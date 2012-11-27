@@ -1,0 +1,536 @@
+/*
+ * Copyright (C) 2009 Nameless Production Committee.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package booton.translator;
+
+import static java.nio.charset.StandardCharsets.*;
+import static junit.framework.Assert.*;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import kiss.I;
+import net.sourceforge.htmlunit.corejs.javascript.Context;
+import net.sourceforge.htmlunit.corejs.javascript.NativeArray;
+import net.sourceforge.htmlunit.corejs.javascript.NativeFunction;
+import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
+import net.sourceforge.htmlunit.corejs.javascript.Script;
+import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
+import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
+
+import org.objectweb.asm.Type;
+
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
+/**
+ * @version 2009/08/05 17:00:40
+ */
+public class ScriptTranslatorTestcase {
+
+    /** The script engine manager. */
+    private static Context context;
+
+    /** The global scope. */
+    private static ScriptableObject global;
+
+    /** The compiled booton script. */
+    private static Script booton;
+
+    // initialization
+    static {
+        try {
+            // build client
+            WebClient client = new WebClient(BrowserVersion.INTERNET_EXPLORER_8);
+
+            // build dummy page
+            HtmlPage dummy = (HtmlPage) client.getPage(I.locate("src/test/resources/empty.html").toUri().toURL());
+
+            // build script engine
+            context = client.getJavaScriptEngine().getContextFactory().enterContext();
+
+            global = dummy.getScriptObject();
+
+            // define console
+            String[] names = {"log"};
+            global.defineFunctionProperties(names, ScriptTranslatorTestcase.class, ScriptableObject.DONTENUM);
+
+            // compile boot script
+            booton = context.compileReader(Files.newBufferedReader(I.locate("src/main/resources/boot.js"), UTF_8), "boot.js", 1, null);
+            // booton = context.compileReader(new
+            // FileReader(I.locate("src/main/javascript/booton.js").toFile()), "booton.js", 1,
+            // null);
+
+        } catch (Exception e) {
+            throw I.quiet(e);
+        }
+    }
+
+    /**
+     * @param script
+     */
+    protected void assertScript(ScriptForByte script) {
+        assertScript((byte) -2, (byte) 2, script);
+    }
+
+    /**
+     * @param script
+     * @param start
+     * @param end
+     */
+    protected void assertScript(byte start, byte end, ScriptForByte script) {
+        // check range
+        if (end <= start) {
+            throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
+        }
+
+        // build inputs
+        List<Byte> inputs = new ArrayList();
+
+        for (byte i = 0; i <= end - start; i++) {
+            inputs.add(Integer.valueOf(start + i).byteValue());
+        }
+
+        // delegate
+        assertScript(inputs, script);
+    }
+
+    /**
+     * @param script
+     */
+    protected void assertScript(ScriptForShort script) {
+        assertScript((short) -2, (short) 2, script);
+    }
+
+    /**
+     * @param script
+     * @param start
+     * @param end
+     */
+    protected void assertScript(short start, short end, ScriptForShort script) {
+        // check range
+        if (end <= start) {
+            throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
+        }
+
+        // build inputs
+        List<Short> inputs = new ArrayList();
+
+        for (short i = 0; i <= end - start; i++) {
+            inputs.add(Integer.valueOf(start + i).shortValue());
+        }
+
+        // delegate
+        assertScript(inputs, script);
+    }
+
+    /**
+     * @param script
+     */
+    protected void assertScript(ScriptForInt script) {
+        assertScript(-2, 2, script);
+    }
+
+    /**
+     * @param script
+     * @param start
+     * @param end
+     */
+    protected void assertScript(int start, int end, ScriptForInt script) {
+        // check range
+        if (end <= start) {
+            throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
+        }
+
+        // build inputs
+        List<Integer> inputs = new ArrayList();
+
+        for (int i = 0; i <= end - start; i++) {
+            inputs.add(start + i);
+        }
+
+        // delegate
+        assertScript(inputs, script);
+    }
+
+    /**
+     * @param script
+     */
+    protected void assertScript(ScriptForLong script) {
+        assertScript(-2, 2, script);
+    }
+
+    /**
+     * @param script
+     * @param start
+     * @param end
+     */
+    protected void assertScript(long start, long end, ScriptForLong script) {
+        // check range
+        if (end <= start) {
+            throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
+        }
+
+        // build inputs
+        List<Long> inputs = new ArrayList();
+
+        for (long i = 0; i <= end - start; i++) {
+            inputs.add(start + i);
+        }
+
+        // delegate
+        assertScript(inputs, script);
+    }
+
+    /**
+     * @param script
+     */
+    protected void assertScript(ScriptForFloat script) {
+        assertScript(-2, 2, script);
+    }
+
+    /**
+     * @param script
+     * @param start
+     * @param end
+     */
+    protected void assertScript(float start, float end, ScriptForFloat script) {
+        // check range
+        if (end <= start) {
+            throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
+        }
+
+        // build inputs
+        List<Float> inputs = new ArrayList();
+
+        for (float i = 0; i <= end - start; i++) {
+            inputs.add(start + i);
+        }
+
+        // delegate
+        assertScript(inputs, script);
+    }
+
+    /**
+     * @param script
+     */
+    protected void assertScript(ScriptForDouble script) {
+        assertScript(-2, 2, script);
+    }
+
+    /**
+     * @param script
+     * @param start
+     * @param end
+     */
+    protected void assertScript(double start, double end, ScriptForDouble script) {
+        // check range
+        if (end <= start) {
+            throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
+        }
+
+        // build inputs
+        List<Double> inputs = new ArrayList();
+
+        for (double i = 0; i <= end - start; i++) {
+            inputs.add(start + i);
+        }
+
+        // delegate
+        assertScript(inputs, script);
+    }
+
+    /**
+     * @param script
+     * @param start
+     * @param end
+     */
+    protected void assertScript(ScriptForBoolean script) {
+        assertScript(Arrays.asList(true, false), script);
+    }
+
+    /**
+     * @param script
+     */
+    protected void assertScript(ScriptForLogicalExpression script) {
+        assertScript(-2, 2, script);
+    }
+
+    /**
+     * @param script
+     * @param start
+     * @param end
+     */
+    protected void assertScript(int start, int end, ScriptForLogicalExpression script) {
+        // check range
+        if (end <= start) {
+            throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
+        }
+
+        // build inputs
+        List<Integer> inputs = new ArrayList();
+
+        for (int i = 0; i <= end - start; i++) {
+            inputs.add(start + i);
+        }
+
+        // delegate
+        assertScript(inputs, script);
+    }
+
+    /**
+     * @param script
+     */
+    protected <T> void assertScript(ScriptForObject<T> script) {
+        assertScript((T) null, script);
+    }
+
+    /**
+     * @param start
+     * @param end
+     * @param script
+     */
+    protected <T> void assertScript(T input, ScriptForObject<T> script) {
+        assertScript(Collections.singletonList(input), script);
+    }
+
+    /**
+     * @param script
+     */
+    protected <T> void assertScript(ScriptForThrowable<T> script) {
+        assertScript((T) null, script);
+    }
+
+    /**
+     * @param start
+     * @param end
+     * @param script
+     */
+    protected <T> void assertScript(T input, ScriptForThrowable<T> script) {
+        assertScript(Collections.singletonList(input), script);
+    }
+
+    /**
+     * @param <T>
+     * @param inputs
+     * @param script
+     */
+    private <T> void assertScript(List<T> inputs, Object script) {
+        // prepare result store
+        List results = new ArrayList();
+
+        Class source = script.getClass();
+        Constructor constructor = null;
+        Method execute = null;
+
+        // execute as Java
+        try {
+            // search constructor
+            constructor = script.getClass().getDeclaredConstructors()[0];
+
+            // search method
+            Method[] methods = script.getClass().getMethods();
+
+            for (Method method : methods) {
+                if (method.getName().equals("execute")) {
+                    execute = method;
+                    break;
+                }
+            }
+
+            // invoke it and store result
+            for (T input : inputs) {
+                try {
+                    results.add(execute.invoke(script, input));
+                } catch (InvocationTargetException e) {
+                    results.add(((InvocationTargetException) e).getTargetException());
+                }
+            }
+        } catch (Exception e) {
+            throw I.quiet(e);
+        }
+
+        // execute as Javascript
+        StringBuilder scriptExpression = new StringBuilder();
+
+        try {
+            Javascript.getScript(script.getClass()).writeAll(scriptExpression);
+
+            booton.exec(context, global);
+            context.evaluateString(global, scriptExpression.toString(), script.getClass().getSimpleName(), 1, null);
+
+            // invoke it and compare result
+            for (int i = 0; i < inputs.size(); i++) {
+                StringBuilder builder = new StringBuilder();
+                builder.append("try {");
+                builder.append("new ");
+                builder.append(Javascript.computeClassName(source));
+                builder.append("(");
+                builder.append(Javascript.computeMethodName(source, "<init>", Type.getConstructorDescriptor(constructor))
+                        .substring(1));
+                builder.append(").");
+                builder.append(Javascript.computeMethodName(source, "execute", Type.getMethodDescriptor(execute)));
+                builder.append("(");
+
+                if (inputs.get(i) instanceof String) {
+                    builder.append("\"").append(inputs.get(i)).append("\"");
+                } else {
+                    builder.append(inputs.get(i));
+                }
+                builder.append(");");
+                builder.append("} catch(e) {e}");
+
+                // execute and compare it to the java result
+                assertObject(results.get(i), context.evaluateString(global, builder.toString(), "", 1, null));
+            }
+        } catch (Exception e) {
+            System.out.println(scriptExpression);
+            throw I.quiet(e);
+        }
+    }
+
+    /**
+     * Assert each items in array.
+     * 
+     * @param java
+     * @param js
+     */
+    private void assertArray(Object java, Object js) {
+        assertTrue(js instanceof NativeArray);
+
+        NativeArray array = (NativeArray) js;
+
+        // check array size
+        assertEquals(Array.getLength(java), array.getLength());
+
+        // check each items
+        for (int i = 0; i < array.getLength(); i++) {
+            assertObject(Array.get(java, i), array.get(i, global));
+        }
+    }
+
+    /**
+     * Assert that java object equals to javascript object.
+     * 
+     * @param java
+     * @param js
+     */
+    private void assertObject(Object java, Object js) {
+        if (java == null) {
+            assertTrue(js instanceof UniqueTag || js == null);
+        } else {
+            if (js.getClass().getSimpleName().equals("NativeError")) {
+                // Internal javascript error was thrown (e.g. invalid syntax error, property was not
+                // found). So we must report as error for developer's feedback.
+                throw new RuntimeException(js.toString());
+            }
+
+            Class type = java.getClass();
+
+            if (type.isArray()) {
+                assertArray(java, js);
+            } else if (type == Integer.class) {
+                int value = ((Integer) java).intValue();
+
+                if (js instanceof Double) {
+                    assertEquals(value, ((Double) js).intValue());
+                } else if (js instanceof UniqueTag) {
+                    assertEquals(value, 0);
+                } else {
+                    assertEquals(value, ((Integer) js).intValue());
+                }
+            } else if (type == Long.class) {
+                long value = ((Long) java).longValue();
+
+                if (js instanceof UniqueTag) {
+                    assertEquals(value, 0L);
+                } else {
+                    assertEquals(value, ((Double) js).longValue());
+                }
+            } else if (type == Float.class) {
+                java = new BigDecimal((Float) java).round(new MathContext(3));
+                js = new BigDecimal((Double) js).round(new MathContext(3));
+
+                assertEquals(java, js);
+            } else if (type == Double.class) {
+                java = new BigDecimal((Double) java).round(new MathContext(3));
+                js = new BigDecimal((Double) js).round(new MathContext(3));
+
+                assertEquals(java, js);
+            } else if (type == Short.class) {
+                assertEquals(((Short) java).doubleValue(), (Double) js, 0D);
+            } else if (type == Byte.class) {
+                assertEquals(((Byte) java).doubleValue(), (Double) js, 0D);
+            } else if (type == Boolean.class) {
+                if (js instanceof Double) {
+                    js = ((Double) js).intValue() != 0;
+                }
+                assertEquals(((Boolean) java), (Boolean) js);
+            } else if (type == String.class) {
+                assertEquals(java, js.toString());
+            } else if (Throwable.class.isAssignableFrom(type)) {
+                assertException((Throwable) java, js);
+            } else {
+                // some object
+                System.out.println(js.getClass());
+                assertTrue(js instanceof NativeObject);
+
+                NativeObject object = (NativeObject) js;
+                System.out.println(Arrays.toString(object.getPrototype().getIds()));
+
+                System.out.println(object.getPrototype().get("constructor", global));
+
+                NativeFunction value = (NativeFunction) object.getPrototype().get("constructor", global);
+                System.out.println(value.getFunctionName());
+
+            }
+        }
+    }
+
+    /**
+     * Assert the specified javascript object is exception.
+     * 
+     * @param exception
+     * @param js
+     */
+    private void assertException(Throwable exception, Object js) {
+        // An expected error (not native Error object) was thrown. This is successful.
+        if (js instanceof String) {
+            String message = exception.getMessage();
+
+            if (message == null) {
+                assertEquals("", js);
+            } else {
+                assertEquals(message, js);
+            }
+        } else {
+            // Some error object was thrown certainly, but we cant check in detail.
+        }
+    }
+
+    public static void log(String message) {
+        System.out.println(message);
+    }
+}
