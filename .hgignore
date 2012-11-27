@@ -1,0 +1,10 @@
+syntax: regexp
+\.settings
+syntax: regexp
+target
+syntax: regexp
+\.classpath
+syntax: regexp
+\.project
+syntax: regexp
+\.factorypath
