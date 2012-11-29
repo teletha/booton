@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package booton.translator;
+package booton.translator.constructor;
 
 import org.junit.Test;
 
+import booton.translator.ScriptTranslatorTestcase;
 import booton.translator.api.ObjectScript;
-import booton.translator.constructor.NoParameter;
 
 /**
  * @version 2009/08/11 20:45:42
