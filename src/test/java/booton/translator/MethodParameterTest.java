@@ -17,6 +17,15 @@ package booton.translator;
 
 import org.junit.Test;
 
+import booton.translator.api.BooleanScript;
+import booton.translator.api.ByteScript;
+import booton.translator.api.DoubleScript;
+import booton.translator.api.FloatScript;
+import booton.translator.api.IntScript;
+import booton.translator.api.LongScript;
+import booton.translator.api.ObjectScript;
+import booton.translator.api.ShortScript;
+
 /**
  * @version 2009/08/05 17:03:59
  */
@@ -24,7 +33,7 @@ public class MethodParameterTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Int() {
-        assertScript(0, 1, new ScriptForInt() {
+        assertScript(0, 1, new IntScript() {
 
             public int execute(int value) {
                 return value;
@@ -34,7 +43,7 @@ public class MethodParameterTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Long() {
-        assertScript(1234567890L, 1234567891L, new ScriptForLong() {
+        assertScript(1234567890L, 1234567891L, new LongScript() {
 
             public long execute(long value) {
                 return value;
@@ -44,7 +53,7 @@ public class MethodParameterTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Float() {
-        assertScript(1.2F, 2.2F, new ScriptForFloat() {
+        assertScript(1.2F, 2.2F, new FloatScript() {
 
             public float execute(float value) {
                 return value;
@@ -54,7 +63,7 @@ public class MethodParameterTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Double() {
-        assertScript(1.23456789D, 2.23456789D, new ScriptForDouble() {
+        assertScript(1.23456789D, 2.23456789D, new DoubleScript() {
 
             public double execute(double value) {
                 return value;
@@ -64,7 +73,7 @@ public class MethodParameterTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Byte() {
-        assertScript((byte) 0, (byte) 1, new ScriptForByte() {
+        assertScript((byte) 0, (byte) 1, new ByteScript() {
 
             public byte execute(byte value) {
                 return value;
@@ -74,7 +83,7 @@ public class MethodParameterTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Short() {
-        assertScript((short) 0, (short) 1, new ScriptForShort() {
+        assertScript((short) 0, (short) 1, new ShortScript() {
 
             public short execute(short value) {
                 return value;
@@ -84,7 +93,7 @@ public class MethodParameterTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Boolean() {
-        assertScript(new ScriptForBoolean() {
+        assertScript(new BooleanScript() {
 
             public boolean execute(boolean value) {
                 return value;
@@ -94,7 +103,7 @@ public class MethodParameterTest extends ScriptTranslatorTestcase {
 
     @Test
     public void String() {
-        assertScript("value", new ScriptForObject<String>() {
+        assertScript("value", new ObjectScript<String>() {
 
             public String execute(String value) {
                 return value;

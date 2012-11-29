@@ -17,6 +17,12 @@ package booton.translator;
 
 import org.junit.Test;
 
+import booton.translator.api.BooleanScript;
+import booton.translator.api.DoubleScript;
+import booton.translator.api.FloatScript;
+import booton.translator.api.IntScript;
+import booton.translator.api.LongScript;
+
 /**
  * @version 2009/08/18 18:50:34
  */
@@ -30,7 +36,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 18:54:24
      */
-    private static class IntField implements ScriptForInt {
+    private static class IntField implements IntScript {
 
         private int field = 10;
 
@@ -47,7 +53,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 18:54:24
      */
-    private static class IntFieldWithExpresison implements ScriptForInt {
+    private static class IntFieldWithExpresison implements IntScript {
 
         private int field = 10;
 
@@ -64,7 +70,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 18:54:24
      */
-    private static class LongField implements ScriptForLong {
+    private static class LongField implements LongScript {
 
         private long field = 9876543210L;
 
@@ -81,7 +87,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 18:54:24
      */
-    private static class FloatField implements ScriptForFloat {
+    private static class FloatField implements FloatScript {
 
         private float field = 3.1415f;
 
@@ -98,7 +104,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 18:54:24
      */
-    private static class DoubleField implements ScriptForDouble {
+    private static class DoubleField implements DoubleScript {
 
         private double field = 3.14159265358979323846264338327950288419716939937510d;
 
@@ -115,7 +121,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 18:54:24
      */
-    private static class BooleanField implements ScriptForBoolean {
+    private static class BooleanField implements BooleanScript {
 
         private boolean field = false;
 
@@ -140,7 +146,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class ExtendChild extends ExtendBase implements ScriptForInt {
+    private static class ExtendChild extends ExtendBase implements IntScript {
 
         public int execute(int value) {
             return value + field;
@@ -164,7 +170,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class OverrideChild extends OverrideBase implements ScriptForInt {
+    private static class OverrideChild extends OverrideBase implements IntScript {
 
         protected int field = 5;
 
@@ -189,7 +195,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class SuperChild extends SuperBase implements ScriptForInt {
+    private static class SuperChild extends SuperBase implements IntScript {
 
         protected int field = 5;
 

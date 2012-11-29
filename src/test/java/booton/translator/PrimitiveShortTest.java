@@ -17,6 +17,8 @@ package booton.translator;
 
 import org.junit.Test;
 
+import booton.translator.api.ShortScript;
+
 /**
  * @version 2009/08/06 11:00:20
  */
@@ -24,7 +26,7 @@ public class PrimitiveShortTest extends ScriptTranslatorTestcase {
 
     @Test
     public void zero() {
-        assertScript(new ScriptForShort() {
+        assertScript(new ShortScript() {
 
             public short execute(short value) {
                 return 0;
@@ -34,7 +36,7 @@ public class PrimitiveShortTest extends ScriptTranslatorTestcase {
 
     @Test
     public void one() {
-        assertScript(new ScriptForShort() {
+        assertScript(new ShortScript() {
 
             public short execute(short value) {
                 return 1;
@@ -44,7 +46,7 @@ public class PrimitiveShortTest extends ScriptTranslatorTestcase {
 
     @Test
     public void two() {
-        assertScript(new ScriptForShort() {
+        assertScript(new ShortScript() {
 
             public short execute(short value) {
                 return 2;
@@ -54,7 +56,7 @@ public class PrimitiveShortTest extends ScriptTranslatorTestcase {
 
     @Test
     public void three() {
-        assertScript(new ScriptForShort() {
+        assertScript(new ShortScript() {
 
             public short execute(short value) {
                 return 3;
@@ -64,7 +66,7 @@ public class PrimitiveShortTest extends ScriptTranslatorTestcase {
 
     @Test
     public void minus() {
-        assertScript(new ScriptForShort() {
+        assertScript(new ShortScript() {
 
             public short execute(short value) {
                 return -1;
@@ -74,7 +76,7 @@ public class PrimitiveShortTest extends ScriptTranslatorTestcase {
 
     @Test
     public void max() {
-        assertScript(new ScriptForShort() {
+        assertScript(new ShortScript() {
 
             public short execute(short value) {
                 return Short.MAX_VALUE;
@@ -84,7 +86,7 @@ public class PrimitiveShortTest extends ScriptTranslatorTestcase {
 
     @Test
     public void min() {
-        assertScript(new ScriptForShort() {
+        assertScript(new ShortScript() {
 
             public short execute(short value) {
                 return Short.MIN_VALUE;

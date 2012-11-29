@@ -17,6 +17,8 @@ package booton.translator;
 
 import org.junit.Test;
 
+import booton.translator.api.IntScript;
+
 /**
  * @version 2009/08/05 17:47:47
  */
@@ -24,7 +26,7 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void Or() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 if (value == 1 || value == 3) {
@@ -38,7 +40,7 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void Complex() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 if ((value == 1 || value == 3) && value == 10) {
@@ -52,7 +54,7 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void Complex2() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 if ((value == 1 || value == 3) && value == 10) {
@@ -66,7 +68,7 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void NotOr() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 if (value != 1 || value == 3) {
@@ -80,7 +82,7 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void OrNot() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 if (value == 1 || value != 3) {
@@ -94,7 +96,7 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void NotOrNot() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 if (value != 1 || value != 3) {
@@ -108,7 +110,7 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void MultipuleOR() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 if (value == 1 || value == 3 || value == 5) {
@@ -122,7 +124,7 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void And() {
-        assertScript(0, 20, new ScriptForInt() {
+        assertScript(0, 20, new IntScript() {
 
             public int execute(int value) {
                 if (value % 2 == 0 && value % 3 == 0) {
@@ -136,7 +138,7 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void NotAnd() {
-        assertScript(0, 20, new ScriptForInt() {
+        assertScript(0, 20, new IntScript() {
 
             public int execute(int value) {
                 if (value % 2 != 0 && value % 3 == 0) {
@@ -150,7 +152,7 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void AndNot() {
-        assertScript(0, 20, new ScriptForInt() {
+        assertScript(0, 20, new IntScript() {
 
             public int execute(int value) {
                 if (value % 2 == 0 && value % 3 != 0) {
@@ -164,7 +166,7 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void NotAndNot() {
-        assertScript(0, 20, new ScriptForInt() {
+        assertScript(0, 20, new IntScript() {
 
             public int execute(int value) {
                 if (value % 2 != 0 && value % 3 != 0) {
@@ -178,7 +180,7 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void MultipleAnd() {
-        assertScript(0, 20, new ScriptForInt() {
+        assertScript(0, 20, new IntScript() {
 
             public int execute(int value) {
                 if (value % 2 == 0 && value % 3 == 0 && value % 4 == 0) {

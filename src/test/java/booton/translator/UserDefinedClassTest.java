@@ -18,6 +18,8 @@ package booton.translator;
 import org.junit.Test;
 
 import booton.Person;
+import booton.translator.api.IntScript;
+import booton.translator.api.ObjectScript;
 
 /**
  * @version 2009/08/20 18:22:56
@@ -26,7 +28,7 @@ public class UserDefinedClassTest extends ScriptTranslatorTestcase {
 
     @Test
     public void UserClass() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 Person user = new Person();
@@ -39,7 +41,7 @@ public class UserDefinedClassTest extends ScriptTranslatorTestcase {
 
     @Test
     public void UserClassToString() {
-        assertScript("Hitagi", new ScriptForObject<String>() {
+        assertScript("Hitagi", new ObjectScript<String>() {
 
             public String execute(String value) {
                 Person user = new Person();

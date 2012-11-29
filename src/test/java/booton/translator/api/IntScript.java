@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package booton.translator;
+package booton.translator.api;
 
 /**
- * @version 2009/08/03 23:11:02
+ * @version 2012/11/29 22:57:53
  */
-public interface ScriptForInt {
+public interface IntScript {
 
     /**
      * Script fragment.

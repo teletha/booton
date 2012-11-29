@@ -17,6 +17,8 @@ package booton.translator;
 
 import org.junit.Test;
 
+import booton.translator.api.ObjectScript;
+
 /**
  * @version 2009/08/31 13:10:00
  */
@@ -24,7 +26,7 @@ public class NullTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Null() {
-        assertScript(new ScriptForObject() {
+        assertScript(new ObjectScript() {
 
             public Object execute(Object value) {
                 return null;

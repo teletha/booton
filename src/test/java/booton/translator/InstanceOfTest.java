@@ -17,6 +17,8 @@ package booton.translator;
 
 import org.junit.Test;
 
+import booton.translator.api.BooleanScript;
+
 /**
  * @version 2009/09/02 19:04:59
  */
@@ -27,7 +29,7 @@ public class InstanceOfTest extends ScriptTranslatorTestcase {
         assertScript(new Base());
     }
 
-    private static class Base implements ScriptForBoolean {
+    private static class Base implements BooleanScript {
 
         public boolean execute(boolean value) {
             return this instanceof Base;
@@ -63,7 +65,7 @@ public class InstanceOfTest extends ScriptTranslatorTestcase {
         assertScript(new OBJECT());
     }
 
-    private static class OBJECT implements ScriptForBoolean {
+    private static class OBJECT implements BooleanScript {
 
         public boolean execute(boolean value) {
             return this instanceof Object;

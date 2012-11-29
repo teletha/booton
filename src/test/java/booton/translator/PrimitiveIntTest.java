@@ -17,6 +17,8 @@ package booton.translator;
 
 import org.junit.Test;
 
+import booton.translator.api.IntScript;
+
 /**
  * @version 2009/06/27 12:48:26
  */
@@ -24,7 +26,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void one() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return 1;
@@ -34,7 +36,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void two() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return 2;
@@ -44,7 +46,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void three() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return 3;
@@ -54,7 +56,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void four() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return 4;
@@ -64,7 +66,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void five() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return 5;
@@ -74,7 +76,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void six() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return 6;
@@ -84,7 +86,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void seven() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return 7;
@@ -94,7 +96,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void eight() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return 8;
@@ -104,7 +106,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void nine() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return 9;
@@ -114,7 +116,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ten() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return 10;
@@ -124,7 +126,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void zero() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return 0;
@@ -134,7 +136,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void minusOne() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return -1;
@@ -144,7 +146,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void minusTwo() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return -2;
@@ -154,7 +156,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void minusThree() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return -3;
@@ -164,7 +166,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void max() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return Integer.MAX_VALUE;
@@ -174,7 +176,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void min() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return Integer.MIN_VALUE;
@@ -184,7 +186,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void add() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value + 1;
@@ -194,7 +196,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void addAssignable() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value += 2;
@@ -204,7 +206,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void subtract() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value - 1;
@@ -214,7 +216,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void subtractAssignable() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value -= 2;
@@ -224,7 +226,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void multiply() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value * 2;
@@ -234,7 +236,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void multiplyAssignable() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value *= 2;
@@ -244,7 +246,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void divide() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value / 2;
@@ -254,7 +256,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void divideAssignable() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value /= 2;
@@ -264,7 +266,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void modulo() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value % 2;
@@ -274,7 +276,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void moduloAssignable() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value %= 2;
@@ -284,7 +286,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitAnd() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value & 0x010101;
@@ -294,7 +296,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitOr() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value | 0x010101;
@@ -304,7 +306,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitOrAssignable() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value |= 0x010101;
@@ -314,7 +316,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitXor() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value ^ 0x010101;
@@ -324,7 +326,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitXorAssignable() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value ^= 0x010101;
@@ -334,7 +336,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitNot() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return ~value;
@@ -344,7 +346,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void shiftLeft() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value << 1;
@@ -354,7 +356,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void shiftLeftAssignable() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value <<= 1;
@@ -364,7 +366,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void shiftRight() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value >> 1;
@@ -374,7 +376,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void shiftRightAssignable() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value >>= 1;
@@ -384,7 +386,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void unsignedShiftRight() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value >>> 1;
@@ -394,7 +396,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void unsignedShiftRightAssignable() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value >>>= 1;
@@ -404,7 +406,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrement() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value++;
@@ -414,7 +416,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrementValue() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 int next = value++;
@@ -425,7 +427,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrementLike() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return value + 1;
@@ -435,7 +437,7 @@ public class PrimitiveIntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void preIncrement() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             public int execute(int value) {
                 return ++value;

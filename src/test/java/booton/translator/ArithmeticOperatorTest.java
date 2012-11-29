@@ -17,6 +17,9 @@ package booton.translator;
 
 import org.junit.Test;
 
+import booton.translator.api.DoubleScript;
+import booton.translator.api.IntScript;
+
 /**
  * @version 2009/06/27 13:51:44
  */
@@ -24,10 +27,10 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void AdditionLeft() {
-        assertScript(-20, 20, new ScriptForInt() {
+        assertScript(-20, 20, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 return 1 + value;
@@ -37,10 +40,10 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void AdditonRight() {
-        assertScript(-20, 20, new ScriptForInt() {
+        assertScript(-20, 20, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 return value + 1;
@@ -50,10 +53,10 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void SubtractionLeft() {
-        assertScript(-20, 20, new ScriptForInt() {
+        assertScript(-20, 20, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 return 10 - value;
@@ -63,10 +66,10 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void SubtractionRight() {
-        assertScript(-20, 20, new ScriptForInt() {
+        assertScript(-20, 20, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 return value - 10;
@@ -76,10 +79,10 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void MultiplicationLeft() {
-        assertScript(-20, 20, new ScriptForDouble() {
+        assertScript(-20, 20, new DoubleScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public double execute(double value) {
                 return value * 3;
@@ -89,10 +92,10 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void MultiplicationRight() {
-        assertScript(-20, 20, new ScriptForDouble() {
+        assertScript(-20, 20, new DoubleScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public double execute(double value) {
                 return -3 * value;
@@ -102,10 +105,10 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DivisionLeft() {
-        assertScript(-20, 20, new ScriptForDouble() {
+        assertScript(-20, 20, new DoubleScript() {
 
             /**
-             * @see booton.translator.ScriptForDouble#execute(double)
+             * @see booton.translator.api.DoubleScript#execute(double)
              */
             public double execute(double value) {
                 return value / 2;
@@ -115,10 +118,10 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DivisionRight() {
-        assertScript(1, 20, new ScriptForDouble() {
+        assertScript(1, 20, new DoubleScript() {
 
             /**
-             * @see booton.translator.ScriptForDouble#execute(double)
+             * @see booton.translator.api.DoubleScript#execute(double)
              */
             public double execute(double value) {
                 return 12 / value;
@@ -128,10 +131,10 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ReminderLeft() {
-        assertScript(-20, 20, new ScriptForInt() {
+        assertScript(-20, 20, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 return value % 7;
@@ -141,10 +144,10 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ReminderRight() {
-        assertScript(1, 20, new ScriptForInt() {
+        assertScript(1, 20, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 return 40 % value;

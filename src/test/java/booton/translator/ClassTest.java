@@ -17,6 +17,8 @@ package booton.translator;
 
 import org.junit.Test;
 
+import booton.translator.api.ObjectScript;
+
 /**
  * @version 2009/08/21 3:27:51
  */
@@ -30,7 +32,7 @@ public class ClassTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/21 3:46:13
      */
-    private static class ClassLiteral implements ScriptForObject<String> {
+    private static class ClassLiteral implements ObjectScript<String> {
 
         public String execute(String value) {
             return "";

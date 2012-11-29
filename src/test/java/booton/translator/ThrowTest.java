@@ -15,16 +15,21 @@
  */
 package booton.translator;
 
+import org.junit.Ignore;
 import org.junit.Test;
+
+import booton.translator.api.ObjectScript;
+import booton.translator.api.ThrowableScript;
 
 /**
  * @version 2009/08/21 11:30:16
  */
+@Ignore
 public class ThrowTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Exception() {
-        assertScript(new ScriptForThrowable() {
+        assertScript(new ThrowableScript() {
 
             public Object execute(Object value) throws Exception {
                 throw new Exception();
@@ -34,7 +39,7 @@ public class ThrowTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ExceptionWithParam() {
-        assertScript("message", new ScriptForThrowable<String>() {
+        assertScript("message", new ThrowableScript<String>() {
 
             public String execute(String value) throws Exception {
                 throw new Exception(value);
@@ -44,7 +49,7 @@ public class ThrowTest extends ScriptTranslatorTestcase {
 
     @Test
     public void RuntimeException() {
-        assertScript(new ScriptForObject<String>() {
+        assertScript(new ObjectScript<String>() {
 
             public String execute(String value) {
                 throw new RuntimeException();
@@ -54,7 +59,7 @@ public class ThrowTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Error() {
-        assertScript(new ScriptForObject<String>() {
+        assertScript(new ObjectScript<String>() {
 
             public String execute(String value) {
                 throw new Error();
