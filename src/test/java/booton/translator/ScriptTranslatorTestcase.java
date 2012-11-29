@@ -41,7 +41,6 @@ import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
 
 import org.objectweb.asm.Type;
 
-import booton.translator.Javascript;
 import booton.translator.api.BooleanScript;
 import booton.translator.api.ByteScript;
 import booton.translator.api.DoubleScript;
@@ -368,6 +367,7 @@ public class ScriptTranslatorTestcase {
             for (Method method : methods) {
                 if (method.getName().equals("execute")) {
                     execute = method;
+                    execute.setAccessible(true);
                     break;
                 }
             }

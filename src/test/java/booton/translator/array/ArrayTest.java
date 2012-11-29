@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package booton.translator;
+package booton.translator.array;
 
 import org.junit.Test;
 
+import booton.translator.ScriptTranslatorTestcase;
 import booton.translator.api.DoubleScript;
 import booton.translator.api.FloatScript;
 import booton.translator.api.IntScript;

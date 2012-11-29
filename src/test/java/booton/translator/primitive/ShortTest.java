@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package booton.translator;
+package booton.translator.primitive;
 
 import org.junit.Test;
 
+import booton.translator.ScriptTranslatorTestcase;
 import booton.translator.api.ShortScript;
 
 /**
  * @version 2009/08/06 11:00:20
  */
-public class PrimitiveShortTest extends ScriptTranslatorTestcase {
+public class ShortTest extends ScriptTranslatorTestcase {
 
     @Test
     public void zero() {
