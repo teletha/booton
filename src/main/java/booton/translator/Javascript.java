@@ -136,7 +136,7 @@ public class Javascript implements ClassListener<Translator> {
     }
 
     /**
-     * @see net.sf.easybean.ClassLoadListener#load(java.lang.Class)
+     * {@inheritDoc}
      */
     public void load(Class<Translator> clazz) {
         if (clazz != Translator.class) {
@@ -145,7 +145,7 @@ public class Javascript implements ClassListener<Translator> {
     }
 
     /**
-     * @see net.sf.easybean.ClassLoadListener#unload(java.lang.Class)
+     * {@inheritDoc}
      */
     public void unload(Class<Translator> clazz) {
     }
@@ -374,6 +374,7 @@ public class Javascript implements ClassListener<Translator> {
             }
         } else {
             // method
+            System.out.println(owner + "  " + name + "  " + description);
             return mung(order(script.methods, name.hashCode() ^ description.hashCode()), false);
         }
     }
