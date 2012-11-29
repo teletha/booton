@@ -947,6 +947,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case INVOKEVIRTUAL: // method call
+        case INVOKEINTERFACE: // interface method call
             // push "this" operand
             contexts.add(0, current.remove(0));
 
