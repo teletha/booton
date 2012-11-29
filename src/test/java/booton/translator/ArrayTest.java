@@ -17,6 +17,12 @@ package booton.translator;
 
 import org.junit.Test;
 
+import booton.translator.api.DoubleScript;
+import booton.translator.api.FloatScript;
+import booton.translator.api.IntScript;
+import booton.translator.api.LongScript;
+import booton.translator.api.ObjectScript;
+
 /**
  * @version 2009/08/18 20:19:16
  */
@@ -24,10 +30,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntArray() {
-        assertScript(new ScriptForObject<int[]>() {
+        assertScript(new ObjectScript<int[]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public int[] execute(int[] value) {
                 int[] array = new int[2];
@@ -41,7 +47,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntArrayWithExpression() {
-        assertScript(new ScriptForObject<int[]>() {
+        assertScript(new ObjectScript<int[]>() {
 
             private int field = 10;
 
@@ -59,7 +65,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntArrayByShorthand() {
-        assertScript(new ScriptForObject<int[]>() {
+        assertScript(new ObjectScript<int[]>() {
 
             public int[] execute(int[] value) {
                 return new int[] {1, 2};
@@ -69,7 +75,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntArrayByShorthandWithFirstZero() {
-        assertScript(new ScriptForObject<int[]>() {
+        assertScript(new ObjectScript<int[]>() {
 
             public int[] execute(int[] value) {
                 return new int[] {0, -1};
@@ -79,7 +85,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntArrayByShorthandWithlastZero() {
-        assertScript(new ScriptForObject<int[]>() {
+        assertScript(new ObjectScript<int[]>() {
 
             public int[] execute(int[] value) {
                 return new int[] {-2, 0};
@@ -89,7 +95,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntArrayByShorthandWithAllZero() {
-        assertScript(new ScriptForObject<int[]>() {
+        assertScript(new ObjectScript<int[]>() {
 
             public int[] execute(int[] value) {
                 return new int[] {0, 0};
@@ -99,12 +105,12 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntArrayWithExpressionByShorthand() {
-        assertScript(new ScriptForObject<int[]>() {
+        assertScript(new ObjectScript<int[]>() {
 
             private int field = 10;
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public int[] execute(int[] value) {
                 return new int[] {field + field, field - field, field * field, field / field};
@@ -114,10 +120,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntArraySoMany() {
-        assertScript(new ScriptForObject<int[]>() {
+        assertScript(new ObjectScript<int[]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public int[] execute(int[] value) {
                 return new int[] {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096};
@@ -127,10 +133,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntMultiDimensionArray() {
-        assertScript(new ScriptForObject<int[][]>() {
+        assertScript(new ObjectScript<int[][]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public int[][] execute(int[][] value) {
                 int[][] array = new int[3][2];
@@ -145,10 +151,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntMultiDimensionArrayByShorthand() {
-        assertScript(new ScriptForObject<int[][]>() {
+        assertScript(new ObjectScript<int[][]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public int[][] execute(int[][] value) {
                 return new int[][] { {0, 1}, {2, 3, 4}, {5, 6, 7, 8}};
@@ -158,10 +164,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntThreeDimensionArray() {
-        assertScript(new ScriptForObject<int[][][]>() {
+        assertScript(new ObjectScript<int[][][]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public int[][][] execute(int[][][] value) {
                 int[][][] array = new int[2][3][1];
@@ -175,10 +181,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntThreeDimensionArrayWithoutNeedlessDeclaration() {
-        assertScript(new ScriptForObject<int[][][]>() {
+        assertScript(new ObjectScript<int[][][]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public int[][][] execute(int[][][] value) {
                 int[][][] array = new int[2][][];
@@ -192,10 +198,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntArrayAccess() {
-        assertScript(new ScriptForInt() {
+        assertScript(new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 int[] array = {1, value};
@@ -207,10 +213,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntArrayLength() {
-        assertScript(1, 10, new ScriptForInt() {
+        assertScript(1, 10, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 return new int[value].length;
@@ -220,10 +226,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntArrayFor() {
-        assertScript(1, 10, new ScriptForInt() {
+        assertScript(1, 10, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 int sum = 0;
@@ -239,10 +245,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntArrayForEach() {
-        assertScript(1, 10, new ScriptForInt() {
+        assertScript(1, 10, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 int sum = 0;
@@ -258,10 +264,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void LongArray() {
-        assertScript(new ScriptForObject<long[]>() {
+        assertScript(new ObjectScript<long[]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public long[] execute(long[] value) {
                 long[] array = new long[2];
@@ -275,12 +281,12 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void LongArrayWithExpression() {
-        assertScript(new ScriptForObject<long[]>() {
+        assertScript(new ObjectScript<long[]>() {
 
             private long field = 12345678L;
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public long[] execute(long[] value) {
                 long[] array = new long[4];
@@ -296,10 +302,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void LongArrayByShorthand() {
-        assertScript(new ScriptForObject<long[]>() {
+        assertScript(new ObjectScript<long[]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public long[] execute(long[] value) {
                 return new long[] {1, 2};
@@ -309,7 +315,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void LongArrayByShorthandWithFirstZero() {
-        assertScript(new ScriptForObject<long[]>() {
+        assertScript(new ObjectScript<long[]>() {
 
             public long[] execute(long[] value) {
                 return new long[] {0L, -1L};
@@ -319,7 +325,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void LongArrayByShorthandWithlastZero() {
-        assertScript(new ScriptForObject<long[]>() {
+        assertScript(new ObjectScript<long[]>() {
 
             public long[] execute(long[] value) {
                 return new long[] {-2L, 0L};
@@ -329,7 +335,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void LongArrayByShorthandWithAllZero() {
-        assertScript(new ScriptForObject<long[]>() {
+        assertScript(new ObjectScript<long[]>() {
 
             public long[] execute(long[] value) {
                 return new long[] {0L, 0L};
@@ -339,12 +345,12 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void LongArrayWithExpressionByShorthand() {
-        assertScript(new ScriptForObject<long[]>() {
+        assertScript(new ObjectScript<long[]>() {
 
             private long field = 10;
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public long[] execute(long[] value) {
                 return new long[] {field + field, field - field, field * field, field / field};
@@ -354,10 +360,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void LongArraySoMany() {
-        assertScript(new ScriptForObject<long[]>() {
+        assertScript(new ObjectScript<long[]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public long[] execute(long[] value) {
                 return new long[] {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096};
@@ -367,10 +373,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void LongMultiDimensionArray() {
-        assertScript(new ScriptForObject<long[][]>() {
+        assertScript(new ObjectScript<long[][]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public long[][] execute(long[][] value) {
                 long[][] array = new long[3][2];
@@ -385,10 +391,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void LongMultiDimensionArrayByShorthand() {
-        assertScript(new ScriptForObject<long[][]>() {
+        assertScript(new ObjectScript<long[][]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public long[][] execute(long[][] value) {
                 return new long[][] { {0, 1}, {2, 3, 4}, {5, 6, 7, 8}};
@@ -398,7 +404,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void LongArrayAccess() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 long[] array = {1, value};
@@ -410,10 +416,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void LongArrayLength() {
-        assertScript(1, 10, new ScriptForInt() {
+        assertScript(1, 10, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 return new long[value].length;
@@ -423,10 +429,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void FloatArray() {
-        assertScript(new ScriptForObject<float[]>() {
+        assertScript(new ObjectScript<float[]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public float[] execute(float[] value) {
                 float[] array = new float[2];
@@ -440,12 +446,12 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void FloatArrayWithExpression() {
-        assertScript(new ScriptForObject<float[]>() {
+        assertScript(new ObjectScript<float[]>() {
 
             private float field = 3.14f;
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public float[] execute(float[] value) {
                 float[] array = new float[4];
@@ -461,10 +467,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void FloatArrayByShorthand() {
-        assertScript(new ScriptForObject<float[]>() {
+        assertScript(new ObjectScript<float[]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public float[] execute(float[] value) {
                 return new float[] {1.5f, -1.5f};
@@ -474,7 +480,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void FloatArrayByShorthandWithFirstZero() {
-        assertScript(new ScriptForObject<float[]>() {
+        assertScript(new ObjectScript<float[]>() {
 
             public float[] execute(float[] value) {
                 return new float[] {0.0f, 0.3f};
@@ -484,7 +490,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void FloatArrayByShorthandWithlastZero() {
-        assertScript(new ScriptForObject<float[]>() {
+        assertScript(new ObjectScript<float[]>() {
 
             public float[] execute(float[] value) {
                 return new float[] {0.1f, 0f};
@@ -494,7 +500,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void FloatArrayByShorthandWithAllZero() {
-        assertScript(new ScriptForObject<float[]>() {
+        assertScript(new ObjectScript<float[]>() {
 
             public float[] execute(float[] value) {
                 return new float[] {0.0f, -0.0f};
@@ -504,12 +510,12 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void FloatArrayWithExpressionByShorthand() {
-        assertScript(new ScriptForObject<float[]>() {
+        assertScript(new ObjectScript<float[]>() {
 
             private float field = 0.002f;
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public float[] execute(float[] value) {
                 return new float[] {field + field, field - field, field * field, field / field};
@@ -519,10 +525,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void FloatArraySoMany() {
-        assertScript(new ScriptForObject<float[]>() {
+        assertScript(new ObjectScript<float[]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public float[] execute(float[] value) {
                 return new float[] {0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f};
@@ -532,7 +538,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void FloatArrayAccess() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 float[] array = {1, value};
@@ -544,10 +550,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void FloatMultiDimensionArray() {
-        assertScript(new ScriptForObject<float[][]>() {
+        assertScript(new ObjectScript<float[][]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public float[][] execute(float[][] value) {
                 float[][] array = new float[3][2];
@@ -562,10 +568,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void FloatMultiDimensionArrayByShorthand() {
-        assertScript(new ScriptForObject<float[][]>() {
+        assertScript(new ObjectScript<float[][]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public float[][] execute(float[][] value) {
                 return new float[][] { {0, 1}, {2, 3, 4}, {5, 6, 7, 8}};
@@ -575,10 +581,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void FloatArrayLength() {
-        assertScript(1, 10, new ScriptForInt() {
+        assertScript(1, 10, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 return new float[value].length;
@@ -588,10 +594,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoubleArray() {
-        assertScript(new ScriptForObject<double[]>() {
+        assertScript(new ObjectScript<double[]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public double[] execute(double[] value) {
                 double[] array = new double[2];
@@ -605,12 +611,12 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoubleArrayWithExpression() {
-        assertScript(new ScriptForObject<double[]>() {
+        assertScript(new ObjectScript<double[]>() {
 
             private double field = 3.14d;
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public double[] execute(double[] value) {
                 double[] array = new double[4];
@@ -626,10 +632,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoubleArrayByShorthand() {
-        assertScript(new ScriptForObject<double[]>() {
+        assertScript(new ObjectScript<double[]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public double[] execute(double[] value) {
                 return new double[] {1.5d, -1.5d};
@@ -639,7 +645,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoubleArrayByShorthandWithFirstZero() {
-        assertScript(new ScriptForObject<double[]>() {
+        assertScript(new ObjectScript<double[]>() {
 
             public double[] execute(double[] value) {
                 return new double[] {0.0d, 0.3d};
@@ -649,7 +655,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoubleArrayByShorthandWithlastZero() {
-        assertScript(new ScriptForObject<double[]>() {
+        assertScript(new ObjectScript<double[]>() {
 
             public double[] execute(double[] value) {
                 return new double[] {0.1d, 0d};
@@ -659,7 +665,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoubleArrayByShorthandWithAllZero() {
-        assertScript(new ScriptForObject<double[]>() {
+        assertScript(new ObjectScript<double[]>() {
 
             public double[] execute(double[] value) {
                 return new double[] {0.0d, -0.0d};
@@ -669,12 +675,12 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoubleArrayWithExpressionByShorthand() {
-        assertScript(new ScriptForObject<double[]>() {
+        assertScript(new ObjectScript<double[]>() {
 
             private double field = 0.002000023d;
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public double[] execute(double[] value) {
                 return new double[] {field + field, field - field, field * field, field / field};
@@ -684,10 +690,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StringArray() {
-        assertScript(new ScriptForObject<String[]>() {
+        assertScript(new ObjectScript<String[]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.String)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.String)
              */
             public String[] execute(String[] value) {
                 String[] array = new String[2];
@@ -701,7 +707,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoubleArrayAccess() {
-        assertScript(new ScriptForDouble() {
+        assertScript(new DoubleScript() {
 
             public double execute(double value) {
                 double[] array = {1, value};
@@ -713,10 +719,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoubleMultiDimensionArray() {
-        assertScript(new ScriptForObject<double[][]>() {
+        assertScript(new ObjectScript<double[][]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public double[][] execute(double[][] value) {
                 double[][] array = new double[3][2];
@@ -731,10 +737,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoubleMultiDimensionArrayByShorthand() {
-        assertScript(new ScriptForObject<double[][]>() {
+        assertScript(new ObjectScript<double[][]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public double[][] execute(double[][] value) {
                 return new double[][] { {0, 1}, {2, 3, 4}, {5, 6, 7, 8}};
@@ -744,10 +750,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoubleArrayLength() {
-        assertScript(1, 10, new ScriptForInt() {
+        assertScript(1, 10, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 return new double[value].length;
@@ -757,10 +763,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoubleArraySoMany() {
-        assertScript(new ScriptForObject<double[]>() {
+        assertScript(new ObjectScript<double[]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public double[] execute(double[] value) {
                 return new double[] {0.1d, 0.2d, 0.3d, 0.4d, 0.5d, 0.6d, 0.7d, 0.8d, 0.9d};
@@ -770,12 +776,12 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StringArrayWithExpression() {
-        assertScript(new ScriptForObject<String[]>() {
+        assertScript(new ObjectScript<String[]>() {
 
             private String field = "value";
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.String)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.String)
              */
             public String[] execute(String[] value) {
                 String[] array = new String[4];
@@ -791,10 +797,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StringArrayByShorthand() {
-        assertScript(new ScriptForObject<String[]>() {
+        assertScript(new ObjectScript<String[]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.String)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.String)
              */
             public String[] execute(String[] value) {
                 return new String[] {"a", "b"};
@@ -804,7 +810,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StringArrayByShorthandWithFirstNull() {
-        assertScript(new ScriptForObject<String[]>() {
+        assertScript(new ObjectScript<String[]>() {
 
             public String[] execute(String[] value) {
                 return new String[] {null, "end"};
@@ -814,7 +820,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StringArrayByShorthandWithlastNull() {
-        assertScript(new ScriptForObject<String[]>() {
+        assertScript(new ObjectScript<String[]>() {
 
             public String[] execute(String[] value) {
                 return new String[] {"start", null};
@@ -824,7 +830,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StringArrayByShorthandWithAllNull() {
-        assertScript(new ScriptForObject<String[]>() {
+        assertScript(new ObjectScript<String[]>() {
 
             public String[] execute(String[] value) {
                 return new String[] {null, null};
@@ -834,12 +840,12 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StringArrayWithExpressionByShorthand() {
-        assertScript(new ScriptForObject<String[]>() {
+        assertScript(new ObjectScript<String[]>() {
 
             private String field = "value";
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.String)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.String)
              */
             public String[] execute(String[] value) {
                 return new String[] {field + field, field.substring(1), field.concat("@"), field.replace('a', 'e')};
@@ -849,10 +855,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StringArraySoMany() {
-        assertScript(new ScriptForObject<String[]>() {
+        assertScript(new ObjectScript<String[]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.String)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.String)
              */
             public String[] execute(String[] value) {
                 return new String[] {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"};
@@ -862,10 +868,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StringMultiDimensionArray() {
-        assertScript(new ScriptForObject<String[][]>() {
+        assertScript(new ObjectScript<String[][]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public String[][] execute(String[][] value) {
                 String[][] array = new String[3][2];
@@ -880,10 +886,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StringMultiDimensionArrayByShorthand() {
-        assertScript(new ScriptForObject<String[][]>() {
+        assertScript(new ObjectScript<String[][]>() {
 
             /**
-             * @see booton.translator.ScriptForObject#execute(java.lang.Object)
+             * @see booton.translator.api.ObjectScript#execute(java.lang.Object)
              */
             public String[][] execute(String[][] value) {
                 return new String[][] { {"a", "b"}, {"c", "d", "e"}};
@@ -893,7 +899,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StringArrayAccess() {
-        assertScript("second", new ScriptForObject<String>() {
+        assertScript("second", new ObjectScript<String>() {
 
             public String execute(String value) {
                 String[] array = {"first", value};
@@ -905,10 +911,10 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StringArrayLength() {
-        assertScript(1, 10, new ScriptForInt() {
+        assertScript(1, 10, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 return new String[value].length;
@@ -918,7 +924,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StringArrayFor() {
-        assertScript(new ScriptForObject<String>() {
+        assertScript(new ObjectScript<String>() {
 
             public String execute(String value) {
                 String sum = "";
@@ -934,7 +940,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StringArrayForEach() {
-        assertScript(new ScriptForObject<String>() {
+        assertScript(new ObjectScript<String>() {
 
             public String execute(String value) {
                 String sum = "";

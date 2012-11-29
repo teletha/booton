@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package booton.translator;
+package booton.translator.api;
 
 /**
- * @version 2009/08/03 23:11:02
+ * @version 2012/11/29 22:57:31
  */
-public interface ScriptForObject<T> {
+public interface ByteScript {
 
     /**
      * Script fragment.
@@ -26,5 +26,5 @@ public interface ScriptForObject<T> {
      * @param value A script input.
      * @return A script output.
      */
-    T execute(T value);
+    byte execute(byte value);
 }

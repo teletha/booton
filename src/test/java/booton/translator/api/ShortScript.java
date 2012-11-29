@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package booton.translator;
+package booton.translator.api;
 
 /**
- * @version 2009/08/05 16:42:02
+ * @version 2012/11/29 22:58:08
  */
-public interface ScriptForFloat {
+public interface ShortScript {
 
     /**
      * Script fragment.
@@ -26,5 +26,5 @@ public interface ScriptForFloat {
      * @param value A script input.
      * @return A script output.
      */
-    float execute(float value);
+    short execute(short value);
 }

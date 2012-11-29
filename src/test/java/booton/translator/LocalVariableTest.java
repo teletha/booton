@@ -17,6 +17,8 @@ package booton.translator;
 
 import org.junit.Test;
 
+import booton.translator.api.IntScript;
+
 /**
  * @version 2009/12/09 8:40:00
  */
@@ -24,10 +26,10 @@ public class LocalVariableTest extends ScriptTranslatorTestcase {
 
     @Test
     public void parallel() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 if (value < 3) {

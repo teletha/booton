@@ -15,7 +15,13 @@
  */
 package booton.translator;
 
+import org.junit.Ignore;
 import org.junit.Test;
+
+import booton.translator.api.BooleanScript;
+import booton.translator.api.IntScript;
+import booton.translator.api.LogicalExpressionScript;
+import booton.translator.api.ObjectScript;
 
 /**
  * @version 2009/09/11 19:17:15
@@ -24,7 +30,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void True() {
-        assertScript(new ScriptForBoolean() {
+        assertScript(new BooleanScript() {
 
             public boolean execute(boolean value) {
                 return true;
@@ -34,7 +40,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void False() {
-        assertScript(new ScriptForBoolean() {
+        assertScript(new BooleanScript() {
 
             public boolean execute(boolean value) {
                 return false;
@@ -44,7 +50,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Equal() {
-        assertScript(new ScriptForLogicalExpression() {
+        assertScript(new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value == 1;
@@ -54,7 +60,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Not() {
-        assertScript(new ScriptForLogicalExpression() {
+        assertScript(new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value != 1;
@@ -64,7 +70,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Or() {
-        assertScript(new ScriptForLogicalExpression() {
+        assertScript(new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value == 1 || value == -1;
@@ -74,7 +80,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void NotOr() {
-        assertScript(new ScriptForLogicalExpression() {
+        assertScript(new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value != 1 || value == -1;
@@ -84,7 +90,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void OrNot() {
-        assertScript(new ScriptForLogicalExpression() {
+        assertScript(new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value == 1 || value != -1;
@@ -94,7 +100,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void NotOrNot() {
-        assertScript(new ScriptForLogicalExpression() {
+        assertScript(new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value != 1 || value != -1;
@@ -104,7 +110,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void MultipleOr() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 2 == 0 || value % 3 == 0 || value % 5 == 0;
@@ -114,7 +120,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void And() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 2 == 0 && value % 3 == 0;
@@ -124,7 +130,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void NotAnd() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 2 != 0 && value % 3 == 0;
@@ -134,7 +140,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void AndNot() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 2 == 0 && value % 3 != 0;
@@ -144,7 +150,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void NotAndNot() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 2 != 0 && value % 3 != 0;
@@ -154,7 +160,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void MultipleAnd() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 2 == 0 && value % 3 == 0 && value % 4 == 0;
@@ -164,7 +170,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex1() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 5 == 0 || value % 3 == 0 && value % 4 == 0;
@@ -174,7 +180,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex2() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 5 == 0 || (value % 3 == 0 && value % 4 == 0);
@@ -184,7 +190,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex3() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return (value % 5 == 0 || value % 3 == 0) && value % 2 == 0;
@@ -194,7 +200,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex4() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 2 == 0 && value % 3 == 0 || value % 4 == 0;
@@ -204,7 +210,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex5() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return (value % 2 == 0 && value % 3 == 0) || value % 4 == 0;
@@ -214,7 +220,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex6() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 3 == 0 && (value % 2 == 0 || value % 5 == 0);
@@ -224,7 +230,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex10() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 5 == 0 && value % 3 == 0 || value % 2 == 0 || value % 7 == 0;
@@ -234,7 +240,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex11() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 5 == 0 || value % 3 == 0 && value % 2 == 0 || value % 7 == 0;
@@ -244,7 +250,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex12() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 5 == 0 || value % 3 == 0 || value % 2 == 0 && value % 7 == 0;
@@ -254,7 +260,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex13() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return (value % 5 == 0 || value % 3 == 0 || value % 7 == 0) && value % 2 == 0;
@@ -264,7 +270,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex14() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return (value % 5 == 0 && value % 3 == 0) || (value % 7 == 0 && value % 2 == 0);
@@ -274,7 +280,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex20() {
-        assertScript(1, 48, new ScriptForLogicalExpression() {
+        assertScript(1, 48, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return (value % 3 == 0 && value % 4 == 0) || (value % 7 == 0 || value % 6 == 0) && value % 5 == 0;
@@ -284,7 +290,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex21() {
-        assertScript(1, 48, new ScriptForLogicalExpression() {
+        assertScript(1, 48, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return ((value % 3 == 0 && value % 4 == 0) || (value % 7 == 0 || value % 6 == 0)) && value % 5 == 0;
@@ -294,7 +300,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex22() {
-        assertScript(1, 48, new ScriptForLogicalExpression() {
+        assertScript(1, 48, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return (value % 3 == 0 || value % 4 == 0) && (value % 5 == 0 || value % 6 == 0) && value % 2 == 0;
@@ -304,7 +310,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex23() {
-        assertScript(1, 48, new ScriptForLogicalExpression() {
+        assertScript(1, 48, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return ((value % 3 == 0 || value % 4 == 0) && (value % 7 == 0 || value % 11 == 0)) || value % 5 == 0;
@@ -314,7 +320,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex24() {
-        assertScript(1, 128, new ScriptForLogicalExpression() {
+        assertScript(1, 128, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 5 == 0 && ((value % 3 == 0 && value % 4 == 0) || (value % 7 == 0 || value % 6 == 0));
@@ -324,7 +330,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex25() {
-        assertScript(1, 128, new ScriptForLogicalExpression() {
+        assertScript(1, 128, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return ((value % 3 == 0 && value % 4 == 0) || (value % 7 == 0 && value % 6 == 0)) && value % 5 == 0;
@@ -334,7 +340,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex26() {
-        assertScript(1, 128, new ScriptForLogicalExpression() {
+        assertScript(1, 128, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return (value % 3 == 0 && value % 4 == 0) || (value % 7 == 0 && value % 6 == 0) && value % 5 == 0;
@@ -344,7 +350,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex27() {
-        assertScript(1, 128, new ScriptForLogicalExpression() {
+        assertScript(1, 128, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 3 == 0 || value % 4 == 0 || value % 7 == 0 && (value % 6 == 0 || value % 5 == 0);
@@ -354,7 +360,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex28() {
-        assertScript(1, 128, new ScriptForLogicalExpression() {
+        assertScript(1, 128, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return (value % 11 == 0 || value % 7 == 0) && ((value % 3 == 0 && value % 2 == 0) || value % 5 == 0);
@@ -364,7 +370,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex29() {
-        assertScript(1, 128, new ScriptForLogicalExpression() {
+        assertScript(1, 128, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 7 == 0 || (value % 3 == 0 || value % 2 == 0) && value % 5 == 0;
@@ -374,7 +380,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex30() {
-        assertScript(1, 128, new ScriptForLogicalExpression() {
+        assertScript(1, 128, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 7 == 0 && (value % 3 == 0 && value % 2 == 0 || value % 5 == 0);
@@ -384,7 +390,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Complex31() {
-        assertScript(1, 128, new ScriptForLogicalExpression() {
+        assertScript(1, 128, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return value % 7 == 0 && (value % 5 == 0 || value % 3 == 0) && value % 2 == 0;
@@ -394,7 +400,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfOr() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 if (value == 1 || value == 3) {
@@ -408,7 +414,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfAnd() {
-        assertScript(0, 12, new ScriptForInt() {
+        assertScript(0, 12, new IntScript() {
 
             public int execute(int value) {
                 if (value % 2 == 0 && value % 3 == 0) {
@@ -422,7 +428,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfComplex1() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 if ((value == 3 || value == 4) && value % 2 == 0) {
@@ -436,7 +442,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfComplex2() {
-        assertScript(0, 48, new ScriptForInt() {
+        assertScript(0, 48, new IntScript() {
 
             public int execute(int value) {
                 if ((value % 3 == 0 && value % 4 == 0) || (value % 7 == 0 || value % 6 == 0) && value % 5 == 0) {
@@ -450,7 +456,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void MethodOr() {
-        assertScript(1, 5, new ScriptForLogicalExpression() {
+        assertScript(1, 5, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return method(value == 1 || value == 2);
@@ -464,7 +470,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void MethodAnd() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return method(value % 2 == 0 && value % 3 == 0);
@@ -478,7 +484,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void MethodComplex1() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return method((value % 4 == 0 || value % 3 == 0) && value % 2 == 0);
@@ -492,7 +498,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void MethodComplex2() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 return method((value % 4 == 0 || value % 3 == 0) && value % 2 == 0 || (value % 5 == 0 || value % 7 == 0) && value % 3 == 0);
@@ -506,7 +512,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void VariableOr() {
-        assertScript(1, 5, new ScriptForLogicalExpression() {
+        assertScript(1, 5, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 boolean v = value == 1 || value == 2;
@@ -518,7 +524,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void VariableAnd() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 boolean v = value % 2 == 0 || value % 3 == 0;
@@ -530,7 +536,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void VariableComplex1() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 boolean v = (value % 3 == 0 || value % 4 == 0) && value % 2 == 0;
@@ -542,7 +548,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void VariableComplex2() {
-        assertScript(1, 24, new ScriptForLogicalExpression() {
+        assertScript(1, 24, new LogicalExpressionScript() {
 
             public boolean execute(int value) {
                 boolean v = (value % 3 == 0 || value % 4 == 0) && value % 2 == 0 || value % 5 == 0 && (value % 2 == 0 || value % 3 == 0);
@@ -554,7 +560,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ConditionalOperator() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 return value == 1 ? 20 : value;
@@ -564,7 +570,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ConditionalOperatorLogicalSum() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 return value == 1 || value == 2 ? 20 : value;
@@ -574,7 +580,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ConditionalOperatorComplex() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 return (value % 2 == 0 || value % 3 == 0) && value % 5 == 0 ? value + 1 : value + 2;
@@ -584,7 +590,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ConditionalOperatorNest1() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 return value % 2 == 0 ? value == 2 ? 20 : 10 : value;
@@ -594,7 +600,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ConditionalOperatorNest2() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 return value == 1 || value == 2 ? value == 1 ? 20 : 10 : value;
@@ -604,7 +610,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ConditionalOperatorNest3() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 return value % 2 == 0 ? value == 2 || value == 4 ? 20 : 10 : value;
@@ -614,7 +620,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ConditionalOperatorNest4() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 return value == 0 ? 20 : value == 1 ? 10 : value;
@@ -624,7 +630,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ConditionalOperatorNest5() {
-        assertScript(0, 100, new ScriptForInt() {
+        assertScript(0, 100, new IntScript() {
 
             public int execute(int value) {
                 return value % 2 == 0 ? value % 3 == 0 || value % 4 == 0 && (value % 5 == 0 || value % 7 == 0) ? 20
@@ -635,7 +641,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ConditionalOperatorWithIf() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 if (value % 2 == 0 || value % 3 == 0) {
@@ -649,7 +655,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ConditionalOperatorInMethod() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 return method(value == 1 ? value + 1 : value + 2);
@@ -663,7 +669,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ConditionalOperatorWithLogicalSumInMethod() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 return method(value == 1 || value == 2 ? value + 1 : value + 2);
@@ -677,7 +683,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ConditionalOperatorComplexInMethod() {
-        assertScript(1, 24, new ScriptForInt() {
+        assertScript(1, 24, new IntScript() {
 
             public int execute(int value) {
                 return method((value % 2 == 0 || value % 3 == 0) && value % 4 == 0 ? value + 1 : value + 2);
@@ -691,7 +697,7 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Anonymous() {
-        assertScript(new ScriptForObject<String>() {
+        assertScript(new ObjectScript<String>() {
 
             public String execute(String value) {
                 return new Object() {
@@ -706,10 +712,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntArrayForEach() {
-        assertScript(1, 10, new ScriptForInt() {
+        assertScript(1, 10, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 int sum = 0;
@@ -725,10 +731,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void If() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 if (value < 3) {
@@ -741,10 +747,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfElse() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 if (value < 3) {
@@ -758,10 +764,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfElseAfter() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 if (value < 3) {
@@ -776,10 +782,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfNest() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 if (value < 3) {
@@ -795,10 +801,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfNest2() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 if (value < 3 && 1 < value || value % 2 == 0) {
@@ -815,10 +821,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void While() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 while (value < 3) {
@@ -832,10 +838,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileBreak() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 while (value < 3) {
@@ -853,10 +859,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileInfiniteBreak() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 while (true) {
@@ -874,10 +880,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileMultipuleBreaks() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 while (value < 5) {
@@ -899,10 +905,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileContinue() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 while (value < 3) {
@@ -920,10 +926,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileNest() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 while (value < 30) {
@@ -941,10 +947,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileLabeledBreak() {
-        assertScript(1, 10, new ScriptForInt() {
+        assertScript(1, 10, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 root: while (value < 100) {
@@ -968,10 +974,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoWhile() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 do {
@@ -985,10 +991,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoWhileEquivalent() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 while (true) {
@@ -1005,10 +1011,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
     }
 
     public void DoWhileBreak() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 do {
@@ -1026,10 +1032,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoWhileInfiniteBreak() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 do {
@@ -1047,10 +1053,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoWhileContinue() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 do {
@@ -1070,10 +1076,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void For() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 for (int i = 0; i < 3; i++) {
@@ -1087,10 +1093,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ForWithoutInitialize() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 int i = 0;
@@ -1107,10 +1113,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ForWithoutUpdate() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 for (int i = 0; i < 8;) {
@@ -1129,10 +1135,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ForBreak() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 for (int i = 0; i < 3; i++) {
@@ -1150,10 +1156,10 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ForContinue() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             /**
-             * @see booton.translator.ScriptForInt#execute(int)
+             * @see booton.translator.api.IntScript#execute(int)
              */
             public int execute(int value) {
                 for (int i = 0; i < 3; i++) {
@@ -1172,8 +1178,9 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
     }
 
     @Test
+    @Ignore
     public void TryCatch() {
-        assertScript(0, 3, new ScriptForInt() {
+        assertScript(0, 3, new IntScript() {
 
             public int execute(int value) {
                 try {
@@ -1189,8 +1196,9 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
     }
 
     @Test
+    @Ignore
     public void TryCatchAfter() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             public int execute(int value) {
                 try {
@@ -1207,8 +1215,9 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
     }
 
     @Test
+    @Ignore
     public void TryMultipleCatch() {
-        assertScript(0, 5, new ScriptForInt() {
+        assertScript(0, 5, new IntScript() {
 
             public int execute(int value) {
                 try {
@@ -1231,8 +1240,9 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
     }
 
     @Test
+    @Ignore
     public void TryCatchInCatch() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             public int execute(int value) {
                 try {
@@ -1255,8 +1265,9 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
     }
 
     @Test
+    @Ignore
     public void TryCatchInTry() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             public int execute(int value) {
                 try {
@@ -1305,8 +1316,9 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
      * </pre>
      */
     @Test
+    @Ignore
     public void TryCatchFinally() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             private int counter = 0;
 
@@ -1330,8 +1342,9 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
     }
 
     @Test
+    @Ignore
     public void TryCatchFinallyNodes() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             private int counter = 0;
 
@@ -1388,8 +1401,9 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
      * </pre>
      */
     @Test
+    @Ignore
     public void TryCatchFinallyAfter() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             public int execute(int value) {
                 try {
@@ -1408,8 +1422,9 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
     }
 
     @Test
+    @Ignore
     public void TryFinallyAfterNest() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             private int id = 0;
 
@@ -1435,8 +1450,9 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
     }
 
     @Test
+    @Ignore
     public void TryFinallyAfterNest2() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             private int id = 0;
 
@@ -1470,8 +1486,9 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
     }
 
     @Test
+    @Ignore
     public void TryCatchFinallyAfterNestAtFinally() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             public int execute(int value) {
                 try {
@@ -1515,8 +1532,9 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
      * </pre>
      */
     @Test
+    @Ignore
     public void TryFinallyAfter() {
-        assertScript(0, 3, new ScriptForInt() {
+        assertScript(0, 3, new IntScript() {
 
             public int execute(int value) {
                 try {
@@ -1555,8 +1573,9 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
      * </pre>
      */
     @Test
+    @Ignore
     public void TryFinallyAfterWithNodes() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             public int execute(int value) {
                 try {
@@ -1584,8 +1603,9 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
     }
 
     @Test
+    @Ignore
     public void TryFinallyNest1() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             public int execute(int value) {
                 try {
@@ -1607,8 +1627,9 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
     }
 
     @Test
+    @Ignore
     public void TryFinallyNest2() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             public int execute(int value) {
                 try {
@@ -1634,8 +1655,9 @@ public class LogicalExpressionTest extends ScriptTranslatorTestcase {
     }
 
     @Test
+    @Ignore
     public void TryFinallyNest3() {
-        assertScript(0, 10, new ScriptForInt() {
+        assertScript(0, 10, new IntScript() {
 
             public int execute(int value) {
                 try {

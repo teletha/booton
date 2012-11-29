@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package booton.translator;
+package booton.translator.api;
 
 /**
- * @version 2009/08/05 16:47:38
+ * @version 2012/11/29 22:58:12
  */
-public interface ScriptForByte {
+public interface ThrowableScript<T> {
 
     /**
      * Script fragment.
@@ -26,5 +26,5 @@ public interface ScriptForByte {
      * @param value A script input.
      * @return A script output.
      */
-    byte execute(byte value);
+    T execute(T value) throws Exception;
 }

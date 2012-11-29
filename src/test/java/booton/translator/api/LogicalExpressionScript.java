@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package booton.translator;
+package booton.translator.api;
 
 /**
- * @version 2009/08/05 16:47:12
+ * @version 2012/11/29 22:57:36
  */
-public interface ScriptForShort {
+public interface LogicalExpressionScript {
 
     /**
      * Script fragment.
@@ -26,5 +26,5 @@ public interface ScriptForShort {
      * @param value A script input.
      * @return A script output.
      */
-    short execute(short value);
+    boolean execute(int value);
 }

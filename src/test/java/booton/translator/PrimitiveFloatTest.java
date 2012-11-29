@@ -17,6 +17,8 @@ package booton.translator;
 
 import org.junit.Test;
 
+import booton.translator.api.FloatScript;
+
 /**
  * @version 2009/08/06 11:00:20
  */
@@ -24,7 +26,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void zero() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return 0;
@@ -34,7 +36,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void one() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return 1;
@@ -44,7 +46,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void two() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return 2;
@@ -54,7 +56,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void three() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return 3;
@@ -64,7 +66,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void minus() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return -1;
@@ -74,7 +76,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void max() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return Float.MAX_VALUE;
@@ -84,7 +86,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void min() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return Float.MIN_VALUE;
@@ -94,7 +96,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void add() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return value + 1;
@@ -104,7 +106,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void addAssignable() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return value += 2;
@@ -114,7 +116,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void subtract() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return value - 1;
@@ -124,7 +126,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void subtractAssignable() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return value -= 2;
@@ -134,7 +136,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void multiply() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return value * 2;
@@ -144,7 +146,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void multiplyAssignable() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return value *= 2;
@@ -154,7 +156,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void divide() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return value / 2;
@@ -164,7 +166,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void divideAssignable() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return value /= 2;
@@ -174,7 +176,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void modulo() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return value % 2;
@@ -184,7 +186,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void moduloAssignable() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return value %= 2;
@@ -194,7 +196,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrement() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return value++;
@@ -204,7 +206,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrementValue() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 float next = value++;
@@ -215,7 +217,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrementLike() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return value + 1;
@@ -225,7 +227,7 @@ public class PrimitiveFloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void preIncrement() {
-        assertScript(new ScriptForFloat() {
+        assertScript(new FloatScript() {
 
             public float execute(float value) {
                 return ++value;

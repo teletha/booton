@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package booton.translator;
+package booton.translator.api;
 
 /**
- * @version 2009/08/05 15:47:06
+ * @version 2012/11/29 22:58:04
  */
-public interface ScriptForDouble {
+public interface ObjectScript<T> {
 
     /**
      * Script fragment.
@@ -26,5 +26,5 @@ public interface ScriptForDouble {
      * @param value A script input.
      * @return A script output.
      */
-    double execute(double value);
+    T execute(T value);
 }

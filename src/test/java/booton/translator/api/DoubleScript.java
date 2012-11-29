@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package booton.translator;
+package booton.translator.api;
 
 /**
- * @version 2009/08/05 16:39:33
+ * @version 2012/11/29 22:57:43
  */
-public interface ScriptForLong {
+public interface DoubleScript {
 
     /**
      * Script fragment.
@@ -26,5 +26,5 @@ public interface ScriptForLong {
      * @param value A script input.
      * @return A script output.
      */
-    long execute(long value);
+    double execute(double value);
 }

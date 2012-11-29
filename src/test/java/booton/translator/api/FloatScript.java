@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package booton.translator;
+package booton.translator.api;
 
 /**
- * @version 2009/09/11 19:14:14
+ * @version 2012/11/29 22:57:49
  */
-public interface ScriptForLogicalExpression {
+public interface FloatScript {
 
     /**
      * Script fragment.
@@ -26,5 +26,5 @@ public interface ScriptForLogicalExpression {
      * @param value A script input.
      * @return A script output.
      */
-    boolean execute(int value);
+    float execute(float value);
 }

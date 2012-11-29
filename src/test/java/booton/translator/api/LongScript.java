@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package booton.translator;
+package booton.translator.api;
 
 /**
- * @version 2009/08/21 11:32:42
+ * @version 2012/11/29 22:58:00
  */
-public interface ScriptForThrowable<T> {
+public interface LongScript {
 
     /**
      * Script fragment.
@@ -26,5 +26,5 @@ public interface ScriptForThrowable<T> {
      * @param value A script input.
      * @return A script output.
      */
-    T execute(T value) throws Exception;
+    long execute(long value);
 }

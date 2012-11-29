@@ -17,6 +17,8 @@ package booton.translator;
 
 import org.junit.Test;
 
+import booton.translator.api.LongScript;
+
 /**
  * @version 2009/08/06 10:54:50
  */
@@ -24,7 +26,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void zero() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return 0;
@@ -34,7 +36,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void one() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return 1;
@@ -44,7 +46,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void two() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return 2;
@@ -54,7 +56,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void three() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return 3;
@@ -64,7 +66,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void minus() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return -1;
@@ -74,7 +76,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void max() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return Long.MAX_VALUE;
@@ -84,7 +86,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void min() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return Long.MIN_VALUE;
@@ -94,7 +96,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void add() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value + 1;
@@ -104,7 +106,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void addAssignable() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value += 2;
@@ -114,7 +116,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void subtract() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value - 1;
@@ -124,7 +126,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void subtractAssignable() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value -= 2;
@@ -134,7 +136,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void multiply() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value * 2;
@@ -144,7 +146,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void multiplyAssignable() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value *= 2;
@@ -154,7 +156,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void divide() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value / 2;
@@ -164,7 +166,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void divideAssignable() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value /= 2;
@@ -174,7 +176,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void modulo() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value % 2;
@@ -184,7 +186,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void moduloAssignable() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value %= 2;
@@ -194,7 +196,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitAnd() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value & 0x010101;
@@ -204,7 +206,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitOr() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value | 0x010101;
@@ -214,7 +216,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitOrAssignable() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value |= 0x010101;
@@ -224,7 +226,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitXor() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value ^ 0x010101;
@@ -234,7 +236,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitXorAssignable() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value ^= 0x010101;
@@ -244,7 +246,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitNot() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return ~value;
@@ -254,7 +256,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void shiftLeft() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value << 1;
@@ -264,7 +266,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void shiftLeftAssignable() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value <<= 1;
@@ -274,7 +276,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void shiftRight() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value >> 1;
@@ -284,7 +286,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void shiftRightAssignable() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value >>= 1;
@@ -296,7 +298,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
      * @TODO Implement arbitrary-precision integers for Javascript.
      */
     public void unsignedShiftRight() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value >>> 1;
@@ -308,7 +310,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
      * @TODO Implement arbitrary-precision integers for Javascript.
      */
     public void unsignedShiftRightAssignable() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value >>>= 1;
@@ -318,7 +320,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrement() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value++;
@@ -328,7 +330,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrementValue() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 long next = value++;
@@ -339,7 +341,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrementLike() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return value + 1;
@@ -349,7 +351,7 @@ public class PrimitiveLongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void preIncrement() {
-        assertScript(new ScriptForLong() {
+        assertScript(new LongScript() {
 
             public long execute(long value) {
                 return ++value;

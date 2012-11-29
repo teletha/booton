@@ -17,6 +17,9 @@ package booton.translator;
 
 import org.junit.Test;
 
+import booton.translator.api.IntScript;
+import booton.translator.api.ObjectScript;
+
 /**
  * @version 2009/08/19 0:39:39
  */
@@ -24,7 +27,7 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StringValueOf() {
-        assertScript(new ScriptForObject<String>() {
+        assertScript(new ObjectScript<String>() {
 
             public String execute(String value) {
                 return String.valueOf((Object) null);
@@ -40,10 +43,10 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/20 13:15:34
      */
-    private static class StaticMethod implements ScriptForInt {
+    private static class StaticMethod implements IntScript {
 
         /**
-         * @see booton.translator.ScriptForInt#execute(int)
+         * @see booton.translator.api.IntScript#execute(int)
          */
         public int execute(int value) {
             return compute();
@@ -62,10 +65,10 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/20 13:15:34
      */
-    private static class StaticMethodWithParam implements ScriptForInt {
+    private static class StaticMethodWithParam implements IntScript {
 
         /**
-         * @see booton.translator.ScriptForInt#execute(int)
+         * @see booton.translator.api.IntScript#execute(int)
          */
         public int execute(int value) {
             return compute(value);
@@ -84,12 +87,12 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/20 13:15:34
      */
-    private static class GetStaticField implements ScriptForInt {
+    private static class GetStaticField implements IntScript {
 
         private static int field = 10;
 
         /**
-         * @see booton.translator.ScriptForInt#execute(int)
+         * @see booton.translator.api.IntScript#execute(int)
          */
         public int execute(int value) {
             return field;
@@ -104,12 +107,12 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/20 13:15:34
      */
-    private static class GetStaticFieldFromStaticMethod implements ScriptForInt {
+    private static class GetStaticFieldFromStaticMethod implements IntScript {
 
         private static int field = 10;
 
         /**
-         * @see booton.translator.ScriptForInt#execute(int)
+         * @see booton.translator.api.IntScript#execute(int)
          */
         public int execute(int value) {
             return compute();
@@ -128,12 +131,12 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/20 13:15:34
      */
-    private static class SetStaticField implements ScriptForInt {
+    private static class SetStaticField implements IntScript {
 
         private static int field;
 
         /**
-         * @see booton.translator.ScriptForInt#execute(int)
+         * @see booton.translator.api.IntScript#execute(int)
          */
         public int execute(int value) {
             field = value;
@@ -150,7 +153,7 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/20 13:15:34
      */
-    private static class StaticInitialization implements ScriptForInt {
+    private static class StaticInitialization implements IntScript {
 
         private static final int field;
 
@@ -159,7 +162,7 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
         }
 
         /**
-         * @see booton.translator.ScriptForInt#execute(int)
+         * @see booton.translator.api.IntScript#execute(int)
          */
         public int execute(int value) {
             return field;

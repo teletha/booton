@@ -41,6 +41,18 @@ import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
 
 import org.objectweb.asm.Type;
 
+import booton.translator.Javascript;
+import booton.translator.api.BooleanScript;
+import booton.translator.api.ByteScript;
+import booton.translator.api.DoubleScript;
+import booton.translator.api.FloatScript;
+import booton.translator.api.IntScript;
+import booton.translator.api.LogicalExpressionScript;
+import booton.translator.api.LongScript;
+import booton.translator.api.ObjectScript;
+import booton.translator.api.ShortScript;
+import booton.translator.api.ThrowableScript;
+
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -91,7 +103,7 @@ public class ScriptTranslatorTestcase {
     /**
      * @param script
      */
-    protected void assertScript(ScriptForByte script) {
+    protected void assertScript(ByteScript script) {
         assertScript((byte) -2, (byte) 2, script);
     }
 
@@ -100,7 +112,7 @@ public class ScriptTranslatorTestcase {
      * @param start
      * @param end
      */
-    protected void assertScript(byte start, byte end, ScriptForByte script) {
+    protected void assertScript(byte start, byte end, ByteScript script) {
         // check range
         if (end <= start) {
             throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
@@ -120,7 +132,7 @@ public class ScriptTranslatorTestcase {
     /**
      * @param script
      */
-    protected void assertScript(ScriptForShort script) {
+    protected void assertScript(ShortScript script) {
         assertScript((short) -2, (short) 2, script);
     }
 
@@ -129,7 +141,7 @@ public class ScriptTranslatorTestcase {
      * @param start
      * @param end
      */
-    protected void assertScript(short start, short end, ScriptForShort script) {
+    protected void assertScript(short start, short end, ShortScript script) {
         // check range
         if (end <= start) {
             throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
@@ -149,7 +161,7 @@ public class ScriptTranslatorTestcase {
     /**
      * @param script
      */
-    protected void assertScript(ScriptForInt script) {
+    protected void assertScript(IntScript script) {
         assertScript(-2, 2, script);
     }
 
@@ -158,7 +170,7 @@ public class ScriptTranslatorTestcase {
      * @param start
      * @param end
      */
-    protected void assertScript(int start, int end, ScriptForInt script) {
+    protected void assertScript(int start, int end, IntScript script) {
         // check range
         if (end <= start) {
             throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
@@ -178,7 +190,7 @@ public class ScriptTranslatorTestcase {
     /**
      * @param script
      */
-    protected void assertScript(ScriptForLong script) {
+    protected void assertScript(LongScript script) {
         assertScript(-2, 2, script);
     }
 
@@ -187,7 +199,7 @@ public class ScriptTranslatorTestcase {
      * @param start
      * @param end
      */
-    protected void assertScript(long start, long end, ScriptForLong script) {
+    protected void assertScript(long start, long end, LongScript script) {
         // check range
         if (end <= start) {
             throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
@@ -207,7 +219,7 @@ public class ScriptTranslatorTestcase {
     /**
      * @param script
      */
-    protected void assertScript(ScriptForFloat script) {
+    protected void assertScript(FloatScript script) {
         assertScript(-2, 2, script);
     }
 
@@ -216,7 +228,7 @@ public class ScriptTranslatorTestcase {
      * @param start
      * @param end
      */
-    protected void assertScript(float start, float end, ScriptForFloat script) {
+    protected void assertScript(float start, float end, FloatScript script) {
         // check range
         if (end <= start) {
             throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
@@ -236,7 +248,7 @@ public class ScriptTranslatorTestcase {
     /**
      * @param script
      */
-    protected void assertScript(ScriptForDouble script) {
+    protected void assertScript(DoubleScript script) {
         assertScript(-2, 2, script);
     }
 
@@ -245,7 +257,7 @@ public class ScriptTranslatorTestcase {
      * @param start
      * @param end
      */
-    protected void assertScript(double start, double end, ScriptForDouble script) {
+    protected void assertScript(double start, double end, DoubleScript script) {
         // check range
         if (end <= start) {
             throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
@@ -267,14 +279,14 @@ public class ScriptTranslatorTestcase {
      * @param start
      * @param end
      */
-    protected void assertScript(ScriptForBoolean script) {
+    protected void assertScript(BooleanScript script) {
         assertScript(Arrays.asList(true, false), script);
     }
 
     /**
      * @param script
      */
-    protected void assertScript(ScriptForLogicalExpression script) {
+    protected void assertScript(LogicalExpressionScript script) {
         assertScript(-2, 2, script);
     }
 
@@ -283,7 +295,7 @@ public class ScriptTranslatorTestcase {
      * @param start
      * @param end
      */
-    protected void assertScript(int start, int end, ScriptForLogicalExpression script) {
+    protected void assertScript(int start, int end, LogicalExpressionScript script) {
         // check range
         if (end <= start) {
             throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
@@ -303,7 +315,7 @@ public class ScriptTranslatorTestcase {
     /**
      * @param script
      */
-    protected <T> void assertScript(ScriptForObject<T> script) {
+    protected <T> void assertScript(ObjectScript<T> script) {
         assertScript((T) null, script);
     }
 
@@ -312,14 +324,14 @@ public class ScriptTranslatorTestcase {
      * @param end
      * @param script
      */
-    protected <T> void assertScript(T input, ScriptForObject<T> script) {
+    protected <T> void assertScript(T input, ObjectScript<T> script) {
         assertScript(Collections.singletonList(input), script);
     }
 
     /**
      * @param script
      */
-    protected <T> void assertScript(ScriptForThrowable<T> script) {
+    protected <T> void assertScript(ThrowableScript<T> script) {
         assertScript((T) null, script);
     }
 
@@ -328,7 +340,7 @@ public class ScriptTranslatorTestcase {
      * @param end
      * @param script
      */
-    protected <T> void assertScript(T input, ScriptForThrowable<T> script) {
+    protected <T> void assertScript(T input, ThrowableScript<T> script) {
         assertScript(Collections.singletonList(input), script);
     }
 

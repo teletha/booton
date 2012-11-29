@@ -17,6 +17,8 @@ package booton.translator;
 
 import org.junit.Test;
 
+import booton.translator.api.IntScript;
+
 /**
  * @version 2009/08/18 19:19:10
  */
@@ -30,7 +32,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class Basic implements ScriptForInt {
+    private static class Basic implements IntScript {
 
         public int execute(int value) {
             return compute();
@@ -49,7 +51,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class Param implements ScriptForInt {
+    private static class Param implements IntScript {
 
         public int execute(int value) {
             return compute(value);
@@ -68,7 +70,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class MultipleParams implements ScriptForInt {
+    private static class MultipleParams implements IntScript {
 
         public int execute(int value) {
             return compute(value, value + 1);
@@ -87,7 +89,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class ArrayParam implements ScriptForInt {
+    private static class ArrayParam implements IntScript {
 
         public int execute(int value) {
             int[] ints = {value, value + 1, value + 2};
@@ -114,7 +116,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class VariableParam implements ScriptForInt {
+    private static class VariableParam implements IntScript {
 
         public int execute(int value) {
             return compute(value, value + 1, value + 2);
@@ -139,7 +141,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class VariableParamWithBase implements ScriptForInt {
+    private static class VariableParamWithBase implements IntScript {
 
         public int execute(int value) {
             return compute(value, value + 1, value + 2);
@@ -164,7 +166,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class VariableParamWithBaseOnly implements ScriptForInt {
+    private static class VariableParamWithBaseOnly implements IntScript {
 
         public int execute(int value) {
             return compute(value);
@@ -189,7 +191,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class Nest implements ScriptForInt {
+    private static class Nest implements IntScript {
 
         public int execute(int value) {
             return compute(value, nest(value));
@@ -212,7 +214,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class Overload implements ScriptForInt {
+    private static class Overload implements IntScript {
 
         public int execute(int value) {
             return compute(value);
@@ -246,7 +248,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class ExtendPublic extends BasePublic implements ScriptForInt {
+    private static class ExtendPublic extends BasePublic implements IntScript {
 
         public int execute(int value) {
             return value + compute();
@@ -271,7 +273,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class ExtendProtected extends BaseProtected implements ScriptForInt {
+    private static class ExtendProtected extends BaseProtected implements IntScript {
 
         public int execute(int value) {
             return value + compute();
@@ -296,7 +298,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class ExtendPackage extends BasePackage implements ScriptForInt {
+    private static class ExtendPackage extends BasePackage implements IntScript {
 
         public int execute(int value) {
             return value + compute();
@@ -322,7 +324,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class OverrideChild extends OverrideBase implements ScriptForInt {
+    private static class OverrideChild extends OverrideBase implements IntScript {
 
         public int execute(int value) {
             return compute(value);
@@ -352,7 +354,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    static class SuperChild extends SuperBase implements ScriptForInt {
+    static class SuperChild extends SuperBase implements IntScript {
 
         public int execute(int value) {
             return this.compute(value) + super.compute(value);
