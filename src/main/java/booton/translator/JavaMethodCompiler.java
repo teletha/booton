@@ -661,7 +661,7 @@ class JavaMethodCompiler extends MethodVisitor {
             dispose(current);
         } else if (third instanceof OperandCondition) {
             System.out.println(first + "  jjjjjjj   " + second + "   " + third);
-            System.out.println(first.getClass() + "  " + second.getClass() + "  " + third.getClass() + "   " + nodes.get(nodes.size() - 1).previous);
+            System.out.println(first.getClass() + "  " + second.getClass() + "  " + third.getClass() + "   " + nodes);
             first = current.remove(0);
             second = current.remove(0);
             third = current.remove(0);
