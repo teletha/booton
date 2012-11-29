@@ -592,8 +592,10 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case IF_ICMPLT: // int < int
-            current.stack.add(new OperandCondition(current.remove(1), LT, current.remove(0), node));
 
+            current.stack.add(new OperandCondition(current.remove(1), LT, current.remove(0), node));
+            System.out.println(current.getClass().getName() + "#" + System.identityHashCode(current));
+            System.out.println(current);
             connect(label);
             break;
 
@@ -624,11 +626,13 @@ class JavaMethodCompiler extends MethodVisitor {
         // THEN_EXPRESSION, GOTO, LABEL, ELSE_EXPRESSION, LABEL] in bytecode.
 
         // build new node
+        System.out.println(current + "  @");
         current = connect(label);
+        System.out.println(current + "  @@");
 
         // store the node in appearing order
         nodes.add(current);
-
+        System.out.println(nodes);
         if (1 < nodes.size()) {
             current.previous = nodes.get(nodes.size() - 2);
 
@@ -649,12 +653,15 @@ class JavaMethodCompiler extends MethodVisitor {
         Operand third = peek(2);
 
         if (first instanceof OperandCondition) {
+            System.out.println(first + "  yyy " + second + "  yyyy " + third);
             merge();
         } else if (second instanceof OperandCondition) {
             merge();
 
             dispose(current);
         } else if (third instanceof OperandCondition) {
+            System.out.println(first + "  jjjjjjj   " + second + "   " + third);
+            System.out.println(first.getClass() + "  " + second.getClass() + "  " + third.getClass() + "   " + nodes.get(nodes.size() - 1).previous);
             first = current.remove(0);
             second = current.remove(0);
             third = current.remove(0);
@@ -665,6 +672,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.addOperand(third.invert());
             } else {
                 current.addOperand(third.invert() + "?" + second + ":" + first);
+                System.out.println(current);
             }
 
             // resolve recursively

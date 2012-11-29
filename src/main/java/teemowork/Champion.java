@@ -9,7 +9,6 @@
  */
 package teemowork;
 
-
 /**
  * @version 2012/11/27 18:19:08
  */
@@ -44,10 +43,19 @@ public class Champion {
     }
 
     public static void jsmain() {
-        System.out.println("system!");
+        // System.out.println("start!!!");
+        //
+        // Champion champion = new Champion("Teemo", 100, 10);
+        //
+        // System.out.println(champion.name + "  " + champion.getHealthAtLvele(7));
 
-        Champion calcurator = new Champion("Teemo", 100, 10);
+        // NodeList list = document.getElementsByTagName("p");
+        int m = 0;
 
-        System.out.println(calcurator.getHealthAtLvele(8));
+        for (int i = 0; i < 3; i++) {
+            // list.item(i).setTextContent(champion.name);
+            m++;
+        }
+        System.out.println(m);
     }
 }
