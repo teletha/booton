@@ -129,7 +129,9 @@ class Node {
 
         // Retrieve and remove it
         Operand operand = stack.remove(index);
-
+        // if (operand instanceof OperandCondition) {
+        // throw new Error(operand.toString());
+        // }
         if (operand.duplicated) {
             operand.duplicated = false;
 
@@ -177,7 +179,7 @@ class Node {
 
         // block.start.stoppable += block.start.incoming.size();
 
-        // 
+        //
         for (TryBlock item : catcheTries) {
             if (item.base == block.base && item.end == block.end) {
                 return;
@@ -397,7 +399,8 @@ class Node {
 
                         // setup following node
                         follower = outgoing.get(1);
-
+                        System.out.println(this.getClass().getName() + "#" + System.identityHashCode(this));
+                        System.out.println(stack.size());
                         // write script fragment
                         buffer.append("l", id, " : for (;", this, ";", update, ") {");
                         process(outgoing.get(0), buffer);

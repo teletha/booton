@@ -25,4 +25,8 @@ public class PrintWriterTranslator extends Translator<PrintStream> {
     public String println(int value) {
         return that + ".log(" + param(0) + ")";
     }
+
+    public String println(Object value) {
+        return that + ".log(" + param(0) + ")";
+    }
 }

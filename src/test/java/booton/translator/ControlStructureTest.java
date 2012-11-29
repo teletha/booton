@@ -526,6 +526,22 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     }
 
     @Test
+    public void ForAfterProcess() {
+        assertScript(0, 5, new ScriptForInt() {
+
+            public int execute(int value) {
+                String name = "act";
+
+                for (int i = 0; i < name.length(); i++) {
+                    value++;
+                }
+
+                return value;
+            }
+        });
+    }
+
+    @Test
     public void SwitchReturn() {
         assertScript(0, 5, new ScriptForInt() {
 

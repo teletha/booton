@@ -46,10 +46,12 @@ public class SiteBuilder {
         head.child("meta").attr("charset", "utf-8");
         head.child("script").attr("type", "text/javascript").attr("src", "boot.js").text("/* */");
         head.child("script").attr("type", "text/javascript").attr("src", "test.js").text("/* */");
-        head.child("script").attr("type", "text/javascript").text(builder.toString());
 
         XML body = html.child("body");
-        body.child("p").text("test");
+        body.child("p").text("test0");
+        body.child("p").text("test1");
+
+        html.child("script").attr("type", "text/javascript").text(builder.toString());
 
         html.to(Files.newBufferedWriter(htmlPath, I.$encoding));
 
