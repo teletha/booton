@@ -37,7 +37,6 @@ import booton.translator.api.BooleanScript;
 import booton.translator.api.IntScript;
 import booton.translator.api.LogicalExpressionScript;
 import booton.translator.api.ObjectScript;
-import booton.translator.api.ShortScript;
 import booton.translator.api.ThrowableScript;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
@@ -85,35 +84,6 @@ public class ScriptTranslatorTestcase {
         } catch (Exception e) {
             throw I.quiet(e);
         }
-    }
-
-    /**
-     * @param script
-     */
-    protected void test(ShortScript script) {
-        test((short) -2, (short) 2, script);
-    }
-
-    /**
-     * @param script
-     * @param start
-     * @param end
-     */
-    protected void test(short start, short end, ShortScript script) {
-        // check range
-        if (end <= start) {
-            throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
-        }
-
-        // build inputs
-        List<Short> inputs = new ArrayList();
-
-        for (short i = 0; i <= end - start; i++) {
-            inputs.add(Integer.valueOf(start + i).shortValue());
-        }
-
-        // delegate
-        assertScript(inputs, script);
     }
 
     /**
