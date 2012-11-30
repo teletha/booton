@@ -193,7 +193,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntArrayAccess() {
-        assertScript(new IntScript() {
+        test(new IntScript() {
 
             /**
              * @see booton.translator.api.IntScript#execute(int)
@@ -399,7 +399,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void LongArrayAccess() {
-        assertScript(new LongScript() {
+        test(new LongScript() {
 
             public long execute(long value) {
                 long[] array = {1, value};
@@ -533,7 +533,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void FloatArrayAccess() {
-        assertScript(new FloatScript() {
+        test(new FloatScript() {
 
             public float execute(float value) {
                 float[] array = {1, value};
@@ -702,7 +702,7 @@ public class ArrayTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoubleArrayAccess() {
-        assertScript(new DoubleScript() {
+        test(new DoubleScript() {
 
             public double execute(double value) {
                 double[] array = {1, value};

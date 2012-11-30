@@ -17,19 +17,20 @@ package booton.translator.primitive;
 
 import org.junit.Test;
 
-import booton.translator.ScriptTranslatorTestcase;
-import booton.translator.api.FloatScript;
+import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
- * @version 2009/08/06 11:00:20
+ * @version 2012/12/01 2:05:46
  */
-public class FloatTest extends ScriptTranslatorTestcase {
+@SuppressWarnings("unused")
+public class FloatTest extends ScriptTester {
 
     @Test
     public void zero() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return 0;
             }
         });
@@ -37,9 +38,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void one() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return 1;
             }
         });
@@ -47,9 +48,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void two() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return 2;
             }
         });
@@ -57,9 +58,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void three() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return 3;
             }
         });
@@ -67,9 +68,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void minus() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return -1;
             }
         });
@@ -77,9 +78,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void max() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return Float.MAX_VALUE;
             }
         });
@@ -87,9 +88,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void min() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return Float.MIN_VALUE;
             }
         });
@@ -97,9 +98,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void add() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return value + 1;
             }
         });
@@ -107,9 +108,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void addAssignable() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return value += 2;
             }
         });
@@ -117,9 +118,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void subtract() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return value - 1;
             }
         });
@@ -127,9 +128,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void subtractAssignable() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return value -= 2;
             }
         });
@@ -137,9 +138,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void multiply() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return value * 2;
             }
         });
@@ -147,9 +148,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void multiplyAssignable() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return value *= 2;
             }
         });
@@ -157,9 +158,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void divide() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return value / 2;
             }
         });
@@ -167,9 +168,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void divideAssignable() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return value /= 2;
             }
         });
@@ -177,9 +178,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void modulo() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return value % 2;
             }
         });
@@ -187,9 +188,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void moduloAssignable() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return value %= 2;
             }
         });
@@ -197,9 +198,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrement() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return value++;
             }
         });
@@ -207,9 +208,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrementValue() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 float next = value++;
                 return value + next;
             }
@@ -218,9 +219,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrementLike() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return value + 1;
             }
         });
@@ -228,9 +229,9 @@ public class FloatTest extends ScriptTranslatorTestcase {
 
     @Test
     public void preIncrement() {
-        assertScript(new FloatScript() {
+        test(new Scriptable() {
 
-            public float execute(float value) {
+            float act(float value) {
                 return ++value;
             }
         });

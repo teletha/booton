@@ -211,15 +211,15 @@ public class ScriptTester {
         } else if (type == int.class) {
             return Arrays.asList(0, 1, 2, 3, -1, -2, -3);
         } else if (type == long.class) {
-            return Arrays.asList(0L, 1L, 2L, 12345678901234L, -1L, -2L, -12345678901234L);
+            return Arrays.asList(0L, 1L, 2L, 123456789L, -1L, -2L, -123456789L);
         } else if (type == float.class) {
             return Arrays.asList(0F, 1F, 0.2F, -1.3464F);
         } else if (type == double.class) {
             return Arrays.asList(0D, 1D, 0.2D, 1.239754297642323D);
         } else if (type == short.class) {
-            return Arrays.asList(0, 1, 2, -1, -2);
+            return Arrays.asList((short) 0, (short) 1, (short) 2, (short) -1, (short) -2);
         } else if (type == byte.class) {
-            return Arrays.asList(0, 1, 2, -1, -2);
+            return Arrays.asList((byte) 0, (byte) 1, (byte) 2, (byte) -1, (byte) -2);
         } else if (type == String.class) {
             return Arrays.asList(null, "", "a", "some value");
         } else {

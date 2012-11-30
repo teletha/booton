@@ -43,7 +43,7 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void length() {
-        assertScript(new IntScript() {
+        test(new IntScript() {
 
             public int execute(int value) {
                 return "java".length();
@@ -103,7 +103,7 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void codePointAt() {
-        assertScript(new IntScript() {
+        test(new IntScript() {
 
             public int execute(int value) {
                 return "java".codePointAt(0);
@@ -113,7 +113,7 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void codePointBefore() {
-        assertScript(new IntScript() {
+        test(new IntScript() {
 
             public int execute(int value) {
                 return "java".codePointBefore(3);
@@ -123,7 +123,7 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void indexOf() {
-        assertScript(new IntScript() {
+        test(new IntScript() {
 
             public int execute(int value) {
                 return "java".indexOf("a");

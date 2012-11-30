@@ -17,19 +17,20 @@ package booton.translator.primitive;
 
 import org.junit.Test;
 
-import booton.translator.ScriptTranslatorTestcase;
-import booton.translator.api.ShortScript;
+import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
- * @version 2009/08/06 11:00:20
+ * @version 2012/12/01 2:07:31
  */
-public class ShortTest extends ScriptTranslatorTestcase {
+@SuppressWarnings("unused")
+public class ShortTest extends ScriptTester {
 
     @Test
     public void zero() {
-        assertScript(new ShortScript() {
+        test(new Scriptable() {
 
-            public short execute(short value) {
+            short act(short value) {
                 return 0;
             }
         });
@@ -37,9 +38,9 @@ public class ShortTest extends ScriptTranslatorTestcase {
 
     @Test
     public void one() {
-        assertScript(new ShortScript() {
+        test(new Scriptable() {
 
-            public short execute(short value) {
+            short act(short value) {
                 return 1;
             }
         });
@@ -47,9 +48,9 @@ public class ShortTest extends ScriptTranslatorTestcase {
 
     @Test
     public void two() {
-        assertScript(new ShortScript() {
+        test(new Scriptable() {
 
-            public short execute(short value) {
+            short act(short value) {
                 return 2;
             }
         });
@@ -57,9 +58,9 @@ public class ShortTest extends ScriptTranslatorTestcase {
 
     @Test
     public void three() {
-        assertScript(new ShortScript() {
+        test(new Scriptable() {
 
-            public short execute(short value) {
+            short act(short value) {
                 return 3;
             }
         });
@@ -67,9 +68,9 @@ public class ShortTest extends ScriptTranslatorTestcase {
 
     @Test
     public void minus() {
-        assertScript(new ShortScript() {
+        test(new Scriptable() {
 
-            public short execute(short value) {
+            short act(short value) {
                 return -1;
             }
         });
@@ -77,9 +78,9 @@ public class ShortTest extends ScriptTranslatorTestcase {
 
     @Test
     public void max() {
-        assertScript(new ShortScript() {
+        test(new Scriptable() {
 
-            public short execute(short value) {
+            short act(short value) {
                 return Short.MAX_VALUE;
             }
         });
@@ -87,9 +88,9 @@ public class ShortTest extends ScriptTranslatorTestcase {
 
     @Test
     public void min() {
-        assertScript(new ShortScript() {
+        test(new Scriptable() {
 
-            public short execute(short value) {
+            short act(short value) {
                 return Short.MIN_VALUE;
             }
         });

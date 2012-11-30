@@ -27,7 +27,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Basic() {
-        assertScript(new Basic());
+        test(new Basic());
     }
 
     /**
@@ -46,7 +46,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Param() {
-        assertScript(new Param());
+        test(new Param());
     }
 
     /**
@@ -65,7 +65,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
 
     @Test
     public void MultipleParams() {
-        assertScript(new MultipleParams());
+        test(new MultipleParams());
     }
 
     /**
@@ -84,7 +84,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ArrayParam() {
-        assertScript(new ArrayParam());
+        test(new ArrayParam());
     }
 
     /**
@@ -111,7 +111,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
 
     @Test
     public void VariableParam() {
-        assertScript(new VariableParam());
+        test(new VariableParam());
     }
 
     /**
@@ -136,7 +136,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
 
     @Test
     public void VariableParamWithBase() {
-        assertScript(new VariableParamWithBase());
+        test(new VariableParamWithBase());
     }
 
     /**
@@ -161,7 +161,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
 
     @Test
     public void VariableParamWithBaseOnly() {
-        assertScript(new VariableParamWithBaseOnly());
+        test(new VariableParamWithBaseOnly());
     }
 
     /**
@@ -186,7 +186,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Nest() {
-        assertScript(new Nest());
+        test(new Nest());
     }
 
     /**
@@ -209,7 +209,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Overload() {
-        assertScript(new Overload());
+        test(new Overload());
     }
 
     /**
@@ -233,7 +233,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ExtendPublic() {
-        assertScript(new ExtendPublic());
+        test(new ExtendPublic());
     }
 
     /**
@@ -258,7 +258,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ExtendProtected() {
-        assertScript(new ExtendProtected());
+        test(new ExtendProtected());
     }
 
     /**
@@ -283,7 +283,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ExtendPackage() {
-        assertScript(new ExtendPackage());
+        test(new ExtendPackage());
     }
 
     /**
@@ -308,7 +308,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Override() {
-        assertScript(new OverrideChild());
+        test(new OverrideChild());
     }
 
     /**
@@ -339,7 +339,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Super() {
-        assertScript(new SuperChild());
+        test(new SuperChild());
     }
 
     /**
