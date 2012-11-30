@@ -65,16 +65,18 @@ public class NodeDebugger {
             backedge = Math.max(backedge, node.backedges.size() * max + (node.backedges.size() - 1) * 2);
         }
 
-        StringBuilder builder = new StringBuilder();
+        FormattedBuilder builder = new FormattedBuilder();
 
         for (Node node : nodes) {
-            builder.append(format(max, String.valueOf(node.id)));
+            builder.append(String.valueOf(node.id), max);
             builder.append("  in : ");
             builder.append(format(max, incoming, node.incoming));
             builder.append("out : ");
             builder.append(format(max, outgoing, node.outgoing));
             builder.append("back : ");
             builder.append(format(max, backedge, node.backedges));
+            builder.append("code : ");
+            builder.append(formatCodeFragment(node.stack));
             builder.append("\r\n");
         }
         return builder.toString();
@@ -130,5 +132,108 @@ public class NodeDebugger {
         }
 
         return format(max, builder.toString());
+    }
+
+    /**
+     * Helper method to format code fragment.
+     * 
+     * @param operands
+     * @return
+     */
+    private static String formatCodeFragment(List<Operand> operands) {
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < operands.size(); i++) {
+            Operand operand = operands.get(i);
+            builder.append(operand);
+            builder.append(" [");
+            if (operand instanceof OperandString) {
+                builder.append("String");
+            } else if (operand instanceof OperandExpression) {
+                builder.append("Expression");
+            } else if (operand instanceof OperandCondition) {
+                builder.append("Condition");
+            } else if (operand instanceof OperandArray) {
+                builder.append("Array");
+            } else if (operand instanceof OperandNumber) {
+                builder.append("Number");
+            } else {
+                builder.append("Operand");
+            }
+            builder.append("]");
+
+            if (i != operands.size() - 1) {
+                builder.append(" ");
+            }
+        }
+        return builder.toString();
+    }
+
+    /**
+     * @version 2012/11/30 16:09:26
+     */
+    private static final class FormattedBuilder {
+
+        /** The actual buffer. */
+        private final StringBuilder builder = new StringBuilder();
+
+        /** The tab length. */
+        private final int tab = 4;
+
+        /** The current message length. */
+        private int count = 0;
+
+        /**
+         * Helper method to write message.
+         * 
+         * @param message
+         * @return
+         */
+        private FormattedBuilder append(String message) {
+            builder.append(message);
+
+            // chainable API
+            return this;
+        }
+
+        /**
+         * Helper method to write message.
+         * 
+         * @param message
+         * @return
+         */
+        private FormattedBuilder append(String message, int max) {
+            builder.append(message);
+
+            // calcurate required tab
+            int requireTab = 1;
+
+            while (requireTab * tab <= max) {
+                requireTab++;
+            }
+
+            // calcurate remaining spaces
+            int remaining = requireTab * tab - message.length();
+            int actualTab = 0;
+
+            while (0 < remaining - tab * actualTab) {
+                actualTab++;
+            }
+
+            for (int i = 0; i < actualTab; i++) {
+                builder.append('\t');
+            }
+
+            // chainable API
+            return this;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return builder.toString();
+        }
     }
 }

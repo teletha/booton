@@ -125,10 +125,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
         nodes.get(0).write(code);
 
-        // Debug.dump(nodes);
-        NodeDebugger.dump(nodes);
-
-        System.out.println(original + "       " + code.toFragment());
         code.optimize();
 
         code.append('}'); // method end
@@ -593,10 +589,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case IF_ICMPLT: // int < int
-
             current.stack.add(new OperandCondition(current.remove(1), LT, current.remove(0), node));
-            System.out.println(current.getClass().getName() + "#" + System.identityHashCode(current));
-            System.out.println(current);
             connect(label);
             break;
 
@@ -652,16 +645,12 @@ class JavaMethodCompiler extends MethodVisitor {
         Operand third = peek(2);
 
         if (first instanceof OperandCondition) {
-            System.out.println(first + "  yyy " + second + "  yyyy " + third);
             merge();
         } else if (second instanceof OperandCondition) {
             merge();
 
             dispose(current);
         } else if (third instanceof OperandCondition) {
-            System.out.println("@@@@@@@ " + first + "   " + second + "   " + third);
-            System.out.println(first.getClass() + "  " + second.getClass() + "  " + third.getClass() + "   " + nodes);
-
             NodeDebugger.dump(nodes);
 
             first = current.remove(0);
@@ -674,7 +663,6 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.addOperand(third.invert());
             } else {
                 current.addOperand(third.invert() + "?" + second + ":" + first);
-                System.out.println(current);
             }
 
             // resolve recursively
@@ -1256,7 +1244,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
                     start = follower;
                     end = nodes.get(2 * j - i - 2);
-                    System.out.println("start " + start.id + "  end " + end.id);
                     for (; i < j;) {
                         nodes.remove(--j);
                     }

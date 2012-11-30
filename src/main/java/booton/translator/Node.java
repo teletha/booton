@@ -275,7 +275,7 @@ class Node {
                         break;
                     } else {
                         if (candidate == null) {
-                            System.out.println("current " + id + "       ");
+
                         }
                         candidate = candidate.getDominator();
                     }
@@ -393,8 +393,7 @@ class Node {
 
                         // setup following node
                         follower = outgoing.get(1);
-                        System.out.println(this.getClass().getName() + "#" + System.identityHashCode(this));
-                        System.out.println(stack.size());
+
                         // write script fragment
                         buffer.append("l", id, " : for (;", this, ";", update, ") {");
                         process(outgoing.get(0), buffer);
@@ -495,7 +494,6 @@ class Node {
     private void process(Node dest, ScriptBuffer buffer) {
         if (dest != null) {
             if (dest.stoppable != 0) {
-                System.out.println("stop node " + dest.id);
                 dest.stoppable--;
                 return;
             }
@@ -516,7 +514,6 @@ class Node {
             if (dominator.backedges.size() == 0) {
                 // stop here
                 dest.getDominator().follower = dest;
-                System.out.println("stop  " + dest.id + "   current " + this.id + "     domi " + dominator.id);
             } else {
                 buffer.append("break l", dominator.id, ";");
             };
