@@ -364,8 +364,6 @@ public class Javascript implements ClassListener<Translator> {
     public static final String computeMethodName(Class owner, String name, String description) {
         Javascript script = getScript(owner);
 
-        System.out.println(script == null);
-
         if (name.charAt(0) == '<') {
             if (name.charAt(1) == 'c') {
                 // class initializer
@@ -376,7 +374,6 @@ public class Javascript implements ClassListener<Translator> {
             }
         } else {
             // method
-            System.out.println(owner + "  " + name + "  " + description);
             return mung(order(script.methods, name.hashCode() ^ description.hashCode()), false);
         }
     }

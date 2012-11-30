@@ -215,7 +215,6 @@ public class ScriptTester {
         if (java == null) {
             assert js instanceof UniqueTag || js == null;
         } else {
-            System.out.println(js);
             if (js.getClass().getSimpleName().equals("NativeError")) {
                 // Internal javascript error was thrown (e.g. invalid syntax error, property was not
                 // found). So we must report as error for developer's feedback.
