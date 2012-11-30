@@ -17,19 +17,19 @@ package booton.translator.constructor;
 
 import org.junit.Test;
 
-import booton.translator.ScriptTranslatorTestcase;
-import booton.translator.api.ObjectScript;
+import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
  * @version 2009/08/11 20:45:42
  */
-public class ConstructorTest extends ScriptTranslatorTestcase {
+public class ConstructorTest extends ScriptTester {
 
     @Test
     public void NoParameterTopLevelClass() {
-        test("script", new ObjectScript<String>() {
+        test(new Scriptable() {
 
-            public String act(String value) {
+            public String act() {
                 return new NoParameter().toString();
             }
         });
@@ -37,9 +37,9 @@ public class ConstructorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ImplicitConstructorOfPublicMember() {
-        test("script", new ObjectScript<String>() {
+        test(new Scriptable() {
 
-            public String act(String value) {
+            public String act() {
                 return new ImplicitConstructorOfPublicMember().toString();
             }
         });
@@ -57,9 +57,9 @@ public class ConstructorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ImplicitConstructorOfProtectedMember() {
-        test("script", new ObjectScript<String>() {
+        test(new Scriptable() {
 
-            public String act(String value) {
+            public String act() {
                 return new ImplicitConstructorOfProtectedMember().toString();
             }
         });
@@ -77,9 +77,9 @@ public class ConstructorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ImplicitConstructorOfPackageMember() {
-        test("script", new ObjectScript<String>() {
+        test(new Scriptable() {
 
-            public String act(String value) {
+            public String act() {
                 return new ImplicitConstructorOfPackageMember().toString();
             }
         });
@@ -97,9 +97,9 @@ public class ConstructorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ImplicitConstructorOfPrivateMember() {
-        test("script", new ObjectScript<String>() {
+        test(new Scriptable() {
 
-            public String act(String value) {
+            public String act() {
                 return new ImplicitConstructorOfPrivateMember().toString();
             }
         });
@@ -122,9 +122,9 @@ public class ConstructorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ExplicitConstructorOfPrivateMember() {
-        test("script", new ObjectScript<String>() {
+        test(new Scriptable() {
 
-            public String act(String value) {
+            public String act() {
                 return new ExplicitConstructorOfPrivateMember().toString();
             }
         });
@@ -151,7 +151,7 @@ public class ConstructorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Parameter() {
-        test("script", new ObjectScript<String>() {
+        test(new Scriptable() {
 
             public String act(String value) {
                 return new Parameter(value).toString();
@@ -177,7 +177,7 @@ public class ConstructorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Parameters() {
-        test("script", new ObjectScript<String>() {
+        test(new Scriptable() {
 
             public String act(String value) {
                 return new Parameters(value, 1).toString();
@@ -210,9 +210,9 @@ public class ConstructorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Overload1() {
-        test("script", new ObjectScript<String>() {
+        test(new Scriptable() {
 
-            public String act(String value) {
+            public String act() {
                 return new Overload().toString();
             }
         });
@@ -220,7 +220,7 @@ public class ConstructorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Overload2() {
-        test("script", new ObjectScript<String>() {
+        test(new Scriptable() {
 
             public String act(String value) {
                 return new Overload(value).toString();
@@ -230,7 +230,7 @@ public class ConstructorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Overload3() {
-        test("script", new ObjectScript<String>() {
+        test(new Scriptable() {
 
             public String act(String value) {
                 return new Overload(value, 1).toString();
@@ -240,7 +240,7 @@ public class ConstructorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Overload4() {
-        test("script", new ObjectScript<String>() {
+        test(new Scriptable() {
 
             public String act(String value) {
                 return new Overload(value, value).toString();
@@ -286,7 +286,7 @@ public class ConstructorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Extend1() {
-        test("CHILD", new ObjectScript<String>() {
+        test(new Scriptable() {
 
             /**
              * @see booton.translator.api.ObjectScript#act(java.lang.Object)
@@ -301,7 +301,7 @@ public class ConstructorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Extend2() {
-        test("CHILD", new ObjectScript<String>() {
+        test(new Scriptable() {
 
             /**
              * @see booton.translator.api.ObjectScript#act(java.lang.Object)
@@ -367,7 +367,7 @@ public class ConstructorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Local() {
-        test(new ObjectScript<String>() {
+        test(new Scriptable() {
 
             private String value = "outer";
 
@@ -393,7 +393,7 @@ public class ConstructorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Anonymous() {
-        test(new ObjectScript<String>() {
+        test(new Scriptable() {
 
             public String act(String value) {
                 return new Object() {
@@ -408,7 +408,7 @@ public class ConstructorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void AnonymousWIthOuterAccess() {
-        test("Hitagi", new ObjectScript<String>() {
+        test(new Scriptable() {
 
             public String act(final String value) {
                 return new Object() {
