@@ -22,7 +22,7 @@ import booton.translator.api.Scriptable;
 public class LongArrayTest extends ScriptTester {
 
     @Test
-    public void LongArray() {
+    public void Array() {
         test(new Scriptable() {
 
             public long[] act() {
@@ -36,7 +36,7 @@ public class LongArrayTest extends ScriptTester {
     }
 
     @Test
-    public void LongArrayWithExpression() {
+    public void ArrayWithExpression() {
         test(new Scriptable() {
 
             private long field = 12345678L;
@@ -54,7 +54,7 @@ public class LongArrayTest extends ScriptTester {
     }
 
     @Test
-    public void LongArrayByShorthand() {
+    public void ArrayByShorthand() {
         test(new Scriptable() {
 
             public long[] act() {
@@ -64,7 +64,7 @@ public class LongArrayTest extends ScriptTester {
     }
 
     @Test
-    public void LongArrayByShorthandWithFirstZero() {
+    public void ArrayByShorthandWithFirstZero() {
         test(new Scriptable() {
 
             public long[] act() {
@@ -74,7 +74,7 @@ public class LongArrayTest extends ScriptTester {
     }
 
     @Test
-    public void LongArrayByShorthandWithlastZero() {
+    public void ArrayByShorthandWithlastZero() {
         test(new Scriptable() {
 
             public long[] act() {
@@ -84,7 +84,7 @@ public class LongArrayTest extends ScriptTester {
     }
 
     @Test
-    public void LongArrayByShorthandWithAllZero() {
+    public void ArrayByShorthandWithAllZero() {
         test(new Scriptable() {
 
             public long[] act() {
@@ -94,7 +94,7 @@ public class LongArrayTest extends ScriptTester {
     }
 
     @Test
-    public void LongArrayWithExpressionByShorthand() {
+    public void ArrayWithExpressionByShorthand() {
         test(new Scriptable() {
 
             private long field = 10;
@@ -106,7 +106,7 @@ public class LongArrayTest extends ScriptTester {
     }
 
     @Test
-    public void LongArraySoMany() {
+    public void ArraySoMany() {
         test(new Scriptable() {
 
             public long[] act() {
@@ -116,7 +116,7 @@ public class LongArrayTest extends ScriptTester {
     }
 
     @Test
-    public void LongMultiDimensionArray() {
+    public void MultiDimensionArray() {
         test(new Scriptable() {
 
             public long[][] act() {
@@ -131,7 +131,7 @@ public class LongArrayTest extends ScriptTester {
     }
 
     @Test
-    public void LongMultiDimensionArrayByShorthand() {
+    public void MultiDimensionArrayByShorthand() {
         test(new Scriptable() {
 
             public long[][] act() {
@@ -141,7 +141,7 @@ public class LongArrayTest extends ScriptTester {
     }
 
     @Test
-    public void LongArrayAccess() {
+    public void ArrayAccess() {
         test(new Scriptable() {
 
             public long act(long value) {
@@ -153,7 +153,7 @@ public class LongArrayTest extends ScriptTester {
     }
 
     @Test
-    public void LongArrayLength() {
+    public void ArrayLength() {
         test(new Scriptable() {
 
             public int act(@Param(ints = {0, 1, 10}) int value) {
