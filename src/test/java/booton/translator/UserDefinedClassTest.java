@@ -12,19 +12,20 @@ package booton.translator;
 import org.junit.Test;
 
 import booton.Person;
-import booton.translator.api.IntScript;
-import booton.translator.api.ObjectScript;
+import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
  * @version 2012/11/30 15:33:32
  */
-public class UserDefinedClassTest extends ScriptTranslatorTestcase {
+@SuppressWarnings("unused")
+public class UserDefinedClassTest extends ScriptTester {
 
     @Test
     public void UserClass() {
-        test(new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            int act(int value) {
                 Person user = new Person();
                 user.setAge(value);
 
@@ -35,9 +36,9 @@ public class UserDefinedClassTest extends ScriptTranslatorTestcase {
 
     @Test
     public void UserClassToString() {
-        test("Hitagi", new ObjectScript<String>() {
+        test(new Scriptable() {
 
-            public String act(String value) {
+            String act(String value) {
                 Person user = new Person();
                 user.setAge(17);
                 user.setFirstName(value);

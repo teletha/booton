@@ -227,7 +227,7 @@ public class ScriptTester {
         } else if (type == byte.class) {
             return Arrays.asList((byte) 0, (byte) 1, (byte) 2, (byte) -1, (byte) -2);
         } else if (type == String.class) {
-            return Arrays.asList(null, "", "a", "some value");
+            return Arrays.asList("", "a", "some value");
         } else {
             return Arrays.asList(null, I.make(type));
         }
