@@ -18,29 +18,29 @@ package booton.translator.method;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import booton.translator.ScriptTranslatorTestcase;
-import booton.translator.api.ObjectScript;
-import booton.translator.api.ThrowableScript;
+import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
- * @version 2009/08/21 11:30:16
+ * @version 2012/12/01 3:51:13
  */
-@Ignore
-public class ThrowTest extends ScriptTranslatorTestcase {
+public class ThrowTest extends ScriptTester {
 
     @Test
+    @Ignore
     public void Exception() {
-        assertScript(new ThrowableScript() {
+        test(new Scriptable() {
 
-            public Object act(Object value) throws Exception {
+            public Object act() throws Exception {
                 throw new Exception();
             }
         });
     }
 
     @Test
+    @Ignore
     public void ExceptionWithParam() {
-        assertScript("message", new ThrowableScript<String>() {
+        test(new Scriptable() {
 
             public String act(String value) throws Exception {
                 throw new Exception(value);
@@ -49,20 +49,22 @@ public class ThrowTest extends ScriptTranslatorTestcase {
     }
 
     @Test
+    @Ignore
     public void RuntimeException() {
-        test(new ObjectScript<String>() {
+        test(new Scriptable() {
 
-            public String act(String value) {
+            public String act() {
                 throw new RuntimeException();
             }
         });
     }
 
     @Test
+    @Ignore
     public void Error() {
-        test(new ObjectScript<String>() {
+        test(new Scriptable() {
 
-            public String act(String value) {
+            public String act() {
                 throw new Error();
             }
         });
