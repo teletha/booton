@@ -11,18 +11,18 @@ package booton.translator.array;
 
 import org.junit.Test;
 
-import booton.translator.api.Compilable;
-import booton.translator.api.CompilableTester;
+import booton.translator.api.Scriptable;
+import booton.translator.api.ScriptTester;
 
 /**
  * @version 2012/11/30 13:30:30
  */
 @SuppressWarnings("unused")
-public class CharArrayTest extends CompilableTester {
+public class CharArrayTest extends ScriptTester {
 
     @Test
     public void single() throws Exception {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             char[] act() {
                 char[] array = new char[1];
@@ -35,7 +35,7 @@ public class CharArrayTest extends CompilableTester {
 
     @Test
     public void multiple() throws Exception {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             char[] act() {
                 char[] array = new char[3];
@@ -50,7 +50,7 @@ public class CharArrayTest extends CompilableTester {
 
     @Test
     public void expression() throws Exception {
-        testByChar(new Compilable() {
+        testByChar(new Scriptable() {
 
             char[] act(char value) {
                 char[] array = new char[1];
@@ -63,7 +63,7 @@ public class CharArrayTest extends CompilableTester {
 
     @Test
     public void multiDimension() throws Exception {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             char[][] act() {
                 char[][] array = new char[1][];
@@ -77,7 +77,7 @@ public class CharArrayTest extends CompilableTester {
 
     @Test
     public void shorthandSingle() throws Exception {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             char[] act() {
                 return new char[] {'a'};
@@ -87,7 +87,7 @@ public class CharArrayTest extends CompilableTester {
 
     @Test
     public void shorthandMultiple() throws Exception {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             char[] act() {
                 return new char[] {'a', 'b', 'c'};
@@ -97,7 +97,7 @@ public class CharArrayTest extends CompilableTester {
 
     @Test
     public void shorthandWithNumeric() throws Exception {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             char[] act() {
                 return new char[] {'2', '1', '0'};
@@ -107,7 +107,7 @@ public class CharArrayTest extends CompilableTester {
 
     @Test
     public void shorthandWithExpression() throws Exception {
-        testByChar(new Compilable() {
+        testByChar(new Scriptable() {
 
             char[] act(char value) {
                 return new char[] {value};
@@ -117,7 +117,7 @@ public class CharArrayTest extends CompilableTester {
 
     @Test
     public void shorthandTooMany() throws Exception {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             char[] act() {
                 return new char[] {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q'};
@@ -127,7 +127,7 @@ public class CharArrayTest extends CompilableTester {
 
     @Test
     public void shorthandMultiDimension() throws Exception {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             char[][] act() {
                 return new char[][] { {'1', '2'}, {'a', 'b'}};

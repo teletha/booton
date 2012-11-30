@@ -11,18 +11,18 @@ package booton.translator.primitive;
 
 import org.junit.Test;
 
-import booton.translator.api.Compilable;
-import booton.translator.api.CompilableTester;
+import booton.translator.api.Scriptable;
+import booton.translator.api.ScriptTester;
 
 /**
  * @version 2012/11/30 1:40:13
  */
 @SuppressWarnings("unused")
-public class IntConstantTest extends CompilableTester {
+public class IntConstantTest extends ScriptTester {
 
     @Test
     public void one() {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             int act() {
                 return 1;
@@ -32,7 +32,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void two() {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             int act() {
                 return 2;
@@ -42,7 +42,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void three() {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             int act() {
                 return 3;
@@ -52,7 +52,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void four() {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             int act() {
                 return 4;
@@ -62,7 +62,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void five() {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             int act() {
                 return 5;
@@ -72,7 +72,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void siz() {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             int act() {
                 return 6;
@@ -82,7 +82,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void seven() {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             int act() {
                 return 7;
@@ -92,7 +92,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void eight() {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             int act() {
                 return 8;
@@ -102,7 +102,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void nine() {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             int act() {
                 return 9;
@@ -112,7 +112,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void ten() {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             int act() {
                 return 10;
@@ -122,7 +122,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void zero() {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             int act() {
                 return 0;
@@ -132,7 +132,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void minusOne() {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             int act() {
                 return -1;
@@ -142,7 +142,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void minusTwo() {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             int act() {
                 return -2;
@@ -152,7 +152,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void minusThree() {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             int act() {
                 return -3;

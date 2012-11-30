@@ -12,5 +12,5 @@ package booton.translator.api;
 /**
  * @version 2012/11/30 1:43:48
  */
-public interface Compilable {
+public interface Scriptable {
 }

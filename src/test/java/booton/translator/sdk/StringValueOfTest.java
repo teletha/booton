@@ -12,18 +12,18 @@ package booton.translator.sdk;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import booton.translator.api.Compilable;
-import booton.translator.api.CompilableTester;
+import booton.translator.api.Scriptable;
+import booton.translator.api.ScriptTester;
 
 /**
  * @version 2012/11/30 8:59:14
  */
 @SuppressWarnings("unused")
-public class StringValueOfTest extends CompilableTester {
+public class StringValueOfTest extends ScriptTester {
 
     @Test
     public void Int() throws Exception {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             String act() {
                 return String.valueOf(1);
@@ -33,7 +33,7 @@ public class StringValueOfTest extends CompilableTester {
 
     @Test
     public void Long() throws Exception {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             String act() {
                 return String.valueOf(1234567890L);
@@ -43,7 +43,7 @@ public class StringValueOfTest extends CompilableTester {
 
     @Test
     public void Float() throws Exception {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             String act() {
                 return String.valueOf(0.1F);
@@ -53,7 +53,7 @@ public class StringValueOfTest extends CompilableTester {
 
     @Test
     public void Double() throws Exception {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             String act() {
                 return String.valueOf(0.12345678901D);
@@ -63,7 +63,7 @@ public class StringValueOfTest extends CompilableTester {
 
     @Test
     public void Boolean() throws Exception {
-        testByBoolean(new Compilable() {
+        testByBoolean(new Scriptable() {
 
             String act(boolean value) {
                 return String.valueOf(value);
@@ -73,7 +73,7 @@ public class StringValueOfTest extends CompilableTester {
 
     @Test
     public void Char() throws Exception {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             String act() {
                 return String.valueOf('Q');
@@ -84,7 +84,7 @@ public class StringValueOfTest extends CompilableTester {
     @Test
     @Ignore
     public void CharArray() throws Exception {
-        test(new Compilable() {
+        test(new Scriptable() {
 
             String act() {
                 return String.valueOf(new char[] {'c', 'a', 't'});

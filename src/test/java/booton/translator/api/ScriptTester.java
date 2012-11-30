@@ -40,7 +40,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 /**
  * @version 2012/11/30 12:42:49
  */
-public class CompilableTester {
+public class ScriptTester {
 
     /** No parameter. */
     private static final Object NONE = new Object();
@@ -82,7 +82,7 @@ public class CompilableTester {
      * 
      * @param compilable A target compilable source.
      */
-    protected final void testByBoolean(Compilable compilable) {
+    protected final void testByBoolean(Scriptable compilable) {
         evaluate(compilable, Arrays.asList(true, false));
     }
 
@@ -93,7 +93,7 @@ public class CompilableTester {
      * 
      * @param compilable A target compilable source.
      */
-    protected final void testByChar(Compilable compilable) {
+    protected final void testByChar(Scriptable compilable) {
         evaluate(compilable, Arrays.asList('2', 'B', 'a', '$', '@', 'c', 'a', 't'));
     }
 
@@ -104,7 +104,7 @@ public class CompilableTester {
      * 
      * @param compilable A target compilable source.
      */
-    protected final void test(Compilable compilable) {
+    protected final void test(Scriptable compilable) {
         evaluate(compilable, Collections.singletonList(NONE));
     }
 
@@ -113,11 +113,11 @@ public class CompilableTester {
      * Compile specified class and evaluate it.
      * </p>
      * 
-     * @param compilable A target compilable source.
+     * @param scriptable A target scriptable source.
      */
-    private <T> void evaluate(Compilable compilable, List<T> inputs) {
+    private <T> void evaluate(Scriptable scriptable, List<T> inputs) {
         // search invocation
-        Class source = compilable.getClass();
+        Class source = scriptable.getClass();
         String constructor = Type.getConstructorDescriptor(source.getDeclaredConstructors()[0]);
         Method method = searchInvocation(source);
 
@@ -131,9 +131,9 @@ public class CompilableTester {
 
                 try {
                     if (input == NONE) {
-                        result = method.invoke(compilable);
+                        result = method.invoke(scriptable);
                     } else {
-                        result = method.invoke(compilable, input);
+                        result = method.invoke(scriptable, input);
                     }
                 } catch (InvocationTargetException e) {
                     result = ((InvocationTargetException) e).getTargetException();
