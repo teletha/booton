@@ -12,8 +12,8 @@ package booton.translator.sdk;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import booton.translator.api.Scriptable;
 import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
  * @version 2012/11/30 8:59:14
@@ -63,7 +63,7 @@ public class StringValueOfTest extends ScriptTester {
 
     @Test
     public void Boolean() throws Exception {
-        testByBoolean(new Scriptable() {
+        test(new Scriptable() {
 
             String act(boolean value) {
                 return String.valueOf(value);

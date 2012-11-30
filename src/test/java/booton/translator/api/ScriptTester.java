@@ -79,56 +79,24 @@ public class ScriptTester {
 
     /**
      * <p>
-     * Compile specified class and evaluate it by boolean values.
-     * </p>
-     * 
-     * @param compilable A target compilable source.
-     */
-    protected final void testByBoolean(Scriptable compilable) {
-        evaluate(compilable, Arrays.asList(true, false));
-    }
-
-    /**
-     * <p>
-     * Compile specified class and evaluate it by boolean values.
-     * </p>
-     * 
-     * @param compilable A target compilable source.
-     */
-    protected final void testByChar(Scriptable compilable) {
-        evaluate(compilable, Arrays.asList('2', 'B', 'a', '$', '@', 'c', 'a', 't'));
-    }
-
-    /**
-     * <p>
-     * Compile specified class and evaluate it.
-     * </p>
-     * 
-     * @param compilable A target compilable source.
-     */
-    protected final void test(Scriptable compilable) {
-        evaluate(compilable, Collections.singletonList(NONE));
-    }
-
-    /**
-     * <p>
      * Compile specified class and evaluate it.
      * </p>
      * 
      * @param scriptable A target scriptable source.
      */
-    private <T> void evaluate(Scriptable scriptable, List<T> inputs) {
+    protected final void test(Scriptable scriptable) {
         // search invocation
         Class source = scriptable.getClass();
         String constructor = Type.getConstructorDescriptor(source.getDeclaredConstructors()[0]);
         Method method = searchInvocation(source);
 
-        // prepare result store
+        // prepare input and result store
+        List inputs = prepareInputs(method);
         List results = new ArrayList();
 
         // invoke as Java
         try {
-            for (T input : inputs) {
+            for (Object input : inputs) {
                 Object result;
 
                 try {
@@ -155,7 +123,7 @@ public class ScriptTester {
 
             // invoke it and compare result
             for (int i = 0; i < inputs.size(); i++) {
-                T input = inputs.get(i);
+                Object input = inputs.get(i);
                 String className = Javascript.computeClassName(source);
                 String constructorName = Javascript.computeMethodName(source, "<init>", constructor).substring(1);
                 String methodName = Javascript.computeMethodName(source, method.getName(), Type.getMethodDescriptor(method));
@@ -217,6 +185,46 @@ public class ScriptTester {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
         throw new Error("Compilable class must implement act method.");
+    }
+
+    /**
+     * <p>
+     * Prepare input values for test automatically.
+     * </p>
+     * 
+     * @param method A target method.
+     * @return A built-in values.
+     */
+    private List prepareInputs(Method method) {
+        Class[] params = method.getParameterTypes();
+
+        if (params.length == 0) {
+            return Collections.singletonList(NONE);
+        }
+
+        Class type = params[0];
+
+        if (type == boolean.class) {
+            return Arrays.asList(true, false);
+        } else if (type == char.class) {
+            return Arrays.asList('2', 'B', 'a', '$', '@', 'c', 'a', 't');
+        } else if (type == int.class) {
+            return Arrays.asList(0, 1, 2, 3, -1, -2, -3);
+        } else if (type == long.class) {
+            return Arrays.asList(0L, 1L, 2L, 12345678901234L, -1L, -2L, -12345678901234L);
+        } else if (type == float.class) {
+            return Arrays.asList(0F, 1F, 0.2F, -1.3464F);
+        } else if (type == double.class) {
+            return Arrays.asList(0D, 1D, 0.2D, 1.239754297642323D);
+        } else if (type == short.class) {
+            return Arrays.asList(0, 1, 2, -1, -2);
+        } else if (type == byte.class) {
+            return Arrays.asList(0, 1, 2, -1, -2);
+        } else if (type == String.class) {
+            return Arrays.asList(null, "", "a", "some value");
+        } else {
+            return Arrays.asList(null, I.make(type));
+        }
     }
 
     /**

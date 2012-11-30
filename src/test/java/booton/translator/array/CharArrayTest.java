@@ -11,8 +11,8 @@ package booton.translator.array;
 
 import org.junit.Test;
 
-import booton.translator.api.Scriptable;
 import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
  * @version 2012/11/30 13:30:30
@@ -50,7 +50,7 @@ public class CharArrayTest extends ScriptTester {
 
     @Test
     public void expression() throws Exception {
-        testByChar(new Scriptable() {
+        test(new Scriptable() {
 
             char[] act(char value) {
                 char[] array = new char[1];
@@ -107,7 +107,7 @@ public class CharArrayTest extends ScriptTester {
 
     @Test
     public void shorthandWithExpression() throws Exception {
-        testByChar(new Scriptable() {
+        test(new Scriptable() {
 
             char[] act(char value) {
                 return new char[] {value};
