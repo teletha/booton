@@ -26,5 +26,5 @@ public interface LogicalExpressionScript {
      * @param value A script input.
      * @return A script output.
      */
-    boolean execute(int value);
+    boolean act(int value);
 }

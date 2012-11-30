@@ -20,9 +20,9 @@ public class NullTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Null() {
-        assertScript(new ObjectScript() {
+        test(new ObjectScript() {
 
-            public Object execute(Object value) {
+            public Object act(Object value) {
                 return null;
             }
         });

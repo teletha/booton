@@ -35,7 +35,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
      */
     private static class Basic implements IntScript {
 
-        public int execute(int value) {
+        public int act(int value) {
             return compute();
         }
 
@@ -54,7 +54,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
      */
     private static class Param implements IntScript {
 
-        public int execute(int value) {
+        public int act(int value) {
             return compute(value);
         }
 
@@ -73,7 +73,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
      */
     private static class MultipleParams implements IntScript {
 
-        public int execute(int value) {
+        public int act(int value) {
             return compute(value, value + 1);
         }
 
@@ -92,7 +92,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
      */
     private static class ArrayParam implements IntScript {
 
-        public int execute(int value) {
+        public int act(int value) {
             int[] ints = {value, value + 1, value + 2};
 
             return compute(ints);
@@ -119,7 +119,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
      */
     private static class VariableParam implements IntScript {
 
-        public int execute(int value) {
+        public int act(int value) {
             return compute(value, value + 1, value + 2);
         }
 
@@ -144,7 +144,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
      */
     private static class VariableParamWithBase implements IntScript {
 
-        public int execute(int value) {
+        public int act(int value) {
             return compute(value, value + 1, value + 2);
         }
 
@@ -169,7 +169,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
      */
     private static class VariableParamWithBaseOnly implements IntScript {
 
-        public int execute(int value) {
+        public int act(int value) {
             return compute(value);
         }
 
@@ -194,7 +194,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
      */
     private static class Nest implements IntScript {
 
-        public int execute(int value) {
+        public int act(int value) {
             return compute(value, nest(value));
         }
 
@@ -217,7 +217,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
      */
     private static class Overload implements IntScript {
 
-        public int execute(int value) {
+        public int act(int value) {
             return compute(value);
         }
 
@@ -251,7 +251,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
      */
     private static class ExtendPublic extends BasePublic implements IntScript {
 
-        public int execute(int value) {
+        public int act(int value) {
             return value + compute();
         }
     }
@@ -276,7 +276,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
      */
     private static class ExtendProtected extends BaseProtected implements IntScript {
 
-        public int execute(int value) {
+        public int act(int value) {
             return value + compute();
         }
     }
@@ -301,7 +301,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
      */
     private static class ExtendPackage extends BasePackage implements IntScript {
 
-        public int execute(int value) {
+        public int act(int value) {
             return value + compute();
         }
     }
@@ -327,7 +327,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
      */
     private static class OverrideChild extends OverrideBase implements IntScript {
 
-        public int execute(int value) {
+        public int act(int value) {
             return compute(value);
         }
 
@@ -357,7 +357,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
      */
     static class SuperChild extends SuperBase implements IntScript {
 
-        public int execute(int value) {
+        public int act(int value) {
             return this.compute(value) + super.compute(value);
         }
 

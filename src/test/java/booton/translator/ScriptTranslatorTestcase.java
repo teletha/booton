@@ -34,7 +34,6 @@ import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
 import org.objectweb.asm.Type;
 
 import booton.translator.api.BooleanScript;
-import booton.translator.api.ByteScript;
 import booton.translator.api.DoubleScript;
 import booton.translator.api.FloatScript;
 import booton.translator.api.IntScript;
@@ -94,37 +93,8 @@ public class ScriptTranslatorTestcase {
     /**
      * @param script
      */
-    protected void test(ByteScript script) {
-        assertScript((byte) -2, (byte) 2, script);
-    }
-
-    /**
-     * @param script
-     * @param start
-     * @param end
-     */
-    protected void assertScript(byte start, byte end, ByteScript script) {
-        // check range
-        if (end <= start) {
-            throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
-        }
-
-        // build inputs
-        List<Byte> inputs = new ArrayList();
-
-        for (byte i = 0; i <= end - start; i++) {
-            inputs.add(Integer.valueOf(start + i).byteValue());
-        }
-
-        // delegate
-        assertScript(inputs, script);
-    }
-
-    /**
-     * @param script
-     */
     protected void test(ShortScript script) {
-        assertScript((short) -2, (short) 2, script);
+        test((short) -2, (short) 2, script);
     }
 
     /**
@@ -132,7 +102,7 @@ public class ScriptTranslatorTestcase {
      * @param start
      * @param end
      */
-    protected void assertScript(short start, short end, ShortScript script) {
+    protected void test(short start, short end, ShortScript script) {
         // check range
         if (end <= start) {
             throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
@@ -153,7 +123,7 @@ public class ScriptTranslatorTestcase {
      * @param script
      */
     protected void test(IntScript script) {
-        assertScript(-2, 2, script);
+        test(-2, 2, script);
     }
 
     /**
@@ -161,7 +131,7 @@ public class ScriptTranslatorTestcase {
      * @param start
      * @param end
      */
-    protected void assertScript(int start, int end, IntScript script) {
+    protected void test(int start, int end, IntScript script) {
         // check range
         if (end <= start) {
             throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
@@ -182,7 +152,7 @@ public class ScriptTranslatorTestcase {
      * @param script
      */
     protected void test(LongScript script) {
-        assertScript(-2, 2, script);
+        test(-2, 2, script);
     }
 
     /**
@@ -190,7 +160,7 @@ public class ScriptTranslatorTestcase {
      * @param start
      * @param end
      */
-    protected void assertScript(long start, long end, LongScript script) {
+    protected void test(long start, long end, LongScript script) {
         // check range
         if (end <= start) {
             throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
@@ -211,7 +181,7 @@ public class ScriptTranslatorTestcase {
      * @param script
      */
     protected void test(FloatScript script) {
-        assertScript(-2, 2, script);
+        test(-2, 2, script);
     }
 
     /**
@@ -219,7 +189,7 @@ public class ScriptTranslatorTestcase {
      * @param start
      * @param end
      */
-    protected void assertScript(float start, float end, FloatScript script) {
+    protected void test(float start, float end, FloatScript script) {
         // check range
         if (end <= start) {
             throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
@@ -240,7 +210,7 @@ public class ScriptTranslatorTestcase {
      * @param script
      */
     protected void test(DoubleScript script) {
-        assertScript(-2, 2, script);
+        test(-2, 2, script);
     }
 
     /**
@@ -248,7 +218,7 @@ public class ScriptTranslatorTestcase {
      * @param start
      * @param end
      */
-    protected void assertScript(double start, double end, DoubleScript script) {
+    protected void test(double start, double end, DoubleScript script) {
         // check range
         if (end <= start) {
             throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
@@ -270,7 +240,7 @@ public class ScriptTranslatorTestcase {
      * @param start
      * @param end
      */
-    protected void assertScript(BooleanScript script) {
+    protected void test(BooleanScript script) {
         assertScript(Arrays.asList(true, false), script);
     }
 
@@ -306,8 +276,8 @@ public class ScriptTranslatorTestcase {
     /**
      * @param script
      */
-    protected <T> void assertScript(ObjectScript<T> script) {
-        assertScript((T) null, script);
+    protected <T> void test(ObjectScript<T> script) {
+        test((T) null, script);
     }
 
     /**
@@ -315,7 +285,7 @@ public class ScriptTranslatorTestcase {
      * @param end
      * @param script
      */
-    protected <T> void assertScript(T input, ObjectScript<T> script) {
+    protected <T> void test(T input, ObjectScript<T> script) {
         assertScript(Collections.singletonList(input), script);
     }
 
@@ -357,7 +327,7 @@ public class ScriptTranslatorTestcase {
             Method[] methods = script.getClass().getMethods();
 
             for (Method method : methods) {
-                if (method.getName().equals("execute")) {
+                if (method.getName().equals("act")) {
                     execute = method;
                     execute.setAccessible(true);
                     break;
@@ -395,7 +365,7 @@ public class ScriptTranslatorTestcase {
                 builder.append(Javascript.computeMethodName(source, "<init>", Type.getConstructorDescriptor(constructor))
                         .substring(1));
                 builder.append(").");
-                builder.append(Javascript.computeMethodName(source, "execute", Type.getMethodDescriptor(execute)));
+                builder.append(Javascript.computeMethodName(source, "act", Type.getMethodDescriptor(execute)));
                 builder.append("(");
 
                 if (inputs.get(i) instanceof String) {

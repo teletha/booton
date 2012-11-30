@@ -22,9 +22,9 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StringValueOf() {
-        assertScript(new ObjectScript<String>() {
+        test(new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 return String.valueOf((Object) null);
             }
         });
@@ -41,9 +41,9 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
     private static class StaticMethod implements IntScript {
 
         /**
-         * @see booton.translator.api.IntScript#execute(int)
+         * @see booton.translator.api.IntScript#act(int)
          */
-        public int execute(int value) {
+        public int act(int value) {
             return compute();
         }
 
@@ -63,9 +63,9 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
     private static class StaticMethodWithParam implements IntScript {
 
         /**
-         * @see booton.translator.api.IntScript#execute(int)
+         * @see booton.translator.api.IntScript#act(int)
          */
-        public int execute(int value) {
+        public int act(int value) {
             return compute(value);
         }
 
@@ -87,9 +87,9 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
         private static int field = 10;
 
         /**
-         * @see booton.translator.api.IntScript#execute(int)
+         * @see booton.translator.api.IntScript#act(int)
          */
-        public int execute(int value) {
+        public int act(int value) {
             return field;
         }
     }
@@ -107,9 +107,9 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
         private static int field = 10;
 
         /**
-         * @see booton.translator.api.IntScript#execute(int)
+         * @see booton.translator.api.IntScript#act(int)
          */
-        public int execute(int value) {
+        public int act(int value) {
             return compute();
         }
 
@@ -131,9 +131,9 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
         private static int field;
 
         /**
-         * @see booton.translator.api.IntScript#execute(int)
+         * @see booton.translator.api.IntScript#act(int)
          */
-        public int execute(int value) {
+        public int act(int value) {
             field = value;
 
             return field;
@@ -157,9 +157,9 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
         }
 
         /**
-         * @see booton.translator.api.IntScript#execute(int)
+         * @see booton.translator.api.IntScript#act(int)
          */
-        public int execute(int value) {
+        public int act(int value) {
             return field;
         }
     }

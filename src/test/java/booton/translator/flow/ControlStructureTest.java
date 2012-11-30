@@ -22,12 +22,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void If() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 if (value < 3) {
                     return 2;
                 }
@@ -38,12 +38,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfThen() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 if (value < 3) {
                     value++;
                 }
@@ -54,12 +54,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfThenNest1() {
-        assertScript(0, 10, new IntScript() {
+        test(0, 10, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 if (value < 5) {
                     value += 1;
 
@@ -74,12 +74,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfThenNest2() {
-        assertScript(0, 10, new IntScript() {
+        test(0, 10, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 if (value < 5) {
                     if (value < 3) {
                         value += 1;
@@ -93,12 +93,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfElse() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 if (value < 3) {
                     return 2;
                 } else {
@@ -110,12 +110,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfElseAfter() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 if (value < 3) {
                     value = 2;
                 } else {
@@ -128,12 +128,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfNest() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 if (value < 3) {
                     if (1 < value) {
                         return 0;
@@ -147,12 +147,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfNest2() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 if (value < 3 && 1 < value || value % 2 == 0) {
                     if (1 < value && value < 2) {
                         return 0;
@@ -167,12 +167,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void While() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 while (value < 3) {
                     value++;
                 }
@@ -184,12 +184,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileBreak() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 while (value < 3) {
                     value++;
 
@@ -205,12 +205,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileInfiniteBreak() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 while (true) {
                     value++;
 
@@ -226,12 +226,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileMultipuleBreaks() {
-        assertScript(0, 10, new IntScript() {
+        test(0, 10, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 while (value < 5) {
                     value++;
 
@@ -251,12 +251,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileContinue() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 while (value < 3) {
                     value += 2;
 
@@ -272,12 +272,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileNest() {
-        assertScript(0, 10, new IntScript() {
+        test(0, 10, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 while (value < 30) {
                     value += 10;
 
@@ -293,12 +293,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileLabeledBreak() {
-        assertScript(1, 10, new IntScript() {
+        test(1, 10, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 root: while (value < 100) {
                     value *= 2;
 
@@ -320,12 +320,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoWhile() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 do {
                     value++;
                 } while (value < 3);
@@ -337,12 +337,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoWhileEquivalent() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 while (true) {
                     value++;
 
@@ -357,12 +357,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     }
 
     public void DoWhileBreak() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 do {
                     value++;
 
@@ -378,12 +378,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoWhileInfiniteBreak() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 do {
                     value++;
 
@@ -399,12 +399,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoWhileContinue() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 do {
                     value += 2;
 
@@ -422,12 +422,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void For() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 for (int i = 0; i < 3; i++) {
                     value++;
                 }
@@ -439,12 +439,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ForWithoutInitialize() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 int i = 0;
                 value++;
 
@@ -459,12 +459,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ForWithoutUpdate() {
-        assertScript(0, 10, new IntScript() {
+        test(0, 10, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 for (int i = 0; i < 8;) {
                     i = value;
                     value += 2;
@@ -481,12 +481,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ForBreak() {
-        assertScript(0, 10, new IntScript() {
+        test(0, 10, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 for (int i = 0; i < 3; i++) {
                     value++;
 
@@ -502,12 +502,12 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ForContinue() {
-        assertScript(0, 10, new IntScript() {
+        test(0, 10, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 for (int i = 0; i < 3; i++) {
                     value++;
 
@@ -525,9 +525,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ForAfterProcess() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
-            public int execute(int value) {
+            public int act(int value) {
                 String name = "act";
 
                 for (int i = 0; i < name.length(); i++) {
@@ -542,9 +542,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     @Test
     @Ignore
     public void SwitchReturn() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
-            public int execute(int value) {
+            public int act(int value) {
                 switch (value) {
                 case 0:
                     return 0;
@@ -562,9 +562,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     @Test
     @Ignore
     public void SwitchReturnWithOrder() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
-            public int execute(int value) {
+            public int act(int value) {
                 switch (value) {
                 default:
                     return value + 5;
@@ -582,9 +582,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     @Test
     @Ignore
     public void SwitchBreak() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
-            public int execute(int value) {
+            public int act(int value) {
                 int result;
 
                 switch (value) {
@@ -609,9 +609,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     @Test
     @Ignore
     public void TryCatch() {
-        assertScript(0, 3, new IntScript() {
+        test(0, 3, new IntScript() {
 
-            public int execute(int value) {
+            public int act(int value) {
                 try {
                     if (value == 0) {
                         throw new Error();
@@ -627,9 +627,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     @Ignore
     @Test
     public void TryCatchFinally() {
-        assertScript(0, 3, new IntScript() {
+        test(0, 3, new IntScript() {
 
-            public int execute(int value) {
+            public int act(int value) {
                 try {
                     if (value == 0) {
                         throw new Error();
@@ -648,9 +648,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     @Test
     @Ignore
     public void TryFinallyAfter() {
-        assertScript(0, 3, new IntScript() {
+        test(0, 3, new IntScript() {
 
-            public int execute(int value) {
+            public int act(int value) {
                 try {
                     value++;
                 } finally {
@@ -664,9 +664,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     @Test
     @Ignore
     public void TryMultipleCatch() {
-        assertScript(0, 3, new IntScript() {
+        test(0, 3, new IntScript() {
 
-            public int execute(int value) {
+            public int act(int value) {
                 try {
                     if (value == 2) {
                         throw new Error();

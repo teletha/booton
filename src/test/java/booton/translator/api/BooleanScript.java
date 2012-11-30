@@ -26,5 +26,5 @@ public interface BooleanScript {
      * @param value A script input.
      * @return A script output.
      */
-    boolean execute(boolean value);
+    boolean act(boolean value);
 }

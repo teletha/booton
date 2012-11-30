@@ -32,7 +32,7 @@ public class ThrowTest extends ScriptTranslatorTestcase {
     public void Exception() {
         assertScript(new ThrowableScript() {
 
-            public Object execute(Object value) throws Exception {
+            public Object act(Object value) throws Exception {
                 throw new Exception();
             }
         });
@@ -42,7 +42,7 @@ public class ThrowTest extends ScriptTranslatorTestcase {
     public void ExceptionWithParam() {
         assertScript("message", new ThrowableScript<String>() {
 
-            public String execute(String value) throws Exception {
+            public String act(String value) throws Exception {
                 throw new Exception(value);
             }
         });
@@ -50,9 +50,9 @@ public class ThrowTest extends ScriptTranslatorTestcase {
 
     @Test
     public void RuntimeException() {
-        assertScript(new ObjectScript<String>() {
+        test(new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 throw new RuntimeException();
             }
         });
@@ -60,9 +60,9 @@ public class ThrowTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Error() {
-        assertScript(new ObjectScript<String>() {
+        test(new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 throw new Error();
             }
         });

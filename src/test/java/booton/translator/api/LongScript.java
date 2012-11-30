@@ -26,5 +26,5 @@ public interface LongScript {
      * @param value A script input.
      * @return A script output.
      */
-    long execute(long value);
+    long act(long value);
 }

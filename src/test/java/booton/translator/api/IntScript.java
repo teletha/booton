@@ -26,5 +26,5 @@ public interface IntScript {
      * @param value A script input.
      * @return A script output.
      */
-    int execute(int value);
+    int act(int value);
 }

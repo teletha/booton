@@ -27,12 +27,12 @@ public class LocalVariableTest extends ScriptTranslatorTestcase {
 
     @Test
     public void parallel() {
-        assertScript(0, 5, new IntScript() {
+        test(0, 5, new IntScript() {
 
             /**
-             * @see booton.translator.api.IntScript#execute(int)
+             * @see booton.translator.api.IntScript#act(int)
              */
-            public int execute(int value) {
+            public int act(int value) {
                 if (value < 3) {
                     int x = value;
 
