@@ -11,20 +11,20 @@ package booton.translator.field;
 
 import org.junit.Test;
 
-import booton.translator.ScriptTranslatorTestcase;
-import booton.translator.api.IntScript;
-import booton.translator.api.ObjectScript;
+import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
  * @version 2012/11/30 15:34:11
  */
-public class StaticMemberTest extends ScriptTranslatorTestcase {
+@SuppressWarnings("unused")
+public class StaticMemberTest extends ScriptTester {
 
     @Test
     public void StringValueOf() {
-        test(new ObjectScript<String>() {
+        test(new Scriptable() {
 
-            public String act(String value) {
+            public String act() {
                 return String.valueOf((Object) null);
             }
         });
@@ -36,14 +36,11 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/20 13:15:34
+     * @version 2012/12/01 3:42:25
      */
-    private static class StaticMethod implements IntScript {
+    private static class StaticMethod implements Scriptable {
 
-        /**
-         * @see booton.translator.api.IntScript#act(int)
-         */
-        public int act(int value) {
+        public int act() {
             return compute();
         }
 
@@ -58,13 +55,10 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/20 13:15:34
+     * @version 2012/12/01 3:42:21
      */
-    private static class StaticMethodWithParam implements IntScript {
+    private static class StaticMethodWithParam implements Scriptable {
 
-        /**
-         * @see booton.translator.api.IntScript#act(int)
-         */
         public int act(int value) {
             return compute(value);
         }
@@ -80,16 +74,13 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/20 13:15:34
+     * @version 2012/12/01 3:42:15
      */
-    private static class GetStaticField implements IntScript {
+    private static class GetStaticField implements Scriptable {
 
         private static int field = 10;
 
-        /**
-         * @see booton.translator.api.IntScript#act(int)
-         */
-        public int act(int value) {
+        public int act() {
             return field;
         }
     }
@@ -100,16 +91,13 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/20 13:15:34
+     * @version 2012/12/01 3:42:12
      */
-    private static class GetStaticFieldFromStaticMethod implements IntScript {
+    private static class GetStaticFieldFromStaticMethod implements Scriptable {
 
         private static int field = 10;
 
-        /**
-         * @see booton.translator.api.IntScript#act(int)
-         */
-        public int act(int value) {
+        public int act() {
             return compute();
         }
 
@@ -124,15 +112,12 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/20 13:15:34
+     * @version 2012/12/01 3:42:08
      */
-    private static class SetStaticField implements IntScript {
+    private static class SetStaticField implements Scriptable {
 
         private static int field;
 
-        /**
-         * @see booton.translator.api.IntScript#act(int)
-         */
         public int act(int value) {
             field = value;
 
@@ -146,9 +131,9 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/20 13:15:34
+     * @version 2012/12/01 3:42:04
      */
-    private static class StaticInitialization implements IntScript {
+    private static class StaticInitialization implements Scriptable {
 
         private static final int field;
 
@@ -156,10 +141,7 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
             field = 10;
         }
 
-        /**
-         * @see booton.translator.api.IntScript#act(int)
-         */
-        public int act(int value) {
+        public int act() {
             return field;
         }
     }

@@ -21,8 +21,9 @@ import booton.translator.api.ScriptTester;
 import booton.translator.api.Scriptable;
 
 /**
- * @version 2009/08/11 20:45:42
+ * @version 2012/12/01 3:41:23
  */
+@SuppressWarnings("unused")
 public class ConstructorTest extends ScriptTester {
 
     @Test

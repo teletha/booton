@@ -17,22 +17,23 @@ package booton.translator.operator;
 
 import org.junit.Test;
 
-import booton.translator.ScriptTranslatorTestcase;
-import booton.translator.api.BooleanScript;
+import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
- * @version 2009/09/02 19:04:59
+ * @version 2012/12/01 3:43:44
  */
-public class InstanceOfTest extends ScriptTranslatorTestcase {
+@SuppressWarnings("unused")
+public class InstanceOfTest extends ScriptTester {
 
     @Test
     public void InstanceOf() {
         test(new Base());
     }
 
-    private static class Base implements BooleanScript {
+    private static class Base implements Scriptable {
 
-        public boolean act(boolean value) {
+        public boolean act() {
             return this instanceof Base;
         }
     }
@@ -44,7 +45,7 @@ public class InstanceOfTest extends ScriptTranslatorTestcase {
 
     private static class Child1 extends Base {
 
-        public boolean act(boolean value) {
+        public boolean act() {
             return this instanceof Child1;
         }
     }
@@ -56,7 +57,7 @@ public class InstanceOfTest extends ScriptTranslatorTestcase {
 
     private static class Child2 extends Base {
 
-        public boolean act(boolean value) {
+        public boolean act() {
             return this instanceof Base;
         }
     }
@@ -66,9 +67,9 @@ public class InstanceOfTest extends ScriptTranslatorTestcase {
         test(new OBJECT());
     }
 
-    private static class OBJECT implements BooleanScript {
+    private static class OBJECT implements Scriptable {
 
-        public boolean act(boolean value) {
+        public boolean act() {
             return this instanceof Object;
         }
     }
