@@ -51,9 +51,11 @@ public class Translator<T> {
      * @return
      */
     String translateMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-        try {
-            return translateMethodCall(name, types, context);
-        } catch (NoSuchMethodException e) {
+        Method translator = searchTranslator(name, types);
+
+        if (translator != null) {
+            return translateMethodCall(translator, context);
+        } else {
             return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + build(context);
         }
     }
@@ -69,9 +71,11 @@ public class Translator<T> {
      * @return
      */
     String translateStaticMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-        try {
-            return translateMethodCall(name, types, context);
-        } catch (NoSuchMethodException e) {
+        Method translator = searchTranslator(name, types);
+
+        if (translator != null) {
+            return translateMethodCall(translator, context);
+        } else {
             return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + build(context);
         }
     }
@@ -87,9 +91,11 @@ public class Translator<T> {
      * @return
      */
     String translateConstructor(Class owner, String desc, Class[] types, List<Operand> context) {
-        try {
-            return translateMethodCall(owner.getSimpleName(), types, context);
-        } catch (NoSuchMethodException e) {
+        Method translator = searchTranslator(owner.getSimpleName(), types);
+
+        if (translator != null) {
+            return translateMethodCall(translator, context);
+        } else {
             // append identifier of constructor method
             context.add(new OperandNumber(Integer.valueOf(Javascript.computeMethodName(owner, "<init>", desc)
                     .substring(1))));
@@ -109,9 +115,11 @@ public class Translator<T> {
      * @return
      */
     String translateSuperMethod(Class owner, String methodName, String desc, Class[] types, List<Operand> context) {
-        try {
-            return translateMethodCall(owner.getSimpleName(), types, context);
-        } catch (NoSuchMethodException e) {
+        Method translator = searchTranslator(owner.getSimpleName(), types);
+
+        if (translator != null) {
+            return translateMethodCall(translator, context);
+        } else {
             // append context 'this' of super method
             context.add(1, new OperandExpression("this"));
 
@@ -154,19 +162,10 @@ public class Translator<T> {
      * @param types A prameter types of the specified method.
      * @param context A current processing operands for the specified method.
      * @return A javascript expression.
-     * @throws NoSuchMethodException A suitable translation method is not found.
      */
-    private String translateMethodCall(String methodName, Class[] types, List<Operand> context)
-            throws NoSuchMethodException {
-        // search translation method
-        Method method = getClass().getDeclaredMethod(methodName, types);
-
-        if (method.isBridge() || method.isSynthetic() || !Modifier.isPublic(method.getModifiers()) || method.getReturnType() != String.class) {
-            throw new NoSuchMethodException();
-        }
-
+    private String translateMethodCall(Method translator, List<Operand> context) {
         // translate special method invocation
-        this.types = types;
+        this.types = translator.getParameterTypes();
         this.context = context;
         this.that = context.get(0).toString();
 
@@ -180,7 +179,16 @@ public class Translator<T> {
                 break;
 
             case Type.INT:
+            case Type.LONG:
+            case Type.FLOAT:
+            case Type.DOUBLE:
+            case Type.SHORT:
+            case Type.BYTE:
                 dummy[i] = 0;
+                break;
+
+            case Type.BOOLEAN:
+                dummy[i] = true;
                 break;
 
             default:
@@ -189,7 +197,7 @@ public class Translator<T> {
         }
 
         try {
-            return (String) method.invoke(this, dummy);
+            return (String) translator.invoke(this, dummy);
         } catch (Exception e) {
             // If this exception will be thrown, it is bug of this program. So we must rethrow
             // the wrapped error in here.
@@ -199,6 +207,66 @@ public class Translator<T> {
             this.types = null;
             this.context = null;
             this.that = null;
+        }
+    }
+
+    /**
+     * <p>
+     * Search translator method's existence.
+     * </p>
+     * 
+     * @param methodName A method name.
+     * @param parameterTypes A method parameters.
+     * @return A result.
+     */
+    private Method searchTranslator(String methodName, Class[] parameterTypes) {
+        Class translator = getClass();
+
+        if (translator == Translator.class) {
+            return null; // use generic translator
+        }
+
+        try {
+            Method method = getClass().getDeclaredMethod(methodName, parameterTypes);
+
+            // ===============================
+            // Validation
+            // ===============================
+            if (method.isBridge() || method.isSynthetic()) {
+                TranslationError error = new TranslationError();
+                error.write("Translation method is system defined. [", translator.getName(), "]");
+                error.writeMethod(method);
+
+                throw error;
+            }
+
+            if (!Modifier.isPublic(method.getModifiers())) {
+                TranslationError error = new TranslationError();
+                error.write("Translation method must be public. [", translator.getName(), "]");
+                error.writeMethod(method);
+
+                throw error;
+            }
+
+            if (method.getReturnType() != String.class) {
+                TranslationError error = new TranslationError();
+                error.write("Translation method must return String type. [", translator.getName(), "]");
+                error.writeMethod(method);
+
+                throw error;
+            }
+
+            return method;
+        } catch (NoSuchMethodException e) {
+            TranslationError error = new TranslationError();
+            error.write("You must define a translator method at ", translator.getName(), ".");
+            error.writeMethod(Modifier.PUBLIC, methodName, String.class, parameterTypes);
+
+            throw error;
+        } catch (Exception e) {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error(e);
         }
     }
 
