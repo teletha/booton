@@ -16,19 +16,19 @@ import booton.translator.api.ScriptTester;
 import booton.translator.api.Scriptable;
 
 /**
- * @version 2012/12/01 3:04:06
+ * @version 2012/12/01 3:09:50
  */
 @SuppressWarnings("unused")
-public class FloatArrayTest extends ScriptTester {
+public class DoubleArrayTest extends ScriptTester {
 
     @Test
     public void Array() {
         test(new Scriptable() {
 
-            public float[] act() {
-                float[] array = new float[2];
-                array[0] = 1.1f;
-                array[1] = 2.2f;
+            public double[] act() {
+                double[] array = new double[2];
+                array[0] = 1.1d;
+                array[1] = 2.2d;
 
                 return array;
             }
@@ -39,10 +39,10 @@ public class FloatArrayTest extends ScriptTester {
     public void ArrayWithExpression() {
         test(new Scriptable() {
 
-            private float field = 3.14f;
+            private double field = 3.14d;
 
-            public float[] act() {
-                float[] array = new float[4];
+            public double[] act() {
+                double[] array = new double[4];
                 array[0] = field + field;
                 array[1] = field - field;
                 array[2] = field * field;
@@ -57,8 +57,8 @@ public class FloatArrayTest extends ScriptTester {
     public void ArrayByShorthand() {
         test(new Scriptable() {
 
-            public float[] act() {
-                return new float[] {1.5f, -1.5f};
+            public double[] act() {
+                return new double[] {1.5d, -1.5d};
             }
         });
     }
@@ -67,8 +67,8 @@ public class FloatArrayTest extends ScriptTester {
     public void ArrayByShorthandWithFirstZero() {
         test(new Scriptable() {
 
-            public float[] act() {
-                return new float[] {0.0f, 0.3f};
+            public double[] act() {
+                return new double[] {0.0d, 0.3d};
             }
         });
     }
@@ -77,8 +77,8 @@ public class FloatArrayTest extends ScriptTester {
     public void ArrayByShorthandWithlastZero() {
         test(new Scriptable() {
 
-            public float[] act() {
-                return new float[] {0.1f, 0f};
+            public double[] act() {
+                return new double[] {0.1d, 0d};
             }
         });
     }
@@ -87,8 +87,8 @@ public class FloatArrayTest extends ScriptTester {
     public void ArrayByShorthandWithAllZero() {
         test(new Scriptable() {
 
-            public float[] act() {
-                return new float[] {0.0f, -0.0f};
+            public double[] act() {
+                return new double[] {0.0d, -0.0d};
             }
         });
     }
@@ -97,20 +97,10 @@ public class FloatArrayTest extends ScriptTester {
     public void ArrayWithExpressionByShorthand() {
         test(new Scriptable() {
 
-            private float field = 0.002f;
+            private double field = 0.002000023d;
 
-            public float[] act() {
-                return new float[] {field + field, field - field, field * field, field / field};
-            }
-        });
-    }
-
-    @Test
-    public void ArraySoMany() {
-        test(new Scriptable() {
-
-            public float[] act() {
-                return new float[] {0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f};
+            public double[] act() {
+                return new double[] {field + field, field - field, field * field, field / field};
             }
         });
     }
@@ -119,8 +109,8 @@ public class FloatArrayTest extends ScriptTester {
     public void ArrayAccess() {
         test(new Scriptable() {
 
-            public float act(float value) {
-                float[] array = {1, value};
+            public double act(double value) {
+                double[] array = {1, value};
 
                 return array[1];
             }
@@ -131,11 +121,11 @@ public class FloatArrayTest extends ScriptTester {
     public void MultiDimensionArray() {
         test(new Scriptable() {
 
-            public float[][] act() {
-                float[][] array = new float[3][2];
-                array[0] = new float[] {1, 2};
-                array[1] = new float[] {3, 4};
-                array[2] = new float[] {5, 6};
+            public double[][] act() {
+                double[][] array = new double[3][2];
+                array[0] = new double[] {1, 2};
+                array[1] = new double[] {3, 4};
+                array[2] = new double[] {5, 6};
 
                 return array;
             }
@@ -146,8 +136,8 @@ public class FloatArrayTest extends ScriptTester {
     public void MultiDimensionArrayByShorthand() {
         test(new Scriptable() {
 
-            public float[][] act() {
-                return new float[][] { {0, 1}, {2, 3, 4}, {5, 6, 7, 8}};
+            public double[][] act() {
+                return new double[][] { {0, 1}, {2, 3, 4}, {5, 6, 7, 8}};
             }
         });
     }
@@ -157,7 +147,17 @@ public class FloatArrayTest extends ScriptTester {
         test(new Scriptable() {
 
             public int act(@Param(ints = {0, 1, 10}) int value) {
-                return new float[value].length;
+                return new double[value].length;
+            }
+        });
+    }
+
+    @Test
+    public void ArraySoMany() {
+        test(new Scriptable() {
+
+            public double[] act() {
+                return new double[] {0.1d, 0.2d, 0.3d, 0.4d, 0.5d, 0.6d, 0.7d, 0.8d, 0.9d};
             }
         });
     }
