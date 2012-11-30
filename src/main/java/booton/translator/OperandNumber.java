@@ -21,12 +21,12 @@ package booton.translator;
 class OperandNumber extends Operand {
 
     /** The actual value of this operand. */
-    final Integer value;
+    final Number value;
 
     /**
      * 
      */
-    OperandNumber(Integer value) {
+    OperandNumber(Number value) {
         this.value = value;
     }
 

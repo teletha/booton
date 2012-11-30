@@ -104,6 +104,90 @@ public class StringTranslator extends Translator<String> {
     }
 
     public String valueOf(Object value) {
-        return "new String(" + param(0) + ")";
+        return Q + Q + "+" + param(0);
+    }
+
+    /**
+     * <p>
+     * Returns the string representation of the int argument.
+     * </p>
+     * 
+     * @param value A value to parse.
+     * @return A compiled expression.
+     */
+    public String valueOf(int value) {
+        return Q + Q + "+" + param(0);
+    }
+
+    /**
+     * <p>
+     * Returns the string representation of the long argument.
+     * </p>
+     * 
+     * @param value A value to parse.
+     * @return A compiled expression.
+     */
+    public String valueOf(long value) {
+        return Q + Q + "+" + param(0);
+    }
+
+    /**
+     * <p>
+     * Returns the string representation of the float argument.
+     * </p>
+     * 
+     * @param value A value to parse.
+     * @return A compiled expression.
+     */
+    public String valueOf(float value) {
+        return Q + Q + "+" + param(0);
+    }
+
+    /**
+     * <p>
+     * Returns the string representation of the double argument.
+     * </p>
+     * 
+     * @param value A value to parse.
+     * @return A compiled expression.
+     */
+    public String valueOf(double value) {
+        return Q + Q + "+" + param(0);
+    }
+
+    /**
+     * <p>
+     * Returns the string representation of the boolean argument.
+     * </p>
+     * 
+     * @param value A value to parse.
+     * @return A compiled expression.
+     */
+    public String valueOf(boolean value) {
+        return Q + Q + "+" + param(0);
+    }
+
+    /**
+     * <p>
+     * Returns the string representation of the char argument.
+     * </p>
+     * 
+     * @param value A value to parse.
+     * @return A compiled expression.
+     */
+    public String valueOf(char value) {
+        return param(0);
+    }
+
+    /**
+     * <p>
+     * Returns the string representation of the char array argument.
+     * </p>
+     * 
+     * @param value A value to parse.
+     * @return A compiled expression.
+     */
+    public String valueOf(char[] value) {
+        return param(0) + ".join()";
     }
 }

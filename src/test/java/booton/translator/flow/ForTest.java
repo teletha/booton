@@ -22,7 +22,7 @@ public class ForTest extends CompilableTester {
 
     @Test
     public void one() throws Exception {
-        evaluate(new Compilable() {
+        test(new Compilable() {
 
             String act() {
                 int m = 0;

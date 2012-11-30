@@ -80,12 +80,23 @@ public class CompilableTester {
 
     /**
      * <p>
+     * Compile specified class and evaluate it by boolean values.
+     * </p>
+     * 
+     * @param compilable A target compilable source.
+     */
+    protected final void testByBoolean(Compilable compilable) {
+        evaluate(compilable, Arrays.asList(true, false));
+    }
+
+    /**
+     * <p>
      * Compile specified class and evaluate it.
      * </p>
      * 
      * @param compilable A target compilable source.
      */
-    protected final void evaluate(Compilable compilable) {
+    protected final void test(Compilable compilable) {
         evaluate(compilable, Collections.singletonList(NONE));
     }
 

@@ -22,7 +22,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void one() {
-        evaluate(new Compilable() {
+        test(new Compilable() {
 
             int act() {
                 return 1;
@@ -32,7 +32,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void two() {
-        evaluate(new Compilable() {
+        test(new Compilable() {
 
             int act() {
                 return 2;
@@ -42,7 +42,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void three() {
-        evaluate(new Compilable() {
+        test(new Compilable() {
 
             int act() {
                 return 3;
@@ -52,7 +52,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void four() {
-        evaluate(new Compilable() {
+        test(new Compilable() {
 
             int act() {
                 return 4;
@@ -62,7 +62,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void five() {
-        evaluate(new Compilable() {
+        test(new Compilable() {
 
             int act() {
                 return 5;
@@ -72,7 +72,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void siz() {
-        evaluate(new Compilable() {
+        test(new Compilable() {
 
             int act() {
                 return 6;
@@ -82,7 +82,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void seven() {
-        evaluate(new Compilable() {
+        test(new Compilable() {
 
             int act() {
                 return 7;
@@ -92,7 +92,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void eight() {
-        evaluate(new Compilable() {
+        test(new Compilable() {
 
             int act() {
                 return 8;
@@ -102,7 +102,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void nine() {
-        evaluate(new Compilable() {
+        test(new Compilable() {
 
             int act() {
                 return 9;
@@ -112,7 +112,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void ten() {
-        evaluate(new Compilable() {
+        test(new Compilable() {
 
             int act() {
                 return 10;
@@ -122,7 +122,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void zero() {
-        evaluate(new Compilable() {
+        test(new Compilable() {
 
             int act() {
                 return 0;
@@ -132,7 +132,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void minusOne() {
-        evaluate(new Compilable() {
+        test(new Compilable() {
 
             int act() {
                 return -1;
@@ -142,7 +142,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void minusTwo() {
-        evaluate(new Compilable() {
+        test(new Compilable() {
 
             int act() {
                 return -2;
@@ -152,7 +152,7 @@ public class IntConstantTest extends CompilableTester {
 
     @Test
     public void minusThree() {
-        evaluate(new Compilable() {
+        test(new Compilable() {
 
             int act() {
                 return -3;
