@@ -17,22 +17,19 @@ package booton.translator.operator;
 
 import org.junit.Test;
 
-import booton.translator.ScriptTranslatorTestcase;
-import booton.translator.api.DoubleScript;
-import booton.translator.api.IntScript;
+import booton.translator.api.Param;
+import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
- * @version 2009/06/27 13:51:44
+ * @version 2012/12/01 3:19:44
  */
-public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
+public class ArithmeticOperatorTest extends ScriptTester {
 
     @Test
     public void AdditionLeft() {
-        test(-20, 20, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
             public int act(int value) {
                 return 1 + value;
             }
@@ -41,11 +38,8 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void AdditonRight() {
-        test(-20, 20, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
             public int act(int value) {
                 return value + 1;
             }
@@ -54,11 +48,8 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void SubtractionLeft() {
-        test(-20, 20, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
             public int act(int value) {
                 return 10 - value;
             }
@@ -67,11 +58,8 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void SubtractionRight() {
-        test(-20, 20, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
             public int act(int value) {
                 return value - 10;
             }
@@ -80,11 +68,8 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void MultiplicationLeft() {
-        test(-20, 20, new DoubleScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
             public double act(double value) {
                 return value * 3;
             }
@@ -93,11 +78,8 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void MultiplicationRight() {
-        test(-20, 20, new DoubleScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
             public double act(double value) {
                 return -3 * value;
             }
@@ -106,11 +88,8 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DivisionLeft() {
-        test(-20, 20, new DoubleScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.DoubleScript#act(double)
-             */
             public double act(double value) {
                 return value / 2;
             }
@@ -119,12 +98,9 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DivisionRight() {
-        test(1, 20, new DoubleScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.DoubleScript#act(double)
-             */
-            public double act(double value) {
+            public double act(@Param(doubles = {1, 3, 4}) double value) {
                 return 12 / value;
             }
         });
@@ -132,11 +108,8 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ReminderLeft() {
-        test(-20, 20, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
             public int act(int value) {
                 return value % 7;
             }
@@ -145,11 +118,8 @@ public class ArithmeticOperatorTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ReminderRight() {
-        test(1, 20, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
             public int act(int value) {
                 return 40 % value;
             }

@@ -29,4 +29,67 @@ public @interface Param {
      * @return
      */
     int[] ints() default {};
+
+    /**
+     * <p>
+     * Provide long values.
+     * </p>
+     * 
+     * @return
+     */
+    long[] longs() default {};
+
+    /**
+     * <p>
+     * Provide float values.
+     * </p>
+     * 
+     * @return
+     */
+    float[] floats() default {};
+
+    /**
+     * <p>
+     * Provide double values.
+     * </p>
+     * 
+     * @return
+     */
+    double[] doubles() default {};
+
+    /**
+     * <p>
+     * Provide byte values.
+     * </p>
+     * 
+     * @return
+     */
+    byte[] bytes() default {};
+
+    /**
+     * <p>
+     * Provide short values.
+     * </p>
+     * 
+     * @return
+     */
+    short[] shorts() default {};
+
+    /**
+     * <p>
+     * Provide char values.
+     * </p>
+     * 
+     * @return
+     */
+    char[] chars() default {};
+
+    /**
+     * <p>
+     * Provide {@link String} values.
+     * </p>
+     * 
+     * @return
+     */
+    String[] strings() default {};
 }
