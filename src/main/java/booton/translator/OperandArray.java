@@ -18,7 +18,7 @@ package booton.translator;
 import java.util.ArrayList;
 
 /**
- * @version 2009/08/20 19:50:36
+ * @version 2012/11/30 11:36:39
  */
 class OperandArray extends Operand {
 
@@ -60,7 +60,7 @@ class OperandArray extends Operand {
     }
 
     /**
-     * @see booton.translator.Operand#toString()
+     * {@inheritDoc}
      */
     @Override
     public String toString() {
