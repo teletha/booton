@@ -24,6 +24,7 @@ import booton.translator.api.Scriptable;
 /**
  * @version 2012/12/01 3:19:44
  */
+@SuppressWarnings("unused")
 public class ArithmeticOperatorTest extends ScriptTester {
 
     @Test

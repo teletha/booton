@@ -34,7 +34,6 @@ import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
 import org.objectweb.asm.Type;
 
 import booton.translator.api.BooleanScript;
-import booton.translator.api.DoubleScript;
 import booton.translator.api.IntScript;
 import booton.translator.api.LogicalExpressionScript;
 import booton.translator.api.ObjectScript;
@@ -139,35 +138,6 @@ public class ScriptTranslatorTestcase {
         List<Integer> inputs = new ArrayList();
 
         for (int i = 0; i <= end - start; i++) {
-            inputs.add(start + i);
-        }
-
-        // delegate
-        assertScript(inputs, script);
-    }
-
-    /**
-     * @param script
-     */
-    protected void test(DoubleScript script) {
-        test(-2, 2, script);
-    }
-
-    /**
-     * @param script
-     * @param start
-     * @param end
-     */
-    protected void test(double start, double end, DoubleScript script) {
-        // check range
-        if (end <= start) {
-            throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
-        }
-
-        // build inputs
-        List<Double> inputs = new ArrayList();
-
-        for (double i = 0; i <= end - start; i++) {
             inputs.add(start + i);
         }
 
