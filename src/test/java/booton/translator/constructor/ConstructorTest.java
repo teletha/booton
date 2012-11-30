@@ -47,7 +47,7 @@ public class ConstructorTest extends ScriptTester {
     }
 
     /**
-     * @version 2009/08/19 20:36:42
+     * @version 2012/12/01 3:58:47
      */
     public static class ImplicitConstructorOfPublicMember {
 
@@ -67,7 +67,7 @@ public class ConstructorTest extends ScriptTester {
     }
 
     /**
-     * @version 2009/08/19 20:36:42
+     * @version 2012/12/01 3:58:40
      */
     protected static class ImplicitConstructorOfProtectedMember {
 
@@ -87,7 +87,7 @@ public class ConstructorTest extends ScriptTester {
     }
 
     /**
-     * @version 2009/08/19 20:36:42
+     * @version 2012/12/01 3:58:43
      */
     static class ImplicitConstructorOfPackageMember {
 
@@ -161,7 +161,7 @@ public class ConstructorTest extends ScriptTester {
     }
 
     /**
-     * @version 2009/08/19 20:36:42
+     * @version 2012/12/01 3:58:34
      */
     private static class Parameter {
 
@@ -187,7 +187,7 @@ public class ConstructorTest extends ScriptTester {
     }
 
     /**
-     * @version 2009/08/19 20:36:42
+     * @version 2012/12/01 3:58:31
      */
     private static class Parameters {
 
@@ -201,7 +201,7 @@ public class ConstructorTest extends ScriptTester {
         }
 
         /**
-         * @see java.lang.Object#toString()
+         * {@inheritDoc}
          */
         @Override
         public String toString() {
@@ -277,7 +277,7 @@ public class ConstructorTest extends ScriptTester {
         }
 
         /**
-         * @see java.lang.Object#toString()
+         * {@inheritDoc}
          */
         @Override
         public String toString() {
@@ -289,9 +289,6 @@ public class ConstructorTest extends ScriptTester {
     public void Extend1() {
         test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.ObjectScript#act(java.lang.Object)
-             */
             public String act(String value) {
                 Child external = new Child(value);
 
@@ -304,9 +301,6 @@ public class ConstructorTest extends ScriptTester {
     public void Extend2() {
         test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.ObjectScript#act(java.lang.Object)
-             */
             public String act(String value) {
                 Child external = new Child(2, value);
 
@@ -316,21 +310,18 @@ public class ConstructorTest extends ScriptTester {
     }
 
     /**
-     * @version 2009/08/11 20:48:12
+     * @version 2012/12/01 3:57:50
      */
     protected static class Base {
 
         protected final String name;
 
-        /**
-         * @param name
-         */
         public Base(String name) {
             this.name = name;
         }
 
         /**
-         * @see java.lang.Object#toString()
+         * {@inheritDoc}
          */
         @Override
         public String toString() {
@@ -339,26 +330,20 @@ public class ConstructorTest extends ScriptTester {
     }
 
     /**
-     * @version 2009/08/11 20:48:12
+     * @version 2012/12/01 3:57:54
      */
     protected static class Child extends Base {
 
-        /**
-         * @param name
-         */
         public Child(String name) {
             super(name);
         }
 
-        /**
-         * @param name
-         */
         public Child(int type, String name) {
             super(name);
         }
 
         /**
-         * @see java.lang.Object#toString()
+         * {@inheritDoc}
          */
         @Override
         public String toString() {
@@ -377,12 +362,12 @@ public class ConstructorTest extends ScriptTester {
             }
 
             /**
-             * @version 2009/08/31 13:16:33
+             * @version 2012/12/01 3:58:16
              */
             class Inner {
 
                 /**
-                 * @see java.lang.Object#toString()
+                 * {@inheritDoc}
                  */
                 @Override
                 public String toString() {

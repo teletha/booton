@@ -1,29 +1,24 @@
 /*
- * Copyright (C) 2009 Nameless Production Committee.
+ * Copyright (C) 2012 Nameless Production Committee
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *          http://opensource.org/licenses/mit-license.php
  */
 package booton.translator.method;
 
 import org.junit.Test;
 
-import booton.translator.ScriptTranslatorTestcase;
-import booton.translator.api.IntScript;
+import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
- * @version 2009/08/18 19:19:10
+ * @version 2012/12/01 3:57:02
  */
-public class MethodTest extends ScriptTranslatorTestcase {
+@SuppressWarnings("unused")
+public class MethodTest extends ScriptTester {
 
     @Test
     public void Basic() {
@@ -31,11 +26,11 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/18 19:19:52
+     * @version 2012/12/01 3:55:41
      */
-    private static class Basic implements IntScript {
+    private static class Basic implements Scriptable {
 
-        public int act(int value) {
+        public int act() {
             return compute();
         }
 
@@ -50,9 +45,9 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/18 19:19:52
+     * @version 2012/12/01 3:55:43
      */
-    private static class Param implements IntScript {
+    private static class Param implements Scriptable {
 
         public int act(int value) {
             return compute(value);
@@ -69,9 +64,9 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/18 19:19:52
+     * @version 2012/12/01 3:55:45
      */
-    private static class MultipleParams implements IntScript {
+    private static class MultipleParams implements Scriptable {
 
         public int act(int value) {
             return compute(value, value + 1);
@@ -88,9 +83,9 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/18 19:19:52
+     * @version 2012/12/01 3:55:48
      */
-    private static class ArrayParam implements IntScript {
+    private static class ArrayParam implements Scriptable {
 
         public int act(int value) {
             int[] ints = {value, value + 1, value + 2};
@@ -115,9 +110,9 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/18 19:19:52
+     * @version 2012/12/01 3:55:52
      */
-    private static class VariableParam implements IntScript {
+    private static class VariableParam implements Scriptable {
 
         public int act(int value) {
             return compute(value, value + 1, value + 2);
@@ -140,9 +135,9 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/18 19:19:52
+     * @version 2012/12/01 3:55:55
      */
-    private static class VariableParamWithBase implements IntScript {
+    private static class VariableParamWithBase implements Scriptable {
 
         public int act(int value) {
             return compute(value, value + 1, value + 2);
@@ -165,9 +160,9 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/18 19:19:52
+     * @version 2012/12/01 3:55:59
      */
-    private static class VariableParamWithBaseOnly implements IntScript {
+    private static class VariableParamWithBaseOnly implements Scriptable {
 
         public int act(int value) {
             return compute(value);
@@ -190,9 +185,9 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/18 19:19:52
+     * @version 2012/12/01 3:56:02
      */
-    private static class Nest implements IntScript {
+    private static class Nest implements Scriptable {
 
         public int act(int value) {
             return compute(value, nest(value));
@@ -213,9 +208,9 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/18 19:19:52
+     * @version 2012/12/01 3:56:04
      */
-    private static class Overload implements IntScript {
+    private static class Overload implements Scriptable {
 
         public int act(int value) {
             return compute(value);
@@ -225,7 +220,6 @@ public class MethodTest extends ScriptTranslatorTestcase {
             return value * value;
         }
 
-        @SuppressWarnings("unused")
         private String compute(String value) {
             return value.substring(1);
         }
@@ -237,7 +231,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/09/01 2:51:35
+     * @version 2012/12/01 3:56:06
      */
     private static class BasePublic {
 
@@ -247,9 +241,9 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/18 19:19:52
+     * @version 2012/12/01 3:56:10
      */
-    private static class ExtendPublic extends BasePublic implements IntScript {
+    private static class ExtendPublic extends BasePublic implements Scriptable {
 
         public int act(int value) {
             return value + compute();
@@ -262,7 +256,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/09/01 2:51:35
+     * @version 2012/12/01 3:56:12
      */
     private static class BaseProtected {
 
@@ -272,9 +266,9 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/18 19:19:52
+     * @version 2012/12/01 3:56:17
      */
-    private static class ExtendProtected extends BaseProtected implements IntScript {
+    private static class ExtendProtected extends BaseProtected implements Scriptable {
 
         public int act(int value) {
             return value + compute();
@@ -287,7 +281,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/09/01 2:51:35
+     * @version 2012/12/01 3:56:19
      */
     private static class BasePackage {
 
@@ -297,9 +291,9 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/18 19:19:52
+     * @version 2012/12/01 3:56:22
      */
-    private static class ExtendPackage extends BasePackage implements IntScript {
+    private static class ExtendPackage extends BasePackage implements Scriptable {
 
         public int act(int value) {
             return value + compute();
@@ -312,20 +306,19 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/09/01 2:51:35
+     * @version 2012/12/01 3:56:46
      */
     private static class OverrideBase {
 
-        @SuppressWarnings("unused")
         public int compute(int value) {
             return value + 1;
         }
     }
 
     /**
-     * @version 2009/08/18 19:19:52
+     * @version 2012/12/01 3:56:45
      */
-    private static class OverrideChild extends OverrideBase implements IntScript {
+    private static class OverrideChild extends OverrideBase implements Scriptable {
 
         public int act(int value) {
             return compute(value);
@@ -343,7 +336,7 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/09/01 2:51:35
+     * @version 2012/12/01 3:56:42
      */
     static class SuperBase {
 
@@ -353,9 +346,9 @@ public class MethodTest extends ScriptTranslatorTestcase {
     }
 
     /**
-     * @version 2009/08/18 19:19:52
+     * @version 2012/12/01 3:56:40
      */
-    static class SuperChild extends SuperBase implements IntScript {
+    static class SuperChild extends SuperBase implements Scriptable {
 
         public int act(int value) {
             return this.compute(value) + super.compute(value);

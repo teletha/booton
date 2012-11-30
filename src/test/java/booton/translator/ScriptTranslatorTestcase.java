@@ -37,7 +37,6 @@ import booton.translator.api.BooleanScript;
 import booton.translator.api.IntScript;
 import booton.translator.api.LogicalExpressionScript;
 import booton.translator.api.ObjectScript;
-import booton.translator.api.ThrowableScript;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -166,22 +165,6 @@ public class ScriptTranslatorTestcase {
      * @param script
      */
     protected <T> void test(T input, ObjectScript<T> script) {
-        assertScript(Collections.singletonList(input), script);
-    }
-
-    /**
-     * @param script
-     */
-    protected <T> void assertScript(ThrowableScript<T> script) {
-        assertScript((T) null, script);
-    }
-
-    /**
-     * @param start
-     * @param end
-     * @param script
-     */
-    protected <T> void assertScript(T input, ThrowableScript<T> script) {
         assertScript(Collections.singletonList(input), script);
     }
 
