@@ -1,1 +1,1 @@
-boot.b=boot.defineClass({$0:function(a,b,c){this.ba=a;this.bb=b;this.bc=c;},A:function(a){return this.bb+this.bc*a;},_B:function(a,b){a=0;b=0;l3 : for (;;++b) {++a;}b>=3?console.log(a):;}});
+boot.b=boot.defineClass({$0:function(a,b,c){this.ba=a;this.bb=b;this.bc=c;},A:function(a){return this.bb+this.bc*a;},_B:function(a,b,c){console.log("start!!!");a=new boot.b("Teemo",100,10,0);console.log(""+a.ba+"  "+a.A(7));b=document.getElementsByTagName("p");c=0;l6 : for (;c<b.length;++c) {b[c].textContent=""+a.ba+"  "+a.A(c);}}});

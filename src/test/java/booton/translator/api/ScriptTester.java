@@ -24,6 +24,7 @@ import java.util.List;
 
 import kiss.I;
 import net.sourceforge.htmlunit.corejs.javascript.Context;
+import net.sourceforge.htmlunit.corejs.javascript.EvaluatorException;
 import net.sourceforge.htmlunit.corejs.javascript.NativeArray;
 import net.sourceforge.htmlunit.corejs.javascript.Script;
 import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
@@ -32,6 +33,7 @@ import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
 import org.objectweb.asm.Type;
 
 import booton.translator.Javascript;
+import booton.translator.TranslationError;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -145,11 +147,11 @@ public class ScriptTester {
         }
 
         // invoke as Javascript
-        StringBuilder scriptExpression = new StringBuilder();
+        String script = Javascript.getScript(source).toString();
 
         try {
             // compile as Javascript and script engine read it
-            engine.evaluateString(global, Javascript.getScript(source).toString(), source.getSimpleName(), 1, null);
+            engine.evaluateString(global, script, source.getSimpleName(), 1, null);
 
             // invoke it and compare result
             for (int i = 0; i < inputs.size(); i++) {
@@ -176,9 +178,21 @@ public class ScriptTester {
                 // execute and compare it to the java resul
                 assertObject(results.get(i), engine.evaluateString(global, invoker.toString(), "", 1, null));
             }
-        } catch (Exception e) {
-            System.out.println(scriptExpression);
-            throw I.quiet(e);
+        } catch (Throwable e) {
+            TranslationError error = new TranslationError(e);
+            error.write(e.getMessage());
+            error.write("\r\nFull Code :");
+            error.write(script);
+
+            if (e instanceof EvaluatorException) {
+                EvaluatorException exception = (EvaluatorException) e;
+
+                int index = exception.columnNumber();
+                String code = exception.lineSource();
+                error.write("\r\nAround Cause :");
+                error.write(code.substring(Math.max(0, index - 20), Math.min(index + 20, code.length())));
+            }
+            throw error;
         }
     }
 
@@ -218,7 +232,7 @@ public class ScriptTester {
             if (js.getClass().getSimpleName().equals("NativeError")) {
                 // Internal javascript error was thrown (e.g. invalid syntax error, property was not
                 // found). So we must report as error for developer's feedback.
-                throw new RuntimeException(js.toString());
+                throw new Error(js.toString());
             }
 
             Class type = java.getClass();
