@@ -472,14 +472,21 @@ class JavaMethodCompiler extends MethodVisitor {
         case LASTORE:
         case FASTORE:
         case DASTORE:
+        case CASTORE:
             Operand contextMaybeArray = current.remove(2);
+            Operand value = current.remove(0);
+
+            if (opcode == CASTORE) {
+                // convert assign value (int -> char)
+                value = value.cast(char.class);
+            }
 
             if (contextMaybeArray instanceof OperandArray) {
                 // initialization of syntax sugar
-                ((OperandArray) contextMaybeArray).set(current.remove(1), current.remove(0));
+                ((OperandArray) contextMaybeArray).set(current.remove(0), value);
             } else {
                 // read by index
-                current.addExpression(contextMaybeArray, "[", current.remove(1), "]=", current.remove(0));
+                current.addExpression(contextMaybeArray, "[", current.remove(0), "]=", value);
             }
             break;
 
@@ -626,13 +633,11 @@ class JavaMethodCompiler extends MethodVisitor {
         // THEN_EXPRESSION, GOTO, LABEL, ELSE_EXPRESSION, LABEL] in bytecode.
 
         // build new node
-        System.out.println(current + "  @");
         current = connect(label);
-        System.out.println(current + "  @@");
 
         // store the node in appearing order
         nodes.add(current);
-        System.out.println(nodes);
+
         if (1 < nodes.size()) {
             current.previous = nodes.get(nodes.size() - 2);
 

@@ -33,8 +33,6 @@ import java.util.List;
 import kiss.I;
 import net.sourceforge.htmlunit.corejs.javascript.Context;
 import net.sourceforge.htmlunit.corejs.javascript.NativeArray;
-import net.sourceforge.htmlunit.corejs.javascript.NativeFunction;
-import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
 import net.sourceforge.htmlunit.corejs.javascript.Script;
 import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
 import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
@@ -57,7 +55,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 /**
- * @version 2009/08/05 17:00:40
+ * @version 2012/11/30 12:42:56
  */
 public class ScriptTranslatorTestcase {
 
@@ -464,59 +462,88 @@ public class ScriptTranslatorTestcase {
             if (type.isArray()) {
                 assertArray(java, js);
             } else if (type == Integer.class) {
+                // ========================
+                // INT
+                // ========================
                 int value = ((Integer) java).intValue();
 
                 if (js instanceof Double) {
-                    assertEquals(value, ((Double) js).intValue());
+                    assert value == ((Double) js).intValue();
                 } else if (js instanceof UniqueTag) {
-                    assertEquals(value, 0);
+                    assert value == 0;
                 } else {
-                    assertEquals(value, ((Integer) js).intValue());
+                    assert value == ((Integer) js).intValue();
                 }
             } else if (type == Long.class) {
+                // ========================
+                // LONG
+                // ========================
                 long value = ((Long) java).longValue();
 
                 if (js instanceof UniqueTag) {
-                    assertEquals(value, 0L);
+                    assert value == 0L;
                 } else {
-                    assertEquals(value, ((Double) js).longValue());
+                    assert value == ((Double) js).longValue();
                 }
             } else if (type == Float.class) {
+                // ========================
+                // FLOAT
+                // ========================
                 java = new BigDecimal((Float) java).round(new MathContext(3));
                 js = new BigDecimal((Double) js).round(new MathContext(3));
 
-                assertEquals(java, js);
+                assert java.equals(js);
             } else if (type == Double.class) {
+                // ========================
+                // DOUBLE
+                // ========================
                 java = new BigDecimal((Double) java).round(new MathContext(3));
                 js = new BigDecimal((Double) js).round(new MathContext(3));
 
-                assertEquals(java, js);
+                assert java.equals(js);
             } else if (type == Short.class) {
-                assertEquals(((Short) java).doubleValue(), (Double) js, 0D);
+                // ========================
+                // SHORT
+                // ========================
+                assert ((Short) java).doubleValue() == ((Double) js).doubleValue();
             } else if (type == Byte.class) {
-                assertEquals(((Byte) java).doubleValue(), (Double) js, 0D);
+                // ========================
+                // BYTE
+                // ========================
+                assert ((Byte) java).doubleValue() == ((Double) js).doubleValue();
             } else if (type == Boolean.class) {
+                // ========================
+                // BOOLEAN
+                // ========================
                 if (js instanceof Double) {
                     js = ((Double) js).intValue() != 0;
                 }
-                assertEquals(((Boolean) java), (Boolean) js);
+                assert java.equals(js);
             } else if (type == String.class) {
-                assertEquals(java, js.toString());
+                // ========================
+                // STRING
+                // ========================
+                assert js.toString().equals(java);
+            } else if (type == Character.class) {
+                // ========================
+                // CHARACTER
+                // ========================
+                if (js instanceof Double) {
+                    // numeric characters (i.e. 0, 1, 2...)
+                    js = Character.valueOf((char) (((Double) js).intValue() + 48));
+                }
+                assert ((Character) java).toString().equals(js.toString());
             } else if (Throwable.class.isAssignableFrom(type)) {
+                // ========================
+                // THROWABLE
+                // ========================
                 assertException((Throwable) java, js);
             } else {
                 // some object
-                System.out.println(js.getClass());
-                assertTrue(js instanceof NativeObject);
 
-                NativeObject object = (NativeObject) js;
-                System.out.println(Arrays.toString(object.getPrototype().getIds()));
-
-                System.out.println(object.getPrototype().get("constructor", global));
-
-                NativeFunction value = (NativeFunction) object.getPrototype().get("constructor", global);
-                System.out.println(value.getFunctionName());
-
+                // If this exception will be thrown, it is bug of this program. So we must rethrow
+                // the wrapped error in here.
+                throw new Error(js.getClass() + " " + java.getClass() + "  " + java + "  " + js);
             }
         }
     }
