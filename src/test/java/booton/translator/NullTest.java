@@ -11,18 +11,20 @@ package booton.translator;
 
 import org.junit.Test;
 
-import booton.translator.api.ObjectScript;
+import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
- * @version 2012/11/30 15:33:13
+ * @version 2012/12/01 3:32:08
  */
-public class NullTest extends ScriptTranslatorTestcase {
+@SuppressWarnings("unused")
+public class NullTest extends ScriptTester {
 
     @Test
     public void Null() {
-        test(new ObjectScript() {
+        test(new Scriptable() {
 
-            public Object act(Object value) {
+            Object act() {
                 return null;
             }
         });
