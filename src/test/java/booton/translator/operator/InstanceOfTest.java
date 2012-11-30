@@ -27,48 +27,48 @@ public class InstanceOfTest extends ScriptTranslatorTestcase {
 
     @Test
     public void InstanceOf() {
-        assertScript(new Base());
+        test(new Base());
     }
 
     private static class Base implements BooleanScript {
 
-        public boolean execute(boolean value) {
+        public boolean act(boolean value) {
             return this instanceof Base;
         }
     }
 
     @Test
     public void InstanceOfChild() {
-        assertScript(new Child1());
+        test(new Child1());
     }
 
     private static class Child1 extends Base {
 
-        public boolean execute(boolean value) {
+        public boolean act(boolean value) {
             return this instanceof Child1;
         }
     }
 
     @Test
     public void InstanceOfBase() {
-        assertScript(new Child2());
+        test(new Child2());
     }
 
     private static class Child2 extends Base {
 
-        public boolean execute(boolean value) {
+        public boolean act(boolean value) {
             return this instanceof Base;
         }
     }
 
     @Test
     public void InstanceOfObject() {
-        assertScript(new OBJECT());
+        test(new OBJECT());
     }
 
     private static class OBJECT implements BooleanScript {
 
-        public boolean execute(boolean value) {
+        public boolean act(boolean value) {
             return this instanceof Object;
         }
     }

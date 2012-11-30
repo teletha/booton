@@ -23,9 +23,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void empty() {
-        assertScript(new ObjectScript<String>() {
+        test(new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 return "";
             }
         });
@@ -33,9 +33,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void basic() {
-        assertScript(new ObjectScript<String>() {
+        test(new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 return "java";
             }
         });
@@ -45,7 +45,7 @@ public class StringTest extends ScriptTranslatorTestcase {
     public void length() {
         test(new IntScript() {
 
-            public int execute(int value) {
+            public int act(int value) {
                 return "java".length();
             }
         });
@@ -53,9 +53,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void substring() {
-        assertScript(new ObjectScript<String>() {
+        test(new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 return "java".substring(2);
             }
         });
@@ -63,9 +63,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void substringBetween() {
-        assertScript(new ObjectScript<String>() {
+        test(new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 return "java".substring(2, 4);
             }
         });
@@ -73,9 +73,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void toLowerCase() {
-        assertScript(new ObjectScript<String>() {
+        test(new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 return "JAVA".toLowerCase();
             }
         });
@@ -83,9 +83,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void toUpperCase() {
-        assertScript(new ObjectScript<String>() {
+        test(new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 return "java".toUpperCase();
             }
         });
@@ -93,9 +93,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void trim() {
-        assertScript(new ObjectScript<String>() {
+        test(new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 return " j a v a ".trim();
             }
         });
@@ -105,7 +105,7 @@ public class StringTest extends ScriptTranslatorTestcase {
     public void codePointAt() {
         test(new IntScript() {
 
-            public int execute(int value) {
+            public int act(int value) {
                 return "java".codePointAt(0);
             }
         });
@@ -115,7 +115,7 @@ public class StringTest extends ScriptTranslatorTestcase {
     public void codePointBefore() {
         test(new IntScript() {
 
-            public int execute(int value) {
+            public int act(int value) {
                 return "java".codePointBefore(3);
             }
         });
@@ -125,7 +125,7 @@ public class StringTest extends ScriptTranslatorTestcase {
     public void indexOf() {
         test(new IntScript() {
 
-            public int execute(int value) {
+            public int act(int value) {
                 return "java".indexOf("a");
             }
         });
@@ -133,9 +133,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void endsWith() {
-        assertScript(new BooleanScript() {
+        test(new BooleanScript() {
 
-            public boolean execute(boolean value) {
+            public boolean act(boolean value) {
                 return "java".endsWith("va");
             }
         });
@@ -143,9 +143,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void startsWith() {
-        assertScript(new BooleanScript() {
+        test(new BooleanScript() {
 
-            public boolean execute(boolean value) {
+            public boolean act(boolean value) {
                 return "java".startsWith("ja");
             }
         });
@@ -153,9 +153,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void concat() {
-        assertScript("script", new ObjectScript<String>() {
+        test("script", new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 return "java".concat(value);
             }
         });
@@ -163,9 +163,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void replace() {
-        assertScript("script", new ObjectScript<String>() {
+        test("script", new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 return "java".replace("java", value);
             }
         });
@@ -173,9 +173,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void replaceForChar() {
-        assertScript(new ObjectScript<String>() {
+        test(new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 return "java".replace('a', 'o');
             }
         });
@@ -183,9 +183,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void replaceForCharWithExpression() {
-        assertScript("ao", new ObjectScript<String>() {
+        test("ao", new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 return "java".replace(value.charAt(0), value.charAt(1));
             }
         });
@@ -193,9 +193,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void replaceAll() {
-        assertScript(new ObjectScript<String>() {
+        test(new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 return "java".replaceAll("a", "o");
             }
         });
@@ -203,9 +203,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void replaceAllWithExpression() {
-        assertScript("a", new ObjectScript<String>() {
+        test("a", new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 return "java".replaceAll(value, "o");
             }
         });
@@ -213,9 +213,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void replaceFirst() {
-        assertScript(new ObjectScript<String>() {
+        test(new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 return "java".replaceFirst("a", "o");
             }
         });
@@ -223,9 +223,9 @@ public class StringTest extends ScriptTranslatorTestcase {
 
     @Test
     public void addition() {
-        assertScript("script", new ObjectScript<String>() {
+        test("script", new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 return "java" + value + "Test";
             }
         });

@@ -11,17 +11,14 @@ package booton.translator.field;
 
 import org.junit.Test;
 
-import booton.translator.ScriptTranslatorTestcase;
-import booton.translator.api.BooleanScript;
-import booton.translator.api.DoubleScript;
-import booton.translator.api.FloatScript;
-import booton.translator.api.IntScript;
-import booton.translator.api.LongScript;
+import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
- * @version 2012/11/30 15:34:04
+ * @version 2012/12/01 2:28:13
  */
-public class FieldTest extends ScriptTranslatorTestcase {
+@SuppressWarnings("unused")
+public class FieldTest extends ScriptTester {
 
     @Test
     public void IntField() {
@@ -31,11 +28,11 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 18:54:24
      */
-    private static class IntField implements IntScript {
+    private static class IntField implements Scriptable {
 
         private int field = 10;
 
-        public int execute(int value) {
+        public int act(int value) {
             return field;
         }
     }
@@ -48,11 +45,11 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 18:54:24
      */
-    private static class IntFieldWithExpresison implements IntScript {
+    private static class IntFieldWithExpresison implements Scriptable {
 
         private int field = 10;
 
-        public int execute(int value) {
+        public int act(int value) {
             return field + value;
         }
     }
@@ -65,11 +62,11 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 18:54:24
      */
-    private static class LongField implements LongScript {
+    private static class LongField implements Scriptable {
 
         private long field = 9876543210L;
 
-        public long execute(long value) {
+        public long act(long value) {
             return field;
         }
     }
@@ -82,11 +79,11 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 18:54:24
      */
-    private static class FloatField implements FloatScript {
+    private static class FloatField implements Scriptable {
 
         private float field = 3.1415f;
 
-        public float execute(float value) {
+        public float act(float value) {
             return field;
         }
     }
@@ -99,28 +96,28 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 18:54:24
      */
-    private static class DoubleField implements DoubleScript {
+    private static class DoubleField implements Scriptable {
 
         private double field = 3.14159265358979323846264338327950288419716939937510d;
 
-        public double execute(double value) {
+        public double act(double value) {
             return field;
         }
     }
 
     @Test
     public void BooleanField() {
-        assertScript(new BooleanField());
+        test(new BooleanField());
     }
 
     /**
      * @version 2009/08/18 18:54:24
      */
-    private static class BooleanField implements BooleanScript {
+    private static class BooleanField implements Scriptable {
 
         private boolean field = false;
 
-        public boolean execute(boolean value) {
+        public boolean act(boolean value) {
             return field;
         }
     }
@@ -141,9 +138,9 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class ExtendChild extends ExtendBase implements IntScript {
+    private static class ExtendChild extends ExtendBase implements Scriptable {
 
-        public int execute(int value) {
+        public int act(int value) {
             return value + field;
         }
     }
@@ -165,11 +162,11 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class OverrideChild extends OverrideBase implements IntScript {
+    private static class OverrideChild extends OverrideBase implements Scriptable {
 
         protected int field = 5;
 
-        public int execute(int value) {
+        public int act(int value) {
             return value + this.field;
         }
     }
@@ -190,11 +187,11 @@ public class FieldTest extends ScriptTranslatorTestcase {
     /**
      * @version 2009/08/18 19:19:52
      */
-    private static class SuperChild extends SuperBase implements IntScript {
+    private static class SuperChild extends SuperBase implements Scriptable {
 
         protected int field = 5;
 
-        public int execute(int value) {
+        public int act(int value) {
             return value + this.field + super.field;
         }
     }

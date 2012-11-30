@@ -11,6 +11,7 @@ package booton.translator.api;
 
 import static java.nio.charset.StandardCharsets.*;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -203,6 +204,11 @@ public class ScriptTester {
         }
 
         Class type = params[0];
+        Annotation[] annotations = method.getParameterAnnotations()[0];
+
+        if (annotations.length == 1 && annotations[0] instanceof Param) {
+            return prepareInputs(type, (Param) annotations[0]);
+        }
 
         if (type == boolean.class) {
             return Arrays.asList(true, false);
@@ -225,6 +231,56 @@ public class ScriptTester {
         } else {
             return Arrays.asList(null, I.make(type));
         }
+    }
+
+    /**
+     * <p>
+     * Prepare user specified input values for test.
+     * </p>
+     * 
+     * @param type A parameter type.
+     * @param method A target method.
+     * @return A user specified values.
+     */
+    private List prepareInputs(Class type, Param param) {
+        if (type == boolean.class) {
+            return Arrays.asList(true, false);
+        } else if (type == char.class) {
+            return Arrays.asList('2', 'B', 'a', '$', '@', 'c', 'a', 't');
+        } else if (type == int.class) {
+            return asList(param.ints());
+        } else if (type == long.class) {
+            return Arrays.asList(0L, 1L, 2L, 123456789L, -1L, -2L, -123456789L);
+        } else if (type == float.class) {
+            return Arrays.asList(0F, 1F, 0.2F, -1.3464F);
+        } else if (type == double.class) {
+            return Arrays.asList(0D, 1D, 0.2D, 1.239754297642323D);
+        } else if (type == short.class) {
+            return Arrays.asList((short) 0, (short) 1, (short) 2, (short) -1, (short) -2);
+        } else if (type == byte.class) {
+            return Arrays.asList((byte) 0, (byte) 1, (byte) 2, (byte) -1, (byte) -2);
+        } else if (type == String.class) {
+            return Arrays.asList(null, "", "a", "some value");
+        } else {
+            return Arrays.asList(null, I.make(type));
+        }
+    }
+
+    /**
+     * <p>
+     * Helper method to prepare user specified inputs.
+     * </p>
+     * 
+     * @param array
+     * @return
+     */
+    private List asList(Object array) {
+        List inputs = new ArrayList();
+
+        for (int i = 0; i < Array.getLength(array); i++) {
+            inputs.add(Array.get(array, i));
+        }
+        return inputs;
     }
 
     /**

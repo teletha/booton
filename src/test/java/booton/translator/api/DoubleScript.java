@@ -26,5 +26,5 @@ public interface DoubleScript {
      * @param value A script input.
      * @return A script output.
      */
-    double execute(double value);
+    double act(double value);
 }

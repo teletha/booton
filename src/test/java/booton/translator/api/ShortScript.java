@@ -20,5 +20,5 @@ public interface ShortScript {
      * @param value A script input.
      * @return A script output.
      */
-    short execute(short value);
+    short act(short value);
 }

@@ -20,5 +20,5 @@ public interface ThrowableScript<T> {
      * @param value A script input.
      * @return A script output.
      */
-    T execute(T value) throws Exception;
+    T act(T value) throws Exception;
 }

@@ -26,5 +26,5 @@ public interface FloatScript {
      * @param value A script input.
      * @return A script output.
      */
-    float execute(float value);
+    float act(float value);
 }

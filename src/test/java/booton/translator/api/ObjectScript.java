@@ -26,5 +26,5 @@ public interface ObjectScript<T> {
      * @param value A script input.
      * @return A script output.
      */
-    T execute(T value);
+    T act(T value);
 }

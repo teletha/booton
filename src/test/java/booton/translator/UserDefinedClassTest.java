@@ -24,7 +24,7 @@ public class UserDefinedClassTest extends ScriptTranslatorTestcase {
     public void UserClass() {
         test(new IntScript() {
 
-            public int execute(int value) {
+            public int act(int value) {
                 Person user = new Person();
                 user.setAge(value);
 
@@ -35,9 +35,9 @@ public class UserDefinedClassTest extends ScriptTranslatorTestcase {
 
     @Test
     public void UserClassToString() {
-        assertScript("Hitagi", new ObjectScript<String>() {
+        test("Hitagi", new ObjectScript<String>() {
 
-            public String execute(String value) {
+            public String act(String value) {
                 Person user = new Person();
                 user.setAge(17);
                 user.setFirstName(value);

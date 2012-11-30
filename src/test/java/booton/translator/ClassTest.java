@@ -20,7 +20,7 @@ public class ClassTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ClassLiteral() {
-        assertScript(new ClassLiteral());
+        test(new ClassLiteral());
     }
 
     /**
@@ -28,7 +28,7 @@ public class ClassTest extends ScriptTranslatorTestcase {
      */
     private static class ClassLiteral implements ObjectScript<String> {
 
-        public String execute(String value) {
+        public String act(String value) {
             return "";
         }
     }
