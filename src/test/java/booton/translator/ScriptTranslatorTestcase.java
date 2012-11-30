@@ -94,7 +94,7 @@ public class ScriptTranslatorTestcase {
     /**
      * @param script
      */
-    protected void assertScript(ByteScript script) {
+    protected void test(ByteScript script) {
         assertScript((byte) -2, (byte) 2, script);
     }
 
@@ -123,7 +123,7 @@ public class ScriptTranslatorTestcase {
     /**
      * @param script
      */
-    protected void assertScript(ShortScript script) {
+    protected void test(ShortScript script) {
         assertScript((short) -2, (short) 2, script);
     }
 
@@ -152,7 +152,7 @@ public class ScriptTranslatorTestcase {
     /**
      * @param script
      */
-    protected void assertScript(IntScript script) {
+    protected void test(IntScript script) {
         assertScript(-2, 2, script);
     }
 
@@ -181,7 +181,7 @@ public class ScriptTranslatorTestcase {
     /**
      * @param script
      */
-    protected void assertScript(LongScript script) {
+    protected void test(LongScript script) {
         assertScript(-2, 2, script);
     }
 
@@ -210,7 +210,7 @@ public class ScriptTranslatorTestcase {
     /**
      * @param script
      */
-    protected void assertScript(FloatScript script) {
+    protected void test(FloatScript script) {
         assertScript(-2, 2, script);
     }
 
@@ -239,7 +239,7 @@ public class ScriptTranslatorTestcase {
     /**
      * @param script
      */
-    protected void assertScript(DoubleScript script) {
+    protected void test(DoubleScript script) {
         assertScript(-2, 2, script);
     }
 

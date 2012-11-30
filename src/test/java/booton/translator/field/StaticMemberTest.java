@@ -32,7 +32,7 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StaticMethod() {
-        assertScript(new StaticMethod());
+        test(new StaticMethod());
     }
 
     /**
@@ -54,7 +54,7 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StaticMethodWithParam() {
-        assertScript(new StaticMethodWithParam());
+        test(new StaticMethodWithParam());
     }
 
     /**
@@ -76,7 +76,7 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
 
     @Test
     public void GetStaticField() {
-        assertScript(new GetStaticField());
+        test(new GetStaticField());
     }
 
     /**
@@ -96,7 +96,7 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
 
     @Test
     public void GetStaticFieldFromStaticMethod() {
-        assertScript(new GetStaticFieldFromStaticMethod());
+        test(new GetStaticFieldFromStaticMethod());
     }
 
     /**
@@ -120,7 +120,7 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
 
     @Test
     public void SetStaticField() {
-        assertScript(new SetStaticField());
+        test(new SetStaticField());
     }
 
     /**
@@ -142,7 +142,7 @@ public class StaticMemberTest extends ScriptTranslatorTestcase {
 
     @Test
     public void StaticInitialization() {
-        assertScript(new StaticInitialization());
+        test(new StaticInitialization());
     }
 
     /**

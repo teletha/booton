@@ -22,7 +22,7 @@ public class UserDefinedClassTest extends ScriptTranslatorTestcase {
 
     @Test
     public void UserClass() {
-        assertScript(new IntScript() {
+        test(new IntScript() {
 
             public int execute(int value) {
                 Person user = new Person();

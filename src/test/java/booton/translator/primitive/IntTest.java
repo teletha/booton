@@ -17,19 +17,20 @@ package booton.translator.primitive;
 
 import org.junit.Test;
 
-import booton.translator.ScriptTranslatorTestcase;
-import booton.translator.api.IntScript;
+import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
- * @version 2009/06/27 12:48:26
+ * @version 2012/12/01 1:56:22
  */
-public class IntTest extends ScriptTranslatorTestcase {
+@SuppressWarnings("unused")
+public class IntTest extends ScriptTester {
 
     @Test
     public void max() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return Integer.MAX_VALUE;
             }
         });
@@ -37,9 +38,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void min() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return Integer.MIN_VALUE;
             }
         });
@@ -47,9 +48,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void add() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value + 1;
             }
         });
@@ -57,9 +58,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void addAssignable() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value += 2;
             }
         });
@@ -67,9 +68,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void subtract() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value - 1;
             }
         });
@@ -77,9 +78,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void subtractAssignable() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value -= 2;
             }
         });
@@ -87,9 +88,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void multiply() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value * 2;
             }
         });
@@ -97,9 +98,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void multiplyAssignable() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value *= 2;
             }
         });
@@ -107,9 +108,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void divide() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value / 2;
             }
         });
@@ -117,9 +118,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void divideAssignable() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value /= 2;
             }
         });
@@ -127,9 +128,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void modulo() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value % 2;
             }
         });
@@ -137,9 +138,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void moduloAssignable() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value %= 2;
             }
         });
@@ -147,9 +148,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitAnd() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value & 0x010101;
             }
         });
@@ -157,9 +158,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitOr() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value | 0x010101;
             }
         });
@@ -167,9 +168,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitOrAssignable() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value |= 0x010101;
             }
         });
@@ -177,9 +178,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitXor() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value ^ 0x010101;
             }
         });
@@ -187,9 +188,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitXorAssignable() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value ^= 0x010101;
             }
         });
@@ -197,9 +198,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitNot() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return ~value;
             }
         });
@@ -207,9 +208,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void shiftLeft() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value << 1;
             }
         });
@@ -217,9 +218,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void shiftLeftAssignable() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value <<= 1;
             }
         });
@@ -227,9 +228,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void shiftRight() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value >> 1;
             }
         });
@@ -237,9 +238,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void shiftRightAssignable() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value >>= 1;
             }
         });
@@ -247,9 +248,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void unsignedShiftRight() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value >>> 1;
             }
         });
@@ -257,9 +258,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void unsignedShiftRightAssignable() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value >>>= 1;
             }
         });
@@ -267,9 +268,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrement() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value++;
             }
         });
@@ -277,9 +278,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrementValue() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 int next = value++;
                 return value + next;
             }
@@ -288,9 +289,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrementLike() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return value + 1;
             }
         });
@@ -298,9 +299,9 @@ public class IntTest extends ScriptTranslatorTestcase {
 
     @Test
     public void preIncrement() {
-        assertScript(new IntScript() {
+        test(new Scriptable() {
 
-            public int execute(int value) {
+            int act(int value) {
                 return ++value;
             }
         });

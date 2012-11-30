@@ -17,19 +17,20 @@ package booton.translator.primitive;
 
 import org.junit.Test;
 
-import booton.translator.ScriptTranslatorTestcase;
-import booton.translator.api.ByteScript;
+import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
- * @version 2009/08/06 11:00:20
+ * @version 2012/12/01 2:02:40
  */
-public class ByteTest extends ScriptTranslatorTestcase {
+@SuppressWarnings("unused")
+public class ByteTest extends ScriptTester {
 
     @Test
     public void zero() {
-        assertScript(new ByteScript() {
+        test(new Scriptable() {
 
-            public byte execute(byte value) {
+            byte act(byte value) {
                 return 0;
             }
         });
@@ -37,9 +38,9 @@ public class ByteTest extends ScriptTranslatorTestcase {
 
     @Test
     public void one() {
-        assertScript(new ByteScript() {
+        test(new Scriptable() {
 
-            public byte execute(byte value) {
+            byte act(byte value) {
                 return 1;
             }
         });
@@ -47,9 +48,9 @@ public class ByteTest extends ScriptTranslatorTestcase {
 
     @Test
     public void two() {
-        assertScript(new ByteScript() {
+        test(new Scriptable() {
 
-            public byte execute(byte value) {
+            byte act(byte value) {
                 return 2;
             }
         });
@@ -57,9 +58,9 @@ public class ByteTest extends ScriptTranslatorTestcase {
 
     @Test
     public void three() {
-        assertScript(new ByteScript() {
+        test(new Scriptable() {
 
-            public byte execute(byte value) {
+            byte act(byte value) {
                 return 3;
             }
         });
@@ -67,9 +68,9 @@ public class ByteTest extends ScriptTranslatorTestcase {
 
     @Test
     public void minus() {
-        assertScript(new ByteScript() {
+        test(new Scriptable() {
 
-            public byte execute(byte value) {
+            byte act(byte value) {
                 return -1;
             }
         });
@@ -77,9 +78,9 @@ public class ByteTest extends ScriptTranslatorTestcase {
 
     @Test
     public void max() {
-        assertScript(new ByteScript() {
+        test(new Scriptable() {
 
-            public byte execute(byte value) {
+            byte act(byte value) {
                 return Byte.MAX_VALUE;
             }
         });
@@ -87,9 +88,9 @@ public class ByteTest extends ScriptTranslatorTestcase {
 
     @Test
     public void min() {
-        assertScript(new ByteScript() {
+        test(new Scriptable() {
 
-            public byte execute(byte value) {
+            byte act(byte value) {
                 return Byte.MIN_VALUE;
             }
         });

@@ -17,19 +17,20 @@ package booton.translator.primitive;
 
 import org.junit.Test;
 
-import booton.translator.ScriptTranslatorTestcase;
-import booton.translator.api.LongScript;
+import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
- * @version 2009/08/06 10:54:50
+ * @version 2012/12/01 2:12:27
  */
-public class LongTest extends ScriptTranslatorTestcase {
+@SuppressWarnings("unused")
+public class LongTest extends ScriptTester {
 
     @Test
     public void zero() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return 0;
             }
         });
@@ -37,9 +38,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void one() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return 1;
             }
         });
@@ -47,9 +48,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void two() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return 2;
             }
         });
@@ -57,9 +58,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void three() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return 3;
             }
         });
@@ -67,9 +68,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void minus() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return -1;
             }
         });
@@ -77,9 +78,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void max() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return Long.MAX_VALUE;
             }
         });
@@ -87,9 +88,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void min() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return Long.MIN_VALUE;
             }
         });
@@ -97,9 +98,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void add() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value + 1;
             }
         });
@@ -107,9 +108,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void addAssignable() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value += 2;
             }
         });
@@ -117,9 +118,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void subtract() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value - 1;
             }
         });
@@ -127,9 +128,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void subtractAssignable() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value -= 2;
             }
         });
@@ -137,9 +138,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void multiply() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value * 2;
             }
         });
@@ -147,9 +148,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void multiplyAssignable() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value *= 2;
             }
         });
@@ -157,9 +158,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void divide() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value / 2;
             }
         });
@@ -167,9 +168,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void divideAssignable() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value /= 2;
             }
         });
@@ -177,9 +178,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void modulo() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value % 2;
             }
         });
@@ -187,9 +188,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void moduloAssignable() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value %= 2;
             }
         });
@@ -197,9 +198,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitAnd() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value & 0x010101;
             }
         });
@@ -207,9 +208,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitOr() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value | 0x010101;
             }
         });
@@ -217,9 +218,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitOrAssignable() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value |= 0x010101;
             }
         });
@@ -227,9 +228,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitXor() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value ^ 0x010101;
             }
         });
@@ -237,9 +238,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitXorAssignable() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value ^= 0x010101;
             }
         });
@@ -247,9 +248,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void bitNot() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return ~value;
             }
         });
@@ -257,9 +258,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void shiftLeft() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value << 1;
             }
         });
@@ -267,9 +268,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void shiftLeftAssignable() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value <<= 1;
             }
         });
@@ -277,9 +278,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void shiftRight() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value >> 1;
             }
         });
@@ -287,9 +288,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void shiftRightAssignable() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value >>= 1;
             }
         });
@@ -299,9 +300,9 @@ public class LongTest extends ScriptTranslatorTestcase {
      * @TODO Implement arbitrary-precision integers for Javascript.
      */
     public void unsignedShiftRight() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value >>> 1;
             }
         });
@@ -311,9 +312,9 @@ public class LongTest extends ScriptTranslatorTestcase {
      * @TODO Implement arbitrary-precision integers for Javascript.
      */
     public void unsignedShiftRightAssignable() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value >>>= 1;
             }
         });
@@ -321,9 +322,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrement() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value++;
             }
         });
@@ -331,9 +332,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrementValue() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 long next = value++;
                 return value + next;
             }
@@ -342,9 +343,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void postIncrementLike() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return value + 1;
             }
         });
@@ -352,9 +353,9 @@ public class LongTest extends ScriptTranslatorTestcase {
 
     @Test
     public void preIncrement() {
-        assertScript(new LongScript() {
+        test(new Scriptable() {
 
-            public long execute(long value) {
+            long act(long value) {
                 return ++value;
             }
         });

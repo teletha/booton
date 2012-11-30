@@ -25,7 +25,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntField() {
-        assertScript(new IntField());
+        test(new IntField());
     }
 
     /**
@@ -42,7 +42,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IntFieldWithExpresison() {
-        assertScript(new IntFieldWithExpresison());
+        test(new IntFieldWithExpresison());
     }
 
     /**
@@ -59,7 +59,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
 
     @Test
     public void LongField() {
-        assertScript(new LongField());
+        test(new LongField());
     }
 
     /**
@@ -76,7 +76,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
 
     @Test
     public void FloatField() {
-        assertScript(new FloatField());
+        test(new FloatField());
     }
 
     /**
@@ -93,7 +93,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoubleField() {
-        assertScript(new DoubleField());
+        test(new DoubleField());
     }
 
     /**
@@ -127,7 +127,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Extend() {
-        assertScript(new ExtendChild());
+        test(new ExtendChild());
     }
 
     /**
@@ -150,7 +150,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Override() {
-        assertScript(new OverrideChild());
+        test(new OverrideChild());
     }
 
     /**
@@ -176,7 +176,7 @@ public class FieldTest extends ScriptTranslatorTestcase {
 
     @Test
     public void Super() {
-        assertScript(new SuperChild());
+        test(new SuperChild());
     }
 
     /**
