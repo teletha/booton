@@ -244,25 +244,29 @@ public class ScriptTester {
      */
     private List prepareInputs(Class type, Param param) {
         if (type == boolean.class) {
-            return Arrays.asList(true, false);
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
         } else if (type == char.class) {
-            return Arrays.asList('2', 'B', 'a', '$', '@', 'c', 'a', 't');
+            return asList(param.chars());
         } else if (type == int.class) {
             return asList(param.ints());
         } else if (type == long.class) {
-            return Arrays.asList(0L, 1L, 2L, 123456789L, -1L, -2L, -123456789L);
+            return asList(param.longs());
         } else if (type == float.class) {
-            return Arrays.asList(0F, 1F, 0.2F, -1.3464F);
+            return asList(param.floats());
         } else if (type == double.class) {
-            return Arrays.asList(0D, 1D, 0.2D, 1.239754297642323D);
+            return asList(param.doubles());
         } else if (type == short.class) {
-            return Arrays.asList((short) 0, (short) 1, (short) 2, (short) -1, (short) -2);
+            return asList(param.shorts());
         } else if (type == byte.class) {
-            return Arrays.asList((byte) 0, (byte) 1, (byte) 2, (byte) -1, (byte) -2);
+            return asList(param.bytes());
         } else if (type == String.class) {
-            return Arrays.asList(null, "", "a", "some value");
+            return asList(param.strings());
         } else {
-            return Arrays.asList(null, I.make(type));
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
         }
     }
 
