@@ -9,56 +9,30 @@
  */
 package booton.translator.flow;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-import booton.translator.api.Scriptable;
 import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
- * @version 2012/11/30 8:36:59
+ * @version 2012/11/30 18:53:43
  */
 @SuppressWarnings("unused")
 public class ForTest extends ScriptTester {
 
     @Test
-    public void one() throws Exception {
+    public void noneReturnCodeAfterLoopWillConfuseCompiler() throws Exception {
         test(new Scriptable() {
 
-            int act() {
+            String act() {
                 int m = 0;
 
                 for (int i = 0; i < 3; i++) {
                     m++;
                 }
-                System.out.println(m);
-                return m;
-            }
-        });
-    }
+                String.valueOf(m); // noise
 
-    @Test
-    @Ignore
-    public void two() throws Exception {
-        test(new Scriptable() {
-
-            int act() {
-                int m = 0;
-
-                for (int i = 0; i < 3; i++) {
-                    m++;
-                }
-                return m;
-            }
-        });
-    }
-
-    @Test
-    public void three() throws Exception {
-        testByBoolean(new Scriptable() {
-
-            String act(boolean value) {
-                return value ? "Q" : "P";
+                return String.valueOf(m);
             }
         });
     }

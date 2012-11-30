@@ -22,6 +22,21 @@ public class TranslationError extends Error {
     private final StringBuilder builder = new StringBuilder("\r\n");
 
     /**
+     * 
+     */
+    public TranslationError() {
+    }
+
+    /**
+     * With cause.
+     * 
+     * @param cause
+     */
+    public TranslationError(Throwable cause) {
+        super(cause);
+    }
+
+    /**
      * <p>
      * Write error message.
      * </p>

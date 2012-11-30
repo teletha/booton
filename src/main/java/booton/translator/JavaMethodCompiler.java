@@ -651,23 +651,48 @@ class JavaMethodCompiler extends MethodVisitor {
 
             dispose(current);
         } else if (third instanceof OperandCondition) {
-            NodeDebugger.dump(nodes);
-
-            first = current.remove(0);
-            second = current.remove(0);
-            third = current.remove(0);
-
-            if (first == ONE && second == ZERO) {
-                current.addOperand(third);
-            } else if (first == ZERO && second == ONE) {
-                current.addOperand(third.invert());
+            if (first instanceof OperandExpression && first.toString().equals(";")) {
+                // do nothing
             } else {
-                current.addOperand(third.invert() + "?" + second + ":" + first);
-            }
+                // =======================
+                // Conditional Operator
+                // =======================
+                first = current.remove(0);
+                second = current.remove(0);
+                third = current.remove(0);
 
-            // resolve recursively
-            resolveLabel();
+                if (first == ONE && second == ZERO) {
+                    current.addOperand(third);
+                } else if (first == ZERO && second == ONE) {
+                    current.addOperand(third.invert());
+                } else {
+                    current.addOperand(third.invert() + "?" + second + ":" + first);
+                }
+
+                // resolve recursively
+                resolveLabel();
+            }
         }
+    }
+
+    /**
+     * Peek operand from latest.
+     * 
+     * @param index
+     * @return
+     */
+    private Operand peek(int index) {
+        Node current = this.current;
+
+        while (current != null) {
+            for (int i = current.stack.size() - 1; -1 < i; --i) {
+                if (index-- == 0) {
+                    return current.stack.get(i);
+                }
+            }
+            current = current.previous;
+        }
+        return null;
     }
 
     /**
@@ -774,21 +799,6 @@ class JavaMethodCompiler extends MethodVisitor {
                 }
             }
         }
-    }
-
-    private Operand peek(int index) {
-        Node current = this.current;
-
-        while (current != null) {
-            for (int i = current.stack.size() - 1; -1 < i; --i) {
-                if (index-- == 0) {
-                    return current.stack.get(i);
-                }
-            }
-
-            current = current.previous;
-        }
-        return null;
     }
 
     /**
