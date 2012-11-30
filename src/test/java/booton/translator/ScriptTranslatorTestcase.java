@@ -37,7 +37,6 @@ import booton.translator.api.BooleanScript;
 import booton.translator.api.DoubleScript;
 import booton.translator.api.IntScript;
 import booton.translator.api.LogicalExpressionScript;
-import booton.translator.api.LongScript;
 import booton.translator.api.ObjectScript;
 import booton.translator.api.ShortScript;
 import booton.translator.api.ThrowableScript;
@@ -140,35 +139,6 @@ public class ScriptTranslatorTestcase {
         List<Integer> inputs = new ArrayList();
 
         for (int i = 0; i <= end - start; i++) {
-            inputs.add(start + i);
-        }
-
-        // delegate
-        assertScript(inputs, script);
-    }
-
-    /**
-     * @param script
-     */
-    protected void test(LongScript script) {
-        test(-2, 2, script);
-    }
-
-    /**
-     * @param script
-     * @param start
-     * @param end
-     */
-    protected void test(long start, long end, LongScript script) {
-        // check range
-        if (end <= start) {
-            throw new IllegalArgumentException("The end parameter must be greater than start parameter.");
-        }
-
-        // build inputs
-        List<Long> inputs = new ArrayList();
-
-        for (long i = 0; i <= end - start; i++) {
             inputs.add(start + i);
         }
 
