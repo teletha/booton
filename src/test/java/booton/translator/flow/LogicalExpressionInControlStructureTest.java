@@ -11,19 +11,21 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
-import booton.translator.ScriptTranslatorTestcase;
-import booton.translator.api.IntScript;
+import booton.translator.api.Param;
+import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
  * @version 2012/11/30 15:32:37
  */
-public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTestcase {
+@SuppressWarnings("unused")
+public class LogicalExpressionInControlStructureTest extends ScriptTester {
 
     @Test
     public void Or() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 if (value == 1 || value == 3) {
                     return value;
                 } else {
@@ -35,9 +37,9 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void Complex() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 if ((value == 1 || value == 3) && value == 10) {
                     return value;
                 } else {
@@ -49,9 +51,9 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void Complex2() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 if ((value == 1 || value == 3) && value == 10) {
                     return value;
                 } else {
@@ -63,9 +65,9 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void NotOr() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 if (value != 1 || value == 3) {
                     return value;
                 } else {
@@ -77,9 +79,9 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void OrNot() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 if (value == 1 || value != 3) {
                     return value;
                 } else {
@@ -91,9 +93,9 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void NotOrNot() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 if (value != 1 || value != 3) {
                     return value;
                 } else {
@@ -105,9 +107,9 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void MultipuleOR() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 if (value == 1 || value == 3 || value == 5) {
                     return value;
                 } else {
@@ -119,9 +121,9 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void And() {
-        test(0, 20, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 20) int value) {
                 if (value % 2 == 0 && value % 3 == 0) {
                     return value;
                 } else {
@@ -133,9 +135,9 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void NotAnd() {
-        test(0, 20, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 20) int value) {
                 if (value % 2 != 0 && value % 3 == 0) {
                     return value;
                 } else {
@@ -147,9 +149,9 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void AndNot() {
-        test(0, 20, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 20) int value) {
                 if (value % 2 == 0 && value % 3 != 0) {
                     return value;
                 } else {
@@ -161,9 +163,9 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void NotAndNot() {
-        test(0, 20, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 20) int value) {
                 if (value % 2 != 0 && value % 3 != 0) {
                     return value;
                 } else {
@@ -175,9 +177,9 @@ public class LogicalExpressionInControlStructureTest extends ScriptTranslatorTes
 
     @Test
     public void MultipleAnd() {
-        test(0, 20, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 20) int value) {
                 if (value % 2 == 0 && value % 3 == 0 && value % 4 == 0) {
                     return value;
                 } else {

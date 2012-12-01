@@ -250,6 +250,18 @@ public class ScriptTester {
         } else if (type == char.class) {
             return asList(param.chars());
         } else if (type == int.class) {
+            int from = param.from();
+            int to = param.to();
+
+            if (from != to) {
+                List inputs = new ArrayList();
+
+                for (int i = from; i <= to; i++) {
+                    inputs.add(i);
+                }
+                return inputs;
+            }
+
             return asList(param.ints());
         } else if (type == long.class) {
             return asList(param.longs());
