@@ -12,9 +12,9 @@ package booton.translator.flow;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import booton.translator.api.Param;
-import booton.translator.api.ScriptTester;
-import booton.translator.api.Scriptable;
+import booton.translator.Param;
+import booton.translator.ScriptTester;
+import booton.translator.Scriptable;
 
 /**
  * @version 2012/12/01 12:28:09
@@ -850,7 +850,7 @@ public class LogicalExpressionTest extends ScriptTester {
         test(new Scriptable() {
 
             /**
-             * @see booton.translator.api.Scriptable#act(int)
+             * @see booton.translator.Scriptable#act(int)
              */
             public int act(int value) {
                 while (value < 5) {

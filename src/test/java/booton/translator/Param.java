@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.api;
+package booton.translator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

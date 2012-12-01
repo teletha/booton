@@ -18,8 +18,8 @@ package booton.translator.method;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import booton.translator.api.ScriptTester;
-import booton.translator.api.Scriptable;
+import booton.translator.ScriptTester;
+import booton.translator.Scriptable;
 
 /**
  * @version 2012/12/01 3:51:13
