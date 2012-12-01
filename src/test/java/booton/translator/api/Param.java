@@ -92,4 +92,22 @@ public @interface Param {
      * @return
      */
     String[] strings() default {};
+
+    /**
+     * <p>
+     * Provide range.
+     * </p>
+     * 
+     * @return
+     */
+    int from() default 0;
+
+    /**
+     * <p>
+     * Provide range.
+     * </p>
+     * 
+     * @return
+     */
+    int to() default 0;
 }

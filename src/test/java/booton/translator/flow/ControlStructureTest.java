@@ -12,22 +12,21 @@ package booton.translator.flow;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import booton.translator.ScriptTranslatorTestcase;
-import booton.translator.api.IntScript;
+import booton.translator.api.Param;
+import booton.translator.api.ScriptTester;
+import booton.translator.api.Scriptable;
 
 /**
  * @version 2012/11/30 15:32:30
  */
-public class ControlStructureTest extends ScriptTranslatorTestcase {
+@SuppressWarnings("unused")
+public class ControlStructureTest extends ScriptTester {
 
     @Test
     public void If() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 if (value < 3) {
                     return 2;
                 }
@@ -38,12 +37,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfThen() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 if (value < 3) {
                     value++;
                 }
@@ -54,12 +50,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfThenNest1() {
-        test(0, 10, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 10) int value) {
                 if (value < 5) {
                     value += 1;
 
@@ -74,12 +67,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfThenNest2() {
-        test(0, 10, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 10) int value) {
                 if (value < 5) {
                     if (value < 3) {
                         value += 1;
@@ -93,12 +83,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfElse() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 if (value < 3) {
                     return 2;
                 } else {
@@ -110,12 +97,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfElseAfter() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 if (value < 3) {
                     value = 2;
                 } else {
@@ -128,12 +112,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfNest() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 if (value < 3) {
                     if (1 < value) {
                         return 0;
@@ -147,12 +128,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void IfNest2() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 if (value < 3 && 1 < value || value % 2 == 0) {
                     if (1 < value && value < 2) {
                         return 0;
@@ -167,12 +145,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void While() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 while (value < 3) {
                     value++;
                 }
@@ -184,12 +159,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileBreak() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 while (value < 3) {
                     value++;
 
@@ -205,12 +177,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileInfiniteBreak() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 while (true) {
                     value++;
 
@@ -226,12 +195,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileMultipuleBreaks() {
-        test(0, 10, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 10) int value) {
                 while (value < 5) {
                     value++;
 
@@ -251,12 +217,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileContinue() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 while (value < 3) {
                     value += 2;
 
@@ -272,12 +235,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileNest() {
-        test(0, 10, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 10) int value) {
                 while (value < 30) {
                     value += 10;
 
@@ -293,12 +253,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void WhileLabeledBreak() {
-        test(1, 10, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 1, to = 10) int value) {
                 root: while (value < 100) {
                     value *= 2;
 
@@ -320,12 +277,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoWhile() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 do {
                     value++;
                 } while (value < 3);
@@ -337,12 +291,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoWhileEquivalent() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 while (true) {
                     value++;
 
@@ -357,12 +308,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     }
 
     public void DoWhileBreak() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 do {
                     value++;
 
@@ -378,12 +326,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoWhileInfiniteBreak() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 do {
                     value++;
 
@@ -399,12 +344,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void DoWhileContinue() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 do {
                     value += 2;
 
@@ -422,12 +364,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void For() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 for (int i = 0; i < 3; i++) {
                     value++;
                 }
@@ -439,12 +378,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ForWithoutInitialize() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 int i = 0;
                 value++;
 
@@ -459,12 +395,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ForWithoutUpdate() {
-        test(0, 10, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 10) int value) {
                 for (int i = 0; i < 8;) {
                     i = value;
                     value += 2;
@@ -481,12 +414,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ForBreak() {
-        test(0, 10, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 10) int value) {
                 for (int i = 0; i < 3; i++) {
                     value++;
 
@@ -502,12 +432,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ForContinue() {
-        test(0, 10, new IntScript() {
+        test(new Scriptable() {
 
-            /**
-             * @see booton.translator.api.IntScript#act(int)
-             */
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 10) int value) {
                 for (int i = 0; i < 3; i++) {
                     value++;
 
@@ -525,9 +452,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
 
     @Test
     public void ForAfterProcess() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 String name = "act";
 
                 for (int i = 0; i < name.length(); i++) {
@@ -542,9 +469,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     @Test
     @Ignore
     public void SwitchReturn() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 switch (value) {
                 case 0:
                     return 0;
@@ -562,9 +489,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     @Test
     @Ignore
     public void SwitchReturnWithOrder() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 switch (value) {
                 default:
                     return value + 5;
@@ -582,9 +509,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     @Test
     @Ignore
     public void SwitchBreak() {
-        test(0, 5, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 5) int value) {
                 int result;
 
                 switch (value) {
@@ -609,9 +536,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     @Test
     @Ignore
     public void TryCatch() {
-        test(0, 3, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 3) int value) {
                 try {
                     if (value == 0) {
                         throw new Error();
@@ -627,9 +554,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     @Ignore
     @Test
     public void TryCatchFinally() {
-        test(0, 3, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 3) int value) {
                 try {
                     if (value == 0) {
                         throw new Error();
@@ -648,9 +575,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     @Test
     @Ignore
     public void TryFinallyAfter() {
-        test(0, 3, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 3) int value) {
                 try {
                     value++;
                 } finally {
@@ -664,9 +591,9 @@ public class ControlStructureTest extends ScriptTranslatorTestcase {
     @Test
     @Ignore
     public void TryMultipleCatch() {
-        test(0, 3, new IntScript() {
+        test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 3) int value) {
                 try {
                     if (value == 2) {
                         throw new Error();
