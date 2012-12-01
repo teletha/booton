@@ -11,8 +11,8 @@ package booton.translator.primitive;
 
 import org.junit.Test;
 
-import booton.translator.api.Scriptable;
-import booton.translator.api.ScriptTester;
+import booton.translator.ScriptTester;
+import booton.translator.Scriptable;
 
 /**
  * @version 2012/11/30 1:40:13

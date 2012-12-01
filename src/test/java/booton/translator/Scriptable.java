@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.api;
+package booton.translator;
 
 /**
  * @version 2012/11/30 1:43:48
