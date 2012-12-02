@@ -9,12 +9,26 @@
  */
 package booton.translator.web;
 
+import java.io.File;
+
 import booton.translator.Translator;
 
 /**
  * @version 2012/11/29 10:11:38
  */
-public class WebSupportTranslator extends Translator<WebSupport> {
+class WebSupportTranslator extends Translator<File> {
 
     public String document = "document";
+
+    /**
+     * <p>
+     * Provide JQuery support.
+     * </p>
+     * 
+     * @param expresion
+     * @return
+     */
+    public String $(String expresion) {
+        return "$(" + param(0) + ")";
+    }
 }
