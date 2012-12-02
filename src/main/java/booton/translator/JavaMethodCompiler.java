@@ -196,7 +196,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // compute owner class
         Class ownerClass = convert(owner);
-        Translator translator = Javascript.getTranslator(ownerClass);
+        Translator translator = TranslatorManager.getTranslator(ownerClass);
 
         switch (opcode) {
         case PUTFIELD:
@@ -918,7 +918,7 @@ class JavaMethodCompiler extends MethodVisitor {
         boolean immediately = Type.getReturnType(desc) == Type.VOID_TYPE;
 
         // retrieve translator for this method owner
-        Translator translator = Javascript.getTranslator(owner);
+        Translator translator = TranslatorManager.getTranslator(owner);
 
         switch (opcode) {
         // Invoke instance method; special handling for superclass constructor, private method,

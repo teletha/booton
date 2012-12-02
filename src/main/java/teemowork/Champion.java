@@ -58,6 +58,6 @@ public class Champion {
         for (int i = 0; i < list.getLength(); i++) {
             list.item(i).setTextContent(champion.name + "  " + champion.getHealthAtLvele(i));
         }
-        System.out.println($("p").after("p").text("added2"));
+        System.out.println($("p").after("p").text("test"));
     }
 }
