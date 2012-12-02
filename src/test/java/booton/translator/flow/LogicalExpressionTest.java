@@ -466,7 +466,7 @@ public class LogicalExpressionTest extends ScriptTester {
     public void MethodAnd() {
         test(new Scriptable() {
 
-            public boolean act(int value) {
+            public boolean act(@Param(from = 0, to = 48) int value) {
                 return method(value % 2 == 0 && value % 3 == 0);
             }
 
@@ -480,7 +480,7 @@ public class LogicalExpressionTest extends ScriptTester {
     public void MethodComplex1() {
         test(new Scriptable() {
 
-            public boolean act(int value) {
+            public boolean act(@Param(from = 0, to = 48) int value) {
                 return method((value % 4 == 0 || value % 3 == 0) && value % 2 == 0);
             }
 
@@ -494,7 +494,7 @@ public class LogicalExpressionTest extends ScriptTester {
     public void MethodComplex2() {
         test(new Scriptable() {
 
-            public boolean act(int value) {
+            public boolean act(@Param(from = 0, to = 48) int value) {
                 return method((value % 4 == 0 || value % 3 == 0) && value % 2 == 0 || (value % 5 == 0 || value % 7 == 0) && value % 3 == 0);
             }
 
@@ -520,7 +520,7 @@ public class LogicalExpressionTest extends ScriptTester {
     public void VariableAnd() {
         test(new Scriptable() {
 
-            public boolean act(int value) {
+            public boolean act(@Param(from = 0, to = 24) int value) {
                 boolean v = value % 2 == 0 || value % 3 == 0;
 
                 return v;
@@ -532,7 +532,7 @@ public class LogicalExpressionTest extends ScriptTester {
     public void VariableComplex1() {
         test(new Scriptable() {
 
-            public boolean act(int value) {
+            public boolean act(@Param(from = 0, to = 24) int value) {
                 boolean v = (value % 3 == 0 || value % 4 == 0) && value % 2 == 0;
 
                 return v;
@@ -544,7 +544,7 @@ public class LogicalExpressionTest extends ScriptTester {
     public void VariableComplex2() {
         test(new Scriptable() {
 
-            public boolean act(int value) {
+            public boolean act(@Param(from = 0, to = 48) int value) {
                 boolean v = (value % 3 == 0 || value % 4 == 0) && value % 2 == 0 || value % 5 == 0 && (value % 2 == 0 || value % 3 == 0);
 
                 return v;
@@ -679,7 +679,7 @@ public class LogicalExpressionTest extends ScriptTester {
     public void ConditionalOperatorComplexInMethod() {
         test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 0, to = 48) int value) {
                 return method((value % 2 == 0 || value % 3 == 0) && value % 4 == 0 ? value + 1 : value + 2);
             }
 
@@ -849,9 +849,6 @@ public class LogicalExpressionTest extends ScriptTester {
     public void WhileMultipuleBreaks() {
         test(new Scriptable() {
 
-            /**
-             * @see booton.translator.Scriptable#act(int)
-             */
             public int act(int value) {
                 while (value < 5) {
                     value++;

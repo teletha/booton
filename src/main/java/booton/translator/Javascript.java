@@ -226,7 +226,8 @@ public class Javascript implements ClassListener<Translator> {
     private synchronized void compile() throws IOException {
         if (code == null) {
             // All scripts depend on its parent script. So we must compile it ahead.
-            Javascript parent = Javascript.getScript(source.getSuperclass());
+            Class parentClass = source.getSuperclass();
+            Javascript parent = Javascript.getScript(parentClass);
 
             if (parent != null) {
                 // compile ahead
@@ -245,8 +246,8 @@ public class Javascript implements ClassListener<Translator> {
             // Start class definition
             code.append(computeClassName(source)).append("=boot.defineClass(");
 
-            if (source.getSuperclass() != Object.class) {
-                code.append(Javascript.computeClassName(source.getSuperclass())).append(',');
+            if (parentClass != null && parentClass != Object.class) {
+                code.append(Javascript.computeClassName(parentClass)).append(',');
             }
 
             code.append('{');
@@ -286,6 +287,10 @@ public class Javascript implements ClassListener<Translator> {
      * @return A compiled Javascript source.
      */
     public static final Javascript getScript(Class source) {
+        if (source == null) {
+            return null;
+        }
+
         // check Native Class
         if (translators.containsKey(source)) {
             return null;
