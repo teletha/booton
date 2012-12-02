@@ -18,6 +18,8 @@ package booton.translator;
 import static org.objectweb.asm.ClassReader.*;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -141,18 +143,18 @@ public class Javascript {
 
     /**
      * <p>
-     * Write this script into the specified output. This method doesn't write out dependency scripts
-     * of this script.
+     * Write this script into the specified output. This method write out dependency scripts of this
+     * script too.
      * </p>
      * 
      * @param outout A script output.
-     * @throws IOException
      */
-    public void write(Appendable output) throws IOException {
-        compile();
-
-        // write this script
-        output.append(code);
+    public void writeTo(Path output) {
+        try {
+            writeTo(Files.newBufferedWriter(output, I.$encoding));
+        } catch (IOException e) {
+            throw I.quiet(e);
+        }
     }
 
     /**
@@ -162,11 +164,10 @@ public class Javascript {
      * </p>
      * 
      * @param outout A script output.
-     * @throws IOException
      */
-    public void writeAll(Appendable output) throws IOException {
+    public void writeTo(Appendable output) {
         // Record all defined classes to prevent duplicated definition.
-        writeAll(output, new HashSet(Collections.singleton(source)));
+        write(output, new HashSet(Collections.singleton(source)));
 
         I.quiet(output);
     }
@@ -178,9 +179,8 @@ public class Javascript {
      * 
      * @param output A script output.
      * @param defined
-     * @throws IOException
      */
-    private void writeAll(Appendable output, Set defined) throws IOException {
+    private void write(Appendable output, Set defined) {
         compile();
 
         for (Class depndency : dependencies) {
@@ -189,13 +189,17 @@ public class Javascript {
 
                 // write dependency scripts
                 if (script != null) {
-                    script.writeAll(output, defined);
+                    script.write(output, defined);
                 }
             }
         }
 
-        // write this script
-        output.append(code);
+        try {
+            // write this script
+            output.append(code);
+        } catch (IOException e) {
+            throw I.quiet(e);
+        }
     }
 
     /**
@@ -203,41 +207,48 @@ public class Javascript {
      * Translate the java byte code to the javascript code.
      * </p>
      */
-    private synchronized void compile() throws IOException {
+    private synchronized void compile() {
         if (code == null) {
-            // All scripts depend on its parent script. So we must compile it ahead.
-            Class parentClass = source.getSuperclass();
-            Javascript parent = Javascript.getScript(parentClass);
+            try {
+                // All scripts depend on its parent script. So we must compile it ahead.
+                Class parentClass = source.getSuperclass();
 
-            if (parent != null) {
-                // compile ahead
-                parent.compile();
+                if (parentClass != null) {
+                    Javascript parent = Javascript.getScript(parentClass);
 
-                // add dependency
-                dependencies.add(parent.source);
+                    if (parent != null) {
+                        // compile ahead
+                        parent.compile();
 
-                // copy all member fields and methods for override mechanism
-                methods.addAll(parent.methods);
+                        // add dependency
+                        dependencies.add(parent.source);
+
+                        // copy all member fields and methods for override mechanism
+                        methods.addAll(parent.methods);
+                    }
+                }
+
+                // Then, we can compile this script.
+                ScriptBuffer code = new ScriptBuffer();
+
+                // Start class definition
+                code.append(computeClassName(source)).append("=boot.defineClass(");
+
+                if (parentClass != null && parentClass != Object.class) {
+                    code.append(Javascript.computeClassName(parentClass)).append(',');
+                }
+
+                code.append('{');
+                new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), SKIP_FRAMES);
+
+                // End class definition
+                code.append("});");
+
+                // create cache
+                this.code = code.toString();
+            } catch (IOException e) {
+                throw I.quiet(e);
             }
-
-            // Then, we can compile this script.
-            ScriptBuffer code = new ScriptBuffer();
-
-            // Start class definition
-            code.append(computeClassName(source)).append("=boot.defineClass(");
-
-            if (parentClass != null && parentClass != Object.class) {
-                code.append(Javascript.computeClassName(parentClass)).append(',');
-            }
-
-            code.append('{');
-            new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), SKIP_FRAMES);
-
-            // End class definition
-            code.append("});");
-
-            // create cache
-            this.code = code.toString();
         }
     }
 
@@ -249,11 +260,7 @@ public class Javascript {
         StringBuilder builder = new StringBuilder();
 
         // write out
-        try {
-            writeAll(builder);
-        } catch (IOException e) {
-            throw I.quiet(e);
-        }
+        writeTo(builder);
 
         return builder.toString();
     }
@@ -267,12 +274,8 @@ public class Javascript {
      * @return A compiled Javascript source.
      */
     public static final Javascript getScript(Class source) {
-        if (source == null) {
-            return null;
-        }
-
         // check Native Class
-        if (TranslatorManager.hasTranslator(source)) {
+        if (TranslatorManager.hasTranslator(source) || source.isInterface()) {
             return null;
         }
 
@@ -344,6 +347,9 @@ public class Javascript {
             }
         } else {
             // method
+            if (TranslatorManager.isNative(owner, name, description)) {
+                return name;
+            }
             return mung(order(script.methods, name.hashCode() ^ description.hashCode()), false);
         }
     }

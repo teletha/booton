@@ -159,3 +159,16 @@ if (!String.prototype.endsWith) {
 		return suffix.length <= this.length && suffix == this.slice(~suffix.length + 1);
 	};
 }
+
+jQuery.fn.iterator = function() {
+    return {
+        items: this,
+        count: 0,
+        hasNext: function() {
+            return this.count < this.items.size();
+        },
+        next: function() {
+            return this.items.get(this.count++);
+        }
+    };
+}

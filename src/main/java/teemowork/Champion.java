@@ -11,7 +11,11 @@ package teemowork;
 
 import static booton.translator.web.WebSupport.*;
 
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import booton.translator.web.JQuery.Event;
+import booton.translator.web.JQuery.EventListener;
 
 /**
  * @version 2012/11/27 18:19:08
@@ -58,6 +62,21 @@ public class Champion {
         for (int i = 0; i < list.getLength(); i++) {
             list.item(i).setTextContent(champion.name + "  " + champion.getHealthAtLvele(i));
         }
-        System.out.println($("p").after("p").text("test"));
+        System.out.println($("p").after("<p/>").next().text("test").attr("class", "new"));
+
+        for (Element element : $("p")) {
+            System.out.println($(element).text());
+        }
+
+        $("p").on("click", new EventListener() {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void handler(Event event) {
+                System.out.println(event.target);
+            }
+        });
     }
 }
