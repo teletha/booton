@@ -1,17 +1,11 @@
 /*
- * Copyright (C) 2009 Nameless Production Committee.
+ * Copyright (C) 2012 Nameless Production Committee
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *          http://opensource.org/licenses/mit-license.php
  */
 package booton.translator;
 
@@ -25,9 +19,12 @@ import kiss.Singleton;
 
 import org.objectweb.asm.Type;
 
-
 /**
- * @version 2009/08/08 10:48:22
+ * <p>
+ * Public {@link Translator} API.
+ * </p>
+ * 
+ * @version 2012/12/02 16:41:59
  */
 @Manageable(lifestyle = Singleton.class)
 public class Translator<T> {
@@ -55,15 +52,7 @@ public class Translator<T> {
      * @return
      */
     String translateMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-        Method translator = searchTranslatorMethod(name, types);
-
-        if (translator == null) {
-            return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + build(context);
-        } else if (translator.isAnnotationPresent(Translatable.class)) {
-            return translateNativeMethodCall(translator, context);
-        } else {
-            return translateMethodCall(translator, context);
-        }
+        return write(search(name, types), context);
     }
 
     /**
@@ -77,13 +66,7 @@ public class Translator<T> {
      * @return
      */
     String translateStaticMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-        Method translator = searchTranslatorMethod(name, types);
-
-        if (translator == null) {
-            return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + build(context);
-        } else {
-            return translateMethodCall(translator, context);
-        }
+        return write(search(name, types), context);
     }
 
     /**
@@ -97,17 +80,7 @@ public class Translator<T> {
      * @return
      */
     String translateConstructor(Class owner, String desc, Class[] types, List<Operand> context) {
-        Method translator = searchTranslatorMethod(owner.getSimpleName(), types);
-
-        if (translator != null) {
-            return translateMethodCall(translator, context);
-        } else {
-            // append identifier of constructor method
-            context.add(new OperandNumber(Integer.valueOf(Javascript.computeMethodName(owner, "<init>", desc)
-                    .substring(1))));
-
-            return "new " + Javascript.computeClassName(owner) + build(context);
-        }
+        return write(search(owner.getSimpleName(), types), context);
     }
 
     /**
@@ -121,37 +94,97 @@ public class Translator<T> {
      * @return
      */
     String translateSuperMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-        Method translator = searchTranslatorMethod(owner.getSimpleName(), types);
+        return write(search(owner.getSimpleName(), types), context);
 
-        if (translator == null) {
-            // append context 'this' of super method
-            context.add(1, new OperandExpression("this"));
-
-            return Javascript.computeClassName(owner) + ".prototype." + Javascript.computeMethodName(owner, name, desc) + ".call" + build(context);
-        } else {
-            return translateMethodCall(translator, context);
-        }
     }
 
     String translateStaticField(Class owner, String fieldName, boolean isNotStatic) {
+        return writeFieldAccess(fieldName);
+    }
+
+    /**
+     * <p>
+     * Translate the specified field invocation.
+     * </p>
+     * 
+     * @param fieldName
+     * @return
+     */
+    private String writeFieldAccess(String fieldName) {
         try {
-            return translatefieldAccess(fieldName);
-        } catch (NoSuchFieldException e) {
-            return (isNotStatic ? Javascript.computeClassName(owner) : "this") + "." + fieldName;
+            Field field = getClass().getDeclaredField(fieldName);
+
+            if (field.isSynthetic() || field.getType() != String.class) {
+                throw new Error();
+            }
+
+            field.setAccessible(true);
+
+            return (String) field.get(this);
+        } catch (Exception e) {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error(e);
         }
     }
 
-    private String translatefieldAccess(String fieldName) throws NoSuchFieldException {
-        Field field = getClass().getDeclaredField(fieldName);
-
-        if (field.isSynthetic() || field.getType() != String.class) {
-            throw new NoSuchFieldException();
+    /**
+     * <p>
+     * Search translator method's existence.
+     * </p>
+     * 
+     * @param methodName A method name.
+     * @param parameterTypes A method parameters.
+     * @return A result.
+     */
+    private Method search(String methodName, Class[] parameterTypes) {
+        Class translator = getClass();
+    
+        if (translator == Translator.class) {
+            return null; // use generic translator
         }
-
-        field.setAccessible(true);
-
+    
         try {
-            return (String) field.get(this);
+            Method method = getClass().getMethod(methodName, parameterTypes);
+    
+            // ===============================
+            // Validation
+            // ===============================
+            // if (method.isBridge() || method.isSynthetic()) {
+            // TranslationError error = new TranslationError();
+            // System.out.println(method.isBridge());
+            // error.write("Translation method is system defined. [", translator.getName(), "]");
+            // error.writeMethod(method);
+            //
+            // throw error;
+            // }
+    
+            if (!Modifier.isPublic(method.getModifiers())) {
+                TranslationError error = new TranslationError();
+                error.write("Translation method must be public. [", translator.getName(), "]");
+                error.writeMethod(method);
+    
+                throw error;
+            }
+    
+            if (method.getReturnType() != String.class) {
+                TranslationError error = new TranslationError();
+                error.write("Translation method must return String type. [", translator.getName(), "]");
+                error.writeMethod(method);
+    
+                throw error;
+            }
+    
+            // make accesible
+            method.setAccessible(true);
+    
+            return method;
+        } catch (NoSuchMethodException e) {
+            TranslationError error = new TranslationError();
+            error.write("You must define a translator method at ", translator.getName(), ".");
+            error.writeMethod(Modifier.PUBLIC, methodName, String.class, parameterTypes);
+    
+            throw error;
         } catch (Exception e) {
             // If this exception will be thrown, it is bug of this program. So we must rethrow the
             // wrapped error in here.
@@ -171,7 +204,7 @@ public class Translator<T> {
      * @param context A current processing operands for the specified method.
      * @return A javascript expression.
      */
-    private String translateMethodCall(Method translator, List<Operand> context) {
+    private String write(Method translator, List<Operand> context) {
         // translate special method invocation
         this.types = translator.getParameterTypes();
         this.context = context;
@@ -219,141 +252,6 @@ public class Translator<T> {
     }
 
     /**
-     * <p>
-     * Translate the specified method invocation (include constructor call) to the user defined
-     * javascript expression. If the suitable translation method is not found,
-     * {@link NoSuchMethodException} will be thrown.
-     * </p>
-     * 
-     * @param methodName A method name that byte code want to invoke.
-     * @param types A prameter types of the specified method.
-     * @param context A current processing operands for the specified method.
-     * @return A javascript expression.
-     */
-    private String translateNativeMethodCall(Method translator, List<Operand> context) {
-        // translate native method invocation
-        this.types = translator.getParameterTypes();
-        this.context = context;
-        this.that = context.get(0).toString();
-
-        try {
-            StringBuilder builder = new StringBuilder();
-            builder.append(that);
-            builder.append('.').append(translator.getName()).append('(');
-            for (int i = 0; i < types.length; i++) {
-                builder.append(param(i));
-
-                if (i != types.length - 1) {
-                    builder.append(',');
-                }
-            }
-            builder.append(')');
-            return builder.toString();
-        } finally {
-            // clear context data
-            this.types = null;
-            this.context = null;
-            this.that = null;
-        }
-    }
-
-    /**
-     * <p>
-     * Search translator method's existence.
-     * </p>
-     * 
-     * @param methodName A method name.
-     * @param parameterTypes A method parameters.
-     * @return A result.
-     */
-    private Method searchTranslatorMethod(String methodName, Class[] parameterTypes) {
-        Class translator = getClass();
-
-        if (translator == Translator.class) {
-            return null; // use generic translator
-        }
-
-        try {
-            Method method = getClass().getMethod(methodName, parameterTypes);
-
-            // ===============================
-            // Validation
-            // ===============================
-            // if (method.isBridge() || method.isSynthetic()) {
-            // TranslationError error = new TranslationError();
-            // System.out.println(method.isBridge());
-            // error.write("Translation method is system defined. [", translator.getName(), "]");
-            // error.writeMethod(method);
-            //
-            // throw error;
-            // }
-
-            if (!Modifier.isPublic(method.getModifiers())) {
-                TranslationError error = new TranslationError();
-                error.write("Translation method must be public. [", translator.getName(), "]");
-                error.writeMethod(method);
-
-                throw error;
-            }
-
-            if (method.getReturnType() != String.class) {
-                TranslationError error = new TranslationError();
-                error.write("Translation method must return String type. [", translator.getName(), "]");
-                error.writeMethod(method);
-
-                throw error;
-            }
-
-            // make accesible
-            method.setAccessible(true);
-
-            return method;
-        } catch (NoSuchMethodException e) {
-            TranslationError error = new TranslationError();
-            error.write("You must define a translator method at ", translator.getName(), ".");
-            error.writeMethod(Modifier.PUBLIC, methodName, String.class, parameterTypes);
-
-            throw error;
-        } catch (Exception e) {
-            // If this exception will be thrown, it is bug of this program. So we must rethrow the
-            // wrapped error in here.
-            throw new Error(e);
-        }
-    }
-
-    /**
-     * Helper method to build parameter expression.
-     * 
-     * @param operands
-     * @return
-     */
-    private String build(List<Operand> operands) {
-        StringBuilder builder = new StringBuilder();
-        builder.append('(');
-
-        for (int i = 1; i < operands.size(); i++) {
-            builder.append(operands.get(i));
-
-            if (i + 1 != operands.size()) {
-                builder.append(',');
-            }
-        }
-        builder.append(')');
-
-        return builder.toString();
-    }
-
-    /**
-     * Helper method to write the specified parameter as expression.
-     * 
-     * @param index
-     * @return
-     */
-    private Operand getOperand(int index) {
-        return context.get(index + 1).cast(types[index]);
-    }
-
-    /**
      * Helper method to write the specified parameter as expression.
      * 
      * @param index
@@ -392,5 +290,15 @@ public class Translator<T> {
         } else {
             return "new RegExp(" + regex + ",\"" + options + "\")";
         }
+    }
+
+    /**
+     * Helper method to write the specified parameter as expression.
+     * 
+     * @param index
+     * @return
+     */
+    private Operand getOperand(int index) {
+        return context.get(index + 1).cast(types[index]);
     }
 }

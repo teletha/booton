@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import kiss.ClassListener;
 import kiss.I;
 import kiss.model.ClassUtil;
 
@@ -54,15 +53,9 @@ import org.objectweb.asm.ClassReader;
  * volatile
  * </p>
  * 
- * @version 2009/08/24 3:02:08
+ * @version 2012/12/02 16:32:42
  */
-public class Javascript implements ClassListener<Translator> {
-
-    /** The generic translator. */
-    private static final Translator generic = new Translator();
-
-    /** The pool of translators. */
-    private static final Map<Class, Translator> translators = new ConcurrentHashMap();
+public class Javascript {
 
     /** The all cached scripts. */
     private static final Map<Class, Javascript> scripts = I.aware(new ConcurrentHashMap());
@@ -136,27 +129,12 @@ public class Javascript implements ClassListener<Translator> {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public void load(Class<Translator> clazz) {
-        if (clazz != Translator.class) {
-            translators.put(ClassUtil.getParameter(clazz, Translator.class)[0], I.make(clazz));
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void unload(Class<Translator> clazz) {
-    }
-
-    /**
      * Require the specified java source code.
      * 
      * @param dependency A dependency class.
      */
     public void require(Class dependency) {
-        if (!hasTranslator(dependency)) {
+        if (!TranslatorManager.hasTranslator(dependency)) {
             dependencies.add(dependency);
         }
     }
@@ -294,7 +272,7 @@ public class Javascript implements ClassListener<Translator> {
         }
 
         // check Native Class
-        if (hasTranslator(source)) {
+        if (TranslatorManager.hasTranslator(source)) {
             return null;
         }
 
@@ -312,34 +290,6 @@ public class Javascript implements ClassListener<Translator> {
         return script;
     }
 
-    private static final boolean hasTranslator(Class clazz) {
-
-        if (clazz.isAnnotationPresent(Translatable.class)) {
-            return true;
-        }
-
-        if (translators.containsKey(clazz)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Retrieve the translator for the specified class.
-     * 
-     * @param clazz
-     * @return
-     */
-    public static final Translator getTranslator(Class clazz) {
-        if (clazz.isAnnotationPresent(Translatable.class)) {
-            return new TranslatableTranslator();
-        }
-
-        Translator translator = translators.get(clazz);
-
-        return translator == null ? generic : translator;
-    }
-
     /**
      * <p>
      * Compute the identified qualified class name for ECMAScript.
@@ -352,11 +302,7 @@ public class Javascript implements ClassListener<Translator> {
         Javascript script = getScript(clazz);
 
         if (script == null) {
-            Translator translator = getTranslator(clazz);
-
-            String name = translator.getClass().getSimpleName();
-
-            return name.substring(0, name.indexOf("Translator"));
+            return clazz.getSimpleName();
         } else {
             return "boot." + mung(script.id, true);
         }
