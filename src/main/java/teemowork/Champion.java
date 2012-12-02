@@ -58,5 +58,6 @@ public class Champion {
         for (int i = 0; i < list.getLength(); i++) {
             list.item(i).setTextContent(champion.name + "  " + champion.getHealthAtLvele(i));
         }
+        document.getDocumentElement().setAttribute("class", "test");
     }
 }

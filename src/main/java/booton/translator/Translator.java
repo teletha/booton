@@ -31,13 +31,16 @@ import org.objectweb.asm.Type;
 @Manageable(lifestyle = Singleton.class)
 public class Translator<T> {
 
+    /** The quote literal. */
     protected static final String Q = "\"";
 
     /** The current processing method expression. */
     protected String that;
 
+    /** The current processing method context stack. */
     private List<Operand> context;
 
+    /** The current processing method paramter types. */
     private Class[] types;
 
     /**
@@ -54,7 +57,7 @@ public class Translator<T> {
         Method translator = searchTranslator(name, types);
 
         if (translator != null) {
-            return translateMethodCall(translator, context);
+            return translateMethodCall(name, translator, context);
         } else {
             return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + build(context);
         }
@@ -74,7 +77,7 @@ public class Translator<T> {
         Method translator = searchTranslator(name, types);
 
         if (translator != null) {
-            return translateMethodCall(translator, context);
+            return translateMethodCall(name, translator, context);
         } else {
             return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + build(context);
         }
@@ -94,7 +97,7 @@ public class Translator<T> {
         Method translator = searchTranslator(owner.getSimpleName(), types);
 
         if (translator != null) {
-            return translateMethodCall(translator, context);
+            return translateMethodCall(null, translator, context);
         } else {
             // append identifier of constructor method
             context.add(new OperandNumber(Integer.valueOf(Javascript.computeMethodName(owner, "<init>", desc)
@@ -114,16 +117,16 @@ public class Translator<T> {
      * @param context
      * @return
      */
-    String translateSuperMethod(Class owner, String methodName, String desc, Class[] types, List<Operand> context) {
+    String translateSuperMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
         Method translator = searchTranslator(owner.getSimpleName(), types);
 
         if (translator != null) {
-            return translateMethodCall(translator, context);
+            return translateMethodCall(name, translator, context);
         } else {
             // append context 'this' of super method
             context.add(1, new OperandExpression("this"));
 
-            return Javascript.computeClassName(owner) + ".prototype." + Javascript.computeMethodName(owner, methodName, desc) + ".call" + build(context);
+            return Javascript.computeClassName(owner) + ".prototype." + Javascript.computeMethodName(owner, name, desc) + ".call" + build(context);
         }
     }
 
@@ -163,7 +166,7 @@ public class Translator<T> {
      * @param context A current processing operands for the specified method.
      * @return A javascript expression.
      */
-    private String translateMethodCall(Method translator, List<Operand> context) {
+    private String translateMethodCall(String name, Method translator, List<Operand> context) {
         // translate special method invocation
         this.types = translator.getParameterTypes();
         this.context = context;
@@ -227,18 +230,19 @@ public class Translator<T> {
         }
 
         try {
-            Method method = getClass().getDeclaredMethod(methodName, parameterTypes);
+            Method method = getClass().getMethod(methodName, parameterTypes);
 
             // ===============================
             // Validation
             // ===============================
-            if (method.isBridge() || method.isSynthetic()) {
-                TranslationError error = new TranslationError();
-                error.write("Translation method is system defined. [", translator.getName(), "]");
-                error.writeMethod(method);
-
-                throw error;
-            }
+            // if (method.isBridge() || method.isSynthetic()) {
+            // TranslationError error = new TranslationError();
+            // System.out.println(method.isBridge());
+            // error.write("Translation method is system defined. [", translator.getName(), "]");
+            // error.writeMethod(method);
+            //
+            // throw error;
+            // }
 
             if (!Modifier.isPublic(method.getModifiers())) {
                 TranslationError error = new TranslationError();
@@ -255,6 +259,9 @@ public class Translator<T> {
 
                 throw error;
             }
+
+            // make accesible
+            method.setAccessible(true);
 
             return method;
         } catch (NoSuchMethodException e) {
