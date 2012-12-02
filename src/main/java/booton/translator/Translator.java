@@ -57,7 +57,7 @@ public class Translator<T> {
         Method translator = searchTranslator(name, types);
 
         if (translator != null) {
-            return translateMethodCall(name, translator, context);
+            return translateMethodCall(translator, context);
         } else {
             return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + build(context);
         }
@@ -77,7 +77,7 @@ public class Translator<T> {
         Method translator = searchTranslator(name, types);
 
         if (translator != null) {
-            return translateMethodCall(name, translator, context);
+            return translateMethodCall(translator, context);
         } else {
             return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + build(context);
         }
@@ -97,7 +97,7 @@ public class Translator<T> {
         Method translator = searchTranslator(owner.getSimpleName(), types);
 
         if (translator != null) {
-            return translateMethodCall(null, translator, context);
+            return translateMethodCall(translator, context);
         } else {
             // append identifier of constructor method
             context.add(new OperandNumber(Integer.valueOf(Javascript.computeMethodName(owner, "<init>", desc)
@@ -121,7 +121,7 @@ public class Translator<T> {
         Method translator = searchTranslator(owner.getSimpleName(), types);
 
         if (translator != null) {
-            return translateMethodCall(name, translator, context);
+            return translateMethodCall(translator, context);
         } else {
             // append context 'this' of super method
             context.add(1, new OperandExpression("this"));
@@ -166,7 +166,7 @@ public class Translator<T> {
      * @param context A current processing operands for the specified method.
      * @return A javascript expression.
      */
-    private String translateMethodCall(String name, Method translator, List<Operand> context) {
+    private String translateMethodCall(Method translator, List<Operand> context) {
         // translate special method invocation
         this.types = translator.getParameterTypes();
         this.context = context;
