@@ -25,6 +25,7 @@ import kiss.Singleton;
 
 import org.objectweb.asm.Type;
 
+
 /**
  * @version 2009/08/08 10:48:22
  */
@@ -54,12 +55,14 @@ public class Translator<T> {
      * @return
      */
     String translateMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-        Method translator = searchTranslator(name, types);
+        Method translator = searchTranslatorMethod(name, types);
 
-        if (translator != null) {
-            return translateMethodCall(translator, context);
-        } else {
+        if (translator == null) {
             return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + build(context);
+        } else if (translator.isAnnotationPresent(Translatable.class)) {
+            return translateNativeMethodCall(translator, context);
+        } else {
+            return translateMethodCall(translator, context);
         }
     }
 
@@ -74,12 +77,12 @@ public class Translator<T> {
      * @return
      */
     String translateStaticMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-        Method translator = searchTranslator(name, types);
+        Method translator = searchTranslatorMethod(name, types);
 
-        if (translator != null) {
-            return translateMethodCall(translator, context);
-        } else {
+        if (translator == null) {
             return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + build(context);
+        } else {
+            return translateMethodCall(translator, context);
         }
     }
 
@@ -94,7 +97,7 @@ public class Translator<T> {
      * @return
      */
     String translateConstructor(Class owner, String desc, Class[] types, List<Operand> context) {
-        Method translator = searchTranslator(owner.getSimpleName(), types);
+        Method translator = searchTranslatorMethod(owner.getSimpleName(), types);
 
         if (translator != null) {
             return translateMethodCall(translator, context);
@@ -118,15 +121,15 @@ public class Translator<T> {
      * @return
      */
     String translateSuperMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-        Method translator = searchTranslator(owner.getSimpleName(), types);
+        Method translator = searchTranslatorMethod(owner.getSimpleName(), types);
 
-        if (translator != null) {
-            return translateMethodCall(translator, context);
-        } else {
+        if (translator == null) {
             // append context 'this' of super method
             context.add(1, new OperandExpression("this"));
 
             return Javascript.computeClassName(owner) + ".prototype." + Javascript.computeMethodName(owner, name, desc) + ".call" + build(context);
+        } else {
+            return translateMethodCall(translator, context);
         }
     }
 
@@ -144,6 +147,8 @@ public class Translator<T> {
         if (field.isSynthetic() || field.getType() != String.class) {
             throw new NoSuchFieldException();
         }
+
+        field.setAccessible(true);
 
         try {
             return (String) field.get(this);
@@ -215,6 +220,45 @@ public class Translator<T> {
 
     /**
      * <p>
+     * Translate the specified method invocation (include constructor call) to the user defined
+     * javascript expression. If the suitable translation method is not found,
+     * {@link NoSuchMethodException} will be thrown.
+     * </p>
+     * 
+     * @param methodName A method name that byte code want to invoke.
+     * @param types A prameter types of the specified method.
+     * @param context A current processing operands for the specified method.
+     * @return A javascript expression.
+     */
+    private String translateNativeMethodCall(Method translator, List<Operand> context) {
+        // translate native method invocation
+        this.types = translator.getParameterTypes();
+        this.context = context;
+        this.that = context.get(0).toString();
+
+        try {
+            StringBuilder builder = new StringBuilder();
+            builder.append(that);
+            builder.append('.').append(translator.getName()).append('(');
+            for (int i = 0; i < types.length; i++) {
+                builder.append(param(i));
+
+                if (i != types.length - 1) {
+                    builder.append(',');
+                }
+            }
+            builder.append(')');
+            return builder.toString();
+        } finally {
+            // clear context data
+            this.types = null;
+            this.context = null;
+            this.that = null;
+        }
+    }
+
+    /**
+     * <p>
      * Search translator method's existence.
      * </p>
      * 
@@ -222,7 +266,7 @@ public class Translator<T> {
      * @param parameterTypes A method parameters.
      * @return A result.
      */
-    private Method searchTranslator(String methodName, Class[] parameterTypes) {
+    private Method searchTranslatorMethod(String methodName, Class[] parameterTypes) {
         Class translator = getClass();
 
         if (translator == Translator.class) {

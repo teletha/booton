@@ -156,7 +156,7 @@ public class Javascript implements ClassListener<Translator> {
      * @param dependency A dependency class.
      */
     public void require(Class dependency) {
-        if (!translators.containsKey(dependency)) {
+        if (!hasTranslator(dependency)) {
             dependencies.add(dependency);
         }
     }
@@ -210,7 +210,9 @@ public class Javascript implements ClassListener<Translator> {
                 Javascript script = Javascript.getScript(depndency);
 
                 // write dependency scripts
-                script.writeAll(output, defined);
+                if (script != null) {
+                    script.writeAll(output, defined);
+                }
             }
         }
 
@@ -292,7 +294,7 @@ public class Javascript implements ClassListener<Translator> {
         }
 
         // check Native Class
-        if (translators.containsKey(source)) {
+        if (hasTranslator(source)) {
             return null;
         }
 
@@ -310,6 +312,18 @@ public class Javascript implements ClassListener<Translator> {
         return script;
     }
 
+    private static final boolean hasTranslator(Class clazz) {
+
+        if (clazz.isAnnotationPresent(Translatable.class)) {
+            return true;
+        }
+
+        if (translators.containsKey(clazz)) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Retrieve the translator for the specified class.
      * 
@@ -317,6 +331,10 @@ public class Javascript implements ClassListener<Translator> {
      * @return
      */
     public static final Translator getTranslator(Class clazz) {
+        if (clazz.isAnnotationPresent(Translatable.class)) {
+            return new TranslatableTranslator();
+        }
+
         Translator translator = translators.get(clazz);
 
         return translator == null ? generic : translator;
@@ -334,7 +352,8 @@ public class Javascript implements ClassListener<Translator> {
         Javascript script = getScript(clazz);
 
         if (script == null) {
-            Translator translator = translators.get(clazz);
+            Translator translator = getTranslator(clazz);
+
             String name = translator.getClass().getSimpleName();
 
             return name.substring(0, name.indexOf("Translator"));
