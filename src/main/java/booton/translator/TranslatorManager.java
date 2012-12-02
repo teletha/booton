@@ -9,15 +9,23 @@
  */
 package booton.translator;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import kiss.ClassListener;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
+import kiss.Table;
 import kiss.model.ClassUtil;
+
+import org.objectweb.asm.Type;
+
+import booton.translator.web.JQuery.EventListener;
 
 /**
  * @version 2012/12/02 16:11:18
@@ -25,8 +33,15 @@ import kiss.model.ClassUtil;
 @Manageable(lifestyle = Singleton.class)
 class TranslatorManager implements ClassListener<Translator> {
 
-    /** The supecial translators. */
+    /** The special translators. */
     private static final Map<Class, Translator> translators = new ConcurrentHashMap();
+
+    /** The native methods. */
+    private static final Table<Integer, Class> natives = new Table();
+
+    static {
+        registerNativeMethod(EventListener.class);
+    }
 
     /**
      * <p>
@@ -37,7 +52,7 @@ class TranslatorManager implements ClassListener<Translator> {
      * @return
      */
     static boolean hasTranslator(Class type) {
-        if (type.isAnnotationPresent(Translatable.class)) {
+        if (Translatable.class.isAssignableFrom(type)) {
             return true;
         }
 
@@ -56,7 +71,7 @@ class TranslatorManager implements ClassListener<Translator> {
      * @return
      */
     static Translator getTranslator(Class type) {
-        if (type.isAnnotationPresent(Translatable.class)) {
+        if (Translatable.class.isAssignableFrom(type)) {
             return I.make(TranslatableTranslator.class);
         }
 
@@ -66,6 +81,50 @@ class TranslatorManager implements ClassListener<Translator> {
             return I.make(GeneralTranslator.class);
         } else {
             return translator;
+        }
+    }
+
+    /**
+     * <p>
+     * Detect this is native method or not.
+     * </p>
+     * 
+     * @param owner A method owner.
+     * @param name A method name.
+     * @param description A method description.
+     * @return
+     */
+    static boolean isNative(Class owner, String name, String description) {
+        List<Class> classes = natives.get(name.hashCode() + description.hashCode());
+
+        for (Class clazz : classes) {
+            if (clazz.isAssignableFrom(owner)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * <p>
+     * Register native methods.
+     * </p>
+     * 
+     * @param nativeClass
+     */
+    public static void registerNativeMethod(Class nativeClass) {
+        if (nativeClass != null) {
+            Table<Method, Annotation> annotations = ClassUtil.getAnnotations(nativeClass);
+
+            for (Entry<Method, List<Annotation>> entry : annotations.entrySet()) {
+                for (Annotation annotation : entry.getValue()) {
+                    if (annotation.annotationType() == JSNative.class) {
+                        Method method = entry.getKey();
+
+                        natives.push(method.getName().hashCode() + Type.getMethodDescriptor(method).hashCode(), nativeClass);
+                    }
+                }
+            }
         }
     }
 
@@ -97,23 +156,7 @@ class TranslatorManager implements ClassListener<Translator> {
          * {@inheritDoc}
          */
         @Override
-        public String translateMethod(Class owner, String name, String desc, Class[] types, List context) {
-            return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + writeParameter(context);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String translateStaticMethod(Class owner, String name, String desc, Class[] types, List context) {
-            return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + writeParameter(context);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String translateConstructor(Class owner, String desc, Class[] types, List context) {
+        String translateConstructor(Class owner, String desc, Class[] types, List context) {
             // append identifier of constructor method
             context.add(new OperandNumber(Integer.valueOf(Javascript.computeMethodName(owner, "<init>", desc)
                     .substring(1))));
@@ -125,7 +168,23 @@ class TranslatorManager implements ClassListener<Translator> {
          * {@inheritDoc}
          */
         @Override
-        public String translateSuperMethod(Class owner, String name, String desc, Class[] types, List context) {
+        String translateMethod(Class owner, String name, String desc, Class[] types, List context) {
+            return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + writeParameter(context);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        String translateStaticMethod(Class owner, String name, String desc, Class[] types, List context) {
+            return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + writeParameter(context);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        String translateSuperMethod(Class owner, String name, String desc, Class[] types, List context) {
             // append context 'this' of super method
             context.add(1, new OperandExpression("this"));
 
@@ -136,30 +195,8 @@ class TranslatorManager implements ClassListener<Translator> {
          * {@inheritDoc}
          */
         @Override
-        public String translateStaticField(Class owner, String fieldName, boolean isNotStatic) {
+        String translateStaticField(Class owner, String fieldName, boolean isNotStatic) {
             return (isNotStatic ? Javascript.computeClassName(owner) : "this") + "." + fieldName;
-        }
-
-        /**
-         * Helper method to write parameter expression.
-         * 
-         * @param operands
-         * @return
-         */
-        private String writeParameter(List<Operand> operands) {
-            StringBuilder builder = new StringBuilder();
-            builder.append('(');
-
-            for (int i = 1; i < operands.size(); i++) {
-                builder.append(operands.get(i));
-
-                if (i + 1 != operands.size()) {
-                    builder.append(',');
-                }
-            }
-            builder.append(')');
-
-            return builder.toString();
         }
     }
 
@@ -173,17 +210,19 @@ class TranslatorManager implements ClassListener<Translator> {
          * {@inheritDoc}
          */
         @Override
-        public String translateConstructor(Class owner, String desc, Class[] types, List<Operand> context) {
-            // If this exception will be thrown, it is bug of this program. So we must rethrow the
-            // wrapped error in here.
-            throw new Error();
+        String translateConstructor(Class owner, String desc, Class[] types, List<Operand> context) {
+            // append identifier of constructor method
+            context.add(new OperandNumber(Integer.valueOf(Javascript.computeMethodName(owner, "<init>", desc)
+                    .substring(1))));
+
+            return "new " + Javascript.computeClassName(owner) + writeParameter(context);
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public String translateMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
+        String translateMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
             StringBuilder builder = new StringBuilder();
             builder.append(context.get(0).toString());
             builder.append('.').append(name).append('(');
@@ -203,7 +242,7 @@ class TranslatorManager implements ClassListener<Translator> {
          * {@inheritDoc}
          */
         @Override
-        public String translateStaticMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
+        String translateStaticMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
             StringBuilder builder = new StringBuilder();
             builder.append(name).append('(');
             for (int i = 0; i < types.length; i++) {
@@ -222,18 +261,48 @@ class TranslatorManager implements ClassListener<Translator> {
          * {@inheritDoc}
          */
         @Override
-        public String translateStaticField(Class owner, String fieldName, boolean isNotStatic) {
-            return fieldName;
+        String translateSuperMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public String translateSuperMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-            // If this exception will be thrown, it is bug of this program. So we must rethrow the
-            // wrapped error in here.
-            throw new Error();
+        Object translateField(Class ownerClass, String name, Operand context) {
+            return context + "." + name;
         }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        String translateStaticField(Class owner, String fieldName, boolean isNotStatic) {
+            return fieldName;
+        }
+    }
+
+    /**
+     * Helper method to write parameter expression.
+     * 
+     * @param operands
+     * @return
+     */
+    private static String writeParameter(List<Operand> operands) {
+        StringBuilder builder = new StringBuilder();
+        builder.append('(');
+
+        for (int i = 1; i < operands.size(); i++) {
+            builder.append(operands.get(i));
+
+            if (i + 1 != operands.size()) {
+                builder.append(',');
+            }
+        }
+        builder.append(')');
+
+        return builder.toString();
     }
 }

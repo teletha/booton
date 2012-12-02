@@ -159,36 +159,35 @@ class JavaMethodCompiler extends MethodVisitor {
     private int recordIndex = 0;
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitAnnotation(java.lang.String, boolean)
+     * {@inheritDoc}
      */
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
         return null; // do nothing
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitAnnotationDefault()
+     * {@inheritDoc}
      */
     public AnnotationVisitor visitAnnotationDefault() {
         return null; // do nothing
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitAttribute(org.objectweb.asm.Attribute)
+     * {@inheritDoc}
      */
     public void visitAttribute(Attribute attr) {
         // do nothing
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitCode()
+     * {@inheritDoc}
      */
     public void visitCode() {
         // do nothing
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitFieldInsn(int, java.lang.String, java.lang.String,
-     *      java.lang.String)
+     * {@inheritDoc}
      */
     public void visitFieldInsn(int opcode, String owner, String name, String desc) {
         // recode current instruction
@@ -204,7 +203,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case GETFIELD:
-            current.addOperand(current.remove(0) + "." + Javascript.computeFieldName(ownerClass, name));
+            current.addOperand(translator.translateField(ownerClass, name, current.remove(0)));
             break;
 
         case PUTSTATIC:
@@ -218,15 +217,14 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitFrame(int, int, java.lang.Object[], int,
-     *      java.lang.Object[])
+     * {@inheritDoc}
      */
     public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
         // do nothing
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitIincInsn(int, int)
+     * {@inheritDoc}
      */
     public void visitIincInsn(int position, int increment) {
         // retrieve the local variable name
@@ -256,7 +254,7 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitInsn(int)
+     * {@inheritDoc}
      */
     public void visitInsn(int opcode) {
         // recode instruction
@@ -496,7 +494,7 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitIntInsn(int, int)
+     * {@inheritDoc}
      */
     public void visitIntInsn(int opcode, int operand) {
         record(opcode);
@@ -526,7 +524,7 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitJumpInsn(int, org.objectweb.asm.Label)
+     * {@inheritDoc}
      */
     public void visitJumpInsn(int opcode, Label label) {
         record(opcode);
@@ -599,7 +597,7 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitLabel(org.objectweb.asm.Label)
+     * {@inheritDoc}
      */
     public void visitLabel(Label label) {
         record(LABEL);
@@ -847,28 +845,26 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitLineNumber(int, org.objectweb.asm.Label)
+     * {@inheritDoc}
      */
     public void visitLineNumber(int number, Label label) {
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitLocalVariable(java.lang.String, java.lang.String,
-     *      java.lang.String, org.objectweb.asm.Label, org.objectweb.asm.Label, int)
+     * {@inheritDoc}
      */
     public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
         // do nothing
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitLookupSwitchInsn(org.objectweb.asm.Label, int[],
-     *      org.objectweb.asm.Label[])
+     * {@inheritDoc}
      */
     public void visitLookupSwitchInsn(Label label, int[] values, Label[] labels) {
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitMaxs(int, int)
+     * {@inheritDoc}
      */
     public void visitMaxs(int maxStack, int maxLocals) {
         // write method declaration
@@ -886,8 +882,7 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitMethodInsn(int, java.lang.String, java.lang.String,
-     *      java.lang.String)
+     * {@inheritDoc}
      */
     public void visitMethodInsn(int opcode, String className, String methodName, String desc) {
         // recode instruction
@@ -980,7 +975,7 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitMultiANewArrayInsn(java.lang.String, int)
+     * {@inheritDoc}
      */
     public void visitMultiANewArrayInsn(String desc, int dimension) {
         // remove needless operands
@@ -991,22 +986,20 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitParameterAnnotation(int, java.lang.String, boolean)
+     * {@inheritDoc}
      */
     public AnnotationVisitor visitParameterAnnotation(int arg0, String arg1, boolean arg2) {
         return null;
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitTableSwitchInsn(int, int, org.objectweb.asm.Label,
-     *      org.objectweb.asm.Label[])
+     * {@inheritDoc}
      */
     public void visitTableSwitchInsn(int min, int max, Label defaultLable, Label[] labels) {
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitTryCatchBlock(org.objectweb.asm.Label,
-     *      org.objectweb.asm.Label, org.objectweb.asm.Label, java.lang.String)
+     * {@inheritDoc}
      */
     public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
         TryBlock block = new TryBlock(start, end, handler, type);
@@ -1021,7 +1014,7 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitTypeInsn(int, java.lang.String)
+     * {@inheritDoc}
      */
     public void visitTypeInsn(int opcode, String type) {
         record(opcode);
@@ -1048,7 +1041,7 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitVarInsn(int, int)
+     * {@inheritDoc}
      */
     public void visitVarInsn(int opcode, int position) {
         // recode operand code

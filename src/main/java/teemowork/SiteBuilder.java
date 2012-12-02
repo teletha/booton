@@ -30,7 +30,7 @@ public class SiteBuilder {
 
         // JS builder
         Javascript js = Javascript.getScript(Champion.class);
-        js.writeAll(Files.newBufferedWriter(jsPath, I.$encoding));
+        js.writeTo(jsPath);
 
         StringBuilder builder = new StringBuilder();
         builder.append("try {");
@@ -44,11 +44,12 @@ public class SiteBuilder {
         XML html = I.xml("html");
         XML head = html.child("head");
         head.child("meta").attr("charset", "utf-8");
-        head.child("script").attr("type", "text/javascript").attr("src", "boot.js").text("/* */");
+
         head.child("script")
                 .attr("type", "text/javascript")
                 .attr("src", "https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js")
                 .text("/* */");
+        head.child("script").attr("type", "text/javascript").attr("src", "boot.js").text("/* */");
         head.child("script").attr("type", "text/javascript").attr("src", "test.js").text("/* */");
 
         XML body = html.child("body");

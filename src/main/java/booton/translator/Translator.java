@@ -43,63 +43,93 @@ public class Translator<T> {
 
     /**
      * <p>
-     * Translate the specified method to the javascript expression.
+     * Translate a constructor invocation to javascript expression.
      * </p>
      * 
-     * @param name
-     * @param types
-     * @param context
-     * @return
+     * @param owner A constructor owner.
+     * @param description A constructor description.
+     * @param types A constructor parameter types.
+     * @param context A operand stacks.
+     * @return A translated expression.
      */
-    String translateMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-        return write(search(name, types), context);
-    }
-
-    /**
-     * <p>
-     * Translate the specified method to the javascript expression.
-     * </p>
-     * 
-     * @param name
-     * @param types
-     * @param context
-     * @return
-     */
-    String translateStaticMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-        return write(search(name, types), context);
-    }
-
-    /**
-     * <p>
-     * Translate the specified method to the javascript expression.
-     * </p>
-     * 
-     * @param name
-     * @param types
-     * @param context
-     * @return
-     */
-    String translateConstructor(Class owner, String desc, Class[] types, List<Operand> context) {
+    String translateConstructor(Class owner, String description, Class[] types, List<Operand> context) {
         return write(search(owner.getSimpleName(), types), context);
     }
 
     /**
      * <p>
-     * Translate the specified method to the javascript expression.
+     * Translate a method invocation to javascript expression.
      * </p>
      * 
-     * @param name
-     * @param types
-     * @param context
-     * @return
+     * @param owner A method owner.
+     * @param name A method name.
+     * @param description A method description.
+     * @param types A method parameter types.
+     * @param context A operand stacks.
+     * @return A translated expression.
      */
-    String translateSuperMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-        return write(search(owner.getSimpleName(), types), context);
-
+    String translateMethod(Class owner, String name, String description, Class[] types, List<Operand> context) {
+        return write(search(name, types), context);
     }
 
-    String translateStaticField(Class owner, String fieldName, boolean isNotStatic) {
-        return writeFieldAccess(fieldName);
+    /**
+     * <p>
+     * Translate a static method invocation to javascript expression.
+     * </p>
+     * 
+     * @param owner A method owner.
+     * @param name A method name.
+     * @param description A method description.
+     * @param types A method parameter types.
+     * @param context A operand stacks.
+     * @return A translated expression.
+     */
+    String translateStaticMethod(Class owner, String name, String description, Class[] types, List<Operand> context) {
+        return write(search(name, types), context);
+    }
+
+    /**
+     * <p>
+     * Translate a super method invocation to javascript expression.
+     * </p>
+     * 
+     * @param owner A method owner.
+     * @param name A method name.
+     * @param description A method description.
+     * @param types A method parameter types.
+     * @param context A operand stacks.
+     * @return A translated expression.
+     */
+    String translateSuperMethod(Class owner, String name, String description, Class[] types, List<Operand> context) {
+        return write(search(owner.getSimpleName(), types), context);
+    }
+
+    /**
+     * <p>
+     * Translate a field access invocation.
+     * </p>
+     * 
+     * @param ownerClass A field owner.
+     * @param name A field name.
+     * @param context A operand stack.
+     * @return A translated expression.
+     */
+    Object translateField(Class ownerClass, String name, Operand context) {
+        return context + "." + Javascript.computeFieldName(ownerClass, name);
+    }
+
+    /**
+     * <p>
+     * Translate a static field access invocation.
+     * </p>
+     * 
+     * @param ownerClass A field owner.
+     * @param name A field name.
+     * @param isNotStatic A operand stack.
+     * @return A translated expression.
+     */
+    String translateStaticField(Class owner, String name, boolean isNotStatic) {
+        return writeFieldAccess(name);
     }
 
     /**
@@ -139,14 +169,14 @@ public class Translator<T> {
      */
     private Method search(String methodName, Class[] parameterTypes) {
         Class translator = getClass();
-    
+
         if (translator == Translator.class) {
             return null; // use generic translator
         }
-    
+
         try {
             Method method = getClass().getMethod(methodName, parameterTypes);
-    
+
             // ===============================
             // Validation
             // ===============================
@@ -158,32 +188,32 @@ public class Translator<T> {
             //
             // throw error;
             // }
-    
+
             if (!Modifier.isPublic(method.getModifiers())) {
                 TranslationError error = new TranslationError();
                 error.write("Translation method must be public. [", translator.getName(), "]");
                 error.writeMethod(method);
-    
+
                 throw error;
             }
-    
+
             if (method.getReturnType() != String.class) {
                 TranslationError error = new TranslationError();
                 error.write("Translation method must return String type. [", translator.getName(), "]");
                 error.writeMethod(method);
-    
+
                 throw error;
             }
-    
+
             // make accesible
             method.setAccessible(true);
-    
+
             return method;
         } catch (NoSuchMethodException e) {
             TranslationError error = new TranslationError();
             error.write("You must define a translator method at ", translator.getName(), ".");
             error.writeMethod(Modifier.PUBLIC, methodName, String.class, parameterTypes);
-    
+
             throw error;
         } catch (Exception e) {
             // If this exception will be thrown, it is bug of this program. So we must rethrow the

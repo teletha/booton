@@ -12,14 +12,14 @@ package booton.translator.web;
 import kiss.I;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import booton.translator.Translatable;
 
 /**
  * @version 2012/11/29 9:56:55
  */
-@Translatable
-public class WebSupport {
+public class WebSupport implements Translatable {
 
     /** The root document. */
     public static Document document;
@@ -33,6 +33,18 @@ public class WebSupport {
      * @return
      */
     public static JQuery $(String expression) {
+        return I.make(JQuery.class);
+    }
+
+    /**
+     * <p>
+     * Provide JQuery support.
+     * </p>
+     * 
+     * @param expression
+     * @return
+     */
+    public static JQuery $(Element element) {
         return I.make(JQuery.class);
     }
 }
