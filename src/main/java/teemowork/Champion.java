@@ -11,11 +11,9 @@ package teemowork;
 
 import static booton.translator.web.WebSupport.*;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import booton.translator.web.JQuery.Event;
-import booton.translator.web.JQuery.EventListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @version 2012/11/27 18:19:08
@@ -51,32 +49,18 @@ public class Champion {
     }
 
     public static void jsmain() {
-        System.out.println("start!!!");
-
         Champion champion = new Champion("Teemo", 100, 10);
 
         System.out.println(champion.name + "  " + champion.getHealthAtLvele(7));
+        System.out.println($("p").after("<p/>").next().text("test").attr("class", "new").css("color", "red"));
 
-        NodeList list = document.getElementsByTagName("p");
+        List<Champion> list = new ArrayList();
+        list.add(champion);
+        System.out.println(list.get(0));
 
-        for (int i = 0; i < list.getLength(); i++) {
-            list.item(i).setTextContent(champion.name + "  " + champion.getHealthAtLvele(i));
-        }
-        System.out.println($("p").after("<p/>").next().text("test").attr("class", "new"));
-
-        for (Element element : $("p")) {
-            System.out.println($(element).text());
-        }
-
-        $("p").on("click", new EventListener() {
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void handler(Event event) {
-                System.out.println(event.target);
-            }
-        });
+        HashMap<String, Champion> map = new HashMap();
+        map.put("test", champion);
+        System.out.println(map);
+        System.out.println(map.get("test"));
     }
 }

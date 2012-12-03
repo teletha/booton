@@ -18,6 +18,7 @@ package booton.translator;
 import static org.objectweb.asm.ClassReader.*;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import kiss.I;
 import kiss.model.ClassUtil;
 
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Type;
 
 /**
  * <h2>The Reserved words in ECMA Script Third Edition</h2>
@@ -210,7 +212,8 @@ public class Javascript {
     private synchronized void compile() {
         if (code == null) {
             try {
-                // All scripts depend on its parent script. So we must compile it ahead.
+                // All scripts depend on its parent classes and interfaces. So we must compile it
+                // ahead.
                 Class parentClass = source.getSuperclass();
 
                 if (parentClass != null) {
@@ -228,6 +231,27 @@ public class Javascript {
                     }
                 }
 
+                Class[] interfaces = source.getInterfaces();
+
+                for (Class type : interfaces) {
+                    Javascript script = Javascript.getScript(type);
+
+                    if (script != null) {
+                        // compile ahead
+                        script.compile();
+
+                        // copy all member fields and methods for override mechanism
+                        methods.addAll(script.methods);
+                    }
+                }
+
+                if (source.isInterface()) {
+                    for (Method method : source.getDeclaredMethods()) {
+                        System.out.println(method);
+                        order(fields, method.getName().hashCode() ^ Type.getMethodDescriptor(method).hashCode());
+                    }
+                }
+
                 // Then, we can compile this script.
                 ScriptBuffer code = new ScriptBuffer();
 
@@ -239,6 +263,7 @@ public class Javascript {
                 }
 
                 code.append('{');
+
                 new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), SKIP_FRAMES);
 
                 // End class definition
@@ -275,7 +300,7 @@ public class Javascript {
      */
     public static final Javascript getScript(Class source) {
         // check Native Class
-        if (TranslatorManager.hasTranslator(source) || source.isInterface()) {
+        if (TranslatorManager.hasTranslator(source)) {
             return null;
         }
 

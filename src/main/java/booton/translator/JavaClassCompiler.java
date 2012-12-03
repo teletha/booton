@@ -94,7 +94,7 @@ class JavaClassCompiler extends ClassVisitor {
      */
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         // ignore compiler generated method (e.g. generics)
-        if ((access & ACC_NATIVE) == 0) {
+        if ((access & (ACC_NATIVE | ACC_ABSTRACT)) == 0) {
             if (isFirst) {
                 isFirst = false;
             } else {

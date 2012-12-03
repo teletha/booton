@@ -177,6 +177,107 @@ public interface JQuery extends Iterable<Element>, Translatable {
 
     /**
      * <p>
+     * Get the children of each element in the set of matched elements, optionally filtered by a
+     * selector.
+     * </p>
+     * 
+     * @return
+     */
+    public JQuery children();
+
+    /**
+     * <p>
+     * Get the children of each element in the set of matched elements, optionally filtered by a
+     * selector.
+     * </p>
+     * 
+     * @param A string containing a selector expression to match elements against.
+     * @return
+     */
+    public JQuery children(String selector);
+
+    /**
+     * <p>
+     * This is a shortcut for .trigger("click").
+     * </p>
+     * 
+     * @return
+     */
+    public JQuery click();
+
+    /**
+     * <p>
+     * Bind an event handler to the "click" JavaScript event, or trigger that event on an element.
+     * </p>
+     * 
+     * @param listener A function to execute each time the event is triggered.
+     * @return
+     */
+    public JQuery click(EventListener listener);
+
+    /**
+     * <p>
+     * For each element in the set, get the first element that matches the selector by testing the
+     * element itself and traversing up through its ancestors in the DOM tree.
+     * </p>
+     * 
+     * @param selector A string containing a selector expression to match elements against.
+     * @return
+     */
+    public JQuery closest(String selector);
+
+    /**
+     * <p>
+     * Get the value of a style property for the first element in the set of matched elements.
+     * </p>
+     * 
+     * @param property A CSS property.
+     * @return
+     */
+    public String css(String property);
+
+    /**
+     * <p>
+     * Set one or more CSS properties for the set of matched elements.
+     * </p>
+     * 
+     * @param property A CSS property name.
+     * @param value A value to set for the property.
+     * @return
+     */
+    public JQuery css(String property, String value);
+
+    /**
+     * <p>
+     * This is a shortcut for .trigger("dblclick").
+     * </p>
+     * 
+     * @return
+     */
+    public JQuery dblclick();
+
+    /**
+     * <p>
+     * Bind an event handler to the "dblclick" JavaScript event, or trigger that event on an
+     * element.
+     * </p>
+     * 
+     * @param listener A function to execute each time the event is triggered.
+     * @return
+     */
+    public JQuery dblclick(EventListener listener);
+
+    /**
+     * <p>
+     * Remove all child nodes of the set of matched elements from the DOM.
+     * </p>
+     * 
+     * @return
+     */
+    public JQuery empty();
+
+    /**
+     * <p>
      * Get the immediately following sibling of each element in the set of matched elements. If a
      * selector is provided, it retrieves the next sibling only if it matches that selector.
      * </p>
@@ -198,6 +299,19 @@ public interface JQuery extends Iterable<Element>, Translatable {
 
     /**
      * <p>
+     * Remove an event handler.
+     * </p>
+     * 
+     * @param eventType One or more space-separated event types and optional namespaces, or just
+     *            namespaces, such as "click", "keydown.myPlugin", or ".myPlugin".
+     * @param listener A handler function previously attached for the event(s), or the special value
+     *            false.
+     * @return
+     */
+    public JQuery off(String eventType, EventListener listener);
+
+    /**
+     * <p>
      * Attach an event handler function for one or more events to the selected elements.
      * </p>
      * 
@@ -208,6 +322,27 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * @return
      */
     public JQuery on(String eventType, EventListener listener);
+
+    /**
+     * <p>
+     * Get the parent of each element in the current set of matched elements, optionally filtered by
+     * a selector.
+     * </p>
+     * 
+     * @return
+     */
+    public JQuery parent();
+
+    /**
+     * <p>
+     * Get the parent of each element in the current set of matched elements, optionally filtered by
+     * a selector.
+     * </p>
+     * 
+     * @param selector A string containing a selector expression to match elements against.
+     * @return
+     */
+    public JQuery parent(String selector);
 
     /**
      * <p>
