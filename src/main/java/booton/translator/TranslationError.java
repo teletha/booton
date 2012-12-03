@@ -65,6 +65,8 @@ public class TranslationError extends Error {
      * @return Chainable API.
      */
     public TranslationError writeMethod(int modifiers, String methodName, Class returnType, Class[] parameterTypes) {
+        builder.append("\r\n\t");
+
         if (modifiers != 0) {
             builder.append(Modifier.toString(modifiers)).append(' ');
         }
@@ -73,7 +75,7 @@ public class TranslationError extends Error {
         builder.append(methodName).append('(');
         for (int i = 0; i < parameterTypes.length; i++) {
             if (!parameterTypes[i].isArray()) {
-                builder.append(parameterTypes[i].getSimpleName());
+                builder.append(parameterTypes[i].getSimpleName()).append(" param").append(i);
             } else {
                 Class type = parameterTypes[i];
                 int dimensions = 0;
@@ -92,7 +94,9 @@ public class TranslationError extends Error {
             // add separator
             if (i < (parameterTypes.length - 1)) builder.append(',');
         }
-        builder.append(')');
+        builder.append(") {\r\n");
+        builder.append("\t\treturn that;\r\n");
+        builder.append("\t}\r\n");
 
         // chainalbe API
         return this;

@@ -25,6 +25,13 @@ public class StringTranslatorForBuilder extends Translator<StringBuilder> {
     /**
      * @see StringBuilder#StringBuilder(String)
      */
+    public String StringBuilder() {
+        return "";
+    }
+
+    /**
+     * @see StringBuilder#StringBuilder(String)
+     */
     public String StringBuilder(String str) {
         return param(0);
     }
