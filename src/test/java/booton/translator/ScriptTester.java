@@ -114,7 +114,7 @@ public class ScriptTester {
 
         // invoke as Javascript
         String script = Javascript.getScript(source).toString();
-        System.out.println(script);
+
         try {
             // compile as Javascript and script engine read it
             engine.evaluateString(global, script, source.getSimpleName(), 1, null);

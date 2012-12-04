@@ -105,7 +105,7 @@ public class Javascript {
     private final List<Integer> constructors = new ArrayList();
 
     /** The method list of this script. */
-    private final List<Integer> methods = new ArrayList();
+    private static final List<Integer> methods = new ArrayList();
 
     /** The field list of this script. */
     private final List<Integer> fields = new ArrayList();
@@ -212,8 +212,7 @@ public class Javascript {
     private synchronized void compile() {
         if (code == null) {
             try {
-                // All scripts depend on its parent classes and interfaces. So we must compile it
-                // ahead.
+                // All scripts depend on its parent classes. So we must compile it ahead.
                 Class parentClass = source.getSuperclass();
 
                 if (parentClass != null) {
@@ -227,27 +226,12 @@ public class Javascript {
                         dependencies.add(parent.source);
 
                         // copy all member fields and methods for override mechanism
-                        methods.addAll(parent.methods);
-                    }
-                }
-
-                Class[] interfaces = source.getInterfaces();
-
-                for (Class type : interfaces) {
-                    Javascript script = Javascript.getScript(type);
-
-                    if (script != null) {
-                        // compile ahead
-                        script.compile();
-
-                        // copy all member fields and methods for override mechanism
-                        methods.addAll(script.methods);
+                        // methods.addAll(parent.methods);
                     }
                 }
 
                 if (source.isInterface()) {
                     for (Method method : source.getDeclaredMethods()) {
-                        System.out.println(method);
                         order(fields, method.getName().hashCode() ^ Type.getMethodDescriptor(method).hashCode());
                     }
                 }
@@ -300,7 +284,7 @@ public class Javascript {
      */
     public static final Javascript getScript(Class source) {
         // check Native Class
-        if (TranslatorManager.hasTranslator(source)) {
+        if (TranslatorManager.hasTranslator(source) || source.isInterface()) {
             return null;
         }
 
@@ -481,7 +465,7 @@ public class Javascript {
 
         // register as new member
         members.add(id);
-
+        System.out.println(members.size());
         // API definition
         return members.size() - 1;
     }
