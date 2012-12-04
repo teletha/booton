@@ -33,9 +33,6 @@ import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
 
 import org.objectweb.asm.Type;
 
-import booton.translator.Javascript;
-import booton.translator.TranslationError;
-
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -117,7 +114,7 @@ public class ScriptTester {
 
         // invoke as Javascript
         String script = Javascript.getScript(source).toString();
-
+        System.out.println(script);
         try {
             // compile as Javascript and script engine read it
             engine.evaluateString(global, script, source.getSimpleName(), 1, null);
