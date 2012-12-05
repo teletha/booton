@@ -564,4 +564,20 @@ class Node {
         }
         return builder.toString();
     }
+
+    /**
+     * @param out
+     */
+    final void disconnect(Node out) {
+        outgoing.remove(out);
+        out.incoming.remove(this);
+    }
+
+    /**
+     * @param node
+     */
+    final void connect(Node node) {
+        outgoing.add(node);
+        node.incoming.add(this);
+    }
 }
