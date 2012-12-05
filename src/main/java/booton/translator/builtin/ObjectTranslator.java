@@ -20,5 +20,5 @@ import booton.translator.Translator;
 /**
  * @version 2009/12/08 18:09:28
  */
-public class ObjectTranslator extends Translator<Object> {
+public class ObjectTranslator extends Translator<ObjectTranslator> {
 }

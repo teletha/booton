@@ -61,4 +61,68 @@ public class IfTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void shorthand22() throws Exception {
+        test(new Scriptable() {
+
+            public boolean act(int o) {
+                while (o < 4) {
+                    o = o + 2;
+                    if (o == 2) return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    @Test
+    public void object4() throws Exception {
+        test(new Scriptable() {
+
+            public boolean act(int o) {
+                while (o < 4) {
+                    o = o + 2;
+                    if (o == 2) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    @Test
+    public void shorthand() throws Exception {
+        test(new Scriptable() {
+
+            public int act(int o) {
+                if (o == 2) return o + 3;
+                return o;
+            }
+        });
+    }
+
+    @Test
+    public void shorthand3() throws Exception {
+        test(new Scriptable() {
+
+            public boolean act(int o) {
+                return o == 3;
+            }
+        });
+    }
+
+    @Test
+    public void shorthand2() throws Exception {
+        test(new Scriptable() {
+
+            public int act(int o) {
+                if (o == 2) {
+                    return o + 3;
+                }
+                return o;
+            }
+        });
+    }
 }
