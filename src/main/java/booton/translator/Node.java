@@ -343,8 +343,8 @@ class Node {
                     condition.written = true;
 
                     // setup actual do-while block and its following node
-
-                    condition.follower = condition.outgoing.get(1);
+                    NodeDebugger.dump(this);
+                    condition.follower = condition.outgoing.get(condition.outgoing.size() - 1);
 
                     // write script fragment
                     buffer.append("l", condition.id, " : do {");

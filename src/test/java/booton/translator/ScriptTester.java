@@ -58,7 +58,7 @@ public class ScriptTester {
     static {
         try {
             // build client
-            WebClient client = new WebClient(BrowserVersion.INTERNET_EXPLORER_8);
+            WebClient client = new WebClient(BrowserVersion.FIREFOX_10);
 
             // build dummy page
             HtmlPage dummy = (HtmlPage) client.getPage(I.locate("src/test/resources/empty.html").toUri().toURL());
@@ -68,7 +68,7 @@ public class ScriptTester {
             global = dummy.getScriptObject();
 
             // compile boot script
-            booton = engine.compileReader(Files.newBufferedReader(I.locate("src/main/resources/boot.js"), UTF_8), "boot.js", 1, null);
+            booton = engine.compileReader(Files.newBufferedReader(I.locate("boot.js").toAbsolutePath(), UTF_8), "boot.js", 1, null);
             booton.exec(engine, global);
         } catch (Exception e) {
             throw I.quiet(e);

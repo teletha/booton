@@ -15,7 +15,5 @@ public class Project extends bee.api.Project {
         require("npc", "sinobu", "0.9.2");
         require("npc", "antibug", "0.2").atTest();
         require("net.sourceforge.htmlunit", "htmlunit", "2.11").atTest();
-
-        unrequire("org.eclipse.jetty", "*");
     }
 }
