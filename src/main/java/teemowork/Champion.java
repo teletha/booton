@@ -12,7 +12,6 @@ package teemowork;
 import static booton.translator.web.WebSupport.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -41,6 +40,17 @@ public class Champion {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Champion) {
+            return name.equals(((Champion) obj).name);
+        }
+        return false;
+    }
+
+    /**
      * @param level
      * @return
      */
@@ -54,13 +64,19 @@ public class Champion {
         System.out.println(champion.name + "  " + champion.getHealthAtLvele(7));
         System.out.println($("p").after("<p/>").next().text("test").attr("class", "new").css("color", "red"));
 
+        System.out.println(champion);
+        System.out.println(champion.hashCode());
+        System.out.println(champion.hashCode());
+        System.out.println(champion.equals(champion));
+        System.out.println(new Champion("Teemo", 0, 0).equals(champion));
+
         List<Champion> list = new ArrayList();
         list.add(champion);
         System.out.println(list.get(0));
-
-        HashMap<String, Champion> map = new HashMap();
-        map.put("test", champion);
-        System.out.println(map);
-        System.out.println(map.get("test"));
+        //
+        // HashMap<String, Champion> map = new HashMap();
+        // map.put("test", champion);
+        // System.out.println(map);
+        // System.out.println(map.get("test"));
     }
 }

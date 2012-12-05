@@ -69,6 +69,9 @@ public class Translator<T> {
      * @return A translated expression.
      */
     String translateMethod(Class owner, String name, String description, Class[] types, List<Operand> context) {
+        if (name.equals("equals") && description.equals("(Ljava/lang/Object;)Z")) {
+            return context.get(0) + ".equals(" + context.get(1) + ")";
+        }
         return write(search(name, types), context);
     }
 

@@ -110,9 +110,6 @@ class JavaMethodCompiler extends MethodVisitor {
      * @see org.objectweb.asm.MethodVisitor#visitEnd()
      */
     public void visitEnd() {
-        // Search all backedge nodes at first.
-        searchBackEdge(nodes.get(0), new ArrayDeque());
-
         // Resolve shorthand syntax sugar of "if" statement.
         for (int i = nodes.size() - 1; 0 <= i; i--) {
             Node node = nodes.get(i);
@@ -128,6 +125,9 @@ class JavaMethodCompiler extends MethodVisitor {
                 condition.stack.add(node.stack.pollFirst().invert());
             }
         }
+
+        // Search all backedge nodes at first.
+        searchBackEdge(nodes.get(0), new ArrayDeque());
 
         // Resolve all try-catch-finally blocks.
         Iterator<TryBlock> iterator = tries.descendingIterator();
@@ -443,7 +443,9 @@ class JavaMethodCompiler extends MethodVisitor {
                 dispose(current);
 
                 // invert the latest condition
-                current.stack.peekLast().invert();
+                if (!current.stack.isEmpty()) {
+                    current.stack.peekLast().invert();
+                }
             }
 
             current.addExpression("return ", current.remove(0));
@@ -1167,6 +1169,13 @@ class JavaMethodCompiler extends MethodVisitor {
         Node previous = next.previous;
         node.previous = previous;
         next.previous = node;
+
+        ArrayList<Node> list = new ArrayList(next.incoming);
+
+        for (Node incoming : list) {
+            incoming.disconnect(next);
+            incoming.connect(node);
+        }
 
         // insert to node list
         nodes.add(nodes.indexOf(next), node);

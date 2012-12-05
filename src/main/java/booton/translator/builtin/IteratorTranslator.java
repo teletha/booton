@@ -25,4 +25,8 @@ public class IteratorTranslator extends Translator<Iterator> {
     public String hasNext() {
         return that + ".hasNext()";
     }
+
+    public String remove() {
+        return that + ".remove()";
+    }
 }

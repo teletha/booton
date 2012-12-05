@@ -301,12 +301,22 @@ class TranslatorManager implements ClassListener<Translator> {
             System.out.println(name);
             switch (name) {
             case "equals":
-                return "(this==" + context.get(0) + ")";
+                return context.get(0) + ".equals(" + context.get(1) + ")";
+
+            case "getClass":
+                return "this";
+
+            case "hashCode":
+                return context.get(0) + ".hashCode()";
 
             default:
                 break;
             }
             return super.translateMethod(owner, name, description, types, context);
+        }
+
+        public String Object() {
+            return that;
         }
     }
 
