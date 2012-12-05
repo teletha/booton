@@ -226,7 +226,7 @@ public class ScriptTester {
         } else if (type == String.class) {
             return Arrays.asList("", "a", "some value");
         } else {
-            return Arrays.asList(null, I.make(type));
+            return Arrays.asList(null, "String", 1);
         }
     }
 

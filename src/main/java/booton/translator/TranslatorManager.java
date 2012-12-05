@@ -71,6 +71,10 @@ class TranslatorManager implements ClassListener<Translator> {
      * @return
      */
     static Translator getTranslator(Class type) {
+        if (type == Object.class) {
+            return I.make(ObjectTranslator.class);
+        }
+
         if (Translatable.class.isAssignableFrom(type)) {
             return I.make(TranslatableTranslator.class);
         }
@@ -281,6 +285,28 @@ class TranslatorManager implements ClassListener<Translator> {
         @Override
         String translateStaticField(Class owner, String fieldName, boolean isNotStatic) {
             return fieldName;
+        }
+    }
+
+    /**
+     * @version 2012/12/05 11:54:43
+     */
+    private static class ObjectTranslator extends Translator<ObjectTranslator> {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        String translateMethod(Class owner, String name, String description, Class[] types, List<Operand> context) {
+            System.out.println(name);
+            switch (name) {
+            case "equals":
+                return "(this==" + context.get(0) + ")";
+
+            default:
+                break;
+            }
+            return super.translateMethod(owner, name, description, types, context);
         }
     }
 

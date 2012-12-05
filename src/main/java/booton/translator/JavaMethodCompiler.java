@@ -535,20 +535,27 @@ class JavaMethodCompiler extends MethodVisitor {
         switch (opcode) {
         case GOTO:
             connect(label);
-
             // disconnect the next appearing node from the current node
             current = null;
             return;
 
         case IFEQ: // == 0
             current.stack.add(new OperandCondition(current.remove(0), EQ, new OperandNumber(0), node));
-
             connect(label);
             break;
 
         case IFNE: // != 0
             current.stack.add(new OperandCondition(current.remove(0), NE, new OperandNumber(0), node));
+            connect(label);
+            break;
 
+        case IFNULL: // object == null
+            current.stack.add(new OperandCondition(current.remove(0), EQ, new OperandExpression("null"), node));
+            connect(label);
+            break;
+
+        case IFNONNULL: // object != null
+            current.stack.add(new OperandCondition(current.remove(0), NE, new OperandExpression("null"), node));
             connect(label);
             break;
 
@@ -556,7 +563,6 @@ class JavaMethodCompiler extends MethodVisitor {
         case IF_ACMPEQ:
         case IF_ICMPEQ:
             current.stack.add(new OperandCondition(current.remove(1), EQ, current.remove(0), node));
-
             connect(label);
             break;
 
@@ -564,25 +570,21 @@ class JavaMethodCompiler extends MethodVisitor {
         case IF_ACMPNE:
         case IF_ICMPNE:
             current.stack.add(new OperandCondition(current.remove(1), NE, current.remove(0), node));
-
             connect(label);
             break;
 
         case IF_ICMPGE: // int => int
             current.stack.add(new OperandCondition(current.remove(1), GE, current.remove(0), node));
-
             connect(label);
             break;
 
         case IF_ICMPGT: // int > int
             current.stack.add(new OperandCondition(current.remove(1), GT, current.remove(0), node));
-
             connect(label);
             break;
 
         case IF_ICMPLE: // int <= int
             current.stack.add(new OperandCondition(current.remove(1), LE, current.remove(0), node));
-
             connect(label);
             break;
 
