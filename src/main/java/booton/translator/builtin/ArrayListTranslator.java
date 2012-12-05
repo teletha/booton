@@ -9,14 +9,12 @@
  */
 package booton.translator.builtin;
 
-import java.util.ArrayList;
-
 import booton.translator.Translator;
 
 /**
  * @version 2012/12/03 19:11:57
  */
-public class ArrayListTranslator extends Translator<ArrayList> {
+public class ArrayListTranslator extends Translator<ArrayListTranslator> {
 
     public String ArrayList() {
         return "[]";

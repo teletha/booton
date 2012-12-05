@@ -36,6 +36,8 @@ import kiss.model.ClassUtil;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 
+import booton.translator.js.JsObject;
+
 /**
  * <h2>The Reserved words in ECMA Script Third Edition</h2>
  * <p>
@@ -215,7 +217,7 @@ public class Javascript {
                 // All scripts depend on its parent classes. So we must compile it ahead.
                 Class parentClass = source.getSuperclass();
 
-                if (parentClass != null) {
+                if (parentClass != null && source != JsObject.class) {
                     Javascript parent = Javascript.getScript(parentClass);
 
                     if (parent != null) {
@@ -286,6 +288,10 @@ public class Javascript {
         // check Native Class
         if (TranslatorManager.hasTranslator(source) || source.isInterface()) {
             return null;
+        }
+
+        if (source == Object.class) {
+            source = JsObject.class;
         }
 
         // check cache
@@ -465,7 +471,7 @@ public class Javascript {
 
         // register as new member
         members.add(id);
-        System.out.println(members.size());
+
         // API definition
         return members.size() - 1;
     }

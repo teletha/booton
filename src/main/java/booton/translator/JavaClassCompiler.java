@@ -100,7 +100,6 @@ class JavaClassCompiler extends ClassVisitor {
             } else {
                 code.append(',');
             }
-
             return new JavaMethodCompiler(script, code, (access & ACC_STATIC) == 0, name, desc);
         }
 

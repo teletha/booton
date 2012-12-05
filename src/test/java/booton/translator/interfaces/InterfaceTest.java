@@ -15,37 +15,19 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2012/12/04 9:58:51
+ * @version 2012/12/05 11:09:45
  */
 @SuppressWarnings("unused")
 public class InterfaceTest extends ScriptTester {
 
     @Test
-    public void single() throws Exception {
+    public void singleInterfaceMethod() throws Exception {
         test(new Scriptable() {
 
-            int act() {
-                Single single = new SingleImpementation();
+            String act() {
+                Interface1 byInterface = new Class1();
 
-                return single.value();
-            }
-        });
-
-        test(new Scriptable() {
-
-            int act() {
-                Time time = new SingleImpementation();
-
-                return time.next();
-            }
-        });
-
-        test(new Scriptable() {
-
-            int act() {
-                Time time = new SingleImpementation();
-
-                return time.before();
+                return byInterface.interfaceMethod();
             }
         });
     }
@@ -53,53 +35,148 @@ public class InterfaceTest extends ScriptTester {
     /**
      * @version 2012/12/04 9:59:51
      */
-    private static interface Single {
+    private static interface Interface1 {
 
-        int value();
+        String interfaceMethod();
+    }
+
+    /**
+     * @version 2012/12/05 10:46:21
+     */
+    private static class Class1 implements Interface1 {
+
+        @Override
+        public String interfaceMethod() {
+            return "Class1";
+        }
+    }
+
+    @Test
+    public void multipleInterfaceMethods() throws Exception {
+        test(new Scriptable() {
+
+            String act() {
+                Interface2 byInterface = new Class2();
+
+                return byInterface.interfaceMethod();
+            }
+        });
+
+        test(new Scriptable() {
+
+            String act() {
+                Interface2 byInterface = new Class2();
+
+                return byInterface.anotherInterfaceMethod();
+            }
+        });
     }
 
     /**
      * @version 2012/12/04 9:59:51
      */
-    private static interface Time {
+    private static interface Interface2 {
 
-        int before();
+        String interfaceMethod();
 
-        int next();
+        String anotherInterfaceMethod();
     }
 
     /**
-     * @version 2012/12/04 10:00:57
+     * @version 2012/12/05 10:49:31
      */
-    private static class SingleImpementation implements Single, Time {
+    private static class Class2 implements Interface2 {
 
-        public int not() {
-            return 0;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
         @Override
-        public int value() {
-            return 10;
+        public String interfaceMethod() {
+            return "Class2";
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
-        public int before() {
-            return 20;
+        public String anotherInterfaceMethod() {
+            return "Class2 Another";
         }
+    }
 
-        /**
-         * {@inheritDoc}
-         */
+    @Test
+    public void sameInterfaceMethod() throws Exception {
+        test(new Scriptable() {
+
+            String act() {
+                Interface1 byInterface = new Class3();
+
+                return byInterface.interfaceMethod();
+            }
+        });
+
+        test(new Scriptable() {
+
+            String act() {
+                Interface2 byInterface = new Class3();
+
+                return byInterface.interfaceMethod();
+            }
+        });
+
+        test(new Scriptable() {
+
+            String act() {
+                Interface2 byInterface = new Class3();
+
+                return byInterface.anotherInterfaceMethod();
+            }
+        });
+    }
+
+    /**
+     * @version 2012/12/05 10:52:26
+     */
+    public static class Class3 implements Interface1, Interface2 {
+
         @Override
-        public int next() {
-            return 30;
+        public String anotherInterfaceMethod() {
+            return "Another";
         }
 
+        @Override
+        public String interfaceMethod() {
+            return "Same";
+        }
+    }
+
+    @Test
+    public void shadowInterfaceMethod() throws Exception {
+        test(new Scriptable() {
+
+            String act() {
+                Interface1 byInterface = new Child();
+
+                return byInterface.interfaceMethod();
+            }
+        });
+    }
+
+    /**
+     * @version 2012/12/05 10:54:46
+     */
+    private static class NotInterface {
+
+        public String classMethod() {
+            return "Class";
+        }
+
+        public String interfaceMethod() {
+            return "NotInterface";
+        }
+    }
+
+    /**
+     * @version 2012/12/05 10:54:46
+     */
+    private static class Child extends NotInterface implements Interface1 {
+
+        public String childMethod() {
+            return "Child";
+        }
     }
 }
