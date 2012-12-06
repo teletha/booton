@@ -12,12 +12,10 @@ package booton.translator.web;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import booton.translator.JavascriptNative;
-
 /**
  * @version 2012/12/06 14:22:06
  */
-public class WebSupport implements JavascriptNative {
+public class WebSupport {
 
     /** The root document. */
     public static Document document;

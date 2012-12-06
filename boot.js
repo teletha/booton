@@ -2,7 +2,7 @@
 
 function boot() {  
   /**
-   * Define specified properties.
+   * Define user properties.
    */
   function define(object, properties) {
     Object.keys(properties).forEach(function(name) {
@@ -17,9 +17,9 @@ function boot() {
     });
   }
   
-  // ====================================================================
+  //====================================================================
   // Object Extensions
-  // ====================================================================
+  //====================================================================
   // Global object identifier
   var hashcode = 0;
   
@@ -46,99 +46,126 @@ function boot() {
       return this == other;
     }
   });
+  
+  //====================================================================
+  // Array Extensions
+  //====================================================================
+  define(Array.prototype, {
+    /**
+     * Retrieve the object identifier.
+     *
+     * @return An identifier.
+     */
+    it: function() {
+      return {
+        item: this,
+        i: 0,
+        hasNext: function() {
+          return this.i < this.item.length;
+        },
+        next: function() {
+          return this.item[this.i++];
+        }
+      };
+    }
+  });
+  
+  //====================================================================
+  // Booton Extensions
+  //====================================================================
+  define(boot, {
+    /**
+     * <p>
+     * Create new Array object from the specified Array-like object.
+     * </p>
+     * 
+     * @param {Object} object
+     * @return {Array} A new created Array.
+     */
+    toArray: function(object) {
+      var result = [];
+
+      if (object != null) {
+        var i = object.length;
+
+        while (i) {
+          result[--i] = object[i];
+        }
+      }
+
+      // API definition
+      return result;
+    },
+    
+    /**
+     * <p>
+     * Define class in booton core library namespace.
+     * </p>
+     * 
+     * @param {String} subclassName A fully qualified class name of a class to defien.
+     * @param {String} superclassName A fully qualified class name of super class.
+     * @param {Object} subclass A class definition.
+     */
+    defineClass: function(name, superclass, subclass) {
+      // default superclass is Object class
+      if (!subclass) {
+        subclass = superclass;
+        superclass = Object;
+      }
+
+      var init;
+      var subclassPrototype;
+
+      // F is a temporary constructor. It have the prototype of superclass, and does not have the
+      // unnecessary (perhaps it will produce an evil) initialization executable code.
+      function F() {
+      }
+
+      F.prototype = superclass.prototype;
+
+      // We must copy the properties over onto the new prototype.
+      // At first, from superclass definition.
+      subclassPrototype = new F();
+      subclassPrototype.constructor = Class; // Class is defined later
+      // Then, from user defined subclass definition.
+      for ( var i in subclass) {
+        // static method
+        if (i.charAt(0) == "_") {
+          if (i.length == 1) {
+            // invoke static initializer
+            init = subclass[i];
+          } else {
+            // define static method
+            Class[i.substring(1)] = subclass[i];
+          }
+        } else {
+          // define member method
+          subclassPrototype[i] = subclass[i];
+        }
+      }
+
+      // This is actual counstructor of the specified subclass.
+      function Class() {
+        var params = boot.toArray(arguments);
+
+        // invoke specified constructor
+        this["$" + params.pop()].apply(this, params);
+      }
+
+      Class.prototype = subclassPrototype;
+      
+      boot[name] = Class;
+
+      // API definition
+      if (init) init.call(Class);
+    }
+  });
 }
 
 boot();
 
 
-// ====================================================================
-// String Extensions
-// ====================================================================
 
-
-/**
- * <p>
- * Define class in booton core library namespace.
- * </p>
- * 
- * @param {String} subclassName A fully qualified class name of a class to defien.
- * @param {String} superclassName A fully qualified class name of super class.
- * @param {Object} subclass A class definition.
- */
-boot.defineClass = function(superclass, subclass) {
-    // default superclass is Object class
-    if (!subclass) {
-        subclass = superclass;
-        superclass = Object;
-    }
-
-    var subclassPrototype;
-
-    // F is a temporary constructor. It have the prototype of superclass, and does not have the
-    // unnecessary (perhaps it will produce an
-    // evil) initialization executable code.
-    function F() {
-    }
-
-    F.prototype = superclass.prototype;
-
-    // We must copy the properties over onto the new prototype.
-    // At first, from superclass definition.
-    subclassPrototype = new F();
-    subclassPrototype.constructor = Class; // Class is defined later
-    // Then, from user defined subclass definition.
-    for ( var i in subclass) {
-        // static method
-        if (i.charAt(0) == "_") {
-            if (i.length == 1) {
-                // invoke static initializer
-                subclass[i].call(Class);
-            } else {
-                // define static method
-                Class[i.substring(1)] = subclass[i];
-            }
-        } else {
-            // define member method
-            subclassPrototype[i] = subclass[i];
-        }
-    }
-
-    // This is actual counstructor of the specified subclass.
-    function Class() {
-        var params = boot.toArray(arguments);
-
-        // invoke specified constructor
-        this["$" + params.pop()].apply(this, params);
-    }
-
-    Class.prototype = subclassPrototype;
-
-    // API definition
-    return Class;
-};
-
-/**
- * <p>
- * Create new Array object from the specified Array-like object.
- * </p>
- * 
- * @param {Object} object
- * @return {Array} A new created Array.
- */
-boot.toArray = function(object) {
-    var result = [];
-
-    if (object != null) {
-        var i = object.length;
-
-        while (i) {
-            result[--i] = object[i];
-        }
-    }
-
-    // API definition
-    return result;
-};
 
 /**
  * <h2>String Method Enhancement</h2>

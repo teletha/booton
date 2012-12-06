@@ -29,14 +29,14 @@ public class SiteBuilder {
         Path jsPath = I.locate("test.js");
 
         // JS builder
-        Javascript js = Javascript.getScript(Champion.class);
+        Javascript js = Javascript.getScript(Teemowork.class);
         js.writeTo(jsPath);
 
         StringBuilder builder = new StringBuilder();
         builder.append("try {");
-        builder.append(Javascript.computeClassName(Champion.class));
+        builder.append(Javascript.computeClassName(Teemowork.class));
         builder.append(".");
-        builder.append(Javascript.computeMethodName(Champion.class, "jsmain", Type.getMethodDescriptor(Champion.class.getMethod("jsmain"))));
+        builder.append(Javascript.computeMethodName(Teemowork.class, "jsmain", Type.getMethodDescriptor(Champion.class.getMethod("jsmain"))));
         builder.append("(");
         builder.append(");");
         builder.append("} catch(e) {console.log(e)}");
@@ -59,6 +59,5 @@ public class SiteBuilder {
         html.child("script").attr("type", "text/javascript").text(builder.toString());
 
         html.to(Files.newBufferedWriter(htmlPath, I.$encoding));
-
     }
 }

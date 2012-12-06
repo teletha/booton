@@ -208,8 +208,8 @@ class TranslatorManager {
          * {@inheritDoc}
          */
         @Override
-        protected String translateStaticField(Class owner, String fieldName, boolean isNotStatic) {
-            return (isNotStatic ? Javascript.computeClassName(owner) : "this") + "." + fieldName;
+        protected String translateStaticField(Class owner, String fieldName) {
+            return Javascript.computeClassName(owner) + "." + Javascript.computeFieldName(owner, fieldName);
         }
 
         /**

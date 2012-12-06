@@ -129,10 +129,9 @@ public class Translator<T> implements Extensible {
      * 
      * @param ownerClass A field owner.
      * @param name A field name.
-     * @param isNotStatic A operand stack.
      * @return A translated expression.
      */
-    String translateStaticField(Class owner, String name, boolean isNotStatic) {
+    String translateStaticField(Class owner, String name) {
         return writeFieldAccess(name);
     }
 

@@ -9,9 +9,7 @@
  */
 package teemowork;
 
-import static booton.translator.web.WebSupport.*;
-import booton.translator.web.JQuery.Event;
-import booton.translator.web.JQuery.EventListener;
+import teemowork.model.Item;
 
 /**
  * @version 2012/11/27 18:19:08
@@ -58,33 +56,8 @@ public class Champion {
     }
 
     public static void jsmain() {
-        Champion champion = new Champion("Teemo", 100, 10);
-        Object some = champion;
-
-        System.out.println(champion.name + "  " + champion.getHealthAtLvele(7));
-        System.out.println($("p").after("<p/>").next().text("test").attr("class", "new").css("color", "red"));
-
-        System.out.println(champion.hashCode());
-        System.out.println(champion.hashCode());
-        System.out.println(some.equals(champion));
-        System.out.println(new Champion("Teemo", 0, 0).equals(champion));
-
-        $("p").click(new EventListener() {
-
-            @Override
-            public void handler(Event event) {
-                System.out.println(event);
-                System.out.println(event.target);
-            }
-        });
-
-        // List<Champion> list = new ArrayList();
-        // list.add(champion);
-        // System.out.println(list.get(0));
-        //
-        // HashMap<String, Champion> map = new HashMap();
-        // map.put("test", champion);
-        // System.out.println(map);
-        // System.out.println(map.get("test"));
+        for (Item item : Item.getAll()) {
+            System.out.println(item);
+        }
     }
 }
