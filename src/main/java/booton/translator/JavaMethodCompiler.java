@@ -85,7 +85,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * @param methodName
      * @param parameters
      */
-    JavaMethodCompiler(Javascript script, ScriptBuffer code, boolean isStatic, String methodName, String desc) {
+    JavaMethodCompiler(Javascript script, ScriptBuffer code, boolean isNotStatic, String methodName, String desc) {
         super(ASM4);
 
         original = methodName;
@@ -93,7 +93,7 @@ class JavaMethodCompiler extends MethodVisitor {
         methodName = Javascript.computeMethodName(script.source, methodName, desc);
 
         // The current processing method is static (class method), we must mark it as static.
-        if (!isStatic) {
+        if (!isNotStatic) {
             methodName = "_" + methodName;
         }
 
@@ -103,7 +103,7 @@ class JavaMethodCompiler extends MethodVisitor {
         // initialize here
         this.script = script;
         this.code = code;
-        this.isNotStatic = isStatic;
+        this.isNotStatic = isNotStatic;
     }
 
     /**
@@ -212,6 +212,10 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // compute owner class
         Class ownerClass = convert(owner);
+
+        // current processing script depends on the owner class
+        script.require(ownerClass);
+
         Translator translator = TranslatorManager.getTranslator(ownerClass);
 
         switch (opcode) {
@@ -224,11 +228,11 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case PUTSTATIC:
-            current.addExpression(isNotStatic ? Javascript.computeClassName(ownerClass) : "this", ".", name, "=", current.remove(0));
+            current.addExpression(Javascript.computeClassName(ownerClass), ".", Javascript.computeFieldName(ownerClass, name), "=", current.remove(0));
             break;
 
         case GETSTATIC:
-            current.addOperand(translator.translateStaticField(ownerClass, name, isNotStatic));
+            current.addOperand(translator.translateStaticField(ownerClass, name));
             break;
         }
     }
