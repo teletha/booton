@@ -365,9 +365,6 @@ public class Javascript {
             }
         } else {
             // method
-            if (name.equals("handler")) {
-                throw new Error();
-            }
             return mung(order(script.methods, name.hashCode() ^ description.hashCode()), false);
         }
     }

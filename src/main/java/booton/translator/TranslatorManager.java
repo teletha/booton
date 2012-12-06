@@ -309,8 +309,7 @@ class TranslatorManager implements ClassListener<JavascriptNative> {
          * {@inheritDoc}
          */
         @Override
-        String translateMethod(Class owner, String name, String description, Class[] types, List<Operand> context) {
-            System.out.println(name);
+        protected String translateMethod(Class owner, String name, String description, Class[] types, List<Operand> context) {
             switch (name) {
             case "equals":
                 return context.get(0) + ".equals(" + context.get(1) + ")";
