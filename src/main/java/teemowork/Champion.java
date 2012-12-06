@@ -10,9 +10,8 @@
 package teemowork;
 
 import static booton.translator.web.WebSupport.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import booton.translator.web.JQuery.Event;
+import booton.translator.web.JQuery.EventListener;
 
 /**
  * @version 2012/11/27 18:19:08
@@ -70,9 +69,18 @@ public class Champion {
         System.out.println(champion.equals(champion));
         System.out.println(new Champion("Teemo", 0, 0).equals(champion));
 
-        List<Champion> list = new ArrayList();
-        list.add(champion);
-        System.out.println(list.get(0));
+        $("p").click(new EventListener() {
+
+            @Override
+            public void handler(Event event) {
+                System.out.println(event);
+                System.out.println(event.target);
+            }
+        });
+
+        // List<Champion> list = new ArrayList();
+        // list.add(champion);
+        // System.out.println(list.get(0));
         //
         // HashMap<String, Champion> map = new HashMap();
         // map.put("test", champion);

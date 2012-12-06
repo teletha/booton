@@ -9,17 +9,15 @@
  */
 package booton.translator.web;
 
-import kiss.I;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import booton.translator.Translatable;
+import booton.translator.JavascriptNative;
 
 /**
- * @version 2012/11/29 9:56:55
+ * @version 2012/12/06 14:22:06
  */
-public class WebSupport implements Translatable {
+public class WebSupport implements JavascriptNative {
 
     /** The root document. */
     public static Document document;
@@ -32,9 +30,7 @@ public class WebSupport implements Translatable {
      * @param expression
      * @return
      */
-    public static JQuery $(String expression) {
-        return I.make(JQuery.class);
-    }
+    public static native JQuery $(String expression);
 
     /**
      * <p>
@@ -44,7 +40,5 @@ public class WebSupport implements Translatable {
      * @param expression
      * @return
      */
-    public static JQuery $(Element element) {
-        return I.make(JQuery.class);
-    }
+    public static native JQuery $(Element element);
 }
