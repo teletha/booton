@@ -155,7 +155,6 @@ public class FieldTest extends ScriptTester {
      */
     private static class OverrideBase {
 
-        @SuppressWarnings("unused")
         protected int field = 10;
     }
 

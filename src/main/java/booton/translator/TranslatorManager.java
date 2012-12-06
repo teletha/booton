@@ -11,11 +11,12 @@ package booton.translator;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import kiss.ClassListener;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
@@ -25,20 +26,61 @@ import kiss.model.ClassUtil;
 import org.objectweb.asm.Type;
 
 /**
- * @version 2012/12/02 16:11:18
+ * @version 2012/12/06 18:28:56
  */
-@Manageable(lifestyle = Singleton.class)
-class TranslatorManager implements ClassListener<JavascriptNative> {
+class TranslatorManager {
 
-    /** The native classes. */
-    private static final Map<Class, JavascriptNativeClassTranslator> translators = new ConcurrentHashMap();
+    /** The native fields. */
+    private static final Map<Class, Set<String>> nativeFields = new ConcurrentHashMap();
 
+    /** The native methods. */
     private static final Table<Integer, Class> nativeMethods = new Table();
 
-    private static final Table<String, Class> nativeFields = new Table();
-
     static {
-        translators.put(Object.class, new ObjectTranslator());
+        // Object class is built-in native class.
+        for (Method method : Object.class.getMethods()) {
+            nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), Object.class);
+        }
+    }
+
+    /**
+     * <p>
+     * Register the given class as native.
+     * </p>
+     * 
+     * @param nativeClass A target class to register.
+     */
+    private static void register(Class nativeClass) {
+        for (Class type : ClassUtil.getTypes(nativeClass)) {
+            for (Class interfaceType : type.getInterfaces()) {
+                if (interfaceType == JavascriptNative.class) {
+                    // The current class implements it directly.
+                    for (Method method : type.getDeclaredMethods()) {
+                        nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), nativeClass);
+                    }
+
+                    Set<String> set = new HashSet();
+
+                    for (Field field : type.getDeclaredFields()) {
+                        set.add(field.getName());
+                    }
+                    nativeFields.put(type, set);
+                }
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Calcurate fingerprint for the method.
+     * </p>
+     * 
+     * @param name A method name.
+     * @param desciption A method description.
+     * @return
+     */
+    private static Integer hash(String name, String desciption) {
+        return name.hashCode() ^ desciption.hashCode();
     }
 
     /**
@@ -50,7 +92,6 @@ class TranslatorManager implements ClassListener<JavascriptNative> {
      * @return
      */
     static boolean hasTranslator(Class type) {
-
         if (I.find(Translator.class, type) != null) {
             return true;
         }
@@ -74,14 +115,8 @@ class TranslatorManager implements ClassListener<JavascriptNative> {
         }
 
         // javascript native class
-        if (JavascriptNative.class.isAssignableFrom(type)) {
-            translator = translators.get(type);
-
-            if (translator == null) {
-                translator = new JavascriptNativeClassTranslator(type);
-                translators.put(type, (JavascriptNativeClassTranslator) translator);
-            }
-            return translator;
+        if (JavascriptNative.class.isAssignableFrom(type) && !nativeFields.containsKey(type)) {
+            register(type);
         }
 
         // normal translator
@@ -96,7 +131,7 @@ class TranslatorManager implements ClassListener<JavascriptNative> {
      * @param owner A method owner.
      * @param name A method name.
      * @param description A method description.
-     * @return
+     * @return A result.
      */
     static boolean isNativeMethod(Class owner, String name, String description) {
         List<Class> classes = nativeMethods.get(hash(name, description));
@@ -109,30 +144,19 @@ class TranslatorManager implements ClassListener<JavascriptNative> {
         return false;
     }
 
+    /**
+     * <p>
+     * Detect this is native field or not.
+     * </p>
+     * 
+     * @param owner A field owner.
+     * @param name A field name.
+     * @return A result.
+     */
     static boolean isNativeField(Class owner, String name) {
-        List<Class> classes = nativeFields.get(name);
+        Set<String> fields = nativeFields.get(owner);
 
-        for (Class clazz : classes) {
-            if (clazz.isAssignableFrom(owner)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void load(Class clazz) {
-        System.out.println(clazz);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void unload(Class clazz) {
+        return fields != null && fields.contains(name);
     }
 
     /**
@@ -187,53 +211,21 @@ class TranslatorManager implements ClassListener<JavascriptNative> {
         protected String translateStaticField(Class owner, String fieldName, boolean isNotStatic) {
             return (isNotStatic ? Javascript.computeClassName(owner) : "this") + "." + fieldName;
         }
-    }
-
-    /**
-     * @version 2012/12/06 15:54:22
-     */
-    @Manageable(lifestyle = Singleton.class)
-    private static class JavascriptNativeClassTranslator extends GeneralTranslator {
 
         /**
-         * @param type
-         */
-        private JavascriptNativeClassTranslator(Class clazz) {
-            for (Class type : ClassUtil.getTypes(clazz)) {
-                for (Class interfaceType : type.getInterfaces()) {
-                    if (interfaceType == JavascriptNative.class) {
-                        // The current class implements it directly.
-                        for (Method method : type.getDeclaredMethods()) {
-                            nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), clazz);
-                        }
-
-                        for (Field field : type.getDeclaredFields()) {
-                            nativeFields.push(field.getName(), clazz);
-                        }
-                    }
-                }
-            }
-        }
-
-        /**
-         * <p>
-         * Helper method to write method call.
-         * </p>
+         * Helper method to write parameter expression.
          * 
-         * @param name A method name.
-         * @param types A method parameter types.
-         * @param context A current oeprand stack.
-         * @param isStatic Flag.
+         * @param operands
          * @return
          */
-        private static String write(String name, Class[] types, List<Operand> context, boolean isStatic) {
+        private static String writeParameter(List<Operand> operands) {
             StringBuilder builder = new StringBuilder();
-            if (!isStatic) builder.append(context.get(0).toString()).append('.');
-            builder.append(name).append('(');
-            for (int i = 0; i < types.length; i++) {
-                builder.append(context.get(i + 1).cast(types[i]));
+            builder.append('(');
 
-                if (i != types.length - 1) {
+            for (int i = 1; i < operands.size(); i++) {
+                builder.append(operands.get(i));
+
+                if (i + 1 != operands.size()) {
                     builder.append(',');
                 }
             }
@@ -241,87 +233,5 @@ class TranslatorManager implements ClassListener<JavascriptNative> {
 
             return builder.toString();
         }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected String translateConstructor(Class owner, String desc, Class[] types, List<Operand> context) {
-            // append identifier of constructor method
-            context.add(new OperandNumber(Integer.valueOf(Javascript.computeMethodName(owner, "<init>", desc)
-                    .substring(1))));
-
-            return "new " + Javascript.computeClassName(owner) + writeParameter(context);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected String translateSuperMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-            // If this exception will be thrown, it is bug of this program. So we must rethrow the
-            // wrapped error in here.
-            throw new Error();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected String translateStaticField(Class owner, String fieldName, boolean isNotStatic) {
-            return fieldName;
-        }
-    }
-
-    /**
-     * @version 2012/12/06 15:54:18
-     */
-    private static class ObjectTranslator extends JavascriptNativeClassTranslator {
-
-        /**
-         * 
-         */
-        private ObjectTranslator() {
-            super(Object.class);
-
-            for (Method method : Object.class.getMethods()) {
-                nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), Object.class);
-            }
-        }
-    }
-
-    /**
-     * <p>
-     * Calcurate fingerprint for the method.
-     * </p>
-     * 
-     * @param name A method name.
-     * @param desciption A method description.
-     * @return
-     */
-    private static Integer hash(String name, String desciption) {
-        return name.hashCode() ^ desciption.hashCode();
-    }
-
-    /**
-     * Helper method to write parameter expression.
-     * 
-     * @param operands
-     * @return
-     */
-    private static String writeParameter(List<Operand> operands) {
-        StringBuilder builder = new StringBuilder();
-        builder.append('(');
-
-        for (int i = 1; i < operands.size(); i++) {
-            builder.append(operands.get(i));
-
-            if (i + 1 != operands.size()) {
-                builder.append(',');
-            }
-        }
-        builder.append(')');
-
-        return builder.toString();
     }
 }
