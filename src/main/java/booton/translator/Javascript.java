@@ -31,7 +31,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import kiss.I;
-import kiss.model.ClassUtil;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
@@ -85,7 +84,7 @@ public class Javascript {
     // initialization
     static {
         // Load Booton module
-        I.load(ClassUtil.getArchive(Javascript.class));
+        I.load(Javascript.class, true);
 
         // Allocate characters
         for (int i = 0; i < 16; i++) {
@@ -350,6 +349,10 @@ public class Javascript {
      * @return An identified class name for ECMAScript.
      */
     public static final String computeMethodName(Class owner, String name, String description) {
+        if (TranslatorManager.isNative(owner, name, description)) {
+            return name;
+        }
+
         Javascript script = getScript(owner);
 
         if (name.charAt(0) == '<') {
@@ -362,8 +365,8 @@ public class Javascript {
             }
         } else {
             // method
-            if (TranslatorManager.isNative(owner, name, description)) {
-                return name;
+            if (name.equals("handler")) {
+                throw new Error();
             }
             return mung(order(script.methods, name.hashCode() ^ description.hashCode()), false);
         }

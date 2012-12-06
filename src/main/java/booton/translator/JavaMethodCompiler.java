@@ -89,7 +89,7 @@ class JavaMethodCompiler extends MethodVisitor {
         super(ASM4);
 
         original = methodName;
-        // The current processing method is constructor, we must use "init" name for booton.js.
+        // The current processing method is constructor, we must use "init" name for boot.js.
         methodName = Javascript.computeMethodName(script.source, methodName, desc);
 
         // The current processing method is static (class method), we must mark it as static.

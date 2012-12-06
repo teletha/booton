@@ -11,13 +11,12 @@ package booton.translator.web;
 
 import org.w3c.dom.Element;
 
-import booton.translator.JSNative;
-import booton.translator.Translatable;
+import booton.translator.JavascriptNative;
 
 /**
  * @version 2012/12/02 12:49:38
  */
-public interface JQuery extends Iterable<Element>, Translatable {
+public abstract class JQuery implements Iterable<Element>, JavascriptNative {
 
     /**
      * <p>
@@ -28,7 +27,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      *            add to the set of matched elements.
      * @return
      */
-    public JQuery add(String selector);
+    public native JQuery add(String selector);
 
     /**
      * <p>
@@ -38,7 +37,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * @param selector An existing jQuery object to add to the set of matched elements.
      * @return
      */
-    public JQuery add(JQuery other);
+    public native JQuery add(JQuery other);
 
     /**
      * <p>
@@ -49,7 +48,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      *            element.
      * @return
      */
-    public JQuery addClass(String classNames);
+    public native JQuery addClass(String classNames);
 
     /**
      * <p>
@@ -61,7 +60,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      *            the set of matched elements.
      * @return
      */
-    public JQuery after(String contents);
+    public native JQuery after(String contents);
 
     /**
      * <p>
@@ -73,7 +72,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      *            the set of matched elements.
      * @return
      */
-    public JQuery after(JQuery contents);
+    public native JQuery after(JQuery contents);
 
     /**
      * <p>
@@ -82,7 +81,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * 
      * @return
      */
-    public JQuery andSelf();
+    public native JQuery andSelf();
 
     /**
      * <p>
@@ -94,7 +93,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      *            element in the set of matched elements.
      * @return
      */
-    public JQuery append(String contents);
+    public native JQuery append(String contents);
 
     /**
      * <p>
@@ -106,7 +105,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      *            element in the set of matched elements.
      * @return
      */
-    public JQuery append(JQuery contents);
+    public native JQuery append(JQuery contents);
 
     /**
      * <p>
@@ -117,7 +116,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      *            will be inserted at the end of the element(s) specified by this parameter.
      * @return
      */
-    public JQuery appendTo(String target);
+    public native JQuery appendTo(String target);
 
     /**
      * <p>
@@ -128,7 +127,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      *            will be inserted at the end of the element(s) specified by this parameter.
      * @return
      */
-    public JQuery appendTo(JQuery target);
+    public native JQuery appendTo(JQuery target);
 
     /**
      * <p>
@@ -138,7 +137,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * @param name The name of the attribute to get.
      * @return
      */
-    public String attr(String name);
+    public native String attr(String name);
 
     /**
      * <p>
@@ -149,7 +148,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * @param value A value to set for the attribute.
      * @return
      */
-    public JQuery attr(String name, String value);
+    public native JQuery attr(String name, String value);
 
     /**
      * <p>
@@ -161,7 +160,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      *            the set of matched elements.
      * @return
      */
-    public JQuery before(String contents);
+    public native JQuery before(String contents);
 
     /**
      * <p>
@@ -173,7 +172,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      *            the set of matched elements.
      * @return
      */
-    public JQuery before(JQuery contents);
+    public native JQuery before(JQuery contents);
 
     /**
      * <p>
@@ -183,7 +182,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * 
      * @return
      */
-    public JQuery children();
+    public native JQuery children();
 
     /**
      * <p>
@@ -194,7 +193,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * @param A string containing a selector expression to match elements against.
      * @return
      */
-    public JQuery children(String selector);
+    public native JQuery children(String selector);
 
     /**
      * <p>
@@ -203,7 +202,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * 
      * @return
      */
-    public JQuery click();
+    public native JQuery click();
 
     /**
      * <p>
@@ -213,7 +212,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * @param listener A function to execute each time the event is triggered.
      * @return
      */
-    public JQuery click(EventListener listener);
+    public native JQuery click(EventListener listener);
 
     /**
      * <p>
@@ -224,7 +223,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * @param selector A string containing a selector expression to match elements against.
      * @return
      */
-    public JQuery closest(String selector);
+    public native JQuery closest(String selector);
 
     /**
      * <p>
@@ -234,7 +233,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * @param property A CSS property.
      * @return
      */
-    public String css(String property);
+    public native String css(String property);
 
     /**
      * <p>
@@ -245,7 +244,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * @param value A value to set for the property.
      * @return
      */
-    public JQuery css(String property, String value);
+    public native JQuery css(String property, String value);
 
     /**
      * <p>
@@ -254,7 +253,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * 
      * @return
      */
-    public JQuery dblclick();
+    public native JQuery dblclick();
 
     /**
      * <p>
@@ -265,7 +264,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * @param listener A function to execute each time the event is triggered.
      * @return
      */
-    public JQuery dblclick(EventListener listener);
+    public native JQuery dblclick(EventListener listener);
 
     /**
      * <p>
@@ -274,7 +273,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * 
      * @return
      */
-    public JQuery empty();
+    public native JQuery empty();
 
     /**
      * <p>
@@ -284,7 +283,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * 
      * @return
      */
-    public JQuery next();
+    public native JQuery next();
 
     /**
      * <p>
@@ -295,7 +294,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * @param selector A string containing a selector expression to match elements against.
      * @return
      */
-    public JQuery next(String selector);
+    public native JQuery next(String selector);
 
     /**
      * <p>
@@ -308,7 +307,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      *            false.
      * @return
      */
-    public JQuery off(String eventType, EventListener listener);
+    public native JQuery off(String eventType, EventListener listener);
 
     /**
      * <p>
@@ -321,7 +320,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      *            allowed as a shorthand for a function that simply does return false.
      * @return
      */
-    public JQuery on(String eventType, EventListener listener);
+    public native JQuery on(String eventType, EventListener listener);
 
     /**
      * <p>
@@ -331,7 +330,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * 
      * @return
      */
-    public JQuery parent();
+    public native JQuery parent();
 
     /**
      * <p>
@@ -342,7 +341,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * @param selector A string containing a selector expression to match elements against.
      * @return
      */
-    public JQuery parent(String selector);
+    public native JQuery parent(String selector);
 
     /**
      * <p>
@@ -352,7 +351,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * 
      * @return
      */
-    public String text();
+    public native String text();
 
     /**
      * <p>
@@ -362,13 +361,12 @@ public interface JQuery extends Iterable<Element>, Translatable {
      * @param text
      * @return
      */
-    public JQuery text(String text);
+    public native JQuery text(String text);
 
     /**
      * @version 2012/12/02 23:08:01
      */
-    @JSNative
-    public static interface EventListener {
+    public static interface EventListener extends JavascriptNative {
 
         /**
          * <p>
@@ -384,7 +382,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
     /**
      * @version 2012/12/02 23:06:56
      */
-    public static class Event implements Translatable {
+    public static class Event implements JavascriptNative {
 
         /** The DOM element that initiated the event. */
         public Element target;
