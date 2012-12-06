@@ -59,15 +59,15 @@ public class Champion {
 
     public static void jsmain() {
         Champion champion = new Champion("Teemo", 100, 10);
+        Object some = champion;
 
         System.out.println(champion.name + "  " + champion.getHealthAtLvele(7));
         System.out.println($("p").after("<p/>").next().text("test").attr("class", "new").css("color", "red"));
 
-        System.out.println(champion);
         System.out.println(champion.hashCode());
         System.out.println(champion.hashCode());
-        System.out.println(champion.equals(champion));
-        System.out.println(new Champion("Teemo", 0, 0).equals(champion));
+        System.out.println(some.equals(champion));
+        System.out.println(new Champion("Teemso", 0, 0).equals(champion));
 
         $("p").click(new EventListener() {
 

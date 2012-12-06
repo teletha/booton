@@ -349,7 +349,7 @@ public class Javascript {
      * @return An identified class name for ECMAScript.
      */
     public static final String computeMethodName(Class owner, String name, String description) {
-        if (TranslatorManager.isNative(owner, name, description)) {
+        if (TranslatorManager.isNativeMethod(owner, name, description)) {
             return name;
         }
 
@@ -379,6 +379,10 @@ public class Javascript {
      * @return An identified field name for ECMAScript.
      */
     public static final String computeFieldName(Class owner, String fieldName) {
+        if (TranslatorManager.isNativeField(owner, fieldName)) {
+            return fieldName;
+        }
+
         try {
             owner.getDeclaredField(fieldName);
 
