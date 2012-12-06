@@ -1,0 +1,47 @@
+/*
+ * Copyright (C) 2012 Nameless Production Committee
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *          http://opensource.org/licenses/mit-license.php
+ */
+package booton.translator.web;
+
+import org.w3c.dom.Element;
+
+import booton.translator.Translator;
+
+/**
+ * @version 2012/12/06 16:19:28
+ */
+public class WebSupportTranslator extends Translator<WebSupport> {
+
+    /** The root document. */
+    public String document = "document";
+
+    /**
+     * <p>
+     * Provide JQuery support.
+     * </p>
+     * 
+     * @param expression
+     * @return
+     */
+    public String $(String expression) {
+        return "$(" + param(0) + ")";
+    }
+
+    /**
+     * <p>
+     * Provide JQuery support.
+     * </p>
+     * 
+     * @param expression
+     * @return
+     */
+    public String $(Element element) {
+        return "$(" + param(0) + ")";
+    }
+}
