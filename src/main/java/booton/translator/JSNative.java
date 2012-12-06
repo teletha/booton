@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
  * @version 2012/12/03 1:21:48
  */
 @Documented
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JSNative {
 }

@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+import kiss.Extensible;
 import kiss.Manageable;
 import kiss.Singleton;
 
@@ -27,7 +28,7 @@ import org.objectweb.asm.Type;
  * @version 2012/12/02 16:41:59
  */
 @Manageable(lifestyle = Singleton.class)
-public class Translator<T> {
+public class Translator<T> implements Extensible {
 
     /** The quote literal. */
     protected static final String Q = "\"";

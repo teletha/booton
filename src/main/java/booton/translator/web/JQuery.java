@@ -367,6 +367,7 @@ public interface JQuery extends Iterable<Element>, Translatable {
     /**
      * @version 2012/12/02 23:08:01
      */
+    @JSNative
     public static interface EventListener {
 
         /**
@@ -377,7 +378,6 @@ public interface JQuery extends Iterable<Element>, Translatable {
          * @param event
          * @return
          */
-        @JSNative
         void handler(Event event);
     }
 

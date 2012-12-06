@@ -12,11 +12,8 @@ package booton.translator;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
 
-import kiss.ClassListener;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
@@ -31,10 +28,7 @@ import booton.translator.web.JQuery.EventListener;
  * @version 2012/12/02 16:11:18
  */
 @Manageable(lifestyle = Singleton.class)
-class TranslatorManager implements ClassListener<Translator> {
-
-    /** The special translators. */
-    private static final Map<Class, Translator> translators = new ConcurrentHashMap();
+class TranslatorManager {
 
     /** The native methods. */
     private static final Table<Integer, Class> natives = new Table();
@@ -56,7 +50,7 @@ class TranslatorManager implements ClassListener<Translator> {
             return true;
         }
 
-        if (translators.containsKey(type)) {
+        if (I.find(Translator.class, type) != null) {
             return true;
         }
         return false;
@@ -79,7 +73,7 @@ class TranslatorManager implements ClassListener<Translator> {
             return I.make(TranslatableTranslator.class);
         }
 
-        Translator translator = translators.get(type);
+        Translator translator = I.find(Translator.class, type);
 
         if (translator == null) {
             return I.make(GeneralTranslator.class);
@@ -129,24 +123,6 @@ class TranslatorManager implements ClassListener<Translator> {
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void load(Class<Translator> clazz) {
-        if (clazz != Translator.class) {
-            translators.put(ClassUtil.getParameter(clazz, Translator.class)[0], I.make(clazz));
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void unload(Class<Translator> clazz) {
-        if (clazz != Translator.class) {
-            translators.remove(ClassUtil.getParameter(clazz, Translator.class)[0]);
         }
     }
 
