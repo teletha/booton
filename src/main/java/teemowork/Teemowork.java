@@ -10,6 +10,7 @@
 package teemowork;
 
 import teemowork.model.Item;
+import teemowork.model.Patch;
 
 /**
  * @version 2012/12/06 23:20:54
@@ -17,6 +18,8 @@ import teemowork.model.Item;
 public class Teemowork {
 
     public static void jsmain() {
-        System.out.println(Item.ShardOfTrueIce.coat);
+        for (Item item : Patch.latest.getItems()) {
+            System.out.println(item);
+        }
     }
 }

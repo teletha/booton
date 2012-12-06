@@ -19,30 +19,27 @@ public class Item {
     private static JsArray<Item> items = new JsArray();
 
     /** The item. */
-    public static final Item ShardOfTrueIce = new Item("Shard of True Ice", 1700);
+    public static final Item ShardOfTrueIce = new Item("Shard of True Ice");
 
-    static {
-        // items.push(new Item("Shard of True Ice", 1700));
-        // items.push(new Item("Liandry's Torment", 2900));
-        // items.push(new Item("Mikael's Crucible", 2200));
+    /** The item. */
+    public static final Item LiandrysTorment = new Item("Liandry's Torment");
 
-    }
+    /** The item. */
+    public static final Item HauntingGuise = new Item("Haunting Guise");
 
     /** The name. */
     public final String name;
 
-    /** The total cost. */
-    public final int coat;
+    /** The status. */
+    public final JsArray<Status> history = new JsArray();
 
-    /** The ability power. */
-    private int ap = 0;
+    public int ap;
 
     /**
      * @param name
      */
-    private Item(String name, int cost) {
+    private Item(String name) {
         this.name = name;
-        this.coat = cost;
     }
 
     /**
@@ -53,7 +50,21 @@ public class Item {
      * @param value
      * @return
      */
-    private Item ap(int ap) {
+    Item ap(int ap) {
+        this.ap = ap;
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * Set magic resist penetration.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    Item mrpen(int value) {
         this.ap = ap;
 
         return this;
@@ -85,5 +96,12 @@ public class Item {
      */
     public static JsArray<Item> getAll() {
         return items;
+    }
+
+    /**
+     * @version 2012/12/07 1:42:06
+     */
+    private static class Status {
+
     }
 }
