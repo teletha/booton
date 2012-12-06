@@ -67,7 +67,7 @@ public class Champion {
         System.out.println(champion.hashCode());
         System.out.println(champion.hashCode());
         System.out.println(some.equals(champion));
-        System.out.println(new Champion("Teemso", 0, 0).equals(champion));
+        System.out.println(new Champion("Teemo", 0, 0).equals(champion));
 
         $("p").click(new EventListener() {
 

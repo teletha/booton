@@ -450,28 +450,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
             current.addExpression("return ", current.remove(0));
 
-            // if (current.stack.peekFirst() instanceof OperandCondition) {
-            // Operand operand = current.stack.peekFirst();
-            // System.out.println("@@@@@@");
-            // NodeDebugger.dump(nodes);
-            //
-            // System.out.println("condition ");
-            // Node node = new Node(counter++);
-            // node.incoming.addAll(current.incoming);
-            // node.outgoing.add(current);
-            // node.outgoing.addAll(current.outgoing);
-            // node.stack.add(operand.invert());
-            // current.stack.pollFirst();
-            //
-            // Node out = current.outgoing.get(0);
-            // current.incoming.clear();
-            // current.incoming.add(node);
-            // current.outgoing.clear();
-            // out.incoming.remove(current);
-            // out.incoming.add(node);
-            // nodes.add(nodes.indexOf(current), node);
-            // }
-
             // disconnect the next appearing node from the current node
             current = null;
             break;
