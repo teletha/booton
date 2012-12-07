@@ -508,6 +508,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // throw
         case ATHROW:
+            NodeDebugger.dump(nodes);
             current.addExpression("throw ", current.remove(0));
 
             // disconnect the next appearing node from the current node
@@ -569,6 +570,16 @@ class JavaMethodCompiler extends MethodVisitor {
 
         case IFNE: // != 0
             current.stack.add(new OperandCondition(current.remove(0), NE, new OperandNumber(0), node));
+            connect(label);
+            break;
+
+        case IFGE: // => 0
+            current.stack.add(new OperandCondition(current.remove(0), GE, new OperandNumber(0), node));
+            connect(label);
+            break;
+
+        case IFLE: // <= 0
+            current.stack.add(new OperandCondition(current.remove(0), LE, new OperandNumber(0), node));
             connect(label);
             break;
 
