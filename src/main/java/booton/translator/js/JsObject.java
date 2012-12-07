@@ -14,7 +14,11 @@ package booton.translator.js;
  */
 public class JsObject {
 
-    // public boolean equals(Object other) {
-    // return this == other;
-    // }
+    public Object get(Object key) {
+        return null;
+    }
+
+    public void set(Object key, Object value) {
+
+    }
 }

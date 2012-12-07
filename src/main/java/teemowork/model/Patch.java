@@ -9,8 +9,8 @@
  */
 package teemowork.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @version 2012/12/06 23:07:37
@@ -18,19 +18,20 @@ import java.util.List;
 public class Patch {
 
     /** The patch. */
-    public static Patch P1510 = new Patch(1510, 2012, 11, 13, "End of Season 2", null);
+    public static Patch P0000 = new Patch(1510, 2012, 11, 13, "Initial", null);
 
     static {
-        P1510.update(Item.HauntingGuise).mrpen(20);
+        P0000.update(Item.RubyCrystal).cost(475).health(180);
+        P0000.update(Item.HauntingGuise).health(200).ap(25);
     }
 
     /** The patch. */
-    public static Patch P1520 = new Patch(1520, 2012, 12, 03, "Preseason 3", P1510);
+    public static Patch P1520 = new Patch(1520, 2012, 12, 03, "Preseason 3", P0000);
 
     static {
         P1520.update(Item.ShardOfTrueIce);
         P1520.update(Item.LiandrysTorment);
-        P1520.update(Item.HauntingGuise).mrpen(15);
+        P1520.update(Item.HauntingGuise);
     }
 
     /** The latest patch. */
@@ -46,7 +47,7 @@ public class Patch {
     private final Patch previous;
 
     /** The item list. */
-    private final List<Item> items = new ArrayList();
+    private final Map<String, Item> items = new HashMap();
 
     /**
      * Create patch information.
@@ -62,24 +63,41 @@ public class Patch {
      * Update item.
      * </p>
      * 
-     * @param item
+     * @param name
      */
-    private Item update(Item item) {
-        items.add(item);
+    private Item update(String name) {
+        Item item = findItem(name);
+
+        if (item == null) {
+            item = new Item(name);
+        } else {
+            item = item.copy();
+        }
+
+        items.put(name, item);
+
         return item;
     }
 
     /**
-     * @version 2012/12/06 23:17:43
-     */
-    private static class ItemUpdate {
-
-    }
-
-    /**
+     * <p>
+     * Helper method to find item by name.
+     * </p>
+     * 
+     * @param name
      * @return
      */
-    public List<Item> getItems() {
-        return items;
+    public Item findItem(String name) {
+        Patch patch = this;
+
+        while (patch != null) {
+            Item item = patch.items.get(name);
+
+            if (item != null) {
+                return item;
+            }
+            patch = patch.previous;
+        }
+        return null;
     }
 }
