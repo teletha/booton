@@ -93,6 +93,15 @@ class JavaClassCompiler extends ClassVisitor {
      *      java.lang.String, java.lang.String[])
      */
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+        // ignore serializable related methods
+        if (name.equals("writeObject") && desc.equals("(Ljava/io/ObjectOutputStream;)V")) {
+            return null;
+        }
+
+        if (name.equals("readObject") && desc.equals("(Ljava/io/ObjectInputStream;)V")) {
+            return null;
+        }
+
         // ignore compiler generated method (e.g. generics)
         if ((access & (ACC_NATIVE | ACC_ABSTRACT)) == 0) {
             if (isFirst) {

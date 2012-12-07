@@ -142,7 +142,7 @@ public class Javascript {
     public void require(Class dependency) {
         dependency = switchClass(dependency);
 
-        if (!TranslatorManager.hasTranslator(dependency)) {
+        if (!TranslatorManager.hasTranslator(dependency) && !dependency.isArray()) {
             dependencies.add(dependency);
         }
     }
@@ -316,11 +316,7 @@ public class Javascript {
         if (Throwable.class.isAssignableFrom(type)) {
             return JsError.class;
         }
-
-        // if (List.class.isAssignableFrom(type)) {
-        // return JsList.class;
-        // }
-        return type;
+        return TranslatorManager.substitute(type);
     }
 
     /**
@@ -339,7 +335,6 @@ public class Javascript {
         } else {
             return "boot." + mung(script.id, true);
         }
-
     }
 
     /**

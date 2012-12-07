@@ -9,10 +9,13 @@
  */
 package booton.translator.js;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+
+import booton.translator.Substitutable;
 
 /**
  * <p>
@@ -21,7 +24,7 @@ import java.util.ListIterator;
  * 
  * @version 2012/12/07 9:25:50
  */
-public class JsList<T> implements List<T> {
+public class JsList<T> implements List<T>, Substitutable<ArrayList> {
 
     /** The actual container. */
     private final JsArray<T> array = new JsArray();

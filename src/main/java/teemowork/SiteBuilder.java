@@ -25,39 +25,43 @@ import booton.translator.Javascript;
 public class SiteBuilder {
 
     public static void main(String[] args) throws Exception {
-        Path htmlPath = I.locate("test.html");
-        Path jsPath = I.locate("test.js");
+        try {
+            Path htmlPath = I.locate("test.html");
+            Path jsPath = I.locate("test.js");
 
-        // JS builder
-        Javascript js = Javascript.getScript(Teemowork.class);
-        js.writeTo(jsPath);
+            // JS builder
+            Javascript js = Javascript.getScript(Teemowork.class);
+            js.writeTo(jsPath);
 
-        StringBuilder builder = new StringBuilder();
-        builder.append("try {");
-        builder.append(Javascript.computeClassName(Teemowork.class));
-        builder.append(".");
-        builder.append(Javascript.computeMethodName(Teemowork.class, "jsmain", Type.getMethodDescriptor(Champion.class.getMethod("jsmain"))));
-        builder.append("(");
-        builder.append(");");
-        builder.append("} catch(e) {console.log(e)}");
+            StringBuilder builder = new StringBuilder();
+            builder.append("try {");
+            builder.append(Javascript.computeClassName(Teemowork.class));
+            builder.append(".");
+            builder.append(Javascript.computeMethodName(Teemowork.class, "jsmain", Type.getMethodDescriptor(Champion.class.getMethod("jsmain"))));
+            builder.append("(");
+            builder.append(");");
+            builder.append("} catch(e) {console.log(e)}");
 
-        XML html = I.xml("html");
-        XML head = html.child("head");
-        head.child("meta").attr("charset", "utf-8");
+            XML html = I.xml("html");
+            XML head = html.child("head");
+            head.child("meta").attr("charset", "utf-8");
 
-        head.child("script")
-                .attr("type", "text/javascript")
-                .attr("src", "https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js")
-                .text("/* */");
-        head.child("script").attr("type", "text/javascript").attr("src", "boot.js").text("/* */");
-        head.child("script").attr("type", "text/javascript").attr("src", "test.js").text("/* */");
+            head.child("script")
+                    .attr("type", "text/javascript")
+                    .attr("src", "https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js")
+                    .text("/* */");
+            head.child("script").attr("type", "text/javascript").attr("src", "boot.js").text("/* */");
+            head.child("script").attr("type", "text/javascript").attr("src", "test.js").text("/* */");
 
-        XML body = html.child("body");
-        body.child("p").text("test0");
-        body.child("p").text("test1");
+            XML body = html.child("body");
+            body.child("p").text("test0");
+            body.child("p").text("test1");
 
-        html.child("script").attr("type", "text/javascript").text(builder.toString());
+            html.child("script").attr("type", "text/javascript").text(builder.toString());
 
-        html.to(Files.newBufferedWriter(htmlPath, I.$encoding));
+            html.to(Files.newBufferedWriter(htmlPath, I.$encoding));
+        } catch (Throwable e) {
+            e.printStackTrace(System.out);
+        }
     }
 }
