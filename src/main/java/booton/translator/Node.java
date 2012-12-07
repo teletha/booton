@@ -143,22 +143,11 @@ class Node {
      * @param separator
      */
     final void join(String separator) {
-        // calculate index
-        int index = stack.size() - 2;
-
-        // retrieve it
-        Operand operand = stack.get(index);
-
-        // copy operand if needed
-        if (operand.duplicated) {
-            operand.duplicated = false;
-
-            // duplicate pointer
-            stack.add(index - 1 == -1 ? 0 : index - 1, operand);
-        }
+        Operand second = remove(0);
+        Operand first = remove(0);
 
         // join latest operands
-        stack.add(new OperandExpression(remove(1) + separator + remove(0)));
+        stack.add(new OperandExpression(first + separator + second));
     }
 
     /**

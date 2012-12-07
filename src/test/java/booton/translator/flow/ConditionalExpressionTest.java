@@ -7,17 +7,21 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator;
+package booton.translator.flow;
 
 import org.junit.Test;
 
+import booton.translator.ScriptTester;
+import booton.translator.Scriptable;
+
 /**
- * @version 2012/12/07 12:34:26
+ * @version 2012/12/07 14:54:26
  */
-public class WrongTest extends ScriptTester {
+@SuppressWarnings("unused")
+public class ConditionalExpressionTest extends ScriptTester {
 
     @Test
-    public void testname() throws Exception {
+    public void withExpression() throws Exception {
         test(new Scriptable() {
 
             public int act(String value) {
