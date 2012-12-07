@@ -44,6 +44,10 @@ function boot() {
      */
     equals: function(other) {
       return this == other;
+    },
+
+    toString2: function() {
+      return this.constructor.name + "#" + this.hashCode();
     }
   });
   

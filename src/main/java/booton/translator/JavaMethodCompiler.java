@@ -36,7 +36,7 @@ import org.objectweb.asm.Type;
  * completely, garbage goto code will remain.
  * </p>
  * 
- * @version 2008/11/17 12:54:03
+ * @version 2012/12/07 11:41:58
  */
 class JavaMethodCompiler extends MethodVisitor {
 

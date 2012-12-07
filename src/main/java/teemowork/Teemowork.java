@@ -9,6 +9,8 @@
  */
 package teemowork;
 
+import java.util.List;
+
 import teemowork.model.Item;
 import teemowork.model.Patch;
 
@@ -18,11 +20,12 @@ import teemowork.model.Patch;
 public class Teemowork {
 
     public static void jsmain() {
-        System.out.println(Patch.latest.getItems());
-        System.out.println(Patch.latest.getItems().remove(0));
+        List<Item> items = Patch.Latest.getItems();
 
-        System.out.println("Removed");
-        for (Item item : Patch.latest.getItems()) {
+        System.out.println(items);
+        System.out.println("Remove  " + items.remove(0));
+
+        for (Item item : Patch.Latest.getItems()) {
             System.out.println(item);
         }
     }
