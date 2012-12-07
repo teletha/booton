@@ -508,7 +508,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // throw
         case ATHROW:
-            NodeDebugger.dump(nodes);
             current.addExpression("throw ", current.remove(0));
 
             // disconnect the next appearing node from the current node
