@@ -25,7 +25,7 @@ public class Teemowork {
         System.out.println(items);
         System.out.println("Remove  " + items.remove(0));
 
-        for (Item item : Patch.Latest.getItems()) {
+        for (Item item : items) {
             System.out.println(item);
         }
     }

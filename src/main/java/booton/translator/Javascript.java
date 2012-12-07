@@ -36,7 +36,6 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 
 import booton.translator.js.JsError;
-import booton.translator.js.JsList;
 import booton.translator.js.JsObject;
 
 /**
@@ -318,9 +317,9 @@ public class Javascript {
             return JsError.class;
         }
 
-        if (List.class.isAssignableFrom(type)) {
-            return JsList.class;
-        }
+        // if (List.class.isAssignableFrom(type)) {
+        // return JsList.class;
+        // }
         return type;
     }
 

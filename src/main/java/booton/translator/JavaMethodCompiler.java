@@ -349,6 +349,7 @@ class JavaMethodCompiler extends MethodVisitor {
         case LADD:
         case FADD:
         case DADD:
+            NodeDebugger.dump(nodes);
             current.join("+");
             break;
 
