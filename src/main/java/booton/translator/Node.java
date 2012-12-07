@@ -143,11 +143,7 @@ class Node {
      * @param separator
      */
     final void join(String separator) {
-        Operand second = remove(0);
-        Operand first = remove(0);
-
-        // join latest operands
-        stack.add(new OperandExpression(first + separator + second));
+        stack.add(new OperandExpression(remove(1) + separator + remove(0)));
     }
 
     /**
@@ -264,7 +260,7 @@ class Node {
                         break;
                     } else {
                         if (candidate == null) {
-
+                            return null;
                         }
                         candidate = candidate.getDominator();
                     }

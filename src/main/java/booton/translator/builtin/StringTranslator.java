@@ -47,6 +47,10 @@ public class StringTranslator extends Translator<String> {
         return that + ".lastIndexOf(" + param(0) + ")";
     }
 
+    public String lastIndexOf(int value) {
+        return that + ".lastIndexOf(" + param(0) + ")";
+    }
+
     public String startsWith(String value) {
         return that + ".startsWith(" + param(0) + ")";
     }
@@ -65,6 +69,10 @@ public class StringTranslator extends Translator<String> {
 
     public String toUpperCase() {
         return that + ".toUpperCase()";
+    }
+
+    public String intern() {
+        return that;
     }
 
     public String trim() {

@@ -22,6 +22,7 @@ import kiss.Manageable;
 import kiss.Singleton;
 import kiss.Table;
 import kiss.model.ClassUtil;
+import kiss.model.Model;
 
 import org.objectweb.asm.Type;
 
@@ -142,6 +143,24 @@ class TranslatorManager {
             }
         }
         return false;
+    }
+
+    /**
+     * <p>
+     * Substitute class for script.
+     * </p>
+     * 
+     * @param type
+     * @return
+     */
+    static Class substitute(Class type) {
+        Substitutable substitutable = I.find(Substitutable.class, type);
+
+        if (substitutable == null) {
+            return type;
+        } else {
+            return Model.load(substitutable.getClass()).type;
+        }
     }
 
     /**

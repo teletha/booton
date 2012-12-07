@@ -89,23 +89,28 @@ public class TranslationError extends Error {
                 for (int j = 0; j < dimensions; j++) {
                     builder.append("[]");
                 }
+                builder.append(" param").append(i);
             }
 
             // add separator
             if (i < (parameterTypes.length - 1)) builder.append(',');
         }
         builder.append(") {\r\n");
-        builder.append("\t\treturn that + \".").append(methodName).append("(\"");
+        builder.append("\t\treturn that + \".").append(methodName).append("(");
         for (int i = 0; i < parameterTypes.length; i++) {
+            if (i == 0) {
+                builder.append("\"");
+            }
+
             builder.append(" + param(").append(i).append(")");
 
             if (i == parameterTypes.length - 1) {
-                builder.append(" + ");
+                builder.append(" + \"");
             } else {
                 builder.append(" + \",\"");
             }
         }
-        builder.append("\")\";\r\n");
+        builder.append(")\";\r\n");
         builder.append("\t}\r\n");
 
         // chainalbe API

@@ -37,6 +37,13 @@ public class StringTranslatorForBuilder extends Translator<StringBuilder> {
     }
 
     /**
+     * @see StringBuilder#StringBuilder(int)
+     */
+    public String StringBuilder(int value) {
+        return param(0);
+    }
+
+    /**
      * @see StringBuilder#append(boolean)
      */
     public String append(boolean value) {

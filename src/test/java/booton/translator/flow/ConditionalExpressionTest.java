@@ -29,4 +29,18 @@ public class ConditionalExpressionTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void testname() throws Exception {
+        test(new Scriptable() {
+
+            public boolean act(Object o) {
+                return indexOf(o) >= 0;
+            }
+
+            private int indexOf(Object o) {
+                return 1;
+            }
+        });
+    }
 }
