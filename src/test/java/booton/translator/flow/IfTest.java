@@ -15,7 +15,7 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2012/12/05 13:19:40
+ * @version 2012/12/07 14:52:04
  */
 @SuppressWarnings("unused")
 public class IfTest extends ScriptTester {
@@ -63,36 +63,6 @@ public class IfTest extends ScriptTester {
     }
 
     @Test
-    public void shorthand22() throws Exception {
-        test(new Scriptable() {
-
-            public boolean act(int o) {
-                while (o < 4) {
-                    o = o + 2;
-                    if (o == 2) return true;
-                }
-                return false;
-            }
-        });
-    }
-
-    @Test
-    public void object4() throws Exception {
-        test(new Scriptable() {
-
-            public boolean act(int o) {
-                while (o < 4) {
-                    o = o + 2;
-                    if (o == 2) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
-    }
-
-    @Test
     public void shorthand() throws Exception {
         test(new Scriptable() {
 
@@ -104,24 +74,15 @@ public class IfTest extends ScriptTester {
     }
 
     @Test
-    public void shorthand3() throws Exception {
+    public void shorthandWithExpression() throws Exception {
         test(new Scriptable() {
 
             public boolean act(int o) {
-                return o == 3;
-            }
-        });
-    }
-
-    @Test
-    public void shorthand2() throws Exception {
-        test(new Scriptable() {
-
-            public int act(int o) {
-                if (o == 2) {
-                    return o + 3;
+                while (o < 4) {
+                    o = o + 2;
+                    if (o == 2) return true;
                 }
-                return o;
+                return false;
             }
         });
     }

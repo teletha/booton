@@ -700,7 +700,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 } else if (first == ZERO && second == ONE) {
                     current.addOperand(third.invert());
                 } else {
-                    current.addOperand(third.invert() + "?" + second + ":" + first);
+                    current.addOperand("(" + third.invert() + "?" + second + ":" + first + ")");
                 }
 
                 // resolve recursively
