@@ -9,24 +9,22 @@
  */
 package booton.translator.builtin;
 
-import java.util.HashMap;
-
 import booton.translator.Translator;
 
 /**
  * @version 2012/12/03 19:23:51
  */
-public class HashMapTranslator extends Translator<HashMap> {
+public class HashMapTranslator extends Translator<HashMapTranslator> {
 
     public String HashMap() {
-        return "new Map()";
+        return "{}";
     }
 
     public String put(Object param0, Object param1) {
-        return that + ".set(" + param(0) + "," + param(1) + ")";
+        return that + "[" + param(0) + "]=" + param(1);
     }
 
     public String get(Object param0) {
-        return that + ".get(" + param(0) + ")";
+        return that + "[" + param(0) + "]";
     }
 }

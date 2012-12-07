@@ -7,17 +7,13 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package teemowork;
+package booton.translator.js;
 
-import teemowork.model.Item;
-import teemowork.model.Patch;
+import booton.translator.Translator;
 
 /**
- * @version 2012/12/06 23:20:54
+ * @version 2012/12/08 2:21:22
  */
-public class Teemowork {
+public class JsObjectTranslator extends Translator<JsObject> {
 
-    public static void jsmain() {
-        System.out.println(Patch.Latest.findItem(Item.HauntingGuise));
-    }
 }

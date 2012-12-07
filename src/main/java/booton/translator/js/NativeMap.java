@@ -7,17 +7,15 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package teemowork;
+package booton.translator.js;
 
-import teemowork.model.Item;
-import teemowork.model.Patch;
 
 /**
- * @version 2012/12/06 23:20:54
+ * @version 2012/12/08 2:25:12
  */
-public class Teemowork {
+public class NativeMap<K, V> {
 
-    public static void jsmain() {
-        System.out.println(Patch.Latest.findItem(Item.HauntingGuise));
-    }
+    public native V set(K key, V value);
+
+    public native V get(Object key);
 }
