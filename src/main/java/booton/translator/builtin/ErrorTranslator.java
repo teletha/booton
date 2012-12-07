@@ -20,7 +20,7 @@ import booton.translator.Translator;
 /**
  * @version 2009/08/21 11:40:12
  */
-public class ErrorTranslator extends Translator<Throwable> {
+public class ErrorTranslator extends Translator<ErrorTranslator> {
 
     /**
      * @see Throwable#Throwable()
@@ -48,5 +48,9 @@ public class ErrorTranslator extends Translator<Throwable> {
      */
     public String Throwable(Throwable throwable) {
         return "this.cause=" + param(0);
+    }
+
+    public String Throwable(String param0, Throwable param1, boolean param2, boolean param3) {
+        return that + ".Throwable(" + param(0) + "," + param(1) + "," + param(2) + "," + param(3) + ")";
     }
 }

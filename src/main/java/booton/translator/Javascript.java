@@ -35,6 +35,8 @@ import kiss.I;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 
+import booton.translator.js.JsError;
+import booton.translator.js.JsList;
 import booton.translator.js.JsObject;
 
 /**
@@ -139,6 +141,8 @@ public class Javascript {
      * @param dependency A dependency class.
      */
     public void require(Class dependency) {
+        dependency = switchClass(dependency);
+
         if (!TranslatorManager.hasTranslator(dependency)) {
             dependencies.add(dependency);
         }
@@ -219,7 +223,7 @@ public class Javascript {
                 if (parentClass != null && source != JsObject.class) {
                     Javascript parent = Javascript.getScript(parentClass);
 
-                    if (parent != null) {
+                    if (parent != null && parent.source != JsObject.class) {
                         // compile ahead
                         parent.compile();
 
@@ -289,9 +293,7 @@ public class Javascript {
             return null;
         }
 
-        if (source == Object.class) {
-            source = JsObject.class;
-        }
+        source = switchClass(source);
 
         // check cache
         Javascript script = scripts.get(source);
@@ -305,6 +307,21 @@ public class Javascript {
 
         // API definition
         return script;
+    }
+
+    private static Class switchClass(Class type) {
+        if (type == Object.class) {
+            return JsObject.class;
+        }
+
+        if (Throwable.class.isAssignableFrom(type)) {
+            return JsError.class;
+        }
+
+        if (List.class.isAssignableFrom(type)) {
+            return JsList.class;
+        }
+        return type;
     }
 
     /**

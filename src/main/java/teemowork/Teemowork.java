@@ -18,6 +18,10 @@ import teemowork.model.Patch;
 public class Teemowork {
 
     public static void jsmain() {
+        System.out.println(Patch.latest.getItems());
+        System.out.println(Patch.latest.getItems().remove(0));
+
+        System.out.println("Removed");
         for (Item item : Patch.latest.getItems()) {
             System.out.println(item);
         }

@@ -15,19 +15,18 @@
  */
 package booton.translator.method;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2012/12/01 3:51:13
+ * @version 2012/12/07 10:51:19
  */
+@SuppressWarnings("unused")
 public class ThrowTest extends ScriptTester {
 
     @Test
-    @Ignore
     public void Exception() {
         test(new Scriptable() {
 
@@ -38,7 +37,6 @@ public class ThrowTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void ExceptionWithParam() {
         test(new Scriptable() {
 
@@ -49,7 +47,6 @@ public class ThrowTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void RuntimeException() {
         test(new Scriptable() {
 
@@ -60,7 +57,6 @@ public class ThrowTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void Error() {
         test(new Scriptable() {
 

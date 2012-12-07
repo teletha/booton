@@ -9,14 +9,15 @@
  */
 package teemowork.model;
 
-import booton.translator.js.JsArray;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * @version 2012/12/06 18:41:16
+ * @version 2012/12/07 10:00:23
  */
 public class Item {
 
-    private static JsArray<Item> items = new JsArray();
+    private static List<Item> items = new ArrayList();
 
     /** The item. */
     public static final Item ShardOfTrueIce = new Item("Shard of True Ice");
@@ -31,7 +32,7 @@ public class Item {
     public final String name;
 
     /** The status. */
-    public final JsArray<Status> history = new JsArray();
+    public final List<Status> history = new ArrayList();
 
     public int ap;
 
@@ -94,7 +95,7 @@ public class Item {
      * 
      * @return
      */
-    public static JsArray<Item> getAll() {
+    public static List<Item> getAll() {
         return items;
     }
 

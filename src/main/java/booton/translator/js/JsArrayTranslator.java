@@ -20,11 +20,31 @@ public class JsArrayTranslator extends Translator<JsArray> {
         return "[]";
     }
 
+    public String length() {
+        return that + ".length";
+    }
+
+    public String get(int param0) {
+        return that + "[" + param(0) + "]";
+    }
+
     public String iterator() {
         return that + ".it()";
     }
 
     public String push(Object param0) {
         return that + ".push(" + param(0) + ")";
+    }
+
+    public String indexOf(Object param0) {
+        return that + ".indexOf(" + param(0) + ")";
+    }
+
+    public String remove(int param0, int param1) {
+        return that + ".splice(" + param(0) + "," + param(1) + ")";
+    }
+
+    public String splice(int param0, int param1, JsArray param2) {
+        return that + ".splice(" + param(0) + "," + param(1) + "," + param(2) + ")";
     }
 }

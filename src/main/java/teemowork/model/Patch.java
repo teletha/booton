@@ -9,7 +9,8 @@
  */
 package teemowork.model;
 
-import booton.translator.js.JsArray;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @version 2012/12/06 23:07:37
@@ -45,7 +46,7 @@ public class Patch {
     private final Patch previous;
 
     /** The item list. */
-    private final JsArray<Item> items = new JsArray();
+    private final List<Item> items = new ArrayList();
 
     /**
      * Create patch information.
@@ -64,7 +65,7 @@ public class Patch {
      * @param item
      */
     private Item update(Item item) {
-        items.push(item);
+        items.add(item);
         return item;
     }
 
@@ -78,7 +79,7 @@ public class Patch {
     /**
      * @return
      */
-    public JsArray<Item> getItems() {
+    public List<Item> getItems() {
         return items;
     }
 }
