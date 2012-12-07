@@ -34,7 +34,7 @@ public class Patch {
     }
 
     /** The latest patch. */
-    public static Patch latest = P1520;
+    public static Patch Latest = P1520;
 
     /** The update number. */
     public final int number;
