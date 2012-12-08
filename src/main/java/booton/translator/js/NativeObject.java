@@ -11,6 +11,7 @@ package booton.translator.js;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import booton.translator.Translator;
 
@@ -20,7 +21,7 @@ import booton.translator.Translator;
 public class NativeObject {
 
     /** The java implementation. */
-    private final Map container = new HashMap();
+    private final Map<String, Object> container = new HashMap();
 
     /**
      * <p>
@@ -49,8 +50,27 @@ public class NativeObject {
         return value;
     }
 
+    /**
+     * <p>
+     * Helper method to compute string expression.
+     * </p>
+     * 
+     * @param key
+     * @return
+     */
     private String literal(Object key) {
         return key == null ? "null" : key.toString();
+    }
+
+    /**
+     * <p>
+     * List up all property names.
+     * </p>
+     * 
+     * @return A property name array.
+     */
+    public Set<String> keys() {
+        return container.keySet();
     }
 
     /**
@@ -93,6 +113,17 @@ public class NativeObject {
          */
         public String setProperty(Object key, Object value) {
             return that + "[" + param(0) + "]=" + param(1);
+        }
+
+        /**
+         * <p>
+         * List up all property names.
+         * </p>
+         * 
+         * @return A property name array.
+         */
+        public String keys() {
+            return that + ".keys()";
         }
     }
 }

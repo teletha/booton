@@ -788,7 +788,7 @@ class JavaMethodCompiler extends MethodVisitor {
         Set<Node> group = new HashSet();
         group.add(current);
 
-        boolean start = false;
+        boolean found = false;
 
         // Decide target node
         Node target = current.previous;
@@ -800,8 +800,8 @@ class JavaMethodCompiler extends MethodVisitor {
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
 
-                if (!start) {
-                    start = true;
+                if (!found) {
+                    found = true;
 
                     // This is first operand condition.
                     group.add(condition.transition);
@@ -814,6 +814,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 } else {
                     return; // Stop here.
                 }
+            } else {
             }
         }
 
