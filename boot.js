@@ -1,19 +1,17 @@
 "use strict";
 
-function boot() {  
+function boot(global) {  
   /**
    * Define user properties.
    */
   function define(object, properties) {
     Object.keys(properties).forEach(function(name) {
-      if (!object[name]) {
         Object.defineProperty(object, name, {
           configurable: false,
           enumerable: false,
           writable: true,
           value: properties[name]
         });
-      }
     });
   }
   
@@ -46,8 +44,22 @@ function boot() {
       return this == other;
     },
 
-    toString2: function() {
+    /**
+     * Create object expression.
+     *
+     * @return A string expression.
+     */
+    toString: function() {
       return this.constructor.name + "#" + this.hashCode();
+    },
+
+    /**
+     * List up all property keys.
+     *
+     * @return A property name array.
+     */ 
+    keys: function() {
+      return Object.keys(this);
     }
   });
   
@@ -72,6 +84,34 @@ function boot() {
         }
       };
     }
+  });
+
+  //====================================================================
+  // Iterator Extensions
+  //====================================================================
+  define(global, {
+    /**
+     * Retrieve the object identifier.
+     *
+     * @return An identifier.
+     */
+    Iterator: (function() {
+      function Iterator() {
+        
+      }
+
+      define(Iterator.prototype, {
+        hasNext: function() {
+          
+        },
+
+        next: function() {
+          
+        }
+      });
+      
+      return Iterator;
+    })()
   });
   
   //====================================================================
@@ -166,7 +206,7 @@ function boot() {
   });
 }
 
-boot();
+boot(window||global);
 
 
 

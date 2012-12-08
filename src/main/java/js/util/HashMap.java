@@ -7,28 +7,28 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.js;
+package js.util;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import booton.translator.Substitutable;
+import booton.translator.js.NativeMap;
 
 /**
- * @version 2012/12/08 2:23:23
+ * @version 2012/12/08 11:36:50
  */
-public class JsMap<K, V> implements Map<K, V>, Substitutable<HashMap> {
+public class HashMap<K, V> implements Map<K, V> {
 
-    private NativeMap<K, V> map = new NativeMap();
+    /** The actual container. */
+    private final NativeMap<K, V> map = new NativeMap();
 
     /**
      * {@inheritDoc}
      */
     @Override
     public int size() {
-        return 0;
+        return map.size();
     }
 
     /**
@@ -36,7 +36,7 @@ public class JsMap<K, V> implements Map<K, V>, Substitutable<HashMap> {
      */
     @Override
     public boolean isEmpty() {
-        return false;
+        return map.size() == 0;
     }
 
     /**
@@ -44,7 +44,7 @@ public class JsMap<K, V> implements Map<K, V>, Substitutable<HashMap> {
      */
     @Override
     public boolean containsKey(Object key) {
-        return false;
+        return map.has(key);
     }
 
     /**
@@ -76,14 +76,14 @@ public class JsMap<K, V> implements Map<K, V>, Substitutable<HashMap> {
      */
     @Override
     public V remove(Object key) {
-        return null;
+        return map.delete(key);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void putAll(Map<? extends K, ? extends V> m) {
+    public void putAll(Map<? extends K, ? extends V> map) {
     }
 
     /**
