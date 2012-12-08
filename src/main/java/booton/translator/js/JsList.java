@@ -27,7 +27,7 @@ import booton.translator.Substitutable;
 public class JsList<T> implements List<T>, Substitutable<ArrayList> {
 
     /** The actual container. */
-    private final JsArray<T> array = new JsArray();
+    private final NativeArray<T> array = new NativeArray();
 
     /**
      * {@inheritDoc}
@@ -168,7 +168,7 @@ public class JsList<T> implements List<T>, Substitutable<ArrayList> {
     public T remove(int index) {
         checkRange(index);
 
-        return array.remove(index, 1).get(0);
+        return (T) array.remove(index, 1).get(0);
     }
 
     /**

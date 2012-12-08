@@ -36,7 +36,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 
 import booton.translator.js.JsError;
-import booton.translator.js.JsObject;
+import booton.translator.js.NativeObject;
 
 /**
  * <h2>The Reserved words in ECMA Script Third Edition</h2>
@@ -219,10 +219,10 @@ public class Javascript {
                 // All scripts depend on its parent classes. So we must compile it ahead.
                 Class parentClass = source.getSuperclass();
 
-                if (parentClass != null && source != JsObject.class) {
+                if (parentClass != null && source != NativeObject.class) {
                     Javascript parent = Javascript.getScript(parentClass);
 
-                    if (parent != null && parent.source != JsObject.class) {
+                    if (parent != null && parent.source != NativeObject.class) {
                         // compile ahead
                         parent.compile();
 
@@ -310,7 +310,7 @@ public class Javascript {
 
     private static Class switchClass(Class type) {
         if (type == Object.class) {
-            return JsObject.class;
+            return NativeObject.class;
         }
 
         if (Throwable.class.isAssignableFrom(type)) {
