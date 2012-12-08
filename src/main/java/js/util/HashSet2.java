@@ -14,17 +14,17 @@ import java.util.Iterator;
 import java.util.Set;
 
 import booton.translator.js.NativeArray;
-import booton.translator.js.NativeMap;
+import booton.translator.js.NativeObject;
 
 /**
  * @version 2012/12/08 11:49:36
  */
-public class HashSet<E> implements Set<E> {
+public class HashSet2<E> implements Set<E> {
 
-    /** The native set. */
-    private NativeMap<E, Integer> set = new NativeMap();
+    /** The native key set. */
+    private NativeObject keys = new NativeObject();
 
-    /** The actual container. */
+    /** The actual value container. */
     private NativeArray values = new NativeArray();
 
     /**
@@ -32,7 +32,7 @@ public class HashSet<E> implements Set<E> {
      */
     @Override
     public int size() {
-        return set.size();
+        return values.length();
     }
 
     /**
@@ -40,7 +40,7 @@ public class HashSet<E> implements Set<E> {
      */
     @Override
     public boolean isEmpty() {
-        return set.size() == 0;
+        return size() == 0;
     }
 
     /**
@@ -48,7 +48,7 @@ public class HashSet<E> implements Set<E> {
      */
     @Override
     public boolean contains(Object o) {
-        return set.has(o);
+        return keys.hasProperty(hash(o));
     }
 
     /**
@@ -83,7 +83,7 @@ public class HashSet<E> implements Set<E> {
         if (contains(e)) {
             return false;
         } else {
-            set.set(e, values.push(e));
+            keys.setProperty(hash(e), (Integer) values.push(e));
 
             return true;
         }
@@ -97,7 +97,11 @@ public class HashSet<E> implements Set<E> {
         if (!contains(o)) {
             return false;
         } else {
-            values.remove(set.delete(o), 1);
+            int hash = hash(o);
+            int index = (int) keys.getProperty(hash);
+
+            keys.removeProperty(hash);
+            values.remove(index, 1);
             return true;
         }
     }
@@ -165,7 +169,19 @@ public class HashSet<E> implements Set<E> {
      */
     @Override
     public void clear() {
-        set = new NativeMap();
+        keys = new NativeObject();
         values = new NativeArray();
+    }
+
+    /**
+     * <p>
+     * Compute hash.
+     * </p>
+     * 
+     * @param key
+     * @return
+     */
+    private int hash(Object key) {
+        return key == null ? -1 : key.hashCode();
     }
 }

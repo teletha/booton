@@ -11,6 +11,7 @@ package booton.translator.js;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Set;
 
 import booton.translator.Translator;
 
@@ -21,6 +22,19 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
 
     /** The java emulation. */
     private final ArrayList<T> list = new ArrayList();
+
+    /**
+     * 
+     */
+    public NativeArray() {
+    }
+
+    /**
+     * 
+     */
+    public NativeArray(Set<T> initial) {
+        list.addAll(initial);
+    }
 
     /**
      * <p>
@@ -167,6 +181,17 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
     }
 
     /**
+     * <p>
+     * Convert type to Java array.
+     * </p>
+     * 
+     * @return
+     */
+    public T[] toJavaArray() {
+        return (T[]) list.toArray();
+    }
+
+    /**
      * @version 2012/12/08 11:09:31
      */
     @SuppressWarnings("unused")
@@ -280,6 +305,17 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
          */
         public String iterator() {
             return that + ".it()";
+        }
+
+        /**
+         * <p>
+         * Convert type to Java array.
+         * </p>
+         * 
+         * @return
+         */
+        public String toJavaArray() {
+            return that;
         }
     }
 }

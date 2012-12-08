@@ -100,7 +100,7 @@ public class NativeMap<K, V> extends NativeObject {
          * @return
          */
         public String NativeMap() {
-            return "Map()";
+            return "new Map()";
         }
 
         /**
@@ -138,7 +138,7 @@ public class NativeMap<K, V> extends NativeObject {
          * @return
          */
         public String has(Object key) {
-            return that + "has(" + param(0) + ")";
+            return that + ".has(" + param(0) + ")";
         }
 
         /**
@@ -151,7 +151,7 @@ public class NativeMap<K, V> extends NativeObject {
          * @return
          */
         public String delete(Object key) {
-            return that + "delete(" + param(0) + ")";
+            return that + ".delete(" + param(0) + ")";
         }
 
         /**

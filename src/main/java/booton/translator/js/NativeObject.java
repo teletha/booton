@@ -11,7 +11,6 @@ package booton.translator.js;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import booton.translator.Translator;
 
@@ -22,6 +21,18 @@ public class NativeObject {
 
     /** The java implementation. */
     private final Map<String, Object> container = new HashMap();
+
+    /**
+     * <p>
+     * Retireve property by key.
+     * </p>
+     * 
+     * @param key A property key.
+     * @return A property value.
+     */
+    public Object getProperty(int key) {
+        return container.get(literal(key));
+    }
 
     /**
      * <p>
@@ -44,10 +55,71 @@ public class NativeObject {
      * @param value A value to set.
      * @return A value to set.
      */
+    public Object setProperty(int key, Object value) {
+        container.put(literal(key), value);
+
+        return value;
+    }
+
+    /**
+     * <p>
+     * Set property value by key.
+     * </p>
+     * 
+     * @param key A property key.
+     * @param value A value to set.
+     * @return A value to set.
+     */
     public Object setProperty(Object key, Object value) {
         container.put(literal(key), value);
 
         return value;
+    }
+
+    /**
+     * <p>
+     * Check property by key.
+     * </p>
+     * 
+     * @param key A property key.
+     * @return A property value.
+     */
+    public boolean hasProperty(int key) {
+        return container.containsKey(literal(key));
+    }
+
+    /**
+     * <p>
+     * Check property by key.
+     * </p>
+     * 
+     * @param key A property key.
+     * @return A property value.
+     */
+    public boolean hasProperty(Object key) {
+        return container.containsKey(literal(key));
+    }
+
+    /**
+     * <p>
+     * Remove property by key.
+     * </p>
+     * 
+     * @param key A property key.
+     */
+    public Object removeProperty(int key) {
+        return container.remove(literal(key));
+    }
+
+    /**
+     * <p>
+     * Remove property by key.
+     * </p>
+     * 
+     * @param key A property key.
+     */
+    public Object removeProperty(Object key) {
+        return container.remove(literal(key));
     }
 
     /**
@@ -69,8 +141,8 @@ public class NativeObject {
      * 
      * @return A property name array.
      */
-    public Set<String> keys() {
-        return container.keySet();
+    public NativeArray<String> keys() {
+        return new NativeArray(container.keySet());
     }
 
     /**
@@ -98,6 +170,18 @@ public class NativeObject {
          * @param key A property key.
          * @return A property value.
          */
+        public String getProperty(int key) {
+            return getProperty((Integer) key);
+        }
+
+        /**
+         * <p>
+         * Retireve property by key.
+         * </p>
+         * 
+         * @param key A property key.
+         * @return A property value.
+         */
         public String getProperty(Object key) {
             return that + "[" + param(0) + "]";
         }
@@ -111,8 +195,67 @@ public class NativeObject {
          * @param value A value to set.
          * @return A value to set.
          */
+        public String setProperty(int key, Object value) {
+            return setProperty((Integer) key, value);
+        }
+
+        /**
+         * <p>
+         * Set property value by key.
+         * </p>
+         * 
+         * @param key A property key.
+         * @param value A value to set.
+         * @return A value to set.
+         */
         public String setProperty(Object key, Object value) {
             return that + "[" + param(0) + "]=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Check property by key.
+         * </p>
+         * 
+         * @param key A property key.
+         * @return A property value.
+         */
+        public String hasProperty(int key) {
+            return hasProperty((Integer) key);
+        }
+
+        /**
+         * <p>
+         * Check property by key.
+         * </p>
+         * 
+         * @param key A property key.
+         * @return A property value.
+         */
+        public String hasProperty(Object key) {
+            return that + "[" + param(0) + "]!=undefined";
+        }
+
+        /**
+         * <p>
+         * Remove property by key.
+         * </p>
+         * 
+         * @param key A property key.
+         */
+        public String removeProperty(int key) {
+            return removeProperty((Integer) key);
+        }
+
+        /**
+         * <p>
+         * Remove property by key.
+         * </p>
+         * 
+         * @param key A property key.
+         */
+        public String removeProperty(Object key) {
+            return "delete " + that + "[" + param(0) + "]";
         }
 
         /**

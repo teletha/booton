@@ -10,10 +10,11 @@
 package js.util;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import booton.translator.js.NativeMap;
+import booton.translator.js.NativeObject;
 
 /**
  * @version 2012/12/08 11:36:50
@@ -21,14 +22,17 @@ import booton.translator.js.NativeMap;
 public class HashMap<K, V> implements Map<K, V> {
 
     /** The actual container. */
-    private final NativeMap<K, V> map = new NativeMap();
+    private NativeObject container = new NativeObject();
+
+    /** The current size. */
+    private int size;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public int size() {
-        return map.size();
+        return size;
     }
 
     /**
@@ -36,7 +40,7 @@ public class HashMap<K, V> implements Map<K, V> {
      */
     @Override
     public boolean isEmpty() {
-        return map.size() == 0;
+        return size == 0;
     }
 
     /**
@@ -44,7 +48,7 @@ public class HashMap<K, V> implements Map<K, V> {
      */
     @Override
     public boolean containsKey(Object key) {
-        return map.has(key);
+        return container.hasProperty(hash(key));
     }
 
     /**
@@ -52,6 +56,11 @@ public class HashMap<K, V> implements Map<K, V> {
      */
     @Override
     public boolean containsValue(Object value) {
+        for (V item : values()) {
+            if (item == value) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -60,7 +69,7 @@ public class HashMap<K, V> implements Map<K, V> {
      */
     @Override
     public V get(Object key) {
-        return map.get(key);
+        return (V) container.getProperty(hash(key));
     }
 
     /**
@@ -68,7 +77,21 @@ public class HashMap<K, V> implements Map<K, V> {
      */
     @Override
     public V put(K key, V value) {
-        return map.set(key, value);
+        int hash = hash(key);
+
+        V previous = null;
+
+        if (container.hasProperty(hash)) {
+            previous = (V) container.getProperty(hash);
+        } else {
+            size++;
+        }
+
+        // register value
+        container.setProperty(hash, value);
+
+        // API definition
+        return previous;
     }
 
     /**
@@ -76,7 +99,20 @@ public class HashMap<K, V> implements Map<K, V> {
      */
     @Override
     public V remove(Object key) {
-        return map.delete(key);
+        int hash = hash(key);
+
+        V previous = null;
+
+        if (container.hasProperty(hash)) {
+            previous = (V) container.getProperty(hash);
+
+            container.removeProperty(hash);
+
+            size--;
+        }
+
+        // API definition
+        return previous;
     }
 
     /**
@@ -84,6 +120,9 @@ public class HashMap<K, V> implements Map<K, V> {
      */
     @Override
     public void putAll(Map<? extends K, ? extends V> map) {
+        for (Entry<? extends K, ? extends V> entry : map.entrySet()) {
+            put(entry.getKey(), entry.getValue());
+        }
     }
 
     /**
@@ -91,6 +130,8 @@ public class HashMap<K, V> implements Map<K, V> {
      */
     @Override
     public void clear() {
+        container = new NativeObject();
+        size = 0;
     }
 
     /**
@@ -98,7 +139,7 @@ public class HashMap<K, V> implements Map<K, V> {
      */
     @Override
     public Set<K> keySet() {
-        return null;
+        return container.keys().;
     }
 
     /**
@@ -115,5 +156,112 @@ public class HashMap<K, V> implements Map<K, V> {
     @Override
     public Set<java.util.Map.Entry<K, V>> entrySet() {
         return null;
+    }
+
+    /**
+     * <p>
+     * Compute hash.
+     * </p>
+     * 
+     * @param key
+     * @return
+     */
+    private int hash(Object key) {
+        return key == null ? -1 : key.hashCode();
+    }
+
+    /**
+     * @version 2012/12/08 21:58:10
+     */
+    private static class SimpleEntry<K, V> implements Entry<K, V> {
+
+        /** The key. */
+        private K key;
+
+        /** The value. */
+        private V value;
+
+        /**
+         * @param key
+         * @param value
+         */
+        private SimpleEntry(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public K getKey() {
+            return key;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public V getValue() {
+            return value;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public V setValue(V value) {
+            V previous = this.value;
+
+            this.value = value;
+
+            return previous;
+        }
+    }
+
+    /**
+     * @version 2012/12/08 22:24:29
+     */
+    private class KeySet extends AbstractSet<K> {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int size() {
+            return size;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Iterator<K> iterator() {
+            return (Iterator<K>) container.keys().iterator();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean add(K e) {
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean remove(Object o) {
+            return HashMap.this.remove(o) != null;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void clear() {
+            HashMap.this.clear();
+        }
     }
 }

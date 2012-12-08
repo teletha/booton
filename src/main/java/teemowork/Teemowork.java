@@ -9,8 +9,7 @@
  */
 package teemowork;
 
-import teemowork.model.Item;
-import teemowork.model.Patch;
+import js.util.HashSet2;
 
 /**
  * @version 2012/12/06 23:20:54
@@ -18,6 +17,20 @@ import teemowork.model.Patch;
 public class Teemowork {
 
     public static void jsmain() {
-        System.out.println(Patch.Latest.findItem(Item.HauntingGuise));
+        // System.out.println(Patch.Latest.findItem(Item.HauntingGuise));
+
+        HashSet2<String[]> set = new HashSet2();
+        set.add(new String[] {"1", "2"});
+
+        System.out.println(set.contains("test"));
+        System.out.println(set.contains("test1"));
+        System.out.println(set.size());
+
+        set.add(new String[] {"1", "2", "5"});
+
+        for (String[] string : set) {
+            System.out.println(string);
+        }
+        System.out.println(set.toArray());
     }
 }

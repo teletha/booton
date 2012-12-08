@@ -26,6 +26,14 @@ public class StringTranslator extends Translator<String> {
         return param(0);
     }
 
+    public String String(char[] param0, int param1, int param2) {
+        return that + ".String(" + param(0) + "," + param(1) + "," + param(2) + ")";
+    }
+    
+    public String String(char[] param0,boolean param1) {
+        return that + ".String(" + param(0) + "," + param(1) + ")";
+    }
+
     /**
      * Javascript native String class have length property instead of length method. And Javascript
      * manages object as hash, so object can't have same name method or property. We must convert
