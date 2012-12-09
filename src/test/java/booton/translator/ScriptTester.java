@@ -104,7 +104,13 @@ public class ScriptTester {
                         result = method.invoke(scriptable, input);
                     }
                 } catch (InvocationTargetException e) {
-                    result = ((InvocationTargetException) e).getTargetException();
+                    Throwable cause = ((InvocationTargetException) e).getTargetException();
+
+                    if (cause instanceof AssertionError) {
+                        throw (AssertionError) cause; // rethrow
+                    } else {
+                        result = cause;
+                    }
                 }
                 results.add(result);
             }
@@ -373,6 +379,7 @@ public class ScriptTester {
                 if (js instanceof Double) {
                     js = ((Double) js).intValue() != 0;
                 }
+                System.out.println(js.getClass() + "   " + java);
                 assert java.equals(js);
             } else if (type == String.class) {
                 // ========================

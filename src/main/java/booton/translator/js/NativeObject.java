@@ -15,7 +15,7 @@ import java.util.Map;
 import booton.translator.Translator;
 
 /**
- * @version 2012/12/05 13:05:38
+ * @version 2012/12/09 13:42:39
  */
 public class NativeObject {
 
@@ -28,7 +28,7 @@ public class NativeObject {
      * </p>
      * 
      * @param key A property key.
-     * @return A property value.
+     * @return An associated value.
      */
     public Object getProperty(int key) {
         return container.get(literal(key));
@@ -40,7 +40,7 @@ public class NativeObject {
      * </p>
      * 
      * @param key A property key.
-     * @return A property value.
+     * @return An associated value.
      */
     public Object getProperty(Object key) {
         return container.get(literal(key));
@@ -53,7 +53,7 @@ public class NativeObject {
      * 
      * @param key A property key.
      * @param value A value to set.
-     * @return A value to set.
+     * @return A newly associated value.
      */
     public Object setProperty(int key, Object value) {
         container.put(literal(key), value);
@@ -68,7 +68,7 @@ public class NativeObject {
      * 
      * @param key A property key.
      * @param value A value to set.
-     * @return A value to set.
+     * @return A newly associated value.
      */
     public Object setProperty(Object key, Object value) {
         container.put(literal(key), value);
@@ -102,24 +102,34 @@ public class NativeObject {
 
     /**
      * <p>
-     * Remove property by key.
+     * Remove property by key from an object. Returns false only if the property exists on the
+     * object itself, regardless of its prototypes, and cannot be deleted. It returns true in all
+     * other cases.
      * </p>
      * 
      * @param key A property key.
+     * @return A result.
      */
-    public Object removeProperty(int key) {
-        return container.remove(literal(key));
+    public boolean deleteProperty(int key) {
+        container.remove(literal(key));
+
+        return true;
     }
 
     /**
      * <p>
-     * Remove property by key.
+     * Remove property by key from an object. Returns false only if the property exists on the
+     * object itself, regardless of its prototypes, and cannot be deleted. It returns true in all
+     * other cases.
      * </p>
      * 
      * @param key A property key.
+     * @return A result.
      */
-    public Object removeProperty(Object key) {
-        return container.remove(literal(key));
+    public boolean deleteProperty(Object key) {
+        container.remove(literal(key));
+
+        return true;
     }
 
     /**
@@ -233,28 +243,34 @@ public class NativeObject {
          * @return A property value.
          */
         public String hasProperty(Object key) {
-            return that + "[" + param(0) + "]!=undefined";
+            return param(0) + " in " + that;
         }
 
         /**
          * <p>
-         * Remove property by key.
+         * Remove property by key from an object. Returns false only if the property exists on the
+         * object itself, regardless of its prototypes, and cannot be deleted. It returns true in
+         * all other cases.
          * </p>
          * 
          * @param key A property key.
+         * @return A result.
          */
-        public String removeProperty(int key) {
-            return removeProperty((Integer) key);
+        public String deleteProperty(int key) {
+            return deleteProperty((Integer) key);
         }
 
         /**
          * <p>
-         * Remove property by key.
+         * Remove property by key from an object. Returns false only if the property exists on the
+         * object itself, regardless of its prototypes, and cannot be deleted. It returns true in
+         * all other cases.
          * </p>
          * 
          * @param key A property key.
+         * @return A result.
          */
-        public String removeProperty(Object key) {
+        public String deleteProperty(Object key) {
             return "delete " + that + "[" + param(0) + "]";
         }
 
