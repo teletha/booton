@@ -168,7 +168,7 @@ public class JsList<T> implements List<T>, Substitutable<ArrayList> {
     public T remove(int index) {
         checkRange(index);
 
-        return (T) array.remove(index, 1).get(0);
+        return (T) array.remove(index);
     }
 
     /**

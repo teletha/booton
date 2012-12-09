@@ -97,7 +97,7 @@ public class IdentityHashSet<E> implements Set<E> {
         if (!contains(o)) {
             return false;
         } else {
-            values.remove(set.delete(o), 1);
+            values.remove(set.delete(o));
             return true;
         }
     }

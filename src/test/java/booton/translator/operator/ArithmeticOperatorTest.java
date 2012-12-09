@@ -121,7 +121,7 @@ public class ArithmeticOperatorTest extends ScriptTester {
     public void ReminderRight() {
         test(new Scriptable() {
 
-            public int act(int value) {
+            public int act(@Param(from = 1, to = 10) int value) {
                 return 40 % value;
             }
         });

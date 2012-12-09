@@ -109,11 +109,7 @@ public class ScriptTester {
                 } catch (InvocationTargetException e) {
                     Throwable cause = ((InvocationTargetException) e).getTargetException();
 
-                    if (cause instanceof AssertionError) {
-                        throw (AssertionError) cause; // rethrow
-                    } else {
-                        result = cause;
-                    }
+                    throw I.quiet(cause);
                 }
                 results.add(result);
             }
@@ -346,6 +342,8 @@ public class ScriptTester {
 
                 if (js instanceof Double) {
                     assert value == ((Double) js).intValue();
+                } else if (js instanceof Long) {
+                    assert value == ((Long) js).intValue();
                 } else if (js instanceof UniqueTag) {
                     assert value == 0;
                 } else {

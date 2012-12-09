@@ -19,20 +19,23 @@ import booton.translator.js.NativeObject;
 /**
  * @version 2012/12/08 11:49:36
  */
-public class HashSet2<E> implements Set<E> {
+public class HashSet<E> implements Set<E> {
+
+    /** The item count. */
+    private int size = 0;
 
     /** The native key set. */
-    private NativeObject keys = new NativeObject();
+    private NativeObject values = new NativeObject();
 
     /** The actual value container. */
-    private NativeArray values = new NativeArray();
+    private NativeArray items = new NativeArray();
 
     /**
      * {@inheritDoc}
      */
     @Override
     public int size() {
-        return values.length();
+        return size;
     }
 
     /**
@@ -40,7 +43,7 @@ public class HashSet2<E> implements Set<E> {
      */
     @Override
     public boolean isEmpty() {
-        return size() == 0;
+        return size == 0;
     }
 
     /**
@@ -48,7 +51,7 @@ public class HashSet2<E> implements Set<E> {
      */
     @Override
     public boolean contains(Object o) {
-        return keys.hasProperty(hash(o));
+        return values.hasProperty(hash(o));
     }
 
     /**
@@ -56,7 +59,7 @@ public class HashSet2<E> implements Set<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return values.iterator();
+        return items.iterator();
     }
 
     /**
@@ -64,7 +67,7 @@ public class HashSet2<E> implements Set<E> {
      */
     @Override
     public Object[] toArray() {
-        return values.toArray();
+        return items.toArray();
     }
 
     /**
@@ -72,7 +75,7 @@ public class HashSet2<E> implements Set<E> {
      */
     @Override
     public <T> T[] toArray(T[] a) {
-        return (T[]) values.toArray();
+        return (T[]) items.toArray();
     }
 
     /**
@@ -80,10 +83,13 @@ public class HashSet2<E> implements Set<E> {
      */
     @Override
     public boolean add(E e) {
-        if (contains(e)) {
+        int hash = hash(e);
+
+        if (values.hasProperty(hash)) {
             return false;
         } else {
-            keys.setProperty(hash(e), (Integer) values.push(e));
+            values.setProperty(hash, e);
+            items.push(e);
 
             return true;
         }
@@ -94,14 +100,15 @@ public class HashSet2<E> implements Set<E> {
      */
     @Override
     public boolean remove(Object o) {
-        if (!contains(o)) {
+        int hash = hash(o);
+
+        if (!values.hasProperty(hash)) {
             return false;
         } else {
-            int hash = hash(o);
-            int index = (int) keys.getProperty(hash);
+            values.deleteProperty(hash);
 
             keys.deleteProperty(hash);
-            values.remove(index, 1);
+            values.remove(index);
             return true;
         }
     }

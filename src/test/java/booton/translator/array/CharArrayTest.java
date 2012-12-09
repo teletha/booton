@@ -66,7 +66,7 @@ public class CharArrayTest extends ScriptTester {
         test(new Scriptable() {
 
             char[][] act() {
-                char[][] array = new char[1][];
+                char[][] array = new char[2][];
                 array[0] = new char[] {'a', 'b'};
                 array[1] = new char[] {'c', 'd'};
 

@@ -126,7 +126,7 @@ public class NativeObjectTest extends ScriptTester {
     public void keys() throws Exception {
         test(new Scriptable() {
 
-            public String[] act() {
+            public int act() {
                 Object key1 = "1";
                 Object key2 = "2";
                 Object key3 = "3";
@@ -146,7 +146,7 @@ public class NativeObjectTest extends ScriptTester {
                 assert set2.indexOf(key3) != -1;
                 assert set2.indexOf("4") == -1;
 
-                return set2.toArray();
+                return set2.toArray().length;
             }
         });
     }
