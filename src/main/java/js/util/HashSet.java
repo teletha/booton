@@ -189,15 +189,18 @@ public class HashSet<E> implements Set<E> {
     }
 
     /**
-     * @version 2012/12/09 16:45:34
+     * @version 2012/12/09 19:25:43
      */
-    private class View<E> implements Iterator<E> {
+    private class View implements Iterator<E> {
 
         /** The actual view. */
         private final NativeArray<String> keys;
 
         /** The curren position. */
         private int index = 0;
+
+        /** The current selected item. */
+        private E current;
 
         /**
          * @param keys
@@ -219,7 +222,9 @@ public class HashSet<E> implements Set<E> {
          */
         @Override
         public E next() {
-            return (E) values.getProperty(hash(keys.get(index++)));
+            current = (E) values.getProperty(keys.get(index++));
+
+            return current;
         }
 
         /**
@@ -227,7 +232,9 @@ public class HashSet<E> implements Set<E> {
          */
         @Override
         public void remove() {
-            values.deleteProperty(hash(keys.get(index - 1)));
+            if (0 < index) {
+                HashSet.this.remove(current);
+            }
         }
     }
 }
