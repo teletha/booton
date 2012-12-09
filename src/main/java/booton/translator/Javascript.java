@@ -316,7 +316,7 @@ public class Javascript {
         if (Throwable.class.isAssignableFrom(type)) {
             return JsError.class;
         }
-        return TranslatorManager.substitute(type);
+        return type;
     }
 
     /**

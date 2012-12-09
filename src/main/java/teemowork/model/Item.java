@@ -9,8 +9,9 @@
  */
 package teemowork.model;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import js.util.ArrayList;
 
 /**
  * @version 2012/12/07 10:00:23

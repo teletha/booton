@@ -155,6 +155,15 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
      * Changes the content of an array, adding new elements while removing old elements.
      * </p>
      */
+    public void add(int index, T item) {
+        list.add(index, item);
+    }
+
+    /**
+     * <p>
+     * Changes the content of an array, adding new elements while removing old elements.
+     * </p>
+     */
     public T remove(int index) {
         return list.remove(index);
     }
@@ -278,6 +287,15 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
          */
         public String lastIndexOf(Object item) {
             return that + ".lastIndexOf(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Changes the content of an array, adding new elements while removing old elements.
+         * </p>
+         */
+        public String add(int index, Object item) {
+            return that + ".splice(" + param(0) + ",0," + param(1) + ")";
         }
 
         /**

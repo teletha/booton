@@ -7,27 +7,22 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.js;
+package js.util;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import booton.translator.Substitutable;
+import booton.translator.js.NativeArray;
 
 /**
- * <p>
- * ArrayList implementation for Javascript.
- * </p>
- * 
- * @version 2012/12/07 9:25:50
+ * @version 2012/12/09 22:57:44
  */
-public class JsList<T> implements List<T>, Substitutable<ArrayList> {
+public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
 
     /** The actual container. */
-    private final NativeArray<T> array = new NativeArray();
+    private NativeArray<E> array = new NativeArray();
 
     /**
      * {@inheritDoc}
@@ -41,23 +36,15 @@ public class JsList<T> implements List<T>, Substitutable<ArrayList> {
      * {@inheritDoc}
      */
     @Override
-    public boolean isEmpty() {
-        return array.length() == 0;
+    public boolean contains(Object item) {
+        return array.indexOf(item) != -1;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean contains(Object o) {
-        return array.indexOf(o) != -1;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Iterator<T> iterator() {
+    public Iterator<E> iterator() {
         return array.iterator();
     }
 
@@ -65,20 +52,8 @@ public class JsList<T> implements List<T>, Substitutable<ArrayList> {
      * {@inheritDoc}
      */
     @Override
-    public native Object[] toArray();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public native <T> T[] toArray(T[] a);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean add(T e) {
-        array.push(e);
+    public boolean add(E item) {
+        array.push(item);
 
         return true;
     }
@@ -87,47 +62,23 @@ public class JsList<T> implements List<T>, Substitutable<ArrayList> {
      * {@inheritDoc}
      */
     @Override
-    public boolean remove(Object o) {
-        return false;
+    public boolean remove(Object item) {
+        int index = array.indexOf(item);
+
+        if (index == -1) {
+            return false;
+        } else {
+            array.remove(index);
+
+            return true;
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean containsAll(Collection<?> c) {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean addAll(Collection<? extends T> c) {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean addAll(int index, Collection<? extends T> c) {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean addAll(int index, Collection<? extends E> c) {
         return false;
     }
 
@@ -136,79 +87,85 @@ public class JsList<T> implements List<T>, Substitutable<ArrayList> {
      */
     @Override
     public void clear() {
+        array = new NativeArray();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public T get(int index) {
-        return null;
+    public E get(int index) {
+        return array.get(index);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public T set(int index, T element) {
-        return null;
+    public E set(int index, E element) {
+        return array.set(index, element);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void add(int index, T element) {
+    public void add(int index, E element) {
+        array.add(index, element);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public T remove(int index) {
-        checkRange(index);
-
-        return (T) array.remove(index);
+    public E remove(int index) {
+        return array.remove(index);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int indexOf(Object o) {
-        return 0;
+    public int indexOf(Object item) {
+        return array.indexOf(item);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int lastIndexOf(Object o) {
-        return 0;
+    public int lastIndexOf(Object item) {
+        return array.lastIndexOf(item);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ListIterator<T> listIterator() {
-        return null;
+    public ListIterator<E> listIterator() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ListIterator<T> listIterator(int index) {
-        return null;
+    public ListIterator<E> listIterator(int index) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<T> subList(int fromIndex, int toIndex) {
-        return null;
+    public List<E> subList(int fromIndex, int toIndex) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
