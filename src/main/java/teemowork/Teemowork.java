@@ -9,6 +9,8 @@
  */
 package teemowork;
 
+import java.util.Set;
+
 import js.util.HashSet;
 
 /**
@@ -19,18 +21,19 @@ public class Teemowork {
     public static void jsmain() {
         // System.out.println(Patch.Latest.findItem(Item.HauntingGuise));
 
-        HashSet<String[]> set = new HashSet();
-        set.add(new String[] {"1", "2"});
+        Set<String> set = new HashSet();
+        set.add("test");
 
         System.out.println(set.contains("test"));
         System.out.println(set.contains("test1"));
         System.out.println(set.size());
 
-        set.add(new String[] {"1", "2", "5"});
+        set.add("asdasd");
+        set.add("test");
 
-        for (String[] string : set) {
+        for (String string : set) {
             System.out.println(string);
         }
-        System.out.println(set.toArray());
+        System.out.println(set);
     }
 }

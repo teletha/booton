@@ -9,6 +9,7 @@
  */
 package js.util;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import org.junit.Test;
@@ -85,6 +86,49 @@ public class HashSetTest extends ScriptTester {
                 assert !set.remove("1");
 
                 assert set.remove("2");
+                assert set.size() == 0;
+
+                return set.size();
+            }
+        });
+    }
+
+    @Test
+    public void iterator() throws Exception {
+        test(new Scriptable() {
+
+            int act() {
+                Set<String> set = new HashSet();
+                set.add("1");
+                set.add("2");
+
+                int size = 0;
+
+                for (String string : set) {
+                    size++;
+                }
+                assert size == 2;
+
+                return size;
+            }
+        });
+    }
+
+    @Test
+    public void iteratorRemove() throws Exception {
+        test(new Scriptable() {
+
+            int act() {
+                Set<String> set = new HashSet();
+                set.add("1");
+                set.add("2");
+
+                Iterator<String> iterator = set.iterator();
+
+                while (iterator.hasNext()) {
+                    iterator.next();
+                    iterator.remove();
+                }
                 assert set.size() == 0;
 
                 return set.size();

@@ -146,6 +146,15 @@ public class NativeObjectTest extends ScriptTester {
                 assert set2.indexOf(key3) != -1;
                 assert set2.indexOf("4") == -1;
 
+                instance.deleteProperty(key1);
+                instance.deleteProperty(key3);
+
+                NativeArray<String> set3 = instance.keys();
+                assert set3.length() == 1;
+                assert set3.indexOf(key1) == -1;
+                assert set3.indexOf(key2) != -1;
+                assert set3.indexOf(key3) == -1;
+
                 return set2.toArray().length;
             }
         });
