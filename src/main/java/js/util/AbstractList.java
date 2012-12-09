@@ -7,12 +7,12 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator;
+package js.util;
 
-import kiss.Extensible;
+import java.util.List;
 
 /**
- * @version 2012/12/07 16:09:29
+ * @version 2012/12/09 23:04:18
  */
-public interface Substitutable<T> extends Extensible {
+public abstract class AbstractList<E> extends AbstractCollection<E> implements List<E> {
 }
