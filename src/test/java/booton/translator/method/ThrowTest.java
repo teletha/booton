@@ -27,7 +27,7 @@ import booton.translator.Scriptable;
 public class ThrowTest extends ScriptTester {
 
     @Test
-    public void Exception() {
+    public void exception() {
         test(new Scriptable() {
 
             public Object act() throws Exception {
@@ -37,7 +37,7 @@ public class ThrowTest extends ScriptTester {
     }
 
     @Test
-    public void ExceptionWithParam() {
+    public void exceptionWithParam() {
         test(new Scriptable() {
 
             public String act(String value) throws Exception {
@@ -47,7 +47,7 @@ public class ThrowTest extends ScriptTester {
     }
 
     @Test
-    public void RuntimeException() {
+    public void runtimeException() {
         test(new Scriptable() {
 
             public String act() {
@@ -57,11 +57,25 @@ public class ThrowTest extends ScriptTester {
     }
 
     @Test
-    public void Error() {
+    public void error() {
         test(new Scriptable() {
 
             public String act() {
                 throw new Error();
+            }
+        });
+    }
+
+    @Test
+    public void inStatement() {
+        test(new Scriptable() {
+
+            public int act(int value) {
+                if (value == 0) {
+                    throw new Error();
+                } else {
+                    return value;
+                }
             }
         });
     }
