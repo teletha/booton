@@ -9,9 +9,10 @@
  */
 package teemowork;
 
-import java.util.Set;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import js.util.HashSet;
+import js.util.HashMap;
 
 /**
  * @version 2012/12/06 23:20:54
@@ -21,23 +22,28 @@ public class Teemowork {
     public static void jsmain() {
         // System.out.println(Patch.Latest.findItem(Item.HauntingGuise));
 
-        Set<String> set1 = new HashSet();
-        set1.add("test111");
+        Map<String, String> map = new HashMap();
+        map.put("1", "test1");
+        map.put("2", "test2");
 
-        Set<String> set = new HashSet();
-        set.add("test");
+        System.out.println(map.size());
 
-        System.out.println(set.contains("test"));
-        System.out.println(set.contains("test1"));
-        System.out.println(set.size());
-
-        set.add("asdasd");
-        set.add("test");
-        set.addAll(set1);
-
-        for (String string : set) {
-            System.out.println(string);
+        for (Entry<String, String> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + "  " + entry.getValue());
         }
-        System.out.println(set);
+
+        map.put("1", "override");
+
+        for (Entry<String, String> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + "  " + entry.getValue());
+        }
+
+        for (String key : map.keySet()) {
+            System.out.println(key);
+        }
+
+        for (String value : map.values()) {
+            System.out.println(value);
+        }
     }
 }

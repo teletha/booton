@@ -9,12 +9,22 @@
  */
 package js.util;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * @version 2012/12/08 22:08:28
  */
 public abstract class AbstractCollection<E> implements Collection<E> {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEmpty() {
+        return size() == 0;
+    }
 
     /**
      * {@inheritDoc}
@@ -80,5 +90,26 @@ public abstract class AbstractCollection<E> implements Collection<E> {
     @Override
     public Object[] toArray() {
         return toArray(new Object[] {});
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T> T[] toArray(T[] array) {
+        int size = size();
+
+        if (array.length < size) {
+            array = (T[]) Array.newInstance(array.getClass(), size);
+        }
+
+        Iterator<E> iterator = iterator();
+
+        for (int i = 0; iterator.hasNext(); i++) {
+            E item = iterator.next();
+
+            array[i] = (T) item;
+        }
+        return array;
     }
 }

@@ -22,8 +22,8 @@ public class HashSet<E> extends AbstractSet<E> {
     /** The item count. */
     private int size = 0;
 
-    /** The native key set. */
-    private NativeObject values = new NativeObject();
+    /** The item pool. */
+    private NativeObject items = new NativeObject();
 
     /**
      * {@inheritDoc}
@@ -37,30 +37,22 @@ public class HashSet<E> extends AbstractSet<E> {
      * {@inheritDoc}
      */
     @Override
-    public boolean isEmpty() {
-        return size == 0;
+    public boolean contains(Object item) {
+        return items.hasProperty(hash(item));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean contains(Object o) {
-        return values.hasProperty(hash(o));
-    }
+    public boolean add(E item) {
+        int hash = hash(item);
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean add(E e) {
-        int hash = hash(e);
-
-        if (values.hasProperty(hash)) {
+        if (items.hasProperty(hash)) {
             return false;
         } else {
             size++;
-            values.setProperty(hash, e);
+            items.setProperty(hash, item);
             return true;
         }
     }
@@ -69,14 +61,14 @@ public class HashSet<E> extends AbstractSet<E> {
      * {@inheritDoc}
      */
     @Override
-    public boolean remove(Object o) {
-        int hash = hash(o);
+    public boolean remove(Object item) {
+        int hash = hash(item);
 
-        if (!values.hasProperty(hash)) {
+        if (!items.hasProperty(hash)) {
             return false;
         } else {
             size--;
-            values.deleteProperty(hash);
+            items.deleteProperty(hash);
             return true;
         }
     }
@@ -87,7 +79,7 @@ public class HashSet<E> extends AbstractSet<E> {
     @Override
     public void clear() {
         size = 0;
-        values = new NativeArray();
+        items = new NativeArray();
     }
 
     /**
@@ -95,17 +87,7 @@ public class HashSet<E> extends AbstractSet<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return new View(values.keys());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T> T[] toArray(T[] a) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return new View(items.keys());
     }
 
     /**
@@ -121,9 +103,69 @@ public class HashSet<E> extends AbstractSet<E> {
     }
 
     /**
+     * <p>
+     * Find the item which is equals to the specified item.
+     * </p>
+     * 
+     * @param item A item to find.
+     * @return A found item in this set.
+     */
+    E find(Object item) {
+        return (E) items.getProperty(hash(item));
+    }
+
+    /**
+     * <p>
+     * Add the item overwritely and return the previous item.
+     * </p>
+     * 
+     * @param item A item to add.
+     * @return A previous item or null.
+     */
+    E push(Object item) {
+        E previous = null;
+        int hash = hash(item);
+
+        if (items.hasProperty(hash)) {
+            previous = (E) items.getProperty(hash);
+        } else {
+            size++;
+        }
+
+        // assign property
+        items.setProperty(hash, item);
+
+        // API definition
+        return previous;
+    }
+
+    /**
+     * <p>
+     * Remove the item and return it.
+     * </p>
+     * 
+     * @param item A item to remove.
+     * @return A removed item or null.
+     */
+    E pull(Object item) {
+        E previous = null;
+        int hash = hash(item);
+
+        if (items.hasProperty(hash)) {
+            previous = (E) items.getProperty(hash);
+
+            size--;
+            items.deleteProperty(hash);
+        }
+
+        // API definition
+        return previous;
+    }
+
+    /**
      * @version 2012/12/09 19:25:43
      */
-    private class View implements Iterator<E> {
+    class View implements Iterator<E> {
 
         /** The actual view. */
         private final NativeArray<String> keys;
@@ -154,7 +196,7 @@ public class HashSet<E> extends AbstractSet<E> {
          */
         @Override
         public E next() {
-            current = (E) values.getProperty(keys.get(index++));
+            current = (E) items.getProperty(keys.get(index++));
 
             return current;
         }
