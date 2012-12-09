@@ -245,7 +245,7 @@ public class Javascript {
                 ScriptBuffer code = new ScriptBuffer();
 
                 // Start class definition
-                code.append("boot.defineClass(\"").append(computeClassName(source).substring(5)).append("\",");
+                code.append("boot.define(\"").append(computeClassName(source).substring(5)).append("\",");
 
                 if (parentClass != null && parentClass != Object.class) {
                     code.append(Javascript.computeClassName(parentClass)).append(',');

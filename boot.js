@@ -236,7 +236,7 @@ function boot(global) {
      * @param {String} superclassName A fully qualified class name of super class.
      * @param {Object} subclass A class definition.
      */
-    defineClass: function(name, superclass, subclass) {
+    define: function(name, superclass, subclass) {
       // default superclass is Object class
       if (!subclass) {
         subclass = superclass;
