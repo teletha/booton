@@ -332,7 +332,7 @@ class Node {
                     condition.follower = condition.outgoing.get(condition.outgoing.size() - 1);
 
                     // write script fragment
-                    buffer.append("l", condition.id, " : do {");
+                    buffer.append("l", condition.id, ":do {");
                     buffer.append(this);
                     process(this.outgoing.get(0), buffer);
                     buffer.append("} while (", condition, ")");
@@ -349,15 +349,15 @@ class Node {
                     }
 
                     if (outgoing.get(0).incoming.size() == 1) {
-                        buffer.append("if (", this, ") {");
+                        buffer.append("if(", this, "){");
                         process(outgoing.get(0), buffer);
-                        buffer.append("} else {");
+                        buffer.append("}else{");
                         process(outgoing.get(1), buffer);
                         buffer.append("}");
                         process(follower, buffer);
                     } else {
-                        buffer.append("if (", this, ") {");
-                        buffer.append("} else {");
+                        buffer.append("if(", this, "){");
+                        buffer.append("}else{");
                         process(outgoing.get(1), buffer);
                         buffer.append("}");
                         process(outgoing.get(0), buffer);
@@ -380,7 +380,7 @@ class Node {
                         follower = outgoing.get(1);
 
                         // write script fragment
-                        buffer.append("l", id, " : for (;", this, ";", update, ") {");
+                        buffer.append("l", id, ":for (;", this, ";", update, ") {");
                         process(outgoing.get(0), buffer);
                         buffer.append("}");
                         process(follower, buffer);
@@ -391,7 +391,7 @@ class Node {
                         follower = outgoing.get(1);
 
                         // write script fragment
-                        buffer.append("l", id, " : while (", this, ") {");
+                        buffer.append("l", id, ":while (", this, ") {");
                         process(outgoing.get(0), buffer);
                         buffer.append("}");
                         process(follower, buffer);
@@ -403,7 +403,7 @@ class Node {
                     follower = outgoing.get(1);
 
                     // write script fragment
-                    buffer.append("l", id, " : while (", this, ") {");
+                    buffer.append("l", id, ":while (", this, ") {");
                     process(outgoing.get(0), buffer);
                     buffer.append("}");
                     process(follower, buffer);
