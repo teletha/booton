@@ -230,7 +230,16 @@ class JavaMethodCompiler extends MethodVisitor {
 
         switch (opcode) {
         case PUTFIELD:
-            current.addExpression(current.remove(1), ".", Javascript.computeFieldName(ownerClass, name), "=", current.remove(0));
+            // Increment of field doesn't use increment instruction, so we must distinguish
+            // increment from addition by pattern matching. Post increment code of field
+            // leaves characteristic pattern like the following.
+            if (match(ALOAD, DUP, GETFIELD, DUP_X1, ICONST_1, IADD, PUTFIELD)) {
+                current.remove(0);
+
+                current.addOperand(new OperandExpression(current.remove(0) + "." + Javascript.computeFieldName(ownerClass, name) + "++"));
+            } else {
+                current.addExpression(current.remove(1), ".", Javascript.computeFieldName(ownerClass, name), "=", current.remove(0));
+            }
             break;
 
         case GETFIELD:
@@ -299,6 +308,18 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.stack.peekLast().duplicated = true;
             }
             break;
+
+        case DUP_X1:
+        case DUP_X2:
+            // These instructions are used for field increment mainly, see visitFieldInsn(PUTFIELD).
+            // Skip this instruction to simplify compiler.
+            break;
+
+        case DUP2_X1:
+        case DUP2_X2:
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
 
         case POP:
         case POP2:

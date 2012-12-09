@@ -27,9 +27,6 @@ public class HashSet<E> implements Set<E> {
     /** The native key set. */
     private NativeObject values = new NativeObject();
 
-    /** The actual value container. */
-    private NativeArray items = new NativeArray();
-
     /**
      * {@inheritDoc}
      */
@@ -59,7 +56,7 @@ public class HashSet<E> implements Set<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return items.iterator();
+        return new View(values.keys());
     }
 
     /**
@@ -67,7 +64,7 @@ public class HashSet<E> implements Set<E> {
      */
     @Override
     public Object[] toArray() {
-        return items.toArray();
+        return toArray(new Object[] {});
     }
 
     /**
@@ -75,7 +72,9 @@ public class HashSet<E> implements Set<E> {
      */
     @Override
     public <T> T[] toArray(T[] a) {
-        return (T[]) items.toArray();
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
@@ -88,9 +87,8 @@ public class HashSet<E> implements Set<E> {
         if (values.hasProperty(hash)) {
             return false;
         } else {
+            size++;
             values.setProperty(hash, e);
-            items.push(e);
-
             return true;
         }
     }
@@ -105,10 +103,8 @@ public class HashSet<E> implements Set<E> {
         if (!values.hasProperty(hash)) {
             return false;
         } else {
+            size--;
             values.deleteProperty(hash);
-
-            keys.deleteProperty(hash);
-            values.remove(index);
             return true;
         }
     }
@@ -176,7 +172,7 @@ public class HashSet<E> implements Set<E> {
      */
     @Override
     public void clear() {
-        keys = new NativeObject();
+        size = 0;
         values = new NativeArray();
     }
 
@@ -190,5 +186,48 @@ public class HashSet<E> implements Set<E> {
      */
     private int hash(Object key) {
         return key == null ? -1 : key.hashCode();
+    }
+
+    /**
+     * @version 2012/12/09 16:45:34
+     */
+    private class View<E> implements Iterator<E> {
+
+        /** The actual view. */
+        private final NativeArray<String> keys;
+
+        /** The curren position. */
+        private int index = 0;
+
+        /**
+         * @param keys
+         */
+        private View(NativeArray<String> keys) {
+            this.keys = keys;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean hasNext() {
+            return index < keys.length();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E next() {
+            return (E) values.getProperty(hash(keys.get(index++)));
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void remove() {
+            values.deleteProperty(hash(keys.get(index - 1)));
+        }
     }
 }
