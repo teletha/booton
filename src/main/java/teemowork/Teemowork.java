@@ -21,6 +21,9 @@ public class Teemowork {
     public static void jsmain() {
         // System.out.println(Patch.Latest.findItem(Item.HauntingGuise));
 
+        Set<String> set1 = new HashSet();
+        set1.add("test111");
+
         Set<String> set = new HashSet();
         set.add("test");
 
@@ -30,6 +33,7 @@ public class Teemowork {
 
         set.add("asdasd");
         set.add("test");
+        set.addAll(set1);
 
         for (String string : set) {
             System.out.println(string);

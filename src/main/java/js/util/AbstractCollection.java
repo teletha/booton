@@ -10,7 +10,6 @@
 package js.util;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * @version 2012/12/08 22:08:28
@@ -21,81 +20,54 @@ public abstract class AbstractCollection<E> implements Collection<E> {
      * {@inheritDoc}
      */
     @Override
-    public boolean isEmpty() {
-        return size() == 0;
-    }
+    public boolean addAll(Collection<? extends E> collection) {
+        boolean modified = false;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean contains(Object o) {
-        Iterator<E> it = iterator();
-
-        if (o == null) {
-            while (it.hasNext()) {
-                if (it.next() == null) {
-                    return true;
-                }
-            }
-        } else {
-            while (it.hasNext()) {
-                if (o.equals(it.next())) {
-                    return true;
-                }
+        for (E item : collection) {
+            if (add(item)) {
+                modified = true;
             }
         }
-        return false;
+        return modified;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Object[] toArray() {
-        return null;
-    }
+    public boolean retainAll(Collection<?> collection) {
+        boolean modified = false;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T> T[] toArray(T[] a) {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean remove(Object o) {
-        Iterator<E> it = iterator();
-
-        if (o == null) {
-            while (it.hasNext()) {
-                if (it.next() == null) {
-                    it.remove();
-                    return true;
-                }
-            }
-        } else {
-            while (it.hasNext()) {
-                if (o.equals(it.next())) {
-                    it.remove();
-                    return true;
-                }
+        for (Object item : this) {
+            if (!collection.contains(item)) {
+                modified = remove(item);
             }
         }
-        return false;
+        return modified;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean containsAll(Collection<?> c) {
-        for (Object e : c) {
-            if (!contains(e)) {
+    public boolean removeAll(Collection<?> collection) {
+        boolean modified = false;
+
+        for (Object item : collection) {
+            if (remove(item)) {
+                modified = true;
+            }
+        }
+        return modified;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean containsAll(Collection<?> collection) {
+        for (Object item : collection) {
+            if (!contains(item)) {
                 return false;
             }
         }
@@ -106,61 +78,7 @@ public abstract class AbstractCollection<E> implements Collection<E> {
      * {@inheritDoc}
      */
     @Override
-    public boolean addAll(Collection<? extends E> c) {
-        boolean modified = false;
-
-        for (E e : c) {
-            if (add(e)) {
-                modified = true;
-            }
-        }
-        return modified;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        boolean modified = false;
-        Iterator it = iterator();
-
-        while (it.hasNext()) {
-            if (c.contains(it.next())) {
-                it.remove();
-                modified = true;
-            }
-        }
-        return modified;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        boolean modified = false;
-        Iterator<E> it = iterator();
-
-        while (it.hasNext()) {
-            if (!c.contains(it.next())) {
-                it.remove();
-                modified = true;
-            }
-        }
-        return modified;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void clear() {
-        Iterator<E> it = iterator();
-
-        while (it.hasNext()) {
-            it.next();
-            it.remove();
-        }
+    public Object[] toArray() {
+        return toArray(new Object[] {});
     }
 }
