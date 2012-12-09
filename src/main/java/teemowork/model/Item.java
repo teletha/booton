@@ -9,16 +9,18 @@
  */
 package teemowork.model;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
 
-import js.util.ArrayList;
+import js.util.HashMap;
 
 /**
  * @version 2012/12/07 10:00:23
  */
 public class Item {
 
-    private static List<Item> items = new ArrayList();
+    /** The item manager. */
+    private static final Map<String, Item> items = new HashMap();
 
     /** The item name. */
     public static final String RubyCrystal = "Ruby Crystal";
@@ -34,6 +36,12 @@ public class Item {
 
     /** The name. */
     public final String name;
+
+    /** The history version. */
+    private final Patch patch;
+
+    /** The history chain. */
+    private final Item previous;
 
     /** Item status. */
     private int cost;
@@ -95,8 +103,10 @@ public class Item {
     /**
      * @param name
      */
-    Item(String name) {
+    Item(String name, Patch patch) {
         this.name = name;
+        this.patch = patch;
+        this.previous = items.get(name);
     }
 
     /**
@@ -107,7 +117,7 @@ public class Item {
      * @param patch
      */
     Item copy() {
-        Item item = new Item(name);
+        Item item = new Item(name, patch);
         item.cost = cost;
         item.ad = ad;
         item.as = as;
@@ -539,12 +549,7 @@ public class Item {
      * @return
      */
     public static Item getByName(String name) {
-        for (Item item : items) {
-            if (item.name.equals(name)) {
-                return item;
-            }
-        }
-        return null;
+        return items.get(name);
     }
 
     /**
@@ -554,7 +559,7 @@ public class Item {
      * 
      * @return
      */
-    public static List<Item> getAll() {
-        return items;
+    public static Collection<Item> getAll() {
+        return items.values();
     }
 }
