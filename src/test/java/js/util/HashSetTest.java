@@ -94,6 +94,60 @@ public class HashSetTest extends ScriptTester {
     }
 
     @Test
+    public void contains() throws Exception {
+        test(new Scriptable() {
+
+            boolean act() {
+                Set<String> set = new HashSet();
+                assert !set.contains("1");
+
+                set.add("1");
+                assert set.contains("1");
+
+                return set.contains("1");
+            }
+        });
+    }
+
+    @Test
+    public void isEmpty() throws Exception {
+        test(new Scriptable() {
+
+            boolean act() {
+                Set<String> set = new HashSet();
+                assert set.isEmpty();
+
+                set.add("1");
+                assert !set.isEmpty();
+
+                return set.isEmpty();
+            }
+        });
+    }
+
+    @Test
+    public void addAll() throws Exception {
+        test(new Scriptable() {
+
+            boolean act() {
+                Set<String> set = new HashSet();
+                set.add("1");
+                assert set.size() == 1;
+
+                Set<String> addition = new HashSet();
+                addition.add("1");
+                addition.add("2");
+                addition.add("3");
+                boolean modified = set.addAll(addition);
+                assert set.size() == 3;
+                assert modified;
+
+                return modified;
+            }
+        });
+    }
+
+    @Test
     public void iterator() throws Exception {
         test(new Scriptable() {
 

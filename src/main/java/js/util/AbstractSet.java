@@ -15,5 +15,4 @@ import java.util.Set;
  * @version 2012/12/08 22:07:59
  */
 public abstract class AbstractSet<E> extends AbstractCollection<E> implements Set<E> {
-
 }

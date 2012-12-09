@@ -9,9 +9,7 @@
  */
 package js.util;
 
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
 
 import booton.translator.js.NativeArray;
 import booton.translator.js.NativeObject;
@@ -19,7 +17,7 @@ import booton.translator.js.NativeObject;
 /**
  * @version 2012/12/08 11:49:36
  */
-public class HashSet<E> implements Set<E> {
+public class HashSet<E> extends AbstractSet<E> {
 
     /** The item count. */
     private int size = 0;
@@ -49,32 +47,6 @@ public class HashSet<E> implements Set<E> {
     @Override
     public boolean contains(Object o) {
         return values.hasProperty(hash(o));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Iterator<E> iterator() {
-        return new View(values.keys());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Object[] toArray() {
-        return toArray(new Object[] {});
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T> T[] toArray(T[] a) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
     }
 
     /**
@@ -113,67 +85,27 @@ public class HashSet<E> implements Set<E> {
      * {@inheritDoc}
      */
     @Override
-    public boolean containsAll(Collection<?> collection) {
-        for (Object item : collection) {
-            if (!contains(item)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean addAll(Collection<? extends E> collection) {
-        boolean modified = false;
-
-        for (E item : collection) {
-            if (add(item)) {
-                modified = true;
-            }
-        }
-        return modified;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean retainAll(Collection<?> collection) {
-        boolean modified = false;
-
-        for (Object item : this) {
-            if (!collection.contains(item)) {
-                modified = remove(item);
-            }
-        }
-        return modified;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean removeAll(Collection<?> collection) {
-        boolean modified = false;
-
-        for (Object item : collection) {
-            if (remove(item)) {
-                modified = true;
-            }
-        }
-        return modified;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void clear() {
         size = 0;
         values = new NativeArray();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Iterator<E> iterator() {
+        return new View(values.keys());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T> T[] toArray(T[] a) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
