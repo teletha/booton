@@ -143,6 +143,7 @@ public class Javascript {
         dependency = switchClass(dependency);
 
         if (!TranslatorManager.hasTranslator(dependency) && !dependency.isArray()) {
+            System.out.println(source + "  require @@@@@@@@@@@ " + dependency);
             dependencies.add(dependency);
         }
     }

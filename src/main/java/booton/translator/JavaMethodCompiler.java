@@ -75,6 +75,9 @@ class JavaMethodCompiler extends MethodVisitor {
 
     private String original;
 
+    /** The flag whether the next jump instruction is used for assert statement or not. */
+    private boolean assertJump = false;
+
     /** The pool of try-catch-finally blocks. */
     private Deque<TryBlock> tries = new ArrayDeque();
 
@@ -207,6 +210,13 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+        // If this field access instruction is used for assertion, we should skip it to erase
+        // compiler generated extra code.
+        if (name.equals("$assertionsDisabled")) {
+            assertJump = true;
+            return;
+        }
+
         // recode current instruction
         record(opcode);
 
@@ -278,7 +288,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitInsn(int opcode) {
-        // recode instruction
+        // recode current instruction
         record(opcode);
 
         switch (opcode) {
@@ -521,6 +531,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitIntInsn(int opcode, int operand) {
+        // recode current instruction
         record(opcode);
 
         // The opcode of the instruction to be visited. This opcode is either BIPUSH, SIPUSH or
@@ -551,6 +562,14 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitJumpInsn(int opcode, Label label) {
+        // If this jump instruction is used for assertion, we should skip it to erase compiler
+        // generated extra code.
+        if (assertJump) {
+            assertJump = false; // reset flag
+            return;
+        }
+
+        // recode current instruction
         record(opcode);
 
         // search node
@@ -636,6 +655,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitLabel(Label label) {
+        // recode current instruction
         record(LABEL);
 
         // Basically, visitLabel method is called each expression. But the following patterns are
@@ -922,7 +942,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitMethodInsn(int opcode, String className, String methodName, String desc) {
-        // recode instruction
+        // recode current instruction
         record(opcode);
 
         // compute owner class
@@ -1054,6 +1074,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitTypeInsn(int opcode, String type) {
+        // recode current instruction
         record(opcode);
 
         switch (opcode) {
@@ -1081,7 +1102,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitVarInsn(int opcode, int position) {
-        // recode operand code
+        // recode current instruction
         record(opcode);
 
         // retrieve local variable name
