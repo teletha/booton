@@ -155,21 +155,8 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
      * Changes the content of an array, adding new elements while removing old elements.
      * </p>
      */
-    public NativeArray<T> remove(int index, int length) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
-    }
-
-    /**
-     * <p>
-     * Changes the content of an array, adding new elements while removing old elements.
-     * </p>
-     */
-    public void splice(int index, int length, NativeArray<T> items) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+    public T remove(int index) {
+        return list.remove(index);
     }
 
     /**
@@ -187,8 +174,19 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
      * 
      * @return
      */
-    public T[] toArray() {
-        return (T[]) list.toArray();
+    public Object[] toArray() {
+        return list.toArray();
+    }
+
+    /**
+     * <p>
+     * Convert type to Java array.
+     * </p>
+     * 
+     * @return
+     */
+    public T[] toArray(T[] container) {
+        return list.toArray(container);
     }
 
     /**
@@ -287,8 +285,8 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
          * Changes the content of an array, adding new elements while removing old elements.
          * </p>
          */
-        public String remove(int param0, int param1) {
-            return that + ".splice(" + param(0) + "," + param(1) + ")";
+        public String remove(int param0) {
+            return that + ".splice(" + param(0) + ",1)[0]";
         }
 
         /**
@@ -315,6 +313,17 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
          * @return
          */
         public String toArray() {
+            return that;
+        }
+
+        /**
+         * <p>
+         * Convert type to Java array.
+         * </p>
+         * 
+         * @return
+         */
+        public String toArray(Object[] container) {
             return that;
         }
     }

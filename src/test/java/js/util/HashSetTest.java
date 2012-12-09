@@ -17,8 +17,9 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2012/12/09 0:39:57
+ * @version 2012/12/09 14:58:41
  */
+@SuppressWarnings("unused")
 public class HashSetTest extends ScriptTester {
 
     @Test
@@ -26,8 +27,11 @@ public class HashSetTest extends ScriptTester {
         test(new Scriptable() {
 
             int act() {
-                Set<String> set = new HashSet2();
+                Set<String> set = new HashSet();
+                assert set.size() == 0;
+
                 set.add("1");
+                assert set.size() == 1;
 
                 return set.size();
             }
@@ -39,9 +43,12 @@ public class HashSetTest extends ScriptTester {
         test(new Scriptable() {
 
             int act() {
-                Set<String> set = new HashSet2();
-                set.add("1");
-                set.add("2");
+                Set<String> set = new HashSet();
+                assert set.size() == 0;
+
+                assert set.add("1");
+                assert set.add("2");
+                assert set.size() == 2;
 
                 return set.size();
             }
@@ -53,11 +60,32 @@ public class HashSetTest extends ScriptTester {
         test(new Scriptable() {
 
             int act() {
-                String value = "1";
+                Set<String> set = new HashSet();
+                assert set.add("1");
+                assert !set.add("1");
+                assert set.size() == 1;
 
-                Set<String> set = new HashSet2();
-                set.add(value);
-                set.add(value);
+                return set.size();
+            }
+        });
+    }
+
+    @Test
+    public void remove() throws Exception {
+        test(new Scriptable() {
+
+            int act() {
+                Set<String> set = new HashSet();
+                set.add("1");
+                set.add("2");
+                assert set.size() == 2;
+
+                assert set.remove("1");
+                assert set.size() == 1;
+                assert !set.remove("1");
+
+                assert set.remove("2");
+                assert set.size() == 0;
 
                 return set.size();
             }

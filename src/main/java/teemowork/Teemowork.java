@@ -9,7 +9,7 @@
  */
 package teemowork;
 
-import js.util.HashSet2;
+import js.util.HashSet;
 
 /**
  * @version 2012/12/06 23:20:54
@@ -19,7 +19,7 @@ public class Teemowork {
     public static void jsmain() {
         // System.out.println(Patch.Latest.findItem(Item.HauntingGuise));
 
-        HashSet2<String[]> set = new HashSet2();
+        HashSet<String[]> set = new HashSet();
         set.add(new String[] {"1", "2"});
 
         System.out.println(set.contains("test"));
