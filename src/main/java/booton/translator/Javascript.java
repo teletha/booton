@@ -231,6 +231,7 @@ public class Javascript {
 
                         // copy all member fields and methods for override mechanism
                         // methods.addAll(parent.methods);
+                        fields.addAll(parent.fields);
                     }
                 }
 
@@ -397,7 +398,7 @@ public class Javascript {
         try {
             owner.getDeclaredField(fieldName);
 
-            return computeClassName(owner).substring(5) + mung(order(getScript(owner).fields, fieldName.hashCode()), true);
+            return mung(order(getScript(owner).fields, fieldName.hashCode() + owner.hashCode()), true);
         } catch (NoSuchFieldException e) {
             return computeFieldName(owner.getSuperclass(), fieldName);
         }
