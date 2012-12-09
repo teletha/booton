@@ -19,7 +19,7 @@ import booton.translator.js.NativeMap;
 /**
  * @version 2012/12/08 11:49:36
  */
-public class HashSet<E> implements Set<E> {
+public class IdentityHashSet<E> implements Set<E> {
 
     /** The native set. */
     private NativeMap<E, Integer> set = new NativeMap();
