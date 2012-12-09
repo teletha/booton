@@ -67,13 +67,8 @@ public class Patch {
      * @param name
      */
     private Item update(String name) {
-        Item item = findItem(name);
-
-        if (item == null) {
-            item = new Item(name);
-        } else {
-            item = item.copy();
-        }
+        Item item = new Item(name, this);
+        System.out.println(name);
 
         items.put(name, item);
 

@@ -9,6 +9,8 @@
  */
 package teemowork;
 
+import java.util.Collection;
+
 import teemowork.model.Item;
 import teemowork.model.Patch;
 
@@ -18,6 +20,12 @@ import teemowork.model.Patch;
 public class Teemowork {
 
     public static void jsmain() {
-        System.out.println(Patch.Latest.findItem(Item.HauntingGuise));
+        System.out.println(Patch.Latest);
+        Collection<Item> items = Item.getAll();
+
+        for (Item item : items) {
+            System.out.println(item);
+        }
+        System.out.println("end");
     }
 }
