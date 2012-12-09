@@ -9,6 +9,7 @@
  */
 package booton.translator;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -17,6 +18,7 @@ import org.junit.Test;
 public class DebugTest extends ScriptTester {
 
     @Test
+    @Ignore
     public void debug() throws Exception {
         test(new Scriptable() {
 
@@ -32,6 +34,7 @@ public class DebugTest extends ScriptTester {
     }
 
     @Test
+    @Ignore
     public void debug2() throws Exception {
         test(new Scriptable() {
 

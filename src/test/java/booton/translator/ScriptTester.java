@@ -42,6 +42,9 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
  */
 public class ScriptTester {
 
+    /** The line feed. */
+    private static final String END = "\r\n";
+
     /** No parameter. */
     private static final Object NONE = new Object();
 
@@ -147,13 +150,26 @@ public class ScriptTester {
                 invoker.append(");");
                 invoker.append("} catch(e) {e}");
 
-                // execute and compare it to the java resul
-                assertObject(results.get(i), engine.evaluateString(global, invoker.toString(), "", 1, null));
+                try {
+                    // execute and compare it to the java resul
+                    assertObject(results.get(i), engine.evaluateString(global, invoker.toString(), "", 1, null));
+                } catch (AssertionError e) {
+                    StringBuilder builder = new StringBuilder();
+                    builder.append("Compiling script is success but execution results of Java and JS are different.")
+                            .append(END);
+
+                    if (input != NONE) {
+                        builder.append("Input value : ").append(input).append(END);
+                    }
+                    throw new AssertionError(builder.toString(), e);
+                }
             }
+        } catch (AssertionError e) {
+            throw e; // rethrow assertion error
         } catch (Throwable e) {
             TranslationError error = new TranslationError(e);
             error.write(e.getMessage());
-            error.write("\r\nFull Code :");
+            error.write(END, "Full Code :");
             error.write(script);
 
             if (e instanceof EvaluatorException) {
@@ -161,7 +177,7 @@ public class ScriptTester {
 
                 int index = exception.columnNumber();
                 String code = exception.lineSource();
-                error.write("\r\nAround Cause :");
+                error.write(END, "Around Cause :");
                 error.write(code.substring(Math.max(0, index - 20), Math.min(index + 20, code.length())));
             }
             throw error;
@@ -379,7 +395,6 @@ public class ScriptTester {
                 if (js instanceof Double) {
                     js = ((Double) js).intValue() != 0;
                 }
-                System.out.println(js.getClass() + "   " + java);
                 assert java.equals(js);
             } else if (type == String.class) {
                 // ========================

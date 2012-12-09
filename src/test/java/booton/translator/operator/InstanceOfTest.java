@@ -15,6 +15,7 @@
  */
 package booton.translator.operator;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.translator.ScriptTester;
@@ -63,6 +64,7 @@ public class InstanceOfTest extends ScriptTester {
     }
 
     @Test
+    @Ignore
     public void InstanceOfObject() {
         test(new OBJECT());
     }
