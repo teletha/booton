@@ -64,7 +64,7 @@ public class HashSet2<E> implements Set<E> {
      */
     @Override
     public Object[] toArray() {
-        return values.toJavaArray();
+        return values.toArray();
     }
 
     /**
@@ -72,7 +72,7 @@ public class HashSet2<E> implements Set<E> {
      */
     @Override
     public <T> T[] toArray(T[] a) {
-        return (T[]) values.toJavaArray();
+        return (T[]) values.toArray();
     }
 
     /**
@@ -100,7 +100,7 @@ public class HashSet2<E> implements Set<E> {
             int hash = hash(o);
             int index = (int) keys.getProperty(hash);
 
-            keys.removeProperty(hash);
+            keys.deleteProperty(hash);
             values.remove(index, 1);
             return true;
         }

@@ -187,7 +187,7 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
      * 
      * @return
      */
-    public T[] toJavaArray() {
+    public T[] toArray() {
         return (T[]) list.toArray();
     }
 
@@ -314,7 +314,7 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
          * 
          * @return
          */
-        public String toJavaArray() {
+        public String toArray() {
             return that;
         }
     }
