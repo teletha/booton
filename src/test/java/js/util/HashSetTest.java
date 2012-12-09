@@ -41,7 +41,7 @@ public class HashSetTest extends ScriptTester {
             int act() {
                 Set<String> set = new HashSet2();
                 set.add("1");
-                set.add("1");
+                set.add("2");
 
                 return set.size();
             }

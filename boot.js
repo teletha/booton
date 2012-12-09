@@ -6,7 +6,7 @@ function boot(global) {
    */
   function define(object, properties) {
     Object.keys(properties).forEach(function(name) {
-      if(!object[name]) {
+      if (!object[name]) {
         Object.defineProperty(object, name, {
           configurable: false,
           enumerable: false,
@@ -16,6 +16,80 @@ function boot(global) {
       }
     });
   }
+  
+  //====================================================================
+  // String Extensions
+  //====================================================================
+  define(String.prototype, {
+    /**
+     * Retrieve the object identifier.
+     *
+     * @return An identifier.
+     */
+    hashCode: function() {
+      if (this.$hashCode !== undefined) return this.$hashCode;
+
+      var hash = 0;
+      
+      for (var i = 0; i < this.length; i++) {
+        hash = 31 * hash + this.charCodeAt(i);
+      }
+      return this.$hashCode = hash;
+    },
+
+    /**
+     * <p>
+     * Tests if this string starts with the specified prefix.
+     * </p>
+     * 
+     * @param {String} prefix A prefix to test.
+     * @return {boolean} true if the character sequence represented by the argument is a prefix of
+     *         the character sequence represented by this string; false otherwise. Note also that
+     *         true will be returned if the argument is an empty string or is equal to this String
+     *         object as determined by the equals(Object) method.
+     */
+    startsWith: function(prefix) {
+        return prefix.length <= this.length && prefix == this.substring(0, prefix.length);
+    },
+
+    /**
+     * <p>
+     * Tests if this string ends with the specified suffix.
+     * </p>
+     * 
+     * @param {String} suffix A suffix to test.
+     * @return {boolean} <code>true</code> if the character sequence represented by the argument
+     *         is a suffix of the character sequence represented by this object; false otherwise.
+     *         Note that the result will be true if the argument is the empty string or is equal to
+     *         this String object as determined by the equals(Object) method.
+     */
+    endsWith: function(suffix) {
+        return suffix.length <= this.length && suffix == this.slice(~suffix.length + 1);
+    }
+  });
+
+  //====================================================================
+  // Array Extensions
+  //====================================================================
+  define(Array.prototype, {
+    /**
+     * Retrieve the object identifier.
+     *
+     * @return An identifier.
+     */
+    it: function() {
+      return {
+        item: this,
+        i: 0,
+        hasNext: function() {
+          return this.i < this.item.length;
+        },
+        next: function() {
+          return this.item[this.i++];
+        }
+      };
+    }
+  });
   
   //====================================================================
   // Object Extensions
@@ -62,29 +136,6 @@ function boot(global) {
      */ 
     keys: function() {
       return Object.keys(this);
-    }
-  });
-  
-  //====================================================================
-  // Array Extensions
-  //====================================================================
-  define(Array.prototype, {
-    /**
-     * Retrieve the object identifier.
-     *
-     * @return An identifier.
-     */
-    it: function() {
-      return {
-        item: this,
-        i: 0,
-        hasNext: function() {
-          return this.i < this.item.length;
-        },
-        next: function() {
-          return this.item[this.i++];
-        }
-      };
     }
   });
 
@@ -243,84 +294,6 @@ function boot(global) {
 
 boot(Function("return this")());
 
-
-
-
-/**
- * <h2>String Method Enhancement</h2>
- * <p>
- * Booton enhances the built-in class, except for Object and Array.
- * </p>
- */
-if (!String.prototype.trim) {
-    /**
-     * <p>
-     * The trim method returns the string stripped of whitespace from both ends. trim does not
-     * affect the value of the string itself.
-     * </p>
-     * 
-     * @return {String}
-     */
-    String.prototype.trim = function() {
-        return this.replace(/^\s+|\s+$/g, "");
-    };
-
-    /**
-     * <p>
-     * The trimRight method returns the string stripped of whitespace from its right end. trimRight
-     * does not affect the value of the string itself.
-     * </p>
-     * 
-     * @return {String}
-     */
-    String.prototype.trimRight = function() {
-        return this.replace(/\s+$/, "");
-    };
-
-    /**
-     * <p>
-     * The trimLeft method returns the string stripped of whitespace from its left end. trimLeft
-     * does not affect the value of the string itself.
-     * </p>
-     * 
-     * @return {String}
-     */
-    String.prototype.trimLeft = function() {
-        return this.replace(/^\s+/, "");
-    };
-}
-
-if (!String.prototype.endsWith) {
-    /**
-     * <p>
-     * Tests if this string starts with the specified prefix.
-     * </p>
-     * 
-     * @param {String} prefix A prefix to test.
-     * @return {boolean} true if the character sequence represented by the argument is a prefix of
-     *         the character sequence represented by this string; false otherwise. Note also that
-     *         true will be returned if the argument is an empty string or is equal to this String
-     *         object as determined by the equals(Object) method.
-     */
-    String.prototype.startsWith = function(prefix) {
-        return prefix.length <= this.length && prefix == this.substring(0, prefix.length);
-    };
-
-    /**
-     * <p>
-     * Tests if this string ends with the specified suffix.
-     * </p>
-     * 
-     * @param {String} suffix A suffix to test.
-     * @return {boolean} <code>true</code> if the character sequence represented by the argument
-     *         is a suffix of the character sequence represented by this object; false otherwise.
-     *         Note that the result will be true if the argument is the empty string or is equal to
-     *         this String object as determined by the equals(Object) method.
-     */
-    String.prototype.endsWith = function(suffix) {
-        return suffix.length <= this.length && suffix == this.slice(~suffix.length + 1);
-    };
-}
 
 if (window.jQuery) {
   jQuery.fn.iterator = function() {
