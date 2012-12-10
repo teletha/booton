@@ -9,6 +9,8 @@
  */
 package teemowork.model;
 
+import static teemowork.model.Item.*;
+
 import java.util.Map;
 
 import js.util.HashMap;
@@ -22,17 +24,17 @@ public class Patch {
     public static Patch P0000 = new Patch(1510, 2012, 11, 13, "Initial", null);
 
     static {
-        P0000.updateItem(Item.RubyCrystal).cost(475).health(180);
-        P0000.updateItem(Item.HauntingGuise).health(200).ap(25);
+        P0000.updateItem(RubyCrystal).cost(475).health(180);
+        P0000.updateItem(HauntingGuise).health(200).ap(25);
     }
 
     /** The patch. */
     public static Patch P1520 = new Patch(1520, 2012, 12, 03, "Preseason 3", P0000);
 
     static {
-        P1520.updateItem(Item.ShardOfTrueIce);
-        P1520.updateItem(Item.LiandrysTorment);
-        P1520.updateItem(Item.HauntingGuise);
+        P1520.updateItem(ShardOfTrueIce);
+        P1520.updateItem(LiandrysTorment);
+        P1520.updateItem(HauntingGuise);
     }
 
     /** The latest patch. */
@@ -53,7 +55,7 @@ public class Patch {
     /**
      * Create patch information.
      */
-    public Patch(int number, int year, int month, int day, String name, Patch previous) {
+    private Patch(int number, int year, int month, int day, String name, Patch previous) {
         this.number = number;
         this.name = name;
         this.previous = previous;
