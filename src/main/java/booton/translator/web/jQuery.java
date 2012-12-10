@@ -15,6 +15,7 @@ import java.util.Iterator;
 
 import org.w3c.dom.Element;
 
+import booton.CSS;
 import booton.translator.JavascriptNative;
 
 /**
@@ -273,6 +274,21 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native String css(String property);
+
+    /**
+     * <p>
+     * Apply class.
+     * </p>
+     * 
+     * @param cssClass
+     * @return
+     */
+    public jQuery css(Class<? extends CSS> css) {
+        addClass(css.getSimpleName());
+
+        // Chainable API
+        return this;
+    }
 
     /**
      * <p>

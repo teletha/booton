@@ -16,7 +16,7 @@ import booton.translator.Translator;
 /**
  * @version 2012/11/28 1:57:58
  */
-public class PrintWriterTranslator extends Translator<PrintStream> {
+class PrintWriterCoder extends Translator<PrintStream> {
 
     public String println(String value) {
         return that + ".log(" + param(0) + ")";

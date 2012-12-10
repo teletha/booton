@@ -73,6 +73,10 @@ public class Translator<T> implements Extensible {
         if (name.equals("equals") && description.equals("(Ljava/lang/Object;)Z")) {
             return context.get(0) + ".equals(" + context.get(1) + ")";
         }
+
+        if (name.equals("hashCode") && description.equals("()I")) {
+            return context.get(0) + ".hashCode()";
+        }
         return write(search(name, types), context);
     }
 

@@ -15,6 +15,7 @@ import java.util.Collection;
 
 import teemowork.model.Item;
 import teemowork.model.Patch;
+import booton.CSS;
 import booton.translator.web.jQuery;
 
 /**
@@ -28,8 +29,19 @@ public class Teemowork {
 
         for (Item item : items) {
             jQuery root = $("<p>").appendTo("body");
-            root.text(item.name);
+            root.text(item.name + "  " + item.cost());
+            System.out.println(MyCSS.class);
+            root.css(MyCSS.class);
         }
+    }
 
+    /**
+     * @version 2012/12/10 16:59:19
+     */
+    private static class MyCSS extends CSS {
+
+        {
+            color(red);
+        }
     }
 }

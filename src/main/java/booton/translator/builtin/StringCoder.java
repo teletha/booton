@@ -20,7 +20,7 @@ import booton.translator.Translator;
 /**
  * @version 2009/08/08 10:49:18
  */
-public class StringTranslator extends Translator<String> {
+class StringCoder extends Translator<String> {
 
     public String String(String value) {
         return param(0);
@@ -29,8 +29,8 @@ public class StringTranslator extends Translator<String> {
     public String String(char[] param0, int param1, int param2) {
         return that + ".String(" + param(0) + "," + param(1) + "," + param(2) + ")";
     }
-    
-    public String String(char[] param0,boolean param1) {
+
+    public String String(char[] param0, boolean param1) {
         return that + ".String(" + param(0) + "," + param(1) + ")";
     }
 
@@ -45,6 +45,10 @@ public class StringTranslator extends Translator<String> {
 
     public String charAt(int index) {
         return that + ".charAt(" + param(0) + ")";
+    }
+
+    public String indexOf(int value) {
+        return that + ".indexOf(" + param(0) + ")";
     }
 
     public String indexOf(String value) {

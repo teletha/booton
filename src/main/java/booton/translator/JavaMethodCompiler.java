@@ -916,8 +916,10 @@ class JavaMethodCompiler extends MethodVisitor {
 
             // add class operand
             Class clazz = convert(className);
-            script.require(clazz);
-            current.addOperand(Javascript.computeClassName(clazz));
+
+            // Booton doesn't support class literal in javascript runtime, so we should provide
+            // class name instead.
+            current.addOperand('"' + Javascript.computeClassName(clazz).substring(5) + '"');
         } else {
             current.addOperand(constant);
         }
