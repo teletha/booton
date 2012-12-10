@@ -9,16 +9,18 @@
  */
 package booton.translator.builtin;
 
-import java.util.Arrays;
-
 import booton.translator.Translator;
 
 /**
- * @version 2012/12/07 15:44:01
+ * @version 2012/12/10 17:06:22
  */
-public class ArraysTranslator extends Translator<Arrays> {
+class ClassCoder extends Translator<Class> {
 
-    public String copyOf(Object[] original, int newLength) {
-        return param(0) + ".slice(" + param(1) + ")";
+    public String getName() {
+        return that;
+    }
+
+    public String getSimpleName() {
+        return that;
     }
 }

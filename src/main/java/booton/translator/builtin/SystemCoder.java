@@ -14,7 +14,7 @@ import booton.translator.Translator;
 /**
  * @version 2012/11/27 23:25:12
  */
-public class SystemTranslator extends Translator<System> {
+class SystemCoder extends Translator<System> {
 
     public String out = "console";
 

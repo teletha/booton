@@ -7,26 +7,18 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton;
+package booton.translator.builtin;
+
+import java.util.Arrays;
+
+import booton.translator.Translator;
 
 /**
- * @version 2012/11/29 11:11:06
+ * @version 2012/12/07 15:44:01
  */
-public abstract class Application {
+class ArraysCoder extends Translator<Arrays> {
 
-    /**
-     * <p>
-     * Entry point to initialize application.
-     * </p>
-     */
-    protected abstract void main();
-
-    /**
-     * <p>
-     * JQuery.
-     * </p>
-     */
-    protected void $(String selector) {
-
+    public String copyOf(Object[] original, int newLength) {
+        return param(0) + ".slice(" + param(1) + ")";
     }
 }
