@@ -92,6 +92,17 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Adds the specified class(es) to each of the set of matched elements.
+     * </p>
+     * 
+     * @param classNames One or more class names to be added to the class attribute of each matched
+     *            element.
+     * @return
+     */
+    public native jQuery addClass(Class<? extends CSS> className);
+
+    /**
+     * <p>
      * Insert content, specified by the parameter, after each element in the set of matched
      * elements.
      * </p>
@@ -277,21 +288,6 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
-     * Apply class.
-     * </p>
-     * 
-     * @param cssClass
-     * @return
-     */
-    public jQuery css(Class<? extends CSS> css) {
-        addClass(css.getSimpleName());
-
-        // Chainable API
-        return this;
-    }
-
-    /**
-     * <p>
      * Set one or more CSS properties for the set of matched elements.
      * </p>
      * 
@@ -410,6 +406,30 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Remove a single class, multiple classes, or all classes from each element in the set of
+     * matched elements.
+     * </p>
+     * 
+     * @param classNames One or more space-separated classes to be removed from the class attribute
+     *            of each matched element.
+     * @return
+     */
+    public native jQuery removeClass(String classNames);
+
+    /**
+     * <p>
+     * Remove a single class, multiple classes, or all classes from each element in the set of
+     * matched elements.
+     * </p>
+     * 
+     * @param classNames One or more space-separated classes to be removed from the class attribute
+     *            of each matched element.
+     * @return
+     */
+    public native jQuery removeClass(Class<? extends CSS> classNames);
+
+    /**
+     * <p>
      * Return the number of elements in the jQuery object.
      * </p>
      * 
@@ -436,6 +456,30 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery text(String text);
+
+    /**
+     * <p>
+     * Add or remove one or more classes from each element in the set of matched elements, depending
+     * on either the class's presence or the value of the switch argument.
+     * </p>
+     * 
+     * @param className One or more class names (separated by spaces) to be toggled for each element
+     *            in the matched set.
+     * @return
+     */
+    public native jQuery toggleClass(String classNames);
+
+    /**
+     * <p>
+     * Add or remove one or more classes from each element in the set of matched elements, depending
+     * on either the class's presence or the value of the switch argument.
+     * </p>
+     * 
+     * @param className One or more class names (separated by spaces) to be toggled for each element
+     *            in the matched set.
+     * @return
+     */
+    public native jQuery toggleClass(Class<? extends CSS> classNames);
 
     /**
      * @version 2012/12/02 23:08:01

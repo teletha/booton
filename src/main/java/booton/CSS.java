@@ -232,9 +232,7 @@ public class CSS implements Extensible {
     }
 
     protected final void margin(double size, Unit unit) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        properties.put("margin", compute(size, unit));
     }
 
     protected final void margin(double top, Unit topUnit, double right, Unit rightUnit, double bottom, Unit bottomUnit, double left, Unit leftUnit) {

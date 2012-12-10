@@ -17,6 +17,8 @@ import teemowork.model.Item;
 import teemowork.model.Patch;
 import booton.CSS;
 import booton.translator.web.jQuery;
+import booton.translator.web.jQuery.Event;
+import booton.translator.web.jQuery.Listener;
 
 /**
  * @version 2012/12/06 23:20:54
@@ -28,10 +30,16 @@ public class Teemowork {
         final Collection<Item> items = Item.getAll();
 
         for (Item item : items) {
-            jQuery root = $("<p>").appendTo("body");
+            final jQuery root = $("<p>").appendTo("body");
             root.text(item.name + "  " + item.cost());
-            System.out.println(MyCSS.class);
-            root.css(MyCSS.class);
+
+            root.click(new Listener() {
+
+                @Override
+                public void handler(Event event) {
+                    root.toggleClass(MyCSS.class);
+                }
+            });
         }
     }
 
@@ -42,6 +50,7 @@ public class Teemowork {
 
         {
             color(red);
+            margin(1, em);
         }
     }
 }
