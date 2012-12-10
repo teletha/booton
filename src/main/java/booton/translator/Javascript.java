@@ -115,6 +115,9 @@ public class Javascript {
     /** The actual Javascript source code to be translated. This is initialized lazy */
     private String code;
 
+    /** The flag whether javascript has native class or not. */
+    private final boolean jsNative;
+
     /**
      * Create Javascript as the specified Java class is source.
      * 
@@ -132,6 +135,15 @@ public class Javascript {
     private Javascript(Class source) {
         this.source = source;
         this.id = counter++;
+
+        boolean jsNative = false;
+
+        for (Class type : source.getInterfaces()) {
+            if (type == JavascriptNative.class) {
+                jsNative = true;
+            }
+        }
+        this.jsNative = jsNative;
     }
 
     /**
@@ -215,55 +227,92 @@ public class Javascript {
      */
     private synchronized void compile() {
         if (code == null) {
-            try {
-                // All scripts depend on its parent classes. So we must compile it ahead.
-                Class parentClass = source.getSuperclass();
+            // All scripts depend on its parent classes. So we must compile it ahead.
+            Class parentClass = source.getSuperclass();
 
-                if (parentClass != null && source != NativeObject.class) {
-                    Javascript parent = Javascript.getScript(parentClass);
+            if (parentClass != null && source != NativeObject.class) {
+                Javascript parent = Javascript.getScript(parentClass);
 
-                    if (parent != null && parent.source != NativeObject.class) {
-                        // compile ahead
-                        parent.compile();
+                if (parent != null && parent.source != NativeObject.class) {
+                    // compile ahead
+                    parent.compile();
 
-                        // add dependency
-                        dependencies.add(parent.source);
+                    // add dependency
+                    dependencies.add(parent.source);
 
-                        // copy all member fields and methods for override mechanism
-                        // methods.addAll(parent.methods);
-                        fields.addAll(parent.fields);
-                    }
+                    // copy all member fields and methods for override mechanism
+                    // methods.addAll(parent.methods);
+                    fields.addAll(parent.fields);
                 }
-
-                if (source.isInterface()) {
-                    for (Method method : source.getDeclaredMethods()) {
-                        order(fields, method.getName().hashCode() ^ Type.getMethodDescriptor(method).hashCode());
-                    }
-                }
-
-                // Then, we can compile this script.
-                ScriptBuffer code = new ScriptBuffer();
-
-                // Start class definition
-                code.append("boot.define(\"").append(computeClassName(source).substring(5)).append("\",");
-
-                if (parentClass != null && parentClass != Object.class) {
-                    code.append(Javascript.computeClassName(parentClass)).append(',');
-                }
-
-                code.append('{');
-
-                new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), SKIP_FRAMES);
-
-                // End class definition
-                code.append("});");
-
-                // create cache
-                this.code = code.toString();
-            } catch (IOException e) {
-                throw I.quiet(e);
             }
+
+            if (source.isInterface()) {
+                for (Method method : source.getDeclaredMethods()) {
+                    order(fields, method.getName().hashCode() ^ Type.getMethodDescriptor(method).hashCode());
+                }
+            }
+
+            // Then, we can compile this script.
+            ScriptBuffer code = new ScriptBuffer();
+
+            if (jsNative) {
+                compileNative(code);
+            } else {
+                compileClass(code, parentClass);
+            }
+
+            // create cache
+            this.code = code.toString();
         }
+    }
+
+    /**
+     * <p>
+     * Compile java class to javascript.
+     * </p>
+     * 
+     * @param code
+     * @param parentClass
+     */
+    private void compileClass(ScriptBuffer code, Class parentClass) {
+        // Start class definition
+        code.append("boot.define(\"").append(computeClassName(source).substring(5)).append("\",");
+
+        if (parentClass != null && parentClass != Object.class) {
+            code.append(Javascript.computeClassName(parentClass)).append(',');
+        }
+
+        code.append('{');
+
+        try {
+            new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), SKIP_FRAMES);
+        } catch (IOException e) {
+            throw I.quiet(e);
+        }
+
+        // End class definition
+        code.append("});");
+    }
+
+    /**
+     * <p>
+     * Compile java class for {@link JavascriptNative}.
+     * </p>
+     * 
+     * @param code
+     */
+    private void compileNative(ScriptBuffer code) {
+        // Start class definition
+        code.append("boot.defineNative(\"").append(source.getSimpleName()).append("\",{");
+
+        try {
+            new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), SKIP_FRAMES);
+        } catch (IOException e) {
+            throw I.quiet(e);
+        }
+
+        // End class definition
+        code.append("});");
     }
 
     /**

@@ -28,7 +28,7 @@ public class WebSupport {
      * @param expression
      * @return
      */
-    public static native JQuery $(String expression);
+    public static native jQuery $(String expression);
 
     /**
      * <p>
@@ -38,5 +38,5 @@ public class WebSupport {
      * @param expression
      * @return
      */
-    public static native JQuery $(Element element);
+    public static native jQuery $(Element element);
 }
