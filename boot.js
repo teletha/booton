@@ -142,63 +142,7 @@ function boot(global) {
   //====================================================================
   // ECMAScript6 Extensions
   //====================================================================
-  define(global, {
-    /**
-     * Retrieve the object identifier.
-     *
-     * @return An identifier.
-     */
-    Map: (function() {
-      function indexOfIdentical(keys, key) {
-        for (var i = 0, length = keys.length; i < length; i++) {
-          if (Object.is(keys[i], key)) return i;
-        }
-        return -1;
-      };
-
-      function Map() {
-        define(this, {keys: [], values: []});
-      }
-
-      define(Map.prototype, {
-        get: function(key) {
-          var index = indexOfIdentical(this.keys, key);
-          return index < 0 ? undefined : this.values[index];
-        },
-
-        has: function(key) {
-          return indexOfIdentical(this.keys, key) >= 0;
-        },
-
-        set: function(key, value) {
-          var keys = this.keys;
-          var values = this.values;
-          var index = indexOfIdentical(keys, key);
-          if (index < 0) index = keys.length;
-          keys[index] = key;
-          values[index] = value;
-          
-          return null;
-        },
-
-        'delete': function(key) {
-          var keys = this.keys;
-          var values = this.values;
-          var index = indexOfIdentical(keys, key);
-          if (index < 0) return false;
-          keys.splice(index, 1);
-          values.splice(index, 1);
-          return true;
-        },
-        
-        size: function() {
-          return this.keys.length;
-        }
-      });
-
-      return Map;
-    })()
-  });
+  
   
   //====================================================================
   // Booton Extensions
@@ -277,7 +221,7 @@ function boot(global) {
       // This is actual counstructor of the specified subclass.
       function Class() {
         var params = boot.toArray(arguments);
-
+      
         // invoke specified constructor
         this["$" + params.pop()].apply(this, params);
       }
@@ -306,4 +250,5 @@ function boot(global) {
   });
 }
 
+// Activate Initialization
 boot(Function("return this")());

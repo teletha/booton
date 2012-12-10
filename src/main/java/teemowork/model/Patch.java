@@ -72,26 +72,4 @@ public class Patch {
 
         return item;
     }
-
-    /**
-     * <p>
-     * Helper method to find item by name.
-     * </p>
-     * 
-     * @param name
-     * @return
-     */
-    public Item findItem(String name) {
-        Patch patch = this;
-
-        while (patch != null) {
-            Item item = patch.items.get(name);
-
-            if (item != null) {
-                return item;
-            }
-            patch = patch.previous;
-        }
-        return null;
-    }
 }
