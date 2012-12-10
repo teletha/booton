@@ -46,10 +46,7 @@ public class SiteBuilder {
             XML head = html.child("head");
             head.child("meta").attr("charset", "utf-8");
 
-            head.child("script")
-                    .attr("type", "text/javascript")
-                    .attr("src", "https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js")
-                    .text("/* */");
+            head.child("script").attr("type", "text/javascript").attr("src", "jquery.js").text("/* */");
             head.child("script").attr("type", "text/javascript").attr("src", "boot.js").text("/* */");
             head.child("script").attr("type", "text/javascript").attr("src", "test.js").text("/* */");
 

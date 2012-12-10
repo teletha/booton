@@ -9,6 +9,8 @@
  */
 package booton.translator.web;
 
+import static booton.translator.web.WebSupport.*;
+
 import java.util.Iterator;
 
 import org.w3c.dom.Element;
@@ -16,16 +18,16 @@ import org.w3c.dom.Element;
 import booton.translator.JavascriptNative;
 
 /**
- * @version 2012/12/02 12:49:38
+ * @version 2012/12/10 13:23:39
  */
-public abstract class jQuery implements Iterable<Element>, JavascriptNative {
+public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Iterator<Element> iterator() {
-        return new Iterator<Element>() {
+    public Iterator<jQuery> iterator() {
+        return new Iterator<jQuery>() {
 
             /** The current position. */
             private int index = 0;
@@ -42,8 +44,8 @@ public abstract class jQuery implements Iterable<Element>, JavascriptNative {
              * {@inheritDoc}
              */
             @Override
-            public Element next() {
-                return get(index++);
+            public jQuery next() {
+                return $(get(index++));
             }
 
             /**
