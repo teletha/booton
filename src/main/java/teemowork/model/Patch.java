@@ -22,17 +22,17 @@ public class Patch {
     public static Patch P0000 = new Patch(1510, 2012, 11, 13, "Initial", null);
 
     static {
-        P0000.update(Item.RubyCrystal).cost(475).health(180);
-        P0000.update(Item.HauntingGuise).health(200).ap(25);
+        P0000.updateItem(Item.RubyCrystal).cost(475).health(180);
+        P0000.updateItem(Item.HauntingGuise).health(200).ap(25);
     }
 
     /** The patch. */
     public static Patch P1520 = new Patch(1520, 2012, 12, 03, "Preseason 3", P0000);
 
     static {
-        P1520.update(Item.ShardOfTrueIce);
-        P1520.update(Item.LiandrysTorment);
-        P1520.update(Item.HauntingGuise);
+        P1520.updateItem(Item.ShardOfTrueIce);
+        P1520.updateItem(Item.LiandrysTorment);
+        P1520.updateItem(Item.HauntingGuise);
     }
 
     /** The latest patch. */
@@ -66,10 +66,8 @@ public class Patch {
      * 
      * @param name
      */
-    private Item update(String name) {
+    private Item updateItem(String name) {
         Item item = new Item(name, this);
-        System.out.println(name);
-
         items.put(name, item);
 
         return item;

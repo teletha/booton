@@ -138,7 +138,9 @@ class JavaMethodCompiler extends MethodVisitor {
         while (iterator.hasNext()) {
             iterator.next().resolve();
         }
-        NodeDebugger.dump(nodes);
+
+        // System.out.println(script.source + "   " + original);
+        // NodeDebugger.dump(nodes);
 
         // write script
         code.mark();
@@ -380,7 +382,6 @@ class JavaMethodCompiler extends MethodVisitor {
         case LADD:
         case FADD:
         case DADD:
-            NodeDebugger.dump(nodes);
             current.join("+");
             break;
 

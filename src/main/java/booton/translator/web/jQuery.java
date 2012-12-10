@@ -9,6 +9,8 @@
  */
 package booton.translator.web;
 
+import java.util.Iterator;
+
 import org.w3c.dom.Element;
 
 import booton.translator.JavascriptNative;
@@ -16,7 +18,42 @@ import booton.translator.JavascriptNative;
 /**
  * @version 2012/12/02 12:49:38
  */
-public abstract class JQuery implements Iterable<Element>, JavascriptNative {
+public abstract class jQuery implements Iterable<Element>, JavascriptNative {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Iterator<Element> iterator() {
+        return new Iterator<Element>() {
+
+            /** The current position. */
+            private int index = 0;
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public boolean hasNext() {
+                return index < size();
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public Element next() {
+                return get(index++);
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void remove() {
+            }
+        };
+    }
 
     /**
      * <p>
@@ -27,7 +64,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      *            add to the set of matched elements.
      * @return
      */
-    public native JQuery add(String selector);
+    public native jQuery add(String selector);
 
     /**
      * <p>
@@ -37,7 +74,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * @param selector An existing jQuery object to add to the set of matched elements.
      * @return
      */
-    public native JQuery add(JQuery other);
+    public native jQuery add(jQuery other);
 
     /**
      * <p>
@@ -48,7 +85,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      *            element.
      * @return
      */
-    public native JQuery addClass(String classNames);
+    public native jQuery addClass(String classNames);
 
     /**
      * <p>
@@ -60,7 +97,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      *            the set of matched elements.
      * @return
      */
-    public native JQuery after(String contents);
+    public native jQuery after(String contents);
 
     /**
      * <p>
@@ -72,7 +109,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      *            the set of matched elements.
      * @return
      */
-    public native JQuery after(JQuery contents);
+    public native jQuery after(jQuery contents);
 
     /**
      * <p>
@@ -81,7 +118,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * 
      * @return
      */
-    public native JQuery andSelf();
+    public native jQuery andSelf();
 
     /**
      * <p>
@@ -93,7 +130,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      *            element in the set of matched elements.
      * @return
      */
-    public native JQuery append(String contents);
+    public native jQuery append(String contents);
 
     /**
      * <p>
@@ -105,7 +142,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      *            element in the set of matched elements.
      * @return
      */
-    public native JQuery append(JQuery contents);
+    public native jQuery append(jQuery contents);
 
     /**
      * <p>
@@ -116,7 +153,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      *            will be inserted at the end of the element(s) specified by this parameter.
      * @return
      */
-    public native JQuery appendTo(String target);
+    public native jQuery appendTo(String target);
 
     /**
      * <p>
@@ -127,7 +164,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      *            will be inserted at the end of the element(s) specified by this parameter.
      * @return
      */
-    public native JQuery appendTo(JQuery target);
+    public native jQuery appendTo(jQuery target);
 
     /**
      * <p>
@@ -148,7 +185,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * @param value A value to set for the attribute.
      * @return
      */
-    public native JQuery attr(String name, String value);
+    public native jQuery attr(String name, String value);
 
     /**
      * <p>
@@ -160,7 +197,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      *            the set of matched elements.
      * @return
      */
-    public native JQuery before(String contents);
+    public native jQuery before(String contents);
 
     /**
      * <p>
@@ -172,7 +209,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      *            the set of matched elements.
      * @return
      */
-    public native JQuery before(JQuery contents);
+    public native jQuery before(jQuery contents);
 
     /**
      * <p>
@@ -182,7 +219,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * 
      * @return
      */
-    public native JQuery children();
+    public native jQuery children();
 
     /**
      * <p>
@@ -193,7 +230,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * @param A string containing a selector expression to match elements against.
      * @return
      */
-    public native JQuery children(String selector);
+    public native jQuery children(String selector);
 
     /**
      * <p>
@@ -202,7 +239,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * 
      * @return
      */
-    public native JQuery click();
+    public native jQuery click();
 
     /**
      * <p>
@@ -212,7 +249,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * @param listener A function to execute each time the event is triggered.
      * @return
      */
-    public native JQuery click(EventListener listener);
+    public native jQuery click(Listener listener);
 
     /**
      * <p>
@@ -223,7 +260,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * @param selector A string containing a selector expression to match elements against.
      * @return
      */
-    public native JQuery closest(String selector);
+    public native jQuery closest(String selector);
 
     /**
      * <p>
@@ -244,7 +281,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * @param value A value to set for the property.
      * @return
      */
-    public native JQuery css(String property, String value);
+    public native jQuery css(String property, String value);
 
     /**
      * <p>
@@ -253,7 +290,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * 
      * @return
      */
-    public native JQuery dblclick();
+    public native jQuery dblclick();
 
     /**
      * <p>
@@ -264,7 +301,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * @param listener A function to execute each time the event is triggered.
      * @return
      */
-    public native JQuery dblclick(EventListener listener);
+    public native jQuery dblclick(Listener listener);
 
     /**
      * <p>
@@ -273,7 +310,17 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * 
      * @return
      */
-    public native JQuery empty();
+    public native jQuery empty();
+
+    /**
+     * <p>
+     * Retrieve the DOM elements matched by the jQuery object.
+     * </p>
+     * 
+     * @param index A zero-based integer indicating which element to retrieve.
+     * @return
+     */
+    public native Element get(int index);
 
     /**
      * <p>
@@ -283,7 +330,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * 
      * @return
      */
-    public native JQuery next();
+    public native jQuery next();
 
     /**
      * <p>
@@ -294,7 +341,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * @param selector A string containing a selector expression to match elements against.
      * @return
      */
-    public native JQuery next(String selector);
+    public native jQuery next(String selector);
 
     /**
      * <p>
@@ -307,7 +354,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      *            false.
      * @return
      */
-    public native JQuery off(String eventType, EventListener listener);
+    public native jQuery off(String eventType, Listener listener);
 
     /**
      * <p>
@@ -320,7 +367,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      *            allowed as a shorthand for a function that simply does return false.
      * @return
      */
-    public native JQuery on(String eventType, EventListener listener);
+    public native jQuery on(String eventType, Listener listener);
 
     /**
      * <p>
@@ -330,7 +377,7 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * 
      * @return
      */
-    public native JQuery parent();
+    public native jQuery parent();
 
     /**
      * <p>
@@ -341,7 +388,16 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * @param selector A string containing a selector expression to match elements against.
      * @return
      */
-    public native JQuery parent(String selector);
+    public native jQuery parent(String selector);
+
+    /**
+     * <p>
+     * Return the number of elements in the jQuery object.
+     * </p>
+     * 
+     * @return
+     */
+    public native int size();
 
     /**
      * <p>
@@ -361,12 +417,12 @@ public abstract class JQuery implements Iterable<Element>, JavascriptNative {
      * @param text
      * @return
      */
-    public native JQuery text(String text);
+    public native jQuery text(String text);
 
     /**
      * @version 2012/12/02 23:08:01
      */
-    public static interface EventListener extends JavascriptNative {
+    public static interface Listener extends JavascriptNative {
 
         /**
          * <p>

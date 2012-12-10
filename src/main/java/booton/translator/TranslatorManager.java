@@ -11,6 +11,7 @@ package booton.translator;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,7 @@ import kiss.model.ClassUtil;
 import org.objectweb.asm.Type;
 
 /**
- * @version 2012/12/06 18:28:56
+ * ion 2012/12/06 18:28:56
  */
 class TranslatorManager {
 
@@ -56,7 +57,11 @@ class TranslatorManager {
                 if (interfaceType == JavascriptNative.class) {
                     // The current class implements it directly.
                     for (Method method : type.getDeclaredMethods()) {
-                        nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), nativeClass);
+                        // Methods defined in interface are as native.
+                        // Methods defined in class are as native if these have native modifier.
+                        if (type.isInterface() || Modifier.isNative(method.getModifiers())) {
+                            nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), nativeClass);
+                        }
                     }
 
                     Set<String> set = new HashSet();

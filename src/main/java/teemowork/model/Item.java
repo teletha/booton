@@ -106,39 +106,35 @@ public class Item {
     Item(String name, Patch patch) {
         this.name = name;
         this.patch = patch;
-        this.previous = items.get(name);
-    }
 
-    /**
-     * <p>
-     * Update this item.
-     * </p>
-     * 
-     * @param patch
-     */
-    Item copy() {
-        Item item = new Item(name, patch);
-        item.cost = cost;
-        item.ad = ad;
-        item.as = as;
-        item.critical = critical;
-        item.arpen = arpen;
-        item.arpenRatio = arpenRatio;
-        item.ls = ls;
-        item.ap = ap;
-        item.mrpen = mrpen;
-        item.mrpenRatio = mrpenRatio;
-        item.cdr = cdr;
-        item.sv = sv;
-        item.health = health;
-        item.hreg = hreg;
-        item.mreg = mreg;
-        item.ar = ar;
-        item.mr = mr;
-        item.ms = ms;
-        item.msRatio = msRatio;
+        Item previous = items.get(name);
 
-        return item;
+        // copy status
+        if (previous != null) {
+            this.cost = previous.cost;
+            this.ad = previous.ad;
+            this.as = previous.as;
+            this.critical = previous.critical;
+            this.arpen = previous.arpen;
+            this.arpenRatio = previous.arpenRatio;
+            this.ls = previous.ls;
+            this.ap = previous.ap;
+            this.mrpen = previous.mrpen;
+            this.mrpenRatio = previous.mrpenRatio;
+            this.cdr = previous.cdr;
+            this.sv = previous.sv;
+            this.health = previous.health;
+            this.hreg = previous.hreg;
+            this.mreg = previous.mreg;
+            this.ar = previous.ar;
+            this.mr = previous.mr;
+            this.ms = previous.ms;
+            this.msRatio = previous.msRatio;
+        }
+        this.previous = previous;
+
+        // update info
+        items.put(name, this);
     }
 
     /**

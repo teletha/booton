@@ -288,24 +288,22 @@ function boot(global) {
 
       // API definition
       if (init) init.call(Class);
+    },
+
+    /**
+     * <p>
+     * Define properties in javascript native object prototype.
+     * </p>
+     * 
+     * @param {String} name A fully qualified class name of a class to defien.
+     * @param {Object} properties A property definition.
+     */
+    defineNative: function(name, properties) {
+      if (global[name]) {
+        define(global[name].prototype, properties);
+      }
     }
   });
 }
 
 boot(Function("return this")());
-
-
-if (window.jQuery) {
-  jQuery.fn.iterator = function() {
-      return {
-          items: this,
-          count: 0,
-          hasNext: function() {
-              return this.count < this.items.size();
-          },
-          next: function() {
-              return this.items.get(this.count++);
-          }
-      };
-  }
-}

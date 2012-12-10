@@ -103,18 +103,16 @@ class JavaClassCompiler extends ClassVisitor {
         }
 
         // ignore compiler generated method (e.g. generics)
-        if ((access & (ACC_NATIVE | ACC_ABSTRACT)) == 0) {
-            if (isFirst) {
-                isFirst = false;
-            } else {
-                code.append(',');
-            }
-            System.out.println(script.source + "   " + name);
-            return new JavaMethodCompiler(script, code, (access & ACC_STATIC) == 0, name, desc);
+        if ((access & (ACC_NATIVE | ACC_ABSTRACT)) != 0) {
+            return null;
         }
 
-        // API definition
-        return null;
+        if (isFirst) {
+            isFirst = false;
+        } else {
+            code.append(',');
+        }
+        return new JavaMethodCompiler(script, code, (access & ACC_STATIC) == 0, name, desc);
     }
 
     /**
