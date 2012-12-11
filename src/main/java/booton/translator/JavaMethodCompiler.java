@@ -925,10 +925,17 @@ class JavaMethodCompiler extends MethodVisitor {
         }
     }
 
+    private int lineNumber = 0;
+
     /**
      * {@inheritDoc}
      */
     public void visitLineNumber(int number, Label label) {
+        if (lineNumber <= number) {
+            lineNumber = number;
+        } else {
+
+        }
     }
 
     /**
@@ -1155,8 +1162,11 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 current.addOperand(variable + "++");
             } else {
+                // When some method which straddles multi lines returns value, we should use operand
+                // from previous node.
                 if (current.stack.size() == 0) {
-                    current.addOperand("$");
+                    current.stack.addAll(current.previous.stack);
+                    current.previous.stack.clear();
                 }
 
                 // retrieve and remove it

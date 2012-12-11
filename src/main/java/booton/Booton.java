@@ -12,12 +12,12 @@ package booton;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import js.ui.Application;
 import kiss.I;
 import kiss.XML;
 
 import org.objectweb.asm.Type;
 
-import teemowork.Champion;
 import teemowork.Teemowork;
 import booton.translator.Javascript;
 
@@ -27,14 +27,14 @@ import booton.translator.Javascript;
 public class Booton {
 
     /** The application class. */
-    private final Class application;
+    private final Class<? extends Application> application;
 
     /**
      * <p>
      * Booton web application builder.
      * </p>
      */
-    public Booton(Class application) {
+    public Booton(Class<? extends Application> application) {
         this.application = application;
     }
 
@@ -85,10 +85,10 @@ public class Booton {
      */
     private void buildHTML(Path file) throws Exception {
         StringBuilder builder = new StringBuilder();
-        builder.append("try {");
-        builder.append(Javascript.computeClassName(Teemowork.class));
-        builder.append(".");
-        builder.append(Javascript.computeMethodName(Teemowork.class, "jsmain", Type.getMethodDescriptor(Champion.class.getMethod("jsmain"))));
+        builder.append("try {new ");
+        builder.append(Javascript.computeClassName(application));
+        builder.append("(0).");
+        builder.append(Javascript.computeMethodName(application, "jsmain", Type.getMethodDescriptor(application.getDeclaredMethod("jsmain"))));
         builder.append("(");
         builder.append(");");
         builder.append("} catch(e) {console.log(e)}");
@@ -97,14 +97,14 @@ public class Booton {
         XML head = html.child("head");
         head.child("meta").attr("charset", "utf-8");
 
+        head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", "bootstrap.css");
         head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", "test.css");
         head.child("script").attr("type", "text/javascript").attr("src", "jquery.js").text("/* */");
+        head.child("script").attr("type", "text/javascript").attr("src", "bootstrap.js").text("/* */");
         head.child("script").attr("type", "text/javascript").attr("src", "boot.js").text("/* */");
         head.child("script").attr("type", "text/javascript").attr("src", "test.js").text("/* */");
 
-        XML body = html.child("body");
-        body.child("p").text("test0");
-        body.child("p").text("test1");
+        html.child("body");
 
         html.child("script").attr("type", "text/javascript").text(builder.toString());
 
