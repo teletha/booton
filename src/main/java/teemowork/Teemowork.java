@@ -13,34 +13,49 @@ import static booton.translator.web.WebSupport.*;
 
 import java.util.Collection;
 
-import teemowork.model.Item;
-import teemowork.model.Patch;
+import js.ui.Application;
+import js.ui.ImageGrid;
+import teemowork.model.Champion;
 import booton.CSS;
+import booton.css.Display;
 import booton.translator.web.jQuery;
-import booton.translator.web.jQuery.Event;
-import booton.translator.web.jQuery.Listener;
 
 /**
- * @version 2012/12/06 23:20:54
+ * @version 2012/12/11 14:23:57
  */
-public class Teemowork {
+public class Teemowork extends Application {
 
-    public static void jsmain() {
-        System.out.println(Patch.Latest);
-        final Collection<Item> items = Item.getAll();
+    /** The champion viewer. */
+    private ImageGrid champions = new ImageGrid<Champion>() {
 
-        for (Item item : items) {
-            final jQuery root = $("<p>").appendTo("body");
-            root.text(item.name + "  " + item.cost());
-
-            root.click(new Listener() {
-
-                @Override
-                public void handler(Event event) {
-                    root.toggleClass(MyCSS.class);
-                }
-            });
+        @Override
+        protected Collection<Champion> sources() {
+            return Champion.getAll();
         }
+
+        @Override
+        protected String name(Champion source) {
+            return source.name;
+        }
+
+        @Override
+        protected String uri(Champion source) {
+            return "src/main/resources/teemowork/icon/" + source.getSystemName() + ".png";
+        }
+    };
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void jsmain() {
+
+        for (Champion champion : Champion.getAll()) {
+            jQuery item = $("<li><a class='tt-twitter' href='#'><span>" + champion.name + "</span></a></li>");
+            item.appendTo("body");
+        }
+
+        $("a").addClass(MyCSS.class);
     }
 
     /**
@@ -49,8 +64,10 @@ public class Teemowork {
     private static class MyCSS extends CSS {
 
         {
-            color(red);
-            margin(1, em);
+            set(Display.None);
+            setWidth(68, px);
+            setHeight(70, px);
+
         }
     }
 }

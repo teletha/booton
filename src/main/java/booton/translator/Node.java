@@ -24,7 +24,7 @@ import booton.translator.JavaMethodCompiler.TryBlock;
  */
 class Node {
 
-    static final Operand END = new OperandExpression(";");
+    private static final Operand END = new OperandExpression(";");
 
     /** The identified label for this node. */
     final int id;

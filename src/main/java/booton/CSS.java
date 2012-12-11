@@ -27,12 +27,15 @@ import kiss.I;
 import booton.css.Alignment;
 import booton.css.BackgroundRepeat;
 import booton.css.Color;
+import booton.css.Display;
+import booton.css.Height;
 import booton.css.HorizontalAlignment;
 import booton.css.TextDecoration;
 import booton.css.TextTransform;
 import booton.css.Unit;
 import booton.css.Units;
 import booton.css.WhiteSpace;
+import booton.css.Width;
 import booton.translator.Javascript;
 
 /**
@@ -42,6 +45,88 @@ public class CSS implements Extensible {
 
     /** The property holder. */
     private Map<String, Object> properties = new TreeMap();
+
+    /**
+     * <p>
+     * The display CSS property specifies the type of rendering box used for an element. In HTML,
+     * default display property values are taken from behaviors described in the HTML specifications
+     * or from the browser/user default stylesheet. The default value in XML is inline.
+     * </p>
+     * <p>
+     * In addition to the many different display box types, the value none lets you turn off the
+     * display of an element; when you use none, all child elements also have their display turned
+     * off. The document is rendered as though the element doesn't exist in the document tree.
+     * </p>
+     * 
+     * @param display
+     */
+    protected final void set(Display display) {
+        properties.put("display", display);
+    }
+
+    /**
+     * <p>
+     * The width CSS property specifies the width of the content area of an element. The content
+     * area is inside the padding, border, and margin of the element.
+     * </p>
+     * <p>
+     * The min-width and max-width properties override width.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     */
+    protected final void setWidth(double size, Unit unit) {
+        properties.put("width", compute(size, unit));
+    }
+
+    /**
+     * <p>
+     * The width CSS property specifies the width of the content area of an element. The content
+     * area is inside the padding, border, and margin of the element.
+     * </p>
+     * <p>
+     * The min-width and max-width properties override width.
+     * </p>
+     * 
+     * @param width
+     */
+    protected final void set(Width width) {
+        properties.put("width", width);
+    }
+
+    protected Display display;
+
+    /**
+     * <p>
+     * The height CSS property specifies the height of the content area of an element. The content
+     * area is inside the padding, border, and margin of the element.
+     * </p>
+     * <p>
+     * The min-height and max-height properties override height.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     */
+    protected final void setHeight(double size, Unit unit) {
+        properties.put("height", compute(size, unit));
+    }
+
+    /**
+     * <p>
+     * The height CSS property specifies the height of the content area of an element. The content
+     * area is inside the padding, border, and margin of the element.
+     * </p>
+     * <p>
+     * The min-height and max-height properties override height.
+     * </p>
+     * 
+     * @param height
+     */
+    protected final void set(Height height) {
+        properties.put("height", height);
+    }
 
     /**
      * <p>
