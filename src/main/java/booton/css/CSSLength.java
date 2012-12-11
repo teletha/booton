@@ -10,21 +10,26 @@
 package booton.css;
 
 /**
- * @version 2012/12/11 16:28:33
+ * @version 2012/12/11 21:26:30
  */
-public final class Height extends CSSLength {
+public abstract class CSSLength extends CSSValue {
 
     /**
      * @param css
      */
-    protected Height(CSS css) {
+    protected CSSLength(CSS css) {
         super(css);
     }
 
     /**
-     * The browser will calculate and select a height for the specified element.
+     * <p>
+     * Specify size.
+     * </p>
+     * 
+     * @param size
+     * @param unit
      */
-    public void auto() {
-        value = "auto";
+    public void size(double size, Unit unit) {
+        value = compute(size, unit);
     }
 }

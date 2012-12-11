@@ -9,26 +9,38 @@
  */
 package booton.css;
 
-import booton.util.Strings;
-
 /**
  * @version 2012/12/11 16:23:56
  */
-public enum Width {
+public final class Width extends CSSLength {
+
+    /**
+     * @param css
+     */
+    Width(CSS css) {
+        super(css);
+    }
+
     /**
      * The browser will calculate and select a width for the specified element.
      */
-    Auto,
+    public void auto() {
+        value = "auto";
+    }
 
     /**
      * The intrinsic preferred width.
      */
-    MaxContent,
+    public void max_content() {
+        value = "max-content";
+    }
 
     /**
      * The intrinsic minimum width.
      */
-    MinContent,
+    public void min_content() {
+        value = "min-content";
+    }
 
     /**
      * <p>
@@ -39,18 +51,14 @@ public enum Width {
      * <li>the smaller of the intrinsic preferred width and the available width</li>
      * </ul>
      */
-    FitContent,
+    public void fit_content() {
+        value = "fit-content";
+    }
 
     /**
      * The containing block width minus horizontal margin, border and padding
      */
-    Available;
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return Strings.hyphenate(name());
+    public void available() {
+        value = "available";
     }
 }

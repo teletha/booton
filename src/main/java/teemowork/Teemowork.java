@@ -16,8 +16,7 @@ import java.util.Collection;
 import js.ui.Application;
 import js.ui.ImageGrid;
 import teemowork.model.Champion;
-import booton.CSS;
-import booton.css.Display;
+import booton.css.CSS;
 import booton.translator.web.jQuery;
 
 /**
@@ -64,10 +63,12 @@ public class Teemowork extends Application {
     private static class MyCSS extends CSS {
 
         {
-            set(Display.None);
-            setWidth(68, px);
-            setHeight(70, px);
-
+            display().block();
+            width.size(68, px);
+            height.size(70, px);
+            margin.vertical(0, px).horizontal(2, px);
+            outline.none();
+            background.transparent().noRepeat().top().left();
         }
     }
 }
