@@ -18,13 +18,15 @@ package booton.css;
 /**
  * @version 2009/08/25 20:41:14
  */
-public class Unit extends Units {
+public class Unit {
+
+    private String value;
 
     /**
      * @param value
      */
     public Unit(String value) {
-        super(value);
+        this.value = value;
     }
 
 }

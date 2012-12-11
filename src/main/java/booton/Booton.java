@@ -19,6 +19,7 @@ import kiss.XML;
 import org.objectweb.asm.Type;
 
 import teemowork.Teemowork;
+import booton.css.CSS;
 import booton.translator.Javascript;
 
 /**
@@ -122,7 +123,7 @@ public class Booton {
         StringBuilder builder = new StringBuilder();
 
         for (CSS css : I.find(CSS.class)) {
-            css.to(builder);
+            builder.append(css.toString());
         }
         Files.write(file, builder.toString().getBytes(I.$encoding));
     }
