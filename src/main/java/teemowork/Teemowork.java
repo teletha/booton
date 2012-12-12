@@ -50,11 +50,15 @@ public class Teemowork extends Application {
     protected void jsmain() {
 
         for (Champion champion : Champion.getAll()) {
+            String uri = "src/main/resources/teemowork/icon/" + champion.getSystemName() + ".png";
+
             jQuery item = $("<li><a class='tt-twitter' href='#'><span>" + champion.name + "</span></a></li>");
             item.appendTo("body");
+            item.children("a").css("background-image", "url(" + uri + ")").css("background-size", "contain");
         }
 
         $("a").addClass(MyCSS.class);
+        $("span").addClass(Span.class);
     }
 
     /**
@@ -63,12 +67,41 @@ public class Teemowork extends Application {
     private static class MyCSS extends CSS {
 
         {
-            display().block();
+            display.block();
             width.size(68, px);
             height.size(70, px);
             margin.vertical(0, px).horizontal(2, px);
             outline.none();
             background.transparent().noRepeat().top().left();
+            position.relative();
+        }
+    }
+
+    /**
+     * @version 2012/12/10 16:59:19
+     */
+    private static class Span extends CSS {
+
+        {
+            width.size(100, px);
+            height.auto();
+            lineHeight.size(20, px);
+            padding.size(10, px);
+            left.size(50, percent);
+            margin.left(-64, px);
+            font.style.italic().size(14, px).weight(400);
+            color.hex("719DAB");
+            textShadow.add(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
+            textAlign.center();
+            border.width(4, px).solid().rgb(255, 255, 255);
+            background.rgba(255, 255, 255, 0.3);
+            textIndent.size(0, px);
+            borderRadius.size(5, px);
+            position.absolute();
+            pointerEvents.none();
+            bottom.size(100, px);
+            opacity.alpha(0);
+            boxShadow.offset(1, px, 1, px).blurRadius(2, px).rgba(0, 0, 0, 0.1);
         }
     }
 }

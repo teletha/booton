@@ -10,36 +10,22 @@
 package booton.css;
 
 /**
- * @version 2012/12/11 16:23:56
+ * @version 2012/12/12 10:32:31
  */
-public final class Width extends CSSLength {
-
-    /**
-     * @param css
-     */
-    Width(CSS css) {
-        super(css);
-    }
-
-    /**
-     * The browser will calculate and select a width for the specified element.
-     */
-    public void auto() {
-        value = "auto";
-    }
+public final class Width extends Length<Width> {
 
     /**
      * The intrinsic preferred width.
      */
-    public void max_content() {
-        value = "max-content";
+    public Width max_content() {
+        return chain("max-content");
     }
 
     /**
      * The intrinsic minimum width.
      */
-    public void min_content() {
-        value = "min-content";
+    public Width min_content() {
+        return chain("min-content");
     }
 
     /**
@@ -51,14 +37,14 @@ public final class Width extends CSSLength {
      * <li>the smaller of the intrinsic preferred width and the available width</li>
      * </ul>
      */
-    public void fit_content() {
-        value = "fit-content";
+    public Width fit_content() {
+        return chain("fit-content");
     }
 
     /**
      * The containing block width minus horizontal margin, border and padding
      */
-    public void available() {
-        value = "available";
+    public Width available() {
+        return chain("available");
     }
 }

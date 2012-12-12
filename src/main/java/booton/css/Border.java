@@ -12,10 +12,7 @@ package booton.css;
 /**
  * @version 2012/12/11 22:52:28
  */
-public class Border extends CSSColor<Border> {
-
-    /** The property name. */
-    private String name;
+public class Border extends Color<Border> {
 
     /** The line width. */
     private String width;
@@ -29,10 +26,16 @@ public class Border extends CSSColor<Border> {
     /**
      * @param css
      */
-    protected Border(CSS css, String name) {
-        super(css);
+    protected Border(String name) {
+        super(name);
+    }
 
-        this.name = name;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return property(name, width, style, color);
     }
 
     /**
@@ -47,7 +50,7 @@ public class Border extends CSSColor<Border> {
     public Border width(double size, Unit unit) {
         width = compute(size, unit);
 
-        return this;
+        return chain();
     }
 
     /**
@@ -63,7 +66,7 @@ public class Border extends CSSColor<Border> {
     public Border none() {
         style = "none";
 
-        return this;
+        return chain();
     }
 
     /**
@@ -79,7 +82,7 @@ public class Border extends CSSColor<Border> {
     public Border hidden() {
         style = "hidden";
 
-        return this;
+        return chain();
     }
 
     /**
@@ -94,7 +97,7 @@ public class Border extends CSSColor<Border> {
     public Border dotted() {
         style = "dotted";
 
-        return this;
+        return chain();
     }
 
     /**
@@ -108,7 +111,7 @@ public class Border extends CSSColor<Border> {
     public Border dashed() {
         style = "dashed";
 
-        return this;
+        return chain();
     }
 
     /**
@@ -121,7 +124,7 @@ public class Border extends CSSColor<Border> {
     public Border solid() {
         style = "solid";
 
-        return this;
+        return chain();
     }
 
     /**
@@ -134,7 +137,7 @@ public class Border extends CSSColor<Border> {
     public Border doubles() {
         style = "double";
 
-        return this;
+        return chain();
     }
 
     /**
@@ -147,7 +150,7 @@ public class Border extends CSSColor<Border> {
     public Border groove() {
         style = "groove";
 
-        return this;
+        return chain();
     }
 
     /**
@@ -161,7 +164,7 @@ public class Border extends CSSColor<Border> {
     public Border ridge() {
         style = "ridge";
 
-        return this;
+        return chain();
     }
 
     /**
@@ -176,7 +179,7 @@ public class Border extends CSSColor<Border> {
     public Border inset() {
         style = "inset";
 
-        return this;
+        return chain();
     }
 
     /**
@@ -191,6 +194,6 @@ public class Border extends CSSColor<Border> {
     public Border outset() {
         style = "outset";
 
-        return this;
+        return chain();
     }
 }

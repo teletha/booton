@@ -10,42 +10,35 @@
 package booton.css;
 
 /**
- * @version 2012/12/11 20:20:12
+ * @version 2012/12/12 9:45:24
  */
-public final class Display extends CSSValue {
-
-    /**
-     * Hide constructor.
-     */
-    Display(CSS css) {
-        super(css);
-    }
+public final class Display extends CSSProperty<Display> {
 
     /** The element generates a block element box. */
-    public void block() {
-        value = "block";
+    public Display block() {
+        return chain("block");
     }
 
     /**
      * The element generates one or more inline element boxes.
      */
-    public void inline() {
-        value = "inline";
+    public Display inline() {
+        return chain("inline");
     }
 
     /**
      * The element generates a block element box that will be flowed with surrounding content as if
      * it were a single inline box (behaving much like a replaced element would)
      */
-    public void inline_block() {
-        value = "inline-block";
+    public Display inline_block() {
+        return chain("inline-block");
     }
 
     /**
      * The element generates a block box for the content and a separate list-item inline box.
      */
-    public void list_item() {
-        value = "list-item";
+    public Display list_item() {
+        return chain("list-item");
     }
 
     /**
@@ -60,46 +53,46 @@ public final class Display extends CSSValue {
      * If a inline box follows, the run-in box becomes a block box.
      * </p>
      */
-    public void run_in() {
-        value = "run-in";
+    public Display run_in() {
+        return chain("run-in");
     }
 
     /**
      * The element behaves like a block element and lay out its content according to the grid model.
      */
-    public void grid() {
-        value = "grid";
+    public Display grid() {
+        return chain("grid");
     }
 
     /**
      * The element behaves like an inline element and lay out its content according to the grid
      * model.
      */
-    public void inline_grid() {
-        value = "inline-grid";
+    public Display inline_grid() {
+        return chain("inline-grid");
     }
 
     /**
      * The element behaves like a block element and lays out its content according to the flexbox
      * model.
      */
-    public void flex() {
-        value = "flex";
+    public Display flex() {
+        return chain("flex");
     }
 
     /**
      * The element behaves like an inline element and lays out its content according to the flexbox
      * model.
      */
-    public void inline_flex() {
-        value = "inline-flex";
+    public Display inline_flex() {
+        return chain("inline-flex");
     }
 
     /**
      * Behaves like the table HTML element. It defines a block-level box.
      */
-    public void table() {
-        value = "table";
+    public Display table() {
+        return chain("table");
     }
 
     /**
@@ -107,69 +100,69 @@ public final class Display extends CSSValue {
      * element, but as an inline box, rather than a block-level box. Inside the table box is a
      * block-level context.
      */
-    public void inline_table() {
-        value = "inline-table";
+    public Display inline_table() {
+        return chain("inline-table");
     }
 
     /**
      * Behaves like the caption HTML element.
      */
-    public void table_caption() {
-        value = "table-caption";
+    public Display table_caption() {
+        return chain("table-caption");
     }
 
     /**
      * Behaves like the tr HTML element.
      */
-    public void table_row() {
-        value = "table-row";
+    public Display table_row() {
+        return chain("table-row");
     }
 
     /**
      * Behaves like the td HTML element.
      */
-    public void table_cell() {
-        value = "table-cell";
+    public Display table_cell() {
+        return chain("table-cell");
     }
 
     /**
      * These elements behave like the corresponding col HTML elements.
      */
-    public void table_column() {
-        value = "table-column";
+    public Display table_column() {
+        return chain("table-column");
     }
 
     /**
      * These elements behave like the corresponding colgroup HTML elements.
      */
-    public void table_column_group() {
-        value = "table-column-group";
+    public Display table_column_group() {
+        return chain("table-column-group");
     }
 
     /**
      * These elements behave like the corresponding thead HTML elements.
      */
-    public void table_header_group() {
-        value = "table-header-group";
+    public Display table_header_group() {
+        return chain("table-header-group");
     }
 
     /**
      * These elements behave like the corresponding tfoot HTML elements.
      */
-    public void table_footer_group() {
-        value = "table-footer-group";
+    public Display table_footer_group() {
+        return chain("table-footer-group");
     }
 
     /**
      * These elements behave like the corresponding tbody HTML elements.
      */
-    public void table_row_group() {
-        value = "table-row-group";
+    public Display table_row_group() {
+        return chain("table-row-group");
     }
 
     /**
      * <p>
-     * Turns off the display of an element (it has no effect on layout); all child elements also
+     * Turns off the display of an element (it has no effect on layout)); all child elements also
      * have their display turned off. The document is rendered as though the element did not exist.
      * </p>
      * <p>
@@ -177,7 +170,7 @@ public final class Display extends CSSValue {
      * property.
      * </p>
      */
-    public void none() {
-        value = "none";
+    public Display none() {
+        return chain("none");
     }
 }

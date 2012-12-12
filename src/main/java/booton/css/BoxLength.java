@@ -10,9 +10,12 @@
 package booton.css;
 
 /**
- * @version 2012/12/11 22:07:42
+ * @version 2012/12/12 10:21:21
  */
-public class Margin extends CSSValue {
+public class BoxLength extends CSSProperty<BoxLength> {
+
+    /** The property name. */
+    private final String name;
 
     /** The top value. */
     private String top;
@@ -27,10 +30,36 @@ public class Margin extends CSSValue {
     private String left;
 
     /**
-     * @param css
+     * @param name
      */
-    protected Margin(CSS css) {
-        super(css);
+    public BoxLength(String name) {
+        this.name = name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return property(name + "-top", top) + property(name + "-bottom", bottom) + property(name + "-right", right) + property(name + "-left", left);
+    }
+
+    /**
+     * <p>
+     * The margin CSS property of an element sets the margin space required on the top of an
+     * element. A negative value is also allowed.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public BoxLength size(double size, Unit unit) {
+        horizontal(size, unit);
+        vertical(size, unit);
+
+        // Chainable API
+        return chain();
     }
 
     /**
@@ -43,11 +72,11 @@ public class Margin extends CSSValue {
      * @param unit
      * @return
      */
-    public Margin top(double size, Unit unit) {
+    public BoxLength top(double size, Unit unit) {
         top = compute(size, unit);
 
         // Chainable API
-        return this;
+        return chain();
     }
 
     /**
@@ -60,11 +89,11 @@ public class Margin extends CSSValue {
      * @param unit
      * @return
      */
-    public Margin bottom(double size, Unit unit) {
+    public BoxLength bottom(double size, Unit unit) {
         bottom = compute(size, unit);
 
         // Chainable API
-        return this;
+        return chain();
     }
 
     /**
@@ -77,11 +106,11 @@ public class Margin extends CSSValue {
      * @param unit
      * @return
      */
-    public Margin left(double size, Unit unit) {
+    public BoxLength left(double size, Unit unit) {
         left = compute(size, unit);
 
         // Chainable API
-        return this;
+        return chain();
     }
 
     /**
@@ -94,11 +123,11 @@ public class Margin extends CSSValue {
      * @param unit
      * @return
      */
-    public Margin right(double size, Unit unit) {
+    public BoxLength right(double size, Unit unit) {
         right = compute(size, unit);
 
         // Chainable API
-        return this;
+        return chain();
     }
 
     /**
@@ -111,12 +140,12 @@ public class Margin extends CSSValue {
      * @param unit
      * @return
      */
-    public Margin horizontal(double size, Unit unit) {
+    public BoxLength horizontal(double size, Unit unit) {
         left(size, unit);
         right(size, unit);
 
         // Chainable API
-        return this;
+        return chain();
     }
 
     /**
@@ -129,11 +158,11 @@ public class Margin extends CSSValue {
      * @param unit
      * @return
      */
-    public Margin vertical(double size, Unit unit) {
+    public BoxLength vertical(double size, Unit unit) {
         top(size, unit);
         bottom(size, unit);
 
         // Chainable API
-        return this;
+        return chain();
     }
 }

@@ -41,4 +41,21 @@ public class Strings {
         }
         return builder.toString();
     }
+
+    /**
+     * <p>
+     * Find whitespace.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public static boolean hasSpace(String value) {
+        for (int i = 0; i < value.length(); i++) {
+            if (Character.isWhitespace(value.charAt(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
