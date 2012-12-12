@@ -109,6 +109,6 @@ public class BoxShadow extends Color<BoxShadow> {
         if (spreadRadius != null) builder.append(spreadRadius).append(" ");
         if (color != null) builder.append(color);
 
-        return property("bos-shadow", builder.toString());
+        return property("box-shadow", builder.toString());
     }
 }
