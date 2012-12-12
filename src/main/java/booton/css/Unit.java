@@ -20,7 +20,7 @@ package booton.css;
  */
 public class Unit {
 
-    private String value;
+    private final String value;
 
     /**
      * @param value
@@ -29,4 +29,11 @@ public class Unit {
         this.value = value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return value;
+    }
 }

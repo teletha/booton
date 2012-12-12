@@ -15,28 +15,17 @@
  */
 package booton.css;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.lang.reflect.Field;
 
 import kiss.Extensible;
+import kiss.I;
+import booton.translator.Javascript;
+import booton.util.RGB;
 
 /**
  * @version 2012/12/11 23:59:41
  */
 public class CSS implements Extensible {
-
-    private Set set = new TreeSet();
-
-    /** The property holder. */
-    private Map<String, Object> properties = new TreeMap();
-
-    private <T> T rule(String name, T property) {
-        properties.put(name, property);
-
-        return property;
-    }
 
     /**
      * <p>
@@ -50,9 +39,7 @@ public class CSS implements Extensible {
      * off. The document is rendered as though the element doesn't exist in the document tree.
      * </p>
      */
-    protected final Display display() {
-        return rule("display", new Display(this));
-    }
+    protected final Display display = new Display();
 
     /**
      * <p>
@@ -66,7 +53,7 @@ public class CSS implements Extensible {
      * @param size
      * @param unit
      */
-    protected final Width width = new Width(this);
+    protected final Width width = new Width();
 
     /**
      * <p>
@@ -77,7 +64,7 @@ public class CSS implements Extensible {
      * The min-height and max-height properties override height.
      * </p>
      */
-    protected final Height height = new Height(this);
+    protected final Length height = new Length("height");
 
     /**
      * <p>
@@ -89,7 +76,20 @@ public class CSS implements Extensible {
      * One single value applies to all four sides.
      * </p>
      */
-    protected final Margin margin = new Margin(this);
+    protected final BoxLength margin = new BoxLength("margin");
+
+    /**
+     * <p>
+     * The padding CSS property sets the required padding space on all sides of an element. The
+     * padding area is the space between the content of the element and its border. Negative values
+     * are not allowed.
+     * </p>
+     * <p>
+     * The padding property is a shorthand to avoid setting each side separately (padding-top,
+     * padding-right, padding-bottom, padding-left).
+     * </p>
+     */
+    protected final BoxLength padding = new BoxLength("padding");
 
     /**
      * <p>
@@ -106,7 +106,7 @@ public class CSS implements Extensible {
      * draws a non-rectangular shape around a construct like this:</li>
      * </ul>
      */
-    protected final Border outline = new Border(this, "outline");
+    protected final Border outline = new Border("outline");
 
     /**
      * <p>
@@ -115,7 +115,177 @@ public class CSS implements Extensible {
      * background-color, background-image, background-position, background-repeat, background-size,
      * </p>
      */
-    protected final Background background = new Background(this);
+    protected final Background background = new Background();
+
+    /**
+     * <p>
+     * The position CSS property chooses alternative rules for positioning elements, designed to be
+     * useful for scripted animation effects.
+     * </p>
+     */
+    protected final Position position = new Position();
+
+    /**
+     * <p>
+     * On inline elements, the line-height CSS property specifies the height that is used in the
+     * calculation of the line box height. On block level elements, line-height specifies the
+     * minimal height of line boxes within the element.
+     * </p>
+     */
+    protected final Length lineHeight = new Length("line-height");
+
+    /**
+     * <p>
+     * The font CSS property is either a shorthand property for setting font-style, font-variant,
+     * font-weight, font-size, line-height and font-family, or a way to set the element's font to a
+     * system font, using specific keywords.
+     * </p>
+     */
+    protected final Font font = new Font();
+
+    /**
+     * <p>
+     * The CSS color property sets the foreground color of an element's text content, and its
+     * decorations. It doesn't affect any other characteristic of the element; it should really be
+     * called text-color and would have been named so, save for historical reasons and its
+     * appearance in CSS Level 1.
+     * </p>
+     */
+    protected final Color color = new Color("color");
+
+    /**
+     * <p>
+     * The text-shadow CSS property adds shadows to text. It accepts a comma-separated list of
+     * shadows to be applied to the text and text-decorations of the element.
+     * </p>
+     * <p>
+     * Each shadow is specified as an offset from the text, along with optional color and blur
+     * radius values.
+     * </p>
+     * <p>
+     * Multiple shadows are applied front-to-back, with the first-specified shadow on top.
+     * </p>
+     */
+    protected final TextShadow textShadow = new TextShadow();
+
+    /**
+     * <p>
+     * The text-align CSS property describes how inline content like text is aligned in its parent
+     * block element. text-align does not control the alignment of block elements itself, only their
+     * inline content.
+     * </p>
+     */
+    protected final TextAlign textAlign = new TextAlign();
+
+    /**
+     * <p>
+     * The border CSS property is a shorthand property for setting the individual border property
+     * values in a single place in the style sheet. border can be used to set the values for one or
+     * more of: border-width, border-style, border-color.
+     * </p>
+     */
+    protected final Border border = new Border("border");
+
+    /**
+     * <p>
+     * The text-indent CSS property specifies how much horizontal space should be left before the
+     * beginning of the first line of the text content of an element. Horizontal spacing is with
+     * respect to the left (or right, for right-to-left layout) edge of the containing block
+     * element's box.
+     * </p>
+     */
+    protected final Length textIndent = new Length("text-indent");
+
+    /**
+     * <p>
+     * The border-radius CSS property allows Web authors to define how rounded border corners are.
+     * The curve of each corner is defined using one or two radii, defining its shape: circle or
+     * ellipse.
+     * </p>
+     */
+    protected final Length borderRadius = new Length("border-radius");
+
+    /**
+     * <p>
+     * The CSS property pointer-events allows authors to control under what circumstances (if any) a
+     * particular graphic element can become the target of mouse events. When this property is
+     * unspecified, the same characteristics of the visiblePainted value apply to SVG content.
+     * </p>
+     */
+    protected final PointerEvents pointerEvents = new PointerEvents();
+
+    /**
+     * <p>
+     * The box-shadow CSS property describes one or more shadow effects as a comma-separated list.
+     * It allows casting a drop shadow from the frame of almost any element. If a border-radius is
+     * specified on the element with a box shadow, the box shadow takes on the same rounded corners.
+     * The z-ordering of multiple box shadows is the same as multiple text shadows (the first
+     * specified shadow is on top).
+     * </p>
+     */
+    protected final BoxShadow boxShadow = new BoxShadow();
+
+    /**
+     * <p>
+     * The top CSS property specifies part of the position of positioned elements. It has no effect
+     * on non-positioned elements. For absolutely positioned elements (those with position: absolute
+     * or position: fixed), it specifies the distance between the top margin edge of the element and
+     * the top edge of its containing block. For relatively positioned elements (those with
+     * position: relative), it specifies the amount the element is moved below its normal position.
+     * When both top and bottom are specified, the element position is over-constrained and the top
+     * property has precedence: the computed value of bottom is set to -top, while its specified
+     * value is ignored.
+     * </p>
+     */
+    protected final Length top = new Length("top");
+
+    /**
+     * <p>
+     * The bottom CSS property participates in specifying the position of positioned elements. For
+     * absolutely positioned elements, that is those with position: absolute or position: fixed, it
+     * specifies the distance between the bottom margin edge of the element and the bottom edge of
+     * its containing block. For relatively positioned elements, that is those with position:
+     * relative, it specifies the distance the element is moved above its normal position. However,
+     * the top property overrides the bottom property, so if top is not auto, the computed value of
+     * bottom is the negative of the computed value of top.
+     * </p>
+     */
+    protected final Length bottom = new Length("bottom");
+
+    /**
+     * <p>
+     * The left CSS property specifies part of the position of positioned elements.
+     * </p>
+     * <p>
+     * For absolutely positioned elements (those with position: absolute or position: fixed), it
+     * specifies the distance between the left margin edge of the element and the left edge of its
+     * containing block.
+     * </p>
+     */
+    protected final Length left = new Length("left");
+
+    /**
+     * <p>
+     * The right CSS property specifies part of the position of positioned elements. For absolutely
+     * positioned elements (those with position: absolute or position: fixed), it specifies the
+     * distance between the right margin edge of the element and the right edge of its containing
+     * block. The right property has no effect on non-positioned elements. When both the right CSS
+     * property and the left CSS property are defined, the position of the element is overspecified.
+     * In that case, the left value has precedence when the container is left-to-right (that is that
+     * the right computed value is set to -left), and the right value has precedence when the
+     * container is right-to-left (that is that the left computed value is set to -right).
+     * </p>
+     */
+    protected final Length right = new Length("right");
+
+    /**
+     * <p>
+     * The opacity CSS property specifies the transparency of an element, that is, the degree to
+     * which the background behind the element is overlaid. Using this property with a value
+     * different than 1 places the element in a new stacking context.
+     * </p>
+     */
+    protected final Alpha opacity = new Alpha("opacity");
 
     /**
      * <p>
@@ -179,10 +349,45 @@ public class CSS implements Extensible {
     protected final Unit percent = new Unit("%");
 
     /**
+     * <p>
+     * Helper method to create RGB color code.
+     * </p>
+     * 
+     * @param red
+     * @param green
+     * @param blue
+     * @param alpha
+     * @return
+     */
+    protected final RGB rgba(int red, int green, int blue, double alpha) {
+        return new RGB(red, green, blue, alpha);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public String toString() {
-        return super.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append('.').append(Javascript.computeClassName(getClass()).substring(5)).append('{');
+
+        for (Field field : CSS.class.getDeclaredFields()) {
+            if (CSSProperty.class.isAssignableFrom(field.getType())) {
+                field.setAccessible(true);
+
+                try {
+                    CSSProperty value = (CSSProperty) field.get(this);
+
+                    if (value.used) {
+                        builder.append(value);
+                    }
+                } catch (Exception e) {
+                    throw I.quiet(e);
+                }
+            }
+        }
+        builder.append('}');
+
+        return builder.toString();
     }
 }

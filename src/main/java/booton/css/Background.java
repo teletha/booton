@@ -12,7 +12,7 @@ package booton.css;
 /**
  * @version 2012/12/12 0:00:13
  */
-public class Background extends CSSColor<Background> {
+public class Background extends Color<Background> {
 
     private String repeat;
 
@@ -21,10 +21,11 @@ public class Background extends CSSColor<Background> {
     private String horizontalPosition;
 
     /**
-     * @param css
+     * {@inheritDoc}
      */
-    protected Background(CSS css) {
-        super(css);
+    @Override
+    public String toString() {
+        return property("background-color", color) + property("background-repeat", repeat) + property("background-position", horizontalPosition, verticalPosition);
     }
 
     /**
@@ -43,7 +44,7 @@ public class Background extends CSSColor<Background> {
         repeat = "repeat-x";
 
         // Chainable API
-        return this;
+        return chain();
     }
 
     /**
@@ -62,7 +63,7 @@ public class Background extends CSSColor<Background> {
         repeat = "repeat-y";
 
         // Chainable API
-        return this;
+        return chain();
     }
 
     /**
@@ -81,7 +82,7 @@ public class Background extends CSSColor<Background> {
         repeat = "repeat";
 
         // Chainable API
-        return this;
+        return chain();
     }
 
     /**
@@ -100,7 +101,7 @@ public class Background extends CSSColor<Background> {
         repeat = "space";
 
         // Chainable API
-        return this;
+        return chain();
     }
 
     /**
@@ -119,7 +120,7 @@ public class Background extends CSSColor<Background> {
         repeat = "round";
 
         // Chainable API
-        return this;
+        return chain();
     }
 
     /**
@@ -138,7 +139,7 @@ public class Background extends CSSColor<Background> {
         repeat = "no-repeat";
 
         // Chainable API
-        return this;
+        return chain();
     }
 
     /**
@@ -153,7 +154,7 @@ public class Background extends CSSColor<Background> {
         verticalPosition = "top";
 
         // Chainable API
-        return this;
+        return chain();
     }
 
     /**
@@ -168,7 +169,7 @@ public class Background extends CSSColor<Background> {
         verticalPosition = "bottom";
 
         // Chainable API
-        return this;
+        return chain();
     }
 
     /**
@@ -183,7 +184,7 @@ public class Background extends CSSColor<Background> {
         horizontalPosition = "left";
 
         // Chainable API
-        return this;
+        return chain();
     }
 
     /**
@@ -198,7 +199,7 @@ public class Background extends CSSColor<Background> {
         horizontalPosition = "right";
 
         // Chainable API
-        return this;
+        return chain();
     }
 
     /**
@@ -213,7 +214,7 @@ public class Background extends CSSColor<Background> {
         horizontalPosition = compute(size, unit);
 
         // Chainable API
-        return this;
+        return chain();
     }
 
     /**
@@ -228,6 +229,6 @@ public class Background extends CSSColor<Background> {
         horizontalPosition = compute(size, unit);
 
         // Chainable API
-        return this;
+        return chain();
     }
 }
