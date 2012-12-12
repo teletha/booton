@@ -44,6 +44,33 @@ public class Strings {
 
     /**
      * <p>
+     * Convert to hyphened lower case.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public static String unhyphenate(String value) {
+        StringBuilder builder = new StringBuilder();
+        boolean hyphen = false;
+
+        for (int i = 0; i < value.length(); i++) {
+            char c = value.charAt(i);
+
+            if (c == '-') {
+                hyphen = true;
+            } else if (hyphen) {
+                hyphen = false;
+                builder.append(Character.toUpperCase(c));
+            } else {
+                builder.append(c);
+            }
+        }
+        return builder.toString();
+    }
+
+    /**
+     * <p>
      * Find whitespace.
      * </p>
      * 

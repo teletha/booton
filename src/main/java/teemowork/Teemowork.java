@@ -58,13 +58,14 @@ public class Teemowork extends Application {
         }
 
         $("a").addClass(MyCSS.class);
-        $("span").addClass(Span.class);
     }
 
     /**
      * @version 2012/12/10 16:59:19
      */
     private static class MyCSS extends CSS {
+
+        private CSS span = sub("span");
 
         {
             display.block();
@@ -74,34 +75,33 @@ public class Teemowork extends Application {
             outline.none();
             background.transparent().noRepeat().top().left();
             position.relative();
-        }
-    }
 
-    /**
-     * @version 2012/12/10 16:59:19
-     */
-    private static class Span extends CSS {
+            span.width.size(100, px);
+            span.height.auto();
+            span.lineHeight.size(20, px);
+            span.padding.size(10, px);
+            span.left.size(50, percent);
+            span.margin.left(-64, px);
+            span.font.style.italic().size(14, px).weight(400);
+            span.color.hex("719DAB");
+            span.textShadow.add(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
+            span.textAlign.center();
+            span.border.width(4, px).solid().rgb(255, 255, 255);
+            span.background.rgba(255, 255, 255, 0.3);
+            span.textIndent.size(0, px);
+            span.borderRadius.size(5, px);
+            span.position.absolute();
+            span.pointerEvents.none();
+            span.bottom.size(100, px);
+            span.opacity.alpha(0);
+            span.boxShadow.offset(1, px, 1, px).blurRadius(2, px).rgba(0, 0, 0, 0.1);
 
-        {
-            width.size(100, px);
-            height.auto();
-            lineHeight.size(20, px);
-            padding.size(10, px);
-            left.size(50, percent);
-            margin.left(-64, px);
-            font.style.italic().size(14, px).weight(400);
-            color.hex("719DAB");
-            textShadow.add(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
-            textAlign.center();
-            border.width(4, px).solid().rgb(255, 255, 255);
-            background.rgba(255, 255, 255, 0.3);
-            textIndent.size(0, px);
-            borderRadius.size(5, px);
-            position.absolute();
-            pointerEvents.none();
-            bottom.size(100, px);
-            opacity.alpha(0);
-            boxShadow.offset(1, px, 1, px).blurRadius(2, px).rgba(0, 0, 0, 0.1);
+            while (hover()) {
+                background.rgb(0, 0, 0);
+
+                span.opacity.alpha(0.9);
+                span.bottom.size(70, px);
+            }
         }
     }
 }

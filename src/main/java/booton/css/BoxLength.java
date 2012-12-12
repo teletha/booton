@@ -14,9 +14,6 @@ package booton.css;
  */
 public class BoxLength extends CSSProperty<BoxLength> {
 
-    /** The property name. */
-    private final String name;
-
     /** The top value. */
     private String top;
 
@@ -33,7 +30,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @param name
      */
     public BoxLength(String name) {
-        this.name = name;
+        super(name);
     }
 
     /**
