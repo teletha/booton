@@ -19,10 +19,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import kiss.Extensible;
@@ -357,61 +354,15 @@ public class CSS implements Extensible {
      */
     public Alpha opacity;
 
-    /** The rule set store. */
-    private final Map<String, Set<CSSProperty>> rules = new TreeMap();
-
-    /** The selector. */
-    private String selector;
+    /** The current procesing rule set. */
+    private RuleSet rules = new RuleSet(getClass());
 
     /**
-     * <p>
-     * Create css rule writer.
-     * </p>
+     * Create user css.
      */
     protected CSS() {
-        load("");
-
-        selector = Javascript.computeClassName(getClass()).substring(5);
+        load(rules);
     }
-
-    /**
-     * Load rule set for the specified mode.
-     * 
-     * @param mode
-     */
-    private void load(String mode) {
-        try {
-            Set<CSSProperty> rule = rules.get(mode);
-
-            if (rule == null) {
-                // create new mode
-                rule = new TreeSet(new PropertySorter());
-
-                for (Field field : CSS.class.getFields()) {
-                    Object value;
-                    Class type = field.getType();
-
-                    try {
-                        Constructor constructor = type.getDeclaredConstructor(String.class);
-                        value = constructor.newInstance(Strings.hyphenate(field.getName()));
-                    } catch (NoSuchMethodException e) {
-                        value = type.newInstance();
-                    }
-                    rule.add((CSSProperty) value);
-                }
-                rules.put(mode, rule);
-            }
-
-            // load and assign
-            for (CSSProperty property : rule) {
-                CSS.class.getField(Strings.unhyphenate(property.name)).set(this, property);
-            }
-        } catch (Exception e) {
-            throw I.quiet(e);
-        }
-    }
-
-    private final Set<CSS> subs = new LinkedHashSet();
 
     /**
      * <p>
@@ -421,40 +372,44 @@ public class CSS implements Extensible {
      * @param selector
      * @return
      */
-    protected final CSS sub(String selector) {
-        CSS sub = new CSS();
-        sub.selector = this.selector + " " + selector;
-        subs.add(sub);
+    protected final boolean rule(String selector) {
+        // dirty usage
+        int id = new Error().getStackTrace()[1].getLineNumber();
 
-        return sub;
-    }
+        if (rules.id == id) {
+            rules.id = -1;
 
-    private boolean hovered = false;
+            // restore parent rule set
+            load(rules.parent);
 
-    protected final boolean hover() {
-        if (hovered) {
-            load("");
-            return hovered = false;
+            return false;
         } else {
-            load(":hover");
-            return hovered = true;
+            // create sub rule set
+            load(new RuleSet(rules, selector));
+
+            // update position info
+            rules.id = id;
+
+            return true;
         }
     }
 
-    private void writeTo(StringBuilder builder) {
-        for (Entry<String, Set<CSSProperty>> entry : rules.entrySet()) {
-            builder.append('.').append(selector).append(entry.getKey()).append(" {\r\n");
+    /**
+     * Load all properties.
+     * 
+     * @param mode
+     */
+    private void load(RuleSet set) {
+        try {
+            // update current rule set
+            rules = set;
 
-            for (CSSProperty property : entry.getValue()) {
-                if (property.used) {
-                    builder.append("  ").append(property).append("\r\n");
-                }
+            // load property and assign it to field
+            for (CSSProperty property : set.rules) {
+                CSS.class.getField(Strings.unhyphenate(property.name)).set(this, property);
             }
-            builder.append("}\r\n");
-
-            for (CSS sub : subs) {
-
-            }
+        } catch (Exception e) {
+            throw I.quiet(e);
         }
     }
 
@@ -464,11 +419,8 @@ public class CSS implements Extensible {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        writeTo(builder);
+        rules.writeTo("", builder);
 
-        for (CSS sub : subs) {
-            sub.writeTo(builder);
-        }
         return builder.toString();
     }
 
@@ -485,6 +437,97 @@ public class CSS implements Extensible {
      */
     protected static final RGB rgba(int red, int green, int blue, double alpha) {
         return new RGB(red, green, blue, alpha);
+    }
+
+    /**
+     * @version 2012/12/13 10:02:01
+     */
+    private static class RuleSet {
+
+        /** The parent rule set. */
+        private final RuleSet parent;
+
+        /** The selector. */
+        private final String selector;
+
+        /** The property store. */
+        private final Set<CSSProperty> rules = new TreeSet(new PropertySorter());
+
+        /** The flag whether this rule set process sub rule or not. */
+        private int id = -1;
+
+        /** The sub rule sets. */
+        private final Set<RuleSet> subs = new LinkedHashSet();
+
+        /**
+         * <p>
+         * Create top level rule set.
+         * </p>
+         */
+        protected RuleSet(Class clazz) {
+            this(null, "." + Javascript.computeClassName(clazz).substring(5));
+        }
+
+        /**
+         * <p>
+         * Create sub css rule.
+         * </p>
+         */
+        private RuleSet(RuleSet parent, String selector) {
+            this.parent = parent;
+            this.selector = selector;
+
+            // store as sub rule in parent rule
+            if (parent != null) {
+                parent.subs.add(this);
+            }
+
+            // create all properties
+            try {
+                for (Field field : CSS.class.getFields()) {
+                    Object value;
+                    Class type = field.getType();
+
+                    try {
+                        Constructor constructor = type.getDeclaredConstructor(String.class);
+                        value = constructor.newInstance(Strings.hyphenate(field.getName()));
+                    } catch (NoSuchMethodException e) {
+                        value = type.newInstance();
+                    }
+                    rules.add((CSSProperty) value);
+                }
+            } catch (Exception e) {
+                throw I.quiet(e);
+            }
+        }
+
+        /**
+         * <p>
+         * Write out properties.
+         * </p>
+         * 
+         * @param prefix
+         * @param builder
+         */
+        private void writeTo(String prefix, StringBuilder builder) {
+            if (prefix.length() != 0 && !selector.startsWith(":")) {
+                prefix = prefix + " ";
+            }
+            prefix = prefix + selector;
+
+            builder.append(prefix).append(" {\r\n");
+
+            for (CSSProperty property : rules) {
+                if (property.used) {
+                    builder.append("  ").append(property).append("\r\n");
+                }
+            }
+            builder.append("}\r\n");
+
+            for (RuleSet sub : subs) {
+                sub.writeTo(prefix, builder);
+            }
+        }
     }
 
     /**
