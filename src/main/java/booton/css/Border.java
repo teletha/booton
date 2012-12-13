@@ -17,9 +17,6 @@ public class Border extends Color<Border> {
     /** The line width. */
     private String width;
 
-    /** The line color. */
-    private String color;
-
     /** The line style. */
     private String style;
 
@@ -35,7 +32,7 @@ public class Border extends Color<Border> {
      */
     @Override
     public String toString() {
-        return property(name, width, style, color);
+        return property(name, width, style, color == null ? "transparent" : color.toString());
     }
 
     /**

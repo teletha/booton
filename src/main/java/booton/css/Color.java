@@ -16,9 +16,6 @@ import booton.util.RGB;
  */
 public class Color<T extends CSSProperty> extends CSSProperty<T> {
 
-    /** The property name. */
-    protected String name;
-
     /** The current color value. */
     protected RGB color;
 
@@ -47,7 +44,7 @@ public class Color<T extends CSSProperty> extends CSSProperty<T> {
      */
     @Override
     public String toString() {
-        return property(name, color.toString());
+        return property(name, color == null ? "transparent" : color.toString());
     }
 
     /**

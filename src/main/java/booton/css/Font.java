@@ -91,9 +91,9 @@ public class Font extends CSSProperty<Font> {
      * @param size
      * @return
      */
-    public Font weight(int size) {
-        return weight.chain(String.valueOf(size));
-    }
+    // public Font weight(int size) {
+    // return weight.chain(String.valueOf(size));
+    // }
 
     /**
      * <p>

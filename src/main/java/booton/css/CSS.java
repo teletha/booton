@@ -255,6 +255,42 @@ public class CSS implements Extensible {
 
     /**
      * <p>
+     * The border CSS property is a shorthand property for setting the individual border property
+     * values in a single place in the style sheet. border can be used to set the values for one or
+     * more of: border-width, border-style, border-color.
+     * </p>
+     */
+    public Border borderLeft;
+
+    /**
+     * <p>
+     * The border CSS property is a shorthand property for setting the individual border property
+     * values in a single place in the style sheet. border can be used to set the values for one or
+     * more of: border-width, border-style, border-color.
+     * </p>
+     */
+    public Border borderRight;
+
+    /**
+     * <p>
+     * The border CSS property is a shorthand property for setting the individual border property
+     * values in a single place in the style sheet. border can be used to set the values for one or
+     * more of: border-width, border-style, border-color.
+     * </p>
+     */
+    public Border borderTop;
+
+    /**
+     * <p>
+     * The border CSS property is a shorthand property for setting the individual border property
+     * values in a single place in the style sheet. border can be used to set the values for one or
+     * more of: border-width, border-style, border-color.
+     * </p>
+     */
+    public Border borderBottom;
+
+    /**
+     * <p>
      * The text-indent CSS property specifies how much horizontal space should be left before the
      * beginning of the first line of the text content of an element. Horizontal spacing is with
      * respect to the left (or right, for right-to-left layout) edge of the containing block
@@ -294,65 +330,21 @@ public class CSS implements Extensible {
 
     /**
      * <p>
-     * The top CSS property specifies part of the position of positioned elements. It has no effect
-     * on non-positioned elements. For absolutely positioned elements (those with position: absolute
-     * or position: fixed), it specifies the distance between the top margin edge of the element and
-     * the top edge of its containing block. For relatively positioned elements (those with
-     * position: relative), it specifies the amount the element is moved below its normal position.
-     * When both top and bottom are specified, the element position is over-constrained and the top
-     * property has precedence: the computed value of bottom is set to -top, while its specified
-     * value is ignored.
-     * </p>
-     */
-    public Length top;
-
-    /**
-     * <p>
-     * The bottom CSS property participates in specifying the position of positioned elements. For
-     * absolutely positioned elements, that is those with position: absolute or position: fixed, it
-     * specifies the distance between the bottom margin edge of the element and the bottom edge of
-     * its containing block. For relatively positioned elements, that is those with position:
-     * relative, it specifies the distance the element is moved above its normal position. However,
-     * the top property overrides the bottom property, so if top is not auto, the computed value of
-     * bottom is the negative of the computed value of top.
-     * </p>
-     */
-    public Length bottom;
-
-    /**
-     * <p>
-     * The left CSS property specifies part of the position of positioned elements.
-     * </p>
-     * <p>
-     * For absolutely positioned elements (those with position: absolute or position: fixed), it
-     * specifies the distance between the left margin edge of the element and the left edge of its
-     * containing block.
-     * </p>
-     */
-    public Length left;
-
-    /**
-     * <p>
-     * The right CSS property specifies part of the position of positioned elements. For absolutely
-     * positioned elements (those with position: absolute or position: fixed), it specifies the
-     * distance between the right margin edge of the element and the right edge of its containing
-     * block. The right property has no effect on non-positioned elements. When both the right CSS
-     * property and the left CSS property are defined, the position of the element is overspecified.
-     * In that case, the left value has precedence when the container is left-to-right (that is that
-     * the right computed value is set to -left), and the right value has precedence when the
-     * container is right-to-left (that is that the left computed value is set to -right).
-     * </p>
-     */
-    public Length right;
-
-    /**
-     * <p>
      * The opacity CSS property specifies the transparency of an element, that is, the degree to
      * which the background behind the element is overlaid. Using this property with a value
      * different than 1 places the element in a new stacking context.
      * </p>
      */
     public Alpha opacity;
+
+    /**
+     * <p>
+     * The content CSS property is used with the ::before and ::after pseudo-elements to generate
+     * content in an element. Objects inserting using the content property are anonymous replaced
+     * elements.
+     * </p>
+     */
+    public Content content;
 
     /** The current procesing rule set. */
     private RuleSet rules = new RuleSet(getClass());

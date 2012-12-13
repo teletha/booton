@@ -121,6 +121,9 @@ public class Booton {
      */
     private void buildCSS(Path file) throws Exception {
         StringBuilder builder = new StringBuilder();
+        builder.append("* {\r\n");
+        builder.append("  -moz-box-sizing: border-box;\r\n");
+        builder.append("}\r\n");
 
         for (CSS css : I.find(CSS.class)) {
             builder.append(css.toString());
