@@ -15,16 +15,16 @@ package booton.css;
 public class BoxLength extends CSSProperty<BoxLength> {
 
     /** The top value. */
-    private String top;
+    private Value top;
 
     /** The right value. */
-    private String right;
+    private Value right;
 
     /** The bottom value. */
-    private String bottom;
+    private Value bottom;
 
     /** The left value. */
-    private String left;
+    private Value left;
 
     /**
      * @param name
@@ -70,7 +70,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @return
      */
     public BoxLength top(double size, Unit unit) {
-        top = compute(size, unit);
+        top = new Value(size, unit);
 
         // Chainable API
         return chain();
@@ -87,7 +87,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @return
      */
     public BoxLength bottom(double size, Unit unit) {
-        bottom = compute(size, unit);
+        bottom = new Value(size, unit);
 
         // Chainable API
         return chain();
@@ -104,7 +104,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @return
      */
     public BoxLength left(double size, Unit unit) {
-        left = compute(size, unit);
+        left = new Value(size, unit);
 
         // Chainable API
         return chain();
@@ -121,7 +121,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @return
      */
     public BoxLength right(double size, Unit unit) {
-        right = compute(size, unit);
+        right = new Value(size, unit);
 
         // Chainable API
         return chain();

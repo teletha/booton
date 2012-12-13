@@ -69,40 +69,56 @@ public class Teemowork extends Application {
             display.block();
             width.size(68, px);
             height.size(70, px);
-            margin.vertical(0, px).horizontal(2, px);
+            margin.vertical(0, px).horizontal(50, px);
             outline.none();
             background.transparent().noRepeat().top().left();
             position.relative();
 
             while (rule("span")) {
-                width.size(100, px);
-                height.auto();
                 lineHeight.size(20, px);
                 padding.size(10, px);
-                left.size(50, percent);
-                margin.left(-64, px);
-                font.style.italic().size(14, px).weight(400);
-                color.hex("719DAB");
                 textShadow.add(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
                 textAlign.center();
-                border.width(4, px).solid().rgb(255, 255, 255);
                 background.rgba(255, 255, 255, 0.3);
-                textIndent.size(0, px);
                 borderRadius.size(5, px);
-                position.absolute();
                 pointerEvents.none();
-                bottom.size(100, px);
-                opacity.alpha(0);
+                position.bottom(100, px);
                 boxShadow.offset(1, px, 1, px).blurRadius(2, px).rgba(0, 0, 0, 0.1);
 
-                // while (rule("span")) {
-                // width.size(0, px);
-                // }
+                bubble(100, 4, 10);
             }
 
             while (rule(":hover span")) {
                 opacity.alpha(0.9);
-                bottom.size(70, px);
+                position.bottom(70, px);
+            }
+        }
+
+        /**
+         * <p>
+         * Apply bubble border box style.
+         * </p>
+         * 
+         * @param boxWidth
+         * @param borderWidth
+         * @param bubbleWidth
+         */
+        private void bubble(double boxWidth, double borderWidth, double bubbleWidth) {
+            position.absolute().left(50, percent);
+            width.size(boxWidth, px);
+            margin.left(-boxWidth / 2, px);
+            border.width(borderWidth, px).solid().rgb(205, 205, 205);
+
+            while (rule(("::before"))) {
+                display.block();
+                content.value("");
+                position.absolute()
+                        .bottom(-bubbleWidth - borderWidth - bubbleWidth, px)
+                        .left(boxWidth / 2 - borderWidth - bubbleWidth, px);
+                width.size(0, px);
+                height.size(0, px);
+                border.width(bubbleWidth, px).solid().transparent();
+                borderTop.white().width(bubbleWidth, px).solid();
             }
         }
     }

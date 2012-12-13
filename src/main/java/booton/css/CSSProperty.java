@@ -92,6 +92,17 @@ public abstract class CSSProperty<T extends CSSProperty> {
 
     /**
      * <p>
+     * Write this property.
+     * </p>
+     * 
+     * @param writer
+     */
+    protected void write(CSSWriter writer) {
+
+    }
+
+    /**
+     * <p>
      * Write css property.
      * </p>
      * 
