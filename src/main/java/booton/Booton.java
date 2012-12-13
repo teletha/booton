@@ -9,6 +9,7 @@
  */
 package booton;
 
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -20,6 +21,7 @@ import org.objectweb.asm.Type;
 
 import teemowork.Teemowork;
 import booton.css.CSS;
+import booton.css.FontFamily;
 import booton.translator.Javascript;
 
 /**
@@ -121,6 +123,21 @@ public class Booton {
      */
     private void buildCSS(Path file) throws Exception {
         StringBuilder builder = new StringBuilder();
+
+        for (CSS css : I.find(CSS.class)) {
+            for (Field field : css.getClass().getDeclaredFields()) {
+                if (field.getType() == FontFamily.class) {
+                    field.setAccessible(true);
+
+                    try {
+                        builder.append("@import url(" + ((FontFamily) field.get(css)).uri + ");\r\n");
+                    } catch (Exception e) {
+                        throw I.quiet(e);
+                    }
+                }
+            }
+        }
+
         builder.append("* {\r\n");
         builder.append("  -moz-box-sizing: border-box;\r\n");
         builder.append("}\r\n");

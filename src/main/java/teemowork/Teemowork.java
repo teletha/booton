@@ -17,6 +17,8 @@ import js.ui.Application;
 import js.ui.ImageGrid;
 import teemowork.model.Champion;
 import booton.css.CSS;
+import booton.css.FontFamily;
+import booton.css.Value;
 import booton.translator.web.jQuery;
 
 /**
@@ -48,16 +50,22 @@ public class Teemowork extends Application {
      */
     @Override
     protected void jsmain() {
+        jQuery body = $("body");
+
+        // create navigation
+        body.append("<div class='navbar'><div class='navbar-inner'><a class='brand' href='#'>Title</a> <ul class='nav'><li class='active'><a href='#''>Home</a></li><li><a href='#''>Link</a></li> <li><a href='#''>Link</a></li> </ul></div></div>");
+
+        $("body").css("padding", "150px");
 
         for (Champion champion : Champion.getAll()) {
             String uri = "src/main/resources/teemowork/icon/" + champion.getSystemName() + ".png";
 
-            jQuery item = $("<li><a class='tt-twitter' href='#'><span>" + champion.name + "</span></a></li>");
+            jQuery item = $("<span><icon><span>" + champion.name + "</span></icon></span>");
             item.appendTo("body");
-            item.children("a").css("background-image", "url(" + uri + ")").css("background-size", "contain");
+            item.children("icon").css("background-image", "url(" + uri + ")").css("background-size", "contain");
         }
 
-        $("a").addClass(MyCSS.class);
+        $("icon").addClass(MyCSS.class);
     }
 
     /**
@@ -65,25 +73,30 @@ public class Teemowork extends Application {
      */
     private static class MyCSS extends CSS {
 
+        private FontFamily Yanone = new FontFamily("Yanone Kaffeesatz", "http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz");
+
         {
-            display.block();
-            width.size(68, px);
-            height.size(70, px);
-            margin.vertical(0, px).horizontal(50, px);
+            display.inlineBlock();
+            box.width(70, px).height(70, px);
             outline.none();
             background.transparent().noRepeat().top().left();
             position.relative();
 
+            cover();
+
             while (rule("span")) {
+                font.family(Yanone).weight.bold().size(18, px);
                 lineHeight.size(20, px);
-                padding.size(10, px);
+                padding.size(5, px);
                 textShadow.add(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
                 textAlign.center();
-                background.rgba(255, 255, 255, 0.3);
+                background.rgba(255, 255, 255, 0.6);
                 borderRadius.size(5, px);
                 pointerEvents.none();
                 position.bottom(100, px);
                 boxShadow.offset(1, px, 1, px).blurRadius(2, px).rgba(0, 0, 0, 0.1);
+                opacity.alpha(0);
+                transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
 
                 bubble(100, 4, 10);
             }
@@ -91,6 +104,24 @@ public class Teemowork extends Application {
             while (rule(":hover span")) {
                 opacity.alpha(0.9);
                 position.bottom(70, px);
+            }
+        }
+
+        private void cover() {
+            Value width = box.width();
+            Value height = box.height();
+
+            while (rule("::after")) {
+                content.value("");
+                display.block();
+                position.absolute();
+                box.width(width.size, width.unit).height(height.size, height.unit);
+                background.white();
+                opacity.alpha(0.2);
+            }
+
+            while (rule(":hover::after")) {
+                opacity.alpha(0);
             }
         }
 
@@ -105,20 +136,19 @@ public class Teemowork extends Application {
          */
         private void bubble(double boxWidth, double borderWidth, double bubbleWidth) {
             position.absolute().left(50, percent);
-            width.size(boxWidth, px);
+            box.width(boxWidth, px);
             margin.left(-boxWidth / 2, px);
-            border.width(borderWidth, px).solid().rgb(205, 205, 205);
+            border.width(borderWidth, px).solid().rgb(5, 5, 5);
 
             while (rule(("::before"))) {
                 display.block();
+                box.width(0, px).height(0, px);
                 content.value("");
                 position.absolute()
                         .bottom(-bubbleWidth - borderWidth - bubbleWidth, px)
                         .left(boxWidth / 2 - borderWidth - bubbleWidth, px);
-                width.size(0, px);
-                height.size(0, px);
                 border.width(bubbleWidth, px).solid().transparent();
-                borderTop.white().width(bubbleWidth, px).solid();
+                borderTop.black().width(bubbleWidth, px).solid();
             }
         }
     }

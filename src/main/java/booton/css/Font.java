@@ -133,6 +133,43 @@ public class Font extends CSSProperty<Font> {
     }
 
     /**
+     * <p>
+     * The font-family CSS property allows for a prioritized list of font family names and/or
+     * generic family names to be specified for the selected element. Unlike most other CSS
+     * properties, values are separated by a comma to indicate that they are alternatives. The
+     * browser will select the first font on the list that is installed on the computer, or that can
+     * be downloaded using the information provided by a @font-face at-rule.
+     * </p>
+     * <p>
+     * Web authors should always add at least one generic family in a font-family list, since
+     * there's no guarantee that a specific font is intalled on the computer or can be downloaded
+     * using a @font-face at-rule. The generic family lets the browser select an acceptable fallback
+     * font when needed.
+     * </p>
+     * 
+     * @param names
+     * @return
+     */
+    public Font family(FontFamily... names) {
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < names.length; i++) {
+            boolean space = Strings.hasSpace(names[i].name);
+
+            if (space) builder.append('"');
+            builder.append(names[i].name);
+            if (space) builder.append('"');
+
+            if (i != names.length - 1) {
+                builder.append(' ');
+            }
+        }
+        family = builder.toString();
+
+        return chain();
+    }
+
+    /**
      * @version 2012/12/12 10:53:02
      */
     public class Size extends Length<Font> {
@@ -337,7 +374,7 @@ public class Font extends CSSProperty<Font> {
          * @return
          */
         public Font bold() {
-            return chain("normal");
+            return chain("bold");
         }
 
         /**
@@ -349,7 +386,7 @@ public class Font extends CSSProperty<Font> {
          * @return
          */
         public Font lighter() {
-            return chain("normal");
+            return chain("lighter");
         }
 
         /**
@@ -360,7 +397,7 @@ public class Font extends CSSProperty<Font> {
          * @return
          */
         public Font bolder() {
-            return chain("normal");
+            return chain("bolder");
         }
     }
 
