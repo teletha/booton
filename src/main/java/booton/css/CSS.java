@@ -24,6 +24,8 @@ import java.util.TreeSet;
 
 import kiss.Extensible;
 import kiss.I;
+import kiss.Manageable;
+import kiss.Singleton;
 import booton.translator.Javascript;
 import booton.util.RGB;
 import booton.util.Strings;
@@ -31,6 +33,7 @@ import booton.util.Strings;
 /**
  * @version 2012/12/11 23:59:41
  */
+@Manageable(lifestyle = Singleton.class)
 public class CSS implements Extensible {
 
     /**
@@ -79,6 +82,30 @@ public class CSS implements Extensible {
 
     /**
      * <p>
+     * The x-height of a font can be found in different ways. Some fonts contain reliable metrics
+     * for the x-height. If reliable font metrics are not available, UAs may determine the x-height
+     * from the height of a lowercase glyph. One possible heuristics is to look at how far the glyph
+     * for the lowercase "o" extends below the baseline, and subtract that value from the top of its
+     * bounding box. In the cases where it is impossible or impractical to determine the x-height, a
+     * value of 0.5em should be used.
+     * </p>
+     */
+    protected static final Unit s = new Unit("s");
+
+    /**
+     * <p>
+     * The x-height of a font can be found in different ways. Some fonts contain reliable metrics
+     * for the x-height. If reliable font metrics are not available, UAs may determine the x-height
+     * from the height of a lowercase glyph. One possible heuristics is to look at how far the glyph
+     * for the lowercase "o" extends below the baseline, and subtract that value from the top of its
+     * bounding box. In the cases where it is impossible or impractical to determine the x-height, a
+     * value of 0.5em should be used.
+     * </p>
+     */
+    protected static final Unit ms = new Unit("ms");
+
+    /**
+     * <p>
      * The format of a percentage value (denoted by <percentage> in this specification) is a
      * <number> immediately followed by '%'.
      * </p>
@@ -110,28 +137,10 @@ public class CSS implements Extensible {
 
     /**
      * <p>
-     * The width CSS property specifies the width of the content area of an element. The content
-     * area is inside the padding, border, and margin of the element.
-     * </p>
-     * <p>
-     * The min-width and max-width properties override width.
-     * </p>
-     * 
-     * @param size
-     * @param unit
-     */
-    public Width width;
-
-    /**
-     * <p>
-     * The height CSS property specifies the height of the content area of an element. The content
-     * area is inside the padding, border, and margin of the element.
-     * </p>
-     * <p>
-     * The min-height and max-height properties override height.
+     * The width, height and box-sizing property.
      * </p>
      */
-    public Length height;
+    public Box box;
 
     /**
      * <p>
@@ -345,6 +354,15 @@ public class CSS implements Extensible {
      * </p>
      */
     public Content content;
+
+    /**
+     * <p>
+     * The CSS transition property is a shorthand property for transition-property,
+     * transition-duration, transition-timing-function, and transition-delay. It allows to define
+     * the transition between two states of an element.
+     * </p>
+     */
+    public Transition transition;
 
     /** The current procesing rule set. */
     private RuleSet rules = new RuleSet(getClass());

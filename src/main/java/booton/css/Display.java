@@ -31,14 +31,14 @@ public final class Display extends CSSProperty<Display> {
      * The element generates a block element box that will be flowed with surrounding content as if
      * it were a single inline box (behaving much like a replaced element would)
      */
-    public Display inline_block() {
+    public Display inlineBlock() {
         return chain("inline-block");
     }
 
     /**
      * The element generates a block box for the content and a separate list-item inline box.
      */
-    public Display list_item() {
+    public Display listItem() {
         return chain("list-item");
     }
 
@@ -54,7 +54,7 @@ public final class Display extends CSSProperty<Display> {
      * If a inline box follows, the run-in box becomes a block box.
      * </p>
      */
-    public Display run_in() {
+    public Display runIn() {
         return chain("run-in");
     }
 
@@ -69,7 +69,7 @@ public final class Display extends CSSProperty<Display> {
      * The element behaves like an inline element and lay out its content according to the grid
      * model.
      */
-    public Display inline_grid() {
+    public Display inlineGrid() {
         return chain("inline-grid");
     }
 
@@ -85,7 +85,7 @@ public final class Display extends CSSProperty<Display> {
      * The element behaves like an inline element and lays out its content according to the flexbox
      * model.
      */
-    public Display inline_flex() {
+    public Display inlineFlex() {
         return chain("inline-flex");
     }
 
@@ -101,63 +101,63 @@ public final class Display extends CSSProperty<Display> {
      * element, but as an inline box, rather than a block-level box. Inside the table box is a
      * block-level context.
      */
-    public Display inline_table() {
+    public Display inlineTable() {
         return chain("inline-table");
     }
 
     /**
      * Behaves like the caption HTML element.
      */
-    public Display table_caption() {
+    public Display tableCaption() {
         return chain("table-caption");
     }
 
     /**
      * Behaves like the tr HTML element.
      */
-    public Display table_row() {
+    public Display tableRow() {
         return chain("table-row");
     }
 
     /**
      * Behaves like the td HTML element.
      */
-    public Display table_cell() {
+    public Display tableCell() {
         return chain("table-cell");
     }
 
     /**
      * These elements behave like the corresponding col HTML elements.
      */
-    public Display table_column() {
+    public Display tableColumn() {
         return chain("table-column");
     }
 
     /**
      * These elements behave like the corresponding colgroup HTML elements.
      */
-    public Display table_column_group() {
+    public Display tableColumnGroup() {
         return chain("table-column-group");
     }
 
     /**
      * These elements behave like the corresponding thead HTML elements.
      */
-    public Display table_header_group() {
+    public Display tableHeaderGroup() {
         return chain("table-header-group");
     }
 
     /**
      * These elements behave like the corresponding tfoot HTML elements.
      */
-    public Display table_footer_group() {
+    public Display tableFooterGroup() {
         return chain("table-footer-group");
     }
 
     /**
      * These elements behave like the corresponding tbody HTML elements.
      */
-    public Display table_row_group() {
+    public Display tableRowGroup() {
         return chain("table-row-group");
     }
 
