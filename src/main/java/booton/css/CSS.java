@@ -553,4 +553,8 @@ public class CSS implements Extensible {
             return o1.name.compareTo(o2.name);
         }
     }
+
+    protected class POO {
+
+    }
 }

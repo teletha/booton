@@ -16,6 +16,7 @@ import java.util.Collection;
 import js.ui.Application;
 import js.ui.ImageGrid;
 import teemowork.model.Champion;
+import booton.View;
 import booton.css.CSS;
 import booton.css.FontFamily;
 import booton.css.Value;
@@ -50,22 +51,40 @@ public class Teemowork extends Application {
      */
     @Override
     protected void jsmain() {
-        jQuery body = $("body");
-
         // create navigation
-        body.append("<div class='navbar'><div class='navbar-inner'><a class='brand' href='#'>Title</a> <ul class='nav'><li class='active'><a href='#''>Home</a></li><li><a href='#''>Link</a></li> <li><a href='#''>Link</a></li> </ul></div></div>");
+        // body.append("<div class='navbar'><div class='navbar-inner'><a class='brand' href='#'>Title</a> <ul class='nav'><li class='active'><a href='#''>Home</a></li><li><a href='#''>Link</a></li> <li><a href='#''>Link</a></li> </ul></div></div>");
 
         $("body").css("padding", "150px");
+
+        jQuery root = $("body");
 
         for (Champion champion : Champion.getAll()) {
             String uri = "src/main/resources/teemowork/icon/" + champion.getSystemName() + ".png";
 
-            jQuery item = $("<span><icon><span>" + champion.name + "</span></icon></span>");
-            item.appendTo("body");
-            item.children("icon").css("background-image", "url(" + uri + ")").css("background-size", "contain");
+            root.child(MyCSS.class).css("background-image", "url(" + uri + ")").child("span").text(champion.name);
         }
+    }
 
-        $("icon").addClass(MyCSS.class);
+    /**
+     * @version 2012/12/14 10:43:46
+     */
+    private static class HTML extends View {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void buildView(jQuery root) {
+
+            for (Champion champion : Champion.getAll()) {
+                String uri = "src/main/resources/teemowork/icon/" + champion.getSystemName() + ".png";
+
+                root.child("span").css("background-image", "url(" + uri + ")");
+                // jQuery item = $("<span><icon><span>" + champion.name + "</span></icon></span>");
+                // item.appendTo("body");
+                // item.children("icon").css("background-image", "url(" + uri + ")");
+            }
+        }
     }
 
     /**
@@ -77,9 +96,9 @@ public class Teemowork extends Application {
 
         {
             display.inlineBlock();
-            box.width(70, px).height(70, px);
+            box.size(60, px);
             outline.none();
-            background.transparent().noRepeat().top().left();
+            background.transparent().noRepeat().top().left().contain();
             position.relative();
 
             cover();
@@ -107,24 +126,6 @@ public class Teemowork extends Application {
             }
         }
 
-        private void cover() {
-            Value width = box.width();
-            Value height = box.height();
-
-            while (rule("::after")) {
-                content.value("");
-                display.block();
-                position.absolute();
-                box.width(width.size, width.unit).height(height.size, height.unit);
-                background.white();
-                opacity.alpha(0.2);
-            }
-
-            while (rule(":hover::after")) {
-                opacity.alpha(0);
-            }
-        }
-
         /**
          * <p>
          * Apply bubble border box style.
@@ -149,6 +150,27 @@ public class Teemowork extends Application {
                         .left(boxWidth / 2 - borderWidth - bubbleWidth, px);
                 border.width(bubbleWidth, px).solid().transparent();
                 borderTop.black().width(bubbleWidth, px).solid();
+            }
+        }
+
+        /**
+         * Apply screen cover.
+         */
+        private void cover() {
+            Value width = box.width();
+            Value height = box.height();
+
+            while (rule("::after")) {
+                content.value("");
+                display.block();
+                position.absolute();
+                box.width(width.size, width.unit).height(height.size, height.unit);
+                background.white();
+                opacity.alpha(0.15);
+            }
+
+            while (rule(":hover::after")) {
+                opacity.alpha(0);
             }
         }
     }

@@ -37,6 +37,29 @@ public class Box extends CSSProperty<Box> {
         return property("width", width) + property("height", height) + sizing.toString();
     }
 
+    /**
+     * <p>
+     * Setting width and height properties.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public Box size(double size, Unit unit) {
+        width(size, unit);
+        height(size, unit);
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * Current width property.
+     * </p>
+     * 
+     * @return A current value.
+     */
     public Value width() {
         return width;
     }
@@ -60,6 +83,13 @@ public class Box extends CSSProperty<Box> {
         return chain();
     }
 
+    /**
+     * <p>
+     * Current height property.
+     * </p>
+     * 
+     * @return A current value.
+     */
     public Value height() {
         return height;
     }

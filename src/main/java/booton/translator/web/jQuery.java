@@ -13,15 +13,38 @@ import static booton.translator.web.WebSupport.*;
 
 import java.util.Iterator;
 
-import org.w3c.dom.Element;
-
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
+import booton.translator.dom.Element;
 
 /**
  * @version 2012/12/10 13:23:39
  */
 public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
+
+    /**
+     * <p>
+     * Create child element.
+     * </p>
+     * 
+     * @param name A element name.
+     * @return Chainable API.
+     */
+    public jQuery child(String name) {
+        return $(document.createElement(name)).appendTo(this);
+    }
+
+    /**
+     * <p>
+     * Create child element with class name.
+     * </p>
+     * 
+     * @param name A element name.
+     * @return Chainable API.
+     */
+    public jQuery child(Class<? extends CSS> className) {
+        return child("span").addClass(className);
+    }
 
     /**
      * {@inheritDoc}

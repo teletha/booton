@@ -9,7 +9,6 @@
  */
 package booton.css;
 
-
 /**
  * @version 2012/12/12 0:00:13
  */
@@ -21,12 +20,14 @@ public class Background extends Color<Background> {
 
     private String horizontalPosition;
 
+    private String size;
+
     /**
      * {@inheritDoc}
      */
     @Override
     public String toString() {
-        return property("background-color", color) + property("background-repeat", repeat) + property("background-position", horizontalPosition, verticalPosition);
+        return property("background-color", color) + property("background-repeat", repeat) + property("background-position", horizontalPosition, verticalPosition) + property("background-size", size);
     }
 
     /**
@@ -228,6 +229,65 @@ public class Background extends Color<Background> {
      */
     public Background horizontal(double size, Unit unit) {
         horizontalPosition = compute(size, unit);
+
+        // Chainable API
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The background-size CSS property specifies the size of the background images. The size of the
+     * image can be fully constrained or only partially in order to preserve its intrinsic ratio.
+     * </p>
+     * <p>
+     * A value that scales the background image to the specified length in the corresponding
+     * dimension. Negative lengths are not allowed.
+     * </p>
+     * 
+     * @return
+     */
+    public Background size(double size, Unit unit) {
+        this.size = compute(size, unit);
+
+        // Chainable API
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The background-size CSS property specifies the size of the background images. The size of the
+     * image can be fully constrained or only partially in order to preserve its intrinsic ratio.
+     * </p>
+     * <p>
+     * This keyword specifies that the background image should be scaled to be as small as possible
+     * while ensuring both its dimensions are greater than or equal to the corresponding dimensions
+     * of the background positioning area.
+     * </p>
+     * 
+     * @return
+     */
+    public Background cover() {
+        size = "cover";
+
+        // Chainable API
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The background-size CSS property specifies the size of the background images. The size of the
+     * image can be fully constrained or only partially in order to preserve its intrinsic ratio.
+     * </p>
+     * <p>
+     * This keyword specifies that the background image should be scaled to be as large as possible
+     * while ensuring both its dimensions are less than or equal to the corresponding dimensions of
+     * the background positioning area.
+     * </p>
+     * 
+     * @return
+     */
+    public Background contain() {
+        size = "contain";
 
         // Chainable API
         return chain();
