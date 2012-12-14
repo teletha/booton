@@ -9,12 +9,11 @@
  */
 package booton.translator.web;
 
-import org.w3c.dom.Element;
-
 import booton.translator.Translator;
+import booton.translator.dom.Element;
 
 /**
- * @version 2012/12/06 16:19:28
+ * @version 2012/12/14 13:11:07
  */
 public class WebSupportTranslator extends Translator<WebSupport> {
 

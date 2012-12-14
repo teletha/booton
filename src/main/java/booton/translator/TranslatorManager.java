@@ -25,6 +25,8 @@ import kiss.Table;
 import kiss.model.ClassUtil;
 
 import org.objectweb.asm.Type;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * ion 2012/12/06 18:28:56
@@ -38,8 +40,14 @@ class TranslatorManager {
     private static final Table<Integer, Class> nativeMethods = new Table();
 
     static {
-        // Object class is built-in native class.
-        for (Method method : Object.class.getMethods()) {
+        // built-in native class.
+        builtIn(Object.class);
+        builtIn(Document.class);
+        builtIn(Element.class);
+    }
+
+    private static void builtIn(Class type) {
+        for (Method method : type.getMethods()) {
             nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), Object.class);
         }
     }
