@@ -70,12 +70,13 @@ public class Teemowork extends Application {
      */
     private static class HTML extends View {
 
+        private Mold item;
+
         /**
          * {@inheritDoc}
          */
         @Override
         protected void buildView(jQuery root) {
-
             for (Champion champion : Champion.getAll()) {
                 String uri = "src/main/resources/teemowork/icon/" + champion.getSystemName() + ".png";
 
@@ -85,6 +86,10 @@ public class Teemowork extends Application {
                 // item.children("icon").css("background-image", "url(" + uri + ")");
             }
         }
+    }
+
+    private static class Mold {
+
     }
 
     /**
