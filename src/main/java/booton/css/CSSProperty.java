@@ -9,10 +9,6 @@
  */
 package booton.css;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import kiss.I;
 import booton.util.Strings;
 
 /**
@@ -189,12 +185,8 @@ public abstract class CSSProperty<T extends CSSProperty> {
      * @param url
      * @return
      */
-    protected final URI url(String url) {
-        try {
-            return new URI(url);
-        } catch (URISyntaxException e) {
-            throw I.quiet(e);
-        }
+    protected final String url(String url) {
+        return "url(\"" + url + "\")";
     }
 
 }

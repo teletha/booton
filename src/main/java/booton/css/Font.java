@@ -14,7 +14,7 @@ import booton.util.Strings;
 /**
  * @version 2012/12/12 10:34:10
  */
-public class Font extends CSSProperty<Font> {
+public class Font extends Color<Font> {
 
     /**
      * <p>
@@ -57,7 +57,7 @@ public class Font extends CSSProperty<Font> {
      */
     @Override
     public String toString() {
-        return property("font-family", family) + style + variant + size + weight;
+        return property("font-family", family) + style + variant + size + weight + property("color", color);
     }
 
     /**

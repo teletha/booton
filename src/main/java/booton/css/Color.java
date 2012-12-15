@@ -124,7 +124,7 @@ public class Color<T extends CSSProperty> extends CSSProperty<T> {
      * @param value
      * @return
      */
-    public final T hex(String value) {
+    public final T color(String value) {
         color = new RGB(value);
 
         return chain();
