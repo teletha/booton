@@ -68,7 +68,10 @@ public class Booton {
         }
 
         try {
-            // loca application extensions
+            // load built-in library
+            I.load(Application.class, true);
+
+            // load application extensions
             I.load(application, true);
 
             buildHTML(output.resolve("test.html"));
@@ -125,6 +128,7 @@ public class Booton {
         StringBuilder builder = new StringBuilder();
 
         for (CSS css : I.find(CSS.class)) {
+            System.out.println(css.getClass());
             for (Field field : css.getClass().getDeclaredFields()) {
                 if (field.getType() == FontFamily.class) {
                     field.setAccessible(true);

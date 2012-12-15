@@ -20,6 +20,9 @@ public class Border extends Color<Border> {
     /** The line style. */
     private String style;
 
+    /** The line radius. */
+    private Value radius;
+
     /**
      * @param css
      */
@@ -32,7 +35,24 @@ public class Border extends Color<Border> {
      */
     @Override
     public String toString() {
-        return property(name, width, style, color == null ? "transparent" : color.toString());
+        return property(name, width, style, color == null ? "transparent" : color.toString()) + property("border-radius", radius);
+    }
+
+    /**
+     * <p>
+     * The border-radius CSS property allows Web authors to define how rounded border corners are.
+     * The curve of each corner is defined using one or two radii, defining its shape: circle or
+     * ellipse.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public Border radius(double size, Unit unit) {
+        radius = new Value(size, unit);
+
+        return chain();
     }
 
     /**

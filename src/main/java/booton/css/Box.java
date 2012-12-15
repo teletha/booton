@@ -29,12 +29,15 @@ public class Box extends CSSProperty<Box> {
     /** The box height. */
     private Value height;
 
+    /** The z-index. */
+    private int index;
+
     /**
      * {@inheritDoc}
      */
     @Override
     public String toString() {
-        return property("width", width) + property("height", height) + sizing.toString();
+        return property("width", width) + property("height", height) + sizing.toString() + property("z-index", index);
     }
 
     /**
@@ -149,5 +152,20 @@ public class Box extends CSSProperty<Box> {
         public Box borderBox() {
             return chain("border-box");
         }
+    }
+
+    /**
+     * <p>
+     * The z-index CSS property specifies the z-order of an element and its descendants. When
+     * elements overlap, z-order determines which one covers the other. An element with a larger
+     * z-index generally covers an element with a lower one.
+     * </p>
+     * 
+     * @param value
+     */
+    public Box zIndex(int value) {
+        index = value;
+
+        return chain();
     }
 }

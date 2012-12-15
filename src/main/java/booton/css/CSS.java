@@ -310,15 +310,6 @@ public class CSS implements Extensible {
 
     /**
      * <p>
-     * The border-radius CSS property allows Web authors to define how rounded border corners are.
-     * The curve of each corner is defined using one or two radii, defining its shape: circle or
-     * ellipse.
-     * </p>
-     */
-    public Length borderRadius;
-
-    /**
-     * <p>
      * The CSS property pointer-events allows authors to control under what circumstances (if any) a
      * particular graphic element can become the target of mouse events. When this property is
      * unspecified, the same characteristics of the visiblePainted value apply to SVG content.
@@ -363,6 +354,24 @@ public class CSS implements Extensible {
      * </p>
      */
     public Transition transition;
+
+    /**
+     * <p>
+     * The list-style CSS property is a shorthand property for setting list-style-type,
+     * list-style-image and list-style-position.
+     * </p>
+     */
+    public ListStyle listStyle;
+
+    /** The text related style. */
+    public Text text;
+
+    /**
+     * <p>
+     * The visibility CSS property has two purposes:
+     * </p>
+     */
+    public Visibility visibility;
 
     /** The current procesing rule set. */
     private RuleSet rules = new RuleSet(getClass());
@@ -447,6 +456,63 @@ public class CSS implements Extensible {
      */
     protected static final RGB rgba(int red, int green, int blue, double alpha) {
         return new RGB(red, green, blue, alpha);
+    }
+
+    /**
+     * <p>
+     * The CSS linear-gradient() function creates an <image> which represents a linear gradient of
+     * colors. The result of this function is an object of the CSS <gradient> data type. Like any
+     * other gradient, a CSS linear gradient is not a CSS <color> but an image with no intrinsic
+     * dimensions; that is, it has no natural or preferred size, nor ratio. Its concrete size will
+     * match the one of the element it applies to.
+     * </p>
+     * 
+     * @return
+     */
+    protected static final Gradient linear(String start, String end) {
+        return linear(new RGB(start), new RGB(end));
+    }
+
+    /**
+     * <p>
+     * The CSS linear-gradient() function creates an <image> which represents a linear gradient of
+     * colors. The result of this function is an object of the CSS <gradient> data type. Like any
+     * other gradient, a CSS linear gradient is not a CSS <color> but an image with no intrinsic
+     * dimensions; that is, it has no natural or preferred size, nor ratio. Its concrete size will
+     * match the one of the element it applies to.
+     * </p>
+     * 
+     * @return
+     */
+    protected static final Gradient linear(RGB start, RGB end) {
+        return new Gradient(start, end);
+    }
+
+    /**
+     * <p>
+     * Apply bubble border box style.
+     * </p>
+     * 
+     * @param boxWidth
+     * @param borderWidth
+     * @param bubbleWidth
+     */
+    protected void bubble(double boxWidth, double borderWidth, double bubbleWidth) {
+        position.absolute().left(50, percent);
+        box.width(boxWidth, px);
+        margin.left(-boxWidth / 2, px);
+        border.width(borderWidth, px).solid().rgb(5, 5, 5);
+
+        while (rule(("::before"))) {
+            display.block();
+            box.width(0, px).height(0, px);
+            content.value("");
+            position.absolute()
+                    .bottom(-bubbleWidth - borderWidth - bubbleWidth, px)
+                    .left(boxWidth / 2 - borderWidth - bubbleWidth, px);
+            border.width(bubbleWidth, px).solid().transparent();
+            borderTop.black().width(bubbleWidth, px).solid();
+        }
     }
 
     /**

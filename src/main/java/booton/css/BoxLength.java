@@ -61,6 +61,19 @@ public class BoxLength extends CSSProperty<BoxLength> {
 
     /**
      * <p>
+     * </p>
+     * 
+     * @return
+     */
+    public BoxLength auto() {
+        right = left = new Auto();
+
+        // Chainable API
+        return chain();
+    }
+
+    /**
+     * <p>
      * The margin-top CSS property of an element sets the margin space required on the top of an
      * element. A negative value is also allowed.
      * </p>
@@ -161,5 +174,24 @@ public class BoxLength extends CSSProperty<BoxLength> {
 
         // Chainable API
         return chain();
+    }
+
+    private static class Auto extends Value {
+
+        /**
+         * @param size
+         * @param unit
+         */
+        public Auto() {
+            super(0, null);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return "auto";
+        }
     }
 }
