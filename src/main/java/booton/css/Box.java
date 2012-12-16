@@ -13,6 +13,7 @@ import java.util.List;
 
 import js.util.ArrayList;
 import kiss.I;
+import booton.util.Color;
 
 /**
  * @version 2012/12/13 17:54:06
@@ -43,8 +44,11 @@ public class Box extends AutomaticCSSProperty<Box> {
     /** The z-index. */
     private int index;
 
+    /** The opacity. */
+    private double alpha = -1;
+
     /** The shadows. */
-    private final List<Shadow> shadows = new ArrayList();
+    private final List<CSSShadowValue> shadows = new ArrayList();
 
     /**
      * {@inheritDoc}
@@ -56,6 +60,7 @@ public class Box extends AutomaticCSSProperty<Box> {
         writer.property("width", width);
         writer.property("height", height);
         writer.property("z-index", index);
+        if (0 <= alpha && alpha <= 1) writer.property("opacity", alpha);
         writer.property("max-width", maxWidth);
         writer.property("min-width", minWidth);
         writer.property("box-shadow", I.join(shadows, ","));
@@ -188,6 +193,19 @@ public class Box extends AutomaticCSSProperty<Box> {
 
     /**
      * <p>
+     * The opacity CSS property specifies the transparency of an element, that is, the degree to
+     * which the background behind the element is overlaid. Using this property with a value
+     * different than 1 places the element in a new stacking context.
+     * </p>
+     */
+    public Box opacity(double alpha) {
+        this.alpha = alpha;
+
+        return chain();
+    }
+
+    /**
+     * <p>
      * The box-shadow CSS property describes one or more shadow effects as a comma-separated list.
      * It allows casting a drop shadow from the frame of almost any element. If a border-radius is
      * specified on the element with a box shadow, the box shadow takes on the same rounded corners.
@@ -202,13 +220,14 @@ public class Box extends AutomaticCSSProperty<Box> {
      * @param color
      * @return
      */
-    public Shadow shadow(double offsetX, Unit unitX, double offsetY, Unit unitY) {
-        Shadow shadow = new Shadow(this);
+    public Box shadow(double offsetX, Unit unitX, double offsetY, Unit unitY, Color color) {
+        CSSShadowValue shadow = new CSSShadowValue();
         shadow.offsetX = new Value(offsetX, unitX);
         shadow.offsetY = new Value(offsetY, unitY);
+        shadow.color = color;
         shadows.add(shadow);
 
-        return shadow;
+        return chain();
     }
 
     /**
@@ -226,41 +245,14 @@ public class Box extends AutomaticCSSProperty<Box> {
      * @param unitY
      * @return
      */
-    public Shadow shadowInset(double offsetX, Unit unitX, double offsetY, Unit unitY) {
-        Shadow shadow = new Shadow(this);
+    public Box shadowInset(double offsetX, Unit unitX, double offsetY, Unit unitY, Color color) {
+        CSSShadowValue shadow = new CSSShadowValue();
         shadow.offsetX = new Value(offsetX, unitX);
         shadow.offsetY = new Value(offsetY, unitY);
-        shadow.inset = true;
+        shadow.color = color;
         shadows.add(shadow);
 
-        return shadow;
-    }
-
-    /**
-     * <p>
-     * The box-shadow CSS property describes one or more shadow effects as a comma-separated list.
-     * It allows casting a drop shadow from the frame of almost any element. If a border-radius is
-     * specified on the element with a box shadow, the box shadow takes on the same rounded corners.
-     * The z-ordering of multiple box shadows is the same as multiple text shadows (the first
-     * specified shadow is on top).
-     * </p>
-     * 
-     * @param offsetX
-     * @param unitX
-     * @param offsetY
-     * @param unitY
-     * @param blur
-     * @param unitBlur
-     * @return
-     */
-    public Shadow shadow(double offsetX, Unit unitX, double offsetY, Unit unitY, double blur, Unit unitBlur) {
-        Shadow shadow = new Shadow(this);
-        shadow.offsetX = new Value(offsetX, unitX);
-        shadow.offsetY = new Value(offsetY, unitY);
-        shadow.blur = new Value(blur, unitBlur);
-        shadows.add(shadow);
-
-        return shadow;
+        return chain();
     }
 
     /**
@@ -280,15 +272,44 @@ public class Box extends AutomaticCSSProperty<Box> {
      * @param unitBlur
      * @return
      */
-    public Shadow shadowInset(double offsetX, Unit unitX, double offsetY, Unit unitY, double blur, Unit unitBlur) {
-        Shadow shadow = new Shadow(this);
+    public Box shadow(double offsetX, Unit unitX, double offsetY, Unit unitY, double blur, Unit unitBlur, Color color) {
+        CSSShadowValue shadow = new CSSShadowValue();
+        shadow.offsetX = new Value(offsetX, unitX);
+        shadow.offsetY = new Value(offsetY, unitY);
+        shadow.blur = new Value(blur, unitBlur);
+        shadow.color = color;
+        shadows.add(shadow);
+
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The box-shadow CSS property describes one or more shadow effects as a comma-separated list.
+     * It allows casting a drop shadow from the frame of almost any element. If a border-radius is
+     * specified on the element with a box shadow, the box shadow takes on the same rounded corners.
+     * The z-ordering of multiple box shadows is the same as multiple text shadows (the first
+     * specified shadow is on top).
+     * </p>
+     * 
+     * @param offsetX
+     * @param unitX
+     * @param offsetY
+     * @param unitY
+     * @param blur
+     * @param unitBlur
+     * @return
+     */
+    public Box shadowInset(double offsetX, Unit unitX, double offsetY, Unit unitY, double blur, Unit unitBlur, Color color) {
+        CSSShadowValue shadow = new CSSShadowValue();
         shadow.offsetX = new Value(offsetX, unitX);
         shadow.offsetY = new Value(offsetY, unitY);
         shadow.blur = new Value(blur, unitBlur);
         shadow.inset = true;
+        shadow.color = color;
         shadows.add(shadow);
 
-        return shadow;
+        return chain();
     }
 
     /**
@@ -326,51 +347,6 @@ public class Box extends AutomaticCSSProperty<Box> {
          */
         public Box borderBox() {
             return chain("border-box");
-        }
-    }
-
-    /**
-     * @version 2012/12/16 14:41:52
-     */
-    public class Shadow extends CSSColorValue<Box> {
-
-        /** The shadow property. */
-        private boolean inset = false;
-
-        /** The shadow property. */
-        private Value offsetX;
-
-        /** The shadow property. */
-        private Value offsetY;
-
-        /** The shadow property. */
-        private Value blur;
-
-        /** The shadow property. */
-        private Value spread;
-
-        /**
-         * Hide constructor.
-         */
-        private Shadow(Box context) {
-            super("", context);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String toString() {
-            StringBuilder builder = new StringBuilder();
-
-            if (inset) builder.append("inset ");
-            if (offsetX != null) builder.append(offsetX).append(" ");
-            if (offsetY != null) builder.append(offsetY).append(" ");
-            if (blur != null) builder.append(blur).append(" ");
-            if (spread != null) builder.append(spread).append(" ");
-            if (color != null) builder.append(color);
-
-            return builder.toString();
         }
     }
 }

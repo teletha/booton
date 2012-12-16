@@ -9,10 +9,16 @@
  */
 package booton.css;
 
+import java.util.List;
+
+import js.util.ArrayList;
+import kiss.I;
+import booton.util.Color;
+
 /**
- * @version 2012/12/15 1:07:56
+ * @version 2012/12/16 15:39:53
  */
-public class Text extends CSSProperty<Text> {
+public class Text extends AutomaticCSSProperty<Text> {
 
     /**
      * <p>
@@ -23,21 +29,162 @@ public class Text extends CSSProperty<Text> {
     public final Decration decoration = new Decration();
 
     /**
+     * <p>
+     * The text-align CSS property describes how inline content like text is aligned in its parent
+     * block element. text-align does not control the alignment of block elements itself, only their
+     * inline content.
+     * </p>
+     */
+    public final Align align = new Align();
+
+    /** The shadows. */
+    private final List<CSSShadowValue> shadows = new ArrayList();
+
+    /**
      * {@inheritDoc}
      */
     @Override
-    public String toString() {
-        return decoration.toString();
+    protected void write(CSSWriter writer) {
+        super.write(writer);
+
+        writer.property("text-shadow", I.join(shadows, ","));
+    }
+
+    /**
+     * <p>
+     * The text-shadow CSS property adds shadows to text. It accepts a comma-separated list of
+     * shadows to be applied to the text and text-decorations of the element.
+     * </p>
+     * 
+     * @param offsetX
+     * @param unitX
+     * @param offsetY
+     * @param unitY
+     * @param color
+     * @return
+     */
+    public Text shadow(double offsetX, Unit unitX, double offsetY, Unit unitY, Color color) {
+        CSSShadowValue shadow = new CSSShadowValue();
+        shadow.offsetX = new Value(offsetX, unitX);
+        shadow.offsetY = new Value(offsetY, unitY);
+        shadow.color = color;
+        shadows.add(shadow);
+
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The text-shadow CSS property adds shadows to text. It accepts a comma-separated list of
+     * shadows to be applied to the text and text-decorations of the element.
+     * </p>
+     * 
+     * @param offsetX
+     * @param unitX
+     * @param offsetY
+     * @param unitY
+     * @param blur
+     * @param unitBlur
+     * @return
+     */
+    public Text shadow(double offsetX, Unit unitX, double offsetY, Unit unitY, double blur, Unit unitBlur, Color color) {
+        CSSShadowValue shadow = new CSSShadowValue();
+        shadow.offsetX = new Value(offsetX, unitX);
+        shadow.offsetY = new Value(offsetY, unitY);
+        shadow.blur = new Value(blur, unitBlur);
+        shadow.color = color;
+        shadows.add(shadow);
+
+        return chain();
+    }
+
+    /**
+     * @version 2012/12/12 14:07:44
+     */
+    public class Align extends AutomaticCSSProperty<Text> {
+
+        /**
+         * Hide.
+         */
+        private Align() {
+            super("text-align", Text.this);
+        }
+
+        /**
+         * <p>
+         * The inline contents are aligned to the left edge of the line box.
+         * </p>
+         * 
+         * @return
+         */
+        public Text left() {
+            return chain("left");
+        }
+
+        /**
+         * <p>
+         * The inline contents are aligned to the right edge of the line box.
+         * </p>
+         * 
+         * @return
+         */
+        public Text right() {
+            return chain("right");
+        }
+
+        /**
+         * <p>
+         * The inline contents are centered within the line box.
+         * </p>
+         * 
+         * @return
+         */
+        public Text center() {
+            return chain("center");
+        }
+
+        /**
+         * <p>
+         * The text is justified. Text should line up their left and right edges to the left and
+         * right content edges of the paragraph.
+         * </p>
+         * 
+         * @return
+         */
+        public Text justify() {
+            return chain("justify");
+        }
+
+        /**
+         * <p>
+         * The same as left if direction is left-to-right and right if direction is right-to-left.
+         * </p>
+         * 
+         * @return
+         */
+        public Text start() {
+            return chain("start");
+        }
+
+        /**
+         * <p>
+         * The same as right if direction is left-to-right and left if direction is right-to-left.
+         * </p>
+         * 
+         * @return
+         */
+        public Text end() {
+            return chain("end");
+        }
     }
 
     /**
      * @version 2012/12/15 1:12:52
      */
-    public class Decration extends CSSProperty<Text> {
+    public class Decration extends AutomaticCSSProperty<Text> {
 
         /**
-         * @param name
-         * @param context
+         * Hide.
          */
         private Decration() {
             super("text-decoration", Text.this);

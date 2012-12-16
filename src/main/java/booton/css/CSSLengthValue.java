@@ -12,26 +12,26 @@ package booton.css;
 /**
  * @version 2012/12/12 10:19:47
  */
-public class Length<T extends CSSProperty> extends AutomaticCSSProperty<T> {
+public class CSSLengthValue<T extends AutomaticCSSProperty> extends AutomaticCSSProperty<T> {
 
     /**
      * 
      */
-    public Length() {
+    public CSSLengthValue() {
         this(null);
     }
 
     /**
      * @param name
      */
-    public Length(String name) {
+    public CSSLengthValue(String name) {
         super(name);
     }
 
     /**
      * @param name
      */
-    public Length(String name, T context) {
+    public CSSLengthValue(String name, T context) {
         super(name, context);
     }
 

@@ -12,7 +12,7 @@ package booton.css;
 /**
  * @version 2012/12/14 23:53:43
  */
-public class ListStyle extends CSSProperty<ListStyle> {
+public class ListStyle extends AutomaticCSSProperty<ListStyle> {
 
     /**
      * <p>
@@ -38,8 +38,8 @@ public class ListStyle extends CSSProperty<ListStyle> {
      * {@inheritDoc}
      */
     @Override
-    public String toString() {
-        return property("list-style", image, type, position);
+    protected void write(CSSWriter writer) {
+        writer.property("list-style", image, type, position);
     }
 
     /**

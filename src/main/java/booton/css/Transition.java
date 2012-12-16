@@ -12,7 +12,7 @@ package booton.css;
 /**
  * @version 2012/12/13 18:12:01
  */
-public class Transition extends CSSProperty<Transition> {
+public class Transition extends AutomaticCSSProperty<Transition> {
 
     /**
      * <p>
@@ -42,8 +42,11 @@ public class Transition extends CSSProperty<Transition> {
      * {@inheritDoc}
      */
     @Override
-    public String toString() {
-        return property("transition-duration", duration) + property("transition-delay", delay) + timing + property;
+    protected void write(CSSWriter writer) {
+        super.write(writer);
+
+        writer.property("transition-duration", duration);
+        writer.property("transition-delay", delay);
     }
 
     /**
@@ -99,7 +102,7 @@ public class Transition extends CSSProperty<Transition> {
     /**
      * @version 2012/12/13 18:13:13
      */
-    public class Property extends CSSProperty<Transition> {
+    public class Property extends AutomaticCSSProperty<Transition> {
 
         /**
          * Hide.
@@ -134,7 +137,7 @@ public class Transition extends CSSProperty<Transition> {
     /**
      * @version 2012/12/13 18:13:13
      */
-    public class Timing extends CSSProperty<Transition> {
+    public class Timing extends AutomaticCSSProperty<Transition> {
 
         /**
          * Hide.

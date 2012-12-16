@@ -9,11 +9,10 @@
  */
 package booton.css;
 
-
 /**
  * @version 2012/12/13 11:44:43
  */
-public class Content extends CSSProperty<Content> {
+public class Content extends AutomaticCSSProperty<Content> {
 
     /**
      * <p>
@@ -23,7 +22,7 @@ public class Content extends CSSProperty<Content> {
      * @param value
      * @return
      */
-    public Content value(String value) {
+    public Content text(String value) {
         return chain("'" + value + "'");
     }
 

@@ -87,7 +87,7 @@ public class Header {
         {
             int Header = 120;
 
-            box.width(960, px).shadow(0, px, 1, px, 1, px).color("#777");
+            box.width(960, px).shadow(0, px, 1, px, 1, px, color("#777"));
             margin.vertical(60, px).auto();
             border.width(1, px).solid().color("#222").radius(6, px);
             background.color(background()).image(linear("#444", background().hex));
@@ -97,15 +97,14 @@ public class Header {
                 borderRight.width(1, px).solid().color("#222");
                 position.relative();
                 box.minWidth(Header, px).zIndex(1);
-                textAlign.center();
+                text.align.center();
             }
 
             while (rule("a")) {
                 display.inlineBlock();
                 padding.vertical(12, px).horizontal(30, px);
                 font.color("#999").weight.bold().size(12, px).family(family);
-                textShadow.add(0, px, 1, px, 0, px, rgba(0, 0, 0, 1));
-                text.decoration.none();
+                text.decoration.none().shadow(0, px, 1, px, 0, px, rgba(0, 0, 0, 1));
             }
 
             while (rule("li:hover > a")) {
@@ -116,17 +115,16 @@ public class Header {
                 listStyle.none();
                 margin.top(20, px);
                 padding.size(0, px);
-                opacity.alpha(0);
                 visibility.hidden();
                 position.absolute().top(44, px).left(0, px);
                 background.color("#444").image(linear("#444", "#111"));
-                box.shadow(0, px, -1, px, 0, px).color(255, 255, 255, 0.3);
+                box.shadow(0, px, -1, px, 0, px, rgba(255, 255, 255, 0.3)).opacity(0);
                 border.radius(3, px);
                 transition.property.all().duration(0.2, s).timing.easeInOut().delay(80, ms);
             }
 
             while (rule("li:hover > ul")) {
-                opacity.alpha(1);
+                box.opacity(1);
                 visibility.visible();
                 margin.size(0, px);
             }
@@ -134,7 +132,7 @@ public class Header {
             while (rule("ul ul")) {
                 position.top(0, px).left(Header, px);
                 margin.left(20, px).top(0, px);
-                box.shadow(-1, px, 0, px, 0, px).color(255, 255, 255, 0.3);
+                box.shadow(-1, px, 0, px, 0, px, rgba(255, 255, 255, 0.3));
             }
 
             while (rule("ul li")) {

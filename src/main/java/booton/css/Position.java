@@ -12,7 +12,7 @@ package booton.css;
 /**
  * @version 2012/12/12 10:12:14
  */
-public class Position extends CSSProperty<Position> {
+public class Position extends AutomaticCSSProperty<Position> {
 
     /** The position. */
     private Value top;
@@ -30,8 +30,13 @@ public class Position extends CSSProperty<Position> {
      * {@inheritDoc}
      */
     @Override
-    public String toString() {
-        return super.toString() + property("top", top) + property("bottom", bottom) + property("left", left) + property("right", right);
+    protected void write(CSSWriter writer) {
+        super.write(writer);
+
+        writer.property("top", top);
+        writer.property("bottom", bottom);
+        writer.property("left", left);
+        writer.property("right", right);
     }
 
     /**

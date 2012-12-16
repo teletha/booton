@@ -1,105 +1,100 @@
-@import url(http://fonts.googleapis.com/css?family=Orbitron);
 @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-.bf {
-  background-color:rgba(17,17,17,1.0); background-image:linear-gradient(rgba(68,68,68,1.0),rgba(17,17,17,1.0)); 
-  border:1px solid rgba(34,34,34,1.0); border-radius:6px; 
-  width:960px; z-index:0; box-shadow:0 1px 1px rgba(119,119,119,1.0); 
-  margin-top:60px;margin-bottom:60px;margin-right:auto;margin-left:auto;
-}
-.bf li {
-  border-right:1px solid rgba(34,34,34,1.0); 
-  z-index:1; min-width:120px; 
-  display:inline-block;
-  position:relative;
-  text-align:center;
-}
-.bf a {
-  display:inline-block;
-  font-weight:bold; font-size:12px; font-family:Orbitron; color:rgba(153,153,153,1.0); 
-  padding-top:12px;padding-bottom:12px;padding-right:30px;padding-left:30px;
-  text-decoration:none;
-  text-shadow:0 1px 0 rgba(0,0,0,1.0);
-}
-.bf li:hover > a {
-  color:rgba(250,250,250,1.0); 
-}
-.bf ul {
-  background-color:rgba(68,68,68,1.0); background-image:linear-gradient(rgba(68,68,68,1.0),rgba(17,17,17,1.0)); 
-  border:transparent; border-radius:3px; 
-  z-index:0; box-shadow:0 -1px 0 rgba(255,255,255,0.3); 
-  list-style:none;
-  margin-top:20px;
-  opacity:0.0;
-  padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;
-  position:absolute;top:44px;left:0;
-  transition-duration:0.2s;transition-delay:80ms;transition-timing-function:ease-in-out;transition-property:all;
-  visibility:hidden;
-}
-.bf li:hover > ul {
-  margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;
-  opacity:1.0;
-  visibility:visible;
-}
-.bf ul ul {
-  z-index:0; box-shadow:-1px 0 0 rgba(255,255,255,0.3); 
-  margin-top:0;margin-left:20px;
-  top:0;left:120px;
-}
-.bf ul li {
-  border:0 transparent; 
-  border-bottom:1px solid rgba(81,81,81,1.0); 
-  display:block;
-}
-.bf ul a {
-  width:120px; z-index:0; 
-  display:block;
-  padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;
-}
-.bf ul a:hover {
-  background-color:rgba(1,134,186,1.0); background-image:linear-gradient(rgba(4,172,236,1.0),rgba(1,134,186,1.0)); 
-}
+@import url(http://fonts.googleapis.com/css?family=Orbitron);
 .h {
   background-repeat:no-repeat; background-position:left top; background-size:contain; 
   width:70px; height:70px; z-index:0; 
-  display:inline-block;
+  display:inline-block; 
   outline:none transparent; 
-  position:relative;
+  position:relative; 
 }
 .h::after {
   background-color:rgba(255,255,255,1.0); 
-  width:70px; height:70px; z-index:0; 
-  content:'';
-  display:block;
-  opacity:0.15;
-  position:absolute;
+  width:70px; height:70px; z-index:0; opacity:0.15; 
+  content:''; 
+  display:block; 
+  position:absolute; 
 }
 .h:hover::after {
-  opacity:0.0;
+  z-index:0; opacity:0.0; 
 }
 .h span {
   background-color:rgba(255,255,255,0.6); 
   border:4px solid rgba(5,5,5,1.0); border-radius:5px; 
-  width:100px; z-index:0; box-shadow:1px 1px 2px rgba(0,0,0,0.1); 
+  width:100px; z-index:0; opacity:0.0; box-shadow:1px 1px 2px rgba(0,0,0,0.1); 
   font-weight:bold; font-size:18px; font-family:"Yanone Kaffeesatz"; 
   line-height:20px; 
-  margin-left:-50px;
-  opacity:0.0;
-  padding-top:5px;padding-bottom:5px;padding-right:5px;padding-left:5px;
-  pointer-events:none;
-  position:absolute;bottom:100px;left:50%;
-  text-align:center;
-  text-shadow:1px 1px 1px rgba(0,0,0,0.1);
-  transition-duration:0.2s;transition-delay:0.15s;transition-timing-function:ease-in-out;transition-property:all;
+  margin-left:-50px; 
+  padding-top:5px; padding-bottom:5px; padding-right:5px; padding-left:5px; 
+  pointer-events:none; 
+  position:absolute; bottom:100px; left:50%; 
+  text-align:center; text-shadow:1px 1px 1px rgba(0,0,0,0.1); 
+  transition-property:all; transition-timing-function:ease-in-out; transition-duration:0.2s; transition-delay:0.15s; 
 }
 .h span::before {
   border:10px solid transparent; 
   border-top:10px solid rgba(0,0,0,1.0); 
   width:0; height:0; z-index:0; 
-  content:'';
-  display:block;
-  position:absolute;bottom:-24px;left:36px;
+  content:''; 
+  display:block; 
+  position:absolute; bottom:-24px; left:36px; 
 }
 .h:hover span {
-  opacity:0.9;
-  bottom:70px;
+  z-index:0; opacity:0.9; 
+  bottom:70px; 
+}
+.bg {
+  background-color:rgba(17,17,17,1.0); background-image:linear-gradient(rgba(68,68,68,1.0),rgba(17,17,17,1.0)); 
+  border:1px solid rgba(34,34,34,1.0); border-radius:6px; 
+  width:960px; z-index:0; box-shadow:0 1px 1px rgba(119,119,119,1.0); 
+  margin-top:60px; margin-bottom:60px; margin-right:auto; margin-left:auto; 
+}
+.bg li {
+  border-right:1px solid rgba(34,34,34,1.0); 
+  z-index:1; min-width:120px; 
+  display:inline-block; 
+  position:relative; 
+  text-align:center; 
+}
+.bg a {
+  display:inline-block; 
+  font-weight:bold; font-size:12px; font-family:Orbitron; color:rgba(153,153,153,1.0); 
+  padding-top:12px; padding-bottom:12px; padding-right:30px; padding-left:30px; 
+  text-decoration:none; text-shadow:0 1px 0 rgba(0,0,0,1.0); 
+}
+.bg li:hover > a {
+  color:rgba(250,250,250,1.0); 
+}
+.bg ul {
+  background-color:rgba(68,68,68,1.0); background-image:linear-gradient(rgba(68,68,68,1.0),rgba(17,17,17,1.0)); 
+  border:transparent; border-radius:3px; 
+  z-index:0; opacity:0.0; box-shadow:0 -1px 0 rgba(255,255,255,0.3); 
+  list-style:none; 
+  margin-top:20px; 
+  padding-top:0; padding-bottom:0; padding-right:0; padding-left:0; 
+  position:absolute; top:44px; left:0; 
+  transition-property:all; transition-timing-function:ease-in-out; transition-duration:0.2s; transition-delay:80ms; 
+  visibility:hidden; 
+}
+.bg li:hover > ul {
+  z-index:0; opacity:1.0; 
+  margin-top:0; margin-bottom:0; margin-right:0; margin-left:0; 
+  visibility:visible; 
+}
+.bg ul ul {
+  z-index:0; box-shadow:-1px 0 0 rgba(255,255,255,0.3); 
+  margin-top:0; margin-left:20px; 
+  top:0; left:120px; 
+}
+.bg ul li {
+  border:0 transparent; 
+  border-bottom:1px solid rgba(81,81,81,1.0); 
+  display:block; 
+}
+.bg ul a {
+  width:120px; z-index:0; 
+  display:block; 
+  padding-top:10px; padding-bottom:10px; padding-right:10px; padding-left:10px; 
+}
+.bg ul a:hover {
+  background-color:rgba(1,134,186,1.0); background-image:linear-gradient(rgba(4,172,236,1.0),rgba(1,134,186,1.0)); 
 }
