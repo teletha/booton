@@ -120,14 +120,14 @@ public class Booton {
         head.child("meta").attr("charset", "utf-8");
         head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", "normalize.css");
         head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", "test.css");
-        head.child("script").attr("type", "text/javascript").attr("src", "jquery.js").text("/* */");
-        head.child("script").attr("type", "text/javascript").attr("src", "boot.js").text("/* */");
-        head.child("script").attr("type", "text/javascript").attr("src", "test.js").text("/* */");
+        head.child("script").attr("type", "text/javascript").attr("src", "jquery.js");
+        head.child("script").attr("type", "text/javascript").attr("src", "boot.js");
+        head.child("script").attr("type", "text/javascript").attr("src", "test.js");
 
         XML body = html.child("body");
-        body.child("header").attr("id", "Header");
-        body.child("div").attr("id", "Content");
-        body.child("footer").attr("id", "Footer");
+        body.child("header").attr("id", "Header").text("");
+        body.child("div").attr("id", "Content").text(" ");
+        body.child("footer").attr("id", "Footer").text(" ");
 
         html.child("script").attr("type", "text/javascript").text(builder.toString());
 
