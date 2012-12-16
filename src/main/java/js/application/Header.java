@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.ui;
+package js.application;
 
 import static booton.translator.web.WebSupport.*;
 import booton.css.CSS;

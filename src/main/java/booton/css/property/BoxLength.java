@@ -20,16 +20,16 @@ import booton.css.Value;
 public class BoxLength extends CSSProperty<BoxLength> {
 
     /** The top value. */
-    private Value top;
+    private Value top = new Value();
 
     /** The right value. */
-    private Value right;
+    private Value right = new Value();
 
     /** The bottom value. */
-    private Value bottom;
+    private Value bottom = new Value();
 
     /** The left value. */
-    private Value left;
+    private Value left = new Value();
 
     /**
      * @param name
@@ -43,10 +43,15 @@ public class BoxLength extends CSSProperty<BoxLength> {
      */
     @Override
     protected void write(CSSWriter writer) {
-        writer.property(name + "-top", top);
-        writer.property(name + "-bottom", bottom);
-        writer.property(name + "-right", right);
-        writer.property(name + "-left", left);
+        if (top.equals(right) && top.equals(bottom) && top.equals(left)) {
+            writer.property(name, top);
+        } else if (top.equals(bottom) && right.equals(left)) {
+            writer.property(name, top, right);
+        } else if (right.equals(left)) {
+            writer.property(name, top, right, bottom);
+        } else {
+            writer.property(name, top, right, bottom, left);
+        }
     }
 
     /**
