@@ -7,14 +7,15 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css;
+package booton.css.property;
 
+import booton.css.Value;
 import booton.util.Color;
 
 /**
  * @version 2012/12/16 15:36:06
  */
-class CSSShadowValue {
+class ShadowValue {
 
     /** The shadow property. */
     boolean inset = false;

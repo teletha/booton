@@ -7,8 +7,13 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css;
+package booton.css.value;
 
+import booton.css.CSSProperty;
+import booton.css.CSSWriter;
+import booton.css.Colorable;
+import booton.css.Unit;
+import booton.css.Value;
 import booton.util.Color;
 
 /**
@@ -17,7 +22,7 @@ import booton.util.Color;
 public class Border extends CSSProperty<Border> implements Colorable<Border> {
 
     /** The border color. */
-    public final CSSColorValue<Border> color = new CSSColorValue(name + "-color", this);
+    public final ColorCode<Border> color = new ColorCode(name + "-color", this);
 
     /** The line width. */
     private String width;

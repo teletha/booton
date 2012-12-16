@@ -7,8 +7,14 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css;
+package booton.css.property;
 
+import booton.css.CSSProperty;
+import booton.css.CSSWriter;
+import booton.css.Colorable;
+import booton.css.Unit;
+import booton.css.value.ColorCode;
+import booton.css.value.Gradient;
 import booton.util.Color;
 
 /**
@@ -16,7 +22,7 @@ import booton.util.Color;
  */
 public class Background extends CSSProperty<Background> implements Colorable<Background> {
 
-    public final CSSColorValue<Background> color = new CSSColorValue("background-color", this);
+    public final ColorCode<Background> color = new ColorCode("background-color", this);
 
     private String repeat;
 

@@ -24,8 +24,8 @@ import org.objectweb.asm.Type;
 
 import teemowork.Teemowork;
 import booton.css.CSS;
-import booton.css.FontFamily;
 import booton.translator.Javascript;
+import booton.util.Font;
 
 /**
  * @version 2012/12/10 23:06:05
@@ -148,11 +148,11 @@ public class Booton {
             CSS css = I.make(rules);
             System.out.println(css.getClass());
             for (Field field : css.getClass().getDeclaredFields()) {
-                if (field.getType() == FontFamily.class) {
+                if (field.getType() == Font.class) {
                     field.setAccessible(true);
 
                     try {
-                        builder.append("@import url(" + ((FontFamily) field.get(css)).uri + ");\r\n");
+                        builder.append("@import url(" + ((Font) field.get(css)).uri + ");\r\n");
                     } catch (Exception e) {
                         throw I.quiet(e);
                     }

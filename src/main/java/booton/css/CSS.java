@@ -26,7 +26,21 @@ import kiss.Extensible;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
-import booton.css.font.Font;
+import booton.css.property.Background;
+import booton.css.property.Box;
+import booton.css.property.BoxLength;
+import booton.css.property.Content;
+import booton.css.property.Display;
+import booton.css.property.Font;
+import booton.css.property.ListStyle;
+import booton.css.property.PointerEvents;
+import booton.css.property.Position;
+import booton.css.property.Text;
+import booton.css.property.Transition;
+import booton.css.property.Visibility;
+import booton.css.value.Border;
+import booton.css.value.Gradient;
+import booton.css.value.Length;
 import booton.translator.Javascript;
 import booton.util.Color;
 import booton.util.Strings;
@@ -209,7 +223,7 @@ public class CSS<T> implements Extensible {
      * minimal height of line boxes within the element.
      * </p>
      */
-    public CSSLengthValue lineHeight;
+    public Length lineHeight;
 
     /**
      * <p>
@@ -273,7 +287,7 @@ public class CSS<T> implements Extensible {
      * element's box.
      * </p>
      */
-    public CSSLengthValue textIndent;
+    public Length textIndent;
 
     /**
      * <p>

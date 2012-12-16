@@ -7,7 +7,12 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css;
+package booton.css.property;
+
+import booton.css.CSSProperty;
+import booton.css.CSSWriter;
+import booton.css.Unit;
+import booton.css.Value;
 
 /**
  * @version 2012/12/13 18:12:01
@@ -132,6 +137,15 @@ public class Transition extends CSSProperty<Transition> {
         public Transition none() {
             return chain("none");
         }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected Transition chain(String value) {
+            return super.chain(value);
+        }
+
     }
 
     /**

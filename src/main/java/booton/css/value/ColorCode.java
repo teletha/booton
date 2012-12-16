@@ -7,14 +7,17 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css;
+package booton.css.value;
 
+import booton.css.CSSProperty;
+import booton.css.CSSWriter;
+import booton.css.Colorable;
 import booton.util.Color;
 
 /**
  * @version 2012/12/16 12:49:00
  */
-public class CSSColorValue<T extends CSSProperty> extends CSSProperty<T> implements Colorable<T> {
+public class ColorCode<T extends CSSProperty> extends CSSProperty<T> implements Colorable<T> {
 
     /** The current color value. */
     protected Color color;
@@ -22,7 +25,7 @@ public class CSSColorValue<T extends CSSProperty> extends CSSProperty<T> impleme
     /**
      * 
      */
-    public CSSColorValue(String name, T context) {
+    public ColorCode(String name, T context) {
         super(name, context);
     }
 
