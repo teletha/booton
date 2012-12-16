@@ -57,7 +57,7 @@ public class Teemowork extends Application {
 
         $("body").css("padding", "150px");
 
-        jQuery root = $("body");
+        jQuery root = $("#Content");
 
         Header nav = new Header();
         nav.add("< ^ v ^ > Teemowork", "test.html");

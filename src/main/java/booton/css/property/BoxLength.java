@@ -15,7 +15,7 @@ import booton.css.Unit;
 import booton.css.Value;
 
 /**
- * @version 2012/12/12 10:21:21
+ * @version 2012/12/16 17:27:52
  */
 public class BoxLength extends CSSProperty<BoxLength> {
 
@@ -43,12 +43,16 @@ public class BoxLength extends CSSProperty<BoxLength> {
      */
     @Override
     protected void write(CSSWriter writer) {
-        if (top.equals(right) && top.equals(bottom) && top.equals(left)) {
-            writer.property(name, top);
-        } else if (top.equals(bottom) && right.equals(left)) {
-            writer.property(name, top, right);
-        } else if (right.equals(left)) {
-            writer.property(name, top, right, bottom);
+        if (right.equals(left)) {
+            if (top.equals(bottom)) {
+                if (top.equals(right)) {
+                    writer.property(name, top);
+                } else {
+                    writer.property(name, top, right);
+                }
+            } else {
+                writer.property(name, top, right, bottom);
+            }
         } else {
             writer.property(name, top, right, bottom, left);
         }
@@ -189,13 +193,15 @@ public class BoxLength extends CSSProperty<BoxLength> {
         return chain();
     }
 
+    /**
+     * @version 2012/12/16 17:22:30
+     */
     private static class Auto extends Value {
 
         /**
-         * @param size
-         * @param unit
+         * Hide
          */
-        public Auto() {
+        private Auto() {
             super(0, null);
         }
 
