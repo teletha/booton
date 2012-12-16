@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css;
+package booton.util;
 
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
@@ -18,7 +18,7 @@ import kiss.I;
 /**
  * @version 2012/12/13 19:18:29
  */
-public class FontFamily {
+public class Font {
 
     /** The font name. */
     public final String name;
@@ -30,7 +30,7 @@ public class FontFamily {
      * @param name
      * @param uri
      */
-    public FontFamily(String uri) {
+    public Font(String uri) {
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             URLConnection connection = new URL(uri).openConnection();

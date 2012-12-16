@@ -7,12 +7,16 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css;
+package booton.css.property;
 
 import java.util.List;
 
 import js.util.ArrayList;
 import kiss.I;
+import booton.css.CSSProperty;
+import booton.css.CSSWriter;
+import booton.css.Unit;
+import booton.css.Value;
 import booton.util.Color;
 
 /**
@@ -38,7 +42,7 @@ public class Text extends CSSProperty<Text> {
     public final Align align = new Align();
 
     /** The shadows. */
-    private final List<CSSShadowValue> shadows = new ArrayList();
+    private final List<ShadowValue> shadows = new ArrayList();
 
     /**
      * {@inheritDoc}
@@ -64,7 +68,7 @@ public class Text extends CSSProperty<Text> {
      * @return
      */
     public Text shadow(double offsetX, Unit unitX, double offsetY, Unit unitY, Color color) {
-        CSSShadowValue shadow = new CSSShadowValue();
+        ShadowValue shadow = new ShadowValue();
         shadow.offsetX = new Value(offsetX, unitX);
         shadow.offsetY = new Value(offsetY, unitY);
         shadow.color = color;
@@ -88,7 +92,7 @@ public class Text extends CSSProperty<Text> {
      * @return
      */
     public Text shadow(double offsetX, Unit unitX, double offsetY, Unit unitY, double blur, Unit unitBlur, Color color) {
-        CSSShadowValue shadow = new CSSShadowValue();
+        ShadowValue shadow = new ShadowValue();
         shadow.offsetX = new Value(offsetX, unitX);
         shadow.offsetY = new Value(offsetY, unitY);
         shadow.blur = new Value(blur, unitBlur);

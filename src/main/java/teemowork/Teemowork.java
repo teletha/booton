@@ -19,9 +19,9 @@ import js.ui.Header.Menu;
 import js.ui.ImageGrid;
 import teemowork.model.Champion;
 import booton.css.CSS;
-import booton.css.FontFamily;
 import booton.css.Value;
 import booton.translator.web.jQuery;
+import booton.util.Font;
 
 /**
  * @version 2012/12/11 14:23:57
@@ -85,7 +85,7 @@ public class Teemowork extends Application {
      */
     private static class MyCSS extends CSS<MyCSS> {
 
-        private FontFamily Yanone = new FontFamily("http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz");
+        private Font Yanone = new Font("http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz");
 
         {
             display.inlineBlock();

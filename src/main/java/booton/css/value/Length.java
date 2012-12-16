@@ -7,31 +7,34 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css;
+package booton.css.value;
+
+import booton.css.CSSProperty;
+import booton.css.Unit;
 
 /**
  * @version 2012/12/12 10:19:47
  */
-public class CSSLengthValue<T extends CSSProperty> extends CSSProperty<T> {
+public class Length<T extends CSSProperty> extends CSSProperty<T> {
 
     /**
      * 
      */
-    public CSSLengthValue() {
+    public Length() {
         this(null);
     }
 
     /**
      * @param name
      */
-    public CSSLengthValue(String name) {
+    public Length(String name) {
         super(name);
     }
 
     /**
      * @param name
      */
-    public CSSLengthValue(String name, T context) {
+    public Length(String name, T context) {
         super(name, context);
     }
 

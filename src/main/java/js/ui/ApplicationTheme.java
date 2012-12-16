@@ -9,15 +9,15 @@
  */
 package js.ui;
 
-import booton.css.FontFamily;
 import booton.util.Color;
+import booton.util.Font;
 
 /**
  * @version 2012/12/15 22:06:17
  */
 public class ApplicationTheme {
 
-    private FontFamily baseFontFamily;
+    private Font baseFontFamily;
 
     private Color baseBackgroundColor;
 
@@ -28,7 +28,7 @@ public class ApplicationTheme {
      * 
      * @return The baseFontFamily property.
      */
-    public FontFamily getBaseFontFamily() {
+    public Font getBaseFontFamily() {
         return baseFontFamily;
     }
 
@@ -37,7 +37,7 @@ public class ApplicationTheme {
      * 
      * @param baseFontFamily The baseFontFamily value to set.
      */
-    public void setBaseFontFamily(FontFamily baseFontFamily) {
+    public void setBaseFontFamily(Font baseFontFamily) {
         this.baseFontFamily = baseFontFamily;
     }
 

@@ -11,9 +11,9 @@ package js.ui;
 
 import static booton.translator.web.WebSupport.*;
 import booton.css.CSS;
-import booton.css.FontFamily;
 import booton.translator.web.jQuery;
 import booton.util.Color;
+import booton.util.Font;
 
 /**
  * @version 2012/12/15 9:58:38
@@ -82,7 +82,7 @@ public class Header {
     public static class Style extends CSS<Style> {
 
         /** The header font. */
-        private final FontFamily family = new FontFamily("http://fonts.googleapis.com/css?family=Orbitron");
+        private final Font family = new Font("http://fonts.googleapis.com/css?family=Orbitron");
 
         {
             int Header = 120;
