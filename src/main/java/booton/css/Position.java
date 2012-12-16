@@ -12,7 +12,7 @@ package booton.css;
 /**
  * @version 2012/12/12 10:12:14
  */
-public class Position extends AutomaticCSSProperty<Position> {
+public class Position extends CSSProperty<Position> {
 
     /** The position. */
     private Value top;

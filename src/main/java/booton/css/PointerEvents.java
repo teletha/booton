@@ -12,7 +12,7 @@ package booton.css;
 /**
  * @version 2012/12/12 14:22:36
  */
-public class PointerEvents extends AutomaticCSSProperty<PointerEvents> {
+public class PointerEvents extends CSSProperty<PointerEvents> {
 
     /**
      * <p>

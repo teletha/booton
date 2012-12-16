@@ -18,7 +18,7 @@ import booton.util.Color;
 /**
  * @version 2012/12/13 17:54:06
  */
-public class Box extends AutomaticCSSProperty<Box> {
+public class Box extends CSSProperty<Box> {
 
     /**
      * <p>
@@ -315,7 +315,7 @@ public class Box extends AutomaticCSSProperty<Box> {
     /**
      * @version 2012/12/13 18:00:31
      */
-    public class Sizing extends AutomaticCSSProperty<Box> {
+    public class Sizing extends CSSProperty<Box> {
 
         /**
          * Hide.

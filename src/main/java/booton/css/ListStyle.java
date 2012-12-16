@@ -12,7 +12,7 @@ package booton.css;
 /**
  * @version 2012/12/14 23:53:43
  */
-public class ListStyle extends AutomaticCSSProperty<ListStyle> {
+public class ListStyle extends CSSProperty<ListStyle> {
 
     /**
      * <p>
