@@ -12,7 +12,7 @@ package booton.css;
 /**
  * @version 2012/12/15 1:18:58
  */
-public class Visibility extends CSSProperty<Visibility> {
+public class Visibility extends AutomaticCSSProperty<Visibility> {
 
     /**
      * <p>

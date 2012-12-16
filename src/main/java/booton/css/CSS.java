@@ -209,7 +209,7 @@ public class CSS<T> implements Extensible {
      * minimal height of line boxes within the element.
      * </p>
      */
-    public Length lineHeight;
+    public CSSLengthValue lineHeight;
 
     /**
      * <p>
@@ -219,30 +219,6 @@ public class CSS<T> implements Extensible {
      * </p>
      */
     public Font font;
-
-    /**
-     * <p>
-     * The text-shadow CSS property adds shadows to text. It accepts a comma-separated list of
-     * shadows to be applied to the text and text-decorations of the element.
-     * </p>
-     * <p>
-     * Each shadow is specified as an offset from the text, along with optional color and blur
-     * radius values.
-     * </p>
-     * <p>
-     * Multiple shadows are applied front-to-back, with the first-specified shadow on top.
-     * </p>
-     */
-    public TextShadow textShadow;
-
-    /**
-     * <p>
-     * The text-align CSS property describes how inline content like text is aligned in its parent
-     * block element. text-align does not control the alignment of block elements itself, only their
-     * inline content.
-     * </p>
-     */
-    public TextAlign textAlign;
 
     /**
      * <p>
@@ -297,7 +273,7 @@ public class CSS<T> implements Extensible {
      * element's box.
      * </p>
      */
-    public Length textIndent;
+    public CSSLengthValue textIndent;
 
     /**
      * <p>
@@ -307,15 +283,6 @@ public class CSS<T> implements Extensible {
      * </p>
      */
     public PointerEvents pointerEvents;
-
-    /**
-     * <p>
-     * The opacity CSS property specifies the transparency of an element, that is, the degree to
-     * which the background behind the element is overlaid. Using this property with a value
-     * different than 1 places the element in a new stacking context.
-     * </p>
-     */
-    public Alpha opacity;
 
     /**
      * <p>
@@ -404,7 +371,7 @@ public class CSS<T> implements Extensible {
             rules = set;
 
             // load property and assign it to field
-            for (CSSProperty property : set.rules) {
+            for (AutomaticCSSProperty property : set.rules) {
                 CSS.class.getField(Strings.unhyphenate(property.name)).set(this, property);
             }
         } catch (Exception e) {
@@ -490,7 +457,7 @@ public class CSS<T> implements Extensible {
         while (rule(("::before"))) {
             display.block();
             box.width(0, px).height(0, px);
-            content.value("");
+            content.text("");
             position.absolute()
                     .bottom(-bubbleWidth - borderWidth - bubbleWidth, px)
                     .left(boxWidth / 2 - borderWidth - bubbleWidth, px);
@@ -511,7 +478,7 @@ public class CSS<T> implements Extensible {
         private final String selector;
 
         /** The property store. */
-        private final Set<CSSProperty> rules = new TreeSet(new PropertySorter());
+        private final Set<AutomaticCSSProperty> rules = new TreeSet(new PropertySorter());
 
         /** The flag whether this rule set process sub rule or not. */
         private int id = -1;
@@ -554,7 +521,7 @@ public class CSS<T> implements Extensible {
                     } catch (NoSuchMethodException e) {
                         value = type.newInstance();
                     }
-                    rules.add((CSSProperty) value);
+                    rules.add((AutomaticCSSProperty) value);
                 }
             } catch (Exception e) {
                 throw I.quiet(e);
@@ -577,7 +544,7 @@ public class CSS<T> implements Extensible {
 
             builder.append(prefix).append(" {\r\n");
 
-            for (CSSProperty property : rules) {
+            for (AutomaticCSSProperty property : rules) {
                 if (property.used) {
                     builder.append("  ").append(property).append("\r\n");
                 }
@@ -593,13 +560,13 @@ public class CSS<T> implements Extensible {
     /**
      * @version 2012/12/13 1:39:08
      */
-    private static class PropertySorter implements Comparator<CSSProperty> {
+    private static class PropertySorter implements Comparator<AutomaticCSSProperty> {
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public int compare(CSSProperty o1, CSSProperty o2) {
+        public int compare(AutomaticCSSProperty o1, AutomaticCSSProperty o2) {
             return o1.name.compareTo(o2.name);
         }
     }

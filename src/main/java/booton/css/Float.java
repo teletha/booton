@@ -12,7 +12,7 @@ package booton.css;
 /**
  * @version 2012/12/13 18:50:02
  */
-public class Float extends CSSProperty<Float> {
+public class Float extends AutomaticCSSProperty<Float> {
 
     /**
      * <p>

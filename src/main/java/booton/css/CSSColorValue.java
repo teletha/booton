@@ -14,7 +14,7 @@ import booton.util.Color;
 /**
  * @version 2012/12/16 12:49:00
  */
-public class CSSColorValue<T extends CSSProperty> extends AutomaticCSSProperty<T> implements Colorable<T> {
+public class CSSColorValue<T extends AutomaticCSSProperty> extends AutomaticCSSProperty<T> implements Colorable<T> {
 
     /** The current color value. */
     protected Color color;

@@ -12,7 +12,7 @@ package booton.css;
 /**
  * @version 2012/12/12 10:21:21
  */
-public class BoxLength extends CSSProperty<BoxLength> {
+public class BoxLength extends AutomaticCSSProperty<BoxLength> {
 
     /** The top value. */
     private Value top;
@@ -37,8 +37,11 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * {@inheritDoc}
      */
     @Override
-    public String toString() {
-        return property(name + "-top", top) + property(name + "-bottom", bottom) + property(name + "-right", right) + property(name + "-left", left);
+    protected void write(CSSWriter writer) {
+        writer.property(name + "-top", top);
+        writer.property(name + "-bottom", bottom);
+        writer.property(name + "-right", right);
+        writer.property(name + "-left", left);
     }
 
     /**

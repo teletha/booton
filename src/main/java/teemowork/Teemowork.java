@@ -100,21 +100,19 @@ public class Teemowork extends Application {
                 font.weight.bold().size(18, px).family(Yanone);
                 lineHeight.size(20, px);
                 padding.size(5, px);
-                textShadow.add(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
-                textAlign.center();
+                text.align.center().shadow(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
                 background.color(255, 255, 255, 0.6);
                 border.radius(5, px);
                 pointerEvents.none();
                 position.bottom(100, px);
-                box.shadow(1, px, 1, px, 2, px).color(0, 0, 0, 0.1);
-                opacity.alpha(0);
+                box.opacity(0).shadow(1, px, 1, px, 2, px, rgba(0, 0, 0, 0.1));
                 transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
 
                 bubble(100, 4, 10);
             }
 
             while (rule(":hover span")) {
-                opacity.alpha(0.9);
+                box.opacity(0.9);
                 position.bottom(70, px);
             }
         }
@@ -127,16 +125,15 @@ public class Teemowork extends Application {
             Value height = box.height();
 
             while (rule("::after")) {
-                content.value("");
+                content.text("");
                 display.block();
                 position.absolute();
-                box.width(width.size, width.unit).height(height.size, height.unit);
+                box.width(width.size, width.unit).height(height.size, height.unit).opacity(0.15);
                 background.color.white();
-                opacity.alpha(0.15);
             }
 
             while (rule(":hover::after")) {
-                opacity.alpha(0);
+                box.opacity(0);
             }
         }
     }

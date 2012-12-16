@@ -18,7 +18,7 @@ import booton.css.CSSColorValue;
 import booton.css.CSSWriter;
 import booton.css.Colorable;
 import booton.css.FontFamily;
-import booton.css.Length;
+import booton.css.CSSLengthValue;
 import booton.css.Unit;
 import booton.util.Color;
 import booton.util.Strings;
@@ -202,7 +202,7 @@ public final class Font extends AutomaticCSSProperty<Font> implements Colorable<
     /**
      * @version 2012/12/12 10:53:02
      */
-    public class Size extends Length<Font> {
+    public class Size extends CSSLengthValue<Font> {
 
         /**
          * 

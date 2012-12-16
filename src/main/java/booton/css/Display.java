@@ -9,11 +9,10 @@
  */
 package booton.css;
 
-
 /**
  * @version 2012/12/12 9:45:24
  */
-public final class Display extends CSSProperty<Display> {
+public final class Display extends AutomaticCSSProperty<Display> {
 
     /** The element generates a block element box. */
     public Display block() {
