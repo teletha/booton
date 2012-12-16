@@ -58,7 +58,7 @@ public class CSS<T> implements Extensible {
      * typographic texts.)
      * </p>
      */
-    protected static final Unit em = new Unit("em");
+    protected static final Unit em = Unit.em;
 
     /**
      * <p>
@@ -67,7 +67,7 @@ public class CSS<T> implements Extensible {
      * even for fonts that don't contain an "x".
      * </p>
      */
-    protected static final Unit ex = new Unit("ex");
+    protected static final Unit ex = Unit.ex;
 
     /**
      * <p>
@@ -79,7 +79,7 @@ public class CSS<T> implements Extensible {
      * value of 0.5em should be used.
      * </p>
      */
-    protected static final Unit px = new Unit("px");
+    protected static final Unit px = Unit.px;
 
     /**
      * <p>
@@ -91,7 +91,7 @@ public class CSS<T> implements Extensible {
      * value of 0.5em should be used.
      * </p>
      */
-    protected static final Unit in = new Unit("in");
+    protected static final Unit in = Unit.in;
 
     /**
      * <p>
@@ -103,7 +103,7 @@ public class CSS<T> implements Extensible {
      * value of 0.5em should be used.
      * </p>
      */
-    protected static final Unit s = new Unit("s");
+    protected static final Unit s = Unit.Second;
 
     /**
      * <p>
@@ -115,7 +115,7 @@ public class CSS<T> implements Extensible {
      * value of 0.5em should be used.
      * </p>
      */
-    protected static final Unit ms = new Unit("ms");
+    protected static final Unit ms = Unit.MillSecond;
 
     /**
      * <p>
@@ -132,7 +132,7 @@ public class CSS<T> implements Extensible {
      * value of that property.
      * </p>
      */
-    protected static final Unit percent = new Unit("%");
+    protected static final Unit percent = Unit.Percentage;
 
     /**
      * <p>
@@ -572,9 +572,5 @@ public class CSS<T> implements Extensible {
         public int compare(CSSProperty o1, CSSProperty o2) {
             return o1.name.compareTo(o2.name);
         }
-    }
-
-    protected class POO {
-
     }
 }
