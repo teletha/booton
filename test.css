@@ -42,29 +42,29 @@
   z-index:0; opacity:0.9; 
   bottom:70px; 
 }
-.bg {
+.be {
   background-color:rgba(17,17,17,1.0); background-image:linear-gradient(rgba(68,68,68,1.0),rgba(17,17,17,1.0)); 
   border:1px solid rgba(34,34,34,1.0); border-radius:6px; 
   width:960px; z-index:0; box-shadow:0 1px 1px rgba(119,119,119,1.0); 
   margin-top:60px; margin-bottom:60px; margin-right:auto; margin-left:auto; 
 }
-.bg li {
+.be li {
   border-right:1px solid rgba(34,34,34,1.0); 
   z-index:1; min-width:120px; 
   display:inline-block; 
   position:relative; 
   text-align:center; 
 }
-.bg a {
+.be a {
   display:inline-block; 
   font-weight:bold; font-size:12px; font-family:Orbitron; color:rgba(153,153,153,1.0); 
   padding-top:12px; padding-bottom:12px; padding-right:30px; padding-left:30px; 
   text-decoration:none; text-shadow:0 1px 0 rgba(0,0,0,1.0); 
 }
-.bg li:hover > a {
+.be li:hover > a {
   color:rgba(250,250,250,1.0); 
 }
-.bg ul {
+.be ul {
   background-color:rgba(68,68,68,1.0); background-image:linear-gradient(rgba(68,68,68,1.0),rgba(17,17,17,1.0)); 
   border:transparent; border-radius:3px; 
   z-index:0; opacity:0.0; box-shadow:0 -1px 0 rgba(255,255,255,0.3); 
@@ -75,26 +75,26 @@
   transition-property:all; transition-timing-function:ease-in-out; transition-duration:0.2s; transition-delay:80ms; 
   visibility:hidden; 
 }
-.bg li:hover > ul {
+.be li:hover > ul {
   z-index:0; opacity:1.0; 
   margin-top:0; margin-bottom:0; margin-right:0; margin-left:0; 
   visibility:visible; 
 }
-.bg ul ul {
+.be ul ul {
   z-index:0; box-shadow:-1px 0 0 rgba(255,255,255,0.3); 
   margin-top:0; margin-left:20px; 
   top:0; left:120px; 
 }
-.bg ul li {
+.be ul li {
   border:0 transparent; 
   border-bottom:1px solid rgba(81,81,81,1.0); 
   display:block; 
 }
-.bg ul a {
+.be ul a {
   width:120px; z-index:0; 
   display:block; 
   padding-top:10px; padding-bottom:10px; padding-right:10px; padding-left:10px; 
 }
-.bg ul a:hover {
+.be ul a:hover {
   background-color:rgba(1,134,186,1.0); background-image:linear-gradient(rgba(4,172,236,1.0),rgba(1,134,186,1.0)); 
 }

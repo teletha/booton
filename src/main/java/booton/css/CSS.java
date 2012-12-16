@@ -32,15 +32,13 @@ import booton.css.property.BoxLength;
 import booton.css.property.Content;
 import booton.css.property.Display;
 import booton.css.property.Font;
+import booton.css.property.Line;
 import booton.css.property.ListStyle;
 import booton.css.property.PointerEvents;
 import booton.css.property.Position;
 import booton.css.property.Text;
 import booton.css.property.Transition;
 import booton.css.property.Visibility;
-import booton.css.value.Border;
-import booton.css.value.Gradient;
-import booton.css.value.Length;
 import booton.translator.Javascript;
 import booton.util.Color;
 import booton.util.Strings;
@@ -197,7 +195,7 @@ public class CSS<T> implements Extensible {
      * draws a non-rectangular shape around a construct like this:</li>
      * </ul>
      */
-    public Border outline;
+    public BorderValue outline;
 
     /**
      * <p>
@@ -223,7 +221,7 @@ public class CSS<T> implements Extensible {
      * minimal height of line boxes within the element.
      * </p>
      */
-    public Length lineHeight;
+    public Line line;
 
     /**
      * <p>
@@ -241,7 +239,7 @@ public class CSS<T> implements Extensible {
      * more of: border-width, border-style, border-color.
      * </p>
      */
-    public Border border;
+    public BorderValue border;
 
     /**
      * <p>
@@ -250,7 +248,7 @@ public class CSS<T> implements Extensible {
      * more of: border-width, border-style, border-color.
      * </p>
      */
-    public Border borderLeft;
+    public BorderValue borderLeft;
 
     /**
      * <p>
@@ -259,7 +257,7 @@ public class CSS<T> implements Extensible {
      * more of: border-width, border-style, border-color.
      * </p>
      */
-    public Border borderRight;
+    public BorderValue borderRight;
 
     /**
      * <p>
@@ -268,7 +266,7 @@ public class CSS<T> implements Extensible {
      * more of: border-width, border-style, border-color.
      * </p>
      */
-    public Border borderTop;
+    public BorderValue borderTop;
 
     /**
      * <p>
@@ -277,17 +275,7 @@ public class CSS<T> implements Extensible {
      * more of: border-width, border-style, border-color.
      * </p>
      */
-    public Border borderBottom;
-
-    /**
-     * <p>
-     * The text-indent CSS property specifies how much horizontal space should be left before the
-     * beginning of the first line of the text content of an element. Horizontal spacing is with
-     * respect to the left (or right, for right-to-left layout) edge of the containing block
-     * element's box.
-     * </p>
-     */
-    public Length textIndent;
+    public BorderValue borderBottom;
 
     /**
      * <p>
@@ -434,7 +422,7 @@ public class CSS<T> implements Extensible {
      * 
      * @return
      */
-    protected static final Gradient linear(String start, String end) {
+    protected static final GradientValue linear(String start, String end) {
         return linear(new Color(start), new Color(end));
     }
 
@@ -449,8 +437,8 @@ public class CSS<T> implements Extensible {
      * 
      * @return
      */
-    protected static final Gradient linear(Color start, Color end) {
-        return new Gradient(start, end);
+    protected static final GradientValue linear(Color start, Color end) {
+        return new GradientValue(start, end);
     }
 
     /**
@@ -531,6 +519,7 @@ public class CSS<T> implements Extensible {
 
                     try {
                         Constructor constructor = type.getDeclaredConstructor(String.class);
+                        constructor.setAccessible(true);
                         value = constructor.newInstance(Strings.hyphenate(field.getName()));
                     } catch (NoSuchMethodException e) {
                         value = type.newInstance();

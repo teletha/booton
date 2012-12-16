@@ -11,10 +11,10 @@ package booton.css.property;
 
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
+import booton.css.ColorValue;
 import booton.css.Colorable;
+import booton.css.GradientValue;
 import booton.css.Unit;
-import booton.css.value.ColorCode;
-import booton.css.value.Gradient;
 import booton.util.Color;
 
 /**
@@ -22,7 +22,7 @@ import booton.util.Color;
  */
 public class Background extends CSSProperty<Background> implements Colorable<Background> {
 
-    public final ColorCode<Background> color = new ColorCode("background-color", this);
+    public final ColorValue<Background> color = new ColorValue("background-color", this);
 
     private String repeat;
 
@@ -107,7 +107,7 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
      * @param uri
      * @return
      */
-    public Background image(Gradient gradient) {
+    public Background image(GradientValue gradient) {
         image = gradient.toString();
 
         return chain();

@@ -44,6 +44,9 @@ public class Text extends CSSProperty<Text> {
     /** The shadows. */
     private final List<ShadowValue> shadows = new ArrayList();
 
+    /** The text-indent property. */
+    private Value indent;
+
     /**
      * {@inheritDoc}
      */
@@ -51,7 +54,22 @@ public class Text extends CSSProperty<Text> {
     protected void write(CSSWriter writer) {
         super.write(writer);
 
+        writer.property("text-indent", indent);
         writer.property("text-shadow", I.join(shadows, ","));
+    }
+
+    /**
+     * <p>
+     * The text-indent CSS property specifies how much horizontal space should be left before the
+     * beginning of the first line of the text content of an element. Horizontal spacing is with
+     * respect to the left (or right, for right-to-left layout) edge of the containing block
+     * element's box.
+     * </p>
+     */
+    public Text indent(double size, Unit unit) {
+        this.indent = new Value(size, unit);
+
+        return chain();
     }
 
     /**
