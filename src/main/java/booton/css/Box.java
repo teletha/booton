@@ -9,10 +9,15 @@
  */
 package booton.css;
 
+import java.util.List;
+
+import js.util.ArrayList;
+import kiss.I;
+
 /**
  * @version 2012/12/13 17:54:06
  */
-public class Box extends CSSProperty<Box> {
+public class Box extends AutomaticCSSProperty<Box> {
 
     /**
      * <p>
@@ -26,18 +31,34 @@ public class Box extends CSSProperty<Box> {
     /** The box width. */
     private Value width;
 
+    /** The bos min-width. */
+    private Value minWidth;
+
+    /** The bos max-width. */
+    private Value maxWidth;
+
     /** The box height. */
     private Value height;
 
     /** The z-index. */
     private int index;
 
+    /** The shadows. */
+    private final List<Shadow> shadows = new ArrayList();
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public String toString() {
-        return property("width", width) + property("height", height) + sizing.toString() + property("z-index", index);
+    protected void write(CSSWriter writer) {
+        super.write(writer);
+
+        writer.property("width", width);
+        writer.property("height", height);
+        writer.property("z-index", index);
+        writer.property("max-width", maxWidth);
+        writer.property("min-width", minWidth);
+        writer.property("box-shadow", I.join(shadows, ","));
     }
 
     /**
@@ -88,6 +109,40 @@ public class Box extends CSSProperty<Box> {
 
     /**
      * <p>
+     * The min-width CSS property is used to set the minimum width of a given element. It prevents
+     * the used value of the width property from becoming smaller than the value specified for
+     * min-width.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public Box minWidth(double size, Unit unit) {
+        minWidth = new Value(size, unit);
+
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The max-width CSS property is used to set the maximum width of a given element. It prevents
+     * the used value of the width property from becoming larger than the value specified for
+     * max-width.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public Box maxWidth(double size, Unit unit) {
+        maxWidth = new Value(size, unit);
+
+        return chain();
+    }
+
+    /**
+     * <p>
      * Current height property.
      * </p>
      * 
@@ -117,9 +172,129 @@ public class Box extends CSSProperty<Box> {
     }
 
     /**
+     * <p>
+     * The z-index CSS property specifies the z-order of an element and its descendants. When
+     * elements overlap, z-order determines which one covers the other. An element with a larger
+     * z-index generally covers an element with a lower one.
+     * </p>
+     * 
+     * @param value
+     */
+    public Box zIndex(int value) {
+        index = value;
+
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The box-shadow CSS property describes one or more shadow effects as a comma-separated list.
+     * It allows casting a drop shadow from the frame of almost any element. If a border-radius is
+     * specified on the element with a box shadow, the box shadow takes on the same rounded corners.
+     * The z-ordering of multiple box shadows is the same as multiple text shadows (the first
+     * specified shadow is on top).
+     * </p>
+     * 
+     * @param offsetX
+     * @param unitX
+     * @param offsetY
+     * @param unitY
+     * @param color
+     * @return
+     */
+    public Shadow shadow(double offsetX, Unit unitX, double offsetY, Unit unitY) {
+        Shadow shadow = new Shadow(this);
+        shadow.offsetX = new Value(offsetX, unitX);
+        shadow.offsetY = new Value(offsetY, unitY);
+        shadows.add(shadow);
+
+        return shadow;
+    }
+
+    /**
+     * <p>
+     * The box-shadow CSS property describes one or more shadow effects as a comma-separated list.
+     * It allows casting a drop shadow from the frame of almost any element. If a border-radius is
+     * specified on the element with a box shadow, the box shadow takes on the same rounded corners.
+     * The z-ordering of multiple box shadows is the same as multiple text shadows (the first
+     * specified shadow is on top).
+     * </p>
+     * 
+     * @param offsetX
+     * @param unitX
+     * @param offsetY
+     * @param unitY
+     * @return
+     */
+    public Shadow shadowInset(double offsetX, Unit unitX, double offsetY, Unit unitY) {
+        Shadow shadow = new Shadow(this);
+        shadow.offsetX = new Value(offsetX, unitX);
+        shadow.offsetY = new Value(offsetY, unitY);
+        shadow.inset = true;
+        shadows.add(shadow);
+
+        return shadow;
+    }
+
+    /**
+     * <p>
+     * The box-shadow CSS property describes one or more shadow effects as a comma-separated list.
+     * It allows casting a drop shadow from the frame of almost any element. If a border-radius is
+     * specified on the element with a box shadow, the box shadow takes on the same rounded corners.
+     * The z-ordering of multiple box shadows is the same as multiple text shadows (the first
+     * specified shadow is on top).
+     * </p>
+     * 
+     * @param offsetX
+     * @param unitX
+     * @param offsetY
+     * @param unitY
+     * @param blur
+     * @param unitBlur
+     * @return
+     */
+    public Shadow shadow(double offsetX, Unit unitX, double offsetY, Unit unitY, double blur, Unit unitBlur) {
+        Shadow shadow = new Shadow(this);
+        shadow.offsetX = new Value(offsetX, unitX);
+        shadow.offsetY = new Value(offsetY, unitY);
+        shadow.blur = new Value(blur, unitBlur);
+        shadows.add(shadow);
+
+        return shadow;
+    }
+
+    /**
+     * <p>
+     * The box-shadow CSS property describes one or more shadow effects as a comma-separated list.
+     * It allows casting a drop shadow from the frame of almost any element. If a border-radius is
+     * specified on the element with a box shadow, the box shadow takes on the same rounded corners.
+     * The z-ordering of multiple box shadows is the same as multiple text shadows (the first
+     * specified shadow is on top).
+     * </p>
+     * 
+     * @param offsetX
+     * @param unitX
+     * @param offsetY
+     * @param unitY
+     * @param blur
+     * @param unitBlur
+     * @return
+     */
+    public Shadow shadowInset(double offsetX, Unit unitX, double offsetY, Unit unitY, double blur, Unit unitBlur) {
+        Shadow shadow = new Shadow(this);
+        shadow.offsetX = new Value(offsetX, unitX);
+        shadow.offsetY = new Value(offsetY, unitY);
+        shadow.blur = new Value(blur, unitBlur);
+        shadow.inset = true;
+        shadows.add(shadow);
+
+        return shadow;
+    }
+
+    /**
      * @version 2012/12/13 18:00:31
      */
-    public class Sizing extends CSSProperty<Box> {
+    public class Sizing extends AutomaticCSSProperty<Box> {
 
         /**
          * Hide.
@@ -155,17 +330,47 @@ public class Box extends CSSProperty<Box> {
     }
 
     /**
-     * <p>
-     * The z-index CSS property specifies the z-order of an element and its descendants. When
-     * elements overlap, z-order determines which one covers the other. An element with a larger
-     * z-index generally covers an element with a lower one.
-     * </p>
-     * 
-     * @param value
+     * @version 2012/12/16 14:41:52
      */
-    public Box zIndex(int value) {
-        index = value;
+    public class Shadow extends CSSColorValue<Box> {
 
-        return chain();
+        /** The shadow property. */
+        private boolean inset = false;
+
+        /** The shadow property. */
+        private Value offsetX;
+
+        /** The shadow property. */
+        private Value offsetY;
+
+        /** The shadow property. */
+        private Value blur;
+
+        /** The shadow property. */
+        private Value spread;
+
+        /**
+         * Hide constructor.
+         */
+        private Shadow(Box context) {
+            super("", context);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            StringBuilder builder = new StringBuilder();
+
+            if (inset) builder.append("inset ");
+            if (offsetX != null) builder.append(offsetX).append(" ");
+            if (offsetY != null) builder.append(offsetY).append(" ");
+            if (blur != null) builder.append(blur).append(" ");
+            if (spread != null) builder.append(spread).append(" ");
+            if (color != null) builder.append(color);
+
+            return builder.toString();
+        }
     }
 }

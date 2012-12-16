@@ -7,14 +7,26 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css;
+package booton.css.font;
 
+import java.util.List;
+
+import js.util.ArrayList;
+import kiss.I;
+import booton.css.AutomaticCSSProperty;
+import booton.css.CSSColorValue;
+import booton.css.CSSWriter;
+import booton.css.Colorable;
+import booton.css.FontFamily;
+import booton.css.Length;
+import booton.css.Unit;
+import booton.util.Color;
 import booton.util.Strings;
 
 /**
- * @version 2012/12/12 10:34:10
+ * @version 2012/12/16 12:25:48
  */
-public class Font extends Color<Font> {
+public final class Font extends AutomaticCSSProperty<Font> implements Colorable<Font> {
 
     /**
      * <p>
@@ -49,16 +61,26 @@ public class Font extends Color<Font> {
      */
     public final Size size = new Size();
 
-    /** The font family. */
-    private String family;
+    /**
+     * <p>
+     * The font-family CSS property allows for a prioritized list of font family names and/or
+     * generic family names to be specified for the selected element. Unlike most other CSS
+     * properties, values are separated by a comma to indicate that they are alternatives. The
+     * browser will select the first font on the list that is installed on the computer, or that can
+     * be downloaded using the information provided by a @font-face at-rule.
+     * </p>
+     */
+    public final Family family = new Family();
 
     /**
-     * {@inheritDoc}
+     * <p>
+     * The CSS color property sets the foreground color of an element's text content, and its
+     * decorations. It doesn't affect any other characteristic of the element; it should really be
+     * called text-color and would have been named so, save for historical reasons and its
+     * appearance in CSS Level 1.
+     * </p>
      */
-    @Override
-    public String toString() {
-        return property("font-family", family) + style + variant + size + weight + property("color", color);
-    }
+    public final CSSColorValue<Font> color = new CSSColorValue("color", this);
 
     /**
      * <p>
@@ -91,45 +113,8 @@ public class Font extends Color<Font> {
      * @param size
      * @return
      */
-    // public Font weight(int size) {
-    // return weight.chain(String.valueOf(size));
-    // }
-
-    /**
-     * <p>
-     * The font-family CSS property allows for a prioritized list of font family names and/or
-     * generic family names to be specified for the selected element. Unlike most other CSS
-     * properties, values are separated by a comma to indicate that they are alternatives. The
-     * browser will select the first font on the list that is installed on the computer, or that can
-     * be downloaded using the information provided by a @font-face at-rule.
-     * </p>
-     * <p>
-     * Web authors should always add at least one generic family in a font-family list, since
-     * there's no guarantee that a specific font is intalled on the computer or can be downloaded
-     * using a @font-face at-rule. The generic family lets the browser select an acceptable fallback
-     * font when needed.
-     * </p>
-     * 
-     * @param names
-     * @return
-     */
-    public Font family(String... names) {
-        StringBuilder builder = new StringBuilder();
-
-        for (int i = 0; i < names.length; i++) {
-            boolean space = Strings.hasSpace(names[i]);
-
-            if (space) builder.append('"');
-            builder.append(names[i]);
-            if (space) builder.append('"');
-
-            if (i != names.length - 1) {
-                builder.append(' ');
-            }
-        }
-        family = builder.toString();
-
-        return chain();
+    public Font weight(int size) {
+        return weight.chain(String.valueOf(size));
     }
 
     /**
@@ -150,23 +135,68 @@ public class Font extends Color<Font> {
      * @param names
      * @return
      */
-    public Font family(FontFamily... names) {
-        StringBuilder builder = new StringBuilder();
-
-        for (int i = 0; i < names.length; i++) {
-            boolean space = Strings.hasSpace(names[i].name);
-
-            if (space) builder.append('"');
-            builder.append(names[i].name);
-            if (space) builder.append('"');
-
-            if (i != names.length - 1) {
-                builder.append(' ');
-            }
+    public Family family(String... fonts) {
+        for (String font : fonts) {
+            family.add(font);
         }
-        family = builder.toString();
+        return family;
+    }
 
-        return chain();
+    /**
+     * <p>
+     * The font-family CSS property allows for a prioritized list of font family names and/or
+     * generic family names to be specified for the selected element. Unlike most other CSS
+     * properties, values are separated by a comma to indicate that they are alternatives. The
+     * browser will select the first font on the list that is installed on the computer, or that can
+     * be downloaded using the information provided by a @font-face at-rule.
+     * </p>
+     * <p>
+     * Web authors should always add at least one generic family in a font-family list, since
+     * there's no guarantee that a specific font is intalled on the computer or can be downloaded
+     * using a @font-face at-rule. The generic family lets the browser select an acceptable fallback
+     * font when needed.
+     * </p>
+     * 
+     * @param fonts
+     * @return
+     */
+    public Family family(FontFamily... fonts) {
+        for (FontFamily font : fonts) {
+            family.add(font.name);
+        }
+        return family;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Font color(int red, int green, int blue) {
+        return color.color(red, green, blue);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Font color(int red, int green, int blue, double alpha) {
+        return color.color(red, green, blue, alpha);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Font color(String hex) {
+        return color.color(hex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Font color(Color color) {
+        return this.color.color(color);
     }
 
     /**
@@ -300,7 +330,7 @@ public class Font extends Color<Font> {
     /**
      * @version 2012/12/12 10:49:48
      */
-    public class Style extends AbstractInheritable<Font> {
+    public class Style extends AutomaticCSSProperty<Font> {
 
         /**
          * 
@@ -346,7 +376,7 @@ public class Font extends Color<Font> {
     /**
      * @version 2012/12/12 11:19:52
      */
-    public class Weight extends CSSProperty<Font> {
+    public class Weight extends AutomaticCSSProperty<Font> {
 
         /**
          * 
@@ -399,12 +429,20 @@ public class Font extends Color<Font> {
         public Font bolder() {
             return chain("bolder");
         }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected Font chain(String value) {
+            return super.chain(value);
+        }
     }
 
     /**
      * @version 2012/12/12 10:40:16
      */
-    public class Variant extends AbstractInheritable<Font> {
+    public class Variant extends AutomaticCSSProperty<Font> {
 
         /**
          * 
@@ -435,6 +473,119 @@ public class Font extends Color<Font> {
          */
         public Font normal() {
             return chain("normal");
+        }
+    }
+
+    /**
+     * @version 2012/12/16 12:01:27
+     */
+    public class Family extends AutomaticCSSProperty<Font> {
+
+        /** The value list. */
+        private final List<String> names = new ArrayList();
+
+        /**
+         * Hide constructor.
+         */
+        private Family() {
+            super("font-family", Font.this);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void write(CSSWriter writer) {
+            writer.property(name, I.join(names, ","));
+        }
+
+        /**
+         * <p>
+         * Glyphs have finishing strokes, flared or tapering ends, or have actual serifed endings.
+         * E.g. Palatino, "Palatino Linotype", Palladio, "URW Palladio", serif
+         * </p>
+         * 
+         * @return
+         */
+        public Font serif() {
+            names.add("serif");
+
+            return chain();
+        }
+
+        /**
+         * <p>
+         * Glyphs have stroke endings that are plain. E.g. 'Trebuchet MS', 'Liberation Sans',
+         * 'Nimbus Sans L', sans-serif
+         * </p>
+         * 
+         * @return
+         */
+        public Font sansSerif() {
+            names.add("sans-serif");
+
+            return chain();
+        }
+
+        /**
+         * <p>
+         * Glyphs in cursive fonts generally have either joining strokes or other cursive
+         * characteristics beyond those of italic typefaces. The glyphs are partially or completely
+         * connected, and the result looks more like handwritten pen or brush writing than printed
+         * letterwork.
+         * </p>
+         * 
+         * @return
+         */
+        public Font cursive() {
+            names.add("cursive");
+
+            return chain();
+        }
+
+        /**
+         * <p>
+         * Fantasy fonts are primarily decorative fonts that contain playful representations of
+         * characters.
+         * </p>
+         * 
+         * @return
+         */
+        public Font fantasy() {
+            names.add("fantasy");
+
+            return chain();
+        }
+
+        /**
+         * <p>
+         * All glyphs have the same fixed width. E.g. "DejaVu Sans Mono", Menlo, Consolas,
+         * "Liberation Mono", Monaco, "Lucida Console", monospace
+         * </p>
+         * 
+         * @return
+         */
+        public Font monospace() {
+            names.add("monospace");
+
+            return chain();
+        }
+
+        /**
+         * <p>
+         * Add font name.
+         * </p>
+         * 
+         * @param name
+         * @return
+         */
+        private Font add(String name) {
+            if (Strings.hasSpace(name)) {
+                names.add('"' + name + '"');
+            } else {
+                names.add(name);
+            }
+            return chain();
         }
     }
 }

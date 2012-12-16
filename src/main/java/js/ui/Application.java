@@ -9,6 +9,8 @@
  */
 package js.ui;
 
+import booton.css.CSS;
+
 /**
  * @version 2012/12/11 14:19:29
  */
@@ -21,7 +23,20 @@ public abstract class Application {
      */
     protected abstract void jsmain();
 
-    protected final void hbox(UI... wedgets) {
+    /**
+     * <p>
+     * Configure header part.
+     * </p>
+     * 
+     * @param header
+     */
+    protected void configure(Header header) {
+    }
+
+    /**
+     * @version 2012/12/15 18:02:37
+     */
+    public static class Style extends CSS {
 
     }
 }

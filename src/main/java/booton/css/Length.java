@@ -12,7 +12,7 @@ package booton.css;
 /**
  * @version 2012/12/12 10:19:47
  */
-public class Length<T extends CSSProperty> extends CSSProperty<T> {
+public class Length<T extends CSSProperty> extends AutomaticCSSProperty<T> {
 
     /**
      * 

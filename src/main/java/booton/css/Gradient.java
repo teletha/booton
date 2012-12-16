@@ -9,22 +9,22 @@
  */
 package booton.css;
 
-import booton.util.RGB;
+import booton.util.Color;
 
 /**
  * @version 2012/12/15 0:52:37
  */
 public class Gradient {
 
-    private RGB start;
+    private Color start;
 
-    private RGB end;
+    private Color end;
 
     /**
      * @param start
      * @param end
      */
-    public Gradient(RGB start, RGB end) {
+    public Gradient(Color start, Color end) {
         this.start = start;
         this.end = end;
     }

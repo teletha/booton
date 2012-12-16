@@ -23,7 +23,7 @@ public abstract class CSSProperty<T extends CSSProperty> {
     protected final String name;
 
     /** The property value. */
-    private String value;
+    protected String value;
 
     /** The API context. */
     private T context;
@@ -136,7 +136,7 @@ public abstract class CSSProperty<T extends CSSProperty> {
      * 
      * @return
      */
-    protected final T chain() {
+    protected T chain() {
         this.context.used = true;
 
         return context;
@@ -149,7 +149,7 @@ public abstract class CSSProperty<T extends CSSProperty> {
      * 
      * @return
      */
-    protected final T chain(String value) {
+    protected T chain(String value) {
         this.value = value;
         this.context.used = true;
 

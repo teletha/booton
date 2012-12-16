@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kiss.I;
-import booton.util.RGB;
+import booton.util.Color;
 
 /**
  * @version 2012/12/12 12:03:34
@@ -36,7 +36,7 @@ public class TextShadow extends CSSProperty<TextShadow> {
      * @param rgb
      * @return
      */
-    public TextShadow add(double offsetX, Unit unitX, double offsetY, Unit unitY, int blurRadius, Unit unitRadius, RGB rgb) {
+    public TextShadow add(double offsetX, Unit unitX, double offsetY, Unit unitY, int blurRadius, Unit unitRadius, Color rgb) {
         values.add(compute(offsetX, unitX) + " " + compute(offsetY, unitY) + " " + compute(blurRadius, unitRadius) + " " + rgb);
 
         return chain();

@@ -12,8 +12,11 @@ package booton;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Set;
 
 import js.ui.Application;
+import js.ui.ApplicationTheme;
 import kiss.I;
 import kiss.XML;
 
@@ -32,13 +35,26 @@ public class Booton {
     /** The application class. */
     private final Class<? extends Application> application;
 
+    /** The application design. */
+    private final Class<? extends ApplicationTheme> design;
+
     /**
      * <p>
      * Booton web application builder.
      * </p>
      */
     public Booton(Class<? extends Application> application) {
+        this(application, null);
+    }
+
+    /**
+     * <p>
+     * Booton web application builder.
+     * </p>
+     */
+    public Booton(Class<? extends Application> application, Class<? extends ApplicationTheme> design) {
         this.application = application;
+        this.design = design == null ? ApplicationTheme.class : design;
     }
 
     /**
@@ -75,8 +91,8 @@ public class Booton {
             I.load(application, true);
 
             buildHTML(output.resolve("test.html"));
-            buildCSS(output.resolve("test.css"));
             buildJS(output.resolve("test.js"));
+            buildCSS(output.resolve("test.css"));
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
@@ -102,15 +118,16 @@ public class Booton {
         XML html = I.xml("html");
         XML head = html.child("head");
         head.child("meta").attr("charset", "utf-8");
-
-        head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", "bootstrap.css");
+        head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", "normalize.css");
         head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", "test.css");
         head.child("script").attr("type", "text/javascript").attr("src", "jquery.js").text("/* */");
-        head.child("script").attr("type", "text/javascript").attr("src", "bootstrap.js").text("/* */");
         head.child("script").attr("type", "text/javascript").attr("src", "boot.js").text("/* */");
         head.child("script").attr("type", "text/javascript").attr("src", "test.js").text("/* */");
 
-        html.child("body");
+        XML body = html.child("body");
+        body.child("header").attr("id", "Header");
+        body.child("div").attr("id", "Content");
+        body.child("footer").attr("id", "Footer");
 
         html.child("script").attr("type", "text/javascript").text(builder.toString());
 
@@ -127,7 +144,8 @@ public class Booton {
     private void buildCSS(Path file) throws Exception {
         StringBuilder builder = new StringBuilder();
 
-        for (CSS css : I.find(CSS.class)) {
+        for (Class<? extends CSS> rules : styles) {
+            CSS css = I.make(rules);
             System.out.println(css.getClass());
             for (Field field : css.getClass().getDeclaredFields()) {
                 if (field.getType() == FontFamily.class) {
@@ -142,12 +160,8 @@ public class Booton {
             }
         }
 
-        builder.append("* {\r\n");
-        builder.append("  -moz-box-sizing: border-box;\r\n");
-        builder.append("}\r\n");
-
-        for (CSS css : I.find(CSS.class)) {
-            builder.append(css.toString());
+        for (Class<? extends CSS> rules : styles) {
+            builder.append(I.make(rules).toString());
         }
         Files.write(file, builder.toString().getBytes(I.$encoding));
     }
@@ -171,4 +185,25 @@ public class Booton {
         Booton booton = new Booton(Teemowork.class);
         booton.build();
     }
+
+    /** The rule sets. */
+    private static final Set<Class<? extends CSS>> styles = new HashSet();
+
+    /**
+     * <p>
+     * </p>
+     * 
+     * @param clazz
+     */
+    public static Class requireCSS(Class clazz) {
+        CSS css = I.find(CSS.class, clazz);
+
+        if (css != null) {
+            clazz = css.getClass();
+        }
+        styles.add(clazz);
+
+        return clazz;
+    }
+
 }

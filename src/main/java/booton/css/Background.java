@@ -9,10 +9,14 @@
  */
 package booton.css;
 
+import booton.util.Color;
+
 /**
  * @version 2012/12/12 0:00:13
  */
-public class Background extends Color<Background> {
+public class Background extends AutomaticCSSProperty<Background> implements Colorable<Background> {
+
+    public final CSSColorValue<Background> color = new CSSColorValue("background-color", this);
 
     private String repeat;
 
@@ -28,8 +32,45 @@ public class Background extends Color<Background> {
      * {@inheritDoc}
      */
     @Override
-    public String toString() {
-        return property("background-color", color) + property("background-repeat", repeat) + property("background-position", horizontalPosition, verticalPosition) + property("background-size", size) + property("background-image", image);
+    protected void write(CSSWriter writer) {
+        super.write(writer);
+
+        writer.property("background-repeat", repeat);
+        writer.property("background-position", horizontalPosition, verticalPosition);
+        writer.property("background-size", size);
+        writer.property("background-image", image);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Background color(int red, int green, int blue) {
+        return color.color(red, green, blue);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Background color(int red, int green, int blue, double alpha) {
+        return color.color(red, green, blue, alpha);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Background color(String hex) {
+        return color.color(hex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Background color(Color color) {
+        return this.color.color(color);
     }
 
     /**
