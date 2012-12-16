@@ -98,7 +98,7 @@ public class Teemowork extends Application {
 
             while (rule("span")) {
                 font.weight.bold().size(18, px).family(Yanone);
-                lineHeight.size(20, px);
+                line.height(20, px);
                 padding.size(5, px);
                 text.align.center().shadow(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
                 background.color(255, 255, 255, 0.6);

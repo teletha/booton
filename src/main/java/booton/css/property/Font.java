@@ -15,10 +15,10 @@ import js.util.ArrayList;
 import kiss.I;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
+import booton.css.ColorValue;
 import booton.css.Colorable;
 import booton.css.Unit;
-import booton.css.value.ColorCode;
-import booton.css.value.Length;
+import booton.css.Value;
 import booton.util.Color;
 import booton.util.Strings;
 
@@ -79,7 +79,7 @@ public final class Font extends CSSProperty<Font> implements Colorable<Font> {
      * appearance in CSS Level 1.
      * </p>
      */
-    public final ColorCode<Font> color = new ColorCode("color", this);
+    public final ColorValue<Font> color = new ColorValue("color", this);
 
     /**
      * <p>
@@ -93,7 +93,7 @@ public final class Font extends CSSProperty<Font> implements Colorable<Font> {
      * @return
      */
     public Font size(double size, Unit unit) {
-        return this.size.size(size, unit);
+        return this.size.set(new Value(size, unit));
     }
 
     /**
@@ -201,13 +201,25 @@ public final class Font extends CSSProperty<Font> implements Colorable<Font> {
     /**
      * @version 2012/12/12 10:53:02
      */
-    public class Size extends Length<Font> {
+    public class Size extends CSSProperty<Font> {
 
         /**
          * 
          */
         private Size() {
             super("font-size", Font.this);
+        }
+
+        /**
+         * <p>
+         * Set numerical value.
+         * </p>
+         * 
+         * @param value
+         * @return
+         */
+        private Font set(Value value) {
+            return chain(value.toString());
         }
 
         /**

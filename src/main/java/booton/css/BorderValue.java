@@ -7,22 +7,17 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css.value;
+package booton.css;
 
-import booton.css.CSSProperty;
-import booton.css.CSSWriter;
-import booton.css.Colorable;
-import booton.css.Unit;
-import booton.css.Value;
 import booton.util.Color;
 
 /**
  * @version 2012/12/11 22:52:28
  */
-public class Border extends CSSProperty<Border> implements Colorable<Border> {
+public class BorderValue extends CSSProperty<BorderValue> implements Colorable<BorderValue> {
 
     /** The border color. */
-    public final ColorCode<Border> color = new ColorCode(name + "-color", this);
+    public final ColorValue<BorderValue> color = new ColorValue(name + "-color", this);
 
     /** The line width. */
     private String width;
@@ -36,7 +31,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
     /**
      * @param css
      */
-    protected Border(String name) {
+    protected BorderValue(String name) {
         super(name);
     }
 
@@ -53,7 +48,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
      * {@inheritDoc}
      */
     @Override
-    public Border color(int red, int green, int blue) {
+    public BorderValue color(int red, int green, int blue) {
         return color.color(red, green, blue);
     }
 
@@ -61,7 +56,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
      * {@inheritDoc}
      */
     @Override
-    public Border color(int red, int green, int blue, double alpha) {
+    public BorderValue color(int red, int green, int blue, double alpha) {
         return color.color(red, green, blue, alpha);
     }
 
@@ -69,7 +64,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
      * {@inheritDoc}
      */
     @Override
-    public Border color(String hex) {
+    public BorderValue color(String hex) {
         return color.color(hex);
     }
 
@@ -77,7 +72,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
      * {@inheritDoc}
      */
     @Override
-    public Border color(Color color) {
+    public BorderValue color(Color color) {
         return this.color.color(color);
     }
 
@@ -92,7 +87,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
      * @param unit
      * @return
      */
-    public Border radius(double size, Unit unit) {
+    public BorderValue radius(double size, Unit unit) {
         radius = new Value(size, unit);
 
         return chain();
@@ -107,7 +102,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
      * @param unit
      * @return
      */
-    public Border width(double size, Unit unit) {
+    public BorderValue width(double size, Unit unit) {
         width = compute(size, unit);
 
         return chain();
@@ -123,7 +118,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
      * 
      * @return
      */
-    public Border none() {
+    public BorderValue none() {
         style = "none";
 
         return chain();
@@ -139,7 +134,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
      * 
      * @return
      */
-    public Border hidden() {
+    public BorderValue hidden() {
         style = "hidden";
 
         return chain();
@@ -154,7 +149,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
      * 
      * @return
      */
-    public Border dotted() {
+    public BorderValue dotted() {
         style = "dotted";
 
         return chain();
@@ -168,7 +163,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
      * 
      * @return
      */
-    public Border dashed() {
+    public BorderValue dashed() {
         style = "dashed";
 
         return chain();
@@ -181,7 +176,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
      * 
      * @return
      */
-    public Border solid() {
+    public BorderValue solid() {
         style = "solid";
 
         return chain();
@@ -194,7 +189,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
      * 
      * @return
      */
-    public Border doubles() {
+    public BorderValue doubles() {
         style = "double";
 
         return chain();
@@ -207,7 +202,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
      * 
      * @return
      */
-    public Border groove() {
+    public BorderValue groove() {
         style = "groove";
 
         return chain();
@@ -221,7 +216,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
      * 
      * @return
      */
-    public Border ridge() {
+    public BorderValue ridge() {
         style = "ridge";
 
         return chain();
@@ -236,7 +231,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
      * 
      * @return
      */
-    public Border inset() {
+    public BorderValue inset() {
         style = "inset";
 
         return chain();
@@ -251,7 +246,7 @@ public class Border extends CSSProperty<Border> implements Colorable<Border> {
      * 
      * @return
      */
-    public Border outset() {
+    public BorderValue outset() {
         style = "outset";
 
         return chain();

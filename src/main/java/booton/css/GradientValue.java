@@ -7,14 +7,14 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css.value;
+package booton.css;
 
 import booton.util.Color;
 
 /**
  * @version 2012/12/15 0:52:37
  */
-public class Gradient {
+public class GradientValue {
 
     private Color start;
 
@@ -24,7 +24,7 @@ public class Gradient {
      * @param start
      * @param end
      */
-    public Gradient(Color start, Color end) {
+    public GradientValue(Color start, Color end) {
         this.start = start;
         this.end = end;
     }
