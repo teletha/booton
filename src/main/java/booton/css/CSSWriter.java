@@ -9,6 +9,11 @@
  */
 package booton.css;
 
+import java.util.List;
+
+import js.util.ArrayList;
+import kiss.I;
+
 /**
  * @version 2012/12/13 16:20:21
  */
@@ -25,9 +30,50 @@ public class CSSWriter {
      * @param name
      * @param value
      */
+    public void property(String name, Object value) {
+        if (value != null) {
+            property(name, value.toString());
+        }
+    }
+
+    /**
+     * <p>
+     * Write property.
+     * </p>
+     * 
+     * @param name
+     * @param value
+     */
+    public void property(String name, Object... values) {
+        List<String> list = new ArrayList();
+
+        for (Object value : values) {
+            if (value != null) {
+                list.add(value.toString());
+            }
+        }
+        property(name, I.join(list, " "));
+    }
+
+    /**
+     * <p>
+     * Write property.
+     * </p>
+     * 
+     * @param name
+     * @param value
+     */
     public void property(String name, String value) {
         if (name != null && name.length() != 0 && value != null && value.length() != 0) {
-            builder.append(name).append(" : ").append(value).append(";");
+            builder.append(name).append(":").append(value).append("; ");
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return builder.toString();
     }
 }

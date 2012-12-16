@@ -28,6 +28,9 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
+import booton.Booton;
+import booton.css.CSS;
+
 /**
  * <p>
  * In general, the compiler converts the short-circuit route, and optimizes the logical expression.
@@ -917,24 +920,15 @@ class JavaMethodCompiler extends MethodVisitor {
             // add class operand
             Class clazz = convert(className);
 
+            if (CSS.class.isAssignableFrom(clazz)) {
+                clazz = Booton.requireCSS(clazz);
+            }
+
             // Booton doesn't support class literal in javascript runtime, so we should provide
             // class name instead.
             current.addOperand('"' + Javascript.computeClassName(clazz).substring(5) + '"');
         } else {
             current.addOperand(constant);
-        }
-    }
-
-    private int lineNumber = 0;
-
-    /**
-     * {@inheritDoc}
-     */
-    public void visitLineNumber(int number, Label label) {
-        if (lineNumber <= number) {
-            lineNumber = number;
-        } else {
-
         }
     }
 

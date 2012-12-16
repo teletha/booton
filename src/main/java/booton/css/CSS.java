@@ -26,15 +26,16 @@ import kiss.Extensible;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
+import booton.css.font.Font;
 import booton.translator.Javascript;
-import booton.util.RGB;
+import booton.util.Color;
 import booton.util.Strings;
 
 /**
  * @version 2012/12/11 23:59:41
  */
 @Manageable(lifestyle = Singleton.class)
-public class CSS implements Extensible {
+public class CSS<T> implements Extensible {
 
     /**
      * <p>
@@ -221,16 +222,6 @@ public class CSS implements Extensible {
 
     /**
      * <p>
-     * The CSS color property sets the foreground color of an element's text content, and its
-     * decorations. It doesn't affect any other characteristic of the element; it should really be
-     * called text-color and would have been named so, save for historical reasons and its
-     * appearance in CSS Level 1.
-     * </p>
-     */
-    public Color color;
-
-    /**
-     * <p>
      * The text-shadow CSS property adds shadows to text. It accepts a comma-separated list of
      * shadows to be applied to the text and text-decorations of the element.
      * </p>
@@ -316,17 +307,6 @@ public class CSS implements Extensible {
      * </p>
      */
     public PointerEvents pointerEvents;
-
-    /**
-     * <p>
-     * The box-shadow CSS property describes one or more shadow effects as a comma-separated list.
-     * It allows casting a drop shadow from the frame of almost any element. If a border-radius is
-     * specified on the element with a box shadow, the box shadow takes on the same rounded corners.
-     * The z-ordering of multiple box shadows is the same as multiple text shadows (the first
-     * specified shadow is on top).
-     * </p>
-     */
-    public BoxShadow boxShadow;
 
     /**
      * <p>
@@ -454,8 +434,12 @@ public class CSS implements Extensible {
      * @param alpha
      * @return
      */
-    protected static final RGB rgba(int red, int green, int blue, double alpha) {
-        return new RGB(red, green, blue, alpha);
+    protected static final Color rgba(int red, int green, int blue, double alpha) {
+        return new Color(red, green, blue, alpha);
+    }
+
+    protected static final Color color(String hex) {
+        return new Color(hex);
     }
 
     /**
@@ -470,7 +454,7 @@ public class CSS implements Extensible {
      * @return
      */
     protected static final Gradient linear(String start, String end) {
-        return linear(new RGB(start), new RGB(end));
+        return linear(new Color(start), new Color(end));
     }
 
     /**
@@ -484,7 +468,7 @@ public class CSS implements Extensible {
      * 
      * @return
      */
-    protected static final Gradient linear(RGB start, RGB end) {
+    protected static final Gradient linear(Color start, Color end) {
         return new Gradient(start, end);
     }
 
@@ -501,7 +485,7 @@ public class CSS implements Extensible {
         position.absolute().left(50, percent);
         box.width(boxWidth, px);
         margin.left(-boxWidth / 2, px);
-        border.width(borderWidth, px).solid().rgb(5, 5, 5);
+        border.width(borderWidth, px).solid().color(5, 5, 5);
 
         while (rule(("::before"))) {
             display.block();
@@ -510,8 +494,8 @@ public class CSS implements Extensible {
             position.absolute()
                     .bottom(-bubbleWidth - borderWidth - bubbleWidth, px)
                     .left(boxWidth / 2 - borderWidth - bubbleWidth, px);
-            border.width(bubbleWidth, px).solid().transparent();
-            borderTop.black().width(bubbleWidth, px).solid();
+            border.width(bubbleWidth, px).solid().color.transparent();
+            borderTop.color.black().width(bubbleWidth, px).solid();
         }
     }
 

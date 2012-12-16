@@ -14,9 +14,9 @@ import static booton.translator.web.WebSupport.*;
 import java.util.Collection;
 
 import js.ui.Application;
+import js.ui.Header;
+import js.ui.Header.Menu;
 import js.ui.ImageGrid;
-import js.ui.Nav;
-import js.ui.NavItem;
 import teemowork.model.Champion;
 import booton.css.CSS;
 import booton.css.FontFamily;
@@ -59,25 +59,19 @@ public class Teemowork extends Application {
 
         jQuery root = $("body");
 
-        Nav nav = new Nav(root);
-        nav.add("Teemowork", "test.html");
-        nav.add("Home", "#");
-        NavItem sub = nav.add("Categories", "#");
-        nav.add("Work", "#");
+        Header nav = new Header();
+        nav.add("< ^ v ^ > Teemowork", "test.html");
+        nav.add("Patch", "#");
+
+        Menu sub = nav.add("Data", "#");
+        sub.add("Champion", "#");
+        sub.add("Item", "#");
+        sub.add("Mastery", "#");
+        sub.add("Rune", "#");
+
+        nav.add("Builder", "#");
         nav.add("About", "#");
         nav.add("Contact", "#");
-
-        NavItem subsub1 = sub.add("CSS", "#");
-        NavItem subsub2 = sub.add("Teemo", "#");
-        sub.add("Patch", "#");
-
-        subsub1.add("CSS", "#");
-        subsub1.add("Teemo", "#");
-        subsub1.add("Patch", "#");
-
-        subsub2.add("CSS2", "#");
-        subsub2.add("Teem2o", "#");
-        subsub2.add("Patch2", "#");
 
         for (Champion champion : Champion.getAll()) {
             String uri = "src/main/resources/teemowork/icon/" + champion.getSystemName() + ".png";
@@ -89,7 +83,7 @@ public class Teemowork extends Application {
     /**
      * @version 2012/12/10 16:59:19
      */
-    private static class MyCSS extends CSS {
+    private static class MyCSS extends CSS<MyCSS> {
 
         private FontFamily Yanone = new FontFamily("http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz");
 
@@ -97,22 +91,22 @@ public class Teemowork extends Application {
             display.inlineBlock();
             box.size(70, px);
             outline.none();
-            background.transparent().noRepeat().top().left().contain();
+            background.color.transparent().noRepeat().top().left().contain();
             position.relative();
 
             cover();
 
             while (rule("span")) {
-                font.family(Yanone).weight.bold().size(18, px);
+                font.weight.bold().size(18, px).family(Yanone);
                 lineHeight.size(20, px);
                 padding.size(5, px);
                 textShadow.add(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
                 textAlign.center();
-                background.rgba(255, 255, 255, 0.6);
+                background.color(255, 255, 255, 0.6);
                 border.radius(5, px);
                 pointerEvents.none();
                 position.bottom(100, px);
-                boxShadow.offset(1, px, 1, px).blurRadius(2, px).rgba(0, 0, 0, 0.1);
+                box.shadow(1, px, 1, px, 2, px).color(0, 0, 0, 0.1);
                 opacity.alpha(0);
                 transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
 
@@ -137,7 +131,7 @@ public class Teemowork extends Application {
                 display.block();
                 position.absolute();
                 box.width(width.size, width.unit).height(height.size, height.unit);
-                background.white();
+                background.color.white();
                 opacity.alpha(0.15);
             }
 
@@ -146,4 +140,5 @@ public class Teemowork extends Application {
             }
         }
     }
+
 }

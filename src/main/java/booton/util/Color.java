@@ -12,7 +12,7 @@ package booton.util;
 /**
  * @version 2012/12/12 13:42:23
  */
-public class RGB {
+public class Color {
 
     /** The character list of number whihc base is 16. */
     private static final char[] chars = new char[16];
@@ -56,7 +56,7 @@ public class RGB {
      * 
      * @param hex
      */
-    public RGB(String hex) {
+    public Color(String hex) {
         if (hex.charAt(0) == '#') {
             hex = hex.substring(1);
         }
@@ -100,7 +100,7 @@ public class RGB {
      * 
      * @param color
      */
-    public RGB(int color) {
+    public Color(int color) {
         this((color & 0xFF0000) >> 16, (color & 0x00FF00) >> 8, (color & 0x0000FF));
     }
 
@@ -114,7 +114,7 @@ public class RGB {
      * @param blue A blue component in the range 0-255. If the specified value is out of range, it
      *            will be round up to 0 or 255.
      */
-    public RGB(int red, int green, int blue) {
+    public Color(int red, int green, int blue) {
         this(red, green, blue, 1);
     }
 
@@ -128,7 +128,7 @@ public class RGB {
      * @param blue A blue component in the range 0-255. If the specified value is out of range, it
      *            will be round up to 0 or 255.
      */
-    public RGB(int red, int green, int blue, double alpha) {
+    public Color(int red, int green, int blue, double alpha) {
         this.red = (int) range(red, 255);
         this.green = (int) range(green, 255);
         this.blue = (int) range(blue, 255);

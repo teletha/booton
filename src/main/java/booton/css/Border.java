@@ -9,10 +9,15 @@
  */
 package booton.css;
 
+import booton.util.Color;
+
 /**
  * @version 2012/12/11 22:52:28
  */
-public class Border extends Color<Border> {
+public class Border extends AutomaticCSSProperty<Border> implements Colorable<Border> {
+
+    /** The border color. */
+    public final CSSColorValue<Border> color = new CSSColorValue(name + "-color", this);
 
     /** The line width. */
     private String width;
@@ -34,8 +39,41 @@ public class Border extends Color<Border> {
      * {@inheritDoc}
      */
     @Override
-    public String toString() {
-        return property(name, width, style, color == null ? "transparent" : color.toString()) + property("border-radius", radius);
+    protected void write(CSSWriter writer) {
+        writer.property(name, width, style, color.color == null ? "transparent" : color.color);
+        writer.property("border-radius", radius);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Border color(int red, int green, int blue) {
+        return color.color(red, green, blue);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Border color(int red, int green, int blue, double alpha) {
+        return color.color(red, green, blue, alpha);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Border color(String hex) {
+        return color.color(hex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Border color(Color color) {
+        return this.color.color(color);
     }
 
     /**
