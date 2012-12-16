@@ -9,7 +9,7 @@
  */
 package teemowork;
 
-import js.ui.ApplicationTheme;
+import js.application.ApplicationTheme;
 
 /**
  * @version 2012/12/15 22:13:17

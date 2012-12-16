@@ -15,8 +15,8 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 
-import js.ui.Application;
-import js.ui.ApplicationTheme;
+import js.application.Application;
+import js.application.ApplicationTheme;
 import kiss.I;
 import kiss.XML;
 

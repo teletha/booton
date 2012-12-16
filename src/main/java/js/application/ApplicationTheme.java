@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.ui;
+package js.application;
 
 import booton.util.Color;
 import booton.util.Font;

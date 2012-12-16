@@ -9,7 +9,6 @@
  */
 package booton.css;
 
-
 /**
  * @version 2012/12/13 15:12:37
  */
@@ -20,6 +19,14 @@ public class Value {
 
     /** The unit. */
     public final Unit unit;
+
+    /**
+     * Zero size.
+     */
+    public Value() {
+        this.size = 0;
+        this.unit = Unit.px;
+    }
 
     /**
      * @param size
@@ -44,5 +51,18 @@ public class Value {
         } else {
             return String.valueOf(size).concat(unit.toString());
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Value) {
+            Value other = (Value) obj;
+
+            return size == other.size && unit == other.unit;
+        }
+        return false;
     }
 }
