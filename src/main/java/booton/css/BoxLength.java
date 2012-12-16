@@ -12,7 +12,7 @@ package booton.css;
 /**
  * @version 2012/12/12 10:21:21
  */
-public class BoxLength extends AutomaticCSSProperty<BoxLength> {
+public class BoxLength extends CSSProperty<BoxLength> {
 
     /** The top value. */
     private Value top;

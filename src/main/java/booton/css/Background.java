@@ -14,7 +14,7 @@ import booton.util.Color;
 /**
  * @version 2012/12/12 0:00:13
  */
-public class Background extends AutomaticCSSProperty<Background> implements Colorable<Background> {
+public class Background extends CSSProperty<Background> implements Colorable<Background> {
 
     public final CSSColorValue<Background> color = new CSSColorValue("background-color", this);
 

@@ -12,7 +12,7 @@ package booton.css;
 /**
  * @version 2012/12/13 11:44:43
  */
-public class Content extends AutomaticCSSProperty<Content> {
+public class Content extends CSSProperty<Content> {
 
     /**
      * <p>

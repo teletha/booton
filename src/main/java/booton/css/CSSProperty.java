@@ -17,7 +17,7 @@ import booton.util.Strings;
 /**
  * @version 2012/12/16 11:24:02
  */
-public class AutomaticCSSProperty<T extends AutomaticCSSProperty> {
+public class CSSProperty<T extends CSSProperty> {
 
     /** The flag. */
     boolean used = false;
@@ -34,7 +34,7 @@ public class AutomaticCSSProperty<T extends AutomaticCSSProperty> {
     /**
      * Create with default name.
      */
-    protected AutomaticCSSProperty() {
+    protected CSSProperty() {
         this(null);
     }
 
@@ -43,7 +43,7 @@ public class AutomaticCSSProperty<T extends AutomaticCSSProperty> {
      * 
      * @param name
      */
-    protected AutomaticCSSProperty(String name) {
+    protected CSSProperty(String name) {
         this(name, null);
     }
 
@@ -53,7 +53,7 @@ public class AutomaticCSSProperty<T extends AutomaticCSSProperty> {
      * @param name
      * @param context
      */
-    protected AutomaticCSSProperty(String name, T context) {
+    protected CSSProperty(String name, T context) {
         if (name == null) {
             name = Strings.hyphenate(getClass().getSimpleName());
         }
@@ -90,8 +90,8 @@ public class AutomaticCSSProperty<T extends AutomaticCSSProperty> {
 
                 if (value == null) {
                     continue;
-                } else if (value instanceof AutomaticCSSProperty) {
-                    ((AutomaticCSSProperty) value).write(writer);
+                } else if (value instanceof CSSProperty) {
+                    ((CSSProperty) value).write(writer);
                 } else {
                     // writer.property(Strings.hyphenate(field.getName()), value);
                 }

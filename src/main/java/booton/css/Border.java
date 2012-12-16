@@ -14,7 +14,7 @@ import booton.util.Color;
 /**
  * @version 2012/12/11 22:52:28
  */
-public class Border extends AutomaticCSSProperty<Border> implements Colorable<Border> {
+public class Border extends CSSProperty<Border> implements Colorable<Border> {
 
     /** The border color. */
     public final CSSColorValue<Border> color = new CSSColorValue(name + "-color", this);

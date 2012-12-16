@@ -14,7 +14,7 @@ import booton.util.Color;
 /**
  * @version 2012/12/16 12:38:37
  */
-public interface Colorable<T extends AutomaticCSSProperty> {
+public interface Colorable<T extends CSSProperty> {
 
     /**
      * <p>

@@ -13,7 +13,7 @@ import java.util.List;
 
 import js.util.ArrayList;
 import kiss.I;
-import booton.css.AutomaticCSSProperty;
+import booton.css.CSSProperty;
 import booton.css.CSSColorValue;
 import booton.css.CSSWriter;
 import booton.css.Colorable;
@@ -26,7 +26,7 @@ import booton.util.Strings;
 /**
  * @version 2012/12/16 12:25:48
  */
-public final class Font extends AutomaticCSSProperty<Font> implements Colorable<Font> {
+public final class Font extends CSSProperty<Font> implements Colorable<Font> {
 
     /**
      * <p>
@@ -330,7 +330,7 @@ public final class Font extends AutomaticCSSProperty<Font> implements Colorable<
     /**
      * @version 2012/12/12 10:49:48
      */
-    public class Style extends AutomaticCSSProperty<Font> {
+    public class Style extends CSSProperty<Font> {
 
         /**
          * 
@@ -376,7 +376,7 @@ public final class Font extends AutomaticCSSProperty<Font> implements Colorable<
     /**
      * @version 2012/12/12 11:19:52
      */
-    public class Weight extends AutomaticCSSProperty<Font> {
+    public class Weight extends CSSProperty<Font> {
 
         /**
          * 
@@ -442,7 +442,7 @@ public final class Font extends AutomaticCSSProperty<Font> implements Colorable<
     /**
      * @version 2012/12/12 10:40:16
      */
-    public class Variant extends AutomaticCSSProperty<Font> {
+    public class Variant extends CSSProperty<Font> {
 
         /**
          * 
@@ -479,7 +479,7 @@ public final class Font extends AutomaticCSSProperty<Font> implements Colorable<
     /**
      * @version 2012/12/16 12:01:27
      */
-    public class Family extends AutomaticCSSProperty<Font> {
+    public class Family extends CSSProperty<Font> {
 
         /** The value list. */
         private final List<String> names = new ArrayList();

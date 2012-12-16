@@ -371,7 +371,7 @@ public class CSS<T> implements Extensible {
             rules = set;
 
             // load property and assign it to field
-            for (AutomaticCSSProperty property : set.rules) {
+            for (CSSProperty property : set.rules) {
                 CSS.class.getField(Strings.unhyphenate(property.name)).set(this, property);
             }
         } catch (Exception e) {
@@ -478,7 +478,7 @@ public class CSS<T> implements Extensible {
         private final String selector;
 
         /** The property store. */
-        private final Set<AutomaticCSSProperty> rules = new TreeSet(new PropertySorter());
+        private final Set<CSSProperty> rules = new TreeSet(new PropertySorter());
 
         /** The flag whether this rule set process sub rule or not. */
         private int id = -1;
@@ -521,7 +521,7 @@ public class CSS<T> implements Extensible {
                     } catch (NoSuchMethodException e) {
                         value = type.newInstance();
                     }
-                    rules.add((AutomaticCSSProperty) value);
+                    rules.add((CSSProperty) value);
                 }
             } catch (Exception e) {
                 throw I.quiet(e);
@@ -544,7 +544,7 @@ public class CSS<T> implements Extensible {
 
             builder.append(prefix).append(" {\r\n");
 
-            for (AutomaticCSSProperty property : rules) {
+            for (CSSProperty property : rules) {
                 if (property.used) {
                     builder.append("  ").append(property).append("\r\n");
                 }
@@ -560,13 +560,13 @@ public class CSS<T> implements Extensible {
     /**
      * @version 2012/12/13 1:39:08
      */
-    private static class PropertySorter implements Comparator<AutomaticCSSProperty> {
+    private static class PropertySorter implements Comparator<CSSProperty> {
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public int compare(AutomaticCSSProperty o1, AutomaticCSSProperty o2) {
+        public int compare(CSSProperty o1, CSSProperty o2) {
             return o1.name.compareTo(o2.name);
         }
     }

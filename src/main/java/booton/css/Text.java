@@ -18,7 +18,7 @@ import booton.util.Color;
 /**
  * @version 2012/12/16 15:39:53
  */
-public class Text extends AutomaticCSSProperty<Text> {
+public class Text extends CSSProperty<Text> {
 
     /**
      * <p>
@@ -101,7 +101,7 @@ public class Text extends AutomaticCSSProperty<Text> {
     /**
      * @version 2012/12/12 14:07:44
      */
-    public class Align extends AutomaticCSSProperty<Text> {
+    public class Align extends CSSProperty<Text> {
 
         /**
          * Hide.
@@ -181,7 +181,7 @@ public class Text extends AutomaticCSSProperty<Text> {
     /**
      * @version 2012/12/15 1:12:52
      */
-    public class Decration extends AutomaticCSSProperty<Text> {
+    public class Decration extends CSSProperty<Text> {
 
         /**
          * Hide.

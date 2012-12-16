@@ -12,7 +12,7 @@ package booton.css;
 /**
  * @version 2012/12/13 18:12:01
  */
-public class Transition extends AutomaticCSSProperty<Transition> {
+public class Transition extends CSSProperty<Transition> {
 
     /**
      * <p>
@@ -102,7 +102,7 @@ public class Transition extends AutomaticCSSProperty<Transition> {
     /**
      * @version 2012/12/13 18:13:13
      */
-    public class Property extends AutomaticCSSProperty<Transition> {
+    public class Property extends CSSProperty<Transition> {
 
         /**
          * Hide.
@@ -137,7 +137,7 @@ public class Transition extends AutomaticCSSProperty<Transition> {
     /**
      * @version 2012/12/13 18:13:13
      */
-    public class Timing extends AutomaticCSSProperty<Transition> {
+    public class Timing extends CSSProperty<Transition> {
 
         /**
          * Hide.
