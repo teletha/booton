@@ -26,6 +26,7 @@ import teemowork.Teemowork;
 import booton.css.CSS;
 import booton.translator.Javascript;
 import booton.util.Font;
+import booton.util.HTMLWriter;
 
 /**
  * @version 2012/12/10 23:06:05
@@ -125,13 +126,13 @@ public class Booton {
         head.child("script").attr("type", "text/javascript").attr("src", "test.js");
 
         XML body = html.child("body");
-        body.child("header").attr("id", "Header").text("");
-        body.child("div").attr("id", "Content").text(" ");
-        body.child("footer").attr("id", "Footer").text(" ");
+        body.child("header").attr("id", "Header");
+        body.child("div").attr("id", "Content");
+        body.child("footer").attr("id", "Footer");
 
         html.child("script").attr("type", "text/javascript").text(builder.toString());
 
-        html.to(Files.newBufferedWriter(file, I.$encoding));
+        html.to(new HTMLWriter(Files.newBufferedWriter(file, I.$encoding)));
     }
 
     /**
