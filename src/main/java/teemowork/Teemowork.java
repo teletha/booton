@@ -73,11 +73,54 @@ public class Teemowork extends Application {
         nav.add("About", "#");
         nav.add("Contact", "#");
 
+        final DataModel model = new DataModel();
+
+        Input input = new Input();
+        input.text(model.text);
+        // input.bind(model, "model.text");
+
+        Output output = new Output();
+        output.text(model.text);
+        // output.bind(model, "model.text");
+
         for (Champion champion : Champion.getAll()) {
             String uri = "src/main/resources/teemowork/icon/" + champion.getSystemName() + ".png";
 
             root.child(MyCSS.class).css("background-image", "url(" + uri + ")").child("span").text(champion.name);
         }
+    }
+
+    private static @interface Bind {
+
+    }
+
+    private static class Binding {
+
+        public Binding(String path) {
+
+        }
+    }
+
+    private static class Input {
+
+        @Bind
+        public void text(String value) {
+
+        }
+    }
+
+    private static class Output {
+
+        public void text(String value) {
+
+        }
+    }
+
+    private static class DataModel {
+
+        public String text;
+
+        public Binding binding = new Binding(text);
     }
 
     /**
