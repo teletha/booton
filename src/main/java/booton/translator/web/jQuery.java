@@ -361,6 +361,73 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Hide the matched elements.
+     * </p>
+     * 
+     * @return
+     */
+    public native jQuery hide();
+
+    /**
+     * <p>
+     * This is a shortcut for .trigger("keydown").
+     * </p>
+     * 
+     * @return
+     */
+    public native jQuery keydown();
+
+    /**
+     * <p>
+     * Bind an event handler to the "keydown" JavaScript event, or trigger that event on an element.
+     * </p>
+     * 
+     * @param listener A function to execute each time the event is triggered.
+     * @return
+     */
+    public native jQuery keydown(Listener listener);
+
+    /**
+     * <p>
+     * This is a shortcut for .trigger("keypress").
+     * </p>
+     * 
+     * @return
+     */
+    public native jQuery keypress();
+
+    /**
+     * <p>
+     * Bind an event handler to the "keypress" JavaScript event, or trigger that event on an
+     * element.
+     * </p>
+     * 
+     * @param listener A function to execute each time the event is triggered.
+     * @return
+     */
+    public native jQuery keypress(Listener listener);
+
+    /**
+     * <p>
+     * This is a shortcut for .trigger("keyup").
+     * </p>
+     * 
+     * @return
+     */
+    public native jQuery keyup();
+
+    /**
+     * <p>
+     * Bind an event handler to the "keyup" JavaScript event, or trigger that event on an element.
+     * </p>
+     * 
+     * @param listener A function to execute each time the event is triggered.
+     * @return
+     */
+    public native jQuery keyup(Listener listener);
+
+    /**
+     * <p>
      * Get the immediately following sibling of each element in the set of matched elements. If a
      * selector is provided, it retrieves the next sibling only if it matches that selector.
      * </p>
@@ -453,6 +520,15 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Display the matched elements.
+     * </p>
+     * 
+     * @return
+     */
+    public native jQuery show();
+
+    /**
+     * <p>
      * Return the number of elements in the jQuery object.
      * </p>
      * 
@@ -503,6 +579,36 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery toggleClass(Class<? extends CSS> classNames);
+
+    /**
+     * <p>
+     * Get the current value of the first element in the set of matched elements.
+     * </p>
+     * <p>
+     * The .val() method is primarily used to get the values of form elements such as input, select
+     * and textarea. In the case of <select multiple="multiple"> elements, the .val() method returns
+     * an array containing each selected option; if no option is selected, it returns null.
+     * </p>
+     * 
+     * @return
+     */
+    public native String val();
+
+    /**
+     * <p>
+     * Set the value of each element in the set of matched elements.
+     * </p>
+     * <p>
+     * The .val() method is primarily used to get the values of form elements such as input, select
+     * and textarea. In the case of <select multiple="multiple"> elements, the .val() method returns
+     * an array containing each selected option; if no option is selected, it returns null.
+     * </p>
+     * 
+     * @param value A string of text or an array of strings corresponding to the value of each
+     *            matched element to set as selected/checked.
+     * @return
+     */
+    public native jQuery val(String value);
 
     /**
      * @version 2012/12/02 23:08:01

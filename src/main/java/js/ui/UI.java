@@ -9,10 +9,43 @@
  */
 package js.ui;
 
+import static booton.translator.web.WebSupport.*;
+import booton.translator.web.jQuery;
 
 /**
  * @version 2012/12/11 14:39:54
  */
-public interface UI {
+public abstract class UI {
 
+    /** The root container element for this user interface. */
+    public final jQuery root;
+
+    /**
+     * <p>
+     * Create UI with div element.
+     * </p>
+     */
+    protected UI() {
+        this("div");
+    }
+
+    /**
+     * <p>
+     * Create UI with specified root element.
+     * </p>
+     * 
+     * @param name
+     */
+    protected UI(String name) {
+        this.root = $("<" + name + ">");
+    }
+
+    /**
+     * <p>
+     * Compose this user interface.
+     * </p>
+     * 
+     * @return
+     */
+    public abstract void compose(jQuery parent);
 }

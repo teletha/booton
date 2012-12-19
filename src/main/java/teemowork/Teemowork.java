@@ -18,10 +18,7 @@ import js.application.Header;
 import js.application.Header.Menu;
 import js.ui.ImageGrid;
 import teemowork.model.Champion;
-import booton.css.CSS;
-import booton.css.Value;
 import booton.translator.web.jQuery;
-import booton.util.Font;
 
 /**
  * @version 2012/12/11 14:23:57
@@ -37,12 +34,12 @@ public class Teemowork extends Application {
         }
 
         @Override
-        protected String name(Champion source) {
+        protected String getTitle(Champion source) {
             return source.name;
         }
 
         @Override
-        protected String uri(Champion source) {
+        protected String getImageURI(Champion source) {
             return "src/main/resources/teemowork/icon/" + source.getSystemName() + ".png";
         }
     };
@@ -73,112 +70,6 @@ public class Teemowork extends Application {
         nav.add("About", "#");
         nav.add("Contact", "#");
 
-        final DataModel model = new DataModel();
-
-        Input input = new Input();
-        input.text(model.text);
-        // input.bind(model, "model.text");
-
-        Output output = new Output();
-        output.text(model.text);
-        // output.bind(model, "model.text");
-
-        for (Champion champion : Champion.getAll()) {
-            String uri = "src/main/resources/teemowork/icon/" + champion.getSystemName() + ".png";
-
-            root.child(MyCSS.class).css("background-image", "url(" + uri + ")").child("span").text(champion.name);
-        }
+        champions.compose(root);
     }
-
-    private static @interface Bind {
-
-    }
-
-    private static class Binding {
-
-        public Binding(String path) {
-
-        }
-    }
-
-    private static class Input {
-
-        @Bind
-        public void text(String value) {
-
-        }
-    }
-
-    private static class Output {
-
-        public void text(String value) {
-
-        }
-    }
-
-    private static class DataModel {
-
-        public String text;
-
-        public Binding binding = new Binding(text);
-    }
-
-    /**
-     * @version 2012/12/10 16:59:19
-     */
-    private static class MyCSS extends CSS<MyCSS> {
-
-        private Font Yanone = new Font("http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz");
-
-        {
-            display.inlineBlock();
-            box.size(70, px);
-            outline.none();
-            background.color.transparent().noRepeat().top().left().contain();
-            position.relative();
-
-            cover();
-
-            while (rule("span")) {
-                font.weight.bold().size(18, px).family(Yanone);
-                line.height(20, px);
-                padding.size(5, px);
-                text.align.center().shadow(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
-                background.color(255, 255, 255, 0.6);
-                border.radius(5, px);
-                pointerEvents.none();
-                position.bottom(100, px);
-                box.opacity(0).shadow(1, px, 1, px, 2, px, rgba(0, 0, 0, 0.1));
-                transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
-
-                bubble(100, 4, 10);
-            }
-
-            while (rule(":hover span")) {
-                box.opacity(0.9);
-                position.bottom(70, px);
-            }
-        }
-
-        /**
-         * Apply screen cover.
-         */
-        private void cover() {
-            Value width = box.width();
-            Value height = box.height();
-
-            while (rule("::after")) {
-                content.text("");
-                display.block();
-                position.absolute();
-                box.width(width.size, width.unit).height(height.size, height.unit).opacity(0.15);
-                background.color.white();
-            }
-
-            while (rule(":hover::after")) {
-                box.opacity(0);
-            }
-        }
-    }
-
 }
