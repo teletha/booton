@@ -19,6 +19,7 @@ import js.application.Application;
 import js.application.ApplicationTheme;
 import kiss.I;
 import kiss.XML;
+import kiss.model.Model;
 
 import org.objectweb.asm.Type;
 
@@ -200,7 +201,7 @@ public class Booton {
         CSS css = I.find(CSS.class, clazz);
 
         if (css != null) {
-            clazz = css.getClass();
+            clazz = Model.load(css.getClass()).type;
         }
         styles.add(clazz);
 

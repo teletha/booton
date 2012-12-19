@@ -38,5 +38,7 @@ public abstract class Application {
      */
     public static class Style extends CSS {
 
+        {
+        }
     }
 }
