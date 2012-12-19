@@ -11,6 +11,7 @@ package js.application;
 
 import static booton.translator.web.WebSupport.*;
 import booton.css.CSS;
+import booton.css.Selector;
 import booton.translator.web.jQuery;
 import booton.util.Color;
 import booton.util.Font;
@@ -84,72 +85,105 @@ public class Header {
         /** The header font. */
         private final Font family = new Font("http://fonts.googleapis.com/css?family=Orbitron");
 
-        {
-            int Header = 120;
+        private int Header = 120;
 
+        {
             box.width(960, px).shadow(0, px, 1, px, 1, px, color("#777"));
             margin.vertical(60, px).auto();
             border.width(1, px).solid().color("#222").radius(6, px);
             background.color(background()).image(linear("#444", background().hex));
+        }
 
-            while (rule("li")) {
-                display.inlineBlock();
-                borderRight.width(1, px).solid().color("#222");
-                position.relative();
-                box.minWidth(Header, px).zIndex(1);
-                text.align.center();
-            }
+        @Selector("li")
+        protected void list() {
+            display.inlineBlock();
+            borderRight.width(1, px).solid().color("#222");
+            position.relative();
+            box.minWidth(Header, px).zIndex(1);
+            text.align.center();
 
-            while (rule("a")) {
-                display.inlineBlock();
-                padding.vertical(12, px).horizontal(30, px);
-                font.color("#999").weight.bold().size(12, px).family(family);
-                text.decoration.none().shadow(0, px, 1, px, 0, px, rgba(0, 0, 0, 1));
-            }
+            new CSS("test") {
 
-            while (rule("li:hover > a")) {
-                font.color("#fafafa");
-            }
+                {
 
-            while (rule("ul")) {
-                listStyle.none();
-                margin.top(20, px);
-                padding.size(0, px);
-                visibility.hidden();
-                position.absolute().top(44, px).left(0, px);
-                background.color("#444").image(linear("#444", "#111"));
-                box.shadow(0, px, -1, px, 0, px, rgba(255, 255, 255, 0.3)).opacity(0);
-                border.radius(3, px);
-                transition.property.all().duration(0.2, s).timing.easeInOut().delay(80, ms);
-            }
+                }
+            };
+        }
 
-            while (rule("li:hover > ul")) {
-                box.opacity(1);
-                visibility.visible();
-                margin.size(0, px);
-            }
+        @Selector("a")
+        protected void a() {
+            display.inlineBlock();
+            padding.vertical(12, px).horizontal(30, px);
+            font.color("#999").weight.bold().size(12, px).family(family);
+            text.decoration.none().shadow(0, px, 1, px, 0, px, rgba(0, 0, 0, 1));
+        }
 
-            while (rule("ul ul")) {
-                position.top(0, px).left(Header, px);
-                margin.left(20, px).top(0, px);
-                box.shadow(-1, px, 0, px, 0, px, rgba(255, 255, 255, 0.3));
-            }
+        @Selector("li:hover > a")
+        protected void anchorSelected() {
+            font.color("#fafafa");
+        }
 
-            while (rule("ul li")) {
-                display.block();
-                border.width(0, px);
-                borderBottom.width(1, px).solid().color("#515151");
-            }
+        @Selector("li:hover > ul")
+        protected void listSelected() {
+            box.opacity(1);
+            visibility.visible();
+            margin.size(0, px);
+        }
 
-            while (rule("ul a")) {
-                padding.size(10, px);
-                box.width(Header, px);
-                display.block();
-            }
+        @Selector("ul")
+        protected void ul() {
+            listStyle.none();
+            margin.top(20, px);
+            padding.size(0, px);
+            visibility.hidden();
+            position.absolute().top(44, px).left(0, px);
+            background.color("#444").image(linear("#444", "#111"));
+            box.shadow(0, px, -1, px, 0, px, rgba(255, 255, 255, 0.3)).opacity(0);
+            border.radius(3, px);
+            transition.property.all().duration(0.2, s).timing.easeInOut().delay(80, ms);
 
-            while (rule("ul a:hover")) {
-                background.color("#0186ba").image(linear("#04acec", "#0186ba"));
-            }
+            new CSS("a") {
+
+                {
+                    display.block();
+                    padding.size(10, px);
+                    box.width(Header, px);
+                }
+
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                protected void hover() {
+                    background.color("#0186ba").image(linear("#04acec", "#0186ba"));
+                }
+            };
+        }
+
+        @Selector("ul ul")
+        protected void subMenu() {
+            position.top(0, px).left(Header, px);
+            margin.left(20, px).top(0, px);
+            box.shadow(-1, px, 0, px, 0, px, rgba(255, 255, 255, 0.3));
+        }
+
+        @Selector("ul li")
+        protected void subMenuItem() {
+            display.block();
+            border.width(0, px);
+            borderBottom.width(1, px).solid().color("#515151");
+        }
+
+        @Selector("ul a")
+        protected void subMenuLink() {
+            display.block();
+            padding.size(10, px);
+            box.width(Header, px);
+        }
+
+        @Selector("ul a:hover")
+        protected void subMenuLinkSelected() {
+            background.color("#0186ba").image(linear("#04acec", "#0186ba"));
         }
 
         protected Color background() {
