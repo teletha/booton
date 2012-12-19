@@ -71,25 +71,7 @@ function boot(global) {
   //====================================================================
   // Array Extensions
   //====================================================================
-  define(Array.prototype, {
-    /**
-     * Retrieve the object identifier.
-     *
-     * @return An identifier.
-     */
-    it: function() {
-      return {
-        item: this,
-        i: 0,
-        hasNext: function() {
-          return this.i < this.item.length;
-        },
-        next: function() {
-          return this.item[this.i++];
-        }
-      };
-    }
-  });
+
   
   //====================================================================
   // Object Extensions

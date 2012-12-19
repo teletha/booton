@@ -47,6 +47,10 @@ class StringCoder extends Translator<String> {
         return that + ".charAt(" + param(0) + ")";
     }
 
+    public String contains(CharSequence param0) {
+        return that + ".indexOf(" + param(0) + ") != -1";
+    }
+
     public String indexOf(int value) {
         return that + ".indexOf(" + param(0) + ")";
     }

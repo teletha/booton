@@ -9,9 +9,9 @@
  */
 package booton.css;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import js.util.ArrayList;
 import kiss.I;
 
 /**

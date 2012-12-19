@@ -9,9 +9,9 @@
  */
 package booton.css.property;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import js.util.ArrayList;
 import kiss.I;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
@@ -63,7 +63,7 @@ public class Box extends CSSProperty<Box> {
 
         writer.property("width", width);
         writer.property("height", height);
-        writer.property("z-index", index);
+        if (0 != index) writer.property("z-index", index);
         if (0 <= alpha && alpha <= 1) writer.property("opacity", alpha);
         writer.property("max-width", maxWidth);
         writer.property("min-width", minWidth);

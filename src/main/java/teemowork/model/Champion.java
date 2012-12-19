@@ -25,6 +25,9 @@ public class Champion {
     /** The name. */
     public final String name;
 
+    /** The normalized name. */
+    public final String normalizedName;
+
     /** The current status. */
     ChampionStatus status;
 
@@ -37,6 +40,7 @@ public class Champion {
      */
     private Champion(String name) {
         this.name = name;
+        this.normalizedName = getSystemName().toLowerCase();
 
         // register by name
         champions.put(name, this);

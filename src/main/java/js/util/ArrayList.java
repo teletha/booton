@@ -45,7 +45,7 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return array.iterator();
+        return new View();
     }
 
     /**
@@ -182,6 +182,41 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
 
         if (size() <= index) {
             throw new IndexOutOfBoundsException("Index is overflowed. Size: " + size() + "  Index: " + index);
+        }
+    }
+
+    /**
+     * @version 2012/12/19 13:51:53
+     */
+    private class View implements Iterator<E> {
+
+        /** The curren position. */
+        private int index = 0;
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean hasNext() {
+            return index < array.length();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E next() {
+            return array.get(index++);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void remove() {
+            if (0 < index) {
+                array.remove(index - 1);
+            }
         }
     }
 }
