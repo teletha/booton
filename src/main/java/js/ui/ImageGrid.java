@@ -46,7 +46,7 @@ public abstract class ImageGrid<T> extends UI {
      */
     @Override
     public void compose(jQuery parent) {
-        root.addClass(Style.class);
+        root.css("line-height", "0").css("width", "700px").css("margin", "0 auto");
 
         final jQuery search = root.child("input").css("display", "block");
         search.keyup(new Listener() {
@@ -66,7 +66,7 @@ public abstract class ImageGrid<T> extends UI {
         });
 
         for (T source : sources) {
-            jQuery image = root.child("span").css("background-image", "url(" + getImageURI(source) + ")");
+            jQuery image = root.child(Style.class).css("background-image", "url(" + getImageURI(source) + ")");
             image.child("span").text(getTitle(source));
 
             images.put(source, image);
@@ -112,42 +112,38 @@ public abstract class ImageGrid<T> extends UI {
         private Font Yanone = new Font("http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz");
 
         {
-            line.height(0, px);
+            display.inlineBlock();
+            box.size(70, px);
+            outline.none();
+            background.color.transparent().noRepeat().top().left().contain();
+            position.relative();
+            transition.property.all().duration(0.2, s).timing.easeInOut();
 
-            while (rule("> span")) {
-                display.inlineBlock();
-                box.size(70, px);
-                outline.none();
-                background.color.transparent().noRepeat().top().left().contain();
-                position.relative();
-                transition.property.all().duration(0.2, s).timing.easeInOut();
+            cover();
 
-                cover();
-
-                while (rule("> span")) {
-                    font.weight.bold().size(18, px).family(Yanone);
-                    line.height(20, px);
-                    padding.size(5, px);
-                    text.align.center().shadow(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
-                    background.color(255, 255, 255, 0.6);
-                    border.radius(5, px);
-                    pointerEvents.none();
-                    position.bottom(100, px);
-                    box.opacity(0).shadow(1, px, 1, px, 2, px, rgba(0, 0, 0, 0.1));
-                    transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
-
-                    bubble(100, 4, 10);
-                }
-
-                while (rule(":hover span")) {
-                    box.opacity(0.9);
-                    position.bottom(70, px);
-                }
-            }
-
-            while (rule("> span.unselected")) {
+            while (rule(".unselected")) {
                 box.opacity(0);
                 margin.right(-70, px);
+            }
+
+            while (rule("> span")) {
+                font.weight.bold().size(18, px).family(Yanone);
+                line.height(20, px);
+                padding.size(5, px);
+                text.align.center().shadow(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
+                background.color(255, 255, 255, 0.6);
+                border.radius(5, px);
+                pointerEvents.none();
+                position.bottom(100, px);
+                box.opacity(0).shadow(1, px, 1, px, 2, px, rgba(0, 0, 0, 0.1));
+                transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
+
+                bubble(100, 4, 10);
+            }
+
+            while (rule(":hover span")) {
+                box.opacity(0.9);
+                position.bottom(70, px);
             }
         }
 
@@ -168,6 +164,29 @@ public abstract class ImageGrid<T> extends UI {
 
             while (rule(":hover::after")) {
                 box.opacity(0);
+            }
+        }
+
+        /**
+         * @version 2012/12/20 11:27:57
+         */
+        private static class TextStyle extends CSS<TextStyle> {
+
+            private Font Yanone = new Font("http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz");
+
+            {
+                font.weight.bold().size(18, px).family(Yanone);
+                line.height(20, px);
+                padding.size(5, px);
+                text.align.center().shadow(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
+                background.color(255, 255, 255, 0.6);
+                border.radius(5, px);
+                pointerEvents.none();
+                position.bottom(100, px);
+                box.opacity(0).shadow(1, px, 1, px, 2, px, rgba(0, 0, 0, 0.1));
+                transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
+
+                bubble(100, 4, 10);
             }
         }
     }

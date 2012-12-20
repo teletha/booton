@@ -101,13 +101,6 @@ public class Header {
             position.relative();
             box.minWidth(Header, px).zIndex(1);
             text.align.center();
-
-            new CSS("test") {
-
-                {
-
-                }
-            };
         }
 
         @Selector("a")
@@ -141,23 +134,6 @@ public class Header {
             box.shadow(0, px, -1, px, 0, px, rgba(255, 255, 255, 0.3)).opacity(0);
             border.radius(3, px);
             transition.property.all().duration(0.2, s).timing.easeInOut().delay(80, ms);
-
-            new CSS("a") {
-
-                {
-                    display.block();
-                    padding.size(10, px);
-                    box.width(Header, px);
-                }
-
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                protected void hover() {
-                    background.color("#0186ba").image(linear("#04acec", "#0186ba"));
-                }
-            };
         }
 
         @Selector("ul ul")
@@ -179,10 +155,14 @@ public class Header {
             display.block();
             padding.size(10, px);
             box.width(Header, px);
+
+            // while (hover()) {
+            // background.color("#0186ba").image(linear("#04acec", "#0186ba"));
+            // }
         }
 
         @Selector("ul a:hover")
-        protected void subMenuLinkSelected() {
+        protected void selectSubMenuLink() {
             background.color("#0186ba").image(linear("#04acec", "#0186ba"));
         }
 
