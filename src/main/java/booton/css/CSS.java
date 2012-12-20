@@ -100,6 +100,26 @@ public abstract class CSS<T> implements Extensible {
     protected static final Unit in = Unit.in;
 
     /**
+     * 1/100th of the width of the viewport.
+     */
+    protected static final Unit vh = Unit.vh;
+
+    /**
+     * 1/100th of the width of the viewport.
+     */
+    protected static final Unit vw = Unit.vw;
+
+    /**
+     * 1/100th of the minimum value between the height and the width of the viewport.
+     */
+    protected static final Unit vmin = Unit.vmin;
+
+    /**
+     * 1/100th of the maximum value between the height and the width of the viewport.
+     */
+    protected static final Unit vmax = Unit.vmax;
+
+    /**
      * <p>
      * The x-height of a font can be found in different ways. Some fonts contain reliable metrics
      * for the x-height. If reliable font metrics are not available, UAs may determine the x-height
@@ -345,8 +365,20 @@ public abstract class CSS<T> implements Extensible {
 
     }
 
-    protected void hover() {
-
+    /**
+     * <p>
+     * The :hover CSS pseudo-class matches when the user designates an element with a pointing
+     * device, but does not necessarily activate it. This style may be overridden by any other
+     * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent
+     * rules. In order to style appropriately links, you need to put the :hover rule after the :link
+     * and :visited rules but before the :active one, as defined by the LVHA-order: :link — :visited
+     * — :hover — :active.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean hover() {
+        return true;
     }
 
     /**
@@ -357,6 +389,7 @@ public abstract class CSS<T> implements Extensible {
      * @param selector
      * @return
      */
+    @Deprecated
     protected final boolean rule(String selector) {
         // dirty usage
         int id = new Error().getStackTrace()[1].getLineNumber();
@@ -410,6 +443,7 @@ public abstract class CSS<T> implements Extensible {
                 for (Annotation annotation : entry.getValue()) {
                     if (annotation.annotationType() == Selector.class) {
                         Method method = entry.getKey();
+                        method.setAccessible(true);
                         Selector selector = (Selector) annotation;
 
                         try {
@@ -582,7 +616,7 @@ public abstract class CSS<T> implements Extensible {
          * @param builder
          */
         private void writeTo(String prefix, StringBuilder builder) {
-            if (prefix.length() != 0 && !selector.startsWith(":")) {
+            if (prefix.length() != 0 && Character.isAlphabetic(selector.charAt(0))) {
                 prefix = prefix + " ";
             }
             prefix = prefix + selector;
