@@ -381,6 +381,40 @@ public abstract class CSS<T> implements Extensible {
         return true;
     }
 
+    protected final boolean after() {
+        return rule2("::after");
+    }
+
+    /**
+     * <p>
+     * Create sub rule set.
+     * </p>
+     * 
+     * @param selector
+     * @return
+     */
+    private final boolean rule2(String selector) {
+        // dirty usage
+        int id = new Error().getStackTrace()[2].getLineNumber();
+
+        if (rules.id == id) {
+            rules.id = -1;
+
+            // restore parent rule set
+            load(rules.parent);
+
+            return false;
+        } else {
+            // create sub rule set
+            load(new RuleSet(rules, selector));
+
+            // update position info
+            rules.id = id;
+
+            return true;
+        }
+    }
+
     /**
      * <p>
      * Create sub rule set.
