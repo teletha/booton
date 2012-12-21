@@ -26,6 +26,10 @@ import booton.util.Font;
  */
 public abstract class ImageGrid<T> extends UI {
 
+    protected static enum N {
+        a;
+    }
+
     /** The image elements. */
     private Map<T, jQuery> images = new HashMap();
 
@@ -66,6 +70,7 @@ public abstract class ImageGrid<T> extends UI {
         });
 
         for (T source : sources) {
+
             jQuery image = root.child(Style.class).css("background-image", "url(" + getImageURI(source) + ")");
             image.child("span").text(getTitle(source));
 
@@ -126,7 +131,7 @@ public abstract class ImageGrid<T> extends UI {
                 margin.right(-70, px);
             }
 
-            while (rule("> span")) {
+            while (rule("span")) {
                 font.weight.bold().size(18, px).family(Yanone);
                 line.height(20, px);
                 padding.size(5, px);
@@ -154,7 +159,7 @@ public abstract class ImageGrid<T> extends UI {
             Value width = box.width();
             Value height = box.height();
 
-            while (rule("::after")) {
+            while (after()) {
                 content.text("");
                 display.block();
                 position.absolute();
