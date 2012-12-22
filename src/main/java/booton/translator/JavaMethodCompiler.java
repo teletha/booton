@@ -14,6 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
 import static org.objectweb.asm.Type.*;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -21,6 +22,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import kiss.I;
 
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
@@ -257,7 +260,19 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case GETSTATIC:
-            current.addOperand(translator.translateStaticField(ownerClass, name));
+            if (!ExternalResource.class.isAssignableFrom(ownerClass)) {
+                current.addOperand(translator.translateStaticField(ownerClass, name));
+            } else {
+                try {
+                    Field field = ownerClass.getDeclaredField(name);
+                    field.setAccessible(true);
+
+                    ExternalResource resource = (ExternalResource) field.get(null);
+                    current.addOperand(new OperandString(resource.toString()));
+                } catch (Exception e) {
+                    throw I.quiet(e);
+                }
+            }
             break;
         }
     }
