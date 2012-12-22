@@ -13,7 +13,7 @@ import static booton.translator.web.WebSupport.*;
 
 import java.util.Collection;
 
-import js.application.Application;
+import js.Application;
 import js.application.Header;
 import js.application.Header.Menu;
 import js.ui.ImageGrid;

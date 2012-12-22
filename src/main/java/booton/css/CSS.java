@@ -32,6 +32,7 @@ import kiss.Manageable;
 import kiss.Singleton;
 import kiss.model.ClassUtil;
 import kiss.model.Model;
+import booton.ExternalResource;
 import booton.css.property.Background;
 import booton.css.property.Box;
 import booton.css.property.BoxLength;
@@ -53,7 +54,7 @@ import booton.util.Strings;
  * @version 2012/12/11 23:59:41
  */
 @Manageable(lifestyle = Singleton.class)
-public abstract class CSS<T> implements Extensible {
+public abstract class CSS<T> implements Extensible, ExternalResource {
 
     /**
      * <p>

@@ -132,29 +132,6 @@ function boot(global) {
   define(boot, {
     /**
      * <p>
-     * Create new Array object from the specified Array-like object.
-     * </p>
-     * 
-     * @param {Object} object
-     * @return {Array} A new created Array.
-     */
-    toArray: function(object) {
-      var result = [];
-
-      if (object != null) {
-        var i = object.length;
-
-        while (i) {
-          result[--i] = object[i];
-        }
-      }
-
-      // API definition
-      return result;
-    },
-    
-    /**
-     * <p>
      * Define class in booton core library namespace.
      * </p>
      * 
@@ -184,7 +161,7 @@ function boot(global) {
       subclassPrototype = new F();
       subclassPrototype.constructor = Class; // Class is defined later
       // Then, from user defined subclass definition.
-      for ( var i in subclass) {
+      for (var i in subclass) {
         // static method
         if (i.charAt(0) == "_") {
           if (i.length == 1) {
@@ -202,7 +179,7 @@ function boot(global) {
 
       // This is actual counstructor of the specified subclass.
       function Class() {
-        var params = boot.toArray(arguments);
+        var params = Array.prototype.slice.call(arguments);
       
         // invoke specified constructor
         this["$" + params.pop()].apply(this, params);

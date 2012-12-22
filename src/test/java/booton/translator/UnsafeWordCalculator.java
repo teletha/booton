@@ -52,8 +52,7 @@ public class UnsafeWordCalculator {
      * case letter and lower case letter (e.g NaN). Because our naming strategy doesn't output the
      * word which has mixed letter.
      */
-    private static final String[] booton = {"base", "bind", "css", "define", "extend", "fire", "html", "load", "once",
-            "repository", "unbind"};
+    private static final String[] booton = {"css", "define"};
 
     /**
      * Output

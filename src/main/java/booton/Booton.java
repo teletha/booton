@@ -15,7 +15,7 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 
-import js.application.Application;
+import js.Application;
 import js.application.ApplicationTheme;
 import kiss.I;
 import kiss.XML;
@@ -162,9 +162,14 @@ public class Booton {
             }
         }
 
-        for (Class<? extends CSS> rules : styles) {
-            builder.append(I.make(rules).toString());
+        for (CSS style : I.find(CSS.class)) {
+            System.out.println(style.getClass().getName());
+            builder.append(style);
         }
+
+        // for (Class<? extends CSS> rules : styles) {
+        // builder.append(I.make(rules).toString());
+        // }
         Files.write(file, builder.toString().getBytes(I.$encoding));
     }
 

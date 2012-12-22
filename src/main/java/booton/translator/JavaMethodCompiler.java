@@ -29,6 +29,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
 import booton.Booton;
+import booton.ExternalResource;
 import booton.css.CSS;
 
 /**
@@ -972,9 +973,12 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // compute owner class
         Class owner = convert(className);
+        boolean resource = ExternalResource.class.isAssignableFrom(owner);
 
         // current processing script depends on the owner class
-        script.require(owner);
+        if (!resource) {
+            script.require(owner);
+        }
 
         // compute parameter types
         Type[] types = Type.getArgumentTypes(desc);
@@ -1016,8 +1020,12 @@ class JavaMethodCompiler extends MethodVisitor {
             } else {
                 // constructor
                 if (countInitialization != 0) {
-                    // instance initialization method invocation
-                    current.addOperand(translator.translateConstructor(owner, desc, parameters, contexts));
+                    if (resource) {
+                        current.addOperand(new OperandExpression('"' + Javascript.computeClassName(owner).substring(5) + '"'));
+                    } else {
+                        // instance initialization method invocation
+                        current.addOperand(translator.translateConstructor(owner, desc, parameters, contexts));
+                    }
 
                     countInitialization--;
 

@@ -15,6 +15,7 @@
  */
 package booton.translator;
 
+import static booton.Obfuscator.*;
 import static org.objectweb.asm.ClassReader.*;
 
 import java.io.IOException;
@@ -22,7 +23,6 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -66,19 +66,6 @@ public class Javascript {
     /** The all cached scripts. */
     private static final Map<Class, Javascript> scripts = I.aware(new ConcurrentHashMap());
 
-    /**
-     * The sorterd hash of unsafe words in ECMA Script. These values are calculated and hard-coded
-     * to reduce footprint size and process time at runtime. See {@link UnsafeWordCalculator} for
-     * more detail.
-     */
-    private static final int[] unsafe = {62, 133, 141, 6355, 8379, 48643, 48854, 53444, 60708, 363787};
-
-    /** The character list of number whihc base is 16. */
-    private static final char[] lowers = new char[16];
-
-    /** The character list of number whihc base is 16. */
-    private static final char[] uppers = new char[16];
-
     /** The local identifier counter for {@link Javascript}. */
     private static int counter = 0;
 
@@ -86,12 +73,6 @@ public class Javascript {
     static {
         // Load Booton module
         I.load(Javascript.class, true);
-
-        // Allocate characters
-        for (int i = 0; i < 16; i++) {
-            lowers[i] = (char) (i + 97);
-            uppers[i] = (char) (i + 65);
-        }
     }
 
     /** The actual script class to translate. */
@@ -383,7 +364,7 @@ public class Javascript {
         if (script == null) {
             return clazz.getSimpleName();
         } else {
-            return "boot." + mung(script.id, true);
+            return "boot." + mung32(script.id);
         }
     }
 
@@ -426,7 +407,7 @@ public class Javascript {
             }
         } else {
             // method
-            return mung(order(script.methods, name.hashCode() ^ description.hashCode()), false);
+            return mung32(order(script.methods, name.hashCode() ^ description.hashCode()));
         }
     }
 
@@ -447,7 +428,7 @@ public class Javascript {
         try {
             owner.getDeclaredField(fieldName);
 
-            return mung(order(getScript(owner).fields, fieldName.hashCode() + owner.hashCode()), true);
+            return mung16(order(getScript(owner).fields, fieldName.hashCode() + owner.hashCode()));
         } catch (NoSuchFieldException e) {
             return computeFieldName(owner.getSuperclass(), fieldName);
         }
@@ -473,48 +454,7 @@ public class Javascript {
         }
 
         // Compute local variable name
-        return mung(order, true);
-    }
-
-    /**
-     * <p>
-     * Convert the specified number to an munged alphabetical hex number expression ('a' to 'p').
-     * </p>
-     * 
-     * @param number A number to mung.
-     * @param lower A character patter. <code>true</code> use lower case, otherwise upper case.
-     * @return A munged letters.
-     */
-    static final String mung(int number, boolean lower) {
-        int i = Arrays.binarySearch(unsafe, number);
-
-        if (i < 0) {
-            // Calculate insert index
-            i = (i + 1) * -1;
-
-            // Increse the amount of unsafe numbers which are lower than the specified number.
-            number += i;
-
-            // If the previous increment exceeds the next unsafe number, we must increse one more.
-            if (i != unsafe.length && unsafe[i] <= number) {
-                number++;
-            }
-        } else {
-            // It is assured that this increment doesn't exceeds the next unsafe number because the
-            // sequence of unsafe numbers has enough distance on each elements.
-            number += i + 1;
-        }
-
-        int index = 8;
-        char[] buffer = new char[8];
-
-        do {
-            buffer[--index] = lower ? lowers[number & 15] : uppers[number & 15];
-            number >>>= 4;
-        } while (number != 0);
-
-        // build muged value
-        return new String(buffer, index, (8 - index));
+        return mung32(order);
     }
 
     /**
