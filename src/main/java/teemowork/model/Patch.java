@@ -63,7 +63,7 @@ public class Patch {
      * Update item.
      * </p>
      * 
-     * @param name
+     * @param Title
      */
     private Champion update(Champion champion) {
         // update champion status

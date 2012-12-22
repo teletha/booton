@@ -447,6 +447,28 @@ public abstract class CSS<T> implements Extensible, ExternalResource {
         }
     }
 
+    protected final boolean rule(ClassName name) {
+        // dirty usage
+        int id = new Error().getStackTrace()[1].getLineNumber();
+
+        if (rules.id == id) {
+            rules.id = -1;
+
+            // restore parent rule set
+            load(rules.parent);
+
+            return false;
+        } else {
+            // create sub rule set
+            load(new RuleSet(rules, "." + name.toString()));
+
+            // update position info
+            rules.id = id;
+
+            return true;
+        }
+    }
+
     /**
      * Load all properties.
      * 
@@ -655,6 +677,10 @@ public abstract class CSS<T> implements Extensible, ExternalResource {
                 prefix = prefix + " ";
             }
             prefix = prefix + selector;
+
+            if (selector.charAt(0) == '.') {
+                prefix = selector;
+            }
 
             builder.append(prefix).append(" {\r\n");
 

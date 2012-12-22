@@ -27,7 +27,7 @@ public class Font {
     public final String uri;
 
     /**
-     * @param name
+     * @param Title
      * @param uri
      */
     public Font(String uri) {

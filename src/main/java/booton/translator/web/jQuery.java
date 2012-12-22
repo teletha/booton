@@ -14,6 +14,7 @@ import static booton.translator.web.WebSupport.*;
 import java.util.Iterator;
 
 import booton.css.CSS;
+import booton.css.ClassName;
 import booton.translator.JavascriptNative;
 import booton.translator.dom.Element;
 
@@ -39,10 +40,22 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * Create child element with class name.
      * </p>
      * 
-     * @param name A element name.
+     * @param Title A element name.
      * @return Chainable API.
      */
     public jQuery child(Class<? extends CSS> className) {
+        return child("span").addClass(className);
+    }
+
+    /**
+     * <p>
+     * Create child element with class name.
+     * </p>
+     * 
+     * @param Title A element name.
+     * @return Chainable API.
+     */
+    public jQuery child(ClassName className) {
         return child("span").addClass(className);
     }
 
@@ -133,7 +146,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      *            element.
      * @return
      */
-    public native jQuery addClass(CSS className);
+    public native jQuery addClass(ClassName className);
 
     /**
      * <p>
@@ -539,7 +552,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      *            of each matched element.
      * @return
      */
-    public native jQuery removeClass(CSS classNames);
+    public native jQuery removeClass(ClassName classNames);
 
     /**
      * <p>

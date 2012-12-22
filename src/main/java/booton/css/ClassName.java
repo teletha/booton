@@ -9,10 +9,32 @@
  */
 package booton.css;
 
+import booton.ExternalResource;
+import booton.Obfuscator;
 
 /**
  * @version 2012/12/21 16:30:58
  */
-public class ClassName {
+public class ClassName implements ExternalResource {
 
+    /** The class counter. */
+    private static int count = 0;
+
+    /** The class name. */
+    private final String id;
+
+    /**
+     * 
+     */
+    public ClassName() {
+        this.id = Obfuscator.mung52(count++);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return id;
+    }
 }

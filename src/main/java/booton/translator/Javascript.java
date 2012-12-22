@@ -35,6 +35,7 @@ import kiss.I;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 
+import booton.ExternalResource;
 import booton.translator.js.JsError;
 import booton.translator.js.NativeObject;
 
@@ -135,7 +136,7 @@ public class Javascript {
     public void require(Class dependency) {
         dependency = switchClass(dependency);
 
-        if (!TranslatorManager.hasTranslator(dependency) && !dependency.isArray()) {
+        if (!TranslatorManager.hasTranslator(dependency) && !dependency.isArray() && !ExternalResource.class.isAssignableFrom(dependency)) {
             dependencies.add(dependency);
         }
     }
