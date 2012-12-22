@@ -126,6 +126,17 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Adds the specified class(es) to each of the set of matched elements.
+     * </p>
+     * 
+     * @param classNames One or more class names to be added to the class attribute of each matched
+     *            element.
+     * @return
+     */
+    public native jQuery addClass(CSS className);
+
+    /**
+     * <p>
      * Insert content, specified by the parameter, after each element in the set of matched
      * elements.
      * </p>
@@ -517,6 +528,18 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery removeClass(Class<? extends CSS> classNames);
+
+    /**
+     * <p>
+     * Remove a single class, multiple classes, or all classes from each element in the set of
+     * matched elements.
+     * </p>
+     * 
+     * @param classNames One or more space-separated classes to be removed from the class attribute
+     *            of each matched element.
+     * @return
+     */
+    public native jQuery removeClass(CSS classNames);
 
     /**
      * <p>

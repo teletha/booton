@@ -1,24 +1,24 @@
 @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-.bi {
+.L {
   background-color:rgba(17,17,17,1.0); background-image:linear-gradient(rgba(68,68,68,1.0),rgba(17,17,17,1.0)); 
   border:1px solid rgba(34,34,34,1.0); border-radius:6px; 
   width:960px; box-shadow:0 1px 1px rgba(119,119,119,1.0); 
   margin:60px auto; 
 }
-.bi ul li {
+.L ul li {
   border:0 transparent; 
   border-bottom:1px solid rgba(81,81,81,1.0); 
   display:block; 
 }
-.bi ul a:hover {
+.L ul a:hover {
   background-color:rgba(1,134,186,1.0); background-image:linear-gradient(rgba(4,172,236,1.0),rgba(1,134,186,1.0)); 
 }
-.bi ul a {
+.L ul a {
   width:120px; 
   display:block; 
   padding:10px; 
 }
-.bi ul {
+.L ul {
   background-color:rgba(68,68,68,1.0); background-image:linear-gradient(rgba(68,68,68,1.0),rgba(17,17,17,1.0)); 
   border:transparent; border-radius:3px; 
   opacity:0.0; box-shadow:0 -1px 0 rgba(255,255,255,0.3); 
@@ -29,55 +29,35 @@
   transition-property:all; transition-timing-function:ease-in-out; transition-duration:0.2s; transition-delay:80ms; 
   visibility:hidden; 
 }
-.bi li:hover > a {
+.L li:hover > a {
   color:rgba(250,250,250,1.0); 
 }
-.bi ul ul {
+.L ul ul {
   box-shadow:-1px 0 0 rgba(255,255,255,0.3); 
   margin:0 0 0 20px; 
   top:0; left:120px; 
 }
-.bi li:hover > ul {
+.L li:hover > ul {
   opacity:1.0; 
   margin:0; 
   visibility:visible; 
 }
-.bi a {
+.L a {
   display:inline-block; 
   font-weight:bold; font-size:12px; font-family:Orbitron; color:rgba(153,153,153,1.0); 
   padding:12px 30px; 
   text-decoration:none; text-shadow:0 1px 0 rgba(0,0,0,1.0); 
 }
-.bi li {
+.L li {
   border-right:1px solid rgba(34,34,34,1.0); 
   z-index:1; min-width:120px; 
   display:inline-block; 
   position:relative; 
   text-align:center; 
 }
-.n {
-  background-repeat:no-repeat; background-position:left top; background-size:contain; 
-  width:70px; height:70px; 
-  display:inline-block; 
-  outline:none transparent; 
-  position:relative; 
-  transition-property:all; transition-timing-function:ease-in-out; transition-duration:0.2s; 
+.u {
 }
-.n::after {
-  background-color:rgba(255,255,255,1.0); 
-  width:70px; height:70px; opacity:0.15; 
-  content:''; 
-  display:block; 
-  position:absolute; 
-}
-.n:hover::after {
-  opacity:0.0; 
-}
-.n.unselected {
-  opacity:0.0; 
-  margin:0 -70px 0 0; 
-}
-.n> span {
+.D {
   background-color:rgba(255,255,255,0.6); 
   border:4px solid rgba(5,5,5,1.0); border-radius:5px; 
   width:100px; opacity:0.0; box-shadow:1px 1px 2px rgba(0,0,0,0.1); 
@@ -90,7 +70,7 @@
   text-align:center; text-shadow:1px 1px 1px rgba(0,0,0,0.1); 
   transition-property:all; transition-timing-function:ease-in-out; transition-duration:0.2s; transition-delay:0.15s; 
 }
-.n> span::before {
+.D::before {
   border:10px solid transparent; 
   border-top:10px solid rgba(0,0,0,1.0); 
   width:0; height:0; 
@@ -98,7 +78,29 @@
   display:block; 
   position:absolute; bottom:-24px; left:36px; 
 }
-.n:hover span {
+.P {
+  background-repeat:no-repeat; background-position:left top; background-size:contain; 
+  width:70px; height:70px; 
+  display:inline-block; 
+  outline:none transparent; 
+  position:relative; 
+  transition-property:all; transition-timing-function:ease-in-out; transition-duration:0.2s; 
+}
+.P::after {
+  background-color:rgba(255,255,255,1.0); 
+  width:70px; height:70px; opacity:0.15; 
+  content:''; 
+  display:block; 
+  position:absolute; 
+}
+.P:hover::after {
+  opacity:0.0; 
+}
+.P.unselected {
+  opacity:0.0; 
+  margin:0 -70px 0 0; 
+}
+.P:hover span {
   opacity:0.9; 
   bottom:70px; 
 }

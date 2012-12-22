@@ -7,8 +7,9 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.application;
+package js;
 
+import js.application.Header;
 import booton.css.CSS;
 
 /**
