@@ -15,7 +15,6 @@ import java.util.Map.Entry;
 
 import js.util.HashMap;
 import booton.css.CSS;
-import booton.css.ClassName;
 import booton.css.Value;
 import booton.translator.web.jQuery;
 import booton.translator.web.jQuery.Event;
@@ -92,17 +91,17 @@ public abstract class ImageGrid<T> extends UI {
 
                 for (Entry<T, jQuery> entry : images.entrySet()) {
                     if (getTitle(entry.getKey()).toLowerCase().contains(name)) {
-                        entry.getValue().removeClass(Style.Unselected);
+                        entry.getValue().removeClass(Unselected.class);
                     } else {
-                        entry.getValue().addClass(Style.Unselected);
+                        entry.getValue().addClass(Unselected.class);
                     }
                 }
             }
         });
 
         for (T source : sources) {
-            jQuery image = root.child(Style.Image).css("background-image", "url(" + getImageURI(source) + ")");
-            image.child("span").addClass(Style.Title).text(getTitle(source));
+            jQuery image = root.child(Image.class).css("background-image", "url(" + getImageURI(source) + ")");
+            image.child("span").addClass(Title.class).text(getTitle(source));
 
             images.put(source, image);
         }
@@ -142,61 +141,23 @@ public abstract class ImageGrid<T> extends UI {
     /**
      * @version 2012/12/19 12:59:03
      */
-    private static class Style extends CSS<Style> {
-
-        /** The sub style. */
-        protected static final ClassName Image = new ClassName();
-
-        /** The sub style. */
-        protected static final ClassName Title = new ClassName();
-
-        /** The sub style. */
-        protected static final ClassName Unselected = new ClassName();
+    private static class Image extends CSS<Image> {
 
         private static int imageSize = 70;
 
-        private Font Yanone = new Font("http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz");
-
         {
-            while (rule(Image)) {
-                display.inlineBlock();
-                box.size(imageSize, px);
-                outline.none();
-                background.color.transparent().noRepeat().top().left().contain();
-                position.relative();
-                transition.property.all().duration(0.2, s).timing.easeInOut();
+            display.inlineBlock();
+            box.size(imageSize, px);
+            outline.none();
+            background.color.transparent().noRepeat().top().left().contain();
+            position.relative();
+            transition.property.all().duration(0.2, s).timing.easeInOut();
 
-                cover();
+            cover();
 
-                while (rule(Title)) {
-                    font.weight.bold().size(18, px).family(Yanone);
-                    line.height(20, px);
-                    padding.size(5, px);
-                    text.align.center().shadow(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
-                    background.color(255, 255, 255, 0.6);
-                    border.radius(5, px);
-                    pointerEvents.none();
-                    position.bottom(Style.imageSize + 30, px);
-                    box.opacity(0).shadow(1, px, 1, px, 2, px, rgba(0, 0, 0, 0.1));
-                    transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
-
-                    bubble(Style.imageSize + 30, 4, 10);
-
-                    // while (parent.hover()) {
-                    // box.opacity(0.9);
-                    // position.bottom(Style.imageSize, px);
-                    // }
-                }
-
-                while (rule(":hover span")) {
-                    box.opacity(0.9);
-                    position.bottom(imageSize, px);
-                }
-
-                while (rule(Unselected)) {
-                    box.opacity(0);
-                    margin.right(-70, px);
-                }
+            while (rule(":hover span")) {
+                box.opacity(0.9);
+                position.bottom(imageSize, px);
             }
         }
 
@@ -218,6 +179,45 @@ public abstract class ImageGrid<T> extends UI {
             while (rule(":hover::after")) {
                 box.opacity(0);
             }
+        }
+    }
+
+    /**
+     * @version 2012/12/23 16:35:59
+     */
+    private static class Title extends CSS {
+
+        private Font Yanone = new Font("http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz");
+
+        {
+            font.weight.bold().size(18, px).family(Yanone);
+            line.height(20, px);
+            padding.size(5, px);
+            text.align.center().shadow(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
+            background.color(255, 255, 255, 0.6);
+            border.radius(5, px);
+            pointerEvents.none();
+            position.bottom(Image.imageSize + 30, px);
+            box.opacity(0).shadow(1, px, 1, px, 2, px, rgba(0, 0, 0, 0.1));
+            transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
+
+            bubble(Image.imageSize + 30, 4, 10);
+
+            // while (parent.hover()) {
+            // box.opacity(0.9);
+            // position.bottom(Style.imageSize, px);
+            // }
+        }
+    }
+
+    /**
+     * @version 2012/12/23 16:36:42
+     */
+    private static class Unselected extends CSS {
+
+        {
+            box.opacity(0);
+            margin.right(-70, px);
         }
     }
 }

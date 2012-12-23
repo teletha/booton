@@ -16,7 +16,7 @@ import java.net.URLConnection;
 import kiss.I;
 
 /**
- * @version 2012/12/13 19:18:29
+ * @version 2012/12/23 19:49:51
  */
 public class Font {
 
@@ -56,5 +56,34 @@ public class Font {
         } catch (Exception e) {
             throw I.quiet(e);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return name.hashCode() ^ uri.hashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Font) {
+            Font other = (Font) obj;
+
+            return name.equals(other.name) && uri.equals(other.uri);
+        }
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "Font [name=" + name + ", uri=" + uri + "]";
     }
 }

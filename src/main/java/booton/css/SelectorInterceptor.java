@@ -24,7 +24,6 @@ class SelectorInterceptor extends Interceptor<Selector> {
      */
     @Override
     protected Object invoke(Object... params) {
-        System.out.println("inbokec");
         Object result = super.invoke(params);
 
         return result;

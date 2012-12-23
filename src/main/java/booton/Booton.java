@@ -9,24 +9,18 @@
  */
 package booton;
 
-import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.Set;
 
 import js.Application;
 import js.application.ApplicationTheme;
 import kiss.I;
 import kiss.XML;
-import kiss.model.Model;
 
 import org.objectweb.asm.Type;
 
 import teemowork.Teemowork;
-import booton.css.CSS;
 import booton.translator.Javascript;
-import booton.util.Font;
 import booton.util.HTMLWriter;
 
 /**
@@ -86,6 +80,9 @@ public class Booton {
         }
 
         try {
+            // load booton extensions
+            I.load(Booton.class, true);
+
             // load built-in library
             I.load(Application.class, true);
 
@@ -93,8 +90,12 @@ public class Booton {
             I.load(application, true);
 
             buildHTML(output.resolve("test.html"));
-            buildJS(output.resolve("test.js"));
-            buildCSS(output.resolve("test.css"));
+
+            // build js file
+            Javascript.getScript(application).writeTo(output.resolve("test.js"));
+
+            // build css file
+            I.make(StylesheetManager.class).write(output.resolve("test.css"));
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
@@ -137,80 +138,10 @@ public class Booton {
     }
 
     /**
-     * <p>
-     * Build css file.
-     * </p>
-     * 
-     * @param file
-     */
-    private void buildCSS(Path file) throws Exception {
-        StringBuilder builder = new StringBuilder();
-
-        for (Class<? extends CSS> rules : styles) {
-            CSS css = I.make(rules);
-            System.out.println(css.getClass());
-            for (Field field : css.getClass().getDeclaredFields()) {
-                if (field.getType() == Font.class) {
-                    field.setAccessible(true);
-
-                    try {
-                        builder.append("@import url(" + ((Font) field.get(css)).uri + ");\r\n");
-                    } catch (Exception e) {
-                        throw I.quiet(e);
-                    }
-                }
-            }
-        }
-
-        for (CSS style : I.find(CSS.class)) {
-            System.out.println(style.getClass().getName());
-            builder.append(style);
-        }
-
-        // for (Class<? extends CSS> rules : styles) {
-        // builder.append(I.make(rules).toString());
-        // }
-        Files.write(file, builder.toString().getBytes(I.$encoding));
-    }
-
-    /**
-     * <p>
-     * Build javascript file.
-     * </p>
-     * 
-     * @param file
-     */
-    private void buildJS(Path file) throws Exception {
-        Javascript js = Javascript.getScript(application);
-        js.writeTo(file);
-    }
-
-    /**
      * @param args
      */
     public static void main(String[] args) {
         Booton booton = new Booton(Teemowork.class);
         booton.build();
     }
-
-    /** The rule sets. */
-    private static final Set<Class<? extends CSS>> styles = new HashSet();
-
-    /**
-     * <p>
-     * </p>
-     * 
-     * @param clazz
-     */
-    public static Class requireCSS(Class clazz) {
-        CSS css = I.find(CSS.class, clazz);
-
-        if (css != null) {
-            clazz = Model.load(css.getClass()).type;
-        }
-        styles.add(clazz);
-
-        return clazz;
-    }
-
 }
