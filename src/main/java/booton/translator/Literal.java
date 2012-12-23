@@ -7,10 +7,10 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton;
+package booton.translator;
 
 /**
  * @version 2012/12/22 14:44:11
  */
-public interface ExternalResource {
+public interface Literal {
 }

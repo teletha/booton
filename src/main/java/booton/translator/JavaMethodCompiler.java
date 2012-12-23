@@ -32,7 +32,6 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
 import booton.Booton;
-import booton.ExternalResource;
 import booton.css.CSS;
 
 /**
@@ -218,7 +217,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
-    public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+    public void visitFieldInsn(int opcode, String ownerClassName, String name, String desc) {
         // If this field access instruction is used for assertion, we should skip it to erase
         // compiler generated extra code.
         if (name.equals("$assertionsDisabled")) {
@@ -230,12 +229,8 @@ class JavaMethodCompiler extends MethodVisitor {
         record(opcode);
 
         // compute owner class
-        Class ownerClass = convert(owner);
-
-        // current processing script depends on the owner class
-        script.require(ownerClass);
-
-        Translator translator = TranslatorManager.getTranslator(ownerClass);
+        Class owner = convert(ownerClassName);
+        Translator translator = TranslatorManager.getTranslator(owner);
 
         switch (opcode) {
         case PUTFIELD:
@@ -245,30 +240,41 @@ class JavaMethodCompiler extends MethodVisitor {
             if (match(ALOAD, DUP, GETFIELD, DUP_X1, ICONST_1, IADD, PUTFIELD)) {
                 current.remove(0);
 
-                current.addOperand(new OperandExpression(current.remove(0) + "." + Javascript.computeFieldName(ownerClass, name) + "++"));
+                current.addOperand(new OperandExpression(current.remove(0) + "." + Javascript.computeFieldName(owner, name) + "++"));
             } else {
-                current.addExpression(current.remove(1), ".", Javascript.computeFieldName(ownerClass, name), "=", current.remove(0));
+                current.addExpression(current.remove(1), ".", Javascript.computeFieldName(owner, name), "=", current.remove(0));
             }
+
+            // current processing script depends on the owner class
+            script.require(owner);
             break;
 
         case GETFIELD:
-            current.addOperand(translator.translateField(ownerClass, name, current.remove(0)));
+            current.addOperand(translator.translateField(owner, name, current.remove(0)));
+
+            // current processing script depends on the owner class
+            script.require(owner);
             break;
 
         case PUTSTATIC:
-            current.addExpression(Javascript.computeClassName(ownerClass), ".", Javascript.computeFieldName(ownerClass, name), "=", current.remove(0));
+            current.addExpression(Javascript.computeClassName(owner), ".", Javascript.computeFieldName(owner, name), "=", current.remove(0));
+
+            // current processing script depends on the owner class
+            script.require(owner);
             break;
 
         case GETSTATIC:
-            if (!ExternalResource.class.isAssignableFrom(ownerClass)) {
-                current.addOperand(translator.translateStaticField(ownerClass, name));
+            if (!Literal.class.isAssignableFrom(owner)) {
+                current.addOperand(translator.translateStaticField(owner, name));
+
+                // current processing script depends on the owner class
+                script.require(owner);
             } else {
                 try {
-                    Field field = ownerClass.getDeclaredField(name);
+                    Field field = owner.getDeclaredField(name);
                     field.setAccessible(true);
 
-                    ExternalResource resource = (ExternalResource) field.get(null);
-                    current.addOperand(new OperandString(resource.toString()));
+                    current.addOperand(new OperandString(field.get(null).toString()));
                 } catch (Exception e) {
                     throw I.quiet(e);
                 }
@@ -988,12 +994,9 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // compute owner class
         Class owner = convert(className);
-        boolean resource = ExternalResource.class.isAssignableFrom(owner);
 
         // current processing script depends on the owner class
-        if (!resource) {
-            script.require(owner);
-        }
+        script.require(owner);
 
         // compute parameter types
         Type[] types = Type.getArgumentTypes(desc);
@@ -1035,12 +1038,8 @@ class JavaMethodCompiler extends MethodVisitor {
             } else {
                 // constructor
                 if (countInitialization != 0) {
-                    if (resource) {
-                        current.addOperand(new OperandExpression('"' + Javascript.computeClassName(owner).substring(5) + '"'));
-                    } else {
-                        // instance initialization method invocation
-                        current.addOperand(translator.translateConstructor(owner, desc, parameters, contexts));
-                    }
+                    // instance initialization method invocation
+                    current.addOperand(translator.translateConstructor(owner, desc, parameters, contexts));
 
                     countInitialization--;
 

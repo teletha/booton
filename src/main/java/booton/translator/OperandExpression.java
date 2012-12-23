@@ -56,5 +56,4 @@ class OperandExpression extends Operand {
     public String toString() {
         return expression == null ? null : expression.toString();
     }
-
 }

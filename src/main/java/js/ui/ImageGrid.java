@@ -101,8 +101,7 @@ public abstract class ImageGrid<T> extends UI {
         });
 
         for (T source : sources) {
-
-            jQuery image = root.child(Style.class).css("background-image", "url(" + getImageURI(source) + ")");
+            jQuery image = root.child(Style.Image).css("background-image", "url(" + getImageURI(source) + ")");
             image.child("span").addClass(Style.Title).text(getTitle(source));
 
             images.put(source, image);
@@ -146,6 +145,9 @@ public abstract class ImageGrid<T> extends UI {
     private static class Style extends CSS<Style> {
 
         /** The sub style. */
+        protected static final ClassName Image = new ClassName();
+
+        /** The sub style. */
         protected static final ClassName Title = new ClassName();
 
         /** The sub style. */
@@ -156,43 +158,45 @@ public abstract class ImageGrid<T> extends UI {
         private Font Yanone = new Font("http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz");
 
         {
-            display.inlineBlock();
-            box.size(imageSize, px);
-            outline.none();
-            background.color.transparent().noRepeat().top().left().contain();
-            position.relative();
-            transition.property.all().duration(0.2, s).timing.easeInOut();
+            while (rule(Image)) {
+                display.inlineBlock();
+                box.size(imageSize, px);
+                outline.none();
+                background.color.transparent().noRepeat().top().left().contain();
+                position.relative();
+                transition.property.all().duration(0.2, s).timing.easeInOut();
 
-            cover();
+                cover();
 
-            while (rule(Title)) {
-                font.weight.bold().size(18, px).family(Yanone);
-                line.height(20, px);
-                padding.size(5, px);
-                text.align.center().shadow(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
-                background.color(255, 255, 255, 0.6);
-                border.radius(5, px);
-                pointerEvents.none();
-                position.bottom(Style.imageSize + 30, px);
-                box.opacity(0).shadow(1, px, 1, px, 2, px, rgba(0, 0, 0, 0.1));
-                transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
+                while (rule(Title)) {
+                    font.weight.bold().size(18, px).family(Yanone);
+                    line.height(20, px);
+                    padding.size(5, px);
+                    text.align.center().shadow(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
+                    background.color(255, 255, 255, 0.6);
+                    border.radius(5, px);
+                    pointerEvents.none();
+                    position.bottom(Style.imageSize + 30, px);
+                    box.opacity(0).shadow(1, px, 1, px, 2, px, rgba(0, 0, 0, 0.1));
+                    transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
 
-                bubble(Style.imageSize + 30, 4, 10);
+                    bubble(Style.imageSize + 30, 4, 10);
 
-                // while (parent.hover()) {
-                // box.opacity(0.9);
-                // position.bottom(Style.imageSize, px);
-                // }
-            }
+                    // while (parent.hover()) {
+                    // box.opacity(0.9);
+                    // position.bottom(Style.imageSize, px);
+                    // }
+                }
 
-            while (rule(":hover span")) {
-                box.opacity(0.9);
-                position.bottom(imageSize, px);
-            }
+                while (rule(":hover span")) {
+                    box.opacity(0.9);
+                    position.bottom(imageSize, px);
+                }
 
-            while (rule(Unselected)) {
-                box.opacity(0);
-                margin.right(-70, px);
+                while (rule(Unselected)) {
+                    box.opacity(0);
+                    margin.right(-70, px);
+                }
             }
         }
 
