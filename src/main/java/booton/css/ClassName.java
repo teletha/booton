@@ -9,13 +9,13 @@
  */
 package booton.css;
 
-import booton.ExternalResource;
 import booton.Obfuscator;
+import booton.translator.Literal;
 
 /**
  * @version 2012/12/21 16:30:58
  */
-public class ClassName implements ExternalResource {
+public class ClassName implements Literal {
 
     /** The class counter. */
     private static int count = 0;
