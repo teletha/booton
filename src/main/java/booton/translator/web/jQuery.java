@@ -14,7 +14,6 @@ import static booton.translator.web.WebSupport.*;
 import java.util.Iterator;
 
 import booton.css.CSS;
-import booton.css.ClassName;
 import booton.translator.JavascriptNative;
 import booton.translator.dom.Element;
 
@@ -44,18 +43,6 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return Chainable API.
      */
     public jQuery child(Class<? extends CSS> className) {
-        return child("span").addClass(className);
-    }
-
-    /**
-     * <p>
-     * Create child element with class name.
-     * </p>
-     * 
-     * @param Title A element name.
-     * @return Chainable API.
-     */
-    public jQuery child(ClassName className) {
         return child("span").addClass(className);
     }
 
@@ -136,17 +123,6 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery addClass(Class<? extends CSS> className);
-
-    /**
-     * <p>
-     * Adds the specified class(es) to each of the set of matched elements.
-     * </p>
-     * 
-     * @param classNames One or more class names to be added to the class attribute of each matched
-     *            element.
-     * @return
-     */
-    public native jQuery addClass(ClassName className);
 
     /**
      * <p>
@@ -541,18 +517,6 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery removeClass(Class<? extends CSS> classNames);
-
-    /**
-     * <p>
-     * Remove a single class, multiple classes, or all classes from each element in the set of
-     * matched elements.
-     * </p>
-     * 
-     * @param classNames One or more space-separated classes to be removed from the class attribute
-     *            of each matched element.
-     * @return
-     */
-    public native jQuery removeClass(ClassName classNames);
 
     /**
      * <p>

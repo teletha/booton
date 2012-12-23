@@ -14,25 +14,24 @@ import static org.objectweb.asm.Opcodes.*;
 import static org.objectweb.asm.Type.*;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Field;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import kiss.Extensible;
 import kiss.I;
+import kiss.model.ClassUtil;
 
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
-
-import booton.Booton;
-import booton.css.CSS;
 
 /**
  * <p>
@@ -230,6 +229,10 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // compute owner class
         Class owner = convert(ownerClassName);
+
+        // current processing script depends on the owner class
+        script.require(owner);
+
         Translator translator = TranslatorManager.getTranslator(owner);
 
         switch (opcode) {
@@ -244,41 +247,18 @@ class JavaMethodCompiler extends MethodVisitor {
             } else {
                 current.addExpression(current.remove(1), ".", Javascript.computeFieldName(owner, name), "=", current.remove(0));
             }
-
-            // current processing script depends on the owner class
-            script.require(owner);
             break;
 
         case GETFIELD:
             current.addOperand(translator.translateField(owner, name, current.remove(0)));
-
-            // current processing script depends on the owner class
-            script.require(owner);
             break;
 
         case PUTSTATIC:
             current.addExpression(Javascript.computeClassName(owner), ".", Javascript.computeFieldName(owner, name), "=", current.remove(0));
-
-            // current processing script depends on the owner class
-            script.require(owner);
             break;
 
         case GETSTATIC:
-            if (!Literal.class.isAssignableFrom(owner)) {
-                current.addOperand(translator.translateStaticField(owner, name));
-
-                // current processing script depends on the owner class
-                script.require(owner);
-            } else {
-                try {
-                    Field field = owner.getDeclaredField(name);
-                    field.setAccessible(true);
-
-                    current.addOperand(new OperandString(field.get(null).toString()));
-                } catch (Exception e) {
-                    throw I.quiet(e);
-                }
-            }
+            current.addOperand(translator.translateStaticField(owner, name));
             break;
         }
     }
@@ -941,17 +921,40 @@ class JavaMethodCompiler extends MethodVisitor {
 
             // add class operand
             Class clazz = convert(className);
+            Literal literal = findLiteral(clazz);
 
-            if (CSS.class.isAssignableFrom(clazz)) {
-                clazz = Booton.requireCSS(clazz);
+            if (literal == null) {
+                // Booton doesn't support class literal in javascript runtime, so we should provide
+                // class name instead.
+                current.addOperand('"' + Javascript.computeClassName(clazz).substring(5) + '"');
+            } else {
+                // Provide class literal support by user.
+                current.addOperand(literal.write(clazz));
             }
-
-            // Booton doesn't support class literal in javascript runtime, so we should provide
-            // class name instead.
-            current.addOperand('"' + Javascript.computeClassName(clazz).substring(5) + '"');
         } else {
             current.addOperand(constant);
         }
+    }
+
+    /**
+     * <p>
+     * Helper method to find literal writer.
+     * </p>
+     * 
+     * @param clazz
+     * @return
+     */
+    private Literal findLiteral(Class clazz) {
+        for (Class extensionPoint : ClassUtil.getTypes(clazz)) {
+            if (Arrays.asList(extensionPoint.getInterfaces()).contains(Extensible.class)) {
+                Literal literal = I.find(Literal.class, extensionPoint);
+
+                if (literal != null) {
+                    return literal;
+                }
+            }
+        }
+        return null;
     }
 
     /**

@@ -142,10 +142,6 @@ public class Javascript {
         if (dependency.isArray()) {
             return;
         }
-
-        if (Literal.class.isAssignableFrom(dependency)) {
-            return;
-        }
         dependencies.add(dependency);
     }
 

@@ -32,6 +32,7 @@ import kiss.Manageable;
 import kiss.Singleton;
 import kiss.model.ClassUtil;
 import kiss.model.Model;
+import booton.Obfuscator;
 import booton.css.property.Background;
 import booton.css.property.Box;
 import booton.css.property.BoxLength;
@@ -45,8 +46,6 @@ import booton.css.property.Position;
 import booton.css.property.Text;
 import booton.css.property.Transition;
 import booton.css.property.Visibility;
-import booton.translator.Javascript;
-import booton.translator.Literal;
 import booton.util.Color;
 import booton.util.Strings;
 
@@ -54,7 +53,7 @@ import booton.util.Strings;
  * @version 2012/12/11 23:59:41
  */
 @Manageable(lifestyle = Singleton.class)
-public abstract class CSS<T> implements Extensible, Literal {
+public abstract class CSS<T> implements Extensible {
 
     /**
      * <p>
@@ -447,28 +446,6 @@ public abstract class CSS<T> implements Extensible, Literal {
         }
     }
 
-    protected final boolean rule(ClassName name) {
-        // dirty usage
-        int id = new Error().getStackTrace()[1].getLineNumber();
-
-        if (rules.id == id) {
-            rules.id = -1;
-
-            // restore parent rule set
-            load(rules.parent);
-
-            return false;
-        } else {
-            // create sub rule set
-            load(new RuleSet(rules, "." + name.toString()));
-
-            // update position info
-            rules.id = id;
-
-            return true;
-        }
-    }
-
     /**
      * Load all properties.
      * 
@@ -627,7 +604,7 @@ public abstract class CSS<T> implements Extensible, Literal {
          * </p>
          */
         protected RuleSet(Class clazz) {
-            this(null, "." + Javascript.computeClassName(Model.load(clazz).type).substring(5));
+            this(null, "." + Obfuscator.computeCSSName(Model.load(clazz).type));
         }
 
         /**
