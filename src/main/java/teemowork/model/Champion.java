@@ -227,6 +227,9 @@ public class Champion {
     public static Champion Morgana = new Champion("Morgana");
 
     /** The champion definition. */
+    public static Champion Nami = new Champion("Nami");
+
+    /** The champion definition. */
     public static Champion Nasus = new Champion("Nasus");
 
     /** The champion definition. */
@@ -345,6 +348,9 @@ public class Champion {
 
     /** The champion definition. */
     public static Champion Veigar = new Champion("Veigar");
+
+    /** The champion definition. */
+    public static Champion Vi = new Champion("Vi");
 
     /** The champion definition. */
     public static Champion Viktor = new Champion("Viktor");

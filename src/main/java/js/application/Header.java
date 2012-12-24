@@ -156,18 +156,21 @@ public class Header {
             padding.size(10, px);
             box.width(Header, px);
 
-            // while (hover()) {
-            // background.color("#0186ba").image(linear("#04acec", "#0186ba"));
-            // }
-        }
-
-        @Selector("ul a:hover")
-        protected void selectSubMenuLink() {
-            background.color("#0186ba").image(linear("#04acec", "#0186ba"));
+            while (hover()) {
+                background.color("#0186ba").image(linear("#04acec", "#0186ba"));
+            }
         }
 
         protected Color background() {
             return new Color("#111");
         }
+    }
+    
+    /**
+     * 
+     * @version 2012/12/24 23:38:50
+     */
+    private static class SubMenu  extends CSS {
+        
     }
 }

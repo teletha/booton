@@ -378,11 +378,33 @@ public abstract class CSS<T> implements Extensible {
      * @return
      */
     protected final boolean hover() {
-        return true;
+        return rule2(":hover");
     }
 
     protected final boolean after() {
-        return rule2("::after");
+        return rule2(":after");
+    }
+
+    protected final boolean parentHover() {
+        // dirty usage
+        int id = new Error().getStackTrace()[1].getLineNumber();
+
+        if (rules.id == id) {
+            rules.id = -1;
+
+            // restore parent rule set
+            load(rules.parent);
+
+            return false;
+        } else {
+            // create sub rule set
+            load(new RuleSet(rules, "*:hover>" + rules.selector));
+
+            // update position info
+            rules.id = id;
+
+            return true;
+        }
     }
 
     /**
@@ -655,7 +677,7 @@ public abstract class CSS<T> implements Extensible {
             }
             prefix = prefix + selector;
 
-            if (selector.charAt(0) == '.') {
+            if (selector.charAt(0) == '.' || selector.charAt(0) == '*') {
                 prefix = selector;
             }
 
