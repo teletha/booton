@@ -65,11 +65,16 @@ class StylesheetManager implements Literal<CSS> {
         Set<Font> fonts = new HashSet();
 
         for (CSS style : required) {
-            for (Field field : style.getClass().getDeclaredFields()) {
-                if (field.getType() == Font.class) {
-                    field.setAccessible(true);
-                    fonts.add((Font) field.get(style));
+            Class type = style.getClass();
+
+            while (type != CSS.class) {
+                for (Field field : type.getDeclaredFields()) {
+                    if (field.getType() == Font.class) {
+                        field.setAccessible(true);
+                        fonts.add((Font) field.get(style));
+                    }
                 }
+                type = type.getSuperclass();
             }
         }
 
