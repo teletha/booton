@@ -135,10 +135,10 @@ public abstract class ImageGrid<T> extends UI {
                 position.absolute();
                 box.width(width.size, width.unit).height(height.size, height.unit).opacity(0.15);
                 background.color.white();
-            }
 
-            while (hover()) {
-                box.opacity(0);
+                while (parentHover()) {
+                    box.opacity(0);
+                }
             }
         }
     }
