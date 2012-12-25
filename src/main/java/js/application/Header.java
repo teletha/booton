@@ -133,6 +133,9 @@ public class Header {
      */
     private static class SubMenuGroup extends CSS {
 
+        /** The menu radius. */
+        private static int Radius = 3;
+
         {
             listStyle.none();
             margin.top(20, px);
@@ -141,7 +144,7 @@ public class Header {
             position.absolute().top(42, px).left(0, px);
             background.color("#444").image(linear("#444", "#111"));
             box.width(TopMenu.Width, px).shadow(0, px, -1, px, 0, px, rgba(255, 255, 255, 0.3)).opacity(0);
-            border.radius(3, px);
+            border.radius(Radius, px);
             transition.property.all().duration(0.2, s).timing.easeInOut().delay(80, ms);
 
             while (parentHover()) {
@@ -166,11 +169,11 @@ public class Header {
                 background.color("#0186ba").image(linear("#04acec", "#0186ba"));
 
                 while (firstChild()) {
-                    border.radius(3, px 3, px, 0, px, 0, px);
+                    border.radius(SubMenuGroup.Radius, px, SubMenuGroup.Radius, px, 0, px, 0, px);
                 }
 
                 while (lastChild()) {
-                    border.radius(3, px);
+                    border.radius(0, px, 0, px, SubMenuGroup.Radius, px, SubMenuGroup.Radius, px);
                 }
             }
         }

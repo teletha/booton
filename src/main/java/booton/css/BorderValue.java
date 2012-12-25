@@ -9,6 +9,7 @@
  */
 package booton.css;
 
+import booton.css.property.BoxLength;
 import booton.util.Color;
 
 /**
@@ -20,22 +21,13 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
     public final ColorValue<BorderValue> color = new ColorValue(name + "-color", this);
 
     /** The line width. */
-    private String width;
+    private Value width;
 
     /** The line style. */
     private String style;
 
-    /** The top value. */
-    private Value top = new Value();
-
-    /** The right value. */
-    private Value right = new Value();
-
-    /** The bottom value. */
-    private Value bottom = new Value();
-
-    /** The left value. */
-    private Value left = new Value();
+    /** The radius size. */
+    private BoxLength radius;
 
     /**
      * @param css
@@ -49,8 +41,10 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
      */
     @Override
     protected void write(CSSWriter writer) {
-        writer.property(name, width, style, color.color == null ? "" : color.color);
-        writer.property("border-radius", radius);
+        super.write(writer);
+
+        writer.property(name + "-style", style);
+        writer.property(name + "-width", width);
     }
 
     /**
@@ -97,9 +91,7 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
      * @return
      */
     public BorderValue radius(double size, Unit unit) {
-        radius = new Value(size, unit);
-
-        return chain();
+        return radius(size, unit, size, unit, size, unit, size, unit);
     }
 
     /**
@@ -114,7 +106,8 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
      * @return
      */
     public BorderValue radius(double first, Unit firstUnit, double second, Unit secondUnit, double third, Unit thirdUnit, double fourth, Unit fourthUnit) {
-        radius = new Value(size, unit);
+        radius = new BoxLength("border-radius");
+        radius.top(first, firstUnit).right(second, secondUnit).bottom(third, thirdUnit).left(fourth, fourthUnit);
 
         return chain();
     }
@@ -129,7 +122,7 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
      * @return
      */
     public BorderValue width(double size, Unit unit) {
-        width = compute(size, unit);
+        width = new Value(size, unit);
 
         return chain();
     }

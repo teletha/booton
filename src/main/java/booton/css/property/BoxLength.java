@@ -42,7 +42,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * {@inheritDoc}
      */
     @Override
-    protected void write(CSSWriter writer) {
+    public void write(CSSWriter writer) {
         if (right.equals(left)) {
             if (top.equals(bottom)) {
                 if (top.equals(right)) {

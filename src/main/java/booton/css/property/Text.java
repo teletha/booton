@@ -41,6 +41,14 @@ public class Text extends CSSProperty<Text> {
      */
     public final Align align = new Align();
 
+    /**
+     * <p>
+     * The vertical-align CSS property specifies the vertical alignment of an inline or table-cell
+     * element.
+     * </p>
+     */
+    public final VerticalAlign verticalAlign = new VerticalAlign();
+
     /** The shadows. */
     private final List<ShadowValue> shadows = new ArrayList();
 
@@ -197,6 +205,109 @@ public class Text extends CSSProperty<Text> {
          */
         public Text end() {
             return chain("end");
+        }
+    }
+
+    /**
+     * @version 2012/12/12 14:07:44
+     */
+    public class VerticalAlign extends CSSProperty<Text> {
+
+        /**
+         * Hide.
+         */
+        private VerticalAlign() {
+            super("vertical-align", Text.this);
+        }
+
+        /**
+         * <p>
+         * Aligns the baseline of the element with the baseline of its parent. The baseline of some
+         * replaced elements, like <textarea> is not specified by the HTML specification, meaning
+         * that their behavior with this keyword may change from one browser to the other.
+         * </p>
+         * 
+         * @return
+         */
+        public Text baseline() {
+            return chain("baseline");
+        }
+
+        /**
+         * <p>
+         * Aligns the baseline of the element with the subscript-baseline of its parent.
+         * </p>
+         * 
+         * @return
+         */
+        public Text sub() {
+            return chain("sub");
+        }
+
+        /**
+         * <p>
+         * Aligns the baseline of the element with the superscript-baseline of its parent.
+         * </p>
+         * 
+         * @return
+         */
+        public Text sup() {
+            return chain("super");
+        }
+
+        /**
+         * <p>
+         * Aligns the top of the element with the top of the parent element's font.
+         * </p>
+         * 
+         * @return
+         */
+        public Text textTop() {
+            return chain("text-top");
+        }
+
+        /**
+         * <p>
+         * Aligns the bottom of the element with the bottom of the parent element's font.
+         * </p>
+         * 
+         * @return
+         */
+        public Text textBottom() {
+            return chain("text-bottom");
+        }
+
+        /**
+         * <p>
+         * Aligns the middle of the element with the middle of lowercase letters in the parent.
+         * </p>
+         * 
+         * @return
+         */
+        public Text middle() {
+            return chain("middle");
+        }
+
+        /**
+         * <p>
+         * Align the top of the element and its descendants with the top of the entire line.
+         * </p>
+         * 
+         * @return
+         */
+        public Text top() {
+            return chain("top");
+        }
+
+        /**
+         * <p>
+         * Align the bottom of the element and its descendants with the bottom of the entire line.
+         * </p>
+         * 
+         * @return
+         */
+        public Text bottom() {
+            return chain("bottom");
         }
     }
 
