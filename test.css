@@ -1,26 +1,24 @@
 @import url(http://fonts.googleapis.com/css?family=Orbitron);
 @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-.a {
-  background-color:rgba(68,68,68,1.0); background-image:linear-gradient(rgba(68,68,68,1.0),rgba(17,17,17,1.0)); 
-  border:transparent; border-radius:3px; 
-  opacity:0.0; box-shadow:0 -1px 0 rgba(255,255,255,0.3); 
-  list-style:none; 
-  margin:20px 0 0; 
-  padding:0; 
-  position:absolute; top:44px; left:0; 
-  transition-property:all; transition-timing-function:ease-in-out; transition-duration:0.2s; transition-delay:80ms; 
-  visibility:hidden; 
+.b {
+  border:0 ; 
+  border-bottom:1px solid rgba(81,81,81,1.0); 
+  display:block; 
 }
-*:hover>.a {
-  opacity:1.0; 
-  margin:0; 
-  visibility:visible; 
+.b:hover {
+  background-color:rgba(1,134,186,1.0); background-image:linear-gradient(rgba(4,172,236,1.0),rgba(1,134,186,1.0)); 
+}
+.b:hover:first-child {
+  border-radius:3px; 
+}
+.b:hover:last-child {
+  border-radius:3px; 
 }
 .d {
-  background-repeat:no-repeat; background-position:left top; background-size:contain; 
+  background-color:rgba(0,0,0,0.0); background-repeat:no-repeat; background-position:left top; background-size:contain; 
   width:70px; height:70px; 
   display:inline-block; 
-  outline:none transparent; 
+  outline:none ; 
   position:relative; 
   transition-property:all; transition-timing-function:ease-in-out; transition-duration:0.2s; 
 }
@@ -34,26 +32,21 @@
 .d:hover:after {
   opacity:0.0; 
 }
-.c {
-  display:block; 
-  font-weight:bold; font-size:12px; font-family:Orbitron; color:rgba(153,153,153,1.0); 
-  padding:12px 30px; 
-  text-decoration:none; text-shadow:0 1px 0 rgba(0,0,0,1.0); 
+.a {
+  background-color:rgba(68,68,68,1.0); background-image:linear-gradient(rgba(68,68,68,1.0),rgba(17,17,17,1.0)); 
+  border-radius:3px; 
+  width:120px; opacity:0.0; box-shadow:0 -1px 0 rgba(255,255,255,0.3); 
+  list-style:none; 
+  margin:20px 0 0; 
+  padding:0; 
+  position:absolute; top:42px; left:0; 
+  transition-property:all; transition-timing-function:ease-in-out; transition-duration:0.2s; transition-delay:80ms; 
+  visibility:hidden; 
 }
-.c:hover {
-  background-color:rgba(1,134,186,1.0); background-image:linear-gradient(rgba(4,172,236,1.0),rgba(1,134,186,1.0)); 
-  color:rgba(250,250,250,1.0); 
-}
-.b {
-  border:0 transparent; 
-  border-bottom:1px solid rgba(81,81,81,1.0); 
-  display:block; 
-}
-.g {
-  background-color:rgba(17,17,17,1.0); background-image:linear-gradient(rgba(68,68,68,1.0),rgba(17,17,17,1.0)); 
-  border:1px solid rgba(34,34,34,1.0); border-radius:6px; 
-  width:960px; box-shadow:0 1px 1px rgba(119,119,119,1.0); 
-  margin:60px auto; 
+*:hover>.a {
+  opacity:1.0; 
+  margin:0; 
+  visibility:visible; 
 }
 .h {
   border-right:1px solid rgba(34,34,34,1.0); 
@@ -62,6 +55,12 @@
   padding:0; 
   position:relative; 
   text-align:center; 
+}
+.g {
+  background-color:rgba(17,17,17,1.0); background-image:linear-gradient(rgba(68,68,68,1.0),rgba(17,17,17,1.0)); 
+  border:1px solid rgba(34,34,34,1.0); border-radius:6px; 
+  width:960px; box-shadow:0 1px 1px rgba(119,119,119,1.0); 
+  margin:60px auto; 
 }
 .f {
   opacity:0.0; 
@@ -81,7 +80,7 @@
   transition-property:all; transition-timing-function:ease-in-out; transition-duration:0.2s; transition-delay:0.15s; 
 }
 .e:before {
-  border:10px solid transparent; 
+  border:10px solid rgba(0,0,0,0.0); 
   border-top:10px solid rgba(0,0,0,1.0); 
   width:0; height:0; 
   content:''; 
@@ -91,4 +90,13 @@
 *:hover>.e {
   opacity:0.9; 
   bottom:70px; 
+}
+.c {
+  display:block; 
+  font-weight:bold; font-size:12px; font-family:Orbitron; color:rgba(153,153,153,1.0); 
+  padding:12px 20px; 
+  text-decoration:none; text-align:center; text-shadow:0 1px 0 rgba(0,0,0,1.0); 
+}
+.c:hover {
+  color:rgba(250,250,250,1.0); 
 }
