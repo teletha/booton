@@ -1,17 +1,11 @@
 /*
- * Copyright (C) 2009 Nameless Production Committee.
+ * Copyright (C) 2012 Nameless Production Committee
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *          http://opensource.org/licenses/mit-license.php
  */
 package booton.css;
 
@@ -50,7 +44,7 @@ import booton.util.Color;
 import booton.util.Strings;
 
 /**
- * @version 2012/12/11 23:59:41
+ * @version 2012/12/25 13:15:28
  */
 @Manageable(lifestyle = Singleton.class)
 public abstract class CSS<T> implements Extensible {
@@ -361,8 +355,59 @@ public abstract class CSS<T> implements Extensible {
         load(rules);
     }
 
-    protected CSS(String selector) {
+    /**
+     * <p>
+     * The :hover CSS pseudo-class matches when the user designates an element with a pointing
+     * device, but does not necessarily activate it. This style may be overridden by any other
+     * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent
+     * rules. In order to style appropriately links, you need to put the :hover rule after the :link
+     * and :visited rules but before the :active one, as defined by the LVHA-order: :link — :visited
+     * — :hover — :active.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean hover() {
+        return rule(rules.selector + ":hover");
+    }
 
+    /**
+     * <p>
+     * The :focus CSS pseudo-class is applied when a element has received focus, either from the
+     * user selecting it with the use of a keyboard or by activating with the mouse (e.g. a form
+     * input).
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean focus() {
+        return rule(rules.selector + ":focus");
+    }
+
+    /**
+     * <p>
+     * :before creates a pseudo-element that is the first child of the element matched. Often used
+     * to add cosmetic content to an element, by using the content property. This element is inline
+     * by default.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean before() {
+        return rule(rules.selector + ":before");
+    }
+
+    /**
+     * <p>
+     * The CSS :after pseudo-element matches a virtual last child of the selected element. Typically
+     * used to add cosmetic content to an element, by using the content CSS property. This element
+     * is inline by default.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean after() {
+        return rule(rules.selector + ":after");
     }
 
     /**
@@ -377,33 +422,13 @@ public abstract class CSS<T> implements Extensible {
      * 
      * @return
      */
-    protected final boolean hover() {
-        return rule2(":hover");
-    }
-
-    protected final boolean after() {
-        return rule2(":after");
-    }
-
     protected final boolean parentHover() {
-        // dirty usage
-        int id = new Error().getStackTrace()[1].getLineNumber();
+        String current = rules.selector;
 
-        if (rules.id == id) {
-            rules.id = -1;
-
-            // restore parent rule set
-            load(rules.parent);
-
-            return false;
+        if (current.endsWith(":after")) {
+            return rule(current.substring(0, current.length() - 6) + ":hover:after");
         } else {
-            // create sub rule set
-            load(new RuleSet(rules, "*:hover>" + rules.selector));
-
-            // update position info
-            rules.id = id;
-
-            return true;
+            return rule("*:hover>" + current);
         }
     }
 
@@ -415,40 +440,9 @@ public abstract class CSS<T> implements Extensible {
      * @param selector
      * @return
      */
-    private final boolean rule2(String selector) {
+    private final boolean rule(String selector) {
         // dirty usage
         int id = new Error().getStackTrace()[2].getLineNumber();
-
-        if (rules.id == id) {
-            rules.id = -1;
-
-            // restore parent rule set
-            load(rules.parent);
-
-            return false;
-        } else {
-            // create sub rule set
-            load(new RuleSet(rules, selector));
-
-            // update position info
-            rules.id = id;
-
-            return true;
-        }
-    }
-
-    /**
-     * <p>
-     * Create sub rule set.
-     * </p>
-     * 
-     * @param selector
-     * @return
-     */
-    @Deprecated
-    protected final boolean rule(String selector) {
-        // dirty usage
-        int id = new Error().getStackTrace()[1].getLineNumber();
 
         if (rules.id == id) {
             rules.id = -1;
@@ -588,7 +582,7 @@ public abstract class CSS<T> implements Extensible {
         margin.left(-boxWidth / 2, px);
         border.width(borderWidth, px).solid().color(5, 5, 5);
 
-        while (rule(("::before"))) {
+        while (before()) {
             display.block();
             box.width(0, px).height(0, px);
             content.text("");
@@ -672,16 +666,7 @@ public abstract class CSS<T> implements Extensible {
          * @param builder
          */
         private void writeTo(String prefix, StringBuilder builder) {
-            if (prefix.length() != 0 && Character.isAlphabetic(selector.charAt(0))) {
-                prefix = prefix + " ";
-            }
-            prefix = prefix + selector;
-
-            if (selector.charAt(0) == '.' || selector.charAt(0) == '*') {
-                prefix = selector;
-            }
-
-            builder.append(prefix).append(" {\r\n");
+            builder.append(selector).append(" {\r\n");
 
             for (CSSProperty property : rules) {
                 if (property.used) {

@@ -11,9 +11,7 @@ package js.application;
 
 import static booton.translator.web.WebSupport.*;
 import booton.css.CSS;
-import booton.css.Selector;
 import booton.translator.web.jQuery;
-import booton.util.Color;
 import booton.util.Font;
 
 /**
@@ -28,7 +26,7 @@ public class Header {
      * @param root
      */
     public Header() {
-        container = $("#Header").addClass(Style.class);
+        container = $("#Header").addClass(TopMenuGroup.class);
     }
 
     /**
@@ -40,8 +38,8 @@ public class Header {
      * @param uri
      */
     public Menu add(String label, String uri) {
-        jQuery item = container.child("li");
-        item.child("a").attr("href", uri).text(label);
+        jQuery item = container.child("li").addClass(TopMenu.class);
+        item.child("a").addClass(MenuLink.class).attr("href", uri).text(label);
 
         return new Menu(item);
     }
@@ -58,7 +56,7 @@ public class Header {
      * 
      */
         private Menu(jQuery root) {
-            this.container = root.child("ul");
+            this.container = root.child("ul").addClass(SubMenuGroup.class);
         }
 
         /**
@@ -70,8 +68,8 @@ public class Header {
          * @param uri
          */
         public Menu add(String label, String uri) {
-            jQuery item = container.child("li");
-            item.child("a").attr("href", uri).text(label);
+            jQuery item = container.child("li").addClass(SubMenu.class);
+            item.child("a").addClass(MenuLink.class).attr("href", uri).text(label);
 
             return new Menu(item);
         }
@@ -80,51 +78,61 @@ public class Header {
     /**
      * @version 2012/12/14 23:51:44
      */
-    public static class Style extends CSS<Style> {
+    public static class TopMenuGroup extends CSS<TopMenuGroup> {
 
-        /** The header font. */
-        private final Font family = new Font("http://fonts.googleapis.com/css?family=Orbitron");
-
-        private int Header = 120;
+        private static int Header = 120;
 
         {
             box.width(960, px).shadow(0, px, 1, px, 1, px, color("#777"));
             margin.vertical(60, px).auto();
             border.width(1, px).solid().color("#222").radius(6, px);
-            background.color(background()).image(linear("#444", background().hex));
+            background.color("#111").image(linear("#444", "#111"));
         }
 
-        @Selector("li")
-        protected void list() {
+    }
+
+    /**
+     * @version 2012/12/25 12:27:53
+     */
+    private static class TopMenu extends CSS {
+
+        {
             display.inlineBlock();
             borderRight.width(1, px).solid().color("#222");
             position.relative();
-            box.minWidth(Header, px).zIndex(1);
+            box.minWidth(TopMenuGroup.Header, px).zIndex(1);
             text.align.center();
+            padding.size(0, px);
         }
+    }
 
-        @Selector("a")
-        protected void a() {
-            display.inlineBlock();
+    /**
+     * @version 2012/12/25 12:29:48
+     */
+    private static class MenuLink extends CSS {
+
+        /** The header font. */
+        private final Font family = new Font("http://fonts.googleapis.com/css?family=Orbitron");
+
+        {
+            display.block();
             padding.vertical(12, px).horizontal(30, px);
             font.color("#999").weight.bold().size(12, px).family(family);
             text.decoration.none().shadow(0, px, 1, px, 0, px, rgba(0, 0, 0, 1));
-        }
 
-        @Selector("li:hover > a")
-        protected void anchorSelected() {
-            font.color("#fafafa");
+            while (hover()) {
+                font.color("#fafafa");
+                background.color("#0186ba").image(linear("#04acec", "#0186ba"));
+            }
         }
+    }
 
-        @Selector("li:hover > ul")
-        protected void listSelected() {
-            box.opacity(1);
-            visibility.visible();
-            margin.size(0, px);
-        }
+    /**
+     * @version 2012/12/25 12:37:56
+     */
+    private static class SubMenuGroup extends CSS {
 
-        @Selector("ul")
-        protected void ul() {
+        {
             listStyle.none();
             margin.top(20, px);
             padding.size(0, px);
@@ -134,43 +142,24 @@ public class Header {
             box.shadow(0, px, -1, px, 0, px, rgba(255, 255, 255, 0.3)).opacity(0);
             border.radius(3, px);
             transition.property.all().duration(0.2, s).timing.easeInOut().delay(80, ms);
-        }
 
-        @Selector("ul ul")
-        protected void subMenu() {
-            position.top(0, px).left(Header, px);
-            margin.left(20, px).top(0, px);
-            box.shadow(-1, px, 0, px, 0, px, rgba(255, 255, 255, 0.3));
+            while (parentHover()) {
+                box.opacity(1);
+                visibility.visible();
+                margin.size(0, px);
+            }
         }
+    }
 
-        @Selector("ul li")
-        protected void subMenuItem() {
+    /**
+     * @version 2012/12/24 23:38:50
+     */
+    private static class SubMenu extends CSS {
+
+        {
             display.block();
             border.width(0, px);
             borderBottom.width(1, px).solid().color("#515151");
         }
-
-        @Selector("ul a")
-        protected void subMenuLink() {
-            display.block();
-            padding.size(10, px);
-            box.width(Header, px);
-
-            while (hover()) {
-                background.color("#0186ba").image(linear("#04acec", "#0186ba"));
-            }
-        }
-
-        protected Color background() {
-            return new Color("#111");
-        }
-    }
-    
-    /**
-     * 
-     * @version 2012/12/24 23:38:50
-     */
-    private static class SubMenu  extends CSS {
-        
     }
 }
