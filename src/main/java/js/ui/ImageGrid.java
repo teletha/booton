@@ -107,7 +107,7 @@ public abstract class ImageGrid<T> extends UI {
     /**
      * @version 2012/12/19 12:59:03
      */
-    private static class Image extends CSS<Image> {
+    private static class Image extends CSS {
 
         private static int imageSize = 70;
 
@@ -133,7 +133,7 @@ public abstract class ImageGrid<T> extends UI {
                 content.text("");
                 display.block();
                 position.absolute();
-                box.width(width.size, width.unit).height(height.size, height.unit).opacity(0.15);
+                box.width(width).height(height).opacity(0.15);
                 background.color.white();
 
                 while (parentHover()) {

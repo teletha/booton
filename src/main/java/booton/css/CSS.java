@@ -47,7 +47,7 @@ import booton.util.Strings;
  * @version 2012/12/25 13:15:28
  */
 @Manageable(lifestyle = Singleton.class)
-public abstract class CSS<T> implements Extensible {
+public abstract class CSS implements Extensible {
 
     /**
      * <p>
@@ -382,6 +382,30 @@ public abstract class CSS<T> implements Extensible {
      */
     protected final boolean focus() {
         return rule(rules.selector + ":focus");
+    }
+
+    /**
+     * <p>
+     * The :first-child CSS pseudo-class represents any element that is the first child element of
+     * its parent.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean firstChild() {
+        return rule(rules.selector + ":first-child");
+    }
+
+    /**
+     * <p>
+     * The :last-child CSS pseudo-class represents any element that is the last child element of its
+     * parent.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean lastChild() {
+        return rule(rules.selector + ":last-child");
     }
 
     /**

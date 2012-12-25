@@ -25,8 +25,17 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
     /** The line style. */
     private String style;
 
-    /** The line radius. */
-    private Value radius;
+    /** The top value. */
+    private Value top = new Value();
+
+    /** The right value. */
+    private Value right = new Value();
+
+    /** The bottom value. */
+    private Value bottom = new Value();
+
+    /** The left value. */
+    private Value left = new Value();
 
     /**
      * @param css
@@ -40,7 +49,7 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
      */
     @Override
     protected void write(CSSWriter writer) {
-        writer.property(name, width, style, color.color == null ? "transparent" : color.color);
+        writer.property(name, width, style, color.color == null ? "" : color.color);
         writer.property("border-radius", radius);
     }
 
@@ -88,6 +97,23 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
      * @return
      */
     public BorderValue radius(double size, Unit unit) {
+        radius = new Value(size, unit);
+
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The border-radius CSS property allows Web authors to define how rounded border corners are.
+     * The curve of each corner is defined using one or two radii, defining its shape: circle or
+     * ellipse.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public BorderValue radius(double first, Unit firstUnit, double second, Unit secondUnit, double third, Unit thirdUnit, double fourth, Unit fourthUnit) {
         radius = new Value(size, unit);
 
         return chain();

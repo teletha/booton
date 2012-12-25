@@ -118,6 +118,25 @@ public class Box extends CSSProperty<Box> {
 
     /**
      * <p>
+     * The width CSS property specifies the width of the content area of an element. The content
+     * area is inside the padding, border, and margin of the element.
+     * </p>
+     * <p>
+     * The min-width and max-width properties override width.
+     * </p>
+     * 
+     * @param size A box width.
+     * @param unit A unit.
+     * @return Chainable API.
+     */
+    public Box width(Value value) {
+        width = value;
+
+        return chain();
+    }
+
+    /**
+     * <p>
      * The min-width CSS property is used to set the minimum width of a given element. It prevents
      * the used value of the width property from becoming smaller than the value specified for
      * min-width.
@@ -176,6 +195,25 @@ public class Box extends CSSProperty<Box> {
      */
     public Box height(double size, Unit unit) {
         height = new Value(size, unit);
+
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The height CSS property specifies the height of the content area of an element. The content
+     * area is inside the padding, border, and margin of the element.
+     * </p>
+     * <p>
+     * The min-height and max-height properties override height.
+     * </p>
+     * 
+     * @param size A box width.
+     * @param unit A unit.
+     * @return Chainable API.
+     */
+    public Box height(Value value) {
+        height = value;
 
         return chain();
     }
