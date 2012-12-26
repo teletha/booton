@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.dom;
+package booton.translator.web;
 
 import booton.translator.JavascriptNative;
 

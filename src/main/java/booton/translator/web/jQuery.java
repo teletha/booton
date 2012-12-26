@@ -15,7 +15,6 @@ import java.util.Iterator;
 
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
-import booton.translator.dom.Element;
 
 /**
  * @version 2012/12/10 13:23:39

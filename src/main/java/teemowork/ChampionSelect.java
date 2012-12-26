@@ -13,7 +13,6 @@ import static booton.translator.web.WebSupport.*;
 
 import java.util.Collection;
 
-import js.Application;
 import js.Page;
 import js.application.Header;
 import js.application.Header.Menu;
@@ -22,9 +21,9 @@ import teemowork.model.Champion;
 import booton.translator.web.jQuery;
 
 /**
- * @version 2012/12/11 14:23:57
+ * @version 2012/12/26 13:06:59
  */
-public class Teemowork extends Application {
+public class ChampionSelect extends Page {
 
     /** The champion viewer. */
     private ImageGrid champions = new ImageGrid<Champion>() {
@@ -46,23 +45,18 @@ public class Teemowork extends Application {
     };
 
     /**
-     * {@inheritDoc}
+     * @param pattern
      */
-    @Override
-    protected Class<? extends Page> initialPage() {
-        return ChampionSelect.class;
+    public ChampionSelect() {
+        super("chmpion-select");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void jsmain() {
-        System.out.println(history);
-
+    protected void render(jQuery root) {
         $("body").css("padding", "0px 10%");
-
-        jQuery root = $("#Content");
 
         Header nav = new Header();
         nav.add("< ^ v ^ > Teemowork", "test.html");
