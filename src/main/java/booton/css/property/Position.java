@@ -187,7 +187,33 @@ public class Position extends CSSProperty<Position> {
      * @return Chainable API.
      */
     public Position bottom(double size, Unit unit) {
-        bottom = new Value(size, unit);
+        return bottom(new Value(size, unit));
+    }
+
+    /**
+     * <p>
+     * The bottom CSS property participates in specifying the position of positioned elements.
+     * </p>
+     * <p>
+     * For absolutely positioned elements, that is those with position: absolute or position: fixed,
+     * it specifies the distance between the bottom margin edge of the element and the bottom edge
+     * of its containing block.
+     * </p>
+     * <p>
+     * For relatively positioned elements, that is those with position: relative, it specifies the
+     * distance the element is moved above its normal position.
+     * </p>
+     * <p>
+     * However, the top property overrides the bottom property, so if top is not auto, the computed
+     * value of bottom is the negative of the computed value of top.
+     * </p>
+     * 
+     * @param size A position value.
+     * @param unit A unit.
+     * @return Chainable API.
+     */
+    public Position bottom(Value value) {
+        bottom = value;
 
         return chain();
     }

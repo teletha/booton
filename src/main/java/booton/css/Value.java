@@ -38,6 +38,18 @@ public class Value {
     }
 
     /**
+     * <p>
+     * Division.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Value divide(int value) {
+        return new Value(size / value, unit);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
