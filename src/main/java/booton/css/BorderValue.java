@@ -121,6 +121,21 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
      * @param unit
      * @return
      */
+    public BorderValue width(Value value) {
+        width = value;
+
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The xxx-width CSS property sets the width of the border of a box.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
     public BorderValue width(double size, Unit unit) {
         width = new Value(size, unit);
 

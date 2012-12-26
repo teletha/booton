@@ -134,7 +134,21 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @return
      */
     public BoxLength left(double size, Unit unit) {
-        left = new Value(size, unit);
+        return left(new Value(size, unit));
+    }
+
+    /**
+     * <p>
+     * The margin-left CSS property of an element sets the margin space required on the top of an
+     * element. A negative value is also allowed.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public BoxLength left(Value value) {
+        left = value;
 
         // Chainable API
         return chain();

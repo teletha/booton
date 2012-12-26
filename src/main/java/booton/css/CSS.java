@@ -35,9 +35,11 @@ import booton.css.property.Display;
 import booton.css.property.Font;
 import booton.css.property.Line;
 import booton.css.property.ListStyle;
+import booton.css.property.Overflow;
 import booton.css.property.PointerEvents;
 import booton.css.property.Position;
 import booton.css.property.Text;
+import booton.css.property.Transform;
 import booton.css.property.Transition;
 import booton.css.property.Visibility;
 import booton.util.Color;
@@ -112,6 +114,12 @@ public abstract class CSS implements Extensible {
      * 1/100th of the maximum value between the height and the width of the viewport.
      */
     protected static final Unit vmax = Unit.vmax;
+
+    /**
+     * deg which represents an angle in degrees. One full circle is 360deg. E.g. 0deg, 90deg,
+     * 360deg.
+     */
+    protected static final Unit deg = Unit.deg;
 
     /**
      * <p>
@@ -317,6 +325,19 @@ public abstract class CSS implements Extensible {
 
     /**
      * <p>
+     * The CSS transform property lets you modify the coordinate space of the CSS visual formatting
+     * model. Using it, elements can be translated, rotated, scaled, and skewed according to the
+     * values set.
+     * </p>
+     * <p>
+     * If the property has a value different than none, a stacking context will be created. In that
+     * case the object will act as a containing block for position: fixed elements that it contains.
+     * </p>
+     */
+    public Transform transform;
+
+    /**
+     * <p>
      * The CSS transition property is a shorthand property for transition-property,
      * transition-duration, transition-timing-function, and transition-delay. It allows to define
      * the transition between two states of an element.
@@ -334,6 +355,22 @@ public abstract class CSS implements Extensible {
 
     /** The text related style. */
     public Text text;
+
+    /**
+     * <p>
+     * The overflow CSS property specifies whether to clip content, render scroll bars or display
+     * overflow content of a block-level element.
+     * </p>
+     * <p>
+     * Using the overflow property with a value different than visible, its default, will create a
+     * new block formatting context. This is technically necessary as if a float would intersect
+     * with the scrolling element it would force to rewrap the content of the scrollable element
+     * around intruding floats. The rewrap would happen after each scroll step and would be lead to
+     * a far too slow scrolling experience. Note that, by programmatically setting scrollTop to the
+     * relevant HTML element, even when overflow has the hidden value an element may need to scroll.
+     * </p>
+     */
+    public Overflow overflow;
 
     /**
      * <p>

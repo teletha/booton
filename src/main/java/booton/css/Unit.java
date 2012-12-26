@@ -96,6 +96,24 @@ public enum Unit {
     pc,
 
     /**
+     * deg which represents an angle in degrees. One full circle is 360deg. E.g. 0deg, 90deg,
+     * 360deg.
+     */
+    deg,
+
+    /**
+     * grad which represents an angle in gradians. One full circle is 400grad. E.g. 0grad, 100grad,
+     * 400grad.
+     */
+    grad,
+
+    /**
+     * rad which represents an angle in radians. One full circle is 2π radians which approximates to
+     * 6.2832rad. 1rad is 180/π degrees. E.g. 0rad, 1.0708rad, 6.2832rad.
+     */
+    rad,
+
+    /**
      * The <percentage> CSS data types represent a percentage value. Many CSS properties can take
      * percentage values, often to define sizes in terms of parent objects. Percentages are formed
      * by a <number> immediately followed by the percentage sign %. Like for all unit in CSS, there
