@@ -9,8 +9,6 @@
  */
 package booton.translator.web;
 
-import booton.translator.dom.Document;
-import booton.translator.dom.Element;
 
 /**
  * @version 2012/12/14 13:11:16
@@ -19,6 +17,15 @@ public class WebSupport {
 
     /** The root document. */
     public static Document document;
+
+    /**
+     * <p>
+     * Returns a reference to the History object, which provides an interface for manipulating the
+     * browser session history (pages visited in the tab or frame that the current page is loaded
+     * in).
+     * </p>
+     */
+    public static History history;
 
     /**
      * <p>

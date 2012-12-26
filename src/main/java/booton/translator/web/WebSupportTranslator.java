@@ -10,7 +10,6 @@
 package booton.translator.web;
 
 import booton.translator.Translator;
-import booton.translator.dom.Element;
 
 /**
  * @version 2012/12/14 13:11:07
@@ -19,6 +18,9 @@ public class WebSupportTranslator extends Translator<WebSupport> {
 
     /** The root document. */
     public String document = "document";
+
+    /** The root document. */
+    public String history = "history";
 
     /**
      * <p>

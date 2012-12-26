@@ -10,12 +10,20 @@
 package js;
 
 import js.application.Header;
-import booton.css.CSS;
 
 /**
  * @version 2012/12/11 14:19:29
  */
 public abstract class Application {
+
+    /**
+     * <p>
+     * Configure initial page.
+     * </p>
+     * 
+     * @return
+     */
+    protected abstract Class<? extends Page> initialPage();
 
     /**
      * <p>
@@ -32,14 +40,5 @@ public abstract class Application {
      * @param header
      */
     protected void configure(Header header) {
-    }
-
-    /**
-     * @version 2012/12/15 18:02:37
-     */
-    public static class Style extends CSS {
-
-        {
-        }
     }
 }
