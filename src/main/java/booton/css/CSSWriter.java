@@ -19,6 +19,10 @@ import kiss.I;
  */
 public class CSSWriter {
 
+    private static final String[] prefixies = {"-webkit-", "-ms-", "-o-", "-moz-", ""};
+
+    private static final String[] specials = {"linear-gradient"};
+
     /** The actual builder. */
     private final StringBuilder builder = new StringBuilder();
 
@@ -33,6 +37,22 @@ public class CSSWriter {
     public void property(String name, Object value) {
         if (value != null) {
             property(name, value.toString());
+        }
+    }
+
+    /**
+     * <p>
+     * Write property.
+     * </p>
+     * 
+     * @param name
+     * @param value
+     */
+    public void propertyWithPrefix(String name, Object value) {
+        if (value != null) {
+            for (String prefix : prefixies) {
+                property(prefix + name, value.toString());
+            }
         }
     }
 
@@ -65,8 +85,36 @@ public class CSSWriter {
      */
     public void property(String name, String value) {
         if (name != null && name.length() != 0 && value != null && value.length() != 0) {
-            builder.append(name).append(":").append(value).append("; ");
+            if (!isSpecialValue(value)) {
+                builder.append(name).append(":").append(value).append("; ");
+            } else if (name.charAt(0) == '-') {
+                int index = name.indexOf('-', 1);
+                String prefix = name.substring(0, index + 1);
+
+                builder.append(name).append(":").append(prefix + value).append("; ");
+            } else {
+                for (String prefix : prefixies) {
+                    builder.append(name).append(":").append(prefix + value).append("; ");
+                }
+            }
         }
+    }
+
+    /**
+     * <p>
+     * Check special property value.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    private boolean isSpecialValue(String value) {
+        for (String special : specials) {
+            if (value.startsWith(special)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

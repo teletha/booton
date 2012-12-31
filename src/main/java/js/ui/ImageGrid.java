@@ -171,18 +171,7 @@ public abstract class ImageGrid<T> extends UI {
             margin.left(boxWidth.divide(-2));
             border.width(borderWidth).solid().color(5, 5, 5).radius(5, px);
 
-            // bubble(Image.imageSize + 30, 4, 10);
-
-            while (after()) {
-                content.text("");
-                display.block();
-                box.size(10, px);
-                background.color("#000");
-                position.absolute().top(50, percent).left(50, percent);
-                transform.rotate(45, deg);
-                overflow.hidden();
-                padding.top(5, px);
-            }
+            bubble(Image.imageSize + 30, 4, 10);
 
             while (parentHover()) {
                 box.opacity(0.9);

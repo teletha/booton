@@ -50,8 +50,8 @@ public class Transition extends CSSProperty<Transition> {
     protected void write(CSSWriter writer) {
         super.write(writer);
 
-        writer.property("transition-duration", duration);
-        writer.property("transition-delay", delay);
+        writer.propertyWithPrefix("transition-duration", duration);
+        writer.propertyWithPrefix("transition-delay", delay);
     }
 
     /**
@@ -113,7 +113,7 @@ public class Transition extends CSSProperty<Transition> {
          * Hide.
          */
         private Property() {
-            super("transition-property", Transition.this);
+            super("transition-property", Transition.this, true);
         }
 
         /**
@@ -157,7 +157,7 @@ public class Transition extends CSSProperty<Transition> {
          * Hide.
          */
         private Timing() {
-            super("transition-timing-function", Transition.this);
+            super("transition-timing-function", Transition.this, true);
         }
 
         /**
