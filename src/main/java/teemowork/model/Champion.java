@@ -52,6 +52,28 @@ public class Champion {
 
     /**
      * <p>
+     * Returns splash art path.
+     * </p>
+     * 
+     * @return
+     */
+    public String getSplashArt() {
+        return "src/main/resources/teemowork/splash/" + getSystemName() + ".jpg";
+    }
+
+    /**
+     * <p>
+     * Returns icon image path.
+     * </p>
+     * 
+     * @return
+     */
+    public String getIcon() {
+        return "src/main/resources/teemowork/icon/" + getSystemName() + ".png";
+    }
+
+    /**
+     * <p>
      * Retrieve item by name.
      * </p>
      * 

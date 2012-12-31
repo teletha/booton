@@ -70,9 +70,16 @@ public abstract class ImageGrid<T> extends UI {
             }
         });
 
-        for (T source : sources) {
+        for (final T source : sources) {
             jQuery image = root.child(Image.class).css("background-image", "url(" + getImageURI(source) + ")");
             image.child("span").addClass(Title.class).text(getTitle(source));
+            image.click(new Listener() {
+
+                @Override
+                public void handler(Event event) {
+                    select(source);
+                }
+            });
 
             images.put(source, image);
         }
@@ -110,6 +117,15 @@ public abstract class ImageGrid<T> extends UI {
     protected abstract String getImageURI(T source);
 
     /**
+     * <p>
+     * Activate this method when some source is seleted by pointer event.
+     * </p>
+     * 
+     * @param source
+     */
+    protected abstract void select(T source);
+
+    /**
      * @version 2012/12/19 12:59:03
      */
     private static class Image extends CSS {
@@ -120,7 +136,7 @@ public abstract class ImageGrid<T> extends UI {
             display.inlineBlock();
             box.size(imageSize, px);
             outline.none();
-            background.color.transparent().noRepeat().top().left().contain();
+            background.color.transparent().top().left().contain();
             position.relative();
             transition.property.all().duration(0.2, s).timing.easeInOut();
 

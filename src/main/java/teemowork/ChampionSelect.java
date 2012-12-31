@@ -42,6 +42,13 @@ public class ChampionSelect extends Page {
         protected String getImageURI(Champion source) {
             return "src/main/resources/teemowork/icon/" + source.getSystemName() + ".png";
         }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void select(Champion source) {
+        }
     };
 
     /**

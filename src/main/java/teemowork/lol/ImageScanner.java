@@ -38,6 +38,7 @@ public class ImageScanner {
 
         Path images = latest.resolve("deploy/assets/images");
         loadChampionIcon(images.resolve("champions"));
+        loadChampionSplashArt(images.resolve("champions"));
     }
 
     /**
@@ -53,6 +54,22 @@ public class ImageScanner {
             name = name.substring(0, name.indexOf('_'));
 
             I.copy(file, output.resolve("icon/" + name + ".png"));
+        }
+    }
+
+    /**
+     * <p>
+     * Helper method to find splash art.
+     * </p>
+     * 
+     * @param root
+     */
+    private static void loadChampionSplashArt(Path root) {
+        for (Path file : I.walk(root, "*_Splash_0.jpg")) {
+            String name = file.getFileName().toString();
+            name = name.substring(0, name.indexOf('_'));
+
+            I.copy(file, output.resolve("splash/" + name + ".jpg"));
         }
     }
 }
