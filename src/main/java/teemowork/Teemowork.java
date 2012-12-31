@@ -41,7 +41,17 @@ public class Teemowork extends Application {
 
         @Override
         protected String getImageURI(Champion source) {
-            return "src/main/resources/teemowork/icon/" + source.getSystemName() + ".png";
+            return source.getIcon();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void select(Champion source) {
+            $("#Content").css("background-image", "url(" + source.getSplashArt() + ")")
+                    .css("background-size", "contain")
+                    .css("background-repeat", "no-repeat");
         }
     };
 
