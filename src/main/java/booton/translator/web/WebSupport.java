@@ -9,11 +9,13 @@
  */
 package booton.translator.web;
 
-
 /**
  * @version 2012/12/14 13:11:16
  */
 public class WebSupport {
+
+    /** The global object in web environment. */
+    public static Window window;
 
     /** The root document. */
     public static Document document;
@@ -46,4 +48,24 @@ public class WebSupport {
      * @return
      */
     public static native jQuery $(Element element);
+
+    /**
+     * <p>
+     * Provide JQuery support.
+     * </p>
+     * 
+     * @param document
+     * @return
+     */
+    public static native jQuery $(Document document);
+
+    /**
+     * <p>
+     * Provide JQuery support.
+     * </p>
+     * 
+     * @param window
+     * @return
+     */
+    public static native jQuery $(Window window);
 }
