@@ -16,6 +16,9 @@ import booton.translator.Translator;
  */
 public class WebSupportTranslator extends Translator<WebSupport> {
 
+    /** The root object. */
+    public String window = "window";
+
     /** The root document. */
     public String document = "document";
 
@@ -43,6 +46,30 @@ public class WebSupportTranslator extends Translator<WebSupport> {
      * @return
      */
     public String $(Element element) {
+        return "$(" + param(0) + ")";
+    }
+
+    /**
+     * <p>
+     * Provide JQuery support.
+     * </p>
+     * 
+     * @param object
+     * @return
+     */
+    public String $(Document object) {
+        return "$(" + param(0) + ")";
+    }
+
+    /**
+     * <p>
+     * Provide JQuery support.
+     * </p>
+     * 
+     * @param object
+     * @return
+     */
+    public String $(Window object) {
         return "$(" + param(0) + ")";
     }
 }

@@ -13,6 +13,8 @@ public class Project extends bee.api.Project {
         product("teemowork", "Teemowork", "0.1");
 
         require("npc", "sinobu", "0.9.2");
+        require("org.eclipse.jetty", "jetty-server", "8.1.7.v20120910");
+        require("org.eclipse.jetty", "jetty-websocket", "8.1.7.v20120910");
         require("npc", "antibug", "0.2").atTest();
         require("net.sourceforge.htmlunit", "htmlunit", "2.11").atTest();
     }

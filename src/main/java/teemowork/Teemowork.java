@@ -20,6 +20,8 @@ import js.application.Header.Menu;
 import js.ui.ImageGrid;
 import teemowork.model.Champion;
 import booton.translator.web.jQuery;
+import booton.translator.web.jQuery.Event;
+import booton.translator.web.jQuery.Listener;
 
 /**
  * @version 2012/12/11 14:23:57
@@ -52,6 +54,8 @@ public class Teemowork extends Application {
             $("#Content").css("background-image", "url(" + source.getSplashArt() + ")")
                     .css("background-size", "contain")
                     .css("background-repeat", "no-repeat");
+
+            history.pushState(null, null, source.name);
         }
     };
 
@@ -89,5 +93,13 @@ public class Teemowork extends Application {
         nav.add("Contact", "#");
 
         champions.compose(root);
+
+        $(window).on("popstate", new Listener() {
+
+            @Override
+            public void handler(Event event) {
+                System.out.println(event);
+            }
+        });
     }
 }
