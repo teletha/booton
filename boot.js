@@ -72,6 +72,22 @@ function boot(global) {
   // Array Extensions
   //====================================================================
 
+  //====================================================================
+  // WebSocket Extensions
+  //====================================================================
+  define(WebSocket, {
+    /**
+     * Establish connection by WebSocket.
+     */
+    connect: function(uri, listener) {
+      var connection = new WebSocket(uri);
+      connection.onopen = listener.open;
+      connection.onclose = listener.close;
+      connection.onerror = listener.error;
+      connection.onmessage = listener.message;
+    }
+  });
+
   
   //====================================================================
   // Object Extensions

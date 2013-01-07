@@ -103,7 +103,17 @@ public class Teemowork extends Application {
             }
         });
 
-        WebSocket socket = new WebSocket("ws://localhost:10021/live/test");
-        socket.send("test");
+        connect("ws://localhost:10021/live/test", new WebSocket() {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            protected void message(MessageEvent event) {
+                System.out.println(event);
+
+                send("textaa");
+            }
+        });
     }
 }
