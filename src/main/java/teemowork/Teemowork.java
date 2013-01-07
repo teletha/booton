@@ -19,6 +19,7 @@ import js.application.Header;
 import js.application.Header.Menu;
 import js.ui.ImageGrid;
 import teemowork.model.Champion;
+import booton.translator.web.WebSocket;
 import booton.translator.web.jQuery;
 import booton.translator.web.jQuery.Event;
 import booton.translator.web.jQuery.Listener;
@@ -80,7 +81,7 @@ public class Teemowork extends Application {
 
         Header nav = new Header();
         nav.add("< ^ v ^ > Teemowork", "test.html");
-        nav.add("Patch", "#");
+        nav.add("Patcha", "#");
 
         Menu sub = nav.add("Data", "#");
         sub.add("Champion", "#");
@@ -101,5 +102,8 @@ public class Teemowork extends Application {
                 System.out.println(event);
             }
         });
+
+        WebSocket socket = new WebSocket("ws://localhost:10021/live/test");
+        socket.send("test");
     }
 }
