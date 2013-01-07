@@ -28,6 +28,8 @@ import org.objectweb.asm.Type;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import booton.translator.web.WebSocket;
+
 /**
  * ion 2012/12/06 18:28:56
  */
@@ -44,10 +46,18 @@ class TranslatorManager {
         builtIn(Object.class);
         builtIn(Document.class);
         builtIn(Element.class);
+        builtIn(WebSocket.class);
     }
 
+    /**
+     * <p>
+     * Register the given class as native.
+     * </p>
+     * 
+     * @param type
+     */
     private static void builtIn(Class type) {
-        for (Method method : type.getMethods()) {
+        for (Method method : type.getDeclaredMethods()) {
             nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), Object.class);
         }
     }

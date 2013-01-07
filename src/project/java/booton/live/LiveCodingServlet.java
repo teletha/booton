@@ -9,7 +9,11 @@
  */
 package booton.live;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
+
+import kiss.I;
 
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketServlet;
@@ -39,6 +43,11 @@ public class LiveCodingServlet extends WebSocketServlet {
         @Override
         public void onOpen(Connection connection) {
             System.out.println("open");
+            try {
+                connection.sendMessage("reply");
+            } catch (IOException e) {
+                throw I.quiet(e);
+            }
         }
 
         /**

@@ -9,6 +9,8 @@
  */
 package booton.translator.web;
 
+import booton.translator.Translator;
+
 /**
  * @version 2012/12/14 13:11:16
  */
@@ -61,6 +63,16 @@ public class WebSupport {
 
     /**
      * <p>
+     * Establish connection to the specified uri.
+     * </p>
+     * 
+     * @param uri
+     * @param connection
+     */
+    public static native void connect(String uri, WebSocket connection);
+
+    /**
+     * <p>
      * Provide JQuery support.
      * </p>
      * 
@@ -68,4 +80,72 @@ public class WebSupport {
      * @return
      */
     public static native jQuery $(Window window);
+
+    /**
+     * @version 2012/12/14 13:11:07
+     */
+    @SuppressWarnings("unused")
+    private static class Coder extends Translator<WebSupport> {
+
+        /** The root object. */
+        public String window = "window";
+
+        /** The root document. */
+        public String document = "document";
+
+        /** The root document. */
+        public String history = "history";
+
+        /**
+         * <p>
+         * Provide JQuery support.
+         * </p>
+         * 
+         * @param expression
+         * @return
+         */
+        public String $(String expression) {
+            return "$(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Provide JQuery support.
+         * </p>
+         * 
+         * @param expression
+         * @return
+         */
+        public String $(Element element) {
+            return "$(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Provide JQuery support.
+         * </p>
+         * 
+         * @param object
+         * @return
+         */
+        public String $(Document object) {
+            return "$(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Provide JQuery support.
+         * </p>
+         * 
+         * @param object
+         * @return
+         */
+        public String $(Window object) {
+            return "$(" + param(0) + ")";
+        }
+
+        public String connect(String param0, WebSocket param1) {
+            return "WebSocket.connect(" + param(0) + "," + param(1) + ")";
+        }
+    }
 }
