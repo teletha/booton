@@ -32,7 +32,7 @@ public class Booton extends Task {
         ui.talk("");
 
         ServletContextHandler servletHandler = new ServletContextHandler();
-        servletHandler.addServlet(LiveCodingServlet.class, "/live/*");
+        servletHandler.addServlet(new ServletHolder(new LiveCodingServlet(project)), "/live/*");
         servletHandler.addServlet(new ServletHolder(new ResourceServlet(project)), "/*");
 
         Server server = new Server(port);

@@ -103,7 +103,7 @@ public class Teemowork extends Application {
             }
         });
 
-        connect("ws://localhost:10021/live/test", new WebSocket() {
+        connect("ws://localhost:10021/live/test.html", new WebSocket() {
 
             /**
              * {@inheritDoc}
