@@ -28,9 +28,12 @@ public class Booton extends Task {
 
     @Command
     public void develop() {
+        ui.talk("Start up live coding server. Port : ", port);
+        ui.talk("");
+
         ServletContextHandler servletHandler = new ServletContextHandler();
-        servletHandler.addServlet(new ServletHolder(new ResourceServlet(project)), "/*");
         servletHandler.addServlet(LiveCodingServlet.class, "/live/*");
+        servletHandler.addServlet(new ServletHolder(new ResourceServlet(project)), "/*");
 
         Server server = new Server(port);
         server.setHandler(servletHandler);
