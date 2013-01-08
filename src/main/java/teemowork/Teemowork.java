@@ -12,7 +12,6 @@ package teemowork;
 import static booton.translator.web.WebSupport.*;
 
 import java.util.Collection;
-import java.util.Date;
 
 import js.Application;
 import js.Page;
@@ -20,7 +19,6 @@ import js.application.Header;
 import js.application.Header.Menu;
 import js.ui.ImageGrid;
 import teemowork.model.Champion;
-import booton.translator.web.WebSocket;
 import booton.translator.web.jQuery;
 import booton.translator.web.jQuery.Event;
 import booton.translator.web.jQuery.Listener;
@@ -101,23 +99,6 @@ public class Teemowork extends Application {
             @Override
             public void handler(Event event) {
                 System.out.println(event);
-            }
-        });
-
-        connect("ws://localhost:10021/live/test.html", new WebSocket() {
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            protected void message(MessageEvent event) {
-                String src = event.data;
-
-                if (src.endsWith("css")) {
-                    $("link[href^='" + src + "']").attr("href", src + "?" + new Date().getTime());
-                } else {
-                    window.location.reload(true);
-                }
             }
         });
     }

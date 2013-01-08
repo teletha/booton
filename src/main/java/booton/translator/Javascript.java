@@ -20,6 +20,7 @@ import static org.objectweb.asm.ClassReader.*;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -176,13 +177,15 @@ public class Javascript {
         // Write bootstrap method if needed.
         try {
             Method main = source.getDeclaredMethod("jsmain");
+            String className = Javascript.computeClassName(source);
+            String methodName = Javascript.computeMethodName(source, main.getName(), Type.getMethodDescriptor(main));
 
-            output.append("try {new ");
-            output.append(Javascript.computeClassName(source));
-            output.append("(0).");
-            output.append(Javascript.computeMethodName(source, main.getName(), Type.getMethodDescriptor(main)));
-            output.append("(");
-            output.append(");");
+            output.append("try {");
+            if (Modifier.isStatic(main.getModifiers())) {
+                output.append(className + "." + methodName + "();");
+            } else {
+                output.append("new " + className + "(0)." + methodName + "();");
+            }
             output.append("} catch(e) {console.log(e)}");
         } catch (Exception e) {
             // do nothing
