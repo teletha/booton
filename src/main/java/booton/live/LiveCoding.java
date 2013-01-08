@@ -24,8 +24,7 @@ public class LiveCoding {
      * 
      */
     public static void jsmain() {
-        System.out.println(window.location);
-        connect("ws://localhost:10021/live/test.html", new WebSocket() {
+        connect("ws://localhost:10021/live" + window.location.pathname, new WebSocket() {
 
             /**
              * {@inheritDoc}
