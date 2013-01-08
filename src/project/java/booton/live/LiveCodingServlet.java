@@ -10,7 +10,6 @@
 package booton.live;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -67,6 +66,9 @@ public class LiveCodingServlet extends WebSocketServlet {
         /** The actual connection. */
         private Connection connection;
 
+        /** The last send time. */
+        private long last = System.currentTimeMillis();
+
         /**
          * @param target
          */
@@ -84,7 +86,7 @@ public class LiveCodingServlet extends WebSocketServlet {
             System.out.println("open " + html);
 
             // observe html
-            new HTMLObserver(html.getFileName().toString());
+            new FileObserver(html.getFileName().toString());
 
             XML xml = I.xml(html);
 
@@ -93,7 +95,7 @@ public class LiveCodingServlet extends WebSocketServlet {
                 String src = js.attr("src");
 
                 if (src.length() != 0 && !src.startsWith("http://") && !src.startsWith("https://")) {
-                    new JSObserver(src);
+                    new FileObserver(src);
                 }
             }
 
@@ -102,7 +104,7 @@ public class LiveCodingServlet extends WebSocketServlet {
                 String src = css.attr("href");
 
                 if (src.length() != 0 && !src.startsWith("http://") && !src.startsWith("https://")) {
-                    new CSSObserver(src);
+                    new FileObserver(src);
                 }
             }
         }
@@ -112,6 +114,8 @@ public class LiveCodingServlet extends WebSocketServlet {
          */
         @Override
         public void onClose(int closeCode, String message) {
+            System.out.println("close " + html);
+
             for (Disposable observer : observers) {
                 observer.dispose();
             }
@@ -135,17 +139,24 @@ public class LiveCodingServlet extends WebSocketServlet {
          * @param message
          */
         private void send(String message) {
-            try {
-                connection.sendMessage(message);
-            } catch (IOException e) {
-                throw I.quiet(e);
+            long current = System.currentTimeMillis();
+
+            if (last + 1000 < current) {
+                last = current;
+
+                try {
+                    System.out.println(message);
+                    connection.sendMessage(message);
+                } catch (IOException e) {
+                    throw I.quiet(e);
+                }
             }
         }
 
         /**
          * @version 2013/01/08 9:36:32
          */
-        protected abstract class FileModificationObserver implements PathListener {
+        private class FileObserver implements PathListener {
 
             /** The original path. */
             protected final String path;
@@ -153,22 +164,14 @@ public class LiveCodingServlet extends WebSocketServlet {
             /** The target. */
             protected final Path file;
 
-            /** The last modified time. */
-            private long last;
-
             /**
              * @param file
              */
-            protected FileModificationObserver(String path) {
-                try {
-                    this.path = path;
-                    this.file = html.resolveSibling(path);
-                    this.last = Files.getLastModifiedTime(file).toMillis();
+            private FileObserver(String path) {
+                this.path = path;
+                this.file = html.resolveSibling(path);
 
-                    observers.add(I.observe(file, this));
-                } catch (IOException e) {
-                    throw I.quiet(e);
-                }
+                observers.add(I.observe(file, this));
             }
 
             /**
@@ -190,92 +193,7 @@ public class LiveCodingServlet extends WebSocketServlet {
              */
             @Override
             public final void modify(Path path) {
-                try {
-                    long current = Files.getLastModifiedTime(path).toMillis();
-
-                    if (last + 1000 < current) {
-                        last = current;
-                        modify();
-                    }
-                } catch (IOException e) {
-                    throw I.quiet(e);
-                }
-            }
-
-            /**
-             * <p>
-             * Invoke whenever the target file is modified.
-             * </p>
-             */
-            protected abstract void modify();
-        }
-
-        /**
-         * @version 2013/01/08 2:00:00
-         */
-        private class HTMLObserver extends FileModificationObserver {
-
-            /**
-             * @param file
-             */
-            private HTMLObserver(String file) {
-                super(file);
-            }
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            protected void modify() {
-                System.out.println("modify " + file);
-
-                send(path);
-            }
-        }
-
-        /**
-         * @version 2013/01/08 2:00:00
-         */
-        private class JSObserver extends FileModificationObserver {
-
-            /**
-             * @param file
-             */
-            private JSObserver(String file) {
-                super(file);
-            }
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            protected void modify() {
-                System.out.println("modify " + file);
-
-                send(path);
-            }
-        }
-
-        /**
-         * @version 2013/01/08 2:00:00
-         */
-        private class CSSObserver extends FileModificationObserver {
-
-            /**
-             * @param file
-             */
-            private CSSObserver(String file) {
-                super(file);
-            }
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            protected void modify() {
-                System.out.println("modify " + file);
-
-                send(path);
+                send(this.path);
             }
         }
     }

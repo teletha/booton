@@ -30,6 +30,7 @@ import org.w3c.dom.Element;
 
 import booton.translator.web.Location;
 import booton.translator.web.WebSocket;
+import booton.translator.web.Window;
 
 /**
  * ion 2012/12/06 18:28:56
@@ -48,6 +49,7 @@ class TranslatorManager {
         builtIn(Document.class);
         builtIn(Element.class);
         builtIn(WebSocket.class);
+        builtIn(Window.class);
         builtIn(Location.class);
     }
 
