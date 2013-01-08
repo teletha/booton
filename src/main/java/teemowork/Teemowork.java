@@ -12,6 +12,7 @@ package teemowork;
 import static booton.translator.web.WebSupport.*;
 
 import java.util.Collection;
+import java.util.Date;
 
 import js.Application;
 import js.Page;
@@ -110,9 +111,13 @@ public class Teemowork extends Application {
              */
             @Override
             protected void message(MessageEvent event) {
-                System.out.println(event);
+                String src = event.data;
 
-                send("textaa");
+                if (src.endsWith("css")) {
+                    $("link[href^='" + src + "']").attr("href", src + "?" + new Date().getTime());
+                } else {
+                    window.location.reload(false);
+                }
             }
         });
     }

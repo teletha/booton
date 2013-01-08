@@ -9,6 +9,8 @@
  */
 package booton.live;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -62,6 +64,9 @@ public class LiveCodingServlet extends WebSocketServlet {
         /** The file observers. */
         private List<Disposable> observers = new ArrayList();
 
+        /** The actual connection. */
+        private Connection connection;
+
         /**
          * @param target
          */
@@ -74,10 +79,12 @@ public class LiveCodingServlet extends WebSocketServlet {
          */
         @Override
         public void onOpen(Connection connection) {
+            this.connection = connection;
+
             System.out.println("open " + html);
 
             // observe html
-            observers.add(I.observe(html, new HTMLObserver()));
+            new HTMLObserver(html.getFileName().toString());
 
             XML xml = I.xml(html);
 
@@ -85,10 +92,8 @@ public class LiveCodingServlet extends WebSocketServlet {
             for (XML js : xml.find("script")) {
                 String src = js.attr("src");
 
-                if (src.length() != 0) {
-                    Path path = html.getParent().resolve(src);
-                    System.out.println(path);
-                    observers.add(I.observe(path, new JSListener()));
+                if (src.length() != 0 && !src.startsWith("http://") && !src.startsWith("https://")) {
+                    new JSObserver(src);
                 }
             }
 
@@ -96,10 +101,8 @@ public class LiveCodingServlet extends WebSocketServlet {
             for (XML css : xml.find("link[rel=stylesheet]")) {
                 String src = css.attr("href");
 
-                if (src.length() != 0) {
-                    Path path = html.getParent().resolve(src);
-                    System.out.println(path);
-                    observers.add(I.observe(path, new CSSListener()));
+                if (src.length() != 0 && !src.startsWith("http://") && !src.startsWith("https://")) {
+                    new CSSObserver(src);
                 }
             }
         }
@@ -112,6 +115,8 @@ public class LiveCodingServlet extends WebSocketServlet {
             for (Disposable observer : observers) {
                 observer.dispose();
             }
+            observers.clear();
+            connection = null;
         }
 
         /**
@@ -123,58 +128,154 @@ public class LiveCodingServlet extends WebSocketServlet {
         }
 
         /**
-         * @version 2013/01/08 1:56:48
+         * <p>
+         * Helper method to send message.
+         * </p>
+         * 
+         * @param message
          */
-        private class HTMLObserver implements PathListener {
+        private void send(String message) {
+            try {
+                connection.sendMessage(message);
+            } catch (IOException e) {
+                throw I.quiet(e);
+            }
+        }
+
+        /**
+         * @version 2013/01/08 9:36:32
+         */
+        protected abstract class FileModificationObserver implements PathListener {
+
+            /** The original path. */
+            protected final String path;
+
+            /** The target. */
+            protected final Path file;
+
+            /** The last modified time. */
+            private long last;
 
             /**
-             * {@inheritDoc}
+             * @param file
              */
-            @Override
-            public void create(Path path) {
+            protected FileModificationObserver(String path) {
+                try {
+                    this.path = path;
+                    this.file = html.resolveSibling(path);
+                    this.last = Files.getLastModifiedTime(file).toMillis();
+
+                    observers.add(I.observe(file, this));
+                } catch (IOException e) {
+                    throw I.quiet(e);
+                }
             }
 
             /**
              * {@inheritDoc}
              */
             @Override
-            public void delete(Path path) {
+            public final void create(Path path) {
             }
 
             /**
              * {@inheritDoc}
              */
             @Override
-            public void modify(Path path) {
-                System.out.println("modify html " + path);
+            public final void delete(Path path) {
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public final void modify(Path path) {
+                try {
+                    long current = Files.getLastModifiedTime(path).toMillis();
+
+                    if (last + 1000 < current) {
+                        last = current;
+                        modify();
+                    }
+                } catch (IOException e) {
+                    throw I.quiet(e);
+                }
+            }
+
+            /**
+             * <p>
+             * Invoke whenever the target file is modified.
+             * </p>
+             */
+            protected abstract void modify();
+        }
+
+        /**
+         * @version 2013/01/08 2:00:00
+         */
+        private class HTMLObserver extends FileModificationObserver {
+
+            /**
+             * @param file
+             */
+            private HTMLObserver(String file) {
+                super(file);
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            protected void modify() {
+                System.out.println("modify " + file);
+
+                send(path);
             }
         }
 
         /**
          * @version 2013/01/08 2:00:00
          */
-        private class JSListener extends HTMLObserver {
+        private class JSObserver extends FileModificationObserver {
+
+            /**
+             * @param file
+             */
+            private JSObserver(String file) {
+                super(file);
+            }
 
             /**
              * {@inheritDoc}
              */
             @Override
-            public void modify(Path path) {
-                System.out.println("modify js " + path);
+            protected void modify() {
+                System.out.println("modify " + file);
+
+                send(path);
             }
         }
 
         /**
          * @version 2013/01/08 2:00:00
          */
-        private class CSSListener extends HTMLObserver {
+        private class CSSObserver extends FileModificationObserver {
+
+            /**
+             * @param file
+             */
+            private CSSObserver(String file) {
+                super(file);
+            }
 
             /**
              * {@inheritDoc}
              */
             @Override
-            public void modify(Path path) {
-                System.out.println("modify css " + path);
+            protected void modify() {
+                System.out.println("modify " + file);
+
+                send(path);
             }
         }
     }

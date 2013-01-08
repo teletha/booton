@@ -28,6 +28,7 @@ import org.objectweb.asm.Type;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import booton.translator.web.Location;
 import booton.translator.web.WebSocket;
 
 /**
@@ -47,6 +48,7 @@ class TranslatorManager {
         builtIn(Document.class);
         builtIn(Element.class);
         builtIn(WebSocket.class);
+        builtIn(Location.class);
     }
 
     /**
@@ -60,6 +62,13 @@ class TranslatorManager {
         for (Method method : type.getDeclaredMethods()) {
             nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), Object.class);
         }
+
+        Set<String> set = new HashSet();
+
+        for (Field field : type.getFields()) {
+            set.add(field.getName());
+        }
+        nativeFields.put(type, set);
     }
 
     /**

@@ -16,4 +16,12 @@ import booton.translator.JavascriptNative;
  */
 public abstract class Window implements JavascriptNative {
 
+    /**
+     * <p>
+     * Returns a Location object, which contains information about the URL of the document and
+     * provides methods for changing that URL. You can also assign to this property to load another
+     * URL.
+     * </p>
+     */
+    public Location location;
 }
