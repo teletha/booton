@@ -24,6 +24,7 @@ public class LiveCoding {
      * 
      */
     public static void jsmain() {
+        System.out.println(window.location);
         connect("ws://localhost:10021/live/test.html", new WebSocket() {
 
             /**
@@ -36,7 +37,7 @@ public class LiveCoding {
                 if (src.endsWith("css")) {
                     $("link[href^='" + src + "']").attr("href", src + "?" + new Date().getTime());
                 } else {
-                    window.location.reload(true);
+                    window.location.reload(false);
                 }
             }
         });

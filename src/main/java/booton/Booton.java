@@ -11,6 +11,7 @@ package booton;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Date;
 
 import js.Application;
 import js.application.ApplicationTheme;
@@ -77,6 +78,8 @@ public class Booton {
             output = output.getParent();
         }
 
+        Path mutex = output.resolve("publishing");
+
         try {
             // load booton extensions
             I.load(Booton.class, true);
@@ -86,6 +89,8 @@ public class Booton {
 
             // load application extensions
             I.load(application, true);
+
+            Files.createFile(mutex);
 
             buildHTML(output.resolve("test.html"));
 
@@ -97,6 +102,8 @@ public class Booton {
             I.make(StylesheetManager.class).write(output.resolve("test.css"));
         } catch (Exception e) {
             e.printStackTrace(System.out);
+        } finally {
+            I.delete(mutex);
         }
     }
 
@@ -108,21 +115,23 @@ public class Booton {
      * @param file
      */
     private void buildHTML(Path file) throws Exception {
+        long now = new Date().getTime();
+
         XML html = I.xml("html");
         XML head = html.child("head");
         head.child("meta").attr("charset", "utf-8");
-        head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", "normalize.css");
-        head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", "test.css");
-        head.child("script").attr("type", "text/javascript").attr("src", "jquery.js");
-        head.child("script").attr("type", "text/javascript").attr("src", "boot.js");
+        head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", "normalize.css?" + now);
+        head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", "test.css?" + now);
 
         XML body = html.child("body");
         body.child("header").attr("id", "Header");
         body.child("div").attr("id", "Content");
         body.child("footer").attr("id", "Footer");
 
-        head.child("script").attr("type", "text/javascript").attr("src", "live.js");
-        html.child("script").attr("type", "text/javascript").attr("src", "test.js");
+        body.child("script").attr("type", "text/javascript").attr("src", "jquery.js?" + now);
+        body.child("script").attr("type", "text/javascript").attr("src", "boot.js?" + now);
+        body.child("script").attr("type", "text/javascript").attr("src", "test.js?" + now);
+        body.child("script").attr("type", "text/javascript").attr("src", "live.js?" + now);
 
         html.to(new HTMLWriter(Files.newBufferedWriter(file, I.$encoding)));
     }

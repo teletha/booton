@@ -66,6 +66,9 @@ public class LiveCodingServlet extends WebSocketServlet {
         /** The actual connection. */
         private Connection connection;
 
+        /** The publish flag. */
+        private boolean whilePublishing = false;
+
         /** The last send time. */
         private long last = System.currentTimeMillis();
 
@@ -82,6 +85,7 @@ public class LiveCodingServlet extends WebSocketServlet {
         @Override
         public void onOpen(Connection connection) {
             this.connection = connection;
+            this.connection.setMaxIdleTime(Integer.MAX_VALUE);
 
             System.out.println("open " + html);
 
@@ -107,6 +111,9 @@ public class LiveCodingServlet extends WebSocketServlet {
                     new FileObserver(src);
                 }
             }
+
+            // observe publishing file
+            observers.add(I.observe(html.resolveSibling("publishing"), new Publisher()));
         }
 
         /**
@@ -129,6 +136,15 @@ public class LiveCodingServlet extends WebSocketServlet {
         @Override
         public void onMessage(String data) {
             System.out.println("message  " + data);
+        }
+
+        /**
+         * <p>
+         * Reload all resources.
+         * </p>
+         */
+        private void reload() {
+            send("reload");
         }
 
         /**
@@ -168,6 +184,12 @@ public class LiveCodingServlet extends WebSocketServlet {
              * @param file
              */
             private FileObserver(String path) {
+                int index = path.indexOf('?');
+
+                if (index != -1) {
+                    path = path.substring(0, index);
+                }
+
                 this.path = path;
                 this.file = html.resolveSibling(path);
 
@@ -193,7 +215,40 @@ public class LiveCodingServlet extends WebSocketServlet {
              */
             @Override
             public final void modify(Path path) {
-                send(this.path);
+                if (!whilePublishing) {
+                    send(this.path);
+                }
+            }
+        }
+
+        /**
+         * @version 2013/01/08 16:25:47
+         */
+        private class Publisher implements PathListener {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void create(Path path) {
+                whilePublishing = true;
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void delete(Path path) {
+                whilePublishing = false;
+
+                reload();
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void modify(Path path) {
             }
         }
     }

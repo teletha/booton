@@ -45,7 +45,8 @@ public class ResourceServlet extends HttpServlet {
      * {@inheritDoc}
      */
     @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
         String path = request.getPathInfo();
 
         if (path == null) {
