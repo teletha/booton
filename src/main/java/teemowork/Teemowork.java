@@ -116,7 +116,7 @@ public class Teemowork extends Application {
                 if (src.endsWith("css")) {
                     $("link[href^='" + src + "']").attr("href", src + "?" + new Date().getTime());
                 } else {
-                    window.location.reload(false);
+                    window.location.reload(true);
                 }
             }
         });

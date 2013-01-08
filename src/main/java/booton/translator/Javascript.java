@@ -173,6 +173,21 @@ public class Javascript {
         // Record all defined classes to prevent duplicated definition.
         write(output, new HashSet(Collections.singleton(source)));
 
+        // Write bootstrap method if needed.
+        try {
+            Method main = source.getDeclaredMethod("jsmain");
+
+            output.append("try {new ");
+            output.append(Javascript.computeClassName(source));
+            output.append("(0).");
+            output.append(Javascript.computeMethodName(source, main.getName(), Type.getMethodDescriptor(main)));
+            output.append("(");
+            output.append(");");
+            output.append("} catch(e) {console.log(e)}");
+        } catch (Exception e) {
+            // do nothing
+        }
+
         I.quiet(output);
     }
 

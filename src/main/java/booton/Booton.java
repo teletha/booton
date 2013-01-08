@@ -16,10 +16,8 @@ import js.Application;
 import js.application.ApplicationTheme;
 import kiss.I;
 import kiss.XML;
-
-import org.objectweb.asm.Type;
-
 import teemowork.Teemowork;
+import booton.live.LiveCoding;
 import booton.translator.Javascript;
 import booton.util.HTMLWriter;
 
@@ -93,6 +91,7 @@ public class Booton {
 
             // build js file
             Javascript.getScript(application).writeTo(output.resolve("test.js"));
+            Javascript.getScript(LiveCoding.class).writeTo(output.resolve("live.js"));
 
             // build css file
             I.make(StylesheetManager.class).write(output.resolve("test.css"));
@@ -109,15 +108,6 @@ public class Booton {
      * @param file
      */
     private void buildHTML(Path file) throws Exception {
-        StringBuilder builder = new StringBuilder();
-        builder.append("try {new ");
-        builder.append(Javascript.computeClassName(application));
-        builder.append("(0).");
-        builder.append(Javascript.computeMethodName(application, "jsmain", Type.getMethodDescriptor(application.getDeclaredMethod("jsmain"))));
-        builder.append("(");
-        builder.append(");");
-        builder.append("} catch(e) {console.log(e)}");
-
         XML html = I.xml("html");
         XML head = html.child("head");
         head.child("meta").attr("charset", "utf-8");
@@ -125,14 +115,14 @@ public class Booton {
         head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", "test.css");
         head.child("script").attr("type", "text/javascript").attr("src", "jquery.js");
         head.child("script").attr("type", "text/javascript").attr("src", "boot.js");
-        head.child("script").attr("type", "text/javascript").attr("src", "test.js");
 
         XML body = html.child("body");
         body.child("header").attr("id", "Header");
         body.child("div").attr("id", "Content");
         body.child("footer").attr("id", "Footer");
 
-        html.child("script").attr("type", "text/javascript").text(builder.toString());
+        head.child("script").attr("type", "text/javascript").attr("src", "live.js");
+        html.child("script").attr("type", "text/javascript").attr("src", "test.js");
 
         html.to(new HTMLWriter(Files.newBufferedWriter(file, I.$encoding)));
     }

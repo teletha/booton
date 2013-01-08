@@ -9,12 +9,11 @@
  */
 package booton.translator.web;
 
-import booton.translator.JavascriptNative;
 
 /**
  * @version 2013/01/04 14:00:47
  */
-public abstract class Window implements JavascriptNative {
+public abstract class Window {
 
     /**
      * <p>
