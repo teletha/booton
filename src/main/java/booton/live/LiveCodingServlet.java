@@ -24,7 +24,7 @@ import kiss.XML;
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketServlet;
 
-import bee.api.Project;
+import booton.Booton;
 
 /**
  * @version 2013/01/04 15:44:31
@@ -33,13 +33,13 @@ import bee.api.Project;
 public class LiveCodingServlet extends WebSocketServlet {
 
     /** The target. */
-    private final Project project;
+    private final Path root;
 
     /**
      * @param project
      */
-    public LiveCodingServlet(Project project) {
-        this.project = project;
+    public LiveCodingServlet(Path root) {
+        this.root = root;
     }
 
     /**
@@ -49,7 +49,7 @@ public class LiveCodingServlet extends WebSocketServlet {
     public WebSocket doWebSocketConnect(HttpServletRequest request, String protocol) {
         String path = request.getPathInfo();
 
-        return new LiveCodingSocket(project.getRoot().toAbsolutePath().resolve(path.substring(1)));
+        return new LiveCodingSocket(root.toAbsolutePath().resolve(path.substring(1)));
     }
 
     /**
@@ -67,7 +67,7 @@ public class LiveCodingServlet extends WebSocketServlet {
         private Connection connection;
 
         /** The publish flag. */
-        private boolean whilePublishing = false;
+        private boolean whileBuilding = false;
 
         /** The last send time. */
         private long last = System.currentTimeMillis();
@@ -95,7 +95,7 @@ public class LiveCodingServlet extends WebSocketServlet {
             XML xml = I.xml(html);
 
             // observe js
-            for (XML js : xml.find("script")) {
+            for (XML js : xml.find("script[src]")) {
                 String src = js.attr("src");
 
                 if (src.length() != 0 && !src.startsWith("http://") && !src.startsWith("https://")) {
@@ -105,15 +105,15 @@ public class LiveCodingServlet extends WebSocketServlet {
 
             // observe css
             for (XML css : xml.find("link[rel=stylesheet]")) {
-                String src = css.attr("href");
+                String href = css.attr("href");
 
-                if (src.length() != 0 && !src.startsWith("http://") && !src.startsWith("https://")) {
-                    new FileObserver(src);
+                if (href.length() != 0 && !href.startsWith("http://") && !href.startsWith("https://")) {
+                    new FileObserver(href);
                 }
             }
 
             // observe publishing file
-            observers.add(I.observe(html.resolveSibling("publishing"), new Publisher()));
+            observers.add(I.observe(html.resolveSibling(Booton.BuildPhase), new BuildObserver()));
         }
 
         /**
@@ -215,7 +215,7 @@ public class LiveCodingServlet extends WebSocketServlet {
              */
             @Override
             public final void modify(Path path) {
-                if (!whilePublishing) {
+                if (!whileBuilding) {
                     send(this.path);
                 }
             }
@@ -224,14 +224,14 @@ public class LiveCodingServlet extends WebSocketServlet {
         /**
          * @version 2013/01/08 16:25:47
          */
-        private class Publisher implements PathListener {
+        private class BuildObserver implements PathListener {
 
             /**
              * {@inheritDoc}
              */
             @Override
             public void create(Path path) {
-                whilePublishing = true;
+                whileBuilding = true;
             }
 
             /**
@@ -239,7 +239,7 @@ public class LiveCodingServlet extends WebSocketServlet {
              */
             @Override
             public void delete(Path path) {
-                whilePublishing = false;
+                whileBuilding = false;
 
                 reload();
             }

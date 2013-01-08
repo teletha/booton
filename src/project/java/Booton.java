@@ -7,6 +7,9 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
+import java.nio.file.Path;
+
+import js.Application;
 import kiss.I;
 
 import org.eclipse.jetty.server.Server;
@@ -26,14 +29,20 @@ public class Booton extends Task {
     /** The server port number. */
     protected int port = 10021;
 
-    @Command
-    public void develop() {
+    /** The application class. */
+    protected Class<? extends Application> applicationClass;
+
+    /** The application output directory. */
+    private final Path output = project.getRoot().resolve("");
+
+    @Command("Launch live coding server.")
+    public void live() {
         ui.talk("Start up live coding server. Port : ", port);
         ui.talk("");
 
         ServletContextHandler servletHandler = new ServletContextHandler();
-        servletHandler.addServlet(new ServletHolder(new LiveCodingServlet(project)), "/live/*");
-        servletHandler.addServlet(new ServletHolder(new ResourceServlet(project)), "/*");
+        servletHandler.addServlet(new ServletHolder(new LiveCodingServlet(output)), "/live/*");
+        servletHandler.addServlet(new ServletHolder(new ResourceServlet(output)), "/*");
 
         Server server = new Server(port);
         server.setHandler(servletHandler);
@@ -45,4 +54,15 @@ public class Booton extends Task {
             throw I.quiet(e);
         }
     }
+
+    // @Command("Build application.")
+    // public void build() {
+    // booton.Booton boot = new booton.Booton(output, applicationClass);
+    // boot.build();
+    // }
+    //
+    // @Command("Publish application to the external repository.")
+    // public void publish() {
+    //
+    // }
 }
