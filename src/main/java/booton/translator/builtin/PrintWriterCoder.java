@@ -18,6 +18,10 @@ import booton.translator.Translator;
  */
 class PrintWriterCoder extends Translator<PrintStream> {
 
+    public String println() {
+        return that + ".log()";
+    }
+
     public String println(String value) {
         return that + ".log(" + param(0) + ")";
     }

@@ -23,4 +23,8 @@ class ClassCoder extends Translator<Class> {
     public String getSimpleName() {
         return that;
     }
+
+    public String newInstance() {
+        return that + ".newInstance()";
+    }
 }

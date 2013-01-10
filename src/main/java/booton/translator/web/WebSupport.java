@@ -9,6 +9,8 @@
  */
 package booton.translator.web;
 
+import org.w3c.dom.DocumentFragment;
+
 import booton.translator.Translator;
 
 /**
@@ -30,6 +32,15 @@ public class WebSupport {
      * </p>
      */
     public static History history;
+
+    /**
+     * <p>
+     * Returns a Location object, which contains information about the URL of the document and
+     * provides methods for changing that URL. You can also assign to this property to load another
+     * URL.
+     * </p>
+     */
+    public static Location location;
 
     /**
      * <p>
@@ -63,6 +74,16 @@ public class WebSupport {
 
     /**
      * <p>
+     * Provide JQuery support.
+     * </p>
+     * 
+     * @param document
+     * @return
+     */
+    public static native jQuery $(DocumentFragment document);
+
+    /**
+     * <p>
      * Establish connection to the specified uri.
      * </p>
      * 
@@ -87,7 +108,7 @@ public class WebSupport {
     @SuppressWarnings("unused")
     private static class Coder extends Translator<WebSupport> {
 
-        /** The root object. */
+        /** The global object in web environment. */
         public String window = "window";
 
         /** The root document. */
@@ -95,6 +116,15 @@ public class WebSupport {
 
         /** The root document. */
         public String history = "history";
+
+        /**
+         * <p>
+         * Returns a Location object, which contains information about the URL of the document and
+         * provides methods for changing that URL. You can also assign to this property to load
+         * another URL.
+         * </p>
+         */
+        public String location = "location";
 
         /**
          * <p>
@@ -129,6 +159,18 @@ public class WebSupport {
          * @return
          */
         public String $(Document object) {
+            return "$(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Provide JQuery support.
+         * </p>
+         * 
+         * @param document
+         * @return
+         */
+        public String $(DocumentFragment document) {
             return "$(" + param(0) + ")";
         }
 

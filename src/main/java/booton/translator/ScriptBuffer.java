@@ -15,6 +15,8 @@
  */
 package booton.translator;
 
+import org.objectweb.asm.Type;
+
 /**
  * @version 2009/08/06 9:03:19
  */
@@ -24,6 +26,32 @@ class ScriptBuffer {
     private final StringBuilder buffer = new StringBuilder();
 
     private int mark = 0;
+
+    /**
+     * <p>
+     * Append debug infomation.
+     * </p>
+     * 
+     * @param owner
+     * @param methodName
+     * @param description
+     */
+    public void debug(Class owner, String methodName, String description) {
+        buffer.append("\r\n// ");
+        buffer.append(owner.getName()).append("#").append(methodName).append("(");
+
+        Type type = Type.getMethodType(description);
+        Type[] args = type.getArgumentTypes();
+
+        for (int i = 0; i < args.length; i++) {
+            buffer.append(args[i].getClassName());
+
+            if (i < args.length - 1) {
+                buffer.append(", ");
+            }
+        }
+        buffer.append(")\r\n");
+    }
 
     /**
      * Helper method to write script source.

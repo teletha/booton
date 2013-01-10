@@ -112,6 +112,7 @@ class JavaClassCompiler extends ClassVisitor {
         } else {
             code.append(',');
         }
+        code.debug(script.source, name, desc);
         return new JavaMethodCompiler(script, code, (access & ACC_STATIC) == 0, name, desc);
     }
 

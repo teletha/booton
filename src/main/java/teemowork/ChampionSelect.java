@@ -9,13 +9,11 @@
  */
 package teemowork;
 
-import static booton.translator.web.WebSupport.*;
-
 import java.util.Collection;
 
+import js.Application;
 import js.Page;
-import js.application.Header;
-import js.application.Header.Menu;
+import js.PageInfo;
 import js.ui.ImageGrid;
 import teemowork.model.Champion;
 import booton.translator.web.jQuery;
@@ -23,6 +21,7 @@ import booton.translator.web.jQuery;
 /**
  * @version 2012/12/26 13:06:59
  */
+@PageInfo(path = "")
 public class ChampionSelect extends Page {
 
     /** The champion viewer. */
@@ -40,7 +39,7 @@ public class ChampionSelect extends Page {
 
         @Override
         protected String getImageURI(Champion source) {
-            return "src/main/resources/teemowork/icon/" + source.getSystemName() + ".png";
+            return source.getIcon();
         }
 
         /**
@@ -48,37 +47,23 @@ public class ChampionSelect extends Page {
          */
         @Override
         protected void select(Champion source) {
+            Application.show(new ChampionDetail(source.name));
         }
     };
 
     /**
-     * @param pattern
+     * {@inheritDoc}
      */
-    public ChampionSelect() {
-        super("chmpion-select");
+    @Override
+    public void load(jQuery root) {
+        champions.compose(root);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void render(jQuery root) {
-        $("body").css("padding", "0px 10%");
-
-        Header nav = new Header();
-        nav.add("< ^ v ^ > Teemowork", "test.html");
-        nav.add("Patch", "#");
-
-        Menu sub = nav.add("Data", "#");
-        sub.add("Champion", "#");
-        sub.add("Item", "#");
-        sub.add("Mastery", "#");
-        sub.add("Rune", "#");
-
-        nav.add("Builder", "#");
-        nav.add("About", "#");
-        nav.add("Contact", "#");
-
-        champions.compose(root);
+    protected String getPageId() {
+        return "";
     }
 }

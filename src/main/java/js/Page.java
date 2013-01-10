@@ -16,22 +16,22 @@ import booton.translator.web.jQuery;
  */
 public abstract class Page {
 
-    /** The uri pattern, */
-    private final String pattern;
-
-    /**
-     * @param pattern
-     */
-    protected Page(String pattern) {
-        this.pattern = pattern;
-    }
-
     /**
      * <p>
-     * Render page contents.
+     * Invoke whenever this page is loaded.
      * </p>
      * 
      * @param root
      */
-    protected abstract void render(jQuery root);
+    public abstract void load(jQuery root);
+
+    /**
+     * <p>
+     * Build the page identifier for the current page state. You must be able to restore page state
+     * from this page identifier.
+     * </p>
+     * 
+     * @return
+     */
+    protected abstract String getPageId();
 }

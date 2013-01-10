@@ -73,6 +73,7 @@ public abstract class ImageGrid<T> extends UI {
         for (final T source : sources) {
             jQuery image = root.child(Image.class).css("background-image", "url(" + getImageURI(source) + ")");
             image.child("span").addClass(Title.class).text(getTitle(source));
+
             image.click(new Listener() {
 
                 @Override
