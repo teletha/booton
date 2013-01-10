@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import kiss.I;
 import kiss.XML;
-import booton.translator.Javascript;
 import booton.util.HTMLWriter;
 
 /**
@@ -92,7 +91,6 @@ public class ResourceServlet extends HttpServlet {
 
         // append live coding script
         html.find("body").child("script").attr("type", "text/javascript").attr("src", "live.js?" + now);
-        Javascript.getScript(LiveCoding.class).writeTo(root.resolve("live.js"));
 
         return html;
     }

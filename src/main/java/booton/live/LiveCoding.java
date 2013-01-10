@@ -14,6 +14,8 @@ import static booton.translator.web.WebSupport.*;
 import java.util.Date;
 
 import booton.translator.web.WebSocket;
+import booton.translator.web.jQuery.Event;
+import booton.translator.web.jQuery.Listener;
 
 /**
  * @version 2013/01/08 13:33:11
@@ -24,6 +26,14 @@ public class LiveCoding {
      * 
      */
     public static void jsmain() {
+        $(window).on("error", new Listener() {
+
+            @Override
+            public void handler(Event event) {
+                System.out.println(event);
+            }
+        });
+
         connect("ws://localhost:10021/live" + window.location.pathname, new WebSocket() {
 
             /**

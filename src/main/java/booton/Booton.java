@@ -10,13 +10,21 @@
 package booton;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.net.ServerSocket;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 import js.Application;
+import js.Page;
+import js.PageInfo;
 import js.application.ApplicationTheme;
+import kiss.ClassListener;
 import kiss.I;
+import kiss.Manageable;
+import kiss.Singleton;
 import kiss.XML;
 
 import org.eclipse.jetty.server.Server;
@@ -24,6 +32,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import teemowork.Teemowork;
+import booton.live.LiveCoding;
 import booton.live.LiveCodingServlet;
 import booton.live.ResourceServlet;
 import booton.translator.Javascript;
@@ -147,26 +156,33 @@ public class Booton {
         this.js = root.resolve("test.js");
         this.css = root.resolve("test.css");
 
+        // load booton extensions
+        I.load(Booton.class, true);
+
+        // load built-in library
+        I.load(Application.class, true);
+
+        // load application extensions
+        I.load(application, true);
+
+        // invoke annotation processor
+        I.make(PageManager.class).build();
+
         Path mutex = root.resolve(BuildPhase);
 
         try {
             // starting build phase
             Files.createFile(mutex);
 
-            // load booton extensions
-            I.load(Booton.class, true);
-
-            // load built-in library
-            I.load(Application.class, true);
-
-            // load application extensions
-            I.load(application, true);
-
             // build html file
             buildHTML();
 
             // build js file
             Javascript.getScript(application).writeTo(js);
+
+            // Don't build live coding script out of build process, because all scripts must share
+            // compiled and obfuscated class information.
+            Javascript.getScript(LiveCoding.class).writeTo(root.resolve("live.js"));
 
             // build css file
             I.make(StylesheetManager.class).write(css);
@@ -215,5 +231,65 @@ public class Booton {
         Booton booton = new Booton(null, Teemowork.class);
         booton.launch(10021);
         booton.build();
+    }
+
+    /**
+     * @version 2013/01/09 21:45:58
+     */
+    @Manageable(lifestyle = Singleton.class)
+    private static class PageManager implements ClassListener<Page> {
+
+        /** The pages. */
+        private final Map<String, Class<Page>> pages = new HashMap();
+
+        /**
+         * <p>
+         * Build routing file.
+         * </p>
+         */
+        private void build() {
+
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void load(Class<Page> clazz) {
+            // validate class
+            PageInfo info = clazz.getAnnotation(PageInfo.class);
+
+            if (info == null) {
+                for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
+                    info = constructor.getAnnotation(PageInfo.class);
+
+                    if (info != null) {
+                        break;
+                    }
+                }
+
+                if (info == null) {
+                    throw new Error(Page.class.getSimpleName() + " class requires " + PageInfo.class.getSimpleName() + " annotation. [" + clazz.getName() + "]");
+                }
+            }
+
+            // validate path info
+            String path = info.path();
+
+            if (path == null) {
+                path = "";
+            }
+            path = path.trim();
+
+            // register
+            pages.put(path, clazz);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void unload(Class<Page> clazz) {
+        }
     }
 }

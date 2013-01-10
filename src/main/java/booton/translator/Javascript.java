@@ -176,7 +176,7 @@ public class Javascript {
 
         // Write bootstrap method if needed.
         try {
-            Method main = source.getDeclaredMethod("jsmain");
+            Method main = source.getMethod("jsmain");
             String className = Javascript.computeClassName(source);
             String methodName = Javascript.computeMethodName(source, main.getName(), Type.getMethodDescriptor(main));
 

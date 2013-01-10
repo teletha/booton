@@ -350,6 +350,44 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Display the matched elements by fading them to opaque.
+     * </p>
+     * 
+     * @return
+     */
+    public native jQuery fadeIn();
+
+    /**
+     * <p>
+     * Display the matched elements by fading them to opaque.
+     * </p>
+     * 
+     * @param ms number determining how long the animation will run.
+     * @return
+     */
+    public native jQuery fadeIn(int ms);
+
+    /**
+     * <p>
+     * Hide the matched elements by fading them to transparent.
+     * </p>
+     * 
+     * @return
+     */
+    public native jQuery fadeOut();
+
+    /**
+     * <p>
+     * Hide the matched elements by fading them to transparent.
+     * </p>
+     * 
+     * @param ms number determining how long the animation will run.
+     * @return
+     */
+    public native jQuery fadeOut(int ms);
+
+    /**
+     * <p>
      * Retrieve the DOM elements matched by the jQuery object.
      * </p>
      * 

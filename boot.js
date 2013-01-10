@@ -134,6 +134,15 @@ function boot(global) {
      */ 
     keys: function() {
       return Object.keys(this);
+    },
+    
+    /**
+     * Retrieve the class object.
+     * 
+     * @return A Class object.
+     */
+    getClass: function() {
+      return this.constructor;
     }
   });
 
@@ -196,12 +205,19 @@ function boot(global) {
       // This is actual counstructor of the specified subclass.
       function Class() {
         var params = Array.prototype.slice.call(arguments);
-      
+
         // invoke specified constructor
         this["$" + params.pop()].apply(this, params);
       }
 
       Class.prototype = subclassPrototype;
+      Class.newInstance = function(args) {
+        return new this(0);
+      };
+      Class.newInstance2 = function(args) {
+      console.log(args);
+        return new this(args,0);
+      };
       
       boot[name] = Class;
 

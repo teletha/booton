@@ -1,1 +1,43 @@
-boot.define("x",{$0:function(){}});boot.define("O",{$0:function(A){this.a=A;this.b=0;},N:function(){return this.b<this.a.size();},P:function(){return $(this.a.get(this.b++));},Q:function(){},H:function(){return this.P();}});boot.defineNative("Document",{$0:function(){},createElement:function(A){return this.createElement(A);}});boot.defineNative("jQuery",{$0:function(){},K:function(A){return $(document.createElement(A)).appendTo(this);},I:function(A){return this.K("span").addClass(A);},G:function(){return new boot.O(this,0);}});boot.define("z",{$0:function(){}});boot.define("y",{$0:function(){}});boot.defineNative("MessageEvent",{$0:function(){}});boot.define("w",boot.y,{$0:function(){boot.y.prototype.$0.call(this);},message:function(A,B){B=A.data;if(B.endsWith("css")==0){window.location.reload(0);}else{$("link[href^='"+B+"']").attr("href",""+B+"?"+new Date().getTime());}}});boot.define("v",{$0:function(){},_C:function(){WebSocket.connect("ws://localhost:10021/live"+window.location.pathname,new boot.w(0));}});try {boot.v.C();} catch(e) {console.log(e)}
+boot.defineNative("MessageEvent",{
+// booton.translator.web.WebSocket$MessageEvent#<init>()
+$0:function(){}});boot.defineNative("Document",{
+// booton.translator.web.Document#<init>()
+$0:function(){},
+// booton.translator.web.Document#createElement(java.lang.String)
+createElement:function(A){return this.createElement(A);}});boot.define("L",{
+// booton.translator.web.jQuery$1#<init>(booton.translator.web.jQuery)
+$0:function(A){this.a=A;this.b=0;},
+// booton.translator.web.jQuery$1#hasNext()
+N:function(){return this.b<this.a.size();},
+// booton.translator.web.jQuery$1#next()
+O:function(){return $(this.a.get(this.b++));},
+// booton.translator.web.jQuery$1#remove()
+P:function(){},
+// booton.translator.web.jQuery$1#next()
+Q:function(){return this.O();}});boot.defineNative("jQuery",{
+// booton.translator.web.jQuery#<init>()
+$0:function(){},
+// booton.translator.web.jQuery#child(java.lang.String)
+K:function(A){return $(document.createElement(A)).appendTo(this);},
+// booton.translator.web.jQuery#child(java.lang.Class)
+L:function(A){return this.K("span").addClass(A);},
+// booton.translator.web.jQuery#iterator()
+M:function(){return new boot.L(this,0);}});boot.define("BF",{
+// booton.translator.web.WebSocket#<init>()
+$0:function(){}});boot.define("S",{
+// booton.translator.web.Location#<init>()
+$0:function(){}});boot.define("BH",{
+// booton.translator.web.Window#<init>()
+$0:function(){}});boot.define("BE",boot.BF,{
+// booton.live.LiveCoding$2#<init>()
+$0:function(){boot.BF.prototype.$0.call(this);},
+// booton.live.LiveCoding$2#message(booton.translator.web.WebSocket$MessageEvent)
+message:function(A,B){B=A.data;if(B.endsWith("css")==0){window.location.reload(0);}else{$("link[href^='"+B+"']").attr("href",""+B+"?"+new Date().getTime());}}});boot.define("BD",{
+// booton.live.LiveCoding$1#<init>()
+$0:function(){},
+// booton.live.LiveCoding$1#handler(booton.translator.web.jQuery$Event)
+handler:function(A){console.log(A);}});boot.define("BC",{
+// booton.live.LiveCoding#<init>()
+$0:function(){},
+// booton.live.LiveCoding#jsmain()
+_A:function(){$(window).on("error",new boot.BD(0));WebSocket.connect("ws://localhost:10021/live"+window.location.pathname,new boot.BE(0));}});try {boot.BC.A();} catch(e) {console.log(e)}
