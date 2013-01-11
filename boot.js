@@ -211,14 +211,23 @@ function boot(global) {
       }
 
       Class.prototype = subclassPrototype;
-      Class.newInstance = function(args) {
-        return new this(0);
+
+      /**
+       * Create new instatnce of this class.
+       *
+       * @param id A constructor id.
+       * @param args An array of arguments.
+       * @return A created instance.
+       */
+      Class.newInstance = function(id, args) {
+        args = args || [];
+        args.push(id);
+
+        var instance = Object.create(this.prototype);
+        this.apply(instance, args);
+        return instance;
       };
-      Class.newInstance2 = function(args) {
-      console.log(args);
-        return new this(args,0);
-      };
-      
+     
       boot[name] = Class;
 
       // API definition

@@ -29,7 +29,19 @@ public class ChampionDetail extends Page {
      */
     @PageInfo(path = "Champion/*")
     public ChampionDetail(String name) {
-        this.champion = Champion.getByName(name);
+        this(Champion.getByName(name));
+    }
+
+    /**
+     * Build page.
+     * 
+     * @param champion
+     */
+    public ChampionDetail(Champion champion) {
+        if (champion == null) {
+            throw new Error();
+        }
+        this.champion = champion;
     }
 
     /**
@@ -37,7 +49,7 @@ public class ChampionDetail extends Page {
      */
     @Override
     public void load(jQuery root) {
-        System.out.println("detail page " + champion);
+        System.out.println("detail page " + champion + "  " + champion.name);
     }
 
     /**

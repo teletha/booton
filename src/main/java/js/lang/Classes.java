@@ -64,7 +64,7 @@ public class Classes {
          * @return A new instance.
          */
         public String newInstance(Class type) {
-            return param(0) + ".newInstance()";
+            return param(0) + ".newInstance(0)";
         }
 
         /**
@@ -76,7 +76,7 @@ public class Classes {
          * @return A new instance.
          */
         public String newInstance(Class type, Object[] params) {
-            return param(0) + ".newInstance(" + param(1) + ",0)";
+            return param(0) + ".newInstance(0," + param(1) + ")";
         }
     }
 }
