@@ -13,9 +13,24 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @version 2012/11/30 15:31:13
+ * @version 2013/01/11 17:42:51
  */
 public class NodeDebugger {
+
+    /** The processing environment. */
+    private static final boolean whileTest;
+
+    static {
+        boolean flag = false;
+
+        for (StackTraceElement element : new Error().getStackTrace()) {
+            if (element.getClassName().startsWith("org.junit.")) {
+                flag = true;
+                break;
+            }
+        }
+        whileTest = flag;
+    }
 
     /**
      * <p>
@@ -37,6 +52,69 @@ public class NodeDebugger {
      */
     public static void dump(Node node) {
         System.out.println(format(Collections.singletonList(node)));
+    }
+
+    /**
+     * <p>
+     * Dump node tree with method info.
+     * </p>
+     * 
+     * @param script A current processing script.
+     * @param methodName A original method name.
+     * @param nodes A node info.
+     */
+    public static void dump(Javascript script, String methodName, List<Node> nodes) {
+        if (whileTest) {
+            if (methodName.equals("act")) {
+                String testClassName = computeTestClassName(script.source);
+                String testMethodName = computeTestMethodName(testClassName);
+
+                System.out.println(testClassName + "  " + testMethodName);
+                dump(nodes);
+            }
+        } else {
+            System.out.println(script.source.getName() + "  " + methodName);
+            dump(nodes);
+        }
+    }
+
+    /**
+     * <p>
+     * Compute actual test class name.
+     * </p>
+     * 
+     * @param clazz
+     * @return
+     */
+    private static String computeTestClassName(Class clazz) {
+        String name = clazz.getName();
+
+        int index = name.indexOf('$');
+
+        if (index != -1) {
+            name = name.substring(0, index);
+        }
+        return name;
+    }
+
+    /**
+     * <p>
+     * Compute actual test method name.
+     * </p>
+     * 
+     * @param testClassName
+     * @return
+     */
+    private static String computeTestMethodName(String testClassName) {
+        for (StackTraceElement element : new Error().getStackTrace()) {
+            if (element.getClassName().equals(testClassName)) {
+                return element.getMethodName();
+            }
+        }
+
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
