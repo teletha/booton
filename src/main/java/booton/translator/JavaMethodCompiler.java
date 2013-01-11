@@ -144,8 +144,7 @@ class JavaMethodCompiler extends MethodVisitor {
             iterator.next().resolve();
         }
 
-        // System.out.println(script.source + "   " + original);
-        // NodeDebugger.dump(nodes);
+        NodeDebugger.dump(script, original, nodes);
 
         // write script
         code.mark();
