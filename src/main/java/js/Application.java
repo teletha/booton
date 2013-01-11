@@ -71,7 +71,7 @@ public abstract class Application {
      */
     public static void show(Page page) {
         if (page != null) {
-            router.dispatch(page);
+            router.dispatch(page.getPageId());
             history.pushState("", "", "#" + page.getPageId());
         }
     }
@@ -111,13 +111,14 @@ public abstract class Application {
             }
 
             for (Route route : routes) {
-                if (route.match(pageId)) {
-                    dispatch(Classes.newInstance(route.page));
+                if (route.match(pageId) != null) {
+                    // dispatch(Classes.newInstance(route.page));
                     return;
                 }
             }
         }
 
+        @Deprecated
         private void dispatch(Page page) {
             // create element cradle
             jQuery cradle = $(document.createDocumentFragment());
@@ -160,11 +161,11 @@ public abstract class Application {
          * @param path
          * @return
          */
-        private boolean match(String path) {
+        private Page match(String path) {
             Matcher matcher = pattern.matcher(path);
 
             if (!matcher.matches()) {
-                return false;
+                return null;
             }
 
             List<String> groups = new ArrayList();
@@ -173,9 +174,18 @@ public abstract class Application {
                 groups.add(matcher.group(i + 1));
             }
 
-            Classes.newInstance(page);
+            Page page = Classes.newInstance(this.page, groups.toArray());
 
-            return matcher.matches();
+            // create element cradle
+            jQuery cradle = $(document.createDocumentFragment());
+
+            // build page element
+            page.load(cradle);
+
+            // clear old page and append new page
+            $("#Content").empty().append(cradle);
+
+            return page;
         }
     }
 }
