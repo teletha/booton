@@ -1349,14 +1349,14 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     class TryBlock {
 
-        /** The base node. */
-        Node base;
-
         /** The start node. */
         Node start;
 
         /** The end node. */
         Node end;
+
+        /** The handler node. */
+        Node handler;
 
         /** The exception type. */
         final String exception;
@@ -1368,78 +1368,113 @@ class JavaMethodCompiler extends MethodVisitor {
          * @param exception
          */
         TryBlock(Label start, Label end, Label handler, String exception) {
-            this.base = getNode(start);
+            this.start = getNode(start);
             this.end = getNode(end);
-            this.start = getNode(handler);
+            this.handler = getNode(handler);
             this.exception = exception == null ? null : Javascript.computeClassName(convert(exception));
         }
 
         private void resolve() {
-            if (exception == null) {
-                if (start == end) {
-                    // try-finally
 
-                    // The base node has only finally node (don't have catch node).
-                    // So, we must recalculate the position of correct finally end node.
-                    Node follower = end.previous.outgoing.get(0);
-
-                    int i = nodes.indexOf(end);
-                    int j = nodes.indexOf(follower);
-
-                    start = follower;
-                    end = nodes.get(2 * j - i - 2);
-                    for (; i < j;) {
-                        nodes.remove(--j);
-                    }
-
-                    base.addFinally(this);
-                } else {
-                    // try-catch-finally
-
-                    Node follower = end;
-
-                    end = start.previous.outgoing.size() == 0 ? start.previous : start.previous.outgoing.get(0);
-                    start = follower;
-
-                    base.addFinally(this);
-                }
-            } else {
-                // try-catch
-                if (!start.incoming.contains(base)) {
-                    start.incoming.add(base);
-                }
-
-                start = nodes.get(nodes.indexOf(start) + 1);
-                end = end.outgoing.size() == 0 ? end : end.outgoing.get(0);
-                base.addCatch(this);
-            }
-        }
-
-        /**
-         * @see java.lang.Object#hashCode()
-         */
-        @Override
-        public int hashCode() {
-            return base.hashCode() + end.hashCode();
-        }
-
-        /**
-         * @see java.lang.Object#equals(java.lang.Object)
-         */
-        @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof TryBlock) {
-                TryBlock other = (TryBlock) obj;
-
-                if (exception == null) {
-                    // finally block
-                    return base == other.base && end == other.end;
-                } else {
-                    // catch block
-                    return base == other.base && end == other.end;
-                }
-            }
-            return false;
         }
     }
+
+    // /**
+    // * @version 2010/01/27 16:04:09
+    // */
+    // class TryBlock {
+    //
+    // /** The base node. */
+    // Node base;
+    //
+    // /** The start node. */
+    // Node start;
+    //
+    // /** The end node. */
+    // Node end;
+    //
+    // /** The exception type. */
+    // final String exception;
+    //
+    // /**
+    // * @param start
+    // * @param end
+    // * @param handler
+    // * @param exception
+    // */
+    // TryBlock(Label start, Label end, Label handler, String exception) {
+    // this.base = getNode(start);
+    // this.end = getNode(end);
+    // this.start = getNode(handler);
+    // this.exception = exception == null ? null : Javascript.computeClassName(convert(exception));
+    // }
+    //
+    // private void resolve() {
+    // if (exception == null) {
+    // if (start == end) {
+    // // try-finally
+    //
+    // // The base node has only finally node (don't have catch node).
+    // // So, we must recalculate the position of correct finally end node.
+    // Node follower = end.previous.outgoing.get(0);
+    //
+    // int i = nodes.indexOf(end);
+    // int j = nodes.indexOf(follower);
+    //
+    // start = follower;
+    // end = nodes.get(2 * j - i - 2);
+    // for (; i < j;) {
+    // nodes.remove(--j);
+    // }
+    //
+    // base.addFinally(this);
+    // } else {
+    // // try-catch-finally
+    //
+    // Node follower = end;
+    //
+    // end = start.previous.outgoing.size() == 0 ? start.previous : start.previous.outgoing.get(0);
+    // start = follower;
+    //
+    // base.addFinally(this);
+    // }
+    // } else {
+    // // try-catch
+    // if (!start.incoming.contains(base)) {
+    // start.incoming.add(base);
+    // }
+    //
+    // start = nodes.get(nodes.indexOf(start) + 1);
+    // end = end.outgoing.size() == 0 ? end : end.outgoing.get(0);
+    // base.addCatch(this);
+    // }
+    // }
+    //
+    // /**
+    // * @see java.lang.Object#hashCode()
+    // */
+    // @Override
+    // public int hashCode() {
+    // return base.hashCode() + end.hashCode();
+    // }
+    //
+    // /**
+    // * @see java.lang.Object#equals(java.lang.Object)
+    // */
+    // @Override
+    // public boolean equals(Object obj) {
+    // if (obj instanceof TryBlock) {
+    // TryBlock other = (TryBlock) obj;
+    //
+    // if (exception == null) {
+    // // finally block
+    // return base == other.base && end == other.end;
+    // } else {
+    // // catch block
+    // return base == other.base && end == other.end;
+    // }
+    // }
+    // return false;
+    // }
+    // }
 }

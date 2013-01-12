@@ -9,15 +9,10 @@
  */
 package booton.translator;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import booton.translator.JavaMethodCompiler.TryBlock;
 
 /**
  * @version 2009/08/05 14:51:59
@@ -46,19 +41,17 @@ class Node {
     /** The dominator node. */
     private Node dominator;
 
-    /** The finally blocks. */
-    private List<TryBlock> catcheTries = new ArrayList();
-
-    /** The finally blocks. */
-    private Deque<TryBlock> catches = new ArrayDeque();
-
-    /** The finally blocks. */
-    private List<TryBlock> finallyTries = new ArrayList();
-
-    /** The finally blocks. */
-    private Deque<TryBlock> finallies = new ArrayDeque();
-
-    private int stoppable = 0;
+    // /** The finally blocks. */
+    // private List<TryBlock> catcheTries = new ArrayList();
+    //
+    // /** The finally blocks. */
+    // private Deque<TryBlock> catches = new ArrayDeque();
+    //
+    // /** The finally blocks. */
+    // private List<TryBlock> finallyTries = new ArrayList();
+    //
+    // /** The finally blocks. */
+    // private Deque<TryBlock> finallies = new ArrayDeque();
 
     /** The following node. */
     Node follower;
@@ -146,50 +139,50 @@ class Node {
         stack.add(new OperandExpression(remove(1) + separator + remove(0)));
     }
 
-    /**
-     * <p>
-     * Set catch block for this node.
-     * <p>
-     * 
-     * @param block
-     */
-    final void addCatch(TryBlock block) {
-        catches.add(block);
+    // /**
+    // * <p>
+    // * Set catch block for this node.
+    // * <p>
+    // *
+    // * @param block
+    // */
+    // final void addCatch(TryBlock block) {
+    // catches.add(block);
+    //
+    // // block.start.stoppable += block.start.incoming.size();
+    //
+    // //
+    // for (TryBlock item : catcheTries) {
+    // if (item.base == block.base && item.end == block.end) {
+    // return;
+    // }
+    // }
+    //
+    // catcheTries.add(block);
+    // block.end.stoppable++;
+    // }
 
-        // block.start.stoppable += block.start.incoming.size();
-
-        //
-        for (TryBlock item : catcheTries) {
-            if (item.base == block.base && item.end == block.end) {
-                return;
-            }
-        }
-
-        catcheTries.add(block);
-        block.end.stoppable++;
-    }
-
-    /**
-     * <p>
-     * Set finally block for this node.
-     * <p>
-     * 
-     * @param block
-     */
-    final void addFinally(TryBlock block) {
-        for (TryBlock item : finallyTries) {
-            if (item.start == block.start) {
-                return;
-            }
-        }
-
-        finallies.add(block);
-        finallyTries.add(block);
-
-        block.start.stoppable += block.start.incoming.size();
-        block.end.stoppable += block.end.incoming.size();
-
-    }
+    // /**
+    // * <p>
+    // * Set finally block for this node.
+    // * <p>
+    // *
+    // * @param block
+    // */
+    // final void addFinally(TryBlock block) {
+    // for (TryBlock item : finallyTries) {
+    // if (item.start == block.start) {
+    // return;
+    // }
+    // }
+    //
+    // finallies.add(block);
+    // finallyTries.add(block);
+    //
+    // block.start.stoppable += block.start.incoming.size();
+    // block.end.stoppable += block.end.incoming.size();
+    //
+    // }
 
     /**
      * Helper method to check whether the specified node dominate this node or not.
@@ -303,10 +296,10 @@ class Node {
         if (!written) {
             written = true;
 
-            // check try-catch-finally
-            for (int i = 0; i < Math.max(catcheTries.size(), finallyTries.size()); i++) {
-                buffer.append("try{");
-            }
+            // // check try-catch-finally
+            // for (int i = 0; i < Math.max(catcheTries.size(), finallyTries.size()); i++) {
+            // buffer.append("try{");
+            // }
 
             int outs = outgoing.size();
             int backs = backedges.size();
@@ -409,63 +402,63 @@ class Node {
                 }
             }
 
-            // check try-catch-finally
-            if (catches.size() != 0 || finallies.size() != 0) {
-                Node end = null;
-
-                // catch
-                if (catches.size() != 0) {
-                    buffer.append("} catch ($) {");
-
-                    Iterator<TryBlock> iterator = catches.descendingIterator();
-
-                    while (iterator.hasNext()) {
-                        TryBlock block = iterator.next();
-
-                        buffer.append("if ($ instanceof " + block.exception + ") {");
-                        block.start.write(buffer);
-                        buffer.append("}");
-
-                        end = block.end;
-                        // process2(end, buffer);
-                    }
-                    buffer.append("}");
-                }
-
-                // finally
-                if (finallies.size() != 0) {
-                    Iterator<TryBlock> iterator = finallies.descendingIterator();
-
-                    while (iterator.hasNext()) {
-                        TryBlock block = iterator.next();
-
-                        if (catches.size() == 0) {
-                            buffer.append("} finally {");
-                        } else {
-                            buffer.append(" finally {");
-                        }
-
-                        block.start.write(buffer);
-                        buffer.append("}");
-
-                        end = block.end;
-                        process2(end, buffer);
-                    }
-                }
-
-                process2(end, buffer);
-                // root.start.process(root.end, buffer);
-            }
+            // // check try-catch-finally
+            // if (catches.size() != 0 || finallies.size() != 0) {
+            // Node end = null;
+            //
+            // // catch
+            // if (catches.size() != 0) {
+            // buffer.append("} catch ($) {");
+            //
+            // Iterator<TryBlock> iterator = catches.descendingIterator();
+            //
+            // while (iterator.hasNext()) {
+            // TryBlock block = iterator.next();
+            //
+            // buffer.append("if ($ instanceof " + block.exception + ") {");
+            // block.start.write(buffer);
+            // buffer.append("}");
+            //
+            // end = block.end;
+            // // process2(end, buffer);
+            // }
+            // buffer.append("}");
+            // }
+            //
+            // // finally
+            // if (finallies.size() != 0) {
+            // Iterator<TryBlock> iterator = finallies.descendingIterator();
+            //
+            // while (iterator.hasNext()) {
+            // TryBlock block = iterator.next();
+            //
+            // if (catches.size() == 0) {
+            // buffer.append("} finally {");
+            // } else {
+            // buffer.append(" finally {");
+            // }
+            //
+            // block.start.write(buffer);
+            // buffer.append("}");
+            //
+            // end = block.end;
+            // process2(end, buffer);
+            // }
+            // }
+            //
+            // process2(end, buffer);
+            // // root.start.process(root.end, buffer);
+            // }
         }
     }
 
     private void process2(Node dest, ScriptBuffer buffer) {
         if (dest != null) {
-            if (dest.stoppable != 0) {
-                dest.stoppable--;
-            } else {
-                dest.write(buffer);
-            }
+            // if (dest.stoppable != 0) {
+            // dest.stoppable--;
+            // } else {
+            dest.write(buffer);
+            // }
         }
     }
 
@@ -477,10 +470,10 @@ class Node {
      */
     private void process(Node dest, ScriptBuffer buffer) {
         if (dest != null) {
-            if (dest.stoppable != 0) {
-                dest.stoppable--;
-                return;
-            }
+            // if (dest.stoppable != 0) {
+            // dest.stoppable--;
+            // return;
+            // }
 
             Node dominator = dest.getDominator();
 
