@@ -524,7 +524,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case IRETURN:
-            if (match(ICONST_0, IRETURN, LABEL, ICONST_1, IRETURN)) {
+            if (match(ICONST_0, IRETURN, LABEL, FRAME_SAME, ICONST_1, IRETURN)) {
                 current.remove(0);
                 current.remove(0);
                 current.remove(0);
@@ -532,7 +532,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 merge();
                 dispose(current);
-            } else if (match(ICONST_1, IRETURN, LABEL, ICONST_0, IRETURN)) {
+            } else if (match(ICONST_1, IRETURN, LABEL, FRAME_SAME, ICONST_0, IRETURN)) {
                 // merge the node sequence of logical expression
                 current.remove(0);
                 current.remove(0);
@@ -1227,7 +1227,7 @@ class JavaMethodCompiler extends MethodVisitor {
         record(opcode);
 
         // check caught exception variable
-        if (match(ASTORE, FRAME_SAME1)) {
+        if (match(FRAME_SAME1, ASTORE)) {
             return;
         }
 

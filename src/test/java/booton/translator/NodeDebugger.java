@@ -148,9 +148,10 @@ public class NodeDebugger {
         Formatter format = new Formatter();
 
         for (Node node : nodes) {
-            String tryFlow = node.isTryStart ? "s" : node.isTryEnd ? "e" : node.isCatch ? "c" : "";
+            // String tryFlow = node.isTryStart ? "s" : node.isTryEnd ? "e" : node.isCatch ? "c" :
+            // "";
 
-            format.write(String.valueOf(node.id) + " " + tryFlow, max);
+            // format.write(String.valueOf(node.id) + " " + tryFlow, max);
             format.write("  in : ");
             format.formatNode(node.incoming, incoming);
             format.write("out : ");

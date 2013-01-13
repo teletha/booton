@@ -7,16 +7,5 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.js;
+package booton.translator;
 
-/**
- * @version 2012/12/07 10:39:47
- */
-public class JsError {
-
-    public JsError() {
-    }
-
-    public JsError(String message) {
-    }
-}

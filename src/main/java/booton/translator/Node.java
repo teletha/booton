@@ -12,6 +12,7 @@ package booton.translator;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -418,30 +419,30 @@ class Node {
                 }
             }
 
-            // if (!catches.isEmpty()) {
-            // // try-catch
-            // if (catches.size() != 0) {
-            // buffer.append("} catch ($) {");
-            //
-            // Iterator<TryCatch> iterator = catches.descendingIterator();
-            //
-            // while (iterator.hasNext()) {
-            // TryCatch block = iterator.next();
-            //
-            // buffer.append("if ($ instanceof " + block.exception + ") {");
-            // block.handler.write(buffer);
-            // buffer.append("}");
-            //
-            // // Node end = block.end;
-            // //
-            // // if (end != null) {
-            // // end.write(buffer);
-            // // }
-            // // process2(end, buffer);
-            // }
-            // buffer.append("}");
-            // }
-            // }
+            if (!catches.isEmpty()) {
+                // try-catch
+                if (catches.size() != 0) {
+                    buffer.append("} catch ($) {");
+
+                    Iterator<TryCatch> iterator = catches.descendingIterator();
+
+                    while (iterator.hasNext()) {
+                        TryCatch block = iterator.next();
+
+                        buffer.append("if ($ instanceof " + block.exception + ") {");
+                        block.handler.write(buffer);
+                        buffer.append("}");
+
+                        // Node end = block.end;
+                        //
+                        // if (end != null) {
+                        // end.write(buffer);
+                        // }
+                        // process2(end, buffer);
+                    }
+                    buffer.append("}");
+                }
+            }
             // for (TryCatch block : tries) {
             // if (block.isCompleted()) {
             // process(block.handler, buffer);
