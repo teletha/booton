@@ -1178,16 +1178,6 @@ class JavaMethodCompiler extends MethodVisitor {
         // }
         //
         // tries.add(block);
-
-        Node handlerNode = getNode(handler);
-        handlerNode.isCatch = true;
-
-        Node startNode = getNode(start);
-        startNode.isTryStart = true;
-
-        Node endNode = getNode(end);
-        endNode.isTryEnd = true;
-
         tries.add(new TryCatch(start, end, handler, type));
     }
 
@@ -1433,6 +1423,9 @@ class JavaMethodCompiler extends MethodVisitor {
         /** The handler node. */
         Node handler;
 
+        /** The following node. */
+        Node next;
+
         /** The exception type. */
         final String exception;
 
@@ -1462,33 +1455,60 @@ class JavaMethodCompiler extends MethodVisitor {
                 handler.incoming.add(start);
             }
 
+            // Node following = end.outgoing.get(0);
+            //
+            // for (Node node : following.incoming) {
+            // node.disconnect(following);
+            // }
+
             handler = nodes.get(nodes.indexOf(handler) + 1);
-            end = end.outgoing.size() == 0 ? end : end.outgoing.get(0);
+            if (end.outgoing.size() != 0) {
+                next = end.outgoing.get(0);
+            }
 
             start.addCatch(this);
-
-            // int start = nodes.indexOf(this.start);
-            // int end = nodes.indexOf(this.end) + 1;
-            //
-            // tries.addAll(nodes.subList(start, end));
-            //
-            // for (Node node : tries) {
-            // node.tries.add(this);
-            // }
         }
 
-        boolean isCompleted() {
-            if (tries.isEmpty()) {
-                return false;
-            }
-
-            for (Node node : tries) {
-                if (!node.written) {
-                    return false;
+        private void resolve() {
+            if (start == null) {
+                if (end == null) {
+                    // // try-finally
+                    //
+                    // // The base node has only finally node (don't have catch node).
+                    // // So, we must recalculate the position of correct finally end node.
+                    // Node follower = end.previous.outgoing.get(0);
+                    //
+                    // int i = nodes.indexOf(end);
+                    // int j = nodes.indexOf(follower);
+                    //
+                    // start = follower;
+                    // end = nodes.get(2 * j - i - 2);
+                    // for (; i < j;) {
+                    // nodes.remove(--j);
+                    // }
+                    //
+                    // base.addFinally(this);
+                    // } else {
+                    // // try-catch-finally
+                    //
+                    // Node follower = end;
+                    //
+                    // end = start.previous.outgoing.size() == 0 ? start.previous :
+                    // start.previous.outgoing.get(0);
+                    // start = follower;
+                    //
+                    // base.addFinally(this);
                 }
+            } else {
+                // try-catch
+                // if (!start.incoming.contains(base)) {
+                // start.incoming.add(base);
+                // }
+                //
+                // start = nodes.get(nodes.indexOf(start) + 1);
+                // end = end.outgoing.size() == 0 ? end : end.outgoing.get(0);
+                // base.addCatch(this);
             }
-            tries.clear();
-            return true;
         }
     }
 
@@ -1522,46 +1542,7 @@ class JavaMethodCompiler extends MethodVisitor {
     // this.exception = exception == null ? null : Javascript.computeClassName(convert(exception));
     // }
     //
-    // private void resolve() {
-    // if (exception == null) {
-    // if (start == end) {
-    // // try-finally
-    //
-    // // The base node has only finally node (don't have catch node).
-    // // So, we must recalculate the position of correct finally end node.
-    // Node follower = end.previous.outgoing.get(0);
-    //
-    // int i = nodes.indexOf(end);
-    // int j = nodes.indexOf(follower);
-    //
-    // start = follower;
-    // end = nodes.get(2 * j - i - 2);
-    // for (; i < j;) {
-    // nodes.remove(--j);
-    // }
-    //
-    // base.addFinally(this);
-    // } else {
-    // // try-catch-finally
-    //
-    // Node follower = end;
-    //
-    // end = start.previous.outgoing.size() == 0 ? start.previous : start.previous.outgoing.get(0);
-    // start = follower;
-    //
-    // base.addFinally(this);
-    // }
-    // } else {
-    // // try-catch
-    // if (!start.incoming.contains(base)) {
-    // start.incoming.add(base);
-    // }
-    //
-    // start = nodes.get(nodes.indexOf(start) + 1);
-    // end = end.outgoing.size() == 0 ? end : end.outgoing.get(0);
-    // base.addCatch(this);
-    // }
-    // }
+
     //
     // /**
     // * @see java.lang.Object#hashCode()

@@ -34,13 +34,13 @@ class Node {
     final LinkedList<Operand> stack = new LinkedList();
 
     /** The node list. */
-    final List<Node> incoming = new ArrayList();
+    final List<Node> incoming = new CopyOnWriteArrayList();
 
     /** The node list. */
-    final List<Node> outgoing = new ArrayList();
+    final List<Node> outgoing = new CopyOnWriteArrayList();
 
     /** The node list. */
-    final List<Node> backedges = new ArrayList();
+    final List<Node> backedges = new CopyOnWriteArrayList();
 
     /** The previous node. */
     Node previous = null;
@@ -51,12 +51,6 @@ class Node {
     /** The dominator try-catch block. */
     List<TryCatch> tries = new ArrayList();
 
-    boolean isTryStart = false;
-
-    boolean isTryEnd = false;
-
-    boolean isCatch = false;
-
     /** The dominator node. */
     private Node dominator;
 
@@ -64,7 +58,7 @@ class Node {
     // private List<TryBlock> catcheTries = new ArrayList();
     //
     /** The catch blocks. */
-    private Deque<TryCatch> catches = new ArrayDeque();
+    Deque<TryCatch> catches = new ArrayDeque();
 
     //
     // /** The finally blocks. */
@@ -74,7 +68,9 @@ class Node {
     // private Deque<TryBlock> finallies = new ArrayDeque();
 
     /** The flag whether this node has already written or not. */
-    boolean written = false;
+    private boolean written = false;
+
+    private int stoppable = 0;
 
     /**
      * @param label
@@ -166,7 +162,9 @@ class Node {
     final void addCatch(TryCatch block) {
         catches.add(block);
 
-        // block.start.stoppable += block.start.incoming.size();
+        if (block.next != null) {
+            block.end.stoppable += block.next.incoming.size();
+        }
 
         // //
         // for (TryCatch item : catcheTries) {
@@ -314,7 +312,7 @@ class Node {
             written = true;
 
             // check try-catch-finally
-            if (isTryStart) {
+            if (!catches.isEmpty()) {
                 buffer.append("try{");
             }
 
@@ -424,6 +422,7 @@ class Node {
                 if (catches.size() != 0) {
                     buffer.append("} catch ($) {");
 
+                    Node next = null;
                     Iterator<TryCatch> iterator = catches.descendingIterator();
 
                     while (iterator.hasNext()) {
@@ -433,6 +432,8 @@ class Node {
                         block.handler.write(buffer);
                         buffer.append("}");
 
+                        next = block.next;
+
                         // Node end = block.end;
                         //
                         // if (end != null) {
@@ -441,6 +442,8 @@ class Node {
                         // process2(end, buffer);
                     }
                     buffer.append("}");
+
+                    process(next, buffer);
                 }
             }
             // for (TryCatch block : tries) {
@@ -517,10 +520,10 @@ class Node {
      */
     private void process(Node dest, ScriptBuffer buffer) {
         if (dest != null) {
-            // if (dest.stoppable != 0) {
-            // dest.stoppable--;
-            // return;
-            // }
+            if (dest.stoppable != 0) {
+                dest.stoppable--;
+                return;
+            }
 
             Node dominator = dest.getDominator();
 

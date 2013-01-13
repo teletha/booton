@@ -10,7 +10,11 @@
 package booton.translator;
 
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+
+import booton.translator.JavaMethodCompiler.TryCatch;
 
 /**
  * @version 2013/01/11 17:42:51
@@ -37,10 +41,12 @@ public class NodeDebugger {
      * Dump node tree.
      * </p>
      * 
-     * @param nodes
+     * @param node
      */
-    public static void dump(List<Node> nodes) {
-        System.out.println(format(nodes));
+    public static void dump(Node node) {
+        if (node != null) {
+            dump(Collections.singletonList(node));
+        }
     }
 
     /**
@@ -48,12 +54,10 @@ public class NodeDebugger {
      * Dump node tree.
      * </p>
      * 
-     * @param node
+     * @param nodes
      */
-    public static void dump(Node node) {
-        if (node != null) {
-            System.out.println(format(Collections.singletonList(node)));
-        }
+    public static void dump(List<Node> nodes) {
+        System.out.println(format(nodes));
     }
 
     /**
@@ -128,36 +132,61 @@ public class NodeDebugger {
      * @return
      */
     private static String format(List<Node> nodes) {
+        Set<TryCatch> tries = new LinkedHashSet();
+    
+        for (Node node : nodes) {
+            for (TryCatch block : node.catches) {
+                tries.add(block);
+            }
+        }
+    
         // compute max id length
         int max = 1;
-
+    
         for (Node node : nodes) {
             max = Math.max(max, String.valueOf(node.id).length());
         }
-
+    
         int incoming = 0;
         int outgoing = 0;
         int backedge = 0;
-
+    
         for (Node node : nodes) {
             incoming = Math.max(incoming, node.incoming.size() * max + (node.incoming.size() - 1) * 2);
             outgoing = Math.max(outgoing, node.outgoing.size() * max + (node.outgoing.size() - 1) * 2);
             backedge = Math.max(backedge, node.backedges.size() * max + (node.backedges.size() - 1) * 2);
         }
-
+    
         Formatter format = new Formatter();
-
+    
         for (Node node : nodes) {
-            // String tryFlow = node.isTryStart ? "s" : node.isTryEnd ? "e" : node.isCatch ? "c" :
-            // "";
-
-            // format.write(String.valueOf(node.id) + " " + tryFlow, max);
+            StringBuilder tryFlow = new StringBuilder();
+    
+            for (TryCatch block : tries) {
+                if (block.start == node) {
+                    tryFlow.append("s");
+                } else if (block.end == node) {
+                    tryFlow.append("e");
+                } else if (block.handler == node) {
+                    tryFlow.append("c");
+                } else if (block.next == node) {
+                    tryFlow.append("n");
+                } else {
+                    tryFlow.append("  ");
+                }
+            }
+    
+            format.write(String.valueOf(node.id), max);
             format.write("  in : ");
             format.formatNode(node.incoming, incoming);
             format.write("out : ");
             format.formatNode(node.outgoing, outgoing);
             format.write("back : ");
             format.formatNode(node.backedges, backedge);
+            if (!tries.isEmpty()) {
+                format.write("try : ");
+                format.write(tryFlow.toString(), tries.size() * 2 + 2);
+            }
             format.write("code : ");
             format.formatCodeFragment(node.stack);
             format.write("\r\n");
