@@ -35,7 +35,6 @@ import kiss.I;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 
-import booton.translator.js.JsError;
 import booton.translator.js.NativeObject;
 
 /**
@@ -366,9 +365,10 @@ public class Javascript {
             return NativeObject.class;
         }
 
-        if (Throwable.class.isAssignableFrom(type)) {
-            return JsError.class;
+        if (type == Throwable.class) {
+            return ThrowableReplacement.class;
         }
+
         return type;
     }
 
@@ -501,5 +501,93 @@ public class Javascript {
 
         // API definition
         return members.size() - 1;
+    }
+
+    /**
+     * @version 2012/12/07 10:39:47
+     */
+    @SuppressWarnings("unused")
+    private static class ThrowableReplacement {
+
+        /** The error message. */
+        private final String message;
+
+        /** The cause error. */
+        private Throwable cause;
+
+        /**
+         * 
+         */
+        public ThrowableReplacement() {
+            this("", null);
+        }
+
+        /**
+         * @param message
+         */
+        public ThrowableReplacement(String message) {
+            this(message, null);
+        }
+
+        /**
+         * @param cause
+         */
+        public ThrowableReplacement(Throwable cause) {
+            this("", cause);
+        }
+
+        /**
+         * @param message
+         * @param cause
+         */
+        public ThrowableReplacement(String message, Throwable cause) {
+            this.message = message;
+            this.cause = cause;
+        }
+
+        /**
+         * @param message
+         * @param cause
+         * @param enableSuppression
+         * @param writableStackTrace
+         */
+        public ThrowableReplacement(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+            this(message, cause);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public String getMessage() {
+            return message;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public String getLocalizedMessage() {
+            return message;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public Throwable getCause() {
+            return cause;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public String toString() {
+            return message;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void printStackTrace() {
+            System.out.println(message);
+        }
     }
 }
