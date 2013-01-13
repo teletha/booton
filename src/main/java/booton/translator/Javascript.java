@@ -16,7 +16,6 @@
 package booton.translator;
 
 import static booton.Obfuscator.*;
-import static org.objectweb.asm.ClassReader.*;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -289,7 +288,7 @@ public class Javascript {
         code.append('{');
 
         try {
-            new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), SKIP_FRAMES);
+            new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
         } catch (IOException e) {
             throw I.quiet(e);
         }
@@ -310,7 +309,7 @@ public class Javascript {
         code.append("boot.defineNative(\"").append(source.getSimpleName()).append("\",{");
 
         try {
-            new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), SKIP_FRAMES);
+            new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
         } catch (IOException e) {
             throw I.quiet(e);
         }

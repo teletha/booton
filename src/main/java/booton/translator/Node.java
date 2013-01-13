@@ -9,16 +9,21 @@
  */
 package booton.translator;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import booton.translator.JavaMethodCompiler.TryCatch;
 
 /**
  * @version 2009/08/05 14:51:59
  */
 class Node {
 
+    /** The re-usable operand. */
     private static final Operand END = new OperandExpression(";");
 
     /** The identified label for this node. */
@@ -36,7 +41,20 @@ class Node {
     /** The node list. */
     final List<Node> backedges = new ArrayList();
 
+    /** The previous node. */
     Node previous = null;
+
+    /** The following node. */
+    Node follower;
+
+    /** The dominator try-catch block. */
+    List<TryCatch> tries = new ArrayList();
+
+    boolean isTryStart = false;
+
+    boolean isTryEnd = false;
+
+    boolean isCatch = false;
 
     /** The dominator node. */
     private Node dominator;
@@ -44,8 +62,9 @@ class Node {
     // /** The finally blocks. */
     // private List<TryBlock> catcheTries = new ArrayList();
     //
-    // /** The finally blocks. */
-    // private Deque<TryBlock> catches = new ArrayDeque();
+    /** The catch blocks. */
+    private Deque<TryCatch> catches = new ArrayDeque();
+
     //
     // /** The finally blocks. */
     // private List<TryBlock> finallyTries = new ArrayList();
@@ -53,11 +72,8 @@ class Node {
     // /** The finally blocks. */
     // private Deque<TryBlock> finallies = new ArrayDeque();
 
-    /** The following node. */
-    Node follower;
-
     /** The flag whether this node has already written or not. */
-    private boolean written = false;
+    boolean written = false;
 
     /**
      * @param label
@@ -139,28 +155,28 @@ class Node {
         stack.add(new OperandExpression(remove(1) + separator + remove(0)));
     }
 
-    // /**
-    // * <p>
-    // * Set catch block for this node.
-    // * <p>
-    // *
-    // * @param block
-    // */
-    // final void addCatch(TryBlock block) {
-    // catches.add(block);
-    //
-    // // block.start.stoppable += block.start.incoming.size();
-    //
-    // //
-    // for (TryBlock item : catcheTries) {
-    // if (item.base == block.base && item.end == block.end) {
-    // return;
-    // }
-    // }
-    //
-    // catcheTries.add(block);
-    // block.end.stoppable++;
-    // }
+    /**
+     * <p>
+     * Set catch block for this node.
+     * <p>
+     * 
+     * @param block
+     */
+    final void addCatch(TryCatch block) {
+        catches.add(block);
+
+        // block.start.stoppable += block.start.incoming.size();
+
+        // //
+        // for (TryCatch item : catcheTries) {
+        // if (item.base == block.base && item.end == block.end) {
+        // return;
+        // }
+        // }
+        //
+        // catcheTries.add(block);
+        // block.end.stoppable++;
+    }
 
     // /**
     // * <p>
@@ -296,10 +312,10 @@ class Node {
         if (!written) {
             written = true;
 
-            // // check try-catch-finally
-            // for (int i = 0; i < Math.max(catcheTries.size(), finallyTries.size()); i++) {
-            // buffer.append("try{");
-            // }
+            // check try-catch-finally
+            if (isTryStart) {
+                buffer.append("try{");
+            }
 
             int outs = outgoing.size();
             int backs = backedges.size();
@@ -401,6 +417,36 @@ class Node {
                     process(follower, buffer);
                 }
             }
+
+            // if (!catches.isEmpty()) {
+            // // try-catch
+            // if (catches.size() != 0) {
+            // buffer.append("} catch ($) {");
+            //
+            // Iterator<TryCatch> iterator = catches.descendingIterator();
+            //
+            // while (iterator.hasNext()) {
+            // TryCatch block = iterator.next();
+            //
+            // buffer.append("if ($ instanceof " + block.exception + ") {");
+            // block.handler.write(buffer);
+            // buffer.append("}");
+            //
+            // // Node end = block.end;
+            // //
+            // // if (end != null) {
+            // // end.write(buffer);
+            // // }
+            // // process2(end, buffer);
+            // }
+            // buffer.append("}");
+            // }
+            // }
+            // for (TryCatch block : tries) {
+            // if (block.isCompleted()) {
+            // process(block.handler, buffer);
+            // }
+            // }
 
             // // check try-catch-finally
             // if (catches.size() != 0 || finallies.size() != 0) {
