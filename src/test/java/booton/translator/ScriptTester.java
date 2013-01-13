@@ -157,6 +157,7 @@ public class ScriptTester {
                     if (input != NONE) {
                         builder.append("Input value : ").append(input).append(END);
                     }
+                    System.out.println(script);
                     throw new AssertionError(builder.toString(), e);
                 }
             }

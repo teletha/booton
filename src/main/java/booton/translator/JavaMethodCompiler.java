@@ -29,6 +29,7 @@ import kiss.model.ClassUtil;
 
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
@@ -44,6 +45,40 @@ import org.objectweb.asm.Type;
  * @version 2012/12/07 11:41:58
  */
 class JavaMethodCompiler extends MethodVisitor {
+
+    /**
+     * Represents an expanded frame. See {@link ClassReader#EXPAND_FRAMES}.
+     */
+    private static int FRAME_NEW = 400;
+
+    /**
+     * Represents a compressed frame with complete frame data.
+     */
+    private static int FRAME_FULL = 401;
+
+    /**
+     * Represents a compressed frame where locals are the same as the locals in the previous frame,
+     * except that additional 1-3 locals are defined, and with an empty stack.
+     */
+    private static int FRAME_APPEND = 402;
+
+    /**
+     * Represents a compressed frame where locals are the same as the locals in the previous frame,
+     * except that the last 1-3 locals are absent and with an empty stack.
+     */
+    private static int FRAME_CHOP = 403;
+
+    /**
+     * Represents a compressed frame with exactly the same locals as the previous frame and with an
+     * empty stack.
+     */
+    private static int FRAME_SAME = 404;
+
+    /**
+     * Represents a compressed frame with exactly the same locals as the previous frame and with a
+     * single value on the stack.
+     */
+    private static int FRAME_SAME1 = 405;
 
     /** The frequently used operand for cache. */
     private static final OperandNumber ZERO = new OperandNumber(0);
@@ -84,7 +119,7 @@ class JavaMethodCompiler extends MethodVisitor {
     private boolean assertJump = false;
 
     /** The pool of try-catch-finally blocks. */
-    private Deque<TryBlock> tries = new ArrayDeque();
+    private Deque<TryCatch> tries = new ArrayDeque();
 
     /**
      * Create {@link JavaMethodCompiler}.
@@ -138,10 +173,10 @@ class JavaMethodCompiler extends MethodVisitor {
         searchBackEdge(nodes.get(0), new ArrayDeque());
 
         // Resolve all try-catch-finally blocks.
-        Iterator<TryBlock> iterator = tries.descendingIterator();
+        Iterator<TryCatch> iterator = tries.descendingIterator();
 
         while (iterator.hasNext()) {
-            iterator.next().resolve();
+            iterator.next().computeTryBlock();
         }
 
         NodeDebugger.dump(script, original, nodes);
@@ -266,7 +301,31 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
-        // do nothing
+        switch (type) {
+        case F_NEW:
+            record(FRAME_NEW);
+            break;
+
+        case F_FULL:
+            record(FRAME_FULL);
+            break;
+
+        case F_APPEND:
+            record(FRAME_APPEND);
+            break;
+
+        case F_CHOP:
+            record(FRAME_CHOP);
+            break;
+
+        case F_SAME:
+            record(FRAME_SAME);
+            break;
+
+        case F_SAME1:
+            record(FRAME_SAME1);
+            break;
+        }
     }
 
     /**
@@ -1110,15 +1169,26 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
-        TryBlock block = new TryBlock(start, end, handler, type);
+        // TryBlock block = new TryBlock(start, end, handler, type);
+        //
+        // for (TryBlock item : tries) {
+        // if (item.start == block.start) {
+        // return;
+        // }
+        // }
+        //
+        // tries.add(block);
 
-        for (TryBlock item : tries) {
-            if (item.start == block.start) {
-                return;
-            }
-        }
+        Node handlerNode = getNode(handler);
+        handlerNode.isCatch = true;
 
-        tries.add(block);
+        Node startNode = getNode(start);
+        startNode.isTryStart = true;
+
+        Node endNode = getNode(end);
+        endNode.isTryEnd = true;
+
+        tries.add(new TryCatch(start, end, handler, type));
     }
 
     /**
@@ -1155,6 +1225,11 @@ class JavaMethodCompiler extends MethodVisitor {
     public void visitVarInsn(int opcode, int position) {
         // recode current instruction
         record(opcode);
+
+        // check caught exception variable
+        if (match(ASTORE, FRAME_SAME1)) {
+            return;
+        }
 
         // retrieve local variable name
         String variable = Javascript.computeLocalVariable(position, !isNotStatic);
@@ -1347,10 +1422,10 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * @version 2010/01/27 16:04:09
      */
-    class TryBlock {
+    class TryCatch {
 
         /** The start node. */
-        Node start;
+        final Node start;
 
         /** The end node. */
         Node end;
@@ -1361,21 +1436,59 @@ class JavaMethodCompiler extends MethodVisitor {
         /** The exception type. */
         final String exception;
 
+        /** The nodes within try block. */
+        final List<Node> tries = new ArrayList();
+
         /**
          * @param start
          * @param end
          * @param handler
          * @param exception
          */
-        TryBlock(Label start, Label end, Label handler, String exception) {
+        TryCatch(Label start, Label end, Label handler, String exception) {
             this.start = getNode(start);
             this.end = getNode(end);
             this.handler = getNode(handler);
             this.exception = exception == null ? null : Javascript.computeClassName(convert(exception));
         }
 
-        private void resolve() {
+        /**
+         * <p>
+         * Assign this try-catch block to nodes.
+         * </p>
+         */
+        private void computeTryBlock() {
+            if (!handler.incoming.contains(start)) {
+                handler.incoming.add(start);
+            }
 
+            handler = nodes.get(nodes.indexOf(handler) + 1);
+            end = end.outgoing.size() == 0 ? end : end.outgoing.get(0);
+
+            start.addCatch(this);
+
+            // int start = nodes.indexOf(this.start);
+            // int end = nodes.indexOf(this.end) + 1;
+            //
+            // tries.addAll(nodes.subList(start, end));
+            //
+            // for (Node node : tries) {
+            // node.tries.add(this);
+            // }
+        }
+
+        boolean isCompleted() {
+            if (tries.isEmpty()) {
+                return false;
+            }
+
+            for (Node node : tries) {
+                if (!node.written) {
+                    return false;
+                }
+            }
+            tries.clear();
+            return true;
         }
     }
 
