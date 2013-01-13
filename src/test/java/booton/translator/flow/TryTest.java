@@ -9,7 +9,6 @@
  */
 package booton.translator.flow;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.translator.Param;
@@ -40,7 +39,6 @@ public class TryTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void TryCatchAfter() {
         test(new Scriptable() {
 
@@ -83,7 +81,6 @@ public class TryTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void TryCatchInCatch() {
         test(new Scriptable() {
 
@@ -107,7 +104,6 @@ public class TryTest extends ScriptTester {
         });
     }
 
-    @Ignore
     @Test
     public void TryCatchInTry() {
         test(new Scriptable() {
