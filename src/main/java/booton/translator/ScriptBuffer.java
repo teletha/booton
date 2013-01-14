@@ -35,7 +35,7 @@ class ScriptBuffer {
      */
     public void debug(Class owner, String methodName, String description) {
         line();
-        buffer.append("/* ");
+        buffer.append("// ");
         buffer.append(owner.getName()).append("#").append(methodName).append("(");
 
         Type type = Type.getMethodType(description);
@@ -48,7 +48,7 @@ class ScriptBuffer {
                 buffer.append(", ");
             }
         }
-        buffer.append(") */");
+        buffer.append(")");
         line();
     }
 
@@ -64,8 +64,8 @@ class ScriptBuffer {
         buffer.append("\r\n");
 
         // write indent
-        for (int i = 0; i < depth * 2; i++) {
-            buffer.append(' ');
+        for (int i = 0; i < depth; i++) {
+            buffer.append('\t');
         }
 
         return this;
@@ -122,15 +122,32 @@ class ScriptBuffer {
 
         // brace makes indentation
         if (length != 0 && value.charAt(0) == '}') {
-            endIndent();
+            int last = buffer.length() - 1;
+
+            if (buffer.charAt(last) == '\t') {
+                buffer.deleteCharAt(last);
+                depth--;
+            } else {
+                endIndent();
+            }
         }
 
         // write actual code
-        buffer.append(value);
+        buffer.append(fragment);
 
         // brace makes indentation
-        if (length != 0 && value.charAt(length - 1) == '{') {
-            startIndent();
+        if (length != 0) {
+            char last = value.charAt(length - 1);
+
+            switch (last) {
+            case '{':
+                startIndent();
+                break;
+
+            case ';':
+                line();
+                break;
+            }
         }
 
         // API definition
@@ -163,7 +180,18 @@ class ScriptBuffer {
         return buffer.substring(mark);
     }
 
+    /**
+     * <p>
+     * Optimize source code.
+     * </p>
+     */
     void optimize() {
+        // Remove tail white spaces.
+        while (Character.isWhitespace(buffer.charAt(buffer.length() - 1))) {
+            buffer.deleteCharAt(buffer.length() - 1);
+        }
+
+        // Remove tail "return;" expression.
         int length = buffer.length();
 
         if (buffer.substring(length - 7, length).equals("return;")) {
