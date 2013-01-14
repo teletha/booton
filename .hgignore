@@ -8,3 +8,5 @@ syntax: regexp
 \.project
 syntax: regexp
 \.factorypath
+syntax: regexp
+test.js

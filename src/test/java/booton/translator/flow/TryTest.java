@@ -151,7 +151,7 @@ public class TryTest extends ScriptTester {
     }
 
     @Test
-    public void TryCatchFromDepth2() {
+    public void TryCatchWithFrameFull() {
         test(new Scriptable() {
 
             public int act(int value) {
@@ -162,7 +162,7 @@ public class TryTest extends ScriptTester {
                 try {
                     return value;
                 } catch (Exception e) {
-                    return 10;
+                    return 10; // unexecutable
                 }
 
             }

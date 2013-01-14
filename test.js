@@ -8,744 +8,19 @@ boot.defineNative("Document",{
 		return this.createElement(A);
 	}
 });
-boot.define("L",{
-	
-	// booton.translator.web.jQuery$1#<init>(booton.translator.web.jQuery)
-	$0:function(A){
-		this.a=A;
-		this.b=0;
-	},
-	// booton.translator.web.jQuery$1#hasNext()
-	M:function(){
-		return this.b<this.a.size();
-	},
-	// booton.translator.web.jQuery$1#next()
-	N:function(){
-		return $(this.a.get(this.b++));
-	},
-	// booton.translator.web.jQuery$1#remove()
-	O:function(){
-	},
-	// booton.translator.web.jQuery$1#next()
-	P:function(){
-		return this.N();
-	}
-});
-
-boot.defineNative("jQuery",{
-	
-	// booton.translator.web.jQuery#<init>()
-	$0:function(){
-	},
-	// booton.translator.web.jQuery#child(java.lang.String)
-	J:function(A){
-		return $(document.createElement(A)).appendTo(this);
-	},
-	// booton.translator.web.jQuery#child(java.lang.Class)
-	K:function(A){
-		return this.J("span").addClass(A);
-	},
-	// booton.translator.web.jQuery#iterator()
-	L:function(){
-		return new boot.L(this,0);
-	}
-});
-boot.define("J",{
-	
-	// js.application.Header$Menu#<init>(js.application.Header, booton.translator.web.jQuery)
-	$1:function(A,B){
-		this.a=A;;
-		this.b=B.J("ul").addClass("d");
-	},
-	// js.application.Header$Menu#add(java.lang.String, java.lang.String)
-	I:function(A,B,C){
-		C=this.b.J("li").addClass("e");
-		C.J("a").addClass("c").attr("href",B).text(A);
-		return new boot.J(this.a,C,1);
-	},
-	// js.application.Header$Menu#<init>(js.application.Header, booton.translator.web.jQuery, js.application.Header$Menu)
-	$0:function(A,B,C){
-		boot.J.prototype.$1.call(this,A,B);
-	}
-});
-
-boot.define("I",{
-	
-	// js.application.Header#<init>()
-	$0:function(){
-		this.a=$("#Header").addClass("a");
-	},
-	// js.application.Header#add(java.lang.String, java.lang.String)
-	I:function(A,B,C){
-		C=this.a.J("li").addClass("b");
-		C.J("a").addClass("c").attr("href",B).text(A);
-		return new boot.J(this,C,null,0);
-	}
-});
-
-boot.define("F",{
-	
-	// js.Page#<init>()
-	$0:function(){
-	}
-});
-
-boot.define("v",{
-	
-	// js.util.HashSet$View#<init>(js.util.HashSet, booton.translator.js.NativeArray)
-	$1:function(A,B){
-		this.a=A;;
-		this.b=0;
-		this.c=B;
-	},
-	// js.util.HashSet$View#hasNext()
-	M:function(){
-		return this.b<this.c.length;
-	},
-	// js.util.HashSet$View#next()
-	P:function(){
-		this.d=boot.U.Bu(this.a)[this.c[this.b++]];
-		return this.d;
-	},
-	// js.util.HashSet$View#remove()
-	O:function(){
-		if(this.b<=0){
-		}else{
-			this.a.BU(this.d);
-		}
-	},
-	// js.util.HashSet$View#<init>(js.util.HashSet, booton.translator.js.NativeArray, js.util.HashSet$View)
-	$0:function(A,B,C){
-		boot.v.prototype.$1.call(this,A,B);
-	}
-});
-
-boot.define("Z",{
-	
-	// js.util.AbstractCollection#<init>()
-	$0:function(){
-	},
-	// js.util.AbstractCollection#isEmpty()
-	BD:function(){
-		return this.BC()==0;
-	},
-	// js.util.AbstractCollection#addAll(java.util.Collection)
-	BS:function(A,B,C,D){
-		B=0;
-		D=A.L();
-		l2:while (D.M()!=0) {
-			C=D.P();
-			if(this.F(C)==0){
-			}else{
-				B=1;
-				continue l2;
-			}continue l2;
-		}return B;
-	},
-	// js.util.AbstractCollection#retainAll(java.util.Collection)
-	BT:function(A,B,C,D){
-		B=0;
-		D=this.L();
-		l2:while (D.M()!=0) {
-			C=D.P();
-			if(A.BF(C)!=0){
-			}else{
-				B=this.BU(C);
-				continue l2;
-			}continue l2;
-		}return B;
-	},
-	// js.util.AbstractCollection#removeAll(java.util.Collection)
-	BV:function(A,B,C,D){
-		B=0;
-		D=A.L();
-		l2:while (D.M()!=0) {
-			C=D.P();
-			if(this.BU(C)==0){
-			}else{
-				B=1;
-				continue l2;
-			}continue l2;
-		}return B;
-	},
-	// js.util.AbstractCollection#containsAll(java.util.Collection)
-	BW:function(A,B,C){
-		C=A.L();
-		l1:while (C.M()!=0) {
-			B=C.P();
-			if(this.BF(B)!=0){
-			}else{
-				return false;
-			}continue l1;
-		}return true;
-	},
-	// js.util.AbstractCollection#toArray()
-	BX:function(){
-		return this.BY(new Array(0));
-	},
-	// js.util.AbstractCollection#toArray(java.lang.Object[])
-	BY:function(A,B,C,D,E){
-		B=this.BC();
-		if(A.length>=B){
-		}else{
-			A=[];
-		}C=this.L();
-		D=0;
-		l6:while (C.M()!=0) {
-			E=C.P();
-			A[D]=E;
-			++D;
-			continue l6;
-		}return A;
-	}
-});
-
-boot.define("Y",boot.Z,{
-	
-	// js.util.AbstractSet#<init>()
-	$0:function(){
-		boot.Z.prototype.$0.call(this);
-	}
-});
-
-boot.define("U",boot.Y,{
-	
-	// js.util.HashSet#<init>()
-	$0:function(){
-		boot.Y.prototype.$0.call(this);
-		this.a=0;
-		this.b={};
-	},
-	// js.util.HashSet#size()
-	BC:function(){
-		return this.a;
-	},
-	// js.util.HashSet#contains(java.lang.Object)
-	BF:function(A){
-		return this.BZ(A) in this.b;
-	},
-	// js.util.HashSet#add(java.lang.Object)
-	F:function(A,B){
-		B=this.BZ(A);
-		if(B in this.b==0){
-			this.a=this.a+1;
-			this.b[B]=A;
-			return true;
-		}else{
-			return false;
-		}
-	},
-	// js.util.HashSet#remove(java.lang.Object)
-	BU:function(A,B){
-		B=this.BZ(A);
-		if(B in this.b!=0){
-			this.a=this.a-1;
-			delete this.b[B];
-			return true;
-		}else{
-			return false;
-		}
-	},
-	// js.util.HashSet#clear()
-	BP:function(){
-		this.a=0;
-		this.b=[];
-	},
-	// js.util.HashSet#iterator()
-	L:function(){
-		return new boot.v(this,this.b.keys(),null,0);
-	},
-	// js.util.HashSet#hash(java.lang.Object)
-	BZ:function(A){
-		return (A==null?-1:A.hashCode());
-	},
-	// js.util.HashSet#find(java.lang.Object)
-	BH:function(A){
-		return this.b[this.BZ(A)];
-	},
-	// js.util.HashSet#push(java.lang.Object)
-	BJ:function(A,B,C){
-		B=null;
-		C=this.BZ(A);
-		if(C in this.b==0){
-			this.a=this.a+1;
-		}else{
-			B=this.b[C];
-		}this.b[C]=A;
-		return B;
-	},
-	// js.util.HashSet#pull(java.lang.Object)
-	BL:function(A,B,C){
-		B=null;
-		C=this.BZ(A);
-		if(C in this.b==0){
-		}else{
-			B=this.b[C];
-			this.a=this.a-1;
-			delete this.b[C];
-		}return B;
-	},
-	// js.util.HashSet#access$0(js.util.HashSet)
-	_Bu:function(A){
-		return A.b;
-	}
-});
-
-boot.define("u",{
-	
-	// js.util.HashMap$View#<init>(js.util.HashMap, java.util.Iterator, boolean)
-	$1:function(A,B,C){
-		this.a=A;;
-		this.b=B;
-		this.c=C;
-	},
-	// js.util.HashMap$View#hasNext()
-	M:function(){
-		return this.b.M();
-	},
-	// js.util.HashMap$View#next()
-	P:function(A){
-		A=this.b.P();
-		if(this.c==0){
-			return A.BI();
-		}else{
-			return A.BO();
-		}
-	},
-	// js.util.HashMap$View#remove()
-	O:function(){
-		this.b.O();
-	},
-	// js.util.HashMap$View#<init>(js.util.HashMap, java.util.Iterator, boolean, js.util.HashMap$View)
-	$0:function(A,B,C,D){
-		boot.u.prototype.$1.call(this,A,B,C);
-	}
-});
-
-boot.define("W",boot.Y,{
-	
-	// js.util.HashMap$Keys#<init>(js.util.HashMap)
-	$1:function(A){
-		this.a=A;boot.Y.prototype.$0.call(this);
-	},
-	// js.util.HashMap$Keys#size()
-	BC:function(){
-		return boot.Q.BR(this.a).BC();
-	},
-	// js.util.HashMap$Keys#contains(java.lang.Object)
-	BF:function(A){
-		return boot.Q.BR(this.a).BF(A);
-	},
-	// js.util.HashMap$Keys#iterator()
-	L:function(){
-		return new boot.u(this.a,boot.Q.BR(this.a).L(),1,null,0);
-	},
-	// js.util.HashMap$Keys#add(java.lang.Object)
-	F:function(A){
-		return false;
-	},
-	// js.util.HashMap$Keys#remove(java.lang.Object)
-	BU:function(A){
-		return boot.Q.BR(this.a).BU(A);
-	},
-	// js.util.HashMap$Keys#clear()
-	BP:function(){
-		boot.Q.BR(this.a).BP();
-	},
-	// js.util.HashMap$Keys#<init>(js.util.HashMap, js.util.HashMap$Keys)
-	$0:function(A,B){
-		boot.W.prototype.$1.call(this,A);
-	}
-});
-
-boot.define("V",{
-	
-	// js.util.HashMap$SimpleEntry#<init>(java.lang.Object, java.lang.Object)
-	$1:function(A,B){
-		this.a=A;
-		this.b=B;
-	},
-	// js.util.HashMap$SimpleEntry#getKey()
-	BO:function(){
-		return this.a;
-	},
-	// js.util.HashMap$SimpleEntry#getValue()
-	BI:function(){
-		return this.b;
-	},
-	// js.util.HashMap$SimpleEntry#setValue(java.lang.Object)
-	Bv:function(A,B){
-		B=this.b;
-		this.b=A;
-		return B;
-	},
-	// js.util.HashMap$SimpleEntry#hashCode()
-	hashCode:function(){
-		return this.a.hashCode();
-	},
-	// js.util.HashMap$SimpleEntry#<init>(java.lang.Object, java.lang.Object, js.util.HashMap$SimpleEntry)
-	$0:function(A,B,C){
-		boot.V.prototype.$1.call(this,A,B);
-	}
-});
-
-boot.define("X",boot.Z,{
-	
-	// js.util.HashMap$Values#<init>(js.util.HashMap)
-	$1:function(A){
-		this.a=A;boot.Z.prototype.$0.call(this);
-	},
-	// js.util.HashMap$Values#size()
-	BC:function(){
-		return boot.Q.BR(this.a).BC();
-	},
-	// js.util.HashMap$Values#contains(java.lang.Object)
-	BF:function(A){
-		return this.a.BG(A);
-	},
-	// js.util.HashMap$Values#iterator()
-	L:function(){
-		return new boot.u(this.a,boot.Q.BR(this.a).L(),0,null,0);
-	},
-	// js.util.HashMap$Values#add(java.lang.Object)
-	F:function(A){
-		return false;
-	},
-	// js.util.HashMap$Values#remove(java.lang.Object)
-	BU:function(A,B,C){
-		B=this.L();
-		l2:while (B.M()!=0) {
-			C=B.P();
-			if(C!=A){
-			}else{
-				B.O();
-				return true;
-			}continue l2;
-		}return false;
-	},
-	// js.util.HashMap$Values#clear()
-	BP:function(){
-		boot.Q.BR(this.a).BP();
-	},
-	// js.util.HashMap$Values#<init>(js.util.HashMap, js.util.HashMap$Values)
-	$0:function(A,B){
-		boot.X.prototype.$1.call(this,A);
-	}
-});
-
-boot.define("Q",{
-	
-	// js.util.HashMap#<init>()
-	$0:function(){
-		this.a=new boot.U(0);
-	},
-	// js.util.HashMap#size()
-	BC:function(){
-		return this.a.BC();
-	},
-	// js.util.HashMap#isEmpty()
-	BD:function(){
-		return this.a.BD();
-	},
-	// js.util.HashMap#containsKey(java.lang.Object)
-	BE:function(A){
-		return this.a.BF(A);
-	},
-	// js.util.HashMap#containsValue(java.lang.Object)
-	BG:function(A,B,C){
-		C=this.BB().L();
-		l1:while (C.M()!=0) {
-			B=C.P();
-			if(B!=A){
-			}else{
-				return true;
-			}continue l1;
-		}return false;
-	},
-	// js.util.HashMap#get(java.lang.Object)
-	BA:function(A,B){
-		B=this.a.BH(A);
-		return (B==null?null:B.BI());
-	},
-	// js.util.HashMap#put(java.lang.Object, java.lang.Object)
-	V:function(A,B,C){
-		C=this.a.BJ(new boot.V(A,B,null,0));
-		if(C!=null){
-			return C.BI();
-		}else{
-			return null;
-		}
-	},
-	// js.util.HashMap#remove(java.lang.Object)
-	BK:function(A,B){
-		B=this.a.BL(A);
-		if(B!=null){
-			return B.BI();
-		}else{
-			return null;
-		}
-	},
-	// js.util.HashMap#putAll(java.util.Map)
-	BM:function(A,B,C){
-		C=A.BN().L();
-		l1:for (;
-		C.M()!=0;
-		this.V(B.BO(),B.BI())) {
-			B=C.P();
-		}
-	},
-	// js.util.HashMap#clear()
-	BP:function(){
-		this.a.BP();
-	},
-	// js.util.HashMap#keySet()
-	BQ:function(){
-		return new boot.W(this,null,0);
-	},
-	// js.util.HashMap#values()
-	BB:function(){
-		return new boot.X(this,null,0);
-	},
-	// js.util.HashMap#entrySet()
-	BN:function(){
-		return this.a;
-	},
-	// js.util.HashMap#access$0(js.util.HashMap)
-	_BR:function(A){
-		return A.a;
-	}
-});
-
-boot.define("T",{
-	
-	// teemowork.model.Champion#<clinit>()
-	_:function(){
-		boot.T.b=new boot.Q(0);
-		boot.T.c=new boot.T("Ahri",0);
-		boot.T.d=new boot.T("Akali",0);
-		boot.T.e=new boot.T("Alistar",0);
-		boot.T.f=new boot.T("Amumu",0);
-		boot.T.g=new boot.T("Ashe",0);
-		boot.T.h=new boot.T("Blitzcrank",0);
-		boot.T.i=new boot.T("Brand",0);
-		boot.T.j=new boot.T("Caitlyn",0);
-		boot.T.k=new boot.T("Cassiopeia",0);
-		boot.T.l=new boot.T("Chogath",0);
-		boot.T.m=new boot.T("Corki",0);
-		boot.T.n=new boot.T("Darius",0);
-		boot.T.o=new boot.T("Diana",0);
-		boot.T.p=new boot.T("Dr.Mundo",0);
-		boot.T.ba=new boot.T("Elise",0);
-		boot.T.bb=new boot.T("Evelynn",0);
-		boot.T.bc=new boot.T("Ezreal",0);
-		boot.T.bd=new boot.T("Fiddlesticks",0);
-		boot.T.be=new boot.T("Fiora",0);
-		boot.T.bf=new boot.T("Fizz",0);
-		boot.T.bg=new boot.T("Galio",0);
-		boot.T.bh=new boot.T("Gangplank",0);
-		boot.T.bi=new boot.T("Garen",0);
-		boot.T.bj=new boot.T("Gragas",0);
-		boot.T.bk=new boot.T("Graves",0);
-		boot.T.bl=new boot.T("Hecarim",0);
-		boot.T.bm=new boot.T("Heimerdinger",0);
-		boot.T.bn=new boot.T("Irelia",0);
-		boot.T.bo=new boot.T("Janna",0);
-		boot.T.bp=new boot.T("Jarvan IV",0);
-		boot.T.ca=new boot.T("Jax",0);
-		boot.T.cb=new boot.T("Jayce",0);
-		boot.T.cc=new boot.T("Karma",0);
-		boot.T.cd=new boot.T("Karthus",0);
-		boot.T.ce=new boot.T("Kassadin",0);
-		boot.T.cf=new boot.T("Katarina",0);
-		boot.T.cg=new boot.T("Kayle",0);
-		boot.T.ch=new boot.T("Kennen",0);
-		boot.T.ci=new boot.T("Kha'zix",0);
-		boot.T.cj=new boot.T("Kog'maw",0);
-		boot.T.ck=new boot.T("LeBlanc",0);
-		boot.T.cl=new boot.T("Lee Sin",0);
-		boot.T.cm=new boot.T("Leona",0);
-		boot.T.cn=new boot.T("Lulu",0);
-		boot.T.co=new boot.T("Lux",0);
-		boot.T.cp=new boot.T("Malphite",0);
-		boot.T.da=new boot.T("Maokai",0);
-		boot.T.db=new boot.T("Master Yi",0);
-		boot.T.dc=new boot.T("Miss Fortune",0);
-		boot.T.dd=new boot.T("Mordekaiser",0);
-		boot.T.de=new boot.T("Morgana",0);
-		boot.T.df=new boot.T("Nami",0);
-		boot.T.dg=new boot.T("Nasus",0);
-		boot.T.dh=new boot.T("Nautilus",0);
-		boot.T.di=new boot.T("Nidalee",0);
-		boot.T.dj=new boot.T("Nocturne",0);
-		boot.T.dk=new boot.T("Nunu",0);
-		boot.T.dl=new boot.T("Olaf",0);
-		boot.T.dm=new boot.T("Orianna",0);
-		boot.T.dn=new boot.T("Pantheon",0);
-		boot.T.dp=new boot.T("Poppy",0);
-		boot.T.ea=new boot.T("Rammus",0);
-		boot.T.eb=new boot.T("Renekton",0);
-		boot.T.ec=new boot.T("Rengar",0);
-		boot.T.ed=new boot.T("Riven",0);
-		boot.T.ee=new boot.T("Rumble",0);
-		boot.T.ef=new boot.T("Ryze",0);
-		boot.T.eg=new boot.T("Sejuani",0);
-		boot.T.eh=new boot.T("Shaco",0);
-		boot.T.ei=new boot.T("Shen",0);
-		boot.T.ej=new boot.T("Shyvana",0);
-		boot.T.ek=new boot.T("Singed",0);
-		boot.T.el=new boot.T("Sion",0);
-		boot.T.em=new boot.T("Sivir",0);
-		boot.T.en=new boot.T("Skarner",0);
-		boot.T.eo=new boot.T("Sona",0);
-		boot.T.ep=new boot.T("Soraka",0);
-		boot.T.fa=new boot.T("Swain",0);
-		boot.T.fb=new boot.T("Syndra",0);
-		boot.T.fc=new boot.T("Talon",0);
-		boot.T.fd=new boot.T("Taric",0);
-		boot.T.fe=new boot.T("Teemo",0);
-		boot.T.ff=new boot.T("Tristana",0);
-		boot.T.fg=new boot.T("Trundle",0);
-		boot.T.fh=new boot.T("Tryndamere",0);
-		boot.T.fi=new boot.T("Twisted Fate",0);
-		boot.T.fj=new boot.T("Twitch",0);
-		boot.T.fk=new boot.T("Udyr",0);
-		boot.T.fl=new boot.T("Urgot",0);
-		boot.T.fm=new boot.T("Varus",0);
-		boot.T.fn=new boot.T("Vayne",0);
-		boot.T.fo=new boot.T("Veigar",0);
-		boot.T.fp=new boot.T("Vi",0);
-		boot.T.ga=new boot.T("Viktor",0);
-		boot.T.gb=new boot.T("Vladimir",0);
-		boot.T.gc=new boot.T("Volibear",0);
-		boot.T.gd=new boot.T("Warwick",0);
-		boot.T.ge=new boot.T("Wukong",0);
-		boot.T.gf=new boot.T("Xerath",0);
-		boot.T.gg=new boot.T("Xin Zhao",0);
-		boot.T.gh=new boot.T("Yorick",0);
-		boot.T.gi=new boot.T("Zed",0);
-		boot.T.gj=new boot.T("Ziggs",0);
-		boot.T.gk=new boot.T("Zilean",0);
-		boot.T.gl=new boot.T("Zyra",0);
-	},
-	// teemowork.model.Champion#<init>(java.lang.String)
-	$0:function(A){
-		this.a=A;
-		this.gm=this.x().toLowerCase();
-		boot.T.b.V(A,this);
-	},
-	// teemowork.model.Champion#getSystemName()
-	x:function(){
-		return this.a.replace(/\./g,"").replace(/\s/g,"").replace(/\'/g,"");
-	},
-	// teemowork.model.Champion#getSplashArt()
-	y:function(){
-		return "src/main/resources/teemowork/splash/"+this.x()+".jpg";
-	},
-	// teemowork.model.Champion#getIcon()
-	u:function(){
-		return "src/main/resources/teemowork/icon/"+this.x()+".png";
-	},
-	// teemowork.model.Champion#getByName(java.lang.String)
-	_z:function(A){
-		return boot.T.b.BA(A);
-	},
-	// teemowork.model.Champion#getAll()
-	_X:function(){
-		return boot.T.b.BB();
-	}
-});
-
-boot.define("R",{
-	
-	// js.ui.ImageGrid$1#<init>(js.ui.ImageGrid, booton.translator.web.jQuery)
-	$0:function(A,B){
-		this.a=A;this.b=B;
-	},
-	// js.ui.ImageGrid$1#handler(booton.translator.web.jQuery$Event)
-	handler:function(A,B,C,D){
-		B=this.b.val().toLowerCase().replace(/\s/g,"");
-		D=boot.O.W(this.a).BN().L();
-		l2:while (D.M()!=0) {
-			C=D.P();
-			if(this.a.U(C.BO()).toLowerCase().indexOf(B) != -1==0){
-				C.BI().addClass("i");
-				continue l2;
-			}else{
-				C.BI().removeClass("i");
-				continue l2;
-			}
-		}
-	}
-});
-
-boot.define("P",{
-	
-	// js.ui.UI#<init>()
-	$0:function(){
-		boot.P.prototype.$1.call(this,"div");
-	},
-	// js.ui.UI#<init>(java.lang.String)
-	$1:function(A){
-		this.a=$("<"+A+">");
-	}
-});
-
 boot.define("S",{
-	
-	// js.ui.ImageGrid$2#<init>(js.ui.ImageGrid, java.lang.Object)
-	$0:function(A,B){
-		this.a=A;this.b=B;
-	},
-	// js.ui.ImageGrid$2#handler(booton.translator.web.jQuery$Event)
-	handler:function(A){
-		this.a.w(this.b);
-	}
-});
-
-boot.define("O",boot.P,{
-	
-	// js.ui.ImageGrid#<init>()
-	$0:function(){
-		boot.P.prototype.$0.call(this);
-		this.b=new boot.Q(0);
-		this.c=this.S();
-	},
-	// js.ui.ImageGrid#compose(booton.translator.web.jQuery)
-	R:function(A,B,C,D,E){
-		this.a.css("line-height","0").css("width","700px").css("margin","0 auto");
-		B=$("<input type='text'>");
-		B.appendTo(this.a);
-		B.addClass("f").css("display","block");
-		B.keyup(new boot.R(this,B,0));
-		D=this.c.L();
-		l6:for (;
-		D.M()!=0;
-		this.b.V(C,E)) {
-			C=D.P();
-			E=this.a.K("g").css("background-image","url("+this.T(C)+")");
-			E.J("span").addClass("h").text(this.U(C));
-			E.click(new boot.S(this,C,0));
-		}A.append(this.a);
-	},
-	// js.ui.ImageGrid#access$0(js.ui.ImageGrid)
-	_W:function(A){
-		return A.b;
-	}
-});
-
-boot.define("x",{
 	
 	// booton.translator.Javascript$ThrowableReplacement#<init>()
 	$0:function(){
-		boot.x.prototype.$1.call(this,"",null);
+		boot.S.prototype.$1.call(this,"",null);
 	},
 	// booton.translator.Javascript$ThrowableReplacement#<init>(java.lang.String)
 	$2:function(A){
-		boot.x.prototype.$1.call(this,A,null);
+		boot.S.prototype.$1.call(this,A,null);
 	},
 	// booton.translator.Javascript$ThrowableReplacement#<init>(java.lang.Throwable)
 	$3:function(A){
-		boot.x.prototype.$1.call(this,"",A);
+		boot.S.prototype.$1.call(this,"",A);
 	},
 	// booton.translator.Javascript$ThrowableReplacement#<init>(java.lang.String, java.lang.Throwable)
 	$1:function(A,B){
@@ -754,18 +29,18 @@ boot.define("x",{
 	},
 	// booton.translator.Javascript$ThrowableReplacement#<init>(java.lang.String, java.lang.Throwable, boolean, boolean)
 	$4:function(A,B,C,D){
-		boot.x.prototype.$1.call(this,A,B);
+		boot.S.prototype.$1.call(this,A,B);
 	},
 	// booton.translator.Javascript$ThrowableReplacement#getMessage()
-	Bw:function(){
+	BH:function(){
 		return this.a;
 	},
 	// booton.translator.Javascript$ThrowableReplacement#getLocalizedMessage()
-	Bx:function(){
+	BI:function(){
 		return this.a;
 	},
 	// booton.translator.Javascript$ThrowableReplacement#getCause()
-	Bz:function(){
+	BJ:function(){
 		return this.b;
 	},
 	// booton.translator.Javascript$ThrowableReplacement#toString()
@@ -773,128 +48,72 @@ boot.define("x",{
 		return this.a;
 	},
 	// booton.translator.Javascript$ThrowableReplacement#printStackTrace()
-	CA:function(){
+	BK:function(){
 		console.log(this.a);
 	}
 });
 
-boot.define("w",boot.x,{
-	
-	// java.lang.Error#<init>()
-	$0:function(){
-		boot.x.prototype.$0.call(this);
-	},
-	// java.lang.Error#<init>(java.lang.String)
-	$1:function(A){
-		boot.x.prototype.$2.call(this,A);
-	},
-	// java.lang.Error#<init>(java.lang.String, java.lang.Throwable)
-	$2:function(A,B){
-		boot.x.prototype.$1.call(this,A,B);
-	},
-	// java.lang.Error#<init>(java.lang.Throwable)
-	$3:function(A){
-		boot.x.prototype.$3.call(this,A);
-	},
-	// java.lang.Error#<init>(java.lang.String, java.lang.Throwable, boolean, boolean)
-	$4:function(A,B,C,D){
-		boot.x.prototype.$4.call(this,A,B,C,D);
-	}
-});
-
-boot.define("G",boot.F,{
-	
-	// teemowork.ChampionDetail#<init>(java.lang.String)
-	$0:function(A){
-		boot.G.prototype.$1.call(this,boot.T.z(A));
-	},
-	// teemowork.ChampionDetail#<init>(teemowork.model.Champion)
-	$1:function(A){
-		boot.F.prototype.$0.call(this);
-		if(A!=null){
-			this.a=A;
-			return;
-		}else{
-			throw new boot.w(0);
-		}
-	},
-	// teemowork.ChampionDetail#load(booton.translator.web.jQuery)
-	Q:function(A){
-		console.log("detail page "+this.a+"  "+this.a.a);
-	},
-	// teemowork.ChampionDetail#getPageId()
-	H:function(){
-		return "Champion/"+this.a.a;
-	}
-});
-
-boot.defineNative("History",{
-	
-	// booton.translator.web.History#<init>()
-	$0:function(){
-	}
-});
-boot.define("z",boot.x,{
+boot.define("R",boot.S,{
 	
 	// java.lang.Exception#<init>()
 	$0:function(){
-		boot.x.prototype.$0.call(this);
+		boot.S.prototype.$0.call(this);
 	},
 	// java.lang.Exception#<init>(java.lang.String)
 	$1:function(A){
-		boot.x.prototype.$2.call(this,A);
+		boot.S.prototype.$2.call(this,A);
 	},
 	// java.lang.Exception#<init>(java.lang.String, java.lang.Throwable)
 	$2:function(A,B){
-		boot.x.prototype.$1.call(this,A,B);
+		boot.S.prototype.$1.call(this,A,B);
 	},
 	// java.lang.Exception#<init>(java.lang.Throwable)
 	$3:function(A){
-		boot.x.prototype.$3.call(this,A);
+		boot.S.prototype.$3.call(this,A);
 	},
 	// java.lang.Exception#<init>(java.lang.String, java.lang.Throwable, boolean, boolean)
 	$4:function(A,B,C,D){
-		boot.x.prototype.$4.call(this,A,B,C,D);
+		boot.S.prototype.$4.call(this,A,B,C,D);
 	}
 });
 
-boot.define("BD",boot.z,{
+boot.define("Q",boot.R,{
 	
 	// java.lang.RuntimeException#<init>()
 	$0:function(){
-		boot.z.prototype.$0.call(this);
+		boot.R.prototype.$0.call(this);
 	},
 	// java.lang.RuntimeException#<init>(java.lang.String)
 	$1:function(A){
-		boot.z.prototype.$1.call(this,A);
+		boot.R.prototype.$1.call(this,A);
 	},
 	// java.lang.RuntimeException#<init>(java.lang.String, java.lang.Throwable)
 	$2:function(A,B){
-		boot.z.prototype.$2.call(this,A,B);
+		boot.R.prototype.$2.call(this,A,B);
 	},
 	// java.lang.RuntimeException#<init>(java.lang.Throwable)
 	$3:function(A){
-		boot.z.prototype.$3.call(this,A);
+		boot.R.prototype.$3.call(this,A);
 	},
 	// java.lang.RuntimeException#<init>(java.lang.String, java.lang.Throwable, boolean, boolean)
 	$4:function(A,B,C,D){
-		boot.z.prototype.$4.call(this,A,B,C,D);
+		boot.R.prototype.$4.call(this,A,B,C,D);
 	}
 });
 
-boot.define("BC",boot.BD,{
+boot.define("P",boot.Q,{
 	
 	// java.lang.IndexOutOfBoundsException#<init>()
 	$1:function(){
-		boot.BD.prototype.$0.call(this);
+		boot.Q.prototype.$0.call(this);
 	},
 	// java.lang.IndexOutOfBoundsException#<init>(java.lang.String)
 	$0:function(A){
-		boot.BD.prototype.$1.call(this,A);
+		boot.Q.prototype.$1.call(this,A);
 	}
 });
 
-boot.define("BB",{
+boot.define("N",{
 	
 	// js.util.ArrayList$View#<init>(js.util.ArrayList)
 	$1:function(A){
@@ -902,44 +121,148 @@ boot.define("BB",{
 		this.b=0;
 	},
 	// js.util.ArrayList$View#hasNext()
-	M:function(){
-		return this.b<boot.BA.CO(this.a).length;
+	O:function(){
+		return this.b<boot.K.BG(this.a).length;
 	},
 	// js.util.ArrayList$View#next()
-	P:function(){
-		return boot.BA.CO(this.a)[this.b++];
+	L:function(){
+		return boot.K.BG(this.a)[this.b++];
 	},
 	// js.util.ArrayList$View#remove()
-	O:function(){
+	BL:function(){
 		if(this.b<=0){
 		}else{
-			boot.BA.CO(this.a).splice(this.b-1,1)[0];
+			boot.K.BG(this.a).splice(this.b-1,1)[0];
 		}
 	},
 	// js.util.ArrayList$View#<init>(js.util.ArrayList, js.util.ArrayList$View)
 	$0:function(A,B){
-		boot.BB.prototype.$1.call(this,A);
+		boot.N.prototype.$1.call(this,A);
 	}
 });
 
-boot.define("BA",boot.Z,{
+boot.define("M",{
+	
+	// js.util.AbstractCollection#<init>()
+	$0:function(){
+	},
+	// js.util.AbstractCollection#isEmpty()
+	Q:function(){
+		return this.R()==0;
+	},
+	// js.util.AbstractCollection#addAll(java.util.Collection)
+	S:function(A,B,C,D){
+		B=0;
+		D=A.K();
+		l2:while (D.O()!=0) {
+			C=D.L();
+			if(this.F(C)==0){
+			}else{
+				B=1;
+				continue l2;
+			}continue l2;
+		}return B;
+	},
+	// js.util.AbstractCollection#retainAll(java.util.Collection)
+	T:function(A,B,C,D){
+		B=0;
+		D=this.K();
+		l2:while (D.O()!=0) {
+			C=D.L();
+			if(A.U(C)!=0){
+			}else{
+				B=this.V(C);
+				continue l2;
+			}continue l2;
+		}return B;
+	},
+	// js.util.AbstractCollection#removeAll(java.util.Collection)
+	W:function(A,B,C,D){
+		B=0;
+		D=A.K();
+		l2:while (D.O()!=0) {
+			C=D.L();
+			if(this.V(C)==0){
+			}else{
+				B=1;
+				continue l2;
+			}continue l2;
+		}return B;
+	},
+	// js.util.AbstractCollection#containsAll(java.util.Collection)
+	X:function(A,B,C){
+		C=A.K();
+		l1:while (C.O()!=0) {
+			B=C.L();
+			if(this.U(B)!=0){
+			}else{
+				return false;
+			}continue l1;
+		}return true;
+	},
+	// js.util.AbstractCollection#toArray()
+	Y:function(){
+		return this.Z(new Array(0));
+	},
+	// js.util.AbstractCollection#toArray(java.lang.Object[])
+	Z:function(A,B,C,D,E){
+		B=this.R();
+		if(A.length>=B){
+		}else{
+			A=[];
+		}C=this.K();
+		D=0;
+		l6:while (C.O()!=0) {
+			E=C.L();
+			A[D]=E;
+			++D;
+			continue l6;
+		}return A;
+	}
+});
+
+boot.define("O",boot.S,{
+	
+	// java.lang.Error#<init>()
+	$0:function(){
+		boot.S.prototype.$0.call(this);
+	},
+	// java.lang.Error#<init>(java.lang.String)
+	$1:function(A){
+		boot.S.prototype.$2.call(this,A);
+	},
+	// java.lang.Error#<init>(java.lang.String, java.lang.Throwable)
+	$2:function(A,B){
+		boot.S.prototype.$1.call(this,A,B);
+	},
+	// java.lang.Error#<init>(java.lang.Throwable)
+	$3:function(A){
+		boot.S.prototype.$3.call(this,A);
+	},
+	// java.lang.Error#<init>(java.lang.String, java.lang.Throwable, boolean, boolean)
+	$4:function(A,B,C,D){
+		boot.S.prototype.$4.call(this,A,B,C,D);
+	}
+});
+
+boot.define("K",boot.M,{
 	
 	// js.util.ArrayList#<init>()
 	$0:function(){
-		boot.Z.prototype.$0.call(this);
+		boot.M.prototype.$0.call(this);
 		this.a=[];
 	},
 	// js.util.ArrayList#size()
-	BC:function(){
+	R:function(){
 		return this.a.length;
 	},
 	// js.util.ArrayList#contains(java.lang.Object)
-	BF:function(A){
+	U:function(A){
 		return this.a.indexOf(A)!=-1;
 	},
 	// js.util.ArrayList#iterator()
-	L:function(){
-		return new boot.BB(this,null,0);
+	K:function(){
+		return new boot.N(this,null,0);
 	},
 	// js.util.ArrayList#add(java.lang.Object)
 	F:function(A){
@@ -947,7 +270,7 @@ boot.define("BA",boot.Z,{
 		return true;
 	},
 	// js.util.ArrayList#remove(java.lang.Object)
-	BU:function(A,B){
+	V:function(A,B){
 		B=this.a.indexOf(A);
 		if(B!=-1){
 			this.a.splice(B,1)[0];
@@ -957,63 +280,63 @@ boot.define("BA",boot.Z,{
 		}
 	},
 	// js.util.ArrayList#addAll(int, java.util.Collection)
-	CD:function(A,B){
+	u:function(A,B){
 		return false;
 	},
 	// js.util.ArrayList#clear()
-	BP:function(){
+	v:function(){
 		this.a=[];
 	},
 	// js.util.ArrayList#get(int)
-	CE:function(A){
+	w:function(A){
 		return this.a[A];
 	},
 	// js.util.ArrayList#set(int, java.lang.Object)
-	CF:function(A,B){
+	x:function(A,B){
 		return this.a[A]=B;
 	},
 	// js.util.ArrayList#add(int, java.lang.Object)
-	CG:function(A,B){
+	y:function(A,B){
 		this.a.splice(A,0,B);
 	},
 	// js.util.ArrayList#remove(int)
-	CH:function(A){
+	z:function(A){
 		return this.a.splice(A,1)[0];
 	},
 	// js.util.ArrayList#indexOf(java.lang.Object)
-	CI:function(A){
+	BA:function(A){
 		return this.a.indexOf(A);
 	},
 	// js.util.ArrayList#lastIndexOf(java.lang.Object)
-	CJ:function(A){
+	BB:function(A){
 		return this.a.lastIndexOf(A);
 	},
 	// js.util.ArrayList#listIterator()
-	CK:function(){
-		throw new boot.w(0);
+	BC:function(){
+		throw new boot.O(0);
 	},
 	// js.util.ArrayList#listIterator(int)
-	CL:function(A){
-		throw new boot.w(0);
+	BD:function(A){
+		throw new boot.O(0);
 	},
 	// js.util.ArrayList#subList(int, int)
-	CM:function(A,B){
-		throw new boot.w(0);
+	BE:function(A,B){
+		throw new boot.O(0);
 	},
 	// js.util.ArrayList#checkRange(int)
-	CN:function(A){
+	BF:function(A){
 		if(A>=0){
-			if(this.BC()>A){
+			if(this.R()>A){
 				return;
 			}else{
-				throw new boot.BC("Index is overflowed. Size: "+this.BC()+"  Index: "+A,0);
+				throw new boot.P("Index is overflowed. Size: "+this.R()+"  Index: "+A,0);
 			}
 		}else{
-			throw new boot.BC("Negative index is unacceptable. Size: "+this.BC()+"  Index: "+A,0);
+			throw new boot.P("Negative index is unacceptable. Size: "+this.R()+"  Index: "+A,0);
 		}
 	},
 	// js.util.ArrayList#access$0(js.util.ArrayList)
-	_CO:function(A){
+	_BG:function(A){
 		return A.a;
 	}
 });
@@ -1026,18 +349,19 @@ boot.define("E",{
 		this.b=B;
 	},
 	// js.Application$Route#match(java.lang.String)
-	CB:function(A,B,C,D){
+	BM:function(A,B,C,D){
 		B=this.a.exec(A);
 		if(B!=null!=0){
-			C=new boot.BA(0);
+			C=new boot.K(0);
 			D=0;
 			l9:for (;
 			D<B.length-1;
 			++D) {
 				C.F(B[D+1]);
 			}try{
+				return this.b.newInstance(0,C.Y());
 			} catch ($) {
-				if ($ instanceof boot.z) {
+				if ($ instanceof boot.R) {
 					console.log(D);
 					return null;
 				}
@@ -1047,8 +371,8 @@ boot.define("E",{
 		}
 	},
 	// js.Application$Route#access$0(js.Application$Route, java.lang.String)
-	_CC:function(A,B){
-		return A.CB(B);
+	_M:function(A,B){
+		return A.BM(B);
 	},
 	// js.Application$Route#<init>(java.lang.String, java.lang.Class, js.Application$Route)
 	$0:function(A,B,C){
@@ -1056,46 +380,95 @@ boot.define("E",{
 	}
 });
 
-boot.define("BE",{
+boot.define("F",{
+	
+	// js.Page#<init>()
+	$0:function(){
+	}
+});
+
+boot.define("T",{
 	
 	// booton.translator.web.Location#<init>()
 	$0:function(){
 	}
 });
 
+boot.define("V",{
+	
+	// booton.translator.web.jQuery$1#<init>(booton.translator.web.jQuery)
+	$0:function(A){
+		this.a=A;
+		this.b=0;
+	},
+	// booton.translator.web.jQuery$1#hasNext()
+	O:function(){
+		return this.b<this.a.size();
+	},
+	// booton.translator.web.jQuery$1#next()
+	BP:function(){
+		return $(this.a.get(this.b++));
+	},
+	// booton.translator.web.jQuery$1#remove()
+	BL:function(){
+	},
+	// booton.translator.web.jQuery$1#next()
+	L:function(){
+		return this.BP();
+	}
+});
+
+boot.defineNative("jQuery",{
+	
+	// booton.translator.web.jQuery#<init>()
+	$0:function(){
+	},
+	// booton.translator.web.jQuery#child(java.lang.String)
+	BN:function(A){
+		return $(document.createElement(A)).appendTo(this);
+	},
+	// booton.translator.web.jQuery#child(java.lang.Class)
+	BO:function(A){
+		return this.BN("span").addClass(A);
+	},
+	// booton.translator.web.jQuery#iterator()
+	K:function(){
+		return new boot.V(this,0);
+	}
+});
 boot.define("D",{
 	
 	// js.Application$Router#<init>()
 	$1:function(){
-		this.a=new boot.BA(0);
+		this.a=new boot.K(0);
 	},
 	// js.Application$Router#handler(booton.translator.web.jQuery$Event)
 	handler:function(A){
-		this.CP(location.hash);
+		this.J(location.hash);
 	},
 	// js.Application$Router#dispatch(java.lang.String)
-	CP:function(A,B,C,D,E){
+	J:function(A,B,C,D,E){
 		if((A.length==0||A.startsWith("#")==0)){
 		}else{
 			A=A.substring(1);
-		}C=this.a.L();
-		l3:while (C.M()!=0) {
-			B=C.P();
-			D=boot.E.CC(B,A);
+		}C=this.a.K();
+		l3:while (C.O()!=0) {
+			B=C.L();
+			D=boot.E.M(B,A);
 			if(D==null){
 			}else{
 				E=$(document.createDocumentFragment());
-				D.Q(E);
+				D.N(E);
 				$("#Content").empty().append(E);
 				return;
 			}continue l3;
 		}
 	},
 	// js.Application$Router#dispatch(js.Page)
-	CQ:function(A,B){
+	P:function(A,B){
 		B=$(document.createDocumentFragment());
 		this.b=A;
-		this.b.Q(B);
+		this.b.N(B);
 		$("#Content").empty().append(B);
 	},
 	// js.Application$Router#<init>(js.Application$Router)
@@ -1104,7 +477,7 @@ boot.define("D",{
 	},
 	// js.Application$Router#access$1(js.Application$Router, java.lang.String)
 	_B:function(A,B){
-		A.CP(B);
+		A.J(B);
 	},
 	// js.Application$Router#access$2(js.Application$Router)
 	_E:function(A){
@@ -1112,6 +485,12 @@ boot.define("D",{
 	}
 });
 
+boot.defineNative("History",{
+	
+	// booton.translator.web.History#<init>()
+	$0:function(){
+	}
+});
 boot.define("B",{
 	
 	// js.Application#<clinit>()
@@ -1143,40 +522,662 @@ boot.define("B",{
 	}
 });
 
-boot.define("N",boot.O,{
+boot.define("J",{
+	
+	// js.application.Header$Menu#<init>(js.application.Header, booton.translator.web.jQuery)
+	$1:function(A,B){
+		this.a=A;;
+		this.b=B.BN("ul").addClass("d");
+	},
+	// js.application.Header$Menu#add(java.lang.String, java.lang.String)
+	I:function(A,B,C){
+		C=this.b.BN("li").addClass("e");
+		C.BN("a").addClass("c").attr("href",B).text(A);
+		return new boot.J(this.a,C,1);
+	},
+	// js.application.Header$Menu#<init>(js.application.Header, booton.translator.web.jQuery, js.application.Header$Menu)
+	$0:function(A,B,C){
+		boot.J.prototype.$1.call(this,A,B);
+	}
+});
+
+boot.define("I",{
+	
+	// js.application.Header#<init>()
+	$0:function(){
+		this.a=$("#Header").addClass("a");
+	},
+	// js.application.Header#add(java.lang.String, java.lang.String)
+	I:function(A,B,C){
+		C=this.a.BN("li").addClass("b");
+		C.BN("a").addClass("c").attr("href",B).text(A);
+		return new boot.J(this,C,null,0);
+	}
+});
+
+boot.define("x",{
+	
+	// js.util.HashMap$View#<init>(js.util.HashMap, java.util.Iterator, boolean)
+	$1:function(A,B,C){
+		this.a=A;;
+		this.b=B;
+		this.c=C;
+	},
+	// js.util.HashMap$View#hasNext()
+	O:function(){
+		return this.b.O();
+	},
+	// js.util.HashMap$View#next()
+	L:function(A){
+		A=this.b.L();
+		if(this.c==0){
+			return A.Bv();
+		}else{
+			return A.CC();
+		}
+	},
+	// js.util.HashMap$View#remove()
+	BL:function(){
+		this.b.BL();
+	},
+	// js.util.HashMap$View#<init>(js.util.HashMap, java.util.Iterator, boolean, js.util.HashMap$View)
+	$0:function(A,B,C,D){
+		boot.x.prototype.$1.call(this,A,B,C);
+	}
+});
+
+boot.define("y",boot.M,{
+	
+	// js.util.AbstractSet#<init>()
+	$0:function(){
+		boot.M.prototype.$0.call(this);
+	}
+});
+
+boot.define("z",{
+	
+	// js.util.HashSet$View#<init>(js.util.HashSet, booton.translator.js.NativeArray)
+	$1:function(A,B){
+		this.a=A;;
+		this.b=0;
+		this.c=B;
+	},
+	// js.util.HashSet$View#hasNext()
+	O:function(){
+		return this.b<this.c.length;
+	},
+	// js.util.HashSet$View#next()
+	L:function(){
+		this.d=boot.Z.CG(this.a)[this.c[this.b++]];
+		return this.d;
+	},
+	// js.util.HashSet$View#remove()
+	BL:function(){
+		if(this.b<=0){
+		}else{
+			this.a.V(this.d);
+		}
+	},
+	// js.util.HashSet$View#<init>(js.util.HashSet, booton.translator.js.NativeArray, js.util.HashSet$View)
+	$0:function(A,B,C){
+		boot.z.prototype.$1.call(this,A,B);
+	}
+});
+
+boot.define("Z",boot.y,{
+	
+	// js.util.HashSet#<init>()
+	$0:function(){
+		boot.y.prototype.$0.call(this);
+		this.a=0;
+		this.b={};
+	},
+	// js.util.HashSet#size()
+	R:function(){
+		return this.a;
+	},
+	// js.util.HashSet#contains(java.lang.Object)
+	U:function(A){
+		return this.CF(A) in this.b;
+	},
+	// js.util.HashSet#add(java.lang.Object)
+	F:function(A,B){
+		B=this.CF(A);
+		if(B in this.b==0){
+			this.a=this.a+1;
+			this.b[B]=A;
+			return true;
+		}else{
+			return false;
+		}
+	},
+	// js.util.HashSet#remove(java.lang.Object)
+	V:function(A,B){
+		B=this.CF(A);
+		if(B in this.b!=0){
+			this.a=this.a-1;
+			delete this.b[B];
+			return true;
+		}else{
+			return false;
+		}
+	},
+	// js.util.HashSet#clear()
+	v:function(){
+		this.a=0;
+		this.b=[];
+	},
+	// js.util.HashSet#iterator()
+	K:function(){
+		return new boot.z(this,this.b.keys(),null,0);
+	},
+	// js.util.HashSet#hash(java.lang.Object)
+	CF:function(A){
+		return (A==null?-1:A.hashCode());
+	},
+	// js.util.HashSet#find(java.lang.Object)
+	Bu:function(A){
+		return this.b[this.CF(A)];
+	},
+	// js.util.HashSet#push(java.lang.Object)
+	Bw:function(A,B,C){
+		B=null;
+		C=this.CF(A);
+		if(C in this.b==0){
+			this.a=this.a+1;
+		}else{
+			B=this.b[C];
+		}this.b[C]=A;
+		return B;
+	},
+	// js.util.HashSet#pull(java.lang.Object)
+	Bz:function(A,B,C){
+		B=null;
+		C=this.CF(A);
+		if(C in this.b==0){
+		}else{
+			B=this.b[C];
+			this.a=this.a-1;
+			delete this.b[C];
+		}return B;
+	},
+	// js.util.HashSet#access$0(js.util.HashSet)
+	_CG:function(A){
+		return A.b;
+	}
+});
+
+boot.define("w",boot.M,{
+	
+	// js.util.HashMap$Values#<init>(js.util.HashMap)
+	$1:function(A){
+		this.a=A;boot.M.prototype.$0.call(this);
+	},
+	// js.util.HashMap$Values#size()
+	R:function(){
+		return boot.Y.CE(this.a).R();
+	},
+	// js.util.HashMap$Values#contains(java.lang.Object)
+	U:function(A){
+		return this.a.BZ(A);
+	},
+	// js.util.HashMap$Values#iterator()
+	K:function(){
+		return new boot.x(this.a,boot.Y.CE(this.a).K(),0,null,0);
+	},
+	// js.util.HashMap$Values#add(java.lang.Object)
+	F:function(A){
+		return false;
+	},
+	// js.util.HashMap$Values#remove(java.lang.Object)
+	V:function(A,B,C){
+		B=this.K();
+		l2:while (B.O()!=0) {
+			C=B.L();
+			if(C!=A){
+			}else{
+				B.BL();
+				return true;
+			}continue l2;
+		}return false;
+	},
+	// js.util.HashMap$Values#clear()
+	v:function(){
+		boot.Y.CE(this.a).v();
+	},
+	// js.util.HashMap$Values#<init>(js.util.HashMap, js.util.HashMap$Values)
+	$0:function(A,B){
+		boot.w.prototype.$1.call(this,A);
+	}
+});
+
+boot.define("u",{
+	
+	// js.util.HashMap$SimpleEntry#<init>(java.lang.Object, java.lang.Object)
+	$1:function(A,B){
+		this.a=A;
+		this.b=B;
+	},
+	// js.util.HashMap$SimpleEntry#getKey()
+	CC:function(){
+		return this.a;
+	},
+	// js.util.HashMap$SimpleEntry#getValue()
+	Bv:function(){
+		return this.b;
+	},
+	// js.util.HashMap$SimpleEntry#setValue(java.lang.Object)
+	CH:function(A,B){
+		B=this.b;
+		this.b=A;
+		return B;
+	},
+	// js.util.HashMap$SimpleEntry#hashCode()
+	hashCode:function(){
+		return this.a.hashCode();
+	},
+	// js.util.HashMap$SimpleEntry#<init>(java.lang.Object, java.lang.Object, js.util.HashMap$SimpleEntry)
+	$0:function(A,B,C){
+		boot.u.prototype.$1.call(this,A,B);
+	}
+});
+
+boot.define("v",boot.y,{
+	
+	// js.util.HashMap$Keys#<init>(js.util.HashMap)
+	$1:function(A){
+		this.a=A;boot.y.prototype.$0.call(this);
+	},
+	// js.util.HashMap$Keys#size()
+	R:function(){
+		return boot.Y.CE(this.a).R();
+	},
+	// js.util.HashMap$Keys#contains(java.lang.Object)
+	U:function(A){
+		return boot.Y.CE(this.a).U(A);
+	},
+	// js.util.HashMap$Keys#iterator()
+	K:function(){
+		return new boot.x(this.a,boot.Y.CE(this.a).K(),1,null,0);
+	},
+	// js.util.HashMap$Keys#add(java.lang.Object)
+	F:function(A){
+		return false;
+	},
+	// js.util.HashMap$Keys#remove(java.lang.Object)
+	V:function(A){
+		return boot.Y.CE(this.a).V(A);
+	},
+	// js.util.HashMap$Keys#clear()
+	v:function(){
+		boot.Y.CE(this.a).v();
+	},
+	// js.util.HashMap$Keys#<init>(js.util.HashMap, js.util.HashMap$Keys)
+	$0:function(A,B){
+		boot.v.prototype.$1.call(this,A);
+	}
+});
+
+boot.define("Y",{
+	
+	// js.util.HashMap#<init>()
+	$0:function(){
+		this.a=new boot.Z(0);
+	},
+	// js.util.HashMap#size()
+	R:function(){
+		return this.a.R();
+	},
+	// js.util.HashMap#isEmpty()
+	Q:function(){
+		return this.a.Q();
+	},
+	// js.util.HashMap#containsKey(java.lang.Object)
+	BY:function(A){
+		return this.a.U(A);
+	},
+	// js.util.HashMap#containsValue(java.lang.Object)
+	BZ:function(A,B,C){
+		C=this.BX().K();
+		l1:while (C.O()!=0) {
+			B=C.L();
+			if(B!=A){
+			}else{
+				return true;
+			}continue l1;
+		}return false;
+	},
+	// js.util.HashMap#get(java.lang.Object)
+	BV:function(A,B){
+		B=this.a.Bu(A);
+		return (B==null?null:B.Bv());
+	},
+	// js.util.HashMap#put(java.lang.Object, java.lang.Object)
+	BS:function(A,B,C){
+		C=this.a.Bw(new boot.u(A,B,null,0));
+		if(C!=null){
+			return C.Bv();
+		}else{
+			return null;
+		}
+	},
+	// js.util.HashMap#remove(java.lang.Object)
+	Bx:function(A,B){
+		B=this.a.Bz(A);
+		if(B!=null){
+			return B.Bv();
+		}else{
+			return null;
+		}
+	},
+	// js.util.HashMap#putAll(java.util.Map)
+	CA:function(A,B,C){
+		C=A.CB().K();
+		l1:for (;
+		C.O()!=0;
+		this.BS(B.CC(),B.Bv())) {
+			B=C.L();
+		}
+	},
+	// js.util.HashMap#clear()
+	v:function(){
+		this.a.v();
+	},
+	// js.util.HashMap#keySet()
+	CD:function(){
+		return new boot.v(this,null,0);
+	},
+	// js.util.HashMap#values()
+	BX:function(){
+		return new boot.w(this,null,0);
+	},
+	// js.util.HashMap#entrySet()
+	CB:function(){
+		return this.a;
+	},
+	// js.util.HashMap#access$0(js.util.HashMap)
+	_CE:function(A){
+		return A.a;
+	}
+});
+
+boot.define("X",{
+	
+	// teemowork.model.Champion#<clinit>()
+	_:function(){
+		boot.X.b=new boot.Y(0);
+		boot.X.c=new boot.X("Ahri",0);
+		boot.X.d=new boot.X("Akali",0);
+		boot.X.e=new boot.X("Alistar",0);
+		boot.X.f=new boot.X("Amumu",0);
+		boot.X.g=new boot.X("Ashe",0);
+		boot.X.h=new boot.X("Blitzcrank",0);
+		boot.X.i=new boot.X("Brand",0);
+		boot.X.j=new boot.X("Caitlyn",0);
+		boot.X.k=new boot.X("Cassiopeia",0);
+		boot.X.l=new boot.X("Chogath",0);
+		boot.X.m=new boot.X("Corki",0);
+		boot.X.n=new boot.X("Darius",0);
+		boot.X.o=new boot.X("Diana",0);
+		boot.X.p=new boot.X("Dr.Mundo",0);
+		boot.X.ba=new boot.X("Elise",0);
+		boot.X.bb=new boot.X("Evelynn",0);
+		boot.X.bc=new boot.X("Ezreal",0);
+		boot.X.bd=new boot.X("Fiddlesticks",0);
+		boot.X.be=new boot.X("Fiora",0);
+		boot.X.bf=new boot.X("Fizz",0);
+		boot.X.bg=new boot.X("Galio",0);
+		boot.X.bh=new boot.X("Gangplank",0);
+		boot.X.bi=new boot.X("Garen",0);
+		boot.X.bj=new boot.X("Gragas",0);
+		boot.X.bk=new boot.X("Graves",0);
+		boot.X.bl=new boot.X("Hecarim",0);
+		boot.X.bm=new boot.X("Heimerdinger",0);
+		boot.X.bn=new boot.X("Irelia",0);
+		boot.X.bo=new boot.X("Janna",0);
+		boot.X.bp=new boot.X("Jarvan IV",0);
+		boot.X.ca=new boot.X("Jax",0);
+		boot.X.cb=new boot.X("Jayce",0);
+		boot.X.cc=new boot.X("Karma",0);
+		boot.X.cd=new boot.X("Karthus",0);
+		boot.X.ce=new boot.X("Kassadin",0);
+		boot.X.cf=new boot.X("Katarina",0);
+		boot.X.cg=new boot.X("Kayle",0);
+		boot.X.ch=new boot.X("Kennen",0);
+		boot.X.ci=new boot.X("Kha'zix",0);
+		boot.X.cj=new boot.X("Kog'maw",0);
+		boot.X.ck=new boot.X("LeBlanc",0);
+		boot.X.cl=new boot.X("Lee Sin",0);
+		boot.X.cm=new boot.X("Leona",0);
+		boot.X.cn=new boot.X("Lulu",0);
+		boot.X.co=new boot.X("Lux",0);
+		boot.X.cp=new boot.X("Malphite",0);
+		boot.X.da=new boot.X("Maokai",0);
+		boot.X.db=new boot.X("Master Yi",0);
+		boot.X.dc=new boot.X("Miss Fortune",0);
+		boot.X.dd=new boot.X("Mordekaiser",0);
+		boot.X.de=new boot.X("Morgana",0);
+		boot.X.df=new boot.X("Nami",0);
+		boot.X.dg=new boot.X("Nasus",0);
+		boot.X.dh=new boot.X("Nautilus",0);
+		boot.X.di=new boot.X("Nidalee",0);
+		boot.X.dj=new boot.X("Nocturne",0);
+		boot.X.dk=new boot.X("Nunu",0);
+		boot.X.dl=new boot.X("Olaf",0);
+		boot.X.dm=new boot.X("Orianna",0);
+		boot.X.dn=new boot.X("Pantheon",0);
+		boot.X.dp=new boot.X("Poppy",0);
+		boot.X.ea=new boot.X("Rammus",0);
+		boot.X.eb=new boot.X("Renekton",0);
+		boot.X.ec=new boot.X("Rengar",0);
+		boot.X.ed=new boot.X("Riven",0);
+		boot.X.ee=new boot.X("Rumble",0);
+		boot.X.ef=new boot.X("Ryze",0);
+		boot.X.eg=new boot.X("Sejuani",0);
+		boot.X.eh=new boot.X("Shaco",0);
+		boot.X.ei=new boot.X("Shen",0);
+		boot.X.ej=new boot.X("Shyvana",0);
+		boot.X.ek=new boot.X("Singed",0);
+		boot.X.el=new boot.X("Sion",0);
+		boot.X.em=new boot.X("Sivir",0);
+		boot.X.en=new boot.X("Skarner",0);
+		boot.X.eo=new boot.X("Sona",0);
+		boot.X.ep=new boot.X("Soraka",0);
+		boot.X.fa=new boot.X("Swain",0);
+		boot.X.fb=new boot.X("Syndra",0);
+		boot.X.fc=new boot.X("Talon",0);
+		boot.X.fd=new boot.X("Taric",0);
+		boot.X.fe=new boot.X("Teemo",0);
+		boot.X.ff=new boot.X("Tristana",0);
+		boot.X.fg=new boot.X("Trundle",0);
+		boot.X.fh=new boot.X("Tryndamere",0);
+		boot.X.fi=new boot.X("Twisted Fate",0);
+		boot.X.fj=new boot.X("Twitch",0);
+		boot.X.fk=new boot.X("Udyr",0);
+		boot.X.fl=new boot.X("Urgot",0);
+		boot.X.fm=new boot.X("Varus",0);
+		boot.X.fn=new boot.X("Vayne",0);
+		boot.X.fo=new boot.X("Veigar",0);
+		boot.X.fp=new boot.X("Vi",0);
+		boot.X.ga=new boot.X("Viktor",0);
+		boot.X.gb=new boot.X("Vladimir",0);
+		boot.X.gc=new boot.X("Volibear",0);
+		boot.X.gd=new boot.X("Warwick",0);
+		boot.X.ge=new boot.X("Wukong",0);
+		boot.X.gf=new boot.X("Xerath",0);
+		boot.X.gg=new boot.X("Xin Zhao",0);
+		boot.X.gh=new boot.X("Yorick",0);
+		boot.X.gi=new boot.X("Zed",0);
+		boot.X.gj=new boot.X("Ziggs",0);
+		boot.X.gk=new boot.X("Zilean",0);
+		boot.X.gl=new boot.X("Zyra",0);
+	},
+	// teemowork.model.Champion#<init>(java.lang.String)
+	$0:function(A){
+		this.a=A;
+		this.gm=this.BR().toLowerCase();
+		boot.X.b.BS(A,this);
+	},
+	// teemowork.model.Champion#getSystemName()
+	BR:function(){
+		return this.a.replace(/\./g,"").replace(/\s/g,"").replace(/\'/g,"");
+	},
+	// teemowork.model.Champion#getSplashArt()
+	BT:function(){
+		return "src/main/resources/teemowork/splash/"+this.BR()+".jpg";
+	},
+	// teemowork.model.Champion#getIcon()
+	BU:function(){
+		return "src/main/resources/teemowork/icon/"+this.BR()+".png";
+	},
+	// teemowork.model.Champion#getByName(java.lang.String)
+	_BQ:function(A){
+		return boot.X.b.BV(A);
+	},
+	// teemowork.model.Champion#getAll()
+	_BW:function(){
+		return boot.X.b.BX();
+	}
+});
+
+boot.define("G",boot.F,{
+	
+	// teemowork.ChampionDetail#<init>(java.lang.String)
+	$0:function(A){
+		boot.G.prototype.$1.call(this,boot.X.BQ(A));
+	},
+	// teemowork.ChampionDetail#<init>(teemowork.model.Champion)
+	$1:function(A){
+		boot.F.prototype.$0.call(this);
+		if(A!=null){
+			this.a=A;
+			return;
+		}else{
+			throw new boot.O(0);
+		}
+	},
+	// teemowork.ChampionDetail#load(booton.translator.web.jQuery)
+	N:function(A){
+		console.log("detail page "+this.a+"  "+this.a.a);
+	},
+	// teemowork.ChampionDetail#getPageId()
+	H:function(){
+		return "Champion/"+this.a.a;
+	}
+});
+
+boot.define("BD",{
+	
+	// js.ui.ImageGrid$1#<init>(js.ui.ImageGrid, booton.translator.web.jQuery)
+	$0:function(A,B){
+		this.a=A;this.b=B;
+	},
+	// js.ui.ImageGrid$1#handler(booton.translator.web.jQuery$Event)
+	handler:function(A,B,C,D){
+		B=this.b.val().toLowerCase().replace(/\s/g,"");
+		D=boot.BB.CM(this.a).CB().K();
+		l2:while (D.O()!=0) {
+			C=D.L();
+			if(this.a.CL(C.CC()).toLowerCase().indexOf(B) != -1==0){
+				C.Bv().addClass("i");
+				continue l2;
+			}else{
+				C.Bv().removeClass("i");
+				continue l2;
+			}
+		}
+	}
+});
+
+boot.define("BE",{
+	
+	// js.ui.ImageGrid$2#<init>(js.ui.ImageGrid, java.lang.Object)
+	$0:function(A,B){
+		this.a=A;this.b=B;
+	},
+	// js.ui.ImageGrid$2#handler(booton.translator.web.jQuery$Event)
+	handler:function(A){
+		this.a.CQ(this.b);
+	}
+});
+
+boot.define("BC",{
+	
+	// js.ui.UI#<init>()
+	$0:function(){
+		boot.BC.prototype.$1.call(this,"div");
+	},
+	// js.ui.UI#<init>(java.lang.String)
+	$1:function(A){
+		this.a=$("<"+A+">");
+	}
+});
+
+boot.define("BB",boot.BC,{
+	
+	// js.ui.ImageGrid#<init>()
+	$0:function(){
+		boot.BC.prototype.$0.call(this);
+		this.b=new boot.Y(0);
+		this.c=this.CJ();
+	},
+	// js.ui.ImageGrid#compose(booton.translator.web.jQuery)
+	CI:function(A,B,C,D,E){
+		this.a.css("line-height","0").css("width","700px").css("margin","0 auto");
+		B=$("<input type='text'>");
+		B.appendTo(this.a);
+		B.addClass("f").css("display","block");
+		B.keyup(new boot.BD(this,B,0));
+		D=this.c.K();
+		l6:for (;
+		D.O()!=0;
+		this.b.BS(C,E)) {
+			C=D.L();
+			E=this.a.BO("g").css("background-image","url("+this.CK(C)+")");
+			E.BN("span").addClass("h").text(this.CL(C));
+			E.click(new boot.BE(this,C,0));
+		}A.append(this.a);
+	},
+	// js.ui.ImageGrid#access$0(js.ui.ImageGrid)
+	_CM:function(A){
+		return A.b;
+	}
+});
+
+boot.define("BA",boot.BB,{
 	
 	// teemowork.ChampionSelect$1#<init>(teemowork.ChampionSelect)
 	$0:function(A){
 		this.d=A;
-		boot.O.prototype.$0.call(this);
+		boot.BB.prototype.$0.call(this);
 	},
 	// teemowork.ChampionSelect$1#sources()
-	S:function(){
-		return boot.T.X();
+	CJ:function(){
+		return boot.X.BW();
 	},
 	// teemowork.ChampionSelect$1#getTitle(teemowork.model.Champion)
-	Y:function(A){
+	CN:function(A){
 		return A.a;
 	},
 	// teemowork.ChampionSelect$1#getImageURI(teemowork.model.Champion)
-	Z:function(A){
-		return A.u();
+	CO:function(A){
+		return A.BU();
 	},
 	// teemowork.ChampionSelect$1#select(teemowork.model.Champion)
-	v:function(A){
+	CP:function(A){
 		boot.B.G(new boot.G(A.a,0));
 	},
 	// teemowork.ChampionSelect$1#getTitle(java.lang.Object)
-	U:function(A){
-		return this.Y(A);
+	CL:function(A){
+		return this.CN(A);
 	},
 	// teemowork.ChampionSelect$1#getImageURI(java.lang.Object)
-	T:function(A){
-		return this.Z(A);
+	CK:function(A){
+		return this.CO(A);
 	},
 	// teemowork.ChampionSelect$1#select(java.lang.Object)
-	w:function(A){
-		this.v(A);
+	CQ:function(A){
+		this.CP(A);
 	}
 });
 
@@ -1185,11 +1186,11 @@ boot.define("H",boot.F,{
 	// teemowork.ChampionSelect#<init>()
 	$0:function(){
 		boot.F.prototype.$0.call(this);
-		this.a=new boot.N(this,0);
+		this.a=new boot.BA(this,0);
 	},
 	// teemowork.ChampionSelect#load(booton.translator.web.jQuery)
-	Q:function(A){
-		this.a.R(A);
+	N:function(A){
+		this.a.CI(A);
 	},
 	// teemowork.ChampionSelect#getPageId()
 	H:function(){
