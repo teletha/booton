@@ -128,4 +128,44 @@ public class TryTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void TryCatchFromDepth() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 10) int value) {
+                try {
+                    return compute(value);
+                } catch (Exception e) {
+                    return value + 10;
+                }
+            }
+
+            private int compute(int value) throws Exception {
+                if (value % 2 == 0) {
+                    throw new Exception();
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void TryCatchFromDepth2() {
+        test(new Scriptable() {
+
+            public int act(int value) {
+                for (int i = 0; i < 1; i++) {
+                    value++;
+                }
+
+                try {
+                    return value;
+                } catch (Exception e) {
+                    return 10;
+                }
+
+            }
+        });
+    }
 }
