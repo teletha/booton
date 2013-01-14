@@ -1,24 +1,18 @@
 /*
- * Copyright (C) 2008 Nameless Production Committee.
+ * Copyright (C) 2013 Nameless Production Committee
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *          http://opensource.org/licenses/mit-license.php
  */
 package booton.translator;
 
 import org.objectweb.asm.Type;
 
 /**
- * @version 2009/08/06 9:03:19
+ * @version 2013/01/14 11:59:19
  */
 class ScriptBuffer {
 
@@ -26,6 +20,9 @@ class ScriptBuffer {
     private final StringBuilder buffer = new StringBuilder();
 
     private int mark = 0;
+
+    /** The current depth of indentation for debug. */
+    private int depth = 0;
 
     /**
      * <p>
@@ -37,7 +34,8 @@ class ScriptBuffer {
      * @param description
      */
     public void debug(Class owner, String methodName, String description) {
-        buffer.append("\r\n// ");
+        line();
+        buffer.append("/* ");
         buffer.append(owner.getName()).append("#").append(methodName).append("(");
 
         Type type = Type.getMethodType(description);
@@ -50,7 +48,51 @@ class ScriptBuffer {
                 buffer.append(", ");
             }
         }
-        buffer.append(")\r\n");
+        buffer.append(") */");
+        line();
+    }
+
+    /**
+     * <p>
+     * Formt line for debug.
+     * </p>
+     * 
+     * @return A chainable API.
+     */
+    public ScriptBuffer line() {
+        // write line separator
+        buffer.append("\r\n");
+
+        // write indent
+        for (int i = 0; i < depth * 2; i++) {
+            buffer.append(' ');
+        }
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * Format code for degug.
+     * </p>
+     * 
+     * @return A chainable API.
+     */
+    private ScriptBuffer startIndent() {
+        depth++;
+        return line();
+    }
+
+    /**
+     * <p>
+     * Format code for degug.
+     * </p>
+     * 
+     * @return A chainable API.
+     */
+    private ScriptBuffer endIndent() {
+        depth--;
+        return line();
     }
 
     /**
@@ -61,7 +103,7 @@ class ScriptBuffer {
      */
     public ScriptBuffer append(Object... fragments) {
         for (Object fragment : fragments) {
-            buffer.append(fragment);
+            write(fragment);
         }
 
         // API definition
@@ -71,11 +113,25 @@ class ScriptBuffer {
     /**
      * Helper method to write script source.
      * 
-     * @param fragments
+     * @param fragment
      * @return
      */
-    ScriptBuffer append(Object fragments) {
-        buffer.append(fragments);
+    private ScriptBuffer write(Object fragment) {
+        String value = fragment.toString();
+        int length = value.length();
+
+        // brace makes indentation
+        if (length != 0 && value.charAt(0) == '}') {
+            endIndent();
+        }
+
+        // write actual code
+        buffer.append(value);
+
+        // brace makes indentation
+        if (length != 0 && value.charAt(length - 1) == '{') {
+            startIndent();
+        }
 
         // API definition
         return this;

@@ -133,35 +133,35 @@ public class NodeDebugger {
      */
     private static String format(List<Node> nodes) {
         Set<TryCatch> tries = new LinkedHashSet();
-    
+
         for (Node node : nodes) {
             for (TryCatch block : node.catches) {
                 tries.add(block);
             }
         }
-    
+
         // compute max id length
         int max = 1;
-    
+
         for (Node node : nodes) {
             max = Math.max(max, String.valueOf(node.id).length());
         }
-    
+
         int incoming = 0;
         int outgoing = 0;
         int backedge = 0;
-    
+
         for (Node node : nodes) {
             incoming = Math.max(incoming, node.incoming.size() * max + (node.incoming.size() - 1) * 2);
             outgoing = Math.max(outgoing, node.outgoing.size() * max + (node.outgoing.size() - 1) * 2);
             backedge = Math.max(backedge, node.backedges.size() * max + (node.backedges.size() - 1) * 2);
         }
-    
+
         Formatter format = new Formatter();
-    
+
         for (Node node : nodes) {
             StringBuilder tryFlow = new StringBuilder();
-    
+
             for (TryCatch block : tries) {
                 if (block.start == node) {
                     tryFlow.append("s");
@@ -175,14 +175,16 @@ public class NodeDebugger {
                     tryFlow.append("  ");
                 }
             }
-    
+
             format.write(String.valueOf(node.id), max);
             format.write("  in : ");
             format.formatNode(node.incoming, incoming);
             format.write("out : ");
             format.formatNode(node.outgoing, outgoing);
-            format.write("back : ");
-            format.formatNode(node.backedges, backedge);
+            if (backedge != 0) {
+                format.write("back : ");
+                format.formatNode(node.backedges, backedge);
+            }
             if (!tries.isEmpty()) {
                 format.write("try : ");
                 format.write(tryFlow.toString(), tries.size() * 2 + 2);

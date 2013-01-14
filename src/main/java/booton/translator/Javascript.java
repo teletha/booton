@@ -294,6 +294,7 @@ public class Javascript {
 
         // End class definition
         code.append("});");
+        code.line();
     }
 
     /**
