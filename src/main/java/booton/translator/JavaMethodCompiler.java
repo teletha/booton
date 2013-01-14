@@ -1228,7 +1228,7 @@ class JavaMethodCompiler extends MethodVisitor {
         record(opcode);
 
         // check caught exception variable
-        if (match(FRAME_SAME1, ASTORE)) {
+        if (match(FRAME_SAME1, ASTORE) || match(FRAME_FULL, ASTORE)) {
             return;
         }
 
