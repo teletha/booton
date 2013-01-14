@@ -8,7 +8,7 @@ boot.defineNative("Document",{
 		return this.createElement(A);
 	}
 });
-boot.define("R",{
+boot.define("L",{
 	
 	// booton.translator.web.jQuery$1#<init>(booton.translator.web.jQuery)
 	$0:function(A){
@@ -16,19 +16,19 @@ boot.define("R",{
 		this.b=0;
 	},
 	// booton.translator.web.jQuery$1#hasNext()
-	T:function(){
+	M:function(){
 		return this.b<this.a.size();
 	},
 	// booton.translator.web.jQuery$1#next()
-	Y:function(){
+	N:function(){
 		return $(this.a.get(this.b++));
 	},
 	// booton.translator.web.jQuery$1#remove()
-	Z:function(){
+	O:function(){
 	},
 	// booton.translator.web.jQuery$1#next()
-	N:function(){
-		return this.Y();
+	P:function(){
+		return this.N();
 	}
 });
 
@@ -38,18 +38,25 @@ boot.defineNative("jQuery",{
 	$0:function(){
 	},
 	// booton.translator.web.jQuery#child(java.lang.String)
-	Q:function(A){
+	J:function(A){
 		return $(document.createElement(A)).appendTo(this);
 	},
 	// booton.translator.web.jQuery#child(java.lang.Class)
-	O:function(A){
-		return this.Q("span").addClass(A);
+	K:function(A){
+		return this.J("span").addClass(A);
 	},
 	// booton.translator.web.jQuery#iterator()
-	M:function(){
-		return new boot.R(this,0);
+	L:function(){
+		return new boot.L(this,0);
 	}
 });
+boot.define("BE",{
+	
+	// booton.translator.web.Location#<init>()
+	$0:function(){
+	}
+});
+
 boot.define("BG",{
 	
 	// booton.live.LiveCoding$1#<init>()
@@ -61,9 +68,9 @@ boot.define("BG",{
 	}
 });
 
-boot.define("BE",{
+boot.define("BI",{
 	
-	// booton.translator.web.Location#<init>()
+	// booton.translator.web.WebSocket#<init>()
 	$0:function(){
 	}
 });
@@ -77,13 +84,6 @@ boot.defineNative("MessageEvent",{
 boot.define("BK",{
 	
 	// booton.translator.web.Window#<init>()
-	$0:function(){
-	}
-});
-
-boot.define("BI",{
-	
-	// booton.translator.web.WebSocket#<init>()
 	$0:function(){
 	}
 });
