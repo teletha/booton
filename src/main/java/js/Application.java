@@ -186,7 +186,6 @@ public abstract class Application {
                 try {
                     return Classes.newInstance(page, wildcards.toArray());
                 } catch (Exception e) {
-                    System.out.println(e);
                     return null;
                 }
             }

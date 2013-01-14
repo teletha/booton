@@ -362,7 +362,6 @@ boot.define("E",{
 				return this.b.newInstance(0,C.Y());
 			} catch ($) {
 				if ($ instanceof boot.R) {
-					console.log(D);
 					return null;
 				}
 			}
