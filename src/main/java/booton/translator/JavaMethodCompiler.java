@@ -95,6 +95,9 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The javascript object code. */
     private final ScriptBuffer code;
 
+    /** The method return type. */
+    private final Type returnType;
+
     /** The flag whether the current processing method is static or not. */
     private boolean isNotStatic;
 
@@ -147,6 +150,7 @@ class JavaMethodCompiler extends MethodVisitor {
         this.script = script;
         this.code = code;
         this.isNotStatic = isNotStatic;
+        this.returnType = Type.getReturnType(desc);
     }
 
     /**
@@ -179,7 +183,7 @@ class JavaMethodCompiler extends MethodVisitor {
             iterator.next().computeTryBlock();
         }
 
-        NodeDebugger.dump(script, original, nodes);
+        // NodeDebugger.dump(script, original, nodes);
 
         // write script
         code.mark();
@@ -187,7 +191,6 @@ class JavaMethodCompiler extends MethodVisitor {
         nodes.get(0).write(code);
 
         code.optimize();
-
         code.append('}'); // method end
     }
 
@@ -548,7 +551,17 @@ class JavaMethodCompiler extends MethodVisitor {
                 }
             }
 
-            current.addExpression("return ", current.remove(0));
+            Operand operand = current.remove(0);
+
+            if (returnType == BOOLEAN_TYPE) {
+                if (operand.toString().equals("0")) {
+                    operand = new OperandExpression("false");
+                } else if (operand.toString().equals("1")) {
+                    operand = new OperandExpression("true");
+                }
+            }
+
+            current.addExpression("return ", operand);
 
             // disconnect the next appearing node from the current node
             current = null;

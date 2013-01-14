@@ -111,8 +111,18 @@ public abstract class Application {
             }
 
             for (Route route : routes) {
-                if (route.match(pageId) != null) {
-                    // dispatch(Classes.newInstance(route.page));
+                Page page = route.match(pageId);
+
+                if (page != null) {
+                    // create element cradle
+                    jQuery cradle = $(document.createDocumentFragment());
+
+                    // build page element
+                    page.load(cradle);
+
+                    // clear old page and append new page
+                    $("#Content").empty().append(cradle);
+
                     return;
                 }
             }
@@ -166,26 +176,20 @@ public abstract class Application {
 
             if (!matcher.matches()) {
                 return null;
+            } else {
+                List<String> wildcards = new ArrayList();
+
+                for (int i = 0; i < matcher.groupCount(); i++) {
+                    wildcards.add(matcher.group(i + 1));
+                }
+
+                try {
+                    return Classes.newInstance(page, wildcards.toArray());
+                } catch (Exception e) {
+                    System.out.println(e);
+                    return null;
+                }
             }
-
-            List<String> groups = new ArrayList();
-
-            for (int i = 0; i < matcher.groupCount(); i++) {
-                groups.add(matcher.group(i + 1));
-            }
-
-            Page page = Classes.newInstance(this.page, groups.toArray());
-
-            // create element cradle
-            jQuery cradle = $(document.createDocumentFragment());
-
-            // build page element
-            page.load(cradle);
-
-            // clear old page and append new page
-            $("#Content").empty().append(cradle);
-
-            return page;
         }
     }
 }
