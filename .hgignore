@@ -9,4 +9,4 @@ syntax: regexp
 syntax: regexp
 \.factorypath
 syntax: regexp
-test.js
+test\.js
