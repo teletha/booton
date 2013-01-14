@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2012/11/30 15:32:30
+ * @version 2013/01/14 12:46:20
  */
 @SuppressWarnings("unused")
 public class ControlStructureTest extends ScriptTester {
@@ -529,82 +529,6 @@ public class ControlStructureTest extends ScriptTester {
                 }
 
                 return result;
-            }
-        });
-    }
-
-    @Test
-    @Ignore
-    public void TryCatch() {
-        test(new Scriptable() {
-
-            public int act(@Param(from = 0, to = 3) int value) {
-                try {
-                    if (value == 0) {
-                        throw new Error();
-                    }
-                    return value;
-                } catch (Error e) {
-                    return -1;
-                }
-            }
-        });
-    }
-
-    @Ignore
-    @Test
-    public void TryCatchFinally() {
-        test(new Scriptable() {
-
-            public int act(@Param(from = 0, to = 3) int value) {
-                try {
-                    if (value == 0) {
-                        throw new Error();
-                    }
-                    value++;
-                } catch (Error e) {
-                    value = 10;
-                } finally {
-                    value += 5;
-                }
-                return value;
-            }
-        });
-    }
-
-    @Test
-    @Ignore
-    public void TryFinallyAfter() {
-        test(new Scriptable() {
-
-            public int act(@Param(from = 0, to = 3) int value) {
-                try {
-                    value++;
-                } finally {
-                    value += 4;
-                }
-                return value;
-            }
-        });
-    }
-
-    @Test
-    @Ignore
-    public void TryMultipleCatch() {
-        test(new Scriptable() {
-
-            public int act(@Param(from = 0, to = 3) int value) {
-                try {
-                    if (value == 2) {
-                        throw new Error();
-                    }
-
-                    return 6 / value;
-                } catch (ArithmeticException e) {
-                    return -1;
-                } catch (Error e) {
-                    return -2;
-                }
             }
         });
     }

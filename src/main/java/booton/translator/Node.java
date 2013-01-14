@@ -10,7 +10,6 @@
 package booton.translator;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -20,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import booton.translator.JavaMethodCompiler.TryCatch;
 
 /**
- * @version 2009/08/05 14:51:59
+ * @version 2013/01/14 12:28:02
  */
 class Node {
 
@@ -49,7 +48,7 @@ class Node {
     Node follower;
 
     /** The dominator try-catch block. */
-    List<TryCatch> tries = new ArrayList();
+    Deque<TryCatch> catches = new ArrayDeque();
 
     /** The dominator node. */
     private Node dominator;
@@ -57,8 +56,6 @@ class Node {
     // /** The finally blocks. */
     // private List<TryBlock> catcheTries = new ArrayList();
     //
-    /** The catch blocks. */
-    Deque<TryCatch> catches = new ArrayDeque();
 
     //
     // /** The finally blocks. */

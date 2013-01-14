@@ -1169,16 +1169,14 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
-        // TryBlock block = new TryBlock(start, end, handler, type);
-        //
-        // for (TryBlock item : tries) {
-        // if (item.start == block.start) {
-        // return;
-        // }
-        // }
-        //
-        // tries.add(block);
-        tries.add(new TryCatch(start, end, handler, type));
+        TryCatch current = new TryCatch(start, end, handler, type);
+
+        for (TryCatch block : tries) {
+            if (block.handler == current.handler) {
+                return;
+            }
+        }
+        tries.add(current);
     }
 
     /**
