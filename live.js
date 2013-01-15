@@ -1,13 +1,26 @@
-boot.define("z",{
+boot.define("BM",{
 	
-	// booton.translator.web.Location#<init>()
+	// booton.translator.web.Window#<init>()
 	$0:function(){
 	}
 });
 
 boot.define("BL",{
 	
-	// booton.translator.web.Window#<init>()
+	// booton.translator.web.WebSocket#<init>()
+	$0:function(){
+	}
+});
+
+boot.defineNative("MessageEvent",{
+	
+	// booton.translator.web.WebSocket$MessageEvent#<init>()
+	$0:function(){
+	}
+});
+boot.define("BG",{
+	
+	// booton.translator.web.Location#<init>()
 	$0:function(){
 	}
 });
@@ -22,7 +35,7 @@ boot.defineNative("Document",{
 		return this.createElement(A);
 	}
 });
-boot.define("M",{
+boot.define("P",{
 	
 	// booton.translator.web.jQuery$1#<init>(booton.translator.web.jQuery)
 	$0:function(A){
@@ -30,19 +43,19 @@ boot.define("M",{
 		this.b=0;
 	},
 	// booton.translator.web.jQuery$1#hasNext()
-	M:function(){
+	T:function(){
 		return this.b<this.a.size();
 	},
 	// booton.translator.web.jQuery$1#next()
-	N:function(){
+	U:function(){
 		return $(this.a.get(this.b++));
 	},
 	// booton.translator.web.jQuery$1#remove()
-	O:function(){
+	V:function(){
 	},
 	// booton.translator.web.jQuery$1#next()
-	P:function(){
-		return this.N();
+	W:function(){
+		return this.U();
 	}
 });
 
@@ -52,47 +65,23 @@ boot.defineNative("jQuery",{
 	$0:function(){
 	},
 	// booton.translator.web.jQuery#child(java.lang.String)
-	J:function(A){
+	R:function(A){
 		return $(document.createElement(A)).appendTo(this);
 	},
 	// booton.translator.web.jQuery#child(java.lang.Class)
-	K:function(A){
-		return this.J("span").addClass(A);
+	L:function(A){
+		return this.R("span").addClass(A);
 	},
 	// booton.translator.web.jQuery#iterator()
-	L:function(){
-		return new boot.M(this,0);
+	S:function(){
+		return new boot.P(this,0);
 	}
 });
-boot.define("BJ",{
-	
-	// booton.live.LiveCoding$1#<init>()
-	$0:function(){
-	},
-	// booton.live.LiveCoding$1#handler(booton.translator.web.jQuery$Event)
-	handler:function(A){
-		console.log(A);
-	}
-});
-
-boot.define("BM",{
-	
-	// booton.translator.web.WebSocket#<init>()
-	$0:function(){
-	}
-});
-
-boot.defineNative("MessageEvent",{
-	
-	// booton.translator.web.WebSocket$MessageEvent#<init>()
-	$0:function(){
-	}
-});
-boot.define("BK",boot.BM,{
+boot.define("BK",boot.BL,{
 	
 	// booton.live.LiveCoding$2#<init>()
 	$0:function(){
-		boot.BM.prototype.$0.call(this);
+		boot.BL.prototype.$0.call(this);
 	},
 	// booton.live.LiveCoding$2#message(booton.translator.web.WebSocket$MessageEvent)
 	message:function(A,B){
@@ -102,6 +91,17 @@ boot.define("BK",boot.BM,{
 		}else{
 			$("link[href^='"+B+"']").attr("href",""+B+"?"+new Date().getTime());
 		}
+	}
+});
+
+boot.define("BJ",{
+	
+	// booton.live.LiveCoding$1#<init>()
+	$0:function(){
+	},
+	// booton.live.LiveCoding$1#handler(booton.translator.web.jQuery$Event)
+	handler:function(A){
+		console.log(A);
 	}
 });
 

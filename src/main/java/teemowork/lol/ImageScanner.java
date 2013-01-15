@@ -53,6 +53,10 @@ public class ImageScanner {
             String name = file.getFileName().toString();
             name = name.substring(0, name.indexOf('_'));
 
+            if (name.equals("MonkeyKing")) {
+                name = "Wukong";
+            }
+
             I.copy(file, output.resolve("icon/" + name + ".png"));
         }
     }
@@ -68,6 +72,10 @@ public class ImageScanner {
         for (Path file : I.walk(root, "*_Splash_0.jpg")) {
             String name = file.getFileName().toString();
             name = name.substring(0, name.indexOf('_'));
+
+            if (name.equals("MonkeyKing")) {
+                name = "Wukong";
+            }
 
             I.copy(file, output.resolve("splash/" + name + ".jpg"));
         }
