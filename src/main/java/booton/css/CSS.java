@@ -31,6 +31,7 @@ import booton.css.property.Background;
 import booton.css.property.Box;
 import booton.css.property.BoxLength;
 import booton.css.property.Content;
+import booton.css.property.Cursor;
 import booton.css.property.Display;
 import booton.css.property.Font;
 import booton.css.property.Line;
@@ -41,6 +42,7 @@ import booton.css.property.Position;
 import booton.css.property.Text;
 import booton.css.property.Transform;
 import booton.css.property.Transition;
+import booton.css.property.UserSelect;
 import booton.css.property.Visibility;
 import booton.util.Color;
 import booton.util.Strings;
@@ -182,6 +184,14 @@ public abstract class CSS implements Extensible {
      * </p>
      */
     public Box box;
+
+    /**
+     * <p>
+     * The cursor CSS property specifies the mouse cursor displayed when the mouse pointer is over
+     * an element.
+     * </p>
+     */
+    public Cursor cursor;
 
     /**
      * <p>
@@ -379,6 +389,16 @@ public abstract class CSS implements Extensible {
      */
     public Visibility visibility;
 
+    /**
+     * <p>
+     * Controls the appearance (only) of selection. This does not have any affect on actual
+     * selection operation. This doesn't have any effect on content loaded as chrome, except in
+     * textboxes. A similar property 'user-focus' was proposed in early drafts of a predecessor of
+     * css3-ui but was rejected by the working group.
+     * </p>
+     */
+    public UserSelect userSelect;
+
     /** The initialization flag. */
     private boolean initialized = false;
 
@@ -469,6 +489,23 @@ public abstract class CSS implements Extensible {
      */
     protected final boolean after() {
         return rule(rules.selector + ":after");
+    }
+
+    /**
+     * <p>
+     * The ::selection CSS pseudo-element applies rules to the portion of a document that has been
+     * highlighted (e.g., selected with the mouse or another pointing device) by the user.
+     * </p>
+     * <p>
+     * Only a small subset of CSS properties can be used in a rule using ::selection in its
+     * selector: color, background, background-color and text-shadow. Note that, in particular,
+     * background-image is ignored, like any other property.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean selection() {
+        return rule(rules.selector + ":selection");
     }
 
     /**
@@ -656,6 +693,24 @@ public abstract class CSS implements Extensible {
     }
 
     /**
+     * <p>
+     * Create text outline.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @param color
+     */
+    protected void createTextOutline(int size, Color color) {
+        for (int i = 1; i <= size; i++) {
+            text.shadow(-i, px, 0, px, color)
+                    .shadow(i, px, 0, px, color)
+                    .shadow(0, px, i, px, color)
+                    .shadow(0, px, -i, px, color);
+        }
+    }
+
+    /**
      * @version 2012/12/13 10:02:01
      */
     private static class RuleSet {
@@ -735,6 +790,17 @@ public abstract class CSS implements Extensible {
                 }
             }
             builder.append("}\r\n");
+
+            if (selector.endsWith(":selection")) {
+                builder.append(selector.replace(":selection", "::-moz-selection")).append(" {\r\n");
+
+                for (CSSProperty property : rules) {
+                    if (property.used) {
+                        builder.append("  ").append(property).append("\r\n");
+                    }
+                }
+                builder.append("}\r\n");
+            }
 
             for (RuleSet sub : subs) {
                 sub.writeTo(prefix, builder);
