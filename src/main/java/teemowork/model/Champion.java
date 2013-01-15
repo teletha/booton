@@ -46,6 +46,17 @@ public class Champion {
         champions.put(name, this);
     }
 
+    /**
+     * <p>
+     * Returns current status.
+     * </p>
+     * 
+     * @return
+     */
+    public ChampionStatus getStatus() {
+        return status;
+    }
+
     public String getSystemName() {
         return name.replace("\\.", "").replace("\\s", "").replace("\\'", "");
     }

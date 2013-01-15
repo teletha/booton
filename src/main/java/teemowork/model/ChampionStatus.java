@@ -422,4 +422,27 @@ public class ChampionStatus {
         return this;
     }
 
+    /**
+     * <p>
+     * Calcurate status.
+     * </p>
+     * 
+     * @param level
+     * @return
+     */
+    public double getHealth(int level) {
+        return healthInitial + healthPerLevel * level;
+    }
+
+    /**
+     * <p>
+     * Calcurate status.
+     * </p>
+     * 
+     * @param level
+     * @return
+     */
+    public double getMana(int level) {
+        return manaInitial + manaPerLvel * level;
+    }
 }
