@@ -108,6 +108,12 @@ public class Champion {
     public static Champion Amumu = new Champion("Amumu");
 
     /** The champion definition. */
+    public static Champion Anivia = new Champion("Anivia");
+
+    /** The champion definition. */
+    public static Champion Annie = new Champion("Annie");
+
+    /** The champion definition. */
     public static Champion Ashe = new Champion("Ashe");
 
     /** The champion definition. */
@@ -136,6 +142,9 @@ public class Champion {
 
     /** The champion definition. */
     public static Champion DrMundo = new Champion("Dr.Mundo");
+
+    /** The champion definition. */
+    public static Champion Draven = new Champion("Draven");
 
     /** The champion definition. */
     public static Champion Elise = new Champion("Elise");
@@ -232,6 +241,9 @@ public class Champion {
 
     /** The champion definition. */
     public static Champion Malphite = new Champion("Malphite");
+
+    /** The champion definition. */
+    public static Champion Malzahar = new Champion("Malzahar");
 
     /** The champion definition. */
     public static Champion Maokai = new Champion("Maokai");

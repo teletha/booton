@@ -26,7 +26,8 @@ public class MethodChainTest extends ScriptTester {
 
             public String act() {
                 String result = "long".replace("looooooooooooooooooooooooooooooooooooooooong", "short")
-                        .replace("loooooooooooooooooooooooooooooooooooooooooooooooooooooooooong", "short");
+                        .replace("loooooooooooooooooooooooooooooooooooooooooooooooooooooooooong", "short")
+                        .replace("long", "replaced");
 
                 return result;
             }

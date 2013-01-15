@@ -1,26 +1,13 @@
-boot.define("T",{
+boot.define("z",{
 	
 	// booton.translator.web.Location#<init>()
 	$0:function(){
 	}
 });
 
-boot.define("BI",{
+boot.define("BL",{
 	
 	// booton.translator.web.Window#<init>()
-	$0:function(){
-	}
-});
-
-boot.defineNative("MessageEvent",{
-	
-	// booton.translator.web.WebSocket$MessageEvent#<init>()
-	$0:function(){
-	}
-});
-boot.define("BJ",{
-	
-	// booton.translator.web.WebSocket#<init>()
 	$0:function(){
 	}
 });
@@ -35,7 +22,7 @@ boot.defineNative("Document",{
 		return this.createElement(A);
 	}
 });
-boot.define("V",{
+boot.define("M",{
 	
 	// booton.translator.web.jQuery$1#<init>(booton.translator.web.jQuery)
 	$0:function(A){
@@ -43,19 +30,19 @@ boot.define("V",{
 		this.b=0;
 	},
 	// booton.translator.web.jQuery$1#hasNext()
-	O:function(){
+	M:function(){
 		return this.b<this.a.size();
 	},
 	// booton.translator.web.jQuery$1#next()
-	BP:function(){
+	N:function(){
 		return $(this.a.get(this.b++));
 	},
 	// booton.translator.web.jQuery$1#remove()
-	BL:function(){
+	O:function(){
 	},
 	// booton.translator.web.jQuery$1#next()
-	L:function(){
-		return this.BP();
+	P:function(){
+		return this.N();
 	}
 });
 
@@ -65,23 +52,47 @@ boot.defineNative("jQuery",{
 	$0:function(){
 	},
 	// booton.translator.web.jQuery#child(java.lang.String)
-	BN:function(A){
+	J:function(A){
 		return $(document.createElement(A)).appendTo(this);
 	},
 	// booton.translator.web.jQuery#child(java.lang.Class)
-	BO:function(A){
-		return this.BN("span").addClass(A);
+	K:function(A){
+		return this.J("span").addClass(A);
 	},
 	// booton.translator.web.jQuery#iterator()
-	K:function(){
-		return new boot.V(this,0);
+	L:function(){
+		return new boot.M(this,0);
 	}
 });
-boot.define("BH",boot.BJ,{
+boot.define("BJ",{
+	
+	// booton.live.LiveCoding$1#<init>()
+	$0:function(){
+	},
+	// booton.live.LiveCoding$1#handler(booton.translator.web.jQuery$Event)
+	handler:function(A){
+		console.log(A);
+	}
+});
+
+boot.define("BM",{
+	
+	// booton.translator.web.WebSocket#<init>()
+	$0:function(){
+	}
+});
+
+boot.defineNative("MessageEvent",{
+	
+	// booton.translator.web.WebSocket$MessageEvent#<init>()
+	$0:function(){
+	}
+});
+boot.define("BK",boot.BM,{
 	
 	// booton.live.LiveCoding$2#<init>()
 	$0:function(){
-		boot.BJ.prototype.$0.call(this);
+		boot.BM.prototype.$0.call(this);
 	},
 	// booton.live.LiveCoding$2#message(booton.translator.web.WebSocket$MessageEvent)
 	message:function(A,B){
@@ -94,27 +105,16 @@ boot.define("BH",boot.BJ,{
 	}
 });
 
-boot.define("BG",{
-	
-	// booton.live.LiveCoding$1#<init>()
-	$0:function(){
-	},
-	// booton.live.LiveCoding$1#handler(booton.translator.web.jQuery$Event)
-	handler:function(A){
-		console.log(A);
-	}
-});
-
-boot.define("BF",{
+boot.define("BI",{
 	
 	// booton.live.LiveCoding#<init>()
 	$0:function(){
 	},
 	// booton.live.LiveCoding#jsmain()
 	_A:function(){
-		$(window).on("error",new boot.BG(0));
-		WebSocket.connect("ws://localhost:10021/live"+window.location.pathname,new boot.BH(0));
+		$(window).on("error",new boot.BJ(0));
+		WebSocket.connect("ws://localhost:10021/live"+window.location.pathname,new boot.BK(0));
 	}
 });
 
-try {boot.BF.A();} catch(e) {console.log(e)}
+try {boot.BI.A();} catch(e) {console.log(e)}

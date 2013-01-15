@@ -183,7 +183,7 @@ class JavaMethodCompiler extends MethodVisitor {
             iterator.next().computeTryBlock();
         }
 
-        NodeDebugger.dump(script, original, nodes);
+        // NodeDebugger.dump(script, original, nodes);
 
         // write script
         code.mark();

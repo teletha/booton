@@ -12,6 +12,7 @@ package teemowork;
 import js.Page;
 import js.PageInfo;
 import teemowork.model.Champion;
+import booton.css.CSS;
 import booton.translator.web.jQuery;
 
 /**
@@ -49,7 +50,12 @@ public class ChampionDetail extends Page {
      */
     @Override
     public void load(jQuery root) {
-        System.out.println("detail page " + champion + "  " + champion.name);
+        jQuery info = root.child(Detail.class)
+                .css("background-image", "url(" + champion.getSplashArt() + ")")
+                .child(Filter.class);
+
+        info.child(Name.class).text(champion.name);
+        info.child(Status.class).text("ad");
     }
 
     /**
@@ -58,5 +64,50 @@ public class ChampionDetail extends Page {
     @Override
     protected String getPageId() {
         return "Champion/" + champion.name;
+    }
+
+    /**
+     * @version 2013/01/15 13:19:52
+     */
+    private static class Detail extends CSS {
+
+        {
+            display.block();
+            box.width(100, percent).height(600, px);
+            background.cover();
+            border.radius(10, px);
+        }
+    }
+
+    /**
+     * @version 2013/01/15 13:54:32
+     */
+    private static class Filter extends CSS {
+
+        {
+            display.block();
+            box.size(100, percent);
+            background.color(255, 255, 255, 0.3);
+        }
+    }
+
+    /**
+     * @version 2013/01/15 13:19:52
+     */
+    private static class Name extends CSS {
+
+        {
+
+        }
+    }
+
+    /**
+     * @version 2013/01/15 13:19:52
+     */
+    private static class Status extends CSS {
+
+        {
+
+        }
     }
 }
