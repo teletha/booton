@@ -278,8 +278,10 @@ public class Javascript {
      * @param parentClass
      */
     private void compileClass(ScriptBuffer code, Class parentClass) {
+        String name = computeClassName(source).substring(5);
+
         // Start class definition
-        code.append("boot.define(\"").append(computeClassName(source).substring(5)).append("\",");
+        code.append("boot.define(\"").append(name).append("\",");
 
         if (parentClass != null && parentClass != Object.class) {
             code.append(Javascript.computeClassName(parentClass)).append(',');
@@ -301,6 +303,8 @@ public class Javascript {
         for (Annotation annotation : source.getAnnotations()) {
             System.out.println(annotation);
             require(annotation.annotationType());
+
+            code.append("boot.defineAnnotation(\"").append(name).append("\",");
         }
     }
 
