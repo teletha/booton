@@ -1,3 +1,10 @@
+boot.define("BE",{
+	
+	// booton.translator.web.Location#<init>()
+	$0:function(){
+	}
+});
+
 boot.define("BO",{
 	
 	// booton.translator.web.Window#<init>()
@@ -5,7 +12,7 @@ boot.define("BO",{
 	}
 });
 
-boot.define("M",{
+boot.define("u",{
 	
 	// booton.translator.web.jQuery$1#<init>(booton.translator.web.jQuery)
 	$0:function(A){
@@ -13,19 +20,19 @@ boot.define("M",{
 		this.b=0;
 	},
 	// booton.translator.web.jQuery$1#hasNext()
-	M:function(){
+	U:function(){
 		return this.b<this.a.size();
 	},
 	// booton.translator.web.jQuery$1#next()
-	N:function(){
+	BT:function(){
 		return $(this.a.get(this.b++));
 	},
 	// booton.translator.web.jQuery$1#remove()
-	O:function(){
+	BS:function(){
 	},
 	// booton.translator.web.jQuery$1#next()
-	P:function(){
-		return this.N();
+	O:function(){
+		return this.BT();
 	}
 });
 
@@ -45,29 +52,18 @@ boot.defineNative("jQuery",{
 	$0:function(){
 	},
 	// booton.translator.web.jQuery#child(java.lang.String)
-	J:function(A){
+	R:function(A){
 		return $(document.createElement(A)).appendTo(this);
 	},
 	// booton.translator.web.jQuery#child(java.lang.Class)
-	K:function(A){
-		return this.J("span").addClass(A);
+	P:function(A){
+		return this.R("span").addClass(A);
 	},
 	// booton.translator.web.jQuery#iterator()
-	L:function(){
-		return new boot.M(this,0);
+	N:function(){
+		return new boot.u(this,0);
 	}
 });
-boot.define("BM",{
-	
-	// booton.live.LiveCoding$1#<init>()
-	$0:function(){
-	},
-	// booton.live.LiveCoding$1#handler(booton.translator.web.jQuery$Event)
-	handler:function(A){
-		console.log(A);
-	}
-});
-
 boot.define("BP",{
 	
 	// booton.translator.web.WebSocket#<init>()
@@ -81,13 +77,6 @@ boot.defineNative("MessageEvent",{
 	$0:function(){
 	}
 });
-boot.define("BC",{
-	
-	// booton.translator.web.Location#<init>()
-	$0:function(){
-	}
-});
-
 boot.define("BN",boot.BP,{
 	
 	// booton.live.LiveCoding$2#<init>()
@@ -102,6 +91,17 @@ boot.define("BN",boot.BP,{
 		}else{
 			$("link[href^='"+B+"']").attr("href",""+B+"?"+new Date().getTime());
 		}
+	}
+});
+
+boot.define("BM",{
+	
+	// booton.live.LiveCoding$1#<init>()
+	$0:function(){
+	},
+	// booton.live.LiveCoding$1#handler(booton.translator.web.jQuery$Event)
+	handler:function(A){
+		console.log(A);
 	}
 });
 

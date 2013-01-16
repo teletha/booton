@@ -10,6 +10,9 @@
 package teemowork;
 
 import static booton.translator.web.WebSupport.*;
+
+import java.lang.reflect.Method;
+
 import js.Application;
 import js.application.Header;
 import js.application.Header.Menu;
@@ -48,10 +51,23 @@ public class Teemowork extends Application {
 
         System.out.println(Patch.Latest);
 
-        Class clazz = Patch.class;
+        Class clazz = Teemowork.class;
         System.out.println(clazz);
         System.out.println(clazz.getName());
         System.out.println(clazz.getSimpleName());
-        System.out.println(clazz.getMethods());
+
+        for (Method method : clazz.getMethods()) {
+            System.out.println(method.getName() + "   @");
+
+            if (method.isAnnotationPresent(Deprecated.class)) {
+                System.out.println(method.getName() + "   annotated");
+
+            }
+        }
+    }
+
+    @Deprecated
+    public void test() {
+        System.out.println("called");
     }
 }
