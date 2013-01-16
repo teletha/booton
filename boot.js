@@ -172,19 +172,19 @@ function boot(global) {
       }
 
       var init;
-      var subclassPrototype;
 
-      // F is a temporary constructor. It have the prototype of superclass, and does not have the
-      // unnecessary (perhaps it will produce an evil) initialization executable code.
-      function F() {
+      // This is actual counstructor of the specified subclass.
+      function Class() {
+        var params = Array.prototype.slice.call(arguments);
+
+        // invoke specified constructor
+        this["$" + params.pop()].apply(this, params);
       }
-
-      F.prototype = superclass.prototype;
 
       // We must copy the properties over onto the new prototype.
       // At first, from superclass definition.
-      subclassPrototype = new F();
-      subclassPrototype.constructor = Class; // Class is defined later
+      Class.prototype = Object.create(superclass.prototype);
+
       // Then, from user defined subclass definition.
       for (var i in subclass) {
         // static method
@@ -198,35 +198,49 @@ function boot(global) {
           }
         } else {
           // define member method
-          subclassPrototype[i] = subclass[i];
+          Class.prototype[i] = subclass[i];
         }
       }
 
-      // This is actual counstructor of the specified subclass.
-      function Class() {
-        var params = Array.prototype.slice.call(arguments);
 
-        // invoke specified constructor
-        this["$" + params.pop()].apply(this, params);
-      }
+      define(Class, {
+        /**
+         * Actual class name.
+         */
+        className: name,
+        
+        /**
+         * Create new instatnce of this class.
+         *
+         * @param id A constructor id.
+         * @param args An array of arguments.
+         * @return A created instance.
+         */
+        newInstance: function(id, args) {
+          args = args || [];
+          args.push(id);
 
-      Class.prototype = subclassPrototype;
+          var instance = Object.create(this.prototype);
+          this.apply(instance, args);
+          return instance;
+        },
 
-      /**
-       * Create new instatnce of this class.
-       *
-       * @param id A constructor id.
-       * @param args An array of arguments.
-       * @return A created instance.
-       */
-      Class.newInstance = function(id, args) {
-        args = args || [];
-        args.push(id);
+        getMethods: function() {
+          var methods = [];
+          var that = this.prototype;
+          
+          Object.keys(that).forEach(function(name) {
+            var property = that[name];
+              
+            if (!name.startsWith("$") && jQuery.isFunction(property)) {
+              methods.push(property);
+            }
+          });
 
-        var instance = Object.create(this.prototype);
-        this.apply(instance, args);
-        return instance;
-      };
+          return methods;
+        }
+      });
+
      
       boot[name] = Class;
 

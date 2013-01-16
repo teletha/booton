@@ -17,14 +17,18 @@ import booton.translator.Translator;
 class ClassCoder extends Translator<Class> {
 
     public String getName() {
-        return that;
+        return "\"boot.\"+" + that + ".className";
     }
 
     public String getSimpleName() {
-        return that;
+        return that + ".className";
     }
 
     public String newInstance() {
         return that + ".newInstance()";
+    }
+
+    public String getMethods() {
+        return that + ".getMethods()";
     }
 }
