@@ -9,8 +9,10 @@
  */
 package teemowork;
 
+import js.Observable;
 import js.Page;
 import js.PageInfo;
+import teemowork.model.Build;
 import teemowork.model.Champion;
 import teemowork.model.ChampionStatus;
 import booton.css.CSS;
@@ -26,6 +28,10 @@ public class ChampionDetail extends Page {
     /** The chmapion. */
     private final Champion champion;
 
+    /** The your custom build. */
+    @Observable
+    private Build build;
+
     /** The current level. */
     private int currentLevel;
 
@@ -36,8 +42,13 @@ public class ChampionDetail extends Page {
 
     // /** The status. */
     // private Text mana = new Text() {
-    // protected Object bind() {
-    // return champion.getStatus().getMana(currentLevel);
+    //
+    // /**
+    // * {@inheritDoc}
+    // */
+    // @Override
+    // protected Object text() {
+    // return build.getMana();
     // }
     // };
 

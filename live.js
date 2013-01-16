@@ -5,16 +5,6 @@ boot.define("BO",{
 	}
 });
 
-boot.defineNative("Document",{
-	
-	// booton.translator.web.Document#<init>()
-	$0:function(){
-	},
-	// booton.translator.web.Document#createElement(java.lang.String)
-	createElement:function(A){
-		return this.createElement(A);
-	}
-});
 boot.define("M",{
 	
 	// booton.translator.web.jQuery$1#<init>(booton.translator.web.jQuery)
@@ -39,6 +29,16 @@ boot.define("M",{
 	}
 });
 
+boot.defineNative("Document",{
+	
+	// booton.translator.web.Document#<init>()
+	$0:function(){
+	},
+	// booton.translator.web.Document#createElement(java.lang.String)
+	createElement:function(A){
+		return this.createElement(A);
+	}
+});
 boot.defineNative("jQuery",{
 	
 	// booton.translator.web.jQuery#<init>()
@@ -57,13 +57,6 @@ boot.defineNative("jQuery",{
 		return new boot.M(this,0);
 	}
 });
-boot.define("BI",{
-	
-	// booton.translator.web.Location#<init>()
-	$0:function(){
-	}
-});
-
 boot.define("BM",{
 	
 	// booton.live.LiveCoding$1#<init>()
@@ -88,6 +81,13 @@ boot.defineNative("MessageEvent",{
 	$0:function(){
 	}
 });
+boot.define("BC",{
+	
+	// booton.translator.web.Location#<init>()
+	$0:function(){
+	}
+});
+
 boot.define("BN",boot.BP,{
 	
 	// booton.live.LiveCoding$2#<init>()

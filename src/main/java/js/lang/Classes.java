@@ -9,6 +9,9 @@
  */
 package js.lang;
 
+import java.lang.annotation.Annotation;
+import java.util.List;
+
 import kiss.I;
 import booton.translator.Translator;
 
@@ -47,6 +50,10 @@ public class Classes {
         } catch (Exception e) {
             throw I.quiet(e);
         }
+    }
+
+    public static <A extends Annotation> List<Function> findFunction(Class<A> annotation) {
+        return null;
     }
 
     /**

@@ -47,5 +47,11 @@ public class Teemowork extends Application {
         nav.add("Contact", "#");
 
         System.out.println(Patch.Latest);
+
+        Class clazz = Patch.class;
+        System.out.println(clazz);
+        System.out.println(clazz.getName());
+        System.out.println(clazz.getSimpleName());
+        System.out.println(clazz.getMethods());
     }
 }
