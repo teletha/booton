@@ -96,6 +96,9 @@ function boot(global) {
   var hashcode = 0;
   
   define(Object.prototype, {
+    /** The Class metadata for reflection. */
+    $: 1,
+  
     /** The identifier for this object. */
     $hashCode: undefined,
   
@@ -145,6 +148,51 @@ function boot(global) {
       return this.constructor;
     }
   });
+  
+  //====================================================================
+  // Class Extensions
+  //====================================================================
+  global.Class = {
+    /**
+     * Actual class name.
+     */
+    $Name: name,
+    
+    /**
+     * Create new instatnce of this class.
+     *
+     * @param id A constructor id.
+     * @param args An array of arguments.
+     * @return A created instance.
+     */
+    newInstance: function(id, args) {
+      args = args || [];
+      args.push(id);
+
+      var instance = Object.create(this.prototype);
+      this.apply(instance, args);
+      return instance;
+    },
+
+    getMethods: function() {
+      var methods = [];
+      var that = this.prototype;
+      
+      Object.keys(that).forEach(function(name) {
+        var property = that[name];
+          
+        if (!name.startsWith("$") && jQuery.isFunction(property)) {
+          methods.push(property);
+        }
+      });
+
+      return methods;
+    },
+    
+    J: function() {
+      return "1";
+    }
+  };
 
   //====================================================================
   // ECMAScript6 Extensions
@@ -184,6 +232,7 @@ function boot(global) {
       // We must copy the properties over onto the new prototype.
       // At first, from superclass definition.
       Class.prototype = Object.create(superclass.prototype);
+      Class.prototype.constructor = Class;
 
       // Then, from user defined subclass definition.
       for (var i in subclass) {
@@ -204,46 +253,12 @@ function boot(global) {
       }
 
 
-      define(Class, {
-        /**
-         * Actual class name.
-         */
-        $Name: name,
-        
-        /**
-         * Create new instatnce of this class.
-         *
-         * @param id A constructor id.
-         * @param args An array of arguments.
-         * @return A created instance.
-         */
-        newInstance: function(id, args) {
-          args = args || [];
-          args.push(id);
-
-          var instance = Object.create(this.prototype);
-          this.apply(instance, args);
-          return instance;
-        },
-
-        getMethods: function() {
-          var methods = [];
-          var that = this.prototype;
-          
-          Object.keys(that).forEach(function(name) {
-            var property = that[name];
-              
-            if (!name.startsWith("$") && jQuery.isFunction(property)) {
-              methods.push(property);
-            }
-          });
-
-          return methods;
-        }
-      });
+      
 
      
       boot[name] = Class;
+
+      define(Class, boot.A.prototype);
 
       // API definition
       if (init) init.call(Class);
