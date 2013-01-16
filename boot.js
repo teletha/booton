@@ -199,6 +199,7 @@ function boot(global) {
         } else {
           // define member method
           Class.prototype[i] = subclass[i];
+          subclass[i].$Name = i;
         }
       }
 
@@ -207,7 +208,7 @@ function boot(global) {
         /**
          * Actual class name.
          */
-        className: name,
+        $Name: name,
         
         /**
          * Create new instatnce of this class.

@@ -18,6 +18,7 @@ package booton.translator;
 import static booton.Obfuscator.*;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
@@ -295,6 +296,25 @@ public class Javascript {
         // End class definition
         code.append("});");
         code.line();
+
+        // class annotation
+        for (Annotation annotation : source.getAnnotations()) {
+            System.out.println(annotation);
+            require(annotation.annotationType());
+        }
+    }
+
+    /**
+     * <p>
+     * Compile annotation to javascript.
+     * </p>
+     */
+    private void compileAnnotation() {
+        // class annotation
+        for (Annotation annotation : source.getAnnotations()) {
+            System.out.println(annotation);
+            require(annotation.annotationType());
+        }
     }
 
     /**
