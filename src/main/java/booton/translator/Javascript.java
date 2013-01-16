@@ -19,6 +19,7 @@ import static booton.Obfuscator.*;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
@@ -73,6 +74,10 @@ public class Javascript {
     static {
         // Load Booton module
         I.load(Javascript.class, true);
+
+        // Define Class class at first. It is ensured that Class definition is assigned in 'boot.A'
+        // variable.
+        getScript(Class.class);
     }
 
     /** The actual script class to translate. */
@@ -304,7 +309,7 @@ public class Javascript {
             System.out.println(annotation);
             require(annotation.annotationType());
 
-            code.append("boot.defineAnnotation(\"").append(name).append("\",");
+            // code.append("boot.defineAnnotation(\"").append(name).append("\",");
         }
     }
 
@@ -392,6 +397,10 @@ public class Javascript {
 
         if (type == Throwable.class) {
             return ThrowableReplacement.class;
+        }
+
+        if (type == Class.class) {
+            return ClassReplacement.class;
         }
 
         return type;
@@ -526,6 +535,25 @@ public class Javascript {
 
         // API definition
         return members.size() - 1;
+    }
+
+    private static class ClassReplacement {
+
+        public <A extends Annotation> boolean isAnnotationPresent(Class<A> annotation) {
+            return false;
+        }
+
+        public String getName() {
+            return "aaa";
+        }
+
+        public Object newInstance() {
+            return null;
+        }
+
+        public Constructor getConstructor() {
+
+        }
     }
 
     /**

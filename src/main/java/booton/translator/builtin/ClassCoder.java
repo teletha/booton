@@ -14,7 +14,7 @@ import booton.translator.Translator;
 /**
  * @version 2012/12/10 17:06:22
  */
-class ClassCoder extends Translator<Class> {
+class ClassCoder extends Translator<ClassCastException> {
 
     public String getName() {
         return "\"boot.\"+" + that + ".$Name";
