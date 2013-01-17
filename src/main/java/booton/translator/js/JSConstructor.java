@@ -9,10 +9,20 @@
  */
 package booton.translator.js;
 
-
 /**
  * @version 2013/01/17 20:45:34
  */
-public class JSConstructor {
+public class JSConstructor extends JSAnnotatedElement {
 
+    /** The constructor function in runtime. */
+    private final NativeObject function;
+
+    /**
+     * @param function
+     */
+    JSConstructor(String name, NativeObject function, NativeObject annotations) {
+        super(name, annotations, name);
+
+        this.function = function;
+    }
 }

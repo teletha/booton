@@ -208,7 +208,7 @@ function boot(global) {
      */
     define: function(name, superclassName, definition, annotation) {
       // Default superclass is native Object class.
-      var init, superclass = superclassName.length === 0 ? Object : boot[superclassName];
+      var superclass = superclassName.length === 0 ? Object : boot[superclassName];
 
       // This is actual counstructor of class to define.
       function Class() {
@@ -217,6 +217,9 @@ function boot(global) {
         // invoke specified constructor
         this["$" + params.pop()].apply(this, params);
       }
+
+      // We must store static initialization function.
+      var init;
 
       // We must copy the properties over onto the new prototype.
       // At first, from superclass definition.
@@ -236,7 +239,7 @@ function boot(global) {
         } else {
           // define member method
           prototype[i] = definition[i];
-          definition[i].$Name = i;
+          definition[i].$ = i;
         }
       }
 
@@ -244,9 +247,20 @@ function boot(global) {
       boot[name] = Class;
 
       // Define class metadata as pseudo Class instance.
-      define(Class, {
-        $: new boot.A(name, prototype, annotation, 0)
+      // This variable is lazy initialized because define function requires
+      // native Class class (it will be "boot.A") in all classes, but Class
+      // class can't be defined at first.
+      var metadata;
+      
+      Object.defineProperty(Class, "$", {
+        get: function() {
+          if (!metadata) {
+            metadata = new boot.A(name, prototype, annotation, 0)
+          }
+          return metadata;
+        }
       });
+
       
       // Define class object for the reference from instance.
       define(prototype, {
