@@ -7,36 +7,53 @@ boot.define("A","",{
 		this.c=C;
 	},
 	// booton.translator.js.JSClass#isAnnotationPresent(java.lang.Class)
-	M:function(A){
-		return false;
+	L:function(A,B,C,D){
+		if(this.c!=null){
+			B=this.c["$"];
+			C=0;
+			l5:for (;
+			C<B.length;
+			++C) {
+				D=B[C];
+				if(D[0].equals(A.T())==0){
+				}else{
+					return true;
+				}
+			}return false;
+		}else{
+			return false;
+		}
 	},
 	// booton.translator.js.JSClass#getName()
-	N:function(){
+	U:function(){
 		return "boot."+this.a;
 	},
 	// booton.translator.js.JSClass#getSimpleName()
-	O:function(){
+	T:function(){
 		return this.a;
 	},
 	// booton.translator.js.JSClass#newInstance()
-	P:function(){
+	V:function(){
 		return null;
 	},
 	// booton.translator.js.JSClass#getConstructor()
-	Q:function(){
+	W:function(){
 		return null;
 	},
 	// booton.translator.js.JSClass#getAnnotation(java.lang.Class)
 	J:function(A,B,C,D){
-		B=this.c["$"];
-		C=0;
-		l3:for (;
-		C<B.length;
-		++C) {
-			D=B[C];
-			if(D[0].equals(A.N())==0){
-			}else{
-				return D[1];
+		if(this.c==null){
+		}else{
+			B=this.c["$"];
+			C=0;
+			l5:for (;
+			C<B.length;
+			++C) {
+				D=B[C];
+				if(D[0].equals(A.T())==0){
+				}else{
+					return D[1];
+				}
 			}
 		}return null;
 	}
@@ -71,19 +88,19 @@ boot.define("w","",{
 		this.b=0;
 	},
 	// booton.translator.web.jQuery$1#hasNext()
-	W:function(){
+	w:function(){
 		return this.b<this.a.size();
 	},
 	// booton.translator.web.jQuery$1#next()
-	BX:function(){
+	Bx:function(){
 		return $(this.a.get(this.b++));
 	},
 	// booton.translator.web.jQuery$1#remove()
-	BP:function(){
+	BV:function(){
 	},
 	// booton.translator.web.jQuery$1#next()
-	T:function(){
-		return this.BX();
+	Z:function(){
+		return this.Bx();
 	}
 });
 
@@ -93,15 +110,15 @@ boot.defineNative("jQuery",{
 	$0:function(){
 	},
 	// booton.translator.web.jQuery#child(java.lang.String)
-	BV:function(A){
+	Bv:function(A){
 		return $(document.createElement(A)).appendTo(this);
 	},
 	// booton.translator.web.jQuery#child(java.lang.Class)
-	BW:function(A){
-		return this.BV("span").addClass(A);
+	Bw:function(A){
+		return this.Bv("span").addClass(A);
 	},
 	// booton.translator.web.jQuery#iterator()
-	S:function(){
+	Y:function(){
 		return new boot.w(this,0);
 	}
 });

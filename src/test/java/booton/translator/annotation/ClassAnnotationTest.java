@@ -15,41 +15,104 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/01/16 16:03:45
+ * @version 2013/01/17 20:10:20
  */
 @SuppressWarnings("unused")
 public class ClassAnnotationTest extends ScriptTester {
+
+    @Test
+    public void NoAnnotated() throws Exception {
+        test(new Scriptable() {
+
+            boolean act() {
+                return NoAnnotated.class.isAnnotationPresent(PrimitiveMarker.class);
+            }
+        });
+    }
+
+    @Test
+    public void NotReferenced() throws Exception {
+        test(new Scriptable() {
+
+            boolean act() {
+                return Annotated.class.isAnnotationPresent(NotReferenced.class);
+            }
+        });
+    }
 
     @Test
     public void Annotated() throws Exception {
         test(new Scriptable() {
 
             int act() {
-                return Annotated.class.getAnnotation(Marker.class).intValue();
+                return Annotated.class.getAnnotation(PrimitiveMarker.class).intValue();
             }
         });
     }
 
     @Test
-    public void NotAnnotated() throws Exception {
+    public void MultipleValues() throws Exception {
         test(new Scriptable() {
 
-            boolean act() {
-                return NotAnnotated.class.isAnnotationPresent(Marker.class);
+            double act() {
+                PrimitiveMarker marker = MultipleValues.class.getAnnotation(PrimitiveMarker.class);
+
+                return marker.floatValue() + marker.doubleValue();
+            }
+        });
+    }
+
+    @Test
+    public void StringValue() throws Exception {
+        test(new Scriptable() {
+
+            String act() {
+                return StringValue.class.getAnnotation(StringMarker.class).value();
+            }
+        });
+    }
+
+    @Test
+    public void ClassValue() throws Exception {
+        test(new Scriptable() {
+
+            Class act() {
+                return ClassValue.class.getAnnotation(ClassMarker.class).value();
             }
         });
     }
 
     /**
+     * @version 2013/01/17 9:50:06
+     */
+    private static class NoAnnotated {
+    }
+
+    /**
      * @version 2013/01/17 9:50:08
      */
-    @Marker(intValue = 5)
+    @PrimitiveMarker(intValue = 5)
     private static class Annotated {
     }
 
     /**
-     * @version 2013/01/17 9:50:06
+     * @version 2013/01/17 9:50:08
      */
-    private static class NotAnnotated {
+    @PrimitiveMarker(floatValue = 1.2f, doubleValue = -0.2444456343343)
+    private static class MultipleValues {
+    }
+
+    /**
+     * @version 2013/01/17 9:50:08
+     */
+    @StringMarker("define")
+    private static class StringValue {
+    }
+
+    /**
+     * @version 2013/01/17 9:50:08
+     */
+    @ClassMarker(ClassValue.class)
+    private static class ClassValue {
     }
 }

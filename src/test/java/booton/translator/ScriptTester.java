@@ -27,6 +27,7 @@ import kiss.I;
 import net.sourceforge.htmlunit.corejs.javascript.Context;
 import net.sourceforge.htmlunit.corejs.javascript.EvaluatorException;
 import net.sourceforge.htmlunit.corejs.javascript.NativeArray;
+import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
 import net.sourceforge.htmlunit.corejs.javascript.Script;
 import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
 import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
@@ -415,6 +416,11 @@ public class ScriptTester {
                 // THROWABLE
                 // ========================
                 assertException((Throwable) java, js);
+            } else if (type == Class.class) {
+                // ========================
+                // Class
+                // ========================
+                assertClass((Class) java, js);
             } else {
                 // some object
 
@@ -464,5 +470,26 @@ public class ScriptTester {
         } else {
             // Some error object was thrown certainly, but we cant check in detail.
         }
+    }
+
+    /**
+     * Assert the specified javascript object is Class.
+     * 
+     * @param exception
+     * @param js
+     */
+    private void assertClass(Class clazz, Object js) {
+        String name = Javascript.computeSimpleClassName(clazz);
+        NativeObject object = (NativeObject) js;
+
+        for (Object id : object.getAllIds()) {
+            Object value = object.get(id);
+
+            if (value instanceof String) {
+                assert name.equals(value);
+                return;
+            }
+        }
+        throw new AssertionError("Class name is not found.");
     }
 }
