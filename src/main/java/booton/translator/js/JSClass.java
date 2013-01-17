@@ -9,7 +9,6 @@
  */
 package booton.translator.js;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 
 /**
@@ -19,16 +18,10 @@ import java.lang.reflect.Constructor;
  * 
  * @version 2013/01/17 15:58:55
  */
-public class JSClass {
-
-    /** The simple class name in runtime. */
-    private final String name;
+public class JSClass extends JSAnnotatedElement {
 
     /** The class definition in runtime. */
     private final NativeObject clazz;
-
-    /** The annotation definition in runtime. */
-    private final NativeObject annotations;
 
     /**
      * @param name
@@ -36,23 +29,9 @@ public class JSClass {
      * @param annotations
      */
     private JSClass(String name, NativeObject clazz, NativeObject annotations) {
-        this.name = name;
-        this.clazz = clazz;
-        this.annotations = annotations;
-    }
+        super(name, annotations, "$");
 
-    /**
-     * <p>
-     * Returns true if an annotation for the specified type is present on this element, else false.
-     * This method is designed primarily for convenient access to marker annotations.
-     * </p>
-     * 
-     * @param annotationClass The Class object corresponding to the annotation type.
-     * @return True if an annotation for the specified annotation type is present on this element, .
-     *         else false.
-     */
-    public <A extends Annotation> boolean isAnnotationPresent(Class<A> annotationClass) {
-        return getAnnotation(annotationClass) != null;
+        this.clazz = clazz;
     }
 
     /**
@@ -70,17 +49,17 @@ public class JSClass {
      * @return The array of Constructor objects representing the public constructors of this class.
      */
     public Constructor[] getConstructors() {
-        NativeArray<Constructor> container = new NativeArray();
+        NativeArray<JSConstructor> container = new NativeArray();
         NativeArray<String> names = clazz.keys();
 
         for (int i = 0; i < names.length(); i++) {
             String name = names.get(i);
 
             if (name.startsWith("$")) {
-                container.push((Constructor) clazz.getProperty(name));
+                container.push(new JSConstructor(name, (NativeObject) clazz.getProperty(name), annotations));
             }
         }
-        return container.toArray(new Constructor[container.length()]);
+        return (Constructor[]) (Object) container;
     }
 
     /**
@@ -124,31 +103,6 @@ public class JSClass {
     }
 
     public Constructor getConstructor() {
-        return null;
-    }
-
-    /**
-     * <p>
-     * Returns this element's annotation for the specified type if such an annotation is present,
-     * else null.
-     * </p>
-     * 
-     * @param annotationClass The Class object corresponding to the annotation type.
-     * @return This element's annotation for the specified annotation type if present on this
-     *         element, else null.
-     */
-    public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
-        if (annotations != null) {
-            NativeArray<NativeArray> annotations = this.annotations.getPropertyAs(NativeArray.class, "$");
-
-            for (int i = 0; i < annotations.length(); i++) {
-                NativeArray definition = annotations.get(i);
-
-                if (definition.get(0).equals(annotationClass.getSimpleName())) {
-                    return (A) definition.get(1);
-                }
-            }
-        }
         return null;
     }
 }
