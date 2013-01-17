@@ -96,9 +96,6 @@ function boot(global) {
   var hashcode = 0;
   
   define(Object.prototype, {
-    /** The Class metadata for reflection. */
-    $: 1,
-  
     /** The identifier for this object. */
     $hashCode: undefined,
   
@@ -145,7 +142,7 @@ function boot(global) {
      * @return A Class object.
      */
     getClass: function() {
-      return this.constructor;
+      return this.constructor.$;
     }
   });
   
@@ -204,20 +201,16 @@ function boot(global) {
      * Define class in booton core library namespace.
      * </p>
      * 
-     * @param {String} subclassName A fully qualified class name of a class to define.
-     * @param {String} superclassName A fully qualified class name of super class.
-     * @param {Object} subclass A class definition.
+     * @param {String} name A simple class name of a class to define.
+     * @param {String} superclassName A simple parent class name.
+     * @param {Object} definition A class definition.
+     * @param {Object} annotation A annotation definition.
      */
-    define: function(name, superclass, subclass) {
-      // default superclass is Object class
-      if (!subclass) {
-        subclass = superclass;
-        superclass = Object;
-      }
+    define: function(name, superclassName, definition, annotation) {
+      // Default superclass is native Object class.
+      var init, superclass = superclassName.length === 0 ? Object : boot[superclassName];
 
-      var init;
-
-      // This is actual counstructor of the specified subclass.
+      // This is actual counstructor of class to define.
       function Class() {
         var params = Array.prototype.slice.call(arguments);
 
@@ -230,32 +223,33 @@ function boot(global) {
       var prototype = Class.prototype = Object.create(superclass.prototype);
       prototype.constructor = Class;
 
-      // Then, from user defined subclass definition.
-      for (var i in subclass) {
+      // Then, from user defined class definition.
+      for (var i in definition) {
         // static method
         if (i.charAt(0) == "_") {
           if (i.length == 1) {
             // invoke static initializer
-            init = subclass[i];
+            init = definition[i];
           } else {
             // define static method
-            Class[i.substring(1)] = subclass[i];
+            Class[i.substring(1)] = definition[i];
           }
         } else {
           // define member method
-          prototype[i] = subclass[i];
-          subclass[i].$Name = i;
+          prototype[i] = definition[i];
+          definition[i].$Name = i;
         }
       }
 
+      // Expose and define class at global scope.
       boot[name] = Class;
 
+      // Define class metadata as pseudo Class instance.
       define(Class, {
-        _: new boot.A(name, Class, 0)
-      });
-      
+        $: new boot.A(name, Class, annotation, 0)
+      }); 
 
-      // API definition
+      // Invoke static initialization.
       if (init) init.call(Class);
     },
 
@@ -271,18 +265,6 @@ function boot(global) {
       if (global[name]) {
         define(global[name].prototype, properties);
       }
-    },
-
-    /**
-     * <p>
-     * Define annotation with class definition.
-     * </p>
-     * 
-     * @param {String} name A fully qualified class name of a class to define.
-     * @param {Object} properties A property definition.
-     */
-    defineAnnotation: function(name, definition) {
-      boot[name].$A = definition;
     }
   });
 }

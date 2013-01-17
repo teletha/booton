@@ -111,6 +111,16 @@ class ScriptBuffer {
     }
 
     /**
+     * Helper method to write String literal.
+     * 
+     * @param fragments
+     * @return
+     */
+    public ScriptBuffer string(String literal) {
+        return append('"', literal, '"');
+    }
+
+    /**
      * Helper method to write script source.
      * 
      * @param fragment
