@@ -995,8 +995,7 @@ class JavaMethodCompiler extends MethodVisitor {
             Literal literal = findLiteral(clazz);
 
             if (literal == null) {
-                // Booton doesn't support class literal in javascript runtime, so we should provide
-                // class name instead.
+                // Booton support class literal in javascript runtime.
                 current.addOperand(Javascript.computeClassName(clazz));
 
                 script.require(clazz);

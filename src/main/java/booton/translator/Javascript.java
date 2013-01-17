@@ -539,6 +539,10 @@ public class Javascript {
 
     private static class ClassReplacement {
 
+        public ClassReplacement(NativeObject definition) {
+            System.out.println(definition);
+        }
+
         public <A extends Annotation> boolean isAnnotationPresent(Class<A> annotation) {
             return false;
         }
@@ -552,7 +556,7 @@ public class Javascript {
         }
 
         public Constructor getConstructor() {
-
+            return null;
         }
     }
 
