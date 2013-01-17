@@ -21,17 +21,35 @@ import booton.translator.Scriptable;
 public class ClassAnnotationTest extends ScriptTester {
 
     @Test
-    public void annotation() throws Exception {
+    public void Annotated() throws Exception {
         test(new Scriptable() {
 
             boolean act() {
-                return Marked.class.isAnnotationPresent(Marker.class);
+                return Annotated.class.isAnnotationPresent(Marker.class);
             }
-
         });
     }
 
+    @Test
+    public void NotAnnotated() throws Exception {
+        test(new Scriptable() {
+
+            boolean act() {
+                return NotAnnotated.class.isAnnotationPresent(Marker.class);
+            }
+        });
+    }
+
+    /**
+     * @version 2013/01/17 9:50:08
+     */
     @Marker
-    private static class Marked {
+    private static class Annotated {
+    }
+
+    /**
+     * @version 2013/01/17 9:50:06
+     */
+    private static class NotAnnotated {
     }
 }

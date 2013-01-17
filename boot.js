@@ -152,7 +152,7 @@ function boot(global) {
   //====================================================================
   // Class Extensions
   //====================================================================
-  global.Class = {
+  var Clazz = {
     /**
      * Actual class name.
      */
@@ -187,10 +187,6 @@ function boot(global) {
       });
 
       return methods;
-    },
-    
-    J: function() {
-      return "1";
     }
   };
 
@@ -231,8 +227,8 @@ function boot(global) {
 
       // We must copy the properties over onto the new prototype.
       // At first, from superclass definition.
-      Class.prototype = Object.create(superclass.prototype);
-      Class.prototype.constructor = Class;
+      var prototype = Class.prototype = Object.create(superclass.prototype);
+      prototype.constructor = Class;
 
       // Then, from user defined subclass definition.
       for (var i in subclass) {
@@ -247,18 +243,14 @@ function boot(global) {
           }
         } else {
           // define member method
-          Class.prototype[i] = subclass[i];
+          prototype[i] = subclass[i];
           subclass[i].$Name = i;
         }
       }
 
-
-      
-
-     
       boot[name] = Class;
 
-      define(Class, boot.A.prototype);
+      define(Class, Clazz);
 
       // API definition
       if (init) init.call(Class);

@@ -1,16 +1,33 @@
-boot.define("v",{
-	
-	// booton.translator.web.Location#<init>()
-	$0:function(){
-	}
-});
-
 boot.defineNative("MessageEvent",{
 	
 	// booton.translator.web.WebSocket$MessageEvent#<init>()
 	$0:function(){
 	}
 });
+boot.define("N",{
+	
+	// booton.translator.web.jQuery$1#<init>(booton.translator.web.jQuery)
+	$0:function(A){
+		this.a=A;
+		this.b=0;
+	},
+	// booton.translator.web.jQuery$1#hasNext()
+	N:function(){
+		return this.b<this.a.size();
+	},
+	// booton.translator.web.jQuery$1#next()
+	O:function(){
+		return $(this.a.get(this.b++));
+	},
+	// booton.translator.web.jQuery$1#remove()
+	P:function(){
+	},
+	// booton.translator.web.jQuery$1#next()
+	Q:function(){
+		return this.O();
+	}
+});
+
 boot.defineNative("Document",{
 	
 	// booton.translator.web.Document#<init>()
@@ -21,48 +38,31 @@ boot.defineNative("Document",{
 		return this.createElement(A);
 	}
 });
-boot.define("Z",{
-	
-	// booton.translator.web.jQuery$1#<init>(booton.translator.web.jQuery)
-	$0:function(A){
-		this.a=A;
-		this.b=0;
-	},
-	// booton.translator.web.jQuery$1#hasNext()
-	CE:function(){
-		return this.b<this.a.size();
-	},
-	// booton.translator.web.jQuery$1#next()
-	EB:function(){
-		return $(this.a.get(this.b++));
-	},
-	// booton.translator.web.jQuery$1#remove()
-	CY:function(){
-	},
-	// booton.translator.web.jQuery$1#next()
-	CD:function(){
-		return this.EB();
-	}
-});
-
 boot.defineNative("jQuery",{
 	
 	// booton.translator.web.jQuery#<init>()
 	$0:function(){
 	},
 	// booton.translator.web.jQuery#child(java.lang.String)
-	Dz:function(A){
+	K:function(A){
 		return $(document.createElement(A)).appendTo(this);
 	},
 	// booton.translator.web.jQuery#child(java.lang.Class)
-	EA:function(A){
-		return this.Dz("span").addClass(A);
+	L:function(A){
+		return this.K("span").addClass(A);
 	},
 	// booton.translator.web.jQuery#iterator()
-	CC:function(){
-		return new boot.Z(this,0);
+	M:function(){
+		return new boot.N(this,0);
 	}
 });
+boot.define("BP",{
+	
+	// booton.translator.web.WebSocket#<init>()
+	$0:function(){
+	}
+});
+
 boot.define("BR",{
 	
 	// booton.translator.web.Window#<init>()
@@ -70,9 +70,9 @@ boot.define("BR",{
 	}
 });
 
-boot.define("BP",{
+boot.define("BA",{
 	
-	// booton.translator.web.WebSocket#<init>()
+	// booton.translator.web.Location#<init>()
 	$0:function(){
 	}
 });

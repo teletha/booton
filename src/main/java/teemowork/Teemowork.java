@@ -50,7 +50,7 @@ public class Teemowork extends Application {
 
         Class clazz = Teemowork.class;
         System.out.println(clazz);
-        System.out.println(clazz.getName());
+
         // System.out.println(clazz.getSimpleName());
         //
         // for (Method method : clazz.getMethods()) {
