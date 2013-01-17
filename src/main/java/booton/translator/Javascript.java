@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,6 +38,7 @@ import kiss.I;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 
+import booton.translator.js.NativeArray;
 import booton.translator.js.NativeObject;
 
 /**
@@ -87,7 +89,7 @@ public class Javascript {
     private final int id;
 
     /** The all dependency scripts. */
-    private final Set<Class> dependencies = new HashSet();
+    private final Set<Class> dependencies = new LinkedHashSet();
 
     /** The constructor list of this script. */
     private final List<Integer> constructors = new ArrayList();
@@ -175,6 +177,8 @@ public class Javascript {
      * @param outout A script output.
      */
     public void writeTo(Appendable output) {
+        require(Class.class);
+
         // Record all defined classes to prevent duplicated definition.
         write(output, new HashSet(Collections.singleton(source)));
 
@@ -304,26 +308,15 @@ public class Javascript {
         code.append("});");
         code.line();
 
-        // class annotation
-        for (Annotation annotation : source.getAnnotations()) {
-            System.out.println(annotation);
-            require(annotation.annotationType());
+        // compile annotation
+        JavaAnnotationCompiler compiler = new JavaAnnotationCompiler(source);
 
-            // code.append("boot.defineAnnotation(\"").append(name).append("\",");
-        }
-    }
+        if (compiler.hasAnnotation()) {
+            System.out.println(compiler.toString());
 
-    /**
-     * <p>
-     * Compile annotation to javascript.
-     * </p>
-     */
-    private void compileAnnotation() {
-        // class annotation
-        for (Annotation annotation : source.getAnnotations()) {
-            System.out.println(annotation);
-            require(annotation.annotationType());
+            code.append("boot.defineAnnotation(\"").append(name).append("\",").append(compiler).append(");");
         }
+
     }
 
     /**
@@ -370,7 +363,7 @@ public class Javascript {
      */
     public static final Javascript getScript(Class source) {
         // check Native Class
-        if (TranslatorManager.hasTranslator(source) || source.isInterface()) {
+        if (TranslatorManager.hasTranslator(source)) {
             return null;
         }
 
@@ -537,10 +530,23 @@ public class Javascript {
         return members.size() - 1;
     }
 
+    /**
+     * @version 2013/01/17 15:58:55
+     */
     private static class ClassReplacement {
 
-        public ClassReplacement(NativeObject definition) {
-            System.out.println(definition);
+        /** The simple class name. */
+        private final String name;
+
+        /** The class definition in javascript runtime. */
+        private final NativeObject definition;
+
+        /**
+         * @param definition
+         */
+        private ClassReplacement(String name, NativeObject definition) {
+            this.name = name;
+            this.definition = definition;
         }
 
         public <A extends Annotation> boolean isAnnotationPresent(Class<A> annotation) {
@@ -548,7 +554,11 @@ public class Javascript {
         }
 
         public String getName() {
-            return "aaa";
+            return "boot." + name;
+        }
+
+        public String getSimpleName() {
+            return name;
         }
 
         public Object newInstance() {
@@ -556,6 +566,19 @@ public class Javascript {
         }
 
         public Constructor getConstructor() {
+            return null;
+        }
+
+        public <A extends Annotation> A getAnnotation(Class<A> annotation) {
+            NativeArray<NativeArray> annotationHolder = (NativeArray) ((NativeObject) definition.getProperty("$A")).getProperty("$");
+
+            for (int i = 0; i < annotationHolder.length(); i++) {
+                NativeArray definition = annotationHolder.get(i);
+
+                if (definition.get(0).equals(annotation.getName())) {
+                    return (A) definition.get(1);
+                }
+            }
             return null;
         }
     }

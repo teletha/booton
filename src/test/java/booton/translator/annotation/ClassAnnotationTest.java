@@ -24,8 +24,8 @@ public class ClassAnnotationTest extends ScriptTester {
     public void Annotated() throws Exception {
         test(new Scriptable() {
 
-            boolean act() {
-                return Annotated.class.isAnnotationPresent(Marker.class);
+            int act() {
+                return Annotated.class.getAnnotation(Marker.class).intValue();
             }
         });
     }
@@ -43,7 +43,7 @@ public class ClassAnnotationTest extends ScriptTester {
     /**
      * @version 2013/01/17 9:50:08
      */
-    @Marker
+    @Marker(intValue = 5)
     private static class Annotated {
     }
 
