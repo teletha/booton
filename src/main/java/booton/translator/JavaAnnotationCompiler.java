@@ -11,6 +11,7 @@ package booton.translator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -22,12 +23,9 @@ import kiss.I;
 import org.objectweb.asm.Type;
 
 /**
- * @version 2013/01/17 13:58:58
+ * @version 2013/01/17 21:15:48
  */
 class JavaAnnotationCompiler {
-
-    /** The compiling class. */
-    private final Class clazz;
 
     /** The code writer. */
     private final ScriptBuffer code = new ScriptBuffer();
@@ -39,8 +37,6 @@ class JavaAnnotationCompiler {
      * 
      */
     JavaAnnotationCompiler(Class clazz) {
-        this.clazz = clazz;
-
         // class
         register("$", clazz);
 
@@ -153,17 +149,13 @@ class JavaAnnotationCompiler {
         for (int i = 0; i < methods.size(); i++) {
             try {
                 Method method = methods.get(i);
-                Class returnType = method.getReturnType();
                 String methodName = Javascript.computeMethodName(type, method.getName(), Type.getMethodDescriptor(method));
-                Object methodValue = method.invoke(annotation);
 
-                if (returnType == String.class) {
-                    methodValue = "\"" + methodValue + "\"";
-                } else if (returnType == Class.class) {
-                    methodValue = Javascript.computeClassName((Class) methodValue) + ".$";
-                }
-
-                code.append(methodName).append(":").append("function() {return ").append(methodValue).append(";}");
+                code.append(methodName)
+                        .append(":")
+                        .append("function() {return ")
+                        .append(compileValue(method.invoke(annotation)))
+                        .append(";}");
 
                 if (i < methods.size() - 1) {
                     code.append(",");
@@ -173,6 +165,42 @@ class JavaAnnotationCompiler {
             }
         }
         code.append("}]");
+    }
+
+    /**
+     * <p>
+     * Compile annotation value.
+     * </p>
+     * 
+     * @param buffer
+     * @param type
+     * @param value
+     */
+    private String compileValue(Object value) {
+        Class type = value.getClass();
+
+        if (type == String.class) {
+            return "\"" + value + "\"";
+        } else if (type == Class.class) {
+            return Javascript.computeClassName((Class) value) + ".$";
+        } else if (type.isArray()) {
+            StringBuilder builder = new StringBuilder("[");
+
+            int size = Array.getLength(value);
+
+            for (int i = 0; i < size; i++) {
+                builder.append(compileValue(Array.get(value, i)));
+
+                if (i < size - 1) {
+                    builder.append(',');
+                }
+            }
+            builder.append(']');
+
+            return builder.toString();
+        } else {
+            return value.toString();
+        }
     }
 
     /**

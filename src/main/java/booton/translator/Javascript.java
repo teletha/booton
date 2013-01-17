@@ -18,6 +18,7 @@ package booton.translator;
 import static booton.Obfuscator.*;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
@@ -37,6 +38,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 
 import booton.translator.js.JSClass;
+import booton.translator.js.JSConstructor;
 import booton.translator.js.NativeObject;
 
 /**
@@ -388,6 +390,10 @@ public class Javascript {
 
         if (type == Class.class) {
             return JSClass.class;
+        }
+
+        if (type == Constructor.class) {
+            return JSConstructor.class;
         }
 
         return type;

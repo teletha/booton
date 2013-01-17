@@ -82,6 +82,26 @@ public class ClassAnnotationTest extends ScriptTester {
         });
     }
 
+    @Test
+    public void StringArrayValue() throws Exception {
+        test(new Scriptable() {
+
+            String[] act() {
+                return StringArrayValue.class.getAnnotation(StringArrayMarker.class).value();
+            }
+        });
+    }
+
+    @Test
+    public void PrimitiveArrayValue() throws Exception {
+        test(new Scriptable() {
+
+            int[] act() {
+                return PrimitiveArrayValue.class.getAnnotation(PrimitiveArrayMarker.class).value();
+            }
+        });
+    }
+
     /**
      * @version 2013/01/17 9:50:06
      */
@@ -114,5 +134,19 @@ public class ClassAnnotationTest extends ScriptTester {
      */
     @ClassMarker(ClassValue.class)
     private static class ClassValue {
+    }
+
+    /**
+     * @version 2013/01/17 9:50:08
+     */
+    @StringArrayMarker({"one", "two", "three"})
+    private static class StringArrayValue {
+    }
+
+    /**
+     * @version 2013/01/17 9:50:08
+     */
+    @PrimitiveArrayMarker({1, 2, 3})
+    private static class PrimitiveArrayValue {
     }
 }
