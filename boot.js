@@ -255,7 +255,7 @@ function boot(global) {
       Object.defineProperty(Class, "$", {
         get: function() {
           if (!metadata) {
-            metadata = new boot.A(name, prototype, annotation, 0)
+            metadata = new boot.A(name, prototype, annotation || {}, 0)
           }
           return metadata;
         }

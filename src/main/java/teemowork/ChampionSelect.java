@@ -21,7 +21,6 @@ import booton.translator.web.jQuery;
 /**
  * @version 2012/12/26 13:06:59
  */
-@PageInfo(path = "")
 public class ChampionSelect extends Page {
 
     /** The champion viewer. */
@@ -50,6 +49,10 @@ public class ChampionSelect extends Page {
             Application.show(new ChampionDetail(source.name));
         }
     };
+
+    @PageInfo(path = "")
+    public ChampionSelect() {
+    }
 
     /**
      * {@inheritDoc}

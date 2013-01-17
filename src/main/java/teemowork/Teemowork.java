@@ -10,11 +10,7 @@
 package teemowork;
 
 import static booton.translator.web.WebSupport.*;
-
-import java.lang.reflect.Constructor;
-
 import js.Application;
-import js.PageInfo;
 import js.application.Header;
 import js.application.Header.Menu;
 import teemowork.model.Patch;
@@ -31,8 +27,8 @@ public class Teemowork extends Application {
      */
     @Override
     public void jsmain() {
-        register("Champion/*", ChampionDetail.class);
-        register("", ChampionSelect.class);
+        register(ChampionDetail.class);
+        register(ChampionSelect.class);
 
         super.jsmain();
 
@@ -53,13 +49,13 @@ public class Teemowork extends Application {
         nav.add("Contact", "#");
 
         System.out.println(Patch.Latest);
-
-        Class<?> clazz = ChampionDetail.class;
-
-        for (Constructor constructor : clazz.getConstructors()) {
-            System.out.println(constructor);
-            System.out.println(constructor.isAnnotationPresent(PageInfo.class));
-        }
+        //
+        // Class<?> clazz = ChampionDetail.class;
+        //
+        // for (Constructor constructor : clazz.getConstructors()) {
+        // System.out.println(constructor);
+        // System.out.println(constructor.isAnnotationPresent(PageInfo.class));
+        // }
 
         // System.out.println(clazz.getSimpleName());
         //
