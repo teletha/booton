@@ -204,7 +204,7 @@ function boot(global) {
      * Define class in booton core library namespace.
      * </p>
      * 
-     * @param {String} subclassName A fully qualified class name of a class to defien.
+     * @param {String} subclassName A fully qualified class name of a class to define.
      * @param {String} superclassName A fully qualified class name of super class.
      * @param {Object} subclass A class definition.
      */
@@ -250,7 +250,10 @@ function boot(global) {
 
       boot[name] = Class;
 
-      define(Class, Clazz);
+      define(Class, {
+        _: new boot.A(name, Class, 0)
+      });
+      
 
       // API definition
       if (init) init.call(Class);
@@ -261,13 +264,25 @@ function boot(global) {
      * Define properties in javascript native object prototype.
      * </p>
      * 
-     * @param {String} name A fully qualified class name of a class to defien.
+     * @param {String} name A fully qualified class name of a class to define.
      * @param {Object} properties A property definition.
      */
     defineNative: function(name, properties) {
       if (global[name]) {
         define(global[name].prototype, properties);
       }
+    },
+
+    /**
+     * <p>
+     * Define annotation with class definition.
+     * </p>
+     * 
+     * @param {String} name A fully qualified class name of a class to define.
+     * @param {Object} properties A property definition.
+     */
+    defineAnnotation: function(name, definition) {
+      boot[name].$A = definition;
     }
   });
 }

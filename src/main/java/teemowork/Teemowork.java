@@ -14,10 +14,12 @@ import js.Application;
 import js.application.Header;
 import js.application.Header.Menu;
 import teemowork.model.Patch;
+import booton.translator.annotation.Marker;
 
 /**
  * @version 2012/12/11 14:23:57
  */
+@Marker(intValue = 4)
 public class Teemowork extends Application {
 
     /**
@@ -48,8 +50,9 @@ public class Teemowork extends Application {
 
         System.out.println(Patch.Latest);
 
-        Class clazz = Teemowork.class;
+        Class<?> clazz = Teemowork.class;
         System.out.println(clazz);
+        System.out.println(clazz.getAnnotation(Marker.class).intValue());
 
         // System.out.println(clazz.getSimpleName());
         //
