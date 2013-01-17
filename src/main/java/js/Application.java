@@ -11,12 +11,12 @@ package js;
 
 import static booton.translator.web.WebSupport.*;
 
+import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import js.application.Header;
-import js.lang.Classes;
 import js.util.ArrayList;
 import booton.translator.web.jQuery;
 import booton.translator.web.jQuery.Event;
@@ -60,6 +60,26 @@ public abstract class Application {
      */
     protected final void register(String pattern, Class<? extends Page> page) {
         router.routes.add(new Route(pattern, page));
+    }
+
+    /**
+     * <p>
+     * Register page with uri pattern.
+     * </p>
+     * 
+     * @param pattern
+     * @param page
+     */
+    protected final void register(Class<? extends Page> page) {
+        Constructor<?>[] constructors = page.getConstructors();
+
+        for (int i = 0; i < constructors.length; i++) {
+            PageInfo info = constructors[i].getAnnotation(PageInfo.class);
+
+            if (info != null) {
+                router.routes.add(new Route(constructors[i], info));
+            }
+        }
     }
 
     /**
@@ -154,6 +174,8 @@ public abstract class Application {
         /** The page class. */
         private final Class<? extends Page> page;
 
+        private Constructor constructor;
+
         /**
          * @param pattern
          * @param page
@@ -161,6 +183,15 @@ public abstract class Application {
         private Route(String pattern, Class<? extends Page> page) {
             this.pattern = Pattern.compile(pattern.replaceAll("\\*", "([^/].+)"));
             this.page = page;
+        }
+
+        /**
+         * @param constructor
+         */
+        private Route(Constructor constructor, PageInfo info) {
+            this.pattern = Pattern.compile(info.path().replaceAll("\\*", "([^/].+)"));
+            this.page = null;
+            this.constructor = constructor;
         }
 
         /**
@@ -184,7 +215,8 @@ public abstract class Application {
                 }
 
                 try {
-                    return Classes.newInstance(page, wildcards.toArray());
+                    return (Page) constructor.newInstance(wildcards.toArray());
+                    // return Classes.newInstance(page, wildcards.toArray());
                 } catch (Exception e) {
                     return null;
                 }

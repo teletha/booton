@@ -19,6 +19,9 @@ import booton.translator.Translator;
  */
 public class NativeObject {
 
+    /** The booton root object. */
+    public static final NativeObject boot = new NativeObject();
+
     /** The java implementation. */
     private final Map<String, Object> container = new HashMap();
 
@@ -173,6 +176,9 @@ public class NativeObject {
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<NativeObject> {
+
+        /** The booton root object. */
+        public String boot = "boot.";
 
         /**
          * <p>

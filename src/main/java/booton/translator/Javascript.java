@@ -408,6 +408,10 @@ public class Javascript {
      * @return An identified class name for ECMAScript.
      */
     public static final String computeSimpleClassName(Class clazz) {
+        if (clazz == NativeObject.class) {
+            return "";
+        }
+
         Javascript script = getScript(clazz);
 
         if (script == null) {

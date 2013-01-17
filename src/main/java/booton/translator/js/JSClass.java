@@ -23,15 +23,19 @@ public class JSClass extends JSAnnotatedElement {
     /** The class definition in runtime. */
     private final NativeObject clazz;
 
+    /** The annotation in runtime. */
+    private final NativeObject annotations;
+
     /**
      * @param name
      * @param clazz
      * @param annotations
      */
     private JSClass(String name, NativeObject clazz, NativeObject annotations) {
-        super(name, annotations, "$");
+        super(name, annotations.getPropertyAs(NativeArray.class, "$"));
 
         this.clazz = clazz;
+        this.annotations = annotations;
     }
 
     /**
@@ -56,7 +60,7 @@ public class JSClass extends JSAnnotatedElement {
             String name = names.get(i);
 
             if (name.startsWith("$")) {
-                container.push(new JSConstructor(name, (NativeObject) clazz.getProperty(name), annotations));
+                container.push(new JSConstructor(this, name, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
             }
         }
         return (Constructor[]) (Object) container;
@@ -103,6 +107,18 @@ public class JSClass extends JSAnnotatedElement {
     }
 
     public Constructor getConstructor() {
+        return null;
+    }
+
+    /**
+     * <p>
+     * Returns the Class object associated with the class or interface with the given string name.
+     * </p>
+     * 
+     * @param fqcn The fully qualified name of the desired class.
+     * @return The Class object for the class with the specified name.
+     */
+    public static Class forName(String fqcn) {
         return null;
     }
 }

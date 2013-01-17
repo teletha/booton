@@ -13,17 +13,15 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 
 /**
- * @version 2013/01/17 21:43:30
+ * @version 2013/01/18 1:15:38
  */
-public abstract class JSAnnotatedElement {
+public abstract class JSAnnotatedElement extends NativeObject {
 
     /** The function name in runtime. */
     protected final String name;
 
     /** The annotation definition in runtime. */
-    protected final NativeObject annotations;
-
-    private final String category;
+    private final NativeArray<NativeArray> annotations;
 
     /**
      * <p>
@@ -33,10 +31,9 @@ public abstract class JSAnnotatedElement {
      * @param name
      * @param annotations
      */
-    protected JSAnnotatedElement(String name, NativeObject annotations, String category) {
+    protected JSAnnotatedElement(String name, NativeArray<NativeArray> annotations) {
         this.name = name;
         this.annotations = annotations;
-        this.category = category;
     }
 
     /**
@@ -65,18 +62,42 @@ public abstract class JSAnnotatedElement {
      */
     public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
         if (annotations != null) {
-            NativeArray<NativeArray> annotations = this.annotations.getPropertyAs(NativeArray.class, category);
+            for (int i = 0; i < annotations.length(); i++) {
+                NativeArray definition = annotations.get(i);
 
-            if (annotations != null) {
-                for (int i = 0; i < annotations.length(); i++) {
-                    NativeArray definition = annotations.get(i);
-
-                    if (definition.get(0).equals(annotationClass.getSimpleName())) {
-                        return (A) definition.get(1);
-                    }
+                if (definition.get(0).equals(annotationClass.getSimpleName())) {
+                    return (A) definition.get(1);
                 }
             }
         }
         return null;
+    }
+
+    /**
+     * <p>
+     * Returns all annotations present on this element. (Returns an array of length zero if this
+     * element has no annotations.) The caller of this method is free to modify the returned array;
+     * it will have no effect on the arrays returned to other callers.
+     * </p>
+     * 
+     * @return All annotations present on this element.
+     */
+    public Annotation[] getAnnotations() {
+        return null;
+    }
+
+    /**
+     * <p>
+     * Returns all annotations that are directly present on this element. Unlike the other methods
+     * in this interface, this method ignores inherited annotations. (Returns an array of length
+     * zero if no annotations are directly present on this element.) The caller of this method is
+     * free to modify the returned array; it will have no effect on the arrays returned to other
+     * callers.
+     * </p>
+     * 
+     * @return All annotations directly present on this element.
+     */
+    public Annotation[] getDeclaredAnnotations() {
+        return getAnnotations();
     }
 }
