@@ -138,7 +138,7 @@ class JavaAnnotationCompiler {
      */
     private void compileAnnotation(Annotation annotation) {
         Class type = annotation.annotationType();
-        code.append("[\"").append(Javascript.computeClassName(type)).append("\",{");
+        code.append("[").string(Javascript.computeSimpleClassName(type)).append(",{");
 
         // collect annotation methods
         List<Method> methods = new ArrayList();
@@ -159,6 +159,8 @@ class JavaAnnotationCompiler {
 
                 if (returnType == String.class) {
                     methodValue = "\"" + methodValue + "\"";
+                } else if (returnType == Class.class) {
+                    methodValue = Javascript.computeClassName((Class) methodValue) + ".$";
                 }
 
                 code.append(methodName).append(":").append("function() {return ").append(methodValue).append(";}");

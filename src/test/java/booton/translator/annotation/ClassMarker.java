@@ -13,10 +13,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * @version 2013/01/16 16:12:01
+ * @version 2013/01/17 19:19:37
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Marker {
+public @interface ClassMarker {
 
-    int intValue() default 10;
+    /**
+     * <p>
+     * Object value.
+     * </p>
+     * 
+     * @return
+     */
+    Class value() default ClassMarker.class;
 }
