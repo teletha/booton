@@ -52,20 +52,35 @@ public class JSClass {
      *         else false.
      */
     public <A extends Annotation> boolean isAnnotationPresent(Class<A> annotationClass) {
-        if (annotations == null) {
-            return false;
-        }
+        return getAnnotation(annotationClass) != null;
+    }
 
-        NativeArray<NativeArray> annotations = this.annotations.getPropertyAs(NativeArray.class, "$");
+    /**
+     * <p>
+     * Returns an array containing Constructor objects reflecting all the public constructors of the
+     * class represented by this Class object. An array of length 0 is returned if the class has no
+     * public constructors, or if the class is an array class, or if the class reflects a primitive
+     * type or void. Note that while this method returns an array of Constructor<T> objects (that is
+     * an array of constructors from this class), the return type of this method is Constructor<?>[]
+     * and not Constructor<T>[] as might be expected. This less informative return type is necessary
+     * since after being returned from this method, the array could be modified to hold Constructor
+     * objects for different classes, which would violate the type guarantees of Constructor<T>[].
+     * </p>
+     * 
+     * @return The array of Constructor objects representing the public constructors of this class.
+     */
+    public Constructor[] getConstructors() {
+        NativeArray<Constructor> container = new NativeArray();
+        NativeArray<String> names = clazz.keys();
 
-        for (int i = 0; i < annotations.length(); i++) {
-            NativeArray definition = annotations.get(i);
+        for (int i = 0; i < names.length(); i++) {
+            String name = names.get(i);
 
-            if (definition.get(0).equals(annotationClass.getSimpleName())) {
-                return true;
+            if (name.startsWith("$")) {
+                container.push((Constructor) clazz.getProperty(name));
             }
         }
-        return false;
+        return container.toArray(new Constructor[container.length()]);
     }
 
     /**

@@ -7,41 +7,41 @@ boot.define("A","",{
 		this.c=C;
 	},
 	// booton.translator.js.JSClass#isAnnotationPresent(java.lang.Class)
-	L:function(A,B,C,D){
-		if(this.c!=null){
-			B=this.c["$"];
-			C=0;
-			l5:for (;
-			C<B.length;
-			++C) {
-				D=B[C];
-				if(D[0].equals(A.T())==0){
-				}else{
-					return true;
-				}
-			}return false;
-		}else{
-			return false;
-		}
+	K:function(A){
+		return this.T(A)!=null;
+	},
+	// booton.translator.js.JSClass#getConstructors()
+	J:function(A,B,C,D){
+		A=[];
+		B=this.b.keys();
+		C=0;
+		l4:while (C<B.length) {
+			D=B[C];
+			if(D.startsWith("$")==0){
+			}else{
+				A.push(this.b[D]);
+			}++C;
+			continue l4;
+		}return A;
 	},
 	// booton.translator.js.JSClass#getName()
 	U:function(){
 		return "boot."+this.a;
 	},
 	// booton.translator.js.JSClass#getSimpleName()
-	T:function(){
+	V:function(){
 		return this.a;
 	},
 	// booton.translator.js.JSClass#newInstance()
-	V:function(){
-		return null;
-	},
-	// booton.translator.js.JSClass#getConstructor()
 	W:function(){
 		return null;
 	},
+	// booton.translator.js.JSClass#getConstructor()
+	X:function(){
+		return null;
+	},
 	// booton.translator.js.JSClass#getAnnotation(java.lang.Class)
-	J:function(A,B,C,D){
+	T:function(A,B,C,D){
 		if(this.c==null){
 		}else{
 			B=this.c["$"];
@@ -50,7 +50,7 @@ boot.define("A","",{
 			C<B.length;
 			++C) {
 				D=B[C];
-				if(D[0].equals(A.T())==0){
+				if(D[0].equals(A.V())==0){
 				}else{
 					return D[1];
 				}
@@ -59,7 +59,7 @@ boot.define("A","",{
 	}
 });
 
-boot.define("BY","",{
+boot.define("Bv","",{
 	
 	// booton.live.LiveCoding$1#<init>()
 	$0:function(){
@@ -80,7 +80,7 @@ boot.defineNative("Document",{
 		return this.createElement(A);
 	}
 });
-boot.define("w","",{
+boot.define("y","",{
 	
 	// booton.translator.web.jQuery$1#<init>(booton.translator.web.jQuery)
 	$0:function(A){
@@ -88,19 +88,19 @@ boot.define("w","",{
 		this.b=0;
 	},
 	// booton.translator.web.jQuery$1#hasNext()
-	w:function(){
+	x:function(){
 		return this.b<this.a.size();
 	},
 	// booton.translator.web.jQuery$1#next()
-	Bx:function(){
+	Bz:function(){
 		return $(this.a.get(this.b++));
 	},
 	// booton.translator.web.jQuery$1#remove()
-	BV:function(){
+	BW:function(){
 	},
 	// booton.translator.web.jQuery$1#next()
-	Z:function(){
-		return this.Bx();
+	u:function(){
+		return this.Bz();
 	}
 });
 
@@ -110,33 +110,33 @@ boot.defineNative("jQuery",{
 	$0:function(){
 	},
 	// booton.translator.web.jQuery#child(java.lang.String)
-	Bv:function(A){
+	Bw:function(A){
 		return $(document.createElement(A)).appendTo(this);
 	},
 	// booton.translator.web.jQuery#child(java.lang.Class)
-	Bw:function(A){
-		return this.Bv("span").addClass(A);
+	Bx:function(A){
+		return this.Bw("span").addClass(A);
 	},
 	// booton.translator.web.jQuery#iterator()
-	Y:function(){
-		return new boot.w(this,0);
+	Z:function(){
+		return new boot.y(this,0);
 	}
 });
-boot.define("Bu","",{
+boot.define("Bx","",{
 	
 	// booton.translator.web.Window#<init>()
 	$0:function(){
 	}
 });
 
-boot.define("Z","",{
+boot.define("v","",{
 	
 	// booton.translator.web.Location#<init>()
 	$0:function(){
 	}
 });
 
-boot.define("Bv","",{
+boot.define("Bz","",{
 	
 	// booton.translator.web.WebSocket#<init>()
 	$0:function(){
@@ -149,11 +149,11 @@ boot.defineNative("MessageEvent",{
 	$0:function(){
 	}
 });
-boot.define("BZ","Bv",{
+boot.define("Bw","Bz",{
 	
 	// booton.live.LiveCoding$2#<init>()
 	$0:function(){
-		boot.Bv.prototype.$0.call(this);
+		boot.Bz.prototype.$0.call(this);
 	},
 	// booton.live.LiveCoding$2#message(booton.translator.web.WebSocket$MessageEvent)
 	message:function(A,B){
@@ -166,16 +166,16 @@ boot.define("BZ","Bv",{
 	}
 });
 
-boot.define("BX","",{
+boot.define("Bu","",{
 	
 	// booton.live.LiveCoding#<init>()
 	$0:function(){
 	},
 	// booton.live.LiveCoding#jsmain()
 	_A:function(){
-		$(window).on("error",new boot.BY(0));
-		WebSocket.connect("ws://localhost:10021/live"+window.location.pathname,new boot.BZ(0));
+		$(window).on("error",new boot.Bv(0));
+		WebSocket.connect("ws://localhost:10021/live"+window.location.pathname,new boot.Bw(0));
 	}
 });
 
-try {boot.BX.A();} catch(e) {console.log(e)}
+try {boot.Bu.A();} catch(e) {console.log(e)}

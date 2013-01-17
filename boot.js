@@ -142,7 +142,7 @@ function boot(global) {
      * @return A Class object.
      */
     getClass: function() {
-      return this.constructor.$;
+      return this.$.$;
     }
   });
   
@@ -221,7 +221,6 @@ function boot(global) {
       // We must copy the properties over onto the new prototype.
       // At first, from superclass definition.
       var prototype = Class.prototype = Object.create(superclass.prototype);
-      prototype.constructor = Class;
 
       // Then, from user defined class definition.
       for (var i in definition) {
@@ -246,8 +245,13 @@ function boot(global) {
 
       // Define class metadata as pseudo Class instance.
       define(Class, {
-        $: new boot.A(name, Class, annotation, 0)
-      }); 
+        $: new boot.A(name, prototype, annotation, 0)
+      });
+      
+      // Define class object for the reference from instance.
+      define(prototype, {
+        $: Class
+      });
 
       // Invoke static initialization.
       if (init) init.call(Class);

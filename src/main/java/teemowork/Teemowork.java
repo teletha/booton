@@ -10,7 +10,11 @@
 package teemowork;
 
 import static booton.translator.web.WebSupport.*;
+
+import java.lang.reflect.Constructor;
+
 import js.Application;
+import js.PageInfo;
 import js.application.Header;
 import js.application.Header.Menu;
 import teemowork.model.Patch;
@@ -50,10 +54,12 @@ public class Teemowork extends Application {
 
         System.out.println(Patch.Latest);
 
-        Class<?> clazz = Teemowork.class;
-        System.out.println(clazz);
-        System.out.println(clazz.getAnnotation(PrimitiveMarker.class).intValue());
-        System.out.println(clazz.isAnnotationPresent(PrimitiveMarker.class));
+        Class<?> clazz = ChampionDetail.class;
+
+        for (Constructor constructor : clazz.getConstructors()) {
+            System.out.println(constructor);
+            System.out.println(constructor.isAnnotationPresent(PageInfo.class));
+        }
 
         // System.out.println(clazz.getSimpleName());
         //
