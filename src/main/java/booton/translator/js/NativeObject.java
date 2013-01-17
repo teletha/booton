@@ -15,7 +15,7 @@ import java.util.Map;
 import booton.translator.Translator;
 
 /**
- * @version 2012/12/09 13:42:39
+ * @version 2013/01/17 16:52:20
  */
 public class NativeObject {
 
@@ -44,6 +44,19 @@ public class NativeObject {
      */
     public Object getProperty(Object key) {
         return container.get(literal(key));
+    }
+
+    /**
+     * <p>
+     * Retireve property by key as the specified type.
+     * </p>
+     * 
+     * @param type A property type.
+     * @param key A property key.
+     * @return An associated value.
+     */
+    public <A> A getPropertyAs(Class<A> type, Object key) {
+        return (A) container.get(literal(key));
     }
 
     /**
@@ -194,6 +207,19 @@ public class NativeObject {
          */
         public String getProperty(Object key) {
             return that + "[" + param(0) + "]";
+        }
+
+        /**
+         * <p>
+         * Retireve property by key as the specified type.
+         * </p>
+         * 
+         * @param type A property type.
+         * @param key A property key.
+         * @return An associated value.
+         */
+        public String getPropertyAs(Class type, Object key) {
+            return that + "[" + param(1) + "]";
         }
 
         /**

@@ -18,8 +18,6 @@ package booton.translator;
 import static booton.Obfuscator.*;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
@@ -38,7 +36,7 @@ import kiss.I;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 
-import booton.translator.js.NativeArray;
+import booton.translator.js.JSClass;
 import booton.translator.js.NativeObject;
 
 /**
@@ -284,39 +282,35 @@ public class Javascript {
      * </p>
      * 
      * @param code
-     * @param parentClass
+     * @param parent A parent class.
      */
-    private void compileClass(ScriptBuffer code, Class parentClass) {
-        String name = computeClassName(source).substring(5);
+    private void compileClass(ScriptBuffer code, Class parent) {
+        // compute related class names
+        String className = computeSimpleClassName(source);
+        String parentClassName = parent == null || parent == Object.class ? "" : computeSimpleClassName(parent);
 
-        // Start class definition
-        code.append("boot.define(\"").append(name).append("\",");
+        // write class definition
+        code.append("boot.define(").string(className).append(",").string(parentClassName).append(",");
 
-        if (parentClass != null && parentClass != Object.class) {
-            code.append(Javascript.computeClassName(parentClass)).append(',');
-        }
-
-        code.append('{');
-
+        // write constructors, fields and methods
         try {
+            code.append('{');
             new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
+            code.append('}');
         } catch (IOException e) {
             throw I.quiet(e);
         }
 
-        // End class definition
-        code.append("});");
-        code.line();
+        // write annotation
+        JavaAnnotationCompiler annotation = new JavaAnnotationCompiler(source);
 
-        // compile annotation
-        JavaAnnotationCompiler compiler = new JavaAnnotationCompiler(source);
-
-        if (compiler.hasAnnotation()) {
-            System.out.println(compiler.toString());
-
-            code.append("boot.defineAnnotation(\"").append(name).append("\",").append(compiler).append(");");
+        if (annotation.hasAnnotation()) {
+            code.append(',').append(annotation);
         }
 
+        // End class definition
+        code.append(");");
+        code.line();
     }
 
     /**
@@ -393,10 +387,28 @@ public class Javascript {
         }
 
         if (type == Class.class) {
-            return ClassReplacement.class;
+            return JSClass.class;
         }
 
         return type;
+    }
+
+    /**
+     * <p>
+     * Compute the identified simple class name for ECMAScript.
+     * </p>
+     * 
+     * @param clazz A class with fully qualified class name(e.g. java.lang.String).
+     * @return An identified class name for ECMAScript.
+     */
+    public static final String computeSimpleClassName(Class clazz) {
+        Javascript script = getScript(clazz);
+
+        if (script == null) {
+            return clazz.getSimpleName();
+        } else {
+            return mung32(script.id);
+        }
     }
 
     /**
@@ -408,13 +420,7 @@ public class Javascript {
      * @return An identified class name for ECMAScript.
      */
     public static final String computeClassName(Class clazz) {
-        Javascript script = getScript(clazz);
-
-        if (script == null) {
-            return clazz.getSimpleName();
-        } else {
-            return "boot." + mung32(script.id);
-        }
+        return "boot." + computeSimpleClassName(clazz);
     }
 
     /**
@@ -528,59 +534,6 @@ public class Javascript {
 
         // API definition
         return members.size() - 1;
-    }
-
-    /**
-     * @version 2013/01/17 15:58:55
-     */
-    private static class ClassReplacement {
-
-        /** The simple class name. */
-        private final String name;
-
-        /** The class definition in javascript runtime. */
-        private final NativeObject definition;
-
-        /**
-         * @param definition
-         */
-        private ClassReplacement(String name, NativeObject definition) {
-            this.name = name;
-            this.definition = definition;
-        }
-
-        public <A extends Annotation> boolean isAnnotationPresent(Class<A> annotation) {
-            return false;
-        }
-
-        public String getName() {
-            return "boot." + name;
-        }
-
-        public String getSimpleName() {
-            return name;
-        }
-
-        public Object newInstance() {
-            return null;
-        }
-
-        public Constructor getConstructor() {
-            return null;
-        }
-
-        public <A extends Annotation> A getAnnotation(Class<A> annotation) {
-            NativeArray<NativeArray> annotationHolder = (NativeArray) ((NativeObject) definition.getProperty("$A")).getProperty("$");
-
-            for (int i = 0; i < annotationHolder.length(); i++) {
-                NativeArray definition = annotationHolder.get(i);
-
-                if (definition.get(0).equals(annotation.getName())) {
-                    return (A) definition.get(1);
-                }
-            }
-            return null;
-        }
     }
 
     /**

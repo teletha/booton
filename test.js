@@ -1,33 +1,34 @@
-boot.define("A",{
+boot.define("A","",{
 	
-	// booton.translator.Javascript$ClassReplacement#<init>(java.lang.String, booton.translator.js.NativeObject)
-	$0:function(A,B){
+	// booton.translator.js.JSClass#<init>(java.lang.String, booton.translator.js.NativeObject, booton.translator.js.NativeObject)
+	$0:function(A,B,C){
 		this.a=A;
 		this.b=B;
+		this.c=C;
 	},
-	// booton.translator.Javascript$ClassReplacement#isAnnotationPresent(java.lang.Class)
+	// booton.translator.js.JSClass#isAnnotationPresent(java.lang.Class)
 	M:function(A){
 		return false;
 	},
-	// booton.translator.Javascript$ClassReplacement#getName()
+	// booton.translator.js.JSClass#getName()
 	N:function(){
 		return "boot."+this.a;
 	},
-	// booton.translator.Javascript$ClassReplacement#getSimpleName()
+	// booton.translator.js.JSClass#getSimpleName()
 	O:function(){
 		return this.a;
 	},
-	// booton.translator.Javascript$ClassReplacement#newInstance()
+	// booton.translator.js.JSClass#newInstance()
 	P:function(){
 		return null;
 	},
-	// booton.translator.Javascript$ClassReplacement#getConstructor()
+	// booton.translator.js.JSClass#getConstructor()
 	Q:function(){
 		return null;
 	},
-	// booton.translator.Javascript$ClassReplacement#getAnnotation(java.lang.Class)
+	// booton.translator.js.JSClass#getAnnotation(java.lang.Class)
 	J:function(A,B,C,D){
-		B=this.b["$A"]["$"];
+		B=this.c["$"];
 		C=0;
 		l3:for (;
 		C<B.length;
@@ -41,13 +42,13 @@ boot.define("A",{
 	}
 });
 
-boot.define("S",{
+boot.define("S","",{
 });
 
-boot.define("Q",{
+boot.define("Q","",{
 });
 
-boot.define("R",{
+boot.define("R","",{
 	
 	// js.util.AbstractCollection#<init>()
 	$0:function(){
@@ -127,7 +128,7 @@ boot.define("R",{
 	}
 });
 
-boot.define("T",{
+boot.define("T","",{
 	
 	// js.util.ArrayList$View#<init>(js.util.ArrayList)
 	$1:function(A){
@@ -155,7 +156,7 @@ boot.define("T",{
 	}
 });
 
-boot.define("W",{
+boot.define("W","",{
 	
 	// booton.translator.Javascript$ThrowableReplacement#<init>()
 	$0:function(){
@@ -200,7 +201,7 @@ boot.define("W",{
 	}
 });
 
-boot.define("U",boot.W,{
+boot.define("U","W",{
 	
 	// java.lang.Error#<init>()
 	$0:function(){
@@ -224,7 +225,7 @@ boot.define("U",boot.W,{
 	}
 });
 
-boot.define("Y",boot.W,{
+boot.define("Y","W",{
 	
 	// java.lang.Exception#<init>()
 	$0:function(){
@@ -248,7 +249,7 @@ boot.define("Y",boot.W,{
 	}
 });
 
-boot.define("X",boot.Y,{
+boot.define("X","Y",{
 	
 	// java.lang.RuntimeException#<init>()
 	$0:function(){
@@ -272,7 +273,7 @@ boot.define("X",boot.Y,{
 	}
 });
 
-boot.define("V",boot.X,{
+boot.define("V","X",{
 	
 	// java.lang.IndexOutOfBoundsException#<init>()
 	$1:function(){
@@ -284,7 +285,7 @@ boot.define("V",boot.X,{
 	}
 });
 
-boot.define("P",boot.R,{
+boot.define("P","R",{
 	
 	// js.util.ArrayList#<init>()
 	$0:function(){
@@ -380,17 +381,17 @@ boot.define("P",boot.R,{
 	}
 });
 
-boot.define("Z",{
+boot.define("Z","",{
 	
 	// booton.translator.web.Location#<init>()
 	$0:function(){
 	}
 });
 
-boot.define("G",{
+boot.define("G","",{
 });
 
-boot.define("F",{
+boot.define("F","",{
 	
 	// js.Application$Route#<init>(java.lang.String, java.lang.Class)
 	$1:function(A,B){
@@ -438,14 +439,14 @@ boot.defineNative("Document",{
 		return this.createElement(A);
 	}
 });
-boot.define("H",{
+boot.define("H","",{
 	
 	// js.Page#<init>()
 	$0:function(){
 	}
 });
 
-boot.define("w",{
+boot.define("w","",{
 	
 	// booton.translator.web.jQuery$1#<init>(booton.translator.web.jQuery)
 	$0:function(A){
@@ -487,7 +488,7 @@ boot.defineNative("jQuery",{
 		return new boot.w(this,0);
 	}
 });
-boot.define("E",{
+boot.define("E","",{
 	
 	// js.Application$Router#<init>()
 	$1:function(){
@@ -534,19 +535,18 @@ boot.define("E",{
 	_E:function(A){
 		return A.a;
 	}
-});
-
-boot.defineAnnotation("E",{
+},{
 	"X":[["boot.O",{
 	}]]
 });
+
 boot.defineNative("History",{
 	
 	// booton.translator.web.History#<init>()
 	$0:function(){
 	}
 });
-boot.define("C",{
+boot.define("C","",{
 	
 	// js.Application#<clinit>()
 	_:function(){
@@ -577,7 +577,7 @@ boot.define("C",{
 	}
 });
 
-boot.define("BM",boot.R,{
+boot.define("BM","R",{
 	
 	// js.util.AbstractSet#<init>()
 	$0:function(){
@@ -585,7 +585,7 @@ boot.define("BM",boot.R,{
 	}
 });
 
-boot.define("BN",{
+boot.define("BN","",{
 	
 	// js.util.HashSet$View#<init>(js.util.HashSet, booton.translator.js.NativeArray)
 	$1:function(A,B){
@@ -615,7 +615,7 @@ boot.define("BN",{
 	}
 });
 
-boot.define("BG",boot.BM,{
+boot.define("BG","BM",{
 	
 	// js.util.HashSet#<init>()
 	$0:function(){
@@ -698,10 +698,10 @@ boot.define("BG",boot.BM,{
 	}
 });
 
-boot.define("BH",{
+boot.define("BH","",{
 });
 
-boot.define("BI",{
+boot.define("BI","",{
 	
 	// js.util.HashMap$SimpleEntry#<init>(java.lang.Object, java.lang.Object)
 	$1:function(A,B){
@@ -732,13 +732,13 @@ boot.define("BI",{
 	}
 });
 
-boot.define("BF",{
+boot.define("BF","",{
 });
 
-boot.define("BJ",{
+boot.define("BJ","",{
 });
 
-boot.define("BO",{
+boot.define("BO","",{
 	
 	// js.util.HashMap$View#<init>(js.util.HashMap, java.util.Iterator, boolean)
 	$1:function(A,B,C){
@@ -769,7 +769,7 @@ boot.define("BO",{
 	}
 });
 
-boot.define("BK",boot.BM,{
+boot.define("BK","BM",{
 	
 	// js.util.HashMap$Keys#<init>(js.util.HashMap)
 	$1:function(A){
@@ -805,7 +805,7 @@ boot.define("BK",boot.BM,{
 	}
 });
 
-boot.define("BL",boot.R,{
+boot.define("BL","R",{
 	
 	// js.util.HashMap$Values#<init>(js.util.HashMap)
 	$1:function(A){
@@ -849,7 +849,7 @@ boot.define("BL",boot.R,{
 	}
 });
 
-boot.define("BE",{
+boot.define("BE","",{
 	
 	// js.util.HashMap#<init>()
 	$0:function(){
@@ -932,7 +932,7 @@ boot.define("BE",{
 	}
 });
 
-boot.define("y",{
+boot.define("y","",{
 	
 	// teemowork.model.Champion#<clinit>()
 	_:function(){
@@ -1085,7 +1085,7 @@ boot.defineNative("Event",{
 	$0:function(){
 	}
 });
-boot.define("z",{
+boot.define("z","",{
 	
 	// teemowork.ChampionDetail$1#<init>(teemowork.ChampionDetail)
 	$0:function(A){
@@ -1098,7 +1098,7 @@ boot.define("z",{
 	}
 });
 
-boot.define("BA",{
+boot.define("BA","",{
 	
 	// teemowork.ChampionDetail$2#<init>(teemowork.ChampionDetail)
 	$0:function(A){
@@ -1111,7 +1111,7 @@ boot.define("BA",{
 	}
 });
 
-boot.define("BB",{
+boot.define("BB","",{
 	
 	// teemowork.model.ChampionStatus#<init>(teemowork.model.Patch, teemowork.model.ChampionStatus)
 	$0:function(A,B){
@@ -1281,7 +1281,7 @@ boot.define("BB",{
 	}
 });
 
-boot.define("I",boot.H,{
+boot.define("I","H",{
 	
 	// teemowork.ChampionDetail#<init>(java.lang.String)
 	$0:function(A){
@@ -1329,15 +1329,14 @@ boot.define("I",boot.H,{
 	_CA:function(A,B){
 		A.Bv(B);
 	}
-});
-
-boot.defineAnnotation("I",{
+},{
 	"$0":[["boot.BC",{
 		CB:function() {return "Champion/*";}
 	}]],"e":[["boot.BD",{
 	}]]
 });
-boot.define("BS",{
+
+boot.define("BS","",{
 	
 	// js.ui.UI#<init>()
 	$0:function(){
@@ -1349,7 +1348,7 @@ boot.define("BS",{
 	}
 });
 
-boot.define("BT",{
+boot.define("BT","",{
 	
 	// js.ui.ImageGrid$1#<init>(js.ui.ImageGrid, booton.translator.web.jQuery)
 	$0:function(A,B){
@@ -1372,7 +1371,7 @@ boot.define("BT",{
 	}
 });
 
-boot.define("BU",{
+boot.define("BU","",{
 	
 	// js.ui.ImageGrid$2#<init>(js.ui.ImageGrid, java.lang.Object)
 	$0:function(A,B){
@@ -1384,7 +1383,7 @@ boot.define("BU",{
 	}
 });
 
-boot.define("BR",boot.BS,{
+boot.define("BR","BS",{
 	
 	// js.ui.ImageGrid#<init>()
 	$0:function(){
@@ -1415,7 +1414,7 @@ boot.define("BR",boot.BS,{
 	}
 });
 
-boot.define("BQ",boot.BR,{
+boot.define("BQ","BR",{
 	
 	// teemowork.ChampionSelect$1#<init>(teemowork.ChampionSelect)
 	$0:function(A){
@@ -1452,7 +1451,7 @@ boot.define("BQ",boot.BR,{
 	}
 });
 
-boot.define("J",boot.H,{
+boot.define("J","H",{
 	
 	// teemowork.ChampionSelect#<init>()
 	$0:function(){
@@ -1467,14 +1466,13 @@ boot.define("J",boot.H,{
 	H:function(){
 		return "";
 	}
-});
-
-boot.defineAnnotation("J",{
+},{
 	"$":[["boot.BC",{
 		CB:function() {return "";}
 	}]]
 });
-boot.define("L",{
+
+boot.define("L","",{
 	
 	// js.application.Header$Menu#<init>(js.application.Header, booton.translator.web.jQuery)
 	$1:function(A,B){
@@ -1493,7 +1491,7 @@ boot.define("L",{
 	}
 });
 
-boot.define("K",{
+boot.define("K","",{
 	
 	// js.application.Header#<init>()
 	$0:function(){
@@ -1507,7 +1505,7 @@ boot.define("K",{
 	}
 });
 
-boot.define("BV",{
+boot.define("BV","",{
 	
 	// teemowork.model.Item#<clinit>()
 	_:function(){
@@ -1723,7 +1721,7 @@ boot.define("BV",{
 	}
 });
 
-boot.define("M",{
+boot.define("M","",{
 	
 	// teemowork.model.Patch#<clinit>()
 	_:function(){
@@ -1866,15 +1864,14 @@ boot.define("M",{
 	}
 });
 
-boot.define("N",{
-});
-
-boot.defineAnnotation("N",{
+boot.define("N","",{
+},{
 	"$":[["boot.BW",{
 		FL:function() {return RUNTIME;}
 	}]]
 });
-boot.define("B",boot.C,{
+
+boot.define("B","C",{
 	
 	// teemowork.Teemowork#<init>()
 	$0:function(){
@@ -1882,8 +1879,8 @@ boot.define("B",boot.C,{
 	},
 	// teemowork.Teemowork#jsmain()
 	A:function(A,B,C){
-		this.D("Champion/*",boot.I._);
-		this.D("",boot.J._);
+		this.D("Champion/*",boot.I.$);
+		this.D("",boot.J.$);
 		boot.C.prototype.A.call(this);
 		$("body").css("padding","0px 10%");
 		A=new boot.K(0);
@@ -1898,20 +1895,19 @@ boot.define("B",boot.C,{
 		A.I("About","#");
 		A.I("Contact","#");
 		console.log(boot.M.a);
-		C=boot.B._;
+		C=boot.B.$;
 		console.log(C);
-		console.log(C.J(boot.N._).K());
+		console.log(C.J(boot.N.$).K());
 	},
 	// teemowork.Teemowork#test()
 	L:function(){
 		console.log("called");
 	}
-});
-
-boot.defineAnnotation("B",{
+},{
 	"$":[["boot.N",{
 		K:function() {return 4;}
 	}]],"L":[["boot.O",{
 	}]]
 });
+
 try {new boot.B(0).A();} catch(e) {console.log(e)}

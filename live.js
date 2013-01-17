@@ -1,33 +1,34 @@
-boot.define("A",{
+boot.define("A","",{
 	
-	// booton.translator.Javascript$ClassReplacement#<init>(java.lang.String, booton.translator.js.NativeObject)
-	$0:function(A,B){
+	// booton.translator.js.JSClass#<init>(java.lang.String, booton.translator.js.NativeObject, booton.translator.js.NativeObject)
+	$0:function(A,B,C){
 		this.a=A;
 		this.b=B;
+		this.c=C;
 	},
-	// booton.translator.Javascript$ClassReplacement#isAnnotationPresent(java.lang.Class)
+	// booton.translator.js.JSClass#isAnnotationPresent(java.lang.Class)
 	M:function(A){
 		return false;
 	},
-	// booton.translator.Javascript$ClassReplacement#getName()
+	// booton.translator.js.JSClass#getName()
 	N:function(){
 		return "boot."+this.a;
 	},
-	// booton.translator.Javascript$ClassReplacement#getSimpleName()
+	// booton.translator.js.JSClass#getSimpleName()
 	O:function(){
 		return this.a;
 	},
-	// booton.translator.Javascript$ClassReplacement#newInstance()
+	// booton.translator.js.JSClass#newInstance()
 	P:function(){
 		return null;
 	},
-	// booton.translator.Javascript$ClassReplacement#getConstructor()
+	// booton.translator.js.JSClass#getConstructor()
 	Q:function(){
 		return null;
 	},
-	// booton.translator.Javascript$ClassReplacement#getAnnotation(java.lang.Class)
+	// booton.translator.js.JSClass#getAnnotation(java.lang.Class)
 	J:function(A,B,C,D){
-		B=this.b["$A"]["$"];
+		B=this.c["$"];
 		C=0;
 		l3:for (;
 		C<B.length;
@@ -41,7 +42,7 @@ boot.define("A",{
 	}
 });
 
-boot.define("BY",{
+boot.define("BY","",{
 	
 	// booton.live.LiveCoding$1#<init>()
 	$0:function(){
@@ -62,7 +63,7 @@ boot.defineNative("Document",{
 		return this.createElement(A);
 	}
 });
-boot.define("w",{
+boot.define("w","",{
 	
 	// booton.translator.web.jQuery$1#<init>(booton.translator.web.jQuery)
 	$0:function(A){
@@ -104,21 +105,21 @@ boot.defineNative("jQuery",{
 		return new boot.w(this,0);
 	}
 });
-boot.define("Bu",{
+boot.define("Bu","",{
 	
 	// booton.translator.web.Window#<init>()
 	$0:function(){
 	}
 });
 
-boot.define("Z",{
+boot.define("Z","",{
 	
 	// booton.translator.web.Location#<init>()
 	$0:function(){
 	}
 });
 
-boot.define("Bv",{
+boot.define("Bv","",{
 	
 	// booton.translator.web.WebSocket#<init>()
 	$0:function(){
@@ -131,7 +132,7 @@ boot.defineNative("MessageEvent",{
 	$0:function(){
 	}
 });
-boot.define("BZ",boot.Bv,{
+boot.define("BZ","Bv",{
 	
 	// booton.live.LiveCoding$2#<init>()
 	$0:function(){
@@ -148,7 +149,7 @@ boot.define("BZ",boot.Bv,{
 	}
 });
 
-boot.define("BX",{
+boot.define("BX","",{
 	
 	// booton.live.LiveCoding#<init>()
 	$0:function(){
