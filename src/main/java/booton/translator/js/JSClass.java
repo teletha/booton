@@ -10,6 +10,7 @@
 package booton.translator.js;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 /**
  * <p>
@@ -73,6 +74,73 @@ public class JSClass extends JSAnnotatedElement {
 
     /**
      * <p>
+     * Returns an array containing Method objects reflecting all the public member methods of the
+     * class or interface represented by this Class object, including those declared by the class or
+     * interface and those inherited from superclasses and superinterfaces. Array classes return all
+     * the (public) member methods inherited from the Object class. The elements in the array
+     * returned are not sorted and are not in any particular order. This method returns an array of
+     * length 0 if this Class object represents a class or interface that has no public member
+     * methods, or if this Class object represents a primitive type or void.
+     * </p>
+     * 
+     * @return The array of Method objects representing the public methods of this class.
+     */
+    public Method[] getMethods() {
+        NativeArray<JSMethod> container = new NativeArray();
+        NativeArray<String> names = clazz.keys();
+
+        for (int i = 0; i < names.length(); i++) {
+            String name = names.get(i);
+
+            if (!name.startsWith("$")) {
+                container.push(new JSMethod(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
+            }
+        }
+        return (Method[]) (Object) container;
+    }
+
+    /**
+     * <p>
+     * Returns an array of Method objects reflecting all the methods declared by the class or
+     * interface represented by this Class object. This includes public, protected, default
+     * (package) access, and private methods, but excludes inherited methods. The elements in the
+     * array returned are not sorted and are not in any particular order. This method returns an
+     * array of length 0 if the class or interface declares no methods, or if this Class object
+     * represents a primitive type, an array class, or void. The class initialization method
+     * <clinit> is not included in the returned array. If the class declares multiple public member
+     * methods with the same parameter types, they are all included in the returned array.
+     * </p>
+     * 
+     * @return The array of Method objects representing all the declared methods of this class.
+     */
+    public Method[] getDeclaredMethods() {
+        NativeArray<JSMethod> container = new NativeArray();
+
+        // collect non-static methods
+        NativeArray<String> names = clazz.keys();
+
+        for (int i = 0; i < names.length(); i++) {
+            String name = names.get(i);
+
+            if (!name.startsWith("$")) {
+                container.push(new JSMethod(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
+            }
+        }
+
+        // collect static methods
+        names = clazz.getPropertyAs(NativeObject.class, "$").keys();
+
+        for (int i = 0; i < names.length(); i++) {
+            String name = names.get(i);
+            container.push(new JSMethod(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
+        }
+
+        // API definition
+        return (Method[]) (Object) container;
+    }
+
+    /**
+     * <p>
      * Returns the name of the entity (class, interface, array class, primitive type, or void)
      * represented by this Class object, as a String.
      * </p>
@@ -107,8 +175,28 @@ public class JSClass extends JSAnnotatedElement {
         return name;
     }
 
+    /**
+     * <p>
+     * Creates a new instance of the class represented by this Class object. The class is
+     * instantiated as if by a new expression with an empty argument list. The class is initialized
+     * if it has not already been initialized.
+     * </p>
+     * <p>
+     * Note that this method propagates any exception thrown by the nullary constructor, including a
+     * checked exception. Use of this method effectively bypasses the compile-time exception
+     * checking that would otherwise be performed by the compiler. The Constructor.newInstance
+     * method avoids this problem by wrapping any exception thrown by the constructor in a (checked)
+     * InvocationTargetException.
+     * </p>
+     * 
+     * @return A newly allocated instance of the class represented by this object.
+     */
     public Object newInstance() {
-        return null;
+        try {
+            return getConstructors()[0].newInstance();
+        } catch (Exception e) {
+            throw new Error(e);
+        }
     }
 
     public Constructor getConstructor() {
