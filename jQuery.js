@@ -3055,7 +3055,7 @@ jQuery.event = {
           event.handleObj = handleObj;
 
           ret = ( (jQuery.event.special[ handleObj.origType ] || {}).handle || handleObj.handler )
-              .apply( handleObj.constructor.name == "Class" ? handleObj : matched.elem, args );
+              .apply( handleObj.$0 ? handleObj : matched.elem, args );
 
           if ( ret !== undefined ) {
             event.result = ret;

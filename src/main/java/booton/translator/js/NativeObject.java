@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,15 +12,13 @@ package booton.translator.js;
 import java.util.HashMap;
 import java.util.Map;
 
+import kiss.I;
 import booton.translator.Translator;
 
 /**
- * @version 2013/01/17 16:52:20
+ * @version 2013/01/18 10:37:21
  */
 public class NativeObject {
-
-    /** The booton root object. */
-    public static final NativeObject boot = new NativeObject();
 
     /** The java implementation. */
     private final Map<String, Object> container = new HashMap();
@@ -172,13 +170,24 @@ public class NativeObject {
     }
 
     /**
-     * @version 2012/12/08 9:51:23
+     * <p>
+     * Creates a new object with this object's prototype and properties.
+     * </p>
+     * 
+     * @return A new object.
+     */
+    public NativeObject create() {
+        NativeObject instance = I.make(getClass());
+        instance.container.putAll(container);
+
+        return instance;
+    }
+
+    /**
+     * @version 2013/01/18 10:37:14
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<NativeObject> {
-
-        /** The booton root object. */
-        public String boot = "boot.";
 
         /**
          * <p>
@@ -314,7 +323,18 @@ public class NativeObject {
          * @return A property name array.
          */
         public String keys() {
-            return that + ".keys()";
+            return "Object.keys(" + that + ")";
+        }
+
+        /**
+         * <p>
+         * Creates a new object with this object's prototype and properties.
+         * </p>
+         * 
+         * @return A new object.
+         */
+        public String create() {
+            return "Object.create(" + that + ")";
         }
     }
 }

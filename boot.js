@@ -126,15 +126,6 @@ function boot(global) {
     toString: function() {
       return this.constructor.name + "#" + this.hashCode();
     },
-
-    /**
-     * List up all property keys.
-     *
-     * @return A property name array.
-     */ 
-    keys: function() {
-      return Object.keys(this);
-    },
     
     /**
      * Retrieve the class object.
@@ -239,7 +230,6 @@ function boot(global) {
         } else {
           // define member method
           prototype[i] = definition[i];
-          definition[i].$ = i;
         }
       }
 
