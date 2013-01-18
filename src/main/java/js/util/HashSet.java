@@ -11,7 +11,6 @@ package js.util;
 
 import java.util.Iterator;
 
-import booton.translator.js.NativeArray;
 import booton.translator.js.NativeObject;
 
 /**
@@ -79,7 +78,7 @@ public class HashSet<E> extends AbstractSet<E> {
     @Override
     public void clear() {
         size = 0;
-        items = new NativeArray();
+        items = new NativeObject();
     }
 
     /**
@@ -168,7 +167,7 @@ public class HashSet<E> extends AbstractSet<E> {
     class View implements Iterator<E> {
 
         /** The actual view. */
-        private final NativeArray<String> keys;
+        private final String[] keys;
 
         /** The curren position. */
         private int index = 0;
@@ -179,7 +178,7 @@ public class HashSet<E> extends AbstractSet<E> {
         /**
          * @param keys
          */
-        private View(NativeArray<String> keys) {
+        private View(String[] keys) {
             this.keys = keys;
         }
 
@@ -188,7 +187,7 @@ public class HashSet<E> extends AbstractSet<E> {
          */
         @Override
         public boolean hasNext() {
-            return index < keys.length();
+            return index < keys.length;
         }
 
         /**
@@ -196,7 +195,7 @@ public class HashSet<E> extends AbstractSet<E> {
          */
         @Override
         public E next() {
-            current = (E) items.getProperty(keys.get(index++));
+            current = (E) items.getProperty(keys[index++]);
 
             return current;
         }

@@ -7,21 +7,37 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.web;
+package js.lang;
+
+import js.dom.Document;
+import js.dom.Element;
+import js.dom.History;
+import js.dom.Location;
+import js.dom.Window;
+import js.net.WebSocket;
+import js.util.jQuery;
 
 import org.w3c.dom.DocumentFragment;
 
 import booton.translator.Translator;
+import booton.translator.js.NativeObject;
 
-/**
- * @version 2012/12/14 13:11:16
+/***
+ * <p>
+ * Define global objects and static methods in Booton environment.
+ * </p>
+ * 
+ * @version 2013/01/18 23:37:39
  */
-public class WebSupport {
+public class Global {
+
+    /** The booton root object. */
+    public static NativeObject boot;
 
     /** The global object in web environment. */
     public static Window window;
 
-    /** The root document. */
+    /** The root document in web environment. */
     public static Document document;
 
     /**
@@ -106,7 +122,10 @@ public class WebSupport {
      * @version 2012/12/14 13:11:07
      */
     @SuppressWarnings("unused")
-    private static class Coder extends Translator<WebSupport> {
+    private static class Coder extends Translator<Global> {
+
+        /** The booton root object. */
+        public String boot = "boot";
 
         /** The global object in web environment. */
         public String window = "window";

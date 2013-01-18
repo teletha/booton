@@ -9,13 +9,14 @@
  */
 package booton.live;
 
-import static booton.translator.web.WebSupport.*;
+import static js.lang.Global.*;
 
 import java.util.Date;
 
-import booton.translator.web.WebSocket;
-import booton.translator.web.jQuery.Event;
-import booton.translator.web.jQuery.Listener;
+import js.net.WebSocket;
+import js.util.jQuery.Event;
+import js.util.jQuery.Listener;
+
 
 /**
  * @version 2013/01/08 13:33:11

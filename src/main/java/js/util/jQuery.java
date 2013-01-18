@@ -7,11 +7,13 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.web;
+package js.util;
 
-import static booton.translator.web.WebSupport.*;
+import static js.lang.Global.*;
 
 import java.util.Iterator;
+
+import js.dom.Element;
 
 import booton.css.CSS;
 import booton.translator.JavascriptNative;

@@ -64,11 +64,8 @@ public class JSClass<T> extends JSAnnotatedElement {
      */
     public Constructor[] getConstructors() {
         NativeArray<JSConstructor> container = new NativeArray();
-        NativeArray<String> names = clazz.keys();
 
-        for (int i = 0; i < names.length(); i++) {
-            String name = names.get(i);
-
+        for (String name : clazz.keys()) {
             if (name.startsWith("$")) {
                 container.push(new JSConstructor(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
             }
@@ -91,11 +88,8 @@ public class JSClass<T> extends JSAnnotatedElement {
      */
     public Method[] getMethods() {
         NativeArray<JSMethod> container = new NativeArray();
-        NativeArray<String> names = clazz.keys();
 
-        for (int i = 0; i < names.length(); i++) {
-            String name = names.get(i);
-
+        for (String name : clazz.keys()) {
             if (!name.startsWith("$")) {
                 container.push(new JSMethod(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
             }
@@ -121,11 +115,7 @@ public class JSClass<T> extends JSAnnotatedElement {
         NativeArray<JSMethod> container = new NativeArray();
 
         // collect non-static methods only
-        NativeArray<String> names = clazz.keys();
-
-        for (int i = 0; i < names.length(); i++) {
-            String name = names.get(i);
-
+        for (String name : clazz.keys()) {
             if (!name.startsWith("$")) {
                 container.push(new JSMethod(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
             }

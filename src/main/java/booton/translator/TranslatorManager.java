@@ -18,6 +18,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import js.dom.Location;
+import js.dom.Window;
+import js.net.WebSocket;
+
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
@@ -28,9 +32,6 @@ import org.objectweb.asm.Type;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import booton.translator.web.Location;
-import booton.translator.web.WebSocket;
-import booton.translator.web.Window;
 
 /**
  * ion 2012/12/06 18:28:56

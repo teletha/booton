@@ -9,10 +9,12 @@
  */
 package js.lang;
 
-import java.util.Collections;
+import static js.lang.Global.*;
+
 import java.util.List;
 
-import booton.translator.Translator;
+import js.util.ArrayList;
+import booton.translator.js.NativeObject;
 
 /**
  * @version 2013/01/18 21:54:32
@@ -28,25 +30,15 @@ public class Classes {
      * @return A list of found classes.
      */
     public static <T> List<Class<? extends T>> find(Class<T> type) {
-        return Collections.EMPTY_LIST;
-    }
+        List<Class<? extends T>> matched = new ArrayList();
 
-    /**
-     * @version 2013/01/18 22:41:25
-     */
-    @SuppressWarnings("unused")
-    private static class Coder extends Translator<Classes> {
+        for (String name : boot.keys()) {
+            Class clazz = boot.getPropertyAs(NativeObject.class, name).getPropertyAs(Class.class, "$");
 
-        /**
-         * <p>
-         * Find all sub class of the specified class.
-         * </p>
-         * 
-         * @param type A type to search.
-         * @return A list of found classes.
-         */
-        public String find(Class param0) {
-            return "boot.find(" + param(0) + ")";
+            if (type != clazz && type.isAssignableFrom(clazz)) {
+                matched.add(clazz);
+            }
         }
+        return matched;
     }
 }

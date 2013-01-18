@@ -9,18 +9,18 @@
  */
 package js.ui;
 
-import static booton.translator.web.WebSupport.*;
+import static js.lang.Global.*;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import js.util.HashMap;
+import js.util.jQuery;
+import js.util.jQuery.Event;
+import js.util.jQuery.Listener;
 import booton.css.CSS;
 import booton.css.Value;
-import booton.translator.web.jQuery;
-import booton.translator.web.jQuery.Event;
-import booton.translator.web.jQuery.Listener;
 import booton.util.Font;
 
 /**
