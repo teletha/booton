@@ -9,24 +9,38 @@
  */
 package booton.translator.js;
 
+import java.lang.reflect.Constructor;
+
 /**
+ * <p>
+ * {@link Constructor} representation in Javascript runtime. This class doesn't provide all
+ * functionalities.
+ * </p>
+ * 
  * @version 2013/01/17 20:45:34
  */
 public class JSConstructor<T> extends JSAnnotatedElement {
 
-    /** The declared class. */
-    private JSClass declared;
+    /** The declared class definition in runtime. */
+    private NativeObject clazz;
 
     /** The constructor function in runtime. */
     private final NativeFunction function;
 
     /**
+     * <p>
+     * Create native constructor.
+     * </p>
+     * 
+     * @param name
+     * @param clazz
      * @param function
+     * @param annotations
      */
-    JSConstructor(JSClass declared, String name, NativeFunction function, NativeArray<NativeArray> annotations) {
+    JSConstructor(String name, NativeObject clazz, NativeFunction function, NativeArray<NativeArray> annotations) {
         super(name, annotations);
 
-        this.declared = declared;
+        this.clazz = clazz;
         this.function = function;
     }
 
@@ -39,10 +53,19 @@ public class JSConstructor<T> extends JSAnnotatedElement {
      * necessary.
      * </p>
      * 
-     * @param parameters
-     * @return
+     * @param parameters Array of objects to be passed as arguments to the constructor call; values
+     *            of primitive types are wrapped in a wrapper object of the appropriate type (e.g. a
+     *            float in a Float).
+     * @return A new object created by calling the constructor this object represents.
      */
     public T newInstance(Object... parameters) {
-        return (T) function.apply(declared, parameters);
+        // create new instance
+        Object instance = clazz.create();
+
+        // invoke function
+        function.apply(instance, parameters);
+
+        // API definition
+        return (T) instance;
     }
 }

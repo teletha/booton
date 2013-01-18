@@ -13,7 +13,8 @@ import java.lang.reflect.Constructor;
 
 /**
  * <p>
- * {@link Class} code in Javascript runtime. This class doesn't provide all functionalities.
+ * {@link Class} representation in Javascript runtime. This class doesn't provide all
+ * functionalities.
  * </p>
  * 
  * @version 2013/01/17 15:58:55
@@ -27,6 +28,10 @@ public class JSClass extends JSAnnotatedElement {
     private final NativeObject annotations;
 
     /**
+     * <p>
+     * Create native class.
+     * </p>
+     * 
      * @param name
      * @param clazz
      * @param annotations
@@ -60,7 +65,7 @@ public class JSClass extends JSAnnotatedElement {
             String name = names.get(i);
 
             if (name.startsWith("$")) {
-                container.push(new JSConstructor(this, name, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
+                container.push(new JSConstructor(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
             }
         }
         return (Constructor[]) (Object) container;

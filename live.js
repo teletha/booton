@@ -7,11 +7,11 @@ boot.define("R","",{
 		this.b=B;
 	},
 	// booton.translator.js.JSAnnotatedElement#isAnnotationPresent(java.lang.Class)
-	U:function(A){
-		return this.I(A)!=null;
+	T:function(A){
+		return this.F(A)!=null;
 	},
 	// booton.translator.js.JSAnnotatedElement#getAnnotation(java.lang.Class)
-	I:function(A,B,C){
+	F:function(A,B,C){
 		if(this.b==null){
 		}else{
 			B=0;
@@ -19,7 +19,7 @@ boot.define("R","",{
 			B<this.b.length;
 			++B) {
 				C=this.b[B];
-				if(C[0].equals(A.V())==0){
+				if(C[0].equals(A.U())==0){
 				}else{
 					return C[1];
 				}
@@ -27,26 +27,28 @@ boot.define("R","",{
 		}return null;
 	},
 	// booton.translator.js.JSAnnotatedElement#getAnnotations()
-	W:function(){
+	V:function(){
 		return null;
 	},
 	// booton.translator.js.JSAnnotatedElement#getDeclaredAnnotations()
-	X:function(){
-		return this.W();
+	W:function(){
+		return this.V();
 	}
 });
 
-boot.define("I","R",{
+boot.define("G","R",{
 	
-	// booton.translator.js.JSConstructor#<init>(booton.translator.js.JSClass, java.lang.String, booton.translator.js.NativeFunction, booton.translator.js.NativeArray)
+	// booton.translator.js.JSConstructor#<init>(java.lang.String, booton.translator.js.NativeObject, booton.translator.js.NativeFunction, booton.translator.js.NativeArray)
 	$0:function(A,B,C,D){
-		boot.R.prototype.$0.call(this,B,D);
-		this.c=A;
+		boot.R.prototype.$0.call(this,A,D);
+		this.c=B;
 		this.d=C;
 	},
 	// booton.translator.js.JSConstructor#newInstance(java.lang.Object[])
-	w:function(A){
-		return this.d.apply(this.c,A);
+	v:function(A,B){
+		B=Object.create(this.c);
+		this.d.apply(B,A);
+		return B;
 	}
 });
 
@@ -59,37 +61,37 @@ boot.define("A","R",{
 		this.d=C;
 	},
 	// booton.translator.js.JSClass#getConstructors()
-	H:function(A,B,C,D){
+	E:function(A,B,C,D){
 		A=[];
-		B=this.c.keys();
+		B=Object.keys(this.c);
 		C=0;
 		l4:while (C<B.length) {
 			D=B[C];
 			if(D.startsWith("$")==0){
 			}else{
-				A.push(new boot.I(this,D,this.c[D],this.d[D],0));
+				A.push(new boot.G(D,this.c,this.c[D],this.d[D],0));
 			}++C;
 			continue l4;
 		}return A;
 	},
 	// booton.translator.js.JSClass#getName()
-	Y:function(){
+	X:function(){
 		return "boot."+this.a;
 	},
 	// booton.translator.js.JSClass#getSimpleName()
-	V:function(){
+	U:function(){
 		return this.a;
 	},
 	// booton.translator.js.JSClass#newInstance()
-	Z:function(){
+	Y:function(){
 		return null;
 	},
 	// booton.translator.js.JSClass#getConstructor()
-	u:function(){
+	Z:function(){
 		return null;
 	},
 	// booton.translator.js.JSClass#forName(java.lang.String)
-	_v:function(A){
+	_u:function(A){
 		return null;
 	}
 });
@@ -123,19 +125,19 @@ boot.define("BC","",{
 		this.b=0;
 	},
 	// booton.translator.web.jQuery$1#hasNext()
-	BC:function(){
+	BB:function(){
 		return this.b<this.a.size();
 	},
 	// booton.translator.web.jQuery$1#next()
-	CH:function(){
+	CG:function(){
 		return $(this.a.get(this.b++));
 	},
 	// booton.translator.web.jQuery$1#remove()
-	Bv:function(){
+	Bu:function(){
 	},
 	// booton.translator.web.jQuery$1#next()
-	z:function(){
-		return this.CH();
+	y:function(){
+		return this.CG();
 	}
 });
 
@@ -145,15 +147,15 @@ boot.defineNative("jQuery",{
 	$0:function(){
 	},
 	// booton.translator.web.jQuery#child(java.lang.String)
-	CF:function(A){
+	CE:function(A){
 		return $(document.createElement(A)).appendTo(this);
 	},
 	// booton.translator.web.jQuery#child(java.lang.Class)
-	CG:function(A){
-		return this.CF("span").addClass(A);
+	CF:function(A){
+		return this.CE("span").addClass(A);
 	},
 	// booton.translator.web.jQuery#iterator()
-	y:function(){
+	x:function(){
 		return new boot.BC(this,0);
 	}
 });

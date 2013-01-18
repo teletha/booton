@@ -52,22 +52,9 @@ public abstract class Application {
 
     /**
      * <p>
-     * Register page with uri pattern.
+     * Register page.
      * </p>
      * 
-     * @param pattern
-     * @param page
-     */
-    protected final void register(String pattern, Class<? extends Page> page) {
-        router.routes.add(new Route(pattern, page));
-    }
-
-    /**
-     * <p>
-     * Register page with uri pattern.
-     * </p>
-     * 
-     * @param pattern
      * @param page
      */
     protected final void register(Class<? extends Page> page) {
@@ -164,34 +151,27 @@ public abstract class Application {
     }
 
     /**
-     * @version 2013/01/09 23:30:29
+     * @version 2013/01/18 10:43:43
      */
     private static class Route {
 
         /** The page pattern. */
         private final Pattern pattern;
 
-        /** The page class. */
-        private final Class<? extends Page> page;
-
+        /** The page constructor. */
         private Constructor constructor;
 
         /**
-         * @param pattern
-         * @param page
-         */
-        private Route(String pattern, Class<? extends Page> page) {
-            this.pattern = Pattern.compile(pattern.replaceAll("\\*", "([^/].+)"));
-            this.page = page;
-        }
-
-        /**
+         * <p>
+         * Create new route.
+         * </p>
+         * 
          * @param constructor
+         * @param info
          */
         private Route(Constructor constructor, PageInfo info) {
-            this.pattern = Pattern.compile(info.path().replaceAll("\\*", "([^/].+)"));
-            this.page = null;
             this.constructor = constructor;
+            this.pattern = Pattern.compile(info.path().replaceAll("\\*", "([^/].+)"));
         }
 
         /**
@@ -216,7 +196,6 @@ public abstract class Application {
 
                 try {
                     return (Page) constructor.newInstance(wildcards.toArray());
-                    // return Classes.newInstance(page, wildcards.toArray());
                 } catch (Exception e) {
                     return null;
                 }
