@@ -132,14 +132,14 @@ public class NativeObjectTest extends ScriptTester {
                 Object key3 = "3";
 
                 NativeObject instance = new NativeObject();
-                NativeArray<String> set1 = instance.keys();
+                NativeArray<String> set1 = new NativeArray(instance.keys());
                 assert set1.length() == 0;
 
                 Object value1 = instance.setProperty(key1, "value1");
                 Object value2 = instance.setProperty(key2, "value2");
                 Object value3 = instance.setProperty(key3, "value3");
 
-                NativeArray<String> set2 = instance.keys();
+                NativeArray<String> set2 = new NativeArray(instance.keys());
                 assert set2.length() == 3;
                 assert set2.indexOf(key1) != -1;
                 assert set2.indexOf(key2) != -1;
@@ -149,7 +149,7 @@ public class NativeObjectTest extends ScriptTester {
                 instance.deleteProperty(key1);
                 instance.deleteProperty(key3);
 
-                NativeArray<String> set3 = instance.keys();
+                NativeArray<String> set3 = new NativeArray(instance.keys());
                 assert set3.length() == 1;
                 assert set3.indexOf(key1) == -1;
                 assert set3.indexOf(key2) != -1;

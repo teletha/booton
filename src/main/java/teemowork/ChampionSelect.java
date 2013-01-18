@@ -15,8 +15,8 @@ import js.Application;
 import js.Page;
 import js.PageInfo;
 import js.ui.ImageGrid;
+import js.util.jQuery;
 import teemowork.model.Champion;
-import booton.translator.web.jQuery;
 
 /**
  * @version 2012/12/26 13:06:59

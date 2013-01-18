@@ -32,6 +32,15 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
     /**
      * 
      */
+    public NativeArray(T[] initial) {
+        for (T item : initial) {
+            list.add(item);
+        }
+    }
+
+    /**
+     * 
+     */
     public NativeArray(Set<T> initial) {
         list.addAll(initial);
     }
@@ -202,7 +211,7 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
      * @version 2012/12/08 11:09:31
      */
     @SuppressWarnings("unused")
-    private static class Coder extends Translator<NativeArray> {
+    private static class Coder<T> extends Translator<NativeArray> {
 
         /**
          * <p>
@@ -213,6 +222,17 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
          */
         public String NativeArray() {
             return "[]";
+        }
+
+        /**
+         * <p>
+         * Create array.
+         * </p>
+         * 
+         * @return
+         */
+        public String NativeArray(T[] initial) {
+            return param(0);
         }
 
         /**

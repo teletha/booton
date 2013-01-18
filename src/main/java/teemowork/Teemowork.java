@@ -9,7 +9,7 @@
  */
 package teemowork;
 
-import static booton.translator.web.WebSupport.*;
+import static js.lang.Global.*;
 import js.Application;
 import js.Page;
 import js.application.Header;
@@ -28,11 +28,10 @@ public class Teemowork extends Application {
     @Override
     public void jsmain() {
         for (Class clazz : Classes.find(Page.class)) {
-            System.out.println(clazz);
+            register(clazz);
         }
-
-        register(ChampionDetail.class);
-        register(ChampionSelect.class);
+        // register(ChampionDetail.class);
+        // register(ChampionSelect.class);
 
         super.jsmain();
 

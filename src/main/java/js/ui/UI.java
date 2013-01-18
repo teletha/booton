@@ -9,8 +9,8 @@
  */
 package js.ui;
 
-import static booton.translator.web.WebSupport.*;
-import booton.translator.web.jQuery;
+import static js.lang.Global.*;
+import js.util.jQuery;
 
 /**
  * @version 2012/12/11 14:39:54

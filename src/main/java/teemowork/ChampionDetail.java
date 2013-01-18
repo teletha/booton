@@ -12,13 +12,13 @@ package teemowork;
 import js.Observable;
 import js.Page;
 import js.PageInfo;
+import js.util.jQuery;
+import js.util.jQuery.Event;
+import js.util.jQuery.Listener;
 import teemowork.model.Build;
 import teemowork.model.Champion;
 import teemowork.model.ChampionStatus;
 import booton.css.CSS;
-import booton.translator.web.jQuery;
-import booton.translator.web.jQuery.Event;
-import booton.translator.web.jQuery.Listener;
 
 /**
  * @version 2013/01/10 2:36:58

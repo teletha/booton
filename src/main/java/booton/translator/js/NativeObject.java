@@ -165,8 +165,8 @@ public class NativeObject {
      * 
      * @return A property name array.
      */
-    public NativeArray<String> keys() {
-        return new NativeArray(container.keySet());
+    public String[] keys() {
+        return new NativeArray<String>(container.keySet()).toArray(new String[container.size()]);
     }
 
     /**

@@ -9,7 +9,7 @@
  */
 package js;
 
-import static booton.translator.web.WebSupport.*;
+import static js.lang.Global.*;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
@@ -18,9 +18,9 @@ import java.util.regex.Pattern;
 
 import js.application.Header;
 import js.util.ArrayList;
-import booton.translator.web.jQuery;
-import booton.translator.web.jQuery.Event;
-import booton.translator.web.jQuery.Listener;
+import js.util.jQuery;
+import js.util.jQuery.Event;
+import js.util.jQuery.Listener;
 
 /**
  * @version 2012/12/11 14:19:29

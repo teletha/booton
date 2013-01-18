@@ -9,9 +9,9 @@
  */
 package js.application;
 
-import static booton.translator.web.WebSupport.*;
+import static js.lang.Global.*;
+import js.util.jQuery;
 import booton.css.CSS;
-import booton.translator.web.jQuery;
 import booton.util.Font;
 
 /**
