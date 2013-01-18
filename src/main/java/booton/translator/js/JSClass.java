@@ -20,13 +20,16 @@ import java.lang.reflect.Method;
  * 
  * @version 2013/01/17 15:58:55
  */
-public class JSClass extends JSAnnotatedElement {
+public class JSClass<T> extends JSAnnotatedElement {
 
     /** The class definition in runtime. */
     private final NativeObject clazz;
 
     /** The annotation in runtime. */
     private final NativeObject annotations;
+
+    /** The super class. */
+    private final JSClass superclass;
 
     /**
      * <p>
@@ -37,11 +40,12 @@ public class JSClass extends JSAnnotatedElement {
      * @param clazz
      * @param annotations
      */
-    private JSClass(String name, NativeObject clazz, NativeObject annotations) {
+    private JSClass(String name, NativeObject clazz, NativeObject annotations, JSClass superclass) {
         super(name, annotations.getPropertyAs(NativeArray.class, "$"));
 
         this.clazz = clazz;
         this.annotations = annotations;
+        this.superclass = superclass;
     }
 
     /**
@@ -116,7 +120,7 @@ public class JSClass extends JSAnnotatedElement {
     public Method[] getDeclaredMethods() {
         NativeArray<JSMethod> container = new NativeArray();
 
-        // collect non-static methods
+        // collect non-static methods only
         NativeArray<String> names = clazz.keys();
 
         for (int i = 0; i < names.length(); i++) {
@@ -127,16 +131,51 @@ public class JSClass extends JSAnnotatedElement {
             }
         }
 
-        // collect static methods
-        names = clazz.getPropertyAs(NativeObject.class, "$").keys();
-
-        for (int i = 0; i < names.length(); i++) {
-            String name = names.get(i);
-            container.push(new JSMethod(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
-        }
-
         // API definition
         return (Method[]) (Object) container;
+    }
+
+    /**
+     * <p>
+     * Determines if the class or interface represented by this Class object is either the same as,
+     * or is a superclass or superinterface of, the class or interface represented by the specified
+     * Class parameter. It returns true if so; otherwise it returns false. If this Class object
+     * represents a primitive type, this method returns true if the specified Class parameter is
+     * exactly this Class object; otherwise it returns false.
+     * </p>
+     * <p>
+     * Specifically, this method tests whether the type represented by the specified Class parameter
+     * can be converted to the type represented by this Class object via an identity conversion or
+     * via a widening reference conversion. See The Java Language Specification, sections 5.1.1 and
+     * 5.1.4 , for details.
+     * </p>
+     * 
+     * @param clazz The Class object to be checked.
+     * @return The boolean value indicating whether objects of the type cls can be assigned to
+     *         objects of this class.
+     */
+    public boolean isAssignableFrom(Class<?> clazz) {
+        while (clazz != null) {
+            if (this == (Object) clazz) {
+                return true;
+            }
+            clazz = clazz.getSuperclass();
+        }
+        return false;
+    }
+
+    /**
+     * <p>
+     * Returns the Class representing the superclass of the entity (class, interface, primitive type
+     * or void) represented by this Class. If this Class represents either the Object class, an
+     * interface, a primitive type, or void, then null is returned. If this object represents an
+     * array class then the Class object representing the Object class is returned.
+     * </p>
+     * 
+     * @return The superclass of the class represented by this object.
+     */
+    public Class<? super T> getSuperclass() {
+        return (Class) (Object) superclass;
     }
 
     /**

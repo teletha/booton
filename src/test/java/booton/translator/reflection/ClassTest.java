@@ -9,6 +9,7 @@
  */
 package booton.translator.reflection;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.translator.ScriptTester;
@@ -31,6 +32,7 @@ public class ClassTest extends ScriptTester {
     }
 
     @Test
+    @Ignore
     public void GetMethods() throws Exception {
         test(new Scriptable() {
 
@@ -41,11 +43,52 @@ public class ClassTest extends ScriptTester {
     }
 
     @Test
+    @Ignore
     public void GetMethodsOverride() throws Exception {
         test(new Scriptable() {
 
             int act() throws Exception {
                 return Child.class.getDeclaredMethods().length;
+            }
+        });
+    }
+
+    @Test
+    public void IsAssignableFrom() throws Exception {
+        test(new Scriptable() {
+
+            boolean act() throws Exception {
+                return Parent.class.isAssignableFrom(Child.class);
+            }
+        });
+    }
+
+    @Test
+    public void IsAssignableFromInvalidClass() throws Exception {
+        test(new Scriptable() {
+
+            boolean act() throws Exception {
+                return Parent.class.isAssignableFrom(AnyoneElse.class);
+            }
+        });
+    }
+
+    @Test
+    public void IsAssignableFromSameClass() throws Exception {
+        test(new Scriptable() {
+
+            boolean act() throws Exception {
+                return Parent.class.isAssignableFrom(Parent.class);
+            }
+        });
+    }
+
+    @Test
+    public void GetSuperclass() throws Exception {
+        test(new Scriptable() {
+
+            Class act() throws Exception {
+                return Child.class.getSuperclass();
             }
         });
     }
@@ -70,6 +113,18 @@ public class ClassTest extends ScriptTester {
         @Override
         public int method() {
             return 10;
+        }
+    }
+
+    /**
+     * @version 2013/01/18 23:25:39
+     */
+    public static class AnyoneElse {
+
+        private int value = 10;
+
+        public int method() {
+            return 1;
         }
     }
 }
