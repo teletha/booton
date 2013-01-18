@@ -1,4 +1,4 @@
-boot.define("R","",{
+boot.define("Q","",{
 	
 	// booton.translator.js.JSAnnotatedElement#<init>(java.lang.String, booton.translator.js.NativeArray)
 	$0:function(A,B){
@@ -7,7 +7,7 @@ boot.define("R","",{
 		this.b=B;
 	},
 	// booton.translator.js.JSAnnotatedElement#isAnnotationPresent(java.lang.Class)
-	T:function(A){
+	O:function(A){
 		return this.F(A)!=null;
 	},
 	// booton.translator.js.JSAnnotatedElement#getAnnotation(java.lang.Class)
@@ -19,7 +19,7 @@ boot.define("R","",{
 			B<this.b.length;
 			++B) {
 				C=this.b[B];
-				if(C[0].equals(A.U())==0){
+				if(C[0].equals(A.P())==0){
 				}else{
 					return C[1];
 				}
@@ -27,54 +27,54 @@ boot.define("R","",{
 		}return null;
 	},
 	// booton.translator.js.JSAnnotatedElement#getAnnotations()
-	V:function(){
+	Q:function(){
 		return null;
 	},
 	// booton.translator.js.JSAnnotatedElement#getDeclaredAnnotations()
-	W:function(){
-		return this.V();
+	R:function(){
+		return this.Q();
 	}
 });
 
-boot.define("G","R",{
+boot.define("G","Q",{
 	
 	// booton.translator.js.JSConstructor#<init>(java.lang.String, booton.translator.js.NativeObject, booton.translator.js.NativeFunction, booton.translator.js.NativeArray)
 	$0:function(A,B,C,D){
-		boot.R.prototype.$0.call(this,A,D);
+		boot.Q.prototype.$0.call(this,A,D);
 		this.c=B;
 		this.d=C;
 	},
 	// booton.translator.js.JSConstructor#newInstance(java.lang.Object[])
-	v:function(A,B){
+	Y:function(A,B){
 		B=Object.create(this.c);
 		this.d.apply(B,A);
 		return B;
 	}
 });
 
-boot.define("S","R",{
+boot.define("R","Q",{
 	
 	// booton.translator.js.JSMethod#<init>(java.lang.String, booton.translator.js.NativeObject, booton.translator.js.NativeFunction, booton.translator.js.NativeArray)
 	$0:function(A,B,C,D){
-		boot.R.prototype.$0.call(this,A,D);
+		boot.Q.prototype.$0.call(this,A,D);
 		this.c=B;
 		this.d=C;
 	}
 });
 
-boot.define("V","",{
+boot.define("U","",{
 	
 	// booton.translator.Javascript$ThrowableReplacement#<init>()
 	$0:function(){
-		boot.V.prototype.$1.call(this,"",null);
+		boot.U.prototype.$1.call(this,"",null);
 	},
 	// booton.translator.Javascript$ThrowableReplacement#<init>(java.lang.String)
 	$2:function(A){
-		boot.V.prototype.$1.call(this,A,null);
+		boot.U.prototype.$1.call(this,A,null);
 	},
 	// booton.translator.Javascript$ThrowableReplacement#<init>(java.lang.Throwable)
 	$3:function(A){
-		boot.V.prototype.$1.call(this,"",A);
+		boot.U.prototype.$1.call(this,"",A);
 	},
 	// booton.translator.Javascript$ThrowableReplacement#<init>(java.lang.String, java.lang.Throwable)
 	$1:function(A,B){
@@ -83,18 +83,18 @@ boot.define("V","",{
 	},
 	// booton.translator.Javascript$ThrowableReplacement#<init>(java.lang.String, java.lang.Throwable, boolean, boolean)
 	$4:function(A,B,C,D){
-		boot.V.prototype.$1.call(this,A,B);
+		boot.U.prototype.$1.call(this,A,B);
 	},
 	// booton.translator.Javascript$ThrowableReplacement#getMessage()
-	y:function(){
+	v:function(){
 		return this.a;
 	},
 	// booton.translator.Javascript$ThrowableReplacement#getLocalizedMessage()
-	z:function(){
+	w:function(){
 		return this.a;
 	},
 	// booton.translator.Javascript$ThrowableReplacement#getCause()
-	BA:function(){
+	x:function(){
 		return this.b;
 	},
 	// booton.translator.Javascript$ThrowableReplacement#toString()
@@ -102,42 +102,43 @@ boot.define("V","",{
 		return this.a;
 	},
 	// booton.translator.Javascript$ThrowableReplacement#printStackTrace()
-	BB:function(){
+	y:function(){
 		console.log(this.a);
 	}
 });
 
-boot.define("U","V",{
+boot.define("T","U",{
 	
 	// java.lang.Error#<init>()
 	$1:function(){
-		boot.V.prototype.$0.call(this);
+		boot.U.prototype.$0.call(this);
 	},
 	// java.lang.Error#<init>(java.lang.String)
 	$2:function(A){
-		boot.V.prototype.$2.call(this,A);
+		boot.U.prototype.$2.call(this,A);
 	},
 	// java.lang.Error#<init>(java.lang.String, java.lang.Throwable)
 	$3:function(A,B){
-		boot.V.prototype.$1.call(this,A,B);
+		boot.U.prototype.$1.call(this,A,B);
 	},
 	// java.lang.Error#<init>(java.lang.Throwable)
 	$0:function(A){
-		boot.V.prototype.$3.call(this,A);
+		boot.U.prototype.$3.call(this,A);
 	},
 	// java.lang.Error#<init>(java.lang.String, java.lang.Throwable, boolean, boolean)
 	$4:function(A,B,C,D){
-		boot.V.prototype.$4.call(this,A,B,C,D);
+		boot.U.prototype.$4.call(this,A,B,C,D);
 	}
 });
 
-boot.define("A","R",{
+boot.define("A","Q",{
 	
-	// booton.translator.js.JSClass#<init>(java.lang.String, booton.translator.js.NativeObject, booton.translator.js.NativeObject)
-	$0:function(A,B,C){
-		boot.R.prototype.$0.call(this,A,C["$"]);
+	// booton.translator.js.JSClass#<init>(java.lang.String, booton.translator.js.NativeObject, booton.translator.js.NativeObject, booton.translator.js.JSClass)
+	$0:function(A,B,C,D){
+		boot.Q.prototype.$0.call(this,A,C["$"]);
 		this.c=B;
 		this.d=C;
+		this.e=D;
 	},
 	// booton.translator.js.JSClass#getConstructors()
 	E:function(A,B,C,D){
@@ -154,7 +155,7 @@ boot.define("A","R",{
 		}return A;
 	},
 	// booton.translator.js.JSClass#getMethods()
-	X:function(A,B,C,D){
+	S:function(A,B,C,D){
 		A=[];
 		B=Object.keys(this.c);
 		C=0;
@@ -162,13 +163,13 @@ boot.define("A","R",{
 			D=B[C];
 			if(D.startsWith("$")!=0){
 			}else{
-				A.push(new boot.S(D,this.c,this.c[D],this.d[D],0));
+				A.push(new boot.R(D,this.c,this.c[D],this.d[D],0));
 			}++C;
 			continue l4;
 		}return A;
 	},
 	// booton.translator.js.JSClass#getDeclaredMethods()
-	Y:function(A,B,C,D){
+	T:function(A,B,C,D){
 		A=[];
 		B=Object.keys(this.c);
 		C=0;
@@ -176,67 +177,75 @@ boot.define("A","R",{
 			D=B[C];
 			if(D.startsWith("$")!=0){
 			}else{
-				A.push(new boot.S(D,this.c,this.c[D],this.d[D],0));
+				A.push(new boot.R(D,this.c,this.c[D],this.d[D],0));
 			}++C;
 			continue l4;
-		}B=Object.keys(this.c["$"]);
-		C=0;
-		l12:for (;
-		C<B.length;
-		++C) {
-			D=B[C];
-			A.push(new boot.S(D,this.c,this.c[D],this.d[D],0));
 		}return A;
 	},
+	// booton.translator.js.JSClass#isAssignableFrom(java.lang.Class)
+	U:function(A){
+		l1:for (;
+		A!=null;
+		A=this.V()) {
+			if(this!=A){
+			}else{
+				return true;
+			}
+		}return false;
+	},
+	// booton.translator.js.JSClass#getSuperclass()
+	V:function(){
+		return this.e;
+	},
 	// booton.translator.js.JSClass#getName()
-	Z:function(){
+	W:function(){
 		return "boot."+this.a;
 	},
 	// booton.translator.js.JSClass#getSimpleName()
-	U:function(){
+	P:function(){
 		return this.a;
 	},
 	// booton.translator.js.JSClass#newInstance()
-	u:function(A){
+	X:function(A){
 		try{
-			return this.E()[0].v(new Array(0));
+			return this.E()[0].Y(new Array(0));
 		} catch ($) {
-			if ($ instanceof boot.T) {
-				throw new boot.U(A,0);
+			if ($ instanceof boot.S) {
+				throw new boot.T(A,0);
 			}
 		}
 	},
 	// booton.translator.js.JSClass#getConstructor()
-	w:function(){
+	Z:function(){
 		return null;
 	},
 	// booton.translator.js.JSClass#forName(java.lang.String)
-	_x:function(A){
+	_u:function(A){
 		return null;
 	}
 });
 
-boot.define("Z","",{
+boot.define("Y","",{
+});
+
+boot.define("K","",{
 });
 
 boot.define("X","",{
-});
-
-boot.define("Y","",{
 	
 	// js.util.AbstractCollection#<init>()
 	$0:function(){
 	},
 	// js.util.AbstractCollection#isEmpty()
-	BJ:function(){
-		return this.BK()==0;
+	BD:function(){
+		return this.BE()==0;
 	},
 	// js.util.AbstractCollection#addAll(java.util.Collection)
-	BL:function(A,B,C,D){
+	BF:function(A,B,C,D){
 		B=0;
-		D=A.BD();
-		l2:while (D.BH()!=0) {
-			C=D.BE();
+		D=A.K();
+		l2:while (D.M()!=0) {
+			C=D.L();
 			if(this.H(C)==0){
 			}else{
 				B=1;
@@ -245,25 +254,25 @@ boot.define("Y","",{
 		}return B;
 	},
 	// js.util.AbstractCollection#retainAll(java.util.Collection)
-	BM:function(A,B,C,D){
+	BG:function(A,B,C,D){
 		B=0;
-		D=this.BD();
-		l2:while (D.BH()!=0) {
-			C=D.BE();
-			if(A.BN(C)!=0){
+		D=this.K();
+		l2:while (D.M()!=0) {
+			C=D.L();
+			if(A.BH(C)!=0){
 			}else{
-				B=this.BO(C);
+				B=this.BI(C);
 				continue l2;
 			}continue l2;
 		}return B;
 	},
 	// js.util.AbstractCollection#removeAll(java.util.Collection)
-	BP:function(A,B,C,D){
+	BJ:function(A,B,C,D){
 		B=0;
-		D=A.BD();
-		l2:while (D.BH()!=0) {
-			C=D.BE();
-			if(this.BO(C)==0){
+		D=A.K();
+		l2:while (D.M()!=0) {
+			C=D.L();
+			if(this.BI(C)==0){
 			}else{
 				B=1;
 				continue l2;
@@ -271,30 +280,30 @@ boot.define("Y","",{
 		}return B;
 	},
 	// js.util.AbstractCollection#containsAll(java.util.Collection)
-	BQ:function(A,B,C){
-		C=A.BD();
-		l1:while (C.BH()!=0) {
-			B=C.BE();
-			if(this.BN(B)!=0){
+	BK:function(A,B,C){
+		C=A.K();
+		l1:while (C.M()!=0) {
+			B=C.L();
+			if(this.BH(B)!=0){
 			}else{
 				return false;
 			}continue l1;
 		}return true;
 	},
 	// js.util.AbstractCollection#toArray()
-	BR:function(){
-		return this.BS(new Array(0));
+	BL:function(){
+		return this.BM(new Array(0));
 	},
 	// js.util.AbstractCollection#toArray(java.lang.Object[])
-	BS:function(A,B,C,D,E){
-		B=this.BK();
+	BM:function(A,B,C,D,E){
+		B=this.BE();
 		if(A.length>=B){
 		}else{
 			A=[];
-		}C=this.BD();
+		}C=this.K();
 		D=0;
-		l6:while (C.BH()!=0) {
-			E=C.BE();
+		l6:while (C.M()!=0) {
+			E=C.L();
 			A[D]=E;
 			++D;
 			continue l6;
@@ -302,7 +311,7 @@ boot.define("Y","",{
 	}
 });
 
-boot.define("u","",{
+boot.define("Z","",{
 	
 	// js.util.ArrayList$View#<init>(js.util.ArrayList)
 	$1:function(A){
@@ -310,104 +319,104 @@ boot.define("u","",{
 		this.b=0;
 	},
 	// js.util.ArrayList$View#hasNext()
-	BH:function(){
-		return this.b<boot.W.CA(this.a).length;
+	M:function(){
+		return this.b<boot.V.BZ(this.a).length;
 	},
 	// js.util.ArrayList$View#next()
-	BE:function(){
-		return boot.W.CA(this.a)[this.b++];
+	L:function(){
+		return boot.V.BZ(this.a)[this.b++];
 	},
 	// js.util.ArrayList$View#remove()
-	CB:function(){
+	Bu:function(){
 		if(this.b<=0){
 		}else{
-			boot.W.CA(this.a).splice(this.b-1,1)[0];
+			boot.V.BZ(this.a).splice(this.b-1,1)[0];
 		}
 	},
 	// js.util.ArrayList$View#<init>(js.util.ArrayList, js.util.ArrayList$View)
 	$0:function(A,B){
-		boot.u.prototype.$1.call(this,A);
+		boot.Z.prototype.$1.call(this,A);
 	}
 });
 
-boot.define("T","V",{
+boot.define("S","U",{
 	
 	// java.lang.Exception#<init>()
 	$0:function(){
-		boot.V.prototype.$0.call(this);
+		boot.U.prototype.$0.call(this);
 	},
 	// java.lang.Exception#<init>(java.lang.String)
 	$1:function(A){
-		boot.V.prototype.$2.call(this,A);
+		boot.U.prototype.$2.call(this,A);
 	},
 	// java.lang.Exception#<init>(java.lang.String, java.lang.Throwable)
 	$2:function(A,B){
-		boot.V.prototype.$1.call(this,A,B);
+		boot.U.prototype.$1.call(this,A,B);
 	},
 	// java.lang.Exception#<init>(java.lang.Throwable)
 	$3:function(A){
-		boot.V.prototype.$3.call(this,A);
+		boot.U.prototype.$3.call(this,A);
 	},
 	// java.lang.Exception#<init>(java.lang.String, java.lang.Throwable, boolean, boolean)
 	$4:function(A,B,C,D){
-		boot.V.prototype.$4.call(this,A,B,C,D);
+		boot.U.prototype.$4.call(this,A,B,C,D);
 	}
 });
 
-boot.define("w","T",{
+boot.define("v","S",{
 	
 	// java.lang.RuntimeException#<init>()
 	$0:function(){
-		boot.T.prototype.$0.call(this);
+		boot.S.prototype.$0.call(this);
 	},
 	// java.lang.RuntimeException#<init>(java.lang.String)
 	$1:function(A){
-		boot.T.prototype.$1.call(this,A);
+		boot.S.prototype.$1.call(this,A);
 	},
 	// java.lang.RuntimeException#<init>(java.lang.String, java.lang.Throwable)
 	$2:function(A,B){
-		boot.T.prototype.$2.call(this,A,B);
+		boot.S.prototype.$2.call(this,A,B);
 	},
 	// java.lang.RuntimeException#<init>(java.lang.Throwable)
 	$3:function(A){
-		boot.T.prototype.$3.call(this,A);
+		boot.S.prototype.$3.call(this,A);
 	},
 	// java.lang.RuntimeException#<init>(java.lang.String, java.lang.Throwable, boolean, boolean)
 	$4:function(A,B,C,D){
-		boot.T.prototype.$4.call(this,A,B,C,D);
+		boot.S.prototype.$4.call(this,A,B,C,D);
 	}
 });
 
-boot.define("v","w",{
+boot.define("u","v",{
 	
 	// java.lang.IndexOutOfBoundsException#<init>()
 	$1:function(){
-		boot.w.prototype.$0.call(this);
+		boot.v.prototype.$0.call(this);
 	},
 	// java.lang.IndexOutOfBoundsException#<init>(java.lang.String)
 	$0:function(A){
-		boot.w.prototype.$1.call(this,A);
+		boot.v.prototype.$1.call(this,A);
 	}
 });
 
-boot.define("W","Y",{
+boot.define("V","X",{
 	
 	// js.util.ArrayList#<init>()
 	$0:function(){
-		boot.Y.prototype.$0.call(this);
+		boot.X.prototype.$0.call(this);
 		this.a=[];
 	},
 	// js.util.ArrayList#size()
-	BK:function(){
+	BE:function(){
 		return this.a.length;
 	},
 	// js.util.ArrayList#contains(java.lang.Object)
-	BN:function(A){
+	BH:function(A){
 		return this.a.indexOf(A)!=-1;
 	},
 	// js.util.ArrayList#iterator()
-	BD:function(){
-		return new boot.u(this,null,0);
+	K:function(){
+		return new boot.Z(this,null,0);
 	},
 	// js.util.ArrayList#add(java.lang.Object)
 	H:function(A){
@@ -415,7 +424,7 @@ boot.define("W","Y",{
 		return true;
 	},
 	// js.util.ArrayList#remove(java.lang.Object)
-	BO:function(A,B){
+	BI:function(A,B){
 		B=this.a.indexOf(A);
 		if(B!=-1){
 			this.a.splice(B,1)[0];
@@ -425,68 +434,68 @@ boot.define("W","Y",{
 		}
 	},
 	// js.util.ArrayList#addAll(int, java.util.Collection)
-	BT:function(A,B){
+	BN:function(A,B){
 		return false;
 	},
 	// js.util.ArrayList#clear()
-	BU:function(){
+	BO:function(){
 		this.a=[];
 	},
 	// js.util.ArrayList#get(int)
-	BV:function(A){
+	BP:function(A){
 		return this.a[A];
 	},
 	// js.util.ArrayList#set(int, java.lang.Object)
-	BW:function(A,B){
+	BQ:function(A,B){
 		return this.a[A]=B;
 	},
 	// js.util.ArrayList#add(int, java.lang.Object)
-	BX:function(A,B){
+	BR:function(A,B){
 		this.a.splice(A,0,B);
 	},
 	// js.util.ArrayList#remove(int)
-	BY:function(A){
+	BS:function(A){
 		return this.a.splice(A,1)[0];
 	},
 	// js.util.ArrayList#indexOf(java.lang.Object)
-	BZ:function(A){
+	BT:function(A){
 		return this.a.indexOf(A);
 	},
 	// js.util.ArrayList#lastIndexOf(java.lang.Object)
-	Bu:function(A){
+	BU:function(A){
 		return this.a.lastIndexOf(A);
 	},
 	// js.util.ArrayList#listIterator()
-	Bv:function(){
-		throw new boot.U(1);
+	BV:function(){
+		throw new boot.T(1);
 	},
 	// js.util.ArrayList#listIterator(int)
-	Bw:function(A){
-		throw new boot.U(1);
+	BW:function(A){
+		throw new boot.T(1);
 	},
 	// js.util.ArrayList#subList(int, int)
-	Bx:function(A,B){
-		throw new boot.U(1);
+	BX:function(A,B){
+		throw new boot.T(1);
 	},
 	// js.util.ArrayList#checkRange(int)
-	Bz:function(A){
+	BY:function(A){
 		if(A>=0){
-			if(this.BK()>A){
+			if(this.BE()>A){
 				return;
 			}else{
-				throw new boot.v("Index is overflowed. Size: "+this.BK()+"  Index: "+A,0);
+				throw new boot.u("Index is overflowed. Size: "+this.BE()+"  Index: "+A,0);
 			}
 		}else{
-			throw new boot.v("Negative index is unacceptable. Size: "+this.BK()+"  Index: "+A,0);
+			throw new boot.u("Negative index is unacceptable. Size: "+this.BE()+"  Index: "+A,0);
 		}
 	},
 	// js.util.ArrayList#access$0(js.util.ArrayList)
-	_CA:function(A){
+	_BZ:function(A){
 		return A.a;
 	}
 });
 
-boot.define("x","",{
+boot.define("w","",{
 	
 	// booton.translator.web.Location#<init>()
 	$0:function(){
@@ -498,11 +507,11 @@ boot.define("I","",{
 
 boot.define("F","",{
 },{
-	"$":[["y",{
+	"$":[["x",{
+	}],["y",{
+		Bx:function() {return [CONSTRUCTOR,TYPE];}
 	}],["z",{
-		CE:function() {return [CONSTRUCTOR,TYPE];}
-	}],["BA",{
-		CF:function() {return RUNTIME;}
+		Bz:function() {return RUNTIME;}
 	}]]
 });
 
@@ -511,22 +520,22 @@ boot.define("H","",{
 	// js.Application$Route#<init>(java.lang.reflect.Constructor, js.PageInfo)
 	$1:function(A,B){
 		this.a=A;
-		this.b=new RegExp(B.CC().replace(/\*/g,"([^/].+)"),"");
+		this.b=new RegExp(B.Bv().replace(/\*/g,"([^/].+)"),"");
 	},
 	// js.Application$Route#match(java.lang.String)
-	CD:function(A,B,C,D){
+	Bw:function(A,B,C,D){
 		B=this.b.exec(A);
 		if(B!=null!=0){
-			C=new boot.W(0);
+			C=new boot.V(0);
 			D=0;
 			l9:for (;
 			D<B.length-1;
 			++D) {
 				C.H(B[D+1]);
 			}try{
-				return this.a.v(C.BR());
+				return this.a.Y(C.BL());
 			} catch ($) {
-				if ($ instanceof boot.T) {
+				if ($ instanceof boot.S) {
 					return null;
 				}
 			}
@@ -535,8 +544,8 @@ boot.define("H","",{
 		}
 	},
 	// js.Application$Route#access$0(js.Application$Route, java.lang.String)
-	_BF:function(A,B){
-		return A.CD(B);
+	_BA:function(A,B){
+		return A.Bw(B);
 	},
 	// js.Application$Route#<init>(java.lang.reflect.Constructor, js.PageInfo, js.Application$Route)
 	$0:function(A,B,C){
@@ -561,7 +570,7 @@ boot.define("J","",{
 	}
 });
 
-boot.define("BD","",{
+boot.define("BC","",{
 	
 	// booton.translator.web.jQuery$1#<init>(booton.translator.web.jQuery)
 	$0:function(A){
@@ -569,19 +578,19 @@ boot.define("BD","",{
 		this.b=0;
 	},
 	// booton.translator.web.jQuery$1#hasNext()
-	BH:function(){
+	M:function(){
 		return this.b<this.a.size();
 	},
 	// booton.translator.web.jQuery$1#next()
-	CI:function(){
+	CC:function(){
 		return $(this.a.get(this.b++));
 	},
 	// booton.translator.web.jQuery$1#remove()
-	CB:function(){
+	Bu:function(){
 	},
 	// booton.translator.web.jQuery$1#next()
-	BE:function(){
-		return this.CI();
+	L:function(){
+		return this.CC();
 	}
 });
 
@@ -591,51 +600,51 @@ boot.defineNative("jQuery",{
 	$0:function(){
 	},
 	// booton.translator.web.jQuery#child(java.lang.String)
-	CG:function(A){
+	CA:function(A){
 		return $(document.createElement(A)).appendTo(this);
 	},
 	// booton.translator.web.jQuery#child(java.lang.Class)
-	CH:function(A){
-		return this.CG("span").addClass(A);
+	CB:function(A){
+		return this.CA("span").addClass(A);
 	},
 	// booton.translator.web.jQuery#iterator()
-	BD:function(){
-		return new boot.BD(this,0);
+	K:function(){
+		return new boot.BC(this,0);
 	}
 });
 boot.define("E","",{
 	
 	// js.Application$Router#<init>()
 	$1:function(){
-		this.a=new boot.W(0);
+		this.a=new boot.V(0);
 	},
 	// js.Application$Router#handler(booton.translator.web.jQuery$Event)
 	handler:function(A){
-		this.BC(location.hash);
+		this.z(location.hash);
 	},
 	// js.Application$Router#dispatch(java.lang.String)
-	BC:function(A,B,C,D,E){
+	z:function(A,B,C,D,E){
 		if((A.length==0||A.startsWith("#")==0)){
 		}else{
 			A=A.substring(1);
-		}C=this.a.BD();
-		l3:while (C.BH()!=0) {
-			B=C.BE();
-			D=boot.H.BF(B,A);
+		}C=this.a.K();
+		l3:while (C.M()!=0) {
+			B=C.L();
+			D=boot.H.BA(B,A);
 			if(D==null){
 			}else{
 				E=$(document.createDocumentFragment());
-				D.BG(E);
+				D.BB(E);
 				$("#Content").empty().append(E);
 				return;
 			}continue l3;
 		}
 	},
 	// js.Application$Router#dispatch(js.Page)
-	BI:function(A,B){
+	BC:function(A,B){
 		B=$(document.createDocumentFragment());
 		this.b=A;
-		this.b.BG(B);
+		this.b.BB(B);
 		$("#Content").empty().append(B);
 	},
 	// js.Application$Router#<init>(js.Application$Router)
@@ -644,14 +653,14 @@ boot.define("E","",{
 	},
 	// js.Application$Router#access$1(js.Application$Router, java.lang.String)
 	_B:function(A,B){
-		A.BC(B);
+		A.z(B);
 	},
 	// js.Application$Router#access$2(js.Application$Router)
 	_G:function(A){
 		return A.a;
 	}
 },{
-	"BI":[["Q",{
+	"BC":[["W",{
 	}]]
 });
 
@@ -701,15 +710,15 @@ boot.define("C","",{
 	}
 });
 
-boot.define("BS","Y",{
+boot.define("BR","X",{
 	
 	// js.util.AbstractSet#<init>()
 	$0:function(){
-		boot.Y.prototype.$0.call(this);
+		boot.X.prototype.$0.call(this);
 	}
 });
 
-boot.define("BT","",{
+boot.define("BS","",{
 	
 	// js.util.HashSet$View#<init>(js.util.HashSet, booton.translator.js.NativeArray)
 	$1:function(A,B){
@@ -718,46 +727,46 @@ boot.define("BT","",{
 		this.c=B;
 	},
 	// js.util.HashSet$View#hasNext()
-	BH:function(){
+	M:function(){
 		return this.b<this.c.length;
 	},
 	// js.util.HashSet$View#next()
-	BE:function(){
-		this.d=boot.BM.DD(this.a)[this.c[this.b++]];
+	L:function(){
+		this.d=boot.BL.Cx(this.a)[this.c[this.b++]];
 		return this.d;
 	},
 	// js.util.HashSet$View#remove()
-	CB:function(){
+	Bu:function(){
 		if(this.b<=0){
 		}else{
-			this.a.BO(this.d);
+			this.a.BI(this.d);
 		}
 	},
 	// js.util.HashSet$View#<init>(js.util.HashSet, booton.translator.js.NativeArray, js.util.HashSet$View)
 	$0:function(A,B,C){
-		boot.BT.prototype.$1.call(this,A,B);
+		boot.BS.prototype.$1.call(this,A,B);
 	}
 });
 
-boot.define("BM","BS",{
+boot.define("BL","BR",{
 	
 	// js.util.HashSet#<init>()
 	$0:function(){
-		boot.BS.prototype.$0.call(this);
+		boot.BR.prototype.$0.call(this);
 		this.a=0;
 		this.b={};
 	},
 	// js.util.HashSet#size()
-	BK:function(){
+	BE:function(){
 		return this.a;
 	},
 	// js.util.HashSet#contains(java.lang.Object)
-	BN:function(A){
-		return this.DC(A) in this.b;
+	BH:function(A){
+		return this.Cw(A) in this.b;
 	},
 	// js.util.HashSet#add(java.lang.Object)
 	H:function(A,B){
-		B=this.DC(A);
+		B=this.Cw(A);
 		if(B in this.b==0){
 			this.a=this.a+1;
 			this.b[B]=A;
@@ -767,8 +776,8 @@ boot.define("BM","BS",{
 		}
 	},
 	// js.util.HashSet#remove(java.lang.Object)
-	BO:function(A,B){
-		B=this.DC(A);
+	BI:function(A,B){
+		B=this.Cw(A);
 		if(B in this.b!=0){
 			this.a=this.a-1;
 			delete this.b[B];
@@ -778,26 +787,26 @@ boot.define("BM","BS",{
 		}
 	},
 	// js.util.HashSet#clear()
-	BU:function(){
+	BO:function(){
 		this.a=0;
 		this.b=[];
 	},
 	// js.util.HashSet#iterator()
-	BD:function(){
-		return new boot.BT(this,Object.keys(this.b),null,0);
+	K:function(){
+		return new boot.BS(this,Object.keys(this.b),null,0);
 	},
 	// js.util.HashSet#hash(java.lang.Object)
-	DC:function(A){
+	Cw:function(A){
 		return (A==null?-1:A.hashCode());
 	},
 	// js.util.HashSet#find(java.lang.Object)
-	CY:function(A){
-		return this.b[this.DC(A)];
+	CS:function(A){
+		return this.b[this.Cw(A)];
 	},
 	// js.util.HashSet#push(java.lang.Object)
-	Cu:function(A,B,C){
+	CU:function(A,B,C){
 		B=null;
-		C=this.DC(A);
+		C=this.Cw(A);
 		if(C in this.b==0){
 			this.a=this.a+1;
 		}else{
@@ -806,9 +815,9 @@ boot.define("BM","BS",{
 		return B;
 	},
 	// js.util.HashSet#pull(java.lang.Object)
-	Cw:function(A,B,C){
+	CW:function(A,B,C){
 		B=null;
-		C=this.DC(A);
+		C=this.Cw(A);
 		if(C in this.b==0){
 		}else{
 			B=this.b[C];
@@ -817,15 +826,15 @@ boot.define("BM","BS",{
 		}return B;
 	},
 	// js.util.HashSet#access$0(js.util.HashSet)
-	_DD:function(A){
+	_Cx:function(A){
 		return A.b;
 	}
 });
 
-boot.define("BN","",{
+boot.define("BM","",{
 });
 
-boot.define("BO","",{
+boot.define("BN","",{
 	
 	// js.util.HashMap$SimpleEntry#<init>(java.lang.Object, java.lang.Object)
 	$1:function(A,B){
@@ -833,15 +842,15 @@ boot.define("BO","",{
 		this.b=B;
 	},
 	// js.util.HashMap$SimpleEntry#getKey()
-	Cz:function(){
+	CZ:function(){
 		return this.a;
 	},
 	// js.util.HashMap$SimpleEntry#getValue()
-	CZ:function(){
+	CT:function(){
 		return this.b;
 	},
 	// js.util.HashMap$SimpleEntry#setValue(java.lang.Object)
-	DE:function(A,B){
+	Cy:function(A,B){
 		B=this.b;
 		this.b=A;
 		return B;
@@ -852,17 +861,17 @@ boot.define("BO","",{
 	},
 	// js.util.HashMap$SimpleEntry#<init>(java.lang.Object, java.lang.Object, js.util.HashMap$SimpleEntry)
 	$0:function(A,B,C){
-		boot.BO.prototype.$1.call(this,A,B);
+		boot.BN.prototype.$1.call(this,A,B);
 	}
 });
 
-boot.define("BL","",{
+boot.define("BK","",{
 });
 
-boot.define("BP","",{
+boot.define("BO","",{
 });
 
-boot.define("BU","",{
+boot.define("BT","",{
 	
 	// js.util.HashMap$View#<init>(js.util.HashMap, java.util.Iterator, boolean)
 	$1:function(A,B,C){
@@ -871,131 +880,131 @@ boot.define("BU","",{
 		this.c=C;
 	},
 	// js.util.HashMap$View#hasNext()
-	BH:function(){
-		return this.b.BH();
+	M:function(){
+		return this.b.M();
 	},
 	// js.util.HashMap$View#next()
-	BE:function(A){
-		A=this.b.BE();
+	L:function(A){
+		A=this.b.L();
 		if(this.c==0){
-			return A.CZ();
+			return A.CT();
 		}else{
-			return A.Cz();
+			return A.CZ();
 		}
 	},
 	// js.util.HashMap$View#remove()
-	CB:function(){
-		this.b.CB();
+	Bu:function(){
+		this.b.Bu();
 	},
 	// js.util.HashMap$View#<init>(js.util.HashMap, java.util.Iterator, boolean, js.util.HashMap$View)
 	$0:function(A,B,C,D){
-		boot.BU.prototype.$1.call(this,A,B,C);
+		boot.BT.prototype.$1.call(this,A,B,C);
 	}
 });
 
-boot.define("BQ","BS",{
+boot.define("BP","BR",{
 	
 	// js.util.HashMap$Keys#<init>(js.util.HashMap)
 	$1:function(A){
-		this.a=A;boot.BS.prototype.$0.call(this);
+		this.a=A;boot.BR.prototype.$0.call(this);
 	},
 	// js.util.HashMap$Keys#size()
-	BK:function(){
-		return boot.BK.DB(this.a).BK();
+	BE:function(){
+		return boot.BJ.Cv(this.a).BE();
 	},
 	// js.util.HashMap$Keys#contains(java.lang.Object)
-	BN:function(A){
-		return boot.BK.DB(this.a).BN(A);
+	BH:function(A){
+		return boot.BJ.Cv(this.a).BH(A);
 	},
 	// js.util.HashMap$Keys#iterator()
-	BD:function(){
-		return new boot.BU(this.a,boot.BK.DB(this.a).BD(),1,null,0);
+	K:function(){
+		return new boot.BT(this.a,boot.BJ.Cv(this.a).K(),1,null,0);
 	},
 	// js.util.HashMap$Keys#add(java.lang.Object)
 	H:function(A){
 		return false;
 	},
 	// js.util.HashMap$Keys#remove(java.lang.Object)
-	BO:function(A){
-		return boot.BK.DB(this.a).BO(A);
+	BI:function(A){
+		return boot.BJ.Cv(this.a).BI(A);
 	},
 	// js.util.HashMap$Keys#clear()
-	BU:function(){
-		boot.BK.DB(this.a).BU();
+	BO:function(){
+		boot.BJ.Cv(this.a).BO();
 	},
 	// js.util.HashMap$Keys#<init>(js.util.HashMap, js.util.HashMap$Keys)
 	$0:function(A,B){
-		boot.BQ.prototype.$1.call(this,A);
+		boot.BP.prototype.$1.call(this,A);
 	}
 });
 
-boot.define("BR","Y",{
+boot.define("BQ","X",{
 	
 	// js.util.HashMap$Values#<init>(js.util.HashMap)
 	$1:function(A){
-		this.a=A;boot.Y.prototype.$0.call(this);
+		this.a=A;boot.X.prototype.$0.call(this);
 	},
 	// js.util.HashMap$Values#size()
-	BK:function(){
-		return boot.BK.DB(this.a).BK();
+	BE:function(){
+		return boot.BJ.Cv(this.a).BE();
 	},
 	// js.util.HashMap$Values#contains(java.lang.Object)
-	BN:function(A){
-		return this.a.CX(A);
+	BH:function(A){
+		return this.a.CR(A);
 	},
 	// js.util.HashMap$Values#iterator()
-	BD:function(){
-		return new boot.BU(this.a,boot.BK.DB(this.a).BD(),0,null,0);
+	K:function(){
+		return new boot.BT(this.a,boot.BJ.Cv(this.a).K(),0,null,0);
 	},
 	// js.util.HashMap$Values#add(java.lang.Object)
 	H:function(A){
 		return false;
 	},
 	// js.util.HashMap$Values#remove(java.lang.Object)
-	BO:function(A,B,C){
-		B=this.BD();
-		l2:while (B.BH()!=0) {
-			C=B.BE();
+	BI:function(A,B,C){
+		B=this.K();
+		l2:while (B.M()!=0) {
+			C=B.L();
 			if(C!=A){
 			}else{
-				B.CB();
+				B.Bu();
 				return true;
 			}continue l2;
 		}return false;
 	},
 	// js.util.HashMap$Values#clear()
-	BU:function(){
-		boot.BK.DB(this.a).BU();
+	BO:function(){
+		boot.BJ.Cv(this.a).BO();
 	},
 	// js.util.HashMap$Values#<init>(js.util.HashMap, js.util.HashMap$Values)
 	$0:function(A,B){
-		boot.BR.prototype.$1.call(this,A);
+		boot.BQ.prototype.$1.call(this,A);
 	}
 });
 
-boot.define("BK","",{
+boot.define("BJ","",{
 	
 	// js.util.HashMap#<init>()
 	$0:function(){
-		this.a=new boot.BM(0);
+		this.a=new boot.BL(0);
 	},
 	// js.util.HashMap#size()
-	BK:function(){
-		return this.a.BK();
+	BE:function(){
+		return this.a.BE();
 	},
 	// js.util.HashMap#isEmpty()
-	BJ:function(){
-		return this.a.BJ();
+	BD:function(){
+		return this.a.BD();
 	},
 	// js.util.HashMap#containsKey(java.lang.Object)
-	CW:function(A){
-		return this.a.BN(A);
+	CQ:function(A){
+		return this.a.BH(A);
 	},
 	// js.util.HashMap#containsValue(java.lang.Object)
-	CX:function(A,B,C){
-		C=this.CV().BD();
-		l1:while (C.BH()!=0) {
-			B=C.BE();
+	CR:function(A,B,C){
+		C=this.CP().K();
+		l1:while (C.M()!=0) {
+			B=C.L();
 			if(B!=A){
 			}else{
 				return true;
@@ -1003,203 +1012,203 @@ boot.define("BK","",{
 		}return false;
 	},
 	// js.util.HashMap#get(java.lang.Object)
-	CT:function(A,B){
-		B=this.a.CY(A);
-		return (B==null?null:B.CZ());
+	CN:function(A,B){
+		B=this.a.CS(A);
+		return (B==null?null:B.CT());
 	},
 	// js.util.HashMap#put(java.lang.Object, java.lang.Object)
-	CS:function(A,B,C){
-		C=this.a.Cu(new boot.BO(A,B,null,0));
+	CM:function(A,B,C){
+		C=this.a.CU(new boot.BN(A,B,null,0));
 		if(C!=null){
-			return C.CZ();
+			return C.CT();
 		}else{
 			return null;
 		}
 	},
 	// js.util.HashMap#remove(java.lang.Object)
-	Cv:function(A,B){
-		B=this.a.Cw(A);
+	CV:function(A,B){
+		B=this.a.CW(A);
 		if(B!=null){
-			return B.CZ();
+			return B.CT();
 		}else{
 			return null;
 		}
 	},
 	// js.util.HashMap#putAll(java.util.Map)
-	Cx:function(A,B,C){
-		C=A.Cy().BD();
+	CX:function(A,B,C){
+		C=A.CY().K();
 		l1:for (;
-		C.BH()!=0;
-		this.CS(B.Cz(),B.CZ())) {
-			B=C.BE();
+		C.M()!=0;
+		this.CM(B.CZ(),B.CT())) {
+			B=C.L();
 		}
 	},
 	// js.util.HashMap#clear()
-	BU:function(){
-		this.a.BU();
+	BO:function(){
+		this.a.BO();
 	},
 	// js.util.HashMap#keySet()
-	DA:function(){
-		return new boot.BQ(this,null,0);
+	Cu:function(){
+		return new boot.BP(this,null,0);
 	},
 	// js.util.HashMap#values()
-	CV:function(){
-		return new boot.BR(this,null,0);
+	CP:function(){
+		return new boot.BQ(this,null,0);
 	},
 	// js.util.HashMap#entrySet()
-	Cy:function(){
+	CY:function(){
 		return this.a;
 	},
 	// js.util.HashMap#access$0(js.util.HashMap)
-	_DB:function(A){
+	_Cv:function(A){
 		return A.a;
 	}
 });
 
-boot.define("BF","",{
+boot.define("BE","",{
 	
 	// teemowork.model.Champion#<clinit>()
 	_:function(){
-		boot.BF.b=new boot.BK(0);
-		boot.BF.c=new boot.BF("Ahri",0);
-		boot.BF.d=new boot.BF("Akali",0);
-		boot.BF.e=new boot.BF("Alistar",0);
-		boot.BF.f=new boot.BF("Amumu",0);
-		boot.BF.g=new boot.BF("Anivia",0);
-		boot.BF.h=new boot.BF("Annie",0);
-		boot.BF.i=new boot.BF("Ashe",0);
-		boot.BF.j=new boot.BF("Blitzcrank",0);
-		boot.BF.k=new boot.BF("Brand",0);
-		boot.BF.l=new boot.BF("Caitlyn",0);
-		boot.BF.m=new boot.BF("Cassiopeia",0);
-		boot.BF.n=new boot.BF("Chogath",0);
-		boot.BF.o=new boot.BF("Corki",0);
-		boot.BF.p=new boot.BF("Darius",0);
-		boot.BF.ba=new boot.BF("Diana",0);
-		boot.BF.bb=new boot.BF("Dr.Mundo",0);
-		boot.BF.bc=new boot.BF("Draven",0);
-		boot.BF.bd=new boot.BF("Elise",0);
-		boot.BF.be=new boot.BF("Evelynn",0);
-		boot.BF.bf=new boot.BF("Ezreal",0);
-		boot.BF.bg=new boot.BF("Fiddlesticks",0);
-		boot.BF.bh=new boot.BF("Fiora",0);
-		boot.BF.bi=new boot.BF("Fizz",0);
-		boot.BF.bj=new boot.BF("Galio",0);
-		boot.BF.bk=new boot.BF("Gangplank",0);
-		boot.BF.bl=new boot.BF("Garen",0);
-		boot.BF.bm=new boot.BF("Gragas",0);
-		boot.BF.bn=new boot.BF("Graves",0);
-		boot.BF.bo=new boot.BF("Hecarim",0);
-		boot.BF.bp=new boot.BF("Heimerdinger",0);
-		boot.BF.ca=new boot.BF("Irelia",0);
-		boot.BF.cb=new boot.BF("Janna",0);
-		boot.BF.cc=new boot.BF("Jarvan IV",0);
-		boot.BF.cd=new boot.BF("Jax",0);
-		boot.BF.ce=new boot.BF("Jayce",0);
-		boot.BF.cf=new boot.BF("Karma",0);
-		boot.BF.cg=new boot.BF("Karthus",0);
-		boot.BF.ch=new boot.BF("Kassadin",0);
-		boot.BF.ci=new boot.BF("Katarina",0);
-		boot.BF.cj=new boot.BF("Kayle",0);
-		boot.BF.ck=new boot.BF("Kennen",0);
-		boot.BF.cl=new boot.BF("Kha'zix",0);
-		boot.BF.cm=new boot.BF("Kog'maw",0);
-		boot.BF.cn=new boot.BF("LeBlanc",0);
-		boot.BF.co=new boot.BF("Lee Sin",0);
-		boot.BF.cp=new boot.BF("Leona",0);
-		boot.BF.da=new boot.BF("Lulu",0);
-		boot.BF.db=new boot.BF("Lux",0);
-		boot.BF.dc=new boot.BF("Malphite",0);
-		boot.BF.dd=new boot.BF("Malzahar",0);
-		boot.BF.de=new boot.BF("Maokai",0);
-		boot.BF.df=new boot.BF("Master Yi",0);
-		boot.BF.dg=new boot.BF("Miss Fortune",0);
-		boot.BF.dh=new boot.BF("Mordekaiser",0);
-		boot.BF.di=new boot.BF("Morgana",0);
-		boot.BF.dj=new boot.BF("Nami",0);
-		boot.BF.dk=new boot.BF("Nasus",0);
-		boot.BF.dl=new boot.BF("Nautilus",0);
-		boot.BF.dm=new boot.BF("Nidalee",0);
-		boot.BF.dn=new boot.BF("Nocturne",0);
-		boot.BF.dp=new boot.BF("Nunu",0);
-		boot.BF.ea=new boot.BF("Olaf",0);
-		boot.BF.eb=new boot.BF("Orianna",0);
-		boot.BF.ec=new boot.BF("Pantheon",0);
-		boot.BF.ed=new boot.BF("Poppy",0);
-		boot.BF.ee=new boot.BF("Rammus",0);
-		boot.BF.ef=new boot.BF("Renekton",0);
-		boot.BF.eg=new boot.BF("Rengar",0);
-		boot.BF.eh=new boot.BF("Riven",0);
-		boot.BF.ei=new boot.BF("Rumble",0);
-		boot.BF.ej=new boot.BF("Ryze",0);
-		boot.BF.ek=new boot.BF("Sejuani",0);
-		boot.BF.el=new boot.BF("Shaco",0);
-		boot.BF.em=new boot.BF("Shen",0);
-		boot.BF.en=new boot.BF("Shyvana",0);
-		boot.BF.eo=new boot.BF("Singed",0);
-		boot.BF.ep=new boot.BF("Sion",0);
-		boot.BF.fa=new boot.BF("Sivir",0);
-		boot.BF.fb=new boot.BF("Skarner",0);
-		boot.BF.fc=new boot.BF("Sona",0);
-		boot.BF.fd=new boot.BF("Soraka",0);
-		boot.BF.fe=new boot.BF("Swain",0);
-		boot.BF.ff=new boot.BF("Syndra",0);
-		boot.BF.fg=new boot.BF("Talon",0);
-		boot.BF.fh=new boot.BF("Taric",0);
-		boot.BF.fi=new boot.BF("Teemo",0);
-		boot.BF.fj=new boot.BF("Tristana",0);
-		boot.BF.fk=new boot.BF("Trundle",0);
-		boot.BF.fl=new boot.BF("Tryndamere",0);
-		boot.BF.fm=new boot.BF("Twisted Fate",0);
-		boot.BF.fn=new boot.BF("Twitch",0);
-		boot.BF.fo=new boot.BF("Udyr",0);
-		boot.BF.fp=new boot.BF("Urgot",0);
-		boot.BF.ga=new boot.BF("Varus",0);
-		boot.BF.gb=new boot.BF("Vayne",0);
-		boot.BF.gc=new boot.BF("Veigar",0);
-		boot.BF.gd=new boot.BF("Vi",0);
-		boot.BF.ge=new boot.BF("Viktor",0);
-		boot.BF.gf=new boot.BF("Vladimir",0);
-		boot.BF.gg=new boot.BF("Volibear",0);
-		boot.BF.gh=new boot.BF("Warwick",0);
-		boot.BF.gi=new boot.BF("Wukong",0);
-		boot.BF.gj=new boot.BF("Xerath",0);
-		boot.BF.gk=new boot.BF("Xin Zhao",0);
-		boot.BF.gl=new boot.BF("Yorick",0);
-		boot.BF.gm=new boot.BF("Zed",0);
-		boot.BF.gn=new boot.BF("Ziggs",0);
-		boot.BF.go=new boot.BF("Zilean",0);
-		boot.BF.gp=new boot.BF("Zyra",0);
+		boot.BE.b=new boot.BJ(0);
+		boot.BE.c=new boot.BE("Ahri",0);
+		boot.BE.d=new boot.BE("Akali",0);
+		boot.BE.e=new boot.BE("Alistar",0);
+		boot.BE.f=new boot.BE("Amumu",0);
+		boot.BE.g=new boot.BE("Anivia",0);
+		boot.BE.h=new boot.BE("Annie",0);
+		boot.BE.i=new boot.BE("Ashe",0);
+		boot.BE.j=new boot.BE("Blitzcrank",0);
+		boot.BE.k=new boot.BE("Brand",0);
+		boot.BE.l=new boot.BE("Caitlyn",0);
+		boot.BE.m=new boot.BE("Cassiopeia",0);
+		boot.BE.n=new boot.BE("Chogath",0);
+		boot.BE.o=new boot.BE("Corki",0);
+		boot.BE.p=new boot.BE("Darius",0);
+		boot.BE.ba=new boot.BE("Diana",0);
+		boot.BE.bb=new boot.BE("Dr.Mundo",0);
+		boot.BE.bc=new boot.BE("Draven",0);
+		boot.BE.bd=new boot.BE("Elise",0);
+		boot.BE.be=new boot.BE("Evelynn",0);
+		boot.BE.bf=new boot.BE("Ezreal",0);
+		boot.BE.bg=new boot.BE("Fiddlesticks",0);
+		boot.BE.bh=new boot.BE("Fiora",0);
+		boot.BE.bi=new boot.BE("Fizz",0);
+		boot.BE.bj=new boot.BE("Galio",0);
+		boot.BE.bk=new boot.BE("Gangplank",0);
+		boot.BE.bl=new boot.BE("Garen",0);
+		boot.BE.bm=new boot.BE("Gragas",0);
+		boot.BE.bn=new boot.BE("Graves",0);
+		boot.BE.bo=new boot.BE("Hecarim",0);
+		boot.BE.bp=new boot.BE("Heimerdinger",0);
+		boot.BE.ca=new boot.BE("Irelia",0);
+		boot.BE.cb=new boot.BE("Janna",0);
+		boot.BE.cc=new boot.BE("Jarvan IV",0);
+		boot.BE.cd=new boot.BE("Jax",0);
+		boot.BE.ce=new boot.BE("Jayce",0);
+		boot.BE.cf=new boot.BE("Karma",0);
+		boot.BE.cg=new boot.BE("Karthus",0);
+		boot.BE.ch=new boot.BE("Kassadin",0);
+		boot.BE.ci=new boot.BE("Katarina",0);
+		boot.BE.cj=new boot.BE("Kayle",0);
+		boot.BE.ck=new boot.BE("Kennen",0);
+		boot.BE.cl=new boot.BE("Kha'zix",0);
+		boot.BE.cm=new boot.BE("Kog'maw",0);
+		boot.BE.cn=new boot.BE("LeBlanc",0);
+		boot.BE.co=new boot.BE("Lee Sin",0);
+		boot.BE.cp=new boot.BE("Leona",0);
+		boot.BE.da=new boot.BE("Lulu",0);
+		boot.BE.db=new boot.BE("Lux",0);
+		boot.BE.dc=new boot.BE("Malphite",0);
+		boot.BE.dd=new boot.BE("Malzahar",0);
+		boot.BE.de=new boot.BE("Maokai",0);
+		boot.BE.df=new boot.BE("Master Yi",0);
+		boot.BE.dg=new boot.BE("Miss Fortune",0);
+		boot.BE.dh=new boot.BE("Mordekaiser",0);
+		boot.BE.di=new boot.BE("Morgana",0);
+		boot.BE.dj=new boot.BE("Nami",0);
+		boot.BE.dk=new boot.BE("Nasus",0);
+		boot.BE.dl=new boot.BE("Nautilus",0);
+		boot.BE.dm=new boot.BE("Nidalee",0);
+		boot.BE.dn=new boot.BE("Nocturne",0);
+		boot.BE.dp=new boot.BE("Nunu",0);
+		boot.BE.ea=new boot.BE("Olaf",0);
+		boot.BE.eb=new boot.BE("Orianna",0);
+		boot.BE.ec=new boot.BE("Pantheon",0);
+		boot.BE.ed=new boot.BE("Poppy",0);
+		boot.BE.ee=new boot.BE("Rammus",0);
+		boot.BE.ef=new boot.BE("Renekton",0);
+		boot.BE.eg=new boot.BE("Rengar",0);
+		boot.BE.eh=new boot.BE("Riven",0);
+		boot.BE.ei=new boot.BE("Rumble",0);
+		boot.BE.ej=new boot.BE("Ryze",0);
+		boot.BE.ek=new boot.BE("Sejuani",0);
+		boot.BE.el=new boot.BE("Shaco",0);
+		boot.BE.em=new boot.BE("Shen",0);
+		boot.BE.en=new boot.BE("Shyvana",0);
+		boot.BE.eo=new boot.BE("Singed",0);
+		boot.BE.ep=new boot.BE("Sion",0);
+		boot.BE.fa=new boot.BE("Sivir",0);
+		boot.BE.fb=new boot.BE("Skarner",0);
+		boot.BE.fc=new boot.BE("Sona",0);
+		boot.BE.fd=new boot.BE("Soraka",0);
+		boot.BE.fe=new boot.BE("Swain",0);
+		boot.BE.ff=new boot.BE("Syndra",0);
+		boot.BE.fg=new boot.BE("Talon",0);
+		boot.BE.fh=new boot.BE("Taric",0);
+		boot.BE.fi=new boot.BE("Teemo",0);
+		boot.BE.fj=new boot.BE("Tristana",0);
+		boot.BE.fk=new boot.BE("Trundle",0);
+		boot.BE.fl=new boot.BE("Tryndamere",0);
+		boot.BE.fm=new boot.BE("Twisted Fate",0);
+		boot.BE.fn=new boot.BE("Twitch",0);
+		boot.BE.fo=new boot.BE("Udyr",0);
+		boot.BE.fp=new boot.BE("Urgot",0);
+		boot.BE.ga=new boot.BE("Varus",0);
+		boot.BE.gb=new boot.BE("Vayne",0);
+		boot.BE.gc=new boot.BE("Veigar",0);
+		boot.BE.gd=new boot.BE("Vi",0);
+		boot.BE.ge=new boot.BE("Viktor",0);
+		boot.BE.gf=new boot.BE("Vladimir",0);
+		boot.BE.gg=new boot.BE("Volibear",0);
+		boot.BE.gh=new boot.BE("Warwick",0);
+		boot.BE.gi=new boot.BE("Wukong",0);
+		boot.BE.gj=new boot.BE("Xerath",0);
+		boot.BE.gk=new boot.BE("Xin Zhao",0);
+		boot.BE.gl=new boot.BE("Yorick",0);
+		boot.BE.gm=new boot.BE("Zed",0);
+		boot.BE.gn=new boot.BE("Ziggs",0);
+		boot.BE.go=new boot.BE("Zilean",0);
+		boot.BE.gp=new boot.BE("Zyra",0);
 	},
 	// teemowork.model.Champion#<init>(java.lang.String)
 	$0:function(A){
 		this.a=A;
-		this.ha=this.CR().toLowerCase();
-		boot.BF.b.CS(A,this);
+		this.ha=this.CL().toLowerCase();
+		boot.BE.b.CM(A,this);
 	},
 	// teemowork.model.Champion#getStatus()
-	CN:function(){
+	CH:function(){
 		return this.hb;
 	},
 	// teemowork.model.Champion#getSystemName()
-	CR:function(){
+	CL:function(){
 		return this.a.replace(/\./g,"").replace(/\s/g,"").replace(/\'/g,"");
 	},
 	// teemowork.model.Champion#getSplashArt()
-	CK:function(){
-		return "src/main/resources/teemowork/splash/"+this.CR()+".jpg";
+	CE:function(){
+		return "src/main/resources/teemowork/splash/"+this.CL()+".jpg";
 	},
 	// teemowork.model.Champion#getIcon()
-	CL:function(){
-		return "src/main/resources/teemowork/icon/"+this.CR()+".png";
+	CF:function(){
+		return "src/main/resources/teemowork/icon/"+this.CL()+".png";
 	},
 	// teemowork.model.Champion#getByName(java.lang.String)
-	_CJ:function(A){
-		return boot.BF.b.CT(A);
+	_CD:function(A){
+		return boot.BE.b.CN(A);
 	},
 	// teemowork.model.Champion#getAll()
-	_CU:function(){
-		return boot.BF.b.CV();
+	_CO:function(){
+		return boot.BE.b.CP();
 	}
 });
 
@@ -1209,7 +1218,7 @@ boot.defineNative("Event",{
 	$0:function(){
 	}
 });
-boot.define("BG","",{
+boot.define("BF","",{
 	
 	// teemowork.ChampionDetail$1#<init>(teemowork.ChampionDetail)
 	$0:function(A){
@@ -1218,11 +1227,11 @@ boot.define("BG","",{
 	// teemowork.ChampionDetail$1#handler(booton.translator.web.jQuery$Event)
 	handler:function(A){
 		A.preventDefault();
-		boot.K.CQ(this.a,boot.K.CP(this.a)+1);
+		boot.L.CK(this.a,boot.L.CJ(this.a)+1);
 	}
 });
 
-boot.define("BH","",{
+boot.define("BG","",{
 	
 	// teemowork.ChampionDetail$2#<init>(teemowork.ChampionDetail)
 	$0:function(A){
@@ -1231,11 +1240,11 @@ boot.define("BH","",{
 	// teemowork.ChampionDetail$2#handler(booton.translator.web.jQuery$Event)
 	handler:function(A){
 		A.preventDefault();
-		boot.K.CQ(this.a,boot.K.CP(this.a)-1);
+		boot.L.CK(this.a,boot.L.CJ(this.a)-1);
 	}
 });
 
-boot.define("BI","",{
+boot.define("BH","",{
 	
 	// teemowork.model.ChampionStatus#<init>(teemowork.model.Patch, teemowork.model.ChampionStatus)
 	$0:function(A,B){
@@ -1248,168 +1257,168 @@ boot.define("BI","",{
 		}
 	},
 	// teemowork.model.ChampionStatus#healthInitial()
-	DF:function(){
+	Cz:function(){
 		return this.c;
 	},
 	// teemowork.model.ChampionStatus#healthPerLevel()
-	DG:function(){
+	DA:function(){
 		return this.d;
 	},
 	// teemowork.model.ChampionStatus#health(int, int)
-	DH:function(A,B){
+	DB:function(A,B){
 		this.c=A;
 		this.d=B;
 		return this;
 	},
 	// teemowork.model.ChampionStatus#getHregInitial()
-	DI:function(){
+	DC:function(){
 		return this.e;
 	},
 	// teemowork.model.ChampionStatus#getHregPerLvel()
-	DJ:function(){
+	DD:function(){
 		return this.f;
 	},
 	// teemowork.model.ChampionStatus#hreg(double, double)
-	DK:function(A,B,C,D){
+	DE:function(A,B,C,D){
 		this.e=A;
 		this.f=C;
 		return this;
 	},
 	// teemowork.model.ChampionStatus#getManaInitial()
-	DL:function(){
+	DF:function(){
 		return this.g;
 	},
 	// teemowork.model.ChampionStatus#getManaPerLvel()
-	DM:function(){
+	DG:function(){
 		return this.h;
 	},
 	// teemowork.model.ChampionStatus#mana(int, double)
-	DN:function(A,B,C){
+	DH:function(A,B,C){
 		this.g=A;
 		this.h=B;
 		return this;
 	},
 	// teemowork.model.ChampionStatus#getMregInitial()
-	DO:function(){
+	DI:function(){
 		return this.i;
 	},
 	// teemowork.model.ChampionStatus#getMregPerLvel()
-	DP:function(){
+	DJ:function(){
 		return this.j;
 	},
 	// teemowork.model.ChampionStatus#mreg(double, double)
-	DQ:function(A,B,C,D){
+	DK:function(A,B,C,D){
 		this.i=A;
 		this.j=C;
 		return this;
 	},
 	// teemowork.model.ChampionStatus#getAdInitial()
-	DR:function(){
+	DL:function(){
 		return this.k;
 	},
 	// teemowork.model.ChampionStatus#getAdPerLvel()
-	DS:function(){
+	DM:function(){
 		return this.l;
 	},
 	// teemowork.model.ChampionStatus#ad(double, double)
-	DT:function(A,B,C,D){
+	DN:function(A,B,C,D){
 		this.k=A;
 		this.l=C;
 		return this;
 	},
 	// teemowork.model.ChampionStatus#getAsInitial()
-	DU:function(){
+	DO:function(){
 		return this.m;
 	},
 	// teemowork.model.ChampionStatus#getAsPerLvel()
-	DV:function(){
+	DP:function(){
 		return this.n;
 	},
 	// teemowork.model.ChampionStatus#as(double, double)
-	DW:function(A,B,C,D){
+	DQ:function(A,B,C,D){
 		this.m=A;
 		this.n=C;
 		return this;
 	},
 	// teemowork.model.ChampionStatus#getArInitial()
-	DX:function(){
+	DR:function(){
 		return this.o;
 	},
 	// teemowork.model.ChampionStatus#getArPerLvel()
-	DY:function(){
+	DS:function(){
 		return this.p;
 	},
 	// teemowork.model.ChampionStatus#ar(double, double)
-	DZ:function(A,B,C,D){
+	DT:function(A,B,C,D){
 		this.o=A;
 		this.p=C;
 		return this;
 	},
 	// teemowork.model.ChampionStatus#getMrInitial()
-	Du:function(){
+	DU:function(){
 		return this.ba;
 	},
 	// teemowork.model.ChampionStatus#getMrPerLvel()
-	Dv:function(){
+	DV:function(){
 		return this.bb;
 	},
 	// teemowork.model.ChampionStatus#mr(double, double)
-	Dw:function(A,B,C,D){
+	DW:function(A,B,C,D){
 		this.ba=A;
 		this.bb=C;
 		return this;
 	},
 	// teemowork.model.ChampionStatus#getRange()
-	Dx:function(){
+	DX:function(){
 		return this.bc;
 	},
 	// teemowork.model.ChampionStatus#range(int)
-	Dy:function(A){
+	DY:function(A){
 		this.bc=A;
 		return this;
 	},
 	// teemowork.model.ChampionStatus#getMs()
-	Dz:function(){
+	DZ:function(){
 		return this.bd;
 	},
 	// teemowork.model.ChampionStatus#ms(int)
-	EA:function(A){
+	Du:function(A){
 		this.bd=A;
 		return this;
 	},
 	// teemowork.model.ChampionStatus#getEnergy()
-	EB:function(){
+	Dv:function(){
 		return this.be;
 	},
 	// teemowork.model.ChampionStatus#energy(int)
-	EC:function(A){
+	Dw:function(A){
 		this.be=A;
 		return this;
 	},
 	// teemowork.model.ChampionStatus#getEreg()
-	ED:function(){
+	Dx:function(){
 		return this.bf;
 	},
 	// teemowork.model.ChampionStatus#ereg(int)
-	EE:function(A){
+	Dy:function(A){
 		this.bf=A;
 		return this;
 	},
 	// teemowork.model.ChampionStatus#getHealth(int)
-	CO:function(A){
+	CI:function(A){
 		return this.c+this.d*A;
 	},
 	// teemowork.model.ChampionStatus#getMana(int)
-	EG:function(A){
+	Dz:function(A){
 		return this.g+this.h*A;
 	}
 });
 
-boot.define("K","J",{
+boot.define("L","J",{
 	
 	// teemowork.ChampionDetail#<init>(java.lang.String)
 	$0:function(A){
-		boot.K.prototype.$1.call(this,boot.BF.CJ(A));
+		boot.L.prototype.$1.call(this,boot.BE.CD(A));
 	},
 	// teemowork.ChampionDetail#<init>(teemowork.model.Champion)
 	$1:function(A){
@@ -1418,26 +1427,26 @@ boot.define("K","J",{
 			this.a=A;
 			return;
 		}else{
-			throw new boot.U(1);
+			throw new boot.T(1);
 		}
 	},
 	// teemowork.ChampionDetail#load(booton.translator.web.jQuery)
-	BG:function(A,B,C){
-		B=A.CH("a").css("background-image","url('"+this.a.CK()+"')").CH("b");
-		C=B.CH("c").css("background-image","url("+this.a.CL()+")").click(new boot.BG(this,0)).on("contextmenu",new boot.BH(this,0));
-		this.b=C.CH("d");
-		this.c=B.CH("e").text("Health").CH("f");
-		this.CM(1);
+	BB:function(A,B,C){
+		B=A.CB("a").css("background-image","url('"+this.a.CE()+"')").CB("b");
+		C=B.CB("c").css("background-image","url("+this.a.CF()+")").click(new boot.BF(this,0)).on("contextmenu",new boot.BG(this,0));
+		this.b=C.CB("d");
+		this.c=B.CB("e").text("Health").CB("f");
+		this.CG(1);
 	},
 	// teemowork.ChampionDetail#setLevel(int)
-	CM:function(A,B){
+	CG:function(A,B){
 		if((A<1||18<A)){
 			return;
 		}else{
 			this.d=A;
 			this.b.text(""+A);
-			B=this.a.CN();
-			this.c.text(""+B.CO(A));
+			B=this.a.CH();
+			this.c.text(""+B.CI(A));
 			return;
 		}
 	},
@@ -1446,25 +1455,25 @@ boot.define("K","J",{
 		return "Champion/"+this.a.a;
 	},
 	// teemowork.ChampionDetail#access$0(teemowork.ChampionDetail)
-	_CP:function(A){
+	_CJ:function(A){
 		return A.d;
 	},
 	// teemowork.ChampionDetail#access$1(teemowork.ChampionDetail, int)
-	_CQ:function(A,B){
-		A.CM(B);
+	_CK:function(A,B){
+		A.CG(B);
 	}
 },{
 	"$0":[["F",{
-		CC:function() {return "Champion/*";}
-	}]],"e":[["BJ",{
+		Bv:function() {return "Champion/*";}
+	}]],"e":[["BI",{
 	}]]
 });
 
-boot.define("BY","",{
+boot.define("BX","",{
 	
 	// js.ui.UI#<init>()
 	$0:function(){
-		boot.BY.prototype.$1.call(this,"div");
+		boot.BX.prototype.$1.call(this,"div");
 	},
 	// js.ui.UI#<init>(java.lang.String)
 	$1:function(A){
@@ -1472,7 +1481,7 @@ boot.define("BY","",{
 	}
 });
 
-boot.define("BZ","",{
+boot.define("BY","",{
 	
 	// js.ui.ImageGrid$1#<init>(js.ui.ImageGrid, booton.translator.web.jQuery)
 	$0:function(A,B){
@@ -1481,21 +1490,21 @@ boot.define("BZ","",{
 	// js.ui.ImageGrid$1#handler(booton.translator.web.jQuery$Event)
 	handler:function(A,B,C,D){
 		B=this.b.val().toLowerCase().replace(/\s/g,"");
-		D=boot.BX.EL(this.a).Cy().BD();
-		l2:while (D.BH()!=0) {
-			C=D.BE();
-			if(this.a.EK(C.Cz()).toLowerCase().indexOf(B) != -1==0){
-				C.CZ().addClass("j");
+		D=boot.BW.EE(this.a).CY().K();
+		l2:while (D.M()!=0) {
+			C=D.L();
+			if(this.a.ED(C.CZ()).toLowerCase().indexOf(B) != -1==0){
+				C.CT().addClass("j");
 				continue l2;
 			}else{
-				C.CZ().removeClass("j");
+				C.CT().removeClass("j");
 				continue l2;
 			}
 		}
 	}
 });
 
-boot.define("Bu","",{
+boot.define("BZ","",{
 	
 	// js.ui.ImageGrid$2#<init>(js.ui.ImageGrid, java.lang.Object)
 	$0:function(A,B){
@@ -1503,88 +1512,88 @@ boot.define("Bu","",{
 	},
 	// js.ui.ImageGrid$2#handler(booton.translator.web.jQuery$Event)
 	handler:function(A){
-		this.a.EM(this.b);
-	}
-});
-
-boot.define("BX","BY",{
-	
-	// js.ui.ImageGrid#<init>()
-	$0:function(){
-		boot.BY.prototype.$0.call(this);
-		this.b=new boot.BK(0);
-		this.c=this.EI();
-	},
-	// js.ui.ImageGrid#compose(booton.translator.web.jQuery)
-	EH:function(A,B,C,D,E){
-		this.a.css("line-height","0").css("width","700px").css("margin","0 auto");
-		B=$("<input type='text'>");
-		B.appendTo(this.a);
-		B.addClass("g").css("display","block");
-		B.keyup(new boot.BZ(this,B,0));
-		D=this.c.BD();
-		l6:for (;
-		D.BH()!=0;
-		this.b.CS(C,E)) {
-			C=D.BE();
-			E=this.a.CH("h").css("background-image","url("+this.EJ(C)+")");
-			E.CG("span").addClass("i").text(this.EK(C));
-			E.click(new boot.Bu(this,C,0));
-		}A.append(this.a);
-	},
-	// js.ui.ImageGrid#access$0(js.ui.ImageGrid)
-	_EL:function(A){
-		return A.b;
+		this.a.EG(this.b);
 	}
 });
 
 boot.define("BW","BX",{
 	
-	// teemowork.ChampionSelect$1#<init>(teemowork.ChampionSelect)
-	$0:function(A){
-		this.d=A;
+	// js.ui.ImageGrid#<init>()
+	$0:function(){
 		boot.BX.prototype.$0.call(this);
+		this.b=new boot.BJ(0);
+		this.c=this.EB();
 	},
-	// teemowork.ChampionSelect$1#sources()
-	EI:function(){
-		return boot.BF.CU();
+	// js.ui.ImageGrid#compose(booton.translator.web.jQuery)
+	EA:function(A,B,C,D,E){
+		this.a.css("line-height","0").css("width","700px").css("margin","0 auto");
+		B=$("<input type='text'>");
+		B.appendTo(this.a);
+		B.addClass("g").css("display","block");
+		B.keyup(new boot.BY(this,B,0));
+		D=this.c.K();
+		l6:for (;
+		D.M()!=0;
+		this.b.CM(C,E)) {
+			C=D.L();
+			E=this.a.CB("h").css("background-image","url("+this.EC(C)+")");
+			E.CA("span").addClass("i").text(this.ED(C));
+			E.click(new boot.BZ(this,C,0));
+		}A.append(this.a);
 	},
-	// teemowork.ChampionSelect$1#getTitle(teemowork.model.Champion)
-	EO:function(A){
-		return A.a;
-	},
-	// teemowork.ChampionSelect$1#getImageURI(teemowork.model.Champion)
-	EP:function(A){
-		return A.CL();
-	},
-	// teemowork.ChampionSelect$1#select(teemowork.model.Champion)
-	EQ:function(A){
-		boot.C.I(new boot.K(A.a,0));
-	},
-	// teemowork.ChampionSelect$1#getTitle(java.lang.Object)
-	EK:function(A){
-		return this.EO(A);
-	},
-	// teemowork.ChampionSelect$1#getImageURI(java.lang.Object)
-	EJ:function(A){
-		return this.EP(A);
-	},
-	// teemowork.ChampionSelect$1#select(java.lang.Object)
-	EM:function(A){
-		this.EQ(A);
+	// js.ui.ImageGrid#access$0(js.ui.ImageGrid)
+	_EE:function(A){
+		return A.b;
 	}
 });
 
-boot.define("L","J",{
+boot.define("BV","BW",{
+	
+	// teemowork.ChampionSelect$1#<init>(teemowork.ChampionSelect)
+	$0:function(A){
+		this.d=A;
+		boot.BW.prototype.$0.call(this);
+	},
+	// teemowork.ChampionSelect$1#sources()
+	EB:function(){
+		return boot.BE.CO();
+	},
+	// teemowork.ChampionSelect$1#getTitle(teemowork.model.Champion)
+	EH:function(A){
+		return A.a;
+	},
+	// teemowork.ChampionSelect$1#getImageURI(teemowork.model.Champion)
+	EI:function(A){
+		return A.CF();
+	},
+	// teemowork.ChampionSelect$1#select(teemowork.model.Champion)
+	EJ:function(A){
+		boot.C.I(new boot.L(A.a,0));
+	},
+	// teemowork.ChampionSelect$1#getTitle(java.lang.Object)
+	ED:function(A){
+		return this.EH(A);
+	},
+	// teemowork.ChampionSelect$1#getImageURI(java.lang.Object)
+	EC:function(A){
+		return this.EI(A);
+	},
+	// teemowork.ChampionSelect$1#select(java.lang.Object)
+	EG:function(A){
+		this.EJ(A);
+	}
+});
+
+boot.define("M","J",{
 	
 	// teemowork.ChampionSelect#<init>()
 	$0:function(){
 		boot.J.prototype.$0.call(this);
-		this.a=new boot.BW(this,0);
+		this.a=new boot.BV(this,0);
 	},
 	// teemowork.ChampionSelect#load(booton.translator.web.jQuery)
-	BG:function(A){
-		this.a.EH(A);
+	BB:function(A){
+		this.a.EA(A);
 	},
 	// teemowork.ChampionSelect#getPageId()
 	J:function(){
@@ -1592,54 +1601,54 @@ boot.define("L","J",{
 	}
 },{
 	"$0":[["F",{
-		CC:function() {return "";}
+		Bv:function() {return "";}
 	}]]
 });
 
-boot.define("N","",{
+boot.define("O","",{
 	
 	// js.application.Header$Menu#<init>(js.application.Header, booton.translator.web.jQuery)
 	$1:function(A,B){
 		this.a=A;;
-		this.b=B.CG("ul").addClass("n");
+		this.b=B.CA("ul").addClass("n");
 	},
 	// js.application.Header$Menu#add(java.lang.String, java.lang.String)
-	K:function(A,B,C){
-		C=this.b.CG("li").addClass("o");
-		C.CG("a").addClass("m").attr("href",B).text(A);
-		return new boot.N(this.a,C,1);
+	N:function(A,B,C){
+		C=this.b.CA("li").addClass("o");
+		C.CA("a").addClass("m").attr("href",B).text(A);
+		return new boot.O(this.a,C,1);
 	},
 	// js.application.Header$Menu#<init>(js.application.Header, booton.translator.web.jQuery, js.application.Header$Menu)
 	$0:function(A,B,C){
-		boot.N.prototype.$1.call(this,A,B);
+		boot.O.prototype.$1.call(this,A,B);
 	}
 });
 
-boot.define("M","",{
+boot.define("N","",{
 	
 	// js.application.Header#<init>()
 	$0:function(){
 		this.a=$("#Header").addClass("k");
 	},
 	// js.application.Header#add(java.lang.String, java.lang.String)
-	K:function(A,B,C){
-		C=this.a.CG("li").addClass("l");
-		C.CG("a").addClass("m").attr("href",B).text(A);
-		return new boot.N(this,C,null,0);
+	N:function(A,B,C){
+		C=this.a.CA("li").addClass("l");
+		C.CA("a").addClass("m").attr("href",B).text(A);
+		return new boot.O(this,C,null,0);
 	}
 });
 
-boot.define("Bv","",{
+boot.define("Bu","",{
 	
 	// teemowork.model.Item#<clinit>()
 	_:function(){
-		boot.Bv.a=new boot.BK(0);
+		boot.Bu.a=new boot.BJ(0);
 	},
 	// teemowork.model.Item#<init>(java.lang.String, teemowork.model.Patch)
 	$0:function(A,B,C){
 		this.b=A;
 		this.c=B;
-		C=boot.Bv.a.CT(A);
+		C=boot.Bu.a.CN(A);
 		if(C==null){
 		}else{
 			this.d=C.d;
@@ -1662,328 +1671,328 @@ boot.define("Bv","",{
 			this.be=C.be;
 			this.bf=C.bf;
 		}this.bg=C;
-		boot.Bv.a.CS(A,this);
+		boot.Bu.a.CM(A,this);
 	},
 	// teemowork.model.Item#cost()
-	EW:function(){
+	EQ:function(){
 		return this.d;
 	},
 	// teemowork.model.Item#cost(int)
-	ES:function(A){
+	EL:function(A){
 		this.d=A;
 		return this;
 	},
 	// teemowork.model.Item#ad()
-	EX:function(){
+	ER:function(){
 		return this.e;
 	},
 	// teemowork.model.Item#ad(int)
-	EY:function(A){
+	ES:function(A){
 		this.e=A;
 		return this;
 	},
 	// teemowork.model.Item#as()
-	EZ:function(){
+	ET:function(){
 		return this.f;
 	},
 	// teemowork.model.Item#as(int)
-	Eu:function(A){
+	EU:function(A){
 		this.f=A;
 		return this;
 	},
 	// teemowork.model.Item#critical()
-	Ev:function(){
+	EV:function(){
 		return this.g;
 	},
 	// teemowork.model.Item#critical(int)
-	Ew:function(A){
+	EW:function(A){
 		this.g=A;
 		return this;
 	},
 	// teemowork.model.Item#arpen()
-	Ex:function(){
+	EX:function(){
 		return this.h;
 	},
 	// teemowork.model.Item#arpen(int)
-	Ey:function(A){
+	EY:function(A){
 		this.h=A;
 		return this;
 	},
 	// teemowork.model.Item#arpenRatio()
-	Ez:function(){
+	EZ:function(){
 		return this.i;
 	},
 	// teemowork.model.Item#arpenRatio(int)
-	FA:function(A){
+	Eu:function(A){
 		this.i=A;
 		return this;
 	},
 	// teemowork.model.Item#ls()
-	FB:function(){
+	Ev:function(){
 		return this.j;
 	},
 	// teemowork.model.Item#ls(int)
-	FC:function(A){
+	Ew:function(A){
 		this.j=A;
 		return this;
 	},
 	// teemowork.model.Item#ap()
-	FD:function(){
+	Ex:function(){
 		return this.k;
 	},
 	// teemowork.model.Item#ap(int)
-	EU:function(A){
+	EO:function(A){
 		this.k=A;
 		return this;
 	},
 	// teemowork.model.Item#mrpen()
-	FE:function(){
+	Ey:function(){
 		return this.l;
 	},
 	// teemowork.model.Item#mrpen(int)
-	FF:function(A){
+	Ez:function(A){
 		this.l=A;
 		return this;
 	},
 	// teemowork.model.Item#mrpenRatio()
-	FG:function(){
+	FA:function(){
 		return this.m;
 	},
 	// teemowork.model.Item#mrpenRatio(int)
-	FH:function(A){
+	FB:function(A){
 		this.m=A;
 		return this;
 	},
 	// teemowork.model.Item#cdr()
-	FI:function(){
+	FC:function(){
 		return this.n;
 	},
 	// teemowork.model.Item#cdr(int)
-	FJ:function(A){
+	FD:function(A){
 		this.n=A;
 		return this;
 	},
 	// teemowork.model.Item#sv()
-	FK:function(){
+	FE:function(){
 		return this.o;
 	},
 	// teemowork.model.Item#sv(int)
-	FL:function(A){
+	FF:function(A){
 		this.o=A;
 		return this;
 	},
 	// teemowork.model.Item#health()
-	FM:function(){
+	FG:function(){
 		return this.p;
 	},
 	// teemowork.model.Item#health(int)
-	ET:function(A){
+	EM:function(A){
 		this.p=A;
 		return this;
 	},
 	// teemowork.model.Item#hreg()
-	FN:function(){
+	FH:function(){
 		return this.ba;
 	},
 	// teemowork.model.Item#hreg(int)
-	FO:function(A){
+	FI:function(A){
 		this.ba=A;
 		return this;
 	},
 	// teemowork.model.Item#mreg()
-	FP:function(){
+	FJ:function(){
 		return this.bb;
 	},
 	// teemowork.model.Item#mreg(int)
-	FQ:function(A){
+	FK:function(A){
 		this.bb=A;
 		return this;
 	},
 	// teemowork.model.Item#ar()
-	FR:function(){
+	FL:function(){
 		return this.bc;
 	},
 	// teemowork.model.Item#ar(int)
-	FS:function(A){
+	FM:function(A){
 		this.bc=A;
 		return this;
 	},
 	// teemowork.model.Item#mr()
-	FT:function(){
+	FN:function(){
 		return this.bd;
 	},
 	// teemowork.model.Item#mr(int)
-	FU:function(A){
+	FO:function(A){
 		this.bd=A;
 		return this;
 	},
 	// teemowork.model.Item#ms()
-	FV:function(){
+	FP:function(){
 		return this.be;
 	},
 	// teemowork.model.Item#ms(int)
-	FW:function(A){
+	FQ:function(A){
 		this.be=A;
 		return this;
 	},
 	// teemowork.model.Item#msRatio()
-	FX:function(){
+	FR:function(){
 		return this.bf;
 	},
 	// teemowork.model.Item#msRatio(int)
-	FY:function(A){
+	FS:function(A){
 		this.bf=A;
 		return this;
 	},
 	// teemowork.model.Item#getByName(java.lang.String)
-	_FZ:function(A){
-		return boot.Bv.a.CT(A);
+	_FT:function(A){
+		return boot.Bu.a.CN(A);
 	},
 	// teemowork.model.Item#getAll()
-	_CU:function(){
-		return boot.Bv.a.CV();
+	_CO:function(){
+		return boot.Bu.a.CP();
 	}
 });
 
-boot.define("O","",{
+boot.define("P","",{
 	
 	// teemowork.model.Patch#<clinit>()
 	_:function(){
-		boot.O.b=new boot.O(1510,2012,11,13,"Initial",null,0);
-		boot.O.b.ER("Ruby Crystal").ES(475).ET(180);
-		boot.O.b.ER("Haunting Guise").ET(200).EU(25);
-		boot.O.b.EV(boot.BF.c).DH(380,80).DK(5.5,0.6).DN(230,50.0).DQ(6.25,0.6).DT(50.0,3.0).DW(0.668,2.0).DZ(10.0,3.5).Dw(30.0,0).Dy(550).EA(330);
-		boot.O.b.EV(boot.BF.d).DH(445,85).DK(7.25,0.65).EC(200).EE(50).DT(53.0,3.2).DW(0.694,3.1).DZ(16.5,3.5).Dw(30.0,1.25).Dy(125).EA(350);
-		boot.O.b.EV(boot.BF.e).DH(442,102).DK(7.25,0.85).DN(215,38.0).DQ(6.45,0.45).DT(55.03,3.62).DW(0.625,3.62).DZ(14.5,3.5).Dw(30.0,1.25).Dy(125).EA(325);
-		boot.O.b.EV(boot.BF.f).DH(472,84).DK(7.45,0.85).DN(220,40.0).DQ(6.5,0.525).DT(47.0,3.8).DW(0.638,2.18).DZ(18.0,3.3).Dw(30.0,1.25).Dy(125).EA(335);
-		boot.O.b.EV(boot.BF.g).DH(350,70).DK(4.65,0.55).DN(257,53.0).DQ(7.0,0.6).DT(48.0,3.2).DW(0.625,1.68).DZ(10.5,4.0).Dw(30.0,0).Dy(600).EA(325);
-		boot.O.b.EV(boot.BF.h).DH(384,76).DK(4.5,0.55).DN(250,50.0).DQ(6.9,0.6).DT(49.0,2.625).DW(0.579,1.36).DZ(12.5,4.0).Dw(30.0,0).Dy(625).EA(335);
-		boot.O.b.EV(boot.BF.i).DH(395,79).DK(4.5,0.55).DN(173,35.0).DQ(6.3,0.4).DT(46.3,2.85).DW(0.658,3.34).DZ(11.5,3.4).Dw(30.0,0).Dy(600).EA(325);
-		boot.O.b.EV(boot.BF.j).DH(423,95).DK(7.25,0.75).DN(260,40.0).DQ(6.6,0.5).DT(55.66,3.5).DW(0.625,1.13).DZ(14.5,3.5).Dw(30.0,1.25).Dy(125).EA(325);
-		boot.O.b.EV(boot.BF.k).DH(380,76).DK(4.5,0.55).DN(250,45.0).DQ(7.0,0.6).DT(51.66,3.0).DW(0.625,1.36).DZ(12.0,3.5).Dw(30.0,0).Dy(550).EA(340);
-		boot.O.b.EV(boot.BF.l).DH(390,80).DK(4.75,0.55).DN(255,35.0).DQ(6.5,0.55).DT(47.0,3.0).DW(0.668,3.0).DZ(13.0,3.5).Dw(30.0,0).Dy(650).EA(325);
-		boot.O.b.EV(boot.BF.m).DH(380,75).DK(4.85,0.5).DN(250,50.0).DQ(7.1,0.75).DT(47.0,3.2).DW(0.644,1.68).DZ(11.5,4.0).Dw(30.0,0).Dy(550).EA(335);
-		boot.O.b.EV(boot.BF.n).DH(440,80).DK(7.5,0.85).DN(205,40.0).DQ(6.45,0.45).DT(54.1,4.2).DW(0.625,1.44).DZ(19.0,3.5).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.o).DH(375,82).DK(4.5,0.55).DN(243,37.0).DQ(6.5,0.55).DT(48.2,3.0).DW(0.658,2.3).DZ(13.5,3.5).Dw(30.0,0).Dy(550).EA(325);
-		boot.O.b.EV(boot.BF.p).DH(426,93).DK(8.25,0.95).DN(200,37.5).DQ(6.0,0.35).DT(50.0,3.5).DW(0.679,2.6).DZ(20.0,3.5).Dw(30.0,1.25).Dy(125).EA(340);
-		boot.O.b.EV(boot.BF.ba).DH(438,90).DK(7.0,0.85).DN(230,40.0).DQ(7.0,0.6).DT(48.0,3.0).DW(0.625,2.25).DZ(16.0,3.6).Dw(30.0,1.25).Dy(150).EA(345);
-		boot.O.b.EV(boot.BF.bb).DH(433,89).DK(6.5,0.75).DT(56.23,3.0).DW(0.625,2.8).DZ(17.0,3.5).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.bc).DH(420,82).DK(5.0,0.7).DN(240,42.0).DQ(6.95,0.65).DT(46.5,3.5).DW(0.679,2.6).DZ(16.0,3.3).Dw(30.0,0).Dy(550).EA(330);
-		boot.O.b.EV(boot.BF.bd).DH(395,80).DK(4.7,0.6).DN(240,50.0).DQ(6.8,0.65).DT(47.5,3.0).DW(0.625,1.75).DZ(12.65,3.35).Dw(30.0,0).Dy(550).EA(335);
-		boot.O.b.EV(boot.BF.be).DH(414,86).DK(6.95,0.55).DN(180,42.0).DQ(7.1,0.6).DT(48.0,3.3).DW(0.658,3.84).DZ(12.5,4.0).Dw(30.0,1.25).Dy(125).EA(340);
-		boot.O.b.EV(boot.BF.bf).DH(350,80).DK(5.5,0.55).DN(235,45.0).DQ(7.0,0.65).DT(47.2,3.0).DW(0.665,2.8).DZ(12.0,3.5).Dw(30.0,0).Dy(550).EA(330);
-		boot.O.b.EV(boot.BF.bg).DH(390,80).DK(4.6,0.6).DN(251,59.0).DQ(6.9,0.65).DT(45.95,2.625).DW(0.625,2.11).DZ(11.0,3.5).Dw(30.0,0).Dy(480).EA(335);
-		boot.O.b.EV(boot.BF.bh).DH(450,85).DK(6.3,0.8).DN(220,40.0).DQ(7.25,0.5).DT(54.5,3.2).DW(0.672,3.0).DZ(15.5,3.5).Dw(30.0,1.25).Dy(125).EA(350);
-		boot.O.b.EV(boot.BF.bi).DH(414,86).DK(7.0,0.7).DN(200,40.0).DQ(6.15,0.45).DT(53.0,3.0).DW(0.658,3.1).DZ(13.0,3.4).Dw(30.0,1.25).Dy(175).EA(335);
-		boot.O.b.EV(boot.BF.bj).DH(435,85).DK(7.45,0.75).DN(235,50.0).DQ(7.0,0.7).DT(56.3,3.375).DW(0.638,1.2).DZ(17.0,3.5).Dw(30.0,0).Dy(125).EA(335);
-		boot.O.b.EV(boot.BF.bk).DH(495,81).DK(425.0,0.75).DN(215,40.0).DQ(6.5,0.7).DT(54.0,3.0).DW(0.651,2.75).DZ(16.5,3.3).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.bl).DH(455,96).DK(7.5,0.75).DT(52.5,3.5).DW(0.625,2.9).DZ(19.0,2.7).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.bm).DH(434,89).DK(7.25,0.85).DN(221,47.0).DQ(6.45,0.45).DT(55.78,3.375).DW(0.651,2.05).DZ(16.0,3.6).Dw(30.0,0).Dy(125).EA(340);
-		boot.O.b.EV(boot.BF.bn).DH(410,84).DK(5.5,0.7).DN(255,40.0).DQ(6.75,0.7).DT(51.0,3.1).DW(0.625,2.9).DZ(15.0,3.2).Dw(30.0,0).Dy(525).EA(330);
-		boot.O.b.EV(boot.BF.bo).DH(440,95).DK(8.0,0.75).DN(210,40.0).DQ(6.5,0.6).DT(56.0,3.2).DW(0.67,2.5).DZ(16.0,4.0).Dw(30.0,1.25).Dy(175).EA(345);
-		boot.O.b.EV(boot.BF.bp).DH(350,75).DK(4.5,0.55).DN(240,65.0).DQ(7.0,0.65).DT(49.24,3.0).DW(0.625,1.21).DZ(7.0,3.0).Dw(30.0,0).Dy(550).EA(325);
-		boot.O.b.EV(boot.BF.ca).DH(456,90).DK(7.5,0.65).DN(230,35.0).DQ(7.0,0.65).DT(56.0,3.3).DW(0.665,3.2).DZ(15.0,3.75).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.cb).DH(356,78).DK(4.5,0.55).DN(302,64.0).DQ(6.9,0.6).DT(49.0,2.95).DW(0.625,2.61).DZ(9.0,3.8).Dw(30.0,0).Dy(475).EA(335);
-		boot.O.b.EV(boot.BF.cc).DH(420,90).DK(7.0,0.7).DN(235,40.0).DQ(6.0,0.45).DT(50.0,3.4).DW(0.658,2.5).DZ(14.0,3.0).Dw(30.0,1.25).Dy(175).EA(340);
-		boot.O.b.EV(boot.BF.cd).DH(463,98).DK(7.45,0.55).DN(230,35.0).DQ(6.4,0.7).DT(56.3,3.375).DW(0.638,3.4).DZ(18.0,3.5).Dw(30.0,1.25).Dy(125).EA(350);
-		boot.O.b.EV(boot.BF.ce).DH(420,90).DK(6.0,0.8).DN(240,40.0).DQ(7.0,0.7).DT(46.5,3.5).DW(0.658,3.0).DZ(12.5,3.5).Dw(30.0,0).Dy(125).EA(335);
-		boot.O.b.EV(boot.BF.cf).DH(410,86).DK(4.7,0.55).DN(240,60.0).DQ(6.8,0.65).DT(50.0,3.3).DW(0.625,2.3).DZ(15.0,3.5).Dw(30.0,0).Dy(425).EA(335);
-		boot.O.b.EV(boot.BF.cg).DH(390,75).DK(5.5,0.55).DN(270,61.0).DQ(6.5,0.6).DT(42.2,3.25).DW(0.625,2.11).DZ(11.0,3.5).Dw(30.0,0).Dy(450).EA(335);
-		boot.O.b.EV(boot.BF.ch).DH(433,78).DK(6.95,0.5).DN(230,45.0).DQ(6.9,0.6).DT(52.3,3.9).DW(0.638,3.7).DZ(14.0,3.2).Dw(30.0,1.25).Dy(125).EA(340);
-		boot.O.b.EV(boot.BF.ci).DH(395,83).DK(6.95,0.55).DT(53.0,3.2).DW(0.658,2.74).DZ(14.75,4.0).Dw(30.0,1.25).Dy(125).EA(350);
-		boot.O.b.EV(boot.BF.cj).DH(418,93).DK(7.0,0.75).DN(255,40.0).DQ(6.9,0.525).DT(53.3,2.8).DW(0.638,2.5).DZ(17.0,3.5).Dw(30.0,0.75).Dy(125).EA(335);
-		boot.O.b.EV(boot.BF.ck).DH(403,79).DK(4.65,0.65).EC(200).EE(50).DT(51.3,3.3).DW(0.69,3.4).DZ(14.0,3.75).Dw(30.0,0).Dy(550).EA(335);
-		boot.O.b.EV(boot.BF.cl).DH(430,85).DK(6.25,0.75).DN(260,40.0).DQ(6.75,0.5).DT(50.0,3.1).DW(0.665,2.7).DZ(15.0,3.0).Dw(30.0,1.25).Dy(125).EA(350);
-		boot.O.b.EV(boot.BF.cm).DH(440,84).DK(5.0,0.55).DN(295,40.0).DQ(7.5,0.7).DT(46.0,3.0).DW(0.665,2.65).DZ(13.0,3.53).Dw(30.0,0).Dy(500).EA(340);
-		boot.O.b.EV(boot.BF.cn).DH(390,75).DK(4.5,0.55).DN(250,50.0).DQ(6.9,0.6).DT(51.0,3.1).DW(0.625,1.4).DZ(12.0,3.5).Dw(30.0,0).Dy(525).EA(335);
-		boot.O.b.EV(boot.BF.co).DH(428,85).DK(6.25,61.0).EE(200).EE(50).DT(55.8,3.2).DW(0.651,3.0).DZ(16.0,3.7).Dw(30.0,1.25).Dy(125).EA(350);
-		boot.O.b.EV(boot.BF.cp).DH(430,87).DK(9.0,0.85).DN(235,40.0).DQ(8.0,0.7).DT(55.0,3.0).DW(0.625,2.9).DZ(18.0,3.1).Dw(30.0,1.25).Dy(125).EA(335);
-		boot.O.b.EV(boot.BF.da).DH(415,82).DK(6.0,0.72).DN(200,50.0).DQ(6.0,0.6).DT(44.4,2.6).DW(0.625,2.2).DZ(9.0,3.7).Dw(30.0,0).Dy(550).EA(325);
-		boot.O.b.EV(boot.BF.db).DH(345,79).DK(4.5,0.55).DN(250,50.0).DQ(6.0,0.6).DT(50.0,3.3).DW(0.625,1.36).DZ(8.0,4.0).Dw(30.0,0).Dy(550).EA(340);
-		boot.O.b.EV(boot.BF.dc).DH(423,90).DK(7.45,0.55).DN(215,40.0).DQ(6.4,0.55).DT(56.3,3.375).DW(0.638,3.4).DZ(18.0,3.75).Dw(30.0,1.25).Dy(125).EA(335);
-		boot.O.b.EV(boot.BF.dd).DH(380,80).DK(4.5,0.55).DN(250,45.0).DQ(7.0,0.6).DT(51.66,3.0).DW(0.625,1.36).DZ(15.0,3.5).Dw(30.0,0).Dy(550).EA(340);
-		boot.O.b.EV(boot.BF.de).DH(421,90).DK(7.25,0.85).DN(250,46.0).DQ(6.45,0.45).DT(58.0,3.3).DW(0.694,2.13).DZ(18.0,4.0).Dw(30.0,0).Dy(125).EA(335);
-		boot.O.b.EV(boot.BF.df).DH(444,86).DK(6.75,0.65).DN(199,36.0).DQ(6.5,0.45).DT(55.12,3.1).DW(0.679,2.98).DZ(16.3,3.7).Dw(30.0,1.25).Dy(125).EA(355);
-		boot.O.b.EV(boot.BF.dg).DH(435,85).DK(5.1,0.65).DN(212,38.0).DQ(6.95,0.65).DT(46.5,3.0).DW(0.658,3.01).DZ(15.0,3.0).Dw(30.0,0).Dy(550).EA(325);
-		boot.O.b.EV(boot.BF.dh).DH(421,80).DK(7.45,0.55).DT(51.7,3.5).DW(0.694,3.0).DZ(15.0,3.5).Dw(30.0,1.25).Dy(125).EA(340);
-		boot.O.b.EV(boot.BF.di).DH(403,86).DK(4.7,0.6).DN(240,60.0).DQ(6.8,0.65).DT(51.58,3.5).DW(0.579,1.53).DZ(15.0,3.8).Dw(30.0,0).Dy(425).EA(335);
-		boot.O.b.EV(boot.BF.dj).DH(365,74).DK(4.5,45.0).DN(305,43.0).DQ(6.9,0.6).DT(48.0,3.1).DW(0.644,2.6).DZ(9.0,4.0).Dw(30.0,0).Dy(550).EA(330);
-		boot.O.b.EV(boot.BF.dk).DH(410,90).DK(7.5,0.9).DN(200,45.0).DQ(6.6,0.5).DT(53.3,3.5).DW(0.638,3.48).DZ(15.0,3.5).Dw(30.0,1.25).Dy(125).EA(350);
-		boot.O.b.EV(boot.BF.dl).DH(432,86).DK(7.45,0.55).DN(200,50.0).DQ(7.45,0.7).DT(52.0,3.3).DW(0.613,0.98).DZ(12.0,3.25).Dw(30.0,1.25).Dy(175).EA(325);
-		boot.O.b.EV(boot.BF.dm).DH(370,90).DK(5.0,0.6).DN(220,45.0).DQ(7.0,0.5).DT(49.0,3.5).DW(0.672,3.22).DZ(11.0,3.5).Dw(30.0,10.75).Dy(525).EA(335);
-		boot.O.b.EV(boot.BF.dn).DH(430,85).DK(7.0,0.75).DN(215,35.0).DQ(6.0,0.45).DT(54.0,3.1).DW(0.668,2.7).DZ(17.0,3.5).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.dp).DH(437,108).DK(7.05,0.8).DN(213,42.0).DQ(6.6,0.5).DT(51.6,3.4).DW(0.625,2.25).DZ(16.5,3.5).Dw(30.0,1.25).Dy(125).EA(340);
-		boot.O.b.EV(boot.BF.ea).DH(441,93).DK(7.0,0.9).DN(225,45.0).DQ(6.5,0.575).DT(54.1,3.5).DW(0.694,2.7).DZ(17.0,3.0).Dw(30.0,1.25).Dy(125).EA(350);
-		boot.O.b.EV(boot.BF.eb).DH(385,79).DK(5.95,0.55).DN(250,50.0).DQ(7.0,0.5).DT(44.0,2.6).DW(0.658,3.5).DZ(8.0,3.0).Dw(30.0,0).Dy(525).EA(325);
-		boot.O.b.EV(boot.BF.ec).DH(433,87).DK(6.75,0.65).DN(210,34.0).DQ(6.6,0.45).DT(50.7,2.9).DW(0.679,2.95).DZ(17.1,3.9).Dw(30.0,1.25).Dy(155).EA(355);
-		boot.O.b.EV(boot.BF.ed).DH(423,81).DK(7.45,0.55).DN(185,30.0).DQ(6.4,0.45).DT(56.3,3.375).DW(0.638,3.35).DZ(18.0,4.0).Dw(30.0,0).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.ee).DH(420,86).DK(8.0,0.55).DN(255,33.0).DQ(4.5,0.3).DT(50.0,3.5).DW(0.625,2.22).DZ(21.0,3.8).Dw(30.0,1.25).Dy(125).EA(335);
-		boot.O.b.EV(boot.BF.ef).DH(426,87).DK(6.7,0.75).DT(53.12,3.1).DW(0.665,2.65).DZ(15.2,3.8).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.eg).DH(435,85).DK(4.0,0.4).DT(55.0,3.0).DW(0.679,2.85).DZ(16.0,3.5).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.eh).DH(414,86).DK(10.4,0.9).DT(54.0,2.75).DW(0.625,3.5).DZ(15.0,3.1).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.ei).DH(450,80).DK(7.0,0.7).DT(55.32,3.2).DW(0.644,1.85).DZ(16.0,3.5).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.ej).DH(360,86).DK(4.35,0.55).DN(250,55.0).DQ(7.0,0.6).DT(52.0,3.0).DW(0.625,2.11).DZ(11.0,3.9).Dw(30.0,0).Dy(550).EA(335);
-		boot.O.b.EV(boot.BF.ek).DH(450,85).DK(7.35,0.85).DN(220,40.0).DQ(6.45,0.45).DT(54.0,3.4).DW(0.67,1.45).DZ(20.5,3.5).Dw(30.0,1.25).Dy(125).EA(340);
-		boot.O.b.EV(boot.BF.el).DH(441,84).DK(7.45,0.55).DN(270,40.0).DQ(6.4,0.45).DT(51.7,3.5).DW(0.694,3.0).DZ(15.0,3.5).Dw(30.0,1.25).Dy(125).EA(350);
-		boot.O.b.EV(boot.BF.em).DH(428,85).DK(7.45,0.55).EC(200).EE(50).DT(54.5,3.375).DW(0.651,3.4).DZ(15.0,4.0).Dw(30.0,0).Dy(125).EA(335);
-		boot.O.b.EV(boot.BF.en).DH(435,95).DK(7.2,0.8).DT(54.5,3.4).DW(0.658,3.4).DZ(17.6,3.4).Dw(30.0,1.25).Dy(125).EA(350);
-		boot.O.b.EV(boot.BF.eo).DH(405,82).DK(7.1,0.55).DN(215,45.0).DQ(6.6,0.55).DT(56.65,3.375).DW(0.613,1.81).DZ(18.0,3.5).Dw(30.0,0).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.ep).DH(403,104).DK(7.9,0.95).DN(240,40.0).DQ(6.3,0.4).DT(55.52,3.1875).DW(0.625,1.63).DZ(17.75,3.25).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.fa).DH(378,82).DK(4.25,0.55).DN(203,43.0).DQ(6.5,0.5).DT(49.0,2.9).DW(0.658,3.28).DZ(12.75,3.25).Dw(30.0,0).Dy(500).EA(335);
-		boot.O.b.EV(boot.BF.fb).DH(440,96).DK(7.5,0.85).DN(205,40.0).DQ(6.45,0.45).DT(54.1,4.2).DW(0.625,2.1).DZ(19.0,3.8).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.fc).DH(340,70).DK(4.5,0.55).DN(265,45.0).DQ(7.0,0.65).DT(47.0,3.0).DW(0.644,2.3).DZ(6.0,3.3).Dw(30.0,0).Dy(550).EA(330);
-		boot.O.b.EV(boot.BF.fd).DH(375,71).DK(4.5,0.55).DN(240,60.0).DQ(6.8,0.65).DT(48.8,3.0).DW(0.625,2.14).DZ(7.4,3.8).Dw(30.0,0).Dy(550).EA(335);
-		boot.O.b.EV(boot.BF.fe).DH(385,78).DK(6.75,0.65).DN(240,50.0).DQ(6.8,0.65).DT(49.0,3.0).DW(0.625,2.11).DZ(12.0,4.0).Dw(30.0,0).Dy(500).EA(335);
-		boot.O.b.EV(boot.BF.ff).DH(380,78).DK(5.5,0.6).DN(250,50.0).DQ(6.9,0.6).DT(51.0,2.9).DW(0.625,2.0).DZ(15.0,3.4).Dw(30.0,0).Dy(550).EA(330);
-		boot.O.b.EV(boot.BF.fg).DH(440,85).DK(7.25,0.75).DN(260,40.0).DQ(6.75,0.5).DT(50.0,3.1).DW(0.668,2.7).DZ(17.0,3.5).Dw(30.0,1.25).Dy(125).EA(350);
-		boot.O.b.EV(boot.BF.fh).DH(468,90).DK(7.1,0.5).DN(255,56.0).DQ(4.1,0.4).DT(58.0,3.5).DW(0.625,2.02).DZ(16.5,3.2).Dw(30.0,1.25).Dy(125).EA(340);
-		boot.O.b.EV(boot.BF.fi).DH(383,82).DK(4.65,0.65).DN(200,40.0).DQ(6.45,0.45).DT(44.5,3.0).DW(0.69,3.38).DZ(14.0,3.75).Dw(30.0,0).Dy(500).EA(330);
-		boot.O.b.EV(boot.BF.fj).DH(415,82).DK(5.1,0.65).DN(193,32.0).DQ(6.45,0.45).DT(46.5,3.0).DW(0.658,3.01).DZ(15.0,3.0).Dw(30.0,0).Dy(550).EA(325);
-		boot.O.b.EV(boot.BF.fk).DH(455,96).DK(8.0,0.85).DN(206,45.0).DQ(6.9,0.6).DT(54.66,3.0).DW(0.672,2.9).DZ(19.0,2.7).Dw(30.0,1.25).Dy(125).EA(350);
-		boot.O.b.EV(boot.BF.fl).DH(461,98).DK(7.9,0.9).DT(56.0,3.2).DW(0.644,2.9).DZ(14.9,3.1).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.fm).DH(384,82).DK(4.5,0.6).DN(202,38.0).DQ(6.5,0.5).DT(46.61,3.3).DW(0.651,3.22).DZ(111.25,3.15).Dw(30.0,0).Dy(525).EA(330);
-		boot.O.b.EV(boot.BF.fn).DH(389,81).DK(5.0,0.6).DN(220,40.0).DQ(6.5,0.45).DT(49.0,3.0).DW(0.679,3.38).DZ(14.0,3.0).Dw(30.0,0).Dy(550).EA(330);
-		boot.O.b.EV(boot.BF.fo).DH(427,99).DK(7.45,0.75).DN(220,30.0).DQ(6.4,0.45).DT(52.91,3.2).DW(0.658,2.67).DZ(14.75,4.0).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.fp).DH(437,89).DK(5.5,0.6).DN(220,55.0).DQ(7.5,0.65).DT(48.0,3.6).DW(0.644,2.9).DZ(15.0,3.3).Dw(30.0,0).Dy(425).EA(335);
-		boot.O.b.EV(boot.BF.ga).DH(400,82).DK(4.5,0.55).DN(250,36.0).DQ(6.5,0.5).DT(46.0,3.0).DW(0.658,2.65).DZ(13.5,3.4).Dw(30.0,0).Dy(575).EA(335);
-		boot.O.b.EV(boot.BF.gb).DH(359,83).DK(4.5,0.55).DN(173,27.0).DQ(6.3,0.4).DT(50.0,3.25).DW(0.658,3.1).DZ(9.3,3.4).Dw(30.0,0).Dy(550).EA(330);
-		boot.O.b.EV(boot.BF.gc).DH(355,82).DK(4.5,0.55).DN(250,55.0).DQ(6.9,0.6).DT(48.3,2.625).DW(0.625,2.24).DZ(12.25,3.75).Dw(30.0,0).Dy(525).EA(340);
-		boot.O.b.EV(boot.BF.gd).DH(440,85).DK(7.5,0.9).DN(220,45.0).DQ(7.0,0.65).DT(55.0,3.5).DW(0.643,2.5).DZ(16.0,3.5).Dw(30.0,1.25).Dy(125).EA(350);
-		boot.O.b.EV(boot.BF.ge).DH(385,78).DK(6.75,0.65).DN(240,50.0).DQ(6.9,0.45).DT(49.0,3.0).DW(0.625,2.11).DZ(12.0,4.0).Dw(30.0,0).Dy(525).EA(335);
-		boot.O.b.EV(boot.BF.gf).DH(400,85).DK(6.0,0.6).DT(45.0,3.0).DW(0.6258,2.0).DZ(12.0,3.5).Dw(30.0,0).Dy(450).EA(335);
-		boot.O.b.EV(boot.BF.gg).DH(440,86).DK(7.0,0.65).DN(220,30.0).DQ(7.0,0.65).DT(54.0,3.3).DW(0.625,2.9).DZ(16.5,3.5).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.gh).DH(428,98).DK(7.05,0.8).DN(190,30.0).DQ(7.1,0.6).DT(56.76,3.375).DW(0.679,2.88).DZ(16.0,3.5).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.gi).DH(435,85).DK(5.1,0.65).DN(202,38.0).DQ(6.9,0.65).DT(54.0,3.2).DW(0.658,3.0).DZ(15.0,3.5).Dw(30.0,1.25).Dy(175).EA(345);
-		boot.O.b.EV(boot.BF.gj).DH(380,80).DK(5.0,0.55).DN(250,45.0).DQ(8.0,0.6).DT(52.0,3.0).DW(0.625,1.36).DZ(12.6,3.4).Dw(30.0,0).Dy(550).EA(340);
-		boot.O.b.EV(boot.BF.gk).DH(445,87).DK(7.0,0.7).DN(213,31.0).DQ(6.6,0.45).DT(52.0,3.3).DW(0.672,2.7).DZ(16.2,3.7).Dw(30.0,1.25).Dy(175).EA(345);
-		boot.O.b.EV(boot.BF.gl).DH(421,85).DK(8.5,0.7).DN(235,35.0).DQ(6.5,0.45).DT(51.5,3.5).DW(0.625,3.0).DZ(18.0,3.6).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.gm).DH(445,85).DK(6.0,0.65).EC(20).EE(50).DT(48.6,3.4).DW(0.658,3.1).DZ(17.5,3.5).Dw(30.0,1.25).Dy(125).EA(345);
-		boot.O.b.EV(boot.BF.gn).DH(390,80).DK(5.25,0.6).DN(250,50.0).DQ(6.75,0.6).DT(54.0,3.1).DW(0.656,1.7).DZ(12.0,3.3).Dw(30.0,0).Dy(575).EA(330);
-		boot.O.b.EV(boot.BF.go).DH(380,71).DK(4.6,0.5).DN(260,60.0).DQ(6.95,0.65).DT(48.6,3.0).DW(0.625,2.13).DZ(6.75,3.8).Dw(30.0,0).Dy(600).EA(335);
-		boot.O.b.EV(boot.BF.gp).DH(355,74).DK(4.85,0.5).DN(250,50.0).DQ(7.1,0.75).DT(50.0,3.2).DW(0.625,1.8).DZ(11.0,3.0).Dw(30.0,0).Dy(575).EA(325);
-		boot.O.c=new boot.O(1520,2012,12,3,"Preseason 3",boot.O.b,0);
-		boot.O.c.ER("Shard of True Ice");
-		boot.O.c.ER("Liandry's Torment");
-		boot.O.c.ER("Haunting Guise");
-		boot.O.a=boot.O.c;
+		boot.P.b=new boot.P(1510,2012,11,13,"Initial",null,0);
+		boot.P.b.EK("Ruby Crystal").EL(475).EM(180);
+		boot.P.b.EK("Haunting Guise").EM(200).EO(25);
+		boot.P.b.EP(boot.BE.c).DB(380,80).DE(5.5,0.6).DH(230,50.0).DK(6.25,0.6).DN(50.0,3.0).DQ(0.668,2.0).DT(10.0,3.5).DW(30.0,0).DY(550).Du(330);
+		boot.P.b.EP(boot.BE.d).DB(445,85).DE(7.25,0.65).Dw(200).Dy(50).DN(53.0,3.2).DQ(0.694,3.1).DT(16.5,3.5).DW(30.0,1.25).DY(125).Du(350);
+		boot.P.b.EP(boot.BE.e).DB(442,102).DE(7.25,0.85).DH(215,38.0).DK(6.45,0.45).DN(55.03,3.62).DQ(0.625,3.62).DT(14.5,3.5).DW(30.0,1.25).DY(125).Du(325);
+		boot.P.b.EP(boot.BE.f).DB(472,84).DE(7.45,0.85).DH(220,40.0).DK(6.5,0.525).DN(47.0,3.8).DQ(0.638,2.18).DT(18.0,3.3).DW(30.0,1.25).DY(125).Du(335);
+		boot.P.b.EP(boot.BE.g).DB(350,70).DE(4.65,0.55).DH(257,53.0).DK(7.0,0.6).DN(48.0,3.2).DQ(0.625,1.68).DT(10.5,4.0).DW(30.0,0).DY(600).Du(325);
+		boot.P.b.EP(boot.BE.h).DB(384,76).DE(4.5,0.55).DH(250,50.0).DK(6.9,0.6).DN(49.0,2.625).DQ(0.579,1.36).DT(12.5,4.0).DW(30.0,0).DY(625).Du(335);
+		boot.P.b.EP(boot.BE.i).DB(395,79).DE(4.5,0.55).DH(173,35.0).DK(6.3,0.4).DN(46.3,2.85).DQ(0.658,3.34).DT(11.5,3.4).DW(30.0,0).DY(600).Du(325);
+		boot.P.b.EP(boot.BE.j).DB(423,95).DE(7.25,0.75).DH(260,40.0).DK(6.6,0.5).DN(55.66,3.5).DQ(0.625,1.13).DT(14.5,3.5).DW(30.0,1.25).DY(125).Du(325);
+		boot.P.b.EP(boot.BE.k).DB(380,76).DE(4.5,0.55).DH(250,45.0).DK(7.0,0.6).DN(51.66,3.0).DQ(0.625,1.36).DT(12.0,3.5).DW(30.0,0).DY(550).Du(340);
+		boot.P.b.EP(boot.BE.l).DB(390,80).DE(4.75,0.55).DH(255,35.0).DK(6.5,0.55).DN(47.0,3.0).DQ(0.668,3.0).DT(13.0,3.5).DW(30.0,0).DY(650).Du(325);
+		boot.P.b.EP(boot.BE.m).DB(380,75).DE(4.85,0.5).DH(250,50.0).DK(7.1,0.75).DN(47.0,3.2).DQ(0.644,1.68).DT(11.5,4.0).DW(30.0,0).DY(550).Du(335);
+		boot.P.b.EP(boot.BE.n).DB(440,80).DE(7.5,0.85).DH(205,40.0).DK(6.45,0.45).DN(54.1,4.2).DQ(0.625,1.44).DT(19.0,3.5).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.o).DB(375,82).DE(4.5,0.55).DH(243,37.0).DK(6.5,0.55).DN(48.2,3.0).DQ(0.658,2.3).DT(13.5,3.5).DW(30.0,0).DY(550).Du(325);
+		boot.P.b.EP(boot.BE.p).DB(426,93).DE(8.25,0.95).DH(200,37.5).DK(6.0,0.35).DN(50.0,3.5).DQ(0.679,2.6).DT(20.0,3.5).DW(30.0,1.25).DY(125).Du(340);
+		boot.P.b.EP(boot.BE.ba).DB(438,90).DE(7.0,0.85).DH(230,40.0).DK(7.0,0.6).DN(48.0,3.0).DQ(0.625,2.25).DT(16.0,3.6).DW(30.0,1.25).DY(150).Du(345);
+		boot.P.b.EP(boot.BE.bb).DB(433,89).DE(6.5,0.75).DN(56.23,3.0).DQ(0.625,2.8).DT(17.0,3.5).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.bc).DB(420,82).DE(5.0,0.7).DH(240,42.0).DK(6.95,0.65).DN(46.5,3.5).DQ(0.679,2.6).DT(16.0,3.3).DW(30.0,0).DY(550).Du(330);
+		boot.P.b.EP(boot.BE.bd).DB(395,80).DE(4.7,0.6).DH(240,50.0).DK(6.8,0.65).DN(47.5,3.0).DQ(0.625,1.75).DT(12.65,3.35).DW(30.0,0).DY(550).Du(335);
+		boot.P.b.EP(boot.BE.be).DB(414,86).DE(6.95,0.55).DH(180,42.0).DK(7.1,0.6).DN(48.0,3.3).DQ(0.658,3.84).DT(12.5,4.0).DW(30.0,1.25).DY(125).Du(340);
+		boot.P.b.EP(boot.BE.bf).DB(350,80).DE(5.5,0.55).DH(235,45.0).DK(7.0,0.65).DN(47.2,3.0).DQ(0.665,2.8).DT(12.0,3.5).DW(30.0,0).DY(550).Du(330);
+		boot.P.b.EP(boot.BE.bg).DB(390,80).DE(4.6,0.6).DH(251,59.0).DK(6.9,0.65).DN(45.95,2.625).DQ(0.625,2.11).DT(11.0,3.5).DW(30.0,0).DY(480).Du(335);
+		boot.P.b.EP(boot.BE.bh).DB(450,85).DE(6.3,0.8).DH(220,40.0).DK(7.25,0.5).DN(54.5,3.2).DQ(0.672,3.0).DT(15.5,3.5).DW(30.0,1.25).DY(125).Du(350);
+		boot.P.b.EP(boot.BE.bi).DB(414,86).DE(7.0,0.7).DH(200,40.0).DK(6.15,0.45).DN(53.0,3.0).DQ(0.658,3.1).DT(13.0,3.4).DW(30.0,1.25).DY(175).Du(335);
+		boot.P.b.EP(boot.BE.bj).DB(435,85).DE(7.45,0.75).DH(235,50.0).DK(7.0,0.7).DN(56.3,3.375).DQ(0.638,1.2).DT(17.0,3.5).DW(30.0,0).DY(125).Du(335);
+		boot.P.b.EP(boot.BE.bk).DB(495,81).DE(425.0,0.75).DH(215,40.0).DK(6.5,0.7).DN(54.0,3.0).DQ(0.651,2.75).DT(16.5,3.3).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.bl).DB(455,96).DE(7.5,0.75).DN(52.5,3.5).DQ(0.625,2.9).DT(19.0,2.7).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.bm).DB(434,89).DE(7.25,0.85).DH(221,47.0).DK(6.45,0.45).DN(55.78,3.375).DQ(0.651,2.05).DT(16.0,3.6).DW(30.0,0).DY(125).Du(340);
+		boot.P.b.EP(boot.BE.bn).DB(410,84).DE(5.5,0.7).DH(255,40.0).DK(6.75,0.7).DN(51.0,3.1).DQ(0.625,2.9).DT(15.0,3.2).DW(30.0,0).DY(525).Du(330);
+		boot.P.b.EP(boot.BE.bo).DB(440,95).DE(8.0,0.75).DH(210,40.0).DK(6.5,0.6).DN(56.0,3.2).DQ(0.67,2.5).DT(16.0,4.0).DW(30.0,1.25).DY(175).Du(345);
+		boot.P.b.EP(boot.BE.bp).DB(350,75).DE(4.5,0.55).DH(240,65.0).DK(7.0,0.65).DN(49.24,3.0).DQ(0.625,1.21).DT(7.0,3.0).DW(30.0,0).DY(550).Du(325);
+		boot.P.b.EP(boot.BE.ca).DB(456,90).DE(7.5,0.65).DH(230,35.0).DK(7.0,0.65).DN(56.0,3.3).DQ(0.665,3.2).DT(15.0,3.75).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.cb).DB(356,78).DE(4.5,0.55).DH(302,64.0).DK(6.9,0.6).DN(49.0,2.95).DQ(0.625,2.61).DT(9.0,3.8).DW(30.0,0).DY(475).Du(335);
+		boot.P.b.EP(boot.BE.cc).DB(420,90).DE(7.0,0.7).DH(235,40.0).DK(6.0,0.45).DN(50.0,3.4).DQ(0.658,2.5).DT(14.0,3.0).DW(30.0,1.25).DY(175).Du(340);
+		boot.P.b.EP(boot.BE.cd).DB(463,98).DE(7.45,0.55).DH(230,35.0).DK(6.4,0.7).DN(56.3,3.375).DQ(0.638,3.4).DT(18.0,3.5).DW(30.0,1.25).DY(125).Du(350);
+		boot.P.b.EP(boot.BE.ce).DB(420,90).DE(6.0,0.8).DH(240,40.0).DK(7.0,0.7).DN(46.5,3.5).DQ(0.658,3.0).DT(12.5,3.5).DW(30.0,0).DY(125).Du(335);
+		boot.P.b.EP(boot.BE.cf).DB(410,86).DE(4.7,0.55).DH(240,60.0).DK(6.8,0.65).DN(50.0,3.3).DQ(0.625,2.3).DT(15.0,3.5).DW(30.0,0).DY(425).Du(335);
+		boot.P.b.EP(boot.BE.cg).DB(390,75).DE(5.5,0.55).DH(270,61.0).DK(6.5,0.6).DN(42.2,3.25).DQ(0.625,2.11).DT(11.0,3.5).DW(30.0,0).DY(450).Du(335);
+		boot.P.b.EP(boot.BE.ch).DB(433,78).DE(6.95,0.5).DH(230,45.0).DK(6.9,0.6).DN(52.3,3.9).DQ(0.638,3.7).DT(14.0,3.2).DW(30.0,1.25).DY(125).Du(340);
+		boot.P.b.EP(boot.BE.ci).DB(395,83).DE(6.95,0.55).DN(53.0,3.2).DQ(0.658,2.74).DT(14.75,4.0).DW(30.0,1.25).DY(125).Du(350);
+		boot.P.b.EP(boot.BE.cj).DB(418,93).DE(7.0,0.75).DH(255,40.0).DK(6.9,0.525).DN(53.3,2.8).DQ(0.638,2.5).DT(17.0,3.5).DW(30.0,0.75).DY(125).Du(335);
+		boot.P.b.EP(boot.BE.ck).DB(403,79).DE(4.65,0.65).Dw(200).Dy(50).DN(51.3,3.3).DQ(0.69,3.4).DT(14.0,3.75).DW(30.0,0).DY(550).Du(335);
+		boot.P.b.EP(boot.BE.cl).DB(430,85).DE(6.25,0.75).DH(260,40.0).DK(6.75,0.5).DN(50.0,3.1).DQ(0.665,2.7).DT(15.0,3.0).DW(30.0,1.25).DY(125).Du(350);
+		boot.P.b.EP(boot.BE.cm).DB(440,84).DE(5.0,0.55).DH(295,40.0).DK(7.5,0.7).DN(46.0,3.0).DQ(0.665,2.65).DT(13.0,3.53).DW(30.0,0).DY(500).Du(340);
+		boot.P.b.EP(boot.BE.cn).DB(390,75).DE(4.5,0.55).DH(250,50.0).DK(6.9,0.6).DN(51.0,3.1).DQ(0.625,1.4).DT(12.0,3.5).DW(30.0,0).DY(525).Du(335);
+		boot.P.b.EP(boot.BE.co).DB(428,85).DE(6.25,61.0).Dy(200).Dy(50).DN(55.8,3.2).DQ(0.651,3.0).DT(16.0,3.7).DW(30.0,1.25).DY(125).Du(350);
+		boot.P.b.EP(boot.BE.cp).DB(430,87).DE(9.0,0.85).DH(235,40.0).DK(8.0,0.7).DN(55.0,3.0).DQ(0.625,2.9).DT(18.0,3.1).DW(30.0,1.25).DY(125).Du(335);
+		boot.P.b.EP(boot.BE.da).DB(415,82).DE(6.0,0.72).DH(200,50.0).DK(6.0,0.6).DN(44.4,2.6).DQ(0.625,2.2).DT(9.0,3.7).DW(30.0,0).DY(550).Du(325);
+		boot.P.b.EP(boot.BE.db).DB(345,79).DE(4.5,0.55).DH(250,50.0).DK(6.0,0.6).DN(50.0,3.3).DQ(0.625,1.36).DT(8.0,4.0).DW(30.0,0).DY(550).Du(340);
+		boot.P.b.EP(boot.BE.dc).DB(423,90).DE(7.45,0.55).DH(215,40.0).DK(6.4,0.55).DN(56.3,3.375).DQ(0.638,3.4).DT(18.0,3.75).DW(30.0,1.25).DY(125).Du(335);
+		boot.P.b.EP(boot.BE.dd).DB(380,80).DE(4.5,0.55).DH(250,45.0).DK(7.0,0.6).DN(51.66,3.0).DQ(0.625,1.36).DT(15.0,3.5).DW(30.0,0).DY(550).Du(340);
+		boot.P.b.EP(boot.BE.de).DB(421,90).DE(7.25,0.85).DH(250,46.0).DK(6.45,0.45).DN(58.0,3.3).DQ(0.694,2.13).DT(18.0,4.0).DW(30.0,0).DY(125).Du(335);
+		boot.P.b.EP(boot.BE.df).DB(444,86).DE(6.75,0.65).DH(199,36.0).DK(6.5,0.45).DN(55.12,3.1).DQ(0.679,2.98).DT(16.3,3.7).DW(30.0,1.25).DY(125).Du(355);
+		boot.P.b.EP(boot.BE.dg).DB(435,85).DE(5.1,0.65).DH(212,38.0).DK(6.95,0.65).DN(46.5,3.0).DQ(0.658,3.01).DT(15.0,3.0).DW(30.0,0).DY(550).Du(325);
+		boot.P.b.EP(boot.BE.dh).DB(421,80).DE(7.45,0.55).DN(51.7,3.5).DQ(0.694,3.0).DT(15.0,3.5).DW(30.0,1.25).DY(125).Du(340);
+		boot.P.b.EP(boot.BE.di).DB(403,86).DE(4.7,0.6).DH(240,60.0).DK(6.8,0.65).DN(51.58,3.5).DQ(0.579,1.53).DT(15.0,3.8).DW(30.0,0).DY(425).Du(335);
+		boot.P.b.EP(boot.BE.dj).DB(365,74).DE(4.5,45.0).DH(305,43.0).DK(6.9,0.6).DN(48.0,3.1).DQ(0.644,2.6).DT(9.0,4.0).DW(30.0,0).DY(550).Du(330);
+		boot.P.b.EP(boot.BE.dk).DB(410,90).DE(7.5,0.9).DH(200,45.0).DK(6.6,0.5).DN(53.3,3.5).DQ(0.638,3.48).DT(15.0,3.5).DW(30.0,1.25).DY(125).Du(350);
+		boot.P.b.EP(boot.BE.dl).DB(432,86).DE(7.45,0.55).DH(200,50.0).DK(7.45,0.7).DN(52.0,3.3).DQ(0.613,0.98).DT(12.0,3.25).DW(30.0,1.25).DY(175).Du(325);
+		boot.P.b.EP(boot.BE.dm).DB(370,90).DE(5.0,0.6).DH(220,45.0).DK(7.0,0.5).DN(49.0,3.5).DQ(0.672,3.22).DT(11.0,3.5).DW(30.0,10.75).DY(525).Du(335);
+		boot.P.b.EP(boot.BE.dn).DB(430,85).DE(7.0,0.75).DH(215,35.0).DK(6.0,0.45).DN(54.0,3.1).DQ(0.668,2.7).DT(17.0,3.5).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.dp).DB(437,108).DE(7.05,0.8).DH(213,42.0).DK(6.6,0.5).DN(51.6,3.4).DQ(0.625,2.25).DT(16.5,3.5).DW(30.0,1.25).DY(125).Du(340);
+		boot.P.b.EP(boot.BE.ea).DB(441,93).DE(7.0,0.9).DH(225,45.0).DK(6.5,0.575).DN(54.1,3.5).DQ(0.694,2.7).DT(17.0,3.0).DW(30.0,1.25).DY(125).Du(350);
+		boot.P.b.EP(boot.BE.eb).DB(385,79).DE(5.95,0.55).DH(250,50.0).DK(7.0,0.5).DN(44.0,2.6).DQ(0.658,3.5).DT(8.0,3.0).DW(30.0,0).DY(525).Du(325);
+		boot.P.b.EP(boot.BE.ec).DB(433,87).DE(6.75,0.65).DH(210,34.0).DK(6.6,0.45).DN(50.7,2.9).DQ(0.679,2.95).DT(17.1,3.9).DW(30.0,1.25).DY(155).Du(355);
+		boot.P.b.EP(boot.BE.ed).DB(423,81).DE(7.45,0.55).DH(185,30.0).DK(6.4,0.45).DN(56.3,3.375).DQ(0.638,3.35).DT(18.0,4.0).DW(30.0,0).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.ee).DB(420,86).DE(8.0,0.55).DH(255,33.0).DK(4.5,0.3).DN(50.0,3.5).DQ(0.625,2.22).DT(21.0,3.8).DW(30.0,1.25).DY(125).Du(335);
+		boot.P.b.EP(boot.BE.ef).DB(426,87).DE(6.7,0.75).DN(53.12,3.1).DQ(0.665,2.65).DT(15.2,3.8).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.eg).DB(435,85).DE(4.0,0.4).DN(55.0,3.0).DQ(0.679,2.85).DT(16.0,3.5).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.eh).DB(414,86).DE(10.4,0.9).DN(54.0,2.75).DQ(0.625,3.5).DT(15.0,3.1).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.ei).DB(450,80).DE(7.0,0.7).DN(55.32,3.2).DQ(0.644,1.85).DT(16.0,3.5).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.ej).DB(360,86).DE(4.35,0.55).DH(250,55.0).DK(7.0,0.6).DN(52.0,3.0).DQ(0.625,2.11).DT(11.0,3.9).DW(30.0,0).DY(550).Du(335);
+		boot.P.b.EP(boot.BE.ek).DB(450,85).DE(7.35,0.85).DH(220,40.0).DK(6.45,0.45).DN(54.0,3.4).DQ(0.67,1.45).DT(20.5,3.5).DW(30.0,1.25).DY(125).Du(340);
+		boot.P.b.EP(boot.BE.el).DB(441,84).DE(7.45,0.55).DH(270,40.0).DK(6.4,0.45).DN(51.7,3.5).DQ(0.694,3.0).DT(15.0,3.5).DW(30.0,1.25).DY(125).Du(350);
+		boot.P.b.EP(boot.BE.em).DB(428,85).DE(7.45,0.55).Dw(200).Dy(50).DN(54.5,3.375).DQ(0.651,3.4).DT(15.0,4.0).DW(30.0,0).DY(125).Du(335);
+		boot.P.b.EP(boot.BE.en).DB(435,95).DE(7.2,0.8).DN(54.5,3.4).DQ(0.658,3.4).DT(17.6,3.4).DW(30.0,1.25).DY(125).Du(350);
+		boot.P.b.EP(boot.BE.eo).DB(405,82).DE(7.1,0.55).DH(215,45.0).DK(6.6,0.55).DN(56.65,3.375).DQ(0.613,1.81).DT(18.0,3.5).DW(30.0,0).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.ep).DB(403,104).DE(7.9,0.95).DH(240,40.0).DK(6.3,0.4).DN(55.52,3.1875).DQ(0.625,1.63).DT(17.75,3.25).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.fa).DB(378,82).DE(4.25,0.55).DH(203,43.0).DK(6.5,0.5).DN(49.0,2.9).DQ(0.658,3.28).DT(12.75,3.25).DW(30.0,0).DY(500).Du(335);
+		boot.P.b.EP(boot.BE.fb).DB(440,96).DE(7.5,0.85).DH(205,40.0).DK(6.45,0.45).DN(54.1,4.2).DQ(0.625,2.1).DT(19.0,3.8).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.fc).DB(340,70).DE(4.5,0.55).DH(265,45.0).DK(7.0,0.65).DN(47.0,3.0).DQ(0.644,2.3).DT(6.0,3.3).DW(30.0,0).DY(550).Du(330);
+		boot.P.b.EP(boot.BE.fd).DB(375,71).DE(4.5,0.55).DH(240,60.0).DK(6.8,0.65).DN(48.8,3.0).DQ(0.625,2.14).DT(7.4,3.8).DW(30.0,0).DY(550).Du(335);
+		boot.P.b.EP(boot.BE.fe).DB(385,78).DE(6.75,0.65).DH(240,50.0).DK(6.8,0.65).DN(49.0,3.0).DQ(0.625,2.11).DT(12.0,4.0).DW(30.0,0).DY(500).Du(335);
+		boot.P.b.EP(boot.BE.ff).DB(380,78).DE(5.5,0.6).DH(250,50.0).DK(6.9,0.6).DN(51.0,2.9).DQ(0.625,2.0).DT(15.0,3.4).DW(30.0,0).DY(550).Du(330);
+		boot.P.b.EP(boot.BE.fg).DB(440,85).DE(7.25,0.75).DH(260,40.0).DK(6.75,0.5).DN(50.0,3.1).DQ(0.668,2.7).DT(17.0,3.5).DW(30.0,1.25).DY(125).Du(350);
+		boot.P.b.EP(boot.BE.fh).DB(468,90).DE(7.1,0.5).DH(255,56.0).DK(4.1,0.4).DN(58.0,3.5).DQ(0.625,2.02).DT(16.5,3.2).DW(30.0,1.25).DY(125).Du(340);
+		boot.P.b.EP(boot.BE.fi).DB(383,82).DE(4.65,0.65).DH(200,40.0).DK(6.45,0.45).DN(44.5,3.0).DQ(0.69,3.38).DT(14.0,3.75).DW(30.0,0).DY(500).Du(330);
+		boot.P.b.EP(boot.BE.fj).DB(415,82).DE(5.1,0.65).DH(193,32.0).DK(6.45,0.45).DN(46.5,3.0).DQ(0.658,3.01).DT(15.0,3.0).DW(30.0,0).DY(550).Du(325);
+		boot.P.b.EP(boot.BE.fk).DB(455,96).DE(8.0,0.85).DH(206,45.0).DK(6.9,0.6).DN(54.66,3.0).DQ(0.672,2.9).DT(19.0,2.7).DW(30.0,1.25).DY(125).Du(350);
+		boot.P.b.EP(boot.BE.fl).DB(461,98).DE(7.9,0.9).DN(56.0,3.2).DQ(0.644,2.9).DT(14.9,3.1).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.fm).DB(384,82).DE(4.5,0.6).DH(202,38.0).DK(6.5,0.5).DN(46.61,3.3).DQ(0.651,3.22).DT(111.25,3.15).DW(30.0,0).DY(525).Du(330);
+		boot.P.b.EP(boot.BE.fn).DB(389,81).DE(5.0,0.6).DH(220,40.0).DK(6.5,0.45).DN(49.0,3.0).DQ(0.679,3.38).DT(14.0,3.0).DW(30.0,0).DY(550).Du(330);
+		boot.P.b.EP(boot.BE.fo).DB(427,99).DE(7.45,0.75).DH(220,30.0).DK(6.4,0.45).DN(52.91,3.2).DQ(0.658,2.67).DT(14.75,4.0).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.fp).DB(437,89).DE(5.5,0.6).DH(220,55.0).DK(7.5,0.65).DN(48.0,3.6).DQ(0.644,2.9).DT(15.0,3.3).DW(30.0,0).DY(425).Du(335);
+		boot.P.b.EP(boot.BE.ga).DB(400,82).DE(4.5,0.55).DH(250,36.0).DK(6.5,0.5).DN(46.0,3.0).DQ(0.658,2.65).DT(13.5,3.4).DW(30.0,0).DY(575).Du(335);
+		boot.P.b.EP(boot.BE.gb).DB(359,83).DE(4.5,0.55).DH(173,27.0).DK(6.3,0.4).DN(50.0,3.25).DQ(0.658,3.1).DT(9.3,3.4).DW(30.0,0).DY(550).Du(330);
+		boot.P.b.EP(boot.BE.gc).DB(355,82).DE(4.5,0.55).DH(250,55.0).DK(6.9,0.6).DN(48.3,2.625).DQ(0.625,2.24).DT(12.25,3.75).DW(30.0,0).DY(525).Du(340);
+		boot.P.b.EP(boot.BE.gd).DB(440,85).DE(7.5,0.9).DH(220,45.0).DK(7.0,0.65).DN(55.0,3.5).DQ(0.643,2.5).DT(16.0,3.5).DW(30.0,1.25).DY(125).Du(350);
+		boot.P.b.EP(boot.BE.ge).DB(385,78).DE(6.75,0.65).DH(240,50.0).DK(6.9,0.45).DN(49.0,3.0).DQ(0.625,2.11).DT(12.0,4.0).DW(30.0,0).DY(525).Du(335);
+		boot.P.b.EP(boot.BE.gf).DB(400,85).DE(6.0,0.6).DN(45.0,3.0).DQ(0.6258,2.0).DT(12.0,3.5).DW(30.0,0).DY(450).Du(335);
+		boot.P.b.EP(boot.BE.gg).DB(440,86).DE(7.0,0.65).DH(220,30.0).DK(7.0,0.65).DN(54.0,3.3).DQ(0.625,2.9).DT(16.5,3.5).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.gh).DB(428,98).DE(7.05,0.8).DH(190,30.0).DK(7.1,0.6).DN(56.76,3.375).DQ(0.679,2.88).DT(16.0,3.5).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.gi).DB(435,85).DE(5.1,0.65).DH(202,38.0).DK(6.9,0.65).DN(54.0,3.2).DQ(0.658,3.0).DT(15.0,3.5).DW(30.0,1.25).DY(175).Du(345);
+		boot.P.b.EP(boot.BE.gj).DB(380,80).DE(5.0,0.55).DH(250,45.0).DK(8.0,0.6).DN(52.0,3.0).DQ(0.625,1.36).DT(12.6,3.4).DW(30.0,0).DY(550).Du(340);
+		boot.P.b.EP(boot.BE.gk).DB(445,87).DE(7.0,0.7).DH(213,31.0).DK(6.6,0.45).DN(52.0,3.3).DQ(0.672,2.7).DT(16.2,3.7).DW(30.0,1.25).DY(175).Du(345);
+		boot.P.b.EP(boot.BE.gl).DB(421,85).DE(8.5,0.7).DH(235,35.0).DK(6.5,0.45).DN(51.5,3.5).DQ(0.625,3.0).DT(18.0,3.6).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.gm).DB(445,85).DE(6.0,0.65).Dw(20).Dy(50).DN(48.6,3.4).DQ(0.658,3.1).DT(17.5,3.5).DW(30.0,1.25).DY(125).Du(345);
+		boot.P.b.EP(boot.BE.gn).DB(390,80).DE(5.25,0.6).DH(250,50.0).DK(6.75,0.6).DN(54.0,3.1).DQ(0.656,1.7).DT(12.0,3.3).DW(30.0,0).DY(575).Du(330);
+		boot.P.b.EP(boot.BE.go).DB(380,71).DE(4.6,0.5).DH(260,60.0).DK(6.95,0.65).DN(48.6,3.0).DQ(0.625,2.13).DT(6.75,3.8).DW(30.0,0).DY(600).Du(335);
+		boot.P.b.EP(boot.BE.gp).DB(355,74).DE(4.85,0.5).DH(250,50.0).DK(7.1,0.75).DN(50.0,3.2).DQ(0.625,1.8).DT(11.0,3.0).DW(30.0,0).DY(575).Du(325);
+		boot.P.c=new boot.P(1520,2012,12,3,"Preseason 3",boot.P.b,0);
+		boot.P.c.EK("Shard of True Ice");
+		boot.P.c.EK("Liandry's Torment");
+		boot.P.c.EK("Haunting Guise");
+		boot.P.a=boot.P.c;
 	},
 	// teemowork.model.Patch#<init>(int, int, int, int, java.lang.String, teemowork.model.Patch)
 	$0:function(A,B,C,D,E,F){
-		this.d=new boot.BK(0);
-		this.e=new boot.BK(0);
+		this.d=new boot.BJ(0);
+		this.e=new boot.BJ(0);
 		this.f=A;
 		this.g=E;
 		this.h=F;
 	},
 	// teemowork.model.Patch#updateItem(java.lang.String)
-	ER:function(A,B){
-		B=new boot.Bv(A,this,0);
-		this.e.CS(A,B);
+	EK:function(A,B){
+		B=new boot.Bu(A,this,0);
+		this.e.CM(A,B);
 		return B;
 	},
 	// teemowork.model.Patch#update(teemowork.model.Champion)
-	EV:function(A){
-		A.hb=new boot.BI(this,A.hb,0);
+	EP:function(A){
+		A.hb=new boot.BH(this,A.hb,0);
 		return A.hb;
 	}
 });
@@ -1995,33 +2004,36 @@ boot.define("B","C",{
 		boot.C.prototype.$0.call(this);
 	},
 	// teemowork.Teemowork#jsmain()
-	A:function(A,B){
-		this.D(boot.K.$);
-		this.D(boot.L.$);
+	A:function(A,B,C,D,E){
+		A=[1,2,3];
+		E=A;D=E.length;C=0;
+		l2:for (;
+		C<D;
+		++C) {
+			B=E[C];
+			console.log(B);
+		}C=boot.find(boot.J.$).K();
+		l7:for (;
+		C.M()!=0;
+		console.log(B)) {
+			B=C.L();
+		}this.D(boot.L.$);
+		this.D(boot.M.$);
 		boot.C.prototype.A.call(this);
 		$("body").css("padding","0px 10%");
-		A=new boot.M(0);
-		A.K("< ^ v ^ > Teemowork","test.html");
-		A.K("Patch","#");
-		B=A.K("Data","#");
-		B.K("Champion","#");
-		B.K("Item","#");
-		B.K("Mastery","#");
-		B.K("Rune","#");
-		A.K("Builder","#");
-		A.K("About","#");
-		A.K("Contact","#");
-		console.log(boot.O.a);
-	},
-	// teemowork.Teemowork#test()
-	L:function(){
-		console.log("called");
+		B=new boot.N(0);
+		B.N("< ^ v ^ > Teemowork","test.html");
+		B.N("Patch","#");
+		C=B.N("Data","#");
+		C.N("Champion","#");
+		C.N("Item","#");
+		C.N("Mastery","#");
+		C.N("Rune","#");
+		B.N("Builder","#");
+		B.N("About","#");
+		B.N("Contact","#");
+		console.log(boot.P.a);
 	}
-},{
-	"$":[["P",{
-		M:function() {return true;},N:function() {return 10;},O:function() {return 10;},P:function() {return 4;},Q:function() {return 10;},R:function() {return 10.0;},S:function() {return 10.0;}
-	}]],"L":[["Q",{
-	}]]
 });
 
 try {new boot.B(0).A();} catch(e) {console.log(e)}

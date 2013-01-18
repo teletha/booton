@@ -72,6 +72,7 @@ function boot(global) {
   // Array Extensions
   //====================================================================
 
+
   //====================================================================
   // WebSocket Extensions
   //====================================================================
@@ -136,47 +137,7 @@ function boot(global) {
       return this.$.$;
     }
   });
-  
-  //====================================================================
-  // Class Extensions
-  //====================================================================
-  var Clazz = {
-    /**
-     * Actual class name.
-     */
-    $Name: name,
-    
-    /**
-     * Create new instatnce of this class.
-     *
-     * @param id A constructor id.
-     * @param args An array of arguments.
-     * @return A created instance.
-     */
-    newInstance: function(id, args) {
-      args = args || [];
-      args.push(id);
 
-      var instance = Object.create(this.prototype);
-      this.apply(instance, args);
-      return instance;
-    },
-
-    getMethods: function() {
-      var methods = [];
-      var that = this.prototype;
-      
-      Object.keys(that).forEach(function(name) {
-        var property = that[name];
-          
-        if (!name.startsWith("$") && jQuery.isFunction(property)) {
-          methods.push(property);
-        }
-      });
-
-      return methods;
-    }
-  };
 
   //====================================================================
   // ECMAScript6 Extensions
@@ -242,12 +203,22 @@ function boot(global) {
       // class can't be defined at first.
       var metadata;
       
+      // "Class" variable (js function) can't directly have functionalities of
+      // (Java) Class class. "Class" variable directly has static methods of the
+      // defiend class, if there is method name confliction between these and the
+      // instance methods of (java) Class class, we can't resolve it correctly.
       Object.defineProperty(Class, "$", {
         get: function() {
           if (!metadata) {
-            metadata = new boot.A(name, prototype, annotation || {}, 0)
+            metadata = new boot.A(name, prototype, annotation || {}, superclass.$, 0)
           }
           return metadata;
+        }
+      });
+      
+      Object.defineProperty(Class, "toString", {
+        value: function() {
+          return "Class " + name;
         }
       });
 
@@ -273,6 +244,12 @@ function boot(global) {
       if (global[name]) {
         define(global[name].prototype, properties);
       }
+    },
+    
+    find: function(type) {
+      Object.keys(boot).forEach(function(name) {
+        console.log(boot[name].$ instanceof type.$);
+      });
     }
   });
 }

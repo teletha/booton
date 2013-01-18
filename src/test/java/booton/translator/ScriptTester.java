@@ -36,6 +36,7 @@ import org.objectweb.asm.Type;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.WebConsole.Logger;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 /**
@@ -63,6 +64,59 @@ public class ScriptTester {
         try {
             // build client
             WebClient client = new WebClient(BrowserVersion.FIREFOX_10);
+            client.getWebConsole().setLogger(new Logger() {
+
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                public void warn(Object message) {
+                    log(message);
+                }
+
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                public void trace(Object message) {
+                    log(message);
+                }
+
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                public void info(Object message) {
+                    log(message);
+                }
+
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                public void error(Object message) {
+                    log(message);
+                }
+
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                public void debug(Object message) {
+                    log(message);
+                }
+
+                /**
+                 * <p>
+                 * Rewrite console message to {@link System.out}.
+                 * </p>
+                 * 
+                 * @param message
+                 */
+                private void log(Object message) {
+                    System.out.println(message);
+                }
+            });
 
             // build dummy page
             HtmlPage dummy = (HtmlPage) client.getPage(I.locate("src/test/resources/empty.html").toUri().toURL());

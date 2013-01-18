@@ -11,15 +11,15 @@ package teemowork;
 
 import static booton.translator.web.WebSupport.*;
 import js.Application;
+import js.Page;
 import js.application.Header;
 import js.application.Header.Menu;
+import js.lang.Classes;
 import teemowork.model.Patch;
-import booton.translator.annotation.PrimitiveMarker;
 
 /**
  * @version 2012/12/11 14:23:57
  */
-@PrimitiveMarker(intValue = 4)
 public class Teemowork extends Application {
 
     /**
@@ -27,6 +27,10 @@ public class Teemowork extends Application {
      */
     @Override
     public void jsmain() {
+        for (Class clazz : Classes.find(Page.class)) {
+            System.out.println(clazz);
+        }
+
         register(ChampionDetail.class);
         register(ChampionSelect.class);
 
@@ -49,28 +53,5 @@ public class Teemowork extends Application {
         nav.add("Contact", "#");
 
         System.out.println(Patch.Latest);
-        //
-        // Class<?> clazz = ChampionDetail.class;
-        //
-        // for (Constructor constructor : clazz.getConstructors()) {
-        // System.out.println(constructor);
-        // System.out.println(constructor.isAnnotationPresent(PageInfo.class));
-        // }
-
-        // System.out.println(clazz.getSimpleName());
-        //
-        // for (Method method : clazz.getMethods()) {
-        // System.out.println(method.getName() + "   @");
-        //
-        // if (method.isAnnotationPresent(Deprecated.class)) {
-        // System.out.println(method.getName() + "   annotated");
-        //
-        // }
-        // }
-    }
-
-    @Deprecated
-    public void test() {
-        System.out.println("called");
     }
 }
