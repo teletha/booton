@@ -4,5 +4,8 @@ target
 \.classpath
 \.project
 \.factorypath
-syntax: glob
-test.*
+syntax: regexp
+^test\.js$
+^test\.css$
+^test\.html$
+^live\.js$
