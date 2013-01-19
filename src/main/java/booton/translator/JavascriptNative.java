@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,7 +10,7 @@
 package booton.translator;
 
 /**
- * @version 2012/12/03 0:30:19
+ * @version 2013/01/19 9:33:04
  */
 public interface JavascriptNative {
 }
