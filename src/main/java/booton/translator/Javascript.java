@@ -160,10 +160,11 @@ public class Javascript {
      * </p>
      * 
      * @param outout A script output.
+     * @param requirements A list of required script classes.
      */
-    public void writeTo(Path output) {
+    public void writeTo(Path output, Class... requirements) {
         try {
-            writeTo(Files.newBufferedWriter(output, I.$encoding));
+            writeTo(Files.newBufferedWriter(output, I.$encoding), requirements);
         } catch (IOException e) {
             throw I.quiet(e);
         }
@@ -176,9 +177,16 @@ public class Javascript {
      * </p>
      * 
      * @param outout A script output.
+     * @param requirements A list of required script classes.
      */
-    public void writeTo(Appendable output) {
+    public void writeTo(Appendable output, Class... requirements) {
         require(Class.class);
+
+        if (requirements != null) {
+            for (Class requirement : requirements) {
+                require(requirement);
+            }
+        }
 
         // Record all defined classes to prevent duplicated definition.
         write(output, new HashSet(Collections.singleton(source)));

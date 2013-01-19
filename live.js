@@ -1,17 +1,17 @@
-boot.define("R","",{
+boot.define("P","",{
 	
-	// booton.translator.js.JSAnnotatedElement#<init>(java.lang.String, booton.translator.js.NativeArray)
+	// js.lang.reflect.JSAnnotatedElement#<init>(java.lang.String, js.lang.NativeArray)
 	$0:function(A,B){
 		{};
 		this.a=A;
 		this.b=B;
 	},
-	// booton.translator.js.JSAnnotatedElement#isAnnotationPresent(java.lang.Class)
-	Q:function(A){
-		return this.F(A)!=null;
+	// js.lang.reflect.JSAnnotatedElement#isAnnotationPresent(java.lang.Class)
+	O:function(A){
+		return this.E(A)!=null;
 	},
-	// booton.translator.js.JSAnnotatedElement#getAnnotation(java.lang.Class)
-	F:function(A,B,C){
+	// js.lang.reflect.JSAnnotatedElement#getAnnotation(java.lang.Class)
+	E:function(A,B,C){
 		if(this.b==null){
 		}else{
 			B=0;
@@ -19,92 +19,108 @@ boot.define("R","",{
 			B<this.b.length;
 			++B) {
 				C=this.b[B];
-				if(C[0].equals(A.R())==0){
+				if(C[0].equals(A.P())==0){
 				}else{
 					return C[1];
 				}
 			}
 		}return null;
 	},
-	// booton.translator.js.JSAnnotatedElement#getAnnotations()
-	S:function(){
+	// js.lang.reflect.JSAnnotatedElement#getAnnotations()
+	Q:function(){
 		return null;
 	},
-	// booton.translator.js.JSAnnotatedElement#getDeclaredAnnotations()
-	T:function(){
-		return this.S();
+	// js.lang.reflect.JSAnnotatedElement#getDeclaredAnnotations()
+	R:function(){
+		return this.Q();
 	}
+},{
+	"$":[["Q",{
+		S:function() {return boot.R.$;}
+	}]]
 });
 
-boot.define("G","R",{
+boot.define("K","P",{
 	
-	// booton.translator.js.JSConstructor#<init>(java.lang.String, booton.translator.js.NativeObject, booton.translator.js.NativeFunction, booton.translator.js.NativeArray)
+	// js.lang.reflect.JSConstructor#<init>(java.lang.String, js.lang.NativeObject, js.lang.NativeFunction, js.lang.NativeArray)
 	$0:function(A,B,C,D){
-		boot.R.prototype.$0.call(this,A,D);
+		boot.P.prototype.$0.call(this,A,D);
 		this.c=B;
 		this.d=C;
 	},
-	// booton.translator.js.JSConstructor#newInstance(java.lang.Object[])
-	u:function(A,B){
+	// js.lang.reflect.JSConstructor#newInstance(java.lang.Object[])
+	Z:function(A,B){
 		B=Object.create(this.c);
 		this.d.apply(B,A);
 		return B;
 	}
+},{
+	"$":[["Q",{
+		S:function() {return boot.K.$;}
+	}]]
 });
 
-boot.define("S","R",{
+boot.define("S","P",{
 	
-	// booton.translator.js.JSMethod#<init>(java.lang.String, booton.translator.js.NativeObject, booton.translator.js.NativeFunction, booton.translator.js.NativeArray)
+	// js.lang.reflect.JSMethod#<init>(java.lang.String, js.lang.NativeObject, js.lang.NativeFunction, js.lang.NativeArray)
 	$0:function(A,B,C,D){
-		boot.R.prototype.$0.call(this,A,D);
+		boot.P.prototype.$0.call(this,A,D);
 		this.c=B;
 		this.d=C;
 	}
+},{
+	"$":[["Q",{
+		S:function() {return boot.S.$;}
+	}]]
 });
 
 boot.define("V","",{
 	
-	// booton.translator.Javascript$ThrowableReplacement#<init>()
+	// js.lang.JSThrowable#<init>()
 	$0:function(){
 		boot.V.prototype.$1.call(this,"",null);
 	},
-	// booton.translator.Javascript$ThrowableReplacement#<init>(java.lang.String)
+	// js.lang.JSThrowable#<init>(java.lang.String)
 	$2:function(A){
 		boot.V.prototype.$1.call(this,A,null);
 	},
-	// booton.translator.Javascript$ThrowableReplacement#<init>(java.lang.Throwable)
+	// js.lang.JSThrowable#<init>(java.lang.Throwable)
 	$3:function(A){
 		boot.V.prototype.$1.call(this,"",A);
 	},
-	// booton.translator.Javascript$ThrowableReplacement#<init>(java.lang.String, java.lang.Throwable)
+	// js.lang.JSThrowable#<init>(java.lang.String, java.lang.Throwable)
 	$1:function(A,B){
 		this.a=A;
 		this.b=B;
 	},
-	// booton.translator.Javascript$ThrowableReplacement#<init>(java.lang.String, java.lang.Throwable, boolean, boolean)
+	// js.lang.JSThrowable#<init>(java.lang.String, java.lang.Throwable, boolean, boolean)
 	$4:function(A,B,C,D){
 		boot.V.prototype.$1.call(this,A,B);
 	},
-	// booton.translator.Javascript$ThrowableReplacement#getMessage()
+	// js.lang.JSThrowable#getMessage()
+	w:function(){
+		return this.a;
+	},
+	// js.lang.JSThrowable#getLocalizedMessage()
 	x:function(){
 		return this.a;
 	},
-	// booton.translator.Javascript$ThrowableReplacement#getLocalizedMessage()
+	// js.lang.JSThrowable#getCause()
 	y:function(){
-		return this.a;
-	},
-	// booton.translator.Javascript$ThrowableReplacement#getCause()
-	z:function(){
 		return this.b;
 	},
-	// booton.translator.Javascript$ThrowableReplacement#toString()
+	// js.lang.JSThrowable#toString()
 	toString:function(){
 		return this.a;
 	},
-	// booton.translator.Javascript$ThrowableReplacement#printStackTrace()
-	BA:function(){
+	// js.lang.JSThrowable#printStackTrace()
+	z:function(){
 		console.log(this.a);
 	}
+},{
+	"$":[["Q",{
+		S:function() {return boot.V.$;}
+	}]]
 });
 
 boot.define("U","V",{
@@ -131,29 +147,42 @@ boot.define("U","V",{
 	}
 });
 
-boot.define("A","R",{
+boot.define("A","P",{
 	
-	// booton.translator.js.JSClass#<init>(java.lang.String, booton.translator.js.NativeObject, booton.translator.js.NativeObject, booton.translator.js.JSClass)
+	// js.lang.reflect.JSClass#<init>(java.lang.String, js.lang.NativeObject, js.lang.NativeObject, js.lang.reflect.JSClass)
 	$0:function(A,B,C,D){
-		boot.R.prototype.$0.call(this,A,C["$"]);
+		boot.P.prototype.$0.call(this,A,C["$"]);
 		this.c=B;
 		this.d=C;
 		this.e=D;
 	},
-	// booton.translator.js.JSClass#getConstructors()
-	E:function(A,B,C,D,E){
+	// js.lang.reflect.JSClass#getConstructors()
+	D:function(A,B,C,D,E){
 		A=[];
 		E=Object.keys(this.c);D=E.length;C=0;
 		l2:while (C<D) {
 			B=E[C];
 			if(B.startsWith("$")==0){
 			}else{
-				A.push(new boot.G(B,this.c,this.c[B],this.d[B],0));
+				A.push(new boot.K(B,this.c,this.c[B],this.d[B],0));
 			}++C;
 			continue l2;
 		}return A;
 	},
-	// booton.translator.js.JSClass#getMethods()
+	// js.lang.reflect.JSClass#getMethods()
+	T:function(A,B,C,D,E){
+		A=[];
+		E=Object.keys(this.c);D=E.length;C=0;
+		l2:while (C<D) {
+			B=E[C];
+			if(B.startsWith("$")!=0){
+			}else{
+				A.push(new boot.S(B,this.c,this.c[B],this.d[B],0));
+			}++C;
+			continue l2;
+		}return A;
+	},
+	// js.lang.reflect.JSClass#getDeclaredMethods()
 	U:function(A,B,C,D,E){
 		A=[];
 		E=Object.keys(this.c);D=E.length;C=0;
@@ -166,63 +195,54 @@ boot.define("A","R",{
 			continue l2;
 		}return A;
 	},
-	// booton.translator.js.JSClass#getDeclaredMethods()
-	V:function(A,B,C,D,E){
-		A=[];
-		E=Object.keys(this.c);D=E.length;C=0;
-		l2:while (C<D) {
-			B=E[C];
-			if(B.startsWith("$")!=0){
-			}else{
-				A.push(new boot.S(B,this.c,this.c[B],this.d[B],0));
-			}++C;
-			continue l2;
-		}return A;
-	},
-	// booton.translator.js.JSClass#isAssignableFrom(java.lang.Class)
-	W:function(A){
+	// js.lang.reflect.JSClass#isAssignableFrom(java.lang.Class)
+	V:function(A){
 		l1:for (;
 		A!=null;
-		A=A.X()) {
+		A=A.W()) {
 			if(this!=A){
 			}else{
 				return true;
 			}
 		}return false;
 	},
-	// booton.translator.js.JSClass#getSuperclass()
-	X:function(){
+	// js.lang.reflect.JSClass#getSuperclass()
+	W:function(){
 		return this.e;
 	},
-	// booton.translator.js.JSClass#getName()
-	Y:function(){
+	// js.lang.reflect.JSClass#getName()
+	X:function(){
 		return "boot."+this.a;
 	},
-	// booton.translator.js.JSClass#getSimpleName()
-	R:function(){
+	// js.lang.reflect.JSClass#getSimpleName()
+	P:function(){
 		return this.a;
 	},
-	// booton.translator.js.JSClass#newInstance()
-	Z:function(A){
+	// js.lang.reflect.JSClass#newInstance()
+	Y:function(A){
 		try{
-			return this.E()[0].u(new Array(0));
+			return this.D()[0].Z(new Array(0));
 		} catch ($) {
 			if ($ instanceof boot.T) {
 				throw new boot.U(A,0);
 			}
 		}
 	},
-	// booton.translator.js.JSClass#getConstructor()
-	v:function(){
+	// js.lang.reflect.JSClass#getConstructor()
+	u:function(){
 		return null;
 	},
-	// booton.translator.js.JSClass#forName(java.lang.String)
-	_w:function(A){
+	// js.lang.reflect.JSClass#forName(java.lang.String)
+	_v:function(A){
 		return null;
 	}
+},{
+	"$":[["Q",{
+		S:function() {return boot.A.$;}
+	}]]
 });
 
-boot.define("Bx","",{
+boot.define("CA","",{
 	
 	// booton.live.LiveCoding$1#<init>()
 	$0:function(){
@@ -243,7 +263,7 @@ boot.defineNative("Document",{
 		return this.createElement(A);
 	}
 });
-boot.define("BD","",{
+boot.define("BK","",{
 	
 	// js.util.jQuery$1#<init>(js.util.jQuery)
 	$0:function(A){
@@ -251,19 +271,19 @@ boot.define("BD","",{
 		this.b=0;
 	},
 	// js.util.jQuery$1#hasNext()
-	O:function(){
+	H:function(){
 		return this.b<this.a.size();
 	},
 	// js.util.jQuery$1#next()
-	CE:function(){
+	CN:function(){
 		return $(this.a.get(this.b++));
 	},
 	// js.util.jQuery$1#remove()
-	Bw:function(){
+	CK:function(){
 	},
 	// js.util.jQuery$1#next()
-	N:function(){
-		return this.CE();
+	C:function(){
+		return this.CN();
 	}
 });
 
@@ -273,33 +293,33 @@ boot.defineNative("jQuery",{
 	$0:function(){
 	},
 	// js.util.jQuery#child(java.lang.String)
-	CC:function(A){
+	CM:function(A){
 		return $(document.createElement(A)).appendTo(this);
 	},
 	// js.util.jQuery#child(java.lang.Class)
-	CD:function(A){
-		return this.CC("span").addClass(A);
+	BC:function(A){
+		return this.CM("span").addClass(A);
 	},
 	// js.util.jQuery#iterator()
-	M:function(){
-		return new boot.BD(this,0);
+	B:function(){
+		return new boot.BK(this,0);
 	}
 });
-boot.define("CA","",{
+boot.define("CC","",{
 	
 	// js.dom.Window#<init>()
 	$0:function(){
 	}
 });
 
-boot.define("x","",{
+boot.define("BY","",{
 	
 	// js.dom.Location#<init>()
 	$0:function(){
 	}
 });
 
-boot.define("CB","",{
+boot.define("CD","",{
 	
 	// js.net.WebSocket#<init>()
 	$0:function(){
@@ -312,11 +332,11 @@ boot.defineNative("MessageEvent",{
 	$0:function(){
 	}
 });
-boot.define("Bz","CB",{
+boot.define("CB","CD",{
 	
 	// booton.live.LiveCoding$2#<init>()
 	$0:function(){
-		boot.CB.prototype.$0.call(this);
+		boot.CD.prototype.$0.call(this);
 	},
 	// booton.live.LiveCoding$2#message(js.net.WebSocket$MessageEvent)
 	message:function(A,B){
@@ -329,16 +349,16 @@ boot.define("Bz","CB",{
 	}
 });
 
-boot.define("Bw","",{
+boot.define("Bz","",{
 	
 	// booton.live.LiveCoding#<init>()
 	$0:function(){
 	},
 	// booton.live.LiveCoding#jsmain()
-	_A:function(){
-		$(window).on("error",new boot.Bx(0));
-		WebSocket.connect("ws://localhost:10021/live"+window.location.pathname,new boot.Bz(0));
+	_M:function(){
+		$(window).on("error",new boot.CA(0));
+		WebSocket.connect("ws://localhost:10021/live"+window.location.pathname,new boot.CB(0));
 	}
 });
 
-try {boot.Bw.A();} catch(e) {console.log(e)}
+try {boot.Bz.M();} catch(e) {console.log(e)}

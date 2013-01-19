@@ -10,16 +10,14 @@
 package booton;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.net.ServerSocket;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import js.Application;
 import js.Page;
-import js.PageInfo;
 import js.application.ApplicationTheme;
 import kiss.ClassListener;
 import kiss.I;
@@ -165,9 +163,6 @@ public class Booton {
         // load application extensions
         I.load(application, true);
 
-        // invoke annotation processor
-        I.make(PageManager.class).build();
-
         Path mutex = root.resolve(BuildPhase);
 
         try {
@@ -178,7 +173,7 @@ public class Booton {
             buildHTML();
 
             // build js file
-            Javascript.getScript(application).writeTo(js);
+            Javascript.getScript(application).writeTo(js, PageManager.getPages());
 
             // Don't build live coding script out of build process, because all scripts must share
             // compiled and obfuscated class information.
@@ -234,55 +229,20 @@ public class Booton {
     }
 
     /**
-     * @version 2013/01/09 21:45:58
+     * @version 2013/01/19 10:56:11
      */
     @Manageable(lifestyle = Singleton.class)
     private static class PageManager implements ClassListener<Page> {
 
         /** The pages. */
-        private final Map<String, Class<Page>> pages = new HashMap();
-
-        /**
-         * <p>
-         * Build routing file.
-         * </p>
-         */
-        private void build() {
-
-        }
+        private static final List<Class<Page>> pages = new ArrayList();
 
         /**
          * {@inheritDoc}
          */
         @Override
         public void load(Class<Page> clazz) {
-            // validate class
-            PageInfo info = clazz.getAnnotation(PageInfo.class);
-
-            if (info == null) {
-                for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
-                    info = constructor.getAnnotation(PageInfo.class);
-
-                    if (info != null) {
-                        break;
-                    }
-                }
-
-                if (info == null) {
-                    throw new Error(Page.class.getSimpleName() + " class requires " + PageInfo.class.getSimpleName() + " annotation. [" + clazz.getName() + "]");
-                }
-            }
-
-            // validate path info
-            String path = info.path();
-
-            if (path == null) {
-                path = "";
-            }
-            path = path.trim();
-
-            // register
-            pages.put(path, clazz);
+            pages.add(clazz);
         }
 
         /**
@@ -290,6 +250,14 @@ public class Booton {
          */
         @Override
         public void unload(Class<Page> clazz) {
+            pages.remove(clazz);
+        }
+
+        /**
+         * @return
+         */
+        private static Class[] getPages() {
+            return pages.toArray(new Class[pages.size()]);
         }
     }
 }

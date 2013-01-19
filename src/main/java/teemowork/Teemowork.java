@@ -11,10 +11,8 @@ package teemowork;
 
 import static js.lang.Global.*;
 import js.Application;
-import js.Page;
 import js.application.Header;
 import js.application.Header.Menu;
-import js.lang.Classes;
 import teemowork.model.Patch;
 
 /**
@@ -26,22 +24,7 @@ public class Teemowork extends Application {
      * {@inheritDoc}
      */
     @Override
-    protected void register() {
-        // register(ChampionDetail.class);
-        // register(ChampionSelect.class);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void jsmain() {
-        for (Class clazz : Classes.find(Page.class)) {
-            register(clazz);
-        }
-
-        super.jsmain();
-
         $("body").css("padding", "0px 10%");
 
         Header nav = new Header();

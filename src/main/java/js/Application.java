@@ -17,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import js.application.Header;
+import js.lang.Classes;
 import js.util.ArrayList;
 import js.util.jQuery;
 import js.util.jQuery.Event;
@@ -32,20 +33,36 @@ public abstract class Application {
 
     /**
      * <p>
-     * Register {@link Page}.
+     * Initialize application.
      * </p>
      */
-    protected abstract void register();
+    protected Application() {
+        // Collect all pages and register it.
+        for (Class page : Classes.find(Page.class)) {
+            Constructor<?>[] constructors = page.getConstructors();
+
+            for (int i = 0; i < constructors.length; i++) {
+                PageInfo info = constructors[i].getAnnotation(PageInfo.class);
+
+                if (info != null) {
+                    router.routes.add(new Route(constructors[i], info));
+                }
+            }
+        }
+
+        // Activate router system.
+        $(window).on("hashchange", router);
+
+        // View initial page by URL.
+        router.dispatch(location.hash);
+    }
 
     /**
      * <p>
      * Entry point for this application.
      * </p>
      */
-    public void jsmain() {
-        $(window).on("hashchange", router);
-        router.dispatch(location.hash);
-    }
+    public abstract void jsmain();
 
     /**
      * <p>
@@ -55,25 +72,6 @@ public abstract class Application {
      * @param header
      */
     protected void configure(Header header) {
-    }
-
-    /**
-     * <p>
-     * Register page.
-     * </p>
-     * 
-     * @param page
-     */
-    protected final void register(Class<? extends Page> page) {
-        Constructor<?>[] constructors = page.getConstructors();
-
-        for (int i = 0; i < constructors.length; i++) {
-            PageInfo info = constructors[i].getAnnotation(PageInfo.class);
-
-            if (info != null) {
-                router.routes.add(new Route(constructors[i], info));
-            }
-        }
     }
 
     /**
