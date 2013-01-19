@@ -9,9 +9,9 @@
  */
 package teemowork;
 
-import js.Observable;
-import js.Page;
-import js.PageInfo;
+import js.application.Page;
+import js.application.PageInfo;
+import js.bind.Observable;
 import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;

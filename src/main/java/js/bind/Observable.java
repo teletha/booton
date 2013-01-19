@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js;
+package js.bind;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

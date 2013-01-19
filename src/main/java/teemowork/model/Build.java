@@ -9,7 +9,7 @@
  */
 package teemowork.model;
 
-import js.Observable;
+import js.bind.Observable;
 
 /**
  * @version 2013/01/16 9:18:22

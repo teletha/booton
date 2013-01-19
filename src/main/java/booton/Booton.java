@@ -16,9 +16,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import js.Application;
-import js.Page;
+import js.application.Application;
 import js.application.ApplicationTheme;
+import js.application.Page;
 import kiss.ClassListener;
 import kiss.I;
 import kiss.Manageable;
@@ -37,7 +37,7 @@ import booton.translator.Javascript;
 import booton.util.HTMLWriter;
 
 /**
- * @version 2012/12/10 23:06:05
+ * @version 2013/01/19 11:18:04
  */
 public class Booton {
 
@@ -155,10 +155,7 @@ public class Booton {
         this.css = root.resolve("test.css");
 
         // load booton extensions
-        I.load(Booton.class, true);
-
-        // load built-in library
-        I.load(Application.class, true);
+        I.load(Booton.class, false);
 
         // load application extensions
         I.load(application, true);

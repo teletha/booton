@@ -11,9 +11,9 @@ package teemowork;
 
 import java.util.Collection;
 
-import js.Application;
-import js.Page;
-import js.PageInfo;
+import js.application.Application;
+import js.application.Page;
+import js.application.PageInfo;
 import js.ui.ImageGrid;
 import js.util.jQuery;
 import teemowork.model.Champion;

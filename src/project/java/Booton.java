@@ -9,7 +9,7 @@
  */
 import java.nio.file.Path;
 
-import js.Application;
+import js.application.Application;
 import kiss.I;
 
 import org.eclipse.jetty.server.Server;
