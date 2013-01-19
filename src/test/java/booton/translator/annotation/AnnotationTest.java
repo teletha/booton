@@ -9,7 +9,6 @@
  */
 package booton.translator.annotation;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.translator.ScriptTester;
@@ -22,7 +21,6 @@ import booton.translator.Scriptable;
 public class AnnotationTest extends ScriptTester {
 
     @Test
-    @Ignore
     public void NoAnnotated() throws Exception {
         test(new Scriptable() {
 

@@ -244,11 +244,25 @@ function boot(global) {
         define(global[name].prototype, properties);
       }
     },
-    
-    find: function(type) {
-      Object.keys(boot).forEach(function(name) {
-        console.log(boot[name].$ instanceof type.$);
-      });
+
+    /**
+     * <p>
+     * Define interface in booton core library namespace.
+     * </p>
+     * 
+     * @param {String} name A simple class name of a interface to define.
+     * @param {Object} definition A interface definition.
+     * @param {Object} annotation A annotation definition.
+     */
+    proxy: function(name, handler) {
+      var proxy = {};
+
+      for (var i in handler) {
+        proxy[i] = function() {
+          return handler[i];
+        }
+      }
+      return proxy;
     }
   });
 }

@@ -38,13 +38,11 @@ public abstract class Application {
     protected Application() {
         // Collect all pages and register it.
         for (Class page : Classes.find(Page.class)) {
-            Constructor<?>[] constructors = page.getConstructors();
-
-            for (int i = 0; i < constructors.length; i++) {
-                PageInfo info = constructors[i].getAnnotation(PageInfo.class);
+            for (Constructor<?> constructor : page.getConstructors()) {
+                PageInfo info = constructor.getAnnotation(PageInfo.class);
 
                 if (info != null) {
-                    router.routes.add(new Route(constructors[i], info));
+                    router.routes.add(new Route(constructor, info));
                 }
             }
         }

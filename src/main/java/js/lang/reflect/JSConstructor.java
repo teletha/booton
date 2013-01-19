@@ -9,13 +9,12 @@
  */
 package js.lang.reflect;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
-
-
 import booton.translator.JavaNative;
 
 /**
@@ -45,7 +44,7 @@ class JSConstructor<T> extends JSAnnotatedElement {
      * @param function
      * @param annotations
      */
-    JSConstructor(String name, NativeObject clazz, NativeFunction function, NativeArray<NativeArray> annotations) {
+    JSConstructor(String name, NativeObject clazz, NativeFunction function, NativeArray<Annotation> annotations) {
         super(name, annotations);
 
         this.clazz = clazz;

@@ -10,9 +10,15 @@
 package teemowork;
 
 import static js.lang.Global.*;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+
 import js.application.Application;
 import js.application.Header;
 import js.application.Header.Menu;
+import js.application.PageInfo;
+import js.lang.Classes;
 import teemowork.model.Patch;
 
 /**
@@ -42,5 +48,15 @@ public class Teemowork extends Application {
         nav.add("Contact", "#");
 
         System.out.println(Patch.Latest);
+
+        PageInfo info = Classes.createProxy(PageInfo.class, new InvocationHandler() {
+
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                System.out.println("called");
+                return "proxy";
+            }
+        });
+        System.out.println(info.path());
     }
 }
