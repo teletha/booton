@@ -26,12 +26,19 @@ public class Teemowork extends Application {
      * {@inheritDoc}
      */
     @Override
+    protected void register() {
+        // register(ChampionDetail.class);
+        // register(ChampionSelect.class);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void jsmain() {
         for (Class clazz : Classes.find(Page.class)) {
             register(clazz);
         }
-        // register(ChampionDetail.class);
-        // register(ChampionSelect.class);
 
         super.jsmain();
 

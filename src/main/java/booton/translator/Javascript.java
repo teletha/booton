@@ -18,13 +18,13 @@ package booton.translator;
 import static booton.Obfuscator.*;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -32,13 +32,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import kiss.ClassListener;
 import kiss.I;
+import kiss.Manageable;
+import kiss.Singleton;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 
-import booton.translator.js.JSClass;
-import booton.translator.js.JSConstructor;
 import booton.translator.js.NativeObject;
 
 /**
@@ -140,7 +141,7 @@ public class Javascript {
      * @param dependency A dependency class.
      */
     public void require(Class dependency) {
-        dependency = switchClass(dependency);
+        dependency = JavaNativeManager.replace(dependency);
 
         if (TranslatorManager.hasTranslator(dependency)) {
             return;
@@ -363,7 +364,7 @@ public class Javascript {
             return null;
         }
 
-        source = switchClass(source);
+        source = JavaNativeManager.replace(source);
 
         // check cache
         Javascript script = scripts.get(source);
@@ -377,26 +378,6 @@ public class Javascript {
 
         // API definition
         return script;
-    }
-
-    private static Class switchClass(Class type) {
-        if (type == Object.class) {
-            return NativeObject.class;
-        }
-
-        if (type == Throwable.class) {
-            return ThrowableReplacement.class;
-        }
-
-        if (type == Class.class) {
-            return JSClass.class;
-        }
-
-        if (type == Constructor.class) {
-            return JSConstructor.class;
-        }
-
-        return type;
     }
 
     /**
@@ -547,90 +528,43 @@ public class Javascript {
     }
 
     /**
-     * @version 2012/12/07 10:39:47
+     * @version 2013/01/19 9:36:13
      */
-    @SuppressWarnings("unused")
-    private static class ThrowableReplacement {
+    @Manageable(lifestyle = Singleton.class)
+    private static class JavaNativeManager implements ClassListener<JavaNative> {
 
-        /** The error message. */
-        private final String message;
-
-        /** The cause error. */
-        private Throwable cause;
+        /** The mapping between Java class and JS implementation class. */
+        private static final Map<Class, Class> replacers = new HashMap();
 
         /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void load(Class<JavaNative> clazz) {
+            replacers.put(clazz.getAnnotation(JavaNative.class).value(), clazz);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void unload(Class<JavaNative> clazz) {
+            replacers.remove(clazz.getAnnotation(JavaNative.class).value());
+        }
+
+        /**
+         * <p>
+         * Replace Java class with the implementation class for Javascript runtime (normaly, it is
+         * simplified).
+         * </p>
          * 
+         * @param type A target class to replace.
+         * @return A replaced class.
          */
-        public ThrowableReplacement() {
-            this("", null);
-        }
+        private static Class replace(Class type) {
+            Class replacer = replacers.get(type);
 
-        /**
-         * @param message
-         */
-        public ThrowableReplacement(String message) {
-            this(message, null);
-        }
-
-        /**
-         * @param cause
-         */
-        public ThrowableReplacement(Throwable cause) {
-            this("", cause);
-        }
-
-        /**
-         * @param message
-         * @param cause
-         */
-        public ThrowableReplacement(String message, Throwable cause) {
-            this.message = message;
-            this.cause = cause;
-        }
-
-        /**
-         * @param message
-         * @param cause
-         * @param enableSuppression
-         * @param writableStackTrace
-         */
-        public ThrowableReplacement(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-            this(message, cause);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public String getMessage() {
-            return message;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public String getLocalizedMessage() {
-            return message;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public Throwable getCause() {
-            return cause;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public String toString() {
-            return message;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public void printStackTrace() {
-            System.out.println(message);
+            return replacer == null ? type : replacer;
         }
     }
 }

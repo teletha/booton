@@ -12,6 +12,8 @@ package booton.translator.js;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
+import booton.translator.JavaNative;
+
 /**
  * <p>
  * {@link Class} representation in Javascript runtime. This class doesn't provide all
@@ -20,6 +22,7 @@ import java.lang.reflect.Method;
  * 
  * @version 2013/01/17 15:58:55
  */
+@JavaNative(Class.class)
 public class JSClass<T> extends JSAnnotatedElement {
 
     /** The class definition in runtime. */

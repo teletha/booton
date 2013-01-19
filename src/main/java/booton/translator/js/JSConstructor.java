@@ -11,6 +11,8 @@ package booton.translator.js;
 
 import java.lang.reflect.Constructor;
 
+import booton.translator.JavaNative;
+
 /**
  * <p>
  * {@link Constructor} representation in Javascript runtime. This class doesn't provide all
@@ -19,6 +21,7 @@ import java.lang.reflect.Constructor;
  * 
  * @version 2013/01/17 20:45:34
  */
+@JavaNative(Constructor.class)
 public class JSConstructor<T> extends JSAnnotatedElement {
 
     /** The declared class definition in runtime. */

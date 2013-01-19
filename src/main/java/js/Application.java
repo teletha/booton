@@ -32,6 +32,13 @@ public abstract class Application {
 
     /**
      * <p>
+     * Register {@link Page}.
+     * </p>
+     */
+    protected abstract void register();
+
+    /**
+     * <p>
      * Entry point for this application.
      * </p>
      */
