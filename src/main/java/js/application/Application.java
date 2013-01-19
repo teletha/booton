@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js;
+package js.application;
 
 import static js.lang.Global.*;
 
@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import js.application.Header;
 import js.lang.Classes;
 import js.util.ArrayList;
 import js.util.jQuery;

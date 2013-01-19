@@ -10,7 +10,7 @@
 package teemowork;
 
 import static js.lang.Global.*;
-import js.Application;
+import js.application.Application;
 import js.application.Header;
 import js.application.Header.Menu;
 import teemowork.model.Patch;
