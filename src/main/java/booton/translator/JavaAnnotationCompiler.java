@@ -27,7 +27,7 @@ import org.objectweb.asm.Type;
  */
 class JavaAnnotationCompiler {
 
-    /** The reuse. */
+    /** The reusable method. */
     private static final Method annotationType;
 
     static {
@@ -53,17 +53,17 @@ class JavaAnnotationCompiler {
 
         // constructors
         for (Constructor constructor : clazz.getDeclaredConstructors()) {
-            register(Javascript.computeMethodName(clazz, "<init>", Type.getConstructorDescriptor(constructor)), constructor);
+            register(Javascript.computeMethodName(constructor), constructor);
         }
 
         // fields
         for (Field field : clazz.getDeclaredFields()) {
-            register(Javascript.computeFieldName(clazz, field.getName()), field);
+            register(Javascript.computeFieldName(field), field);
         }
 
         // methods
         for (Method method : clazz.getDeclaredMethods()) {
-            register(Javascript.computeMethodName(clazz, method.getName(), Type.getMethodDescriptor(method)), method);
+            register(Javascript.computeMethodName(method), method);
         }
 
         // compile
@@ -72,7 +72,7 @@ class JavaAnnotationCompiler {
 
             for (int i = 0; i < elements.size(); i++) {
                 Annotated element = elements.get(i);
-                code.append("\"").append(element.name).append("\":");
+                code.append(element.name).append(":");
                 compileAnnotations(element.annotations);
 
                 if (i < elements.size() - 1) {
@@ -145,42 +145,34 @@ class JavaAnnotationCompiler {
      */
     private void compileAnnotation(Annotation annotation) {
         Class type = annotation.annotationType();
-        code.append("{")
-                .append(Javascript.computeMethodName(annotationType))
-                .append(":")
-                .append("function() {return ")
-                .append(Javascript.computeClass(type))
-                .append(";},");
+        code.append("{");
+        write(Javascript.computeMethodName(annotationType), Javascript.computeClass(type));
 
-        // collect annotation methods
-        List<Method> methods = new ArrayList();
+        // collect annotation methods and compile to javascript expression
+        Method[] methods = type.getDeclaredMethods();
 
-        for (Method method : type.getMethods()) {
-            if (method.getDeclaringClass() == type) {
-                methods.add(method);
-            }
-        }
+        for (int i = 0; i < methods.length; i++) {
+            code.separator();
 
-        // compile annotation to javascript
-        for (int i = 0; i < methods.size(); i++) {
             try {
-                Method method = methods.get(i);
+                Method method = methods[i];
                 String methodName = Javascript.computeMethodName(type, method.getName(), Type.getMethodDescriptor(method));
 
-                code.append(methodName)
-                        .append(":")
-                        .append("function() {return ")
-                        .append(compileValue(method.invoke(annotation)))
-                        .append(";}");
-
-                if (i < methods.size() - 1) {
-                    code.append(",");
-                }
+                write(methodName, compileValue(method.invoke(annotation)));
             } catch (Exception e) {
                 throw I.quiet(e);
             }
         }
         code.append("}");
+    }
+
+    /**
+     * <p>
+     * Helper method to write annotation property.
+     * </p>
+     */
+    private void write(String name, String value) {
+        code.append(name, ": ", "function() {", "return ", value, ";", "}");
     }
 
     /**
@@ -198,7 +190,7 @@ class JavaAnnotationCompiler {
         if (type == String.class) {
             return "\"" + value + "\"";
         } else if (type == Class.class) {
-            return Javascript.computeClassName((Class) value) + ".$";
+            return Javascript.computeClass((Class) value);
         } else if (type.isArray()) {
             StringBuilder builder = new StringBuilder("[");
 

@@ -20,8 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import js.dom.Location;
 import js.dom.Window;
+import js.lang.Function;
 import js.net.WebSocket;
-
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
@@ -31,7 +31,6 @@ import kiss.model.ClassUtil;
 import org.objectweb.asm.Type;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 
 /**
  * ion 2012/12/06 18:28:56
@@ -195,7 +194,7 @@ class TranslatorManager {
     }
 
     /**
-     * @version 2012/12/02 16:20:23
+     * @version 2013/01/19 23:52:14
      */
     @Manageable(lifestyle = Singleton.class)
     private static class GeneralTranslator extends Translator<GeneralTranslator> {
@@ -206,8 +205,14 @@ class TranslatorManager {
         @Override
         protected String translateConstructor(Class owner, String desc, Class[] types, List<Operand> context) {
             // append identifier of constructor method
-            context.add(new OperandNumber(Integer.valueOf(Javascript.computeMethodName(owner, "<init>", desc)
-                    .substring(1))));
+            Operand id;
+
+            if (Function.class.isAssignableFrom(owner) && owner.getDeclaredMethods().length == 1) {
+                id = new OperandString(Javascript.computeMethodName(owner.getDeclaredMethods()[0]));
+            } else {
+                id = new OperandNumber(Integer.valueOf(Javascript.computeMethodName(owner, "<init>", desc).substring(1)));
+            }
+            context.add(id);
 
             return "new " + Javascript.computeClassName(owner) + writeParameter(context);
         }
