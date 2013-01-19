@@ -20,7 +20,6 @@ import js.util.jQuery;
 import org.w3c.dom.DocumentFragment;
 
 import booton.translator.Translator;
-import booton.translator.js.NativeObject;
 
 /***
  * <p>

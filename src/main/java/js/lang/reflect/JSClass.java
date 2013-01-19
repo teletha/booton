@@ -7,10 +7,15 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.js;
+package js.lang.reflect;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+
+import js.lang.NativeArray;
+import js.lang.NativeFunction;
+import js.lang.NativeObject;
+
 
 import booton.translator.JavaNative;
 
@@ -23,7 +28,7 @@ import booton.translator.JavaNative;
  * @version 2013/01/17 15:58:55
  */
 @JavaNative(Class.class)
-public class JSClass<T> extends JSAnnotatedElement {
+class JSClass<T> extends JSAnnotatedElement {
 
     /** The class definition in runtime. */
     private final NativeObject clazz;

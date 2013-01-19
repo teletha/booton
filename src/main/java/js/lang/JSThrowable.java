@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.js;
+package js.lang;
 
 import booton.translator.JavaNative;
 
@@ -15,7 +15,7 @@ import booton.translator.JavaNative;
  * @version 2013/01/19 9:27:51
  */
 @JavaNative(Throwable.class)
-public class JSThrowable {
+class JSThrowable {
 
     /** The error message. */
     private final String message;

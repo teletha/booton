@@ -32,6 +32,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import js.lang.Global;
+import js.lang.NativeObject;
 import kiss.ClassListener;
 import kiss.I;
 import kiss.Manageable;
@@ -39,8 +41,6 @@ import kiss.Singleton;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
-
-import booton.translator.js.NativeObject;
 
 /**
  * <h2>The Reserved words in ECMA Script Third Edition</h2>
@@ -76,7 +76,7 @@ public class Javascript {
     // initialization
     static {
         // Load Booton module
-        I.load(Javascript.class, true);
+        I.load(Global.class, false);
 
         // Define Class class at first. It is ensured that Class definition is assigned in 'boot.A'
         // variable.

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2012 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -7,12 +7,12 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.lang;
+package booton.translator.builtin.dom;
 
+import org.w3c.dom.DocumentFragment;
 
 /**
- * @version 2013/01/16 14:04:37
+ * @version 2012/12/02 10:31:36
  */
-public class Function {
-
+class DocumentFragmentTranslator extends AbstractDOMSupport<DocumentFragment> {
 }

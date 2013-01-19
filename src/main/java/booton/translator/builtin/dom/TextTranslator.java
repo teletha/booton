@@ -7,16 +7,15 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.dom;
+package booton.translator.builtin.dom;
 
-import org.w3c.dom.CDATASection;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Text;
 
 /**
- * @version 2012/12/02 10:37:39
+ * @version 2012/12/02 10:35:32
  */
-class CDATASectionTranslator extends AbstractCharacterSupport<CDATASection> {
+class TextTranslator extends AbstractCharacterSupport<Text> {
 
     /**
      * Breaks this node into two nodes at the specified <code>offset</code>, keeping both in the

@@ -20,7 +20,9 @@ import java.lang.annotation.Target;
  * Annotated class replaces the specified Java class from javascript compilation process.
  * </p>
  * <p>
- * Normaly, the replacement class provides the simplified implementation of the replaced class.
+ * Normaly, the replacement class provides the simplified implementation of the replaced class. The
+ * replacement class is not used by booton user, so it is recommended that the class has package
+ * private modifier.
  * </p>
  * 
  * @version 2013/01/19 9:32:47

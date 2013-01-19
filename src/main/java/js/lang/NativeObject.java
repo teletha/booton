@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.js;
+package js.lang;
 
 import java.util.HashMap;
 import java.util.Map;
