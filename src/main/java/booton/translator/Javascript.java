@@ -18,6 +18,8 @@ package booton.translator;
 import static booton.Obfuscator.*;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
@@ -278,6 +280,8 @@ public class Javascript {
 
             if (jsNative) {
                 compileNative(code);
+            } else if (source.isInterface()) {
+                compileInterface(code);
             } else {
                 compileClass(code, parentClass);
             }
@@ -337,14 +341,22 @@ public class Javascript {
         String className = computeSimpleClassName(source);
 
         // write interface definition
-        code.append("boot.defineInterface(").string(className).append(",");
+        code.append("boot.define(").string(className).append(",\"\",");
 
         // write constructors, fields and methods
         try {
             code.append('{');
-            new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
+            Method[] methods = source.getDeclaredMethods();
+
+            for (int i = 0; i < methods.length; i++) {
+                code.append(computeMethodName(methods[i])).append(":null");
+
+                if (i < methods.length - 1) {
+                    code.append(",");
+                }
+            }
             code.append('}');
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw I.quiet(e);
         }
 
@@ -482,6 +494,22 @@ public class Javascript {
      *            (Ljava/lang/String;)V)
      * @return An identified class name for ECMAScript.
      */
+    public static final String computeMethodName(Constructor constructor) {
+        return computeMethodName(constructor.getDeclaringClass(), "<init>", Type.getConstructorDescriptor(constructor));
+    }
+
+    /**
+     * <p>
+     * Compute the identified qualified method name for ECMAScript.
+     * </p>
+     * 
+     * @param owner A {@link Class} object representing the class or interface that declares the
+     *            specified method.
+     * @param methodName A method name(e.g. toString, <init> and <clinit>).
+     * @param description A method description of parameter types and return type. (e.g.
+     *            (Ljava/lang/String;)V)
+     * @return An identified class name for ECMAScript.
+     */
     public static final String computeMethodName(Method method) {
         return computeMethodName(method.getDeclaringClass(), method.getName(), Type.getMethodDescriptor(method));
     }
@@ -517,6 +545,19 @@ public class Javascript {
             // method
             return mung32(order(script.methods, name.hashCode() ^ description.hashCode()));
         }
+    }
+
+    /**
+     * <p>
+     * Compute the identified qualified field name for ECMAScript.
+     * </p>
+     * 
+     * @param owner A owner class of the specified field.
+     * @param fieldName A field name in Java source code.
+     * @return An identified field name for ECMAScript.
+     */
+    public static final String computeFieldName(Field field) {
+        return computeFieldName(field.getDeclaringClass(), field.getName());
     }
 
     /**

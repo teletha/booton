@@ -34,7 +34,6 @@ class ScriptBuffer {
      * @param description
      */
     public void debug(Class owner, String methodName, String description) {
-        line();
         buffer.append("// ");
         buffer.append(owner.getName()).append("#").append(methodName).append("(");
 
@@ -118,6 +117,15 @@ class ScriptBuffer {
      */
     public ScriptBuffer string(String literal) {
         return append('"', literal, '"');
+    }
+
+    /**
+     * <p>
+     * Helper method to write separator ",".
+     * </p>
+     */
+    public ScriptBuffer separator() {
+        return append(",").line();
     }
 
     /**

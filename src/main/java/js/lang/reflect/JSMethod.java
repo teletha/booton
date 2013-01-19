@@ -50,4 +50,15 @@ class JSMethod extends JSAnnotatedElement {
         this.clazz = clazz;
         this.function = function;
     }
+
+    /**
+     * <p>
+     * Returns the name of the method represented by this Method object, as a String.
+     * </p>
+     * 
+     * @return The simple name of the underlying member.
+     */
+    public String getName() {
+        return name;
+    }
 }

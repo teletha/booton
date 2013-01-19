@@ -110,7 +110,7 @@ class JavaClassCompiler extends ClassVisitor {
         if (isFirst) {
             isFirst = false;
         } else {
-            code.append(',');
+            code.separator();
         }
         code.debug(script.source, name, desc);
         return new JavaMethodCompiler(script, code, (access & ACC_STATIC) == 0, name, desc);

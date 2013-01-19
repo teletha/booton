@@ -164,9 +164,17 @@ function boot(global) {
       // This is actual counstructor of class to define.
       function Class() {
         var params = Array.prototype.slice.call(arguments);
-
-        // invoke specified constructor
-        this["$" + params.pop()].apply(this, params);
+        var name = params.pop();
+        
+        // Invoke the specified constructor function.
+        this["$" + (name in this ? 0 : name)].apply(this, params);
+        
+        // Return function if this class is functional.
+        if (name in this) {
+          return function() {
+            return this[name]();
+          }.bind(this);
+        }
       }
 
       // We must store static initialization function.
@@ -243,26 +251,6 @@ function boot(global) {
       if (global[name]) {
         define(global[name].prototype, properties);
       }
-    },
-
-    /**
-     * <p>
-     * Define interface in booton core library namespace.
-     * </p>
-     * 
-     * @param {String} name A simple class name of a interface to define.
-     * @param {Object} definition A interface definition.
-     * @param {Object} annotation A annotation definition.
-     */
-    proxy: function(name, handler) {
-      var proxy = {};
-
-      for (var i in handler) {
-        proxy[i] = function() {
-          return handler[i];
-        }
-      }
-      return proxy;
     }
   });
 }

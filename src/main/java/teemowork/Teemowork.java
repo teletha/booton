@@ -53,7 +53,9 @@ public class Teemowork extends Application {
 
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                System.out.println("called");
+                System.out.println("called ");
+                System.out.println(method);
+                System.out.println(proxy);
                 return "proxy";
             }
         });
