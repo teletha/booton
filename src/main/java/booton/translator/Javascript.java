@@ -326,6 +326,42 @@ public class Javascript {
 
     /**
      * <p>
+     * Compile java class to javascript.
+     * </p>
+     * 
+     * @param code
+     * @param parent A parent class.
+     */
+    private void compileInterface(ScriptBuffer code) {
+        // compute related class names
+        String className = computeSimpleClassName(source);
+
+        // write interface definition
+        code.append("boot.defineInterface(").string(className).append(",");
+
+        // write constructors, fields and methods
+        try {
+            code.append('{');
+            new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
+            code.append('}');
+        } catch (IOException e) {
+            throw I.quiet(e);
+        }
+
+        // write annotation
+        JavaAnnotationCompiler annotation = new JavaAnnotationCompiler(source);
+
+        if (annotation.hasAnnotation()) {
+            code.append(',').append(annotation);
+        }
+
+        // End class definition
+        code.append(");");
+        code.line();
+    }
+
+    /**
+     * <p>
      * Compile java class for {@link JavascriptNative}.
      * </p>
      * 
@@ -412,6 +448,18 @@ public class Javascript {
 
     /**
      * <p>
+     * Compute the identified qualified class object for ECMAScript.
+     * </p>
+     * 
+     * @param clazz A class with fully qualified class name(e.g. java.lang.String).
+     * @return An identified class object for ECMAScript.
+     */
+    public static final String computeClass(Class clazz) {
+        return computeClassName(clazz) + ".$";
+    }
+
+    /**
+     * <p>
      * Compute the identified qualified class name for ECMAScript.
      * </p>
      * 
@@ -427,10 +475,16 @@ public class Javascript {
      * Compute the identified qualified method name for ECMAScript.
      * </p>
      * 
-     * @param methodName A fully qualified internal name(e.g. java/lang/String).
-     * @param parameters A list of parameter types.
+     * @param owner A {@link Class} object representing the class or interface that declares the
+     *            specified method.
+     * @param methodName A method name(e.g. toString, <init> and <clinit>).
+     * @param description A method description of parameter types and return type. (e.g.
+     *            (Ljava/lang/String;)V)
      * @return An identified class name for ECMAScript.
      */
+    public static final String computeMethodName(Method method) {
+        return computeMethodName(method.getDeclaringClass(), method.getName(), Type.getMethodDescriptor(method));
+    }
 
     /**
      * <p>

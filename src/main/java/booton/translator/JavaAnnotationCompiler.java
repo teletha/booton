@@ -27,6 +27,17 @@ import org.objectweb.asm.Type;
  */
 class JavaAnnotationCompiler {
 
+    /** The reuse. */
+    private static final Method annotationType;
+
+    static {
+        try {
+            annotationType = Annotation.class.getMethod("annotationType");
+        } catch (Exception e) {
+            throw I.quiet(e);
+        }
+    }
+
     /** The code writer. */
     private final ScriptBuffer code = new ScriptBuffer();
 
@@ -134,7 +145,12 @@ class JavaAnnotationCompiler {
      */
     private void compileAnnotation(Annotation annotation) {
         Class type = annotation.annotationType();
-        code.append("[").string(Javascript.computeSimpleClassName(type)).append(",{");
+        code.append("{")
+                .append(Javascript.computeMethodName(annotationType))
+                .append(":")
+                .append("function() {return ")
+                .append(Javascript.computeClass(type))
+                .append(";},");
 
         // collect annotation methods
         List<Method> methods = new ArrayList();
@@ -164,7 +180,7 @@ class JavaAnnotationCompiler {
                 throw I.quiet(e);
             }
         }
-        code.append("}]");
+        code.append("}");
     }
 
     /**

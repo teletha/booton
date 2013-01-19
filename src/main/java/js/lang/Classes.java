@@ -11,6 +11,8 @@ package js.lang;
 
 import static js.lang.Global.*;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import js.util.ArrayList;
@@ -39,5 +41,29 @@ public class Classes {
             }
         }
         return matched;
+    }
+
+    /**
+     * <p>
+     * Create new proxy instance.
+     * </p>
+     * 
+     * @param interfaceType
+     * @param handler
+     * @return
+     */
+    public static <T> T createProxy(Class<T> interfaceType, final InvocationHandler handler) {
+        final NativeObject proxy = new NativeObject();
+
+        for (final Method method : interfaceType.getMethods()) {
+            proxy.setProperty(method.getName(), new Function() {
+
+                @SuppressWarnings("unused")
+                public Object evaluate() throws Throwable {
+                    return handler.invoke(proxy, method, new Object[0]);
+                }
+            });
+        }
+        return (T) proxy;
     }
 }

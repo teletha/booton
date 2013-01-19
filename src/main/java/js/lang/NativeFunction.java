@@ -9,12 +9,25 @@
  */
 package js.lang;
 
+import java.lang.reflect.Method;
+
 import booton.translator.Translator;
 
 /**
  * @version 2013/01/18 2:13:18
  */
 public class NativeFunction extends NativeObject {
+
+    /** The actual method. */
+    private final Method method;
+
+    /**
+     * @param method
+     */
+    public NativeFunction(Method method) {
+        super();
+        this.method = method;
+    }
 
     public Object apply(Object context, Object[] parameters) {
         return null;

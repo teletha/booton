@@ -9,12 +9,12 @@
  */
 package js.lang.reflect;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
-
 import booton.translator.JavaNative;
 
 /**
@@ -44,7 +44,7 @@ class JSMethod extends JSAnnotatedElement {
      * @param function
      * @param annotations
      */
-    JSMethod(String name, NativeObject clazz, NativeFunction function, NativeArray<NativeArray> annotations) {
+    JSMethod(String name, NativeObject clazz, NativeFunction function, NativeArray<Annotation> annotations) {
         super(name, annotations);
 
         this.clazz = clazz;

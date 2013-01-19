@@ -14,7 +14,6 @@ import java.lang.reflect.AnnotatedElement;
 
 import js.lang.NativeArray;
 import js.lang.NativeObject;
-
 import booton.translator.JavaNative;
 
 /**
@@ -27,7 +26,7 @@ abstract class JSAnnotatedElement extends NativeObject {
     protected final String name;
 
     /** The annotation definition in runtime. */
-    private final NativeArray<NativeArray> annotations;
+    private final NativeArray<Annotation> annotations;
 
     /**
      * <p>
@@ -37,7 +36,7 @@ abstract class JSAnnotatedElement extends NativeObject {
      * @param name
      * @param annotations
      */
-    protected JSAnnotatedElement(String name, NativeArray<NativeArray> annotations) {
+    protected JSAnnotatedElement(String name, NativeArray<Annotation> annotations) {
         this.name = name;
         this.annotations = annotations;
     }
@@ -69,10 +68,10 @@ abstract class JSAnnotatedElement extends NativeObject {
     public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
         if (annotations != null) {
             for (int i = 0; i < annotations.length(); i++) {
-                NativeArray definition = annotations.get(i);
+                Annotation annotation = annotations.get(i);
 
-                if (definition.get(0).equals(annotationClass.getSimpleName())) {
-                    return (A) definition.get(1);
+                if (annotation.annotationType() == annotationClass) {
+                    return (A) annotation;
                 }
             }
         }
