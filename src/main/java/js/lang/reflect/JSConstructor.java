@@ -7,9 +7,14 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.js;
+package js.lang.reflect;
 
 import java.lang.reflect.Constructor;
+
+import js.lang.NativeArray;
+import js.lang.NativeFunction;
+import js.lang.NativeObject;
+
 
 import booton.translator.JavaNative;
 
@@ -22,7 +27,7 @@ import booton.translator.JavaNative;
  * @version 2013/01/17 20:45:34
  */
 @JavaNative(Constructor.class)
-public class JSConstructor<T> extends JSAnnotatedElement {
+class JSConstructor<T> extends JSAnnotatedElement {
 
     /** The declared class definition in runtime. */
     private NativeObject clazz;

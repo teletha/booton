@@ -7,10 +7,13 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.js;
+package js.lang.reflect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+
+import js.lang.NativeArray;
+import js.lang.NativeObject;
 
 import booton.translator.JavaNative;
 
@@ -18,7 +21,7 @@ import booton.translator.JavaNative;
  * @version 2013/01/18 1:15:38
  */
 @JavaNative(AnnotatedElement.class)
-public abstract class JSAnnotatedElement extends NativeObject {
+abstract class JSAnnotatedElement extends NativeObject {
 
     /** The function name in runtime. */
     protected final String name;

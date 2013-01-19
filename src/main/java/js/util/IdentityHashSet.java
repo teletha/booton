@@ -13,8 +13,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
-import booton.translator.js.NativeArray;
-import booton.translator.js.NativeMap;
+import js.lang.NativeArray;
+import js.lang.NativeMap;
+
 
 /**
  * @version 2012/12/08 11:49:36

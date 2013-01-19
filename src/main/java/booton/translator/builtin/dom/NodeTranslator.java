@@ -7,12 +7,12 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.dom;
+package booton.translator.builtin.dom;
 
-import org.w3c.dom.DocumentFragment;
+import org.w3c.dom.Node;
 
 /**
- * @version 2012/12/02 10:31:36
+ * @version 2012/12/02 10:21:37
  */
-class DocumentFragmentTranslator extends AbstractDOMSupport<DocumentFragment> {
+class NodeTranslator extends AbstractDOMSupport<Node> {
 }

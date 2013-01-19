@@ -14,7 +14,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import booton.translator.js.NativeArray;
+import js.lang.NativeArray;
+
 
 /**
  * @version 2012/12/09 22:57:44

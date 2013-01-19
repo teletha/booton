@@ -11,7 +11,8 @@ package js.util;
 
 import java.util.Iterator;
 
-import booton.translator.js.NativeObject;
+import js.lang.NativeObject;
+
 
 /**
  * @version 2012/12/08 11:49:36

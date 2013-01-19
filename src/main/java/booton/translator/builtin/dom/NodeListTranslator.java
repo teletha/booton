@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.dom;
+package booton.translator.builtin.dom;
 
 import org.w3c.dom.NodeList;
 

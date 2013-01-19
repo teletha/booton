@@ -7,7 +7,9 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.js;
+package js.lang;
+
+import js.lang.NativeArray;
 
 import org.junit.Test;
 
