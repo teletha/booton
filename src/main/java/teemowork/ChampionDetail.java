@@ -9,15 +9,18 @@
  */
 package teemowork;
 
+import java.lang.reflect.Method;
+
 import js.application.Page;
 import js.application.PageInfo;
+import js.bind.Notifiable;
 import js.bind.Observable;
+import js.bind.Observer;
 import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
 import teemowork.model.Build;
 import teemowork.model.Champion;
-import teemowork.model.ChampionStatus;
 import booton.css.CSS;
 
 /**
@@ -25,32 +28,18 @@ import booton.css.CSS;
  */
 public class ChampionDetail extends Page {
 
-    /** The chmapion. */
-    private final Champion champion;
-
     /** The your custom build. */
     @Observable
-    private Build build;
+    private final Build build;
 
-    /** The current level. */
-    private int currentLevel;
-
+    /** The status. */
     private jQuery level;
 
     /** The status. */
     private jQuery health;
 
-    // /** The status. */
-    // private Text mana = new Text() {
-    //
-    // /**
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // protected Object text() {
-    // return build.getMana();
-    // }
-    // };
+    /** The status. */
+    private jQuery mana;
 
     /**
      * Build page.
@@ -71,7 +60,27 @@ public class ChampionDetail extends Page {
         if (champion == null) {
             throw new Error();
         }
-        this.champion = champion;
+        this.build = new Build(champion);
+
+        bind(build);
+    }
+
+    /**
+     * <p>
+     * Bind.
+     * </p>
+     * 
+     * @param notifiable
+     */
+    private void bind(Notifiable notifiable) {
+        if (notifiable != null) {
+            // collect observer
+            for (Method method : getClass().getMethods()) {
+                if (method.isAnnotationPresent(Observer.class)) {
+                    notifiable.register(this, method);
+                }
+            }
+        }
     }
 
     /**
@@ -80,18 +89,18 @@ public class ChampionDetail extends Page {
     @Override
     public void load(jQuery root) {
         jQuery info = root.child(RootPanel.class)
-                .css("background-image", "url('" + champion.getSplashArt() + "')")
+                .css("background-image", "url('" + build.champion.getSplashArt() + "')")
                 .child(RootPanelFilter.class);
 
         jQuery icon = info.child(Icon.class)
-                .css("background-image", "url(" + champion.getIcon() + ")")
+                .css("background-image", "url(" + build.champion.getIcon() + ")")
                 .click(new Listener() {
 
                     @Override
                     public void handler(Event event) {
                         event.preventDefault();
 
-                        setLevel(currentLevel + 1);
+                        build.setLevel(build.getLevel() + 1);
                     }
                 })
                 .on("contextmenu", new Listener() {
@@ -100,41 +109,28 @@ public class ChampionDetail extends Page {
                     public void handler(Event event) {
                         event.preventDefault();
 
-                        setLevel(currentLevel - 1);
+                        build.setLevel(build.getLevel() - 1);
                     }
                 });
 
         level = icon.child(Level.class);
         health = info.child(Status.class).text("Health").child(Value.class);
-        // mana = info.child(Status.class).text("Mana").child(Value.class);
+        mana = info.child(Status.class).text("Mana").child(Value.class);
 
-        // initialize
-        setLevel(1);
+        calcurate();
     }
 
     /**
      * <p>
-     * Set champion level.
+     * Calcurate current status.
      * </p>
-     * 
-     * @param level
      */
-    private void setLevel(int level) {
-        if (level < 1 || 18 < level) {
-            return;
-        }
-
-        // new level
-        this.currentLevel = level;
-
-        // display
-        this.level.text(String.valueOf(level));
-
+    @Observer
+    private void calcurate() {
         // update each status
-        ChampionStatus status = champion.getStatus();
-
-        health.text(String.valueOf(status.getHealth(level)));
-        // mana.text(String.valueOf(status.getMana(level)));
+        level.text(String.valueOf(build.getLevel()));
+        health.text(String.valueOf(build.getHealth()));
+        mana.text(String.valueOf(build.getMana()));
     }
 
     /**
@@ -142,7 +138,7 @@ public class ChampionDetail extends Page {
      */
     @Override
     protected String getPageId() {
-        return "Champion/" + champion.name;
+        return "Champion/" + build.champion.name;
     }
 
     /**

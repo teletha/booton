@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
-
 import booton.translator.Translator;
 
 /**

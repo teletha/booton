@@ -135,6 +135,19 @@ public class Javascript {
             }
         }
         this.jsNative = jsNative;
+
+        Class parent = JavaNativeManager.replace(source.getSuperclass());
+
+        if (parent != null && parent != NativeObject.class) {
+            Javascript script = getScript(parent);
+
+            fields.addAll(script.fields);
+        }
+
+        for (Field field : source.getDeclaredFields()) {
+            order(fields, field.getName().hashCode() + source.hashCode());
+        }
+
     }
 
     /**
@@ -254,7 +267,7 @@ public class Javascript {
             Class parentClass = source.getSuperclass();
 
             if (parentClass != null && source != NativeObject.class) {
-                Javascript parent = Javascript.getScript(parentClass);
+                Javascript parent = getScript(parentClass);
 
                 if (parent != null && parent.source != NativeObject.class) {
                     // compile ahead
@@ -265,7 +278,7 @@ public class Javascript {
 
                     // copy all member fields and methods for override mechanism
                     // methods.addAll(parent.methods);
-                    fields.addAll(parent.fields);
+                    // fields.addAll(parent.fields);
                 }
             }
 

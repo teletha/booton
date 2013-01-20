@@ -207,14 +207,52 @@ class TranslatorManager {
             // append identifier of constructor method
             Operand id;
 
-            if (Function.class.isAssignableFrom(owner) && owner.getDeclaredMethods().length == 1) {
-                id = new OperandString(Javascript.computeMethodName(owner.getDeclaredMethods()[0]));
-            } else {
+            Method functional = findFunctionMethod(owner);
+
+            if (functional == null) {
                 id = new OperandNumber(Integer.valueOf(Javascript.computeMethodName(owner, "<init>", desc).substring(1)));
+            } else {
+                id = new OperandString(Javascript.computeMethodName(functional));
             }
             context.add(id);
 
             return "new " + Javascript.computeClassName(owner) + writeParameter(context);
+        }
+
+        /**
+         * <p>
+         * Search single function method.
+         * </p>
+         * 
+         * @param clazz
+         * @return
+         */
+        private Method findFunctionMethod(Class clazz) {
+            if (Function.class.isAssignableFrom(clazz)) {
+                for (Class type : ClassUtil.getTypes(clazz)) {
+                    if (isFunction(type) && type.getDeclaredMethods().length == 1) {
+                        return type.getDeclaredMethods()[0];
+                    }
+                }
+            }
+            return null;
+        }
+
+        /**
+         * <p>
+         * Check whether the specified class implements {@link Function} directly or not.
+         * </p>
+         * 
+         * @param clazz A target class to check.
+         * @return A result.
+         */
+        private boolean isFunction(Class clazz) {
+            for (Class type : clazz.getInterfaces()) {
+                if (type == Function.class) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /**
