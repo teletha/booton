@@ -37,4 +37,8 @@ class PrintWriterCoder extends Translator<PrintStream> {
     public String println(Object value) {
         return that + ".log(" + param(0) + ")";
     }
+
+    public String println(double param0) {
+        return that + ".log(" + param(0) + ")";
+    }
 }

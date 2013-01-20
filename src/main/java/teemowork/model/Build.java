@@ -88,4 +88,16 @@ public class Build extends Notifiable {
     public double getMana() {
         return status.getManaInitial() + status.getManaPerLvel() * level;
     }
+
+    /**
+     * <p>
+     * Compute current ad.
+     * </p>
+     * 
+     * @return
+     */
+    public double getAd() {
+        System.out.println(status.getAdInitial());
+        return status.getAdInitial() + status.getAdPerLvel() * level;
+    }
 }

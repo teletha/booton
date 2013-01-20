@@ -41,6 +41,9 @@ public class ChampionDetail extends Page {
     /** The status. */
     private jQuery mana;
 
+    /** The status. */
+    private jQuery ad;
+
     /**
      * Build page.
      * 
@@ -116,6 +119,7 @@ public class ChampionDetail extends Page {
         level = icon.child(Level.class);
         health = info.child(Status.class).text("Health").child(Value.class);
         mana = info.child(Status.class).text("Mana").child(Value.class);
+        ad = info.child(Status.class).text("Attack Damage").child(Value.class);
 
         calcurate();
     }
@@ -131,6 +135,8 @@ public class ChampionDetail extends Page {
         level.text(String.valueOf(build.getLevel()));
         health.text(String.valueOf(build.getHealth()));
         mana.text(String.valueOf(build.getMana()));
+        System.out.println(build.getAd());
+        ad.text(String.valueOf(build.getAd()));
     }
 
     /**

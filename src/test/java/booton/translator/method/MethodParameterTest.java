@@ -105,4 +105,18 @@ public class MethodParameterTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void DoubleSizePrimitive() {
+        test(new Scriptable() {
+
+            double act(double value) {
+                return calc(20, value);
+            }
+
+            double calc(double one, double two) {
+                return one * two;
+            }
+        });
+    }
 }
