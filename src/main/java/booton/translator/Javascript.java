@@ -114,57 +114,48 @@ public class Javascript {
      * 
      * @param source A Java class as source.
      */
-    private Javascript() {
-        this(Object.class);
-    }
-
-    /**
-     * Create Javascript as the specified Java class is source.
-     * 
-     * @param source A Java class as source.
-     */
     private Javascript(Class source) {
         this.source = source;
         this.id = counter++;
+        this.jsNative = isJavascriptNative();
 
-        boolean jsNative = false;
+        // copy all member fields for override mechanism
+        Javascript script = getScript(source.getSuperclass());
 
-        for (Class type : source.getInterfaces()) {
-            if (type == JavascriptNative.class) {
-                jsNative = true;
-            }
-        }
-        this.jsNative = jsNative;
-
-        Class parent = JavaNativeManager.replace(source.getSuperclass());
-
-        if (parent != null && parent != NativeObject.class) {
-            Javascript script = getScript(parent);
-
+        if (script != null) {
             fields.addAll(script.fields);
         }
 
         for (Field field : source.getDeclaredFields()) {
             order(fields, field.getName().hashCode() + source.hashCode());
         }
-
     }
 
     /**
+     * <p>
+     * Helper method to detect whether this script implements {@link JavascriptNative} directly or
+     * not.
+     * </p>
+     * 
+     * @return A result.
+     */
+    private boolean isJavascriptNative() {
+        for (Class type : source.getInterfaces()) {
+            if (type == JavascriptNative.class) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * <p>
      * Require the specified java source code.
+     * </p>
      * 
      * @param dependency A dependency class.
      */
     public void require(Class dependency) {
-        dependency = JavaNativeManager.replace(dependency);
-
-        if (TranslatorManager.hasTranslator(dependency)) {
-            return;
-        }
-
-        if (dependency.isArray()) {
-            return;
-        }
         dependencies.add(dependency);
     }
 
@@ -195,6 +186,7 @@ public class Javascript {
      * @param requirements A list of required script classes.
      */
     public void writeTo(Appendable output, Class... requirements) {
+        // Any class requires Class class.
         require(Class.class);
 
         if (requirements != null) {
@@ -241,7 +233,7 @@ public class Javascript {
             if (defined.add(depndency)) {
                 Javascript script = Javascript.getScript(depndency);
 
-                // write dependency scripts
+                // write dependency scripts ahead
                 if (script != null) {
                     script.write(output, defined);
                 }
@@ -263,32 +255,6 @@ public class Javascript {
      */
     private synchronized void compile() {
         if (code == null) {
-            // All scripts depend on its parent classes. So we must compile it ahead.
-            Class parentClass = source.getSuperclass();
-
-            if (parentClass != null && source != NativeObject.class) {
-                Javascript parent = getScript(parentClass);
-
-                if (parent != null && parent.source != NativeObject.class) {
-                    // compile ahead
-                    parent.compile();
-
-                    // add dependency
-                    dependencies.add(parent.source);
-
-                    // copy all member fields and methods for override mechanism
-                    // methods.addAll(parent.methods);
-                    // fields.addAll(parent.fields);
-                }
-            }
-
-            if (source.isInterface()) {
-                for (Method method : source.getDeclaredMethods()) {
-                    order(fields, method.getName().hashCode() ^ Type.getMethodDescriptor(method).hashCode());
-                }
-            }
-
-            // Then, we can compile this script.
             ScriptBuffer code = new ScriptBuffer();
 
             if (jsNative) {
@@ -296,7 +262,7 @@ public class Javascript {
             } else if (source.isInterface()) {
                 compileInterface(code);
             } else {
-                compileClass(code, parentClass);
+                compileClass(code, source.getSuperclass());
             }
 
             // create cache
@@ -428,12 +394,12 @@ public class Javascript {
      * @return A compiled Javascript source.
      */
     public static final Javascript getScript(Class source) {
+        source = JavaNativeManager.replace(source);
+
         // check Native Class
-        if (TranslatorManager.hasTranslator(source)) {
+        if (source == null || TranslatorManager.hasTranslator(source)) {
             return null;
         }
-
-        source = JavaNativeManager.replace(source);
 
         // check cache
         Javascript script = scripts.get(source);
