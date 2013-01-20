@@ -280,7 +280,7 @@ public class Javascript {
      */
     private void compileClass(ScriptBuffer code, Class parent) {
         // compute related class names
-        String className = computeSimpleClassName(source);
+        String className = Javascript.computeSimpleClassName(source);
         String parentClassName = parent == null || parent == Object.class ? "" : computeSimpleClassName(parent);
 
         // write class definition
@@ -317,7 +317,7 @@ public class Javascript {
      */
     private void compileInterface(ScriptBuffer code) {
         // compute related class names
-        String className = computeSimpleClassName(source);
+        String className = Javascript.computeSimpleClassName(source);
 
         // write interface definition
         code.append("boot.define(").string(className).append(",\"\",");
@@ -373,7 +373,7 @@ public class Javascript {
     }
 
     /**
-     * @see java.lang.Object#toString()
+     * {@inheritDoc}
      */
     @Override
     public String toString() {
@@ -417,28 +417,6 @@ public class Javascript {
 
     /**
      * <p>
-     * Compute the identified simple class name for ECMAScript.
-     * </p>
-     * 
-     * @param clazz A class with fully qualified class name(e.g. java.lang.String).
-     * @return An identified class name for ECMAScript.
-     */
-    public static final String computeSimpleClassName(Class clazz) {
-        if (clazz == NativeObject.class) {
-            return "";
-        }
-
-        Javascript script = getScript(clazz);
-
-        if (script == null) {
-            return clazz.getSimpleName();
-        } else {
-            return mung32(script.id);
-        }
-    }
-
-    /**
-     * <p>
      * Compute the identified qualified class object for ECMAScript.
      * </p>
      * 
@@ -459,6 +437,28 @@ public class Javascript {
      */
     public static final String computeClassName(Class clazz) {
         return "boot." + computeSimpleClassName(clazz);
+    }
+
+    /**
+     * <p>
+     * Compute the identified simple class name for ECMAScript.
+     * </p>
+     * 
+     * @param clazz A class with fully qualified class name(e.g. java.lang.String).
+     * @return An identified class name for ECMAScript.
+     */
+    public static final String computeSimpleClassName(Class clazz) {
+        if (clazz == NativeObject.class) {
+            return "";
+        }
+
+        Javascript script = getScript(clazz);
+
+        if (script == null) {
+            return clazz.getSimpleName();
+        } else {
+            return mung32(script.id);
+        }
     }
 
     /**
@@ -522,7 +522,7 @@ public class Javascript {
             }
         } else {
             // method
-            return mung32(order(script.methods, name.hashCode() ^ description.hashCode()));
+            return mung32(order(methods, name.hashCode() ^ description.hashCode()));
         }
     }
 

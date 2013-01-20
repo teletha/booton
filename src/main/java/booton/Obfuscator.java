@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ import java.util.Map;
 import booton.translator.UnsafeWordCalculator;
 
 /**
- * @version 2012/12/22 9:13:01
+ * @version 2013/01/21 0:40:53
  */
 public class Obfuscator {
 
@@ -62,7 +62,7 @@ public class Obfuscator {
      * @param clazz A class with fully qualified class name(e.g. java.lang.String).
      * @return An identified class name for ECMAScript.
      */
-    public static String computeCSSName(Class style) {
+    public static final String computeCSSName(Class style) {
         while (!Modifier.isAbstract(style.getSuperclass().getModifiers())) {
             style = style.getSuperclass();
         }

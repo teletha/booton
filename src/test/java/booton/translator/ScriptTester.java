@@ -34,6 +34,7 @@ import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
 
 import org.objectweb.asm.Type;
 
+
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebConsole.Logger;

@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kiss.Extensible;
 import kiss.I;
@@ -97,6 +98,9 @@ class JavaMethodCompiler extends MethodVisitor {
 
     /** The method return type. */
     private final Type returnType;
+
+    /** The local variable index. */
+    private final CopyOnWriteArrayList<Integer> locals = new CopyOnWriteArrayList();
 
     /** The flag whether the current processing method is static or not. */
     private boolean isNotStatic;
@@ -185,7 +189,22 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // NodeDebugger.dump(script, original, nodes);
 
-        // write script
+        // ===============================================
+        // Script Code
+        // ===============================================
+        // write method declaration
+        code.append(":function(");
+        if (original.equals("act")) System.out.println(locals + "  " + isNotStatic);
+        for (int i = isNotStatic ? 1 : 0; i < locals.size(); i++) {
+            code.append(Javascript.computeLocalVariable(locals.get(i), !isNotStatic));
+
+            if (i + 1 != locals.size()) {
+                code.append(',');
+            }
+        }
+
+        code.append("){");
+
         code.mark();
 
         nodes.get(0).write(code);
@@ -1033,31 +1052,21 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
-        // do nothing
+        locals.addIfAbsent(index);
     }
 
     /**
      * {@inheritDoc}
      */
     public void visitLookupSwitchInsn(Label label, int[] values, Label[] labels) {
+        // do nothing
     }
 
     /**
      * {@inheritDoc}
      */
     public void visitMaxs(int maxStack, int maxLocals) {
-        // write method declaration
-        code.append(":function(");
-
-        for (int i = isNotStatic ? 1 : 0; i < maxLocals; i++) {
-            code.append(Javascript.computeLocalVariable(i, !isNotStatic));
-
-            if (i + 1 != maxLocals) {
-                code.append(',');
-            }
-        }
-
-        code.append("){");
+        // do nothing
     }
 
     /**
