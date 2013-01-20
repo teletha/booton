@@ -4,9 +4,9 @@ function boot(global) {
   /**
    * Define user properties.
    */
-  function define(object, properties) {
+  function define(object, properties, override) {
     Object.keys(properties).forEach(function(name) {
-      if (!object[name]) {
+      if (!object[name] || override) {
         Object.defineProperty(object, name, {
           configurable: false,
           enumerable: false,
@@ -172,7 +172,7 @@ function boot(global) {
         // Return function if this class is functional.
         if (name in this) {
           return function() {
-            return this[name]();
+            return this[name].apply(this, arguments);
           }.bind(this);
         }
       }
@@ -233,7 +233,7 @@ function boot(global) {
       // Define class object for the reference from instance.
       define(prototype, {
         $: Class
-      });
+      }, true);
 
       // Invoke static initialization.
       if (init) init.call(Class);

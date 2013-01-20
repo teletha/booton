@@ -9,22 +9,21 @@
  */
 package teemowork.model;
 
-import js.bind.Observable;
+import js.bind.Notifiable;
 
 /**
  * @version 2013/01/16 9:18:22
  */
-public class Build {
+public class Build extends Notifiable {
 
     /** The selected champion. */
-    private Champion champion;
+    public final Champion champion;
 
     /** The current champion status. */
-    private ChampionStatus status;
+    private final ChampionStatus status;
 
     /** The level. */
-    @Observable
-    private int level;
+    private int level = 1;
 
     /** The item list. */
     private Item[] items = new Item[6];
@@ -39,13 +38,53 @@ public class Build {
     private RuneSet rune;
 
     /**
+     * @param champion
+     */
+    public Build(Champion champion) {
+        this.champion = champion;
+        this.status = champion.status;
+    }
+
+    /**
+     * Get the level property of this {@link Build}.
+     * 
+     * @return The level property.
+     */
+    public int getLevel() {
+        return level;
+    }
+
+    /**
+     * Set the level property of this {@link Build}.
+     * 
+     * @param level The level value to set.
+     */
+    public void setLevel(int level) {
+        if (0 < level && level < 19) {
+            this.level = level;
+
+            fire();
+        }
+    }
+
+    /**
+     * <p>
+     * Compute current health.
+     * </p>
+     * 
+     * @return
+     */
+    public double getHealth() {
+        return status.healthInitial() + status.healthPerLevel() * level;
+    }
+
+    /**
      * <p>
      * Compute current mana.
      * </p>
      * 
      * @return
      */
-    @Observable
     public double getMana() {
         return status.getManaInitial() + status.getManaPerLvel() * level;
     }

@@ -14,7 +14,6 @@ import static js.lang.Global.*;
 import java.util.Iterator;
 
 import js.dom.Element;
-
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
 

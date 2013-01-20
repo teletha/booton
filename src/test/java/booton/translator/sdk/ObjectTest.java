@@ -15,7 +15,7 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/01/16 21:33:44
+ * @version 2013/01/20 13:45:18
  */
 @SuppressWarnings("unused")
 public class ObjectTest extends ScriptTester {
@@ -24,6 +24,12 @@ public class ObjectTest extends ScriptTester {
      * @version 2013/01/16 21:36:02
      */
     private static class Klass {
+    }
+
+    /**
+     * @version 2013/01/16 21:36:02
+     */
+    private static class Child extends Klass {
     }
 
     @Test
@@ -78,6 +84,16 @@ public class ObjectTest extends ScriptTester {
 
             boolean act() {
                 return new Klass().getClass() == Klass.class;
+            }
+        });
+    }
+
+    @Test
+    public void GetClassAtChild() throws Exception {
+        test(new Scriptable() {
+
+            boolean act() {
+                return new Child().getClass() == Child.class;
             }
         });
     }
