@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -11,14 +11,11 @@ package booton.translator;
 
 import static org.objectweb.asm.Opcodes.*;
 
-import org.objectweb.asm.AnnotationVisitor;
-import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 
 /**
- * @version 2012/12/03 1:31:30
+ * @version 2013/01/21 15:29:47
  */
 class JavaClassCompiler extends ClassVisitor {
 
@@ -27,8 +24,6 @@ class JavaClassCompiler extends ClassVisitor {
 
     /** The javascript object code. */
     private final ScriptBuffer code;
-
-    private boolean isFirst = true;
 
     /**
      * JavaClassCompiler
@@ -44,53 +39,7 @@ class JavaClassCompiler extends ClassVisitor {
     }
 
     /**
-     * @see org.objectweb.asm.ClassVisitor#visit(int, int, java.lang.String, java.lang.String,
-     *      java.lang.String, java.lang.String[])
-     */
-    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        // do nothing
-    }
-
-    /**
-     * @see org.objectweb.asm.ClassVisitor#visitEnd()
-     */
-    public void visitEnd() {
-        // do nothing
-    }
-
-    /**
-     * @see org.objectweb.asm.ClassVisitor#visitAnnotation(java.lang.String, boolean)
-     */
-    public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-        return null; // do nothing
-    }
-
-    /**
-     * @see org.objectweb.asm.ClassVisitor#visitAttribute(org.objectweb.asm.Attribute)
-     */
-    public void visitAttribute(Attribute attribute) {
-        // do nothing
-    }
-
-    /**
-     * @see org.objectweb.asm.ClassVisitor#visitField(int, java.lang.String, java.lang.String,
-     *      java.lang.String, java.lang.Object)
-     */
-    public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-        return null; // do nothing
-    }
-
-    /**
-     * @see org.objectweb.asm.ClassVisitor#visitInnerClass(java.lang.String, java.lang.String,
-     *      java.lang.String, int)
-     */
-    public void visitInnerClass(String name, String outerName, String innerName, int access) {
-        // do nothing
-    }
-
-    /**
-     * @see org.objectweb.asm.ClassVisitor#visitMethod(int, java.lang.String, java.lang.String,
-     *      java.lang.String, java.lang.String[])
+     * {@inheritDoc}
      */
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         // ignore serializable related methods
@@ -107,27 +56,28 @@ class JavaClassCompiler extends ClassVisitor {
             return null;
         }
 
-        if (isFirst) {
-            isFirst = false;
-        } else {
-            code.separator();
-        }
+        // debug code
         code.debug(script.source, name, desc);
-        return new JavaMethodCompiler(script, code, (access & ACC_STATIC) == 0, name, desc);
+
+        // static modifier
+        boolean isStatic = (access & ACC_STATIC) != 0;
+
+        // compute method name
+        name = Javascript.computeMethodName(script.source, name, desc);
+
+        if (isStatic) {
+            name = "_" + name;
+        }
+
+        // start compiling method
+        return new JavaMethodCompiler(script, code, name, desc, isStatic);
     }
 
     /**
-     * @see org.objectweb.asm.ClassVisitor#visitOuterClass(java.lang.String, java.lang.String,
-     *      java.lang.String)
+     * {@inheritDoc}
      */
-    public void visitOuterClass(String owner, String name, String desc) {
-        // do nothing
-    }
-
-    /**
-     * @see org.objectweb.asm.ClassVisitor#visitSource(java.lang.String, java.lang.String)
-     */
-    public void visitSource(String source, String debug) {
-        // do nothing
+    @Override
+    public void visitEnd() {
+        code.optimize();
     }
 }
