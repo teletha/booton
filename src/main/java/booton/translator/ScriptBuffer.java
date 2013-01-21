@@ -129,6 +129,64 @@ class ScriptBuffer {
     }
 
     /**
+     * <p>
+     * Optimize source code.
+     * </p>
+     * <ol>
+     * <li>Remove tail whitespaces.</li>
+     * <li>Remove tail separator comma.</li>
+     * <li>Remove tail "return;" expression.</li>
+     * </ol>
+     */
+    public void optimize() {
+        remove(",");
+        remove("return;");
+    }
+
+    /**
+     * <p>
+     * Remove tailing characters if it is matched.
+     * </p>
+     * 
+     * @param c A character to remove.
+     * @return A last position.
+     */
+    private int remove(String chracters) {
+        int last = removeWhitespaces();
+        int length = chracters.length() - 1;
+
+        if (last < length) {
+            return last;
+        }
+
+        if (buffer.substring(last - length).equals(chracters)) {
+            buffer.delete(last - length, last + 1);
+            last -= length;
+        }
+        return last;
+    }
+
+    /**
+     * <p>
+     * Remove tailing whitespaces.
+     * </p>
+     * 
+     * @return A last position.
+     */
+    private int removeWhitespaces() {
+        int last = buffer.length() - 1;
+
+        if (last < 0) {
+            return 0;
+        }
+
+        while (Character.isWhitespace(buffer.charAt(last))) {
+            buffer.deleteCharAt(last--);
+        }
+        return last;
+    }
+
+    /**
      * Helper method to write script source.
      * 
      * @param fragment
@@ -196,25 +254,6 @@ class ScriptBuffer {
 
     String toFragment() {
         return buffer.substring(mark);
-    }
-
-    /**
-     * <p>
-     * Optimize source code.
-     * </p>
-     */
-    void optimize() {
-        // Remove tail white spaces.
-        while (Character.isWhitespace(buffer.charAt(buffer.length() - 1))) {
-            buffer.deleteCharAt(buffer.length() - 1);
-        }
-
-        // Remove tail "return;" expression.
-        int length = buffer.length();
-
-        if (buffer.substring(length - 7, length).equals("return;")) {
-            buffer.delete(length - 7, length);
-        }
     }
 
     /**

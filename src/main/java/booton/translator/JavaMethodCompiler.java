@@ -97,11 +97,14 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The javascript object code. */
     private final ScriptBuffer code;
 
+    /** The current processing method name. */
+    private final String methodName;
+
     /** The method return type. */
     private final Type returnType;
 
     /** The local variable manager. */
-    private final LocalVariables local;
+    private final LocalVariables variables;
 
     /** The current processing node. */
     private Node current = null;
@@ -118,8 +121,8 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The record of recent instructions. */
     private int[] records = new int[8];
 
-    /** The original method name. */
-    private String original;
+    /** The current start position of instruction records. */
+    private int recordIndex = 0;
 
     /** The flag whether the next jump instruction is used for assert statement or not. */
     private boolean assertJump = false;
@@ -128,36 +131,24 @@ class JavaMethodCompiler extends MethodVisitor {
     private Deque<TryCatch> tries = new ArrayDeque();
 
     /**
-     * Create {@link JavaMethodCompiler}.
-     * 
-     * @param classTranslator
-     * @param methodName
-     * @param parameters
+     * @param script A target script to compile.
+     * @param code A code writer.
+     * @param name A method name.
+     * @param description A method description.
+     * @param isStatic A static flag.
      */
-    JavaMethodCompiler(Javascript script, ScriptBuffer code, boolean isNotStatic, String methodName, String desc) {
+    JavaMethodCompiler(Javascript script, ScriptBuffer code, String name, String description, boolean isStatic) {
         super(ASM4);
 
-        original = methodName;
-        // The current processing method is constructor, we must use "init" name for boot.js.
-        methodName = Javascript.computeMethodName(script.source, methodName, desc);
-
-        // The current processing method is static (class method), we must mark it as static.
-        if (!isNotStatic) {
-            methodName = "_" + methodName;
-        }
-
-        // write method declaration
-        code.append(methodName);
-
-        // initialization
         this.script = script;
         this.code = code;
-        this.returnType = Type.getReturnType(desc);
-        this.local = new LocalVariables(!isNotStatic);
+        this.methodName = name;
+        this.returnType = Type.getReturnType(description);
+        this.variables = new LocalVariables(isStatic);
     }
 
     /**
-     * @see org.objectweb.asm.MethodVisitor#visitEnd()
+     * {@inheritDoc}
      */
     public void visitEnd() {
         // Resolve shorthand syntax sugar of "if" statement.
@@ -192,11 +183,12 @@ class JavaMethodCompiler extends MethodVisitor {
         // Script Code
         // ===============================================
         // write method declaration
-        code.append(":function(", I.join(local.names(), ","), "){");
+        code.append(methodName, ":", "function(", I.join(variables.names(), ","), "){");
         code.mark();
         nodes.get(0).write(code);
         code.optimize();
         code.append('}'); // method end
+        code.separator();
     }
 
     /**
@@ -223,9 +215,6 @@ class JavaMethodCompiler extends MethodVisitor {
         // Remove the current processing node.
         nodes.pollLast();
     }
-
-    /** The current start position of instruction records. */
-    private int recordIndex = 0;
 
     /**
      * {@inheritDoc}
@@ -341,7 +330,7 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     public void visitIincInsn(int position, int increment) {
         // retrieve the local variable name
-        String variable = local.name(position);
+        String variable = variables.name(position);
 
         if (increment == 1) {
             // increment
@@ -1038,7 +1027,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
-        local.register(index, desc);
+        variables.register(index, desc);
     }
 
     /**
@@ -1052,7 +1041,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitMaxs(int maxStack, int maxLocals) {
-        local.max = maxLocals;
+        variables.max = maxLocals;
     }
 
     /**
@@ -1227,7 +1216,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         // retrieve local variable name
-        String variable = local.name(position);
+        String variable = variables.name(position);
 
         switch (opcode) {
         case ALOAD:
@@ -1421,7 +1410,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * 
      * @version 2013/01/21 11:09:48
      */
-    private class LocalVariables {
+    private static class LocalVariables {
 
         /** The current processing method is static or not. */
         private final boolean isStatic;
