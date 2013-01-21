@@ -564,29 +564,6 @@ public class Javascript {
 
     /**
      * <p>
-     * Compute the identified qualified local variable name for ECMAScript.
-     * </p>
-     * 
-     * @param order An order by which this variable was declared.
-     * @param inStaticMember If this variable is declared in static member, <code>true</code>.
-     * @return An identified local variable name for ECMAScript.
-     */
-    public static final String computeLocalVariable(int order, boolean inStaticMember) {
-        // order 0 means "this", but static method doesn't have "this" variable
-        if (!inStaticMember) {
-            order--;
-        }
-
-        if (order == -1) {
-            return "this";
-        }
-
-        // Compute local variable name
-        return mung32(order);
-    }
-
-    /**
-     * <p>
      * Helper method to do numbering for the specified member's id.
      * </p>
      * 

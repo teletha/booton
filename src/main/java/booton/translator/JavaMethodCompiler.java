@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import kiss.Extensible;
 import kiss.I;
@@ -35,6 +34,8 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
+import booton.Obfuscator;
+
 /**
  * <p>
  * In general, the compiler converts the short-circuit route, and optimizes the logical expression.
@@ -43,7 +44,7 @@ import org.objectweb.asm.Type;
  * completely, garbage goto code will remain.
  * </p>
  * 
- * @version 2012/12/07 11:41:58
+ * @version 2013/01/21 11:55:35
  */
 class JavaMethodCompiler extends MethodVisitor {
 
@@ -99,11 +100,8 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The method return type. */
     private final Type returnType;
 
-    /** The local variable index. */
-    private final CopyOnWriteArrayList<Integer> locals = new CopyOnWriteArrayList();
-
-    /** The flag whether the current processing method is static or not. */
-    private boolean isNotStatic;
+    /** The local variable manager. */
+    private final LocalVariables local;
 
     /** The current processing node. */
     private Node current = null;
@@ -120,6 +118,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The record of recent instructions. */
     private int[] records = new int[8];
 
+    /** The original method name. */
     private String original;
 
     /** The flag whether the next jump instruction is used for assert statement or not. */
@@ -150,11 +149,11 @@ class JavaMethodCompiler extends MethodVisitor {
         // write method declaration
         code.append(methodName);
 
-        // initialize here
+        // initialization
         this.script = script;
         this.code = code;
-        this.isNotStatic = isNotStatic;
         this.returnType = Type.getReturnType(desc);
+        this.local = new LocalVariables(!isNotStatic);
     }
 
     /**
@@ -193,22 +192,9 @@ class JavaMethodCompiler extends MethodVisitor {
         // Script Code
         // ===============================================
         // write method declaration
-        code.append(":function(");
-        if (original.equals("act")) System.out.println(locals + "  " + isNotStatic);
-        for (int i = isNotStatic ? 1 : 0; i < locals.size(); i++) {
-            code.append(Javascript.computeLocalVariable(locals.get(i), !isNotStatic));
-
-            if (i + 1 != locals.size()) {
-                code.append(',');
-            }
-        }
-
-        code.append("){");
-
+        code.append(":function(", I.join(local.names(), ","), "){");
         code.mark();
-
         nodes.get(0).write(code);
-
         code.optimize();
         code.append('}'); // method end
     }
@@ -355,7 +341,7 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     public void visitIincInsn(int position, int increment) {
         // retrieve the local variable name
-        String variable = Javascript.computeLocalVariable(position, !isNotStatic);
+        String variable = local.name(position);
 
         if (increment == 1) {
             // increment
@@ -1052,7 +1038,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
-        locals.addIfAbsent(index);
+        local.register(index, desc);
     }
 
     /**
@@ -1066,7 +1052,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitMaxs(int maxStack, int maxLocals) {
-        // do nothing
+        local.max = maxLocals;
     }
 
     /**
@@ -1241,7 +1227,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         // retrieve local variable name
-        String variable = Javascript.computeLocalVariable(position, !isNotStatic);
+        String variable = local.name(position);
 
         switch (opcode) {
         case ALOAD:
@@ -1425,6 +1411,86 @@ class JavaMethodCompiler extends MethodVisitor {
             // If this exception will be thrown, it is bug of this program. So we must rethrow the
             // wrapped error in here.
             throw new Error(e);
+        }
+    }
+
+    /**
+     * <p>
+     * Manage local variables.
+     * </p>
+     * 
+     * @version 2013/01/21 11:09:48
+     */
+    private class LocalVariables {
+
+        /** The current processing method is static or not. */
+        private final boolean isStatic;
+
+        /** The max size of variables. */
+        private int max = 0;
+
+        /** The ignorable variable index. */
+        private final List<Integer> ignores = new ArrayList();
+
+        /**
+         * @param isStatic
+         */
+        private LocalVariables(boolean isStatic) {
+            this.isStatic = isStatic;
+        }
+
+        /**
+         * <p>
+         * Register local variable.
+         * </p>
+         * 
+         * @param index A index of variable.
+         * @param type A type of variable.
+         */
+        private void register(int index, String type) {
+            if (type.equals("D") || type.equals("J")) {
+                ignores.add(index + 1);
+            }
+        }
+
+        /**
+         * <p>
+         * Compute the identified qualified local variable name for ECMAScript.
+         * </p>
+         * 
+         * @param order An order by which this variable was declared.
+         * @return An identified local variable name for ECMAScript.
+         */
+        private String name(int order) {
+            // order 0 means "this", but static method doesn't have "this" variable
+            if (!isStatic) {
+                order--;
+            }
+
+            if (order == -1) {
+                return "this";
+            }
+
+            // Compute local variable name
+            return Obfuscator.mung32(order);
+        }
+
+        /**
+         * <p>
+         * List up all valid variable names.
+         * </p>
+         * 
+         * @return
+         */
+        private List<String> names() {
+            List<String> names = new ArrayList();
+
+            for (int i = isStatic ? 0 : 1; i < max; i++) {
+                if (!ignores.contains(i)) {
+                    names.add(name(i));
+                }
+            }
+            return names;
         }
     }
 

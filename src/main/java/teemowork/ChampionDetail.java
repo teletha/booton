@@ -135,7 +135,6 @@ public class ChampionDetail extends Page {
         level.text(String.valueOf(build.getLevel()));
         health.text(String.valueOf(build.getHealth()));
         mana.text(String.valueOf(build.getMana()));
-        System.out.println(build.getAd());
         ad.text(String.valueOf(build.getAd()));
     }
 
