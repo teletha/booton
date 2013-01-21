@@ -97,7 +97,6 @@ public class Build extends Notifiable {
      * @return
      */
     public double getAd() {
-        System.out.println(status.getAdInitial());
         return status.getAdInitial() + status.getAdPerLvel() * level;
     }
 }
