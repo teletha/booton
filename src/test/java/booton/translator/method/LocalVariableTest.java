@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2012/12/01 3:54:05
+ * @version 2013/01/21 16:49:37
  */
 @SuppressWarnings("unused")
 public class LocalVariableTest extends ScriptTester {
@@ -39,5 +39,44 @@ public class LocalVariableTest extends ScriptTester {
                 return value;
             }
         });
+    }
+
+    @Test
+    public void PrimitiveLongAndDoubleUses2Stacks() {
+        test(new Scriptable() {
+
+            double act(double value) {
+                return calc(20, value, 10);
+            }
+
+            double calc(double one, double two, long three) {
+                return one * two + three;
+            }
+        });
+    }
+
+    @Test
+    public void CompilerGeneratedCodeDoesntProduceLocalVariableOperand() {
+        test(new CompilerGenerator());
+    }
+
+    /**
+     * @version 2013/01/21 16:51:53
+     */
+    private static class CompilerGenerator implements Scriptable {
+
+        double act() {
+            return new CompilerGeneratedCode().calc(10, 10);
+        }
+
+        /**
+         * @version 2013/01/21 16:52:11
+         */
+        private static class CompilerGeneratedCode {
+
+            private double calc(double one, double two) {
+                return one * two;
+            }
+        }
     }
 }

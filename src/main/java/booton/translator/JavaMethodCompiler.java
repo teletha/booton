@@ -1027,6 +1027,8 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
+        // Compiler generated code (i.e. synthetic method) doesn't have local variable operand.
+        // So we shouldn't use thid method to retrieve infomation.
         variables.register(index, desc);
     }
 
@@ -1216,7 +1218,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         // retrieve local variable name
-        String variable = variables.name(position);
+        String variable = variables.name(position, opcode);
 
         switch (opcode) {
         case ALOAD:
@@ -1451,6 +1453,37 @@ class JavaMethodCompiler extends MethodVisitor {
          * @return An identified local variable name for ECMAScript.
          */
         private String name(int order) {
+            // order 0 means "this", but static method doesn't have "this" variable
+            if (!isStatic) {
+                order--;
+            }
+
+            if (order == -1) {
+                return "this";
+            }
+
+            // Compute local variable name
+            return Obfuscator.mung32(order);
+        }
+
+        /**
+         * <p>
+         * Compute the identified qualified local variable name for ECMAScript.
+         * </p>
+         * 
+         * @param order An order by which this variable was declared.
+         * @return An identified local variable name for ECMAScript.
+         */
+        private String name(int order, int opcode) {
+            switch (opcode) {
+            case LLOAD:
+            case LSTORE:
+            case DLOAD:
+            case DSTORE:
+                ignores.add(order + 1);
+                break;
+            }
+
             // order 0 means "this", but static method doesn't have "this" variable
             if (!isStatic) {
                 order--;
