@@ -36,13 +36,13 @@ public class ChampionDetail extends Page {
     private jQuery level;
 
     /** The status. */
-    private jQuery health;
+    private StatusBox health;
 
     /** The status. */
-    private jQuery mana;
+    private StatusBox mana;
 
     /** The status. */
-    private jQuery ad;
+    private StatusBox ad;
 
     /**
      * Build page.
@@ -117,9 +117,9 @@ public class ChampionDetail extends Page {
                 });
 
         level = icon.child(Level.class);
-        health = info.child(Status.class).text("Health").child(Value.class);
-        mana = info.child(Status.class).text("Mana").child(Value.class);
-        ad = info.child(Status.class).text("Attack Damage").child(Value.class);
+        health = new StatusBox("Health", info);
+        mana = new StatusBox("Mana", info);
+        ad = new StatusBox("AD", info);
 
         calcurate();
     }
@@ -133,9 +133,9 @@ public class ChampionDetail extends Page {
     private void calcurate() {
         // update each status
         level.text(String.valueOf(build.getLevel()));
-        health.text(String.valueOf(build.getHealth()));
-        mana.text(String.valueOf(build.getMana()));
-        ad.text(String.valueOf(build.getAd()));
+        health.set(build.getHealth(), 10);
+        mana.set(build.getMana(), 0);
+        ad.set(build.getAd(), 0);
     }
 
     /**
@@ -144,6 +144,74 @@ public class ChampionDetail extends Page {
     @Override
     protected String getPageId() {
         return "Champion/" + build.champion.name;
+    }
+
+    /**
+     * @version 2013/01/21 16:29:15
+     */
+    private static class StatusBox {
+
+        /** The value for curernt Lv. */
+        private jQuery current;
+
+        /** The value for per Lv. */
+        private jQuery perLv;
+
+        /**
+         * @param name
+         */
+        private StatusBox(String name, jQuery root) {
+            jQuery status = root.child(Box.class);
+            status.child(Name.class).text(name);
+            current = status.child(Value.class);
+            perLv = status.child(Value.class);
+        }
+
+        /**
+         * <p>
+         * Set status.
+         * </p>
+         * 
+         * @param current
+         * @param per
+         */
+        private void set(double current, double per) {
+            this.current.text(String.valueOf(current));
+            this.perLv.text("(+" + per + ")");
+        }
+
+        /**
+         * @version 2013/01/21 16:33:33
+         */
+        private static class Box extends CSS {
+
+            {
+                display.block();
+                box.width(240, px);
+            }
+        }
+
+        /**
+         * @version 2013/01/21 16:33:33
+         */
+        private static class Name extends CSS {
+
+            {
+                display.tableCell();
+                box.width(50, px);
+            }
+        }
+
+        /**
+         * @version 2013/01/21 16:33:33
+         */
+        private static class Value extends CSS {
+
+            {
+                display.tableCell();
+                box.width(50, px);
+            }
+        }
     }
 
     /**
@@ -203,26 +271,6 @@ public class ChampionDetail extends Page {
             while (selection()) {
                 background.color.transparent();
             }
-        }
-    }
-
-    /**
-     * @version 2013/01/15 13:19:52
-     */
-    private static class Status extends CSS {
-
-        {
-
-        }
-    }
-
-    /**
-     * @version 2013/01/15 13:19:52
-     */
-    private static class Value extends CSS {
-
-        {
-
         }
     }
 }
