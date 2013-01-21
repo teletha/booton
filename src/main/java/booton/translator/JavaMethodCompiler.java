@@ -1028,8 +1028,7 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
         // Compiler generated code (i.e. synthetic method) doesn't have local variable operand.
-        // So we shouldn't use thid method to retrieve infomation.
-        variables.register(index, desc);
+        // So we shouldn't use this method to salvage infomation.
     }
 
     /**
@@ -1432,20 +1431,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
         /**
          * <p>
-         * Register local variable.
-         * </p>
-         * 
-         * @param index A index of variable.
-         * @param type A type of variable.
-         */
-        private void register(int index, String type) {
-            if (type.equals("D") || type.equals("J")) {
-                ignores.add(index + 1);
-            }
-        }
-
-        /**
-         * <p>
          * Compute the identified qualified local variable name for ECMAScript.
          * </p>
          * 
@@ -1453,17 +1438,7 @@ class JavaMethodCompiler extends MethodVisitor {
          * @return An identified local variable name for ECMAScript.
          */
         private String name(int order) {
-            // order 0 means "this", but static method doesn't have "this" variable
-            if (!isStatic) {
-                order--;
-            }
-
-            if (order == -1) {
-                return "this";
-            }
-
-            // Compute local variable name
-            return Obfuscator.mung32(order);
+            return name(order, 0);
         }
 
         /**
@@ -1475,6 +1450,7 @@ class JavaMethodCompiler extends MethodVisitor {
          * @return An identified local variable name for ECMAScript.
          */
         private String name(int order, int opcode) {
+            // ignore long or double second index
             switch (opcode) {
             case LLOAD:
             case LSTORE:
