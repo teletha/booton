@@ -50,6 +50,17 @@ import booton.Obfuscator;
  */
 class JavaMethodCompiler extends MethodVisitor {
 
+    /** The {@link Class#isAssignableFrom(Class)} method signature. */
+    private static final Method assignable;
+
+    static {
+        try {
+            assignable = Class.class.getMethod("isAssignableFrom", Class.class);
+        } catch (Exception e) {
+            throw I.quiet(e);
+        }
+    }
+
     /**
      * Represents an expanded frame. See {@link ClassReader#EXPAND_FRAMES}.
      */
@@ -102,6 +113,9 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The current processing method name. */
     private final String methodName;
 
+    /** The current processing method description. */
+    private final String description;
+
     /** The method return type. */
     private final Type returnType;
 
@@ -133,6 +147,11 @@ class JavaMethodCompiler extends MethodVisitor {
     private Deque<TryCatch> tries = new ArrayDeque();
 
     /**
+     * {@link Enum#values} produces special bytecode, so we must handle it by special way.
+     */
+    private Operand[] enumValues = new Operand[2];
+
+    /**
      * @param script A target script to compile.
      * @param code A code writer.
      * @param name A method name.
@@ -145,6 +164,7 @@ class JavaMethodCompiler extends MethodVisitor {
         this.script = script;
         this.code = code;
         this.methodName = name;
+        this.description = description;
         this.returnType = Type.getReturnType(description);
         this.variables = new LocalVariables(isStatic);
     }
@@ -179,7 +199,7 @@ class JavaMethodCompiler extends MethodVisitor {
             iterator.next().computeTryBlock();
         }
 
-        // NodeDebugger.dump(script, original, nodes);
+        // NodeDebugger.dump(script, methodName, description, nodes);
 
         // ===============================================
         // Script Code
@@ -444,7 +464,7 @@ class JavaMethodCompiler extends MethodVisitor {
         case LADD:
         case FADD:
         case DADD:
-            current.join("+");
+            current.join("+").enclose();
             break;
 
         // - operand
@@ -452,7 +472,7 @@ class JavaMethodCompiler extends MethodVisitor {
         case LSUB:
         case FSUB:
         case DSUB:
-            current.join("-");
+            current.join("-").enclose();
             break;
 
         // * operand
@@ -1217,17 +1237,6 @@ class JavaMethodCompiler extends MethodVisitor {
         }
     }
 
-    private static final Method assignable;
-
-    static {
-        try {
-            assignable = Class.class.getMethod("isAssignableFrom", Class.class);
-        } catch (Exception e) {
-            throw I.quiet(e);
-        }
-
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -1276,10 +1285,22 @@ class JavaMethodCompiler extends MethodVisitor {
                 // retrieve and remove it
                 Operand operand = current.stack.pollLast();
 
+                // Enum#values produces special bytecode, so we must handle it by special way.
+                if (match(ASTORE, ICONST_0, ALOAD, ARRAYLENGTH, DUP, ISTORE)) {
+                    enumValues[0] = current.remove(0);
+                    enumValues[1] = current.remove(0);
+                }
+
                 current.addExpression(variable, "=", operand);
 
                 if (operand.duplicated) {
                     operand.duplicated = false;
+
+                    // Enum#values produces special bytecode, so we must handle it by special way.
+                    if (match(ARRAYLENGTH, DUP, ISTORE, ANEWARRAY, DUP, ASTORE)) {
+                        current.addOperand(enumValues[1]);
+                        current.addOperand(enumValues[0]);
+                    }
 
                     // duplicate pointer
                     current.addOperand(variable);

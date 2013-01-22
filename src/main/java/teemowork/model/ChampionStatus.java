@@ -10,11 +10,12 @@
 package teemowork.model;
 
 import teemowork.model.improvement.AttackSpeed;
+import teemowork.model.improvement.AttackSpeedPerLv;
 
 /**
  * @version 2012/12/11 11:50:04
  */
-public class ChampionStatus implements AttackSpeed {
+public class ChampionStatus implements AttackSpeed, AttackSpeedPerLv {
 
     /** The history version. */
     private final Patch patch;
@@ -260,20 +261,10 @@ public class ChampionStatus implements AttackSpeed {
     }
 
     /**
-     * Get the asInitial property of this {@link ChampionStatus}.
-     * 
-     * @return The asInitial property.
+     * {@inheritDoc}
      */
-    public double getAsBase() {
-        return asInitial;
-    }
-
-    /**
-     * Get the asPerLvel property of this {@link ChampionStatus}.
-     * 
-     * @return The asPerLvel property.
-     */
-    public double getAsPerLvel() {
+    @Override
+    public double getASPerLv() {
         return asPerLvel;
     }
 

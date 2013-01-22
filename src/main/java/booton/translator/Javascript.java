@@ -284,13 +284,7 @@ public class Javascript {
         String superClass = parent == null || parent == Object.class ? "" : computeSimpleClassName(parent);
 
         // write class definition
-        code.append("boot.define(")
-                .string(className)
-                .append(",")
-                .string(superClass)
-                .append(",")
-                .append(interfaces())
-                .append(",");
+        code.append("boot.define(").string(className).append(",").string(superClass).append(",", interfaces(), ",");
 
         // write constructors, fields and methods
         try {

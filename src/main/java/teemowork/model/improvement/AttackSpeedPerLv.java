@@ -12,7 +12,7 @@ package teemowork.model.improvement;
 /**
  * @version 2013/01/21 20:19:06
  */
-public interface AttackSpeedPerLv {
+public interface AttackSpeedPerLv extends Improvement {
 
     /**
      * <p>

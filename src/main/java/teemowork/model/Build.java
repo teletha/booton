@@ -9,10 +9,13 @@
  */
 package teemowork.model;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import js.bind.Notifiable;
 import js.util.ArrayList;
+import teemowork.model.improvement.AttackSpeed;
+import teemowork.model.improvement.AttackSpeedPerLv;
 import teemowork.model.improvement.Improvement;
 
 /**
@@ -112,18 +115,25 @@ public class Build extends Notifiable {
      * @return
      */
     public double getAS() {
-        return status.getAsBase() + status.getAsPerLvel() * level;
+        return round4(status.getASBase() * (1 + (status.getASPerLv() * (level - 1) + getASIncreased()) / 100));
+    }
+
+    public double getASIncreased() {
+        return sum(AttackSpeed.class) + sum(AttackSpeedPerLv.class) * level;
     }
 
     /**
      * <p>
-     * Compute current as.
+     * Round decimel.
      * </p>
      * 
+     * @param value
      * @return
      */
-    public double getASPerLv() {
-        return status.getAdPerLvel();
+    private double round4(double value) {
+        value *= 1000;
+        value = Math.round(value);
+        return value / 1000;
     }
 
     /**
@@ -136,9 +146,14 @@ public class Build extends Notifiable {
      */
     private <T extends Improvement> double sum(Class<T> improvementType) {
         double sum = 0;
+        Method method = improvementType.getMethods()[0];
 
         for (T item : collect(improvementType)) {
-
+            try {
+                sum += (double) method.invoke(item);
+            } catch (Exception e) {
+                throw new Error(e);
+            }
         }
         return sum;
     }
@@ -154,9 +169,9 @@ public class Build extends Notifiable {
     private <T> List<T> collect(Class<T> improvementType) {
         List<T> items = new ArrayList();
 
-        if (improvementType.isAssignableFrom(champion.getClass())) {
-            items.add((T) champion);
-        }
+        // if (improvementType.isAssignableFrom(status.getClass())) {
+        // items.add((T) status);
+        // }
         return items;
     }
 }

@@ -140,7 +140,7 @@ public class ChampionDetail extends Page {
         health.set(build.getHealth(), 10);
         mana.set(build.getMana(), 0);
         ad.set(build.getAd(), 0);
-        as.set(build.getAS(), 0);
+        as.set(build.getAS(), build.getASIncreased());
     }
 
     /**

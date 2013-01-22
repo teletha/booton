@@ -28,11 +28,8 @@ import booton.translator.JavaNative;
 @JavaNative(Method.class)
 class JSMethod extends JSAnnotatedElement {
 
-    /** The declared class definition in runtime. */
+    /** The declaring class definition in runtime. */
     private NativeObject clazz;
-
-    /** The method function in runtime. */
-    private final NativeFunction function;
 
     /**
      * <p>
@@ -41,14 +38,12 @@ class JSMethod extends JSAnnotatedElement {
      * 
      * @param name
      * @param clazz
-     * @param function
      * @param annotations
      */
-    JSMethod(String name, NativeObject clazz, NativeFunction function, NativeArray<Annotation> annotations) {
+    JSMethod(String name, NativeObject clazz, NativeArray<Annotation> annotations) {
         super(name, annotations);
 
         this.clazz = clazz;
-        this.function = function;
     }
 
     /**
@@ -100,6 +95,6 @@ class JSMethod extends JSAnnotatedElement {
      *         parameters args.
      */
     public Object invoke(Object context, Object... parameters) {
-        return function.apply(context, parameters);
+        return ((NativeObject) context).getPropertyAs(NativeFunction.class, name).apply(context, parameters);
     }
 }

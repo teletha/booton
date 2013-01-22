@@ -108,7 +108,7 @@ class JSClass<T> extends JSAnnotatedElement {
 
         for (String name : clazz.keys()) {
             if (!name.startsWith("$")) {
-                container.push(new JSMethod(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
+                container.push(new JSMethod(name, clazz, annotations.getPropertyAs(NativeArray.class, name)));
             }
         }
         return (Method[]) (Object) container;
@@ -134,7 +134,7 @@ class JSClass<T> extends JSAnnotatedElement {
         // collect non-static methods only
         for (String name : clazz.keys()) {
             if (!name.startsWith("$")) {
-                container.push(new JSMethod(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
+                container.push(new JSMethod(name, clazz, annotations.getPropertyAs(NativeArray.class, name)));
             }
         }
 
