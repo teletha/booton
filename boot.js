@@ -154,10 +154,11 @@ function boot(global) {
      * 
      * @param {String} name A simple class name of a class to define.
      * @param {String} superclassName A simple parent class name.
+     * @param {Array}  interfaces A list of interface name.
      * @param {Object} definition A class definition.
      * @param {Object} annotation A annotation definition.
      */
-    define: function(name, superclassName, definition, annotation) {
+    define: function(name, superclassName, interfaces, definition, annotation) {
       // Default superclass is native Object class.
       var superclass = superclassName.length === 0 ? Object : boot[superclassName];
 
@@ -217,7 +218,7 @@ function boot(global) {
       Object.defineProperty(Class, "$", {
         get: function() {
           if (!metadata) {
-            metadata = new boot.A(name, prototype, annotation || {}, superclass.$, 0)
+            metadata = new boot.A(name, prototype, annotation || {}, superclass.$, interfaces, 0)
           }
           return metadata;
         }

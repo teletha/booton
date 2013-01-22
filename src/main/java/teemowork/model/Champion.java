@@ -29,7 +29,7 @@ public class Champion {
     public final String normalizedName;
 
     /** The current status. */
-    ChampionStatus status;
+    public ChampionStatus status;
 
     /**
      * <p>

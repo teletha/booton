@@ -9,10 +9,12 @@
  */
 package teemowork.model;
 
+import teemowork.model.improvement.AttackSpeed;
+
 /**
  * @version 2012/12/11 11:50:04
  */
-public class ChampionStatus {
+public class ChampionStatus implements AttackSpeed {
 
     /** The history version. */
     private final Patch patch;
@@ -250,11 +252,19 @@ public class ChampionStatus {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public double getASBase() {
+        return asInitial;
+    }
+
+    /**
      * Get the asInitial property of this {@link ChampionStatus}.
      * 
      * @return The asInitial property.
      */
-    public double getAsInitial() {
+    public double getAsBase() {
         return asInitial;
     }
 
