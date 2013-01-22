@@ -69,9 +69,9 @@ public class NodeDebugger {
      * @param methodName A original method name.
      * @param nodes A node info.
      */
-    public static void dump(Javascript script, String methodName, List<Node> nodes) {
+    public static void dump(Javascript script, String methodName, String description, List<Node> nodes) {
         if (whileTest) {
-            if (methodName.equals("act")) {
+            if (methodName.equals(Javascript.computeMethodName(script.source, "act", description))) {
                 String testClassName = computeTestClassName(script.source);
                 String testMethodName = computeTestMethodName(testClassName);
 

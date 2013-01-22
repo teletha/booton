@@ -126,4 +126,14 @@ public class ArithmeticOperatorTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void Complex() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 1, to = 10) int value) {
+                return (value + 2) * 2;
+            }
+        });
+    }
 }

@@ -71,6 +71,14 @@ function boot(global) {
   //====================================================================
   // Array Extensions
   //====================================================================
+  define(Array.prototype, {
+    copy: function(from, dest, dfrom, length) {
+      for (var i = 0; i < length; i++) {
+        dest[dfrom + i] = this[from + i];
+      } 
+    }
+  });
+  
 
   //====================================================================
   // WebSocket Extensions

@@ -21,6 +21,6 @@ class SystemCoder extends Translator<System> {
     public String err = "console";
 
     public String arraycopy(Object param0, int param1, Object param2, int param3, int param4) {
-        return param(2) + ".splice(" + param3 + ",0," + param(0) + ".splice(" + param(1) + "," + param(4) + "))";
+        return param(0) + ".copy(" + param(1) + "," + param(2) + "," + param(3) + "," + param(4) + ")";
     }
 }

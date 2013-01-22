@@ -9,10 +9,8 @@
  */
 package teemowork.model.improvement;
 
-
 /**
  * @version 2013/01/21 20:17:00
  */
 public interface Improvement {
-
 }

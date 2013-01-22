@@ -126,9 +126,7 @@ class Node {
 
         // Retrieve and remove it
         Operand operand = stack.remove(index);
-        // if (operand instanceof OperandCondition) {
-        // throw new Error(operand.toString());
-        // }
+
         if (operand.duplicated) {
             operand.duplicated = false;
 
@@ -144,9 +142,27 @@ class Node {
      * Helper method to join latest two operands.
      * 
      * @param separator
+     * @return Chainable API.
      */
-    final void join(String separator) {
+    final Node join(String separator) {
         stack.add(new OperandExpression(remove(1) + separator + remove(0)));
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Helper method to enclose current opperand.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    final Node enclose() {
+        stack.add(new OperandExpression("(" + remove(0) + ")"));
+
+        // API definition
+        return this;
     }
 
     /**
