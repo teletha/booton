@@ -199,7 +199,7 @@ class JavaMethodCompiler extends MethodVisitor {
             iterator.next().computeTryBlock();
         }
 
-        // NodeDebugger.dump(script, methodName, description, nodes);
+        NodeDebugger.dump(script, methodName, description, nodes);
 
         // ===============================================
         // Script Code

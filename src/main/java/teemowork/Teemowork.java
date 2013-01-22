@@ -42,11 +42,5 @@ public class Teemowork extends Application {
         nav.add("Contact", "#");
 
         System.out.println(Patch.Latest);
-        System.out.println(AAA.A);
-        System.out.println(AAA.values());
-    }
-
-    private static enum AAA {
-        A, B, C
     }
 }
