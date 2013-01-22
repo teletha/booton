@@ -9,7 +9,6 @@
  */
 package booton.translator.flow;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.translator.Param;
@@ -17,7 +16,7 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/01/14 12:46:20
+ * @version 2013/01/22 20:37:16
  */
 @SuppressWarnings("unused")
 public class ControlStructureTest extends ScriptTester {
@@ -462,73 +461,6 @@ public class ControlStructureTest extends ScriptTester {
                 }
 
                 return value;
-            }
-        });
-    }
-
-    @Test
-    @Ignore
-    public void SwitchReturn() {
-        test(new Scriptable() {
-
-            public int act(@Param(from = 0, to = 5) int value) {
-                switch (value) {
-                case 0:
-                    return 0;
-
-                case 1:
-                    return 1;
-
-                default:
-                    return value + 5;
-                }
-            }
-        });
-    }
-
-    @Test
-    @Ignore
-    public void SwitchReturnWithOrder() {
-        test(new Scriptable() {
-
-            public int act(@Param(from = 0, to = 5) int value) {
-                switch (value) {
-                default:
-                    return value + 5;
-
-                case 1:
-                    return 1;
-
-                case 0:
-                    return 0;
-                }
-            }
-        });
-    }
-
-    @Test
-    @Ignore
-    public void SwitchBreak() {
-        test(new Scriptable() {
-
-            public int act(@Param(from = 0, to = 5) int value) {
-                int result;
-
-                switch (value) {
-                case 0:
-                    result = -1;
-                    break;
-
-                case 1:
-                    result = 10;
-                    break;
-
-                default:
-                    result = value;
-                    break;
-                }
-
-                return result;
             }
         });
     }
