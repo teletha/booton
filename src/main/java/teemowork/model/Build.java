@@ -9,7 +9,11 @@
  */
 package teemowork.model;
 
+import java.util.List;
+
 import js.bind.Notifiable;
+import js.util.ArrayList;
+import teemowork.model.improvement.Improvement;
 
 /**
  * @version 2013/01/16 9:18:22
@@ -98,5 +102,61 @@ public class Build extends Notifiable {
      */
     public double getAd() {
         return status.getAdInitial() + status.getAdPerLvel() * level;
+    }
+
+    /**
+     * <p>
+     * Compute current as.
+     * </p>
+     * 
+     * @return
+     */
+    public double getAS() {
+        return status.getAsBase() + status.getAsPerLvel() * level;
+    }
+
+    /**
+     * <p>
+     * Compute current as.
+     * </p>
+     * 
+     * @return
+     */
+    public double getASPerLv() {
+        return status.getAdPerLvel();
+    }
+
+    /**
+     * <p>
+     * Compute sum of the specified improvements.
+     * </p>
+     * 
+     * @param improvementType A target type.
+     * @return A sum value.
+     */
+    private <T extends Improvement> double sum(Class<T> improvementType) {
+        double sum = 0;
+
+        for (T item : collect(improvementType)) {
+
+        }
+        return sum;
+    }
+
+    /**
+     * <p>
+     * Collect improvements.
+     * </p>
+     * 
+     * @param type
+     * @return
+     */
+    private <T> List<T> collect(Class<T> improvementType) {
+        List<T> items = new ArrayList();
+
+        if (improvementType.isAssignableFrom(champion.getClass())) {
+            items.add((T) champion);
+        }
+        return items;
     }
 }

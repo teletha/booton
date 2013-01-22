@@ -9,6 +9,8 @@
  */
 package js.lang.reflect;
 
+import static js.lang.Global.*;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -36,7 +38,10 @@ class JSClass<T> extends JSAnnotatedElement {
     private final NativeObject annotations;
 
     /** The super class. */
-    private final JSClass superclass;
+    private final Class superclass;
+
+    /** The interface classes. */
+    private final Class[] interfaces;
 
     /**
      * <p>
@@ -47,12 +52,17 @@ class JSClass<T> extends JSAnnotatedElement {
      * @param clazz
      * @param annotations
      */
-    private JSClass(String name, NativeObject clazz, NativeObject annotations, JSClass superclass) {
+    private JSClass(String name, NativeObject clazz, NativeObject annotations, Class superclass, String[] interfaces) {
         super(name, annotations.getPropertyAs(NativeArray.class, "$"));
 
         this.clazz = clazz;
         this.annotations = annotations;
         this.superclass = superclass;
+        this.interfaces = new Class[interfaces.length];
+
+        for (int i = 0; i < interfaces.length; i++) {
+            this.interfaces[i] = forName(interfaces[i]);
+        }
     }
 
     /**
@@ -177,12 +187,48 @@ class JSClass<T> extends JSAnnotatedElement {
      */
     public boolean isAssignableFrom(Class<?> clazz) {
         while (clazz != null) {
+            // match against class
             if (this == (Object) clazz) {
                 return true;
+            }
+
+            // match agains interfaces
+            for (Class type : clazz.getInterfaces()) {
+                if (isAssignableFrom(type)) {
+                    return true;
+                }
             }
             clazz = clazz.getSuperclass();
         }
         return false;
+    }
+
+    /**
+     * <p>
+     * Determines if the specified {@code Object} is assignment-compatible with the object
+     * represented by this {@code Class}. This method is the dynamic equivalent of the Java language
+     * {@code instanceof} operator. The method returns {@code true} if the specified {@code Object}
+     * argument is non-null and can be cast to the reference type represented by this {@code Class}
+     * object without raising a {@code ClassCastException.} It returns {@code false} otherwise.
+     * </p>
+     * <p>
+     * Specifically, if this {@code Class} object represents a declared class, this method returns
+     * {@code true} if the specified {@code Object} argument is an instance of the represented class
+     * (or of any of its subclasses); it returns {@code false} otherwise. If this {@code Class}
+     * object represents an array class, this method returns {@code true} if the specified
+     * {@code Object} argument can be converted to an object of the array class by an identity
+     * conversion or by a widening reference conversion; it returns {@code false} otherwise. If this
+     * {@code Class} object represents an interface, this method returns {@code true} if the class
+     * or any superclass of the specified {@code Object} argument implements this interface; it
+     * returns {@code false} otherwise. If this {@code Class} object represents a primitive type,
+     * this method returns {@code false}.
+     * </p>
+     * 
+     * @param instance The object to check.
+     * @return True if {@code instance} is an instance of this class.
+     */
+    public boolean isInstance(Object instance) {
+        return isAssignableFrom(instance.getClass());
     }
 
     /**
@@ -196,7 +242,31 @@ class JSClass<T> extends JSAnnotatedElement {
      * @return The superclass of the class represented by this object.
      */
     public Class<? super T> getSuperclass() {
-        return (Class) (Object) superclass;
+        return superclass;
+    }
+
+    /**
+     * <p>
+     * Determines the interfaces implemented by the class or interface represented by this object.
+     * </p>
+     * <p>
+     * If this object represents an interface, the array contains objects representing all
+     * interfaces extended by the interface. The order of the interface objects in the array
+     * corresponds to the order of the interface names in the extends clause of the declaration of
+     * the interface represented by this object.
+     * </p>
+     * <p>
+     * If this object represents a class or interface that implements no interfaces, the method
+     * returns an array of length 0.
+     * </p>
+     * <p>
+     * If this object represents a primitive type or void, the method returns an array of length 0.
+     * </p>
+     * 
+     * @return
+     */
+    public Class<?>[] getInterfaces() {
+        return interfaces;
     }
 
     /**
@@ -272,6 +342,6 @@ class JSClass<T> extends JSAnnotatedElement {
      * @return The Class object for the class with the specified name.
      */
     public static Class forName(String fqcn) {
-        return null;
+        return (Class) boot.getPropertyAs(NativeObject.class, fqcn).getProperty("$");
     }
 }

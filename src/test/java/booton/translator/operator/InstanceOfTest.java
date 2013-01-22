@@ -15,7 +15,8 @@
  */
 package booton.translator.operator;
 
-import org.junit.Ignore;
+import java.io.Serializable;
+
 import org.junit.Test;
 
 import booton.translator.ScriptTester;
@@ -64,7 +65,6 @@ public class InstanceOfTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void InstanceOfObject() {
         test(new OBJECT());
     }
@@ -73,6 +73,30 @@ public class InstanceOfTest extends ScriptTester {
 
         public boolean act() {
             return this instanceof Object;
+        }
+    }
+
+    @Test
+    public void InstanceOfInterface() {
+        test(new ValidInterface());
+    }
+
+    private static class ValidInterface implements Scriptable {
+
+        public boolean act() {
+            return this instanceof Scriptable;
+        }
+    }
+
+    @Test
+    public void InstanceOfInvalidInterface() {
+        test(new ValidInterface());
+    }
+
+    private static class InivalidInterface implements Scriptable {
+
+        public boolean act() {
+            return this instanceof Serializable;
         }
     }
 }

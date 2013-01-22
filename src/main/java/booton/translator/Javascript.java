@@ -281,10 +281,16 @@ public class Javascript {
     private void compileClass(ScriptBuffer code, Class parent) {
         // compute related class names
         String className = Javascript.computeSimpleClassName(source);
-        String parentClassName = parent == null || parent == Object.class ? "" : computeSimpleClassName(parent);
+        String superClass = parent == null || parent == Object.class ? "" : computeSimpleClassName(parent);
 
         // write class definition
-        code.append("boot.define(").string(className).append(",").string(parentClassName).append(",");
+        code.append("boot.define(")
+                .string(className)
+                .append(",")
+                .string(superClass)
+                .append(",")
+                .append(interfaces())
+                .append(",");
 
         // write constructors, fields and methods
         try {
@@ -320,7 +326,7 @@ public class Javascript {
         String className = Javascript.computeSimpleClassName(source);
 
         // write interface definition
-        code.append("boot.define(").string(className).append(",\"\",");
+        code.append("boot.define(").string(className).append(",\"\",").append(interfaces()).append(",");
 
         // write constructors, fields and methods
         try {
@@ -370,6 +376,26 @@ public class Javascript {
 
         // End class definition
         code.append("});");
+    }
+
+    /**
+     * <p>
+     * Compute interface definition.
+     * </p>
+     * 
+     * @return
+     */
+    private String interfaces() {
+        List<String> list = new ArrayList();
+
+        for (Class type : source.getInterfaces()) {
+            if (!JavascriptNative.class.isAssignableFrom(type)) {
+                require(type);
+
+                list.add("\"" + computeSimpleClassName(type) + "\"");
+            }
+        }
+        return "[" + I.join(list, ",") + "]";
     }
 
     /**

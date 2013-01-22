@@ -14,6 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
 import static org.objectweb.asm.Type.*;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import js.lang.NativeObject;
 import kiss.Extensible;
 import kiss.I;
 import kiss.model.ClassUtil;
@@ -51,36 +53,36 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * Represents an expanded frame. See {@link ClassReader#EXPAND_FRAMES}.
      */
-    private static int FRAME_NEW = 400;
+    private static final int FRAME_NEW = 400;
 
     /**
      * Represents a compressed frame with complete frame data.
      */
-    private static int FRAME_FULL = 401;
+    private static final int FRAME_FULL = 401;
 
     /**
      * Represents a compressed frame where locals are the same as the locals in the previous frame,
      * except that additional 1-3 locals are defined, and with an empty stack.
      */
-    private static int FRAME_APPEND = 402;
+    private static final int FRAME_APPEND = 402;
 
     /**
      * Represents a compressed frame where locals are the same as the locals in the previous frame,
      * except that the last 1-3 locals are absent and with an empty stack.
      */
-    private static int FRAME_CHOP = 403;
+    private static final int FRAME_CHOP = 403;
 
     /**
      * Represents a compressed frame with exactly the same locals as the previous frame and with an
      * empty stack.
      */
-    private static int FRAME_SAME = 404;
+    private static final int FRAME_SAME = 404;
 
     /**
      * Represents a compressed frame with exactly the same locals as the previous frame and with a
      * single value on the stack.
      */
-    private static int FRAME_SAME1 = 405;
+    private static final int FRAME_SAME1 = 405;
 
     /** The frequently used operand for cache. */
     private static final OperandNumber ZERO = new OperandNumber(0);
@@ -1199,9 +1201,31 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case INSTANCEOF:
-            current.addOperand(current.remove(0) + " instanceof " + Javascript.computeClassName(convert(type)));
+            Class clazz = convert(type);
+
+            // load source
+            script.require(clazz);
+
+            if (clazz == Object.class || clazz == NativeObject.class) {
+                current.addOperand(current.remove(0) + " instanceof Object");
+            } else if (clazz.isInterface()) {
+                current.addOperand(Javascript.computeClass(clazz) + "." + Javascript.computeMethodName(assignable) + "(" + current.remove(0) + ".$.$)");
+            } else {
+                current.addOperand(current.remove(0) + " instanceof " + Javascript.computeClassName(clazz));
+            }
             break;
         }
+    }
+
+    private static final Method assignable;
+
+    static {
+        try {
+            assignable = Class.class.getMethod("isAssignableFrom", Class.class);
+        } catch (Exception e) {
+            throw I.quiet(e);
+        }
+
     }
 
     /**
@@ -1394,7 +1418,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * @param className A fully qualified internal class name.
      * @return Java class.
      */
-    private Class convert(String className) {
+    private final Class convert(String className) {
         try {
             return Class.forName(className.replace('/', '.'));
         } catch (ClassNotFoundException e) {
@@ -1545,10 +1569,10 @@ class JavaMethodCompiler extends MethodVisitor {
             // }
 
             handler = nodes.get(nodes.indexOf(handler) + 1);
+
             if (end.outgoing.size() != 0) {
                 next = end.outgoing.get(0);
             }
-
             start.addCatch(this);
         }
 
@@ -1594,64 +1618,4 @@ class JavaMethodCompiler extends MethodVisitor {
             }
         }
     }
-
-    // /**
-    // * @version 2010/01/27 16:04:09
-    // */
-    // class TryBlock {
-    //
-    // /** The base node. */
-    // Node base;
-    //
-    // /** The start node. */
-    // Node start;
-    //
-    // /** The end node. */
-    // Node end;
-    //
-    // /** The exception type. */
-    // final String exception;
-    //
-    // /**
-    // * @param start
-    // * @param end
-    // * @param handler
-    // * @param exception
-    // */
-    // TryBlock(Label start, Label end, Label handler, String exception) {
-    // this.base = getNode(start);
-    // this.end = getNode(end);
-    // this.start = getNode(handler);
-    // this.exception = exception == null ? null : Javascript.computeClassName(convert(exception));
-    // }
-    //
-
-    //
-    // /**
-    // * @see java.lang.Object#hashCode()
-    // */
-    // @Override
-    // public int hashCode() {
-    // return base.hashCode() + end.hashCode();
-    // }
-    //
-    // /**
-    // * @see java.lang.Object#equals(java.lang.Object)
-    // */
-    // @Override
-    // public boolean equals(Object obj) {
-    // if (obj instanceof TryBlock) {
-    // TryBlock other = (TryBlock) obj;
-    //
-    // if (exception == null) {
-    // // finally block
-    // return base == other.base && end == other.end;
-    // } else {
-    // // catch block
-    // return base == other.base && end == other.end;
-    // }
-    // }
-    // return false;
-    // }
-    // }
 }
