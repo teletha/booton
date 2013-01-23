@@ -230,7 +230,7 @@ class JavaMethodCompiler extends MethodVisitor {
             iterator.next().computeTryBlock();
         }
 
-        NodeDebugger.dump(script, methodNameOriginal, nodes);
+        // NodeDebugger.dump(script, methodNameOriginal, nodes);
 
         // ===============================================
         // Script Code
@@ -619,8 +619,6 @@ class JavaMethodCompiler extends MethodVisitor {
         case FRETURN:
         case DRETURN:
             if (match(DUP, JUMP, ARETURN)) {
-                NodeDebugger.dump(nodes);
-
                 current.addExpression("return ", current.remove(1));
                 current = null;
                 return;
