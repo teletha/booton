@@ -37,6 +37,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
 import booton.Obfuscator;
+import booton.translator.Node.Switch;
 
 /**
  * <p>
@@ -156,6 +157,30 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@link Enum#values} produces special bytecode, so we must handle it by special way.
      */
     private Operand[] enumValues = new Operand[2];
+
+    /**
+     * <p>
+     * Switch statement with enum produces special bytecode, so we must handle it by special way.
+     * The following asmfier code is typical code for enum switch.
+     * </p>
+     * 
+     * <pre>
+     * // invoke compiler generated static method to retrieve the user class specific number array
+     * // we should ignore this oeprand
+     * mv.visitMethodInsn(INVOKESTATIC, "EnumSwitchUserClass", "$SWITCH_TABLE$EnumClass", "()[I");
+     *
+     * // load target enum variable
+     * mv.visitVarInsn(ALOAD, 1);
+     * 
+     * // invoke Enum#ordinal method to retieve identical number
+     * mv.visitMethodInsn(INVOKEVIRTUAL, "EnumClass", "ordinal", "()I");
+     * 
+     * // access mapping number array
+     * //we should ignore this operand
+     * mv.visitInsn(IALOAD);
+     * </pre>
+     */
+    private boolean enumSwitchInvoked;
 
     /**
      * @param script A target script to compile.
@@ -608,8 +633,15 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         // write array value by index
-        case AALOAD:
         case IALOAD:
+            if (enumSwitchInvoked) {
+                enumSwitchInvoked = false; // reset
+
+                // enum switch table starts from 1, but Enum#ordinal starts from 0
+                current.addOperand(current.remove(0) + "+1");
+                break;
+            }
+        case AALOAD:
         case LALOAD:
         case FALOAD:
         case DALOAD:
@@ -1159,11 +1191,15 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case INVOKESTATIC: // static method call
-            // push class operand
-            contexts.add(0, new OperandExpression(Javascript.computeClassName(owner)));
+            if (Switch.isEnumSwitchTable(methodName, desc)) {
+                enumSwitchInvoked = true;
+            } else {
+                // push class operand
+                contexts.add(0, new OperandExpression(Javascript.computeClassName(owner)));
 
-            // translate
-            current.addOperand(translator.translateStaticMethod(owner, methodName, desc, parameters, contexts));
+                // translate
+                current.addOperand(translator.translateStaticMethod(owner, methodName, desc, parameters, contexts));
+            }
             break;
         }
 

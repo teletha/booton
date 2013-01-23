@@ -678,7 +678,7 @@ class Node {
     /**
      * @version 2013/01/23 9:25:08
      */
-    private static class Switch {
+    static class Switch {
 
         /** The entering node. */
         private final Node enter;
@@ -781,6 +781,28 @@ class Node {
                 nodes.addAll(node.outgoing);
             }
             return null;
+        }
+
+        /**
+         * <p>
+         * Helper method to detect special enum method.
+         * </p>
+         * 
+         * @param name
+         * @param description
+         * @return
+         */
+        static boolean isEnumSwitchTable(String name, String description) {
+            // For Eclipse JDT compiler.
+            if (name.startsWith("$SWITCH_TABLE$")) {
+                return true;
+            }
+
+            // For JDK compiler.
+            if (name.startsWith("$SwitchMap$")) {
+                return true;
+            }
+            return false;
         }
     }
 }

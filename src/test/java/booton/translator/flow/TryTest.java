@@ -168,4 +168,29 @@ public class TryTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void TryCatchSequencial() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 3) int value) {
+                try {
+                    if (value == 0) {
+                        throw new Error();
+                    }
+                } catch (Error e) {
+                    return -1;
+                }
+
+                try {
+                    if (value == 3) {
+                        throw new Error();
+                    }
+                } catch (Error e) {
+                    return -1;
+                }
+                return value;
+            }
+        });
+    }
 }
