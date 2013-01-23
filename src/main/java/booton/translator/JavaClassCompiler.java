@@ -63,14 +63,14 @@ class JavaClassCompiler extends ClassVisitor {
         boolean isStatic = (access & ACC_STATIC) != 0;
 
         // compute method name
-        name = Javascript.computeMethodName(script.source, name, desc);
+        String computed = Javascript.computeMethodName(script.source, name, desc);
 
         if (isStatic) {
-            name = "_" + name;
+            computed = "_" + computed;
         }
 
         // start compiling method
-        return new JavaMethodCompiler(script, code, name, desc, isStatic);
+        return new JavaMethodCompiler(script, code, name, computed, desc, isStatic);
     }
 
     /**

@@ -95,6 +95,12 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private static final int FRAME_SAME1 = 405;
 
+    /**
+     * Represents a jump instruction. A jump instruction is an instruction that may jump to another
+     * instruction.
+     */
+    private static final int JUMP = 406;
+
     /** The frequently used operand for cache. */
     private static final OperandNumber ZERO = new OperandNumber(0);
 
@@ -113,8 +119,8 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The current processing method name. */
     private final String methodName;
 
-    /** The current processing method description. */
-    private final String description;
+    /** The Java original method name. */
+    private final String methodNameOriginal;
 
     /** The method return type. */
     private final Type returnType;
@@ -158,13 +164,13 @@ class JavaMethodCompiler extends MethodVisitor {
      * @param description A method description.
      * @param isStatic A static flag.
      */
-    JavaMethodCompiler(Javascript script, ScriptBuffer code, String name, String description, boolean isStatic) {
+    JavaMethodCompiler(Javascript script, ScriptBuffer code, String original, String name, String description, boolean isStatic) {
         super(ASM4);
 
         this.script = script;
         this.code = code;
         this.methodName = name;
-        this.description = description;
+        this.methodNameOriginal = original;
         this.returnType = Type.getReturnType(description);
         this.variables = new LocalVariables(isStatic);
     }
@@ -199,7 +205,7 @@ class JavaMethodCompiler extends MethodVisitor {
             iterator.next().computeTryBlock();
         }
 
-        NodeDebugger.dump(script, methodName, description, nodes);
+        NodeDebugger.dump(script, methodNameOriginal, nodes);
 
         // ===============================================
         // Script Code
@@ -543,7 +549,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case IRETURN:
-            if (match(ICONST_0, IRETURN, LABEL, FRAME_SAME, ICONST_1, IRETURN)) {
+            if (match(JUMP, ICONST_0, IRETURN, LABEL, FRAME_SAME, ICONST_1, IRETURN)) {
                 current.remove(0);
                 current.remove(0);
                 current.remove(0);
@@ -551,7 +557,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 merge();
                 dispose(current);
-            } else if (match(ICONST_1, IRETURN, LABEL, FRAME_SAME, ICONST_0, IRETURN)) {
+            } else if (match(JUMP, ICONST_1, IRETURN, LABEL, FRAME_SAME, ICONST_0, IRETURN)) {
                 // merge the node sequence of logical expression
                 current.remove(0);
                 current.remove(0);
@@ -587,6 +593,14 @@ class JavaMethodCompiler extends MethodVisitor {
         case LRETURN:
         case FRETURN:
         case DRETURN:
+            if (match(DUP, JUMP, ARETURN)) {
+                NodeDebugger.dump(nodes);
+
+                current.addExpression("return ", current.remove(1));
+                current = null;
+                return;
+            }
+
             current.addExpression("return ", current.remove(0));
 
             // disconnect the next appearing node from the current node
@@ -684,7 +698,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         // recode current instruction
-        record(opcode);
+        record(JUMP);
 
         // search node
         Node node = getNode(label);
@@ -1181,7 +1195,14 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
-    public void visitTableSwitchInsn(int min, int max, Label defaultLable, Label[] labels) {
+    public void visitTableSwitchInsn(int min, int max, Label end, Label[] labels) {
+        List<Node> nodes = new ArrayList();
+
+        for (Label label : labels) {
+            nodes.add(getNode(label));
+        }
+
+        current.createSwitch(min, max, getNode(end), nodes);
     }
 
     /**

@@ -33,22 +33,25 @@ class Node {
     final LinkedList<Operand> stack = new LinkedList();
 
     /** The node list. */
-    final List<Node> incoming = new CopyOnWriteArrayList();
+    final CopyOnWriteArrayList<Node> incoming = new CopyOnWriteArrayList();
 
     /** The node list. */
-    final List<Node> outgoing = new CopyOnWriteArrayList();
+    final CopyOnWriteArrayList<Node> outgoing = new CopyOnWriteArrayList();
 
     /** The node list. */
-    final List<Node> backedges = new CopyOnWriteArrayList();
+    final CopyOnWriteArrayList<Node> backedges = new CopyOnWriteArrayList();
 
     /** The previous node. */
-    Node previous = null;
+    Node previous;
 
     /** The following node. */
     Node follower;
 
     /** The dominator try-catch block. */
     Deque<TryCatch> catches = new ArrayDeque();
+
+    /** This node is switch starting node. */
+    private Switch switchy;
 
     /** The dominator node. */
     private Node dominator;
@@ -324,6 +327,40 @@ class Node {
         if (!written) {
             written = true;
 
+            // =============================================================
+            // Switch Block
+            // =============================================================
+            // Switch block is independent from other blocks, so we must return at the end.
+            if (switchy != null) {
+                Node exit = switchy.searchExit();
+
+                // enter switch
+                buffer.append("switch(", switchy.value, "){");
+
+                // each cases
+                for (Node node : switchy.cases()) {
+                    for (int value : switchy.values(node)) {
+                        buffer.append("case ", value, ":").line();
+                    }
+                    node.write(buffer);
+                }
+
+                // default case
+                buffer.append("default:").line();
+                switchy.defaults.write(buffer);
+
+                // exit switch
+                buffer.append("}");
+
+                // write following nodes if needed
+                if (exit != null) exit.write(buffer);
+
+                return; // must
+            }
+
+            // =============================================================
+            // Other Block
+            // =============================================================
             // check try-catch-finally
             if (!catches.isEmpty()) {
                 buffer.append("try{");
@@ -446,13 +483,6 @@ class Node {
                         buffer.append("}");
 
                         next = block.next;
-
-                        // Node end = block.end;
-                        //
-                        // if (end != null) {
-                        // end.write(buffer);
-                        // }
-                        // process2(end, buffer);
                     }
                     buffer.append("}");
 
@@ -617,7 +647,140 @@ class Node {
      * @param node
      */
     final void connect(Node node) {
-        outgoing.add(node);
-        node.incoming.add(this);
+        outgoing.addIfAbsent(node);
+        node.incoming.addIfAbsent(this);
+    }
+
+    /**
+     * <p>
+     * Create switch statement.
+     * </p>
+     * 
+     * @param min A minimum valu.
+     * @param max A maximum value.
+     * @param defaults A default node.
+     * @param cases A list of case nodes.
+     */
+    final void createSwitch(int min, int max, Node defaults, List<Node> cases) {
+        switchy = new Switch(this, min, max, defaults, cases);
+
+        // connect enter node with each case node
+        for (Node node : cases) {
+            if (node != defaults) {
+                connect(node);
+            }
+        }
+
+        // connect enter node with default node
+        connect(defaults);
+    }
+
+    /**
+     * @version 2013/01/23 9:25:08
+     */
+    private static class Switch {
+
+        /** The entering node. */
+        private final Node enter;
+
+        /** The evaluated value. */
+        private final Operand value;
+
+        /** The minimum value of case statement. */
+        private final int min;
+
+        /** The maximum value of case statement. */
+        private final int max;
+
+        /** The default node of this switch statement. */
+        private final Node defaults;
+
+        /** The case nodes of this switch statement. */
+        private final List<Node> cases;
+
+        /**
+         * <p>
+         * Creat switch block infomation holder.
+         * </p>
+         * 
+         * @param enter
+         * @param min
+         * @param max
+         * @param defaults
+         * @param cases
+         */
+        private Switch(Node enter, int min, int max, Node defaults, List<Node> cases) {
+            this.enter = enter;
+            this.value = enter.remove(0);
+            this.min = min;
+            this.max = max;
+            this.defaults = defaults;
+            this.cases = cases;
+        }
+
+        /**
+         * <p>
+         * Find all case values for the specified node.
+         * </p>
+         * 
+         * @param node A target node.
+         * @return A collected case values.
+         */
+        private List<Integer> values(Node node) {
+            CopyOnWriteArrayList<Integer> values = new CopyOnWriteArrayList();
+
+            for (int i = 0; i < cases.size(); i++) {
+                if (cases.get(i) == node) {
+                    values.addIfAbsent(i + min);
+                }
+            }
+            return values;
+        }
+
+        /**
+         * <p>
+         * Find all unique cases for the specified node.
+         * </p>
+         * 
+         * @param node A target node.
+         * @return A collected case values.
+         */
+        private List<Node> cases() {
+            CopyOnWriteArrayList<Node> nodes = new CopyOnWriteArrayList();
+
+            for (int i = 0; i < cases.size(); i++) {
+                if (cases.get(i) != defaults) {
+                    nodes.addIfAbsent(cases.get(i));
+                }
+            }
+            return nodes;
+        }
+
+        /**
+         * <p>
+         * Search exit node of this switch block.
+         * </p>
+         * 
+         * @return Null or exit node.
+         */
+        private Node searchExit() {
+            List<Node> nodes = new LinkedList();
+            nodes.addAll(defaults.outgoing);
+
+            while (!nodes.isEmpty()) {
+                Node node = nodes.remove(0);
+
+                if (node.getDominator() == enter) {
+                    // add break statement to each incoming node
+                    for (Node incoming : node.incoming) {
+                        incoming.addExpression("break");
+                    }
+
+                    return node;
+                }
+                nodes.addAll(node.outgoing);
+            }
+            return null;
+        }
     }
 }

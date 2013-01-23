@@ -69,9 +69,28 @@ public class NodeDebugger {
      * @param methodName A original method name.
      * @param nodes A node info.
      */
-    public static void dump(Javascript script, String methodName, String description, List<Node> nodes) {
+    public static void dump(String methodName, List<Node> nodes) {
         if (whileTest) {
-            if (methodName.equals(Javascript.computeMethodName(script.source, "act", description))) {
+            if (methodName.equals("act")) {
+                dump(nodes);
+            }
+        } else {
+            dump(nodes);
+        }
+    }
+
+    /**
+     * <p>
+     * Dump node tree with method info.
+     * </p>
+     * 
+     * @param script A current processing script.
+     * @param methodName A original method name.
+     * @param nodes A node info.
+     */
+    public static void dump(Javascript script, String methodName, List<Node> nodes) {
+        if (whileTest) {
+            if (methodName.equals("$SWITCH_TABLE$booton$translator$flow$SwitchTest$Number")) {
                 String testClassName = computeTestClassName(script.source);
                 String testMethodName = computeTestMethodName(testClassName);
 

@@ -145,4 +145,26 @@ public class StaticMemberTest extends ScriptTester {
             return field;
         }
     }
+
+    @Test
+    public void Lazy() {
+        test(new StaticInitialization());
+    }
+
+    /**
+     * @version 2013/01/23 16:00:03
+     */
+    private static class Lazy implements Scriptable {
+
+        private static String value;
+
+        public String act() {
+            if (value != null) {
+                return value;
+            }
+
+            value = "test";
+            return value;
+        }
+    }
 }

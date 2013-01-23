@@ -9,7 +9,6 @@
  */
 package booton.translator.flow;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.translator.Param;
@@ -73,8 +72,7 @@ public class SwitchTest extends ScriptTester {
                     return 0;
 
                 case 2:
-                    value++;
-                    break;
+                    return 12;
 
                 case 4:
                     return 10;
@@ -85,8 +83,53 @@ public class SwitchTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
-    public void SwitchReturnWithOrder() {
+    public void Multiple() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 5) int value) {
+                switch (value) {
+                case 0:
+                case 1:
+                    return 0;
+
+                case 5:
+                    return 1;
+
+                default:
+                    return value + 5;
+                }
+            }
+        });
+    }
+
+    @Test
+    public void Nest() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 5) int value) {
+                switch (value) {
+                case 0:
+                case 3:
+                    switch (value) {
+                    case 3:
+                        return 20;
+
+                    default:
+                        return 100;
+                    }
+
+                case 5:
+                    return 1;
+
+                default:
+                    return value + 5;
+                }
+            }
+        });
+    }
+
+    @Test
+    public void StrangeOrder() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -105,8 +148,7 @@ public class SwitchTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
-    public void SwitchBreak() {
+    public void Break() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -118,7 +160,7 @@ public class SwitchTest extends ScriptTester {
                     break;
 
                 case 1:
-                    result = 10;
+                    result = -2;
                     break;
 
                 default:
@@ -129,5 +171,33 @@ public class SwitchTest extends ScriptTester {
                 return result;
             }
         });
+    }
+
+    @Test
+    public void Enum() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 2) int value) {
+                Number number = Number.values()[value];
+
+                switch (number) {
+                case One:
+                    return 10;
+
+                case Three:
+                    return 20;
+
+                default:
+                    return 30;
+                }
+            }
+        });
+    }
+
+    /**
+     * @version 2013/01/23 15:24:08
+     */
+    private static enum Number {
+        One, Two, Three;
     }
 }
