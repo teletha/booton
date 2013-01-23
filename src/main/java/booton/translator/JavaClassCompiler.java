@@ -14,6 +14,8 @@ import static org.objectweb.asm.Opcodes.*;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 
+import booton.translator.Node.Switch;
+
 /**
  * @version 2013/01/21 15:29:47
  */
@@ -53,6 +55,11 @@ class JavaClassCompiler extends ClassVisitor {
 
         // ignore compiler generated method (e.g. generics)
         if ((access & (ACC_NATIVE | ACC_ABSTRACT)) != 0) {
+            return null;
+        }
+
+        // ignore compiler generated method for enum switch
+        if (Switch.isEnumSwitchTable(name, desc)) {
             return null;
         }
 

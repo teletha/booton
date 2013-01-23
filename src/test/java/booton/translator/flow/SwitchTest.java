@@ -174,21 +174,61 @@ public class SwitchTest extends ScriptTester {
     }
 
     @Test
-    public void Enum() {
+    public void Enum0() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 2) int value) {
                 Number number = Number.values()[value];
 
                 switch (number) {
-                case One:
-                    return 10;
+                case Four:
+                    return 40;
 
                 case Three:
-                    return 20;
+                    return 30;
 
                 default:
+                    return 1;
+                }
+            }
+        });
+    }
+
+    @Test
+    public void Enum1() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 2) int value) {
+                Number[] numbers = Number.values();
+
+                switch (numbers[value]) {
+                case Four:
+                    return 40;
+
+                case Three:
                     return 30;
+
+                default:
+                    return 1;
+                }
+            }
+        });
+    }
+
+    @Test
+    public void Enum2() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 2) int value) {
+                switch (Number.values()[value]) {
+                case Four:
+                    return 40;
+
+                case Three:
+                    return 30;
+
+                default:
+                    return 1;
                 }
             }
         });
@@ -198,6 +238,6 @@ public class SwitchTest extends ScriptTester {
      * @version 2013/01/23 15:24:08
      */
     private static enum Number {
-        One, Two, Three;
+        One, Two, Three, Four, Five;
     }
 }
