@@ -12,6 +12,7 @@ package booton.translator;
 import static org.objectweb.asm.Opcodes.*;
 
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 
 import booton.translator.Node.Switch;
@@ -38,6 +39,35 @@ class JavaClassCompiler extends ClassVisitor {
 
         this.script = script;
         this.code = code;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
+        name = Javascript.computeFieldName(script.source, name);
+
+        // write primitive field declaration
+        switch (desc) {
+        case "I": // int
+        case "J": // long
+        case "F": // float
+        case "D": // double
+        case "B": // byte
+        case "S": // short
+            code.append(name, ":0").separator();
+            break;
+
+        case "C": // char
+            code.append(name, ":").string("\0").separator();
+            break;
+
+        case "Z": // boolean
+            code.append(name, ":false").separator();
+            break;
+        }
+        return null;
     }
 
     /**

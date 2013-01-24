@@ -37,12 +37,6 @@ public class Item extends AbstractStatus<Item> {
     /** The name. */
     public final String name;
 
-    /** The history version. */
-    private final Patch patch;
-
-    /** The history chain. */
-    private final Item previous;
-
     /** Item status. */
     private int cost;
 
@@ -104,8 +98,8 @@ public class Item extends AbstractStatus<Item> {
      * @param name
      */
     Item(String name, Patch patch) {
+        super(patch, null);
         this.name = name;
-        this.patch = patch;
 
         Item previous = items.get(name);
 
@@ -131,7 +125,6 @@ public class Item extends AbstractStatus<Item> {
             this.ms = previous.ms;
             this.msRatio = previous.msRatio;
         }
-        this.previous = previous;
 
         // update info
         items.put(name, this);
