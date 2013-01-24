@@ -119,4 +119,21 @@ public class InitialValueTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void Static() {
+        test(new Static());
+    }
+
+    /**
+     * @version 2013/01/24 16:54:54
+     */
+    private static class Static implements Scriptable {
+
+        private static int uninitialized;
+
+        int act() {
+            return uninitialized;
+        }
+    }
 }
