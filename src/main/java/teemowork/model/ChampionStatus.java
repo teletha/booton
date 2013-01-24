@@ -14,17 +14,10 @@ package teemowork.model;
  */
 public class ChampionStatus extends AbstractStatus<ChampionStatus> {
 
-    /** The history version. */
-    private final Patch patch;
-
-    /** The history chain. */
-    private final ChampionStatus previous;
-
     /**
      * @param patch
      */
     ChampionStatus(Patch patch, ChampionStatus previous) {
-        this.patch = patch;
-        this.previous = previous;
+        super(patch, previous);
     }
 }

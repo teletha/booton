@@ -15,16 +15,16 @@ package teemowork.model;
 public abstract class AbstractStatus<T extends AbstractStatus<T>> implements Improvable {
 
     /** The history version. */
-    private Patch patch;
+    private final Patch patch;
 
     /** The history chain. */
-    private AbstractStatus previous;
+    private final AbstractStatus previous;
 
     /** The initial status. */
-    private int health;
+    private int health = 0;
 
     /** The per level status. */
-    private int healthPerLevel;
+    private int healthPerLevel = 0;
 
     /** The initial status. */
     private double hreg;
@@ -129,10 +129,19 @@ public abstract class AbstractStatus<T extends AbstractStatus<T>> implements Imp
     private double criticalPerLv;
 
     /**
+     * @param patch
+     * @param previous
+     */
+    protected AbstractStatus(Patch patch, AbstractStatus previous) {
+        this.patch = patch;
+        this.previous = previous;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public double get(Status status) {
-        double value = 0;
+        double value;
 
         switch (status) {
         case AD:

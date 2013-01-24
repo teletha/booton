@@ -364,7 +364,7 @@ class Node {
                 switchy.defaults.write(buffer);
 
                 // exit switch
-                buffer.append("}");
+                buffer.append("}").line();
 
                 // write following nodes if needed
                 if (exit != null) exit.write(buffer);
