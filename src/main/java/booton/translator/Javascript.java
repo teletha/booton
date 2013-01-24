@@ -88,6 +88,9 @@ public class Javascript {
     /** The actual script class to translate. */
     public final Class source;
 
+    /** The flag whether javascript has native class or not. */
+    public final boolean isJavascritpNative;
+
     /** The identifier of this script. */
     private final int id;
 
@@ -106,9 +109,6 @@ public class Javascript {
     /** The actual Javascript source code to be translated. This is initialized lazy */
     private String code;
 
-    /** The flag whether javascript has native class or not. */
-    private final boolean jsNative;
-
     /**
      * Create Javascript as the specified Java class is source.
      * 
@@ -117,7 +117,7 @@ public class Javascript {
     private Javascript(Class source) {
         this.source = source;
         this.id = counter++;
-        this.jsNative = isJavascriptNative();
+        this.isJavascritpNative = isJavascriptNative();
 
         // copy all member fields for override mechanism
         Javascript script = getScript(source.getSuperclass());
@@ -257,7 +257,7 @@ public class Javascript {
         if (code == null) {
             ScriptBuffer code = new ScriptBuffer();
 
-            if (jsNative) {
+            if (isJavascritpNative) {
                 compileNative(code);
             } else if (source.isInterface()) {
                 compileInterface(code);
