@@ -12,7 +12,13 @@ package teemowork.model;
 /**
  * @version 2013/01/24 1:19:42
  */
-public abstract class AbstractImprovement<T extends AbstractImprovement<T>> {
+public abstract class AbstractStatus<T extends AbstractStatus<T>> implements Improvable {
+
+    /** The history version. */
+    private Patch patch;
+
+    /** The history chain. */
+    private AbstractStatus previous;
 
     /** The initial status. */
     private int health;
@@ -24,49 +30,55 @@ public abstract class AbstractImprovement<T extends AbstractImprovement<T>> {
     private double hreg;
 
     /** The per level status. */
-    private double hregPerLvel;
+    private double hregPerLv;
 
     /** The initial status. */
     private int mana;
 
     /** The per level status. */
-    private double manaPerLvel;
+    private double manaPerLv;
 
     /** The initial status. */
     private double mreg;
 
     /** The per level status. */
-    private double mregPerLvel;
+    private double mregPerLv;
 
     /** The initial status. */
     private double ad;
 
     /** The per level status. */
-    private double adPerLvel;
+    private double adPerLv;
 
     /** The initial status. */
     private double as;
 
     /** The per level status. */
-    private double asPerLvel;
+    private double asPerLv;
 
     /** The initial status. */
     private double ar;
 
     /** The per level status. */
-    private double arPerLvel;
+    private double arPerLv;
 
     /** The initial status. */
     private double mr;
 
     /** The per level status. */
-    private double mrPerLvel;
+    private double mrPerLv;
 
     /** The initial status. */
     private int range;
 
+    /** The per level status. */
+    private int rangePerLv;
+
     /** The initial status. */
     private int ms;
+
+    /** The initial status. */
+    private int msRatio;
 
     /** The initial status. */
     private int energy;
@@ -74,113 +86,208 @@ public abstract class AbstractImprovement<T extends AbstractImprovement<T>> {
     /** The initial status. */
     private int ereg;
 
+    /** The initial status. */
+    private double ap;
+
+    /** The per level status. */
+    private double apPerLv;
+
+    /** The initial status. */
+    private double cdr;
+
+    /** The per level status. */
+    private double cdrPerLv;
+
+    /** The initial status. */
+    private double sv;
+
+    /** The per level status. */
+    private double svPerLv;
+
+    /** The initial status. */
+    private double ls;
+
+    /** The per level status. */
+    private double lsPerLv;
+
+    /** The initial status. */
+    private double arpen;
+
+    /** The per level status. */
+    private double arpenRatio;
+
+    /** The initial status. */
+    private double mrpen;
+
+    /** The per level status. */
+    private double mrpenRatio;
+
+    /** The initial status. */
+    private double critical;
+
+    /** The per level status. */
+    private double criticalPerLv;
+
     /**
-     * <p>
-     * Calcurate value.
-     * </p>
-     * 
-     * @param entry
-     * @return
+     * {@inheritDoc}
      */
-    public double calcurate(ImprovementEntry entry) {
-        switch (entry) {
+    public double get(Status status) {
+        double value = 0;
+
+        switch (status) {
         case AD:
-            return ad;
+            value = ad;
+            break;
 
         case ADPerLv:
-            return adPerLvel;
+            value = adPerLv;
+            break;
 
         case AS:
-            return as;
+            value = as;
+            break;
 
         case ASPerLv:
-            return asPerLvel;
+            value = asPerLv;
+            break;
 
         case Health:
-            return health;
+            value = health;
+            break;
 
         case HealthPerLv:
-            return healthPerLevel;
+            value = healthPerLevel;
+            break;
 
         case Hreg:
-            return hreg;
+            value = hreg;
+            break;
 
         case HregPerLv:
-            return hregPerLvel;
+            value = hregPerLv;
+            break;
+
         case AP:
-            return ap;
+            value = ap;
+            break;
 
         case APPerLv:
-            return ap;
+            value = apPerLv;
+            break;
 
         case AR:
-            return ap;
-
-        case ARPen:
-            return ap;
-
-        case ARPenPercentage:
-            return ap;
+            value = ar;
+            break;
 
         case ARPerLv:
-            return ap;
+            value = arPerLv;
+            break;
+
+        case ARPen:
+            value = arpen;
+            break;
+
+        case ARPenRatio:
+            value = arpenRatio;
+            break;
 
         case CDR:
-            return ap;
+            value = cdr;
+            break;
 
         case CDRPerLv:
-            return ap;
+            value = cdrPerLv;
+            break;
 
         case Critical:
-            return ap;
+            value = critical;
+            break;
 
         case CriticalPerLv:
-            return ap;
+            value = criticalPerLv;
+            break;
 
         case LS:
-            return ap;
+            value = ls;
+            break;
 
         case LSPerLv:
-            return ap;
+            value = lsPerLv;
+            break;
 
         case MR:
-            return ap;
-
-        case MRPen:
-            return ap;
-
-        case MRPenPercentage:
-            return ap;
+            value = mr;
+            break;
 
         case MRPerLv:
-            return ap;
+            value = mrPerLv;
+            break;
+
+        case MRPen:
+            value = mrpen;
+            break;
+
+        case MRPenRatio:
+            value = mrpenRatio;
+            break;
 
         case MS:
-            return ap;
+            value = ms;
+            break;
 
-        case MSPercentage:
-            return ap;
+        case MSRatio:
+            value = msRatio;
+            break;
 
         case Mana:
-            return ap;
+            value = mana;
+            break;
 
         case ManaPerLv:
-            return ap;
+            value = manaPerLv;
+            break;
 
         case Mreg:
-            return ap;
+            value = mreg;
+            break;
 
         case MregPerLv:
-            return ap;
+            value = mregPerLv;
+            break;
 
         case SV:
-            return ap;
+            value = sv;
+            break;
 
         case SVPerLv:
-            return ap;
+            value = svPerLv;
+            break;
 
+        case Range:
+            value = range;
+            break;
+
+        case RangePerLv:
+            value = rangePerLv;
+            break;
+
+        case Energy:
+            value = energy;
+            break;
+
+        case Ereg:
+            value = ereg;
+            break;
+
+        default:
+            value = 0;
+            break;
         }
-        return 0;
+
+        if (value == 0 && previous != null) {
+            return previous.get(status);
+        }
+        return value;
     }
 
     /**
@@ -204,7 +311,7 @@ public abstract class AbstractImprovement<T extends AbstractImprovement<T>> {
      */
     T hreg(double initial, double per) {
         this.hreg = initial;
-        this.hregPerLvel = per;
+        this.hregPerLv = per;
 
         return (T) this;
     }
@@ -217,7 +324,7 @@ public abstract class AbstractImprovement<T extends AbstractImprovement<T>> {
      */
     T mana(int initial, double per) {
         this.mana = initial;
-        this.manaPerLvel = per;
+        this.manaPerLv = per;
 
         return (T) this;
     }
@@ -230,7 +337,7 @@ public abstract class AbstractImprovement<T extends AbstractImprovement<T>> {
      */
     T mreg(double initial, double per) {
         this.mreg = initial;
-        this.mregPerLvel = per;
+        this.mregPerLv = per;
 
         return (T) this;
     }
@@ -243,7 +350,7 @@ public abstract class AbstractImprovement<T extends AbstractImprovement<T>> {
      */
     T ad(double initial, double per) {
         this.ad = initial;
-        this.adPerLvel = per;
+        this.adPerLv = per;
 
         return (T) this;
     }
@@ -256,7 +363,7 @@ public abstract class AbstractImprovement<T extends AbstractImprovement<T>> {
      */
     T as(double initial, double per) {
         this.as = initial;
-        this.asPerLvel = per;
+        this.asPerLv = per;
 
         return (T) this;
     }
@@ -269,7 +376,7 @@ public abstract class AbstractImprovement<T extends AbstractImprovement<T>> {
      */
     T ar(double initial, double per) {
         this.ar = initial;
-        this.arPerLvel = per;
+        this.arPerLv = per;
 
         return (T) this;
     }
@@ -282,7 +389,7 @@ public abstract class AbstractImprovement<T extends AbstractImprovement<T>> {
      */
     T mr(double initial, double per) {
         this.mr = initial;
-        this.mrPerLvel = per;
+        this.mrPerLv = per;
 
         return (T) this;
     }

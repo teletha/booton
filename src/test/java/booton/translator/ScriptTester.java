@@ -293,7 +293,7 @@ public class ScriptTester {
         } else if (type == float.class) {
             return Arrays.asList(0F, 1F, 0.2F, -1.3464F);
         } else if (type == double.class) {
-            return Arrays.asList(0D, 1D, 0.2D, 1.239754297642323D);
+            return Arrays.asList(0D, 1D, -5.4D, 1.239754297642323D, 100.3D);
         } else if (type == short.class) {
             return Arrays.asList((short) 0, (short) 1, (short) 2, (short) -1, (short) -2);
         } else if (type == byte.class) {

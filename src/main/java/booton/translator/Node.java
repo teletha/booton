@@ -108,6 +108,20 @@ class Node {
 
     /**
      * <p>
+     * Helper method to add new conditional operand on the top of this stack.
+     * </p>
+     * 
+     * @param left A left operand.
+     * @param operator A condition operator.
+     * @param right A right operand.
+     * @param transition A transition node.
+     */
+    final void condition(Operand left, int operator, Operand right, Node transition) {
+        stack.add(new OperandCondition(left, operator, right, transition));
+    }
+
+    /**
+     * <p>
      * Helper method to remove the operand which is stored in the specified index from the operands
      * stack.
      * </p>

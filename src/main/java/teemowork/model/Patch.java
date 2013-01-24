@@ -1268,6 +1268,19 @@ public class Patch {
         P1520.updateItem(HauntingGuise);
     }
 
+    /** The patch. */
+    public static Patch P1530 = new Patch(1530, 2012, 12, 14, "Preseason Balance Update 1", P1520);
+
+    static {
+    }
+
+    /** The patch. */
+    public static Patch P1540 = new Patch(1540, 2013, 1, 16, "Preseason Balance Update 2", P1530);
+
+    static {
+        P1540.update(Champion.Alistar).ms(330);
+    }
+
     /** The latest patch. */
-    public static Patch Latest = P1520;
+    public static Patch Latest = P1540;
 }

@@ -12,7 +12,7 @@ package teemowork.model;
 /**
  * @version 2013/01/23 23:37:52
  */
-public enum ImprovementEntry {
+public enum Status {
 
     AS,
 
@@ -60,7 +60,7 @@ public enum ImprovementEntry {
 
     MS,
 
-    MSPercentage,
+    MSRatio,
 
     AR,
 
@@ -72,9 +72,17 @@ public enum ImprovementEntry {
 
     ARPen,
 
-    ARPenPercentage,
+    ARPenRatio,
 
     MRPen,
 
-    MRPenPercentage;
+    MRPenRatio,
+
+    Range,
+
+    RangePerLv,
+
+    Energy,
+
+    Ereg;
 }

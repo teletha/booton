@@ -47,6 +47,9 @@ public class ChampionDetail extends Page {
     /** The status. */
     private StatusBox as;
 
+    /** The status. */
+    private StatusBox ms;
+
     /**
      * Build page.
      * 
@@ -124,6 +127,7 @@ public class ChampionDetail extends Page {
         mana = new StatusBox("Mana", info);
         ad = new StatusBox("AD", info);
         as = new StatusBox("AS", info);
+        ms = new StatusBox("MS", info);
 
         calcurate();
     }
@@ -141,6 +145,7 @@ public class ChampionDetail extends Page {
         mana.set(build.getMana(), 0);
         ad.set(build.getAd(), 0);
         as.set(build.getAS(), build.getASIncreased());
+        ms.set(build.getMS(), build.getMSIncreased());
     }
 
     /**

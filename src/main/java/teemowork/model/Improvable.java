@@ -7,19 +7,20 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package teemowork.model.improvement;
+package teemowork.model;
 
 /**
- * @version 2013/01/21 20:17:29
+ * @version 2013/01/24 9:21:47
  */
-public interface AttackSpeed extends Improvement {
+public interface Improvable {
 
     /**
      * <p>
-     * Compute attack spped improvement value.
+     * Calcurate status value.
      * </p>
      * 
-     * @return A base attack speed.
+     * @param status A target status.
+     * @return A calcurated value of the specified status.
      */
-    double getASBase();
+    double get(Status status);
 }
