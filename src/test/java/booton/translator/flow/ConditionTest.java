@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2012/12/07 11:28:35
+ * @version 2013/01/24 13:55:55
  */
 @SuppressWarnings("unused")
 public class ConditionTest extends ScriptTester {
@@ -51,11 +51,31 @@ public class ConditionTest extends ScriptTester {
     }
 
     @Test
+    public void IFGT() throws Exception {
+        test(new Scriptable() {
+
+            public boolean act(int value) {
+                return value <= 0;
+            }
+        });
+    }
+
+    @Test
     public void IFLE() throws Exception {
         test(new Scriptable() {
 
             public boolean act(int value) {
                 return value > 0;
+            }
+        });
+    }
+
+    @Test
+    public void IFLT() throws Exception {
+        test(new Scriptable() {
+
+            public boolean act(int value) {
+                return value >= 0;
             }
         });
     }

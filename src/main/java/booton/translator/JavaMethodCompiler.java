@@ -682,6 +682,14 @@ class JavaMethodCompiler extends MethodVisitor {
             // disconnect the next appearing node from the current node
             current = null;
             break;
+
+        // numerical comparison operator for long, float and double primitives
+        case LCMP:
+        case DCMPL:
+        case DCMPG:
+        case FCMPL:
+        case FCMPG:
+            break; // ignore, because we should handle it in visitJumpInsn method
         }
     }
 
@@ -711,7 +719,7 @@ class JavaMethodCompiler extends MethodVisitor {
         // Opcodes.T_CHAR, Opcodes.T_FLOAT, Opcodes.T_DOUBLE, Opcodes.T_BYTE, Opcodes.T_SHORT,
         // Opcodes.T_INT or Opcodes.T_LONG.
         case NEWARRAY:
-            current.stack.add(new OperandArray(current.remove(0), true));
+            current.addOperand(new OperandArray(current.remove(0), true));
             break;
         }
     }
@@ -741,72 +749,102 @@ class JavaMethodCompiler extends MethodVisitor {
             return;
 
         case IFEQ: // == 0
-            current.stack.add(new OperandCondition(current.remove(0), EQ, new OperandNumber(0), node));
-            connect(label);
+            if (match(DCMPL, JUMP) || match(FCMPL, JUMP) || match(LCMP, JUMP)) {
+                // for long, float and double
+                current.condition(current.remove(1), EQ, current.remove(0), node);
+            } else {
+                // others
+                current.condition(current.remove(0), EQ, ZERO, node);
+            }
             break;
 
         case IFNE: // != 0
-            current.stack.add(new OperandCondition(current.remove(0), NE, new OperandNumber(0), node));
-            connect(label);
+            if (match(DCMPL, JUMP) || match(FCMPL, JUMP) || match(LCMP, JUMP)) {
+                // for long, float and double
+                current.condition(current.remove(1), NE, current.remove(0), node);
+            } else {
+                // others
+                current.condition(current.remove(0), NE, ZERO, node);
+            }
             break;
 
         case IFGE: // => 0
-            current.stack.add(new OperandCondition(current.remove(0), GE, new OperandNumber(0), node));
-            connect(label);
+            if (match(DCMPG, JUMP) || match(FCMPG, JUMP) || match(LCMP, JUMP)) {
+                // for long, float and double
+                current.condition(current.remove(1), GE, current.remove(0), node);
+            } else {
+                // others
+                current.condition(current.remove(0), GE, ZERO, node);
+            }
+            break;
+
+        case IFGT: // > 0
+            if (match(DCMPG, JUMP) || match(FCMPG, JUMP) || match(LCMP, JUMP)) {
+                // for long, float and double
+                current.condition(current.remove(1), GT, current.remove(0), node);
+            } else {
+                // others
+                current.condition(current.remove(0), GT, ZERO, node);
+            }
             break;
 
         case IFLE: // <= 0
-            current.stack.add(new OperandCondition(current.remove(0), LE, new OperandNumber(0), node));
-            connect(label);
+            if (match(DCMPL, JUMP) || match(FCMPL, JUMP) || match(LCMP, JUMP)) {
+                // for long, float and double
+                current.condition(current.remove(1), LE, current.remove(0), node);
+            } else {
+                // others
+                current.condition(current.remove(0), LE, ZERO, node);
+            }
+            break;
+
+        case IFLT: // < 0
+            if (match(DCMPL, JUMP) || match(FCMPL, JUMP) || match(LCMP, JUMP)) {
+                // for long, float and double
+                current.condition(current.remove(1), LT, current.remove(0), node);
+            } else {
+                // others
+                current.condition(current.remove(0), LT, ZERO, node);
+            }
             break;
 
         case IFNULL: // object == null
-            current.stack.add(new OperandCondition(current.remove(0), EQ, new OperandExpression("null"), node));
-            connect(label);
+            current.condition(current.remove(0), EQ, new OperandExpression("null"), node);
             break;
 
         case IFNONNULL: // object != null
-            current.stack.add(new OperandCondition(current.remove(0), NE, new OperandExpression("null"), node));
-            connect(label);
+            current.condition(current.remove(0), NE, new OperandExpression("null"), node);
             break;
 
         // ==
         case IF_ACMPEQ:
         case IF_ICMPEQ:
-            current.stack.add(new OperandCondition(current.remove(1), EQ, current.remove(0), node));
-            connect(label);
+            current.condition(current.remove(1), EQ, current.remove(0), node);
             break;
 
         // !=
         case IF_ACMPNE:
         case IF_ICMPNE:
-            current.stack.add(new OperandCondition(current.remove(1), NE, current.remove(0), node));
-            connect(label);
+            current.condition(current.remove(1), NE, current.remove(0), node);
             break;
 
         case IF_ICMPGE: // int => int
-            current.stack.add(new OperandCondition(current.remove(1), GE, current.remove(0), node));
-            connect(label);
+            current.condition(current.remove(1), GE, current.remove(0), node);
             break;
 
         case IF_ICMPGT: // int > int
-            current.stack.add(new OperandCondition(current.remove(1), GT, current.remove(0), node));
-            connect(label);
+            current.condition(current.remove(1), GT, current.remove(0), node);
             break;
 
         case IF_ICMPLE: // int <= int
-            current.stack.add(new OperandCondition(current.remove(1), LE, current.remove(0), node));
-            connect(label);
+            current.condition(current.remove(1), LE, current.remove(0), node);
             break;
 
         case IF_ICMPLT: // int < int
-            current.stack.add(new OperandCondition(current.remove(1), LT, current.remove(0), node));
-            connect(label);
-            break;
-
-        default:
+            current.condition(current.remove(1), LT, current.remove(0), node);
             break;
         }
+        connect(label);
     }
 
     /**
@@ -1216,7 +1254,7 @@ class JavaMethodCompiler extends MethodVisitor {
         for (int i = 0; i < dimension - 1; i++) {
             current.remove(0);
         }
-        current.stack.add(new OperandArray(current.remove(0), false));
+        current.addOperand(new OperandArray(current.remove(0), false));
     }
 
     /**
@@ -1268,7 +1306,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case ANEWARRAY:
-            current.stack.add(new OperandArray(current.remove(0), false));
+            current.addOperand(new OperandArray(current.remove(0), false));
             break;
 
         case CHECKCAST:

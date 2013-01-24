@@ -9,14 +9,13 @@
  */
 package teemowork.model;
 
-import java.lang.reflect.Method;
+import static java.lang.Math.*;
+import static teemowork.model.Status.*;
+
 import java.util.List;
 
 import js.bind.Notifiable;
 import js.util.ArrayList;
-import teemowork.model.improvement.AttackSpeed;
-import teemowork.model.improvement.AttackSpeedPerLv;
-import teemowork.model.improvement.Improvement;
 
 /**
  * @version 2013/01/16 9:18:22
@@ -82,7 +81,18 @@ public class Build extends Notifiable {
      * @return
      */
     public double getHealth() {
-        return status.healthInitial() + status.healthPerLevel() * level;
+        return round(base(Health, HealthPerLv) + getHealthIncreased());
+    }
+
+    /**
+     * <p>
+     * Calcurate increased health.
+     * </p>
+     * 
+     * @return A result.
+     */
+    public double getHealthIncreased() {
+        return round(sum(Health) + sum(HealthPerLv));
     }
 
     /**
@@ -93,7 +103,18 @@ public class Build extends Notifiable {
      * @return
      */
     public double getMana() {
-        return status.getManaInitial() + status.getManaPerLvel() * level;
+        return round(base(Mana, ManaPerLv) + getManaIncreased());
+    }
+
+    /**
+     * <p>
+     * Calcurate increased mana.
+     * </p>
+     * 
+     * @return A result.
+     */
+    public double getManaIncreased() {
+        return round(sum(Mana) + sum(ManaPerLv));
     }
 
     /**
@@ -104,7 +125,18 @@ public class Build extends Notifiable {
      * @return
      */
     public double getAd() {
-        return status.getAdInitial() + status.getAdPerLvel() * level;
+        return round(base(AD, ADPerLv) + getAdIncreased());
+    }
+
+    /**
+     * <p>
+     * Calcurate increased attack damage.
+     * </p>
+     * 
+     * @return A result.
+     */
+    public double getAdIncreased() {
+        return round(sum(AD) + sum(ADPerLv));
     }
 
     /**
@@ -115,11 +147,40 @@ public class Build extends Notifiable {
      * @return
      */
     public double getAS() {
-        return round4(status.getASBase() * (1 + (status.getASPerLv() * (level - 1) + getASIncreased()) / 100));
+        return round4(status.get(AS) * (1 + (status.get(ASPerLv) * (level - 1) + getASIncreased()) / 100));
     }
 
+    /**
+     * <p>
+     * Calcurate increased attack speed.
+     * </p>
+     * 
+     * @return A result.
+     */
     public double getASIncreased() {
-        return sum(AttackSpeed.class) + sum(AttackSpeedPerLv.class) * level;
+        return sum(AS) + sum(ASPerLv) * level;
+    }
+
+    /**
+     * <p>
+     * Compute current movemnet speed.
+     * </p>
+     * 
+     * @return
+     */
+    public double getMS() {
+        return round(base(MS) + getMSIncreased());
+    }
+
+    /**
+     * <p>
+     * Calcurate increased movement speed.
+     * </p>
+     * 
+     * @return A result.
+     */
+    public double getMSIncreased() {
+        return round(sum(MS) + sum(MSRatio));
     }
 
     /**
@@ -138,23 +199,39 @@ public class Build extends Notifiable {
 
     /**
      * <p>
+     * Calcurate champion base status.
+     * </p>
+     * 
+     * @param status
+     * @return
+     */
+    private double base(Status base) {
+        return this.status.get(base);
+    }
+
+    /**
+     * <p>
+     * Calcurate champion base status.
+     * </p>
+     * 
+     * @param status
+     * @return
+     */
+    private double base(Status base, Status per) {
+        return this.status.get(base) + this.status.get(per) * level;
+    }
+
+    /**
+     * <p>
      * Compute sum of the specified improvements.
      * </p>
      * 
      * @param improvementType A target type.
      * @return A sum value.
      */
-    private <T extends Improvement> double sum(Class<T> improvementType) {
+    private double sum(Status status) {
         double sum = 0;
-        Method method = improvementType.getMethods()[0];
 
-        for (T item : collect(improvementType)) {
-            try {
-                sum += (double) method.invoke(item);
-            } catch (Exception e) {
-                throw new Error(e);
-            }
-        }
         return sum;
     }
 
@@ -166,7 +243,7 @@ public class Build extends Notifiable {
      * @param type
      * @return
      */
-    private <T> List<T> collect(Class<T> improvementType) {
+    private <T> List<T> collect() {
         List<T> items = new ArrayList();
 
         // if (improvementType.isAssignableFrom(status.getClass())) {
