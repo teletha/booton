@@ -25,8 +25,8 @@ public class Build extends Notifiable {
     /** The selected champion. */
     public final Champion champion;
 
-    /** The current champion status. */
-    private final ChampionStatus status;
+    /** The version. */
+    private Patch patch = Patch.Latest;
 
     /** The level. */
     private int level = 1;
@@ -48,7 +48,6 @@ public class Build extends Notifiable {
      */
     public Build(Champion champion) {
         this.champion = champion;
-        this.status = champion.status;
     }
 
     /**
@@ -70,6 +69,84 @@ public class Build extends Notifiable {
             this.level = level;
 
             fire();
+        }
+    }
+
+    /**
+     * Get the patch property of this {@link Build}.
+     * 
+     * @return The patch property.
+     */
+    public Patch getPatch() {
+        return patch;
+    }
+
+    /**
+     * Set the patch property of this {@link Build}.
+     * 
+     * @param patch The patch value to set.
+     */
+    public void setPatch(Patch patch) {
+        if (patch != null) {
+            this.patch = patch;
+
+            fire();
+        }
+    }
+
+    /**
+     * <p>
+     * Compute current status.
+     * </p>
+     * 
+     * @param status A target status.
+     * @return A computed value.
+     */
+    public double get(Status status) {
+        switch (status) {
+        case MS:
+        case MSRatio:
+        case ARPen:
+        case ARPenRatio:
+        case MRPen:
+        case MRPerLv:
+        case Energy:
+        case Ereg:
+
+            return 0;
+
+        default:
+            Status base = status;
+            Status per = Status.valueOf(status.name() + "PerLv");
+            return base(base, per) + sum(base) + sum(per);
+        }
+    }
+
+    /**
+     * <p>
+     * Compute current status.
+     * </p>
+     * 
+     * @param status A target status.
+     * @return A computed value.
+     */
+    public double getIncreased(Status status) {
+        switch (status) {
+        case MS:
+        case MSRatio:
+        case ARPen:
+        case ARPenRatio:
+        case MRPen:
+        case MRPerLv:
+        case Energy:
+        case Ereg:
+
+            return 0;
+
+        default:
+            Status base = status;
+            Status per = Status.valueOf(status.name() + "PerLv");
+            return sum(base) + sum(per);
         }
     }
 
@@ -147,7 +224,7 @@ public class Build extends Notifiable {
      * @return
      */
     public double getAS() {
-        return round4(status.get(AS) * (1 + (status.get(ASPerLv) * (level - 1) + getASIncreased()) / 100));
+        return round4(champion.improvement.get(AS, patch) * (1 + (champion.improvement.get(ASPerLv, patch) * (level - 1) + getASIncreased()) / 100));
     }
 
     /**
@@ -202,11 +279,11 @@ public class Build extends Notifiable {
      * Calcurate champion base status.
      * </p>
      * 
-     * @param status
+     * @param improvement
      * @return
      */
     private double base(Status base) {
-        return this.status.get(base);
+        return champion.improvement.get(base, patch);
     }
 
     /**
@@ -214,11 +291,11 @@ public class Build extends Notifiable {
      * Calcurate champion base status.
      * </p>
      * 
-     * @param status
+     * @param improvement
      * @return
      */
     private double base(Status base, Status per) {
-        return this.status.get(base) + this.status.get(per) * level;
+        return champion.improvement.get(base, patch) + champion.improvement.get(per, patch) * level;
     }
 
     /**

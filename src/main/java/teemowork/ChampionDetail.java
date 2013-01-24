@@ -9,6 +9,8 @@
  */
 package teemowork;
 
+import static teemowork.model.Status.*;
+
 import java.lang.reflect.Method;
 
 import js.application.Page;
@@ -141,7 +143,7 @@ public class ChampionDetail extends Page {
     private void calcurate() {
         // update each status
         level.text(String.valueOf(build.getLevel()));
-        health.set(build.getHealth(), 10);
+        health.set(build.get(Health), build.getIncreased(Health));
         mana.set(build.getMana(), 0);
         ad.set(build.getAd(), 0);
         as.set(build.getAS(), build.getASIncreased());

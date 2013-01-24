@@ -58,10 +58,6 @@ public enum Status {
 
     CDRPerLv,
 
-    MS,
-
-    MSRatio,
-
     AR,
 
     ARPerLv,
@@ -70,6 +66,14 @@ public enum Status {
 
     MRPerLv,
 
+    Range,
+
+    RangePerLv,
+
+    MS,
+
+    MSRatio,
+
     ARPen,
 
     ARPenRatio,
@@ -77,10 +81,6 @@ public enum Status {
     MRPen,
 
     MRPenRatio,
-
-    Range,
-
-    RangePerLv,
 
     Energy,
 
