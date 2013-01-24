@@ -51,9 +51,9 @@ class JavaClassCompiler extends ClassVisitor {
         // uninitialized primiteve field explicitly.
         //
         // Skip final field, it is assured that the constructor will initialize it.
-        if ((access & ACC_FINAL) == 0) {
+        if (!script.isJavascritpNative && (access & ACC_FINAL) == 0) {
             name = Javascript.computeFieldName(script.source, name);
-            
+
             if ((access & ACC_STATIC) != 0) {
                 name = "_" + name;
             }
