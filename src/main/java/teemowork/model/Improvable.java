@@ -20,7 +20,8 @@ public interface Improvable {
      * </p>
      * 
      * @param status A target status.
+     * @param patch A version.
      * @return A calcurated value of the specified status.
      */
-    double get(Status status);
+    double get(Status status, Patch patch);
 }

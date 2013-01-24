@@ -65,12 +65,12 @@ public class Patch {
      * 
      * @param Title
      */
-    private ChampionStatus update(Champion champion) {
+    private Improvement update(Champion champion) {
         // update champion status
-        champion.status = new ChampionStatus(this, champion.status);
+        champion.improvement = new Improvement(this, champion.improvement);
 
         // Chainable API
-        return champion.status;
+        return champion.improvement;
     }
 
     /** The patch. */

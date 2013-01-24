@@ -17,7 +17,7 @@ import js.util.HashMap;
 /**
  * @version 2012/12/07 10:00:23
  */
-public class Item extends AbstractStatus<Item> {
+public class Item extends Improvement<Item> {
 
     /** The item manager. */
     private static final Map<String, Item> items = new HashMap();

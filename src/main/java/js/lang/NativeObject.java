@@ -186,6 +186,17 @@ public class NativeObject {
     }
 
     /**
+     * <p>
+     * Confirm this object is native Array or not.
+     * </p>
+     * 
+     * @return A result.
+     */
+    public boolean isArray() {
+        return this instanceof NativeArray;
+    }
+
+    /**
      * @version 2013/01/18 10:37:14
      */
     @SuppressWarnings("unused")
@@ -337,6 +348,17 @@ public class NativeObject {
          */
         public String create() {
             return "Object.create(" + that + ")";
+        }
+
+        /**
+         * <p>
+         * Confirm this object is native Array or not.
+         * </p>
+         * 
+         * @return A result.
+         */
+        public String isArray() {
+            return "Array.isArray(" + that + ")";
         }
     }
 }

@@ -28,8 +28,8 @@ public class Champion {
     /** The normalized name. */
     public final String normalizedName;
 
-    /** The current status. */
-    public ChampionStatus status;
+    /** The status. */
+    Improvement improvement;
 
     /**
      * <p>
@@ -44,17 +44,6 @@ public class Champion {
 
         // register by name
         champions.put(name, this);
-    }
-
-    /**
-     * <p>
-     * Returns current status.
-     * </p>
-     * 
-     * @return
-     */
-    public ChampionStatus getStatus() {
-        return status;
     }
 
     public String getSystemName() {

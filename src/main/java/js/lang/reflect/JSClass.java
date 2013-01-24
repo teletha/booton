@@ -14,10 +14,12 @@ import static js.lang.Global.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
+import js.util.HashMap;
 import booton.translator.JavaNative;
 
 /**
@@ -42,6 +44,9 @@ class JSClass<T> extends JSAnnotatedElement {
 
     /** The interface classes. */
     private final Class[] interfaces;
+
+    /** The cache for enum constants. */
+    private Map<String, Enum> enumerationConstants;
 
     /**
      * <p>
@@ -331,6 +336,36 @@ class JSClass<T> extends JSAnnotatedElement {
 
     public Constructor getConstructor() {
         return null;
+    }
+
+    /**
+     * <p>
+     * Returns a map from simple name to enum constant. This package-private method is used
+     * internally by Enum to implement public static <T extends Enum<T>> T valueOf(Class<T>, String)
+     * efficiently.
+     * </p>
+     * <p>
+     * Note that the map is returned by this method is created lazily on first use. Typically it
+     * won't ever get created.
+     * </p>
+     */
+    Map<String, Enum> enumConstantDirectory() {
+        if (enumerationConstants == null) {
+            enumerationConstants = new HashMap();
+
+            NativeObject definition = clazz.getPropertyAs(NativeObject.class, "$");
+
+            for (String name : definition.keys()) {
+                NativeObject value = definition.getPropertyAs(NativeObject.class, name);
+
+                if (value.isArray()) {
+                    for (Enum item : (Enum[]) (Object) value) {
+                        enumerationConstants.put(item.name(), item);
+                    }
+                }
+            }
+        }
+        return enumerationConstants;
     }
 
     /**

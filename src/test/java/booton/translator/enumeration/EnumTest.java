@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator.primitive;
+package booton.translator.enumeration;
 
 import org.junit.Test;
 
@@ -65,6 +65,16 @@ public class EnumTest extends ScriptTester {
                 assert numbers[2] == Number.Three;
 
                 return numbers[2].name();
+            }
+        });
+    }
+
+    @Test
+    public void valueOf() throws Exception {
+        test(new Scriptable() {
+
+            String act() {
+                return Number.valueOf("One").name();
             }
         });
     }
