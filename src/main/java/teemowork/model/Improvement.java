@@ -20,11 +20,14 @@ public class Improvement<T extends Improvement<T>> implements Improvable {
     /** The history chain. */
     private final Improvement previous;
 
+    /** The base status. */
+    private int cost;
+
     /** The initial status. */
-    private int health;
+    private double health;
 
     /** The per level status. */
-    private int healthPerLevel;
+    private double healthPerLevel;
 
     /** The initial status. */
     private double hreg;
@@ -33,7 +36,7 @@ public class Improvement<T extends Improvement<T>> implements Improvable {
     private double hregPerLv;
 
     /** The initial status. */
-    private int mana;
+    private double mana;
 
     /** The per level status. */
     private double manaPerLv;
@@ -75,10 +78,10 @@ public class Improvement<T extends Improvement<T>> implements Improvable {
     private int rangePerLv;
 
     /** The initial status. */
-    private int ms;
+    private double ms;
 
     /** The initial status. */
-    private int msRatio;
+    private double msRatio;
 
     /** The initial status. */
     private int energy;
@@ -306,14 +309,43 @@ public class Improvement<T extends Improvement<T>> implements Improvable {
     /**
      * Set the improvement entry of this object.
      * 
+     * @param base The base value to set.
+     */
+    T cost(int base) {
+        this.cost = base;
+
+        return (T) this;
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
+     * @param base The base value to set.
+     */
+    T health(double base) {
+        return health(base, 0);
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
      * @param initial The initial value to set.
      * @param per The per level value to set.
      */
-    T health(int initial, int per) {
+    T health(double initial, double per) {
         this.health = initial;
         this.healthPerLevel = per;
 
         return (T) this;
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
+     * @param base The base value to set.
+     */
+    T hreg(double base) {
+        return hreg(base, 0);
     }
 
     /**
@@ -332,14 +364,32 @@ public class Improvement<T extends Improvement<T>> implements Improvable {
     /**
      * Set the improvement entry of this object.
      * 
+     * @param base The base value to set.
+     */
+    T mana(double base) {
+        return mana(base, 0);
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
      * @param initial The initial value to set.
      * @param per The per level value to set.
      */
-    T mana(int initial, double per) {
+    T mana(double initial, double per) {
         this.mana = initial;
         this.manaPerLv = per;
 
         return (T) this;
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
+     * @param base The base value to set.
+     */
+    T mreg(int base) {
+        return mreg(base, 0);
     }
 
     /**
@@ -358,6 +408,15 @@ public class Improvement<T extends Improvement<T>> implements Improvable {
     /**
      * Set the improvement entry of this object.
      * 
+     * @param base The base value to set.
+     */
+    T ad(int base) {
+        return ad(base, 0);
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
      * @param initial The initial value to set.
      * @param per The per level value to set.
      */
@@ -366,6 +425,15 @@ public class Improvement<T extends Improvement<T>> implements Improvable {
         this.adPerLv = per;
 
         return (T) this;
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
+     * @param base The base value to set.
+     */
+    T as(int base) {
+        return as(base, 0);
     }
 
     /**
@@ -384,6 +452,15 @@ public class Improvement<T extends Improvement<T>> implements Improvable {
     /**
      * Set the improvement entry of this object.
      * 
+     * @param base The base value to set.
+     */
+    T ar(int base) {
+        return ar(base, 0);
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
      * @param initial The initial value to set.
      * @param per The per level value to set.
      */
@@ -392,6 +469,15 @@ public class Improvement<T extends Improvement<T>> implements Improvable {
         this.arPerLv = per;
 
         return (T) this;
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
+     * @param base The base value to set.
+     */
+    T mr(int base) {
+        return mr(base, 0);
     }
 
     /**
@@ -447,6 +533,72 @@ public class Improvement<T extends Improvement<T>> implements Improvable {
      */
     T ereg(int ereg) {
         this.ereg = ereg;
+
+        return (T) this;
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
+     * @param base The base value to set.
+     */
+    T ap(double base) {
+        return ap(base, 0);
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
+     * @param base The base value to set.
+     * @param per The per level value to set.
+     */
+    T ap(double base, double per) {
+        this.ap = base;
+        this.apPerLv = per;
+
+        return (T) this;
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
+     * @param base The base value to set.
+     */
+    T cdr(double base) {
+        return cdr(base, 0);
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
+     * @param base The base value to set.
+     * @param per The per level value to set.
+     */
+    T cdr(double base, double per) {
+        this.cdr = base;
+        this.cdrPerLv = per;
+
+        return (T) this;
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
+     * @param base The base value to set.
+     */
+    T sv(double base) {
+        return sv(base, 0);
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
+     * @param base The base value to set.
+     * @param per The per level value to set.
+     */
+    T sv(double base, double per) {
+        this.sv = base;
+        this.svPerLv = per;
 
         return (T) this;
     }

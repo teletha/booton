@@ -17,7 +17,7 @@ import js.bind.Notifiable;
 import js.util.ArrayList;
 
 /**
- * @version 2013/01/16 9:18:22
+ * @version 2013/01/25 14:31:39
  */
 public class Build extends Notifiable {
 
@@ -31,7 +31,7 @@ public class Build extends Notifiable {
     private int level = 1;
 
     /** The item list. */
-    private Item[] items = new Item[6];
+    private List<Item> items = new ArrayList();
 
     /** The skill order. */
     private int[] skills = new int[18];
@@ -39,14 +39,25 @@ public class Build extends Notifiable {
     /** The mastery. */
     private MasterySet mastery;
 
-    /** The rune. */
-    private RuneSet rune;
+    /** The rune list. */
+    private List<Rune> marks = new ArrayList();
+
+    /** The rune list. */
+    private List<Rune> glyphs = new ArrayList();
+
+    /** The rune list. */
+    private List<Rune> seals = new ArrayList();
+
+    /** The rune list. */
+    private List<Rune> quintessences = new ArrayList();
 
     /**
      * @param champion
      */
     public Build(Champion champion) {
         this.champion = champion;
+
+        items.add(Item.HauntingGuise);
     }
 
     /**
@@ -101,7 +112,7 @@ public class Build extends Notifiable {
      * @param status A target status.
      * @return A computed value.
      */
-    public double get(Status status) {
+    public Computed get(Status status) {
         switch (status) {
         case MSRatio:
         case ARPen:
@@ -110,12 +121,21 @@ public class Build extends Notifiable {
         case MRPerLv:
         case Energy:
         case Ereg:
-            return 0;
+            return new Computed(0, 0, status.precision);
+
+        case AS:
+            double baseAS = champion.improvement.get(AS, patch);
+            double levelAS = champion.improvement.get(ASPerLv, patch) * (level - 1);
+            return new Computed(baseAS * (1 + levelAS / 100), baseAS * (1 + (levelAS + sum(ASRatio)) / 100), status.precision);
 
         default:
             Status per = Status.valueOf(status.name() + "PerLv");
             Status ratio = Status.valueOf(status.name() + "Ratio");
-            return (getBase(status) + sum(status) + sum(per) * level) * (1 + sum(ratio) / 100);
+
+            double base = base(status);
+            double computed = (base + sum(status) + sum(per) * level) * (1 + sum(ratio) / 100);
+
+            return new Computed(base, computed, status.precision);
         }
     }
 
@@ -127,7 +147,7 @@ public class Build extends Notifiable {
      * @param status A target status.
      * @return A computed value.
      */
-    public double getBase(Status status) {
+    private double base(Status status) {
         switch (status) {
         case MS:
         case MSRatio:
@@ -147,66 +167,6 @@ public class Build extends Notifiable {
 
     /**
      * <p>
-     * Compute current as.
-     * </p>
-     * 
-     * @return
-     */
-    public double getAS() {
-        return round4(champion.improvement.get(AS, patch) * (1 + (champion.improvement.get(ASPerLv, patch) * (level - 1) + getASIncreased()) / 100));
-    }
-
-    /**
-     * <p>
-     * Calcurate increased attack speed.
-     * </p>
-     * 
-     * @return A result.
-     */
-    public double getASIncreased() {
-        return sum(AS) + sum(ASPerLv) * level;
-    }
-
-    /**
-     * <p>
-     * Round decimel.
-     * </p>
-     * 
-     * @param value
-     * @return
-     */
-    private double round4(double value) {
-        value *= 1000;
-        value = Math.round(value);
-        return value / 1000;
-    }
-
-    /**
-     * <p>
-     * Calcurate champion base status.
-     * </p>
-     * 
-     * @param improvement
-     * @return
-     */
-    private double base(Status base) {
-        return champion.improvement.get(base, patch);
-    }
-
-    /**
-     * <p>
-     * Calcurate champion base status.
-     * </p>
-     * 
-     * @param improvement
-     * @return
-     */
-    private double base(Status base, Status per) {
-        return champion.improvement.get(base, patch) + champion.improvement.get(per, patch) * level;
-    }
-
-    /**
-     * <p>
      * Compute sum of the specified improvements.
      * </p>
      * 
@@ -216,23 +176,113 @@ public class Build extends Notifiable {
     private double sum(Status status) {
         double sum = 0;
 
+        for (Item item : items) {
+            sum += item.improvement.get(status, patch);
+        }
+
+        for (Rune rune : marks) {
+            sum += rune.improvement.get(status, patch);
+        }
+
+        for (Rune rune : seals) {
+            sum += rune.improvement.get(status, patch);
+        }
+
+        for (Rune rune : glyphs) {
+            sum += rune.improvement.get(status, patch);
+        }
+
+        for (Rune rune : quintessences) {
+            sum += rune.improvement.get(status, patch);
+        }
+
         return sum;
     }
 
     /**
-     * <p>
-     * Collect improvements.
-     * </p>
-     * 
-     * @param type
-     * @return
+     * @version 2013/01/25 13:42:02
      */
-    private <T> List<T> collect() {
-        List<T> items = new ArrayList();
+    public static class Computed {
 
-        // if (improvementType.isAssignableFrom(status.getClass())) {
-        // items.add((T) status);
-        // }
-        return items;
+        /** The champion base value. */
+        public final double base;
+
+        /** The computed value. */
+        public final double value;
+
+        /** The increased value. */
+        public final double increased;
+
+        /**
+         * @param base A base value.
+         * @param value A computed value.
+         */
+        private Computed(double base, double value, int precision) {
+            this.base = round(base, precision);
+            this.value = round(value, precision);
+            this.increased = round(value - base, precision);
+        }
+
+        /**
+         * <p>
+         * Round decimel.
+         * </p>
+         * 
+         * @param value
+         * @param precision
+         * @return
+         */
+        private double round(double value, int precision) {
+            int round = 1;
+
+            for (int i = 0; i < precision; i++) {
+                round *= 10;
+            }
+
+            value *= round;
+            value = Math.round(value);
+            return value / round;
+        }
+
+        /**
+         * <p>
+         * Retrieve computed value as String expression.
+         * </p>
+         * 
+         * @return A computed value.
+         */
+        public String value() {
+            return String.valueOf(value);
+        }
+
+        /**
+         * <p>
+         * Retrieve base value as String expression.
+         * </p>
+         * 
+         * @return A base value.
+         */
+        public String base() {
+            return String.valueOf(base);
+        }
+
+        /**
+         * <p>
+         * Retrieve increased value as String expression.
+         * </p>
+         * 
+         * @return A increased value.
+         */
+        public String increased() {
+            return String.valueOf(increased);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return value();
+        }
     }
 }

@@ -14,7 +14,9 @@ package teemowork.model;
  */
 public enum Status {
 
-    AS,
+    Cost,
+
+    AS(3),
 
     ASPerLv,
 
@@ -44,11 +46,11 @@ public enum Status {
 
     HealthRatio,
 
-    Hreg,
+    Hreg(2),
 
-    HregPerLv,
+    HregPerLv(2),
 
-    HregRatio,
+    HregRatio(2),
 
     Mana,
 
@@ -56,11 +58,11 @@ public enum Status {
 
     ManaRatio,
 
-    Mreg,
+    Mreg(2),
 
-    MregPerLv,
+    MregPerLv(2),
 
-    MregRatio,
+    MregRatio(2),
 
     AP,
 
@@ -127,4 +129,21 @@ public enum Status {
     EregPerLv,
 
     EregRatio;
+
+    /** The precision for value. */
+    public final int precision;
+
+    /**
+     * @param precision
+     */
+    private Status() {
+        this(0);
+    }
+
+    /**
+     * @param precision
+     */
+    private Status(int precision) {
+        this.precision = precision;
+    }
 }
