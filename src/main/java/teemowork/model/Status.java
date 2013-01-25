@@ -18,71 +18,113 @@ public enum Status {
 
     ASPerLv,
 
+    ASRatio,
+
     AD,
 
     ADPerLv,
+
+    ADRatio,
 
     Critical,
 
     CriticalPerLv,
 
+    CriticalRatio,
+
     LS,
 
     LSPerLv,
+
+    LSRatio,
 
     Health,
 
     HealthPerLv,
 
+    HealthRatio,
+
     Hreg,
 
     HregPerLv,
+
+    HregRatio,
 
     Mana,
 
     ManaPerLv,
 
+    ManaRatio,
+
     Mreg,
 
     MregPerLv,
+
+    MregRatio,
 
     AP,
 
     APPerLv,
 
+    APRatio,
+
     SV,
 
     SVPerLv,
+
+    SVRatio,
 
     CDR,
 
     CDRPerLv,
 
+    CDRRatio,
+
     AR,
 
     ARPerLv,
+
+    ARRatio,
 
     MR,
 
     MRPerLv,
 
+    MRRatio,
+
     Range,
 
     RangePerLv,
 
+    RangeRatio,
+
     MS,
+
+    MSPerLv,
 
     MSRatio,
 
     ARPen,
 
+    ARPenPerLv,
+
     ARPenRatio,
 
     MRPen,
+
+    MRPenPerLv,
 
     MRPenRatio,
 
     Energy,
 
-    Ereg;
+    EnergyPerLv,
+
+    EnergyRatio,
+
+    Ereg,
+
+    EregPerLv,
+
+    EregRatio;
 }

@@ -9,7 +9,6 @@
  */
 package teemowork.model;
 
-import static java.lang.Math.*;
 import static teemowork.model.Status.*;
 
 import java.util.List;
@@ -96,7 +95,7 @@ public class Build extends Notifiable {
 
     /**
      * <p>
-     * Compute current status.
+     * Compute build status.
      * </p>
      * 
      * @param status A target status.
@@ -104,7 +103,6 @@ public class Build extends Notifiable {
      */
     public double get(Status status) {
         switch (status) {
-        case MS:
         case MSRatio:
         case ARPen:
         case ARPenRatio:
@@ -112,108 +110,39 @@ public class Build extends Notifiable {
         case MRPerLv:
         case Energy:
         case Ereg:
-
             return 0;
 
         default:
-            Status base = status;
             Status per = Status.valueOf(status.name() + "PerLv");
-            return base(base, per) + sum(base) + sum(per);
+            Status ratio = Status.valueOf(status.name() + "Ratio");
+            return (getBase(status) + sum(status) + sum(per) * level) * (1 + sum(ratio) / 100);
         }
     }
 
     /**
      * <p>
-     * Compute current status.
+     * Compute champion base status.
      * </p>
      * 
      * @param status A target status.
      * @return A computed value.
      */
-    public double getIncreased(Status status) {
+    public double getBase(Status status) {
         switch (status) {
         case MS:
         case MSRatio:
         case ARPen:
         case ARPenRatio:
         case MRPen:
-        case MRPerLv:
+        case MRPenRatio:
         case Energy:
         case Ereg:
-
-            return 0;
+            return champion.improvement.get(status, patch);
 
         default:
-            Status base = status;
             Status per = Status.valueOf(status.name() + "PerLv");
-            return sum(base) + sum(per);
+            return champion.improvement.get(status, patch) + champion.improvement.get(per, patch) * level;
         }
-    }
-
-    /**
-     * <p>
-     * Compute current health.
-     * </p>
-     * 
-     * @return
-     */
-    public double getHealth() {
-        return round(base(Health, HealthPerLv) + getHealthIncreased());
-    }
-
-    /**
-     * <p>
-     * Calcurate increased health.
-     * </p>
-     * 
-     * @return A result.
-     */
-    public double getHealthIncreased() {
-        return round(sum(Health) + sum(HealthPerLv));
-    }
-
-    /**
-     * <p>
-     * Compute current mana.
-     * </p>
-     * 
-     * @return
-     */
-    public double getMana() {
-        return round(base(Mana, ManaPerLv) + getManaIncreased());
-    }
-
-    /**
-     * <p>
-     * Calcurate increased mana.
-     * </p>
-     * 
-     * @return A result.
-     */
-    public double getManaIncreased() {
-        return round(sum(Mana) + sum(ManaPerLv));
-    }
-
-    /**
-     * <p>
-     * Compute current ad.
-     * </p>
-     * 
-     * @return
-     */
-    public double getAd() {
-        return round(base(AD, ADPerLv) + getAdIncreased());
-    }
-
-    /**
-     * <p>
-     * Calcurate increased attack damage.
-     * </p>
-     * 
-     * @return A result.
-     */
-    public double getAdIncreased() {
-        return round(sum(AD) + sum(ADPerLv));
     }
 
     /**
@@ -236,28 +165,6 @@ public class Build extends Notifiable {
      */
     public double getASIncreased() {
         return sum(AS) + sum(ASPerLv) * level;
-    }
-
-    /**
-     * <p>
-     * Compute current movemnet speed.
-     * </p>
-     * 
-     * @return
-     */
-    public double getMS() {
-        return round(base(MS) + getMSIncreased());
-    }
-
-    /**
-     * <p>
-     * Calcurate increased movement speed.
-     * </p>
-     * 
-     * @return A result.
-     */
-    public double getMSIncreased() {
-        return round(sum(MS) + sum(MSRatio));
     }
 
     /**

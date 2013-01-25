@@ -143,11 +143,11 @@ public class ChampionDetail extends Page {
     private void calcurate() {
         // update each status
         level.text(String.valueOf(build.getLevel()));
-        health.set(build.get(Health), build.getIncreased(Health));
-        mana.set(build.getMana(), 0);
-        ad.set(build.getAd(), 0);
+        health.set(build.get(Health), build.getBase(Health));
+        mana.set(build.get(Mana), build.getBase(Mana));
+        ad.set(build.get(AD), build.getBase(AD));
         as.set(build.getAS(), build.getASIncreased());
-        ms.set(build.getMS(), build.getMSIncreased());
+        ms.set(build.get(MS), build.getBase(MS));
     }
 
     /**
