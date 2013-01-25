@@ -1138,13 +1138,6 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
-    public void visitLookupSwitchInsn(Label label, int[] values, Label[] labels) {
-        // do nothing
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public void visitMaxs(int maxStack, int maxLocals) {
         variables.max = maxLocals;
     }
@@ -1267,14 +1260,32 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
-    public void visitTableSwitchInsn(int min, int max, Label end, Label[] labels) {
+    public void visitTableSwitchInsn(int min, int max, Label defaults, Label... labels) {
         List<Node> nodes = new ArrayList();
 
         for (Label label : labels) {
             nodes.add(getNode(label));
         }
 
-        current.createSwitch(min, max, getNode(end), nodes);
+        int[] keys = new int[max - min + 1];
+
+        for (int i = 0; i < keys.length; i++) {
+            keys[i] = min + i;
+        }
+        current.createSwitch(getNode(defaults), keys, nodes);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visitLookupSwitchInsn(Label defaults, int[] keys, Label[] labels) {
+        List<Node> nodes = new ArrayList();
+
+        for (Label label : labels) {
+            nodes.add(getNode(label));
+        }
+        current.createSwitch(getNode(defaults), keys, nodes);
     }
 
     /**

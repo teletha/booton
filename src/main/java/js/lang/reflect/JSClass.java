@@ -312,6 +312,21 @@ class JSClass<T> extends JSAnnotatedElement {
 
     /**
      * <p>
+     * Returns the canonical name of the underlying class as defined by the Java Language
+     * Specification. Returns null if the underlying class does not have a canonical name (i.e., if
+     * it is a local or anonymous class or an array whose component type does not have a canonical
+     * name).
+     * </p>
+     * 
+     * @return the canonical name of the underlying class if it exists, and {@code null} otherwise.
+     * @since 1.5
+     */
+    public String getCanonicalName() {
+        return name;
+    }
+
+    /**
+     * <p>
      * Creates a new instance of the class represented by this Class object. The class is
      * instantiated as if by a new expression with an empty argument list. The class is initialized
      * if it has not already been initialized.

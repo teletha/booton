@@ -10,6 +10,7 @@
 package booton.translator;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -670,13 +671,12 @@ class Node {
      * Create switch statement.
      * </p>
      * 
-     * @param min A minimum valu.
-     * @param max A maximum value.
      * @param defaults A default node.
+     * @param keys A case key values.
      * @param cases A list of case nodes.
      */
-    final void createSwitch(int min, int max, Node defaults, List<Node> cases) {
-        switchy = new Switch(this, min, max, defaults, cases);
+    final void createSwitch(Node defaults, int[] keys, List<Node> cases) {
+        switchy = new Switch(this, defaults, keys, cases);
 
         // connect enter node with each case node
         for (Node node : cases) {
@@ -700,17 +700,14 @@ class Node {
         /** The evaluated value. */
         private final Operand value;
 
-        /** The minimum value of case statement. */
-        private final int min;
-
-        /** The maximum value of case statement. */
-        private final int max;
-
         /** The default node of this switch statement. */
         private final Node defaults;
 
         /** The case nodes of this switch statement. */
         private final List<Node> cases;
+
+        /** The case value of this switch statement. */
+        private final List<Integer> keys = new ArrayList();
 
         /**
          * <p>
@@ -718,18 +715,19 @@ class Node {
          * </p>
          * 
          * @param enter
-         * @param min
-         * @param max
          * @param defaults
+         * @param keys
          * @param cases
          */
-        private Switch(Node enter, int min, int max, Node defaults, List<Node> cases) {
+        private Switch(Node enter, Node defaults, int[] keys, List<Node> cases) {
             this.enter = enter;
             this.value = enter.remove(0);
-            this.min = min;
-            this.max = max;
             this.defaults = defaults;
             this.cases = cases;
+
+            for (int key : keys) {
+                this.keys.add(key);
+            }
         }
 
         /**
@@ -745,7 +743,7 @@ class Node {
 
             for (int i = 0; i < cases.size(); i++) {
                 if (cases.get(i) == node) {
-                    values.addIfAbsent(i + min);
+                    values.addIfAbsent(keys.get(i));
                 }
             }
             return values;
@@ -818,5 +816,12 @@ class Node {
             }
             return false;
         }
+    }
+
+    /**
+     * @version 2013/01/25 13:15:43
+     */
+    private static class LookupSwitch {
+
     }
 }
