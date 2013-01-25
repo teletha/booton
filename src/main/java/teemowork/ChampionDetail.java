@@ -35,7 +35,8 @@ import booton.css.CSS;
 public class ChampionDetail extends Page {
 
     /** The displayable status. */
-    private static final Status[] VISIBLE = {Health, Hreg, Mana, Mreg, AD, AS, Critical, LS, AP, CDR, SV, AR, MR, MS};
+    private static final Status[] VISIBLE = {Health, Hreg, Mana, Mreg, AD, AS, Critical, LS, AP, CDR, SV, AR, MR,
+            ARPen, MRPen, MS};
 
     /** The status box. */
     private List<StatusBox> boxies = new ArrayList();

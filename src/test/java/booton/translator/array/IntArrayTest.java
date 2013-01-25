@@ -221,4 +221,21 @@ public class IntArrayTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void SplitLine() {
+        test(new Scriptable() {
+
+            public int act() {
+                int sum = 0;
+                int[] array = {123456789, 123456789, 123456789, 123456789, 123456789, 123456789, 123456789, 123456789,
+                        123456789, 123456789, 123456789, 123456789, 123456789, 123456789, 123456789};
+
+                for (int i : array) {
+                    sum += i;
+                }
+                return sum;
+            }
+        });
+    }
 }
