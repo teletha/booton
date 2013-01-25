@@ -420,7 +420,7 @@ class JavaMethodCompiler extends MethodVisitor {
         case DUP2:
             if (!match(NEW, DUP) && !match(NEW, DUP2)) {
                 // mark as duplicated operand
-                current.stack.peekLast().duplicated = true;
+                current.peek(0).duplicated = true;
             }
             break;
 
@@ -594,7 +594,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 // invert the latest condition
                 if (!current.stack.isEmpty()) {
-                    current.stack.peekLast().invert();
+                    current.peek(0).invert();
                 }
             }
 
@@ -890,9 +890,9 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void resolveLabel() {
-        Operand first = peek(0);
-        Operand second = peek(1);
-        Operand third = peek(2);
+        Operand first = current.peek(0);
+        Operand second = current.peek(1);
+        Operand third = current.peek(2);
 
         if (first instanceof OperandCondition) {
             merge();
@@ -923,26 +923,6 @@ class JavaMethodCompiler extends MethodVisitor {
                 resolveLabel();
             }
         }
-    }
-
-    /**
-     * Peek operand from latest.
-     * 
-     * @param index
-     * @return
-     */
-    private Operand peek(int index) {
-        Node current = this.current;
-
-        while (current != null) {
-            for (int i = current.stack.size() - 1; -1 < i; --i) {
-                if (index-- == 0) {
-                    return current.stack.get(i);
-                }
-            }
-            current = current.previous;
-        }
-        return null;
     }
 
     /**
@@ -1037,7 +1017,7 @@ class JavaMethodCompiler extends MethodVisitor {
         // Merge this node and the specified node.
         // Rearch the start of node
         if (target.previous != null) {
-            Operand operand = target.previous.stack.peekLast();
+            Operand operand = target.previous.peek(0);
 
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
@@ -1387,7 +1367,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 }
 
                 // retrieve and remove it
-                Operand operand = current.stack.pollLast();
+                Operand operand = current.remove(0, false);
 
                 // Enum#values produces special bytecode, so we must handle it by special way.
                 if (match(ASTORE, ICONST_0, ALOAD, ARRAYLENGTH, DUP, ISTORE)) {

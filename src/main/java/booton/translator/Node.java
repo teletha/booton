@@ -131,6 +131,19 @@ class Node {
      * @return A removed operand.
      */
     final Operand remove(int index) {
+        return remove(index, true);
+    }
+
+    /**
+     * <p>
+     * Helper method to remove the operand which is stored in the specified index from the operands
+     * stack.
+     * </p>
+     * 
+     * @param index An index that you want to remove from the operands stack.
+     * @return A removed operand.
+     */
+    final Operand remove(int index, boolean processDuplication) {
         // Calculate index
         index = stack.size() - 1 - index;
 
@@ -145,12 +158,40 @@ class Node {
         // Retrieve and remove it
         Operand operand = stack.remove(index);
 
-        if (operand.duplicated) {
+        if (processDuplication && operand.duplicated) {
             operand.duplicated = false;
 
             // Duplicate pointer
             stack.add(index, operand);
         }
+
+        // API definition
+        return operand;
+    }
+
+    /**
+     * <p>
+     * Helper method to peek the operand which is stored in the specified index from the operands
+     * stack.
+     * </p>
+     * 
+     * @param index An index that you want to peek from the operands stack.
+     * @return A target operand.
+     */
+    final Operand peek(int index) {
+        // Calculate index
+        index = stack.size() - 1 - index;
+
+        if (index < 0) {
+            // Peek operand from the previous node if we can.
+            //
+            // calculated = stack.size() - 1 - index
+            // index - stack.size() = -calculated - 1;
+            return previous == null ? null : previous.peek(-index - 1);
+        }
+
+        // Retrieve it
+        Operand operand = stack.get(index);
 
         // API definition
         return operand;
@@ -816,12 +857,5 @@ class Node {
             }
             return false;
         }
-    }
-
-    /**
-     * @version 2013/01/25 13:15:43
-     */
-    private static class LookupSwitch {
-
     }
 }
