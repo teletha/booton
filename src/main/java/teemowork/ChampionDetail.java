@@ -12,17 +12,21 @@ package teemowork;
 import static teemowork.model.Status.*;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import js.application.Page;
 import js.application.PageInfo;
 import js.bind.Notifiable;
 import js.bind.Observable;
 import js.bind.Observer;
+import js.util.ArrayList;
 import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
 import teemowork.model.Build;
+import teemowork.model.Build.Computed;
 import teemowork.model.Champion;
+import teemowork.model.Status;
 import booton.css.CSS;
 
 /**
@@ -30,27 +34,18 @@ import booton.css.CSS;
  */
 public class ChampionDetail extends Page {
 
+    /** The displayable status. */
+    private static final Status[] VISIBLE = {Health, Hreg, Mana, Mreg, AD, AS, Critical, LS, AP, CDR, SV, AR, MR, MS};
+
+    /** The status box. */
+    private List<StatusBox> boxies = new ArrayList();
+
     /** The your custom build. */
     @Observable
     private final Build build;
 
     /** The status. */
     private jQuery level;
-
-    /** The status. */
-    private StatusBox health;
-
-    /** The status. */
-    private StatusBox mana;
-
-    /** The status. */
-    private StatusBox ad;
-
-    /** The status. */
-    private StatusBox as;
-
-    /** The status. */
-    private StatusBox ms;
 
     /**
      * Build page.
@@ -125,11 +120,10 @@ public class ChampionDetail extends Page {
                 });
 
         level = icon.child(Level.class);
-        health = new StatusBox("Health", info);
-        mana = new StatusBox("Mana", info);
-        ad = new StatusBox("AD", info);
-        as = new StatusBox("AS", info);
-        ms = new StatusBox("MS", info);
+
+        for (Status status : VISIBLE) {
+            boxies.add(new StatusBox(status, info, build));
+        }
 
         calcurate();
     }
@@ -143,11 +137,10 @@ public class ChampionDetail extends Page {
     private void calcurate() {
         // update each status
         level.text(String.valueOf(build.getLevel()));
-        health.set(build.get(Health), build.getBase(Health));
-        mana.set(build.get(Mana), build.getBase(Mana));
-        ad.set(build.get(AD), build.getBase(AD));
-        as.set(build.getAS(), build.getASIncreased());
-        ms.set(build.get(MS), build.getBase(MS));
+
+        for (StatusBox box : boxies) {
+            box.calcurate();
+        }
     }
 
     /**
@@ -163,33 +156,42 @@ public class ChampionDetail extends Page {
      */
     private static class StatusBox {
 
+        /** The target to display. */
+        private final Status status;
+
         /** The value for curernt Lv. */
         private jQuery current;
 
         /** The value for per Lv. */
         private jQuery perLv;
 
+        /** The build. */
+        private final Build build;
+
         /**
          * @param name
          */
-        private StatusBox(String name, jQuery root) {
-            jQuery status = root.child(Box.class);
-            status.child(Name.class).text(name);
-            current = status.child(Value.class);
-            perLv = status.child(Value.class);
+        private StatusBox(Status status, jQuery root, Build build) {
+            jQuery box = root.child(Box.class);
+            box.child(Name.class).text(status.name());
+
+            this.status = status;
+            this.current = box.child(Value.class);
+            this.perLv = box.child(Value.class);
+            this.build = build;
+
         }
 
         /**
          * <p>
-         * Set status.
+         * Calcurate status and show it
          * </p>
-         * 
-         * @param current
-         * @param per
          */
-        private void set(double current, double per) {
-            this.current.text(String.valueOf(current));
-            this.perLv.text("(+" + per + ")");
+        private void calcurate() {
+            Computed value = build.get(status);
+
+            this.current.text(value.value());
+            this.perLv.text("(+" + value.increased + ")");
         }
 
         /**

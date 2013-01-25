@@ -9,8 +9,6 @@
  */
 package teemowork.model;
 
-import static teemowork.model.Item.*;
-
 import java.util.Map;
 
 import js.util.HashMap;
@@ -49,21 +47,22 @@ public class Patch {
      * Update item.
      * </p>
      * 
-     * @param name
+     * @param item A target to update.
      */
-    private Item updateItem(String name) {
-        Item item = new Item(name, this);
-        items.put(name, item);
+    private Improvement update(Item item) {
+        // update champion status
+        item.improvement = new Improvement(this, item.improvement);
 
-        return item;
+        // Chainable API
+        return item.improvement;
     }
 
     /**
      * <p>
-     * Update item.
+     * Update champion.
      * </p>
      * 
-     * @param Title
+     * @param champion A target to update.
      */
     private Improvement update(Champion champion) {
         // update champion status
@@ -73,12 +72,33 @@ public class Patch {
         return champion.improvement;
     }
 
+    /**
+     * <p>
+     * Update rune.
+     * </p>
+     * 
+     * @param rune A target to update.
+     */
+    private Improvement update(Rune rune) {
+        // update champion status
+        rune.improvement = new Improvement(this, rune.improvement);
+
+        // Chainable API
+        return rune.improvement;
+    }
+
     /** The patch. */
     public static Patch P0000 = new Patch(1510, 2012, 11, 13, "Initial", null);
 
     static {
-        P0000.updateItem(RubyCrystal).cost(475).health(180);
-        P0000.updateItem(HauntingGuise).health(200).ap(25);
+        P0000.update(Item.BlastingWand).cost(860).ap(40);
+        P0000.update(Item.RubyCrystal).cost(475).health(180);
+        P0000.update(Item.HauntingGuise).health(200).ap(25);
+
+        P0000.update(Rune.VitalityMark).health(0, 0.54);
+        P0000.update(Rune.VitalitySeal).health(0, 1.08);
+        P0000.update(Rune.VitalityGlyph).health(0, 0.54);
+        P0000.update(Rune.VitalityQuintessence).health(0, 2.7);
 
         P0000.update(Champion.Ahri)
                 .health(380, 80)
@@ -1263,9 +1283,9 @@ public class Patch {
     public static Patch P1520 = new Patch(1520, 2012, 12, 03, "Preseason 3", P0000);
 
     static {
-        P1520.updateItem(ShardOfTrueIce);
-        P1520.updateItem(LiandrysTorment);
-        P1520.updateItem(HauntingGuise);
+        P1520.update(Item.ShardOfTrueIce);
+        P1520.update(Item.LiandrysTorment);
+        P1520.update(Item.HauntingGuise);
     }
 
     /** The patch. */
