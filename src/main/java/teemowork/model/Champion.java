@@ -38,7 +38,7 @@ public class Champion {
      * 
      * @param name
      */
-    private Champion(String name) {
+    Champion(String name) {
         this.name = name;
         this.normalizedName = getSystemName().toLowerCase();
 

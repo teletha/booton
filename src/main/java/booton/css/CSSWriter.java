@@ -62,7 +62,7 @@ public class CSSWriter {
      * </p>
      * 
      * @param name
-     * @param value
+     * @param calcurated
      */
     public void property(String name, Object... values) {
         List<String> list = new ArrayList();
