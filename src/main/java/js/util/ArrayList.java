@@ -16,7 +16,6 @@ import java.util.ListIterator;
 
 import js.lang.NativeArray;
 
-
 /**
  * @version 2012/12/09 22:57:44
  */
@@ -24,6 +23,24 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
 
     /** The actual container. */
     private NativeArray<E> array = new NativeArray();
+
+    /**
+     * <p>
+     * Constructs an empty list with an initial capacity of ten.
+     * </p>
+     */
+    public ArrayList() {
+    }
+
+    /**
+     * <p>
+     * Constructs an empty list with the specified initial capacity.
+     * </p>
+     * 
+     * @param initial The initial capacity of the list.
+     */
+    public ArrayList(int initial) {
+    }
 
     /**
      * {@inheritDoc}

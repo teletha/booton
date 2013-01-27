@@ -57,7 +57,7 @@ public class Build extends Notifiable {
     public Build(Champion champion) {
         this.champion = champion;
 
-        items.add(Item.HauntingGuise);
+        items.add(Item.ZekesHerald);
     }
 
     /**

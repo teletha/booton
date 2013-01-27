@@ -505,12 +505,23 @@ public class Improvement<T extends Improvement<T>> implements Improvable {
     }
 
     /**
-     * Set the ms property of this object.
+     * Set the improvement entry of this object.
      * 
-     * @param ms The ms value to set.
+     * @param base The base value to set.
      */
-    T ms(int ms) {
-        this.ms = ms;
+    T ms(double base) {
+        return ms(base, 0);
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
+     * @param base The base value to set.
+     * @param ratio The per level value to set.
+     */
+    T ms(double base, double ratio) {
+        this.ms = base;
+        this.msRatio = ratio;
 
         return (T) this;
     }
@@ -600,6 +611,54 @@ public class Improvement<T extends Improvement<T>> implements Improvable {
         this.sv = base;
         this.svPerLv = per;
 
+        return (T) this;
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
+     * @param base The base value to set.
+     */
+    T critical(double base) {
+        return critical(base, 0);
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
+     * @param base The base value to set.
+     * @param per The per level value to set.
+     */
+    T critical(double base, double per) {
+        this.critical = base;
+        this.criticalPerLv = per;
+
+        return (T) this;
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
+     * @param base The base value to set.
+     */
+    T ls(double base) {
+        return ls(base, 0);
+    }
+
+    /**
+     * Set the improvement entry of this object.
+     * 
+     * @param base The base value to set.
+     * @param per The per level value to set.
+     */
+    T ls(double base, double per) {
+        this.ls = base;
+        this.lsPerLv = per;
+
+        return (T) this;
+    }
+
+    T build(Item... items) {
         return (T) this;
     }
 }

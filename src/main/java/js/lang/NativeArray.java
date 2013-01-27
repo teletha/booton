@@ -54,6 +54,8 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
      * @return A item at index.
      */
     public T get(int index) {
+        ensureSize(index + 1);
+
         return list.get(index);
     }
 
@@ -67,9 +69,22 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
      * @return A value to set.
      */
     public T set(int index, T value) {
-        list.ensureCapacity(index);
+        ensureSize(index + 1);
 
         return list.set(index, value);
+    }
+
+    /**
+     * <p>
+     * Ensure list size.
+     * </p>
+     * 
+     * @param min A minmum size.
+     */
+    private void ensureSize(int min) {
+        for (int i = list.size(); i < min; i++) {
+            list.add(null);
+        }
     }
 
     /**

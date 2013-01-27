@@ -36,7 +36,7 @@ public class Patch {
     /**
      * Create patch information.
      */
-    private Patch(int number, int year, int month, int day, String name, Patch previous) {
+    Patch(int number, int year, int month, int day, String name, Patch previous) {
         this.number = number;
         this.name = name;
         this.previous = previous;
@@ -91,15 +91,298 @@ public class Patch {
     public static Patch P0000 = new Patch(1510, 2012, 11, 13, "Initial", null);
 
     static {
-        P0000.update(Item.BlastingWand).cost(860).ap(40);
-        P0000.update(Item.RubyCrystal).cost(475).health(180);
-        P0000.update(Item.HauntingGuise).health(200).ap(25);
-
         P0000.update(Rune.VitalityMark).health(0, 0.54);
         P0000.update(Rune.VitalitySeal).health(0, 1.08);
         P0000.update(Rune.VitalityGlyph).health(0, 0.54);
         P0000.update(Rune.VitalityQuintessence).health(0, 2.7);
 
+        // ====================================================
+        // Item Definitions
+        // ====================================================
+        P0000.update(Item.AbyssalScepter).build(Item.BlastingWand, Item.NegatronCloak).cost(980).mr(45).ap(70);
+        P0000.update(Item.AegisOftheLegion)
+                .build(Item.EmblemOfValor, Item.NullMagicMantle, Item.RubyCrystal)
+                .cost(625)
+                .mr(20)
+                .health(250);
+        P0000.update(Item.AmplifyingTome).cost(435).ap(20);
+        P0000.update(Item.ArchangelsStaff)
+                .build(Item.TearOftheGoddess, Item.BlastingWand)
+                .cost(1140)
+                .ap(60)
+                .mana(250)
+                .mreg(10);
+        P0000.update(Item.AthenesUnholyGrail)
+                .build(Item.ChaliceOfHarmony, Item.FiendishCodex)
+                .cost(920)
+                .mr(40)
+                .ap(60)
+                .mreg(15);
+        P0000.update(Item.AtmasImpaler).build(Item.AvariceBlade, Item.ChainVest).cost(780).critical(15);
+        P0000.update(Item.AugmentDeath).build(Item.TheHexCore).cost(1000).ap(45);
+        P0000.update(Item.AugmentGravity).build(Item.TheHexCore).cost(1000).mana(200).cdr(10).mreg(5);
+        P0000.update(Item.AugmentPower).build(Item.TheHexCore).cost(1000).hreg(6).health(220);
+        P0000.update(Item.AvariceBlade).build(Item.BrawlersGloves).cost(400).critical(10);
+        P0000.update(Item.BFSword).cost(1550).ad(45);
+        P0000.update(Item.BannerOfCommand).build(Item.BlastingWand, Item.EmblemOfValor).cost(890).ap(40).cdr(10);
+        P0000.update(Item.BansheesVeil)
+                .build(Item.NegatronCloak, Item.CatalystTheProtector)
+                .cost(600)
+                .mr(45)
+                .mana(300)
+                .health(400);
+        P0000.update(Item.BerserkersGreaves).build(Item.BootsOfSpeed, Item.Dagger).cost(150).as(20);
+        P0000.update(Item.BilgewaterCutlass).build(Item.Pickaxe, Item.VampiricScepter).cost(250).ls(10).ad(40);
+        P0000.update(Item.BlackfireTorch)
+                .build(Item.KagesLuckyPick, Item.FiendishCodex, Item.HauntingGuise)
+                .cost(700)
+                .ap(80)
+                .health(250)
+                .mreg(10);
+        P0000.update(Item.BladeOftheRuinedKing).build(Item.BilgewaterCutlass).cost(975).ls(10).ad(40);
+        P0000.update(Item.BlastingWand).cost(860).ap(40);
+        P0000.update(Item.BonetoothNecklace).cost(800).ad(5);
+        P0000.update(Item.BootsOfMobility).build(Item.BootsOfSpeed).cost(650);
+        P0000.update(Item.BootsOfSpeed).cost(350);
+        P0000.update(Item.BootsOfSwiftness).build(Item.BootsOfSpeed).cost(650);
+        P0000.update(Item.BrawlersGloves).cost(400).critical(8);
+        P0000.update(Item.CatalystTheProtector)
+                .build(Item.RubyCrystal, Item.SapphireCrystal)
+                .cost(325)
+                .mana(300)
+                .health(200);
+        P0000.update(Item.ChainVest).cost(720);
+        P0000.update(Item.ChaliceOfHarmony).build(Item.FaerieCharm, Item.NullMagicMantle).cost(300).mr(25).mreg(7);
+        P0000.update(Item.CloakOfAgility).cost(730).critical(15);
+        P0000.update(Item.ClothArmor).cost(300);
+        P0000.update(Item.CrystallineFlask).cost(345);
+        P0000.update(Item.Dagger).cost(400).as(12);
+        P0000.update(Item.DeathfireGrasp).build(Item.AmplifyingTome, Item.NeedlesslyLargeRod).cost(965).ap(100).cdr(15);
+        P0000.update(Item.DoransBlade).cost(475).ad(10).health(80);
+        P0000.update(Item.DoransRing).cost(475).ap(15).health(80).mreg(3);
+        P0000.update(Item.DoransShield).cost(475).hreg(5).health(100);
+        P0000.update(Item.EleisasMiracle).build(Item.PhilosophersStone).cost(400).hreg(10).mreg(15);
+        P0000.update(Item.ElixirOfBrilliance).cost(250);
+        P0000.update(Item.ElixirOfFortitude).cost(250);
+        P0000.update(Item.EmblemOfValor).build(Item.ClothArmor, Item.RejuvenationBead).cost(170);
+        P0000.update(Item.Entropy).build(Item.BFSword, Item.Phage).cost(600).ad(70).health(275);
+        P0000.update(Item.ExecutionersCalling).build(Item.AvariceBlade, Item.LongSword).cost(700).critical(15).ad(25);
+        P0000.update(Item.FaerieCharm).cost(180).mreg(3);
+        P0000.update(Item.FiendishCodex).build(Item.FaerieCharm, Item.AmplifyingTome).cost(385).ap(30).mreg(6);
+        P0000.update(Item.FrozenHeart).build(Item.GlacialShroud, Item.WardensMail).cost(500).mana(400).cdr(20);
+        P0000.update(Item.FrozenMallet).build(Item.Phage, Item.GiantsBelt).cost(835).ad(30).health(700);
+        P0000.update(Item.GiantsBelt).cost(1000).health(400);
+        P0000.update(Item.GlacialShroud).build(Item.SapphireCrystal, Item.ChainVest).cost(380).mana(300);
+        P0000.update(Item.GrezsSpectralLantern).build(Item.ClothArmor, Item.VampiricScepter).cost(150).ls(12).ad(20);
+        P0000.update(Item.GuardianAngel).build(Item.NullMagicMantle, Item.ChainVest).cost(1480).mr(30);
+        P0000.update(Item.GuinsoosRageblade).build(Item.BlastingWand, Item.Pickaxe).cost(865).ap(40).ad(30);
+        P0000.update(Item.HauntingGuise).build(Item.RubyCrystal, Item.AmplifyingTome).cost(575).ap(25).health(200);
+        P0000.update(Item.HealthPotion).cost(35);
+        P0000.update(Item.Hexdrinker).build(Item.LongSword, Item.NullMagicMantle).cost(550).mr(25).ad(25);
+        P0000.update(Item.HextechGunblade)
+                .build(Item.BilgewaterCutlass, Item.HextechRevolver)
+                .cost(275)
+                .ls(10)
+                .ap(65)
+                .ad(45);
+        P0000.update(Item.HextechRevolver).build(Item.AmplifyingTome, Item.AmplifyingTome).cost(330).ap(40);
+        P0000.update(Item.HextechSweeper)
+                .build(Item.AmplifyingTome, Item.AmplifyingTome, Item.Kindlegem)
+                .cost(200)
+                .ap(50)
+                .health(300);
+        P0000.update(Item.HuntersMachete).cost(300);
+        P0000.update(Item.IcebornGauntlet).build(Item.Sheen, Item.GlacialShroud).cost(640).ap(40).mana(500).cdr(15);
+        P0000.update(Item.IchorOfIllumination).cost(500);
+        P0000.update(Item.IchorOfRage).cost(500);
+        P0000.update(Item.InfinityEdge)
+                .build(Item.BFSword, Item.CloakOfAgility, Item.Pickaxe)
+                .cost(645)
+                .critical(25)
+                .ad(70);
+        P0000.update(Item.IonianBootsOfLucidity).build(Item.BootsOfSpeed).cost(700);
+        P0000.update(Item.KagesLuckyPick).build(Item.AmplifyingTome).cost(330).ap(25);
+        P0000.update(Item.Kindlegem).build(Item.RubyCrystal).cost(375).health(200);
+        P0000.update(Item.KitaesBloodrazor).build(Item.Pickaxe, Item.RecurveBow).cost(700).as(40).ad(30);
+        P0000.update(Item.LastWhisper).build(Item.LongSword, Item.Pickaxe).cost(1025).ad(40);
+        P0000.update(Item.LiandrysTorment).build(Item.HauntingGuise, Item.AmplifyingTome).cost(980).ap(60).health(300);
+        P0000.update(Item.LichBane).build(Item.Sheen, Item.BlastingWand).cost(880).ap(80).ms(5).mana(250);
+        P0000.update(Item.LocketOftheIronSolari)
+                .build(Item.Kindlegem, Item.ClothArmor, Item.RejuvenationBead)
+                .cost(670)
+                .cdr(10)
+                .health(425);
+        P0000.update(Item.LongSword).cost(400).ad(10);
+        P0000.update(Item.MadredsRazors).build(Item.ClothArmor, Item.HuntersMachete).cost(100);
+        P0000.update(Item.Malady).build(Item.Dagger, Item.Dagger, Item.AmplifyingTome).cost(800).ap(25).as(45);
+        P0000.update(Item.ManaManipulator).build(Item.FaerieCharm, Item.FaerieCharm).cost(40);
+        P0000.update(Item.Manamune).build(Item.TearOftheGoddess, Item.LongSword).cost(1000).ad(20).mana(250).mreg(7);
+        P0000.update(Item.ManaPotion).cost(35);
+        P0000.update(Item.MawOfMalmortius).build(Item.Hexdrinker, Item.Pickaxe).cost(975).mr(36).ad(55);
+        P0000.update(Item.MejaisSoulstealer).build(Item.AmplifyingTome).cost(800).ap(20);
+        P0000.update(Item.MercurialScimitar).build(Item.QuicksilverSash, Item.BFSword).cost(600).mr(45).ad(60);
+        P0000.update(Item.MercurysTreads).build(Item.BootsOfSpeed, Item.NullMagicMantle).cost(450).mr(25);
+        P0000.update(Item.MikaelsCrucible)
+                .build(Item.SapphireCrystal, Item.ChaliceOfHarmony)
+                .cost(920)
+                .mr(40)
+                .mana(300)
+                .mreg(9);
+        P0000.update(Item.Morellonomicon)
+                .build(Item.FiendishCodex, Item.KagesLuckyPick)
+                .cost(435)
+                .ap(75)
+                .cdr(20)
+                .mreg(12);
+        P0000.update(Item.Muramana).build(Item.Manamune).cost(0).ad(20).mana(1000).mreg(7);
+        P0000.update(Item.NashorsTooth).build(Item.Stinger, Item.FiendishCodex).cost(250).ap(65).as(50).mreg(10);
+        P0000.update(Item.NeedlesslyLargeRod).cost(1600).ap(80);
+        P0000.update(Item.NegatronCloak).cost(810).mr(45);
+        P0000.update(Item.NinjaTabi).build(Item.BootsOfSpeed, Item.ClothArmor).cost(350);
+        P0000.update(Item.NullMagicMantle).cost(400).mr(20);
+        P0000.update(Item.OdynsVeil)
+                .build(Item.NegatronCloak, Item.CatalystTheProtector)
+                .cost(600)
+                .mr(50)
+                .mana(350)
+                .health(350);
+        P0000.update(Item.Ohmwrecker).build(Item.CatalystTheProtector, Item.ChainVest).cost(930).mana(300).health(350);
+        P0000.update(Item.OraclesElixir).cost(400);
+        P0000.update(Item.OraclesExtract).cost(250);
+        P0000.update(Item.OverlordsBloodmail).build(Item.GiantsBelt, Item.RubyCrystal).cost(980).health(850);
+        P0000.update(Item.Phage).build(Item.RubyCrystal, Item.LongSword).cost(590).ad(20).health(200);
+        P0000.update(Item.PhantomDancer)
+                .build(Item.CloakOfAgility, Item.Zeal, Item.Dagger)
+                .cost(495)
+                .critical(30)
+                .ms(5)
+                .as(50);
+        P0000.update(Item.PhilosophersStone).build(Item.FaerieCharm, Item.RejuvenationBead).cost(340).hreg(7).mreg(9);
+        P0000.update(Item.Pickaxe).cost(875).ad(25);
+        P0000.update(Item.ProspectorsBlade).cost(950).ls(5).ad(20);
+        P0000.update(Item.ProspectorsRing).cost(950).ap(40);
+        P0000.update(Item.QuicksilverSash).build(Item.NegatronCloak).cost(850).mr(45);
+        P0000.update(Item.RabadonsDeathcap).build(Item.BlastingWand, Item.NeedlesslyLargeRod).cost(740).ap(120);
+        P0000.update(Item.RanduinsOmen).build(Item.GiantsBelt, Item.WardensMail).cost(1000).health(500);
+        P0000.update(Item.RavenousHydra).build(Item.Tiamat, Item.VampiricScepter).cost(400).ls(10).ad(75).hreg(15);
+        P0000.update(Item.RecurveBow).cost(950).as(30);
+        P0000.update(Item.RejuvenationBead).cost(180).hreg(5);
+        P0000.update(Item.RodOfAges)
+                .build(Item.CatalystTheProtector, Item.BlastingWand)
+                .cost(740)
+                .ap(60)
+                .mana(450)
+                .health(450);
+        P0000.update(Item.RubyCrystal).cost(475).health(180);
+        P0000.update(Item.RubySightstone).build(Item.Sightstone).cost(125).health(300);
+        P0000.update(Item.RunaansHurricane).build(Item.Dagger, Item.RecurveBow, Item.Dagger).cost(1000).as(70);
+        P0000.update(Item.RunicBulwark).build(Item.NullMagicMantle, Item.AegisOftheLegion).cost(650).mr(30).health(400);
+        P0000.update(Item.RylaisCrystalScepter)
+                .build(Item.BlastingWand, Item.AmplifyingTome, Item.GiantsBelt)
+                .cost(605)
+                .ap(80)
+                .health(500);
+        P0000.update(Item.SanguineBlade).build(Item.BFSword, Item.VampiricScepter).cost(500).ls(15).ad(65);
+        P0000.update(Item.SapphireCrystal).cost(400).mana(200);
+        P0000.update(Item.SeraphsEmbrace).build(Item.ArchangelsStaff).cost(0).ap(60).mana(1000).mreg(10);
+        P0000.update(Item.ShardOfTrueIce).build(Item.KagesLuckyPick, Item.ManaManipulator).cost(535).ap(45);
+        P0000.update(Item.Sheen).build(Item.SapphireCrystal, Item.AmplifyingTome).cost(425).ap(25).mana(200);
+        P0000.update(Item.ShurelyasReverie)
+                .build(Item.Kindlegem, Item.PhilosophersStone)
+                .cost(550)
+                .hreg(10)
+                .health(250)
+                .mreg(10);
+        P0000.update(Item.Sightstone).cost(700).health(100);
+        P0000.update(Item.SightWard).cost(75);
+        P0000.update(Item.SorcerersShoes).build(Item.BootsOfSpeed).cost(750);
+        P0000.update(Item.SpiritOftheAncientGolem)
+                .build(Item.SpiritStone, Item.GiantsBelt)
+                .cost(600)
+                .hreg(14)
+                .health(500)
+                .mreg(7);
+        P0000.update(Item.SpiritOftheElderLizard)
+                .build(Item.SpiritStone, Item.Pickaxe)
+                .cost(725)
+                .ad(50)
+                .hreg(14)
+                .cdr(10)
+                .mreg(7);
+        P0000.update(Item.SpiritOftheSpectralWraith)
+                .build(Item.SpiritStone, Item.HextechRevolver)
+                .cost(400)
+                .ap(50)
+                .cdr(10)
+                .mreg(10);
+        P0000.update(Item.SpiritStone)
+                .build(Item.HuntersMachete, Item.FaerieCharm, Item.RejuvenationBead)
+                .cost(140)
+                .hreg(14)
+                .mreg(7);
+        P0000.update(Item.SpiritVisage).build(Item.Kindlegem, Item.NegatronCloak).cost(540).mr(50).cdr(15).health(200);
+        P0000.update(Item.StatikkShiv).build(Item.Zeal, Item.AvariceBlade).cost(525).critical(20).ms(6).as(40);
+        P0000.update(Item.Stinger).build(Item.Dagger, Item.Dagger).cost(450).as(40);
+        P0000.update(Item.SunfireCape).build(Item.ChainVest, Item.GiantsBelt).cost(780).health(450);
+        P0000.update(Item.SwordOftheDivine).build(Item.RecurveBow, Item.Dagger).cost(850).as(45);
+        P0000.update(Item.SwordOftheOccult).build(Item.LongSword).cost(800).ad(10);
+        P0000.update(Item.TearOftheGoddess).build(Item.SapphireCrystal, Item.FaerieCharm).cost(120).mana(250).mreg(7);
+        P0000.update(Item.TheBlackCleaver)
+                .build(Item.TheBrutalizer, Item.RubyCrystal)
+                .cost(1188)
+                .ad(50)
+                .cdr(10)
+                .health(250);
+        P0000.update(Item.TheBloodthirster).build(Item.BFSword, Item.VampiricScepter).cost(650).ls(12).ad(70);
+        P0000.update(Item.TheBrutalizer).build(Item.LongSword, Item.LongSword).cost(537).ad(25);
+        P0000.update(Item.TheHexCore).cost(0);
+        P0000.update(Item.TheLightbringer).build(Item.BonetoothNecklace, Item.Pickaxe).cost(300).ls(12).ad(50);
+        P0000.update(Item.Thornmail).build(Item.ChainVest, Item.ClothArmor).cost(1180);
+        P0000.update(Item.Tiamat)
+                .build(Item.Pickaxe, Item.LongSword, Item.RejuvenationBead, Item.RejuvenationBead)
+                .cost(665)
+                .ad(50)
+                .hreg(15);
+        P0000.update(Item.TrinityForce)
+                .build(Item.Zeal, Item.Sheen, Item.Phage)
+                .cost(300)
+                .critical(10)
+                .ap(30)
+                .ms(8)
+                .mana(200)
+                .as(30)
+                .ad(30)
+                .health(250);
+        P0000.update(Item.TwinShadows).build(Item.KagesLuckyPick, Item.NullMagicMantle).cost(735).ap(40).ms(6);
+        P0000.update(Item.VampiricScepter).build(Item.LongSword).cost(400).ls(10).ad(10);
+        P0000.update(Item.VisionWard).cost(125);
+        P0000.update(Item.VoidStaff).build(Item.BlastingWand, Item.AmplifyingTome).cost(1000).ap(70);
+        P0000.update(Item.WardensMail).build(Item.ClothArmor, Item.ClothArmor).cost(500);
+        P0000.update(Item.WarmogsArmor)
+                .build(Item.GiantsBelt, Item.RubyCrystal, Item.RejuvenationBead)
+                .cost(995)
+                .health(1000);
+        P0000.update(Item.WillOftheAncients).build(Item.KagesLuckyPick, Item.HextechRevolver).cost(585).ap(50);
+        P0000.update(Item.WitsEnd).build(Item.RecurveBow, Item.NullMagicMantle).cost(850).mr(20).as(40);
+        P0000.update(Item.WoogletsWitchcap)
+                .build(Item.BlastingWand, Item.BlastingWand, Item.ChainVest)
+                .cost(1060)
+                .ap(100);
+        P0000.update(Item.WrigglesLantern).build(Item.VampiricScepter, Item.MadredsRazors).cost(100).ls(10).ad(15);
+        P0000.update(Item.YoumuusGhostblade)
+                .build(Item.AvariceBlade, Item.TheBrutalizer)
+                .cost(563)
+                .critical(15)
+                .ad(30)
+                .cdr(10);
+        P0000.update(Item.Zeal).build(Item.BrawlersGloves, Item.Dagger).cost(375).critical(10).ms(5).as(18);
+        P0000.update(Item.ZekesHerald).build(Item.VampiricScepter, Item.Kindlegem).cost(800).cdr(15).health(250);
+        P0000.update(Item.Zephyr).build(Item.Stinger, Item.LongSword).cost(1200).ms(10).as(50).ad(20).cdr(10);
+        P0000.update(Item.ZhonyasHourglass).build(Item.NeedlesslyLargeRod, Item.ChainVest).cost(780).ap(100);
+
+        // =============================================================
+        // Champion Definitions
+        // =============================================================
         P0000.update(Champion.Ahri)
                 .health(380, 80)
                 .hreg(5.5, 0.6)
