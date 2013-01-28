@@ -14,7 +14,21 @@ package teemowork.lol;
  */
 public enum Version {
 
-    P1154("preseason Balance Update 2", 2013, 1, 16),
+    P0000("Release", 2009, 10, 27),
+
+    P1148("Late September", 2012, 9, 26),
+
+    P1149("World Championship Hotfix", 2012, 9, 18),
+
+    P1150("Shadow Isles", 2012, 10, 25),
+
+    P1151("End of Season 2", 2012, 11, 13),
+
+    P1152("Preseason 3", 2012, 12, 4),
+
+    P1153("Preseason Balance Update 1", 2012, 12, 14),
+
+    P1154("Preseason Balance Update 2", 2013, 1, 16),
 
     PBE("Public Beta Environment", 2013, 1, 26);
 
