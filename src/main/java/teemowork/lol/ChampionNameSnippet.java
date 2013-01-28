@@ -12,8 +12,6 @@ package teemowork.lol;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import teemowork.model.Champion;
-
 /**
  * @version 2012/12/11 11:30:34
  */

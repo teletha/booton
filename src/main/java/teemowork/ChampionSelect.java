@@ -10,13 +10,15 @@
 package teemowork;
 
 import java.util.Collection;
+import java.util.List;
 
 import js.application.Application;
 import js.application.Page;
 import js.application.PageInfo;
 import js.ui.ImageGrid;
+import js.util.ArrayList;
 import js.util.jQuery;
-import teemowork.model.Champion;
+import teemowork.lol.Champion;
 
 /**
  * @version 2012/12/26 13:06:59
@@ -28,7 +30,12 @@ public class ChampionSelect extends Page {
 
         @Override
         protected Collection<Champion> sources() {
-            return Champion.getAll();
+            List<Champion> list = new ArrayList();
+
+            for (Champion champion : Champion.values()) {
+                list.add(champion);
+            }
+            return list;
         }
 
         @Override

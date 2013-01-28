@@ -17,7 +17,7 @@ import booton.translator.Translator;
 class DoubleCoder extends Translator<Double> {
 
     public String valueOf(double param0) {
-        return "\"\"+" + param(0);
+        return param(0);
     }
 
     public String doubleValue() {

@@ -9,17 +9,8 @@
  */
 package booton.translator.field;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
-import js.util.ArrayList;
-
 import org.junit.Test;
 
-import teemowork.model.Champion;
-import teemowork.model.Item;
-import teemowork.model.MasterySet;
-import teemowork.model.RuneSet;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
