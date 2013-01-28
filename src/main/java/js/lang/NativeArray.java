@@ -202,6 +202,17 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
 
     /**
      * <p>
+     * Create new {@link NativeArray} with copied elements.
+     * </p>
+     * 
+     * @return
+     */
+    public NativeArray<T> copy() {
+        return new NativeArray(list.toArray());
+    }
+
+    /**
+     * <p>
      * Convert type to Java array.
      * </p>
      * 
@@ -356,6 +367,17 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
          */
         public String iterator() {
             return that + ".it()";
+        }
+
+        /**
+         * <p>
+         * Create new {@link NativeArray} with copied elements.
+         * </p>
+         * 
+         * @return
+         */
+        public String copy() {
+            return that + ".slice(0)";
         }
 
         /**

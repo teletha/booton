@@ -9,8 +9,7 @@
  */
 package teemowork.lol;
 
-import static teemowork.lol.Damage.*;
-import static teemowork.lol.SkillCost.*;
+import static teemowork.lol.Status.*;
 
 import org.junit.Test;
 
@@ -20,25 +19,38 @@ import org.junit.Test;
 public class SkillDescriptorTest {
 
     @Test
-    public void skill() throws Exception {
-        SkillDescriptor skill = Skill.AbsoluteZero.createDescriptor(Version.P1154);
+    public void GetAndSet() throws Exception {
+        SkillDescriptor skill = new SkillDescriptor(null);
+        assert skill.get(Range) == 0;
 
-        skill.range(500);
-        skill.cooldown(1.5);
-        skill.cost(Mana, 16, 22, 28, 34, 40);
-        skill.damage(Magic, 40, 60, 80, 100, 120);
-        skill.description("Evelynn fires a line of spikes through a nearby enemy, dealing magic damage to all enemy units in its path.");
+        skill.set(Range, 100);
+        assert skill.get(Range) == 100;
     }
 
     @Test
-    public void name() throws Exception {
-        SkillDescriptor skill = new SkillDescriptor("name");
-        assert skill.name.equals("name");
+    public void Delegate() throws Exception {
+        SkillDescriptor previous = new SkillDescriptor(null);
+        previous.set(Range, 100);
+        assert previous.get(Range) == 100;
+
+        SkillDescriptor skill = new SkillDescriptor(previous);
+        assert skill.get(Range) == 100;
     }
 
     @Test
-    public void version() throws Exception {
-        SkillDescriptor skill = new SkillDescriptor("name");
+    public void Override() throws Exception {
+        SkillDescriptor previous = new SkillDescriptor(null);
+        previous.set(Range, 100);
+        assert previous.get(Range) == 100;
 
+        SkillDescriptor skill = new SkillDescriptor(previous);
+        skill.set(Range, 200);
+        assert skill.get(Range) == 200;
+        assert previous.get(Range) == 100;
+    }
+
+    @Test
+    public void active() throws Exception {
+        SkillDescriptor skill = new SkillDescriptor(null);
     }
 }
