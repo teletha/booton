@@ -9,7 +9,7 @@
  */
 package teemowork;
 
-import static teemowork.model.Status.*;
+import static teemowork.lol.Status.*;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -23,10 +23,10 @@ import js.util.ArrayList;
 import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
+import teemowork.lol.Champion;
+import teemowork.lol.Status;
 import teemowork.model.Build;
 import teemowork.model.Build.Computed;
-import teemowork.model.Champion;
-import teemowork.model.Status;
 import booton.css.CSS;
 
 /**
@@ -55,7 +55,7 @@ public class ChampionDetail extends Page {
      */
     @PageInfo(path = "Champion/*")
     public ChampionDetail(String name) {
-        this(Champion.getByName(name));
+        this(Champion.valueOf(name));
     }
 
     /**

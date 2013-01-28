@@ -9,12 +9,15 @@
  */
 package teemowork.model;
 
-import static teemowork.model.Status.*;
+import static teemowork.lol.Status.*;
 
 import java.util.List;
 
 import js.bind.Notifiable;
 import js.util.ArrayList;
+import teemowork.lol.Champion;
+import teemowork.lol.Status;
+import teemowork.lol.Version;
 
 /**
  * @version 2013/01/25 14:31:39
@@ -25,7 +28,7 @@ public class Build extends Notifiable {
     public final Champion champion;
 
     /** The version. */
-    private Patch patch = Patch.Latest;
+    private Version version = Version.Latest;
 
     /** The level. */
     private int level = 1;
@@ -87,18 +90,18 @@ public class Build extends Notifiable {
      * 
      * @return The patch property.
      */
-    public Patch getPatch() {
-        return patch;
+    public Version getVersion() {
+        return version;
     }
 
     /**
      * Set the patch property of this {@link Build}.
      * 
-     * @param patch The patch value to set.
+     * @param version The patch value to set.
      */
-    public void setPatch(Patch patch) {
-        if (patch != null) {
-            this.patch = patch;
+    public void setVersion(Version version) {
+        if (version != null) {
+            this.version = version;
 
             fire();
         }
@@ -124,8 +127,8 @@ public class Build extends Notifiable {
             return new Computed(0, 0, status.precision);
 
         case AS:
-            double baseAS = champion.improvement.get(AS, patch);
-            double levelAS = champion.improvement.get(ASPerLv, patch) * (level - 1);
+            double baseAS = champion.getDescriptor(version).get(AS);
+            double levelAS = champion.getDescriptor(version).get(ASPerLv) * (level - 1);
             return new Computed(baseAS * (1 + levelAS / 100), baseAS * (1 + (levelAS + sum(ASRatio)) / 100), status.precision);
 
         default:
@@ -157,11 +160,11 @@ public class Build extends Notifiable {
         case MRPenRatio:
         case Energy:
         case Ereg:
-            return champion.improvement.get(status, patch);
+            return champion.getDescriptor(version).get(status);
 
         default:
             Status per = Status.valueOf(status.name() + "PerLv");
-            return champion.improvement.get(status, patch) + champion.improvement.get(per, patch) * level;
+            return champion.getDescriptor(version).get(status) + champion.getDescriptor(version).get(per) * level;
         }
     }
 
@@ -176,25 +179,25 @@ public class Build extends Notifiable {
     private double sum(Status status) {
         double sum = 0;
 
-        for (Item item : items) {
-            sum += item.improvement.get(status, patch);
-        }
-
-        for (Rune rune : marks) {
-            sum += rune.improvement.get(status, patch);
-        }
-
-        for (Rune rune : seals) {
-            sum += rune.improvement.get(status, patch);
-        }
-
-        for (Rune rune : glyphs) {
-            sum += rune.improvement.get(status, patch);
-        }
-
-        for (Rune rune : quintessences) {
-            sum += rune.improvement.get(status, patch);
-        }
+        // for (Item item : items) {
+        // sum += item.improvement.get(status, version);
+        // }
+        //
+        // for (Rune rune : marks) {
+        // sum += rune.improvement.get(status, version);
+        // }
+        //
+        // for (Rune rune : seals) {
+        // sum += rune.improvement.get(status, version);
+        // }
+        //
+        // for (Rune rune : glyphs) {
+        // sum += rune.improvement.get(status, version);
+        // }
+        //
+        // for (Rune rune : quintessences) {
+        // sum += rune.improvement.get(status, version);
+        // }
 
         return sum;
     }
