@@ -51,9 +51,6 @@ public class Rune {
     /** The kind of rune. */
     public final int kind;
 
-    /** The status. */
-    Improvement improvement;
-
     /**
      * @param name
      * @param kind

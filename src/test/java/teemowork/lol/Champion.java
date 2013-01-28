@@ -423,7 +423,7 @@ public enum Champion {
 
     /**
      * <p>
-     * Update descriptor..
+     * Update descriptor.
      * </p>
      * 
      * @param version A update version.
@@ -1404,7 +1404,7 @@ public enum Champion {
                 .set(Mreg, 6.5, 0.5)
                 .set(AD, 46.61, 3.3)
                 .set(AS, 0.651, 3.22)
-                .set(AR, 111.25, 3.15)
+                .set(AR, 11.25, 3.15)
                 .set(MR, 30, 0)
                 .set(Range, 525)
                 .set(MS, 330);

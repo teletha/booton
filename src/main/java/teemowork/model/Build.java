@@ -16,6 +16,7 @@ import java.util.List;
 import js.bind.Notifiable;
 import js.util.ArrayList;
 import teemowork.lol.Champion;
+import teemowork.lol.Item;
 import teemowork.lol.Status;
 import teemowork.lol.Version;
 
@@ -179,10 +180,10 @@ public class Build extends Notifiable {
     private double sum(Status status) {
         double sum = 0;
 
-        // for (Item item : items) {
-        // sum += item.improvement.get(status, version);
-        // }
-        //
+        for (Item item : items) {
+            sum += item.getDescriptor(version).get(status);
+        }
+
         // for (Rune rune : marks) {
         // sum += rune.improvement.get(status, version);
         // }

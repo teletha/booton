@@ -13,7 +13,6 @@ import static js.lang.Global.*;
 import js.application.Application;
 import js.application.Header;
 import js.application.Header.Menu;
-import teemowork.lol.Version;
 
 /**
  * @version 2012/12/11 14:23:57
@@ -40,7 +39,5 @@ public class Teemowork extends Application {
         nav.add("Builder", "#");
         nav.add("About", "#");
         nav.add("Contact", "#");
-
-        System.out.println(Version.Latest);
     }
 }
