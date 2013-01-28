@@ -149,7 +149,7 @@ public class ChampionDetail extends Page {
      */
     @Override
     protected String getPageId() {
-        return "Champion/" + build.champion.name;
+        return "Champion/" + build.champion.name();
     }
 
     /**

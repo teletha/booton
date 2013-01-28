@@ -53,7 +53,7 @@ public class ChampionSelect extends Page {
          */
         @Override
         protected void select(Champion source) {
-            Application.show(new ChampionDetail(source.name));
+            Application.show(new ChampionDetail(source.name()));
         }
     };
 
