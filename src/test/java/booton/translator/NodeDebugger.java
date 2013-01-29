@@ -90,7 +90,7 @@ public class NodeDebugger {
      */
     public static void dump(Javascript script, String methodName, List<Node> nodes) {
         if (whileTest) {
-            if (methodName.equals("$SWITCH_TABLE$booton$translator$flow$SwitchTest$Number")) {
+            if (methodName.equals("act")) {
                 String testClassName = computeTestClassName(script.source);
                 String testMethodName = computeTestMethodName(testClassName);
 
