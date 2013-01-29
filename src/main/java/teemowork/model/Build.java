@@ -17,6 +17,8 @@ import js.bind.Notifiable;
 import js.util.ArrayList;
 import teemowork.lol.Champion;
 import teemowork.lol.Item;
+import teemowork.lol.ItemAbility;
+import teemowork.lol.ItemDescriptor;
 import teemowork.lol.Status;
 import teemowork.lol.Version;
 
@@ -180,8 +182,11 @@ public class Build extends Notifiable {
     private double sum(Status status) {
         double sum = 0;
 
+        List<ItemDescriptor> descriptors = new ArrayList();
+        List<ItemAbility> abilities = new ArrayList();
+
         for (Item item : items) {
-            sum += item.getDescriptor(version).get(status);
+            descriptors.add(item.getDescriptor(version));
         }
 
         // for (Rune rune : marks) {

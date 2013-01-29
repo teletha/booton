@@ -14,24 +14,19 @@ import js.lang.NativeArray;
 /**
  * @version 2013/01/29 1:55:25
  */
-public class ItemDescriptor {
+public class ItemAbility {
 
     /** The value store. */
     private NativeArray<Double> values;
 
-    /** The item build. */
-    private Item[] build;
-
     /**
      * @param name
      */
-    ItemDescriptor(ItemDescriptor previous) {
+    ItemAbility(ItemAbility previous) {
         if (previous != null) {
             values = previous.values.copy();
-            build = previous.build;
         } else {
             values = new NativeArray();
-            build = new Item[0];
         }
     }
 
@@ -57,7 +52,7 @@ public class ItemDescriptor {
      * @param status A target status.
      * @return Chainable API.
      */
-    public ItemDescriptor set(Status status, double value) {
+    public ItemAbility set(Status status, double value) {
         values.set(status.ordinal(), value);
 
         return this;
@@ -71,7 +66,7 @@ public class ItemDescriptor {
      * @param status A target status.
      * @return Chainable API.
      */
-    public ItemDescriptor set(Status status, double base, double per) {
+    public ItemAbility set(Status status, double base, double per) {
         values.set(status.ordinal(), base);
         values.set(Status.valueOf(status.name() + "PerLv").ordinal(), per);
 
@@ -86,8 +81,7 @@ public class ItemDescriptor {
      * @param items
      * @return
      */
-    public ItemDescriptor build(Item... items) {
-        this.build = items;
+    public ItemAbility build(Item... items) {
 
         return this;
     }
