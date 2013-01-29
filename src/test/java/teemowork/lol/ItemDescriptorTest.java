@@ -20,11 +20,11 @@ public class ItemDescriptorTest {
 
     @Test
     public void GetAndSet() throws Exception {
-        ItemDescriptor skill = new ItemDescriptor(null);
-        assert skill.get(Range) == 0;
+        ItemDescriptor item = new ItemDescriptor(null);
+        assert item.get(Range) == 0;
 
-        skill.set(Range, 100);
-        assert skill.get(Range) == 100;
+        item.set(Range, 100);
+        assert item.get(Range) == 100;
     }
 
     @Test
@@ -33,8 +33,8 @@ public class ItemDescriptorTest {
         previous.set(Range, 100);
         assert previous.get(Range) == 100;
 
-        ItemDescriptor skill = new ItemDescriptor(previous);
-        assert skill.get(Range) == 100;
+        ItemDescriptor item = new ItemDescriptor(previous);
+        assert item.get(Range) == 100;
     }
 
     @Test
@@ -43,14 +43,15 @@ public class ItemDescriptorTest {
         previous.set(Range, 100);
         assert previous.get(Range) == 100;
 
-        ItemDescriptor skill = new ItemDescriptor(previous);
-        skill.set(Range, 200);
-        assert skill.get(Range) == 200;
+        ItemDescriptor item = new ItemDescriptor(previous);
+        item.set(Range, 200);
+        assert item.get(Range) == 200;
         assert previous.get(Range) == 100;
     }
 
     @Test
     public void active() throws Exception {
-        ItemDescriptor skill = new ItemDescriptor(null);
+        ItemDescriptor item = new ItemDescriptor(null);
+        item.aura("test").set(MRReduction, 20).unique();
     }
 }

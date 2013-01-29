@@ -78,10 +78,9 @@ public class ItemAbility {
      * Set build items.
      * </p>
      * 
-     * @param items
      * @return
      */
-    public ItemAbility build(Item... items) {
+    public ItemAbility unique() {
 
         return this;
     }

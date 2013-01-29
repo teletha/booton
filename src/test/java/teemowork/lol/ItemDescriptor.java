@@ -9,7 +9,10 @@
  */
 package teemowork.lol;
 
+import java.util.Map;
+
 import js.lang.NativeArray;
+import js.util.HashMap;
 
 /**
  * @version 2013/01/29 1:55:25
@@ -21,6 +24,9 @@ public class ItemDescriptor {
 
     /** The item build. */
     private Item[] build;
+
+    /** The abilities. */
+    private Map<String, ItemAbility> abilities = new HashMap();
 
     /**
      * @param name
@@ -90,5 +96,9 @@ public class ItemDescriptor {
         this.build = items;
 
         return this;
+    }
+
+    public ItemAbility aura(String name) {
+
     }
 }

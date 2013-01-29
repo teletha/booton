@@ -88,11 +88,15 @@ public enum Status {
 
     ARRatio,
 
+    ARReduction,
+
     MR,
 
     MRPerLv,
 
     MRRatio,
+
+    MRReduction,
 
     Range,
 
