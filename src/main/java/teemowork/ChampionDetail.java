@@ -23,10 +23,10 @@ import js.util.ArrayList;
 import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
+import teemowork.lol.Build;
 import teemowork.lol.Champion;
 import teemowork.lol.Status;
-import teemowork.model.Build;
-import teemowork.model.Build.Computed;
+import teemowork.lol.Build.Computed;
 import booton.css.CSS;
 
 /**

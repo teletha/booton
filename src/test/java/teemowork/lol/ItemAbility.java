@@ -9,79 +9,85 @@
  */
 package teemowork.lol;
 
-import js.lang.NativeArray;
+import static teemowork.lol.Status.*;
+import static teemowork.lol.Version.*;
 
 /**
  * @version 2013/01/29 1:55:25
  */
-public class ItemAbility {
+public enum ItemAbility {
 
-    /** The value store. */
-    private NativeArray<Double> values;
+    AbyssalAura,
+
+    Legion("Legion"),
+
+    Insight("Insight"),
+
+    ManaCharge("Mana Charge");
+
+    /** The ability name. */
+    public final String name;
+
+    /** The visible name. */
+    public final boolean visible;
+
+    /** The descriptor. */
+    private final ItemAbilityDescriptor[] descriptors = new ItemAbilityDescriptor[Version.values().length];
 
     /**
+     * Create new ability with invisible name.
+     */
+    private ItemAbility() {
+        this(null);
+    }
+
+    /**
+     * <p>
+     * Create new ability.
+     * </p>
+     * 
      * @param name
      */
-    ItemAbility(ItemAbility previous) {
-        if (previous != null) {
-            values = previous.values.copy();
-        } else {
-            values = new NativeArray();
+    private ItemAbility(String name) {
+        this.visible = name != null;
+        this.name = visible ? name : name();
+    }
+
+    /**
+     * <p>
+     * Retrieve a descriptor at the specified version.
+     * </p>
+     */
+    public ItemAbilityDescriptor getDescriptor(Version version) {
+        for (int i = version.ordinal(); 0 <= i; i--) {
+            ItemAbilityDescriptor descriptor = descriptors[i];
+
+            if (descriptor != null) {
+                return descriptor;
+            }
         }
+        return null;
     }
 
     /**
      * <p>
-     * Retrieve status value.
+     * Update descriptor.
      * </p>
      * 
-     * @param status A target status.
-     * @return A result.
+     * @param version A update version.
+     * @return A descriptor.
      */
-    public double get(Status status) {
-        Double value = values.get(status.ordinal());
+    private ItemAbilityDescriptor update(Version version) {
+        ItemAbilityDescriptor descriptor = new ItemAbilityDescriptor(getDescriptor(version));
 
-        return value == null ? 0 : value;
+        descriptors[version.ordinal()] = descriptor;
+
+        return descriptor;
     }
 
-    /**
-     * <p>
-     * Retrieve status value.
-     * </p>
-     * 
-     * @param status A target status.
-     * @return Chainable API.
-     */
-    public ItemAbility set(Status status, double value) {
-        values.set(status.ordinal(), value);
-
-        return this;
-    }
-
-    /**
-     * <p>
-     * Retrieve status value.
-     * </p>
-     * 
-     * @param status A target status.
-     * @return Chainable API.
-     */
-    public ItemAbility set(Status status, double base, double per) {
-        values.set(status.ordinal(), base);
-        values.set(Status.valueOf(status.name() + "PerLv").ordinal(), per);
-
-        return this;
-    }
-
-    /**
-     * <p>
-     * Set build items.
-     * </p>
-     * 
-     * @return
-     */
-    public ItemAbility unique() {
-
-        return this;
+    static {
+        AbyssalAura.update(P0000).set(MRReduction, 20).aura(700);
+        Legion.update(P0000).set(AR, 10).set(MR, 15).set(Hreg, 10).aura(1200);
+        Insight.update(P0000).description("最大マナの3%に等しいAPを得る");
     }
 }

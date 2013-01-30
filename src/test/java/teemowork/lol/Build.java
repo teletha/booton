@@ -7,20 +7,18 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package teemowork.model;
+package teemowork.lol;
 
 import static teemowork.lol.Status.*;
 
 import java.util.List;
+import java.util.Set;
 
 import js.bind.Notifiable;
 import js.util.ArrayList;
-import teemowork.lol.Champion;
-import teemowork.lol.Item;
-import teemowork.lol.ItemAbility;
-import teemowork.lol.ItemDescriptor;
-import teemowork.lol.Status;
-import teemowork.lol.Version;
+import js.util.HashSet;
+import teemowork.model.MasterySet;
+import teemowork.model.Rune;
 
 /**
  * @version 2013/01/25 14:31:39
@@ -37,7 +35,10 @@ public class Build extends Notifiable {
     private int level = 1;
 
     /** The item list. */
-    private List<Item> items = new ArrayList();
+    private Item[] items = new Item[6];
+
+    /** The item list. */
+    private int[] itemCounts = {1, 1, 1, 1, 1, 1};
 
     /** The skill order. */
     private int[] skills = new int[18];
@@ -63,7 +64,7 @@ public class Build extends Notifiable {
     public Build(Champion champion) {
         this.champion = champion;
 
-        items.add(Item.ZekesHerald);
+        items[0] = Item.ArchangelsStaff;
     }
 
     /**
@@ -182,11 +183,30 @@ public class Build extends Notifiable {
     private double sum(Status status) {
         double sum = 0;
 
-        List<ItemDescriptor> descriptors = new ArrayList();
-        List<ItemAbility> abilities = new ArrayList();
+        // manage unique ability
+        Set<String> names = new HashSet();
 
-        for (Item item : items) {
-            descriptors.add(item.getDescriptor(version));
+        for (int i = 0; i < 6; i++) {
+            Item item = items[i];
+
+            if (item != null) {
+                ItemDescriptor descriptor = item.getDescriptor(version);
+
+                // compute item status
+                sum += descriptor.get(status);
+
+                for (ItemAbility ability : descriptor.abilities) {
+                    ItemAbilityDescriptor abilityDescriptor = ability.getDescriptor(version);
+
+                    if (abilityDescriptor.isUnique() && names.contains(ability.name)) {
+                        continue;
+                    }
+                    names.add(ability.name);
+
+                    // compute ability status
+                    sum += abilityDescriptor.get(status) * itemCounts[i];
+                }
+            }
         }
 
         // for (Rune rune : marks) {

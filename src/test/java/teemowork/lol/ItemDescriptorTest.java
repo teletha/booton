@@ -9,6 +9,7 @@
  */
 package teemowork.lol;
 
+import static teemowork.lol.ItemAbility.*;
 import static teemowork.lol.Status.*;
 
 import org.junit.Test;
@@ -50,8 +51,11 @@ public class ItemDescriptorTest {
     }
 
     @Test
-    public void active() throws Exception {
+    public void ability() throws Exception {
         ItemDescriptor item = new ItemDescriptor(null);
-        item.aura("test").set(MRReduction, 20).unique();
+        assert item.abilities.length == 0;
+
+        item.ability(AbyssalAura);
+        assert item.abilities.length == 1;
     }
 }
