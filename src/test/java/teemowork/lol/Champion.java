@@ -13,343 +13,347 @@ import static teemowork.lol.Skill.*;
 import static teemowork.lol.Status.*;
 import static teemowork.lol.Version.*;
 
+import java.util.List;
+
+import js.util.ArrayList;
+
 /**
  * @version 2013/01/27 9:55:21
  */
-public enum Champion {
+public class Champion {
+
+    /** The champion manager. */
+    private static final List<Champion> champions = new ArrayList();
+
     /** The champion name. */
-    Ahri("Ahri", EssenceTheft, OrbOfDeception, FoxFire, Charm, SpiritRush),
+    public static final Champion Ahri = new Champion("Ahri", EssenceTheft, OrbOfDeception, FoxFire, Charm, SpiritRush);
 
     /** The champion name. */
-    Akali("Akali", TwinDisciplines, MarkOftheAssassin, TwilightShroud, CrescentSlash, ShadowDance),
+    public static final Champion Akali = new Champion("Akali", TwinDisciplines, MarkOftheAssassin, TwilightShroud, CrescentSlash, ShadowDance);
 
     /** The champion name. */
-    Alistar("Alistar", Trample, Pulverize, Headbutt, TriumphantRoar, UnbreakableWill),
+    public static final Champion Alistar = new Champion("Alistar", Trample, Pulverize, Headbutt, TriumphantRoar, UnbreakableWill);
 
     /** The champion name. */
-    Amumu("Amumu", CursedTouch, BandageToss, Despair, Tantrum, CurseOftheSadMummy),
+    public static final Champion Amumu = new Champion("Amumu", CursedTouch, BandageToss, Despair, Tantrum, CurseOftheSadMummy);
 
     /** The champion name. */
-    Anivia("Anivia", Rebirth, FlashFrost, Crystalize, Frostbite, GlacialStorm),
+    public static final Champion Anivia = new Champion("Anivia", Rebirth, FlashFrost, Crystalize, Frostbite, GlacialStorm);
 
     /** The champion name. */
-    Annie("Annie", Pyromania, Disintegrate, Incinerate, MoltenShield, SummonTibbers),
+    public static final Champion Annie = new Champion("Annie", Pyromania, Disintegrate, Incinerate, MoltenShield, SummonTibbers);
 
     /** The champion name. */
-    Ashe("Ashe", Focus, FrostShot, Volley, Hawkshot, EnchantedCrystalArrow),
+    public static final Champion Ashe = new Champion("Ashe", Focus, FrostShot, Volley, Hawkshot, EnchantedCrystalArrow);
 
     /** The champion name. */
-    Blitzcrank("Blitzcrank", ManaBarrier, RocketGrab, Overdrive, PowerFist, StaticField),
+    public static final Champion Blitzcrank = new Champion("Blitzcrank", ManaBarrier, RocketGrab, Overdrive, PowerFist, StaticField);
 
     /** The champion name. */
-    Brand("Brand", Blaze, Sear, PillarOfFlame, Conflagration, Pyroclasm),
+    public static final Champion Brand = new Champion("Brand", Blaze, Sear, PillarOfFlame, Conflagration, Pyroclasm);
 
     /** The champion name. */
-    Caitlyn("Caitlyn", Headshot, PiltoverPeacemaker, YordleSnapTrap, CaliberNet, AceinTheHole),
+    public static final Champion Caitlyn = new Champion("Caitlyn", Headshot, PiltoverPeacemaker, YordleSnapTrap, CaliberNet, AceinTheHole);
 
     /** The champion name. */
-    Cassiopeia("Cassiopeia", DeadlyCadence, NoxiousBlast, Miasma, TwinFang, PetrifyingGaze),
+    public static final Champion Cassiopeia = new Champion("Cassiopeia", DeadlyCadence, NoxiousBlast, Miasma, TwinFang, PetrifyingGaze);
 
     /** The champion name. */
-    ChoGath("Cho'Gath", Carnivore, Rupture, FeralScream, VorpalSpikes, Feast),
+    public static final Champion ChoGath = new Champion("Cho'Gath", Carnivore, Rupture, FeralScream, VorpalSpikes, Feast);
 
     /** The champion name. */
-    Corki("Corki", HextechShrapnelShells, PhosphorusBomb, Valkyrie, GatlingGun, MissileBarrage),
+    public static final Champion Corki = new Champion("Corki", HextechShrapnelShells, PhosphorusBomb, Valkyrie, GatlingGun, MissileBarrage);
 
     /** The champion name. */
-    Darius("Darius", Hemorrhage, Decimate, CripplingStrike, Apprehend, NoxianGuillotine),
+    public static final Champion Darius = new Champion("Darius", Hemorrhage, Decimate, CripplingStrike, Apprehend, NoxianGuillotine);
 
     /** The champion name. */
-    Diana("Diana", MoonsilverBlade, CrescentStrike, PaleCascade, Moonfall, LunarRush),
+    public static final Champion Diana = new Champion("Diana", MoonsilverBlade, CrescentStrike, PaleCascade, Moonfall, LunarRush);
 
     /** The champion name. */
-    DrMundo("Dr.Mundo", AdrenalineRush, InfectedCleaver, BurningAgony, Masochism, Sadism),
+    public static final Champion DrMundo = new Champion("Dr.Mundo", AdrenalineRush, InfectedCleaver, BurningAgony, Masochism, Sadism);
 
     /** The champion name. */
-    Draven("Draven", WickedBlades, SpinningAxe, BloodRush, StandAside, WhirlingDeath),
+    public static final Champion Draven = new Champion("Draven", WickedBlades, SpinningAxe, BloodRush, StandAside, WhirlingDeath);
 
     /** The champion name. */
-    Elise("Elise", SpiderSwarm, NeurotoxinVenomousBite, VolatileSpiderlingSkitteringFrenzy, CocoonRappel,
-            SpiderFormHumanForm),
+    public static final Champion Elise = new Champion("Elise", SpiderSwarm, NeurotoxinVenomousBite, VolatileSpiderlingSkitteringFrenzy, CocoonRappel, SpiderFormHumanForm);
 
     /** The champion name. */
-    Evelynn("Evelynn", ShadowWalk, HateSpike, DarkFrenzy, Ravage, AgonysEmbrace),
+    public static final Champion Evelynn = new Champion("Evelynn", ShadowWalk, HateSpike, DarkFrenzy, Ravage, AgonysEmbrace);
 
     /** The champion name. */
-    Ezreal("Ezreal", RisingSpellForce, MysticShot, EssenceFlux, ArcaneShift, TrueshotBarrage),
+    public static final Champion Ezreal = new Champion("Ezreal", RisingSpellForce, MysticShot, EssenceFlux, ArcaneShift, TrueshotBarrage);
 
     /** The champion name. */
-    Fiddlesticks("Fiddlesticks", Dread, Terrify, Drain, DarkWind, Crowstorm),
+    public static final Champion Fiddlesticks = new Champion("Fiddlesticks", Dread, Terrify, Drain, DarkWind, Crowstorm);
 
     /** The champion name. */
-    Fiora("Fiora", Duelist, Lunge, Riposte, BurstOfSpeed, BladeWaltz),
+    public static final Champion Fiora = new Champion("Fiora", Duelist, Lunge, Riposte, BurstOfSpeed, BladeWaltz);
 
     /** The champion name. */
-    Fizz("Fizz", NimbleFighter, UrchinStrike, SeastoneTrident, PlayfulTrickster, ChumTheWaters),
+    public static final Champion Fizz = new Champion("Fizz", NimbleFighter, UrchinStrike, SeastoneTrident, PlayfulTrickster, ChumTheWaters);
 
     /** The champion name. */
-    Galio("Galio", RunicSkin, ResoluteSmite, Bulwark, RighteousGust, IdolOfDurand),
+    public static final Champion Galio = new Champion("Galio", RunicSkin, ResoluteSmite, Bulwark, RighteousGust, IdolOfDurand);
 
     /** The champion name. */
-    Gangplank("Gangplank", GrogSoakedBlade, Parrrley, RemoveScurvy, RaiseMorale, CannonBarrage),
+    public static final Champion Gangplank = new Champion("Gangplank", GrogSoakedBlade, Parrrley, RemoveScurvy, RaiseMorale, CannonBarrage);
 
     /** The champion name. */
-    Garen("Garen", Perseverance, DecisiveStrike, Courage, Judgment, DemacianJustice),
+    public static final Champion Garen = new Champion("Garen", Perseverance, DecisiveStrike, Courage, Judgment, DemacianJustice);
 
     /** The champion name. */
-    Gragas("Gragas", HappyHour, BarrelRoll, DrunkenRage, BodySlam, ExplosiveCask),
+    public static final Champion Gragas = new Champion("Gragas", HappyHour, BarrelRoll, DrunkenRage, BodySlam, ExplosiveCask);
 
     /** The champion name. */
-    Graves("Graves", TrueGrit, Buckshot, Smokescreen, Quickdraw, CollateralDamage),
+    public static final Champion Graves = new Champion("Graves", TrueGrit, Buckshot, Smokescreen, Quickdraw, CollateralDamage);
 
     /** The champion name. */
-    Hecarim("Hecarim", Warpath, Rampage, SpiritOfDread, DevastatingCharge, OnslaughtOfShadows),
+    public static final Champion Hecarim = new Champion("Hecarim", Warpath, Rampage, SpiritOfDread, DevastatingCharge, OnslaughtOfShadows);
 
     /** The champion name. */
-    Heimerdinger("Heimerdinger", TechmaturgicalRepairBots, H28GEvolutionTurret, HextechMicroRockets,
-            CH1ConcussionGrenade, UPGRADE),
+    public static final Champion Heimerdinger = new Champion("Heimerdinger", TechmaturgicalRepairBots, H28GEvolutionTurret, HextechMicroRockets, CH1ConcussionGrenade, UPGRADE);
 
     /** The champion name. */
-    Irelia("Irelia", IonianFervor, Bladesurge, HitenStyle, EquilibriumStrike, TranscendentBlades),
+    public static final Champion Irelia = new Champion("Irelia", IonianFervor, Bladesurge, HitenStyle, EquilibriumStrike, TranscendentBlades);
 
     /** The champion name. */
-    Janna("Janna", Tailwind, HowlingGale, Zephyr, EyeOfTheStorm, Monsoon),
+    public static final Champion Janna = new Champion("Janna", Tailwind, HowlingGale, Zephyr, EyeOfTheStorm, Monsoon);
 
     /** The champion name. */
-    JarvanIV("Jarvan IV", MartialCadence, DragonStrike, GoldenAegis, DemacianStandard, Cataclysm),
+    public static final Champion JarvanIV = new Champion("Jarvan IV", MartialCadence, DragonStrike, GoldenAegis, DemacianStandard, Cataclysm);
 
     /** The champion name. */
-    Jax("Jax", RelentlessAssault, LeapStrike, Empower, CounterStrike, GrandmastersMight),
+    public static final Champion Jax = new Champion("Jax", RelentlessAssault, LeapStrike, Empower, CounterStrike, GrandmastersMight);
 
     /** The champion name. */
-    Jayce("Jayce", HextechCapacitor, ToTheSkiesShockBlast, LightningFieldHyperCharge, ThunderingBlowAccelerationGate,
-            TransformMercuryCannonTransformMercuryHammer),
+    public static final Champion Jayce = new Champion("Jayce", HextechCapacitor, ToTheSkiesShockBlast, LightningFieldHyperCharge, ThunderingBlowAccelerationGate, TransformMercuryCannonTransformMercuryHammer);
 
     /** The champion name. */
-    Karma("Karma", InnerFlame, HeavenlyWave, SpiritBond, SoulShield, Mantra),
+    public static final Champion Karma = new Champion("Karma", InnerFlame, HeavenlyWave, SpiritBond, SoulShield, Mantra);
 
     /** The champion name. */
-    Karthus("Karthus", DeathDefied, LayWaste, WallOfPain, Defile, Requiem),
+    public static final Champion Karthus = new Champion("Karthus", DeathDefied, LayWaste, WallOfPain, Defile, Requiem);
 
     /** The champion name. */
-    Kassadin("Kassadin", VoidStone, NullSphere, NetherBlade, ForcePulse, Riftwalk),
+    public static final Champion Kassadin = new Champion("Kassadin", VoidStone, NullSphere, NetherBlade, ForcePulse, Riftwalk);
 
     /** The champion name. */
-    Katarina("Katarina", Voracity, BouncingBlade, SinisterSteel, Shunpo, DeathLotus),
+    public static final Champion Katarina = new Champion("Katarina", Voracity, BouncingBlade, SinisterSteel, Shunpo, DeathLotus);
 
     /** The champion name. */
-    Kayle("Kayle", HolyFervor, Reckoning, DivineBlessing, RighteousFury, Intervention),
+    public static final Champion Kayle = new Champion("Kayle", HolyFervor, Reckoning, DivineBlessing, RighteousFury, Intervention);
 
     /** The champion name. */
-    Kennen("Kennen", MarkOftheStorm, ThunderingShuriken, ElectricalSurge, LightningRush, SlicingMaelstrom),
+    public static final Champion Kennen = new Champion("Kennen", MarkOftheStorm, ThunderingShuriken, ElectricalSurge, LightningRush, SlicingMaelstrom);
 
     /** The champion name. */
-    KhaZix("Kha'Zix", UnseenThreat, TasteTheirFear, VoidSpike, Leap, VoidAssault),
+    public static final Champion KhaZix = new Champion("Kha'Zix", UnseenThreat, TasteTheirFear, VoidSpike, Leap, VoidAssault);
 
     /** The champion name. */
-    KogMaw("Kog'Maw", IcathianSurprise, CausticSpittle, BioArcaneBarrage, VoidOoze, LivingArtillery),
+    public static final Champion KogMaw = new Champion("Kog'Maw", IcathianSurprise, CausticSpittle, BioArcaneBarrage, VoidOoze, LivingArtillery);
 
     /** The champion name. */
-    LeBlanc("LeBlanc", MirrorImage, SigilOfSilence, Distortion, EtherealChains, Mimic),
+    public static final Champion LeBlanc = new Champion("LeBlanc", MirrorImage, SigilOfSilence, Distortion, EtherealChains, Mimic);
 
     /** The champion name. */
-    LeeSin("Lee Sin", Flurry, SonicWaveResonatingStrike, SafeguardIronWill, TempestCripple, DragonsRage),
+    public static final Champion LeeSin = new Champion("Lee Sin", Flurry, SonicWaveResonatingStrike, SafeguardIronWill, TempestCripple, DragonsRage);
 
     /** The champion name. */
-    Leona("Leona", Sunlight, ShieldOfDaybreak, Eclipse, ZenithBlade, SolarFlare),
+    public static final Champion Leona = new Champion("Leona", Sunlight, ShieldOfDaybreak, Eclipse, ZenithBlade, SolarFlare);
 
     /** The champion name. */
-    Lulu("Lulu", PixFaerieCompanion, Glitterlance, Whimsy, HelpPix, WildGrowth),
+    public static final Champion Lulu = new Champion("Lulu", PixFaerieCompanion, Glitterlance, Whimsy, HelpPix, WildGrowth);
 
     /** The champion name. */
-    Lux("Lux", Illumination, LightBinding, PrismaticBarrier, LucentSingularity, FinalSpark),
+    public static final Champion Lux = new Champion("Lux", Illumination, LightBinding, PrismaticBarrier, LucentSingularity, FinalSpark);
 
     /** The champion name. */
-    Malphite("Malphite", GraniteShield, SeismicShard, BrutalStrikes, GroundSlam, UnstoppableForce),
+    public static final Champion Malphite = new Champion("Malphite", GraniteShield, SeismicShard, BrutalStrikes, GroundSlam, UnstoppableForce);
 
     /** The champion name. */
-    Malzahar("Malzahar", SummonVoidling, CallOftheVoid, NullZone, MaleficVisions, NetherGrasp),
+    public static final Champion Malzahar = new Champion("Malzahar", SummonVoidling, CallOftheVoid, NullZone, MaleficVisions, NetherGrasp);
 
     /** The champion name. */
-    Maokai("Maokai", SapMagic, ArcaneSmash, TwistedAdvance, SaplingToss, VengefulMaelstrom),
+    public static final Champion Maokai = new Champion("Maokai", SapMagic, ArcaneSmash, TwistedAdvance, SaplingToss, VengefulMaelstrom);
 
     /** The champion name. */
-    MasterYi("Master Yi", DoubleStrike, AlphaStrike, Meditate, WujuStyle, Highlander),
+    public static final Champion MasterYi = new Champion("Master Yi", DoubleStrike, AlphaStrike, Meditate, WujuStyle, Highlander);
 
     /** The champion name. */
-    MissFortune("Miss Fortune", Strut, DoubleUp, ImpureShots, MakeItRain, BulletTime),
+    public static final Champion MissFortune = new Champion("Miss Fortune", Strut, DoubleUp, ImpureShots, MakeItRain, BulletTime);
 
     /** The champion name. */
-    Mordekaiser("Mordekaiser", IronMan, MaceOfSpades, CreepingDeath, SiphonOfDestruction, ChildrenOftheGrave),
+    public static final Champion Mordekaiser = new Champion("Mordekaiser", IronMan, MaceOfSpades, CreepingDeath, SiphonOfDestruction, ChildrenOftheGrave);
 
     /** The champion name. */
-    Morgana("Morgana", SoulSiphon, DarkBinding, TormentedSoil, BlackShield, SoulShackles),
+    public static final Champion Morgana = new Champion("Morgana", SoulSiphon, DarkBinding, TormentedSoil, BlackShield, SoulShackles);
 
     /** The champion name. */
-    Nami("Nami", SurgingTides, AquaPrison, EbbandFlow, TidecallersBlessing, TidalWave),
+    public static final Champion Nami = new Champion("Nami", SurgingTides, AquaPrison, EbbandFlow, TidecallersBlessing, TidalWave);
 
     /** The champion name. */
-    Nasus("Nasus", SoulEater, SiphoningStrike, Wither, SpiritFire, FuryOftheSands),
+    public static final Champion Nasus = new Champion("Nasus", SoulEater, SiphoningStrike, Wither, SpiritFire, FuryOftheSands);
 
     /** The champion name. */
-    Nautilus("Nautilus", StaggeringBlow, DredgeLine, TitansWrath, Riptide, DepthCharge),
+    public static final Champion Nautilus = new Champion("Nautilus", StaggeringBlow, DredgeLine, TitansWrath, Riptide, DepthCharge);
 
     /** The champion name. */
-    Nidalee("Nidalee", Prowl, JavelinTossTakedown, BushwhackPounce, PrimalSurgeSwipe, AspectOfTheCougar),
+    public static final Champion Nidalee = new Champion("Nidalee", Prowl, JavelinTossTakedown, BushwhackPounce, PrimalSurgeSwipe, AspectOfTheCougar);
 
     /** The champion name. */
-    Nocturne("Nocturne", UmbraBlades, Duskbringer, ShroudOfDarkness, UnspeakableHorror, Paranoia),
+    public static final Champion Nocturne = new Champion("Nocturne", UmbraBlades, Duskbringer, ShroudOfDarkness, UnspeakableHorror, Paranoia);
 
     /** The champion name. */
-    Nunu("Nunu", Visionary, Consume, BloodBoil, IceBlast, AbsoluteZero),
+    public static final Champion Nunu = new Champion("Nunu", Visionary, Consume, BloodBoil, IceBlast, AbsoluteZero);
 
     /** The champion name. */
-    Olaf("Olaf", BerzerkerRage, Undertow, ViciousStrikes, RecklessSwing, Ragnarok),
+    public static final Champion Olaf = new Champion("Olaf", BerzerkerRage, Undertow, ViciousStrikes, RecklessSwing, Ragnarok);
 
     /** The champion name. */
-    Orianna("Orianna", ClockworkWindup, CommandAttack, CommandDissonance, CommandProtect, CommandShockwave),
+    public static final Champion Orianna = new Champion("Orianna", ClockworkWindup, CommandAttack, CommandDissonance, CommandProtect, CommandShockwave);
 
     /** The champion name. */
-    Pantheon("Pantheon", AegisProtection, SpearShot, AegisOfZeonia, HeartseekerStrike, GrandSkyfall),
+    public static final Champion Pantheon = new Champion("Pantheon", AegisProtection, SpearShot, AegisOfZeonia, HeartseekerStrike, GrandSkyfall);
 
     /** The champion name. */
-    Poppy("Poppy", ValiantFighter, DevastatingBlow, ParagonOfDemacia, HeroicCharge, DiplomaticImmunity),
+    public static final Champion Poppy = new Champion("Poppy", ValiantFighter, DevastatingBlow, ParagonOfDemacia, HeroicCharge, DiplomaticImmunity);
 
     /** The champion name. */
-    Rammus("Rammus", SpikedShell, Powerball, DefensiveBallCurl, PuncturingTaunt, Tremors),
+    public static final Champion Rammus = new Champion("Rammus", SpikedShell, Powerball, DefensiveBallCurl, PuncturingTaunt, Tremors);
 
     /** The champion name. */
-    Renekton("Renekton", ReignOfAnger, CullTheMeek, RuthlessPredator, SliceandDice, Dominus),
+    public static final Champion Renekton = new Champion("Renekton", ReignOfAnger, CullTheMeek, RuthlessPredator, SliceandDice, Dominus);
 
     /** The champion name. */
-    Rengar("Rengar", UnseenPredator, Savagery, BattleRoar, BolaStrike, ThrillOftheHunt),
+    public static final Champion Rengar = new Champion("Rengar", UnseenPredator, Savagery, BattleRoar, BolaStrike, ThrillOftheHunt);
 
     /** The champion name. */
-    Riven("Riven", RunicBlade, BrokenWings, KiBurst, Valor, BladeOftheExile),
+    public static final Champion Riven = new Champion("Riven", RunicBlade, BrokenWings, KiBurst, Valor, BladeOftheExile);
 
     /** The champion name. */
-    Rumble("Rumble", JunkyardTitan, Flamespitter, ScrapShield, ElectroHarpoon, TheEqualizer),
+    public static final Champion Rumble = new Champion("Rumble", JunkyardTitan, Flamespitter, ScrapShield, ElectroHarpoon, TheEqualizer);
 
     /** The champion name. */
-    Ryze("Ryze", ArcaneMastery, Overload, RunePrison, SpellFlux, DesperatePower),
+    public static final Champion Ryze = new Champion("Ryze", ArcaneMastery, Overload, RunePrison, SpellFlux, DesperatePower);
 
     /** The champion name. */
-    Sejuani("Sejuani", Frost, ArcticAssault, NorthernWinds, Permafrost, GlacialPrison),
+    public static final Champion Sejuani = new Champion("Sejuani", Frost, ArcticAssault, NorthernWinds, Permafrost, GlacialPrison);
 
     /** The champion name. */
-    Shaco("Shaco", Backstab, Deceive, JackInTheBox, TwoShivPoison, Hallucinate),
+    public static final Champion Shaco = new Champion("Shaco", Backstab, Deceive, JackInTheBox, TwoShivPoison, Hallucinate);
 
     /** The champion name. */
-    Shen("Shen", KiStrike, VorpalBlade, Feint, ShadowDash, StandUnited),
+    public static final Champion Shen = new Champion("Shen", KiStrike, VorpalBlade, Feint, ShadowDash, StandUnited);
 
     /** The champion name. */
-    Shyvana("Shyvana", FuryOftheDragonborn, TwinBite, Burnout, FlameBreath, DragonsDescent),
+    public static final Champion Shyvana = new Champion("Shyvana", FuryOftheDragonborn, TwinBite, Burnout, FlameBreath, DragonsDescent);
 
     /** The champion name. */
-    Singed("Singed", EmpoweredBulwark, PoisonTrail, MegaAdhesive, Fling, InsanityPotion),
+    public static final Champion Singed = new Champion("Singed", EmpoweredBulwark, PoisonTrail, MegaAdhesive, Fling, InsanityPotion);
 
     /** The champion name. */
-    Sion("Sion", FeelNoPain, CrypticGaze, DeathsCaress, Enrage, Cannibalism),
+    public static final Champion Sion = new Champion("Sion", FeelNoPain, CrypticGaze, DeathsCaress, Enrage, Cannibalism);
 
     /** The champion name. */
-    Sivir("Sivir", FleetOfFoot, BoomerangBlade, Ricochet, SpellShield, OnTheHunt),
+    public static final Champion Sivir = new Champion("Sivir", FleetOfFoot, BoomerangBlade, Ricochet, SpellShield, OnTheHunt);
 
     /** The champion name. */
-    Skarner("Skarner", Energize, CrystalSlash, CrystallineExoskeleton, Fracture, Impale),
+    public static final Champion Skarner = new Champion("Skarner", Energize, CrystalSlash, CrystallineExoskeleton, Fracture, Impale);
 
     /** The champion name. */
-    Sona("Sona", PowerChord, HymnOfValor, AriaOfPerseverance, SongOfCelerity, Crescendo),
+    public static final Champion Sona = new Champion("Sona", PowerChord, HymnOfValor, AriaOfPerseverance, SongOfCelerity, Crescendo);
 
     /** The champion name. */
-    Soraka("Soraka", Consecration, Starcall, AstralBlessing, Infuse, Wish),
+    public static final Champion Soraka = new Champion("Soraka", Consecration, Starcall, AstralBlessing, Infuse, Wish);
 
     /** The champion name. */
-    Swain("Swain", CarrionRenewal, Decrepify, Nevermove, Torment, RavenousFlock),
+    public static final Champion Swain = new Champion("Swain", CarrionRenewal, Decrepify, Nevermove, Torment, RavenousFlock);
 
     /** The champion name. */
-    Syndra("Syndra", Transcendent, DarkSphere, ForceOfWill, ScatterTheWeak, UnleashedPower),
+    public static final Champion Syndra = new Champion("Syndra", Transcendent, DarkSphere, ForceOfWill, ScatterTheWeak, UnleashedPower);
 
     /** The champion name. */
-    Talon("Talon", Mercy, NoxianDiplomacy, Rake, Cutthroat, ShadowAssault),
+    public static final Champion Talon = new Champion("Talon", Mercy, NoxianDiplomacy, Rake, Cutthroat, ShadowAssault);
 
     /** The champion name. */
-    Taric("Taric", Gemcraft, Imbue, Shatter, Dazzle, Radiance),
+    public static final Champion Taric = new Champion("Taric", Gemcraft, Imbue, Shatter, Dazzle, Radiance);
 
     /** The champion name. */
-    Teemo("Teemo", Camouflage, BlindingDart, MoveQuick, ToxicShot, NoxiousTrap),
+    public static final Champion Teemo = new Champion("Teemo", Camouflage, BlindingDart, MoveQuick, ToxicShot, NoxiousTrap);
 
     /** The champion name. */
-    Thresh("Thresh", Damnation, DeathSentence, DarkPassage, Flay, TheBox),
+    public static final Champion Thresh = new Champion("Thresh", Damnation, DeathSentence, DarkPassage, Flay, TheBox);
 
     /** The champion name. */
-    Tristana("Tristana", DrawaBead, RapidFire, RocketJump, ExplosiveShot, BusterShot),
+    public static final Champion Tristana = new Champion("Tristana", DrawaBead, RapidFire, RocketJump, ExplosiveShot, BusterShot);
 
     /** The champion name. */
-    Trundle("Trundle", Decompose, RabidBite, Contaminate, PillarOfFilth, Agony),
+    public static final Champion Trundle = new Champion("Trundle", Decompose, RabidBite, Contaminate, PillarOfFilth, Agony);
 
     /** The champion name. */
-    Tryndamere("Tryndamere", BattleFury, Bloodlust, MockingShout, SpinningSlash, UndyingRage),
+    public static final Champion Tryndamere = new Champion("Tryndamere", BattleFury, Bloodlust, MockingShout, SpinningSlash, UndyingRage);
 
     /** The champion name. */
-    TwistedFate("Twisted Fate", LoadedDice, WildCards, PickACard, StackedDeck, Destiny),
+    public static final Champion TwistedFate = new Champion("Twisted Fate", LoadedDice, WildCards, PickACard, StackedDeck, Destiny);
 
     /** The champion name. */
-    Twitch("Twitch", DeadlyVenom, Ambush, VenomCask, Expunge, SprayandPray),
+    public static final Champion Twitch = new Champion("Twitch", DeadlyVenom, Ambush, VenomCask, Expunge, SprayandPray);
 
     /** The champion name. */
-    Udyr("Udyr", MonkeysAgility, TigerStance, TurtleStance, BearStance, PhoenixStance),
+    public static final Champion Udyr = new Champion("Udyr", MonkeysAgility, TigerStance, TurtleStance, BearStance, PhoenixStance);
 
     /** The champion name. */
-    Urgot("Urgot", ZaunTouchedBoltAugmenter, AcidHunter, TerrorCapacitor, NoxianCorrosiveCharge,
-            HyperKineticPositionReverser),
+    public static final Champion Urgot = new Champion("Urgot", ZaunTouchedBoltAugmenter, AcidHunter, TerrorCapacitor, NoxianCorrosiveCharge, HyperKineticPositionReverser);
 
     /** The champion name. */
-    Varus("Varus", LivingVengeance, PiercingArrow, BlightedQuiver, HailOfArrows, ChainOfCorruption),
+    public static final Champion Varus = new Champion("Varus", LivingVengeance, PiercingArrow, BlightedQuiver, HailOfArrows, ChainOfCorruption);
 
     /** The champion name. */
-    Vayne("Vayne", NightHunter, Tumble, SilverBolts, Condemn, FinalHour),
+    public static final Champion Vayne = new Champion("Vayne", NightHunter, Tumble, SilverBolts, Condemn, FinalHour);
 
     /** The champion name. */
-    Veigar("Veigar", Equilibrium, BalefulStrike, DarkMatter, EventHorizon, PrimordialBurst),
+    public static final Champion Veigar = new Champion("Veigar", Equilibrium, BalefulStrike, DarkMatter, EventHorizon, PrimordialBurst);
 
     /** The champion name. */
-    Vi("Vi", BlastShield, VaultBreaker, DentingBlows, ExcessiveForce, AssaultandBattery),
+    public static final Champion Vi = new Champion("Vi", BlastShield, VaultBreaker, DentingBlows, ExcessiveForce, AssaultandBattery);
 
     /** The champion name. */
-    Viktor("Viktor", EvolvingTechnology, PowerTransfer, GravityField, DeathRay, ChaosStorm),
+    public static final Champion Viktor = new Champion("Viktor", EvolvingTechnology, PowerTransfer, GravityField, DeathRay, ChaosStorm);
 
     /** The champion name. */
-    Vladimir("Vladimir", CrimsonPact, Transfusion, SanguinePool, TidesOfBlood, Hemoplague),
+    public static final Champion Vladimir = new Champion("Vladimir", CrimsonPact, Transfusion, SanguinePool, TidesOfBlood, Hemoplague);
 
     /** The champion name. */
-    Volibear("Volibear", ChosenOftheStorm, RollingThunder, Frenzy, MajesticRoar, ThunderClaws),
+    public static final Champion Volibear = new Champion("Volibear", ChosenOftheStorm, RollingThunder, Frenzy, MajesticRoar, ThunderClaws);
 
     /** The champion name. */
-    Warwick("Warwick", EternalThirst, HungeringStrike, HuntersCall, BloodScent, InfiniteDuress),
+    public static final Champion Warwick = new Champion("Warwick", EternalThirst, HungeringStrike, HuntersCall, BloodScent, InfiniteDuress);
 
     /** The champion name. */
-    Wukong("Wukong", StoneSkin, CrushingBlow, Decoy, NimbusStrike, Cyclone),
+    public static final Champion Wukong = new Champion("Wukong", StoneSkin, CrushingBlow, Decoy, NimbusStrike, Cyclone);
 
     /** The champion name. */
-    Xerath("Xerath", AscendedForm, Arcanopulse, LocusOfPower, MageChains, ArcaneBarrage),
+    public static final Champion Xerath = new Champion("Xerath", AscendedForm, Arcanopulse, LocusOfPower, MageChains, ArcaneBarrage);
 
     /** The champion name. */
-    XinZhao("Xin Zhao", Challenge, ThreeTalonStrike, BattleCry, AudaciousCharge, CrescentSweep),
+    public static final Champion XinZhao = new Champion("Xin Zhao", Challenge, ThreeTalonStrike, BattleCry, AudaciousCharge, CrescentSweep);
 
     /** The champion name. */
-    Yorick("Yorick", UnholyCovenant, OmenOfWar, OmenOfPestilence, OmenOfFamine, OmenOfDeath),
+    public static final Champion Yorick = new Champion("Yorick", UnholyCovenant, OmenOfWar, OmenOfPestilence, OmenOfFamine, OmenOfDeath);
 
     /** The champion name. */
-    Zed("Zed", ContemptforTheWeak, RazorShuriken, LivingShadow, ShadowSlash, DeathMark),
+    public static final Champion Zed = new Champion("Zed", ContemptforTheWeak, RazorShuriken, LivingShadow, ShadowSlash, DeathMark);
 
     /** The champion name. */
-    Ziggs("Ziggs", ShortFuse, BouncingBomb, SatchelCharge, HexplosiveMinefield, MegaInfernoBomb),
+    public static final Champion Ziggs = new Champion("Ziggs", ShortFuse, BouncingBomb, SatchelCharge, HexplosiveMinefield, MegaInfernoBomb);
 
     /** The champion name. */
-    Zilean("Zilean", HeightenedLearning, TimeBomb, Rewind, TimeWarp, ChronoShift),
+    public static final Champion Zilean = new Champion("Zilean", HeightenedLearning, TimeBomb, Rewind, TimeWarp, ChronoShift);
 
     /** The champion name. */
-    Zyra("Zyra", RiseOftheThorns, DeadlyBloom, RampantGrowth, GraspingRoots, Stranglethorns);
+    public static final Champion Zyra = new Champion("Zyra", RiseOftheThorns, DeadlyBloom, RampantGrowth, GraspingRoots, Stranglethorns);
 
     /** The name. */
     public final String name;
@@ -370,6 +374,8 @@ public enum Champion {
     private Champion(String name, Skill passive, Skill q, Skill w, Skill e, Skill r) {
         this.name = name;
         this.systemName = getSystemName().toLowerCase();
+
+        champions.add(this);
     }
 
     /**
@@ -435,6 +441,34 @@ public enum Champion {
         descriptors[version.ordinal()] = descriptor;
 
         return descriptor;
+    }
+
+    /**
+     * <p>
+     * List up all champions.
+     * </p>
+     * 
+     * @return
+     */
+    public static List<Champion> getAll() {
+        return champions;
+    }
+
+    /**
+     * <p>
+     * Find champion by name.
+     * </p>
+     * 
+     * @param name A champion name.
+     * @return A matched champion.
+     */
+    public static Champion getByName(String name) {
+        for (Champion champion : champions) {
+            if (champion.systemName.equals(name)) {
+                return champion;
+            }
+        }
+        return null;
     }
 
     static {

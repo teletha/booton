@@ -24,9 +24,9 @@ import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
 import teemowork.lol.Build;
+import teemowork.lol.Build.Computed;
 import teemowork.lol.Champion;
 import teemowork.lol.Status;
-import teemowork.lol.Build.Computed;
 import booton.css.CSS;
 
 /**
@@ -55,7 +55,7 @@ public class ChampionDetail extends Page {
      */
     @PageInfo(path = "Champion/*")
     public ChampionDetail(String name) {
-        this(Champion.valueOf(name));
+        this(Champion.getByName(name));
     }
 
     /**
@@ -149,7 +149,7 @@ public class ChampionDetail extends Page {
      */
     @Override
     protected String getPageId() {
-        return "Champion/" + build.champion.name();
+        return "Champion/" + build.champion.systemName;
     }
 
     /**
