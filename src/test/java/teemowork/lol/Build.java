@@ -148,6 +148,23 @@ public class Build extends Notifiable {
 
     /**
      * <p>
+     * Set item.
+     * </p>
+     * 
+     * @param index A index to store item.
+     * @param item A item to store.
+     */
+    public void setItem(int index, Item item) {
+        if (0 <= index && index <= 5) {
+            items[index] = item;
+            itemCounts[index] = 1;
+
+            fire();
+        }
+    }
+
+    /**
+     * <p>
      * Compute champion base status.
      * </p>
      * 

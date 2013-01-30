@@ -34,22 +34,71 @@ public class BuildTest {
         champion.update(Version.P0000).set(AD, 20);
 
         Build build = new Build(champion);
-        Computed valeu = build.get(AD);
-        assert valeu.base == 20;
-        assert valeu.increased == 0;
-        assert valeu.value == 20;
+        assertStatus(build, AD, 20, 0);
     }
 
     @Test
     public void item() throws Exception {
         Champion champion = new EmptyChampion();
-
         Build build = new Build(champion);
+        assertStatus(build, AD, 0, 0);
 
-        Computed valeu = build.get(AD);
-        assert valeu.base == 20;
-        assert valeu.increased == 0;
-        assert valeu.value == 20;
+        build.setItem(0, createItem(AD, 10));
+        assertStatus(build, AD, 0, 10);
+    }
+
+    @Test
+    public void items() throws Exception {
+        Champion champion = new EmptyChampion();
+        Build build = new Build(champion);
+        assertStatus(build, AD, 0, 0);
+
+        build.setItem(0, createItem(AD, 10));
+        build.setItem(1, createItem(AD, 10));
+        assertStatus(build, AD, 0, 20);
+    }
+
+    @Test
+    public void ability() throws Exception {
+        Champion champion = new EmptyChampion();
+        Build build = new Build(champion);
+        assertStatus(build, AD, 0, 0);
+
+        build.setItem(0, createItem(AD, 10));
+        build.setItem(1, createItem(AD, 10));
+        assertStatus(build, AD, 0, 20);
+    }
+
+    /**
+     * <p>
+     * Helper method to create new item.
+     * </p>
+     * 
+     * @param status
+     * @param value
+     * @return
+     */
+    private Item createItem(Status status, double value) {
+        Item item = new EmptyItem();
+        item.update(Version.P0000).set(status, value);
+
+        return item;
+    }
+
+    /**
+     * <p>
+     * Assert status value.
+     * </p>
+     * 
+     * @param status
+     * @param base
+     * @param increased
+     */
+    private void assertStatus(Build build, Status status, double base, double increased) {
+        Computed valeu = build.get(status);
+        assert valeu.base == base;
+        assert valeu.increased == increased;
+        assert valeu.value == base + increased;
     }
 
     /**
@@ -62,6 +111,21 @@ public class BuildTest {
          */
         private EmptyChampion() {
             super("Tester", null, null, null, null, null);
+
+            update(Version.P0000);
+        }
+    }
+
+    /**
+     * @version 2013/01/30 13:34:11
+     */
+    private static class EmptyItem extends Item {
+
+        /**
+         * 
+         */
+        private EmptyItem() {
+            super(0, "Test Item");
 
             update(Version.P0000);
         }

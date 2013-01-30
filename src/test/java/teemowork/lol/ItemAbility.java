@@ -15,15 +15,19 @@ import static teemowork.lol.Version.*;
 /**
  * @version 2013/01/29 1:55:25
  */
-public enum ItemAbility {
+public class ItemAbility {
 
-    AbyssalAura,
+    /** The ability. */
+    public static final ItemAbility AbyssalAura = new ItemAbility("AbyssalAura");
 
-    Legion("Legion"),
+    /** The ability. */
+    public static final ItemAbility Legion = new ItemAbility("Legion", true);
 
-    Insight("Insight"),
+    /** The ability. */
+    public static final ItemAbility Insight = new ItemAbility("Insight", true);
 
-    ManaCharge("Mana Charge");
+    /** The ability. */
+    public static final ItemAbility ManaCharge = new ItemAbility("Mana Charge", true);
 
     /** The ability name. */
     public final String name;
@@ -37,8 +41,8 @@ public enum ItemAbility {
     /**
      * Create new ability with invisible name.
      */
-    private ItemAbility() {
-        this(null);
+    ItemAbility(String name) {
+        this(name, false);
     }
 
     /**
@@ -48,9 +52,9 @@ public enum ItemAbility {
      * 
      * @param name
      */
-    private ItemAbility(String name) {
-        this.visible = name != null;
-        this.name = visible ? name : name();
+    ItemAbility(String name, boolean visible) {
+        this.name = name;
+        this.visible = visible;
     }
 
     /**
@@ -77,7 +81,7 @@ public enum ItemAbility {
      * @param version A update version.
      * @return A descriptor.
      */
-    private ItemAbilityDescriptor update(Version version) {
+    ItemAbilityDescriptor update(Version version) {
         ItemAbilityDescriptor descriptor = new ItemAbilityDescriptor(getDescriptor(version));
 
         descriptors[version.ordinal()] = descriptor;
