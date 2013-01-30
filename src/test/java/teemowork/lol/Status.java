@@ -16,6 +16,8 @@ public enum Status {
 
     Cost,
 
+    Sell,
+
     AS(3),
 
     ASPerLv,

@@ -9,6 +9,7 @@
  */
 package teemowork.lol;
 
+import static teemowork.lol.ItemAbility.*;
 import static teemowork.lol.Status.*;
 import static teemowork.lol.Version.*;
 
@@ -673,16 +674,23 @@ public enum Item {
     }
 
     static {
-        AbyssalScepter.update(P0000).build(BlastingWand, NegatronCloak).set(Cost, 980).set(MR, 45).set(AP, 70);
+        AbyssalScepter.update(P0000)
+                .build(BlastingWand, NegatronCloak)
+                .set(Cost, 980, 1855)
+                .set(MR, 45)
+                .set(AP, 70)
+                .ability(AbyssalAura);
         AegisOftheLegion.update(P0000)
                 .build(EmblemOfValor, NullMagicMantle, RubyCrystal)
-                .set(Cost, 625)
+                .set(Cost, 625, 1505)
+                .set(AR, 20)
                 .set(MR, 20)
-                .set(Health, 250);
-        AmplifyingTome.update(P0000).set(Cost, 435).set(AP, 20);
+                .set(Health, 250)
+                .ability(Legion);
+        AmplifyingTome.update(P0000).set(Cost, 435, 305).set(AP, 20);
         ArchangelsStaff.update(P0000)
                 .build(TearOftheGoddess, BlastingWand)
-                .set(Cost, 1140)
+                .set(Cost, 1140, 1890)
                 .set(AP, 60)
                 .set(Mana, 250)
                 .set(Mreg, 10);

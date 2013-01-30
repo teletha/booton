@@ -9,10 +9,8 @@
  */
 package teemowork.lol;
 
-import java.util.Map;
-
+import static teemowork.lol.Status.*;
 import js.lang.NativeArray;
-import js.util.HashMap;
 
 /**
  * @version 2013/01/29 1:55:25
@@ -26,7 +24,7 @@ public class ItemDescriptor {
     private Item[] build;
 
     /** The abilities. */
-    private Map<String, ItemAbility> abilities = new HashMap();
+    public ItemAbility[] abilities;
 
     /**
      * @param name
@@ -35,9 +33,11 @@ public class ItemDescriptor {
         if (previous != null) {
             values = previous.values.copy();
             build = previous.build;
+            abilities = previous.abilities;
         } else {
             values = new NativeArray();
             build = new Item[0];
+            abilities = new ItemAbility[0];
         }
     }
 
@@ -78,8 +78,13 @@ public class ItemDescriptor {
      * @return Chainable API.
      */
     public ItemDescriptor set(Status status, double base, double per) {
-        values.set(status.ordinal(), base);
-        values.set(Status.valueOf(status.name() + "PerLv").ordinal(), per);
+        if (status == Cost) {
+            values.set(status.ordinal(), base);
+            values.set(Sell.ordinal(), per);
+        } else {
+            values.set(status.ordinal(), base);
+            values.set(Status.valueOf(status.name() + "PerLv").ordinal(), per);
+        }
 
         return this;
     }
@@ -98,7 +103,17 @@ public class ItemDescriptor {
         return this;
     }
 
-    public ItemAbility aura(String name) {
+    /**
+     * <p>
+     * Add item abilities.
+     * </p>
+     * 
+     * @param abilities
+     * @return
+     */
+    public ItemDescriptor ability(ItemAbility... abilities) {
+        this.abilities = abilities;
 
+        return this;
     }
 }
