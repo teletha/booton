@@ -643,7 +643,7 @@ public class Item {
      * @param i
      * @param string
      */
-    private Item(int id, String name) {
+    Item(int id, String name) {
         this.id = id;
         this.name = name;
 
@@ -674,7 +674,7 @@ public class Item {
      * @param version A update version.
      * @return A champion descriptor.
      */
-    private ItemDescriptor update(Version version) {
+    ItemDescriptor update(Version version) {
         ItemDescriptor descriptor = new ItemDescriptor(getDescriptor(version));
 
         descriptors[version.ordinal()] = descriptor;
