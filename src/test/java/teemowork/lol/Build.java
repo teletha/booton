@@ -58,13 +58,14 @@ public class Build extends Notifiable {
     /** The rune list. */
     private List<Rune> quintessences = new ArrayList();
 
+    /** The first cache for computed value. */
+    private List<Computed> cache = new ArrayList(Status.values().length);
+
     /**
      * @param champion
      */
     public Build(Champion champion) {
         this.champion = champion;
-
-        items[0] = Item.ArchangelsStaff;
     }
 
     /**
@@ -128,12 +129,12 @@ public class Build extends Notifiable {
         case MRPerLv:
         case Energy:
         case Ereg:
-            return new Computed(0, 0, status.precision);
+            return new Computed(0, 0, status);
 
         case AS:
             double baseAS = champion.getDescriptor(version).get(AS);
             double levelAS = champion.getDescriptor(version).get(ASPerLv) * (level - 1);
-            return new Computed(baseAS * (1 + levelAS / 100), baseAS * (1 + (levelAS + sum(ASRatio)) / 100), status.precision);
+            return new Computed(baseAS * (1 + levelAS / 100), baseAS * (1 + (levelAS + sum(ASRatio)) / 100), status);
 
         default:
             Status per = Status.valueOf(status.name() + "PerLv");
@@ -142,7 +143,7 @@ public class Build extends Notifiable {
             double base = base(status);
             double computed = (base + sum(status) + sum(per) * level) * (1 + sum(ratio) / 100);
 
-            return new Computed(base, computed, status.precision);
+            return new Computed(base, computed, status);
         }
     }
 
@@ -248,7 +249,7 @@ public class Build extends Notifiable {
     /**
      * @version 2013/01/25 13:42:02
      */
-    public static class Computed {
+    public class Computed {
 
         /** The champion base value. */
         public final double base;
@@ -263,10 +264,12 @@ public class Build extends Notifiable {
          * @param base A base value.
          * @param value A computed value.
          */
-        private Computed(double base, double value, int precision) {
-            this.base = round(base, precision);
-            this.value = round(value, precision);
-            this.increased = round(value - base, precision);
+        private Computed(double base, double value, Status status) {
+            this.base = round(base, status.precision);
+            this.value = round(value, status.precision);
+            this.increased = round(value - base, status.precision);
+
+            cache.set(status.ordinal(), this);
         }
 
         /**

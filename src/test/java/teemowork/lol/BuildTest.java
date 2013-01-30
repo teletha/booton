@@ -20,6 +20,9 @@ import teemowork.lol.Build.Computed;
  */
 public class BuildTest {
 
+    /** The id counter. */
+    private static int counter = 0;
+
     @Test
     public void instance() throws Exception {
         Champion champion = new EmptyChampion();
@@ -64,9 +67,72 @@ public class BuildTest {
         Build build = new Build(champion);
         assertStatus(build, AD, 0, 0);
 
-        build.setItem(0, createItem(AD, 10));
-        build.setItem(1, createItem(AD, 10));
+        build.setItem(0, createAbilityItem(AD, 10));
+        assertStatus(build, AD, 0, 10);
+    }
+
+    @Test
+    public void abilities() throws Exception {
+        Champion champion = new EmptyChampion();
+        Build build = new Build(champion);
+        assertStatus(build, AD, 0, 0);
+
+        build.setItem(0, createAbilityItem(AD, 10));
+        build.setItem(1, createAbilityItem(AD, 10));
         assertStatus(build, AD, 0, 20);
+    }
+
+    @Test
+    public void uniqueAbility() throws Exception {
+        Champion champion = new EmptyChampion();
+        Build build = new Build(champion);
+        assertStatus(build, AD, 0, 0);
+
+        build.setItem(0, createUniqueAbilityItem("test", AD, 10));
+        assertStatus(build, AD, 0, 10);
+    }
+
+    @Test
+    public void uniqueAbilities() throws Exception {
+        Champion champion = new EmptyChampion();
+        Build build = new Build(champion);
+        assertStatus(build, AD, 0, 0);
+
+        build.setItem(0, createUniqueAbilityItem("test1", AD, 10));
+        build.setItem(1, createUniqueAbilityItem("test2", AD, 10));
+        assertStatus(build, AD, 0, 20);
+    }
+
+    @Test
+    public void sameUniqueAbilities() throws Exception {
+        Champion champion = new EmptyChampion();
+        Build build = new Build(champion);
+        assertStatus(build, AD, 0, 0);
+
+        build.setItem(0, createUniqueAbilityItem("test", AD, 10));
+        build.setItem(1, createUniqueAbilityItem("test", AD, 10));
+        assertStatus(build, AD, 0, 10);
+    }
+
+    @Test
+    public void reference() throws Exception {
+        Champion champion = new EmptyChampion();
+        champion.update(Version.P0000).set(Health, 100);
+
+        Build build = new Build(champion);
+        assertStatus(build, AD, 0, 0);
+
+        build.setItem(0, new ReferenceItem(AD) {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public double get(Status status, Build build) {
+                return build.get(Health).base;
+            }
+        });
+        assertStatus(build, AD, 0, 100);
     }
 
     /**
@@ -81,6 +147,44 @@ public class BuildTest {
     private Item createItem(Status status, double value) {
         Item item = new EmptyItem();
         item.update(Version.P0000).set(status, value);
+
+        return item;
+    }
+
+    /**
+     * <p>
+     * Helper method to create new item with ability.
+     * </p>
+     * 
+     * @param status
+     * @param value
+     * @return
+     */
+    private Item createAbilityItem(Status status, double value) {
+        ItemAbility ability = new ItemAbility("Test Ability " + counter);
+        ability.update(Version.P0000).set(status, value);
+
+        Item item = new EmptyItem();
+        item.update(Version.P0000).ability(ability);
+
+        return item;
+    }
+
+    /**
+     * <p>
+     * Helper method to create new item with unique ability.
+     * </p>
+     * 
+     * @param status
+     * @param value
+     * @return
+     */
+    private Item createUniqueAbilityItem(String unique, Status status, double value) {
+        ItemAbility ability = new ItemAbility(unique);
+        ability.update(Version.P0000).set(status, value).unique();
+
+        Item item = new EmptyItem();
+        item.update(Version.P0000).ability(ability);
 
         return item;
     }
@@ -128,6 +232,19 @@ public class BuildTest {
             super(0, "Test Item");
 
             update(Version.P0000);
+        }
+    }
+
+    /**
+     * @version 2013/01/30 14:51:35
+     */
+    private static abstract class ReferenceItem extends EmptyItem implements BuildAware {
+
+        /**
+         * 
+         */
+        private ReferenceItem(Status status) {
+
         }
     }
 }
