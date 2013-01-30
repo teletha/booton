@@ -10,13 +10,11 @@
 package teemowork;
 
 import java.util.Collection;
-import java.util.List;
 
 import js.application.Application;
 import js.application.Page;
 import js.application.PageInfo;
 import js.ui.ImageGrid;
-import js.util.ArrayList;
 import js.util.jQuery;
 import teemowork.lol.Champion;
 
@@ -30,12 +28,7 @@ public class ChampionSelect extends Page {
 
         @Override
         protected Collection<Champion> sources() {
-            List<Champion> list = new ArrayList();
-
-            for (Champion champion : Champion.values()) {
-                list.add(champion);
-            }
-            return list;
+            return Champion.getAll();
         }
 
         @Override
@@ -53,7 +46,7 @@ public class ChampionSelect extends Page {
          */
         @Override
         protected void select(Champion source) {
-            Application.show(new ChampionDetail(source.name()));
+            Application.show(new ChampionDetail(source.systemName));
         }
     };
 

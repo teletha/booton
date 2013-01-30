@@ -9,10 +9,15 @@
  */
 package teemowork.lol;
 
+import org.junit.Test;
 
 /**
  * @version 2013/01/30 12:46:23
  */
 public class BuildTest {
 
+    @Test
+    public void build() throws Exception {
+        Build build = new Build(Champion.Ahri);
+    }
 }
