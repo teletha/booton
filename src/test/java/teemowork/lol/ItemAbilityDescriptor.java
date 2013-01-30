@@ -45,7 +45,7 @@ public class ItemAbilityDescriptor {
             description = previous.description;
             values = previous.values;
         } else {
-            unique = true;
+            unique = false;
             aura = false;
             description = "";
             values = new NativeArray();
