@@ -371,7 +371,7 @@ public class Champion {
      * 
      * @param name
      */
-    private Champion(String name, Skill passive, Skill q, Skill w, Skill e, Skill r) {
+    Champion(String name, Skill passive, Skill q, Skill w, Skill e, Skill r) {
         this.name = name;
         this.systemName = getSystemName().toLowerCase();
 
@@ -435,7 +435,7 @@ public class Champion {
      * @param version A update version.
      * @return A champion descriptor.
      */
-    private ChampionDescriptor update(Version version) {
+    ChampionDescriptor update(Version version) {
         ChampionDescriptor descriptor = new ChampionDescriptor(getDescriptor(version));
 
         descriptors[version.ordinal()] = descriptor;

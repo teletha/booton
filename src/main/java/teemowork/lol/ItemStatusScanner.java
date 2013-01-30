@@ -35,7 +35,7 @@ public class ItemStatusScanner {
             Item item = find(name);
 
             if (item != null) {
-                System.out.print("P0000.update(Item." + item.name() + ")");
+                System.out.print("P0000.update(Item." + item.name + ")");
 
                 String from = computeBuild(built);
 
@@ -74,7 +74,7 @@ public class ItemStatusScanner {
         StringBuilder builder = new StringBuilder();
 
         for (int i = 0; i < items.size(); i++) {
-            builder.append("Item." + items.get(i).name());
+            builder.append("Item." + items.get(i).name);
 
             if (i < items.size() - 1) {
                 builder.append(", ");
@@ -85,8 +85,8 @@ public class ItemStatusScanner {
     }
 
     private static Item find(String name) {
-        for (Item item : Item.values()) {
-            if (item.name.equals(name) || item.name().toLowerCase().equals(name)) {
+        for (Item item : Item.getAll()) {
+            if (item.name.equals(name) || item.name.toLowerCase().equals(name)) {
                 return item;
             }
         }
