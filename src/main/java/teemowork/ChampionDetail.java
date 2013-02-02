@@ -126,7 +126,10 @@ public class ChampionDetail extends Page {
         jQuery skills = info.child(Skills.class);
 
         for (Skill skill : build.champion.skills) {
-            skills.child(SkillIcon.class).css("background-image", "url(" + skill.getIcon() + ")");
+            jQuery box = skills.child(SkillBox.class);
+
+            box.child(SkillIcon.class).css("background-image", "url(" + skill.getIcon() + ")");
+            box.child(SkillDescription.class).text(skill.getDescriptor(build.getVersion()).getText());
         }
 
         for (Status status : VISIBLE) {
@@ -309,14 +312,34 @@ public class ChampionDetail extends Page {
     /**
      * @version 2013/02/02 11:27:13
      */
+    private static class SkillBox extends CSS {
+
+        {
+            display.block();
+        }
+    }
+
+    /**
+     * @version 2013/02/02 11:27:13
+     */
     private static class SkillIcon extends CSS {
 
         {
-            display.inlineBlock();
+            display.block();
             box.size(50, px);
             background.contain().size(50, px);
             border.radius(10, px).color(50, 50, 50).width(2, px).solid();
             margin.right(5, px);
+        }
+    }
+
+    /**
+     * @version 2013/02/02 11:27:13
+     */
+    private static class SkillDescription extends CSS {
+
+        {
+            display.block();
         }
     }
 }

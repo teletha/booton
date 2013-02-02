@@ -9,7 +9,10 @@
  */
 package teemowork.lol;
 
+import static teemowork.lol.Damage.*;
 import static teemowork.lol.SkillKey.*;
+import static teemowork.lol.Status.*;
+import static teemowork.lol.Version.*;
 
 /**
  * @version 2013/01/27 20:32:01
@@ -1771,17 +1774,29 @@ public enum Skill {
 
     /**
      * <p>
-     * Create new descriptor.
+     * Update descriptor.
      * </p>
      * 
-     * @param version
-     * @return
+     * @param version A update version.
+     * @return A champion descriptor.
      */
-    public SkillDescriptor createDescriptor(Version version) {
+    SkillDescriptor update(Version version) {
         SkillDescriptor descriptor = new SkillDescriptor(getDescriptor(version));
 
         descriptors[version.ordinal()] = descriptor;
 
         return descriptor;
+    }
+
+    static {
+        EssenceTheft.update(P0000)
+                .text("スキルが敵ユニットに当たる度にEssence Theftのチャージを1つ得る(1回のスキルで得られる上限は3チャージまで)。9チャージの状態でスキルを使用すると、チャージを全て消費して使用したスキルに35%のSpell Vampが追加される。");
+        OrbOfDeception.update(P0000)
+                .text("指定方向にオーブを放ち当たった敵ユニットに$1を与える。オーブは行きと帰りでそれぞれにヒット判定があり、帰りの場合は$2を与える。")
+                .damage(1, Magic, 40, 25, AP, 0.33)
+                .damage(2, True, 40, 25, AP, 0.33);
+        FoxFire.update(P0000);
+        Charm.update(P0000);
+        SpiritRush.update(P0000);
     }
 }
