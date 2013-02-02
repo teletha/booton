@@ -77,7 +77,7 @@ public class Champion {
     public static final Champion Draven = new Champion("Draven", WickedBlades, SpinningAxe, BloodRush, StandAside, WhirlingDeath);
 
     /** The champion name. */
-    public static final Champion Elise = new Champion("Elise", SpiderSwarm, NeurotoxinVenomousBite, VolatileSpiderlingSkitteringFrenzy, CocoonRappel, SpiderFormHumanForm);
+    public static final Champion Elise = new Champion("Elise", SpiderSwarm, Neurotoxin, VolatileSpiderling, Cocoon, SpiderForm, VenomousBite, SkitteringFrenzy, Rappel, HumanForm);
 
     /** The champion name. */
     public static final Champion Evelynn = new Champion("Evelynn", ShadowWalk, HateSpike, DarkFrenzy, Ravage, AgonysEmbrace);
@@ -128,7 +128,7 @@ public class Champion {
     public static final Champion Jax = new Champion("Jax", RelentlessAssault, LeapStrike, Empower, CounterStrike, GrandmastersMight);
 
     /** The champion name. */
-    public static final Champion Jayce = new Champion("Jayce", HextechCapacitor, ToTheSkiesShockBlast, LightningFieldHyperCharge, ThunderingBlowAccelerationGate, TransformMercuryCannonTransformMercuryHammer);
+    public static final Champion Jayce = new Champion("Jayce", HextechCapacitor, ToTheSkies, LightningField, ThunderingBlow, TransformMercuryCannon, ShockBlast, HyperCharge, AccelerationGate, TransformMercuryHammer);
 
     /** The champion name. */
     public static final Champion Karma = new Champion("Karma", InnerFlame, HeavenlyWave, SpiritBond, SoulShield, Mantra);
@@ -158,7 +158,7 @@ public class Champion {
     public static final Champion LeBlanc = new Champion("LeBlanc", MirrorImage, SigilOfSilence, Distortion, EtherealChains, Mimic);
 
     /** The champion name. */
-    public static final Champion LeeSin = new Champion("Lee Sin", Flurry, SonicWaveResonatingStrike, SafeguardIronWill, TempestCripple, DragonsRage);
+    public static final Champion LeeSin = new Champion("Lee Sin", Flurry, SonicWave, Safeguard, Tempest, DragonsRage, ResonatingStrike, IronWill, Cripple);
 
     /** The champion name. */
     public static final Champion Leona = new Champion("Leona", Sunlight, ShieldOfDaybreak, Eclipse, ZenithBlade, SolarFlare);
@@ -200,7 +200,7 @@ public class Champion {
     public static final Champion Nautilus = new Champion("Nautilus", StaggeringBlow, DredgeLine, TitansWrath, Riptide, DepthCharge);
 
     /** The champion name. */
-    public static final Champion Nidalee = new Champion("Nidalee", Prowl, JavelinTossTakedown, BushwhackPounce, PrimalSurgeSwipe, AspectOfTheCougar);
+    public static final Champion Nidalee = new Champion("Nidalee", Prowl, JavelinToss, Bushwhack, PrimalSurge, AspectOfTheCougar, Takedown, Pounce, Swipe);
 
     /** The champion name. */
     public static final Champion Nocturne = new Champion("Nocturne", UmbraBlades, Duskbringer, ShroudOfDarkness, UnspeakableHorror, Paranoia);
@@ -209,7 +209,7 @@ public class Champion {
     public static final Champion Nunu = new Champion("Nunu", Visionary, Consume, BloodBoil, IceBlast, AbsoluteZero);
 
     /** The champion name. */
-    public static final Champion Olaf = new Champion("Olaf", BerzerkerRage, Undertow, ViciousStrikes, RecklessSwing, Ragnarok);
+    public static final Champion Olaf = new Champion("Olaf", BerserkerRage, Undertow, ViciousStrikes, RecklessSwing, Ragnarok);
 
     /** The champion name. */
     public static final Champion Orianna = new Champion("Orianna", ClockworkWindup, CommandAttack, CommandDissonance, CommandProtect, CommandShockwave);
@@ -361,6 +361,9 @@ public class Champion {
     /** The normalized system name. */
     public final String systemName;
 
+    /** The skill set. */
+    public final Skill[] skills;
+
     /** The descriptor. */
     private final ChampionDescriptor[] descriptors = new ChampionDescriptor[Version.values().length];
 
@@ -371,9 +374,10 @@ public class Champion {
      * 
      * @param name
      */
-    Champion(String name, Skill passive, Skill q, Skill w, Skill e, Skill r) {
+    Champion(String name, Skill... skills) {
         this.name = name;
-        this.systemName = getSystemName().toLowerCase();
+        this.systemName = getSystemName().toLowerCase().replaceAll("[\\s'\\.]", "");
+        this.skills = skills;
 
         champions.add(this);
     }

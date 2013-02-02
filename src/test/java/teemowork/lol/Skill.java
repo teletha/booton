@@ -275,16 +275,28 @@ public enum Skill {
     SpiderSwarm("Spider Swarm", Passive),
 
     /** The skill name. */
-    NeurotoxinVenomousBite("Neurotoxin / Venomous Bite", Q),
+    Neurotoxin("Neurotoxin", Q),
 
     /** The skill name. */
-    VolatileSpiderlingSkitteringFrenzy("Volatile Spiderling / Skittering Frenzy", W),
+    VenomousBite("Venomous Bite", Q),
 
     /** The skill name. */
-    CocoonRappel("Cocoon / Rappel", E),
+    VolatileSpiderling("Volatile Spiderling", W),
 
     /** The skill name. */
-    SpiderFormHumanForm("Spider Form / Human Form", R),
+    SkitteringFrenzy("Skittering Frenzy", W),
+
+    /** The skill name. */
+    Cocoon("Cocoon", E),
+
+    /** The skill name. */
+    Rappel("Rappel", E),
+
+    /** The skill name. */
+    SpiderForm("Spider Form", R),
+
+    /** The skill name. */
+    HumanForm("Human Form", R),
 
     /** The skill name. */
     ShadowWalk("Shadow Walk", Passive),
@@ -530,16 +542,28 @@ public enum Skill {
     HextechCapacitor("Hextech Capacitor", Passive),
 
     /** The skill name. */
-    ToTheSkiesShockBlast("To the Skies! / Shock Blast", Q),
+    ToTheSkies("To the Skies!", Q),
 
     /** The skill name. */
-    LightningFieldHyperCharge("Lightning Field / Hyper Charge", W),
+    ShockBlast("Shock Blast", Q),
 
     /** The skill name. */
-    ThunderingBlowAccelerationGate("Thundering Blow / Acceleration Gate", E),
+    LightningField("Lightning Field", W),
 
     /** The skill name. */
-    TransformMercuryCannonTransformMercuryHammer("Transform: Mercury Cannon / Transform: Mercury Hammer", R),
+    HyperCharge("Hyper Charge", W),
+
+    /** The skill name. */
+    ThunderingBlow("Thundering Blow", E),
+
+    /** The skill name. */
+    AccelerationGate("Acceleration Gate", E),
+
+    /** The skill name. */
+    TransformMercuryCannon("Transform: Mercury Cannon", R),
+
+    /** The skill name. */
+    TransformMercuryHammer("Transform: Mercury Hammer", R),
 
     /** The skill name. */
     InnerFlame("Inner Flame", Passive),
@@ -680,13 +704,22 @@ public enum Skill {
     Flurry("Flurry", Passive),
 
     /** The skill name. */
-    SonicWaveResonatingStrike("Sonic Wave / Resonating Strike", Q),
+    SonicWave("Sonic Wave", Q),
 
     /** The skill name. */
-    SafeguardIronWill("Safeguard / Iron Will", W),
+    ResonatingStrike("Resonating Strike", Q),
 
     /** The skill name. */
-    TempestCripple("Tempest / Cripple", E),
+    Safeguard("Safeguard", W),
+
+    /** The skill name. */
+    IronWill("Iron Will", W),
+
+    /** The skill name. */
+    Tempest("Tempest", E),
+
+    /** The skill name. */
+    Cripple("Cripple", E),
 
     /** The skill name. */
     DragonsRage("Dragon's Rage", R),
@@ -890,13 +923,22 @@ public enum Skill {
     Prowl("Prowl", Passive),
 
     /** The skill name. */
-    JavelinTossTakedown("Javelin Toss / Takedown", Q),
+    JavelinToss("Javelin Toss", Q),
 
     /** The skill name. */
-    BushwhackPounce("Bushwhack / Pounce", W),
+    Takedown("Takedown", Q),
 
     /** The skill name. */
-    PrimalSurgeSwipe("Primal Surge / Swipe", E),
+    Bushwhack("Bushwhack", W),
+
+    /** The skill name. */
+    Pounce("Pounce", W),
+
+    /** The skill name. */
+    PrimalSurge("Primal Surge", E),
+
+    /** The skill name. */
+    Swipe("Swipe", E),
 
     /** The skill name. */
     AspectOfTheCougar("Aspect Of The Cougar", R),
@@ -932,7 +974,7 @@ public enum Skill {
     AbsoluteZero("Absolute Zero", R),
 
     /** The skill name. */
-    BerzerkerRage("Berzerker Rage", Passive),
+    BerserkerRage("Berserker Rage", Passive),
 
     /** The skill name. */
     Undertow("Undertow", Q),
@@ -1669,6 +1711,9 @@ public enum Skill {
     /** The skill name. */
     public final String name;
 
+    /** The skill system name. */
+    public final String system;
+
     /** The skill key type. */
     public final SkillKey key;
 
@@ -1684,7 +1729,19 @@ public enum Skill {
      */
     private Skill(String name, SkillKey key) {
         this.name = name;
+        this.system = name.replaceAll(" of ", "Of").replaceAll("[\\s-,!':/]", "");
         this.key = key;
+    }
+
+    /**
+     * <p>
+     * Returns icon image path.
+     * </p>
+     * 
+     * @return
+     */
+    public String getIcon() {
+        return "src/main/resources/teemowork/skill/" + system + ".jpg";
     }
 
     /**
@@ -1722,9 +1779,9 @@ public enum Skill {
      */
     public SkillDescriptor createDescriptor(Version version) {
         SkillDescriptor descriptor = new SkillDescriptor(getDescriptor(version));
-        
+
         descriptors[version.ordinal()] = descriptor;
-        
+
         return descriptor;
     }
 }
