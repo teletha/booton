@@ -26,6 +26,7 @@ import js.util.jQuery.Listener;
 import teemowork.lol.Build;
 import teemowork.lol.Build.Computed;
 import teemowork.lol.Champion;
+import teemowork.lol.Skill;
 import teemowork.lol.Status;
 import booton.css.CSS;
 
@@ -121,6 +122,12 @@ public class ChampionDetail extends Page {
                 });
 
         level = icon.child(Level.class);
+
+        jQuery skills = info.child(Skills.class);
+
+        for (Skill skill : build.champion.skills) {
+            skills.child(SkillIcon.class).css("background-image", "url(" + skill.getIcon() + ")");
+        }
 
         for (Status status : VISIBLE) {
             boxies.add(new StatusBox(status, info, build));
@@ -286,6 +293,30 @@ public class ChampionDetail extends Page {
             while (selection()) {
                 background.color.transparent();
             }
+        }
+    }
+
+    /**
+     * @version 2013/02/02 11:27:13
+     */
+    private static class Skills extends CSS {
+
+        {
+            display.block();
+        }
+    }
+
+    /**
+     * @version 2013/02/02 11:27:13
+     */
+    private static class SkillIcon extends CSS {
+
+        {
+            display.inlineBlock();
+            box.size(50, px);
+            background.contain().size(50, px);
+            border.radius(10, px).color(50, 50, 50).width(2, px).solid();
+            margin.right(5, px);
         }
     }
 }
