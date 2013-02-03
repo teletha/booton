@@ -9,17 +9,17 @@
  */
 package js.awt;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * @version 2013/02/03 15:02:24
  */
-public interface Bindable<T> {
-
-    /**
-     * <p>
-     * This method is invoked whenever the bound value is updated.
-     * </p>
-     * 
-     * @param value A new value.
-     */
-    void update(T value);
+@Documented
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Bind {
 }
