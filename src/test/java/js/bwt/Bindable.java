@@ -7,12 +7,19 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.awt;
-
+package js.bwt;
 
 /**
- * @version 2013/02/03 14:57:09
+ * @version 2013/02/03 15:02:24
  */
-public class Text extends Widget {
+public interface Bindable<T> {
 
+    /**
+     * <p>
+     * This method is invoked whenever the bound value is updated.
+     * </p>
+     * 
+     * @param value A new value.
+     */
+    void update(T value);
 }

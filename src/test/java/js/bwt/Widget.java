@@ -7,14 +7,16 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.awt;
+package js.bwt;
 
 import booton.css.CSS;
 
 /**
+ * Bindable Widget Toolkit.
+ * 
  * @version 2013/02/03 14:55:32
  */
-public class Widget {
+public abstract class Widget<T> implements Bindable<T> {
 
     public Text text(Class<? extends CSS> style) {
         return text(style, "");
@@ -25,6 +27,29 @@ public class Widget {
     }
 
     public Text text(Class<? extends CSS> style, String text) {
-        return null;
+        Text box = new Text();
+        box.text(text);
+
+        return box;
+    }
+
+    /**
+     * <p>
+     * Unwrap binding value.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    protected final void bind(T value) {
+        if (value instanceof Value) {
+            Value<T> reference = (Value) value;
+            reference.bind(this);
+
+            update(reference.get());
+        } else {
+            // normal value
+            update(value);
+        }
     }
 }

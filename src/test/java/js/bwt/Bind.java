@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.awt;
+package js.bwt;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
