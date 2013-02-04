@@ -33,6 +33,9 @@ public abstract class Widget<T> implements Bindable<T> {
         return box;
     }
 
+    /** The current binding. */
+    private Value current;
+
     /**
      * <p>
      * Unwrap binding value.
@@ -42,14 +45,22 @@ public abstract class Widget<T> implements Bindable<T> {
      * @return
      */
     protected final void bind(T value) {
+        if (current != null) {
+            current.unbind(this);
+        }
+
         if (value instanceof Value) {
             Value<T> reference = (Value) value;
             reference.bind(this);
 
             update(reference.get());
+
+            current = reference;
         } else {
             // normal value
             update(value);
+
+            current = null;
         }
     }
 }
