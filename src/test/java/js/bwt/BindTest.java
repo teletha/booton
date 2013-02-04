@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.awt;
+package js.bwt;
 
 import org.junit.Test;
 
@@ -21,7 +21,7 @@ public class BindTest {
         Item item = new Item();
         assert item.text == null;
 
-        BoundValue<String> value = new BoundValue();
+        Value<String> value = new Value();
         value.bind(item);
         value.set("test");
         assert item.text.equals("test");
@@ -53,7 +53,7 @@ public class BindTest {
 
         Item item2 = new Item();
 
-        BoundValue<Item> first = new BoundValue();
+        Value<Item> first = new Value();
         first.bind(nest);
         first.set(item1);
         assert nest.item == item1;

@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.awt;
+package js.bwt;
 
 /**
  * @version 2013/02/03 15:25:14

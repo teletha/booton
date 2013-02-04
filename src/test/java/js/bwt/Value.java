@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.awt;
+package js.bwt;
 
 import java.util.List;
 
@@ -16,13 +16,24 @@ import js.util.ArrayList;
 /**
  * @version 2013/02/03 21:39:32
  */
-public class BoundValue<T> {
+public class Value<T> {
 
     /** The actual value. */
     private T value;
 
     /** The bindable object manager. */
     private final List<Bindable> bindables = new ArrayList();
+
+    /**
+     * <p>
+     * Create reference value.
+     * </p>
+     * 
+     * @param value A initial value.
+     */
+    public Value(T value) {
+        this.value = value;
+    }
 
     /**
      * <p>
@@ -73,6 +84,22 @@ public class BoundValue<T> {
     public void unbind(Bindable bindable) {
         if (bindable != null) {
             bindables.remove(bindable);
+        }
+    }
+
+    /**
+     * <p>
+     * Unwrap binding value.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public static final <T> T convert(T value) {
+        if (value instanceof Value) {
+            return ((Value<T>) value).value;
+        } else {
+            return value;
         }
     }
 }
