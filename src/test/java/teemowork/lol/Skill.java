@@ -9,7 +9,6 @@
  */
 package teemowork.lol;
 
-import static teemowork.lol.Damage.*;
 import static teemowork.lol.SkillKey.*;
 import static teemowork.lol.Status.*;
 import static teemowork.lol.Version.*;
@@ -1711,6 +1710,9 @@ public enum Skill {
     /** The skill name. */
     Stranglethorns("Stranglethorns", R);
 
+    /** The current writing version. */
+    private static Version version;
+
     /** The skill name. */
     public final String name;
 
@@ -1721,7 +1723,7 @@ public enum Skill {
     public final SkillKey key;
 
     /** The descriptor. */
-    private SkillDescriptor[] descriptors = new SkillDescriptor[Version.values().length];
+    private SkillStatus[] versions = new SkillStatus[Version.values().length];
 
     /**
      * <p>
@@ -1752,21 +1754,32 @@ public enum Skill {
      * Retrieve latest descriptor.
      * </p>
      */
-    public SkillDescriptor getDescriptor() {
-        return getDescriptor(Version.Latest);
+    public SkillStatus getDescriptor() {
+        return getStatus(Version.Latest);
     }
 
     /**
      * <p>
-     * Retrieve a descriptor at the specified version.
+     * Returns skill level size.
+     * </p>
+     * 
+     * @return
+     */
+    public int getMaxLevel() {
+        return key == R && this != PhoenixStance ? 3 : 5;
+    }
+
+    /**
+     * <p>
+     * Retrieve a status at the specified version.
      * </p>
      */
-    public SkillDescriptor getDescriptor(Version version) {
+    public SkillStatus getStatus(Version version) {
         for (int i = version.ordinal(); 0 <= i; i--) {
-            SkillDescriptor descriptor = descriptors[i];
+            SkillStatus status = versions[i];
 
-            if (descriptor != null) {
-                return descriptor;
+            if (status != null) {
+                return status;
             }
         }
         return null;
@@ -1774,29 +1787,36 @@ public enum Skill {
 
     /**
      * <p>
-     * Update descriptor.
+     * Update status.
      * </p>
      * 
-     * @param version A update version.
      * @return A champion descriptor.
      */
-    SkillDescriptor update(Version version) {
-        SkillDescriptor descriptor = new SkillDescriptor(getDescriptor(version));
+    SkillStatus update() {
+        SkillStatus status = new SkillStatus(getStatus(version));
 
-        descriptors[version.ordinal()] = descriptor;
+        versions[version.ordinal()] = status;
 
-        return descriptor;
+        return status;
     }
 
     static {
-        EssenceTheft.update(P0000)
-                .text("スキルが敵ユニットに当たる度にEssence Theftのチャージを1つ得る(1回のスキルで得られる上限は3チャージまで)。9チャージの状態でスキルを使用すると、チャージを全て消費して使用したスキルに35%のSpell Vampが追加される。");
-        OrbOfDeception.update(P0000)
-                .text("指定方向にオーブを放ち当たった敵ユニットに$1を与える。オーブは行きと帰りでそれぞれにヒット判定があり、帰りの場合は$2を与える。")
-                .damage(1, Magic, 40, 25, AP, 0.33)
-                .damage(2, True, 40, 25, AP, 0.33);
-        FoxFire.update(P0000);
-        Charm.update(P0000);
-        SpiritRush.update(P0000);
+        version = P0000;
+        EssenceTheft.update()
+                .description("スキルが敵ユニットに当たる度にEssence Theftのチャージを1つ得る(1回のスキルで得られる上限は3チャージまで)。9チャージの状態でスキルを使用すると、チャージを全て消費して使用したスキルに$1が追加される。")
+                .variable(1, SV, 35, 0);
+        OrbOfDeception.update()
+                .description("指定方向にオーブを放ち当たった敵ユニットに$1を与える。オーブは行きと帰りでそれぞれにヒット判定があり、帰りの場合は$2を与える。")
+                .damage(1, MagicDamage, 40, 25, AP, 0.33)
+                .damage(2, TrueDamage, 40, 25, AP, 0.33);
+        FoxFire.update()
+                .description("Ahriの周囲を回る3本の鬼火を放つ。鬼火は5秒間持続し、近くの敵ユニットに自動的に突撃して$1を与える。鬼火が同一対象に突撃した場合、2発目以降は本来の50%分の魔法DMを与える(同一対象に3発hitで合計200%の魔法DM)。Ahriの通常攻撃範囲内に敵Championがいる場合、それらを優先して狙う。")
+                .damage(1, MagicDamage, 40, 25, AP, 0.4);
+        Charm.update()
+                .description("指定方向に投げキッスを放ち、当たった敵ユニットに$1を与え、対象を$2して自分の方向に移動させる。また魅了状態の対象には$3が付与される。")
+                .damage(1, MagicDamage, 60, 30, AP, 0.35)
+                .variable(2, Status.Charm, 1, 0.25)
+                .variable(3, Slow, 50, 0);
+        SpiritRush.update();
     }
 }

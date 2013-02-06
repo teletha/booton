@@ -15,7 +15,7 @@ import js.lang.NativeArray;
 /**
  * @version 2013/01/29 1:55:25
  */
-public class ItemAbilityDescriptor {
+public class ItemAbilityStatus {
 
     /** The unique flag. */
     private boolean unique;
@@ -38,7 +38,7 @@ public class ItemAbilityDescriptor {
      * @param unique
      * @param previous
      */
-    ItemAbilityDescriptor(ItemAbilityDescriptor previous) {
+    ItemAbilityStatus(ItemAbilityStatus previous) {
         if (previous != null) {
             unique = previous.unique;
             aura = previous.aura;
@@ -74,7 +74,7 @@ public class ItemAbilityDescriptor {
      * @param status A target status.
      * @return Chainable API.
      */
-    public ItemAbilityDescriptor set(Status status, double value) {
+    public ItemAbilityStatus set(Status status, double value) {
         values.set(status.ordinal(), value);
 
         return this;
@@ -88,7 +88,7 @@ public class ItemAbilityDescriptor {
      * @param status A target status.
      * @return Chainable API.
      */
-    public ItemAbilityDescriptor set(Status status, double base, double per) {
+    public ItemAbilityStatus set(Status status, double base, double per) {
         values.set(status.ordinal(), base);
         values.set(Status.valueOf(status.name() + "PerLv").ordinal(), per);
 
@@ -103,7 +103,7 @@ public class ItemAbilityDescriptor {
      * @param range
      * @return
      */
-    public ItemAbilityDescriptor aura(double range) {
+    public ItemAbilityStatus aura(double range) {
         this.aura = true;
         this.unique = true;
         set(Range, range);
@@ -129,7 +129,7 @@ public class ItemAbilityDescriptor {
      * 
      * @return
      */
-    public ItemAbilityDescriptor unique() {
+    public ItemAbilityStatus unique() {
         this.unique = true;
 
         return this;
@@ -154,7 +154,7 @@ public class ItemAbilityDescriptor {
      * @param text
      * @return
      */
-    public ItemAbilityDescriptor description(String text) {
+    public ItemAbilityStatus description(String text) {
         this.description = text;
 
         return this;

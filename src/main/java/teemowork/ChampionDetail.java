@@ -96,11 +96,7 @@ public class ChampionDetail extends Page {
      */
     @Override
     public void load(jQuery root) {
-        jQuery info = root.child(RootPanel.class)
-                .css("background-image", "url('" + build.champion.getSplashArt() + "')")
-                .child(RootPanelFilter.class);
-
-        jQuery icon = info.child(Icon.class)
+        jQuery icon = root.child(Icon.class)
                 .css("background-image", "url(" + build.champion.getIcon() + ")")
                 .click(new Listener() {
 
@@ -123,17 +119,26 @@ public class ChampionDetail extends Page {
 
         level = icon.child(Level.class);
 
-        jQuery skills = info.child(Skills.class);
+        jQuery skills = root.child(SkillTable.class);
 
         for (Skill skill : build.champion.skills) {
-            jQuery box = skills.child(SkillBox.class);
+            jQuery box = skills.child(SkillRow.class);
+            jQuery iconBox = box.child(SkillIconBox.class);
+            iconBox.child(SkillStyle.Icon.class).css("background-image", "url(" + skill.getIcon() + ")");
+            jQuery levels = iconBox.child(SkillStyle.LevelBox.class);
 
-            box.child(SkillIcon.class).css("background-image", "url(" + skill.getIcon() + ")");
-            box.child(SkillDescription.class).text(skill.getDescriptor(build.getVersion()).getText());
+            int size = skill.getMaxLevel();
+
+            for (int i = 0; i < size; i++) {
+                levels.child(size == 3 ? SkillStyle.LevelMark3.class : SkillStyle.LevelMark.class);
+            }
+            jQuery descriptor = box.child(SkillStyle.DescriptionBox.class);
+            descriptor.child(SkillStyle.Name.class).text(skill.name);
+            descriptor.child(SkillStyle.Text.class).text(skill.getStatus(build.getVersion()).getDescription());
         }
 
         for (Status status : VISIBLE) {
-            boxies.add(new StatusBox(status, info, build));
+            boxies.add(new StatusBox(status, root, build));
         }
 
         calcurate();
@@ -300,46 +305,172 @@ public class ChampionDetail extends Page {
     }
 
     /**
-     * @version 2013/02/02 11:27:13
+     * @version 2013/02/06 19:56:37
      */
-    private static class Skills extends CSS {
+    private static class StatusStyle {
 
-        {
-            display.block();
+    }
+
+    /**
+     * @version 2013/02/06 18:46:37
+     */
+    private static class SkillStyle {
+
+        /** The skill icon size. */
+        private static final int IconSize = 45;
+
+        /** The level box height. */
+        private static final int LevelBoxHeight = 5;
+
+        /**
+         * @version 2013/02/06 18:51:27
+         */
+        private static class Icon extends CSS {
+
+            {
+                display.block();
+                box.size(IconSize, px);
+                background.contain().size(IconSize, px);
+                border.radius(10, px).color(50, 50, 50).width(2, px).solid();
+                margin.right(5, px);
+            }
+        }
+
+        /**
+         * @version 2013/02/02 11:27:13
+         */
+        private static class LevelBox extends CSS {
+
+            {
+                display.table();
+                box.width(IconSize + 2, px).height(LevelBoxHeight, px);
+                border.width(1, px).solid().color.black();
+            }
+        }
+
+        /**
+         * @version 2013/02/02 11:27:13
+         */
+        private static class LevelMark extends CSS {
+
+            {
+                display.tableCell();
+                box.width(IconSize / 5, px).height(LevelBoxHeight, px);
+                borderLeft.solid().color.black().width(1, px);
+                background.image(linear(rgba(240, 192, 28, 1), rgba(160, 123, 1, 1)));
+
+                while (firstChild()) {
+                    border.none();
+                }
+            }
+        }
+
+        /**
+         * @version 2013/02/02 11:27:13
+         */
+        private static class LevelMark3 extends CSS {
+
+            {
+                display.tableCell();
+                box.width(IconSize / 3, px).height(LevelBoxHeight, px);
+                borderLeft.solid().color.black().width(1, px);
+                background.image(linear(rgba(240, 192, 28, 1), rgba(160, 123, 1, 1)));
+
+                while (firstChild()) {
+                    border.none();
+                }
+            }
+        }
+
+        /**
+         * @version 2013/02/02 11:27:13
+         */
+        private static class DescriptionBox extends CSS {
+
+            {
+                display.tableCell();
+                text.verticalAlign.top();
+            }
+        }
+
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Name extends CSS {
+
+            {
+                display.block();
+            }
+        }
+
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Text extends CSS {
+
+            {
+
+            }
+        }
+
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Cost extends CSS {
+
+            {
+
+            }
+        }
+
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Cooldown extends CSS {
+
+            {
+
+            }
+        }
+
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Range extends CSS {
+
+            {
+
+            }
         }
     }
 
     /**
      * @version 2013/02/02 11:27:13
      */
-    private static class SkillBox extends CSS {
+    private static class SkillTable extends CSS {
 
         {
-            display.block();
+            display.table();
         }
     }
 
     /**
      * @version 2013/02/02 11:27:13
      */
-    private static class SkillIcon extends CSS {
+    private static class SkillRow extends CSS {
 
         {
-            display.block();
-            box.size(50, px);
-            background.contain().size(50, px);
-            border.radius(10, px).color(50, 50, 50).width(2, px).solid();
-            margin.right(5, px);
+            display.tableRow();
         }
     }
 
     /**
      * @version 2013/02/02 11:27:13
      */
-    private static class SkillDescription extends CSS {
+    private static class SkillIconBox extends CSS {
 
         {
-            display.block();
+            display.tableCell();
         }
     }
 }

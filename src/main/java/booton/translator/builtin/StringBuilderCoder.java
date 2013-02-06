@@ -26,7 +26,7 @@ class StringBuilderCoder extends Translator<StringBuilder> {
      * @see StringBuilder#StringBuilder(String)
      */
     public String StringBuilder() {
-        return "";
+        return "\"\"";
     }
 
     /**

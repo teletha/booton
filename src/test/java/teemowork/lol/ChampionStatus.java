@@ -9,35 +9,24 @@
  */
 package teemowork.lol;
 
-import static teemowork.lol.Status.*;
 import js.lang.NativeArray;
 
 /**
- * @version 2013/01/29 1:55:25
+ * @version 2013/01/28 14:37:16
  */
-public class ItemDescriptor {
+public class ChampionStatus {
 
     /** The value store. */
     private NativeArray<Double> values;
 
-    /** The item build. */
-    private Item[] build;
-
-    /** The abilities. */
-    public ItemAbility[] abilities;
-
     /**
      * @param name
      */
-    ItemDescriptor(ItemDescriptor previous) {
+    ChampionStatus(ChampionStatus previous) {
         if (previous != null) {
             values = previous.values.copy();
-            build = previous.build;
-            abilities = previous.abilities;
         } else {
             values = new NativeArray();
-            build = new Item[0];
-            abilities = new ItemAbility[0];
         }
     }
 
@@ -63,7 +52,7 @@ public class ItemDescriptor {
      * @param status A target status.
      * @return Chainable API.
      */
-    public ItemDescriptor set(Status status, double value) {
+    public ChampionStatus set(Status status, double value) {
         values.set(status.ordinal(), value);
 
         return this;
@@ -77,42 +66,9 @@ public class ItemDescriptor {
      * @param status A target status.
      * @return Chainable API.
      */
-    public ItemDescriptor set(Status status, double base, double per) {
-        if (status == Cost) {
-            values.set(status.ordinal(), base);
-            values.set(Sell.ordinal(), per);
-        } else {
-            values.set(status.ordinal(), base);
-            values.set(Status.valueOf(status.name() + "PerLv").ordinal(), per);
-        }
-
-        return this;
-    }
-
-    /**
-     * <p>
-     * Set build items.
-     * </p>
-     * 
-     * @param items
-     * @return
-     */
-    public ItemDescriptor build(Item... items) {
-        this.build = items;
-
-        return this;
-    }
-
-    /**
-     * <p>
-     * Add item abilities.
-     * </p>
-     * 
-     * @param abilities
-     * @return
-     */
-    public ItemDescriptor ability(ItemAbility... abilities) {
-        this.abilities = abilities;
+    public ChampionStatus set(Status status, double base, double per) {
+        values.set(status.ordinal(), base);
+        values.set(Status.valueOf(status.name() + "PerLv").ordinal(), per);
 
         return this;
     }

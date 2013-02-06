@@ -16,11 +16,11 @@ import org.junit.Test;
 /**
  * @version 2013/01/29 10:27:30
  */
-public class ChampionDescriptorTest {
+public class ChampionStatusTest {
 
     @Test
     public void GetAndSet() throws Exception {
-        ChampionDescriptor skill = new ChampionDescriptor(null);
+        ChampionStatus skill = new ChampionStatus(null);
         assert skill.get(Range) == 0;
 
         skill.set(Range, 100);
@@ -29,21 +29,21 @@ public class ChampionDescriptorTest {
 
     @Test
     public void Delegate() throws Exception {
-        ChampionDescriptor previous = new ChampionDescriptor(null);
+        ChampionStatus previous = new ChampionStatus(null);
         previous.set(Range, 100);
         assert previous.get(Range) == 100;
 
-        ChampionDescriptor skill = new ChampionDescriptor(previous);
+        ChampionStatus skill = new ChampionStatus(previous);
         assert skill.get(Range) == 100;
     }
 
     @Test
     public void Override() throws Exception {
-        ChampionDescriptor previous = new ChampionDescriptor(null);
+        ChampionStatus previous = new ChampionStatus(null);
         previous.set(Range, 100);
         assert previous.get(Range) == 100;
 
-        ChampionDescriptor skill = new ChampionDescriptor(previous);
+        ChampionStatus skill = new ChampionStatus(previous);
         skill.set(Range, 200);
         assert skill.get(Range) == 200;
         assert previous.get(Range) == 100;
@@ -51,6 +51,6 @@ public class ChampionDescriptorTest {
 
     @Test
     public void active() throws Exception {
-        ChampionDescriptor skill = new ChampionDescriptor(null);
+        ChampionStatus skill = new ChampionStatus(null);
     }
 }

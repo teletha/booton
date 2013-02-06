@@ -1312,6 +1312,9 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (clazz == Object.class || clazz == NativeObject.class) {
                 current.addOperand(current.remove(0) + " instanceof Object");
+            } else if (clazz == String.class) {
+                Operand operand = current.remove(0);
+                current.addOperand("typeof " + operand + "===\"string\"||" + operand + " instanceof String");
             } else if (clazz.isInterface()) {
                 current.addOperand(Javascript.computeClass(clazz) + "." + Javascript.computeMethodName(assignable) + "(" + current.remove(0) + ".$.$)");
             } else {

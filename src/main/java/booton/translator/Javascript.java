@@ -459,6 +459,10 @@ public class Javascript {
         if (clazz == Object.class) {
             return "Object";
         }
+
+        if (clazz == String.class) {
+            return "String";
+        }
         return "boot." + computeSimpleClassName(clazz);
     }
 
