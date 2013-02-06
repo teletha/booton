@@ -626,7 +626,7 @@ public class Item {
     public static final Item SoulShroud = new Item(3099, "Soul Shroud");
 
     /** The descriptor. */
-    private final ItemDescriptor[] descriptors = new ItemDescriptor[Version.values().length];
+    private final ItemStatus[] versions = new ItemStatus[Version.values().length];
 
     /** The item id. */
     public final int id;
@@ -635,7 +635,6 @@ public class Item {
     public final String name;
 
     /**
-     * The abiliti private List<Ability> abilities = new ArrayList(); /**
      * <p>
      * Create constructor.
      * </p>
@@ -652,15 +651,15 @@ public class Item {
 
     /**
      * <p>
-     * Retrieve a descriptor at the specified version.
+     * Retrieve a status at the specified version.
      * </p>
      */
-    public ItemDescriptor getDescriptor(Version version) {
+    public ItemStatus getStatus(Version version) {
         for (int i = version.ordinal(); 0 <= i; i--) {
-            ItemDescriptor descriptor = descriptors[i];
+            ItemStatus status = versions[i];
 
-            if (descriptor != null) {
-                return descriptor;
+            if (status != null) {
+                return status;
             }
         }
         return null;
@@ -668,18 +667,18 @@ public class Item {
 
     /**
      * <p>
-     * Update descriptor.
+     * Update status.
      * </p>
      * 
      * @param version A update version.
      * @return A champion descriptor.
      */
-    ItemDescriptor update(Version version) {
-        ItemDescriptor descriptor = new ItemDescriptor(getDescriptor(version));
+    ItemStatus update(Version version) {
+        ItemStatus status = new ItemStatus(getStatus(version));
 
-        descriptors[version.ordinal()] = descriptor;
+        versions[version.ordinal()] = status;
 
-        return descriptor;
+        return status;
     }
 
     /**

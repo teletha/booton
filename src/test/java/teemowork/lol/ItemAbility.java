@@ -36,7 +36,7 @@ public class ItemAbility {
     public final boolean visible;
 
     /** The descriptor. */
-    private final ItemAbilityDescriptor[] descriptors = new ItemAbilityDescriptor[Version.values().length];
+    private final ItemAbilityStatus[] versions = new ItemAbilityStatus[Version.values().length];
 
     /**
      * Create new ability with invisible name.
@@ -59,15 +59,15 @@ public class ItemAbility {
 
     /**
      * <p>
-     * Retrieve a descriptor at the specified version.
+     * Retrieve a status at the specified version.
      * </p>
      */
-    public ItemAbilityDescriptor getDescriptor(Version version) {
+    public ItemAbilityStatus getStatus(Version version) {
         for (int i = version.ordinal(); 0 <= i; i--) {
-            ItemAbilityDescriptor descriptor = descriptors[i];
+            ItemAbilityStatus status = versions[i];
 
-            if (descriptor != null) {
-                return descriptor;
+            if (status != null) {
+                return status;
             }
         }
         return null;
@@ -75,18 +75,18 @@ public class ItemAbility {
 
     /**
      * <p>
-     * Update descriptor.
+     * Update status.
      * </p>
      * 
      * @param version A update version.
      * @return A descriptor.
      */
-    ItemAbilityDescriptor update(Version version) {
-        ItemAbilityDescriptor descriptor = new ItemAbilityDescriptor(getDescriptor(version));
+    ItemAbilityStatus update(Version version) {
+        ItemAbilityStatus status = new ItemAbilityStatus(getStatus(version));
 
-        descriptors[version.ordinal()] = descriptor;
+        versions[version.ordinal()] = status;
 
-        return descriptor;
+        return status;
     }
 
     static {

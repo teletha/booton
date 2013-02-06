@@ -26,7 +26,7 @@ public class Champion {
     private static final List<Champion> champions = new ArrayList();
 
     /** The champion name. */
-    public static final Champion Ahri = new Champion("Ahri", EssenceTheft, OrbOfDeception, FoxFire, Charm, SpiritRush);
+    public static final Champion Ahri = new Champion("Ahri", EssenceTheft, OrbOfDeception, FoxFire, Skill.Charm, SpiritRush);
 
     /** The champion name. */
     public static final Champion Akali = new Champion("Akali", TwinDisciplines, MarkOftheAssassin, TwilightShroud, CrescentSlash, ShadowDance);
@@ -365,7 +365,7 @@ public class Champion {
     public final Skill[] skills;
 
     /** The descriptor. */
-    private final ChampionDescriptor[] descriptors = new ChampionDescriptor[Version.values().length];
+    private final ChampionStatus[] versions = new ChampionStatus[Version.values().length];
 
     /**
      * <p>
@@ -420,12 +420,12 @@ public class Champion {
      * Retrieve a descriptor at the specified version.
      * </p>
      */
-    public ChampionDescriptor getDescriptor(Version version) {
+    public ChampionStatus getStatus(Version version) {
         for (int i = version.ordinal(); 0 <= i; i--) {
-            ChampionDescriptor descriptor = descriptors[i];
+            ChampionStatus status = versions[i];
 
-            if (descriptor != null) {
-                return descriptor;
+            if (status != null) {
+                return status;
             }
         }
         return null;
@@ -439,12 +439,11 @@ public class Champion {
      * @param version A update version.
      * @return A champion descriptor.
      */
-    ChampionDescriptor update(Version version) {
-        ChampionDescriptor descriptor = new ChampionDescriptor(getDescriptor(version));
+    ChampionStatus update(Version version) {
+        ChampionStatus status = new ChampionStatus(getStatus(version));
+        versions[version.ordinal()] = status;
 
-        descriptors[version.ordinal()] = descriptor;
-
-        return descriptor;
+        return status;
     }
 
     /**

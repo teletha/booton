@@ -17,11 +17,11 @@ import org.junit.Test;
 /**
  * @version 2013/01/27 20:34:23
  */
-public class ItemDescriptorTest {
+public class ItemStatusTest {
 
     @Test
     public void GetAndSet() throws Exception {
-        ItemDescriptor item = new ItemDescriptor(null);
+        ItemStatus item = new ItemStatus(null);
         assert item.get(Range) == 0;
 
         item.set(Range, 100);
@@ -30,21 +30,21 @@ public class ItemDescriptorTest {
 
     @Test
     public void Delegate() throws Exception {
-        ItemDescriptor previous = new ItemDescriptor(null);
+        ItemStatus previous = new ItemStatus(null);
         previous.set(Range, 100);
         assert previous.get(Range) == 100;
 
-        ItemDescriptor item = new ItemDescriptor(previous);
+        ItemStatus item = new ItemStatus(previous);
         assert item.get(Range) == 100;
     }
 
     @Test
     public void Override() throws Exception {
-        ItemDescriptor previous = new ItemDescriptor(null);
+        ItemStatus previous = new ItemStatus(null);
         previous.set(Range, 100);
         assert previous.get(Range) == 100;
 
-        ItemDescriptor item = new ItemDescriptor(previous);
+        ItemStatus item = new ItemStatus(previous);
         item.set(Range, 200);
         assert item.get(Range) == 200;
         assert previous.get(Range) == 100;
@@ -52,7 +52,7 @@ public class ItemDescriptorTest {
 
     @Test
     public void ability() throws Exception {
-        ItemDescriptor item = new ItemDescriptor(null);
+        ItemStatus item = new ItemStatus(null);
         assert item.abilities.length == 0;
 
         item.ability(AbyssalAura);

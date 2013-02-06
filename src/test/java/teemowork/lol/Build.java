@@ -132,8 +132,8 @@ public class Build extends Notifiable {
             return new Computed(0, 0, status);
 
         case AS:
-            double baseAS = champion.getDescriptor(version).get(AS);
-            double levelAS = champion.getDescriptor(version).get(ASPerLv) * (level - 1);
+            double baseAS = champion.getStatus(version).get(AS);
+            double levelAS = champion.getStatus(version).get(ASPerLv) * (level - 1);
             return new Computed(baseAS * (1 + levelAS / 100), baseAS * (1 + (levelAS + sum(ASRatio)) / 100), status);
 
         default:
@@ -182,11 +182,11 @@ public class Build extends Notifiable {
         case MRPenRatio:
         case Energy:
         case Ereg:
-            return champion.getDescriptor(version).get(status);
+            return champion.getStatus(version).get(status);
 
         default:
             Status per = Status.valueOf(status.name() + "PerLv");
-            return champion.getDescriptor(version).get(status) + champion.getDescriptor(version).get(per) * level;
+            return champion.getStatus(version).get(status) + champion.getStatus(version).get(per) * level;
         }
     }
 
@@ -208,13 +208,13 @@ public class Build extends Notifiable {
             Item item = items[i];
 
             if (item != null) {
-                ItemDescriptor descriptor = item.getDescriptor(version);
+                ItemStatus descriptor = item.getStatus(version);
 
                 // compute item status
                 sum += descriptor.get(status);
 
                 for (ItemAbility ability : descriptor.abilities) {
-                    ItemAbilityDescriptor abilityDescriptor = ability.getDescriptor(version);
+                    ItemAbilityStatus abilityDescriptor = ability.getStatus(version);
 
                     if (abilityDescriptor.isUnique() && names.contains(ability.name)) {
                         continue;

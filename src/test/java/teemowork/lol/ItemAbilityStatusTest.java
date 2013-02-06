@@ -16,11 +16,11 @@ import org.junit.Test;
 /**
  * @version 2013/01/30 10:54:04
  */
-public class ItemAbilityDescriptorTest {
+public class ItemAbilityStatusTest {
 
     @Test
     public void ability() throws Exception {
-        ItemAbilityDescriptor item = new ItemAbilityDescriptor(null);
+        ItemAbilityStatus item = new ItemAbilityStatus(null);
         item.set(AD, 20);
         assert item.get(AD) == 20;
     }

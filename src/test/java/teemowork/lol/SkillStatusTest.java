@@ -16,11 +16,11 @@ import org.junit.Test;
 /**
  * @version 2013/01/27 20:34:23
  */
-public class SkillDescriptorTest {
+public class SkillStatusTest {
 
     @Test
     public void GetAndSet() throws Exception {
-        SkillDescriptor skill = new SkillDescriptor(null);
+        SkillStatus skill = new SkillStatus(null);
         assert skill.get(Range) == 0;
 
         skill.set(Range, 100);
@@ -29,21 +29,21 @@ public class SkillDescriptorTest {
 
     @Test
     public void Delegate() throws Exception {
-        SkillDescriptor previous = new SkillDescriptor(null);
+        SkillStatus previous = new SkillStatus(null);
         previous.set(Range, 100);
         assert previous.get(Range) == 100;
 
-        SkillDescriptor skill = new SkillDescriptor(previous);
+        SkillStatus skill = new SkillStatus(previous);
         assert skill.get(Range) == 100;
     }
 
     @Test
     public void Override() throws Exception {
-        SkillDescriptor previous = new SkillDescriptor(null);
+        SkillStatus previous = new SkillStatus(null);
         previous.set(Range, 100);
         assert previous.get(Range) == 100;
 
-        SkillDescriptor skill = new SkillDescriptor(previous);
+        SkillStatus skill = new SkillStatus(previous);
         skill.set(Range, 200);
         assert skill.get(Range) == 200;
         assert previous.get(Range) == 100;
@@ -51,6 +51,6 @@ public class SkillDescriptorTest {
 
     @Test
     public void active() throws Exception {
-        SkillDescriptor skill = new SkillDescriptor(null);
+        SkillStatus skill = new SkillStatus(null);
     }
 }

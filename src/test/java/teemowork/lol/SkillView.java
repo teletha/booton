@@ -33,8 +33,7 @@ public class SkillView {
      * @param level
      */
     public static void buildText(jQuery root, Skill skill, Version version, int level) {
-        SkillDescriptor descriptor = skill.getDescriptor(version);
-        String text = descriptor.getText();
+        SkillStatus status = skill.getStatus(version);
 
     }
 }

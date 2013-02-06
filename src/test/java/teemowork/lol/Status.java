@@ -10,7 +10,7 @@
 package teemowork.lol;
 
 /**
- * @version 2013/01/23 23:37:52
+ * @version 2013/02/06 16:32:58
  */
 public enum Status {
 
@@ -18,31 +18,31 @@ public enum Status {
 
     Sell,
 
-    AS(3),
+    AS("Attack Speed", 3),
 
     ASPerLv,
 
     ASRatio,
 
-    AD,
+    AD("Attack Damage"),
 
     ADPerLv,
 
     ADRatio,
 
-    Critical,
+    Critical("Critical Chanse"),
 
     CriticalPerLv,
 
     CriticalRatio,
 
-    LS,
+    LS("Life Steal"),
 
     LSPerLv,
 
     LSRatio,
 
-    Health,
+    Health("Health"),
 
     HealthPerLv,
 
@@ -54,7 +54,7 @@ public enum Status {
 
     HregRatio(2),
 
-    Mana,
+    Mana("Mana"),
 
     ManaPerLv,
 
@@ -66,13 +66,13 @@ public enum Status {
 
     MregRatio(2),
 
-    AP,
+    AP("Ability Power"),
 
     APPerLv,
 
     APRatio,
 
-    SV,
+    SV("Spell Vamp"),
 
     SVPerLv,
 
@@ -134,10 +134,23 @@ public enum Status {
 
     EregPerLv,
 
-    EregRatio;
+    EregRatio,
+
+    PhysicalDamage("Physical Damage"),
+
+    MagicDamage("Magic Damage"),
+
+    TrueDamage("True Damage"),
+
+    Charm,
+
+    Slow;
 
     /** The precision for value. */
     public final int precision;
+
+    /** The status name. */
+    public final String name;
 
     /**
      * @param precision
@@ -149,7 +162,22 @@ public enum Status {
     /**
      * @param precision
      */
+    private Status(String name) {
+        this(name, 0);
+    }
+
+    /**
+     * @param precision
+     */
     private Status(int precision) {
+        this(null, precision);
+    }
+
+    /**
+     * @param name
+     */
+    private Status(String name, int precision) {
+        this.name = name == null ? name() : name;
         this.precision = precision;
     }
 }

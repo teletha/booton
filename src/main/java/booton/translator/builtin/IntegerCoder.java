@@ -23,4 +23,8 @@ public class IntegerCoder extends Translator<Integer> {
     public String intValue() {
         return that;
     }
+
+    public String parseInt(String param0) {
+        return "parseInt(" + param(0) + ")";
+    }
 }

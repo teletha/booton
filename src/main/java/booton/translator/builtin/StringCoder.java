@@ -119,6 +119,10 @@ class StringCoder extends Translator<String> {
         return that + ".charCodeAt(" + param(0) + "-1)";
     }
 
+    public String split(String param0) {
+        return that + ".split(" + regex(0) + ")";
+    }
+
     public String substring(int start) {
         return that + ".substring(" + param(0) + ")";
     }
