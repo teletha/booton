@@ -27,6 +27,7 @@ import teemowork.lol.Build;
 import teemowork.lol.Build.Computed;
 import teemowork.lol.Champion;
 import teemowork.lol.Skill;
+import teemowork.lol.SkillKey;
 import teemowork.lol.Status;
 import booton.css.CSS;
 
@@ -121,17 +122,21 @@ public class ChampionDetail extends Page {
 
         jQuery skills = root.child(SkillTable.class);
 
-        for (Skill skill : build.champion.skills) {
+        for (final Skill skill : build.champion.skills) {
             jQuery box = skills.child(SkillRow.class);
             jQuery iconBox = box.child(SkillIconBox.class);
             iconBox.child(SkillStyle.Icon.class).css("background-image", "url(" + skill.getIcon() + ")");
-            jQuery levels = iconBox.child(SkillStyle.LevelBox.class);
 
-            int size = skill.getMaxLevel();
+            if (skill.key != SkillKey.Passive) {
+                jQuery levels = iconBox.child(SkillStyle.LevelBox.class);
 
-            for (int i = 0; i < size; i++) {
-                levels.child(size == 3 ? SkillStyle.LevelMark3.class : SkillStyle.LevelMark.class);
+                int size = skill.getMaxLevel();
+
+                for (int i = 0; i < size; i++) {
+                    levels.child(size == 3 ? SkillStyle.LevelMark3.class : SkillStyle.LevelMark.class);
+                }
             }
+
             jQuery descriptor = box.child(SkillStyle.DescriptionBox.class);
             descriptor.child(SkillStyle.Name.class).text(skill.name);
             descriptor.child(SkillStyle.Text.class).text(skill.getStatus(build.getVersion()).getDescription());
@@ -142,6 +147,14 @@ public class ChampionDetail extends Page {
         }
 
         calcurate();
+    }
+
+    /**
+     * <p>
+     * </p>
+     */
+    private void skillLevelUp() {
+
     }
 
     /**
@@ -368,17 +381,17 @@ public class ChampionDetail extends Page {
         /**
          * @version 2013/02/02 11:27:13
          */
-        private static class LevelMark3 extends CSS {
+        private static class LevelMark3 extends LevelMark {
 
             {
-                display.tableCell();
-                box.width(IconSize / 3, px).height(LevelBoxHeight, px);
-                borderLeft.solid().color.black().width(1, px);
-                background.image(linear(rgba(240, 192, 28, 1), rgba(160, 123, 1, 1)));
-
-                while (firstChild()) {
-                    border.none();
-                }
+                // display.tableCell();
+                box.width(IconSize / 3, px);
+                // borderLeft.solid().color.black().width(1, px);
+                // background.image(linear(rgba(240, 192, 28, 1), rgba(160, 123, 1, 1)));
+                //
+                // while (firstChild()) {
+                // border.none();
+                // }
             }
         }
 
