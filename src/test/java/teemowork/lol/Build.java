@@ -43,6 +43,9 @@ public class Build extends Notifiable {
     /** The skill order. */
     private int[] skills = new int[18];
 
+    /** The skill level. */
+    private int[] skillLevel = {0, 1, 1, 1, 1};
+
     /** The mastery. */
     private MasterySet mastery;
 
