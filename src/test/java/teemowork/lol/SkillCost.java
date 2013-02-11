@@ -17,5 +17,5 @@ public enum SkillCost {
 
     Energy,
 
-    Stack;
+    Charge;
 }

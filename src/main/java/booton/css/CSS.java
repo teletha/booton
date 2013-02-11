@@ -510,6 +510,19 @@ public abstract class CSS implements Extensible {
 
     /**
      * <p>
+     * The CSS :after pseudo-element matches a virtual last child of the selected element. Typically
+     * used to add cosmetic content to an element, by using the content CSS property. This element
+     * is inline by default.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean inBackOf(Class<? extends CSS> clazz) {
+        return rule("." + Obfuscator.computeCSSName(clazz) + "~" + rules.selector);
+    }
+
+    /**
+     * <p>
      * The :hover CSS pseudo-class matches when the user designates an element with a pointing
      * device, but does not necessarily activate it. This style may be overridden by any other
      * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent

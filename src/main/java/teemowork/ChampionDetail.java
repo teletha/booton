@@ -39,8 +39,8 @@ import booton.css.CSS;
 public class ChampionDetail extends Page {
 
     /** The displayable status. */
-    private static final Status[] VISIBLE = {Health, Hreg, Mana, Mreg, AD, ARPen, ARPenRatio, AS, LS, Critical, AP,
-            MRPen, MRPenRatio, CDR, SV, AR, MR, MS};
+    private static final Status[] VISIBLE = {Health, Hreg, Mana, Mreg, AD, ARPen, AS, LS, Critical, AP, MRPen, CDR, SV,
+            AR, MR, MS};
 
     /** The status box. */
     private List<StatusView> statuses = new ArrayList();
@@ -179,13 +179,19 @@ public class ChampionDetail extends Page {
         private final jQuery[] levels;
 
         /** The skill text. */
-        private final jQuery text;
+        private final jQuery passive;
+
+        /** The skill text. */
+        private final jQuery active;
 
         /** The cool down. */
-        private final ValueView cooldown;
+        private final jQuery cooldown;
 
         /** The cost. */
-        private final ValueView cost;
+        private final jQuery cost;
+
+        /** The cost. */
+        private final jQuery range;
 
         /**
          * @param skill
@@ -225,9 +231,12 @@ public class ChampionDetail extends Page {
             jQuery descriptor = root.child(SkillStyle.DescriptionBox.class);
             descriptor.child(SkillStyle.Name.class).text(skill.name);
 
-            this.text = descriptor.child(SkillStyle.Text.class);
-            this.cooldown = new ValueView("Cooldown", size, descriptor);
-            this.cost = new ValueView("Cost", size, descriptor);
+            this.range = descriptor.child(ValueStyles.Values.class);
+            this.cooldown = descriptor.child(ValueStyles.Values.class);
+            this.cost = descriptor.child(ValueStyles.Values.class);
+
+            this.passive = descriptor.child(SkillStyle.Text.class);
+            this.active = descriptor.child(SkillStyle.Text.class);
         }
 
         /**
@@ -248,19 +257,69 @@ public class ChampionDetail extends Page {
                 }
             }
 
-            cooldown.update(level, status.get(CD), status.get(CDPerLv), build.get(CDR).value);
-            cost.update(level, status.get(Cost), status.get(CostPerLv), 0);
+            String costLabel = status.getCostType().name().toUpperCase();
 
-            // text
-            text.empty();
+            if (status.isToggle()) {
+                costLabel = "毎秒" + costLabel;
+            }
 
-            List tokens = status.getDescriptionTokens();
+            buildValues(cooldown, "CD", status, CD, build.get(CDR).value);
+            buildValues(cost, costLabel, status, Cost, 0);
+            buildValues(range, "RANGE", status, Range, 0);
 
-            for (Object token : tokens) {
+            // PASSIVE
+            passive.empty();
+
+            if (!status.passive.isEmpty()) {
+                passive.child(SkillStyle.Passive.class).text("PASSIVE");
+
+                for (Object token : status.passive) {
+                    if (token instanceof SkillVariable) {
+                        buildVariable(passive, (SkillVariable) token, skill.getMaxLevel(), level);
+                    } else {
+                        passive.append(token.toString());
+                    }
+                }
+            }
+
+            // ACTIVE
+            active.empty();
+
+            if (status.isToggle()) {
+                active.child(SkillStyle.Passive.class).text("TOGGLE");
+            }
+
+            for (Object token : status.active) {
                 if (token instanceof SkillVariable) {
-                    buildVariable(text, (SkillVariable) token, skill.getMaxLevel(), level);
+                    buildVariable(active, (SkillVariable) token, skill.getMaxLevel(), level);
                 } else {
-                    text.append(token.toString());
+                    active.append(token.toString());
+                }
+            }
+        }
+
+        private void buildValues(jQuery root, String label, SkillStatus skill, Status status, double reduction) {
+            root.empty();
+
+            double base = skill.get(status);
+            double diff = skill.get(status.per());
+
+            if (base != 0 || diff != 0) {
+                int size = diff == 0 ? 1 : this.skill.getMaxLevel();
+
+                root.child(ValueStyles.Label.class).text(label);
+
+                for (int i = 0; i < size; i++) {
+                    jQuery value = root.child(ValueStyles.Value.class)
+                            .text(status.round((base + diff * i) * (1 - reduction / 100)));
+
+                    if (size != 1 && i == build.getLevel(this.skill) - 1) {
+                        value.addClass(ValueStyles.Current.class);
+                    }
+
+                    if (i != size - 1) {
+                        root.child(ValueStyles.Separator.class).text("/");
+                    }
                 }
             }
         }
@@ -268,19 +327,24 @@ public class ChampionDetail extends Page {
         private void buildVariable(jQuery root, SkillVariable variable, int size, int level) {
             double base = variable.base;
             double diff = variable.diff;
+            List<Status> amplifiers = variable.amplifiers;
+
             Status status = variable.status;
 
-            double computed = base + diff * (level - 1);
-            for (int i = 0; i < variable.amplifiers.size(); i++) {
-                computed += variable.amplifierRatios.get(i) * build.get(variable.amplifiers.get(i)).value;
+            double computed = base + diff * Math.max(0, (level - 1));
+
+            for (int i = 0; i < amplifiers.size(); i++) {
+                computed += variable.amplifierRatios.get(i) * build.get(amplifiers.get(i)).value;
             }
 
-            root.append(status.name());
             root.child(SkillStyle.Computed.class).text(status.round(computed) + status.unit);
+            if (!status.name.isEmpty()) {
+                root.append("の");
+            }
+            root.append(status.name);
 
-            if (diff != 0) {
-                root.append("【");
-
+            if (diff != 0 || !amplifiers.isEmpty()) {
+                root.append("(");
                 for (int i = 0; i < size; i++) {
                     jQuery value = root.child(SkillStyle.Value.class).text(base + diff * i);
 
@@ -293,122 +357,75 @@ public class ChampionDetail extends Page {
                     }
                 }
 
-                List<Status> amplifiers = variable.amplifiers;
-
                 if (!amplifiers.isEmpty()) {
                     for (int i = 0; i < amplifiers.size(); i++) {
-                        root.append("(+");
-                        root.append(String.valueOf(variable.amplifierRatios.get(i)));
-                        root.append(" ");
-                        root.append(amplifiers.get(i).name());
-                        root.append(")");
+                        jQuery amplifier = root.child(SkillStyle.Amplifier.class);
+                        amplifier.text("+" + variable.amplifierRatios.get(i) + amplifiers.get(i).name());
                     }
                 }
-                root.append("】");
+                root.append(")");
             }
         }
     }
 
     /**
-     * @version 2013/02/10 10:35:50
+     * @version 2013/02/10 11:01:26
      */
-    private static class ValueView {
-
-        /** The value list. */
-        private final jQuery[] values;
+    private static class ValueStyles {
 
         /**
-         * @param values
+         * @version 2013/02/06 20:03:25
          */
-        private ValueView(String label, int size, jQuery root) {
-            values = new jQuery[size];
+        private static class Label extends CSS {
 
-            jQuery list = root.child(Styles.Values.class);
-            list.child(Styles.Label.class).text(label);
-
-            for (int i = 0; i < size; i++) {
-                values[i] = list.child(Styles.Value.class);
-
-                if (i != size - 1) {
-                    list.child(Styles.Separator.class).text("/");
-                }
+            {
+                margin.right(5, px);
+                font.size.smaller();
             }
         }
 
         /**
-         * <p>
-         * Update value list.
-         * </p>
-         * 
-         * @param build
+         * @version 2013/02/06 20:03:25
          */
-        private void update(int level, double base, double diff, double reduction) {
-            for (int i = 0; i < values.length; i++) {
-                if (i == level - 1) {
-                    values[i].addClass(Styles.Current.class);
-                } else {
-                    values[i].removeClass(Styles.Current.class);
-                }
-                values[i].text(Math.round((base + diff * i) * (1 - reduction / 100) * 10) / 10);
+        private static class Values extends CSS {
+
+            {
+                display.inlineBlock();
+                margin.left(1, em);
             }
         }
 
         /**
-         * @version 2013/02/10 11:01:26
+         * @version 2013/02/06 20:03:25
          */
-        private static class Styles {
+        private static class Value extends CSS {
 
-            /**
-             * @version 2013/02/06 20:03:25
-             */
-            private static class Label extends CSS {
-
-                {
-                    display.inlineBlock();
-                    box.width(4, em);
-                }
+            {
+                display.inlineBlock();
+                text.align.center();
+                box.opacity(0.7);
             }
+        }
 
-            /**
-             * @version 2013/02/06 20:03:25
-             */
-            private static class Values extends CSS {
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Separator extends CSS {
 
-                {
-                    display.block();
-                }
+            {
+                box.opacity(0.4);
+                margin.horizontal(4, px);
             }
+        }
 
-            /**
-             * @version 2013/02/06 20:03:25
-             */
-            private static class Value extends CSS {
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Current extends CSS {
 
-                {
-                    display.inlineBlock();
-                    box.width(2.2, em);
-                    text.align.center();
-                }
-            }
-
-            /**
-             * @version 2013/02/06 20:03:25
-             */
-            private static class Separator extends CSS {
-
-                {
-
-                }
-            }
-
-            /**
-             * @version 2013/02/06 20:03:25
-             */
-            private static class Current extends CSS {
-
-                {
-                    font.color(rgba(160, 123, 1, 1));
-                }
+            {
+                font.color(rgba(160, 123, 1, 1));
+                box.opacity(1);
             }
         }
     }
@@ -437,7 +454,7 @@ public class ChampionDetail extends Page {
         /**
          * @version 2013/02/02 11:27:13
          */
-        private static class SkillRow extends CSS {
+        class SkillRow extends CSS {
 
             {
                 display.block();
@@ -480,6 +497,7 @@ public class ChampionDetail extends Page {
                 display.tableCell();
                 box.width(IconSize / 5, px).height(LevelBoxHeight, px);
                 borderLeft.solid().color.black().width(1, px);
+                background.image(linear(rgba(240, 192, 28, 0.5), rgba(160, 123, 1, 0.5)));
 
                 while (firstChild()) {
                     border.none();
@@ -535,8 +553,8 @@ public class ChampionDetail extends Page {
         private static class Name extends CSS {
 
             {
-                display.block();
-                margin.bottom(0.2, em);
+                margin.right(0.5, em);
+                font.weight.bold();
             }
         }
 
@@ -546,7 +564,10 @@ public class ChampionDetail extends Page {
         private static class Text extends CSS {
 
             {
-
+                display.block();
+                margin.top(0.4, em);
+                line.height(140, percent);
+                font.size.smaller();
             }
         }
 
@@ -576,7 +597,7 @@ public class ChampionDetail extends Page {
         private static class Computed extends CSS {
 
             {
-
+                font.weight.bolder();
             }
         }
 
@@ -607,6 +628,34 @@ public class ChampionDetail extends Page {
 
             {
                 font.color(rgba(160, 123, 1, 1));
+            }
+        }
+
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Passive extends CSS {
+
+            {
+                margin.right(1, em);
+            }
+        }
+
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Amplifier extends CSS {
+
+            {
+                font.color(25, 111, 136);
+
+                while (inBackOf(Value.class)) {
+                    margin.left(0.4, em);
+                }
+
+                while (inBackOf(Amplifier.class)) {
+                    margin.left(0.4, em);
+                }
             }
         }
     }
@@ -645,8 +694,15 @@ public class ChampionDetail extends Page {
         private void calcurate() {
             Computed value = build.get(status);
 
-            this.current.text(value.value());
-            this.perLv.text("(+" + value.increased + ")");
+            this.current.text(value.value() + status.unit);
+
+            if (status == ARPen) {
+                current.append(" | ").append(build.get(ARPenRatio).value() + ARPenRatio.unit);
+            }
+
+            if (status == MRPen) {
+                current.append(" | ").append(build.get(MRPenRatio).value() + MRPenRatio.unit);
+            }
         }
     }
 

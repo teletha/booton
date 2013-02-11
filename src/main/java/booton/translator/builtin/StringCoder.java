@@ -91,6 +91,10 @@ class StringCoder extends Translator<String> {
         return that;
     }
 
+    public String isEmpty() {
+        return that + ".length==0";
+    }
+
     public String trim() {
         return that + ".trim()";
     }

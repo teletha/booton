@@ -823,7 +823,7 @@ public class Item {
         KagesLuckyPick.update(P0000).build(AmplifyingTome).set(Cost, 330).set(AP, 25);
         Kindlegem.update(P0000).build(RubyCrystal).set(Cost, 375).set(Health, 200);
         KitaesBloodrazor.update(P0000).build(Pickaxe, RecurveBow).set(Cost, 700).set(AS, 40).set(AD, 30);
-        LastWhisper.update(P0000).build(LongSword, Pickaxe).set(Cost, 1025).set(AD, 40);
+        LastWhisper.update(P0000).build(LongSword, Pickaxe).set(Cost, 1025).set(AD, 40).set(ARPenRatio, 40);
         LiandrysTorment.update(P0000).build(HauntingGuise, AmplifyingTome).set(Cost, 980).set(AP, 60).set(Health, 300);
         LichBane.update(P0000).build(Sheen, BlastingWand).set(Cost, 880).set(AP, 80).set(MS, 5).set(Mana, 250);
         LocketOftheIronSolari.update(P0000)

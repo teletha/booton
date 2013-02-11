@@ -44,7 +44,7 @@ public class Build extends Notifiable {
     private int[] skills = new int[18];
 
     /** The skill level. */
-    private int[] skillLevel = {0, 1, 1, 1, 1};
+    private int[] skillLevel = {1, 0, 0, 0, 0};
 
     /** The mastery. */
     private MasterySet mastery;
@@ -70,7 +70,7 @@ public class Build extends Notifiable {
     public Build(Champion champion) {
         this.champion = champion;
 
-        items[0] = Item.DeathfireGrasp;
+        items[0] = Item.LastWhisper;
     }
 
     /**
@@ -127,14 +127,12 @@ public class Build extends Notifiable {
      */
     public Computed get(Status status) {
         switch (status) {
-        case MSRatio:
-        case ARPen:
-        case ARPenRatio:
-        case MRPen:
-        case MRPerLv:
         case Energy:
         case Ereg:
             return new Computed(0, 0, status);
+
+        case Lv:
+            return new Computed(level, level, Lv);
 
         case AS:
             double baseAS = champion.getStatus(version).get(AS);
@@ -142,11 +140,10 @@ public class Build extends Notifiable {
             return new Computed(baseAS * (1 + levelAS / 100), baseAS * (1 + (levelAS + sum(ASRatio)) / 100), status);
 
         default:
-            Status per = Status.valueOf(status.name() + "PerLv");
             Status ratio = Status.valueOf(status.name() + "Ratio");
 
             double base = base(status);
-            double computed = (base + sum(status) + sum(per) * level) * (1 + sum(ratio) / 100);
+            double computed = (base + sum(status) + sum(status.per()) * level) * (1 + sum(ratio) / 100);
 
             return new Computed(base, computed, status);
         }
@@ -210,7 +207,7 @@ public class Build extends Notifiable {
         int index = skill.key.ordinal();
         int now = skillLevel[index];
 
-        if (1 < now) {
+        if (0 < now) {
             skillLevel[index] = now - 1;
 
             fire();
@@ -278,6 +275,10 @@ public class Build extends Notifiable {
                     sum += abilityDescriptor.get(status) * itemCounts[i];
                 }
             }
+        }
+
+        for (int i = 0; i < champion.skills.length; i++) {
+            sum += champion.skills[i].getStatus(version).getPassive(status, skillLevel[i]);
         }
 
         // for (Rune rune : marks) {

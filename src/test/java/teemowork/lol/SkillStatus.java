@@ -24,8 +24,17 @@ public class SkillStatus {
     /** The value store. */
     private NativeArray<Double> values;
 
+    /** The skill cost type. */
+    private SkillCost cost;
+
+    /** The toggle flag. */
+    private boolean isToggle;
+
     /** The skill description. */
-    private List tokens;
+    public final List passive;
+
+    /** The skill description. */
+    public final List active;
 
     /**
      * @param name
@@ -33,10 +42,16 @@ public class SkillStatus {
     SkillStatus(SkillStatus previous) {
         if (previous != null) {
             values = previous.values.copy();
-            tokens = previous.tokens;
+            passive = previous.passive;
+            active = previous.active;
+            isToggle = previous.isToggle;
+            cost = previous.cost;
         } else {
             values = new NativeArray();
-            tokens = new ArrayList();
+            passive = new ArrayList();
+            active = new ArrayList();
+            isToggle = false;
+            cost = SkillCost.Mana;
         }
     }
 
@@ -60,6 +75,27 @@ public class SkillStatus {
      * </p>
      * 
      * @param status A target status.
+     * @return A result.
+     */
+    public double getPassive(Status status, int level) {
+        for (Object token : passive) {
+            if (token instanceof SkillVariable) {
+                SkillVariable variable = (SkillVariable) token;
+
+                if (variable.status == status) {
+                    return variable.base * (level);
+                }
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * <p>
+     * Retrieve status value.
+     * </p>
+     * 
+     * @param status A target status.
      * @return Chainable API.
      */
     SkillStatus set(Status status, double value) {
@@ -70,29 +106,25 @@ public class SkillStatus {
 
     /**
      * <p>
-     * Retrieve description tokens.
+     * Set skill passive ability.
      * </p>
-     * 
-     * @return
      */
-    public List getDescriptionTokens() {
-        return tokens;
-    }
+    SkillStatus passive(String text) {
+        // clear previous version
+        this.passive.clear();
 
-    /**
-     * <p>
-     * Retrieve description.
-     * </p>
-     * 
-     * @return
-     */
-    public String getDescription() {
-        String text = "";
+        String[] tokens = text.split("[\\{\\}]");
 
-        for (Object token : tokens) {
-            text += token;
+        for (int i = 0; i < tokens.length; i++) {
+            String token = tokens[i];
+
+            if (token.length() != 1) {
+                this.passive.add(token);
+            } else {
+                this.passive.add(new SkillVariable(Integer.parseInt(token)));
+            }
         }
-        return text;
+        return this;
     }
 
     /**
@@ -103,9 +135,9 @@ public class SkillStatus {
      * @param text
      * @return
      */
-    SkillStatus description(String text) {
+    SkillStatus active(String text) {
         // clear previous version
-        this.tokens.clear();
+        this.active.clear();
 
         String[] tokens = text.split("[\\{\\}]");
 
@@ -113,9 +145,9 @@ public class SkillStatus {
             String token = tokens[i];
 
             if (token.length() != 1) {
-                this.tokens.add(token);
+                this.active.add(token);
             } else {
-                this.tokens.add(new SkillVariable(Integer.parseInt(token)));
+                this.active.add(new SkillVariable(Integer.parseInt(token)));
             }
         }
         return this;
@@ -171,28 +203,44 @@ public class SkillStatus {
      * @return A chainable API.
      */
     SkillStatus variable(int id, Status status, double base, double diff, Status ratioType1, double ratio1, Status ratioType2, double ratio2) {
-        for (Object token : tokens) {
-            if (token instanceof SkillVariable) {
-                SkillVariable variable = (SkillVariable) token;
+        List[] lists = {passive, active};
 
-                if (variable.id == id) {
-                    variable.status = status;
-                    variable.base = base;
-                    variable.diff = diff;
+        for (List list : lists) {
+            for (Object token : list) {
+                if (token instanceof SkillVariable) {
+                    SkillVariable variable = (SkillVariable) token;
 
-                    if (ratioType1 != null) {
-                        variable.amplifiers.add(ratioType1);
-                        variable.amplifierRatios.add(ratio1);
-                    }
+                    if (variable.id == id) {
+                        variable.status = status;
+                        variable.base = base;
+                        variable.diff = diff;
 
-                    if (ratioType2 != null) {
-                        variable.amplifiers.add(ratioType2);
-                        variable.amplifierRatios.add(ratio2);
+                        if (ratioType1 != null) {
+                            variable.amplifiers.add(ratioType1);
+                            variable.amplifierRatios.add(ratio1);
+                        }
+
+                        if (ratioType2 != null) {
+                            variable.amplifiers.add(ratioType2);
+                            variable.amplifierRatios.add(ratio2);
+                        }
                     }
                 }
             }
         }
         return this;
+    }
+
+    /**
+     * <p>
+     * Set cooldown time.
+     * </p>
+     * 
+     * @param base A base time.
+     * @param diff A diff time.
+     */
+    SkillStatus cd(double base) {
+        return cd(base, 0);
     }
 
     /**
@@ -218,6 +266,18 @@ public class SkillStatus {
      * @param base A base cost.
      * @param diff A diff cost.
      */
+    SkillStatus cost(double base) {
+        return cost(SkillCost.Mana, base, 0);
+    }
+
+    /**
+     * <p>
+     * Set skill cost.
+     * </p>
+     * 
+     * @param base A base cost.
+     * @param diff A diff cost.
+     */
     SkillStatus cost(double base, double diff) {
         return cost(SkillCost.Mana, base, diff);
     }
@@ -233,7 +293,55 @@ public class SkillStatus {
     SkillStatus cost(SkillCost type, double base, double diff) {
         values.set(Cost.ordinal(), base);
         values.set(CostPerLv.ordinal(), diff);
-        values.set(CostType.ordinal(), (double) type.ordinal());
+        cost = type;
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * Retrieve skill cost type.
+     * </p>
+     * 
+     * @return
+     */
+    public SkillCost getCostType() {
+        return cost;
+    }
+
+    /**
+     * <p>
+     * Set skill range.
+     * </p>
+     * 
+     * @param range
+     */
+    SkillStatus range(double range) {
+        values.set(Range.ordinal(), range);
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * Retrieve this skill is toggle type or not.
+     * </p>
+     * 
+     * @return A result.
+     */
+    public boolean isToggle() {
+        return isToggle;
+    }
+
+    /**
+     * <p>
+     * Set this skill is togglable.
+     * </p>
+     * 
+     * @return
+     */
+    SkillStatus toggle() {
+        isToggle = true;
 
         return this;
     }

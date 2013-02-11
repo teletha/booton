@@ -23,4 +23,8 @@ class DoubleCoder extends Translator<Double> {
     public String doubleValue() {
         return that;
     }
+
+    public String intValue() {
+        return that;
+    }
 }
