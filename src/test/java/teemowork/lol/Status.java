@@ -16,9 +16,13 @@ public enum Status {
 
     Cost,
 
+    CostPerLv,
+
+    CostType,
+
     Sell,
 
-    AS("Attack Speed", 3),
+    AS("Attack Speed", 3, "%"),
 
     ASPerLv,
 
@@ -30,13 +34,13 @@ public enum Status {
 
     ADRatio,
 
-    Critical("Critical Chanse"),
+    Critical("Critical Chanse", 0, "%"),
 
     CriticalPerLv,
 
     CriticalRatio,
 
-    LS("Life Steal"),
+    LS("Life Steal", 0, "%"),
 
     LSPerLv,
 
@@ -72,11 +76,15 @@ public enum Status {
 
     APRatio,
 
-    SV("Spell Vamp"),
+    SV("Spell Vamp", 0, "%"),
 
     SVPerLv,
 
     SVRatio,
+
+    CD,
+
+    CDPerLv,
 
     CDR,
 
@@ -118,11 +126,15 @@ public enum Status {
 
     ARPenRatio,
 
+    ARPenRatioPerLv,
+
     MRPen,
 
     MRPenPerLv,
 
     MRPenRatio,
+
+    MRPenRatioPerLv,
 
     Energy,
 
@@ -142,15 +154,18 @@ public enum Status {
 
     TrueDamage("True Damage"),
 
-    Charm,
+    Charm(3),
 
-    Slow;
-
-    /** The precision for value. */
-    public final int precision;
+    Slow(null, 0, "%");
 
     /** The status name. */
     public final String name;
+
+    /** The unit. */
+    public final String unit;
+
+    /** The precision for value. */
+    private final int precision;
 
     /**
      * @param precision
@@ -163,21 +178,42 @@ public enum Status {
      * @param precision
      */
     private Status(String name) {
-        this(name, 0);
+        this(name, 0, null);
     }
 
     /**
      * @param precision
      */
     private Status(int precision) {
-        this(null, precision);
+        this(null, precision, null);
     }
 
     /**
      * @param name
      */
-    private Status(String name, int precision) {
+    private Status(String name, int precision, String unit) {
         this.name = name == null ? name() : name;
         this.precision = precision;
+        this.unit = unit == null ? "" : unit;
+    }
+
+    /**
+     * <p>
+     * Round up the specified value decimal for this state.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public double round(double value) {
+        int round = 1;
+
+        for (int i = 0; i < precision; i++) {
+            round *= 10;
+        }
+
+        value *= round;
+        value = Math.round(value);
+        return value / round;
     }
 }

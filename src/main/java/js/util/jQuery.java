@@ -596,6 +596,16 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Set the content of each element in the set of matched elements to the specified text.
+     * </p>
+     * 
+     * @param text
+     * @return
+     */
+    public native jQuery text(Object text);
+
+    /**
+     * <p>
      * Add or remove one or more classes from each element in the set of matched elements, depending
      * on either the class's presence or the value of the switch argument.
      * </p>
