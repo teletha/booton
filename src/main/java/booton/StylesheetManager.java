@@ -31,7 +31,7 @@ import booton.util.Font;
 class StylesheetManager implements Literal<CSS> {
 
     /** The used styles. */
-    private final Set<Class<? extends CSS>> used = new HashSet();
+    private final Set<Class<? extends CSS>> used = new LinkedHashSet();
 
     /**
      * <p>

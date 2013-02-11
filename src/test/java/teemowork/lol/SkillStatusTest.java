@@ -54,9 +54,9 @@ public class SkillStatusTest {
     @Test
     public void description() throws Exception {
         SkillStatus skill = new SkillStatus(null);
-        skill.description("Test");
+        skill.active("Test");
 
-        List tokens = skill.getDescriptionTokens();
+        List tokens = skill.active;
         assert tokens.size() == 1;
         assert tokens.get(0).equals("Test");
     }
@@ -64,10 +64,10 @@ public class SkillStatusTest {
     @Test
     public void variable() throws Exception {
         SkillStatus skill = new SkillStatus(null);
-        skill.description("Test{1}");
+        skill.active("Test{1}");
         skill.variable(1, AD, 10, 10);
 
-        List tokens = skill.getDescriptionTokens();
+        List tokens = skill.active;
         assert tokens.size() == 2;
         assert tokens.get(0).equals("Test");
 
@@ -85,10 +85,10 @@ public class SkillStatusTest {
     @Test
     public void variable2() throws Exception {
         SkillStatus skill = new SkillStatus(null);
-        skill.description("Test{1}");
+        skill.active("Test{1}");
         skill.variable(1, SV, 10, 10);
 
-        List tokens = skill.getDescriptionTokens();
+        List tokens = skill.active;
         assert tokens.size() == 2;
         assert tokens.get(0).equals("Test");
 

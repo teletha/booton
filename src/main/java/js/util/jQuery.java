@@ -47,6 +47,18 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
     }
 
     /**
+     * <p>
+     * Create child element with class name.
+     * </p>
+     * 
+     * @param Title A element name.
+     * @return Chainable API.
+     */
+    public jQuery child(CSS className) {
+        return child("span").addClass(className);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -123,6 +135,17 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery addClass(Class<? extends CSS> className);
+
+    /**
+     * <p>
+     * Adds the specified class(es) to each of the set of matched elements.
+     * </p>
+     * 
+     * @param classNames One or more class names to be added to the class attribute of each matched
+     *            element.
+     * @return
+     */
+    public native jQuery addClass(CSS className);
 
     /**
      * <p>

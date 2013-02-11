@@ -66,7 +66,7 @@ class OperandArray extends Operand {
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
-        if (items.size() == 0) {
+        if (items.size() == 0 && !undefined.equals("0")) {
             // normal
             builder.append("new Array(").append(this.size).append(')');
         } else {

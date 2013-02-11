@@ -82,11 +82,11 @@ public enum Status {
 
     SVRatio,
 
-    CD,
+    CD(1),
 
     CDPerLv,
 
-    CDR,
+    CDR("CD減少", 0, "%"),
 
     CDRPerLv,
 
@@ -106,7 +106,7 @@ public enum Status {
 
     MRRatio,
 
-    MRReduction,
+    MRReduction("MR減少"),
 
     Range,
 
@@ -114,7 +114,7 @@ public enum Status {
 
     RangeRatio,
 
-    MS,
+    MS("移動速度"),
 
     MSPerLv,
 
@@ -124,7 +124,7 @@ public enum Status {
 
     ARPenPerLv,
 
-    ARPenRatio,
+    ARPenRatio(null, 0, "%"),
 
     ARPenRatioPerLv,
 
@@ -132,7 +132,7 @@ public enum Status {
 
     MRPenPerLv,
 
-    MRPenRatio,
+    MRPenRatio(null, 0, "%"),
 
     MRPenRatioPerLv,
 
@@ -148,15 +148,43 @@ public enum Status {
 
     EregRatio,
 
-    PhysicalDamage("Physical Damage"),
+    PhysicalDamage("物理DM"),
 
-    MagicDamage("Magic Damage"),
+    MagicDamage("魔法DM"),
 
-    TrueDamage("True Damage"),
+    TrueDamage("TrueDM"),
+
+    RestoreHealth("Healthを回復"),
+
+    RestoreMana("Manaを回復"),
+
+    RestoreEnergy("気を回復"),
+
+    DamageReductionRation("DM減少", 0, "%"),
+
+    PhysicalDamageReduction("物理DM減少"),
+
+    Lv,
+
+    LvPerLv,
+
+    LvRatio,
 
     Charm(3),
 
-    Slow(null, 0, "%");
+    Stun("スタン", 3, "秒"),
+
+    Snare("スネア", 3, "秒"),
+
+    KnockUp("打ち上げ", 3, "秒"),
+
+    KnockBack(3),
+
+    Slow(null, 0, "%"),
+
+    Time("", 3, "秒"),
+
+    TargetHealth("", 3, "%");
 
     /** The status name. */
     public final String name;
@@ -215,5 +243,16 @@ public enum Status {
         value *= round;
         value = Math.round(value);
         return value / round;
+    }
+
+    /**
+     * <p>
+     * Find per level status.
+     * </p>
+     * 
+     * @return
+     */
+    public Status per() {
+        return Status.valueOf(name() + "PerLv");
     }
 }
