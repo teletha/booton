@@ -1766,6 +1766,9 @@ public enum Skill {
      * @return
      */
     public int getMaxLevel() {
+        if (key == Passive) {
+            return 0;
+        }
         return key == R && this != PhoenixStance ? 3 : 5;
     }
 
@@ -1803,20 +1806,55 @@ public enum Skill {
     static {
         version = P0000;
         EssenceTheft.update()
-                .description("スキルが敵ユニットに当たる度にEssence Theftのチャージを1つ得る(1回のスキルで得られる上限は3チャージまで)。9チャージの状態でスキルを使用すると、チャージを全て消費して使用したスキルに$1が追加される。")
+                .description("スキルが敵ユニットに当たる度に" + EssenceTheft + "のチャージを1つ得る(1回のスキルで得られる上限は3チャージまで)。9チャージの状態でスキルを使用すると、チャージを全て消費して使用したスキルに{1}が追加される。")
                 .variable(1, SV, 35, 0);
         OrbOfDeception.update()
-                .description("指定方向にオーブを放ち当たった敵ユニットに$1を与える。オーブは行きと帰りでそれぞれにヒット判定があり、帰りの場合は$2を与える。")
-                .damage(1, MagicDamage, 40, 25, AP, 0.33)
-                .damage(2, TrueDamage, 40, 25, AP, 0.33);
+                .description("指定方向にオーブを放ち当たった敵ユニットに{1}を与える。オーブは行きと帰りでそれぞれにヒット判定があり、帰りの場合は{2}を与える。")
+                .variable(1, MagicDamage, 40, 25, AP, 0.33)
+                .variable(2, TrueDamage, 40, 25, AP, 0.33)
+                .cd(7, 0)
+                .cost(70, 5);
         FoxFire.update()
-                .description("Ahriの周囲を回る3本の鬼火を放つ。鬼火は5秒間持続し、近くの敵ユニットに自動的に突撃して$1を与える。鬼火が同一対象に突撃した場合、2発目以降は本来の50%分の魔法DMを与える(同一対象に3発hitで合計200%の魔法DM)。Ahriの通常攻撃範囲内に敵Championがいる場合、それらを優先して狙う。")
-                .damage(1, MagicDamage, 40, 25, AP, 0.4);
+                .description("Ahriの周囲を回る3本の鬼火を放つ。鬼火は5秒間持続し、近くの敵ユニットに自動的に突撃して{1}を与える。鬼火が同一対象に突撃した場合、2発目以降は本来の50%分の魔法DMを与える(同一対象に3発hitで合計200%の魔法DM)。Ahriの通常攻撃範囲内に敵Championがいる場合、それらを優先して狙う。")
+                .variable(1, MagicDamage, 40, 25, AP, 0.4)
+                .cd(9, -1)
+                .cost(60, 0);
         Charm.update()
-                .description("指定方向に投げキッスを放ち、当たった敵ユニットに$1を与え、対象を$2して自分の方向に移動させる。また魅了状態の対象には$3が付与される。")
-                .damage(1, MagicDamage, 60, 30, AP, 0.35)
+                .description("指定方向に投げキッスを放ち、当たった敵ユニットに{1}を与え、対象を{2}して自分の方向に移動させる。また魅了状態の対象には{3}が付与される。")
+                .variable(1, MagicDamage, 60, 30, AP, 0.35)
                 .variable(2, Status.Charm, 1, 0.25)
-                .variable(3, Slow, 50, 0);
-        SpiritRush.update();
+                .variable(3, Slow, 50, 0)
+                .cd(12, 0)
+                .cost(50, 15);
+        SpiritRush.update()
+                .description("指定方向にダッシュした後、周囲の敵ユニット(範囲550,敵Championを優先)3体に{1}を与える。このスキルは10秒の間、3回まで連続して使用できる(但し、一度使用する度に1秒のCDが発生する)。2～3発目はマナコスト無しで使用可能。")
+                .variable(1, MagicDamage, 85, 40, AP, 0.35)
+                .cd(110, -15)
+                .cost(100, 0);
+
+        TwinDisciplines.update()
+                .description("増加ADが10以上の時、{1}増加。その後増加AD6毎に{2}増加。APが20以上のとき、通常攻撃にADの8%のMagic Damageが付与される。その後AP6毎にMagic Damageが1%増加する。")
+                .variable(1, SV, 8, 0)
+                .variable(2, SV, 1, 0);
+        MarkOftheAssassin.update()
+                .description("対象の敵ユニットにカマを投げつけ{1}とマーク(6s)を与える。マークが付いた対象に通常攻撃または" + CrescentSlash.name + "でダメージを与えたとき、マークを消費して{2}を与え、「気」が回復する。")
+                .variable(1, MagicDamage, 45, 25, AP, 0.4)
+                .variable(2, MagicDamage, 45, 25, AP, 0.4)
+                .cd(6, -0.5)
+                .cost(SkillCost.Energy, 60, 0);
+        TwilightShroud.update()
+                .description("指定地点に8秒間煙を発生させ範囲内のユニットに以下の効果を与える。AkaliはAR・MR上昇とステルスの効果を得る。敵ユニットにはスローを与える。")
+                .cd(20, 0)
+                .cost(SkillCost.Energy, 80, -5);
+        CrescentSlash.update()
+                .description("周囲の敵ユニットに{1}を与える。")
+                .variable(1, PhysicalDamage, 30, 25, AP, 0.3, AD, 0.6)
+                .cd(7, -1)
+                .cost(SkillCost.Energy, 60, -5);
+        ShadowDance.update()
+                .description("対象の敵ユニットまで高速で移動し{1}を与える。使用時にスタックを消費する。スタックは時間経過・敵Championキル/アシストで増加し最大で3つまでスタックされる。スタック増加時間はCD低減の影響を受ける。")
+                .variable(1, MagicDamage, 100, 75, AP, 0.5)
+                .cd(2, -0.5)
+                .cost(SkillCost.Stack, 1, 0);
     }
 }

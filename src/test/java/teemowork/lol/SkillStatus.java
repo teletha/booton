@@ -9,6 +9,8 @@
  */
 package teemowork.lol;
 
+import static teemowork.lol.Status.*;
+
 import java.util.List;
 
 import js.lang.NativeArray;
@@ -68,6 +70,17 @@ public class SkillStatus {
 
     /**
      * <p>
+     * Retrieve description tokens.
+     * </p>
+     * 
+     * @return
+     */
+    public List getDescriptionTokens() {
+        return tokens;
+    }
+
+    /**
+     * <p>
      * Retrieve description.
      * </p>
      * 
@@ -94,14 +107,15 @@ public class SkillStatus {
         // clear previous version
         this.tokens.clear();
 
-        String[] tokens = text.split("\\$");
+        String[] tokens = text.split("[\\{\\}]");
 
         for (int i = 0; i < tokens.length; i++) {
-            if (i == 0) {
-                this.tokens.add(tokens[0]);
+            String token = tokens[i];
+
+            if (token.length() != 1) {
+                this.tokens.add(token);
             } else {
-                this.tokens.add(new SkillVariable(Integer.parseInt(tokens[i].substring(0, 1))));
-                this.tokens.add(tokens[i].substring(1));
+                this.tokens.add(new SkillVariable(Integer.parseInt(token)));
             }
         }
         return this;
@@ -109,24 +123,72 @@ public class SkillStatus {
 
     /**
      * <p>
-     * Set variable.
+     * Set variable with amplifiers.
      * </p>
      * 
-     * @param id
-     * @param status
-     * @param base
-     * @param diff
-     * @return
+     * @param id A variable identifier.
+     * @param status A variable type.
+     * @param base A base value.
+     * @param diff A diff value.
+     * @param ratioType First amplifier type.
+     * @param ratio First amplifier ration.
+     * @return A chainable API.
      */
     SkillStatus variable(int id, Status status, double base, double diff) {
+        return variable(id, status, base, diff, null, 0);
+    }
+
+    /**
+     * <p>
+     * Set variable with amplifiers.
+     * </p>
+     * 
+     * @param id A variable identifier.
+     * @param status A variable type.
+     * @param base A base value.
+     * @param diff A diff value.
+     * @param ratioType First amplifier type.
+     * @param ratio First amplifier ration.
+     * @return A chainable API.
+     */
+    SkillStatus variable(int id, Status status, double base, double diff, Status ratioType, double ratio) {
+        return variable(id, status, base, diff, ratioType, ratio, null, 0);
+    }
+
+    /**
+     * <p>
+     * Set variable with amplifiers.
+     * </p>
+     * 
+     * @param id A variable identifier.
+     * @param status A variable type.
+     * @param base A base value.
+     * @param diff A diff value.
+     * @param ratioType1 First amplifier type.
+     * @param ratio1 First amplifier ration.
+     * @param ratioType2 Second amplifier type.
+     * @param ratio2 Second amplifier ration.
+     * @return A chainable API.
+     */
+    SkillStatus variable(int id, Status status, double base, double diff, Status ratioType1, double ratio1, Status ratioType2, double ratio2) {
         for (Object token : tokens) {
             if (token instanceof SkillVariable) {
                 SkillVariable variable = (SkillVariable) token;
 
                 if (variable.id == id) {
-                    variable.setStatus(status);
-                    variable.setBase(base);
-                    variable.setDiff(diff);
+                    variable.status = status;
+                    variable.base = base;
+                    variable.diff = diff;
+
+                    if (ratioType1 != null) {
+                        variable.amplifiers.add(ratioType1);
+                        variable.amplifierRatios.add(ratio1);
+                    }
+
+                    if (ratioType2 != null) {
+                        variable.amplifiers.add(ratioType2);
+                        variable.amplifierRatios.add(ratio2);
+                    }
                 }
             }
         }
@@ -135,31 +197,44 @@ public class SkillStatus {
 
     /**
      * <p>
-     * Set damage variable.
+     * Set cooldown time.
      * </p>
      * 
-     * @param id
-     * @param type
-     * @param base
-     * @param diff
-     * @param ratioType
-     * @param ratio
-     * @return
+     * @param base A base time.
+     * @param diff A diff time.
      */
-    SkillStatus damage(int id, Status type, int base, int diff, Status ratioType, double ratio) {
-        for (Object token : tokens) {
-            if (token instanceof SkillVariable) {
-                SkillVariable variable = (SkillVariable) token;
+    SkillStatus cd(double base, double diff) {
+        values.set(CD.ordinal(), base);
+        values.set(CDPerLv.ordinal(), diff);
 
-                if (variable.id == id) {
-                    variable.setStatus(type);
-                    variable.setBase(base);
-                    variable.setDiff(diff);
-                    variable.setRatioType(ratioType);
-                    variable.setRatio(ratio);
-                }
-            }
-        }
+        return this;
+    }
+
+    /**
+     * <p>
+     * Set skill cost.
+     * </p>
+     * 
+     * @param base A base cost.
+     * @param diff A diff cost.
+     */
+    SkillStatus cost(double base, double diff) {
+        return cost(SkillCost.Mana, base, diff);
+    }
+
+    /**
+     * <p>
+     * Set skill cost.
+     * </p>
+     * 
+     * @param base A base cost.
+     * @param diff A diff cost.
+     */
+    SkillStatus cost(SkillCost type, double base, double diff) {
+        values.set(Cost.ordinal(), base);
+        values.set(CostPerLv.ordinal(), diff);
+        values.set(CostType.ordinal(), (double) type.ordinal());
+
         return this;
     }
 }

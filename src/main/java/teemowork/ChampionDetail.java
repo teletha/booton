@@ -28,6 +28,8 @@ import teemowork.lol.Build.Computed;
 import teemowork.lol.Champion;
 import teemowork.lol.Skill;
 import teemowork.lol.SkillKey;
+import teemowork.lol.SkillStatus;
+import teemowork.lol.SkillVariable;
 import teemowork.lol.Status;
 import booton.css.CSS;
 
@@ -37,11 +39,14 @@ import booton.css.CSS;
 public class ChampionDetail extends Page {
 
     /** The displayable status. */
-    private static final Status[] VISIBLE = {Health, Hreg, Mana, Mreg, AD, AS, Critical, LS, AP, CDR, SV, AR, MR,
-            ARPen, MRPen, MS};
+    private static final Status[] VISIBLE = {Health, Hreg, Mana, Mreg, AD, ARPen, ARPenRatio, AS, LS, Critical, AP,
+            MRPen, MRPenRatio, CDR, SV, AR, MR, MS};
 
     /** The status box. */
-    private List<StatusBox> boxies = new ArrayList();
+    private List<StatusView> statuses = new ArrayList();
+
+    /** The skill view. */
+    private List<SkillView> skills = new ArrayList();
 
     /** The your custom build. */
     @Observable
@@ -120,41 +125,19 @@ public class ChampionDetail extends Page {
 
         level = icon.child(Level.class);
 
-        jQuery skills = root.child(SkillTable.class);
-
-        for (final Skill skill : build.champion.skills) {
-            jQuery box = skills.child(SkillRow.class);
-            jQuery iconBox = box.child(SkillIconBox.class);
-            iconBox.child(SkillStyle.Icon.class).css("background-image", "url(" + skill.getIcon() + ")");
-
-            if (skill.key != SkillKey.Passive) {
-                jQuery levels = iconBox.child(SkillStyle.LevelBox.class);
-
-                int size = skill.getMaxLevel();
-
-                for (int i = 0; i < size; i++) {
-                    levels.child(size == 3 ? SkillStyle.LevelMark3.class : SkillStyle.LevelMark.class);
-                }
-            }
-
-            jQuery descriptor = box.child(SkillStyle.DescriptionBox.class);
-            descriptor.child(SkillStyle.Name.class).text(skill.name);
-            descriptor.child(SkillStyle.Text.class).text(skill.getStatus(build.getVersion()).getDescription());
-        }
+        jQuery statusView = root.child(StatusStyle.View.class);
 
         for (Status status : VISIBLE) {
-            boxies.add(new StatusBox(status, root, build));
+            statuses.add(new StatusView(status, statusView));
+        }
+
+        jQuery skillView = root.child(SkillStyle.SkillTable.class);
+
+        for (final Skill skill : build.champion.skills) {
+            skills.add(new SkillView(skill, skillView.child(SkillStyle.SkillRow.class)));
         }
 
         calcurate();
-    }
-
-    /**
-     * <p>
-     * </p>
-     */
-    private void skillLevelUp() {
-
     }
 
     /**
@@ -167,7 +150,11 @@ public class ChampionDetail extends Page {
         // update each status
         level.text(String.valueOf(build.getLevel()));
 
-        for (StatusBox box : boxies) {
+        for (SkillView view : skills) {
+            view.update();
+        }
+
+        for (StatusView box : statuses) {
             box.calcurate();
         }
     }
@@ -181,34 +168,473 @@ public class ChampionDetail extends Page {
     }
 
     /**
+     * @version 2013/02/09 22:59:04
+     */
+    private class SkillView {
+
+        /** The target to desiplay. */
+        private final Skill skill;
+
+        /** The skill level. */
+        private final jQuery[] levels;
+
+        /** The skill text. */
+        private final jQuery text;
+
+        /** The cool down. */
+        private final ValueView cooldown;
+
+        /** The cost. */
+        private final ValueView cost;
+
+        /**
+         * @param skill
+         */
+        private SkillView(final Skill skill, jQuery root) {
+            int size = skill.getMaxLevel();
+
+            this.skill = skill;
+            this.levels = new jQuery[size];
+
+            jQuery iconBox = root.child(SkillStyle.IconBox.class);
+            iconBox.child(SkillStyle.Icon.class).css("background-image", "url(" + skill.getIcon() + ")");
+            iconBox.click(new Listener() {
+
+                @Override
+                public void handler(Event event) {
+                    event.preventDefault();
+                    build.up(skill);
+                }
+            }).on("contextmenu", new Listener() {
+
+                @Override
+                public void handler(Event event) {
+                    event.preventDefault();
+                    build.down(skill);
+                }
+            });
+
+            if (skill.key != SkillKey.Passive) {
+                jQuery levels = iconBox.child(SkillStyle.LevelBox.class);
+
+                for (int i = 0; i < size; i++) {
+                    this.levels[i] = levels.child(size == 3 ? SkillStyle.LevelMark3.class : SkillStyle.LevelMark.class);
+                }
+            }
+
+            jQuery descriptor = root.child(SkillStyle.DescriptionBox.class);
+            descriptor.child(SkillStyle.Name.class).text(skill.name);
+
+            this.text = descriptor.child(SkillStyle.Text.class);
+            this.cooldown = new ValueView("Cooldown", size, descriptor);
+            this.cost = new ValueView("Cost", size, descriptor);
+        }
+
+        /**
+         * <p>
+         * Update this view.
+         * </p>
+         */
+        private void update() {
+            SkillStatus status = skill.getStatus(build.getVersion());
+
+            int level = build.getLevel(skill);
+
+            for (int i = 0; i < levels.length; i++) {
+                if (i < level) {
+                    levels[i].addClass(SkillStyle.Assigned.class);
+                } else {
+                    levels[i].removeClass(SkillStyle.Assigned.class);
+                }
+            }
+
+            cooldown.update(level, status.get(CD), status.get(CDPerLv), build.get(CDR).value);
+            cost.update(level, status.get(Cost), status.get(CostPerLv), 0);
+
+            // text
+            text.empty();
+
+            List tokens = status.getDescriptionTokens();
+
+            for (Object token : tokens) {
+                if (token instanceof SkillVariable) {
+                    buildVariable(text, (SkillVariable) token, skill.getMaxLevel(), level);
+                } else {
+                    text.append(token.toString());
+                }
+            }
+        }
+
+        private void buildVariable(jQuery root, SkillVariable variable, int size, int level) {
+            double base = variable.base;
+            double diff = variable.diff;
+            Status status = variable.status;
+
+            double computed = base + diff * (level - 1);
+            for (int i = 0; i < variable.amplifiers.size(); i++) {
+                computed += variable.amplifierRatios.get(i) * build.get(variable.amplifiers.get(i)).value;
+            }
+
+            root.append(status.name());
+            root.child(SkillStyle.Computed.class).text(status.round(computed) + status.unit);
+
+            if (diff != 0) {
+                root.append("【");
+
+                for (int i = 0; i < size; i++) {
+                    jQuery value = root.child(SkillStyle.Value.class).text(base + diff * i);
+
+                    if (i == level - 1) {
+                        value.addClass(SkillStyle.Current.class);
+                    }
+
+                    if (i != size - 1) {
+                        root.child(SkillStyle.Separator.class).text("/");
+                    }
+                }
+
+                List<Status> amplifiers = variable.amplifiers;
+
+                if (!amplifiers.isEmpty()) {
+                    for (int i = 0; i < amplifiers.size(); i++) {
+                        root.append("(+");
+                        root.append(String.valueOf(variable.amplifierRatios.get(i)));
+                        root.append(" ");
+                        root.append(amplifiers.get(i).name());
+                        root.append(")");
+                    }
+                }
+                root.append("】");
+            }
+        }
+    }
+
+    /**
+     * @version 2013/02/10 10:35:50
+     */
+    private static class ValueView {
+
+        /** The value list. */
+        private final jQuery[] values;
+
+        /**
+         * @param values
+         */
+        private ValueView(String label, int size, jQuery root) {
+            values = new jQuery[size];
+
+            jQuery list = root.child(Styles.Values.class);
+            list.child(Styles.Label.class).text(label);
+
+            for (int i = 0; i < size; i++) {
+                values[i] = list.child(Styles.Value.class);
+
+                if (i != size - 1) {
+                    list.child(Styles.Separator.class).text("/");
+                }
+            }
+        }
+
+        /**
+         * <p>
+         * Update value list.
+         * </p>
+         * 
+         * @param build
+         */
+        private void update(int level, double base, double diff, double reduction) {
+            for (int i = 0; i < values.length; i++) {
+                if (i == level - 1) {
+                    values[i].addClass(Styles.Current.class);
+                } else {
+                    values[i].removeClass(Styles.Current.class);
+                }
+                values[i].text(Math.round((base + diff * i) * (1 - reduction / 100) * 10) / 10);
+            }
+        }
+
+        /**
+         * @version 2013/02/10 11:01:26
+         */
+        private static class Styles {
+
+            /**
+             * @version 2013/02/06 20:03:25
+             */
+            private static class Label extends CSS {
+
+                {
+                    display.inlineBlock();
+                    box.width(4, em);
+                }
+            }
+
+            /**
+             * @version 2013/02/06 20:03:25
+             */
+            private static class Values extends CSS {
+
+                {
+                    display.block();
+                }
+            }
+
+            /**
+             * @version 2013/02/06 20:03:25
+             */
+            private static class Value extends CSS {
+
+                {
+                    display.inlineBlock();
+                    box.width(2.2, em);
+                    text.align.center();
+                }
+            }
+
+            /**
+             * @version 2013/02/06 20:03:25
+             */
+            private static class Separator extends CSS {
+
+                {
+
+                }
+            }
+
+            /**
+             * @version 2013/02/06 20:03:25
+             */
+            private static class Current extends CSS {
+
+                {
+                    font.color(rgba(160, 123, 1, 1));
+                }
+            }
+        }
+    }
+
+    /**
+     * @version 2013/02/06 18:46:37
+     */
+    private static class SkillStyle {
+
+        /** The skill icon size. */
+        private static final int IconSize = 45;
+
+        /** The level box height. */
+        private static final int LevelBoxHeight = 5;
+
+        /**
+         * @version 2013/02/02 11:27:13
+         */
+        private static class SkillTable extends CSS {
+
+            {
+                display.tableCell();
+            }
+        }
+
+        /**
+         * @version 2013/02/02 11:27:13
+         */
+        private static class SkillRow extends CSS {
+
+            {
+                display.block();
+                margin.bottom(1, em);
+            }
+        }
+
+        /**
+         * @version 2013/02/06 18:51:27
+         */
+        private static class Icon extends CSS {
+
+            {
+                display.block();
+                box.size(IconSize, px);
+                background.contain().size(IconSize, px);
+                border.radius(10, px).color(50, 50, 50).width(2, px).solid();
+            }
+        }
+
+        /**
+         * @version 2013/02/02 11:27:13
+         */
+        private static class LevelBox extends CSS {
+
+            {
+                display.table();
+                box.width(IconSize, px).height(LevelBoxHeight, px);
+                border.width(1, px).solid().color.black();
+                margin.top(2, px).bottom(5, px);
+            }
+        }
+
+        /**
+         * @version 2013/02/02 11:27:13
+         */
+        private static class LevelMark extends CSS {
+
+            {
+                display.tableCell();
+                box.width(IconSize / 5, px).height(LevelBoxHeight, px);
+                borderLeft.solid().color.black().width(1, px);
+
+                while (firstChild()) {
+                    border.none();
+                }
+            }
+        }
+
+        /**
+         * @version 2013/02/02 11:27:13
+         */
+        private static class LevelMark3 extends LevelMark {
+
+            {
+                box.width(IconSize / 3, px);
+            }
+        }
+
+        /**
+         * @version 2013/02/09 23:26:39
+         */
+        private static class Assigned extends CSS {
+
+            {
+                background.image(linear(rgba(240, 192, 28, 1), rgba(160, 123, 1, 1)));
+            }
+        }
+
+        /**
+         * @version 2013/02/02 11:27:13
+         */
+        private static class IconBox extends CSS {
+
+            {
+                display.tableCell();
+                padding.right(IconSize / 5, px);
+            }
+        }
+
+        /**
+         * @version 2013/02/02 11:27:13
+         */
+        private static class DescriptionBox extends CSS {
+
+            {
+                display.tableCell();
+                text.verticalAlign.top();
+            }
+        }
+
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Name extends CSS {
+
+            {
+                display.block();
+                margin.bottom(0.2, em);
+            }
+        }
+
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Text extends CSS {
+
+            {
+
+            }
+        }
+
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Cost extends CSS {
+
+            {
+
+            }
+        }
+
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Range extends CSS {
+
+            {
+
+            }
+        }
+
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Computed extends CSS {
+
+            {
+
+            }
+        }
+
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Value extends CSS {
+
+            {
+                text.align.center();
+            }
+        }
+
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Separator extends CSS {
+
+            {
+
+            }
+        }
+
+        /**
+         * @version 2013/02/06 20:03:25
+         */
+        private static class Current extends CSS {
+
+            {
+                font.color(rgba(160, 123, 1, 1));
+            }
+        }
+    }
+
+    /**
      * @version 2013/01/21 16:29:15
      */
-    private static class StatusBox {
+    private class StatusView {
 
         /** The target to display. */
         private final Status status;
 
         /** The value for curernt Lv. */
-        private jQuery current;
+        private final jQuery current;
 
         /** The value for per Lv. */
-        private jQuery perLv;
-
-        /** The build. */
-        private final Build build;
+        private final jQuery perLv;
 
         /**
          * @param name
          */
-        private StatusBox(Status status, jQuery root, Build build) {
-            jQuery box = root.child(Box.class);
-            box.child(Name.class).text(status.name());
+        private StatusView(Status status, jQuery root) {
+            jQuery box = root.child(StatusStyle.Box.class);
+            box.child(StatusStyle.Name.class).text(status.name());
 
             this.status = status;
-            this.current = box.child(Value.class);
-            this.perLv = box.child(Value.class);
-            this.build = build;
-
+            this.current = box.child(StatusStyle.Value.class);
+            this.perLv = box.child(StatusStyle.Value.class);
         }
 
         /**
@@ -222,33 +648,51 @@ public class ChampionDetail extends Page {
             this.current.text(value.value());
             this.perLv.text("(+" + value.increased + ")");
         }
+    }
+
+    /**
+     * @version 2013/02/11 0:12:14
+     */
+    private static class StatusStyle {
 
         /**
-         * @version 2013/01/21 16:33:33
+         * @version 2013/02/11 0:02:30
          */
-        private static class Box extends CSS {
-
-            {
-                display.block();
-                box.width(240, px);
-            }
-        }
-
-        /**
-         * @version 2013/01/21 16:33:33
-         */
-        private static class Name extends CSS {
+        class View extends CSS {
 
             {
                 display.tableCell();
-                box.width(50, px);
+                box.width(13, em);
+                text.verticalAlign.top();
             }
         }
 
         /**
          * @version 2013/01/21 16:33:33
          */
-        private static class Value extends CSS {
+        class Box extends CSS {
+
+            {
+                display.block();
+                margin.bottom(4, px);
+            }
+        }
+
+        /**
+         * @version 2013/01/21 16:33:33
+         */
+        class Name extends CSS {
+
+            {
+                display.tableCell();
+                box.width(5, em);
+            }
+        }
+
+        /**
+         * @version 2013/01/21 16:33:33
+         */
+        class Value extends CSS {
 
             {
                 display.tableCell();
@@ -294,6 +738,7 @@ public class ChampionDetail extends Page {
             background.contain().size(80, px).horizontal(-5, px).vertical(-5, px);
             border.radius(10, px).color(50, 50, 50).width(2, px).solid();
             position.relative();
+            margin.bottom(1, em);
         }
     }
 
@@ -314,176 +759,6 @@ public class ChampionDetail extends Page {
             while (selection()) {
                 background.color.transparent();
             }
-        }
-    }
-
-    /**
-     * @version 2013/02/06 19:56:37
-     */
-    private static class StatusStyle {
-
-    }
-
-    /**
-     * @version 2013/02/06 18:46:37
-     */
-    private static class SkillStyle {
-
-        /** The skill icon size. */
-        private static final int IconSize = 45;
-
-        /** The level box height. */
-        private static final int LevelBoxHeight = 5;
-
-        /**
-         * @version 2013/02/06 18:51:27
-         */
-        private static class Icon extends CSS {
-
-            {
-                display.block();
-                box.size(IconSize, px);
-                background.contain().size(IconSize, px);
-                border.radius(10, px).color(50, 50, 50).width(2, px).solid();
-                margin.right(5, px);
-            }
-        }
-
-        /**
-         * @version 2013/02/02 11:27:13
-         */
-        private static class LevelBox extends CSS {
-
-            {
-                display.table();
-                box.width(IconSize + 2, px).height(LevelBoxHeight, px);
-                border.width(1, px).solid().color.black();
-            }
-        }
-
-        /**
-         * @version 2013/02/02 11:27:13
-         */
-        private static class LevelMark extends CSS {
-
-            {
-                display.tableCell();
-                box.width(IconSize / 5, px).height(LevelBoxHeight, px);
-                borderLeft.solid().color.black().width(1, px);
-                background.image(linear(rgba(240, 192, 28, 1), rgba(160, 123, 1, 1)));
-
-                while (firstChild()) {
-                    border.none();
-                }
-            }
-        }
-
-        /**
-         * @version 2013/02/02 11:27:13
-         */
-        private static class LevelMark3 extends LevelMark {
-
-            {
-                // display.tableCell();
-                box.width(IconSize / 3, px);
-                // borderLeft.solid().color.black().width(1, px);
-                // background.image(linear(rgba(240, 192, 28, 1), rgba(160, 123, 1, 1)));
-                //
-                // while (firstChild()) {
-                // border.none();
-                // }
-            }
-        }
-
-        /**
-         * @version 2013/02/02 11:27:13
-         */
-        private static class DescriptionBox extends CSS {
-
-            {
-                display.tableCell();
-                text.verticalAlign.top();
-            }
-        }
-
-        /**
-         * @version 2013/02/06 20:03:25
-         */
-        private static class Name extends CSS {
-
-            {
-                display.block();
-            }
-        }
-
-        /**
-         * @version 2013/02/06 20:03:25
-         */
-        private static class Text extends CSS {
-
-            {
-
-            }
-        }
-
-        /**
-         * @version 2013/02/06 20:03:25
-         */
-        private static class Cost extends CSS {
-
-            {
-
-            }
-        }
-
-        /**
-         * @version 2013/02/06 20:03:25
-         */
-        private static class Cooldown extends CSS {
-
-            {
-
-            }
-        }
-
-        /**
-         * @version 2013/02/06 20:03:25
-         */
-        private static class Range extends CSS {
-
-            {
-
-            }
-        }
-    }
-
-    /**
-     * @version 2013/02/02 11:27:13
-     */
-    private static class SkillTable extends CSS {
-
-        {
-            display.table();
-        }
-    }
-
-    /**
-     * @version 2013/02/02 11:27:13
-     */
-    private static class SkillRow extends CSS {
-
-        {
-            display.tableRow();
-        }
-    }
-
-    /**
-     * @version 2013/02/02 11:27:13
-     */
-    private static class SkillIconBox extends CSS {
-
-        {
-            display.tableCell();
         }
     }
 }

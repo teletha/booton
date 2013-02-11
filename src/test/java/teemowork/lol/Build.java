@@ -69,6 +69,8 @@ public class Build extends Notifiable {
      */
     public Build(Champion champion) {
         this.champion = champion;
+
+        items[0] = Item.DeathfireGrasp;
     }
 
     /**
@@ -162,6 +164,54 @@ public class Build extends Notifiable {
         if (0 <= index && index <= 5) {
             items[index] = item;
             itemCounts[index] = 1;
+
+            fire();
+        }
+    }
+
+    /**
+     * <p>
+     * Increase skill level.
+     * </p>
+     * 
+     * @param skill
+     */
+    public void up(Skill skill) {
+        int index = skill.key.ordinal();
+        int now = skillLevel[index];
+
+        if (now < skill.getMaxLevel()) {
+            skillLevel[index] = now + 1;
+
+            fire();
+        }
+    }
+
+    /**
+     * <p>
+     * Retrieve skill level.
+     * </p>
+     * 
+     * @param skill A target skill.
+     * @return A skill level.
+     */
+    public int getLevel(Skill skill) {
+        return skillLevel[skill.key.ordinal()];
+    }
+
+    /**
+     * <p>
+     * Decrease skill level.
+     * </p>
+     * 
+     * @param skill
+     */
+    public void down(Skill skill) {
+        int index = skill.key.ordinal();
+        int now = skillLevel[index];
+
+        if (1 < now) {
+            skillLevel[index] = now - 1;
 
             fire();
         }
@@ -268,32 +318,11 @@ public class Build extends Notifiable {
          * @param value A computed value.
          */
         private Computed(double base, double value, Status status) {
-            this.base = round(base, status.precision);
-            this.value = round(value, status.precision);
-            this.increased = round(value - base, status.precision);
+            this.base = status.round(base);
+            this.value = status.round(value);
+            this.increased = status.round(value - base);
 
             cache.set(status.ordinal(), this);
-        }
-
-        /**
-         * <p>
-         * Round decimel.
-         * </p>
-         * 
-         * @param value
-         * @param precision
-         * @return
-         */
-        private double round(double value, int precision) {
-            int round = 1;
-
-            for (int i = 0; i < precision; i++) {
-                round *= 10;
-            }
-
-            value *= round;
-            value = Math.round(value);
-            return value / round;
         }
 
         /**

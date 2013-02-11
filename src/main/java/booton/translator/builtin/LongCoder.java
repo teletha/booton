@@ -7,15 +7,16 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package teemowork.lol;
+package booton.translator.builtin;
+
+import booton.translator.Translator;
 
 /**
- * @version 2013/01/27 20:39:28
+ * @version 2013/01/16 11:54:29
  */
-public enum SkillCost {
-    Mana,
+class LongCoder extends Translator<Long> {
 
-    Energy,
-
-    Stack;
+    public String valueOf(long param0) {
+        return param(0);
+    }
 }
