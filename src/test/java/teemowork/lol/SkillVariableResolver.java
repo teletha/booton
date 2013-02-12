@@ -172,4 +172,44 @@ public abstract class SkillVariableResolver {
             super(new int[] {1, 4, 7, 10, 13, 16}, base, diff);
         }
     }
+
+    /**
+     * @version 2013/02/12 11:37:34
+     */
+    public static class Per1Level extends SkillVariableResolver {
+
+        /** The values. */
+        private final int[] values;
+
+        /**
+         * @param values
+         */
+        public Per1Level(int[] values) {
+            this.values = values;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int getSize() {
+            return 18;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public double compute(int skillLevel) {
+            return values[skillLevel];
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isSkillLevelBased() {
+            return false;
+        }
+    }
 }

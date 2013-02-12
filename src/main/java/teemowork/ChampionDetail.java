@@ -362,7 +362,7 @@ public class ChampionDetail extends Page {
             // All values
             double[] values = resolver.enumerate();
 
-            if (values.length != 1 || !amplifiers.isEmpty()) {
+            if (1 < values.length || !amplifiers.isEmpty()) {
                 root.append("(");
 
                 for (int i = 0; i < values.length; i++) {

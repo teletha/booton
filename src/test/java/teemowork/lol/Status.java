@@ -106,7 +106,7 @@ public enum Status {
 
     ARRatio,
 
-    ARReduction,
+    ARReduction("AR減少"),
 
     MR,
 
@@ -156,27 +156,33 @@ public enum Status {
 
     EregRatio,
 
+    Damage(""),
+
     PhysicalDamage("物理DM"),
 
     MagicDamage("魔法DM"),
 
     TrueDamage("TrueDM"),
 
-    RestoreHealth("Healthを回復"),
+    RestoreHealth("Health"),
 
-    RestoreMana("Manaを回復"),
+    RestoreMana("Mana"),
 
-    RestoreEnergy("気を回復"),
+    RestoreEnergy("気"),
 
     DamageReductionRation("DM減少", 0, "%"),
 
     PhysicalDamageReduction("物理DM減少"),
+
+    Shield("シールド"),
 
     Lv,
 
     LvPerLv,
 
     LvRatio,
+
+    Tenacity(null, 0, "%"),
 
     Charm("魅了", 3, "秒"),
 
@@ -194,13 +200,17 @@ public enum Status {
 
     Chill,
 
-    Count(""),
+    Count("", 3, ""),
 
     Time("", 3, "秒"),
 
     CDRAwareTime("", 3, "秒"),
 
     TargetHealth("", 3, "%"),
+
+    TargetCurrentHealth("対象の現在のHealth", 3, "%"),
+
+    MissingHealth("Health損耗率", 3, "%"),
 
     Radius("範囲"),
 
@@ -292,7 +302,7 @@ public enum Status {
         computed = round(computed);
 
         if (this == RestoreEnergy || this == RestoreHealth || this == RestoreMana) {
-            return computed + "の" + name;
+            return name + "が" + computed + "回復";
         }
 
         if (this == Gold) {
