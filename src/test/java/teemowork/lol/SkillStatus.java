@@ -224,6 +224,15 @@ public class SkillStatus {
     }
 
     SkillStatus variable(int id, Status status, SkillVariableResolver resolver, Status ratioType1, double ratio1, Status ratioType2, double ratio2) {
+        return variable(id, status, resolver, ratioType1 == null ? null : new SkillAmplifier(ratioType1, ratio1, 0), ratioType2 == null ? null
+                : new SkillAmplifier(ratioType2, ratio2, 0));
+    }
+
+    SkillStatus variable(int id, Status status, double base, double diff, SkillAmplifier amplifier) {
+        return variable(id, status, new SimpleValues(skill.getMaxLevel(), base, diff), amplifier, null);
+    }
+
+    SkillStatus variable(int id, Status status, SkillVariableResolver resolver, SkillAmplifier amplifier1, SkillAmplifier amplifier2) {
         List[] lists = {passive, active};
 
         for (List list : lists) {
@@ -235,14 +244,12 @@ public class SkillStatus {
                         variable.status = status;
                         variable.resolver = resolver;
 
-                        if (ratioType1 != null) {
-                            variable.amplifiers.add(ratioType1);
-                            variable.amplifierRatios.add(ratio1);
+                        if (amplifier1 != null) {
+                            variable.amplifiers.add(amplifier1);
                         }
 
-                        if (ratioType2 != null) {
-                            variable.amplifiers.add(ratioType2);
-                            variable.amplifierRatios.add(ratio2);
+                        if (amplifier2 != null) {
+                            variable.amplifiers.add(amplifier2);
                         }
                     }
                 }

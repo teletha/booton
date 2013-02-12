@@ -1806,6 +1806,34 @@ public enum Skill {
         return status;
     }
 
+    /**
+     * <p>
+     * Create skill amplifier.
+     * </p>
+     * 
+     * @param status A status type.
+     * @param base A base value of amplifier rate.
+     * @param diff A diff value of amplifier rate.
+     * @return
+     */
+    private static final SkillAmplifier amplify(Status status, double base) {
+        return amplify(status, base);
+    }
+
+    /**
+     * <p>
+     * Create skill amplifier.
+     * </p>
+     * 
+     * @param status A status type.
+     * @param base A base value of amplifier rate.
+     * @param diff A diff value of amplifier rate.
+     * @return
+     */
+    private static final SkillAmplifier amplify(Status status, double base, double diff) {
+        return new SkillAmplifier(status, base, diff);
+    }
+
     static {
         version = P0000;
         EssenceTheft.update()
@@ -2380,7 +2408,7 @@ public enum Skill {
                 .cd(7);
         Sadism.update()
                 .active("12秒かけて{1}し、{2}を得る。")
-                .variable(1, RestoreHealth, 0, 0, Health, 0.4)
+                .variable(1, RestoreHealth, 0, 0, amplify(Health, 0.4, 0.15))
                 .variable(2, MSRatio, 15, 10)
                 .cd(75)
                 .cost(SkillCost.CurrentHealth, 20, 0);
