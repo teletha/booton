@@ -24,11 +24,8 @@ public class SkillVariable {
     /** The variable type. */
     public Status status;
 
-    /** The base value. */
-    public double base;
-
-    /** The value of diff for each stack. */
-    public double diff;
+    /** The value enumerator. */
+    public SkillVariableResolver resolver;
 
     /** The amplifier types. */
     public final List<Status> amplifiers = new ArrayList();

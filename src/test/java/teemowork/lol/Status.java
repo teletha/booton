@@ -28,6 +28,8 @@ public enum Status {
 
     ASRatio,
 
+    ASReduction("AS減少", 0, "%"),
+
     AD("Attack Damage"),
 
     ADPerLv,
@@ -170,21 +172,31 @@ public enum Status {
 
     LvRatio,
 
-    Charm(3),
+    Charm("魅了状態", 3, "秒"),
 
     Stun("スタン", 3, "秒"),
 
     Snare("スネア", 3, "秒"),
 
-    KnockUp("打ち上げ", 3, "秒"),
+    Knockup("打ち上げ", 3, "秒"),
 
-    KnockBack(3),
+    Knockback,
 
-    Slow(null, 0, "%"),
+    Slow("スロー", 0, "%"),
+
+    Chill,
 
     Time("", 3, "秒"),
 
-    TargetHealth("", 3, "%");
+    CDRAwareTime("", 3, "秒"),
+
+    TargetHealth("", 3, "%"),
+
+    Radius("範囲"),
+
+    Length("長さ"),
+
+    Gold(null, 0, "Gold");
 
     /** The status name. */
     public final String name;
@@ -254,5 +266,35 @@ public enum Status {
      */
     public Status per() {
         return Status.valueOf(name() + "PerLv");
+    }
+
+    /**
+     * <p>
+     * Format human-readable status with the specified value.
+     * </p>
+     * 
+     * @param computed A value to display.
+     * @return A formatted text.
+     */
+    public String format(double computed) {
+        computed = round(computed);
+
+        if (this == Radius || this == Length) {
+            return name + computed;
+        }
+
+        // Other
+        String text = "";
+
+        if (computed != 0) {
+            text += computed + unit;
+
+            if (name.length() != 0) {
+                text += "の";
+            }
+        }
+        text += name;
+
+        return text;
     }
 }

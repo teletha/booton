@@ -21,6 +21,9 @@ import js.util.ArrayList;
  */
 public class SkillStatus {
 
+    /** The associated skill. */
+    public final Skill skill;
+
     /** The value store. */
     private NativeArray<Double> values;
 
@@ -39,7 +42,9 @@ public class SkillStatus {
     /**
      * @param name
      */
-    SkillStatus(SkillStatus previous) {
+    SkillStatus(Skill skill, SkillStatus previous) {
+        this.skill = skill;
+
         if (previous != null) {
             values = previous.values.copy();
             passive = previous.passive;
@@ -83,7 +88,7 @@ public class SkillStatus {
                 SkillVariable variable = (SkillVariable) token;
 
                 if (variable.status == status) {
-                    return variable.base * (level);
+                    return variable.resolver.compute(level);
                 }
             }
         }
@@ -110,44 +115,38 @@ public class SkillStatus {
      * </p>
      */
     SkillStatus passive(String text) {
-        // clear previous version
-        this.passive.clear();
-
-        String[] tokens = text.split("[\\{\\}]");
-
-        for (int i = 0; i < tokens.length; i++) {
-            String token = tokens[i];
-
-            if (token.length() != 1) {
-                this.passive.add(token);
-            } else {
-                this.passive.add(new SkillVariable(Integer.parseInt(token)));
-            }
-        }
-        return this;
+        return parse(passive, text);
     }
 
     /**
      * <p>
-     * Describe this ability.
+     * Set skill active ability.
      * </p>
      * 
      * @param text
      * @return
      */
     SkillStatus active(String text) {
+        return parse(active, text);
+    }
+
+    /**
+     * <p>
+     * Parse skill text.
+     * </p>
+     * 
+     * @param tokens A list of text tokens.
+     * @param text A skill text.
+     */
+    private SkillStatus parse(List tokens, String text) {
         // clear previous version
-        this.active.clear();
+        tokens.clear();
 
-        String[] tokens = text.split("[\\{\\}]");
-
-        for (int i = 0; i < tokens.length; i++) {
-            String token = tokens[i];
-
-            if (token.length() != 1) {
-                this.active.add(token);
+        for (String token : text.split("[\\{\\}]")) {
+            if (token.length() != 1 || !Character.isDigit(token.charAt(0))) {
+                tokens.add(token);
             } else {
-                this.active.add(new SkillVariable(Integer.parseInt(token)));
+                tokens.add(new SkillVariable(Integer.parseInt(token)));
             }
         }
         return this;
@@ -203,6 +202,14 @@ public class SkillStatus {
      * @return A chainable API.
      */
     SkillStatus variable(int id, Status status, double base, double diff, Status ratioType1, double ratio1, Status ratioType2, double ratio2) {
+        return variable(id, status, new SimpleValues(skill.getMaxLevel(), base, diff), ratioType1, ratio1, ratioType2, ratio2);
+    }
+
+    SkillStatus variable(int id, Status status, SkillVariableResolver resolver) {
+        return variable(id, status, resolver, null, 0, null, 0);
+    }
+
+    SkillStatus variable(int id, Status status, SkillVariableResolver resolver, Status ratioType1, double ratio1, Status ratioType2, double ratio2) {
         List[] lists = {passive, active};
 
         for (List list : lists) {
@@ -212,8 +219,7 @@ public class SkillStatus {
 
                     if (variable.id == id) {
                         variable.status = status;
-                        variable.base = base;
-                        variable.diff = diff;
+                        variable.resolver = resolver;
 
                         if (ratioType1 != null) {
                             variable.amplifiers.add(ratioType1);
@@ -317,7 +323,19 @@ public class SkillStatus {
      * @param range
      */
     SkillStatus range(double range) {
+        return range(range, 0);
+    }
+
+    /**
+     * <p>
+     * Set skill range.
+     * </p>
+     * 
+     * @param range
+     */
+    SkillStatus range(double range, double diff) {
         values.set(Range.ordinal(), range);
+        values.set(RangePerLv.ordinal(), diff);
 
         return this;
     }
@@ -344,5 +362,47 @@ public class SkillStatus {
         isToggle = true;
 
         return this;
+    }
+
+    /**
+     * @version 2013/02/12 10:41:24
+     */
+    private static class SimpleValues extends SkillVariableResolver {
+
+        /** The skill size. */
+        private final int size;
+
+        /** The base value. */
+        private final double base;
+
+        /** The value of diff for each stack. */
+        private final double diff;
+
+        /**
+         * @param size A size of skill level.
+         * @param base A base value.
+         * @param diff A diff value.
+         */
+        private SimpleValues(int size, double base, double diff) {
+            this.size = size;
+            this.base = base;
+            this.diff = diff;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int getSize() {
+            return diff == 0 ? 1 : size;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public double compute(int skillLevel) {
+            return base + diff * skillLevel;
+        }
     }
 }

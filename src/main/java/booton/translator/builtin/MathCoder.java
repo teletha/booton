@@ -37,6 +37,31 @@ class MathCoder extends Translator<Math> {
      * @param a the argument whose absolute value is to be determined
      * @return the absolute value of the argument.
      */
+    public String abs(float a) {
+        return "Math.abs(" + param(0) + ")";
+    }
+
+    /**
+     * <p>
+     * Returns the absolute value of a {@code double} value. If the argument is not negative, the
+     * argument is returned. If the argument is negative, the negation of the argument is returned.
+     * Special cases:
+     * </p>
+     * <ul>
+     * <li>If the argument is positive zero or negative zero, the result is positive zero.
+     * <li>If the argument is infinite, the result is positive infinity.
+     * <li>If the argument is NaN, the result is NaN.
+     * </ul>
+     * <p>
+     * In other words, the result is the same as the value of the expression:
+     * </p>
+     * <p>
+     * {@code Double.longBitsToDouble((Double.doubleToLongBits(a)<<1)>>>1)}
+     * </p>
+     * 
+     * @param a the argument whose absolute value is to be determined
+     * @return the absolute value of the argument.
+     */
     public String abs(double a) {
         return "Math.abs(" + param(0) + ")";
     }

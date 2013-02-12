@@ -30,6 +30,7 @@ import teemowork.lol.Skill;
 import teemowork.lol.SkillKey;
 import teemowork.lol.SkillStatus;
 import teemowork.lol.SkillVariable;
+import teemowork.lol.SkillVariableResolver;
 import teemowork.lol.Status;
 import booton.css.CSS;
 
@@ -275,7 +276,7 @@ public class ChampionDetail extends Page {
 
                 for (Object token : status.passive) {
                     if (token instanceof SkillVariable) {
-                        buildVariable(passive, (SkillVariable) token, skill.getMaxLevel(), level);
+                        buildVariable(passive, (SkillVariable) token, level);
                     } else {
                         passive.append(token.toString());
                     }
@@ -291,13 +292,20 @@ public class ChampionDetail extends Page {
 
             for (Object token : status.active) {
                 if (token instanceof SkillVariable) {
-                    buildVariable(active, (SkillVariable) token, skill.getMaxLevel(), level);
+                    buildVariable(active, (SkillVariable) token, level);
                 } else {
                     active.append(token.toString());
                 }
             }
         }
 
+        /**
+         * @param root
+         * @param label
+         * @param skill
+         * @param status
+         * @param reduction
+         */
         private void buildValues(jQuery root, String label, SkillStatus skill, Status status, double reduction) {
             root.empty();
 
@@ -324,35 +332,47 @@ public class ChampionDetail extends Page {
             }
         }
 
-        private void buildVariable(jQuery root, SkillVariable variable, int size, int level) {
-            double base = variable.base;
-            double diff = variable.diff;
+        /**
+         * @param root
+         * @param variable
+         * @param size
+         * @param skillLevel
+         */
+        private void buildVariable(jQuery root, SkillVariable variable, int skillLevel) {
+            SkillVariableResolver resolver = variable.resolver;
+            Status status = variable.status;
             List<Status> amplifiers = variable.amplifiers;
 
-            Status status = variable.status;
+            if (!resolver.isSkillLevelBased()) {
+                skillLevel = resolver.convertLevel(build.getLevel());
+            }
 
-            double computed = base + diff * Math.max(0, (level - 1));
+            // Computed value
+            double computed = resolver.compute(Math.max(0, (skillLevel - 1)));
 
             for (int i = 0; i < amplifiers.size(); i++) {
                 computed += variable.amplifierRatios.get(i) * build.get(amplifiers.get(i)).value;
             }
 
-            root.child(SkillStyle.Computed.class).text(status.round(computed) + status.unit);
-            if (!status.name.isEmpty()) {
-                root.append("の");
+            if (status == CDRAwareTime) {
+                computed = computed * (1 - build.get(CDR).value / 100);
             }
-            root.append(status.name);
+            root.child(SkillStyle.Computed.class).text(status.format(computed));
 
-            if (diff != 0 || !amplifiers.isEmpty()) {
+            // All values
+            double[] values = resolver.enumerate();
+
+            if (values.length != 1 || !amplifiers.isEmpty()) {
                 root.append("(");
-                for (int i = 0; i < size; i++) {
-                    jQuery value = root.child(SkillStyle.Value.class).text(base + diff * i);
 
-                    if (i == level - 1) {
+                for (int i = 0; i < values.length; i++) {
+                    jQuery value = root.child(SkillStyle.Value.class).text(values[i]);
+
+                    if (i == skillLevel - 1) {
                         value.addClass(SkillStyle.Current.class);
                     }
 
-                    if (i != size - 1) {
+                    if (i != values.length - 1) {
                         root.child(SkillStyle.Separator.class).text("/");
                     }
                 }

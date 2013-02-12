@@ -12,6 +12,9 @@ package teemowork.lol;
 import static teemowork.lol.SkillKey.*;
 import static teemowork.lol.Status.*;
 import static teemowork.lol.Version.*;
+import teemowork.lol.SkillVariableResolver.Per3Level;
+import teemowork.lol.SkillVariableResolver.Per4Level;
+import teemowork.lol.SkillVariableResolver.Per6Level;
 
 /**
  * @version 2013/01/27 20:32:01
@@ -1796,7 +1799,7 @@ public enum Skill {
      * @return A champion descriptor.
      */
     SkillStatus update() {
-        SkillStatus status = new SkillStatus(getStatus(version));
+        SkillStatus status = new SkillStatus(this, getStatus(version));
 
         versions[version.ordinal()] = status;
 
@@ -1823,7 +1826,7 @@ public enum Skill {
                 .cost(60, 0)
                 .range(800);
         Charm.update()
-                .active("指定方向に投げキッスを放ち、当たった敵ユニットに{1}を与え、対象を{2}して自分の方向に移動させる。また魅了状態の対象には{3}が付与される。")
+                .active("指定方向に投げキッスを放ち、当たった敵ユニットに{1}を与え、対象を{2}にして自分の方向に移動させる。また" + Charm + "の対象には{3}が付与される。")
                 .variable(1, MagicDamage, 60, 30, AP, 0.35)
                 .variable(2, Status.Charm, 1, 0.25)
                 .variable(3, Slow, 50, 0)
@@ -1831,8 +1834,9 @@ public enum Skill {
                 .cost(50, 15)
                 .range(975);
         SpiritRush.update()
-                .active("指定方向にダッシュした後、周囲の敵ユニット(範囲550,敵Championを優先)3体に{1}を与える。このスキルは10秒の間、3回まで連続して使用できる(但し、一度使用する度に1秒のCDが発生する)。2～3発目はマナコスト無しで使用可能。")
+                .active("指定方向にダッシュした後、{2}の敵ユニット(敵Championを優先)3体に{1}を与える。このスキルは10秒の間、3回まで連続して使用できる(但し、一度使用する度に1秒のCDが発生する)。2～3発目はマナコスト無しで使用可能。")
                 .variable(1, MagicDamage, 85, 40, AP, 0.35)
+                .variable(2, Radius, 500, 0)
                 .cd(110, -15)
                 .cost(100, 0)
                 .range(450);
@@ -1843,56 +1847,63 @@ public enum Skill {
                 .variable(2, SV, 1, 0)
                 .variable(3, MagicDamage, 0, 0, AD, 0.08);
         MarkOftheAssassin.update()
-                .active("対象の敵ユニットにカマを投げつけ{1}とマーク(6s)を与える。マークが付いた対象に通常攻撃または" + CrescentSlash.name + "でダメージを与えたとき、マークを消費して{2}を与え、{3}する。")
+                .active("対象の敵ユニットにカマを投げつけ{1}とマークを{4}を与える。マークが付いた対象に通常攻撃または" + CrescentSlash.name + "でダメージを与えたとき、マークを消費して{2}を与え、{3}する。")
                 .variable(1, MagicDamage, 45, 25, AP, 0.4)
                 .variable(2, MagicDamage, 45, 25, AP, 0.4)
                 .variable(3, RestoreEnergy, 20, 5)
+                .variable(4, Time, 6, 0)
                 .cd(6, -0.5)
                 .cost(SkillCost.Energy, 60, 0)
                 .range(600);
         TwilightShroud.update()
-                .active("指定地点に8秒間煙を発生させ範囲内のユニットに以下の効果を与える。AkaliはAR・MR上昇とステルスの効果を得る。敵ユニットにはスローを与える。")
+                .active("指定地点に8秒間煙を発生させ{1}のユニットに以下の効果を与える。Akaliは{2}と{3}、ステルスの効果を得る。敵ユニットには{4}を与える。")
+                .variable(1, Radius, 300, 0)
+                .variable(2, AR, 10, 10)
+                .variable(3, MR, 10, 10)
+                .variable(4, Slow, 14, 4)
                 .cd(20, 0)
                 .cost(SkillCost.Energy, 80, -5)
                 .range(700);
         CrescentSlash.update()
-                .active("周囲の敵ユニットに{1}を与える。")
+                .active("{2}の敵ユニットに{1}を与える。")
                 .variable(1, PhysicalDamage, 30, 25, AP, 0.3, AD, 0.6)
+                .variable(2, Radius, 325, 0)
                 .cd(7, -1)
-                .cost(SkillCost.Energy, 60, -5)
-                .range(325);
+                .cost(SkillCost.Energy, 60, -5);
         ShadowDance.update()
-                .active("対象の敵ユニットまで高速で移動し{1}を与える。使用時にチャージを消費する。チャージは時間経過・敵Championキル/アシストで増加し最大で3つまでチャージされる。チャージ増加時間はCD低減の影響を受ける。")
+                .active("対象の敵ユニットまで高速で移動し{1}を与える。使用時にチャージを消費する。チャージは{2}毎に又は敵Championキル/アシストで増加し最大で3つまでチャージされる。チャージ増加時間はCD低減の影響を受ける。")
                 .variable(1, MagicDamage, 100, 75, AP, 0.5)
+                .variable(2, CDRAwareTime, 25, -5)
                 .cd(2, -0.5)
                 .cost(SkillCost.Charge, 1, 0)
                 .range(800);
 
         Trample.update()
-                .passive("スキルを使用すると3秒間他のユニットをすり抜けられるようになり、周囲の敵ユニットと建物に毎秒{1}を与える。ミニオンとモンスターに対しては与えるダメージが2倍になる。")
+                .passive("スキルを使用すると3秒間他のユニットをすり抜けられるようになり、{2}の敵ユニットと建物に毎秒{1}を与える。ミニオンとモンスターに対しては与えるダメージが2倍になる。")
                 .variable(1, MagicDamage, 6, 0, AP, 0.1, Lv, 1)
-                .range(182.5);
+                .variable(2, Radius, 182.5, 0);
         Pulverize.update()
-                .active("近くの敵ユニットに{1}を与え、{2}後に{3}を与える。")
+                .active("{4}の敵ユニットに{1}を与え、{2}後に{3}を与える。")
                 .variable(1, MagicDamage, 60, 45, AP, 0.5)
-                .variable(2, KnockUp, 1, 0)
+                .variable(2, Knockup, 1, 0)
                 .variable(3, Stun, 0.5, 0)
+                .variable(4, Radius, 365, 0)
                 .cd(17, -1)
-                .cost(70, 10)
-                .range(365);
+                .cost(70, 10);
         Headbutt.update()
-                .active("対象の敵ユニットに突撃し{1}とノックバックを与える。")
+                .active("対象の敵ユニットに突撃し{1}と{2}を与える。")
                 .variable(1, MagicDamage, 55, 55, AP, 0.7)
+                .variable(2, Knockback, 650, 0)
                 .cd(14, -1)
                 .cost(70, 10)
                 .range(650);
         TriumphantRoar.update()
-                .active("{1}する。近くの味方ユニットは{2}する。近くの敵ユニットが死ぬとCDが2秒解消される。")
+                .active("{1}する。{3}の味方ユニットは{2}する。近くの敵ユニットが死ぬとCDが2秒解消される。")
                 .variable(1, RestoreHealth, 60, 30, AP, 0.2)
                 .variable(2, RestoreHealth, 30, 15, AP, 0.1)
+                .variable(3, Radius, 575, 0)
                 .cd(12, 0)
-                .cost(40, 10)
-                .range(575);
+                .cost(40, 10);
         UnbreakableWill.update()
                 .active("7秒間Alistarは{1}及び{2}を得る。StunなどのDisable中でも使用可能。使用時に自身にかかっているCC(Stun, Slow, Taunt, Fear, Snare, Silence, Suppression)を解除する。")
                 .variable(1, AD, 60, 10)
@@ -1900,7 +1911,9 @@ public enum Skill {
                 .cd(120, -20)
                 .cost(100, 0);
 
-        CursedTouch.update().passive("通常攻撃した対象に3秒間{1}を与える。レベル1、7、13で低下値が上昇する。").variable(1, MRReduction, 15, 5);
+        CursedTouch.update()
+                .passive("通常攻撃した対象に3秒間{1}を与える。レベル1、7、13で低下値が上昇する。")
+                .variable(1, MRReduction, new Per6Level(15, 5));
         BandageToss.update()
                 .active("指定方向に包帯を飛ばし、当たった敵ユニットに{1}及び{2}を与え、そこまで移動する。")
                 .variable(1, MagicDamage, 80, 60, AP, 0.7)
@@ -1909,27 +1922,137 @@ public enum Skill {
                 .cd(16, -2)
                 .range(1100);
         Despair.update()
-                .active("毎秒、周囲の敵ユニットに対象の最大Healthの{2} + {1}を与える。")
+                .active("毎秒、{3}の敵ユニットに対象の最大Healthの{2} + {1}を与える。")
                 .variable(1, MagicDamage, 8, 4)
                 .variable(2, TargetHealth, 1.5, 0.3, AP, 0.01)
+                .variable(3, Radius, 350, 0)
                 .cost(8)
                 .cd(1)
-                .range(350)
                 .toggle();
         Tantrum.update()
                 .passive("{1}を得る。")
                 .variable(1, PhysicalDamageReduction, 2, 2)
-                .active("周囲の敵ユニットに{2}を与える。Amumuが通常攻撃でダメージを受けるたびにこのスキルのCDが0.5秒解消される。")
+                .active("{3}の敵ユニットに{2}を与える。Amumuが通常攻撃でダメージを受けるたびにこのスキルのCDが0.5秒解消される。")
                 .variable(2, MagicDamage, 75, 25, AP, 0.5)
+                .variable(3, Radius, 400, 0)
                 .cost(35)
-                .cd(10, -1)
-                .range(400);
+                .cd(10, -1);
         CurseOftheSadMummy.update()
-                .active("周囲の敵ユニットに{1}を与え、2秒間通常攻撃と移動を封じる。")
+                .active("{2}の敵ユニットに{1}を与え、2秒間通常攻撃と移動を封じる。")
                 .variable(1, MagicDamage, 150, 100, AP, 0.8)
+                .variable(2, Radius, 600, 0)
                 .cost(100, 50)
-                .cd(150, -20)
+                .cd(150, -20);
+
+        Rebirth.update()
+                .passive("死亡時に卵になり6秒かけて復活する。復活中は{1}及び{2}を得る。復活中にHPが0になった場合は死亡する。レベル1、5、8、12、15で増加AR/MRが上昇する。")
+                .variable(1, AR, new Per4Level(-40, 15))
+                .variable(2, MR, new Per4Level(-40, 15))
+                .cd(240);
+        FlashFrost.update()
+                .active("指定方向に貫通する氷を飛ばし、氷に触れた敵ユニットに{1}を与え、{3}間{2}と{4}にする。氷が飛んでいる最中に再度スキルを使用するか、最大距離まで飛ぶと氷が破裂し、破裂地点の{6}の敵ユニットにさらに{1}と{5}を与え、{3}間{2}と{4}にする。")
+                .variable(1, MagicDamage, 60, 30, AP, 0.5)
+                .variable(2, Slow, 20, 0)
+                .variable(3, Time, 3, 0)
+                .variable(4, Chill, 0, 0)
+                .variable(5, Stun, 1, 0)
+                .variable(6, Radius, 150, 0)
+                .cost(80, 20)
+                .cd(12, -1)
+                .range(1100);
+        Crystalize.update()
+                .active("指定地点に5秒間{1}の壁を作りユニットを通れなくする。また、指定地点の視界を得る。")
+                .variable(1, Length, 400, 100)
+                .cost(70, 20)
+                .cd(25)
+                .range(1000);
+        Frostbite.update()
+                .active("対象の敵ユニットに{1}を与える。対象が" + Chill + "の場合は{2}を与える。")
+                .variable(1, MagicDamage, 55, 30, AP, 0.5)
+                .variable(2, MagicDamage, 110, 60, AP, 1.0)
+                .cost(50, 10)
+                .cd(5)
+                .range(650);
+        GlacialStorm.update()
+                .active("指定地点の{6}の敵ユニットに毎秒{1}を与え、{4}間{2}と{3}、{5}にする。")
+                .variable(1, MagicDamage, 80, 40, AP, 0.25)
+                .variable(2, ASReduction, 20, 0)
+                .variable(3, Slow, 20, 0)
+                .variable(4, Time, 1, 0)
+                .variable(5, Chill, 0, 0)
+                .variable(6, Radius, 300, 0)
+                .cost(75)
+                .cd(6)
+                .range(625)
+                .toggle();
+
+        Pyromania.update()
+                .passive("スキルを使用するたびにスタックが1貯まり、4スタック時に" + MoltenShield + "以外のスキルを使用すると、スタックを全て消費してそのスキルに{1}が追加される。")
+                .variable(1, Stun, 1.75, 0);
+        Disintegrate.update()
+                .active("対象の敵ユニットに{1}を与える。このスキルでLHを取ると消費した分のマナが回復する。")
+                .variable(1, MagicDamage, 85, 40, AP, 0.7)
+                .cost(60, 5)
+                .cd(4)
+                .range(625);
+        Incinerate.update()
+                .active("指定方向扇形45°の{1}の敵ユニットに{2}を与える。")
+                .variable(1, Radius, 625, 0)
+                .variable(2, MagicDamage, 80, 50, AP, 0.75)
+                .cost(70, 10)
+                .cd(8);
+        MoltenShield.update()
+                .active("{1}間{2}と{3}を得て、効果時間中に通常攻撃をしてきた敵ユニットに{4}を与える。")
+                .variable(1, Time, 5, 0)
+                .variable(2, AR, 20, 10)
+                .variable(3, MR, 20, 10)
+                .variable(4, MagicDamage, 20, 10, AP, 0.2)
+                .cost(20)
+                .cd(10);
+        SummonTibbers.update()
+                .active("指定地点の{1}の敵ユニットに{2}を与え、操作可能なTibbersを召喚する。Tibbersは{3}間持続し、{4}の敵ユニットに毎秒{5}を与える。")
+                .variable(1, Radius, 150, 0)
+                .variable(2, MagicDamage, 200, 125, AP, 0.7)
+                .variable(3, Time, 45, 0)
+                .variable(4, Radius, 200, 0)
+                .variable(5, MagicDamage, 35, 0, AP, 0.2)
+                .cost(125, 50)
+                .cd(120)
                 .range(600);
+
+        Focus.update()
+                .passive("3秒毎に{1}を得る（最大100%）。通常攻撃を行うとリセットされる。上昇値は3レベル毎に増加する。")
+                .variable(1, Critical, new Per3Level(3, 3));
+        FrostShot.update()
+                .active("通常攻撃に{2}間の{1}を付与する。")
+                .variable(1, Slow, 15, 5)
+                .variable(2, Time, 2, 0)
+                .cost(8)
+                .toggle();
+        Volley.update()
+                .active("指定方向扇形57.5°の方向に非貫通の矢7本を飛ばし当たった敵ユニットに{1}と{2}(Frost Shotと同様の低下率)を与える。Frost Shotを覚えていない場合はスローは発生しない。")
+                .variable(1, PhysicalDamage, 40, 10, AD, 1)
+                .variable(2, Slow, 0, 0)
+                .cost(60)
+                .cd(16, -3)
+                .range(1200);
+        Hawkshot.update()
+                .passive("敵を倒した際に追加で{1}得る。")
+                .variable(1, Gold, 1, 1)
+                .active("指定地点に偵察鷹を放つ。鷹は指定した地点の視界を5秒間確保する。また飛行中の鷹も視界を持つ。")
+                .cd(60)
+                .range(2500, 750);
+        EnchantedCrystalArrow.update()
+                .active("指定方向に敵Championにのみ当たる矢を飛ばし、当たった敵Championに{1}と{2}と{3}間の{4}を与える。また敵Champion命中時に矢が爆発し、{5}の敵ユニットに{6}と{3}間の{4}を与える。スタンは当たるまでの飛距離に比例して効果時間が長くなる。飛行中の矢は視界を持つ。")
+                .variable(1, MagicDamage, 250, 175, AP, 1)
+                .variable(2, Stun, 1, 1)
+                .variable(3, Time, 3, 0)
+                .variable(4, Slow, 50, 0)
+                .variable(5, Radius, 0, 0)
+                .variable(6, MagicDamage, 125, 88.5, AP, 0.5)
+                .cost(150)
+                .cd(100, -10)
+                .range(-1);
 
         ArcaneMastery.update().passive("スキルを使用すると使用した以外のスキルのCDが1秒解消される。");
         Overload.update()
@@ -1955,10 +2078,11 @@ public enum Skill {
                 .cd(14)
                 .range(675);
         DesperatePower.update()
-                .active("{1}間、{2}及び{3}を得る。更にスキルに50%のスプラッシュダメージが付与される。")
+                .active("{1}間、{2}及び{3}を得る。更にスキルに50%のスプラッシュダメージ({4})が付与される。")
                 .variable(1, Time, 5, 1)
                 .variable(2, SV, 15, 5)
                 .variable(3, MS, 35, 10)
+                .variable(4, Radius, 200, 0)
                 .cd(70, -10);
     }
 }
