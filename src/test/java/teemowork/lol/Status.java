@@ -22,7 +22,7 @@ public enum Status {
 
     Sell,
 
-    AS("Attack Speed", 3, "%"),
+    AS("攻撃速度", 3, "%"),
 
     ASPerLv,
 
@@ -30,11 +30,17 @@ public enum Status {
 
     ASReduction("AS減少", 0, "%"),
 
-    AD("Attack Damage"),
+    AD,
 
     ADPerLv,
 
     ADRatio,
+
+    BounusAD,
+
+    BounusADPerLv,
+
+    BounusADRatio,
 
     Critical("Critical Chanse", 0, "%"),
 
@@ -120,7 +126,7 @@ public enum Status {
 
     MSPerLv,
 
-    MSRatio,
+    MSRatio("移動速度", 0, "%"),
 
     ARPen,
 
@@ -172,19 +178,23 @@ public enum Status {
 
     LvRatio,
 
-    Charm("魅了状態", 3, "秒"),
+    Charm("魅了", 3, "秒"),
 
     Stun("スタン", 3, "秒"),
 
     Snare("スネア", 3, "秒"),
 
+    Silence("サイレンス", 3, "秒"),
+
     Knockup("打ち上げ", 3, "秒"),
 
-    Knockback,
+    Knockback("ノックバック"),
 
     Slow("スロー", 0, "%"),
 
     Chill,
+
+    Count(""),
 
     Time("", 3, "秒"),
 
@@ -196,7 +206,9 @@ public enum Status {
 
     Length("長さ"),
 
-    Gold(null, 0, "Gold");
+    Distance("距離"),
+
+    Gold;
 
     /** The status name. */
     public final String name;
@@ -279,22 +291,25 @@ public enum Status {
     public String format(double computed) {
         computed = round(computed);
 
-        if (this == Radius || this == Length) {
-            return name + computed;
+        if (this == RestoreEnergy || this == RestoreHealth || this == RestoreMana) {
+            return computed + "の" + name;
         }
 
-        // Other
-        String text = "";
-
-        if (computed != 0) {
-            text += computed + unit;
-
-            if (name.length() != 0) {
-                text += "の";
-            }
+        if (this == Gold) {
+            return computed + name;
         }
-        text += name;
 
-        return text;
+        if (computed == 0) {
+            return name;
+        }
+        return name + computed + unit;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return name;
     }
 }

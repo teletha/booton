@@ -70,7 +70,7 @@ public class Build extends Notifiable {
     public Build(Champion champion) {
         this.champion = champion;
 
-        items[0] = Item.DeathfireGrasp;
+        items[0] = Item.LastWhisper;
     }
 
     /**
