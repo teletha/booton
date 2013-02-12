@@ -27,6 +27,7 @@ import teemowork.lol.Build;
 import teemowork.lol.Build.Computed;
 import teemowork.lol.Champion;
 import teemowork.lol.Skill;
+import teemowork.lol.SkillAmplifier;
 import teemowork.lol.SkillKey;
 import teemowork.lol.SkillStatus;
 import teemowork.lol.SkillVariable;
@@ -341,17 +342,19 @@ public class ChampionDetail extends Page {
         private void buildVariable(jQuery root, SkillVariable variable, int skillLevel) {
             SkillVariableResolver resolver = variable.resolver;
             Status status = variable.status;
-            List<Status> amplifiers = variable.amplifiers;
+            List<SkillAmplifier> amplifiers = variable.amplifiers;
 
             if (!resolver.isSkillLevelBased()) {
                 skillLevel = resolver.convertLevel(build.getLevel());
             }
 
-            // Computed value
-            double computed = resolver.compute(Math.max(0, (skillLevel - 1)));
+            int level = Math.max(0, skillLevel - 1);
 
-            for (int i = 0; i < amplifiers.size(); i++) {
-                computed += variable.amplifierRatios.get(i) * build.get(amplifiers.get(i)).value;
+            // Computed value
+            double computed = resolver.compute(level);
+
+            for (SkillAmplifier amplifier : amplifiers) {
+                computed += (amplifier.base + amplifier.diff * level) * build.get(amplifier.status).value;
             }
 
             if (status == CDRAwareTime) {
@@ -378,13 +381,34 @@ public class ChampionDetail extends Page {
                 }
 
                 if (!amplifiers.isEmpty()) {
-                    for (int i = 0; i < amplifiers.size(); i++) {
-                        jQuery amplifier = root.child(SkillStyle.Amplifier.class);
-                        amplifier.text("+" + variable.amplifierRatios.get(i) + amplifiers.get(i).name());
+                    for (SkillAmplifier amplifier : amplifiers) {
+                        writeAmplifier(root, amplifier, skillLevel);
                     }
                 }
                 root.append(")");
             }
+        }
+
+        private void writeAmplifier(jQuery root, SkillAmplifier amplifier, int skillLevel) {
+            jQuery element = root.child(SkillStyle.Amplifier.class);
+            element.append("+");
+
+            int size = amplifier.diff == 0 ? 1 : skill.getMaxLevel();
+
+            for (int i = 0; i < size; i++) {
+                double computed = amplifier.base + amplifier.diff * i;
+
+                jQuery value = element.child(SkillStyle.Value.class).text(computed);
+
+                if (size != 1 && i == skillLevel - 1) {
+                    value.addClass(SkillStyle.Current.class);
+                }
+
+                if (i != size - 1) {
+                    element.child(SkillStyle.Separator.class).text("/");
+                }
+            }
+            element.append(amplifier.status.name);
         }
     }
 
