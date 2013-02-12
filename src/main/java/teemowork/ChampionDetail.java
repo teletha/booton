@@ -366,7 +366,7 @@ public class ChampionDetail extends Page {
                 root.append("(");
 
                 for (int i = 0; i < values.length; i++) {
-                    jQuery value = root.child(SkillStyle.Value.class).text(values[i]);
+                    jQuery value = root.child(SkillStyle.Value.class).text(status.round(values[i]));
 
                     if (i == skillLevel - 1) {
                         value.addClass(SkillStyle.Current.class);

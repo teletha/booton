@@ -394,7 +394,7 @@ public class SkillStatus {
          */
         @Override
         public int getSize() {
-            return diff == 0 ? 1 : size;
+            return base == 0 ? 0 : diff == 0 ? 1 : size;
         }
 
         /**

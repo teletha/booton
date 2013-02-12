@@ -1753,12 +1753,11 @@ public enum Skill {
     }
 
     /**
-     * <p>
-     * Retrieve latest descriptor.
-     * </p>
+     * {@inheritDoc}
      */
-    public SkillStatus getDescriptor() {
-        return getStatus(Version.Latest);
+    @Override
+    public String toString() {
+        return name;
     }
 
     /**
@@ -1826,7 +1825,7 @@ public enum Skill {
                 .cost(60, 0)
                 .range(800);
         Charm.update()
-                .active("指定方向に投げキッスを放ち、当たった敵ユニットに{1}を与え、対象を{2}にして自分の方向に移動させる。また" + Charm + "の対象には{3}が付与される。")
+                .active("指定方向に投げキッスを放ち、当たった敵ユニットに{1}と{2}を与え自分の方向に移動させる。また" + Status.Charm + "した対象には{3}が付与される。")
                 .variable(1, MagicDamage, 60, 30, AP, 0.35)
                 .variable(2, Status.Charm, 1, 0.25)
                 .variable(3, Slow, 50, 0)
@@ -1847,7 +1846,7 @@ public enum Skill {
                 .variable(2, SV, 1, 0)
                 .variable(3, MagicDamage, 0, 0, AD, 0.08);
         MarkOftheAssassin.update()
-                .active("対象の敵ユニットにカマを投げつけ{1}とマークを{4}を与える。マークが付いた対象に通常攻撃または" + CrescentSlash.name + "でダメージを与えたとき、マークを消費して{2}を与え、{3}する。")
+                .active("対象の敵ユニットにカマを投げつけ{1}とマーク({4})を与える。マークが付いた対象に通常攻撃または" + CrescentSlash.name + "でダメージを与えたとき、マークを消費して{2}を与え、{3}する。")
                 .variable(1, MagicDamage, 45, 25, AP, 0.4)
                 .variable(2, MagicDamage, 45, 25, AP, 0.4)
                 .variable(3, RestoreEnergy, 20, 5)
@@ -1922,7 +1921,7 @@ public enum Skill {
                 .cd(16, -2)
                 .range(1100);
         Despair.update()
-                .active("毎秒、{3}の敵ユニットに対象の最大Healthの{2} + {1}を与える。")
+                .active("毎秒、{3}の敵ユニットに{1} + 対象の最大Healthの{2}を与える。")
                 .variable(1, MagicDamage, 8, 4)
                 .variable(2, TargetHealth, 1.5, 0.3, AP, 0.01)
                 .variable(3, Radius, 350, 0)
@@ -2030,29 +2029,126 @@ public enum Skill {
                 .cost(8)
                 .toggle();
         Volley.update()
-                .active("指定方向扇形57.5°の方向に非貫通の矢7本を飛ばし当たった敵ユニットに{1}と{2}(Frost Shotと同様の低下率)を与える。Frost Shotを覚えていない場合はスローは発生しない。")
+                .active("指定方向扇形57.5°の方向に非貫通の矢7本を飛ばし当たった敵ユニットに{1}と{2}(" + FrostShot + "のLvに依存)を与える。" + FrostShot + "を覚えていない場合はスローは発生しない。")
                 .variable(1, PhysicalDamage, 40, 10, AD, 1)
                 .variable(2, Slow, 0, 0)
                 .cost(60)
                 .cd(16, -3)
                 .range(1200);
         Hawkshot.update()
-                .passive("敵を倒した際に追加で{1}得る。")
+                .passive("敵を倒した際に追加で{1}を得る。")
                 .variable(1, Gold, 1, 1)
                 .active("指定地点に偵察鷹を放つ。鷹は指定した地点の視界を5秒間確保する。また飛行中の鷹も視界を持つ。")
                 .cd(60)
                 .range(2500, 750);
         EnchantedCrystalArrow.update()
-                .active("指定方向に敵Championにのみ当たる矢を飛ばし、当たった敵Championに{1}と{2}と{3}間の{4}を与える。また敵Champion命中時に矢が爆発し、{5}の敵ユニットに{6}と{3}間の{4}を与える。スタンは当たるまでの飛距離に比例して効果時間が長くなる。飛行中の矢は視界を持つ。")
+                .active("指定方向に敵Championにのみ当たる矢を飛ばし、当たった敵Championに{1}と{2}(飛距離に比例して１～3.5秒)と{3}間の{4}を与える。また敵Champion命中時に矢が爆発し、{5}の敵ユニットに{6}と{3}間の{4}を与える。飛行中の矢は視界を持つ。")
                 .variable(1, MagicDamage, 250, 175, AP, 1)
-                .variable(2, Stun, 1, 1)
+                .variable(2, Stun, 0, 0)
                 .variable(3, Time, 3, 0)
                 .variable(4, Slow, 50, 0)
-                .variable(5, Radius, 0, 0)
-                .variable(6, MagicDamage, 125, 88.5, AP, 0.5)
+                .variable(5, Radius, 250, 0)
+                .variable(6, MagicDamage, 125, 87.5, AP, 0.5)
                 .cost(150)
                 .cd(100, -10)
                 .range(-1);
+
+        ManaBarrier.update().passive(" HPが20%以下になった際、その時点での残りマナの50%分のダメージを防御するシールドを張る。このシールドは10秒間持続する。").cd(90);
+        RocketGrab.update()
+                .active("指定方向に腕を飛ばし、当たった敵ユニットに{1}と{2}を与え自分の位置まで引き寄せる。またこのスキル命中時に対象の視界を得る。")
+                .variable(1, MagicDamage, 80, 55, AP, 1)
+                .variable(2, Stun, 1, 0)
+                .cost(120)
+                .cd(20, -1)
+                .range(925);
+        Overdrive.update()
+                .active("8秒間自身の{1} {2}増加する。")
+                .variable(1, MSRatio, 16, 4)
+                .variable(2, AS, 30, 8)
+                .cost(75)
+                .cd(15);
+        PowerFist.update()
+                .active("次の通常攻撃のダメージが{1}増加し、対象に{2}を与える。")
+                .variable(1, PhysicalDamage, 0, 0, AD, 1)
+                .variable(2, Knockup, 1, 0)
+                .cost(25)
+                .cd(9, -1);
+        StaticField.update()
+                .passive("{1}の敵ユニット1体（対象はランダム）に2.5秒ごとに{2}を与える。")
+                .variable(1, Radius, 450, 0)
+                .variable(2, MagicDamage, 100, 100, AP, 0.25)
+                .active("{3}の敵ユニットに{4}と{5}を与える。効果後はCDが解消されるまでPassiveの効果がなくなる。")
+                .variable(3, Radius, 600, 0)
+                .variable(4, MagicDamage, 250, 125, AP, 1)
+                .variable(5, Silence, 0.5, 0)
+                .cost(150)
+                .cd(30);
+
+        Blaze.update()
+                .passive("スキルが当たった敵ユニットを炎上させ、対象の最大HPの2%分の魔法ダメージを毎秒与える。この効果は4秒間続く。炎上している敵ユニットにスキルが命中すると追加効果が発生する。(Minionに対しては毎秒80DMが上限)");
+        Sear.update()
+                .active("指定方向に火球を投射し、当たった敵ユニットに{1}を与える。敵が炎上していた場合、{2}を与える。")
+                .variable(1, MagicDamage, 80, 40, AP, 0.65)
+                .variable(2, Stun, 2, 0)
+                .cost(50)
+                .cd(8, -0.5)
+                .range(1025);
+        PillarOfFlame.update()
+                .active("指定地点に炎の柱を作り出し、0.5秒後に{1}の敵ユニットに{2}を与える。敵が炎上していた場合、代わりに{3}を与える。")
+                .variable(1, Radius, 175, 0)
+                .variable(2, MagicDamage, 75, 45, AP, 0.6)
+                .variable(3, MagicDamage, 94, 56, AP, 0.75)
+                .cost(70, 10)
+                .cd(10)
+                .range(900);
+        Conflagration.update()
+                .active("対象の敵ユニットに{1}を与える。敵が炎上していた場合、{2}の敵にも{1}を与える。")
+                .variable(1, MagicDamage, 70, 35, AP, 0.55)
+                .variable(2, Radius, 200, 0)
+                .cost(60, 5)
+                .cd(12, -1)
+                .range(625);
+        Pyroclasm.update()
+                .active("対象の敵ユニットに火炎弾を放つ。火炎弾は近くの敵ユニットに4回まで跳ね、その度に{1}を与える(最大5hit)。この跳ね返りは同一ユニットに何度も跳ね返る。敵が炎上していた場合、敵Championに優先して跳ね返るようになる。")
+                .variable(1, MagicDamage, 150, 100, AP, 0.5)
+                .cost(100, 50)
+                .cd(105, -15)
+                .range(750);
+
+        Headshot.update()
+                .passive("通常攻撃{1}回毎にダメージが増加する(Minionには250%、Championには150%)。茂みから通常攻撃を行うと2回分としてカウントされる。レベル1、7、13でダメージが増加するまでの攻撃回数が減少する。")
+                .variable(1, Count, new Per6Level(8, -1));
+        PiltoverPeacemaker.update()
+                .active("1秒詠唱後、指定方向に貫通する弾を発射し当たった敵ユニットに{1}を与える。ダメージは敵に当たるごとに10%減少していき最小で{2}を与える。")
+                .variable(1, PhysicalDamage, 20, 40, AD, 1.3)
+                .variable(2, PhysicalDamage, 10, 20, AD, 0.65)
+                .cost(50, 10)
+                .cd(10, -1)
+                .range(1250);
+        YordleSnapTrap.update()
+                .active("指定地点に罠を仕掛ける。敵Championが罠の{4}に入ると発動して、対象に{1}かけて{2}と{3}を与え、9秒間対象の位置が見える。罠は3個まで置け、4分間持続する。")
+                .variable(1, Time, 1.5, 0)
+                .variable(2, MagicDamage, 80, 50, AP, 0.6)
+                .variable(3, Snare, 1.5, 0)
+                .variable(4, Radius, 135, 0)
+                .cost(50)
+                .cd(20, -3)
+                .range(800);
+        CaliberNet.update()
+                .active("指定方向にネットを飛ばし当たった敵ユニットに{1}と{3}間{2}を与え、Caitlynはネットを飛ばした方向の反対側にジャンプ({4})する。")
+                .variable(1, MagicDamage, 80, 50, AP, 0.8)
+                .variable(2, Slow, 50, 0)
+                .variable(3, Time, 1, 0.25)
+                .variable(4, Distance, 400, 0)
+                .cost(75)
+                .cd(18, -2)
+                .range(850);
+        AceinTheHole.update()
+                .active("0.5秒詠唱後に対象の敵Championの視界を得て、更に1秒詠唱後対象に目掛けて敵Championにのみ当たる弾を発射し、当たった敵Championに{1}を与える。ターゲットとの射線を遮ると間に入った敵Championに当たる。")
+                .variable(1, PhysicalDamage, 250, 225, BounusAD, 2)
+                .cost(100)
+                .cd(90, -15)
+                .range(2000, 500);
 
         ArcaneMastery.update().passive("スキルを使用すると使用した以外のスキルのCDが1秒解消される。");
         Overload.update()
@@ -2071,9 +2167,10 @@ public enum Skill {
                 .cd(14)
                 .range(625);
         SpellFlux.update()
-                .active("対象の敵ユニットに魔法弾を飛ばし{1}及び{2}を与える。魔法弾は近くの敵ユニット及び自身に4回まで跳ね返る(最大5hit)。この跳ね返りは同一ユニットに何度も跳ね返り、また自身から跳ね返った弾は敵Championを優先で狙う。")
+                .active("対象の敵ユニットに魔法弾を飛ばし{1}及び{2}を与える。魔法弾は{3}の敵ユニット及び自身に4回まで跳ね返る(最大5hit)。この跳ね返りは同一ユニットに何度も跳ね返り、また自身から跳ね返った弾は敵Championを優先で狙う。")
                 .variable(1, MagicDamage, 50, 20, AP, 0.35, Mana, 0.01)
                 .variable(2, MRReduction, 12, 3)
+                .variable(3, Radius, 400, 0)
                 .cost(60, 10)
                 .cd(14)
                 .range(675);
