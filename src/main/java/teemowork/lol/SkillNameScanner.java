@@ -76,7 +76,7 @@ public class SkillNameScanner {
                 write("cd", cd);
                 write("range", range);
 
-                System.out.println("");
+                System.out.println(";");
             }
         }
     }

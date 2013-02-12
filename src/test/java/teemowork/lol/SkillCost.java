@@ -17,5 +17,9 @@ public enum SkillCost {
 
     Energy,
 
-    Charge;
+    Charge,
+
+    Health,
+
+    CurrentHealth;
 }

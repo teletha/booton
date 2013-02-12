@@ -160,6 +160,20 @@ public class SkillStatus {
      * @param id A variable identifier.
      * @param status A variable type.
      * @param base A base value.
+     * @return A chainable API.
+     */
+    SkillStatus variable(int id, Status status, double base) {
+        return variable(id, status, base, 0, null, 0);
+    }
+
+    /**
+     * <p>
+     * Set variable with amplifiers.
+     * </p>
+     * 
+     * @param id A variable identifier.
+     * @param status A variable type.
+     * @param base A base value.
      * @param diff A diff value.
      * @param ratioType First amplifier type.
      * @param ratio First amplifier ration.

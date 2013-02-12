@@ -28,6 +28,9 @@ public class SkillVariable {
     public SkillVariableResolver resolver;
 
     /** The amplifier types. */
+    public final List<SkillAmplifier> skillAmplifiers = new ArrayList();
+
+    /** The amplifier types. */
     public final List<Status> amplifiers = new ArrayList();
 
     /** The amplifier ratio. */
