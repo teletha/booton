@@ -71,6 +71,25 @@ function boot(global) {
   //====================================================================
   // Array Extensions
   //====================================================================
+  define(Array, {
+    /**
+     * <p>
+     * Create primitive array with the specified size. (all elements are initialized by 0)
+     * </p>
+     *
+     * @param {Number} size A initila size.
+     * @return {Array} A initialized array.
+     */
+    create: function(size) {
+      var array = [];
+    
+      for (var i = 0; i < size; i++) {
+        array[i] = 0;
+      }
+      return array;
+    }
+  });
+  
   define(Array.prototype, {
     copy: function(from, dest, dfrom, length) {
       for (var i = 0; i < length; i++) {

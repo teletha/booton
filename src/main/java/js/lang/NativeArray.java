@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
+import kiss.I;
 import booton.translator.Translator;
 
 /**
@@ -96,6 +97,18 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
      */
     public int length() {
         return list.size();
+    }
+
+    /**
+     * <p>
+     * Joins all elements of an array into a string.
+     * </p>
+     * 
+     * @param separator A separator text.
+     * @return A built expression.
+     */
+    public String join(String separator) {
+        return I.join(list, separator);
     }
 
     /**
@@ -295,6 +308,18 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
          */
         public String length() {
             return that + ".length";
+        }
+
+        /**
+         * <p>
+         * Joins all elements of an array into a string.
+         * </p>
+         * 
+         * @param separator A separator text.
+         * @return A built expression.
+         */
+        public String join(String separator) {
+            return that + ".join(" + param(0) + ")";
         }
 
         /**
