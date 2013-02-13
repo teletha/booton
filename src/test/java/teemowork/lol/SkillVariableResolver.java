@@ -16,15 +16,6 @@ public abstract class SkillVariableResolver {
 
     /**
      * <p>
-     * Retrieve the size of associated variable.
-     * </p>
-     * 
-     * @return
-     */
-    public abstract int getSize();
-
-    /**
-     * <p>
      * Compute value by skill level.
      * </p>
      * 
@@ -35,13 +26,25 @@ public abstract class SkillVariableResolver {
 
     /**
      * <p>
+     * Retrieve the size of associated variable.
+     * </p>
+     * 
+     * @param hint A hint for size.
+     * @return
+     */
+    public int computeSize(int hint) {
+        return hint;
+    }
+
+    /**
+     * <p>
      * Enumerate all values for this variable.
      * </p>
      * 
      * @return A list of all computed values.
      */
-    public double[] enumerate() {
-        double[] values = new double[getSize()];
+    public double[] enumerate(int hint) {
+        double[] values = new double[computeSize(hint)];
 
         for (int i = 0; i < values.length; i++) {
             values[i] = compute(i + 1);
@@ -100,7 +103,7 @@ public abstract class SkillVariableResolver {
          * {@inheritDoc}
          */
         @Override
-        public int getSize() {
+        public int computeSize(int hint) {
             return levels.length;
         }
 
@@ -192,7 +195,7 @@ public abstract class SkillVariableResolver {
          * {@inheritDoc}
          */
         @Override
-        public int getSize() {
+        public int computeSize(int hint) {
             return 18;
         }
 
