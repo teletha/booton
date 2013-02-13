@@ -9,6 +9,8 @@
  */
 package teemowork.lol;
 
+import js.math.Mathematics;
+
 /**
  * @version 2013/02/06 16:32:58
  */
@@ -274,15 +276,7 @@ public enum Status {
      * @return
      */
     public double round(double value) {
-        int round = 1;
-
-        for (int i = 0; i < precision; i++) {
-            round *= 10;
-        }
-
-        value *= round;
-        value = Math.round(value);
-        return value / round;
+        return Mathematics.round(value, precision);
     }
 
     /**

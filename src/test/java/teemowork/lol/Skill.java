@@ -1820,6 +1820,18 @@ public enum Skill {
 
     /**
      * <p>
+     * Create skill AD amplifier. This pattern is used frequently.
+     * </p>
+     * 
+     * @param rate An AD rate.
+     * @return
+     */
+    private static final SkillAmplifier bounusAD(double rate) {
+        return amplify(BounusAD, rate);
+    }
+
+    /**
+     * <p>
      * Create skill AP amplifier. This pattern is used frequently.
      * </p>
      * 
@@ -2192,7 +2204,7 @@ public enum Skill {
                 .range(850);
         AceinTheHole.update()
                 .active("0.5秒詠唱後に対象の敵Championの視界を得て、更に1秒詠唱後対象に目掛けて敵Championにのみ当たる弾を発射し、当たった敵Championに{1}を与える。ターゲットとの射線を遮ると間に入った敵Championに当たる。")
-                .variable(1, PhysicalDamage, 250, 225, BounusAD, 2)
+                .variable(1, PhysicalDamage, 250, 225, bounusAD(2))
                 .cost(100)
                 .cd(90, -15)
                 .range(2000, 500);
@@ -2319,7 +2331,7 @@ public enum Skill {
                 .range(800);
         GatlingGun.update()
                 .active("4秒間、Corkiの前方にいる敵ユニットに0.5秒毎に{1}を与える(最大8hit)。ダメージを与える度に対象ユニットに{2}を与える。この効果は2秒間持続し、8回までスタックする。")
-                .variable(1, PhysicalDamage, 10, 6, BounusAD, 0.02)
+                .variable(1, PhysicalDamage, 10, 6, bounusAD(0.02))
                 .variable(2, ARReduction, 1, 1)
                 .cost(60, 5)
                 .cd(16)
@@ -2336,12 +2348,12 @@ public enum Skill {
         /** Darius */
         Hemorrhage.update()
                 .passive("通常攻撃またはスキルでダメージを与えた敵ユニットに出血スタックを付与する。出血スタックが付与された敵ユニットは毎秒{1}を受ける。出血スタックは最大5回までスタックし、5秒間持続する。また、出血スタックを受けている敵Champion数に応じて{2}ずつ増加していく。")
-                .variable(1, MagicDamage, 2.4, 0, Lv, 0.3, BounusAD, 0.06)
+                .variable(1, MagicDamage, 2.4, 0, amplify(Lv, 0.3), bounusAD(0.06))
                 .variable(2, MSRatio, 5);
         Decimate.update()
                 .active("斧を振り回し周囲の敵ユニットに{1}を与える。斧の刃に当たった敵Championに対しては{2}を与える。")
-                .variable(1, PhysicalDamage, 70, 35, BounusAD, 0.7)
-                .variable(2, PhysicalDamage, 105, 52.5, BounusAD, 1.05)
+                .variable(1, PhysicalDamage, 70, 35, bounusAD(0.7))
+                .variable(2, PhysicalDamage, 105, 52.5, bounusAD(1.05))
                 .cost(40)
                 .cd(9, -1)
                 .range(425);
@@ -2362,7 +2374,7 @@ public enum Skill {
                 .range(550);
         NoxianGuillotine.update()
                 .active("対象の敵Championに跳躍し、{1}を与える。対象の出血スタック数1個につき、このスキルのダメージが20%増加する(最大でダメージ2倍)。このスキルで敵Championのキルを取った場合、このスキルのCDが解消される。")
-                .variable(1, TrueDamage, 160, 90, BounusAD, 0.75)
+                .variable(1, TrueDamage, 160, 90, bounusAD(0.75))
                 .cost(100)
                 .cd(100, -10)
                 .range(475);
@@ -2443,16 +2455,26 @@ public enum Skill {
                 .variable(1, PhysicalDamage, 0, 0, amplify(AD, 0.45, 0.1))
                 .cost(45)
                 .cd(12, -1);
-        BloodRush.update().active("Dravenの移動速度が1.5秒増加し、攻撃速度が3秒増加する。移動速度増加は1.5秒かけて元に戻る。").cost(40).cd(12);
+        BloodRush.update()
+                .active("1.5秒間{1}増加し、3秒間{2}増加する。移動速度増加は1.5秒かけて元に戻る。")
+                .variable(1, MSRatio, 40, 5)
+                .variable(2, AS, 20, 5)
+                .cost(40)
+                .cd(12);
         StandAside.update()
-                .active("指定方向に貫通する斧を投げ、当たった敵ユニットに物理DMとノックバックとスロー(2s)を与える。このノックバックは斧から弾かれる形で左右に吹き飛ぶ。")
+                .active("指定方向に貫通する斧を投げ、当たった敵ユニットに{1}と{2}と2秒間{3}を与える。このノックバックは斧から弾かれる形で左右に吹き飛ぶ。")
+                .variable(1, PhysicalDamage, 70, 35, bounusAD(0.5))
+                .variable(2, Knockback, 0)
+                .variable(3, Slow, 20, 5)
                 .cost(70)
                 .cd(18, -1)
                 .range(1050);
         WhirlingDeath.update()
-                .active("指定方向に地面を這う貫通する斧を投げ、当たった敵ユニットに物理DMを与える。ダメージは敵に当たるごとに8%ずつ減り、最大で40%まで低下する。行きと帰りそれぞれに攻撃判定があり、斧が飛んでいる最中に再度このスキルを使用するか、敵Championに命中した時点で斧が反転してDravenの元に戻ってくる。反転した際、低下ダメージはリセットされる。また移動中の斧は視界を持つ。")
+                .active("指定方向に地面を這う貫通する斧を投げ、当たった敵ユニットに{1}を与える。ダメージは敵に当たるごとに8%ずつ減り、最大で40%まで低下する。行きと帰りそれぞれに攻撃判定があり、斧が飛んでいる最中に再度このスキルを使用するか、敵Championに命中した時点で斧が反転してDravenの元に戻ってくる。反転した際、低下ダメージはリセットされる。また移動中の斧は視界を持つ。")
+                .variable(1, PhysicalDamage, 175, 100, bounusAD(1.1))
                 .cost(120)
-                .cd(110);
+                .cd(110)
+                .range(-1);
 
         /** Elise */
         SpiderSwarm.update()

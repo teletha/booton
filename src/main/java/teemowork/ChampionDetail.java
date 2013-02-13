@@ -19,6 +19,7 @@ import js.application.PageInfo;
 import js.bind.Notifiable;
 import js.bind.Observable;
 import js.bind.Observer;
+import js.math.Mathematics;
 import js.util.ArrayList;
 import js.util.jQuery;
 import js.util.jQuery.Event;
@@ -387,10 +388,7 @@ public class ChampionDetail extends Page {
             int size = amplifier.diff == 0 ? 1 : skill.getMaxLevel();
 
             for (int i = 0; i < size; i++) {
-                System.out.println(amplifier.diff);
-                System.out.println(i);
-                System.out.println(amplifier.diff * i);
-                double computed = amplifier.base + (amplifier.diff * 100) * i / 100;
+                double computed = Mathematics.round(amplifier.base + amplifier.diff * i, 3);
 
                 jQuery value = element.child(SkillStyle.Value.class).text(computed);
 
