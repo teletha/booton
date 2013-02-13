@@ -518,7 +518,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     protected final boolean inBackOf(Class<? extends CSS> clazz) {
-        return rule("." + Obfuscator.computeCSSName(clazz) + "~" + rules.selector);
+        return rule("." + Obfuscator.computeCSSName(clazz) + "+" + rules.selector);
     }
 
     /**

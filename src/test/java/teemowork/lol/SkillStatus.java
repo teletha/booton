@@ -130,10 +130,14 @@ public class SkillStatus {
             if (token.length() != 1 || !Character.isDigit(token.charAt(0))) {
                 tokens.add(token);
             } else {
-                SkillVariable variable = new SkillVariable();
+                int id = Integer.parseInt(token);
+                SkillVariable variable = variables.get(id);
 
+                if (variable == null) {
+                    variable = new SkillVariable();
+                    variables.set(id, variable);
+                }
                 tokens.add(variable);
-                variables.set(Integer.parseInt(token), variable);
             }
         }
         return this;
