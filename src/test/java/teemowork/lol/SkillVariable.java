@@ -19,13 +19,16 @@ import js.util.ArrayList;
 public class SkillVariable {
 
     /** The variable id. */
-    final int id;
+    public final int id;
 
     /** The variable type. */
     public Status status;
 
     /** The value enumerator. */
     public SkillVariableResolver resolver;
+
+    /** The conditional variable flag. */
+    public boolean isConditional = false;
 
     /** The amplifier types. */
     public final List<SkillAmplifier> amplifiers = new ArrayList();

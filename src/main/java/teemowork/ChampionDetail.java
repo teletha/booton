@@ -348,19 +348,8 @@ public class ChampionDetail extends Page {
                 skillLevel = resolver.convertLevel(build.getLevel());
             }
 
-            int level = Math.max(0, skillLevel - 1);
-
             // Computed value
-            double computed = resolver.compute(level);
-
-            for (SkillAmplifier amplifier : amplifiers) {
-                computed += (amplifier.base + amplifier.diff * level) * build.get(amplifier.status).value;
-            }
-
-            if (status == CDRAwareTime) {
-                computed = computed * (1 - build.get(CDR).value / 100);
-            }
-            root.child(SkillStyle.Computed.class).text(status.format(computed));
+            root.child(SkillStyle.Computed.class).text(status.format(build.computeSkillVariable(skill, variable)));
 
             // All values
             double[] values = resolver.enumerate();
@@ -408,6 +397,7 @@ public class ChampionDetail extends Page {
                     element.child(SkillStyle.Separator.class).text("/");
                 }
             }
+            element.append(amplifier.status.unit);
             element.append(amplifier.status.name);
         }
     }

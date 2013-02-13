@@ -76,18 +76,20 @@ public class SkillStatus {
 
     /**
      * <p>
-     * Retrieve status value.
+     * Retrieve passive status value.
      * </p>
      * 
      * @param status A target status.
      * @return A result.
      */
-    public double getPassive(Status status, int level) {
+    public double getPassive(Status status, int level, Build build) {
         for (Object token : passive) {
             if (token instanceof SkillVariable) {
                 SkillVariable variable = (SkillVariable) token;
 
-                if (variable.status == status) {
+                if (variable.status == status && !variable.isConditional) {
+                    System.out.println(status);
+                    System.out.println(level);
                     return variable.resolver.compute(level);
                 }
             }
@@ -230,6 +232,10 @@ public class SkillStatus {
 
     SkillStatus variable(int id, Status status, double base, double diff, SkillAmplifier amplifier) {
         return variable(id, status, new SimpleValues(skill.getMaxLevel(), base, diff), amplifier, null);
+    }
+
+    SkillStatus variable(int id, Status status, double base, double diff, SkillAmplifier amplifier1, SkillAmplifier amplifier2) {
+        return variable(id, status, new SimpleValues(skill.getMaxLevel(), base, diff), amplifier1, amplifier2);
     }
 
     SkillStatus variable(int id, Status status, SkillVariableResolver resolver, SkillAmplifier amplifier1, SkillAmplifier amplifier2) {

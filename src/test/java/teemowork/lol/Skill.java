@@ -1808,16 +1808,39 @@ public enum Skill {
 
     /**
      * <p>
+     * Create skill AD amplifier. This pattern is used frequently.
+     * </p>
+     * 
+     * @param rate An AD rate.
+     * @return
+     */
+    private static final SkillAmplifier ad(double rate) {
+        return amplify(AD, rate);
+    }
+
+    /**
+     * <p>
+     * Create skill AP amplifier. This pattern is used frequently.
+     * </p>
+     * 
+     * @param rate An AP rate.
+     * @return
+     */
+    private static final SkillAmplifier ap(double rate) {
+        return amplify(AP, rate);
+    }
+
+    /**
+     * <p>
      * Create skill amplifier.
      * </p>
      * 
      * @param status A status type.
      * @param base A base value of amplifier rate.
-     * @param diff A diff value of amplifier rate.
      * @return
      */
     private static final SkillAmplifier amplify(Status status, double base) {
-        return amplify(status, base);
+        return amplify(status, base, 0);
     }
 
     /**
@@ -1842,20 +1865,20 @@ public enum Skill {
                 .cost(SkillCost.Charge, 9, 0);
         OrbOfDeception.update()
                 .active("指定方向にオーブを放ち当たった敵ユニットに{1}を与える。オーブは行きと帰りでそれぞれにヒット判定があり、帰りの場合は{2}を与える。")
-                .variable(1, MagicDamage, 40, 25, AP, 0.33)
-                .variable(2, TrueDamage, 40, 25, AP, 0.33)
+                .variable(1, MagicDamage, 40, 25, ap(0.33))
+                .variable(2, TrueDamage, 40, 25, ap(0.33))
                 .cd(7, 0)
                 .cost(70, 5)
                 .range(880);
         FoxFire.update()
                 .active("Ahriの周囲を回る3本の鬼火を放つ。鬼火は5秒間持続し、近くの敵ユニットに自動的に突撃して{1}を与える。鬼火が同一対象に突撃した場合、2発目以降は本来の50%分の魔法DMを与える(同一対象に3発hitで合計200%の魔法DM)。Ahriの通常攻撃範囲内に敵Championがいる場合、それらを優先して狙う。")
-                .variable(1, MagicDamage, 40, 25, AP, 0.4)
+                .variable(1, MagicDamage, 40, 25, ap(0.4))
                 .cd(9, -1)
                 .cost(60, 0)
                 .range(800);
         Charm.update()
                 .active("指定方向に投げキッスを放ち、当たった敵ユニットに{1}と{2}を与え自分の方向に移動させる。また" + Status.Charm + "した対象には{3}が付与される。")
-                .variable(1, MagicDamage, 60, 30, AP, 0.35)
+                .variable(1, MagicDamage, 60, 30, ap(0.35))
                 .variable(2, Status.Charm, 1, 0.25)
                 .variable(3, Slow, 50)
                 .cd(12, 0)
@@ -1863,7 +1886,7 @@ public enum Skill {
                 .range(975);
         SpiritRush.update()
                 .active("指定方向にダッシュした後、{2}の敵ユニット(敵Championを優先)3体に{1}を与える。このスキルは10秒の間、3回まで連続して使用できる(但し、一度使用する度に1秒のCDが発生する)。2～3発目はマナコスト無しで使用可能。")
-                .variable(1, MagicDamage, 85, 40, AP, 0.35)
+                .variable(1, MagicDamage, 85, 40, ap(0.35))
                 .variable(2, Radius, 500)
                 .cd(110, -15)
                 .cost(100, 0)
@@ -1876,8 +1899,8 @@ public enum Skill {
                 .variable(3, MagicDamage, 0, 0, AD, 0.08);
         MarkOftheAssassin.update()
                 .active("対象の敵ユニットにカマを投げつけ{1}とマーク({4})を与える。マークが付いた対象に通常攻撃または" + CrescentSlash.name + "でダメージを与えたとき、マークを消費して{2}を与え、{3}する。")
-                .variable(1, MagicDamage, 45, 25, AP, 0.4)
-                .variable(2, MagicDamage, 45, 25, AP, 0.4)
+                .variable(1, MagicDamage, 45, 25, ap(0.4))
+                .variable(2, MagicDamage, 45, 25, ap(0.4))
                 .variable(3, RestoreEnergy, 20, 5)
                 .variable(4, Time, 6)
                 .cd(6, -0.5)
@@ -1894,13 +1917,13 @@ public enum Skill {
                 .range(700);
         CrescentSlash.update()
                 .active("{2}の敵ユニットに{1}を与える。")
-                .variable(1, PhysicalDamage, 30, 25, AP, 0.3, AD, 0.6)
+                .variable(1, PhysicalDamage, 30, 25, ap(0.3), ad(0.6))
                 .variable(2, Radius, 325, 0)
                 .cd(7, -1)
                 .cost(SkillCost.Energy, 60, -5);
         ShadowDance.update()
                 .active("対象の敵ユニットまで高速で移動し{1}を与える。使用時にチャージを消費する。チャージは{2}毎に又は敵Championキル/アシストで増加し最大で3つまでチャージされる。チャージ増加時間はCD低減の影響を受ける。")
-                .variable(1, MagicDamage, 100, 75, AP, 0.5)
+                .variable(1, MagicDamage, 100, 75, ap(0.5))
                 .variable(2, CDRAwareTime, 25, -5)
                 .cd(2, -0.5)
                 .cost(SkillCost.Charge, 1, 0)
@@ -1908,11 +1931,11 @@ public enum Skill {
 
         Trample.update()
                 .passive("スキルを使用すると3秒間他のユニットをすり抜けられるようになり、{2}の敵ユニットと建物に毎秒{1}を与える。ミニオンとモンスターに対しては与えるダメージが2倍になる。")
-                .variable(1, MagicDamage, 6, 0, AP, 0.1, Lv, 1)
+                .variable(1, MagicDamage, 6, 0, ap(0.1), amplify(Lv, 1))
                 .variable(2, Radius, 182.5);
         Pulverize.update()
                 .active("{4}の敵ユニットに{1}を与え、{2}後に{3}を与える。")
-                .variable(1, MagicDamage, 60, 45, AP, 0.5)
+                .variable(1, MagicDamage, 60, 45, ap(0.5))
                 .variable(2, Knockup, 1)
                 .variable(3, Stun, 0.5, 0)
                 .variable(4, Radius, 365)
@@ -1920,15 +1943,15 @@ public enum Skill {
                 .cost(70, 10);
         Headbutt.update()
                 .active("対象の敵ユニットに突撃し{1}と{2}を与える。")
-                .variable(1, MagicDamage, 55, 55, AP, 0.7)
+                .variable(1, MagicDamage, 55, 55, ap(0.7))
                 .variable(2, Knockback, 650)
                 .cd(14, -1)
                 .cost(70, 10)
                 .range(650);
         TriumphantRoar.update()
                 .active("{1}する。{3}の味方ユニットは{2}する。近くの敵ユニットが死ぬとCDが2秒解消される。")
-                .variable(1, RestoreHealth, 60, 30, AP, 0.2)
-                .variable(2, RestoreHealth, 30, 15, AP, 0.1)
+                .variable(1, RestoreHealth, 60, 30, ap(0.2))
+                .variable(2, RestoreHealth, 30, 15, ap(0.1))
                 .variable(3, Radius, 575)
                 .cd(12, 0)
                 .cost(40, 10);
@@ -1944,7 +1967,7 @@ public enum Skill {
                 .variable(1, MRReduction, new Per6Level(15, 5));
         BandageToss.update()
                 .active("指定方向に包帯を飛ばし、当たった敵ユニットに{1}及び{2}を与え、そこまで移動する。")
-                .variable(1, MagicDamage, 80, 60, AP, 0.7)
+                .variable(1, MagicDamage, 80, 60, ap(0.7))
                 .variable(2, Stun, 1)
                 .cost(80, 10)
                 .cd(16, -2)
@@ -1952,7 +1975,7 @@ public enum Skill {
         Despair.update()
                 .active("毎秒、{3}の敵ユニットに{1} + 対象の最大Healthの{2}を与える。")
                 .variable(1, MagicDamage, 8, 4)
-                .variable(2, TargetHealth, 1.5, 0.3, AP, 0.01)
+                .variable(2, TargetHealth, 1.5, 0.3, ap(0.01))
                 .variable(3, Radius, 350)
                 .cost(8)
                 .cd(1)
@@ -1961,13 +1984,13 @@ public enum Skill {
                 .passive("{1}を得る。")
                 .variable(1, PhysicalDamageReduction, 2, 2)
                 .active("{3}の敵ユニットに{2}を与える。Amumuが通常攻撃でダメージを受けるたびにこのスキルのCDが0.5秒解消される。")
-                .variable(2, MagicDamage, 75, 25, AP, 0.5)
+                .variable(2, MagicDamage, 75, 25, ap(0.5))
                 .variable(3, Radius, 400)
                 .cost(35)
                 .cd(10, -1);
         CurseOftheSadMummy.update()
                 .active("{2}の敵ユニットに{1}を与え、2秒間通常攻撃と移動を封じる。")
-                .variable(1, MagicDamage, 150, 100, AP, 0.8)
+                .variable(1, MagicDamage, 150, 100, ap(0.8))
                 .variable(2, Radius, 600)
                 .cost(100, 50)
                 .cd(150, -20);
@@ -1979,7 +2002,7 @@ public enum Skill {
                 .cd(240);
         FlashFrost.update()
                 .active("指定方向に貫通する氷を飛ばし、氷に触れた敵ユニットに{1}を与え、{3}間{2}と{4}にする。氷が飛んでいる最中に再度スキルを使用するか、最大距離まで飛ぶと氷が破裂し、破裂地点の{6}の敵ユニットにさらに{1}と{5}を与え、{3}間{2}と{4}にする。")
-                .variable(1, MagicDamage, 60, 30, AP, 0.5)
+                .variable(1, MagicDamage, 60, 30, ap(0.5))
                 .variable(2, Slow, 20)
                 .variable(3, Time, 3)
                 .variable(4, Chill, 0)
@@ -1996,14 +2019,14 @@ public enum Skill {
                 .range(1000);
         Frostbite.update()
                 .active("対象の敵ユニットに{1}を与える。対象が" + Chill + "の場合は{2}を与える。")
-                .variable(1, MagicDamage, 55, 30, AP, 0.5)
-                .variable(2, MagicDamage, 110, 60, AP, 1.0)
+                .variable(1, MagicDamage, 55, 30, ap(0.5))
+                .variable(2, MagicDamage, 110, 60, ap(1.0))
                 .cost(50, 10)
                 .cd(5)
                 .range(650);
         GlacialStorm.update()
                 .active("指定地点の{6}の敵ユニットに毎秒{1}を与え、{4}間{2}と{3}、{5}にする。")
-                .variable(1, MagicDamage, 80, 40, AP, 0.25)
+                .variable(1, MagicDamage, 80, 40, ap(0.25))
                 .variable(2, ASReduction, 20, 0)
                 .variable(3, Slow, 20)
                 .variable(4, Time, 1)
@@ -2019,14 +2042,14 @@ public enum Skill {
                 .variable(1, Stun, 1.75);
         Disintegrate.update()
                 .active("対象の敵ユニットに{1}を与える。このスキルでLHを取ると消費した分のマナが回復する。")
-                .variable(1, MagicDamage, 85, 40, AP, 0.7)
+                .variable(1, MagicDamage, 85, 40, ap(0.7))
                 .cost(60, 5)
                 .cd(4)
                 .range(625);
         Incinerate.update()
                 .active("指定方向扇形45°の{1}の敵ユニットに{2}を与える。")
                 .variable(1, Radius, 625)
-                .variable(2, MagicDamage, 80, 50, AP, 0.75)
+                .variable(2, MagicDamage, 80, 50, ap(0.75))
                 .cost(70, 10)
                 .cd(8);
         MoltenShield.update()
@@ -2034,16 +2057,16 @@ public enum Skill {
                 .variable(1, Time, 5)
                 .variable(2, AR, 20, 10)
                 .variable(3, MR, 20, 10)
-                .variable(4, MagicDamage, 20, 10, AP, 0.2)
+                .variable(4, MagicDamage, 20, 10, ap(0.2))
                 .cost(20)
                 .cd(10);
         SummonTibbers.update()
                 .active("指定地点の{1}の敵ユニットに{2}を与え、操作可能なTibbersを召喚する。Tibbersは{3}間持続し、{4}の敵ユニットに毎秒{5}を与える。")
                 .variable(1, Radius, 150)
-                .variable(2, MagicDamage, 200, 125, AP, 0.7)
+                .variable(2, MagicDamage, 200, 125, ap(0.7))
                 .variable(3, Time, 45, 0)
                 .variable(4, Radius, 200)
-                .variable(5, MagicDamage, 35, 0, AP, 0.2)
+                .variable(5, MagicDamage, 35, 0, ap(0.2))
                 .cost(125, 50)
                 .cd(120)
                 .range(600);
@@ -2067,12 +2090,12 @@ public enum Skill {
                 .range(2500, 750);
         EnchantedCrystalArrow.update()
                 .active("指定方向に敵Championにのみ当たる矢を飛ばし、当たった敵Championに{1}と{2}(飛距離に比例して１～3.5秒)と{3}間の{4}を与える。また敵Champion命中時に矢が爆発し、{5}の敵ユニットに{6}と{3}間の{4}を与える。飛行中の矢は視界を持つ。")
-                .variable(1, MagicDamage, 250, 175, AP, 1)
+                .variable(1, MagicDamage, 250, 175, ap(1))
                 .variable(2, Stun, 0)
                 .variable(3, Time, 3)
                 .variable(4, Slow, 50)
                 .variable(5, Radius, 250)
-                .variable(6, MagicDamage, 125, 87.5, AP, 0.5)
+                .variable(6, MagicDamage, 125, 87.5, ap(0.5))
                 .cost(150)
                 .cd(100, -10)
                 .range(-1);
@@ -2080,7 +2103,7 @@ public enum Skill {
         ManaBarrier.update().passive(" HPが20%以下になった際、その時点での残りマナの50%分のダメージを防御するシールドを張る。このシールドは10秒間持続する。").cd(90);
         RocketGrab.update()
                 .active("指定方向に腕を飛ばし、当たった敵ユニットに{1}と{2}を与え自分の位置まで引き寄せる。またこのスキル命中時に対象の視界を得る。")
-                .variable(1, MagicDamage, 80, 55, AP, 1)
+                .variable(1, MagicDamage, 80, 55, ap(1))
                 .variable(2, Stun, 1)
                 .cost(120)
                 .cd(20, -1)
@@ -2100,10 +2123,10 @@ public enum Skill {
         StaticField.update()
                 .passive("{1}の敵ユニット1体（対象はランダム）に2.5秒ごとに{2}を与える。")
                 .variable(1, Radius, 450)
-                .variable(2, MagicDamage, 100, 100, AP, 0.25)
+                .variable(2, MagicDamage, 100, 100, ap(0.25))
                 .active("{3}の敵ユニットに{4}と{5}を与える。効果後はCDが解消されるまでPassiveの効果がなくなる。")
                 .variable(3, Radius, 600)
-                .variable(4, MagicDamage, 250, 125, AP, 1)
+                .variable(4, MagicDamage, 250, 125, ap(1))
                 .variable(5, Silence, 0.5)
                 .cost(150)
                 .cd(30);
@@ -2112,7 +2135,7 @@ public enum Skill {
                 .passive("スキルが当たった敵ユニットを炎上させ、対象の最大HPの2%分の魔法ダメージを毎秒与える。この効果は4秒間続く。炎上している敵ユニットにスキルが命中すると追加効果が発生する。(Minionに対しては毎秒80DMが上限)");
         Sear.update()
                 .active("指定方向に火球を投射し、当たった敵ユニットに{1}を与える。敵が炎上していた場合、{2}を与える。")
-                .variable(1, MagicDamage, 80, 40, AP, 0.65)
+                .variable(1, MagicDamage, 80, 40, ap(0.65))
                 .variable(2, Stun, 2)
                 .cost(50)
                 .cd(8, -0.5)
@@ -2120,21 +2143,21 @@ public enum Skill {
         PillarOfFlame.update()
                 .active("指定地点に炎の柱を作り出し、0.5秒後に{1}の敵ユニットに{2}を与える。敵が炎上していた場合、代わりに{3}を与える。")
                 .variable(1, Radius, 175)
-                .variable(2, MagicDamage, 75, 45, AP, 0.6)
-                .variable(3, MagicDamage, 94, 56, AP, 0.75)
+                .variable(2, MagicDamage, 75, 45, ap(0.6))
+                .variable(3, MagicDamage, 94, 56, ap(0.75))
                 .cost(70, 10)
                 .cd(10)
                 .range(900);
         Conflagration.update()
                 .active("対象の敵ユニットに{1}を与える。敵が炎上していた場合、{2}の敵にも{1}を与える。")
-                .variable(1, MagicDamage, 70, 35, AP, 0.55)
+                .variable(1, MagicDamage, 70, 35, ap(0.55))
                 .variable(2, Radius, 200)
                 .cost(60, 5)
                 .cd(12, -1)
                 .range(625);
         Pyroclasm.update()
                 .active("対象の敵ユニットに火炎弾を放つ。火炎弾は近くの敵ユニットに4回まで跳ね、その度に{1}を与える(最大5hit)。この跳ね返りは同一ユニットに何度も跳ね返る。敵が炎上していた場合、敵Championに優先して跳ね返るようになる。")
-                .variable(1, MagicDamage, 150, 100, AP, 0.5)
+                .variable(1, MagicDamage, 150, 100, ap(0.5))
                 .cost(100, 50)
                 .cd(105, -15)
                 .range(750);
@@ -2152,7 +2175,7 @@ public enum Skill {
         YordleSnapTrap.update()
                 .active("指定地点に罠を仕掛ける。敵Championが罠の{4}に入ると発動して、対象に{1}かけて{2}と{3}を与え、9秒間対象の位置が見える。罠は3個まで置け、4分間持続する。")
                 .variable(1, Time, 1.5)
-                .variable(2, MagicDamage, 80, 50, AP, 0.6)
+                .variable(2, MagicDamage, 80, 50, ap(0.6))
                 .variable(3, Snare, 1.5)
                 .variable(4, Radius, 135)
                 .cost(50)
@@ -2160,7 +2183,7 @@ public enum Skill {
                 .range(800);
         CaliberNet.update()
                 .active("指定方向にネットを飛ばし当たった敵ユニットに{1}と{3}間{2}を与え、Caitlynはネットを飛ばした方向の反対側にジャンプ({4})する。")
-                .variable(1, MagicDamage, 80, 50, AP, 0.8)
+                .variable(1, MagicDamage, 80, 50, ap(0.8))
                 .variable(2, Slow, 50)
                 .variable(3, Time, 1, 0.25)
                 .variable(4, Distance, 400)
@@ -2178,21 +2201,21 @@ public enum Skill {
         Overload.update()
                 .active("対象の敵ユニットに{1}を与える。")
                 .passive("{2}を得る。")
-                .variable(1, MagicDamage, 60, 25, AP, 0.4, Mana, 0.065)
+                .variable(1, MagicDamage, 60, 25, ap(0.4), amplify(Mana, 0.065))
                 .variable(2, CDR, 2, 2)
                 .cost(60)
                 .cd(3.5)
                 .range(650);
         RunePrison.update()
                 .active("対象の敵ユニットに{1}及び{2}を与える。")
-                .variable(1, MagicDamage, 60, 35, AP, 0.6, Mana, 0.045)
+                .variable(1, MagicDamage, 60, 35, ap(0.6), amplify(Mana, 0.045))
                 .variable(2, Snare, 0.75, 0.25)
                 .cost(80, 10)
                 .cd(14)
                 .range(625);
         SpellFlux.update()
                 .active("対象の敵ユニットに魔法弾を飛ばし{1}及び{2}を与える。魔法弾は{3}の敵ユニット及び自身に4回まで跳ね返る(最大5hit)。この跳ね返りは同一ユニットに何度も跳ね返り、また自身から跳ね返った弾は敵Championを優先で狙う。")
-                .variable(1, MagicDamage, 50, 20, AP, 0.35, Mana, 0.01)
+                .variable(1, MagicDamage, 50, 20, ap(0.35), amplify(Mana, 0.01))
                 .variable(2, MRReduction, 12, 3)
                 .variable(3, Radius, 400)
                 .cost(60, 10)
@@ -2211,14 +2234,14 @@ public enum Skill {
         NoxiousBlast.update()
                 .active("指定地点に0.5秒後に毒を発生させ、{1}の敵ユニットに毒を与え3秒かけて{2}を与える。このスキルがChampionにヒットした場合、3秒間{3}増加する。")
                 .variable(1, Radius, 75)
-                .variable(2, MagicDamage, 75, 40, AP, 0.8)
+                .variable(2, MagicDamage, 75, 40, ap(0.8))
                 .variable(3, MSRatio, 15, 2.5)
                 .cost(35, 10)
                 .cd(3)
                 .range(850);
         Miasma.update()
                 .active("指定地点に7秒間持続する毒霧を吹き出す。毒霧は徐々に範囲(100～175)が広がり、毒霧の上を通過した敵に2秒間持続する毒を付与し{1}と{2}の{3}を与える。また指定地点の視界を得る。")
-                .variable(1, MagicDamage, 25, 10, AP, 0.15)
+                .variable(1, MagicDamage, 25, 10, ap(0.15))
                 .variable(2, Time, 2)
                 .variable(3, Slow, 15, 5)
                 .cost(70, 10)
@@ -2226,13 +2249,13 @@ public enum Skill {
                 .range(850);
         TwinFang.update()
                 .active("対象の敵ユニットに{1}を与える。対象が毒を受けている場合、CDが0.5秒になる。")
-                .variable(1, MagicDamage, 50, 35, AP, 0.55)
+                .variable(1, MagicDamage, 50, 35, ap(0.55))
                 .cost(50, 10)
                 .cd(5)
                 .range(700);
         PetrifyingGaze.update()
                 .active("眼からビームを放ち、指定方向扇形83°の範囲内の敵ユニットに{1}を与え、こちらを向いている敵に更に{2}を与える。後ろを向いていた場合スロー{3}の{4}を与える。")
-                .variable(1, MagicDamage, 200, 125, AP, 0.6)
+                .variable(1, MagicDamage, 200, 125, ap(0.6))
                 .variable(2, Stun, 2)
                 .variable(3, Time, 2)
                 .variable(4, Slow, 60)
@@ -2248,7 +2271,7 @@ public enum Skill {
         Rupture.update()
                 .active("指定地点に0.5秒後にトゲを出現させ、{1}の敵ユニットに{2}、{3}を与えて、{4}間{5}にする。また指定地点の視界を得る。")
                 .variable(1, Radius, 175)
-                .variable(2, MagicDamage, 80, 55, AP, 1)
+                .variable(2, MagicDamage, 80, 55, ap(1))
                 .variable(3, Knockup, 1)
                 .variable(4, Time, 3)
                 .variable(5, Slow, 60)
@@ -2257,21 +2280,21 @@ public enum Skill {
                 .range(950);
         FeralScream.update()
                 .active("前方扇形60°の領域の敵ユニットに{1}と{2}を与える。")
-                .variable(1, MagicDamage, 75, 50, AP, 0.7)
+                .variable(1, MagicDamage, 75, 50, ap(0.7))
                 .variable(2, Silence, 1.5, 0.25)
                 .cost(70, 10)
                 .cd(13)
                 .range(700);
         VorpalSpikes.update()
                 .active("通常攻撃時に前方にトゲを飛ばし当たった敵ユニットに{1}を与える。トゲを飛ばす範囲はUltのスタック数に比例し増加する。")
-                .variable(1, MagicDamage, 20, 15, AP, 0.3)
+                .variable(1, MagicDamage, 20, 15, ap(0.3))
                 .cd(0.5)
                 .range(500)
                 .toggle();
         Feast.update()
                 .active("対象の敵ユニットに{1}を与える。対象がChampion以外の場合は{2}を与える。このスキルで敵を倒すとスタックが1増えて{3}と{4}が増加する。死亡するとスタックが半分(端数切り上げ)消失する。")
-                .variable(1, TrueDamage, 300, 175, AP, 0.7)
-                .variable(2, TrueDamage, 1000, 0, AP, 0.7)
+                .variable(1, TrueDamage, 300, 175, ap(0.7))
+                .variable(2, TrueDamage, 1000, 0, ap(0.7))
                 .variable(3, Health, 90, 30)
                 .variable(4, Range, 4, 2.15)
                 .cost(100)
@@ -2283,14 +2306,14 @@ public enum Skill {
         PhosphorusBomb.update()
                 .active("指定した{1}の敵ユニットに{2}を与え、6秒間指定地点の視界を得る。また、Championに当たった場合、6秒間そのChampionの視界を得る。このスキルで敵のステルスを看破する事はできない。")
                 .variable(1, Radius, 150)
-                .variable(2, MagicDamage, 80, 50, AP, 0.5)
+                .variable(2, MagicDamage, 80, 50, ap(0.5))
                 .cost(80, 10)
                 .cd(8)
                 .range(600);
         Valkyrie.update()
                 .active("指定地点まで高速で移動し{1}、通過地点を2.5秒間炎上させる。炎上地点の上にいる敵ユニットに毎秒{2}を与える。")
                 .variable(1, Distance, 800)
-                .variable(2, MagicDamage, 60, 30, AP, 0.4)
+                .variable(2, MagicDamage, 60, 30, ap(0.4))
                 .cost(100)
                 .cd(26, -3)
                 .range(800);
@@ -2304,7 +2327,7 @@ public enum Skill {
         MissileBarrage.update()
                 .active("指定方向にミサイルを発射し、当たった敵ユニットの{1}に{2}を与える。使用時にスタックを消費する。スタックは{3}毎に1つ増加し最大7つまでスタックされる。4発毎に大きいミサイル(効果範囲2倍、ダメージ50%上昇)を発射させる。スタック増加時間はCD低減の影響を受ける。")
                 .variable(1, Radius, 150, 0)
-                .variable(2, MagicDamage, 120, 70, AP, 0.3, AD, 0.2)
+                .variable(2, MagicDamage, 120, 70, ap(0.3), amplify(AD, 0.2))
                 .variable(3, CDRAwareTime, 12)
                 .cost(30, 5)
                 .cd(1.2)
@@ -2352,16 +2375,16 @@ public enum Skill {
                         175, 195, 215, 240, 265, 290}));
         CrescentStrike.update()
                 .active("指定地点に弧を描くエネルギーを放ち、当たった敵ユニットとその{2}に{1}とMoonlight(3秒)を与える。またMoonlightが付与されている敵ユニットの位置が見える。")
-                .variable(1, MagicDamage, 60, 35, AP, 0.7)
+                .variable(1, MagicDamage, 60, 35, ap(0.7))
                 .variable(2, Radius, 50)
                 .cost(55)
                 .cd(10, -1)
                 .range(830);
         PaleCascade.update()
                 .active("5秒間ダメージを軽減する{1}を張ると同時に、Dianaの周りを回る3つの球体を召喚する。敵ユニットが触れた球体は爆発し、{2}の敵ユニットに{3}を与える。球体が全て爆発するとシールドが張りなおされる。")
-                .variable(1, Shield, 55, 25, AP, 0.45)
+                .variable(1, Shield, 55, 25, ap(0.45))
                 .variable(2, Radius, 400)
-                .variable(3, MagicDamage, 20, 14, AP, 0.2)
+                .variable(3, MagicDamage, 20, 14, ap(0.2))
                 .cost(60, 10)
                 .cd(10);
         Moonfall.update()
@@ -2373,7 +2396,7 @@ public enum Skill {
                 .cd(26, -2);
         LunarRush.update()
                 .active("対象の敵ユニットの元までテレポートし、{1}を与える。対象にMoonlightが付与されていた場合、すべての敵ユニットに付与されたMoonlightを消費してこのスキルのCDが解消される。")
-                .variable(1, MagicDamage, 100, 60, AP, 0.6)
+                .variable(1, MagicDamage, 100, 60, ap(0.6))
                 .cost(50, 15)
                 .cd(25, -5)
                 .range(825);
@@ -2381,11 +2404,10 @@ public enum Skill {
         /** Dr.Mundo */
         AdrenalineRush.update().passive("毎秒{1}する。").variable(1, RestoreHealth, 0, 0, Health, 0.003);
         InfectedCleaver.update()
-                .active("指定方向に包丁を投げ、当たった敵ユニットに{1}の{4}と{2}間の{3}を与える。最小DMは{5}。ミニオンやモンスターへの最大DMは{6}。命中すると{7}する。")
-                .variable(1, TargetCurrentHealth, 15, 3)
+                .active("指定方向に包丁を投げ、当たった敵ユニットに{1}と{2}間の{3}を与える。最小DMは{5}。ミニオンやモンスターへの最大DMは{6}。命中すると{7}する。")
+                .variable(1, MagicDamage, 0, 0, amplify(TargetCurrentHealth, 0.15, 0.03))
                 .variable(2, Time, 2)
                 .variable(3, Slow, 40)
-                .variable(4, MagicDamage, 0)
                 .variable(5, MagicDamage, 80, 50)
                 .variable(6, MagicDamage, 300, 100)
                 .variable(7, RestoreHealth, 25, 5)
@@ -2395,16 +2417,15 @@ public enum Skill {
         BurningAgony.update()
                 .active("{1}の敵ユニットに毎秒{2}を与える。また{3}を得る。")
                 .variable(1, Radius, 325)
-                .variable(2, MagicDamage, 35, 15, AP, 0.2)
+                .variable(2, MagicDamage, 35, 15, ap(0.2))
                 .variable(3, Tenacity, 10, 5)
                 .cost(SkillCost.Health, 10, 5)
                 .cd(4)
                 .toggle();
         Masochism.update()
-                .active("5秒間{1} + {2} * {3}を得る。")
-                .variable(1, AD, 40, 15)
-                .variable(2, MissingHealth, 0)
-                .variable(3, Count, 0.4, 0.15)
+                .active("5秒間{1}を得る。")
+                .variable(1, AD, 40, 15, amplify(MissingHealth, 0.4, 0.15))
+                .cost(SkillCost.Health, 35, 10)
                 .cd(7);
         Sadism.update()
                 .active("12秒かけて{1}し、{2}を得る。")
@@ -3987,7 +4008,10 @@ public enum Skill {
                 .range(700);
 
         /** Vladimir */
-        CrimsonPact.update().passive("アイテム等でHPが40増加する度にAPが1増加し、APが1増加する度にHPが1.4増加する。");
+        CrimsonPact.update()
+                .passive(BounusHealth + "に比例して{1}を、" + AP + "に比例して{2}を得る。")
+                .variable(1, AP, 0, 0, amplify(BounusHealth, 0.2))
+                .variable(2, Health, 0, 0, ap(1.4));
         Transfusion.update().active("対象の敵ユニットに魔法DMを与え、自身のHPを回復する。").cd(10, -1.5).range(600);
         SanguinePool.update()
                 .active("Vladimirが2秒間血の海に沈む。その間はターゲットされなくなり、血の海の上にいる敵ユニットに魔法DMとスロー(40%,1s)を与え続ける。また、与えたダメージの12.5%を回復する。魔法DM: 80/135/190/245/300 + [アイテム等で増加したHPの15%]※表記魔法DMは2秒間当て続けた場合の合計ダメージ。")
