@@ -259,7 +259,7 @@ public class ChampionDetail extends Page {
                 }
             }
 
-            String costLabel = status.getCostType().name().toUpperCase();
+            String costLabel = status.getCostType().name;
 
             if (status.isToggle()) {
                 costLabel = "毎秒" + costLabel;
@@ -267,6 +267,7 @@ public class ChampionDetail extends Page {
 
             buildValues(cooldown, "CD", status, CD, build.get(CDR).value);
             buildValues(cost, costLabel, status, Cost, 0);
+            cost.append(status.getCostType().unit);
             buildValues(range, "RANGE", status, Range, 0);
 
             // PASSIVE
@@ -386,7 +387,10 @@ public class ChampionDetail extends Page {
             int size = amplifier.diff == 0 ? 1 : skill.getMaxLevel();
 
             for (int i = 0; i < size; i++) {
-                double computed = amplifier.base + amplifier.diff * i;
+                System.out.println(amplifier.diff);
+                System.out.println(i);
+                System.out.println(amplifier.diff * i);
+                double computed = amplifier.base + (amplifier.diff * 100) * i / 100;
 
                 jQuery value = element.child(SkillStyle.Value.class).text(computed);
 

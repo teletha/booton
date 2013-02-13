@@ -1862,7 +1862,7 @@ public enum Skill {
         EssenceTheft.update()
                 .passive("スキルが敵ユニットに当たる度に" + EssenceTheft + "のチャージを1つ得る(1回のスキルで得られる上限は3チャージまで)。9チャージの状態でスキルを使用すると、チャージを全て消費して使用したスキルに{1}が追加される。")
                 .variable(1, SV, 35)
-                .cost(SkillCost.Charge, 9, 0);
+                .cost(Charge, 9, 0);
         OrbOfDeception.update()
                 .active("指定方向にオーブを放ち当たった敵ユニットに{1}を与える。オーブは行きと帰りでそれぞれにヒット判定があり、帰りの場合は{2}を与える。")
                 .variable(1, MagicDamage, 40, 25, ap(0.33))
@@ -1904,7 +1904,7 @@ public enum Skill {
                 .variable(3, RestoreEnergy, 20, 5)
                 .variable(4, Time, 6)
                 .cd(6, -0.5)
-                .cost(SkillCost.Energy, 60, 0)
+                .cost(Energy, 60, 0)
                 .range(600);
         TwilightShroud.update()
                 .active("指定地点に8秒間煙を発生させ{1}のユニットに以下の効果を与える。Akaliは{2}と{3}、ステルスの効果を得る。敵ユニットには{4}を与える。")
@@ -1913,20 +1913,20 @@ public enum Skill {
                 .variable(3, MR, 10, 10)
                 .variable(4, Slow, 14, 4)
                 .cd(20, 0)
-                .cost(SkillCost.Energy, 80, -5)
+                .cost(Energy, 80, -5)
                 .range(700);
         CrescentSlash.update()
                 .active("{2}の敵ユニットに{1}を与える。")
                 .variable(1, PhysicalDamage, 30, 25, ap(0.3), ad(0.6))
                 .variable(2, Radius, 325, 0)
                 .cd(7, -1)
-                .cost(SkillCost.Energy, 60, -5);
+                .cost(Energy, 60, -5);
         ShadowDance.update()
                 .active("対象の敵ユニットまで高速で移動し{1}を与える。使用時にチャージを消費する。チャージは{2}毎に又は敵Championキル/アシストで増加し最大で3つまでチャージされる。チャージ増加時間はCD低減の影響を受ける。")
                 .variable(1, MagicDamage, 100, 75, ap(0.5))
                 .variable(2, CDRAwareTime, 25, -5)
                 .cd(2, -0.5)
-                .cost(SkillCost.Charge, 1, 0)
+                .cost(Charge, 1, 0)
                 .range(800);
 
         Trample.update()
@@ -2411,7 +2411,7 @@ public enum Skill {
                 .variable(5, MagicDamage, 80, 50)
                 .variable(6, MagicDamage, 300, 100)
                 .variable(7, RestoreHealth, 25, 5)
-                .cost(SkillCost.Health, 50, 10)
+                .cost(Health, 50, 10)
                 .cd(4)
                 .range(1000);
         BurningAgony.update()
@@ -2419,25 +2419,28 @@ public enum Skill {
                 .variable(1, Radius, 325)
                 .variable(2, MagicDamage, 35, 15, ap(0.2))
                 .variable(3, Tenacity, 10, 5)
-                .cost(SkillCost.Health, 10, 5)
+                .cost(Health, 10, 5)
                 .cd(4)
                 .toggle();
         Masochism.update()
                 .active("5秒間{1}を得る。")
                 .variable(1, AD, 40, 15, amplify(MissingHealth, 0.4, 0.15))
-                .cost(SkillCost.Health, 35, 10)
+                .cost(Health, 35, 10)
                 .cd(7);
         Sadism.update()
                 .active("12秒かけて{1}し、{2}を得る。")
                 .variable(1, RestoreHealth, 0, 0, amplify(Health, 0.4, 0.15))
                 .variable(2, MSRatio, 15, 10)
                 .cd(75)
-                .cost(SkillCost.CurrentHealth, 20, 0);
+                .cost(CurrentHealth, 20, 0);
 
         /** Draven */
-        WickedBlades.update().passive("クリティカル時またはSpinning Axe使用時の通常攻撃に毎秒物理DMが付与される。毎秒ダメージは4秒間持続する。");
+        WickedBlades.update()
+                .passive("クリティカル時または" + SpinningAxe + "使用時の通常攻撃に毎秒{1}が付与される。毎秒ダメージは4秒間持続する。")
+                .variable(1, PhysicalDamage, 7.5, 0, Lv, 1);
         SpinningAxe.update()
-                .active("次に行う通常攻撃に追加物理DMが付与される。このスキルによる通常攻撃が敵ユニットに命中すると、斧がDravenの近くに跳ね返る。その斧をキャッチするとBlood RushのCDが解消され、更に次の通常攻撃もSpinning Axeの効果を受けるようになる。このスキルは連続で使用する事で最大2回分までチャージできる。")
+                .active("次に行う通常攻撃に追加{1}が付与される。このスキルによる通常攻撃が敵ユニットに命中すると、斧がDravenの近くに跳ね返る。その斧をキャッチするとBlood RushのCDが解消され、更に次の通常攻撃もSpinning Axeの効果を受けるようになる。このスキルは連続で使用する事で最大2回分までチャージできる。")
+                .variable(1, PhysicalDamage, 0, 0, amplify(AD, 0.45, 0.1))
                 .cost(45)
                 .cd(12, -1);
         BloodRush.update().active("Dravenの移動速度が1.5秒増加し、攻撃速度が3秒増加する。移動速度増加は1.5秒かけて元に戻る。").cost(40).cd(12);
@@ -4012,15 +4015,36 @@ public enum Skill {
                 .passive(BounusHealth + "に比例して{1}を、" + AP + "に比例して{2}を得る。")
                 .variable(1, AP, 0, 0, amplify(BounusHealth, 0.025))
                 .variable(2, Health, 0, 0, ap(1.4));
-        Transfusion.update().active("対象の敵ユニットに魔法DMを与え、自身のHPを回復する。").cd(10, -1.5).range(600);
+        Transfusion.update()
+                .active("対象の敵ユニットに{1}を与え、{2}する。")
+                .variable(1, MagicDamage, 90, 35, ap(0.6))
+                .variable(2, RestoreHealth, 15, 10, ap(0.25))
+                .cd(10, -1.5)
+                .range(600);
         SanguinePool.update()
-                .active("Vladimirが2秒間血の海に沈む。その間はターゲットされなくなり、血の海の上にいる敵ユニットに魔法DMとスロー(40%,1s)を与え続ける。また、与えたダメージの12.5%を回復する。魔法DM: 80/135/190/245/300 + [アイテム等で増加したHPの15%]※表記魔法DMは2秒間当て続けた場合の合計ダメージ。")
+                .active("Vladimirが2秒間血の海に沈む。その間はターゲットされなくなり、{1}内にいる敵ユニットに0.5秒毎に{2}と{3}間の{4}を与え続ける。また、与えたダメージの12.5%Healthが回復する。")
+                .variable(1, Radius, 300)
+                .variable(2, MagicDamage, 20, 13.75, BounusHealth, 0.00375)
+                .variable(3, Time, 1)
+                .variable(4, Slow, 40)
+                .cost(CurrentHealth, 20, 0)
                 .cd(26, -3);
         TidesOfBlood.update()
-                .active("周囲の敵ユニットに魔法DMを与える。使用する度にスタックが増加し、1スタックにつきこのスキルの基礎魔法DMとHPコストが25%、VladimirのHP回復量とHPRegが増加していく(最大4スタック)。スタックは10秒増加が無いと0になる。このスキルは周囲に敵ユニットがいなくても使用可能。")
+                .active("{1}の敵ユニットに{2}を与える。使用する度にスタックが増加し、1スタックにつきこのスキルの基礎魔法DMとHPコストが25%増加し、{4}と{3}を得るく(最大4スタック)。スタックは10秒増加が無いと0になる。このスキルは周囲に敵ユニットがいなくても使用可能。")
+                .variable(1, Radius, 0)
+                .variable(2, MagicDamage, 60, 25, ap(0.45))
+                .variable(3, HregRatio, 4, 1)
+                .variable(4, RestoreHealthRatio, 4, 1)
+                .cost(Health, 30, 10)
                 .cd(4.5)
                 .range(620);
-        Hemoplague.update().active("指定範囲の敵ユニットに疫病を付与し、その敵ユニットは5秒間受けるダメージが増加する。効果終了時に魔法DMを与える。").cd(150, -15).range(700);
+        Hemoplague.update()
+                .active("指定地点の{1}の敵ユニットに疫病を付与し、その敵ユニットは5秒間受けるダメージが12%増加する。効果終了時に{2}を与える。ダメージ増加効果のため実際には{3}を与える。")
+                .variable(1, Radius, 300)
+                .variable(2, MagicDamage, 150, 100, ap(0.7))
+                .variable(3, MagicDamage, 168, 112, ap(0.784))
+                .cd(150, -15)
+                .range(700);
 
         /** Volibear */
         ChosenOftheStorm.update().passive("VolibearのHPが30%以下になったとき、6秒間かけて最大HPの30%を回復する。").cd(120);

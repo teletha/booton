@@ -28,7 +28,7 @@ public class SkillStatus {
     private NativeArray<Double> values;
 
     /** The skill cost type. */
-    private SkillCost cost;
+    private Status cost;
 
     /** The toggle flag. */
     private boolean isToggle;
@@ -56,7 +56,7 @@ public class SkillStatus {
             passive = new ArrayList();
             active = new ArrayList();
             isToggle = false;
-            cost = SkillCost.Mana;
+            cost = Mana;
         }
     }
 
@@ -277,7 +277,7 @@ public class SkillStatus {
      * @param diff A diff cost.
      */
     SkillStatus cost(double base) {
-        return cost(SkillCost.Mana, base, 0);
+        return cost(Mana, base, 0);
     }
 
     /**
@@ -289,7 +289,7 @@ public class SkillStatus {
      * @param diff A diff cost.
      */
     SkillStatus cost(double base, double diff) {
-        return cost(SkillCost.Mana, base, diff);
+        return cost(Mana, base, diff);
     }
 
     /**
@@ -300,7 +300,7 @@ public class SkillStatus {
      * @param base A base cost.
      * @param diff A diff cost.
      */
-    SkillStatus cost(SkillCost type, double base, double diff) {
+    SkillStatus cost(Status type, double base, double diff) {
         values.set(Cost.ordinal(), base);
         values.set(CostPerLv.ordinal(), diff);
         cost = type;
@@ -315,7 +315,7 @@ public class SkillStatus {
      * 
      * @return
      */
-    public SkillCost getCostType() {
+    public Status getCostType() {
         return cost;
     }
 

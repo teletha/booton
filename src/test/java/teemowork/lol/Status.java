@@ -62,7 +62,7 @@ public enum Status {
 
     HregPerLv(2),
 
-    HregRatio(2),
+    HregRatio("Hreg", 2, "%"),
 
     Mana("Mana"),
 
@@ -164,6 +164,8 @@ public enum Status {
 
     RestoreHealth("Health"),
 
+    RestoreHealthRatio("Health回復量", 3, "%"),
+
     RestoreMana("Mana"),
 
     RestoreEnergy("気"),
@@ -206,6 +208,8 @@ public enum Status {
 
     TargetHealth("", 3, "%"),
 
+    CurrentHealth("現在のHealth", 0, "%"),
+
     TargetCurrentHealth("対象の現在のHealth"),
 
     TargetCurrentHealthRatio("対象の現在のHealth", 3, "%"),
@@ -218,7 +222,9 @@ public enum Status {
 
     Distance("距離"),
 
-    Gold;
+    Gold,
+
+    Charge;
 
     /** The status name. */
     public final String name;
