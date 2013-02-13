@@ -44,7 +44,7 @@ public abstract class SkillVariableResolver {
         double[] values = new double[getSize()];
 
         for (int i = 0; i < values.length; i++) {
-            values[i] = compute(i);
+            values[i] = compute(i + 1);
         }
         return values;
     }

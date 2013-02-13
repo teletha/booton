@@ -348,8 +348,9 @@ public class ChampionDetail extends Page {
                 skillLevel = resolver.convertLevel(build.getLevel());
             }
 
-            // Computed value
-            root.child(SkillStyle.Computed.class).text(status.format(build.computeSkillVariable(skill, variable)));
+            // compute current value
+            root.child(SkillStyle.Computed.class)
+                    .text(status.format(build.computeVariable(skill, variable, Math.max(1, skillLevel))));
 
             // All values
             double[] values = resolver.enumerate();

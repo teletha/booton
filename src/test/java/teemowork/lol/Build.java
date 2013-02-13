@@ -73,7 +73,7 @@ public class Build extends Notifiable {
     public Build(Champion champion) {
         this.champion = champion;
 
-        items[0] = Item.DeathfireGrasp;
+        items[0] = Item.LastWhisper;
         items[1] = Item.WarmogsArmor;
     }
 
@@ -235,38 +235,6 @@ public class Build extends Notifiable {
 
     /**
      * <p>
-     * Compute skill variable value by using this build.
-     * </p>
-     * 
-     * @param skill A current processing skill.
-     * @param variable A current processing variable.
-     * @param skillLevel A current skill level.
-     * @return
-     */
-    public double computeSkillVariable(Skill skill, SkillVariable variable) {
-        // avoid circular dependency
-        dependencies.add(skill);
-
-        int level = Math.max(0, getLevel(skill) - 1);
-        double value = variable.resolver.compute(level);
-
-        for (SkillAmplifier amplifier : variable.amplifiers) {
-            value += (amplifier.base + amplifier.diff * level) * get(amplifier.status).value;
-        }
-
-        if (variable.status == CDRAwareTime) {
-            value = value * (1 - get(CDR).value / 100);
-        }
-
-        // avoid circular dependency
-        dependencies.remove(skill);
-
-        // API definition
-        return value;
-    }
-
-    /**
-     * <p>
      * Compute champion base status.
      * </p>
      * 
@@ -331,45 +299,52 @@ public class Build extends Notifiable {
         // Champion Passive
         for (int i = 0; i < champion.skills.length; i++) {
             Skill skill = champion.skills[i];
+            SkillStatus skillStatus = skill.getStatus(version);
 
-            if (dependencies.add(skill)) {
-                SkillStatus skillStatus = skill.getStatus(version);
+            for (Object token : skillStatus.passive) {
+                if (token instanceof SkillVariable) {
+                    SkillVariable variable = (SkillVariable) token;
 
-                for (Object token : skillStatus.passive) {
-                    if (token instanceof SkillVariable) {
-                        SkillVariable variable = (SkillVariable) token;
-
-                        if (variable.status == status && !variable.isConditional) {
-                            double passiveValue = variable.resolver.compute(skillLevel[i] - 1);
-
-                            for (SkillAmplifier amplifier : variable.amplifiers) {
-                                passiveValue += (amplifier.base + amplifier.diff * (skillLevel[i] - 1)) * get(amplifier.status).value;
-                            }
-                            sum += passiveValue;
-                        }
+                    if (variable.status == status && !variable.isConditional) {
+                        sum += computeVariable(skill, variable, getLevel(skill));
                     }
                 }
-                dependencies.remove(skill);
             }
         }
-
-        // for (Rune rune : marks) {
-        // sum += rune.improvement.get(status, version);
-        // }
-        //
-        // for (Rune rune : seals) {
-        // sum += rune.improvement.get(status, version);
-        // }
-        //
-        // for (Rune rune : glyphs) {
-        // sum += rune.improvement.get(status, version);
-        // }
-        //
-        // for (Rune rune : quintessences) {
-        // sum += rune.improvement.get(status, version);
-        // }
-
         return sum;
+    }
+
+    /**
+     * <p>
+     * Compute skill variable value by using this build.
+     * </p>
+     * 
+     * @param skill A current processing skill.
+     * @param variable A current processing variable.
+     * @param level A current skill level.
+     * @return
+     */
+    public double computeVariable(Skill skill, SkillVariable variable, int level) {
+        // avoid circular dependency
+        if (!dependencies.add(skill)) {
+            return 0;
+        }
+
+        double value = variable.resolver.compute(level);
+
+        for (SkillAmplifier amplifier : variable.amplifiers) {
+            value += (amplifier.base + amplifier.diff * (level - 1)) * get(amplifier.status).value;
+        }
+
+        if (variable.status == CDRAwareTime) {
+            value = value * (1 - get(CDR).value / 100);
+        }
+
+        // avoid circular dependency
+        dependencies.remove(skill);
+
+        // API definition
+        return value;
     }
 
     /**
