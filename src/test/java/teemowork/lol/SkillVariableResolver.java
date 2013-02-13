@@ -204,7 +204,7 @@ public abstract class SkillVariableResolver {
          */
         @Override
         public double compute(int skillLevel) {
-            return values[skillLevel];
+            return values[skillLevel - 1];
         }
 
         /**
