@@ -1814,7 +1814,7 @@ public enum Skill {
      * @param rate An AD rate.
      * @return
      */
-    private static final SkillAmplifier ad(double rate) {
+    private static final SkillVariable ad(double rate) {
         return amplify(AD, rate);
     }
 
@@ -1826,7 +1826,7 @@ public enum Skill {
      * @param rate An AD rate.
      * @return
      */
-    private static final SkillAmplifier bounusAD(double rate) {
+    private static final SkillVariable bounusAD(double rate) {
         return amplify(BounusAD, rate);
     }
 
@@ -1838,7 +1838,7 @@ public enum Skill {
      * @param rate An AP rate.
      * @return
      */
-    private static final SkillAmplifier ap(double rate) {
+    private static final SkillVariable ap(double rate) {
         return amplify(AP, rate);
     }
 
@@ -1851,7 +1851,7 @@ public enum Skill {
      * @param base A base value of amplifier rate.
      * @return
      */
-    private static final SkillAmplifier amplify(Status status, double base) {
+    private static final SkillVariable amplify(Status status, double base) {
         return amplify(status, base, 0);
     }
 
@@ -1865,8 +1865,8 @@ public enum Skill {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final SkillAmplifier amplify(Status status, double base, double diff) {
-        SkillAmplifier amplifier = new SkillAmplifier();
+    private static final SkillVariable amplify(Status status, double base, double diff) {
+        SkillVariable amplifier = new SkillVariable();
         amplifier.setStatus(status);
         amplifier.setResolver(new SimpleVariableResolver(base, diff));
 
@@ -1883,8 +1883,8 @@ public enum Skill {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final SkillAmplifier amplify(Status status, double base, double diff, SkillAmplifier amplifier) {
-        SkillAmplifier one = amplify(status, base, diff);
+    private static final SkillVariable amplify(Status status, double base, double diff, SkillVariable amplifier) {
+        SkillVariable one = amplify(status, base, diff);
         one.amplifiers.add(amplifier);
 
         return one;

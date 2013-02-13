@@ -306,7 +306,7 @@ public class Build extends Notifiable {
                 if (token instanceof SkillVariable) {
                     SkillVariable variable = (SkillVariable) token;
 
-                    if (variable.getStatus() == status && !variable.isConditional) {
+                    if (variable.getStatus() == status) {
                         sum += computeVariable(skill, variable, getLevel(skill));
                     }
                 }
@@ -325,7 +325,7 @@ public class Build extends Notifiable {
      * @param level A current skill level.
      * @return
      */
-    public double computeVariable(Skill skill, SkillAmplifier variable, int level) {
+    public double computeVariable(Skill skill, SkillVariable variable, int level) {
         // avoid circular dependency
         if (!dependencies.add(skill)) {
             return 0;
@@ -333,7 +333,7 @@ public class Build extends Notifiable {
 
         double value = variable.getResolver().compute(level);
 
-        for (SkillAmplifier amplifier : variable.amplifiers) {
+        for (SkillVariable amplifier : variable.amplifiers) {
             value += amplifier.getResolver().compute(level) * get(amplifier.getStatus()).value;
         }
 

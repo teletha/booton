@@ -28,10 +28,9 @@ import teemowork.lol.Build;
 import teemowork.lol.Build.Computed;
 import teemowork.lol.Champion;
 import teemowork.lol.Skill;
-import teemowork.lol.SkillAmplifier;
+import teemowork.lol.SkillVariable;
 import teemowork.lol.SkillKey;
 import teemowork.lol.SkillStatus;
-import teemowork.lol.SkillVariable;
 import teemowork.lol.SkillVariableResolver;
 import teemowork.lol.Status;
 import booton.css.CSS;
@@ -344,7 +343,7 @@ public class ChampionDetail extends Page {
         private void buildVariable(jQuery root, SkillVariable variable, int skillLevel) {
             SkillVariableResolver resolver = variable.getResolver();
             Status status = variable.getStatus();
-            List<SkillAmplifier> amplifiers = variable.amplifiers;
+            List<SkillVariable> amplifiers = variable.amplifiers;
 
             if (!resolver.isSkillLevelBased()) {
                 skillLevel = resolver.convertLevel(build.getLevel());
@@ -373,7 +372,7 @@ public class ChampionDetail extends Page {
                 }
 
                 if (!amplifiers.isEmpty()) {
-                    for (SkillAmplifier amplifier : amplifiers) {
+                    for (SkillVariable amplifier : amplifiers) {
                         writeAmplifier(root, amplifier, skillLevel);
                     }
                 }
@@ -381,7 +380,7 @@ public class ChampionDetail extends Page {
             }
         }
 
-        private void writeAmplifier(jQuery root, SkillAmplifier amplifier, int skillLevel) {
+        private void writeAmplifier(jQuery root, SkillVariable amplifier, int skillLevel) {
             jQuery element = root.child(SkillStyle.Amplifier.class);
             element.append("+");
 
@@ -404,7 +403,7 @@ public class ChampionDetail extends Page {
 
             if (!amplifier.amplifiers.isEmpty()) {
                 element.append("(");
-                for (SkillAmplifier nest : amplifier.amplifiers) {
+                for (SkillVariable nest : amplifier.amplifiers) {
                     writeAmplifier(element, nest, skillLevel);
                 }
                 element.append(")");

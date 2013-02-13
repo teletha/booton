@@ -27,6 +27,9 @@ public class SkillStatus {
     /** The value store. */
     private NativeArray<Double> values;
 
+    /** The value store. */
+    private NativeArray<SkillVariable> variables;
+
     /** The skill cost type. */
     private Status cost;
 
@@ -47,12 +50,14 @@ public class SkillStatus {
 
         if (previous != null) {
             values = previous.values.copy();
+            variables = previous.variables;
             passive = previous.passive;
             active = previous.active;
             isToggle = previous.isToggle;
             cost = previous.cost;
         } else {
             values = new NativeArray();
+            variables = new NativeArray();
             passive = new ArrayList();
             active = new ArrayList();
             isToggle = false;
@@ -125,7 +130,10 @@ public class SkillStatus {
             if (token.length() != 1 || !Character.isDigit(token.charAt(0))) {
                 tokens.add(token);
             } else {
-                tokens.add(new SkillVariable(Integer.parseInt(token)));
+                SkillVariable variable = new SkillVariable();
+
+                tokens.add(variable);
+                variables.set(Integer.parseInt(token), variable);
             }
         }
         return this;
@@ -203,11 +211,11 @@ public class SkillStatus {
     }
 
     SkillStatus variable(int id, Status status, SkillVariableResolver resolver, Status ratioType1, double ratio1, Status ratioType2, double ratio2) {
-        SkillAmplifier amplifier1 = new SkillAmplifier();
+        SkillVariable amplifier1 = new SkillVariable();
         amplifier1.setStatus(ratioType1);
         amplifier1.setResolver(new SimpleVariableResolver(ratio1, 0));
 
-        SkillAmplifier amplifier2 = new SkillAmplifier();
+        SkillVariable amplifier2 = new SkillVariable();
         amplifier2.setStatus(ratioType2);
         amplifier2.setResolver(new SimpleVariableResolver(ratio2, 0));
 
@@ -215,37 +223,27 @@ public class SkillStatus {
                 : amplifier2);
     }
 
-    SkillStatus variable(int id, Status status, double base, double diff, SkillAmplifier amplifier) {
+    SkillStatus variable(int id, Status status, double base, double diff, SkillVariable amplifier) {
         return variable(id, status, new SimpleValues(skill.getMaxLevel(), base, diff), amplifier, null);
     }
 
-    SkillStatus variable(int id, Status status, double base, double diff, SkillAmplifier amplifier1, SkillAmplifier amplifier2) {
+    SkillStatus variable(int id, Status status, double base, double diff, SkillVariable amplifier1, SkillVariable amplifier2) {
         return variable(id, status, new SimpleValues(skill.getMaxLevel(), base, diff), amplifier1, amplifier2);
     }
 
-    SkillStatus variable(int id, Status status, SkillVariableResolver resolver, SkillAmplifier amplifier1, SkillAmplifier amplifier2) {
-        List[] lists = {passive, active};
+    SkillStatus variable(int id, Status status, SkillVariableResolver resolver, SkillVariable amplifier1, SkillVariable amplifier2) {
+        SkillVariable variable = variables.get(id);
+        variable.setStatus(status);
+        variable.setResolver(resolver);
 
-        for (List list : lists) {
-            for (Object token : list) {
-                if (token instanceof SkillVariable) {
-                    SkillVariable variable = (SkillVariable) token;
-
-                    if (variable.id == id) {
-                        variable.setStatus(status);
-                        variable.setResolver(resolver);
-
-                        if (amplifier1 != null) {
-                            variable.amplifiers.add(amplifier1);
-                        }
-
-                        if (amplifier2 != null) {
-                            variable.amplifiers.add(amplifier2);
-                        }
-                    }
-                }
-            }
+        if (amplifier1 != null) {
+            variable.amplifiers.add(amplifier1);
         }
+
+        if (amplifier2 != null) {
+            variable.amplifiers.add(amplifier2);
+        }
+
         return this;
     }
 
