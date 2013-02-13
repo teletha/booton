@@ -203,8 +203,16 @@ public class SkillStatus {
     }
 
     SkillStatus variable(int id, Status status, SkillVariableResolver resolver, Status ratioType1, double ratio1, Status ratioType2, double ratio2) {
-        return variable(id, status, resolver, ratioType1 == null ? null : new SkillAmplifier(ratioType1, ratio1, 0), ratioType2 == null ? null
-                : new SkillAmplifier(ratioType2, ratio2, 0));
+        SkillAmplifier amplifier1 = new SkillAmplifier();
+        amplifier1.setStatus(ratioType1);
+        amplifier1.setResolver(new SimpleVariableResolver(ratio1, 0));
+
+        SkillAmplifier amplifier2 = new SkillAmplifier();
+        amplifier2.setStatus(ratioType2);
+        amplifier2.setResolver(new SimpleVariableResolver(ratio2, 0));
+
+        return variable(id, status, resolver, ratioType1 == null ? null : amplifier1, ratioType2 == null ? null
+                : amplifier2);
     }
 
     SkillStatus variable(int id, Status status, double base, double diff, SkillAmplifier amplifier) {
@@ -224,8 +232,8 @@ public class SkillStatus {
                     SkillVariable variable = (SkillVariable) token;
 
                     if (variable.id == id) {
-                        variable.status = status;
-                        variable.resolver = resolver;
+                        variable.setStatus(status);
+                        variable.setResolver(resolver);
 
                         if (amplifier1 != null) {
                             variable.amplifiers.add(amplifier1);
@@ -371,7 +379,7 @@ public class SkillStatus {
     /**
      * @version 2013/02/12 10:41:24
      */
-    private static class SimpleValues extends SkillVariableResolver {
+    public static class SimpleValues extends SkillVariableResolver {
 
         /** The skill size. */
         private final int size;
@@ -387,7 +395,7 @@ public class SkillStatus {
          * @param base A base value.
          * @param diff A diff value.
          */
-        private SimpleValues(int size, double base, double diff) {
+        public SimpleValues(int size, double base, double diff) {
             this.size = size;
             this.base = base;
             this.diff = diff;
@@ -397,16 +405,16 @@ public class SkillStatus {
          * {@inheritDoc}
          */
         @Override
-        public int getSize() {
-            return base == 0 ? 0 : diff == 0 ? 1 : size;
+        public double compute(int skillLevel) {
+            return base + diff * (skillLevel - 1);
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public double compute(int skillLevel) {
-            return base + diff * (skillLevel - 1);
+        public int computeSize(int hint) {
+            return base == 0 ? 0 : diff == 0 ? 1 : size;
         }
     }
 }

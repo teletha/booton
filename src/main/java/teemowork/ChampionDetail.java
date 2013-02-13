@@ -342,8 +342,8 @@ public class ChampionDetail extends Page {
          * @param skillLevel
          */
         private void buildVariable(jQuery root, SkillVariable variable, int skillLevel) {
-            SkillVariableResolver resolver = variable.resolver;
-            Status status = variable.status;
+            SkillVariableResolver resolver = variable.getResolver();
+            Status status = variable.getStatus();
             List<SkillAmplifier> amplifiers = variable.amplifiers;
 
             if (!resolver.isSkillLevelBased()) {
@@ -355,7 +355,7 @@ public class ChampionDetail extends Page {
                     .text(status.format(build.computeVariable(skill, variable, Math.max(1, skillLevel))));
 
             // All values
-            double[] values = resolver.enumerate();
+            double[] values = resolver.enumerate(skill.getMaxLevel());
 
             if (1 < values.length || !amplifiers.isEmpty()) {
                 root.append("(");
@@ -385,12 +385,11 @@ public class ChampionDetail extends Page {
             jQuery element = root.child(SkillStyle.Amplifier.class);
             element.append("+");
 
-            int size = amplifier.diff == 0 ? 1 : skill.getMaxLevel();
+            int size = amplifier.getResolver().computeSize(skill.getMaxLevel());
 
             for (int i = 0; i < size; i++) {
-                double computed = Mathematics.round(amplifier.base + amplifier.diff * i, 3);
-
-                jQuery value = element.child(SkillStyle.Value.class).text(computed);
+                jQuery value = element.child(SkillStyle.Value.class)
+                        .text(Mathematics.round(build.computeVariable(skill, amplifier, i + 1), 3));
 
                 if (size != 1 && i == skillLevel - 1) {
                     value.addClass(SkillStyle.Current.class);
@@ -400,8 +399,18 @@ public class ChampionDetail extends Page {
                     element.child(SkillStyle.Separator.class).text("/");
                 }
             }
-            element.append(amplifier.status.unit);
-            element.append(amplifier.status.name);
+
+            element.append(amplifier.getStatus().unit);
+
+            if (!amplifier.amplifiers.isEmpty()) {
+                element.append("(");
+                for (SkillAmplifier nest : amplifier.amplifiers) {
+                    writeAmplifier(element, nest, skillLevel);
+                }
+                element.append(")");
+            }
+
+            element.append(amplifier.getStatus().name);
         }
     }
 

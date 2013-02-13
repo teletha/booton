@@ -1866,7 +1866,28 @@ public enum Skill {
      * @return
      */
     private static final SkillAmplifier amplify(Status status, double base, double diff) {
-        return new SkillAmplifier(status, base, diff);
+        SkillAmplifier amplifier = new SkillAmplifier();
+        amplifier.setStatus(status);
+        amplifier.setResolver(new SimpleVariableResolver(base, diff));
+
+        return amplifier;
+    }
+
+    /**
+     * <p>
+     * Create skill amplifier.
+     * </p>
+     * 
+     * @param status A status type.
+     * @param base A base value of amplifier rate.
+     * @param diff A diff value of amplifier rate.
+     * @return
+     */
+    private static final SkillAmplifier amplify(Status status, double base, double diff, SkillAmplifier amplifier) {
+        SkillAmplifier one = amplify(status, base, diff);
+        one.amplifiers.add(amplifier);
+
+        return one;
     }
 
     static {
@@ -2123,7 +2144,7 @@ public enum Skill {
         Overdrive.update()
                 .active("8秒間自身の{1} {2}増加する。")
                 .variable(1, MSRatio, 16, 4)
-                .variable(2, AS, 30, 8)
+                .variable(2, ASRatio, 30, 8)
                 .cost(75)
                 .cd(15);
         PowerFist.update()
@@ -2381,8 +2402,8 @@ public enum Skill {
 
         /** Diana */
         MoonsilverBlade.update()
-                .passive("{1}を得る。通常攻撃3回毎に周囲にいる敵ユニットに{2}を与える。追加魔法DMはLvが上がるごとに強化される。")
-                .variable(1, AS, 20)
+                .passive("{1}増加する。通常攻撃3回毎に周囲にいる敵ユニットに{2}を与える。追加魔法DMはLvが上がるごとに強化される。")
+                .variable(1, ASRatio, 20)
                 .variable(2, MagicDamage, new Per1Level(new int[] {20, 25, 30, 40, 50, 65, 80, 95, 110, 125, 140, 155,
                         175, 195, 215, 240, 265, 290}));
         CrescentStrike.update()
@@ -2458,7 +2479,7 @@ public enum Skill {
         BloodRush.update()
                 .active("1.5秒間{1}増加し、3秒間{2}増加する。移動速度増加は1.5秒かけて元に戻る。")
                 .variable(1, MSRatio, 40, 5)
-                .variable(2, AS, 20, 5)
+                .variable(2, ASRatio, 20, 5)
                 .cost(40)
                 .cd(12);
         StandAside.update()
@@ -2480,43 +2501,79 @@ public enum Skill {
         SpiderSwarm.update()
                 .passive("Human Form時に使用したスキルが敵ユニットに命中するとSpiderlingのチャージを1得る。Spider Formになるとチャージ数に比例したSpiderlingを召喚する。召喚される数はSpider Form(Ult)のレベルに比例し増加する。召喚されたSpiderlingは死亡するとチャージが減るが、再度Human Formに戻ると再度チャージ状態に戻る。");
         Neurotoxin.update()
-                .passive("in(Human Form)")
-                .active("対象の敵ユニットに毒を放ち魔法DMを与える。対象の現在のHPに比例しダメージが増加する。魔法DM: 50/95/140/185/230 + [対象の現在HPの8%(+0.03%)](割合ダメージはMinionに対して60/120/180/240/300DMが上限)消費MN: 80/85/90/95/100 CD: 6s Range: 650Venomous Bite(Spider Form)Active:対象の敵ユニットに飛びつき魔法DMを与える。対象の減っているHPに比例しダメージが増加する。")
+                .active("対象の敵ユニットに毒を放ち{1} + {2}を与える。対象の現在のHPに比例しダメージが増加する。")
+                .variable(1, MagicDamage, 50, 45, amplify(TargetCurrentHealth, 8, 0, amplify(AP, 0.03)))
+                .variable(2, TargetCurrentHealth, 8, 0, ap(0.03))
                 .cost(80, 5)
                 .cd(6)
                 .range(475);
         VolatileSpiderling.update()
-                .passive("Spiderling(Human Form)")
-                .active("指定地点に蜘蛛を放つ。蜘蛛は敵ユニットに当たるか3秒間経過すると爆発し、範囲内の敵ユニットに魔法DMを与える。蜘蛛は指定地点に移動した後、最も近くにいる敵ユニットに向かって移動する。また蜘蛛は視界を持つ。魔法DM: 75/125/175/225/275 (+0.8)消費MN: 60/70/80/90/100 CD: 12s Range: 950Skittering Frenzy(Spider Form)Passive:Spiderlingの攻撃速度が増加する。増加AS: 5/10/15/20/25%Active:3秒間EliseとSpiderlingの攻撃速度が増加する。また、その間Spiderlingが攻撃を行うたびにEliseのHPが回復する。")
+                .active("指定地点に蜘蛛を放つ。蜘蛛は敵ユニットに当たるか3秒間経過すると爆発し、範囲内の敵ユニットに{1}を与える。蜘蛛は指定地点に移動した後、最も近くにいる敵ユニットに向かって移動する。また蜘蛛は視界を持つ。")
+                .variable(1, MagicDamage, 75, 50, ap(0.8))
                 .cost(60, 10)
                 .cd(12)
                 .range(950);
         Cocoon.update()
-                .passive("uman Form)")
-                .active("指定方向に糸を飛ばし当たった敵ユニットの視界を得て、スタン(1.5s)を与える。弾速: 1450消費MN: 50 CD: 14/13/12/11/10s Range: 1075Rappel(Spider Form)Active:EliseとSpiderlingが上空に退避し(ターゲット不可になる)指定の方法で降下する。上空にいる間は射程内の視界を得る地面をクリックした場合: 最大2秒間上空に待機し、初期位置へ降下する。この間、敵ユニットをターゲットし裏側に降下できる。")
+                .active("指定方向に糸を飛ばし当たった敵ユニットの視界を得て、{1}を与える。")
+                .variable(1, Stun, 1.5)
                 .cost(50)
-                .cd(26, -2)
+                .cd(14, -1)
                 .range(1075);
         SpiderForm.update()
-                .passive("orm(Human Form)")
-                .active("EliseがSpider Formに変身し射程125のMeleeになる。その間は通常攻撃に追加魔法DMが付与され、ARとMRが増加し更に移動速度が10増加する。またこのスキルに比例しSpiderlingの最大チャージ数、攻撃力が増加し、Spiderlingが受けるAoEダメージが低減される。追加魔法DM: 10/20/30/40 (+0.3)増加AR/MR: 10/15/20/25Spiderling最大チャージ数: 2/3/4/5Spiderling攻撃力: 10/20/30/40 (+0.1)Spiderling被ダメージ低減率: 10/20/30/40%消費MN: なし CD: 4sHuman Form(Spider Form)Active:EliseがHuman Formに変身し射程550のRangedになる。")
+                .active("EliseがSpider Formに変身し射程125のMeleeになる。その間は通常攻撃に追加{1}が付与され、{2}と{3}、{4}を得る。またこのスキルに比例しSpiderlingの最大チャージ数、攻撃力が増加し、Spiderlingが受けるAoEダメージが低減される。")
+                .variable(1, MagicDamage, 10, 10, ap(0.3))
+                .variable(2, AR, 10, 5)
+                .variable(3, MR, 10, 5)
+                .variable(4, MS, 10)
                 .cd(4);
+        VenomousBite.update()
+                .active("対象の敵ユニットに飛びつき{1} + {2}を与える。対象の減っているHPに比例しダメージが増加する。")
+                .variable(1, MagicDamage, 50, 45)
+                .variable(2, TargetMissingHealth, 8, 0, ap(0.03))
+                .cd(6)
+                .range(475);
+        SkitteringFrenzy.update()
+                .passive("Spiderlingの{1}増加する。")
+                .variable(1, ASRatio, 5, 5)
+                .active("3秒間EliseとSpiderlingの{2}増加する。また、その間Spiderlingが攻撃を行うたびにEliseの{3}する。")
+                .variable(2, ASRatio, 60, 20)
+                .variable(3, RestoreHealth, 4, 0, ap(0.02))
+                .cd(12);
+        Rappel.update()
+                .active("EliseとSpiderlingが上空に退避し(ターゲット不可になる)指定の方法で降下する。上空にいる間は射程内の視界を得る地面をクリックした場合: 最大2秒間上空に待機し、初期位置へ降下する。この間、敵ユニットをターゲットし裏側に降下できる。敵ユニットをクリックした場合: 即座に下降し裏側に降り立つ。")
+                .cd(26, -2)
+                .range(1075);
+        HumanForm.update().active("EliseがHuman Formに変身し射程550のRangedになる。").cd(4);
 
         /** Evelynn */
         ShadowWalk.update()
-                .passive("Evelynnがステルス状態になる。スキルを使うか、ダメージを受けるか与えるかすると、6秒間ステルスが解除された状態になる。敵Championに範囲700まで近づくとステルス状態でも敵Championに視認されるようになる。また、ステルス中は毎秒最大マナの1%分のマナが回復していく。");
+                .passive("Evelynnがステルス状態になる。スキルを使うか、ダメージを受けるか与えるかすると、6秒間ステルスが解除された状態になる。敵Championに範囲700まで近づくとステルス状態でも敵Championに視認されるようになる。また、ステルス中は毎秒{1}していく。")
+                .variable(1, RestoreMana, 0, 0, amplify(Mana, 0.01));
         HateSpike.update()
-                .active("視界内にいる最も近くにいる敵ユニット1体に向けて棘を放ち、直線状にいる敵ユニットにダメージを与える。Evelynnが敵ユニットをターゲットしている場合は、その対象に向けて棘が放たれる。")
+                .active("視界内にいる最も近くにいる敵ユニット1体に向けて棘を放ち、直線状にいる敵ユニットに{1}を与える。Evelynnが敵ユニットをターゲットしている場合は、その対象に向けて棘が放たれる。")
+                .variable(1, MagicDamage, 40, 20, ap(0.45), bounusAD(0.5))
                 .cost(16, 6)
                 .cd(1.5)
                 .range(400);
         DarkFrenzy.update()
-                .passive("敵Championにスキルを当てるたびに移動速度が増加する。移動速度増加は3秒間持続し、最大4スタックする。増加移動速度(1スタック): 4/8/12/16/20")
-                .active("3秒間移動速度が増加し、ユニットをすり抜けられるようになり、更にスローの効果を受けなくなる。敵Championキル/アシスト時に、このスキルのCDが解消される。")
+                .passive("敵Championにスキルを当てるたびに{1}増加する。移動速度増加は3秒間持続し、最大4スタックする。")
+                .variable(1, MS, 4, 4)
+                .active("3秒間{2}増加し、ユニットをすり抜けられるようになり、更にスローの効果を受けなくなる。敵Championキル/アシスト時に、このスキルのCDが解消される。")
+                .variable(2, MSRatio, 30, 10)
                 .cd(15);
-        Ravage.update().active("対象の敵ユニットに2回連続で魔法DMを与え、3秒間Evelynnの攻撃速度が増加する。").cost(50, 5).cd(9).range(225);
+        Ravage.update()
+                .active("対象の敵ユニットに2回連続で{1}を与え、3秒間{2}増加する。")
+                .variable(1, MagicDamage, 35, 20, ap(0.5), bounusAD(0.5))
+                .variable(2, ASRatio, 60, 15)
+                .cost(50, 5)
+                .cd(9)
+                .range(225);
         AgonysEmbrace.update()
-                .active("指定範囲内の敵ユニットに対象の現在HPに比例した魔法DMとスロー(2s)を与え、このスキルを命中させた敵Championの数に比例してEvelynnに6秒間持続するシールドが張られる。")
+                .active("指定{1}の敵ユニットに{2}と2秒間の{3}を与え、このスキルを命中させた敵Champion毎に6秒間持続する{4}を得る。")
+                .variable(1, Radius, 500)
+                .variable(2, MagicDamage, 0, 0, amplify(TargetCurrentHealth, 15, 5, ap(0.01)))
+                .variable(3, Slow, 30, 20)
+                .variable(4, Shield, 150, 75)
                 .cost(100)
                 .cd(150, -30)
                 .range(650);
@@ -2758,7 +2815,9 @@ public enum Skill {
 
         /** Jarvan IV */
         MartialCadence.update()
-                .passive("通常攻撃に敵の現在HPの6/8/10%の追加物理DM(最大400DM)が付与される。同一の対象には6秒に一度しか発動しない。レベル1、7、13で追加物理DMの増加値が上昇する。");
+                .passive("通常攻撃に{1}の{2}(最大400DM)が付与される。同一の対象には6秒に一度しか発動しない。レベル1、7、13で追加物理DMの増加値が上昇する。")
+                .variable(1, TargetCurrentHealth, new Per6Level(6, 2))
+                .variable(2, PhysicalDamage, 0);
         DragonStrike.update()
                 .active("槍を突き出して直線上の敵ユニットに物理DMを与え、3秒間ARを低下させる。また、Demacian Standardの旗にヒットした場合、旗の位置まで突進し、進路上の敵ユニットに打ち上げ(0.75s)を与える。")
                 .cost(45, 5)
@@ -4169,10 +4228,14 @@ public enum Skill {
                 .cd(13, -1)
                 .range(600);
         CrescentSweep.update()
-                .active("槍を振り回し周囲の敵ユニットに物理DMとノックバックを与え、このスキルを命中させた敵Championの数に比例して自身のARとMRを6秒間上昇させる。敵ユニットの現在のHPに比例して与えるダメージが増加する。Challenge効果中の敵ユニットに対してはノックバックは発動しない。")
+                .active("槍を振り回し{3}の敵ユニットに{1}と{2}を与え、このスキルを命中させた敵Championの数に比例して6秒間{4}と{5}を得る。" + Challenge + "効果中の敵ユニットに対しては" + Knockback + "は発動しない。")
+                .variable(1, PhysicalDamage, 125, 100, bounusAD(1), amplify(TargetCurrentHealth, 0.15))
+                .variable(2, Knockback, 0)
+                .variable(3, Radius, 375)
+                .variable(4, AR, 15, 5)
+                .variable(5, MR, 15, 5)
                 .cost(100)
-                .cd(100, -10)
-                .range(375);
+                .cd(100, -10);
 
         /** Yorick */
         UnholyCovenant.update()

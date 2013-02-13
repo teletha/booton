@@ -9,29 +9,16 @@
  */
 package teemowork.lol;
 
-import java.util.List;
-
-import js.util.ArrayList;
-
 /**
  * @version 2013/02/06 13:53:39
  */
-public class SkillVariable {
+public class SkillVariable extends SkillAmplifier {
 
     /** The variable id. */
     public final int id;
 
-    /** The variable type. */
-    public Status status;
-
-    /** The value enumerator. */
-    public SkillVariableResolver resolver;
-
     /** The conditional variable flag. */
     public boolean isConditional = false;
-
-    /** The amplifier types. */
-    public final List<SkillAmplifier> amplifiers = new ArrayList();
 
     /**
      * @param id

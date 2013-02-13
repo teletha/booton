@@ -75,6 +75,7 @@ public class Build extends Notifiable {
 
         items[0] = Item.LastWhisper;
         items[1] = Item.WarmogsArmor;
+        items[2] = Item.RabadonsDeathcap;
     }
 
     /**
@@ -305,7 +306,7 @@ public class Build extends Notifiable {
                 if (token instanceof SkillVariable) {
                     SkillVariable variable = (SkillVariable) token;
 
-                    if (variable.status == status && !variable.isConditional) {
+                    if (variable.getStatus() == status && !variable.isConditional) {
                         sum += computeVariable(skill, variable, getLevel(skill));
                     }
                 }
@@ -324,19 +325,19 @@ public class Build extends Notifiable {
      * @param level A current skill level.
      * @return
      */
-    public double computeVariable(Skill skill, SkillVariable variable, int level) {
+    public double computeVariable(Skill skill, SkillAmplifier variable, int level) {
         // avoid circular dependency
         if (!dependencies.add(skill)) {
             return 0;
         }
 
-        double value = variable.resolver.compute(level);
+        double value = variable.getResolver().compute(level);
 
         for (SkillAmplifier amplifier : variable.amplifiers) {
-            value += (amplifier.base + amplifier.diff * (level - 1)) * get(amplifier.status).value;
+            value += amplifier.getResolver().compute(level) * get(amplifier.getStatus()).value;
         }
 
-        if (variable.status == CDRAwareTime) {
+        if (variable.getStatus() == CDRAwareTime) {
             value = value * (1 - get(CDR).value / 100);
         }
 

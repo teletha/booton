@@ -20,15 +20,13 @@ public enum Status {
 
     CostPerLv,
 
-    CostType,
-
     Sell,
 
-    AS("攻撃速度", 3, "%"),
+    AS(3),
 
     ASPerLv,
 
-    ASRatio,
+    ASRatio("攻撃速度", 3, "%"),
 
     ASReduction("AS減少", 0, "%"),
 
@@ -212,9 +210,11 @@ public enum Status {
 
     CurrentHealth("現在のHealth", 0, "%"),
 
-    TargetCurrentHealth("対象の現在のHealth"),
+    TargetCurrentHealth("対象の現在のHealth", 0, "%"),
 
     TargetCurrentHealthRatio("対象の現在のHealth", 3, "%"),
+
+    TargetMissingHealth("対象の減っているHealth", 0, "%"),
 
     MissingHealth("Health損耗率"),
 
@@ -312,12 +312,23 @@ public enum Status {
     public String format(double computed) {
         computed = round(computed);
 
-        if (this == RestoreEnergy || this == RestoreHealth || this == RestoreMana) {
+        switch (this) {
+        case RestoreEnergy:
+        case RestoreHealth:
+        case RestoreMana:
             return name + "が" + computed + "回復";
-        }
 
-        if (this == Gold) {
+        case ASRatio:
+            return name + "が" + computed + unit;
+
+        case TargetCurrentHealth:
+            return name + "の" + computed + unit;
+
+        case Gold:
             return computed + name;
+
+        default:
+            break;
         }
 
         if (computed == 0) {
