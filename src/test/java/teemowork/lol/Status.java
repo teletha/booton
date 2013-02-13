@@ -36,11 +36,7 @@ public enum Status {
 
     ADRatio,
 
-    BounusAD,
-
-    BounusADPerLv,
-
-    BounusADRatio,
+    BounusAD("増加AD"),
 
     Critical("Critical Chanse", 0, "%"),
 
@@ -60,6 +56,8 @@ public enum Status {
 
     HealthRatio,
 
+    BounusHealth("増加Health"),
+
     Hreg(2),
 
     HregPerLv(2),
@@ -78,7 +76,7 @@ public enum Status {
 
     MregRatio(2),
 
-    AP("Ability Power"),
+    AP,
 
     APPerLv,
 
@@ -132,7 +130,7 @@ public enum Status {
 
     ARPenPerLv,
 
-    ARPenRatio(null, 0, "%"),
+    ARPenRatio("割合ARPen", 0, "%"),
 
     ARPenRatioPerLv,
 
@@ -208,9 +206,11 @@ public enum Status {
 
     TargetHealth("", 3, "%"),
 
-    TargetCurrentHealth("対象の現在のHealth", 3, "%"),
+    TargetCurrentHealth("対象の現在のHealth"),
 
-    MissingHealth("Health損耗率", 3, "%"),
+    TargetCurrentHealthRatio("対象の現在のHealth", 3, "%"),
+
+    MissingHealth("Health損耗率"),
 
     Radius("範囲"),
 
@@ -288,6 +288,17 @@ public enum Status {
      */
     public Status per() {
         return Status.valueOf(name() + "PerLv");
+    }
+
+    /**
+     * <p>
+     * This status is multiplicative or not.
+     * </p>
+     * 
+     * @return
+     */
+    public boolean isMultiplicative() {
+        return name().endsWith("Ratio");
     }
 
     /**

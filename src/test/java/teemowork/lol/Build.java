@@ -64,13 +64,17 @@ public class Build extends Notifiable {
     /** The first cache for computed value. */
     private List<Computed> cache = new ArrayList(Status.values().length);
 
+    /** The circular dependency manager. */
+    private final Set<Skill> dependencies = new HashSet();
+
     /**
      * @param champion
      */
     public Build(Champion champion) {
         this.champion = champion;
 
-        items[0] = Item.LastWhisper;
+        items[0] = Item.DeathfireGrasp;
+        items[1] = Item.WarmogsArmor;
     }
 
     /**
@@ -126,6 +130,12 @@ public class Build extends Notifiable {
      * @return A computed value.
      */
     public Computed get(Status status) {
+        // Computed value = cache.get(status.ordinal());
+        //
+        // if (value != null) {
+        // return value;
+        // }
+
         switch (status) {
         case Energy:
         case Ereg:
@@ -133,6 +143,15 @@ public class Build extends Notifiable {
 
         case Lv:
             return new Computed(level, level, Lv);
+
+        case MissingHealth:
+            return new Computed(0, 0, status);
+
+        case BounusAD:
+            return new Computed(0, get(AD).increased, status);
+
+        case BounusHealth:
+            return new Computed(0, get(Health).increased, status);
 
         case AS:
             double baseAS = champion.getStatus(version).get(AS);
@@ -216,6 +235,38 @@ public class Build extends Notifiable {
 
     /**
      * <p>
+     * Compute skill variable value by using this build.
+     * </p>
+     * 
+     * @param skill A current processing skill.
+     * @param variable A current processing variable.
+     * @param skillLevel A current skill level.
+     * @return
+     */
+    public double computeSkillVariable(Skill skill, SkillVariable variable) {
+        // avoid circular dependency
+        dependencies.add(skill);
+
+        int level = Math.max(0, getLevel(skill) - 1);
+        double value = variable.resolver.compute(level);
+
+        for (SkillAmplifier amplifier : variable.amplifiers) {
+            value += (amplifier.base + amplifier.diff * level) * get(amplifier.status).value;
+        }
+
+        if (variable.status == CDRAwareTime) {
+            value = value * (1 - get(CDR).value / 100);
+        }
+
+        // avoid circular dependency
+        dependencies.remove(skill);
+
+        // API definition
+        return value;
+    }
+
+    /**
+     * <p>
      * Compute champion base status.
      * </p>
      * 
@@ -277,8 +328,29 @@ public class Build extends Notifiable {
             }
         }
 
+        // Champion Passive
         for (int i = 0; i < champion.skills.length; i++) {
-            sum += champion.skills[i].getStatus(version).getPassive(status, skillLevel[i]);
+            Skill skill = champion.skills[i];
+
+            if (dependencies.add(skill)) {
+                SkillStatus skillStatus = skill.getStatus(version);
+
+                for (Object token : skillStatus.passive) {
+                    if (token instanceof SkillVariable) {
+                        SkillVariable variable = (SkillVariable) token;
+
+                        if (variable.status == status && !variable.isConditional) {
+                            double passiveValue = variable.resolver.compute(skillLevel[i] - 1);
+
+                            for (SkillAmplifier amplifier : variable.amplifiers) {
+                                passiveValue += (amplifier.base + amplifier.diff * (skillLevel[i] - 1)) * get(amplifier.status).value;
+                            }
+                            sum += passiveValue;
+                        }
+                    }
+                }
+                dependencies.remove(skill);
+            }
         }
 
         // for (Rune rune : marks) {

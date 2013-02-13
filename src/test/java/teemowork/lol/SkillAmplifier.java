@@ -33,8 +33,4 @@ public class SkillAmplifier {
         this.base = base;
         this.diff = diff;
     }
-
-    public double compute(double value) {
-        return value + base + diff;
-    }
 }
