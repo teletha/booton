@@ -76,29 +76,6 @@ public class SkillStatus {
 
     /**
      * <p>
-     * Retrieve passive status value.
-     * </p>
-     * 
-     * @param status A target status.
-     * @return A result.
-     */
-    public double getPassive(Status status, int level, Build build) {
-        for (Object token : passive) {
-            if (token instanceof SkillVariable) {
-                SkillVariable variable = (SkillVariable) token;
-
-                if (variable.status == status && !variable.isConditional) {
-                    System.out.println(status);
-                    System.out.println(level);
-                    return variable.resolver.compute(level);
-                }
-            }
-        }
-        return 0;
-    }
-
-    /**
-     * <p>
      * Retrieve status value.
      * </p>
      * 
@@ -429,7 +406,7 @@ public class SkillStatus {
          */
         @Override
         public double compute(int skillLevel) {
-            return base + diff * skillLevel;
+            return base + diff * (skillLevel - 1);
         }
     }
 }

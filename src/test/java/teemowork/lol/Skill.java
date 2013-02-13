@@ -4010,7 +4010,7 @@ public enum Skill {
         /** Vladimir */
         CrimsonPact.update()
                 .passive(BounusHealth + "に比例して{1}を、" + AP + "に比例して{2}を得る。")
-                .variable(1, AP, 0, 0, amplify(BounusHealth, 0.2))
+                .variable(1, AP, 0, 0, amplify(BounusHealth, 0.025))
                 .variable(2, Health, 0, 0, ap(1.4));
         Transfusion.update().active("対象の敵ユニットに魔法DMを与え、自身のHPを回復する。").cd(10, -1.5).range(600);
         SanguinePool.update()
