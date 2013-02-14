@@ -166,6 +166,19 @@ public abstract class SkillVariableResolver {
     /**
      * @version 2013/02/12 11:37:34
      */
+    public static class Per2Level extends PerLevel {
+
+        /**
+         * @param values
+         */
+        public Per2Level(double base, double diff) {
+            super(new int[] {1, 3, 6, 9, 12, 15, 18}, base, diff);
+        }
+    }
+
+    /**
+     * @version 2013/02/12 11:37:34
+     */
     public static class Per3Level extends PerLevel {
 
         /**
@@ -213,6 +226,38 @@ public abstract class SkillVariableResolver {
         @Override
         public boolean isSkillLevelBased() {
             return false;
+        }
+    }
+
+    /**
+     * @version 2013/02/14 18:22:02
+     */
+    public static class FixedValues extends SkillVariableResolver {
+
+        /** The fixed values. */
+        private final double[] values;
+
+        /**
+         * @param values
+         */
+        public FixedValues(double[] values) {
+            this.values = values;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public double compute(int skillLevel) {
+            return values[skillLevel - 1];
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int computeSize(int hint) {
+            return values.length;
         }
     }
 }

@@ -75,7 +75,8 @@ public class Build extends Notifiable {
 
         items[0] = Item.LastWhisper;
         items[1] = Item.WarmogsArmor;
-        items[2] = Item.RabadonsDeathcap;
+        items[2] = Item.DeathfireGrasp;
+        items[3] = Item.MercurysTreads;
     }
 
     /**
@@ -158,6 +159,9 @@ public class Build extends Notifiable {
 
         case BounusHealth:
             return new Computed(0, get(Health).increased, status);
+
+        case BounusMS:
+            return new Computed(0, get(MS).increased, status);
 
         case AS:
             double baseAS = champion.getStatus(version).get(AS);
@@ -315,7 +319,7 @@ public class Build extends Notifiable {
                         int level = getLevel(skill);
 
                         if (level != 0) {
-                            sum += computeVariable(skill, variable, getLevel(skill));
+                            sum += computeVariable(skill, variable, level);
                         }
                     }
                 }
@@ -336,14 +340,17 @@ public class Build extends Notifiable {
      */
     public double computeVariable(Skill skill, SkillVariable variable, int level) {
         // avoid circular dependency
-        if (!dependencies.add(skill)) {
+        if (skill != null && !dependencies.add(skill)) {
             return 0;
         }
 
         double value = variable.getResolver().compute(level);
 
         for (SkillVariable amplifier : variable.amplifiers) {
-            value += amplifier.getResolver().compute(level) * get(amplifier.getStatus()).value;
+            SkillVariableResolver resolver = amplifier.getResolver();
+            int skillLevel = resolver.isSkillLevelBased() ? level : this.level;
+
+            value += computeVariable(null, amplifier, skillLevel) * get(amplifier.getStatus()).value;
         }
 
         if (variable.getStatus() == CDRAwareTime) {
