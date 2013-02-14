@@ -102,15 +102,17 @@ public enum Status {
 
     ARPerLv,
 
-    ARRatio,
+    ARRatio(AR.name, 3, "%"),
 
     ARReduction("AR減少"),
+
+    ARReductionRatio("AR減少", 3, "%"),
 
     MR,
 
     MRPerLv,
 
-    MRRatio,
+    MRRatio(MR.name(), 3, "%"),
 
     MRReduction("MR減少"),
 
@@ -154,7 +156,7 @@ public enum Status {
 
     EregRatio,
 
-    Damage(""),
+    Damage("与えたダメージ", 3, "%"),
 
     PhysicalDamage("物理DM"),
 
@@ -170,9 +172,11 @@ public enum Status {
 
     RestoreEnergy("気"),
 
-    DamageReductionRation("DM減少", 0, "%"),
+    DamageReductionRatio("DM減少", 0, "%"),
 
     PhysicalDamageReduction("物理DM減少"),
+
+    NormalAttackDamageReduction("通常攻撃DM減少"),
 
     Shield("シールド"),
 
@@ -190,7 +194,11 @@ public enum Status {
 
     Snare("スネア", 3, "秒"),
 
+    Fear("Fear", 3, "秒"),
+
     Silence("サイレンス", 3, "秒"),
+
+    Taunt("タウント", 3, "秒"),
 
     Knockup("打ち上げ", 3, "秒"),
 
@@ -225,6 +233,10 @@ public enum Status {
     Distance("距離"),
 
     Gold,
+
+    Experiment("経験値"),
+
+    ExperimentRatio("経験値", 0, "%"),
 
     Charge;
 
@@ -316,9 +328,13 @@ public enum Status {
         case RestoreEnergy:
         case RestoreHealth:
         case RestoreMana:
-            return name + "が" + computed + "回復";
+            return name + "が" + (computed == 0 ? "" : computed) + "回復";
 
         case ASRatio:
+        case MSRatio:
+        case ARRatio:
+        case MRRatio:
+        case ExperimentRatio:
             return name + "が" + computed + unit;
 
         case TargetCurrentHealth:
