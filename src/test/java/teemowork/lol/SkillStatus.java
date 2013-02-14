@@ -374,6 +374,21 @@ public class SkillStatus {
     }
 
     /**
+     * <p>
+     * </p>
+     * 
+     * @param id A variable identifier.
+     */
+    SkillStatus conditional(int id) {
+        SkillVariable variable = variables.get(id);
+
+        if (variable != null) {
+            variable.setConditional();
+        }
+        return this;
+    }
+
+    /**
      * @version 2013/02/12 10:41:24
      */
     public static class SimpleValues extends SkillVariableResolver {

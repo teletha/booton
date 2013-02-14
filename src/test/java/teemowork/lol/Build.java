@@ -75,8 +75,7 @@ public class Build extends Notifiable {
 
         items[0] = Item.LastWhisper;
         items[1] = Item.WarmogsArmor;
-        items[2] = Item.DeathfireGrasp;
-        items[3] = Item.MercurysTreads;
+        items[2] = Item.RabadonsDeathcap;
     }
 
     /**
@@ -147,11 +146,15 @@ public class Build extends Notifiable {
             return new Computed(level, level, Lv);
 
         case Damage:
-
             return new Computed(base(status), sum(status), status);
 
         case MissingHealth:
+        case TargetHealth:
+        case TargetCurrentHealth:
         case TargetMissingHealth:
+        case CurrentMana:
+        case Stack:
+        case Duration:
             return new Computed(0, 0, status);
 
         case BounusAD:
@@ -315,8 +318,9 @@ public class Build extends Notifiable {
                 if (token instanceof SkillVariable) {
                     SkillVariable variable = (SkillVariable) token;
 
-                    if (variable.getStatus() == status) {
-                        int level = getLevel(skill);
+                    if (variable.getStatus() == status && !variable.isConditional()) {
+                        SkillVariableResolver resolver = variable.getResolver();
+                        int level = resolver.isSkillLevelBased() ? getLevel(skill) : resolver.convertLevel(this.level);
 
                         if (level != 0) {
                             sum += computeVariable(skill, variable, level);

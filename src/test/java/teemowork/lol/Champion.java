@@ -18,6 +18,8 @@ import java.util.List;
 import js.util.ArrayList;
 
 /**
+ * 3.02準拠
+ * 
  * @version 2013/01/27 9:55:21
  */
 public class Champion {
@@ -555,7 +557,7 @@ public class Champion {
         Blitzcrank.update(P0000)
                 .set(Health, 423, 95)
                 .set(Hreg, 7.25, 0.75)
-                .set(Mana, 260, 40)
+                .set(Mana, 200, 40)
                 .set(Mreg, 6.6, 0.5)
                 .set(AD, 55.66, 3.5)
                 .set(AS, 0.625, 1.13)
@@ -688,11 +690,11 @@ public class Champion {
                 .set(Mana, 235, 45)
                 .set(Mreg, 7, 0.65)
                 .set(AD, 47.2, 3)
-                .set(AS, 0.665, 2.8)
+                .set(AS, 0.625, 2.8)
                 .set(AR, 12, 3.5)
                 .set(MR, 30, 0)
                 .set(Range, 550)
-                .set(MS, 330);
+                .set(MS, 325);
         Fiddlesticks.update(P0000)
                 .set(Health, 390, 80)
                 .set(Hreg, 4.6, 0.6)
@@ -897,7 +899,7 @@ public class Champion {
                 .set(AR, 14.75, 4)
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
-                .set(MS, 350);
+                .set(MS, 345);
         Kayle.update(P0000)
                 .set(Health, 418, 93)
                 .set(Hreg, 7, 0.75)
@@ -1082,7 +1084,7 @@ public class Champion {
                 .set(AR, 9, 4)
                 .set(MR, 30, 0)
                 .set(Range, 550)
-                .set(MS, 330);
+                .set(MS, 340);
         Nasus.update(P0000)
                 .set(Health, 410, 90)
                 .set(Hreg, 7.5, 0.9)
@@ -1137,7 +1139,7 @@ public class Champion {
                 .set(AR, 16.5, 3.5)
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
-                .set(MS, 340);
+                .set(MS, 350);
         Olaf.update(P0000)
                 .set(Health, 441, 93)
                 .set(Hreg, 7, 0.9)
@@ -1213,7 +1215,7 @@ public class Champion {
                 .set(MS, 345);
         Riven.update(P0000)
                 .set(Health, 414, 86)
-                .set(Hreg, 10.4, 0.9)
+                .set(Hreg, 5.5, 0.5)
                 .set(AD, 54, 2.75)
                 .set(AS, 0.625, 3.5)
                 .set(AR, 15, 3.1)
@@ -1429,7 +1431,7 @@ public class Champion {
                 .set(Health, 461, 98)
                 .set(Hreg, 7.9, 0.9)
                 .set(AD, 56, 3.2)
-                .set(AS, 0.644, 2.9)
+                .set(AS, 0.67, 2.9)
                 .set(AR, 14.9, 3.1)
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
@@ -1548,7 +1550,7 @@ public class Champion {
                 .set(Mana, 220, 30)
                 .set(Mreg, 7, 0.65)
                 .set(AD, 54, 3.3)
-                .set(AS, 0.625, 2.9)
+                .set(AS, 0.658, 2.9)
                 .set(AR, 16.5, 3.5)
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
@@ -1653,7 +1655,7 @@ public class Champion {
                 .set(Range, 575)
                 .set(MS, 325);
 
-        Thresh.update(P1154)
+        Thresh.update(P0000)
                 .set(Health, 452, 92)
                 .set(Hreg, 9, 0.85)
                 .set(Mana, 200, 50)

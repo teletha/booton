@@ -24,6 +24,9 @@ public class SkillVariable {
     /** The value enumerator. */
     private SkillVariableResolver resolver;
 
+    /** The condtional variable flag. */
+    private boolean conditional = false;
+
     /** The amplifiers for this amplifier rate. */
     public final List<SkillVariable> amplifiers = new ArrayList();
 
@@ -61,5 +64,25 @@ public class SkillVariable {
      */
     public void setResolver(SkillVariableResolver resolver) {
         this.resolver = resolver;
+    }
+
+    /**
+     * <p>
+     * Get the conditional property of this {@link SkillVariable}.
+     * </p>
+     * 
+     * @return
+     */
+    public boolean isConditional() {
+        return conditional;
+    }
+
+    /**
+     * <p>
+     * Set the conditional property of this {@link SkillVariable}.
+     * </p>
+     */
+    public void setConditional() {
+        this.conditional = true;
     }
 }
