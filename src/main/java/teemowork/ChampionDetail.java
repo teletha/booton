@@ -384,7 +384,13 @@ public class ChampionDetail extends Page {
             jQuery element = root.child(SkillStyle.Amplifier.class);
             element.append("+");
 
-            int size = amplifier.getResolver().computeSize(skill.getMaxLevel());
+            SkillVariableResolver resolver = amplifier.getResolver();
+
+            if (!resolver.isSkillLevelBased()) {
+                skillLevel = resolver.convertLevel(build.getLevel());
+            }
+
+            int size = resolver.computeSize(skill.getMaxLevel());
 
             for (int i = 0; i < size; i++) {
                 jQuery value = element.child(SkillStyle.Value.class)

@@ -145,7 +145,7 @@ public class SkillStatus {
 
     /**
      * <p>
-     * Set variable with amplifiers.
+     * Set new variable.
      * </p>
      * 
      * @param id A variable identifier.
@@ -154,100 +154,95 @@ public class SkillStatus {
      * @return A chainable API.
      */
     SkillStatus variable(int id, Status status, double base) {
-        return variable(id, status, base, 0, null, 0);
+        return variable(id, status, base, 0);
     }
 
     /**
      * <p>
-     * Set variable with amplifiers.
+     * Set new variable.
      * </p>
      * 
      * @param id A variable identifier.
      * @param status A variable type.
      * @param base A base value.
      * @param diff A diff value.
-     * @param ratioType First amplifier type.
-     * @param ratio First amplifier ration.
      * @return A chainable API.
      */
     SkillStatus variable(int id, Status status, double base, double diff) {
-        return variable(id, status, base, diff, null, 0);
+        return variable(id, status, base, diff, null, null);
     }
 
     /**
      * <p>
-     * Set variable with amplifiers.
+     * Set new variable.
      * </p>
      * 
      * @param id A variable identifier.
      * @param status A variable type.
-     * @param base A base value.
-     * @param diff A diff value.
-     * @param ratioType First amplifier type.
-     * @param ratio First amplifier ration.
-     * @return A chainable API.
+     * @param resolver A resolver.
+     * @return Chainable API.
      */
-    SkillStatus variable(int id, Status status, double base, double diff, Status ratioType, double ratio) {
-        return variable(id, status, base, diff, ratioType, ratio, null, 0);
-    }
-
-    /**
-     * <p>
-     * Set variable with amplifiers.
-     * </p>
-     * 
-     * @param id A variable identifier.
-     * @param status A variable type.
-     * @param base A base value.
-     * @param diff A diff value.
-     * @param ratioType1 First amplifier type.
-     * @param ratio1 First amplifier ration.
-     * @param ratioType2 Second amplifier type.
-     * @param ratio2 Second amplifier ration.
-     * @return A chainable API.
-     */
-    SkillStatus variable(int id, Status status, double base, double diff, Status ratioType1, double ratio1, Status ratioType2, double ratio2) {
-        return variable(id, status, new SimpleValues(skill.getMaxLevel(), base, diff), ratioType1, ratio1, ratioType2, ratio2);
-    }
-
     SkillStatus variable(int id, Status status, SkillVariableResolver resolver) {
-        return variable(id, status, resolver, null, 0, null, 0);
+        return variable(id, status, resolver, null, null);
     }
 
-    SkillStatus variable(int id, Status status, SkillVariableResolver resolver, Status ratioType1, double ratio1, Status ratioType2, double ratio2) {
-        SkillVariable amplifier1 = new SkillVariable();
-        amplifier1.setStatus(ratioType1);
-        amplifier1.setResolver(new SimpleVariableResolver(ratio1, 0));
-
-        SkillVariable amplifier2 = new SkillVariable();
-        amplifier2.setStatus(ratioType2);
-        amplifier2.setResolver(new SimpleVariableResolver(ratio2, 0));
-
-        return variable(id, status, resolver, ratioType1 == null ? null : amplifier1, ratioType2 == null ? null
-                : amplifier2);
-    }
-
+    /**
+     * <p>
+     * Set new variable.
+     * </p>
+     * 
+     * @param id A variable identifier.
+     * @param status A variable type.
+     * @param base A base value.
+     * @param diff A diff value.
+     * @param amplifier A first amplifier.
+     * @return Chainable API.
+     */
     SkillStatus variable(int id, Status status, double base, double diff, SkillVariable amplifier) {
-        return variable(id, status, new SimpleValues(skill.getMaxLevel(), base, diff), amplifier, null);
+        return variable(id, status, base, diff, amplifier, null);
     }
 
-    SkillStatus variable(int id, Status status, double base, double diff, SkillVariable amplifier1, SkillVariable amplifier2) {
-        return variable(id, status, new SimpleValues(skill.getMaxLevel(), base, diff), amplifier1, amplifier2);
+    /**
+     * <p>
+     * Set new variable.
+     * </p>
+     * 
+     * @param id A variable identifier.
+     * @param status A variable type.
+     * @param base A base value.
+     * @param diff A diff value.
+     * @param first A first amplifier.
+     * @param second A second amplifier.
+     * @return Chainable API.
+     */
+    SkillStatus variable(int id, Status status, double base, double diff, SkillVariable first, SkillVariable second) {
+        return variable(id, status, new SimpleValues(skill.getMaxLevel(), base, diff), first, second);
     }
 
-    SkillStatus variable(int id, Status status, SkillVariableResolver resolver, SkillVariable amplifier1, SkillVariable amplifier2) {
+    /**
+     * <p>
+     * Set new variable.
+     * </p>
+     * 
+     * @param id A variable identifier.
+     * @param status A variable type.
+     * @param resolver A resolver.
+     * @param first A first amplifier.
+     * @param second A second amplifier.
+     * @return Chainable API.
+     */
+    private SkillStatus variable(int id, Status status, SkillVariableResolver resolver, SkillVariable first, SkillVariable second) {
         SkillVariable variable = variables.get(id);
         variable.setStatus(status);
         variable.setResolver(resolver);
 
-        if (amplifier1 != null) {
-            variable.amplifiers.add(amplifier1);
+        if (first != null) {
+            variable.amplifiers.add(first);
         }
 
-        if (amplifier2 != null) {
-            variable.amplifiers.add(amplifier2);
+        if (second != null) {
+            variable.amplifiers.add(second);
         }
-
         return this;
     }
 
@@ -286,7 +281,7 @@ public class SkillStatus {
      * @param base A base cost.
      * @param diff A diff cost.
      */
-    SkillStatus cost(double base) {
+    SkillStatus mana(double base) {
         return cost(Mana, base, 0);
     }
 
@@ -298,7 +293,7 @@ public class SkillStatus {
      * @param base A base cost.
      * @param diff A diff cost.
      */
-    SkillStatus cost(double base, double diff) {
+    SkillStatus mana(double base, double diff) {
         return cost(Mana, base, diff);
     }
 
