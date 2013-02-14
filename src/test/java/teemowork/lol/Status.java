@@ -36,8 +36,6 @@ public enum Status {
 
     ADRatio,
 
-    BounusAD("増加AD"),
-
     Critical("Critical Chanse", 0, "%"),
 
     CriticalPerLv,
@@ -55,8 +53,6 @@ public enum Status {
     HealthPerLv,
 
     HealthRatio,
-
-    BounusHealth("増加Health"),
 
     Hreg(2),
 
@@ -172,7 +168,7 @@ public enum Status {
 
     RestoreEnergy("気"),
 
-    DamageReductionRatio("DM減少", 0, "%"),
+    DamageReductionRatio("DM", 0, "%"),
 
     PhysicalDamageReduction("物理DM減少"),
 
@@ -237,6 +233,12 @@ public enum Status {
     Experiment("経験値"),
 
     ExperimentRatio("経験値", 0, "%"),
+
+    BounusAD("増加AD"),
+
+    BounusHealth("増加Health"),
+
+    BounusMS("増加移動速度"),
 
     Charge;
 

@@ -12,7 +12,9 @@ package teemowork.lol;
 import static teemowork.lol.SkillKey.*;
 import static teemowork.lol.Status.*;
 import static teemowork.lol.Version.*;
+import teemowork.lol.SkillVariableResolver.FixedValues;
 import teemowork.lol.SkillVariableResolver.Per1Level;
+import teemowork.lol.SkillVariableResolver.Per2Level;
 import teemowork.lol.SkillVariableResolver.Per3Level;
 import teemowork.lol.SkillVariableResolver.Per4Level;
 import teemowork.lol.SkillVariableResolver.Per6Level;
@@ -1947,10 +1949,9 @@ public enum Skill {
                 .range(450);
 
         TwinDisciplines.update()
-                .passive("増加ADが10以上の時、{1}を得る。その後増加AD6毎に{2}を得る。APが20以上のとき、通常攻撃に{3}が付与される。その後AP6毎にMagic Damageが1%増加する。")
-                .variable(1, SV, 8)
-                .variable(2, SV, 1)
-                .variable(3, MagicDamage, 0, 0, ad(0.08));
+                .passive("{1}を得る。また通常攻撃に{2}が付与される。")
+                .variable(1, SV, 6, 0, bounusAD(0.167))
+                .variable(2, MagicDamage, 0, 0, amplify(AD, 0.06, 0, ap(0.00167)));
         MarkOftheAssassin.update()
                 .active("対象の敵ユニットにカマを投げつけ{1}とマーク({4})を与える。マークが付いた対象に通常攻撃または" + CrescentSlash.name + "でダメージを与えたとき、マークを消費して{2}を与え、{3}する。")
                 .variable(1, MagicDamage, 45, 25, ap(0.4))
@@ -2829,58 +2830,93 @@ public enum Skill {
                 .passive("{1}、{2}増加する。")
                 .variable(1, ARRatio, 20)
                 .variable(2, MRRatio, 20)
-                .active("一定時間自身が受けるダメージを30%軽減し、受けるCC(Stun, Slow, Taunt, Fear, Snare, Silence, Blind)の効果時間が30%低減される。")
+                .active("{3}間{4}減少し、{5}を得る。")
+                .variable(3, Time, 2, 1)
+                .variable(4, DamageReductionRatio, 30)
+                .variable(5, Tenacity, 30)
                 .cd(24, -1);
         Judgment.update()
-                .active("Garenが3秒間回転し、その間近くの敵ユニットに0.5秒毎に物理DMを与える(最大6hit)。このスキルにはクリティカル判定があり、クリティカル時は追加物理DMを与える。回転中はユニットをすり抜ける様になるが、敵Minionをすり抜けている間は移動速度が20%低下する。Minionに与えるダメージは通常の75%。")
+                .active("Garenが3秒間回転し、その間近くの敵ユニットに0.5秒毎に{1}を与える(最大6hit)。このスキルにはクリティカル判定があり、クリティカル時は追加{2}を与える。回転中はユニットをすり抜ける様になるが、敵Minionをすり抜けている間は移動速度が20%低下する。Minionに与えるダメージは通常の75%。")
+                .variable(1, PhysicalDamage, 10, 12.5, ad(0.35))
+                .variable(2, PhysicalDamage, 0, 0, ad(0.175))
                 .cd(13, -1);
-        DemacianJustice.update().active("対象の敵Championに魔法DMを与える。対象が受けているダメージに比例してダメージが増加する。").cd(160, -40).range(400);
+        DemacianJustice.update()
+                .active("対象の敵Championに{1}を与える。")
+                .variable(1, MagicDamage, 175, 175, amplify(TargetMissingHealth, new FixedValues(new double[] {28.6,
+                        33.3, 40})))
+                .cd(160, -40)
+                .range(400);
 
         /** Gragas */
-        HappyHour.update().passive("スキル使用後に4秒かけて最大HPの2%分のHPを回復する。");
+        HappyHour.update().passive("スキル使用後に4秒かけて{1}する。").variable(1, RestoreHealth, 0, 0, amplify(Health, 0.02));
         BarrelRoll.update()
-                .active("指定地点に樽を転がし、爆発時に範囲内の敵ユニットに魔法DMとAS低下(3s)を与える。樽は5秒経つか、スキルを再度使用すると爆発する。")
+                .active("指定地点に樽を転がし、爆発時に{1}の敵ユニットに{2}と3秒間{3}を与える。樽は5秒経つか、スキルを再度使用すると爆発する。")
+                .variable(1, Radius, 375)
+                .variable(2, MagicDamage, 85, 50, ap(0.9))
+                .variable(3, ASReduction, 20, 5)
                 .mana(80, 10)
                 .cd(12, -1)
                 .range(1100);
-        DrunkenRage.update().active("自身のMNを回復する。さらに1秒詠唱後に攻撃力が上昇し、20秒間被DM低減の効果を得る。").mana(30, 15).cd(25);
+        DrunkenRage.update()
+                .active("{1}する。さらに1秒詠唱後に20秒間{2}と{3}を得る。")
+                .variable(1, RestoreMana, 30, 15)
+                .variable(2, AD, 30, 10)
+                .variable(3, DamageReductionRatio, 10, 2)
+                .cd(25);
         BodySlam.update()
-                .active("指定方向に突進し、衝突した敵ユニットとその周囲にいる敵ユニットに魔法DMとスロー(35%, 2.5s)を与える。衝突時に突進は止まる。衝突地点に複数の敵ユニットがいた場合、ダメージは分散する。")
+                .active("指定方向に突進し、衝突した敵ユニットとその周囲にいる敵ユニットに{1}と2.5秒間{2}を与える。衝突時に突進は止まる。衝突地点に複数の敵ユニットがいた場合、{3}を与える。")
+                .variable(1, MagicDamage, 80, 40, ap(0.5), ad(0.66))
+                .variable(2, Slow, 35)
+                .variable(3, MagicDamage, 50, 25, ap(0.5))
                 .mana(75)
                 .cd(7)
                 .range(650);
         ExplosiveCask.update()
-                .active("指定地点に爆発する樽を投げ、範囲内の敵ユニットに魔法DMを与え、ノックバックさせる。")
+                .active("指定地点に爆発する樽を投げ、{1}内の敵ユニットに{2}を与え、{3}させる。")
+                .variable(1, Radius, 400)
+                .variable(2, MagicDamage, 200, 125, ap(1))
+                .variable(3, Knockback, 800)
                 .mana(100, 25)
                 .cd(100, -10)
                 .range(1050);
 
         /** Graves */
         TrueGrit.update()
-                .passive("戦闘状態になると1秒ごとにスタックが1増加し、スタック数に比例してARとMRが上昇する。この効果は10回までスタックし、3秒間戦闘を行わないとスタックが0になる。レベル1、7、13で1スタック毎の増加AR,MRが上昇する。");
+                .passive("戦闘状態になると1秒ごとにスタックが1増加し、スタック数に比例して{1}と{2}を得る。この効果は10回までスタックし、3秒間戦闘を行わないとスタックが0になる。レベル1、7、13で1スタック毎の増加AR,MRが上昇する。")
+                .variable(1, AR, new Per6Level(1, 1))
+                .variable(2, MR, new Per6Level(1, 1));
         Buckshot.update()
-                .active("指定方向扇形の範囲に貫通する弾を3発発射し、当たった敵ユニットに物理DMを与える。同一対象に対して複数hitし、2発目以降は本来の35%分の物理DMを与える(3発hitで合計170%の物理DM)。")
+                .active("指定方向扇形の範囲に貫通する弾を3発発射し、当たった敵ユニットに{1}を与える。同一対象に対して複数hitし、2発目以降は本来の35%分の物理DMを与える(3発hitで合計{2})。")
+                .variable(1, PhysicalDamage, 60, 35, bounusAD(0.8))
+                .variable(2, PhysicalDamage, 102, 59.5, bounusAD(1.36))
                 .mana(60, 10)
                 .cd(12, -1)
                 .range(750);
         Smokescreen.update()
-                .active("指定地点にスモーク弾を発射し範囲内の敵ユニットに魔法DMを与え、4秒間持続する煙幕を残す。煙幕内にいる敵Championに視界低下とスローを与える。")
+                .active("指定地点にスモーク弾を発射し範囲内の敵ユニットに{1}を与え、4秒間持続する煙幕を残す。煙幕内にいる敵Championに視界低下とス{2}を与える。")
+                .variable(1, MagicDamage, 60, 50, ap(0.6))
+                .variable(2, Slow, 15, 5)
                 .mana(70)
                 .cd(20, -1)
                 .range(700);
         Quickdraw.update()
-                .active("指定方向にダッシュし4秒間ASが増加する。このスキルは自身が通常攻撃を行う毎にCDが1秒解消される。対象が建物の場合は無効。")
+                .active("指定方向にダッシュし4秒間{1}増加する。このスキルは自身が通常攻撃を行う毎にCDが1秒解消される。対象が建物の場合は無効。")
+                .variable(1, ASRatio, 30, 10)
                 .mana(50)
                 .cd(22, -2)
                 .range(425);
         CollateralDamage.update()
-                .active("指定方向にMinionを貫通する爆発弾を発射し、hitした敵ユニットに物理DMを与える。敵Championにhitするか最大距離飛ぶとターゲット後方に扇形に爆発が広がり、範囲内の敵ユニットに物理DMを与える。")
+                .active("指定方向にMinionを貫通する爆発弾を発射し、hitした敵ユニットに{1}を与える。敵Championにhitするか最大距離飛ぶとターゲット後方に扇形に爆発が広がり、範囲内の敵ユニットに{2}を与える。")
+                .variable(1, PhysicalDamage, 250, 100, bounusAD(1.4))
+                .variable(2, PhysicalDamage, 140, 110, bounusAD(1.2))
                 .mana(100)
                 .cd(100, -10)
                 .range(1000);
 
         /** Hecarim */
-        Warpath.update().passive("ユニットをすり抜けるようになり、増加移動速度の一定割合を自身の攻撃力に追加する。レベル1、3、6、9、12、15、18で増加割合が上昇する。");
+        Warpath.update()
+                .passive("ユニットをすり抜けるようになり、{1}を得る。レベル1、3、6、9、12、15、18で増加割合が上昇する。")
+                .variable(1, AD, 0, 0, amplify(BounusMS, new Per2Level(0.1, 0.025)));
         Rampage.update()
                 .active("武器を振り回し周囲の敵ユニットに物理DMを与える。このスキルが敵ユニットに命中した場合、Hecarimは短時間の間1スタックを得て、1スタックにつきこのスキルのCDが1秒低減される(最大2スタック)。スタックは6秒間増加がないと0になる。minionに与えるダメージは通常の66%に減少する。")
                 .mana(25)
@@ -4424,7 +4460,8 @@ public enum Skill {
                 .cd(6)
                 .range(900);
         LivingShadow.update()
-                .passive("edの攻撃力が上昇する。増加AD: [増加攻撃力 × 5/10/15/20/25%]")
+                .passive("{1}を得る。")
+                .variable(1, AD, 0, 0, amplify(BounusAD, 0.05, 0.05))
                 .active("Zedの「影」が指定方向にダッシュし、4秒間その場に留まる。再度このスキルを使用するとZedと「影」の位置が入れ替わる。「影」はZedが通常スキルを使用すると同時に同じスキルを使用する。この時スキルがZedのスキルと同一の敵ユニットに命中した場合、「気」が回復する。回復効果はスキル1回毎に1度のみ発動する。")
                 .cd(22, -1.5)
                 .range(550);
