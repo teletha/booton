@@ -128,7 +128,7 @@ public enum Status {
 
     ARPenPerLv,
 
-    ARPenRatio("割合ARPen", 0, "%"),
+    ARPenRatio("ARPen", 0, "%"),
 
     ARPenRatioPerLv,
 
@@ -176,6 +176,8 @@ public enum Status {
 
     Shield("シールド"),
 
+    MagicShield("魔法DM用シールド"),
+
     Lv,
 
     LvPerLv,
@@ -208,15 +210,17 @@ public enum Status {
 
     Time("", 3, "秒"),
 
-    CDRAwareTime("", 3, "秒"),
+    Duration("経過秒数"),
 
-    TargetHealth("", 3, "%"),
+    CDRAwareTime("", 3, "秒"),
 
     CurrentHealth("現在のHealth", 0, "%"),
 
-    TargetCurrentHealth("対象の現在のHealth", 0, "%"),
+    CurrentMana("現在のMana", 0, "%"),
 
-    TargetCurrentHealthRatio("対象の現在のHealth", 3, "%"),
+    TargetHealth("対象の最大Health", 3, "%"),
+
+    TargetCurrentHealth("対象の現在のHealth", 0, "%"),
 
     TargetMissingHealth("対象の減っているHealth", 0, "%"),
 
@@ -240,7 +244,9 @@ public enum Status {
 
     BounusMS("増加移動速度"),
 
-    Charge;
+    Charge,
+
+    Stack("スタック");
 
     /** The status name. */
     public final String name;
