@@ -33,8 +33,8 @@ public class SkillStatus {
     /** The skill cost type. */
     private Status cost;
 
-    /** The toggle flag. */
-    private boolean isToggle;
+    /** The skill type. */
+    private SkillType type;
 
     /** The skill description. */
     public final List passive;
@@ -53,14 +53,14 @@ public class SkillStatus {
             variables = previous.variables;
             passive = previous.passive;
             active = previous.active;
-            isToggle = previous.isToggle;
+            type = previous.type;
             cost = previous.cost;
         } else {
             values = new NativeArray();
             variables = new NativeArray();
             passive = new ArrayList();
             active = new ArrayList();
-            isToggle = false;
+            type = SkillType.Active;
             cost = Mana;
         }
     }
@@ -351,13 +351,13 @@ public class SkillStatus {
 
     /**
      * <p>
-     * Retrieve this skill is toggle type or not.
+     * Retrieve this skill type.
      * </p>
      * 
      * @return A result.
      */
-    public boolean isToggle() {
-        return isToggle;
+    public SkillType getType() {
+        return type;
     }
 
     /**
@@ -367,8 +367,8 @@ public class SkillStatus {
      * 
      * @return
      */
-    SkillStatus toggle() {
-        isToggle = true;
+    SkillStatus type(SkillType type) {
+        this.type = type;
 
         return this;
     }

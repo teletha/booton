@@ -30,6 +30,7 @@ import teemowork.lol.Champion;
 import teemowork.lol.Skill;
 import teemowork.lol.SkillKey;
 import teemowork.lol.SkillStatus;
+import teemowork.lol.SkillType;
 import teemowork.lol.SkillVariable;
 import teemowork.lol.SkillVariableResolver;
 import teemowork.lol.Status;
@@ -261,7 +262,7 @@ public class ChampionDetail extends Page {
 
             String costLabel = status.getCostType().name;
 
-            if (status.isToggle()) {
+            if (status.getType() == SkillType.Toggle) {
                 costLabel = "毎秒" + costLabel;
             }
 
@@ -288,8 +289,8 @@ public class ChampionDetail extends Page {
             // ACTIVE
             active.empty();
 
-            if (status.isToggle()) {
-                active.child(SkillStyle.Passive.class).text("TOGGLE");
+            if (status.getType() != SkillType.Active) {
+                active.child(SkillStyle.Passive.class).text(status.getType().name().toUpperCase());
             }
 
             for (Object token : status.active) {
@@ -320,11 +321,12 @@ public class ChampionDetail extends Page {
                 root.child(ValueStyles.Label.class).text(label);
 
                 for (int i = 0; i < size; i++) {
-                    jQuery value = root.child(ValueStyles.Value.class)
-                            .text(status.round((base + diff * i) * (1 - reduction / 100)));
+                    double value = status.round((base + diff * i) * (1 - reduction / 100));
+
+                    jQuery element = root.child(ValueStyles.Value.class).text(value == -1 ? "∞" : value);
 
                     if (size != 1 && i == build.getLevel(this.skill) - 1) {
-                        value.addClass(ValueStyles.Current.class);
+                        element.addClass(ValueStyles.Current.class);
                     }
 
                     if (i != size - 1) {

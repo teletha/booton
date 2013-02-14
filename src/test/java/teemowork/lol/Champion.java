@@ -92,7 +92,7 @@ public class Champion {
     public static final Champion Fiora = new Champion("Fiora", Duelist, Lunge, Riposte, BurstOfSpeed, BladeWaltz);
 
     /** The champion name. */
-    public static final Champion Fizz = new Champion("Fizz", NimbleFighter, UrchinStrike, SeastoneTrident, PlayfulTrickster, ChumTheWaters);
+    public static final Champion Fizz = new Champion("Fizz", NimbleFighter, UrchinStrike, SeastoneTrident, Playful, Trickster, ChumTheWaters);
 
     /** The champion name. */
     public static final Champion Galio = new Champion("Galio", RunicSkin, ResoluteSmite, Bulwark, RighteousGust, IdolOfDurand);

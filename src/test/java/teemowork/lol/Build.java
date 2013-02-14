@@ -145,7 +145,12 @@ public class Build extends Notifiable {
         case Lv:
             return new Computed(level, level, Lv);
 
+        case Damage:
+
+            return new Computed(base(status), sum(status), status);
+
         case MissingHealth:
+        case TargetMissingHealth:
             return new Computed(0, 0, status);
 
         case BounusAD:
@@ -252,11 +257,11 @@ public class Build extends Notifiable {
         case MRPenRatio:
         case Energy:
         case Ereg:
+        case Damage:
             return champion.getStatus(version).get(status);
 
         default:
-            Status per = Status.valueOf(status.name() + "PerLv");
-            return champion.getStatus(version).get(status) + champion.getStatus(version).get(per) * level;
+            return champion.getStatus(version).get(status) + champion.getStatus(version).get(status.per()) * level;
         }
     }
 
@@ -307,7 +312,11 @@ public class Build extends Notifiable {
                     SkillVariable variable = (SkillVariable) token;
 
                     if (variable.getStatus() == status) {
-                        sum += computeVariable(skill, variable, getLevel(skill));
+                        int level = getLevel(skill);
+
+                        if (level != 0) {
+                            sum += computeVariable(skill, variable, getLevel(skill));
+                        }
                     }
                 }
             }
