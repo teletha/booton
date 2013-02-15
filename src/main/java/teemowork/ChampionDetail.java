@@ -207,7 +207,7 @@ public class ChampionDetail extends Page {
         private final Skill skill;
 
         /** The icon element. */
-        private final jQuery iconBox;
+        private final jQuery icon;
 
         /** The skill level. */
         private final jQuery[] levels;
@@ -236,8 +236,8 @@ public class ChampionDetail extends Page {
             this.skill = skill;
             this.levels = new jQuery[size];
 
-            iconBox = root.child(SkillStyle.IconBox.class);
-            iconBox.child(SkillStyle.Icon.class).css("background-image", "url(" + skill.getIcon() + ")");
+            jQuery iconBox = root.child(SkillStyle.IconBox.class);
+            icon = iconBox.child(SkillStyle.Icon.class).css("background-image", "url(" + skill.getIcon() + ")");
             iconBox.click(new Listener() {
 
                 @Override
@@ -292,7 +292,9 @@ public class ChampionDetail extends Page {
             }
 
             if (build.isActive(skill)) {
-                System.out.println("active " + skill.name);
+                icon.addClass(SkillStyle.Active.class);
+            } else {
+                icon.removeClass(SkillStyle.Active.class);
             }
 
             String costLabel = status.getCostType().name;
@@ -744,6 +746,16 @@ public class ChampionDetail extends Page {
                 while (inBackOf(Amplifier.class)) {
                     margin.left(0.4, em);
                 }
+            }
+        }
+
+        /**
+         * @version 2013/02/16 0:35:05
+         */
+        private static class Active extends CSS {
+
+            {
+                box.opacity(0.5);
             }
         }
     }
