@@ -12,7 +12,7 @@ package teemowork.lol;
 /**
  * @version 2013/02/14 1:27:31
  */
-public class SimpleVariableResolver extends SkillVariableResolver {
+public class SimpleVariableResolver extends VariableResolver {
 
     /** The base value of amplifier rate. */
     private final double base;
@@ -41,7 +41,7 @@ public class SimpleVariableResolver extends SkillVariableResolver {
      * {@inheritDoc}
      */
     @Override
-    public int computeSize(int hint) {
-        return diff == 0 ? 1 : hint;
+    public int estimateSize(int hint) {
+        return base == 0 ? 0 : diff == 0 ? 1 : hint;
     }
 }

@@ -16,22 +16,22 @@ import js.util.ArrayList;
 /**
  * @version 2013/02/13 1:35:47
  */
-public class SkillVariable {
+public class Variable {
 
-    /** The amplifier type. */
+    /** The variable type. */
     private Status status;
 
     /** The value enumerator. */
-    private SkillVariableResolver resolver;
+    private VariableResolver resolver;
 
     /** The condtional variable flag. */
     private boolean conditional = false;
 
     /** The amplifiers for this amplifier rate. */
-    public final List<SkillVariable> amplifiers = new ArrayList();
+    public final List<Variable> amplifiers = new ArrayList();
 
     /**
-     * Get the status property of this {@link SkillVariable}.
+     * Get the status property of this {@link Variable}.
      * 
      * @return The status property.
      */
@@ -40,7 +40,7 @@ public class SkillVariable {
     }
 
     /**
-     * Set the status property of this {@link SkillVariable}.
+     * Set the status property of this {@link Variable}.
      * 
      * @param status The status value to set.
      */
@@ -49,26 +49,26 @@ public class SkillVariable {
     }
 
     /**
-     * Get the resolver property of this {@link SkillVariable}.
+     * Get the resolver property of this {@link Variable}.
      * 
      * @return The resolver property.
      */
-    public SkillVariableResolver getResolver() {
+    public VariableResolver getResolver() {
         return resolver;
     }
 
     /**
-     * Set the resolver property of this {@link SkillVariable}.
+     * Set the resolver property of this {@link Variable}.
      * 
      * @param resolver The resolver value to set.
      */
-    public void setResolver(SkillVariableResolver resolver) {
+    public void setResolver(VariableResolver resolver) {
         this.resolver = resolver;
     }
 
     /**
      * <p>
-     * Get the conditional property of this {@link SkillVariable}.
+     * Get the conditional property of this {@link Variable}.
      * </p>
      * 
      * @return
@@ -79,7 +79,7 @@ public class SkillVariable {
 
     /**
      * <p>
-     * Set the conditional property of this {@link SkillVariable}.
+     * Set the conditional property of this {@link Variable}.
      * </p>
      */
     public void setConditional() {

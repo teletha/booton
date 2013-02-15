@@ -315,11 +315,11 @@ public class Build extends Notifiable {
             SkillStatus skillStatus = skill.getStatus(version);
 
             for (Object token : skillStatus.passive) {
-                if (token instanceof SkillVariable) {
-                    SkillVariable variable = (SkillVariable) token;
+                if (token instanceof Variable) {
+                    Variable variable = (Variable) token;
 
                     if (variable.getStatus() == status && !variable.isConditional()) {
-                        SkillVariableResolver resolver = variable.getResolver();
+                        VariableResolver resolver = variable.getResolver();
                         int level = resolver.isSkillLevelBased() ? getLevel(skill) : resolver.convertLevel(this.level);
 
                         if (level != 0) {
@@ -342,7 +342,7 @@ public class Build extends Notifiable {
      * @param level A current skill level.
      * @return
      */
-    public double computeVariable(Skill skill, SkillVariable variable, int level) {
+    public double computeVariable(Skill skill, Variable variable, int level) {
         // avoid circular dependency
         if (skill != null && !dependencies.add(skill)) {
             return 0;
@@ -350,8 +350,8 @@ public class Build extends Notifiable {
 
         double value = variable.getResolver().compute(level);
 
-        for (SkillVariable amplifier : variable.amplifiers) {
-            SkillVariableResolver resolver = amplifier.getResolver();
+        for (Variable amplifier : variable.amplifiers) {
+            VariableResolver resolver = amplifier.getResolver();
             int skillLevel = resolver.isSkillLevelBased() ? level : this.level;
 
             value += computeVariable(null, amplifier, skillLevel) * get(amplifier.getStatus()).value;
