@@ -365,7 +365,11 @@ public enum Status {
         case ARRatio:
         case MRRatio:
         case ExperimentRatio:
-            return name + "が" + computed + unit;
+            if (computed == 0) {
+                return name;
+            } else {
+                return name + "が" + computed + unit;
+            }
 
         case TargetCurrentHealth:
             return name + "の" + computed + unit;
