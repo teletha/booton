@@ -30,8 +30,8 @@ public class Teemowork extends Application {
         nav.add("< ^ v ^ > Teemowork", "test.html");
         nav.add("Patch", "#");
 
-        Menu sub = nav.add("Data", "#");
-        sub.add("Champion", "#");
+        Menu sub = nav.add("Champion", "#");
+        sub.add("Compare", "#ChampionComparing");
         sub.add("Item", "#");
         sub.add("Mastery", "#");
         sub.add("Rune", "#");
