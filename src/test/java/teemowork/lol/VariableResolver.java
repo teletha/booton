@@ -19,10 +19,10 @@ public abstract class VariableResolver {
      * Compute value by skill level.
      * </p>
      * 
-     * @param skillLevel A target skill level to compute.
+     * @param level A target skill level to compute.
      * @return A computed value.
      */
-    public abstract double compute(int skillLevel);
+    public abstract double compute(int level);
 
     /**
      * <p>
@@ -256,6 +256,43 @@ public abstract class VariableResolver {
         @Override
         public int estimateSize(int hint) {
             return values.length;
+        }
+    }
+
+    /**
+     * @version 2013/02/15 13:05:53
+     */
+    public static class Diff extends VariableResolver {
+
+        /** The base value of amplifier rate. */
+        private final double base;
+
+        /** The diff value of amplifier rate. */
+        private final double diff;
+
+        /**
+         * @param base
+         * @param diff
+         */
+        public Diff(double base, double diff) {
+            this.base = base;
+            this.diff = diff;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public double compute(int skillLevel) {
+            return base + diff * (skillLevel - 1);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int estimateSize(int hint) {
+            return base == 0 ? 0 : diff == 0 ? 1 : hint;
         }
     }
 }

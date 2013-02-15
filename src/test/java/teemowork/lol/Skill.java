@@ -12,6 +12,7 @@ package teemowork.lol;
 import static teemowork.lol.SkillKey.*;
 import static teemowork.lol.Status.*;
 import static teemowork.lol.Version.*;
+import teemowork.lol.VariableResolver.Diff;
 import teemowork.lol.VariableResolver.Fixed;
 import teemowork.lol.VariableResolver.Per1Level;
 import teemowork.lol.VariableResolver.Per2Level;
@@ -1871,7 +1872,7 @@ public enum Skill {
      * @return
      */
     private static final Variable amplify(Status status, double base, double diff) {
-        return amplify(status, new SimpleVariableResolver(base, diff));
+        return amplify(status, new Diff(base, diff));
     }
 
     /**
