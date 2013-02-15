@@ -640,6 +640,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 break;
             }
         case AALOAD:
+        case BALOAD:
         case LALOAD:
         case FALOAD:
         case DALOAD:
@@ -648,6 +649,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // read array value by index
         case AASTORE:
+        case BASTORE:
         case IASTORE:
         case LASTORE:
         case FASTORE:
