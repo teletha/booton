@@ -9,6 +9,7 @@
  */
 package teemowork;
 
+import static js.lang.Global.*;
 import static teemowork.lol.Status.*;
 
 import java.lang.reflect.Method;
@@ -31,9 +32,9 @@ import teemowork.lol.Skill;
 import teemowork.lol.SkillKey;
 import teemowork.lol.SkillStatus;
 import teemowork.lol.SkillType;
+import teemowork.lol.Status;
 import teemowork.lol.Variable;
 import teemowork.lol.VariableResolver;
-import teemowork.lol.Status;
 import booton.css.CSS;
 
 /**
@@ -140,6 +141,33 @@ public class ChampionDetail extends Page {
             skills.add(new SkillView(skill, skillView.child(SkillStyle.SkillRow.class)));
         }
 
+        $(window).keypress(new Listener() {
+
+            @Override
+            public void handler(Event event) {
+                switch (event.which) {
+                case 113:// Q
+                    build.active(SkillKey.Q);
+                    break;
+
+                case 119:// W
+                    build.active(SkillKey.W);
+                    break;
+
+                case 101:// E
+                    build.active(SkillKey.E);
+                    break;
+
+                case 114:// R
+                    build.active(SkillKey.R);
+                    break;
+
+                default:
+                    break;
+                }
+            }
+        });
+
         calcurate();
     }
 
@@ -178,6 +206,9 @@ public class ChampionDetail extends Page {
         /** The target to desiplay. */
         private final Skill skill;
 
+        /** The icon element. */
+        private final jQuery iconBox;
+
         /** The skill level. */
         private final jQuery[] levels;
 
@@ -205,7 +236,7 @@ public class ChampionDetail extends Page {
             this.skill = skill;
             this.levels = new jQuery[size];
 
-            jQuery iconBox = root.child(SkillStyle.IconBox.class);
+            iconBox = root.child(SkillStyle.IconBox.class);
             iconBox.child(SkillStyle.Icon.class).css("background-image", "url(" + skill.getIcon() + ")");
             iconBox.click(new Listener() {
 
@@ -258,6 +289,10 @@ public class ChampionDetail extends Page {
                 } else {
                     levels[i].removeClass(SkillStyle.Assigned.class);
                 }
+            }
+
+            if (build.isActive(skill)) {
+                System.out.println("active " + skill.name);
             }
 
             String costLabel = status.getCostType().name;

@@ -46,6 +46,9 @@ public class Build extends Notifiable {
     /** The skill level. */
     private int[] skillLevel = {1, 0, 0, 0, 0};
 
+    /** The skill level. */
+    private boolean[] skillActivation = {false, false, false, false, false};
+
     /** The mastery. */
     private MasterySet mastery;
 
@@ -363,6 +366,31 @@ public class Build extends Notifiable {
 
         // API definition
         return value;
+    }
+
+    /**
+     * <p>
+     * Push skill key.
+     * </p>
+     * 
+     * @param key
+     */
+    public void active(SkillKey key) {
+        skillActivation[key.ordinal()] = !skillActivation[key.ordinal()];
+
+        fire();
+    }
+
+    /**
+     * <p>
+     * Retrieve skill activation state.
+     * </p>
+     * 
+     * @param skill A target skill.
+     * @return
+     */
+    public boolean isActive(Skill skill) {
+        return skillActivation[skill.key.ordinal()];
     }
 
     /**
