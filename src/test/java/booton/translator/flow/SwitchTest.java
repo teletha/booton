@@ -174,6 +174,27 @@ public class SwitchTest extends ScriptTester {
     }
 
     @Test
+    public void BreakNoDefault() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 5) int value) {
+                int result = 100;
+
+                switch (value) {
+                case 0:
+                    result = -1;
+                    break;
+
+                case 1:
+                    result = -2;
+                    break;
+                }
+                return result;
+            }
+        });
+    }
+
+    @Test
     public void Enum0() {
         test(new Scriptable() {
 

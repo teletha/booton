@@ -402,8 +402,10 @@ class Node {
                 }
 
                 // default case
-                buffer.append("default:").line();
-                switchy.defaults.write(buffer);
+                if (!switchy.noDefault) {
+                    buffer.append("default:").line();
+                    switchy.defaults.write(buffer);
+                }
 
                 // exit switch
                 buffer.append("}").line();
@@ -750,6 +752,9 @@ class Node {
         /** The case value of this switch statement. */
         private final List<Integer> keys = new ArrayList();
 
+        /** Whether this switch has default node or not. */
+        private boolean noDefault = false;
+
         /**
          * <p>
          * Creat switch block infomation holder.
@@ -817,6 +822,18 @@ class Node {
          * @return Null or exit node.
          */
         private Node searchExit() {
+            if (defaults.outgoing.isEmpty() && defaults.incoming.contains(enter)) {
+                // default node is no exist
+                noDefault = true;
+
+                for (Node node : defaults.incoming) {
+                    if (node != enter) {
+                        node.addExpression("break");
+                    }
+                }
+                return defaults;
+            }
+
             List<Node> nodes = new LinkedList();
             nodes.addAll(defaults.outgoing);
 
