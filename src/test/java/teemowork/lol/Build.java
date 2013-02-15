@@ -258,10 +258,6 @@ public class Build extends Notifiable {
         switch (status) {
         case MS:
         case MSRatio:
-        case ARPen:
-        case ARPenRatio:
-        case MRPen:
-        case MRPenRatio:
         case Energy:
         case Ereg:
         case Damage:
@@ -290,12 +286,12 @@ public class Build extends Notifiable {
             Item item = items[i];
 
             if (item != null) {
-                ItemStatus descriptor = item.getStatus(version);
+                ItemStatus itemStatus = item.getStatus(version);
 
                 // compute item status
-                sum += descriptor.get(status);
+                sum = status.compute(sum, itemStatus.get(status));
 
-                for (ItemAbility ability : descriptor.abilities) {
+                for (ItemAbility ability : itemStatus.abilities) {
                     ItemAbilityStatus abilityDescriptor = ability.getStatus(version);
 
                     if (abilityDescriptor.isUnique() && names.contains(ability.name)) {
@@ -304,7 +300,7 @@ public class Build extends Notifiable {
                     names.add(ability.name);
 
                     // compute ability status
-                    sum += abilityDescriptor.get(status) * itemCounts[i];
+                    sum = status.compute(sum, abilityDescriptor.get(status) * itemCounts[i]);
                 }
             }
         }
@@ -317,13 +313,14 @@ public class Build extends Notifiable {
             for (Object token : skillStatus.passive) {
                 if (token instanceof Variable) {
                     Variable variable = (Variable) token;
+                    Status variableStatus = variable.getStatus();
 
-                    if (variable.getStatus() == status && !variable.isConditional()) {
+                    if (variableStatus == status && !variable.isConditional()) {
                         VariableResolver resolver = variable.getResolver();
                         int level = resolver.isSkillLevelBased() ? getLevel(skill) : resolver.convertLevel(this.level);
 
                         if (level != 0) {
-                            sum += computeVariable(skill, variable, level);
+                            sum = variableStatus.compute(sum, computeVariable(skill, variable, level));
                         }
                     }
                 }

@@ -15,6 +15,7 @@ import java.util.List;
 
 import js.lang.NativeArray;
 import js.util.ArrayList;
+import teemowork.lol.VariableResolver.Diff;
 
 /**
  * @version 2013/01/27 20:32:01
@@ -216,7 +217,7 @@ public class SkillStatus {
      * @return Chainable API.
      */
     SkillStatus variable(int id, Status status, double base, double diff, Variable first, Variable second) {
-        return variable(id, status, new SimpleVariableResolver(base, diff), first, second);
+        return variable(id, status, new Diff(base, diff), first, second);
     }
 
     /**

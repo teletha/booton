@@ -16,9 +16,8 @@ import js.math.Mathematics;
  */
 public enum Status {
 
-    Cost,
-
-    CostPerLv,
+    /** Cost */
+    Cost, CostPerLv,
 
     Sell,
 
@@ -100,17 +99,11 @@ public enum Status {
 
     ARRatio(AR.name, 3, "%"),
 
-    ARReduction("AR減少"),
-
-    ARReductionRatio("AR減少", 3, "%"),
-
     MR,
 
     MRPerLv,
 
     MRRatio(MR.name(), 3, "%"),
-
-    MRReduction("MR減少"),
 
     Range,
 
@@ -124,22 +117,39 @@ public enum Status {
 
     MSRatio("移動速度", 0, "%"),
 
-    ARPen,
+    // ==================================================
+    // AR Penetrations and Reductions
+    // ==================================================
+    /** Flat Penetration */
+    ARPen, ARPenPerLv,
 
-    ARPenPerLv,
+    /** Percentage Penetration */
+    ARPenRatio(ARPen.name(), 0, "%"), ARPenRatioPerLv,
 
-    ARPenRatio("ARPen", 0, "%"),
+    /** Flat Reduction */
+    ARReduction("AR減少"),
 
-    ARPenRatioPerLv,
+    /** Percentage Reduction */
+    ARReductionRatio("AR減少", 0, "%"),
 
-    MRPen,
+    // ==================================================
+    // MR Penetrations and Reductions
+    // ==================================================
+    /** Flat Penetration */
+    MRPen, MRPenPerLv,
 
-    MRPenPerLv,
+    /** Percentage Penetration */
+    MRPenRatio(MRPen.name(), 0, "%"), MRPenRatioPerLv,
 
-    MRPenRatio(null, 0, "%"),
+    /** Flat Reduction */
+    MRReduction("MR減少"),
 
-    MRPenRatioPerLv,
+    /** Percentage Reduction */
+    MRReductionRatio("MR減少", 0, "%"),
 
+    // ==================================================
+    // Energy
+    // ==================================================
     Energy,
 
     EnergyPerLv,
@@ -312,13 +322,25 @@ public enum Status {
 
     /**
      * <p>
-     * This status is multiplicative or not.
+     * Compute values.
      * </p>
      * 
+     * @param one
+     * @param other
      * @return
      */
-    public boolean isMultiplicative() {
-        return name().endsWith("Ratio");
+    public double compute(double one, double other) {
+        switch (this) {
+        case ARPenRatio:
+        case ARReductionRatio:
+        case MRPenRatio:
+        case MRReductionRatio:
+        case Tenacity:
+            return (1 - (1 - one / 100) * (1 - other / 100)) * 100;
+
+        default:
+            return one + other;
+        }
     }
 
     /**
