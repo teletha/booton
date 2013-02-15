@@ -31,8 +31,8 @@ import teemowork.lol.Skill;
 import teemowork.lol.SkillKey;
 import teemowork.lol.SkillStatus;
 import teemowork.lol.SkillType;
-import teemowork.lol.SkillVariable;
-import teemowork.lol.SkillVariableResolver;
+import teemowork.lol.Variable;
+import teemowork.lol.VariableResolver;
 import teemowork.lol.Status;
 import booton.css.CSS;
 
@@ -43,7 +43,7 @@ public class ChampionDetail extends Page {
 
     /** The displayable status. */
     private static final Status[] VISIBLE = {Health, Hreg, Mana, Mreg, AD, ARPen, AS, LS, Critical, AP, MRPen, CDR, SV,
-            AR, MR, MS};
+            AR, MR, MS, Range};
 
     /** The status box. */
     private List<StatusView> statuses = new ArrayList();
@@ -278,8 +278,8 @@ public class ChampionDetail extends Page {
                 passive.child(SkillStyle.Passive.class).text("PASSIVE");
 
                 for (Object token : status.passive) {
-                    if (token instanceof SkillVariable) {
-                        buildVariable(passive, (SkillVariable) token, level);
+                    if (token instanceof Variable) {
+                        buildVariable(passive, (Variable) token, level);
                     } else {
                         passive.append(token.toString());
                     }
@@ -294,8 +294,8 @@ public class ChampionDetail extends Page {
             }
 
             for (Object token : status.active) {
-                if (token instanceof SkillVariable) {
-                    buildVariable(active, (SkillVariable) token, level);
+                if (token instanceof Variable) {
+                    buildVariable(active, (Variable) token, level);
                 } else {
                     active.append(token.toString());
                 }
@@ -342,10 +342,10 @@ public class ChampionDetail extends Page {
          * @param size
          * @param skillLevel
          */
-        private void buildVariable(jQuery root, SkillVariable variable, int skillLevel) {
-            SkillVariableResolver resolver = variable.getResolver();
+        private void buildVariable(jQuery root, Variable variable, int skillLevel) {
+            VariableResolver resolver = variable.getResolver();
             Status status = variable.getStatus();
-            List<SkillVariable> amplifiers = variable.amplifiers;
+            List<Variable> amplifiers = variable.amplifiers;
 
             if (!resolver.isSkillLevelBased()) {
                 skillLevel = resolver.convertLevel(build.getLevel());
@@ -374,7 +374,7 @@ public class ChampionDetail extends Page {
                 }
 
                 if (!amplifiers.isEmpty()) {
-                    for (SkillVariable amplifier : amplifiers) {
+                    for (Variable amplifier : amplifiers) {
                         writeAmplifier(root, amplifier, skillLevel);
                     }
                 }
@@ -382,17 +382,17 @@ public class ChampionDetail extends Page {
             }
         }
 
-        private void writeAmplifier(jQuery root, SkillVariable amplifier, int skillLevel) {
+        private void writeAmplifier(jQuery root, Variable amplifier, int skillLevel) {
             jQuery element = root.child(SkillStyle.Amplifier.class);
             element.append("+");
 
-            SkillVariableResolver resolver = amplifier.getResolver();
+            VariableResolver resolver = amplifier.getResolver();
 
             if (!resolver.isSkillLevelBased()) {
                 skillLevel = resolver.convertLevel(build.getLevel());
             }
 
-            int size = resolver.computeSize(skill.getMaxLevel());
+            int size = resolver.estimateSize(skill.getMaxLevel());
 
             for (int i = 0; i < size; i++) {
                 jQuery value = element.child(SkillStyle.Value.class)
@@ -411,7 +411,7 @@ public class ChampionDetail extends Page {
 
             if (!amplifier.amplifiers.isEmpty()) {
                 element.append("(");
-                for (SkillVariable nest : amplifier.amplifiers) {
+                for (Variable nest : amplifier.amplifiers) {
                     writeAmplifier(element, nest, skillLevel);
                 }
                 element.append(")");

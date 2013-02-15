@@ -72,9 +72,9 @@ public class SkillStatusTest {
         assert tokens.get(0).equals("Test");
 
         Object token = tokens.get(1);
-        assert token instanceof SkillVariable;
+        assert token instanceof Variable;
 
-        SkillVariable variable = (SkillVariable) token;
+        Variable variable = (Variable) token;
         assert variable.id == 1;
         assert variable.getStatus() == AD;
         assert variable.base == 10;
@@ -93,9 +93,9 @@ public class SkillStatusTest {
         assert tokens.get(0).equals("Test");
 
         Object token = tokens.get(1);
-        assert token instanceof SkillVariable;
+        assert token instanceof Variable;
 
-        SkillVariable variable = (SkillVariable) token;
+        Variable variable = (Variable) token;
         assert variable.id == 1;
         assert variable.getStatus() == SV;
         assert variable.base == 10;

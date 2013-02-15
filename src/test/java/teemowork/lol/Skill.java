@@ -12,12 +12,12 @@ package teemowork.lol;
 import static teemowork.lol.SkillKey.*;
 import static teemowork.lol.Status.*;
 import static teemowork.lol.Version.*;
-import teemowork.lol.SkillVariableResolver.Fixed;
-import teemowork.lol.SkillVariableResolver.Per1Level;
-import teemowork.lol.SkillVariableResolver.Per2Level;
-import teemowork.lol.SkillVariableResolver.Per3Level;
-import teemowork.lol.SkillVariableResolver.Per4Level;
-import teemowork.lol.SkillVariableResolver.Per6Level;
+import teemowork.lol.VariableResolver.Fixed;
+import teemowork.lol.VariableResolver.Per1Level;
+import teemowork.lol.VariableResolver.Per2Level;
+import teemowork.lol.VariableResolver.Per3Level;
+import teemowork.lol.VariableResolver.Per4Level;
+import teemowork.lol.VariableResolver.Per6Level;
 
 /**
  * @version 2013/01/27 20:32:01
@@ -1819,7 +1819,7 @@ public enum Skill {
      * @param rate An AD rate.
      * @return
      */
-    private static final SkillVariable ad(double rate) {
+    private static final Variable ad(double rate) {
         return amplify(AD, rate);
     }
 
@@ -1831,7 +1831,7 @@ public enum Skill {
      * @param rate An AD rate.
      * @return
      */
-    private static final SkillVariable bounusAD(double rate) {
+    private static final Variable bounusAD(double rate) {
         return amplify(BounusAD, rate);
     }
 
@@ -1843,7 +1843,7 @@ public enum Skill {
      * @param rate An AP rate.
      * @return
      */
-    private static final SkillVariable ap(double rate) {
+    private static final Variable ap(double rate) {
         return amplify(AP, rate);
     }
 
@@ -1856,7 +1856,7 @@ public enum Skill {
      * @param base A base value of amplifier rate.
      * @return
      */
-    private static final SkillVariable amplify(Status status, double base) {
+    private static final Variable amplify(Status status, double base) {
         return amplify(status, base, 0);
     }
 
@@ -1870,12 +1870,8 @@ public enum Skill {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final SkillVariable amplify(Status status, double base, double diff) {
-        SkillVariable amplifier = new SkillVariable();
-        amplifier.setStatus(status);
-        amplifier.setResolver(new SimpleVariableResolver(base, diff));
-
-        return amplifier;
+    private static final Variable amplify(Status status, double base, double diff) {
+        return amplify(status, new SimpleVariableResolver(base, diff));
     }
 
     /**
@@ -1888,8 +1884,8 @@ public enum Skill {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final SkillVariable amplify(Status status, SkillVariableResolver resolver) {
-        SkillVariable amplifier = new SkillVariable();
+    private static final Variable amplify(Status status, VariableResolver resolver) {
+        Variable amplifier = new Variable();
         amplifier.setStatus(status);
         amplifier.setResolver(resolver);
 
@@ -1906,8 +1902,8 @@ public enum Skill {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final SkillVariable amplify(Status status, double base, double diff, SkillVariable amplifier) {
-        SkillVariable one = amplify(status, base, diff);
+    private static final Variable amplify(Status status, double base, double diff, Variable amplifier) {
+        Variable one = amplify(status, base, diff);
         one.amplifiers.add(amplifier);
 
         return one;
@@ -3782,15 +3778,37 @@ public enum Skill {
 
         /** Riven */
         RunicBlade.update()
-                .passive("スキルを使用するごとに1チャージを得る。チャージがある状態で通常攻撃を行うと、チャージを消費して通常攻撃に追加物理DMが付与される。チャージは最大3スタックされ、通常攻撃ごとに1チャージずつ消費される。チャージは5秒間増加または消費がないと0になる。ダメージはレベル3毎に2増加していく。建物には無効。");
+                .passive("スキルを使用するごとに1チャージを得る。チャージがある状態で通常攻撃を行うと、チャージを消費して通常攻撃に{1}が付与される。チャージは最大3スタックされ、通常攻撃ごとに1チャージずつ消費される。チャージは5秒間増加または消費がないと0になる。建物には無効。")
+                .variable(1, PhysicalDamage, 0, 0, amplify(AD, new Per2Level(0.2, 0.05)));
         BrokenWings.update()
-                .active("前方にステップし、範囲内の敵ユニットを剣で切りつけて物理DMを与える。このスキルは短期間の間、3回まで連続して使用できる。3度目の使用でジャンプを行い、着地時に周囲の敵ユニットに物理DMとノックバックを与える。また、スキルを使用する度にオートアタックタイマーがリセットされる。")
+                .active("前方にステップし、{1}の敵ユニットを剣で切りつけて{2}を与える。このスキルは短期間の間、3回まで連続して使用できる。3度目の使用でジャンプを行い、着地時に{3}の敵ユニットに{2}と{4}を与える。また、スキルを使用する度にオートアタックタイマーがリセットされる。最大DMは{5}。")
+                .variable(1, Radius, 112.5)
+                .variable(2, PhysicalDamage, 30, 25, bounusAD(0.7))
+                .variable(3, Radius, 150)
+                .variable(4, Knockback, 225)
+                .variable(5, PhysicalDamage, 90, 75, bounusAD(2.1))
                 .cd(1)
                 .range(260);
-        KiBurst.update().active("周囲の敵ユニットに物理DMとスタン(0.75s)を与える。").cd(11, -1);
-        Valor.update().active("指定方向にダッシュし、2.5秒間Rivenにシールドが付与される。").cd(10, -1).range(325);
+        KiBurst.update()
+                .active("{1}の敵ユニットに{2}と{3}を与える。")
+                .variable(1, Radius, 125)
+                .variable(2, PhysicalDamage, 50, 30, bounusAD(1))
+                .variable(3, Stun, 0.75)
+                .cd(11, -1);
+        Valor.update()
+                .active("指定方向にダッシュ({1})し、2.5秒間{2}が付与される。")
+                .variable(1, Distance, 325)
+                .variable(2, Shield, 70, 30, bounusAD(1))
+                .cd(10, -1)
+                .range(325);
         BladeOftheExile.update()
-                .active("15秒間折れた剣の刃を再生させ、Rivenの攻撃力が20%増加し、Valor以外のスキルと通常攻撃の射程距離が増加する。また、このスキルを再度使用することで一度だけ「Wind Slash」が使用できる。通常攻撃の射程増加後: 200Broken Wingsの効果範囲増加後: 325Ki Burstの効果範囲増加後: 270Wind Slash:0.5秒後に指定方向に巨大な衝撃波を発生させ、範囲内の敵ユニットに物理DMを与える。対象が受けているダメージに比例して与えるダメージが増加する。")
+                .active("15秒間折れた剣の刃を再生させ、{1}増加し、射程が増加する(通常攻撃: {2} Broken Wings: {3} Ki Burst: {4})。また、このスキルを再度使用することで一度だけ0.5秒後に指定方向に巨大な衝撃波を発生させ、範囲内の敵ユニットに{5}与える。対象が受けているダメージに比例して与えるダメージが増加して、最大DMは{6}。")
+                .variable(1, AD, 0, 0, ad(0.2))
+                .variable(2, Range, 200)
+                .variable(3, Range, 325)
+                .variable(4, Range, 270)
+                .variable(5, PhysicalDamage, 80, 40, bounusAD(0.6))
+                .variable(6, PhysicalDamage, 240, 120, bounusAD(1.8))
                 .cd(110, -30);
 
         /** Rumble */

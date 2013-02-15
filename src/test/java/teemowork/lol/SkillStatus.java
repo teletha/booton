@@ -28,7 +28,7 @@ public class SkillStatus {
     private NativeArray<Double> values;
 
     /** The value store. */
-    private NativeArray<SkillVariable> variables;
+    private NativeArray<Variable> variables;
 
     /** The skill cost type. */
     private Status cost;
@@ -131,10 +131,10 @@ public class SkillStatus {
                 tokens.add(token);
             } else {
                 int id = Integer.parseInt(token);
-                SkillVariable variable = variables.get(id);
+                Variable variable = variables.get(id);
 
                 if (variable == null) {
-                    variable = new SkillVariable();
+                    variable = new Variable();
                     variables.set(id, variable);
                 }
                 tokens.add(variable);
@@ -182,7 +182,7 @@ public class SkillStatus {
      * @param resolver A resolver.
      * @return Chainable API.
      */
-    SkillStatus variable(int id, Status status, SkillVariableResolver resolver) {
+    SkillStatus variable(int id, Status status, VariableResolver resolver) {
         return variable(id, status, resolver, null, null);
     }
 
@@ -198,7 +198,7 @@ public class SkillStatus {
      * @param amplifier A first amplifier.
      * @return Chainable API.
      */
-    SkillStatus variable(int id, Status status, double base, double diff, SkillVariable amplifier) {
+    SkillStatus variable(int id, Status status, double base, double diff, Variable amplifier) {
         return variable(id, status, base, diff, amplifier, null);
     }
 
@@ -215,8 +215,8 @@ public class SkillStatus {
      * @param second A second amplifier.
      * @return Chainable API.
      */
-    SkillStatus variable(int id, Status status, double base, double diff, SkillVariable first, SkillVariable second) {
-        return variable(id, status, new SimpleValues(skill.getMaxLevel(), base, diff), first, second);
+    SkillStatus variable(int id, Status status, double base, double diff, Variable first, Variable second) {
+        return variable(id, status, new SimpleVariableResolver(base, diff), first, second);
     }
 
     /**
@@ -231,8 +231,8 @@ public class SkillStatus {
      * @param second A second amplifier.
      * @return Chainable API.
      */
-    private SkillStatus variable(int id, Status status, SkillVariableResolver resolver, SkillVariable first, SkillVariable second) {
-        SkillVariable variable = variables.get(id);
+    private SkillStatus variable(int id, Status status, VariableResolver resolver, Variable first, Variable second) {
+        Variable variable = variables.get(id);
         variable.setStatus(status);
         variable.setResolver(resolver);
 
@@ -380,53 +380,11 @@ public class SkillStatus {
      * @param id A variable identifier.
      */
     SkillStatus conditional(int id) {
-        SkillVariable variable = variables.get(id);
+        Variable variable = variables.get(id);
 
         if (variable != null) {
             variable.setConditional();
         }
         return this;
-    }
-
-    /**
-     * @version 2013/02/12 10:41:24
-     */
-    public static class SimpleValues extends SkillVariableResolver {
-
-        /** The skill size. */
-        private final int size;
-
-        /** The base value. */
-        private final double base;
-
-        /** The value of diff for each stack. */
-        private final double diff;
-
-        /**
-         * @param size A size of skill level.
-         * @param base A base value.
-         * @param diff A diff value.
-         */
-        public SimpleValues(int size, double base, double diff) {
-            this.size = size;
-            this.base = base;
-            this.diff = diff;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public double compute(int skillLevel) {
-            return base + diff * (skillLevel - 1);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public int computeSize(int hint) {
-            return base == 0 ? 0 : diff == 0 ? 1 : size;
-        }
     }
 }

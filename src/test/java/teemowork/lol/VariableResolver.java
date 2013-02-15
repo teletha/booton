@@ -12,7 +12,7 @@ package teemowork.lol;
 /**
  * @version 2013/02/12 10:33:59
  */
-public abstract class SkillVariableResolver {
+public abstract class VariableResolver {
 
     /**
      * <p>
@@ -32,9 +32,7 @@ public abstract class SkillVariableResolver {
      * @param hint A hint for size.
      * @return
      */
-    public int computeSize(int hint) {
-        return hint;
-    }
+    public abstract int estimateSize(int hint);
 
     /**
      * <p>
@@ -44,7 +42,7 @@ public abstract class SkillVariableResolver {
      * @return A list of all computed values.
      */
     public double[] enumerate(int hint) {
-        double[] values = new double[computeSize(hint)];
+        double[] values = new double[estimateSize(hint)];
 
         for (int i = 0; i < values.length; i++) {
             values[i] = compute(i + 1);
@@ -77,7 +75,7 @@ public abstract class SkillVariableResolver {
     /**
      * @version 2013/02/12 13:10:53
      */
-    private static abstract class PerLevel extends SkillVariableResolver {
+    private static abstract class PerLevel extends VariableResolver {
 
         /** The level pattern. */
         private final int[] levels;
@@ -103,7 +101,7 @@ public abstract class SkillVariableResolver {
          * {@inheritDoc}
          */
         @Override
-        public int computeSize(int hint) {
+        public int estimateSize(int hint) {
             return levels.length;
         }
 
@@ -167,7 +165,7 @@ public abstract class SkillVariableResolver {
      * @version 2013/02/12 11:37:34
      */
     public static class Per3Level extends PerLevel {
-    
+
         /**
          * @param values
          */
@@ -192,7 +190,7 @@ public abstract class SkillVariableResolver {
     /**
      * @version 2013/02/12 11:37:34
      */
-    public static class Per1Level extends SkillVariableResolver {
+    public static class Per1Level extends VariableResolver {
 
         /** The values. */
         private final int[] values;
@@ -208,7 +206,7 @@ public abstract class SkillVariableResolver {
          * {@inheritDoc}
          */
         @Override
-        public int computeSize(int hint) {
+        public int estimateSize(int hint) {
             return 18;
         }
 
@@ -232,7 +230,7 @@ public abstract class SkillVariableResolver {
     /**
      * @version 2013/02/14 18:22:02
      */
-    public static class Fixed extends SkillVariableResolver {
+    public static class Fixed extends VariableResolver {
 
         /** The fixed values. */
         private final double[] values;
@@ -256,7 +254,7 @@ public abstract class SkillVariableResolver {
          * {@inheritDoc}
          */
         @Override
-        public int computeSize(int hint) {
+        public int estimateSize(int hint) {
             return values.length;
         }
     }
