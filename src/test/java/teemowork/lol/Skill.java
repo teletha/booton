@@ -3200,25 +3200,38 @@ public enum Skill {
                 .cd(3);
 
         /** Kog'Maw */
-        IcathianSurprise.update().passive("死亡すると4秒後に自爆して周囲の敵ユニットにTrue Damageを与える。自爆するまでの間は徐々に移動速度が増加する(最大時40%増加)。");
+        IcathianSurprise.update()
+                .passive("死亡すると4秒後に自爆して周囲の敵ユニットに{1}を与える。自爆するまでの間は徐々に移動速度が増加する(最大時40%増加)。")
+                .variable(1, TrueDamage, 100, 0, amplify(Lv, 25));
         CausticSpittle.update()
-                .passive("自身の攻撃速度が増加する。増加攻撃速度: 10/15/20/25/30%")
-                .active("対象の敵ユニットに魔法DMを与え、4秒間ARとMRを低下させる。")
+                .passive("{1}を得る。")
+                .variable(1, ASRatio, 10, 5)
+                .active("対象の敵ユニットに{2}を与え、4秒間{3}と{4}を与える。")
+                .variable(2, MagicDamage, 60, 50, ap(0.7))
+                .variable(3, ARReduction, 5, 5)
+                .variable(4, MRReduction, 5, 5)
                 .mana(60)
                 .cd(8)
                 .range(625);
         BioArcaneBarrage.update()
-                .active("8秒間通常攻撃の射程距離が増加し、通常攻撃時に対象の最大HPに比例した魔法DMを追加で与える。")
+                .active("8秒間通常攻撃の射程が{1}増加し、通常攻撃時に{2}を追加で与える。")
+                .variable(1, Range, 130, 20)
+                .variable(2, MagicDamage, 0, 0, amplify(TargetHealth, 2, 1, ap(0.01)))
                 .mana(50)
                 .cd(17)
                 .range(130, 20);
         VoidOoze.update()
-                .active("指定方向に貫通する弾を発射し、当たった敵ユニットに魔法DMを与える。弾の通過点に4秒間持続する液体が残り、その上にいる敵ユニットにスローを与える。")
+                .active("指定方向に貫通する弾を発射し、当たった敵ユニットに{1}を与える。弾の通過点に4秒間持続する液体が残り、その上にいる敵ユニットに{2}を与える。")
+                .variable(1, MagicDamage, 60, 50, ap(0.7))
+                .variable(2, Slow, 20, 8)
                 .mana(80, 10)
                 .cd(12)
                 .range(1400);
         LivingArtillery.update()
-                .active("指定地点を砲撃し、範囲内の敵ユニットに魔法DMを与え、4秒間そのユニットの視界を得る。対象がChampionの場合、基本ダメージの125%分の追加DMが発生する。このスキルを使うたびにスタックが増加し、1スタックにつきこのスキルの消費マナが40ずつ増加していく。スタックは6秒間持続する。")
+                .active("指定地点を砲撃し、{1}の敵ユニットに{2}を敵Championには{3}を与え、4秒間そのユニットの視界を得る。このスキルを使うたびにスタックが増加し、1スタックにつきこのスキルの消費マナが40ずつ増加していく。スタックは6秒間持続する。")
+                .variable(1, Radius, 200)
+                .variable(2, MagicDamage, 80, 40, ap(0.3), bounusAD(0.5))
+                .variable(3, MagicDamage, 180, 90, ap(0.3), bounusAD(0.5))
                 .mana(40)
                 .cd(2, -0.5)
                 .range(1400, 300);
@@ -3652,16 +3665,32 @@ public enum Skill {
                 .cd(150, -30);
 
         /** Olaf */
-        BerserkerRage.update().passive("HPの減少割合に比例して攻撃速度が上昇する(瀕死時程攻撃速度UP)。");
+        BerserkerRage.update().passive("{1}を得る。").variable(1, ASRatio, 0, 0, amplify(MissingHealth, 1));
         Undertow.update()
-                .active("指定地点に貫通する斧を投げ、当たった敵ユニットに物理DMとスロー(2.5s)を与える。このスローは2.5秒かけて元に戻る。投げた斧は指定地点に7秒間留まり、斧を回収するとこのスキルのCDが4.5秒解消される。")
+                .active("指定地点に貫通する斧を投げ、当たった敵ユニットに{1}と2.5秒間{2}を与える。このスローは2.5秒かけて元に戻る。投げた斧は指定地点に7秒間留まり、斧を回収するとこのスキルのCDが4.5秒解消される。")
+                .variable(1, PhysicalDamage, 80, 45, bounusAD(1))
+                .variable(2, Slow, 24, 4)
                 .mana(55, 5)
                 .cd(8)
                 .range(1000);
-        ViciousStrikes.update().active("6秒間自身の攻撃力とLife StealとSpell Vampが増加する。").mana(40, 5).cd(16);
-        RecklessSwing.update().active("対象の敵ユニットにTrue Damageを与える。このスキルはマナの代わりにHPを消費する。").cd(9, -1).range(325);
+        ViciousStrikes.update()
+                .active("6秒間{1}と{2}と{3}を得る。")
+                .variable(1, AD, 7, 7, amplify(Health, 0.01))
+                .variable(2, LS, 9, 3)
+                .variable(3, SV, 9, 3)
+                .mana(40, 5)
+                .cd(16);
+        RecklessSwing.update()
+                .active("対象の敵ユニットに{1}を与える。")
+                .variable(1, TrueDamage, 100, 60)
+                .cost(Health, 40, 24)
+                .cd(9, -1)
+                .range(325);
         Ragnarok.update()
-                .active("6秒間自身のARPen、Armor、Magic Resistが増加し、すべてのCC(Stun, Slow, Taunt, Fear, Snare, 打ち上げ、ノックバック, Silence, Blind, Suppression)を無効化する。既にCCを受けていた場合はそれらを解除する。StunなどのDisable中でも使用可能。")
+                .active("6秒間{1}と{2}と{3}を得て、すべてのCC(Stun, Slow, Taunt, Fear, Snare, 打ち上げ、ノックバック, Silence, Blind, Suppression)を無効化する。既にCCを受けていた場合はそれらを解除する。StunなどのDisable中でも使用可能。")
+                .variable(1, ARPen, 10, 10)
+                .variable(2, AR, 30, 15)
+                .variable(3, MR, 30, 15)
                 .mana(100, -25)
                 .cd(100);
 
@@ -3729,21 +3758,35 @@ public enum Skill {
                 .range(900);
 
         /** Rammus */
-        SpikedShell.update().passive("ARの25%分、攻撃力が増加する。");
+        SpikedShell.update().passive("{1}を得る。").variable(1, AD, 0, 0, amplify(AR, 0.45));
         Powerball.update()
-                .active("使用してから7秒間Rammusが回転し、その間徐々に移動速度が増加する(最大時85%増加)。回転中に最初に当たった敵ユニットとRammusの周囲にいる敵ユニットに魔法DM、打ち上げ(0.75s)、スロー(3s)を与える。回転中にスキル再使用または、Defensive Ball Curlを使用すると回転がキャンセルされる。")
+                .active("使用してから7秒間Rammusが回転し、その間徐々に移動速度が増加する(最大時85%増加)。回転中に最初に当たった敵ユニットとRammusの周囲({1})にいる敵ユニットに{2}、{3}、3秒間の{4}を与える。回転中にスキル再使用または、Defensive Ball Curlを使用すると回転がキャンセルされる。")
+                .variable(1, Radius, 200)
+                .variable(2, MagicDamage, 100, 50, ap(1))
+                .variable(3, Knockup, 0.75)
+                .variable(4, Slow, 20, 5)
                 .mana(70, 10)
                 .cd(10);
         DefensiveBallCurl.update()
-                .active("6秒間ARとMRが大幅に増加し、Rammusを通常攻撃した敵ユニットに魔法DMを与える。効果中にPowerballを使用すると効果がキャンセルされる。また、このスキルを再使用することで効果をキャンセルできる。")
+                .active("6秒間{1}と{2}を得て、Rammusを通常攻撃した敵ユニットに{3}を与える。効果中にPowerballを使用すると効果がキャンセルされる。また、このスキルを再使用することで効果をキャンセルできる。")
+                .variable(1, AR, 40, 20)
+                .variable(2, MR, 40, 20)
+                .variable(3, MagicDamage, 15, 10, amplify(AR, 0.1))
                 .mana(40)
                 .cd(14);
         PuncturingTaunt.update()
-                .active("対象の敵ユニットをTaunt状態(自動的にRammusを攻撃してしまう)にする。またその間対象のARを低下させる。")
+                .active("対象の敵ユニットに{1}と{2}を与える。")
+                .variable(1, Taunt, 1, 0.5)
+                .variable(2, ARReduction, 10, 5)
                 .mana(50, 10)
                 .cd(12)
                 .range(325);
-        Tremors.update().active("8秒間地震を発生させRammusの近くの敵ユニット及び建物に毎秒魔法DMを与える。").mana(120).cd(60);
+        Tremors.update()
+                .active("8秒間地震を発生させ{1}の敵ユニット及び建物に毎秒{2}を与える。")
+                .variable(1, Radius, 300)
+                .variable(2, MagicDamage, 65, 65, ap(0.3))
+                .mana(120)
+                .cd(60);
 
         /** Renekton */
         ReignOfAnger.update()
@@ -4075,28 +4118,43 @@ public enum Skill {
                 .range(1000);
 
         /** Taric */
-        Gemcraft.update().passive("通常攻撃で与えたダメージの7.5%分MNが回復する。");
+        Gemcraft.update().passive("通常攻撃をすると{1}する。").variable(1, RestoreMana, 0, 0, amplify(Damage, 0.075));
         Imbue.update()
-                .active("対象の味方ユニットとTaricのHPを回復する。自身に使用した場合は回復量が40%上昇する。このスキルは自身が通常攻撃を行う毎にCDが1秒解消される。対象が敵Championの場合は3秒解消される。")
+                .active("対象の味方ユニットとTaricの{1}する。自身に使用した場合は{2}する。このスキルは自身が通常攻撃を行う毎にCDが1秒解消される。対象が敵Championの場合は3秒解消される。")
+                .variable(1, RestoreHealth, 60, 40, ap(0.6))
+                .variable(2, RestoreHealth, 84, 56, ap(0.84))
                 .mana(80, 15)
                 .cd(20, -1)
                 .range(750);
         Shatter.update()
-                .passive("TaricのARが上昇し、更に近くの味方ChampionのARを増加させるAuraを得る。(Taric自身はAuraと合わせて2倍の効果を得る)増加AR: 10/15/20/25/30 Aura増加AR: 10/15/20/25/30 効果範囲: 1000")
-                .active("周囲の敵ユニットに魔法DMを与え、ARを低下(4s)させる。効果後はCDが解消されるまでPassiveのTaric自身の増加ARが無くなる。")
+                .passive("Taricは{1}を得て、更に近くの味方Championの{1}を増加させる{2}のAuraを得る。(Taric自身はAuraと合わせて2倍の効果を得る)")
+                .variable(1, AR, 10, 5)
+                .variable(2, Radius, 1000)
+                .active("{3}の敵ユニットに{4}を与え、4秒間{5}を与える。効果後はCDが解消されるまでPassiveのTaric自身の増加ARが無くなる。")
+                .variable(3, Radius, 400)
+                .variable(4, MagicDamage, 60, 45, ap(0.6))
+                .variable(5, ARReduction, 10, 5)
                 .mana(50, 10)
-                .cd(10)
-                .range(400);
+                .cd(10);
         Dazzle.update()
-                .active("対象の敵ユニットに魔法DMとスタン(1.5s)を与える。魔法DMは対象との距離が近いほど増加し、距離が遠いほど低下する。")
+                .active("対象の敵ユニットに{1}と{2}を与える。魔法DMは対象との距離が近いほど増加し、距離が遠いほど低下する。最大DMは{3}。")
+                .variable(1, MagicDamage, 80, 60, ap(0.8))
+                .variable(2, Stun, 1.5)
+                .variable(3, MagicDamage, 40, 30, ap(0.3))
                 .mana(95)
                 .cd(14, -1)
                 .range(625);
         Radiance.update()
-                .active("周囲の敵ユニットに魔法DMを与える。スキル使用後の10秒間、自身と近くの味方ユニットの攻撃力とAPを増加させるAura(範囲1000)を展開する。")
+                .active("{1}の敵ユニットに{2}を与える。スキル使用後の10秒間、{3}と{4}を得て、更に近くの味方Championの{5}と{6}を増加させるAura({7})を展開する。")
+                .variable(1, Radius, 400)
+                .variable(2, MagicDamage, 150, 100, ap(0.7))
+                .variable(3, AD, 30, 20)
+                .variable(4, AP, 30, 20)
+                .variable(5, AD, 15, 10)
+                .variable(6, AP, 15, 10)
+                .variable(7, Radius, 1000)
                 .mana(100)
-                .cd(60)
-                .range(400);
+                .cd(60);
 
         /** Teemo */
         Camouflage.update().passive("2秒間動かないとステルス状態になる。何か行動を行うか、強制的に移動させられるとステルスが解除され、ステルス解除後3秒間攻撃速度が40%増加する。");
