@@ -10,6 +10,7 @@
 package booton.translator.builtin;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 import booton.translator.Translator;
 
@@ -20,5 +21,13 @@ class ArraysCoder extends Translator<Arrays> {
 
     public String copyOf(Object[] original, int newLength) {
         return param(0) + ".slice(" + param(1) + ")";
+    }
+
+    public String sort(Object[] param0) {
+        return param(0) + ".sort()";
+    }
+
+    public String sort(Object[] param0, Comparator param1) {
+        return param(0) + ".sortBy(" + param(1) + ")";
     }
 }

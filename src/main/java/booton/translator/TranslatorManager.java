@@ -12,6 +12,7 @@ package booton.translator;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import js.dom.Location;
 import js.dom.Window;
 import js.lang.Function;
 import js.net.WebSocket;
+import js.util.ArrayList;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
@@ -51,6 +53,7 @@ class TranslatorManager {
         builtIn(WebSocket.class);
         builtIn(Window.class);
         builtIn(Location.class);
+        builtIn(Comparator.class);
     }
 
     /**
@@ -230,8 +233,10 @@ class TranslatorManager {
         private Method findFunctionMethod(Class clazz) {
             if (Function.class.isAssignableFrom(clazz)) {
                 for (Class type : ClassUtil.getTypes(clazz)) {
-                    if (isFunction(type) && type.getDeclaredMethods().length == 1) {
-                        return type.getDeclaredMethods()[0];
+                    Method method = getFunctionMethod(type);
+
+                    if (method != null) {
+                        return method;
                     }
                 }
             }
@@ -246,13 +251,21 @@ class TranslatorManager {
          * @param clazz A target class to check.
          * @return A result.
          */
-        private boolean isFunction(Class clazz) {
+        private Method getFunctionMethod(Class clazz) {
             for (Class type : clazz.getInterfaces()) {
                 if (type == Function.class) {
-                    return true;
+                    List<Method> userDefined = new ArrayList();
+                    Method[] methods = clazz.getDeclaredMethods();
+
+                    for (Method method : methods) {
+                        if (!method.isSynthetic() && !method.isBridge()) {
+                            userDefined.add(method);
+                        }
+                    }
+                    return userDefined.size() == 1 ? userDefined.get(0) : null;
                 }
             }
-            return false;
+            return null;
         }
 
         /**

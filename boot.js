@@ -95,6 +95,17 @@ function boot(global) {
       for (var i = 0; i < length; i++) {
         dest[dfrom + i] = this[from + i];
       } 
+    },
+
+    /**
+     * <p>
+     * Sort by the specified Java comparator.
+     * </p>
+     *
+     * @param comparator A entry comparator.
+     */
+    sortBy: function(comparator) {
+      this.sort(comparator.compare.bind(comparator));
     }
   });
   

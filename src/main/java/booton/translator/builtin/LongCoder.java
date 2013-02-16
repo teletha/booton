@@ -19,4 +19,8 @@ class LongCoder extends Translator<Long> {
     public String valueOf(long param0) {
         return param(0);
     }
+
+    public String toString(long param0) {
+        return param(0);
+    }
 }

@@ -23,6 +23,9 @@ public abstract class Table<T> extends UI {
      */
     @Override
     public void compose(jQuery parent) {
+        for (T item : sources()) {
+
+        }
     }
 
     /**
