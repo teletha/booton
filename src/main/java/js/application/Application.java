@@ -93,9 +93,6 @@ public abstract class Application {
         /** The page router. */
         private final List<Route> routes = new ArrayList();
 
-        /** The current page. */
-        private Page current;
-
         /**
          * <p>
          * URI dispatcher.
@@ -135,20 +132,6 @@ public abstract class Application {
                     return;
                 }
             }
-        }
-
-        @Deprecated
-        private void dispatch(Page page) {
-            // create element cradle
-            jQuery cradle = $(document.createDocumentFragment());
-
-            // build page element
-            current = page;
-            current.load(cradle);
-
-            // clear old page and append new page
-            $("#Content").empty().append(cradle);
-
         }
     }
 
