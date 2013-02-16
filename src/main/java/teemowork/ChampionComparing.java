@@ -12,13 +12,13 @@ package teemowork;
 import static js.lang.Global.*;
 import static teemowork.lol.Status.*;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import js.application.Page;
 import js.application.PageInfo;
 import js.util.ArrayList;
-import js.util.Collections;
 import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;

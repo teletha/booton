@@ -37,6 +37,22 @@ public class IncrementTest extends ScriptTester {
     }
 
     @Test
+    public void preincrementFieldInMethodCall() throws Exception {
+        test(new Scriptable() {
+
+            private int index = 0;
+
+            public int act() {
+                return call(--index);
+            }
+
+            private int call(int value) {
+                return value;
+            }
+        });
+    }
+
+    @Test
     public void incrementFieldInFieldAccess() throws Exception {
         test(new Scriptable() {
 

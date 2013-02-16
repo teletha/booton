@@ -12,11 +12,15 @@ package js.util;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.ListIterator;
+
+import booton.translator.JavaNative;
 
 /**
  * @version 2013/02/16 11:28:44
  */
-public class Collections {
+@JavaNative(java.util.Collections.class)
+class Collections {
 
     /**
      * Sorts the specified list according to the order induced by the specified comparator. All
@@ -66,8 +70,11 @@ public class Collections {
         Object[] values = list.toArray();
         Arrays.sort(values, (Comparator) comparator);
 
+        ListIterator iterator = list.listIterator();
+
         for (int i = 0; i < values.length; i++) {
-            list.set(i, (T) values[i]);
+            iterator.next();
+            iterator.set(values[i]);
         }
     }
 }
