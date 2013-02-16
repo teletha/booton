@@ -4055,15 +4055,25 @@ public enum Skill {
         Wish.update().active("味方Champion全員のHPを回復する。").mana(100, 75).cd(160, -15);
 
         /** Swain */
-        CarrionRenewal.update().passive("敵ユニットを倒す毎に自身のmanaが回復する。").mana(9);
+        CarrionRenewal.update().passive("敵ユニットを倒す毎に{1}する。").variable(1, RestoreMana, 9, 0, amplify(Lv, 1));
         Decrepify.update()
-                .active("Swainの位置にビームを吐くカラスを設置し、対象の敵ユニットに毎秒魔法DMとスローを与える。3秒経つか対象のユニットがカラスの有効範囲外(900)に移動すると効果が切れる。")
+                .active("Swainの位置にビームを吐くカラスを設置し、対象の敵ユニットに毎秒{1}と{2}を与える。3秒経つか対象のユニットがカラスの有効範囲外({3})に移動すると効果が切れる。")
+                .variable(1, MagicDamage, 25, 15, ap(0.3))
+                .variable(2, Slow, 20, 5)
+                .variable(3, Radius, 900)
                 .mana(60, 10)
                 .cd(8)
                 .range(625);
-        Nevermove.update().active("地点を指定した0.5秒後に範囲内の敵ユニットに魔法DMとSnare(2s)を与える。").mana(80, 10).cd(18, -2).range(900);
+        Nevermove.update()
+                .active("地点を指定した0.5秒後に範囲内の敵ユニットに{1}と{2}を与える。")
+                .variable(1, MagicDamage, 80, 40, ap(0.7))
+                .variable(2, Snare, 2)
+                .mana(80, 10)
+                .cd(18, -2)
+                .range(900);
         Torment.update()
-                .active("対象の敵ユニットに4秒かけて(表示は4秒間の合計DM)魔法DMを与える。また、効果中はSwainが対象のユニットに与えるダメージが増加する。")
+                .active("対象の敵ユニットに4秒かけて{1}を与える。また、効果中はSwainが対象のユニットに与えるダメージが増加する。")
+                .variable(1, MagicDamage, 75, 40, ap(0.8))
                 .mana(65, 5)
                 .cd(10)
                 .range(625);

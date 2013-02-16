@@ -623,6 +623,7 @@ public class ChampionDetail extends Page {
             {
                 display.tableCell();
                 padding.right(IconSize / 5, px);
+                cursor.pointer();
             }
         }
 
@@ -895,6 +896,7 @@ public class ChampionDetail extends Page {
             border.radius(10, px).color(50, 50, 50).width(2, px).solid();
             position.relative();
             margin.bottom(1, em);
+            cursor.pointer();
         }
     }
 
