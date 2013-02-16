@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ import java.util.ListIterator;
 import js.lang.NativeArray;
 
 /**
- * @version 2012/12/09 22:57:44
+ * @version 2013/02/16 15:06:47
  */
 public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
 
@@ -63,7 +63,7 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return new View();
+        return new View(0);
     }
 
     /**
@@ -161,9 +161,7 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
      */
     @Override
     public ListIterator<E> listIterator() {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return new View(0);
     }
 
     /**
@@ -171,9 +169,7 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
      */
     @Override
     public ListIterator<E> listIterator(int index) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return new View(index);
     }
 
     /**
@@ -204,12 +200,19 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
     }
 
     /**
-     * @version 2012/12/19 13:51:53
+     * @version 2013/02/16 15:06:43
      */
-    private class View implements Iterator<E> {
+    private class View implements Iterator<E>, ListIterator<E> {
 
         /** The curren position. */
         private int index = 0;
+
+        /**
+         * @param index
+         */
+        private View(int index) {
+            this.index = index;
+        }
 
         /**
          * {@inheritDoc}
@@ -231,10 +234,61 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
          * {@inheritDoc}
          */
         @Override
+        public int nextIndex() {
+            return index;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean hasPrevious() {
+            return 0 < index;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E previous() {
+            index--;
+            return array.get(index);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int previousIndex() {
+            return index - 1;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
         public void remove() {
             if (0 < index) {
                 array.remove(index - 1);
             }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void set(E e) {
+            array.set(index, e);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void add(E e) {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
         }
     }
 }

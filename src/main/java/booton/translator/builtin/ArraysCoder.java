@@ -23,6 +23,10 @@ class ArraysCoder extends Translator<Arrays> {
         return param(0) + ".slice(" + param(1) + ")";
     }
 
+    public String copyOf(Object[] original, int newLength, Class newType) {
+        return param(0) + ".slice(" + param(1) + ")";
+    }
+
     public String sort(Object[] param0) {
         return param(0) + ".sort()";
     }
