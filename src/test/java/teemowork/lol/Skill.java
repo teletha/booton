@@ -23,1702 +23,1702 @@ import teemowork.lol.VariableResolver.Per6Level;
 /**
  * @version 2013/01/27 20:32:01
  */
-public enum Skill {
+public class Skill {
 
     /** The skill name. */
-    EssenceTheft("Essence Theft", Passive),
+    public static final Skill EssenceTheft = new Skill("Essence Theft", Passive);
 
     /** The skill name. */
-    OrbOfDeception("Orb of Deception", Q),
+    public static final Skill OrbOfDeception = new Skill("Orb of Deception", Q);
 
     /** The skill name. */
-    FoxFire("Fox-Fire", W),
+    public static final Skill FoxFire = new Skill("Fox-Fire", W);
 
     /** The skill name. */
-    Charm("Charm", E),
+    public static final Skill Charm = new Skill("Charm", E);
 
     /** The skill name. */
-    SpiritRush("Spirit Rush", R),
+    public static final Skill SpiritRush = new Skill("Spirit Rush", R);
 
     /** The skill name. */
-    TwinDisciplines("Twin Disciplines", Passive),
+    public static final Skill TwinDisciplines = new Skill("Twin Disciplines", Passive);
 
     /** The skill name. */
-    MarkOftheAssassin("Mark of the Assassin", Q),
+    public static final Skill MarkOftheAssassin = new Skill("Mark of the Assassin", Q);
 
     /** The skill name. */
-    TwilightShroud("Twilight Shroud", W),
+    public static final Skill TwilightShroud = new Skill("Twilight Shroud", W);
 
     /** The skill name. */
-    CrescentSlash("Crescent Slash", E),
+    public static final Skill CrescentSlash = new Skill("Crescent Slash", E);
 
     /** The skill name. */
-    ShadowDance("Shadow Dance", R),
+    public static final Skill ShadowDance = new Skill("Shadow Dance", R);
 
     /** The skill name. */
-    Trample("Trample", Passive),
+    public static final Skill Trample = new Skill("Trample", Passive);
 
     /** The skill name. */
-    Pulverize("Pulverize", Q),
+    public static final Skill Pulverize = new Skill("Pulverize", Q);
 
     /** The skill name. */
-    Headbutt("Headbutt", W),
+    public static final Skill Headbutt = new Skill("Headbutt", W);
 
     /** The skill name. */
-    TriumphantRoar("Triumphant Roar", E),
+    public static final Skill TriumphantRoar = new Skill("Triumphant Roar", E);
 
     /** The skill name. */
-    UnbreakableWill("Unbreakable Will", R),
+    public static final Skill UnbreakableWill = new Skill("Unbreakable Will", R);
 
     /** The skill name. */
-    CursedTouch("Cursed Touch", Passive),
+    public static final Skill CursedTouch = new Skill("Cursed Touch", Passive);
 
     /** The skill name. */
-    BandageToss("Bandage Toss", Q),
+    public static final Skill BandageToss = new Skill("Bandage Toss", Q);
 
     /** The skill name. */
-    Despair("Despair", W),
+    public static final Skill Despair = new Skill("Despair", W);
 
     /** The skill name. */
-    Tantrum("Tantrum", E),
+    public static final Skill Tantrum = new Skill("Tantrum", E);
 
     /** The skill name. */
-    CurseOftheSadMummy("Curse of the Sad Mummy", R),
+    public static final Skill CurseOftheSadMummy = new Skill("Curse of the Sad Mummy", R);
 
     /** The skill name. */
-    Rebirth("Rebirth", Passive),
+    public static final Skill Rebirth = new Skill("Rebirth", Passive);
 
     /** The skill name. */
-    FlashFrost("Flash Frost", Q),
+    public static final Skill FlashFrost = new Skill("Flash Frost", Q);
 
     /** The skill name. */
-    Crystalize("Crystalize", W),
+    public static final Skill Crystalize = new Skill("Crystalize", W);
 
     /** The skill name. */
-    Frostbite("Frostbite", E),
+    public static final Skill Frostbite = new Skill("Frostbite", E);
 
     /** The skill name. */
-    GlacialStorm("Glacial Storm", R),
+    public static final Skill GlacialStorm = new Skill("Glacial Storm", R);
 
     /** The skill name. */
-    Pyromania("Pyromania", Passive),
+    public static final Skill Pyromania = new Skill("Pyromania", Passive);
 
     /** The skill name. */
-    Disintegrate("Disintegrate", Q),
+    public static final Skill Disintegrate = new Skill("Disintegrate", Q);
 
     /** The skill name. */
-    Incinerate("Incinerate", W),
+    public static final Skill Incinerate = new Skill("Incinerate", W);
 
     /** The skill name. */
-    MoltenShield("Molten Shield", E),
+    public static final Skill MoltenShield = new Skill("Molten Shield", E);
 
     /** The skill name. */
-    SummonTibbers("Summon: Tibbers", R),
+    public static final Skill SummonTibbers = new Skill("Summon: Tibbers", R);
 
     /** The skill name. */
-    Focus("Focus", Passive),
+    public static final Skill Focus = new Skill("Focus", Passive);
 
     /** The skill name. */
-    FrostShot("Frost Shot", Q),
+    public static final Skill FrostShot = new Skill("Frost Shot", Q);
 
     /** The skill name. */
-    Volley("Volley", W),
+    public static final Skill Volley = new Skill("Volley", W);
 
     /** The skill name. */
-    Hawkshot("Hawkshot", E),
+    public static final Skill Hawkshot = new Skill("Hawkshot", E);
 
     /** The skill name. */
-    EnchantedCrystalArrow("Enchanted Crystal Arrow", R),
+    public static final Skill EnchantedCrystalArrow = new Skill("Enchanted Crystal Arrow", R);
 
     /** The skill name. */
-    ManaBarrier("Mana Barrier", Passive),
+    public static final Skill ManaBarrier = new Skill("Mana Barrier", Passive);
 
     /** The skill name. */
-    RocketGrab("Rocket Grab", Q),
+    public static final Skill RocketGrab = new Skill("Rocket Grab", Q);
 
     /** The skill name. */
-    Overdrive("Overdrive", W),
+    public static final Skill Overdrive = new Skill("Overdrive", W);
 
     /** The skill name. */
-    PowerFist("Power Fist", E),
+    public static final Skill PowerFist = new Skill("Power Fist", E);
 
     /** The skill name. */
-    StaticField("Static Field", R),
+    public static final Skill StaticField = new Skill("Static Field", R);
 
     /** The skill name. */
-    Blaze("Blaze", Passive),
+    public static final Skill Blaze = new Skill("Blaze", Passive);
 
     /** The skill name. */
-    Sear("Sear", Q),
+    public static final Skill Sear = new Skill("Sear", Q);
 
     /** The skill name. */
-    PillarOfFlame("Pillar of Flame", W),
+    public static final Skill PillarOfFlame = new Skill("Pillar of Flame", W);
 
     /** The skill name. */
-    Conflagration("Conflagration", E),
+    public static final Skill Conflagration = new Skill("Conflagration", E);
 
     /** The skill name. */
-    Pyroclasm("Pyroclasm", R),
+    public static final Skill Pyroclasm = new Skill("Pyroclasm", R);
 
     /** The skill name. */
-    Headshot("Headshot", Passive),
+    public static final Skill Headshot = new Skill("Headshot", Passive);
 
     /** The skill name. */
-    PiltoverPeacemaker("Piltover Peacemaker", Q),
+    public static final Skill PiltoverPeacemaker = new Skill("Piltover Peacemaker", Q);
 
     /** The skill name. */
-    YordleSnapTrap("Yordle Snap Trap", W),
+    public static final Skill YordleSnapTrap = new Skill("Yordle Snap Trap", W);
 
     /** The skill name. */
-    CaliberNet("90 Caliber Net", E),
+    public static final Skill CaliberNet = new Skill("90 Caliber Net", E);
 
     /** The skill name. */
-    AceinTheHole("Ace in the Hole", R),
+    public static final Skill AceinTheHole = new Skill("Ace in the Hole", R);
 
     /** The skill name. */
-    DeadlyCadence("Deadly Cadence", Passive),
+    public static final Skill DeadlyCadence = new Skill("Deadly Cadence", Passive);
 
     /** The skill name. */
-    NoxiousBlast("Noxious Blast", Q),
+    public static final Skill NoxiousBlast = new Skill("Noxious Blast", Q);
 
     /** The skill name. */
-    Miasma("Miasma", W),
+    public static final Skill Miasma = new Skill("Miasma", W);
 
     /** The skill name. */
-    TwinFang("Twin Fang", E),
+    public static final Skill TwinFang = new Skill("Twin Fang", E);
 
     /** The skill name. */
-    PetrifyingGaze("Petrifying Gaze", R),
+    public static final Skill PetrifyingGaze = new Skill("Petrifying Gaze", R);
 
     /** The skill name. */
-    Carnivore("Carnivore", Passive),
+    public static final Skill Carnivore = new Skill("Carnivore", Passive);
 
     /** The skill name. */
-    Rupture("Rupture", Q),
+    public static final Skill Rupture = new Skill("Rupture", Q);
 
     /** The skill name. */
-    FeralScream("Feral Scream", W),
+    public static final Skill FeralScream = new Skill("Feral Scream", W);
 
     /** The skill name. */
-    VorpalSpikes("Vorpal Spikes", E),
+    public static final Skill VorpalSpikes = new Skill("Vorpal Spikes", E);
 
     /** The skill name. */
-    Feast("Feast", R),
+    public static final Skill Feast = new Skill("Feast", R);
 
     /** The skill name. */
-    HextechShrapnelShells("Hextech Shrapnel Shells", Passive),
+    public static final Skill HextechShrapnelShells = new Skill("Hextech Shrapnel Shells", Passive);
 
     /** The skill name. */
-    PhosphorusBomb("Phosphorus Bomb", Q),
+    public static final Skill PhosphorusBomb = new Skill("Phosphorus Bomb", Q);
 
     /** The skill name. */
-    Valkyrie("Valkyrie", W),
+    public static final Skill Valkyrie = new Skill("Valkyrie", W);
 
     /** The skill name. */
-    GatlingGun("Gatling Gun", E),
+    public static final Skill GatlingGun = new Skill("Gatling Gun", E);
 
     /** The skill name. */
-    MissileBarrage("Missile Barrage", R),
+    public static final Skill MissileBarrage = new Skill("Missile Barrage", R);
 
     /** The skill name. */
-    Hemorrhage("Hemorrhage", Passive),
+    public static final Skill Hemorrhage = new Skill("Hemorrhage", Passive);
 
     /** The skill name. */
-    Decimate("Decimate", Q),
+    public static final Skill Decimate = new Skill("Decimate", Q);
 
     /** The skill name. */
-    CripplingStrike("Crippling Strike", W),
+    public static final Skill CripplingStrike = new Skill("Crippling Strike", W);
 
     /** The skill name. */
-    Apprehend("Apprehend", E),
+    public static final Skill Apprehend = new Skill("Apprehend", E);
 
     /** The skill name. */
-    NoxianGuillotine("Noxian Guillotine", R),
+    public static final Skill NoxianGuillotine = new Skill("Noxian Guillotine", R);
 
     /** The skill name. */
-    MoonsilverBlade("Moonsilver Blade", Passive),
+    public static final Skill MoonsilverBlade = new Skill("Moonsilver Blade", Passive);
 
     /** The skill name. */
-    CrescentStrike("Crescent Strike", Q),
+    public static final Skill CrescentStrike = new Skill("Crescent Strike", Q);
 
     /** The skill name. */
-    PaleCascade("Pale Cascade", W),
+    public static final Skill PaleCascade = new Skill("Pale Cascade", W);
 
     /** The skill name. */
-    Moonfall("Moonfall", E),
+    public static final Skill Moonfall = new Skill("Moonfall", E);
 
     /** The skill name. */
-    LunarRush("Lunar Rush", R),
+    public static final Skill LunarRush = new Skill("Lunar Rush", R);
 
     /** The skill name. */
-    AdrenalineRush("Adrenaline Rush", Passive),
+    public static final Skill AdrenalineRush = new Skill("Adrenaline Rush", Passive);
 
     /** The skill name. */
-    InfectedCleaver("Infected Cleaver", Q),
+    public static final Skill InfectedCleaver = new Skill("Infected Cleaver", Q);
 
     /** The skill name. */
-    BurningAgony("Burning Agony", W),
+    public static final Skill BurningAgony = new Skill("Burning Agony", W);
 
     /** The skill name. */
-    Masochism("Masochism", E),
+    public static final Skill Masochism = new Skill("Masochism", E);
 
     /** The skill name. */
-    Sadism("Sadism", R),
+    public static final Skill Sadism = new Skill("Sadism", R);
 
     /** The skill name. */
-    WickedBlades("Wicked Blades", Passive),
+    public static final Skill WickedBlades = new Skill("Wicked Blades", Passive);
 
     /** The skill name. */
-    SpinningAxe("Spinning Axe", Q),
+    public static final Skill SpinningAxe = new Skill("Spinning Axe", Q);
 
     /** The skill name. */
-    BloodRush("Blood Rush", W),
+    public static final Skill BloodRush = new Skill("Blood Rush", W);
 
     /** The skill name. */
-    StandAside("Stand Aside", E),
+    public static final Skill StandAside = new Skill("Stand Aside", E);
 
     /** The skill name. */
-    WhirlingDeath("Whirling Death", R),
+    public static final Skill WhirlingDeath = new Skill("Whirling Death", R);
 
     /** The skill name. */
-    SpiderSwarm("Spider Swarm", Passive),
+    public static final Skill SpiderSwarm = new Skill("Spider Swarm", Passive);
 
     /** The skill name. */
-    Neurotoxin("Neurotoxin", Q),
+    public static final Skill Neurotoxin = new Skill("Neurotoxin", Q);
 
     /** The skill name. */
-    VenomousBite("Venomous Bite", Q),
+    public static final Skill VenomousBite = new Skill("Venomous Bite", Q);
 
     /** The skill name. */
-    VolatileSpiderling("Volatile Spiderling", W),
+    public static final Skill VolatileSpiderling = new Skill("Volatile Spiderling", W);
 
     /** The skill name. */
-    SkitteringFrenzy("Skittering Frenzy", W),
+    public static final Skill SkitteringFrenzy = new Skill("Skittering Frenzy", W);
 
     /** The skill name. */
-    Cocoon("Cocoon", E),
+    public static final Skill Cocoon = new Skill("Cocoon", E);
 
     /** The skill name. */
-    Rappel("Rappel", E),
+    public static final Skill Rappel = new Skill("Rappel", E);
 
     /** The skill name. */
-    SpiderForm("Spider Form", R),
+    public static final Skill SpiderForm = new Skill("Spider Form", R);
 
     /** The skill name. */
-    HumanForm("Human Form", R),
+    public static final Skill HumanForm = new Skill("Human Form", R);
 
     /** The skill name. */
-    ShadowWalk("Shadow Walk", Passive),
+    public static final Skill ShadowWalk = new Skill("Shadow Walk", Passive);
 
     /** The skill name. */
-    HateSpike("Hate Spike", Q),
+    public static final Skill HateSpike = new Skill("Hate Spike", Q);
 
     /** The skill name. */
-    DarkFrenzy("Dark Frenzy", W),
+    public static final Skill DarkFrenzy = new Skill("Dark Frenzy", W);
 
     /** The skill name. */
-    Ravage("Ravage", E),
+    public static final Skill Ravage = new Skill("Ravage", E);
 
     /** The skill name. */
-    AgonysEmbrace("Agony's Embrace", R),
+    public static final Skill AgonysEmbrace = new Skill("Agony's Embrace", R);
 
     /** The skill name. */
-    RisingSpellForce("Rising Spell Force", Passive),
+    public static final Skill RisingSpellForce = new Skill("Rising Spell Force", Passive);
 
     /** The skill name. */
-    MysticShot("Mystic Shot", Q),
+    public static final Skill MysticShot = new Skill("Mystic Shot", Q);
 
     /** The skill name. */
-    EssenceFlux("Essence Flux", W),
+    public static final Skill EssenceFlux = new Skill("Essence Flux", W);
 
     /** The skill name. */
-    ArcaneShift("Arcane Shift", E),
+    public static final Skill ArcaneShift = new Skill("Arcane Shift", E);
 
     /** The skill name. */
-    TrueshotBarrage("Trueshot Barrage", R),
+    public static final Skill TrueshotBarrage = new Skill("Trueshot Barrage", R);
 
     /** The skill name. */
-    Dread("Dread", Passive),
+    public static final Skill Dread = new Skill("Dread", Passive);
 
     /** The skill name. */
-    Terrify("Terrify", Q),
+    public static final Skill Terrify = new Skill("Terrify", Q);
 
     /** The skill name. */
-    Drain("Drain", W),
+    public static final Skill Drain = new Skill("Drain", W);
 
     /** The skill name. */
-    DarkWind("Dark Wind", E),
+    public static final Skill DarkWind = new Skill("Dark Wind", E);
 
     /** The skill name. */
-    Crowstorm("Crowstorm", R),
+    public static final Skill Crowstorm = new Skill("Crowstorm", R);
 
     /** The skill name. */
-    Duelist("Duelist", Passive),
+    public static final Skill Duelist = new Skill("Duelist", Passive);
 
     /** The skill name. */
-    Lunge("Lunge", Q),
+    public static final Skill Lunge = new Skill("Lunge", Q);
 
     /** The skill name. */
-    Riposte("Riposte", W),
+    public static final Skill Riposte = new Skill("Riposte", W);
 
     /** The skill name. */
-    BurstOfSpeed("Burst of Speed", E),
+    public static final Skill BurstOfSpeed = new Skill("Burst of Speed", E);
 
     /** The skill name. */
-    BladeWaltz("Blade Waltz", R),
+    public static final Skill BladeWaltz = new Skill("Blade Waltz", R);
 
     /** The skill name. */
-    NimbleFighter("Nimble Fighter", Passive),
+    public static final Skill NimbleFighter = new Skill("Nimble Fighter", Passive);
 
     /** The skill name. */
-    UrchinStrike("Urchin Strike", Q),
+    public static final Skill UrchinStrike = new Skill("Urchin Strike", Q);
 
     /** The skill name. */
-    SeastoneTrident("Seastone Trident", W),
+    public static final Skill SeastoneTrident = new Skill("Seastone Trident", W);
 
     /** The skill name. */
-    Playful("Playful", E),
+    public static final Skill Playful = new Skill("Playful", E);
 
     /** The skill name. */
-    Trickster("Trickster", E),
+    public static final Skill Trickster = new Skill("Trickster", E);
 
     /** The skill name. */
-    ChumTheWaters("Chum the Waters", R),
+    public static final Skill ChumTheWaters = new Skill("Chum the Waters", R);
 
     /** The skill name. */
-    RunicSkin("Runic Skin", Passive),
+    public static final Skill RunicSkin = new Skill("Runic Skin", Passive);
 
     /** The skill name. */
-    ResoluteSmite("Resolute Smite", Q),
+    public static final Skill ResoluteSmite = new Skill("Resolute Smite", Q);
 
     /** The skill name. */
-    Bulwark("Bulwark", W),
+    public static final Skill Bulwark = new Skill("Bulwark", W);
 
     /** The skill name. */
-    RighteousGust("Righteous Gust", E),
+    public static final Skill RighteousGust = new Skill("Righteous Gust", E);
 
     /** The skill name. */
-    IdolOfDurand("Idol of Durand", R),
+    public static final Skill IdolOfDurand = new Skill("Idol of Durand", R);
 
     /** The skill name. */
-    GrogSoakedBlade("Grog Soaked Blade", Passive),
+    public static final Skill GrogSoakedBlade = new Skill("Grog Soaked Blade", Passive);
 
     /** The skill name. */
-    Parrrley("Parrrley", Q),
+    public static final Skill Parrrley = new Skill("Parrrley", Q);
 
     /** The skill name. */
-    RemoveScurvy("Remove Scurvy", W),
+    public static final Skill RemoveScurvy = new Skill("Remove Scurvy", W);
 
     /** The skill name. */
-    RaiseMorale("Raise Morale", E),
+    public static final Skill RaiseMorale = new Skill("Raise Morale", E);
 
     /** The skill name. */
-    CannonBarrage("Cannon Barrage", R),
+    public static final Skill CannonBarrage = new Skill("Cannon Barrage", R);
 
     /** The skill name. */
-    Perseverance("Perseverance", Passive),
+    public static final Skill Perseverance = new Skill("Perseverance", Passive);
 
     /** The skill name. */
-    DecisiveStrike("Decisive Strike", Q),
+    public static final Skill DecisiveStrike = new Skill("Decisive Strike", Q);
 
     /** The skill name. */
-    Courage("Courage", W),
+    public static final Skill Courage = new Skill("Courage", W);
 
     /** The skill name. */
-    Judgment("Judgment", E),
+    public static final Skill Judgment = new Skill("Judgment", E);
 
     /** The skill name. */
-    DemacianJustice("Demacian Justice", R),
+    public static final Skill DemacianJustice = new Skill("Demacian Justice", R);
 
     /** The skill name. */
-    HappyHour("Happy Hour", Passive),
+    public static final Skill HappyHour = new Skill("Happy Hour", Passive);
 
     /** The skill name. */
-    BarrelRoll("Barrel Roll", Q),
+    public static final Skill BarrelRoll = new Skill("Barrel Roll", Q);
 
     /** The skill name. */
-    DrunkenRage("Drunken Rage", W),
+    public static final Skill DrunkenRage = new Skill("Drunken Rage", W);
 
     /** The skill name. */
-    BodySlam("Body Slam", E),
+    public static final Skill BodySlam = new Skill("Body Slam", E);
 
     /** The skill name. */
-    ExplosiveCask("Explosive Cask", R),
+    public static final Skill ExplosiveCask = new Skill("Explosive Cask", R);
 
     /** The skill name. */
-    TrueGrit("True Grit", Passive),
+    public static final Skill TrueGrit = new Skill("True Grit", Passive);
 
     /** The skill name. */
-    Buckshot("Buckshot", Q),
+    public static final Skill Buckshot = new Skill("Buckshot", Q);
 
     /** The skill name. */
-    Smokescreen("Smokescreen", W),
+    public static final Skill Smokescreen = new Skill("Smokescreen", W);
 
     /** The skill name. */
-    Quickdraw("Quickdraw", E),
+    public static final Skill Quickdraw = new Skill("Quickdraw", E);
 
     /** The skill name. */
-    CollateralDamage("Collateral Damage", R),
+    public static final Skill CollateralDamage = new Skill("Collateral Damage", R);
 
     /** The skill name. */
-    Warpath("Warpath", Passive),
+    public static final Skill Warpath = new Skill("Warpath", Passive);
 
     /** The skill name. */
-    Rampage("Rampage", Q),
+    public static final Skill Rampage = new Skill("Rampage", Q);
 
     /** The skill name. */
-    SpiritOfDread("Spirit of Dread", W),
+    public static final Skill SpiritOfDread = new Skill("Spirit of Dread", W);
 
     /** The skill name. */
-    DevastatingCharge("Devastating Charge", E),
+    public static final Skill DevastatingCharge = new Skill("Devastating Charge", E);
 
     /** The skill name. */
-    OnslaughtOfShadows("Onslaught of Shadows", R),
+    public static final Skill OnslaughtOfShadows = new Skill("Onslaught of Shadows", R);
 
     /** The skill name. */
-    TechmaturgicalRepairBots("Techmaturgical Repair Bots", Passive),
+    public static final Skill TechmaturgicalRepairBots = new Skill("Techmaturgical Repair Bots", Passive);
 
     /** The skill name. */
-    H28GEvolutionTurret("H-28G Evolution Turret", Q),
+    public static final Skill H28GEvolutionTurret = new Skill("H-28G Evolution Turret", Q);
 
     /** The skill name. */
-    HextechMicroRockets("Hextech Micro-Rockets", W),
+    public static final Skill HextechMicroRockets = new Skill("Hextech Micro-Rockets", W);
 
     /** The skill name. */
-    CH1ConcussionGrenade("CH-1 Concussion Grenade", E),
+    public static final Skill CH1ConcussionGrenade = new Skill("CH-1 Concussion Grenade", E);
 
     /** The skill name. */
-    UPGRADE("UPGRADE!!!", R),
+    public static final Skill UPGRADE = new Skill("UPGRADE!!!", R);
 
     /** The skill name. */
-    IonianFervor("Ionian Fervor", Passive),
+    public static final Skill IonianFervor = new Skill("Ionian Fervor", Passive);
 
     /** The skill name. */
-    Bladesurge("Bladesurge", Q),
+    public static final Skill Bladesurge = new Skill("Bladesurge", Q);
 
     /** The skill name. */
-    HitenStyle("Hiten Style", W),
+    public static final Skill HitenStyle = new Skill("Hiten Style", W);
 
     /** The skill name. */
-    EquilibriumStrike("Equilibrium Strike", E),
+    public static final Skill EquilibriumStrike = new Skill("Equilibrium Strike", E);
 
     /** The skill name. */
-    TranscendentBlades("Transcendent Blades", R),
+    public static final Skill TranscendentBlades = new Skill("Transcendent Blades", R);
 
     /** The skill name. */
-    Tailwind("Tailwind", Passive),
+    public static final Skill Tailwind = new Skill("Tailwind", Passive);
 
     /** The skill name. */
-    HowlingGale("Howling Gale", Q),
+    public static final Skill HowlingGale = new Skill("Howling Gale", Q);
 
     /** The skill name. */
-    Zephyr("Zephyr", W),
+    public static final Skill Zephyr = new Skill("Zephyr", W);
 
     /** The skill name. */
-    EyeOfTheStorm("Eye Of The Storm", E),
+    public static final Skill EyeOfTheStorm = new Skill("Eye Of The Storm", E);
 
     /** The skill name. */
-    Monsoon("Monsoon", R),
+    public static final Skill Monsoon = new Skill("Monsoon", R);
 
     /** The skill name. */
-    MartialCadence("Martial Cadence", Passive),
+    public static final Skill MartialCadence = new Skill("Martial Cadence", Passive);
 
     /** The skill name. */
-    DragonStrike("Dragon Strike", Q),
+    public static final Skill DragonStrike = new Skill("Dragon Strike", Q);
 
     /** The skill name. */
-    GoldenAegis("Golden Aegis", W),
+    public static final Skill GoldenAegis = new Skill("Golden Aegis", W);
 
     /** The skill name. */
-    DemacianStandard("Demacian Standard", E),
+    public static final Skill DemacianStandard = new Skill("Demacian Standard", E);
 
     /** The skill name. */
-    Cataclysm("Cataclysm", R),
+    public static final Skill Cataclysm = new Skill("Cataclysm", R);
 
     /** The skill name. */
-    RelentlessAssault("Relentless Assault", Passive),
+    public static final Skill RelentlessAssault = new Skill("Relentless Assault", Passive);
 
     /** The skill name. */
-    LeapStrike("Leap Strike", Q),
+    public static final Skill LeapStrike = new Skill("Leap Strike", Q);
 
     /** The skill name. */
-    Empower("Empower", W),
+    public static final Skill Empower = new Skill("Empower", W);
 
     /** The skill name. */
-    CounterStrike("Counter Strike", E),
+    public static final Skill CounterStrike = new Skill("Counter Strike", E);
 
     /** The skill name. */
-    GrandmastersMight("Grandmaster's Might", R),
+    public static final Skill GrandmastersMight = new Skill("Grandmaster's Might", R);
 
     /** The skill name. */
-    HextechCapacitor("Hextech Capacitor", Passive),
+    public static final Skill HextechCapacitor = new Skill("Hextech Capacitor", Passive);
 
     /** The skill name. */
-    ToTheSkies("To the Skies!", Q),
+    public static final Skill ToTheSkies = new Skill("To the Skies!", Q);
 
     /** The skill name. */
-    ShockBlast("Shock Blast", Q),
+    public static final Skill ShockBlast = new Skill("Shock Blast", Q);
 
     /** The skill name. */
-    LightningField("Lightning Field", W),
+    public static final Skill LightningField = new Skill("Lightning Field", W);
 
     /** The skill name. */
-    HyperCharge("Hyper Charge", W),
+    public static final Skill HyperCharge = new Skill("Hyper Charge", W);
 
     /** The skill name. */
-    ThunderingBlow("Thundering Blow", E),
+    public static final Skill ThunderingBlow = new Skill("Thundering Blow", E);
 
     /** The skill name. */
-    AccelerationGate("Acceleration Gate", E),
+    public static final Skill AccelerationGate = new Skill("Acceleration Gate", E);
 
     /** The skill name. */
-    TransformMercuryCannon("Transform: Mercury Cannon", R),
+    public static final Skill TransformMercuryCannon = new Skill("Transform: Mercury Cannon", R);
 
     /** The skill name. */
-    TransformMercuryHammer("Transform: Mercury Hammer", R),
+    public static final Skill TransformMercuryHammer = new Skill("Transform: Mercury Hammer", R);
 
     /** The skill name. */
-    InnerFlame("Inner Flame", Passive),
+    public static final Skill InnerFlame = new Skill("Inner Flame", Passive);
 
     /** The skill name. */
-    HeavenlyWave("Heavenly Wave", Q),
+    public static final Skill HeavenlyWave = new Skill("Heavenly Wave", Q);
 
     /** The skill name. */
-    SpiritBond("Spirit Bond", W),
+    public static final Skill SpiritBond = new Skill("Spirit Bond", W);
 
     /** The skill name. */
-    SoulShield("Soul Shield", E),
+    public static final Skill SoulShield = new Skill("Soul Shield", E);
 
     /** The skill name. */
-    Mantra("Mantra", R),
+    public static final Skill Mantra = new Skill("Mantra", R);
 
     /** The skill name. */
-    DeathDefied("Death Defied", Passive),
+    public static final Skill DeathDefied = new Skill("Death Defied", Passive);
 
     /** The skill name. */
-    LayWaste("Lay Waste", Q),
+    public static final Skill LayWaste = new Skill("Lay Waste", Q);
 
     /** The skill name. */
-    WallOfPain("Wall of Pain", W),
+    public static final Skill WallOfPain = new Skill("Wall of Pain", W);
 
     /** The skill name. */
-    Defile("Defile", E),
+    public static final Skill Defile = new Skill("Defile", E);
 
     /** The skill name. */
-    Requiem("Requiem", R),
+    public static final Skill Requiem = new Skill("Requiem", R);
 
     /** The skill name. */
-    VoidStone("Void Stone", Passive),
+    public static final Skill VoidStone = new Skill("Void Stone", Passive);
 
     /** The skill name. */
-    NullSphere("Null Sphere", Q),
+    public static final Skill NullSphere = new Skill("Null Sphere", Q);
 
     /** The skill name. */
-    NetherBlade("Nether Blade", W),
+    public static final Skill NetherBlade = new Skill("Nether Blade", W);
 
     /** The skill name. */
-    ForcePulse("Force Pulse", E),
+    public static final Skill ForcePulse = new Skill("Force Pulse", E);
 
     /** The skill name. */
-    Riftwalk("Riftwalk", R),
+    public static final Skill Riftwalk = new Skill("Riftwalk", R);
 
     /** The skill name. */
-    Voracity("Voracity", Passive),
+    public static final Skill Voracity = new Skill("Voracity", Passive);
 
     /** The skill name. */
-    BouncingBlade("Bouncing Blade", Q),
+    public static final Skill BouncingBlade = new Skill("Bouncing Blade", Q);
 
     /** The skill name. */
-    SinisterSteel("Sinister Steel", W),
+    public static final Skill SinisterSteel = new Skill("Sinister Steel", W);
 
     /** The skill name. */
-    Shunpo("Shunpo", E),
+    public static final Skill Shunpo = new Skill("Shunpo", E);
 
     /** The skill name. */
-    DeathLotus("Death Lotus", R),
+    public static final Skill DeathLotus = new Skill("Death Lotus", R);
 
     /** The skill name. */
-    HolyFervor("Holy Fervor", Passive),
+    public static final Skill HolyFervor = new Skill("Holy Fervor", Passive);
 
     /** The skill name. */
-    Reckoning("Reckoning", Q),
+    public static final Skill Reckoning = new Skill("Reckoning", Q);
 
     /** The skill name. */
-    DivineBlessing("Divine Blessing", W),
+    public static final Skill DivineBlessing = new Skill("Divine Blessing", W);
 
     /** The skill name. */
-    RighteousFury("Righteous Fury", E),
+    public static final Skill RighteousFury = new Skill("Righteous Fury", E);
 
     /** The skill name. */
-    Intervention("Intervention", R),
+    public static final Skill Intervention = new Skill("Intervention", R);
 
     /** The skill name. */
-    MarkOftheStorm("Mark of the Storm", Passive),
+    public static final Skill MarkOftheStorm = new Skill("Mark of the Storm", Passive);
 
     /** The skill name. */
-    ThunderingShuriken("Thundering Shuriken", Q),
+    public static final Skill ThunderingShuriken = new Skill("Thundering Shuriken", Q);
 
     /** The skill name. */
-    ElectricalSurge("Electrical Surge", W),
+    public static final Skill ElectricalSurge = new Skill("Electrical Surge", W);
 
     /** The skill name. */
-    LightningRush("Lightning Rush", E),
+    public static final Skill LightningRush = new Skill("Lightning Rush", E);
 
     /** The skill name. */
-    SlicingMaelstrom("Slicing Maelstrom", R),
+    public static final Skill SlicingMaelstrom = new Skill("Slicing Maelstrom", R);
 
     /** The skill name. */
-    UnseenThreat("Unseen Threat", Passive),
+    public static final Skill UnseenThreat = new Skill("Unseen Threat", Passive);
 
     /** The skill name. */
-    TasteTheirFear("Taste Their Fear", Q),
+    public static final Skill TasteTheirFear = new Skill("Taste Their Fear", Q);
 
     /** The skill name. */
-    VoidSpike("Void Spike", W),
+    public static final Skill VoidSpike = new Skill("Void Spike", W);
 
     /** The skill name. */
-    Leap("Leap", E),
+    public static final Skill Leap = new Skill("Leap", E);
 
     /** The skill name. */
-    VoidAssault("Void Assault", R),
+    public static final Skill VoidAssault = new Skill("Void Assault", R);
 
     /** The skill name. */
-    IcathianSurprise("Icathian Surprise", Passive),
+    public static final Skill IcathianSurprise = new Skill("Icathian Surprise", Passive);
 
     /** The skill name. */
-    CausticSpittle("Caustic Spittle", Q),
+    public static final Skill CausticSpittle = new Skill("Caustic Spittle", Q);
 
     /** The skill name. */
-    BioArcaneBarrage("Bio-Arcane Barrage", W),
+    public static final Skill BioArcaneBarrage = new Skill("Bio-Arcane Barrage", W);
 
     /** The skill name. */
-    VoidOoze("Void Ooze", E),
+    public static final Skill VoidOoze = new Skill("Void Ooze", E);
 
     /** The skill name. */
-    LivingArtillery("Living Artillery", R),
+    public static final Skill LivingArtillery = new Skill("Living Artillery", R);
 
     /** The skill name. */
-    MirrorImage("Mirror Image", Passive),
+    public static final Skill MirrorImage = new Skill("Mirror Image", Passive);
 
     /** The skill name. */
-    SigilOfSilence("Sigil of Silence", Q),
+    public static final Skill SigilOfSilence = new Skill("Sigil of Silence", Q);
 
     /** The skill name. */
-    Distortion("Distortion", W),
+    public static final Skill Distortion = new Skill("Distortion", W);
 
     /** The skill name. */
-    EtherealChains("Ethereal Chains", E),
+    public static final Skill EtherealChains = new Skill("Ethereal Chains", E);
 
     /** The skill name. */
-    Mimic("Mimic", R),
+    public static final Skill Mimic = new Skill("Mimic", R);
 
     /** The skill name. */
-    Flurry("Flurry", Passive),
+    public static final Skill Flurry = new Skill("Flurry", Passive);
 
     /** The skill name. */
-    SonicWave("Sonic Wave", Q),
+    public static final Skill SonicWave = new Skill("Sonic Wave", Q);
 
     /** The skill name. */
-    ResonatingStrike("Resonating Strike", Q),
+    public static final Skill ResonatingStrike = new Skill("Resonating Strike", Q);
 
     /** The skill name. */
-    Safeguard("Safeguard", W),
+    public static final Skill Safeguard = new Skill("Safeguard", W);
 
     /** The skill name. */
-    IronWill("Iron Will", W),
+    public static final Skill IronWill = new Skill("Iron Will", W);
 
     /** The skill name. */
-    Tempest("Tempest", E),
+    public static final Skill Tempest = new Skill("Tempest", E);
 
     /** The skill name. */
-    Cripple("Cripple", E),
+    public static final Skill Cripple = new Skill("Cripple", E);
 
     /** The skill name. */
-    DragonsRage("Dragon's Rage", R),
+    public static final Skill DragonsRage = new Skill("Dragon's Rage", R);
 
     /** The skill name. */
-    Sunlight("Sunlight", Passive),
+    public static final Skill Sunlight = new Skill("Sunlight", Passive);
 
     /** The skill name. */
-    ShieldOfDaybreak("Shield of Daybreak", Q),
+    public static final Skill ShieldOfDaybreak = new Skill("Shield of Daybreak", Q);
 
     /** The skill name. */
-    Eclipse("Eclipse", W),
+    public static final Skill Eclipse = new Skill("Eclipse", W);
 
     /** The skill name. */
-    ZenithBlade("Zenith Blade", E),
+    public static final Skill ZenithBlade = new Skill("Zenith Blade", E);
 
     /** The skill name. */
-    SolarFlare("Solar Flare", R),
+    public static final Skill SolarFlare = new Skill("Solar Flare", R);
 
     /** The skill name. */
-    PixFaerieCompanion("Pix, Faerie Companion", Passive),
+    public static final Skill PixFaerieCompanion = new Skill("Pix, Faerie Companion", Passive);
 
     /** The skill name. */
-    Glitterlance("Glitterlance", Q),
+    public static final Skill Glitterlance = new Skill("Glitterlance", Q);
 
     /** The skill name. */
-    Whimsy("Whimsy", W),
+    public static final Skill Whimsy = new Skill("Whimsy", W);
 
     /** The skill name. */
-    HelpPix("Help, Pix!", E),
+    public static final Skill HelpPix = new Skill("Help, Pix!", E);
 
     /** The skill name. */
-    WildGrowth("Wild Growth", R),
+    public static final Skill WildGrowth = new Skill("Wild Growth", R);
 
     /** The skill name. */
-    Illumination("Illumination", Passive),
+    public static final Skill Illumination = new Skill("Illumination", Passive);
 
     /** The skill name. */
-    LightBinding("Light Binding", Q),
+    public static final Skill LightBinding = new Skill("Light Binding", Q);
 
     /** The skill name. */
-    PrismaticBarrier("Prismatic Barrier", W),
+    public static final Skill PrismaticBarrier = new Skill("Prismatic Barrier", W);
 
     /** The skill name. */
-    LucentSingularity("Lucent Singularity", E),
+    public static final Skill LucentSingularity = new Skill("Lucent Singularity", E);
 
     /** The skill name. */
-    FinalSpark("Final Spark", R),
+    public static final Skill FinalSpark = new Skill("Final Spark", R);
 
     /** The skill name. */
-    GraniteShield("Granite Shield", Passive),
+    public static final Skill GraniteShield = new Skill("Granite Shield", Passive);
 
     /** The skill name. */
-    SeismicShard("Seismic Shard", Q),
+    public static final Skill SeismicShard = new Skill("Seismic Shard", Q);
 
     /** The skill name. */
-    BrutalStrikes("Brutal Strikes", W),
+    public static final Skill BrutalStrikes = new Skill("Brutal Strikes", W);
 
     /** The skill name. */
-    GroundSlam("Ground Slam", E),
+    public static final Skill GroundSlam = new Skill("Ground Slam", E);
 
     /** The skill name. */
-    UnstoppableForce("Unstoppable Force", R),
+    public static final Skill UnstoppableForce = new Skill("Unstoppable Force", R);
 
     /** The skill name. */
-    SummonVoidling("Summon Voidling", Passive),
+    public static final Skill SummonVoidling = new Skill("Summon Voidling", Passive);
 
     /** The skill name. */
-    CallOftheVoid("Call of the Void", Q),
+    public static final Skill CallOftheVoid = new Skill("Call of the Void", Q);
 
     /** The skill name. */
-    NullZone("Null Zone", W),
+    public static final Skill NullZone = new Skill("Null Zone", W);
 
     /** The skill name. */
-    MaleficVisions("Malefic Visions", E),
+    public static final Skill MaleficVisions = new Skill("Malefic Visions", E);
 
     /** The skill name. */
-    NetherGrasp("Nether Grasp", R),
+    public static final Skill NetherGrasp = new Skill("Nether Grasp", R);
 
     /** The skill name. */
-    SapMagic("Sap Magic", Passive),
+    public static final Skill SapMagic = new Skill("Sap Magic", Passive);
 
     /** The skill name. */
-    ArcaneSmash("Arcane Smash", Q),
+    public static final Skill ArcaneSmash = new Skill("Arcane Smash", Q);
 
     /** The skill name. */
-    TwistedAdvance("Twisted Advance", W),
+    public static final Skill TwistedAdvance = new Skill("Twisted Advance", W);
 
     /** The skill name. */
-    SaplingToss("Sapling Toss", E),
+    public static final Skill SaplingToss = new Skill("Sapling Toss", E);
 
     /** The skill name. */
-    VengefulMaelstrom("Vengeful Maelstrom", R),
+    public static final Skill VengefulMaelstrom = new Skill("Vengeful Maelstrom", R);
 
     /** The skill name. */
-    DoubleStrike("Double Strike", Passive),
+    public static final Skill DoubleStrike = new Skill("Double Strike", Passive);
 
     /** The skill name. */
-    AlphaStrike("Alpha Strike", Q),
+    public static final Skill AlphaStrike = new Skill("Alpha Strike", Q);
 
     /** The skill name. */
-    Meditate("Meditate", W),
+    public static final Skill Meditate = new Skill("Meditate", W);
 
     /** The skill name. */
-    WujuStyle("Wuju Style", E),
+    public static final Skill WujuStyle = new Skill("Wuju Style", E);
 
     /** The skill name. */
-    Highlander("Highlander", R),
+    public static final Skill Highlander = new Skill("Highlander", R);
 
     /** The skill name. */
-    Strut("Strut", Passive),
+    public static final Skill Strut = new Skill("Strut", Passive);
 
     /** The skill name. */
-    DoubleUp("Double Up", Q),
+    public static final Skill DoubleUp = new Skill("Double Up", Q);
 
     /** The skill name. */
-    ImpureShots("Impure Shots", W),
+    public static final Skill ImpureShots = new Skill("Impure Shots", W);
 
     /** The skill name. */
-    MakeItRain("Make It Rain", E),
+    public static final Skill MakeItRain = new Skill("Make It Rain", E);
 
     /** The skill name. */
-    BulletTime("Bullet Time", R),
+    public static final Skill BulletTime = new Skill("Bullet Time", R);
 
     /** The skill name. */
-    IronMan("Iron Man", Passive),
+    public static final Skill IronMan = new Skill("Iron Man", Passive);
 
     /** The skill name. */
-    MaceOfSpades("Mace of Spades", Q),
+    public static final Skill MaceOfSpades = new Skill("Mace of Spades", Q);
 
     /** The skill name. */
-    CreepingDeath("Creeping Death", W),
+    public static final Skill CreepingDeath = new Skill("Creeping Death", W);
 
     /** The skill name. */
-    SiphonOfDestruction("Siphon of Destruction", E),
+    public static final Skill SiphonOfDestruction = new Skill("Siphon of Destruction", E);
 
     /** The skill name. */
-    ChildrenOftheGrave("Children of the Grave", R),
+    public static final Skill ChildrenOftheGrave = new Skill("Children of the Grave", R);
 
     /** The skill name. */
-    SoulSiphon("Soul Siphon", Passive),
+    public static final Skill SoulSiphon = new Skill("Soul Siphon", Passive);
 
     /** The skill name. */
-    DarkBinding("Dark Binding", Q),
+    public static final Skill DarkBinding = new Skill("Dark Binding", Q);
 
     /** The skill name. */
-    TormentedSoil("Tormented Soil", W),
+    public static final Skill TormentedSoil = new Skill("Tormented Soil", W);
 
     /** The skill name. */
-    BlackShield("Black Shield", E),
+    public static final Skill BlackShield = new Skill("Black Shield", E);
 
     /** The skill name. */
-    SoulShackles("Soul Shackles", R),
+    public static final Skill SoulShackles = new Skill("Soul Shackles", R);
 
     /** The skill name. */
-    SurgingTides("Surging Tides", Passive),
+    public static final Skill SurgingTides = new Skill("Surging Tides", Passive);
 
     /** The skill name. */
-    AquaPrison("Aqua Prison", Q),
+    public static final Skill AquaPrison = new Skill("Aqua Prison", Q);
 
     /** The skill name. */
-    EbbandFlow("Ebb and Flow", W),
+    public static final Skill EbbandFlow = new Skill("Ebb and Flow", W);
 
     /** The skill name. */
-    TidecallersBlessing("Tidecaller's Blessing", E),
+    public static final Skill TidecallersBlessing = new Skill("Tidecaller's Blessing", E);
 
     /** The skill name. */
-    TidalWave("Tidal Wave", R),
+    public static final Skill TidalWave = new Skill("Tidal Wave", R);
 
     /** The skill name. */
-    SoulEater("Soul Eater", Passive),
+    public static final Skill SoulEater = new Skill("Soul Eater", Passive);
 
     /** The skill name. */
-    SiphoningStrike("Siphoning Strike", Q),
+    public static final Skill SiphoningStrike = new Skill("Siphoning Strike", Q);
 
     /** The skill name. */
-    Wither("Wither", W),
+    public static final Skill Wither = new Skill("Wither", W);
 
     /** The skill name. */
-    SpiritFire("Spirit Fire", E),
+    public static final Skill SpiritFire = new Skill("Spirit Fire", E);
 
     /** The skill name. */
-    FuryOftheSands("Fury of the Sands", R),
+    public static final Skill FuryOftheSands = new Skill("Fury of the Sands", R);
 
     /** The skill name. */
-    StaggeringBlow("Staggering Blow", Passive),
+    public static final Skill StaggeringBlow = new Skill("Staggering Blow", Passive);
 
     /** The skill name. */
-    DredgeLine("Dredge Line", Q),
+    public static final Skill DredgeLine = new Skill("Dredge Line", Q);
 
     /** The skill name. */
-    TitansWrath("Titan's Wrath", W),
+    public static final Skill TitansWrath = new Skill("Titan's Wrath", W);
 
     /** The skill name. */
-    Riptide("Riptide", E),
+    public static final Skill Riptide = new Skill("Riptide", E);
 
     /** The skill name. */
-    DepthCharge("Depth Charge", R),
+    public static final Skill DepthCharge = new Skill("Depth Charge", R);
 
     /** The skill name. */
-    Prowl("Prowl", Passive),
+    public static final Skill Prowl = new Skill("Prowl", Passive);
 
     /** The skill name. */
-    JavelinToss("Javelin Toss", Q),
+    public static final Skill JavelinToss = new Skill("Javelin Toss", Q);
 
     /** The skill name. */
-    Takedown("Takedown", Q),
+    public static final Skill Takedown = new Skill("Takedown", Q);
 
     /** The skill name. */
-    Bushwhack("Bushwhack", W),
+    public static final Skill Bushwhack = new Skill("Bushwhack", W);
 
     /** The skill name. */
-    Pounce("Pounce", W),
+    public static final Skill Pounce = new Skill("Pounce", W);
 
     /** The skill name. */
-    PrimalSurge("Primal Surge", E),
+    public static final Skill PrimalSurge = new Skill("Primal Surge", E);
 
     /** The skill name. */
-    Swipe("Swipe", E),
+    public static final Skill Swipe = new Skill("Swipe", E);
 
     /** The skill name. */
-    AspectOfTheCougar("Aspect Of The Cougar", R),
+    public static final Skill AspectOfTheCougar = new Skill("Aspect Of The Cougar", R);
 
     /** The skill name. */
-    UmbraBlades("Umbra Blades", Passive),
+    public static final Skill UmbraBlades = new Skill("Umbra Blades", Passive);
 
     /** The skill name. */
-    Duskbringer("Duskbringer", Q),
+    public static final Skill Duskbringer = new Skill("Duskbringer", Q);
 
     /** The skill name. */
-    ShroudOfDarkness("Shroud of Darkness", W),
+    public static final Skill ShroudOfDarkness = new Skill("Shroud of Darkness", W);
 
     /** The skill name. */
-    UnspeakableHorror("Unspeakable Horror", E),
+    public static final Skill UnspeakableHorror = new Skill("Unspeakable Horror", E);
 
     /** The skill name. */
-    Paranoia("Paranoia", R),
+    public static final Skill Paranoia = new Skill("Paranoia", R);
 
     /** The skill name. */
-    Visionary("Visionary", Passive),
+    public static final Skill Visionary = new Skill("Visionary", Passive);
 
     /** The skill name. */
-    Consume("Consume", Q),
+    public static final Skill Consume = new Skill("Consume", Q);
 
     /** The skill name. */
-    BloodBoil("Blood Boil", W),
+    public static final Skill BloodBoil = new Skill("Blood Boil", W);
 
     /** The skill name. */
-    IceBlast("Ice Blast", E),
+    public static final Skill IceBlast = new Skill("Ice Blast", E);
 
     /** The skill name. */
-    AbsoluteZero("Absolute Zero", R),
+    public static final Skill AbsoluteZero = new Skill("Absolute Zero", R);
 
     /** The skill name. */
-    BerserkerRage("Berserker Rage", Passive),
+    public static final Skill BerserkerRage = new Skill("Berserker Rage", Passive);
 
     /** The skill name. */
-    Undertow("Undertow", Q),
+    public static final Skill Undertow = new Skill("Undertow", Q);
 
     /** The skill name. */
-    ViciousStrikes("Vicious Strikes", W),
+    public static final Skill ViciousStrikes = new Skill("Vicious Strikes", W);
 
     /** The skill name. */
-    RecklessSwing("Reckless Swing", E),
+    public static final Skill RecklessSwing = new Skill("Reckless Swing", E);
 
     /** The skill name. */
-    Ragnarok("Ragnarok", R),
+    public static final Skill Ragnarok = new Skill("Ragnarok", R);
 
     /** The skill name. */
-    ClockworkWindup("Clockwork Windup", Passive),
+    public static final Skill ClockworkWindup = new Skill("Clockwork Windup", Passive);
 
     /** The skill name. */
-    CommandAttack("Command: Attack", Q),
+    public static final Skill CommandAttack = new Skill("Command: Attack", Q);
 
     /** The skill name. */
-    CommandDissonance("Command: Dissonance", W),
+    public static final Skill CommandDissonance = new Skill("Command: Dissonance", W);
 
     /** The skill name. */
-    CommandProtect("Command: Protect", E),
+    public static final Skill CommandProtect = new Skill("Command: Protect", E);
 
     /** The skill name. */
-    CommandShockwave("Command: Shockwave", R),
+    public static final Skill CommandShockwave = new Skill("Command: Shockwave", R);
 
     /** The skill name. */
-    AegisProtection("Aegis Protection", Passive),
+    public static final Skill AegisProtection = new Skill("Aegis Protection", Passive);
 
     /** The skill name. */
-    SpearShot("Spear Shot", Q),
+    public static final Skill SpearShot = new Skill("Spear Shot", Q);
 
     /** The skill name. */
-    AegisOfZeonia("Aegis of Zeonia", W),
+    public static final Skill AegisOfZeonia = new Skill("Aegis of Zeonia", W);
 
     /** The skill name. */
-    HeartseekerStrike("Heartseeker Strike", E),
+    public static final Skill HeartseekerStrike = new Skill("Heartseeker Strike", E);
 
     /** The skill name. */
-    GrandSkyfall("Grand Skyfall", R),
+    public static final Skill GrandSkyfall = new Skill("Grand Skyfall", R);
 
     /** The skill name. */
-    ValiantFighter("Valiant Fighter", Passive),
+    public static final Skill ValiantFighter = new Skill("Valiant Fighter", Passive);
 
     /** The skill name. */
-    DevastatingBlow("Devastating Blow", Q),
+    public static final Skill DevastatingBlow = new Skill("Devastating Blow", Q);
 
     /** The skill name. */
-    ParagonOfDemacia("Paragon of Demacia", W),
+    public static final Skill ParagonOfDemacia = new Skill("Paragon of Demacia", W);
 
     /** The skill name. */
-    HeroicCharge("Heroic Charge", E),
+    public static final Skill HeroicCharge = new Skill("Heroic Charge", E);
 
     /** The skill name. */
-    DiplomaticImmunity("Diplomatic Immunity", R),
+    public static final Skill DiplomaticImmunity = new Skill("Diplomatic Immunity", R);
 
     /** The skill name. */
-    SpikedShell("Spiked Shell", Passive),
+    public static final Skill SpikedShell = new Skill("Spiked Shell", Passive);
 
     /** The skill name. */
-    Powerball("Powerball", Q),
+    public static final Skill Powerball = new Skill("Powerball", Q);
 
     /** The skill name. */
-    DefensiveBallCurl("Defensive Ball Curl", W),
+    public static final Skill DefensiveBallCurl = new Skill("Defensive Ball Curl", W);
 
     /** The skill name. */
-    PuncturingTaunt("Puncturing Taunt", E),
+    public static final Skill PuncturingTaunt = new Skill("Puncturing Taunt", E);
 
     /** The skill name. */
-    Tremors("Tremors", R),
+    public static final Skill Tremors = new Skill("Tremors", R);
 
     /** The skill name. */
-    ReignOfAnger("Reign of Anger", Passive),
+    public static final Skill ReignOfAnger = new Skill("Reign of Anger", Passive);
 
     /** The skill name. */
-    CullTheMeek("Cull the Meek", Q),
+    public static final Skill CullTheMeek = new Skill("Cull the Meek", Q);
 
     /** The skill name. */
-    RuthlessPredator("Ruthless Predator", W),
+    public static final Skill RuthlessPredator = new Skill("Ruthless Predator", W);
 
     /** The skill name. */
-    SliceandDice("Slice and Dice", E),
+    public static final Skill SliceandDice = new Skill("Slice and Dice", E);
 
     /** The skill name. */
-    Dominus("Dominus", R),
+    public static final Skill Dominus = new Skill("Dominus", R);
 
     /** The skill name. */
-    UnseenPredator("Unseen Predator", Passive),
+    public static final Skill UnseenPredator = new Skill("Unseen Predator", Passive);
 
     /** The skill name. */
-    Savagery("Savagery", Q),
+    public static final Skill Savagery = new Skill("Savagery", Q);
 
     /** The skill name. */
-    BattleRoar("Battle Roar", W),
+    public static final Skill BattleRoar = new Skill("Battle Roar", W);
 
     /** The skill name. */
-    BolaStrike("Bola Strike", E),
+    public static final Skill BolaStrike = new Skill("Bola Strike", E);
 
     /** The skill name. */
-    ThrillOftheHunt("Thrill of the Hunt", R),
+    public static final Skill ThrillOftheHunt = new Skill("Thrill of the Hunt", R);
 
     /** The skill name. */
-    RunicBlade("Runic Blade", Passive),
+    public static final Skill RunicBlade = new Skill("Runic Blade", Passive);
 
     /** The skill name. */
-    BrokenWings("Broken Wings", Q),
+    public static final Skill BrokenWings = new Skill("Broken Wings", Q);
 
     /** The skill name. */
-    KiBurst("Ki Burst", W),
+    public static final Skill KiBurst = new Skill("Ki Burst", W);
 
     /** The skill name. */
-    Valor("Valor", E),
+    public static final Skill Valor = new Skill("Valor", E);
 
     /** The skill name. */
-    BladeOftheExile("Blade of the Exile", R),
+    public static final Skill BladeOftheExile = new Skill("Blade of the Exile", R);
 
     /** The skill name. */
-    JunkyardTitan("Junkyard Titan", Passive),
+    public static final Skill JunkyardTitan = new Skill("Junkyard Titan", Passive);
 
     /** The skill name. */
-    Flamespitter("Flamespitter", Q),
+    public static final Skill Flamespitter = new Skill("Flamespitter", Q);
 
     /** The skill name. */
-    ScrapShield("Scrap Shield", W),
+    public static final Skill ScrapShield = new Skill("Scrap Shield", W);
 
     /** The skill name. */
-    ElectroHarpoon("Electro-Harpoon", E),
+    public static final Skill ElectroHarpoon = new Skill("Electro-Harpoon", E);
 
     /** The skill name. */
-    TheEqualizer("The Equalizer", R),
+    public static final Skill TheEqualizer = new Skill("The Equalizer", R);
 
     /** The skill name. */
-    ArcaneMastery("Arcane Mastery", Passive),
+    public static final Skill ArcaneMastery = new Skill("Arcane Mastery", Passive);
 
     /** The skill name. */
-    Overload("Overload", Q),
+    public static final Skill Overload = new Skill("Overload", Q);
 
     /** The skill name. */
-    RunePrison("Rune Prison", W),
+    public static final Skill RunePrison = new Skill("Rune Prison", W);
 
     /** The skill name. */
-    SpellFlux("Spell Flux", E),
+    public static final Skill SpellFlux = new Skill("Spell Flux", E);
 
     /** The skill name. */
-    DesperatePower("Desperate Power", R),
+    public static final Skill DesperatePower = new Skill("Desperate Power", R);
 
     /** The skill name. */
-    Frost("Frost", Passive),
+    public static final Skill Frost = new Skill("Frost", Passive);
 
     /** The skill name. */
-    ArcticAssault("Arctic Assault", Q),
+    public static final Skill ArcticAssault = new Skill("Arctic Assault", Q);
 
     /** The skill name. */
-    NorthernWinds("Northern Winds", W),
+    public static final Skill NorthernWinds = new Skill("Northern Winds", W);
 
     /** The skill name. */
-    Permafrost("Permafrost", E),
+    public static final Skill Permafrost = new Skill("Permafrost", E);
 
     /** The skill name. */
-    GlacialPrison("Glacial Prison", R),
+    public static final Skill GlacialPrison = new Skill("Glacial Prison", R);
 
     /** The skill name. */
-    Backstab("Backstab", Passive),
+    public static final Skill Backstab = new Skill("Backstab", Passive);
 
     /** The skill name. */
-    Deceive("Deceive", Q),
+    public static final Skill Deceive = new Skill("Deceive", Q);
 
     /** The skill name. */
-    JackInTheBox("Jack In The Box", W),
+    public static final Skill JackInTheBox = new Skill("Jack In The Box", W);
 
     /** The skill name. */
-    TwoShivPoison("Two-Shiv Poison", E),
+    public static final Skill TwoShivPoison = new Skill("Two-Shiv Poison", E);
 
     /** The skill name. */
-    Hallucinate("Hallucinate", R),
+    public static final Skill Hallucinate = new Skill("Hallucinate", R);
 
     /** The skill name. */
-    KiStrike("Ki Strike", Passive),
+    public static final Skill KiStrike = new Skill("Ki Strike", Passive);
 
     /** The skill name. */
-    VorpalBlade("Vorpal Blade", Q),
+    public static final Skill VorpalBlade = new Skill("Vorpal Blade", Q);
 
     /** The skill name. */
-    Feint("Feint", W),
+    public static final Skill Feint = new Skill("Feint", W);
 
     /** The skill name. */
-    ShadowDash("Shadow Dash", E),
+    public static final Skill ShadowDash = new Skill("Shadow Dash", E);
 
     /** The skill name. */
-    StandUnited("Stand United", R),
+    public static final Skill StandUnited = new Skill("Stand United", R);
 
     /** The skill name. */
-    FuryOftheDragonborn("Fury of the Dragonborn", Passive),
+    public static final Skill FuryOftheDragonborn = new Skill("Fury of the Dragonborn", Passive);
 
     /** The skill name. */
-    TwinBite("Twin Bite", Q),
+    public static final Skill TwinBite = new Skill("Twin Bite", Q);
 
     /** The skill name. */
-    Burnout("Burnout", W),
+    public static final Skill Burnout = new Skill("Burnout", W);
 
     /** The skill name. */
-    FlameBreath("Flame Breath", E),
+    public static final Skill FlameBreath = new Skill("Flame Breath", E);
 
     /** The skill name. */
-    DragonsDescent("Dragon's Descent", R),
+    public static final Skill DragonsDescent = new Skill("Dragon's Descent", R);
 
     /** The skill name. */
-    EmpoweredBulwark("Empowered Bulwark", Passive),
+    public static final Skill EmpoweredBulwark = new Skill("Empowered Bulwark", Passive);
 
     /** The skill name. */
-    PoisonTrail("Poison Trail", Q),
+    public static final Skill PoisonTrail = new Skill("Poison Trail", Q);
 
     /** The skill name. */
-    MegaAdhesive("Mega Adhesive", W),
+    public static final Skill MegaAdhesive = new Skill("Mega Adhesive", W);
 
     /** The skill name. */
-    Fling("Fling", E),
+    public static final Skill Fling = new Skill("Fling", E);
 
     /** The skill name. */
-    InsanityPotion("Insanity Potion", R),
+    public static final Skill InsanityPotion = new Skill("Insanity Potion", R);
 
     /** The skill name. */
-    FeelNoPain("Feel No Pain", Passive),
+    public static final Skill FeelNoPain = new Skill("Feel No Pain", Passive);
 
     /** The skill name. */
-    CrypticGaze("Cryptic Gaze", Q),
+    public static final Skill CrypticGaze = new Skill("Cryptic Gaze", Q);
 
     /** The skill name. */
-    DeathsCaress("Death's Caress", W),
+    public static final Skill DeathsCaress = new Skill("Death's Caress", W);
 
     /** The skill name. */
-    Enrage("Enrage", E),
+    public static final Skill Enrage = new Skill("Enrage", E);
 
     /** The skill name. */
-    Cannibalism("Cannibalism", R),
+    public static final Skill Cannibalism = new Skill("Cannibalism", R);
 
     /** The skill name. */
-    FleetOfFoot("Fleet of Foot", Passive),
+    public static final Skill FleetOfFoot = new Skill("Fleet of Foot", Passive);
 
     /** The skill name. */
-    BoomerangBlade("Boomerang Blade", Q),
+    public static final Skill BoomerangBlade = new Skill("Boomerang Blade", Q);
 
     /** The skill name. */
-    Ricochet("Ricochet", W),
+    public static final Skill Ricochet = new Skill("Ricochet", W);
 
     /** The skill name. */
-    SpellShield("Spell Shield", E),
+    public static final Skill SpellShield = new Skill("Spell Shield", E);
 
     /** The skill name. */
-    OnTheHunt("On The Hunt", R),
+    public static final Skill OnTheHunt = new Skill("On The Hunt", R);
 
     /** The skill name. */
-    Energize("Energize", Passive),
+    public static final Skill Energize = new Skill("Energize", Passive);
 
     /** The skill name. */
-    CrystalSlash("Crystal Slash", Q),
+    public static final Skill CrystalSlash = new Skill("Crystal Slash", Q);
 
     /** The skill name. */
-    CrystallineExoskeleton("Crystalline Exoskeleton", W),
+    public static final Skill CrystallineExoskeleton = new Skill("Crystalline Exoskeleton", W);
 
     /** The skill name. */
-    Fracture("Fracture", E),
+    public static final Skill Fracture = new Skill("Fracture", E);
 
     /** The skill name. */
-    Impale("Impale", R),
+    public static final Skill Impale = new Skill("Impale", R);
 
     /** The skill name. */
-    PowerChord("Power Chord", Passive),
+    public static final Skill PowerChord = new Skill("Power Chord", Passive);
 
     /** The skill name. */
-    HymnOfValor("Hymn of Valor", Q),
+    public static final Skill HymnOfValor = new Skill("Hymn of Valor", Q);
 
     /** The skill name. */
-    AriaOfPerseverance("Aria of Perseverance", W),
+    public static final Skill AriaOfPerseverance = new Skill("Aria of Perseverance", W);
 
     /** The skill name. */
-    SongOfCelerity("Song of Celerity", E),
+    public static final Skill SongOfCelerity = new Skill("Song of Celerity", E);
 
     /** The skill name. */
-    Crescendo("Crescendo", R),
+    public static final Skill Crescendo = new Skill("Crescendo", R);
 
     /** The skill name. */
-    Consecration("Consecration", Passive),
+    public static final Skill Consecration = new Skill("Consecration", Passive);
 
     /** The skill name. */
-    Starcall("Starcall", Q),
+    public static final Skill Starcall = new Skill("Starcall", Q);
 
     /** The skill name. */
-    AstralBlessing("Astral Blessing", W),
+    public static final Skill AstralBlessing = new Skill("Astral Blessing", W);
 
     /** The skill name. */
-    Infuse("Infuse", E),
+    public static final Skill Infuse = new Skill("Infuse", E);
 
     /** The skill name. */
-    Wish("Wish", R),
+    public static final Skill Wish = new Skill("Wish", R);
 
     /** The skill name. */
-    CarrionRenewal("Carrion Renewal", Passive),
+    public static final Skill CarrionRenewal = new Skill("Carrion Renewal", Passive);
 
     /** The skill name. */
-    Decrepify("Decrepify", Q),
+    public static final Skill Decrepify = new Skill("Decrepify", Q);
 
     /** The skill name. */
-    Nevermove("Nevermove", W),
+    public static final Skill Nevermove = new Skill("Nevermove", W);
 
     /** The skill name. */
-    Torment("Torment", E),
+    public static final Skill Torment = new Skill("Torment", E);
 
     /** The skill name. */
-    RavenousFlock("Ravenous Flock", R),
+    public static final Skill RavenousFlock = new Skill("Ravenous Flock", R);
 
     /** The skill name. */
-    Transcendent("Transcendent", Passive),
+    public static final Skill Transcendent = new Skill("Transcendent", Passive);
 
     /** The skill name. */
-    DarkSphere("Dark Sphere", Q),
+    public static final Skill DarkSphere = new Skill("Dark Sphere", Q);
 
     /** The skill name. */
-    ForceOfWill("Force of Will", W),
+    public static final Skill ForceOfWill = new Skill("Force of Will", W);
 
     /** The skill name. */
-    ScatterTheWeak("Scatter the Weak", E),
+    public static final Skill ScatterTheWeak = new Skill("Scatter the Weak", E);
 
     /** The skill name. */
-    UnleashedPower("Unleashed Power", R),
+    public static final Skill UnleashedPower = new Skill("Unleashed Power", R);
 
     /** The skill name. */
-    Mercy("Mercy", Passive),
+    public static final Skill Mercy = new Skill("Mercy", Passive);
 
     /** The skill name. */
-    NoxianDiplomacy("Noxian Diplomacy", Q),
+    public static final Skill NoxianDiplomacy = new Skill("Noxian Diplomacy", Q);
 
     /** The skill name. */
-    Rake("Rake", W),
+    public static final Skill Rake = new Skill("Rake", W);
 
     /** The skill name. */
-    Cutthroat("Cutthroat", E),
+    public static final Skill Cutthroat = new Skill("Cutthroat", E);
 
     /** The skill name. */
-    ShadowAssault("Shadow Assault", R),
+    public static final Skill ShadowAssault = new Skill("Shadow Assault", R);
 
     /** The skill name. */
-    Gemcraft("Gemcraft", Passive),
+    public static final Skill Gemcraft = new Skill("Gemcraft", Passive);
 
     /** The skill name. */
-    Imbue("Imbue", Q),
+    public static final Skill Imbue = new Skill("Imbue", Q);
 
     /** The skill name. */
-    Shatter("Shatter", W),
+    public static final Skill Shatter = new Skill("Shatter", W);
 
     /** The skill name. */
-    Dazzle("Dazzle", E),
+    public static final Skill Dazzle = new Skill("Dazzle", E);
 
     /** The skill name. */
-    Radiance("Radiance", R),
+    public static final Skill Radiance = new Skill("Radiance", R);
 
     /** The skill name. */
-    Camouflage("Camouflage", Passive),
+    public static final Skill Camouflage = new Skill("Camouflage", Passive);
 
     /** The skill name. */
-    BlindingDart("Blinding Dart", Q),
+    public static final Skill BlindingDart = new Skill("Blinding Dart", Q);
 
     /** The skill name. */
-    MoveQuick("Move Quick", W),
+    public static final Skill MoveQuick = new Skill("Move Quick", W);
 
     /** The skill name. */
-    ToxicShot("Toxic Shot", E),
+    public static final Skill ToxicShot = new Skill("Toxic Shot", E);
 
     /** The skill name. */
-    NoxiousTrap("Noxious Trap", R),
+    public static final Skill NoxiousTrap = new Skill("Noxious Trap", R);
 
     /** The skill name. */
-    Damnation("Damnation", Passive),
+    public static final Skill Damnation = new Skill("Damnation", Passive);
 
     /** The skill name. */
-    DeathSentence("Death Sentence", Q),
+    public static final Skill DeathSentence = new Skill("Death Sentence", Q);
 
     /** The skill name. */
-    DarkPassage("Dark Passage", W),
+    public static final Skill DarkPassage = new Skill("Dark Passage", W);
 
     /** The skill name. */
-    Flay("Flay", E),
+    public static final Skill Flay = new Skill("Flay", E);
 
     /** The skill name. */
-    TheBox("The Box", R),
+    public static final Skill TheBox = new Skill("The Box", R);
 
     /** The skill name. */
-    DrawaBead("Draw a Bead", Passive),
+    public static final Skill DrawaBead = new Skill("Draw a Bead", Passive);
 
     /** The skill name. */
-    RapidFire("Rapid Fire", Q),
+    public static final Skill RapidFire = new Skill("Rapid Fire", Q);
 
     /** The skill name. */
-    RocketJump("Rocket Jump", W),
+    public static final Skill RocketJump = new Skill("Rocket Jump", W);
 
     /** The skill name. */
-    ExplosiveShot("Explosive Shot", E),
+    public static final Skill ExplosiveShot = new Skill("Explosive Shot", E);
 
     /** The skill name. */
-    BusterShot("Buster Shot", R),
+    public static final Skill BusterShot = new Skill("Buster Shot", R);
 
     /** The skill name. */
-    Decompose("Decompose", Passive),
+    public static final Skill Decompose = new Skill("Decompose", Passive);
 
     /** The skill name. */
-    RabidBite("Rabid Bite", Q),
+    public static final Skill RabidBite = new Skill("Rabid Bite", Q);
 
     /** The skill name. */
-    Contaminate("Contaminate", W),
+    public static final Skill Contaminate = new Skill("Contaminate", W);
 
     /** The skill name. */
-    PillarOfFilth("Pillar of Filth", E),
+    public static final Skill PillarOfFilth = new Skill("Pillar of Filth", E);
 
     /** The skill name. */
-    Agony("Agony", R),
+    public static final Skill Agony = new Skill("Agony", R);
 
     /** The skill name. */
-    BattleFury("Battle Fury", Passive),
+    public static final Skill BattleFury = new Skill("Battle Fury", Passive);
 
     /** The skill name. */
-    Bloodlust("Bloodlust", Q),
+    public static final Skill Bloodlust = new Skill("Bloodlust", Q);
 
     /** The skill name. */
-    MockingShout("Mocking Shout", W),
+    public static final Skill MockingShout = new Skill("Mocking Shout", W);
 
     /** The skill name. */
-    SpinningSlash("Spinning Slash", E),
+    public static final Skill SpinningSlash = new Skill("Spinning Slash", E);
 
     /** The skill name. */
-    UndyingRage("Undying Rage", R),
+    public static final Skill UndyingRage = new Skill("Undying Rage", R);
 
     /** The skill name. */
-    LoadedDice("Loaded Dice", Passive),
+    public static final Skill LoadedDice = new Skill("Loaded Dice", Passive);
 
     /** The skill name. */
-    WildCards("Wild Cards", Q),
+    public static final Skill WildCards = new Skill("Wild Cards", Q);
 
     /** The skill name. */
-    PickACard("Pick A Card", W),
+    public static final Skill PickACard = new Skill("Pick A Card", W);
 
     /** The skill name. */
-    StackedDeck("Stacked Deck", E),
+    public static final Skill StackedDeck = new Skill("Stacked Deck", E);
 
     /** The skill name. */
-    Destiny("Destiny", R),
+    public static final Skill Destiny = new Skill("Destiny", R);
 
     /** The skill name. */
-    DeadlyVenom("Deadly Venom", Passive),
+    public static final Skill DeadlyVenom = new Skill("Deadly Venom", Passive);
 
     /** The skill name. */
-    Ambush("Ambush", Q),
+    public static final Skill Ambush = new Skill("Ambush", Q);
 
     /** The skill name. */
-    VenomCask("Venom Cask", W),
+    public static final Skill VenomCask = new Skill("Venom Cask", W);
 
     /** The skill name. */
-    Expunge("Expunge", E),
+    public static final Skill Expunge = new Skill("Expunge", E);
 
     /** The skill name. */
-    SprayandPray("Spray and Pray", R),
+    public static final Skill SprayandPray = new Skill("Spray and Pray", R);
 
     /** The skill name. */
-    MonkeysAgility("Monkey's Agility", Passive),
+    public static final Skill MonkeysAgility = new Skill("Monkey's Agility", Passive);
 
     /** The skill name. */
-    TigerStance("Tiger Stance", Q),
+    public static final Skill TigerStance = new Skill("Tiger Stance", Q);
 
     /** The skill name. */
-    TurtleStance("Turtle Stance", W),
+    public static final Skill TurtleStance = new Skill("Turtle Stance", W);
 
     /** The skill name. */
-    BearStance("Bear Stance", E),
+    public static final Skill BearStance = new Skill("Bear Stance", E);
 
     /** The skill name. */
-    PhoenixStance("Phoenix Stance", R),
+    public static final Skill PhoenixStance = new Skill("Phoenix Stance", R);
 
     /** The skill name. */
-    ZaunTouchedBoltAugmenter("Zaun-Touched Bolt Augmenter", Passive),
+    public static final Skill ZaunTouchedBoltAugmenter = new Skill("Zaun-Touched Bolt Augmenter", Passive);
 
     /** The skill name. */
-    AcidHunter("Acid Hunter", Q),
+    public static final Skill AcidHunter = new Skill("Acid Hunter", Q);
 
     /** The skill name. */
-    TerrorCapacitor("Terror Capacitor", W),
+    public static final Skill TerrorCapacitor = new Skill("Terror Capacitor", W);
 
     /** The skill name. */
-    NoxianCorrosiveCharge("Noxian Corrosive Charge", E),
+    public static final Skill NoxianCorrosiveCharge = new Skill("Noxian Corrosive Charge", E);
 
     /** The skill name. */
-    HyperKineticPositionReverser("Hyper-Kinetic Position Reverser", R),
+    public static final Skill HyperKineticPositionReverser = new Skill("Hyper-Kinetic Position Reverser", R);
 
     /** The skill name. */
-    LivingVengeance("Living Vengeance", Passive),
+    public static final Skill LivingVengeance = new Skill("Living Vengeance", Passive);
 
     /** The skill name. */
-    PiercingArrow("Piercing Arrow", Q),
+    public static final Skill PiercingArrow = new Skill("Piercing Arrow", Q);
 
     /** The skill name. */
-    BlightedQuiver("Blighted Quiver", W),
+    public static final Skill BlightedQuiver = new Skill("Blighted Quiver", W);
 
     /** The skill name. */
-    HailOfArrows("Hail of Arrows", E),
+    public static final Skill HailOfArrows = new Skill("Hail of Arrows", E);
 
     /** The skill name. */
-    ChainOfCorruption("Chain of Corruption", R),
+    public static final Skill ChainOfCorruption = new Skill("Chain of Corruption", R);
 
     /** The skill name. */
-    NightHunter("Night Hunter", Passive),
+    public static final Skill NightHunter = new Skill("Night Hunter", Passive);
 
     /** The skill name. */
-    Tumble("Tumble", Q),
+    public static final Skill Tumble = new Skill("Tumble", Q);
 
     /** The skill name. */
-    SilverBolts("Silver Bolts", W),
+    public static final Skill SilverBolts = new Skill("Silver Bolts", W);
 
     /** The skill name. */
-    Condemn("Condemn", E),
+    public static final Skill Condemn = new Skill("Condemn", E);
 
     /** The skill name. */
-    FinalHour("Final Hour", R),
+    public static final Skill FinalHour = new Skill("Final Hour", R);
 
     /** The skill name. */
-    Equilibrium("Equilibrium", Passive),
+    public static final Skill Equilibrium = new Skill("Equilibrium", Passive);
 
     /** The skill name. */
-    BalefulStrike("Baleful Strike", Q),
+    public static final Skill BalefulStrike = new Skill("Baleful Strike", Q);
 
     /** The skill name. */
-    DarkMatter("Dark Matter", W),
+    public static final Skill DarkMatter = new Skill("Dark Matter", W);
 
     /** The skill name. */
-    EventHorizon("Event Horizon", E),
+    public static final Skill EventHorizon = new Skill("Event Horizon", E);
 
     /** The skill name. */
-    PrimordialBurst("Primordial Burst", R),
+    public static final Skill PrimordialBurst = new Skill("Primordial Burst", R);
 
     /** The skill name. */
-    BlastShield("Blast Shield", Passive),
+    public static final Skill BlastShield = new Skill("Blast Shield", Passive);
 
     /** The skill name. */
-    VaultBreaker("Vault Breaker", Q),
+    public static final Skill VaultBreaker = new Skill("Vault Breaker", Q);
 
     /** The skill name. */
-    DentingBlows("Denting Blows", W),
+    public static final Skill DentingBlows = new Skill("Denting Blows", W);
 
     /** The skill name. */
-    ExcessiveForce("Excessive Force", E),
+    public static final Skill ExcessiveForce = new Skill("Excessive Force", E);
 
     /** The skill name. */
-    AssaultandBattery("Assault and Battery", R),
+    public static final Skill AssaultandBattery = new Skill("Assault and Battery", R);
 
     /** The skill name. */
-    EvolvingTechnology("Evolving Technology", Passive),
+    public static final Skill EvolvingTechnology = new Skill("Evolving Technology", Passive);
 
     /** The skill name. */
-    PowerTransfer("Power Transfer", Q),
+    public static final Skill PowerTransfer = new Skill("Power Transfer", Q);
 
     /** The skill name. */
-    GravityField("Gravity Field", W),
+    public static final Skill GravityField = new Skill("Gravity Field", W);
 
     /** The skill name. */
-    DeathRay("Death Ray", E),
+    public static final Skill DeathRay = new Skill("Death Ray", E);
 
     /** The skill name. */
-    ChaosStorm("Chaos Storm", R),
+    public static final Skill ChaosStorm = new Skill("Chaos Storm", R);
 
     /** The skill name. */
-    CrimsonPact("Crimson Pact", Passive),
+    public static final Skill CrimsonPact = new Skill("Crimson Pact", Passive);
 
     /** The skill name. */
-    Transfusion("Transfusion", Q),
+    public static final Skill Transfusion = new Skill("Transfusion", Q);
 
     /** The skill name. */
-    SanguinePool("Sanguine Pool", W),
+    public static final Skill SanguinePool = new Skill("Sanguine Pool", W);
 
     /** The skill name. */
-    TidesOfBlood("Tides of Blood", E),
+    public static final Skill TidesOfBlood = new Skill("Tides of Blood", E);
 
     /** The skill name. */
-    Hemoplague("Hemoplague", R),
+    public static final Skill Hemoplague = new Skill("Hemoplague", R);
 
     /** The skill name. */
-    ChosenOftheStorm("Chosen of the Storm", Passive),
+    public static final Skill ChosenOftheStorm = new Skill("Chosen of the Storm", Passive);
 
     /** The skill name. */
-    RollingThunder("Rolling Thunder", Q),
+    public static final Skill RollingThunder = new Skill("Rolling Thunder", Q);
 
     /** The skill name. */
-    Frenzy("Frenzy", W),
+    public static final Skill Frenzy = new Skill("Frenzy", W);
 
     /** The skill name. */
-    MajesticRoar("Majestic Roar", E),
+    public static final Skill MajesticRoar = new Skill("Majestic Roar", E);
 
     /** The skill name. */
-    ThunderClaws("Thunder Claws", R),
+    public static final Skill ThunderClaws = new Skill("Thunder Claws", R);
 
     /** The skill name. */
-    EternalThirst("Eternal Thirst", Passive),
+    public static final Skill EternalThirst = new Skill("Eternal Thirst", Passive);
 
     /** The skill name. */
-    HungeringStrike("Hungering Strike", Q),
+    public static final Skill HungeringStrike = new Skill("Hungering Strike", Q);
 
     /** The skill name. */
-    HuntersCall("Hunters Call", W),
+    public static final Skill HuntersCall = new Skill("Hunters Call", W);
 
     /** The skill name. */
-    BloodScent("Blood Scent", E),
+    public static final Skill BloodScent = new Skill("Blood Scent", E);
 
     /** The skill name. */
-    InfiniteDuress("Infinite Duress", R),
+    public static final Skill InfiniteDuress = new Skill("Infinite Duress", R);
 
     /** The skill name. */
-    StoneSkin("Stone Skin", Passive),
+    public static final Skill StoneSkin = new Skill("Stone Skin", Passive);
 
     /** The skill name. */
-    CrushingBlow("Crushing Blow", Q),
+    public static final Skill CrushingBlow = new Skill("Crushing Blow", Q);
 
     /** The skill name. */
-    Decoy("Decoy", W),
+    public static final Skill Decoy = new Skill("Decoy", W);
 
     /** The skill name. */
-    NimbusStrike("Nimbus Strike", E),
+    public static final Skill NimbusStrike = new Skill("Nimbus Strike", E);
 
     /** The skill name. */
-    Cyclone("Cyclone", R),
+    public static final Skill Cyclone = new Skill("Cyclone", R);
 
     /** The skill name. */
-    AscendedForm("Ascended Form", Passive),
+    public static final Skill AscendedForm = new Skill("Ascended Form", Passive);
 
     /** The skill name. */
-    Arcanopulse("Arcanopulse", Q),
+    public static final Skill Arcanopulse = new Skill("Arcanopulse", Q);
 
     /** The skill name. */
-    LocusOfPower("Locus of Power", W),
+    public static final Skill LocusOfPower = new Skill("Locus of Power", W);
 
     /** The skill name. */
-    MageChains("Mage Chains", E),
+    public static final Skill MageChains = new Skill("Mage Chains", E);
 
     /** The skill name. */
-    ArcaneBarrage("Arcane Barrage", R),
+    public static final Skill ArcaneBarrage = new Skill("Arcane Barrage", R);
 
     /** The skill name. */
-    Challenge("Challenge", Passive),
+    public static final Skill Challenge = new Skill("Challenge", Passive);
 
     /** The skill name. */
-    ThreeTalonStrike("Three Talon Strike", Q),
+    public static final Skill ThreeTalonStrike = new Skill("Three Talon Strike", Q);
 
     /** The skill name. */
-    BattleCry("Battle Cry", W),
+    public static final Skill BattleCry = new Skill("Battle Cry", W);
 
     /** The skill name. */
-    AudaciousCharge("Audacious Charge", E),
+    public static final Skill AudaciousCharge = new Skill("Audacious Charge", E);
 
     /** The skill name. */
-    CrescentSweep("Crescent Sweep", R),
+    public static final Skill CrescentSweep = new Skill("Crescent Sweep", R);
 
     /** The skill name. */
-    UnholyCovenant("Unholy Covenant", Passive),
+    public static final Skill UnholyCovenant = new Skill("Unholy Covenant", Passive);
 
     /** The skill name. */
-    OmenOfWar("Omen of War", Q),
+    public static final Skill OmenOfWar = new Skill("Omen of War", Q);
 
     /** The skill name. */
-    OmenOfPestilence("Omen of Pestilence", W),
+    public static final Skill OmenOfPestilence = new Skill("Omen of Pestilence", W);
 
     /** The skill name. */
-    OmenOfFamine("Omen of Famine", E),
+    public static final Skill OmenOfFamine = new Skill("Omen of Famine", E);
 
     /** The skill name. */
-    OmenOfDeath("Omen of Death", R),
+    public static final Skill OmenOfDeath = new Skill("Omen of Death", R);
 
     /** The skill name. */
-    ContemptforTheWeak("Contempt for the Weak", Passive),
+    public static final Skill ContemptforTheWeak = new Skill("Contempt for the Weak", Passive);
 
     /** The skill name. */
-    RazorShuriken("Razor Shuriken", Q),
+    public static final Skill RazorShuriken = new Skill("Razor Shuriken", Q);
 
     /** The skill name. */
-    LivingShadow("Living Shadow", W),
+    public static final Skill LivingShadow = new Skill("Living Shadow", W);
 
     /** The skill name. */
-    ShadowSlash("Shadow Slash", E),
+    public static final Skill ShadowSlash = new Skill("Shadow Slash", E);
 
     /** The skill name. */
-    DeathMark("Death Mark", R),
+    public static final Skill DeathMark = new Skill("Death Mark", R);
 
     /** The skill name. */
-    ShortFuse("Short Fuse", Passive),
+    public static final Skill ShortFuse = new Skill("Short Fuse", Passive);
 
     /** The skill name. */
-    BouncingBomb("Bouncing Bomb", Q),
+    public static final Skill BouncingBomb = new Skill("Bouncing Bomb", Q);
 
     /** The skill name. */
-    SatchelCharge("Satchel Charge", W),
+    public static final Skill SatchelCharge = new Skill("Satchel Charge", W);
 
     /** The skill name. */
-    HexplosiveMinefield("Hexplosive Minefield", E),
+    public static final Skill HexplosiveMinefield = new Skill("Hexplosive Minefield", E);
 
     /** The skill name. */
-    MegaInfernoBomb("Mega Inferno Bomb", R),
+    public static final Skill MegaInfernoBomb = new Skill("Mega Inferno Bomb", R);
 
     /** The skill name. */
-    HeightenedLearning("Heightened Learning", Passive),
+    public static final Skill HeightenedLearning = new Skill("Heightened Learning", Passive);
 
     /** The skill name. */
-    TimeBomb("Time Bomb", Q),
+    public static final Skill TimeBomb = new Skill("Time Bomb", Q);
 
     /** The skill name. */
-    Rewind("Rewind", W),
+    public static final Skill Rewind = new Skill("Rewind", W);
 
     /** The skill name. */
-    TimeWarp("Time Warp", E),
+    public static final Skill TimeWarp = new Skill("Time Warp", E);
 
     /** The skill name. */
-    ChronoShift("Chrono Shift", R),
+    public static final Skill ChronoShift = new Skill("Chrono Shift", R);
 
     /** The skill name. */
-    RiseOftheThorns("Rise of the Thorns", Passive),
+    public static final Skill RiseOftheThorns = new Skill("Rise of the Thorns", Passive);
 
     /** The skill name. */
-    DeadlyBloom("Deadly Bloom", Q),
+    public static final Skill DeadlyBloom = new Skill("Deadly Bloom", Q);
 
     /** The skill name. */
-    RampantGrowth("Rampant Growth", W),
+    public static final Skill RampantGrowth = new Skill("Rampant Growth", W);
 
     /** The skill name. */
-    GraspingRoots("Grasping Roots", E),
+    public static final Skill GraspingRoots = new Skill("Grasping Roots", E);
 
     /** The skill name. */
-    Stranglethorns("Stranglethorns", R);
+    public static final Skill Stranglethorns = new Skill("Stranglethorns", R);
 
     /** The current writing version. */
     private static Version version;
@@ -1742,7 +1742,7 @@ public enum Skill {
      * 
      * @param name
      */
-    private Skill(String name, SkillKey key) {
+    Skill(String name, SkillKey key) {
         this.name = name;
         this.system = name.replaceAll(" of ", "Of").replaceAll("[\\s-,!':/]", "");
         this.key = key;

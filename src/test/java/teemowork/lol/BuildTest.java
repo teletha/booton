@@ -114,27 +114,6 @@ public class BuildTest {
         assertStatus(build, AD, 0, 10);
     }
 
-    @Test
-    public void reference() throws Exception {
-        Champion champion = new EmptyChampion();
-        champion.update(Version.P0000).set(Health, 100);
-
-        Build build = new Build(champion);
-        assertStatus(build, AD, 0, 0);
-
-        build.setItem(0, new ReferenceItem(AD) {
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public double get(Status status, Build build) {
-                return build.get(Health).base;
-            }
-        });
-        assertStatus(build, AD, 0, 100);
-    }
-
     /**
      * <p>
      * Helper method to create new item.
@@ -199,10 +178,10 @@ public class BuildTest {
      * @param increased
      */
     private void assertStatus(Build build, Status status, double base, double increased) {
-        Computed valeu = build.get(status);
-        assert valeu.base == base;
-        assert valeu.increased == increased;
-        assert valeu.value == base + increased;
+        Computed value = build.get(status);
+        assert value.base == base;
+        assert value.increased == increased;
+        assert value.value == base + increased;
     }
 
     /**
@@ -214,7 +193,7 @@ public class BuildTest {
          * 
          */
         private EmptyChampion() {
-            super("Tester", null, null, null, null, null);
+            super("Tester");
 
             update(Version.P0000);
         }
@@ -232,6 +211,28 @@ public class BuildTest {
             super(0, "Test Item");
 
             update(Version.P0000);
+        }
+    }
+
+    /**
+     * @version 2013/02/17 12:38:49
+     */
+    private static class EmptySkill extends Skill {
+
+        /**
+         * 
+         */
+        private EmptySkill() {
+            super("Test Skill", SkillKey.Q);
+
+            update();
+        }
+
+        /**
+         * 
+         */
+        private EmptySkill(SkillKey key) {
+            super("Test Skill", key);
         }
     }
 

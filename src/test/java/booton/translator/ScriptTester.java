@@ -222,8 +222,8 @@ public class ScriptTester {
         } catch (Throwable e) {
             TranslationError error = new TranslationError(e);
             error.write(e.getMessage());
-            error.write(END, "Full Code :");
-            error.write(script);
+            error.write(END, "Test Code :");
+            error.write(script.substring(script.indexOf("boot.define(\"" + Javascript.computeSimpleClassName(source) + "\",")));
 
             if (e instanceof EvaluatorException) {
                 EvaluatorException exception = (EvaluatorException) e;

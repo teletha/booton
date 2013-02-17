@@ -76,9 +76,9 @@ public class Build extends Notifiable {
     public Build(Champion champion) {
         this.champion = champion;
 
-        items[0] = Item.LastWhisper;
-        items[1] = Item.WarmogsArmor;
-        items[2] = Item.RabadonsDeathcap;
+        // items[0] = Item.LastWhisper;
+        // items[1] = Item.WarmogsArmor;
+        // items[2] = Item.RabadonsDeathcap;
     }
 
     /**
@@ -382,7 +382,7 @@ public class Build extends Notifiable {
             if (champion == Champion.Nidalee) {
                 champion = Champion.NidaleeCougar;
             }
-            
+
             if (champion == Champion.NidaleeCougar) {
                 champion = Champion.Nidalee;
             }
