@@ -26,7 +26,7 @@ import teemowork.model.Rune;
 public class Build extends Notifiable {
 
     /** The selected champion. */
-    public final Champion champion;
+    public Champion champion;
 
     /** The version. */
     private Version version = Version.Latest;
@@ -377,6 +377,16 @@ public class Build extends Notifiable {
      */
     public void active(SkillKey key) {
         skillActivation[key.ordinal()] = !skillActivation[key.ordinal()];
+
+        if (key == SkillKey.R) {
+            if (champion == Champion.Nidalee) {
+                champion = Champion.NidaleeCougar;
+            }
+            
+            if (champion == Champion.NidaleeCougar) {
+                champion = Champion.Nidalee;
+            }
+        }
 
         fire();
     }
