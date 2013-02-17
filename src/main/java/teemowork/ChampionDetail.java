@@ -59,6 +59,9 @@ public class ChampionDetail extends Page {
     /** The status. */
     private jQuery level;
 
+    /** The skill view. */
+    private jQuery skillView;
+
     /**
      * Build page.
      * 
@@ -134,12 +137,7 @@ public class ChampionDetail extends Page {
         for (Status status : VISIBLE) {
             statuses.add(new StatusView(status, statusView));
         }
-
-        jQuery skillView = root.child(SkillStyle.SkillTable.class);
-
-        for (final Skill skill : build.champion.skills) {
-            skills.add(new SkillView(skill, skillView.child(SkillStyle.SkillRow.class)));
-        }
+        skillView = root.child(SkillStyle.SkillTable.class);
 
         $(window).keypress(new Listener() {
 
@@ -181,8 +179,10 @@ public class ChampionDetail extends Page {
         // update each status
         level.text(String.valueOf(build.getLevel()));
 
-        for (SkillView view : skills) {
-            view.update();
+        skillView.empty();
+
+        for (Skill skill : build.champion.skills) {
+            new SkillView(skill, skillView.child(SkillStyle.SkillRow.class)).update();
         }
 
         for (StatusView box : statuses) {
@@ -635,6 +635,7 @@ public class ChampionDetail extends Page {
             {
                 display.tableCell();
                 text.verticalAlign.top();
+                box.height(60, px);
             }
         }
 

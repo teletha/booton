@@ -44,7 +44,7 @@ public class Build extends Notifiable {
     private int[] skills = new int[18];
 
     /** The skill level. */
-    private int[] skillLevel = {1, 0, 0, 0, 0};
+    private int[] skillLevel = {0, 0, 0, 0, 0};
 
     /** The skill level. */
     private boolean[] skillActivation = {false, false, false, false, false};
@@ -75,6 +75,10 @@ public class Build extends Notifiable {
      */
     public Build(Champion champion) {
         this.champion = champion;
+
+        for (int i = 0; i < 5; i++) {
+            skillLevel[i] = champion.skills[i].getMinLevel();
+        }
 
         // items[0] = Item.LastWhisper;
         // items[1] = Item.WarmogsArmor;
@@ -203,6 +207,18 @@ public class Build extends Notifiable {
 
     /**
      * <p>
+     * Retrieve skill level.
+     * </p>
+     * 
+     * @param skill A target skill.
+     * @return A skill level.
+     */
+    public int getLevel(Skill skill) {
+        return skillLevel[skill.key.ordinal()];
+    }
+
+    /**
+     * <p>
      * Increase skill level.
      * </p>
      * 
@@ -221,18 +237,6 @@ public class Build extends Notifiable {
 
     /**
      * <p>
-     * Retrieve skill level.
-     * </p>
-     * 
-     * @param skill A target skill.
-     * @return A skill level.
-     */
-    public int getLevel(Skill skill) {
-        return skillLevel[skill.key.ordinal()];
-    }
-
-    /**
-     * <p>
      * Decrease skill level.
      * </p>
      * 
@@ -242,7 +246,7 @@ public class Build extends Notifiable {
         int index = skill.key.ordinal();
         int now = skillLevel[index];
 
-        if (0 < now) {
+        if (skill.getMinLevel() < now) {
             skillLevel[index] = now - 1;
 
             fire();
@@ -259,7 +263,6 @@ public class Build extends Notifiable {
      */
     private double base(Status status) {
         switch (status) {
-        case MS:
         case MSRatio:
         case Energy:
         case Ereg:
@@ -267,7 +270,20 @@ public class Build extends Notifiable {
             return champion.getStatus(version).get(status);
 
         default:
-            return champion.getStatus(version).get(status) + champion.getStatus(version).get(status.per()) * level;
+            double value = champion.getStatus(version).get(status) + champion.getStatus(version).get(status.per()) * level;
+
+            if (champion == Champion.EliseSpider) {
+                value += computeVariable(status, Skill.SpiderForm);
+            }
+
+            if (champion == Champion.NidaleeCougar) {
+                value += computeVariable(status, Skill.AspectOfTheCougar);
+            }
+
+            if (champion == Champion.Jayce) {
+                value += computeVariable(status, Skill.TransformMercuryHammer);
+            }
+            return value;
         }
     }
 
@@ -370,6 +386,37 @@ public class Build extends Notifiable {
 
     /**
      * <p>
+     * Compute status from skill variable.
+     * </p>
+     * 
+     * @param status A target status.
+     * @param skill A target skill.
+     * @return A calcurated value.
+     */
+    private double computeVariable(Status status, Skill skill) {
+        double value = 0;
+        int level = skillLevel[skill.key.ordinal()];
+
+        if (0 < level) {
+            SkillStatus skillStatus = skill.getStatus(version);
+
+            for (Object token : skillStatus.active) {
+                if (token instanceof Variable) {
+                    Variable variable = (Variable) token;
+
+                    if (variable.getStatus() == status) {
+                        value += computeVariable(skill, variable, skillLevel[skill.key.ordinal()]);
+                    }
+                }
+            }
+        }
+
+        // API definition
+        return value;
+    }
+
+    /**
+     * <p>
      * Push skill key.
      * </p>
      * 
@@ -381,10 +428,20 @@ public class Build extends Notifiable {
         if (key == SkillKey.R) {
             if (champion == Champion.Nidalee) {
                 champion = Champion.NidaleeCougar;
+            } else if (champion == Champion.NidaleeCougar) {
+                champion = Champion.Nidalee;
             }
 
-            if (champion == Champion.NidaleeCougar) {
-                champion = Champion.Nidalee;
+            if (champion == Champion.Elise) {
+                champion = Champion.EliseSpider;
+            } else if (champion == Champion.EliseSpider) {
+                champion = Champion.Elise;
+            }
+
+            if (champion == Champion.Jayce) {
+                champion = Champion.JayceCannon;
+            } else if (champion == Champion.JayceCannon) {
+                champion = Champion.Jayce;
             }
         }
 
