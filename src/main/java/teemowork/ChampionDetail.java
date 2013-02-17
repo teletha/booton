@@ -44,7 +44,7 @@ public class ChampionDetail extends Page {
 
     /** The displayable status. */
     private static final Status[] VISIBLE = {Health, Hreg, Mana, Mreg, AD, ARPen, AS, LS, Critical, AP, MRPen, CDR, SV,
-            AR, MR, MS, Range};
+            AR, MR, MS, Range, Tenacity};
 
     /** The status box. */
     private List<StatusView> statuses = new ArrayList();

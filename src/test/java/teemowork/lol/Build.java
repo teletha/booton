@@ -145,23 +145,24 @@ public class Build extends Notifiable {
         // }
 
         switch (status) {
-        case Energy:
-        case Ereg:
-            return new Computed(0, 0, status);
-
         case Lv:
             return new Computed(level, level, Lv);
 
         case Damage:
+        case Tenacity:
+
             return new Computed(base(status), sum(status), status);
 
-        case MissingHealth:
+        case MissingHealthRatio:
         case TargetHealth:
         case TargetCurrentHealth:
         case TargetMissingHealth:
         case CurrentMana:
         case Stack:
         case Duration:
+        case Energy:
+        case Ereg:
+        case EnemyChampion:
             return new Computed(0, 0, status);
 
         case BounusAD:
