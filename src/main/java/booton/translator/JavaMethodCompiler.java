@@ -102,14 +102,39 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private static final int JUMP = 406;
 
+    /**
+     * Represents a primitive addtion instruction. IADD, LADD, FADD and DADD.
+     */
+    private static final int ADD = 407;
+
+    /**
+     * Represents a primitive substruction instruction. ISUB, LSUB, FSUB and DSUB.
+     */
+    private static final int SUB = 408;
+
+    /**
+     * Represents a constant 0 instruction. ICONST_0, LCONST_0, FCONST_0 and DCONST_0.
+     */
+    private static final int CONSTANT_0 = 409;
+
+    /**
+     * Represents a constant 1 instruction. ICONST_1, LCONST_1, FCONST_1 and DCONST_1.
+     */
+    private static final int CONSTANT_1 = 410;
+
+    /**
+     * Represents a duplicate instruction. DUP_X1 and DUP2_X2.
+     */
+    private static final int DUPLICATE_X1 = 411;
+
+    /** The extra opcode for byte code parsing. */
+    private static final int LABEL = 300;
+
     /** The frequently used operand for cache. */
     private static final OperandNumber ZERO = new OperandNumber(0);
 
     /** The frequently used operand for cache. */
     private static final OperandNumber ONE = new OperandNumber(1);
-
-    /** The extra opcode for byte code parsing. */
-    private static final int LABEL = 300;
 
     /** The java source(byte) code. */
     private final Javascript script;
@@ -321,13 +346,28 @@ class JavaMethodCompiler extends MethodVisitor {
 
         switch (opcode) {
         case PUTFIELD:
-            // Increment of field doesn't use increment instruction, so we must distinguish
-            // increment from addition by pattern matching. Post increment code of field
-            // leaves characteristic pattern like the following.
-            if (match(ALOAD, DUP, GETFIELD, DUP_X1, ICONST_1, IADD, PUTFIELD)) {
+            // Increment (decrement) of field doesn't use increment instruction, so we must
+            // distinguish increment (decrement) from addition by pattern matching.
+            if (match(ALOAD, DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, ADD, PUTFIELD)) {
+                // The pattenr of post-increment field is like above.
                 current.remove(0);
 
                 current.addOperand(new OperandExpression(current.remove(0) + "." + Javascript.computeFieldName(owner, name) + "++"));
+            } else if (match(ALOAD, DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, SUB, PUTFIELD)) {
+                // The pattenr of post-decrement field is like above.
+                current.remove(0);
+
+                current.addOperand(new OperandExpression(current.remove(0) + "." + Javascript.computeFieldName(owner, name) + "--"));
+            } else if (match(ALOAD, DUP, GETFIELD, CONSTANT_1, ADD, DUPLICATE_X1, PUTFIELD)) {
+                // The pattenr of pre-increment field is like above.
+                current.remove(0);
+
+                current.addOperand(new OperandExpression("++" + current.remove(0) + "." + Javascript.computeFieldName(owner, name)));
+            } else if (match(ALOAD, DUP, GETFIELD, CONSTANT_1, SUB, DUPLICATE_X1, PUTFIELD)) {
+                // The pattenr of pre-decrement field is like above.
+                current.remove(0);
+
+                current.addOperand(new OperandExpression("--" + current.remove(0) + "." + Javascript.computeFieldName(owner, name)));
             } else {
                 current.addExpression(current.remove(1), ".", Javascript.computeFieldName(owner, name), "=", current.remove(0));
             }
@@ -432,9 +472,9 @@ class JavaMethodCompiler extends MethodVisitor {
 
         case DUP2_X1:
         case DUP2_X2:
-            // If this exception will be thrown, it is bug of this program. So we must rethrow the
-            // wrapped error in here.
-            throw new Error();
+            // These instructions are used for field increment mainly, see visitFieldInsn(PUTFIELD).
+            // Skip this instruction to simplify compiler.
+            break;
 
         case POP:
         case POP2:
@@ -1459,17 +1499,80 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
+     * <p>
      * Pattern matching for the recent instructions.
+     * </p>
      * 
-     * @param first A oldest instruction.
-     * @param second A middle instruction.
-     * @param third A latest instruction.
+     * @param opcodes A sequence of opecodes to match.
      * @return A result.
      */
     private final boolean match(int... opcodes) {
-        for (int i = 0; i < opcodes.length; i++) {
-            if (records[(recordIndex + i + 8 - opcodes.length) % 8] != opcodes[i]) {
-                return false;
+        root: for (int i = 0; i < opcodes.length; i++) {
+            int record = records[(recordIndex + i + 8 - opcodes.length) % 8];
+
+            switch (opcodes[i]) {
+            case ADD:
+                switch (record) {
+                case IADD:
+                case LADD:
+                case FADD:
+                case DADD:
+                    continue root;
+
+                default:
+                    return false;
+                }
+
+            case SUB:
+                switch (record) {
+                case ISUB:
+                case LSUB:
+                case FSUB:
+                case DSUB:
+                    continue root;
+
+                default:
+                    return false;
+                }
+
+            case CONSTANT_0:
+                switch (record) {
+                case ICONST_0:
+                case LCONST_0:
+                case FCONST_0:
+                case DCONST_0:
+                    continue root;
+
+                default:
+                    return false;
+                }
+
+            case CONSTANT_1:
+                switch (record) {
+                case ICONST_1:
+                case LCONST_1:
+                case FCONST_1:
+                case DCONST_1:
+                    continue root;
+
+                default:
+                    return false;
+                }
+
+            case DUPLICATE_X1:
+                switch (record) {
+                case DUP_X1:
+                case DUP2_X1:
+                    continue root;
+
+                default:
+                    return false;
+                }
+
+            default:
+                if (record != opcodes[i]) {
+                    return false;
+                }
             }
         }
         return true;
@@ -1628,7 +1731,7 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
-     * @version 2010/01/27 16:04:09
+     * @version 2013/02/17 15:35:56
      */
     class TryCatch {
 
