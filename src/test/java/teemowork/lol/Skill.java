@@ -3602,25 +3602,44 @@ public enum Skill {
                 .range(850);
 
         /** Nidalee */
-        Prowl.update().passive("茂みに入ると移動速度が15%増加する。この効果は茂みから出ても2秒間持続する。");
+        Prowl.update().passive("茂みに入ると{1}増加する。この効果は茂みから出ても2秒間持続する。").variable(1, MSRatio, 15).conditional(1);
         JavelinToss.update()
-                .passive("Toss(Human)")
-                .active("指定方向に槍を投げて当たった敵ユニットに魔法DMを与える。槍がhitした時のNidaleeとターゲットの間の距離に比例して与えるダメージが増加する。(最大2.5倍)最小魔法DM: 55/95/140/185/230 (+0.65)最大魔法DM: 137.5/237.5/350/462.5/575 (+1.625)消費MN: 50/60/70/80/90 CD: 6s Range: 1500Takedown(Cougar)Active:次に行う通常攻撃のダメージが増加する。対象が受けているダメージに比例してダメージが増加する。")
+                .active("指定方向に槍を投げて当たった敵ユニットに{1}を与える。槍がhitした時のNidaleeとターゲットの間の距離に比例して与えるダメージが増加する。最大で{2}。")
+                .variable(1, MagicDamage, 55, 40, ap(0.65))
+                .variable(2, MagicDamage, 137.5, 100, ap(1.625))
                 .mana(50, 10)
                 .cd(5)
                 .range(1500);
+        Takedown.update()
+                .active("次に行う通常攻撃のダメージが{1}増加する。対象が受けているダメージに比例してダメージが増加する。最大で{2}。")
+                .variable(1, PhysicalDamage, 40, 30)
+                .variable(2, PhysicalDamage, 120, 90, ad(2))
+                .cd(5);
         Bushwhack.update()
-                .passive("k(Human)")
-                .active("指定地点に罠を仕掛ける。敵ユニットが罠を踏むと発動し、対象の敵ユニットとその周囲の敵ユニットに2秒かけて魔法DMを与え、12秒間ARとMRを低下させ視界を得る。罠は4分間持続する。罠を設置してから2秒間の間は罠は発動しない。魔法DM: 80/125/170/215/260 (+0.4) 低下AR,MR: 20/25/30/35/40% 罠起動範囲:消費MN: 60/75/90/105/120 CD: 18s Range: 900Pounce(Cougar)Active:前方に飛びかかり着地地点の敵ユニットに魔法DMを与える。")
+                .active("指定地点に罠を仕掛ける。敵ユニットが罠を踏むと発動し、対象の敵ユニットとその周囲の敵ユニットに2秒かけて{1}を与え、12秒間{2}と{3}を与え視界を得る。罠は4分間持続する。罠を設置してから2秒間の間は罠は発動しない。")
+                .variable(1, MagicDamage, 80, 45, ap(0.4))
+                .variable(2, ARReductionRatio, 20, 5)
+                .variable(3, MRReductionRatio, 20, 5)
                 .mana(60, 15)
+                .cd(18)
+                .range(900);
+        Pounce.update()
+                .active("前方に飛びかかり着地地点の敵ユニットに{1}を与える。")
+                .variable(1, MagicDamage, 125, 50, ap(0.4))
                 .cd(3.5)
                 .range(350);
         PrimalSurge.update()
-                .passive("urge(Human)")
-                .active("対象の味方ChampionのHPを回復し、7秒間攻撃速度を増加させる。回復HP: 50/85/120/155/190 (+0.7)増加攻撃速度: 20/30/40/50/60%消費MN: 60/80/100/120/140 CD: 10s Range: 600Swipe(Cougar)Active:前方扇形180°の範囲内の敵ユニットに魔法DMを与える。")
+                .active("対象の味方Championの{1}し、7秒間{2}増加させる。")
+                .variable(1, RestoreHealth, 50, 35, ap(0.7))
+                .variable(2, ASRatio, 20, 10)
                 .mana(60, 20)
-                .cd(6)
+                .cd(10)
                 .range(600);
+        Swipe.update()
+                .active("前方扇形180°{2}の敵ユニットに{1}を与える。")
+                .variable(1, MagicDamage, 150, 75, ap(0.4))
+                .variable(2, Radius, 300)
+                .cd(6);
         AspectOfTheCougar.update()
                 .active("HumanからCougarに、CougarからHumanに変身する。Cougar時はスキルの効果が変わり、通常攻撃の射程距離が125(Melee)になり、移動速度が20、ARとMRが10/20/30上昇する。Cougarスキルはこのスキルのレベルに比例し威力が増加する。")
                 .cd(4);
