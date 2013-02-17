@@ -896,6 +896,11 @@ class JavaMethodCompiler extends MethodVisitor {
         Operand second = current.peek(1);
         Operand third = current.peek(2);
 
+        if (first == Node.END) {
+            // The current node represents single expression.
+            return;
+        }
+
         if (first instanceof OperandCondition) {
             merge();
         } else if (second instanceof OperandCondition) {
@@ -903,27 +908,23 @@ class JavaMethodCompiler extends MethodVisitor {
 
             dispose(current);
         } else if (third instanceof OperandCondition) {
-            if (first instanceof OperandExpression && first.toString().equals(";")) {
-                // do nothing
+            // =======================
+            // Conditional Operator
+            // =======================
+            first = current.remove(0);
+            second = current.remove(0);
+            third = current.remove(0);
+
+            if (first == ONE && second == ZERO) {
+                current.addOperand(third);
+            } else if (first == ZERO && second == ONE) {
+                current.addOperand(third.invert());
             } else {
-                // =======================
-                // Conditional Operator
-                // =======================
-                first = current.remove(0);
-                second = current.remove(0);
-                third = current.remove(0);
-
-                if (first == ONE && second == ZERO) {
-                    current.addOperand(third);
-                } else if (first == ZERO && second == ONE) {
-                    current.addOperand(third.invert());
-                } else {
-                    current.addOperand("(" + third.invert() + "?" + second + ":" + first + ")");
-                }
-
-                // resolve recursively
-                resolveLabel();
+                current.addOperand("(" + third.invert() + "?" + second + ":" + first + ")");
             }
+
+            // resolve recursively
+            resolveLabel();
         }
     }
 

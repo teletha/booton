@@ -24,26 +24,52 @@ public class BooleanTest extends ScriptTester {
     public void Boolean() {
         test(new Scriptable() {
 
-            int act(boolean value) {
-                value = !value;
-
-                if (value) {
-                    return 1;
-                } else {
-                    return 2;
-                }
+            boolean act(boolean value) {
+                return value;
             }
         });
     }
 
     @Test
-    public void Boolean2() {
+    public void Negative() {
+        test(new Scriptable() {
+
+            boolean act(boolean value) {
+                return !value;
+            }
+        });
+    }
+
+    @Test
+    public void Dual() {
+        test(new Scriptable() {
+
+            boolean act(boolean value) {
+                return !!value;
+            }
+        });
+    }
+
+    @Test
+    public void VariableNegative() {
         test(new Scriptable() {
 
             boolean act(boolean value) {
                 value = !value;
 
-                return !value;
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void VariableDual() {
+        test(new Scriptable() {
+
+            boolean act(boolean value) {
+                value = !!value;
+
+                return value;
             }
         });
     }

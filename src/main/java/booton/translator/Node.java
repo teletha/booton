@@ -25,7 +25,7 @@ import booton.translator.JavaMethodCompiler.TryCatch;
 class Node {
 
     /** The re-usable operand. */
-    private static final Operand END = new OperandExpression(";");
+    static final Operand END = new OperandExpression(";");
 
     /** The identified label for this node. */
     final int id;
