@@ -150,7 +150,6 @@ public class Build extends Notifiable {
 
         case Damage:
         case Tenacity:
-
             return new Computed(base(status), sum(status), status);
 
         case MissingHealthRatio:
@@ -178,6 +177,10 @@ public class Build extends Notifiable {
             double baseAS = champion.getStatus(version).get(AS);
             double levelAS = champion.getStatus(version).get(ASPerLv) * (level - 1);
             return new Computed(baseAS * (1 + levelAS / 100), baseAS * (1 + (levelAS + sum(ASRatio)) / 100), status);
+
+        case AR:
+            double value = base(status);
+            return new Computed(value, value + sum(status) + sum(status.per()), status);
 
         default:
             Status ratio = Status.valueOf(status.name() + "Ratio");

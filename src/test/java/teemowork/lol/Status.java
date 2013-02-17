@@ -21,31 +21,32 @@ public enum Status {
 
     Sell,
 
-    AS(3),
+    // ==================================================
+    // Attack Related
+    // ==================================================
+    /** Attack Damage */
+    AD, ADPerLv, ADRatio("AD", 0, "%"),
 
-    ASPerLv,
+    /** Attack Speed */
+    AS(3), ASPerLv(3), ASRatio("攻撃速度", 0, "%"),
 
-    ASRatio("攻撃速度", 3, "%"),
+    /** life Steal */
+    LS("Life Steal", 0, "%"), LSPerLv, LSRatio,
 
-    ASReduction("AS減少", 0, "%"),
+    /** Critical Chance */
+    Critical("Critical Chanse", 0, "%"), CriticalPerLv, CriticalRatio,
 
-    AD,
+    // ==================================================
+    // Ability Related
+    // ==================================================
+    /** Ability Power */
+    AP, APPerLv, APRatio,
 
-    ADPerLv,
+    /** Cooldown Reduction */
+    CDR("CD減少", 0, "%"), CDRPerLv, CDRRatio,
 
-    ADRatio,
-
-    Critical("Critical Chanse", 0, "%"),
-
-    CriticalPerLv,
-
-    CriticalRatio,
-
-    LS("Life Steal", 0, "%"),
-
-    LSPerLv,
-
-    LSRatio,
+    /** Spell Vamp */
+    SV("Spell Vamp", 0, "%"), SVPerLv, SVRatio,
 
     Health("Health"),
 
@@ -71,33 +72,11 @@ public enum Status {
 
     MregRatio(2),
 
-    AP,
-
-    APPerLv,
-
-    APRatio,
-
-    SV("Spell Vamp", 0, "%"),
-
-    SVPerLv,
-
-    SVRatio,
-
-    CD(1),
-
-    CDPerLv,
-
-    CDR("CD減少", 0, "%"),
-
-    CDRPerLv,
-
-    CDRRatio,
-
-    AR,
-
-    ARPerLv,
-
-    ARRatio(AR.name, 3, "%"),
+    // ==================================================
+    // Defense Related
+    // ==================================================
+    /** Attack Damage Resistance */
+    AR, ARPerLv, ARRatio(AR.name, 3, "%"),
 
     MR,
 
@@ -162,6 +141,9 @@ public enum Status {
 
     EregRatio,
 
+    /** Cooldown */
+    CD, CDPerLv,
+
     Damage("与えたダメージ", 3, "%"),
 
     PhysicalDamage("物理DM"),
@@ -212,11 +194,15 @@ public enum Status {
 
     Taunt("タウント", 3, "秒"),
 
+    Suppression("サプレッション", 3, "秒"),
+
     Knockup("打ち上げ", 3, "秒"),
 
     Knockback("ノックバック"),
 
     Slow("スロー", 0, "%"),
+
+    ASSlow("攻撃速度低下", 0, "%"),
 
     Blind("ブラインド", 0, "%"),
 
@@ -263,6 +249,10 @@ public enum Status {
     BounusMS("増加移動速度"),
 
     EnemyChampion("敵Championの数"),
+
+    ReduceCooldown,
+
+    Percentage("", 0, "%"),
 
     Charge,
 
@@ -370,8 +360,12 @@ public enum Status {
         case RestoreMana:
             return name + "が" + (computed == 0 ? "" : computed) + "回復";
 
+        case ReduceCooldown:
+            return "CDが" + (computed == 0 ? "" : computed + "秒") + "解消";
+
         case ASRatio:
         case MSRatio:
+        case ADRatio:
         case ARRatio:
         case MRRatio:
         case ExperimentRatio:
