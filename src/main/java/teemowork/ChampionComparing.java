@@ -257,10 +257,12 @@ public class ChampionComparing extends Page {
          */
         private static class Icon extends CSS {
 
+            private int size = 44;
+
             {
                 display.inlineBlock();
-                box.size(40, px);
-                background.contain().size(44, px).horizontal(-2, px).vertical(-2, px);
+                box.size(size, px);
+                background.contain().size(size + 4, px).horizontal(-2, px).vertical(-2, px);
                 border.radius(5, px).color(50, 50, 50).width(1, px).solid();
                 text.verticalAlign.middle();
             }
