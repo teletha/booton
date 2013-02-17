@@ -1778,7 +1778,12 @@ public enum Skill {
         if (key == Passive) {
             return 0;
         }
-        return key == R && this != PhoenixStance ? 3 : 5;
+
+        if (this != PhoenixStance && (key == R || this == Takedown || this == Pounce || this == Swipe)) {
+            return 3;
+        } else {
+            return 5;
+        }
     }
 
     /**

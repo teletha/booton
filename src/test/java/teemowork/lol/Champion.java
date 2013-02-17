@@ -202,7 +202,10 @@ public class Champion {
     public static final Champion Nautilus = new Champion("Nautilus", StaggeringBlow, DredgeLine, TitansWrath, Riptide, DepthCharge);
 
     /** The champion name. */
-    public static final Champion Nidalee = new Champion("Nidalee", Prowl, JavelinToss, Bushwhack, PrimalSurge, AspectOfTheCougar, Takedown, Pounce, Swipe);
+    public static final Champion Nidalee = new Champion("Nidalee", Prowl, JavelinToss, Bushwhack, PrimalSurge, AspectOfTheCougar);
+
+    /** The champion name. */
+    public static final Champion NidaleeCougar = new Champion("Nidalee", true, Prowl, Takedown, Pounce, Swipe, AspectOfTheCougar);
 
     /** The champion name. */
     public static final Champion Nocturne = new Champion("Nocturne", UmbraBlades, Duskbringer, ShroudOfDarkness, UnspeakableHorror, Paranoia);
@@ -377,11 +380,24 @@ public class Champion {
      * @param name
      */
     Champion(String name, Skill... skills) {
+        this(name, false, skills);
+    }
+
+    /**
+     * <p>
+     * Create new champion.
+     * </p>
+     * 
+     * @param name
+     */
+    Champion(String name, boolean transformed, Skill... skills) {
         this.name = name;
         this.systemName = getSystemName().toLowerCase().replaceAll("[\\s'\\.]", "");
         this.skills = skills;
 
-        champions.add(this);
+        if (!transformed) {
+            champions.add(this);
+        }
     }
 
     /**

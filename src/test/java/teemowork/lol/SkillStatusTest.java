@@ -22,7 +22,7 @@ public class SkillStatusTest {
 
     @Test
     public void GetAndSet() throws Exception {
-        SkillStatus skill = new SkillStatus(null);
+        SkillStatus skill = new SkillStatus(null, null);
         assert skill.get(Range) == 0;
 
         skill.set(Range, 100);
@@ -31,21 +31,21 @@ public class SkillStatusTest {
 
     @Test
     public void Delegate() throws Exception {
-        SkillStatus previous = new SkillStatus(null);
+        SkillStatus previous = new SkillStatus(null, null);
         previous.set(Range, 100);
         assert previous.get(Range) == 100;
 
-        SkillStatus skill = new SkillStatus(previous);
+        SkillStatus skill = new SkillStatus(null, previous);
         assert skill.get(Range) == 100;
     }
 
     @Test
     public void Override() throws Exception {
-        SkillStatus previous = new SkillStatus(null);
+        SkillStatus previous = new SkillStatus(null, null);
         previous.set(Range, 100);
         assert previous.get(Range) == 100;
 
-        SkillStatus skill = new SkillStatus(previous);
+        SkillStatus skill = new SkillStatus(null, previous);
         skill.set(Range, 200);
         assert skill.get(Range) == 200;
         assert previous.get(Range) == 100;
@@ -53,7 +53,7 @@ public class SkillStatusTest {
 
     @Test
     public void description() throws Exception {
-        SkillStatus skill = new SkillStatus(null);
+        SkillStatus skill = new SkillStatus(null, null);
         skill.active("Test");
 
         List tokens = skill.active;
@@ -63,7 +63,7 @@ public class SkillStatusTest {
 
     @Test
     public void variable() throws Exception {
-        SkillStatus skill = new SkillStatus(null);
+        SkillStatus skill = new SkillStatus(null, null);
         skill.active("Test{1}");
         skill.variable(1, AD, 10, 10);
 
@@ -75,16 +75,13 @@ public class SkillStatusTest {
         assert token instanceof Variable;
 
         Variable variable = (Variable) token;
-        assert variable.id == 1;
         assert variable.getStatus() == AD;
-        assert variable.base == 10;
-        assert variable.diff == 10;
         assert variable.amplifiers.size() == 0;
     }
 
     @Test
     public void variable2() throws Exception {
-        SkillStatus skill = new SkillStatus(null);
+        SkillStatus skill = new SkillStatus(null, null);
         skill.active("Test{1}");
         skill.variable(1, SV, 10, 10);
 
@@ -96,10 +93,7 @@ public class SkillStatusTest {
         assert token instanceof Variable;
 
         Variable variable = (Variable) token;
-        assert variable.id == 1;
         assert variable.getStatus() == SV;
-        assert variable.base == 10;
-        assert variable.diff == 10;
         assert variable.amplifiers.size() == 0;
     }
 }
