@@ -1769,7 +1769,25 @@ public class Skill {
 
     /**
      * <p>
-     * Returns skill level size.
+     * Returns minimum skill level.
+     * </p>
+     * 
+     * @return
+     */
+    public int getMinLevel() {
+        if (key == Passive) {
+            return 1;
+        }
+
+        if (this == SpiderForm || this == HumanForm || this == TransformMercuryCannon || this == TransformMercuryHammer) {
+            return 1;
+        }
+        return 0;
+    }
+
+    /**
+     * <p>
+     * Returns maximum skill level.
      * </p>
      * 
      * @return
@@ -1777,6 +1795,10 @@ public class Skill {
     public int getMaxLevel() {
         if (key == Passive) {
             return 0;
+        }
+
+        if (this == SpiderForm || this == HumanForm || this == TransformMercuryCannon || this == TransformMercuryHammer) {
+            return 4;
         }
 
         if (this != PhoenixStance && (key == R || this == Takedown || this == Pounce || this == Swipe)) {
@@ -2538,7 +2560,7 @@ public class Skill {
 
         /** Elise */
         SpiderSwarm.update()
-                .passive("Human Form時に使用したスキルが敵ユニットに命中するとSpiderlingのチャージを1得る。Spider Formになるとチャージ数に比例したSpiderlingを召喚する。召喚される数はSpider Form(Ult)のレベルに比例し増加する。召喚されたSpiderlingは死亡するとチャージが減るが、再度Human Formに戻ると再度チャージ状態に戻る。");
+                .passive("Human Form時に使用したスキルが敵ユニットに命中するとSpiderlingのチャージを1得る。Spider Formになるとチャージ数に比例したSpiderlingを召喚する。召喚される数はSpider Formのレベルに比例し増加する。召喚されたSpiderlingは死亡するとチャージが減るが、再度Human Formに戻ると再度チャージ状態に戻る。");
         Neurotoxin.update()
                 .active("対象の敵ユニットに毒を放ち{1}を与える。")
                 .variable(1, MagicDamage, 50, 45, amplify(TargetCurrentHealth, 8, 0, amplify(AP, 0.03)))
@@ -2581,7 +2603,11 @@ public class Skill {
                 .active("EliseとSpiderlingが上空に退避し(ターゲット不可になる)指定の方法で降下する。上空にいる間は射程内の視界を得る地面をクリックした場合: 最大2秒間上空に待機し、初期位置へ降下する。この間、敵ユニットをターゲットし裏側に降下できる。敵ユニットをクリックした場合: 即座に下降し裏側に降り立つ。")
                 .cd(26, -2)
                 .range(1075);
-        HumanForm.update().active("EliseがHuman Formに変身し射程550のRangedになる。").cd(4);
+        HumanForm.update()
+                .passive("通常攻撃に追加{1}が付与される。")
+                .variable(1, MagicDamage, 10, 10, ap(0.3))
+                .active("EliseがHuman Formに変身し射程550のRangedになる。")
+                .cd(4);
 
         /** Evelynn */
         ShadowWalk.update()
@@ -3051,27 +3077,60 @@ public class Skill {
                 .cd(80);
 
         /** Jayce */
-        HextechCapacitor.update().passive("Transformを使用すると1.25秒の間移動速度が40だけ増加し、ユニットをすり抜けるようになる。");
+        HextechCapacitor.update()
+                .passive("Transformを使用すると1.25秒の間{1}増加し、ユニットをすり抜けるようになる。")
+                .variable(1, MS, 40)
+                .conditional(1);
         ToTheSkies.update()
-                .passive("kies!(Mercury Hammer)")
-                .active("対象の敵ユニットに飛びかかり、対象と周囲の敵ユニットに物理DMとスロー(2s)を与える。物理DM: 20/65/110/155/200 + [増加攻撃力 × 100%]スロー: 30/35/40/45/50%消費MN: 40/45/50/55/60 CD: 16/14/12/10/8s Range: 600Shock Blast(Mercury Cannon)Active:指定方向に雷のオーブを飛ばし、敵ユニットに命中するか一定距離で爆発し、周囲の敵ユニット物理DMを与える。オーブがAcceleration Gateによって生成されたゲートを通過した場合、弾速、射程距離、爆発範囲、与えるDMが各40%増加する。")
+                .active("対象の敵ユニットに飛びかかり、対象と周囲の敵ユニットに{1}と2秒間{2}を与える。")
+                .variable(1, PhysicalDamage, 20, 45, bounusAD(1))
+                .variable(2, Slow, 30, 5)
+                .mana(40, 5)
+                .cd(16, -2)
+                .range(600);
+        ShockBlast.update()
+                .active("指定方向に雷のオーブを飛ばし、敵ユニットに命中するか一定距離で爆発し、周囲の敵ユニット{1}を与える。オーブがAcceleration Gateによって生成されたゲートを通過した場合、弾速、射程距離、爆発範囲、与えるDMが各40%増加する。{2}")
+                .variable(1, PhysicalDamage, 60, 55, bounusAD(1.2))
+                .variable(2, PhysicalDamage, 84, 77, bounusAD(1.68))
                 .mana(55, 5)
                 .cd(8)
-                .range(1050, 420);
+                .range(1050);
         LightningField.update()
-                .passive("g Field(Mercury Hammer)Passive:通常攻撃ごとにマナを回復する。回復MN: 6/8/10/12/14")
-                .active("4秒間雷のオーラを身にまとい、周囲の敵ユニットに毎秒魔法DMを与える。毎秒魔法DM: 25/42.5/60/77.5/95 (+0.25) 効果範囲: 285消費MN: 40 CD: 10sHyper Charge(Mercury Cannon)Active:Jayceの攻撃速度が最大まで上昇する。3回通常攻撃を行うと効果が解消される。また効果中は通常攻撃で与えるダメージが変化する。")
+                .passive("通常攻撃ごとに{1}する。")
+                .variable(1, RestoreMana, 6, 2)
+                .active("4秒間雷のオーラを身にまとい、{2}の敵ユニットに毎秒{3}を与える。")
+                .variable(2, Radius, 285)
+                .variable(3, MagicDamage, 25, 17.5, ap(0.25))
+                .mana(40)
+                .cd(10);
+        HyperCharge.update()
+                .active("Jayceの攻撃速度が最大まで上昇する。3回通常攻撃を行うと効果が解消される。また効果中は通常攻撃で与えるダメージが{1}%になる。")
+                .variable(1, Count, 70, 15)
                 .mana(40)
                 .cd(14, -2);
         ThunderingBlow.update()
-                .passive("ng Blow(Mercury Hammer)")
-                .active("対象の敵ユニットに最大HPに比例した魔法DMと短い距離のノックバックを与える。魔法DM: [増加攻撃力 × 100%] + [対象の最大HP × 8/11/14/17/20%](Minionに対しては200/300/400/500/600DMが上限) ノックバック距離:消費MN: 40/50/60/70/80 CD: 14/13/12/11/10s Range: 240Acceleration Gate(Mercury Cannon)Active:4秒間持続するゲート（通りぬけ可能）を生成し、触れた味方ユニットは移動速度が3秒間上昇する。移動速度は3秒かけて元に戻る。")
+                .active("対象の敵ユニットに{1}と短い距離のノックバックを与える。ミニオンやモンスターに対しては{2}が上限。")
+                .variable(1, MagicDamage, 0, 0, bounusAD(1), amplify(TargetHealth, 8, 3))
+                .variable(2, MagicDamage, 200, 100)
+                .mana(40)
+                .cd(14, -1)
+                .range(240);
+        AccelerationGate.update()
+                .active("4秒間持続するゲート（通りぬけ可能）を生成し、触れた味方ユニットは3秒間{1}上昇する。移動速度は3秒かけて元に戻る。")
+                .variable(1, MSRatio, 30, 5)
                 .mana(50)
                 .cd(14, -1)
                 .range(650);
         TransformMercuryCannon.update()
-                .passive("m: Mercury Cannon(Mercury Hammer)")
-                .active("Jayceの射程が500(ranged)になる。また、次の通常攻撃に敵のARとMRを低下する効果(5s)を付与する。低下AR/MR: 10/15/20/25%消費MN: 無し CD: 6sTransform: Mercury Hammer(Mercury Cannon)Active:Jayceの射程が125(melee)になり、その間はARとMRが増加する。また、次の通常攻撃に追加魔法DMを付与する。")
+                .active("Jayceの射程が500(Ranged)になる。また、次の通常攻撃に５秒間{1}と{2}を付与する。")
+                .variable(1, ARReductionRatio, 10, 5)
+                .variable(2, MRReductionRatio, 10, 5)
+                .cd(6);
+        TransformMercuryHammer.update()
+                .active("Jayceの射程が125(Melee)になり、その間は{1}と{2}を得る。また、次の通常攻撃に追加{3}を付与する。")
+                .variable(1, AR, 5, 10)
+                .variable(2, MR, 5, 10)
+                .variable(3, MagicDamage, 20, 40)
                 .cd(6);
 
         /** Karma */
@@ -3646,7 +3705,10 @@ public class Skill {
                 .variable(2, Radius, 300)
                 .cd(6);
         AspectOfTheCougar.update()
-                .active("HumanからCougarに、CougarからHumanに変身する。Cougar時はスキルの効果が変わり、通常攻撃の射程距離が125(Melee)になり、移動速度が20、ARとMRが10/20/30上昇する。Cougarスキルはこのスキルのレベルに比例し威力が増加する。")
+                .active("HumanからCougarに、CougarからHumanに変身する。Cougar時はスキルの効果が変わり、通常攻撃の射程距離が125(Melee)になり、{1}、{2}、{3}を得る。Cougarスキルはこのスキルのレベルに比例し威力が増加する。")
+                .variable(1, MS, 20)
+                .variable(2, AR, 10, 10)
+                .variable(3, MR, 10, 10)
                 .cd(4);
 
         /** Nocturne */

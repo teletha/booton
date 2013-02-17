@@ -79,7 +79,10 @@ public class Champion {
     public static final Champion Draven = new Champion("Draven", WickedBlades, SpinningAxe, BloodRush, StandAside, WhirlingDeath);
 
     /** The champion name. */
-    public static final Champion Elise = new Champion("Elise", SpiderSwarm, Neurotoxin, VolatileSpiderling, Cocoon, SpiderForm, VenomousBite, SkitteringFrenzy, Rappel, HumanForm);
+    public static final Champion Elise = new Champion("Elise", SpiderSwarm, Neurotoxin, VolatileSpiderling, Cocoon, SpiderForm);
+
+    /** The champion name. */
+    public static final Champion EliseSpider = new Champion("Elise", true, SpiderSwarm, VenomousBite, SkitteringFrenzy, Rappel, HumanForm);
 
     /** The champion name. */
     public static final Champion Evelynn = new Champion("Evelynn", ShadowWalk, HateSpike, DarkFrenzy, Ravage, AgonysEmbrace);
@@ -130,7 +133,10 @@ public class Champion {
     public static final Champion Jax = new Champion("Jax", RelentlessAssault, LeapStrike, Empower, CounterStrike, GrandmastersMight);
 
     /** The champion name. */
-    public static final Champion Jayce = new Champion("Jayce", HextechCapacitor, ToTheSkies, LightningField, ThunderingBlow, TransformMercuryCannon, ShockBlast, HyperCharge, AccelerationGate, TransformMercuryHammer);
+    public static final Champion Jayce = new Champion("Jayce", HextechCapacitor, ToTheSkies, LightningField, ThunderingBlow, TransformMercuryCannon);
+
+    /** The champion name. */
+    public static final Champion JayceCannon = new Champion("Jayce", true, HextechCapacitor, ShockBlast, HyperCharge, AccelerationGate, TransformMercuryHammer);
 
     /** The champion name. */
     public static final Champion Karma = new Champion("Karma", InnerFlame, HeavenlyWave, SpiritBond, SoulShield, Mantra);
@@ -689,6 +695,17 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 335);
+        EliseSpider.update(P0000)
+                .set(Health, 395, 80)
+                .set(Hreg, 4.7, 0.6)
+                .set(Mana, 240, 50)
+                .set(Mreg, 6.8, 0.65)
+                .set(AD, 47.5, 3)
+                .set(AS, 0.625, 1.75)
+                .set(AR, 12.65, 3.35)
+                .set(MR, 30, 0)
+                .set(Range, 125)
+                .set(MS, 335);
         Evelynn.update(P0000)
                 .set(Health, 414, 86)
                 .set(Hreg, 6.95, 0.55)
@@ -873,6 +890,17 @@ public class Champion {
                 .set(AR, 12.5, 3.5)
                 .set(MR, 30, 0)
                 .set(Range, 125)
+                .set(MS, 335);
+        JayceCannon.update(P0000)
+                .set(Health, 420, 90)
+                .set(Hreg, 6, 0.8)
+                .set(Mana, 240, 40)
+                .set(Mreg, 7, 0.7)
+                .set(AD, 46.5, 3.5)
+                .set(AS, 0.658, 3)
+                .set(AR, 12.5, 3.5)
+                .set(MR, 30, 0)
+                .set(Range, 500)
                 .set(MS, 335);
         Karma.update(P0000)
                 .set(Health, 410, 86)
@@ -1133,6 +1161,17 @@ public class Champion {
                 .set(AR, 11, 3.5)
                 .set(MR, 30, 10.75)
                 .set(Range, 525)
+                .set(MS, 335);
+        NidaleeCougar.update(P0000)
+                .set(Health, 370, 90)
+                .set(Hreg, 5.0, 0.6)
+                .set(Mana, 220, 45)
+                .set(Mreg, 7, 0.5)
+                .set(AD, 49, 3.5)
+                .set(AS, 0.672, 3.22)
+                .set(AR, 11, 3.5)
+                .set(MR, 30, 10.75)
+                .set(Range, 125)
                 .set(MS, 335);
         Nocturne.update(P0000)
                 .set(Health, 430, 85)
