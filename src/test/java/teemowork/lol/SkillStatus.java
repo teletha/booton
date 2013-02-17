@@ -32,7 +32,7 @@ public class SkillStatus {
     private NativeArray<Variable> variables;
 
     /** The skill cost type. */
-    private Status cost;
+    private Variable cost;
 
     /** The skill type. */
     private SkillType type;
@@ -62,7 +62,6 @@ public class SkillStatus {
             passive = new ArrayList();
             active = new ArrayList();
             type = SkillType.Active;
-            cost = Mana;
         }
     }
 
@@ -232,7 +231,7 @@ public class SkillStatus {
      * @param second A second amplifier.
      * @return Chainable API.
      */
-    private SkillStatus variable(int id, Status status, VariableResolver resolver, Variable first, Variable second) {
+    SkillStatus variable(int id, Status status, VariableResolver resolver, Variable first, Variable second) {
         Variable variable = variables.get(id);
         variable.setStatus(status);
         variable.setResolver(resolver);
@@ -307,10 +306,25 @@ public class SkillStatus {
      * @param diff A diff cost.
      */
     SkillStatus cost(Status type, double base, double diff) {
-        values.set(Cost.ordinal(), base);
-        values.set(CostPerLv.ordinal(), diff);
-        cost = type;
+        return cost(type, new Diff(base, diff), null);
+    }
 
+    /**
+     * <p>
+     * Set skill cost.
+     * </p>
+     * 
+     * @param base A base cost.
+     * @param diff A diff cost.
+     */
+    SkillStatus cost(Status type, VariableResolver resolver, Variable amplifier) {
+        cost = new Variable();
+        cost.setStatus(type);
+        cost.setResolver(resolver);
+
+        if (amplifier != null) {
+            cost.amplifiers.add(amplifier);
+        }
         return this;
     }
 
@@ -321,7 +335,7 @@ public class SkillStatus {
      * 
      * @return
      */
-    public Status getCostType() {
+    public Variable getCost() {
         return cost;
     }
 

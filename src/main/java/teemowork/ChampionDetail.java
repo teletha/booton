@@ -297,15 +297,8 @@ public class ChampionDetail extends Page {
                 icon.removeClass(SkillStyle.Active.class);
             }
 
-            String costLabel = status.getCostType().name;
-
-            if (status.getType() == SkillType.Toggle) {
-                costLabel = "毎秒" + costLabel;
-            }
-
             buildValues(cooldown, "CD", status, CD, build.get(CDR).value);
-            buildValues(cost, costLabel, status, Cost, 0);
-            cost.append(status.getCostType().unit);
+            writeCost(cost, status, 0);
             buildValues(range, "RANGE", status, Range, 0);
 
             // PASSIVE
@@ -336,6 +329,49 @@ public class ChampionDetail extends Page {
                 } else {
                     active.append(token.toString());
                 }
+            }
+        }
+
+        private void writeCost(jQuery root, SkillStatus status, int skillLevel) {
+            root.empty();
+
+            Variable cost = status.getCost();
+
+            if (cost != null) {
+                VariableResolver resolver = cost.getResolver();
+                String label = cost.getStatus().name;
+
+                if (status.getType() == SkillType.Toggle) {
+                    label = "毎秒" + label;
+                }
+
+                double[] values = resolver.enumerate(resolver.estimateSize(skill.getMaxLevel()));
+
+                root.child(ValueStyles.Label.class).text(label);
+
+                for (int i = 0; i < values.length; i++) {
+                    jQuery element = root.child(ValueStyles.Value.class).text(values[i] == -1 ? "∞" : values[i]);
+
+                    if (values.length != 1 && i == build.getLevel(this.skill) - 1) {
+                        element.addClass(ValueStyles.Current.class);
+                    }
+
+                    if (i != values.length - 1) {
+                        root.child(ValueStyles.Separator.class).text("/");
+                    }
+                }
+
+                if (!cost.amplifiers.isEmpty()) {
+                    root.append("(");
+
+                    for (Variable amplifier : cost.amplifiers) {
+                        writeAmplifier(root, amplifier, skillLevel);
+                    }
+
+                    root.append(")");
+                }
+
+                root.append(cost.getStatus().unit);
             }
         }
 

@@ -166,7 +166,7 @@ public class Champion {
     public static final Champion LeBlanc = new Champion("LeBlanc", MirrorImage, SigilOfSilence, Distortion, EtherealChains, Mimic);
 
     /** The champion name. */
-    public static final Champion LeeSin = new Champion("Lee Sin", Flurry, SonicWave, Safeguard, Tempest, DragonsRage, ResonatingStrike, IronWill, Cripple);
+    public static final Champion LeeSin = new Champion("Lee Sin", Flurry, SonicWave, ResonatingStrike, Safeguard, IronWill, Tempest, Cripple, DragonsRage);
 
     /** The champion name. */
     public static final Champion Leona = new Champion("Leona", Sunlight, ShieldOfDaybreak, Eclipse, ZenithBlade, SolarFlare);
