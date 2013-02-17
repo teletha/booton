@@ -17,7 +17,9 @@ import teemowork.lol.VariableResolver.Fixed;
 import teemowork.lol.VariableResolver.Per1Level;
 import teemowork.lol.VariableResolver.Per2Level;
 import teemowork.lol.VariableResolver.Per3Level;
+import teemowork.lol.VariableResolver.Per3Level2;
 import teemowork.lol.VariableResolver.Per4Level;
+import teemowork.lol.VariableResolver.Per5Level;
 import teemowork.lol.VariableResolver.Per6Level;
 
 /**
@@ -1775,7 +1777,7 @@ public class Skill {
      * @return
      */
     public int getMinLevel() {
-        if (key == Passive) {
+        if (key == Passive || this == Mantra) {
             return 1;
         }
 
@@ -1795,6 +1797,10 @@ public class Skill {
     public int getMaxLevel() {
         if (key == Passive) {
             return 0;
+        }
+
+        if (this == Mantra) {
+            return 1;
         }
 
         if (this == SpiderForm || this == HumanForm || this == TransformMercuryCannon || this == TransformMercuryHammer) {
@@ -2518,7 +2524,7 @@ public class Skill {
                 .type(SkillType.Toggle);
         Masochism.update()
                 .active("5秒間{1}を得る。")
-                .variable(1, AD, 40, 15, amplify(MissingHealth, 0.4, 0.15))
+                .variable(1, AD, 40, 15, amplify(MissingHealthRatio, 0.4, 0.15))
                 .cost(Health, 35, 10)
                 .cd(7);
         Sadism.update()
@@ -2956,123 +2962,212 @@ public class Skill {
                 .passive("ユニットをすり抜けるようになり、{1}を得る。レベル1、3、6、9、12、15、18で増加割合が上昇する。")
                 .variable(1, AD, 0, 0, amplify(BounusMS, new Per2Level(0.1, 0.025)));
         Rampage.update()
-                .active("武器を振り回し周囲の敵ユニットに物理DMを与える。このスキルが敵ユニットに命中した場合、Hecarimは短時間の間1スタックを得て、1スタックにつきこのスキルのCDが1秒低減される(最大2スタック)。スタックは6秒間増加がないと0になる。minionに与えるダメージは通常の66%に減少する。")
+                .active("武器を振り回し{2}の敵ユニットに{1}を与える。このスキルが敵ユニットに命中した場合、Hecarimは短時間の間1スタックを得て、1スタックにつきこのスキルのCDが1秒低減される(最大2スタック)。スタックは6秒間増加がないと0になる。ミニオンやモンスターには{3}を与える。")
+                .variable(1, PhysicalDamage, 50, 35, bounusAD(0.6))
+                .variable(2, Radius, 200)
+                .variable(3, PhysicalDamage, 18.5, 11.5, bounusAD(0.2))
                 .mana(25)
-                .cd(4)
-                .range(200);
+                .cd(4);
         SpiritOfDread.update()
-                .active("4秒間周囲の敵ユニットに毎秒魔法DMを与える。この効果を受けている敵ユニットがダメージを受けた場合、そのダメージの値に応じてHecarimのHPが回復する。")
+                .active("4秒間{1}の敵ユニットに毎秒{2}を与える。この効果を受けている敵ユニットがダメージを受けた場合、そのダメージの値に応じて{3}する。")
+                .variable(1, Radius, 575)
+                .variable(2, MagicDamage, 20, 11.25, ap(0.2))
+                .variable(3, RestoreHealth, 0, 0, amplify(Damage, 10, 5))
                 .mana(50, 10)
                 .cd(14);
         DevastatingCharge.update()
-                .active("Hecarimの移動速度が25%増加し、その後3秒かけて移動速度が徐々に増加(最大75%増加)、更にその後1秒間その移動速度を維持する。また次の通常攻撃のダメージはこのスキルを使用してからHecarimが移動した距離に比例したものに変更され、ノックバックが付与される。")
+                .active("{1}増加し、その後3秒かけて移動速度が徐々に増加(最大75%増加)、更にその後1秒間その移動速度を維持する。また次の通常攻撃のダメージはこのスキルを使用してからHecarimが移動した距離に比例したものに変更され、{2}が付与される。最小で{3}、最大で{4}。")
+                .variable(1, MSRatio, 20)
+                .variable(2, Knockback, 300)
+                .variable(3, PhysicalDamage, 40, 35, bounusAD(0.5))
+                .variable(4, PhysicalDamage, 80, 70, bounusAD(1))
                 .mana(60)
                 .cd(24, -2);
         OnslaughtOfShadows.update()
-                .active("亡霊の騎兵隊を従え指定地点に突撃し、Hecarimと騎兵に触れた敵ユニットに魔法DMを与える。指定した地点に到着すると衝撃波を放ち、周囲の敵ユニットに魔法DMと恐怖状態(1s)を与える。Hecarimが指定した地点に到着しても、騎兵隊は常に最大距離まで突撃する。恐怖状態に陥ったユニットは強制的にHecarimから遠ざかるように移動する。（魅了状態の逆）この時、Hecarimとの距離に比例して移動速度が変化する。")
+                .active("亡霊の騎兵隊を従え指定地点に突撃し、Hecarimと騎兵に触れた敵ユニットに{1}を与える。指定した地点に到着すると衝撃波を放ち、{2}の敵ユニットに{3}と{4}を与える。Hecarimが指定した地点に到着しても、騎兵隊は常に最大距離まで突撃する。" + Terrified + "に陥ったユニットは強制的にHecarimから遠ざかるように移動する。この時、Hecarimとの距離に比例して移動速度が変化する。")
+                .variable(1, MagicDamage, 100, 100, ap(0.8))
+                .variable(2, Radius, 0)
+                .variable(3, MagicDamage, 50, 75, ap(0.4))
+                .variable(4, Terrified, 1)
                 .mana(100)
-                .cd(140, -20);
+                .cd(140, -20)
+                .range(1000);
 
         /** Heimerdinger */
-        TechmaturgicalRepairBots.update().passive("周囲の味方ユニットとTurretのHPregを増加させる。レベル1、6、11、15でベースの増加HPRegが上昇する。");
+        TechmaturgicalRepairBots.update()
+                .passive("{1}の味方ユニットとTurretは{2}を得る。レベル1、6、11、15でベースの増加HPRegが上昇する。")
+                .variable(1, Radius, 800)
+                .variable(2, Hreg, new Per5Level(10, 5));
         H28GEvolutionTurret.update()
-                .active("指定地点にTurret(砲台、近くの敵に自動攻撃・魔法DM)を設置する。使用時にスタックを消費する。設置後6秒間はTurretの攻撃速度が1.5倍になる。25秒毎にスタックが1つ増加し最大2つ(Lv3以降)までスタックされる。スタック増加時間はCD低減の影響を受ける。Turretが塔に与えるダメージは半分。Turret: Lv1/Lv2/Lv3/Lv4/Lv5消費MN: 70/80/90/100/110 + 1スタック CD: 1s Range: 250「Turret」最大HP: 295 + [15 × Lv] 魔法DM: 30/38/46/54/62 (+0.2) Range: 525AR: 30 + [1 × Lv] MR: 80 + [1 × Lv] AS: 1.250 MS: 0 視界範囲: 625【備考】Debuff(CCのみ)を無効化、Heimerdingerが攻撃するor攻撃されている場合、その対象を優先で攻撃Lv2.攻撃したユニットのAR,MRを1低下させる。AR,MR低下は2秒間持続し、50回までスタックする。Lv3.Turretの最大スタック数と設置できる上限が2に増える。Lv4.Turretの最大HP+125。Lv5.50%のスプラッシュダメージが付与される。")
+                .active("指定地点にTurretを設置する。使用時にスタックを消費する。設置後6秒間はTurretの攻撃速度が1.5倍になる。{1}毎にスタックが1つ増加し最大2つまでスタックされる。スタック増加時間はCD低減の影響を受ける。Turretが塔に与えるダメージは半分になる。Debuff(CCのみ)を無効化、Heimerdingerが攻撃するor攻撃されている場合、その対象を優先で攻撃。Lv2.攻撃したユニットに{6}と{7}を与える。この効果は2秒間持続し、50回までスタックする。Lv3.Turretの最大スタック数と設置できる上限が2に増える。Lv4.Turretの最大HP+125。Lv5.50%のスプラッシュダメージが付与される。　HP:{2} ダメージ:{3} 射程:525 AR:{4} MR:{5} AS:1.25 視界:625")
+                .variable(1, CDRAwareTime, 25)
+                .variable(2, Count, 295, 0, amplify(Lv, 15))
+                .variable(3, MagicDamage, 30, 8, ap(0.2))
+                .variable(4, Count, 30, 0, amplify(Lv, 1))
+                .variable(5, Count, 80, 0, amplify(Lv, 1))
+                .variable(6, ARReduction, 1)
+                .variable(7, MRReduction, 1)
                 .mana(70, 10)
                 .cd(1)
-                .range(525);
-        HextechMicroRockets.update().active("視界内にいる最も近い敵ユニット3体に魔法DMを与える。").mana(65, 20).cd(10).range(1000);
+                .range(250);
+        HextechMicroRockets.update()
+                .active("視界内にいる最も近い敵ユニット3体に{1}を与える。")
+                .variable(1, MagicDamage, 85, 50, ap(0.55))
+                .mana(65, 20)
+                .cd(10)
+                .range(1000);
         CH1ConcussionGrenade.update()
-                .active("指定地点に手榴弾を投げ、破裂した箇所にいる敵ユニットに魔法DMとブラインド効果を与え、真ん中のユニットにはさらにスタン(1.5s)を与える。また指定地点の視界を得る。")
+                .active("指定地点に手榴弾を投げ、破裂した{1}にいる敵ユニットに{2}と{3}を与え、真ん中のユニットにはさらに{4}を与える。また指定地点の視界を得る。")
+                .variable(1, Radius, 250)
+                .variable(2, MagicDamage, 80, 55, ap(0.6))
+                .variable(3, Blind, 1, 0.5)
+                .variable(4, Stun, 1)
                 .mana(80, 10)
                 .cd(13, -1)
                 .range(925);
         UPGRADE.update()
-                .passive("HeimerdingerのスキルのCDが短縮される。CD低減: 10/15/20%")
-                .active("設置したTurretのHPが最大まで回復し、10秒間Turretの攻撃にスロー(20/25/30%)が付与され、Hextech Micro-Rocketsの同時攻撃可能数が5体に増加し、CH-1 Concussion Grenadeの弾速が増加(+250)する。")
+                .passive("{1}を得る。")
+                .variable(1, CDR, 10, 5)
+                .active("設置したTurretのHPが最大まで回復し、10秒間Turretの攻撃に{2}が付与され、Hextech Micro-Rocketsの同時攻撃可能数が5体に増加し、CH-1 Concussion Grenadeの弾速が増加(+250)する。")
+                .variable(2, Slow, 20, 5)
                 .mana(90)
                 .cd(120, -15);
 
         /** Irelia */
         IonianFervor.update()
-                .passive("Ireliaの視界内(範囲1200)に敵Championがいる数に応じてCC(Stun, Slow, Taunt, Fear, Snare, Silence, Blind)の効果時間が短くなる。効果の上限は最大3人まで。");
+                .passive("Ireliaの視界内(範囲1200)に敵Championがいる数に応じて{1}を得る。効果の上限は最大3人まで。")
+                .variable(1, Tenacity, new Fixed(new double[] {10, 25, 40}))
+                .conditional(1);
         Bladesurge.update()
-                .active("対象の敵ユニットに突進し、物理DMを与える。このスキルで敵を倒したとき、このスキルのCDが解消されると共にManaが35回復する。また、このスキルはOn-Hit Effectsの影響を受ける。")
+                .active("対象の敵ユニットに突進し、{1}を与える。このスキルで敵を倒したとき、このスキルのCDが解消されると共にManaが35回復する。また、このスキルはOn-Hit Effectsの影響を受ける。")
+                .variable(1, PhysicalDamage, 20, 30, ad(1))
                 .mana(60, 5)
                 .cd(14, -2)
                 .range(650);
         HitenStyle.update()
-                .passive("通常攻撃を行う度にHPが回復する。回復HP: 5/7/9/11/13")
-                .active("6秒間通常攻撃にTrueDMが付与され、PassiveのHP回復量が倍になる。")
+                .passive("通常攻撃を行う度に{1}する。")
+                .variable(1, RestoreHealth, 5, 2)
+                .active("6秒間通常攻撃に{2}が付与され、PassiveのHP回復量が倍になる。")
+                .variable(2, TrueDamage, 15, 15)
                 .mana(40)
                 .cd(15);
         EquilibriumStrike.update()
-                .active("対象の敵ユニットに魔法DMを与える。対象の残HP%がIreliaより高かった場合スタンを与え、低かった場合はスロー(60%)を与える。")
+                .active("対象の敵ユニットに{1}を与える。対象の残HP%がIreliaより高かった場合{2}を与え、低かった場合は{4}間{3}を与える。")
+                .variable(1, MagicDamage, 80, 50)
+                .variable(2, Stun, 1, 0.25)
+                .variable(3, Slow, 60, 0)
+                .variable(4, Time, 1, 0.25)
                 .mana(50, 5)
                 .cd(8)
                 .range(425);
         TranscendentBlades.update()
-                .active("指定方向に貫通する刃を飛ばし、当たった敵ユニットに物理DMを与える。このスキルは15秒の間、4回まで連続して使用できる(但し、一度使用する度に0.5秒のCDが発生する)。2〜4発目はマナコスト無しで使用可能。また、与えたダメージの10%(Championに対しては25%)が回復する。")
+                .active("指定方向に貫通する刃を飛ばし、当たった敵ユニットに{1}を与える。このスキルは15秒の間、4回まで連続して使用できる(但し、一度使用する度に0.5秒のCDが発生する)。2〜4発目はマナコスト無しで使用可能。ミニオンやモンスターにダメージを与えると{2}し、Championにダメージを与えると{3}する。")
+                .variable(1, PhysicalDamage, 80, 40, ap(0.5), bounusAD(0.6))
+                .variable(2, RestoreHealth, 0, 0, amplify(Damage, 10))
+                .variable(3, RestoreHealth, 0, 0, amplify(Damage, 25))
                 .mana(100)
                 .cd(70, -10)
                 .range(1000);
 
         /** Janna */
-        Tailwind.update().passive("すべての味方Championの移動速度を3%増加させる。");
+        Tailwind.update().passive("すべての味方Championは{1}増加する。").variable(1, MSRatio, 3);
         HowlingGale.update()
-                .active("指定方向に竜巻を発生させ、触れた敵ユニットに魔法DMと打ち上げ効果を与える。竜巻は設置後に再度スキル使用ですぐに飛ばすことができるが、溜めた時間に比例して魔法DM、射程距離、打ち上げ時間が増加する。")
+                .active("指定方向に竜巻を発生させ、触れた敵ユニットに{1}と{2}を与える。竜巻は設置後に再度スキル使用ですぐに飛ばすことができるが、溜めた時間に比例して魔法DM、射程距離、打ち上げ時間が増加する。")
+                .variable(1, MagicDamage, 60, 25, ap(0.75), amplify(Duration, 25))
+                .variable(2, Knockup, 0.8, 0, amplify(Duration, 0.1))
                 .mana(90, 15)
                 .cd(14, -1)
                 .range(1100);
         Zephyr.update()
-                .passive("自身の移動速度が増加しユニットを通過できるようになる。増加MS: 4/7/10/13/16%")
-                .active("対象の敵ユニットに魔法DMとスロー(3s)を与える。またこのスキルがCDの間はPassiveの効果が無くなる。")
+                .passive("{1}増加しユニットを通過できるようになる。")
+                .variable(1, MSRatio, 4, 3)
+                .active("対象の敵ユニットに{2}と3秒間{3}を与える。またこのスキルがCDの間はPassiveの効果が無くなる。")
+                .variable(2, MagicDamage, 60, 55, ap(0.6))
+                .variable(3, Slow, 24, 6)
                 .mana(40, 10)
                 .cd(12, -1)
                 .range(600);
         EyeOfTheStorm.update()
-                .active("対象の味方Championか塔に5秒間シールドを付与する。シールドが持続している間は対象の攻撃力を5秒間増加させる。")
+                .active("対象の味方Championか塔に5秒間{1}を付与する。シールドが持続している間は対象は{2}を得る。")
+                .variable(1, Shield, 80, 40, ap(0.9))
+                .variable(2, AD, 14, 9)
                 .mana(70, 10)
                 .cd(10)
                 .range(800);
-        Monsoon.update().active("周囲の敵ユニットを吹き飛ばし4秒間詠唱する。詠唱中は周囲の味方ユニットのHPを毎秒回復する。").mana(150, 75).cd(150, -15);
+        Monsoon.update()
+                .active("{1}の敵ユニットを{2}して4秒間詠唱する。詠唱中は{1}の味方ユニットは毎秒{3}する。")
+                .variable(1, Radius, 725)
+                .variable(2, Knockback, 875)
+                .variable(3, RestoreHealth, 70, 40, ap(0.35))
+                .mana(150, 75)
+                .cd(150, -15);
 
         /** Jarvan IV */
         MartialCadence.update()
                 .passive("通常攻撃に{1}(最大400DM)が付与される。同一の対象には6秒に一度しか発動しない。レベル1、7、13で追加物理DMの増加値が上昇する。")
                 .variable(1, PhysicalDamage, 0, 0, amplify(TargetCurrentHealth, new Per6Level(6, 2)));
         DragonStrike.update()
-                .active("槍を突き出して直線上の敵ユニットに物理DMを与え、3秒間ARを低下させる。また、Demacian Standardの旗にヒットした場合、旗の位置まで突進し、進路上の敵ユニットに打ち上げ(0.75s)を与える。")
+                .active("槍を突き出して直線上の敵ユニットに{1}を与え、3秒間{2}を与える。また、Demacian Standardの旗にヒットした場合、旗の位置まで突進し、進路上の敵ユニットに{3}を与える。")
+                .variable(1, PhysicalDamage, 70, 45, bounusAD(1.1))
+                .variable(2, ARReductionRatio, 10, 4)
+                .variable(3, Knockup, 0.75)
                 .mana(45, 5)
                 .cd(10, -1)
                 .range(770);
         GoldenAegis.update()
-                .active("自身に5秒間ダメージを軽減するシールドを付与すると同時に、周囲の敵ユニットにスロー(2s)を与える。シールドの耐久値は周囲にいる敵Championの数に比例して増加する。")
+                .active("5秒間{1}を付与すると同時に、{2}の敵ユニットに２秒間{3}を与える。シールドの耐久値は周囲にいる敵Championの数に比例して増加する。")
+                .variable(1, Shield, 50, 40, amplify(EnemyChampion, 20, 5))
+                .variable(2, Radius, 600)
+                .variable(3, Slow, 15, 5)
                 .mana(65)
                 .cd(20, -2);
         DemacianStandard.update()
-                .passive("Jarvan IVの攻撃速度とARが増加する。増加攻撃速度: 10/13/16/19/22% 増加AR: 10/13/16/19/22")
-                .active("指定地点に旗を投げ、範囲内の敵ユニットに魔法DMを与える。旗は8秒間その場に残り視界を確保するとともに、周囲の味方ChampionにPassiveの効果を与える。")
+                .passive("{1}増加し{2}を得る。")
+                .variable(1, ASRatio, 10, 3)
+                .variable(2, AR, 10, 3)
+                .active("指定地点に旗を投げ、{3}の敵ユニットに{4}を与える。旗は8秒間その場に残り視界を確保するとともに、{5}の味方ChampionにPassiveの効果を与える。(Jarvan IV自身はPassiveと合わせて倍の効果を受ける)")
+                .variable(3, Radius, 150)
+                .variable(4, MagicDamage, 60, 45, ap(0.8))
+                .variable(5, Radius, 1200)
                 .mana(55)
                 .cd(13)
                 .range(830);
         Cataclysm.update()
-                .active("対象の敵Championまで跳躍して物理DMを与え、3.5秒間その周囲に通行不可能の円形の地形を作る。再度このスキルを使用すると地形を破壊できる。")
+                .active("対象の敵Championまで跳躍して{1}を与え、3.5秒間その周囲に通行不可能の円形の地形を作る。再度このスキルを使用すると地形を破壊できる。")
+                .variable(1, PhysicalDamage, 200, 125, bounusAD(1.5))
                 .mana(100, 25)
                 .cd(120, -15)
                 .range(650);
 
         /** Jax */
         RelentlessAssault.update()
-                .passive("通常攻撃を行う度にスタックが1増加し、スタック数に比例して攻撃速度増加(最大6スタック)。スタックは2.5秒増加がないと0になる。またレベルで1スタック毎の増加攻撃速度が上昇する。");
-        LeapStrike.update().active("対象のユニットまで飛びかかる。対象が敵ユニットの場合、物理DMを与える。").mana(65).cd(10, -1).range(700);
-        Empower.update().active("使用後に最初に行った通常攻撃かLeap Strikeに追加魔法DMを付与する。建物には無効。").mana(30).cd(7, -1);
+                .passive("通常攻撃を行う度にスタックが1増加し、スタック数に比例して{1}増加する(最大6スタック)。スタックは2.5秒増加がないと0になる。増加値は3レベル毎に上昇する。")
+                .variable(1, ASRatio, new Per3Level(4, 2))
+                .conditional(1);
+        LeapStrike.update()
+                .active("対象のユニットまで飛びかかる。対象が敵ユニットの場合、{1}を与える。")
+                .variable(1, PhysicalDamage, 70, 40, ap(0.6), bounusAD(1))
+                .mana(65)
+                .cd(10, -1)
+                .range(700);
+        Empower.update()
+                .active("使用後に最初に行った通常攻撃かLeap Strikeに追加{1}を付与する。建物には無効。")
+                .variable(1, MagicDamage, 40, 35, ap(0.6))
+                .mana(30)
+                .cd(7, -1);
         CounterStrike.update()
-                .active("2秒間、Jaxが受けるタワー以外の通常攻撃を回避(無効化)し、AoEダメージを25%低減、さらに効果終了時に周囲の敵ユニットに物理DMとスタン(1s)を与える。スキルを使用してから1秒経つと再使用できるようになり、任意に効果を終了できる。通常攻撃を回避する度にこのスキルのダメージが20%ずつ増加する(上限は100%、最大で2倍ダメージ)。")
+                .active("2秒間、Jaxが受けるタワー以外の通常攻撃を無効化し、AoEダメージを25%低減、さらに効果終了時に{1}の敵ユニットに{2}と{3}を与える。スキルを使用してから1秒経つと再使用できるようになり、任意に効果を終了できる。通常攻撃を回避する度にこのスキルのダメージが20%ずつ増加する(上限は100%、最大で2倍ダメージ)。")
+                .variable(1, Radius, 375)
+                .variable(2, PhysicalDamage, 50, 25, bounusAD(0.5))
+                .variable(3, Stun, 1)
                 .mana(70, 5)
                 .cd(18, -2);
         GrandmastersMight.update()
-                .passive("通常攻撃3回目ごとに追加で魔法DMを与える。建物には無効。追加魔法DM: 100/160/220 (+0.7)")
-                .active("8秒間JaxのARとMRが増加する。")
+                .passive("通常攻撃3回目ごとに追加で{1}を与える。建物には無効。")
+                .variable(1, MagicDamage, 100, 60, ap(0.7))
+                .active("8秒間{2}と{3}を得る。")
+                .variable(2, AR, 25, 10, bounusAD(0.3))
+                .variable(3, MR, 25, 10, ap(0.2))
                 .mana(100)
                 .cd(80);
 
@@ -3134,58 +3229,100 @@ public class Skill {
                 .cd(6);
 
         /** Karma */
-        InnerFlame.update().passive("HPの割合に反比例してAPが上昇する。レベル1、3、6、9、12、15で最大値が上昇する。");
+        InnerFlame.update()
+                .passive("{1}を得る。レベル1、3、6、9、12、15で最大値が上昇する。")
+                .variable(1, AP, 0, 0, amplify(MissingHealthRatio, new Per3Level2(0.3, 0.2)));
         HeavenlyWave.update()
-                .active("指定方向扇形60°の範囲内の敵ユニットに魔法DMを与える。Mantra Bonus:自身と効果範囲内の味方ユニットのHPを回復する。回復量は対象のHP残量によって変化する。")
+                .active("指定方向扇形60°の{1}の敵ユニットに{2}を与える。Mantra Bonus:自身と効果範囲内の味方ユニットは{3}する。回復量は対象のHP残量によって変化する。")
+                .variable(1, Radius, 600)
+                .variable(2, MagicDamage, 70, 40, ap(0.6))
+                .variable(3, RestoreHealth, 35, 20, amplify(MissingHealth, 0.05, 0, ap(0.02)))
                 .mana(70, 5)
                 .cd(6);
         SpiritBond.update()
-                .active("対象のユニットと自身を繋ぐビームを発生させる。ビームは5秒間持続し、自身及び味方ユニットにはMS増加、敵ユニットにはMS低下を与える。ビームに触れたChampion(敵味方問わず)にも同様の効果を与え、それが敵ユニットだった場合は更に魔法DMを与える。ビームを繋ぐ対象がステルス状態または距離1000まで離れた場合、効果が途切れる。Mantra Bonus:MS増加/MS低下の効果が2倍になる。")
+                .active("対象のユニットと自身を繋ぐビームを発生させる。ビームは5秒間持続し、自身及び味方ユニットは{1}増加し、敵ユニットには{2}を与える。ビームに触れたChampion(敵味方問わず)にも同様の効果を与え、それが敵ユニットだった場合は更に{3}を与える。ビームを繋ぐ対象がステルス状態または距離1000まで離れた場合、効果が途切れる。Mantra Bonus:MS増加/MS低下の効果が2倍になる。")
+                .variable(1, MSRatio, 10, 2)
+                .variable(2, Slow, 10, 2)
+                .variable(3, MagicDamage, 80, 45, ap(0.7))
                 .mana(65, 10)
                 .cd(15, -1)
                 .range(800);
         SoulShield.update()
-                .active("対象の味方ユニットに5秒間持続するシールドを付与する。Mantra Bonus:味方ユニットにシールドを付与した際、その味方ユニットの周囲にいる敵ユニットに魔法DMを与える。")
+                .active("対象の味方ユニットに5秒間持続する{1}を付与する。Mantra Bonus:味方ユニットにシールドを付与した際、その味方ユニットの{2}にいる敵ユニットに{3}を与える。")
+                .variable(1, Shield, 80, 40, ap(0.8))
+                .variable(2, Radius, 600)
+                .variable(3, MagicDamage, 80, 40, ap(0.8))
                 .mana(80, 10)
                 .cd(10)
                 .range(650);
         Mantra.update()
-                .active("次に使用するスキルにMantra Bonusを付与する。Lv1から使用でき、スキルポイントを割り振ることはできない。30/25/20秒毎にスタック数が1つ増加し最大で2つまでスタックされる。スタック増加時間はCD低減の影響を受ける。レベル1、7、13でスタック増加時間が短縮される。")
+                .active("次に使用するスキルにMantra Bonusを付与する。Lv1から使用でき、スキルポイントを割り振ることはできない。{1}毎にスタック数が1つ増加し最大で2つまでスタックされる。スタック増加時間はCD低減の影響を受ける。レベル1、7、13でスタック増加時間が短縮される。")
+                .variable(1, CDRAwareTime, new Per6Level(30, -5))
                 .cd(0.25);
 
         /** Karthus */
         DeathDefied.update().passive("死亡後7秒間スキルが使用可能。この状態ではスキルコストがなくなる。");
         LayWaste.update()
-                .active("指定地点を0.5秒後に爆発させ範囲内の敵ユニットに魔法DMを与える。対象が1体の場合はダメージが2倍になる。また、指定地点の視界を得る。")
+                .active("指定地点を0.5秒後に爆発させ{1}の敵ユニットに{2}を与える。対象が1体の場合は{2}を与える。また、指定地点の視界を得る。")
+                .variable(1, Radius, 100)
+                .variable(2, MagicDamage, 40, 20, ap(0.3))
+                .variable(2, MagicDamage, 80, 40, ap(0.6))
                 .mana(20, 6)
                 .cd(1)
                 .range(875);
         WallOfPain.update()
-                .active("指定地点に壁（通りぬけ可能）を5秒間生成し、触れた敵ユニットにMR低下(15%,5s)とスロー(5s)を与える。スローの効果は5秒かけて元に戻る。また、指定地点の視界を得る。")
+                .active("指定地点に{3}の通りぬけ可能な壁を5秒間生成し、触れた敵ユニットに５秒間{1}と{2}を与える。スローの効果は5秒かけて元に戻る。また、指定地点の視界を得る。")
+                .variable(1, MRReductionRatio, 15)
+                .variable(2, Slow, 40, 10)
+                .variable(3, Length, 800, 100)
                 .mana(100)
                 .cd(18)
                 .range(1000);
         Defile.update()
-                .passive("ff:敵ユニットを倒すとMNが回復する。回復MN: 20/27/34/41/48Toggle On:周囲の敵ユニットに毎秒魔法DMを与える。")
+                .passive("敵ユニットを倒すと{1}する。")
+                .variable(1, RestoreMana, 20, 7)
+                .active("{2}の敵ユニットに毎秒{3}を与える。")
+                .variable(2, Radius, 550)
+                .variable(3, MagicDamage, 30, 20, ap(0.25))
                 .mana(30, 12)
-                .cd(0.5);
-        Requiem.update().active("3秒詠唱後にすべての敵Championに魔法DMを与える。").mana(150, 25).cd(200, -20);
+                .cd(0.5)
+                .type(SkillType.Toggle);
+        Requiem.update()
+                .active("3秒詠唱後にすべての敵Championに{1}を与える。")
+                .variable(1, MagicDamage, 250, 150, ap(0.6))
+                .mana(150, 25)
+                .cd(200, -20)
+                .range(-1);
 
         /** Kassadin */
         VoidStone.update().passive("自身が受ける魔法DMを15%軽減し、4秒間軽減した分のダメージを攻撃速度(%)に加算する。");
-        NullSphere.update().active("対象の敵ユニットに魔法DMとサイレンスを与える。").mana(70, 10).cd(9).range(650);
+        NullSphere.update()
+                .active("対象の敵ユニットに{1}と{2}を与える。")
+                .variable(1, MagicDamage, 80, 50, ap(0.7))
+                .variable(2, Silence, 1, 0.4)
+                .mana(70, 10)
+                .cd(9)
+                .range(650);
         NetherBlade.update()
-                .passive("通常攻撃ごとにマナを回復する。対象がChampionの場合は回復量が3倍になる。回復MN: 8/11/14/17/20")
-                .active("5秒間、通常攻撃に追加魔法DMが付与される。建物には無効。")
+                .passive("通常攻撃ごとに{1}する。対象がChampionの場合は{2}する。")
+                .variable(1, RestoreMana, 8, 3)
+                .variable(2, RestoreMana, 16, 6)
+                .active("5秒間、通常攻撃に追加{3}が付与される。建物には無効。")
+                .variable(3, MagicDamage, 30, 15, ap(0.3))
                 .mana(25)
                 .cd(12);
         ForcePulse.update()
-                .active("指定方向扇形80°の範囲内の敵ユニットに魔法DMとスロー(3s)を与える。近くのChampion（敵味方自分問わず）がスキルを使用するとスタックが増え、6スタックまで溜まると使用可能。スキル使用時にスタックは0になる。")
+                .active("指定方向扇形80°の{1}の敵ユニットに{2}と3秒間{3}を与える。近くのChampion（敵味方自分問わず）がスキルを使用するとスタックが増え、6スタックまで溜まると使用可能。スキル使用時にスタックは0になる。")
+                .variable(1, Radius, 700)
+                .variable(2, MagicDamage, 80, 50, ap(0.7))
+                .variable(3, Slow, 30, 5)
                 .mana(80)
                 .cd(6);
         Riftwalk.update()
-                .active("指定地点にテレポートし、テレポート先の周囲の敵ユニットに魔法DMを与える。スキル使用時にスタックが増加し、1スタックごとに消費MNと魔法DMが増加していく。（最大10スタック）スタックは8秒間増加がないと0になる。")
-                .mana(100)
+                .active("指定地点にテレポートし、テレポート先の{1}の敵ユニットに{2}を与える。スキル使用時にスタックが増加し、1スタックごとに消費MNと魔法DMが増加していく。（最大10スタック）スタックは8秒間増加がないと0になる。")
+                .variable(1, Radius, 150)
+                .variable(2, MagicDamage, 60, 10, ap(0.8), amplify(Stack, 60, 10))
+                .mana(100, amplify(Stack, 100))
                 .cd(7, -1)
                 .range(700);
 
@@ -3751,7 +3888,7 @@ public class Skill {
                 .cd(150, -30);
 
         /** Olaf */
-        BerserkerRage.update().passive("{1}を得る。").variable(1, ASRatio, 0, 0, amplify(MissingHealth, 1));
+        BerserkerRage.update().passive("{1}を得る。").variable(1, ASRatio, 0, 0, amplify(MissingHealthRatio, 1));
         Undertow.update()
                 .active("指定地点に貫通する斧を投げ、当たった敵ユニットに{1}と2.5秒間{2}を与える。このスローは2.5秒かけて元に戻る。投げた斧は指定地点に7秒間留まり、斧を回収するとこのスキルのCDが4.5秒解消される。")
                 .variable(1, PhysicalDamage, 80, 45, bounusAD(1))

@@ -196,6 +196,8 @@ public enum Status {
 
     Tenacity(null, 0, "%"),
 
+    TenacityPerLv(null, 0, "%"),
+
     Charm("魅了", 3, "秒"),
 
     Stun("スタン", 3, "秒"),
@@ -203,6 +205,8 @@ public enum Status {
     Snare("スネア", 3, "秒"),
 
     Fear("Fear", 3, "秒"),
+
+    Terrified("Terrified", 3, "秒"),
 
     Silence("サイレンス", 3, "秒"),
 
@@ -213,6 +217,8 @@ public enum Status {
     Knockback("ノックバック"),
 
     Slow("スロー", 0, "%"),
+
+    Blind("ブラインド", 0, "%"),
 
     Chill,
 
@@ -234,7 +240,9 @@ public enum Status {
 
     TargetMissingHealth("対象の減っているHealth", 0, "%"),
 
-    MissingHealth("Health損耗率"),
+    MissingHealth("失ったHealth"),
+
+    MissingHealthRatio("Health損耗率"),
 
     Radius("範囲"),
 
@@ -253,6 +261,8 @@ public enum Status {
     BounusHealth("増加Health"),
 
     BounusMS("増加移動速度"),
+
+    EnemyChampion("敵Championの数"),
 
     Charge,
 
