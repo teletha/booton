@@ -41,7 +41,7 @@ public class Item {
     public static final Item AthenesUnholyGrail = new Item(3174, "Athene's Unholy Grail");
 
     /** Atma's Impaler */
-    public static final Item AtmASRatioImpaler = new Item(3005, "Atma's Impaler");
+    public static final Item AtmasImpaler = new Item(3005, "Atma's Impaler");
 
     /** Augment: Power */
     public static final Item AugmentPower = new Item(3196, "Augment: Power");
@@ -82,8 +82,8 @@ public class Item {
     /** Berserker's Greaves Alacrity */
     public static final Item BerserkersGreavesAlacrity = new Item(3254, "Berserker's Greaves Alacrity");
 
-    /** Bilgewater CutlASRatios */
-    public static final Item BilgewaterCutlASRatios = new Item(3144, "Bilgewater CutlASRatios");
+    /** Bilgewater Cutlass */
+    public static final Item BilgewaterCutlass = new Item(3144, "Bilgewater Cutlass");
 
     /** The Black Cleaver */
     public static final Item TheBlackCleaver = new Item(3071, "The Black Cleaver");
@@ -94,8 +94,8 @@ public class Item {
     /** Blade of the Ruined King */
     public static final Item BladeOftheRuinedKing = new Item(3153, "Blade of the Ruined King");
 
-    /** BlASRatioting Wand */
-    public static final Item BlASRatiotingWand = new Item(1026, "BlASRatioting Wand");
+    /** Blasting Wand */
+    public static final Item BlastingWand = new Item(1026, "Blasting Wand");
 
     /** The Bloodthirster */
     public static final Item TheBloodthirster = new Item(3072, "The Bloodthirster");
@@ -163,14 +163,14 @@ public class Item {
     /** Cloth Armor */
     public static final Item ClothArmor = new Item(1029, "Cloth Armor");
 
-    /** Crystalline FlASRatiok */
-    public static final Item CrystallineFlASRatiok = new Item(2041, "Crystalline FlASRatiok");
+    /** Crystalline Flask */
+    public static final Item CrystallineFlask = new Item(2041, "Crystalline Flask");
 
     /** Dagger */
     public static final Item Dagger = new Item(1042, "Dagger");
 
-    /** Deathfire GrASRatiop */
-    public static final Item DeathfireGrASRatiop = new Item(3128, "Deathfire GrASRatiop");
+    /** Deathfire Grasp */
+    public static final Item DeathfireGrasp = new Item(3128, "Deathfire Grasp");
 
     /** Doran's Blade */
     public static final Item DoransBlade = new Item(1055, "Doran's Blade");
@@ -182,7 +182,7 @@ public class Item {
     public static final Item DoransShield = new Item(1054, "Doran's Shield");
 
     /** Eleisa's Miracle */
-    public static final Item EleisASRatioMiracle = new Item(3173, "Eleisa's Miracle");
+    public static final Item EleisasMiracle = new Item(3173, "Eleisa's Miracle");
 
     /** Elixir of Brilliance */
     public static final Item ElixirOfBrilliance = new Item(2039, "Elixir of Brilliance");
@@ -289,8 +289,8 @@ public class Item {
     /** Kitae's Bloodrazor */
     public static final Item KitaesBloodrazor = new Item(3186, "Kitae's Bloodrazor");
 
-    /** LASRatiot Whisper */
-    public static final Item LASRatiotWhisper = new Item(3035, "LASRatiot Whisper");
+    /** Last Whisper */
+    public static final Item LastWhisper = new Item(3035, "Last Whisper");
 
     /** Liandry's Torment */
     public static final Item LiandrysTorment = new Item(3151, "Liandry's Torment");
@@ -364,8 +364,8 @@ public class Item {
     /** Muramana */
     public static final Item Muramana = new Item(3042, "Muramana");
 
-    /** NASRatiohor's Tooth */
-    public static final Item NASRatiohorsTooth = new Item(3115, "NASRatiohor's Tooth");
+    /** Nashor's Tooth */
+    public static final Item NashorsTooth = new Item(3115, "Nashor's Tooth");
 
     /** Needlessly Large Rod */
     public static final Item NeedlesslyLargeRod = new Item(1058, "Needlessly Large Rod");
@@ -427,8 +427,8 @@ public class Item {
     /** Prospector's Ring */
     public static final Item ProspectorsRing = new Item(1063, "Prospector's Ring");
 
-    /** Quicksilver SASRatioh */
-    public static final Item QuicksilverSASRatioh = new Item(3140, "Quicksilver SASRatioh");
+    /** Quicksilver Sash */
+    public static final Item QuicksilverSash = new Item(3140, "Quicksilver Sash");
 
     /** Rabadon's Deathcap */
     public static final Item RabadonsDeathcap = new Item(3089, "Rabadon's Deathcap");
@@ -479,7 +479,7 @@ public class Item {
     public static final Item Sheen = new Item(3057, "Sheen");
 
     /** Shurelya's Reverie */
-    public static final Item ShurelyASRatioReverie = new Item(3069, "Shurelya's Reverie");
+    public static final Item ShurelyasReverie = new Item(3069, "Shurelya's Reverie");
 
     /** Sight Ward */
     public static final Item SightWard = new Item(2044, "Sight Ward");
@@ -592,8 +592,8 @@ public class Item {
     /** Zephyr */
     public static final Item Zephyr = new Item(3172, "Zephyr");
 
-    /** Zhonya's HourglASRatios */
-    public static final Item ZhonyASRatioHourglASRatios = new Item(3157, "Zhonya's HourglASRatios");
+    /** Zhonya's Hourglass */
+    public static final Item ZhonyasHourglass = new Item(3157, "Zhonya's Hourglass");
 
     /** Cloak and Dagger */
     public static final Item CloakandDagger = new Item(3172, "Cloak and Dagger");
@@ -711,7 +711,7 @@ public class Item {
 
     static {
         AbyssalScepter.update(P0000)
-                .build(BlASRatiotingWand, NegatronCloak)
+                .build(BlastingWand, NegatronCloak)
                 .set(Cost, 980, 1855)
                 .set(MR, 45)
                 .set(AP, 70)
@@ -725,7 +725,7 @@ public class Item {
                 .ability(Legion);
         AmplifyingTome.update(P0000).set(Cost, 435, 305).set(AP, 20);
         ArchangelsStaff.update(P0000)
-                .build(TearOftheGoddess, BlASRatiotingWand)
+                .build(TearOftheGoddess, BlastingWand)
                 .set(Cost, 1140, 1890)
                 .set(AP, 60)
                 .set(Mana, 250)
@@ -736,13 +736,13 @@ public class Item {
                 .set(MR, 40)
                 .set(AP, 60)
                 .set(Mreg, 15);
-        AtmASRatioImpaler.update(P0000).build(AvariceBlade, ChainVest).set(Cost, 780).set(Critical, 15);
+        AtmasImpaler.update(P0000).build(AvariceBlade, ChainVest).set(Cost, 780).set(Critical, 15);
         AugmentDeath.update(P0000).build(TheHexCore).set(Cost, 1000).set(AP, 45);
         AugmentGravity.update(P0000).build(TheHexCore).set(Cost, 1000).set(Mana, 200).set(CDR, 10).set(Mreg, 5);
         AugmentPower.update(P0000).build(TheHexCore).set(Cost, 1000).set(Hreg, 6).set(Health, 220);
         AvariceBlade.update(P0000).build(BrawlersGloves).set(Cost, 400).set(Critical, 10);
         BFSword.update(P0000).set(Cost, 1550).set(AD, 45);
-        BannerOfCommand.update(P0000).build(BlASRatiotingWand, EmblemOfValor).set(Cost, 890).set(AP, 40).set(CDR, 10);
+        BannerOfCommand.update(P0000).build(BlastingWand, EmblemOfValor).set(Cost, 890).set(AP, 40).set(CDR, 10);
         BansheesVeil.update(P0000)
                 .build(NegatronCloak, CatalystTheProtector)
                 .set(Cost, 600)
@@ -750,15 +750,15 @@ public class Item {
                 .set(Mana, 300)
                 .set(Health, 400);
         BerserkersGreaves.update(P0000).build(BootsOfSpeed, Dagger).set(Cost, 150).set(ASRatio, 20);
-        BilgewaterCutlASRatios.update(P0000).build(Pickaxe, VampiricScepter).set(Cost, 250).set(LS, 10).set(AD, 40);
+        BilgewaterCutlass.update(P0000).build(Pickaxe, VampiricScepter).set(Cost, 250).set(LS, 10).set(AD, 40);
         BlackfireTorch.update(P0000)
                 .build(KagesLuckyPick, FiendishCodex, HauntingGuise)
                 .set(Cost, 700)
                 .set(AP, 80)
                 .set(Health, 250)
                 .set(Mreg, 10);
-        BladeOftheRuinedKing.update(P0000).build(BilgewaterCutlASRatios).set(Cost, 975).set(LS, 10).set(AD, 40);
-        BlASRatiotingWand.update(P0000).set(Cost, 860).set(AP, 40);
+        BladeOftheRuinedKing.update(P0000).build(BilgewaterCutlass).set(Cost, 975).set(LS, 10).set(AD, 40);
+        BlastingWand.update(P0000).set(Cost, 860).set(AP, 40);
         BonetoothNecklace.update(P0000).set(Cost, 800).set(AD, 5);
         BootsOfMobility.update(P0000).build(BootsOfSpeed).set(Cost, 650);
         BootsOfSpeed.update(P0000).set(Cost, 350);
@@ -773,17 +773,13 @@ public class Item {
         ChaliceOfHarmony.update(P0000).build(FaerieCharm, NullMagicMantle).set(Cost, 300).set(MR, 25).set(Mreg, 7);
         CloakOfAgility.update(P0000).set(Cost, 730).set(Critical, 15);
         ClothArmor.update(P0000).set(Cost, 300);
-        CrystallineFlASRatiok.update(P0000).set(Cost, 345);
+        CrystallineFlask.update(P0000).set(Cost, 345);
         Dagger.update(P0000).set(Cost, 400).set(ASRatio, 12);
-        DeathfireGrASRatiop.update(P0000)
-                .build(AmplifyingTome, NeedlesslyLargeRod)
-                .set(Cost, 965)
-                .set(AP, 100)
-                .set(CDR, 15);
+        DeathfireGrasp.update(P0000).build(AmplifyingTome, NeedlesslyLargeRod).set(Cost, 965).set(AP, 100).set(CDR, 15);
         DoransBlade.update(P0000).set(Cost, 475).set(AD, 10).set(Health, 80);
         DoransRing.update(P0000).set(Cost, 475).set(AP, 15).set(Health, 80).set(Mreg, 3);
         DoransShield.update(P0000).set(Cost, 475).set(Hreg, 5).set(Health, 100);
-        EleisASRatioMiracle.update(P0000).build(PhilosophersStone).set(Cost, 400).set(Hreg, 10).set(Mreg, 15);
+        EleisasMiracle.update(P0000).build(PhilosophersStone).set(Cost, 400).set(Hreg, 10).set(Mreg, 15);
         ElixirOfBrilliance.update(P0000).set(Cost, 250);
         ElixirOfFortitude.update(P0000).set(Cost, 250);
         EmblemOfValor.update(P0000).build(ClothArmor, RejuvenationBead).set(Cost, 170);
@@ -797,12 +793,12 @@ public class Item {
         GlacialShroud.update(P0000).build(SapphireCrystal, ChainVest).set(Cost, 380).set(Mana, 300);
         GrezsSpectralLantern.update(P0000).build(ClothArmor, VampiricScepter).set(Cost, 150).set(LS, 12).set(AD, 20);
         GuardianAngel.update(P0000).build(NullMagicMantle, ChainVest).set(Cost, 1480).set(MR, 30);
-        GuinsoosRageblade.update(P0000).build(BlASRatiotingWand, Pickaxe).set(Cost, 865).set(AP, 40).set(AD, 30);
+        GuinsoosRageblade.update(P0000).build(BlastingWand, Pickaxe).set(Cost, 865).set(AP, 40).set(AD, 30);
         HauntingGuise.update(P0000).build(RubyCrystal, AmplifyingTome).set(Cost, 575).set(AP, 25).set(Health, 200);
         HealthPotion.update(P0000).set(Cost, 35);
         Hexdrinker.update(P0000).build(LongSword, NullMagicMantle).set(Cost, 550).set(MR, 25).set(AD, 25);
         HextechGunblade.update(P0000)
-                .build(BilgewaterCutlASRatios, HextechRevolver)
+                .build(BilgewaterCutlass, HextechRevolver)
                 .set(Cost, 275)
                 .set(LS, 10)
                 .set(AP, 65)
@@ -827,9 +823,9 @@ public class Item {
         KagesLuckyPick.update(P0000).build(AmplifyingTome).set(Cost, 330).set(AP, 25);
         Kindlegem.update(P0000).build(RubyCrystal).set(Cost, 375).set(Health, 200);
         KitaesBloodrazor.update(P0000).build(Pickaxe, RecurveBow).set(Cost, 700).set(ASRatio, 40).set(AD, 30);
-        LASRatiotWhisper.update(P0000).build(LongSword, Pickaxe).set(Cost, 1025).set(AD, 40).set(ARPenRatio, 40);
+        LastWhisper.update(P0000).build(LongSword, Pickaxe).set(Cost, 1025).set(AD, 40).set(ARPenRatio, 40);
         LiandrysTorment.update(P0000).build(HauntingGuise, AmplifyingTome).set(Cost, 980).set(AP, 60).set(Health, 300);
-        LichBane.update(P0000).build(Sheen, BlASRatiotingWand).set(Cost, 880).set(AP, 80).set(MS, 5).set(Mana, 250);
+        LichBane.update(P0000).build(Sheen, BlastingWand).set(Cost, 880).set(AP, 80).set(MS, 5).set(Mana, 250);
         LocketOftheIronSolari.update(P0000)
                 .build(Kindlegem, ClothArmor, RejuvenationBead)
                 .set(Cost, 670)
@@ -848,7 +844,7 @@ public class Item {
         ManaPotion.update(P0000).set(Cost, 35);
         MawOfMalmortius.update(P0000).build(Hexdrinker, Pickaxe).set(Cost, 975).set(MR, 36).set(AD, 55);
         MejaisSoulstealer.update(P0000).build(AmplifyingTome).set(Cost, 800).set(AP, 20);
-        MercurialScimitar.update(P0000).build(QuicksilverSASRatioh, BFSword).set(Cost, 600).set(MR, 45).set(AD, 60);
+        MercurialScimitar.update(P0000).build(QuicksilverSash, BFSword).set(Cost, 600).set(MR, 45).set(AD, 60);
         MercurysTreads.update(P0000).build(BootsOfSpeed, NullMagicMantle).set(Cost, 450).set(MR, 25).set(MS, 50);
         MikaelsCrucible.update(P0000)
                 .build(SapphireCrystal, ChaliceOfHarmony)
@@ -863,7 +859,7 @@ public class Item {
                 .set(CDR, 20)
                 .set(Mreg, 12);
         Muramana.update(P0000).build(Manamune).set(Cost, 0).set(AD, 20).set(Mana, 1000).set(Mreg, 7);
-        NASRatiohorsTooth.update(P0000)
+        NashorsTooth.update(P0000)
                 .build(Stinger, FiendishCodex)
                 .set(Cost, 250)
                 .set(AP, 65)
@@ -894,14 +890,14 @@ public class Item {
         Pickaxe.update(P0000).set(Cost, 875).set(AD, 25);
         ProspectorsBlade.update(P0000).set(Cost, 950).set(LS, 5).set(AD, 20);
         ProspectorsRing.update(P0000).set(Cost, 950).set(AP, 40);
-        QuicksilverSASRatioh.update(P0000).build(NegatronCloak).set(Cost, 850).set(MR, 45);
-        RabadonsDeathcap.update(P0000).build(BlASRatiotingWand, NeedlesslyLargeRod).set(Cost, 740).set(AP, 120);
+        QuicksilverSash.update(P0000).build(NegatronCloak).set(Cost, 850).set(MR, 45);
+        RabadonsDeathcap.update(P0000).build(BlastingWand, NeedlesslyLargeRod).set(Cost, 740).set(AP, 120);
         RanduinsOmen.update(P0000).build(GiantsBelt, WardensMail).set(Cost, 1000).set(Health, 500);
         RavenousHydra.update(P0000).build(Tiamat, VampiricScepter).set(Cost, 400).set(LS, 10).set(AD, 75).set(Hreg, 15);
         RecurveBow.update(P0000).set(Cost, 950).set(ASRatio, 30);
         RejuvenationBead.update(P0000).set(Cost, 180).set(Hreg, 5);
         RodOfAges.update(P0000)
-                .build(CatalystTheProtector, BlASRatiotingWand)
+                .build(CatalystTheProtector, BlastingWand)
                 .set(Cost, 740)
                 .set(AP, 60)
                 .set(Mana, 450)
@@ -911,7 +907,7 @@ public class Item {
         RunaansHurricane.update(P0000).build(Dagger, RecurveBow, Dagger).set(Cost, 1000).set(ASRatio, 70);
         RunicBulwark.update(P0000).build(NullMagicMantle, AegisOftheLegion).set(Cost, 650).set(MR, 30).set(Health, 400);
         RylaisCrystalScepter.update(P0000)
-                .build(BlASRatiotingWand, AmplifyingTome, GiantsBelt)
+                .build(BlastingWand, AmplifyingTome, GiantsBelt)
                 .set(Cost, 605)
                 .set(AP, 80)
                 .set(Health, 500);
@@ -920,7 +916,7 @@ public class Item {
         SeraphsEmbrace.update(P0000).build(ArchangelsStaff).set(Cost, 0).set(AP, 60).set(Mana, 1000).set(Mreg, 10);
         ShardOfTrueIce.update(P0000).build(KagesLuckyPick, ManaManipulator).set(Cost, 535).set(AP, 45);
         Sheen.update(P0000).build(SapphireCrystal, AmplifyingTome).set(Cost, 425).set(AP, 25).set(Mana, 200);
-        ShurelyASRatioReverie.update(P0000)
+        ShurelyasReverie.update(P0000)
                 .build(Kindlegem, PhilosophersStone)
                 .set(Cost, 550)
                 .set(Hreg, 10)
@@ -999,15 +995,12 @@ public class Item {
         TwinShadows.update(P0000).build(KagesLuckyPick, NullMagicMantle).set(Cost, 735).set(AP, 40).set(MS, 6);
         VampiricScepter.update(P0000).build(LongSword).set(Cost, 400).set(LS, 10).set(AD, 10);
         VisionWard.update(P0000).set(Cost, 125);
-        VoidStaff.update(P0000).build(BlASRatiotingWand, AmplifyingTome).set(Cost, 1000).set(AP, 70);
+        VoidStaff.update(P0000).build(BlastingWand, AmplifyingTome).set(Cost, 1000).set(AP, 70);
         WardensMail.update(P0000).build(ClothArmor, ClothArmor).set(Cost, 500);
         WarmogsArmor.update(P0000).build(GiantsBelt, RubyCrystal, RejuvenationBead).set(Cost, 995).set(Health, 1000);
         WillOftheAncients.update(P0000).build(KagesLuckyPick, HextechRevolver).set(Cost, 585).set(AP, 50);
         WitsEnd.update(P0000).build(RecurveBow, NullMagicMantle).set(Cost, 850).set(MR, 20).set(ASRatio, 40);
-        WoogletsWitchcap.update(P0000)
-                .build(BlASRatiotingWand, BlASRatiotingWand, ChainVest)
-                .set(Cost, 1060)
-                .set(AP, 100);
+        WoogletsWitchcap.update(P0000).build(BlastingWand, BlastingWand, ChainVest).set(Cost, 1060).set(AP, 100);
         WrigglesLantern.update(P0000).build(VampiricScepter, MadredsRazors).set(Cost, 100).set(LS, 10).set(AD, 15);
         YoumuusGhostblade.update(P0000)
                 .build(AvariceBlade, TheBrutalizer)
@@ -1024,6 +1017,6 @@ public class Item {
                 .set(ASRatio, 50)
                 .set(AD, 20)
                 .set(CDR, 10);
-        ZhonyASRatioHourglASRatios.update(P0000).build(NeedlesslyLargeRod, ChainVest).set(Cost, 780).set(AP, 100);
+        ZhonyasHourglass.update(P0000).build(NeedlesslyLargeRod, ChainVest).set(Cost, 780).set(AP, 100);
     }
 }
