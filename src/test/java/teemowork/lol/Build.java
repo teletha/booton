@@ -82,7 +82,7 @@ public class Build extends Notifiable {
 
         // items[0] = Item.LastWhisper;
         // items[1] = Item.WarmogsArmor;
-        // items[2] = Item.RabadonsDeathcap;
+        items[2] = Item.RabadonsDeathcap;
         items[3] = Item.MercurysTreads;
     }
 
@@ -149,15 +149,15 @@ public class Build extends Notifiable {
         case Lv:
             return new Computed(level, level, Lv);
 
-        case Damage:
+        case DamageRatio:
         case Tenacity:
             return new Computed(base(status), sum(status), status);
 
-        case MissingHealthRatio:
-        case TargetHealth:
-        case TargetCurrentHealth:
-        case TargetMissingHealth:
-        case CurrentMana:
+        case MissingHealthPercentage:
+        case TargetMaxHealthRatio:
+        case TargetCurrentHealthRatio:
+        case TargetMissingHealthRatio:
+        case CurrentManaRatio:
         case Stack:
         case Duration:
         case Energy:
@@ -193,10 +193,6 @@ public class Build extends Notifiable {
             double levelAS = champion.getStatus(version).get(ASPerLv) * (level - 1);
 
             return new Computed(baseAS * (1 + levelAS / 100), Math.min(2.5, baseAS * (1 + (levelAS + sum(ASRatio)) / 100)), status);
-
-        case AR:
-            double value = base(status);
-            return new Computed(value, value + sum(status) + sum(status.per()), status);
 
         default:
             Status ratio = Status.valueOf(status.name() + "Ratio");
@@ -286,7 +282,7 @@ public class Build extends Notifiable {
         case MSRatio:
         case Energy:
         case Ereg:
-        case Damage:
+        case DamageRatio:
             return champion.getStatus(version).get(status);
 
         default:

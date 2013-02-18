@@ -51,40 +51,40 @@ public enum Status {
     // ==================================================
     // My Health Reference
     // ==================================================
-    CurrentHealth("現在のHealth"),
+    CurrentHealthRatio("現在のHealth"),
 
-    MissingHealth("失ったHealth"),
+    MissingHealthRatio("失ったHealth"),
 
-    MissingHealthRatio("Health損耗率"),
+    MissingHealthPercentage("Health損耗率"),
 
     // ==================================================
     // Target Health Reference
     // ==================================================
-    TargetHealth("対象の最大Health"),
+    TargetMaxHealthRatio("対象の最大Health"),
 
-    TargetCurrentHealth("対象の現在のHealth"),
+    TargetCurrentHealthRatio("対象の現在のHealth"),
 
-    TargetMissingHealth("対象の減っているHealth"),
+    TargetMissingHealthRatio("対象の減っているHealth"),
 
     TargetMissingHealthPercentage("対象のHealth損耗率"),
 
     // ==================================================
     // My Mana Reference
     // ==================================================
-    CurrentMana("現在のMana"),
+    CurrentManaRatio("現在のMana"),
 
-    MissingMana("失ったMana"),
+    MissingManaRatio("失ったMana"),
 
-    MissingManaRatio("Mana損耗率"),
+    MissingManaPercentage("Mana損耗率"),
 
     // ==================================================
     // Target Mana Reference
     // ==================================================
-    TargetMana("対象の最大Mana"),
+    TargetManaRatio("対象の最大Mana"),
 
-    TargetCurrentMana("対象の現在のMana"),
+    TargetCurrentManaRatio("対象の現在のMana"),
 
-    TargetMissingMana("対象の減っているMana"),
+    TargetMissingManaRatio("対象の減っているMana"),
 
     TargetMissingManaPercetage("対象のMana損耗率"),
 
@@ -125,10 +125,10 @@ public enum Status {
     ARPenRatio(ARPen.name(), 0, "%"), ARPenRatioPerLv,
 
     /** Flat Reduction */
-    ARReduction("AR減少"),
+    ARReduction,
 
     /** Percentage Reduction */
-    ARReductionRatio("AR減少", 0, "%"),
+    ARReductionRatio,
 
     // ==================================================
     // MR Penetrations and Reductions
@@ -187,7 +187,7 @@ public enum Status {
     /** Cooldown */
     CD, CDPerLv,
 
-    Damage("与えたダメージ", 3, "%"),
+    DamageRatio("与えたダメージ"),
 
     // ==================================================
     // Damage Type
@@ -238,6 +238,8 @@ public enum Status {
 
     ASSlow("攻撃速度低下"), ASSlowRatio("攻撃速度低下", 0, "%"),
 
+    Wounds("HP回復量半減"),
+
     // ==================================================
     // Movement Related
     // ==================================================
@@ -276,6 +278,8 @@ public enum Status {
     Distance("距離"),
 
     Gold,
+
+    Visionable("視界を得る"),
 
     BounusAD("増加AD"),
 
@@ -332,6 +336,10 @@ public enum Status {
     }
 
     public String getUnit() {
+        if (name().endsWith("Ratio")) {
+            return "%";
+        }
+
         switch (this) {
         case Time:
         case Snare:
@@ -342,23 +350,17 @@ public enum Status {
         case Taunt:
         case Fear:
         case Terrified:
+        case Wounds:
         case Knockup:
         case Suppression:
         case CDRAwareTime:
             return "秒";
 
-        case ASRatio:
-        case MSRatio:
         case CDR:
         case SV:
         case LS:
-        case ASSlowRatio:
-        case MSSlowRatio:
-        case DamageReductionRatio:
-        case PhysicalDamageReductionRatio:
-        case MagicDamageReductionRatio:
-        case AttackDamageReductionRatio:
-        case TargetCurrentHealth:
+        case Tenacity:
+        case Percentage:
             return "%";
 
         default:
@@ -427,14 +429,38 @@ public enum Status {
         case MS:
             return name + "が" + computed + "増加";
 
+        case Critical:
         case MSRatio:
+        case ASRatio:
+        case ADRatio:
+        case ARRatio:
+        case MRRatio:
+        case ExperimentRatio:
             return name + "が" + computed + "%増加";
 
+        case DamageReduction:
         case DamageReductionRatio:
-            return "ダメージを" + computed + "%軽減";
+            return "ダメージを" + computed + getUnit() + "軽減";
 
         case PhysicalDamageReduction:
-            return "物理ダメージを" + computed + "軽減";
+        case PhysicalDamageReductionRatio:
+            return "物理ダメージを" + computed + getUnit() + "軽減";
+
+        case MagicDamageReduction:
+        case MagicDamageReductionRatio:
+            return "魔法ダメージを" + computed + getUnit() + "軽減";
+
+        case AttackDamageReduction:
+        case AttackDamageReductionRatio:
+            return "通常攻撃で受けるダメージを" + computed + getUnit() + "軽減";
+
+        case ARReduction:
+        case ARReductionRatio:
+            return "AR減少" + computed + getUnit();
+
+        case MRReduction:
+        case MRReductionRatio:
+            return "MR減少" + computed + getUnit();
 
         case RestoreEnergy:
         case RestoreHealth:
@@ -444,18 +470,7 @@ public enum Status {
         case ReduceCooldown:
             return "CDが" + (computed == 0 ? "" : computed + "秒") + "解消";
 
-        case ASRatio:
-        case ADRatio:
-        case ARRatio:
-        case MRRatio:
-        case ExperimentRatio:
-            if (computed == 0) {
-                return name;
-            } else {
-                return name + "が" + computed + getUnit();
-            }
-
-        case TargetCurrentHealth:
+        case TargetCurrentHealthRatio:
             return name + "の" + computed + getUnit();
 
         case Gold:

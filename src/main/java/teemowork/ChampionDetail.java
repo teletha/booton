@@ -319,7 +319,9 @@ public class ChampionDetail extends Page {
             // ACTIVE
             active.empty();
 
-            if (status.getType() != SkillType.Active) {
+            SkillType type = status.getType();
+
+            if (type != SkillType.Active && type != SkillType.OnHitEffectable) {
                 active.child(SkillStyle.Passive.class).text(status.getType().name().toUpperCase());
             }
 
@@ -329,6 +331,10 @@ public class ChampionDetail extends Page {
                 } else {
                     active.append(token.toString());
                 }
+            }
+
+            if (type == SkillType.OnHitEffectable) {
+                active.append("このスキルはOn-Hit Effectの影響を受ける。");
             }
         }
 

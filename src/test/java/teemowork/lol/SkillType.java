@@ -18,5 +18,7 @@ public enum SkillType {
 
     Toggle,
 
-    Channel;
+    Channel,
+
+    OnHitEffectable;
 }
