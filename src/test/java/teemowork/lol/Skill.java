@@ -3821,60 +3821,107 @@ public class Skill {
         /** Master Yi */
         DoubleStrike.update().passive("通常攻撃7回毎に2回分ダメージを与える。対象が建物の場合も有効。");
         AlphaStrike.update()
-                .active("対象の敵ユニットと近くの敵ユニット3体(範囲600)をランダムに対象とし魔法DMを与え、対象の近くにワープする。minionの場合は50%の確率で追加魔法DMを与える。")
+                .active("対象の敵ユニットと近くの敵ユニット3体({1})をランダムに対象とし{2}を与え、対象の近くにワープする。minionの場合は50%の確率で追加{3}を与える。")
+                .variable(1, Radius, 600)
+                .variable(2, MagicDamage, 100, 50, ap(1))
+                .variable(3, MagicDamage, 260, 60)
                 .mana(60, 10)
                 .cd(18, -2)
                 .range(600);
         Meditate.update()
-                .active("5秒間詠唱を行い、その間自身のHPを回復する。詠唱中はARとMRが増加する。※ チャネリングスキル。チャネリングが中断されるか効果時間が過ぎるまで効果が持続する。回復HP: 200/350/500/650/800 (+2.0)※表記回復HPは5秒間詠唱した時の回復量。毎秒 40/70/100/130/160 (+0.4)ずつ回復していく。")
+                .active("5秒間詠唱を行い、毎秒{1}し、詠唱中は{2}と{3}を得る。")
+                .variable(1, RestoreHealth, 40, 30, ap(0.4))
+                .variable(2, AR, 100, 50)
+                .variable(3, MR, 100, 50)
                 .mana(50, 15)
-                .cd(35);
+                .cd(35)
+                .type(SkillType.Channel);
         WujuStyle.update()
-                .passive("Master Yiの攻撃力が増加する。増加AD: 15/20/25/30/35")
-                .active("10秒間Master Yiの攻撃力が増加する。CDが解消されるまでPassiveの増加ダメージがなくなる。")
+                .passive("{1}を得る。")
+                .variable(1, AD, 15, 5)
+                .active("10秒間{2}を得る。CDが解消されるまでPassiveの増加ダメージがなくなる。")
+                .variable(2, AD, 30, 10)
                 .mana(40)
                 .cd(25, -2);
         Highlander.update()
-                .active("移動速度と攻撃速度が増加し、スローの効果を受けなくなる。効果中に敵Championを倒すとMaster YiのすべてのスキルのCDが解消される。")
+                .active("{4}間{1}、{2}し、{3}を得る。効果中に敵Championを倒すとすべてのスキルの{5}する。")
+                .variable(1, MSRatio, 40)
+                .variable(2, ASRatio, 40)
+                .variable(3, IgnoreSlow)
+                .variable(4, Time, 8, 2)
+                .variable(5, ReduceCooldown)
                 .mana(100)
                 .cd(75);
 
         /** Miss Fortune */
-        Strut.update().passive("5秒間ダメージを受けないと移動速度が25上昇する。以後、毎秒移動速度が9ずつ上昇し、5秒後に移動速度上昇値は上限の70に到達する。ダメージを受けると解除される。");
+        Strut.update()
+                .passive("5秒間ダメージを受けないと{1}する。以後、毎秒移動速度が9ずつ上昇し、5秒後に移動速度上昇値は上限の70に到達する。ダメージを受けると解除される。")
+                .variable(1, MS, 25)
+                .conditional(1);
         DoubleUp.update()
-                .active("対象の敵ユニットに弾丸を飛ばし物理DMを与える。弾は一度だけ跳ね返り、背後にいる敵ユニット一体(範囲500)を対象とし120%の物理DMを与える。このスキルはOn-Hit Effects(Impure Shots含む)の影響を受ける。")
+                .active("対象の敵ユニットに弾丸を飛ばし{1}を与える。弾は一度だけ跳ね返り、背後にいる敵ユニット一体(範囲500)を対象とし{2}を与える。")
+                .variable(1, PhysicalDamage, 25, 35, ad(0.75))
+                .variable(2, PhysicalDamage, 30, 42, ad(0.9))
                 .mana(70, 5)
                 .cd(9, -1)
                 .range(625);
         ImpureShots.update()
-                .passive("通常攻撃に追加魔法DMを与え、対象にスタックを付与する。1スタックにつき追加魔法DMが倍増していく。スタックは最大4スタック(最大4倍ダメージ)で5秒間持続する。追加魔法DM(1スタック): 6/8/10/12/14 (+0.05)")
-                .active("6秒間自身の攻撃速度が増加し、通常攻撃にHP回復量-50%(3s)を付加する。")
+                .passive("通常攻撃に{1}を与え、対象にスタックを付与する。1スタックにつき追加魔法DMが倍増していく。スタックは最大4スタック(最大4倍ダメージ)で5秒間持続する。")
+                .variable(1, MagicDamage, 6, 2, ap(0.05))
+                .active("6秒間{2}し、通常攻撃に{3}を付加する。")
+                .variable(2, ASRatio, 30, 5)
+                .variable(3, Wounds, 3)
                 .mana(50)
                 .cd(16);
         MakeItRain.update()
-                .active("地点を指定した0.5秒後に2秒間銃弾の雨を降らし、範囲内の敵ユニットに魔法DMとスロー(1s)を与える。魔法DM: 90/145/200/255/310 (+0.8) 効果範囲: 400スロー: 20/28/36/44/52%※表記魔法DMは2秒間当て続けた場合の合計ダメージ。")
+                .active("地点を指定した0.5秒後に2秒間銃弾の雨を降らし、{1}の敵ユニットに{2}と1秒間{3}を与える。")
+                .variable(1, Radius, 400)
+                .variable(2, MagicDamage, 90, 55, ap(0.8))
+                .variable(3, MSSlowRatio, 20, 8)
                 .mana(80)
                 .cd(15)
                 .range(800);
         BulletTime.update()
-                .active("指定方向扇形の範囲に2秒間、弾幕砲火を浴びせて範囲内の敵ユニットに物理DMを与える。弾は0.25秒毎に一発発射され、同一の対象に8回までヒットする。※ チャネリングスキル。チャネリングが中断されるか効果時間が過ぎるまで効果が持続する。")
+                .active("指定方向扇形の範囲に2秒間、弾幕砲火を浴びせて範囲内の敵ユニットに{1}を与える。弾は0.25秒毎に一発発射され、同一の対象に8回までヒットする。最大で{2}。")
+                .variable(1, PhysicalDamage, 65, 30, ap(0.2), bounusAD(0.35))
+                .variable(2, PhysicalDamage, 520, 240, ap(1.6), bounusAD(2.8))
                 .mana(100)
                 .cd(120, -10)
-                .range(1400);
+                .range(1400)
+                .type(SkillType.Channel);
 
         /** Mordekaiser */
         IronMan.update()
-                .passive("スキルで与えたダメージの17.5%(Championに対しては35%)をシールドに変換する。受けたダメージはHPより先にシールドがくらってくれる。シールドは最大90 + (30 × Lv)まで溜まり、1秒毎に3%ずつ低下していく。");
+                .passive("スキルで与えたダメージの17.5%(Championに対しては35%)をシールドに変換して(最大で{1})受けたダメージはHPより先にシールドがくらってくれる。1秒毎に3%ずつ低下していく。")
+                .variable(1, Shield, 90, 0, amplify(Lv, 30));
         MaceOfSpades.update()
-                .active("次に行う通常攻撃が魔法DMになり、更に近くの敵ユニット3体(範囲600)にもダメージを与える。対象が1体だけの場合は与えるダメージが65%上昇する。")
-                .cd(8, -1);
+                .active("次に行う通常攻撃が{1}になり、更に近くの敵ユニット3体({2})にもダメージを与える。対象が1体だけの場合は{3}与える。")
+                .variable(1, MagicDamage, 80, 30, ap(0.4), bounusAD(1))
+                .variable(2, Radius, 600)
+                .variable(3, MagicDamage, 132, 49.5, ap(0.66), bounusAD(1.65))
+                .cd(8, -1)
+                .cost(Health, 20, 5);
         CreepingDeath.update()
-                .active("対象の味方ユニットに6秒間持続するシールドを付与する。付与されたユニットはAR,MRが増加し、近くの敵ユニットに毎秒魔法DMを与える。")
+                .active("対象の味方ユニットに6秒間持続するシールドを付与する。付与されたユニットは{1}と{2}を得て、{3}の敵ユニットに毎秒{4}を与える。")
+                .variable(1, AR, 10, 5)
+                .variable(2, MR, 10, 5)
+                .variable(3, Radius, 250)
+                .variable(4, MagicDamage, 24, 12, ap(0.2))
                 .cd(20, -2)
-                .range(750);
-        SiphonOfDestruction.update().active("指定方向扇形の範囲内の敵ユニットに魔法DMを与える。").cd(6).range(700);
+                .range(750)
+                .cost(Health, 26, 6);
+        SiphonOfDestruction.update()
+                .active("指定方向扇形の範囲内の敵ユニットに{1}を与える。")
+                .variable(1, MagicDamage, 70, 45, ap(0.6))
+                .cd(6)
+                .range(700)
+                .cost(Health, 24, 12);
         ChildrenOftheGrave.update()
-                .active("対象の敵Championに魔法DMを与え、その後10秒間、毎秒魔法DMを与える。効果中に対象が死ぬとThe Spiritを生成、30秒間従わせる。（RまたはALT押しながらクリックで任意の操作可能）また、このスキルで与えたダメージの100%が回復する。魔法DM: 対象の最大HPの12/14.5/17% (+0.02)%毎秒魔法DM: 対象の最大HPの1.2/1.45/1.7% (+0.002)%消費HP: 無し CD: 120/105/90s Range: 850「The Spirit」AD: 元になったChampのAD + MordekaiserのADの75%AP: 元になったChampのAP + MordekaiserのAPの75%HP: 元になったChampのHP + MordekaiserのHPの15%行動範囲: 1125【備考】敵Championの一部アイテムとスキルの効果を引き継ぐ。また、The Spiritを従えている間、Mordekaiserは元になったChampのADとAPの20％を得る。")
+                .active("対象の敵Championに{1}を与え、その後10秒間、毎秒{2}を与える。10秒間で総計{4}を与え、{3}する。効果中に対象が死ぬとThe Spiritを生成し30秒間従わせる。（RまたはALT押しながらクリックで任意の操作可能）　The Spirit AD: 元になったChampのAD + MordekaiserのADの75%AP: 元になったChampのAP + MordekaiserのAPの75%HP: 元になったChampのHP + MordekaiserのHPの15%行動範囲: 1125 また、The Spiritを従えている間、Mordekaiserは元になったChampのADとAPの20％を得る。")
+                .variable(1, MagicDamage, 0, 0, amplify(TargetMaxHealthRatio, 12, 2.5, ap(0.02)))
+                .variable(2, MagicDamage, 0, 0, amplify(TargetMaxHealthRatio, 1.2, 0.25, ap(0.002)))
+                .variable(3, RestoreHealth, 0, 0, amplify(DamageRatio, 100))
+                .variable(4, MagicDamage, 0, 0, amplify(TargetMaxHealthRatio, 24, 5, ap(0.04)))
                 .cd(120, -15)
                 .range(850);
 
@@ -3902,7 +3949,7 @@ public class Skill {
                 .cd(23, -2)
                 .range(750);
         SoulShackles.update()
-                .active("周囲の敵Championに{1}と３秒間{2}を与え対象と糸で繋がれる。3秒間対象が糸の範囲内({3})に留まっていた場合、対象に{1}とスタン{4}を与える。")
+                .active("周囲の敵Championに{1}と３秒間{2}を与え対象と糸で繋がれる。3秒間対象が糸の範囲内({3})に留まっていた場合、対象に{1}と{4}を与える。")
                 .variable(1, MagicDamage, 175, 75, ap(0.7))
                 .variable(2, MSSlowRatio, 20)
                 .variable(3, Radius, 1000)
@@ -3913,7 +3960,7 @@ public class Skill {
 
         /** Nami */
         SurgingTides.update()
-                .passive("スキルが味方Championに命中した際に、対象は1.5秒間{1}増加する。レベル1/7/13で増加量が上昇する。")
+                .passive("スキルが味方Championに命中した際に、対象は1.5秒間{1}する。レベル1/7/13で増加量が上昇する。")
                 .variable(1, MS, new Per6Level(40, 5))
                 .conditional(1);
         AquaPrison.update()
@@ -4014,7 +4061,7 @@ public class Skill {
                 .range(850);
 
         /** Nidalee */
-        Prowl.update().passive("茂みに入ると{1}増加する。この効果は茂みから出ても2秒間持続する。").variable(1, MSRatio, 15).conditional(1);
+        Prowl.update().passive("茂みに入ると{1}する。この効果は茂みから出ても2秒間持続する。").variable(1, MSRatio, 15).conditional(1);
         JavelinToss.update()
                 .active("指定方向に槍を投げて当たった敵ユニットに{1}を与える。槍がhitした時のNidaleeとターゲットの間の距離に比例して与えるダメージが増加する。最大で{2}。")
                 .variable(1, MagicDamage, 55, 40, ap(0.65))
@@ -4028,10 +4075,11 @@ public class Skill {
                 .variable(2, PhysicalDamage, 120, 90, ad(2))
                 .cd(5);
         Bushwhack.update()
-                .active("指定地点に罠を仕掛ける。敵ユニットが罠を踏むと発動し、対象の敵ユニットとその周囲の敵ユニットに2秒かけて{1}を与え、12秒間{2}と{3}を与え視界を得る。罠は4分間持続する。罠を設置してから2秒間の間は罠は発動しない。")
+                .active("指定地点に罠を仕掛ける。敵ユニットが罠を踏むと発動し、対象の敵ユニットとその周囲の敵ユニットに2秒かけて{1}を与え、12秒間{2}と{3}を与え{4}。罠は4分間持続する。罠を設置してから2秒間の間は罠は発動しない。")
                 .variable(1, MagicDamage, 80, 45, ap(0.4))
                 .variable(2, ARReductionRatio, 20, 5)
                 .variable(3, MRReductionRatio, 20, 5)
+                .variable(4, Visionable)
                 .mana(60, 15)
                 .cd(18)
                 .range(900);
@@ -4041,7 +4089,7 @@ public class Skill {
                 .cd(3.5)
                 .range(350);
         PrimalSurge.update()
-                .active("対象の味方Championの{1}し、7秒間{2}増加させる。")
+                .active("対象の味方Championの{1}し、7秒間{2}する。")
                 .variable(1, RestoreHealth, 50, 35, ap(0.7))
                 .variable(2, ASRatio, 20, 10)
                 .mana(60, 20)
