@@ -22,6 +22,73 @@ public enum Status {
     Sell,
 
     // ==================================================
+    // Health Related
+    // ==================================================
+    /** Health */
+    Health, HealthPerLv, HealthRatio("Health", 0, "%"),
+
+    /** Health Regeneration */
+    Hreg(2), HregPerLv(2), HregRatio("Hreg", 2, "%"),
+
+    // ==================================================
+    // Mana Related
+    // ==================================================
+    /** Mana */
+    Mana("Mana"), ManaPerLv, ManaRatio("Mana", 0, "%"),
+
+    /** Mana Regeneration */
+    Mreg(2), MregPerLv(2), MregRatio("Mana", 2, "%"),
+
+    // ==================================================
+    // Energy Related
+    // ==================================================
+    /** Energy */
+    Energy, EnergyPerLv, EnergyRatio("Energy", 0, "%"),
+
+    /** Energy Regeneration */
+    Ereg, EregPerLv, EregRatio("Energy", 0, "%"),
+
+    // ==================================================
+    // My Health Reference
+    // ==================================================
+    CurrentHealth("現在のHealth"),
+
+    MissingHealth("失ったHealth"),
+
+    MissingHealthRatio("Health損耗率"),
+
+    // ==================================================
+    // Target Health Reference
+    // ==================================================
+    TargetHealth("対象の最大Health"),
+
+    TargetCurrentHealth("対象の現在のHealth"),
+
+    TargetMissingHealth("対象の減っているHealth"),
+
+    TargetMissingHealthPercentage("対象のHealth損耗率"),
+
+    // ==================================================
+    // My Mana Reference
+    // ==================================================
+    CurrentMana("現在のMana"),
+
+    MissingMana("失ったMana"),
+
+    MissingManaRatio("Mana損耗率"),
+
+    // ==================================================
+    // Target Mana Reference
+    // ==================================================
+    TargetMana("対象の最大Mana"),
+
+    TargetCurrentMana("対象の現在のMana"),
+
+    TargetMissingMana("対象の減っているMana"),
+
+    TargetMissingManaPercetage("対象のMana損耗率"),
+
+    // ==================================================
     // Attack Related
     // ==================================================
     /** Attack Damage */
@@ -37,7 +104,7 @@ public enum Status {
     Critical("Critical Chanse", 0, "%"), CriticalPerLv, CriticalRatio,
 
     // ==================================================
-    // Ability Related
+    // Ability Power Related
     // ==================================================
     /** Ability Power */
     AP, APPerLv, APRatio,
@@ -47,54 +114,6 @@ public enum Status {
 
     /** Spell Vamp */
     SV("Spell Vamp", 0, "%"), SVPerLv, SVRatio,
-
-    Health("Health"),
-
-    HealthPerLv,
-
-    HealthRatio,
-
-    Hreg(2),
-
-    HregPerLv(2),
-
-    HregRatio("Hreg", 2, "%"),
-
-    Mana("Mana"),
-
-    ManaPerLv,
-
-    ManaRatio,
-
-    Mreg(2),
-
-    MregPerLv(2),
-
-    MregRatio(2),
-
-    // ==================================================
-    // Defense Related
-    // ==================================================
-    /** Attack Damage Resistance */
-    AR, ARPerLv, ARRatio(AR.name, 3, "%"),
-
-    MR,
-
-    MRPerLv,
-
-    MRRatio(MR.name(), 3, "%"),
-
-    Range,
-
-    RangePerLv,
-
-    RangeRatio,
-
-    MS("移動速度"),
-
-    MSPerLv,
-
-    MSRatio("移動速度", 0, "%"),
 
     // ==================================================
     // AR Penetrations and Reductions
@@ -127,31 +146,61 @@ public enum Status {
     MRReductionRatio("MR減少", 0, "%"),
 
     // ==================================================
-    // Energy
+    // Defense Related
     // ==================================================
-    Energy,
+    /** Attack Damage Resistance */
+    AR, ARPerLv, ARRatio("AR", 3, "%"),
 
-    EnergyPerLv,
+    /** Magic Damage Resistance */
+    MR, MRPerLv, MRRatio("MR", 3, "%"),
 
-    EnergyRatio,
+    /** General Damage Reduction */
+    DamageReduction, DamageReductionRatio,
 
-    Ereg,
+    /** Physical Damage Reduction */
+    PhysicalDamageReduction, PhysicalDamageReductionRatio,
 
-    EregPerLv,
+    /** Magic Damage Reduction */
+    MagicDamageReduction, MagicDamageReductionRatio,
 
-    EregRatio,
+    /** Attack Damage Reduction */
+    AttackDamageReduction, AttackDamageReductionRatio,
+
+    /** Shield */
+    Shield("シールド"), PhysicalShield("物理DM用シールド"), MagicShield("魔法DM用シールド"),
+
+    // ==================================================
+    // Other Status Related
+    // ==================================================
+    /** Range */
+    Range("射程"), RangePerLv, RangeRatio("射程"),
+
+    /** Level */
+    Lv, LvPerLv,
+
+    /** Tenacity */
+    Tenacity(null, 0, "%"), TenacityPerLv(null, 0, "%"),
+
+    /** Experiment */
+    Experiment("経験値"), ExperimentRatio("経験値", 0, "%"),
 
     /** Cooldown */
     CD, CDPerLv,
 
     Damage("与えたダメージ", 3, "%"),
 
+    // ==================================================
+    // Damage Type
+    // ==================================================
     PhysicalDamage("物理DM"),
 
     MagicDamage("魔法DM"),
 
     TrueDamage("TrueDM"),
 
+    // ==================================================
+    // Heal Related
+    // ==================================================
     RestoreHealth("Health"),
 
     RestoreHealthRatio("Health回復量", 3, "%"),
@@ -160,26 +209,9 @@ public enum Status {
 
     RestoreEnergy("気"),
 
-    DamageReductionRatio("DM", 0, "%"),
-
-    PhysicalDamageReduction("物理DM減少"),
-
-    NormalAttackDamageReduction("通常攻撃DM減少"),
-
-    Shield("シールド"),
-
-    MagicShield("魔法DM用シールド"),
-
-    Lv,
-
-    LvPerLv,
-
-    LvRatio,
-
-    Tenacity(null, 0, "%"),
-
-    TenacityPerLv(null, 0, "%"),
-
+    // ==================================================
+    // Crowd Control
+    // ==================================================
     Charm("魅了", 3, "秒"),
 
     Stun("スタン", 3, "秒"),
@@ -192,6 +224,8 @@ public enum Status {
 
     Silence("サイレンス", 3, "秒"),
 
+    Blind("ブラインド", 0, "%"),
+
     Taunt("タウント", 3, "秒"),
 
     Suppression("サプレッション", 3, "秒"),
@@ -200,47 +234,48 @@ public enum Status {
 
     Knockback("ノックバック"),
 
-    Slow("スロー", 0, "%"),
+    MSSlow("移動速度低下"), MSSlowRatio("スロー", 0, "%"),
 
-    ASSlow("攻撃速度低下", 0, "%"),
+    ASSlow("攻撃速度低下"), ASSlowRatio("攻撃速度低下", 0, "%"),
 
-    Blind("ブラインド", 0, "%"),
+    // ==================================================
+    // Movement Related
+    // ==================================================
+    /** Movement Speed */
+    MS("移動速度"), MSPerLv, MSRatio("移動速度"),
 
+    /** Ignor Slow */
+    IgnoreSlow(MSSlowRatio.name + "無効"),
+
+    /** Ignore Unit Collision */
+    IgnoreUnitCollision("ユニット衝突無効"),
+
+    // ==================================================
+    // Buff
+    // ==================================================
+    Stealth("ステルス"),
+
+    // ==================================================
+    // Special Condition
+    // ==================================================
     Chill,
 
-    Count("", 3, ""),
-
+    // ==================================================
+    // Time Related
+    // ==================================================
     Time("", 3, "秒"),
 
     Duration("経過秒数"),
 
     CDRAwareTime("", 3, "秒"),
 
-    CurrentHealth("現在のHealth", 0, "%"),
-
-    CurrentMana("現在のMana", 0, "%"),
-
-    TargetHealth("対象の最大Health", 3, "%"),
-
-    TargetCurrentHealth("対象の現在のHealth", 0, "%"),
-
-    TargetMissingHealth("対象の減っているHealth", 0, "%"),
-
-    MissingHealth("失ったHealth"),
-
-    MissingHealthRatio("Health損耗率"),
-
-    Radius("範囲"),
+    Count("", 3, ""), Radius("範囲"),
 
     Length("長さ"),
 
     Distance("距離"),
 
     Gold,
-
-    Experiment("経験値"),
-
-    ExperimentRatio("経験値", 0, "%"),
 
     BounusAD("増加AD"),
 
@@ -262,7 +297,7 @@ public enum Status {
     public final String name;
 
     /** The unit. */
-    public final String unit;
+    // public final String unit;
 
     /** The precision for value. */
     private final int precision;
@@ -294,7 +329,41 @@ public enum Status {
     private Status(String name, int precision, String unit) {
         this.name = name == null ? name() : name;
         this.precision = precision;
-        this.unit = unit == null ? "" : unit;
+    }
+
+    public String getUnit() {
+        switch (this) {
+        case Time:
+        case Snare:
+        case Silence:
+        case Charm:
+        case Stun:
+        case Blind:
+        case Taunt:
+        case Fear:
+        case Terrified:
+        case Knockup:
+        case Suppression:
+        case CDRAwareTime:
+            return "秒";
+
+        case ASRatio:
+        case MSRatio:
+        case CDR:
+        case SV:
+        case LS:
+        case ASSlowRatio:
+        case MSSlowRatio:
+        case DamageReductionRatio:
+        case PhysicalDamageReductionRatio:
+        case MagicDamageReductionRatio:
+        case AttackDamageReductionRatio:
+        case TargetCurrentHealth:
+            return "%";
+
+        default:
+            return "";
+        }
     }
 
     /**
@@ -355,6 +424,18 @@ public enum Status {
         computed = round(computed);
 
         switch (this) {
+        case MS:
+            return name + "が" + computed + "増加";
+
+        case MSRatio:
+            return name + "が" + computed + "%増加";
+
+        case DamageReductionRatio:
+            return "ダメージを" + computed + "%軽減";
+
+        case PhysicalDamageReduction:
+            return "物理ダメージを" + computed + "軽減";
+
         case RestoreEnergy:
         case RestoreHealth:
         case RestoreMana:
@@ -364,7 +445,6 @@ public enum Status {
             return "CDが" + (computed == 0 ? "" : computed + "秒") + "解消";
 
         case ASRatio:
-        case MSRatio:
         case ADRatio:
         case ARRatio:
         case MRRatio:
@@ -372,11 +452,11 @@ public enum Status {
             if (computed == 0) {
                 return name;
             } else {
-                return name + "が" + computed + unit;
+                return name + "が" + computed + getUnit();
             }
 
         case TargetCurrentHealth:
-            return name + "の" + computed + unit;
+            return name + "の" + computed + getUnit();
 
         case Gold:
             return computed + name;
@@ -388,7 +468,7 @@ public enum Status {
         if (computed == 0) {
             return name;
         }
-        return name + computed + unit;
+        return name + computed + getUnit();
     }
 
     /**

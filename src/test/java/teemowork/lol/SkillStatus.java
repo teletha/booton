@@ -150,6 +150,19 @@ public class SkillStatus {
      * 
      * @param id A variable identifier.
      * @param status A variable type.
+     * @return A chainable API.
+     */
+    SkillStatus variable(int id, Status status) {
+        return variable(id, status, 0);
+    }
+
+    /**
+     * <p>
+     * Set new variable.
+     * </p>
+     * 
+     * @param id A variable identifier.
+     * @param status A variable type.
      * @param base A base value.
      * @return A chainable API.
      */

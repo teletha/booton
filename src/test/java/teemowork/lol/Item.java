@@ -825,7 +825,7 @@ public class Item {
         KitaesBloodrazor.update(P0000).build(Pickaxe, RecurveBow).set(Cost, 700).set(ASRatio, 40).set(AD, 30);
         LastWhisper.update(P0000).build(LongSword, Pickaxe).set(Cost, 1025).set(AD, 40).set(ARPenRatio, 40);
         LiandrysTorment.update(P0000).build(HauntingGuise, AmplifyingTome).set(Cost, 980).set(AP, 60).set(Health, 300);
-        LichBane.update(P0000).build(Sheen, BlastingWand).set(Cost, 880).set(AP, 80).set(MS, 5).set(Mana, 250);
+        LichBane.update(P0000).build(Sheen, BlastingWand).set(Cost, 880).set(AP, 80).set(MSRatio, 5).set(Mana, 250);
         LocketOftheIronSolari.update(P0000)
                 .build(Kindlegem, ClothArmor, RejuvenationBead)
                 .set(Cost, 670)
@@ -884,7 +884,7 @@ public class Item {
                 .build(CloakOfAgility, Zeal, Dagger)
                 .set(Cost, 495)
                 .set(Critical, 30)
-                .set(MS, 5)
+                .set(MSRatio, 5)
                 .set(ASRatio, 50);
         PhilosophersStone.update(P0000).build(FaerieCharm, RejuvenationBead).set(Cost, 340).set(Hreg, 7).set(Mreg, 9);
         Pickaxe.update(P0000).set(Cost, 875).set(AD, 25);
@@ -959,7 +959,7 @@ public class Item {
                 .build(Zeal, AvariceBlade)
                 .set(Cost, 525)
                 .set(Critical, 20)
-                .set(MS, 6)
+                .set(MSRatio, 6)
                 .set(ASRatio, 40);
         Stinger.update(P0000).build(Dagger, Dagger).set(Cost, 450).set(ASRatio, 40);
         SunfireCape.update(P0000).build(ChainVest, GiantsBelt).set(Cost, 780).set(Health, 450);
@@ -987,12 +987,12 @@ public class Item {
                 .set(Cost, 300)
                 .set(Critical, 10)
                 .set(AP, 30)
-                .set(MS, 8)
+                .set(MSRatio, 8)
                 .set(Mana, 200)
                 .set(ASRatio, 30)
                 .set(AD, 30)
                 .set(Health, 250);
-        TwinShadows.update(P0000).build(KagesLuckyPick, NullMagicMantle).set(Cost, 735).set(AP, 40).set(MS, 6);
+        TwinShadows.update(P0000).build(KagesLuckyPick, NullMagicMantle).set(Cost, 735).set(AP, 40).set(MSRatio, 6);
         VampiricScepter.update(P0000).build(LongSword).set(Cost, 400).set(LS, 10).set(AD, 10);
         VisionWard.update(P0000).set(Cost, 125);
         VoidStaff.update(P0000).build(BlastingWand, AmplifyingTome).set(Cost, 1000).set(AP, 70);
@@ -1008,12 +1008,17 @@ public class Item {
                 .set(Critical, 15)
                 .set(AD, 30)
                 .set(CDR, 10);
-        Zeal.update(P0000).build(BrawlersGloves, Dagger).set(Cost, 375).set(Critical, 10).set(MS, 5).set(ASRatio, 18);
+        Zeal.update(P0000)
+                .build(BrawlersGloves, Dagger)
+                .set(Cost, 375)
+                .set(Critical, 10)
+                .set(MSRatio, 5)
+                .set(ASRatio, 18);
         ZekesHerald.update(P0000).build(VampiricScepter, Kindlegem).set(Cost, 800).set(CDR, 15).set(Health, 250);
         Zephyr.update(P0000)
                 .build(Stinger, LongSword)
                 .set(Cost, 1200)
-                .set(MS, 10)
+                .set(MSRatio, 10)
                 .set(ASRatio, 50)
                 .set(AD, 20)
                 .set(CDR, 10);
