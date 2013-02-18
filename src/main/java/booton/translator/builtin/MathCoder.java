@@ -126,6 +126,21 @@ class MathCoder extends Translator<Math> {
 
     /**
      * <p>
+     * Returns the greater of two {@code int} values. That is, the result is the argument closer to
+     * the value of {@link Integer#MAX_VALUE}. If the arguments have the same value, the result is
+     * that same value.
+     * </p>
+     * 
+     * @param a an argument.
+     * @param b another argument.
+     * @return the larger of {@code a} and {@code b}.
+     */
+    public String max(double a, double b) {
+        return "Math.max(" + param(0) + "," + param(1) + ")";
+    }
+
+    /**
+     * <p>
      * Returns the smaller of two {@code int} values. That is, the result the argument closer to the
      * value of {@link Integer#MIN_VALUE}. If the arguments have the same value, the result is that
      * same value.
@@ -136,6 +151,21 @@ class MathCoder extends Translator<Math> {
      * @return the smaller of {@code a} and {@code b}.
      */
     public String min(int a, int b) {
+        return "Math.min(" + param(0) + "," + param(1) + ")";
+    }
+
+    /**
+     * <p>
+     * Returns the smaller of two {@code int} values. That is, the result the argument closer to the
+     * value of {@link Integer#MIN_VALUE}. If the arguments have the same value, the result is that
+     * same value.
+     * </p>
+     * 
+     * @param a an argument.
+     * @param b another argument.
+     * @return the smaller of {@code a} and {@code b}.
+     */
+    public String min(double a, double b) {
         return "Math.min(" + param(0) + "," + param(1) + ")";
     }
 

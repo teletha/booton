@@ -83,6 +83,7 @@ public class Build extends Notifiable {
         // items[0] = Item.LastWhisper;
         // items[1] = Item.WarmogsArmor;
         // items[2] = Item.RabadonsDeathcap;
+        items[3] = Item.MercurysTreads;
     }
 
     /**
@@ -173,10 +174,25 @@ public class Build extends Notifiable {
         case BounusMS:
             return new Computed(0, get(MS).increased, status);
 
+        case MS:
+            double baseMS = base(status);
+            double computedMS = (baseMS + sum(status) + sum(MSPerLv) * level) * (1 + sum(MSRatio) / 100);
+
+            // calcurate movement speed cap
+            if (490 < computedMS) {
+                computedMS = computedMS * 0.5 + 230;
+            } else if (415 < computedMS) {
+                computedMS = computedMS * 0.8 + 83;
+            } else if (computedMS < 220) {
+                computedMS = computedMS * 0.5 + 110;
+            }
+            return new Computed(baseMS, computedMS, status);
+
         case AS:
             double baseAS = champion.getStatus(version).get(AS);
             double levelAS = champion.getStatus(version).get(ASPerLv) * (level - 1);
-            return new Computed(baseAS * (1 + levelAS / 100), baseAS * (1 + (levelAS + sum(ASRatio)) / 100), status);
+
+            return new Computed(baseAS * (1 + levelAS / 100), Math.min(2.5, baseAS * (1 + (levelAS + sum(ASRatio)) / 100)), status);
 
         case AR:
             double value = base(status);
@@ -302,7 +318,9 @@ public class Build extends Notifiable {
     private double sum(Status status) {
         double sum = 0;
 
-        // manage unique ability
+        // ===================================
+        // Item
+        // ===================================
         Set<String> names = new HashSet();
 
         for (int i = 0; i < 6; i++) {
@@ -328,23 +346,48 @@ public class Build extends Notifiable {
             }
         }
 
-        // Champion Passive
+        // ===================================
+        // Skill
+        // ===================================
         for (int i = 0; i < champion.skills.length; i++) {
             Skill skill = champion.skills[i];
             SkillStatus skillStatus = skill.getStatus(version);
 
-            for (Object token : skillStatus.passive) {
-                if (token instanceof Variable) {
-                    Variable variable = (Variable) token;
-                    Status variableStatus = variable.getStatus();
+            // form passive
+            sum += sum(skillStatus.passive, skill, status);
 
-                    if (variableStatus == status && !variable.isConditional()) {
-                        VariableResolver resolver = variable.getResolver();
-                        int level = resolver.isSkillLevelBased() ? getLevel(skill) : resolver.convertLevel(this.level);
+            // from active
+            if (skillActivation[i]) {
+                sum += sum(skill.getStatus(version).active, skill, status);
+            }
+        }
+        return sum;
+    }
 
-                        if (level != 0) {
-                            sum = variableStatus.compute(sum, computeVariable(skill, variable, level));
-                        }
+    /**
+     * <p>
+     * Compute sum value from the specified skill variables.
+     * </p>
+     * 
+     * @param tokens A descriptor tokens.
+     * @param skill A current processing skill.
+     * @param status A target status.
+     * @return A computed value.
+     */
+    private double sum(List tokens, Skill skill, Status status) {
+        double sum = 0;
+
+        for (Object token : tokens) {
+            if (token instanceof Variable) {
+                Variable variable = (Variable) token;
+                Status variableStatus = variable.getStatus();
+
+                if (variableStatus == status && !variable.isConditional()) {
+                    VariableResolver resolver = variable.getResolver();
+                    int level = resolver.isSkillLevelBased() ? getLevel(skill) : resolver.convertLevel(this.level);
+
+                    if (level != 0) {
+                        sum = variableStatus.compute(sum, computeVariable(skill, variable, level));
                     }
                 }
             }
@@ -372,7 +415,7 @@ public class Build extends Notifiable {
 
         for (Variable amplifier : variable.amplifiers) {
             VariableResolver resolver = amplifier.getResolver();
-            int skillLevel = resolver.isSkillLevelBased() ? level : this.level;
+            int skillLevel = resolver.isSkillLevelBased() ? level : resolver.convertLevel(this.level);
 
             value += computeVariable(null, amplifier, skillLevel) * get(amplifier.getStatus()).value;
         }
@@ -427,7 +470,13 @@ public class Build extends Notifiable {
      * @param key
      */
     public void active(SkillKey key) {
-        skillActivation[key.ordinal()] = !skillActivation[key.ordinal()];
+        int index = key.ordinal();
+        skillActivation[index] = !skillActivation[index];
+
+        // assure minimun skill level
+        if (skillActivation[index] && skillLevel[index] == 0) {
+            skillLevel[index] = 1;
+        }
 
         if (key == SkillKey.R) {
             if (champion == Champion.Nidalee) {

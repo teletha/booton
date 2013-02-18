@@ -371,7 +371,7 @@ public class ChampionDetail extends Page {
                     root.append(")");
                 }
 
-                root.append(cost.getStatus().unit);
+                root.append(cost.getStatus().getUnit());
             }
         }
 
@@ -480,7 +480,7 @@ public class ChampionDetail extends Page {
                 }
             }
 
-            element.append(amplifier.getStatus().unit);
+            element.append(amplifier.getStatus().getUnit());
 
             if (!amplifier.amplifiers.isEmpty()) {
                 element.append("(");
@@ -832,14 +832,14 @@ public class ChampionDetail extends Page {
         private void calcurate() {
             Computed value = build.get(status);
 
-            this.current.text(value.value() + status.unit);
+            this.current.text(value.value() + status.getUnit());
 
             if (status == ARPen) {
-                current.append(" | ").append(build.get(ARPenRatio).value() + ARPenRatio.unit);
+                current.append(" | ").append(build.get(ARPenRatio).value() + ARPenRatio.getUnit());
             }
 
             if (status == MRPen) {
-                current.append(" | ").append(build.get(MRPenRatio).value() + MRPenRatio.unit);
+                current.append(" | ").append(build.get(MRPenRatio).value() + MRPenRatio.getUnit());
             }
         }
     }
