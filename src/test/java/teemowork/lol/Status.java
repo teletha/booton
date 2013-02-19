@@ -12,20 +12,15 @@ package teemowork.lol;
 import js.math.Mathematics;
 
 /**
- * @version 2013/02/06 16:32:58
+ * @version 2013/02/19 11:52:02
  */
 public enum Status {
-
-    /** Cost */
-    Cost, CostPerLv,
-
-    Sell,
 
     // ==================================================
     // Damage Type
     // ==================================================
     /** Any Damage */
-    Damage("DM"),
+    Damage("DM"), DamageRatio("DM"),
 
     /** Physical Daname */
     PhysicalDamage("物理DM"),
@@ -64,7 +59,7 @@ public enum Status {
     Mana("Mana"), ManaPerLv, ManaRatio("Mana"), BounusMana("増加Mana"),
 
     /** Mana Regeneration */
-    Mreg(2), MregPerLv(2), MregRatio("Mana", 2),
+    Mreg(2), MregPerLv(2), MregRatio("Mreg", 2),
 
     // ==================================================
     // Energy Related
@@ -182,7 +177,7 @@ public enum Status {
     MR, MRPerLv, MRRatio("MR", 3), BounusMR("増加MR"),
 
     /** General Damage Reduction */
-    DamageReduction(), DamageReductionRatio,
+    DamageReduction(Damage), DamageReductionRatio(Damage),
 
     /** Physical Damage Reduction */
     PhysicalDamageReduction(PhysicalDamage), PhysicalDamageReductionRatio(PhysicalDamage),
@@ -194,7 +189,7 @@ public enum Status {
     AttackDamageReduction(AttackDamage), AttackDamageReductionRatio(AttackDamage),
 
     /** Shield */
-    Shield("シールド"), PhysicalShield("物理DM用シールド"), MagicShield("魔法DM用シールド"),
+    Shield("シールド"), PhysicalShield("物理DM用シールド"), MagicShield("魔法DM用シールド"), SpellShield("スペルシールド"),
 
     // ==================================================
     // Other Status Related
@@ -203,16 +198,16 @@ public enum Status {
     Range("射程"), RangePerLv, RangeRatio("射程"),
 
     /** Level */
-    Lv, LvPerLv,
+    Lv,
 
     /** Tenacity */
-    Tenacity("Tenacity"), TenacityPerLv("Tenacity"),
+    Tenacity("Tenacity"), TenacityPerLv,
 
     /** Experiment */
     Experiment("経験値"), ExperimentRatio("経験値"),
 
     /** Cooldown */
-    CD, CDPerLv,
+    CD, CDPerLv, CDDecrease,
 
     // ==================================================
     // Heal Related
@@ -226,7 +221,7 @@ public enum Status {
     RestoreEnergy("気"),
 
     // ==================================================
-    // Crowd Control
+    // Crowd Control and Debuff
     // ==================================================
     Charm("魅了", 3),
 
@@ -256,27 +251,41 @@ public enum Status {
 
     Wounds("HP回復量半減"),
 
+    Foggy("視界低下"),
+
     // ==================================================
     // Movement Related
     // ==================================================
     /** Movement Speed */
     MS("移動速度"), MSPerLv, MSRatio("移動速度"), BounusMS("増加移動速度"),
 
-    /** Ignor Slow */
+    /** Ignore Slow */
     IgnoreSlow(MSSlowRatio.name + "無効"),
 
     /** Ignore Unit Collision */
     IgnoreUnitCollision("ユニット衝突無効"),
 
     // ==================================================
-    // Buff
+    // State
     // ==================================================
+    /** Ignore Crowd Control */
+    IgnoreCC("CC無効"),
+
     Stealth("ステルス"),
 
-    // ==================================================
-    // Special Condition
-    // ==================================================
+    Visionable("視界を得る"),
+
     Chill,
+
+    // ==================================================
+    // Cost Related
+    // ==================================================
+    /** Cost */
+    Cost, CostPerLv,
+
+    Sell,
+
+    Gold(""),
 
     // ==================================================
     // Time Related
@@ -291,13 +300,7 @@ public enum Status {
 
     Distance("距離"),
 
-    Gold,
-
-    Visionable("視界を得る"),
-
     EnemyChampion("敵Championの数"),
-
-    ReduceCooldown,
 
     Percentage(""),
 
@@ -426,14 +429,19 @@ public enum Status {
         case Knockup:
         case Suppression:
         case CDRAwareTime:
+        case CDDecrease:
             return "秒";
 
         case CDR:
+        case Critical:
         case SV:
         case LS:
         case Tenacity:
         case Percentage:
             return "%";
+
+        case Gold:
+            return "Gold";
 
         default:
             return "";
@@ -449,18 +457,17 @@ public enum Status {
      * @return A formatted text.
      */
     public String format(double computed) {
-        computed = round(computed);
-
         switch (this) {
         case Critical:
         case MS:
+        case DamageRatio:
         case MSRatio:
         case ASRatio:
         case ADRatio:
         case ARRatio:
         case MRRatio:
         case ExperimentRatio:
-            return name + "が" + computed + getUnit() + "増加";
+            return name + "が" + formatValue(computed) + "増加";
 
         case DamageReduction:
         case DamageReductionRatio:
@@ -470,38 +477,29 @@ public enum Status {
         case MagicDamageReductionRatio:
         case AttackDamageReduction:
         case AttackDamageReductionRatio:
-            return name + "を" + computed + getUnit() + "軽減";
-
-        case ARReduction:
-        case ARReductionRatio:
-            return "AR減少" + computed + getUnit();
-
-        case MRReduction:
-        case MRReductionRatio:
-            return "MR減少" + computed + getUnit();
+            return name + "を" + formatValue(computed) + "軽減";
 
         case RestoreEnergy:
         case RestoreHealth:
         case RestoreMana:
-            return name + "が" + (computed == 0 ? "" : computed) + "回復";
+            return name + "が" + formatValue(computed) + "回復";
 
-        case ReduceCooldown:
-            return "CDが" + (computed == 0 ? "" : computed + "秒") + "解消";
-
-        case TargetCurrentHealthRatio:
-            return name + "の" + computed + getUnit();
-
-        case Gold:
-            return computed + name;
-
-        default:
-            break;
+        case CDDecrease:
+            return "CDが" + formatValue(computed) + "解消";
         }
+        return name + formatValue(computed);
+    }
 
-        if (computed == 0) {
-            return name;
-        }
-        return name + computed + getUnit();
+    /**
+     * <p>
+     * Helper method to format value.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    private String formatValue(double value) {
+        return value == 0 ? "" : round(value) + getUnit();
     }
 
     /**
