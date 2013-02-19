@@ -67,29 +67,11 @@ public class Item {
     /** Berserker's Greaves */
     public static final Item BerserkersGreaves = new Item(3006, "Berserker's Greaves");
 
-    /** Berserker's Greaves Homeguard */
-    public static final Item BerserkersGreavesHomeguard = new Item(3250, "Berserker's Greaves Homeguard");
-
-    /** Berserker's Greaves Captain */
-    public static final Item BerserkersGreavesCaptain = new Item(3251, "Berserker's Greaves Captain");
-
-    /** Berserker's Greaves Furor */
-    public static final Item BerserkersGreavesFuror = new Item(3252, "Berserker's Greaves Furor");
-
-    /** Berserker's Greaves Distortion */
-    public static final Item BerserkersGreavesDistortion = new Item(3253, "Berserker's Greaves Distortion");
-
-    /** Berserker's Greaves Alacrity */
-    public static final Item BerserkersGreavesAlacrity = new Item(3254, "Berserker's Greaves Alacrity");
-
     /** Bilgewater Cutlass */
     public static final Item BilgewaterCutlass = new Item(3144, "Bilgewater Cutlass");
 
     /** The Black Cleaver */
     public static final Item TheBlackCleaver = new Item(3071, "The Black Cleaver");
-
-    /** Blackfire Torch */
-    public static final Item BlackfireTorch = new Item(3188, "Blackfire Torch");
 
     /** Blade of the Ruined King */
     public static final Item BladeOftheRuinedKing = new Item(3153, "Blade of the Ruined King");
@@ -106,41 +88,11 @@ public class Item {
     /** Boots of Mobility */
     public static final Item BootsOfMobility = new Item(3117, "Boots of Mobility");
 
-    /** Boots of Mobility Homeguard */
-    public static final Item BootsOfMobilityHomeguard = new Item(3270, "Boots of Mobility Homeguard");
-
-    /** Boots of Mobility Captain */
-    public static final Item BootsOfMobilityCaptain = new Item(3271, "Boots of Mobility Captain");
-
-    /** Boots of Mobility Furor */
-    public static final Item BootsOfMobilityFuror = new Item(3272, "Boots of Mobility Furor");
-
-    /** Boots of Mobility Distortion */
-    public static final Item BootsOfMobilityDistortion = new Item(3273, "Boots of Mobility Distortion");
-
-    /** Boots of Mobility Alacrity */
-    public static final Item BootsOfMobilityAlacrity = new Item(3274, "Boots of Mobility Alacrity");
-
     /** Boots of Speed */
     public static final Item BootsOfSpeed = new Item(1001, "Boots of Speed");
 
     /** Boots of Swiftness */
     public static final Item BootsOfSwiftness = new Item(3009, "Boots of Swiftness");
-
-    /** Boots of Swiftness Homeguard */
-    public static final Item BootsOfSwiftnessHomeguard = new Item(3280, "Boots of Swiftness Homeguard");
-
-    /** Boots of Swiftness Captain */
-    public static final Item BootsOfSwiftnessCaptain = new Item(3281, "Boots of Swiftness Captain");
-
-    /** Boots of Swiftness Furor */
-    public static final Item BootsOfSwiftnessFuror = new Item(3282, "Boots of Swiftness Furor");
-
-    /** Boots of Swiftness Distortion */
-    public static final Item BootsOfSwiftnessDistortion = new Item(3283, "Boots of Swiftness Distortion");
-
-    /** Boots of Swiftness Alacrity */
-    public static final Item BootsOfSwiftnessAlacrity = new Item(3284, "Boots of Swiftness Alacrity");
 
     /** Brawler's Gloves */
     public static final Item BrawlersGloves = new Item(1051, "Brawler's Gloves");
@@ -193,9 +145,6 @@ public class Item {
     /** Emblem of Valor */
     public static final Item EmblemOfValor = new Item(3097, "Emblem of Valor");
 
-    /** Entropy */
-    public static final Item Entropy = new Item(3184, "Entropy");
-
     /** Executioner's Calling */
     public static final Item ExecutionersCalling = new Item(3123, "Executioner's Calling");
 
@@ -216,9 +165,6 @@ public class Item {
 
     /** Glacial Shroud */
     public static final Item GlacialShroud = new Item(3024, "Glacial Shroud");
-
-    /** Grez's Spectral Lantern */
-    public static final Item GrezsSpectralLantern = new Item(3159, "Grez's Spectral Lantern");
 
     /** Guardian Angel */
     public static final Item GuardianAngel = new Item(3026, "Guardian Angel");
@@ -244,20 +190,11 @@ public class Item {
     /** Hextech Revolver */
     public static final Item HextechRevolver = new Item(3145, "Hextech Revolver");
 
-    /** Hextech Sweeper */
-    public static final Item HextechSweeper = new Item(3187, "Hextech Sweeper");
-
     /** Hunter's Machete */
     public static final Item HuntersMachete = new Item(1039, "Hunter's Machete");
 
     /** Iceborn Gauntlet */
     public static final Item IcebornGauntlet = new Item(3025, "Iceborn Gauntlet");
-
-    /** Ichor of Illumination */
-    public static final Item IchorOfIllumination = new Item(2048, "Ichor of Illumination");
-
-    /** Ichor of Rage */
-    public static final Item IchorOfRage = new Item(2040, "Ichor of Rage");
 
     /** Infinity Edge */
     public static final Item InfinityEdge = new Item(3031, "Infinity Edge");
@@ -265,29 +202,11 @@ public class Item {
     /** Ionian Boots of Lucidity */
     public static final Item IonianBootsOfLucidity = new Item(3158, "Ionian Boots of Lucidity");
 
-    /** Ionian Boots of Lucidity Homeguard */
-    public static final Item IonianBootsOfLucidityHomeguard = new Item(3275, "Ionian Boots of Lucidity Homeguard");
-
-    /** Ionian Boots of Lucidity Captain */
-    public static final Item IonianBootsOfLucidityCaptain = new Item(3276, "Ionian Boots of Lucidity Captain");
-
-    /** Ionian Boots of Lucidity Furor */
-    public static final Item IonianBootsOfLucidityFuror = new Item(3277, "Ionian Boots of Lucidity Furor");
-
-    /** Ionian Boots of Lucidity Distortion */
-    public static final Item IonianBootsOfLucidityDistortion = new Item(3278, "Ionian Boots of Lucidity Distortion");
-
-    /** Ionian Boots of Lucidity Alacrity */
-    public static final Item IonianBootsOfLucidityAlacrity = new Item(3279, "Ionian Boots of Lucidity Alacrity");
-
     /** Kage's Lucky Pick */
     public static final Item KagesLuckyPick = new Item(3098, "Kage's Lucky Pick");
 
     /** Kindlegem */
     public static final Item Kindlegem = new Item(3067, "Kindlegem");
-
-    /** Kitae's Bloodrazor */
-    public static final Item KitaesBloodrazor = new Item(3186, "Kitae's Bloodrazor");
 
     /** Last Whisper */
     public static final Item LastWhisper = new Item(3035, "Last Whisper");
@@ -298,20 +217,11 @@ public class Item {
     /** Lich Bane */
     public static final Item LichBane = new Item(3100, "Lich Bane");
 
-    /** The Lightbringer */
-    public static final Item TheLightbringer = new Item(3185, "The Lightbringer");
-
     /** Locket of the Iron Solari */
     public static final Item LocketOftheIronSolari = new Item(3190, "Locket of the Iron Solari");
 
     /** Long Sword */
     public static final Item LongSword = new Item(1036, "Long Sword");
-
-    /** Lord Van Damm's Pillager */
-    public static final Item LordVanDammsPillager = new Item(3104, "Lord Van Damm's Pillager");
-
-    /** Madred's Bloodrazor */
-    public static final Item MadredsBloodrazor = new Item(3126, "Madred's Bloodrazor");
 
     /** Madred's Razors */
     public static final Item MadredsRazors = new Item(3106, "Madred's Razors");
@@ -340,21 +250,6 @@ public class Item {
     /** Mercury's Treads */
     public static final Item MercurysTreads = new Item(3111, "Mercury's Treads");
 
-    /** Mercury's Treads Homeguard */
-    public static final Item MercurysTreadsHomeguard = new Item(3265, "Mercury's Treads Homeguard");
-
-    /** Mercury's Treads Captain */
-    public static final Item MercurysTreadsCaptain = new Item(3266, "Mercury's Treads Captain");
-
-    /** Mercury's Treads Furor */
-    public static final Item MercurysTreadsFuror = new Item(3267, "Mercury's Treads Furor");
-
-    /** Mercury's Treads Distortion */
-    public static final Item MercurysTreadsDistortion = new Item(3268, "Mercury's Treads Distortion");
-
-    /** Mercury's Treads Alacrity */
-    public static final Item MercurysTreadsAlacrity = new Item(3269, "Mercury's Treads Alacrity");
-
     /** Mikael's Crucible */
     public static final Item MikaelsCrucible = new Item(3222, "Mikael's Crucible");
 
@@ -376,38 +271,14 @@ public class Item {
     /** Ninja Tabi */
     public static final Item NinjaTabi = new Item(3047, "Ninja Tabi");
 
-    /** Ninja Tabi Homeguard */
-    public static final Item NinjaTabiHomeguard = new Item(3260, "Ninja Tabi Homeguard");
-
-    /** Ninja Tabi Captain */
-    public static final Item NinjaTabiCaptain = new Item(3261, "Ninja Tabi Captain");
-
-    /** Ninja Tabi Furor */
-    public static final Item NinjaTabiFuror = new Item(3262, "Ninja Tabi Furor");
-
-    /** Ninja Tabi Distortion */
-    public static final Item NinjaTabiDistortion = new Item(3263, "Ninja Tabi Distortion");
-
-    /** Ninja Tabi Alacrity */
-    public static final Item NinjaTabiAlacrity = new Item(3264, "Ninja Tabi Alacrity");
-
     /** Null-Magic Mantle */
     public static final Item NullMagicMantle = new Item(1033, "Null-Magic Mantle");
-
-    /** Odyn's Veil */
-    public static final Item OdynsVeil = new Item(3180, "Odyn's Veil");
 
     /** Ohmwrecker */
     public static final Item Ohmwrecker = new Item(3056, "Ohmwrecker");
 
     /** Oracle's Elixir */
     public static final Item OraclesElixir = new Item(2042, "Oracle's Elixir");
-
-    /** Oracle's Extract */
-    public static final Item OraclesExtract = new Item(2047, "Oracle's Extract");
-
-    /** Overlord's Bloodmail */
-    public static final Item OverlordsBloodmail = new Item(3084, "Overlord's Bloodmail");
 
     /** Phage */
     public static final Item Phage = new Item(3044, "Phage");
@@ -420,12 +291,6 @@ public class Item {
 
     /** Pickaxe */
     public static final Item Pickaxe = new Item(1037, "Pickaxe");
-
-    /** Prospector's Blade */
-    public static final Item ProspectorsBlade = new Item(1062, "Prospector's Blade");
-
-    /** Prospector's Ring */
-    public static final Item ProspectorsRing = new Item(1063, "Prospector's Ring");
 
     /** Quicksilver Sash */
     public static final Item QuicksilverSash = new Item(3140, "Quicksilver Sash");
@@ -463,9 +328,6 @@ public class Item {
     /** Rylai's Crystal Scepter */
     public static final Item RylaisCrystalScepter = new Item(3116, "Rylai's Crystal Scepter");
 
-    /** Sanguine Blade */
-    public static final Item SanguineBlade = new Item(3181, "Sanguine Blade");
-
     /** Sapphire Crystal */
     public static final Item SapphireCrystal = new Item(1027, "Sapphire Crystal");
 
@@ -489,21 +351,6 @@ public class Item {
 
     /** Sorcerer's Shoes */
     public static final Item SorcerersShoes = new Item(3020, "Sorcerer's Shoes");
-
-    /** Sorcerer's Shoes Homeguard */
-    public static final Item SorcerersShoesHomeguard = new Item(3255, "Sorcerer's Shoes Homeguard");
-
-    /** Sorcerer's Shoes Captain */
-    public static final Item SorcerersShoesCaptain = new Item(3256, "Sorcerer's Shoes Captain");
-
-    /** Sorcerer's Shoes Furor */
-    public static final Item SorcerersShoesFuror = new Item(3257, "Sorcerer's Shoes Furor");
-
-    /** Sorcerer's Shoes Distortion */
-    public static final Item SorcerersShoesDistortion = new Item(3258, "Sorcerer's Shoes Distortion");
-
-    /** Sorcerer's Shoes Alacrity */
-    public static final Item SorcerersShoesAlacrity = new Item(3259, "Sorcerer's Shoes Alacrity");
 
     /** Spirit Stone */
     public static final Item SpiritStone = new Item(1080, "Spirit Stone");
@@ -565,17 +412,11 @@ public class Item {
     /** Warmog's Armor */
     public static final Item WarmogsArmor = new Item(3083, "Warmog's Armor");
 
-    /** Wicked Hatchet */
-    public static final Item WickedHatchet = new Item(3122, "Wicked Hatchet");
-
     /** Will of the Ancients */
     public static final Item WillOftheAncients = new Item(3152, "Will of the Ancients");
 
     /** Wit's End */
     public static final Item WitsEnd = new Item(3091, "Wit's End");
-
-    /** Wooglet's Witchcap */
-    public static final Item WoogletsWitchcap = new Item(3090, "Wooglet's Witchcap");
 
     /** Wriggle's Lantern */
     public static final Item WrigglesLantern = new Item(3154, "Wriggle's Lantern");
@@ -594,36 +435,6 @@ public class Item {
 
     /** Zhonya's Hourglass */
     public static final Item ZhonyasHourglass = new Item(3157, "Zhonya's Hourglass");
-
-    /** Cloak and Dagger */
-    public static final Item CloakandDagger = new Item(3172, "Cloak and Dagger");
-
-    /** Elixir of Agility */
-    public static final Item ElixirOfAgility = new Item(2038, "Elixir of Agility");
-
-    /** Force of Nature */
-    public static final Item ForceOfNature = new Item(3109, "Force of Nature");
-
-    /** Heart of Gold */
-    public static final Item HeartOfGold = new Item(3132, "Heart of Gold");
-
-    /** Ionic Spark */
-    public static final Item IonicSpark = new Item(3178, "Ionic Spark");
-
-    /** Leviathan */
-    public static final Item Leviathan = new Item(3138, "Leviathan");
-
-    /** Meki Pendant */
-    public static final Item MekiPendant = new Item(1005, "Meki Pendant");
-
-    /** Moonflair Spellblade */
-    public static final Item MoonflairSpellblade = new Item(3170, "Moonflair Spellblade");
-
-    /** Regrowth Pendant */
-    public static final Item RegrowthPendant = new Item(1007, "Regrowth Pendant");
-
-    /** Soul Shroud */
-    public static final Item SoulShroud = new Item(3099, "Soul Shroud");
 
     /** The descriptor. */
     private final ItemStatus[] versions = new ItemStatus[Version.values().length];
@@ -647,6 +458,17 @@ public class Item {
         this.name = name;
 
         items.add(this);
+    }
+
+    /**
+     * <p>
+     * Returns icon image path.
+     * </p>
+     * 
+     * @return
+     */
+    public String getIcon() {
+        return "src/main/resources/teemowork/item/" + id + ".png";
     }
 
     /**
@@ -751,12 +573,7 @@ public class Item {
                 .set(Health, 400);
         BerserkersGreaves.update(P0000).build(BootsOfSpeed, Dagger).set(Cost, 150).set(ASRatio, 20);
         BilgewaterCutlass.update(P0000).build(Pickaxe, VampiricScepter).set(Cost, 250).set(LS, 10).set(AD, 40);
-        BlackfireTorch.update(P0000)
-                .build(KagesLuckyPick, FiendishCodex, HauntingGuise)
-                .set(Cost, 700)
-                .set(AP, 80)
-                .set(Health, 250)
-                .set(Mreg, 10);
+
         BladeOftheRuinedKing.update(P0000).build(BilgewaterCutlass).set(Cost, 975).set(LS, 10).set(AD, 40);
         BlastingWand.update(P0000).set(Cost, 860).set(AP, 40);
         BonetoothNecklace.update(P0000).set(Cost, 800).set(AD, 5);
@@ -783,7 +600,6 @@ public class Item {
         ElixirOfBrilliance.update(P0000).set(Cost, 250);
         ElixirOfFortitude.update(P0000).set(Cost, 250);
         EmblemOfValor.update(P0000).build(ClothArmor, RejuvenationBead).set(Cost, 170);
-        Entropy.update(P0000).build(BFSword, Phage).set(Cost, 600).set(AD, 70).set(Health, 275);
         ExecutionersCalling.update(P0000).build(AvariceBlade, LongSword).set(Cost, 700).set(Critical, 15).set(AD, 25);
         FaerieCharm.update(P0000).set(Cost, 180).set(Mreg, 3);
         FiendishCodex.update(P0000).build(FaerieCharm, AmplifyingTome).set(Cost, 385).set(AP, 30).set(Mreg, 6);
@@ -791,7 +607,6 @@ public class Item {
         FrozenMallet.update(P0000).build(Phage, GiantsBelt).set(Cost, 835).set(AD, 30).set(Health, 700);
         GiantsBelt.update(P0000).set(Cost, 1000).set(Health, 400);
         GlacialShroud.update(P0000).build(SapphireCrystal, ChainVest).set(Cost, 380).set(Mana, 300);
-        GrezsSpectralLantern.update(P0000).build(ClothArmor, VampiricScepter).set(Cost, 150).set(LS, 12).set(AD, 20);
         GuardianAngel.update(P0000).build(NullMagicMantle, ChainVest).set(Cost, 1480).set(MR, 30);
         GuinsoosRageblade.update(P0000).build(BlastingWand, Pickaxe).set(Cost, 865).set(AP, 40).set(AD, 30);
         HauntingGuise.update(P0000).build(RubyCrystal, AmplifyingTome).set(Cost, 575).set(AP, 25).set(Health, 200);
@@ -804,11 +619,6 @@ public class Item {
                 .set(AP, 65)
                 .set(AD, 45);
         HextechRevolver.update(P0000).build(AmplifyingTome, AmplifyingTome).set(Cost, 330).set(AP, 40);
-        HextechSweeper.update(P0000)
-                .build(AmplifyingTome, AmplifyingTome, Kindlegem)
-                .set(Cost, 200)
-                .set(AP, 50)
-                .set(Health, 300);
         HuntersMachete.update(P0000).set(Cost, 300);
         IcebornGauntlet.update(P0000)
                 .build(Sheen, GlacialShroud)
@@ -816,13 +626,10 @@ public class Item {
                 .set(AP, 40)
                 .set(Mana, 500)
                 .set(CDR, 15);
-        IchorOfIllumination.update(P0000).set(Cost, 500);
-        IchorOfRage.update(P0000).set(Cost, 500);
         InfinityEdge.update(P0000).build(BFSword, CloakOfAgility, Pickaxe).set(Cost, 645).set(Critical, 25).set(AD, 70);
         IonianBootsOfLucidity.update(P0000).build(BootsOfSpeed).set(Cost, 700);
         KagesLuckyPick.update(P0000).build(AmplifyingTome).set(Cost, 330).set(AP, 25);
         Kindlegem.update(P0000).build(RubyCrystal).set(Cost, 375).set(Health, 200);
-        KitaesBloodrazor.update(P0000).build(Pickaxe, RecurveBow).set(Cost, 700).set(ASRatio, 40).set(AD, 30);
         LastWhisper.update(P0000).build(LongSword, Pickaxe).set(Cost, 1025).set(AD, 40).set(ARPenRatio, 40);
         LiandrysTorment.update(P0000).build(HauntingGuise, AmplifyingTome).set(Cost, 980).set(AP, 60).set(Health, 300);
         LichBane.update(P0000).build(Sheen, BlastingWand).set(Cost, 880).set(AP, 80).set(MSRatio, 5).set(Mana, 250);
@@ -869,16 +676,8 @@ public class Item {
         NegatronCloak.update(P0000).set(Cost, 810).set(MR, 45);
         NinjaTabi.update(P0000).build(BootsOfSpeed, ClothArmor).set(Cost, 350);
         NullMagicMantle.update(P0000).set(Cost, 400).set(MR, 20);
-        OdynsVeil.update(P0000)
-                .build(NegatronCloak, CatalystTheProtector)
-                .set(Cost, 600)
-                .set(MR, 50)
-                .set(Mana, 350)
-                .set(Health, 350);
         Ohmwrecker.update(P0000).build(CatalystTheProtector, ChainVest).set(Cost, 930).set(Mana, 300).set(Health, 350);
         OraclesElixir.update(P0000).set(Cost, 400);
-        OraclesExtract.update(P0000).set(Cost, 250);
-        OverlordsBloodmail.update(P0000).build(GiantsBelt, RubyCrystal).set(Cost, 980).set(Health, 850);
         Phage.update(P0000).build(RubyCrystal, LongSword).set(Cost, 590).set(AD, 20).set(Health, 200);
         PhantomDancer.update(P0000)
                 .build(CloakOfAgility, Zeal, Dagger)
@@ -888,8 +687,6 @@ public class Item {
                 .set(ASRatio, 50);
         PhilosophersStone.update(P0000).build(FaerieCharm, RejuvenationBead).set(Cost, 340).set(Hreg, 7).set(Mreg, 9);
         Pickaxe.update(P0000).set(Cost, 875).set(AD, 25);
-        ProspectorsBlade.update(P0000).set(Cost, 950).set(LS, 5).set(AD, 20);
-        ProspectorsRing.update(P0000).set(Cost, 950).set(AP, 40);
         QuicksilverSash.update(P0000).build(NegatronCloak).set(Cost, 850).set(MR, 45);
         RabadonsDeathcap.update(P0000).build(BlastingWand, NeedlesslyLargeRod).set(Cost, 740).set(AP, 120);
         RanduinsOmen.update(P0000).build(GiantsBelt, WardensMail).set(Cost, 1000).set(Health, 500);
@@ -911,7 +708,6 @@ public class Item {
                 .set(Cost, 605)
                 .set(AP, 80)
                 .set(Health, 500);
-        SanguineBlade.update(P0000).build(BFSword, VampiricScepter).set(Cost, 500).set(LS, 15).set(AD, 65);
         SapphireCrystal.update(P0000).set(Cost, 400).set(Mana, 200);
         SeraphsEmbrace.update(P0000).build(ArchangelsStaff).set(Cost, 0).set(AP, 60).set(Mana, 1000).set(Mreg, 10);
         ShardOfTrueIce.update(P0000).build(KagesLuckyPick, ManaManipulator).set(Cost, 535).set(AP, 45);
@@ -975,7 +771,6 @@ public class Item {
         TheBloodthirster.update(P0000).build(BFSword, VampiricScepter).set(Cost, 650).set(LS, 12).set(AD, 70);
         TheBrutalizer.update(P0000).build(LongSword, LongSword).set(Cost, 537).set(AD, 25);
         TheHexCore.update(P0000).set(Cost, 0);
-        TheLightbringer.update(P0000).build(BonetoothNecklace, Pickaxe).set(Cost, 300).set(LS, 12).set(AD, 50);
         Thornmail.update(P0000).build(ChainVest, ClothArmor).set(Cost, 1180);
         Tiamat.update(P0000)
                 .build(Pickaxe, LongSword, RejuvenationBead, RejuvenationBead)
@@ -1000,7 +795,6 @@ public class Item {
         WarmogsArmor.update(P0000).build(GiantsBelt, RubyCrystal, RejuvenationBead).set(Cost, 995).set(Health, 1000);
         WillOftheAncients.update(P0000).build(KagesLuckyPick, HextechRevolver).set(Cost, 585).set(AP, 50);
         WitsEnd.update(P0000).build(RecurveBow, NullMagicMantle).set(Cost, 850).set(MR, 20).set(ASRatio, 40);
-        WoogletsWitchcap.update(P0000).build(BlastingWand, BlastingWand, ChainVest).set(Cost, 1060).set(AP, 100);
         WrigglesLantern.update(P0000).build(VampiricScepter, MadredsRazors).set(Cost, 100).set(LS, 10).set(AD, 15);
         YoumuusGhostblade.update(P0000)
                 .build(AvariceBlade, TheBrutalizer)

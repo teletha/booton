@@ -123,7 +123,7 @@ public enum Status {
     LS("Life Steal"), LSPerLv, LSRatio,
 
     /** Critical Chance */
-    Critical("Critical Chanse"), CriticalPerLv, CriticalRatio,
+    Critical("Critical Chance"), CriticalPerLv, CriticalRatio,
 
     // ==================================================
     // Ability Power Related
