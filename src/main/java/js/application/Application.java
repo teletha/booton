@@ -13,11 +13,13 @@ import static js.lang.Global.*;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import js.lang.Classes;
 import js.util.ArrayList;
+import js.util.HashMap;
 import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
@@ -42,7 +44,11 @@ public abstract class Application {
                 PageInfo info = constructor.getAnnotation(PageInfo.class);
 
                 if (info != null) {
-                    router.routes.add(new Route(constructor, info));
+                    if (info.path().contains("*")) {
+                        router.wildcards.add(new Route(constructor, info));
+                    } else {
+                        router.route.put(info.path(), constructor);
+                    }
                 }
             }
         }
@@ -91,7 +97,10 @@ public abstract class Application {
     private static class Router implements Listener {
 
         /** The page router. */
-        private final List<Route> routes = new ArrayList();
+        private final Map<String, Constructor> route = new HashMap();
+
+        /** The page router. */
+        private final List<Route> wildcards = new ArrayList();
 
         /**
          * <p>
@@ -116,22 +125,42 @@ public abstract class Application {
                 pageId = pageId.substring(1);
             }
 
-            for (Route route : routes) {
-                Page page = route.match(pageId);
+            Constructor constructor = route.get(pageId);
 
-                if (page != null) {
-                    // create element cradle
-                    jQuery cradle = $(document.createDocumentFragment());
+            if (constructor != null) {
+                try {
+                    dispatch((Page) constructor.newInstance());
+                } catch (Exception e) {
+                    // do nothing
+                }
+            } else {
+                for (Route route : wildcards) {
+                    Page page = route.match(pageId);
 
-                    // build page element
-                    page.load(cradle);
-
-                    // clear old page and append new page
-                    $("#Content").empty().append(cradle);
-
-                    return;
+                    if (page != null) {
+                        dispatch(page);
+                        return;
+                    }
                 }
             }
+        }
+
+        /**
+         * <p>
+         * Dispatch page.
+         * </p>
+         * 
+         * @param pageId
+         */
+        private void dispatch(Page page) {
+            // create element cradle
+            jQuery cradle = $(document.createDocumentFragment());
+
+            // build page element
+            page.load(cradle);
+
+            // clear old page and append new page
+            $("#Content").empty().append(cradle);
         }
     }
 

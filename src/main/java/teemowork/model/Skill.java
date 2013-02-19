@@ -4907,18 +4907,30 @@ public class Skill {
 
         /** Tryndamere */
         BattleFury.update()
-                .passive("通常攻撃時に5Fury、クリティカル時に10Fury、Spinning Slashが敵ユニットに命中するたびに2Furyを得る。敵ユニットを倒すと追加で10Furyを得る。Furyの上限は100、8秒間戦闘を行わないと毎秒5Furyずつ減少していく。また、Furyの割合に比例してクリティカルの確率が上昇する。建物を攻撃した場合はFuryは増加しない。");
+                .passive("{1}する。通常攻撃時に5Fury、クリティカル時に10Fury、Spinning Slashが敵ユニットに命中するたびに2Furyを得る。敵ユニットを倒すと追加で10Furyを得る。Furyの上限は100、8秒間戦闘を行わないと毎秒5Furyずつ減少していく。建物を攻撃した場合はFuryは増加しない。")
+                .variable(1, Critical, 0, 0, amplify(Stack, 0.35))
+                .conditional(1);
         Bloodlust.update()
-                .passive("Tryndamereの攻撃力が増加し、更にHPの減少割合に比例して攻撃力が上昇する(瀕死時程攻撃力UP)。増加AD: 5/10/15/20/25 + [HP損傷率(%) × 0.15/0.2/0.25/0.3/0.35]")
-                .active("Furyをすべて消費しHPを回復する。")
+                .passive("{1}を得る。")
+                .variable(1, AD, 5, 5, amplify(MissingHealthPercentage, 0.15, 0.05))
+                .active("Furyをすべて消費し{2}する。")
+                .variable(2, RestoreHealth, 30, 10, ap(1.5), amplify(Stack, 0.5, 0.45))
                 .cd(12);
-        MockingShout.update().active("4秒間近くの敵Championの攻撃力を下げ、後ろを向いている敵Championには更にスロー(4s)を与える。").cd(14).range(850);
+        MockingShout.update()
+                .active("4秒間近くの敵Championに{1}を与え、後ろを向いている敵Championには更に4秒間{2}を与える。")
+                .variable(1, ASSlowRatio, 20, 15)
+                .variable(2, MSSlowRatio, 30, 7.5)
+                .cd(14)
+                .range(850);
         SpinningSlash.update()
-                .active("指定地点まで武器を振り回しながら移動し、当たった敵ユニットに物理DMを与える。このスキルはクリティカルが発生するたびにCDが2秒解消される。")
+                .active("指定地点まで武器を振り回しながら移動し、当たった敵ユニットに{1}を与える。このスキルはクリティカルが発生するたびに{2}する。")
+                .variable(1, PhysicalDamage, 70, 30, ap(1), bounusAD(1.2))
+                .variable(2, CDDecrease, 2)
                 .cd(13, -1)
                 .range(660);
         UndyingRage.update()
-                .active("5秒間HPが1未満にならなくなる(死ななくなる)。また、このスキル使用時にFuryが増加する。このスキルの使用は状態異常によって阻害されない。")
+                .active("5秒間HPが1未満にならなくなる(死ななくなる)。また、このスキル使用時にFuryが{1}増加する。このスキルの使用は状態異常によって阻害されない。")
+                .variable(1, Count, 50, 25)
                 .cd(110, -10);
 
         /** Twisted Fate */

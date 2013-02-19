@@ -27,12 +27,12 @@ public class Teemowork extends Application {
         $("body").css("padding", "0px 10%");
 
         Header nav = new Header();
-        nav.add("< ^ v ^ > Teemowork", "test.html");
+        nav.add("< ^ v ^ > Teemowork", "");
         nav.add("Patch", "#");
 
         Menu sub = nav.add("Champion", "#");
         sub.add("Compare", "#ChampionComparing");
-        sub.add("Item", "#");
+        sub.add("Item", "#ItemCatalog");
         sub.add("Mastery", "#");
         sub.add("Rune", "#");
 
