@@ -156,6 +156,7 @@ public class Build extends Notifiable {
         case TargetMaxHealthRatio:
         case TargetCurrentHealthRatio:
         case TargetMissingHealthRatio:
+        case AttackDamageRatio:
         case CurrentManaRatio:
         case Stack:
         case Duration:
