@@ -15,8 +15,8 @@ import static teemowork.model.Version.*;
 import teemowork.model.VariableResolver.Diff;
 import teemowork.model.VariableResolver.Fixed;
 import teemowork.model.VariableResolver.Per1Level;
-import teemowork.model.VariableResolver.Per3LevelAdditional;
 import teemowork.model.VariableResolver.Per3Level;
+import teemowork.model.VariableResolver.Per3LevelAdditional;
 import teemowork.model.VariableResolver.Per3LevelForKarma;
 import teemowork.model.VariableResolver.Per4Level;
 import teemowork.model.VariableResolver.Per5Level;
@@ -4551,68 +4551,132 @@ public class Skill {
                 .range(1000);
 
         /** Singed */
-        EmpoweredBulwark.update().passive("最大MNの25%分、HPが上昇する。");
-        PoisonTrail.update().passive("n:Singedの通り道に3.25秒間持続する毒を撒き、触れた敵ユニットに毎秒魔法DMを与える。毎秒魔法DMは3秒間持続する。").mana(13).cd(1);
+        EmpoweredBulwark.update().passive("{1}を得る。").variable(1, Health, 0, 0, amplify(Mana, 0.25));
+        PoisonTrail.update()
+                .passive("Singedの通り道に3.25秒間持続する毒を撒き、触れた敵ユニットに3秒間毎秒{1}を与える。")
+                .variable(1, MagicDamage, 22, 0, ap(0.3))
+                .mana(13)
+                .cd(1);
         MegaAdhesive.update()
-                .active("指定範囲に5秒間持続する粘着剤を撒き、範囲内の敵ユニットにスローを与え続ける。スローは範囲外に出てからも1秒間持続する。")
+                .active("指定地点に5秒間持続する粘着剤を撒き、{1}の敵ユニットに{2}を与え続ける。この効果は範囲外に出てからも1秒間持続する。")
+                .variable(1, Radius, 350)
+                .variable(2, MSSlowRatio, 35, 10)
                 .mana(70, 10)
                 .cd(14)
                 .range(1000);
-        Fling.update().active("対象の敵ユニット魔法DMを与え、Singedの後ろに投げ飛ばす。").mana(100, 10).cd(10).range(125);
+        Fling.update()
+                .active("対象の敵ユニット{1}を与え、Singedの後ろに投げ飛ばす({2})。")
+                .variable(1, MagicDamage, 100, 50, ap(1))
+                .variable(2, Distance, 550)
+                .mana(100, 10)
+                .cd(10)
+                .range(125);
         InsanityPotion.update()
-                .active("25秒間Singedの各能力(AP、AR、MR、移動速度、HP回復速度、MN回復速度)が上昇し、受けるCC(Stun, Slow, Taunt, Fear, Snare, Silence, Blind)の効果時間が低減される。")
+                .active("25秒間{1}、{2}、{3}、{4}、{5}、{6}を得て、{7}する。")
+                .variable(1, AP, 35, 15)
+                .variable(2, AR, 35, 15)
+                .variable(3, MR, 35, 15)
+                .variable(4, Hreg, 35, 15)
+                .variable(5, Mreg, 35, 15)
+                .variable(6, Tenacity, 10, 5)
+                .variable(7, MSRatio, 35, 15)
                 .mana(150)
                 .cd(100);
 
         /** Sion */
-        FeelNoPain.update().passive("40%の確率で受ける通常攻撃のダメージを軽減する。この軽減は防御力計算より先に行われる。レベル1、7、13で軽減DMが上昇する。");
-        CrypticGaze.update().active("対象の敵ユニットに魔法DMとスタン(1.5s)を与える。").mana(100).cd(12, -1).range(550);
+        FeelNoPain.update()
+                .passive("40%の確率で{1}する。この軽減は防御力計算より先に行われる。レベル1、7、13で軽減DMが上昇する。")
+                .variable(1, AttackDamageReduction, new Per6Level(30, 10));
+        CrypticGaze.update()
+                .active("対象の敵ユニットに{1}と{2}を与える。")
+                .variable(1, MagicDamage, 70, 55, ap(0.9))
+                .variable(2, Stun, 1.5)
+                .mana(100)
+                .cd(12, -1)
+                .range(550);
         DeathsCaress.update()
-                .active("ダメージを軽減するシールドを自身に付与する。10秒間シールドが残っていた場合、シールドが破裂し近くの敵ユニットに魔法DMを与える。使用から4秒後以降に再度使用で、即座にシールドを破裂させる。")
+                .active("{1}を得る。10秒間シールドが残っていた場合、シールドが破裂し{2}の敵ユニットに{3}を与える。使用から4秒後以降に再度使用で、即座にシールドを破裂させる。")
+                .variable(1, Shield, 100, 50, ap(0.9))
+                .variable(2, Radius, 550)
+                .variable(3, MagicDamage, 100, 50, ap(0.9))
                 .mana(70, 10);
         Enrage.update()
-                .passive("n:Sionの攻撃力が増加する。使用中にLHをとるとSionの最大HPが増加する。対象が敵Champion/SiegeまたはSuperMinion/Buffを持った中立クリープの場合、増加値は2倍(+2/3/4/5/6)になる。このスキルはマナの代わりにHPを消費する。");
+                .passive("{1}を得る。使用中にLHをとるとSionの最大HPが{2}増加する。対象が敵Champion/SiegeまたはSuperMinion/Buffを持った中立クリープの場合、増加値は2倍になる。")
+                .variable(1, AD, 25, 10)
+                .variable(2, Count, 1, 0.5)
+                .cost(Health, 6, 2)
+                .type(SkillType.Toggle);
         Cannibalism.update()
-                .active("20秒間Sionのライフスティールと攻撃速度が増加し、近くの味方ユニット(範囲200)を通常攻撃で与えたダメージの一定割合分回復させる。")
+                .active("20秒間{1}を得て{2}し、通常攻撃をするたびに{4}の味方ユニットは{3}する。")
+                .variable(1, LS, 50, 25)
+                .variable(2, ASRatio, 50)
+                .variable(3, RestoreHealth, 0, 0, amplify(AttackDamageRatio, 25, 12.5))
+                .variable(4, Radius, 200)
                 .mana(100)
                 .cd(90);
 
         /** Sivir */
-        FleetOfFoot.update().passive("敵Championに通常攻撃でダメージを与えると、2秒間移動速度が50増加する。");
+        FleetOfFoot.update().passive("敵Championに通常攻撃でダメージを与えると、2秒間{1}する。").variable(1, MSRatio, 50).conditional(1);
         BoomerangBlade.update()
-                .active("指定方向にブーメランを投げ、当たった敵ユニットに物理DMを与える。ダメージは敵に当たるごとに20%ずつ減り、最大で40%まで低下する。行きと帰りそれぞれに攻撃判定がある。")
+                .active("指定方向にブーメランを投げ、当たった敵ユニットに{1}を与える。ダメージは敵に当たるごとに20%ずつ減り、最大で40%まで低下する。行きと帰りそれぞれに攻撃判定がある。")
+                .variable(1, PhysicalDamage, 60, 45, ap(0.5), bounusAD(1.1))
                 .mana(70, 10)
                 .cd(9)
                 .range(1200);
         Ricochet.update()
-                .active("次に行う通常攻撃に追加物理DMが付与され、5回跳ね返る(範囲450)ようになる。この追加ダメージはCriticalHitによって増幅される。On-Hit Effectsの効果は最初に当たったユニットにのみ発動し、跳ね返る毎にダメージが20%ずつ低下する。")
+                .active("次に行う通常攻撃に追加{1}が付与され、5回跳ね返る({2})ようになる。この追加ダメージはCriticalHitによって増幅される。On-Hit Effectsの効果は最初に当たったユニットにのみ発動し、跳ね返る毎にダメージが20%ずつ低下する。")
+                .variable(1, PhysicalDamage, 20, 15)
+                .variable(2, Radius, 450)
                 .mana(40)
                 .cd(7, -1);
         SpellShield.update()
-                .active("Sivirに3秒間持続するスペルシールドを付与し、その間一度だけ敵のスキルを無効化する。無効化した場合自身のMNが150回復する。")
+                .active("Sivirに3秒間{1}を付与し、その間一度だけ敵のスキルを無効化する。無効化した場合{2}する。")
+                .variable(1, Status.SpellShield)
+                .variable(2, RestoreMana, 150)
                 .mana(75)
                 .cd(22, -3);
         OnTheHunt.update()
-                .active("10秒間自身と近くの味方ユニットの攻撃速度と移動速度を上昇するオーラを発生させる。一度範囲内に入れば、Sivirから離れても効果が持続する。")
+                .active("10秒間以下の能力をもつ{1}のオーラを発生させる。{2}し、自身は{3}、近くの味方ユニットは{4}する。一度範囲内に入れば、Sivirから離れても効果が持続する。")
+                .variable(1, Radius, 1200)
+                .variable(2, MSRatio, 20)
+                .variable(3, ASRatio, 30, 15)
+                .variable(4, ASRatio, 15, 7.5)
                 .mana(100)
                 .cd(100, -10)
                 .range(1200);
 
         /** Skarner */
-        Energize.update().passive("通常攻撃を行うたびに、 Skarnerのすべてのスキルのクールダウンが0.5秒解消される(対象がChampionの場合は1秒)。建物に対しては無効。");
+        Energize.update()
+                .passive("通常攻撃を行うたびに、 Skarnerのすべてのスキルの{1}される(対象がChampionの場合は{2})。建物に対しては無効。")
+                .variable(1, CDDecrease, 0.5)
+                .variable(2, CDDecrease, 1);
         CrystalSlash.update()
-                .active("Skarnerの近くにいるすべての敵ユニットに物理DMを与える。このスキルが敵ユニットにヒットした場合、5秒間Crystal Energyのスタックを得る。スタックがある状態で再度このスキルを使用すると、追加魔法DMとスロー(2s)が付与される。")
+                .active("Skarnerの近くにいるすべての敵ユニットに{1}を与える。このスキルが敵ユニットにヒットした場合、5秒間Crystal Energyのスタックを得る。スタックがある状態で再度このスキルを使用すると、追加{2}と2秒間{3}が付与される。")
+                .variable(1, PhysicalDamage, 25, 15, bounusAD(0.8))
+                .variable(2, MagicDamage, 24, 12, ap(0.4))
+                .variable(3, MSSlowRatio, 20, 5)
                 .mana(20, 2)
                 .cd(3.5)
                 .range(350);
-        CrystallineExoskeleton.update().active("6秒間自身にシールドを張る。シールドが残っている間MS/ASが増加する。").mana(60).cd(18);
+        CrystallineExoskeleton.update()
+                .active("6秒間{1}を張る。シールドが残っている間{2}し、{3}する。")
+                .variable(1, Shield, 70, 45, ap(0.6))
+                .variable(2, MSRatio, 15, 2)
+                .variable(3, ASRatio, 30, 5)
+                .mana(60)
+                .cd(18);
         Fracture.update()
-                .active("指定方向に貫通するエネルギーを飛ばし、当たった敵ユニットに魔法DMと6秒間持続するマークを付与する。自身がマークが付いた敵ユニットを攻撃するか、このスキルで敵ユニットを倒した場合、マークを消費して自身のHPを回復する。HP回復量はマークを消費する度に50%ずつ低下していく。")
+                .active("指定方向に貫通するエネルギーを飛ばし、当たった敵ユニットに{1}と6秒間持続するマークを付与する。自身がマークが付いた敵ユニットを攻撃するか、このスキルで敵ユニットを倒した場合、マークを消費して{2}する。HP回復量はマークを消費する度に50%ずつ低下していく。")
+                .variable(1, MagicDamage, 80, 40, ap(0.7))
+                .variable(2, RestoreHealth, 30, 15, ap(0.3))
                 .mana(50, 5)
                 .cd(10)
                 .range(600);
         Impale.update()
-                .active("対象の敵Championに魔法DMとサプレッション(1.75s)を与える。効果中は対象の敵Championを引っ張る事が出来る。また、効果終了時に追加魔法DMを与える。")
+                .active("対象の敵Championに{1}と{2}を与える。効果中は対象の敵Championを引っ張る事が出来る。また、効果終了時に追加{3}を与える。")
+                .variable(1, MagicDamage, 100, 50, ap(0.5))
+                .variable(2, Suppression, 1.75)
+                .variable(3, MagicDamage, 100, 50, ap(0.5))
                 .mana(100, 25)
                 .cd(130, -10)
                 .range(350);

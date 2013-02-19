@@ -32,7 +32,7 @@ public enum Status {
     TrueDamage("TrueDM"),
 
     /** ATtack Damage */
-    AttackDamage("通常攻撃によるDM"),
+    AttackDamage("通常攻撃によるDM"), AttackDamageRatio(AttackDamage),
 
     /** Dealt Damage */
     DealtDamage("与えたDM"), DealtDamageRatio(DealtDamage),
@@ -207,7 +207,7 @@ public enum Status {
     Experiment("経験値"), ExperimentRatio("経験値"),
 
     /** Cooldown */
-    CD, CDPerLv, CDDecrease,
+    CD, CDPerLv, CDDecrease(1),
 
     // ==================================================
     // Heal Related
