@@ -10,7 +10,7 @@
 package teemowork;
 
 import static js.lang.Global.*;
-import static teemowork.lol.Status.*;
+import static teemowork.model.Status.*;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,11 +22,11 @@ import js.util.ArrayList;
 import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
-import teemowork.lol.Champion;
-import teemowork.lol.ChampionGroup;
-import teemowork.lol.ChampionStatus;
-import teemowork.lol.Status;
-import teemowork.lol.Version;
+import teemowork.model.Champion;
+import teemowork.model.ChampionGroup;
+import teemowork.model.ChampionStatus;
+import teemowork.model.Status;
+import teemowork.model.Version;
 import booton.css.CSS;
 
 /**

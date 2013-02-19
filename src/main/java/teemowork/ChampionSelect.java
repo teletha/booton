@@ -16,7 +16,7 @@ import js.application.Page;
 import js.application.PageInfo;
 import js.ui.ImageGrid;
 import js.util.jQuery;
-import teemowork.lol.Champion;
+import teemowork.model.Champion;
 
 /**
  * @version 2012/12/26 13:06:59
