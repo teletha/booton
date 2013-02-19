@@ -10,7 +10,7 @@
 package teemowork;
 
 import static js.lang.Global.*;
-import static teemowork.lol.Status.*;
+import static teemowork.model.Status.*;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -25,16 +25,16 @@ import js.util.ArrayList;
 import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
-import teemowork.lol.Build;
-import teemowork.lol.Build.Computed;
-import teemowork.lol.Champion;
-import teemowork.lol.Skill;
-import teemowork.lol.SkillKey;
-import teemowork.lol.SkillStatus;
-import teemowork.lol.SkillType;
-import teemowork.lol.Status;
-import teemowork.lol.Variable;
-import teemowork.lol.VariableResolver;
+import teemowork.model.Build;
+import teemowork.model.Champion;
+import teemowork.model.Skill;
+import teemowork.model.SkillKey;
+import teemowork.model.SkillStatus;
+import teemowork.model.SkillType;
+import teemowork.model.Status;
+import teemowork.model.Variable;
+import teemowork.model.VariableResolver;
+import teemowork.model.Build.Computed;
 import booton.css.CSS;
 
 /**
