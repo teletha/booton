@@ -190,12 +190,12 @@ public abstract class VariableResolver {
     /**
      * @version 2013/02/12 11:37:34
      */
-    public static class Per3Level2 extends PerLevel {
+    public static class Per3LevelForKarma extends PerLevel {
 
         /**
          * @param values
          */
-        public Per3Level2(double base, double diff) {
+        public Per3LevelForKarma(double base, double diff) {
             super(new int[] {1, 3, 6, 9, 12, 15}, base, diff);
         }
     }
@@ -203,12 +203,12 @@ public abstract class VariableResolver {
     /**
      * @version 2013/02/12 11:37:34
      */
-    public static class Per2Level extends PerLevel {
+    public static class Per3LevelAdditional extends PerLevel {
 
         /**
          * @param values
          */
-        public Per2Level(double base, double diff) {
+        public Per3LevelAdditional(double base, double diff) {
             super(new int[] {1, 3, 6, 9, 12, 15, 18}, base, diff);
         }
     }

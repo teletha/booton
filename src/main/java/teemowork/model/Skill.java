@@ -15,9 +15,9 @@ import static teemowork.model.Version.*;
 import teemowork.model.VariableResolver.Diff;
 import teemowork.model.VariableResolver.Fixed;
 import teemowork.model.VariableResolver.Per1Level;
-import teemowork.model.VariableResolver.Per2Level;
+import teemowork.model.VariableResolver.Per3LevelAdditional;
 import teemowork.model.VariableResolver.Per3Level;
-import teemowork.model.VariableResolver.Per3Level2;
+import teemowork.model.VariableResolver.Per3LevelForKarma;
 import teemowork.model.VariableResolver.Per4Level;
 import teemowork.model.VariableResolver.Per5Level;
 import teemowork.model.VariableResolver.Per6Level;
@@ -2982,7 +2982,7 @@ public class Skill {
         /** Hecarim */
         Warpath.update()
                 .passive("{2}と{1}を得る。レベル1、3、6、9、12、15、18で増加割合が上昇する。")
-                .variable(1, AD, 0, 0, amplify(BounusMS, new Per2Level(0.1, 0.025)))
+                .variable(1, AD, 0, 0, amplify(BounusMS, new Per3LevelAdditional(0.1, 0.025)))
                 .variable(2, IgnoreUnitCollision);
         Rampage.update()
                 .active("武器を振り回し{2}の敵ユニットに{1}を与える。このスキルが敵ユニットに命中した場合、Hecarimは短時間の間1スタックを得て、1スタックにつきこのスキルの{4}する(最大2スタック)。スタックは6秒間増加がないと0になる。ミニオンやモンスターには{3}を与える。")
@@ -3259,7 +3259,7 @@ public class Skill {
         /** Karma */
         InnerFlame.update()
                 .passive("{1}を得る。レベル1、3、6、9、12、15で最大値が上昇する。")
-                .variable(1, AP, 0, 0, amplify(MissingHealthPercentage, new Per3Level2(0.3, 0.2)));
+                .variable(1, AP, 0, 0, amplify(MissingHealthPercentage, new Per3LevelForKarma(0.3, 0.2)));
         HeavenlyWave.update()
                 .active("指定方向扇形60°の{1}の敵ユニットに{2}を与える。Mantra Bonus:自身と効果範囲内の味方ユニットは{3}する。回復量は対象のHP残量によって変化する。")
                 .variable(1, Radius, 600)
@@ -3613,7 +3613,7 @@ public class Skill {
         /** Leona */
         Sunlight.update()
                 .passive("スキルでダメージを与えた敵ユニットに、3.5秒間持続するDebuffを付与する。この敵ユニットに対してLeona以外の味方Championがダメージを与えると、付与されたDebuffを消費して追加{1}を与える。追加魔法DMは2レベル毎に増加する。")
-                .variable(1, MagicDamage, new Per2Level(20, 15));
+                .variable(1, MagicDamage, new Per3LevelAdditional(20, 15));
         ShieldOfDaybreak.update()
                 .active("次の通常攻撃に追加{1}と{2}が付与される。")
                 .variable(1, MagicDamage, 40, 30, ap(0.3))
@@ -4408,7 +4408,7 @@ public class Skill {
         /** Riven */
         RunicBlade.update()
                 .passive("スキルを使用するごとに1チャージを得る。チャージがある状態で通常攻撃を行うと、チャージを消費して通常攻撃に{1}が付与される。チャージは最大3スタックされ、通常攻撃ごとに1チャージずつ消費される。チャージは5秒間増加または消費がないと0になる。建物には無効。")
-                .variable(1, PhysicalDamage, 0, 0, amplify(AD, new Per2Level(0.2, 0.05)));
+                .variable(1, PhysicalDamage, 0, 0, amplify(AD, new Per3LevelAdditional(0.2, 0.05)));
         BrokenWings.update()
                 .active("前方にステップし、{1}の敵ユニットを剣で切りつけて{2}を与える。このスキルは短期間の間、3回まで連続して使用できる。3度目の使用でジャンプを行い、着地時に{3}の敵ユニットに{2}と{4}を与える。また、スキルを使用する度にオートアタックタイマーがリセットされる。最大DMは{5}。")
                 .variable(1, Radius, 112.5)
