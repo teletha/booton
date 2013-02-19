@@ -153,6 +153,7 @@ public class Build extends Notifiable {
         case Tenacity:
             return new Computed(base(status), sum(status), status);
 
+        case MissingManaPercentage:
         case MissingHealthPercentage:
         case TargetMaxHealthRatio:
         case TargetCurrentHealthRatio:

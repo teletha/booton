@@ -268,7 +268,7 @@ public class Champion {
     public static final Champion Sion = new Champion("Sion", FeelNoPain, CrypticGaze, DeathsCaress, Enrage, Cannibalism);
 
     /** The champion name. */
-    public static final Champion Sivir = new Champion("Sivir", FleetOfFoot, BoomerangBlade, Ricochet, SpellShield, OnTheHunt);
+    public static final Champion Sivir = new Champion("Sivir", FleetOfFoot, BoomerangBlade, Ricochet, Skill.SpellShield, OnTheHunt);
 
     /** The champion name. */
     public static final Champion Skarner = new Champion("Skarner", Energize, CrystalSlash, CrystallineExoskeleton, Fracture, Impale);

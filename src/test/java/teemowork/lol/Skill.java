@@ -1945,6 +1945,8 @@ public class Skill {
 
     static {
         version = P0000;
+
+        /** Ahri */
         EssenceTheft.update()
                 .passive("スキルが敵ユニットに当たる度に" + EssenceTheft + "のチャージを1つ得る(1回のスキルで得られる上限は3チャージまで)。9チャージの状態でスキルを使用すると、チャージを全て消費して使用したスキルに{1}が追加される。")
                 .variable(1, SV, 35)
@@ -1979,6 +1981,7 @@ public class Skill {
                 .mana(100, 0)
                 .range(450);
 
+        /** Akali */
         TwinDisciplines.update()
                 .passive("{1}を得る。また通常攻撃に{2}が付与される。")
                 .variable(1, SV, 6, 0, bounusAD(0.167))
@@ -2015,6 +2018,7 @@ public class Skill {
                 .cost(Charge, 1, 0)
                 .range(800);
 
+        /** Alistar */
         Trample.update()
                 .passive("スキルを使用すると3秒間{1}を得て、{2}の敵ユニットと建物に毎秒{3}を与える。ミニオンとモンスターに対しては与えるダメージが2倍になる。")
                 .variable(3, MagicDamage, 6, 0, ap(0.1), amplify(Lv, 1))
@@ -2040,7 +2044,7 @@ public class Skill {
                 .variable(1, RestoreHealth, 60, 30, ap(0.2))
                 .variable(2, RestoreHealth, 30, 15, ap(0.1))
                 .variable(3, Radius, 575)
-                .variable(4, ReduceCooldown, 2)
+                .variable(4, CDDecrease, 2)
                 .cd(12, 0)
                 .mana(40, 10);
         UnbreakableWill.update()
@@ -2050,6 +2054,7 @@ public class Skill {
                 .cd(120, -20)
                 .mana(100, 0);
 
+        /** Amumu */
         CursedTouch.update()
                 .passive("通常攻撃した対象に3秒間{1}を与える。レベル1、7、13で低下値が上昇する。")
                 .variable(1, MRReduction, new Per6Level(15, 5))
@@ -2074,7 +2079,7 @@ public class Skill {
                 .active("{3}の敵ユニットに{2}を与える。Amumuが通常攻撃でダメージを受けるたびに{4}。")
                 .variable(2, MagicDamage, 75, 25, ap(0.5))
                 .variable(3, Radius, 400)
-                .variable(4, ReduceCooldown, 0.5)
+                .variable(4, CDDecrease, 0.5)
                 .mana(35)
                 .cd(10, -1);
         CurseOftheSadMummy.update()
@@ -2127,6 +2132,7 @@ public class Skill {
                 .range(625)
                 .type(SkillType.Toggle);
 
+        /** Annie */
         Pyromania.update()
                 .passive("スキルを使用するたびにスタックが1貯まり、4スタック時に" + MoltenShield + "以外のスキルを使用すると、スタックを全て消費してそのスキルに{1}が追加される。")
                 .variable(1, Stun, 1.75);
@@ -2162,8 +2168,9 @@ public class Skill {
                 .cd(120)
                 .range(600);
 
+        /** Ashe */
         Focus.update()
-                .passive("3秒毎に{1}すｒ（最大100%）。通常攻撃を行うとリセットされる。上昇値は3レベル毎に増加する。")
+                .passive("3秒毎に{1}する（最大100%）。通常攻撃を行うとリセットされる。上昇値は3レベル毎に増加する。")
                 .variable(1, Critical, new Per3Level(3, 3))
                 .conditional(1);
         FrostShot.update().active("通常攻撃に2秒間の{1}を付与する。").variable(1, MSSlowRatio, 15, 5).mana(8).type(SkillType.Toggle);
@@ -2296,7 +2303,8 @@ public class Skill {
                 .cd(90, -15)
                 .range(2000, 500);
 
-        ArcaneMastery.update().passive("スキルを使用すると使用した以外のスキルのCDが1秒解消される。");
+        /** Ryze */
+        ArcaneMastery.update().passive("スキルを使用すると使用した以外のスキルの{1}する。").variable(1, CDDecrease, 1);
         Overload.update()
                 .active("対象の敵ユニットに{1}を与える。")
                 .passive("{2}を得る。")
@@ -2321,7 +2329,7 @@ public class Skill {
                 .cd(14)
                 .range(675);
         DesperatePower.update()
-                .active("{1}間、{2}及び{3}を得る。更にスキルに50%のスプラッシュダメージ({4})が付与される。")
+                .active("{1}間、{2}を得て{3}する。更にスキルに50%のスプラッシュダメージ({4})が付与される。")
                 .variable(1, Time, 5, 1)
                 .variable(2, SV, 15, 5)
                 .variable(3, MS, 35, 10)
@@ -2448,7 +2456,7 @@ public class Skill {
                 .variable(1, PhysicalDamage, 0, 0, ad(0.2))
                 .variable(3, ASSlowRatio, 20, 5)
                 .variable(4, MSSlowRatio, 20, 5)
-                .variable(5, ReduceCooldown, 1)
+                .variable(5, CDDecrease, 1)
                 .mana(30, 5)
                 .cd(8);
         Apprehend.update()
@@ -2461,7 +2469,7 @@ public class Skill {
         NoxianGuillotine.update()
                 .active("対象の敵Championに跳躍し、{1}を与える。対象の出血スタック数1個につき、このスキルのダメージが20%増加する(最大でダメージ2倍)。このスキルで敵Championのキルを取った場合、{3}する。")
                 .variable(1, TrueDamage, 160, 90, bounusAD(0.75))
-                .variable(3, ReduceCooldown)
+                .variable(3, CDDecrease)
                 .mana(100)
                 .cd(100, -10)
                 .range(475);
@@ -2496,7 +2504,7 @@ public class Skill {
         LunarRush.update()
                 .active("対象の敵ユニットの元までテレポートし、{1}を与える。対象にMoonlightが付与されていた場合、すべての敵ユニットに付与されたMoonlightを消費してこのスキルの{2}する。")
                 .variable(1, MagicDamage, 100, 60, ap(0.6))
-                .variable(2, ReduceCooldown)
+                .variable(2, CDDecrease)
                 .mana(50, 15)
                 .cd(25, -5)
                 .range(825);
@@ -2635,7 +2643,7 @@ public class Skill {
                 .variable(2, MSRatio, 30, 10)
                 .variable(3, IgnoreSlow)
                 .variable(4, IgnoreUnitCollision)
-                .variable(5, ReduceCooldown)
+                .variable(5, CDDecrease)
                 .cd(15);
         Ravage.update()
                 .active("対象の敵ユニットに2回連続で{1}を与え、3秒間{2}する。")
@@ -2662,7 +2670,7 @@ public class Skill {
         MysticShot.update()
                 .active("指定方向に魔法の矢を飛ばし、当たった敵ユニットに{1}を与える。このスキルが命中すると、Ezrealのすべてのスキルの{2}。")
                 .variable(1, PhysicalDamage, 35, 20, ap(0.2), ad(1))
-                .variable(2, ReduceCooldown, 1)
+                .variable(2, CDDecrease, 1)
                 .mana(28, 3)
                 .cd(6, -0.5)
                 .range(1150);
@@ -2740,7 +2748,7 @@ public class Skill {
                 .active("3秒間{1}する。効果中に通常攻撃を行うかまたはLungeを使用すると3秒間{2}する。移動速度の増加は3回までスタックする。敵Championを倒すとこのスキルの{3}する。")
                 .variable(1, ASRatio, 60, 15)
                 .variable(2, MSRatio, 7, 2)
-                .variable(3, ReduceCooldown)
+                .variable(3, CDDecrease)
                 .mana(55)
                 .cd(15, -1);
         BladeWaltz.update()
@@ -2959,7 +2967,7 @@ public class Skill {
         Quickdraw.update()
                 .active("指定方向にダッシュし4秒間{1}する。このスキルは自身が通常攻撃を行う毎に{2}する。対象が建物の場合は無効。")
                 .variable(1, ASRatio, 30, 10)
-                .variable(2, ReduceCooldown, 1)
+                .variable(2, CDDecrease, 1)
                 .mana(50)
                 .cd(22, -2)
                 .range(425);
@@ -2981,7 +2989,7 @@ public class Skill {
                 .variable(1, PhysicalDamage, 50, 35, bounusAD(0.6))
                 .variable(2, Radius, 200)
                 .variable(3, PhysicalDamage, 18.5, 11.5, bounusAD(0.2))
-                .variable(4, ReduceCooldown, 1)
+                .variable(4, CDDecrease, 1)
                 .mana(25)
                 .cd(4);
         SpiritOfDread.update()
@@ -3057,7 +3065,7 @@ public class Skill {
         Bladesurge.update()
                 .active("対象の敵ユニットに突進し、{1}を与える。このスキルで敵を倒したとき、このスキルの{2}されManaが35回復する。")
                 .variable(1, PhysicalDamage, 20, 30, ad(1))
-                .variable(2, ReduceCooldown)
+                .variable(2, CDDecrease)
                 .mana(60, 5)
                 .cd(14, -2)
                 .type(SkillType.OnHitEffectable)
@@ -3351,7 +3359,7 @@ public class Skill {
                 .range(700);
 
         /** Katarina */
-        Voracity.update().passive("敵Championキル/アシスト時に、すべてのスキルの{1}する。").variable(1, ReduceCooldown, 15);
+        Voracity.update().passive("敵Championキル/アシスト時に、すべてのスキルの{1}する。").variable(1, CDDecrease, 15);
         BouncingBlade.update()
                 .active("対象の敵ユニットにナイフを飛ばし{1}と４秒間Debuffを与える。ナイフは近くの敵ユニット({2})に4回まで跳ね返り、その度にダメージとDebuffを与える。ナイフが与えるダメージは跳ね返る度に10%低下する。Debuffが付与された敵ユニットにKatarinaが通常攻撃またはスキルでダメージを与えると、付与されたDebuffを消費して{3}を与える。")
                 .variable(1, MagicDamage, 60, 25, ap(0.15))
@@ -3385,9 +3393,10 @@ public class Skill {
                 .variable(1, ARReductionRatio, 3)
                 .variable(2, MRReductionRatio, 3);
         Reckoning.update()
-                .active("対象の敵ユニットに{1}と４秒間{2}を与える。このスキルのスローがかかった敵ユニットに対しては、Kayleが対象のユニットに与えるダメージが増加する。")
+                .active("対象の敵ユニットに{1}と４秒間{2}を与える。このスキルのスローがかかった敵ユニットに対しては、Kayleが対象のユニットに与える{3}する。")
                 .variable(1, MagicDamage, 60, 50, ap(1), bounusAD(1))
                 .variable(2, MSSlowRatio, 35)
+                .variable(3, DamageRatio, 6, 1)
                 .mana(70, 5)
                 .cd(8)
                 .range(650);
@@ -3477,7 +3486,7 @@ public class Skill {
                 .active("指定地点にジャンプし、{1}の敵ユニットに{2}を与える。進化すると射程が400増加し、またkillやassistを取った場合にこのスキルの{3}する。")
                 .variable(1, Radius, 0)
                 .variable(2, PhysicalDamage, 65, 35, bounusAD(0.8))
-                .variable(3, ReduceCooldown, 0)
+                .variable(3, CDDecrease, 0)
                 .mana(50)
                 .cd(22, -2)
                 .range(600);
@@ -3849,7 +3858,7 @@ public class Skill {
                 .variable(2, ASRatio, 40)
                 .variable(3, IgnoreSlow)
                 .variable(4, Time, 8, 2)
-                .variable(5, ReduceCooldown)
+                .variable(5, CDDecrease)
                 .mana(100)
                 .cd(75);
 
@@ -3943,8 +3952,9 @@ public class Skill {
                 .cd(10)
                 .range(900);
         BlackShield.update()
-                .active("対象の味方Championに5秒間持続する{1}を発生させ、すべてのCC(Stun, Slow, Taunt, Fear, Snare, 打ち上げ、ノックバック, Silence, Blind, Suppression)を防御する。")
+                .active("対象の味方Championは5秒間{1}と{2}を得る。")
                 .variable(1, MagicShield, 95, 65, ap(0.7))
+                .variable(2, IgnoreCC)
                 .mana(50)
                 .cd(23, -2)
                 .range(750);
@@ -4109,49 +4119,84 @@ public class Skill {
 
         /** Nocturne */
         UmbraBlades.update()
-                .passive("10秒に1度、通常攻撃のダメージが120%に増加し、周囲200の敵ユニットにダメージを与える範囲攻撃になる。この効果がヒットした敵の数に応じて自身のHPを回復する。また、通常攻撃を行うごとに、このスキルのCDが1秒減少する。建物を攻撃する時はこの効果は発生しない。レベル1、7、13でHP回復量が上昇する。")
+                .passive("10秒に1度、通常攻撃のダメージが120%に増加し、{1}の敵ユニットにダメージを与える範囲攻撃になる。この効果がヒットした敵の数に応じて{2}する。また、通常攻撃を行うごとに、このスキルの{3}する。建物を攻撃する時はこの効果は発生しない。レベル1、7、13でHP回復量が上昇する。")
+                .variable(1, Radius, 200)
+                .variable(2, RestoreHealth, new Per6Level(10, 8))
+                .variable(3, CDDecrease, 1)
                 .cd(10);
         Duskbringer.update()
-                .active("指定方向に影の刃を投げて当たった敵ユニットに物理DMを与える。刃の軌跡には5秒間持続するDusk Trailが残り、刃がヒットした敵Championの動いた軌道上にもDusk Trailが残るようになる。Dusk Trailの上ではNocturneは他ユニットをすり抜けるようになり、また攻撃力と移動速度が増加する。")
+                .active("指定方向に影の刃を投げて当たった敵ユニットに{1}を与える。刃の軌跡には5秒間持続するDusk Trailが残り、刃がヒットした敵Championの動いた軌道上にもDusk Trailが残るようになる。Dusk Trailの上ではNocturneは{2}と{3}を得て、{4}する。")
+                .variable(1, PhysicalDamage, 60, 45, bounusAD(0.75))
+                .variable(2, AD, 15, 10)
+                .variable(3, IgnoreUnitCollision)
+                .variable(4, ASRatio, 15, 5)
                 .mana(60, 5)
                 .cd(10)
                 .range(1200);
         ShroudOfDarkness.update()
-                .passive("攻撃速度が増加する。増加AS: 20/25/30/35/40%")
-                .active("Nocturneに1.5秒間持続するスペルシールドを付与し、その間一度だけ敵のスキルを無効化する。無効化した場合、5秒間Passiveの増加攻撃速度が2倍になる。")
+                .passive("{1}する。")
+                .variable(1, ASRatio, 20, 5)
+                .active("Nocturneに1.5秒間持続する{2}を付与し、その間一度だけ敵のスキルを無効化する。無効化した場合、5秒間Passiveの増加攻撃速度が2倍になる。")
+                .variable(2, Status.SpellShield)
                 .mana(50)
                 .cd(20, -2);
         UnspeakableHorror.update()
-                .active("対象の敵ユニットに2秒かけて魔法DMを与え、2秒間対象が一定範囲内(範囲465)に留まり続けていれば、更にFearを与える。魔法DM: 50/100/150/200/250 (+1.0)※表記魔法DMは2秒間当て続けた場合の合計ダメージ。")
+                .active("対象の敵ユニットに2秒間0.5秒毎に{1}、合計で{3}を与え、2秒間対象が一定範囲内(範囲465)に留まり続けていれば、更に{2}を与える。")
+                .variable(1, MagicDamage, 12.5, 12.5, ap(0.25))
+                .variable(2, Fear, 1, 0.25)
+                .variable(3, MagicDamage, 50, 50, ap(1))
                 .mana(60, 5)
                 .cd(15, -1)
                 .range(425);
         Paranoia.update()
-                .active("4秒間すべての敵Championの視界範囲を低下させ、また自分以外の視界を得られなくする。効果中に範囲内にいる敵Championを指定すると対象の位置まで移動し、到着時に対象に物理DMを与える。")
+                .active("4秒間すべての敵Championに{1}を与え、また自分以外の視界を得られなくする。効果中に範囲内にいる敵Championを指定すると対象の位置まで移動し、到着時に対象に{2}を与える。")
+                .variable(1, Foggy, 300)
+                .variable(2, PhysicalDamage, 150, 100, bounusAD(1.2))
                 .mana(100)
                 .cd(180, -40)
                 .range(2000, 750);
 
         /** Nunu */
         Visionary.update().passive("通常攻撃を行うたびにスタックが増加する(最大5スタック)。5スタックの状態でスキルを使用すると、スタックを消費して対象のスキルの消費マナが0になる。");
-        Consume.update().active("対象の敵MinionかPet及び中立クリープ1体にTrue Damageを与え、自身のHPを回復する。").mana(60).cd(16, -2).range(125);
+        Consume.update()
+                .active("対象の敵MinionかPet及び中立クリープ1体に{1}を与え、{2}する。")
+                .variable(1, TrueDamage, 500, 100)
+                .variable(2, RestoreHealth, 125, 55, ap(1))
+                .mana(60)
+                .cd(16, -2)
+                .range(125);
         BloodBoil.update()
-                .active("対象の味方ユニットの攻撃速度と移動速度を12秒間上昇させる。自分以外に使用した場合は自身にも同様の効果が発生する。")
+                .active("12秒間対象の味方ユニットは{1}し{2}する。自分以外に使用した場合は自身にも同様の効果が発生する。")
+                .variable(1, ASRatio, 25, 5)
+                .variable(2, MSRatio, 8, 1)
                 .mana(50)
                 .cd(15)
                 .range(700);
-        IceBlast.update().active("対象の敵ユニットに魔法DMと攻撃速度低下(25%,3s)、スロー(3s)を与える。").mana(75, 10).cd(6).range(550);
+        IceBlast.update()
+                .active("対象の敵ユニットに{1}と3秒間{2}、{3}を与える。")
+                .variable(1, MagicDamage, 85, 45, ap(1))
+                .variable(2, ASSlowRatio, 25)
+                .variable(3, MSSlowRatio, 20, 10)
+                .mana(75, 10)
+                .cd(6)
+                .range(550);
         AbsoluteZero.update()
-                .active("最大3秒詠唱を行い、詠唱完了またはキャンセル時に範囲内の敵ユニットに魔法DMを与える。ダメージは詠唱した時間に比例し増加する。また詠唱中は範囲内の敵ユニットに攻撃速度低下(25%)、スロー(50%)を与える。")
+                .active("最大3秒詠唱を行い、詠唱完了またはキャンセル時に{1}の敵ユニットに{2}を与える。ダメージは詠唱した時間に比例して最大で{3}。また詠唱中は範囲内の敵ユニットに{4}と{5}を与える。")
+                .variable(1, Radius, 550)
+                .variable(2, MagicDamage, 78, 31, ap(0.3))
+                .variable(3, MagicDamage, 625, 250, ap(2.5))
+                .variable(4, ASSlowRatio, 25)
+                .variable(5, MSSlowRatio, 50)
                 .mana(150)
                 .cd(150, -30);
 
         /** Olaf */
-        BerserkerRage.update().passive("{1}を得る。").variable(1, ASRatio, 0, 0, amplify(MissingHealthPercentage, 1));
+        BerserkerRage.update().passive("{1}する。").variable(1, ASRatio, 0, 0, amplify(MissingHealthPercentage, 1));
         Undertow.update()
-                .active("指定地点に貫通する斧を投げ、当たった敵ユニットに{1}と2.5秒間{2}を与える。このスローは2.5秒かけて元に戻る。投げた斧は指定地点に7秒間留まり、斧を回収するとこのスキルのCDが4.5秒解消される。")
+                .active("指定地点に貫通する斧を投げ、当たった敵ユニットに{1}と2.5秒間{2}を与える。このスローは2.5秒かけて元に戻る。投げた斧は指定地点に7秒間留まり、斧を回収するとこのスキルの{3}する。")
                 .variable(1, PhysicalDamage, 80, 45, bounusAD(1))
                 .variable(2, MSSlowRatio, 24, 4)
+                .variable(3, CDDecrease, 4.5)
                 .mana(55, 5)
                 .cd(8)
                 .range(1000);
@@ -4169,72 +4214,116 @@ public class Skill {
                 .cd(9, -1)
                 .range(325);
         Ragnarok.update()
-                .active("6秒間{1}と{2}と{3}を得て、すべてのCC(Stun, Slow, Taunt, Fear, Snare, 打ち上げ、ノックバック, Silence, Blind, Suppression)を無効化する。既にCCを受けていた場合はそれらを解除する。StunなどのDisable中でも使用可能。")
+                .active("6秒間{1}、{2}、{3}と{4}を得る。既にCCを受けていた場合はそれらを解除する。StunなどのDisable中でも使用可能。")
                 .variable(1, ARPen, 10, 10)
                 .variable(2, AR, 30, 15)
                 .variable(3, MR, 30, 15)
+                .variable(4, IgnoreCC)
                 .mana(100, -25)
                 .cd(100);
 
         /** Orianna */
         ClockworkWindup.update()
-                .passive("通常攻撃に追加魔法DMが付与される。4秒以内に同一の対象を連続して攻撃すると、追加魔法DMが20%上昇していく(最大+40%)。追加魔法の基礎DMは4/7/10/13/16レベル時に増加する。建物には無効。");
+                .passive("通常攻撃に追加{1}が付与される。4秒以内に同一の対象を連続して攻撃すると、追加魔法DMが20%上昇していく(最大+40%)。追加魔法の基礎DMは4/7/10/13/16レベル時に増加する。建物には無効。")
+                .variable(1, MagicDamage, new Per3Level(10, 8), ap(0.15), null);
         CommandAttack.update()
-                .active("指定した地点にBallを移動させ、移動中のBallに触れた敵ユニットと指定範囲にいる敵ユニットに魔法DMを与える。ダメージは敵に当たるごとに10%づつ減少する（最大60%減少）。BallはOriannaから一定距離離れなければその場に待機して視界を確保し続ける。")
+                .active("指定した地点にBallを移動させ、移動中のBallに触れた敵ユニットと指定{1}にいる敵ユニットに{2}を与える。ダメージは敵に当たるごとに10%づつ減少する（最大60%減少）。BallはOriannaから一定距離離れなければその場に待機して{3}。")
+                .variable(1, Radius)
+                .variable(2, MagicDamage, 60, 30, ap(0.5))
+                .variable(3, Visionable)
                 .mana(50)
                 .cd(6, -0.75)
                 .range(825);
         CommandDissonance.update()
-                .active("Ballの存在する地点にフィールドを展開しBallの周囲にいる敵ユニットに魔法DMを与える。フィールドは3秒間持続し、フィールドの上の味方ユニットは移動速度が上昇、敵ユニットにはスローを与える。フィールドから出た場合、この効果は2秒かけて元に戻る。")
+                .active("Ballの存在する地点にフィールドを展開しBallの{1}にいる敵ユニットに{2}を与える。フィールドは3秒間持続し、フィールドの上の味方ユニットは{3}し、敵ユニットには{4}を与える。フィールドから出た場合、この効果は2秒かけて元に戻る。")
+                .variable(1, Radius, 250)
+                .variable(2, MagicDamage, 70, 45, ap(0.7))
+                .variable(3, MSRatio, 20, 5)
+                .variable(4, MSSlowRatio, 20, 5)
                 .mana(70, 10)
                 .cd(9);
         CommandProtect.update()
-                .passive("Ballが付いている味方ChampionのARとMRが増加する。増加AR,MR: 10/15/20/25/30")
-                .active("対象の味方ChampionまでBallを移動させ、4秒間持続するダメージを軽減するシールドを付与する。また、移動中のBallに触れた敵ユニットに魔法DMを与える。Ballは対象がOriannaから一定距離離れなければ貼り付き続ける。")
+                .passive("Ballが付いている味方Championは{1}と{2}を得る。")
+                .variable(1, AR, 10, 5)
+                .variable(2, MR, 10, 5)
+                .active("対象の味方ChampionまでBallを移動させ、4秒間持続する{3}を付与する。また、移動中のBallに触れた敵ユニットに{4}を与える。Ballは対象がOriannaから一定距離離れなければ貼り付き続ける。")
+                .variable(3, Shield, 80, 40, ap(0.4))
+                .variable(4, MagicDamage, 60, 30, ap(0.3))
                 .mana(60)
                 .cd(9)
                 .range(1120);
         CommandShockwave.update()
-                .active("約0.5秒詠唱後にBallから衝撃波を発生させ、Ballの周囲にいる敵ユニットに魔法DMを与えると共に、Ballの方向に打ち上げ（ノックバック）させる。")
+                .active("約0.5秒詠唱後にBallから衝撃波を発生させ、Ballの{1}にいる敵ユニットに{2}を与えると共に、Ballの方向に{3}させる。")
+                .variable(1, Radius, 400)
+                .variable(2, MagicDamage, 150, 75, ap(0.7))
+                .variable(3, Knockback, 350)
                 .mana(100, 25)
                 .cd(120, -15);
 
         /** Pantheon */
         AegisProtection.update()
                 .passive("通常攻撃を行うかスキルを使用するたびにスタックが1増加(最大4スタック)し、4スタック時に40DM以上の通常攻撃を受けるとスタックを消費して通常攻撃のダメージを無効化する。");
-        SpearShot.update().active("対象の敵ユニットに槍を投げ物理DMを与える。").mana(45).cd(4).range(600);
+        SpearShot.update()
+                .active("対象の敵ユニットに槍を投げ{1}を与える。")
+                .variable(1, PhysicalDamage, 65, 40, bounusAD(1.4))
+                .mana(45)
+                .cd(4)
+                .range(600);
         AegisOfZeonia.update()
-                .active("対象の敵Championに飛びかかり魔法DMとスタン(1s)を与え、Aegis Protectionを発動する。")
+                .active("対象の敵Championに飛びかかり{1}と{2}を与え、Aegis Protectionを発動する。")
+                .variable(1, MagicDamage, 50, 25, ap(1))
+                .variable(2, Stun, 1)
                 .mana(55)
                 .cd(13, -1)
                 .range(600);
         HeartseekerStrike.update()
                 .passive("敵ユニットのHPが15%以下の時は通常攻撃が必ずクリティカルになり、またSpear Shotのダメージが1.5倍になる。")
-                .active("指定方向に0.75秒間槍を突き出し、範囲内の敵ユニットに物理DMを最大3回与える(0.25秒毎に1ヒット)。対象がChampionの場合、与えるダメージが2倍になる。※ チャネリングスキル。チャネリングが中断されるか効果時間が過ぎるまで効果が持続する。")
+                .active("指定方向に0.75秒間槍を突き出し、範囲内の敵ユニットに{1}を最大3回与える(0.25秒毎に1ヒット)。対象がChampionの場合、与えるダメージが{2}になる。")
+                .variable(1, PhysicalDamage, 13, 10, bounusAD(0.6))
+                .variable(2, PhysicalDamage, 26, 20, bounusAD(1.2))
                 .mana(45, 5)
                 .cd(10, -1)
-                .range(400);
+                .range(400)
+                .type(SkillType.Channel);
         GrandSkyfall.update()
-                .active("地点を指定して2秒後にジャンプし、その1.5秒後に指定地点の周囲に魔法DM、スロー(35%,1s)を与えつつ落下(ワープ)する。DMは指定地点から離れるほど低減され、範囲最端では50%となる。ジャンプ前にキャンセルすると、消費した分のマナが回復し、このスキルのCDは10秒になる。")
+                .active("地点を指定して2秒後にジャンプし、その1.5秒後に指定地点の{1}に{2}と1秒間{3}を与えつつ落下する。DMは指定地点から離れるほど低減され、範囲最端では50%となる。ジャンプ前にキャンセルすると、消費した分のマナが回復し、このスキルのCDは10秒になる。")
+                .variable(1, Radius, 1000)
+                .variable(2, MagicDamage, 400, 300, ap(1))
+                .variable(3, MSSlowRatio, 35)
                 .mana(125)
                 .cd(150, -15)
                 .range(5500);
 
         /** Poppy */
         ValiantFighter.update().passive("現在HPの10%を超えるダメージを受けた際、その超過分のダメージを50%低減する。塔の攻撃には無効。");
-        DevastatingBlow.update().active("次に行う通常攻撃が魔法DMになり、追加魔法DMが付与される。追加魔法DMは対象の最大HPに比例する。").mana(55).cd(8, -1);
+        DevastatingBlow.update()
+                .active("次に行う通常攻撃が魔法DMになり、追加{1}が付与される。")
+                .variable(1, MagicDamage, 20, 20, ap(0.6), amplify(TargetMaxHealthRatio, 8))
+                .mana(55)
+                .cd(8, -1);
         ParagonOfDemacia.update()
-                .passive("通常攻撃を行うか、ダメージを受ける度にスタックが1増加する(最大10)。スタック数に比例して自身の攻撃力とARが増加する。スタックは5秒間増加がないと0になる。増加攻撃力,AR(1スタック毎): 1.5/2/2.5/3/3.5")
-                .active("スタックを最大(10)まで増加させ、5秒間移動速度が増加する。")
+                .passive("通常攻撃を行うか、ダメージを受ける度にスタックが1増加する(最大10)。スタック数に比例して{1}と{2}を得る。スタックは5秒間増加がないと0になる。")
+                .variable(1, AD, 1.5, 0, amplify(Stack, 0.5))
+                .variable(2, AR, 1.5, 0, amplify(Stack, 0.5))
+                .conditional(1)
+                .conditional(2)
+                .active("スタックを最大(10)まで増加させ、5秒間{3}する。")
+                .variable(3, MSRatio, 17, 2)
                 .mana(70, 5)
                 .cd(12);
         HeroicCharge.update()
-                .active("対象の敵ユニットに突撃しノックバックと魔法DMを与える。ノックバック時に壁にぶつかった場合、追加魔法DMとスタン(1.5s)を与える。")
+                .active("対象の敵ユニットに突撃し{1}と{2}を与える。ノックバック時に壁にぶつかった場合、追加{3}と{4}を与える。")
+                .variable(1, Knockback)
+                .variable(2, MagicDamage, 50, 25, ap(0.4))
+                .variable(3, MagicDamage, 75, 50, ap(0.4))
+                .variable(4, Stun, 1.5)
                 .mana(60, 5)
                 .cd(12, -1)
                 .range(525);
         DiplomaticImmunity.update()
-                .active("対象の敵Championを数秒間ターゲットし、その対象に与えるダメージが増加する。効果中は対象以外からのすべての攻撃を無効化する(対象のPetからはダメージを受ける)。")
+                .active("対象の敵Championを{2}秒間ターゲットし、その対象に与える{1}する。効果中は対象以外からのすべての攻撃を無効化する(対象のPetからはダメージを受ける)。")
+                .variable(1, DamageRatio, 20, 10)
+                .variable(2, Time, 6, 1)
                 .mana(100)
                 .cd(140, -20)
                 .range(900);
@@ -4274,16 +4363,30 @@ public class Skill {
         ReignOfAnger.update()
                 .passive("通常攻撃ごとにFuryが5増加する。12秒間戦闘を行わないとFuryは毎秒2.5減少する。Furyの最大値は100、Furyが50以上ある場合にスキルを使用すると、Furyを50消費してスキルが強化される。また、RenektonのHPが50%以下になるとFuryの増加量が50%増加する。建物を攻撃した場合はFuryは増加しない。");
         CullTheMeek.update()
-                .active("武器を振り回し周囲の敵ユニットに物理DMを与え、与えたダメージの5%を回復する(上限あり)。対象がChampionの場合、HP回復量が20%になる。当たったユニット1体につきFuryが5増加する。(最大25)Fury消費時:与えるダメージが50%増加し、HP回復量が2倍、回復上限が3倍に増加する。但し、Fury増加効果は無くなる。")
+                .active("武器を振り回し{1}の敵ユニットに{2}を与え、{3}する(上限あり)。対象がChampionの場合、{4}する。当たったユニット1体につきFuryが5増加する(最大25)。Fury消費すると与えるダメージが50%増加し、HP回復量が2倍、回復上限が3倍に増加する。但し、Fury増加効果は無くなる。")
+                .variable(1, Radius, 450)
+                .variable(2, PhysicalDamage, 60, 30, bounusAD(0.8))
+                .variable(3, RestoreHealth, 0, 0, amplify(DealtDamageRatio, 5))
+                .variable(4, RestoreHealth, 0, 0, amplify(DealtDamageRatio, 20))
                 .cd(8);
         RuthlessPredator.update()
-                .active("次に行う通常攻撃が2回攻撃になり、スタン(0.75s)が付与される。このスキルはOn-Hit Effectsの影響を受ける。Fury消費時:攻撃回数が3回に増加し、スタンの効果時間が延長(1.5s)される。但し、Fury増加効果は無くなる。")
-                .cd(13, -1);
+                .active("次に行う通常攻撃が2回攻撃になり、{1}が付与される。Fury消費すると攻撃回数が3回に増加し、{2}を付与する。但し、Fury増加効果は無くなる。")
+                .variable(1, Stun, 0.75)
+                .variable(2, Stun, 1.5)
+                .cd(13, -1)
+                .type(SkillType.OnHitEffectable);
         SliceandDice.update()
-                .active("指定方向にダッシュし触れた敵ユニットに物理DMを与える(Slice)。このスキルが敵にヒットした場合、4秒間の間だけ再度使用できる(Dice)。Fury消費時:Diceで与えるダメージが50%増加し、4秒間敵ユニットのARを減少させる効果が追加される。SliceではFuryを消費しない。")
+                .active("指定方向にダッシュし触れた敵ユニットに{1}を与える(Slice)。このスキルが敵にヒットした場合、4秒間の間だけ再度使用できる(Dice)。Fury消費時:Diceで与えるダメージが50%増加し、4秒間{2}を与える。SliceではFuryを消費しない。")
+                .variable(1, PhysicalDamage, 30, 30, bounusAD(0.9))
+                .variable(2, ARReductionRatio, 15, 5)
                 .cd(18, -1)
                 .range(450);
-        Dominus.update().active("15秒間サイズが大きくなり、スキルの射程が増加する。更にHPが増加し周囲に毎秒魔法DMを与える。また、毎秒5Furyを得る。").cd(120);
+        Dominus.update()
+                .active("15秒間サイズが大きくなり、スキルの射程が増加する。更に{1}を得て{2}の敵ユニットに毎秒{3}を与える。また、毎秒5Furyを得る。")
+                .variable(1, Health, 300, 150)
+                .variable(2, Radius, 350)
+                .variable(3, MagicDamage, 40, 30, ap(0.1))
+                .cd(120);
 
         /** Rengar */
         UnseenPredator.update()
@@ -4339,20 +4442,35 @@ public class Skill {
 
         /** Rumble */
         JunkyardTitan.update()
-                .passive("Ult以外のスキルを使うとHeatが20増加し、それが50以上になると「Danger Zone」状態に入り全てのスキルに追加効果がつくようになる。Heatが100になると6秒間スキルが使用不可能になり、通常攻撃に追加魔法DMが付与される。Heatは時間によって減少していく。追加魔法DMは建物には無効。");
+                .passive("Ult以外のスキルを使うとHeatが20増加し、それが50以上になると「Danger Zone」状態に入り全てのスキルに追加効果がつくようになる。Heatが100になると6秒間スキルが使用不可能になり、通常攻撃に追加{1}が付与される。Heatは時間によって減少していく。追加魔法DMは建物には無効。")
+                .variable(1, MagicDamage, 20, 0, ap(0.3), amplify(Lv, 5));
         Flamespitter.update()
-                .active("3秒間前方の範囲を火炎放射器で焼き払い、範囲内の敵ユニットに毎秒魔法DMを与える。minionに与えるダメージは半分。「Danger Zone」中は25%分の追加ダメージが入る。")
+                .active("3秒間前方の範囲を火炎放射器で焼き払い、範囲内の敵ユニットに毎秒{1}を与える。minionに与えるダメージは半分。Danger Zone中は{2}を与える。")
+                .variable(1, MagicDamage, 30, 23.3, ap(0.45))
+                .variable(2, MagicDamage, 37.5, 29.1, ap(0.56))
                 .cd(6)
                 .range(600);
         ScrapShield.update()
-                .active("2秒間ダメージを軽減するシールドを付与し、更に1秒間自身の移動速度が上昇する。「Danger Zone」状態ではシールドの耐久値と移動速度上昇効果が25%分上昇する。")
+                .active("2秒間{1}を得て1秒間{2}する。Danger Zone中は{3}を得て1秒間{4}する。")
+                .variable(1, Shield, 50, 30, ap(0.4))
+                .variable(2, MSRatio, 10, 5)
+                .variable(3, Shield, 62.5, 37.5, ap(0.5))
+                .variable(4, MSRatio, 12.5, 6.25)
                 .cd(6);
         ElectroHarpoon.update()
-                .active("指定方向に銛を放ち当たった敵ユニットに魔法DMとスロー(3s)を与える。このスキルは3秒の間、2回まで連続して使用できる(但し、一度使用する度に1秒のCDが発生する)。2発目はHeatが増加しない。また、このスキルによるスローはスタックする。「Danger Zone」状態ではスローとダメージが25%分上昇する。")
+                .active("指定方向に銛を放ち当たった敵ユニットに{1}と3秒間{2}を与える。このスキルは3秒の間、2回まで連続して使用できる(但し、一度使用する度に1秒のCDが発生する)。2発目はHeatが増加しない。また、このスキルによるスローはスタックする。Danger Zone中では{3}と3秒間{4}を与える。")
+                .variable(1, MagicDamage, 55, 30, ap(0.5))
+                .variable(2, MSSlowRatio, 15, 5)
+                .variable(3, MagicDamage, 68.75, 37.5, ap(0.625))
+                .variable(4, MSSlowRatio, 18.75, 6.25)
                 .cd(10)
                 .range(850);
         TheEqualizer.update()
-                .active("指定した位置から指定方向に向かってロケットを打ち出し、当たった敵ユニットに魔法DMとスロー(35%)を与える。また5秒間ロケットの着弾した地面に炎が残り、その上にいる敵ユニットに毎秒魔法DMとスロー(35%)を与える。")
+                .active("指定した位置から指定方向({4})にロケットを打ち出し、当たった敵ユニットに{1}と{2}を与える。また5秒間ロケットの着弾した地面に炎が残り、その上にいる敵ユニットに毎秒{3}と{2}を与える。")
+                .variable(1, MagicDamage, 150, 75, ap(0.5))
+                .variable(2, MSSlowRatio, 35)
+                .variable(3, MagicDamage, 100, 40, ap(0.2))
+                .variable(4, Distance, 1000)
                 .cd(105, -15)
                 .range(1750);
 
@@ -4740,15 +4858,32 @@ public class Skill {
                 .cd(110, -10);
 
         /** Twisted Fate */
-        LoadedDice.update().passive("味方Championが敵を倒した時に取得するGoldが2増加する。");
-        WildCards.update().active("指定向き3方向に貫通するカードを飛ばし、当たった敵ユニットに魔法DMを与える。").mana(60, 10).cd(6).range(1450);
+        LoadedDice.update().passive("味方Championが敵を倒した時に追加で{1}を得るようになる。").variable(1, Gold, 2);
+        WildCards.update()
+                .active("指定向き3方向に貫通するカードを飛ばし、当たった敵ユニットに{1}を与える。")
+                .variable(1, MagicDamage, 60, 50, ap(0.65))
+                .mana(60, 10)
+                .cd(6)
+                .range(1450);
         PickACard.update()
-                .active("使用するとBlue、Red、Goldの3種のカードを選択し始め、再度使用でカードが決定する。決定したカードにより次の通常攻撃が魔法DMに変換され、以下の効果が追加される。Blue Card: マナが回復する。魔法DM: 40/60/80/100/120 (+0.4) + [攻撃力 × 100%]回復マナ: 26/39/52/65/78 + [攻撃力 × 65%]Red Card: 範囲攻撃になり、更にスロー(2.5s)の効果。魔法DM: 30/45/60/75/90 (+0.4) + [攻撃力 × 100%]スロー: 30/35/40/45/50%効果範囲: 100Gold Card: スタンの効果。")
+                .active("使用するとBlue、Red、Goldの3種のカードを選択し始め、再度使用でカードが決定する。決定したカードにより次の通常攻撃が魔法DMに変換され、以下の効果が追加される。Blue Card: {2}を与え{3}する。　Red Card: {4}の敵に{5}と2.5秒間{6}を与える。　Gold Card: {7}と{8}を与える。")
+                .variable(2, MagicDamage, 40, 20, ap(0.4), ad(1))
+                .variable(3, RestoreMana, 26, 13, ad(0.65))
+                .variable(4, Radius, 100)
+                .variable(5, MagicDamage, 30, 15, ap(0.4), ad(1))
+                .variable(6, MSSlowRatio, 30, 5)
+                .variable(7, MagicDamage, 15, 7.5, ap(0.4), ad(1))
+                .variable(8, Stun, 1.2, 0.2)
                 .mana(40, 15)
                 .cd(6);
-        StackedDeck.update().passive("CD待ち時間が低下し、攻撃速度が増加し、通常攻撃4回毎に追加魔法DMを与える。");
+        StackedDeck.update()
+                .passive("{1}を得て{2}する。通常攻撃4回毎に追加{3}を与える。")
+                .variable(1, CDR, 3, 3)
+                .variable(2, ASRatio, 3, 3)
+                .variable(3, MagicDamage, 55, 25, ap(0.4));
         Destiny.update()
-                .active("一定時間すべての敵Champion(ステルス中のChampion含む)の視界を得る。効果中に再度使用で「Gate」が発動する。効果中は敵Championの頭上にアイコンが表示される。効果時間: 6/8/10s消費MN: 150/125/100 CD: 150/135/120s Range: 無限[Gate]2秒間移動・攻撃が不可能になった後、指定した地点にワープする。")
+                .active("{1}間すべての敵Champion(ステルス中のChampion含む)の視界を得る。効果中に再度使用すると2秒間移動・攻撃が不可能になった後、指定した地点にワープする。。効果中は敵Championの頭上にアイコンが表示される。")
+                .variable(1, Time, 6, 2)
                 .mana(150, -25)
                 .cd(150, -15)
                 .range(5500);
@@ -4848,7 +4983,7 @@ public class Skill {
                 .cd(70);
 
         /** Veigar */
-        Equilibrium.update().passive("manaを1%失う毎に自身のmana回復量が1%上昇する。");
+        Equilibrium.update().passive("{1}を得る。").variable(1, MregRatio, 0, 0, amplify(MissingManaPercentage, 1));
         BalefulStrike.update()
                 .passive("敵Championを倒すとAPが増加する。増加AP: 1/2/3/4/5")
                 .active("対象の敵ユニットに魔法DMを与える。このスキルでLHを取るとAPが1増加する。対象が敵Champion/SiegeまたはSuperMinion/Buffを持った中立クリープの場合、増加値は2倍(+2)になる。")
