@@ -2694,7 +2694,7 @@ public class Skill {
         Drain.update()
                 .active("対象の敵ユニットに最大5秒間毎秒{1}を与え、{2}する。敵が離れる({3})と詠唱が中断される。")
                 .variable(1, MagicDamage, 60, 30, ap(0.45))
-                .variable(2, RestoreHealth, 0, 0, amplify(DamageRatio, 60, 5))
+                .variable(2, RestoreHealth, 0, 0, amplify(DealtDamageRatio, 60, 5))
                 .variable(3, Radius, 750)
                 .mana(80, 10)
                 .cd(10, -1)
@@ -2988,7 +2988,7 @@ public class Skill {
                 .active("4秒間{1}の敵ユニットに毎秒{2}を与える。この効果を受けている敵ユニットがダメージを受けた場合、そのダメージの値に応じて{3}する。")
                 .variable(1, Radius, 575)
                 .variable(2, MagicDamage, 20, 11.25, ap(0.2))
-                .variable(3, RestoreHealth, 0, 0, amplify(DamageRatio, 10, 5))
+                .variable(3, RestoreHealth, 0, 0, amplify(DealtDamageRatio, 10, 5))
                 .mana(50, 10)
                 .cd(14);
         DevastatingCharge.update()
@@ -3081,8 +3081,8 @@ public class Skill {
         TranscendentBlades.update()
                 .active("指定方向に貫通する刃を飛ばし、当たった敵ユニットに{1}を与える。このスキルは15秒の間、4回まで連続して使用できる(但し、一度使用する度に0.5秒のCDが発生する)。2〜4発目はマナコスト無しで使用可能。ミニオンやモンスターにダメージを与えると{2}し、Championにダメージを与えると{3}する。")
                 .variable(1, PhysicalDamage, 80, 40, ap(0.5), bounusAD(0.6))
-                .variable(2, RestoreHealth, 0, 0, amplify(DamageRatio, 10))
-                .variable(3, RestoreHealth, 0, 0, amplify(DamageRatio, 25))
+                .variable(2, RestoreHealth, 0, 0, amplify(DealtDamageRatio, 10))
+                .variable(3, RestoreHealth, 0, 0, amplify(DealtDamageRatio, 25))
                 .mana(100)
                 .cd(70, -10)
                 .range(1000);
@@ -3920,7 +3920,7 @@ public class Skill {
                 .active("対象の敵Championに{1}を与え、その後10秒間、毎秒{2}を与える。10秒間で総計{4}を与え、{3}する。効果中に対象が死ぬとThe Spiritを生成し30秒間従わせる。（RまたはALT押しながらクリックで任意の操作可能）　The Spirit AD: 元になったChampのAD + MordekaiserのADの75%AP: 元になったChampのAP + MordekaiserのAPの75%HP: 元になったChampのHP + MordekaiserのHPの15%行動範囲: 1125 また、The Spiritを従えている間、Mordekaiserは元になったChampのADとAPの20％を得る。")
                 .variable(1, MagicDamage, 0, 0, amplify(TargetMaxHealthRatio, 12, 2.5, ap(0.02)))
                 .variable(2, MagicDamage, 0, 0, amplify(TargetMaxHealthRatio, 1.2, 0.25, ap(0.002)))
-                .variable(3, RestoreHealth, 0, 0, amplify(DamageRatio, 100))
+                .variable(3, RestoreHealth, 0, 0, amplify(DealtDamageRatio, 100))
                 .variable(4, MagicDamage, 0, 0, amplify(TargetMaxHealthRatio, 24, 5, ap(0.04)))
                 .cd(120, -15)
                 .range(850);
@@ -4610,7 +4610,7 @@ public class Skill {
                 .range(1000);
 
         /** Taric */
-        Gemcraft.update().passive("通常攻撃をすると{1}する。").variable(1, RestoreMana, 0, 0, amplify(DamageRatio, 0.075));
+        Gemcraft.update().passive("通常攻撃をすると{1}する。").variable(1, RestoreMana, 0, 0, amplify(DealtDamageRatio, 0.075));
         Imbue.update()
                 .active("対象の味方ユニットとTaricの{1}する。自身に使用した場合は{2}する。このスキルは自身が通常攻撃を行う毎にCDが1秒解消される。対象が敵Championの場合は3秒解消される。")
                 .variable(1, RestoreHealth, 60, 40, ap(0.6))
@@ -5135,7 +5135,7 @@ public class Skill {
                 .range(5300);
 
         /** Zilean */
-        HeightenedLearning.update().passive("すべての味方Championが取得する{1}増加する。").variable(1, ExperimentRatio, 8);
+        HeightenedLearning.update().passive("すべての味方Championが取得する{1}する。").variable(1, ExperimentRatio, 8);
         TimeBomb.update()
                 .active("対象のユニットに爆弾をつけ、4秒後に対象(味方ユニットの場合ダメージ無し)とその周辺{1}の敵ユニットに{2}を与える。対象が死亡した場合は即座に爆発する。")
                 .variable(1, Radius, 330)

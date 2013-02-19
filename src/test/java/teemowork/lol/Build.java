@@ -149,7 +149,7 @@ public class Build extends Notifiable {
         case Lv:
             return new Computed(level, level, Lv);
 
-        case DamageRatio:
+        case DealtDamageRatio:
         case Tenacity:
             return new Computed(base(status), sum(status), status);
 
@@ -195,10 +195,8 @@ public class Build extends Notifiable {
             return new Computed(baseAS * (1 + levelAS / 100), Math.min(2.5, baseAS * (1 + (levelAS + sum(ASRatio)) / 100)), status);
 
         default:
-            Status ratio = Status.valueOf(status.name() + "Ratio");
-
             double base = base(status);
-            double computed = (base + sum(status) + sum(status.per()) * level) * (1 + sum(ratio) / 100);
+            double computed = (base + sum(status) + sum(status.per()) * level) * (1 + sum(status.ratio()) / 100);
 
             return new Computed(base, computed, status);
         }
@@ -282,7 +280,7 @@ public class Build extends Notifiable {
         case MSRatio:
         case Energy:
         case Ereg:
-        case DamageRatio:
+        case DealtDamageRatio:
             return champion.getStatus(version).get(status);
 
         default:
