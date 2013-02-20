@@ -2478,8 +2478,8 @@ public class Skill {
         MoonsilverBlade.update()
                 .passive("{1}する。通常攻撃3回毎に周囲にいる敵ユニットに{2}を与える。")
                 .variable(1, ASRatio, 20)
-                .variable(2, MagicDamage, new Per1Level(new int[] {20, 25, 30, 40, 50, 65, 80, 95, 110, 125, 140, 155,
-                        175, 195, 215, 240, 265, 290}));
+                .variable(2, MagicDamage, new Per1Level(new double[] {20, 25, 30, 40, 50, 65, 80, 95, 110, 125, 140,
+                        155, 175, 195, 215, 240, 265, 290}));
         CrescentStrike.update()
                 .active("指定地点に弧を描くエネルギーを放ち、当たった敵ユニットと{2}のユニットに{1}とMoonlight(3秒)を与える。またMoonlightが付与されている敵ユニットの{3}。")
                 .variable(1, MagicDamage, 60, 35, ap(0.7))
@@ -3462,7 +3462,7 @@ public class Skill {
         /** Kha'Zix */
         UnseenThreat.update()
                 .passive("自身が敵チームの視界から消えた時に発動する。次の敵Championに対する通常攻撃かEvolved Void Spikeに追加{1}と2秒間{2}を付与する。この効果は敵チームの視界に現れても効果が消費されるまでは失われない。")
-                .variable(1, MagicDamage, new Per1Level(new int[] {15, 20, 25, 35, 45, 55, 65, 75, 85, 95, 110, 125,
+                .variable(1, MagicDamage, new Per1Level(new double[] {15, 20, 25, 35, 45, 55, 65, 75, 85, 95, 110, 125,
                         140, 150, 160, 170, 180, 190}), ap(0.5), null)
                 .variable(2, MSSlowRatio, 25);
         TasteTheirFear.update()
@@ -5160,41 +5160,79 @@ public class Skill {
                 .range(700);
 
         /** Volibear */
-        ChosenOftheStorm.update().passive("VolibearのHPが30%以下になったとき、6秒間かけて最大HPの30%を回復する。").cd(120);
+        ChosenOftheStorm.update()
+                .passive("VolibearのHPが30%以下になったとき、6秒間かけて{1}する。")
+                .variable(1, RestoreHealth, 0, 0, amplify(Health, 0.3))
+                .cd(120);
         RollingThunder.update()
-                .active("4秒間Volibearの移動速度が15%増加する。敵Championに向かって移動する場合は45%に増加する。また次の通常攻撃に追加物理DMを付与し、対象をVolibearの後ろに投げ飛ばす。4秒間攻撃を行わないとCDになる。")
+                .active("4秒間{1}する。敵Championに向かって移動する場合は{2}する。また次の通常攻撃に追加{3}を付与し、対象をVolibearの後ろに投げ飛ばす。4秒間攻撃を行わないとCDになる。")
+                .variable(1, MSRatio, 15)
+                .variable(2, MSRatio, 45)
+                .variable(3, PhysicalDamage, 30, 30)
+                .conditional(2)
                 .mana(40)
                 .cd(12, -1);
         Frenzy.update()
-                .passive("通常攻撃でダメージを与える度にスタックが1増加し、スタック数に比例して攻撃速度が増加する(最大3スタック)。スタックは4秒持続する。増加攻撃速度(1スタック): 8/11/14/17/20%")
-                .active("スタックが最大まで溜まった時のみ使用可能。対象の敵ユニットにVolibearの増加HPに比例した物理DMを与える。対象が失っているHP1%につきダメージが1%上昇する。")
+                .passive("通常攻撃でダメージを与える度にスタックが1増加し(最大3スタック)、{1}する。スタックは4秒持続する。")
+                .variable(1, ASRatio, 0, 0, amplify(Stack, 8, 3))
+                .conditional(1)
+                .active("スタックが最大まで溜まった時のみ使用可能。対象の敵ユニットに{2}を与える。対象が失っているHP1%につきダメージが1%上昇する。")
+                .variable(2, PhysicalDamage, 80, 45, amplify(BounusHealth, 0.15))
                 .mana(35)
                 .cd(17)
                 .range(400);
         MajesticRoar.update()
-                .active("周囲の敵ユニットに魔法DMとスロー(3s)を与える。対象がMinionの場合、さらにFear(3s)を与える。")
+                .active("{1}の敵ユニットに{2}と3秒間{3}を与える。対象がMinionの場合、さらに{4}を与える。")
+                .variable(1, Radius, 425)
+                .variable(2, MagicDamage, 60, 45, ap(0.6))
+                .variable(3, MSSlowRatio, 30, 5)
+                .variable(4, Fear, 3)
                 .mana(60, 5)
-                .cd(11)
-                .range(425);
+                .cd(11);
         ThunderClaws.update()
-                .active("12秒間Volibearが通常攻撃した対象に雷を放ち魔法DMを与える。雷は対象の付近の敵ユニット(敵Championを優先、範囲300)3体にも連鎖し同様のダメージを与える。建物を攻撃する時は効果は発生しない。")
+                .active("12秒間Volibearが通常攻撃した対象に雷を放ち{1}を与える。雷は対象の{2}の敵ユニット(敵Championを優先)3体にも連鎖し同様のダメージを与える。建物を攻撃する時は効果は発生しない。")
+                .variable(1, MagicDamage, 75, 40, ap(0.3))
+                .variable(2, Radius, 300)
                 .mana(100)
                 .cd(100, -10);
 
         /** Warwick */
         EternalThirst.update()
-                .passive("通常攻撃に追加魔法DMとHP回復効果が付与され、対象にスタックを付与する。1スタックにつき追加魔法DMと回復効果が増加していく。スタックは4秒持続し、最大3つまでスタックされる。建物を攻撃した場合は無効。");
+                .passive("通常攻撃で対象にスタックを付与し、追加{1}を与え{2}する。スタックは4秒持続し、最大3つまでスタックされる。建物を攻撃した場合は無効。")
+                .variable(1, MagicDamage, 0, 0, amplify(Stack, new Per1Level(new double[] {3, 3.5, 4, 4.5, 5, 5.5, 6,
+                        6.5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16})))
+                .variable(2, RestoreHealth, 0, 0, amplify(Stack, new Per1Level(new double[] {3, 3.5, 4, 4.5, 5, 5.5, 6,
+                        6.5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16})));
         HungeringStrike.update()
-                .active("対象の敵ユニットに魔法DMを与え、与えたダメージの80%が回復する。魔法DM: 75/125/175/225/275 (+1.0)(対象がChampionの場合は次の計算式と比較し大きいほうとなる。")
+                .active("対象の敵ユニットに{1}を与え、{2}する。対象がChampionの場合は{3}と比較し大きいほうのDMを与える。")
+                .variable(1, MagicDamage, 75, 50, ap(1))
+                .variable(2, RestoreHealth, 0, 0, amplify(DealtDamageRatio, 80))
+                .variable(3, MagicDamage, 0, 0, ap(1), amplify(TargetMaxHealthRatio, 8, 2))
                 .mana(70, 10)
                 .cd(10, -1)
                 .range(400);
-        HuntersCall.update().active("10秒間自身と近くの味方Championの攻撃速度を増加させる。").mana(35).cd(24, -2);
+        HuntersCall.update()
+                .active("10秒間{2}し、{1}の味方Championは{3}する。")
+                .variable(1, Radius, 1200)
+                .variable(2, ASRatio, 40, 10)
+                .variable(3, ASRatio, 20, 5)
+                .conditional(3)
+                .mana(35)
+                .cd(24, -2);
         BloodScent.update()
-                .passive("n:範囲内にHPが50%以下の敵Championがいるとその視界を得て、Warwickの移動速度が増加する。このスキルで敵のステルスを看破する事はできず、ステルス中の敵Championの視界を得ることもできない。")
+                .passive("{1}して、{2}内にいるHPが50%以下の敵Championの{3}。このスキルで敵のステルスを看破する事はできず、ステルス中の敵Championの視界を得ることもできない。")
+                .variable(1, MSRatio, 20, 5)
+                .variable(2, Radius, 1500, 800)
+                .variable(3, Visionable)
                 .cd(4);
         InfiniteDuress.update()
-                .active("対象の敵Championに突撃し、1.8秒かけて5回魔法DMを与える(0.36秒毎に1ヒット)。チャネリングが続いている間は対象にサプレッション(最大1.8s)を与え続け、WarwickのLSが30%増加する。このスキルは1ヒット毎にOn-Hit Effectsの影響を受ける。※ チャネリングスキル。チャネリングが中断されるか効果時間が過ぎるまで効果が持続する。")
+                .active("対象の敵Championに突撃し{2}を与えて、その間{3}を得て0.36秒毎に{1}を、計5回で{4}を与える。")
+                .variable(1, MagicDamage, 50, 17, bounusAD(0.4))
+                .variable(2, Suppression, 1.8)
+                .variable(3, LS, 30)
+                .variable(4, MagicDamage, 250, 85, bounusAD(2))
+                .type(SkillType.Channel)
+                .type(SkillType.OnHitEffectable)
                 .mana(100, 25)
                 .cd(90, -10)
                 .range(700);

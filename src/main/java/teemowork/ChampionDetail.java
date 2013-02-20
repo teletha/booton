@@ -13,6 +13,7 @@ import static js.lang.Global.*;
 import static teemowork.model.Status.*;
 
 import java.lang.reflect.Method;
+import java.util.EnumSet;
 import java.util.List;
 
 import js.application.Page;
@@ -26,6 +27,7 @@ import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
 import teemowork.model.Build;
+import teemowork.model.Build.Computed;
 import teemowork.model.Champion;
 import teemowork.model.Skill;
 import teemowork.model.SkillKey;
@@ -34,7 +36,6 @@ import teemowork.model.SkillType;
 import teemowork.model.Status;
 import teemowork.model.Variable;
 import teemowork.model.VariableResolver;
-import teemowork.model.Build.Computed;
 import booton.css.CSS;
 
 /**
@@ -319,10 +320,14 @@ public class ChampionDetail extends Page {
             // ACTIVE
             active.empty();
 
-            SkillType type = status.getType();
+            EnumSet<SkillType> types = status.getType();
 
-            if (type != SkillType.Active && type != SkillType.OnHitEffectable) {
-                active.child(SkillStyle.Passive.class).text(status.getType().name().toUpperCase());
+            if (types.contains(SkillType.Toggle)) {
+                active.child(SkillStyle.Passive.class).text("TOGGLE");
+            }
+
+            if (types.contains(SkillType.Channel)) {
+                active.child(SkillStyle.Passive.class).text("CHANNEL");
             }
 
             for (Object token : status.active) {
@@ -333,7 +338,7 @@ public class ChampionDetail extends Page {
                 }
             }
 
-            if (type == SkillType.OnHitEffectable) {
+            if (types.contains(SkillType.OnHitEffectable)) {
                 active.append("このスキルはOn-Hit Effectの影響を受ける。");
             }
         }
@@ -347,7 +352,7 @@ public class ChampionDetail extends Page {
                 VariableResolver resolver = cost.getResolver();
                 String label = cost.getStatus().name;
 
-                if (status.getType() == SkillType.Toggle) {
+                if (status.getType().contains(SkillType.Toggle)) {
                     label = "毎秒" + label;
                 }
 
