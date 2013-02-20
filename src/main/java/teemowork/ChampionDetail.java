@@ -13,7 +13,6 @@ import static js.lang.Global.*;
 import static teemowork.model.Status.*;
 
 import java.lang.reflect.Method;
-import java.util.EnumSet;
 import java.util.List;
 
 import js.application.Page;
@@ -320,14 +319,10 @@ public class ChampionDetail extends Page {
             // ACTIVE
             active.empty();
 
-            EnumSet<SkillType> types = status.getType();
+            SkillType type = status.getType();
 
-            if (types.contains(SkillType.Toggle)) {
-                active.child(SkillStyle.Passive.class).text("TOGGLE");
-            }
-
-            if (types.contains(SkillType.Channel)) {
-                active.child(SkillStyle.Passive.class).text("CHANNEL");
+            if (type != SkillType.Active && type != SkillType.OnHitEffectable) {
+                active.child(SkillStyle.Passive.class).text(status.getType().name().toUpperCase());
             }
 
             for (Object token : status.active) {
@@ -338,7 +333,7 @@ public class ChampionDetail extends Page {
                 }
             }
 
-            if (types.contains(SkillType.OnHitEffectable)) {
+            if (type == SkillType.OnHitEffectable) {
                 active.append("このスキルはOn-Hit Effectの影響を受ける。");
             }
         }
@@ -352,7 +347,7 @@ public class ChampionDetail extends Page {
                 VariableResolver resolver = cost.getResolver();
                 String label = cost.getStatus().name;
 
-                if (status.getType().contains(SkillType.Toggle)) {
+                if (status.getType() == SkillType.Toggle) {
                     label = "毎秒" + label;
                 }
 
