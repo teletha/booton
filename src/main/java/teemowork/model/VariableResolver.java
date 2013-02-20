@@ -219,12 +219,12 @@ public abstract class VariableResolver {
     public static class Per1Level extends VariableResolver {
 
         /** The values. */
-        private final int[] values;
+        private final double[] values;
 
         /**
          * @param values
          */
-        public Per1Level(int[] values) {
+        public Per1Level(double[] values) {
             this.values = values;
         }
 
