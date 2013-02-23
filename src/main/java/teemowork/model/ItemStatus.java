@@ -21,7 +21,7 @@ public class ItemStatus {
     private NativeArray<Double> values;
 
     /** The item build. */
-    private Item[] build;
+    Item[] build;
 
     /** The abilities. */
     public ItemAbility[] abilities;

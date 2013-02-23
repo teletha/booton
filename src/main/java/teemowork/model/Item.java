@@ -489,6 +489,25 @@ public class Item {
 
     /**
      * <p>
+     * Calcurate item total cost.
+     * </p>
+     * 
+     * @param version
+     * @return
+     */
+    public double getTotalCost(Version version) {
+        ItemStatus status = getStatus(version);
+
+        double sum = status.get(Cost);
+
+        for (Item material : status.build) {
+            sum += material.getTotalCost(version);
+        }
+        return sum;
+    }
+
+    /**
+     * <p>
      * Update status.
      * </p>
      * 
