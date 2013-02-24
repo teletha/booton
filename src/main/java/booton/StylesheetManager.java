@@ -30,6 +30,9 @@ import booton.util.Font;
 @Manageable(lifestyle = Singleton.class)
 class StylesheetManager implements Literal<CSS> {
 
+    /** The used web fonts. */
+    private final Set<Font> fonts = new HashSet();
+
     /** The used styles. */
     private final Set<Class<? extends CSS>> used = new LinkedHashSet();
 
@@ -62,20 +65,8 @@ class StylesheetManager implements Literal<CSS> {
         }
 
         // collect required fonts
-        Set<Font> fonts = new HashSet();
-
         for (CSS style : required) {
-            Class type = style.getClass();
-
-            while (type != CSS.class) {
-                for (Field field : type.getDeclaredFields()) {
-                    if (field.getType() == Font.class) {
-                        field.setAccessible(true);
-                        fonts.add((Font) field.get(style));
-                    }
-                }
-                type = type.getSuperclass();
-            }
+            collectFont(style.getClass(), style);
         }
 
         StringBuilder builder = new StringBuilder();
@@ -91,6 +82,29 @@ class StylesheetManager implements Literal<CSS> {
         }
 
         Files.write(file, builder.toString().getBytes(I.$encoding));
+    }
+
+    /**
+     * <p>
+     * Collect font declarations.
+     * </p>
+     * 
+     * @param clazz
+     */
+    private void collectFont(Class clazz, CSS style) throws Exception {
+        if (clazz != null && clazz != CSS.class) {
+            for (Field field : clazz.getDeclaredFields()) {
+                if (field.getType() == Font.class) {
+                    field.setAccessible(true);
+                    fonts.add((Font) field.get(style));
+                }
+            }
+
+            if (clazz.isMemberClass()) {
+                collectFont(clazz.getEnclosingClass(), null);
+            }
+            collectFont(clazz.getSuperclass(), style);
+        }
     }
 
     /**

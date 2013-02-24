@@ -28,7 +28,7 @@ public class SkillStatus {
     /** The value store. */
     private NativeArray<Double> values;
 
-    /** The value store. */
+    /** The variable store. */
     private NativeArray<Variable> variables;
 
     /** The skill cost type. */
