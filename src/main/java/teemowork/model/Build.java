@@ -327,17 +327,17 @@ public class Build extends Notifiable {
                 // compute item status
                 sum = status.compute(sum, itemStatus.get(status));
 
-                for (ItemAbility ability : itemStatus.abilities) {
-                    ItemAbilityStatus abilityDescriptor = ability.getStatus(version);
-
-                    if (abilityDescriptor.isUnique() && names.contains(ability.name)) {
-                        continue;
-                    }
-                    names.add(ability.name);
-
-                    // compute ability status
-                    sum = status.compute(sum, abilityDescriptor.get(status) * itemCounts[i]);
-                }
+                // for (ItemAbility ability : itemStatus.abilities) {
+                // ItemAbilityStatus abilityDescriptor = ability.getStatus(version);
+                //
+                // if (abilityDescriptor.isUnique() && names.contains(ability.name)) {
+                // continue;
+                // }
+                // names.add(ability.name);
+                //
+                // // compute ability status
+                // sum = status.compute(sum, abilityDescriptor.get(status) * itemCounts[i]);
+                // }
             }
         }
 
@@ -411,6 +411,10 @@ public class Build extends Notifiable {
         for (Variable amplifier : variable.amplifiers) {
             VariableResolver resolver = amplifier.getResolver();
             int skillLevel = resolver.isSkillLevelBased() ? level : resolver.convertLevel(this.level);
+
+            if (level != skillLevel) {
+                System.out.println(level + "   " + skillLevel);
+            }
 
             value += computeVariable(null, amplifier, skillLevel) * get(amplifier.getStatus()).value;
         }

@@ -9,13 +9,13 @@
  */
 package teemowork.model;
 
-import static teemowork.model.ItemAbility.*;
 import static teemowork.model.Status.*;
 import static teemowork.model.Version.*;
 
 import java.util.List;
 
 import js.util.ArrayList;
+import teemowork.model.VariableResolver.Diff;
 
 /**
  * @version 2013/01/27 0:43:53
@@ -334,6 +334,9 @@ public class Item {
     /** Seraph's Embrace */
     public static final Item SeraphsEmbrace = new Item(3040, "Seraph's Embrace");
 
+    /** Seeker's Armguard */
+    public static final Item SeekersArmguard = new Item(3191, "Seeker's Armguard");
+
     /** Shard of True Ice */
     public static final Item ShardOfTrueIce = new Item(3092, "Shard of True Ice");
 
@@ -514,6 +517,22 @@ public class Item {
      * @param version A update version.
      * @return A champion descriptor.
      */
+    ItemStatus update() {
+        ItemStatus status = new ItemStatus(getStatus(P0000));
+
+        versions[P0000.ordinal()] = status;
+
+        return status;
+    }
+
+    /**
+     * <p>
+     * Update status.
+     * </p>
+     * 
+     * @param version A update version.
+     * @return A champion descriptor.
+     */
     ItemStatus update(Version version) {
         ItemStatus status = new ItemStatus(getStatus(version));
 
@@ -550,291 +569,360 @@ public class Item {
         return null;
     }
 
+    /**
+     * <p>
+     * Create skill AD amplifier. This pattern is used frequently.
+     * </p>
+     * 
+     * @param rate An AD rate.
+     * @return
+     */
+    private static final Variable ad(double rate) {
+        return amplify(AD, rate);
+    }
+
+    /**
+     * <p>
+     * Create skill AD amplifier. This pattern is used frequently.
+     * </p>
+     * 
+     * @param rate An AD rate.
+     * @return
+     */
+    private static final Variable bounusAD(double rate) {
+        return amplify(BounusAD, rate);
+    }
+
+    /**
+     * <p>
+     * Create skill AP amplifier. This pattern is used frequently.
+     * </p>
+     * 
+     * @param rate An AP rate.
+     * @return
+     */
+    private static final Variable ap(double rate) {
+        return amplify(AP, rate);
+    }
+
+    /**
+     * <p>
+     * Create skill amplifier.
+     * </p>
+     * 
+     * @param status A status type.
+     * @param base A base value of amplifier rate.
+     * @return
+     */
+    private static final Variable amplify(Status status, double base) {
+        return amplify(status, base, 0);
+    }
+
+    /**
+     * <p>
+     * Create skill amplifier.
+     * </p>
+     * 
+     * @param status A status type.
+     * @param base A base value of amplifier rate.
+     * @param diff A diff value of amplifier rate.
+     * @return
+     */
+    private static final Variable amplify(Status status, double base, double diff) {
+        return amplify(status, new Diff(base, diff));
+    }
+
+    /**
+     * <p>
+     * Create skill amplifier.
+     * </p>
+     * 
+     * @param status A status type.
+     * @param base A base value of amplifier rate.
+     * @param diff A diff value of amplifier rate.
+     * @return
+     */
+    private static final Variable amplify(Status status, VariableResolver resolver) {
+        Variable amplifier = new Variable();
+        amplifier.setStatus(status);
+        amplifier.setResolver(resolver);
+
+        return amplifier;
+    }
+
+    /**
+     * <p>
+     * Create skill amplifier.
+     * </p>
+     * 
+     * @param status A status type.
+     * @param base A base value of amplifier rate.
+     * @param diff A diff value of amplifier rate.
+     * @return
+     */
+    private static final Variable amplify(Status status, double base, double diff, Variable amplifier) {
+        Variable one = amplify(status, base, diff);
+        one.amplifiers.add(amplifier);
+
+        return one;
+    }
+
     static {
-        AbyssalScepter.update(P0000)
-                .build(BlastingWand, NegatronCloak)
-                .set(Cost, 980, 1855)
-                .set(MR, 45)
-                .set(AP, 70)
-                .ability(AbyssalAura);
-        AegisOftheLegion.update(P0000)
+        AbyssalScepter.update().build(BlastingWand, NegatronCloak).cost(980).set(AP, 70).set(MR, 45);
+        AegisOftheLegion.update()
                 .build(EmblemOfValor, NullMagicMantle, RubyCrystal)
-                .set(Cost, 625, 1505)
+                .cost(625)
+                .set(Health, 250)
                 .set(AR, 20)
                 .set(MR, 20)
-                .set(Health, 250)
-                .ability(Legion);
-        AmplifyingTome.update(P0000).set(Cost, 435, 305).set(AP, 20);
-        ArchangelsStaff.update(P0000)
+                .passive("Insight", "{1}を得る。")
+                .variable(1, AP, 0, 0, amplify(Mana, 0.03))
+                .passive("Mana Charge", "スキル使用時及びMana消費時に最大Manaが6だけ増加する(最大+750)。CD: 3s");
+        AmplifyingTome.update().cost(435).set(AP, 20);
+        ArchangelsStaff.update()
                 .build(TearOftheGoddess, BlastingWand)
-                .set(Cost, 1140, 1890)
+                .cost(1140)
                 .set(AP, 60)
-                .set(Mana, 250)
-                .set(Mreg, 10);
-        AthenesUnholyGrail.update(P0000)
+                .set(Mreg, 10)
+                .set(Mana, 250);
+        AthenesUnholyGrail.update()
                 .build(ChaliceOfHarmony, FiendishCodex)
-                .set(Cost, 920)
-                .set(MR, 40)
+                .cost(900)
                 .set(AP, 60)
-                .set(Mreg, 15);
-        AtmasImpaler.update(P0000).build(AvariceBlade, ChainVest).set(Cost, 780).set(Critical, 15);
-        AugmentDeath.update(P0000).build(TheHexCore).set(Cost, 1000).set(AP, 45);
-        AugmentGravity.update(P0000).build(TheHexCore).set(Cost, 1000).set(Mana, 200).set(CDR, 10).set(Mreg, 5);
-        AugmentPower.update(P0000).build(TheHexCore).set(Cost, 1000).set(Hreg, 6).set(Health, 220);
-        AvariceBlade.update(P0000).build(BrawlersGloves).set(Cost, 400).set(Critical, 10);
-        BFSword.update(P0000).set(Cost, 1550).set(AD, 45);
-        BannerOfCommand.update(P0000).build(BlastingWand, EmblemOfValor).set(Cost, 890).set(AP, 40).set(CDR, 10);
-        BansheesVeil.update(P0000)
+                .set(Mreg, 15)
+                .set(MR, 40);
+        AtmasImpaler.update().build(AvariceBlade, ChainVest).cost(780).set(AR, 45).set(Critical, 15);
+        AugmentDeath.update().build(TheHexCore).cost(1000).set(AP, 45);
+        AugmentGravity.update().build(TheHexCore).cost(1000).set(CDR, 10).set(Mreg, 5).set(Mana, 200);
+        AugmentPower.update().build(TheHexCore).cost(1000).set(Health, 220).set(Hreg, 6);
+        AvariceBlade.update().build(BrawlersGloves).cost(400).set(Critical, 10);
+        BFSword.update().cost(1550).set(AD, 45);
+        BannerOfCommand.update().build(FiendishCodex, EmblemOfValor).cost(890).set(AP, 40).set(CDR, 10).set(AR, 30);
+        BansheesVeil.update()
                 .build(NegatronCloak, CatalystTheProtector)
-                .set(Cost, 600)
-                .set(MR, 45)
+                .cost(600)
+                .set(Health, 400)
                 .set(Mana, 300)
-                .set(Health, 400);
-        BerserkersGreaves.update(P0000).build(BootsOfSpeed, Dagger).set(Cost, 150).set(ASRatio, 20);
-        BilgewaterCutlass.update(P0000).build(Pickaxe, VampiricScepter).set(Cost, 250).set(LS, 10).set(AD, 40);
-
-        BladeOftheRuinedKing.update(P0000).build(BilgewaterCutlass).set(Cost, 975).set(LS, 10).set(AD, 40);
-        BlastingWand.update(P0000).set(Cost, 860).set(AP, 40);
-        BonetoothNecklace.update(P0000).set(Cost, 800).set(AD, 5);
-        BootsOfMobility.update(P0000).build(BootsOfSpeed).set(Cost, 650);
-        BootsOfSpeed.update(P0000).set(Cost, 350);
-        BootsOfSwiftness.update(P0000).build(BootsOfSpeed).set(Cost, 650);
-        BrawlersGloves.update(P0000).set(Cost, 400).set(Critical, 8);
-        CatalystTheProtector.update(P0000)
-                .build(RubyCrystal, SapphireCrystal)
-                .set(Cost, 325)
-                .set(Mana, 300)
-                .set(Health, 200);
-        ChainVest.update(P0000).set(Cost, 720);
-        ChaliceOfHarmony.update(P0000).build(FaerieCharm, NullMagicMantle).set(Cost, 300).set(MR, 25).set(Mreg, 7);
-        CloakOfAgility.update(P0000).set(Cost, 730).set(Critical, 15);
-        ClothArmor.update(P0000).set(Cost, 300);
-        CrystallineFlask.update(P0000).set(Cost, 345);
-        Dagger.update(P0000).set(Cost, 400).set(ASRatio, 12);
-        DeathfireGrasp.update(P0000).build(AmplifyingTome, NeedlesslyLargeRod).set(Cost, 965).set(AP, 100).set(CDR, 15);
-        DoransBlade.update(P0000).set(Cost, 475).set(AD, 10).set(Health, 80);
-        DoransRing.update(P0000).set(Cost, 475).set(AP, 15).set(Health, 80).set(Mreg, 3);
-        DoransShield.update(P0000).set(Cost, 475).set(Hreg, 5).set(Health, 100);
-        EleisasMiracle.update(P0000).build(PhilosophersStone).set(Cost, 400).set(Hreg, 10).set(Mreg, 15);
-        ElixirOfBrilliance.update(P0000).set(Cost, 250);
-        ElixirOfFortitude.update(P0000).set(Cost, 250);
-        EmblemOfValor.update(P0000).build(ClothArmor, RejuvenationBead).set(Cost, 170);
-        ExecutionersCalling.update(P0000).build(AvariceBlade, LongSword).set(Cost, 700).set(Critical, 15).set(AD, 25);
-        FaerieCharm.update(P0000).set(Cost, 180).set(Mreg, 3);
-        FiendishCodex.update(P0000).build(FaerieCharm, AmplifyingTome).set(Cost, 385).set(AP, 30).set(Mreg, 6);
-        FrozenHeart.update(P0000).build(GlacialShroud, WardensMail).set(Cost, 500).set(Mana, 400).set(CDR, 20);
-        FrozenMallet.update(P0000).build(Phage, GiantsBelt).set(Cost, 835).set(AD, 30).set(Health, 700);
-        GiantsBelt.update(P0000).set(Cost, 1000).set(Health, 400);
-        GlacialShroud.update(P0000).build(SapphireCrystal, ChainVest).set(Cost, 380).set(Mana, 300);
-        GuardianAngel.update(P0000).build(NullMagicMantle, ChainVest).set(Cost, 1480).set(MR, 30);
-        GuinsoosRageblade.update(P0000).build(BlastingWand, Pickaxe).set(Cost, 865).set(AP, 40).set(AD, 30);
-        HauntingGuise.update(P0000).build(RubyCrystal, AmplifyingTome).set(Cost, 575).set(AP, 25).set(Health, 200);
-        HealthPotion.update(P0000).set(Cost, 35);
-        Hexdrinker.update(P0000).build(LongSword, NullMagicMantle).set(Cost, 550).set(MR, 25).set(AD, 25);
-        HextechGunblade.update(P0000)
+                .set(MR, 45);
+        BerserkersGreaves.update().build(BootsOfSpeed, Dagger).cost(150).set(ASRatio, 20);
+        BilgewaterCutlass.update().build(Pickaxe, VampiricScepter).cost(250).set(LS, 10).set(AD, 40);
+        BladeOftheRuinedKing.update().build(BilgewaterCutlass).cost(975).set(LS, 10).set(AD, 45);
+        BlastingWand.update().cost(860).set(AP, 40);
+        BonetoothNecklace.update().cost(800).set(AD, 5);
+        BootsOfMobility.update().build(BootsOfSpeed).cost(650);
+        BootsOfSpeed.update().cost(350);
+        BootsOfSwiftness.update().build(BootsOfSpeed).cost(650);
+        BrawlersGloves.update().cost(400).set(Critical, 8);
+        CatalystTheProtector.update().build(RubyCrystal, SapphireCrystal).cost(325).set(Health, 200).set(Mana, 300);
+        ChainVest.update().cost(720).set(AR, 40);
+        ChaliceOfHarmony.update().build(FaerieCharm, FaerieCharm, NullMagicMantle).cost(120).set(Mreg, 7).set(MR, 25);
+        CloakOfAgility.update().cost(730).set(Critical, 15);
+        ClothArmor.update().cost(300).set(AR, 15);
+        CrystallineFlask.update().cost(345);
+        Dagger.update().cost(400).set(ASRatio, 12);
+        DeathfireGrasp.update().build(FiendishCodex, NeedlesslyLargeRod).cost(680).set(AP, 120).set(CDR, 10);
+        DoransBlade.update().cost(475).set(AD, 10).set(Health, 80);
+        DoransRing.update().cost(475).set(AP, 15).set(Health, 80).set(Mreg, 3);
+        DoransShield.update().cost(475).set(Health, 100).set(Hreg, 8).set(AR, 5);
+        EleisasMiracle.update().build(PhilosophersStone).cost(400).set(Mreg, 15).set(Hreg, 10);
+        ElixirOfBrilliance.update().cost(250);
+        ElixirOfFortitude.update().cost(250);
+        EmblemOfValor.update().build(ClothArmor, RejuvenationBead).cost(170).set(AR, 20);
+        ExecutionersCalling.update().build(AvariceBlade, LongSword).cost(700).set(AD, 25).set(Critical, 20);
+        FaerieCharm.update().cost(180).set(Mreg, 3);
+        FiendishCodex.update().build(AmplifyingTome).cost(385).set(AP, 30);
+        FrozenHeart.update().build(GlacialShroud, WardensMail).cost(550).set(CDR, 20).set(AR, 95).set(Mana, 400);
+        FrozenMallet.update().build(Phage, GiantsBelt).cost(835).set(AD, 30).set(Health, 700);
+        GiantsBelt.update().cost(1000).set(Health, 380);
+        GlacialShroud.update().build(SapphireCrystal, ChainVest).cost(230).set(AR, 45).set(Mana, 300);
+        GuardianAngel.update().build(NullMagicMantle, ChainVest).cost(1480).set(AR, 50).set(MR, 30);
+        GuinsoosRageblade.update().build(BlastingWand, Pickaxe).cost(865).set(AD, 30).set(AP, 40);
+        HauntingGuise.update().build(RubyCrystal, AmplifyingTome).cost(575).set(AP, 25).set(Health, 200);
+        HealthPotion.update().cost(35);
+        Hexdrinker.update().build(LongSword, NullMagicMantle).cost(550).set(AD, 25).set(MR, 25);
+        HextechGunblade.update()
                 .build(BilgewaterCutlass, HextechRevolver)
-                .set(Cost, 275)
+                .cost(275)
                 .set(LS, 10)
-                .set(AP, 65)
-                .set(AD, 45);
-        HextechRevolver.update(P0000).build(AmplifyingTome, AmplifyingTome).set(Cost, 330).set(AP, 40);
-        HuntersMachete.update(P0000).set(Cost, 300);
-        IcebornGauntlet.update(P0000)
+                .set(AD, 45)
+                .set(AP, 65);
+        HextechRevolver.update().build(AmplifyingTome, AmplifyingTome).cost(330).set(AP, 40);
+        HuntersMachete.update().cost(300);
+        IcebornGauntlet.update()
                 .build(Sheen, GlacialShroud)
-                .set(Cost, 640)
+                .cost(640)
                 .set(AP, 40)
-                .set(Mana, 500)
-                .set(CDR, 15);
-        InfinityEdge.update(P0000).build(BFSword, CloakOfAgility, Pickaxe).set(Cost, 645).set(Critical, 25).set(AD, 70);
-        IonianBootsOfLucidity.update(P0000).build(BootsOfSpeed).set(Cost, 700);
-        KagesLuckyPick.update(P0000).build(AmplifyingTome).set(Cost, 330).set(AP, 25);
-        Kindlegem.update(P0000).build(RubyCrystal).set(Cost, 375).set(Health, 200);
-        LastWhisper.update(P0000).build(LongSword, Pickaxe).set(Cost, 1025).set(AD, 40).set(ARPenRatio, 40);
-        LiandrysTorment.update(P0000).build(HauntingGuise, AmplifyingTome).set(Cost, 980).set(AP, 60).set(Health, 300);
-        LichBane.update(P0000).build(Sheen, BlastingWand).set(Cost, 880).set(AP, 80).set(MSRatio, 5).set(Mana, 250);
-        LocketOftheIronSolari.update(P0000)
-                .build(Kindlegem, ClothArmor, RejuvenationBead)
-                .set(Cost, 670)
                 .set(CDR, 10)
-                .set(Health, 425);
-        LongSword.update(P0000).set(Cost, 400).set(AD, 10);
-        MadredsRazors.update(P0000).build(ClothArmor, HuntersMachete).set(Cost, 100);
-        Malady.update(P0000).build(Dagger, Dagger, AmplifyingTome).set(Cost, 800).set(AP, 25).set(ASRatio, 45);
-        ManaManipulator.update(P0000).build(FaerieCharm, FaerieCharm).set(Cost, 40);
-        Manamune.update(P0000)
-                .build(TearOftheGoddess, LongSword)
-                .set(Cost, 1000)
-                .set(AD, 20)
-                .set(Mana, 250)
-                .set(Mreg, 7);
-        ManaPotion.update(P0000).set(Cost, 35);
-        MawOfMalmortius.update(P0000).build(Hexdrinker, Pickaxe).set(Cost, 975).set(MR, 36).set(AD, 55);
-        MejaisSoulstealer.update(P0000).build(AmplifyingTome).set(Cost, 800).set(AP, 20);
-        MercurialScimitar.update(P0000).build(QuicksilverSash, BFSword).set(Cost, 600).set(MR, 45).set(AD, 60);
-        MercurysTreads.update(P0000).build(BootsOfSpeed, NullMagicMantle).set(Cost, 450).set(MR, 25).set(MS, 50);
-        MikaelsCrucible.update(P0000)
+                .set(AR, 60)
+                .set(Mana, 500);
+        InfinityEdge.update().build(BFSword, CloakOfAgility, Pickaxe).cost(645).set(AD, 70).set(Critical, 25);
+        IonianBootsOfLucidity.update().build(BootsOfSpeed).cost(700);
+        KagesLuckyPick.update().build(AmplifyingTome).cost(330).set(AP, 25);
+        Kindlegem.update().build(RubyCrystal).cost(375).set(Health, 200);
+        LastWhisper.update().build(LongSword, Pickaxe).cost(1025).set(AD, 40);
+        LiandrysTorment.update().build(HauntingGuise, AmplifyingTome).cost(980).set(AP, 50).set(Health, 300);
+        LichBane.update().build(Sheen, BlastingWand).cost(880).set(AP, 80).set(Mana, 250).set(MSRatio, 5);
+        LocketOftheIronSolari.update()
+                .build(Kindlegem, ClothArmor, RejuvenationBead)
+                .cost(670)
+                .set(Health, 425)
+                .set(CDR, 10)
+                .set(AR, 35);
+        LongSword.update().cost(400).set(AD, 10);
+        MadredsRazors.update().build(ClothArmor, HuntersMachete).cost(100).set(AR, 25);
+        Malady.update().build(Dagger, Dagger, AmplifyingTome).cost(800).set(AP, 25).set(ASRatio, 45);
+        ManaManipulator.update().build(FaerieCharm, FaerieCharm).cost(40);
+        Manamune.update().build(TearOftheGoddess, LongSword).cost(1000).set(AD, 20).set(Mreg, 7).set(Mana, 250);
+        ManaPotion.update().cost(35);
+        MawOfMalmortius.update().build(Hexdrinker, Pickaxe).cost(975).set(AD, 55).set(MR, 36);
+        MejaisSoulstealer.update().build(AmplifyingTome).cost(800).set(AP, 20);
+        MercurialScimitar.update().build(QuicksilverSash, BFSword).cost(600).set(AD, 60).set(MR, 45);
+        MercurysTreads.update().build(BootsOfSpeed, NullMagicMantle).cost(450).set(MR, 25);
+        MikaelsCrucible.update()
                 .build(SapphireCrystal, ChaliceOfHarmony)
-                .set(Cost, 920)
-                .set(MR, 40)
+                .cost(920)
+                .set(Mreg, 9)
                 .set(Mana, 300)
-                .set(Mreg, 9);
-        Morellonomicon.update(P0000)
-                .build(FiendishCodex, KagesLuckyPick)
-                .set(Cost, 435)
+                .set(MR, 40);
+        Morellonomicon.update()
+                .build(FaerieCharm, FiendishCodex, KagesLuckyPick)
+                .cost(435)
                 .set(AP, 75)
                 .set(CDR, 20)
                 .set(Mreg, 12);
-        Muramana.update(P0000).build(Manamune).set(Cost, 0).set(AD, 20).set(Mana, 1000).set(Mreg, 7);
-        NashorsTooth.update(P0000)
-                .build(Stinger, FiendishCodex)
-                .set(Cost, 250)
-                .set(AP, 65)
-                .set(ASRatio, 50)
-                .set(Mreg, 10);
-        NeedlesslyLargeRod.update(P0000).set(Cost, 1600).set(AP, 80);
-        NegatronCloak.update(P0000).set(Cost, 810).set(MR, 45);
-        NinjaTabi.update(P0000).build(BootsOfSpeed, ClothArmor).set(Cost, 350);
-        NullMagicMantle.update(P0000).set(Cost, 400).set(MR, 20);
-        Ohmwrecker.update(P0000).build(CatalystTheProtector, ChainVest).set(Cost, 930).set(Mana, 300).set(Health, 350);
-        OraclesElixir.update(P0000).set(Cost, 400);
-        Phage.update(P0000).build(RubyCrystal, LongSword).set(Cost, 590).set(AD, 20).set(Health, 200);
-        PhantomDancer.update(P0000)
+        Muramana.update().build(Manamune).cost(0).set(AD, 20).set(Mreg, 7).set(Mana, 1000);
+        NashorsTooth.update().build(Stinger, FiendishCodex).cost(200).set(AP, 65).set(ASRatio, 50);
+        NeedlesslyLargeRod.update().cost(1600).set(AP, 80);
+        NegatronCloak.update().cost(720).set(MR, 40);
+        NinjaTabi.update().build(BootsOfSpeed, ClothArmor).cost(350).set(AR, 25);
+        NullMagicMantle.update().cost(400).set(MR, 20);
+        Ohmwrecker.update()
+                .build(RubyCrystal, BlastingWand, PhilosophersStone)
+                .cost(800)
+                .set(AP, 50)
+                .set(Health, 350)
+                .set(Mreg, 15)
+                .set(Hreg, 15);
+        OraclesElixir.update().cost(400);
+        Phage.update().build(RubyCrystal, LongSword).cost(590).set(AD, 20).set(Health, 200);
+        PhantomDancer.update()
                 .build(CloakOfAgility, Zeal, Dagger)
-                .set(Cost, 495)
-                .set(Critical, 30)
+                .cost(495)
+                .set(ASRatio, 50)
                 .set(MSRatio, 5)
-                .set(ASRatio, 50);
-        PhilosophersStone.update(P0000).build(FaerieCharm, RejuvenationBead).set(Cost, 340).set(Hreg, 7).set(Mreg, 9);
-        Pickaxe.update(P0000).set(Cost, 875).set(AD, 25);
-        QuicksilverSash.update(P0000).build(NegatronCloak).set(Cost, 850).set(MR, 45);
-        RabadonsDeathcap.update(P0000).build(BlastingWand, NeedlesslyLargeRod).set(Cost, 740).set(AP, 120);
-        RanduinsOmen.update(P0000).build(GiantsBelt, WardensMail).set(Cost, 1000).set(Health, 500);
-        RavenousHydra.update(P0000).build(Tiamat, VampiricScepter).set(Cost, 400).set(LS, 10).set(AD, 75).set(Hreg, 15);
-        RecurveBow.update(P0000).set(Cost, 950).set(ASRatio, 30);
-        RejuvenationBead.update(P0000).set(Cost, 180).set(Hreg, 5);
-        RodOfAges.update(P0000)
+                .set(Critical, 30);
+        PhilosophersStone.update().build(FaerieCharm, RejuvenationBead).cost(340).set(Mreg, 9).set(Hreg, 7);
+        Pickaxe.update().cost(875).set(AD, 25);
+        QuicksilverSash.update().build(NegatronCloak).cost(830).set(MR, 45);
+        RabadonsDeathcap.update().build(BlastingWand, NeedlesslyLargeRod).cost(840).set(AP, 120);
+        RanduinsOmen.update().build(GiantsBelt, WardensMail).cost(1000).set(Health, 500).set(AR, 70);
+        RavenousHydra.update().build(Tiamat, VampiricScepter).cost(400).set(LS, 10).set(AD, 75).set(Hreg, 15);
+        RecurveBow.update().cost(950).set(ASRatio, 30);
+        RejuvenationBead.update().cost(180).set(Hreg, 5);
+        RodOfAges.update()
                 .build(CatalystTheProtector, BlastingWand)
-                .set(Cost, 740)
+                .cost(740)
                 .set(AP, 60)
-                .set(Mana, 450)
-                .set(Health, 450);
-        RubyCrystal.update(P0000).set(Cost, 475).set(Health, 180);
-        RubySightstone.update(P0000).build(Sightstone).set(Cost, 125).set(Health, 300);
-        RunaansHurricane.update(P0000).build(Dagger, RecurveBow, Dagger).set(Cost, 1000).set(ASRatio, 70);
-        RunicBulwark.update(P0000).build(NullMagicMantle, AegisOftheLegion).set(Cost, 650).set(MR, 30).set(Health, 400);
-        RylaisCrystalScepter.update(P0000)
+                .set(Health, 450)
+                .set(Mana, 450);
+        RubyCrystal.update().cost(475).set(Health, 180);
+        RubySightstone.update().build(RubyCrystal, Sightstone).cost(125).set(Health, 360);
+        RunaansHurricane.update().build(Dagger, RecurveBow, Dagger).cost(1000).set(ASRatio, 70);
+        RunicBulwark.update()
+                .build(NullMagicMantle, AegisOftheLegion)
+                .cost(650)
+                .set(Health, 400)
+                .set(AR, 20)
+                .set(MR, 30);
+        RylaisCrystalScepter.update()
                 .build(BlastingWand, AmplifyingTome, GiantsBelt)
-                .set(Cost, 605)
+                .cost(605)
                 .set(AP, 80)
                 .set(Health, 500);
-        SapphireCrystal.update(P0000).set(Cost, 400).set(Mana, 200);
-        SeraphsEmbrace.update(P0000).build(ArchangelsStaff).set(Cost, 0).set(AP, 60).set(Mana, 1000).set(Mreg, 10);
-        ShardOfTrueIce.update(P0000).build(KagesLuckyPick, ManaManipulator).set(Cost, 535).set(AP, 45);
-        Sheen.update(P0000).build(SapphireCrystal, AmplifyingTome).set(Cost, 425).set(AP, 25).set(Mana, 200);
-        ShurelyasReverie.update(P0000)
+        SapphireCrystal.update().cost(400).set(Mana, 200);
+        SeekersArmguard.update().build(AmplifyingTome, ClothArmor, ClothArmor).cost(125).set(AP, 25).set(AR, 30);
+        SeraphsEmbrace.update().build(ArchangelsStaff).cost(0).set(AP, 60).set(Mreg, 10).set(Mana, 1000);
+        ShardOfTrueIce.update().build(KagesLuckyPick, ManaManipulator).cost(535).set(AP, 45);
+        Sheen.update().build(SapphireCrystal, AmplifyingTome).cost(425).set(AP, 25).set(Mana, 200);
+        ShurelyasReverie.update()
                 .build(Kindlegem, PhilosophersStone)
-                .set(Cost, 550)
-                .set(Hreg, 10)
+                .cost(550)
                 .set(Health, 250)
-                .set(Mreg, 10);
-        Sightstone.update(P0000).set(Cost, 700).set(Health, 100);
-        SightWard.update(P0000).set(Cost, 75);
-        SorcerersShoes.update(P0000).build(BootsOfSpeed).set(Cost, 750);
-        SpiritOftheAncientGolem.update(P0000)
-                .build(SpiritStone, GiantsBelt)
-                .set(Cost, 600)
-                .set(Hreg, 14)
-                .set(Health, 500)
-                .set(Mreg, 7);
-        SpiritOftheElderLizard.update(P0000)
-                .build(SpiritStone, Pickaxe)
-                .set(Cost, 725)
-                .set(AD, 50)
-                .set(Hreg, 14)
                 .set(CDR, 10)
-                .set(Mreg, 7);
-        SpiritOftheSpectralWraith.update(P0000)
+                .set(Mreg, 10)
+                .set(Hreg, 10);
+        Sightstone.update().build(RubyCrystal).cost(475).set(Health, 180);
+        SightWard.update().cost(75);
+        SorcerersShoes.update().build(BootsOfSpeed).cost(750);
+        SpiritOftheAncientGolem.update()
+                .build(SpiritStone, GiantsBelt)
+                .cost(600)
+                .set(Health, 500)
+                .set(Mreg, 7)
+                .set(Hreg, 14)
+                .set(AR, 30);
+        SpiritOftheElderLizard.update()
+                .build(SpiritStone, Pickaxe)
+                .cost(725)
+                .set(AD, 50)
+                .set(CDR, 10)
+                .set(Mreg, 7)
+                .set(Hreg, 14);
+        SpiritOftheSpectralWraith.update()
                 .build(SpiritStone, HextechRevolver)
-                .set(Cost, 400)
+                .cost(100)
                 .set(AP, 50)
                 .set(CDR, 10)
                 .set(Mreg, 10);
-        SpiritStone.update(P0000)
-                .build(HuntersMachete, FaerieCharm, RejuvenationBead)
-                .set(Cost, 140)
-                .set(Hreg, 14)
-                .set(Mreg, 7);
-        SpiritVisage.update(P0000)
-                .build(Kindlegem, NegatronCloak)
-                .set(Cost, 540)
-                .set(MR, 50)
-                .set(CDR, 15)
-                .set(Health, 200);
-        StatikkShiv.update(P0000)
-                .build(Zeal, AvariceBlade)
-                .set(Cost, 525)
-                .set(Critical, 20)
-                .set(MSRatio, 6)
-                .set(ASRatio, 40);
-        Stinger.update(P0000).build(Dagger, Dagger).set(Cost, 450).set(ASRatio, 40);
-        SunfireCape.update(P0000).build(ChainVest, GiantsBelt).set(Cost, 780).set(Health, 450);
-        SwordOftheDivine.update(P0000).build(RecurveBow, Dagger).set(Cost, 850).set(ASRatio, 45);
-        SwordOftheOccult.update(P0000).build(LongSword).set(Cost, 800).set(AD, 10);
-        TearOftheGoddess.update(P0000).build(SapphireCrystal, FaerieCharm).set(Cost, 120).set(Mana, 250).set(Mreg, 7);
-        TheBlackCleaver.update(P0000)
-                .build(TheBrutalizer, RubyCrystal)
-                .set(Cost, 1188)
-                .set(AD, 50)
-                .set(CDR, 10)
-                .set(Health, 250);
-        TheBloodthirster.update(P0000).build(BFSword, VampiricScepter).set(Cost, 650).set(LS, 12).set(AD, 70);
-        TheBrutalizer.update(P0000).build(LongSword, LongSword).set(Cost, 537).set(AD, 25);
-        TheHexCore.update(P0000).set(Cost, 0);
-        Thornmail.update(P0000).build(ChainVest, ClothArmor).set(Cost, 1180);
-        Tiamat.update(P0000)
+        SpiritStone.update().build(HuntersMachete, FaerieCharm, RejuvenationBead).cost(40).set(Mreg, 7).set(Hreg, 14);
+        SpiritVisage.update().build(Kindlegem, NegatronCloak).cost(630).set(Health, 200).set(CDR, 20).set(MR, 50);
+        StatikkShiv.update().build(Zeal, AvariceBlade).cost(525).set(ASRatio, 40).set(MSRatio, 6).set(Critical, 20);
+        Stinger.update().build(Dagger, Dagger).cost(450).set(ASRatio, 40);
+        SunfireCape.update().build(ChainVest, GiantsBelt).cost(930).set(Health, 450).set(AR, 45);
+        SwordOftheDivine.update().build(RecurveBow, Dagger).cost(850).set(ASRatio, 45);
+        SwordOftheOccult.update().build(LongSword).cost(800).set(AD, 10);
+        TearOftheGoddess.update().build(SapphireCrystal, FaerieCharm).cost(120).set(Mreg, 7).set(Mana, 250);
+        TheBlackCleaver.update().build(TheBrutalizer, RubyCrystal).cost(1188).set(AD, 50).set(Health, 200).set(CDR, 10);
+        TheBloodthirster.update().build(BFSword, VampiricScepter).cost(850).set(LS, 12).set(AD, 70);
+        TheBrutalizer.update().build(LongSword, LongSword).cost(537).set(AD, 25);
+        TheHexCore.update().cost(0);
+        Thornmail.update().build(ChainVest, ClothArmor).cost(1180).set(AR, 100);
+        Tiamat.update()
                 .build(Pickaxe, LongSword, RejuvenationBead, RejuvenationBead)
-                .set(Cost, 665)
+                .cost(665)
                 .set(AD, 50)
                 .set(Hreg, 15);
-        TrinityForce.update(P0000)
+        TrinityForce.update()
                 .build(Zeal, Sheen, Phage)
-                .set(Cost, 300)
-                .set(Critical, 10)
+                .cost(3)
+                .set(AD, 30)
                 .set(AP, 30)
-                .set(MSRatio, 8)
-                .set(Mana, 200)
+                .set(Health, 250)
                 .set(ASRatio, 30)
-                .set(AD, 30)
-                .set(Health, 250);
-        TwinShadows.update(P0000).build(KagesLuckyPick, NullMagicMantle).set(Cost, 735).set(AP, 40).set(MSRatio, 6);
-        VampiricScepter.update(P0000).build(LongSword).set(Cost, 400).set(LS, 10).set(AD, 10);
-        VisionWard.update(P0000).set(Cost, 125);
-        VoidStaff.update(P0000).build(BlastingWand, AmplifyingTome).set(Cost, 1000).set(AP, 70);
-        WardensMail.update(P0000).build(ClothArmor, ClothArmor).set(Cost, 500);
-        WarmogsArmor.update(P0000).build(GiantsBelt, RubyCrystal, RejuvenationBead).set(Cost, 995).set(Health, 1000);
-        WillOftheAncients.update(P0000).build(KagesLuckyPick, HextechRevolver).set(Cost, 585).set(AP, 50);
-        WitsEnd.update(P0000).build(RecurveBow, NullMagicMantle).set(Cost, 850).set(MR, 20).set(ASRatio, 40);
-        WrigglesLantern.update(P0000).build(VampiricScepter, MadredsRazors).set(Cost, 100).set(LS, 10).set(AD, 15);
-        YoumuusGhostblade.update(P0000)
+                .set(Mana, 200)
+                .set(MSRatio, 8)
+                .set(Critical, 10);
+        TwinShadows.update().build(KagesLuckyPick, NullMagicMantle).cost(735).set(AP, 40).set(MSRatio, 6);
+        VampiricScepter.update().build(LongSword).cost(400).set(LS, 10).set(AD, 10);
+        VisionWard.update().cost(125);
+        VoidStaff.update().build(BlastingWand, AmplifyingTome).cost(1000).set(AP, 70);
+        WardensMail.update().build(ClothArmor, ClothArmor).cost(500).set(AR, 50);
+        WarmogsArmor.update()
+                .build(GiantsBelt, RubyCrystal, RejuvenationBead, RejuvenationBead)
+                .cost(995)
+                .set(Health, 1000);
+        WillOftheAncients.update().build(KagesLuckyPick, HextechRevolver).cost(585).set(AP, 50);
+        WitsEnd.update().build(RecurveBow, NullMagicMantle).cost(850).set(ASRatio, 40).set(MR, 25);
+        WrigglesLantern.update().build(VampiricScepter, MadredsRazors).cost(100).set(LS, 10).set(AD, 15).set(AR, 30);
+        YoumuusGhostblade.update()
                 .build(AvariceBlade, TheBrutalizer)
-                .set(Cost, 563)
-                .set(Critical, 15)
+                .cost(563)
                 .set(AD, 30)
-                .set(CDR, 10);
-        Zeal.update(P0000)
-                .build(BrawlersGloves, Dagger)
-                .set(Cost, 375)
-                .set(Critical, 10)
-                .set(MSRatio, 5)
-                .set(ASRatio, 18);
-        ZekesHerald.update(P0000).build(VampiricScepter, Kindlegem).set(Cost, 800).set(CDR, 15).set(Health, 250);
-        Zephyr.update(P0000)
-                .build(Stinger, LongSword)
-                .set(Cost, 1200)
-                .set(MSRatio, 10)
-                .set(ASRatio, 50)
-                .set(AD, 20)
-                .set(CDR, 10);
-        ZhonyasHourglass.update(P0000).build(NeedlesslyLargeRod, ChainVest).set(Cost, 780).set(AP, 100);
+                .set(CDR, 10)
+                .set(Critical, 15);
+        Zeal.update().build(BrawlersGloves, Dagger).cost(375).set(ASRatio, 18).set(MSRatio, 5).set(Critical, 10);
+        ZekesHerald.update().build(VampiricScepter, Kindlegem).cost(900).set(Health, 250).set(CDR, 20);
+        Zephyr.update().build(Stinger, LongSword).cost(1200).set(AD, 20).set(CDR, 10).set(ASRatio, 50).set(MSRatio, 10);
+        ZhonyasHourglass.update().build(NeedlesslyLargeRod, SeekersArmguard).cost(650).set(AP, 120).set(AR, 50);
     }
 }

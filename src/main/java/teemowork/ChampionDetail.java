@@ -36,6 +36,7 @@ import teemowork.model.Status;
 import teemowork.model.Variable;
 import teemowork.model.VariableResolver;
 import booton.css.CSS;
+import booton.util.Font;
 
 /**
  * @version 2013/01/10 2:36:58
@@ -567,6 +568,8 @@ public class ChampionDetail extends Page {
      */
     private static class SkillStyle {
 
+        private static Font Sans = new Font("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600");
+
         /** The skill icon size. */
         private static final int IconSize = 45;
 
@@ -580,6 +583,7 @@ public class ChampionDetail extends Page {
 
             {
                 display.tableCell();
+                font.family(Sans);
             }
         }
 
@@ -855,6 +859,8 @@ public class ChampionDetail extends Page {
      */
     private static class StatusStyle {
 
+        private static Font Sans = new Font("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600");
+
         /**
          * @version 2013/02/11 0:02:30
          */
@@ -864,6 +870,7 @@ public class ChampionDetail extends Page {
                 display.tableCell();
                 box.width(13, em);
                 text.verticalAlign.top();
+                font.family(Sans);
             }
         }
 
