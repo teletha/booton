@@ -165,7 +165,7 @@ public class ItemStatus {
      * @return Chainable API.
      */
     ItemStatus variable(int id, Status status, double base, double diff, Variable first, Variable second) {
-        return variable(id, status, new Diff(base, diff), first, second);
+        return variable(id, status, new Diff(base, diff, 0), first, second);
     }
 
     /**

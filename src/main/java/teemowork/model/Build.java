@@ -21,7 +21,7 @@ import js.util.HashSet;
 /**
  * @version 2013/01/25 14:31:39
  */
-public class Build extends Notifiable {
+public class Build extends Notifiable implements StatusCalculator {
 
     /** The selected champion. */
     public Champion champion;
@@ -204,6 +204,14 @@ public class Build extends Notifiable {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public double calculate(Status status) {
+        return get(status).value;
+    }
+
+    /**
      * <p>
      * Set item.
      * </p>
@@ -382,7 +390,7 @@ public class Build extends Notifiable {
                     int level = resolver.isSkillLevelBased() ? getLevel(skill) : resolver.convertLevel(this.level);
 
                     if (level != 0) {
-                        sum = variableStatus.compute(sum, computeVariable(skill, variable, level));
+                        sum = variableStatus.compute(sum, calculateVariable(skill, variable, level));
                     }
                 }
             }
@@ -400,28 +408,13 @@ public class Build extends Notifiable {
      * @param level A current skill level.
      * @return
      */
-    public double computeVariable(Skill skill, Variable variable, int level) {
+    public double calculateVariable(Skill skill, Variable variable, int level) {
         // avoid circular dependency
         if (skill != null && !dependencies.add(skill)) {
             return 0;
         }
 
-        double value = variable.getResolver().compute(level);
-
-        for (Variable amplifier : variable.amplifiers) {
-            VariableResolver resolver = amplifier.getResolver();
-            int skillLevel = resolver.isSkillLevelBased() ? level : resolver.convertLevel(this.level);
-
-            if (level != skillLevel) {
-                System.out.println(level + "   " + skillLevel);
-            }
-
-            value += computeVariable(null, amplifier, skillLevel) * get(amplifier.getStatus()).value;
-        }
-
-        if (variable.getStatus() == CDRAwareTime) {
-            value = value * (1 - get(CDR).value / 100);
-        }
+        double value = variable.calcurate(level, this);
 
         // avoid circular dependency
         dependencies.remove(skill);
@@ -451,7 +444,7 @@ public class Build extends Notifiable {
                     Variable variable = (Variable) token;
 
                     if (variable.getStatus() == status) {
-                        value += computeVariable(skill, variable, skillLevel[skill.key.ordinal()]);
+                        value += calculateVariable(skill, variable, skillLevel[skill.key.ordinal()]);
                     }
                 }
             }

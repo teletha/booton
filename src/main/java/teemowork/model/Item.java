@@ -629,7 +629,7 @@ public class Item {
      * @return
      */
     private static final Variable amplify(Status status, double base, double diff) {
-        return amplify(status, new Diff(base, diff));
+        return amplify(status, new Diff(base, diff, 1));
     }
 
     /**

@@ -9,6 +9,8 @@
  */
 package teemowork.model;
 
+import static teemowork.model.Status.*;
+
 import java.util.List;
 
 import js.util.ArrayList;
@@ -84,5 +86,27 @@ public class Variable {
      */
     public void setConditional() {
         this.conditional = true;
+    }
+
+    /**
+     * <p>
+     * Calculate value by using the specified calculator.
+     * </p>
+     * 
+     * @param level A level.
+     * @param calculator A status calculator.
+     * @return A calculated value.
+     */
+    public double calcurate(int level, StatusCalculator calculator) {
+        double value = resolver.compute(level);
+
+        for (Variable amplifier : amplifiers) {
+            value += amplifier.calcurate(level, calculator) * calculator.calculate(amplifier.getStatus());
+        }
+
+        if (status == CDRAwareTime) {
+            value = value * (1 - calculator.calculate(CDR) / 100);
+        }
+        return value;
     }
 }
