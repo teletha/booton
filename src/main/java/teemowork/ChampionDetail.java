@@ -352,7 +352,7 @@ public class ChampionDetail extends Page {
                     label = "毎秒" + label;
                 }
 
-                double[] values = resolver.enumerate(resolver.estimateSize(skill.getMaxLevel()));
+                double[] values = resolver.enumerate();
 
                 root.child(ValueStyles.Label.class).text(label);
 
@@ -433,10 +433,10 @@ public class ChampionDetail extends Page {
 
             // compute current value
             root.child(SkillStyle.Computed.class)
-                    .text(status.format(build.computeVariable(skill, variable, Math.max(1, skillLevel))));
+                    .text(status.format(variable.calcurate(Math.max(1, skillLevel), build)));
 
             // All values
-            double[] values = resolver.enumerate(skill.getMaxLevel());
+            double[] values = resolver.enumerate();
 
             if (1 < values.length || !amplifiers.isEmpty()) {
                 root.append("(");
@@ -472,11 +472,11 @@ public class ChampionDetail extends Page {
                 skillLevel = resolver.convertLevel(build.getLevel());
             }
 
-            int size = resolver.estimateSize(skill.getMaxLevel());
+            int size = resolver.estimateSize();
 
             for (int i = 0; i < size; i++) {
                 jQuery value = element.child(SkillStyle.Value.class)
-                        .text(Mathematics.round(build.computeVariable(skill, amplifier, i + 1), 3));
+                        .text(Mathematics.round(amplifier.calcurate(i + 1, build), 3));
 
                 if (size != 1 && i == skillLevel - 1) {
                     value.addClass(SkillStyle.Current.class);

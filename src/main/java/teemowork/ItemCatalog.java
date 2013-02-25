@@ -105,7 +105,7 @@ public class ItemCatalog extends Page {
         root.child(SkillStyle.Computed.class).text(status.format(1));
 
         // All values
-        double[] values = resolver.enumerate(1);
+        double[] values = resolver.enumerate();
 
         if (1 < values.length || !amplifiers.isEmpty()) {
             root.append("(");
@@ -141,7 +141,7 @@ public class ItemCatalog extends Page {
             skillLevel = resolver.convertLevel(skillLevel);
         }
 
-        int size = resolver.estimateSize(1);
+        int size = resolver.estimateSize();
 
         for (int i = 0; i < size; i++) {
             jQuery value = element.child(SkillStyle.Value.class).text(1);

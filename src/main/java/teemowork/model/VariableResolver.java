@@ -29,10 +29,9 @@ public abstract class VariableResolver {
      * Retrieve the size of associated variable.
      * </p>
      * 
-     * @param hint A hint for size.
      * @return
      */
-    public abstract int estimateSize(int hint);
+    public abstract int estimateSize();
 
     /**
      * <p>
@@ -41,8 +40,8 @@ public abstract class VariableResolver {
      * 
      * @return A list of all computed values.
      */
-    public double[] enumerate(int hint) {
-        double[] values = new double[estimateSize(hint)];
+    public final double[] enumerate() {
+        double[] values = new double[estimateSize()];
 
         for (int i = 0; i < values.length; i++) {
             values[i] = compute(i + 1);
@@ -101,7 +100,7 @@ public abstract class VariableResolver {
          * {@inheritDoc}
          */
         @Override
-        public int estimateSize(int hint) {
+        public int estimateSize() {
             return levels.length;
         }
 
@@ -232,7 +231,7 @@ public abstract class VariableResolver {
          * {@inheritDoc}
          */
         @Override
-        public int estimateSize(int hint) {
+        public int estimateSize() {
             return 18;
         }
 
@@ -280,7 +279,7 @@ public abstract class VariableResolver {
          * {@inheritDoc}
          */
         @Override
-        public int estimateSize(int hint) {
+        public int estimateSize() {
             return values.length;
         }
     }
@@ -296,13 +295,18 @@ public abstract class VariableResolver {
         /** The diff value of amplifier rate. */
         private final double diff;
 
+        /** The variable size. */
+        private final int size;
+
         /**
          * @param base
          * @param diff
+         * @param size
          */
-        public Diff(double base, double diff) {
+        public Diff(double base, double diff, int size) {
             this.base = base;
             this.diff = diff;
+            this.size = size;
         }
 
         /**
@@ -317,8 +321,8 @@ public abstract class VariableResolver {
          * {@inheritDoc}
          */
         @Override
-        public int estimateSize(int hint) {
-            return base == 0 ? 0 : diff == 0 ? 1 : hint;
+        public int estimateSize() {
+            return base == 0 ? 0 : diff == 0 ? 1 : size;
         }
     }
 }

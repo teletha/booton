@@ -229,7 +229,7 @@ public class SkillStatus {
      * @return Chainable API.
      */
     SkillStatus variable(int id, Status status, double base, double diff, Variable first, Variable second) {
-        return variable(id, status, new Diff(base, diff), first, second);
+        return variable(id, status, new Diff(base, diff, skill.getMaxLevel()), first, second);
     }
 
     /**
@@ -319,7 +319,7 @@ public class SkillStatus {
      * @param diff A diff cost.
      */
     SkillStatus cost(Status type, double base, double diff) {
-        return cost(type, new Diff(base, diff), null);
+        return cost(type, new Diff(base, diff, skill.getMaxLevel()), null);
     }
 
     /**

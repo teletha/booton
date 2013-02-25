@@ -1725,6 +1725,9 @@ public class Skill {
     /** The current writing version. */
     private static Version version;
 
+    /** The current writing skill. */
+    private static Skill skill;
+
     /** The skill name. */
     public final String name;
 
@@ -1841,6 +1844,7 @@ public class Skill {
         SkillStatus status = new SkillStatus(this, getStatus(version));
 
         versions[version.ordinal()] = status;
+        skill = this;
 
         return status;
     }
@@ -1905,7 +1909,7 @@ public class Skill {
      * @return
      */
     private static final Variable amplify(Status status, double base, double diff) {
-        return amplify(status, new Diff(base, diff));
+        return amplify(status, new Diff(base, diff, skill.getMaxLevel()));
     }
 
     /**
@@ -3354,7 +3358,7 @@ public class Skill {
                 .active("指定地点にテレポートし、テレポート先の{1}の敵ユニットに{2}を与える。スキル使用時にスタックが増加し、1スタックごとに消費MNと魔法DMが増加していく。（最大10スタック）スタックは8秒間増加がないと0になる。")
                 .variable(1, Radius, 150)
                 .variable(2, MagicDamage, 60, 10, ap(0.8), amplify(Stack, 60, 10))
-                .cost(Mana, new Diff(100, 0), amplify(Stack, 100))
+                .cost(Mana, new Diff(100, 0, 1), amplify(Stack, 100))
                 .cd(7, -1)
                 .range(700);
 
@@ -3531,7 +3535,7 @@ public class Skill {
                 .variable(1, Radius, 200)
                 .variable(2, MagicDamage, 80, 40, ap(0.3), bounusAD(0.5))
                 .variable(3, MagicDamage, 180, 90, ap(0.3), bounusAD(0.5))
-                .cost(Mana, new Diff(40, 0), amplify(Stack, 40))
+                .cost(Mana, new Diff(40, 0, 1), amplify(Stack, 40))
                 .cd(2, -0.5)
                 .range(1400, 300);
 
