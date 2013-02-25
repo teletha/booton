@@ -207,7 +207,7 @@ public enum Status {
     Experiment("経験値"), ExperimentRatio("経験値"),
 
     /** Cooldown */
-    CD, CDPerLv, CDDecrease(1),
+    CD(1), CDPerLv, CDDecrease(1),
 
     // ==================================================
     // Heal Related

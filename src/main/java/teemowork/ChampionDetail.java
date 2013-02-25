@@ -298,10 +298,9 @@ public class ChampionDetail extends Page {
                 icon.removeClass(SkillStyle.Active.class);
             }
 
-            // buildValues(cooldown, "CD", status, CD, build.get(CDR).value);
-            writeCost(cooldown, status, 0, status.getCooldown());
-            writeCost(cost, status, 0, status.getCost());
-            writeCost(range, status, 0, status.getRange());
+            write(cooldown, status, status.getCooldown());
+            write(cost, status, status.getCost());
+            write(range, status, status.getRange());
 
             // PASSIVE
             passive.empty();
@@ -311,7 +310,7 @@ public class ChampionDetail extends Page {
 
                 for (Object token : status.passive) {
                     if (token instanceof Variable) {
-                        buildVariable(passive, (Variable) token, level);
+                        writeVariable(passive, (Variable) token, level);
                     } else {
                         passive.append(token.toString());
                     }
@@ -329,7 +328,7 @@ public class ChampionDetail extends Page {
 
             for (Object token : status.active) {
                 if (token instanceof Variable) {
-                    buildVariable(active, (Variable) token, level);
+                    writeVariable(active, (Variable) token, level);
                 } else {
                     active.append(token.toString());
                 }
@@ -340,24 +339,22 @@ public class ChampionDetail extends Page {
             }
         }
 
-        private void writeCost(jQuery root, SkillStatus status, int skillLevel, Variable variable) {
+        private void write(jQuery root, SkillStatus status, Variable variable) {
             root.empty();
 
             if (variable != null) {
                 VariableResolver resolver = variable.getResolver();
                 String label = variable.getStatus().name;
 
-                if (status.getType() == SkillType.Toggle) {
+                if (root == cost && status.getType() == SkillType.Toggle) {
                     label = "毎秒" + label;
                 }
+                root.child(ValueStyles.Label.class).text(label);
 
                 int size = resolver.estimateSize();
 
-                root.child(ValueStyles.Label.class).text(label);
-
                 for (int i = 0; i < size; i++) {
                     double value = variable.calculate(i + 1, build);
-                    System.out.println("Get " + value);
                     jQuery element = root.child(ValueStyles.Value.class).text(value == -1 ? "∞" : value);
 
                     if (size != 1 && i == build.getLevel(this.skill) - 1) {
@@ -373,7 +370,7 @@ public class ChampionDetail extends Page {
                     root.append("(");
 
                     for (Variable amplifier : variable.amplifiers) {
-                        writeAmplifier(root, amplifier, skillLevel);
+                        writeAmplifier(root, amplifier, 0);
                     }
 
                     root.append(")");
@@ -385,45 +382,11 @@ public class ChampionDetail extends Page {
 
         /**
          * @param root
-         * @param label
-         * @param skill
-         * @param status
-         * @param reduction
-         */
-        private void buildValues(jQuery root, String label, SkillStatus skill, Status status, double reduction) {
-            root.empty();
-
-            double base = skill.get(status);
-            double diff = skill.get(status.per());
-
-            if (base != 0 || diff != 0) {
-                int size = diff == 0 ? 1 : this.skill.getMaxLevel();
-
-                root.child(ValueStyles.Label.class).text(label);
-
-                for (int i = 0; i < size; i++) {
-                    double value = status.round((base + diff * i) * (1 - reduction / 100));
-
-                    jQuery element = root.child(ValueStyles.Value.class).text(value == -1 ? "∞" : value);
-
-                    if (size != 1 && i == build.getLevel(this.skill) - 1) {
-                        element.addClass(ValueStyles.Current.class);
-                    }
-
-                    if (i != size - 1) {
-                        root.child(ValueStyles.Separator.class).text("/");
-                    }
-                }
-            }
-        }
-
-        /**
-         * @param root
          * @param variable
          * @param size
          * @param skillLevel
          */
-        private void buildVariable(jQuery root, Variable variable, int skillLevel) {
+        private void writeVariable(jQuery root, Variable variable, int skillLevel) {
             VariableResolver resolver = variable.getResolver();
             Status status = variable.getStatus();
             List<Variable> amplifiers = variable.amplifiers;
