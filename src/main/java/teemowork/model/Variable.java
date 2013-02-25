@@ -97,11 +97,11 @@ public class Variable {
      * @param calculator A status calculator.
      * @return A calculated value.
      */
-    public double calcurate(int level, StatusCalculator calculator) {
+    public double calculate(int level, StatusCalculator calculator) {
         double value = resolver.compute(level);
 
         for (Variable amplifier : amplifiers) {
-            value += amplifier.calcurate(level, calculator) * calculator.calculate(amplifier.getStatus());
+            value += amplifier.calculate(level, calculator) * calculator.calculate(amplifier.getStatus());
         }
 
         if (status == CDRAwareTime) {
