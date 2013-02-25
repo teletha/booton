@@ -464,15 +464,21 @@ class Node {
                     }
 
                     if (outgoing.get(0).incoming.size() == 1) {
-                        buffer.append("if(", this, "){");
-                        process(outgoing.get(0), buffer);
-                        buffer.append("}else{");
-                        process(outgoing.get(1), buffer);
-                        buffer.append("}");
-                        process(follower, buffer);
+                        if (outgoing.get(1).incoming.size() == 1) {
+                            buffer.append("if(", this, "){");
+                            process(outgoing.get(0), buffer);
+                            buffer.append("}else{");
+                            process(outgoing.get(1), buffer);
+                            buffer.append("}");
+                            process(follower, buffer);
+                        } else {
+                            buffer.append("if(", this, "){");
+                            process(outgoing.get(0), buffer);
+                            buffer.append("}");
+                            process(outgoing.get(1), buffer);
+                        }
                     } else {
-                        buffer.append("if(", this, "){");
-                        buffer.append("}else{");
+                        buffer.append("if(!(", this, ")){");
                         process(outgoing.get(1), buffer);
                         buffer.append("}");
                         process(outgoing.get(0), buffer);

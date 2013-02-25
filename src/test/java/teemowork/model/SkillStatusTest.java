@@ -15,13 +15,13 @@ import java.util.List;
 
 import org.junit.Test;
 
-import teemowork.model.SkillStatus;
-import teemowork.model.Variable;
-
 /**
  * @version 2013/01/27 20:34:23
  */
 public class SkillStatusTest {
+
+    /** The empty skill. */
+    private static final Skill empty = new EmptySkill();
 
     @Test
     public void GetAndSet() throws Exception {
@@ -66,7 +66,7 @@ public class SkillStatusTest {
 
     @Test
     public void variable() throws Exception {
-        SkillStatus skill = new SkillStatus(null, null);
+        SkillStatus skill = new SkillStatus(empty, null);
         skill.active("Test{1}");
         skill.variable(1, AD, 10, 10);
 
@@ -84,7 +84,7 @@ public class SkillStatusTest {
 
     @Test
     public void variable2() throws Exception {
-        SkillStatus skill = new SkillStatus(null, null);
+        SkillStatus skill = new SkillStatus(empty, null);
         skill.active("Test{1}");
         skill.variable(1, SV, 10, 10);
 
@@ -98,5 +98,27 @@ public class SkillStatusTest {
         Variable variable = (Variable) token;
         assert variable.getStatus() == SV;
         assert variable.amplifiers.size() == 0;
+    }
+
+    /**
+     * @version 2013/02/17 12:38:49
+     */
+    private static class EmptySkill extends Skill {
+
+        /**
+         * 
+         */
+        private EmptySkill() {
+            super("Test Skill", SkillKey.Q);
+
+            update();
+        }
+
+        /**
+         * 
+         */
+        private EmptySkill(SkillKey key) {
+            super("Test Skill", key);
+        }
     }
 }

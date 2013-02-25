@@ -9,12 +9,9 @@
  */
 package teemowork.model;
 
-import static teemowork.model.ItemAbility.*;
 import static teemowork.model.Status.*;
 
 import org.junit.Test;
-
-import teemowork.model.ItemStatus;
 
 /**
  * @version 2013/01/27 20:34:23
@@ -50,14 +47,5 @@ public class ItemStatusTest {
         item.set(Range, 200);
         assert item.get(Range) == 200;
         assert previous.get(Range) == 100;
-    }
-
-    @Test
-    public void ability() throws Exception {
-        ItemStatus item = new ItemStatus(null);
-        assert item.abilities.length == 0;
-
-        item.ability(AbyssalAura);
-        assert item.abilities.length == 1;
     }
 }
