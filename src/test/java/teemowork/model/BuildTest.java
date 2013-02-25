@@ -11,6 +11,7 @@ package teemowork.model;
 
 import static teemowork.model.Status.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import teemowork.model.Build.Computed;
@@ -18,6 +19,7 @@ import teemowork.model.Build.Computed;
 /**
  * @version 2013/01/30 12:46:23
  */
+@Ignore
 public class BuildTest {
 
     /** The id counter. */
@@ -144,7 +146,7 @@ public class BuildTest {
         ability.update(Version.P0000).set(status, value);
 
         Item item = new EmptyItem();
-        item.update(Version.P0000).ability(ability);
+        item.update(Version.P0000);
 
         return item;
     }
@@ -163,7 +165,7 @@ public class BuildTest {
         ability.update(Version.P0000).set(status, value).unique();
 
         Item item = new EmptyItem();
-        item.update(Version.P0000).ability(ability);
+        item.update(Version.P0000);
 
         return item;
     }
