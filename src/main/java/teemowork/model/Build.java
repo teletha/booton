@@ -414,7 +414,7 @@ public class Build extends Notifiable implements StatusCalculator {
             return 0;
         }
 
-        double value = variable.calcurate(level, this);
+        double value = variable.calculate(level, this);
 
         // avoid circular dependency
         dependencies.remove(skill);

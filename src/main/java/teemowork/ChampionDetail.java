@@ -298,9 +298,10 @@ public class ChampionDetail extends Page {
                 icon.removeClass(SkillStyle.Active.class);
             }
 
-            buildValues(cooldown, "CD", status, CD, build.get(CDR).value);
-            writeCost(cost, status, 0);
-            buildValues(range, "RANGE", status, Range, 0);
+            // buildValues(cooldown, "CD", status, CD, build.get(CDR).value);
+            writeCost(cooldown, status, 0, status.getCooldown());
+            writeCost(cost, status, 0, status.getCost());
+            writeCost(range, status, 0, status.getRange());
 
             // PASSIVE
             passive.empty();
@@ -339,46 +340,46 @@ public class ChampionDetail extends Page {
             }
         }
 
-        private void writeCost(jQuery root, SkillStatus status, int skillLevel) {
+        private void writeCost(jQuery root, SkillStatus status, int skillLevel, Variable variable) {
             root.empty();
 
-            Variable cost = status.getCost();
-
-            if (cost != null) {
-                VariableResolver resolver = cost.getResolver();
-                String label = cost.getStatus().name;
+            if (variable != null) {
+                VariableResolver resolver = variable.getResolver();
+                String label = variable.getStatus().name;
 
                 if (status.getType() == SkillType.Toggle) {
                     label = "毎秒" + label;
                 }
 
-                double[] values = resolver.enumerate();
+                int size = resolver.estimateSize();
 
                 root.child(ValueStyles.Label.class).text(label);
 
-                for (int i = 0; i < values.length; i++) {
-                    jQuery element = root.child(ValueStyles.Value.class).text(values[i] == -1 ? "∞" : values[i]);
+                for (int i = 0; i < size; i++) {
+                    double value = variable.calculate(i + 1, build);
+                    System.out.println("Get " + value);
+                    jQuery element = root.child(ValueStyles.Value.class).text(value == -1 ? "∞" : value);
 
-                    if (values.length != 1 && i == build.getLevel(this.skill) - 1) {
+                    if (size != 1 && i == build.getLevel(this.skill) - 1) {
                         element.addClass(ValueStyles.Current.class);
                     }
 
-                    if (i != values.length - 1) {
+                    if (i != size - 1) {
                         root.child(ValueStyles.Separator.class).text("/");
                     }
                 }
 
-                if (!cost.amplifiers.isEmpty()) {
+                if (!variable.amplifiers.isEmpty()) {
                     root.append("(");
 
-                    for (Variable amplifier : cost.amplifiers) {
+                    for (Variable amplifier : variable.amplifiers) {
                         writeAmplifier(root, amplifier, skillLevel);
                     }
 
                     root.append(")");
                 }
 
-                root.append(cost.getStatus().getUnit());
+                root.append(variable.getStatus().getUnit());
             }
         }
 
@@ -433,7 +434,7 @@ public class ChampionDetail extends Page {
 
             // compute current value
             root.child(SkillStyle.Computed.class)
-                    .text(status.format(variable.calcurate(Math.max(1, skillLevel), build)));
+                    .text(status.format(variable.calculate(Math.max(1, skillLevel), build)));
 
             // All values
             double[] values = resolver.enumerate();
@@ -476,7 +477,7 @@ public class ChampionDetail extends Page {
 
             for (int i = 0; i < size; i++) {
                 jQuery value = element.child(SkillStyle.Value.class)
-                        .text(Mathematics.round(amplifier.calcurate(i + 1, build), 3));
+                        .text(Mathematics.round(amplifier.calculate(i + 1, build), 3));
 
                 if (size != 1 && i == skillLevel - 1) {
                     value.addClass(SkillStyle.Current.class);

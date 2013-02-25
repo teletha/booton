@@ -31,8 +31,14 @@ public class SkillStatus {
     /** The variable store. */
     private NativeArray<Variable> variables;
 
-    /** The skill cost type. */
+    /** The skill range. */
+    private Variable range;
+
+    /** The skill cost. */
     private Variable cost;
+
+    /** The skill cooldown. */
+    private Variable cooldown;
 
     /** The skill type. */
     private SkillType type;
@@ -56,6 +62,8 @@ public class SkillStatus {
             active = previous.active;
             type = previous.type;
             cost = previous.cost;
+            range = previous.range;
+            cooldown = previous.cooldown;
         } else {
             values = new NativeArray();
             variables = new NativeArray();
@@ -280,8 +288,9 @@ public class SkillStatus {
      * @param diff A diff time.
      */
     SkillStatus cd(double base, double diff) {
-        values.set(CD.ordinal(), base);
-        values.set(CDPerLv.ordinal(), diff);
+        cooldown = new Variable();
+        cooldown.setResolver(new Diff(base, diff, skill.getMaxLevel()));
+        cooldown.setStatus(CD);
 
         return this;
     }
@@ -343,13 +352,35 @@ public class SkillStatus {
 
     /**
      * <p>
-     * Retrieve skill cost type.
+     * Retrieve skill cost.
      * </p>
      * 
      * @return
      */
     public Variable getCost() {
         return cost;
+    }
+
+    /**
+     * <p>
+     * Retrieve skill range.
+     * </p>
+     * 
+     * @return
+     */
+    public Variable getRange() {
+        return range;
+    }
+
+    /**
+     * <p>
+     * Retrieve skill range.
+     * </p>
+     * 
+     * @return
+     */
+    public Variable getCooldown() {
+        return cooldown;
     }
 
     /**
@@ -370,9 +401,10 @@ public class SkillStatus {
      * 
      * @param range
      */
-    SkillStatus range(double range, double diff) {
-        values.set(Range.ordinal(), range);
-        values.set(RangePerLv.ordinal(), diff);
+    SkillStatus range(double base, double diff) {
+        range = new Variable();
+        range.setResolver(new Diff(base, diff, skill.getMaxLevel()));
+        range.setStatus(Range);
 
         return this;
     }
