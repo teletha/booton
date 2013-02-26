@@ -35,22 +35,6 @@ public abstract class VariableResolver {
 
     /**
      * <p>
-     * Enumerate all values for this variable.
-     * </p>
-     * 
-     * @return A list of all computed values.
-     */
-    public final double[] enumerate() {
-        double[] values = new double[estimateSize()];
-
-        for (int i = 0; i < values.length; i++) {
-            values[i] = compute(i + 1);
-        }
-        return values;
-    }
-
-    /**
-     * <p>
      * Check whether this variable relies on skill level or not.
      * </p>
      * 

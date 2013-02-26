@@ -400,19 +400,19 @@ public class ChampionDetail extends Page {
                     .text(status.format(variable.calculate(Math.max(1, skillLevel), build)));
 
             // All values
-            double[] values = resolver.enumerate();
+            int size = resolver.estimateSize();
 
-            if (1 < values.length || !amplifiers.isEmpty()) {
+            if (1 < size || !amplifiers.isEmpty()) {
                 root.append("(");
 
-                for (int i = 0; i < values.length; i++) {
-                    jQuery value = root.child(SkillStyle.Value.class).text(status.round(values[i]));
+                for (int i = 1; i <= size; i++) {
+                    jQuery element = root.child(SkillStyle.Value.class).text(resolver.compute(i));
 
-                    if (i == skillLevel - 1) {
-                        value.addClass(SkillStyle.Current.class);
+                    if (i == skillLevel) {
+                        element.addClass(SkillStyle.Current.class);
                     }
 
-                    if (i != values.length - 1) {
+                    if (i != size) {
                         root.child(SkillStyle.Separator.class).text("/");
                     }
                 }
@@ -438,15 +438,15 @@ public class ChampionDetail extends Page {
 
             int size = resolver.estimateSize();
 
-            for (int i = 0; i < size; i++) {
+            for (int i = 1; i <= size; i++) {
                 jQuery value = element.child(SkillStyle.Value.class)
-                        .text(Mathematics.round(amplifier.calculate(i + 1, build), 3));
+                        .text(Mathematics.round(amplifier.calculate(i, build), 3));
 
-                if (size != 1 && i == skillLevel - 1) {
+                if (size != 1 && i == skillLevel) {
                     value.addClass(SkillStyle.Current.class);
                 }
 
-                if (i != size - 1) {
+                if (i != size) {
                     element.child(SkillStyle.Separator.class).text("/");
                 }
             }
@@ -676,26 +676,6 @@ public class ChampionDetail extends Page {
         /**
          * @version 2013/02/06 20:03:25
          */
-        private static class Cost extends CSS {
-
-            {
-
-            }
-        }
-
-        /**
-         * @version 2013/02/06 20:03:25
-         */
-        private static class Range extends CSS {
-
-            {
-
-            }
-        }
-
-        /**
-         * @version 2013/02/06 20:03:25
-         */
         private static class Computed extends CSS {
 
             {
@@ -783,9 +763,6 @@ public class ChampionDetail extends Page {
         /** The value for curernt Lv. */
         private final jQuery current;
 
-        /** The value for per Lv. */
-        private final jQuery perLv;
-
         /**
          * @param name
          */
@@ -795,7 +772,6 @@ public class ChampionDetail extends Page {
 
             this.status = status;
             this.current = box.child(StatusStyle.Value.class);
-            this.perLv = box.child(StatusStyle.Value.class);
         }
 
         /**
@@ -869,32 +845,6 @@ public class ChampionDetail extends Page {
                 display.tableCell();
                 box.width(50, px);
             }
-        }
-    }
-
-    /**
-     * @version 2013/01/15 13:19:52
-     */
-    private static class RootPanel extends CSS {
-
-        {
-            display.block();
-            box.width(100, percent).height(900, px);
-            background.contain().noRepeat();
-            border.radius(10, px);
-        }
-    }
-
-    /**
-     * @version 2013/01/15 13:54:32
-     */
-    private static class RootPanelFilter extends CSS {
-
-        {
-            display.block();
-            box.size(100, percent);
-            background.color(255, 255, 255, 0.8);
-            padding.horizontal(20, px).vertical(20, px);
         }
     }
 

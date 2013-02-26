@@ -104,7 +104,7 @@ public class Variable {
             value += amplifier.calculate(level, calculator) * calculator.calculate(amplifier.getStatus());
         }
 
-        if (status == CD || status == CDRAwareTime) {
+        if (status == CDRAwareTime) {
             value = value * (1 - calculator.calculate(CDR) / 100);
         }
         return value;

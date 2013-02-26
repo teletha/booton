@@ -315,7 +315,7 @@ public enum Status {
     // public final String unit;
 
     /** The precision for value. */
-    private final int precision;
+    public final int precision;
 
     /**
      * @param precision

@@ -21,7 +21,6 @@ import teemowork.model.Item;
 import teemowork.model.ItemStatus;
 import teemowork.model.Status;
 import teemowork.model.Variable;
-import teemowork.model.VariableResolver;
 import teemowork.model.Version;
 import booton.css.CSS;
 import booton.util.Font;
@@ -81,91 +80,13 @@ public class ItemCatalog extends Page {
 
                 for (Object token : entry.getValue()) {
                     if (token instanceof Variable) {
-                        buildVariable(descriptions, (Variable) token, 1);
+                        descriptions.append(token.toString());
                     } else {
                         descriptions.append(token.toString());
                     }
                 }
             }
         }
-    }
-
-    /**
-     * @param root
-     * @param variable
-     * @param size
-     * @param skillLevel
-     */
-    private void buildVariable(jQuery root, Variable variable, int skillLevel) {
-        VariableResolver resolver = variable.getResolver();
-        Status status = variable.getStatus();
-        List<Variable> amplifiers = variable.amplifiers;
-
-        // compute current value
-        root.child(SkillStyle.Computed.class).text(status.format(1));
-
-        // All values
-        double[] values = resolver.enumerate();
-
-        if (1 < values.length || !amplifiers.isEmpty()) {
-            root.append("(");
-
-            for (int i = 0; i < values.length; i++) {
-                jQuery value = root.child(SkillStyle.Value.class).text(status.round(values[i]));
-
-                if (i == skillLevel - 1) {
-                    value.addClass(SkillStyle.Current.class);
-                }
-
-                if (i != values.length - 1) {
-                    root.child(SkillStyle.Separator.class).text("/");
-                }
-            }
-
-            if (!amplifiers.isEmpty()) {
-                for (Variable amplifier : amplifiers) {
-                    writeAmplifier(root, amplifier, skillLevel);
-                }
-            }
-            root.append(")");
-        }
-    }
-
-    private void writeAmplifier(jQuery root, Variable amplifier, int skillLevel) {
-        jQuery element = root.child(SkillStyle.Amplifier.class);
-        element.append("+");
-
-        VariableResolver resolver = amplifier.getResolver();
-
-        if (!resolver.isSkillLevelBased()) {
-            skillLevel = resolver.convertLevel(skillLevel);
-        }
-
-        int size = resolver.estimateSize();
-
-        for (int i = 0; i < size; i++) {
-            jQuery value = element.child(SkillStyle.Value.class).text(1);
-
-            if (size != 1 && i == skillLevel - 1) {
-                value.addClass(SkillStyle.Current.class);
-            }
-
-            if (i != size - 1) {
-                element.child(SkillStyle.Separator.class).text("/");
-            }
-        }
-
-        element.append(amplifier.getStatus().getUnit());
-
-        if (!amplifier.amplifiers.isEmpty()) {
-            element.append("(");
-            for (Variable nest : amplifier.amplifiers) {
-                writeAmplifier(element, nest, skillLevel);
-            }
-            element.append(")");
-        }
-
-        element.append(amplifier.getStatus().name);
     }
 
     /**
