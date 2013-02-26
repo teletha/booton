@@ -353,15 +353,15 @@ public class ChampionDetail extends Page {
 
                 int size = resolver.estimateSize();
 
-                for (int i = 0; i < size; i++) {
-                    double value = variable.calculate(i + 1, build);
+                for (int i = 1; i <= size; i++) {
+                    double value = variable.getStatus().round(variable.calculate(i, build));
                     jQuery element = root.child(ValueStyles.Value.class).text(value == -1 ? "∞" : value);
 
-                    if (size != 1 && i == build.getLevel(this.skill) - 1) {
+                    if (size != 1 && i == build.getLevel(this.skill)) {
                         element.addClass(ValueStyles.Current.class);
                     }
 
-                    if (i != size - 1) {
+                    if (i != size) {
                         root.child(ValueStyles.Separator.class).text("/");
                     }
                 }
