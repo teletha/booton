@@ -12,14 +12,15 @@ package booton.css.property;
 import java.util.List;
 
 import js.util.ArrayList;
+import js.util.Color;
 import kiss.I;
+import booton.StylesheetManager;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.ColorValue;
 import booton.css.Colorable;
 import booton.css.Unit;
 import booton.css.Value;
-import booton.util.Color;
 import booton.util.Strings;
 
 /**
@@ -162,6 +163,8 @@ public final class Font extends CSSProperty<Font> implements Colorable<Font> {
     public Family family(booton.util.Font... fonts) {
         for (booton.util.Font font : fonts) {
             family.add(font.name);
+
+            StylesheetManager.register(font);
         }
         return family;
     }
@@ -178,16 +181,8 @@ public final class Font extends CSSProperty<Font> implements Colorable<Font> {
      * {@inheritDoc}
      */
     @Override
-    public Font color(int red, int green, int blue, double alpha) {
+    public Font color(int red, int green, int blue, float alpha) {
         return color.color(red, green, blue, alpha);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Font color(String hex) {
-        return color.color(hex);
     }
 
     /**

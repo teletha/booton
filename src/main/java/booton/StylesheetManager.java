@@ -9,7 +9,6 @@
  */
 package booton;
 
-import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
@@ -28,10 +27,10 @@ import booton.util.Font;
  * @version 2012/12/23 17:27:55
  */
 @Manageable(lifestyle = Singleton.class)
-class StylesheetManager implements Literal<CSS> {
+public class StylesheetManager implements Literal<CSS> {
 
     /** The used web fonts. */
-    private final Set<Font> fonts = new HashSet();
+    private static final Set<Font> fonts = new HashSet();
 
     /** The used styles. */
     private final Set<Class<? extends CSS>> used = new LinkedHashSet();
@@ -64,11 +63,6 @@ class StylesheetManager implements Literal<CSS> {
             required.add(cascading.find(type));
         }
 
-        // collect required fonts
-        for (CSS style : required) {
-            collectFont(style.getClass(), style);
-        }
-
         StringBuilder builder = new StringBuilder();
 
         // write font imports
@@ -84,27 +78,8 @@ class StylesheetManager implements Literal<CSS> {
         Files.write(file, builder.toString().getBytes(I.$encoding));
     }
 
-    /**
-     * <p>
-     * Collect font declarations.
-     * </p>
-     * 
-     * @param clazz
-     */
-    private void collectFont(Class clazz, CSS style) throws Exception {
-        if (clazz != null && clazz != CSS.class) {
-            for (Field field : clazz.getDeclaredFields()) {
-                if (field.getType() == Font.class) {
-                    field.setAccessible(true);
-                    fonts.add((Font) field.get(style));
-                }
-            }
-
-            if (clazz.isMemberClass()) {
-                collectFont(clazz.getEnclosingClass(), null);
-            }
-            collectFont(clazz.getSuperclass(), style);
-        }
+    public static void register(Font font) {
+        fonts.add(font);
     }
 
     /**

@@ -9,13 +9,13 @@
  */
 package booton.css.property;
 
+import js.util.Color;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.ColorValue;
 import booton.css.Colorable;
 import booton.css.GradientValue;
 import booton.css.Unit;
-import booton.util.Color;
 
 /**
  * @version 2012/12/12 0:00:13
@@ -59,16 +59,8 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
      * {@inheritDoc}
      */
     @Override
-    public Background color(int red, int green, int blue, double alpha) {
+    public Background color(int red, int green, int blue, float alpha) {
         return color.color(red, green, blue, alpha);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Background color(String hex) {
-        return color.color(hex);
     }
 
     /**

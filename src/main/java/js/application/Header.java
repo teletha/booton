@@ -81,10 +81,10 @@ public class Header {
     public static class TopMenuGroup extends CSS {
 
         {
-            box.width(960, px).shadow(0, px, 1, px, 1, px, color("#777"));
+            box.width(960, px).shadow(0, px, 1, px, 1, px, rgba(119, 119, 119, 1));
             margin.vertical(60, px).auto();
-            border.width(1, px).solid().color("#222").radius(6, px);
-            background.color("#111").image(linear("#444", "#111"));
+            border.width(1, px).solid().color(34, 34, 34).radius(6, px);
+            background.color(17, 17, 17).image(linear(rgba(68, 68, 68, 1), rgba(17, 17, 17, 1)));
         }
 
     }
@@ -99,7 +99,7 @@ public class Header {
 
         {
             display.inlineBlock();
-            borderRight.width(1, px).solid().color("#222");
+            borderRight.width(1, px).solid().color(34, 34, 34);
             position.relative();
             box.minWidth(TopMenu.Width, px).zIndex(1);
             text.align.center();
@@ -119,11 +119,11 @@ public class Header {
         {
             display.block();
             padding.vertical(12, px).horizontal(20, px);
-            font.color("#999").weight.bold().size(12, px).family(family);
+            font.color(153, 153, 153).weight.bold().size(12, px).family(family);
             text.decoration.none().shadow(0, px, 1, px, 0, px, rgba(0, 0, 0, 1)).align.center();
 
             while (hover()) {
-                font.color("#fafafa");
+                font.color(250, 250, 250);
             }
         }
     }
@@ -142,8 +142,8 @@ public class Header {
             padding.size(0, px);
             visibility.hidden();
             position.absolute().top(42, px).left(0, px);
-            background.color("#444").image(linear("#444", "#111"));
-            box.width(TopMenu.Width, px).shadow(0, px, -1, px, 0, px, rgba(255, 255, 255, 0.3)).opacity(0);
+            background.color(68, 68, 68).image(linear(rgba(68, 68, 68, 1), rgba(17, 17, 17, 1)));
+            box.width(TopMenu.Width, px).shadow(0, px, -1, px, 0, px, rgba(255, 255, 255, 0.3f)).opacity(0);
             border.radius(Radius, px);
             transition.property.all().duration(0.2, s).timing.easeInOut().delay(80, ms);
 
@@ -163,10 +163,10 @@ public class Header {
         {
             display.block();
             border.width(0, px);
-            borderBottom.width(1, px).solid().color("#515151");
+            borderBottom.width(1, px).solid().color(81, 81, 81);
 
             while (hover()) {
-                background.color("#0186ba").image(linear("#04acec", "#0186ba"));
+                background.color(1, 134, 186).image(linear(rgba(4, 172, 236, 1), rgba(1, 134, 186, 1)));
 
                 while (firstChild()) {
                     border.radius(SubMenuGroup.Radius, px, SubMenuGroup.Radius, px, 0, px, 0, px);

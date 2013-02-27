@@ -9,8 +9,8 @@
  */
 package booton.css.property;
 
+import js.util.Color;
 import booton.css.Value;
-import booton.util.Color;
 
 /**
  * @version 2012/12/16 15:36:06

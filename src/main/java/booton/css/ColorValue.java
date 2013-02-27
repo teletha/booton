@@ -9,7 +9,7 @@
  */
 package booton.css;
 
-import booton.util.Color;
+import js.util.Color;
 
 /**
  * @version 2012/12/16 12:49:00
@@ -39,7 +39,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
      */
     @Override
     public T color(int red, int green, int blue) {
-        color = new Color(red, green, blue);
+        color = Color.rgb(red, green, blue);
 
         // Chainable API
         return chain();
@@ -49,19 +49,8 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
      * {@inheritDoc}
      */
     @Override
-    public T color(int red, int green, int blue, double alpha) {
-        color = new Color(red, green, blue, alpha);
-
-        // Chainable API
-        return chain();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public T color(String hex) {
-        color = new Color(hex);
+    public T color(int red, int green, int blue, float alpha) {
+        color = Color.rgba(red, green, blue, alpha);
 
         // Chainable API
         return chain();
@@ -80,7 +69,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T transparent() {
-        color = new Color(0, 0, 0, 0);
+        color = Color.rgba(0, 0, 0, 0);
 
         // Chainable API
         return chain();
@@ -88,7 +77,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T aqua() {
-        color = new Color(0, 255, 255);
+        color = Color.rgb(0, 255, 255);
 
         // Chainable API
         return chain();
@@ -96,7 +85,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T black() {
-        color = new Color(0, 0, 0);
+        color = Color.rgb(0, 0, 0);
 
         // Chainable API
         return chain();
@@ -104,7 +93,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T blue() {
-        color = new Color(0, 0, 255);
+        color = Color.rgb(0, 0, 255);
 
         // Chainable API
         return chain();
@@ -112,7 +101,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T fuchsia() {
-        color = new Color(255, 0, 255);
+        color = Color.rgb(255, 0, 255);
 
         // Chainable API
         return chain();
@@ -120,7 +109,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T gray() {
-        color = new Color(128, 128, 128);
+        color = Color.rgb(128, 128, 128);
 
         // Chainable API
         return chain();
@@ -128,7 +117,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T green() {
-        color = new Color(0, 128, 0);
+        color = Color.rgb(0, 128, 0);
 
         // Chainable API
         return chain();
@@ -136,7 +125,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T lime() {
-        color = new Color(0, 255, 0);
+        color = Color.rgb(0, 255, 0);
 
         // Chainable API
         return chain();
@@ -144,7 +133,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T maroon() {
-        color = new Color(128, 0, 0);
+        color = Color.rgb(128, 0, 0);
 
         // Chainable API
         return chain();
@@ -152,7 +141,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T navy() {
-        color = new Color(0, 0, 128);
+        color = Color.rgb(0, 0, 128);
 
         // Chainable API
         return chain();
@@ -160,7 +149,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T olive() {
-        color = new Color(128, 128, 0);
+        color = Color.rgb(128, 128, 0);
 
         // Chainable API
         return chain();
@@ -168,7 +157,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T orange() {
-        color = new Color(255, 165, 0);
+        color = Color.rgb(255, 165, 0);
 
         // Chainable API
         return chain();
@@ -176,7 +165,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T purple() {
-        color = new Color(128, 0, 128);
+        color = Color.rgb(128, 0, 128);
 
         // Chainable API
         return chain();
@@ -184,7 +173,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T red() {
-        color = new Color(255, 0, 0);
+        color = Color.rgb(255, 0, 0);
 
         // Chainable API
         return chain();
@@ -192,7 +181,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T silver() {
-        color = new Color(192, 192, 192);
+        color = Color.rgb(192, 192, 192);
 
         // Chainable API
         return chain();
@@ -200,7 +189,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T teal() {
-        color = new Color(0, 128, 128);
+        color = Color.rgb(0, 128, 128);
 
         // Chainable API
         return chain();
@@ -208,7 +197,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T white() {
-        color = new Color(255, 255, 255);
+        color = Color.rgb(255, 255, 255);
 
         // Chainable API
         return chain();
@@ -216,7 +205,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T yellow() {
-        color = new Color(255, 255, 0);
+        color = Color.rgb(255, 255, 0);
 
         // Chainable API
         return chain();

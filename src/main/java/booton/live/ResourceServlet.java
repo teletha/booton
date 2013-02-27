@@ -57,6 +57,10 @@ public class ResourceServlet extends HttpServlet {
         if (path.endsWith(".html")) {
             rebuild(file).to(new HTMLWriter(new OutputStreamWriter(response.getOutputStream(), I.$encoding)));
         } else {
+            if (path.endsWith(".css")) {
+                response.addHeader("Content-Type", "text/css");
+            }
+
             I.copy(Files.newInputStream(file), response.getOutputStream(), true);
         }
     }

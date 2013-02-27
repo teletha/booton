@@ -167,7 +167,7 @@ public class ItemCatalog extends Page {
                 display.tableCell();
                 box.width(IconSize / 5, px).height(LevelBoxHeight, px);
                 borderLeft.solid().color.black().width(1, px);
-                background.image(linear(rgba(240, 192, 28, 0.5), rgba(160, 123, 1, 0.5)));
+                background.image(linear(rgba(240, 192, 28, 0.5f), rgba(160, 123, 1, 0.5f)));
 
                 while (firstChild()) {
                     border.none();

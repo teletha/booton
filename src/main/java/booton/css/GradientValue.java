@@ -9,7 +9,7 @@
  */
 package booton.css;
 
-import booton.util.Color;
+import js.util.Color;
 
 /**
  * @version 2012/12/15 0:52:37
