@@ -9,7 +9,7 @@
  */
 package js.application;
 
-import booton.util.Color;
+import js.util.Color;
 import booton.util.Font;
 
 /**

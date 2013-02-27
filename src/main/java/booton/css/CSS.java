@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
+import js.util.Color;
 import kiss.Extensible;
 import kiss.I;
 import kiss.Manageable;
@@ -44,7 +45,6 @@ import booton.css.property.Transform;
 import booton.css.property.Transition;
 import booton.css.property.UserSelect;
 import booton.css.property.Visibility;
-import booton.util.Color;
 import booton.util.Strings;
 
 /**
@@ -640,27 +640,8 @@ public abstract class CSS implements Extensible {
      * @param alpha
      * @return
      */
-    protected static final Color rgba(int red, int green, int blue, double alpha) {
-        return new Color(red, green, blue, alpha);
-    }
-
-    protected static final Color color(String hex) {
-        return new Color(hex);
-    }
-
-    /**
-     * <p>
-     * The CSS linear-gradient() function creates an <image> which represents a linear gradient of
-     * colors. The result of this function is an object of the CSS <gradient> data type. Like any
-     * other gradient, a CSS linear gradient is not a CSS <color> but an image with no intrinsic
-     * dimensions; that is, it has no natural or preferred size, nor ratio. Its concrete size will
-     * match the one of the element it applies to.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final GradientValue linear(String start, String end) {
-        return linear(new Color(start), new Color(end));
+    protected static final Color rgba(int red, int green, int blue, float alpha) {
+        return Color.rgba(red, green, blue, alpha);
     }
 
     /**

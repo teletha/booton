@@ -12,12 +12,12 @@ package booton.css.property;
 import java.util.ArrayList;
 import java.util.List;
 
+import js.util.Color;
 import kiss.I;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
 import booton.css.Value;
-import booton.util.Color;
 
 /**
  * @version 2012/12/13 17:54:06

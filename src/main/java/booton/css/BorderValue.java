@@ -9,8 +9,8 @@
  */
 package booton.css;
 
+import js.util.Color;
 import booton.css.property.BoxLength;
-import booton.util.Color;
 
 /**
  * @version 2012/12/11 22:52:28
@@ -59,16 +59,8 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
      * {@inheritDoc}
      */
     @Override
-    public BorderValue color(int red, int green, int blue, double alpha) {
+    public BorderValue color(int red, int green, int blue, float alpha) {
         return color.color(red, green, blue, alpha);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public BorderValue color(String hex) {
-        return color.color(hex);
     }
 
     /**
