@@ -10,70 +10,31 @@
 package js.application;
 
 import js.util.Color;
-import booton.util.Font;
 
 /**
  * @version 2012/12/15 22:06:17
  */
 public class ApplicationTheme {
 
-    private Font baseFontFamily;
+    /** The base color. */
+    private Color baseColor;
 
-    private Color baseBackgroundColor;
+    /** The main color. */
+    private Color mainColor;
 
-    private Color baseFontColor;
-
-    /**
-     * Get the baseFontFamily property of this {@link ApplicationTheme}.
-     * 
-     * @return The baseFontFamily property.
-     */
-    public Font getBaseFontFamily() {
-        return baseFontFamily;
-    }
+    /** The accent color. */
+    private Color accentColor;
 
     /**
-     * Set the baseFontFamily property of this {@link ApplicationTheme}.
+     * <p>
+     * Set main color, base color and accent color.
+     * </p>
      * 
-     * @param baseFontFamily The baseFontFamily value to set.
+     * @param mainColor Your main color.
      */
-    public void setBaseFontFamily(Font baseFontFamily) {
-        this.baseFontFamily = baseFontFamily;
-    }
-
-    /**
-     * Get the baseBackgroundColor property of this {@link ApplicationTheme}.
-     * 
-     * @return The baseBackgroundColor property.
-     */
-    public Color getBaseBackgroundColor() {
-        return baseBackgroundColor;
-    }
-
-    /**
-     * Set the baseBackgroundColor property of this {@link ApplicationTheme}.
-     * 
-     * @param baseBackgroundColor The baseBackgroundColor value to set.
-     */
-    public void setBaseBackgroundColor(Color baseBackgroundColor) {
-        this.baseBackgroundColor = baseBackgroundColor;
-    }
-
-    /**
-     * Get the baseFontColor property of this {@link ApplicationTheme}.
-     * 
-     * @return The baseFontColor property.
-     */
-    public Color getBaseFontColor() {
-        return baseFontColor;
-    }
-
-    /**
-     * Set the baseFontColor property of this {@link ApplicationTheme}.
-     * 
-     * @param baseFontColor The baseFontColor value to set.
-     */
-    public void setBaseFontColor(Color baseFontColor) {
-        this.baseFontColor = baseFontColor;
+    protected void buildColor(Color mainColor) {
+        if (mainColor != null) {
+            this.mainColor = mainColor;
+        }
     }
 }
