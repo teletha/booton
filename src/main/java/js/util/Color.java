@@ -45,10 +45,92 @@ public class Color {
      * @param lightness
      */
     public Color(int hue, int saturation, int lightness, float alpha) {
-        this.hue = (int) range(hue, 360);
+        this.hue = hue % 360;
         this.saturation = (int) range(saturation, 100);
         this.lightness = (int) range(lightness, 100);
         this.alpha = range(alpha * 100, 100) / 100;
+    }
+
+    /**
+     * <p>
+     * Changes the hue of a color while retaining the lightness and saturation.
+     * </p>
+     * 
+     * @param amount An amount of hue.
+     * @return A new color.
+     */
+    public Color adjustHue(int amount) {
+        return new Color(hue + amount, saturation, lightness, alpha);
+    }
+
+    /**
+     * <p>
+     * Makes a color more saturated.
+     * </p>
+     * 
+     * @param amount An amount of saturation.
+     * @return A new color.
+     */
+    public Color saturate(int amount) {
+        return new Color(hue, saturation + amount, lightness, alpha);
+    }
+
+    /**
+     * <p>
+     * Makes a color lighter or darker. Positive value makes this color lighter, negative value
+     * makes this color darker.
+     * </p>
+     * 
+     * @param amount An amount of lightness.
+     * @return A new color.
+     */
+    public Color lighten(int amount) {
+        return new Color(hue, saturation, lightness + amount, alpha);
+    }
+
+    /**
+     * <p>
+     * Converts a color to grayscale. This is qeuivalent to the following method call:
+     * </p>
+     * 
+     * <pre>
+     * color.saturate(-100);
+     * </pre>
+     * 
+     * @return A grascaled color.
+     */
+    public Color grayscale() {
+        return saturate(-100);
+    }
+
+    /**
+     * <p>
+     * Returns the complement of a color. This is qeuivalent to the following method call:
+     * </p>
+     * 
+     * <pre>
+     * color.adjustHue(180);
+     * </pre>
+     * 
+     * @return A grascaled color.
+     */
+    public Color complement() {
+        return adjustHue(180);
+    }
+
+    /**
+     * <p>
+     * Returns the inverse (negative) of a color. This is qeuivalent to the following method call:
+     * </p>
+     * 
+     * <pre>
+     * color.adjustHue(180);
+     * </pre>
+     * 
+     * @return A grascaled color.
+     */
+    public Color invert() {
+        return adjustHue(180);
     }
 
     /**
