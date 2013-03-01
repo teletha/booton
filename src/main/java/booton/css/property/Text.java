@@ -9,6 +9,8 @@
  */
 package booton.css.property;
 
+import static booton.css.Unit.*;
+
 import java.util.List;
 
 import js.util.ArrayList;
@@ -78,6 +80,38 @@ public class Text extends CSSProperty<Text> {
         this.indent = new Value(size, unit);
 
         return chain();
+    }
+
+    /**
+     * <p>
+     * Helper method to write one-point text shadow. This method is equivalent to the following
+     * code:
+     * </p>
+     * 
+     * <pre>
+     * text.shadow(1);
+     * </pre>
+     * 
+     * @return
+     */
+    public Text shadow() {
+        return shadow(1);
+    }
+
+    /**
+     * <p>
+     * Helper method to write one-point text shadow.
+     * </p>
+     * 
+     * @param transparency A transparency of shadow.
+     * @return
+     */
+    public Text shadow(double transparency) {
+        Color color = new Color(0, 0, css.font.color().lightness < 50 ? 100 : 0, transparency);
+        shadow(1, px, 0, px, 0, px, color);
+        shadow(0, px, 1, px, 0, px, color);
+
+        return this;
     }
 
     /**

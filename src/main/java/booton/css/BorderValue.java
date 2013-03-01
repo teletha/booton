@@ -59,7 +59,7 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
      * {@inheritDoc}
      */
     @Override
-    public BorderValue color(int red, int green, int blue, float alpha) {
+    public BorderValue color(int red, int green, int blue, double alpha) {
         return color.color(red, green, blue, alpha);
     }
 
@@ -69,6 +69,14 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
     @Override
     public BorderValue color(Color color) {
         return this.color.color(color);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Color color() {
+        return color.color;
     }
 
     /**

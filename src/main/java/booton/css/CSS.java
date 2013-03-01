@@ -585,6 +585,7 @@ public abstract class CSS implements Extensible {
 
             // load property and assign it to field
             for (CSSProperty property : set.rules) {
+                property.css = this;
                 CSS.class.getField(Strings.unhyphenate(property.name)).set(this, property);
             }
         } catch (Exception e) {
@@ -629,19 +630,74 @@ public abstract class CSS implements Extensible {
         return builder.toString();
     }
 
+    // ====================================================
+    // Color Methods
+    // ====================================================
     /**
      * <p>
-     * Helper method to create RGB color code.
+     * Create Color without alpha channel.
      * </p>
      * 
-     * @param red
-     * @param green
-     * @param blue
-     * @param alpha
-     * @return
+     * @param red A red component in the range 0-255. If the specified value is out of range, it
+     *            will be round up to 0 or 255.
+     * @param green A green component in the range 0-255. If the specified value is out of range, it
+     *            will be round up to 0 or 255.
+     * @param blue A blue component in the range 0-255. If the specified value is out of range, it
+     *            will be round up to 0 or 255.
+     * @return A new color.
      */
-    protected static final Color rgba(int red, int green, int blue, float alpha) {
+    protected static final Color rgb(int red, int green, int blue) {
+        return Color.rgb(red, green, blue);
+    }
+
+    /**
+     * <p>
+     * Create Color with alpha channel.
+     * </p>
+     * 
+     * @param red A red component in the range 0-255. If the specified value is out of range, it
+     *            will be round up to 0 or 255.
+     * @param green A green component in the range 0-255. If the specified value is out of range, it
+     *            will be round up to 0 or 255.
+     * @param blue A blue component in the range 0-255. If the specified value is out of range, it
+     *            will be round up to 0 or 255.
+     * @return A new color.
+     */
+    protected static final Color rgba(int red, int green, int blue, double alpha) {
         return Color.rgba(red, green, blue, alpha);
+    }
+
+    /**
+     * <p>
+     * Create Color without alpha channel.
+     * </p>
+     * 
+     * @param hue The attribute of a visual sensation according to which an area appears to be
+     *            similar to one of the perceived colors: red, yellow, green, and blue, or to a
+     *            combination of two of them .
+     * @param saturation The colorfulness of a stimulus relative to its own brightness.
+     * @param lightness The brightness relative to the brightness of a similarly illuminated white.
+     * @return A new color.
+     */
+    protected static final Color hsl(int hue, int saturation, int lightness) {
+        return hsla(hue, saturation, lightness, 1);
+    }
+
+    /**
+     * <p>
+     * Create Color without alpha channel.
+     * </p>
+     * 
+     * @param hue The attribute of a visual sensation according to which an area appears to be
+     *            similar to one of the perceived colors: red, yellow, green, and blue, or to a
+     *            combination of two of them .
+     * @param saturation The colorfulness of a stimulus relative to its own brightness.
+     * @param lightness The brightness relative to the brightness of a similarly illuminated white.
+     * @param alpha The transparency.
+     * @return A new color.
+     */
+    protected static final Color hsla(int hue, int saturation, int lightness, double alpha) {
+        return new Color(hue, saturation, lightness, alpha);
     }
 
     /**

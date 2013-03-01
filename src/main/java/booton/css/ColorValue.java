@@ -49,7 +49,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
      * {@inheritDoc}
      */
     @Override
-    public T color(int red, int green, int blue, float alpha) {
+    public T color(int red, int green, int blue, double alpha) {
         color = Color.rgba(red, green, blue, alpha);
 
         // Chainable API
@@ -65,6 +65,14 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
         // Chainable API
         return chain();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Color color() {
+        return color;
     }
 
     /** The color keyword. */
@@ -210,5 +218,4 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
         // Chainable API
         return chain();
     }
-
 }

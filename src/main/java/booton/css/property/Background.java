@@ -59,7 +59,7 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
      * {@inheritDoc}
      */
     @Override
-    public Background color(int red, int green, int blue, float alpha) {
+    public Background color(int red, int green, int blue, double alpha) {
         return color.color(red, green, blue, alpha);
     }
 
@@ -69,6 +69,14 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
     @Override
     public Background color(Color color) {
         return this.color.color(color);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Color color() {
+        return color.color();
     }
 
     /**

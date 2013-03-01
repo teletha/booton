@@ -10,11 +10,12 @@
 package js.application;
 
 import js.util.Color;
+import booton.css.CSS;
 
 /**
  * @version 2012/12/15 22:06:17
  */
-public class ApplicationTheme {
+public abstract class ApplicationTheme extends CSS {
 
     /** The base color. */
     private Color baseColor;
@@ -35,6 +36,8 @@ public class ApplicationTheme {
     protected void buildColor(Color mainColor) {
         if (mainColor != null) {
             this.mainColor = mainColor;
+            this.baseColor = mainColor.lighten(35);
+            this.accentColor = mainColor.complement();
         }
     }
 }

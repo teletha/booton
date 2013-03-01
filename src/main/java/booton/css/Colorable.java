@@ -44,7 +44,7 @@ public interface Colorable<T extends CSSProperty> {
      * @param green
      * @param blue
      */
-    public T color(int red, int green, int blue, float alpha);
+    public T color(int red, int green, int blue, double alpha);
 
     /**
      * <p>
@@ -60,4 +60,10 @@ public interface Colorable<T extends CSSProperty> {
      */
     public T color(Color color);
 
+    /**
+     * <p>
+     * Retrieve the configured color.
+     * </p>
+     */
+    public Color color();
 }
