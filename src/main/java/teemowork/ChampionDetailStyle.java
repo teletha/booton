@@ -10,14 +10,11 @@
 package teemowork;
 
 import booton.css.CSS;
-import booton.util.Font;
 
 /**
  * @version 2013/02/26 23:49:51
  */
-class ChampionDetailStyle extends TeemoworkTheme {
-
-    static Font Sans = new Font("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600");
+class ChampionDetailStyle {
 
     /** The skill icon size. */
     int SkillIconSize = 45;
@@ -66,7 +63,6 @@ class ChampionDetailStyle extends TeemoworkTheme {
 
         {
             display.tableCell();
-            font.family(Sans);
         }
     }
 
@@ -127,7 +123,7 @@ class ChampionDetailStyle extends TeemoworkTheme {
     /**
      * @version 2013/02/02 11:27:13
      */
-    class LevelMark3 extends ChampionDetailStyle.LevelMark {
+    class LevelMark3 extends LevelMark {
 
         {
             box.width(SkillIconSize / 3, px);
@@ -316,7 +312,6 @@ class ChampionDetailStyle extends TeemoworkTheme {
             display.tableCell();
             box.width(13, em);
             text.verticalAlign.top();
-            font.family(Sans);
         }
     }
 

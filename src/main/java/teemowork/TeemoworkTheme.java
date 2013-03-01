@@ -9,14 +9,29 @@
  */
 package teemowork;
 
-import js.application.ApplicationTheme;
+import booton.css.CSS;
+import booton.util.Font;
 
 /**
  * @version 2012/12/15 22:13:17
  */
-public class TeemoworkTheme extends ApplicationTheme {
+public class TeemoworkTheme {
 
-    {
+    /** The main font. */
+    Font Sans = new Font("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600");
 
+    class HTML extends CSS {
+
+        {
+            font.family(Sans);
+            padding.horizontal(10, percent).top(10, px);
+        }
+    }
+
+    class Content extends CSS {
+
+        {
+            padding.horizontal(5, percent).top(20, px);
+        }
     }
 }
