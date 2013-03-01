@@ -15,7 +15,7 @@ import booton.util.Font;
 /**
  * @version 2013/02/26 23:49:51
  */
-class ChampionDetailStyle extends TeemoworkDesign {
+class ChampionDetailStyle extends TeemoworkTheme {
 
     static Font Sans = new Font("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600");
 
@@ -116,7 +116,7 @@ class ChampionDetailStyle extends TeemoworkDesign {
             display.tableCell();
             box.width(SkillIconSize / 5, px).height(LevelBoxHeight, px);
             borderLeft.solid().color.black().width(1, px);
-            background.image(linear(rgba(240, 192, 28, 0.5f), rgba(160, 123, 1, 0.5f)));
+            background.image(linear(rgba(240, 192, 28, 0.5), rgba(160, 123, 1, 0.5)));
 
             while (firstChild()) {
                 border.none();

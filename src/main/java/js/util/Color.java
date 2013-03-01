@@ -14,6 +14,18 @@ package js.util;
  */
 public class Color {
 
+    /** The frequently used color. */
+    public static final Color White = new Color(0, 0, 100);
+
+    /** The frequently used color. */
+    public static final Color Whity = new Color(0, 0, 97);
+
+    /** The frequently used color. */
+    public static final Color WhiteGray = new Color(0, 0, 93);
+
+    /** The frequently used color. */
+    public static final Color Black = new Color(0, 0, 0);
+
     /**
      * The attribute of a visual sensation according to which an area appears to be similar to one
      * of the perceived colors: red, yellow, green, and blue, or to a combination of two of them .
@@ -31,7 +43,7 @@ public class Color {
     public final int lightness;
 
     /**
-     * Thetransparency.
+     * The transparency.
      */
     public final float alpha;
 
@@ -40,15 +52,33 @@ public class Color {
      * Create new color.
      * </p>
      * 
-     * @param hue
-     * @param saturation
-     * @param lightness
+     * @param hue The attribute of a visual sensation according to which an area appears to be
+     *            similar to one of the perceived colors: red, yellow, green, and blue, or to a
+     *            combination of two of them .
+     * @param saturation The colorfulness of a stimulus relative to its own brightness.
+     * @param lightness The brightness relative to the brightness of a similarly illuminated white.
      */
-    public Color(int hue, int saturation, int lightness, float alpha) {
+    public Color(int hue, int saturation, int lightness) {
+        this(hue, saturation, lightness, 1);
+    }
+
+    /**
+     * <p>
+     * Create new color.
+     * </p>
+     * 
+     * @param hue The attribute of a visual sensation according to which an area appears to be
+     *            similar to one of the perceived colors: red, yellow, green, and blue, or to a
+     *            combination of two of them .
+     * @param saturation The colorfulness of a stimulus relative to its own brightness.
+     * @param lightness The brightness relative to the brightness of a similarly illuminated white.
+     * @param alpha The transparency.
+     */
+    public Color(int hue, int saturation, int lightness, double alpha) {
         this.hue = hue % 360;
         this.saturation = (int) range(saturation, 100);
         this.lightness = (int) range(lightness, 100);
-        this.alpha = range(alpha * 100, 100) / 100;
+        this.alpha = range((float) alpha, 100);
     }
 
     /**
@@ -90,6 +120,18 @@ public class Color {
 
     /**
      * <p>
+     * Makes a color more opaque.
+     * </p>
+     * 
+     * @param amount An amount of transparency.
+     * @return A new color.
+     */
+    public Color opacify(float amount) {
+        return new Color(hue, saturation, lightness, alpha + amount);
+    }
+
+    /**
+     * <p>
      * Converts a color to grayscale. This is qeuivalent to the following method call:
      * </p>
      * 
@@ -119,26 +161,15 @@ public class Color {
     }
 
     /**
-     * <p>
-     * Returns the inverse (negative) of a color. This is qeuivalent to the following method call:
-     * </p>
-     * 
-     * <pre>
-     * color.adjustHue(180);
-     * </pre>
-     * 
-     * @return A grascaled color.
-     */
-    public Color invert() {
-        return adjustHue(180);
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
     public String toString() {
-        return "hsla(" + hue + "," + saturation + "%," + lightness + "%," + alpha + ")";
+        if (alpha == 1) {
+            return "hsl(" + hue + "," + saturation + "%," + lightness + "%)";
+        } else {
+            return "hsla(" + hue + "," + saturation + "%," + lightness + "%," + alpha + ")";
+        }
     }
 
     /**
@@ -171,8 +202,8 @@ public class Color {
      *            will be round up to 0 or 255.
      * @return A new color.
      */
-    public static Color rgba(int red, int green, int blue, float alpha) {
-        return color(range(red, 255), range(green, 255), range(blue, 255), range(alpha, 1));
+    public static Color rgba(int red, int green, int blue, double alpha) {
+        return color(range(red, 255), range(green, 255), range(blue, 255), range((float) alpha, 1));
     }
 
     /**

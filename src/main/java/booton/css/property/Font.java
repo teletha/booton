@@ -181,7 +181,7 @@ public final class Font extends CSSProperty<Font> implements Colorable<Font> {
      * {@inheritDoc}
      */
     @Override
-    public Font color(int red, int green, int blue, float alpha) {
+    public Font color(int red, int green, int blue, double alpha) {
         return color.color(red, green, blue, alpha);
     }
 
@@ -191,6 +191,14 @@ public final class Font extends CSSProperty<Font> implements Colorable<Font> {
     @Override
     public Font color(Color color) {
         return this.color.color(color);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Color color() {
+        return color.color();
     }
 
     /**

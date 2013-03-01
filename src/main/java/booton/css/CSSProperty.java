@@ -19,6 +19,9 @@ import booton.util.Strings;
  */
 public class CSSProperty<T extends CSSProperty> {
 
+    /** The current processing css rule. */
+    protected CSS css;
+
     /** The flag. */
     boolean used = false;
 

@@ -9,7 +9,6 @@
  */
 package teemowork;
 
-import static js.lang.Global.*;
 import js.application.Application;
 import js.application.Header;
 import js.application.Header.Menu;
@@ -24,8 +23,6 @@ public class Teemowork extends Application {
      */
     @Override
     public void jsmain() {
-        $("body").css("padding", "0px 10%");
-
         Header nav = new Header();
         nav.add("< ^ v ^ > Teemowork", "");
         nav.add("Patch", "#");

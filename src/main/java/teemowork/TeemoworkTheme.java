@@ -14,7 +14,7 @@ import js.application.ApplicationTheme;
 /**
  * @version 2012/12/15 22:13:17
  */
-public class TeemoworkDesign extends ApplicationTheme {
+public class TeemoworkTheme extends ApplicationTheme {
 
     {
 
