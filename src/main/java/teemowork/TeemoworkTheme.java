@@ -31,7 +31,7 @@ public class TeemoworkTheme {
     class Content extends CSS {
 
         {
-            padding.horizontal(5, percent).top(20, px);
+            padding.top(20, px);
         }
     }
 }

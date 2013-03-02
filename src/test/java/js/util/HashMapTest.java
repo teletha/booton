@@ -274,4 +274,24 @@ public class HashMapTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void primitiveWrapperKey() throws Exception {
+        test(new Scriptable() {
+
+            public int act() {
+                int key1 = 1;
+                String value1 = "value1";
+
+                HashMap<Integer, String> map = new HashMap();
+                assert map.size() == 0;
+
+                assert map.put(key1, value1) == null;
+                assert map.size() == 1;
+                assert map.get(key1) == value1;
+
+                return map.size();
+            }
+        });
+    }
 }

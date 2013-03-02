@@ -18,7 +18,7 @@ import java.util.List;
 import js.util.ArrayList;
 
 /**
- * 3.02準拠
+ * 3.03準拠
  * 
  * @version 2013/01/27 9:55:21
  */
@@ -230,6 +230,9 @@ public class Champion {
 
     /** The champion name. */
     public static final Champion Poppy = new Champion("Poppy", ValiantFighter, DevastatingBlow, ParagonOfDemacia, HeroicCharge, DiplomaticImmunity);
+
+    /** The champion name. */
+    public static final Champion Quinn = new Champion("Quinn", Harrier, BlindingAssault, HeightenedSenses, Vault, TagTeam);
 
     /** The champion name. */
     public static final Champion Rammus = new Champion("Rammus", SpikedShell, Powerball, DefensiveBallCurl, PuncturingTaunt, Tremors);

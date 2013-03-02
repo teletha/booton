@@ -27,7 +27,7 @@ public class Build extends Notifiable implements StatusCalculator {
     public Champion champion;
 
     /** The version. */
-    private Version version = Version.Latest;
+    private Version version = Version.P0000;
 
     /** The level. */
     private int level = 1;
