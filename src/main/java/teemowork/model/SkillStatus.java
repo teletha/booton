@@ -12,9 +12,11 @@ package teemowork.model;
 import static teemowork.model.Status.*;
 
 import java.util.List;
+import java.util.Map;
 
 import js.lang.NativeArray;
 import js.util.ArrayList;
+import js.util.HashMap;
 import teemowork.model.VariableResolver.Diff;
 
 /**
@@ -29,7 +31,7 @@ public class SkillStatus {
     private NativeArray<Double> values;
 
     /** The variable store. */
-    private NativeArray<Variable> variables;
+    private Map<Integer, Variable> variables;
 
     /** The skill range. */
     private Variable range;
@@ -57,7 +59,8 @@ public class SkillStatus {
 
         if (previous != null) {
             values = previous.values.copy();
-            variables = previous.variables;
+            variables = new HashMap();
+            variables.putAll(previous.variables);
             passive = previous.passive;
             active = previous.active;
             type = previous.type;
@@ -66,11 +69,23 @@ public class SkillStatus {
             cooldown = previous.cooldown;
         } else {
             values = new NativeArray();
-            variables = new NativeArray();
+            variables = new HashMap();
             passive = new ArrayList();
             active = new ArrayList();
             type = SkillType.Active;
         }
+    }
+
+    /**
+     * <p>
+     * Update this skill.
+     * </p>
+     * 
+     * @param version
+     * @return
+     */
+    SkillStatus update(Version version) {
+        return skill.update(version);
     }
 
     /**
@@ -143,7 +158,7 @@ public class SkillStatus {
 
                 if (variable == null) {
                     variable = new Variable();
-                    variables.set(id, variable);
+                    variables.put(id, variable);
                 }
                 tokens.add(variable);
             }
@@ -254,6 +269,7 @@ public class SkillStatus {
      */
     SkillStatus variable(int id, Status status, VariableResolver resolver, Variable first, Variable second) {
         Variable variable = variables.get(id);
+        variable.amplifiers.clear();
         variable.setStatus(status);
         variable.setResolver(resolver);
 

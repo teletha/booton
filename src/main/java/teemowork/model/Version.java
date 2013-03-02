@@ -10,7 +10,7 @@
 package teemowork.model;
 
 /**
- * @version 2013/01/27 0:36:31
+ * @version 2013/03/02 11:37:49
  */
 public enum Version {
 
@@ -30,10 +30,12 @@ public enum Version {
 
     P1154("Preseason Balance Update 2", 2013, 1, 16),
 
+    P303("3.03", 2013, 2, 28),
+
     PBE("Public Beta Environment", 2013, 1, 26);
 
     /** The latest stable version. */
-    public static final Version Latest = P0000;
+    public static final Version Latest = P303;
 
     /** The version name. */
     public final String name;

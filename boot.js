@@ -16,6 +16,21 @@ function boot(global) {
       }
     });
   }
+
+  //====================================================================
+  // Number Extensions
+  //====================================================================
+  define(Number.prototype, {
+    /**
+     * Retrieve the object identifier.
+     *
+     * @return An identifier.
+     */
+    hashCode: function() {
+      return this;
+    }
+  });
+  
   
   //====================================================================
   // String Extensions

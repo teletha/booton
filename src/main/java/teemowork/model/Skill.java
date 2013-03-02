@@ -23,7 +23,7 @@ import teemowork.model.VariableResolver.Per5Level;
 import teemowork.model.VariableResolver.Per6Level;
 
 /**
- * @version 2013/01/27 20:32:01
+ * @version 2013/03/02 11:34:54
  */
 public class Skill {
 
@@ -1722,8 +1722,20 @@ public class Skill {
     /** The skill name. */
     public static final Skill Stranglethorns = new Skill("Stranglethorns", R);
 
-    /** The current writing version. */
-    private static Version version;
+    /** The skill name. */
+    public static final Skill Harrier = new Skill("Harrier", Passive);
+
+    /** The skill name. */
+    public static final Skill BlindingAssault = new Skill("Blinding Assault", Q);
+
+    /** The skill name. */
+    public static final Skill HeightenedSenses = new Skill("Heightened Senses", W);
+
+    /** The skill name. */
+    public static final Skill Vault = new Skill("Vault", E);
+
+    /** The skill name. */
+    public static final Skill TagTeam = new Skill("Tag Team", R);
 
     /** The current writing skill. */
     private static Skill skill;
@@ -1841,6 +1853,17 @@ public class Skill {
      * @return A champion descriptor.
      */
     SkillStatus update() {
+        return update(Version.P0000);
+    }
+
+    /**
+     * <p>
+     * Update status.
+     * </p>
+     * 
+     * @return A champion descriptor.
+     */
+    SkillStatus update(Version version) {
         SkillStatus status = new SkillStatus(this, getStatus(version));
 
         versions[version.ordinal()] = status;
@@ -1948,8 +1971,6 @@ public class Skill {
     }
 
     static {
-        version = P0000;
-
         /** Ahri */
         EssenceTheft.update()
                 .passive("スキルが敵ユニットに当たる度に" + EssenceTheft + "のチャージを1つ得る(1回のスキルで得られる上限は3チャージまで)。9チャージの状態でスキルを使用すると、チャージを全て消費して使用したスキルに{1}が追加される。")
@@ -2069,7 +2090,9 @@ public class Skill {
                 .variable(2, Stun, 1)
                 .mana(80, 10)
                 .cd(16, -2)
-                .range(1100);
+                .range(1100)
+                .update(P303)
+                .variable(1, MagicDamage, 80, 50, ap(0.7));
         Despair.update()
                 .active("毎秒、{2}の敵ユニットに{1}を与える。")
                 .variable(1, MagicDamage, 8, 4, amplify(TargetMaxHealthRatio, 1.5, 0.3, ap(0.01)))
