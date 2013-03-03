@@ -28,7 +28,7 @@ public class ItemStatus {
     private NativeArray<Double> values;
 
     /** The variable store. */
-    private NativeArray<Variable> variables;
+    private NativeArray<VariableHolder> variables;
 
     /** The item build. */
     Item[] build;
@@ -65,10 +65,10 @@ public class ItemStatus {
                 tokens.add(token);
             } else {
                 int id = Integer.parseInt(token);
-                Variable variable = variables.get(id);
+                VariableHolder variable = variables.get(id);
 
                 if (variable == null) {
-                    variable = new Variable();
+                    variable = new VariableHolder();
                     variables.set(id, variable);
                 }
                 tokens.add(variable);
@@ -147,7 +147,7 @@ public class ItemStatus {
      * @param amplifier A first amplifier.
      * @return Chainable API.
      */
-    ItemStatus variable(int id, Status status, double base, double diff, Variable amplifier) {
+    ItemStatus variable(int id, Status status, double base, double diff, VariableHolder amplifier) {
         return variable(id, status, base, diff, amplifier, null);
     }
 
@@ -164,7 +164,7 @@ public class ItemStatus {
      * @param second A second amplifier.
      * @return Chainable API.
      */
-    ItemStatus variable(int id, Status status, double base, double diff, Variable first, Variable second) {
+    ItemStatus variable(int id, Status status, double base, double diff, VariableHolder first, VariableHolder second) {
         return variable(id, status, new Diff(base, diff, 0), first, second);
     }
 
@@ -180,17 +180,17 @@ public class ItemStatus {
      * @param second A second amplifier.
      * @return Chainable API.
      */
-    ItemStatus variable(int id, Status status, VariableResolver resolver, Variable first, Variable second) {
-        Variable variable = variables.get(id);
+    ItemStatus variable(int id, Status status, VariableResolver resolver, VariableHolder first, VariableHolder second) {
+        VariableHolder variable = variables.get(id);
         variable.setStatus(status);
         variable.setResolver(resolver);
 
         if (first != null) {
-            variable.amplifiers.add(first);
+            variable.getAmplifiers().add(first);
         }
 
         if (second != null) {
-            variable.amplifiers.add(second);
+            variable.getAmplifiers().add(second);
         }
         return this;
     }

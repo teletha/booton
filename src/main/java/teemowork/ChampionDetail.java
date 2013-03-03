@@ -61,6 +61,7 @@ import teemowork.model.SkillStatus;
 import teemowork.model.SkillType;
 import teemowork.model.Status;
 import teemowork.model.Variable;
+import teemowork.model.VariableHolder;
 import teemowork.model.VariableResolver;
 
 /**
@@ -404,7 +405,7 @@ public class ChampionDetail extends Page {
                 }
 
                 // write amplifiers
-                writeAmplifier(root, variable.amplifiers, 0);
+                writeAmplifier(root, variable.getAmplifiers(), 0);
 
                 // write unit
                 root.append(status.getUnit());
@@ -420,7 +421,7 @@ public class ChampionDetail extends Page {
         private void writeVariable(jQuery root, Variable variable, int level) {
             VariableResolver resolver = variable.getResolver();
             Status status = variable.getStatus();
-            List<Variable> amplifiers = variable.amplifiers;
+            List<VariableHolder> amplifiers = variable.getAmplifiers();
 
             if (!resolver.isSkillLevelBased()) {
                 level = resolver.convertLevel(build.getLevel());
@@ -461,7 +462,7 @@ public class ChampionDetail extends Page {
          * @param amplifiers A list of skill amplifiers.
          * @param level A current skill level.
          */
-        private void writeAmplifier(jQuery root, List<Variable> amplifiers, int level) {
+        private void writeAmplifier(jQuery root, List<VariableHolder> amplifiers, int level) {
             for (Variable amplifier : amplifiers) {
                 jQuery element = root.child(Amplifier.class);
                 element.append("+");
@@ -487,9 +488,9 @@ public class ChampionDetail extends Page {
                 }
 
                 element.append(amplifier.getStatus().getUnit());
-                if (!amplifier.amplifiers.isEmpty()) {
+                if (!amplifier.getAmplifiers().isEmpty()) {
                     element.append("(");
-                    writeAmplifier(element, amplifier.amplifiers, level);
+                    writeAmplifier(element, amplifier.getAmplifiers(), level);
                     element.append(")");
                 }
                 element.append(amplifier.getStatus().name);

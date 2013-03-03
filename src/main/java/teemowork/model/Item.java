@@ -614,7 +614,7 @@ public class Item {
      * @param base A base value of amplifier rate.
      * @return
      */
-    private static final Variable amplify(Status status, double base) {
+    private static final VariableHolder amplify(Status status, double base) {
         return amplify(status, base, 0);
     }
 
@@ -628,7 +628,7 @@ public class Item {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final Variable amplify(Status status, double base, double diff) {
+    private static final VariableHolder amplify(Status status, double base, double diff) {
         return amplify(status, new Diff(base, diff, 1));
     }
 
@@ -642,8 +642,8 @@ public class Item {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final Variable amplify(Status status, VariableResolver resolver) {
-        Variable amplifier = new Variable();
+    private static final VariableHolder amplify(Status status, VariableResolver resolver) {
+        VariableHolder amplifier = new VariableHolder();
         amplifier.setStatus(status);
         amplifier.setResolver(resolver);
 
@@ -660,9 +660,9 @@ public class Item {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final Variable amplify(Status status, double base, double diff, Variable amplifier) {
+    private static final Variable amplify(Status status, double base, double diff, VariableHolder amplifier) {
         Variable one = amplify(status, base, diff);
-        one.amplifiers.add(amplifier);
+        one.getAmplifiers().add(amplifier);
 
         return one;
     }

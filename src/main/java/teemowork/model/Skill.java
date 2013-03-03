@@ -1880,7 +1880,7 @@ public class Skill {
      * @param rate An AD rate.
      * @return
      */
-    private static final Variable ad(double rate) {
+    private static final VariableHolder ad(double rate) {
         return amplify(AD, rate);
     }
 
@@ -1892,7 +1892,7 @@ public class Skill {
      * @param rate An AD rate.
      * @return
      */
-    private static final Variable bounusAD(double rate) {
+    private static final VariableHolder bounusAD(double rate) {
         return amplify(BounusAD, rate);
     }
 
@@ -1904,7 +1904,7 @@ public class Skill {
      * @param rate An AP rate.
      * @return
      */
-    private static final Variable ap(double rate) {
+    private static final VariableHolder ap(double rate) {
         return amplify(AP, rate);
     }
 
@@ -1917,7 +1917,7 @@ public class Skill {
      * @param base A base value of amplifier rate.
      * @return
      */
-    private static final Variable amplify(Status status, double base) {
+    private static final VariableHolder amplify(Status status, double base) {
         return amplify(status, base, 0);
     }
 
@@ -1931,7 +1931,7 @@ public class Skill {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final Variable amplify(Status status, double base, double diff) {
+    private static final VariableHolder amplify(Status status, double base, double diff) {
         return amplify(status, new Diff(base, diff, skill.getMaxLevel()));
     }
 
@@ -1945,8 +1945,8 @@ public class Skill {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final Variable amplify(Status status, VariableResolver resolver) {
-        Variable amplifier = new Variable();
+    private static final VariableHolder amplify(Status status, VariableResolver resolver) {
+        VariableHolder amplifier = new VariableHolder();
         amplifier.setStatus(status);
         amplifier.setResolver(resolver);
 
@@ -1963,9 +1963,9 @@ public class Skill {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final Variable amplify(Status status, double base, double diff, Variable amplifier) {
-        Variable one = amplify(status, base, diff);
-        one.amplifiers.add(amplifier);
+    private static final VariableHolder amplify(Status status, double base, double diff, VariableHolder amplifier) {
+        VariableHolder one = amplify(status, base, diff);
+        one.getAmplifiers().add(amplifier);
 
         return one;
     }

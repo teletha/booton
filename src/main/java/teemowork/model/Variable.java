@@ -9,84 +9,42 @@
  */
 package teemowork.model;
 
-import static teemowork.model.Status.*;
-
 import java.util.List;
 
-import js.util.ArrayList;
-
 /**
- * @version 2013/02/13 1:35:47
+ * @version 2013/03/03 9:37:52
  */
-public class Variable {
-
-    /** The variable type. */
-    private Status status;
-
-    /** The value enumerator. */
-    private VariableResolver resolver;
-
-    /** The condtional variable flag. */
-    private boolean conditional = false;
-
-    /** The amplifiers for this amplifier rate. */
-    public final List<Variable> amplifiers = new ArrayList();
+public interface Variable {
 
     /**
-     * Get the status property of this {@link Variable}.
+     * Get the status property of this {@link VariableHolder}.
      * 
      * @return The status property.
      */
-    public Status getStatus() {
-        return status;
-    }
+    Status getStatus();
 
     /**
-     * Set the status property of this {@link Variable}.
-     * 
-     * @param status The status value to set.
-     */
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    /**
-     * Get the resolver property of this {@link Variable}.
+     * Get the resolver property of this {@link VariableHolder}.
      * 
      * @return The resolver property.
      */
-    public VariableResolver getResolver() {
-        return resolver;
-    }
+    VariableResolver getResolver();
 
     /**
-     * Set the resolver property of this {@link Variable}.
+     * Get the amplifiers property of this {@link VariableHolder}.
      * 
-     * @param resolver The resolver value to set.
+     * @return The amplifiers property.
      */
-    public void setResolver(VariableResolver resolver) {
-        this.resolver = resolver;
-    }
+    List<VariableHolder> getAmplifiers();
 
     /**
      * <p>
-     * Get the conditional property of this {@link Variable}.
+     * Get the conditional property of this {@link VariableHolder}.
      * </p>
      * 
      * @return
      */
-    public boolean isConditional() {
-        return conditional;
-    }
-
-    /**
-     * <p>
-     * Set the conditional property of this {@link Variable}.
-     * </p>
-     */
-    public void setConditional() {
-        this.conditional = true;
-    }
+    boolean isConditional();
 
     /**
      * <p>
@@ -97,16 +55,6 @@ public class Variable {
      * @param calculator A status calculator.
      * @return A calculated value.
      */
-    public double calculate(int level, StatusCalculator calculator) {
-        double value = resolver.compute(level);
+    double calculate(int level, StatusCalculator calculator);
 
-        for (Variable amplifier : amplifiers) {
-            value += amplifier.calculate(level, calculator) * calculator.calculate(amplifier.getStatus());
-        }
-
-        if (status == CD || status == CDRAwareTime) {
-            value = value * (1 - calculator.calculate(CDR) / 100);
-        }
-        return value;
-    }
 }

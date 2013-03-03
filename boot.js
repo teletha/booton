@@ -22,6 +22,16 @@ function boot(global) {
   //====================================================================
   define(Number.prototype, {
     /**
+     * <p>
+     * Returns the runtime class of this Object. The returned Class object is the object
+     * that is locked by static synchronized methods of the represented class. 
+     * </p>
+     *
+     * @return Number class.
+     */
+    $: Number,
+    
+    /**
      * Retrieve the object identifier.
      *
      * @return An identifier.
@@ -36,6 +46,16 @@ function boot(global) {
   // String Extensions
   //====================================================================
   define(String.prototype, {
+    /**
+     * <p>
+     * Returns the runtime class of this Object. The returned Class object is the object
+     * that is locked by static synchronized methods of the represented class. 
+     * </p>
+     *
+     * @return String class.
+     */
+    $: String,
+  
     /**
      * Retrieve the object identifier.
      *

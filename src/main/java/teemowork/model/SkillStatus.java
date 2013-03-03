@@ -31,16 +31,16 @@ public class SkillStatus {
     private NativeArray<Double> values;
 
     /** The variable store. */
-    private Map<Integer, Variable> variables;
+    private Map<Integer, VariableHolder> variables;
 
     /** The skill range. */
-    private Variable range;
+    private VariableHolder range;
 
     /** The skill cost. */
-    private Variable cost;
+    private VariableHolder cost;
 
     /** The skill cooldown. */
-    private Variable cooldown;
+    private VariableHolder cooldown;
 
     /** The skill type. */
     private SkillType type;
@@ -154,10 +154,10 @@ public class SkillStatus {
                 tokens.add(token);
             } else {
                 int id = Integer.parseInt(token);
-                Variable variable = variables.get(id);
+                VariableHolder variable = variables.get(id);
 
                 if (variable == null) {
-                    variable = new Variable();
+                    variable = new VariableHolder();
                     variables.put(id, variable);
                 }
                 tokens.add(variable);
@@ -234,7 +234,7 @@ public class SkillStatus {
      * @param amplifier A first amplifier.
      * @return Chainable API.
      */
-    SkillStatus variable(int id, Status status, double base, double diff, Variable amplifier) {
+    SkillStatus variable(int id, Status status, double base, double diff, VariableHolder amplifier) {
         return variable(id, status, base, diff, amplifier, null);
     }
 
@@ -251,7 +251,7 @@ public class SkillStatus {
      * @param second A second amplifier.
      * @return Chainable API.
      */
-    SkillStatus variable(int id, Status status, double base, double diff, Variable first, Variable second) {
+    SkillStatus variable(int id, Status status, double base, double diff, VariableHolder first, VariableHolder second) {
         return variable(id, status, new Diff(base, diff, skill.getMaxLevel()), first, second);
     }
 
@@ -267,18 +267,18 @@ public class SkillStatus {
      * @param second A second amplifier.
      * @return Chainable API.
      */
-    SkillStatus variable(int id, Status status, VariableResolver resolver, Variable first, Variable second) {
-        Variable variable = variables.get(id);
-        variable.amplifiers.clear();
+    SkillStatus variable(int id, Status status, VariableResolver resolver, VariableHolder first, VariableHolder second) {
+        VariableHolder variable = variables.get(id);
+        variable.getAmplifiers().clear();
         variable.setStatus(status);
         variable.setResolver(resolver);
 
         if (first != null) {
-            variable.amplifiers.add(first);
+            variable.getAmplifiers().add(first);
         }
 
         if (second != null) {
-            variable.amplifiers.add(second);
+            variable.getAmplifiers().add(second);
         }
         return this;
     }
@@ -304,7 +304,7 @@ public class SkillStatus {
      * @param diff A diff time.
      */
     SkillStatus cd(double base, double diff) {
-        cooldown = new Variable();
+        cooldown = new VariableHolder();
         cooldown.setResolver(new Diff(base, diff, skill.getMaxLevel()));
         cooldown.setStatus(CD);
 
@@ -355,13 +355,13 @@ public class SkillStatus {
      * @param base A base cost.
      * @param diff A diff cost.
      */
-    SkillStatus cost(Status type, VariableResolver resolver, Variable amplifier) {
-        cost = new Variable();
+    SkillStatus cost(Status type, VariableResolver resolver, VariableHolder amplifier) {
+        cost = new VariableHolder();
         cost.setStatus(type);
         cost.setResolver(resolver);
 
         if (amplifier != null) {
-            cost.amplifiers.add(amplifier);
+            cost.getAmplifiers().add(amplifier);
         }
         return this;
     }
@@ -418,7 +418,7 @@ public class SkillStatus {
      * @param range
      */
     SkillStatus range(double base, double diff) {
-        range = new Variable();
+        range = new VariableHolder();
         range.setResolver(new Diff(base, diff, skill.getMaxLevel()));
         range.setStatus(Range);
 
@@ -456,7 +456,7 @@ public class SkillStatus {
      * @param id A variable identifier.
      */
     SkillStatus conditional(int id) {
-        Variable variable = variables.get(id);
+        VariableHolder variable = variables.get(id);
 
         if (variable != null) {
             variable.setConditional();

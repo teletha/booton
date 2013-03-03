@@ -79,7 +79,7 @@ public class SkillStatusTest {
 
         Variable variable = (Variable) token;
         assert variable.getStatus() == AD;
-        assert variable.amplifiers.size() == 0;
+        assert variable.getAmplifiers().size() == 0;
     }
 
     @Test
@@ -97,7 +97,7 @@ public class SkillStatusTest {
 
         Variable variable = (Variable) token;
         assert variable.getStatus() == SV;
-        assert variable.amplifiers.size() == 0;
+        assert variable.getAmplifiers().size() == 0;
     }
 
     /**
