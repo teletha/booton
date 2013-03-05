@@ -17,7 +17,10 @@ import java.util.Map;
 import js.lang.NativeArray;
 import js.util.ArrayList;
 import js.util.HashMap;
-import teemowork.model.VariableResolver.Diff;
+import teemowork.model.variable.Variable;
+import teemowork.model.variable.VariableHolder;
+import teemowork.model.variable.VariableResolver;
+import teemowork.model.variable.VariableResolver.Diff;
 
 /**
  * @version 2013/01/27 20:32:01
@@ -26,6 +29,10 @@ public class SkillStatus {
 
     /** The associated skill. */
     public final Skill skill;
+
+    private final SkillStatus previous;
+
+    private boolean initializable = true;
 
     /** The value store. */
     private NativeArray<Double> values;
@@ -56,24 +63,63 @@ public class SkillStatus {
      */
     SkillStatus(Skill skill, SkillStatus previous) {
         this.skill = skill;
+        this.previous = previous;
 
-        if (previous != null) {
-            values = previous.values.copy();
+        if (previous == null) {
+            values = new NativeArray();
             variables = new HashMap();
-            variables.putAll(previous.variables);
+            passive = new ArrayList();
+            active = new ArrayList();
+            type = SkillType.Active;
+
+            initializable = false;
+        } else {
+            values = previous.values.copy();
+            variables = previous.variables;
             passive = previous.passive;
             active = previous.active;
             type = previous.type;
             cost = previous.cost;
             range = previous.range;
             cooldown = previous.cooldown;
-        } else {
-            values = new NativeArray();
-            variables = new HashMap();
-            passive = new ArrayList();
-            active = new ArrayList();
-            type = SkillType.Active;
         }
+    }
+
+    /**
+     * <p>
+     * Retrieve the value which is associated with the specified key.
+     * </p>
+     * 
+     * @param key A key.
+     * @return A value.
+     */
+    private Variable get(int key) {
+        if (variables == null) {
+            return previous.get(key);
+        } else {
+            return variables.get(key);
+        }
+    }
+
+    /**
+     * <p>
+     * Update variable.
+     * </p>
+     * 
+     * @param key
+     * @param value
+     */
+    private void put(int key, VariableHolder value) {
+        if (initializable) {
+            // create new map to disconnect reference from parent
+            variables = new HashMap();
+
+            if (previous != null) {
+                // copy all key-values
+                variables.putAll(previous.variables);
+            }
+        }
+        variables.put(key, value);
     }
 
     /**

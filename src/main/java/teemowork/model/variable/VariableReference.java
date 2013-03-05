@@ -7,14 +7,17 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package teemowork.model;
+package teemowork.model.variable;
 
 import java.util.List;
+
+import teemowork.model.Status;
+import teemowork.model.StatusCalculator;
 
 /**
  * @version 2013/03/03 11:57:14
  */
-public class VariableDelegator implements Variable {
+public class VariableReference implements Variable {
 
     /** The identifier of the actual variable. */
     private int id;

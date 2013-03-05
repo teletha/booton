@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package teemowork.model;
+package teemowork.model.variable;
 
 /**
  * @version 2013/02/12 10:33:59

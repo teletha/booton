@@ -15,7 +15,10 @@ import static teemowork.model.Version.*;
 import java.util.List;
 
 import js.util.ArrayList;
-import teemowork.model.VariableResolver.Diff;
+import teemowork.model.variable.Variable;
+import teemowork.model.variable.VariableHolder;
+import teemowork.model.variable.VariableResolver;
+import teemowork.model.variable.VariableResolver.Diff;
 
 /**
  * @version 2013/01/27 0:43:53

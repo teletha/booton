@@ -23,6 +23,27 @@ public class HashMap<K, V> implements Map<K, V> {
     private final HashSet<Entry<K, V>> items = new HashSet();
 
     /**
+     * <p>
+     * Constructs an empty HashMap with the default initial capacity.
+     * </p>
+     */
+    public HashMap() {
+    }
+
+    /**
+     * <p>
+     * Constructs a new HashMap with the same mappings as the specified Map. the specified Map.
+     * </p>
+     * 
+     * @param map A map whose mappings are to be placed in this map.
+     */
+    public HashMap(Map<? extends K, ? extends V> map) {
+        if (map != null) {
+            putAll(map);
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

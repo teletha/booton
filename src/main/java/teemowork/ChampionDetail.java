@@ -54,15 +54,15 @@ import teemowork.ChampionDetailStyle.Text;
 import teemowork.ChampionDetailStyle.Value;
 import teemowork.model.Build;
 import teemowork.model.Build.Computed;
+import teemowork.model.variable.Variable;
+import teemowork.model.variable.VariableHolder;
+import teemowork.model.variable.VariableResolver;
 import teemowork.model.Champion;
 import teemowork.model.Skill;
 import teemowork.model.SkillKey;
 import teemowork.model.SkillStatus;
 import teemowork.model.SkillType;
 import teemowork.model.Status;
-import teemowork.model.Variable;
-import teemowork.model.VariableHolder;
-import teemowork.model.VariableResolver;
 
 /**
  * @version 2013/01/10 2:36:58
