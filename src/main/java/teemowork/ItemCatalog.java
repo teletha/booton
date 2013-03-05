@@ -20,8 +20,8 @@ import js.util.jQuery;
 import teemowork.model.Item;
 import teemowork.model.ItemStatus;
 import teemowork.model.Status;
-import teemowork.model.Variable;
 import teemowork.model.Version;
+import teemowork.model.variable.Variable;
 import booton.css.CSS;
 import booton.util.Font;
 

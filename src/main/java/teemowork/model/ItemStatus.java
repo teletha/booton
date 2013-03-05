@@ -17,7 +17,9 @@ import java.util.Map;
 import js.lang.NativeArray;
 import js.util.ArrayList;
 import js.util.HashMap;
-import teemowork.model.VariableResolver.Diff;
+import teemowork.model.variable.VariableHolder;
+import teemowork.model.variable.VariableResolver;
+import teemowork.model.variable.VariableResolver.Diff;
 
 /**
  * @version 2013/01/29 1:55:25

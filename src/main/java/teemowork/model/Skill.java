@@ -12,15 +12,17 @@ package teemowork.model;
 import static teemowork.model.SkillKey.*;
 import static teemowork.model.Status.*;
 import static teemowork.model.Version.*;
-import teemowork.model.VariableResolver.Diff;
-import teemowork.model.VariableResolver.Fixed;
-import teemowork.model.VariableResolver.Per1Level;
-import teemowork.model.VariableResolver.Per3Level;
-import teemowork.model.VariableResolver.Per3LevelAdditional;
-import teemowork.model.VariableResolver.Per3LevelForKarma;
-import teemowork.model.VariableResolver.Per4Level;
-import teemowork.model.VariableResolver.Per5Level;
-import teemowork.model.VariableResolver.Per6Level;
+import teemowork.model.variable.VariableHolder;
+import teemowork.model.variable.VariableResolver;
+import teemowork.model.variable.VariableResolver.Diff;
+import teemowork.model.variable.VariableResolver.Fixed;
+import teemowork.model.variable.VariableResolver.Per1Level;
+import teemowork.model.variable.VariableResolver.Per3Level;
+import teemowork.model.variable.VariableResolver.Per3LevelAdditional;
+import teemowork.model.variable.VariableResolver.Per3LevelForKarma;
+import teemowork.model.variable.VariableResolver.Per4Level;
+import teemowork.model.variable.VariableResolver.Per5Level;
+import teemowork.model.variable.VariableResolver.Per6Level;
 
 /**
  * @version 2013/03/02 11:34:54

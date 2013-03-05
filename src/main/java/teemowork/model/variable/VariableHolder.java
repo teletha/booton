@@ -7,13 +7,15 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package teemowork.model;
+package teemowork.model.variable;
 
 import static teemowork.model.Status.*;
 
 import java.util.List;
 
 import js.util.ArrayList;
+import teemowork.model.Status;
+import teemowork.model.StatusCalculator;
 
 /**
  * @version 2013/02/13 1:35:47

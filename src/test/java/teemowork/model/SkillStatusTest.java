@@ -15,6 +15,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import teemowork.model.variable.Variable;
+
 /**
  * @version 2013/01/27 20:34:23
  */

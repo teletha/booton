@@ -14,6 +14,9 @@ import static teemowork.model.Status.*;
 import java.util.List;
 import java.util.Set;
 
+import teemowork.model.variable.Variable;
+import teemowork.model.variable.VariableResolver;
+
 import js.bind.Notifiable;
 import js.util.ArrayList;
 import js.util.HashSet;
@@ -361,7 +364,7 @@ public class Build extends Notifiable implements StatusCalculator {
 
             // from active
             if (skillActivation[i]) {
-                sum += sum(skill.getStatus(version).active, skill, status);
+                sum += sum(skillStatus.active, skill, status);
             }
         }
         return sum;
