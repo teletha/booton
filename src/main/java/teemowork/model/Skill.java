@@ -21,6 +21,7 @@ import teemowork.model.variable.VariableResolver.Per3Level;
 import teemowork.model.variable.VariableResolver.Per3LevelAdditional;
 import teemowork.model.variable.VariableResolver.Per3LevelForKarma;
 import teemowork.model.variable.VariableResolver.Per4Level;
+import teemowork.model.variable.VariableResolver.Per4LevelForTrundle;
 import teemowork.model.variable.VariableResolver.Per5Level;
 import teemowork.model.variable.VariableResolver.Per6Level;
 
@@ -3171,7 +3172,7 @@ public class Skill {
                 .cd(10, -1)
                 .range(770);
         GoldenAegis.update()
-                .active("5秒間{1}を付与すると同時に、{2}の敵ユニットに２秒間{3}を与える。シールドの耐久値は周囲にいる敵Championの数に比例して増加する。")
+                .active("5秒間{1}を付与すると同時に、{2}の敵ユニットに２秒間{3}を与える。")
                 .variable(1, Shield, 50, 40, amplify(EnemyChampion, 20, 5))
                 .variable(2, Radius, 600)
                 .variable(3, MSSlowRatio, 15, 5)
@@ -4733,19 +4734,34 @@ public class Skill {
         Crescendo.update().active("前方範囲の敵Championに魔法DMを与え、1.5秒間強制的に踊らせる(スタン)。").mana(100, 50).cd(140, -20).range(1000);
 
         /** Soraka */
-        Consecration.update().passive("周囲の味方Champion(範囲1000)のMRを16上昇させる。");
+        Consecration.update().passive("{1}の味方Championは{2}を得る。").variable(1, Radius, 1000).variable(2, MR, 16);
         Starcall.update()
-                .active("周囲の敵ユニットに魔法DMを与え、スタックを1つ増加させる。スタック1つにつきMRが低下する。スタックは5秒間持続し最大10まで増加する。")
+                .active("{1}の敵ユニットに{2}を与え、スタックを1つ増加させる。スタック1つにつき{3}を与える。スタックは5秒間持続し最大10まで増加する。")
+                .variable(1, Radius, 675)
+                .variable(2, MagicDamage, 60, 25, ap(0.4))
+                .variable(3, MRReduction, 8, 1)
                 .mana(20, 15)
-                .cd(2.5)
-                .range(675);
-        AstralBlessing.update().active("対象の味方ユニットのHPを回復し、3秒間ARを増加させる。").mana(80, 30).cd(20).range(750);
+                .cd(2.5);
+        AstralBlessing.update()
+                .active("対象の味方ユニットは{1}し、3秒間{2}を得る。")
+                .variable(1, RestoreHealth, 70, 70, ap(0.45))
+                .variable(2, AR, 25, 20)
+                .mana(80, 30)
+                .cd(20)
+                .range(750);
         Infuse.update()
-                .active("対象の味方Championに使用するとmanaを回復する。敵ユニットに使用すると魔法DMとサイレンスを与える。このスキルはSoraka自身を対象とすることが出来ない。")
+                .active("対象の味方Championに使用すると{1}する。敵ユニットに使用すると{2}と{3}を与える。このスキルはSoraka自身を対象とすることが出来ない。")
+                .variable(1, RestoreMana, 40, 40)
+                .variable(2, MagicDamage, 50, 50, ap(0.6))
+                .variable(3, Silence, 1.5, 0.25)
                 .mana(40, 40)
                 .cd(10)
                 .range(725);
-        Wish.update().active("味方Champion全員のHPを回復する。").mana(100, 75).cd(160, -15);
+        Wish.update()
+                .active("全ての味方Championは{1}する。")
+                .variable(1, RestoreHealth, 200, 120, ap(0.7))
+                .mana(100, 75)
+                .cd(160, -15);
 
         /** Swain */
         CarrionRenewal.update().passive("敵ユニットを倒す毎に{1}する。").variable(1, RestoreMana, 9, 0, amplify(Lv, 1));
@@ -4913,7 +4929,10 @@ public class Skill {
         BusterShot.update().active("対象の敵ユニットに魔法DMを与え、対象とその周囲(範囲200)の敵ユニットをノックバックさせる。").mana(100).cd(60).range(700);
 
         /** Trundle */
-        Decompose.update().passive("Trundleの範囲1000以内で敵ユニットが死んだとき、自身のHPを回復する。レベル1、5、9、12、15で回復する割合が上昇する。");
+        Decompose.update()
+                .passive("{1}以内で敵ユニットが死んだとき、{2}する。レベル1、5、9、12、15で回復する割合が上昇する。")
+                .variable(1, Radius, 1000)
+                .variable(2, RestoreHealth, 0, 0, amplify(Health, new Per4LevelForTrundle(0.02, 0.01)));
         RabidBite.update()
                 .active("次の通常攻撃のダメージが変更され、攻撃後自身の攻撃力が8秒間増加し、攻撃を受けたユニットの攻撃力をその半分だけ減少させる。建物には無効。")
                 .mana(30)

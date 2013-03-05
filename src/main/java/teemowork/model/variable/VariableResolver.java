@@ -160,6 +160,19 @@ public abstract class VariableResolver {
     /**
      * @version 2013/02/12 11:37:34
      */
+    public static class Per4LevelForTrundle extends PerLevel {
+
+        /**
+         * @param values
+         */
+        public Per4LevelForTrundle(double base, double diff) {
+            super(new int[] {1, 5, 9, 12, 15}, base, diff);
+        }
+    }
+
+    /**
+     * @version 2013/02/12 11:37:34
+     */
     public static class Per3Level extends PerLevel {
 
         /**

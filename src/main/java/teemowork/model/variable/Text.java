@@ -9,10 +9,14 @@
  */
 package teemowork.model.variable;
 
+import java.util.List;
 
 /**
  * @version 2013/03/05 14:15:36
  */
 public class Text {
 
+    public List getTokens() {
+        return null;
+    }
 }
