@@ -22,6 +22,9 @@ import teemowork.model.StatusCalculator;
  */
 public class VariableHolder implements Variable {
 
+    /** The variable identifier. */
+    public final int id;
+
     /** The variable type. */
     private Status status;
 
@@ -33,6 +36,22 @@ public class VariableHolder implements Variable {
 
     /** The amplifiers for this amplifier rate. */
     private List<VariableHolder> amplifiers = new ArrayList();
+
+    /**
+     * Without ID.
+     */
+    public VariableHolder() {
+        this(-1);
+    }
+
+    /**
+     * With ID.
+     * 
+     * @param id A variable identifier.
+     */
+    public VariableHolder(int id) {
+        this.id = id;
+    }
 
     /**
      * {@inheritDoc}
