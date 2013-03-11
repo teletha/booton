@@ -9,24 +9,30 @@
  */
 package teemowork.model.variable;
 
-import java.util.List;
-
-import js.util.ArrayList;
 import js.util.jQuery;
 
 /**
- * @version 2013/03/05 14:15:36
+ * @version 2013/03/08 11:18:11
  */
-public class Text implements HTMLizable {
-
-    /** The token list. */
-    private final List tokens = new ArrayList();
+public interface TokenWriter {
 
     /**
-     * {@inheritDoc}
+     * <p>
+     * Write string expression.
+     * </p>
+     * 
+     * @param root
+     * @param token
      */
-    @Override
-    public void toDOM(jQuery root) {
+    void write(jQuery root, String token);
 
-    }
+    /**
+     * <p>
+     * Write variable expression.
+     * </p>
+     * 
+     * @param root
+     * @param token
+     */
+    void write(jQuery root, Variable token);
 }
