@@ -54,15 +54,14 @@ import teemowork.ChampionDetailStyle.Text;
 import teemowork.ChampionDetailStyle.Value;
 import teemowork.model.Build;
 import teemowork.model.Build.Computed;
-import teemowork.model.variable.Variable;
-import teemowork.model.variable.VariableHolder;
-import teemowork.model.variable.VariableResolver;
 import teemowork.model.Champion;
 import teemowork.model.Skill;
 import teemowork.model.SkillKey;
 import teemowork.model.SkillStatus;
 import teemowork.model.SkillType;
 import teemowork.model.Status;
+import teemowork.model.variable.Variable;
+import teemowork.model.variable.VariableResolver;
 
 /**
  * @version 2013/01/10 2:36:58
@@ -331,10 +330,10 @@ public class ChampionDetail extends Page {
             // PASSIVE
             passive.empty();
 
-            if (!status.passive.isEmpty()) {
+            if (!status.getPassive().isEmpty()) {
                 passive.child(Passive.class).text("PASSIVE");
 
-                for (Object token : status.passive) {
+                for (Object token : status.getPassive()) {
                     if (token instanceof Variable) {
                         writeVariable(passive, (Variable) token, level);
                     } else {
@@ -352,7 +351,7 @@ public class ChampionDetail extends Page {
                 active.child(Passive.class).text(status.getType().name().toUpperCase());
             }
 
-            for (Object token : status.active) {
+            for (Object token : status.getActive()) {
                 if (token instanceof Variable) {
                     writeVariable(active, (Variable) token, level);
                 } else {
@@ -421,7 +420,7 @@ public class ChampionDetail extends Page {
         private void writeVariable(jQuery root, Variable variable, int level) {
             VariableResolver resolver = variable.getResolver();
             Status status = variable.getStatus();
-            List<VariableHolder> amplifiers = variable.getAmplifiers();
+            List<Variable> amplifiers = variable.getAmplifiers();
 
             if (!resolver.isSkillLevelBased()) {
                 level = resolver.convertLevel(build.getLevel());
@@ -462,7 +461,7 @@ public class ChampionDetail extends Page {
          * @param amplifiers A list of skill amplifiers.
          * @param level A current skill level.
          */
-        private void writeAmplifier(jQuery root, List<VariableHolder> amplifiers, int level) {
+        private void writeAmplifier(jQuery root, List<Variable> amplifiers, int level) {
             for (Variable amplifier : amplifiers) {
                 jQuery element = root.child(Amplifier.class);
                 element.append("+");

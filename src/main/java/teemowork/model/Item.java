@@ -16,7 +16,6 @@ import java.util.List;
 
 import js.util.ArrayList;
 import teemowork.model.variable.Variable;
-import teemowork.model.variable.VariableHolder;
 import teemowork.model.variable.VariableResolver;
 import teemowork.model.variable.VariableResolver.Diff;
 
@@ -617,7 +616,7 @@ public class Item {
      * @param base A base value of amplifier rate.
      * @return
      */
-    private static final VariableHolder amplify(Status status, double base) {
+    private static final Variable amplify(Status status, double base) {
         return amplify(status, base, 0);
     }
 
@@ -631,7 +630,7 @@ public class Item {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final VariableHolder amplify(Status status, double base, double diff) {
+    private static final Variable amplify(Status status, double base, double diff) {
         return amplify(status, new Diff(base, diff, 1));
     }
 
@@ -645,12 +644,8 @@ public class Item {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final VariableHolder amplify(Status status, VariableResolver resolver) {
-        VariableHolder amplifier = new VariableHolder();
-        amplifier.setStatus(status);
-        amplifier.setResolver(resolver);
-
-        return amplifier;
+    private static final Variable amplify(Status status, VariableResolver resolver) {
+        return new Variable(status, resolver);
     }
 
     /**
@@ -663,7 +658,7 @@ public class Item {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final Variable amplify(Status status, double base, double diff, VariableHolder amplifier) {
+    private static final Variable amplify(Status status, double base, double diff, Variable amplifier) {
         Variable one = amplify(status, base, diff);
         one.getAmplifiers().add(amplifier);
 

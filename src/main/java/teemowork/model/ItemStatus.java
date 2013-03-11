@@ -17,7 +17,7 @@ import java.util.Map;
 import js.lang.NativeArray;
 import js.util.ArrayList;
 import js.util.HashMap;
-import teemowork.model.variable.VariableHolder;
+import teemowork.model.variable.Variable;
 import teemowork.model.variable.VariableResolver;
 import teemowork.model.variable.VariableResolver.Diff;
 
@@ -30,7 +30,7 @@ public class ItemStatus {
     private NativeArray<Double> values;
 
     /** The variable store. */
-    private NativeArray<VariableHolder> variables;
+    private NativeArray<Variable> variables;
 
     /** The item build. */
     Item[] build;
@@ -67,10 +67,10 @@ public class ItemStatus {
                 tokens.add(token);
             } else {
                 int id = Integer.parseInt(token);
-                VariableHolder variable = variables.get(id);
+                Variable variable = variables.get(id);
 
                 if (variable == null) {
-                    variable = new VariableHolder();
+                    variable = new Variable();
                     variables.set(id, variable);
                 }
                 tokens.add(variable);
@@ -149,7 +149,7 @@ public class ItemStatus {
      * @param amplifier A first amplifier.
      * @return Chainable API.
      */
-    ItemStatus variable(int id, Status status, double base, double diff, VariableHolder amplifier) {
+    ItemStatus variable(int id, Status status, double base, double diff, Variable amplifier) {
         return variable(id, status, base, diff, amplifier, null);
     }
 
@@ -166,7 +166,7 @@ public class ItemStatus {
      * @param second A second amplifier.
      * @return Chainable API.
      */
-    ItemStatus variable(int id, Status status, double base, double diff, VariableHolder first, VariableHolder second) {
+    ItemStatus variable(int id, Status status, double base, double diff, Variable first, Variable second) {
         return variable(id, status, new Diff(base, diff, 0), first, second);
     }
 
@@ -182,18 +182,13 @@ public class ItemStatus {
      * @param second A second amplifier.
      * @return Chainable API.
      */
-    ItemStatus variable(int id, Status status, VariableResolver resolver, VariableHolder first, VariableHolder second) {
-        VariableHolder variable = variables.get(id);
-        variable.setStatus(status);
-        variable.setResolver(resolver);
+    ItemStatus variable(int id, Status status, VariableResolver resolver, Variable first, Variable second) {
+        Variable variable = new Variable(status, resolver);
+        variable.add(first);
+        variable.add(second);
 
-        if (first != null) {
-            variable.getAmplifiers().add(first);
-        }
+        variables.add(id, variable);
 
-        if (second != null) {
-            variable.getAmplifiers().add(second);
-        }
         return this;
     }
 

@@ -61,7 +61,7 @@ public class SkillStatusTest {
         SkillStatus skill = new SkillStatus(null, null);
         skill.active("Test");
 
-        List tokens = skill.active;
+        List tokens = skill.getActive();
         assert tokens.size() == 1;
         assert tokens.get(0).equals("Test");
     }
@@ -72,7 +72,7 @@ public class SkillStatusTest {
         skill.active("Test{1}");
         skill.variable(1, AD, 10, 10);
 
-        List tokens = skill.active;
+        List tokens = skill.getActive();
         assert tokens.size() == 2;
         assert tokens.get(0).equals("Test");
 
@@ -90,7 +90,7 @@ public class SkillStatusTest {
         skill.active("Test{1}");
         skill.variable(1, SV, 10, 10);
 
-        List tokens = skill.active;
+        List tokens = skill.getActive();
         assert tokens.size() == 2;
         assert tokens.get(0).equals("Test");
 

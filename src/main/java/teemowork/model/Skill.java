@@ -12,7 +12,7 @@ package teemowork.model;
 import static teemowork.model.SkillKey.*;
 import static teemowork.model.Status.*;
 import static teemowork.model.Version.*;
-import teemowork.model.variable.VariableHolder;
+import teemowork.model.variable.Variable;
 import teemowork.model.variable.VariableResolver;
 import teemowork.model.variable.VariableResolver.Diff;
 import teemowork.model.variable.VariableResolver.Fixed;
@@ -1883,7 +1883,7 @@ public class Skill {
      * @param rate An AD rate.
      * @return
      */
-    private static final VariableHolder ad(double rate) {
+    private static final Variable ad(double rate) {
         return amplify(AD, rate);
     }
 
@@ -1895,7 +1895,7 @@ public class Skill {
      * @param rate An AD rate.
      * @return
      */
-    private static final VariableHolder bounusAD(double rate) {
+    private static final Variable bounusAD(double rate) {
         return amplify(BounusAD, rate);
     }
 
@@ -1907,7 +1907,7 @@ public class Skill {
      * @param rate An AP rate.
      * @return
      */
-    private static final VariableHolder ap(double rate) {
+    private static final Variable ap(double rate) {
         return amplify(AP, rate);
     }
 
@@ -1920,7 +1920,7 @@ public class Skill {
      * @param base A base value of amplifier rate.
      * @return
      */
-    private static final VariableHolder amplify(Status status, double base) {
+    private static final Variable amplify(Status status, double base) {
         return amplify(status, base, 0);
     }
 
@@ -1934,7 +1934,7 @@ public class Skill {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final VariableHolder amplify(Status status, double base, double diff) {
+    private static final Variable amplify(Status status, double base, double diff) {
         return amplify(status, new Diff(base, diff, skill.getMaxLevel()));
     }
 
@@ -1948,12 +1948,8 @@ public class Skill {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final VariableHolder amplify(Status status, VariableResolver resolver) {
-        VariableHolder amplifier = new VariableHolder();
-        amplifier.setStatus(status);
-        amplifier.setResolver(resolver);
-
-        return amplifier;
+    private static final Variable amplify(Status status, VariableResolver resolver) {
+        return new Variable(status, resolver);
     }
 
     /**
@@ -1966,8 +1962,8 @@ public class Skill {
      * @param diff A diff value of amplifier rate.
      * @return
      */
-    private static final VariableHolder amplify(Status status, double base, double diff, VariableHolder amplifier) {
-        VariableHolder one = amplify(status, base, diff);
+    private static final Variable amplify(Status status, double base, double diff, Variable amplifier) {
+        Variable one = amplify(status, base, diff);
         one.getAmplifiers().add(amplifier);
 
         return one;
@@ -2117,7 +2113,9 @@ public class Skill {
                 .variable(1, MagicDamage, 150, 100, ap(0.8))
                 .variable(2, Radius, 600)
                 .mana(100, 50)
-                .cd(150, -20);
+                .cd(150, -20)
+                .update(P303)
+                .variable(2, Radius, 550);
 
         Rebirth.update()
                 .passive("死亡時に卵になり6秒かけて復活する。復活中は{1}及び{2}を得る。復活中にHPが0になった場合は死亡する。レベル1、5、8、12、15で増加AR/MRが上昇する。")
@@ -2502,7 +2500,10 @@ public class Skill {
                 .variable(3, CDDecrease)
                 .mana(100)
                 .cd(100, -10)
-                .range(475);
+                .range(475)
+                .update(P303)
+                .active("対象の敵Championに跳躍し、{1}を与える。対象の出血スタック数1個につき、このスキルのダメージが20%増加する(最大でダメージ2倍)。このスキルで敵Championのキルを取った場合、12秒間再使用することが出来る。この効果は複数回起こりえる。")
+                .cd(120, -20);
 
         /** Diana */
         MoonsilverBlade.update()
@@ -2912,7 +2913,9 @@ public class Skill {
         /** Garen */
         Perseverance.update()
                 .passive("9秒間敵Minion以外からダメージを受けない状態が続くと、以降敵Minion以外からダメージを受けるまで毎秒{1}し続ける。")
-                .variable(1, RestoreHealth, 0, 0, amplify(Health, 0.005));
+                .variable(1, RestoreHealth, 0, 0, amplify(Health, 0.005))
+                .update(P303)
+                .variable(1, RestoreHealth, 0, 0, amplify(Health, 0.004));
         DecisiveStrike.update()
                 .active("{1}間{2}し、スキル使用後6秒間に行った次の通常攻撃に追加{3}と{4}が付与される。またこのスキル使用時に自身にかかっているスローを解除する。")
                 .variable(1, Time, 1.5, 0.75)
@@ -2922,13 +2925,16 @@ public class Skill {
                 .cd(8);
         Courage.update()
                 .passive("{1}し{2}する。")
-                .variable(1, ARRatio, 20)
-                .variable(2, MRRatio, 20)
+                .variable(1, AR, 0, 0, amplify(AR, 0.2))
+                .variable(2, MR, 0, 0, amplify(MR, 0.2))
                 .active("{3}間{4}し、{5}を得る。")
                 .variable(3, Time, 2, 1)
                 .variable(4, DamageReductionRatio, 30)
                 .variable(5, Tenacity, 30)
-                .cd(24, -1);
+                .cd(24, -1)
+                .update(P303)
+                .variable(1, AR, 0, 0, amplify(AR, 1))
+                .variable(2, MR, 0, 0, amplify(BounusMR, 0.2));
         Judgment.update()
                 .active("Garenが3秒間回転し、その間近くの敵ユニットに0.5秒毎に{1}を与える(最大6hit)。このスキルにはクリティカル判定があり、クリティカル時は追加{2}を与える。回転中は{3}を得るが、敵Minionをすり抜けている間は移動速度が20%低下する。Minionに与えるダメージは通常の75%。")
                 .variable(1, PhysicalDamage, 10, 12.5, ad(0.35))

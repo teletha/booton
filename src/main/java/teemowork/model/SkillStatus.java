@@ -18,7 +18,6 @@ import js.lang.NativeArray;
 import js.util.ArrayList;
 import js.util.HashMap;
 import teemowork.model.variable.Variable;
-import teemowork.model.variable.VariableHolder;
 import teemowork.model.variable.VariableResolver;
 import teemowork.model.variable.VariableResolver.Diff;
 
@@ -38,25 +37,25 @@ public class SkillStatus {
     private NativeArray<Double> values;
 
     /** The variable store. */
-    private Map<Integer, VariableHolder> variables;
+    private Map<String, Variable> variables;
 
     /** The skill range. */
-    private VariableHolder range;
+    private Variable range;
 
     /** The skill cost. */
-    private VariableHolder cost;
+    private Variable cost;
 
     /** The skill cooldown. */
-    private VariableHolder cooldown;
+    private Variable cooldown;
 
     /** The skill type. */
     private SkillType type;
 
     /** The skill description. */
-    public final List passive;
+    private List passive;
 
     /** The skill description. */
-    public final List active;
+    private List active;
 
     /**
      * @param name
@@ -85,6 +84,32 @@ public class SkillStatus {
         }
     }
 
+    public List getPassive() {
+        List tokens = new ArrayList();
+
+        for (Object token : passive) {
+            if (token instanceof VariableReference) {
+                tokens.add(variables.get(token.toString()));
+            } else {
+                tokens.add(token);
+            }
+        }
+        return tokens;
+    }
+
+    public List getActive() {
+        List tokens = new ArrayList();
+
+        for (Object token : active) {
+            if (token instanceof VariableReference) {
+                tokens.add(variables.get(token.toString()));
+            } else {
+                tokens.add(token);
+            }
+        }
+        return tokens;
+    }
+
     /**
      * <p>
      * Retrieve the value which is associated with the specified key.
@@ -109,7 +134,7 @@ public class SkillStatus {
      * @param key
      * @param value
      */
-    private void put(int key, VariableHolder value) {
+    private void put(int key, Variable value) {
         if (initializable) {
             // create new map to disconnect reference from parent
             variables = new HashMap();
@@ -119,7 +144,7 @@ public class SkillStatus {
                 variables.putAll(previous.variables);
             }
         }
-        variables.put(key, value);
+        // variables.put(key, value);
     }
 
     /**
@@ -168,6 +193,7 @@ public class SkillStatus {
      * </p>
      */
     SkillStatus passive(String text) {
+        passive = new ArrayList();
         return parse(passive, text);
     }
 
@@ -180,6 +206,7 @@ public class SkillStatus {
      * @return
      */
     SkillStatus active(String text) {
+        active = new ArrayList();
         return parse(active, text);
     }
 
@@ -199,14 +226,7 @@ public class SkillStatus {
             if (token.length() != 1 || !Character.isDigit(token.charAt(0))) {
                 tokens.add(token);
             } else {
-                int id = Integer.parseInt(token);
-                VariableHolder variable = variables.get(id);
-
-                if (variable == null) {
-                    variable = new VariableHolder();
-                    variables.put(id, variable);
-                }
-                tokens.add(variable);
+                tokens.add(new VariableReference(token));
             }
         }
         return this;
@@ -280,7 +300,7 @@ public class SkillStatus {
      * @param amplifier A first amplifier.
      * @return Chainable API.
      */
-    SkillStatus variable(int id, Status status, double base, double diff, VariableHolder amplifier) {
+    SkillStatus variable(int id, Status status, double base, double diff, Variable amplifier) {
         return variable(id, status, base, diff, amplifier, null);
     }
 
@@ -297,7 +317,7 @@ public class SkillStatus {
      * @param second A second amplifier.
      * @return Chainable API.
      */
-    SkillStatus variable(int id, Status status, double base, double diff, VariableHolder first, VariableHolder second) {
+    SkillStatus variable(int id, Status status, double base, double diff, Variable first, Variable second) {
         return variable(id, status, new Diff(base, diff, skill.getMaxLevel()), first, second);
     }
 
@@ -313,19 +333,21 @@ public class SkillStatus {
      * @param second A second amplifier.
      * @return Chainable API.
      */
-    SkillStatus variable(int id, Status status, VariableResolver resolver, VariableHolder first, VariableHolder second) {
-        VariableHolder variable = variables.get(id);
-        variable.getAmplifiers().clear();
-        variable.setStatus(status);
-        variable.setResolver(resolver);
+    SkillStatus variable(int id, Status status, VariableResolver resolver, Variable first, Variable second) {
+        Variable variable = new Variable(status, resolver);
+        variable.add(first);
+        variable.add(second);
 
-        if (first != null) {
-            variable.getAmplifiers().add(first);
-        }
+        if (initializable) {
+            initializable = false;
+            variables = new HashMap();
 
-        if (second != null) {
-            variable.getAmplifiers().add(second);
+            if (previous != null) {
+                variables.putAll(previous.variables);
+            }
         }
+        variables.put(String.valueOf(id), variable);
+
         return this;
     }
 
@@ -350,9 +372,7 @@ public class SkillStatus {
      * @param diff A diff time.
      */
     SkillStatus cd(double base, double diff) {
-        cooldown = new VariableHolder();
-        cooldown.setResolver(new Diff(base, diff, skill.getMaxLevel()));
-        cooldown.setStatus(CD);
+        cooldown = new Variable(CD, new Diff(base, diff, skill.getMaxLevel()));
 
         return this;
     }
@@ -401,14 +421,9 @@ public class SkillStatus {
      * @param base A base cost.
      * @param diff A diff cost.
      */
-    SkillStatus cost(Status type, VariableResolver resolver, VariableHolder amplifier) {
-        cost = new VariableHolder();
-        cost.setStatus(type);
-        cost.setResolver(resolver);
+    SkillStatus cost(Status type, VariableResolver resolver, Variable amplifier) {
+        cost = new Variable(type, resolver, amplifier);
 
-        if (amplifier != null) {
-            cost.getAmplifiers().add(amplifier);
-        }
         return this;
     }
 
@@ -430,8 +445,8 @@ public class SkillStatus {
      * 
      * @return
      */
-    public Variable getRange() {
-        return range;
+    public Variable getCooldown() {
+        return cooldown;
     }
 
     /**
@@ -441,8 +456,8 @@ public class SkillStatus {
      * 
      * @return
      */
-    public Variable getCooldown() {
-        return cooldown;
+    public Variable getRange() {
+        return range;
     }
 
     /**
@@ -464,9 +479,7 @@ public class SkillStatus {
      * @param range
      */
     SkillStatus range(double base, double diff) {
-        range = new VariableHolder();
-        range.setResolver(new Diff(base, diff, skill.getMaxLevel()));
-        range.setStatus(Range);
+        range = new Variable(Range, new Diff(base, diff, skill.getMaxLevel()));
 
         return this;
     }
@@ -502,11 +515,35 @@ public class SkillStatus {
      * @param id A variable identifier.
      */
     SkillStatus conditional(int id) {
-        VariableHolder variable = variables.get(id);
+        Variable variable = variables.get(id);
 
         if (variable != null) {
             variable.setConditional();
         }
         return this;
+    }
+
+    /**
+     * @version 2013/03/11 18:58:42
+     */
+    private static class VariableReference {
+
+        /** The variable name. */
+        private final String name;
+
+        /**
+         * @param name
+         */
+        private VariableReference(String name) {
+            this.name = name;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return name;
+        }
     }
 }
