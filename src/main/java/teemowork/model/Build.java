@@ -14,12 +14,11 @@ import static teemowork.model.Status.*;
 import java.util.List;
 import java.util.Set;
 
-import teemowork.model.variable.Variable;
-import teemowork.model.variable.VariableResolver;
-
 import js.bind.Notifiable;
 import js.util.ArrayList;
 import js.util.HashSet;
+import teemowork.model.variable.Variable;
+import teemowork.model.variable.VariableResolver;
 
 /**
  * @version 2013/01/25 14:31:39
@@ -30,7 +29,7 @@ public class Build extends Notifiable implements StatusCalculator {
     public Champion champion;
 
     /** The version. */
-    private Version version = Version.P0000;
+    private Version version = Version.Latest;
 
     /** The level. */
     private int level = 1;
@@ -82,9 +81,9 @@ public class Build extends Notifiable implements StatusCalculator {
         }
 
         // items[0] = Item.LastWhisper;
-        // items[1] = Item.WarmogsArmor;
+        items[1] = Item.WarmogsArmor;
         items[2] = Item.DeathfireGrasp;
-        items[3] = Item.MercurysTreads;
+        items[3] = Item.ClothArmor;
     }
 
     /**
@@ -171,6 +170,12 @@ public class Build extends Notifiable implements StatusCalculator {
 
         case BounusAD:
             return new Computed(0, get(AD).increased, status);
+
+        case BounusAR:
+            return new Computed(0, get(AR).increased, status);
+
+        case BounusMR:
+            return new Computed(0, get(MR).increased, status);
 
         case BounusHealth:
             return new Computed(0, get(Health).increased, status);
@@ -360,11 +365,11 @@ public class Build extends Notifiable implements StatusCalculator {
             SkillStatus skillStatus = skill.getStatus(version);
 
             // form passive
-            sum += sum(skillStatus.passive, skill, status);
+            sum += sum(skillStatus.getPassive(), skill, status);
 
             // from active
             if (skillActivation[i]) {
-                sum += sum(skillStatus.active, skill, status);
+                sum += sum(skillStatus.getActive(), skill, status);
             }
         }
         return sum;
@@ -381,6 +386,10 @@ public class Build extends Notifiable implements StatusCalculator {
      * @return A computed value.
      */
     private double sum(List tokens, Skill skill, Status status) {
+        if (skill == Skill.CrimsonPact) {
+            return 0;
+        }
+
         double sum = 0;
 
         for (Object token : tokens) {
@@ -393,6 +402,9 @@ public class Build extends Notifiable implements StatusCalculator {
                     int level = resolver.isSkillLevelBased() ? getLevel(skill) : resolver.convertLevel(this.level);
 
                     if (level != 0) {
+                        if (status == AP) {
+                            System.out.println(skill.name + "   " + variable.getStatus().name);
+                        }
                         sum = variableStatus.compute(sum, calculateVariable(skill, variable, level));
                     }
                 }
@@ -442,7 +454,7 @@ public class Build extends Notifiable implements StatusCalculator {
         if (0 < level) {
             SkillStatus skillStatus = skill.getStatus(version);
 
-            for (Object token : skillStatus.active) {
+            for (Object token : skillStatus.getActive()) {
                 if (token instanceof Variable) {
                     Variable variable = (Variable) token;
 

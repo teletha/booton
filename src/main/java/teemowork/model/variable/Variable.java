@@ -9,45 +9,118 @@
  */
 package teemowork.model.variable;
 
-import java.util.List;
+import static teemowork.model.Status.*;
 
+import java.util.List;
+import java.util.Set;
+
+import js.util.ArrayList;
+import js.util.HashSet;
 import teemowork.model.Status;
 import teemowork.model.StatusCalculator;
 
 /**
- * @version 2013/03/03 9:37:52
+ * @version 2013/03/11 18:38:36
  */
-public interface Variable {
+public class Variable {
+
+    /** The variable type. */
+    private Status status;
+
+    /** The value enumerator. */
+    private VariableResolver resolver;
+
+    /** The condtional variable flag. */
+    private boolean conditional = false;
+
+    /** The amplifiers for this amplifier rate. */
+    private List<Variable> amplifiers = new ArrayList();
 
     /**
-     * Get the status property of this {@link VariableHolder}.
+     * Without ID.
+     */
+    public Variable() {
+    }
+
+    /**
+     * @param status
+     * @param resolver
+     */
+    public Variable(Status status, VariableResolver resolver) {
+        this.status = status;
+        this.resolver = resolver;
+    }
+
+    /**
+     * @param status
+     * @param resolver
+     */
+    public Variable(Status status, VariableResolver resolver, Variable amplifier) {
+        this.status = status;
+        this.resolver = resolver;
+
+        if (amplifier != null) {
+            amplifiers.add(amplifier);
+        }
+    }
+
+    /**
+     * Get the status property of this {@link Variable}.
      * 
      * @return The status property.
      */
-    Status getStatus();
+    public Status getStatus() {
+        return status;
+    }
 
     /**
-     * Get the resolver property of this {@link VariableHolder}.
+     * Set the status property of this {@link Variable}.
+     * 
+     * @param status The status value to set.
+     */
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    /**
+     * Get the resolver property of this {@link Variable}.
      * 
      * @return The resolver property.
      */
-    VariableResolver getResolver();
+    public VariableResolver getResolver() {
+        return resolver;
+    }
 
     /**
-     * Get the amplifiers property of this {@link VariableHolder}.
+     * Set the resolver property of this {@link Variable}.
      * 
-     * @return The amplifiers property.
+     * @param resolver The resolver value to set.
      */
-    List<VariableHolder> getAmplifiers();
+    public void setResolver(VariableResolver resolver) {
+        this.resolver = resolver;
+    }
 
     /**
      * <p>
-     * Get the conditional property of this {@link VariableHolder}.
+     * Get the conditional property of this {@link Variable}.
      * </p>
      * 
      * @return
      */
-    boolean isConditional();
+    public boolean isConditional() {
+        return conditional;
+    }
+
+    /**
+     * <p>
+     * Set the conditional property of this {@link Variable}.
+     * </p>
+     */
+    public void setConditional() {
+        this.conditional = true;
+    }
+
+    private Set set = new HashSet();
 
     /**
      * <p>
@@ -58,6 +131,37 @@ public interface Variable {
      * @param calculator A status calculator.
      * @return A calculated value.
      */
-    double calculate(int level, StatusCalculator calculator);
+    public double calculate(int level, StatusCalculator calculator) {
+        if (!set.add(calculator)) {
+            return 0;
+        }
 
+        double value = resolver.compute(level);
+
+        for (Variable amplifier : amplifiers) {
+            value += amplifier.calculate(level, calculator) * calculator.calculate(amplifier.getStatus());
+        }
+
+        if (status == CD || status == CDRAwareTime) {
+            value = value * (1 - calculator.calculate(CDR) / 100);
+        }
+
+        set.remove(calculator);
+        return value;
+    }
+
+    /**
+     * Get the amplifiers property of this {@link Variable}.
+     * 
+     * @return The amplifiers property.
+     */
+    public List<Variable> getAmplifiers() {
+        return amplifiers;
+    }
+
+    public void add(Variable amplifier) {
+        if (amplifier != null) {
+            amplifiers.add(amplifier);
+        }
+    }
 }

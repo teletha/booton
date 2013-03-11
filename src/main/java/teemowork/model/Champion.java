@@ -579,6 +579,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 600)
                 .set(MS, 325);
+        Ashe.update(P303).set(AS, 0.658, 4);
         Blitzcrank.update(P0000)
                 .set(Health, 423, 95)
                 .set(Hreg, 7.25, 0.75)
@@ -1712,7 +1713,6 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 575)
                 .set(MS, 325);
-
         Thresh.update(P0000)
                 .set(Health, 452, 92)
                 .set(Hreg, 9, 0.85)
