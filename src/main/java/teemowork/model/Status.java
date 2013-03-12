@@ -100,8 +100,10 @@ public enum Status {
     MissingManaPercentage("Mana損耗率"),
 
     // ==================================================
-    // Target Mana Reference
+    // Target Mana Related Reference
     // ==================================================
+    TargetAP("対象のAP"),
+
     TargetManaRatio("対象の最大Mana"),
 
     TargetCurrentManaRatio("対象の現在のMana"),
@@ -432,6 +434,7 @@ public enum Status {
         case Suppression:
         case CDRAwareTime:
         case CDDecrease:
+        case Stealth:
             return "秒";
 
         case CDR:
