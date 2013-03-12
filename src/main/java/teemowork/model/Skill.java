@@ -4543,62 +4543,100 @@ public class Skill {
                 .range(1750);
 
         /** Sejuani */
-        Frost.update().passive("通常攻撃にFrostを付与する。Frost状態の敵ユニットはスロー(10%、3s)を受ける。");
+        Frost.update().passive("通常攻撃にFrostを付与する。Frost状態の敵ユニットは3秒間{1}になる。").variable(1, MSSlowRatio, 30);
         ArcticAssault.update()
-                .active("指定方向に突進し、接触した全ての敵ユニットに魔法DMとFrostを与え、対象がMinionの場合は更にノックバックさせる。敵Championに当たるか最大距離だけ移動すると突進は止まる。")
+                .active("指定方向に突進し、接触した全ての敵ユニットに{1}とFrostを与え、対象がMinionの場合は更に{2}させる。敵Championに当たるか最大距離だけ移動すると突進は止まる。")
+                .variable(1, MagicDamage, 60, 30, ap(0.4))
+                .variable(2, Knockback)
                 .mana(70, 5)
                 .cd(19, -2)
                 .range(700);
         NorthernWinds.update()
-                .active("6秒間極寒の嵐を周囲に召還し、周囲の敵ユニットに毎秒魔法DMを与える。魔法DMは敵ユニットがFrostまたはPermafrostの時には50%増加する。")
+                .active("6秒間極寒の嵐を周囲に召還し、{1}の敵ユニットに毎秒{2}を与える。魔法DMは敵ユニットがFrostまたはPermafrostの時には50%増加する。")
+                .variable(1, Radius, 350)
+                .variable(2, MagicDamage, 12, 6, ap(0.1), amplify(Health, 0.01, 0.0025))
                 .mana(40)
                 .cd(10);
         Permafrost.update()
-                .active("周囲の敵ユニットのFrostをPermafrostにし、魔法DMを与える。Permafrost状態の敵ユニットは強力なスロー(3s)を受ける。")
+                .active("{0}の敵ユニットのFrostをPermafrostにし、{1}を与える。Permafrost状態の敵ユニットは3秒間{2}を受ける。")
+                .variable(0, Radius, 1000)
+                .variable(1, MagicDamage, 60, 50, ap(0.5))
+                .variable(2, MSSlowRatio, 30, 10)
                 .mana(55)
                 .cd(11);
         GlacialPrison.update()
-                .active("指定方向に武器を投げ、最大距離飛ぶか敵Championに命中するとその場で氷が爆発し、周囲の敵ユニットに魔法DMとスタン(1s)を与え、Frostにする。武器が直撃した敵Championはスタン効果時間が2sになる。")
+                .active("指定方向に武器を投げ、最大距離飛ぶか敵Championに命中するとその場で氷が爆発し、{1}の敵ユニットに{2}と{3}を与え、Frostにする。武器が直撃した敵Championには{4}を与える。")
+                .variable(1, Radius, 450)
+                .variable(2, MagicDamage, 150, 100, ap(0.8))
+                .variable(3, Stun, 1)
+                .variable(4, Stun, 2)
                 .mana(100)
                 .cd(130, -15)
                 .range(1150);
 
         /** Shaco */
-        Backstab.update().passive("対象の背後から攻撃した場合にダメージが20%増加する。");
+        Backstab.update().passive("対象の背後から攻撃した場合に{1}する。").variable(1, DamageRatio, 20);
         Deceive.update()
-                .active("指定地点にテレポートし、その後3.5秒間ステルス状態になる。また、スキル使用後6秒以内に通常攻撃を行うと必ずクリティカルになる。その際のクリティカルダメージはレベル毎に変化する。")
+                .active("指定地点にテレポートし、{1}になる。また、スキル使用後6秒以内に通常攻撃を行うと必ずクリティカルになる。その際のクリティカルダメージは{2}になる。")
+                .variable(1, Stealth, 3.5)
+                .variable(2, Percentage, 140, 20)
+                .cd(11)
                 .mana(90, -10)
                 .range(400);
         JackInTheBox.update()
-                .active("指定地点に60秒持続する人形を設置する。人形は設置後2秒でステルス状態となり、敵ユニットがステルス状態の人形から範囲300以内に近づくと、人形のステルスが解除されると同時に近くの敵ユニットにFearを与え、5秒間通常攻撃を行った後に破壊される。")
+                .active("指定地点に60秒持続する人形を設置する。人形は設置後2秒で{1}となり、敵ユニットがステルス状態の人形から範囲300以内に近づくと、人形のステルスが解除されると同時に近くの敵ユニットに{2}を与え、5秒間通常攻撃({3})を行った後に破壊される。")
+                .variable(1, Stealth)
+                .variable(2, Fear, 0.5, 0.25)
+                .variable(3, MagicDamage, 35, 15, ap(0.2))
                 .mana(60)
                 .cd(16)
                 .range(425);
         TwoShivPoison.update()
-                .passive("通常攻撃時にスロー(2s)を与える。対象がChampion以外の場合、更に命中率低下(値はスローと同じ)を与える。命中率低下を受けたユニットは一定確率で通常攻撃が外れる(ブラインドと同じ)。スロー,命中率低下: 10/15/20/25/30%")
-                .active("対象の敵ユニットに魔法DMとスロー(Passiveと同じ効果、3s)を与える。効果後はCDが解消されるまでPassiveの効果が無くなる。")
+                .passive("通常攻撃に2秒間の{1}を付与する。対象がChampion以外の場合、更に命中率低下(値はスローと同じ)を与える。命中率低下を受けたユニットは一定確率で通常攻撃が外れる(ブラインドと同じ)。")
+                .variable(1, MSSlowRatio, 10, 5)
+                .active("対象の敵ユニットに{2}と3秒間{1}を与える。効果後はCDが解消されるまでPassiveの効果が無くなる。")
+                .variable(2, MagicDamage, 50, 40, ap(1), bounusAD(1))
                 .mana(50, 5)
                 .cd(8)
                 .range(625);
         Hallucinate.update()
-                .active("18秒間持続する自身のイリュージョン(敵からの見た目は本体と同じ)を作成する。(RまたはALT押しながらクリックで任意の操作可能)イリュージョンは本体の75%の攻撃力を持ち、150%のダメージを受ける。また本体の一部アイテムの効果を引き継ぐ。イリュージョン死亡または効果時間終了時に爆発し、近くの敵ユニットに魔法DMを与える。イリュージョンが塔に与えるダメージは半分。このスキルを使用してもステルスは解除されない。")
+                .active("18秒間持続する自身のイリュージョン(敵からの見た目は本体と同じ)を作成する。(RまたはALT押しながらクリックで任意の操作可能)イリュージョンは本体の75%の攻撃力を持ち、150%のダメージを受ける。また本体の一部アイテムの効果を引き継ぐ。イリュージョン死亡または効果時間終了時に爆発し、{1}の敵ユニットに{2}を与える。イリュージョンが塔に与えるダメージは半分。このスキルを使用してもステルスは解除されない。")
+                .variable(1, Radius, 250)
+                .variable(2, MagicDamage, 300, 150, ap(1))
                 .mana(100)
                 .cd(100, -10);
 
         /** Shen */
         KiStrike.update()
-                .passive("9秒に1度通常攻撃に「気」回復効果と追加魔法DMが付与される。このスキルはShenが通常攻撃を行う度にCDが1秒解消される。CD解消は建物を攻撃した場合は発生しない。LV1/7/13で「気」回復量が増加する。")
-                .cd(9);
+                .passive("9秒に1度通常攻撃に追加{1}が付与され、{2}する。このスキルはShenが通常攻撃を行う度にCDが1秒解消される。CD解消は建物を攻撃した場合は発生しない。LV1/7/13で「気」回復量が増加する。")
+                .variable(1, MagicDamage, 4, 0, amplify(Lv, 4), amplify(BounusHealth, 0.1))
+                .variable(2, RestoreEnergy, new Per6Level(10, 10));
         VorpalBlade.update()
-                .active("対象の敵ユニットに魔法DMと5秒間持続するDebuffを与える。Debuffが付与された対象に通常攻撃またはダメージスペルで攻撃をすると、攻撃した味方ChampionのHPが3秒かけて回復する。このスキルでLHを取った場合、回復HPの33%の回復効果を得る。")
+                .active("対象の敵ユニットに{1}と5秒間持続するDebuffを与える。Debuffが付与された対象に通常攻撃またはダメージスペルで攻撃をすると、攻撃した味方Championは3秒かけて{2}する。このスキルでLHを取った場合、{3}する。")
+                .variable(1, MagicDamage, 60, 40, ap(0.6))
+                .variable(2, RestoreHealth, 6, 4, amplify(Health, 0.015))
+                .variable(3, RestoreHealth, 2, 1.3, amplify(Health, 0.005))
                 .cd(6, -0.5)
+                .cost(Energy, 60, 0)
                 .range(475);
-        Feint.update().active("3秒間DMを軽減するシールドを自身に付与する。シールドが持続している間はKi StrikeのCD解消効果が1秒から2秒になる。").cd(9, -1);
+        Feint.update()
+                .active("3秒間{1}を得る。シールドが持続している間はKi StrikeのCD解消効果が1秒から2秒になる。")
+                .variable(1, Shield, 70, 45, ap(0.6))
+                .cd(9, -1)
+                .cost(Energy, 50, 0);
         ShadowDash.update()
-                .active("指定地点まで素早く移動し接触した敵Championに魔法DMとTaunt(1.5s)を与える。ShenはTaunt効果中の対象から受ける通常攻撃のダメージを半減する。またこのスキルが敵Championに命中する度に「気」が40回復する。")
+                .active("指定地点まで素早く移動し接触した敵Championに{1}と{2}を与える。ShenはTaunt効果中の対象から受ける通常攻撃のダメージを半減する。またこのスキルが敵Championに命中する度に{3}する。")
+                .variable(1, MagicDamage, 50, 35, ap(0.5))
+                .variable(2, Taunt, 1.5)
+                .variable(3, RestoreEnergy, 40)
                 .cd(16, -2)
+                .cost(Energy, 120, 0)
                 .range(600);
-        StandUnited.update().active("MAP内の味方Championを指定し対象に5秒間持続するシールドを付与する。その後3秒詠唱しそこまでワープする。").cd(200, -20);
+        StandUnited.update()
+                .active("対象の味方Championに5秒間{1}を付与し、3秒詠唱後そこまでワープする。")
+                .variable(1, Shield, 250, 300, ap(1.5))
+                .cd(200, -20)
+                .range(-1);
 
         /** Shyvana */
         FuryOftheDragonborn.update()

@@ -490,7 +490,7 @@ public class ChampionDetail extends Page {
                 int size = resolver.estimateSize();
 
                 for (int i = 1; i <= size; i++) {
-                    jQuery value = element.child(Value.class).text(Mathematics.round(amplifier.calculate(i, build), 3));
+                    jQuery value = element.child(Value.class).text(Mathematics.round(amplifier.calculate(i, build), 4));
 
                     if (size != 1 && i == level) {
                         value.addClass(Current.class);
