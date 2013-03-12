@@ -211,7 +211,7 @@ public class Champion {
     public static final Champion Nidalee = new Champion("Nidalee", Prowl, JavelinToss, Bushwhack, PrimalSurge, AspectOfTheCougar);
 
     /** The champion name. */
-    public static final Champion NidaleeCougar = new Champion("Nidalee", true, Prowl, Takedown, Pounce, Swipe, AspectOfTheCougar);
+    public static final Champion NidaleeCougar = new Champion("Nidalee", true, Prowl, Takedown, Pounce, Swipe, AspectOfTheCougarInCougar);
 
     /** The champion name. */
     public static final Champion Nocturne = new Champion("Nocturne", UmbraBlades, Duskbringer, ShroudOfDarkness, UnspeakableHorror, Paranoia);
@@ -959,6 +959,7 @@ public class Champion {
                 .set(MR, 30, 0.75)
                 .set(Range, 125)
                 .set(MS, 335);
+        Kayle.update(P303).set(MR, 30, 0);
         Kennen.update(P0000)
                 .set(Health, 403, 79)
                 .set(Hreg, 4.65, 0.65)
@@ -1163,9 +1164,10 @@ public class Champion {
                 .set(AD, 49, 3.5)
                 .set(AS, 0.672, 3.22)
                 .set(AR, 11, 3.5)
-                .set(MR, 30, 10.75)
+                .set(MR, 30, 0.75)
                 .set(Range, 525)
                 .set(MS, 335);
+        Nidalee.update(P303).set(MR, 30, 0);
         NidaleeCougar.update(P0000)
                 .set(Health, 370, 90)
                 .set(Hreg, 5.0, 0.6)
@@ -1174,9 +1176,10 @@ public class Champion {
                 .set(AD, 49, 3.5)
                 .set(AS, 0.672, 3.22)
                 .set(AR, 11, 3.5)
-                .set(MR, 30, 10.75)
+                .set(MR, 30, 0.75)
                 .set(Range, 125)
                 .set(MS, 335);
+        NidaleeCougar.update(P303).set(MR, 30, 0);
         Nocturne.update(P0000)
                 .set(Health, 430, 85)
                 .set(Hreg, 7, 0.75)
@@ -1453,6 +1456,7 @@ public class Champion {
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
                 .set(MS, 340);
+        Taric.update(P303).set(AD, 53, 3.5);
         Teemo.update(P0000)
                 .set(Health, 383, 82)
                 .set(Hreg, 4.65, 0.65)
@@ -1475,6 +1479,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 325);
+        Tristana.update(P303).set(AS, 0.658, 4);
         Trundle.update(P0000)
                 .set(Health, 455, 96)
                 .set(Hreg, 8, 0.85)
@@ -1561,6 +1566,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 330);
+        Vayne.update(P303).set(Mana, 173, 35).set(AS, 0.658, 4);
         Veigar.update(P0000)
                 .set(Health, 355, 82)
                 .set(Hreg, 4.5, 0.55)
@@ -1583,6 +1589,7 @@ public class Champion {
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
                 .set(MS, 350);
+        Vi.update(P303).set(AD, 51, 3.5);
         Viktor.update(P0000)
                 .set(Health, 385, 78)
                 .set(Hreg, 6.75, 0.65)

@@ -67,9 +67,6 @@ public class Build extends Notifiable implements StatusCalculator {
     /** The first cache for computed value. */
     private List<Computed> cache = new ArrayList(Status.values().length);
 
-    /** The circular dependency manager. */
-    private final Set<Skill> dependencies = new HashSet();
-
     /**
      * @param champion
      */
@@ -80,10 +77,10 @@ public class Build extends Notifiable implements StatusCalculator {
             skillLevel[i] = champion.skills[i].getMinLevel();
         }
 
-        // items[0] = Item.LastWhisper;
-        items[1] = Item.WarmogsArmor;
+        items[0] = Item.LastWhisper;
+        // items[1] = Item.WarmogsArmor;
         items[2] = Item.DeathfireGrasp;
-        items[3] = Item.ClothArmor;
+        // items[3] = Item.ClothArmor;
     }
 
     /**
@@ -386,10 +383,6 @@ public class Build extends Notifiable implements StatusCalculator {
      * @return A computed value.
      */
     private double sum(List tokens, Skill skill, Status status) {
-        if (skill == Skill.CrimsonPact) {
-            return 0;
-        }
-
         double sum = 0;
 
         for (Object token : tokens) {
@@ -402,9 +395,6 @@ public class Build extends Notifiable implements StatusCalculator {
                     int level = resolver.isSkillLevelBased() ? getLevel(skill) : resolver.convertLevel(this.level);
 
                     if (level != 0) {
-                        if (status == AP) {
-                            System.out.println(skill.name + "   " + variable.getStatus().name);
-                        }
                         sum = variableStatus.compute(sum, calculateVariable(skill, variable, level));
                     }
                 }
@@ -425,14 +415,14 @@ public class Build extends Notifiable implements StatusCalculator {
      */
     public double calculateVariable(Skill skill, Variable variable, int level) {
         // avoid circular dependency
-        if (skill != null && !dependencies.add(skill)) {
+        if (DependencyManager.use(skill)) {
             return 0;
         }
 
         double value = variable.calculate(level, this);
 
         // avoid circular dependency
-        dependencies.remove(skill);
+        DependencyManager.unuse(skill);
 
         // API definition
         return value;

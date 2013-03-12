@@ -149,18 +149,6 @@ public class SkillStatus {
 
     /**
      * <p>
-     * Update this skill.
-     * </p>
-     * 
-     * @param version
-     * @return
-     */
-    SkillStatus update(Version version) {
-        return skill.update(version);
-    }
-
-    /**
-     * <p>
      * Retrieve status value.
      * </p>
      * 
@@ -372,7 +360,11 @@ public class SkillStatus {
      * @param diff A diff time.
      */
     SkillStatus cd(double base, double diff) {
-        cooldown = new Variable(CD, new Diff(base, diff, skill.getMaxLevel()));
+        return cd(new Diff(base, diff, skill.getMaxLevel()));
+    }
+
+    SkillStatus cd(VariableResolver resolver) {
+        cooldown = new Variable(CD, resolver);
 
         return this;
     }
@@ -515,7 +507,7 @@ public class SkillStatus {
      * @param id A variable identifier.
      */
     SkillStatus conditional(int id) {
-        Variable variable = variables.get(id);
+        Variable variable = variables.get(String.valueOf(id));
 
         if (variable != null) {
             variable.setConditional();

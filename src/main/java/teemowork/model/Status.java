@@ -300,6 +300,8 @@ public enum Status {
 
     Distance("距離"),
 
+    MissileSpeed("弾速"),
+
     EnemyChampion("敵Championの数"),
 
     Percentage(""),

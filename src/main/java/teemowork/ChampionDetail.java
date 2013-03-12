@@ -55,6 +55,7 @@ import teemowork.ChampionDetailStyle.Value;
 import teemowork.model.Build;
 import teemowork.model.Build.Computed;
 import teemowork.model.Champion;
+import teemowork.model.DependencyManager;
 import teemowork.model.Skill;
 import teemowork.model.SkillKey;
 import teemowork.model.SkillStatus;
@@ -327,6 +328,9 @@ public class ChampionDetail extends Page {
             write(cost, status, status.getCost());
             write(range, status, status.getRange());
 
+            // avoid circular dependency
+            DependencyManager.use(skill);
+
             // PASSIVE
             passive.empty();
 
@@ -362,6 +366,10 @@ public class ChampionDetail extends Page {
             if (type == SkillType.OnHitEffectable) {
                 active.append("このスキルはOn-Hit Effectの影響を受ける。");
             }
+
+            // avoid circular dependency
+            DependencyManager.unuse(skill);
+
         }
 
         /**
@@ -378,6 +386,13 @@ public class ChampionDetail extends Page {
 
             if (variable != null) {
                 Status status = variable.getStatus();
+                VariableResolver resolver = variable.getResolver();
+
+                int level = build.getLevel(this.skill);
+
+                if (!resolver.isSkillLevelBased()) {
+                    level = resolver.convertLevel(build.getLevel());
+                }
 
                 // write label
                 String label = status.name;
@@ -388,13 +403,13 @@ public class ChampionDetail extends Page {
                 root.child(StatusLabel.class).text(label);
 
                 // write values
-                int size = variable.getResolver().estimateSize();
+                int size = resolver.estimateSize();
 
                 for (int i = 1; i <= size; i++) {
                     double value = status.round(variable.calculate(i, build));
                     jQuery element = root.child(SkillStatusValue.class).text(value == -1 ? "∞" : value);
 
-                    if (size != 1 && i == build.getLevel(this.skill)) {
+                    if (size != 1 && i == level) {
                         element.addClass(Current.class);
                     }
 
