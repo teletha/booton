@@ -2136,6 +2136,7 @@ public class Skill {
                 .cd(150, -20);
         CurseOftheSadMummy.update(P303).variable(2, Radius, 550);
 
+        /** Anivia */
         Rebirth.update()
                 .passive("死亡時に卵になり6秒かけて復活する。復活中は{1}及び{2}を得る。復活中にHPが0になった場合は死亡する。レベル1、5、8、12、15で増加AR/MRが上昇する。")
                 .variable(1, AR, new Per4Level(-40, 15))
@@ -2247,6 +2248,7 @@ public class Skill {
                 .cd(100, -10)
                 .range(-1);
 
+        /** Blitzcrank */
         ManaBarrier.update()
                 .passive(" HPが20%以下になると、10秒間持続する{1}を張る。")
                 .variable(1, Shield, 0, 0, amplify(CurrentManaRatio, 50))
@@ -2282,6 +2284,7 @@ public class Skill {
                 .mana(150)
                 .cd(30);
 
+        /** Brand */
         Blaze.update()
                 .passive("スキルが当たった敵ユニットを炎上させ、毎秒{1}与える。この効果は4秒間続く。炎上している敵ユニットにスキルが命中すると追加効果が発生する。(Minionに対しては毎秒80DMが上限)")
                 .variable(1, MagicDamage, 0, 0, amplify(TargetMaxHealthRatio, 2));
@@ -2314,6 +2317,7 @@ public class Skill {
                 .cd(105, -15)
                 .range(750);
 
+        /** Caitlyn */
         Headshot.update()
                 .passive("通常攻撃{1}回毎にダメージが増加する(Minionには250%、Championには150%)。茂みから通常攻撃を行うと2回分としてカウントされる。レベル1、7、13でダメージが増加するまでの攻撃回数が減少する。")
                 .variable(1, Count, new Per6Level(8, -1));
@@ -2361,14 +2365,14 @@ public class Skill {
                 .cd(3.5)
                 .range(650);
         RunePrison.update()
-                .active("対象の敵ユニットに{1}及び{2}を与える。")
+                .active("対象の敵ユニットに{1}と{2}を与える。")
                 .variable(1, MagicDamage, 60, 35, ap(0.6), amplify(Mana, 0.045))
                 .variable(2, Snare, 0.75, 0.25)
                 .mana(80, 10)
                 .cd(14)
                 .range(625);
         SpellFlux.update()
-                .active("対象の敵ユニットに魔法弾を飛ばし{1}及び{2}を与える。魔法弾は{3}の敵ユニット及び自身に4回まで跳ね返る(最大5hit)。この跳ね返りは同一ユニットに何度も跳ね返り、また自身から跳ね返った弾は敵Championを優先で狙う。")
+                .active("対象の敵ユニットに魔法弾を飛ばし{1}と{2}を与える。魔法弾は{3}の敵ユニット及び自身に4回まで跳ね返る(最大5hit)。この跳ね返りは同一ユニットに何度も跳ね返り、また自身から跳ね返った弾は敵Championを優先で狙う。")
                 .variable(1, MagicDamage, 50, 20, ap(0.35), amplify(Mana, 0.01))
                 .variable(2, MRReduction, 12, 3)
                 .variable(3, Radius, 400)
@@ -4640,20 +4644,31 @@ public class Skill {
 
         /** Shyvana */
         FuryOftheDragonborn.update()
-                .passive("Shyvanaは通常攻撃時に次の効果を得る。・Twin Bite：CDを0.5秒解消させる。対象が建物の場合は無効。・Burnout：効果時間が1秒延長される。最大4秒延長できる。対象が建物の場合も有効。・Flame Breath：Flame BreathのAR低下を受けている敵ユニットに対し、Flame Breathのダメージの15%分の追加魔法DMが発生する。・Dragon's Descent：通常攻撃時に2Furyを得る。また、Human formの時には1.5秒毎に1Furyを得る。");
+                .passive("Shyvanaは通常攻撃時に次の効果を得る。Twin BiteのCDを0.5秒解消する。対象が建物の場合は無効。Burnoutの効果時間が1秒延長される。最大4秒延長できる。対象が建物の場合も有効。Flame BreathのAR低下を受けている敵ユニットに対し、Flame Breathのダメージの15%分の追加魔法DMが発生する。Dragon's Descent通常攻撃時に2Furyを得る。また、Human formの時には1.5秒毎に1Furyを得る。");
         TwinBite.update()
-                .active("次に行う通常攻撃が2回攻撃になる。このスキルはOn-Hit Effectsの影響を受ける。2回目の物理DM: [攻撃力 × 80/85/90/95/100%]Dragon Form:対象の周囲にいる敵ユニットにも同様の効果を与える。")
-                .cd(10, -1);
+                .active("次に行う通常攻撃が二回攻撃になり、ニ回目の攻撃は{1}を与える。Dragon Form時は対象の周囲にいる敵ユニットにも同様の効果を与える。")
+                .variable(1, PhysicalDamage, 0, 0, amplify(AD, 0.8, 0.05))
+                .cd(10, -1)
+                .type(SkillType.OnHitEffectable);
         Burnout.update()
-                .active("3秒間周囲の敵ユニットに毎秒魔法DMを与え、その間Shyvanaの移動速度が増加する。移動速度上昇は時間経過と共に減少する。毎秒魔法DM: 25/40/55/70/85 + [増加攻撃力 × 20%] 効果範囲: 325MS増加: 30/35/40/45/50%Dragon Form:Shyvanaの通り道を5秒間炎上させ、その上にいる敵ユニットにも毎秒魔法DMを与える。")
+                .active("3秒間{1}の敵ユニットに毎秒{2}を与え、{3}する。移動速度上昇は時間経過と共に減少する。Dragon Form時Shyvanaの通り道を5秒間炎上させ、その上にいる敵ユニットにも毎秒{2}を与える。")
+                .variable(1, Radius, 325)
+                .variable(2, MagicDamage, 25, 15, bounusAD(0.2))
+                .variable(3, MSRatio, 30, 5)
                 .cd(12);
         FlameBreath.update()
-                .active("指定方向に火球を放ち当たった敵ユニットに魔法DMを与え、4秒間対象のARを15%減少させる。魔法DM: 80/125/170/215/260 (+0.6)Dragon Form:Shyvanaの前方の扇状の範囲を巻き込む範囲攻撃となる。")
+                .active("指定方向に火球を放ち当たった敵ユニットに{1}と４秒間{2}を与える。Dragon Form時Shyvanaの前方の扇状の範囲を巻き込む範囲攻撃となる。")
+                .variable(1, MagicDamage, 80, 45, ap(0.6))
+                .variable(2, ARReductionRatio, 15)
                 .cd(12, -1)
                 .range(700);
         DragonsDescent.update()
-                .passive("ARとMRが増加する。 AR/MR増加はDragon Formの時は2倍になる。増加AR,MR: 10/15/20また、このスキルのLv1取得時に100Furyを得る。")
-                .active("このスキルはHuman formでFuryが100貯まった時のみ使用可能。Dragon Formに変身し、指定地点まで飛んで移動する。その際の移動経路上にいる敵ユニットに魔法DMを与え、移動地点の方向にノックバックさせる。Dragon Formでは毎秒6Fury減少し、0になるとHuman Formに戻る。")
+                .passive("{1}と{2}を得る。 Dragon Formの時は2倍になる。また、このスキルのLv1取得時に100Furyを得る。")
+                .variable(1, AR, 10, 5)
+                .variable(2, MR, 10, 5)
+                .active("このスキルはHuman formでFuryが100貯まった時のみ使用可能。Dragon Formに変身し、指定地点まで飛んで移動する。その際の移動経路上にいる敵ユニットに{1}を与え、移動地点の方向に{2}を与える。Dragon Formでは毎秒6Fury減少し、0になるとHuman Formに戻る。")
+                .variable(1, MagicDamage, 200, 100, ap(0.7))
+                .variable(2, Knockback)
                 .range(1000);
 
         /** Singed */

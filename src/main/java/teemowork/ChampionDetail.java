@@ -451,7 +451,7 @@ public class ChampionDetail extends Page {
                 root.append("(");
 
                 for (int i = 1; i <= size; i++) {
-                    jQuery element = root.child(Value.class).text(resolver.compute(i));
+                    jQuery element = root.child(Value.class).text(Mathematics.round(resolver.compute(i), 2));
 
                     if (i == level) {
                         element.addClass(Current.class);
