@@ -166,6 +166,19 @@ public abstract class VariableResolver {
          * @param values
          */
         public Per5Level(double base, double diff) {
+            super(new int[] {1, 6, 11, 16}, base, diff);
+        }
+    }
+
+    /**
+     * @version 2013/02/12 11:37:34
+     */
+    public static class Per5LevelForHeimer extends PerLevel {
+
+        /**
+         * @param values
+         */
+        public Per5LevelForHeimer(double base, double diff) {
             super(new int[] {1, 6, 11, 15}, base, diff);
         }
     }
@@ -247,6 +260,18 @@ public abstract class VariableResolver {
          * @param values
          */
         public Per1Level(double[] values) {
+            this.values = values;
+        }
+
+        /**
+         * @param values
+         */
+        public Per1Level(double base, double diff) {
+            double[] values = new double[18];
+
+            for (int i = 0; i < values.length; i++) {
+                values[i] = base + diff * i;
+            }
             this.values = values;
         }
 

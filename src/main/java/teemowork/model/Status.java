@@ -434,8 +434,10 @@ public enum Status {
         case Suppression:
         case CDRAwareTime:
         case CDDecrease:
-        case Stealth:
             return "秒";
+
+        case Stealth:
+            return "秒間";
 
         case CDR:
         case Critical:
@@ -491,6 +493,9 @@ public enum Status {
 
         case CDDecrease:
             return "CDが" + formatValue(computed) + "解消";
+
+        case Stealth:
+            return formatValue(computed) + "ステルス";
         }
         return name + formatValue(computed);
     }
