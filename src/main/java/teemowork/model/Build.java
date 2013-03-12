@@ -152,6 +152,7 @@ public class Build extends Notifiable implements StatusCalculator {
 
         case MissingManaPercentage:
         case MissingHealthPercentage:
+        case TargetAP:
         case TargetMaxHealthRatio:
         case TargetCurrentHealthRatio:
         case TargetMissingHealthRatio:
@@ -163,6 +164,7 @@ public class Build extends Notifiable implements StatusCalculator {
         case Energy:
         case Ereg:
         case EnemyChampion:
+        case Time:
             return new Computed(0, 0, status);
 
         case BounusAD:

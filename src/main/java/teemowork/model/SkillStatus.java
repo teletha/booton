@@ -471,7 +471,19 @@ public class SkillStatus {
      * @param range
      */
     SkillStatus range(double base, double diff) {
-        range = new Variable(Range, new Diff(base, diff, skill.getMaxLevel()));
+        return range(new Diff(base, diff, skill.getMaxLevel()), null);
+    }
+
+    /**
+     * <p>
+     * Set skill range.
+     * </p>
+     * 
+     * @param range
+     */
+    SkillStatus range(VariableResolver resolver, Variable amplifier) {
+        range = new Variable(Range, resolver);
+        range.add(amplifier);
 
         return this;
     }
