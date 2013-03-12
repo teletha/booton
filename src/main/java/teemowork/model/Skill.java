@@ -23,6 +23,7 @@ import teemowork.model.variable.VariableResolver.Per3LevelForKarma;
 import teemowork.model.variable.VariableResolver.Per4Level;
 import teemowork.model.variable.VariableResolver.Per4LevelForTrundle;
 import teemowork.model.variable.VariableResolver.Per5Level;
+import teemowork.model.variable.VariableResolver.Per5LevelForHeimer;
 import teemowork.model.variable.VariableResolver.Per6Level;
 import teemowork.model.variable.VariableResolver.Per6LevelForVi;
 import teemowork.model.variable.VariableResolver.Per6LevelForZed;
@@ -1968,10 +1969,25 @@ public class Skill {
      * @return
      */
     private static final Variable amplify(Status status, double base, double diff, Variable amplifier) {
-        Variable one = amplify(status, base, diff);
-        one.getAmplifiers().add(amplifier);
+        return amplify(status, base, diff, amplifier, null);
+    }
 
-        return one;
+    /**
+     * <p>
+     * Create skill amplifier.
+     * </p>
+     * 
+     * @param status A status type.
+     * @param base A base value of amplifier rate.
+     * @param diff A diff value of amplifier rate.
+     * @return
+     */
+    private static final Variable amplify(Status status, double base, double diff, Variable first, Variable second) {
+        Variable variable = amplify(status, base, diff);
+        variable.add(first);
+        variable.add(second);
+
+        return variable;
     }
 
     static {
@@ -3061,7 +3077,7 @@ public class Skill {
         TechmaturgicalRepairBots.update()
                 .passive("{1}の味方ユニットとTurretは{2}を得る。レベル1、6、11、15でベースの増加HRegが上昇する。")
                 .variable(1, Radius, 800)
-                .variable(2, Hreg, new Per5Level(10, 5));
+                .variable(2, Hreg, new Per5LevelForHeimer(10, 5));
         H28GEvolutionTurret.update()
                 .active("指定地点にTurretを設置する。使用時にスタックを消費する。設置後6秒間はTurretの攻撃速度が1.5倍になる。{1}毎にスタックが1つ増加し最大2つまでスタックされる。スタック増加時間はCD低減の影響を受ける。Turretが塔に与えるダメージは半分になる。Debuff(CCのみ)を無効化、Heimerdingerが攻撃するor攻撃されている場合、その対象を優先で攻撃。Lv2.攻撃したユニットに{6}と{7}を与える。この効果は2秒間持続し、50回までスタックする。Lv3.Turretの最大スタック数と設置できる上限が2に増える。Lv4.Turretの最大HP+125。Lv5.50%のスプラッシュダメージが付与される。　HP:{2} ダメージ:{3} 射程:525 AR:{4} MR:{5} AS:1.25 視界:625")
                 .variable(1, CDRAwareTime, 25)
@@ -3538,9 +3554,9 @@ public class Skill {
                 .range(600);
         VoidAssault.update()
                 .passive("このスキルを取得、またはランクが上がる毎に、いずれかのスキルを選んで進化させることができる。")
-                .active("使用後1秒間{2}状態になり、{1}する。この際にUnseen Threatの効果が発動する。また使用後10秒以内であれば、消費mana無しでもう一度だけこのスキルを使用することができる。進化すると10秒以内に再度使用可能な回数が2回に増加し、またステルス状態の間に受けるDMを40%軽減するようになる。")
+                .active("使用後{2}状態になり、{1}する。この際にUnseen Threatの効果が発動する。また使用後10秒以内であれば、消費mana無しでもう一度だけこのスキルを使用することができる。進化すると10秒以内に再度使用可能な回数が2回に増加し、またステルス状態の間に受けるDMを40%軽減するようになる。")
                 .variable(1, MSRatio, 40)
-                .variable(2, Stealth)
+                .variable(2, Stealth, 1)
                 .mana(100)
                 .cd(3);
 
@@ -4803,15 +4819,21 @@ public class Skill {
                 .cd(18, -2)
                 .range(900);
         Torment.update()
-                .active("対象の敵ユニットに4秒かけて{1}を与える。また、効果中はSwainが対象のユニットに与えるダメージが増加する。")
+                .active("対象の敵ユニットに4秒かけて{1}を与える。また、効果中はSwainが対象のユニットに与える{2}する。")
                 .variable(1, MagicDamage, 75, 40, ap(0.8))
+                .variable(2, DamageRatio, 8, 3)
                 .mana(65, 5)
                 .cd(10)
                 .range(625);
         RavenousFlock.update()
-                .passive("n:Swainがカラスに変身し、近くにいる敵ユニット3体(敵Championを優先)に毎秒魔法DMを与える。また、与えたダメージの25%(Championに対しては75%)が回復する。")
+                .active("カラスに変身し、{0}の敵ユニット3体(敵Championを優先)に毎秒{1}を与える。また、{2}して敵Championの場合は{3}する。")
+                .variable(0, Radius, 700)
+                .variable(1, MagicDamage, 50, 25, ap(0.2))
+                .variable(2, RestoreHealth, 0, 0, amplify(DealtDamageRatio, 0.25))
+                .variable(3, RestoreHealth, 0, 0, amplify(DealtDamage, 0.75))
                 .cd(8)
-                .range(700);
+                .cost(Mana, new Diff(25, 0, 1), amplify(Duration, 5, 1))
+                .type(SkillType.Toggle);
 
         /** Syndra */
         Transcendent.update()
@@ -4945,20 +4967,35 @@ public class Skill {
                 .cd(150, -10);
 
         /** Tristana */
-        DrawaBead.update().passive("レベルに比例し通常攻撃とExplosive Shot(E)の射程が上昇する。");
-        RapidFire.update().active("7秒間Tristanaの攻撃速度が大幅に上昇する。").mana(50).cd(20);
+        DrawaBead.update().passive("通常攻撃とExplosive Shotは追加の{1}を得る。").variable(1, Range, new Per1Level(0, 9));
+        RapidFire.update().active("7秒間{1}する。").variable(1, ASRatio, 30, 15).mana(50).cd(20);
         RocketJump.update()
-                .active("指定地点にジャンプしジャンプ先の周囲の敵ユニットに魔法DMとスロー(60%,2.5s)を与える。キルかアシストをとるとこのスキルのCDが解消される。")
+                .active("指定地点にジャンプしジャンプ先の{1}の敵ユニットに{2}と2.5秒間{3}を与える。キルかアシストをとるとこのスキルの{4}する。")
+                .variable(1, Radius)
+                .variable(2, MagicDamage, 70, 45, ap(0.8))
+                .variable(3, MSSlowRatio, 60)
+                .variable(4, CDDecrease)
                 .mana(80)
                 .cd(22, -2)
                 .range(800);
         ExplosiveShot.update()
-                .passive("通常攻撃で敵ユニットを倒した時にそのユニットの周囲の敵ユニットに魔法DMを与える。魔法DM: 50/75/100/125/150 (+0.25)")
-                .active("対象の敵ユニットに5秒かけて魔法DMを与え、その間HP回復量を50%低下させる。")
+                .passive("通常攻撃で敵ユニットを倒した時にそのユニットの{1}の敵ユニットに{2}を与える。")
+                .variable(1, Radius, 150)
+                .variable(2, MagicDamage, 50, 25, ap(0.25))
+                .active("対象の敵ユニットに5秒かけて{3}と{4}を与える。")
+                .variable(3, MagicDamage, 110, 40, ap(1))
+                .variable(4, Wounds)
                 .mana(50, 10)
                 .cd(16)
-                .range(616);
-        BusterShot.update().active("対象の敵ユニットに魔法DMを与え、対象とその周囲(範囲200)の敵ユニットをノックバックさせる。").mana(100).cd(60).range(700);
+                .range(new Diff(616, 0, 1), amplify(Lv, 9));
+        BusterShot.update()
+                .active("対象の敵ユニットに{1}を与え、対象と{2}の敵ユニットを{3}させる。")
+                .variable(1, MagicDamage, 300, 100, ap(1.5))
+                .variable(2, Radius, 200)
+                .variable(3, Knockback, 600, 200)
+                .mana(100)
+                .cd(60)
+                .range(700);
 
         /** Trundle */
         Decompose.update()
@@ -5046,18 +5083,32 @@ public class Skill {
                 .range(5500);
 
         /** Twitch */
-        DeadlyVenom.update().passive("通常攻撃時に毒を付与し、毎秒Trueダメージを与える。毒は6回までスタックし、6秒持続する。レベル1、6、11、16で毎秒ダメージが増加する。");
+        DeadlyVenom.update()
+                .passive("通常攻撃時に毒を付与し、６秒間かけて{1}を与える。毒は6回までスタックする。レベル1、6、11、16でダメージが増加する。")
+                .variable(1, TrueDamage, new Per5Level(12, 12));
         Ambush.update()
-                .active("使用から1.25秒後にステルス状態になる。ステルス状態ではTwitchの移動速度が20%増加し、ステルスを解除すると5秒間攻撃速度が増加する。ステルス準備中に攻撃を行うかダメージを受けると、ステルス状態になるのに再度1.25秒必要になる。ステルス準備開始から5秒経過するとダメージを受けていてもステルス状態になる。")
+                .active("使用から1.25秒後に{1}になる。ステルス状態では{2}し、ステルスを解除すると5秒間{3}する。ステルス準備中に攻撃を行うかダメージを受けると、ステルス状態になるのに再度1.25秒必要になる。ステルス準備開始から5秒経過するとダメージを受けていてもステルス状態になる。")
+                .variable(1, Stealth, 4, 1)
+                .variable(2, MSRatio, 20)
+                .variable(3, ASRatio, 30, 10)
                 .mana(60);
         VenomCask.update()
-                .active("指定地点に毒の入った瓶を投げつけ、範囲内の敵ユニットにスロー(3s)と毒を2スタック分与える。また、指定した地点の視界を得る。")
+                .active("指定地点に{1}で毒の入った瓶を投げつけ、範囲内の敵ユニットに3秒間{2}と毒を2スタック分与える。また、指定した地点の{3}。")
+                .variable(1, MissileSpeed, 1400)
+                .variable(2, MSSlowRatio, 25, 5)
+                .variable(3, Visionable)
                 .mana(50)
                 .cd(13, -1)
                 .range(950);
-        Expunge.update().active("毒をスタックされている近くの敵ユニットに物理DMを与える。ダメージはスタック数に比例し増加する。").mana(50, 10).cd(12, -1).range(1200);
+        Expunge.update()
+                .active("毒をスタックされている{1}の敵ユニットに{2}を与える。")
+                .variable(1, Radius, 1200)
+                .variable(2, PhysicalDamage, 40, 10, amplify(Stack, 15, 5, ap(0.2), bounusAD(0.25)))
+                .mana(50, 10)
+                .cd(12, -1);
         SprayandPray.update()
-                .active("7秒間Twitchの攻撃力が増加し射程が850に長くなり、通常攻撃が敵ユニットを貫通するようになる。対象との直線上にいる敵ユニットにもダメージと毒スタックを与える。ダメージは敵に当たるごとに20%減少する。最小で40%。")
+                .active("7秒間射程が850になり{1}を得て、通常攻撃が敵ユニットを貫通するようになる。対象との直線上にいる敵ユニットにもダメージと毒スタックを与える。ダメージは敵に当たるごとに20%減少する。最小で40%。")
+                .variable(1, AD, 20, 8)
                 .mana(100, 25)
                 .cd(120, -10);
 
@@ -5128,7 +5179,7 @@ public class Skill {
                 .variable(2, PhysicalDamage, 15, 50, ad(1.65))
                 .mana(70, 5)
                 .cd(16, -2)
-                .range(new Diff(850, 0, 1), amplify(Time, 200));
+                .range(new Diff(850, 0, 1), amplify(Duration, 200));
         BlightedQuiver.update()
                 .passive("通常攻撃に追加{1}と6秒間持続する疫病が付与される。疫病は3回までスタックする。疫病のスタックが付与されている敵ユニットにVarusの他のスキルが命中した場合、疫病のスタックを全て消費して1スタック毎に{2}を与える。")
                 .variable(1, MagicDamage, 10, 4, ap(0.25))
@@ -5170,7 +5221,7 @@ public class Skill {
                 .cd(20, -2)
                 .range(450);
         FinalHour.update()
-                .active("{1}間{2}を得て、Tumbleのローリングに{3}が付与され、Night Hunterの移動速度増加が3倍になる。")
+                .active("{1}間{2}を得て、Tumbleを使うと{3}になり、Night Hunterの移動速度増加が3倍になる。")
                 .variable(1, Time, 8, 2)
                 .variable(2, AD, 25, 15)
                 .variable(3, Stealth, 1)
