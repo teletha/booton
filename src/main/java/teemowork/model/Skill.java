@@ -24,6 +24,8 @@ import teemowork.model.variable.VariableResolver.Per4Level;
 import teemowork.model.variable.VariableResolver.Per4LevelForTrundle;
 import teemowork.model.variable.VariableResolver.Per5Level;
 import teemowork.model.variable.VariableResolver.Per6Level;
+import teemowork.model.variable.VariableResolver.Per6LevelForVi;
+import teemowork.model.variable.VariableResolver.Per6LevelForZed;
 
 /**
  * @version 2013/03/02 11:34:54
@@ -959,6 +961,9 @@ public class Skill {
 
     /** The skill name. */
     public static final Skill AspectOfTheCougar = new Skill("Aspect Of The Cougar", R);
+
+    /** The skill name. */
+    public static final Skill AspectOfTheCougarInCougar = new Skill("Aspect Of The Cougar", R);
 
     /** The skill name. */
     public static final Skill UmbraBlades = new Skill("Umbra Blades", Passive);
@@ -2089,9 +2094,8 @@ public class Skill {
                 .variable(2, Stun, 1)
                 .mana(80, 10)
                 .cd(16, -2)
-                .range(1100)
-                .update(P303)
-                .variable(1, MagicDamage, 80, 50, ap(0.7));
+                .range(1100);
+        BandageToss.update(P303).variable(1, MagicDamage, 80, 50, ap(0.7));
         Despair.update()
                 .active("毎秒、{2}の敵ユニットに{1}を与える。")
                 .variable(1, MagicDamage, 8, 4, amplify(TargetMaxHealthRatio, 1.5, 0.3, ap(0.01)))
@@ -2113,9 +2117,8 @@ public class Skill {
                 .variable(1, MagicDamage, 150, 100, ap(0.8))
                 .variable(2, Radius, 600)
                 .mana(100, 50)
-                .cd(150, -20)
-                .update(P303)
-                .variable(2, Radius, 550);
+                .cd(150, -20);
+        CurseOftheSadMummy.update(P303).variable(2, Radius, 550);
 
         Rebirth.update()
                 .passive("死亡時に卵になり6秒かけて復活する。復活中は{1}及び{2}を得る。復活中にHPが0になった場合は死亡する。レベル1、5、8、12、15で増加AR/MRが上昇する。")
@@ -2500,8 +2503,8 @@ public class Skill {
                 .variable(3, CDDecrease)
                 .mana(100)
                 .cd(100, -10)
-                .range(475)
-                .update(P303)
+                .range(475);
+        NoxianGuillotine.update(P303)
                 .active("対象の敵Championに跳躍し、{1}を与える。対象の出血スタック数1個につき、このスキルのダメージが20%増加する(最大でダメージ2倍)。このスキルで敵Championのキルを取った場合、12秒間再使用することが出来る。この効果は複数回起こりえる。")
                 .cd(120, -20);
 
@@ -2913,9 +2916,8 @@ public class Skill {
         /** Garen */
         Perseverance.update()
                 .passive("9秒間敵Minion以外からダメージを受けない状態が続くと、以降敵Minion以外からダメージを受けるまで毎秒{1}し続ける。")
-                .variable(1, RestoreHealth, 0, 0, amplify(Health, 0.005))
-                .update(P303)
-                .variable(1, RestoreHealth, 0, 0, amplify(Health, 0.004));
+                .variable(1, RestoreHealth, 0, 0, amplify(Health, 0.005));
+        Perseverance.update(P303).variable(1, RestoreHealth, 0, 0, amplify(Health, 0.004));
         DecisiveStrike.update()
                 .active("{1}間{2}し、スキル使用後6秒間に行った次の通常攻撃に追加{3}と{4}が付与される。またこのスキル使用時に自身にかかっているスローを解除する。")
                 .variable(1, Time, 1.5, 0.75)
@@ -2931,9 +2933,9 @@ public class Skill {
                 .variable(3, Time, 2, 1)
                 .variable(4, DamageReductionRatio, 30)
                 .variable(5, Tenacity, 30)
-                .cd(24, -1)
-                .update(P303)
-                .variable(1, AR, 0, 0, amplify(AR, 1))
+                .cd(24, -1);
+        Courage.update(P303)
+                .variable(1, AR, 0, 0, amplify(BounusAR, 0.2))
                 .variable(2, MR, 0, 0, amplify(BounusMR, 0.2));
         Judgment.update()
                 .active("Garenが3秒間回転し、その間近くの敵ユニットに0.5秒毎に{1}を与える(最大6hit)。このスキルにはクリティカル判定があり、クリティカル時は追加{2}を与える。回転中は{3}を得るが、敵Minionをすり抜けている間は移動速度が20%低下する。Minionに与えるダメージは通常の75%。")
@@ -3028,6 +3030,7 @@ public class Skill {
                 .variable(4, CDDecrease, 1)
                 .mana(25)
                 .cd(4);
+        Rampage.update(P303).variable(1, PhysicalDamage, 60, 35, bounusAD(0.6));
         SpiritOfDread.update()
                 .active("4秒間{1}の敵ユニットに毎秒{2}を与える。この効果を受けている敵ユニットがダメージを受けた場合、そのダメージの値に応じて{3}する。")
                 .variable(1, Radius, 575)
@@ -3035,6 +3038,7 @@ public class Skill {
                 .variable(3, RestoreHealth, 0, 0, amplify(DealtDamageRatio, 10, 5))
                 .mana(50, 10)
                 .cd(14);
+        SpiritOfDread.update(P303).variable(3, RestoreHealth, 0, 0, amplify(DealtDamageRatio, 20, 0)).cd(20, -1.5);
         DevastatingCharge.update()
                 .active("3秒間{1}して(最大75%)、その後1秒間その移動速度を維持する。また次の通常攻撃のダメージはこのスキルを使用してからHecarimが移動した距離に比例し最小で{3}、最大で{4}を与えるようになり、{2}が付与される。")
                 .variable(1, MSRatio, 20, 0, amplify(Duration, 18.3))
@@ -3164,6 +3168,7 @@ public class Skill {
                 .variable(3, RestoreHealth, 70, 40, ap(0.35))
                 .mana(150, 75)
                 .cd(150, -15);
+        Monsoon.update(P303).mana(100, 50);
 
         /** Jarvan IV */
         MartialCadence.update()
@@ -3429,13 +3434,18 @@ public class Skill {
                 .variable(1, ARReductionRatio, 3)
                 .variable(2, MRReductionRatio, 3);
         Reckoning.update()
-                .active("対象の敵ユニットに{1}と４秒間{2}を与える。このスキルのスローがかかった敵ユニットに対しては、Kayleが対象のユニットに与える{3}する。")
+                .active("{4}の光の玉を撃ち対象の敵ユニットに{1}と4秒間{2}を与える。このスキルのスローがかかった敵ユニットに対しては、Kayleが対象のユニットに与える{3}する。")
                 .variable(1, MagicDamage, 60, 50, ap(1), bounusAD(1))
                 .variable(2, MSSlowRatio, 35)
                 .variable(3, DamageRatio, 6, 1)
+                .variable(4, MissileSpeed, 1300)
                 .mana(70, 5)
                 .cd(8)
                 .range(650);
+        Reckoning.update(P303)
+                .active("{4}の光の玉を撃ち対象の敵ユニットに{1}と3秒間{2}、HolyFervorのスタックをひとつ与える。")
+                .variable(2, MSSlowRatio, 35, 5)
+                .variable(4, MissileSpeed, 1500);
         DivineBlessing.update()
                 .active("対象の味方Championは{1}し、3秒間{2}する。")
                 .variable(1, RestoreHealth, 60, 45, ap(0.35))
@@ -4146,11 +4156,17 @@ public class Skill {
                 .variable(1, MagicDamage, 150, 75, ap(0.4))
                 .variable(2, Radius, 300)
                 .cd(6);
+        Swipe.update().variable(1, MagicDamage, 150, 75, ap(0.6));
         AspectOfTheCougar.update()
-                .active("HumanからCougarに、CougarからHumanに変身する。Cougar時はスキルの効果が変わり、通常攻撃の射程距離が125(Melee)になり、{1}、{2}、{3}を得る。Cougarスキルはこのスキルのレベルに比例し威力が増加する。")
+                .active("HumanからCougarに変身する。Cougar時はスキルの効果が変わり、通常攻撃の射程距離が125(Melee)になり、{1}、{2}、{3}を得る。Cougarスキルはこのスキルのレベルに比例し威力が増加する。")
                 .variable(1, MS, 20)
                 .variable(2, AR, 10, 10)
                 .variable(3, MR, 10, 10)
+                .cd(4);
+        AspectOfTheCougar.update(P303)
+                .active("HumanからCougarに変身する。Cougar時はスキルの効果が変わり、通常攻撃の射程距離が125(Melee)になり、{1}を得る。Cougarスキルはこのスキルのレベルに比例し威力が増加する。");
+        AspectOfTheCougarInCougar.update()
+                .active("CougarからHumanに変身する。Human時はスキルの効果が変わり、通常攻撃の射程距離が525(Ranged)になる。")
                 .cd(4);
 
         /** Nocturne */
@@ -4844,6 +4860,10 @@ public class Skill {
 
         /** Taric */
         Gemcraft.update().passive("通常攻撃をすると{1}する。").variable(1, RestoreMana, 0, 0, amplify(DealtDamageRatio, 0.075));
+        Gemcraft.update(P303)
+                .passive("通常攻撃に追加{1}を付与する。敵チャンピオンに対しては{2}を与える。建物には無効。")
+                .variable(1, MagicDamage, 0, 0, amplify(Mana, 0.02))
+                .variable(2, MagicDamage, 0, 0, amplify(Mana, 0.04));
         Imbue.update()
                 .active("対象の味方ユニットとTaricの{1}する。自身に使用した場合は{2}する。このスキルは自身が通常攻撃を行う毎にCDが1秒解消される。対象が敵Championの場合は3秒解消される。")
                 .variable(1, RestoreHealth, 60, 40, ap(0.6))
@@ -4852,15 +4872,20 @@ public class Skill {
                 .cd(20, -1)
                 .range(750);
         Shatter.update()
-                .passive("Taricは{1}を得て、更に近くの味方Championの{1}を増加させる{2}のAuraを得る。(Taric自身はAuraと合わせて2倍の効果を得る)")
+                .passive("Taricは{1}を得て、味方Championの{1}を増加させる{2}のAuraを得る。(Taric自身はAuraと合わせて2倍の効果を得る)")
                 .variable(1, AR, 10, 5)
                 .variable(2, Radius, 1000)
-                .active("{3}の敵ユニットに{4}を与え、4秒間{5}を与える。効果後はCDが解消されるまでPassiveのTaric自身の増加ARが無くなる。")
-                .variable(3, Radius, 400)
-                .variable(4, MagicDamage, 60, 45, ap(0.6))
-                .variable(5, ARReduction, 10, 5)
+                .active("{4}の敵ユニットに{5}を与え、4秒間{6}を与える。効果後はCDが解消されるまでPassiveのTaric自身の増加ARが無くなる。")
+                .variable(4, Radius, 400)
+                .variable(5, MagicDamage, 60, 45, ap(0.6))
+                .variable(6, ARReduction, 10, 5)
                 .mana(50, 10)
                 .cd(10);
+        Shatter.update(P303)
+                .passive("Taricは{1}を得て、味方Championの{3}を増加させる{2}のAuraを得る。(Taric自身はAuraと両方の効果を得る)")
+                .variable(3, AR, 0, 0, amplify(AR, 0.12))
+                .variable(5, MagicDamage, 60, 45, ap(0.6), amplify(AR, 0.3))
+                .mana(50);
         Dazzle.update()
                 .active("対象の敵ユニットに{1}と{2}を与える。魔法DMは対象との距離が近いほど増加し、距離が遠いほど低下する。最大DMは{3}。")
                 .variable(1, MagicDamage, 80, 60, ap(0.8))
@@ -4869,6 +4894,7 @@ public class Skill {
                 .mana(95)
                 .cd(14, -1)
                 .range(625);
+        Dazzle.update(P303).mana(75);
         Radiance.update()
                 .active("{1}の敵ユニットに{2}を与える。スキル使用後の10秒間、{3}と{4}を得て、更に近くの味方Championの{5}と{6}を増加させるAura({7})を展開する。")
                 .variable(1, Radius, 400)
@@ -4970,6 +4996,7 @@ public class Skill {
                 .active("Furyをすべて消費し{2}する。")
                 .variable(2, RestoreHealth, 30, 10, ap(1.5), amplify(Stack, 0.5, 0.45))
                 .cd(12);
+        Bloodlust.update(P303).variable(2, RestoreHealth, 30, 10, ap(0.3), amplify(Stack, 0.5, 0.45, ap(0.012)));
         MockingShout.update()
                 .active("4秒間近くの敵Championに{1}を与え、後ろを向いている敵Championには更に4秒間{2}を与える。")
                 .variable(1, ASSlowRatio, 20, 15)
@@ -5101,6 +5128,7 @@ public class Skill {
         /** Vayne */
         NightHunter.update().passive("敵Championに向かって移動する際に移動速度が30増加する。");
         Tumble.update().active("指定地点にローリングし、次の通常攻撃のダメージが上昇する。6秒間攻撃を行わないとCDになる。").mana(40).cd(6, -1);
+        Tumble.update(P303).mana(30);
         SilverBolts.update().passive("同じターゲットに3回連続して通常攻撃またはスキルで攻撃すると、ターゲットの最大HPに比例したTrue Damageを与える。");
         Condemn.update()
                 .active("対象の敵ユニットをヘビークロスボウで狙撃し物理DMとノックバックを与える。ノックバックした敵が壁等に当たると追加で物理DMとスタン(1.5s)を与える。")
@@ -5134,21 +5162,40 @@ public class Skill {
 
         /** Vi */
         BlastShield.update()
-                .passive("敵ユニットにスキルでダメージを与えると、3秒間自身に最大HPの10%のダメージを軽減するシールドが展開される。レベル1/7/12でCDが減少する。")
-                .cd(18, -5);
+                .passive("敵ユニットにスキルでダメージを与えると、3秒間{1}を得る。レベル1/7/12でCDが減少する。")
+                .variable(1, Shield, 0, 0, amplify(Health, 0.1))
+                .cd(new Per6LevelForVi(18, -5));
         VaultBreaker.update()
-                .active("発動すると自身の移動速度が15%減少し、このスキルのダメージと射程が徐々に増加する(1.25sで最大)。再度使用で指定した方向へとダッシュし、命中した全ての敵ユニットに物理DMを与える。ダッシュ中に敵Championに衝突するとその時点で停止し、対象をノックバックさせる。このスキルにはDenting Blowsの効果が適用され、Minionや中立クリープに与えるダメージは75%に減少する。")
+                .active("発動すると自身の移動速度が15%減少し、このスキルのダメージと射程が徐々に増加する(1.25秒で最大)。再度使用で指定した方向へとダッシュし(最小{3}、最大{4})、命中した全ての敵ユニットに{1}を与える（最大で{2}）。ダッシュ中に敵Championに衝突するとその時点で停止し、対象をノックバックさせる。このスキルにはDenting Blowsの効果が適用され、Minionや中立クリープに与えるダメージは75%に減少する。")
+                .variable(1, PhysicalDamage, 50, 30, bounusAD(0.7))
+                .variable(2, PhysicalDamage, 100, 60, bounusAD(1.4))
+                .variable(3, Distance, 50)
+                .variable(4, Distance, 600)
                 .mana(50, 10)
                 .cd(18, -2.5)
                 .range(50);
-        DentingBlows.update().passive("同一対象に3回連続して通常攻撃を行うと、対象の最大HPに比例した追加物理DMを与えると共に4秒間対象のARを20%減少させ、自身の攻撃速度が4秒間増加する。");
+        VaultBreaker.update(P303)
+                .active("発動すると自身の移動速度が15%減少し、このスキルのダメージと射程が徐々に増加する(1.25秒で最大)。再度使用で指定した方向へとダッシュし(最小{3}、最大{4})、命中した全ての敵ユニットに{1}を与える（最大で{2}）。ダッシュ中に敵Championに衝突するとその時点で停止し、対象をノックバックさせる。このスキルにはDenting Blowsの効果が適用され、Minionや中立クリープに与えるダメージは75%に減少する。途中で詠唱を停止させられた場合、このスキルのCDは3秒になり、消費したmanaの半分が回復する。");
+        DentingBlows.update()
+                .passive("同一対象に3回連続して通常攻撃を行うと、{1}と4秒間{2}を与え、4秒間{3}する。（ミニオンやモンスターへは最大300DMを与える）")
+                .variable(1, PhysicalDamage, 0, 0, amplify(TargetMaxHealthRatio, 6, 1, bounusAD(0.03)))
+                .variable(2, ARReductionRatio, 20)
+                .variable(3, ASRatio, 30, 5);
+        DentingBlows.update(P303)
+                .variable(1, PhysicalDamage, 0, 0, amplify(TargetMaxHealthRatio, 4, 1.5, bounusAD(0.03)));
         ExcessiveForce.update()
-                .active("チャージを1つ消費することで、次の通常攻撃のダメージが増加し、対象とその後方扇形範囲にいる敵ユニットにもダメージを与える範囲攻撃になる。チャージは一定時間ごとに増加し、最大2つまでスタックされる。")
+                .active("チャージを1つ消費することで、次の通常攻撃に追加{1}を付与し、対象とその後方扇形{2}にいる敵ユニットにもダメージを与える範囲攻撃になる。チャージは{3}毎に増加し、最大2つまでスタックされる。")
+                .variable(1, PhysicalDamage, 5, 15, ad(1.15), ap(0.7))
+                .variable(2, Radius, 600)
+                .variable(3, CDRAwareTime, 14, -1.5)
                 .mana(60)
-                .cd(1)
-                .range(600);
+                .cd(1);
         AssaultandBattery.update()
-                .active("対象の敵Championに突撃し、物理DMと打ち上げ(1.25s)を与える。一連の動作中は自身が受けるCCを無効化し、また対象のChampion以外でViに触れた敵ユニットには75%のダメージを与え、左右に吹き飛ばす。")
+                .active("対象の敵Championに突撃し、{1}と{2}を与える。一連の動作中は{4}を得て、また対象のChampion以外でViに触れた敵ユニットには{3}を与え、左右に吹き飛ばす。")
+                .variable(1, PhysicalDamage, 200, 125, bounusAD(1.4))
+                .variable(2, Knockup, 1.25)
+                .variable(3, PhysicalDamage, 150, 112.5, bounusAD(1.05))
+                .variable(4, IgnoreCC)
                 .mana(100, 25)
                 .cd(130, -25)
                 .range(700);
@@ -5359,6 +5406,7 @@ public class Skill {
                 .mana(70)
                 .cd(13, -1)
                 .range(600);
+        AudaciousCharge.update(P303).variable(2, MagicDamage, 70, 35, ap(0.6)).cd(14, -1);
         CrescentSweep.update()
                 .active("槍を振り回し{3}の敵ユニットに{1}と{2}を与え、このスキルを命中させた敵Championの数に比例して6秒間{4}と{5}を得る。" + Challenge + "効果中の敵ユニットに対しては" + Knockback + "は発動しない。")
                 .variable(1, PhysicalDamage, 125, 100, bounusAD(1), amplify(TargetCurrentHealthRatio, 0.15))
@@ -5368,6 +5416,9 @@ public class Skill {
                 .variable(5, MR, 15, 5)
                 .mana(100)
                 .cd(100, -10);
+        CrescentSweep.update(P303)
+                .variable(1, PhysicalDamage, 75, 100, bounusAD(1), amplify(TargetCurrentHealthRatio, 0.15))
+                .cd(120, -10);
 
         /** Yorick */
         UnholyCovenant.update()
@@ -5394,9 +5445,10 @@ public class Skill {
 
         /** Zed */
         ContemptforTheWeak.update()
-                .passive("HPが50%以下の敵ユニットへの通常攻撃に対象の最大HPに比例した追加魔法DMを付与する。同一の対象には10秒に一度しか発動しない。レベル1、7、17でDMが上昇する。");
+                .passive("HPが50%以下の敵ユニットへの通常攻撃に{1}を付与する。同一の対象には10秒に一度しか発動しない。レベル1、7、17でDMが上昇する。")
+                .variable(1, MagicDamage, 0, 0, amplify(TargetMaxHealthRatio, new Per6LevelForZed(6, 2)));
         RazorShuriken.update()
-                .active("Zedと「影」から指定方向に貫通する手裏剣を飛ばし、当たった敵ユニットに物理DMを与える。手裏剣は一度敵ユニットに当たるとそれ以降の敵ユニットには80%のDMを与える。物理DM: 75/110/145/180/215 + [増加攻撃力 × 100%]Living Shadow:Zedと「影」が同一の対象に手裏剣を命中させた場合、「影」が与えるDMは半分になり「気」が回復する。")
+                .active("Zedと「影」から指定方向に貫通する手裏剣を飛ばし、当たった敵ユニットに{1}を与える。手裏剣は一度敵ユニットに当たるとそれ以降の敵ユニットには80%のDMを与える。物理DM: 75/110/145/180/215 + [増加攻撃力 × 100%]Living Shadow:Zedと「影」が同一の対象に手裏剣を命中させた場合、「影」が与えるDMは半分になり「気」が回復する。")
                 .cd(6)
                 .range(900);
         LivingShadow.update()
