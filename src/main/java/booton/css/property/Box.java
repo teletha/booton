@@ -125,7 +125,7 @@ public class Box extends CSSProperty<Box> {
      * The min-width and max-width properties override width.
      * </p>
      * 
-     * @param size A box width.
+     * @param MasterWidth A box width.
      * @param unit A unit.
      * @return Chainable API.
      */
@@ -208,7 +208,7 @@ public class Box extends CSSProperty<Box> {
      * The min-height and max-height properties override height.
      * </p>
      * 
-     * @param size A box width.
+     * @param MasterWidth A box width.
      * @param unit A unit.
      * @return Chainable API.
      */

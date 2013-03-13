@@ -24,6 +24,24 @@ public abstract class Notifiable {
 
     /**
      * <p>
+     * Bind.
+     * </p>
+     * 
+     * @param notifiable
+     */
+    public void register(Object observer) {
+        if (observer != null) {
+            // collect observer
+            for (Method method : observer.getClass().getMethods()) {
+                if (method.isAnnotationPresent(js.bind.Observer.class)) {
+                    register(observer, method);
+                }
+            }
+        }
+    }
+
+    /**
+     * <p>
      * Register observer of thi object.
      * </p>
      * 

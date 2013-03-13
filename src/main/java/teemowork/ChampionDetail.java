@@ -426,7 +426,7 @@ public class ChampionDetail extends Page {
         /**
          * @param root
          * @param variable
-         * @param size
+         * @param MasterWidth
          * @param level
          */
         private void writeVariable(jQuery root, Variable variable, int level) {

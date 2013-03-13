@@ -34,6 +34,7 @@ import booton.css.property.BoxLength;
 import booton.css.property.Content;
 import booton.css.property.Cursor;
 import booton.css.property.Display;
+import booton.css.property.Filter;
 import booton.css.property.Font;
 import booton.css.property.Line;
 import booton.css.property.ListStyle;
@@ -399,6 +400,15 @@ public abstract class CSS implements Extensible {
      */
     public UserSelect userSelect;
 
+    /**
+     * <p>
+     * The CSS filter property provides for effects like blurring or color shifting on an element’s
+     * rendering before the element is displayed. Filters are commonly used to adjust the rendering
+     * of an image, a background, or a border.
+     * </p>
+     */
+    public Filter filter;
+
     /** The initialization flag. */
     private boolean initialized = false;
 
@@ -504,7 +514,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean selection() {
+    public final boolean selection() {
         return rule(rules.selector + ":selection");
     }
 
@@ -519,6 +529,32 @@ public abstract class CSS implements Extensible {
      */
     protected final boolean inBackOf(Class<? extends CSS> clazz) {
         return rule("." + Obfuscator.computeCSSName(clazz) + "+" + rules.selector);
+    }
+
+    /**
+     * <p>
+     * The CSS :after pseudo-element matches a virtual last child of the selected element. Typically
+     * used to add cosmetic content to an element, by using the content CSS property. This element
+     * is inline by default.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean insideOf(Class<? extends CSS> clazz) {
+        return rule("." + Obfuscator.computeCSSName(clazz) + " " + rules.selector);
+    }
+
+    /**
+     * <p>
+     * The CSS :after pseudo-element matches a virtual last child of the selected element. Typically
+     * used to add cosmetic content to an element, by using the content CSS property. This element
+     * is inline by default.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean with(Class<? extends CSS> clazz) {
+        return rule("." + Obfuscator.computeCSSName(clazz) + rules.selector);
     }
 
     /**
