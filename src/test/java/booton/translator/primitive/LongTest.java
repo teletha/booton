@@ -291,7 +291,7 @@ public class LongTest extends ScriptTester {
     }
 
     /**
-     * @TODO Implement arbitrary-precision integers for Javascript.
+     * @TODO Implement arbitrary-precision longegers for Javascript.
      */
     public void unsignedShiftRight() {
         test(new Scriptable() {
@@ -303,7 +303,7 @@ public class LongTest extends ScriptTester {
     }
 
     /**
-     * @TODO Implement arbitrary-precision integers for Javascript.
+     * @TODO Implement arbitrary-precision longegers for Javascript.
      */
     public void unsignedShiftRightAssignable() {
         test(new Scriptable() {
@@ -413,5 +413,89 @@ public class LongTest extends ScriptTester {
                 return value >= 1;
             }
         });
+    }
+
+    @Test
+    public void incrementStatiFieldInFieldAccess() throws Exception {
+        test(new IncrementStaticField());
+    }
+
+    /**
+     * @version 2013/03/13 17:21:44
+     */
+    private static class IncrementStaticField implements Scriptable {
+
+        private static long index = 1;
+
+        private static long count = 2;
+
+        public long act() {
+            index = count++;
+
+            return count + index * 10;
+        }
+    }
+
+    @Test
+    public void decrementStatiFieldInFieldAccess() throws Exception {
+        test(new DecrementStaticField());
+    }
+
+    /**
+     * @version 2013/03/13 17:21:44
+     */
+    private static class DecrementStaticField implements Scriptable {
+
+        private static long index = 1;
+
+        private static long count = 2;
+
+        public long act() {
+            index = count--;
+
+            return count + index * 10;
+        }
+    }
+
+    @Test
+    public void preincrementStatiFieldInFieldAccess() throws Exception {
+        test(new PreincrementStaticField());
+    }
+
+    /**
+     * @version 2013/03/13 17:21:44
+     */
+    private static class PreincrementStaticField implements Scriptable {
+
+        private static long index = 1;
+
+        private static long count = 2;
+
+        public long act() {
+            index = ++count;
+
+            return count + index * 10;
+        }
+    }
+
+    @Test
+    public void predecrementStatiFieldInFieldAccess() throws Exception {
+        test(new PredecrementStaticField());
+    }
+
+    /**
+     * @version 2013/03/13 17:21:44
+     */
+    private static class PredecrementStaticField implements Scriptable {
+
+        private static long index = 1;
+
+        private static long count = 2;
+
+        public long act() {
+            index = --count;
+
+            return count + index * 10;
+        }
     }
 }
