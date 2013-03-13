@@ -101,7 +101,7 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
      * ellipse.
      * </p>
      * 
-     * @param MasterWidth
+     * @param size
      * @param unit
      * @return
      */
@@ -117,7 +117,7 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
      * The xxx-width CSS property sets the width of the border of a box.
      * </p>
      * 
-     * @param MasterWidth
+     * @param size
      * @param unit
      * @return
      */
