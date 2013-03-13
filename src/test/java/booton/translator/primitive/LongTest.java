@@ -291,7 +291,7 @@ public class LongTest extends ScriptTester {
     }
 
     /**
-     * @TODO Implement arbitrary-precision longegers for Javascript.
+     * @TODO Implement arbitrary-precision integer for Javascript.
      */
     public void unsignedShiftRight() {
         test(new Scriptable() {
@@ -303,7 +303,7 @@ public class LongTest extends ScriptTester {
     }
 
     /**
-     * @TODO Implement arbitrary-precision longegers for Javascript.
+     * @TODO Implement arbitrary-precision integer for Javascript.
      */
     public void unsignedShiftRightAssignable() {
         test(new Scriptable() {

@@ -143,7 +143,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * element. A negative value is also allowed.
      * </p>
      * 
-     * @param MasterWidth
+     * @param size
      * @param unit
      * @return
      */

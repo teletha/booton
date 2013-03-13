@@ -208,7 +208,7 @@ public class Position extends CSSProperty<Position> {
      * value of bottom is the negative of the computed value of top.
      * </p>
      * 
-     * @param MasterWidth A position value.
+     * @param size A position value.
      * @param unit A unit.
      * @return Chainable API.
      */
