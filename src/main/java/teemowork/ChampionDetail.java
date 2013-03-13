@@ -76,9 +76,6 @@ public class ChampionDetail extends Page {
     /** The status box. */
     private List<StatusView> statuses = new ArrayList();
 
-    /** The skill view. */
-    private List<SkillView> skills = new ArrayList();
-
     /** The your custom build. */
     @Observable
     private final Build build;
@@ -552,5 +549,12 @@ public class ChampionDetail extends Page {
                 current.append(" | ").append(build.get(MRPenRatio).value() + MRPenRatio.getUnit());
             }
         }
+    }
+
+    /**
+     * @version 2013/03/13 10:41:24
+     */
+    private class RuneView {
+
     }
 }

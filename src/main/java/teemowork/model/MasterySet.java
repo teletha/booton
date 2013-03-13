@@ -9,10 +9,29 @@
  */
 package teemowork.model;
 
-
 /**
- * @version 2013/01/16 9:19:36
+ * @version 2013/03/13 17:07:25
  */
 public class MasterySet {
+
+    /**
+     * <p>
+     * Level up the specified mastery.
+     * </p>
+     * 
+     * @param mastery
+     */
+    public void up(Mastery mastery) {
+    }
+
+    /**
+     * <p>
+     * Level up the specified mastery.
+     * </p>
+     * 
+     * @param mastery
+     */
+    public void down(Mastery mastery) {
+    }
 
 }

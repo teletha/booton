@@ -247,11 +247,11 @@ class ChampionDetailStyle {
         {
             font.color(25, 111, 136);
 
-            while (inBackOf(ChampionDetailStyle.Value.class)) {
+            while (inBackOf(Value.class)) {
                 margin.left(0.4, em);
             }
 
-            while (inBackOf(ChampionDetailStyle.Amplifier.class)) {
+            while (inBackOf(Amplifier.class)) {
                 margin.left(0.4, em);
             }
         }

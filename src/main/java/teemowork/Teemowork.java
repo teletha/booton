@@ -36,7 +36,7 @@ public class Teemowork extends Application {
         Menu sub = nav.add("Champion", "#");
         sub.add("Compare", "#ChampionComparing");
         sub.add("Item", "#ItemCatalog");
-        sub.add("Mastery", "#");
+        sub.add("Mastery", "#Mastery");
         sub.add("Rune", "#");
 
         nav.add("Builder", "#");
