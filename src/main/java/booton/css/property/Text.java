@@ -116,6 +116,24 @@ public class Text extends CSSProperty<Text> {
 
     /**
      * <p>
+     * Helper method to write outlined text.
+     * </p>
+     * 
+     * @param transparency A transparency of shadow.
+     * @return
+     */
+    public Text outline(double transparency) {
+        Color color = new Color(0, 0, css.font.color().lightness < 50 ? 100 : 0, transparency);
+        shadow(1, px, 0, px, 0, px, color);
+        shadow(0, px, 1, px, 0, px, color);
+        shadow(-1, px, 0, px, 0, px, color);
+        shadow(0, px, -1, px, 0, px, color);
+
+        return this;
+    }
+
+    /**
+     * <p>
      * The text-shadow CSS property adds shadows to text. It accepts a comma-separated list of
      * shadows to be applied to the text and text-decorations of the element.
      * </p>
