@@ -181,6 +181,21 @@ public class Text extends CSSProperty<Text> {
     }
 
     /**
+     * <p>
+     * Helper method to make text unselectable.
+     * </p>
+     */
+    public Text unselectable() {
+        css.userSelect.none();
+
+        while (css.selection()) {
+            css.background.color.transparent();
+        }
+
+        return chain();
+    }
+
+    /**
      * @version 2012/12/12 14:07:44
      */
     public class Align extends CSSProperty<Text> {
