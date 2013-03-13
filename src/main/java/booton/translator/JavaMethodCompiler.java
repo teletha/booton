@@ -47,7 +47,7 @@ import booton.translator.Node.Switch;
  * completely, garbage goto code will remain.
  * </p>
  * 
- * @version 2013/01/21 11:55:35
+ * @version 2013/03/13 17:52:57
  */
 class JavaMethodCompiler extends MethodVisitor {
 
@@ -123,9 +123,14 @@ class JavaMethodCompiler extends MethodVisitor {
     private static final int CONSTANT_1 = 410;
 
     /**
+     * Represents a duplicate instruction. DUP and DUP2.
+     */
+    private static final int DUPLICATE = 411;
+
+    /**
      * Represents a duplicate instruction. DUP_X1 and DUP2_X2.
      */
-    private static final int DUPLICATE_X1 = 411;
+    private static final int DUPLICATE_X1 = 412;
 
     /** The extra opcode for byte code parsing. */
     private static final int LABEL = 300;
@@ -378,7 +383,32 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case PUTSTATIC:
-            current.addExpression(Javascript.computeClassName(owner), ".", Javascript.computeFieldName(owner, name), "=", current.remove(0));
+            if (match(GETSTATIC, DUPLICATE, CONSTANT_1, ADD, PUTSTATIC)) {
+                // The pattenr of post-increment field is like above.
+                current.remove(0);
+
+                current.addOperand(new OperandExpression(current.remove(0) + "++"));
+            } else if (match(GETSTATIC, DUPLICATE, CONSTANT_1, SUB, PUTSTATIC)) {
+                // The pattenr of post-decrement field is like above.
+                current.remove(0);
+
+                current.addOperand(new OperandExpression(current.remove(0) + "--"));
+            } else if (match(GETSTATIC, CONSTANT_1, ADD, DUPLICATE, PUTSTATIC)) {
+                // The pattenr of pre-increment field is like above.
+                current.remove(0);
+                current.remove(0);
+
+                current.addOperand(new OperandExpression("++" + Javascript.computeClassName(owner) + "." + Javascript.computeFieldName(owner, name)));
+
+            } else if (match(GETSTATIC, CONSTANT_1, SUB, DUPLICATE, PUTSTATIC)) {
+                // The pattenr of pre-decrement field is like above.
+                current.remove(0);
+                current.remove(0);
+
+                current.addOperand(new OperandExpression("--" + Javascript.computeClassName(owner) + "." + Javascript.computeFieldName(owner, name)));
+            } else {
+                current.addExpression(Javascript.computeClassName(owner), ".", Javascript.computeFieldName(owner, name), "=", current.remove(0));
+            }
             break;
 
         case GETSTATIC:
@@ -1553,6 +1583,16 @@ class JavaMethodCompiler extends MethodVisitor {
                 case LCONST_1:
                 case FCONST_1:
                 case DCONST_1:
+                    continue root;
+
+                default:
+                    return false;
+                }
+
+            case DUPLICATE:
+                switch (record) {
+                case DUP:
+                case DUP2:
                     continue root;
 
                 default:
