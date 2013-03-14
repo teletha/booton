@@ -274,4 +274,13 @@ public class MasterySet extends Notifiable {
         }
         return false;
     }
+
+    public String encode() {
+        String value = "";
+
+        for (int i = 0; i < levels.length; i++) {
+            value += levels[i];
+        }
+        return value;
+    }
 }

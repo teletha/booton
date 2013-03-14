@@ -18,6 +18,16 @@ public abstract class Page {
 
     /**
      * <p>
+     * Build the page identifier for the current page state. You must be able to restore page state
+     * from this page identifier.
+     * </p>
+     * 
+     * @return
+     */
+    protected abstract String getPageId();
+
+    /**
+     * <p>
      * Invoke whenever this page is loaded.
      * </p>
      * 
@@ -27,11 +37,11 @@ public abstract class Page {
 
     /**
      * <p>
-     * Build the page identifier for the current page state. You must be able to restore page state
-     * from this page identifier.
+     * Invoke whenever this page is loaded.
      * </p>
      * 
-     * @return
+     * @param root
      */
-    protected abstract String getPageId();
+    public void unload() {
+    }
 }
