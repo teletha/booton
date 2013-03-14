@@ -9,6 +9,7 @@
  */
 package teemowork;
 
+import static js.lang.Global.*;
 import static teemowork.model.Mastery.*;
 
 import java.util.List;
@@ -73,7 +74,14 @@ public class MasteryBuilder extends Page {
 
     @PageInfo(path = "Mastery")
     public MasteryBuilder() {
+        this("");
+    }
+
+    @PageInfo(path = "Mastery/*")
+    public MasteryBuilder(String levels) {
         masterySet.register(this);
+
+        System.out.println(levels + " init");
     }
 
     /**
@@ -86,6 +94,15 @@ public class MasteryBuilder extends Page {
         utility = build(root.child(Utility.class), UTILITY);
 
         update();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void unload() {
+        System.out.println("unload " + masterySet.encode());
+        history.pushState("", "", "#" + getPageId());
     }
 
     /**
@@ -133,7 +150,7 @@ public class MasteryBuilder extends Page {
      */
     @Override
     protected String getPageId() {
-        return "Mastery";
+        return "Mastery/" + masterySet.encode();
     }
 
     /**

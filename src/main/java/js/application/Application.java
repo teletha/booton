@@ -96,6 +96,9 @@ public abstract class Application {
      */
     private static class Router implements Listener {
 
+        /** The current page. */
+        private static Page current;
+
         /** The page router. */
         private final Map<String, Constructor> route = new HashMap();
 
@@ -153,6 +156,10 @@ public abstract class Application {
          * @param pageId
          */
         private void dispatch(Page page) {
+            if (current != null) {
+                current.unload();
+            }
+
             // create element cradle
             jQuery cradle = $(document.createDocumentFragment());
 
@@ -161,6 +168,9 @@ public abstract class Application {
 
             // clear old page and append new page
             $("#Content").empty().append(cradle);
+
+            // record page
+            current = page;
         }
     }
 

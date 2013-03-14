@@ -54,4 +54,14 @@ public abstract class History implements JavascriptNative {
      * </p>
      */
     public native void pushState(Object data, String title, String url);
+
+    /**
+     * <p>
+     * Updates the most recent entry on the history stack to have the specified data, title, and, if
+     * provided, URL. The data is treated as opaque by the DOM; you may specify any JavaScript
+     * object that can be serialized. Note that Firefox currently ignores the title parameter; for
+     * more information, see manipulating the browser history.
+     * </p>
+     */
+    public native void replaceState(Object data, String title, String url);
 }
