@@ -35,7 +35,6 @@ import teemowork.MasteryBuilderStyle.Sum;
 import teemowork.MasteryBuilderStyle.Unavailable;
 import teemowork.MasteryBuilderStyle.Utility;
 import teemowork.MasteryBuilderStyle.Value;
-import teemowork.model.Converter;
 import teemowork.model.Mastery;
 import teemowork.model.MasterySet;
 
@@ -59,7 +58,7 @@ public class MasteryBuilder extends Page {
             {Wealth, Awareness, StrengthOfSpirit, Explorer}, {Pickpocket, Intelligence, null, null},
             {null, Nimble, null, null}};
 
-    private MasterySet masterySet = new MasterySet();
+    private final MasterySet masterySet;
 
     /** The offense value. */
     private jQuery offense;
@@ -80,8 +79,8 @@ public class MasteryBuilder extends Page {
 
     @PageInfo(path = "Mastery/*")
     public MasteryBuilder(String levels) {
+        masterySet = new MasterySet(levels);
         masterySet.register(this);
-        masterySet.decode(levels);
     }
 
     /**
@@ -92,10 +91,6 @@ public class MasteryBuilder extends Page {
         offense = build(root.child(Offense.class), OFFENSE);
         defense = build(root.child(Defense.class), DEFEMSE);
         utility = build(root.child(Utility.class), UTILITY);
-
-        Converter converter = new Converter();
-        converter.setTemplateString("OAdTQYD7HyrxwJToRkCKSwNQiB");
-        System.out.println(converter.getSkills());
 
         update();
     }
@@ -147,7 +142,7 @@ public class MasteryBuilder extends Page {
      */
     @Override
     protected String getPageId() {
-        return "Mastery/" + masterySet.encode();
+        return "Mastery/" + masterySet.toString();
     }
 
     /**
