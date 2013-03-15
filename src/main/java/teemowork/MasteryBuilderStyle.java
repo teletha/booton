@@ -75,6 +75,7 @@ class MasteryBuilderStyle {
         {
             display.block();
             margin.vertical(Gap * 3, px);
+            text.unselectable();
         }
     }
 
@@ -82,6 +83,14 @@ class MasteryBuilderStyle {
 
         {
             visibility.hidden();
+        }
+    }
+
+    class MasteryContainer extends CSS {
+
+        {
+            position.relative();
+            display.inlineBlock();
         }
     }
 
@@ -187,4 +196,81 @@ class MasteryBuilderStyle {
 
         }
     }
+
+    class Popup extends CSS {
+
+        int Width = 200;
+
+        Color borderColor = new Color(0, 98, 97, 0.9);
+
+        Color color = new Color(0, 10, 0, 0.9);
+
+        int BorderWidth = 2;
+
+        {
+            display.block();
+            position.absolute().bottom(IconSize + 35, px).left(0, px);
+            box.width(Width, px).opacity(0).zIndex(100).shadow(0, px, 0, px, 7, px, hsla(0, 0, 0, 0.9));
+            background.image(linear(color.lighten(10), color)).color(color);
+            border.radius(Corner, px).solid().width(BorderWidth, px).color(borderColor);
+            padding.size(5, px);
+            visibility.hidden();
+            font.color(hsl(0, 99, 97));
+            transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
+            pointerEvents.none();
+
+            createBubble(12);
+        }
+
+        private void createBubble(int bubbleWidth) {
+            booton.css.Value width = box.width();
+            Color backgroundColor = background.color();
+
+            booton.css.Value borderWidth = border.width();
+            Color borderColor = border.color();
+
+            if (borderWidth == null) {
+                borderWidth = new booton.css.Value(0, px);
+            }
+
+            position.absolute().left(50, percent);
+            margin.left(width.divide(-2));
+
+            // write bubble
+            while (before()) {
+                display.block();
+                box.size(0, px);
+                content.text("");
+                position.absolute()
+                        .bottom(borderWidth.multiply(-1).subtract(bubbleWidth * 2))
+                        .left(width.divide(2).subtract(borderWidth).subtract(bubbleWidth));
+                border.solid().color.transparent().width(bubbleWidth, px);
+                borderTop.color(borderColor).width(bubbleWidth, px);
+            }
+
+            if (borderWidth.size != 0) {
+                while (after()) {
+                    display.block();
+                    box.size(0, px);
+                    content.text("");
+                    position.absolute()
+                            .bottom(borderWidth.subtract(bubbleWidth * 2))
+                            .left(width.divide(2).subtract(borderWidth).subtract(bubbleWidth));
+                    border.width(bubbleWidth, px).solid().color.transparent();
+                    border.solid().color.transparent().width(bubbleWidth, px);
+                    borderTop.color(backgroundColor).width(bubbleWidth, px);
+                }
+            }
+        }
+    }
+
+    class PopupShow extends CSS {
+
+        {
+            box.opacity(1);
+            visibility.visible();
+            position.bottom(IconSize + 15, px);
+        }
+    }
+
 }
