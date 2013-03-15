@@ -489,6 +489,81 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Bind an event handler to the “mousedown” JavaScript event, or trigger that event on an
+     * element.
+     * </p>
+     * 
+     * @param listener A function to execute each time the event is triggered.
+     * @return
+     */
+    public native jQuery mouseDown(Listener listener);
+
+    /**
+     * <p>
+     * Bind an event handler to be fired when the mouse enters an element, or trigger that handler
+     * on an element.
+     * </p>
+     * 
+     * @param listener A function to execute each time the event is triggered.
+     * @return
+     */
+    public native jQuery mouseEnter(Listener listener);
+
+    /**
+     * <p>
+     * Bind an event handler to be fired when the mouse leaves an element, or trigger that handler
+     * on an element.
+     * </p>
+     * 
+     * @param listener A function to execute each time the event is triggered.
+     * @return
+     */
+    public native jQuery mouseLeave(Listener listener);
+
+    /**
+     * <p>
+     * Bind an event handler to the “mousemove” JavaScript event, or trigger that event on an
+     * element.
+     * </p>
+     * 
+     * @param listener A function to execute each time the event is triggered.
+     * @return
+     */
+    public native jQuery mouseMove(Listener listener);
+
+    /**
+     * <p>
+     * Bind an event handler to the "mouseout" JavaScript event, or trigger that event on an
+     * element.
+     * </p>
+     * 
+     * @param listener A function to execute each time the event is triggered.
+     * @return
+     */
+    public native jQuery mouseOut(Listener listener);
+
+    /**
+     * <p>
+     * Bind an event handler to the “mouseover” JavaScript event, or trigger that event on an eleme.
+     * </p>
+     * 
+     * @param listener A function to execute each time the event is triggered.
+     * @return
+     */
+    public native jQuery mouseOver(Listener listener);
+
+    /**
+     * <p>
+     * Bind an event handler to the “mouseup” JavaScript event, or trigger that event on an element.
+     * </p>
+     * 
+     * @param listener A function to execute each time the event is triggered.
+     * @return
+     */
+    public native jQuery mouseUp(Listener listener);
+
+    /**
+     * <p>
      * Get the immediately following sibling of each element in the set of matched elements. If a
      * selector is provided, it retrieves the next sibling only if it matches that selector.
      * </p>

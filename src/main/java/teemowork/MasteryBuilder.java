@@ -60,6 +60,9 @@ public class MasteryBuilder extends Page {
 
     private final MasterySet masterySet;
 
+    /** The sum. */
+    private jQuery sum;
+
     /** The offense value. */
     private jQuery offense;
 
