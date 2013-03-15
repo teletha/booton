@@ -21,6 +21,32 @@ import booton.translator.Scriptable;
 public class CharArrayTest extends ScriptTester {
 
     @Test
+    public void get() throws Exception {
+        test(new Scriptable() {
+
+            char act() {
+                char[] array = {'a'};
+
+                return array[0];
+            }
+        });
+    }
+
+    @Test
+    public void Array() {
+        test(new Scriptable() {
+
+            public char[] act() {
+                char[] array = new char[2];
+                array[0] = 'a';
+                array[1] = 'b';
+
+                return array;
+            }
+        });
+    }
+
+    @Test
     public void single() throws Exception {
         test(new Scriptable() {
 

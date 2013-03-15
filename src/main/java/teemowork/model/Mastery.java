@@ -14,6 +14,9 @@ package teemowork.model;
  */
 public class Mastery {
 
+    /** The mastery pool. */
+    private static final Mastery[] set = new Mastery[56];
+
     /** The tree type. */
     public static final int Offense = 0;
 
@@ -231,6 +234,8 @@ public class Mastery {
         this.type = type;
         this.rank = rank;
         this.requirement = rank * 4;
+
+        set[id] = this;
     }
 
     /**
@@ -241,5 +246,17 @@ public class Mastery {
      */
     public String getIcon() {
         return "src/main/resources/teemowork/mastery/s3/" + system + ".png";
+    }
+
+    /**
+     * <p>
+     * Get {@link Mastery} by id.
+     * </p>
+     * 
+     * @param id
+     * @return
+     */
+    public static Mastery get(int id) {
+        return set[id];
     }
 }

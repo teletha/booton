@@ -283,4 +283,20 @@ public class MasterySet extends Notifiable {
         }
         return value;
     }
+
+    /**
+     * <p>
+     * </p>
+     * 
+     * @param text
+     */
+    public void decode(String text) {
+        for (int i = 0; i < text.length(); i++) {
+            int level = Integer.parseInt(String.valueOf(text.charAt(i)));
+
+            for (int j = 0; j < level; j++) {
+                up(Mastery.get(i));
+            }
+        }
+    }
 }

@@ -499,4 +499,21 @@ class MathCoder extends Translator<Math> {
     public String random() {
         return "Math.random()";
     }
+
+    /**
+     * Returns the natural logarithm (base <i>e</i>) of a {@code double} value. Special cases:
+     * <ul>
+     * <li>If the argument is NaN or less than zero, then the result is NaN.
+     * <li>If the argument is positive infinity, then the result is positive infinity.
+     * <li>If the argument is positive zero or negative zero, then the result is negative infinity.
+     * </ul>
+     * <p>
+     * The computed result must be within 1 ulp of the exact result. Results must be semi-monotonic.
+     * 
+     * @param a a value
+     * @return the value ln&nbsp;{@code a}, the natural logarithm of {@code a}.
+     */
+    public String log(double param0) {
+        return "Math.log(" + param(0) + ")";
+    }
 }
