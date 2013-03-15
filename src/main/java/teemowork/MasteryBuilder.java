@@ -28,8 +28,11 @@ import teemowork.MasteryBuilderStyle.EmptyIcon;
 import teemowork.MasteryBuilderStyle.Filter;
 import teemowork.MasteryBuilderStyle.Hierarchy;
 import teemowork.MasteryBuilderStyle.Level;
+import teemowork.MasteryBuilderStyle.MasteryContainer;
 import teemowork.MasteryBuilderStyle.MasteryIcon;
 import teemowork.MasteryBuilderStyle.Offense;
+import teemowork.MasteryBuilderStyle.Popup;
+import teemowork.MasteryBuilderStyle.PopupShow;
 import teemowork.MasteryBuilderStyle.Separator;
 import teemowork.MasteryBuilderStyle.Sum;
 import teemowork.MasteryBuilderStyle.Unavailable;
@@ -111,7 +114,8 @@ public class MasteryBuilder extends Page {
             jQuery hierarchy = root.child(Hierarchy.class);
 
             for (final Mastery mastery : masteries) {
-                jQuery icon = hierarchy.child(MasteryIcon.class);
+                jQuery parent = hierarchy.child(MasteryContainer.class);
+                jQuery icon = parent.child(MasteryIcon.class);
 
                 if (mastery == null) {
                     icon.addClass(EmptyIcon.class);
@@ -165,6 +169,9 @@ public class MasteryBuilder extends Page {
         /** The value element. */
         private final jQuery value;
 
+        /** The popup element. */
+        private jQuery popup;
+
         /**
          * <p>
          * Create mastery view.
@@ -176,6 +183,7 @@ public class MasteryBuilder extends Page {
         private MasteryView(final jQuery icon, final Mastery mastery) {
             this.mastery = mastery;
             this.icon = icon;
+            this.popup = icon.parent().child(Popup.class).text(mastery.name);
             this.filter = icon.child(Filter.class);
 
             icon.css("background-image", "url(" + mastery.getIcon() + ")");
@@ -191,14 +199,27 @@ public class MasteryBuilder extends Page {
                 @Override
                 public void handler(Event event) {
                     event.preventDefault();
+
                     masterySet.down(mastery);
                 }
             }).mouseenter(new Listener() {
 
                 @Override
                 public void handler(Event event) {
-                    System.out.println(mastery.name);
-                    System.out.println(event.target);
+                    popup.addClass(PopupShow.class);
+                }
+            }).mouseleave(new Listener() {
+
+                @Override
+                public void handler(Event event) {
+                    popup.removeClass(PopupShow.class);
+                }
+            }).dblclick(new Listener() {
+
+                @Override
+                public void handler(Event event) {
+                    event.preventDefault();
+                    event.stopPropagation();
                 }
             });
 
@@ -206,7 +227,6 @@ public class MasteryBuilder extends Page {
             this.value = level.child(Value.class).text(0);
             level.child(Separator.class).text("/");
             level.child(Value.class).text(mastery.level);
-
         }
 
         /**

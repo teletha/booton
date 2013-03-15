@@ -114,6 +114,17 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
 
     /**
      * <p>
+     * Current width property.
+     * </p>
+     * 
+     * @return A current value.
+     */
+    public Value width() {
+        return width;
+    }
+
+    /**
+     * <p>
      * The xxx-width CSS property sets the width of the border of a box.
      * </p>
      * 

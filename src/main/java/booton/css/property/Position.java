@@ -94,6 +94,25 @@ public class Position extends CSSProperty<Position> {
      * containing block.
      * </p>
      * 
+     * @param value A position value.
+     * @return Chainable API.
+     */
+    public Position left(Value value) {
+        left = value;
+
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The left CSS property specifies part of the position of positioned elements.
+     * </p>
+     * <p>
+     * For absolutely positioned elements (those with position: absolute or position: fixed), it
+     * specifies the distance between the left margin edge of the element and the left edge of its
+     * containing block.
+     * </p>
+     * 
      * @param size A position value.
      * @param unit A unit.
      * @return Chainable API.
@@ -124,12 +143,70 @@ public class Position extends CSSProperty<Position> {
      * set to -right).
      * </p>
      * 
+     * @param value A position value.
+     * @return Chainable API.
+     */
+    public Position right(Value value) {
+        right = value;
+
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The right CSS property specifies part of the position of positioned elements.
+     * </p>
+     * <p>
+     * For absolutely positioned elements (those with position: absolute or position: fixed), it
+     * specifies the distance between the right margin edge of the element and the right edge of its
+     * containing block.
+     * </p>
+     * <p>
+     * The right property has no effect on non-positioned elements.
+     * </p>
+     * <p>
+     * When both the right CSS property and the left CSS property are defined, the position of the
+     * element is overspecified. In that case, the left value has precedence when the container is
+     * left-to-right (that is that the right computed value is set to -left), and the right value
+     * has precedence when the container is right-to-left (that is that the left computed value is
+     * set to -right).
+     * </p>
+     * 
      * @param size A position value.
      * @param unit A unit.
      * @return Chainable API.
      */
     public Position right(double size, Unit unit) {
         right = new Value(size, unit);
+
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The top CSS property specifies part of the position of positioned elements. It has no effect
+     * on non-positioned elements.
+     * </p>
+     * <p>
+     * For absolutely positioned elements (those with position: absolute or position: fixed), it
+     * specifies the distance between the top margin edge of the element and the top edge of its
+     * containing block.
+     * </p>
+     * <p>
+     * For relatively positioned elements (those with position: relative), it specifies the amount
+     * the element is moved below its normal position.
+     * </p>
+     * <p>
+     * When both top and bottom are specified, the element position is over-constrained and the top
+     * property has precedence: the computed value of bottom is set to -top, while its specified
+     * value is ignored.
+     * </p>
+     * 
+     * @param value A position value.
+     * @return Chainable API.
+     */
+    public Position top(Value value) {
+        top = value;
 
         return chain();
     }

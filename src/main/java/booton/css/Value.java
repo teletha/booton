@@ -39,6 +39,78 @@ public class Value {
 
     /**
      * <p>
+     * Addition.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Value add(int value) {
+        return new Value(size + value, unit);
+    }
+
+    /**
+     * <p>
+     * Addition.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Value add(Value value) {
+        return new Value(size + value.size, unit);
+    }
+
+    /**
+     * <p>
+     * Subtraction.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Value subtract(int value) {
+        return new Value(size - value, unit);
+    }
+
+    /**
+     * <p>
+     * Subtraction.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Value subtract(Value value) {
+        return new Value(size - value.size, unit);
+    }
+
+    /**
+     * <p>
+     * Multiply.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Value multiply(int value) {
+        return new Value(size * value, unit);
+    }
+
+    /**
+     * <p>
+     * Multiply.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Value multiply(Value value) {
+        return new Value(size * value.size, unit);
+    }
+
+    /**
+     * <p>
      * Division.
      * </p>
      * 
@@ -47,6 +119,18 @@ public class Value {
      */
     public Value divide(int value) {
         return new Value(size / value, unit);
+    }
+
+    /**
+     * <p>
+     * Division.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Value divide(Value value) {
+        return new Value(size / value.size, unit);
     }
 
     /**

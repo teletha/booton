@@ -2645,9 +2645,10 @@ jQuery.event = {
 					// ==========================================================
 					// Modified Code
 					// ==========================================================
-					var originalHandler = handleObj.handler;
+					var listener = handleObj.handler;
+
 					handleObj.handler = function() {
-					  originalHandler.apply(handleObj && handleObj.$0 ? handleObj : this, args);
+					  listener.apply(handleObj && handleObj.$0 ? handleObj : this, arguments);
 					};
 					// ==========================================================
 

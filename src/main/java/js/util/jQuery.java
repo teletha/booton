@@ -345,6 +345,50 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Set one or more CSS properties for the set of matched elements.
+     * </p>
+     * 
+     * @param property A CSS property name.
+     * @param value A value to set for the property.
+     * @return
+     */
+    public native jQuery css(String property, int value);
+
+    /**
+     * <p>
+     * Set one or more CSS properties for the set of matched elements.
+     * </p>
+     * 
+     * @param property A CSS property name.
+     * @param value A value to set for the property.
+     * @return
+     */
+    public native jQuery css(String property, long value);
+
+    /**
+     * <p>
+     * Set one or more CSS properties for the set of matched elements.
+     * </p>
+     * 
+     * @param property A CSS property name.
+     * @param value A value to set for the property.
+     * @return
+     */
+    public native jQuery css(String property, float value);
+
+    /**
+     * <p>
+     * Set one or more CSS properties for the set of matched elements.
+     * </p>
+     * 
+     * @param property A CSS property name.
+     * @param value A value to set for the property.
+     * @return
+     */
+    public native jQuery css(String property, double value);
+
+    /**
+     * <p>
      * This is a shortcut for .trigger("dblclick").
      * </p>
      * 
