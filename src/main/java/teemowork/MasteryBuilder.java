@@ -35,6 +35,7 @@ import teemowork.MasteryBuilderStyle.Sum;
 import teemowork.MasteryBuilderStyle.Unavailable;
 import teemowork.MasteryBuilderStyle.Utility;
 import teemowork.MasteryBuilderStyle.Value;
+import teemowork.model.Converter;
 import teemowork.model.Mastery;
 import teemowork.model.MasterySet;
 
@@ -80,8 +81,7 @@ public class MasteryBuilder extends Page {
     @PageInfo(path = "Mastery/*")
     public MasteryBuilder(String levels) {
         masterySet.register(this);
-
-        System.out.println(levels + " init");
+        masterySet.decode(levels);
     }
 
     /**
@@ -93,16 +93,11 @@ public class MasteryBuilder extends Page {
         defense = build(root.child(Defense.class), DEFEMSE);
         utility = build(root.child(Utility.class), UTILITY);
 
-        update();
-    }
+        Converter converter = new Converter();
+        converter.setTemplateString("OAdTQYD7HyrxwJToRkCKSwNQiB");
+        System.out.println(converter.getSkills());
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void unload() {
-        System.out.println("unload " + masterySet.encode());
-        history.pushState("", "", "#" + getPageId());
+        update();
     }
 
     /**
@@ -143,6 +138,8 @@ public class MasteryBuilder extends Page {
         offense.text("OFFENSE　" + masterySet.getSum(Mastery.Offense));
         defense.text("DEFENSE　" + masterySet.getSum(Mastery.Defense));
         utility.text("UTILITY　" + masterySet.getSum(Mastery.Utility));
+
+        history.replaceState("", "", "#" + getPageId());
     }
 
     /**

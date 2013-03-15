@@ -156,10 +156,6 @@ public abstract class Application {
          * @param pageId
          */
         private void dispatch(Page page) {
-            if (current != null) {
-                current.unload();
-            }
-
             // create element cradle
             jQuery cradle = $(document.createDocumentFragment());
 

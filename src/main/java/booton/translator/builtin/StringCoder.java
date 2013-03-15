@@ -79,6 +79,19 @@ class StringCoder extends Translator<String> {
         return that + ".concat(" + param(0) + ")";
     }
 
+    /**
+     * <p>
+     * Converts this string to a new character array.
+     * </p>
+     * 
+     * @return a newly allocated character array whose length is the length of this string and whose
+     *         contents are initialized to contain the character sequence represented by this
+     *         string.
+     */
+    public String toCharArray() {
+        return that + ".split('')";
+    }
+
     public String toLowerCase() {
         return that + ".toLowerCase()";
     }

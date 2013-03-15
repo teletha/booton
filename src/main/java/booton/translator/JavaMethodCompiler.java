@@ -714,6 +714,7 @@ class JavaMethodCompiler extends MethodVisitor {
         case LALOAD:
         case FALOAD:
         case DALOAD:
+        case CALOAD:
             current.addOperand(current.remove(1) + "[" + current.remove(0) + "]");
             break;
 

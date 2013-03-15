@@ -34,14 +34,4 @@ public abstract class Page {
      * @param root
      */
     public abstract void load(jQuery root);
-
-    /**
-     * <p>
-     * Invoke whenever this page is loaded.
-     * </p>
-     * 
-     * @param root
-     */
-    public void unload() {
-    }
 }
