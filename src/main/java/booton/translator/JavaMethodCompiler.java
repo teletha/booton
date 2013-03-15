@@ -603,13 +603,13 @@ class JavaMethodCompiler extends MethodVisitor {
         // & operand
         case IAND:
         case LAND:
-            current.join("&");
+            current.join("&").enclose();
             break;
 
         // | operand
         case IOR:
         case LOR:
-            current.join("|");
+            current.join("|").enclose();
             break;
 
         // ^ operand
