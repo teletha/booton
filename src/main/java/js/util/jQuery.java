@@ -496,29 +496,41 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @param listener A function to execute each time the event is triggered.
      * @return
      */
-    public native jQuery mouseDown(Listener listener);
+    public native jQuery mousedown(Listener listener);
 
     /**
      * <p>
      * Bind an event handler to be fired when the mouse enters an element, or trigger that handler
      * on an element.
      * </p>
+     * <p>
+     * The mouseenter JavaScript event is proprietary to Internet Explorer. Because of the event's
+     * general utility, jQuery simulates this event so that it can be used regardless of browser.
+     * This event is sent to an element when the mouse pointer enters the element. Any HTML element
+     * can receive this event.
+     * </p>
      * 
      * @param listener A function to execute each time the event is triggered.
      * @return
      */
-    public native jQuery mouseEnter(Listener listener);
+    public native jQuery mouseenter(Listener listener);
 
     /**
      * <p>
      * Bind an event handler to be fired when the mouse leaves an element, or trigger that handler
      * on an element.
      * </p>
+     * <p>
+     * The mouseleave JavaScript event is proprietary to Internet Explorer. Because of the event's
+     * general utility, jQuery simulates this event so that it can be used regardless of browser.
+     * This event is sent to an element when the mouse pointer leaves the element. Any HTML element
+     * can receive this event.
+     * </p>
      * 
      * @param listener A function to execute each time the event is triggered.
      * @return
      */
-    public native jQuery mouseLeave(Listener listener);
+    public native jQuery mouseleave(Listener listener);
 
     /**
      * <p>
@@ -529,7 +541,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @param listener A function to execute each time the event is triggered.
      * @return
      */
-    public native jQuery mouseMove(Listener listener);
+    public native jQuery mousemove(Listener listener);
 
     /**
      * <p>
@@ -540,7 +552,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @param listener A function to execute each time the event is triggered.
      * @return
      */
-    public native jQuery mouseOut(Listener listener);
+    public native jQuery mouseout(Listener listener);
 
     /**
      * <p>
@@ -550,7 +562,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @param listener A function to execute each time the event is triggered.
      * @return
      */
-    public native jQuery mouseOver(Listener listener);
+    public native jQuery mouseover(Listener listener);
 
     /**
      * <p>
@@ -560,7 +572,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @param listener A function to execute each time the event is triggered.
      * @return
      */
-    public native jQuery mouseUp(Listener listener);
+    public native jQuery mouseup(Listener listener);
 
     /**
      * <p>
