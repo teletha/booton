@@ -173,7 +173,7 @@ public class MasteryBuilder extends Page {
          * @param icon
          * @param mastery
          */
-        private MasteryView(jQuery icon, final Mastery mastery) {
+        private MasteryView(final jQuery icon, final Mastery mastery) {
             this.mastery = mastery;
             this.icon = icon;
             this.filter = icon.child(Filter.class);
@@ -192,6 +192,13 @@ public class MasteryBuilder extends Page {
                 public void handler(Event event) {
                     event.preventDefault();
                     masterySet.down(mastery);
+                }
+            }).mouseenter(new Listener() {
+
+                @Override
+                public void handler(Event event) {
+                    System.out.println(mastery.name);
+                    System.out.println(event.target);
                 }
             });
 
