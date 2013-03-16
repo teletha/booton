@@ -9,10 +9,12 @@
  */
 package teemowork.model;
 
+import static teemowork.model.Status.*;
+
 /**
  * @version 2013/03/13 14:34:14
  */
-public class Mastery extends Descriptable<MasteryDescriptor> {
+public class Mastery extends Describable<MasteryDescriptor> {
 
     /** The mastery pool. */
     public static final Mastery[] VALUES = new Mastery[56];
@@ -206,9 +208,6 @@ public class Mastery extends Descriptable<MasteryDescriptor> {
     /** The system name. */
     public final String system;
 
-    /** The maximum level. */
-    public final int level;
-
     /** The tree type. */
     public final int type;
 
@@ -217,6 +216,9 @@ public class Mastery extends Descriptable<MasteryDescriptor> {
 
     /** The required point. */
     public final int requirement;
+
+    /** The maximum level. */
+    private final int level;
 
     /** The descriptor. */
     private MasteryDescriptor[] versions = new MasteryDescriptor[Version.values().length];
@@ -242,6 +244,14 @@ public class Mastery extends Descriptable<MasteryDescriptor> {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getMaxLevel() {
+        return level;
+    }
+
+    /**
      * <p>
      * </p>
      * 
@@ -257,5 +267,12 @@ public class Mastery extends Descriptable<MasteryDescriptor> {
     @Override
     protected MasteryDescriptor createDescriptor(MasteryDescriptor previous) {
         return new MasteryDescriptor(this, previous);
+    }
+
+    static {
+        Fury.update().passive("{1}する。").variable(1, ASRatio, 1, 1);
+        Sorcery.update().passive("{1}を得る。").variable(1, CDR, 1, 1);
+        Butcher.update().passive("ミニオンや中立モンスターへの通常攻撃のDMが{1}増加する。").variable(1, Count, 2, 2);
+        Deadliness.update().passive("{1}する。Lv18時で{2}。").variable(1, ADPerLv, 0.17, 0.17).variable(2, AD, 3, 3);
     }
 }

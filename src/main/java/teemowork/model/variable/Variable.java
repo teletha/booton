@@ -24,6 +24,9 @@ import teemowork.model.StatusCalculator;
  */
 public class Variable {
 
+    /** The empty object. */
+    private static final StatusCalculator EMPTY = new EmptyCalculator();
+
     /** The variable type. */
     private Status status;
 
@@ -128,10 +131,26 @@ public class Variable {
      * </p>
      * 
      * @param level A level.
+     * @return A calculated value.
+     */
+    public double calculate(int level) {
+        return calculate(level, null);
+    }
+
+    /**
+     * <p>
+     * Calculate value by using the specified calculator.
+     * </p>
+     * 
+     * @param level A level.
      * @param calculator A status calculator.
      * @return A calculated value.
      */
     public double calculate(int level, StatusCalculator calculator) {
+        if (calculator == null) {
+            calculator = EMPTY;
+        }
+
         if (!set.add(calculator)) {
             return 0;
         }
@@ -163,5 +182,20 @@ public class Variable {
         if (amplifier != null) {
             amplifiers.add(amplifier);
         }
+    }
+
+    /**
+     * @version 2013/03/16 21:43:18
+     */
+    private static class EmptyCalculator implements StatusCalculator {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public double calculate(Status status) {
+            return 0;
+        }
+
     }
 }
