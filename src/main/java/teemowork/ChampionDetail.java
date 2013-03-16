@@ -18,7 +18,6 @@ import java.util.List;
 import js.application.Page;
 import js.application.PageInfo;
 import js.bind.Notifiable;
-import js.bind.Observable;
 import js.bind.Observer;
 import js.math.Mathematics;
 import js.util.ArrayList;
@@ -77,7 +76,6 @@ public class ChampionDetail extends Page {
     private List<StatusView> statuses = new ArrayList();
 
     /** The your custom build. */
-    @Observable
     private final Build build;
 
     /** The status. */

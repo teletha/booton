@@ -9,15 +9,15 @@
  */
 package js.bind;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
- * @version 2013/01/16 10:10:11
+ * @version 2013/03/16 23:52:56
  */
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Observable {
+public interface Subscriber {
+
+    /**
+     * <p>
+     * Receive event.
+     * </p>
+     */
+    void receive();
 }

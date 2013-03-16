@@ -16,10 +16,19 @@ import js.util.ArrayList;
 /**
  * @version 2013/03/16 12:53:49
  */
-public abstract class Descriptable<T extends Descriptor> {
+public abstract class Describable<T extends Descriptor> {
 
     /** The version manager. */
     private final List<T> versions = new ArrayList(Version.values().length);
+
+    /**
+     * <p>
+     * Retrieve the maximum level of this object.
+     * </p>
+     * 
+     * @return The maximum level.
+     */
+    public abstract int getMaxLevel();
 
     /**
      * <p>
@@ -34,7 +43,7 @@ public abstract class Descriptable<T extends Descriptor> {
                 return descriptor;
             }
         }
-        return null;
+        return createDescriptor(null);
     }
 
     /**

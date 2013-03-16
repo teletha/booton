@@ -188,7 +188,7 @@ public class MasterySet extends Notifiable {
      * @return
      */
     public boolean isMax(Mastery mastery) {
-        return levels[mastery.id] == mastery.level;
+        return levels[mastery.id] == mastery.getMaxLevel();
     }
 
     /**
@@ -285,7 +285,7 @@ public class MasterySet extends Notifiable {
         int value = 0;
 
         for (Mastery mastery : Mastery.VALUES) {
-            if (mastery.level == level) {
+            if (mastery.getMaxLevel() == level) {
                 value |= levels[mastery.id] << step;
 
                 // step into next mastery
@@ -316,7 +316,7 @@ public class MasterySet extends Notifiable {
         int value = Integer.parseInt(serialized, 36);
 
         for (Mastery mastery : Mastery.VALUES) {
-            if (mastery.level == level) {
+            if (mastery.getMaxLevel() == level) {
                 int mask = (int) Math.pow(2, binarySize) - 1 << step;
 
                 changeLevel(mastery, (value & mask) >> step);
@@ -341,8 +341,8 @@ public class MasterySet extends Notifiable {
         int current = levels[mastery.id];
 
         // validate value range
-        if (mastery.level < current + value) {
-            value = mastery.level - current;
+        if (mastery.getMaxLevel() < current + value) {
+            value = mastery.getMaxLevel() - current;
         } else if (current + value < 0) {
             value = -current;
         }

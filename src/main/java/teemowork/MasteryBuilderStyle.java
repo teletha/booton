@@ -199,7 +199,7 @@ class MasteryBuilderStyle {
 
     class Popup extends CSS {
 
-        int Width = 200;
+        int Width = 250;
 
         Color borderColor = new Color(0, 98, 97, 0.9);
 
@@ -213,9 +213,9 @@ class MasteryBuilderStyle {
             box.width(Width, px).opacity(0).zIndex(100).shadow(0, px, 0, px, 7, px, hsla(0, 0, 0, 0.9));
             background.image(linear(color.lighten(10), color)).color(color);
             border.radius(Corner, px).solid().width(BorderWidth, px).color(borderColor);
-            padding.size(5, px);
+            padding.size(10, px);
             visibility.hidden();
-            font.color(hsl(0, 99, 97));
+            font.color(hsl(0, 99, 97)).size.smaller();
             transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
             pointerEvents.none();
 
@@ -273,4 +273,33 @@ class MasteryBuilderStyle {
         }
     }
 
+    class Name extends CSS {
+
+        {
+            display.block();
+            margin.bottom(0.7, em);
+            font.weight.bolder();
+        }
+    }
+
+    class Description extends CSS {
+
+        {
+
+        }
+    }
+
+    class Current extends CSS {
+
+        {
+
+        }
+    }
+
+    class ComputedValue extends CSS {
+
+        {
+
+        }
+    }
 }

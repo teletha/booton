@@ -10,19 +10,36 @@
 package teemowork.model;
 
 import java.util.List;
+import java.util.Map;
 
 import js.util.ArrayList;
+import js.util.HashMap;
+import teemowork.model.variable.Variable;
+import teemowork.model.variable.VariableResolver;
+import teemowork.model.variable.VariableResolver.Diff;
 
 /**
  * @version 2013/03/16 13:36:52
  */
 public abstract class Descriptor<T extends Descriptor> {
 
+    /** The target object to describe. */
+    private final Describable describable;
+
+    /** The previous version. */
+    private final Descriptor<T> previous;
+
     /** The ability description. */
     private List passive;
 
     /** The ability description. */
     private List active;
+
+    /** The flag for initialization of variable pool. */
+    private boolean initializable = true;
+
+    /** The variable store. */
+    private Map<String, Variable> variables;
 
     /**
      * <p>
@@ -31,14 +48,41 @@ public abstract class Descriptor<T extends Descriptor> {
      * 
      * @param previous
      */
-    protected Descriptor(Descriptor<T> previous) {
+    protected Descriptor(Describable describable, Descriptor<T> previous) {
+        this.describable = describable;
+        this.previous = previous;
+
         if (previous == null) {
             passive = new ArrayList();
             active = new ArrayList();
+            variables = new HashMap();
+
+            initializable = false;
         } else {
             passive = previous.passive;
             active = previous.active;
+            variables = previous.variables;
         }
+    }
+
+    /**
+     * <p>
+     * Retrieve passive text.
+     * </p>
+     * 
+     * @return
+     */
+    public final List getPassive() {
+        List tokens = new ArrayList();
+
+        for (Object token : passive) {
+            if (token instanceof VariableReference) {
+                tokens.add(variables.get(token.toString()));
+            } else {
+                tokens.add(token);
+            }
+        }
+        return tokens;
     }
 
     /**
@@ -49,10 +93,31 @@ public abstract class Descriptor<T extends Descriptor> {
      * @param text
      * @return
      */
-    protected T passive(String text) {
+    protected final T passive(String text) {
+        passive = parse(text);
 
         // Chainable API
         return (T) this;
+    }
+
+    /**
+     * <p>
+     * Retrieve active text.
+     * </p>
+     * 
+     * @return
+     */
+    public final List getActive() {
+        List tokens = new ArrayList();
+
+        for (Object token : active) {
+            if (token instanceof VariableReference) {
+                tokens.add(variables.get(token.toString()));
+            } else {
+                tokens.add(token);
+            }
+        }
+        return tokens;
     }
 
     /**
@@ -63,7 +128,8 @@ public abstract class Descriptor<T extends Descriptor> {
      * @param text
      * @return
      */
-    protected T active(String text) {
+    protected final T active(String text) {
+        active = parse(text);
 
         // Chainable API
         return (T) this;
@@ -88,6 +154,125 @@ public abstract class Descriptor<T extends Descriptor> {
             }
         }
         return tokens;
+    }
+
+    /**
+     * <p>
+     * Set new variable.
+     * </p>
+     * 
+     * @param id A variable identifier.
+     * @param status A variable type.
+     * @return A chainable API.
+     */
+    protected final T variable(int id, Status status) {
+        return variable(id, status, 0);
+    }
+
+    /**
+     * <p>
+     * Set new variable.
+     * </p>
+     * 
+     * @param id A variable identifier.
+     * @param status A variable type.
+     * @param base A base value.
+     * @return A chainable API.
+     */
+    protected final T variable(int id, Status status, double base) {
+        return variable(id, status, base, 0);
+    }
+
+    /**
+     * <p>
+     * Set new variable.
+     * </p>
+     * 
+     * @param id A variable identifier.
+     * @param status A variable type.
+     * @param base A base value.
+     * @param diff A diff value.
+     * @return A chainable API.
+     */
+    protected final T variable(int id, Status status, double base, double diff) {
+        return variable(id, status, base, diff, null, null);
+    }
+
+    /**
+     * <p>
+     * Set new variable.
+     * </p>
+     * 
+     * @param id A variable identifier.
+     * @param status A variable type.
+     * @param resolver A resolver.
+     * @return Chainable API.
+     */
+    protected final T variable(int id, Status status, VariableResolver resolver) {
+        return variable(id, status, resolver, null, null);
+    }
+
+    /**
+     * <p>
+     * Set new variable.
+     * </p>
+     * 
+     * @param id A variable identifier.
+     * @param status A variable type.
+     * @param base A base value.
+     * @param diff A diff value.
+     * @param amplifier A first amplifier.
+     * @return Chainable API.
+     */
+    protected final T variable(int id, Status status, double base, double diff, Variable amplifier) {
+        return variable(id, status, base, diff, amplifier, null);
+    }
+
+    /**
+     * <p>
+     * Set new variable.
+     * </p>
+     * 
+     * @param id A variable identifier.
+     * @param status A variable type.
+     * @param base A base value.
+     * @param diff A diff value.
+     * @param first A first amplifier.
+     * @param second A second amplifier.
+     * @return Chainable API.
+     */
+    protected final T variable(int id, Status status, double base, double diff, Variable first, Variable second) {
+        return variable(id, status, new Diff(base, diff, describable.getMaxLevel()), first, second);
+    }
+
+    /**
+     * <p>
+     * Set new variable.
+     * </p>
+     * 
+     * @param id A variable identifier.
+     * @param status A variable type.
+     * @param resolver A resolver.
+     * @param first A first amplifier.
+     * @param second A second amplifier.
+     * @return Chainable API.
+     */
+    protected final T variable(int id, Status status, VariableResolver resolver, Variable first, Variable second) {
+        Variable variable = new Variable(status, resolver);
+        variable.add(first);
+        variable.add(second);
+
+        if (initializable) {
+            initializable = false;
+            variables = new HashMap();
+
+            if (previous != null) {
+                variables.putAll(previous.variables);
+            }
+        }
+        variables.put(String.valueOf(id), variable);
+
+        return (T) this;
     }
 
     /**
