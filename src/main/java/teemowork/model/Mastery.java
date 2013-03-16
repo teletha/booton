@@ -12,7 +12,7 @@ package teemowork.model;
 /**
  * @version 2013/03/13 14:34:14
  */
-public class Mastery {
+public class Mastery extends Descriptable<MasteryDescriptor> {
 
     /** The mastery pool. */
     public static final Mastery[] VALUES = new Mastery[56];
@@ -218,6 +218,9 @@ public class Mastery {
     /** The required point. */
     public final int requirement;
 
+    /** The descriptor. */
+    private MasteryDescriptor[] versions = new MasteryDescriptor[Version.values().length];
+
     /**
      * <p>
      * Define mastery.
@@ -246,5 +249,13 @@ public class Mastery {
      */
     public String getIcon() {
         return "src/main/resources/teemowork/mastery/s3/" + system + ".png";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected MasteryDescriptor createDescriptor(MasteryDescriptor previous) {
+        return new MasteryDescriptor(this, previous);
     }
 }
