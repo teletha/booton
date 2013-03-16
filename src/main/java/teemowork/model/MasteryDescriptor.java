@@ -9,10 +9,15 @@
  */
 package teemowork.model;
 
-
 /**
  * @version 2013/03/13 14:55:20
  */
-public class MasteryDescriptor {
+public class MasteryDescriptor extends Descriptor<MasteryDescriptor> {
+
+    /**
+     * 
+     */
+    MasteryDescriptor(Mastery mastery, MasteryDescriptor previous) {
+    }
 
 }
