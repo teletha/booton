@@ -20,7 +20,7 @@ public enum Status {
     // Damage Type
     // ==================================================
     /** Any Damage */
-    Damage("DM"), DamageRatio("DM"),
+    Damage("ダメージ"), DamageRatio(Damage), CriticalDamageRatio("クリティカルダメージ", 2),
 
     /** Physical Daname */
     PhysicalDamage("物理DM"),
@@ -32,7 +32,7 @@ public enum Status {
     TrueDamage("TrueDM"),
 
     /** ATtack Damage */
-    AttackDamage("通常攻撃によるDM"), AttackDamageRatio(AttackDamage),
+    AttackDamage("通常攻撃によるダメージ"), AttackDamageRatio(AttackDamage),
 
     /** Dealt Damage */
     DealtDamage("与えたDM"), DealtDamageRatio(DealtDamage),
@@ -131,7 +131,7 @@ public enum Status {
     // Ability Power Related
     // ==================================================
     /** Ability Power */
-    AP, APPerLv, APRatio,
+    AP, APPerLv, APRatio("AP", 2),
 
     /** Cooldown Reduction */
     CDR("CD減少"), CDRPerLv, CDRRatio,
@@ -325,21 +325,21 @@ public enum Status {
      * @param precision
      */
     private Status() {
-        this(0);
+        this(1);
     }
 
     /**
      * @param name
      */
     private Status(String name) {
-        this(name, 0);
+        this(name, 1);
     }
 
     /**
      * @param status
      */
     private Status(Status status) {
-        this(status.name, 0);
+        this(status.name, 1);
     }
 
     /**
@@ -452,6 +452,7 @@ public enum Status {
 
         case CDR:
         case Critical:
+        case CriticalDamageRatio:
         case SV:
         case LS:
         case Tenacity:
@@ -479,9 +480,13 @@ public enum Status {
         case Critical:
         case MS:
         case DamageRatio:
+        case CriticalDamageRatio:
+        case AttackDamage:
+        case AttackDamageRatio:
         case MSRatio:
         case ASRatio:
         case ADRatio:
+        case APRatio:
         case ARRatio:
         case MRRatio:
         case ExperimentRatio:

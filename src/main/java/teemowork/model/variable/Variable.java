@@ -151,7 +151,7 @@ public class Variable {
             calculator = EMPTY;
         }
 
-        if (!set.add(calculator)) {
+        if (level == 0 || !set.add(calculator)) {
             return 0;
         }
 
