@@ -15,6 +15,7 @@ import static org.objectweb.asm.Type.*;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1277,6 +1278,12 @@ class JavaMethodCompiler extends MethodVisitor {
             if (Switch.isEnumSwitchTable(methodName, desc)) {
                 enumSwitchInvoked = true;
             } else {
+                // Non-private static method which is called from child class have parent
+                // class signature.
+                while (!hasStaticMethod(owner, methodName, parameters)) {
+                    owner = owner.getSuperclass();
+                }
+
                 // push class operand
                 contexts.add(0, new OperandExpression(Javascript.computeClassName(owner)));
 
@@ -1290,6 +1297,26 @@ class JavaMethodCompiler extends MethodVisitor {
         // write out the expression of method invocation immediatly.
         if (immediately && current.stack.size() != 0) {
             current.addExpression(current.remove(0));
+        }
+    }
+
+    /**
+     * <p>
+     * Check static method.
+     * </p>
+     * 
+     * @param owner
+     * @param name
+     * @param types
+     * @return
+     */
+    private boolean hasStaticMethod(Class owner, String name, Class[] types) {
+        try {
+            Method method = owner.getDeclaredMethod(name, types);
+
+            return Modifier.isStatic(method.getModifiers());
+        } catch (NoSuchMethodException e) {
+            return false;
         }
     }
 

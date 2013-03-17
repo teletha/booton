@@ -9,14 +9,22 @@
  */
 package teemowork.model;
 
+import static teemowork.model.Status.*;
+
 import java.util.List;
 
 import js.util.ArrayList;
+import teemowork.model.variable.Variable;
+import teemowork.model.variable.VariableResolver;
+import teemowork.model.variable.VariableResolver.Diff;
 
 /**
  * @version 2013/03/16 12:53:49
  */
 public abstract class Describable<T extends Descriptor> {
+
+    /** The current processing object. */
+    private static Describable current;
 
     /** The version manager. */
     private final List<T> versions = new ArrayList(Version.values().length);
@@ -70,6 +78,9 @@ public abstract class Describable<T extends Descriptor> {
         // versioning management
         versions.set(version.ordinal(), descriptor);
 
+        // for helper methods
+        current = this;
+
         // API definition
         return descriptor;
     }
@@ -83,4 +94,113 @@ public abstract class Describable<T extends Descriptor> {
      * @return
      */
     protected abstract T createDescriptor(T previous);
+
+    /**
+     * <p>
+     * Create skill AP amplifier. This pattern is used frequently.
+     * </p>
+     * 
+     * @param rate An AP rate.
+     * @return
+     */
+    protected static final Variable ap(double rate) {
+        return amplify(AP, rate);
+    }
+
+    /**
+     * <p>
+     * Create skill AD amplifier. This pattern is used frequently.
+     * </p>
+     * 
+     * @param rate An AD rate.
+     * @return
+     */
+    protected static final Variable ad(double rate) {
+        return amplify(AD, rate);
+    }
+
+    /**
+     * <p>
+     * Create skill AD amplifier. This pattern is used frequently.
+     * </p>
+     * 
+     * @param rate An AD rate.
+     * @return
+     */
+    protected static final Variable bounusAD(double rate) {
+        return amplify(BounusAD, rate);
+    }
+
+    /**
+     * <p>
+     * Helper method to create nre amplifier.
+     * </p>
+     * 
+     * @param status A status type.
+     * @param base A base value of amplifier rate.
+     * @return
+     */
+    protected static final Variable amplify(Status status, double base) {
+        return amplify(status, base, 0);
+    }
+
+    /**
+     * <p>
+     * Helper method to create nre amplifier.
+     * </p>
+     * 
+     * @param status A status type.
+     * @param base A base value of amplifier rate.
+     * @param diff A diff value of amplifier rate.
+     * @return
+     */
+    protected static final Variable amplify(Status status, double base, double diff) {
+        return amplify(status, new Diff(base, diff, current.getMaxLevel()));
+    }
+
+    /**
+     * <p>
+     * Helper method to create nre amplifier.
+     * </p>
+     * 
+     * @param status A status type.
+     * @param base A base value of amplifier rate.
+     * @param diff A diff value of amplifier rate.
+     * @return
+     */
+    protected static final Variable amplify(Status status, VariableResolver resolver) {
+        return new Variable(status, resolver);
+    }
+
+    /**
+     * <p>
+     * Helper method to create nre amplifier.
+     * </p>
+     * 
+     * @param status A status type.
+     * @param base A base value of amplifier rate.
+     * @param diff A diff value of amplifier rate.
+     * @return
+     */
+    protected static final Variable amplify(Status status, double base, double diff, Variable amplifier) {
+        return amplify(status, base, diff, amplifier, null);
+    }
+
+    /**
+     * <p>
+     * Helper method to create nre amplifier.
+     * </p>
+     * 
+     * @param status A status type.
+     * @param base A base value of amplifier rate.
+     * @param diff A diff value of amplifier rate.
+     * @return
+     */
+    protected static final Variable amplify(Status status, double base, double diff, Variable first, Variable second) {
+        Variable variable = amplify(status, base, diff);
+        variable.add(first);
+        variable.add(second);
+
+        return variable;
+    }
 }

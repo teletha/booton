@@ -359,6 +359,17 @@ public enum Status {
 
     /**
      * <p>
+     * Test status type.
+     * </p>
+     * 
+     * @return
+     */
+    public boolean isPerLv() {
+        return name().endsWith("PerLv");
+    }
+
+    /**
+     * <p>
      * Find per level status.
      * </p>
      * 
