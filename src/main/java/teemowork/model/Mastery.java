@@ -10,6 +10,7 @@
 package teemowork.model;
 
 import static teemowork.model.Status.*;
+import teemowork.model.variable.VariableResolver.Fixed;
 
 /**
  * @version 2013/03/13 14:34:14
@@ -273,6 +274,8 @@ public class Mastery extends Describable<MasteryDescriptor> {
         Fury.update().passive("{1}する。").variable(1, ASRatio, 1, 1);
         Sorcery.update().passive("{1}を得る。").variable(1, CDR, 1, 1);
         Butcher.update().passive("ミニオンや中立モンスターへの通常攻撃のDMが{1}増加する。").variable(1, Count, 2, 2);
-        Deadliness.update().passive("{1}する。Lv18時で{2}。").variable(1, ADPerLv, 0.17, 0.17).variable(2, AD, 3, 3);
+        Deadliness.update()
+                .passive("{1}する。")
+                .variable(1, AD, 0, 0, amplify(Lv, new Fixed(new double[] {0.17, 0.33, 0.5, 0.67})));
     }
 }
