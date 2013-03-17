@@ -199,7 +199,7 @@ class MasteryBuilderStyle {
 
     class Popup extends CSS {
 
-        int Width = 200;
+        int Width = 220;
 
         Color borderColor = new Color(0, 98, 97, 0.9);
 
@@ -231,6 +231,10 @@ class MasteryBuilderStyle {
 
             if (borderWidth == null) {
                 borderWidth = new booton.css.Value(0, px);
+            }
+
+            if (!position.isAbsolute() && !position.isRelative()) {
+                position.relative();
             }
 
             // write bubble

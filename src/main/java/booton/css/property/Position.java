@@ -46,6 +46,17 @@ public class Position extends CSSProperty<Position> {
 
     /**
      * <p>
+     * Helper method to test position property.
+     * </p>
+     * 
+     * @return A result.
+     */
+    public boolean isRelative() {
+        return value.equals("relative");
+    }
+
+    /**
+     * <p>
      * Lay out all elements as though the element were not positioned, and then adjust the element's
      * position, without changing layout (and thus leaving a gap for the element where it would have
      * been had it not been positioned). The effect of position:relative on table-*-group,
@@ -56,6 +67,17 @@ public class Position extends CSSProperty<Position> {
      */
     public Position relative() {
         return chain("relative");
+    }
+
+    /**
+     * <p>
+     * Helper method to test position property.
+     * </p>
+     * 
+     * @return A result.
+     */
+    public boolean isAbsolute() {
+        return value.equals("absolute");
     }
 
     /**
