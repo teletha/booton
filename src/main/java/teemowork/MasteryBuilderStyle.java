@@ -203,7 +203,7 @@ class MasteryBuilderStyle {
 
         Color borderColor = new Color(0, 98, 97, 0.9);
 
-        Color color = new Color(0, 10, 0, 0.9);
+        Color color = new Color(0, 10, 0, 0.7);
 
         int BorderWidth = 2;
 
