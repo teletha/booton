@@ -199,7 +199,7 @@ class MasteryBuilderStyle {
 
     class Popup extends CSS {
 
-        int Width = 250;
+        int Width = 200;
 
         Color borderColor = new Color(0, 98, 97, 0.9);
 
@@ -209,7 +209,7 @@ class MasteryBuilderStyle {
 
         {
             display.block();
-            position.absolute().bottom(IconSize + 35, px).left(0, px);
+            position.absolute().bottom(IconSize + 35, px).left(Gap - Width / 2 + IconSize / 2, px);
             box.width(Width, px).opacity(0).zIndex(100).shadow(0, px, 0, px, 7, px, hsla(0, 0, 0, 0.9));
             background.image(linear(color.lighten(10), color)).color(color);
             border.radius(Corner, px).solid().width(BorderWidth, px).color(borderColor);
@@ -232,9 +232,6 @@ class MasteryBuilderStyle {
             if (borderWidth == null) {
                 borderWidth = new booton.css.Value(0, px);
             }
-
-            position.absolute().left(50, percent);
-            margin.left(width.divide(-2));
 
             // write bubble
             while (before()) {
