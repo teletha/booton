@@ -47,4 +47,9 @@ public abstract class Document implements org.w3c.dom.Document, JavascriptNative
      * {@inheritDoc}
      */
     public native Element createElement(String name);
+
+    /**
+     * {@inheritDoc}
+     */
+    public native Element createElementNS(String namespaceURI, String qualifiedName);
 }

@@ -286,7 +286,9 @@ class MasteryBuilderStyle {
     class Description extends CSS {
 
         {
-
+            while (inBackOf(Unavailable.class)) {
+                font.color(hsl(0, 70, 70));
+            }
         }
     }
 
