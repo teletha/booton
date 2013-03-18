@@ -129,7 +129,7 @@ public class Mastery extends Describable<MasteryDescriptor> {
     public static final Mastery Defender = new Mastery("Defender", 1, Defense, 4);
 
     /** Season3 Mastery */
-    public static final Mastery LegendaryArmor = new Mastery("Legendary Armor", 1, Defense, 4);
+    public static final Mastery LegendaryArmor = new Mastery("Legendary Armor", 3, Defense, 4);
 
     /** Season3 Mastery */
     public static final Mastery GoodHands = new Mastery("Good Hands   ", 1, Defense, 4);
@@ -302,5 +302,21 @@ public class Mastery extends Describable<MasteryDescriptor> {
 
         Perseverance.update().passive("{1}を得る。").variable(1, Hreg, 0, 0, amplify(MissingHealthPercentage, 0.02, 0.02));
         Durability.update().passive("{1}を得る。").variable(1, HealthPerLv, 1.5, 1.5);
+        ToughSkin.update().passive("中立モンスターから受ける{1}する。").variable(1, DamageReduction, 1, 1);
+        Hardiness.update().passive("{1}を得る。").variable(1, AR, 2, 1.5);
+        Resistance.update().passive("{1}を得る。").variable(1, MR, 2, 1.5);
+        BladedArmor.update().passive("攻撃してきたミニオンと中立モンスターに{1}を与える。").variable(1, TrueDamage, 6);
+        Unyielding.update().passive("敵Championから受ける{1}する。").variable(1, DamageReduction, 1, 1);
+        Relentless.update().passive("{1}する。").variable(1, MSSlowReductionRatio, 7.5, 7.5);
+        VeteransScar.update().passive("{1}を得る。").variable(1, Health, 30);
+        Safeguard.update().passive("タワーから受ける{1}する。").variable(1, DamageReductionRatio, 5);
+        Block.update().passive("敵Championから受ける{1}する。").variable(1, AttackDamageReduction, 3);
+        Tenacious.update().passive("{1}を得る。").variable(1, Tenacity, 5, 5);
+        Juggernaut.update().passive("{1}する。").variable(1, HealthRatio, 1.5, 1.25);
+        Defender.update()
+                .passive("{1}と{2}を得る。")
+                .variable(1, AR, 0, 0, amplify(EnemyChampion, 1))
+                .variable(2, MR, 0, 0, amplify(EnemyChampion, 1));
+        LegendaryArmor.update().passive("{1}し{2}する。").variable(1, ARRatio, 2, 1.5).variable(2, MRRatio, 2, 1.5);
     }
 }
