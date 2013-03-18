@@ -190,6 +190,9 @@ public enum Status {
     /** Attack Damage Reduction */
     AttackDamageReduction(AttackDamage), AttackDamageReductionRatio(AttackDamage),
 
+    /** Movement Slow Reduction */
+    MSSlowReduction("スロー"), MSSlowReductionRatio("スロー"),
+
     /** Shield */
     Shield("シールド"), PhysicalShield("物理DM用シールド"), MagicShield("魔法DM用シールド"), SpellShield("スペルシールド"),
 
@@ -452,7 +455,6 @@ public enum Status {
 
         case CDR:
         case Critical:
-        case CriticalDamageRatio:
         case SV:
         case LS:
         case Tenacity:
@@ -489,6 +491,7 @@ public enum Status {
         case APRatio:
         case ARRatio:
         case MRRatio:
+        case HealthRatio:
         case ExperimentRatio:
             return name + "が" + formatValue(computed) + "増加";
 
@@ -500,6 +503,8 @@ public enum Status {
         case MagicDamageReductionRatio:
         case AttackDamageReduction:
         case AttackDamageReductionRatio:
+        case MSSlowReduction:
+        case MSSlowReductionRatio:
             return name + "を" + formatValue(computed) + "軽減";
 
         case RestoreEnergy:
