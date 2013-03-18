@@ -271,6 +271,12 @@ public class Mastery extends Describable<MasteryDescriptor> {
     }
 
     static {
+        SummonersWrath.update()
+                .passive("Exhaustに{1}と{2}を付与する。IgniteがCDの間{3}と{4}を得る。")
+                .variable(1, ARReduction, 10)
+                .variable(2, MRReduction, 10)
+                .variable(3, AD, 5)
+                .variable(4, AP, 5);
         Fury.update().passive("{1}する。").variable(1, ASRatio, 1, 1);
         Sorcery.update().passive("{1}を得る。").variable(1, CDR, 1, 1);
         Butcher.update().passive("ミニオンや中立モンスターへの{1}する。").variable(1, AttackDamage, 2, 2);
@@ -293,5 +299,8 @@ public class Mastery extends Describable<MasteryDescriptor> {
         Sunder.update().passive("{1}を得る。").variable(1, ARPen, 2, 1.5);
         Archmage.update().passive("{1}する。").variable(1, APRatio, 1.25, 1.25);
         Executioner.update().passive("対象のHealthが50%以下の時、{1}する。").variable(1, DamageRatio, 5);
+
+        Perseverance.update().passive("{1}を得る。").variable(1, Hreg, 0, 0, amplify(MissingHealthPercentage, 0.02, 0.02));
+        Durability.update().passive("{1}を得る。").variable(1, HealthPerLv, 1.5, 1.5);
     }
 }

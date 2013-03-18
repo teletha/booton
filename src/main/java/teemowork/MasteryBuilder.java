@@ -296,7 +296,7 @@ public class MasteryBuilder extends Page {
             List<Variable> amplifiers = variable.getAmplifiers();
 
             // compute current value
-            root.child(ComputedValue.class).text(status.format(variable.calculate(level)));
+            root.child(ComputedValue.class).text(status.format(variable.calculate(Math.max(1, level))));
 
             // All values
             int size = resolver.estimateSize();

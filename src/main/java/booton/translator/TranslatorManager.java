@@ -33,6 +33,7 @@ import kiss.model.ClassUtil;
 import org.objectweb.asm.Type;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  * ion 2012/12/06 18:28:56
@@ -48,6 +49,7 @@ class TranslatorManager {
     static {
         // built-in native class.
         builtIn(Object.class);
+        builtIn(Node.class);
         builtIn(Document.class);
         builtIn(Element.class);
         builtIn(WebSocket.class);
