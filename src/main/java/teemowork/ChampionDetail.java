@@ -57,7 +57,7 @@ import teemowork.model.Champion;
 import teemowork.model.DependencyManager;
 import teemowork.model.Skill;
 import teemowork.model.SkillKey;
-import teemowork.model.SkillStatus;
+import teemowork.model.SkillDescriptor;
 import teemowork.model.SkillType;
 import teemowork.model.Status;
 import teemowork.model.variable.Variable;
@@ -301,7 +301,7 @@ public class ChampionDetail extends Page {
          * </p>
          */
         private void update() {
-            SkillStatus status = skill.getStatus(build.getVersion());
+            SkillDescriptor status = skill.getDescriptor(build.getVersion());
 
             int level = build.getLevel(skill);
 
@@ -376,7 +376,7 @@ public class ChampionDetail extends Page {
          * @param skill A current processing skill.
          * @param variable A target skill variable.
          */
-        private void write(jQuery root, SkillStatus skill, Variable variable) {
+        private void write(jQuery root, SkillDescriptor skill, Variable variable) {
             root.empty();
 
             if (variable != null) {

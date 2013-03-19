@@ -361,7 +361,7 @@ public class Build extends Notifiable implements StatusCalculator {
         // ===================================
         for (int i = 0; i < champion.skills.length; i++) {
             Skill skill = champion.skills[i];
-            SkillStatus skillStatus = skill.getStatus(version);
+            SkillDescriptor skillStatus = skill.getDescriptor(version);
 
             // form passive
             sum += sum(skillStatus.getPassive(), skill, status);
@@ -444,7 +444,7 @@ public class Build extends Notifiable implements StatusCalculator {
         int level = skillLevel[skill.key.ordinal()];
 
         if (0 < level) {
-            SkillStatus skillStatus = skill.getStatus(version);
+            SkillDescriptor skillStatus = skill.getDescriptor(version);
 
             for (Object token : skillStatus.getActive()) {
                 if (token instanceof Variable) {
