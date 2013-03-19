@@ -12,8 +12,6 @@ package teemowork.model;
 import static teemowork.model.SkillKey.*;
 import static teemowork.model.Status.*;
 import static teemowork.model.Version.*;
-import teemowork.model.variable.Variable;
-import teemowork.model.variable.VariableResolver;
 import teemowork.model.variable.VariableResolver.Diff;
 import teemowork.model.variable.VariableResolver.Fixed;
 import teemowork.model.variable.VariableResolver.Per1Level;
@@ -31,7 +29,7 @@ import teemowork.model.variable.VariableResolver.Per6LevelForZed;
 /**
  * @version 2013/03/02 11:34:54
  */
-public class Skill {
+public class Skill extends Describable<SkillDescriptor> {
 
     /** The skill name. */
     public static final Skill EssenceTheft = new Skill("Essence Theft", Passive);
@@ -1746,9 +1744,6 @@ public class Skill {
     /** The skill name. */
     public static final Skill TagTeam = new Skill("Tag Team", R);
 
-    /** The current writing skill. */
-    private static Skill skill;
-
     /** The skill name. */
     public final String name;
 
@@ -1759,7 +1754,7 @@ public class Skill {
     public final SkillKey key;
 
     /** The descriptor. */
-    private SkillStatus[] versions = new SkillStatus[Version.values().length];
+    private SkillDescriptor[] versions = new SkillDescriptor[Version.values().length];
 
     /**
      * <p>
@@ -1772,6 +1767,14 @@ public class Skill {
         this.name = name;
         this.system = name.replaceAll(" of ", "Of").replaceAll("[\\s-,!':/]", "");
         this.key = key;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected SkillDescriptor createDescriptor(SkillDescriptor previous) {
+        return new SkillDescriptor(this, previous);
     }
 
     /**
@@ -1836,158 +1839,6 @@ public class Skill {
         } else {
             return 5;
         }
-    }
-
-    /**
-     * <p>
-     * Retrieve a status at the specified version.
-     * </p>
-     */
-    public SkillStatus getStatus(Version version) {
-        for (int i = version.ordinal(); 0 <= i; i--) {
-            SkillStatus status = versions[i];
-
-            if (status != null) {
-                return status;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * <p>
-     * Update status.
-     * </p>
-     * 
-     * @return A champion descriptor.
-     */
-    SkillStatus update() {
-        return update(Version.P0000);
-    }
-
-    /**
-     * <p>
-     * Update status.
-     * </p>
-     * 
-     * @return A champion descriptor.
-     */
-    SkillStatus update(Version version) {
-        SkillStatus status = new SkillStatus(this, getStatus(version));
-
-        versions[version.ordinal()] = status;
-        skill = this;
-
-        return status;
-    }
-
-    /**
-     * <p>
-     * Create skill AD amplifier. This pattern is used frequently.
-     * </p>
-     * 
-     * @param rate An AD rate.
-     * @return
-     */
-    private static final Variable ad(double rate) {
-        return amplify(AD, rate);
-    }
-
-    /**
-     * <p>
-     * Create skill AD amplifier. This pattern is used frequently.
-     * </p>
-     * 
-     * @param rate An AD rate.
-     * @return
-     */
-    private static final Variable bounusAD(double rate) {
-        return amplify(BounusAD, rate);
-    }
-
-    /**
-     * <p>
-     * Create skill AP amplifier. This pattern is used frequently.
-     * </p>
-     * 
-     * @param rate An AP rate.
-     * @return
-     */
-    private static final Variable ap(double rate) {
-        return amplify(AP, rate);
-    }
-
-    /**
-     * <p>
-     * Create skill amplifier.
-     * </p>
-     * 
-     * @param status A status type.
-     * @param base A base value of amplifier rate.
-     * @return
-     */
-    private static final Variable amplify(Status status, double base) {
-        return amplify(status, base, 0);
-    }
-
-    /**
-     * <p>
-     * Create skill amplifier.
-     * </p>
-     * 
-     * @param status A status type.
-     * @param base A base value of amplifier rate.
-     * @param diff A diff value of amplifier rate.
-     * @return
-     */
-    private static final Variable amplify(Status status, double base, double diff) {
-        return amplify(status, new Diff(base, diff, skill.getMaxLevel()));
-    }
-
-    /**
-     * <p>
-     * Create skill amplifier.
-     * </p>
-     * 
-     * @param status A status type.
-     * @param base A base value of amplifier rate.
-     * @param diff A diff value of amplifier rate.
-     * @return
-     */
-    private static final Variable amplify(Status status, VariableResolver resolver) {
-        return new Variable(status, resolver);
-    }
-
-    /**
-     * <p>
-     * Create skill amplifier.
-     * </p>
-     * 
-     * @param status A status type.
-     * @param base A base value of amplifier rate.
-     * @param diff A diff value of amplifier rate.
-     * @return
-     */
-    private static final Variable amplify(Status status, double base, double diff, Variable amplifier) {
-        return amplify(status, base, diff, amplifier, null);
-    }
-
-    /**
-     * <p>
-     * Create skill amplifier.
-     * </p>
-     * 
-     * @param status A status type.
-     * @param base A base value of amplifier rate.
-     * @param diff A diff value of amplifier rate.
-     * @return
-     */
-    private static final Variable amplify(Status status, double base, double diff, Variable first, Variable second) {
-        Variable variable = amplify(status, base, diff);
-        variable.add(first);
-        variable.add(second);
-
-        return variable;
     }
 
     static {

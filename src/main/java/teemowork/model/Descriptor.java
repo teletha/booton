@@ -24,7 +24,7 @@ import teemowork.model.variable.VariableResolver.Diff;
 public abstract class Descriptor<T extends Descriptor> {
 
     /** The target object to describe. */
-    private final Describable describable;
+    protected final Describable describable;
 
     /** The previous version. */
     private final Descriptor<T> previous;

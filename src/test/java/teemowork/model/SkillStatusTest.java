@@ -27,7 +27,7 @@ public class SkillStatusTest {
 
     @Test
     public void description() throws Exception {
-        SkillStatus skill = new SkillStatus(null, null);
+        SkillDescriptor skill = new SkillDescriptor(null, null);
         skill.active("Test");
 
         List tokens = skill.getActive();
@@ -37,7 +37,7 @@ public class SkillStatusTest {
 
     @Test
     public void variable() throws Exception {
-        SkillStatus skill = new SkillStatus(empty, null);
+        SkillDescriptor skill = new SkillDescriptor(empty, null);
         skill.active("Test{1}");
         skill.variable(1, AD, 10, 10);
 
@@ -55,7 +55,7 @@ public class SkillStatusTest {
 
     @Test
     public void variable2() throws Exception {
-        SkillStatus skill = new SkillStatus(empty, null);
+        SkillDescriptor skill = new SkillDescriptor(empty, null);
         skill.active("Test{1}");
         skill.variable(1, SV, 10, 10);
 
