@@ -221,9 +221,6 @@ public class Mastery extends Describable<MasteryDescriptor> {
     /** The maximum level. */
     private final int level;
 
-    /** The descriptor. */
-    private MasteryDescriptor[] versions = new MasteryDescriptor[Version.values().length];
-
     /**
      * <p>
      * Define mastery.
@@ -318,5 +315,30 @@ public class Mastery extends Describable<MasteryDescriptor> {
                 .variable(1, AR, 0, 0, amplify(EnemyChampion, 1))
                 .variable(2, MR, 0, 0, amplify(EnemyChampion, 1));
         LegendaryArmor.update().passive("{1}し{2}する。").variable(1, ARRatio, 2, 1.5).variable(2, MRRatio, 2, 1.5);
+        GoodHands.update().passive("{1}する。").variable(1, RespawnTimeReductionRatio, 10);
+        ReinforcedArmor.update().passive("クリティカルヒットから受ける{1}する。").variable(1, DamageReductionRatio, 10);
+        HonorGuard.update().passive("{1}する。").variable(1, DamageReductionRatio, 3);
+
+        Wanderer.update().passive("５秒間戦闘状態にならなければ{1}する。").variable(1, MSRatio, new Fixed(new double[] {0.66, 1.33, 2}));
+        Meditation.update().passive("{1}を得る。").variable(1, Mreg, 1, 1);
+        ImprovedRecall.update().passive("Recallの詠唱時間が1秒短くなる。");
+        Scout.update().passive("Wardの視界が設置してから5秒間25%拡大する。");
+        Mastermind.update().passive("{全てのSummoner SpellのCDが{1}減少する。").variable(1, Percentage, 4, 3);
+        ExpandedMind.update().passive("{1}を得る。").variable(1, Mana, 0, 0, amplify(Lv, 4, 3));
+        Artificer.update().passive("アイテムのActiveのCDが{1}減少する。").variable(1, Percentage, 7.5, 7.5);
+        Greed.update().passive("{1}を得る。").variable(1, GoldPer10Sec, 0.5, 0.5);
+        RunicAffinity.update().passive("BaronBuff以外のBuffの効果時間が20%延長される。");
+        Vampirism.update().passive("{1}と{2}を得る。").variable(1, LS, 1, 1).variable(2, SV, 1, 1);
+        Biscuiteer.update().passive("ゲーム開始時に10秒かけて80Healthと50Manaを回復するアイテムを1個得る。");
+        Wealth.update().passive("ゲーム開始時に{1}を得る。").variable(1, Gold, 25, 25);
+        Awareness.update().passive("獲得する{1}する。").variable(1, ExperimentRatio, 1.25, 1.25);
+        StrengthOfSpirit.update().passive("{1}を得る。").variable(1, Hreg, 0, 0, amplify(Mana, 0.0025, 0.0025));
+        Explorer.update().passive("ゲーム開始時に効果時間が60秒のSight Wardを1個得る。");
+        Pickpocket.update()
+                .passive("敵Championに通常攻撃でダメージを与える毎に{1}を得る。Rangedの場合は{2}を得る。CDは5秒。")
+                .variable(1, Gold, 5)
+                .variable(2, Gold, 3);
+        Intelligence.update().passive("{1}を得る。").variable(1, CDR, 2, 2);
+        Nimble.update().passive("{1}する。").variable(1, MSRatio, 3);
     }
 }

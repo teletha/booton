@@ -290,12 +290,12 @@ public enum Status {
 
     Sell,
 
-    Gold(""),
+    Gold(""), GoldPer10Sec,
 
     // ==================================================
     // Time Related
     // ==================================================
-    Time("", 3), CDRAwareTime(""),
+    Time("", 3), CDRAwareTime(""), RespawnTimeReductionRatio("死亡時間"),
 
     Duration("経過秒数"),
 
@@ -462,6 +462,7 @@ public enum Status {
             return "%";
 
         case Gold:
+        case GoldPer10Sec:
             return "Gold";
 
         default:
@@ -505,6 +506,7 @@ public enum Status {
         case AttackDamageReductionRatio:
         case MSSlowReduction:
         case MSSlowReductionRatio:
+        case RespawnTimeReductionRatio:
             return name + "を" + formatValue(computed) + "軽減";
 
         case RestoreEnergy:
@@ -517,6 +519,9 @@ public enum Status {
 
         case Stealth:
             return formatValue(computed) + "ステルス";
+
+        case GoldPer10Sec:
+            return "10秒毎に" + formatValue(computed);
         }
         return name + formatValue(computed);
     }
