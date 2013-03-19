@@ -269,11 +269,11 @@ public class Mastery extends Describable<MasteryDescriptor> {
 
     static {
         SummonersWrath.update()
-                .passive("Exhaustに{1}と{2}を付与する。IgniteがCDの間{3}と{4}を得る。")
+                .passive("Exhaustに{1}と{2}を付与する。\\r\\nIgniteがCDの間{3}と{4}を得る。")
                 .variable(1, ARReduction, 10)
                 .variable(2, MRReduction, 10)
-                .variable(3, AD, 5)
-                .variable(4, AP, 5);
+                .variable(-3, AD, 5)
+                .variable(-4, AP, 5);
         Fury.update().passive("{1}する。").variable(1, ASRatio, 1, 1);
         Sorcery.update().passive("{1}を得る。").variable(1, CDR, 1, 1);
         Butcher.update().passive("ミニオンや中立モンスターへの{1}する。").variable(1, AttackDamage, 2, 2);
@@ -292,7 +292,7 @@ public class Mastery extends Describable<MasteryDescriptor> {
         BruteForce.update().passive("{1}を得る。").variable(1, AD, 1.5, 1.5);
         MentalForce.update().passive("{1}を得る。").variable(1, AP, 2, 2);
         Spellsword.update().passive("通常攻撃に追加の{1}を付与する。").variable(1, MagicDamage, 0, 0, ap(0.05));
-        Frenzy.update().passive("クリティカルヒット時に2秒間{1}する。").variable(1, ASRatio, 10);
+        Frenzy.update().passive("クリティカルヒット時に2秒間{1}する。").variable(-1, ASRatio, 10);
         Sunder.update().passive("{1}を得る。").variable(1, ARPen, 2, 1.5);
         Archmage.update().passive("{1}する。").variable(1, APRatio, 1.25, 1.25);
         Executioner.update().passive("対象のHealthが50%以下の時、{1}する。").variable(1, DamageRatio, 5);
@@ -319,7 +319,9 @@ public class Mastery extends Describable<MasteryDescriptor> {
         ReinforcedArmor.update().passive("クリティカルヒットから受ける{1}する。").variable(1, DamageReductionRatio, 10);
         HonorGuard.update().passive("{1}する。").variable(1, DamageReductionRatio, 3);
 
-        Wanderer.update().passive("５秒間戦闘状態にならなければ{1}する。").variable(1, MSRatio, new Fixed(new double[] {0.66, 1.33, 2}));
+        Wanderer.update()
+                .passive("５秒間戦闘状態にならなければ{1}する。")
+                .variable(-1, MSRatio, new Fixed(new double[] {0.66, 1.33, 2}));
         Meditation.update().passive("{1}を得る。").variable(1, Mreg, 1, 1);
         ImprovedRecall.update().passive("Recallの詠唱時間が1秒短くなる。");
         Scout.update().passive("Wardの視界が設置してから5秒間25%拡大する。");

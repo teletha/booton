@@ -10,7 +10,7 @@
 package teemowork.model;
 
 /**
- * @version 2013/03/02 11:37:49
+ * @version 2013/03/19 19:59:46
  */
 public enum Version {
 
@@ -32,10 +32,12 @@ public enum Version {
 
     P303("3.03", 2013, 2, 28),
 
+    P304("3.04", 2013, 3, 19),
+
     PBE("Public Beta Environment", 2013, 1, 26);
 
     /** The latest stable version. */
-    public static final Version Latest = P303;
+    public static final Version Latest = P304;
 
     /** The version name. */
     public final String name;

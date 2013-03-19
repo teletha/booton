@@ -112,71 +112,6 @@ public class SkillStatus {
 
     /**
      * <p>
-     * Retrieve the value which is associated with the specified key.
-     * </p>
-     * 
-     * @param key A key.
-     * @return A value.
-     */
-    private Variable get(int key) {
-        if (variables == null) {
-            return previous.get(key);
-        } else {
-            return variables.get(key);
-        }
-    }
-
-    /**
-     * <p>
-     * Update variable.
-     * </p>
-     * 
-     * @param key
-     * @param value
-     */
-    private void put(int key, Variable value) {
-        if (initializable) {
-            // create new map to disconnect reference from parent
-            variables = new HashMap();
-
-            if (previous != null) {
-                // copy all key-values
-                variables.putAll(previous.variables);
-            }
-        }
-        // variables.put(key, value);
-    }
-
-    /**
-     * <p>
-     * Retrieve status value.
-     * </p>
-     * 
-     * @param status A target status.
-     * @return A result.
-     */
-    public double get(Status status) {
-        Double value = values.get(status.ordinal());
-
-        return value == null ? 0 : value;
-    }
-
-    /**
-     * <p>
-     * Retrieve status value.
-     * </p>
-     * 
-     * @param status A target status.
-     * @return Chainable API.
-     */
-    SkillStatus set(Status status, double value) {
-        values.set(status.ordinal(), value);
-
-        return this;
-    }
-
-    /**
-     * <p>
      * Set skill passive ability.
      * </p>
      */
@@ -334,6 +269,12 @@ public class SkillStatus {
                 variables.putAll(previous.variables);
             }
         }
+
+        if (id < 0) {
+            id *= -1;
+            variable.setConditional();
+        }
+
         variables.put(String.valueOf(id), variable);
 
         return this;
@@ -509,21 +450,6 @@ public class SkillStatus {
     SkillStatus type(SkillType type) {
         this.type = type;
 
-        return this;
-    }
-
-    /**
-     * <p>
-     * </p>
-     * 
-     * @param id A variable identifier.
-     */
-    SkillStatus conditional(int id) {
-        Variable variable = variables.get(String.valueOf(id));
-
-        if (variable != null) {
-            variable.setConditional();
-        }
         return this;
     }
 

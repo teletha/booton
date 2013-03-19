@@ -262,6 +262,11 @@ public abstract class Descriptor<T extends Descriptor> {
         variable.add(first);
         variable.add(second);
 
+        if (id < 0) {
+            id *= -1;
+            variable.setConditional();
+        }
+
         if (initializable) {
             initializable = false;
             variables = new HashMap();
