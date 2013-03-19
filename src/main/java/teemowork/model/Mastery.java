@@ -269,7 +269,7 @@ public class Mastery extends Describable<MasteryDescriptor> {
 
     static {
         SummonersWrath.update()
-                .passive("Exhaustに{1}と{2}を付与する。\\r\\nIgniteがCDの間{3}と{4}を得る。")
+                .passive("Exhaustに{1}と{2}を付与する。<br/>IgniteがCDの間{3}と{4}を得る。")
                 .variable(1, ARReduction, 10)
                 .variable(2, MRReduction, 10)
                 .variable(-3, AD, 5)

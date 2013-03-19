@@ -40,6 +40,16 @@ public abstract class Describable<T extends Descriptor> {
 
     /**
      * <p>
+     * Create new descriptor.
+     * </p>
+     * 
+     * @param previous
+     * @return
+     */
+    protected abstract T createDescriptor(T previous);
+
+    /**
+     * <p>
      * Retrieve a descriptor of the specified version.
      * </p>
      */
@@ -84,16 +94,6 @@ public abstract class Describable<T extends Descriptor> {
         // API definition
         return descriptor;
     }
-
-    /**
-     * <p>
-     * Create new descriptor.
-     * </p>
-     * 
-     * @param previous
-     * @return
-     */
-    protected abstract T createDescriptor(T previous);
 
     /**
      * <p>
