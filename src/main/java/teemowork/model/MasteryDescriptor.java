@@ -20,5 +20,4 @@ public class MasteryDescriptor extends Descriptor<MasteryDescriptor> {
     MasteryDescriptor(Mastery mastery, MasteryDescriptor previous) {
         super(mastery, previous);
     }
-
 }
