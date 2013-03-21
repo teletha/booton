@@ -16,7 +16,7 @@ import java.util.List;
 
 import js.application.Page;
 import js.application.PageInfo;
-import js.bind.Observer;
+import js.bind.Subscriber;
 import js.math.Mathematics;
 import js.util.ArrayList;
 import js.util.jQuery;
@@ -44,6 +44,8 @@ import teemowork.MasteryBuilderStyle.Sum;
 import teemowork.MasteryBuilderStyle.Unavailable;
 import teemowork.MasteryBuilderStyle.Utility;
 import teemowork.MasteryBuilderStyle.Value;
+import teemowork.model.DescriptionView;
+import teemowork.model.Descriptor;
 import teemowork.model.Mastery;
 import teemowork.model.MasterySet;
 import teemowork.model.Status;
@@ -54,7 +56,7 @@ import teemowork.model.variable.VariableResolver;
 /**
  * @version 2013/03/13 14:31:08
  */
-public class MasteryBuilder extends Page {
+public class MasteryBuilder extends Page implements Subscriber {
 
     private static final Mastery[][] OFFENSE = { {SummonersWrath, Fury, Sorcery, Butcher},
             {null, Deadliness, Blast, Destruction}, {Havoc, WeaponExpertise, ArcaneKnowledge, null},
@@ -108,7 +110,7 @@ public class MasteryBuilder extends Page {
         defense = build(root.child(Defense.class), DEFEMSE);
         utility = build(root.child(Utility.class), UTILITY);
 
-        update();
+        masterySet.publish();
     }
 
     /**
@@ -130,7 +132,7 @@ public class MasteryBuilder extends Page {
                 if (mastery == null) {
                     icon.addClass(EmptyIcon.class);
                 } else {
-                    views.add(new MasteryView(icon, mastery));
+                    masterySet.register(new MasteryView(icon, mastery));
                 }
             }
         }
@@ -138,15 +140,10 @@ public class MasteryBuilder extends Page {
     }
 
     /**
-     * <p>
-     * Update View.
-     * </p>
+     * {@inheritDoc}
      */
-    @Observer
-    private void update() {
-        for (MasteryView view : views) {
-            view.update();
-        }
+    @Override
+    public void receive() {
         offense.text("OFFENSE　" + masterySet.getSum(Mastery.Offense));
         defense.text("DEFENSE　" + masterySet.getSum(Mastery.Defense));
         utility.text("UTILITY　" + masterySet.getSum(Mastery.Utility));
@@ -165,7 +162,7 @@ public class MasteryBuilder extends Page {
     /**
      * @version 2013/03/13 19:10:27
      */
-    private class MasteryView {
+    private class MasteryView implements Subscriber {
 
         /** The associated mastery. */
         private final Mastery mastery;
@@ -239,11 +236,10 @@ public class MasteryBuilder extends Page {
         }
 
         /**
-         * <p>
-         * Update this view.
-         * </p>
+         * {@inheritDoc}
          */
-        public void update() {
+        @Override
+        public void receive() {
             int current = masterySet.getLevel(mastery);
 
             value.text(current);
@@ -260,13 +256,6 @@ public class MasteryBuilder extends Page {
                 icon.removeClass(Completed.class);
             }
 
-            receive();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public void receive() {
             text.empty();
 
             List passive = mastery.getDescriptor(Version.Latest).getPassive();
@@ -358,5 +347,28 @@ public class MasteryBuilder extends Page {
                 element.append(amplifier.getStatus().name);
             }
         }
+
+        /**
+         * @version 2013/03/21 21:15:50
+         */
+        private class MasteryDescriptionView extends DescriptionView {
+
+            /**
+             * @param descriptor
+             * @param root
+             */
+            public MasteryDescriptionView(Descriptor descriptor, jQuery root) {
+                super(descriptor, root);
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            protected int getCurrentLevel() {
+                return masterySet.getLevel(mastery);
+            }
+        }
     }
+
 }
