@@ -28,7 +28,7 @@ public class Publisher {
      * 
      * @param subscriber A subscriber to register.
      */
-    protected final void register(Subscriber subscriber) {
+    public final void register(Subscriber subscriber) {
         if (subscriber != null && !subscribers.contains(subscriber)) {
             subscribers.add(subscriber);
         }
@@ -41,7 +41,7 @@ public class Publisher {
      * 
      * @param subscriber A subscriber to unregister.
      */
-    protected final void unregister(Subscriber subscriber) {
+    public final void unregister(Subscriber subscriber) {
         if (subscriber != null && !subscribers.contains(subscriber)) {
             subscribers.add(subscriber);
         }
@@ -52,7 +52,7 @@ public class Publisher {
      * Publish event.
      * </p>
      */
-    protected final void publish() {
+    public final void publish() {
         for (Subscriber subscriber : subscribers) {
             try {
                 subscriber.receive();

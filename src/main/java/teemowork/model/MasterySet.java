@@ -10,12 +10,12 @@
 package teemowork.model;
 
 import static teemowork.model.Mastery.*;
-import js.bind.Notifiable;
+import js.bind.Publisher;
 
 /**
  * @version 2013/03/15 16:51:59
  */
-public class MasterySet extends Notifiable {
+public class MasterySet extends Publisher {
 
     /** The values for each masteries. */
     private int[] levels = new int[56];
@@ -72,7 +72,7 @@ public class MasterySet extends Notifiable {
      */
     public void up(Mastery mastery) {
         if (isAvailable(mastery) && changeLevel(mastery, 1)) {
-            fire();
+            publish();
         }
     }
 
@@ -85,7 +85,7 @@ public class MasterySet extends Notifiable {
      */
     public void down(Mastery mastery) {
         if (isUnavailable(mastery) && changeLevel(mastery, -1)) {
-            fire();
+            publish();
         }
     }
 
