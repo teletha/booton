@@ -14,6 +14,7 @@ import static js.lang.Global.*;
 import java.util.Iterator;
 
 import js.dom.Element;
+import js.dom.Image;
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
 
@@ -91,6 +92,19 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
             public void remove() {
             }
         };
+    }
+
+    /**
+     * <p>
+     * Adds the specified class(es) to each of the set of matched elements.
+     * </p>
+     * 
+     * @param classNames One or more class names to be added to the class attribute of each matched
+     *            element.
+     * @return
+     */
+    public Image image(Class<? extends CSS> className) {
+        return new Image(this, className);
     }
 
     /**
@@ -206,6 +220,18 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Insert content, specified by the parameter, to the end of each element in the set of matched
+     * elements.
+     * </p>
+     * 
+     * @param contents DOM element, HTML string, or jQuery object to insert at the end of each
+     *            element in the set of matched elements.
+     * @return
+     */
+    public native jQuery append(Element contents);
+
+    /**
+     * <p>
      * Insert every element in the set of matched elements to the end of the target.
      * </p>
      * 
@@ -246,6 +272,17 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery attr(String name, String value);
+
+    /**
+     * <p>
+     * Set one or more attributes for the set of matched elements.
+     * </p>
+     * 
+     * @param name The name of the attribute to set.
+     * @param value A value to set for the attribute.
+     * @return
+     */
+    public native jQuery attr(String name, int value);
 
     /**
      * <p>
@@ -685,6 +722,16 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery parent(String selector);
+
+    /**
+     * <p>
+     * Remove an attribute from each element in the set of matched elements.
+     * </p>
+     * 
+     * @param attributeName An attribute to remove.
+     * @return
+     */
+    public native jQuery removeAttr(String attributeName);
 
     /**
      * <p>

@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import js.dom.DOMTokenList;
 import js.dom.Location;
 import js.dom.Window;
 import js.lang.Function;
@@ -52,6 +53,7 @@ class TranslatorManager {
         builtIn(Node.class);
         builtIn(Document.class);
         builtIn(Element.class);
+        builtIn(DOMTokenList.class);
         builtIn(WebSocket.class);
         builtIn(Window.class);
         builtIn(Location.class);
