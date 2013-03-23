@@ -1246,6 +1246,17 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 125)
                 .set(MS, 345);
+        Quinn.update(P0000)
+                .set(Health, 390, 85)
+                .set(Hreg, 4.5, 0.55)
+                .set(Mana, 210, 35)
+                .set(Mreg, 6.3, 0.4)
+                .set(AD, 48, 3)
+                .set(AS, 0.668, 3.11)
+                .set(AR, 13.5, 3.5)
+                .set(MR, 30, 0)
+                .set(Range, 525)
+                .set(MS, 335);
         Rammus.update(P0000)
                 .set(Health, 420, 86)
                 .set(Hreg, 8, 0.55)
@@ -1468,6 +1479,17 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 500)
                 .set(MS, 330);
+        Thresh.update(P0000)
+                .set(Health, 452, 92)
+                .set(Hreg, 9, 0.85)
+                .set(Mana, 200, 50)
+                .set(Mreg, 8.45, 0.85)
+                .set(AD, 46, 2.2)
+                .set(AS, 0.625, 2.1)
+                .set(AR, 18, 0)
+                .set(MR, 30, 0)
+                .set(Range, 475)
+                .set(MS, 325);
         Tristana.update(P0000)
                 .set(Health, 415, 82)
                 .set(Hreg, 5.1, 0.65)
@@ -1719,17 +1741,6 @@ public class Champion {
                 .set(AR, 11, 3)
                 .set(MR, 30, 0)
                 .set(Range, 575)
-                .set(MS, 325);
-        Thresh.update(P0000)
-                .set(Health, 452, 92)
-                .set(Hreg, 9, 0.85)
-                .set(Mana, 200, 50)
-                .set(Mreg, 8.45, 0.85)
-                .set(AD, 46, 2.2)
-                .set(AS, 0.625, 2.1)
-                .set(AR, 18, 0)
-                .set(MR, 30, 0)
-                .set(Range, 475)
                 .set(MS, 325);
     }
 }

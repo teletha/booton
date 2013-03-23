@@ -22,8 +22,8 @@ public class ChampionGroup {
 
     /** The built-in group. */
     public static final ChampionGroup RANGED = new ChampionGroup(new Champion[] {Ashe, Caitlyn, Corki, Draven, Ezreal,
-            Graves, Jayce, Kennen, KogMaw, MissFortune, Sivir, Teemo, Thresh, Tristana, TwistedFate, Twitch, Urgot,
-            Varus, Vayne});
+            Graves, Jayce, Kennen, KogMaw, MissFortune, Quinn, Sivir, Teemo, Thresh, Tristana, TwistedFate, Twitch,
+            Urgot, Varus, Vayne});
 
     /** The group members. */
     private final List<Champion> members = new ArrayList();
