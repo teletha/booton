@@ -44,7 +44,7 @@ public class Image {
         svg = $(document.createElementNS(SVG, "svg"));
         svg.append(filters);
         svg.append(image);
-        svg.get(0).classList.add(className);
+        svg.attr("class", className.toString());
 
         parent.append(svg);
     }
@@ -95,7 +95,7 @@ public class Image {
         filter.attr("values", amount + " " + amount + " " + amount + " 0 0 " + amount + " " + amount + " " + amount + " 0 0 " + amount + " " + amount + " " + amount + " 0 0 0 0 0 1 0");
 
         // Chainable API
-        return apply(filter);
+        return applyFilter(filter);
     }
 
     /**
@@ -106,7 +106,7 @@ public class Image {
      * @param filter
      * @return
      */
-    private Image apply(jQuery filter) {
+    private Image applyFilter(jQuery filter) {
         // remove filter
         filters.empty();
 
@@ -133,13 +133,6 @@ public class Image {
 
         // unapply filter
         image.removeAttr("filter");
-
-        // Chainable API
-        return this;
-    }
-
-    public Image addClass(Class<? extends CSS> className) {
-        svg.addClass(className);
 
         // Chainable API
         return this;
