@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ import booton.translator.JavascriptNative;
  * Enhanced {@link org.w3c.dom.Document} for web platform.
  * </p>
  * 
- * @version 2012/12/14 12:42:38
+ * @version 2013/03/23 14:13:30
  */
 public abstract class Document implements org.w3c.dom.Document, JavascriptNative {
 
