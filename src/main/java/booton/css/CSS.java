@@ -34,7 +34,6 @@ import booton.css.property.BoxLength;
 import booton.css.property.Content;
 import booton.css.property.Cursor;
 import booton.css.property.Display;
-import booton.css.property.Filter;
 import booton.css.property.Font;
 import booton.css.property.Line;
 import booton.css.property.ListStyle;
@@ -399,15 +398,6 @@ public abstract class CSS implements Extensible {
      * </p>
      */
     public UserSelect userSelect;
-
-    /**
-     * <p>
-     * The CSS filter property provides for effects like blurring or color shifting on an element’s
-     * rendering before the element is displayed. Filters are commonly used to adjust the rendering
-     * of an image, a background, or a border.
-     * </p>
-     */
-    public Filter filter;
 
     /** The initialization flag. */
     private boolean initialized = false;
