@@ -48,7 +48,7 @@ import booton.translator.Node.Switch;
  * completely, garbage goto code will remain.
  * </p>
  * 
- * @version 2013/03/13 17:52:57
+ * @version 2013/03/23 13:52:57
  */
 class JavaMethodCompiler extends MethodVisitor {
 
@@ -132,6 +132,11 @@ class JavaMethodCompiler extends MethodVisitor {
      * Represents a duplicate instruction. DUP_X1 and DUP2_X2.
      */
     private static final int DUPLICATE_X1 = 412;
+
+    /**
+     * Represents a return instruction.
+     */
+    private static final int RETURNS = 413;
 
     /** The extra opcode for byte code parsing. */
     private static final int LABEL = 300;
@@ -1433,7 +1438,7 @@ class JavaMethodCompiler extends MethodVisitor {
         record(opcode);
 
         // check caught exception variable
-        if (match(FRAME_SAME1, ASTORE) || match(FRAME_FULL, ASTORE)) {
+        if (match(RETURNS, LABEL, FRAME_SAME1, ASTORE) || match(ATHROW, LABEL, FRAME_SAME1, ASTORE) || match(FRAME_FULL, ASTORE)) {
             return;
         }
 
@@ -1631,6 +1636,20 @@ class JavaMethodCompiler extends MethodVisitor {
                 switch (record) {
                 case DUP_X1:
                 case DUP2_X1:
+                    continue root;
+
+                default:
+                    return false;
+                }
+
+            case RETURNS:
+                switch (record) {
+                case RETURN:
+                case IRETURN:
+                case ARETURN:
+                case LRETURN:
+                case FRETURN:
+                case DRETURN:
                     continue root;
 
                 default:
