@@ -29,6 +29,8 @@ class MasteryBuilderStyle {
 
     int IconSize = MasterWidth - Gap * 2;
 
+    int IconBorderSize = 1;
+
     int Corner = 5;
 
     Color AvailableColor = new Color(120, 90, 52);
@@ -70,7 +72,7 @@ class MasteryBuilderStyle {
         }
     }
 
-    class Hierarchy extends CSS {
+    class RankPane extends CSS {
 
         {
             display.block();
@@ -79,62 +81,50 @@ class MasteryBuilderStyle {
         }
     }
 
-    class EmptyIcon extends CSS {
+    class MasteryPane extends CSS {
+
+        {
+            display.inlineBlock();
+            box.size(IconSize, px);
+            margin.horizontal(Gap, px);
+            position.relative();
+            cursor.pointer();
+
+            while (with(Unavailable.class)) {
+                cursor.defaults();
+            }
+        }
+    }
+
+    class EmptyPane extends CSS {
 
         {
             visibility.hidden();
         }
     }
 
-    class MasteryContainer extends CSS {
+    class IconImage extends CSS {
 
         {
-            position.relative();
-            display.inlineBlock();
-        }
-    }
-
-    class MasteryIcon extends CSS {
-
-        {
-            display.inlineBlock();
             box.size(IconSize, px);
-            border.color(AvailableColor).width(1, px).solid().radius(Corner, px);
-            margin.horizontal(Gap, px);
-            background.contain();
-            position.relative();
+            border.color(AvailableColor).width(IconBorderSize, px).solid().radius(Corner, px);
 
-            while (with(Available.class)) {
-                cursor.pointer();
+            while (insideOf(Unavailable.class)) {
+                border.color(AvailableColor.grayscale());
             }
 
-            while (with(Completed.class)) {
+            while (insideOf(Completed.class)) {
                 border.color(CompleteColor);
             }
         }
     }
 
-    class Filter extends CSS {
+    class LevelPane extends CSS {
 
         {
             display.block();
-            position.absolute();
-            box.size(100, percent);
-            border.radius(Corner, px, Corner, px, Corner, px, Corner, px);
-            background.color(hsla(0, 0, 0, 0.4));
-
-            while (insideOf(Available.class)) {
-                display.none();
-            }
-        }
-    }
-
-    class Level extends CSS {
-
-        {
-            display.block();
-            box.width(100, percent);
-            position.bottom(0, px).right(0, px).absolute();
+            box.width(IconSize - IconBorderSize * 2, px);
+            position.bottom(IconBorderSize, px).left(IconBorderSize, px).absolute();
             padding.right(5, px);
             border.radius(0, px, 0, px, Corner, px, Corner, px);
             background.color(hsla(0, 0, 0, 0.4));
@@ -151,7 +141,7 @@ class MasteryBuilderStyle {
         }
     }
 
-    class Sum extends CSS {
+    class SumPoint extends CSS {
 
         {
             font.color(hsl(0, 97, 97)).size(26, px);
@@ -160,14 +150,14 @@ class MasteryBuilderStyle {
         }
     }
 
-    class Value extends CSS {
+    class LevelValue extends CSS {
 
         {
             text.unselectable();
         }
     }
 
-    class Separator extends CSS {
+    class LevelSeparator extends CSS {
 
         {
             margin.horizontal(2, px);
@@ -175,18 +165,10 @@ class MasteryBuilderStyle {
         }
     }
 
-    class Available extends CSS {
-
-        {
-
-        }
-    }
-
     class Unavailable extends CSS {
 
         {
-            filter.grayscale(90);
-            transition.property.all().timing.easeInOut().duration(1, s);
+
         }
     }
 
@@ -197,19 +179,19 @@ class MasteryBuilderStyle {
         }
     }
 
-    class Popup extends CSS {
+    class PopupPane extends CSS {
 
         int Width = 220;
+
+        int BorderWidth = 2;
 
         Color borderColor = new Color(0, 98, 97, 0.9);
 
         Color color = new Color(0, 10, 0, 0.7);
 
-        int BorderWidth = 2;
-
         {
             display.block();
-            position.absolute().bottom(IconSize + 35, px).left(Gap - Width / 2 + IconSize / 2, px);
+            position.absolute().bottom(IconSize + 35, px).left(IconSize / 2 - Width / 2, px);
             box.width(Width, px).opacity(0).zIndex(100).shadow(0, px, 0, px, 7, px, hsla(0, 0, 0, 0.9));
             background.image(linear(color.lighten(10), color)).color(color);
             border.radius(Corner, px).solid().width(BorderWidth, px).color(borderColor);
@@ -220,6 +202,10 @@ class MasteryBuilderStyle {
             pointerEvents.none();
 
             createBubble(12);
+
+            while (insideOf(Unavailable.class)) {
+                font.color(AvailableColor.grayscale());
+            }
         }
 
         private void createBubble(int bubbleWidth) {
@@ -259,27 +245,27 @@ class MasteryBuilderStyle {
                             .left(width.divide(2).subtract(borderWidth).subtract(bubbleWidth));
                     border.width(bubbleWidth, px).solid().color.transparent();
                     border.solid().color.transparent().width(bubbleWidth, px);
-                    borderTop.color(backgroundColor).width(bubbleWidth, px);
+                    borderTop.color(backgroundColor.opacify(1)).width(bubbleWidth, px);
                 }
             }
         }
     }
 
-    class PopupShow extends CSS {
+    class DescriptionAvailable extends CSS {
 
         {
             box.opacity(1);
             visibility.visible();
-            position.bottom(IconSize + 15, px);
+            position.bottom(IconSize + 12, px);
         }
     }
 
-    class Name extends CSS {
+    class MasteryName extends CSS {
 
         {
             display.block();
             margin.bottom(0.7, em);
-            font.weight.bolder();
+            font.weight.bolder().color();
         }
     }
 

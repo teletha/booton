@@ -37,9 +37,9 @@ public class Image {
      * 
      */
     public Image(jQuery parent, Class<? extends CSS> className) {
-        image = $(document.createElementNS(SVG, "image"));
+        image = $(document.createElementNS(SVG, "image")).attr("width", "100%").attr("height", "100%");
         filters = $(document.createElementNS(SVG, "filter"));
-        filters.attr("id", "test");
+        filters.attr("id", "filter" + hashCode());
 
         svg = $(document.createElementNS(SVG, "svg"));
         svg.append(filters);
@@ -60,6 +60,7 @@ public class Image {
      */
     public Image size(int width, int height) {
         image.attr("width", width).attr("height", height);
+        svg.attr("width", width).attr("height", height);
 
         // Chainable API
         return this;
@@ -106,11 +107,14 @@ public class Image {
      * @return
      */
     private Image apply(jQuery filter) {
+        // remove filter
+        filters.empty();
+
         // add filter
         filters.append(filter);
 
         // apply filter
-        image.attr("filter", "url('#test')");
+        image.attr("filter", "url('#filter" + hashCode() + "')");
 
         // Chainable API
         return this;
