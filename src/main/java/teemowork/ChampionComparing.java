@@ -22,12 +22,19 @@ import js.util.ArrayList;
 import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
+import teemowork.ChampionComparingStyle.Body;
+import teemowork.ChampionComparingStyle.Head;
+import teemowork.ChampionComparingStyle.Icon;
+import teemowork.ChampionComparingStyle.Name;
+import teemowork.ChampionComparingStyle.NoIcon;
+import teemowork.ChampionComparingStyle.RowLine;
+import teemowork.ChampionComparingStyle.StatusView;
+import teemowork.ChampionComparingStyle.Table;
 import teemowork.model.Champion;
 import teemowork.model.ChampionGroup;
 import teemowork.model.ChampionStatus;
 import teemowork.model.Status;
 import teemowork.model.Version;
-import booton.css.CSS;
 
 /**
  * @version 2013/02/15 15:12:54
@@ -59,13 +66,13 @@ public class ChampionComparing extends Page {
      */
     @Override
     public void load(jQuery root) {
-        jQuery table = root.child(Styles.Table.class);
-        jQuery head = table.child(Styles.Head.class);
-        head.child(Styles.NoIcon.class);
-        head.child(Styles.Name.class).text("Name");
+        jQuery table = root.child(Table.class);
+        jQuery head = table.child(Head.class);
+        head.child(NoIcon.class);
+        head.child(Name.class).text("Name");
 
         for (final Status value : STATUS) {
-            head.child(Styles.Status.class).text(value.name).click(new Listener() {
+            head.child(StatusView.class).text(value.name).click(new Listener() {
 
                 @Override
                 public void handler(Event event) {
@@ -74,18 +81,18 @@ public class ChampionComparing extends Page {
             });
         }
 
-        body = table.child(Styles.Body.class);
+        body = table.child(Body.class);
 
         // create row
         for (Champion champion : Champion.getAll()) {
             ChampionStatus status = champion.getStatus(Version.Latest);
 
-            jQuery row = $("<div>").addClass(Styles.Row.class);
-            row.child(Styles.Icon.class).css("background-image", "url(" + champion.getIcon() + ")");
-            row.child(Styles.Name.class).text(champion.name);
+            jQuery row = $("<div>").addClass(RowLine.class);
+            row.child(Icon.class).css("background-image", "url(" + champion.getIcon() + ")");
+            row.child(Name.class).text(champion.name);
 
             for (Status value : STATUS) {
-                row.child(Styles.Status.class).text(status.get(value));
+                row.child(StatusView.class).text(status.get(value));
             }
             rows.add(new Row(champion, row));
         }
@@ -190,104 +197,6 @@ public class ChampionComparing extends Page {
                 return order;
             } else {
                 return order * -1;
-            }
-        }
-    }
-
-    /**
-     * @version 2013/02/16 9:51:18
-     */
-    private static final class Styles {
-
-        /**
-         * @version 2013/02/16 9:52:23
-         */
-        private static class Table extends CSS {
-
-            {
-
-            }
-        }
-
-        /**
-         * @version 2013/02/16 10:00:01
-         */
-        private static class Head extends CSS {
-
-            {
-
-            }
-        }
-
-        /**
-         * @version 2013/02/16 9:52:23
-         */
-        private static class Body extends CSS {
-
-            {
-
-            }
-        }
-
-        /**
-         * @version 2013/02/16 10:00:01
-         */
-        private static class Row extends CSS {
-
-            {
-
-            }
-        }
-
-        /**
-         * @version 2013/02/16 10:00:01
-         */
-        private static class Name extends CSS {
-
-            {
-                display.inlineBlock();
-                box.width(7, em);
-                text.verticalAlign.middle();
-                padding.left(20, px);
-            }
-        }
-
-        /**
-         * @version 2013/02/16 10:00:01
-         */
-        private static class Icon extends CSS {
-
-            private int size = 44;
-
-            {
-                display.inlineBlock();
-                box.size(size, px);
-                background.contain().size(size + 4, px).horizontal(-2, px).vertical(-2, px);
-                border.radius(5, px).color(50, 50, 50).width(1, px).solid();
-                text.verticalAlign.middle();
-            }
-        }
-
-        /**
-         * @version 2013/02/16 10:00:01
-         */
-        private static class NoIcon extends CSS {
-
-            {
-                display.inlineBlock();
-                box.size(40, px);
-            }
-        }
-
-        /**
-         * @version 2013/02/16 10:00:01
-         */
-        private static class Status extends CSS {
-
-            {
-                display.inlineBlock();
-                box.width(4, em);
-                text.verticalAlign.middle();
             }
         }
     }

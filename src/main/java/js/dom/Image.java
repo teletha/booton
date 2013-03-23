@@ -90,12 +90,8 @@ public class Image {
      * @return
      */
     public Image grayscale(double amount) {
-        jQuery filter = $(document.createElementNS(SVG, "feColorMatrix"));
-        filter.attr("type", "matrix");
-        filter.attr("values", amount + " " + amount + " " + amount + " 0 0 " + amount + " " + amount + " " + amount + " 0 0 " + amount + " " + amount + " " + amount + " 0 0 0 0 0 1 0");
-
-        // Chainable API
-        return applyFilter(filter);
+        return applyFilter($(document.createElementNS(SVG, "feColorMatrix")).attr("type", "matrix")
+                .attr("values", amount + " " + amount + " " + amount + " 0 0 " + amount + " " + amount + " " + amount + " 0 0 " + amount + " " + amount + " " + amount + " 0 0 0 0 0 1 0"));
     }
 
     /**
