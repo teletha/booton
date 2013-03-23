@@ -251,6 +251,7 @@ public class Mastery extends Describable<MasteryDescriptor> {
 
     /**
      * <p>
+     * Compute full path to icon image.
      * </p>
      * 
      * @return

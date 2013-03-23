@@ -24,51 +24,66 @@ import teemowork.model.variable.Variable;
 import teemowork.model.variable.VariableResolver;
 
 /**
- * @version 2013/03/16 23:49:50
+ * @version 2013/03/23 12:41:01
  */
-public class DescriptionView implements Subscriber {
-
-    /** The target descriptor to view. */
-    private final Descriptor descriptor;
-
-    /** The root element. */
-    private final jQuery root;
+public abstract class DescriptionView implements Subscriber {
 
     /** The passive element. */
-    private final jQuery passiveDescription;
+    private final jQuery description;
+
+    /** The target descriptor to view. */
+    private final Describable describable;
+
+    /** The target type. */
+    private final boolean forPassive;
 
     /**
      * <p>
-     * Create view for {@link Descriptor}.
+     * Create view for {@link Describable}.
      * </p>
      * 
      * @param root
      */
-    public DescriptionView(Descriptor descriptor, jQuery root) {
-        this.descriptor = descriptor;
-        this.root = root;
-        this.passiveDescription = root.child(Passive.class);
+    public DescriptionView(jQuery root, Describable describable, boolean forPassive) {
+        this.description = root.child(Passive.class);
+        this.describable = describable;
+        this.forPassive = forPassive;
     }
 
-    protected int getCurrentLevel() {
-        return 0;
-    }
+    /**
+     * <p>
+     * Specify the current level of descriptor.
+     * </p>
+     * 
+     * @return
+     */
+    protected abstract int getLevel();
+
+    /**
+     * <p>
+     * Specify the current version of descriptor.
+     * </p>
+     * 
+     * @return
+     */
+    protected abstract Version getVersion();
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void receive() {
-        passiveDescription.empty();
+    public final void receive() {
+        description.empty();
 
-        List passive = descriptor.getPassive();
+        Descriptor descriptor = describable.getDescriptor(getVersion());
+        List tokens = forPassive ? descriptor.getPassive() : descriptor.getActive();
 
-        if (!passive.isEmpty()) {
-            for (Object token : passive) {
+        if (!tokens.isEmpty()) {
+            for (Object token : tokens) {
                 if (token instanceof Variable) {
-                    writeVariable(passiveDescription, (Variable) token, getCurrentLevel());
+                    writeVariable(description, (Variable) token, getLevel());
                 } else {
-                    passiveDescription.append(token.toString());
+                    description.append(token.toString());
                 }
             }
         }
@@ -76,6 +91,7 @@ public class DescriptionView implements Subscriber {
 
     /**
      * <p>
+     * Helper method to write variable.
      * </p>
      * 
      * @param root
@@ -115,12 +131,12 @@ public class DescriptionView implements Subscriber {
 
     /**
      * <p>
-     * Write skill amplifier.
+     * Helper method to write variable as amplifier.
      * </p>
      * 
      * @param root A element to write.
-     * @param amplifiers A list of skill amplifiers.
-     * @param level A current skill level.
+     * @param amplifiers A list of variable amplifiers.
+     * @param level A current variable level.
      */
     private void writeAmplifier(jQuery root, List<Variable> amplifiers, int level) {
         for (Variable amplifier : amplifiers) {

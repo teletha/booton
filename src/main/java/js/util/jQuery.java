@@ -109,6 +109,19 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Bind an event handler to the "right click" JavaScript event, or trigger that event on an
+     * element.
+     * </p>
+     * 
+     * @param listener A function to execute each time the event is triggered.
+     * @return
+     */
+    public jQuery contextmenu(Listener listener) {
+        return on("contextmenu", listener);
+    }
+
+    /**
+     * <p>
      * Add elements to the set of matched elements.
      * </p>
      * 
