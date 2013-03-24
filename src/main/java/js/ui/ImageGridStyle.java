@@ -21,7 +21,28 @@ import booton.css.Value;
  */
 class ImageGridStyle {
 
+    Color backColor = new Color(0, 10, 10);
+
     Value ImageSize = new Value(70, px);
+
+    class Root extends CSS {
+
+        {
+            display.block();
+            margin.auto();
+            line.height(0);
+            box.width(ImageSize.multiply(10).add(2));
+        }
+    }
+
+    class ImageSet extends CSS {
+
+        {
+            display.block();
+            background.color(backColor);
+            border.solid().width(1, px).color(backColor);
+        }
+    }
 
     class Container extends CSS {
 
@@ -35,8 +56,8 @@ class ImageGridStyle {
         {
             display.inlineBlock();
             box.size(ImageSize);
+            border.solid().width(1, px).color(backColor);
             cursor.pointer();
-            background.top().left().contain();
             position.relative();
             transition.property.all().duration(0.2, s).timing.easeInOut();
 

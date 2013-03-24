@@ -16,13 +16,17 @@ import static teemowork.model.Version.*;
 import java.util.List;
 
 import js.util.ArrayList;
+import js.util.jQuery;
 
 /**
- * 3.03準拠
+ * 3.04準拠
  * 
  * @version 2013/01/27 9:55:21
  */
 public class Champion {
+
+    /** The counter for id. */
+    private static int counter = 0;
 
     /** The champion manager. */
     private static final List<Champion> champions = new ArrayList();
@@ -369,6 +373,9 @@ public class Champion {
     /** The champion name. */
     public static final Champion Zyra = new Champion("Zyra", RiseOftheThorns, DeadlyBloom, RampantGrowth, GraspingRoots, Stranglethorns);
 
+    /** The champion id. */
+    public final int id;
+
     /** The name. */
     public final String name;
 
@@ -400,6 +407,7 @@ public class Champion {
      * @param name
      */
     Champion(String name, boolean transformed, Skill... skills) {
+        this.id = transformed ? counter : counter++;
         this.name = name;
         this.systemName = getSystemName().toLowerCase().replaceAll("[\\s'\\.]", "");
         this.skills = skills;
@@ -440,6 +448,17 @@ public class Champion {
      */
     public String getIcon() {
         return "src/main/resources/teemowork/icon/" + getSystemName() + ".png";
+    }
+
+    /**
+     * <p>
+     * Apply icon image.
+     * </p>
+     */
+    public void applyIcon(jQuery element) {
+        element.css("background-image", "url(champions.jpg)")
+                .css("background-position", id / (counter - 1) * 100 + "% 0%")
+                .css("background-size", "cover");
     }
 
     /**

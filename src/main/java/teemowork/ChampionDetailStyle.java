@@ -275,7 +275,6 @@ class ChampionDetailStyle {
         {
             display.block();
             box.size(70, px);
-            background.contain().size(80, px).horizontal(-5, px).vertical(-5, px);
             border.radius(10, px).color(50, 50, 50).width(2, px).solid();
             position.relative();
             margin.bottom(1, em);

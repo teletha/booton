@@ -56,8 +56,8 @@ import teemowork.model.Build.Computed;
 import teemowork.model.Champion;
 import teemowork.model.DependencyManager;
 import teemowork.model.Skill;
-import teemowork.model.SkillKey;
 import teemowork.model.SkillDescriptor;
+import teemowork.model.SkillKey;
 import teemowork.model.SkillType;
 import teemowork.model.Status;
 import teemowork.model.variable.Variable;
@@ -131,26 +131,24 @@ public class ChampionDetail extends Page {
      */
     @Override
     public void load(jQuery root) {
-        jQuery icon = root.child(ChampionIcon.class)
-                .css("background-image", "url(" + build.champion.getIcon() + ")")
-                .click(new Listener() {
+        jQuery icon = root.child(ChampionIcon.class).click(new Listener() {
 
-                    @Override
-                    public void handler(Event event) {
-                        event.preventDefault();
+            @Override
+            public void handler(Event event) {
+                event.preventDefault();
 
-                        build.setLevel(build.getLevel() + 1);
-                    }
-                })
-                .on("contextmenu", new Listener() {
+                build.setLevel(build.getLevel() + 1);
+            }
+        }).on("contextmenu", new Listener() {
 
-                    @Override
-                    public void handler(Event event) {
-                        event.preventDefault();
+            @Override
+            public void handler(Event event) {
+                event.preventDefault();
 
-                        build.setLevel(build.getLevel() - 1);
-                    }
-                });
+                build.setLevel(build.getLevel() - 1);
+            }
+        });
+        build.champion.applyIcon(icon);
 
         level = icon.child(Level.class);
 

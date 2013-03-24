@@ -17,7 +17,9 @@ import java.util.Map.Entry;
 
 import js.ui.ImageGridStyle.Container;
 import js.ui.ImageGridStyle.IconImage;
+import js.ui.ImageGridStyle.ImageSet;
 import js.ui.ImageGridStyle.Input;
+import js.ui.ImageGridStyle.Root;
 import js.ui.ImageGridStyle.Title;
 import js.ui.ImageGridStyle.Unselected;
 import js.util.HashMap;
@@ -50,7 +52,7 @@ public abstract class ImageGrid<T> extends UI {
      */
     @Override
     public void compose(jQuery parent) {
-        root.css("line-height", "0").css("width", "700px").css("margin", "0 auto");
+        root.addClass(Root.class);
 
         final jQuery search = $("<input type='text'>");
         search.appendTo(root);
@@ -72,10 +74,14 @@ public abstract class ImageGrid<T> extends UI {
             }
         });
 
-        for (final T source : sources) {
-            jQuery container = root.child(Container.class);
+        jQuery set = root.child(ImageSet.class);
 
-            jQuery image = container.child(IconImage.class).css("background-image", "url(" + getImageURI(source) + ")");
+        for (final T source : sources) {
+            jQuery container = set.child(Container.class);
+            jQuery image = container.child(IconImage.class);
+
+            apply(source, image);
+
             container.child(Title.class).text(getTitle(source));
 
             image.click(new Listener() {
@@ -113,13 +119,14 @@ public abstract class ImageGrid<T> extends UI {
 
     /**
      * <p>
-     * Find uri of the specified image source.
+     * Apply image to the element.
      * </p>
      * 
-     * @param source A images source.
+     * @param source A image source.
+     * @param element A images element.
      * @return
      */
-    protected abstract String getImageURI(T source);
+    protected abstract void apply(T source, jQuery element);
 
     /**
      * <p>
