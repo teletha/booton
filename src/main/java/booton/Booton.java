@@ -150,9 +150,9 @@ public class Booton {
      * @param output An output location
      */
     public void build() {
-        this.html = root.resolve("test.html");
-        this.js = root.resolve("test.js");
-        this.css = root.resolve("test.css");
+        this.html = root.resolve("index.html");
+        this.js = root.resolve("application.js");
+        this.css = root.resolve("application.css");
 
         // load booton extensions
         I.load(Booton.class, false);
