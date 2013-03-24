@@ -79,7 +79,6 @@ class ChampionComparingStyle {
         {
             display.inlineBlock();
             box.size(size, px);
-            background.contain().size(size + 4, px).horizontal(-2, px).vertical(-2, px);
             border.radius(5, px).color(50, 50, 50).width(1, px).solid();
             text.verticalAlign.middle();
         }

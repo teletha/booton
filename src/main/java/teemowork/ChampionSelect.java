@@ -36,9 +36,12 @@ public class ChampionSelect extends Page {
             return source.name;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        protected String getImageURI(Champion source) {
-            return source.getIcon();
+        protected void apply(Champion source, jQuery element) {
+            source.applyIcon(element);
         }
 
         /**

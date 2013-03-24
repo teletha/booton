@@ -88,7 +88,7 @@ public class ChampionComparing extends Page {
             ChampionStatus status = champion.getStatus(Version.Latest);
 
             jQuery row = $("<div>").addClass(RowLine.class);
-            row.child(Icon.class).css("background-image", "url(" + champion.getIcon() + ")");
+            champion.applyIcon(row.child(Icon.class));
             row.child(Name.class).text(champion.name);
 
             for (Status value : STATUS) {
