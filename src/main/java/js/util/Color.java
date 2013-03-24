@@ -126,7 +126,8 @@ public class Color {
      * @param amount An amount of transparency.
      * @return A new color.
      */
-    public Color opacify(float amount) {
+    public Color opacify(double amount) {
+        System.out.println(alpha + amount);
         return new Color(hue, saturation, lightness, alpha + amount);
     }
 

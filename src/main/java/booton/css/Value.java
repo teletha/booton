@@ -45,7 +45,7 @@ public class Value {
      * @param value
      * @return
      */
-    public Value add(int value) {
+    public Value add(double value) {
         return new Value(size + value, unit);
     }
 
@@ -69,7 +69,7 @@ public class Value {
      * @param value
      * @return
      */
-    public Value subtract(int value) {
+    public Value subtract(double value) {
         return new Value(size - value, unit);
     }
 
@@ -93,7 +93,7 @@ public class Value {
      * @param value
      * @return
      */
-    public Value multiply(int value) {
+    public Value multiply(double value) {
         return new Value(size * value, unit);
     }
 
@@ -117,7 +117,7 @@ public class Value {
      * @param value
      * @return
      */
-    public Value divide(int value) {
+    public Value divide(double value) {
         return new Value(size / value, unit);
     }
 

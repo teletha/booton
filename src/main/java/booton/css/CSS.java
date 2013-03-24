@@ -746,25 +746,50 @@ public abstract class CSS implements Extensible {
      * Apply bubble border box style.
      * </p>
      * 
-     * @param boxWidth
-     * @param borderWidth
-     * @param bubbleWidth
+     * @param bubbleHeight
      */
-    protected void bubble(double boxWidth, double borderWidth, double bubbleWidth) {
-        position.absolute().left(50, percent);
-        box.width(boxWidth, px);
-        margin.left(-boxWidth / 2, px);
-        border.width(borderWidth, px).solid().color(5, 5, 5);
+    protected final void createBubble(int bubbleHeight) {
+        Value boxWidth = box.width();
+        Color boxBackColor = background.color();
 
+        Value borderWidth = border.width();
+        Color borderColor = border.color();
+
+        if (borderWidth == null) {
+            borderWidth = new booton.css.Value(0, px);
+        }
+
+        if (!position.isAbsolute() && !position.isRelative()) {
+            position.relative();
+        }
+
+        // write bubble
         while (before()) {
             display.block();
-            box.width(0, px).height(0, px);
+            box.size(0, px);
             content.text("");
             position.absolute()
-                    .bottom(-bubbleWidth - borderWidth - bubbleWidth, px)
-                    .left(boxWidth / 2 - borderWidth - bubbleWidth, px);
-            border.width(bubbleWidth, px).solid().color.transparent();
-            borderTop.color.black().width(bubbleWidth, px).solid();
+                    .left(boxWidth.divide(2).subtract(borderWidth).subtract(bubbleHeight * 2))
+                    .top(100, percent);
+            margin.top(borderWidth.subtract(1));
+            border.solid().color.transparent().width(bubbleHeight * 2, px);
+            borderTop.color(borderColor).width(bubbleHeight * 2, px);
+        }
+
+        if (borderWidth.size != 0) {
+            double height = bubbleHeight + borderWidth.size - borderWidth.size * 1.414;
+
+            while (after()) {
+                display.block();
+                box.size(0, px);
+                content.text("");
+                position.absolute()
+                        .left(boxWidth.divide(2).subtract(borderWidth).subtract(height * 2))
+                        .top(100, percent);
+
+                border.solid().color.transparent().width(height * 2, px);
+                borderTop.color(boxBackColor.opacify(1)).width(height * 2, px);
+            }
         }
     }
 

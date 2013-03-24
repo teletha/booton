@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ import booton.css.Unit;
 import booton.css.Value;
 
 /**
- * @version 2012/12/16 17:27:52
+ * @version 2013/03/24 2:06:03
  */
 public class BoxLength extends CSSProperty<BoxLength> {
 
@@ -100,7 +100,21 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @return
      */
     public BoxLength top(double size, Unit unit) {
-        top = new Value(size, unit);
+        return top(new Value(size, unit));
+    }
+
+    /**
+     * <p>
+     * The margin-top CSS property of an element sets the margin space required on the top of an
+     * element. A negative value is also allowed.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public BoxLength top(Value value) {
+        top = value;
 
         // Chainable API
         return chain();
@@ -117,7 +131,21 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @return
      */
     public BoxLength bottom(double size, Unit unit) {
-        bottom = new Value(size, unit);
+        return bottom(new Value(size, unit));
+    }
+
+    /**
+     * <p>
+     * The margin-bottom CSS property of an element sets the margin space required on the top of an
+     * element. A negative value is also allowed.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public BoxLength bottom(Value value) {
+        bottom = value;
 
         // Chainable API
         return chain();
@@ -165,7 +193,21 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @return
      */
     public BoxLength right(double size, Unit unit) {
-        right = new Value(size, unit);
+        return right(new Value(size, unit));
+    }
+
+    /**
+     * <p>
+     * The margin-right CSS property of an element sets the margin space required on the top of an
+     * element. A negative value is also allowed.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public BoxLength right(Value value) {
+        right = value;
 
         // Chainable API
         return chain();
