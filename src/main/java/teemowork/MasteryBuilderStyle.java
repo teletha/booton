@@ -11,6 +11,7 @@ package teemowork;
 
 import js.util.Color;
 import booton.css.CSS;
+import booton.css.Snippet;
 
 /**
  * @version 2013/03/13 15:05:12
@@ -201,20 +202,17 @@ class MasteryBuilderStyle {
             transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
             pointerEvents.none();
 
-            createBottomBubble(6);
+            Snippet.createBottomBubble(6);
 
             while (insideOf(Unavailable.class)) {
                 font.color(AvailableColor.grayscale());
             }
-        }
-    }
 
-    class DescriptionAvailable extends CSS {
-
-        {
-            box.opacity(1);
-            visibility.visible();
-            position.bottom(IconSize + 12, px);
+            while (siblingHover()) {
+                box.opacity(1);
+                visibility.visible();
+                position.bottom(IconSize + 12, px);
+            }
         }
     }
 
@@ -223,7 +221,7 @@ class MasteryBuilderStyle {
         {
             display.block();
             margin.bottom(0.7, em);
-            font.weight.bolder().color();
+            font.size(16, px).weight.bolder().color(hsl(60, 100, 85)).family(TeemoworkTheme.Title);
         }
     }
 
