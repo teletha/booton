@@ -187,13 +187,13 @@ class MasteryBuilderStyle {
 
         Color borderColor = new Color(0, 98, 97, 0.9);
 
-        Color color = new Color(0, 10, 0, 0.7);
+        Color color = new Color(0, 10, 0, 1);
 
         {
             display.block();
             position.absolute().bottom(IconSize + 35, px).left(IconSize / 2 - Width / 2, px);
-            box.width(Width, px).opacity(0).zIndex(100).shadow(0, px, 0, px, 7, px, hsla(0, 0, 0, 0.9));
-            background.image(linear(color.lighten(10), color)).color(color);
+            box.width(Width, px).opacity(0).zIndex(100).shadow(0, px, 0, px, 7, px, color);
+            background.image(linear(color.opacify(-0.2).lighten(20), color)).color(color.opacify(-1));
             border.radius(Corner, px).solid().width(BorderWidth, px).color(borderColor);
             padding.size(10, px);
             visibility.hidden();
@@ -201,52 +201,10 @@ class MasteryBuilderStyle {
             transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
             pointerEvents.none();
 
-            createBubble(12);
+            createBubble(6);
 
             while (insideOf(Unavailable.class)) {
                 font.color(AvailableColor.grayscale());
-            }
-        }
-
-        private void createBubble(int bubbleWidth) {
-            booton.css.Value width = box.width();
-            Color backgroundColor = background.color();
-
-            booton.css.Value borderWidth = border.width();
-            Color borderColor = border.color();
-
-            if (borderWidth == null) {
-                borderWidth = new booton.css.Value(0, px);
-            }
-
-            if (!position.isAbsolute() && !position.isRelative()) {
-                position.relative();
-            }
-
-            // write bubble
-            while (before()) {
-                display.block();
-                box.size(0, px);
-                content.text("");
-                position.absolute()
-                        .bottom(borderWidth.multiply(-1).subtract(bubbleWidth * 2))
-                        .left(width.divide(2).subtract(borderWidth).subtract(bubbleWidth));
-                border.solid().color.transparent().width(bubbleWidth, px);
-                borderTop.color(borderColor).width(bubbleWidth, px);
-            }
-
-            if (borderWidth.size != 0) {
-                while (after()) {
-                    display.block();
-                    box.size(0, px);
-                    content.text("");
-                    position.absolute()
-                            .bottom(borderWidth.subtract(bubbleWidth * 2))
-                            .left(width.divide(2).subtract(borderWidth).subtract(bubbleWidth));
-                    border.width(bubbleWidth, px).solid().color.transparent();
-                    border.solid().color.transparent().width(bubbleWidth, px);
-                    borderTop.color(backgroundColor.opacify(1)).width(bubbleWidth, px);
-                }
             }
         }
     }
