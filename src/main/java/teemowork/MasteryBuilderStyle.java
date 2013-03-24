@@ -193,7 +193,7 @@ class MasteryBuilderStyle {
             display.block();
             position.absolute().bottom(IconSize + 35, px).left(IconSize / 2 - Width / 2, px);
             box.width(Width, px).opacity(0).zIndex(100).shadow(0, px, 0, px, 7, px, color);
-            background.image(linear(color.opacify(-0.2).lighten(20), color)).color(color.opacify(-1));
+            background.image(linear(color.opacify(-0.25), color));
             border.radius(Corner, px).solid().width(BorderWidth, px).color(borderColor);
             padding.size(10, px);
             visibility.hidden();
@@ -201,7 +201,7 @@ class MasteryBuilderStyle {
             transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
             pointerEvents.none();
 
-            createBubble(6);
+            createBottomBubble(6);
 
             while (insideOf(Unavailable.class)) {
                 font.color(AvailableColor.grayscale());

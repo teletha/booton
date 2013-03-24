@@ -120,7 +120,7 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
      * @return A current value.
      */
     public Value width() {
-        return width;
+        return width == null ? Value.Zero : width;
     }
 
     /**

@@ -26,6 +26,9 @@ public class Color {
     /** The frequently used color. */
     public static final Color Black = new Color(0, 0, 0);
 
+    /** The frequently used color. */
+    public static final Color Transparent = new Color(0, 0, 0, 0);
+
     /**
      * The attribute of a visual sensation according to which an area appears to be similar to one
      * of the perceived colors: red, yellow, green, and blue, or to a combination of two of them .
@@ -78,7 +81,7 @@ public class Color {
         this.hue = hue % 360;
         this.saturation = (int) range(saturation, 100);
         this.lightness = (int) range(lightness, 100);
-        this.alpha = range((float) alpha, 100);
+        this.alpha = range((float) alpha, 1);
     }
 
     /**
@@ -127,7 +130,6 @@ public class Color {
      * @return A new color.
      */
     public Color opacify(double amount) {
-        System.out.println(alpha + amount);
         return new Color(hue, saturation, lightness, alpha + amount);
     }
 

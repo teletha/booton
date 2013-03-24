@@ -571,6 +571,28 @@ public abstract class CSS implements Extensible {
 
     /**
      * <p>
+     * The :hover CSS pseudo-class matches when the user designates an element with a pointing
+     * device, but does not necessarily activate it. This style may be overridden by any other
+     * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent
+     * rules. In order to style appropriately links, you need to put the :hover rule after the :link
+     * and :visited rules but before the :active one, as defined by the LVHA-order: :link — :visited
+     * — :hover — :active.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean siblingHover() {
+        String current = rules.selector;
+
+        if (current.endsWith(":after")) {
+            return rule(current.substring(0, current.length() - 6) + ":hover:after");
+        } else {
+            return rule("*:hover+" + current);
+        }
+    }
+
+    /**
+     * <p>
      * Create sub rule set.
      * </p>
      * 
@@ -748,47 +770,40 @@ public abstract class CSS implements Extensible {
      * 
      * @param bubbleHeight
      */
-    protected final void createBubble(int bubbleHeight) {
-        Value boxWidth = box.width();
-        Color boxBackColor = background.color();
-
+    protected final void createBottomBubble(int bubbleHeight) {
         Value borderWidth = border.width();
         Color borderColor = border.color();
-
-        if (borderWidth == null) {
-            borderWidth = new booton.css.Value(0, px);
-        }
+        Color boxBackColor = background.color();
 
         if (!position.isAbsolute() && !position.isRelative()) {
             position.relative();
         }
 
-        // write bubble
+        Value width = borderWidth.add(bubbleHeight);
+
+        // write bubble border color
         while (before()) {
             display.block();
             box.size(0, px);
             content.text("");
-            position.absolute()
-                    .left(boxWidth.divide(2).subtract(borderWidth).subtract(bubbleHeight * 2))
-                    .top(100, percent);
-            margin.top(borderWidth.subtract(1));
-            border.solid().color.transparent().width(bubbleHeight * 2, px);
-            borderTop.color(borderColor).width(bubbleHeight * 2, px);
+            position.absolute().left(50, percent).top(100, percent);
+            margin.left(width.opposite());
+            border.solid().color.transparent().width(width);
+            borderTop.color(borderColor);
         }
 
+        // write bubble background color
         if (borderWidth.size != 0) {
-            double height = bubbleHeight + borderWidth.size - borderWidth.size * 1.414;
+            width = width.subtract(borderWidth.multiply(1.5));
 
             while (after()) {
                 display.block();
                 box.size(0, px);
                 content.text("");
-                position.absolute()
-                        .left(boxWidth.divide(2).subtract(borderWidth).subtract(height * 2))
-                        .top(100, percent);
-
-                border.solid().color.transparent().width(height * 2, px);
-                borderTop.color(boxBackColor.opacify(1)).width(height * 2, px);
+                position.absolute().left(50, percent).top(100, percent);
+                margin.left(width.opposite());
+                border.solid().color.transparent().width(width);
+                borderTop.color(boxBackColor.opacify(1));
             }
         }
     }

@@ -77,7 +77,7 @@ public class ColorValue<T extends CSSProperty> extends CSSProperty<T> implements
 
     /** The color keyword. */
     public T transparent() {
-        color = Color.rgba(0, 0, 0, 0);
+        color = Color.Transparent;
 
         // Chainable API
         return chain();

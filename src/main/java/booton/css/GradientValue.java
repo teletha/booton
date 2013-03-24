@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,13 +12,15 @@ package booton.css;
 import js.util.Color;
 
 /**
- * @version 2012/12/15 0:52:37
+ * @version 2013/03/24 13:09:14
  */
 public class GradientValue {
 
-    private Color start;
+    /** The start color. */
+    public final Color start;
 
-    private Color end;
+    /** The end color. */
+    public final Color end;
 
     /**
      * @param start

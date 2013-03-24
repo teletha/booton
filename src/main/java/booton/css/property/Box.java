@@ -80,8 +80,21 @@ public class Box extends CSSProperty<Box> {
      * @return
      */
     public Box size(double size, Unit unit) {
-        width(size, unit);
-        height(size, unit);
+        return size(new Value(size, unit));
+    }
+
+    /**
+     * <p>
+     * Setting width and height properties.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public Box size(Value value) {
+        width(value);
+        height(value);
 
         return this;
     }
@@ -94,7 +107,7 @@ public class Box extends CSSProperty<Box> {
      * @return A current value.
      */
     public Value width() {
-        return width;
+        return width == null ? minWidth == null ? Value.Zero : minWidth : width;
     }
 
     /**
@@ -147,7 +160,22 @@ public class Box extends CSSProperty<Box> {
      * @return
      */
     public Box minWidth(double size, Unit unit) {
-        minWidth = new Value(size, unit);
+        return minWidth(new Value(size, unit));
+    }
+
+    /**
+     * <p>
+     * The min-width CSS property is used to set the minimum width of a given element. It prevents
+     * the used value of the width property from becoming smaller than the value specified for
+     * min-width.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public Box minWidth(Value value) {
+        minWidth = value;
 
         return chain();
     }
@@ -164,7 +192,22 @@ public class Box extends CSSProperty<Box> {
      * @return
      */
     public Box maxWidth(double size, Unit unit) {
-        maxWidth = new Value(size, unit);
+        return maxWidth(new Value(size, unit));
+    }
+
+    /**
+     * <p>
+     * The max-width CSS property is used to set the maximum width of a given element. It prevents
+     * the used value of the width property from becoming larger than the value specified for
+     * max-width.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public Box maxWidth(Value value) {
+        maxWidth = value;
 
         return chain();
     }
