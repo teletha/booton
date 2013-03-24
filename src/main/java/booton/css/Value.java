@@ -14,6 +14,9 @@ package booton.css;
  */
 public class Value {
 
+    /** The zero value. */
+    public static final Value Zero = new Value(0, Unit.px);
+
     /** The size. */
     public final double size;
 
@@ -131,6 +134,16 @@ public class Value {
      */
     public Value divide(Value value) {
         return new Value(size / value.size, unit);
+    }
+
+    /**
+     * <p>
+     * </p>
+     * 
+     * @return
+     */
+    public Value opposite() {
+        return new Value(size * -1, unit);
     }
 
     /**

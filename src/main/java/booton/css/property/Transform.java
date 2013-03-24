@@ -51,4 +51,35 @@ public class Transform extends CSSProperty<Transform> {
 
         return chain();
     }
+
+    /**
+     * <p>
+     * The scale() CSS function modify the size of the element. It can either augment or decrease
+     * its size and as the amount of scaling is defined by a vector, if can do so more in one
+     * direction than in another one.
+     * </p>
+     * 
+     * @param scale
+     */
+    public Transform scale(double scale) {
+        functions.add("scale(" + scale + ")");
+
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The scale() CSS function modify the size of the element. It can either augment or decrease
+     * its size and as the amount of scaling is defined by a vector, if can do so more in one
+     * direction than in another one.
+     * </p>
+     * 
+     * @param scaleX
+     * @param scaleY
+     */
+    public Transform scale(double scaleX, double scaleY) {
+        functions.add("scale(" + scaleX + "," + scaleY + ")");
+
+        return chain();
+    }
 }

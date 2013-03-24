@@ -34,6 +34,8 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
 
     private String image;
 
+    private GradientValue gradient;
+
     /**
      * {@inheritDoc}
      */
@@ -76,7 +78,16 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
      */
     @Override
     public Color color() {
-        return color.color();
+        Color backgroundColor = color.color();
+
+        if (backgroundColor == null) {
+            if (gradient == null) {
+                backgroundColor = Color.Transparent;
+            } else {
+                backgroundColor = gradient.end;
+            }
+        }
+        return backgroundColor;
     }
 
     /**
@@ -108,7 +119,8 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
      * @return
      */
     public Background image(GradientValue gradient) {
-        image = gradient.toString();
+        this.gradient = gradient;
+        this.image = gradient.toString();
 
         return chain();
     }
