@@ -20,7 +20,6 @@ import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
 import teemowork.MasteryBuilderStyle.Completed;
 import teemowork.MasteryBuilderStyle.Defense;
-import teemowork.MasteryBuilderStyle.DescriptionAvailable;
 import teemowork.MasteryBuilderStyle.EmptyPane;
 import teemowork.MasteryBuilderStyle.IconImage;
 import teemowork.MasteryBuilderStyle.LevelPane;
@@ -177,31 +176,19 @@ public class MasteryBuilder extends Page implements Subscriber {
             // Icon Pane
             image = root.image(IconImage.class).src(mastery.getIcon());
 
-            // Mastery Description Pane
-            popup = root.child(PopupPane.class);
-            popup.child(MasteryName.class).text(mastery.name);
-            masterySet.register(new MasteryDescriptionView(popup, mastery));
-
             // Mastery Level Pane
             jQuery levelPane = root.child(LevelPane.class);
             currentLevel = levelPane.child(LevelValue.class).text(0);
             levelPane.child(LevelSeparator.class).text("/");
             levelPane.child(LevelValue.class).text(mastery.getMaxLevel());
 
+            // Mastery Description Pane
+            popup = root.child(PopupPane.class);
+            popup.child(MasteryName.class).text(mastery.name);
+            masterySet.register(new MasteryDescriptionView(popup, mastery));
+
             // Event Handlers
-            root.mouseenter(new Listener() {
-
-                @Override
-                public void handler(Event event) {
-                    popup.addClass(DescriptionAvailable.class);
-                }
-            }).mouseleave(new Listener() {
-
-                @Override
-                public void handler(Event event) {
-                    popup.removeClass(DescriptionAvailable.class);
-                }
-            }).click(new Listener() {
+            root.click(new Listener() {
 
                 @Override
                 public void handler(Event event) {

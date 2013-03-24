@@ -11,16 +11,15 @@ package js.ui;
 
 import static booton.css.Unit.*;
 import js.util.Color;
+import teemowork.TeemoworkTheme;
 import booton.css.CSS;
+import booton.css.Snippet;
 import booton.css.Value;
-import booton.util.Font;
 
 /**
  * @version 2013/03/24 10:50:33
  */
 class ImageGridStyle {
-
-    Font Yanone = new Font("http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz");
 
     Value ImageSize = new Value(70, px);
 
@@ -62,7 +61,7 @@ class ImageGridStyle {
         Color color = new Color(0, 98, 97, 1);
 
         {
-            font.weight.bold().size(18, px).family(Yanone);
+            font.weight.bold().size(18, px).family(TeemoworkTheme.Title);
             text.align.center().shadow(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
             line.height(20, px);
             padding.size(5, px);
@@ -75,7 +74,7 @@ class ImageGridStyle {
             pointerEvents.none();
             transition.property.all().duration(0.2, s).timing.easeInOut().delay(100, ms);
 
-            createBottomBubble(6);
+            Snippet.createBottomBubble(7);
 
             while (siblingHover()) {
                 box.opacity(1);

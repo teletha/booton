@@ -10,13 +10,10 @@
 package js.application;
 
 import js.util.Color;
+import teemowork.TeemoworkTheme;
 import booton.css.CSS;
-import booton.util.Font;
 
 class HeaderStyle {
-
-    /** The header font. */
-    Font Orbitron = new Font("http://fonts.googleapis.com/css?family=Orbitron");
 
     /** The background color. */
     Color LightBack = new Color(0, 0, 27);
@@ -57,7 +54,7 @@ class HeaderStyle {
         {
             display.block();
             padding.vertical(12, px).horizontal(20, px);
-            font.color(153, 153, 153).weight.bold().size(12, px).family(Orbitron);
+            font.color(153, 153, 153).weight.bold().size(12, px).family(TeemoworkTheme.Header);
             text.decoration.none().shadow();
 
             while (hover()) {
