@@ -9,13 +9,10 @@
  */
 package teemowork.tool;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import kiss.I;
 import teemowork.tool.image.ImageConverter;
-import teemowork.tool.image.ImageType;
 
 /**
  * @version 2013/03/25 9:45:25
@@ -26,21 +23,14 @@ public class ChampionIconBuilder {
      * @param args
      */
     public static void main(String[] args) throws Exception {
-        Path output = I.locate(".act/");
-
-        try {
-            Files.createDirectories(output);
-        } catch (IOException e) {
-            throw I.quiet(e);
-        }
+        ImageConverter container = new ImageConverter();
 
         for (Path icon : I.walk(ResourceLocator.ChampionIcons)) {
-
             ImageConverter image = new ImageConverter(icon);
-            image.trim(10).resizeX(70);
+            image.trim(7).resize(70);
 
-            image.write(output, ImageType.JPG);
-            break;
+            container.concat(image);
         }
+        container.write(ResourceLocator.Resources.resolve("champions.jpg"));
     }
 }

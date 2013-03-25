@@ -456,7 +456,7 @@ public class Champion {
      * </p>
      */
     public void applyIcon(jQuery element) {
-        element.css("background-image", "url(champions.jpg)")
+        element.css("background-image", "url(src/main/resources/teemowork/champions.jpg)")
                 .css("background-position", id / (counter - 1) * 100 + "% 0%")
                 .css("background-size", "cover");
     }

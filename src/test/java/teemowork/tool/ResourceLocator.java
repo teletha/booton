@@ -19,17 +19,17 @@ import kiss.I;
 public class ResourceLocator {
 
     /** The resource root. */
-    private static final String Resources = "src/main/resources/teemowork/";
+    public static final Path Resources = I.locate("src/main/resources/teemowork");
 
     /** The champion icons. */
-    public static final Path ChampionIcons = I.locate(Resources + "icon");
+    public static final Path ChampionIcons = Resources.resolve("icon");
 
     /** The item icons. */
-    public static final Path ItemIcons = I.locate(Resources + "item");
+    public static final Path ItemIcons = Resources.resolve("item");
 
     /** The mastery icons. */
-    public static final Path MasteryIcon = I.locate(Resources + "mastery/s3");
+    public static final Path MasteryIcon = Resources.resolve("mastery/s3");
 
     /** The skill icons. */
-    public static final Path SkillIcon = I.locate(Resources + "skill");
+    public static final Path SkillIcon = Resources.resolve("skill");
 }
