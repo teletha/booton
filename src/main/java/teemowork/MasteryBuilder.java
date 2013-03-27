@@ -146,6 +146,8 @@ public class MasteryBuilder extends Page implements Subscriber {
      */
     private class MasteryView implements Subscriber {
 
+        private final int size = 45;
+
         /** The associated mastery. */
         private final Mastery mastery;
 
@@ -174,7 +176,7 @@ public class MasteryBuilder extends Page implements Subscriber {
             this.mastery = mastery;
 
             // Icon Pane
-            image = root.image(IconImage.class).src(mastery.getIcon());
+            image = root.image(IconImage.class).src(mastery.getSpriteImage()).clip(mastery.id * size, 0, size, size);
 
             // Mastery Level Pane
             jQuery levelPane = root.child(LevelPane.class);

@@ -12,10 +12,13 @@ package teemowork.tool.image;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.RenderingHints.Key;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -28,7 +31,21 @@ import kiss.I;
 /**
  * @version 2013/03/25 11:51:38
  */
-public class ImageConverter {
+public class EditableImage {
+
+    private static final Map<Key, Object> hints = new HashMap();
+
+    static {
+        hints.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+        hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        hints.put(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+        hints.put(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
+        hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        hints.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        hints.put(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        hints.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+    }
 
     /** The original file. */
     private final Path file;
@@ -39,7 +56,7 @@ public class ImageConverter {
     /**
      * 
      */
-    public ImageConverter() {
+    public EditableImage() {
         file = null;
         image = new EmptyImage();
     }
@@ -47,7 +64,7 @@ public class ImageConverter {
     /**
      * @param file
      */
-    public ImageConverter(Path file) {
+    public EditableImage(Path file) {
         try {
             this.file = file;
             this.image = ImageIO.read(file.toFile());
@@ -63,7 +80,7 @@ public class ImageConverter {
      * 
      * @param size
      */
-    public ImageConverter trim(int size) {
+    public EditableImage trim(int size) {
         return trim(size, size, size, size);
     }
 
@@ -77,7 +94,7 @@ public class ImageConverter {
      * @param bottom A triming pixel size of bottom side.
      * @param left A triming pixel size of left side.
      */
-    public ImageConverter trim(int top, int right, int bottom, int left) {
+    public EditableImage trim(int top, int right, int bottom, int left) {
         int width = image.getWidth();
         int height = image.getHeight();
 
@@ -93,18 +110,10 @@ public class ImageConverter {
      * 
      * @param size
      */
-    public ImageConverter resize(int size) throws Exception {
+    public EditableImage resize(int size) throws Exception {
         BufferedImage screen = new BufferedImage(size, size, image.getType());
         Graphics2D graphics = screen.createGraphics();
-        graphics.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        graphics.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-        graphics.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
-        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        graphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-        graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-        graphics.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+        graphics.setRenderingHints(hints);
         graphics.drawImage(image, 0, 0, size, size, null);
         image = screen;
 
@@ -118,7 +127,7 @@ public class ImageConverter {
      * 
      * @param image2
      */
-    public ImageConverter concat(ImageConverter target) {
+    public EditableImage concat(EditableImage target) {
         BufferedImage screen = new BufferedImage(image.getWidth() + target.image.getWidth(), Math.max(image.getHeight(), target.image.getHeight()), image.getType());
         Graphics2D graphics = screen.createGraphics();
         graphics.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);

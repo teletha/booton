@@ -261,6 +261,17 @@ public class Mastery extends Describable<MasteryDescriptor> {
     }
 
     /**
+     * <p>
+     * Compute full path to icon image.
+     * </p>
+     * 
+     * @return
+     */
+    public String getSpriteImage() {
+        return "src/main/resources/teemowork/masteryS3.jpg";
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
