@@ -12,6 +12,8 @@ package teemowork;
 import js.util.Color;
 import booton.css.CSS;
 import booton.css.Snippet;
+import booton.css.Unit;
+import booton.css.Value;
 
 /**
  * @version 2013/03/13 15:05:12
@@ -77,7 +79,7 @@ class MasteryBuilderStyle {
 
         {
             display.block();
-            margin.vertical(Gap * 3, px);
+            margin.vertical(Gap * 2.8, px);
             text.unselectable();
         }
     }
@@ -245,6 +247,87 @@ class MasteryBuilderStyle {
 
         {
 
+        }
+    }
+
+    class Information extends CSS {
+
+        {
+            display.block();
+            margin.bottom(10, px);
+        }
+    }
+
+    class ResetButton extends CSS {
+
+        {
+            createButton();
+        }
+
+        private void createButton() {
+            Color front = new Color(0, 0, 33);
+            Color back = new Color(0, 0, 87);
+
+            display.inlineBlock();
+            margin.size(0, px);
+            padding.vertical(4, px).horizontal(15, px);
+            cursor.pointer();
+            border.solid().width(1, px).color(hsl(0, 0, 73)).radius(3, px);
+            overflow.visible();
+            font.weight.bolder().color(front);
+            text.decoration.none().shadow(0, px, 1, px, Color.White.opacify(-0.1)).unselectable();
+            background.color(back).image(linear(Color.White, Color.White.opacify(-1)));
+            box.shadow(0, px, 1, px, hsla(0, 0, 0, 0.3))
+                    .shadow(0, px, 2, px, 2, px, -1, px, hsla(0, 0, 0, 0.5))
+                    .shadowInset(0, px, 1, px, 0, px, Color.White.opacify(-0.7));
+
+            transition.property("background-color").timing.easeOut().duration(0.2, s);
+
+            while (hover()) {
+                background.color(back.lighten(6));
+            }
+
+            while (active()) {
+                background.color(back.lighten(4)).imageNone();
+                position.relative().top(1, px);
+                box.shadowInset(0, px, 1, px, 1, px, Color.Black.opacify(-0.7));
+            }
+        }
+    }
+
+    class Available extends CSS {
+
+        {
+
+        }
+    }
+
+    Value BorderWidth = new Value(1, Unit.px);
+
+    Value BorderRadius = new Value(4, Unit.px);
+
+    Color BorderColor = new Color(0, 0, 80);
+
+    class Input extends CSS {
+
+        {
+            display.inlineBlock();
+            box.height(20, px).width(200, px).shadowInset(0, px, 1, px, 1, px, rgba(0, 0, 0, 0.075));
+            padding.vertical(4, px).horizontal(6, px);
+            font.size(14, px).color(85, 85, 85);
+            line.height(20, px);
+            text.verticalAlign.middle();
+
+            border.width(1, px).solid().color(204, 204, 204);
+            background.color(255, 255, 255);
+            transition.property.all().duration(0.2, s).timing.linear();
+
+            while (focus()) {
+                border.color(82, 168, 236, 0.8f);
+                outline.none();
+                box.shadowInset(0, px, 1, px, 1, px, rgba(0, 0, 0, 0.075))
+                        .shadow(0, px, 0, px, 8, px, rgba(82, 168, 236, 0.6));
+            }
         }
     }
 }

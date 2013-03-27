@@ -105,6 +105,21 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
      * @param unit
      * @return
      */
+    public BorderValue radius(Value value) {
+        return radius(value.size, value.unit);
+    }
+
+    /**
+     * <p>
+     * The border-radius CSS property allows Web authors to define how rounded border corners are.
+     * The curve of each corner is defined using one or two radii, defining its shape: circle or
+     * ellipse.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
     public BorderValue radius(double first, Unit firstUnit, double second, Unit secondUnit, double third, Unit thirdUnit, double fourth, Unit fourthUnit) {
         radius = new BoxLength("border-radius");
         radius.top(first, firstUnit).right(second, secondUnit).bottom(third, thirdUnit).left(fourth, fourthUnit);

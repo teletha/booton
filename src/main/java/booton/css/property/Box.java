@@ -398,6 +398,69 @@ public class Box extends CSSProperty<Box> {
     }
 
     /**
+     * <p>
+     * The box-shadow CSS property describes one or more shadow effects as a comma-separated list.
+     * It allows casting a drop shadow from the frame of almost any element. If a border-radius is
+     * specified on the element with a box shadow, the box shadow takes on the same rounded corners.
+     * The z-ordering of multiple box shadows is the same as multiple text shadows (the first
+     * specified shadow is on top).
+     * </p>
+     * 
+     * @param offsetX
+     * @param unitX
+     * @param offsetY
+     * @param unitY
+     * @param blur
+     * @param unitBlur
+     * @param spread
+     * @param unitSpread
+     * @return
+     */
+    public Box shadow(double offsetX, Unit unitX, double offsetY, Unit unitY, double blur, Unit unitBlur, double spread, Unit unitSpread, Color color) {
+        ShadowValue shadow = new ShadowValue();
+        shadow.offsetX = new Value(offsetX, unitX);
+        shadow.offsetY = new Value(offsetY, unitY);
+        shadow.blur = new Value(blur, unitBlur);
+        shadow.spread = new Value(spread, unitSpread);
+        shadow.color = color;
+        shadows.add(shadow);
+
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The box-shadow CSS property describes one or more shadow effects as a comma-separated list.
+     * It allows casting a drop shadow from the frame of almost any element. If a border-radius is
+     * specified on the element with a box shadow, the box shadow takes on the same rounded corners.
+     * The z-ordering of multiple box shadows is the same as multiple text shadows (the first
+     * specified shadow is on top).
+     * </p>
+     * 
+     * @param offsetX
+     * @param unitX
+     * @param offsetY
+     * @param unitY
+     * @param blur
+     * @param unitBlur
+     * @param spread
+     * @param unitSpread
+     * @return
+     */
+    public Box shadowInset(double offsetX, Unit unitX, double offsetY, Unit unitY, double blur, Unit unitBlur, double spread, Unit unitSpread, Color color) {
+        ShadowValue shadow = new ShadowValue();
+        shadow.offsetX = new Value(offsetX, unitX);
+        shadow.offsetY = new Value(offsetY, unitY);
+        shadow.blur = new Value(blur, unitBlur);
+        shadow.spread = new Value(spread, unitSpread);
+        shadow.inset = true;
+        shadow.color = color;
+        shadows.add(shadow);
+
+        return chain();
+    }
+
+    /**
      * @version 2012/12/13 18:00:31
      */
     public class Sizing extends CSSProperty<Box> {

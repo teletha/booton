@@ -11,18 +11,8 @@ package js.ui;
 
 
 /**
- * @version 2013/01/16 9:44:18
+ * @version 2013/03/28 1:05:04
  */
-public class Text {
+public class SelectMenu extends UI {
 
-    /**
-     * <p>
-     * Bind your data to this text field.
-     * </p>
-     * 
-     * @return
-     */
-    protected Object text() {
-        return "";
-    }
 }

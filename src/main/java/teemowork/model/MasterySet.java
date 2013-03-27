@@ -91,6 +91,25 @@ public class MasterySet extends Publisher {
 
     /**
      * <p>
+     * Reset all points.
+     * </p>
+     */
+    public void reset() {
+        boolean changed = false;
+
+        for (Mastery mastery : Mastery.VALUES) {
+            if (changeLevel(mastery, -4)) {
+                changed = true;
+            }
+        }
+
+        if (changed) {
+            publish();
+        }
+    }
+
+    /**
+     * <p>
      * Retrieve the specified mastery level.
      * </p>
      * 
@@ -99,6 +118,17 @@ public class MasterySet extends Publisher {
      */
     public int getLevel(Mastery mastery) {
         return levels[mastery.id];
+    }
+
+    /**
+     * <p>
+     * Sum points in all trees.
+     * </p>
+     * 
+     * @return A result.
+     */
+    public int getSum() {
+        return offense + defense + utility;
     }
 
     /**
@@ -341,10 +371,10 @@ public class MasterySet extends Publisher {
         int current = levels[mastery.id];
 
         // validate value range
-        if (mastery.getMaxLevel() < current + value) {
-            value = mastery.getMaxLevel() - current;
-        } else if (current + value < 0) {
+        if (current + value < 0) {
             value = -current;
+        } else if (mastery.getMaxLevel() < current + value) {
+            value = mastery.getMaxLevel() - current;
         }
 
         if (value == 0) {

@@ -39,13 +39,4 @@ public abstract class UI {
     protected UI(String name) {
         this.root = $("<" + name + ">");
     }
-
-    /**
-     * <p>
-     * Compose this user interface.
-     * </p>
-     * 
-     * @return
-     */
-    public abstract void compose(jQuery parent);
 }

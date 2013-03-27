@@ -22,6 +22,7 @@ import teemowork.MasteryBuilderStyle.Completed;
 import teemowork.MasteryBuilderStyle.Defense;
 import teemowork.MasteryBuilderStyle.EmptyPane;
 import teemowork.MasteryBuilderStyle.IconImage;
+import teemowork.MasteryBuilderStyle.Information;
 import teemowork.MasteryBuilderStyle.LevelPane;
 import teemowork.MasteryBuilderStyle.LevelSeparator;
 import teemowork.MasteryBuilderStyle.LevelValue;
@@ -30,6 +31,7 @@ import teemowork.MasteryBuilderStyle.MasteryPane;
 import teemowork.MasteryBuilderStyle.Offense;
 import teemowork.MasteryBuilderStyle.PopupPane;
 import teemowork.MasteryBuilderStyle.RankPane;
+import teemowork.MasteryBuilderStyle.ResetButton;
 import teemowork.MasteryBuilderStyle.SumPoint;
 import teemowork.MasteryBuilderStyle.Unavailable;
 import teemowork.MasteryBuilderStyle.Utility;
@@ -73,6 +75,13 @@ public class MasteryBuilder extends Page implements Subscriber {
     /** The offense value. */
     private jQuery utility;
 
+    /** The reset button. */
+    private jQuery reset;
+
+    private jQuery name;
+
+    private js.ui.Input menu;
+
     @PageInfo(path = "Mastery")
     public MasteryBuilder() {
         this("");
@@ -89,6 +98,18 @@ public class MasteryBuilder extends Page implements Subscriber {
      */
     @Override
     public void load(jQuery root) {
+        jQuery infomation = root.child(Information.class);
+        menu = new js.ui.Input().placeholder("Mastery Set Name");
+        infomation.append(menu);
+
+        reset = infomation.child(ResetButton.class).click(new Listener() {
+
+            @Override
+            public void handler(Event event) {
+                masterySet.reset();
+            }
+        });
+
         offense = build(root.child(Offense.class), OFFENSE);
         defense = build(root.child(Defense.class), DEFEMSE);
         utility = build(root.child(Utility.class), UTILITY);
@@ -126,6 +147,8 @@ public class MasteryBuilder extends Page implements Subscriber {
      */
     @Override
     public void receive() {
+        reset.text(30 - masterySet.getSum());
+
         offense.text("OFFENSE　" + masterySet.getSum(Mastery.Offense));
         defense.text("DEFENSE　" + masterySet.getSum(Mastery.Defense));
         utility.text("UTILITY　" + masterySet.getSum(Mastery.Utility));

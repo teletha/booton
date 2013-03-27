@@ -433,9 +433,28 @@ public abstract class CSS implements Extensible {
 
     /**
      * <p>
-     * The :focus CSS pseudo-class is applied when a element has received focus, either from the
-     * user selecting it with the use of a keyboard or by activating with the mouse (e.g. a form
-     * input).
+     * The :hover CSS pseudo-class matches when the user designates an element with a pointing
+     * device, but does not necessarily activate it. This style may be overridden by any other
+     * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent
+     * rules. In order to style appropriately links, you need to put the :hover rule after the :link
+     * and :visited rules but before the :active one, as defined by the LVHA-order: :link — :visited
+     * — :hover — :active.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean active() {
+        return rule(rules.selector + ":active");
+    }
+
+    /**
+     * <p>
+     * The :active CSS pseudo-class matches when an element is being activated by the user. It
+     * allows the page to give a feedback that the activation has been detected by the browser. When
+     * interacting with a mouse, this is typically the time between the user presses the mouse
+     * button and releases it. The :active pseudo-class is also typically matched when using the
+     * keyboard tab key. It is frequently used on <a> and <button> HTML elements, but may not be
+     * limited to just those.
      * </p>
      * 
      * @return
