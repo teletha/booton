@@ -12,7 +12,7 @@ package teemowork.tool;
 import java.nio.file.Path;
 
 import kiss.I;
-import teemowork.tool.image.ImageConverter;
+import teemowork.tool.image.EditableImage;
 
 /**
  * @version 2013/03/25 9:45:25
@@ -23,10 +23,10 @@ public class ChampionIconBuilder {
      * @param args
      */
     public static void main(String[] args) throws Exception {
-        ImageConverter container = new ImageConverter();
+        EditableImage container = new EditableImage();
 
         for (Path icon : I.walk(ResourceLocator.ChampionIcons)) {
-            ImageConverter image = new ImageConverter(icon);
+            EditableImage image = new EditableImage(icon);
             image.trim(7).resize(70);
 
             container.concat(image);

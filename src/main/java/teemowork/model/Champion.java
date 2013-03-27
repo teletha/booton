@@ -77,10 +77,10 @@ public class Champion {
     public static final Champion Diana = new Champion("Diana", MoonsilverBlade, CrescentStrike, PaleCascade, Moonfall, LunarRush);
 
     /** The champion name. */
-    public static final Champion DrMundo = new Champion("Dr.Mundo", AdrenalineRush, InfectedCleaver, BurningAgony, Masochism, Sadism);
+    public static final Champion Draven = new Champion("Draven", WickedBlades, SpinningAxe, BloodRush, StandAside, WhirlingDeath);
 
     /** The champion name. */
-    public static final Champion Draven = new Champion("Draven", WickedBlades, SpinningAxe, BloodRush, StandAside, WhirlingDeath);
+    public static final Champion DrMundo = new Champion("Dr.Mundo", AdrenalineRush, InfectedCleaver, BurningAgony, Masochism, Sadism);
 
     /** The champion name. */
     public static final Champion Elise = new Champion("Elise", SpiderSwarm, Neurotoxin, VolatileSpiderling, Cocoon, SpiderForm);

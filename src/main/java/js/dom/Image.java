@@ -118,6 +118,29 @@ public class Image {
 
     /**
      * <p>
+     * Clip image.
+     * </p>
+     * 
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @return
+     */
+    public Image clip(int x, int y, int width, int height) {
+        // apply clip
+        image.attr("x", "-" + x)
+                .attr("y", "-" + y)
+                .attr("width", x + width)
+                .attr("height", y + height)
+                .get(0)
+                .setAttribute("preserveAspectRatio", "xMinYMin slice");
+
+        return this;
+    }
+
+    /**
+     * <p>
      * Clear all applied filters.
      * </p>
      * 
