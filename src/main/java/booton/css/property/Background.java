@@ -101,6 +101,23 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
      * @param uri
      * @return
      */
+    public Background imageNone() {
+        image = "none";
+
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The CSS background-image property sets the background images for an element. The images are
+     * drawn on successive stacking context layers, with the first specified being drawn as if it is
+     * the closest to the user. The borders of the element are then drawn on top of them, and the
+     * background-color is drawn beneath them.
+     * </p>
+     * 
+     * @param uri
+     * @return
+     */
     public Background image(String uri) {
         image = url(uri);
 

@@ -45,13 +45,6 @@ public abstract class ImageGrid<T> extends UI {
      */
     public ImageGrid() {
         sources = sources();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void compose(jQuery parent) {
         root.addClass(Root.class);
 
         final jQuery search = $("<input type='text'>");
@@ -94,8 +87,6 @@ public abstract class ImageGrid<T> extends UI {
 
             images.put(source, image);
         }
-
-        parent.append(root);
     }
 
     /**

@@ -62,7 +62,7 @@ public class ChampionSelect extends Page {
      */
     @Override
     public void load(jQuery root) {
-        champions.compose(root);
+        root.append(champions);
     }
 
     /**

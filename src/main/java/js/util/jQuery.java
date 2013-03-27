@@ -15,6 +15,7 @@ import java.util.Iterator;
 
 import js.dom.Element;
 import js.dom.Image;
+import js.ui.UI;
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
 
@@ -242,6 +243,20 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery append(Element contents);
+
+    /**
+     * <p>
+     * Insert content, specified by the parameter, to the end of each element in the set of matched
+     * elements.
+     * </p>
+     * 
+     * @param contents DOM element, HTML string, or jQuery object to insert at the end of each
+     *            element in the set of matched elements.
+     * @return
+     */
+    public jQuery append(UI contents) {
+        return append(contents.root);
+    }
 
     /**
      * <p>

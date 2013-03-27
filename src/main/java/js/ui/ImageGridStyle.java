@@ -39,8 +39,9 @@ class ImageGridStyle {
 
         {
             display.block();
-            background.color(backColor);
-            border.solid().width(1, px).color(backColor);
+            // background.color(backColor);
+            borderTop.solid().width(2, px).color(backColor);
+            borderLeft.solid().width(2, px).color(backColor);
         }
     }
 
@@ -56,7 +57,8 @@ class ImageGridStyle {
         {
             display.inlineBlock();
             box.size(ImageSize);
-            border.solid().width(1, px).color(backColor);
+            borderBottom.solid().width(2, px).color(backColor);
+            borderRight.solid().width(2, px).color(backColor);
             cursor.pointer();
             position.relative();
             transition.property.all().duration(0.2, s).timing.easeInOut();
@@ -99,7 +101,7 @@ class ImageGridStyle {
 
             while (siblingHover()) {
                 box.opacity(1);
-                position.bottom(ImageSize);
+                position.bottom(ImageSize.add(5));
                 visibility.visible();
             }
         }
