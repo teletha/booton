@@ -642,6 +642,14 @@ class JavaMethodCompiler extends MethodVisitor {
             current.join(">>>");
             break;
 
+        // negative operand
+        case INEG:
+        case LNEG:
+        case FNEG:
+        case DNEG:
+            current.addOperand(new OperandExpression("-" + current.remove(0)));
+            break;
+
         case RETURN:
             current.addExpression("return");
 

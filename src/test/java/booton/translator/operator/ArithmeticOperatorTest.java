@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Nameless Production Committee.
+ * Copyright (C) 2013 Nameless Production Committee.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2012/12/01 3:19:44
+ * @version 2013/03/27 23:00:37
  */
 @SuppressWarnings("unused")
 public class ArithmeticOperatorTest extends ScriptTester {
@@ -133,6 +133,16 @@ public class ArithmeticOperatorTest extends ScriptTester {
 
             public int act(@Param(from = 1, to = 10) int value) {
                 return (value + 2) * 2;
+            }
+        });
+    }
+
+    @Test
+    public void Negative() {
+        test(new Scriptable() {
+
+            public int act(int value) {
+                return -value;
             }
         });
     }
