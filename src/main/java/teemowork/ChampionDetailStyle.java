@@ -85,7 +85,7 @@ class ChampionDetailStyle {
         {
             display.block();
             box.size(SkillIconSize, px);
-            background.contain().size(SkillIconSize, px);
+            background.contain().size(SkillIconSize, px).borderBox();
             border.radius(10, px).color(50, 50, 50).width(2, px).solid();
         }
     }

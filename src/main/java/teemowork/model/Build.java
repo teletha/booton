@@ -21,7 +21,7 @@ import teemowork.model.variable.Variable;
 import teemowork.model.variable.VariableResolver;
 
 /**
- * @version 2013/01/25 14:31:39
+ * @version 2013/03/28 23:46:05
  */
 public class Build extends Notifiable implements StatusCalculator {
 
@@ -84,12 +84,19 @@ public class Build extends Notifiable implements StatusCalculator {
     }
 
     /**
-     * Get the level property of this {@link Build}.
-     * 
-     * @return The level property.
+     * {@inheritDoc}
      */
+    @Override
     public int getLevel() {
         return level;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getLevel(Skill skill) {
+        return skillLevel[skill.key.ordinal()];
     }
 
     /**
@@ -233,18 +240,6 @@ public class Build extends Notifiable implements StatusCalculator {
 
             fire();
         }
-    }
-
-    /**
-     * <p>
-     * Retrieve skill level.
-     * </p>
-     * 
-     * @param skill A target skill.
-     * @return A skill level.
-     */
-    public int getLevel(Skill skill) {
-        return skillLevel[skill.key.ordinal()];
     }
 
     /**
@@ -394,7 +389,7 @@ public class Build extends Notifiable implements StatusCalculator {
 
                 if (variableStatus == status && !variable.isConditional()) {
                     VariableResolver resolver = variable.getResolver();
-                    int level = resolver.isSkillLevelBased() ? getLevel(skill) : resolver.convertLevel(this.level);
+                    int level = resolver.isSkillLevelBased() ? getLevel(skill) : resolver.convertLevel(this);
 
                     if (level != 0) {
                         sum = variableStatus.compute(sum, calculateVariable(skill, variable, level));

@@ -25,9 +25,10 @@ import teemowork.model.variable.VariableResolver.Per5LevelForHeimer;
 import teemowork.model.variable.VariableResolver.Per6Level;
 import teemowork.model.variable.VariableResolver.Per6LevelForVi;
 import teemowork.model.variable.VariableResolver.Per6LevelForZed;
+import teemowork.model.variable.VariableResolver.Refer;
 
 /**
- * @version 2013/03/02 11:34:54
+ * @version 2013/03/29 0:48:02
  */
 public class Skill extends Describable<SkillDescriptor> {
 
@@ -584,16 +585,16 @@ public class Skill extends Describable<SkillDescriptor> {
     public static final Skill TransformMercuryHammer = new Skill("Transform: Mercury Hammer", R);
 
     /** The skill name. */
-    public static final Skill InnerFlame = new Skill("Inner Flame", Passive);
+    public static final Skill GatheringFire = new Skill("Gathering Fire", Passive);
 
     /** The skill name. */
-    public static final Skill HeavenlyWave = new Skill("Heavenly Wave", Q);
+    public static final Skill InnerFlame = new Skill("Inner Flame", Q);
 
     /** The skill name. */
-    public static final Skill SpiritBond = new Skill("Spirit Bond", W);
+    public static final Skill FocusedResolve = new Skill("Focused Resolve", W);
 
     /** The skill name. */
-    public static final Skill SoulShield = new Skill("Soul Shield", E);
+    public static final Skill Inspire = new Skill("Inspire", E);
 
     /** The skill name. */
     public static final Skill Mantra = new Skill("Mantra", R);
@@ -1745,6 +1746,21 @@ public class Skill extends Describable<SkillDescriptor> {
     public static final Skill TagTeam = new Skill("Tag Team", R);
 
     /** The skill name. */
+    public static final Skill CellDivision = new Skill("Cell Division", Passive);
+
+    /** The skill name. */
+    public static final Skill StretchingStrike = new Skill("Stretching Strike", Q);
+
+    /** The skill name. */
+    public static final Skill UnstableMatter = new Skill("Unstable Matter", W);
+
+    /** The skill name. */
+    public static final Skill ElasticSlingshot = new Skill("Elastic Slingshot", E);
+
+    /** The skill name. */
+    public static final Skill LetsBounce = new Skill("Let's Bounce!", R);
+
+    /** The skill name. */
     public final String name;
 
     /** The skill system name. */
@@ -1826,11 +1842,7 @@ public class Skill extends Describable<SkillDescriptor> {
             return 0;
         }
 
-        if (this == Mantra) {
-            return 1;
-        }
-
-        if (this == SpiderForm || this == HumanForm || this == TransformMercuryCannon || this == TransformMercuryHammer) {
+        if (this == SpiderForm || this == HumanForm || this == TransformMercuryCannon || this == TransformMercuryHammer || this == Mantra) {
             return 4;
         }
 
@@ -2904,6 +2916,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(50, 10)
                 .cd(14);
         SpiritOfDread.update(P303).variable(3, RestoreHealth, 0, 0, amplify(DealtDamageRatio, 20, 0)).cd(20, -1.5);
+        SpiritOfDread.update(P305).cd(22, -1);
         DevastatingCharge.update()
                 .active("3秒間{1}して(最大75%)、その後1秒間その移動速度を維持する。また次の通常攻撃のダメージはこのスキルを使用してからHecarimが移動した距離に比例し最小で{3}、最大で{4}を与えるようになり、{2}が付与される。")
                 .variable(1, MSRatio, 20, 0, amplify(Duration, 18.3))
@@ -3165,17 +3178,32 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(6);
 
         /** Karma */
-        InnerFlame.update()
+        GatheringFire.update()
                 .passive("{1}を得る。レベル1、3、6、9、12、15で最大値が上昇する。")
                 .variable(1, AP, 0, 0, amplify(MissingHealthPercentage, new Per3LevelForKarma(0.3, 0.2)));
-        HeavenlyWave.update()
+        GatheringFire.update(P305)
+                .passive("敵Championにスキルでダメージを与えた場合Mantraの{1}し、通常攻撃でダメージを与えた場合は{2}する。")
+                .variable(1, CDDecrease, new Per6Level(1, 0.5))
+                .variable(2, CDDecrease, new Per6Level(0.5, 0.25));
+        InnerFlame.update()
                 .active("指定方向扇形60°の{1}の敵ユニットに{2}を与える。Mantra Bonus:自身と効果範囲内の味方ユニットは{3}する。回復量は対象のHP残量によって変化する。")
                 .variable(1, Radius, 600)
                 .variable(2, MagicDamage, 70, 40, ap(0.6))
                 .variable(3, RestoreHealth, 35, 20, amplify(MissingHealthRatio, 0.05, 0, ap(0.02)))
                 .mana(70, 5)
                 .cd(6);
-        SpiritBond.update()
+        InnerFlame.update(Version.P305)
+                .active("指定方向に炎を飛ばし、命中した敵と{1}の敵ユニットに{2}と1.5秒間{3}を与える。Mantraを付与した場合、追加の{4}を与え、更に炎が命中した地点にフィールドを発生させ、フィールドの上にいる敵ユニットに{5}を与える。フィールドは1.5秒後に爆発し、フィールドの上にいる敵ユニットに{6}を与える。炎が敵ユニットに命中しなかった場合、最大距離まで飛んだ後にフィールドが発生する。")
+                .variable(1, Radius, 200)
+                .variable(2, MagicDamage, 60, 50, ap(0.6))
+                .variable(3, MSSlowRatio, 25)
+                .variable(4, MagicDamage, new Refer(Mantra, 25, 50), ap(0.3), null)
+                .variable(5, MSSlowRatio, 50)
+                .variable(6, MagicDamage, new Refer(Mantra, 50, 100), ap(0.6), null)
+                .mana(50, 10)
+                .cd(7, -0.5)
+                .range(950);
+        FocusedResolve.update()
                 .active("対象のユニットと自身を繋ぐビームを発生させる。ビームは5秒間持続し、自身及び味方ユニットは{1}し、敵ユニットには{2}を与える。ビームに触れたChampion(敵味方問わず)にも同様の効果を与え、それが敵ユニットだった場合は更に{3}を与える。ビームを繋ぐ対象がステルス状態または距離1000まで離れた場合、効果が途切れる。Mantra Bonus:MS増加/MS低下の効果が2倍になる。")
                 .variable(1, MSRatio, 10, 2)
                 .variable(2, MSSlowRatio, 10, 2)
@@ -3183,7 +3211,15 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(65, 10)
                 .cd(15, -1)
                 .range(800);
-        SoulShield.update()
+        FocusedResolve.update(P305)
+                .active("対象の敵Championと自身を繋ぐビームを発生させる。0.33秒毎に{1}を与え、2秒間ビームが持続していた場合{2}を与える。Mantraを付与した場合、追加の{3}を与え、{4}するようになる。")
+                .variable(1, MagicDamage, 10, 50 / 6, ap(0.1))
+                .variable(2, Snare, 1, 0.25)
+                .variable(3, MagicDamage, new Refer(Mantra, 75 / 6, 75 / 6), ap(0.1), null)
+                .variable(4, RestoreHealth, 0, 0, amplify(MissingHealthRatio, 25, 0, ap(0.01)))
+                .mana(70, 10)
+                .cd(16, -0.5);
+        Inspire.update()
                 .active("対象の味方ユニットに5秒間持続する{1}を付与する。Mantra Bonus:味方ユニットにシールドを付与した際、その味方ユニットの{2}にいる敵ユニットに{3}を与える。")
                 .variable(1, Shield, 80, 40, ap(0.8))
                 .variable(2, Radius, 600)
@@ -3191,10 +3227,21 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(80, 10)
                 .cd(10)
                 .range(650);
+        Inspire.update(P305)
+                .active("対象の味方は4秒間{1}を得て1.25秒間{2}する。Mantraを付与した場合、味方ユニットにシールドを付与した際に{3}の味方ユニットは{4}を得て、敵ユニットには{5}を与える。対象とした味方ユニットは通常のシールドとMantraによるシールド両方の効果を得られる。")
+                .variable(1, Shield, 80, 40, ap(0.5))
+                .variable(2, MSRatio, 20, 10)
+                .variable(3, Radius, 200)
+                .variable(4, Shield, new Refer(Mantra, 30, 40), ap(0.3), null)
+                .variable(5, MagicDamage, new Refer(Mantra, 60, 80), ap(0.6), null)
+                .mana(60, 10)
+                .cd(12)
+                .range(800);
         Mantra.update()
                 .active("次に使用するスキルにMantra Bonusを付与する。Lv1から使用でき、スキルポイントを割り振ることはできない。{1}毎にスタック数が1つ増加し最大で2つまでスタックされる。スタック増加時間はCD低減の影響を受ける。レベル1、7、13でスタック増加時間が短縮される。")
                 .variable(1, CDRAwareTime, new Per6Level(30, -5))
                 .cd(0.25);
+        Mantra.update(P305).active("8秒以内に使用する次のスキルにMantraを付与する。追加効果はMnatraのスキルレベルを参照する。").cd(45);
 
         /** Karthus */
         DeathDefied.update().passive("死亡後7秒間スキルが使用可能。この状態ではスキルコストがなくなる。");
@@ -4388,6 +4435,10 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(4, Distance, 1000)
                 .cd(105, -15)
                 .range(1750);
+        TheEqualizer.update(P305)
+                .active("指定した位置から指定方向({4})にロケットを打ち出し、当たった地面を5秒間炎上させる。炎上した地面の上にいる敵ユニットに毎秒{3}と{2}を与える。")
+                .variable(3, MagicDamage, 130, 55, ap(0.5))
+                .variable(2, MSSlowRatio, 15, 5);
 
         /** Sejuani */
         Frost.update().passive("通常攻撃にFrostを付与する。Frost状態の敵ユニットは3秒間{1}になる。").variable(1, MSSlowRatio, 30);
@@ -5013,23 +5064,57 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Udyr */
         MonkeysAgility.update()
-                .passive("スキルを使用する度に攻撃速度が10%増加し、ARとMRが4%増加する。この効果は5秒間持続し、3回までスタックする。また、スキルを使用するとその他のCD待ちでないスキルが1秒間のCDになる。");
+                .passive("スキルを使用する度に{1}、{2}、{3}する。この効果は5秒間持続し、3回までスタックする。また、スキルを使用するとその他のCD待ちでないスキルが1秒間のCDになる。")
+                .variable(-1, ASRatio, 10)
+                .variable(-2, ARRatio, 4)
+                .variable(-3, MRRatio, 4);
+        MonkeysAgility.update(P305)
+                .passive("スキルを使用する度に{1}、{4}する。この効果は5秒間持続し、3回までスタックする。また、スキルを使用するとその他のCD待ちでないスキルが1秒間のCDになる。")
+                .variable(4, MS, 5);
         TigerStance.update()
-                .passive("Persistent Effect:Udyrの攻撃速度が増加する。増加攻撃速度: 20/25/30/35/40%Activation:5秒間Udyrの攻撃速度が増加する(Persistent Effectと重複)。また、次の通常攻撃に追加魔法DMを付与する。このダメージは2秒かけて与えられる。建物には無効。")
+                .active("次の通常攻撃は2秒間かけて追加の{2}を与えるようになり（建物には無効）、5秒間{3}する。別のスキルを使うまで{1}する。")
+                .variable(-1, ASRatio, 20, 5)
+                .variable(2, MagicDamage, 30, 50, ad(1.5))
+                .variable(3, ASRatio, 15, 5)
                 .mana(55, -5)
                 .cd(6);
+        TigerStance.update(P305).mana(47, -3);
         TurtleStance.update()
-                .passive("Persistent Effect:通常攻撃でクリティカルが発生しなくなるが、通常攻撃で与えたダメージの一定割合のHPとMNが回復する。回復HP: 10/12/14/16/18% 回復MN: 5/6/7/8/9%Activation:自身に5秒間持続するシールドを付与しダメージを軽減する。")
+                .active("5秒間{1}を得る。別のスキルを使うまで通常攻撃でクリティカルが発生しなくなるが、通常攻撃するごとに{2}し{3}する。")
+                .variable(1, Shield, 60, 36, ap(0.5))
+                .variable(2, RestoreHealth, 0, 0, amplify(DealtDamageRatio, 10, 2))
+                .variable(3, RestoreMana, 0, 0, amplify(DealtDamageRatio, 5, 1))
                 .mana(55, -5)
                 .cd(6);
+        TurtleStance.update(P305)
+                .active("5秒間{1}を得る。別のスキルを使うまで通常攻撃するごとに{2}する。")
+                .variable(1, Shield, 60, 40, ap(0.5))
+                .mana(47, -3);
         BearStance.update()
-                .passive("Persistent Effect:通常攻撃にスタン(1s)が付与される。この効果は同一の対象に6秒に1度しか発動しない。Activation:一定時間移動速度が増加する。")
+                .active("{1}間{2}する。別のスキルを使うまで通常攻撃は{3}を与える。この効果は同一の対象に6秒に1度しか発動しない。")
+                .variable(1, Time, 2, 0.5)
+                .variable(2, MSRatio, 15, 3)
+                .variable(3, Stun, 1)
                 .mana(55, -5)
                 .cd(6);
+        BearStance.update(P305)
+                .active("{1}間{2}し{4}を得る。別のスキルを使うまで通常攻撃は{3}を与える。この効果は同一の対象に6秒に1度しか発動しない。")
+                .variable(1, Time, 2, 0.25)
+                .variable(2, MSRatio, 15, 5)
+                .variable(4, IgnoreUnitCollision)
+                .mana(47, -3);
         PhoenixStance.update()
-                .passive("Persistent Effect:通常攻撃を3回行うごとに火を吹き前方の敵ユニットに魔法DMを与える。魔法DM: 40/80/120/160/200 (+0.25)Activation:5秒間周囲の敵ユニットに毎秒魔法DMを与える。またその間は攻撃力とAPが増加する。")
+                .active("5秒間周囲の敵ユニットに毎秒{1}を与え、{2}と{3}を得る。別のスキル使うまで通常攻撃を3回行うごとに火を吹き前方の敵ユニットに{4}を与える。")
+                .variable(1, MagicDamage, 15, 10, ap(0.25))
+                .variable(2, AD, 8, 4)
+                .variable(3, AP, 16, 8)
+                .variable(4, MagicDamage, 40, 40, ap(0.25))
                 .mana(55, -5)
                 .cd(6);
+        PhoenixStance.update(P305)
+                .active("5秒間周囲の敵ユニットに毎秒{1}を与え、次の通常攻撃に前方の敵ユニットに{4}を与える効果を付与する。別のスキル使うまで通常攻撃を3回行うごとに火を吹き前方の敵ユニットに{4}を与える。")
+                .variable(4, MagicDamage, 40, 40, ap(0.45))
+                .mana(47, -3);
 
         /** Urgot */
         ZaunTouchedBoltAugmenter.update()
@@ -5436,6 +5521,40 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(100)
                 .cd(120, -15)
                 .range(900);
+
+        /** Zac */
+        CellDivision.update()
+                .passive("Zacのスキルが敵ユニットに命中する度に小型のスライムが出現する。スライムを回収すると{1}する。スライムが敵championに踏まれた場合は消滅する。また、ZacのHealthが0になった時4つのスライムに分裂し一定時間かけて復活する。復活中にすべてのスライムが死亡するとZacも死亡する。復活時のHealthは生きているスライムの数に比例し増加(10-50%)する。スライムはZacの最大Health10%のHealthと、50%のArmor及びMagic Resistを持つ。")
+                .variable(1, RestoreHealth, 0, 0, amplify(Health, 0.04))
+                .cd(300);
+        StretchingStrike.update()
+                .active("指定方向に腕を伸ばし範囲内にいる敵ユニットに{1}と2秒間{2}を与える。")
+                .variable(1, MagicDamage, 70, 40, ap(0.5))
+                .variable(2, MSSlowRatio, 20, 5)
+                .cost(CurrentHealthRatio, 4, 0)
+                .cd(9, -0.5)
+                .range(550);
+        UnstableMatter.update()
+                .active("{1}にいる敵ユニットに{2}を与える。(Minionに対しては200DMが上限)")
+                .variable(1, Radius, 350)
+                .variable(2, MagicDamage, 40, 15, amplify(TargetMaxHealthRatio, 4, 1, ap(0.02)))
+                .cost(CurrentHealthRatio, 4, 0)
+                .cd(4);
+        ElasticSlingshot.update()
+                .active("発動するとZacがその場で停止しチャージを行う。チャージした時間に比例して射程が前方扇形範囲で徐々に増加する。再度使用で指定した地点にジャンプし、着地時に範囲内にいる敵ユニットに{1}と{2}を与える。チャージは移動を行う事でキャンセルできる。")
+                .variable(1, MagicDamage, 80, 50, ap(0.7))
+                .variable(2, Knockback)
+                .cost(CurrentHealthRatio, 4, 0)
+                .cd(24, -3)
+                .range(1100);
+        LetsBounce.update()
+                .active("Zacが4回飛び跳ね、その度に周囲にいる敵ユニットに{1}と{2}と1秒間{3}を与える。ノックバックは同一の対象に1度までしか発生せず、同一ユニットに複数回DMを与える場合、2回目以降は50%のダメージになる。このスキルが発動している間はUnstable Matterと移動のみが可能であり、また徐々に移動速度が増加する(20-50%増加)。使用中は{4}を得る。")
+                .variable(1, MagicDamage, 160, 80, ap(0.25))
+                .variable(2, Knockback)
+                .variable(3, MSSlowRatio, 20)
+                .variable(4, Tenacity, 75)
+                .cd(130, -15)
+                .range(300);
 
         /** Zed */
         ContemptforTheWeak.update()

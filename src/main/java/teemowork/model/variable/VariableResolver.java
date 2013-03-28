@@ -9,6 +9,9 @@
  */
 package teemowork.model.variable;
 
+import teemowork.model.Skill;
+import teemowork.model.StatusCalculator;
+
 /**
  * @version 2013/02/12 10:33:59
  */
@@ -46,13 +49,13 @@ public abstract class VariableResolver {
 
     /**
      * <p>
-     * Convert chnapion level to skill level.
+     * Compute skill level.
      * </p>
      * 
      * @return
      */
-    public int convertLevel(int level) {
-        return level;
+    public int convertLevel(StatusCalculator calculator) {
+        return 0;
     }
 
     /**
@@ -108,7 +111,9 @@ public abstract class VariableResolver {
          * {@inheritDoc}
          */
         @Override
-        public int convertLevel(int level) {
+        public int convertLevel(StatusCalculator calculator) {
+            int level = calculator.getLevel();
+
             for (int i = 0; i < levels.length; i++) {
                 if (level < levels[i]) {
                     return i;
@@ -371,6 +376,42 @@ public abstract class VariableResolver {
         @Override
         public int estimateSize() {
             return base == 0 ? 0 : diff == 0 ? 1 : size;
+        }
+    }
+
+    /**
+     * @version 2013/03/28 23:27:41
+     */
+    public static class Refer extends Diff {
+
+        /** The referenced skill. */
+        private final Skill reference;
+
+        /**
+         * @param reference
+         * @param base
+         * @param diff
+         */
+        public Refer(Skill reference, double base, double diff) {
+            super(base, diff, reference.getMaxLevel());
+
+            this.reference = reference;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isSkillLevelBased() {
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int convertLevel(StatusCalculator calculator) {
+            return calculator.getLevel(reference);
         }
     }
 }

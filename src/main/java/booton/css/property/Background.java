@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ import booton.css.GradientValue;
 import booton.css.Unit;
 
 /**
- * @version 2012/12/12 0:00:13
+ * @version 2013/03/28 22:39:12
  */
 public class Background extends CSSProperty<Background> implements Colorable<Background> {
 
@@ -36,6 +36,8 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
 
     private GradientValue gradient;
 
+    private String origin;
+
     /**
      * {@inheritDoc}
      */
@@ -47,6 +49,7 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
         writer.property("background-position", horizontalPosition, verticalPosition);
         writer.property("background-size", size);
         writer.property("background-image", image);
+        writer.property("background-origin", origin);
     }
 
     /**
@@ -400,6 +403,62 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
      */
     public Background contain() {
         size = "contain";
+
+        // Chainable API
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The background-origin CSS property determines the background positioning area, that is the
+     * position of the origin of an image specified using the background-image CSS property.
+     * </p>
+     * <p>
+     * No background is drawn below the border (background extends to the outside edge of the
+     * padding).
+     * </p>
+     * 
+     * @return
+     */
+    public Background paddingBox() {
+        origin = "padding-box";
+
+        // Chainable API
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The background-origin CSS property determines the background positioning area, that is the
+     * position of the origin of an image specified using the background-image CSS property.
+     * </p>
+     * <p>
+     * The background is painted within (clipped to) the content box.
+     * </p>
+     * 
+     * @return
+     */
+    public Background contentBox() {
+        origin = "content-box";
+
+        // Chainable API
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The background-origin CSS property determines the background positioning area, that is the
+     * position of the origin of an image specified using the background-image CSS property.
+     * </p>
+     * <p>
+     * The background extends to the outside edge of the border (but underneath the border in
+     * z-ordering).
+     * </p>
+     * 
+     * @return
+     */
+    public Background borderBox() {
+        origin = "border-box";
 
         // Chainable API
         return chain();
