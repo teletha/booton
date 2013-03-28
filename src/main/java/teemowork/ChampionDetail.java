@@ -384,7 +384,7 @@ public class ChampionDetail extends Page {
                 int level = build.getLevel(this.skill);
 
                 if (!resolver.isSkillLevelBased()) {
-                    level = resolver.convertLevel(build.getLevel());
+                    level = resolver.convertLevel(build);
                 }
 
                 // write label
@@ -433,7 +433,7 @@ public class ChampionDetail extends Page {
             List<Variable> amplifiers = variable.getAmplifiers();
 
             if (!resolver.isSkillLevelBased()) {
-                level = resolver.convertLevel(build.getLevel());
+                level = resolver.convertLevel(build);
             }
 
             // compute current value
@@ -479,7 +479,7 @@ public class ChampionDetail extends Page {
                 VariableResolver resolver = amplifier.getResolver();
 
                 if (!resolver.isSkillLevelBased()) {
-                    level = resolver.convertLevel(build.getLevel());
+                    level = resolver.convertLevel(build);
                 }
 
                 int size = resolver.estimateSize();

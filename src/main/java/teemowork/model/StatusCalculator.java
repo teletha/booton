@@ -10,7 +10,7 @@
 package teemowork.model;
 
 /**
- * @version 2013/02/25 14:17:37
+ * @version 2013/03/28 23:45:28
  */
 public interface StatusCalculator {
 
@@ -23,4 +23,21 @@ public interface StatusCalculator {
      * @return A calculated value.
      */
     double calculate(Status status);
+
+    /**
+     * Get the level of this entity.
+     * 
+     * @return The level property.
+     */
+    public int getLevel();
+
+    /**
+     * <p>
+     * Retrieve skill level.
+     * </p>
+     * 
+     * @param skill A target skill.
+     * @return A skill level.
+     */
+    public int getLevel(Skill skill);
 }

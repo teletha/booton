@@ -34,10 +34,12 @@ public enum Version {
 
     P304("3.04", 2013, 3, 19),
 
+    P305("3.5", 2013, 3, 28),
+
     PBE("Public Beta Environment", 2013, 1, 26);
 
     /** The latest stable version. */
-    public static final Version Latest = P304;
+    public static final Version Latest = P305;
 
     /** The version name. */
     public final String name;

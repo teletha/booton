@@ -16,6 +16,7 @@ import java.util.Set;
 
 import js.util.ArrayList;
 import js.util.HashSet;
+import teemowork.model.Skill;
 import teemowork.model.Status;
 import teemowork.model.StatusCalculator;
 
@@ -185,7 +186,7 @@ public class Variable {
     }
 
     /**
-     * @version 2013/03/16 21:43:18
+     * @version 2013/03/28 23:45:22
      */
     private static class EmptyCalculator implements StatusCalculator {
 
@@ -197,5 +198,20 @@ public class Variable {
             return 0;
         }
 
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int getLevel() {
+            return 0;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int getLevel(Skill skill) {
+            return 0;
+        }
     }
 }

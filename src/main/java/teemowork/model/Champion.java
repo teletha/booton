@@ -143,7 +143,7 @@ public class Champion {
     public static final Champion JayceCannon = new Champion("Jayce", true, HextechCapacitor, ShockBlast, HyperCharge, AccelerationGate, TransformMercuryHammer);
 
     /** The champion name. */
-    public static final Champion Karma = new Champion("Karma", InnerFlame, HeavenlyWave, SpiritBond, SoulShield, Mantra);
+    public static final Champion Karma = new Champion("Karma", GatheringFire, InnerFlame, FocusedResolve, Inspire, Mantra);
 
     /** The champion name. */
     public static final Champion Karthus = new Champion("Karthus", DeathDefied, LayWaste, WallOfPain, Defile, Requiem);
@@ -360,6 +360,9 @@ public class Champion {
 
     /** The champion name. */
     public static final Champion Yorick = new Champion("Yorick", UnholyCovenant, OmenOfWar, OmenOfPestilence, OmenOfFamine, OmenOfDeath);
+
+    /** The champion name. */
+    public static final Champion Zac = new Champion("Zac", CellDivision, StretchingStrike, UnstableMatter, ElasticSlingshot, LetsBounce);
 
     /** The champion name. */
     public static final Champion Zed = new Champion("Zed", ContemptforTheWeak, RazorShuriken, LivingShadow, ShadowSlash, DeathMark);
@@ -1717,6 +1720,15 @@ public class Champion {
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
                 .set(MS, 345);
+        Zac.update(P0000)
+                .set(Health, 450, 95)
+                .set(Hreg, 12.5, 0.55)
+                .set(AD, 54, 3.375)
+                .set(AS, 0.658, 3.1)
+                .set(AR, 14, 3.5)
+                .set(MR, 30, 1.25)
+                .set(Range, 125)
+                .set(MS, 335);
         Zed.update(P0000)
                 .set(Health, 445, 85)
                 .set(Hreg, 6, 0.65)
