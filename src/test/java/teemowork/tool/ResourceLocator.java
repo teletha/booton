@@ -22,7 +22,10 @@ public class ResourceLocator {
     public static final Path Resources = I.locate("src/main/resources/teemowork");
 
     /** The champion icons. */
-    public static final Path ChampionIcons = Resources.resolve("icon");
+    public static final Path ChampionIcon = Resources.resolve("icon");
+
+    /** The champion icons. */
+    public static final Path ChampionSplash = Resources.resolve("splash");
 
     /** The item icons. */
     public static final Path ItemIcons = Resources.resolve("item");
