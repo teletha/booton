@@ -5631,24 +5631,43 @@ public class Skill extends Describable<SkillDescriptor> {
                 .range(625);
 
         /** Ziggs */
-        ShortFuse.update().passive("12秒毎に通常攻撃に追加魔法DMが付与される。Ziggsがスキルを使う度にCDが4秒低減される。建物に対しては150%のDMを与える。").cd(12);
+        ShortFuse.update()
+                .passive("12秒毎に通常攻撃に追加{1}が付与される。Ziggsがスキルを使う度に{2}する。建物に対しては{3}を与える。")
+                .variable(1, MagicDamage, 13, 0, ap(0.35), amplify(Lv, 7))
+                .variable(2, CDDecrease, 4)
+                .variable(3, MagicDamage, 19.5, 0, ap(0.525), amplify(Lv, 10.5));
         BouncingBomb.update()
-                .active("指定地点に跳ねながら転がる爆弾を投げ、爆発時に周囲の敵ユニットに魔法DMを与える。敵に当たらなかった場合には投げた方向に2回までバウンドする。")
+                .active("指定地点に跳ねながら転がる爆弾を投げ、爆発時に{1}の敵ユニットに{2}を与える。敵に当たらなかった場合には投げた方向に2回までバウンドする。")
+                .variable(1, Radius, 250)
+                .variable(2, MagicDamage, 75, 45, ap(0.65))
                 .mana(50, 10)
                 .cd(6, -0.5)
                 .range(850);
         SatchelCharge.update()
-                .active("指定地点に火薬を投げ、爆発時に周囲の敵ユニットに魔法DMを与え、ノックバックさせる。Ziggsが範囲内にいた場合は自分もノックバックを受ける(Ziggsにダメージは無し)。火薬は4秒経つか、スキルを再度使用すると爆発する。また火薬は視界を確保する。")
+                .active("指定地点に火薬を投げ、爆発時に{1}の敵ユニットに{2}を与え、{3}させる。Ziggsが範囲内にいた場合は自分も{4}する(Ziggsにダメージは無し)。火薬は4秒経つか、スキルを再度使用すると爆発する。また火薬は{5}。")
+                .variable(1, Radius, 300)
+                .variable(2, MagicDamage, 70, 35, ap(0.35))
+                .variable(3, Knockback, 250)
+                .variable(4, Knockback, 400)
+                .variable(5, Visionable)
                 .mana(65)
                 .cd(26, -2)
                 .range(1000);
         HexplosiveMinefield.update()
-                .active("指定範囲に11個の近接地雷を円形にばら撒き、敵ユニットが地雷に触れると魔法DMとスロー(1.5s)を与える。同ユニットが2個目以降に踏む地雷のダメージは本来の40%となる。地雷は爆発するか10秒経つと消滅する。")
+                .active("指定地点の{4}に11個の近接地雷を円形にばら撒き、敵ユニットが地雷に触れると{1}と1.5秒間{2}を与える。同ユニットが2個目以降に踏むと{3}を与える。地雷は爆発するか10秒経つと消滅する。")
+                .variable(1, MagicDamage, 40, 25, ap(0.3))
+                .variable(2, MSSlowRatio, 20, 5)
+                .variable(3, MagicDamage, 16, 10, ap(0.12))
+                .variable(4, Radius, 400)
                 .mana(70, 10)
                 .cd(16)
                 .range(900);
         MegaInfernoBomb.update()
-                .active("指定地点に巨大な爆弾を投下し、範囲内の敵ユニットに魔法DMを与える。爆発の中心点から離れた位置にいる敵ユニットには80%のDMを与える。")
+                .active("指定地点に巨大な爆弾を投下し、{1}の敵ユニットに{2}を与え、{3}の敵ユニットに{4}を与える。")
+                .variable(1, Radius, 250)
+                .variable(2, MagicDamage, 250, 125, ap(0.9))
+                .variable(3, Radius, 750)
+                .variable(4, MagicDamage, 200, 100, ap(0.72))
                 .mana(100)
                 .cd(120, -15)
                 .range(5300);
