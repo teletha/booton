@@ -5433,23 +5433,41 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Wukong */
         StoneSkin.update()
-                .passive("Wukongの視界内(範囲1400)にいる敵Championの数に比例して、WukongのArmorとMagic Resistが増加する。レベル1、7、13で増加値が上昇する。");
+                .passive("Wukongの視界内{1}にいる敵Championの数に比例して、{2}と{3}を得る。レベル1、7、13で増加値が上昇する。")
+                .variable(1, Radius, 1400)
+                .variable(2, AR, 0, 0, amplify(EnemyChampion, new Per6Level(4, 2)))
+                .variable(3, MR, 0, 0, amplify(EnemyChampion, new Per6Level(4, 2)));
         CrushingBlow.update()
-                .active("次の通常攻撃の射程とダメージが増加し、対象のArmorを30%低下させる効果が付与される。Armor低下は3秒間持続する。")
+                .active("次の通常攻撃は射程が125増加して追加の{1}と3秒間の{2}を与える。")
+                .variable(1, PhysicalDamage, 30, 30, ad(0.1))
+                .variable(2, ARReductionRatio, 30)
                 .mana(40)
                 .cd(9, -1)
                 .range(300);
         Decoy.update()
-                .active("Wukongが1.5秒間ステルス状態になり、その間ユニットを通過できるようになる。同時にWukongがいた場所に分身(操作不可能)を作り出す。分身は1.5秒経過すると消滅し、その際に分身の周囲の敵に魔法DMを与える。")
+                .active("{1}になり{2}を得る。同時にWukongがいた場所に分身(操作不可能)を作り出す。分身は1.5秒経過すると消滅し、その際に分身の{3}の敵に{4}を与える。")
+                .variable(1, Stealth, 1.5)
+                .variable(2, IgnoreUnitCollision)
+                .variable(3, Radius, 350)
+                .variable(4, MagicDamage, 70, 45, ap(0.6))
                 .mana(50, 5)
                 .cd(18, -2);
         NimbusStrike.update()
-                .active("対象の敵ユニットまでダッシュし物理DMを与える。対象の敵ユニットの近くにいる敵ユニット2体にもWukongの幻影が飛び、同様のダメージを与える。また、スキル使用後4秒間攻撃速度が上昇する。")
+                .active("対象の敵ユニットまでダッシュし{1}を与える。対象の敵ユニットの{3}の敵ユニット2体にもWukongの幻影が飛び、{1}を与える。また、スキル使用後4秒間{2}する。")
+                .variable(1, PhysicalDamage, 60, 45, bounusAD(0.8))
+                .variable(2, ASRatio, 30, 5)
+                .variable(3, Radius, 325)
                 .mana(45, 5)
                 .cd(8)
                 .range(625);
         Cyclone.update()
-                .active("4秒間Wukongが回転する。回転中は近くにいる敵ユニットに0.5秒毎に物理DMと打ち上げ(1.5s)を与える(最大8hit)。打ち上げ効果は同一の対象に1度までしか発生しない。また、このスキルを使用してから0.5秒毎にWukongの移動速度が5%ずつ上昇していく(最大40%)。")
+                .active("4秒間Wukongが回転する。回転中は{1}の敵ユニットに0.5秒毎に{2}と{3}を与える。打ち上げ効果は同一の対象に1度までしか発生しない。また、このスキルを使用してから0.5秒毎に{5}する。最大で{4}を与え、{6}する。")
+                .variable(1, Radius, 325)
+                .variable(2, PhysicalDamage, 10, 45, ad(0.6))
+                .variable(3, Knockup, 1.5)
+                .variable(4, PhysicalDamage, 80, 360, ad(4.8))
+                .variable(-5, MSRatio, 5)
+                .variable(6, MSRatio, 40)
                 .mana(100)
                 .cd(120, -15);
 
