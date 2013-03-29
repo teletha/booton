@@ -528,6 +528,15 @@ public enum Status {
 
         case GoldPer10Sec:
             return "10秒毎に" + formatValue(computed);
+
+        case Knockback:
+            String length = formatValue(computed);
+
+            if (length.length() == 0) {
+                return name;
+            } else {
+                return name + "(距離" + formatValue(computed) + ")";
+            }
         }
         return name + formatValue(computed);
     }
