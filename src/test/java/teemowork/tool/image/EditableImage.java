@@ -110,7 +110,7 @@ public class EditableImage {
      * 
      * @param size
      */
-    public EditableImage resize(int size) throws Exception {
+    public EditableImage resize(int size) {
         BufferedImage screen = new BufferedImage(size, size, image.getType());
         Graphics2D graphics = screen.createGraphics();
         graphics.setRenderingHints(hints);
