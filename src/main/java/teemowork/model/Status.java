@@ -190,6 +190,9 @@ public enum Status {
     /** Attack Damage Reduction */
     AttackDamageReduction(AttackDamage), AttackDamageReductionRatio(AttackDamage),
 
+    /** Other Status Reduction */
+    ADReduction(AD),
+
     /** Movement Slow Reduction */
     MSSlowReduction("スロー"), MSSlowReductionRatio("スロー"),
 
@@ -508,6 +511,9 @@ public enum Status {
         case MSSlowReductionRatio:
         case RespawnTimeReductionRatio:
             return name + "を" + formatValue(computed) + "軽減";
+
+        case ADReduction:
+            return name + "が" + formatValue(computed) + "減少";
 
         case RestoreEnergy:
         case RestoreHealth:
