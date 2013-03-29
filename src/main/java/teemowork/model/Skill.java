@@ -5454,25 +5454,33 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(120, -15);
 
         /** Xerath */
-        AscendedForm.update().passive("APの15%分、ARが上昇する。");
+        AscendedForm.update().passive("{1}を得る。").variable(1, AR, 0, 0, ap(0.15));
         Arcanopulse.update()
-                .active("0.75秒詠唱後指定方向にビームを放ち、直線状の敵ユニットすべてに魔法DMを与える。")
+                .active("0.75秒詠唱後指定方向にビームを放ち、直線状の敵ユニットすべてに{1}を与える。")
+                .variable(1, MagicDamage, 75, 40, ap(0.6))
                 .mana(65, 5)
                 .cd(7, -0.5)
-                .range(900, 400);
+                .range(900);
         LocusOfPower.update()
-                .active("0.5秒詠唱後に移動が不可能になる代わりに、全てのスキルの射程が400増加し、Magic Penetrationが増加する。この効果は8秒経過するか、再度このスキルを使用する事で解除される。このスキルが解除された時に自身の移動速度が2秒間35%増加する。")
+                .active("0.5秒詠唱後に移動が不可能になる代わりに、全てのスキルの射程が400増加し、{1}を得る。この効果は8秒経過するか、再度このスキルを使用する事で解除される。このスキルが解除された時に2秒間{2}する。")
+                .variable(1, MRPenRatio, 16, 6)
+                .variable(2, MSRatio, 35)
                 .cd(20, -4);
         MageChains.update()
-                .active("対象の敵ユニットに魔法DMとマーク(3s)を与える。マークがついている敵ユニットにXerathのスキルが命中した場合、マークを消費して対象にスタン(1.5s)を与える。")
+                .active("対象の敵ユニットに{1}と3秒間マークを与える。マークがついている敵ユニットにXerathのスキルが命中した場合、マークを消費して対象に{2}を与える。")
+                .variable(1, MagicDamage, 70, 50, ap(0.8))
+                .variable(2, Stun, 1.5)
                 .mana(70, 5)
                 .cd(12, -1)
-                .range(600, 400);
+                .range(600);
         ArcaneBarrage.update()
-                .active("地点を指定して0.5秒後に範囲内の敵ユニットに魔法DMを与える。このスキルは12秒の間、3回まで連続して使用できる(但し、一度使用する度に0.35秒のCDが発生する)。2〜3発目はマナコスト無しで使用可能。また、指定地点の視界を得る。")
+                .active("0.5秒後に指定地点の{1}の敵ユニットに{2}を与える。このスキルは12秒の間、3回まで連続して使用できる(但し、一度使用する度に0.35秒のCDが発生する)。2〜3発目はマナコスト無しで使用可能。また、指定地点の視界{3}を得る。")
+                .variable(1, Radius, 200)
+                .variable(2, MagicDamage, 125, 75, ap(0.6))
+                .variable(3, Radius, 300)
                 .mana(150, 30)
                 .cd(80, -10)
-                .range(900, 400);
+                .range(900);
 
         /** Xin Zhao */
         Challenge.update()
