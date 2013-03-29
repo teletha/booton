@@ -4881,17 +4881,37 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(60);
 
         /** Teemo */
-        Camouflage.update().passive("2秒間動かないとステルス状態になる。何か行動を行うか、強制的に移動させられるとステルスが解除され、ステルス解除後3秒間攻撃速度が40%増加する。");
-        BlindingDart.update().active("対象の敵ユニットに魔法DMとブラインドを与える。").mana(70, 10).cd(8).range(680);
+        Camouflage.update()
+                .passive("2秒間動かないと{1}になる。何か行動を行うか、強制的に移動させられるとステルスが解除され、ステルス解除後3秒間{2}する。")
+                .variable(1, Stealth)
+                .variable(-2, ASRatio, 40);
+        BlindingDart.update()
+                .active("対象の敵ユニットに{1}と{2}を与える。")
+                .variable(1, MagicDamage, 80, 45, ap(0.8))
+                .variable(2, Blind, 1.5, 0.25)
+                .mana(70, 10)
+                .cd(8)
+                .range(680);
         MoveQuick.update()
-                .passive("Teemoの移動速度が増加する。敵Championかタワーからダメージを受けると5秒間効果が切れる。増加移動速度: 10/14/18/22/26%")
-                .active("3秒間Passiveの増加移動速度が倍になる。移動速度が倍の間は敵Championやタワーからのダメージで効果が切れない。")
+                .passive("{1}する。敵Championかタワーからダメージを受けると5秒間効果が切れる。")
+                .variable(1, MSRatio, 10, 4)
+                .active("3秒間{1}し、Passiveの効果が切れることがなくなる。")
                 .mana(40)
                 .cd(17);
-        ToxicShot.update().passive("通常攻撃時に追加魔法DMと毒が付与される。毒は4秒間持続し、毎秒魔法DMを与える。");
+        ToxicShot.update()
+                .passive("通常攻撃時に{1}と毒が付与される。毒は4秒間持続し、毎秒{2}を与える。合計で{3}。")
+                .variable(1, MagicDamage, 10, 10, ap(0.3))
+                .variable(2, MagicDamage, 6, 6, ap(0.1))
+                .variable(3, MagicDamage, 34, 34, ap(0.7));
         NoxiousTrap.update()
-                .active("指定地点に10分間持続するキノコの罠を仕掛ける(設置後1秒でステルス状態となる)。使用時にスタックを消費する。敵ユニットがステルス状態の罠を踏むと破裂し、周囲のユニットに4秒かけて魔法DMとスロー(4s)を与える。一定時間毎にスタック数が1つ増加し最大3つまでスタックされる。スタック増加時間はCD低減の影響を受ける。設置したキノコはChampionの通常攻撃でのみダメージを与えられる。")
+                .active("指定地点に10分間持続するキノコの罠を仕掛ける(設置後1秒で{1}になる)。使用時にスタックを消費する。敵ユニットがステルス状態の罠を踏むと破裂し、{2}のユニットに4秒かけて{3}と4秒間{4}を与える。{5}毎にスタック数が1つ増加し最大3つまでスタックされる。スタック増加時間はCD低減の影響を受ける。設置したキノコはChampionの通常攻撃でのみダメージを与えられる。")
+                .variable(1, Stealth)
+                .variable(2, Radius, 400)
+                .variable(3, MagicDamage, 200, 125, ap(0.8))
+                .variable(4, MSSlowRatio, 30, 10)
+                .variable(5, CDRAwareTime, 35, -4)
                 .cd(1)
+                .mana(75, 25)
                 .range(230);
 
         /** Thresh */
