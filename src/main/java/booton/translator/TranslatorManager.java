@@ -223,7 +223,7 @@ class TranslatorManager {
             }
             context.add(id);
 
-            return "new " + Javascript.computeClassName(owner) + writeParameter(context);
+            return "new " + Javascript.computeClassName(owner) + writeParameter(types, context);
         }
 
         /**
@@ -277,7 +277,7 @@ class TranslatorManager {
          */
         @Override
         protected String translateMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-            return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + writeParameter(context);
+            return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + writeParameter(types, context);
         }
 
         /**
@@ -285,7 +285,7 @@ class TranslatorManager {
          */
         @Override
         protected String translateStaticMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-            return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + writeParameter(context);
+            return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + writeParameter(types, context);
         }
 
         /**
@@ -296,7 +296,7 @@ class TranslatorManager {
             // append context 'this' of super method
             context.add(1, new OperandExpression("this"));
 
-            return Javascript.computeClassName(owner) + ".prototype." + Javascript.computeMethodName(owner, name, desc) + ".call" + writeParameter(context);
+            return Javascript.computeClassName(owner) + ".prototype." + Javascript.computeMethodName(owner, name, desc) + ".call" + writeParameter(types, context);
         }
 
         /**
@@ -313,11 +313,29 @@ class TranslatorManager {
          * @param operands
          * @return
          */
-        private static String writeParameter(List<Operand> operands) {
+        private static String writeParameter(Class[] types, List<Operand> operands) {
             StringBuilder builder = new StringBuilder();
             builder.append('(');
 
             for (int i = 1; i < operands.size(); i++) {
+                if (i - 1 < types.length) {
+                    Class type = types[i - 1];
+
+                    if (type == boolean.class) {
+                        Operand operand = operands.get(i);
+
+                        if (operand instanceof OperandNumber) {
+                            OperandNumber number = (OperandNumber) operand;
+
+                            if (number.value.intValue() == 0) {
+                                operands.set(i, new OperandExpression(false));
+                            } else {
+                                operands.set(i, new OperandExpression(true));
+                            }
+                        }
+                    }
+                }
+
                 builder.append(operands.get(i));
 
                 if (i + 1 != operands.size()) {
