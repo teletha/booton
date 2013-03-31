@@ -16,6 +16,7 @@ import java.util.Iterator;
 import js.dom.Element;
 import js.dom.Image;
 import js.ui.UI;
+import js.ui.ElementBasedUI;
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
 
@@ -260,6 +261,20 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Insert content, specified by the parameter, to the end of each element in the set of matched
+     * elements.
+     * </p>
+     * 
+     * @param contents DOM element, HTML string, or jQuery object to insert at the end of each
+     *            element in the set of matched elements.
+     * @return
+     */
+    public jQuery append(ElementBasedUI contents) {
+        return append(contents.root);
+    }
+
+    /**
+     * <p>
      * Insert every element in the set of matched elements to the end of the target.
      * </p>
      * 
@@ -311,6 +326,39 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery attr(String name, int value);
+
+    /**
+     * <p>
+     * Set one or more attributes for the set of matched elements.
+     * </p>
+     * 
+     * @param name The name of the attribute to set.
+     * @param value A value to set for the attribute.
+     * @return
+     */
+    public native jQuery attr(String name, long value);
+
+    /**
+     * <p>
+     * Set one or more attributes for the set of matched elements.
+     * </p>
+     * 
+     * @param name The name of the attribute to set.
+     * @param value A value to set for the attribute.
+     * @return
+     */
+    public native jQuery attr(String name, float value);
+
+    /**
+     * <p>
+     * Set one or more attributes for the set of matched elements.
+     * </p>
+     * 
+     * @param name The name of the attribute to set.
+     * @param value A value to set for the attribute.
+     * @return
+     */
+    public native jQuery attr(String name, double value);
 
     /**
      * <p>

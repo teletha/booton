@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,22 +10,22 @@
 package js.ui;
 
 import static js.lang.Global.*;
-import js.util.jQuery;
+import js.dom.Element;
 
 /**
- * @version 2012/12/11 14:39:54
+ * @version 2013/03/31 21:47:21
  */
-public abstract class UI {
+public class ElementBasedUI {
 
     /** The root container element for this user interface. */
-    public final jQuery root;
+    public final Element root;
 
     /**
      * <p>
      * Create UI with div element.
      * </p>
      */
-    protected UI() {
+    protected ElementBasedUI() {
         this("span");
     }
 
@@ -36,7 +36,7 @@ public abstract class UI {
      * 
      * @param name
      */
-    protected UI(String name) {
-        this.root = $("<" + name + ">");
+    protected ElementBasedUI(String name) {
+        this.root = document.createElement(name);
     }
 }

@@ -15,6 +15,7 @@ import js.application.Page;
 import js.application.PageInfo;
 import js.bind.Subscriber;
 import js.dom.Image;
+import js.ui.Select;
 import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
@@ -80,7 +81,7 @@ public class MasteryBuilder extends Page implements Subscriber {
 
     private jQuery name;
 
-    private js.ui.Input menu;
+    private js.ui.Select menu;
 
     @PageInfo(path = "Mastery")
     public MasteryBuilder() {
@@ -99,7 +100,7 @@ public class MasteryBuilder extends Page implements Subscriber {
     @Override
     public void load(jQuery root) {
         jQuery infomation = root.child(Information.class);
-        menu = new js.ui.Input().placeholder("Mastery Set Name");
+        menu = new Select();
         infomation.append(menu);
 
         reset = infomation.child(ResetButton.class).click(new Listener() {
@@ -242,10 +243,10 @@ public class MasteryBuilder extends Page implements Subscriber {
 
             // Switch enable / disable
             if (current != 0 || masterySet.isAvailable(mastery)) {
-                image.clearFilter();
+                image.saturate(0.8);
                 root.removeClass(Unavailable.class);
             } else {
-                image.grayscale(0.3);
+                image.grayscale(0.4);
                 root.addClass(Unavailable.class);
             }
 

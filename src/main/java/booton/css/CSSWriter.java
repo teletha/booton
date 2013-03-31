@@ -81,6 +81,25 @@ public class CSSWriter {
      * </p>
      * 
      * @param name
+     * @param calcurated
+     */
+    public void property(String name, List values) {
+        List<String> list = new ArrayList();
+
+        for (Object value : values) {
+            if (value != null) {
+                list.add(value.toString());
+            }
+        }
+        property(name, I.join(list, ","));
+    }
+
+    /**
+     * <p>
+     * Write property.
+     * </p>
+     * 
+     * @param name
      * @param value
      */
     public void property(String name, String value) {

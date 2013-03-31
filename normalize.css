@@ -384,3 +384,10 @@ time, mark, audio, video, svg {
     -webkit-box-sizing:border-box;
     box-sizing:border-box;
 }
+
+/**
+ * Remove clear button in IE 10+.
+ */
+input::-ms-clear {
+    display: none;
+}

@@ -11,6 +11,7 @@ package teemowork;
 
 import js.util.Color;
 import booton.css.CSS;
+import booton.css.GradientValue;
 import booton.css.Snippet;
 import booton.css.Unit;
 import booton.css.Value;
@@ -36,19 +37,24 @@ class MasteryBuilderStyle {
 
     int Corner = 5;
 
-    Color AvailableColor = new Color(120, 90, 52);
+    Color AvailableColor = new Color(120, 40, 65);
 
-    Color CompleteColor = AvailableColor.adjustHue(-70);
+    Color CompleteColor = new Color(50, 40, 65);
+
+    Color Blue = new Color(220, 40, 95);
+
+    GradientValue transparent = new GradientValue(new Color(0, 100, 100, 0.5), new Color(0, 100, 100, 0));
+
+    String noise = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAFUlEQVQImWNgQAO3b9/2pboAAwMDAPVTDldKdOWIAAAAAElFTkSuQmCC";
 
     class Offense extends CSS {
 
         {
             display.inlineBlock();
             box.width(TreeWidth, px).height(TreeHeight, px);
-            padding.right(TreePadding - 3, px).left(TreePadding + 3, px).vertical(TreePadding, px);
-            background.contain();
-            background.image("src/main/resources/teemowork/mastery/s3/Offense.jpg");
-            border.radius(Corner * 2, px, 0, px, 0, px, Corner * 2, px);
+            padding.size(TreePadding, px);
+            background.color(Blue.adjustHue(120)).image(transparent, noise);
+            font.color(background.color().lighten(-25));
         }
     }
 
@@ -57,9 +63,9 @@ class MasteryBuilderStyle {
         {
             display.inlineBlock();
             box.width(TreeWidth, px).height(TreeHeight, px);
-            padding.right(TreePadding, px).left(TreePadding, px).vertical(TreePadding, px);
-            background.contain();
-            background.image("src/main/resources/teemowork/mastery/s3/Defense.jpg");
+            padding.size(TreePadding, px);
+            background.color(Blue).image(transparent, noise);
+            font.color(background.color().lighten(-25));
         }
     }
 
@@ -68,10 +74,9 @@ class MasteryBuilderStyle {
         {
             display.inlineBlock();
             box.width(TreeWidth, px).height(TreeHeight, px);
-            padding.right(TreePadding + 3, px).left(TreePadding - 3, px).vertical(TreePadding, px);
-            background.contain();
-            background.image("src/main/resources/teemowork/mastery/s3/Utility.jpg");
-            border.radius(0, px, Corner * 2, px, Corner * 2, px, 0, px);
+            padding.size(TreePadding, px);
+            background.color(Blue.adjustHue(-120)).image(transparent, noise);
+            font.color(background.color().lighten(-25));
         }
     }
 
@@ -130,7 +135,7 @@ class MasteryBuilderStyle {
             position.bottom(IconBorderSize, px).left(IconBorderSize, px).absolute();
             padding.right(5, px);
             border.radius(0, px, 0, px, Corner, px, Corner, px);
-            background.color(hsla(0, 0, 0, 0.4));
+            background.color(hsla(0, 0, 0, 0.3));
             font.color(AvailableColor).size(11, px);
             text.outline(1).align.right();
 
@@ -147,8 +152,9 @@ class MasteryBuilderStyle {
     class SumPoint extends CSS {
 
         {
-            font.color(hsl(0, 97, 97)).size(26, px);
-            text.unselectable().shadow();
+            // font.color(hsl(0, 50, 70)).size(26, px);
+            font.size(26, px);
+            text.unselectable(); // .shadow();
             padding.left(7, px);
         }
     }
@@ -223,6 +229,7 @@ class MasteryBuilderStyle {
         {
             display.block();
             margin.bottom(0.7, em);
+            text.unselectable();
             font.size(16, px).weight.bolder().color(hsl(60, 100, 85)).family(TeemoworkTheme.Title);
         }
     }
@@ -230,6 +237,8 @@ class MasteryBuilderStyle {
     class Description extends CSS {
 
         {
+            text.unselectable();
+
             while (inBackOf(Unavailable.class)) {
                 font.color(hsl(0, 70, 70));
             }

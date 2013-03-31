@@ -9,6 +9,9 @@
  */
 package booton.css.property;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import js.util.Color;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
@@ -32,7 +35,7 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
 
     private String size;
 
-    private String image;
+    private List<String> images = new ArrayList();
 
     private GradientValue gradient;
 
@@ -48,7 +51,7 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
         writer.property("background-repeat", repeat);
         writer.property("background-position", horizontalPosition, verticalPosition);
         writer.property("background-size", size);
-        writer.property("background-image", image);
+        writer.property("background-image", images);
         writer.property("background-origin", origin);
     }
 
@@ -105,7 +108,7 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
      * @return
      */
     public Background imageNone() {
-        image = "none";
+        images.clear();
 
         return chain();
     }
@@ -122,7 +125,7 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
      * @return
      */
     public Background image(String uri) {
-        image = url(uri);
+        images.add(url(uri));
 
         return chain();
     }
@@ -140,8 +143,31 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
      */
     public Background image(GradientValue gradient) {
         this.gradient = gradient;
-        this.image = gradient.toString();
+        this.images.add(gradient.toString());
 
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The CSS background-image property sets the background images for an element. The images are
+     * drawn on successive stacking context layers, with the first specified being drawn as if it is
+     * the closest to the user. The borders of the element are then drawn on top of them, and the
+     * background-color is drawn beneath them.
+     * </p>
+     * 
+     * @param uri
+     * @return
+     */
+    public Background image(Object... images) {
+        for (Object image : images) {
+            if (image instanceof String) {
+                this.images.add(url((String) image));
+            } else {
+                this.images.add(image.toString());
+            }
+        }
+    
         return chain();
     }
 
