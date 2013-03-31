@@ -78,6 +78,24 @@ public class BoxLength extends CSSProperty<BoxLength> {
 
     /**
      * <p>
+     * The margin CSS property of an element sets the margin space required on the top of an
+     * element. A negative value is also allowed.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public BoxLength size(Value value) {
+        horizontal(value);
+        vertical(value);
+
+        // Chainable API
+        return chain();
+    }
+
+    /**
+     * <p>
      * </p>
      * 
      * @return
@@ -233,6 +251,24 @@ public class BoxLength extends CSSProperty<BoxLength> {
 
     /**
      * <p>
+     * The margin-left and margin-right CSS property of an element sets the margin space required on
+     * the top of an element. A negative value is also allowed.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public BoxLength horizontal(Value value) {
+        left(value);
+        right(value);
+
+        // Chainable API
+        return chain();
+    }
+
+    /**
+     * <p>
      * The margin-top and margin-bottom CSS property of an element sets the margin space required on
      * the top of an element. A negative value is also allowed.
      * </p>
@@ -244,6 +280,24 @@ public class BoxLength extends CSSProperty<BoxLength> {
     public BoxLength vertical(double size, Unit unit) {
         top(size, unit);
         bottom(size, unit);
+
+        // Chainable API
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The margin-top and margin-bottom CSS property of an element sets the margin space required on
+     * the top of an element. A negative value is also allowed.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public BoxLength vertical(Value value) {
+        top(value);
+        bottom(value);
 
         // Chainable API
         return chain();

@@ -36,14 +36,20 @@ public class Box extends CSSProperty<Box> {
     /** The box width. */
     private Value width;
 
-    /** The bos min-width. */
+    /** The box min-width. */
     private Value minWidth;
 
-    /** The bos max-width. */
+    /** The box max-width. */
     private Value maxWidth;
 
     /** The box height. */
     private Value height;
+
+    /** The box min-width. */
+    private Value minHeight;
+
+    /** The box max-width. */
+    private Value maxHeight;
 
     /** The z-index. */
     private int index;
@@ -67,6 +73,8 @@ public class Box extends CSSProperty<Box> {
         if (0 <= alpha && alpha <= 1) writer.property("opacity", alpha);
         writer.property("max-width", maxWidth);
         writer.property("min-width", minWidth);
+        writer.property("max-height", maxHeight);
+        writer.property("min-height", minHeight);
         writer.property("box-shadow", I.join(shadows, ","));
     }
 
@@ -257,6 +265,70 @@ public class Box extends CSSProperty<Box> {
      */
     public Box height(Value value) {
         height = value;
+
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The min-height CSS property is used to set the minimum height of a given element. It prevents
+     * the used value of the height property from becoming smaller than the value specified for
+     * min-height.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public Box minHeight(double size, Unit unit) {
+        return minHeight(new Value(size, unit));
+    }
+
+    /**
+     * <p>
+     * The min-height CSS property is used to set the minimum height of a given element. It prevents
+     * the used value of the height property from becoming smaller than the value specified for
+     * min-height.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public Box minHeight(Value value) {
+        minHeight = value;
+
+        return chain();
+    }
+
+    /**
+     * <p>
+     * The max-height CSS property is used to set the maximum height of a given element. It prevents
+     * the used value of the height property from becoming larger than the value specified for
+     * max-height.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public Box maxHeight(double size, Unit unit) {
+        return maxHeight(new Value(size, unit));
+    }
+
+    /**
+     * <p>
+     * The max-height CSS property is used to set the maximum height of a given element. It prevents
+     * the used value of the height property from becoming larger than the value specified for
+     * max-height.
+     * </p>
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    public Box maxHeight(Value value) {
+        maxHeight = value;
 
         return chain();
     }

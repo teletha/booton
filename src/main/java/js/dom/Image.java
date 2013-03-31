@@ -96,6 +96,19 @@ public class Image {
 
     /**
      * <p>
+     * Apply saturate filter.
+     * </p>
+     * 
+     * @param amount An amount of saturation. (0 ~ 1)
+     * @return
+     */
+    public Image saturate(double amount) {
+        return applyFilter($(document.createElementNS(SVG, "feColorMatrix")).attr("type", "saturate")
+                .attr("values", amount));
+    }
+
+    /**
+     * <p>
      * Helper method to apply filter.
      * </p>
      * 

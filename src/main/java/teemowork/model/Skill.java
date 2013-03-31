@@ -1769,9 +1769,6 @@ public class Skill extends Describable<SkillDescriptor> {
     /** The skill key type. */
     public final SkillKey key;
 
-    /** The descriptor. */
-    private SkillDescriptor[] versions = new SkillDescriptor[Version.values().length];
-
     /**
      * <p>
      * Create new Skill.
