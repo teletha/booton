@@ -12,6 +12,8 @@ package js.ui;
 import static booton.css.Unit.*;
 import js.util.Color;
 import booton.css.CSS;
+import booton.css.Snippet;
+import booton.css.Snippet.Icon;
 import booton.css.Value;
 
 /**
@@ -19,21 +21,21 @@ import booton.css.Value;
  */
 class FormUIStyle {
 
-    /** The general form padding. */
-    Value FormHeight = new Value(2, em);
+    /** The general single line form height. */
+    Value SingleLineFormHeight = new Value(20, px);
 
     /** The general form padding. */
-    Value FormPadding = new Value(0.4, em);
+    Value FormVerticalPadding = new Value(4, px);
 
-    Value BorderWidth = new Value(1, px);
+    /** The general form padding. */
+    Value FormHorizontalPadding = new Value(6, px);
 
-    Value BorderRadius = new Value(4, px);
+    class FormComponent extends CSS {
 
-    Color BorderColor = new Color(0, 0, 80);
-
-    Color BorderInsetColor = new Color(0, 0, 0, 0.1);
-
-    Color FocusColor = new Color(206, 79, 62, 0.8);
+        {
+            position.relative();
+        }
+    }
 
     /**
      * @version 2013/03/31 22:49:02
@@ -41,45 +43,83 @@ class FormUIStyle {
     private class BaseForm extends CSS {
 
         {
-            display.inlineBlock();
-            padding.size(FormPadding);
-            font.size(14, px).color(85, 85, 85);
-            transition.property.all().duration(0.2, s).timing.linear();
+            // Required property for single line form.
+            box.minHeight(SingleLineFormHeight);
+
+            // Required property for single line form.
+            text.verticalAlign.middle();
+
+            // Required property for single line form.
             outline.none();
+
+            // Customizable properties.
+            display.inlineBlock();
+            font.size(14, px);
+            padding.vertical(FormVerticalPadding).horizontal(FormHorizontalPadding);
+
+            transition.property.all().duration(0.2, s).timing.linear();
+        }
+
+        // ===========================================
+        // Border Related Style
+        // ===========================================
+        private Value BorderWidth = new Value(1, px);
+
+        private Value BorderRadius = new Value(3, px);
+
+        private Color BorderColor = new Color(0, 0, 80);
+
+        private Color BorderInsetShadow = new Color(0, 0, 0, 0.1);
+
+        private Color BorderFocusColor = new Color(206, 79, 62, 0.8);
+
+        /**
+         * <p>
+         * Helper method to write border.
+         * </p>
+         */
+        protected final void writeBorder() {
+            border.width(BorderWidth).solid().color(BorderColor);
+            box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow);
+
+            while (firstChild()) {
+                borderLeft.radius(BorderRadius);
+            }
+
+            while (lastChild()) {
+                borderRight.radius(BorderRadius);
+            }
+
+            while (focus()) {
+                border.color(BorderFocusColor);
+                box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow)
+                        .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
+            }
         }
     }
 
-    class InputForm extends BaseForm {
+    class SelectForm extends BaseForm {
 
         {
-            box.width(200, px).shadowInset(0, px, 1, px, 1, px, BorderInsetColor);
-            border.width(BorderWidth).solid().color(BorderColor);
-
-            while (focus()) {
-                border.color(FocusColor);
-
-                box.shadowInset(0, px, 1, px, 1, px, BorderInsetColor)
-                        .shadow(0, px, 0, px, 8, px, FocusColor.opacify(-0.2));
-            }
+            writeBorder();
         }
     }
 
     class SelectArrow extends BaseForm {
 
         {
-            border.width(BorderWidth).solid().color(BorderColor);
-            borderLeft.none();
-            box.size(40, px);
+            writeBorder();
+
+            Snippet.write(Icon.BottomArrow);
+            cursor.pointer();
+
         }
     }
 
-    class FormOutline extends BaseForm {
+    class SelectItemList extends CSS {
 
         {
 
-            while (focus()) {
-                background.color.black();
-            }
         }
     }
 }

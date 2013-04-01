@@ -122,7 +122,28 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
      */
     public BorderValue radius(double first, Unit firstUnit, double second, Unit secondUnit, double third, Unit thirdUnit, double fourth, Unit fourthUnit) {
         radius = new BoxLength("border-radius");
-        radius.top(first, firstUnit).right(second, secondUnit).bottom(third, thirdUnit).left(fourth, fourthUnit);
+
+        switch (name) {
+        case "border-top":
+            radius.top(first, firstUnit).right(second, secondUnit);
+            break;
+
+        case "border-right":
+            radius.right(second, secondUnit).bottom(third, thirdUnit);
+            break;
+
+        case "border-bottom":
+            radius.bottom(third, thirdUnit).left(fourth, fourthUnit);
+            break;
+
+        case "border-left":
+            radius.top(first, firstUnit).left(fourth, fourthUnit);
+            break;
+
+        default:
+            radius.top(first, firstUnit).right(second, secondUnit).bottom(third, thirdUnit).left(fourth, fourthUnit);
+            break;
+        }
 
         return chain();
     }

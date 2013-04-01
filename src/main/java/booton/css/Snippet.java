@@ -11,11 +11,14 @@ package booton.css;
 
 import static booton.css.CSS.*;
 import js.util.Color;
+import booton.util.Font;
 
 /**
  * @version 2013/03/24 16:07:10
  */
 public class Snippet {
+
+    private static final Font Icons = new Font("icon.css");
 
     /**
      * <p>
@@ -61,6 +64,47 @@ public class Snippet {
                 css.border.solid().color.transparent().width(width);
                 css.borderTop.color(boxBackColor.opacify(1));
             }
+        }
+    }
+
+    /**
+     * <p>
+     * Write icon in before pseudo element.
+     * </p>
+     * 
+     * @param icon
+     */
+    public static final void write(Icon icon) {
+        CSS css = CSS.current;
+
+        Color color = css.border.color();
+
+        while (css.before()) {
+            css.font.color(color.lighten(-40)).family(Icons);
+            css.content.text(icon.code);
+        }
+    }
+
+    /**
+     * @version 2013/04/01 20:01:08
+     */
+    public static enum Icon {
+
+        /** The icon. */
+        BottomArrow("e75c");
+
+        /** The unicode. */
+        public final String code;
+
+        /**
+         * <p>
+         * Specify character code for icon.
+         * </p>
+         * 
+         * @param unicode
+         */
+        private Icon(String unicode) {
+            this.code = "\\" + unicode;
         }
     }
 }

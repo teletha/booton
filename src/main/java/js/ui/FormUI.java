@@ -10,7 +10,7 @@
 package js.ui;
 
 import js.dom.Element;
-import js.ui.FormUIStyle.FormOutline;
+import js.ui.FormUIStyle.FormComponent;
 
 /**
  * @version 2013/03/31 17:40:08
@@ -31,7 +31,7 @@ public class FormUI<T extends FormUI> extends ElementBasedUI {
      * 
      */
     public FormUI(String form) {
-        root.add(FormOutline.class);
+        root.add(FormComponent.class);
 
         this.form = root.child(form);
     }

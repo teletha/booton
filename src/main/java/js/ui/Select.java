@@ -9,18 +9,21 @@
  */
 package js.ui;
 
-import static js.lang.Global.*;
 import js.dom.Element;
-import js.ui.FormUIStyle.InputForm;
+import js.dom.Element.Event;
+import js.dom.Element.Listener;
 import js.ui.FormUIStyle.SelectArrow;
-import js.util.Raphael;
-import js.util.jQuery.Event;
-import js.util.jQuery.Listener;
+import js.ui.FormUIStyle.SelectForm;
+import js.ui.FormUIStyle.SelectItemList;
 
 /**
  * @version 2013/03/28 1:31:15
  */
 public class Select extends FormUI<Select> {
+
+    private ModelProvider provider;
+
+    private Element items;
 
     /**
      * <p>
@@ -28,70 +31,26 @@ public class Select extends FormUI<Select> {
      * </p>
      */
     public Select() {
-        form.add(InputForm.class).set("type", "input").set("readonly", "true").set("value", "aaa");
+        form.add(SelectForm.class).set("type", "input").set("disabled", "");
 
         Element e = root.child(SelectArrow.class);
-        Raphael paper = $(e, 40, 40);
-        final Raphael outline = paper.path("M23.963,20.834L17.5,9.64c-0.825-1.429-2.175-1.429-3,0L8.037,20.834c-0.825,1.429-0.15,2.598,1.5,2.598h12.926C24.113,23.432,24.788,22.263,23.963,20.834z")
-                .attr("fill", "none")
-                .attr("stroke", "#aaa")
-                .attr("stroke-width", "3")
-                .attr("stroke-linejoin", "round")
-                .attr("opacity", "0");
-
-        paper.path("M23.963,20.834L17.5,9.64c-0.825-1.429-2.175-1.429-3,0L8.037,20.834c-0.825,1.429-0.15,2.598,1.5,2.598h12.926C24.113,23.432,24.788,22.263,23.963,20.834z")
-                .attr("fill", "#000")
-                .attr("stroke", "none");
-
-        $(e).mouseenter(new Listener() {
+        e.addEventListener("click", new Listener() {
 
             @Override
-            public void handler(js.util.jQuery.Event event) {
-                outline.attr("opacity", "1");
-            }
-        }).mouseleave(new Listener() {
+            public void handleEvent(Event event) {
 
-            @Override
-            public void handler(Event event) {
-                outline.attr("opacity", "0");
             }
         });
+    }
 
-        // SVG svg = new SVG(SelectArrow.class);
-        // final Path path = svg.path()
-        // .fill("none")
-        // .stroke("#00ff00")
-        // .strokeWidth(3)
-        // .strokeLineJoin("round")
-        // .line("M8.037,11.166L14.5,22.359C15.325,23.789,16.675,23.789,17.5,22.359L23.963,11.165000000000001C24.789,9.736,24.113,8.567,22.463,8.567H9.537C7.886,8.568,7.211,9.737,8.037,11.166Z");
-        // path.getElement().addEventListener("mouseenter", new Listener() {
-        //
-        // @Override
-        // public void handleEvent(Event event) {
-        // path.getElement().set("style", "opacity:1;");
-        // }
-        // });
-        // path.getElement().addEventListener("mouseout", new Listener() {
-        //
-        // @Override
-        // public void handleEvent(Event event) {
-        // path.getElement().set("style", "opacity:0;");
-        // }
-        // });
-        //
-        // Path path2 = svg.path()
-        // .fill("#333333")
-        // .stroke("none")
-        // .line("M8.037,11.166L14.5,22.359C15.325,23.789,16.675,23.789,17.5,22.359L23.963,11.165000000000001C24.789,9.736,24.113,8.567,22.463,8.567H9.537C7.886,8.568,7.211,9.737,8.037,11.166Z");
-        //
-        // path2.getElement().addEventListener("mouseenter", new Listener() {
-        //
-        // @Override
-        // public void handleEvent(Event event) {
-        // path.getElement().set("style", "opacity:1;");
-        // }
-        // });
+    public void model(ModelProvider provider) {
+        this.provider = provider;
+    }
 
-        // root.append(svg);
+    private Element getItemListElement() {
+        if (items == null) {
+            items = root.child(SelectItemList.class);
+        }
+        return items;
     }
 }

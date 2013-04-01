@@ -397,21 +397,6 @@ public abstract class Element extends js.dom.Node implements org.w3c.dom.Element
 
     /**
      * <p>
-     * Add child element.
-     * </p>
-     * 
-     * @param elementName A child element name.
-     * @return A created element.
-     */
-    public Element append(Elementable child) {
-        appendChild(child.getElement());
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
      * Assign classes.
      * </p>
      * 
