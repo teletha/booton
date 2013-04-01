@@ -63,4 +63,23 @@ class FormUIStyle {
             }
         }
     }
+
+    class SelectArrow extends BaseForm {
+
+        {
+            border.width(BorderWidth).solid().color(BorderColor);
+            borderLeft.none();
+            box.size(40, px);
+        }
+    }
+
+    class FormOutline extends BaseForm {
+
+        {
+
+            while (focus()) {
+                background.color.black();
+            }
+        }
+    }
 }

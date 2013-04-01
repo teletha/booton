@@ -9,7 +9,6 @@
  */
 package booton;
 
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,10 +62,6 @@ public class Obfuscator {
      * @return An identified class name for ECMAScript.
      */
     public static final String computeCSSName(Class style) {
-        while (!Modifier.isAbstract(style.getSuperclass().getModifiers())) {
-            style = style.getSuperclass();
-        }
-
         String name = css.get(style);
 
         if (name == null) {
