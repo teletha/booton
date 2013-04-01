@@ -52,7 +52,7 @@ public class Position extends CSSProperty<Position> {
      * @return A result.
      */
     public boolean isRelative() {
-        return value.equals("relative");
+        return "relative".equals(value);
     }
 
     /**
@@ -77,7 +77,7 @@ public class Position extends CSSProperty<Position> {
      * @return A result.
      */
     public boolean isAbsolute() {
-        return value.equals("absolute");
+        return "absolute".equals(value);
     }
 
     /**

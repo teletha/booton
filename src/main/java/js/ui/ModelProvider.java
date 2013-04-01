@@ -7,19 +7,16 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.dom;
+package js.ui;
 
 /**
- * @version 2013/04/01 14:30:00
+ * @version 2013/04/02 3:04:15
  */
-public interface Elementable {
+public interface ModelProvider<M> {
 
-    /**
-     * <p>
-     * Return DOM element representation.
-     * </p>
-     * 
-     * @return A DOM element.
-     */
-    Element getElement();
+    int size();
+
+    M item(int index);
+
+    String name(M model);
 }

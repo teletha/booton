@@ -31,30 +31,35 @@ public class Font {
      * @param uri
      */
     public Font(String uri) {
-        try {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            URLConnection connection = new URL(uri).openConnection();
-            connection.connect();
-            I.copy(connection.getInputStream(), out, true);
-
-            String contents = out.toString();
-            int start = contents.indexOf("font-family");
-            int end = contents.indexOf(";", start);
-
-            String name = contents.substring(start + 11, end).trim();
-
-            if (name.charAt(0) == ':') {
-                name = name.substring(1).trim();
-            }
-
-            if (name.charAt(0) == '\'') {
-                name = name.substring(1, name.length() - 1);
-            }
-
-            this.name = name;
+        if (!uri.startsWith("http")) {
+            this.name = "icon";
             this.uri = uri;
-        } catch (Exception e) {
-            throw I.quiet(e);
+        } else {
+            try {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                URLConnection connection = new URL(uri).openConnection();
+                connection.connect();
+                I.copy(connection.getInputStream(), out, true);
+
+                String contents = out.toString();
+                int start = contents.indexOf("font-family");
+                int end = contents.indexOf(";", start);
+
+                String name = contents.substring(start + 11, end).trim();
+
+                if (name.charAt(0) == ':') {
+                    name = name.substring(1).trim();
+                }
+
+                if (name.charAt(0) == '\'') {
+                    name = name.substring(1, name.length() - 1);
+                }
+
+                this.name = name;
+                this.uri = uri;
+            } catch (Exception e) {
+                throw I.quiet(e);
+            }
         }
     }
 

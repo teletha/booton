@@ -15,6 +15,7 @@ import js.application.Page;
 import js.application.PageInfo;
 import js.bind.Subscriber;
 import js.dom.Image;
+import js.ui.ModelProvider;
 import js.ui.Select;
 import js.util.jQuery;
 import js.util.jQuery.Event;
@@ -101,6 +102,34 @@ public class MasteryBuilder extends Page implements Subscriber {
     public void load(jQuery root) {
         jQuery infomation = root.child(Information.class);
         menu = new Select();
+        menu.model(new ModelProvider<String>() {
+
+            private String[] items = {"AAA", "BBB", "CCC"};
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public int size() {
+                return items.length;
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public String item(int index) {
+                return items[index];
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public String name(String model) {
+                return model;
+            }
+        });
         infomation.append(menu);
 
         reset = infomation.child(ResetButton.class).click(new Listener() {
