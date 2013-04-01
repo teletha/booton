@@ -18,7 +18,6 @@ import java.util.Set;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
-import kiss.Table;
 import booton.css.CSS;
 import booton.translator.Literal;
 import booton.util.Font;
@@ -44,23 +43,24 @@ public class StylesheetManager implements Literal<CSS> {
      */
     public void write(Path file) throws Exception {
         // collect defined styles
-        Table<Class, CSS> cascading = new Table();
-
-        for (CSS style : I.find(CSS.class)) {
-            Class type = style.getClass();
-
-            while (type != CSS.class) {
-                cascading.push(type, style);
-
-                type = type.getSuperclass();
-            }
-        }
+        // Table<Class, CSS> cascading = new Table();
+        //
+        // for (CSS style : I.find(CSS.class)) {
+        // System.out.println(style.getClass().getName());
+        // Class type = style.getClass();
+        //
+        // while (type != CSS.class) {
+        // cascading.push(type, style);
+        //
+        // type = type.getSuperclass();
+        // }
+        // }
 
         // collect required styles
         Set<CSS> required = new LinkedHashSet();
 
-        for (Class type : used) {
-            required.add(cascading.find(type));
+        for (Class<? extends CSS> type : used) {
+            required.add(I.make(type));
         }
 
         StringBuilder builder = new StringBuilder();

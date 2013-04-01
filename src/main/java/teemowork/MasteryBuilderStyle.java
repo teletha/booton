@@ -41,11 +41,11 @@ class MasteryBuilderStyle {
 
     Color CompleteColor = new Color(50, 40, 65);
 
-    Color Blue = new Color(220, 40, 95);
+    Color Blue = new Color(220, 50, 85);
 
-    GradientValue transparent = new GradientValue(new Color(0, 100, 100, 0.5), new Color(0, 100, 100, 0));
+    GradientValue transparent = new GradientValue(new Color(0, 100, 100, 0.6), new Color(0, 100, 100, 0));
 
-    String noise = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAFUlEQVQImWNgQAO3b9/2pboAAwMDAPVTDldKdOWIAAAAAElFTkSuQmCC";
+    String noise = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAABlBMVEUAAAAAAAClZ7nPAAAAAnRSTlMAGovxNEIAAAAoSURBVDhPYxBEAgIMSkhAgcEFCTgwdCCBBoZRfaP6RvWN6hvVR5Y+APADQlQnmrINAAAAAElFTkSuQmCC";
 
     class Offense extends CSS {
 

@@ -15,6 +15,7 @@ import js.dom.History;
 import js.dom.Location;
 import js.dom.Window;
 import js.net.WebSocket;
+import js.util.Raphael;
 import js.util.jQuery;
 
 import org.w3c.dom.DocumentFragment;
@@ -118,6 +119,18 @@ public class Global {
     public static native jQuery $(Window window);
 
     /**
+     * <p>
+     * Provide Raphael support.
+     * </p>
+     * 
+     * @param parent
+     * @param width
+     * @param height
+     * @return
+     */
+    public static native Raphael $(Element parent, int width, int height);
+
+    /**
      * @version 2012/12/14 13:11:07
      */
     @SuppressWarnings("unused")
@@ -190,6 +203,20 @@ public class Global {
          */
         public String $(DocumentFragment document) {
             return "$(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Provide Raphael support.
+         * </p>
+         * 
+         * @param parent
+         * @param width
+         * @param height
+         * @return
+         */
+        public String $(Element parent, int width, int height) {
+            return "Raphael(" + param(0) + "," + param(1) + "," + param(2) + ")";
         }
 
         /**
