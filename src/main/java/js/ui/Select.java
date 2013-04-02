@@ -14,6 +14,7 @@ import js.ui.FormUIStyle.SelectArrow;
 import js.ui.FormUIStyle.SelectForm;
 import js.ui.FormUIStyle.SelectItem;
 import js.ui.FormUIStyle.SelectItemList;
+import js.ui.ScrollableList.ItemProvider;
 import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
@@ -25,7 +26,7 @@ public class Select extends FormUI<Select> {
 
     private ModelProvider provider;
 
-    private jQuery items;
+    private ScrollableList items;
 
     /**
      * <p>
@@ -39,39 +40,52 @@ public class Select extends FormUI<Select> {
 
             @Override
             public void handler(Event event) {
-                getItemListElement().slideToggle(200);
+                items.root.slideToggle(200);
             }
         });
+
+        items = new ScrollableList(16, form.height()).provide(new ItemProvider<String>() {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public int countItem() {
+                return 200;
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public String item(int index) {
+                return String.valueOf(index);
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void render(int index, jQuery element, String model) {
+                element.addClass(SelectItem.class).attr("index", index).text(model);
+            }
+        });
+        items.root.addClass(SelectItemList.class).click(new Listener() {
+
+            @Override
+            public void handler(Event event) {
+                jQuery element = $(event.target);
+                form.val(element.text());
+
+                items.root.slideToggle(200);
+            }
+        });
+
+        root.append(items);
     }
 
     public void model(ModelProvider provider) {
         this.provider = provider;
-    }
-
-    private jQuery getItemListElement() {
-        if (items == null) {
-            items = root.child(SelectItemList.class);
-
-            for (int i = 0; i < provider.size(); i++) {
-                Object model = provider.item(i);
-
-                items.child(SelectItem.class).attr("index", i).text(provider.name(model));
-            }
-
-            items.click(new Listener() {
-
-                @Override
-                public void handler(Event event) {
-                    jQuery element = $(event.target);
-                    Object model = provider.item(Integer.parseInt(element.attr("index")));
-                    form.val(provider.name(model));
-
-                    getItemListElement().slideToggle();
-                }
-            });
-        }
-
-        return items;
     }
 
     /**

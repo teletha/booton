@@ -669,6 +669,21 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Get the current computed height for the first element in the set of matched elements.
+     * </p>
+     * <p>
+     * The difference between .css('height') and .height() is that the latter returns a unit-less
+     * pixel value (for example, 400) while the former returns a value with units intact (for
+     * example, 400px). The .height() method is recommended when an element's height needs to be
+     * used in a mathematical calculation.
+     * </p>
+     * 
+     * @return
+     */
+    public native int height();
+
+    /**
+     * <p>
      * Hide the matched elements.
      * </p>
      * 
@@ -1198,6 +1213,21 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery val(String value);
+
+    /**
+     * <p>
+     * Get the current computed width for the first element in the set of matched elements.
+     * </p>
+     * <p>
+     * The difference between .css(width) and .width() is that the latter returns a unit-less pixel
+     * value (for example, 400) while the former returns a value with units intact (for example,
+     * 400px). The .width() method is recommended when an element's width needs to be used in a
+     * mathematical calculation.
+     * </p>
+     * 
+     * @return
+     */
+    public native int width();
 
     /**
      * @version 2012/12/02 23:08:01
