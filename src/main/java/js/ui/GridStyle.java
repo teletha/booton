@@ -29,23 +29,21 @@ class GridStyle {
 
         {
             display.block();
-            box.width(100, percent).height(100, percent);
             position.relative();
             overflowY.auto();
         }
     }
 
-    class ScrollableItemView extends CSS {
+    class RenderableItemView extends CSS {
 
         {
             display.block();
-            box.width(100, percent).height(100, percent);
-            position.relative();
-            overflowY.auto();
+
+            // overflowY.hidden();
         }
     }
 
-    class ScrollableItemViewSpacer extends CSS {
+    class Spacer extends CSS {
 
         {
             display.block();

@@ -47,10 +47,9 @@ public class GridPage extends Page {
              */
             @Override
             public int countItem() {
-                return 100;
+                return 20;
             }
 
         }));
-        System.out.println(1);
     }
 }

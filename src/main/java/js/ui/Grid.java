@@ -10,14 +10,14 @@
 package js.ui;
 
 import js.ui.GridStyle.ItemColumnView;
+import js.ui.GridStyle.RenderableItemView;
 import js.ui.GridStyle.RootArea;
-import js.ui.GridStyle.ScrollableItemView;
-import js.ui.GridStyle.ScrollableItemViewSpacer;
+import js.ui.GridStyle.Spacer;
 import js.ui.GridStyle.ViewabletemView;
 import js.util.jQuery;
+import js.util.jQuery.DebounceListener;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
-import js.util.jQuery.Offset;
 
 /**
  * @version 2013/04/02 15:52:54
@@ -27,46 +27,74 @@ public class Grid extends UI {
     /** The viewable item size. */
     private final int viewableItemSize;
 
-    /** The maximum viewable item size. */
-    private final int viewableItemMaximumSize;
+    /** The extra renderable item size for top direction. */
+    private final int extraTopRenderableItemSize;
+
+    /** The extra renderable item size for bottom direction. */
+    private final int extraBottomRenderableItemSize;
+
+    /** The all renderable item size. */
+    private final int renderableItemSize;
 
     /** The item height. */
-    private final int height = 20;
+    private final int itemHeight = 20;
 
     /** The scrollable item view. */
-    private jQuery viewableItemView;
+    private final jQuery viewableItemView;
 
     /** The scrollable item view. */
-    private jQuery scrollableItemView;
+    private final jQuery renderableItemView;
 
     /** The spacer. */
-    private jQuery scrollableItemViewSpacer;
+    private final jQuery spacer;
+
+    /** The item list. */
+    private jQuery[] items;
+
+    /** The item provider. */
+    private ItemProvider provider;
 
     /**
      * 
      */
-    public Grid(int viewableItemSize, int height) {
+    public Grid(int size, int height) {
         root.addClass(RootArea.class);
 
-        this.viewableItemSize = viewableItemSize;
-        this.viewableItemMaximumSize = viewableItemSize * 3;
-        this.viewableItemView = root.child(ViewabletemView.class);
-        this.scrollableItemView = viewableItemView.child(ScrollableItemView.class);
-        this.scrollableItemViewSpacer = scrollableItemView.child(ScrollableItemViewSpacer.class);
+        this.viewableItemSize = size;
+        this.extraBottomRenderableItemSize = 25;
+        this.extraTopRenderableItemSize = extraBottomRenderableItemSize + viewableItemSize;
+        this.renderableItemSize = extraBottomRenderableItemSize + viewableItemSize + extraTopRenderableItemSize;
 
-        for (int i = 0; i < viewableItemMaximumSize; i++) {
-            scrollableItemView.child(ItemColumnView.class).css("height", height + "px").text(i);
+        this.viewableItemView = root.addClass(ViewabletemView.class);
+        this.renderableItemView = viewableItemView.child(RenderableItemView.class);
+        this.spacer = renderableItemView.child(Spacer.class);
+        this.items = new jQuery[renderableItemSize];
+
+        for (int i = 0; i < renderableItemSize; i++) {
+            items[i] = renderableItemView.child(ItemColumnView.class).css("height", itemHeight + "px").text(i);
         }
 
-        viewableItemView.scroll(new Listener() {
+        viewableItemView.scroll(new DebounceListener(100, new Listener() {
 
             @Override
             public void handler(Event event) {
-                Offset offset = scrollableItemView.position();
-                System.out.println(offset);
-                scrollableItemViewSpacer.css("height", (-offset.top - 20 * Grid.this.height) + "px");
+                int top = -renderableItemView.position().top;
+                int viewableTopIndex = Math.round(top / itemHeight);
+                int renderableTopIndex = Math.max(0, viewableTopIndex - extraTopRenderableItemSize);
+
+                if (provider.countItem() <= viewableTopIndex + viewableItemSize + extraBottomRenderableItemSize) {
+                    // 既に最後の要素まで到達可能な範囲にいるので末尾から数えるようにする。
+                    renderableTopIndex = provider.countItem() - renderableItemSize;
+                }
+                System.out.println(top + "  " + viewableTopIndex + "  " + renderableTopIndex);
+
+                for (int i = 0; i < items.length; i++) {
+                    items[i].text(renderableTopIndex + i);
+                }
+
+                spacer.css("height", renderableTopIndex * itemHeight + "px");
             }
-        });
+        }));
     }
 
     /**
@@ -78,8 +106,9 @@ public class Grid extends UI {
      * @return
      */
     public Grid provide(ItemProvider provider) {
-        viewableItemView.css("height", viewableItemSize * height + "px");
-        scrollableItemView.css("height", provider.countItem() * height + "px");
+        this.provider = provider;
+        viewableItemView.css("height", viewableItemSize * itemHeight + "px");
+        renderableItemView.css("height", provider.countItem() * itemHeight + "px");
 
         // API definition
         return this;
