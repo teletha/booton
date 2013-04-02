@@ -94,7 +94,21 @@ public final class Font extends CSSProperty<Font> implements Colorable<Font> {
      * @return
      */
     public Font size(double size, Unit unit) {
-        return this.size.set(new Value(size, unit));
+        return size(new Value(size, unit));
+    }
+
+    /**
+     * <p>
+     * The font-size CSS property specifies the size of the font. Setting the font size may, in
+     * turn, change the size of other items, since it is used to compute the value of em and ex
+     * length units.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Font size(Value value) {
+        return this.size.set(value);
     }
 
     /**

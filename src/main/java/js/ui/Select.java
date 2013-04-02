@@ -9,12 +9,13 @@
  */
 package js.ui;
 
-import js.dom.Element;
-import js.dom.Element.Event;
-import js.dom.Element.Listener;
 import js.ui.FormUIStyle.SelectArrow;
 import js.ui.FormUIStyle.SelectForm;
+import js.ui.FormUIStyle.SelectItem;
 import js.ui.FormUIStyle.SelectItemList;
+import js.util.jQuery;
+import js.util.jQuery.Event;
+import js.util.jQuery.Listener;
 
 /**
  * @version 2013/03/28 1:31:15
@@ -23,7 +24,7 @@ public class Select extends FormUI<Select> {
 
     private ModelProvider provider;
 
-    private Element items;
+    private jQuery items;
 
     /**
      * <p>
@@ -31,14 +32,14 @@ public class Select extends FormUI<Select> {
      * </p>
      */
     public Select() {
-        form.add(SelectForm.class).set("type", "input").set("disabled", "");
+        form.addClass(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
 
-        Element e = root.child(SelectArrow.class);
-        e.addEventListener("click", new Listener() {
+        jQuery e = root.child(SelectArrow.class);
+        e.click(new Listener() {
 
             @Override
-            public void handleEvent(Event event) {
-
+            public void handler(Event event) {
+                getItemListElement();
             }
         });
     }
@@ -47,9 +48,23 @@ public class Select extends FormUI<Select> {
         this.provider = provider;
     }
 
-    private Element getItemListElement() {
+    private jQuery getItemListElement() {
         if (items == null) {
             items = root.child(SelectItemList.class);
+
+            for (int i = 0; i < provider.size(); i++) {
+                Object model = provider.item(i);
+
+                items.child(SelectItem.class).text(provider.name(model));
+            }
+
+            items.click(new Listener() {
+
+                @Override
+                public void handler(Event event) {
+                    System.out.println(event.target);
+                }
+            });
         }
         return items;
     }

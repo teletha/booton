@@ -21,6 +21,21 @@ import booton.css.Value;
  */
 class FormUIStyle {
 
+    // ===========================================
+    // Border Related Style
+    // ===========================================
+    Value BorderWidth = new Value(1, px);
+
+    Value BorderRadius = new Value(3, px);
+
+    Color BorderColor = new Color(0, 0, 80);
+
+    Color BorderInsetShadow = new Color(0, 0, 0, 0.1);
+
+    Color BorderFocusColor = new Color(206, 79, 62, 0.8);
+
+    Value FontSize = new Value(14, px);
+
     /** The general single line form height. */
     Value SingleLineFormHeight = new Value(20, px);
 
@@ -30,9 +45,12 @@ class FormUIStyle {
     /** The general form padding. */
     Value FormHorizontalPadding = new Value(6, px);
 
+    Color SelectColor = new Color(206, 79, 62, 0.8);
+
     class FormComponent extends CSS {
 
         {
+            display.inlineBlock();
             position.relative();
         }
     }
@@ -54,24 +72,11 @@ class FormUIStyle {
 
             // Customizable properties.
             display.inlineBlock();
-            font.size(14, px);
+            font.size(FontSize);
             padding.vertical(FormVerticalPadding).horizontal(FormHorizontalPadding);
 
             transition.property.all().duration(0.2, s).timing.linear();
         }
-
-        // ===========================================
-        // Border Related Style
-        // ===========================================
-        private Value BorderWidth = new Value(1, px);
-
-        private Value BorderRadius = new Value(3, px);
-
-        private Color BorderColor = new Color(0, 0, 80);
-
-        private Color BorderInsetShadow = new Color(0, 0, 0, 0.1);
-
-        private Color BorderFocusColor = new Color(206, 79, 62, 0.8);
 
         /**
          * <p>
@@ -109,6 +114,7 @@ class FormUIStyle {
 
         {
             writeBorder();
+            borderLeft.none();
 
             Snippet.write(Icon.BottomArrow);
             cursor.pointer();
@@ -119,7 +125,27 @@ class FormUIStyle {
     class SelectItemList extends CSS {
 
         {
+            position.absolute().top(100, percent).left(0, px);
+            margin.top(5, px);
+            box.maxHeight(SingleLineFormHeight.multiply(6)).width(100, percent).zIndex(1);
+            font.size(FontSize);
+            overflowY.scroll();
 
+            background.color(Color.White);
+            border.solid().width(BorderWidth).color(BorderColor);
+        }
+    }
+
+    class SelectItem extends CSS {
+
+        {
+            display.block();
+            padding.vertical(FormVerticalPadding).horizontal(FormHorizontalPadding);
+            text.overflow.ellipsis();
+
+            while (hover()) {
+                background.color(SelectColor);
+            }
         }
     }
 }

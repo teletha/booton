@@ -387,6 +387,39 @@ public abstract class CSS implements Extensible {
 
     /**
      * <p>
+     * The overflow-x CSS property specifies whether to clip content, render a scroll bar or display
+     * overflow content of a block-level element, when it overflows at the left and right edges.
+     * </p>
+     * <p>
+     * Using the overflow property with a value different than visible, its default, will create a
+     * new block formatting context. This is technically necessary as if a float would intersect
+     * with the scrolling element it would force to rewrap the content of the scrollable element
+     * around intruding floats. The rewrap would happen after each scroll step and would be lead to
+     * a far too slow scrolling experience. Note that, by programmatically setting scrollTop to the
+     * relevant HTML element, even when overflow has the hidden value an element may need to scroll.
+     * </p>
+     */
+    public Overflow overflowX;
+
+    /**
+     * <p>
+     * The overflow-y CSS property specifies whether to clip content, render a scroll bar, or
+     * display overflow content of a block-level element, when it overflows at the top and bottom
+     * edges.
+     * </p>
+     * <p>
+     * Using the overflow property with a value different than visible, its default, will create a
+     * new block formatting context. This is technically necessary as if a float would intersect
+     * with the scrolling element it would force to rewrap the content of the scrollable element
+     * around intruding floats. The rewrap would happen after each scroll step and would be lead to
+     * a far too slow scrolling experience. Note that, by programmatically setting scrollTop to the
+     * relevant HTML element, even when overflow has the hidden value an element may need to scroll.
+     * </p>
+     */
+    public Overflow overflowY;
+
+    /**
+     * <p>
      * The visibility CSS property has two purposes:
      * </p>
      */

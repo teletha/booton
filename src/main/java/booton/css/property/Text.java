@@ -28,6 +28,15 @@ public class Text extends CSSProperty<Text> {
 
     /**
      * <p>
+     * The text-align CSS property describes how inline content like text is aligned in its parent
+     * block element. text-align does not control the alignment of block elements itself, only their
+     * inline content.
+     * </p>
+     */
+    public final Align align = new Align();
+
+    /**
+     * <p>
      * The text-decoration CSS property is used to set the text formatting to underline, overline,
      * line-through or blink.
      * </p>
@@ -36,12 +45,12 @@ public class Text extends CSSProperty<Text> {
 
     /**
      * <p>
-     * The text-align CSS property describes how inline content like text is aligned in its parent
-     * block element. text-align does not control the alignment of block elements itself, only their
-     * inline content.
+     * The text-overflow CSS property determines how overflowed content that is not displayed is
+     * signaled to the users. It can be clipped, display an ellipsis ('…', U+2026 Horizontal
+     * Ellipsis) or a Web author-defined string.
      * </p>
      */
-    public final Align align = new Align();
+    public final Overflow overflow = new Overflow();
 
     /**
      * <p>
@@ -461,6 +470,46 @@ public class Text extends CSSProperty<Text> {
          */
         public Text blink() {
             return chain("blink");
+        }
+    }
+
+    /**
+     * @version 2013/04/02 11:22:24
+     */
+    public class Overflow extends CSSProperty<Text> {
+
+        /**
+         * Hide.
+         */
+        private Overflow() {
+            super("text-overflow", Text.this);
+        }
+
+        /**
+         * <p>
+         * This keyword value indicates to truncate the text at the limit of the content area,
+         * therefore the truncation can happen in the middle of a character. To truncate at the
+         * transition between two characters, the empty string value ('') must be used. The value
+         * clip is the default for this property.
+         * </p>
+         * 
+         * @return
+         */
+        public Text clip() {
+            return chain("clip");
+        }
+
+        /**
+         * <p>
+         * This keyword value indicates to display ellipses ('…', U+2026 Horizontal Ellipsis) to
+         * represent clipped text. The ellipsis is displayed inside the content area, shortening
+         * more the size of the displayed text. If there is not enough place to display ellipsis,
+         * they are clipped.
+         * 
+         * @return
+         */
+        public Text ellipsis() {
+            return chain("ellipsis");
         }
     }
 }

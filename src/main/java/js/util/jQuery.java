@@ -16,7 +16,6 @@ import java.util.Iterator;
 import js.dom.Element;
 import js.dom.Image;
 import js.ui.UI;
-import js.ui.ElementBasedUI;
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
 
@@ -170,6 +169,23 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * Adds the specified class(es) to each of the set of matched elements.
      * </p>
      * 
+     * @param classes A list of class names to assign.
+     * @return Chainable API.
+     */
+    public jQuery addClass(Class<? extends CSS>... classes) {
+        for (Class<? extends CSS> clazz : classes) {
+            addClass(clazz);
+        }
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Adds the specified class(es) to each of the set of matched elements.
+     * </p>
+     * 
      * @param classNames One or more class names to be added to the class attribute of each matched
      *            element.
      * @return
@@ -256,20 +272,6 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public jQuery append(UI contents) {
-        return append(contents.root);
-    }
-
-    /**
-     * <p>
-     * Insert content, specified by the parameter, to the end of each element in the set of matched
-     * elements.
-     * </p>
-     * 
-     * @param contents DOM element, HTML string, or jQuery object to insert at the end of each
-     *            element in the set of matched elements.
-     * @return
-     */
-    public jQuery append(ElementBasedUI contents) {
         return append(contents.root);
     }
 
@@ -579,6 +581,43 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Determine whether any of the matched elements are assigned the given class.
+     * </p>
+     * 
+     * @param className The class name to search for.
+     * @return A result
+     */
+    public native boolean hasClass(String className);
+
+    /**
+     * <p>
+     * Determine whether any of the matched elements are assigned the given class.
+     * </p>
+     * 
+     * @param className The class name to search for.
+     * @return A result
+     */
+    public native boolean hasClass(Class<? extends CSS> className);
+
+    /**
+     * <p>
+     * Determine whether any of the matched elements are assigned the given class.
+     * </p>
+     * 
+     * @param classes A list of class names to check.
+     * @return A result.
+     */
+    public boolean hasClass(Class<? extends CSS>... classes) {
+        for (Class<? extends CSS> clazz : classes) {
+            if (!hasClass(clazz)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * <p>
      * Hide the matched elements.
      * </p>
      * 
@@ -835,6 +874,24 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Remove a single class, multiple classes, or all classes from each element in the set of
+     * matched elements.
+     * </p>
+     * 
+     * @param classes A list of class names to remove.
+     * @return Chainable API.
+     */
+    public jQuery removeClass(Class<? extends CSS>... classes) {
+        for (Class<? extends CSS> clazz : classes) {
+            removeClass(clazz);
+        }
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
      * Display the matched elements.
      * </p>
      * 
@@ -904,6 +961,24 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery toggleClass(Class<? extends CSS> classNames);
+
+    /**
+     * <p>
+     * Add or remove one or more classes from each element in the set of matched elements, depending
+     * on either the class's presence or the value of the switch argument.
+     * </p>
+     * 
+     * @param classes A list of class names to remove.
+     * @return Chainable API.
+     */
+    public jQuery toggleClass(Class<? extends CSS>... classes) {
+        for (Class<? extends CSS> clazz : classes) {
+            toggleClass(clazz);
+        }
+
+        // API definition
+        return this;
+    }
 
     /**
      * <p>
