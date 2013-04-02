@@ -14,16 +14,7 @@ import booton.css.CSS;
 /**
  * @version 2013/04/02 15:57:15
  */
-class GridStyle {
-
-    class RootArea extends CSS {
-
-        {
-            display.block();
-            box.width(100, px);
-            border.solid().width(1, px).color.black();
-        }
-    }
+class ScrollableListStyle {
 
     class ViewabletemView extends CSS {
 
@@ -38,8 +29,7 @@ class GridStyle {
 
         {
             display.block();
-
-            // overflowY.hidden();
+            overflow.hidden();
         }
     }
 
@@ -54,7 +44,6 @@ class GridStyle {
 
         {
             display.block();
-            border.color.black().solid().width(1, px);
         }
     }
 }

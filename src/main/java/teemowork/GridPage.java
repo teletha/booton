@@ -11,8 +11,8 @@ package teemowork;
 
 import js.application.Page;
 import js.application.PageInfo;
-import js.ui.Grid;
-import js.ui.Grid.ItemProvider;
+import js.ui.ScrollableList;
+import js.ui.ScrollableList.ItemProvider;
 import js.util.jQuery;
 
 /**
@@ -40,16 +40,31 @@ public class GridPage extends Page {
      */
     @Override
     public void load(jQuery root) {
-        root.append(new Grid(10, 20).provide(new ItemProvider() {
+        root.append(new ScrollableList(10, 20).provide(new ItemProvider() {
 
             /**
              * {@inheritDoc}
              */
             @Override
             public int countItem() {
-                return 20;
+                return 800;
             }
 
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public Object item(int index) {
+                return index;
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void render(jQuery element, Object model) {
+                element.text(model);
+            }
         }));
     }
 }

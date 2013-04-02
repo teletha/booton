@@ -981,6 +981,15 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * This is a shortcut for .trigger("scroll").
+     * </p>
+     * 
+     * @return
+     */
+    public native jQuery scroll();
+
+    /**
+     * <p>
      * Bind an event handler to the "scroll" JavaScript event, or trigger that event on an element.
      * </p>
      * 
