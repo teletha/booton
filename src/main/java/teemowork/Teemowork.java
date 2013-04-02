@@ -39,7 +39,7 @@ public class Teemowork extends Application {
         sub.add("Mastery", "#Mastery");
         sub.add("Rune", "#");
 
-        nav.add("Builder", "#SVG");
+        nav.add("Builder", "#GridTest");
         nav.add("About", "#");
         nav.add("Contact", "#");
     }

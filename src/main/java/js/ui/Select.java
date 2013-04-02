@@ -9,6 +9,7 @@
  */
 package js.ui;
 
+import static js.lang.Global.*;
 import js.ui.FormUIStyle.SelectArrow;
 import js.ui.FormUIStyle.SelectForm;
 import js.ui.FormUIStyle.SelectItem;
@@ -34,12 +35,11 @@ public class Select extends FormUI<Select> {
     public Select() {
         form.addClass(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
 
-        jQuery e = root.child(SelectArrow.class);
-        e.click(new Listener() {
+        root.child(SelectArrow.class).click(new Listener() {
 
             @Override
             public void handler(Event event) {
-                getItemListElement();
+                getItemListElement().slideToggle(200);
             }
         });
     }
@@ -55,17 +55,42 @@ public class Select extends FormUI<Select> {
             for (int i = 0; i < provider.size(); i++) {
                 Object model = provider.item(i);
 
-                items.child(SelectItem.class).text(provider.name(model));
+                items.child(SelectItem.class).attr("index", i).text(provider.name(model));
             }
 
             items.click(new Listener() {
 
                 @Override
                 public void handler(Event event) {
-                    System.out.println(event.target);
+                    jQuery element = $(event.target);
+                    Object model = provider.item(Integer.parseInt(element.attr("index")));
+                    form.val(provider.name(model));
+
+                    getItemListElement().slideToggle();
                 }
             });
         }
+
         return items;
+    }
+
+    /**
+     * @version 2013/04/02 15:13:17
+     */
+    public static interface Provider<M> {
+
+        int size();
+
+        int itemHeight();
+
+        /**
+         * <p>
+         * Create list item view.
+         * </p>
+         * 
+         * @param item
+         * @param model
+         */
+        void buildItemView(jQuery item, M model);
     }
 }

@@ -126,13 +126,21 @@ class FormUIStyle {
 
         {
             position.absolute().top(100, percent).left(0, px);
-            margin.top(5, px);
+            margin.top(BorderWidth.opposite());
             box.maxHeight(SingleLineFormHeight.multiply(6)).width(100, percent).zIndex(1);
             font.size(FontSize);
             overflowY.scroll();
+            display.none();
 
             background.color(Color.White);
             border.solid().width(BorderWidth).color(BorderColor);
+        }
+    }
+
+    class SelectItemListShown extends CSS {
+
+        {
+
         }
     }
 
