@@ -138,7 +138,8 @@ public class ScrollableList extends UI {
                 spacer.css("height", renderableTopIndex * itemHeight + "px");
 
                 for (int i = 0; i < items.size(); i++) {
-                    provider.render(items.get(i), provider.item(renderableTopIndex + i));
+                    int index = renderableTopIndex + i;
+                    provider.render(index, items.get(i), provider.item(index));
                 }
             }
         }
@@ -173,10 +174,11 @@ public class ScrollableList extends UI {
          * Render the model to the given element.
          * </p>
          * 
+         * @param index A current index.
          * @param element A element to render.
          * @param model A rendering item.
          */
-        void render(jQuery element, M model);
+        void render(int index, jQuery element, M model);
     }
 
     /**
@@ -204,7 +206,7 @@ public class ScrollableList extends UI {
          * {@inheritDoc}
          */
         @Override
-        public void render(jQuery element, Object model) {
+        public void render(int index, jQuery element, Object model) {
         }
     }
 }

@@ -62,8 +62,8 @@ public class GridPage extends Page {
              * {@inheritDoc}
              */
             @Override
-            public void render(jQuery element, Object model) {
-                element.text(model);
+            public void render(int index, jQuery element, Object model) {
+                element.text(index);
             }
         }));
     }
