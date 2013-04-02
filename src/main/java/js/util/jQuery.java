@@ -504,6 +504,57 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Return the value at the named data store for the first element in the jQuery collection, as
+     * set by data(name, value) or by an HTML5 data-* attribute.
+     * </p>
+     * 
+     * @param key Name of the data stored.
+     * @return
+     */
+    private native Object data(String key);
+
+    /**
+     * <p>
+     * Store arbitrary data associated with the matched elements.
+     * </p>
+     * 
+     * @param key A string naming the piece of data to set.
+     * @param data The new data value; it can be any Javascript type including Array or Object.
+     * @return
+     */
+    private native jQuery data(String key, Object data);
+
+    /**
+     * <p>
+     * Get typed key-value pair.
+     * </p>
+     * 
+     * @param key A typed key.
+     * @return A paired value.
+     */
+    public <T> T data(Class<T> key) {
+        return key == null ? null : (T) data(key.getClass().getName());
+    }
+
+    /**
+     * <p>
+     * Set typed key-value pair.
+     * </p>
+     * 
+     * @param value A paired value.
+     * @return
+     */
+    public jQuery data(Object value) {
+        if (value != null) {
+            data(value.getClass().getName(), value);
+        }
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
      * This is a shortcut for .trigger("dblclick").
      * </p>
      * 
@@ -793,6 +844,20 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Get the current coordinates of the first element in the set of matched elements, relative to
+     * the document.
+     * </p>
+     * <p>
+     * The .offset() method allows us to retrieve the current position of an element relative to the
+     * document. Contrast this with .position(), which retrieves the current position relative to
+     * the offset parent. When positioning a new element on top of an existing one for global
+     * manipulation (in particular, for implementing drag-and-drop), .offset() is the more useful.
+     * </p>
+     */
+    public native Offset offset();
+
+    /**
+     * <p>
      * Remove an event handler.
      * </p>
      * 
@@ -837,6 +902,20 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery parent(String selector);
+
+    /**
+     * <p>
+     * Get the current coordinates of the first element in the set of matched elements, relative to
+     * the offset parent.
+     * </p>
+     * <p>
+     * The .position() method allows us to retrieve the current position of an element relative to
+     * the offset parent. Contrast this with .offset(), which retrieves the current position
+     * relative to the document. When positioning a new element near another one and within the same
+     * containing DOM element, .position() is the more useful.
+     * </p>
+     */
+    public native Offset position();
 
     /**
      * <p>
@@ -892,6 +971,56 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Remove a previously-stored piece of data.
+     * </p>
+     * 
+     * @param key A string naming the piece of data to delete.
+     * @return
+     */
+    private native jQuery removeData(String key);
+
+    /**
+     * <p>
+     * Bind an event handler to the "scroll" JavaScript event, or trigger that event on an element.
+     * </p>
+     * 
+     * @param listener A function to execute each time the event is triggered.
+     * @return
+     */
+    public native jQuery scroll(Listener listener);
+
+    /**
+     * <p>
+     * Get the current horizontal position of the scroll bar for the first element in the set of
+     * matched elements.
+     * </p>
+     * <p>
+     * The horizontal scroll position is the same as the number of pixels that are hidden from view
+     * to the left of the scrollable area. If the scroll bar is at the very left, or if the element
+     * is not scrollable, this number will be 0.
+     * </p>
+     * 
+     * @return
+     */
+    public native int scrollLeft();
+
+    /**
+     * <p>
+     * Get the current vertical position of the scroll bar for the first element in the set of
+     * matched elements or set the vertical position of the scroll bar for every matched element.
+     * </p>
+     * <p>
+     * The vertical scroll position is the same as the number of pixels that are hidden from view
+     * above the scrollable area. If the scroll bar is at the very top, or if the element is not
+     * scrollable, this number will be 0.
+     * </p>
+     * 
+     * @return
+     */
+    public native int scrollTop();
+
+    /**
+     * <p>
      * Display the matched elements.
      * </p>
      * 
@@ -907,6 +1036,57 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native int size();
+
+    /**
+     * <p>
+     * Display the matched elements with a sliding motion.
+     * </p>
+     */
+    public native jQuery slideDown();
+
+    /**
+     * <p>
+     * Display the matched elements with a sliding motion.
+     * </p>
+     * 
+     * @param duration A string or number determining how long the animation will run.
+     * @return
+     */
+    public native jQuery slideDown(int duration);
+
+    /**
+     * <p>
+     * Hide the matched elements with a sliding motion.
+     * </p>
+     */
+    public native jQuery slideUp();
+
+    /**
+     * <p>
+     * Hide the matched elements with a sliding motion.
+     * </p>
+     * 
+     * @param duration A string or number determining how long the animation will run.
+     * @return
+     */
+    public native jQuery slideUp(int duration);
+
+    /**
+     * <p>
+     * Display or hide the matched elements with a sliding motion.
+     * </p>
+     */
+    public native jQuery slideToggle();
+
+    /**
+     * <p>
+     * Display or hide the matched elements with a sliding motion.
+     * </p>
+     * 
+     * @param duration A string or number determining how long the animation will run.
+     * @return
+     */
+    public native jQuery slideToggle(int duration);
 
     /**
      * <p>
@@ -1116,5 +1296,17 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
          * </p>
          */
         public native void stopImmediatePropagation();
+    }
+
+    /**
+     * @version 2013/04/02 16:51:33
+     */
+    public static class Offset implements JavascriptNative {
+
+        /** The top offset. */
+        public int top;
+
+        /** The left offset. */
+        public int left;
     }
 }

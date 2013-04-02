@@ -82,4 +82,19 @@ public class Transform extends CSSProperty<Transform> {
 
         return chain();
     }
+
+    /**
+     * <p>
+     * The translateY() CSS function moves vertically the element on the plane. This transformation
+     * is characterized by a <length> defining how much it moves vertically.
+     * </p>
+     * 
+     * @param amount
+     * @return
+     */
+    public Transform translateY(double amount) {
+        functions.add("translateY(" + amount + ")");
+
+        return chain();
+    }
 }

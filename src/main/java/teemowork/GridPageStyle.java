@@ -7,12 +7,19 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.ui;
+package teemowork;
 
+import booton.css.CSS;
 
 /**
- * @version 2013/03/28 1:05:04
+ * @version 2013/04/02 16:15:20
  */
-public class SelectMenu extends UI {
+public class GridPageStyle {
 
+    class Table extends CSS {
+
+        {
+            box.width(100, px);
+        }
+    }
 }
