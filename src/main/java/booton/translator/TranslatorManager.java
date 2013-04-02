@@ -25,6 +25,7 @@ import js.dom.Window;
 import js.lang.Function;
 import js.net.WebSocket;
 import js.util.ArrayList;
+import js.util.jQuery.Listener;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
@@ -58,6 +59,8 @@ class TranslatorManager {
         builtIn(Window.class);
         builtIn(Location.class);
         builtIn(Comparator.class);
+        builtIn(Runnable.class);
+        builtIn(Listener.class);
     }
 
     /**

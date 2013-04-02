@@ -1193,7 +1193,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
     /**
      * @version 2012/12/02 23:08:01
      */
-    public static interface Listener extends JavascriptNative {
+    public static interface Listener {
 
         /**
          * <p>
@@ -1204,6 +1204,54 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
          * @return
          */
         void handler(Event event);
+    }
+
+    /**
+     * @version 2013/04/02 19:04:44
+     */
+    public static class DebounceListener implements Listener, Runnable {
+
+        /** The delay time. */
+        private final int delay;
+
+        /** The delegator. */
+        private final Listener listener;
+
+        /** The lastest event. */
+        private Event event;
+
+        /** The time out id. */
+        private long id = -1;
+
+        /**
+         * @param listener
+         */
+        public DebounceListener(int delay, Listener listener) {
+            this.delay = delay;
+            this.listener = listener;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handler(Event event) {
+            if (id != -1) {
+                clearTimeout(id);
+            }
+            this.event = event;
+            this.id = setTimeout(this, delay);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void run() {
+            id = -1;
+            listener.handler(event);
+            event = null;
+        }
     }
 
     /**

@@ -15,7 +15,6 @@ import js.dom.History;
 import js.dom.Location;
 import js.dom.Window;
 import js.net.WebSocket;
-import js.util.Raphael;
 import js.util.jQuery;
 
 import org.w3c.dom.DocumentFragment;
@@ -100,16 +99,6 @@ public class Global {
 
     /**
      * <p>
-     * Establish connection to the specified uri.
-     * </p>
-     * 
-     * @param uri
-     * @param connection
-     */
-    public static native void connect(String uri, WebSocket connection);
-
-    /**
-     * <p>
      * Provide JQuery support.
      * </p>
      * 
@@ -120,15 +109,33 @@ public class Global {
 
     /**
      * <p>
-     * Provide Raphael support.
+     * Establish connection to the specified uri.
      * </p>
      * 
-     * @param parent
-     * @param width
-     * @param height
-     * @return
+     * @param uri
+     * @param connection
      */
-    public static native Raphael $(Element parent, int width, int height);
+    public static native void connect(String uri, WebSocket connection);
+
+    /**
+     * <p>
+     * Calls a function or executes a code snippet after specified delay.
+     * </p>
+     * 
+     * @param function A callable function.
+     * @param delay A delay time.
+     * @return A timeout id.
+     */
+    public static native long setTimeout(Runnable runnable, int delay);
+
+    /**
+     * <p>
+     * Clears the delay set by setTimeout().
+     * </p>
+     * 
+     * @param timeoutId The ID of the timeout you wish to clear, as returned by setTimeout().
+     */
+    public static native void clearTimeout(long timeoutId);
 
     /**
      * @version 2012/12/14 13:11:07
@@ -233,6 +240,30 @@ public class Global {
 
         public String connect(String param0, WebSocket param1) {
             return "WebSocket.connect(" + param(0) + "," + param(1) + ")";
+        }
+
+        /**
+         * <p>
+         * Calls a function or executes a code snippet after specified delay.
+         * </p>
+         * 
+         * @param function A callable function.
+         * @param delay A delay time.
+         * @return A timeout id.
+         */
+        public String setTimeout(Runnable runnable, int delay) {
+            return "setTimeout(boot.functionalize(" + param(0) + ")," + param(1) + ")";
+        }
+
+        /**
+         * <p>
+         * Clears the delay set by setTimeout().
+         * </p>
+         * 
+         * @param timeoutId The ID of the timeout you wish to clear, as returned by setTimeout().
+         */
+        public String clearTimeout(long timeoutId) {
+            return " clearTimeout(" + param(0) + ")";
         }
     }
 }
