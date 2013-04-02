@@ -104,7 +104,7 @@ public class MasteryBuilder extends Page implements Subscriber {
         menu = new Select();
         menu.model(new ModelProvider<String>() {
 
-            private String[] items = {"AAA", "BBB", "CCC"};
+            private String[] items = {"AAA", "BBB", "CCC", "DDD", "EEE", "FFF", "GGG", "HHH"};
 
             /**
              * {@inheritDoc}

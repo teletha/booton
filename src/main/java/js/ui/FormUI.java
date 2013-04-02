@@ -9,16 +9,16 @@
  */
 package js.ui;
 
-import js.dom.Element;
 import js.ui.FormUIStyle.FormComponent;
+import js.util.jQuery;
 
 /**
  * @version 2013/03/31 17:40:08
  */
-public class FormUI<T extends FormUI> extends ElementBasedUI {
+public class FormUI<T extends FormUI> extends UI {
 
     /** The actual form element. */
-    protected final Element form;
+    protected final jQuery form;
 
     /**
      * 
@@ -31,7 +31,7 @@ public class FormUI<T extends FormUI> extends ElementBasedUI {
      * 
      */
     public FormUI(String form) {
-        root.add(FormComponent.class);
+        root.addClass(FormComponent.class);
 
         this.form = root.child(form);
     }
@@ -44,7 +44,7 @@ public class FormUI<T extends FormUI> extends ElementBasedUI {
      * @return
      */
     public T disable() {
-        form.set("disabled", "");
+        form.attr("disabled", "");
 
         return (T) this;
     }
@@ -57,7 +57,7 @@ public class FormUI<T extends FormUI> extends ElementBasedUI {
      * @return
      */
     public T enable() {
-        form.remove("disabled");
+        form.removeAttr("disabled");
 
         return (T) this;
     }

@@ -17,6 +17,13 @@ import booton.css.CSSProperty;
 public class Overflow extends CSSProperty<Overflow> {
 
     /**
+     * @param name
+     */
+    public Overflow(String name) {
+        super(name);
+    }
+
+    /**
      * <p>
      * Default value. Content is not clipped, it may be rendered outside the content box.
      * </p>

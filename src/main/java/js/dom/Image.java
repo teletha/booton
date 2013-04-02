@@ -25,26 +25,28 @@ public class Image {
     private static final String XLINK = "http://www.w3.org/1999/xlink";
 
     /** The root element. */
-    private final Element svg;
+    private final jQuery svg;
 
     /** The image element. */
     private final Element image;
 
     /** The filter element. */
-    private final Element filters;
+    private final jQuery filters;
 
     /**
      * 
      */
     public Image(jQuery parent, Class<? extends CSS> className) {
-        image = document.createElementNS(SVG, "image").set("width", "100%").set("height", "100%");
-        filters = document.createElementNS(SVG, "filter");
-        filters.set("id", "filter" + hashCode());
+        image = document.createElementNS(SVG, "image");
+        image.setAttribute("width", "100%");
+        image.setAttribute("height", "100%");
+        filters = $(document.createElementNS(SVG, "filter"));
+        filters.attr("id", "filter" + hashCode());
 
-        svg = document.createElementNS(SVG, "svg");
-        svg.appendChild(filters);
-        svg.appendChild(image);
-        svg.set("class", className.toString());
+        svg = $(document.createElementNS(SVG, "svg"));
+        svg.append(filters);
+        svg.append(image);
+        svg.attr("class", className.toString());
 
         parent.append(svg);
     }
@@ -59,8 +61,10 @@ public class Image {
      * @return
      */
     public Image size(int width, int height) {
-        image.set("width", width).set("height", height);
-        svg.set("width", width).set("height", height);
+        image.setAttribute("width", width);
+        image.setAttribute("height", height);
+        svg.attr("width", width);
+        svg.attr("height", height);
 
         // Chainable API
         return this;
@@ -90,8 +94,8 @@ public class Image {
      * @return
      */
     public Image grayscale(double amount) {
-        return applyFilter(document.createElementNS(SVG, "feColorMatrix").set("type", "matrix")
-                .set("values", amount + " " + amount + " " + amount + " 0 0 " + amount + " " + amount + " " + amount + " 0 0 " + amount + " " + amount + " " + amount + " 0 0 0 0 0 1 0"));
+        return applyFilter($(document.createElementNS(SVG, "feColorMatrix")).attr("type", "matrix")
+                .attr("values", amount + " " + amount + " " + amount + " 0 0 " + amount + " " + amount + " " + amount + " 0 0 " + amount + " " + amount + " " + amount + " 0 0 0 0 0 1 0"));
     }
 
     /**
@@ -103,7 +107,8 @@ public class Image {
      * @return
      */
     public Image saturate(double amount) {
-        return applyFilter(document.createElementNS(SVG, "feColorMatrix").set("type", "saturate").set("values", amount));
+        return applyFilter($(document.createElementNS(SVG, "feColorMatrix")).attr("type", "saturate")
+                .attr("values", amount));
     }
 
     /**
@@ -114,15 +119,15 @@ public class Image {
      * @param filter
      * @return
      */
-    private Image applyFilter(Element filter) {
+    private Image applyFilter(jQuery filter) {
         // remove filter
         filters.empty();
 
         // add filter
-        filters.appendChild(filter);
+        filters.append(filter);
 
         // apply filter
-        image.set("filter", "url('#filter" + hashCode() + "')");
+        image.setAttribute("filter", "url('#filter" + hashCode() + "')");
 
         // Chainable API
         return this;
@@ -141,11 +146,11 @@ public class Image {
      */
     public Image clip(int x, int y, int width, int height) {
         // apply clip
-        image.set("x", "-" + x)
-                .set("y", "-" + y)
-                .set("width", x + width)
-                .set("height", y + height)
-                .set("preserveAspectRatio", "xMinYMin slice");
+        image.setAttribute("x", "-" + x);
+        image.setAttribute("y", "-" + y);
+        image.setAttribute("width", x + width);
+        image.setAttribute("height", y + height);
+        image.setAttribute("preserveAspectRatio", "xMinYMin slice");
 
         return this;
     }
@@ -162,7 +167,7 @@ public class Image {
         filters.empty();
 
         // unapply filter
-        image.remove("filter");
+        image.removeAttribute("filter");
 
         // Chainable API
         return this;
