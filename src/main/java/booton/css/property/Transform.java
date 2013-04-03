@@ -31,7 +31,7 @@ public class Transform extends CSSProperty<Transform> {
      */
     @Override
     protected void write(CSSWriter writer) {
-        writer.property("transform", I.join(functions, " "));
+        writer.propertyWithPrefix("transform", I.join(functions, " "));
     }
 
     /**
@@ -92,8 +92,21 @@ public class Transform extends CSSProperty<Transform> {
      * @param amount
      * @return
      */
-    public Transform translateY(double amount) {
-        functions.add("translateY(" + amount + ")");
+    public Transform translateY(double size, Unit unit) {
+        return translateY(new Value(size, unit));
+    }
+
+    /**
+     * <p>
+     * The translateY() CSS function moves vertically the element on the plane. This transformation
+     * is characterized by a <length> defining how much it moves vertically.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Transform translateY(Value value) {
+        functions.add("translateY(" + value + ")");
 
         return chain();
     }

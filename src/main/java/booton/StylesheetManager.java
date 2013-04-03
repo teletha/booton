@@ -19,6 +19,7 @@ import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
 import booton.css.CSS;
+import booton.css.Combine;
 import booton.translator.Literal;
 import booton.util.Font;
 
@@ -87,8 +88,37 @@ public class StylesheetManager implements Literal<CSS> {
      */
     @Override
     public String write(Class<? extends CSS> clazz) {
-        used.add(clazz);
+        Set<Class<? extends CSS>> styles = new LinkedHashSet();
 
-        return '"' + Obfuscator.computeCSSName(clazz) + '"';
+        collectStyle(clazz, styles);
+
+        used.addAll(styles);
+
+        StringBuilder builder = new StringBuilder();
+        for (Class<? extends CSS> style : styles) {
+            builder.append(Obfuscator.computeCSSName(style)).append(' ');
+        }
+
+        return '"' + builder.toString().trim() + '"';
+    }
+
+    /**
+     * <p>
+     * Collect combined style.
+     * </p>
+     * 
+     * @param clazz
+     * @param set
+     */
+    private void collectStyle(Class<? extends CSS> clazz, Set<Class<? extends CSS>> set) {
+        if (clazz != null && set.add(clazz)) {
+            Combine combine = clazz.getAnnotation(Combine.class);
+
+            if (combine != null) {
+                for (Class<? extends CSS> style : combine.value()) {
+                    collectStyle(style, set);
+                }
+            }
+        }
     }
 }
