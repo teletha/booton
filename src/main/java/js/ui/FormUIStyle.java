@@ -87,16 +87,20 @@ class FormUIStyle {
             border.width(BorderWidth).solid().color(BorderColor);
             box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow);
 
-            while (firstOfType()) {
+            while (firstChild()) {
                 borderLeft.radius(BorderRadius);
             }
 
-            while (lastOfType()) {
+            while (lastChild()) {
                 borderRight.radius(BorderRadius);
             }
 
-            while (onlyOfType()) {
+            while (onlyChild()) {
                 border.radius(BorderRadius);
+            }
+
+            while (hover()) {
+                box.shadowInset(0, px, 0, px, 6, px, BorderInsetShadow);
             }
 
             while (focus()) {
@@ -137,7 +141,7 @@ class FormUIStyle {
 
         {
             position.absolute().top(100, percent).left(0, px);
-            margin.top(BorderWidth.opposite());
+            transform.translateY(BorderWidth.opposite());
             box.maxHeight(SingleLineFormHeight.multiply(6)).width(100, percent).zIndex(1);
             font.size(FontSize);
             overflowY.scroll();

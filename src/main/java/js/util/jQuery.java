@@ -910,6 +910,18 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * Remove an event handler.
      * </p>
      * 
+     * @param event An object where the string keys represent one or more space-separated event
+     *            types and optional namespaces, and the values represent handler functions
+     *            previously attached for the event(s).
+     * @return
+     */
+    public native jQuery off(Event event);
+
+    /**
+     * <p>
+     * Remove an event handler.
+     * </p>
+     * 
      * @param eventType One or more space-separated event types and optional namespaces, or just
      *            namespaces, such as "click", "keydown.myPlugin", or ".myPlugin".
      * @param listener A handler function previously attached for the event(s), or the special value
@@ -930,6 +942,20 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery on(String eventType, Listener listener);
+
+    /**
+     * <p>
+     * Attach a handler to an event for the elements. The handler is executed at most once per
+     * element.
+     * </p>
+     * 
+     * @param eventType One or more space-separated event types and optional namespaces, such as
+     *            "click" or "keydown.myPlugin".
+     * @param listener A function to execute when the event is triggered. The value false is also
+     *            allowed as a shorthand for a function that simply does return false.
+     * @return
+     */
+    public native jQuery one(String eventType, Listener listener);
 
     /**
      * <p>

@@ -2641,16 +2641,7 @@ jQuery.event = {
 
 					event.handleObj = handleObj;
 					event.data = handleObj.data;
-					
-					// ==========================================================
-					// Modified Code
-					// ==========================================================
-					var listener = handleObj.handler;
-
-					handleObj.handler = function() {
-					  listener.apply(handleObj && handleObj.$0 ? handleObj : this, arguments);
-					};
-					// ==========================================================
+				
 
 					ret = ( (jQuery.event.special[ handleObj.origType ] || {}).handle || handleObj.handler )
 							.apply(matched.elem, args );
@@ -3033,13 +3024,25 @@ jQuery.fn.extend({
 		} else if ( !fn ) {
 			return this;
 		}
+		
+	  // ==========================================================
+		// Modified Code
+		// ==========================================================
+		if (fn.$0) {
+		  var listener = fn;
+		
+		  fn = function() {
+		    listener.handler.apply(listener, arguments);
+		  }
+		}
+		// ==========================================================
 
 		if ( one === 1 ) {
 			origFn = fn;
 			fn = function( event ) {
 				// Can use an empty set, since event contains the info
 				jQuery().off( event );
-				return origFn.apply( this, arguments );
+				return (origFn.$ ? origFn.handler.bind(origFn) : origFn).apply( this, arguments );
 			};
 			// Use same guid so caller can remove using origFn
 			fn.guid = origFn.guid || ( origFn.guid = jQuery.guid++ );
@@ -3056,6 +3059,7 @@ jQuery.fn.extend({
 		if ( types && types.preventDefault && types.handleObj ) {
 			// ( event )  dispatched jQuery.Event
 			handleObj = types.handleObj;
+
 			jQuery( types.delegateTarget ).off(
 				handleObj.namespace ? handleObj.origType + "." + handleObj.namespace : handleObj.origType,
 				handleObj.selector,

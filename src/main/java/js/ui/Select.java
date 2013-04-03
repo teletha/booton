@@ -40,7 +40,11 @@ public class Select extends FormUI<Select> {
 
             @Override
             public void handler(Event event) {
-                getList().root.slideToggle(200);
+                getList();
+
+                open();
+
+                event.stopPropagation();
             }
         });
 
@@ -52,7 +56,6 @@ public class Select extends FormUI<Select> {
 
     private ScrollableList getList() {
         if (items == null) {
-            System.out.println(form.outerHeight() + "  " + form.innerHeight() + "  " + form.height() + "  " + form.outerHeight(true));
             items = new ScrollableList(10, form.outerHeight()).provide(new ItemProvider<String>() {
 
                 /**
@@ -86,13 +89,25 @@ public class Select extends FormUI<Select> {
                 public void handler(Event event) {
                     jQuery element = $(event.target);
                     form.val(element.text());
-
-                    items.root.slideToggle(200);
                 }
             });
             root.append(items);
         }
         return items;
+    }
+
+    private void open() {
+        items.root.slideToggle(200);
+
+        $(window).one("click", new Listener() {
+
+            @Override
+            public void handler(Event event) {
+                System.out.println(event);
+                items.root.slideToggle(100);
+
+            }
+        });
     }
 
     /**
