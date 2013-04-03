@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import booton.css.CSS;
 import booton.translator.JavascriptNative;
 
 /**
- * @version 2012/12/10 13:23:39
+ * @version 2013/04/03 9:26:06
  */
 public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
@@ -669,6 +669,15 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Hide the matched elements.
+     * </p>
+     * 
+     * @return
+     */
+    public native jQuery hide();
+
+    /**
+     * <p>
      * Get the current computed height for the first element in the set of matched elements.
      * </p>
      * <p>
@@ -684,12 +693,37 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
-     * Hide the matched elements.
+     * Get the current computed height for the first element in the set of matched elements,
+     * including padding but not border.
      * </p>
      * 
      * @return
      */
-    public native jQuery hide();
+    public native int innerHeight();
+
+    /**
+     * <p>
+     * Get the current computed height for the first element in the set of matched elements,
+     * including padding, border, and optionally margin. Returns an integer (without "px")
+     * representation of the value or null if called on an empty set of elements.
+     * </p>
+     * 
+     * @return
+     */
+    public native int outerHeight();
+
+    /**
+     * <p>
+     * Get the current computed height for the first element in the set of matched elements,
+     * including padding, border, and optionally margin. Returns an integer (without "px")
+     * representation of the value or null if called on an empty set of elements.
+     * </p>
+     * 
+     * @param includeMargin A Boolean indicating whether to include the element's margin in the
+     *            calculation.
+     * @return
+     */
+    public native int outerHeight(boolean includeMargin);
 
     /**
      * <p>
@@ -1228,6 +1262,38 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native int width();
+
+    /**
+     * <p>
+     * Get the current computed width for the first element in the set of matched elements,
+     * including padding but not border.
+     * </p>
+     * 
+     * @return
+     */
+    public native int innerWidth();
+
+    /**
+     * <p>
+     * Get the current computed width for the first element in the set of matched elements,
+     * including padding and border.
+     * </p>
+     * 
+     * @return
+     */
+    public native int outerWidth();
+
+    /**
+     * <p>
+     * Get the current computed width for the first element in the set of matched elements,
+     * including padding and border.
+     * </p>
+     * 
+     * @param includeMargin A Boolean indicating whether to include the element's margin in the
+     *            calculation.
+     * @return
+     */
+    public native int outerWidth(boolean includeMargin);
 
     /**
      * @version 2012/12/02 23:08:01
