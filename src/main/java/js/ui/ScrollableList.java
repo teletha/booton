@@ -26,6 +26,9 @@ import js.util.jQuery.Listener;
  */
 public class ScrollableList extends UI {
 
+    /** The item height. */
+    private final int itemHeight;
+
     /** The viewable item size. */
     private final int viewableItemSize;
 
@@ -38,6 +41,9 @@ public class ScrollableList extends UI {
     /** The spacer. */
     private final jQuery spacer;
 
+    /** The item list. */
+    private final List<jQuery> items = new ArrayList();
+
     /** The extra renderable item size for top direction. */
     private int extraTopRenderableItemSize;
 
@@ -47,20 +53,21 @@ public class ScrollableList extends UI {
     /** The all renderable item size. */
     private int renderableItemSize;
 
-    /** The item height. */
-    private int itemHeight = 20;
-
-    /** The item list. */
-    private List<jQuery> items = new ArrayList();
-
     /** The item provider. */
     private ItemProvider provider;
 
     /**
+     * <p>
+     * Constructor for {@link ScrollableList}.
+     * </p>
      * 
+     * @param viewableItemSize
+     * @param itemHeight
      */
-    public ScrollableList(int size, int height) {
-        this.viewableItemSize = size;
+    public ScrollableList(int viewableItemSize, int itemHeight) {
+        this.itemHeight = itemHeight;
+        this.viewableItemSize = viewableItemSize;
+
         this.viewableItemView = root.addClass(ViewabletemView.class).scroll(new DebounceListener(100, new Renderer()));
         this.renderableItemView = viewableItemView.child(RenderableItemView.class);
         this.spacer = renderableItemView.child(Spacer.class);

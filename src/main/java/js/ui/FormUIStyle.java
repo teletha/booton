@@ -87,12 +87,16 @@ class FormUIStyle {
             border.width(BorderWidth).solid().color(BorderColor);
             box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow);
 
-            while (firstChild()) {
+            while (firstOfType()) {
                 borderLeft.radius(BorderRadius);
             }
 
-            while (lastChild()) {
+            while (lastOfType()) {
                 borderRight.radius(BorderRadius);
+            }
+
+            while (onlyOfType()) {
+                border.radius(BorderRadius);
             }
 
             while (focus()) {
@@ -100,6 +104,13 @@ class FormUIStyle {
                 box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow)
                         .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
             }
+        }
+    }
+
+    class InputForm extends BaseForm {
+
+        {
+            writeBorder();
         }
     }
 

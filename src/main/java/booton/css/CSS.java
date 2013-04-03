@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ import booton.css.property.Visibility;
 import booton.util.Strings;
 
 /**
- * @version 2012/12/25 13:15:28
+ * @version 2013/04/03 16:58:44
  */
 @Manageable(lifestyle = Singleton.class)
 public abstract class CSS implements Extensible {
@@ -510,6 +510,18 @@ public abstract class CSS implements Extensible {
 
     /**
      * <p>
+     * The :first-of-type CSS pseudo-class represents the first sibling of its type in the list of
+     * children of its parent element.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean firstOfType() {
+        return rule(rules.selector + ":first-of-type");
+    }
+
+    /**
+     * <p>
      * The :last-child CSS pseudo-class represents any element that is the last child element of its
      * parent.
      * </p>
@@ -518,6 +530,98 @@ public abstract class CSS implements Extensible {
      */
     protected final boolean lastChild() {
         return rule(rules.selector + ":last-child");
+    }
+
+    /**
+     * <p>
+     * The :last-of-type CSS pseudo-class represents the last sibling of its type in the list of
+     * children of its parent element.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean lastOfType() {
+        return rule(rules.selector + ":last-of-type");
+    }
+
+    /**
+     * <p>
+     * The :only-child CSS pseudo-class represents any element which is the only child of its
+     * parent. This is the same as :first-child:last-child or :nth-child(1):nth-last-child(1), but
+     * with a lower specificity.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean onlyChild() {
+        return rule(rules.selector + ":only-child");
+    }
+
+    /**
+     * <p>
+     * The :only-of-type CSS pseudo-class represents any element that has no siblings of the given
+     * type.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean onlyOfType() {
+        return rule(rules.selector + ":only-of-type");
+    }
+
+    /**
+     * <p>
+     * The :nth-child CSS pseudo-class matches an element that has an+b-1 siblings before it in the
+     * document tree, for a given positive or zero value for n, and has a parent element.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean nthChild(String pattern) {
+        return rule(rules.selector + ":nth-child");
+    }
+
+    /**
+     * <p>
+     * The :nth-last-child CSS pseudo-class matches an element that has an+b-1 siblings after it in
+     * the document tree, for a given positive or zero value for n, and has a parent element. See
+     * :nth-child for a more thorough description of the syntax of its argument.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean nthLastChild(String pattern) {
+        return rule(rules.selector + ":nth-child");
+    }
+
+    /**
+     * <p>
+     * The :nth-of-type CSS pseudo-class matches an element that has an+b-1 siblings with the same
+     * element name before it in the document tree, for a given positive or zero value for n, and
+     * has a parent element. See :nth-child for a more thorough description of the syntax of its
+     * argument. This is a more flexible and useful pseudo selector if you want to ensure you're
+     * selecting the same type of tag no matter where it is inside the parent element, or what other
+     * different tags appear before it.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean nthOfType(String pattern) {
+        return rule(rules.selector + ":nth-of-type");
+    }
+
+    /**
+     * <p>
+     * The :nth-last-of-type CSS pseudo-class matches an element that has an+b-1 siblings with the
+     * same element name after it in the document tree, for a given positive or zero value for n,
+     * and has a parent element. See :nth-child for a more thorough description of the syntax of its
+     * argument.
+     * </p>
+     * 
+     * @return
+     */
+    protected final boolean nthLastOfType(String pattern) {
+        return rule(rules.selector + ":nth-last-of-type");
     }
 
     /**

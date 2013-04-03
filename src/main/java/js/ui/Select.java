@@ -40,52 +40,59 @@ public class Select extends FormUI<Select> {
 
             @Override
             public void handler(Event event) {
-                items.root.slideToggle(200);
+                getList().root.slideToggle(200);
             }
         });
 
-        items = new ScrollableList(16, form.height()).provide(new ItemProvider<String>() {
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public int countItem() {
-                return 200;
-            }
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public String item(int index) {
-                return String.valueOf(index);
-            }
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void render(int index, jQuery element, String model) {
-                element.addClass(SelectItem.class).attr("index", index).text(model);
-            }
-        });
-        items.root.addClass(SelectItemList.class).click(new Listener() {
-
-            @Override
-            public void handler(Event event) {
-                jQuery element = $(event.target);
-                form.val(element.text());
-
-                items.root.slideToggle(200);
-            }
-        });
-
-        root.append(items);
     }
 
     public void model(ModelProvider provider) {
         this.provider = provider;
+    }
+
+    private ScrollableList getList() {
+        if (items == null) {
+            System.out.println(form.outerHeight() + "  " + form.innerHeight() + "  " + form.height() + "  " + form.outerHeight(true));
+            items = new ScrollableList(10, form.outerHeight()).provide(new ItemProvider<String>() {
+
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                public int countItem() {
+                    return 200;
+                }
+
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                public String item(int index) {
+                    return String.valueOf(index);
+                }
+
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                public void render(int index, jQuery element, String model) {
+                    element.addClass(SelectItem.class).attr("index", index).text(model);
+                }
+            });
+
+            items.root.addClass(SelectItemList.class).click(new Listener() {
+
+                @Override
+                public void handler(Event event) {
+                    jQuery element = $(event.target);
+                    form.val(element.text());
+
+                    items.root.slideToggle(200);
+                }
+            });
+            root.append(items);
+        }
+        return items;
     }
 
     /**
