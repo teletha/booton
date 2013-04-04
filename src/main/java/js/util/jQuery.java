@@ -932,6 +932,21 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Remove an event handler.
+     * </p>
+     * 
+     * @param eventType One or more space-separated event types and optional namespaces, or just
+     *            namespaces, such as "click", "keydown.myPlugin", or ".myPlugin".
+     * @param selector A selector which should match the one originally passed to .on() when
+     *            attaching event handlers.
+     * @param listener A handler function previously attached for the event(s), or the special value
+     *            false.
+     * @return
+     */
+    public native jQuery off(String eventType, String selector, Listener listener);
+
+    /**
+     * <p>
      * Attach an event handler function for one or more events to the selected elements.
      * </p>
      * 
