@@ -7,36 +7,42 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.ui;
+package js.ui.view;
 
 import booton.css.CSS;
 
 /**
  * @version 2013/04/04 16:18:54
  */
-class PopupPanelStyle {
+class SlidableViewStyle {
 
-    class PopupView extends CSS {
+    class ViewableArea extends CSS {
 
         {
-            display.inlineBlock();
-            box.width(100, percent);
             overflow.hidden();
+            visibility.hidden();
+            box.width(100, percent).zIndex(1);
+            position.absolute().top(100, percent).left(0, px);
         }
     }
 
-    class SliderView extends CSS {
+    class Slider extends CSS {
 
         {
+            display.block();
             transform.translateY(-100, percent);
             transition.property.all().timing.easeInOut().duration(200, ms);
+
+            while (insideOf(Shown.class)) {
+                transform.translateY(-1, px);
+            }
         }
     }
 
-    class SliderShown extends CSS {
+    class Shown extends CSS {
 
         {
-            transform.translateY(0, px);
+            visibility.visible();
         }
     }
 }

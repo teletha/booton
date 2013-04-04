@@ -140,12 +140,13 @@ class FormUIStyle {
     class SelectItemList extends CSS {
 
         {
-            position.absolute().top(100, percent).left(0, px);
-            transform.translateY(BorderWidth.opposite());
-            box.maxHeight(SingleLineFormHeight.multiply(6)).width(100, percent).zIndex(1);
-            font.size(FontSize);
-            overflowY.scroll();
-            display.none();
+            // position.absolute().top(100, percent).left(0, px);
+            // transform.translateY(BorderWidth.opposite());
+            // box.maxHeight(SingleLineFormHeight.multiply(6)).width(100, percent).zIndex(1);
+            // font.size(FontSize);
+            // overflowY.scroll();
+            // // display.none();
+            box.width(100, percent).maxHeight(SingleLineFormHeight.multiply(6));
 
             background.color(Color.White);
             border.solid().width(BorderWidth).color(BorderColor);

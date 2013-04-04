@@ -7,14 +7,14 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.ui;
+package js.ui.view;
 
 import booton.css.CSS;
 
 /**
  * @version 2013/04/02 15:57:15
  */
-class ScrollableListStyle {
+class ScrollableListViewStyle {
 
     class ViewabletemView extends CSS {
 
