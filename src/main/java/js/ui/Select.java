@@ -14,7 +14,9 @@ import js.ui.FormUIStyle.SelectArrow;
 import js.ui.FormUIStyle.SelectForm;
 import js.ui.FormUIStyle.SelectItem;
 import js.ui.FormUIStyle.SelectItemList;
-import js.ui.ScrollableList.ItemProvider;
+import js.ui.view.ScrollableListView;
+import js.ui.view.SlidableView;
+import js.ui.view.ScrollableListView.ItemProvider;
 import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
@@ -36,8 +38,8 @@ public class Select extends FormUI<Select> {
     public Select() {
         form.addClass(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
         jQuery arrow = root.child(SelectArrow.class);
-
-        ScrollableList list = new ScrollableList(10, form.height()).provide(new ItemProvider<String>() {
+        System.out.println(form.height());
+        ScrollableListView list = new ScrollableListView(10, 28).provide(new ItemProvider<String>() {
 
             /**
              * {@inheritDoc}
@@ -73,8 +75,8 @@ public class Select extends FormUI<Select> {
             }
         });
 
-        PopupPanel popup = new PopupPanel(list);
-        popup.registerAsOpener(arrow);
+        SlidableView popup = new SlidableView(list);
+        popup.register(arrow);
 
         root.append(popup);
 

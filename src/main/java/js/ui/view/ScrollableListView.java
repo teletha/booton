@@ -7,14 +7,15 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.ui;
+package js.ui.view;
 
 import java.util.List;
 
-import js.ui.ScrollableListStyle.ItemColumnView;
-import js.ui.ScrollableListStyle.RenderableItemView;
-import js.ui.ScrollableListStyle.Spacer;
-import js.ui.ScrollableListStyle.ViewabletemView;
+import js.ui.UI;
+import js.ui.view.ScrollableListViewStyle.ItemColumnView;
+import js.ui.view.ScrollableListViewStyle.RenderableItemView;
+import js.ui.view.ScrollableListViewStyle.Spacer;
+import js.ui.view.ScrollableListViewStyle.ViewabletemView;
 import js.util.ArrayList;
 import js.util.jQuery;
 import js.util.jQuery.DebounceListener;
@@ -24,7 +25,7 @@ import js.util.jQuery.Listener;
 /**
  * @version 2013/04/02 15:52:54
  */
-public class ScrollableList extends UI {
+public class ScrollableListView extends UI {
 
     /** The item height. */
     private final int itemHeight;
@@ -58,13 +59,13 @@ public class ScrollableList extends UI {
 
     /**
      * <p>
-     * Constructor for {@link ScrollableList}.
+     * Constructor for {@link ScrollableListView}.
      * </p>
      * 
      * @param viewableItemSize
      * @param itemHeight
      */
-    public ScrollableList(int viewableItemSize, int itemHeight) {
+    public ScrollableListView(int viewableItemSize, int itemHeight) {
         this.itemHeight = itemHeight;
         this.viewableItemSize = viewableItemSize;
 
@@ -81,7 +82,7 @@ public class ScrollableList extends UI {
      * @param provider
      * @return
      */
-    public ScrollableList provide(ItemProvider provider) {
+    public ScrollableListView provide(ItemProvider provider) {
         this.provider = provider;
 
         // Configure viewable and renderable item size.
