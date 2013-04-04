@@ -26,7 +26,7 @@ public class Select extends FormUI<Select> {
 
     private ModelProvider provider;
 
-    private ScrollableList items;
+    // private PopupPanel popup = new PopupPanel();
 
     /**
      * <p>
@@ -35,79 +35,53 @@ public class Select extends FormUI<Select> {
      */
     public Select() {
         form.addClass(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
+        jQuery arrow = root.child(SelectArrow.class);
 
-        root.child(SelectArrow.class).click(new Listener() {
+        ScrollableList list = new ScrollableList(10, form.height()).provide(new ItemProvider<String>() {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public int countItem() {
+                return 200;
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public String item(int index) {
+                return String.valueOf(index);
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void render(int index, jQuery element, String model) {
+                element.addClass(SelectItem.class).attr("index", index).text(model);
+            }
+        });
+
+        list.root.addClass(SelectItemList.class).click(new Listener() {
 
             @Override
             public void handler(Event event) {
-                getList();
-
-                open();
-
-                event.stopPropagation();
+                jQuery element = $(event.target);
+                form.val(element.text());
             }
         });
+
+        PopupPanel popup = new PopupPanel(list);
+        popup.registerAsOpener(arrow);
+
+        root.append(popup);
 
     }
 
     public void model(ModelProvider provider) {
         this.provider = provider;
-    }
-
-    private ScrollableList getList() {
-        if (items == null) {
-            items = new ScrollableList(10, form.outerHeight()).provide(new ItemProvider<String>() {
-
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public int countItem() {
-                    return 200;
-                }
-
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public String item(int index) {
-                    return String.valueOf(index);
-                }
-
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public void render(int index, jQuery element, String model) {
-                    element.addClass(SelectItem.class).attr("index", index).text(model);
-                }
-            });
-
-            items.root.addClass(SelectItemList.class).click(new Listener() {
-
-                @Override
-                public void handler(Event event) {
-                    jQuery element = $(event.target);
-                    form.val(element.text());
-                }
-            });
-            root.append(items);
-        }
-        return items;
-    }
-
-    private void open() {
-        items.root.slideToggle(200);
-
-        $(window).one("click", new Listener() {
-
-            @Override
-            public void handler(Event event) {
-                System.out.println(event);
-                items.root.slideToggle(100);
-
-            }
-        });
     }
 
     /**

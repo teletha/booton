@@ -3025,14 +3025,15 @@ jQuery.fn.extend({
 			return this;
 		}
 		
-	  // ==========================================================
+    // ==========================================================
 		// Modified Code
 		// ==========================================================
 		if (fn.$0) {
-		  var listener = fn;
+		  var context = fn;
+		  var listener = context.handler;
 		
-		  fn = function() {
-		    listener.handler.apply(listener, arguments);
+		  fn.handler = function() {
+		    listener.apply(context, arguments);
 		  }
 		}
 		// ==========================================================
@@ -3055,6 +3056,15 @@ jQuery.fn.extend({
 		return this.on( types, selector, data, fn, 1 );
 	},
 	off: function( types, selector, fn ) {
+    // ==========================================================
+		// Modified Code
+		// ==========================================================
+		if (selector && selector.$0) {
+		  fn = selector.handler;
+		  selector = undefined;
+		}
+		// ==========================================================
+	
 		var handleObj, type;
 		if ( types && types.preventDefault && types.handleObj ) {
 			// ( event )  dispatched jQuery.Event

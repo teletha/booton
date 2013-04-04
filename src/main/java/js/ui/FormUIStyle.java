@@ -62,7 +62,7 @@ class FormUIStyle {
 
         {
             // Required property for single line form.
-            box.minHeight(SingleLineFormHeight);
+            box.height(SingleLineFormHeight.add(FormVerticalPadding.multiply(2)));
 
             // Required property for single line form.
             text.verticalAlign.middle();
