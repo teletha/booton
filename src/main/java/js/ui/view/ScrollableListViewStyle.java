@@ -12,7 +12,7 @@ package js.ui.view;
 import booton.css.CSS;
 
 /**
- * @version 2013/04/02 15:57:15
+ * @version 2013/04/05 11:40:35
  */
 class ScrollableListViewStyle {
 
@@ -22,7 +22,6 @@ class ScrollableListViewStyle {
             display.block();
             position.relative();
             overflowY.auto();
-            overflowX.hidden();
         }
     }
 

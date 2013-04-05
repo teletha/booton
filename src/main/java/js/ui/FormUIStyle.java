@@ -165,7 +165,7 @@ class FormUIStyle {
         {
             display.block();
             padding.vertical(FormVerticalPadding).horizontal(FormHorizontalPadding);
-            // text.overflow.ellipsis();
+            text.overflow.ellipsis();
             cursor.pointer();
 
             while (hover()) {
