@@ -10,14 +10,12 @@
 package js.ui;
 
 import static js.lang.Global.*;
-
-import java.util.List;
-
 import js.ui.FormUIStyle.SelectArrow;
 import js.ui.FormUIStyle.SelectForm;
 import js.ui.FormUIStyle.SelectItem;
 import js.ui.FormUIStyle.SelectItemList;
-import js.ui.model.SelectableModel;
+import js.ui.model.Selectable;
+import js.ui.model.SelectableListener;
 import js.ui.view.ScrollableListView;
 import js.ui.view.ScrollableListView.ItemProvider;
 import js.ui.view.SlidableView;
@@ -30,24 +28,28 @@ import js.util.jQuery.Listener;
  */
 public class Select<M> extends FormUI<Select> {
 
-    /** The item list. */
-    private final Items items = new Items();
-
     /** The associated model. */
-    private final SelectableModel<M> model = new SelectableModel();
+    public final Selectable<M> model;
+
+    /** The associated view. */
+    private final ScrollableListView view;
+
+    /** The view-model binder. */
+    private final Binder binder = new Binder();
 
     /**
      * <p>
      * Create input form.
      * </p>
      */
-    public Select() {
-        form.addClass(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
-        jQuery arrow = root.child(SelectArrow.class);
+    public Select(Selectable<M> model) {
+        this.model = model;
+        this.model.listen(binder);
 
-        ScrollableListView list = new ScrollableListView(10, 28).provide(items);
-        list.root.addClass(SelectItemList.class);
-        list.root.click(new Listener() {
+        form.addClass(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
+
+        view = new ScrollableListView(10, 28).provide(binder);
+        view.root.addClass(SelectItemList.class).click(new Listener() {
 
             @Override
             public void handler(Event event) {
@@ -55,69 +57,66 @@ public class Select<M> extends FormUI<Select> {
             }
         });
 
-        SlidableView slide = new SlidableView(list);
-        slide.register(arrow);
-
-        root.append(slide);
+        root.append(new SlidableView(view, root.child(SelectArrow.class)));
     }
 
     /**
-     * <p>
-     * Set item models to select.
-     * </p>
-     * 
-     * @param items
-     * @return A chainable API.
+     * @version 2013/04/05 10:06:20
      */
-    public Select<M> model(M... items) {
-        model.clear();
-
-        for (M item : items) {
-            model.add(item);
-        }
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
-     * Return the current items.
-     * </p>
-     * 
-     * @return
-     */
-    public List<M> model() {
-        return model;
-    }
-
-    /**
-     * @version 2013/04/04 20:05:56
-     */
-    private static class Items implements ItemProvider<String> {
+    private class Binder implements ItemProvider<M>, SelectableListener<M> {
 
         /**
          * {@inheritDoc}
          */
         @Override
         public int countItem() {
-            return 200;
+            return model.size();
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public String item(int index) {
-            return String.valueOf(index);
+        public M item(int index) {
+            return model.get(index);
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public void render(int index, jQuery element, String model) {
+        public void render(int index, jQuery element, M model) {
             element.addClass(SelectItem.class).attr("index", index).text(model);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void select(int index, M item) {
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void deselect(int index, M item) {
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void add(int index, M item) {
+            view.provide(this);
+            view.render(index);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void remove(M item, int index) {
         }
     }
 }
