@@ -109,6 +109,7 @@ public class Select<M> extends FormUI<Select> {
         @Override
         public void add(int index, M item) {
             view.provide(this);
+
             view.render(index);
         }
 
