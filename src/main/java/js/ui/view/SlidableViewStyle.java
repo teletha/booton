@@ -19,7 +19,7 @@ class SlidableViewStyle {
     class ViewableArea extends CSS {
 
         {
-            overflow.hidden();
+            overflowY.hidden();
             visibility.hidden();
             box.width(100, percent).zIndex(1);
             position.absolute().top(100, percent).left(0, px);

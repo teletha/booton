@@ -114,7 +114,7 @@ public class ScrollableListView extends UI {
         viewableItemView.css("max-height", viewableItemSize * itemHeight + "px");
 
         // Trigger scroll event to force item rendering.
-        // s viewableItemView.scroll();
+        // viewableItemView.scroll();
 
         // API definition
         return this;
