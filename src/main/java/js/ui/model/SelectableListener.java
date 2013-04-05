@@ -45,9 +45,8 @@ public interface SelectableListener<T> {
      * <p>
      * Notiify item deselection event.
      * </p>
-     * 
-     * @param item
      * @param index TODO
+     * @param item
      */
-    public void remove(T item, int index);
+    public void remove(int index, T item);
 }

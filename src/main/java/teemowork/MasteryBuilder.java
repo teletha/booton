@@ -17,6 +17,7 @@ import js.bind.Subscriber;
 import js.dom.Image;
 import js.ui.Select;
 import js.ui.model.Selectable;
+import js.ui.model.SelectableListener;
 import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
@@ -107,19 +108,23 @@ public class MasteryBuilder extends Page implements Subscriber {
     public void load(jQuery root) {
         jQuery infomation = root.child(Information.class);
         menu = infomation.child(new Select(set));
-        menu.model.add(masterySet);
+        menu.model.listen(new MasterySelector());
 
         reset = infomation.child(ResetButton.class).click(new Listener() {
 
             @Override
             public void handler(Event event) {
                 masterySet.reset();
-                menu.model.add(new MasterySet("02t4w002005m9s001ls"));
-                menu.model.add(new MasterySet("09tz400200b8jk001ls"));
             }
         });
 
-        add = infomation.child(ResetButton.class).text("ADD");
+        add = infomation.child(ResetButton.class).text("ADD").click(new Listener() {
+
+            @Override
+            public void handler(Event event) {
+                menu.model.add(new MasterySet(masterySet.getCode()));
+            }
+        });
 
         offense = build(root.child(Offense.class), OFFENSE);
         defense = build(root.child(Defense.class), DEFEMSE);
@@ -173,6 +178,41 @@ public class MasteryBuilder extends Page implements Subscriber {
     @Override
     protected String getPageId() {
         return "Mastery/" + masterySet.toString();
+    }
+
+    /**
+     * @version 2013/04/05 15:32:50
+     */
+    private class MasterySelector implements SelectableListener<MasterySet> {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void select(int index, MasterySet item) {
+            masterySet.setCode(item.getCode());
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void deselect(int index, MasterySet item) {
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void add(int index, MasterySet item) {
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void remove(int index, MasterySet item) {
+        }
     }
 
     /**
