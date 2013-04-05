@@ -58,7 +58,7 @@ public class ScrollableListView extends UI {
     private int lastRenderedTopIndex;
 
     /** The item provider. */
-    private ItemProvider provider = new EmptyItemProvider();
+    private ItemRenderer renderer = new EmptyItemRenderer();
 
     /**
      * <p>
@@ -72,7 +72,8 @@ public class ScrollableListView extends UI {
         this.itemHeight = itemHeight;
         this.viewableItemSize = viewableItemSize;
 
-        this.viewableItemView = root.addClass(ViewabletemView.class).scroll(new DebounceListener(100, new Renderer()));
+        this.viewableItemView = root.addClass(ViewabletemView.class)
+                .scroll(new DebounceListener(100, new ScrollAware()));
         this.renderableItemView = viewableItemView.child(RenderableItemView.class);
         this.spacer = renderableItemView.child(Spacer.class);
     }
@@ -85,8 +86,8 @@ public class ScrollableListView extends UI {
      * @param provider
      * @return
      */
-    public ScrollableListView provide(ItemProvider provider) {
-        this.provider = provider;
+    public ScrollableListView provide(ItemRenderer provider) {
+        this.renderer = provider;
 
         // Configure viewable and renderable item size.
         int size = provider.countItem();
@@ -129,14 +130,14 @@ public class ScrollableListView extends UI {
      */
     public void render(int index) {
         if (lastRenderedTopIndex <= index && index < lastRenderedTopIndex + renderableItemSize) {
-            provider.render(index, items.get(index - lastRenderedTopIndex), provider.item(index));
+            renderer.renderItem(index, items.get(index - lastRenderedTopIndex));
         }
     }
 
     /**
      * @version 2013/04/02 23:50:57
      */
-    private class Renderer implements Listener {
+    private class ScrollAware implements Listener {
 
         /**
          * {@inheritDoc}
@@ -147,8 +148,8 @@ public class ScrollableListView extends UI {
             int renderableTopIndex = Math.max(0, viewableTopIndex - extraTopRenderableItemSize);
 
             // 既に最後の要素まで到達可能な範囲にいたら末尾から数えるようにする。
-            if (provider.countItem() <= viewableTopIndex + viewableItemSize + extraBottomRenderableItemSize) {
-                renderableTopIndex = provider.countItem() - renderableItemSize;
+            if (renderer.countItem() <= viewableTopIndex + viewableItemSize + extraBottomRenderableItemSize) {
+                renderableTopIndex = renderer.countItem() - renderableItemSize;
             }
 
             // 以前と同じインデックスから始まるようなら再レンダリングする必要はない
@@ -168,7 +169,7 @@ public class ScrollableListView extends UI {
     /**
      * @version 2013/04/02 15:57:52
      */
-    public static interface ItemProvider<M> {
+    public static interface ItemRenderer {
 
         /**
          * <p>
@@ -181,30 +182,19 @@ public class ScrollableListView extends UI {
 
         /**
          * <p>
-         * Retrieve item by the specified index.
+         * Render the item model to the given element.
          * </p>
          * 
-         * @param index A index to search.
-         * @return A item in the specified index.
-         */
-        M item(int index);
-
-        /**
-         * <p>
-         * Render the model to the given element.
-         * </p>
-         * 
-         * @param index A current index.
+         * @param index A index of item.
          * @param element A element to render.
-         * @param model A rendering item.
          */
-        void render(int index, jQuery element, M model);
+        void renderItem(int index, jQuery element);
     }
 
     /**
      * @version 2013/04/02 16:04:20
      */
-    private static class EmptyItemProvider implements ItemProvider {
+    private static class EmptyItemRenderer implements ItemRenderer {
 
         /**
          * {@inheritDoc}
@@ -218,15 +208,7 @@ public class ScrollableListView extends UI {
          * {@inheritDoc}
          */
         @Override
-        public Object item(int index) {
-            return null;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void render(int index, jQuery element, Object model) {
+        public void renderItem(int index, jQuery element) {
         }
     }
 }

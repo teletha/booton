@@ -58,12 +58,7 @@ public class MasterySet extends Publisher {
      * @param serialized A serialized text expression.
      */
     public MasterySet(String serialized) {
-        if (serialized != null && serialized.length() == 19) {
-            decode(1, 1, serialized.substring(0, 5));
-            decode(2, 2, serialized.substring(5, 8));
-            decode(3, 2, serialized.substring(8, 14));
-            decode(4, 3, serialized.substring(14, 19));
-        }
+        setCode(serialized);
     }
 
     /**
@@ -72,7 +67,7 @@ public class MasterySet extends Publisher {
      * @return The name property.
      */
     public String getName() {
-        return name;
+        return name.length() == 0 ? getCode() : name;
     }
 
     /**
@@ -430,7 +425,55 @@ public class MasterySet extends Publisher {
      * {@inheritDoc}
      */
     @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof MasterySet) {
+            MasterySet other = (MasterySet) obj;
+
+            return name.equals(other.name);
+        }
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String toString() {
+        return getName() + " (" + getSum(Mastery.Offense) + " - " + getSum(Mastery.Defense) + " - " + getSum(Mastery.Utility) + ")";
+    }
+
+    /**
+     * @return
+     */
+    public String getCode() {
         return encode(1, 1, 5) + encode(2, 2, 3) + encode(3, 2, 6) + encode(4, 3, 5);
+    }
+
+    /**
+     * <p>
+     * Set code.
+     * </p>
+     * 
+     * @param serialized
+     */
+    public void setCode(String serialized) {
+        if (serialized != null && serialized.length() == 19) {
+            reset();
+
+            decode(1, 1, serialized.substring(0, 5));
+            decode(2, 2, serialized.substring(5, 8));
+            decode(3, 2, serialized.substring(8, 14));
+            decode(4, 3, serialized.substring(14, 19));
+
+            publish();
+        }
     }
 }

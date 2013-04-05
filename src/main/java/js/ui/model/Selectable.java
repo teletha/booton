@@ -234,7 +234,7 @@ public class Selectable<T> implements Iterable<T> {
 
             // At first, notify item removing.
             for (SelectableListener listener : listeners) {
-                listener.remove(removed, index);
+                listener.remove(index, removed);
             }
 
             // Then notify selection changing.

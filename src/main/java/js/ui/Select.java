@@ -17,7 +17,7 @@ import js.ui.FormUIStyle.SelectItemList;
 import js.ui.model.Selectable;
 import js.ui.model.SelectableListener;
 import js.ui.view.ScrollableListView;
-import js.ui.view.ScrollableListView.ItemProvider;
+import js.ui.view.ScrollableListView.ItemRenderer;
 import js.ui.view.SlidableView;
 import js.util.jQuery;
 import js.util.jQuery.Event;
@@ -32,7 +32,7 @@ public class Select<M> extends FormUI<Select> {
     public final Selectable<M> model;
 
     /** The associated view. */
-    private final ScrollableListView view;
+    public final ScrollableListView view;
 
     /** The view-model binder. */
     private final Binder binder = new Binder();
@@ -53,7 +53,7 @@ public class Select<M> extends FormUI<Select> {
 
             @Override
             public void handler(Event event) {
-                form.val($(event.target).attr("index"));
+                Select.this.model.setSelectionIndex(Integer.parseInt($(event.target).attr("index")));
             }
         });
 
@@ -63,7 +63,7 @@ public class Select<M> extends FormUI<Select> {
     /**
      * @version 2013/04/05 10:06:20
      */
-    private class Binder implements ItemProvider<M>, SelectableListener<M> {
+    private class Binder implements ItemRenderer, SelectableListener<M> {
 
         /**
          * {@inheritDoc}
@@ -77,16 +77,8 @@ public class Select<M> extends FormUI<Select> {
          * {@inheritDoc}
          */
         @Override
-        public M item(int index) {
-            return model.get(index);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void render(int index, jQuery element, M model) {
-            element.addClass(SelectItem.class).attr("index", index).text(model);
+        public void renderItem(int itemIndex, jQuery element) {
+            element.addClass(SelectItem.class).attr("index", itemIndex).text(model.get(itemIndex));
         }
 
         /**
@@ -94,6 +86,7 @@ public class Select<M> extends FormUI<Select> {
          */
         @Override
         public void select(int index, M item) {
+            form.val(item.toString());
         }
 
         /**
@@ -101,6 +94,7 @@ public class Select<M> extends FormUI<Select> {
          */
         @Override
         public void deselect(int index, M item) {
+            form.val("");
         }
 
         /**
@@ -109,7 +103,6 @@ public class Select<M> extends FormUI<Select> {
         @Override
         public void add(int index, M item) {
             view.provide(this);
-
             view.render(index);
         }
 
@@ -117,7 +110,8 @@ public class Select<M> extends FormUI<Select> {
          * {@inheritDoc}
          */
         @Override
-        public void remove(M item, int index) {
+        public void remove(int index, M item) {
+            view.provide(this);
         }
     }
 }
