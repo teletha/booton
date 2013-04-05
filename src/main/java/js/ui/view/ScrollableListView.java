@@ -55,10 +55,10 @@ public class ScrollableListView extends UI {
     private int renderableItemSize;
 
     /** The last rendered index. */
-    private int lastRenderedTopIndex = -1;
+    private int lastRenderedTopIndex;
 
     /** The item provider. */
-    private ItemProvider provider;
+    private ItemProvider provider = new EmptyItemProvider();
 
     /**
      * <p>
@@ -114,15 +114,22 @@ public class ScrollableListView extends UI {
         viewableItemView.css("max-height", viewableItemSize * itemHeight + "px");
 
         // Trigger scroll event to force item rendering.
-        viewableItemView.scroll();
+        // s viewableItemView.scroll();
 
         // API definition
         return this;
     }
 
+    /**
+     * <p>
+     * Render list item if it is renderable.
+     * </p>
+     * 
+     * @param index A item index to render.
+     */
     public void render(int index) {
-        if (lastRenderedTopIndex <= index && index <= lastRenderedTopIndex + renderableItemSize) {
-            provider.render(index, items.get(index), provider.item(index));
+        if (lastRenderedTopIndex <= index && index < lastRenderedTopIndex + renderableItemSize) {
+            provider.render(index, items.get(index - lastRenderedTopIndex), provider.item(index));
         }
     }
 

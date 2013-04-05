@@ -22,6 +22,7 @@ class ScrollableListViewStyle {
             display.block();
             position.relative();
             overflowY.auto();
+            overflowX.hidden();
         }
     }
 

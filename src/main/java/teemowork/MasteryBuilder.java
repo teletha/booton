@@ -105,6 +105,16 @@ public class MasteryBuilder extends Page implements Subscriber {
         jQuery infomation = root.child(Information.class);
         menu = infomation.child(new Select(set));
         menu.model.add(masterySet);
+        menu.model.add(new MasterySet("02t4w002005m9s001ls"));
+        menu.model.add(new MasterySet("09tz400200b8jk001ls"));
+        menu.model.add(new MasterySet("02t4w002005m9s001ls"));
+        menu.model.add(new MasterySet("09tz400200b8jk001ls"));
+        menu.model.add(new MasterySet("02t4w002005m9s001ls"));
+        menu.model.add(new MasterySet("09tz400200b8jk001ls"));
+        menu.model.add(new MasterySet("02t4w002005m9s001ls"));
+        menu.model.add(new MasterySet("09tz400200b8jk001ls"));
+        menu.model.add(new MasterySet("0003l03k0wb28000004"));
+        menu.model.add(new MasterySet("0000100000000000004"));
 
         reset = infomation.child(ResetButton.class).click(new Listener() {
 
@@ -113,6 +123,14 @@ public class MasteryBuilder extends Page implements Subscriber {
                 masterySet.reset();
                 menu.model.add(new MasterySet("02t4w002005m9s001ls"));
                 menu.model.add(new MasterySet("09tz400200b8jk001ls"));
+                menu.model.add(new MasterySet("02t4w002005m9s001ls"));
+                menu.model.add(new MasterySet("09tz400200b8jk001ls"));
+                menu.model.add(new MasterySet("02t4w002005m9s001ls"));
+                menu.model.add(new MasterySet("09tz400200b8jk001ls"));
+                menu.model.add(new MasterySet("02t4w002005m9s001ls"));
+                menu.model.add(new MasterySet("09tz400200b8jk001ls"));
+                menu.model.add(new MasterySet("0003l03k0wb28000004"));
+                menu.model.add(new MasterySet("0000100000000000004"));
             }
         });
 

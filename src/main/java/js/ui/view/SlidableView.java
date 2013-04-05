@@ -57,7 +57,7 @@ public class SlidableView extends UI {
             root.addClass(Shown.class);
 
             // prepare closer
-            // $(window).on("click", switchgear);
+            $(window).on("click", switchgear);
         }
     }
 
