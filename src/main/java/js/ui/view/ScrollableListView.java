@@ -54,6 +54,9 @@ public class ScrollableListView extends UI {
     /** The all renderable item size. */
     private int renderableItemSize;
 
+    /** The last rendered index. */
+    private int lastRenderedTopIndex = -1;
+
     /** The item provider. */
     private ItemProvider provider;
 
@@ -117,13 +120,16 @@ public class ScrollableListView extends UI {
         return this;
     }
 
+    public void render(int index) {
+        if (lastRenderedTopIndex <= index && index <= lastRenderedTopIndex + renderableItemSize) {
+            provider.render(index, items.get(index), provider.item(index));
+        }
+    }
+
     /**
      * @version 2013/04/02 23:50:57
      */
     private class Renderer implements Listener {
-
-        /** The last rendered index. */
-        private int lastRenderedTopIndex = -1;
 
         /**
          * {@inheritDoc}
@@ -146,8 +152,7 @@ public class ScrollableListView extends UI {
                 spacer.css("height", renderableTopIndex * itemHeight + "px");
 
                 for (int i = 0; i < items.size(); i++) {
-                    int index = renderableTopIndex + i;
-                    provider.render(index, items.get(i), provider.item(index));
+                    render(renderableTopIndex + i);
                 }
             }
         }

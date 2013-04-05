@@ -16,6 +16,7 @@ import js.application.PageInfo;
 import js.bind.Subscriber;
 import js.dom.Image;
 import js.ui.Select;
+import js.ui.model.Selectable;
 import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
@@ -62,6 +63,8 @@ public class MasteryBuilder extends Page implements Subscriber {
             {Wealth, Awareness, StrengthOfSpirit, Explorer}, {Pickpocket, Intelligence, null, null},
             {null, Nimble, null, null}};
 
+    private final Selectable<MasterySet> set = new Selectable();
+
     private final MasterySet masterySet;
 
     /** The sum. */
@@ -81,7 +84,7 @@ public class MasteryBuilder extends Page implements Subscriber {
 
     private jQuery name;
 
-    private js.ui.Select menu;
+    private Select<MasterySet> menu;
 
     @PageInfo(path = "Mastery")
     public MasteryBuilder() {
@@ -100,13 +103,16 @@ public class MasteryBuilder extends Page implements Subscriber {
     @Override
     public void load(jQuery root) {
         jQuery infomation = root.child(Information.class);
-        menu = infomation.childUI(Select.class).model("aaa", "bbb", "ccc", "ddd");
+        menu = infomation.child(new Select(set));
+        menu.model.add(masterySet);
 
         reset = infomation.child(ResetButton.class).click(new Listener() {
 
             @Override
             public void handler(Event event) {
                 masterySet.reset();
+                menu.model.add(new MasterySet("02t4w002005m9s001ls"));
+                menu.model.add(new MasterySet("09tz400200b8jk001ls"));
             }
         });
 

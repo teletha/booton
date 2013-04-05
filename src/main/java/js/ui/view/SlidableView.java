@@ -36,9 +36,13 @@ public class SlidableView extends UI {
      * 
      * @param content
      */
-    public SlidableView(UI content) {
+    public SlidableView(UI content, jQuery... switchgears) {
         root.addClass(ViewableArea.class);
         root.child(Slider.class).append(content);
+
+        for (jQuery switchgear : switchgears) {
+            register(switchgear);
+        }
     }
 
     /**
@@ -53,7 +57,7 @@ public class SlidableView extends UI {
             root.addClass(Shown.class);
 
             // prepare closer
-            $(window).on("click", switchgear);
+            // $(window).on("click", switchgear);
         }
     }
 

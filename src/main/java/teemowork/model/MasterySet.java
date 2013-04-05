@@ -17,6 +17,9 @@ import js.bind.Publisher;
  */
 public class MasterySet extends Publisher {
 
+    /** The human-readable name. */
+    private String name = "";
+
     /** The values for each masteries. */
     private int[] levels = new int[56];
 
@@ -60,6 +63,26 @@ public class MasterySet extends Publisher {
             decode(2, 2, serialized.substring(5, 8));
             decode(3, 2, serialized.substring(8, 14));
             decode(4, 3, serialized.substring(14, 19));
+        }
+    }
+
+    /**
+     * Get the name property of this {@link MasterySet}.
+     * 
+     * @return The name property.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Set the name property of this {@link MasterySet}.
+     * 
+     * @param name The name value to set.
+     */
+    public void setName(String name) {
+        if (name != null) {
+            this.name = name;
         }
     }
 

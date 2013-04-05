@@ -56,28 +56,22 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @param Title A element name.
      * @return Chainable API.
      */
-    public <T extends UI> T childUI(Class<T> uiClass) {
-        try {
-            T ui = uiClass.newInstance();
-
-            append(ui);
-
-            return ui;
-        } catch (Exception e) {
-            throw new Error(e);
-        }
+    public jQuery child(CSS className) {
+        return child("span").addClass(className);
     }
 
     /**
      * <p>
-     * Create child element with class name.
+     * Create child user interface.
      * </p>
      * 
-     * @param Title A element name.
+     * @param ui A child ui.
      * @return Chainable API.
      */
-    public jQuery child(CSS className) {
-        return child("span").addClass(className);
+    public <T extends UI> T child(T ui) {
+        append(ui.root);
+
+        return ui;
     }
 
     /**
