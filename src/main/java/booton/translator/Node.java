@@ -411,7 +411,7 @@ class Node {
                 buffer.append("}").line();
 
                 // write following nodes if needed
-                if (exit != null) exit.write(buffer);
+                if (!switchy.noExit) exit.write(buffer);
 
                 return; // must
             }
@@ -553,69 +553,6 @@ class Node {
                     process(next, buffer);
                 }
             }
-            // for (TryCatch block : tries) {
-            // if (block.isCompleted()) {
-            // process(block.handler, buffer);
-            // }
-            // }
-
-            // // check try-catch-finally
-            // if (catches.size() != 0 || finallies.size() != 0) {
-            // Node end = null;
-            //
-            // // catch
-            // if (catches.size() != 0) {
-            // buffer.append("} catch ($) {");
-            //
-            // Iterator<TryBlock> iterator = catches.descendingIterator();
-            //
-            // while (iterator.hasNext()) {
-            // TryBlock block = iterator.next();
-            //
-            // buffer.append("if ($ instanceof " + block.exception + ") {");
-            // block.start.write(buffer);
-            // buffer.append("}");
-            //
-            // end = block.end;
-            // // process2(end, buffer);
-            // }
-            // buffer.append("}");
-            // }
-            //
-            // // finally
-            // if (finallies.size() != 0) {
-            // Iterator<TryBlock> iterator = finallies.descendingIterator();
-            //
-            // while (iterator.hasNext()) {
-            // TryBlock block = iterator.next();
-            //
-            // if (catches.size() == 0) {
-            // buffer.append("} finally {");
-            // } else {
-            // buffer.append(" finally {");
-            // }
-            //
-            // block.start.write(buffer);
-            // buffer.append("}");
-            //
-            // end = block.end;
-            // process2(end, buffer);
-            // }
-            // }
-            //
-            // process2(end, buffer);
-            // // root.start.process(root.end, buffer);
-            // }
-        }
-    }
-
-    private void process2(Node dest, ScriptBuffer buffer) {
-        if (dest != null) {
-            // if (dest.stoppable != 0) {
-            // dest.stoppable--;
-            // } else {
-            dest.write(buffer);
-            // }
         }
     }
 
@@ -653,38 +590,6 @@ class Node {
             };
         }
     }
-
-    // /**
-    // * Helper method to process script writing.
-    // *
-    // * @param dest
-    // * @param buffer
-    // */
-    // private void process(ScriptBuffer buffer) {
-    // Node dest = follower;
-    //
-    // if (dest != null) {
-    // Node dominator = dest.getDominator();
-    //
-    // if (dominator == null || dominator == this) {
-    // // normal process
-    // dest.write(buffer);
-    // return;
-    // }
-    //
-    // if (hasDominator(dest)) {
-    // buffer.append("continue l", dest.id, ";");
-    // return;
-    // }
-    //
-    // if (dominator.backedges.size() == 0) {
-    // // stop here
-    // dest.getDominator().follower = dest;
-    // } else {
-    // buffer.append("break l", dominator.id, ";");
-    // };
-    // }
-    // }
 
     /**
      * {@inheritDoc}
@@ -761,6 +666,9 @@ class Node {
         /** Whether this switch has default node or not. */
         private boolean noDefault = false;
 
+        /** Whether this switch has exit node or not. */
+        private boolean noExit = false;
+
         /**
          * <p>
          * Creat switch block infomation holder.
@@ -828,24 +736,22 @@ class Node {
          * @return Null or exit node.
          */
         private Node searchExit() {
+            // If the exit node has the incoming node which is outside of switch statement,
+            // it is invalid.
+            for (Node node : defaults.incoming) {
+                if (!node.hasDominator(enter)) {
+                    noExit = true;
+                    noDefault = true;
+                }
+            }
+
+            // The end node is not default node.
             if (defaults.outgoing.isEmpty() && defaults.incoming.contains(enter)) {
-                // default node does not exist
-                noDefault = true;
+                noDefault = true; // default node does not exist
+            }
 
-                for (Node node : defaults.incoming) {
-                    if (node != enter) {
-                        node.addExpression("break");
-                    }
-                }
-
-                // If the exit node has the incoming node which is outside of switch statement, it
-                // is invalid.
-                for (Node node : defaults.incoming) {
-                    if (!node.hasDominator(enter)) {
-                        return null;
-                    }
-                }
-                return defaults;
+            for (Node node : defaults.incoming) {
+                node.addExpression("break");
             }
 
             List<Node> nodes = new LinkedList();
@@ -859,12 +765,11 @@ class Node {
                     for (Node incoming : node.incoming) {
                         incoming.addExpression("break");
                     }
-
                     return node;
                 }
                 nodes.addAll(node.outgoing);
             }
-            return null;
+            return defaults;
         }
 
         /**

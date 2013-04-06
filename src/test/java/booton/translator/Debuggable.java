@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 /**
  * @version 2013/04/06 13:14:00
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.CONSTRUCTOR})
 @Retention(RetentionPolicy.CLASS)
 public @interface Debuggable {
 }

@@ -241,6 +241,50 @@ public class SwitchTest extends ScriptTester {
     }
 
     @Test
+    public void BreakNoDefaultInNestedOtherFlow() {
+        test(new Scriptable() {
+
+            public int act(int value) {
+                for (int i = 0; i < 3; i++) {
+                    if (value != 2) {
+                        switch (value) {
+                        case 1:
+                            value++;
+                            break;
+                        }
+                    }
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void BreakAndReturn() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 5) int value) {
+                int result;
+
+                switch (value) {
+                case 0:
+                    return 10;
+
+                case 1:
+                    result = -2;
+                    break;
+
+                default:
+                    result = value;
+                    break;
+                }
+
+                return result;
+            }
+        });
+    }
+
+    @Test
     public void Enum0() {
         test(new Scriptable() {
 
