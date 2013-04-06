@@ -14,11 +14,13 @@ import static js.lang.Global.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
+import js.util.ArrayList;
 import js.util.HashMap;
 import booton.translator.JavaNative;
 
@@ -109,14 +111,16 @@ class JSClass<T> extends JSAnnotatedElement {
      * @return The array of Method objects representing the public methods of this class.
      */
     public Method[] getMethods() {
-        NativeArray<JSMethod> container = new NativeArray();
+        Class clazz = (Class) (Object) this;
+        List<Method> methods = new ArrayList();
 
-        for (String name : clazz.keys()) {
-            if (!name.startsWith("$")) {
-                container.push(new JSMethod(name, clazz, annotations.getPropertyAs(NativeArray.class, name)));
+        while (clazz != null) {
+            for (Method method : clazz.getDeclaredMethods()) {
+                methods.add(method);
             }
+            clazz = clazz.getSuperclass();
         }
-        return (Method[]) (Object) container;
+        return methods.toArray(new Method[methods.size()]);
     }
 
     /**

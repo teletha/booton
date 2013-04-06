@@ -22,7 +22,6 @@ import kiss.I;
 
 import org.objectweb.asm.Type;
 
-
 /**
  * @version 2013/01/17 21:15:48
  */
@@ -39,6 +38,9 @@ class JavaAnnotationCompiler {
         }
     }
 
+    /** The current processing script. */
+    private final Javascript script;
+
     /** The code writer. */
     private final ScriptBuffer code = new ScriptBuffer();
 
@@ -48,7 +50,9 @@ class JavaAnnotationCompiler {
     /**
      * 
      */
-    JavaAnnotationCompiler(Class clazz) {
+    JavaAnnotationCompiler(Javascript script, Class clazz) {
+        this.script = script;
+
         // class
         register("$", clazz);
 
@@ -192,6 +196,10 @@ class JavaAnnotationCompiler {
             return "\"" + value + "\"";
         } else if (type == Class.class) {
             return Javascript.computeClass((Class) value);
+        } else if (type.isEnum()) {
+            script.require(type);
+
+            return Javascript.computeClassName(type) + "." + Javascript.computeFieldName(type, ((Enum) value).name());
         } else if (type.isArray()) {
             StringBuilder builder = new StringBuilder("[");
 
