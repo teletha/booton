@@ -14,7 +14,7 @@ import booton.css.CSS;
 /**
  * @version 2013/04/02 16:15:20
  */
-public class GridPageStyle {
+public class FormCatalogStyle {
 
     class Table extends CSS {
 

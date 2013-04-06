@@ -10,10 +10,10 @@
 package js.ui;
 
 import static js.lang.Global.*;
-import js.ui.FormUIStyle.SelectArrow;
-import js.ui.FormUIStyle.SelectForm;
-import js.ui.FormUIStyle.SelectItem;
-import js.ui.FormUIStyle.SelectItemList;
+import js.ui.SelectStyle.SelectArrow;
+import js.ui.SelectStyle.SelectForm;
+import js.ui.SelectStyle.SelectItem;
+import js.ui.SelectStyle.SelectItemList;
 import js.ui.model.Selectable;
 import js.ui.model.SelectableListener;
 import js.ui.view.ScrollableListView;
@@ -31,15 +31,27 @@ public class Select<M> extends FormUI<Select> {
     /** The associated model. */
     public final Selectable<M> model;
 
+    /** The option list. */
+    public final SlidableView options;
+
     /** The associated view. */
-    public final ScrollableListView view;
+    protected final ScrollableListView view;
 
     /** The view-model binder. */
     private final Binder binder = new Binder();
 
     /**
      * <p>
-     * Create input form.
+     * Create select form.
+     * </p>
+     */
+    public Select(M... model) {
+        this(new Selectable(model));
+    }
+
+    /**
+     * <p>
+     * Create select form.
      * </p>
      */
     public Select(Selectable<M> model) {
@@ -57,7 +69,7 @@ public class Select<M> extends FormUI<Select> {
             }
         });
 
-        root.append(new SlidableView(view, root.child(SelectArrow.class)));
+        options = root.child(new SlidableView(view, root.child(SelectArrow.class)));
     }
 
     /**

@@ -12,8 +12,6 @@ package js.ui;
 import static booton.css.Unit.*;
 import js.util.Color;
 import booton.css.CSS;
-import booton.css.Snippet;
-import booton.css.Snippet.Icon;
 import booton.css.Value;
 
 /**
@@ -58,7 +56,7 @@ class FormUIStyle {
     /**
      * @version 2013/03/31 22:49:02
      */
-    private class BaseForm extends CSS {
+    protected class BaseForm extends CSS {
 
         {
             // Required property for single line form.
@@ -115,62 +113,6 @@ class FormUIStyle {
 
         {
             writeBorder();
-        }
-    }
-
-    class SelectForm extends BaseForm {
-
-        {
-            writeBorder();
-        }
-    }
-
-    class SelectArrow extends BaseForm {
-
-        {
-            writeBorder();
-            borderLeft.none();
-
-            Snippet.write(Icon.BottomArrow);
-            cursor.pointer();
-
-        }
-    }
-
-    class SelectItemList extends CSS {
-
-        {
-            // position.absolute().top(100, percent).left(0, px);
-            // transform.translateY(BorderWidth.opposite());
-            // box.maxHeight(SingleLineFormHeight.multiply(6)).width(100, percent).zIndex(1);
-            // font.size(FontSize);
-            // overflowY.scroll();
-            // // display.none();
-            box.width(100, percent).maxHeight(SingleLineFormHeight.multiply(6));
-
-            background.color(Color.White);
-            border.solid().width(BorderWidth).color(BorderColor);
-        }
-    }
-
-    class SelectItemListShown extends CSS {
-
-        {
-
-        }
-    }
-
-    class SelectItem extends CSS {
-
-        {
-            display.block();
-            padding.vertical(FormVerticalPadding).horizontal(FormHorizontalPadding);
-            overflow.hidden();
-            cursor.pointer();
-
-            while (hover()) {
-                background.color(SelectColor);
-            }
         }
     }
 }
