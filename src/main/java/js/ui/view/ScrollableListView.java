@@ -55,7 +55,7 @@ public class ScrollableListView extends UI {
     private int renderableItemSize;
 
     /** The last rendered index. */
-    private int lastRenderedTopIndex;
+    private int lastRenderedTopIndex = -1;
 
     /** The item provider. */
     private ItemRenderer renderer = new EmptyItemRenderer();
@@ -114,11 +114,38 @@ public class ScrollableListView extends UI {
         renderableItemView.css("height", size * itemHeight + "px");
         viewableItemView.css("max-height", viewableItemSize * itemHeight + "px");
 
-        // Trigger scroll event to force item rendering.
-        // viewableItemView.scroll();
+        // Force item rendering.
+        render();
 
         // API definition
         return this;
+    }
+
+    /**
+     * <p>
+     * Render all list items.
+     * </p>
+     */
+    private void render() {
+        int viewableTopIndex = Math.round(-renderableItemView.position().top / itemHeight);
+        int renderableTopIndex = Math.max(0, viewableTopIndex - extraTopRenderableItemSize);
+
+        // 既に最後の要素まで到達可能な範囲にいたら末尾から数えるようにする。
+        if (renderer.countItem() <= viewableTopIndex + viewableItemSize + extraBottomRenderableItemSize) {
+            renderableTopIndex = renderer.countItem() - renderableItemSize;
+        }
+
+        // 以前と同じインデックスから始まるようなら再レンダリングする必要はない
+        if (lastRenderedTopIndex != renderableTopIndex) {
+            lastRenderedTopIndex = renderableTopIndex; // update
+
+            // re-rendering
+            spacer.css("height", renderableTopIndex * itemHeight + "px");
+
+            for (int i = 0; i < items.size(); i++) {
+                render(renderableTopIndex + i);
+            }
+        }
     }
 
     /**
@@ -144,25 +171,7 @@ public class ScrollableListView extends UI {
          */
         @Override
         public void handler(Event event) {
-            int viewableTopIndex = Math.round(-renderableItemView.position().top / itemHeight);
-            int renderableTopIndex = Math.max(0, viewableTopIndex - extraTopRenderableItemSize);
-
-            // 既に最後の要素まで到達可能な範囲にいたら末尾から数えるようにする。
-            if (renderer.countItem() <= viewableTopIndex + viewableItemSize + extraBottomRenderableItemSize) {
-                renderableTopIndex = renderer.countItem() - renderableItemSize;
-            }
-
-            // 以前と同じインデックスから始まるようなら再レンダリングする必要はない
-            if (lastRenderedTopIndex != renderableTopIndex) {
-                lastRenderedTopIndex = renderableTopIndex; // update
-
-                // re-rendering
-                spacer.css("height", renderableTopIndex * itemHeight + "px");
-
-                for (int i = 0; i < items.size(); i++) {
-                    render(renderableTopIndex + i);
-                }
-            }
+            render();
         }
     }
 

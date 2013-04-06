@@ -447,7 +447,7 @@ public class MasterySet extends Publisher {
      */
     @Override
     public String toString() {
-        return getName() + " (" + getSum(Mastery.Offense) + " - " + getSum(Mastery.Defense) + " - " + getSum(Mastery.Utility) + ")";
+        return encode(1, 1, 5) + encode(2, 2, 3) + encode(3, 2, 6) + encode(4, 3, 5);
     }
 
     /**

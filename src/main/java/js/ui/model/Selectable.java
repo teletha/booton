@@ -29,6 +29,25 @@ public class Selectable<T> implements Iterable<T> {
     private List<SelectableListener<T>> listeners = new ArrayList();
 
     /**
+     * <p>
+     * Create {@link Selectable} model with no items.
+     * </p>
+     */
+    public Selectable() {
+    }
+
+    /**
+     * <p>
+     * Create {@link Selectable} model with the given items.
+     * </p>
+     * 
+     * @param items
+     */
+    public Selectable(T... items) {
+        add(items);
+    }
+
+    /**
      * Get the index property of this {@link Selectable}.
      * 
      * @return The index property.
@@ -211,6 +230,32 @@ public class Selectable<T> implements Iterable<T> {
             }
         }
         return index;
+    }
+
+    /**
+     * <p>
+     * Appends the specified item to the end of this model.
+     * </p>
+     * 
+     * @param item An item to be appended to this model.
+     */
+    public final void add(T... items) {
+        for (T item : items) {
+            add(item);
+        }
+    }
+
+    /**
+     * <p>
+     * Appends the specified item to the end of this model.
+     * </p>
+     * 
+     * @param item An item to be appended to this model.
+     */
+    public final void add(Iterable<T> items) {
+        for (T item : items) {
+            add(item);
+        }
     }
 
     /**

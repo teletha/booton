@@ -11,19 +11,20 @@ package teemowork;
 
 import js.application.Page;
 import js.application.PageInfo;
-import js.ui.Input;
+import js.lang.Global;
+import js.ui.Select;
 import js.util.jQuery;
 
 /**
  * @version 2013/04/02 15:53:46
  */
-public class GridPage extends Page {
+public class FormCatalogPage extends Page {
 
     /**
      * 
      */
     @PageInfo(path = "GridTest")
-    private GridPage() {
+    private FormCatalogPage() {
     }
 
     /**
@@ -39,6 +40,17 @@ public class GridPage extends Page {
      */
     @Override
     public void load(jQuery root) {
-        root.append(new Input());
+        final Select<String> child = root.child(new Select("a", "b", "c"));
+
+        Global.setTimeout(new Runnable() {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void run() {
+                child.options.open();
+            }
+        }, 1000);
     }
 }
