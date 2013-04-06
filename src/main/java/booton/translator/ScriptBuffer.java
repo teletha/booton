@@ -209,7 +209,7 @@ class ScriptBuffer {
         }
 
         // write actual code
-        buffer.append(fragment);
+        buffer.append(value);
 
         // brace makes indentation
         if (length != 0) {
