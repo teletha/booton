@@ -218,6 +218,9 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private boolean enumSwitchInvoked;
 
+    /** The debug flag. */
+    private boolean debuggable = false;
+
     /**
      * @param script A target script to compile.
      * @param code A code writer.
@@ -266,7 +269,9 @@ class JavaMethodCompiler extends MethodVisitor {
             iterator.next().computeTryBlock();
         }
 
-        // NodeDebugger.dump(script, methodNameOriginal, nodes);
+        if (debuggable) {
+            NodeDebugger.dump(nodes);
+        }
 
         // ===============================================
         // Script Code
@@ -309,6 +314,9 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+        if (desc.equals(Type.getType(Debuggable.class).getDescriptor())) {
+            debuggable = true;
+        }
         return null; // do nothing
     }
 
