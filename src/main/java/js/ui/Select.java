@@ -19,6 +19,7 @@ import js.ui.model.SelectableListener;
 import js.ui.view.ScrollableListView;
 import js.ui.view.ScrollableListView.ItemRenderer;
 import js.ui.view.SlidableView;
+import js.ui.view.SlidableView.OpenEvent;
 import js.util.jQuery;
 import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
@@ -71,7 +72,17 @@ public class Select<M> extends FormUI<Select> {
 
         options = root.child(new SlidableView(view, root.child(SelectArrow.class)));
         options.register(binder);
-        System.out.println("create");
+
+        eventBus.register(this);
+    }
+
+    private EventBus eventBus = new EventBus();
+
+    @Subscriber
+    private void listen(OpenEvent event) {
+        System.out.println("open");
+        System.out.println(OpenEvent.class);
+        System.out.println(event);
     }
 
     /**

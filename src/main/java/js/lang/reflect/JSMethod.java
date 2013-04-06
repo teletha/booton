@@ -58,6 +58,17 @@ class JSMethod extends JSAnnotatedElement {
     }
 
     /**
+     * Returns an array of {@code Class} objects that represent the formal parameter types, in
+     * declaration order, of the method represented by this {@code Method} object. Returns an array
+     * of length 0 if the underlying method takes no parameters.
+     * 
+     * @return the parameter types for the method this object represents
+     */
+    public Class<?>[] getParameterTypes() {
+        return getAnnotation(Signature.class).parameterTypes();
+    }
+
+    /**
      * <p>
      * Invokes the underlying method represented by this Method object, on the specified object with
      * the specified parameters. Individual parameters are automatically unwrapped to match

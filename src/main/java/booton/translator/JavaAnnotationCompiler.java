@@ -16,8 +16,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import js.lang.reflect.Signature;
 import kiss.I;
 
 import org.objectweb.asm.Type;
@@ -100,7 +102,14 @@ class JavaAnnotationCompiler {
         Annotation[] annotations = element.getAnnotations();
 
         if (annotations.length != 0) {
-            elements.add(new Annotated(name, annotations));
+            List<Annotation> defined = new ArrayList();
+            defined.addAll(Arrays.asList(annotations));
+
+            if (element instanceof Method) {
+                defined.add(new MethodSignature((Method) element));
+                System.out.println(element);
+            }
+            elements.add(new Annotated(name, defined.toArray(new Annotation[defined.size()])));
         }
     }
 
@@ -238,6 +247,46 @@ class JavaAnnotationCompiler {
         private Annotated(String name, Annotation[] annotations) {
             this.name = name;
             this.annotations = annotations;
+        }
+    }
+
+    /**
+     * @version 2013/04/07 3:05:00
+     */
+    private static class MethodSignature implements Signature {
+
+        /** The method . */
+        private final Method method;
+
+        /**
+         * @param method
+         */
+        private MethodSignature(Method method) {
+            this.method = method;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Class<? extends Annotation> annotationType() {
+            return Signature.class;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Class returnType() {
+            return method.getReturnType();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Class[] parameterTypes() {
+            return method.getParameterTypes();
         }
     }
 }
