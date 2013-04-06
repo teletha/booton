@@ -279,6 +279,10 @@ public class Javascript {
      * @param parent A parent class.
      */
     private void compileClass(ScriptBuffer code, Class parent) {
+        if (source.isArray()) {
+            return;
+        }
+
         // compute related class names
         String className = Javascript.computeSimpleClassName(source);
         String superClass = parent == null || parent == Object.class ? "" : computeSimpleClassName(parent);
@@ -296,7 +300,7 @@ public class Javascript {
         }
 
         // write annotation
-        JavaAnnotationCompiler annotation = new JavaAnnotationCompiler(source);
+        JavaAnnotationCompiler annotation = new JavaAnnotationCompiler(this, source);
 
         if (annotation.hasAnnotation()) {
             code.append(',').append(annotation);
@@ -340,7 +344,7 @@ public class Javascript {
         }
 
         // write annotation
-        JavaAnnotationCompiler annotation = new JavaAnnotationCompiler(source);
+        JavaAnnotationCompiler annotation = new JavaAnnotationCompiler(this, source);
 
         if (annotation.hasAnnotation()) {
             code.append(',').append(annotation);
