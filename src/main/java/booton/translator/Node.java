@@ -829,12 +829,20 @@ class Node {
          */
         private Node searchExit() {
             if (defaults.outgoing.isEmpty() && defaults.incoming.contains(enter)) {
-                // default node is no exist
+                // default node does not exist
                 noDefault = true;
 
                 for (Node node : defaults.incoming) {
                     if (node != enter) {
                         node.addExpression("break");
+                    }
+                }
+
+                // If the exit node has the incoming node which is outside of switch statement, it
+                // is invalid.
+                for (Node node : defaults.incoming) {
+                    if (!node.hasDominator(enter)) {
+                        return null;
                     }
                 }
                 return defaults;

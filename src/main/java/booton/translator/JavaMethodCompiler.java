@@ -270,19 +270,23 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         if (debuggable) {
-            NodeDebugger.dump(nodes);
+            NodeDebugger.dump(script, methodNameOriginal, nodes);
         }
 
         // ===============================================
         // Script Code
         // ===============================================
         // write method declaration
-        code.append(methodName, ":", "function(", I.join(variables.names(), ","), "){");
         code.mark();
+        code.append(methodName, ":", "function(", I.join(variables.names(), ","), "){");
         nodes.get(0).write(code);
         code.optimize();
         code.append('}'); // method end
         code.separator();
+
+        if (debuggable) {
+            System.out.println(code.toFragment());
+        }
     }
 
     /**

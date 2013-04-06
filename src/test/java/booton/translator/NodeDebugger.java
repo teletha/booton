@@ -90,13 +90,11 @@ public class NodeDebugger {
      */
     public static void dump(Javascript script, String methodName, List<Node> nodes) {
         if (whileTest) {
-            if (methodName.equals("act")) {
-                String testClassName = computeTestClassName(script.source);
-                String testMethodName = computeTestMethodName(testClassName);
+            String testClassName = computeTestClassName(script.source);
+            String testMethodName = computeTestMethodName(testClassName);
 
-                System.out.println(testClassName + "  " + testMethodName);
-                dump(nodes);
-            }
+            System.out.println(testClassName + "  " + testMethodName);
+            dump(nodes);
         } else {
             System.out.println(script.source.getName() + "  " + methodName);
             dump(nodes);
