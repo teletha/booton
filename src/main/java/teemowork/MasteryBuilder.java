@@ -108,7 +108,7 @@ public class MasteryBuilder extends Page implements Subscriber {
     public void load(jQuery root) {
         jQuery infomation = root.child(Information.class);
         menu = infomation.child(new Select(set));
-        menu.model.listen(new MasterySelector());
+        menu.model.register(new MasterySelector());
 
         reset = infomation.child(ResetButton.class).click(new Listener() {
 

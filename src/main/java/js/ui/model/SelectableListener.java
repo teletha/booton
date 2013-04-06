@@ -9,10 +9,12 @@
  */
 package js.ui.model;
 
+import java.util.EventListener;
+
 /**
  * @version 2013/04/05 9:32:19
  */
-public interface SelectableListener<T> {
+public interface SelectableListener<T> extends EventListener {
 
     /**
      * <p>
@@ -45,6 +47,7 @@ public interface SelectableListener<T> {
      * <p>
      * Notiify item deselection event.
      * </p>
+     * 
      * @param index TODO
      * @param item
      */

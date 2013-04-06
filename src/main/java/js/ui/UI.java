@@ -15,7 +15,7 @@ import js.util.jQuery;
 /**
  * @version 2012/12/11 14:39:54
  */
-public abstract class UI {
+public abstract class UI extends Publishable {
 
     /** The root container element for this user interface. */
     public final jQuery root;
@@ -39,4 +39,5 @@ public abstract class UI {
     protected UI(String name) {
         this.root = $("<" + name + ">");
     }
+
 }

@@ -56,7 +56,7 @@ public class Select<M> extends FormUI<Select> {
      */
     public Select(Selectable<M> model) {
         this.model = model;
-        this.model.listen(binder);
+        this.model.register(binder);
 
         form.addClass(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
 
@@ -70,12 +70,14 @@ public class Select<M> extends FormUI<Select> {
         });
 
         options = root.child(new SlidableView(view, root.child(SelectArrow.class)));
+        options.register(binder);
+        System.out.println("create");
     }
 
     /**
      * @version 2013/04/05 10:06:20
      */
-    private class Binder implements ItemRenderer, SelectableListener<M> {
+    private class Binder implements ItemRenderer, SelectableListener<M>, SlidableView.Listener {
 
         /**
          * {@inheritDoc}
@@ -124,6 +126,22 @@ public class Select<M> extends FormUI<Select> {
         @Override
         public void remove(int index, M item) {
             view.provide(this);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void open() {
+            System.out.println("open");
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void close() {
+            System.out.println("close");
         }
     }
 }

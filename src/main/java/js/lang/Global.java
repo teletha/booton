@@ -138,6 +138,14 @@ public class Global {
     public static native void clearTimeout(long timeoutId);
 
     /**
+     * <p>
+     * </p>
+     * 
+     * @return
+     */
+    public static native Object[] getArgumentArray();
+
+    /**
      * @version 2012/12/14 13:11:07
      */
     @SuppressWarnings("unused")
@@ -263,7 +271,18 @@ public class Global {
          * @param timeoutId The ID of the timeout you wish to clear, as returned by setTimeout().
          */
         public String clearTimeout(long timeoutId) {
-            return " clearTimeout(" + param(0) + ")";
+            return "clearTimeout(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Clears the delay set by setTimeout().
+         * </p>
+         * 
+         * @param timeoutId The ID of the timeout you wish to clear, as returned by setTimeout().
+         */
+        public String getArgumentArray() {
+            return "Array.prototype.slice.call(arguments)";
         }
     }
 }

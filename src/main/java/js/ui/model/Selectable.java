@@ -12,21 +12,19 @@ package js.ui.model;
 import java.util.Iterator;
 import java.util.List;
 
+import js.ui.Publishable;
 import js.util.ArrayList;
 
 /**
  * @version 2013/04/05 9:31:56
  */
-public class Selectable<T> implements Iterable<T> {
+public class Selectable<T> extends Publishable implements Iterable<T> {
 
     /** The index of current selected item. */
     private int index = -1;
 
     /** The item manager. */
     private List<T> items = new ArrayList();
-
-    /** The listener list. */
-    private List<SelectableListener<T>> listeners = new ArrayList();
 
     /**
      * <p>
@@ -76,17 +74,11 @@ public class Selectable<T> implements Iterable<T> {
 
         // notify
         if (old != -1) {
-            T item = items.get(old);
-
-            for (SelectableListener listener : listeners) {
-                listener.deselect(old, item);
-            }
+            publish(SelectableListener.class).deselect(old, items.get(old));
         }
 
         if (index != -1) {
-            for (SelectableListener listener : listeners) {
-                listener.select(index, items.get(index));
-            }
+            publish(SelectableListener.class).select(index, items.get(index));
         }
     }
 
@@ -106,23 +98,6 @@ public class Selectable<T> implements Iterable<T> {
      */
     protected void setItems(List<T> items) {
         this.items = items;
-    }
-
-    /**
-     * <p>
-     * Add selection event listener.
-     * </p>
-     * 
-     * @param listener
-     */
-    public void listen(SelectableListener listener) {
-        if (listener != null) {
-            listeners.add(listener);
-
-            if (index != -1) {
-                listener.select(index, items.get(index));
-            }
-        }
     }
 
     /**
@@ -225,9 +200,7 @@ public class Selectable<T> implements Iterable<T> {
             index = items.size();
             items.add(item);
 
-            for (SelectableListener listener : listeners) {
-                listener.add(index, item);
-            }
+            publish(SelectableListener.class).add(index, item);
         }
         return index;
     }
@@ -278,9 +251,7 @@ public class Selectable<T> implements Iterable<T> {
             }
 
             // At first, notify item removing.
-            for (SelectableListener listener : listeners) {
-                listener.remove(index, removed);
-            }
+            publish(SelectableListener.class).remove(index, removed);
 
             // Then notify selection changing.
             setSelectionIndex(index);

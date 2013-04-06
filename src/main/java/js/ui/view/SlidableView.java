@@ -10,13 +10,15 @@
 package js.ui.view;
 
 import static js.lang.Global.*;
+
+import java.util.EventListener;
+
 import js.ui.UI;
 import js.ui.view.SlidableViewStyle.Shown;
 import js.ui.view.SlidableViewStyle.Slider;
 import js.ui.view.SlidableViewStyle.ViewableArea;
 import js.util.jQuery;
 import js.util.jQuery.Event;
-import js.util.jQuery.Listener;
 
 /**
  * @version 2013/04/04 19:01:02
@@ -56,6 +58,9 @@ public class SlidableView extends UI {
             shown = true;
             root.addClass(Shown.class);
 
+            // notify event
+            publish(Listener.class).open();
+
             // prepare closer
             $(window).on("click", switchgear);
         }
@@ -71,6 +76,9 @@ public class SlidableView extends UI {
             // hide slide view
             shown = false;
             root.removeClass(Shown.class);
+
+            // notify event
+            publish(Listener.class).close();
 
             // discard coloser
             $(window).off("click", switchgear);
@@ -115,7 +123,7 @@ public class SlidableView extends UI {
     /**
      * @version 2013/04/04 18:41:30
      */
-    private class Switchgear implements Listener {
+    private class Switchgear implements js.util.jQuery.Listener {
 
         /**
          * {@inheritDoc}
@@ -126,5 +134,25 @@ public class SlidableView extends UI {
 
             toggle();
         }
+    }
+
+    /**
+     * @version 2013/04/07 1:03:07
+     */
+    public interface Listener extends EventListener {
+
+        /**
+         * <p>
+         * Receive open event.
+         * </p>
+         */
+        void open();
+
+        /**
+         * <p>
+         * Receive close event.
+         * </p>
+         */
+        void close();
     }
 }
