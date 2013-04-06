@@ -83,6 +83,28 @@ public class SwitchTest extends ScriptTester {
     }
 
     @Test
+    public void EmptyDefault() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 5) int value) {
+                switch (value) {
+                case 0:
+                    value = 10;
+                    break;
+
+                case 2:
+                    value = 20;
+                    break;
+
+                default:
+                    break;
+                }
+                return value + 10;
+            }
+        });
+    }
+
+    @Test
     public void Multiple() {
         test(new Scriptable() {
 
@@ -188,6 +210,30 @@ public class SwitchTest extends ScriptTester {
                 case 1:
                     result = -2;
                     break;
+                }
+                return result;
+            }
+        });
+    }
+
+    @Test
+    public void BreakNoDefaultInOtherFlow() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 5) int value) {
+                int result = 100;
+
+                if (value != 4) {
+                    switch (value) {
+                    case 0:
+                        result = -1;
+                        break;
+
+                    case 1:
+                        result = -2;
+                        break;
+
+                    }
                 }
                 return result;
             }

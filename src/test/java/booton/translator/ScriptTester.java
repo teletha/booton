@@ -207,8 +207,6 @@ public class ScriptTester {
                 } catch (AssertionError e) {
                     StringBuilder builder = new StringBuilder();
                     builder.append("Compiling script is success but execution results of Java and JS are different.")
-                            .append(END)
-                            .append(script)
                             .append(END);
 
                     if (input != NONE) {
