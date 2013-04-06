@@ -62,7 +62,7 @@ public class Classes {
 
                 @SuppressWarnings("unused")
                 public Object evaluate() throws Throwable {
-                    return handler.invoke(proxy, method, new Object[0]);
+                    return handler.invoke(proxy, method, Global.getArgumentArray());
                 }
             });
         }

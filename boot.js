@@ -232,6 +232,10 @@ function boot(global) {
      * @param {Object} annotation A annotation definition.
      */
     define: function(name, superclassName, interfaces, definition, annotation) {
+      if (boot[name]) {
+        return; // avoid to redefine
+      }
+    
       // Default superclass is native Object class.
       var superclass = superclassName.length === 0 ? Object : boot[superclassName];
 
