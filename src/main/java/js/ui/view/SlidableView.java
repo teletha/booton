@@ -136,10 +136,6 @@ public class SlidableView extends UI {
         }
     }
 
-    public class OpenEvent extends js.ui.Event<SlidableView> {
-
-    }
-
     /**
      * @version 2013/04/07 1:03:07
      */

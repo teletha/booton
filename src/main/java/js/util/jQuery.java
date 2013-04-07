@@ -19,8 +19,6 @@ import js.dom.Image;
 import js.ui.Listen;
 import js.ui.UI;
 import js.ui.UIEvent;
-import js.ui.event.Key;
-import js.ui.event.ListenKey;
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
 
@@ -390,6 +388,48 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery attr(String name, double value);
+
+    /**
+     * <p>
+     * Attach all event handlers which are defined in the given subscriber to the selected elements.
+     * </p>
+     * 
+     * @param subscriber A subscriber that holds user action event listeners.
+     * @return A chainable API.
+     */
+    public jQuery bind(final Object subscriber) {
+        if (subscriber != null) {
+            Class clazz = subscriber.getClass();
+            String namespace = "." + clazz.getSimpleName() + subscriber.hashCode();
+
+            for (final Method method : clazz.getMethods()) {
+                Listen annotation = method.getAnnotation(Listen.class);
+
+                if (annotation != null) {
+                    final UIEvent type = annotation.value();
+
+                    on(type.name + namespace, new Listener() {
+
+                        @Override
+                        public void handler(Event event) {
+                            int code = type.code;
+
+                            if (code == -1 || code == event.which) {
+                                try {
+                                    method.invoke(subscriber, event);
+                                } catch (Exception e) {
+                                    throw new Error(e);
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        // API defintion
+        return this;
+    }
 
     /**
      * <p>
@@ -944,6 +984,18 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      *            previously attached for the event(s).
      * @return
      */
+    public native jQuery off(String eventType);
+
+    /**
+     * <p>
+     * Remove an event handler.
+     * </p>
+     * 
+     * @param event An object where the string keys represent one or more space-separated event
+     *            types and optional namespaces, and the values represent handler functions
+     *            previously attached for the event(s).
+     * @return
+     */
     public native jQuery off(Event event);
 
     /**
@@ -973,64 +1025,6 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery off(String eventType, String selector, Listener listener);
-
-    /**
-     * <p>
-     * Attach an event handler function for one or more events to the selected elements.
-     * </p>
-     * 
-     * @param subscriber A function to execute when the event is triggered. The value false is also
-     *            allowed as a shorthand for a function that simply does return false.
-     * @return
-     */
-    public jQuery register(final Object subscriber) {
-        for (final Method method : subscriber.getClass().getMethods()) {
-            Listen listen = method.getAnnotation(Listen.class);
-
-            if (listen != null) {
-                UIEvent type = listen.value();
-
-                if (type != null && type != UIEvent.None) {
-                    on(type.toString(), new Listener() {
-
-                        @Override
-                        public void handler(Event event) {
-                            try {
-                                method.invoke(subscriber, event);
-                            } catch (Exception e) {
-                                throw new Error(e);
-                            }
-                        }
-                    });
-                }
-            }
-
-            ListenKey listenKey = method.getAnnotation(ListenKey.class);
-
-            if (listenKey != null) {
-                final Key key = listenKey.value();
-
-                if (key != null) {
-                    keydown(new Listener() {
-
-                        @Override
-                        public void handler(Event event) {
-                            if (event.which == key.code) {
-                                try {
-                                    method.invoke(subscriber, event);
-                                } catch (Exception e) {
-                                    throw new Error(e);
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-        }
-
-        // API defintion
-        return this;
-    }
 
     /**
      * <p>
@@ -1343,6 +1337,33 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
         }
 
         // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Dettach all event handlers which are defined in the given subscriber from the selected
+     * elements.
+     * </p>
+     * 
+     * @param subscriber A subscriber that holds user action event listeners.
+     * @return A chainable API.
+     */
+    public jQuery unbind(Object subscriber) {
+        if (subscriber != null) {
+            Class clazz = subscriber.getClass();
+            String namespace = "." + clazz.getSimpleName() + subscriber.hashCode();
+
+            for (Method method : clazz.getMethods()) {
+                Listen annotation = method.getAnnotation(Listen.class);
+
+                if (annotation != null) {
+                    off(annotation.value().name + namespace);
+                }
+            }
+        }
+
+        // API defintion
         return this;
     }
 
