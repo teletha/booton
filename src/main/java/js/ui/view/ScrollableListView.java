@@ -13,7 +13,9 @@ import static js.lang.Global.*;
 
 import java.util.List;
 
+import js.ui.Listen;
 import js.ui.UI;
+import js.ui.UIEvent;
 import js.ui.view.ScrollableListViewStyle.ItemColumnView;
 import js.ui.view.ScrollableListViewStyle.RenderableItemView;
 import js.ui.view.ScrollableListViewStyle.Spacer;
@@ -176,6 +178,16 @@ public class ScrollableListView extends UI {
         } else {
             return $();
         }
+    }
+
+    /**
+     * <p>
+     * Re-renderer view on scroll.
+     * </p>
+     */
+    @Listen(value = UIEvent.Scroll, debounce = 100)
+    private void scroll() {
+        render();
     }
 
     /**

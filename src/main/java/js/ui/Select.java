@@ -15,8 +15,6 @@ import js.ui.SelectStyle.SelectForm;
 import js.ui.SelectStyle.SelectItem;
 import js.ui.SelectStyle.SelectItemList;
 import js.ui.SelectStyle.SelectedItem;
-import js.ui.event.Key;
-import js.ui.event.ListenKey;
 import js.ui.model.Selectable;
 import js.ui.model.SelectableListener;
 import js.ui.view.ScrollableListView;
@@ -61,21 +59,21 @@ public class Select<M> extends FormUI<Select> {
         model.register(binder);
 
         form.addClass(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
-        form.register(this);
+        form.bind(this);
 
         view = new ScrollableListView(10, 28).provide(binder);
-        view.root.addClass(SelectItemList.class).register(binder);
+        view.root.addClass(SelectItemList.class).bind(binder);
 
         options = root.child(new SlidableView(view, root.child(SelectArrow.class)));
         options.register(binder);
     }
 
-    @ListenKey(Key.Up)
+    @Listen(UIEvent.Key_Up)
     private void selectPrevious() {
         model.selectPrevious();
     }
 
-    @ListenKey(Key.Down)
+    @Listen(UIEvent.Key_Down)
     private void selectNext() {
         model.selectNext();
     }

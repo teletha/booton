@@ -23,5 +23,30 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Listen {
 
-    UIEvent value() default UIEvent.None;
+    /**
+     * <p>
+     * Define event type.
+     * </p>
+     * 
+     * @return
+     */
+    UIEvent value();
+
+    /**
+     * <p>
+     * Set debounce time.
+     * </p>
+     * 
+     * @return
+     */
+    long debounce() default 0;
+
+    /**
+     * <p>
+     * Set throttle time.
+     * </p>
+     * 
+     * @return
+     */
+    long throttle() default 0;
 }
