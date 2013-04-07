@@ -11,11 +11,16 @@ package js.util;
 
 import static js.lang.Global.*;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 
 import js.dom.Element;
 import js.dom.Image;
+import js.ui.Listen;
 import js.ui.UI;
+import js.ui.UIEvent;
+import js.ui.event.Key;
+import js.ui.event.ListenKey;
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
 
@@ -238,6 +243,16 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery andSelf();
+
+    /**
+     * <p>
+     * Perform a custom animation of a set of CSS properties.
+     * </p>
+     * 
+     * @param propertyName
+     * @param propertyValue
+     */
+    public native void animate(String propertyName, int propertyValue);
 
     /**
      * <p>
@@ -958,6 +973,64 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery off(String eventType, String selector, Listener listener);
+
+    /**
+     * <p>
+     * Attach an event handler function for one or more events to the selected elements.
+     * </p>
+     * 
+     * @param subscriber A function to execute when the event is triggered. The value false is also
+     *            allowed as a shorthand for a function that simply does return false.
+     * @return
+     */
+    public jQuery register(final Object subscriber) {
+        for (final Method method : subscriber.getClass().getMethods()) {
+            Listen listen = method.getAnnotation(Listen.class);
+
+            if (listen != null) {
+                UIEvent type = listen.value();
+
+                if (type != null && type != UIEvent.None) {
+                    on(type.toString(), new Listener() {
+
+                        @Override
+                        public void handler(Event event) {
+                            try {
+                                method.invoke(subscriber, event);
+                            } catch (Exception e) {
+                                throw new Error(e);
+                            }
+                        }
+                    });
+                }
+            }
+
+            ListenKey listenKey = method.getAnnotation(ListenKey.class);
+
+            if (listenKey != null) {
+                final Key key = listenKey.value();
+
+                if (key != null) {
+                    keydown(new Listener() {
+
+                        @Override
+                        public void handler(Event event) {
+                            if (event.which == key.code) {
+                                try {
+                                    method.invoke(subscriber, event);
+                                } catch (Exception e) {
+                                    throw new Error(e);
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        // API defintion
+        return this;
+    }
 
     /**
      * <p>

@@ -63,6 +63,16 @@ public class Global {
      * </p>
      * 
      * @param expression
+     * @return A empty {@link jQuery} instance.
+     */
+    public static native jQuery $();
+
+    /**
+     * <p>
+     * Provide JQuery support.
+     * </p>
+     * 
+     * @param expression
      * @return
      */
     public static native jQuery $(String expression);
@@ -171,6 +181,18 @@ public class Global {
          * </p>
          */
         public String location = "location";
+
+        /**
+         * <p>
+         * Provide JQuery support.
+         * </p>
+         * 
+         * @param expression
+         * @return A empty {@link jQuery} instance.
+         */
+        public String $() {
+            return "$()";
+        }
 
         /**
          * <p>

@@ -14,15 +14,16 @@ import js.ui.SelectStyle.SelectArrow;
 import js.ui.SelectStyle.SelectForm;
 import js.ui.SelectStyle.SelectItem;
 import js.ui.SelectStyle.SelectItemList;
+import js.ui.SelectStyle.SelectedItem;
+import js.ui.event.Key;
+import js.ui.event.ListenKey;
 import js.ui.model.Selectable;
 import js.ui.model.SelectableListener;
 import js.ui.view.ScrollableListView;
 import js.ui.view.ScrollableListView.ItemRenderer;
 import js.ui.view.SlidableView;
-import js.ui.view.SlidableView.OpenEvent;
 import js.util.jQuery;
 import js.util.jQuery.Event;
-import js.util.jQuery.Listener;
 
 /**
  * @version 2013/03/28 1:31:15
@@ -55,40 +56,39 @@ public class Select<M> extends FormUI<Select> {
      * Create select form.
      * </p>
      */
-    public Select(Selectable<M> model) {
-        this.model = model;
-        this.model.register(binder);
+    public Select(Selectable<M> selectable) {
+        model = selectable;
+        model.register(binder);
 
         form.addClass(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
+        form.register(this);
 
         view = new ScrollableListView(10, 28).provide(binder);
-        view.root.addClass(SelectItemList.class).click(new Listener() {
-
-            @Override
-            public void handler(Event event) {
-                Select.this.model.setSelectionIndex(Integer.parseInt($(event.target).attr("index")));
-            }
-        });
+        view.root.addClass(SelectItemList.class).register(binder);
 
         options = root.child(new SlidableView(view, root.child(SelectArrow.class)));
         options.register(binder);
-
-        eventBus.register(this);
     }
 
-    private EventBus eventBus = new EventBus();
+    @ListenKey(Key.Up)
+    private void selectPrevious() {
+        model.selectPrevious();
+    }
 
-    @Subscriber
-    private void listen(OpenEvent event) {
-        System.out.println("open");
-        System.out.println(OpenEvent.class);
-        System.out.println(event);
+    @ListenKey(Key.Down)
+    private void selectNext() {
+        model.selectNext();
     }
 
     /**
      * @version 2013/04/05 10:06:20
      */
     private class Binder implements ItemRenderer, SelectableListener<M>, SlidableView.Listener {
+
+        @Listen(UIEvent.Click)
+        private void selectItem(Event event) {
+            model.setSelectionIndex(Integer.parseInt($(event.target).attr("index")));
+        }
 
         /**
          * {@inheritDoc}
@@ -104,6 +104,12 @@ public class Select<M> extends FormUI<Select> {
         @Override
         public void renderItem(int itemIndex, jQuery element) {
             element.addClass(SelectItem.class).attr("index", itemIndex).text(model.get(itemIndex));
+
+            if (itemIndex == model.getSelectionIndex()) {
+                element.addClass(SelectedItem.class);
+            } else {
+                element.removeClass(SelectedItem.class);
+            }
         }
 
         /**
@@ -112,6 +118,8 @@ public class Select<M> extends FormUI<Select> {
         @Override
         public void select(int index, M item) {
             form.val(item.toString());
+
+            view.render(index);
         }
 
         /**
@@ -119,7 +127,7 @@ public class Select<M> extends FormUI<Select> {
          */
         @Override
         public void deselect(int index, M item) {
-            form.val("");
+            view.render(index);
         }
 
         /**
@@ -144,7 +152,7 @@ public class Select<M> extends FormUI<Select> {
          */
         @Override
         public void open() {
-            System.out.println("open");
+            view.item(model.getSelectionIndex()).animate("scrollTop", 0);
         }
 
         /**

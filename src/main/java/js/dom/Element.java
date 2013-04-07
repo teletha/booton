@@ -284,4 +284,11 @@ public abstract class Element extends js.dom.Node implements org.w3c.dom.Element
      *                NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
      */
     public native void setAttribute(String name, double value);
+
+    /**
+     * <p>
+     * The scrollIntoView() method scrolls the element into view.
+     * </p>
+     */
+    public native void scrollIntoView();
 }

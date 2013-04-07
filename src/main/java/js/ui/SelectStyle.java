@@ -70,8 +70,15 @@ class SelectStyle extends FormUIStyle {
             cursor.pointer();
 
             while (hover()) {
-                background.color(SelectColor);
+                background.color(SelectColor.grayscale());
             }
+        }
+    }
+
+    class SelectedItem extends CSS {
+
+        {
+            background.color(SelectColor);
         }
     }
 }

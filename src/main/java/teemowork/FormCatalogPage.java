@@ -13,6 +13,7 @@ import js.application.Page;
 import js.application.PageInfo;
 import js.lang.Global;
 import js.ui.Select;
+import js.ui.model.Selectable;
 import js.util.jQuery;
 
 /**
@@ -40,7 +41,13 @@ public class FormCatalogPage extends Page {
      */
     @Override
     public void load(jQuery root) {
-        final Select<String> child = root.child(new Select("a", "b", "c"));
+        Selectable<String> s = new Selectable<String>();
+        for (int i = 0; i < 200; i++) {
+            s.add(String.valueOf(i));
+        }
+
+        final Select<String> child = root.child(new Select(s));
+        child.model.setSelectionIndex(180);
 
         Global.setTimeout(new Runnable() {
 

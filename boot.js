@@ -261,6 +261,8 @@ function boot(global) {
       // We must copy the properties over onto the new prototype.
       // At first, from superclass definition.
       var prototype = Class.prototype = Object.create(superclass.prototype);
+      prototype.$ = Class; // Define class object for the reference from instance.
+      
 
       // Then, from user defined class definition.
       for (var i in definition) {
@@ -306,12 +308,6 @@ function boot(global) {
           return "Class " + name;
         }
       });
-
-      
-      // Define class object for the reference from instance.
-      define(prototype, {
-        $: Class
-      }, true);
 
       // Invoke static initialization.
       if (init) init.call(Class);
