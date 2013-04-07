@@ -9,6 +9,8 @@
  */
 package js.ui.view;
 
+import static js.lang.Global.*;
+
 import java.util.List;
 
 import js.ui.UI;
@@ -158,6 +160,21 @@ public class ScrollableListView extends UI {
     public void render(int index) {
         if (lastRenderedTopIndex <= index && index < lastRenderedTopIndex + renderableItemSize) {
             renderer.renderItem(index, items.get(index - lastRenderedTopIndex));
+        }
+    }
+
+    /**
+     * <p>
+     * Render list item if it is renderable.
+     * </p>
+     * 
+     * @param index A item index to render.
+     */
+    public jQuery item(int index) {
+        if (lastRenderedTopIndex <= index && index < lastRenderedTopIndex + renderableItemSize) {
+            return items.get(index - lastRenderedTopIndex);
+        } else {
+            return $();
         }
     }
 

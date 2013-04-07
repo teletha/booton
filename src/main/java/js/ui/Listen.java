@@ -21,5 +21,7 @@ import java.lang.annotation.Target;
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Subscriber {
+public @interface Listen {
+
+    UIEvent value() default UIEvent.None;
 }

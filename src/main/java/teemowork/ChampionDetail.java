@@ -194,7 +194,7 @@ public class ChampionDetail extends Page {
      * Calcurate current status.
      * </p>
      */
-    // @Observer
+    @Observer
     private void calcurate() {
         // update each status
         level.text(String.valueOf(build.getLevel()));

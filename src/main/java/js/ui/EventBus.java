@@ -23,9 +23,9 @@ public class EventBus {
      */
     public void register(Object subscriber) {
         for (Method method : subscriber.getClass().getMethods()) {
-            if (method.isAnnotationPresent(Subscriber.class)) {
+            if (method.isAnnotationPresent(Listen.class)) {
                 System.out.println(method);
-                System.out.println(Subscriber.class);
+                System.out.println(Listen.class);
 
                 Class[] parameters = method.getParameterTypes();
                 System.out.println(parameters);
