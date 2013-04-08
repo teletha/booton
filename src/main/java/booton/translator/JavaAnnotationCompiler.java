@@ -107,7 +107,6 @@ class JavaAnnotationCompiler {
 
             if (element instanceof Method) {
                 defined.add(new MethodSignature((Method) element));
-                System.out.println(element);
             }
             elements.add(new Annotated(name, defined.toArray(new Annotation[defined.size()])));
         }

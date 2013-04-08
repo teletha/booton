@@ -9,14 +9,13 @@
  */
 package booton.translator.reflection;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/01/18 11:13:39
+ * @version 2013/04/08 14:26:59
  */
 @SuppressWarnings("unused")
 public class ClassTest extends ScriptTester {
@@ -32,7 +31,6 @@ public class ClassTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void GetMethods() throws Exception {
         test(new Scriptable() {
 
@@ -43,7 +41,6 @@ public class ClassTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void GetMethodsOverride() throws Exception {
         test(new Scriptable() {
 

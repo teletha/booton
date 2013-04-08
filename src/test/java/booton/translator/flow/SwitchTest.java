@@ -16,7 +16,7 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/01/22 20:36:50
+ * @version 2013/04/08 14:28:16
  */
 @SuppressWarnings("unused")
 public class SwitchTest extends ScriptTester {
@@ -252,6 +252,26 @@ public class SwitchTest extends ScriptTester {
                             value++;
                             break;
                         }
+                    }
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void BreakNoDefaultInNestedOtherFlow2() {
+        test(new Scriptable() {
+
+            public int act(int value) {
+                for (int i = 0; i < 3; i++) {
+                    if (value != 2) {
+                        switch (value) {
+                        case 1:
+                            value++;
+                            break;
+                        }
+                        value += 3;
                     }
                 }
                 return value;
