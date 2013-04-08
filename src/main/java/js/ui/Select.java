@@ -10,7 +10,6 @@
 package js.ui;
 
 import static js.lang.Global.*;
-import js.dom.Element;
 import js.ui.SelectStyle.SelectArrow;
 import js.ui.SelectStyle.SelectForm;
 import js.ui.SelectStyle.SelectItem;
@@ -117,12 +116,6 @@ public class Select<M> extends FormUI<Select> {
         public void select(int index, M item) {
             form.val(item.toString());
 
-            Element e = view.item(index).get(0);
-
-            if (e != null) {
-                e.scrollIntoView();
-            }
-
             view.render(index);
         }
 
@@ -156,7 +149,6 @@ public class Select<M> extends FormUI<Select> {
          */
         @Override
         public void open() {
-            view.item(model.getSelectionIndex()).animate("scrollTop", 0);
         }
 
         /**
@@ -164,7 +156,6 @@ public class Select<M> extends FormUI<Select> {
          */
         @Override
         public void close() {
-            System.out.println("close");
         }
     }
 }

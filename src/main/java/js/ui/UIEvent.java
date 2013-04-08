@@ -39,8 +39,8 @@ public class UIEvent implements JavascriptNative {
     public int pageY;
 
     /**
-     * The difference in milliseconds between the time the browser created the event and January
-     * 1, 1970.
+     * The difference in milliseconds between the time the browser created the event and January 1,
+     * 1970.
      */
     public long timeStamp;
 
@@ -48,8 +48,7 @@ public class UIEvent implements JavascriptNative {
     public String type;
 
     /**
-     * For key or mouse events, this property indicates the specific key or button that was
-     * pressed.
+     * For key or mouse events, this property indicates the specific key or button that was pressed.
      */
     public int which;
 
@@ -89,17 +88,29 @@ public class UIEvent implements JavascriptNative {
 
     /**
      * <p>
-     * Prevents the event from bubbling up the DOM tree, preventing any parent handlers from
-     * being notified of the event.
+     * Prevents the event from bubbling up the DOM tree, preventing any parent handlers from being
+     * notified of the event.
      * </p>
      */
     public native void stopPropagation();
 
     /**
      * <p>
-     * Keeps the rest of the handlers from being executed and prevents the event from bubbling
-     * up the DOM tree.
+     * Keeps the rest of the handlers from being executed and prevents the event from bubbling up
+     * the DOM tree.
      * </p>
      */
     public native void stopImmediatePropagation();
+
+    /**
+     * @version 2013/04/02 16:51:33
+     */
+    public static class Offset implements JavascriptNative {
+
+        /** The top offset. */
+        public int top;
+
+        /** The left offset. */
+        public int left;
+    }
 }
