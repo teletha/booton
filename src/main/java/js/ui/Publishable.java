@@ -34,7 +34,7 @@ public abstract class Publishable {
      * Register event listener.
      * </p>
      */
-    public void register(Object subscriber) {
+    public void bind(Object subscriber) {
         for (Class type : getTypes(subscriber.getClass())) {
             Class[] interfaces = type.getInterfaces();
 

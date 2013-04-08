@@ -67,4 +67,13 @@ public @interface Listen {
      * @return
      */
     int count() default 0;
+
+    /**
+     * <p>
+     * Set event propagation behavior.
+     * </p>
+     * 
+     * @return The <code>false</code> will stop propagation.
+     */
+    boolean propagate() default true;
 }
