@@ -1474,6 +1474,18 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
     public native int outerWidth(boolean includeMargin);
 
     /**
+     * @version 2013/04/02 16:51:33
+     */
+    public static class Offset implements JavascriptNative {
+    
+        /** The top offset. */
+        public int top;
+    
+        /** The left offset. */
+        public int left;
+    }
+
+    /**
      * @version 2012/12/02 23:08:01
      */
     public static interface Listener {
@@ -1487,18 +1499,6 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
          * @return
          */
         void handler(UIEvent event);
-    }
-
-    /**
-     * @version 2013/04/02 16:51:33
-     */
-    public static class Offset implements JavascriptNative {
-
-        /** The top offset. */
-        public int top;
-
-        /** The left offset. */
-        public int left;
     }
 
     /**
