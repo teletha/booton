@@ -18,7 +18,7 @@ import js.dom.Element;
 import js.dom.Image;
 import js.ui.Listen;
 import js.ui.UI;
-import js.ui.UIEvent;
+import js.ui.UserAction;
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
 
@@ -438,7 +438,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
                         listener = new Debounce(time, listener);
                     }
 
-                    for (final UIEvent type : listen.value()) {
+                    for (final UserAction type : listen.value()) {
                         // ===========================
                         // KeyCode Wrapper
                         // ===========================
@@ -1384,7 +1384,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
                 Listen annotation = method.getAnnotation(Listen.class);
 
                 if (annotation != null) {
-                    for (UIEvent type : annotation.value()) {
+                    for (UserAction type : annotation.value()) {
                         off(type.name + namespace);
                     }
                 }
