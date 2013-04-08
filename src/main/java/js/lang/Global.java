@@ -136,7 +136,7 @@ public class Global {
      * @param delay A delay time.
      * @return A timeout id.
      */
-    public static native long setTimeout(Runnable runnable, int delay);
+    public static native long setTimeout(Runnable runnable, long delay);
 
     /**
      * <p>
@@ -281,7 +281,7 @@ public class Global {
          * @param delay A delay time.
          * @return A timeout id.
          */
-        public String setTimeout(Runnable runnable, int delay) {
+        public String setTimeout(Runnable runnable, long delay) {
             return "setTimeout(boot.functionalize(" + param(0) + ")," + param(1) + ")";
         }
 

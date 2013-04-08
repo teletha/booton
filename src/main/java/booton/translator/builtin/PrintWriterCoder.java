@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ import java.io.PrintStream;
 import booton.translator.Translator;
 
 /**
- * @version 2012/11/28 1:57:58
+ * @version 2013/04/08 14:41:10
  */
 class PrintWriterCoder extends Translator<PrintStream> {
 
@@ -27,6 +27,10 @@ class PrintWriterCoder extends Translator<PrintStream> {
     }
 
     public String println(int value) {
+        return that + ".log(" + param(0) + ")";
+    }
+
+    public String println(long param0) {
         return that + ".log(" + param(0) + ")";
     }
 

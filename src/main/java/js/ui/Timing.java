@@ -14,11 +14,15 @@ package js.ui;
  */
 public enum Timing {
 
+    /** The default timing. */
     Immediate,
 
+    /** The special timing. */
     Throttle,
 
+    /** The special timing. */
     Debounce,
 
+    /** The special timing. */
     Lazy;
 }

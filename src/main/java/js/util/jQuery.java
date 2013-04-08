@@ -397,27 +397,57 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @param subscriber A subscriber that holds user action event listeners.
      * @return A chainable API.
      */
-    public jQuery bind(final Object subscriber) {
+    public jQuery bind(Object subscriber) {
         if (subscriber != null) {
             Class clazz = subscriber.getClass();
             String namespace = "." + clazz.getSimpleName() + subscriber.hashCode();
 
-            for (final Method method : clazz.getMethods()) {
-                Listen annotation = method.getAnnotation(Listen.class);
+            for (Method method : clazz.getMethods()) {
+                Listen listen = method.getAnnotation(Listen.class);
 
-                if (annotation != null) {
-                    final UIEvent[] types = annotation.value();
-
+                if (listen != null) {
                     Listener listener = new Subscriber(subscriber, method);
 
-                    for (final UIEvent type : types) {
-                        on(type.name + namespace, new Listener() {
+                    // ===========================
+                    // Execution Count Wrapper
+                    // ===========================
+                    int count = listen.count();
 
-                            @Override
-                            public void handler(Event event) {
+                    if (0 < count) {
+                        listener = new Count(count, listener);
+                    }
 
-                            }
-                        });
+                    // ===========================
+                    // Timing Related Wrappers
+                    // ===========================
+                    long time = listen.delay();
+
+                    if (0 < time) {
+                        listener = new Delay(time, listener);
+                    }
+
+                    time = listen.throttle();
+
+                    if (0 < time) {
+                        listener = new Throttle(time, listener);
+                    }
+
+                    time = listen.debounce();
+
+                    if (0 < time) {
+                        listener = new Debounce(time, listener);
+                    }
+
+                    for (final UIEvent type : listen.value()) {
+                        // ===========================
+                        // KeyCode Wrapper
+                        // ===========================
+                        int keyCode = type.code;
+
+                        if (keyCode != -1) {
+                            listener = new KeyBind(keyCode, listener);
+                        }
+                        on(type.name + namespace, listener);
                     }
                 }
             }
@@ -425,71 +455,6 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
         // API defintion
         return this;
-    }
-
-    /**
-     * @version 2013/04/08 10:11:19
-     */
-    private static class Subscriber implements Listener {
-
-        /** The subscriber instance. */
-        private final Object subscriber;
-
-        /** The subscriber method. */
-        private final Method method;
-
-        /**
-         * @param type
-         * @param subscriber
-         * @param method
-         */
-        private Subscriber(Object subscriber, Method method) {
-            this.subscriber = subscriber;
-            this.method = method;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void handler(Event event) {
-            try {
-                method.invoke(subscriber, event);
-            } catch (Exception e) {
-                throw new Error(e);
-            }
-        }
-    }
-
-    /**
-     * @version 2013/04/08 10:11:19
-     */
-    private static class KeyBinder implements Listener {
-
-        /** The target key code. */
-        private final int keyCode;
-
-        /** The delegation. */
-        private final Listener listener;
-
-        /**
-         * @param keyCode
-         * @param listener
-         */
-        private KeyBinder(int keyCode, Listener listener) {
-            this.keyCode = keyCode;
-            this.listener = listener;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void handler(Event event) {
-            if (event.which == keyCode) {
-                listener.handler(event);
-            }
-        }
     }
 
     /**
@@ -1524,54 +1489,6 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
     }
 
     /**
-     * @version 2013/04/02 19:04:44
-     */
-    public static class DebounceListener implements Listener, Runnable {
-
-        /** The delay time. */
-        private final int delay;
-
-        /** The delegator. */
-        private final Listener listener;
-
-        /** The lastest event. */
-        private Event event;
-
-        /** The time out id. */
-        private long id = -1;
-
-        /**
-         * @param listener
-         */
-        public DebounceListener(int delay, Listener listener) {
-            this.delay = delay;
-            this.listener = listener;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void handler(Event event) {
-            if (id != -1) {
-                clearTimeout(id);
-            }
-            this.event = event;
-            this.id = setTimeout(this, delay);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void run() {
-            id = -1;
-            listener.handler(event);
-            event = null;
-        }
-    }
-
-    /**
      * @version 2012/12/02 23:06:56
      */
     public static class Event implements JavascriptNative {
@@ -1673,5 +1590,250 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
         /** The left offset. */
         public int left;
+    }
+
+    /**
+     * @version 2013/04/08 10:11:19
+     */
+    private static class Subscriber implements Listener {
+
+        /** The subscriber instance. */
+        private final Object subscriber;
+
+        /** The subscriber method. */
+        private final Method method;
+
+        /**
+         * @param type
+         * @param subscriber
+         * @param method
+         */
+        private Subscriber(Object subscriber, Method method) {
+            this.subscriber = subscriber;
+            this.method = method;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handler(Event event) {
+            try {
+                method.invoke(subscriber, event);
+            } catch (Exception e) {
+                throw new Error(e);
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Built-in listener wrapper.
+     * </p>
+     * 
+     * @version 2013/04/08 10:11:19
+     */
+    private static class KeyBind implements Listener {
+
+        /** The target key code. */
+        private final int keyCode;
+
+        /** The delegation. */
+        private final Listener listener;
+
+        /**
+         * @param keyCode
+         * @param listener
+         */
+        private KeyBind(int keyCode, Listener listener) {
+            this.keyCode = keyCode;
+            this.listener = listener;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handler(Event event) {
+            if (event.which == keyCode) {
+                listener.handler(event);
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Built-in listener wrapper.
+     * </p>
+     * 
+     * @version 2013/04/08 13:42:03
+     */
+    private static class Count implements Listener {
+
+        /** The delegator. */
+        private final Listener listener;
+
+        /** The execution limit. */
+        private final int limit;
+
+        /** The current number of execution. */
+        private int current = 0;
+
+        /**
+         * @param limit
+         */
+        private Count(int limit, Listener listener) {
+            this.limit = limit;
+            this.listener = listener;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handler(Event event) {
+            listener.handler(event);
+
+            if (++current == limit) {
+                $(event.target).off(event);
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Built-in listener wrapper.
+     * </p>
+     * 
+     * @version 2013/04/08 14:58:44
+     */
+    private static class Debounce implements Listener, Runnable {
+
+        /** The delay time. */
+        private final long delay;
+
+        /** The delegator. */
+        private final Listener listener;
+
+        /** The lastest event. */
+        private Event event;
+
+        /** The time out id. */
+        private long id = -1;
+
+        /**
+         * @param listener
+         */
+        private Debounce(long delay, Listener listener) {
+            this.delay = delay;
+            this.listener = listener;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handler(Event event) {
+            if (id != -1) {
+                clearTimeout(id);
+            }
+            this.event = event;
+            this.id = setTimeout(this, delay);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void run() {
+            id = -1;
+            listener.handler(event);
+            event = null;
+        }
+    }
+
+    /**
+     * <p>
+     * Built-in listener wrapper.
+     * </p>
+     * 
+     * @version 2013/04/08 14:37:30
+     */
+    private static class Throttle implements Listener {
+
+        /** The delay time. */
+        private final long delay;
+
+        /** The delegator. */
+        private final Listener listener;
+
+        /** The latest execution time. */
+        private long latest;
+
+        /**
+         * @param listener
+         */
+        private Throttle(long delay, Listener listener) {
+            this.delay = delay;
+            this.listener = listener;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handler(Event event) {
+            long now = event.timeStamp;
+
+            if (latest + delay < now) {
+                latest = now;
+
+                listener.handler(event);
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Built-in listener wrapper.
+     * </p>
+     * 
+     * @version 2013/04/08 13:57:10
+     */
+    private static class Delay implements Listener, Runnable {
+
+        /** The delay time. */
+        private final long delay;
+
+        /** The delegator. */
+        private final Listener listener;
+
+        /** The lastest event. */
+        private Event event;
+
+        /**
+         * @param listener
+         */
+        public Delay(long delay, Listener listener) {
+            this.delay = delay;
+            this.listener = listener;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handler(Event event) {
+            this.event = event;
+            setTimeout(this, delay);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void run() {
+            listener.handler(event);
+        }
     }
 }

@@ -14,7 +14,6 @@ import static js.lang.Global.*;
 import java.util.List;
 
 import js.ui.Listen;
-import js.ui.Timing;
 import js.ui.UI;
 import js.ui.UIEvent;
 import js.ui.view.ScrollableListViewStyle.ItemColumnView;
@@ -23,12 +22,9 @@ import js.ui.view.ScrollableListViewStyle.Spacer;
 import js.ui.view.ScrollableListViewStyle.ViewabletemView;
 import js.util.ArrayList;
 import js.util.jQuery;
-import js.util.jQuery.DebounceListener;
-import js.util.jQuery.Event;
-import js.util.jQuery.Listener;
 
 /**
- * @version 2013/04/02 15:52:54
+ * @version 2013/04/08 14:34:22
  */
 public class ScrollableListView extends UI {
 
@@ -77,8 +73,7 @@ public class ScrollableListView extends UI {
         this.itemHeight = itemHeight;
         this.viewableItemSize = viewableItemSize;
 
-        this.viewableItemView = root.addClass(ViewabletemView.class)
-                .scroll(new DebounceListener(100, new ScrollAware()));
+        this.viewableItemView = root.addClass(ViewabletemView.class).bind(this);
         this.renderableItemView = viewableItemView.child(RenderableItemView.class);
         this.spacer = renderableItemView.child(Spacer.class);
     }
@@ -131,6 +126,7 @@ public class ScrollableListView extends UI {
      * Render all list items.
      * </p>
      */
+    @Listen(value = UIEvent.Scroll, debounce = 100)
     private void render() {
         int viewableTopIndex = Math.round(-renderableItemView.position().top / itemHeight);
         int renderableTopIndex = Math.max(0, viewableTopIndex - extraTopRenderableItemSize);
@@ -178,30 +174,6 @@ public class ScrollableListView extends UI {
             return items.get(index - lastRenderedTopIndex);
         } else {
             return $();
-        }
-    }
-
-    /**
-     * <p>
-     * Re-renderer view on scroll.
-     * </p>
-     */
-    @Listen(value = UIEvent.Scroll, executeAt = Timing.Debounce, executeTime = 100)
-    private void scroll() {
-        render();
-    }
-
-    /**
-     * @version 2013/04/02 23:50:57
-     */
-    private class ScrollAware implements Listener {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void handler(Event event) {
-            render();
         }
     }
 

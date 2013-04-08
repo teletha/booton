@@ -34,17 +34,30 @@ public @interface Listen {
 
     /**
      * <p>
-     * Set execution {@link Timing}.
+     * Set the execution debounce time (ms).
      * </p>
      * 
-     * @return
+     * @return A time (ms);
      */
-    Timing executeAt() default Timing.Immediate;
+    long debounce() default 0;
 
     /**
-     * @return
+     * <p>
+     * Set the execution throttle time (ms).
+     * </p>
+     * 
+     * @return A time (ms);
      */
-    long executeTime() default 0;
+    long throttle() default 0;
+
+    /**
+     * <p>
+     * Set the execution delay time (ms).
+     * </p>
+     * 
+     * @return A time (ms);
+     */
+    long delay() default 0;
 
     /**
      * <p>
