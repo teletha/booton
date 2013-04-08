@@ -746,7 +746,7 @@ class Node {
             }
 
             // The end node is not default node.
-            if (defaults.outgoing.isEmpty() && defaults.incoming.contains(enter)) {
+            if (defaults.incoming.size() != 1 && defaults.incoming.contains(enter)) {
                 noDefault = true; // default node does not exist
             }
 
@@ -754,20 +754,22 @@ class Node {
                 node.addExpression("break");
             }
 
-            List<Node> nodes = new LinkedList();
-            nodes.addAll(defaults.outgoing);
+            if (!noDefault) {
+                List<Node> nodes = new LinkedList();
+                nodes.addAll(defaults.outgoing);
 
-            while (!nodes.isEmpty()) {
-                Node node = nodes.remove(0);
+                while (!nodes.isEmpty()) {
+                    Node node = nodes.remove(0);
 
-                if (node.getDominator() == enter) {
-                    // add break statement to each incoming node
-                    for (Node incoming : node.incoming) {
-                        incoming.addExpression("break");
+                    if (node.getDominator() == enter) {
+                        // add break statement to each incoming node
+                        for (Node incoming : node.incoming) {
+                            incoming.addExpression("break");
+                        }
+                        return node;
                     }
-                    return node;
+                    nodes.addAll(node.outgoing);
                 }
-                nodes.addAll(node.outgoing);
             }
             return defaults;
         }
