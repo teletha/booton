@@ -55,7 +55,7 @@ public class Select<M> extends FormUI<Select> {
      */
     public Select(Selectable<M> selectable) {
         model = selectable;
-        model.register(binder);
+        model.bind(binder);
 
         form.addClass(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
         form.bind(this);
@@ -64,7 +64,7 @@ public class Select<M> extends FormUI<Select> {
         view.root.addClass(SelectItemList.class).bind(binder);
 
         options = root.child(new SlidableView(view, root.child(SelectArrow.class)));
-        options.register(binder);
+        options.bind(binder);
     }
 
     @Listen(UIAction.Key_Up)
@@ -80,7 +80,7 @@ public class Select<M> extends FormUI<Select> {
     /**
      * @version 2013/04/05 10:06:20
      */
-    private class Binder implements ItemRenderer, SelectableListener<M>, SlidableView.Listener {
+    private class Binder implements ItemRenderer, SelectableListener<M> {
 
         @Listen(UIAction.Click)
         private void selectItem(UIEvent event) {
@@ -142,20 +142,6 @@ public class Select<M> extends FormUI<Select> {
         @Override
         public void remove(int index, M item) {
             view.provide(this);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void open() {
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void close() {
         }
     }
 }

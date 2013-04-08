@@ -13,8 +13,9 @@ import static js.lang.Global.*;
 
 import java.util.EventListener;
 
+import js.ui.Listen;
 import js.ui.UI;
-import js.ui.UIEvent;
+import js.ui.UIAction;
 import js.ui.view.SlidableViewStyle.Shown;
 import js.ui.view.SlidableViewStyle.Slider;
 import js.ui.view.SlidableViewStyle.ViewableArea;
@@ -24,9 +25,6 @@ import js.util.jQuery;
  * @version 2013/04/04 19:01:02
  */
 public class SlidableView extends UI {
-
-    /** The slide switchgear. */
-    private final Switchgear switchgear = new Switchgear();
 
     /** The current slide state. */
     private boolean shown = false;
@@ -43,7 +41,7 @@ public class SlidableView extends UI {
         root.child(Slider.class).append(content);
 
         for (jQuery switchgear : switchgears) {
-            register(switchgear);
+            switchgear.bind(this);
         }
     }
 
@@ -62,7 +60,7 @@ public class SlidableView extends UI {
             publish(Listener.class).open();
 
             // prepare closer
-            $(window).on("click", switchgear);
+            $(window).bind(this);
         }
     }
 
@@ -81,7 +79,7 @@ public class SlidableView extends UI {
             publish(Listener.class).close();
 
             // discard coloser
-            $(window).off("click", switchgear);
+            $(window).unbind(this);
         }
     }
 
@@ -90,49 +88,12 @@ public class SlidableView extends UI {
      * Toggle slide view.
      * </p>
      */
+    @Listen(value = UIAction.Click, propagate = false)
     public void toggle() {
         if (shown) {
             close();
         } else {
             open();
-        }
-    }
-
-    /**
-     * <p>
-     * Register as slide switchgear.
-     * </p>
-     * 
-     * @param element
-     */
-    public void register(jQuery element) {
-        element.click(switchgear);
-    }
-
-    /**
-     * <p>
-     * Unregister as slide switchgear.
-     * </p>
-     * 
-     * @param element
-     */
-    public void unregister(jQuery element) {
-        element.off("click", switchgear);
-    }
-
-    /**
-     * @version 2013/04/04 18:41:30
-     */
-    private class Switchgear implements js.util.jQuery.Listener {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void handler(UIEvent event) {
-            event.stopPropagation();
-
-            toggle();
         }
     }
 

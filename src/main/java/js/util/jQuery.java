@@ -407,7 +407,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
                 Listen listen = method.getAnnotation(Listen.class);
 
                 if (listen != null) {
-                    Listener listener = new Subscriber(subscriber, method);
+                    Listener listener = new Subscriber(subscriber, method, listen.propagate());
 
                     // ===========================
                     // Execution Count Wrapper
@@ -1477,10 +1477,10 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @version 2013/04/02 16:51:33
      */
     public static class Offset implements JavascriptNative {
-    
+
         /** The top offset. */
         public int top;
-    
+
         /** The left offset. */
         public int left;
     }
@@ -1512,14 +1512,18 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
         /** The subscriber method. */
         private final Method method;
 
+        /** The event propagation behavior. */
+        private final boolean propagation;
+
         /**
-         * @param type
          * @param subscriber
          * @param method
+         * @param propagation
          */
-        private Subscriber(Object subscriber, Method method) {
+        private Subscriber(Object subscriber, Method method, boolean propagation) {
             this.subscriber = subscriber;
             this.method = method;
+            this.propagation = propagation;
         }
 
         /**
@@ -1527,6 +1531,10 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
          */
         @Override
         public void handler(UIEvent event) {
+            if (!propagation) {
+                event.stopPropagation();
+            }
+
             try {
                 method.invoke(subscriber, event);
             } catch (Exception e) {
