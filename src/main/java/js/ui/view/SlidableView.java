@@ -22,12 +22,12 @@ import js.ui.view.SlidableViewStyle.ViewableArea;
 import js.util.jQuery;
 
 /**
- * @version 2013/04/04 19:01:02
+ * @version 2013/04/08 23:37:18
  */
 public class SlidableView extends UI {
 
     /** The current slide state. */
-    private boolean shown = false;
+    private int shown = 0;
 
     /**
      * <p>
@@ -51,9 +51,8 @@ public class SlidableView extends UI {
      * </p>
      */
     public void open() {
-        if (!shown) {
+        if (shown++ == 0) {
             // show slide view
-            shown = true;
             root.addClass(Shown.class);
 
             // notify event
@@ -70,15 +69,15 @@ public class SlidableView extends UI {
      * </p>
      */
     public void close() {
-        if (shown) {
+        if (2 <= shown) {
             // hide slide view
-            shown = false;
+            shown = 0;
             root.removeClass(Shown.class);
 
             // notify event
             publish(Listener.class).close();
 
-            // discard coloser
+            // discard closer
             $(window).unbind(this);
         }
     }
@@ -88,13 +87,24 @@ public class SlidableView extends UI {
      * Toggle slide view.
      * </p>
      */
-    @Listen(value = UIAction.Click, propagate = false)
+    @Listen(UIAction.Click)
     public void toggle() {
-        if (shown) {
+        if (2 <= shown) {
             close();
         } else {
             open();
         }
+    }
+
+    /**
+     * <p>
+     * Retrieve slide view condition.
+     * </p>
+     * 
+     * @return
+     */
+    public boolean isOpen() {
+        return shown != 0;
     }
 
     /**

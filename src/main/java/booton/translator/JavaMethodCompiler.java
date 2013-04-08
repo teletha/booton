@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 import js.lang.NativeObject;
+import js.ui.Input;
 import kiss.Extensible;
 import kiss.I;
 import kiss.model.ClassUtil;
@@ -1275,8 +1276,24 @@ class JavaMethodCompiler extends MethodVisitor {
             } else {
                 // constructor
                 if (countInitialization != 0) {
-                    // instance initialization method invocation
-                    current.addOperand(translator.translateConstructor(owner, desc, parameters, contexts));
+                    if (className.equals(Type.getType(Input.class).getInternalName())) {
+                        String model = "";
+                        String path = contexts.remove(1).toString();
+                        int index = path.indexOf('.');
+
+                        if (index != -1) {
+                            model = path.substring(0, index);
+                            path = path.substring(index + 1);
+                        }
+                        contexts.add(new OperandExpression(model));
+                        contexts.add(new OperandString(path));
+
+                        current.addOperand(translator.translateConstructor(owner, "(Ljava/lang/Object;Ljava/lang/String;)V", new Class[] {
+                                Object.class, String.class}, contexts));
+                    } else {
+                        // instance initialization method invocation
+                        current.addOperand(translator.translateConstructor(owner, desc, parameters, contexts));
+                    }
 
                     countInitialization--;
 

@@ -11,8 +11,10 @@ package teemowork;
 
 import js.application.Page;
 import js.application.PageInfo;
-import js.lang.Global;
+import js.ui.Input;
+import js.ui.Publishable;
 import js.ui.Select;
+import js.ui.model.Bindable;
 import js.ui.model.Selectable;
 import js.util.jQuery;
 
@@ -41,23 +43,27 @@ public class FormCatalogPage extends Page {
      */
     @Override
     public void load(jQuery root) {
-        Selectable<String> s = new Selectable<String>();
+        Selectable<String> selectable = new Selectable<String>();
         for (int i = 0; i < 200; i++) {
-            s.add(String.valueOf(i));
+            selectable.add(String.valueOf(i));
         }
 
-        final Select<String> child = root.child(new Select(s));
+        Select<String> child = root.child(new Select(selectable));
         child.model.setSelectionIndex(180);
 
-        Global.setTimeout(new Runnable() {
+        SomeModel model = new SomeModel();
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void run() {
-                child.options.open();
-            }
-        }, 1000);
+        Input input = root.child(new Input(model.name));
+        model.name = "AAAA";
+        System.out.println(model.name);
+    }
+
+    /**
+     * @version 2013/04/08 23:56:46
+     */
+    private static class SomeModel extends Publishable {
+
+        @Bindable
+        public String name;
     }
 }

@@ -70,10 +70,11 @@ public @interface Listen {
 
     /**
      * <p>
-     * Set event propagation behavior.
+     * Stop event propagation and default behavior. {@link UIEvent#stopPropagation()} and
+     * {@link UIEvent#preventDefault()} methods will be called.
      * </p>
      * 
-     * @return The <code>false</code> will stop propagation.
+     * @return The <code>true</code> will stop the current processing event.
      */
-    boolean propagate() default true;
+    boolean abort() default false;
 }

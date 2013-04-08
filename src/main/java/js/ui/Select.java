@@ -23,7 +23,7 @@ import js.ui.view.SlidableView;
 import js.util.jQuery;
 
 /**
- * @version 2013/03/28 1:31:15
+ * @version 2013/04/08 23:38:34
  */
 public class Select<M> extends FormUI<Select> {
 
