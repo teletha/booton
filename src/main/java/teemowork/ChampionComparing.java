@@ -18,9 +18,9 @@ import java.util.List;
 
 import js.application.Page;
 import js.application.PageInfo;
+import js.ui.UIEvent;
 import js.util.ArrayList;
 import js.util.jQuery;
-import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
 import teemowork.ChampionComparingStyle.Body;
 import teemowork.ChampionComparingStyle.Head;
@@ -75,7 +75,7 @@ public class ChampionComparing extends Page {
             head.child(StatusView.class).text(value.name).click(new Listener() {
 
                 @Override
-                public void handler(Event event) {
+                public void handler(UIEvent event) {
                     sort(value);
                 }
             });

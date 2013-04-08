@@ -16,10 +16,10 @@ import js.application.PageInfo;
 import js.bind.Subscriber;
 import js.dom.Image;
 import js.ui.Select;
+import js.ui.UIEvent;
 import js.ui.model.Selectable;
 import js.ui.model.SelectableListener;
 import js.util.jQuery;
-import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
 import teemowork.MasteryBuilderStyle.Completed;
 import teemowork.MasteryBuilderStyle.Defense;
@@ -113,7 +113,7 @@ public class MasteryBuilder extends Page implements Subscriber {
         reset = infomation.child(ResetButton.class).click(new Listener() {
 
             @Override
-            public void handler(Event event) {
+            public void handler(UIEvent event) {
                 masterySet.reset();
             }
         });
@@ -121,7 +121,7 @@ public class MasteryBuilder extends Page implements Subscriber {
         add = infomation.child(ResetButton.class).text("ADD").click(new Listener() {
 
             @Override
-            public void handler(Event event) {
+            public void handler(UIEvent event) {
                 menu.model.add(new MasterySet(masterySet.getCode()));
             }
         });
@@ -267,14 +267,14 @@ public class MasteryBuilder extends Page implements Subscriber {
             root.click(new Listener() {
 
                 @Override
-                public void handler(Event event) {
+                public void handler(UIEvent event) {
                     event.preventDefault();
                     masterySet.up(mastery);
                 }
             }).contextmenu(new Listener() {
 
                 @Override
-                public void handler(Event event) {
+                public void handler(UIEvent event) {
                     event.preventDefault();
                     masterySet.down(mastery);
                 }

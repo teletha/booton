@@ -14,7 +14,7 @@ import static js.lang.Global.*;
 import java.util.Date;
 
 import js.net.WebSocket;
-import js.util.jQuery.Event;
+import js.ui.UIEvent;
 import js.util.jQuery.Listener;
 
 
@@ -30,7 +30,7 @@ public class LiveCoding {
         $(window).on("error", new Listener() {
 
             @Override
-            public void handler(Event event) {
+            public void handler(UIEvent event) {
                 System.out.println(event);
             }
         });

@@ -18,7 +18,8 @@ import js.dom.Element;
 import js.dom.Image;
 import js.ui.Listen;
 import js.ui.UI;
-import js.ui.UserAction;
+import js.ui.UIAction;
+import js.ui.UIEvent;
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
 
@@ -438,7 +439,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
                         listener = new Debounce(time, listener);
                     }
 
-                    for (final UserAction type : listen.value()) {
+                    for (final UIAction type : listen.value()) {
                         // ===========================
                         // KeyCode Wrapper
                         // ===========================
@@ -1022,7 +1023,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      *            previously attached for the event(s).
      * @return
      */
-    public native jQuery off(Event event);
+    public native jQuery off(UIEvent event);
 
     /**
      * <p>
@@ -1384,7 +1385,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
                 Listen annotation = method.getAnnotation(Listen.class);
 
                 if (annotation != null) {
-                    for (UserAction type : annotation.value()) {
+                    for (UIAction type : annotation.value()) {
                         off(type.name + namespace);
                     }
                 }
@@ -1485,99 +1486,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
          * @param event
          * @return
          */
-        void handler(Event event);
-    }
-
-    /**
-     * @version 2012/12/02 23:06:56
-     */
-    public static class Event implements JavascriptNative {
-
-        /** The DOM element that initiated the event. */
-        public Element target;
-
-        /** The current DOM element within the event bubbling phase. */
-        public Element currentTarget;
-
-        /** The other DOM element involved in the event, if any. */
-        public Element relatedTarget;
-
-        /** The element where the currently-called jQuery event handler was attached. */
-        public Element delegateTarget;
-
-        /** The namespace specified when the event was triggered. */
-        public String namespace;
-
-        /** The mouse position relative to the left edge of the document. */
-        public int pageX;
-
-        /** The mouse position relative to the top edge of the document. */
-        public int pageY;
-
-        /**
-         * The difference in milliseconds between the time the browser created the event and January
-         * 1, 1970.
-         */
-        public long timeStamp;
-
-        /** Describes the nature of the event. */
-        public String type;
-
-        /**
-         * For key or mouse events, this property indicates the specific key or button that was
-         * pressed.
-         */
-        public int which;
-
-        /**
-         * <p>
-         * Returns whether event.preventDefault() was ever called on this event object.
-         * </p>
-         * 
-         * @return
-         */
-        public native boolean isDefaultPrevented();
-
-        /**
-         * <p>
-         * Returns whether event.stopImmediatePropagation() was ever called on this event object.
-         * </p>
-         * 
-         * @return
-         */
-        public native boolean isImmediatePropagationStopped();
-
-        /**
-         * <p>
-         * Returns whether event.stopPropagation() was ever called on this event object.
-         * </p>
-         * 
-         * @return
-         */
-        public native boolean isPropagationStopped();
-
-        /**
-         * <p>
-         * If this method is called, the default action of the event will not be triggered.
-         * </p>
-         */
-        public native void preventDefault();
-
-        /**
-         * <p>
-         * Prevents the event from bubbling up the DOM tree, preventing any parent handlers from
-         * being notified of the event.
-         * </p>
-         */
-        public native void stopPropagation();
-
-        /**
-         * <p>
-         * Keeps the rest of the handlers from being executed and prevents the event from bubbling
-         * up the DOM tree.
-         * </p>
-         */
-        public native void stopImmediatePropagation();
+        void handler(UIEvent event);
     }
 
     /**
@@ -1617,7 +1526,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
          * {@inheritDoc}
          */
         @Override
-        public void handler(Event event) {
+        public void handler(UIEvent event) {
             try {
                 method.invoke(subscriber, event);
             } catch (Exception e) {
@@ -1654,7 +1563,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
          * {@inheritDoc}
          */
         @Override
-        public void handler(Event event) {
+        public void handler(UIEvent event) {
             if (event.which == keyCode) {
                 listener.handler(event);
             }
@@ -1691,7 +1600,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
          * {@inheritDoc}
          */
         @Override
-        public void handler(Event event) {
+        public void handler(UIEvent event) {
             listener.handler(event);
 
             if (++current == limit) {
@@ -1716,7 +1625,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
         private final Listener listener;
 
         /** The lastest event. */
-        private Event event;
+        private UIEvent event;
 
         /** The time out id. */
         private long id = -1;
@@ -1733,7 +1642,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
          * {@inheritDoc}
          */
         @Override
-        public void handler(Event event) {
+        public void handler(UIEvent event) {
             if (id != -1) {
                 clearTimeout(id);
             }
@@ -1782,7 +1691,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
          * {@inheritDoc}
          */
         @Override
-        public void handler(Event event) {
+        public void handler(UIEvent event) {
             long now = event.timeStamp;
 
             if (latest + delay < now) {
@@ -1809,7 +1718,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
         private final Listener listener;
 
         /** The lastest event. */
-        private Event event;
+        private UIEvent event;
 
         /**
          * @param listener
@@ -1823,7 +1732,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
          * {@inheritDoc}
          */
         @Override
-        public void handler(Event event) {
+        public void handler(UIEvent event) {
             this.event = event;
             setTimeout(this, delay);
         }

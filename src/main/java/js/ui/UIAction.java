@@ -13,7 +13,7 @@ package js.ui;
 /**
  * @version 2013/04/07 19:37:45
  */
-public enum UserAction {
+public enum UIAction {
 
     /** The ui event type. */
     Close,
@@ -267,7 +267,7 @@ public enum UserAction {
     /**
      * 
      */
-    private UserAction() {
+    private UIAction() {
         this(-1);
     }
 
@@ -278,7 +278,7 @@ public enum UserAction {
      * 
      * @param code
      */
-    private UserAction(int code) {
+    private UIAction(int code) {
         this.code = code;
         this.name = code == -1 ? name().toLowerCase() : "keydown";
     }

@@ -20,9 +20,9 @@ import js.application.PageInfo;
 import js.bind.Notifiable;
 import js.bind.Observer;
 import js.math.Mathematics;
+import js.ui.UIEvent;
 import js.util.ArrayList;
 import js.util.jQuery;
-import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
 import teemowork.ChampionDetailStyle.Active;
 import teemowork.ChampionDetailStyle.Amplifier;
@@ -134,7 +134,7 @@ public class ChampionDetail extends Page {
         jQuery icon = root.child(ChampionIcon.class).click(new Listener() {
 
             @Override
-            public void handler(Event event) {
+            public void handler(UIEvent event) {
                 event.preventDefault();
 
                 build.setLevel(build.getLevel() + 1);
@@ -142,7 +142,7 @@ public class ChampionDetail extends Page {
         }).on("contextmenu", new Listener() {
 
             @Override
-            public void handler(Event event) {
+            public void handler(UIEvent event) {
                 event.preventDefault();
 
                 build.setLevel(build.getLevel() - 1);
@@ -162,7 +162,7 @@ public class ChampionDetail extends Page {
         $(window).keypress(new Listener() {
 
             @Override
-            public void handler(Event event) {
+            public void handler(UIEvent event) {
                 switch (event.which) {
                 case 113:// Q
                     build.active(SkillKey.Q);
@@ -261,14 +261,14 @@ public class ChampionDetail extends Page {
             iconBox.click(new Listener() {
 
                 @Override
-                public void handler(Event event) {
+                public void handler(UIEvent event) {
                     event.preventDefault();
                     build.up(skill);
                 }
             }).on("contextmenu", new Listener() {
 
                 @Override
-                public void handler(Event event) {
+                public void handler(UIEvent event) {
                     event.preventDefault();
                     build.down(skill);
                 }

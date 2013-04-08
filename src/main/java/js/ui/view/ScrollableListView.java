@@ -15,7 +15,7 @@ import java.util.List;
 
 import js.ui.Listen;
 import js.ui.UI;
-import js.ui.UserAction;
+import js.ui.UIAction;
 import js.ui.view.ScrollableListViewStyle.ItemColumnView;
 import js.ui.view.ScrollableListViewStyle.RenderableItemView;
 import js.ui.view.ScrollableListViewStyle.Spacer;
@@ -126,7 +126,7 @@ public class ScrollableListView extends UI {
      * Render all list items.
      * </p>
      */
-    @Listen(value = UserAction.Scroll, debounce = 100)
+    @Listen(value = UIAction.Scroll, debounce = 100)
     private void render() {
         int viewableTopIndex = Math.round(-renderableItemView.position().top / itemHeight);
         int renderableTopIndex = Math.max(0, viewableTopIndex - extraTopRenderableItemSize);
