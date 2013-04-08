@@ -14,6 +14,7 @@ import java.util.Map;
 
 import kiss.I;
 import booton.translator.JavaNative;
+import booton.translator.JavascriptNative;
 import booton.translator.Translator;
 
 /**
@@ -197,6 +198,57 @@ public class NativeObject {
     }
 
     /**
+     * <p>
+     * Returns a property descriptor for an own property (that is, one directly present on an
+     * object, not present by dint of being along an object's prototype chain) of a given object.
+     * </p>
+     * 
+     * @param object The object in which to look for the property.
+     * @param propertyName The name of the property whose description is to be retrieved.
+     * @return
+     */
+    public static native Object getOwnPropertyDescriptor(Object object, String propertyName);
+
+    /**
+     * <p>
+     * Defines a new property directly on an object, or modifies an existing property on an object,
+     * and returns the object. If you want to see how to use the Object.defineProperty method with a
+     * binary-flags-like syntax.
+     * </p>
+     * 
+     * @param object The object on which to define the property.
+     * @param propertyName The name of the property to be defined or modified.
+     * @param descriptor The descriptor for the property being defined or modified.
+     */
+    public static native void defineProperty(Object object, String propertyName, PropertyDescriptor descriptor);
+
+    /**
+     * @version 2013/04/09 2:35:51
+     */
+    public static interface PropertyDescriptor<T> extends JavascriptNative {
+
+        /**
+         * <p>
+         * Binds an object property to a function that will be called when that property is looked
+         * up.
+         * </p>
+         * 
+         * @return
+         */
+        T get();
+
+        /**
+         * <p>
+         * Binds an object property to a function to be called when there is an attempt to set that
+         * property.
+         * </p>
+         * 
+         * @param value
+         */
+        void set(T value);
+    }
+
+    /**
      * @version 2013/01/18 10:37:14
      */
     @SuppressWarnings("unused")
@@ -359,6 +411,36 @@ public class NativeObject {
          */
         public String isArray() {
             return "Array.isArray(" + that + ")";
+        }
+
+        /**
+         * <p>
+         * Returns a property descriptor for an own property (that is, one directly present on an
+         * object, not present by dint of being along an object's prototype chain) of a given
+         * object.
+         * </p>
+         * 
+         * @param object The object in which to look for the property.
+         * @param propertyName The name of the property whose description is to be retrieved.
+         * @return
+         */
+        public String getOwnPropertyDescriptor(Object object, String propertyName) {
+            return "Object.getOwnPropertyDescriptor(" + param(0) + "," + param(1) + ")";
+        }
+
+        /**
+         * <p>
+         * Defines a new property directly on an object, or modifies an existing property on an
+         * object, and returns the object. If you want to see how to use the Object.defineProperty
+         * method with a binary-flags-like syntax.
+         * </p>
+         * 
+         * @param object The object on which to define the property.
+         * @param propertyName The name of the property to be defined or modified.
+         * @param descriptor The descriptor for the property being defined or modified.
+         */
+        public String defineProperty(Object object, String propertyName, PropertyDescriptor descriptor) {
+            return "Object.defineProperty(" + param(0) + "," + param(1) + "," + param(2) + ")";
         }
     }
 }

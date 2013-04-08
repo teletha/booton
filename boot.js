@@ -340,6 +340,31 @@ function boot(global) {
      */
     functionalize: function(runnable) {
       return runnable.run.bind(runnable);
+    },
+    
+    /**
+     *
+     */
+    bindable: function(model, name) {
+      var descriptor = Object.getOwnPropertyDescriptor(model, name);
+
+      if (descriptor) {
+        return;
+      }
+      
+      var value = model[name];
+  
+      Object.defineProperty(model, name, {
+        get: function() {
+          console.log("getter ", value);
+          return value;
+        },
+        
+        set: function(newValue) {
+          console.log("setter ", value, " ", newValue);
+          value = newValue;
+        }
+      });
     }
   });
 }

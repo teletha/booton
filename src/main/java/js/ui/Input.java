@@ -9,22 +9,63 @@
  */
 package js.ui;
 
+import js.lang.NativeObject;
+import js.lang.NativeObject.PropertyDescriptor;
 import js.ui.FormUIStyle.InputForm;
-import js.util.jQuery;
 
 /**
  * @version 2013/04/03 11:47:12
  */
-public class Input extends UI {
-
-    /** The input form element. */
-    public final jQuery inputForm;
+public class Input extends FormUI {
 
     /**
      * 
      */
     public Input() {
-        this.inputForm = root.child("input").attr("type", "input").addClass(InputForm.class);
+        form.attr("type", "input").addClass(InputForm.class);
     }
 
+    /**
+     * 
+     */
+    public Input(String model) {
+        form.attr("type", "input").addClass(InputForm.class);
+    }
+
+    /**
+     * 
+     */
+    @SuppressWarnings("unused")
+    private Input(Object model, String propertyName) {
+        form.attr("type", "input").addClass(InputForm.class);
+
+        Object descriptor = NativeObject.getOwnPropertyDescriptor(model, propertyName);
+
+        if (descriptor == null) {
+            NativeObject.defineProperty(model, propertyName, new PropertyDescriptor() {
+
+                private Object value;
+
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                public Object get() {
+                    return value;
+                }
+
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                public void set(Object value) {
+                    this.value = value;
+                }
+            });
+        }
+
+        System.out.println(model);
+        System.out.println(propertyName);
+        Binder.bind(model, propertyName);
+    }
 }
