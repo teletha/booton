@@ -406,29 +406,90 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
                 Listen annotation = method.getAnnotation(Listen.class);
 
                 if (annotation != null) {
-                    final UIEvent type = annotation.value();
+                    final UIEvent[] types = annotation.value();
 
-                    on(type.name + namespace, new Listener() {
+                    Listener listener = new Subscriber(subscriber, method);
 
-                        @Override
-                        public void handler(Event event) {
-                            int code = type.code;
+                    for (final UIEvent type : types) {
+                        on(type.name + namespace, new Listener() {
 
-                            if (code == -1 || code == event.which) {
-                                try {
-                                    method.invoke(subscriber, event);
-                                } catch (Exception e) {
-                                    throw new Error(e);
-                                }
+                            @Override
+                            public void handler(Event event) {
+
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
         }
 
         // API defintion
         return this;
+    }
+
+    /**
+     * @version 2013/04/08 10:11:19
+     */
+    private static class Subscriber implements Listener {
+
+        /** The subscriber instance. */
+        private final Object subscriber;
+
+        /** The subscriber method. */
+        private final Method method;
+
+        /**
+         * @param type
+         * @param subscriber
+         * @param method
+         */
+        private Subscriber(Object subscriber, Method method) {
+            this.subscriber = subscriber;
+            this.method = method;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handler(Event event) {
+            try {
+                method.invoke(subscriber, event);
+            } catch (Exception e) {
+                throw new Error(e);
+            }
+        }
+    }
+
+    /**
+     * @version 2013/04/08 10:11:19
+     */
+    private static class KeyBinder implements Listener {
+
+        /** The target key code. */
+        private final int keyCode;
+
+        /** The delegation. */
+        private final Listener listener;
+
+        /**
+         * @param keyCode
+         * @param listener
+         */
+        private KeyBinder(int keyCode, Listener listener) {
+            this.keyCode = keyCode;
+            this.listener = listener;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handler(Event event) {
+            if (event.which == keyCode) {
+                listener.handler(event);
+            }
+        }
     }
 
     /**
@@ -1358,7 +1419,9 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
                 Listen annotation = method.getAnnotation(Listen.class);
 
                 if (annotation != null) {
-                    off(annotation.value().name + namespace);
+                    for (UIEvent type : annotation.value()) {
+                        off(type.name + namespace);
+                    }
                 }
             }
         }
