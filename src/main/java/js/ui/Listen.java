@@ -30,23 +30,28 @@ public @interface Listen {
      * 
      * @return
      */
-    UIEvent value();
+    UIEvent[] value();
 
     /**
      * <p>
-     * Set debounce time.
+     * Set execution {@link Timing}.
      * </p>
      * 
      * @return
      */
-    long debounce() default 0;
+    Timing executeAt() default Timing.Immediate;
+
+    /**
+     * @return
+     */
+    long executeTime() default 0;
 
     /**
      * <p>
-     * Set throttle time.
+     * Set a number of execution.
      * </p>
      * 
      * @return
      */
-    long throttle() default 0;
+    int count() default 0;
 }

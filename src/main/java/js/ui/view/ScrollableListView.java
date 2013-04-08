@@ -14,6 +14,7 @@ import static js.lang.Global.*;
 import java.util.List;
 
 import js.ui.Listen;
+import js.ui.Timing;
 import js.ui.UI;
 import js.ui.UIEvent;
 import js.ui.view.ScrollableListViewStyle.ItemColumnView;
@@ -185,7 +186,7 @@ public class ScrollableListView extends UI {
      * Re-renderer view on scroll.
      * </p>
      */
-    @Listen(value = UIEvent.Scroll, debounce = 100)
+    @Listen(value = UIEvent.Scroll, executeAt = Timing.Debounce, executeTime = 100)
     private void scroll() {
         render();
     }
