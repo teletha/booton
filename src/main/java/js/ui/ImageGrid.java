@@ -24,7 +24,6 @@ import js.ui.ImageGridStyle.Title;
 import js.ui.ImageGridStyle.Unselected;
 import js.util.HashMap;
 import js.util.jQuery;
-import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
 
 /**
@@ -54,7 +53,7 @@ public abstract class ImageGrid<T> extends UI {
         search.keyup(new Listener() {
 
             @Override
-            public void handler(Event event) {
+            public void handler(UIEvent event) {
                 String name = search.val().toLowerCase().replace("\\s", "");
 
                 for (Entry<T, jQuery> entry : images.entrySet()) {
@@ -80,7 +79,7 @@ public abstract class ImageGrid<T> extends UI {
             image.click(new Listener() {
 
                 @Override
-                public void handler(Event event) {
+                public void handler(UIEvent event) {
                     select(source);
                 }
             });

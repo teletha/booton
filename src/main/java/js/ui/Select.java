@@ -22,7 +22,6 @@ import js.ui.view.ScrollableListView;
 import js.ui.view.ScrollableListView.ItemRenderer;
 import js.ui.view.SlidableView;
 import js.util.jQuery;
-import js.util.jQuery.Event;
 
 /**
  * @version 2013/03/28 1:31:15
@@ -69,12 +68,12 @@ public class Select<M> extends FormUI<Select> {
         options.register(binder);
     }
 
-    @Listen(UserAction.Key_Up)
+    @Listen(UIAction.Key_Up)
     private void selectPrevious() {
         model.selectPrevious();
     }
 
-    @Listen(UserAction.Key_Down)
+    @Listen(UIAction.Key_Down)
     private void selectNext() {
         model.selectNext();
     }
@@ -84,8 +83,8 @@ public class Select<M> extends FormUI<Select> {
      */
     private class Binder implements ItemRenderer, SelectableListener<M>, SlidableView.Listener {
 
-        @Listen(UserAction.Click)
-        private void selectItem(Event event) {
+        @Listen(UIAction.Click)
+        private void selectItem(UIEvent event) {
             model.setSelectionIndex(Integer.parseInt($(event.target).attr("index")));
         }
 

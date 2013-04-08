@@ -14,11 +14,11 @@ import static js.lang.Global.*;
 import java.util.EventListener;
 
 import js.ui.UI;
+import js.ui.UIEvent;
 import js.ui.view.SlidableViewStyle.Shown;
 import js.ui.view.SlidableViewStyle.Slider;
 import js.ui.view.SlidableViewStyle.ViewableArea;
 import js.util.jQuery;
-import js.util.jQuery.Event;
 
 /**
  * @version 2013/04/04 19:01:02
@@ -129,7 +129,7 @@ public class SlidableView extends UI {
          * {@inheritDoc}
          */
         @Override
-        public void handler(Event event) {
+        public void handler(UIEvent event) {
             event.stopPropagation();
 
             toggle();

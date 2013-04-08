@@ -18,10 +18,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import js.lang.Classes;
+import js.ui.UIEvent;
 import js.util.ArrayList;
 import js.util.HashMap;
 import js.util.jQuery;
-import js.util.jQuery.Event;
 import js.util.jQuery.Listener;
 
 /**
@@ -112,7 +112,7 @@ public abstract class Application {
          * {@inheritDoc}
          */
         @Override
-        public void handler(Event event) {
+        public void handler(UIEvent event) {
             dispatch(location.hash);
         }
 
