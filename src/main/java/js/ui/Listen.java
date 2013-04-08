@@ -30,7 +30,7 @@ public @interface Listen {
      * 
      * @return
      */
-    UIEvent[] value();
+    UserAction[] value();
 
     /**
      * <p>

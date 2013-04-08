@@ -69,12 +69,12 @@ public class Select<M> extends FormUI<Select> {
         options.register(binder);
     }
 
-    @Listen(UIEvent.Key_Up)
+    @Listen(UserAction.Key_Up)
     private void selectPrevious() {
         model.selectPrevious();
     }
 
-    @Listen(UIEvent.Key_Down)
+    @Listen(UserAction.Key_Down)
     private void selectNext() {
         model.selectNext();
     }
@@ -84,7 +84,7 @@ public class Select<M> extends FormUI<Select> {
      */
     private class Binder implements ItemRenderer, SelectableListener<M>, SlidableView.Listener {
 
-        @Listen(UIEvent.Click)
+        @Listen(UserAction.Click)
         private void selectItem(Event event) {
             model.setSelectionIndex(Integer.parseInt($(event.target).attr("index")));
         }
