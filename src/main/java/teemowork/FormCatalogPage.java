@@ -11,17 +11,20 @@ package teemowork;
 
 import js.application.Page;
 import js.application.PageInfo;
+import js.ui.Bindable;
 import js.ui.Input;
-import js.ui.Publishable;
+import js.ui.Listen;
 import js.ui.Select;
-import js.ui.model.Bindable;
-import js.ui.model.Selectable;
+import js.ui.UIAction;
+import js.ui.model.SelectableModel;
 import js.util.jQuery;
 
 /**
  * @version 2013/04/02 15:53:46
  */
 public class FormCatalogPage extends Page {
+
+    SomeModel model = new SomeModel();
 
     /**
      * 
@@ -43,7 +46,7 @@ public class FormCatalogPage extends Page {
      */
     @Override
     public void load(jQuery root) {
-        Selectable<String> selectable = new Selectable<String>();
+        SelectableModel<String> selectable = new SelectableModel<String>();
         for (int i = 0; i < 200; i++) {
             selectable.add(String.valueOf(i));
         }
@@ -51,19 +54,26 @@ public class FormCatalogPage extends Page {
         Select<String> child = root.child(new Select(selectable));
         child.model.setSelectionIndex(180);
 
-        SomeModel model = new SomeModel();
+        Input<Integer> input = root.child(new Input(model.type));
+        Input<String> input2 = root.child(new Input(model.name));
 
-        Input input = root.child(new Input(model.name));
-        model.name = "AAAA";
-        System.out.println(model.name);
+        input2.form.bind(this);
+    }
+
+    @Listen(UIAction.Blur)
+    private void confirm() {
+        System.out.println("current value is " + model.name);
     }
 
     /**
      * @version 2013/04/08 23:56:46
      */
-    private static class SomeModel extends Publishable {
+    private static class SomeModel {
 
         @Bindable
-        public String name;
+        public String name = "base";
+
+        @Bindable
+        public int type = 1;
     }
 }

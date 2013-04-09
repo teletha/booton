@@ -1424,7 +1424,119 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      *            matched element to set as selected/checked.
      * @return
      */
-    public native jQuery val(String value);
+    public native jQuery val(int value);
+
+    /**
+     * <p>
+     * Set the value of each element in the set of matched elements.
+     * </p>
+     * <p>
+     * The .val() method is primarily used to get the values of form elements such as input, select
+     * and textarea. In the case of <select multiple="multiple"> elements, the .val() method returns
+     * an array containing each selected option; if no option is selected, it returns null.
+     * </p>
+     * 
+     * @param value A string of text or an array of strings corresponding to the value of each
+     *            matched element to set as selected/checked.
+     * @return
+     */
+    public native jQuery val(long value);
+
+    /**
+     * <p>
+     * Set the value of each element in the set of matched elements.
+     * </p>
+     * <p>
+     * The .val() method is primarily used to get the values of form elements such as input, select
+     * and textarea. In the case of <select multiple="multiple"> elements, the .val() method returns
+     * an array containing each selected option; if no option is selected, it returns null.
+     * </p>
+     * 
+     * @param value A string of text or an array of strings corresponding to the value of each
+     *            matched element to set as selected/checked.
+     * @return
+     */
+    public native jQuery val(float value);
+
+    /**
+     * <p>
+     * Set the value of each element in the set of matched elements.
+     * </p>
+     * <p>
+     * The .val() method is primarily used to get the values of form elements such as input, select
+     * and textarea. In the case of <select multiple="multiple"> elements, the .val() method returns
+     * an array containing each selected option; if no option is selected, it returns null.
+     * </p>
+     * 
+     * @param value A string of text or an array of strings corresponding to the value of each
+     *            matched element to set as selected/checked.
+     * @return
+     */
+    public native jQuery val(double value);
+
+    /**
+     * <p>
+     * Set the value of each element in the set of matched elements.
+     * </p>
+     * <p>
+     * The .val() method is primarily used to get the values of form elements such as input, select
+     * and textarea. In the case of <select multiple="multiple"> elements, the .val() method returns
+     * an array containing each selected option; if no option is selected, it returns null.
+     * </p>
+     * 
+     * @param value A string of text or an array of strings corresponding to the value of each
+     *            matched element to set as selected/checked.
+     * @return
+     */
+    public native jQuery val(boolean value);
+
+    /**
+     * <p>
+     * Set the value of each element in the set of matched elements.
+     * </p>
+     * <p>
+     * The .val() method is primarily used to get the values of form elements such as input, select
+     * and textarea. In the case of <select multiple="multiple"> elements, the .val() method returns
+     * an array containing each selected option; if no option is selected, it returns null.
+     * </p>
+     * 
+     * @param value A string of text or an array of strings corresponding to the value of each
+     *            matched element to set as selected/checked.
+     * @return
+     */
+    public native jQuery val(byte value);
+
+    /**
+     * <p>
+     * Set the value of each element in the set of matched elements.
+     * </p>
+     * <p>
+     * The .val() method is primarily used to get the values of form elements such as input, select
+     * and textarea. In the case of <select multiple="multiple"> elements, the .val() method returns
+     * an array containing each selected option; if no option is selected, it returns null.
+     * </p>
+     * 
+     * @param value A string of text or an array of strings corresponding to the value of each
+     *            matched element to set as selected/checked.
+     * @return
+     */
+    public native jQuery val(char value);
+
+    /**
+     * <p>
+     * Set the value of each element in the set of matched elements.
+     * </p>
+     * <p>
+     * The .val() method is primarily used to get the values of form elements such as input, select
+     * and textarea. In the case of <select multiple="multiple"> elements, the .val() method returns
+     * an array containing each selected option; if no option is selected, it returns null.
+     * </p>
+     * 
+     * @param value A string of text or an array of strings corresponding to the value of each
+     *            matched element to set as selected/checked.
+     * @return
+     */
+    public native jQuery val(Object value);
 
     /**
      * <p>

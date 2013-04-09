@@ -343,28 +343,19 @@ function boot(global) {
     },
     
     /**
+     * <p>
+     * Helper method to define property descriptor for Java environment.
+     * </p>
      *
+     * @parma {Object} object The object on which to define the property.
+     * @param {String} name A fully qualified name of a property to define.
+     * @param {Object} descriptor A property descriptor.
      */
-    bindable: function(model, name) {
-      var descriptor = Object.getOwnPropertyDescriptor(model, name);
+    defineProperty: function(object, name, descriptor) {
+      descriptor.get = descriptor.get.bind(descriptor);
+      descriptor.set = descriptor.set.bind(descriptor);
 
-      if (descriptor) {
-        return;
-      }
-      
-      var value = model[name];
-  
-      Object.defineProperty(model, name, {
-        get: function() {
-          console.log("getter ", value);
-          return value;
-        },
-        
-        set: function(newValue) {
-          console.log("setter ", value, " ", newValue);
-          value = newValue;
-        }
-      });
+      Object.defineProperty(object, name, descriptor);
     }
   });
 }

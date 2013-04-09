@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.ui.model;
+package js.ui;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -16,7 +16,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @version 2013/04/09 0:04:03
+ * @version 2013/04/09 14:33:15
  */
 @Documented
 @Target(ElementType.FIELD)

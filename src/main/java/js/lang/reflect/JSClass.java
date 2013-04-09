@@ -177,6 +177,37 @@ class JSClass<T> extends JSAnnotatedElement {
 
     /**
      * <p>
+     * Returns an array of {@code Field} objects reflecting all the fields declared by the class or
+     * interface represented by this {@code Class} object. This includes public, protected, default
+     * (package) access, and private fields, but excludes inherited fields. The elements in the
+     * array returned are not sorted and are not in any particular order. This method returns an
+     * array of length 0 if the class or interface declares no fields, or if this {@code Class}
+     * object represents a primitive type, an array class, or void.
+     * </p>
+     * <p>
+     * See <em>The Java Language Specification</em>, sections 8.2 and 8.3.
+     * </p>
+     * 
+     * @return the array of {@code Field} objects representing all the declared fields of this class
+     * @exception SecurityException If a security manager, <i>s</i>, is present and any of the
+     *                following conditions is met:
+     *                <ul>
+     *                <li>invocation of {@link SecurityManager#checkMemberAccess
+     *                s.checkMemberAccess(this, Member.DECLARED)} denies access to the declared
+     *                fields within this class
+     *                <li>the caller's class loader is not the same as or an ancestor of the class
+     *                loader for the current class and invocation of
+     *                {@link SecurityManager#checkPackageAccess s.checkPackageAccess()} denies
+     *                access to the package of this class
+     *                </ul>
+     * @since JDK1.1
+     */
+    public Field[] getDeclaredFields() throws SecurityException {
+        return null;
+    }
+
+    /**
+     * <p>
      * Determines if the class or interface represented by this Class object is either the same as,
      * or is a superclass or superinterface of, the class or interface represented by the specified
      * Class parameter. It returns true if so; otherwise it returns false. If this Class object

@@ -17,7 +17,7 @@ import js.bind.Subscriber;
 import js.dom.Image;
 import js.ui.Select;
 import js.ui.UIEvent;
-import js.ui.model.Selectable;
+import js.ui.model.SelectableModel;
 import js.ui.model.SelectableListener;
 import js.util.jQuery;
 import js.util.jQuery.Listener;
@@ -64,7 +64,7 @@ public class MasteryBuilder extends Page implements Subscriber {
             {Wealth, Awareness, StrengthOfSpirit, Explorer}, {Pickpocket, Intelligence, null, null},
             {null, Nimble, null, null}};
 
-    private final Selectable<MasterySet> set = new Selectable();
+    private final SelectableModel<MasterySet> set = new SelectableModel();
 
     private final MasterySet masterySet;
 

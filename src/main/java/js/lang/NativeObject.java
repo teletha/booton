@@ -207,7 +207,7 @@ public class NativeObject {
      * @param propertyName The name of the property whose description is to be retrieved.
      * @return
      */
-    public static native Object getOwnPropertyDescriptor(Object object, String propertyName);
+    public static native NativeObject getOwnPropertyDescriptor(Object object, String propertyName);
 
     /**
      * <p>
@@ -440,7 +440,7 @@ public class NativeObject {
          * @param descriptor The descriptor for the property being defined or modified.
          */
         public String defineProperty(Object object, String propertyName, PropertyDescriptor descriptor) {
-            return "Object.defineProperty(" + param(0) + "," + param(1) + "," + param(2) + ")";
+            return "boot.defineProperty(" + param(0) + "," + param(1) + "," + param(2) + ")";
         }
     }
 }

@@ -18,7 +18,7 @@ import js.util.jQuery;
 public class FormUI<T extends FormUI> extends UI {
 
     /** The actual form element. */
-    protected final jQuery form;
+    public final jQuery form;
 
     /**
      * 

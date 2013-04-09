@@ -1279,7 +1279,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     if (className.equals(Type.getType(Input.class).getInternalName())) {
                         String model = "";
                         String path = contexts.remove(1).toString();
-                        int index = path.indexOf('.');
+                        int index = path.indexOf('.', path.startsWith("this.") ? 5 : 0);
 
                         if (index != -1) {
                             model = path.substring(0, index);
