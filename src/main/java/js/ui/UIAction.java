@@ -31,10 +31,10 @@ public enum UIAction {
     Deactivate,
 
     /** The ui event type. */
-    FocusIn,
+    Focus,
 
     /** The ui event type. */
-    FocusOut,
+    Blur,
 
     /** The ui event type. */
     Resize,

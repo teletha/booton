@@ -15,7 +15,7 @@ import js.ui.SelectStyle.SelectForm;
 import js.ui.SelectStyle.SelectItem;
 import js.ui.SelectStyle.SelectItemList;
 import js.ui.SelectStyle.SelectedItem;
-import js.ui.model.Selectable;
+import js.ui.model.SelectableModel;
 import js.ui.model.SelectableListener;
 import js.ui.view.ScrollableListView;
 import js.ui.view.ScrollableListView.ItemRenderer;
@@ -28,7 +28,7 @@ import js.util.jQuery;
 public class Select<M> extends FormUI<Select> {
 
     /** The associated model. */
-    public final Selectable<M> model;
+    public final SelectableModel<M> model;
 
     /** The option list. */
     public final SlidableView options;
@@ -45,7 +45,7 @@ public class Select<M> extends FormUI<Select> {
      * </p>
      */
     public Select(M... model) {
-        this(new Selectable(model));
+        this(new SelectableModel(model));
     }
 
     /**
@@ -53,7 +53,7 @@ public class Select<M> extends FormUI<Select> {
      * Create select form.
      * </p>
      */
-    public Select(Selectable<M> selectable) {
+    public Select(SelectableModel<M> selectable) {
         model = selectable;
         model.bind(binder);
 
