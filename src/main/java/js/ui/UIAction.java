@@ -46,6 +46,15 @@ public enum UIAction {
     Scroll,
 
     /** The ui event type. */
+    KeyDown,
+
+    /** The ui event type. */
+    KeyUp,
+
+    /** The ui event type. */
+    KeyPress,
+
+    /** The ui event type. */
     MouseDown,
 
     /** The ui event type. */
@@ -211,7 +220,7 @@ public enum UIAction {
     Key_PageUp(33),
 
     /** The ui key input type. */
-    vPageDown(34),
+    Key_PageDown(34),
 
     /** The ui key input type. */
     Key_Control(17),

@@ -11,6 +11,7 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -25,6 +26,7 @@ public class TryTest extends ScriptTester {
     public void TryCatch() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 3) int value) {
                 try {
                     if (value == 0) {
@@ -42,6 +44,7 @@ public class TryTest extends ScriptTester {
     public void TryCatchAfter() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     if (value % 2 == 0) {
@@ -57,9 +60,31 @@ public class TryTest extends ScriptTester {
     }
 
     @Test
+    public void TryEmptyCatch() {
+        test(new Scriptable() {
+
+            private int number = 10;
+
+            @Debuggable
+            public int act(int value) {
+                try {
+                    if (value == 0) {
+                        throw new Error();
+                    }
+                    number = value;
+                } catch (Error e) {
+                    // do nothing
+                }
+                return number;
+            }
+        });
+    }
+
+    @Test
     public void TryMultipleCatch() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 try {
                     if (value == 2) {
@@ -84,6 +109,7 @@ public class TryTest extends ScriptTester {
     public void TryCatchInCatch() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     if (value % 2 == 0) {
@@ -108,6 +134,7 @@ public class TryTest extends ScriptTester {
     public void TryCatchInTry() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     if (value % 2 == 0) {
@@ -133,6 +160,7 @@ public class TryTest extends ScriptTester {
     public void TryCatchFromDepth() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     return compute(value);
@@ -188,6 +216,57 @@ public class TryTest extends ScriptTester {
                     }
                 } catch (Error e) {
                     return -1;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void TryFinally() {
+        test(new Scriptable() {
+
+            private int number = 10;
+
+            @Debuggable
+            public int act(int value) {
+                try {
+                    set(value);
+                } catch (Error e) {
+                    // do nothing
+                }
+                return number;
+            }
+
+            @Debuggable
+            private void set(int value) {
+                try {
+                    if (value == 0) {
+                        throw new Error();
+                    }
+                    number = value;
+                } finally {
+                    number++;
+                }
+            }
+        });
+    }
+
+    @Test
+    public void TryCatchFinally() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                try {
+                    if (value == 0) {
+                        throw new Error();
+                    }
+                    value++;
+                } catch (Error e) {
+                    value--;
+                } finally {
+                    value = value + 10;
                 }
                 return value;
             }

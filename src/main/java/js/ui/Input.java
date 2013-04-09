@@ -54,11 +54,16 @@ public class Input<T> extends FormUI {
         form.bind(this);
     }
 
-    @Listen(UIAction.Blur)
+    @Listen(UIAction.KeyUp)
     private void validateInput() {
         String value = form.val();
 
-        model.set(decode(value));
+        try {
+            model.set(decode(value));
+        } catch (Error e) {
+            System.out.println("Error catch");
+            System.out.println(e);
+        }
 
     }
 
@@ -152,23 +157,31 @@ public class Input<T> extends FormUI {
          */
         @Override
         public void set(S value) {
-            if (!whileUpdate) {
-                whileUpdate = true;
+            try {
+                if (!whileUpdate) {
+                    whileUpdate = true;
 
-                // restore old value
-                S old = get();
+                    // restore old value
+                    S old = get();
+                    System.out.println(value);
+                    if ("aa".equals(value)) {
+                        throw new Error("error desu");
+                    }
+                    System.out.println("clear");
 
-                if (old != value) {
-                    // store new value
-                    model.setProperty("$" + name, value);
+                    if (old != value) {
+                        // store new value
+                        model.setProperty("$" + name, value);
 
-                    // notify change event
-                    List<PropertyChangeListener> listeners = model.getPropertyAs(List.class, "$$" + name);
+                        // notify change event
+                        List<PropertyChangeListener> listeners = model.getPropertyAs(List.class, "$$" + name);
 
-                    for (PropertyChangeListener listener : listeners) {
-                        listener.change(model, name, old, value);
+                        for (PropertyChangeListener listener : listeners) {
+                            listener.change(model, name, old, value);
+                        }
                     }
                 }
+            } finally {
                 whileUpdate = false;
             }
         }

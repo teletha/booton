@@ -62,7 +62,7 @@ public class FormCatalogPage extends Page {
 
     @Listen(UIAction.Blur)
     private void confirm() {
-        System.out.println("current value is " + model.name);
+        System.out.println("current value is " + model.name + "  " + model.type);
     }
 
     /**
