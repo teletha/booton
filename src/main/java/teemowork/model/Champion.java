@@ -1070,6 +1070,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 340);
+        Lux.update(P3051).set(MS, 330);
         Malphite.update(P0000)
                 .set(Health, 423, 90)
                 .set(Hreg, 7.45, 0.55)
@@ -1178,6 +1179,7 @@ public class Champion {
                 .set(MR, 30, 1.25)
                 .set(Range, 175)
                 .set(MS, 325);
+        Nautilus.update(P3051).set(AR, 19, 3.25);
         Nidalee.update(P0000)
                 .set(Health, 370, 90)
                 .set(Hreg, 5.0, 0.6)
