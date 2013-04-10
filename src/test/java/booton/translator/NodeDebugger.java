@@ -9,6 +9,7 @@
  */
 package booton.translator;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -152,8 +153,8 @@ public class NodeDebugger {
         Set<TryCatch> tries = new LinkedHashSet();
 
         for (Node node : nodes) {
-            for (TryCatch block : node.catches) {
-                tries.add(block);
+            if (node.block != null) {
+                tries.add(node.block);
             }
         }
 
@@ -198,6 +199,8 @@ public class NodeDebugger {
             format.formatNode(node.incoming, incoming);
             format.write("out : ");
             format.formatNode(node.outgoing, outgoing);
+            format.write("dom : ");
+            format.formatNode(node.getDominator() == null ? Collections.EMPTY_LIST : Arrays.asList(node.getDominator()), 1);
             if (backedge != 0) {
                 format.write("back : ");
                 format.formatNode(node.backedges, backedge);

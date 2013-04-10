@@ -10,8 +10,11 @@
 package booton.translator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -43,14 +46,11 @@ class Node {
     /** The following node. */
     Node follower;
 
-    /** The dominator try-catch block. */
-    List<TryCatch> catches = new ArrayList();
+    /** This node is try-catch starting node. */
+    TryCatch block;
 
     /** This node is switch starting node. */
     private Switch switchy;
-
-    /** This node is try-catch starting node. */
-    private TryCatch tryCatch;
 
     /** The dominator node. */
     private Node dominator;
@@ -267,7 +267,7 @@ class Node {
      * 
      * @return A dominator node. If this node is root, <code>null</code>.
      */
-    private Node getDominator() {
+    Node getDominator() {
         // check cache
         if (dominator == null) {
             // We must search a immediate dominator.
@@ -391,7 +391,7 @@ class Node {
             // Other Block
             // =============================================================
             // check try-catch-finally
-            if (!catches.isEmpty()) {
+            if (block != null) {
                 buffer.append("try{");
             }
 
@@ -401,7 +401,7 @@ class Node {
             if (outs == 0) {
                 // end node
                 buffer.append(this);
-            } else if (outs == 1) {
+            } else if (outs == 1 || block != null) {
                 // do while or normal
                 if (backs == 0) {
                     // normal node with follower
@@ -503,25 +503,25 @@ class Node {
             }
 
             // try-catch
-            if (!catches.isEmpty()) {
+            if (block != null) {
                 buffer.append("} catch ($) {");
 
-                Node exit = null;
+                for (Entry<Class, Node> entry : block.catches.entrySet()) {
+                    buffer.append("if ($ instanceof " + Javascript.computeClassName(entry.getKey()) + ") {");
+                    block.searchCatchEnterance(entry.getValue()).write(buffer);
+                    buffer.append("}");
+                }
 
-                for (int i = 0; i < catches.size(); i++) {
-                    TryCatch tryCatch = catches.get(i);
-
-                    if (i != 0) {
-                        buffer.append("else ");
-                    }
-
-                    buffer.append("if ($ instanceof " + tryCatch.exception + ") {");
-                    tryCatch.catchEntrance.write(buffer);
-                    buffer.append("}"); // close if statement
-
-                    exit = tryCatch.searchExit();
+                if (block.finalizer != null) {
+                    buffer.append("} finally {");
+                    Node finalizer = block.searchFinallyEnterance();
+                    finalizer.written = false;
+                    finalizer.write(buffer);
+                    buffer.append("}");
                 }
                 buffer.append("}"); // close try statement
+
+                Node exit = block.searchExit();
 
                 if (exit != null) {
                     exit.written = false;
@@ -783,42 +783,63 @@ class Node {
         /** The handler node. */
         final Node catcher;
 
-        Node catchEntrance;
+        /** The catch blocks. */
+        final Map<Class, Node> catches = new HashMap();
 
         /** The exit node. */
         Node exit;
 
-        /** The exception type. */
-        final String exception;
-
         /** The nodes within try block. */
         final List<Node> tries = new ArrayList();
+
+        Node finalizer;
 
         /**
          * @param start
          * @param end
-         * @param chatcher
+         * @param catcher
          * @param exception
          */
-        TryCatch(Node start, Node end, Node chatcher, Class exception) {
+        TryCatch(Node start, Node end, Node catcher, Class exception) {
             this.start = start;
             this.end = end;
-            this.catcher = chatcher;
-            this.exception = exception == null ? null : Javascript.computeClassName(exception);
+            this.catcher = catcher;
+
+            addCatchBlock(exception, catcher);
+        }
+
+        /**
+         * <p>
+         * Add catch block.
+         * </p>
+         * 
+         * @param exception
+         * @param catcher
+         */
+        void addCatchBlock(Class exception, Node catcher) {
+            if (exception != null) {
+                catches.put(exception, catcher);
+            }
+        }
+
+        void conenct() {
+            // connect to catcher
+            start.connect(catcher);
+
+            for (Node node : catches.values()) {
+                start.connect(node);
+            }
         }
 
         void process() {
+
             // search enter node
-            start.catches.add(this);
-
-            // search exit node
-            exit = searchExit();
-            exit.written = true; // forbid node writing
-
-            // search catch node
-            catchEntrance = searchCatchEnterance();
+            start.block = this;
 
             // search finally node
+            if (finalizer != null) {
+                finalizer.written = true; // forbid node writing
+            }
         }
 
         /**
@@ -828,8 +849,8 @@ class Node {
          * 
          * @return Null or exit node.
          */
-        private Node searchCatchEnterance() {
-            Node entrance = catcher.outgoing.get(0);
+        private Node searchCatchEnterance(Node candidate) {
+            Node entrance = candidate.outgoing.get(0);
 
             if (entrance != exit) {
                 return entrance;
@@ -840,18 +861,38 @@ class Node {
 
         /**
          * <p>
+         * Search the entrance node of finally block.
+         * </p>
+         */
+        private Node searchFinallyEnterance() {
+            return finalizer;
+        }
+
+        /**
+         * <p>
          * Search exit node of this switch block.
          * </p>
          * 
          * @return Null or exit node.
          */
         private Node searchExit() {
-            if (end.outgoing.isEmpty()) {
-                return EmptyNode;
-            } else {
-                return end.outgoing.get(0);
+            if (exit == null) {
+                LinkedList<Node> nodes = new LinkedList();
+                nodes.addAll(end.outgoing);
+
+                while (!nodes.isEmpty()) {
+                    Node node = nodes.remove(0);
+
+                    if (node.getDominator() == start) {
+                        node.written = true; // forbid node writing
+                        exit = node;
+                        break;
+                    }
+                    nodes.addAll(node.outgoing);
+                }
             }
 
+            return exit;
         }
 
         private void resolve() {
