@@ -14,7 +14,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import booton.translator.JavaMethodCompiler.TryCatch;
+import booton.translator.Node.TryCatch;
 
 /**
  * @version 2013/01/11 17:42:51
@@ -184,9 +184,9 @@ public class NodeDebugger {
                     tryFlow.append("s");
                 } else if (block.end == node) {
                     tryFlow.append("e");
-                } else if (block.handler == node) {
+                } else if (block.catcher == node) {
                     tryFlow.append("c");
-                } else if (block.next == node) {
+                } else if (block.exit == node) {
                     tryFlow.append("n");
                 } else {
                     tryFlow.append("  ");

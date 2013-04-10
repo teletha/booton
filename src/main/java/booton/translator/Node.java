@@ -9,15 +9,10 @@
  */
 package booton.translator;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import booton.translator.JavaMethodCompiler.TryCatch;
 
 /**
  * @version 2013/01/14 12:28:02
@@ -49,10 +44,13 @@ class Node {
     Node follower;
 
     /** The dominator try-catch block. */
-    Deque<TryCatch> catches = new ArrayDeque();
+    List<TryCatch> catches = new ArrayList();
 
     /** This node is switch starting node. */
     private Switch switchy;
+
+    /** This node is try-catch starting node. */
+    private TryCatch tryCatch;
 
     /** The dominator node. */
     private Node dominator;
@@ -70,8 +68,6 @@ class Node {
 
     /** The flag whether this node has already written or not. */
     private boolean written = false;
-
-    private int stoppable = 0;
 
     /**
      * @param label
@@ -222,31 +218,6 @@ class Node {
 
         // API definition
         return this;
-    }
-
-    /**
-     * <p>
-     * Set catch block for this node.
-     * <p>
-     * 
-     * @param block
-     */
-    final void addCatch(TryCatch block) {
-        catches.add(block);
-
-        if (block.next != null) {
-            block.end.stoppable += block.next.incoming.size();
-        }
-
-        // //
-        // for (TryCatch item : catcheTries) {
-        // if (item.base == block.base && item.end == block.end) {
-        // return;
-        // }
-        // }
-        //
-        // catcheTries.add(block);
-        // block.end.stoppable++;
     }
 
     // /**
@@ -531,26 +502,30 @@ class Node {
                 }
             }
 
+            // try-catch
             if (!catches.isEmpty()) {
-                // try-catch
-                if (catches.size() != 0) {
-                    buffer.append("} catch ($) {");
+                buffer.append("} catch ($) {");
 
-                    Node next = null;
-                    Iterator<TryCatch> iterator = catches.descendingIterator();
+                Node exit = null;
 
-                    while (iterator.hasNext()) {
-                        TryCatch block = iterator.next();
+                for (int i = 0; i < catches.size(); i++) {
+                    TryCatch tryCatch = catches.get(i);
 
-                        buffer.append("if ($ instanceof " + block.exception + ") {");
-                        block.handler.write(buffer);
-                        buffer.append("}");
-
-                        next = block.next;
+                    if (i != 0) {
+                        buffer.append("else ");
                     }
-                    buffer.append("}");
 
-                    process(next, buffer);
+                    buffer.append("if ($ instanceof " + tryCatch.exception + ") {");
+                    tryCatch.catchEntrance.write(buffer);
+                    buffer.append("}"); // close if statement
+
+                    exit = tryCatch.searchExit();
+                }
+                buffer.append("}"); // close try statement
+
+                if (exit != null) {
+                    exit.written = false;
+                    exit.write(buffer);
                 }
             }
         }
@@ -564,11 +539,6 @@ class Node {
      */
     private void process(Node dest, ScriptBuffer buffer) {
         if (dest != null) {
-            if (dest.stoppable != 0) {
-                dest.stoppable--;
-                return;
-            }
-
             Node dominator = dest.getDominator();
 
             if (dominator == null || dominator == this) {
@@ -794,6 +764,136 @@ class Node {
                 return true;
             }
             return false;
+        }
+    }
+
+    /**
+     * @version 2013/02/17 15:35:56
+     */
+    static class TryCatch {
+
+        private static final Node EmptyNode = new Node(-1);
+
+        /** The start node. */
+        final Node start;
+
+        /** The end node. */
+        final Node end;
+
+        /** The handler node. */
+        final Node catcher;
+
+        Node catchEntrance;
+
+        /** The exit node. */
+        Node exit;
+
+        /** The exception type. */
+        final String exception;
+
+        /** The nodes within try block. */
+        final List<Node> tries = new ArrayList();
+
+        /**
+         * @param start
+         * @param end
+         * @param chatcher
+         * @param exception
+         */
+        TryCatch(Node start, Node end, Node chatcher, Class exception) {
+            this.start = start;
+            this.end = end;
+            this.catcher = chatcher;
+            this.exception = exception == null ? null : Javascript.computeClassName(exception);
+        }
+
+        void process() {
+            // search enter node
+            start.catches.add(this);
+
+            // search exit node
+            exit = searchExit();
+            exit.written = true; // forbid node writing
+
+            // search catch node
+            catchEntrance = searchCatchEnterance();
+
+            // search finally node
+        }
+
+        /**
+         * <p>
+         * Search catch entrance node of this try-catch block.
+         * </p>
+         * 
+         * @return Null or exit node.
+         */
+        private Node searchCatchEnterance() {
+            Node entrance = catcher.outgoing.get(0);
+
+            if (entrance != exit) {
+                return entrance;
+            } else {
+                return EmptyNode;
+            }
+        }
+
+        /**
+         * <p>
+         * Search exit node of this switch block.
+         * </p>
+         * 
+         * @return Null or exit node.
+         */
+        private Node searchExit() {
+            if (end.outgoing.isEmpty()) {
+                return EmptyNode;
+            } else {
+                return end.outgoing.get(0);
+            }
+
+        }
+
+        private void resolve() {
+            if (start == null) {
+                if (end == null) {
+                    // // try-finally
+                    //
+                    // // The base node has only finally node (don't have catch node).
+                    // // So, we must recalculate the position of correct finally end node.
+                    // Node follower = end.previous.outgoing.get(0);
+                    //
+                    // int i = nodes.indexOf(end);
+                    // int j = nodes.indexOf(follower);
+                    //
+                    // start = follower;
+                    // end = nodes.get(2 * j - i - 2);
+                    // for (; i < j;) {
+                    // nodes.remove(--j);
+                    // }
+                    //
+                    // base.addFinally(this);
+                    // } else {
+                    // // try-catch-finally
+                    //
+                    // Node follower = end;
+                    //
+                    // end = start.previous.outgoing.size() == 0 ? start.previous :
+                    // start.previous.outgoing.get(0);
+                    // start = follower;
+                    //
+                    // base.addFinally(this);
+                }
+            } else {
+                // try-catch
+                // if (!start.incoming.contains(base)) {
+                // start.incoming.add(base);
+                // }
+                //
+                // start = nodes.get(nodes.indexOf(start) + 1);
+                // end = end.outgoing.size() == 0 ? end : end.outgoing.get(0);
+                // base.addCatch(this);
+            }
         }
     }
 }

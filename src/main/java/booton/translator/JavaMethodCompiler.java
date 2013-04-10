@@ -40,6 +40,7 @@ import org.objectweb.asm.Type;
 
 import booton.Obfuscator;
 import booton.translator.Node.Switch;
+import booton.translator.Node.TryCatch;
 
 /**
  * <p>
@@ -267,7 +268,7 @@ class JavaMethodCompiler extends MethodVisitor {
         Iterator<TryCatch> iterator = tries.descendingIterator();
 
         while (iterator.hasNext()) {
-            iterator.next().computeTryBlock();
+            iterator.next().process();
         }
 
         if (debuggable) {
@@ -1415,14 +1416,15 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
-        TryCatch current = new TryCatch(start, end, handler, type);
-
-        for (TryCatch block : tries) {
-            if (block.handler == current.handler) {
-                return;
-            }
-        }
-        tries.add(current);
+        tries.add(new TryCatch(getNode(start), getNode(end), getNode(handler), convert(type)));
+        // TryCatch current = new TryCatch(start, end, handler, type);
+        //
+        // for (TryCatch block : tries) {
+        // if (block.catcher == current.catcher) {
+        // return;
+        // }
+        // }
+        // tries.add(current);
     }
 
     /**
@@ -1851,109 +1853,6 @@ class JavaMethodCompiler extends MethodVisitor {
                 }
             }
             return names;
-        }
-    }
-
-    /**
-     * @version 2013/02/17 15:35:56
-     */
-    class TryCatch {
-
-        /** The start node. */
-        final Node start;
-
-        /** The end node. */
-        Node end;
-
-        /** The handler node. */
-        Node handler;
-
-        /** The following node. */
-        Node next;
-
-        /** The exception type. */
-        final String exception;
-
-        /** The nodes within try block. */
-        final List<Node> tries = new ArrayList();
-
-        /**
-         * @param start
-         * @param end
-         * @param handler
-         * @param exception
-         */
-        TryCatch(Label start, Label end, Label handler, String exception) {
-            this.start = getNode(start);
-            this.end = getNode(end);
-            this.handler = getNode(handler);
-            this.exception = exception == null ? null : Javascript.computeClassName(convert(exception));
-        }
-
-        /**
-         * <p>
-         * Assign this try-catch block to nodes.
-         * </p>
-         */
-        private void computeTryBlock() {
-            if (!handler.incoming.contains(start)) {
-                handler.incoming.add(start);
-            }
-
-            // Node following = end.outgoing.get(0);
-            //
-            // for (Node node : following.incoming) {
-            // node.disconnect(following);
-            // }
-
-            handler = nodes.get(nodes.indexOf(handler) + 1);
-
-            if (end.outgoing.size() != 0) {
-                next = end.outgoing.get(0);
-            }
-            start.addCatch(this);
-        }
-
-        private void resolve() {
-            if (start == null) {
-                if (end == null) {
-                    // // try-finally
-                    //
-                    // // The base node has only finally node (don't have catch node).
-                    // // So, we must recalculate the position of correct finally end node.
-                    // Node follower = end.previous.outgoing.get(0);
-                    //
-                    // int i = nodes.indexOf(end);
-                    // int j = nodes.indexOf(follower);
-                    //
-                    // start = follower;
-                    // end = nodes.get(2 * j - i - 2);
-                    // for (; i < j;) {
-                    // nodes.remove(--j);
-                    // }
-                    //
-                    // base.addFinally(this);
-                    // } else {
-                    // // try-catch-finally
-                    //
-                    // Node follower = end;
-                    //
-                    // end = start.previous.outgoing.size() == 0 ? start.previous :
-                    // start.previous.outgoing.get(0);
-                    // start = follower;
-                    //
-                    // base.addFinally(this);
-                }
-            } else {
-                // try-catch
-                // if (!start.incoming.contains(base)) {
-                // start.incoming.add(base);
-                // }
-                //
-                // start = nodes.get(nodes.indexOf(start) + 1);
-                // end = end.outgoing.size() == 0 ? end : end.outgoing.get(0);
-                // base.addCatch(this);
-            }
         }
     }
 }
