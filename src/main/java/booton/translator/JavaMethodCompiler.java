@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -189,7 +188,7 @@ class JavaMethodCompiler extends MethodVisitor {
     private boolean assertJump = false;
 
     /** The pool of try-catch-finally blocks. */
-    private Deque<TryCatch> tries = new ArrayDeque();
+    private Deque<TryCatch> blocks = new ArrayDeque();
 
     /**
      * {@link Enum#values} produces special bytecode, so we must handle it by special way.
@@ -265,10 +264,12 @@ class JavaMethodCompiler extends MethodVisitor {
         searchBackEdge(nodes.get(0), new ArrayDeque());
 
         // Resolve all try-catch-finally blocks.
-        Iterator<TryCatch> iterator = tries.descendingIterator();
+        for (TryCatch block : blocks) {
+            block.conenct();
+        }
 
-        while (iterator.hasNext()) {
-            iterator.next().process();
+        for (TryCatch block : blocks) {
+            block.process();
         }
 
         if (debuggable) {
@@ -1416,15 +1417,31 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
-        tries.add(new TryCatch(getNode(start), getNode(end), getNode(handler), convert(type)));
-        // TryCatch current = new TryCatch(start, end, handler, type);
-        //
-        // for (TryCatch block : tries) {
-        // if (block.catcher == current.catcher) {
-        // return;
-        // }
-        // }
-        // tries.add(current);
+        TryCatch current = new TryCatch(getNode(start), getNode(end), getNode(handler), convert(type));
+
+        for (TryCatch block : blocks) {
+            if (type == null && block.start == current.start) {
+                block.finalizer = current.end;
+                return;
+            }
+
+            // The try-catch block which indicates the same start and end nodes means multiple
+            // catches.
+            if (block.start == current.start && block.end == current.end) {
+                block.addCatchBlock(convert(type), current.catcher);
+                return;
+            }
+
+            // In Java 6 and later, the old jsr and ret instructions are effectively deprecated.
+            // These instructions were used to build mini-subroutines inside methods.
+            //
+            // The try-catch block which indicates the same catch node is copied by compiler,
+            // so we must ignore it.
+            if (block.catcher == current.catcher) {
+                return;
+            }
+        }
+        blocks.add(current);
     }
 
     /**
@@ -1509,11 +1526,16 @@ class JavaMethodCompiler extends MethodVisitor {
             } else {
                 // When some method which straddles multi lines returns value, we should use operand
                 // from previous node.
-                if (current.stack.size() == 0) {
+                //
+                // Exclude the pattern of finally statement like the following.
+                // mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[] {"java/lang/Throwable"});
+                // mv.visitVarInsn(ASTORE, 1);
+                if (current.stack.size() == 0 && !match(FRAME_SAME1, ASTORE)) {
                     current.stack.addAll(current.previous.stack);
                     current.previous.stack.clear();
                 }
 
+                // ここで ; が取られてる
                 // retrieve and remove it
                 Operand operand = current.remove(0, false);
 
@@ -1759,6 +1781,10 @@ class JavaMethodCompiler extends MethodVisitor {
      * @return Java class.
      */
     private final Class convert(String className) {
+        if (className == null) {
+            return null;
+        }
+
         try {
             return Class.forName(className.replace('/', '.'));
         } catch (ClassNotFoundException e) {
