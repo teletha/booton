@@ -63,19 +63,21 @@ public class TryTest extends ScriptTester {
     public void TryEmptyCatch() {
         test(new Scriptable() {
 
-            private int number = 10;
-
             @Debuggable
             public int act(int value) {
                 try {
-                    if (value == 0) {
-                        throw new Error();
-                    }
-                    number = value;
+                    value = error(value);
                 } catch (Error e) {
                     // do nothing
                 }
-                return number;
+                return value;
+            }
+
+            private int error(int value) {
+                if (value == 1) {
+                    throw new Error();
+                }
+                return value + 10;
             }
         });
     }
@@ -182,6 +184,7 @@ public class TryTest extends ScriptTester {
     public void TryCatchWithFrameFull() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(int value) {
                 for (int i = 0; i < 1; i++) {
                     value++;
@@ -201,6 +204,7 @@ public class TryTest extends ScriptTester {
     public void TryCatchSequencial() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 3) int value) {
                 try {
                     if (value == 0) {
@@ -226,28 +230,70 @@ public class TryTest extends ScriptTester {
     public void TryFinally() {
         test(new Scriptable() {
 
-            private int number = 10;
+            @Debuggable
+            public int act(int value) {
+                try {
+                    value = error(value);
+                } finally {
+                    value++;
+                }
+                return value;
+            }
+
+            @Debuggable
+            private int error(int value) {
+                if (value == 1) {
+                    throw new Error();
+                }
+                return value + 10;
+            }
+        });
+    }
+
+    @Test
+    public void TryEmptyFinally() {
+        test(new Scriptable() {
 
             @Debuggable
             public int act(int value) {
                 try {
-                    set(value);
-                } catch (Error e) {
+                    value = error(value);
+                } finally {
                     // do nothing
                 }
-                return number;
+                return value;
             }
 
             @Debuggable
-            private void set(int value) {
-                try {
-                    if (value == 0) {
-                        throw new Error();
-                    }
-                    number = value;
-                } finally {
-                    number++;
+            private int error(int value) {
+                if (value == 1) {
+                    throw new Error();
                 }
+                return value + 10;
+            }
+        });
+    }
+
+    @Test
+    public void EmptyTryFinally() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                try {
+                    // do nothing
+                } finally {
+                    value = error(value);
+                }
+                return value;
+            }
+
+            @Debuggable
+            private int error(int value) {
+                if (value == 1) {
+                    throw new Error();
+                }
+                return value + 10;
             }
         });
     }

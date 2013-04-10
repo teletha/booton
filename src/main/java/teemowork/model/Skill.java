@@ -1898,6 +1898,9 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(6, -0.5)
                 .cost(Energy, 60, 0)
                 .range(600);
+        MarkOftheAssassin.update(P3051)
+                .variable(1, MagicDamage, 35, 20, ap(0.4))
+                .variable(2, MagicDamage, 45, 25, ap(0.5));
         TwilightShroud.update()
                 .active("指定地点に8秒間煙を発生させ{1}のユニットに以下の効果を与える。Akaliは{2}と{3}、{5}を得る。敵ユニットには{4}を与える。")
                 .variable(1, Radius, 300)
@@ -1921,6 +1924,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(2, -0.5)
                 .cost(Charge, 1, 0)
                 .range(800);
+        ShadowDance.update(P3051).variable(2, CDRAwareTime, 35, -10);
 
         /** Alistar */
         Trample.update()
@@ -3182,6 +3186,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .passive("敵Championにスキルでダメージを与えた場合Mantraの{1}し、通常攻撃でダメージを与えた場合は{2}する。")
                 .variable(1, CDDecrease, new Per6Level(1, 0.5))
                 .variable(2, CDDecrease, new Per6Level(0.5, 0.25));
+        GatheringFire.update(P3051).variable(1, CDDecrease, 2).variable(2, CDDecrease, 1);
         InnerFlame.update()
                 .active("指定方向扇形60°の{1}の敵ユニットに{2}を与える。Mantra Bonus:自身と効果範囲内の味方ユニットは{3}する。回復量は対象のHP残量によって変化する。")
                 .variable(1, Radius, 600)
@@ -3216,6 +3221,13 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(4, RestoreHealth, 0, 0, amplify(MissingHealthRatio, 25, 0, ap(0.01)))
                 .mana(70, 10)
                 .cd(16, -0.5);
+        FocusedResolve.update(P3051)
+                .active("対象の敵Championと自身を繋ぐビームを発生させる。0.66秒毎に{1}を与え、2秒間ビームが持続していた場合{2}を与える。Mantraを付与した場合、追加の{3}を与え、{4}するようになる。ダメージを与えるたびにGathering Fireの効果が発生する。")
+                .variable(1, MagicDamage, 20, 50 / 3, ap(0.2))
+                .variable(2, Snare, 1, 0.25)
+                .variable(3, MagicDamage, new Refer(Mantra, 75 / 3, 75 / 3), ap(0.2), null)
+                .variable(4, RestoreHealth, 0, 0, amplify(MissingHealthRatio, 25, 0, ap(0.01)))
+                .mana(70, 5);
         Inspire.update()
                 .active("対象の味方ユニットに5秒間持続する{1}を付与する。Mantra Bonus:味方ユニットにシールドを付与した際、その味方ユニットの{2}にいる敵ユニットに{3}を与える。")
                 .variable(1, Shield, 80, 40, ap(0.8))
@@ -3225,15 +3237,18 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(10)
                 .range(650);
         Inspire.update(P305)
-                .active("対象の味方は4秒間{1}を得て1.25秒間{2}する。Mantraを付与した場合、味方ユニットにシールドを付与した際に{3}の味方ユニットは{4}を得て、敵ユニットには{5}を与える。対象とした味方ユニットは通常のシールドとMantraによるシールド両方の効果を得られる。")
+                .active("対象の味方は4秒間{1}を得て{6}間{2}する。Mantraを付与した場合、味方ユニットにシールドを付与した際に{3}の味方ユニットは{4}を得て{7}し、敵ユニットには{5}を与える。対象とした味方ユニットは通常のシールドとMantraによるシールド両方の効果を得られる。")
                 .variable(1, Shield, 80, 40, ap(0.5))
                 .variable(2, MSRatio, 20, 10)
-                .variable(3, Radius, 200)
+                .variable(3, Radius, 600)
                 .variable(4, Shield, new Refer(Mantra, 30, 40), ap(0.3), null)
                 .variable(5, MagicDamage, new Refer(Mantra, 60, 80), ap(0.6), null)
+                .variable(6, Time, 1.25)
+                .variable(7, MSRatio, 20, 10)
                 .mana(60, 10)
                 .cd(12)
                 .range(800);
+        Inspire.update(P3051).variable(3, Radius, 700).variable(6, Time, 1.5).variable(7, MSRatio, 60);
         Mantra.update()
                 .active("次に使用するスキルにMantra Bonusを付与する。Lv1から使用でき、スキルポイントを割り振ることはできない。{1}毎にスタック数が1つ増加し最大で2つまでスタックされる。スタック増加時間はCD低減の影響を受ける。レベル1、7、13でスタック増加時間が短縮される。")
                 .variable(1, CDRAwareTime, new Per6Level(30, -5))
@@ -3364,6 +3379,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(60, 10)
                 .cd(15)
                 .range(1000);
+        DivineBlessing.update(P3051).range(900);
         RighteousFury.update()
                 .active("10秒間Kayleの通常攻撃の射程が525に伸びる(Ranged)。更に通常攻撃に追加{1}が付与され、スプラッシュ効果{2}が付く。塔を攻撃する時はスプラッシュ効果は発生しない。")
                 .variable(1, MagicDamage, 20, 10, ap(0.4), amplify(AD, 0.2, 0.05))
@@ -3376,6 +3392,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(100, -25)
                 .cd(90, -15)
                 .range(1200);
+        Intervention.update(P3051).range(900);
 
         /** Kennen */
         MarkOftheStorm.update()
@@ -3674,6 +3691,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(100)
                 .cd(80, -20)
                 .range(3000);
+        FinalSpark.update(P3051).cd(80, -15);
 
         /** Malphite */
         GraniteShield.update().passive("10秒間ダメージを受けないと{1}を得る。").variable(1, Shield, 0, 0, amplify(Health, 0.1));
@@ -3898,6 +3916,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(60, 15)
                 .cd(11)
                 .range(1300);
+        DarkBinding.update(P3051).mana(50, 10);
         TormentedSoil.update()
                 .active("指定地点に5秒間持続する黒い沼({3})を発生させ、上にいる敵ユニットに毎秒{1}と{2}を与える。MR低下は2秒間持続し、5回までスタックする。")
                 .variable(1, MagicDamage, 25, 15, ap(0.2))
@@ -3922,6 +3941,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(100, 50)
                 .cd(120, -10)
                 .range(600);
+        SoulShackles.update(P3051).mana(100);
 
         /** Nami */
         SurgingTides.update()
@@ -3957,7 +3977,8 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, MSSlowRatio, 50, 10)
                 .mana(100, 50)
                 .cd(140, -20)
-                .range(2550);
+                .range(2500);
+        TidalWave.update(P3051).range(2750).cd(120, -10).mana(100);
 
         /** Nasus */
         SoulEater.update().passive("{1}を得る。レベル1、7、13で増加値が上昇する。").variable(1, LS, new Per6Level(14, 3));
@@ -4007,6 +4028,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, MagicDamage, 30, 15, ap(0.4))
                 .mana(80)
                 .cd(26, -2);
+        TitansWrath.update(P3051).cd(22, -1);
         Riptide.update()
                 .active("周囲を爆発させ命中した敵ユニットに{1}と２秒間{2}を与える。スローの効果は2秒かけて元に戻る。爆発はNautilusを中心に3回まで発生し、同一対象に対して複数hitする。2発目以降は本来の50%分の魔法DMを与える(3発hitで{3})。")
                 .variable(1, MagicDamage, 60, 40, ap(0.5))
@@ -4150,6 +4172,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(5, MSSlowRatio, 50)
                 .mana(150)
                 .cd(150, -30);
+        AbsoluteZero.update(P3051).cd(110, -10).mana(100);
 
         /** Olaf */
         BerserkerRage.update().passive("{1}する。").variable(1, ASRatio, 0, 0, amplify(MissingHealthPercentage, 1));
@@ -4286,6 +4309,44 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(100)
                 .cd(140, -20)
                 .range(900);
+
+        /** Quinn */
+        Harrier.update()
+                .passive("ValorがQuinnの周辺に存在する敵ユニット一体(Champion優先)に自動的に4.5秒間持続するマークを付与する。マークが付与された敵ユニットにQuinnが通常攻撃を行うと、付与されたマークを消費して{1}を与える。またマークが付与された敵ユニットの{2}。Valorと交代している間はこのスキルは無効になる。")
+                .variable(1, PhysicalDamage, new Fixed(new double[] {25, 35, 45, 55, 65, 75, 85, 95, 105, 115, 125,
+                        135, 145, 155, 170, 185, 190, 215}), bounusAD(0.5), null)
+                .variable(2, Visionable)
+                .cd(10);
+        BlindingAssault.update()
+                .active("指定方向にValorを突撃させ、最初に当たった敵ユニットと{1}の敵ユニットに{2}と{3}を与える。Tag Team時は自身の{1}の敵ユニットに{2}と{3}を与える。")
+                .variable(1, Radius, 200)
+                .variable(2, PhysicalDamage, 70, 40, bounusAD(0.65))
+                .variable(3, Blind, 1.5)
+                .mana(60, 5)
+                .cd(11, -1)
+                .range(1025);
+        HeightenedSenses.update()
+                .passive("Harrierによってマークが付与された敵ユニットに通常攻撃を行うと、3秒間{1}する。Tag Team時は{2}する。")
+                .variable(1, ASRatio, 20, 5)
+                .variable(-2, ASRatio, 40, 10)
+                .active("2秒間{3}の視界を得る。")
+                .variable(3, Radius, 2100)
+                .cd(50, -5);
+        Vault.update()
+                .active("対象の敵ユニットまでダッシュし{1}と2秒間{2}を与える。スローの効果は2秒かけて元に戻る。ダッシュ後、Quinnは自身の通常攻撃の最大射程(距離525)までジャンプして対象と距離を離す。また、同時に対象にはHarrierのマークが付与される。Tag Team時はダッシュ後に距離を離さなくなる。")
+                .variable(1, PhysicalDamage, 40, 30, bounusAD(0.2))
+                .variable(2, MSSlowRatio, 50)
+                .range(750)
+                .mana(50)
+                .cd(12, -1);
+        TagTeam.update()
+                .active("20秒間ValorがQuinnと入れ替わり戦闘に参加する。Valorは射程125のMeleeであり、専用のスキルが与えられるがスキルのCDはQuinnと共有する。Valorは{1}を得て{2}する。戦闘状態に入ると{3}する。このスキルを再度使用するか、20秒経過するとValorがQuinnと入れ替わり、{4}に敵ユニットに{5}を与える。対象が受けているダメージに比例して与えるダメージが増加し、最大で{6}を与える。")
+                .variable(1, IgnoreUnitCollision)
+                .variable(-2, MSRatio, 80)
+                .variable(3, MSRatio, 20)
+                .variable(4, Radius, 700)
+                .variable(5, PhysicalDamage, 100, 50, bounusAD(0.5))
+                .variable(6, PhysicalDamage, 200, 100, bounusAD(1));
 
         /** Rammus */
         SpikedShell.update().passive("{1}を得る。").variable(1, AD, 0, 0, amplify(AR, 0.45));
@@ -5385,6 +5446,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, PhysicalDamage, 30, 30)
                 .mana(40)
                 .cd(12, -1);
+        RollingThunder.update(P3051).variable(-2, MSRatio, 30, 5);
         Frenzy.update()
                 .passive("通常攻撃でダメージを与える度にスタックが1増加し(最大3スタック)、{1}する。スタックは4秒持続する。")
                 .variable(-1, ASRatio, 0, 0, amplify(Stack, 8, 3))
