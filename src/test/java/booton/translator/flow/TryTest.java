@@ -9,7 +9,6 @@
  */
 package booton.translator.flow;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.translator.Debuggable;
@@ -18,7 +17,7 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/01/11 16:57:25
+ * @version 2013/04/11 11:23:21
  */
 @SuppressWarnings("unused")
 public class TryTest extends ScriptTester {
@@ -289,81 +288,6 @@ public class TryTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
-    public void TryFinally() {
-        test(new Scriptable() {
-
-            @Debuggable
-            public int act(@Param(from = 0, to = 10) int value) {
-                try {
-                    value = error(value);
-                } finally {
-                    value++;
-                }
-                return value;
-            }
-
-            @Debuggable
-            private int error(int value) {
-                if (value == 1) {
-                    throw new Error();
-                }
-                return value + 10;
-            }
-        });
-    }
-
-    @Test
-    @Ignore
-    public void TryEmptyFinally() {
-        test(new Scriptable() {
-
-            @Debuggable
-            public int act(@Param(from = 0, to = 10) int value) {
-                try {
-                    value = error(value);
-                } finally {
-                    // do nothing
-                }
-                return value;
-            }
-
-            @Debuggable
-            private int error(int value) {
-                if (value == 1) {
-                    throw new Error();
-                }
-                return value + 10;
-            }
-        });
-    }
-
-    @Test
-    @Ignore
-    public void EmptyTryFinally() {
-        test(new Scriptable() {
-
-            @Debuggable
-            public int act(@Param(from = 0, to = 10) int value) {
-                try {
-                    // do nothing
-                } finally {
-                    value = error(value);
-                }
-                return value;
-            }
-
-            @Debuggable
-            private int error(int value) {
-                if (value == 1) {
-                    throw new Error();
-                }
-                return value + 10;
-            }
-        });
-    }
-
-    @Test
     public void TryCatchFinallyAfter() {
         test(new Scriptable() {
 
@@ -426,6 +350,31 @@ public class TryTest extends ScriptTester {
                     counter = counter + 2;
                 }
                 return value + 1;
+            }
+        });
+    }
+
+    @Test
+    public void TryFinally() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 10) int value) {
+                try {
+                    value = error(value);
+                } catch (Error e) {
+                    // do nothing
+                }
+                return value;
+            }
+
+            @Debuggable
+            private int error(int value) {
+                try {
+                    value = Throw.error(value);
+                } finally {
+                    value++;
+                }
+                return value;
             }
         });
     }

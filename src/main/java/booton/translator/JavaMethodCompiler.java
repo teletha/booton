@@ -38,6 +38,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
 import booton.Obfuscator;
+import booton.translator.Node.Catch;
 import booton.translator.Node.Switch;
 import booton.translator.Node.TryCatch;
 
@@ -49,7 +50,7 @@ import booton.translator.Node.TryCatch;
  * completely, garbage goto code will remain.
  * </p>
  * 
- * @version 2013/03/23 13:52:57
+ * @version 2013/04/11 11:23:33
  */
 class JavaMethodCompiler extends MethodVisitor {
 
@@ -271,6 +272,7 @@ class JavaMethodCompiler extends MethodVisitor {
         for (TryCatch block : blocks) {
             block.process();
         }
+        System.out.println(blocks);
 
         if (debuggable) {
             NodeDebugger.dump(script, methodNameOriginal, nodes);
@@ -1422,6 +1424,11 @@ class JavaMethodCompiler extends MethodVisitor {
         for (TryCatch block : blocks) {
             if (type == null && block.start == current.start) {
                 block.finalizer = current.end;
+                block.pseudoCatchers.add(current.catcher);
+                return;
+            }
+
+            if (type == null && block.pseudoCatchers.contains(current)) {
                 return;
             }
 
@@ -1511,6 +1518,16 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case ASTORE:
+            if (match(FRAME_SAME1, ASTORE)) {
+                for (TryCatch tryBlock : blocks) {
+                    for (Catch catchBlock : tryBlock.catches) {
+                        if (catchBlock.node == current) {
+                            catchBlock.variable = variable;
+                        }
+                    }
+                }
+            }
+
         case ISTORE:
         case LSTORE:
         case FSTORE:
