@@ -9,6 +9,8 @@
  */
 package booton.translator.flow;
 
+import java.io.IOException;
+
 import org.junit.Test;
 
 import booton.translator.Debuggable;
@@ -37,6 +39,13 @@ public class TryTest extends ScriptTester {
         private static int exception(int value) throws Exception {
             if (value % 3 == 0) {
                 throw new Exception();
+            }
+            return value + 10000;
+        }
+
+        private static int io(int value) throws IOException {
+            if (value % 4 == 0) {
+                throw new IOException();
             }
             return value + 100000;
         }
@@ -138,6 +147,25 @@ public class TryTest extends ScriptTester {
                 } catch (Error e) {
                     return 3;
                 }
+            }
+        });
+    }
+
+    @Test
+    public void TryMultipleCatchInherited() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(@Param(from = 0, to = 10) int value) {
+                try {
+                    value = Throw.io(value);
+                    value = Throw.exception(value);
+                } catch (IOException e) {
+                    value = value + 2;
+                } catch (Exception e) {
+                    value = value + 3;
+                }
+                return value;
             }
         });
     }
@@ -358,6 +386,7 @@ public class TryTest extends ScriptTester {
     public void TryFinally() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     value = error(value);
