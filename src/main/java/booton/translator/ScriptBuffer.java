@@ -12,9 +12,12 @@ package booton.translator;
 import org.objectweb.asm.Type;
 
 /**
- * @version 2013/01/14 11:59:19
+ * @version 2013/04/11 21:23:05
  */
 class ScriptBuffer {
+
+    /** The optimization flag. */
+    private static boolean optimize = false;
 
     /** The actual buffer. */
     private final StringBuilder buffer = new StringBuilder();
@@ -105,6 +108,23 @@ class ScriptBuffer {
             write(fragment);
         }
 
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Helper method to write script code with white space.
+     * </p>
+     */
+    public ScriptBuffer write(Object... fragments) {
+        for (int i = 0; i < fragments.length; i++) {
+            write(fragments[i]);
+
+            if (!optimize && i + 1 != fragments.length) {
+                write(" ");
+            }
+        }
         // API definition
         return this;
     }

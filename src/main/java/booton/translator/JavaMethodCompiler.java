@@ -1476,7 +1476,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case ASTORE:
-            if (match(FRAME_SAME1, ASTORE)) {
+            if (match(FRAME_SAME1, ASTORE) || match(FRAME_FULL, ASTORE)) {
                 tries.assignVariableName(current, variable);
             }
 

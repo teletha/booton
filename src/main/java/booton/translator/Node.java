@@ -500,24 +500,32 @@ class Node {
             // Try-Catch-Finally Block
             // =============================================================
             for (TryCatchFinally block : tries) {
+                buffer.write("}", "catch", "($)", "{");
 
-                for (Catch current : block.catches) {
-                    Class exception = current.exception;
+                for (int i = 0; i < block.catches.size(); i++) {
+                    Catch current = block.catches.get(i);
                     String variable = current.variable;
 
-                    if (variable == null) {
-                        variable = "$";
-                    }
-
-                    if (exception == null) {
-                        buffer.append("} catch (" + variable + ") {");
+                    if (current.exception == null) {
+                        // finally block
+                        buffer.write(variable, "=", "$;");
                         current.node.write(buffer);
                     } else {
-                        buffer.append("} catch (" + variable + " if " + variable + " instanceof " + Javascript.computeClassName(exception) + ") {");
+                        buffer.write("if", "($ instanceof", Javascript.computeClassName(current.exception) + ")", "{");
+                        buffer.write(variable, "=", "$;");
                         current.node.write(buffer);
+                        buffer.write("}", "else");
+
+                        if (i + 1 == block.catches.size()) {
+                            buffer.write("", "{");
+                            buffer.write("throw $;");
+                            buffer.write("}");
+                        } else {
+                            buffer.write(" ");
+                        }
                     }
                 }
-                buffer.append("}"); // close try statement
+                buffer.write("}"); // close try statement
 
                 Node exit = block.exit;
 
@@ -530,29 +538,31 @@ class Node {
     }
 
     /**
+     * <p>
      * Helper method to process script writing.
+     * </p>
      * 
-     * @param dest
-     * @param buffer
+     * @param node A next node to write.
+     * @param buffer A script code buffer.
      */
-    private final void process(Node dest, ScriptBuffer buffer) {
-        if (dest != null) {
-            Node dominator = dest.getDominator();
+    private final void process(Node node, ScriptBuffer buffer) {
+        if (node != null) {
+            Node dominator = node.getDominator();
 
             if (dominator == null || dominator == this) {
                 // normal process
-                dest.write(buffer);
+                node.write(buffer);
                 return;
             }
 
-            if (hasDominator(dest)) {
-                buffer.append("continue l", dest.id, ";");
+            if (hasDominator(node)) {
+                buffer.append("continue l", node.id, ";");
                 return;
             }
 
             if (dominator.backedges.size() == 0) {
                 // stop here
-                dest.getDominator().follower = dest;
+                node.getDominator().follower = node;
             } else {
                 buffer.append("break l", dominator.id, ";");
             };
