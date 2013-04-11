@@ -1411,7 +1411,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
-        tries.add(getNode(start), getNode(end), getNode(handler), convert(type));
+        tries.addTryCatchFinallyBlock(getNode(start), getNode(end), getNode(handler), convert(type));
     }
 
     /**
@@ -1477,8 +1477,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
         case ASTORE:
             if (match(FRAME_SAME1, ASTORE)) {
-
-                tries.setVariableName(current, variable);
+                tries.assignVariableName(current, variable);
             }
 
         case ISTORE:
@@ -1499,13 +1498,6 @@ class JavaMethodCompiler extends MethodVisitor {
                 // mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[] {"Error Class"});
                 // mv.visitVarInsn(ASTORE, 1);
                 if (current.peek(0) != Node.END) {
-                    // When some method which straddles multi lines returns value,
-                    // we should use operand from previous node.
-                    // if (current.stack.size() == 0 && !match(FRAME_SAME1, ASTORE)) {
-                    // current.stack.addAll(current.previous.stack);
-                    // current.previous.stack.clear();
-                    // }
-
                     // retrieve and remove it
                     Operand operand = current.remove(0, false);
 

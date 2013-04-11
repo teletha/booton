@@ -13,13 +13,12 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/04/11 11:23:21
+ * @version 2013/04/11 19:55:53
  */
 @SuppressWarnings("unused")
 public class TryTest extends ScriptTester {
@@ -55,7 +54,6 @@ public class TryTest extends ScriptTester {
     public void TryCatch() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     return Throw.error(value);
@@ -70,7 +68,6 @@ public class TryTest extends ScriptTester {
     public void TryCatchAfter() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     value = Throw.error(value);
@@ -86,7 +83,6 @@ public class TryTest extends ScriptTester {
     public void TryCatchAfter2() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     value = Throw.error(value);
@@ -103,7 +99,6 @@ public class TryTest extends ScriptTester {
     public void TryCatchAfter3() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     value = Throw.error(value);
@@ -119,7 +114,6 @@ public class TryTest extends ScriptTester {
     public void TryEmptyCatch() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     value = Throw.error(value);
@@ -135,7 +129,6 @@ public class TryTest extends ScriptTester {
     public void TryMultipleCatch() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     value = Throw.error(value);
@@ -155,7 +148,6 @@ public class TryTest extends ScriptTester {
     public void TryMultipleCatchInherited() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     value = Throw.io(value);
@@ -174,7 +166,6 @@ public class TryTest extends ScriptTester {
     public void TryMultipleCatchAfter() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     value = Throw.error(value);
@@ -193,7 +184,6 @@ public class TryTest extends ScriptTester {
     public void TryCatchInCatch() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     return Throw.error(value);
@@ -212,7 +202,6 @@ public class TryTest extends ScriptTester {
     public void TryCatchInCatchAfter() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     value = Throw.error(value);
@@ -233,7 +222,6 @@ public class TryTest extends ScriptTester {
     public void TryCatchInTry() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     value = Throw.exception(value);
@@ -255,7 +243,6 @@ public class TryTest extends ScriptTester {
     public void TryCatchInTryImmediately() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     try {
@@ -275,7 +262,6 @@ public class TryTest extends ScriptTester {
     public void TryCatchInTryAfter() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     value = Throw.exception(value);
@@ -298,7 +284,6 @@ public class TryTest extends ScriptTester {
     public void TryCatchWithFrameFull() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 for (int i = 0; i < 1; i++) {
                     value++;
@@ -317,7 +302,6 @@ public class TryTest extends ScriptTester {
     public void TryCatchSequencial() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 3) int value) {
                 try {
                     value = Throw.error(value);
@@ -339,7 +323,6 @@ public class TryTest extends ScriptTester {
     public void TryCatchFinallyAfter() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     value = Throw.error(value);
@@ -360,12 +343,10 @@ public class TryTest extends ScriptTester {
 
             private int counter = 0;
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 return counter + calc(value);
             }
 
-            @Debuggable
             private int calc(int value) {
                 try {
                     return Throw.error(value);
@@ -388,7 +369,6 @@ public class TryTest extends ScriptTester {
                 return counter + calc(value);
             }
 
-            @Debuggable
             private int calc(int value) {
                 try {
                     return Throw.error(value);
@@ -406,7 +386,6 @@ public class TryTest extends ScriptTester {
     public void TryFinally() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     value = error(value);
@@ -416,7 +395,6 @@ public class TryTest extends ScriptTester {
                 return value;
             }
 
-            @Debuggable
             private int error(int value) {
                 try {
                     value = Throw.error(value);
@@ -434,7 +412,6 @@ public class TryTest extends ScriptTester {
 
             private int counter = 0;
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     if (value != 0) {
@@ -446,7 +423,6 @@ public class TryTest extends ScriptTester {
                 return counter;
             }
 
-            @Debuggable
             private void error(int value) {
                 try {
                     counter = Throw.error(value);
