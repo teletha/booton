@@ -52,17 +52,6 @@ class Node {
     /** The dominator node. */
     private Node dominator;
 
-    // /** The finally blocks. */
-    // private List<TryBlock> catcheTries = new ArrayList();
-    //
-
-    //
-    // /** The finally blocks. */
-    // private List<TryBlock> finallyTries = new ArrayList();
-    //
-    // /** The finally blocks. */
-    // private Deque<TryBlock> finallies = new ArrayDeque();
-
     /** The flag whether this node has already written or not. */
     private boolean written = false;
 
@@ -385,13 +374,15 @@ class Node {
             }
 
             // =============================================================
-            // Other Block
+            // Try-Catch-Finally Block
             // =============================================================
-            // check try-catch-finally
             if (tryCatchFinally != null) {
                 buffer.append("try{");
             }
 
+            // =============================================================
+            // Other Block
+            // =============================================================
             int outs = outgoing.size();
             int backs = backedges.size();
 
@@ -499,16 +490,23 @@ class Node {
                 }
             }
 
-            // try-catch
+            // =============================================================
+            // Try-Catch-Finally Block
+            // =============================================================
             if (tryCatchFinally != null) {
                 for (Catch current : tryCatchFinally.catches) {
                     Class exception = current.exception;
+                    String variable = current.variable;
+
+                    if (variable == null) {
+                        variable = "$";
+                    }
 
                     if (exception == null) {
-                        buffer.append("} catch ($) {");
+                        buffer.append("} catch (" + variable + ") {");
                         current.node.write(buffer);
                     } else {
-                        buffer.append("} catch ($ if $ instanceof " + Javascript.computeClassName(exception) + ") {");
+                        buffer.append("} catch (" + variable + " if " + variable + " instanceof " + Javascript.computeClassName(exception) + ") {");
                         current.node.write(buffer);
                     }
                 }
@@ -839,6 +837,24 @@ class Node {
 
                 for (Catch catchBlock : block.catches) {
                     block.start.disconnect(catchBlock.node);
+                }
+            }
+        }
+
+        /**
+         * <p>
+         * Set exception variable name.
+         * </p>
+         * 
+         * @param current
+         * @param variable
+         */
+        void setVariableName(Node current, String variable) {
+            for (TryCatchFinally block : blocks) {
+                for (Catch catchBlock : block.catches) {
+                    if (catchBlock.node == current) {
+                        catchBlock.variable = variable;
+                    }
                 }
             }
         }

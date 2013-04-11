@@ -1463,11 +1463,6 @@ class JavaMethodCompiler extends MethodVisitor {
         // recode current instruction
         record(opcode);
 
-        // check caught exception variable
-        if (match(RETURNS, LABEL, FRAME_SAME1, ASTORE) || match(ATHROW, LABEL, FRAME_SAME1, ASTORE) || match(FRAME_FULL, ASTORE)) {
-            return;
-        }
-
         // retrieve local variable name
         String variable = variables.name(position, opcode);
 
@@ -1482,13 +1477,8 @@ class JavaMethodCompiler extends MethodVisitor {
 
         case ASTORE:
             if (match(FRAME_SAME1, ASTORE)) {
-                // for (TryCatch tryBlock : blocks) {
-                // for (Catch catchBlock : tryBlock.catches) {
-                // if (catchBlock.node == current) {
-                // catchBlock.variable = variable;
-                // }
-                // }
-                // }
+
+                tries.setVariableName(current, variable);
             }
 
         case ISTORE:
