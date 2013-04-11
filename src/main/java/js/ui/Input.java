@@ -62,7 +62,6 @@ public class Input<T> extends FormUI {
             model.set(decode(value));
         } catch (Error e) {
             System.out.println("Error catch");
-            System.out.println(e);
         }
 
     }
@@ -163,6 +162,7 @@ public class Input<T> extends FormUI {
 
                     // restore old value
                     S old = get();
+
                     if ("aa".equals(value)) {
                         throw new Error("error desu");
                     }

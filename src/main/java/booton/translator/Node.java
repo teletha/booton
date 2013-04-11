@@ -134,7 +134,7 @@ class Node {
             //
             // calculated = stack.size() - 1 - index
             // index - stack.size() = -calculated - 1;
-            return previous == null ? null : previous.remove(-index - 1);
+            return previous == null || incoming.isEmpty() ? null : previous.remove(-index - 1);
         }
 
         // Retrieve and remove it
@@ -169,7 +169,7 @@ class Node {
             //
             // calculated = stack.size() - 1 - index
             // index - stack.size() = -calculated - 1;
-            return previous == null ? null : previous.peek(-index - 1);
+            return previous == null || incoming.isEmpty() ? null : previous.peek(-index - 1);
         }
 
         // Retrieve it
