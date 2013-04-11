@@ -10,15 +10,12 @@
 package booton.translator;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * @version 2013/01/14 12:28:02
+ * @version 2013/04/11 11:23:39
  */
 class Node {
 
@@ -248,7 +245,7 @@ class Node {
      * @param dominator A dominator node.
      * @return A result.
      */
-    private boolean hasDominator(Node dominator) {
+    final boolean hasDominator(Node dominator) {
         Node current = this;
 
         while (current != null) {
@@ -267,7 +264,7 @@ class Node {
      * 
      * @return A dominator node. If this node is root, <code>null</code>.
      */
-    Node getDominator() {
+    final Node getDominator() {
         // check cache
         if (dominator == null) {
             // We must search a immediate dominator.
@@ -506,10 +503,17 @@ class Node {
             if (block != null) {
                 buffer.append("} catch ($) {");
 
-                for (Entry<Class, Node> entry : block.catches.entrySet()) {
-                    buffer.append("if ($ instanceof " + Javascript.computeClassName(entry.getKey()) + ") {");
-                    block.searchCatchEnterance(entry.getValue()).write(buffer);
-                    buffer.append("}");
+                for (Catch current : block.catches) {
+                    Class exception = current.exception;
+                    System.out.println(current.variable);
+
+                    if (exception == null) {
+                        block.searchCatchEnterance(current.node).write(buffer);
+                    } else {
+                        buffer.append("if ($ instanceof " + Javascript.computeClassName(exception) + ") {");
+                        block.searchCatchEnterance(current.node).write(buffer);
+                        buffer.append("}");
+                    }
                 }
 
                 // if (block.finalizer != null) {
@@ -784,7 +788,7 @@ class Node {
         final Node catcher;
 
         /** The catch blocks. */
-        final Map<Class, Node> catches = new HashMap();
+        final List<Catch> catches = new ArrayList();
 
         /** The exit node. */
         Node exit;
@@ -793,6 +797,8 @@ class Node {
         final List<Node> tries = new ArrayList();
 
         Node finalizer;
+
+        List<Node> pseudoCatchers = new ArrayList();
 
         /**
          * @param start
@@ -817,17 +823,20 @@ class Node {
          * @param catcher
          */
         void addCatchBlock(Class exception, Node catcher) {
-            if (exception != null) {
-                catches.put(exception, catcher);
+            for (Catch block : catches) {
+                if (block.exception == exception) {
+                    return;
+                }
             }
+            catches.add(new Catch(exception, catcher));
         }
 
         void conenct() {
             // connect to catcher
             start.connect(catcher);
 
-            for (Node node : catches.values()) {
-                start.connect(node);
+            for (Catch block : catches) {
+                start.connect(block.node);
             }
         }
 
@@ -861,15 +870,6 @@ class Node {
 
         /**
          * <p>
-         * Search the entrance node of finally block.
-         * </p>
-         */
-        private Node searchFinallyEnterance() {
-            return finalizer;
-        }
-
-        /**
-         * <p>
          * Search exit node of this switch block.
          * </p>
          * 
@@ -895,46 +895,45 @@ class Node {
             return exit;
         }
 
-        private void resolve() {
-            if (start == null) {
-                if (end == null) {
-                    // // try-finally
-                    //
-                    // // The base node has only finally node (don't have catch node).
-                    // // So, we must recalculate the position of correct finally end node.
-                    // Node follower = end.previous.outgoing.get(0);
-                    //
-                    // int i = nodes.indexOf(end);
-                    // int j = nodes.indexOf(follower);
-                    //
-                    // start = follower;
-                    // end = nodes.get(2 * j - i - 2);
-                    // for (; i < j;) {
-                    // nodes.remove(--j);
-                    // }
-                    //
-                    // base.addFinally(this);
-                    // } else {
-                    // // try-catch-finally
-                    //
-                    // Node follower = end;
-                    //
-                    // end = start.previous.outgoing.size() == 0 ? start.previous :
-                    // start.previous.outgoing.get(0);
-                    // start = follower;
-                    //
-                    // base.addFinally(this);
-                }
-            } else {
-                // try-catch
-                // if (!start.incoming.contains(base)) {
-                // start.incoming.add(base);
-                // }
-                //
-                // start = nodes.get(nodes.indexOf(start) + 1);
-                // end = end.outgoing.size() == 0 ? end : end.outgoing.get(0);
-                // base.addCatch(this);
-            }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return "TryCatch [catches=" + catches + "]";
+        }
+
+    }
+
+    /**
+     * @version 2013/04/11 11:32:44
+     */
+    static class Catch {
+
+        /** The Throwable class, may be null for finally statmenet. */
+        final Class exception;
+
+        /** The associated node. */
+        final Node node;
+
+        /** The exception variable name. */
+        String variable;
+
+        /**
+         * @param exception
+         * @param node
+         */
+        private Catch(Class exception, Node node) {
+            this.exception = exception;
+            this.node = node;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return "Catch [exception=" + exception + ", node=" + node + ", variable=" + variable + "]";
         }
     }
 }
