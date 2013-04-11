@@ -354,7 +354,7 @@ class Node {
                 Node exit = switchy.searchExit();
 
                 // enter switch
-                buffer.append("switch(", switchy.value, "){");
+                buffer.write("switch", "(" + switchy.value + ")", "{");
 
                 // each cases
                 for (Node node : switchy.cases()) {
@@ -383,7 +383,7 @@ class Node {
             // Try-Catch-Finally Block
             // =============================================================
             for (int i = 0; i < tries.size(); i++) {
-                buffer.append("try{");
+                buffer.write("try", "{");
             }
 
             // =============================================================
@@ -412,10 +412,10 @@ class Node {
                     condition.follower = condition.outgoing.get(condition.outgoing.size() - 1);
 
                     // write script fragment
-                    buffer.append("l", condition.id, ":do {");
+                    buffer.write("l" + condition.id, ":", "do", "{");
                     buffer.append(this);
                     process(this.outgoing.get(0), buffer);
-                    buffer.append("} while (", condition, ")");
+                    buffer.write("}", "while", "(" + condition + ")");
                     condition.process(condition.follower, buffer);
                 }
             } else if (outs == 2) {
@@ -430,22 +430,22 @@ class Node {
 
                     if (outgoing.get(0).incoming.size() == 1) {
                         if (outgoing.get(1).incoming.size() == 1) {
-                            buffer.append("if(", this, "){");
+                            buffer.write("if", "(" + this + ")", "{");
                             process(outgoing.get(0), buffer);
-                            buffer.append("}else{");
+                            buffer.write("}", "else", "{");
                             process(outgoing.get(1), buffer);
-                            buffer.append("}");
+                            buffer.write("}");
                             process(follower, buffer);
                         } else {
-                            buffer.append("if(", this, "){");
+                            buffer.write("if", "(" + this + ")", "{");
                             process(outgoing.get(0), buffer);
-                            buffer.append("}");
+                            buffer.write("}");
                             process(outgoing.get(1), buffer);
                         }
                     } else {
-                        buffer.append("if(!(", this, ")){");
+                        buffer.write("if", "(!(" + this + "))", "{");
                         process(outgoing.get(1), buffer);
-                        buffer.append("}");
+                        buffer.write("}");
                         process(outgoing.get(0), buffer);
                     }
                 } else if (backs == 1) {
@@ -466,9 +466,9 @@ class Node {
                         follower = outgoing.get(1);
 
                         // write script fragment
-                        buffer.append("l", id, ":for (;", this, ";", update, ") {");
+                        buffer.write("l" + id + ":", "for", "(;", this + ";", update + ")", "{");
                         process(outgoing.get(0), buffer);
-                        buffer.append("}");
+                        buffer.write("}");
                         process(follower, buffer);
                     } else {
                         // while with break only
@@ -477,9 +477,9 @@ class Node {
                         follower = outgoing.get(1);
 
                         // write script fragment
-                        buffer.append("l", id, ":while (", this, ") {");
+                        buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
                         process(outgoing.get(0), buffer);
-                        buffer.append("}");
+                        buffer.write("}");
                         process(follower, buffer);
                     }
                 } else {
@@ -489,9 +489,9 @@ class Node {
                     follower = outgoing.get(1);
 
                     // write script fragment
-                    buffer.append("l", id, ":while (", this, ") {");
+                    buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
                     process(outgoing.get(0), buffer);
-                    buffer.append("}");
+                    buffer.write("}");
                     process(follower, buffer);
                 }
             }
