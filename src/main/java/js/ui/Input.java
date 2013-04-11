@@ -163,11 +163,9 @@ public class Input<T> extends FormUI {
 
                     // restore old value
                     S old = get();
-                    System.out.println(value);
                     if ("aa".equals(value)) {
                         throw new Error("error desu");
                     }
-                    System.out.println("clear");
 
                     if (old != value) {
                         // store new value

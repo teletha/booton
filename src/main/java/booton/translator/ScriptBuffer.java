@@ -119,7 +119,7 @@ class ScriptBuffer {
      */
     public ScriptBuffer write(Object... fragments) {
         for (int i = 0; i < fragments.length; i++) {
-            write(fragments[i]);
+            write(fragments[i], false);
 
             if (!optimize && i + 1 != fragments.length) {
                 write(" ");
@@ -213,6 +213,16 @@ class ScriptBuffer {
      * @return
      */
     private ScriptBuffer write(Object fragment) {
+        return write(fragment, true);
+    }
+
+    /**
+     * Helper method to write script source.
+     * 
+     * @param fragment
+     * @return
+     */
+    private ScriptBuffer write(Object fragment, boolean line) {
         String value = fragment.toString();
         int length = value.length();
 
@@ -241,7 +251,7 @@ class ScriptBuffer {
                 break;
 
             case ';':
-                line();
+                if (line) line();
                 break;
             }
         }
