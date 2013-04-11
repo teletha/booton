@@ -512,13 +512,13 @@ class Node {
                     buffer.append("}");
                 }
 
-                if (block.finalizer != null) {
-                    buffer.append("} finally {");
-                    Node finalizer = block.searchFinallyEnterance();
-                    finalizer.written = false;
-                    finalizer.write(buffer);
-                    buffer.append("}");
-                }
+                // if (block.finalizer != null) {
+                // buffer.append("} finally {");
+                // Node finalizer = block.searchFinallyEnterance();
+                // finalizer.written = false;
+                // finalizer.write(buffer);
+                // buffer.append("}");
+                // }
                 buffer.append("}"); // close try statement
 
                 Node exit = block.searchExit();
@@ -838,7 +838,7 @@ class Node {
 
             // search finally node
             if (finalizer != null) {
-                finalizer.written = true; // forbid node writing
+                // finalizer.written = true; // forbid node writing
             }
         }
 
