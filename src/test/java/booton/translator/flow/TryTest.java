@@ -387,6 +387,30 @@ public class TryTest extends ScriptTester {
     }
 
     @Test
+    public void TryCatchFinallyReturnImmediatelyWithAfter() {
+        test(new Scriptable() {
+
+            private int counter = 0;
+
+            public int act(@Param(from = 0, to = 10) int value) {
+                return counter + calc(value);
+            }
+
+            @Debuggable
+            private int calc(int value) {
+                try {
+                    return Throw.error(value);
+                } catch (Error e) {
+                    value = value + 3;
+                } finally {
+                    counter = counter + 2;
+                }
+                return value + 1;
+            }
+        });
+    }
+
+    @Test
     public void TryCatchFinallyAfter() {
         test(new Scriptable() {
 
