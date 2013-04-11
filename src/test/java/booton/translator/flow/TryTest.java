@@ -407,6 +407,32 @@ public class TryTest extends ScriptTester {
     }
 
     @Test
+    public void TryFinally2() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 10) int value) {
+                try {
+                    value = error(value);
+                } catch (Error e) {
+                    // do nothing
+                }
+                return value;
+            }
+
+            private int error(int value) {
+                try {
+                    for (int i = 0; i < 3; i++) {
+                        value = Throw.error(value);
+                    }
+                } finally {
+                    value++;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
     public void TryFinallyVoid() {
         test(new Scriptable() {
 

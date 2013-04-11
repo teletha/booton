@@ -1493,11 +1493,9 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 current.addOperand(variable + "++");
             } else {
-                // Exclude the pattern of catch and finally statement like the following.
-                //
-                // mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[] {"Error Class"});
-                // mv.visitVarInsn(ASTORE, 1);
-                if (current.peek(0) != Node.END) {
+                Operand previous = current.peek(0);
+
+                if (previous != null && previous != Node.END) {
                     // retrieve and remove it
                     Operand operand = current.remove(0, false);
 
