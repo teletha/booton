@@ -378,4 +378,33 @@ public class TryTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void TryFinallyVoid() {
+        test(new Scriptable() {
+
+            private int counter = 0;
+
+            @Debuggable
+            public int act(@Param(from = 0, to = 10) int value) {
+                try {
+                    if (value != 0) {
+                        error(value);
+                    }
+                } catch (Error e) {
+                    // do nothing
+                }
+                return counter;
+            }
+
+            @Debuggable
+            private void error(int value) {
+                try {
+                    counter = Throw.error(value);
+                } finally {
+                    counter++;
+                }
+            }
+        });
+    }
 }

@@ -15,7 +15,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import booton.translator.Node.TryCatch;
+import booton.translator.Node.TryCatchFinally;
 
 /**
  * @version 2013/01/11 17:42:51
@@ -150,11 +150,11 @@ public class NodeDebugger {
      * @return
      */
     private static String format(List<Node> nodes) {
-        Set<TryCatch> tries = new LinkedHashSet();
+        Set<TryCatchFinally> tries = new LinkedHashSet();
 
         for (Node node : nodes) {
-            if (node.block != null) {
-                tries.add(node.block);
+            if (node.tryCatchFinally != null) {
+                tries.add(node.tryCatchFinally);
             }
         }
 
@@ -180,7 +180,7 @@ public class NodeDebugger {
         for (Node node : nodes) {
             StringBuilder tryFlow = new StringBuilder();
 
-            for (TryCatch block : tries) {
+            for (TryCatchFinally block : tries) {
                 if (block.start == node) {
                     tryFlow.append("s");
                 } else if (block.end == node) {
@@ -189,8 +189,6 @@ public class NodeDebugger {
                     tryFlow.append("c");
                 } else if (block.exit == node) {
                     tryFlow.append("n");
-                } else if (block.finalizer == node) {
-                    tryFlow.append("F");
                 } else {
                     tryFlow.append("  ");
                 }

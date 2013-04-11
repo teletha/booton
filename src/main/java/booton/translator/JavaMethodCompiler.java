@@ -38,9 +38,8 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
 import booton.Obfuscator;
-import booton.translator.Node.Catch;
 import booton.translator.Node.Switch;
-import booton.translator.Node.TryCatch;
+import booton.translator.Node.TryCatchFinallyBlocks;
 
 /**
  * <p>
@@ -167,6 +166,9 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The local variable manager. */
     private final LocalVariables variables;
 
+    /** The pool of try-catch-finally blocks. */
+    private final TryCatchFinallyBlocks tries = new TryCatchFinallyBlocks();
+
     /** The current processing node. */
     private Node current = null;
 
@@ -187,9 +189,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
     /** The flag whether the next jump instruction is used for assert statement or not. */
     private boolean assertJump = false;
-
-    /** The pool of try-catch-finally blocks. */
-    private Deque<TryCatch> blocks = new ArrayDeque();
 
     /**
      * {@link Enum#values} produces special bytecode, so we must handle it by special way.
@@ -265,14 +264,7 @@ class JavaMethodCompiler extends MethodVisitor {
         searchBackEdge(nodes.get(0), new ArrayDeque());
 
         // Resolve all try-catch-finally blocks.
-        for (TryCatch block : blocks) {
-            block.conenct();
-        }
-
-        for (TryCatch block : blocks) {
-            block.process();
-        }
-        System.out.println(blocks);
+        tries.process();
 
         if (debuggable) {
             NodeDebugger.dump(script, methodNameOriginal, nodes);
@@ -1419,36 +1411,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
-        TryCatch current = new TryCatch(getNode(start), getNode(end), getNode(handler), convert(type));
-
-        for (TryCatch block : blocks) {
-            if (type == null && block.start == current.start) {
-                block.finalizer = current.end;
-                block.pseudoCatchers.add(current.catcher);
-                return;
-            }
-
-            if (type == null && block.pseudoCatchers.contains(current)) {
-                return;
-            }
-
-            // The try-catch block which indicates the same start and end nodes means multiple
-            // catches.
-            if (block.start == current.start && block.end == current.end) {
-                block.addCatchBlock(convert(type), current.catcher);
-                return;
-            }
-
-            // In Java 6 and later, the old jsr and ret instructions are effectively deprecated.
-            // These instructions were used to build mini-subroutines inside methods.
-            //
-            // The try-catch block which indicates the same catch node is copied by compiler,
-            // so we must ignore it.
-            if (block.catcher == current.catcher) {
-                return;
-            }
-        }
-        blocks.add(current);
+        tries.add(getNode(start), getNode(end), getNode(handler), convert(type));
     }
 
     /**
@@ -1519,13 +1482,13 @@ class JavaMethodCompiler extends MethodVisitor {
 
         case ASTORE:
             if (match(FRAME_SAME1, ASTORE)) {
-                for (TryCatch tryBlock : blocks) {
-                    for (Catch catchBlock : tryBlock.catches) {
-                        if (catchBlock.node == current) {
-                            catchBlock.variable = variable;
-                        }
-                    }
-                }
+                // for (TryCatch tryBlock : blocks) {
+                // for (Catch catchBlock : tryBlock.catches) {
+                // if (catchBlock.node == current) {
+                // catchBlock.variable = variable;
+                // }
+                // }
+                // }
             }
 
         case ISTORE:
@@ -1546,6 +1509,13 @@ class JavaMethodCompiler extends MethodVisitor {
                 // mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[] {"Error Class"});
                 // mv.visitVarInsn(ASTORE, 1);
                 if (current.peek(0) != Node.END) {
+                    // When some method which straddles multi lines returns value,
+                    // we should use operand from previous node.
+                    // if (current.stack.size() == 0 && !match(FRAME_SAME1, ASTORE)) {
+                    // current.stack.addAll(current.previous.stack);
+                    // current.previous.stack.clear();
+                    // }
+
                     // retrieve and remove it
                     Operand operand = current.remove(0, false);
 

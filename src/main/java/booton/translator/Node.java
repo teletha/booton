@@ -43,8 +43,8 @@ class Node {
     /** The following node. */
     Node follower;
 
-    /** This node is try-catch starting node. */
-    TryCatch block;
+    /** This node is try-catch-finally starting node. */
+    TryCatchFinally tryCatchFinally;
 
     /** This node is switch starting node. */
     private Switch switchy;
@@ -388,7 +388,7 @@ class Node {
             // Other Block
             // =============================================================
             // check try-catch-finally
-            if (block != null) {
+            if (tryCatchFinally != null) {
                 buffer.append("try{");
             }
 
@@ -398,7 +398,7 @@ class Node {
             if (outs == 0) {
                 // end node
                 buffer.append(this);
-            } else if (outs == 1 || block != null) {
+            } else if (outs == 1) {
                 // do while or normal
                 if (backs == 0) {
                     // normal node with follower
@@ -500,32 +500,23 @@ class Node {
             }
 
             // try-catch
-            if (block != null) {
+            if (tryCatchFinally != null) {
                 buffer.append("} catch ($) {");
 
-                for (Catch current : block.catches) {
+                for (Catch current : tryCatchFinally.catches) {
                     Class exception = current.exception;
-                    System.out.println(current.variable);
 
                     if (exception == null) {
-                        block.searchCatchEnterance(current.node).write(buffer);
+                        current.node.write(buffer);
                     } else {
                         buffer.append("if ($ instanceof " + Javascript.computeClassName(exception) + ") {");
-                        block.searchCatchEnterance(current.node).write(buffer);
+                        current.node.write(buffer);
                         buffer.append("}");
                     }
                 }
-
-                // if (block.finalizer != null) {
-                // buffer.append("} finally {");
-                // Node finalizer = block.searchFinallyEnterance();
-                // finalizer.written = false;
-                // finalizer.write(buffer);
-                // buffer.append("}");
-                // }
                 buffer.append("}"); // close try statement
 
-                Node exit = block.searchExit();
+                Node exit = tryCatchFinally.exit;
 
                 if (exit != null) {
                     exit.written = false;
@@ -772,11 +763,93 @@ class Node {
     }
 
     /**
-     * @version 2013/02/17 15:35:56
+     * @version 2013/04/11 13:04:37
      */
-    static class TryCatch {
+    static class TryCatchFinallyBlocks {
 
-        private static final Node EmptyNode = new Node(-1);
+        /** The managed try-catch-finally blocks. */
+        private final List<TryCatchFinally> blocks = new ArrayList();
+
+        /**
+         * <p>
+         * Manage block.
+         * </p>
+         * 
+         * @param start
+         * @param end
+         * @param catcher
+         * @param exception
+         */
+        void add(Node start, Node end, Node catcher, Class exception) {
+            for (TryCatchFinally block : blocks) {
+                // The try-catch-finally block which indicates the same start node
+                // without error class means finally block.
+                // But this translator ignores finally block to use compiler duplicated codes.
+                if (exception == null && block.start == start) {
+                    // block.finalizer = end;
+                    return;
+                }
+
+                // The try-catch-finally block which indicates the same start and end nodes
+                // means multiple catches.
+                if (block.start == start && block.end == end) {
+                    block.addCatchBlock(exception, catcher);
+                    return;
+                }
+
+                // In Java 6 and later, the old jsr and ret instructions are effectively deprecated.
+                // These instructions were used to build mini-subroutines inside methods.
+                //
+                // The try-catch block which indicates the same catch node is copied by compiler,
+                // so we must ignore it.
+                if (block.catcher == catcher) {
+                    return;
+                }
+            }
+            blocks.add(new TryCatchFinally(start, end, catcher, exception));
+        }
+
+        /**
+         * <p>
+         * Preprocess.
+         * </p>
+         */
+        void process() {
+            // To analyze try-catch-finally statement tree, we must connect each nodes.
+            // But these connections disturb the analysis of other statements (e.g. if, for).
+            // So we must disconnect them immediately after analysis of try-catch-finally statement.
+
+            // At first, do connecting only.
+            for (TryCatchFinally block : blocks) {
+                block.start.connect(block.catcher);
+
+                for (Catch catchBlock : block.catches) {
+                    block.start.connect(catchBlock.node);
+                }
+            }
+
+            // Then, we can analyze.
+            for (TryCatchFinally block : blocks) {
+                // Associate node with block.
+                block.start.tryCatchFinally = block;
+                block.searchExit();
+            }
+
+            // At last, disconnect immediately after analysis.
+            for (TryCatchFinally block : blocks) {
+                block.start.disconnect(block.catcher);
+
+                for (Catch catchBlock : block.catches) {
+                    block.start.disconnect(catchBlock.node);
+                }
+            }
+        }
+    }
+
+    /**
+     * @version 2013/04/11 15:36:53
+     */
+    static class TryCatchFinally {
 
         /** The start node. */
         final Node start;
@@ -784,7 +857,7 @@ class Node {
         /** The end node. */
         final Node end;
 
-        /** The handler node. */
+        /** The catcher node. */
         final Node catcher;
 
         /** The catch blocks. */
@@ -793,20 +866,13 @@ class Node {
         /** The exit node. */
         Node exit;
 
-        /** The nodes within try block. */
-        final List<Node> tries = new ArrayList();
-
-        Node finalizer;
-
-        List<Node> pseudoCatchers = new ArrayList();
-
         /**
          * @param start
          * @param end
          * @param catcher
          * @param exception
          */
-        TryCatch(Node start, Node end, Node catcher, Class exception) {
+        private TryCatchFinally(Node start, Node end, Node catcher, Class exception) {
             this.start = start;
             this.end = end;
             this.catcher = catcher;
@@ -822,7 +888,7 @@ class Node {
          * @param exception
          * @param catcher
          */
-        void addCatchBlock(Class exception, Node catcher) {
+        private void addCatchBlock(Class exception, Node catcher) {
             for (Catch block : catches) {
                 if (block.exception == exception) {
                     return;
@@ -831,93 +897,41 @@ class Node {
             catches.add(new Catch(exception, catcher));
         }
 
-        void conenct() {
-            // connect to catcher
-            start.connect(catcher);
-
-            for (Catch block : catches) {
-                start.connect(block.node);
-            }
-        }
-
-        void process() {
-
-            // search enter node
-            start.block = this;
-
-            // search finally node
-            if (finalizer != null) {
-                // finalizer.written = true; // forbid node writing
-            }
-        }
-
         /**
          * <p>
-         * Search catch entrance node of this try-catch block.
+         * Search exit node of this try-catch-finally block.
          * </p>
-         * 
-         * @return Null or exit node.
          */
-        private Node searchCatchEnterance(Node candidate) {
-            Node entrance = candidate.outgoing.get(0);
+        private void searchExit() {
+            LinkedList<Node> nodes = new LinkedList();
+            nodes.addAll(end.outgoing);
 
-            if (entrance != exit) {
-                return entrance;
-            } else {
-                return EmptyNode;
-            }
-        }
+            while (!nodes.isEmpty()) {
+                Node node = nodes.remove(0);
 
-        /**
-         * <p>
-         * Search exit node of this switch block.
-         * </p>
-         * 
-         * @return Null or exit node.
-         */
-        private Node searchExit() {
-            if (exit == null) {
-                LinkedList<Node> nodes = new LinkedList();
-                nodes.addAll(end.outgoing);
-
-                while (!nodes.isEmpty()) {
-                    Node node = nodes.remove(0);
-
-                    if (node.getDominator() == start) {
-                        node.written = true; // forbid node writing
-                        exit = node;
-                        break;
-                    }
-                    nodes.addAll(node.outgoing);
+                if (node.getDominator() == start) {
+                    exit = node;
+                    exit.written = true; // forbid node writing
+                    return;
                 }
+                nodes.addAll(node.outgoing);
             }
-
-            return exit;
         }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String toString() {
-            return "TryCatch [catches=" + catches + "]";
-        }
-
     }
 
     /**
      * @version 2013/04/11 11:32:44
      */
-    static class Catch {
+    private static class Catch {
 
         /** The Throwable class, may be null for finally statmenet. */
-        final Class exception;
+        private final Class exception;
 
         /** The associated node. */
-        final Node node;
+        private final Node node;
 
         /** The exception variable name. */
-        String variable;
+        private String variable;
 
         /**
          * @param exception
@@ -926,14 +940,6 @@ class Node {
         private Catch(Class exception, Node node) {
             this.exception = exception;
             this.node = node;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String toString() {
-            return "Catch [exception=" + exception + ", node=" + node + ", variable=" + variable + "]";
         }
     }
 }
