@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Nameless Production Committee.
+ * Copyright (C) 2013 Nameless Production Committee.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package booton.translator;
 
 /**
- * @version 2009/08/06 15:57:55
+ * @version 2013/04/11 10:13:44
  */
 abstract class Operand {
 

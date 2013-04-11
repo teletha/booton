@@ -189,6 +189,8 @@ public class NodeDebugger {
                     tryFlow.append("c");
                 } else if (block.exit == node) {
                     tryFlow.append("n");
+                } else if (block.finalizer == node) {
+                    tryFlow.append("F");
                 } else {
                     tryFlow.append("  ");
                 }
@@ -200,7 +202,7 @@ public class NodeDebugger {
             format.write("out : ");
             format.formatNode(node.outgoing, outgoing);
             format.write("dom : ");
-            format.formatNode(node.getDominator() == null ? Collections.EMPTY_LIST : Arrays.asList(node.getDominator()), 1);
+            format.formatNode(list(node.getDominator()), 1);
             if (backedge != 0) {
                 format.write("back : ");
                 format.formatNode(node.backedges, backedge);
@@ -214,6 +216,21 @@ public class NodeDebugger {
             format.write("\r\n");
         }
         return format.toString();
+    }
+
+    /**
+     * <p>
+     * Create single item list.
+     * </p>
+     * 
+     * @param node
+     * @return
+     */
+    private static List<Node> list(Node node) {
+        if (node == null) {
+            return Collections.EMPTY_LIST;
+        }
+        return Arrays.asList(node);
     }
 
     /**
@@ -276,7 +293,7 @@ public class NodeDebugger {
                 builder.append(String.valueOf(nodes.get(i).id));
 
                 if (i != nodes.size() - 1) {
-                    builder.append(", ");
+                    builder.append(",");
                 }
             }
             builder.append("]");

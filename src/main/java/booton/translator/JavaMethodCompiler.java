@@ -1515,49 +1515,44 @@ class JavaMethodCompiler extends MethodVisitor {
         case LSTORE:
         case FSTORE:
         case DSTORE:
-            // Increment not-int type doesn't use Iinc instruction, so we must distinguish increment
-            // from addition by pattern matching. Post increment code of non-int type leaves
-            // characteristic pattern like the following.
+            // Increment not-int type doesn't use Iinc instruction, so we must distinguish
+            // increment from addition by pattern matching. Post increment code of non-int type
+            // leaves characteristic pattern like the following.
             if (match(FLOAD, DUP, FCONST_1, FADD, FSTORE) || match(DLOAD, DUP2, DCONST_1, DADD, DSTORE) || match(LLOAD, DUP2, LCONST_1, LADD, LSTORE)) {
                 current.remove(0);
                 current.remove(0);
 
                 current.addOperand(variable + "++");
             } else {
-                // When some method which straddles multi lines returns value, we should use operand
-                // from previous node.
+                // Exclude the pattern of catch and finally statement like the following.
                 //
-                // Exclude the pattern of finally statement like the following.
-                // mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[] {"java/lang/Throwable"});
+                // mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[] {"Error Class"});
                 // mv.visitVarInsn(ASTORE, 1);
-                if (current.stack.size() == 0 && !match(FRAME_SAME1, ASTORE)) {
-                    current.stack.addAll(current.previous.stack);
-                    current.previous.stack.clear();
-                }
-
-                // ここで ; が取られてる
-                // retrieve and remove it
-                Operand operand = current.remove(0, false);
-
-                // Enum#values produces special bytecode, so we must handle it by special way.
-                if (match(ASTORE, ICONST_0, ALOAD, ARRAYLENGTH, DUP, ISTORE)) {
-                    enumValues[0] = current.remove(0);
-                    enumValues[1] = current.remove(0);
-                }
-
-                current.addExpression(variable, "=", operand);
-
-                if (operand.duplicated) {
-                    operand.duplicated = false;
+                if (current.peek(0) != Node.END) {
+                    // retrieve and remove it
+                    Operand operand = current.remove(0, false);
 
                     // Enum#values produces special bytecode, so we must handle it by special way.
-                    if (match(ARRAYLENGTH, DUP, ISTORE, ANEWARRAY, DUP, ASTORE)) {
-                        current.addOperand(enumValues[1]);
-                        current.addOperand(enumValues[0]);
+                    if (match(ASTORE, ICONST_0, ALOAD, ARRAYLENGTH, DUP, ISTORE)) {
+                        enumValues[0] = current.remove(0);
+                        enumValues[1] = current.remove(0);
                     }
 
-                    // duplicate pointer
-                    current.addOperand(variable);
+                    current.addExpression(variable, "=", operand);
+
+                    if (operand.duplicated) {
+                        operand.duplicated = false;
+
+                        // Enum#values produces special bytecode,
+                        // so we must handle it by special way.
+                        if (match(ARRAYLENGTH, DUP, ISTORE, ANEWARRAY, DUP, ASTORE)) {
+                            current.addOperand(enumValues[1]);
+                            current.addOperand(enumValues[0]);
+                        }
+
+                        // duplicate pointer
+                        current.addOperand(variable);
+                    }
                 }
             }
             break;
