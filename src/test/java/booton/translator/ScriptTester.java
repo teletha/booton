@@ -13,6 +13,7 @@ import static java.nio.charset.StandardCharsets.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -40,7 +41,7 @@ import com.gargoylesoftware.htmlunit.WebConsole.Logger;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 /**
- * @version 2012/11/30 12:42:49
+ * @version 2013/04/11 11:03:09
  */
 public class ScriptTester {
 
@@ -143,7 +144,8 @@ public class ScriptTester {
     protected final void test(Scriptable scriptable) {
         // search invocation
         Class source = scriptable.getClass();
-        String constructor = Type.getConstructorDescriptor(source.getDeclaredConstructors()[0]);
+        Constructor constructor = searchInstantiator(source);
+        Object[] parameter = constructor.getParameterTypes().length == 0 ? new Object[0] : new Object[] {this};
         Method method = searchInvocation(source);
 
         // prepare input and result store
@@ -155,16 +157,17 @@ public class ScriptTester {
             for (Object input : inputs) {
                 Object result;
 
+                // create scriptable instance for each tests
+                Object instance = constructor.newInstance(parameter);
+
                 try {
                     if (input == NONE) {
-                        result = method.invoke(scriptable);
+                        result = method.invoke(instance);
                     } else {
-                        result = method.invoke(scriptable, input);
+                        result = method.invoke(instance, input);
                     }
                 } catch (InvocationTargetException e) {
-                    Throwable cause = ((InvocationTargetException) e).getTargetException();
-
-                    throw I.quiet(cause);
+                    throw I.quiet(((InvocationTargetException) e).getTargetException());
                 }
                 results.add(result);
             }
@@ -179,12 +182,14 @@ public class ScriptTester {
             // compile as Javascript and script engine read it
             engine.evaluateString(global, script, source.getSimpleName(), 1, null);
 
+            String className = Javascript.computeClassName(source);
+            String descriptor = Type.getConstructorDescriptor(constructor);
+            String constructorName = Javascript.computeMethodName(source, "<init>", descriptor).substring(1);
+            String methodName = Javascript.computeMethodName(source, method.getName(), Type.getMethodDescriptor(method));
+
             // invoke it and compare result
             for (int i = 0; i < inputs.size(); i++) {
                 Object input = inputs.get(i);
-                String className = Javascript.computeClassName(source);
-                String constructorName = Javascript.computeMethodName(source, "<init>", constructor).substring(1);
-                String methodName = Javascript.computeMethodName(source, method.getName(), Type.getMethodDescriptor(method));
 
                 // write test script
                 StringBuilder invoker = new StringBuilder();
@@ -233,6 +238,34 @@ public class ScriptTester {
             }
             throw error;
         }
+    }
+
+    /**
+     * <p>
+     * Search instantiator.
+     * </p>
+     * 
+     * @param source
+     * @return
+     */
+    private Constructor searchInstantiator(Class source) {
+        // search method
+        root: for (Constructor constructor : source.getDeclaredConstructors()) {
+            if (!constructor.isSynthetic()) {
+                for (Class parameter : constructor.getParameterTypes()) {
+                    if (parameter != getClass()) {
+                        continue root;
+                    }
+                }
+                constructor.setAccessible(true);
+
+                return constructor;
+            }
+        }
+
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error("Test class must extend ScriptTester.");
     }
 
     /**
