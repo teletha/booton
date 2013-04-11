@@ -252,6 +252,26 @@ public class TryTest extends ScriptTester {
     }
 
     @Test
+    public void TryCatchInTryImmediately() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(@Param(from = 0, to = 10) int value) {
+                try {
+                    try {
+                        value = Throw.error(value);
+                    } catch (Error e) {
+                        return value + 1;
+                    }
+                    return Throw.exception(value);
+                } catch (Exception e) {
+                    return value + 3;
+                }
+            }
+        });
+    }
+
+    @Test
     public void TryCatchInTryAfter() {
         test(new Scriptable() {
 
