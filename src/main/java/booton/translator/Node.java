@@ -501,17 +501,15 @@ class Node {
 
             // try-catch
             if (tryCatchFinally != null) {
-                buffer.append("} catch ($) {");
-
                 for (Catch current : tryCatchFinally.catches) {
                     Class exception = current.exception;
 
                     if (exception == null) {
+                        buffer.append("} catch ($) {");
                         current.node.write(buffer);
                     } else {
-                        buffer.append("if ($ instanceof " + Javascript.computeClassName(exception) + ") {");
+                        buffer.append("} catch ($ if $ instanceof " + Javascript.computeClassName(exception) + ") {");
                         current.node.write(buffer);
-                        buffer.append("}");
                     }
                 }
                 buffer.append("}"); // close try statement
