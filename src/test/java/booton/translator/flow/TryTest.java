@@ -364,11 +364,31 @@ public class TryTest extends ScriptTester {
     }
 
     @Test
+    public void TryCatchFinallyAfter() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(@Param(from = 0, to = 10) int value) {
+                try {
+                    value = Throw.error(value);
+                } catch (Error e) {
+                    value = value + 1;
+                } finally {
+                    value = value + 2;
+                    value = value + 4;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
     public void TryCatchFinallyReturnImmediately() {
         test(new Scriptable() {
 
             private int counter = 0;
 
+            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 return counter + calc(value);
             }
@@ -406,25 +426,6 @@ public class TryTest extends ScriptTester {
                     counter = counter + 2;
                 }
                 return value + 1;
-            }
-        });
-    }
-
-    @Test
-    public void TryCatchFinallyAfter() {
-        test(new Scriptable() {
-
-            @Debuggable
-            public int act(@Param(from = 0, to = 10) int value) {
-                try {
-                    value = Throw.error(value);
-                } catch (Error e) {
-                    value = value + 1;
-                } finally {
-                    value = value + 2;
-                    value = value + 4;
-                }
-                return value;
             }
         });
     }
