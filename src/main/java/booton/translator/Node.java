@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * @version 2013/04/11 11:23:39
+ * @version 2013/04/11 19:56:01
  */
 class Node {
 
@@ -37,14 +37,14 @@ class Node {
     /** The node list. */
     final CopyOnWriteArrayList<Node> backedges = new CopyOnWriteArrayList();
 
+    /** The try-catch-finally starting node list. */
+    final List<TryCatchFinally> tries = new CopyOnWriteArrayList();
+
     /** The previous node. */
     Node previous;
 
     /** The following node. */
     Node follower;
-
-    /** This node is try-catch-finally starting node. */
-    TryCatchFinally tryCatchFinally;
 
     /** This node is switch starting node. */
     private Switch switchy;
@@ -206,28 +206,6 @@ class Node {
         return this;
     }
 
-    // /**
-    // * <p>
-    // * Set finally block for this node.
-    // * <p>
-    // *
-    // * @param block
-    // */
-    // final void addFinally(TryBlock block) {
-    // for (TryBlock item : finallyTries) {
-    // if (item.start == block.start) {
-    // return;
-    // }
-    // }
-    //
-    // finallies.add(block);
-    // finallyTries.add(block);
-    //
-    // block.start.stoppable += block.start.incoming.size();
-    // block.end.stoppable += block.end.incoming.size();
-    //
-    // }
-
     /**
      * Helper method to check whether the specified node dominate this node or not.
      * 
@@ -311,22 +289,50 @@ class Node {
     }
 
     /**
-     * Helper method to search the nearest common dominator for this node and the specified node.
+     * <p>
+     * Helper method to disconnect nodes each other.
+     * </p>
      * 
      * @param node A target node.
-     * @return A dominator. If it is not found, <code>null</code>.
      */
-    private Node getNearestCommonDominator(Node node) {
-        Node current = this;
+    final void disconnect(Node node) {
+        outgoing.remove(node);
+        node.incoming.remove(this);
+    }
 
-        while (current != null) {
-            if (node.hasDominator(current)) {
-                return current;
+    /**
+     * <p>
+     * Helper method to connect nodes each other.
+     * </p>
+     * 
+     * @param node A target node.
+     */
+    final void connect(Node node) {
+        outgoing.addIfAbsent(node);
+        node.incoming.addIfAbsent(this);
+    }
+
+    /**
+     * <p>
+     * Create switch statement.
+     * </p>
+     * 
+     * @param defaults A default node.
+     * @param keys A case key values.
+     * @param cases A list of case nodes.
+     */
+    final void createSwitch(Node defaults, int[] keys, List<Node> cases) {
+        switchy = new Switch(this, defaults, keys, cases);
+
+        // connect enter node with each case node
+        for (Node node : cases) {
+            if (node != defaults) {
+                connect(node);
             }
-            current = current.getDominator();
         }
 
-        return null;
+        // connect enter node with default node
+        connect(defaults);
     }
 
     /**
@@ -336,7 +342,7 @@ class Node {
      * 
      * @param buffer
      */
-    void write(ScriptBuffer buffer) {
+    final void write(ScriptBuffer buffer) {
         if (!written) {
             written = true;
 
@@ -376,7 +382,7 @@ class Node {
             // =============================================================
             // Try-Catch-Finally Block
             // =============================================================
-            if (tryCatchFinally != null) {
+            for (int i = 0; i < tries.size(); i++) {
                 buffer.append("try{");
             }
 
@@ -493,8 +499,9 @@ class Node {
             // =============================================================
             // Try-Catch-Finally Block
             // =============================================================
-            if (tryCatchFinally != null) {
-                for (Catch current : tryCatchFinally.catches) {
+            for (TryCatchFinally block : tries) {
+
+                for (Catch current : block.catches) {
                     Class exception = current.exception;
                     String variable = current.variable;
 
@@ -512,7 +519,7 @@ class Node {
                 }
                 buffer.append("}"); // close try statement
 
-                Node exit = tryCatchFinally.exit;
+                Node exit = block.exit;
 
                 if (exit != null) {
                     exit.written = false;
@@ -528,7 +535,7 @@ class Node {
      * @param dest
      * @param buffer
      */
-    private void process(Node dest, ScriptBuffer buffer) {
+    private final void process(Node dest, ScriptBuffer buffer) {
         if (dest != null) {
             Node dominator = dest.getDominator();
 
@@ -556,52 +563,13 @@ class Node {
      * {@inheritDoc}
      */
     @Override
-    public String toString() {
+    public final String toString() {
         StringBuilder builder = new StringBuilder();
 
         for (Operand operand : stack) {
             builder.append(operand);
         }
         return builder.toString();
-    }
-
-    /**
-     * @param out
-     */
-    final void disconnect(Node out) {
-        outgoing.remove(out);
-        out.incoming.remove(this);
-    }
-
-    /**
-     * @param node
-     */
-    final void connect(Node node) {
-        outgoing.addIfAbsent(node);
-        node.incoming.addIfAbsent(this);
-    }
-
-    /**
-     * <p>
-     * Create switch statement.
-     * </p>
-     * 
-     * @param defaults A default node.
-     * @param keys A case key values.
-     * @param cases A list of case nodes.
-     */
-    final void createSwitch(Node defaults, int[] keys, List<Node> cases) {
-        switchy = new Switch(this, defaults, keys, cases);
-
-        // connect enter node with each case node
-        for (Node node : cases) {
-            if (node != defaults) {
-                connect(node);
-            }
-        }
-
-        // connect enter node with default node
-        connect(defaults);
     }
 
     /**
@@ -776,7 +744,7 @@ class Node {
          * @param catcher
          * @param exception
          */
-        void add(Node start, Node end, Node catcher, Class exception) {
+        void addTryCatchFinallyBlock(Node start, Node end, Node catcher, Class exception) {
             for (TryCatchFinally block : blocks) {
                 // The try-catch-finally block which indicates the same start node
                 // without error class means finally block.
@@ -827,7 +795,7 @@ class Node {
             // Then, we can analyze.
             for (TryCatchFinally block : blocks) {
                 // Associate node with block.
-                block.start.tryCatchFinally = block;
+                block.start.tries.add(block);
                 block.searchExit();
             }
 
@@ -846,10 +814,10 @@ class Node {
          * Set exception variable name.
          * </p>
          * 
-         * @param current
-         * @param variable
+         * @param current A target node.
+         * @param variable A variable name.
          */
-        void setVariableName(Node current, String variable) {
+        void assignVariableName(Node current, String variable) {
             for (TryCatchFinally block : blocks) {
                 for (Catch catchBlock : block.catches) {
                     if (catchBlock.node == current) {
@@ -861,7 +829,7 @@ class Node {
     }
 
     /**
-     * @version 2013/04/11 15:36:53
+     * @version 2013/04/11 19:45:29
      */
     static class TryCatchFinally {
 

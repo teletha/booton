@@ -153,8 +153,8 @@ public class NodeDebugger {
         Set<TryCatchFinally> tries = new LinkedHashSet();
 
         for (Node node : nodes) {
-            if (node.tryCatchFinally != null) {
-                tries.add(node.tryCatchFinally);
+            if (node.tries != null) {
+                tries.addAll(node.tries);
             }
         }
 
