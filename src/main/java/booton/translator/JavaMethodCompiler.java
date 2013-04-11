@@ -1493,9 +1493,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 current.addOperand(variable + "++");
             } else {
-                Operand previous = current.peek(0);
-
-                if (previous != null && previous != Node.END) {
+                if (current.peek(0) != null) {
                     // retrieve and remove it
                     Operand operand = current.remove(0, false);
 
