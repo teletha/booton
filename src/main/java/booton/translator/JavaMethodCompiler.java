@@ -1281,11 +1281,12 @@ class JavaMethodCompiler extends MethodVisitor {
                             model = path.substring(0, index);
                             path = path.substring(index + 1);
                         }
+                        contexts.add(new OperandExpression(Javascript.computeClass(ClassUtil.wrap(parameters[0]))));
                         contexts.add(new OperandExpression(model));
                         contexts.add(new OperandString(path));
 
-                        current.addOperand(translator.translateConstructor(owner, "(Ljava/lang/Object;Ljava/lang/String;)V", new Class[] {
-                                Object.class, String.class}, contexts));
+                        current.addOperand(translator.translateConstructor(owner, "(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;)V", new Class[] {
+                                Class.class, Object.class, String.class}, contexts));
                     } else {
                         // instance initialization method invocation
                         current.addOperand(translator.translateConstructor(owner, desc, parameters, contexts));

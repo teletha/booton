@@ -9,6 +9,8 @@
  */
 package js.lang;
 
+import booton.translator.JavaNative;
+
 /**
  * <p>
  * {@link ClasIntegers} representation in Javascript runtime. This class doesn't provide all
@@ -17,6 +19,7 @@ package js.lang;
  * 
  * @version 2013/04/12 12:58:25
  */
+@JavaNative(Integer.class)
 class JSInteger {
 
     /** The actual value. */
@@ -52,7 +55,7 @@ class JSInteger {
      * @exception NumberFormatException if the string does not contain a parsable integer.
      */
     public static int parseInt(String value) throws NumberFormatException {
-        return Global.parseInt(value);
+        return parseInt(value, 10);
     }
 
     /**
@@ -103,7 +106,12 @@ class JSInteger {
      *                {@code int}.
      */
     public static int parseInt(String value, int radix) throws NumberFormatException {
-        return Global.parseInt(value, radix);
+        int parsed = Global.parseInt(value, radix);
+
+        if (parsed == Double.NaN) {
+            throw new NumberFormatException(value + " is not a number.");
+        }
+        return parsed;
     }
 
     /**

@@ -14,7 +14,7 @@ import booton.translator.Translator;
 /**
  * @version 2013/04/12 14:40:24
  */
-class IntegerCoder extends Translator<Integer> {
+class IntegerCoder extends Translator<IntegerCoder> {
 
     /**
      * <p>
