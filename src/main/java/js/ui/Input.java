@@ -14,6 +14,7 @@ import java.util.List;
 import js.lang.NativeObject;
 import js.lang.NativeObject.PropertyDescriptor;
 import js.ui.FormUIStyle.InputForm;
+import js.ui.FormUIStyle.InvalidInputForm;
 import js.ui.validator.Validator;
 import js.util.ArrayList;
 
@@ -62,6 +63,7 @@ public class Input<T> extends FormUI {
             model.set(decode(value));
         } catch (Error e) {
             System.out.println("Error catch");
+            form.addClass(InvalidInputForm.class);
         }
 
     }
