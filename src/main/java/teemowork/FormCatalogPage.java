@@ -17,6 +17,8 @@ import js.ui.Listen;
 import js.ui.Select;
 import js.ui.UIAction;
 import js.ui.model.SelectableModel;
+import js.ui.validator.Invalid;
+import js.ui.validator.Validator;
 import js.util.jQuery;
 
 /**
@@ -54,11 +56,16 @@ public class FormCatalogPage extends Page {
         Select<String> child = root.child(new Select(selectable));
         child.model.setSelectionIndex(180);
 
-        Input<Integer> input = root.child(new Input(model.type));
-        Input<String> input2 = root.child(new Input(model.name));
+        root.child(new Input<Integer>(model.type)).add(new Validator<Integer>() {
 
-        input.form.bind(this);
-        input2.form.bind(this);
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void validate(Integer model) throws Invalid {
+            }
+        });
+        root.child(new Input(model.name));
     }
 
     @Listen(UIAction.Blur)

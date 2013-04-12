@@ -24,108 +24,9 @@ import booton.css.CSS;
 import booton.translator.JavascriptNative;
 
 /**
- * @version 2013/04/12 11:21:31
+ * @version 2013/04/12 11:26:03
  */
 public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
-
-    /**
-     * <p>
-     * Create child element.
-     * </p>
-     * 
-     * @param name A element name.
-     * @return Chainable API.
-     */
-    public jQuery child(String name) {
-        return $(document.createElement(name)).appendTo(this);
-    }
-
-    /**
-     * <p>
-     * Create child element with class name.
-     * </p>
-     * 
-     * @param Title A element name.
-     * @return Chainable API.
-     */
-    public jQuery child(Class<? extends CSS> className) {
-        return child("span").add(className);
-    }
-
-    /**
-     * <p>
-     * Create child user interface.
-     * </p>
-     * 
-     * @param ui A child ui.
-     * @return Chainable API.
-     */
-    public <T extends UI> T child(T ui) {
-        append(ui.root);
-
-        return ui;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Iterator<jQuery> iterator() {
-        return new Iterator<jQuery>() {
-
-            /** The current position. */
-            private int index = 0;
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public boolean hasNext() {
-                return index < size();
-            }
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public jQuery next() {
-                return $(get(index++));
-            }
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void remove() {
-            }
-        };
-    }
-
-    /**
-     * <p>
-     * Adds the specified class(es) to each of the set of matched elements.
-     * </p>
-     * 
-     * @param classNames One or more class names to be added to the class attribute of each matched
-     *            element.
-     * @return
-     */
-    public Image image(Class<? extends CSS> className) {
-        return new Image(this, className);
-    }
-
-    /**
-     * <p>
-     * Bind an event handler to the "right click" JavaScript event, or trigger that event on an
-     * element.
-     * </p>
-     * 
-     * @param listener A function to execute each time the event is triggered.
-     * @return
-     */
-    public jQuery contextmenu(Listener listener) {
-        return on("contextmenu", listener);
-    }
 
     /**
      * <p>
@@ -456,6 +357,44 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Create child element.
+     * </p>
+     * 
+     * @param name A element name.
+     * @return Chainable API.
+     */
+    public jQuery child(String name) {
+        return $(document.createElement(name)).appendTo(this);
+    }
+
+    /**
+     * <p>
+     * Create child element with class name.
+     * </p>
+     * 
+     * @param Title A element name.
+     * @return Chainable API.
+     */
+    public jQuery child(Class<? extends CSS> className) {
+        return child("span").add(className);
+    }
+
+    /**
+     * <p>
+     * Create child user interface.
+     * </p>
+     * 
+     * @param ui A child ui.
+     * @return Chainable API.
+     */
+    public <T extends UI> T child(T ui) {
+        append(ui.root);
+
+        return ui;
+    }
+
+    /**
+     * <p>
      * Get the children of each element in the set of matched elements, optionally filtered by a
      * selector.
      * </p>
@@ -504,6 +443,19 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native jQuery closest(String selector);
+
+    /**
+     * <p>
+     * Bind an event handler to the "right click" JavaScript event, or trigger that event on an
+     * element.
+     * </p>
+     * 
+     * @param listener A function to execute each time the event is triggered.
+     * @return
+     */
+    public jQuery contextmenu(Listener listener) {
+        return on("contextmenu", listener);
+    }
 
     /**
      * <p>
@@ -792,6 +744,53 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public native int outerHeight(boolean includeMargin);
+
+    /**
+     * <p>
+     * Create child {@link Image} element.
+     * </p>
+     * 
+     * @param classNames A class name to be added to the class attribute of each matched element.
+     * @return A created image.
+     */
+    public Image image(Class<? extends CSS> className) {
+        return new Image(this, className);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Iterator<jQuery> iterator() {
+        return new Iterator<jQuery>() {
+
+            /** The current position. */
+            private int index = 0;
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public boolean hasNext() {
+                return index < size();
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public jQuery next() {
+                return $(get(index++));
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void remove() {
+            }
+        };
+    }
 
     /**
      * <p>
