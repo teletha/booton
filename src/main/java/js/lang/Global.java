@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,12 @@ import org.w3c.dom.DocumentFragment;
 
 import booton.translator.Translator;
 
-/***
+/**
  * <p>
  * Define global objects and static methods in Booton environment.
  * </p>
  * 
- * @version 2013/01/18 23:37:39
+ * @version 2013/04/12 13:09:07
  */
 public class Global {
 
@@ -154,6 +154,32 @@ public class Global {
      * @return
      */
     public static native Object[] getArgumentArray();
+
+    /**
+     * <p>
+     * Parses a string argument and returns an integer of 10 radix.
+     * </p>
+     * 
+     * @param value The value to parse. If string is not a string, then it is converted to one.
+     *            Leading whitespace in the string is ignored.
+     * @return A parsed number value.
+     */
+    public static native int parseInt(String value);
+
+    /**
+     * <p>
+     * Parses a string argument and returns an integer of the specified radix or base.
+     * </p>
+     * 
+     * @param value The value to parse. If string is not a string, then it is converted to one.
+     *            Leading whitespace in the string is ignored.
+     * @param radix An integer that represents the radix of the above mentioned string. Always
+     *            specify this parameter to eliminate reader confusion and to guarantee predictable
+     *            behavior. Different implementations produce different results when a radix is not
+     *            specified.
+     * @return A parsed number value.
+     */
+    public static native int parseInt(String value, int radix);
 
     /**
      * @version 2012/12/14 13:11:07
@@ -305,6 +331,36 @@ public class Global {
          */
         public String getArgumentArray() {
             return "Array.prototype.slice.call(arguments)";
+        }
+
+        /**
+         * <p>
+         * Parses a string argument and returns an integer of 10 radix.
+         * </p>
+         * 
+         * @param value The value to parse. If string is not a string, then it is converted to one.
+         *            Leading whitespace in the string is ignored.
+         * @return A parsed number value.
+         */
+        public String parseInt(String value) {
+            return "parseInt(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Parses a string argument and returns an integer of the specified radix or base.
+         * </p>
+         * 
+         * @param value The value to parse. If string is not a string, then it is converted to one.
+         *            Leading whitespace in the string is ignored.
+         * @param radix An integer that represents the radix of the above mentioned string. Always
+         *            specify this parameter to eliminate reader confusion and to guarantee
+         *            predictable behavior. Different implementations produce different results when
+         *            a radix is not specified.
+         * @return A parsed number value.
+         */
+        public String parseInt(String value, int radix) {
+            return "parseInt(" + param(0) + "," + param(1) + ")";
         }
     }
 }
