@@ -57,11 +57,11 @@ public class Select<M> extends FormUI<Select> {
         model = selectable;
         model.bind(binder);
 
-        form.addClass(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
+        form.add(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
         form.bind(this);
 
         view = new ScrollableListView(10, 28).provide(binder);
-        view.root.addClass(SelectItemList.class).bind(binder);
+        view.root.add(SelectItemList.class).bind(binder);
 
         options = root.child(new SlidableView(view, root.child(SelectArrow.class)));
         options.bind(binder);
@@ -100,12 +100,12 @@ public class Select<M> extends FormUI<Select> {
          */
         @Override
         public void renderItem(int itemIndex, jQuery element) {
-            element.addClass(SelectItem.class).attr("index", itemIndex).text(model.get(itemIndex));
+            element.add(SelectItem.class).attr("index", itemIndex).text(model.get(itemIndex));
 
             if (itemIndex == model.getSelectionIndex()) {
-                element.addClass(SelectedItem.class);
+                element.add(SelectedItem.class);
             } else {
-                element.removeClass(SelectedItem.class);
+                element.remove(SelectedItem.class);
             }
         }
 

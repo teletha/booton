@@ -31,7 +31,7 @@ public class FormUI<T extends FormUI> extends UI {
      * 
      */
     public FormUI(String form) {
-        root.addClass(FormComponent.class);
+        root.add(FormComponent.class);
 
         this.form = root.child(form);
     }

@@ -149,7 +149,7 @@ public class MasteryBuilder extends Page implements Subscriber {
                 jQuery pane = rank.child(MasteryPane.class);
 
                 if (mastery == null) {
-                    pane.addClass(EmptyPane.class);
+                    pane.add(EmptyPane.class);
                 } else {
                     masterySet.register(new MasteryView(pane, mastery));
                 }
@@ -294,17 +294,17 @@ public class MasteryBuilder extends Page implements Subscriber {
             // Switch enable / disable
             if (current != 0 || masterySet.isAvailable(mastery)) {
                 image.saturate(0.8);
-                root.removeClass(Unavailable.class);
+                root.remove(Unavailable.class);
             } else {
                 image.grayscale(0.4);
-                root.addClass(Unavailable.class);
+                root.add(Unavailable.class);
             }
 
             // Switch complete / incomplete
             if (masterySet.isMax(mastery)) {
-                root.addClass(Completed.class);
+                root.add(Completed.class);
             } else {
-                root.removeClass(Completed.class);
+                root.remove(Completed.class);
             }
         }
 
