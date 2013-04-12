@@ -107,12 +107,35 @@ class FormUIStyle {
                         .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
             }
         }
+
+        /**
+         * <p>
+         * Helper method to write border.
+         * </p>
+         * 
+         * @param color A border bolor.
+         */
+        protected final void writeBorder(Color color) {
+            border.color(color);
+            box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow).shadow(0, px, 0, px, 8, px, color.opacify(-0.2));
+        }
     }
 
     class InputForm extends BaseForm {
 
         {
             writeBorder();
+        }
+    }
+
+    class InvalidInputForm extends BaseForm {
+
+        {
+            writeBorder(BorderFocusColor.adjustHue(-180));
+
+            while (focus()) {
+                writeBorder(BorderFocusColor.adjustHue(-180));
+            }
         }
     }
 }

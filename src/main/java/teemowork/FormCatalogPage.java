@@ -57,6 +57,7 @@ public class FormCatalogPage extends Page {
         Input<Integer> input = root.child(new Input(model.type));
         Input<String> input2 = root.child(new Input(model.name));
 
+        input.form.bind(this);
         input2.form.bind(this);
     }
 
