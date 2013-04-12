@@ -29,7 +29,7 @@ public class Header {
      * @param root
      */
     public Header() {
-        container = $("#Header").addClass(TopMenuGroup.class);
+        container = $("#Header").add(TopMenuGroup.class);
     }
 
     /**
@@ -41,8 +41,8 @@ public class Header {
      * @param uri
      */
     public Menu add(String label, String uri) {
-        jQuery item = container.child("li").addClass(TopMenu.class);
-        item.child("a").addClass(MenuLink.class).attr("href", uri).text(label);
+        jQuery item = container.child("li").add(TopMenu.class);
+        item.child("a").add(MenuLink.class).attr("href", uri).text(label);
 
         return new Menu(item);
     }
@@ -59,7 +59,7 @@ public class Header {
      * 
      */
         private Menu(jQuery root) {
-            this.container = root.child("ul").addClass(SubMenuGroup.class);
+            this.container = root.child("ul").add(SubMenuGroup.class);
         }
 
         /**
@@ -71,8 +71,8 @@ public class Header {
          * @param uri
          */
         public Menu add(String label, String uri) {
-            jQuery item = container.child("li").addClass(SubMenu.class);
-            item.child("a").addClass(MenuLink.class).attr("href", uri).text(label);
+            jQuery item = container.child("li").add(SubMenu.class);
+            item.child("a").add(MenuLink.class).attr("href", uri).text(label);
 
             return new Menu(item);
         }

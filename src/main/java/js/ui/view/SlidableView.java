@@ -37,7 +37,7 @@ public class SlidableView extends UI {
      * @param content
      */
     public SlidableView(UI content, jQuery... switchgears) {
-        root.addClass(ViewableArea.class);
+        root.add(ViewableArea.class);
         root.child(Slider.class).append(content);
 
         for (jQuery switchgear : switchgears) {
@@ -53,7 +53,7 @@ public class SlidableView extends UI {
     public void open() {
         if (shown++ == 0) {
             // show slide view
-            root.addClass(Shown.class);
+            root.add(Shown.class);
 
             // notify event
             publish(Listener.class).open();
@@ -72,7 +72,7 @@ public class SlidableView extends UI {
         if (2 <= shown) {
             // hide slide view
             shown = 0;
-            root.removeClass(Shown.class);
+            root.remove(Shown.class);
 
             // notify event
             publish(Listener.class).close();

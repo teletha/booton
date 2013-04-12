@@ -116,7 +116,7 @@ public abstract class DescriptionView implements Subscriber {
                 jQuery element = root.child(Value.class).text(Mathematics.round(resolver.compute(i), 2));
 
                 if (i == level) {
-                    element.addClass(Current.class);
+                    element.add(Current.class);
                 }
 
                 if (i != size) {
@@ -149,7 +149,7 @@ public abstract class DescriptionView implements Subscriber {
                 jQuery value = element.child(Value.class).text(Mathematics.round(amplifier.calculate(i), 4));
 
                 if (size != 1 && i == level) {
-                    value.addClass(Current.class);
+                    value.add(Current.class);
                 }
 
                 if (i != size) {

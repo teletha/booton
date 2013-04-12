@@ -51,7 +51,7 @@ public class Input<T> extends FormUI {
     private Input(Object model, String name) {
         this.model = new Property((NativeObject) model, name);
 
-        form.attr("type", "input").addClass(InputForm.class);
+        form.attr("type", "input").add(InputForm.class);
         form.bind(this);
     }
 
@@ -63,7 +63,7 @@ public class Input<T> extends FormUI {
             model.set(decode(value));
         } catch (Error e) {
             System.out.println("Error catch");
-            form.addClass(InvalidInputForm.class);
+            form.add(InvalidInputForm.class);
         }
 
     }

@@ -44,12 +44,12 @@ public abstract class ImageGrid<T> extends UI {
      */
     public ImageGrid() {
         sources = sources();
-        root.addClass(Root.class);
+        root.add(Root.class);
 
         final jQuery search = $("<input type='text'>");
         search.appendTo(root);
 
-        search.addClass(Input.class);
+        search.add(Input.class);
         search.keyup(new Listener() {
 
             @Override
@@ -58,9 +58,9 @@ public abstract class ImageGrid<T> extends UI {
 
                 for (Entry<T, jQuery> entry : images.entrySet()) {
                     if (getTitle(entry.getKey()).toLowerCase().contains(name)) {
-                        entry.getValue().removeClass(Unselected.class);
+                        entry.getValue().remove(Unselected.class);
                     } else {
-                        entry.getValue().addClass(Unselected.class);
+                        entry.getValue().add(Unselected.class);
                     }
                 }
             }

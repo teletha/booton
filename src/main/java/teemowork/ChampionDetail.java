@@ -305,16 +305,16 @@ public class ChampionDetail extends Page {
 
             for (int i = 0; i < levels.length; i++) {
                 if (i < level) {
-                    levels[i].addClass(Assigned.class);
+                    levels[i].add(Assigned.class);
                 } else {
-                    levels[i].removeClass(Assigned.class);
+                    levels[i].remove(Assigned.class);
                 }
             }
 
             if (build.isActive(skill)) {
-                icon.addClass(Active.class);
+                icon.add(Active.class);
             } else {
-                icon.removeClass(Active.class);
+                icon.remove(Active.class);
             }
 
             write(cooldown, status, status.getCooldown());
@@ -403,7 +403,7 @@ public class ChampionDetail extends Page {
                     jQuery element = root.child(SkillStatusValue.class).text(value == -1 ? "∞" : value);
 
                     if (size != 1 && i == level) {
-                        element.addClass(Current.class);
+                        element.add(Current.class);
                     }
 
                     if (i != size) {
@@ -449,7 +449,7 @@ public class ChampionDetail extends Page {
                     jQuery element = root.child(Value.class).text(Mathematics.round(resolver.compute(i), 2));
 
                     if (i == level) {
-                        element.addClass(Current.class);
+                        element.add(Current.class);
                     }
 
                     if (i != size) {
@@ -488,7 +488,7 @@ public class ChampionDetail extends Page {
                     jQuery value = element.child(Value.class).text(Mathematics.round(amplifier.calculate(i, build), 4));
 
                     if (size != 1 && i == level) {
-                        value.addClass(Current.class);
+                        value.add(Current.class);
                     }
 
                     if (i != size) {

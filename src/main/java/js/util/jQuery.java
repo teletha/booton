@@ -24,7 +24,7 @@ import booton.css.CSS;
 import booton.translator.JavascriptNative;
 
 /**
- * @version 2013/04/03 9:26:06
+ * @version 2013/04/12 11:21:31
  */
 public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
@@ -49,19 +49,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return Chainable API.
      */
     public jQuery child(Class<? extends CSS> className) {
-        return child("span").addClass(className);
-    }
-
-    /**
-     * <p>
-     * Create child element with class name.
-     * </p>
-     * 
-     * @param Title A element name.
-     * @return Chainable API.
-     */
-    public jQuery child(CSS className) {
-        return child("span").addClass(className);
+        return child("span").add(className);
     }
 
     /**
@@ -162,37 +150,15 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
-     * Adds the specified class(es) to each of the set of matched elements.
+     * Adds the specified class to each of the set of matched elements.
      * </p>
      * 
-     * @param classNames One or more class names to be added to the class attribute of each matched
-     *            element.
-     * @return
-     */
-    public native jQuery addClass(String classNames);
-
-    /**
-     * <p>
-     * Adds the specified class(es) to each of the set of matched elements.
-     * </p>
-     * 
-     * @param classNames One or more class names to be added to the class attribute of each matched
-     *            element.
-     * @return
-     */
-    public native jQuery addClass(Class<? extends CSS> className);
-
-    /**
-     * <p>
-     * Adds the specified class(es) to each of the set of matched elements.
-     * </p>
-     * 
-     * @param classes A list of class names to assign.
+     * @param classNames A class name to be added to the class attribute of each matched element.
      * @return Chainable API.
      */
-    public jQuery addClass(Class<? extends CSS>... classes) {
-        for (Class<? extends CSS> clazz : classes) {
-            addClass(clazz);
+    public jQuery add(Class<? extends CSS> className) {
+        for (int i = 0; i < size(); i++) {
+            get(i).classList.add(className);
         }
 
         // API definition
@@ -204,11 +170,17 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * Adds the specified class(es) to each of the set of matched elements.
      * </p>
      * 
-     * @param classNames One or more class names to be added to the class attribute of each matched
-     *            element.
-     * @return
+     * @param classes A list of class names to assign.
+     * @return Chainable API.
      */
-    public native jQuery addClass(CSS className);
+    public jQuery add(Class<? extends CSS>... classes) {
+        for (Class<? extends CSS> clazz : classes) {
+            add(clazz);
+        }
+
+        // API definition
+        return this;
+    }
 
     /**
      * <p>
@@ -1117,37 +1089,20 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
-     * Remove an attribute from each element in the set of matched elements.
+     * Remove a class from each element in the set of matched elements.
      * </p>
      * 
-     * @param attributeName An attribute to remove.
-     * @return
+     * @param className A class name to be removed from the class attribute of each matched element.
+     * @return Chainable API.
      */
-    public native jQuery removeAttr(String attributeName);
+    public jQuery remove(Class<? extends CSS> className) {
+        for (int i = 0; i < size(); i++) {
+            get(i).classList.remove(className);
+        }
 
-    /**
-     * <p>
-     * Remove a single class, multiple classes, or all classes from each element in the set of
-     * matched elements.
-     * </p>
-     * 
-     * @param classNames One or more space-separated classes to be removed from the class attribute
-     *            of each matched element.
-     * @return
-     */
-    public native jQuery removeClass(String classNames);
-
-    /**
-     * <p>
-     * Remove a single class, multiple classes, or all classes from each element in the set of
-     * matched elements.
-     * </p>
-     * 
-     * @param classNames One or more space-separated classes to be removed from the class attribute
-     *            of each matched element.
-     * @return
-     */
-    public native jQuery removeClass(Class<? extends CSS> classNames);
+        // API definition
+        return this;
+    }
 
     /**
      * <p>
@@ -1158,14 +1113,24 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @param classes A list of class names to remove.
      * @return Chainable API.
      */
-    public jQuery removeClass(Class<? extends CSS>... classes) {
+    public jQuery remove(Class<? extends CSS>... classes) {
         for (Class<? extends CSS> clazz : classes) {
-            removeClass(clazz);
+            remove(clazz);
         }
 
         // API definition
         return this;
     }
+
+    /**
+     * <p>
+     * Remove an attribute from each element in the set of matched elements.
+     * </p>
+     * 
+     * @param attributeName An attribute to remove.
+     * @return
+     */
+    public native jQuery removeAttr(String attributeName);
 
     /**
      * <p>
@@ -1327,40 +1292,34 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
-     * Add or remove one or more classes from each element in the set of matched elements, depending
-     * on either the class's presence or the value of the switch argument.
+     * Add or remove class from each element in the set of matched elements, depending on either the
+     * class's presence or the value of the switch argument.
      * </p>
      * 
-     * @param className One or more class names (separated by spaces) to be toggled for each element
-     *            in the matched set.
-     * @return
-     */
-    public native jQuery toggleClass(String classNames);
-
-    /**
-     * <p>
-     * Add or remove one or more classes from each element in the set of matched elements, depending
-     * on either the class's presence or the value of the switch argument.
-     * </p>
-     * 
-     * @param className One or more class names (separated by spaces) to be toggled for each element
-     *            in the matched set.
-     * @return
-     */
-    public native jQuery toggleClass(Class<? extends CSS> classNames);
-
-    /**
-     * <p>
-     * Add or remove one or more classes from each element in the set of matched elements, depending
-     * on either the class's presence or the value of the switch argument.
-     * </p>
-     * 
-     * @param classes A list of class names to remove.
+     * @param className A class name to be toggled for each element in the matched set.
      * @return Chainable API.
      */
-    public jQuery toggleClass(Class<? extends CSS>... classes) {
+    public jQuery toggle(Class<? extends CSS> className) {
+        for (int i = 0; i < size(); i++) {
+            get(i).classList.toggle(className);
+        }
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Add or remove one or more classes from each element in the set of matched elements, depending
+     * on either the class's presence or the value of the switch argument.
+     * </p>
+     * 
+     * @param classes A list of class names to add or remove.
+     * @return Chainable API.
+     */
+    public jQuery toggle(Class<? extends CSS>... classes) {
         for (Class<? extends CSS> clazz : classes) {
-            toggleClass(clazz);
+            toggle(clazz);
         }
 
         // API definition
