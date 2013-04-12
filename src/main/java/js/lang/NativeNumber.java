@@ -65,6 +65,50 @@ public class NativeNumber extends NativeObject {
 
     /**
      * <p>
+     * Convert to primitive int type.
+     * </p>
+     * 
+     * @return A int value.
+     */
+    public int intValue() {
+        return value.intValue();
+    }
+
+    /**
+     * <p>
+     * Convert to primitive long type.
+     * </p>
+     * 
+     * @return A long value.
+     */
+    public long longValue() {
+        return value.longValue();
+    }
+
+    /**
+     * <p>
+     * Convert to primitive float type.
+     * </p>
+     * 
+     * @return A float value.
+     */
+    public float floatValue() {
+        return value.floatValue();
+    }
+
+    /**
+     * <p>
+     * Convert to primitive double type.
+     * </p>
+     * 
+     * @return A double value.
+     */
+    public double doubleValue() {
+        return value.doubleValue();
+    }
+
+    /**
+     * <p>
      * Returns a string expression.
      * </p>
      * 
@@ -135,6 +179,50 @@ public class NativeNumber extends NativeObject {
          */
         public String NativeNumber(double value) {
             return param(0);
+        }
+
+        /**
+         * <p>
+         * Convert to primitive int type.
+         * </p>
+         * 
+         * @return A int value.
+         */
+        public String intValue() {
+            return that;
+        }
+
+        /**
+         * <p>
+         * Convert to primitive long type.
+         * </p>
+         * 
+         * @return A long value.
+         */
+        public String longValue() {
+            return that;
+        }
+
+        /**
+         * <p>
+         * Convert to primitive float type.
+         * </p>
+         * 
+         * @return A float value.
+         */
+        public String floatValue() {
+            return that;
+        }
+
+        /**
+         * <p>
+         * Convert to primitive double type.
+         * </p>
+         * 
+         * @return A double value.
+         */
+        public String doubleValue() {
+            return that;
         }
 
         /**

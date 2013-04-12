@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2012/11/30 15:32:50
+ * @version 2013/04/13 3:27:34
  */
 @SuppressWarnings("unused")
 public class StringTest extends ScriptTester {
@@ -37,6 +37,76 @@ public class StringTest extends ScriptTester {
 
             public String act() {
                 return "java";
+            }
+        });
+    }
+
+    @Test
+    public void quote() {
+        test(new Scriptable() {
+
+            public String act(String value) {
+                return "\"";
+            }
+        });
+    }
+
+    @Test
+    public void tab() {
+        test(new Scriptable() {
+
+            public String act(String value) {
+                return "\t";
+            }
+        });
+    }
+
+    @Test
+    public void linebreak() {
+        test(new Scriptable() {
+
+            public String act(String value) {
+                return "\r\n";
+            }
+        });
+    }
+
+    @Test
+    public void formfeed() {
+        test(new Scriptable() {
+
+            public String act(String value) {
+                return "\f";
+            }
+        });
+    }
+
+    @Test
+    public void backspace() {
+        test(new Scriptable() {
+
+            public String act(String value) {
+                return "\b";
+            }
+        });
+    }
+
+    @Test
+    public void singlequote() {
+        test(new Scriptable() {
+
+            public String act(String value) {
+                return "\'";
+            }
+        });
+    }
+
+    @Test
+    public void unicode() {
+        test(new Scriptable() {
+
+            public String act(String value) {
+                return "\u3040";
             }
         });
     }
@@ -197,6 +267,26 @@ public class StringTest extends ScriptTester {
 
             public String act() {
                 return "java".replaceAll("a", "o");
+            }
+        });
+    }
+
+    @Test
+    public void replaceAllWithRegex() {
+        test(new Scriptable() {
+
+            public String act() {
+                return "jaaava".replaceAll("a+", "o");
+            }
+        });
+    }
+
+    @Test
+    public void replaceAllWithRegexEscaped() {
+        test(new Scriptable() {
+
+            public String act() {
+                return "j a v a".replaceAll("\\s", "");
             }
         });
     }

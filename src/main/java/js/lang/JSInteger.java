@@ -19,8 +19,9 @@ import booton.translator.JavaNative;
  * 
  * @version 2013/04/12 12:58:25
  */
+@SuppressWarnings("serial")
 @JavaNative(Integer.class)
-class JSInteger {
+class JSInteger extends Number {
 
     /** The actual value. */
     private final NativeNumber value;
@@ -30,6 +31,54 @@ class JSInteger {
      */
     private JSInteger(int value) {
         this.value = new NativeNumber(value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int intValue() {
+        return value.intValue();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long longValue() {
+        return value.longValue();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public float floatValue() {
+        return value.floatValue();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public double doubleValue() {
+        return value.doubleValue();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        return obj == value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return value.intValue();
     }
 
     /**
@@ -108,7 +157,7 @@ class JSInteger {
     public static int parseInt(String value, int radix) throws NumberFormatException {
         int parsed = Global.parseInt(value, radix);
 
-        if (parsed == Double.NaN) {
+        if (Global.isNaN(parsed)) {
             throw new NumberFormatException(value + " is not a number.");
         }
         return parsed;
