@@ -10,18 +10,32 @@
 package js.ui;
 
 import java.util.List;
+import java.util.Map;
 
 import js.lang.NativeObject;
 import js.lang.NativeObject.PropertyDescriptor;
 import js.ui.FormUIStyle.InputForm;
 import js.ui.FormUIStyle.InvalidInputForm;
+import js.ui.validator.IntegerValidator;
+import js.ui.validator.Invalid;
 import js.ui.validator.Validator;
 import js.util.ArrayList;
+import js.util.HashMap;
 
 /**
  * @version 2013/04/03 11:47:12
  */
 public class Input<T> extends FormUI {
+
+    /** The built-in validators. */
+    private static final Map<Class, Validator> builtins = new HashMap();
+
+    static {
+        builtins.put(Integer.class, new IntegerValidator());
+    }
+
+    /** The value type. */
+    private Class<T> type;
 
     /** The associated model. */
     private Property<T> model;
@@ -51,9 +65,12 @@ public class Input<T> extends FormUI {
      * </p>
      */
     @SuppressWarnings("unused")
-    private Input(Object model, String name) {
+    private Input(Class type, Object model, String name) {
+        this.type = type;
         this.model = new Property((NativeObject) model, name);
         this.validators = new ArrayList();
+
+        add(builtins.get(type));
 
         form.attr("type", "input").add(InputForm.class);
         form.bind(this);
@@ -61,12 +78,18 @@ public class Input<T> extends FormUI {
 
     @Listen(UIAction.KeyUp)
     private void validateInput() {
-        String value = form.val();
-
         try {
+            String value = form.val();
+
+            // validation
+            for (Validator validator : validators) {
+                validator.validate(value);
+            }
+
             model.set(decode(value));
             form.remove(InvalidInputForm.class);
-        } catch (Error e) {
+        } catch (Invalid e) {
+            System.out.println(e.getMessage());
             form.add(InvalidInputForm.class);
         }
     }
@@ -92,7 +115,8 @@ public class Input<T> extends FormUI {
      * @param text
      * @return
      */
-    protected T decode(String text) {
+    private T decode(String text) {
+
         return (T) text;
     }
 

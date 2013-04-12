@@ -182,6 +182,17 @@ public class Global {
     public static native int parseInt(String value, int radix);
 
     /**
+     * <p>
+     * Determines whether a value is NaN or not. Be careful, this function is broken. You may be
+     * interested in ECMAScript 6 Number.isNaN.
+     * </p>
+     * 
+     * @param value The value to be tested.
+     * @return A result.
+     */
+    public static native boolean isNaN(Object value);
+
+    /**
      * @version 2012/12/14 13:11:07
      */
     @SuppressWarnings("unused")
@@ -361,6 +372,19 @@ public class Global {
          */
         public String parseInt(String value, int radix) {
             return "parseInt(" + param(0) + "," + param(1) + ")";
+        }
+
+        /**
+         * <p>
+         * Determines whether a value is NaN or not. Be careful, this function is broken. You may be
+         * interested in ECMAScript 6 Number.isNaN.
+         * </p>
+         * 
+         * @param value The value to be tested.
+         * @return A result.
+         */
+        public String isNaN(Object value) {
+            return "isNaN(" + param(0) + ")";
         }
     }
 }
