@@ -10,17 +10,19 @@
 package js.ui.validator;
 
 /**
- * @version 2013/04/09 16:52:36
+ * @version 2013/04/12 12:02:16
  */
-public interface Validator<M> {
+@SuppressWarnings("serial")
+public class Invalid extends RuntimeException {
 
     /**
      * <p>
-     * Validate the given model.
+     * The message for invalid state.
      * </p>
      * 
-     * @param model A target model to validate.
-     * @throws Invalid If the model is invalid.
+     * @param message
      */
-    void validate(M model) throws Invalid;
+    public Invalid(String message) {
+        super(message);
+    }
 }

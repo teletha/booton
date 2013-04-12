@@ -26,6 +26,9 @@ public class Input<T> extends FormUI {
     /** The associated model. */
     private Property<T> model;
 
+    /** The validators. */
+    private List<Validator> validators;
+
     /**
      * <p>
      * Bindable {@link Input} form.
@@ -50,6 +53,7 @@ public class Input<T> extends FormUI {
     @SuppressWarnings("unused")
     private Input(Object model, String name) {
         this.model = new Property((NativeObject) model, name);
+        this.validators = new ArrayList();
 
         form.attr("type", "input").add(InputForm.class);
         form.bind(this);
@@ -61,11 +65,23 @@ public class Input<T> extends FormUI {
 
         try {
             model.set(decode(value));
+            form.remove(InvalidInputForm.class);
         } catch (Error e) {
-            System.out.println("Error catch");
             form.add(InvalidInputForm.class);
         }
+    }
 
+    /**
+     * <p>
+     * Add value validator.
+     * </p>
+     * 
+     * @param validator A value validator to use.
+     */
+    public void add(Validator validator) {
+        if (validator != null) {
+            validators.add(validator);
+        }
     }
 
     /**
