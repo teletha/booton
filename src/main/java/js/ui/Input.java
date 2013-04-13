@@ -85,6 +85,7 @@ public class Input<T> extends FormUI {
             for (Validator validator : validators) {
                 validator.validate(value);
             }
+            System.out.println(int.class);
 
             model.set(decode(value));
             form.remove(InvalidInputForm.class);
