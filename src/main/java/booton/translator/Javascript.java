@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -547,6 +548,7 @@ public class Javascript {
         }
 
         Javascript script = getScript(owner);
+        description = JavaNativeManager.replace(description);
 
         if (name.charAt(0) == '<') {
             if (name.charAt(1) == 'c') {
@@ -661,6 +663,13 @@ public class Javascript {
             Class replacer = replacers.get(type);
 
             return replacer == null ? type : replacer;
+        }
+
+        private static String replace(String desc) {
+            for (Entry<Class, Class> entry : replacers.entrySet()) {
+                desc = desc.replaceAll(Type.getDescriptor(entry.getKey()), Type.getDescriptor(entry.getValue()));
+            }
+            return desc;
         }
     }
 }
