@@ -22,8 +22,7 @@ public class IntegerValidator implements Validator {
         try {
             System.out.println(Integer.parseInt(model.toString()));
         } catch (Throwable e) {
-            throw new Invalid("Require number.");
+            throw new Invalid("Require number. " + model);
         }
-
     }
 }

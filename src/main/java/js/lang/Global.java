@@ -190,10 +190,54 @@ public class Global {
      * @param value The value to be tested.
      * @return A result.
      */
+    public static native boolean isNaN(int value);
+
+    /**
+     * <p>
+     * Determines whether a value is NaN or not. Be careful, this function is broken. You may be
+     * interested in ECMAScript 6 Number.isNaN.
+     * </p>
+     * 
+     * @param value The value to be tested.
+     * @return A result.
+     */
+    public static native boolean isNaN(long value);
+
+    /**
+     * <p>
+     * Determines whether a value is NaN or not. Be careful, this function is broken. You may be
+     * interested in ECMAScript 6 Number.isNaN.
+     * </p>
+     * 
+     * @param value The value to be tested.
+     * @return A result.
+     */
+    public static native boolean isNaN(float value);
+
+    /**
+     * <p>
+     * Determines whether a value is NaN or not. Be careful, this function is broken. You may be
+     * interested in ECMAScript 6 Number.isNaN.
+     * </p>
+     * 
+     * @param value The value to be tested.
+     * @return A result.
+     */
+    public static native boolean isNaN(double value);
+
+    /**
+     * <p>
+     * Determines whether a value is NaN or not. Be careful, this function is broken. You may be
+     * interested in ECMAScript 6 Number.isNaN.
+     * </p>
+     * 
+     * @param value The value to be tested.
+     * @return A result.
+     */
     public static native boolean isNaN(Object value);
 
     /**
-     * @version 2012/12/14 13:11:07
+     * @version 2013/04/13 12:45:25
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<Global> {
@@ -372,6 +416,58 @@ public class Global {
          */
         public String parseInt(String value, int radix) {
             return "parseInt(" + param(0) + "," + param(1) + ")";
+        }
+
+        /**
+         * <p>
+         * Determines whether a value is NaN or not. Be careful, this function is broken. You may be
+         * interested in ECMAScript 6 Number.isNaN.
+         * </p>
+         * 
+         * @param value The value to be tested.
+         * @return A result.
+         */
+        public String isNaN(int value) {
+            return "isNaN(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Determines whether a value is NaN or not. Be careful, this function is broken. You may be
+         * interested in ECMAScript 6 Number.isNaN.
+         * </p>
+         * 
+         * @param value The value to be tested.
+         * @return A result.
+         */
+        public String isNaN(long value) {
+            return "isNaN(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Determines whether a value is NaN or not. Be careful, this function is broken. You may be
+         * interested in ECMAScript 6 Number.isNaN.
+         * </p>
+         * 
+         * @param value The value to be tested.
+         * @return A result.
+         */
+        public String isNaN(float value) {
+            return "isNaN(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Determines whether a value is NaN or not. Be careful, this function is broken. You may be
+         * interested in ECMAScript 6 Number.isNaN.
+         * </p>
+         * 
+         * @param value The value to be tested.
+         * @return A result.
+         */
+        public String isNaN(double value) {
+            return "isNaN(" + param(0) + ")";
         }
 
         /**

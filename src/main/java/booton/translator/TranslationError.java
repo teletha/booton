@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 /**
- * @version 2012/11/30 9:30:19
+ * @version 2013/04/13 12:07:19
  */
 @SuppressWarnings("serial")
 public class TranslationError extends Error {
@@ -60,11 +60,51 @@ public class TranslationError extends Error {
      * </p>
      * 
      * @param methodName A method name.
+     * @param parameterTypes A method parameters.
+     * @return Chainable API.
+     */
+    public TranslationError writeMethod(Method method) {
+        return writeMethod(method.getModifiers(), method.getName(), method.getReturnType(), method.getParameterTypes(), true);
+    }
+
+    /**
+     * <p>
+     * Write method type.
+     * </p>
+     * 
+     * @param methodName A method name.
+     * @param parameterTypes A method parameters.
+     * @return Chainable API.
+     */
+    public TranslationError writeMethodWithoutBody(Method method) {
+        return writeMethod(method.getModifiers(), method.getName(), method.getReturnType(), method.getParameterTypes(), false);
+    }
+
+    /**
+     * <p>
+     * Write method type.
+     * </p>
+     * 
+     * @param methodName A method name.
      * @param returnType A method return type.
      * @param parameterTypes A method parameters.
      * @return Chainable API.
      */
     public TranslationError writeMethod(int modifiers, String methodName, Class returnType, Class[] parameterTypes) {
+        return writeMethod(modifiers, methodName, returnType, parameterTypes, true);
+    }
+
+    /**
+     * <p>
+     * Write method type.
+     * </p>
+     * 
+     * @param methodName A method name.
+     * @param returnType A method return type.
+     * @param parameterTypes A method parameters.
+     * @return Chainable API.
+     */
+    private TranslationError writeMethod(int modifiers, String methodName, Class returnType, Class[] parameterTypes, boolean body) {
         builder.append("\r\n\t");
 
         if (modifiers != 0) {
@@ -96,38 +136,32 @@ public class TranslationError extends Error {
             if (i < (parameterTypes.length - 1)) builder.append(',');
         }
         builder.append(") {\r\n");
-        builder.append("\t\treturn that + \".").append(methodName).append("(");
-        for (int i = 0; i < parameterTypes.length; i++) {
-            if (i == 0) {
-                builder.append("\"");
-            }
 
-            builder.append(" + param(").append(i).append(")");
+        // write body
+        if (body) {
+            builder.append("\t\treturn that + \".").append(methodName).append("(");
+            for (int i = 0; i < parameterTypes.length; i++) {
+                if (i == 0) {
+                    builder.append("\"");
+                }
 
-            if (i == parameterTypes.length - 1) {
-                builder.append(" + \"");
-            } else {
-                builder.append(" + \",\"");
+                builder.append(" + param(").append(i).append(")");
+
+                if (i == parameterTypes.length - 1) {
+                    builder.append(" + \"");
+                } else {
+                    builder.append(" + \",\"");
+                }
             }
+            builder.append(")\";\r\n");
+        } else {
+            builder.append("\t\t// Write your implementation.\r\n");
         }
-        builder.append(")\";\r\n");
+
         builder.append("\t}\r\n");
 
         // chainalbe API
         return this;
-    }
-
-    /**
-     * <p>
-     * Write method type.
-     * </p>
-     * 
-     * @param methodName A method name.
-     * @param parameterTypes A method parameters.
-     * @return Chainable API.
-     */
-    public TranslationError writeMethod(Method method) {
-        return writeMethod(method.getModifiers(), method.getName(), method.getReturnType(), method.getParameterTypes());
     }
 
     /**

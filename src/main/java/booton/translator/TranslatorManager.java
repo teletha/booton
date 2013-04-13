@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
- * ion 2012/12/06 18:28:56
+ * @version 2013/04/13 12:41:47
  */
 class TranslatorManager {
 
@@ -280,6 +280,7 @@ class TranslatorManager {
          */
         @Override
         protected String translateMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
+
             return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + writeParameter(types, context);
         }
 
@@ -288,6 +289,8 @@ class TranslatorManager {
          */
         @Override
         protected String translateStaticMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
+            search(owner, name, types);
+
             return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + writeParameter(types, context);
         }
 
@@ -348,6 +351,56 @@ class TranslatorManager {
             builder.append(')');
 
             return builder.toString();
+        }
+
+        /**
+         * <p>
+         * Search js native method's existence.
+         * </p>
+         * 
+         * @param methodName A method name.
+         * @param parameterTypes A method parameters.
+         * @return A result.
+         */
+        private void search(Class classJava, String methodName, Class[] parameterTypes) {
+            Class classJS = Javascript.getCompilableClass(classJava);
+
+            if (!classJS.isAnnotationPresent(JavaNative.class) || TranslatorManager.hasTranslator(classJS)) {
+                return;
+            }
+
+            try {
+                Method methodJava = classJava.getDeclaredMethod(methodName, parameterTypes);
+
+                if (Modifier.isNative(methodJava.getModifiers())) {
+                    return;
+                }
+
+                try {
+                    Method methodJS = classJS.getDeclaredMethod(methodName, parameterTypes);
+                    Class returnJava = methodJava.getReturnType();
+                    Class returnJS = methodJS.getReturnType();
+
+                    if (Javascript.getCompilableClass(returnJava) != returnJS && returnJava != returnJS) {
+                        TranslationError error = new TranslationError();
+                        error.write("Your defined method has incorrect return type. [", methodJS, "]");
+                        error.write("Define a method like the following:");
+                        error.writeMethodWithoutBody(methodJava);
+
+                        throw error;
+                    }
+                } catch (NoSuchMethodException e) {
+                    TranslationError error = new TranslationError();
+                    error.write("You must define a method at ", classJS.getName(), ".");
+                    error.writeMethodWithoutBody(methodJava);
+
+                    throw error;
+                }
+            } catch (NoSuchMethodException e) {
+                // If this exception will be thrown, it is bug of this program. So we must rethrow
+                // the wrapped error in here.
+                throw I.quiet(e);
+            }
         }
     }
 }
