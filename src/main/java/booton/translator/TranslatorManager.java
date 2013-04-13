@@ -280,7 +280,6 @@ class TranslatorManager {
          */
         @Override
         protected String translateMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-
             return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + writeParameter(types, context);
         }
 

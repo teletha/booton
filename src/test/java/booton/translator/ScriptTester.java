@@ -564,14 +564,14 @@ public class ScriptTester {
      * @param js
      */
     private void assertClass(Class clazz, Object js) {
-        String name = Javascript.computeSimpleClassName(clazz);
+        String computedJavaClassName = Javascript.computeSimpleClassName(clazz);
         NativeObject object = (NativeObject) js;
 
         for (Object id : object.getAllIds()) {
-            Object value = object.get(id);
+            Object jsClassName = object.get(id);
 
-            if (value instanceof String) {
-                assert name.equals(value);
+            if (jsClassName instanceof String) {
+                assert computedJavaClassName.equals(jsClassName);
                 return;
             }
         }

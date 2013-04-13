@@ -603,6 +603,7 @@ public class Javascript {
 
         try {
             owner.getDeclaredField(fieldName);
+            owner = JavaNativeManager.replace(owner);
 
             return mung16(order(getScript(owner).fields, fieldName.hashCode() + owner.hashCode()));
         } catch (NoSuchFieldException e) {

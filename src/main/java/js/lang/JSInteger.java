@@ -21,7 +21,10 @@ import booton.translator.JavaNative;
  */
 @SuppressWarnings("serial")
 @JavaNative(java.lang.Integer.class)
-class JSInteger extends Number {
+public class JSInteger extends Number {
+
+    /** The primitive int class. */
+    public static final Class TYPE = JSInteger.class;
 
     /** The actual value. */
     private final NativeNumber value;
