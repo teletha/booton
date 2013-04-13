@@ -26,70 +26,11 @@ public class JSInteger extends Number {
     /** The primitive int class. */
     public static final Class TYPE = JSInteger.class;
 
-    /** The actual value. */
-    private final NativeNumber value;
-
     /**
      * @param value
      */
-    private JSInteger(int value) {
-        this.value = new NativeNumber(value);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int intValue() {
-        return value.intValue();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public long longValue() {
-        return value.longValue();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public float floatValue() {
-        return value.floatValue();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public double doubleValue() {
-        return value.doubleValue();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean equals(Object obj) {
-        return obj == value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int hashCode() {
-        return value.intValue();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return value.toString();
+    private JSInteger(double value) {
+        super(value);
     }
 
     /**

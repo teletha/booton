@@ -9,6 +9,7 @@
  */
 package booton.translator.primitive;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.translator.ScriptTester;
@@ -20,6 +21,7 @@ import booton.translator.Scriptable;
 public class PrimitiveClassTest extends ScriptTester {
 
     @Test
+    @Ignore
     public void Int() throws Exception {
         test(new Scriptable() {
 

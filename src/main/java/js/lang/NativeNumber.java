@@ -17,7 +17,7 @@ import booton.translator.Translator;
 public class NativeNumber extends NativeObject {
 
     /** The actual value. */
-    private final Number value;
+    private final java.lang.Number value;
 
     /**
      * <p>
