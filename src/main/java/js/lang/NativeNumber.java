@@ -128,7 +128,7 @@ public class NativeNumber extends NativeObject {
      * @return A string expression.
      */
     public String toString(int radix) {
-        return JSInteger.toString(value.intValue(), radix);
+        return Integer.toString(value.intValue(), radix);
     }
 
     /**

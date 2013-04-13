@@ -9,10 +9,13 @@
  */
 package js.lang;
 
+import booton.translator.JavaNative;
+
 /**
  * @version 2013/04/13 18:56:37
  */
-public abstract class Number extends java.lang.Number {
+@JavaNative(java.lang.Number.class)
+abstract class Number {
 
     /** The actual value. */
     protected final NativeNumber value;
@@ -25,35 +28,70 @@ public abstract class Number extends java.lang.Number {
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the value of the specified number as an <code>int</code>. This may involve rounding
+     * or truncation.
+     * 
+     * @return the numeric value represented by this object after conversion to type
+     *         <code>int</code>.
      */
-    @Override
     public int intValue() {
         return value.intValue();
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the value of the specified number as a <code>long</code>. This may involve rounding
+     * or truncation.
+     * 
+     * @return the numeric value represented by this object after conversion to type
+     *         <code>long</code>.
      */
-    @Override
     public long longValue() {
         return value.longValue();
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the value of the specified number as a <code>float</code>. This may involve rounding.
+     * 
+     * @return the numeric value represented by this object after conversion to type
+     *         <code>float</code>.
      */
-    @Override
     public float floatValue() {
         return value.floatValue();
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the value of the specified number as a <code>double</code>. This may involve
+     * rounding.
+     * 
+     * @return the numeric value represented by this object after conversion to type
+     *         <code>double</code>.
      */
-    @Override
     public double doubleValue() {
         return value.doubleValue();
+    }
+
+    /**
+     * Returns the value of the specified number as a <code>byte</code>. This may involve rounding
+     * or truncation.
+     * 
+     * @return the numeric value represented by this object after conversion to type
+     *         <code>byte</code>.
+     * @since JDK1.1
+     */
+    public byte byteValue() {
+        return (byte) intValue();
+    }
+
+    /**
+     * Returns the value of the specified number as a <code>short</code>. This may involve rounding
+     * or truncation.
+     * 
+     * @return the numeric value represented by this object after conversion to type
+     *         <code>short</code>.
+     * @since JDK1.1
+     */
+    public short shortValue() {
+        return (short) intValue();
     }
 
     /**

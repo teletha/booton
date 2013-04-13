@@ -19,17 +19,16 @@ import booton.translator.JavaNative;
  * 
  * @version 2013/04/12 12:58:25
  */
-@SuppressWarnings("serial")
 @JavaNative(java.lang.Integer.class)
-public class JSInteger extends Number {
+public class Integer extends Number {
 
     /** The primitive int class. */
-    public static final Class TYPE = JSInteger.class;
+    public static final Class TYPE = Integer.class;
 
     /**
      * @param value
      */
-    private JSInteger(double value) {
+    private Integer(double value) {
         super(value);
     }
 
@@ -123,7 +122,7 @@ public class JSInteger extends Number {
      * @return an {@code Integer} object holding the value represented by the string argument.
      * @exception NumberFormatException if the string cannot be parsed as an integer.
      */
-    public static Integer valueOf(String value) throws NumberFormatException {
+    public static java.lang.Integer valueOf(String value) throws NumberFormatException {
         return valueOf(parseInt(value, 10));
     }
 
@@ -148,7 +147,7 @@ public class JSInteger extends Number {
      * @exception NumberFormatException if the {@code String} does not contain a parsable
      *                {@code int}.
      */
-    public static Integer valueOf(String value, int radix) throws NumberFormatException {
+    public static java.lang.Integer valueOf(String value, int radix) throws NumberFormatException {
         return valueOf(parseInt(value, radix));
     }
 
@@ -166,8 +165,8 @@ public class JSInteger extends Number {
      * @return an {@code Integer} instance representing {@code i}.
      * @since 1.5
      */
-    public static Integer valueOf(int value) {
-        return new Integer(value);
+    public static java.lang.Integer valueOf(int value) {
+        return (java.lang.Integer) (Object) new Integer(value);
     }
 
     /**
