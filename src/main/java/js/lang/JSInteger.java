@@ -20,7 +20,7 @@ import booton.translator.JavaNative;
  * @version 2013/04/12 12:58:25
  */
 @SuppressWarnings("serial")
-@JavaNative(Integer.class)
+@JavaNative(java.lang.Integer.class)
 class JSInteger extends Number {
 
     /** The actual value. */

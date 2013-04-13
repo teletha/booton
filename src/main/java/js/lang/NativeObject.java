@@ -274,7 +274,7 @@ public class NativeObject {
          * @return A property value.
          */
         public String getProperty(int key) {
-            return getProperty((Integer) key);
+            return getProperty((java.lang.Integer) key);
         }
 
         /**
@@ -312,7 +312,7 @@ public class NativeObject {
          * @return A value to set.
          */
         public String setProperty(int key, Object value) {
-            return setProperty((Integer) key, value);
+            return setProperty((java.lang.Integer) key, value);
         }
 
         /**
@@ -337,7 +337,7 @@ public class NativeObject {
          * @return A property value.
          */
         public String hasProperty(int key) {
-            return hasProperty((Integer) key);
+            return hasProperty((java.lang.Integer) key);
         }
 
         /**
@@ -363,7 +363,7 @@ public class NativeObject {
          * @return A result.
          */
         public String deleteProperty(int key) {
-            return deleteProperty((Integer) key);
+            return deleteProperty((java.lang.Integer) key);
         }
 
         /**
