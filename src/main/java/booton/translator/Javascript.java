@@ -405,18 +405,6 @@ public class Javascript {
 
     /**
      * <p>
-     * Search compilable class.
-     * </p>
-     * 
-     * @param source
-     * @return
-     */
-    public static final Class getCompilableClass(Class source) {
-        return JavaNativeManager.replace(source);
-    }
-
-    /**
-     * <p>
      * Compile the specified Java class to Javascript source code.
      * </p>
      * 
@@ -424,7 +412,7 @@ public class Javascript {
      * @return A compiled Javascript source.
      */
     public static final Javascript getScript(Class source) {
-        source = getCompilableClass(source);
+        source = JavaNativeManager.replace(source);
 
         // check Native Class
         if (source == null || TranslatorManager.hasTranslator(source)) {
