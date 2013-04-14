@@ -63,6 +63,9 @@ public class FormCatalogPage extends Page {
              */
             @Override
             public void validate(Integer model) throws Invalid {
+                if (model < 10) {
+                    throw new Invalid("Minimum is 10.");
+                }
             }
         });
         root.child(new Input(model.name));
