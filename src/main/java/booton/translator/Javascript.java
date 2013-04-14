@@ -25,7 +25,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -52,7 +51,7 @@ import org.objectweb.asm.Type;
  * throw, throws, transient, true, try, typeof, var, void, volatile, while, with
  * <p>
  * <p>
- * But the following words can use safely in many javascript engines (IE6+, Gecko1.5+, Webkit3.0+).
+ * But the following words can use safely in many javascript engines (IE10+, Gecko10+, Webkit5+).
  * <p>
  * <p>
  * abstract, boolean, byte, char, double, final, float, goto, implements, int, interface, long,
@@ -413,7 +412,7 @@ public class Javascript {
      * @return A compiled Javascript source.
      */
     public static final Javascript getScript(Class source) {
-        source = JavaNativeManager.replace(source);
+        source = JavaAPIProviders.convert(source);
 
         // check Native Class
         if (source == null || TranslatorManager.hasTranslator(source)) {
@@ -547,19 +546,18 @@ public class Javascript {
             return name;
         }
 
-        Javascript script = getScript(owner);
-        description = JavaNativeManager.replace(description);
-
         if (name.charAt(0) == '<') {
             if (name.charAt(1) == 'c') {
                 // class initializer
                 return "";
             } else {
                 // constructor
-                return "$" + order(script.constructors, description.hashCode());
+                return "$" + order(getScript(owner).constructors, description.hashCode());
             }
         } else {
             // method
+            JavaAPIProviders.validateMethod(owner, name, description);
+
             return mung32(order(methods, name.hashCode() ^ description.hashCode()));
         }
     }
@@ -593,7 +591,6 @@ public class Javascript {
 
         try {
             owner.getDeclaredField(fieldName);
-            owner = JavaNativeManager.replace(owner);
 
             return mung16(order(getScript(owner).fields, fieldName.hashCode() + owner.hashCode()));
         } catch (NoSuchFieldException e) {
@@ -626,50 +623,90 @@ public class Javascript {
     }
 
     /**
-     * @version 2013/01/19 9:36:13
+     * @version 2013/04/14 14:04:15
      */
     @Manageable(lifestyle = Singleton.class)
-    private static class JavaNativeManager implements ClassListener<JavaNative> {
+    private static class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
 
         /** The mapping between Java class and JS implementation class. */
-        private static final Map<Class, Class> replacers = new HashMap();
+        private static final Map<Class, Definition> definitions = new HashMap();
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public void load(Class<JavaNative> clazz) {
-            replacers.put(clazz.getAnnotation(JavaNative.class).value(), clazz);
+        public void load(Class<JavaAPIProvider> clazz) {
+            definitions.put(clazz.getAnnotation(JavaAPIProvider.class).value(), new Definition(clazz));
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public void unload(Class<JavaNative> clazz) {
-            replacers.remove(clazz.getAnnotation(JavaNative.class).value());
+        public void unload(Class<JavaAPIProvider> clazz) {
+            definitions.remove(clazz.getAnnotation(JavaAPIProvider.class).value());
         }
 
         /**
          * <p>
-         * Replace Java class with the implementation class for Javascript runtime (normaly, it is
-         * simplified).
+         * Convert Java class to Javascript runtime class (normaly, it is simplified).
          * </p>
          * 
-         * @param type A target class to replace.
-         * @return A replaced class.
+         * @param type A target class to convert.
+         * @return A converted class.
          */
-        private static Class replace(Class type) {
-            Class replacer = replacers.get(type);
+        private static Class convert(Class type) {
+            Definition definition = definitions.get(type);
 
-            return replacer == null ? type : replacer;
+            return definition == null ? type : definition.clazz;
         }
 
-        private static String replace(String desc) {
-            for (Entry<Class, Class> entry : replacers.entrySet()) {
-                desc = desc.replaceAll(Type.getDescriptor(entry.getKey()), Type.getDescriptor(entry.getValue()));
+        /**
+         * <p>
+         * Validate method implementation in Javascript class.
+         * </p>
+         * 
+         * @param owner
+         * @param name
+         * @param description
+         */
+        private static void validateMethod(Class owner, String name, String description) {
+            Definition definition = definitions.get(owner);
+
+            if (definition != null && !definition.methods.contains(description)) {
+                TranslationError error = new TranslationError();
+                error.write("You must define the method in " + definition.clazz + ".");
+                error.writeMethod(name, Type.getReturnType(description), Type.getArgumentTypes(description));
+
+                throw error;
             }
-            return desc;
+        }
+
+        /**
+         * <p>
+         * Cache for API definitions.
+         * </p>
+         * 
+         * @version 2013/04/14 14:07:33
+         */
+        private static class Definition {
+
+            /** The actual provider class. */
+            private final Class clazz;
+
+            /** The method signatures. */
+            private final Set<String> methods = new HashSet();
+
+            /**
+             * @param clazz
+             */
+            private Definition(Class clazz) {
+                this.clazz = clazz;
+
+                for (Method method : clazz.getMethods()) {
+                    methods.add(Type.getMethodDescriptor(method));
+                }
+            }
         }
     }
 }

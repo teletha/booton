@@ -59,7 +59,14 @@ public class UnsafeWordCalculator {
      * case letter and lower case letter (e.g NaN). Because our naming strategy doesn't output the
      * word which has mixed letter.
      */
-    private static final String[] booton = {"css", "define", "defineNative", "newInstance"};
+    private static final String[] booton = {"define", "defineNative", "defineProperty", "functionalize"};
+
+    /**
+     * The sorterd property names in jQuery. It is no need to contains the word which has both upper
+     * case letter and lower case letter (e.g NaN). Because our naming strategy doesn't output the
+     * word which has mixed letter.
+     */
+    private static final String[] jquery = {"add", "on", "off"};
 
     /**
      * Output
@@ -74,6 +81,7 @@ public class UnsafeWordCalculator {
         words.addAll(Arrays.asList(function));
         words.addAll(Arrays.asList(booton));
         words.addAll(Arrays.asList(java));
+        words.addAll(Arrays.asList(jquery));
 
         root: for (int i = 0; i < words.size(); i++) {
             // 'a'-head word is safe because our munging implementation can't output 'a'-head value

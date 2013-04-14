@@ -14,12 +14,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 
-import booton.translator.JavaNative;
+import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/02/16 11:28:44
  */
-@JavaNative(java.util.Collections.class)
+@JavaAPIProvider(java.util.Collections.class)
 class Collections {
 
     /**

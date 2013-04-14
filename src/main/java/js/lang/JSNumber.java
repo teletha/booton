@@ -9,13 +9,13 @@
  */
 package js.lang;
 
-import booton.translator.JavaNative;
+import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/04/13 18:56:37
  */
-@JavaNative(java.lang.Number.class)
-abstract class Number {
+@JavaAPIProvider(Number.class)
+abstract class JSNumber {
 
     /** The actual value. */
     protected final NativeNumber value;
@@ -23,7 +23,7 @@ abstract class Number {
     /**
      * @param value
      */
-    protected Number(double value) {
+    protected JSNumber(double value) {
         this.value = new NativeNumber(value);
     }
 

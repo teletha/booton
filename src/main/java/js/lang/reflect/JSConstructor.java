@@ -15,7 +15,7 @@ import java.lang.reflect.Constructor;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
-import booton.translator.JavaNative;
+import booton.translator.JavaAPIProvider;
 
 /**
  * <p>
@@ -25,7 +25,7 @@ import booton.translator.JavaNative;
  * 
  * @version 2013/01/17 20:45:34
  */
-@JavaNative(Constructor.class)
+@JavaAPIProvider(Constructor.class)
 class JSConstructor<T> extends JSAnnotatedElement {
 
     /** The declared class definition in runtime. */

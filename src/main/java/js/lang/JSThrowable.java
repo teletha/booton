@@ -9,12 +9,12 @@
  */
 package js.lang;
 
-import booton.translator.JavaNative;
+import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/01/19 9:27:51
  */
-@JavaNative(Throwable.class)
+@JavaAPIProvider(Throwable.class)
 class JSThrowable {
 
     /** The error message. */
