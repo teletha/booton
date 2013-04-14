@@ -590,9 +590,12 @@ public class Javascript {
         }
 
         try {
-            owner.getDeclaredField(fieldName);
+            // valicate field declaration
+            JavaAPIProviders.validateField(owner, owner.getDeclaredField(fieldName));
 
-            return mung16(order(getScript(owner).fields, fieldName.hashCode() + owner.hashCode()));
+            Javascript js = getScript(owner);
+
+            return mung16(order(js.fields, fieldName.hashCode() + js.source.hashCode()));
         } catch (NoSuchFieldException e) {
             return computeFieldName(owner.getSuperclass(), fieldName);
         }
@@ -684,6 +687,28 @@ public class Javascript {
 
         /**
          * <p>
+         * Validate method implementation in Javascript class.
+         * </p>
+         * 
+         * @param owner
+         * @param name
+         * @param description
+         */
+        private static void validateField(Class owner, Field field) {
+            Definition definition = definitions.get(owner);
+
+            if (definition != null && !definition.fields.contains(field.getName())) {
+                TranslationError error = new TranslationError();
+                error.write("You must define the field in ", definition.clazz, ".");
+                error.write("");
+                error.writeField(field);
+
+                throw error;
+            }
+        }
+
+        /**
+         * <p>
          * Cache for API definitions.
          * </p>
          * 
@@ -697,6 +722,9 @@ public class Javascript {
             /** The method signatures. */
             private final Set<String> methods = new HashSet();
 
+            /** The method signatures. */
+            private final Set<String> fields = new HashSet();
+
             /**
              * @param clazz
              */
@@ -705,6 +733,10 @@ public class Javascript {
 
                 for (Method method : clazz.getMethods()) {
                     methods.add(Type.getMethodDescriptor(method));
+                }
+
+                for (Field field : clazz.getFields()) {
+                    fields.add(field.getName());
                 }
             }
         }
