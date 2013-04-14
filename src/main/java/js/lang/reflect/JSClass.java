@@ -22,7 +22,7 @@ import js.lang.NativeFunction;
 import js.lang.NativeObject;
 import js.util.ArrayList;
 import js.util.HashMap;
-import booton.translator.JavaNative;
+import booton.translator.JavaAPIProvider;
 
 /**
  * <p>
@@ -32,7 +32,7 @@ import booton.translator.JavaNative;
  * 
  * @version 2013/01/17 15:58:55
  */
-@JavaNative(Class.class)
+@JavaAPIProvider(Class.class)
 class JSClass<T> extends JSAnnotatedElement {
 
     /** The class definition in runtime. */
@@ -399,7 +399,7 @@ class JSClass<T> extends JSAnnotatedElement {
      * won't ever get created.
      * </p>
      */
-    Map<String, Enum> enumConstantDirectory() {
+    public Map<String, Enum> enumConstantDirectory() {
         if (enumerationConstants == null) {
             enumerationConstants = new HashMap();
 

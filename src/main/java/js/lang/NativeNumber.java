@@ -17,11 +17,11 @@ import booton.translator.Translator;
 public class NativeNumber extends NativeObject {
 
     /** The actual value. */
-    private final java.lang.Number value;
+    private final Number value;
 
     /**
      * <p>
-     * Create javascript native {@link Number} instance.
+     * Create javascript native {@link JSNumber} instance.
      * </p>
      * 
      * @param value
@@ -32,7 +32,7 @@ public class NativeNumber extends NativeObject {
 
     /**
      * <p>
-     * Create javascript native {@link Number} instance.
+     * Create javascript native {@link JSNumber} instance.
      * </p>
      * 
      * @param value
@@ -43,7 +43,7 @@ public class NativeNumber extends NativeObject {
 
     /**
      * <p>
-     * Create javascript native {@link Number} instance.
+     * Create javascript native {@link JSNumber} instance.
      * </p>
      * 
      * @param value
@@ -54,7 +54,7 @@ public class NativeNumber extends NativeObject {
 
     /**
      * <p>
-     * Create javascript native {@link Number} instance.
+     * Create javascript native {@link JSNumber} instance.
      * </p>
      * 
      * @param value
@@ -139,7 +139,7 @@ public class NativeNumber extends NativeObject {
 
         /**
          * <p>
-         * Create javascript native {@link Number} instance.
+         * Create javascript native {@link JSNumber} instance.
          * </p>
          * 
          * @param value
@@ -150,7 +150,7 @@ public class NativeNumber extends NativeObject {
 
         /**
          * <p>
-         * Create javascript native {@link Number} instance.
+         * Create javascript native {@link JSNumber} instance.
          * </p>
          * 
          * @param value
@@ -161,7 +161,7 @@ public class NativeNumber extends NativeObject {
 
         /**
          * <p>
-         * Create javascript native {@link Number} instance.
+         * Create javascript native {@link JSNumber} instance.
          * </p>
          * 
          * @param value
@@ -172,7 +172,7 @@ public class NativeNumber extends NativeObject {
 
         /**
          * <p>
-         * Create javascript native {@link Number} instance.
+         * Create javascript native {@link JSNumber} instance.
          * </p>
          * 
          * @param value

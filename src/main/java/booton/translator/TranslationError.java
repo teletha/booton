@@ -12,8 +12,10 @@ package booton.translator;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import org.objectweb.asm.Type;
+
 /**
- * @version 2013/04/13 12:07:19
+ * @version 2013/04/14 14:47:13
  */
 @SuppressWarnings("serial")
 public class TranslationError extends Error {
@@ -73,25 +75,30 @@ public class TranslationError extends Error {
      * </p>
      * 
      * @param methodName A method name.
-     * @param parameterTypes A method parameters.
-     * @return Chainable API.
-     */
-    public TranslationError writeMethodWithoutBody(Method method) {
-        return writeMethod(method.getModifiers(), method.getName(), method.getReturnType(), method.getParameterTypes(), false);
-    }
-
-    /**
-     * <p>
-     * Write method type.
-     * </p>
-     * 
-     * @param methodName A method name.
      * @param returnType A method return type.
      * @param parameterTypes A method parameters.
      * @return Chainable API.
      */
     public TranslationError writeMethod(int modifiers, String methodName, Class returnType, Class[] parameterTypes) {
         return writeMethod(modifiers, methodName, returnType, parameterTypes, true);
+    }
+
+    /**
+     * <p>
+     * </p>
+     * 
+     * @param name
+     * @param returnType
+     * @param parameterTypes
+     */
+    public void writeMethod(String name, Type returnType, Type[] parameterTypes) {
+        Class[] parameters = new Class[parameterTypes.length];
+
+        for (int i = 0; i < parameters.length; i++) {
+            parameters[i] = JavaMethodCompiler.convert(parameterTypes[i]);
+        }
+
+        writeMethod(Modifier.PUBLIC, name, JavaMethodCompiler.convert(returnType), parameters, false);
     }
 
     /**

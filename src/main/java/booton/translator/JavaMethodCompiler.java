@@ -1693,7 +1693,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * @param type A parameter {@link Type}.
      * @return A parameter {@link Class}.
      */
-    private final Class convert(Type type) {
+    static final Class convert(Type type) {
         switch (type.getSort()) {
         case INT:
             return int.class;
@@ -1741,7 +1741,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * @param className A fully qualified internal class name.
      * @return Java class.
      */
-    private final Class convert(String className) {
+    static final Class convert(String className) {
         if (className == null) {
             return null;
         }

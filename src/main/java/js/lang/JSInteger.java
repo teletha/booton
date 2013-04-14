@@ -9,7 +9,7 @@
  */
 package js.lang;
 
-import booton.translator.JavaNative;
+import booton.translator.JavaAPIProvider;
 
 /**
  * <p>
@@ -19,16 +19,16 @@ import booton.translator.JavaNative;
  * 
  * @version 2013/04/12 12:58:25
  */
-@JavaNative(java.lang.Integer.class)
-class Integer extends Number {
+@JavaAPIProvider(Integer.class)
+class JSInteger extends JSNumber {
 
     /** The primitive int class. */
-    public static final Class TYPE = Integer.class;
+    public static final Class TYPE = JSInteger.class;
 
     /**
      * @param value
      */
-    private Integer(double value) {
+    private JSInteger(double value) {
         super(value);
     }
 
@@ -166,7 +166,7 @@ class Integer extends Number {
      * @since 1.5
      */
     public static Integer valueOf(int value) {
-        return new Integer(value);
+        return (Integer) (Object) new JSInteger(value);
     }
 
     /**

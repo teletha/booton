@@ -17,27 +17,26 @@ import java.lang.annotation.Target;
 
 /**
  * <p>
- * Annotated class replaces the specified Java class from javascript compilation process.
+ * Annotated class provides the specified Java class API in Javascript runtime.
  * </p>
  * <p>
- * Normaly, the replacement class provides the simplified implementation of the replaced class. The
- * replacement class is not used by booton user, so it is recommended that the class has package
- * private modifier.
+ * Normaly, the annotated class provides the simplified implementation of API and it is not used by
+ * booton user. So it is recommended that the class has package private modifier.
  * </p>
  * 
- * @version 2013/01/19 9:32:47
+ * @version 2013/04/14 14:02:55
  */
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface JavaNative {
+public @interface JavaAPIProvider {
 
     /**
      * <p>
-     * Specify the class to replace.
+     * Specify the class to provide API.
      * </p>
      * 
-     * @return A class to replace.
+     * @return A target class.
      */
     Class value();
 }

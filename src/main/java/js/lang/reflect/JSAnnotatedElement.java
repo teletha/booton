@@ -14,12 +14,12 @@ import java.lang.reflect.AnnotatedElement;
 
 import js.lang.NativeArray;
 import js.lang.NativeObject;
-import booton.translator.JavaNative;
+import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/01/18 1:15:38
  */
-@JavaNative(AnnotatedElement.class)
+@JavaAPIProvider(AnnotatedElement.class)
 abstract class JSAnnotatedElement extends NativeObject {
 
     /** The function name in runtime. */

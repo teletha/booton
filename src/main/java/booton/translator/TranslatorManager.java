@@ -349,56 +349,5 @@ class TranslatorManager {
 
             return builder.toString();
         }
-
-        // /**
-        // * <p>
-        // * Search js native method's existence.
-        // * </p>
-        // *
-        // * @param methodName A method name.
-        // * @param parameterTypes A method parameters.
-        // * @return A result.
-        // */
-        // private void search(Class classJava, String methodName, Class[] parameterTypes) {
-        // Class classJS = Javascript.getCompilableClass(classJava);
-        //
-        // if (!classJS.isAnnotationPresent(JavaNative.class) ||
-        // TranslatorManager.hasTranslator(classJS)) {
-        // return;
-        // }
-        //
-        // try {
-        // Method methodJava = classJava.getDeclaredMethod(methodName, parameterTypes);
-        //
-        // if (Modifier.isNative(methodJava.getModifiers())) {
-        // return;
-        // }
-        //
-        // try {
-        // Method methodJS = classJS.getDeclaredMethod(methodName, parameterTypes);
-        // Class returnJava = methodJava.getReturnType();
-        // Class returnJS = methodJS.getReturnType();
-        //
-        // if (Javascript.getCompilableClass(returnJava) != returnJS && returnJava != returnJS) {
-        // TranslationError error = new TranslationError();
-        // error.write("Your defined method has incorrect return type. [", methodJS, "]");
-        // error.write("Define a method like the following:");
-        // error.writeMethodWithoutBody(methodJava);
-        //
-        // throw error;
-        // }
-        // } catch (NoSuchMethodException e) {
-        // TranslationError error = new TranslationError();
-        // error.write("You must define a method at ", classJS.getName(), ".");
-        // error.writeMethodWithoutBody(methodJava);
-        //
-        // throw error;
-        // }
-        // } catch (NoSuchMethodException e) {
-        // // If this exception will be thrown, it is bug of this program. So we must rethrow
-        // // the wrapped error in here.
-        // throw I.quiet(e);
-        // }
-        // }
     }
 }
