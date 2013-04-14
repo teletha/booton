@@ -30,10 +30,10 @@ public class FormUI<T extends FormUI> extends UI {
     /**
      * 
      */
-    public FormUI(String form) {
+    public FormUI(String elementName) {
         root.add(FormComponent.class);
 
-        this.form = root.child(form);
+        form = root.child(elementName);
     }
 
     /**
@@ -60,5 +60,14 @@ public class FormUI<T extends FormUI> extends UI {
         form.removeAttr("disabled");
 
         return (T) this;
+    }
+
+    /**
+     * <p>
+     * Focus this form.
+     * </p>
+     */
+    public void focus() {
+
     }
 }

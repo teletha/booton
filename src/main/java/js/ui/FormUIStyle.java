@@ -131,7 +131,6 @@ class FormUIStyle {
     class InvalidInputForm extends BaseForm {
 
         {
-            writeBorder(BorderFocusColor.adjustHue(-180));
 
             while (focus()) {
                 writeBorder(BorderFocusColor.adjustHue(-180));

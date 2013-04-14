@@ -81,16 +81,21 @@ public class Input<T> extends FormUI {
         try {
             String value = form.val();
 
+            T converted;
+
+            if (type == int.class) {
+                converted = (T) (Object) Integer.parseInt(value);
+            } else {
+                converted = (T) value;
+            }
+
             // validation
             for (Validator validator : validators) {
-                validator.validate(value);
+                validator.validate(converted);
             }
-            System.out.println(int.class);
-
             model.set(decode(value));
             form.remove(InvalidInputForm.class);
         } catch (Invalid e) {
-            System.out.println(e.getMessage());
             form.add(InvalidInputForm.class);
         }
     }
