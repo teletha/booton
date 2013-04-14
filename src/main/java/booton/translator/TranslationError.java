@@ -9,6 +9,7 @@
  */
 package booton.translator;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -177,5 +178,42 @@ public class TranslationError extends Error {
     @Override
     public String getMessage() {
         return builder.toString();
+    }
+
+    /**
+     * <p>
+     * Write method type.
+     * </p>
+     * 
+     * @param field A field.
+     * @return Chainable API.
+     */
+    public TranslationError writeField(Field field) {
+        Class type = field.getType();
+
+        builder.append("\t")
+                .append(Modifier.toString(field.getModifiers()))
+                .append(" ")
+                .append(type.getSimpleName())
+                .append(" ")
+                .append(field.getName())
+                .append(" = ");
+
+        if (type.isPrimitive()) {
+            if (type == boolean.class) {
+                builder.append("true");
+            } else if (type == char.class) {
+                builder.append("''");
+            } else {
+                builder.append("0");
+            }
+        } else {
+            builder.append("null");
+        }
+        builder.append("; // write your code");
+        builder.append("\r\n");
+
+        // chainalbe API
+        return this;
     }
 }
