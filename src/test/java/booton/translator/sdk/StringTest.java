@@ -11,6 +11,7 @@ package booton.translator.sdk;
 
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -317,6 +318,47 @@ public class StringTest extends ScriptTester {
 
             public String act(String value) {
                 return "java" + value + "Test";
+            }
+        });
+    }
+
+    @Test
+    public void constructorEmpty() {
+        test(new Scriptable() {
+
+            public String act(String value) {
+                return new String();
+            }
+        });
+    }
+
+    @Test
+    public void constructorCopy() {
+        test(new Scriptable() {
+
+            public String act(String value) {
+                return new String("test");
+            }
+        });
+    }
+
+    @Test
+    public void constructorCharArray() {
+        test(new Scriptable() {
+
+            public String act(String value) {
+                return new String(new char[] {'t', 'e', 's', 't'});
+            }
+        });
+    }
+
+    @Test
+    public void constructorCharArrayWithOffset() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public String act(String value) {
+                return new String(new char[] {'t', 'e', 's', 't'}, 0, 2);
             }
         });
     }

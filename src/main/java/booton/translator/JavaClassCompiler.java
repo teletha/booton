@@ -45,6 +45,14 @@ class JavaClassCompiler extends ClassVisitor {
      * {@inheritDoc}
      */
     @Override
+    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+        super.visit(version, access, name, signature, superName, interfaces);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
         // In Java, initial value for primitives are defined in Java specification. But in
         // Javascript, initial value (in property) will be "undefined". So we must declare

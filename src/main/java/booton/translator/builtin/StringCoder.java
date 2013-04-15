@@ -1,37 +1,75 @@
 /*
- * Copyright (C) 2009 Nameless Production Committee.
+ * Copyright (C) 2013 Nameless Production Committee
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *          http://opensource.org/licenses/mit-license.php
  */
 package booton.translator.builtin;
 
 import booton.translator.Translator;
 
 /**
- * @version 2009/08/08 10:49:18
+ * @version 2013/04/15 16:19:02
  */
 class StringCoder extends Translator<String> {
 
+    /**
+     * <p>
+     * Initializes a newly created {@code String} object so that it represents an empty character
+     * sequence. Note that use of this constructor is unnecessary since Strings are immutable.
+     * </p>
+     */
+    public String String() {
+        return Q + Q;
+    }
+
+    /**
+     * <p>
+     * Initializes a newly created {@code String} object so that it represents the same sequence of
+     * characters as the argument; in other words, the newly created string is a copy of the
+     * argument string. Unless an explicit copy of {@code original} is needed, use of this
+     * constructor is unnecessary since Strings are immutable.
+     * </p>
+     * 
+     * @param original A {@code String}
+     */
     public String String(String value) {
         return param(0);
     }
 
-    public String String(char[] param0, int param1, int param2) {
-        return that + ".String(" + param(0) + "," + param(1) + "," + param(2) + ")";
+    /**
+     * <p>
+     * Allocates a new {@code String} so that it represents the sequence of characters currently
+     * contained in the character array argument. The contents of the character array are copied;
+     * subsequent modification of the character array does not affect the newly created string.
+     * </p>
+     * 
+     * @param value The initial value of the string
+     */
+    public String String(char[] value) {
+        return param(0) + ".join(" + Q + Q + ")";
     }
 
-    public String String(char[] param0, boolean param1) {
-        return that + ".String(" + param(0) + "," + param(1) + ")";
+    /**
+     * <p>
+     * Allocates a new {@code String} that contains characters from a subarray of the character
+     * array argument. The {@code offset} argument is the index of the first character of the
+     * subarray and the {@code count} argument specifies the length of the subarray. The contents of
+     * the subarray are copied; subsequent modification of the character array does not affect the
+     * newly created string.
+     * </p>
+     * 
+     * @param value Array that is the source of characters
+     * @param offset The initial offset
+     * @param count The length
+     * @throws IndexOutOfBoundsException If the {@code offset} and {@code count} arguments index
+     *             characters outside the bounds of the {@code value} array
+     */
+    public String String(char[] value, int offset, int count) {
+        return param(0) + ".slice(" + param(1) + "," + param(1) + "+" + param(2) + ").join(" + Q + Q + ")";
     }
 
     /**
@@ -89,7 +127,7 @@ class StringCoder extends Translator<String> {
      *         string.
      */
     public String toCharArray() {
-        return that + ".split('')";
+        return that + ".split(+Q + Q+)";
     }
 
     public String toLowerCase() {
@@ -148,6 +186,16 @@ class StringCoder extends Translator<String> {
         return that + ".substring(" + param(0) + "," + param(1) + ")";
     }
 
+    /**
+     * <p>
+     * Returns the string representation of the <code>Object</code> argument.
+     * </p>
+     * 
+     * @param obj an <code>Object</code>.
+     * @return if the argument is <code>null</code>, then a string equal to <code>"null"</code>;
+     *         otherwise, the value of <code>obj.toString()</code> is returned.
+     * @see java.lang.Object#toString()
+     */
     public String valueOf(Object value) {
         return Q + Q + "+" + param(0);
     }
