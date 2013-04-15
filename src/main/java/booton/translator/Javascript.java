@@ -465,13 +465,6 @@ public class Javascript {
      * @return An identified class name for ECMAScript.
      */
     public static final String computeClassName(Class clazz) {
-        if (clazz == Object.class) {
-            return "Object";
-        }
-
-        if (clazz == String.class) {
-            return "String";
-        }
         return "boot." + computeSimpleClassName(clazz);
     }
 

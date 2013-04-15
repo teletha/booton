@@ -20,6 +20,7 @@ import js.ui.validator.IntegerValidator;
 import js.ui.validator.Invalid;
 import js.ui.validator.Validator;
 import js.util.ArrayList;
+import js.util.Converter;
 import js.util.HashMap;
 
 /**
@@ -42,6 +43,9 @@ public class Input<T> extends FormUI {
 
     /** The validators. */
     private List<Validator> validators;
+
+    /** The condition flag. */
+    private boolean required = false;
 
     /**
      * <p>
@@ -78,22 +82,23 @@ public class Input<T> extends FormUI {
 
     @Listen(UIAction.KeyUp)
     private void validateInput() {
-        try {
-            String value = form.val();
+        String input = form.val();
 
-            T converted;
-
-            if (type == int.class) {
-                converted = (T) (Object) Integer.parseInt(value);
-            } else {
-                converted = (T) value;
+        if (input.length() == 0) {
+            if (required) {
+                form.add(InvalidInputForm.class);
             }
+            return;
+        }
+
+        try {
+            T value = Converter.convert(input, type);
 
             // validation
             for (Validator validator : validators) {
-                validator.validate(converted);
+                validator.validate(value);
             }
-            model.set(decode(value));
+            model.set(value);
             form.remove(InvalidInputForm.class);
         } catch (Invalid e) {
             form.add(InvalidInputForm.class);
@@ -107,7 +112,7 @@ public class Input<T> extends FormUI {
      * 
      * @param validator A value validator to use.
      */
-    public void add(Validator validator) {
+    public void add(Validator<T> validator) {
         if (validator != null) {
             validators.add(validator);
         }
