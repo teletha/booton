@@ -12,15 +12,15 @@ package js.ui.validator;
 /**
  * @version 2013/04/12 16:25:12
  */
-public class IntegerValidator implements Validator {
+public class IntegerValidator implements Validator<Integer> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void validate(Object model) throws Invalid {
+    public void validate(Integer model) throws Invalid {
         try {
-            System.out.println(Integer.parseInt(model.toString()));
+
         } catch (Throwable e) {
             throw new Invalid("Require number. " + model);
         }

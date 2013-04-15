@@ -13,7 +13,6 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -138,7 +137,6 @@ public class TryTest extends ScriptTester {
                 }
             }
 
-            @Debuggable
             private int error(int value) {
                 try {
                     if (value != 3) {

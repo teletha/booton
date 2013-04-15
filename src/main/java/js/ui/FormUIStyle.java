@@ -134,6 +134,7 @@ class FormUIStyle {
 
             while (focus()) {
                 writeBorder(BorderFocusColor.adjustHue(-180));
+                box.shadow(0, px, 0, px, 8, px, BorderFocusColor.adjustHue(-180).opacify(-0.2));
             }
         }
     }

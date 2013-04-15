@@ -9,6 +9,8 @@
  */
 package js.util;
 
+import js.ui.validator.Invalid;
+
 /**
  * @version 2013/04/12 16:12:29
  */
@@ -23,14 +25,17 @@ public class Converter {
      * @param type A destination type.
      */
     public static <T> T convert(String value, Class<T> type) {
-        if (type == String.class) {
-            return (T) value;
-        }
+        try {
+            if (type == Integer.class) {
+                return (T) Integer.valueOf(value);
+            }
 
-        if (type == Integer.class || type == int.class) {
-            return (T) (Object) Integer.parseInt(value);
+            if (type == String.class) {
+                return (T) value;
+            }
+        } catch (NumberFormatException e) {
+            // do nothing
         }
-
-        throw new IllegalArgumentException("The value [" + value + "] is not converted.");
+        throw new Invalid("The value [" + value + "] is not converted.");
     }
 }

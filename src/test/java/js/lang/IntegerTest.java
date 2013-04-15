@@ -53,4 +53,32 @@ public class IntegerTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void empty() throws Exception {
+        test(new Scriptable() {
+
+            int act() {
+                try {
+                    return Integer.parseInt("");
+                } catch (NumberFormatException e) {
+                    return 10;
+                }
+            }
+        });
+    }
+
+    @Test
+    public void Null() throws Exception {
+        test(new Scriptable() {
+
+            int act() {
+                try {
+                    return Integer.parseInt(null);
+                } catch (NumberFormatException e) {
+                    return 10;
+                }
+            }
+        });
+    }
 }

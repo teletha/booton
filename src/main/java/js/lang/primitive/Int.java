@@ -9,10 +9,11 @@
  */
 package js.lang.primitive;
 
+import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/04/13 14:38:48
  */
-
+@JavaAPIProvider(int.class)
 class Int {
 }
