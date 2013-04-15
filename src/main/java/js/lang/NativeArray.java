@@ -201,8 +201,30 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
      * Changes the content of an array, adding new elements while removing old elements.
      * </p>
      */
+    public void add(int index, T[] items) {
+        for (int i = 0; i < items.length; i++) {
+            list.add(i + index, items[i]);
+        }
+    }
+
+    /**
+     * <p>
+     * Changes the content of an array, adding new elements while removing old elements.
+     * </p>
+     */
     public T remove(int index) {
         return list.remove(index);
+    }
+
+    /**
+     * <p>
+     * Changes the content of an array, adding new elements while removing old elements.
+     * </p>
+     */
+    public void remove(int index, int length) {
+        for (int i = 0; i < length; i++) {
+            list.remove(index);
+        }
     }
 
     /**
@@ -365,7 +387,16 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
          * Changes the content of an array, adding new elements while removing old elements.
          * </p>
          */
-        public String add(int index, Object item) {
+        public String add(int index, T item) {
+            return that + ".splice(" + param(0) + ",0," + param(1) + ")";
+        }
+
+        /**
+         * <p>
+         * Changes the content of an array, adding new elements while removing old elements.
+         * </p>
+         */
+        public String add(int index, T[] items) {
             return that + ".splice(" + param(0) + ",0," + param(1) + ")";
         }
 
@@ -376,6 +407,15 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
          */
         public String remove(int param0) {
             return that + ".splice(" + param(0) + ",1)[0]";
+        }
+
+        /**
+         * <p>
+         * Changes the content of an array, adding new elements while removing old elements.
+         * </p>
+         */
+        public String remove(int index, int length) {
+            return that + ".splice(" + param(0) + "," + param(1) + ")";
         }
 
         /**

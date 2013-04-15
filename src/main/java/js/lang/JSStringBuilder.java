@@ -12,21 +12,20 @@ package js.lang;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/04/15 15:42:54
+ * @version 2013/04/15 21:24:44
  */
 @JavaAPIProvider(StringBuilder.class)
-public class JSStringBuilder {
+class JSStringBuilder {
 
-    private NativeArray text;
-
-    private int count;
+    /** The native strint expression. */
+    private NativeString text;
 
     /**
      * Constructs a string builder with no characters in it and an initial capacity of 16
      * characters.
      */
     public JSStringBuilder() {
-        this(16);
+        text = new NativeString();
     }
 
     /**
@@ -38,7 +37,7 @@ public class JSStringBuilder {
      *             <code>0</code>.
      */
     public JSStringBuilder(int capacity) {
-        text = new NativeArray();
+        this();
     }
 
     /**
@@ -49,7 +48,7 @@ public class JSStringBuilder {
      * @throws NullPointerException if <code>value</code> is <code>null</code>
      */
     public JSStringBuilder(String value) {
-        this(value.length() + 16);
+        this();
 
         append(value);
     }
@@ -63,7 +62,7 @@ public class JSStringBuilder {
      * @throws NullPointerException if <code>seq</code> is <code>null</code>
      */
     public JSStringBuilder(CharSequence seq) {
-        this(seq.length() + 16);
+        this();
 
         append(seq);
     }
@@ -238,12 +237,87 @@ public class JSStringBuilder {
      * </p>
      * 
      * @param value
-     * @return
+     * @return Chainable API.
      */
     public StringBuilder append(String value) {
-        text.splice(text.length(), value.length(), value.toCharArray());
+        text = text.concat(value);
 
         return (StringBuilder) (Object) this;
+    }
+
+    /**
+     * <p>
+     * Returns the char value in this sequence at the specified index. The first char value is at
+     * index 0, the next at index 1, and so on, as in array indexing.
+     * </p>
+     * <p>
+     * The index argument must be greater than or equal to 0, and less than the length of this
+     * sequence.
+     * </p>
+     * <p>
+     * If the char value specified by the index is a surrogate, the surrogate value is returned.
+     * </p>
+     * 
+     * @param index The index of the desired char value.
+     * @return The char value at the specified index.
+     */
+    public char charAt(int index) {
+        return text.charAt(index);
+    }
+
+    /**
+     * <p>
+     * Returns the character (Unicode code point) at the specified index. The index refers to char
+     * values (Unicode code units) and ranges from 0 to length() - 1.
+     * </p>
+     * <p>
+     * If the char value specified at the given index is in the high-surrogate range, the following
+     * index is less than the length of this sequence, and the char value at the following index is
+     * in the low-surrogate range, then the supplementary code point corresponding to this surrogate
+     * pair is returned. Otherwise, the char value at the given index is returned.
+     * </p>
+     * 
+     * @param index The index to the char values.
+     * @return The code point value of the character at the index.
+     */
+    public int codePointAt(int index) {
+        return text.charCodeAt(index);
+    }
+
+    /**
+     * <p>
+     * Removes the characters in a substring of this sequence. The substring begins at the specified
+     * start and extends to the character at index end - 1 or to the end of the sequence if no such
+     * character exists. If start is equal to end, no changes are made.
+     * </p>
+     * 
+     * @param start The beginning index, inclusive.
+     * @param end The ending index, exclusive.
+     * @return Chainable API.
+     */
+    public StringBuilder delete(int start, int end) {
+        text = text.substring(0, start - 1).concat(text.substring(end));
+
+        return (StringBuilder) (Object) this;
+    }
+
+    /**
+     * <p>
+     * Removes the char at the specified position in this sequence. This sequence is shortened by
+     * one char.
+     * </p>
+     * <p>
+     * Note: If the character at the given index is a supplementary character, this method does not
+     * remove the entire character. If correct handling of supplementary characters is required,
+     * determine the number of chars to remove by calling
+     * Character.charCount(thisSequence.codePointAt(index)), where thisSequence is this sequence.
+     * </p>
+     * 
+     * @param index Index of char to remove.
+     * @return Chainable API.
+     */
+    public StringBuilder deleteCharAt(int index) {
+        return delete(index + 1, index + 1);
     }
 
     // // Appends the specified string builder to this sequence.
@@ -503,6 +577,6 @@ public class JSStringBuilder {
      */
     @Override
     public String toString() {
-        return text.join("");
+        return text.toString();
     }
 }
