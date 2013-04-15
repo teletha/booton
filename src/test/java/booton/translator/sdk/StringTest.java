@@ -11,7 +11,6 @@ package booton.translator.sdk;
 
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -356,7 +355,6 @@ public class StringTest extends ScriptTester {
     public void constructorCharArrayWithOffset() {
         test(new Scriptable() {
 
-            @Debuggable
             public String act(String value) {
                 return new String(new char[] {'t', 'e', 's', 't'}, 0, 2);
             }

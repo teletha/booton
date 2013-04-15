@@ -183,6 +183,16 @@ public class Global {
 
     /**
      * <p>
+     * Parses a string argument and returns a floating point number.
+     * </p>
+     * 
+     * @param value A string that represents the value you want to parse.
+     * @return A parsed number value.
+     */
+    public static native float parseFloat(String value);
+
+    /**
+     * <p>
      * Determines whether a value is NaN or not. Be careful, this function is broken. You may be
      * interested in ECMAScript 6 Number.isNaN.
      * </p>
@@ -237,7 +247,7 @@ public class Global {
     public static native boolean isNaN(Object value);
 
     /**
-     * @version 2013/04/13 12:45:25
+     * @version 2013/04/15 23:20:23
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<Global> {
@@ -416,6 +426,18 @@ public class Global {
          */
         public String parseInt(String value, int radix) {
             return "parseInt(" + param(0) + "," + param(1) + ")";
+        }
+
+        /**
+         * <p>
+         * Parses a string argument and returns a floating point number.
+         * </p>
+         * 
+         * @param value A string that represents the value you want to parse.
+         * @return A parsed number value.
+         */
+        public String parseFloat(String value) {
+            return "parseFloat(" + param(0) + ")";
         }
 
         /**

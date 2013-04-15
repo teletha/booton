@@ -669,7 +669,7 @@ public class Javascript {
         private static void validateMethod(Class owner, String name, String description) {
             Definition definition = definitions.get(owner);
 
-            if (definition != null && !definition.methods.contains(description)) {
+            if (definition != null && !definition.methods.contains(name + description)) {
                 TranslationError error = new TranslationError();
                 error.write("You must define the method in " + definition.clazz + ".");
                 error.writeMethod(name, Type.getReturnType(description), Type.getArgumentTypes(description));
@@ -725,7 +725,7 @@ public class Javascript {
                 this.clazz = clazz;
 
                 for (Method method : clazz.getMethods()) {
-                    methods.add(Type.getMethodDescriptor(method));
+                    methods.add(method.getName() + Type.getMethodDescriptor(method));
                 }
 
                 for (Field field : clazz.getFields()) {
