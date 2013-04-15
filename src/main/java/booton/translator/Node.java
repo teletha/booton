@@ -897,6 +897,7 @@ class Node {
         private void searchExit() {
             LinkedList<Node> nodes = new LinkedList();
             nodes.addAll(end.outgoing);
+            nodes.addAll(catcher.outgoing);
 
             while (!nodes.isEmpty()) {
                 Node node = nodes.remove(0);

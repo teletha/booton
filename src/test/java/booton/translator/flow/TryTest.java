@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -121,6 +122,32 @@ public class TryTest extends ScriptTester {
                     // do nothing
                 }
                 return value;
+            }
+        });
+    }
+
+    @Test
+    public void TryEmptyCatchAfterThrow() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 10) int value) {
+                try {
+                    return error(value);
+                } catch (Error e) {
+                    return -10;
+                }
+            }
+
+            @Debuggable
+            private int error(int value) {
+                try {
+                    if (value != 3) {
+                        return Throw.exception(value);
+                    }
+                } catch (Exception e) {
+                    // do nothing
+                }
+                throw new Error();
             }
         });
     }
