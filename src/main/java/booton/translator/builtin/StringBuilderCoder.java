@@ -20,7 +20,7 @@ import booton.translator.Translator;
 /**
  * @version 2009/08/19 0:17:49
  */
-class StringBuilderCoder extends Translator<StringBuilder> {
+class StringBuilderCoder extends Translator<StringBuilderCoder> {
 
     /**
      * @see StringBuilder#StringBuilder(String)

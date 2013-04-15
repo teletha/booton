@@ -9,10 +9,12 @@
  */
 package js.lang;
 
+import booton.translator.JavaAPIProvider;
+
 /**
  * @version 2013/04/15 15:42:54
  */
-// @JavaAPIProvider(JSStringBuilder.class)
+@JavaAPIProvider(StringBuilder.class)
 public class JSStringBuilder {
 
     private NativeArray text;
@@ -79,7 +81,143 @@ public class JSStringBuilder {
      * @param value A value to append.
      * @return Chainable API.
      */
-    public JSStringBuilder append(Object value) {
+    public StringBuilder append(Object value) {
+        return append(String.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Appends the string representation of the number argument to this sequence.
+     * </p>
+     * <p>
+     * The overall effect is exactly as if the argument were converted to a string by the method
+     * String.valueOf(value), and the characters of that string were then appended to this character
+     * sequence.
+     * </p>
+     * 
+     * @param value A value to append.
+     * @return Chainable API.
+     */
+    public StringBuilder append(int value) {
+        return append(String.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Appends the string representation of the number argument to this sequence.
+     * </p>
+     * <p>
+     * The overall effect is exactly as if the argument were converted to a string by the method
+     * String.valueOf(value), and the characters of that string were then appended to this character
+     * sequence.
+     * </p>
+     * 
+     * @param value A value to append.
+     * @return Chainable API.
+     */
+    public StringBuilder append(long value) {
+        return append(String.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Appends the string representation of the number argument to this sequence.
+     * </p>
+     * <p>
+     * The overall effect is exactly as if the argument were converted to a string by the method
+     * String.valueOf(value), and the characters of that string were then appended to this character
+     * sequence.
+     * </p>
+     * 
+     * @param value A value to append.
+     * @return Chainable API.
+     */
+    public StringBuilder append(float value) {
+        return append(String.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Appends the string representation of the number argument to this sequence.
+     * </p>
+     * <p>
+     * The overall effect is exactly as if the argument were converted to a string by the method
+     * String.valueOf(value), and the characters of that string were then appended to this character
+     * sequence.
+     * </p>
+     * 
+     * @param value A value to append.
+     * @return Chainable API.
+     */
+    public StringBuilder append(double value) {
+        return append(String.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Appends the string representation of the number argument to this sequence.
+     * </p>
+     * <p>
+     * The overall effect is exactly as if the argument were converted to a string by the method
+     * String.valueOf(value), and the characters of that string were then appended to this character
+     * sequence.
+     * </p>
+     * 
+     * @param value A value to append.
+     * @return Chainable API.
+     */
+    public StringBuilder append(boolean value) {
+        return append(String.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Appends the string representation of the number argument to this sequence.
+     * </p>
+     * <p>
+     * The overall effect is exactly as if the argument were converted to a string by the method
+     * String.valueOf(value), and the characters of that string were then appended to this character
+     * sequence.
+     * </p>
+     * 
+     * @param value A value to append.
+     * @return Chainable API.
+     */
+    public StringBuilder append(byte value) {
+        return append(String.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Appends the string representation of the number argument to this sequence.
+     * </p>
+     * <p>
+     * The overall effect is exactly as if the argument were converted to a string by the method
+     * String.valueOf(value), and the characters of that string were then appended to this character
+     * sequence.
+     * </p>
+     * 
+     * @param value A value to append.
+     * @return Chainable API.
+     */
+    public StringBuilder append(short value) {
+        return append(String.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Appends the string representation of the char argument to this sequence.
+     * </p>
+     * <p>
+     * The overall effect is exactly as if the argument were converted to a string by the method
+     * String.valueOf(value), and the characters of that string were then appended to this character
+     * sequence.
+     * </p>
+     * 
+     * @param value A value to append.
+     * @return Chainable API.
+     */
+    public StringBuilder append(char value) {
         return append(String.valueOf(value));
     }
 
@@ -102,9 +240,10 @@ public class JSStringBuilder {
      * @param value
      * @return
      */
-    public JSStringBuilder append(String value) {
+    public StringBuilder append(String value) {
+        text.splice(text.length(), value.length(), value.toCharArray());
 
-        return this;
+        return (StringBuilder) (Object) this;
     }
 
     // // Appends the specified string builder to this sequence.
@@ -364,7 +503,6 @@ public class JSStringBuilder {
      */
     @Override
     public String toString() {
-        // Create a copy, don't share the array
-        return new String(text, 0, count);
+        return text.join("");
     }
 }
