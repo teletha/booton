@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ import kiss.I;
 import booton.translator.Translator;
 
 /**
- * @version 2012/12/08 11:08:56
+ * @version 2013/04/15 16:19:13
  */
 public class NativeArray<T> extends NativeObject implements Iterable<T> {
 
