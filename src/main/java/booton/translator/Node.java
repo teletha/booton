@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * @version 2013/04/11 19:56:01
+ * @version 2013/04/15 11:12:23
  */
 class Node {
 
@@ -511,7 +511,7 @@ class Node {
                         buffer.write(variable, "=", "$;");
                         current.node.write(buffer);
                     } else {
-                        buffer.write("if", "($ instanceof", Javascript.computeClassName(current.exception) + ")", "{");
+                        buffer.write("if", "($ instanceof " + Javascript.computeClassName(current.exception) + ")", "{");
                         buffer.write(variable, "=", "$;");
                         current.node.write(buffer);
                         buffer.write("}", "else");

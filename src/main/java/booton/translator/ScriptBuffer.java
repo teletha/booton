@@ -9,15 +9,19 @@
  */
 package booton.translator;
 
+import kiss.I;
+
 import org.objectweb.asm.Type;
 
+import booton.BootonConfiguration;
+
 /**
- * @version 2013/04/11 21:23:05
+ * @version 2013/04/15 11:12:28
  */
 class ScriptBuffer {
 
     /** The optimization flag. */
-    private static boolean optimize = false;
+    private final BootonConfiguration config = I.make(BootonConfiguration.class);
 
     /** The actual buffer. */
     private final StringBuilder buffer = new StringBuilder();
@@ -37,21 +41,23 @@ class ScriptBuffer {
      * @param description
      */
     public void debug(Class owner, String methodName, String description) {
-        buffer.append("// ");
-        buffer.append(owner.getName()).append("#").append(methodName).append("(");
+        if (!config.optimization) {
+            buffer.append("// ");
+            buffer.append(owner.getName()).append("#").append(methodName).append("(");
 
-        Type type = Type.getMethodType(description);
-        Type[] args = type.getArgumentTypes();
+            Type type = Type.getMethodType(description);
+            Type[] args = type.getArgumentTypes();
 
-        for (int i = 0; i < args.length; i++) {
-            buffer.append(args[i].getClassName());
+            for (int i = 0; i < args.length; i++) {
+                buffer.append(args[i].getClassName());
 
-            if (i < args.length - 1) {
-                buffer.append(", ");
+                if (i < args.length - 1) {
+                    buffer.append(", ");
+                }
             }
+            buffer.append(")");
+            line();
         }
-        buffer.append(")");
-        line();
     }
 
     /**
@@ -62,14 +68,15 @@ class ScriptBuffer {
      * @return A chainable API.
      */
     public ScriptBuffer line() {
-        // write line separator
-        buffer.append("\r\n");
+        if (!config.optimization) {
+            // write line separator
+            buffer.append("\r\n");
 
-        // write indent
-        for (int i = 0; i < depth; i++) {
-            buffer.append('\t');
+            // write indent
+            for (int i = 0; i < depth; i++) {
+                buffer.append('\t');
+            }
         }
-
         return this;
     }
 
@@ -121,7 +128,7 @@ class ScriptBuffer {
         for (int i = 0; i < fragments.length; i++) {
             write(fragments[i], false);
 
-            if (!optimize && i + 1 != fragments.length) {
+            if (!config.optimization && i + 1 != fragments.length) {
                 write(" ");
             }
         }
