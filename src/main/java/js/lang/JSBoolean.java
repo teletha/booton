@@ -10,6 +10,7 @@
 package js.lang;
 
 import booton.translator.JavaAPIProvider;
+import booton.translator.JavascriptNativePrimitiveBoolean;
 
 /**
  * <p>
@@ -20,7 +21,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/04/12 12:58:25
  */
 @JavaAPIProvider(Boolean.class)
-class JSBoolean {
+class JSBoolean implements JavascriptNativePrimitiveBoolean {
 
     /**
      * The {@code Boolean} object corresponding to the primitive value {@code true}.
@@ -43,6 +44,14 @@ class JSBoolean {
      */
     private JSBoolean(boolean value) {
         this.value = value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean valueOf() {
+        return value;
     }
 
     /**
