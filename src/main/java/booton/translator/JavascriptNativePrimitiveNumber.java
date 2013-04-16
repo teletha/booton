@@ -14,7 +14,7 @@ import js.lang.NativeNumber;
 /**
  * @version 2013/04/16 14:37:53
  */
-public interface JavascriptNativeNumberPrimitive extends JavascriptNative {
+public interface JavascriptNativePrimitiveNumber extends JavascriptNative {
 
     /**
      * <p>
