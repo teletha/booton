@@ -15,7 +15,6 @@
  */
 package booton.translator.method;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.translator.ScriptTester;
@@ -28,59 +27,56 @@ import booton.translator.Scriptable;
 public class ThrowTest extends ScriptTester {
 
     @Test
-    @Ignore
     public void exception() {
         test(new Scriptable() {
 
-            public Object act() throws Exception {
-                throw new Exception();
+            public int act() throws Exception {
+                try {
+                    throw new Exception();
+                } catch (Exception e) {
+                    return 10;
+                }
             }
         });
     }
 
     @Test
-    @Ignore
     public void exceptionWithParam() {
         test(new Scriptable() {
 
             public String act(String value) throws Exception {
-                throw new Exception(value);
+                try {
+                    throw new Exception("test");
+                } catch (Exception e) {
+                    return e.getMessage();
+                }
             }
         });
     }
 
     @Test
-    @Ignore
     public void runtimeException() {
         test(new Scriptable() {
 
             public String act() {
-                throw new RuntimeException();
+                try {
+                    throw new RuntimeException("test");
+                } catch (RuntimeException e) {
+                    return e.getMessage();
+                }
             }
         });
     }
 
     @Test
-    @Ignore
     public void error() {
         test(new Scriptable() {
 
             public String act() {
-                throw new Error();
-            }
-        });
-    }
-
-    @Test
-    @Ignore
-    public void inStatement() {
-        test(new Scriptable() {
-
-            public int act(int value) {
-                if (value == 0) {
-                    throw new Error();
-                } else {
-                    return value;
+                try {
+                    throw new Error("test");
+                } catch (Error e) {
+                    return e.getMessage();
                 }
             }
         });

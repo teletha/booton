@@ -508,11 +508,11 @@ class Node {
 
                     if (current.exception == null) {
                         // finally block
-                        buffer.write(variable, "=", "$;");
+                        buffer.write(variable, "=", "$;").line();
                         current.node.write(buffer);
                     } else {
                         buffer.write("if", "($ instanceof " + Javascript.computeClassName(current.exception) + ")", "{");
-                        buffer.write(variable, "=", "$;");
+                        buffer.write(variable, "=", "$;").line();
                         current.node.write(buffer);
                         buffer.write("}", "else");
 
