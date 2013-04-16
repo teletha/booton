@@ -23,7 +23,7 @@ import booton.translator.JavaAPIProvider;
 class JSInteger extends JSNumber {
 
     /** The primitive int class. */
-    public static final Class TYPE = JSInteger.class;
+    public static final Class TYPE = Primitive.class;
 
     /**
      * @param value
@@ -245,4 +245,12 @@ class JSInteger extends JSNumber {
     public static String toString(int value, int radix) {
         return new NativeNumber(value).toString(radix);
     }
+
+    /**
+     * @version 2013/04/16 22:57:09
+     */
+    @JavaAPIProvider(int.class)
+    private static class Primitive {
+    }
+
 }
