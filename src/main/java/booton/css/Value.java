@@ -1,0 +1,177 @@
+/*
+ * Copyright (C) 2012 Nameless Production Committee
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *          http://opensource.org/licenses/mit-license.php
+ */
+package booton.css;
+
+/**
+ * @version 2012/12/13 15:12:37
+ */
+public class Value {
+
+    /** The zero value. */
+    public static final Value Zero = new Value(0, Unit.px);
+
+    /** The size. */
+    public final double size;
+
+    /** The unit. */
+    public final Unit unit;
+
+    /**
+     * Zero size.
+     */
+    public Value() {
+        this.size = 0;
+        this.unit = Unit.px;
+    }
+
+    /**
+     * @param size
+     * @param unit
+     */
+    public Value(double size, Unit unit) {
+        this.size = size;
+        this.unit = unit;
+    }
+
+    /**
+     * <p>
+     * Addition.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Value add(double value) {
+        return new Value(size + value, unit);
+    }
+
+    /**
+     * <p>
+     * Addition.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Value add(Value value) {
+        return new Value(size + value.size, unit);
+    }
+
+    /**
+     * <p>
+     * Subtraction.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Value subtract(double value) {
+        return new Value(size - value, unit);
+    }
+
+    /**
+     * <p>
+     * Subtraction.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Value subtract(Value value) {
+        return new Value(size - value.size, unit);
+    }
+
+    /**
+     * <p>
+     * Multiply.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Value multiply(double value) {
+        return new Value(size * value, unit);
+    }
+
+    /**
+     * <p>
+     * Multiply.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Value multiply(Value value) {
+        return new Value(size * value.size, unit);
+    }
+
+    /**
+     * <p>
+     * Division.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Value divide(double value) {
+        return new Value(size / value, unit);
+    }
+
+    /**
+     * <p>
+     * Division.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public Value divide(Value value) {
+        return new Value(size / value.size, unit);
+    }
+
+    /**
+     * <p>
+     * </p>
+     * 
+     * @return
+     */
+    public Value opposite() {
+        return new Value(size * -1, unit);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        int i = (int) size;
+
+        if (size == 0) {
+            return "0";
+        } else if (i == size) {
+            return String.valueOf(i).concat(unit.toString());
+        } else {
+            return String.valueOf(size).concat(unit.toString());
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Value) {
+            Value other = (Value) obj;
+
+            return size == other.size && unit == other.unit;
+        }
+        return false;
+    }
+}
