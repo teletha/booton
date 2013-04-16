@@ -13,7 +13,7 @@ import booton.translator.JavaAPIProvider;
 
 /**
  * <p>
- * {@link ClasIntegers} representation in Javascript runtime. This class doesn't provide all
+ * {@link Integer} representation in Javascript runtime. This class doesn't provide all
  * functionalities.
  * </p>
  * 

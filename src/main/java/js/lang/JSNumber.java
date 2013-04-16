@@ -10,12 +10,13 @@
 package js.lang;
 
 import booton.translator.JavaAPIProvider;
+import booton.translator.JavascriptNativeNumberPrimitive;
 
 /**
  * @version 2013/04/13 18:56:37
  */
 @JavaAPIProvider(Number.class)
-abstract class JSNumber {
+abstract class JSNumber implements JavascriptNativeNumberPrimitive {
 
     /** The actual value. */
     protected final NativeNumber value;
@@ -116,5 +117,13 @@ abstract class JSNumber {
     @Override
     public String toString() {
         return value.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public NativeNumber valueOf() {
+        return value;
     }
 }
