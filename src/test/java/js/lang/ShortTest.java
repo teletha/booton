@@ -15,17 +15,17 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/04/14 0:03:00
+ * @version 2013/04/17 3:16:19
  */
 @SuppressWarnings("unused")
-public class IntegerTest extends ScriptTester {
+public class ShortTest extends ScriptTester {
 
     @Test
     public void parse() throws Exception {
         test(new Scriptable() {
 
-            int act() {
-                return Integer.parseInt("1");
+            short act() {
+                return Short.parseShort("1");
             }
         });
     }
@@ -34,8 +34,8 @@ public class IntegerTest extends ScriptTester {
     public void parseNegative() throws Exception {
         test(new Scriptable() {
 
-            int act() {
-                return Integer.parseInt("-1");
+            short act() {
+                return Short.parseShort("-1");
             }
         });
     }
@@ -44,9 +44,9 @@ public class IntegerTest extends ScriptTester {
     public void parseNaN() throws Exception {
         test(new Scriptable() {
 
-            int act() {
+            short act() {
                 try {
-                    return Integer.parseInt("Number");
+                    return Short.parseShort("Number");
                 } catch (NumberFormatException e) {
                     return 10;
                 }
@@ -58,9 +58,9 @@ public class IntegerTest extends ScriptTester {
     public void empty() throws Exception {
         test(new Scriptable() {
 
-            int act() {
+            short act() {
                 try {
-                    return Integer.parseInt("");
+                    return Short.parseShort("");
                 } catch (NumberFormatException e) {
                     return 10;
                 }
@@ -72,9 +72,9 @@ public class IntegerTest extends ScriptTester {
     public void Null() throws Exception {
         test(new Scriptable() {
 
-            int act() {
+            short act() {
                 try {
-                    return Integer.parseInt(null);
+                    return Short.parseShort(null);
                 } catch (NumberFormatException e) {
                     return 10;
                 }

@@ -118,6 +118,30 @@ class StringCoder extends Translator<String> {
     }
 
     /**
+     * Compares this {@code String} to another {@code String}, ignoring case considerations. Two
+     * strings are considered equal ignoring case if they are of the same length and corresponding
+     * characters in the two strings are equal ignoring case.
+     * <p>
+     * Two characters {@code c1} and {@code c2} are considered the same ignoring case if at least
+     * one of the following is true:
+     * <ul>
+     * <li>The two characters are the same (as compared by the {@code ==} operator)
+     * <li>Applying the method {@link java.lang.Character#toUpperCase(char)} to each character
+     * produces the same result
+     * <li>Applying the method {@link java.lang.Character#toLowerCase(char)} to each character
+     * produces the same result
+     * </ul>
+     * 
+     * @param anotherString The {@code String} to compare this {@code String} against
+     * @return {@code true} if the argument is not {@code null} and it represents an equivalent
+     *         {@code String} ignoring case; {@code false} otherwise
+     * @see #equals(Object)
+     */
+    public String equalsIgnoreCase(String anotherString) {
+        return that + ".toLowerCase().equals(" + param(0) + ".toLowerCase())";
+    }
+
+    /**
      * <p>
      * Converts this string to a new character array.
      * </p>

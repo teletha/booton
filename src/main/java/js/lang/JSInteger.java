@@ -123,7 +123,7 @@ class JSInteger extends JSNumber {
      * @exception NumberFormatException if the string cannot be parsed as an integer.
      */
     public static Integer valueOf(String value) throws NumberFormatException {
-        return valueOf(parseInt(value, 10));
+        return valueOf(parseInt(value));
     }
 
     /**
@@ -252,5 +252,4 @@ class JSInteger extends JSNumber {
     @JavaAPIProvider(int.class)
     private static class Primitive {
     }
-
 }
