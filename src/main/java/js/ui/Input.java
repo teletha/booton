@@ -71,15 +71,24 @@ public class Input<T> extends FormUI {
     @SuppressWarnings("unused")
     private Input(Class type, Object model, String name) {
         this.type = type;
-        this.model = new Property((NativeObject) model, name);
         this.validators = new ArrayList();
+        this.model = new Property((NativeObject) model, name);
 
         add(builtins.get(type));
 
+        // create UI
         form.attr("type", "input").add(InputForm.class);
         form.bind(this);
+
+        // initial binding
+        this.model.change(model, name, null, this.model.get());
     }
 
+    /**
+     * <p>
+     * Validate the input value by user or API.
+     * </p>
+     */
     @Listen(UIAction.KeyUp)
     private void validateInput() {
         String input = form.val();
@@ -99,6 +108,7 @@ public class Input<T> extends FormUI {
                 validator.validate(value);
             }
             model.set(value);
+
             form.remove(InvalidInputForm.class);
         } catch (Invalid e) {
             form.add(InvalidInputForm.class);
@@ -115,36 +125,9 @@ public class Input<T> extends FormUI {
     public void add(Validator<T> validator) {
         if (validator != null) {
             validators.add(validator);
+
+            validateInput();
         }
-    }
-
-    /**
-     * <p>
-     * Decode value.
-     * </p>
-     * 
-     * @param text
-     * @return
-     */
-    private T decode(String text) {
-
-        return (T) text;
-    }
-
-    /**
-     * <p>
-     * Encode value.
-     * </p>
-     * 
-     * @param value
-     * @return
-     */
-    protected String encode(T value) {
-        return value.toString();
-    }
-
-    protected boolean validate() {
-        return true;
     }
 
     /**
@@ -191,9 +174,6 @@ public class Input<T> extends FormUI {
                 model.setProperty("$$" + name, listeners);
             }
             listeners.add(this);
-
-            // initial binding
-            change(model, name, null, get());
         }
 
         /**
@@ -215,10 +195,6 @@ public class Input<T> extends FormUI {
 
                     // restore old value
                     S old = get();
-
-                    if ("aa".equals(value)) {
-                        throw new Error("error desu");
-                    }
 
                     if (old != value) {
                         // store new value
@@ -243,6 +219,8 @@ public class Input<T> extends FormUI {
         @Override
         public void change(Object object, String propertyName, S oldValue, S newValue) {
             form.val(newValue);
+
+            validateInput();
         }
     }
 }

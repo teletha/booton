@@ -16,10 +16,12 @@ import js.ui.Input;
 import js.ui.Listen;
 import js.ui.Select;
 import js.ui.UIAction;
+import js.ui.UIEvent;
 import js.ui.model.SelectableModel;
 import js.ui.validator.Invalid;
 import js.ui.validator.Validator;
 import js.util.jQuery;
+import js.util.jQuery.Listener;
 
 /**
  * @version 2013/04/02 15:53:46
@@ -68,7 +70,14 @@ public class FormCatalogPage extends Page {
                 }
             }
         });
-        root.child(new Input(model.name));
+        root.child(new Input(model.name)).root.click(new Listener() {
+
+            @Override
+            public void handler(UIEvent event) {
+                model.type = model.type + 1;
+            }
+        });
+
     }
 
     @Listen(UIAction.Blur)
