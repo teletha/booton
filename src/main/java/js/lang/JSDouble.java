@@ -23,7 +23,7 @@ import booton.translator.JavaAPIProvider;
 class JSDouble extends JSNumber {
 
     /** The primitive double class. */
-    public static final Class TYPE = JSDouble.class;
+    public static final Class TYPE = Primitive.class;
 
     /**
      * @param value
@@ -177,4 +177,10 @@ class JSDouble extends JSNumber {
         return (Double) (Object) new JSDouble(value);
     }
 
+    /**
+     * @version 2013/04/16 23:01:24
+     */
+    @JavaAPIProvider(double.class)
+    private static class Primitive {
+    }
 }
