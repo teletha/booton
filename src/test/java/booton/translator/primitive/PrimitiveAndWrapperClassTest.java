@@ -205,4 +205,35 @@ public class PrimitiveAndWrapperClassTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void BooleanPrimitive() throws Exception {
+        test(new Scriptable() {
+
+            Class act() {
+                return boolean.class;
+            }
+        });
+    }
+
+    @Test
+    public void BooleanWrapper() throws Exception {
+        test(new Scriptable() {
+
+            Class act() {
+                return Boolean.class;
+            }
+        });
+    }
+
+    @Test
+    public void BooleanPrimitiveAndWrapper() throws Exception {
+        test(new Scriptable() {
+
+            boolean act() {
+                assert Boolean.class != boolean.class;
+                return Boolean.class == boolean.class;
+            }
+        });
+    }
 }
