@@ -10,7 +10,7 @@
 package booton.translator;
 
 /**
- * @version 2013/01/19 9:33:04
+ * @version 2013/04/16 14:48:03
  */
 public interface JavascriptNative {
 }
