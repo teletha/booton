@@ -52,6 +52,68 @@ public class PrimitiveAndWrapperClassTest extends ScriptTester {
     }
 
     @Test
+    public void LongPrimitive() throws Exception {
+        test(new Scriptable() {
+
+            Class act() {
+                return long.class;
+            }
+        });
+    }
+
+    @Test
+    public void LongWrapper() throws Exception {
+        test(new Scriptable() {
+
+            Class act() {
+                return Long.class;
+            }
+        });
+    }
+
+    @Test
+    public void LongPrimitiveAndWrapper() throws Exception {
+        test(new Scriptable() {
+
+            boolean act() {
+                assert Long.class != long.class;
+                return Long.class == long.class;
+            }
+        });
+    }
+
+    @Test
+    public void FloatPrimitive() throws Exception {
+        test(new Scriptable() {
+
+            Class act() {
+                return float.class;
+            }
+        });
+    }
+
+    @Test
+    public void FloatWrapper() throws Exception {
+        test(new Scriptable() {
+
+            Class act() {
+                return Float.class;
+            }
+        });
+    }
+
+    @Test
+    public void FloatPrimitiveAndWrapper() throws Exception {
+        test(new Scriptable() {
+
+            boolean act() {
+                assert Float.class != float.class;
+                return Float.class == float.class;
+            }
+        });
+    }
+
+    @Test
     public void DoublePrimitive() throws Exception {
         test(new Scriptable() {
 
@@ -78,6 +140,68 @@ public class PrimitiveAndWrapperClassTest extends ScriptTester {
             boolean act() {
                 assert Double.class != double.class;
                 return Double.class == double.class;
+            }
+        });
+    }
+
+    @Test
+    public void ShortPrimitive() throws Exception {
+        test(new Scriptable() {
+
+            Class act() {
+                return short.class;
+            }
+        });
+    }
+
+    @Test
+    public void ShortWrapper() throws Exception {
+        test(new Scriptable() {
+
+            Class act() {
+                return Short.class;
+            }
+        });
+    }
+
+    @Test
+    public void ShortPrimitiveAndWrapper() throws Exception {
+        test(new Scriptable() {
+
+            boolean act() {
+                assert Short.class != short.class;
+                return Short.class == short.class;
+            }
+        });
+    }
+
+    @Test
+    public void BytePrimitive() throws Exception {
+        test(new Scriptable() {
+
+            Class act() {
+                return byte.class;
+            }
+        });
+    }
+
+    @Test
+    public void ByteWrapper() throws Exception {
+        test(new Scriptable() {
+
+            Class act() {
+                return Byte.class;
+            }
+        });
+    }
+
+    @Test
+    public void BytePrimitiveAndWrapper() throws Exception {
+        test(new Scriptable() {
+
+            boolean act() {
+                assert Byte.class != byte.class;
+                return Byte.class == byte.class;
             }
         });
     }
