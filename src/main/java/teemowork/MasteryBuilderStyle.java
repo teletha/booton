@@ -207,7 +207,7 @@ class MasteryBuilderStyle {
             padding.size(10, px);
             visibility.hidden();
             font.color(hsl(0, 99, 97)).size.smaller();
-            transition.property.all().duration(0.2, s).timing.easeInOut().delay(0.15, s);
+            transition.property.all().duration(0.15, s).timing.easeInOut().delay(0.2, s);
             pointerEvents.none();
 
             Snippet.createBottomBubble(6);

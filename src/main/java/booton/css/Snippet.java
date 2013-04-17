@@ -79,6 +79,10 @@ public class Snippet {
 
         Color color = css.border.color();
 
+        if (color == null) {
+            color = Color.Black;
+        }
+
         while (css.before()) {
             css.font.color(color.lighten(-40)).family(Icons);
             css.content.text(icon.code);

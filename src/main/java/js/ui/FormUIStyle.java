@@ -50,6 +50,52 @@ class FormUIStyle {
         {
             display.inlineBlock();
             position.relative();
+
+            writeBorder();
+        }
+
+        /**
+         * <p>
+         * Helper method to write border.
+         * </p>
+         */
+        protected final void writeBorder() {
+            transition.property.all().duration(0.2, s).timing.linear();
+            border.width(BorderWidth).solid().color(BorderColor);
+            box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow);
+
+            while (firstChild()) {
+                borderLeft.radius(BorderRadius);
+            }
+
+            while (lastChild()) {
+                borderRight.radius(BorderRadius);
+            }
+
+            while (onlyChild()) {
+                border.radius(BorderRadius);
+            }
+
+            while (hover()) {
+                box.shadowInset(0, px, 0, px, 6, px, BorderInsetShadow);
+            }
+
+            while (with(Focus.class)) {
+                border.color(BorderFocusColor);
+                box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow)
+                        .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
+            }
+            
+            while (insideOf(FormComponent.class)) {
+                border.none();
+            }
+        }
+    }
+
+    class Focus extends CSS {
+
+        {
+
         }
     }
 
@@ -82,30 +128,31 @@ class FormUIStyle {
          * </p>
          */
         protected final void writeBorder() {
-            border.width(BorderWidth).solid().color(BorderColor);
-            box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow);
-
-            while (firstChild()) {
-                borderLeft.radius(BorderRadius);
-            }
-
-            while (lastChild()) {
-                borderRight.radius(BorderRadius);
-            }
-
-            while (onlyChild()) {
-                border.radius(BorderRadius);
-            }
-
-            while (hover()) {
-                box.shadowInset(0, px, 0, px, 6, px, BorderInsetShadow);
-            }
-
-            while (focus()) {
-                border.color(BorderFocusColor);
-                box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow)
-                        .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
-            }
+            border.none();
+            // border.width(BorderWidth).solid().color(BorderColor);
+            // box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow);
+            //
+            // while (firstChild()) {
+            // borderLeft.radius(BorderRadius);
+            // }
+            //
+            // while (lastChild()) {
+            // borderRight.radius(BorderRadius);
+            // }
+            //
+            // while (onlyChild()) {
+            // border.radius(BorderRadius);
+            // }
+            //
+            // while (hover()) {
+            // box.shadowInset(0, px, 0, px, 6, px, BorderInsetShadow);
+            // }
+            //
+            // while (focus()) {
+            // border.color(BorderFocusColor);
+            // box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow)
+            // .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
+            // }
         }
 
         /**
@@ -118,6 +165,41 @@ class FormUIStyle {
         protected final void writeBorder(Color color) {
             border.color(color);
             box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow).shadow(0, px, 0, px, 8, px, color.opacify(-0.2));
+        }
+    }
+
+    /**
+     * @version 2013/04/17 16:29:48
+     */
+    class ButtonForm extends BaseForm {
+
+        {
+            createButton();
+        }
+
+        private void createButton() {
+            Color front = new Color(0, 0, 33);
+            Color back = new Color(0, 0, 87);
+
+            // writeBorder();
+            cursor.pointer();
+            padding.horizontal(15, px);
+            font.weight.bolder();
+            background.color(back).image(linear(Color.White, Color.White.opacify(-1)));
+            text.decoration.none().shadow(0, px, 1, px, Color.White.opacify(-0.1)).unselectable();
+
+            transition.property("background-color").timing.easeOut().duration(0.2, s);
+
+            while (hover()) {
+                background.color(back.lighten(6));
+            }
+
+            while (active()) {
+                border.color(BorderColor.lighten(-20));
+                background.color(back.lighten(4)).imageNone();
+                box.shadowInset(0, px, 2, px, 4, px, Color.Black.opacify(-0.85))
+                        .shadow(0, px, 1, px, 2, px, Color.Black.opacify(-0.95));
+            }
         }
     }
 
@@ -135,6 +217,19 @@ class FormUIStyle {
             while (focus()) {
                 writeBorder(BorderFocusColor.adjustHue(-180));
                 box.shadow(0, px, 0, px, 8, px, BorderFocusColor.adjustHue(-180).opacify(-0.2));
+            }
+        }
+    }
+
+    class Disable extends CSS {
+
+        {
+            while (after()) {
+                display.block();
+                box.size(100, percent);
+                background.color(Color.Transparent);
+                content.text(" ");
+                position.absolute().top(0, px).left(0, px);
             }
         }
     }

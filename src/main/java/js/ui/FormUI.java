@@ -9,16 +9,33 @@
  */
 package js.ui;
 
+import js.ui.FormUIStyle.Disable;
 import js.ui.FormUIStyle.FormComponent;
 import js.util.jQuery;
+import js.util.jQuery.Listener;
 
 /**
  * @version 2013/03/31 17:40:08
  */
 public class FormUI<T extends FormUI> extends UI {
 
+    /** The event types. */
+    private static final String Events = "click contextmenu dbclick mouseover mouseout mouseon";
+
+    /** The event disabler. */
+    private static final Listener Disabler = new Listener() {
+
+        @Override
+        public void handler(UIEvent event) {
+            event.stopImmediatePropagation();
+        }
+    };
+
     /** The actual form element. */
     public final jQuery form;
+
+    /** The enable flag. */
+    private boolean enable = true;
 
     /**
      * 
@@ -32,7 +49,6 @@ public class FormUI<T extends FormUI> extends UI {
      */
     public FormUI(String elementName) {
         root.add(FormComponent.class);
-
         form = root.child(elementName);
     }
 
@@ -44,7 +60,10 @@ public class FormUI<T extends FormUI> extends UI {
      * @return
      */
     public T disable() {
-        form.attr("disabled", "");
+        enable = false;
+        root.add(Disable.class);
+        root.on(Events, Disabler);
+        form.attr("disabled", "true");
 
         return (T) this;
     }
@@ -57,6 +76,9 @@ public class FormUI<T extends FormUI> extends UI {
      * @return
      */
     public T enable() {
+        enable = true;
+        root.remove(Disable.class);
+        root.off(Events, Disabler);
         form.removeAttr("disabled");
 
         return (T) this;
@@ -68,6 +90,5 @@ public class FormUI<T extends FormUI> extends UI {
      * </p>
      */
     public void focus() {
-
     }
 }

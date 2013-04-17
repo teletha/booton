@@ -17,29 +17,7 @@ function boot(global) {
     });
   }
 
-  //====================================================================
-  // Number Extensions
-  //====================================================================
-  define(Number.prototype, {
-    /**
-     * <p>
-     * Returns the runtime class of this Object. The returned Class object is the object
-     * that is locked by static synchronized methods of the represented class. 
-     * </p>
-     *
-     * @return Number class.
-     */
-    $: Number,
-    
-    /**
-     * Retrieve the object identifier.
-     *
-     * @return An identifier.
-     */
-    hashCode: function() {
-      return this;
-    }
-  });
+
   
   
   //====================================================================

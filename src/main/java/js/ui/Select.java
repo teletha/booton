@@ -10,17 +10,18 @@
 package js.ui;
 
 import static js.lang.Global.*;
-import js.ui.SelectStyle.SelectArrow;
+import js.ui.FormUIStyle.Focus;
 import js.ui.SelectStyle.SelectForm;
 import js.ui.SelectStyle.SelectItem;
 import js.ui.SelectStyle.SelectItemList;
 import js.ui.SelectStyle.SelectedItem;
-import js.ui.model.SelectableModel;
 import js.ui.model.SelectableListener;
+import js.ui.model.SelectableModel;
 import js.ui.view.ScrollableListView;
 import js.ui.view.ScrollableListView.ItemRenderer;
 import js.ui.view.SlidableView;
 import js.util.jQuery;
+import js.util.jQuery.Listener;
 
 /**
  * @version 2013/04/08 23:38:34
@@ -38,6 +39,9 @@ public class Select<M> extends FormUI<Select> {
 
     /** The view-model binder. */
     private final Binder binder = new Binder();
+
+    /** The select button. */
+    private final Button arrow;
 
     /**
      * <p>
@@ -63,7 +67,15 @@ public class Select<M> extends FormUI<Select> {
         view = new ScrollableListView(10, 28).provide(binder);
         view.root.add(SelectItemList.class).bind(binder);
 
-        options = root.child(new SlidableView(view, root.child(SelectArrow.class)));
+        arrow = root.child(new Button("V", new Listener() {
+
+            @Override
+            public void handler(UIEvent event) {
+            }
+        }));
+        // arrow.root.add(SelectArrow.class);
+
+        options = root.child(new SlidableView(view, arrow.root));
         options.bind(binder);
     }
 
@@ -75,6 +87,16 @@ public class Select<M> extends FormUI<Select> {
     @Listen(UIAction.Key_Down)
     private void selectNext() {
         model.selectNext();
+    }
+
+    @Listen(UIAction.Focus)
+    private void startInput() {
+        root.add(Focus.class);
+    }
+
+    @Listen(UIAction.Blur)
+    private void endInput() {
+        root.remove(Focus.class);
     }
 
     /**
