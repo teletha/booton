@@ -29,11 +29,9 @@ class SelectStyle extends FormUIStyle {
     class SelectArrow extends BaseForm {
 
         {
-            writeBorder();
             borderLeft.none();
 
             Snippet.write(Icon.BottomArrow);
-            cursor.pointer();
 
         }
     }

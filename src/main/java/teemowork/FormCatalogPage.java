@@ -11,15 +11,10 @@ package teemowork;
 
 import js.application.Page;
 import js.application.PageInfo;
-import js.ui.Bindable;
 import js.ui.Input;
-import js.ui.Listen;
 import js.ui.Select;
-import js.ui.UIAction;
 import js.ui.UIEvent;
 import js.ui.model.SelectableModel;
-import js.ui.validator.Invalid;
-import js.ui.validator.Validator;
 import js.util.jQuery;
 import js.util.jQuery.Listener;
 
@@ -58,31 +53,14 @@ public class FormCatalogPage extends Page {
         Select<String> child = root.child(new Select(selectable));
         child.model.setSelectionIndex(180);
 
-        root.child(new Input<Integer>(model.type)).add(new Validator<Integer>() {
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void validate(Integer model) throws Invalid {
-                if (model < 10) {
-                    throw new Invalid("Minimum is 10.");
-                }
-            }
-        });
+        root.child(new Input<Integer>(model.type));
         root.child(new Input(model.name)).root.click(new Listener() {
 
             @Override
             public void handler(UIEvent event) {
-                model.type = model.type + 1;
+                model.type = model.type - 1;
             }
         });
-
-    }
-
-    @Listen(UIAction.Blur)
-    private void confirm() {
-        System.out.println("current value is " + model.name + "  " + model.type);
     }
 
     /**
@@ -90,10 +68,8 @@ public class FormCatalogPage extends Page {
      */
     private static class SomeModel {
 
-        @Bindable
-        public String name = "base";
+        public String name;
 
-        @Bindable
-        public int type = 1;
+        public int type;
     }
 }

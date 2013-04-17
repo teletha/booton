@@ -15,10 +15,11 @@ import js.application.Page;
 import js.application.PageInfo;
 import js.bind.Subscriber;
 import js.dom.Image;
+import js.ui.Button;
 import js.ui.Select;
 import js.ui.UIEvent;
-import js.ui.model.SelectableModel;
 import js.ui.model.SelectableListener;
+import js.ui.model.SelectableModel;
 import js.util.jQuery;
 import js.util.jQuery.Listener;
 import teemowork.MasteryBuilderStyle.Completed;
@@ -34,7 +35,6 @@ import teemowork.MasteryBuilderStyle.MasteryPane;
 import teemowork.MasteryBuilderStyle.Offense;
 import teemowork.MasteryBuilderStyle.PopupPane;
 import teemowork.MasteryBuilderStyle.RankPane;
-import teemowork.MasteryBuilderStyle.ResetButton;
 import teemowork.MasteryBuilderStyle.SumPoint;
 import teemowork.MasteryBuilderStyle.Unavailable;
 import teemowork.MasteryBuilderStyle.Utility;
@@ -81,10 +81,10 @@ public class MasteryBuilder extends Page implements Subscriber {
     private jQuery utility;
 
     /** The reset button. */
-    private jQuery reset;
+    private Button reset;
 
     /** The add button. */
-    private jQuery add;
+    private Button add;
 
     private jQuery name;
 
@@ -110,21 +110,21 @@ public class MasteryBuilder extends Page implements Subscriber {
         menu = infomation.child(new Select(set));
         menu.model.bind(new MasterySelector());
 
-        reset = infomation.child(ResetButton.class).click(new Listener() {
+        reset = infomation.child(new Button("30", new Listener() {
 
             @Override
             public void handler(UIEvent event) {
                 masterySet.reset();
             }
-        });
+        }));
 
-        add = infomation.child(ResetButton.class).text("ADD").click(new Listener() {
+        add = infomation.child(new Button("ADD", new Listener() {
 
             @Override
             public void handler(UIEvent event) {
                 menu.model.add(new MasterySet(masterySet.getCode()));
             }
-        });
+        }));
 
         offense = build(root.child(Offense.class), OFFENSE);
         defense = build(root.child(Defense.class), DEFEMSE);
@@ -163,7 +163,7 @@ public class MasteryBuilder extends Page implements Subscriber {
      */
     @Override
     public void receive() {
-        reset.text(30 - masterySet.getSum());
+        reset.label(String.valueOf(30 - masterySet.getSum()));
 
         offense.text("OFFENSE　" + masterySet.getSum(Mastery.Offense));
         defense.text("DEFENSE　" + masterySet.getSum(Mastery.Defense));
