@@ -50,6 +50,7 @@ class FormUIStyle {
         {
             display.inlineBlock();
             position.relative();
+            box.sizing.contentBox();
 
             writeBorder();
         }
@@ -85,9 +86,10 @@ class FormUIStyle {
                 box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow)
                         .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
             }
-            
+
             while (insideOf(FormComponent.class)) {
                 border.none();
+                borderLeft.solid();
             }
         }
     }
@@ -128,7 +130,7 @@ class FormUIStyle {
          * </p>
          */
         protected final void writeBorder() {
-            border.none();
+            border.none().radius(BorderRadius);
             // border.width(BorderWidth).solid().color(BorderColor);
             // box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow);
             //
