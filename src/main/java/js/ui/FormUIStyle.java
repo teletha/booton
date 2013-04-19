@@ -13,11 +13,14 @@ import static booton.css.Unit.*;
 import js.util.Color;
 import booton.css.CSS;
 import booton.css.Value;
+import booton.util.Font;
 
 /**
  * @version 2013/03/28 1:34:10
  */
 class FormUIStyle {
+
+    Font Icons = new Font("icon.css");
 
     // ===========================================
     // Border Related Style
@@ -50,9 +53,14 @@ class FormUIStyle {
         {
             display.inlineBlock();
             position.relative();
-            box.sizing.contentBox();
+            font.size(FontSize);
 
-            writeBorder();
+            transition.property.all().duration(0.2, s).timing.linear();
+
+            while (with(Focus.class)) {
+                box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow)
+                        .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
+            }
         }
 
         /**
@@ -62,19 +70,11 @@ class FormUIStyle {
          */
         protected final void writeBorder() {
             transition.property.all().duration(0.2, s).timing.linear();
-            border.width(BorderWidth).solid().color(BorderColor);
+            border.width(BorderWidth).solid().color(BorderColor).radius(BorderRadius);
             box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow);
 
             while (firstChild()) {
-                borderLeft.radius(BorderRadius);
-            }
 
-            while (lastChild()) {
-                borderRight.radius(BorderRadius);
-            }
-
-            while (onlyChild()) {
-                border.radius(BorderRadius);
             }
 
             while (hover()) {
@@ -88,7 +88,7 @@ class FormUIStyle {
             }
 
             while (insideOf(FormComponent.class)) {
-                border.none();
+                border.none().radius(0, px);
                 borderLeft.solid();
             }
         }
@@ -118,10 +118,14 @@ class FormUIStyle {
 
             // Customizable properties.
             display.inlineBlock();
-            font.size(FontSize);
             padding.vertical(FormVerticalPadding).horizontal(FormHorizontalPadding);
 
-            transition.property.all().duration(0.2, s).timing.linear();
+            // border color
+            border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
+
+            while (insideOf(Focus.class)) {
+                border.color(BorderFocusColor);
+            }
         }
 
         /**
@@ -129,31 +133,24 @@ class FormUIStyle {
          * Helper method to write border.
          * </p>
          */
-        protected final void writeBorder() {
-            border.none().radius(BorderRadius);
-            // border.width(BorderWidth).solid().color(BorderColor);
+        protected final void eraseBorder() {
+            // transition.property.all().duration(0.2, s).timing.linear();
+            // border.width(BorderWidth).solid().color(BorderColor).radius(BorderRadius);
             // box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow);
-            //
-            // while (firstChild()) {
-            // borderLeft.radius(BorderRadius);
-            // }
-            //
-            // while (lastChild()) {
-            // borderRight.radius(BorderRadius);
-            // }
-            //
-            // while (onlyChild()) {
-            // border.radius(BorderRadius);
-            // }
             //
             // while (hover()) {
             // box.shadowInset(0, px, 0, px, 6, px, BorderInsetShadow);
             // }
             //
-            // while (focus()) {
+            // while (with(Focus.class)) {
             // border.color(BorderFocusColor);
             // box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow)
             // .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
+            // }
+            //
+            // while (insideOf(FormComponent.class)) {
+            // border.none().radius(0, px);
+            // borderLeft.solid();
             // }
         }
 
@@ -187,28 +184,28 @@ class FormUIStyle {
             cursor.pointer();
             padding.horizontal(15, px);
             font.weight.bolder();
-            background.color(back).image(linear(Color.White, Color.White.opacify(-1)));
+            // background.color(back).image(linear(Color.White, Color.White.opacify(-1)));
             text.decoration.none().shadow(0, px, 1, px, Color.White.opacify(-0.1)).unselectable();
 
-            transition.property("background-color").timing.easeOut().duration(0.2, s);
+            // transition.property("background-color").timing.easeOut().duration(0.2, s);
 
-            while (hover()) {
-                background.color(back.lighten(6));
-            }
-
-            while (active()) {
-                border.color(BorderColor.lighten(-20));
-                background.color(back.lighten(4)).imageNone();
-                box.shadowInset(0, px, 2, px, 4, px, Color.Black.opacify(-0.85))
-                        .shadow(0, px, 1, px, 2, px, Color.Black.opacify(-0.95));
-            }
+            // while (hover()) {
+            // background.color(back.lighten(6));
+            // }
+            //
+            // while (active()) {
+            // border.color(BorderColor.lighten(-20));
+            // background.color(back.lighten(4)).imageNone();
+            // box.shadowInset(0, px, 2, px, 4, px, Color.Black.opacify(-0.85))
+            // .shadow(0, px, 1, px, 2, px, Color.Black.opacify(-0.95));
+            // }
         }
     }
 
     class InputForm extends BaseForm {
 
         {
-            writeBorder();
+            eraseBorder();
         }
     }
 
@@ -233,6 +230,49 @@ class FormUIStyle {
                 content.text(" ");
                 position.absolute().top(0, px).left(0, px);
             }
+        }
+    }
+
+    class Icons extends CSS {
+
+        {
+            font.color(BorderColor.lighten(-20)).family(Icons);
+            padding.size(10, px);
+
+            while (hover()) {
+                font.color(BorderColor.lighten(-40));
+            }
+        }
+    }
+
+    class BorderedUI extends CSS {
+
+        {
+
+        }
+    }
+
+    class FirstBorderedUI extends CSS {
+
+        {
+            borderRight.none();
+            borderLeft.radius(BorderRadius);
+        }
+    }
+
+    class LastBorderedUI extends CSS {
+
+        {
+            borderLeft.none();
+            borderRight.radius(BorderRadius);
+        }
+    }
+
+    class MiddleBorderedUI extends CSS {
+
+        {
+            borderRight.none().radius(0, px);
+            borderLeft.none().radius(0, px);
         }
     }
 }

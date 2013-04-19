@@ -10,7 +10,10 @@
 package js.ui;
 
 import static js.lang.Global.*;
+import js.ui.FormUIStyle.BorderedUI;
+import js.ui.FormUIStyle.FirstBorderedUI;
 import js.ui.FormUIStyle.Focus;
+import js.ui.FormUIStyle.LastBorderedUI;
 import js.ui.SelectStyle.SelectForm;
 import js.ui.SelectStyle.SelectItem;
 import js.ui.SelectStyle.SelectItemList;
@@ -61,21 +64,24 @@ public class Select<M> extends FormUI<Select> {
         model = selectable;
         model.bind(binder);
 
-        form.add(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
+        form.add(SelectForm.class, BorderedUI.class, FirstBorderedUI.class)
+                .attr("type", "input")
+                .attr("placeholder", "Mastery Set Name");
         form.bind(this);
 
         view = new ScrollableListView(10, 28).provide(binder);
         view.root.add(SelectItemList.class).bind(binder);
 
-        arrow = root.child(new Button("V", new Listener() {
+        arrow = root.child(new Button(Icon.BottomArrow, new Listener() {
 
             @Override
             public void handler(UIEvent event) {
+                options.toggle();
             }
         }));
-        // arrow.root.add(SelectArrow.class);
+        arrow.form.add(BorderedUI.class, LastBorderedUI.class);
 
-        options = root.child(new SlidableView(view, arrow.root));
+        options = root.child(new SlidableView(view));
         options.bind(binder);
     }
 
