@@ -14,6 +14,8 @@ import java.util.Map;
 
 import js.lang.NativeObject;
 import js.lang.NativeObject.PropertyDescriptor;
+import js.ui.FormUIStyle.BorderedUI;
+import js.ui.FormUIStyle.Focus;
 import js.ui.FormUIStyle.InputForm;
 import js.ui.FormUIStyle.InvalidInputForm;
 import js.ui.validator.IntegerValidator;
@@ -77,12 +79,14 @@ public class Input<T> extends FormUI {
         add(builtins.get(type));
 
         // create UI
-        form.attr("type", "input").add(InputForm.class);
+        form.attr("type", "input").add(InputForm.class, BorderedUI.class);
         form.bind(this);
 
         // initial binding
         this.model.change(model, name, null, this.model.get());
     }
+
+
 
     /**
      * <p>

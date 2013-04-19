@@ -9,6 +9,7 @@
  */
 package js.ui;
 
+import js.ui.FormUIStyle.BorderedUI;
 import js.ui.FormUIStyle.ButtonForm;
 import js.ui.FormUIStyle.Icons;
 import js.util.jQuery.Listener;
@@ -27,7 +28,7 @@ public class Button extends FormUI<Button> {
     public Button(String label, Listener action) {
         super("span");
 
-        form.add(ButtonForm.class).text(label).click(action);
+        form.add(ButtonForm.class, BorderedUI.class).text(label).click(action);
 
         this.label = label;
     }

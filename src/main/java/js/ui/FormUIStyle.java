@@ -120,38 +120,9 @@ class FormUIStyle {
             display.inlineBlock();
             padding.vertical(FormVerticalPadding).horizontal(FormHorizontalPadding);
 
-            // border color
-            border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
-
             while (insideOf(Focus.class)) {
                 border.color(BorderFocusColor);
             }
-        }
-
-        /**
-         * <p>
-         * Helper method to write border.
-         * </p>
-         */
-        protected final void eraseBorder() {
-            // transition.property.all().duration(0.2, s).timing.linear();
-            // border.width(BorderWidth).solid().color(BorderColor).radius(BorderRadius);
-            // box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow);
-            //
-            // while (hover()) {
-            // box.shadowInset(0, px, 0, px, 6, px, BorderInsetShadow);
-            // }
-            //
-            // while (with(Focus.class)) {
-            // border.color(BorderFocusColor);
-            // box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow)
-            // .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
-            // }
-            //
-            // while (insideOf(FormComponent.class)) {
-            // border.none().radius(0, px);
-            // borderLeft.solid();
-            // }
         }
 
         /**
@@ -184,28 +155,28 @@ class FormUIStyle {
             cursor.pointer();
             padding.horizontal(15, px);
             font.weight.bolder();
-            // background.color(back).image(linear(Color.White, Color.White.opacify(-1)));
+            background.color(back).image(linear(Color.White, Color.White.opacify(-1)));
             text.decoration.none().shadow(0, px, 1, px, Color.White.opacify(-0.1)).unselectable();
 
             // transition.property("background-color").timing.easeOut().duration(0.2, s);
 
-            // while (hover()) {
-            // background.color(back.lighten(6));
-            // }
-            //
-            // while (active()) {
-            // border.color(BorderColor.lighten(-20));
-            // background.color(back.lighten(4)).imageNone();
-            // box.shadowInset(0, px, 2, px, 4, px, Color.Black.opacify(-0.85))
-            // .shadow(0, px, 1, px, 2, px, Color.Black.opacify(-0.95));
-            // }
+            while (hover()) {
+                background.color(back.lighten(6));
+            }
+
+            while (active()) {
+                border.color(BorderColor.lighten(-20));
+                background.color(back.lighten(4)).imageNone();
+                box.shadowInset(0, px, 2, px, 4, px, Color.Black.opacify(-0.85))
+                        .shadow(0, px, 1, px, 2, px, Color.Black.opacify(-0.95));
+            }
         }
     }
 
     class InputForm extends BaseForm {
 
         {
-            eraseBorder();
+
         }
     }
 
@@ -237,7 +208,7 @@ class FormUIStyle {
 
         {
             font.color(BorderColor.lighten(-20)).family(Icons);
-            padding.size(10, px);
+            padding.size(8, px);
 
             while (hover()) {
                 font.color(BorderColor.lighten(-40));
@@ -248,6 +219,8 @@ class FormUIStyle {
     class BorderedUI extends CSS {
 
         {
+            // border color
+            border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
 
         }
     }

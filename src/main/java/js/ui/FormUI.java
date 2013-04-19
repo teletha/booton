@@ -10,6 +10,7 @@
 package js.ui;
 
 import js.ui.FormUIStyle.Disable;
+import js.ui.FormUIStyle.Focus;
 import js.ui.FormUIStyle.FormComponent;
 import js.util.jQuery;
 import js.util.jQuery.Listener;
@@ -49,6 +50,7 @@ public class FormUI<T extends FormUI> extends UI {
      */
     public FormUI(String elementName) {
         root.add(FormComponent.class);
+        root.bind(this);
         form = root.child(elementName);
     }
 
@@ -82,6 +84,16 @@ public class FormUI<T extends FormUI> extends UI {
         form.removeAttr("disabled");
 
         return (T) this;
+    }
+
+    @Listen(UIAction.Focus)
+    private void startInput() {
+        root.add(Focus.class);
+    }
+
+    @Listen(UIAction.Blur)
+    private void endInput() {
+        root.remove(Focus.class);
     }
 
     /**
