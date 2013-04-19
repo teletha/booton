@@ -11,6 +11,7 @@ package teemowork;
 
 import js.application.Page;
 import js.application.PageInfo;
+import js.ui.Button;
 import js.ui.Input;
 import js.ui.Select;
 import js.ui.UIEvent;
@@ -61,6 +62,13 @@ public class FormCatalogPage extends Page {
                 model.type = model.type - 1;
             }
         });
+        root.child(new Button("Add", new Listener() {
+
+            @Override
+            public void handler(UIEvent event) {
+                model.type++;
+            }
+        }));
     }
 
     /**
