@@ -19,10 +19,9 @@ import js.ui.UIAction;
 import js.ui.view.SlidableViewStyle.Shown;
 import js.ui.view.SlidableViewStyle.Slider;
 import js.ui.view.SlidableViewStyle.ViewableArea;
-import js.util.jQuery;
 
 /**
- * @version 2013/04/08 23:37:18
+ * @version 2013/04/19 12:54:30
  */
 public class SlidableView extends UI {
 
@@ -36,13 +35,9 @@ public class SlidableView extends UI {
      * 
      * @param content
      */
-    public SlidableView(UI content, jQuery... switchgears) {
+    public SlidableView(UI content) {
         root.add(ViewableArea.class);
         root.child(Slider.class).append(content);
-
-        for (jQuery switchgear : switchgears) {
-            switchgear.bind(this);
-        }
     }
 
     /**
@@ -52,6 +47,15 @@ public class SlidableView extends UI {
      */
     public void open() {
         if (shown++ == 0) {
+            // fit to parent box
+            String left = root.parent().css("border-left-width");
+            String right = root.parent().css("border-right-width");
+            String bottom = root.parent().css("border-bottom-width");
+
+            root.css("top", "calc(100% + " + bottom + ")")
+                    .css("left", "-" + left)
+                    .css("width", "calc(100% + " + right + " + " + left + ")");
+
             // show slide view
             root.add(Shown.class);
 

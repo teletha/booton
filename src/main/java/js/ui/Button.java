@@ -10,6 +10,7 @@
 package js.ui;
 
 import js.ui.FormUIStyle.ButtonForm;
+import js.ui.FormUIStyle.Icons;
 import js.util.jQuery.Listener;
 
 /**
@@ -29,6 +30,15 @@ public class Button extends FormUI<Button> {
         form.add(ButtonForm.class).text(label).click(action);
 
         this.label = label;
+    }
+
+    /**
+     * @param label
+     */
+    public Button(Icon icon, Listener action) {
+        this(icon.code, action);
+
+        form.add(Icons.class);
     }
 
     public void label(String label) {

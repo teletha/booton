@@ -12,7 +12,7 @@ package js.ui.view;
 import booton.css.CSS;
 
 /**
- * @version 2013/04/04 16:18:54
+ * @version 2013/04/19 12:54:41
  */
 class SlidableViewStyle {
 

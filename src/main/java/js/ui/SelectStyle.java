@@ -11,8 +11,6 @@ package js.ui;
 
 import js.util.Color;
 import booton.css.CSS;
-import booton.css.Snippet;
-import booton.css.Snippet.Icon;
 
 /**
  * @version 2013/04/06 0:04:01
@@ -22,40 +20,17 @@ class SelectStyle extends FormUIStyle {
     class SelectForm extends BaseForm {
 
         {
-            writeBorder();
-        }
-    }
-
-    class SelectArrow extends BaseForm {
-
-        {
-            borderLeft.none();
-
-            Snippet.write(Icon.BottomArrow);
-
+            eraseBorder();
         }
     }
 
     class SelectItemList extends CSS {
 
         {
-            // position.absolute().top(100, percent).left(0, px);
-            // transform.translateY(BorderWidth.opposite());
-            // box.maxHeight(SingleLineFormHeight.multiply(6)).width(100, percent).zIndex(1);
-            // font.size(FontSize);
-            // overflowY.scroll();
-            // // display.none();
             box.width(100, percent).maxHeight(SingleLineFormHeight.multiply(6));
 
             background.color(Color.White);
             border.solid().width(BorderWidth).color(BorderColor);
-        }
-    }
-
-    class SelectItemListShown extends CSS {
-
-        {
-
         }
     }
 
