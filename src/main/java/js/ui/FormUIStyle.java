@@ -64,8 +64,6 @@ class FormUIStyle {
                 box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow)
                         .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
             }
-
-            writeBorder();
         }
 
         /**
@@ -225,19 +223,18 @@ class FormUIStyle {
         }
     }
 
-    class BorderedUI extends CSS {
+    class SingleLineBorderFormUI extends CSS {
 
         {
-            border.none();
-            // border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
-            //
-            // while (insideOf(Focus.class)) {
-            // border.color(BorderFocusColor);
-            // }
+            border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
+
+            while (insideOf(Focus.class)) {
+                border.color(BorderFocusColor);
+            }
         }
     }
 
-    class FirstBorderedUI extends BorderedUI {
+    class FirstBorderedUI extends SingleLineBorderFormUI {
 
         {
             // borderRight.none();
@@ -245,7 +242,7 @@ class FormUIStyle {
         }
     }
 
-    class LastBorderedUI extends BorderedUI {
+    class LastBorderedUI extends SingleLineBorderFormUI {
 
         {
             // borderLeft.none();
