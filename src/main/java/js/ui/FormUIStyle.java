@@ -64,6 +64,8 @@ class FormUIStyle {
                 box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow)
                         .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
             }
+
+            writeBorder();
         }
 
         /**
@@ -76,19 +78,19 @@ class FormUIStyle {
             border.width(BorderWidth).solid().color(BorderColor).radius(BorderRadius);
             box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow);
 
-            while (firstChild()) {
-
-            }
-
-            while (hover()) {
-                box.shadowInset(0, px, 0, px, 6, px, BorderInsetShadow);
-            }
-
-            while (with(Focus.class)) {
-                border.color(BorderFocusColor);
-                box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow)
-                        .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
-            }
+            // while (firstChild()) {
+            //
+            // }
+            //
+            // while (hover()) {
+            // box.shadowInset(0, px, 0, px, 6, px, BorderInsetShadow);
+            // }
+            //
+            // while (with(Focus.class)) {
+            // border.color(BorderFocusColor);
+            // box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow)
+            // .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
+            // }
 
             while (insideOf(FormComponent.class)) {
                 border.none().radius(0, px);
@@ -111,7 +113,7 @@ class FormUIStyle {
 
         {
             // Required property for single line form.
-            box.width(SingleLineFormWidth).height(SingleLineFormHeight.add(FormVerticalPadding.multiply(2)));
+            box.height(SingleLineFormHeight.add(FormVerticalPadding.multiply(2)));
 
             // Required property for single line form.
             text.verticalAlign.middle();
@@ -226,35 +228,36 @@ class FormUIStyle {
     class BorderedUI extends CSS {
 
         {
-            border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
-
-            while (insideOf(Focus.class)) {
-                border.color(BorderFocusColor);
-            }
+            border.none();
+            // border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
+            //
+            // while (insideOf(Focus.class)) {
+            // border.color(BorderFocusColor);
+            // }
         }
     }
 
     class FirstBorderedUI extends BorderedUI {
 
         {
-            borderRight.none();
-            borderLeft.radius(BorderRadius);
+            // borderRight.none();
+            // borderLeft.radius(BorderRadius);
         }
     }
 
     class LastBorderedUI extends BorderedUI {
 
         {
-            borderLeft.none();
-            borderRight.radius(BorderRadius);
+            // borderLeft.none();
+            // borderRight.radius(BorderRadius);
         }
     }
 
     class MiddleBorderedUI extends CSS {
 
         {
-            borderRight.none().radius(0, px);
-            borderLeft.none().radius(0, px);
+            // borderRight.none().radius(0, px);
+            // borderLeft.none().radius(0, px);
         }
     }
 }
