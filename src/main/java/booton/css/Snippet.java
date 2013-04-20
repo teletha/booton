@@ -84,8 +84,9 @@ public class Snippet {
         }
 
         while (css.before()) {
-            css.font.color(color.lighten(-40)).family(Icons);
+            css.font.color(color.lighten(-20)).family(Icons);
             css.content.text(icon.code);
+            css.text.verticalAlign.middle();
         }
     }
 

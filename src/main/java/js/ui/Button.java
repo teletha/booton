@@ -37,9 +37,9 @@ public class Button extends FormUI<Button> {
      * @param label
      */
     public Button(Icon icon, Listener action) {
-        this(icon.code, action);
+        this("", action);
 
-        form.add(Icons.class);
+        form.add(Icons.class).attr("icon", icon.code);
     }
 
     public void label(String label) {
