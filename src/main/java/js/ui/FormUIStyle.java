@@ -40,6 +40,9 @@ class FormUIStyle {
     /** The general single line form height. */
     Value SingleLineFormHeight = new Value(20, px);
 
+    /** The general single line form width. */
+    Value SingleLineFormWidth = new Value(160, px);
+
     /** The general form padding. */
     Value FormVerticalPadding = new Value(4, px);
 
@@ -108,7 +111,7 @@ class FormUIStyle {
 
         {
             // Required property for single line form.
-            box.height(SingleLineFormHeight.add(FormVerticalPadding.multiply(2)));
+            box.width(SingleLineFormWidth).height(SingleLineFormHeight.add(FormVerticalPadding.multiply(2)));
 
             // Required property for single line form.
             text.verticalAlign.middle();
@@ -119,10 +122,6 @@ class FormUIStyle {
             // Customizable properties.
             display.inlineBlock();
             padding.vertical(FormVerticalPadding).horizontal(FormHorizontalPadding);
-
-            while (insideOf(Focus.class)) {
-                border.color(BorderFocusColor);
-            }
         }
 
         /**
@@ -227,13 +226,15 @@ class FormUIStyle {
     class BorderedUI extends CSS {
 
         {
-            // border color
             border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
 
+            while (insideOf(Focus.class)) {
+                border.color(BorderFocusColor);
+            }
         }
     }
 
-    class FirstBorderedUI extends CSS {
+    class FirstBorderedUI extends BorderedUI {
 
         {
             borderRight.none();
@@ -241,7 +242,7 @@ class FormUIStyle {
         }
     }
 
-    class LastBorderedUI extends CSS {
+    class LastBorderedUI extends BorderedUI {
 
         {
             borderLeft.none();
