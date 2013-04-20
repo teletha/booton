@@ -207,11 +207,19 @@ class FormUIStyle {
     class Icons extends CSS {
 
         {
-            font.color(BorderColor.lighten(-20)).family(Icons);
-            padding.size(8, px);
+            padding.vertical(0, px).horizontal(8, px);
+            line.height(SingleLineFormHeight.add(FormVerticalPadding.multiply(2)));
+
+            while (after()) {
+                font.color(BorderColor.lighten(-20)).family(Icons);
+                text.verticalAlign.middle();
+                content.attr("icon");
+            }
 
             while (hover()) {
-                font.color(BorderColor.lighten(-40));
+                while (after()) {
+                    font.color(BorderColor.lighten(-40));
+                }
             }
         }
     }

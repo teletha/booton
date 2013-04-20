@@ -56,6 +56,22 @@ public class Line extends CSSProperty<Line> {
      * @param size
      * @return
      */
+    public Line height(Value size) {
+        height = size.toString();
+
+        return chain();
+    }
+
+    /**
+     * <p>
+     * On inline elements, the line-height CSS property specifies the height that is used in the
+     * calculation of the line box height. On block level elements, line-height specifies the
+     * minimal height of line boxes within the element.
+     * </p>
+     * 
+     * @param size
+     * @return
+     */
     public Line height(double size, Unit unit) {
         height = new Value(size, unit).toString();
 
