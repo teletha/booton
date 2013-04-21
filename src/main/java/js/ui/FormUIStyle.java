@@ -41,7 +41,7 @@ class FormUIStyle {
     Value SingleLineFormHeight = new Value(20, px);
 
     /** The general single line form width. */
-    Value SingleLineFormWidth = new Value(160, px);
+    Value SingleLineFormWidth = new Value(185, px);
 
     /** The general form padding. */
     Value FormVerticalPadding = new Value(4, px);
@@ -50,6 +50,8 @@ class FormUIStyle {
     Value FormHorizontalPadding = new Value(6, px);
 
     Color SelectColor = new Color(206, 79, 62, 0.8);
+
+    Value IconButtonSize = SingleLineFormHeight.add(FormVerticalPadding.multiply(2));
 
     class FormComponent extends CSS {
 
@@ -175,7 +177,7 @@ class FormUIStyle {
     class InputForm extends BaseForm {
 
         {
-
+            box.width(SingleLineFormWidth);
         }
     }
 
@@ -207,7 +209,8 @@ class FormUIStyle {
 
         {
             padding.vertical(0, px).horizontal(8, px);
-            line.height(SingleLineFormHeight.add(FormVerticalPadding.multiply(2)));
+            line.height(IconButtonSize);
+            box.size(IconButtonSize);
 
             while (after()) {
                 font.color(BorderColor.lighten(-20)).family(Icons);
@@ -237,16 +240,16 @@ class FormUIStyle {
     class FirstBorderedUI extends SingleLineBorderFormUI {
 
         {
-            // borderRight.none();
-            // borderLeft.radius(BorderRadius);
+            borderRight.none();
+            borderLeft.radius(BorderRadius);
         }
     }
 
     class LastBorderedUI extends SingleLineBorderFormUI {
 
         {
-            // borderLeft.none();
-            // borderRight.radius(BorderRadius);
+            borderLeft.none();
+            borderRight.radius(BorderRadius);
         }
     }
 
@@ -255,6 +258,73 @@ class FormUIStyle {
         {
             // borderRight.none().radius(0, px);
             // borderLeft.none().radius(0, px);
+        }
+    }
+
+    class FormUIComponent extends CSS {
+
+        {
+            display.inlineBlock();
+            position.relative();
+            font.size(FontSize);
+
+            transition.property.all().duration(0.2, s).timing.linear();
+
+            while (with(Focus.class)) {
+                box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow)
+                        .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
+            }
+        }
+    }
+
+    /**
+     * @version 2013/03/31 22:49:02
+     */
+    protected class AbstractForm extends CSS {
+
+        {
+            // Required property for single line form.
+            box.height(SingleLineFormHeight.add(FormVerticalPadding.multiply(2)));
+
+            // Required property for single line form.
+            text.verticalAlign.middle();
+
+            // Required property for single line form.
+            outline.none();
+
+            // Customizable properties.
+            display.inlineBlock();
+            padding.vertical(FormVerticalPadding).horizontal(FormHorizontalPadding);
+        }
+
+        /**
+         * <p>
+         * Helper method to write border.
+         * </p>
+         * 
+         * @param color A border bolor.
+         */
+        protected final void writeBorder(Color color) {
+            border.color(color);
+            box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow).shadow(0, px, 0, px, 8, px, color.opacify(-0.2));
+        }
+    }
+
+    /**
+     * <p>
+     * Form UI style with border.
+     * </p>
+     * 
+     * @version 2013/04/21 12:05:29
+     */
+    class BorderFormUI extends CSS {
+
+        {
+            border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
+
+            while (insideOf(Focus.class)) {
+                border.color(BorderFocusColor);
+            }
         }
     }
 }

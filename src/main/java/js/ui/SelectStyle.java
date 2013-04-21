@@ -20,7 +20,7 @@ class SelectStyle extends FormUIStyle {
     class SelectForm extends BaseForm {
 
         {
-
+            box.width(SingleLineFormHeight.subtract(IconButtonSize));
         }
     }
 
