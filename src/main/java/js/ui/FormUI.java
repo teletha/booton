@@ -11,7 +11,7 @@ package js.ui;
 
 import js.ui.FormUIStyle.Disable;
 import js.ui.FormUIStyle.Focus;
-import js.ui.FormUIStyle.FormComponent;
+import js.ui.FormUIStyle.FormRoot;
 import js.util.jQuery;
 import js.util.jQuery.Listener;
 
@@ -49,7 +49,7 @@ public class FormUI<T extends FormUI> extends UI {
      * 
      */
     public FormUI(String elementName) {
-        root.add(FormComponent.class);
+        root.add(FormRoot.class);
         root.bind(this);
         form = root.child(elementName);
     }

@@ -10,7 +10,6 @@
 package booton.css;
 
 import js.util.Color;
-import booton.css.property.BoxLength;
 
 /**
  * @version 2012/12/11 22:52:28
@@ -27,7 +26,16 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
     private String style;
 
     /** The radius size. */
-    private BoxLength radius;
+    private Value topLeft;
+
+    /** The radius size. */
+    private Value topRight;
+
+    /** The radius size. */
+    private Value bottomLeft;
+
+    /** The radius size. */
+    private Value bottomRight;
 
     /**
      * @param css
@@ -45,6 +53,10 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
 
         writer.property(name + "-style", style);
         writer.property(name + "-width", width);
+        writer.property("border-top-left-radius", topLeft);
+        writer.property("border-top-right-radius", topRight);
+        writer.property("border-bottom-left-radius", bottomLeft);
+        writer.property("border-bottom-right-radius", bottomRight);
     }
 
     /**
@@ -121,30 +133,34 @@ public class BorderValue extends CSSProperty<BorderValue> implements Colorable<B
      * @return
      */
     public BorderValue radius(double first, Unit firstUnit, double second, Unit secondUnit, double third, Unit thirdUnit, double fourth, Unit fourthUnit) {
-        radius = new BoxLength("border-radius");
-
         switch (name) {
         case "border-top":
-            radius.top(first, firstUnit).right(second, secondUnit);
+            topLeft = new Value(first, firstUnit);
+            topRight = new Value(second, secondUnit);
             break;
 
         case "border-right":
-            radius.right(second, secondUnit).bottom(third, thirdUnit);
+            topRight = new Value(second, secondUnit);
+            bottomRight = new Value(third, thirdUnit);
             break;
 
         case "border-bottom":
-            radius.bottom(third, thirdUnit).left(fourth, fourthUnit);
+            bottomRight = new Value(third, thirdUnit);
+            bottomLeft = new Value(fourth, fourthUnit);
             break;
 
         case "border-left":
-            radius.top(first, firstUnit).left(fourth, fourthUnit);
+            topLeft = new Value(first, firstUnit);
+            bottomLeft = new Value(fourth, fourthUnit);
             break;
 
         default:
-            radius.top(first, firstUnit).right(second, secondUnit).bottom(third, thirdUnit).left(fourth, fourthUnit);
+            topLeft = new Value(first, firstUnit);
+            topRight = new Value(second, secondUnit);
+            bottomRight = new Value(third, thirdUnit);
+            bottomLeft = new Value(fourth, fourthUnit);
             break;
         }
-
         return chain();
     }
 
