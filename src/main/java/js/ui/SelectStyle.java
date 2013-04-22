@@ -17,10 +17,10 @@ import booton.css.CSS;
  */
 class SelectStyle extends FormUIStyle {
 
-    class SelectForm extends BaseForm {
+    class SelectForm extends AbstractForm {
 
         {
-            box.width(SingleLineFormHeight.subtract(IconButtonSize));
+
         }
     }
 
@@ -52,6 +52,13 @@ class SelectStyle extends FormUIStyle {
 
         {
             background.color(SelectColor);
+        }
+    }
+
+    class SelectArrow extends CSS {
+
+        {
+            position.absolute().top(0, px).right(0, px);
         }
     }
 }
