@@ -10,7 +10,6 @@
 package js.ui;
 
 import static js.lang.Global.*;
-import js.ui.FormUIStyle.AbstractBorderForm;
 import js.ui.FormUIStyle.Focus;
 import js.ui.SelectStyle.SelectArrow;
 import js.ui.SelectStyle.SelectForm;
@@ -63,10 +62,7 @@ public class Select<M> extends FormUI<Select> {
         model = selectable;
         model.bind(binder);
 
-        form.add(SelectForm.class, AbstractBorderForm.class)
-                .attr("type", "input")
-                .attr("placeholder", "Mastery Set Name");
-        form.bind(this);
+        form.add(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
 
         view = new ScrollableListView(10, 28).provide(binder);
         view.root.add(SelectItemList.class).bind(binder);

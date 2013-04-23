@@ -11,8 +11,12 @@ package booton;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import kiss.I;
@@ -20,6 +24,7 @@ import kiss.Manageable;
 import kiss.Singleton;
 import booton.css.CSS;
 import booton.css.Combine;
+import booton.css.Priority;
 import booton.translator.Literal;
 import booton.util.Font;
 
@@ -58,11 +63,30 @@ public class StylesheetManager implements Literal<CSS> {
         // }
 
         // collect required styles
-        Set<CSS> required = new LinkedHashSet();
+        List<CSS> required = new ArrayList();
 
         for (Class<? extends CSS> type : used) {
             required.add(I.make(type));
         }
+        Collections.sort(required, new Comparator<CSS>() {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public int compare(CSS o1, CSS o2) {
+                Priority priority1 = o1.getClass().getAnnotation(Priority.class);
+                Priority priority2 = o2.getClass().getAnnotation(Priority.class);
+                int value1 = priority1 == null ? 0 : priority1.value();
+                int value2 = priority2 == null ? 0 : priority2.value();
+
+                if (value1 == value2) {
+                    return 0;
+                }
+                return value1 < value2 ? -1 : 1;
+
+            }
+        });
 
         StringBuilder builder = new StringBuilder();
 
