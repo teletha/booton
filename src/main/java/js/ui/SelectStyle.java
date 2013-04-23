@@ -11,16 +11,18 @@ package js.ui;
 
 import js.util.Color;
 import booton.css.CSS;
+import booton.css.Priority;
 
 /**
  * @version 2013/04/06 0:04:01
  */
 class SelectStyle extends FormUIStyle {
 
-    class SelectForm extends AbstractForm {
+    @Priority(10)
+    class SelectForm extends InputForm {
 
         {
-
+            padding.right(IconSize.add(FormHorizontalPadding));
         }
     }
 
@@ -55,6 +57,7 @@ class SelectStyle extends FormUIStyle {
         }
     }
 
+    @Priority(10)
     class SelectArrow extends CSS {
 
         {

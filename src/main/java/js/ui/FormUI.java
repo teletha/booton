@@ -50,8 +50,9 @@ public class FormUI<T extends FormUI> extends UI {
      */
     public FormUI(String elementName) {
         root.add(FormRoot.class);
-        root.bind(this);
+
         form = root.child(elementName);
+        form.bind(this);
     }
 
     /**

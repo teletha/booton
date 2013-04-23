@@ -80,6 +80,12 @@ class FormUIStyle {
                 box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow)
                         .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
             }
+
+            while (insideOf(FormRoot.class)) {
+                while (with(Focus.class)) {
+                    box.shadow(0, px, 0, px, 0, px, Color.Transparent);
+                }
+            }
         }
     }
 
@@ -181,7 +187,7 @@ class FormUIStyle {
     /**
      * @version 2013/04/17 16:29:48
      */
-    class ButtonForm extends AbstractForm {
+    class ButtonForm extends AbstractBorderForm {
 
         {
             Color front = new Color(0, 0, 33);
@@ -209,14 +215,14 @@ class FormUIStyle {
         }
     }
 
-    class InputForm extends AbstractForm {
+    class InputForm extends AbstractBorderForm {
 
         {
             box.width(SingleLineFormWidth);
         }
     }
 
-    class InvalidInputForm extends AbstractForm {
+    class InvalidInputForm extends AbstractBorderForm {
 
         {
 
