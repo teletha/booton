@@ -13,6 +13,7 @@ import js.dom.Document;
 import js.dom.Element;
 import js.dom.History;
 import js.dom.Location;
+import js.dom.Storage;
 import js.dom.Window;
 import js.net.WebSocket;
 import js.util.jQuery;
@@ -56,6 +57,24 @@ public class Global {
      * </p>
      */
     public static Location location;
+
+    /**
+     * <p>
+     * localStorage is the same as sessionStorage with same same-origin rules applied but it is
+     * persistent. localStorage was introduced in Firefox 3.5.
+     * </p>
+     */
+    public static Storage localStorage;
+
+    /**
+     * <p>
+     * This is a global object (sessionStorage) that maintains a storage area that's available for
+     * the duration of the page session. A page session lasts for as long as the browser is open and
+     * survives over page reloads and restores. Opening a page in a new tab or window will cause a
+     * new session to be initiated.
+     * </p>
+     */
+    public static Storage sessionStorage;
 
     /**
      * <p>
