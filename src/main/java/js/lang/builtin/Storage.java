@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.dom;
+package js.lang.builtin;
 
 import booton.translator.JavascriptNative;
 
@@ -98,6 +98,6 @@ public abstract class Storage implements JavascriptNative {
      * @return
      */
     public <T> T get(Class<T> modelClass) {
-
+        return null;
     }
 }

@@ -5,16 +5,18 @@ function boot(global) {
    * Define user properties.
    */
   function define(object, properties, override) {
-    Object.keys(properties).forEach(function(name) {
-      if (!object[name] || override) {
-        Object.defineProperty(object, name, {
-          configurable: false,
-          enumerable: false,
-          writable: true,
-          value: properties[name]
-        });
-      }
-    });
+    if (object) {
+      Object.keys(properties).forEach(function(name) {
+        if (!object[name] || override) {
+          Object.defineProperty(object, name, {
+            configurable: false,
+            enumerable: false,
+            writable: true,
+            value: properties[name]
+          });
+        }
+      });
+    }
   }
 
 
