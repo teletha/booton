@@ -23,6 +23,8 @@ import js.dom.DOMTokenList;
 import js.dom.Location;
 import js.dom.Window;
 import js.lang.Function;
+import js.lang.builtin.JSON;
+import js.lang.builtin.Storage;
 import js.net.WebSocket;
 import js.util.ArrayList;
 import js.util.jQuery.Listener;
@@ -58,6 +60,8 @@ class TranslatorManager {
         builtIn(WebSocket.class);
         builtIn(Window.class);
         builtIn(Location.class);
+        builtIn(JSON.class);
+        builtIn(Storage.class);
         builtIn(Comparator.class);
         builtIn(Runnable.class);
         builtIn(Listener.class);
