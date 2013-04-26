@@ -9,6 +9,9 @@
  */
 package js.lang.builtin;
 
+import static js.lang.Global.*;
+import js.lang.NativeObject;
+import js.util.jQuery;
 import booton.translator.JavascriptNative;
 
 /**
@@ -98,6 +101,36 @@ public abstract class Storage implements JavascriptNative {
      * @return
      */
     public <T> T get(Class<T> modelClass) {
-        return null;
+        if (modelClass == null) {
+            return null;
+        }
+
+        String text = getItem(modelClass.getName());
+
+        if (text == null) {
+            return null;
+        }
+
+        try {
+            System.out.println(text);
+            System.out.println(JSON.parse(text));
+            return jQuery.extend(true, modelClass.newInstance(), JSON.parse(text));
+        } catch (Exception e) {
+            throw new Error(e);
+        }
+    }
+
+    /**
+     * <p>
+     * Retrieve the model instance of the specified class.
+     * </p>
+     * 
+     * @param modelClass
+     * @return
+     */
+    public void set(Object model) {
+        if (model != null) {
+            setItem(model.getClass().getName(), JSON.stringify((NativeObject) model));
+        }
     }
 }
