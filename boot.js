@@ -336,6 +336,17 @@ function boot(global) {
       descriptor.set = descriptor.set.bind(descriptor);
 
       Object.defineProperty(object, name, descriptor);
+    },
+
+    /**
+     * <p>
+     * Write JSON text from the specified model with excluding the private properties.
+     * </p>
+     */
+    writeJSON: function(model) {
+      return JSON.stringify(model, function(key, value) {
+        return key.startsWith("$") ? undefined : value;
+      });
     }
   });
 }

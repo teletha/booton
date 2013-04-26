@@ -9,10 +9,9 @@
  */
 package teemowork;
 
-import static js.lang.Global.*;
 import js.application.Page;
 import js.application.PageInfo;
-import js.lang.NativeObject;
+import js.lang.Global;
 import js.ui.Button;
 import js.ui.Input;
 import js.ui.Select;
@@ -71,10 +70,12 @@ public class FormCatalogPage extends Page {
                 model.type++;
             }
         }));
-        Object modeler = model;
+        Global.sessionStorage.set(model);
 
-        // ((NativeObject) (Object) modeler).deleteProperty("$");
-        System.out.println(JSON.stringify((NativeObject) (Object) modeler));
+        SomeModel restored = Global.sessionStorage.get(SomeModel.class);
+        System.out.println(restored);
+        System.out.println(restored.getClass());
+        restored.test();
     }
 
     /**
@@ -84,7 +85,11 @@ public class FormCatalogPage extends Page {
 
         public String name;
 
-        public int type;
+        public int type = 10;
+
+        private void test() {
+            System.out.println("invoked");
+        }
     }
 
     private static class Modeler {

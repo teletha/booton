@@ -30,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import js.lang.Global;
 import js.lang.NativeObject;
+import js.util.jQuery;
 import kiss.ClassListener;
 import kiss.I;
 import kiss.Manageable;
@@ -465,6 +466,9 @@ public class Javascript {
      * @return An identified class name for ECMAScript.
      */
     public static final String computeClassName(Class clazz) {
+        if (clazz == jQuery.class) {
+            return "$";
+        }
         return "boot." + computeSimpleClassName(clazz);
     }
 
@@ -583,12 +587,17 @@ public class Javascript {
         }
 
         try {
-            // valicate field declaration
-            JavaAPIProviders.validateField(owner, owner.getDeclaredField(fieldName));
+            Field field = owner.getDeclaredField(fieldName);
+
+            // validate field declaration
+            JavaAPIProviders.validateField(owner, field);
 
             Javascript js = getScript(owner);
 
-            return mung16(order(js.fields, fieldName.hashCode() + js.source.hashCode()));
+            // transient prefix
+            String prefix = Modifier.isTransient(field.getModifiers()) ? "$" : "";
+
+            return prefix + mung16(order(js.fields, fieldName.hashCode() + js.source.hashCode()));
         } catch (NoSuchFieldException e) {
             return computeFieldName(owner.getSuperclass(), fieldName);
         }

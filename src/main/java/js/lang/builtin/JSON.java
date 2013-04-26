@@ -10,6 +10,7 @@
 package js.lang.builtin;
 
 import js.lang.NativeObject;
+import booton.translator.Translator;
 
 /**
  * <p>
@@ -42,4 +43,37 @@ public abstract class JSON {
      * @return
      */
     public native String stringify(NativeObject value);
+
+    /**
+     * @version 2013/04/26 11:04:31
+     */
+    @SuppressWarnings("unused")
+    private static class Coder extends Translator<JSON> {
+
+        /**
+         * <p>
+         * Parse a string as JSON, optionally transforming the value produced by parsing.
+         * </p>
+         * 
+         * @param text The string to parse as JSON. See the JSON object for a description of JSON
+         *            syntax.
+         * @return
+         */
+        public String parse(String text) {
+            return "JSON.parse(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Convert a value to JSON, optionally replacing values if a replacer function is specified,
+         * or optionally including only the specified properties if a replacer array is specified.
+         * </p>
+         * 
+         * @param value The value to convert to a JSON string.
+         * @return
+         */
+        public String stringify(NativeObject value) {
+            return "boot.writeJSON(" + param(0) + ")";
+        }
+    }
 }

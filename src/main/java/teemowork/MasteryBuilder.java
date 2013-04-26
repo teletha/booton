@@ -64,7 +64,7 @@ public class MasteryBuilder extends Page implements Subscriber {
             {Wealth, Awareness, StrengthOfSpirit, Explorer}, {Pickpocket, Intelligence, null, null},
             {null, Nimble, null, null}};
 
-    private final SelectableModel<MasterySet> set = new SelectableModel();
+    private SelectableModel<MasterySet> set;
 
     private final MasterySet masterySet;
 
@@ -106,6 +106,13 @@ public class MasteryBuilder extends Page implements Subscriber {
      */
     @Override
     public void load(jQuery root) {
+        set = localStorage.get(SelectableModel.class);
+
+        if (set == null) {
+            set = new SelectableModel();
+        }
+        System.out.println(set);
+
         jQuery infomation = root.child(Information.class);
         menu = infomation.child(new Select(set));
         menu.model.bind(new MasterySelector());
@@ -170,6 +177,8 @@ public class MasteryBuilder extends Page implements Subscriber {
         utility.text("UTILITY　" + masterySet.getSum(Mastery.Utility));
 
         history.replaceState("", "", "#" + getPageId());
+
+        localStorage.set(set);
     }
 
     /**

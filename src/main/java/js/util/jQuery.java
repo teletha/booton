@@ -24,9 +24,22 @@ import booton.css.CSS;
 import booton.translator.JavascriptNative;
 
 /**
- * @version 2013/04/12 11:26:03
+ * @version 2013/04/26 12:37:01
  */
 public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
+
+    /**
+     * <p>
+     * Merge the contents of two or more objects together into the first object.
+     * </p>
+     * 
+     * @param deeply If true, the merge becomes recursive (aka. deep copy).
+     * @param base An object that will receive the new properties if additional objects are passed
+     *            in or that will extend the jQuery namespace if it is the sole argument.
+     * @param provider An object containing additional properties to merge in.
+     * @return
+     */
+    public static native <T> T extend(boolean deeply, T base, Object provider);
 
     /**
      * <p>

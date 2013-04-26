@@ -27,7 +27,7 @@ import js.util.HashSet;
 public abstract class Publishable {
 
     /** The lazy initialized event listener holder. */
-    private Map<Class, Subscribers> subscribers;
+    private transient Map<Class, Subscribers> subscribers;
 
     /**
      * <p>

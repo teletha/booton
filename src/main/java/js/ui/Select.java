@@ -78,6 +78,10 @@ public class Select<M> extends FormUI<Select> {
 
         options = root.child(new SlidableView(view));
         options.bind(binder);
+
+        if (model.size() == 0) {
+            disable();
+        }
     }
 
     @Listen(UIAction.Key_Up)
@@ -157,6 +161,8 @@ public class Select<M> extends FormUI<Select> {
         public void add(int index, M item) {
             view.provide(this);
             view.render(index);
+
+            enable();
         }
 
         /**
@@ -165,6 +171,10 @@ public class Select<M> extends FormUI<Select> {
         @Override
         public void remove(int index, M item) {
             view.provide(this);
+
+            if (model.size() == 0) {
+                disable();
+            }
         }
     }
 }
