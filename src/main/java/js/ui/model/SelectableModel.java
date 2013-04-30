@@ -21,9 +21,11 @@ import js.util.ArrayList;
 public class SelectableModel<T> extends Publishable implements Iterable<T> {
 
     /** The index of current selected item. */
+    @Property
     private int index = -1;
 
     /** The item manager. */
+    @Property
     private List<T> items = new ArrayList();
 
     /**

@@ -176,6 +176,9 @@ public class Champion {
     public static final Champion Leona = new Champion("Leona", Sunlight, ShieldOfDaybreak, Eclipse, ZenithBlade, SolarFlare);
 
     /** The champion name. */
+    public static final Champion Lissandra = new Champion("Lissandra", Sunlight, ShieldOfDaybreak, Eclipse, ZenithBlade, SolarFlare);
+
+    /** The champion name. */
     public static final Champion Lulu = new Champion("Lulu", PixFaerieCompanion, Glitterlance, Whimsy, HelpPix, WildGrowth);
 
     /** The champion name. */
@@ -257,7 +260,7 @@ public class Champion {
     public static final Champion Ryze = new Champion("Ryze", ArcaneMastery, Overload, RunePrison, SpellFlux, DesperatePower);
 
     /** The champion name. */
-    public static final Champion Sejuani = new Champion("Sejuani", Frost, ArcticAssault, NorthernWinds, Permafrost, GlacialPrison);
+    public static final Champion Sejuani = new Champion("Sejuani", FrostArnor, ArcticAssault, FlailOfTheNorthernWinds, Permafrost, GlacialPrison);
 
     /** The champion name. */
     public static final Champion Shaco = new Champion("Shaco", Backstab, Deceive, JackInTheBox, TwoShivPoison, Hallucinate);
@@ -308,7 +311,7 @@ public class Champion {
     public static final Champion Tristana = new Champion("Tristana", DrawaBead, RapidFire, RocketJump, ExplosiveShot, BusterShot);
 
     /** The champion name. */
-    public static final Champion Trundle = new Champion("Trundle", Decompose, RabidBite, Contaminate, PillarOfFilth, Agony);
+    public static final Champion Trundle = new Champion("Trundle", KingsTribute, Chomp, FrozenKingdom, PillarOfIce, Subjugate);
 
     /** The champion name. */
     public static final Champion Tryndamere = new Champion("Tryndamere", BattleFury, Bloodlust, MockingShout, SpinningSlash, UndyingRage);
@@ -1059,6 +1062,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 325);
+        Lulu.update(P306).set(Mana, 200, 55);
         Lux.update(P0000)
                 .set(Health, 345, 79)
                 .set(Hreg, 4.5, 0.55)

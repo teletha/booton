@@ -288,4 +288,44 @@ class JavaAnnotationCompiler {
             return method.getParameterTypes();
         }
     }
+
+    /**
+     * @version 2013/04/07 3:05:00
+     */
+    private static class FieldSignature implements Signature {
+
+        /** The field . */
+        private final Field field;
+
+        /**
+         * @param field
+         */
+        private FieldSignature(Field field) {
+            this.field = field;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Class<? extends Annotation> annotationType() {
+            return Signature.class;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Class returnType() {
+            return field.getType();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Class[] parameterTypes() {
+            return new Class[0];
+        }
+    }
 }

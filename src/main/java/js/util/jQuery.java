@@ -43,6 +43,19 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Merge the contents of two or more objects together into the first object.
+     * </p>
+     * 
+     * @param deeply If true, the merge becomes recursive (aka. deep copy).
+     * @param base An object that will receive the new properties if additional objects are passed
+     *            in or that will extend the jQuery namespace if it is the sole argument.
+     * @param provider An object containing additional properties to merge in.
+     * @return
+     */
+    public static native boolean isArray(Object provider);
+
+    /**
+     * <p>
      * Add elements to the set of matched elements.
      * </p>
      * 

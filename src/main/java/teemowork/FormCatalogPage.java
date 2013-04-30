@@ -70,12 +70,14 @@ public class FormCatalogPage extends Page {
                 model.type++;
             }
         }));
+        model.modeler.name = "changed";
+        model.type = 10101;
         Global.sessionStorage.set(model);
 
         SomeModel restored = Global.sessionStorage.get(SomeModel.class);
         System.out.println(restored);
-        System.out.println(restored.getClass());
         restored.test();
+        restored.modeler.aaa();
     }
 
     /**
@@ -83,12 +85,14 @@ public class FormCatalogPage extends Page {
      */
     private static class SomeModel {
 
-        public String name;
+        public String name = "name";
 
         public int type = 10;
 
+        public Modeler modeler = new Modeler();
+
         private void test() {
-            System.out.println("invoked");
+            System.out.println("invoked " + type);
         }
     }
 
@@ -97,5 +101,11 @@ public class FormCatalogPage extends Page {
         public String name = "aa";
 
         public int type = 10;
+
+        public int[] test = {10, 2};
+
+        private void aaa() {
+            System.out.println("nested method " + name);
+        }
     }
 }

@@ -497,6 +497,7 @@ public enum Status {
         case MRRatio:
         case HealthRatio:
         case ExperimentRatio:
+        case RestoreHealthRatio:
             return name + "が" + formatValue(computed) + "増加";
 
         case DamageReduction:

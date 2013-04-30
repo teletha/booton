@@ -17,7 +17,7 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/04/11 11:05:08
+ * @version 2013/04/29 15:46:00
  */
 @SuppressWarnings("unused")
 public class InstanceOfTest extends ScriptTester {
@@ -92,5 +92,15 @@ public class InstanceOfTest extends ScriptTester {
         public boolean act() {
             return this instanceof Serializable;
         }
+    }
+
+    @Test
+    public void StringLiteral() {
+        test(new Scriptable() {
+
+            public boolean act() {
+                return "text" instanceof String;
+            }
+        });
     }
 }

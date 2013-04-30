@@ -19,8 +19,6 @@ function boot(global) {
     }
   }
 
-
-  
   
   //====================================================================
   // String Extensions
@@ -121,6 +119,11 @@ function boot(global) {
      */
     sortBy: function(comparator) {
       this.sort(comparator.compare.bind(comparator));
+    },
+    
+    getClass: function() {
+    console.log(111);
+      return this.$;
     }
   });
   
@@ -280,6 +283,19 @@ function boot(global) {
           return metadata;
         }
       });
+      
+      // "Class" variable (js function) can't directly have functionalities of
+      // (Java) Class class. "Class" variable directly has static methods of the
+      // defiend class, if there is method name confliction between these and the
+      // instance methods of (java) Class class, we can't resolve it correctly.
+      Object.defineProperty(Class, "$A", {
+        get: function() {
+          if (!metadata) {
+            metadata = new boot.A("$" + name, prototype, {}, Object, [], 0)
+          }
+          return metadata;
+        }
+      });
 
       // Define class object for the reference from instance.
       define(prototype, {
@@ -344,9 +360,23 @@ function boot(global) {
      * </p>
      */
     writeJSON: function(model) {
-      return JSON.stringify(model, function(key, value) {
+      var a = JSON.stringify(model, function(key, value) {
         return key.startsWith("$") ? undefined : value;
       });
+      console.log("write ", a);
+      return a;
+    },
+    
+    /**
+     * <p>
+     * Helper method to chech whether the specified value is String or not.
+     * </p>
+     *
+     * @param {Object} value The value to test.
+     * @return {boolean} The result.
+     */
+    isString: function(value) {
+      return typeof value === "string" || value instanceof String;
     }
   });
 }
