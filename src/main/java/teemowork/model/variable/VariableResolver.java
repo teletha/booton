@@ -191,6 +191,19 @@ public abstract class VariableResolver {
     /**
      * @version 2013/02/12 11:37:34
      */
+    public static class Per5LevelForSejuani extends PerLevel {
+
+        /**
+         * @param values
+         */
+        public Per5LevelForSejuani(double base, double diff) {
+            super(new int[] {1, 7, 12, 17}, base, diff);
+        }
+    }
+
+    /**
+     * @version 2013/02/12 11:37:34
+     */
     public static class Per4Level extends PerLevel {
 
         /**

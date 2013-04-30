@@ -320,6 +320,15 @@ class JSStringBuilder {
         return delete(index + 1, index + 1);
     }
 
+    /**
+     * Returns the length (character count).
+     * 
+     * @return the length of the sequence of characters currently represented by this object
+     */
+    public int length() {
+        return text.length();
+    }
+
     // // Appends the specified string builder to this sequence.
     // private JSStringBuilder append(JSStringBuilder sb) {
     // if (sb == null) return append("null");

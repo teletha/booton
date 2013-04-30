@@ -22,6 +22,7 @@ import teemowork.model.variable.VariableResolver.Per4Level;
 import teemowork.model.variable.VariableResolver.Per4LevelForTrundle;
 import teemowork.model.variable.VariableResolver.Per5Level;
 import teemowork.model.variable.VariableResolver.Per5LevelForHeimer;
+import teemowork.model.variable.VariableResolver.Per5LevelForSejuani;
 import teemowork.model.variable.VariableResolver.Per6Level;
 import teemowork.model.variable.VariableResolver.Per6LevelForVi;
 import teemowork.model.variable.VariableResolver.Per6LevelForZed;
@@ -1146,13 +1147,13 @@ public class Skill extends Describable<SkillDescriptor> {
     public static final Skill DesperatePower = new Skill("Desperate Power", R);
 
     /** The skill name. */
-    public static final Skill Frost = new Skill("Frost", Passive);
+    public static final Skill FrostArnor = new Skill("Frost Armor", Passive);
 
     /** The skill name. */
     public static final Skill ArcticAssault = new Skill("Arctic Assault", Q);
 
     /** The skill name. */
-    public static final Skill NorthernWinds = new Skill("Northern Winds", W);
+    public static final Skill FlailOfTheNorthernWinds = new Skill("Flail of the Northern Winds", W);
 
     /** The skill name. */
     public static final Skill Permafrost = new Skill("Permafrost", E);
@@ -1401,19 +1402,19 @@ public class Skill extends Describable<SkillDescriptor> {
     public static final Skill BusterShot = new Skill("Buster Shot", R);
 
     /** The skill name. */
-    public static final Skill Decompose = new Skill("Decompose", Passive);
+    public static final Skill KingsTribute = new Skill("King's Tribute", Passive);
 
     /** The skill name. */
-    public static final Skill RabidBite = new Skill("Rabid Bite", Q);
+    public static final Skill Chomp = new Skill("Chomp", Q);
 
     /** The skill name. */
-    public static final Skill Contaminate = new Skill("Contaminate", W);
+    public static final Skill FrozenKingdom = new Skill("Frozen Kingdom", W);
 
     /** The skill name. */
-    public static final Skill PillarOfFilth = new Skill("Pillar of Filth", E);
+    public static final Skill PillarOfIce = new Skill("Pillar of Ice", E);
 
     /** The skill name. */
-    public static final Skill Agony = new Skill("Agony", R);
+    public static final Skill Subjugate = new Skill("Subjugate", R);
 
     /** The skill name. */
     public static final Skill BattleFury = new Skill("Battle Fury", Passive);
@@ -3194,7 +3195,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, RestoreHealth, 35, 20, amplify(MissingHealthRatio, 0.05, 0, ap(0.02)))
                 .mana(70, 5)
                 .cd(6);
-        InnerFlame.update(Version.P305)
+        InnerFlame.update(P305)
                 .active("指定方向に炎を飛ばし、命中した敵と{1}の敵ユニットに{2}と1.5秒間{3}を与える。Mantraを付与した場合、追加の{4}を与え、更に炎が命中した地点にフィールドを発生させ、フィールドの上にいる敵ユニットに{5}を与える。フィールドは1.5秒後に爆発し、フィールドの上にいる敵ユニットに{6}を与える。炎が敵ユニットに命中しなかった場合、最大距離まで飛んだ後にフィールドが発生する。")
                 .variable(1, Radius, 200)
                 .variable(2, MagicDamage, 60, 50, ap(0.6))
@@ -3205,6 +3206,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(50, 10)
                 .cd(7, -0.5)
                 .range(950);
+        InnerFlame.update(P306).variable(2, MagicDamage, 80, 45, ap(0.6));
         FocusedResolve.update()
                 .active("対象のユニットと自身を繋ぐビームを発生させる。ビームは5秒間持続し、自身及び味方ユニットは{1}し、敵ユニットには{2}を与える。ビームに触れたChampion(敵味方問わず)にも同様の効果を与え、それが敵ユニットだった場合は更に{3}を与える。ビームを繋ぐ対象がステルス状態または距離1000まで離れた場合、効果が途切れる。Mantra Bonus:MS増加/MS低下の効果が2倍になる。")
                 .variable(1, MSRatio, 10, 2)
@@ -3228,6 +3230,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, MagicDamage, new Refer(Mantra, 75 / 3, 75 / 3), ap(0.2), null)
                 .variable(4, RestoreHealth, 0, 0, amplify(MissingHealthRatio, 25, 0, ap(0.01)))
                 .mana(70, 5);
+        FocusedResolve.update(P306).cd(16, -1);
         Inspire.update()
                 .active("対象の味方ユニットに5秒間持続する{1}を付与する。Mantra Bonus:味方ユニットにシールドを付与した際、その味方ユニットの{2}にいる敵ユニットに{3}を与える。")
                 .variable(1, Shield, 80, 40, ap(0.8))
@@ -3249,11 +3252,13 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(12)
                 .range(800);
         Inspire.update(P3051).variable(3, Radius, 700).variable(6, Time, 1.5).variable(7, MSRatio, 60);
+        Inspire.update(P306).variable(2, MSRatio, 40, 5).cd(10);
         Mantra.update()
                 .active("次に使用するスキルにMantra Bonusを付与する。Lv1から使用でき、スキルポイントを割り振ることはできない。{1}毎にスタック数が1つ増加し最大で2つまでスタックされる。スタック増加時間はCD低減の影響を受ける。レベル1、7、13でスタック増加時間が短縮される。")
                 .variable(1, CDRAwareTime, new Per6Level(30, -5))
                 .cd(0.25);
         Mantra.update(P305).active("8秒以内に使用する次のスキルにMantraを付与する。追加効果はMnatraのスキルレベルを参照する。").cd(45);
+        Mantra.update(P306).cd(45, -3);
 
         /** Karthus */
         DeathDefied.update().passive("死亡後7秒間スキルが使用可能。この状態ではスキルコストがなくなる。");
@@ -3631,6 +3636,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(40, 10)
                 .cd(7)
                 .range(925);
+        Glitterlance.update(P306).mana(60, 5);
         Whimsy.update()
                 .active("対象の味方Championに使用した場合、5秒間対象の味方Championは{1}し{2}を得る。敵Championに使用した場合、{3}間無力な動物に変化させ(Polymorph)、その間通常攻撃とスキルを封じ、基本移動速度を60下げる。")
                 .variable(1, MSRatio, 35)
@@ -3740,6 +3746,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(80, 10)
                 .cd(9)
                 .range(900);
+        CallOftheVoid.update(P306).mana(80, 5);
         NullZone.update()
                 .active("指定地点に5秒間持続する{1}のダメージゾーンを発生させ、上にいる敵ユニットに毎秒{2}を与える。(Minionに対しては毎秒120DMが上限)")
                 .variable(1, Radius, 250)
@@ -3747,6 +3754,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(90, 10)
                 .cd(14)
                 .range(800);
+        NullZone.update(P306).mana(90, 5);
         MaleficVisions.update()
                 .active("対象の敵ユニットに4秒かけて{1}を与える。効果中に敵ユニットが死亡した場合、{2}し、近くの敵ユニットに効果が移り変わる。移る度に4秒のタイマーはリセットされる。")
                 .variable(1, MagicDamage, 80, 60, ap(0.8))
@@ -3994,6 +4002,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(80)
                 .cd(15, -1)
                 .range(700);
+        Wither.update(P306).variable(1, ASSlowRatio, 17.5, 0, amplify(Duration, 1.5, 1.5));
         SpiritFire.update()
                 .active("指定地点に魔法陣を呼び出し{1}の敵ユニットに{2}を与える。魔方陣は5秒間持続し、上にいる敵ユニットに{3}と毎秒{4}を与える。")
                 .variable(1, Radius, 400)
@@ -4325,6 +4334,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(60, 5)
                 .cd(11, -1)
                 .range(1025);
+        BlindingAssault.update(P306).variable(2, PhysicalDamage, 70, 40, bounusAD(0.65), ap(0.5));
         HeightenedSenses.update()
                 .passive("Harrierによってマークが付与された敵ユニットに通常攻撃を行うと、3秒間{1}する。Tag Team時は{2}する。")
                 .variable(1, ASRatio, 20, 5)
@@ -4332,6 +4342,9 @@ public class Skill extends Describable<SkillDescriptor> {
                 .active("2秒間{3}の視界を得る。")
                 .variable(3, Radius, 2100)
                 .cd(50, -5);
+        HeightenedSenses.update(P306)
+                .passive("Harrierによってマークが付与された敵ユニットに通常攻撃を行うと、3秒間{1}、{3}する。Tag Team時は{2}する。")
+                .variable(3, MS, 20, 10);
         Vault.update()
                 .active("対象の敵ユニットまでダッシュし{1}と2秒間{2}を与える。スローの効果は2秒かけて元に戻る。ダッシュ後、Quinnは自身の通常攻撃の最大射程(距離525)までジャンプして対象と距離を離す。また、同時に対象にはHarrierのマークが付与される。Tag Team時はダッシュ後に距離を離さなくなる。")
                 .variable(1, PhysicalDamage, 40, 30, bounusAD(0.2))
@@ -4346,7 +4359,10 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, MSRatio, 20)
                 .variable(4, Radius, 700)
                 .variable(5, PhysicalDamage, 100, 50, bounusAD(0.5))
-                .variable(6, PhysicalDamage, 200, 100, bounusAD(1));
+                .variable(6, PhysicalDamage, 200, 100, bounusAD(1))
+                .cd(140, -20)
+                .mana(100);
+        TagTeam.update(P306).variable(-2, MSRatio, 80, 10).variable(3, MSRatio, 20, 10).cd(140, -30);
 
         /** Rammus */
         SpikedShell.update().passive("{1}を得る。").variable(1, AD, 0, 0, amplify(AR, 0.45));
@@ -4499,7 +4515,11 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(2, MSSlowRatio, 15, 5);
 
         /** Sejuani */
-        Frost.update().passive("通常攻撃にFrostを付与する。Frost状態の敵ユニットは3秒間{1}になる。").variable(1, MSSlowRatio, 30);
+        FrostArnor.update().passive("通常攻撃にFrostを付与する。Frost状態の敵ユニットは3秒間{1}になる。").variable(1, MSSlowRatio, 30);
+        FrostArnor.update(P306)
+                .passive("通常攻撃かスキルによりダメージを与えると、2秒間{1}と{2}を得る。この効果時間は最大8秒までスタックする。")
+                .variable(1, AR, new Per5LevelForSejuani(10, 5))
+                .variable(2, MSSlowReductionRatio, new Per5LevelForSejuani(10, 5));
         ArcticAssault.update()
                 .active("指定方向に突進し、接触した全ての敵ユニットに{1}とFrostを与え、対象がMinionの場合は更に{2}させる。敵Championに当たるか最大距離だけ移動すると突進は止まる。")
                 .variable(1, MagicDamage, 60, 30, ap(0.4))
@@ -4507,12 +4527,26 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(70, 5)
                 .cd(19, -2)
                 .range(700);
-        NorthernWinds.update()
+        ArcticAssault.update(P306)
+                .active("指定方向に突進し、接触した全ての敵ユニットに{1}と{2}を与える（モンスターには最大300ダメージ）。敵Championに当たると突進は止まる。")
+                .variable(1, Knockup)
+                .variable(2, MagicDamage, 40, 30, ap(0.4), amplify(TargetMaxHealthRatio, 4, 2))
+                .mana(80, 5)
+                .cd(15, -1)
+                .range(650);
+        FlailOfTheNorthernWinds.update()
                 .active("6秒間極寒の嵐を周囲に召還し、{1}の敵ユニットに毎秒{2}を与える。魔法DMは敵ユニットがFrostまたはPermafrostの時には50%増加する。")
                 .variable(1, Radius, 350)
                 .variable(2, MagicDamage, 12, 6, ap(0.1), amplify(Health, 0.01, 0.0025))
                 .mana(40)
                 .cd(10);
+        FlailOfTheNorthernWinds.update(P306)
+                .active("次の通常攻撃は、対象と{1}の敵達に{2}を与える。また4秒間{1}の敵に毎秒{3}を与える。(最大で{4})")
+                .variable(1, Radius, 350)
+                .variable(2, MagicDamage, 40, 20, ap(0.3))
+                .variable(3, MagicDamage, 20, 10, ap(0.15), amplify(BounusHealth, 0.04))
+                .variable(4, MagicDamage, 120, 60, ap(0.9), amplify(BounusHealth, 0.16))
+                .cd(11, -1);
         Permafrost.update()
                 .active("{0}の敵ユニットのFrostをPermafrostにし、{1}を与える。Permafrost状態の敵ユニットは3秒間{2}を受ける。")
                 .variable(0, Radius, 1000)
@@ -4520,6 +4554,13 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(2, MSSlowRatio, 30, 10)
                 .mana(55)
                 .cd(11);
+        Permafrost.update(P306)
+                .passive("通常攻撃かスキルによりダメージを与えると、対象を4秒間Frost状態にする。")
+                .active("{0}のFrost状態の敵ユニットに{1}と{2}間{3}を与える。")
+                .variable(0, Radius, 1000)
+                .variable(1, MagicDamage, 60, 50, ap(0.5))
+                .variable(2, Time, 2, 0.25)
+                .variable(3, MSSlowRatio, 50, 5);
         GlacialPrison.update()
                 .active("指定方向に武器を投げ、最大距離飛ぶか敵Championに命中するとその場で氷が爆発し、{1}の敵ユニットに{2}と{3}を与え、Frostにする。武器が直撃した敵Championには{4}を与える。")
                 .variable(1, Radius, 450)
@@ -4529,6 +4570,11 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(100)
                 .cd(130, -15)
                 .range(1150);
+        GlacialPrison.update(P306)
+                .active("指定方向に武器を投げ、敵Championに命中するとその場で爆発し、{1}の敵ユニットに{2}と{3}を与える。命中しなかった場合、最大射程で爆発し{1}の敵ユニットに{2}と{5}間{4}を与える。")
+                .variable(3, Stun, 1.5, 0.25)
+                .variable(4, MSSlowRatio, 90)
+                .variable(5, Time, 1.5, 0.25);
 
         /** Shaco */
         Backstab.update().passive("対象の背後から攻撃した場合に{1}する。").variable(1, DamageRatio, 20);
@@ -4974,22 +5020,32 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Thresh */
         Damnation.update()
-                .passive("レベルアップでArmorを得る事ができない。自身の周囲で敵ユニットが死んだ場合、一定の確率で魂(Soul)を落とす。魂へ近づくかDark Passageのランタンを魂の近くに置くとその魂を回収する事ができ、自身のArmorとAbility Powerが上昇する。落とした魂は15秒間持続し、敵チームがThreshの視界を得ていた場合、敵チームからも視認することができる。");
+                .passive("{1}で敵ユニットが死んだ場合、一定の確率で魂(Soul)を落とす。魂へ近づくかDark Passageのランタンを魂の近くに置くとその魂を回収する事ができ、自身のArmorとAbility Powerが上昇する。落とした魂は15秒間持続し、敵チームがThreshの視界を得ていた場合、敵チームからも視認することができる。")
+                .variable(1, Radius, 2000);
         DeathSentence.update()
-                .passive("通常攻撃に追加魔法DMを付与する。このDMはDamnationのスタック数と、自身が前回敵ユニットに通常攻撃をしてから経過した時間に比例して増加する。建物を攻撃した場合は追加魔法DMは発生せず、時間がリセットされる事もない。追加魔法DM(最小): Damnationのスタック数追加魔法DM(最大): Damnationのスタック数 + [攻撃力 × 80/110/140/170/200%]")
-                .active("指定方向に鎌を投げ、命中した敵ユニットに魔法DMとスタン(1.5s)を与え、対象を1.5秒かけて自身の方へ引き寄せる。このスキルを再度使用すると対象のユニットへ飛びつく。")
+                .active("指定方向に鎌を投げ、命中した敵ユニットに{1}と{2}を与え、対象を1.5秒かけて自身の方へ引き寄せる。このスキルを再度使用すると対象のユニットへ飛びつく。")
+                .variable(1, MagicDamage, 80, 30, ap(0.5))
+                .variable(2, Stun, 1.5)
                 .mana(80)
                 .cd(18, -1.5)
                 .range(1075);
+        DeathSentence.update(P306).variable(1, MagicDamage, 80, 40, ap(0.5));
         DarkPassage.update()
                 .active("指定地点に6秒間持続するランタンを設置する。味方Championがランタンを指定すると、ランタンとその味方Championが自身の方へと引き寄せられる。更にランタンの周囲にいる魂を自動的に回収し、味方Championにダメージを一定値軽減するシールドを付与する。シールドを得られるのは1ユニットにつき1回のみ。自身がランタンから距離1500以上離れるとランタンは自動的に自身の下へと戻る。")
                 .mana(40)
                 .cd(22, -1.5)
                 .range(950);
         Flay.update()
-                .active("自身後方から前方への帯状領域内の敵ユニットに魔法DMを与える。また自身後方にいる敵ユニットは自身に近づく向きに、自身前方にいる敵ユニットには自身から遠ざかる向きにノックバックさせ、スロー(1.5s)を与える。")
+                .active("自身後方から前方への帯状領域内の敵ユニットに{1}を与える。また自身後方にいる敵ユニットは自身に近づく向きに、自身前方にいる敵ユニットには自身から遠ざかる向きにノックバックさせ、1.5秒間{2}を与える。")
+                .variable(1, MagicDamage, 65, 40, ap(0.4))
+                .variable(2, MSSlowRatio, 20, 5)
                 .mana(60, 5)
-                .cd(9);
+                .cd(9)
+                .range(400);
+        Flay.update(P306)
+                .passive("通常攻撃に{3}を付与する。このDMはDamnationのスタック数と、自身が前回敵ユニットに通常攻撃をしてから経過した時間に比例して増加する。建物を攻撃した場合は追加魔法DMは発生せず、時間がリセットされる事もない。")
+                .variable(2, MagicDamage, 65, 30, ap(0.4))
+                .variable(3, MagicDamage, 0, 0, amplify(Stack, 1));
         TheBox.update()
                 .active("自身の周囲に五角形の壁を創り出し、最初に壁に触れた敵Championに魔法DMとスロー(99%,2s)を与える。2つ目以降の壁に触れた敵championには半分の魔法DMとスロー(99%,1s)を与える。敵が触れた部分の壁は破壊され消滅する。")
                 .mana(100)
@@ -5027,18 +5083,22 @@ public class Skill extends Describable<SkillDescriptor> {
                 .range(700);
 
         /** Trundle */
-        Decompose.update()
+        KingsTribute.update()
                 .passive("{1}以内で敵ユニットが死んだとき、{2}する。レベル1、5、9、12、15で回復する割合が上昇する。")
                 .variable(1, Radius, 1000)
                 .variable(2, RestoreHealth, 0, 0, amplify(Health, new Per4LevelForTrundle(0.02, 0.01)));
-        RabidBite.update()
+        Chomp.update()
                 .active("次の通常攻撃で与えるダメージは{1}になる。8秒間{2}を得て、攻撃を受けたユニットは{3}する。建物には無効。")
                 .variable(1, PhysicalDamage, 30, 15, amplify(AD, 0.8, 0.1))
                 .variable(2, AD, 20, 5)
                 .variable(3, ADReduction, 10, 2.5)
                 .mana(30)
                 .cd(4);
-        Contaminate.update()
+        Chomp.update(P306)
+                .active("次の通常攻撃は{1}と0.1秒間{4}を与える。8秒間{2}を得て、攻撃を受けたユニットは{3}する。建物には無効。")
+                .variable(1, PhysicalDamage, 20, 20, amplify(AD, 1, 0.05))
+                .variable(4, MSSlowRatio, 75);
+        FrozenKingdom.update()
                 .active("指定した地点の{1}に8秒間持続する呪いを振りまく。範囲内に入っている間、{2}、{3}して{4}を得る。")
                 .variable(1, Radius, 1000)
                 .variable(2, ASRatio, 20, 10)
@@ -5047,16 +5107,22 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(60)
                 .cd(15)
                 .range(900);
-        PillarOfFilth.update()
-                .active("指定地点に7秒間持続する通行不可能なビーコンを設置し、ビーコンの{1}にいる敵ユニットに{2}を与える。また、{3}の視界を得る。")
+        FrozenKingdom.update(P306)
+                .active("指定した地点の{1}に8秒間持続する呪いを振りまく。範囲内に入っている間、{2}、{3}、{4}する。")
+                .variable(2, ASRatio, 20, 15)
+                .variable(4, RestoreHealthRatio, 8, 3);
+        PillarOfIce.update()
+                .active("指定地点に{0}間持続する通行不可能なビーコンを設置し、ビーコンの{1}にいる敵ユニットに{2}を与える。また、{3}の視界を得る。")
+                .variable(0, Time, 7)
                 .variable(1, Radius, 375)
                 .variable(2, MSSlowRatio, 25, 5)
                 .variable(3, Radius, 1200)
                 .mana(60)
                 .cd(23, -3)
                 .range(1000);
-        Agony.update()
-                .active("対象の敵ユニットに{1}と{2}、{3}を与える。その後6秒間かけて更に{1}と{2}、{3}を与える。このスキルでダメージを与えると{4}する")
+        PillarOfIce.update(P306).variable(0, Time, 6);
+        Subjugate.update()
+                .active("対象の敵ユニットに{1}を{2}、{3}を与える。その後6秒間かけて更に{1}と{2}、{3}を与える。このスキルでダメージを与えると{4}する。")
                 .variable(1, MagicDamage, 100, 75, ap(0.6))
                 .variable(2, ARReductionRatio, 15, 5)
                 .variable(3, MRReductionRatio, 15, 5)
@@ -5064,6 +5130,11 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(75)
                 .cd(80, -10)
                 .range(700);
+        Subjugate.update(P306)
+                .active("対象の敵ユニットに{1}を与え、4秒間かけて{2}、{3}を与えて減少させた分の値を自身のARとMRに加算する、この効果はその後4秒間持続する。")
+                .variable(1, MagicDamage, 0, 0, amplify(TargetMaxHealthRatio, 20, 2, ap(0.02)))
+                .variable(2, ARReductionRatio, 20)
+                .variable(3, MRReductionRatio, 20);
 
         /** Tryndamere */
         BattleFury.update()
@@ -5171,6 +5242,11 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(55, -5)
                 .cd(6);
         TigerStance.update(P305).mana(47, -3);
+        TigerStance.update(P306)
+                .active("次の通常攻撃は2秒間かけて追加の{2}を与えるようになり（建物には無効）、5秒間{3}する。別のスキルを使うまで通常攻撃は追加{1}を与える。")
+                .variable(1, PhysicalDamage, 0, 0, ad(0.15))
+                .variable(2, PhysicalDamage, 30, 50, amplify(AD, 1.2, 0.1))
+                .variable(3, ASRatio, 30, 10);
         TurtleStance.update()
                 .active("5秒間{1}を得る。別のスキルを使うまで通常攻撃でクリティカルが発生しなくなるが、通常攻撃するごとに{2}し{3}する。")
                 .variable(1, Shield, 60, 36, ap(0.5))
@@ -5418,10 +5494,9 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cost(CurrentHealthRatio, 20, 0)
                 .cd(26, -3);
         TidesOfBlood.update()
-                .active("{1}の敵ユニットに{2}を与える。使用する度にスタックが増加し、1スタックにつきこのスキルの基礎魔法DMとHPコストが25%増加し、{4}と{3}を得るく(最大4スタック)。スタックは10秒増加が無いと0になる。このスキルは周囲に敵ユニットがいなくても使用可能。")
+                .active("{1}の敵ユニットに{2}を与える。使用する度にスタックが増加し、1スタックにつきこのスキルの基礎魔法DMとHPコストが25%増加し、{4}するく(最大4スタック)。スタックは10秒増加が無いと0になる。このスキルは周囲に敵ユニットがいなくても使用可能。")
                 .variable(1, Radius, 0)
                 .variable(2, MagicDamage, 60, 25, ap(0.45))
-                .variable(3, HregRatio, 4, 1)
                 .variable(4, RestoreHealthRatio, 4, 1)
                 .cost(Health, 30, 10)
                 .cd(4.5)
@@ -5695,6 +5770,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cost(Energy, 40, -5)
                 .cd(22, -1.5)
                 .range(550);
+        LivingShadow.update(P306).cd(18, -1);
         ShadowSlash.update()
                 .active("Zedと「影」から衝撃波を発生させ、{1}の敵ユニットに{2}を与える。ZedのShadow Slashは敵ユニットに当たる度にLiving ShadowのCDを1秒解消させる。「影」のShadow Slashはダメージと共に敵ユニットに1.5秒間{3}を与える。Zedと「影」が同一の対象にShadow Slashを命中させた場合、DMは重複しないがスローの効果が上昇する。")
                 .variable(1, Radius, 290)
@@ -5702,6 +5778,8 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, MSSlowRatio, 30, 7.5)
                 .cost(Energy, 50, 0)
                 .cd(3);
+        ShadowSlash.update(P306)
+                .active("Zedと「影」から衝撃波を発生させ、{1}の敵ユニットに{2}を与える。ZedのShadow Slashは敵Championに当たる度にLiving ShadowのCDを2秒解消させる。「影」のShadow Slashはダメージと共に敵ユニットに1.5秒間{3}を与える。Zedと「影」が同一の対象にShadow Slashを命中させた場合、DMは重複しないがスローの効果が上昇する。");
         ShadowSlash.update(P303).variable(2, PhysicalDamage, 60, 30, bounusAD(0.9));
         DeathMark.update()
                 .active("対象の敵Championにダッシュしマークを付与する。ダッシュ中はターゲット不可状態になる。また対象の背後に4秒間持続する「影」を召喚する。再度このスキルを使用するとZedと「影」の位置が入れ替わる。付与から3秒後にマークは消費され、対象にマークが付与されている間にZedと「影」が与えた物理DMと魔法DMの合計に比例し{1}を与える。")

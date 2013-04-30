@@ -171,6 +171,30 @@ class JSClass<T> extends JSAnnotatedElement {
      * 
      * @return The array of Field objects representing the public fields.
      */
+    public Field getField(String name) {
+        return null;
+    }
+
+    /**
+     * <p>
+     * Returns an array containing Field objects reflecting all the accessible public fields of the
+     * class or interface represented by this Class object. The elements in the array returned are
+     * not sorted and are not in any particular order. This method returns an array of length 0 if
+     * the class or interface has no accessible public fields, or if it represents an array class, a
+     * primitive type, or void.
+     * </p>
+     * <p>
+     * Specifically, if this Class object represents a class, this method returns the public fields
+     * of this class and of all its superclasses. If this Class object represents an interface, this
+     * method returns the fields of this interface and of all its superinterfaces.
+     * </p>
+     * <p>
+     * The implicit length field for array class is not reflected by this method. User code should
+     * use the methods of class Array to manipulate arrays.
+     * </p>
+     * 
+     * @return The array of Field objects representing the public fields.
+     */
     public Field[] getFields() {
         return null;
     }
@@ -203,7 +227,17 @@ class JSClass<T> extends JSAnnotatedElement {
      * @since JDK1.1
      */
     public Field[] getDeclaredFields() throws SecurityException {
-        return null;
+        NativeArray<JSField> container = new NativeArray();
+
+        // collect non-static field only
+        for (String name : clazz.keys()) {
+            if (!name.startsWith("$")) {
+                container.push(new JSField(name, clazz, annotations.getPropertyAs(NativeArray.class, name)));
+            }
+        }
+
+        // API definition
+        return (Field[]) (Object) container;
     }
 
     /**

@@ -116,6 +116,17 @@ class NativeString {
     }
 
     /**
+     * <p>
+     * Count text length.
+     * </p>
+     * 
+     * @return
+     */
+    public int length() {
+        return builder.length();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -216,6 +227,17 @@ class NativeString {
          */
         public String substring(int start, int end) {
             return that + ".substring(" + param(0) + "," + param(1) + ")";
+        }
+
+        /**
+         * <p>
+         * Count text length.
+         * </p>
+         * 
+         * @return
+         */
+        public String length() {
+            return that + ".length";
         }
 
         /**

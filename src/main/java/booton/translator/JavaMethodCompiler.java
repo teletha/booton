@@ -1163,7 +1163,14 @@ class JavaMethodCompiler extends MethodVisitor {
         if (constant instanceof String) {
             current.stack.add(new OperandString((String) constant));
         } else if (constant instanceof Type) {
+            boolean isArray = false;
             String className = ((Type) constant).getInternalName();
+
+            if (className.charAt(0) == '[') {
+                isArray = true;
+                className = className.substring(1);
+
+            }
 
             // add class operand
             Class clazz = convert(className);
@@ -1171,7 +1178,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (literal == null) {
                 // Booton support class literal in javascript runtime.
-                current.addOperand(Javascript.computeClass(clazz));
+                current.addOperand(Javascript.computeClass(clazz) + (isArray ? "A" : ""));
 
                 script.require(clazz);
             } else {
@@ -1447,7 +1454,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.addOperand(current.remove(0) + " instanceof Object");
             } else if (clazz == String.class) {
                 Operand operand = current.remove(0);
-                current.addOperand("typeof " + operand + "===\"string\"||" + operand + " instanceof String");
+                current.addOperand("boot.isString(" + operand + ")");
             } else if (clazz.isInterface()) {
                 current.addOperand(Javascript.computeClass(clazz) + "." + Javascript.computeMethodName(assignable) + "(" + current.remove(0) + ".$.$)");
             } else {

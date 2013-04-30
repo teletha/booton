@@ -9,9 +9,7 @@
  */
 package js.lang.builtin;
 
-import static js.lang.Global.*;
-import js.lang.NativeObject;
-import js.util.jQuery;
+import js.persistence.Persister;
 import booton.translator.JavascriptNative;
 
 /**
@@ -112,9 +110,7 @@ public abstract class Storage implements JavascriptNative {
         }
 
         try {
-            System.out.println(text);
-            System.out.println(JSON.parse(text));
-            return jQuery.extend(true, modelClass.newInstance(), JSON.parse(text));
+            return Persister.restore(modelClass, text);
         } catch (Exception e) {
             throw new Error(e);
         }
@@ -130,7 +126,8 @@ public abstract class Storage implements JavascriptNative {
      */
     public void set(Object model) {
         if (model != null) {
-            setItem(model.getClass().getName(), JSON.stringify((NativeObject) model));
+            System.out.println(Persister.store(model));
+            setItem(model.getClass().getName(), Persister.store(model));
         }
     }
 }
