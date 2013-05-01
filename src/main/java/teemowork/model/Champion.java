@@ -176,7 +176,7 @@ public class Champion {
     public static final Champion Leona = new Champion("Leona", Sunlight, ShieldOfDaybreak, Eclipse, ZenithBlade, SolarFlare);
 
     /** The champion name. */
-    public static final Champion Lissandra = new Champion("Lissandra", Sunlight, ShieldOfDaybreak, Eclipse, ZenithBlade, SolarFlare);
+    public static final Champion Lissandra = new Champion("Lissandra", Iceborn, IceShard, RingOfFrost, GlacialPath, FrozenTomb);
 
     /** The champion name. */
     public static final Champion Lulu = new Champion("Lulu", PixFaerieCompanion, Glitterlance, Whimsy, HelpPix, WildGrowth);
@@ -1051,6 +1051,17 @@ public class Champion {
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
                 .set(MS, 335);
+        Lissandra.update(P0000)
+                .set(Health, 365, 84)
+                .set(Hreg, 6, 0.55)
+                .set(Mana, 210, 50)
+                .set(Mreg, 4.6, 0.4)
+                .set(AD, 48, 2.7)
+                .set(AS, 0.625, 1.36)
+                .set(AR, 10, 3.7)
+                .set(MR, 30, 0)
+                .set(Range, 550)
+                .set(MS, 325);
         Lulu.update(P0000)
                 .set(Health, 415, 82)
                 .set(Hreg, 6, 0.72)
@@ -1354,6 +1365,7 @@ public class Champion {
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
                 .set(MS, 340);
+        Sejuani.update(P306).set(Health, 440, 95).set(Hreg, 7.25, 0.85).set(AD, 52, 3.3).set(AR, 20.5, 3);
         Shaco.update(P0000)
                 .set(Health, 441, 84)
                 .set(Hreg, 7.45, 0.55)
@@ -1534,7 +1546,7 @@ public class Champion {
                 .set(Health, 455, 96)
                 .set(Hreg, 8, 0.85)
                 .set(Mana, 206, 45)
-                .set(Mreg, 6.9, 0.6)
+                .set(Mreg, 6.5, 0.6)
                 .set(AD, 54.66, 3)
                 .set(AS, 0.672, 2.9)
                 .set(AR, 19, 2.7)

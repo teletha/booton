@@ -39,12 +39,18 @@ public class Persister {
 
                     if (value instanceof Object) {
                         String className = js.getPropertyAs(String.class, "$" + key);
-                        Class clazz = Class.forName(className);
-                        Object instance = clazz.newInstance();
+                        
+                        if (className.startsWith("[")) {
+                            
+                        } else {
+                            Class clazz = Class.forName(className);
+                            Object instance = clazz.newInstance();
 
-                        restore((NativeObject) instance, (NativeObject) value);
+                            restore((NativeObject) instance, (NativeObject) value);
 
-                        java.setProperty(key, instance);
+                            java.setProperty(key, instance);
+                        }
+
                     } else {
                         java.setProperty(key, value);
                     }

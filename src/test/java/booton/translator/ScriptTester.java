@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import kiss.I;
+import net.sourceforge.htmlunit.corejs.javascript.ConsString;
 import net.sourceforge.htmlunit.corejs.javascript.Context;
 import net.sourceforge.htmlunit.corejs.javascript.EvaluatorException;
 import net.sourceforge.htmlunit.corejs.javascript.NativeArray;
@@ -564,14 +565,21 @@ public class ScriptTester {
      * @param js
      */
     private void assertClass(Class clazz, Object js) {
-        String computedJavaClassName = Javascript.computeSimpleClassName(clazz);
+        String prefix = "";
+
+        while (clazz.isArray()) {
+            prefix += "[";
+            clazz = clazz.getComponentType();
+        }
+
+        String computedJavaClassName = prefix + Javascript.computeSimpleClassName(clazz);
         NativeObject object = (NativeObject) js;
 
         for (Object id : object.getAllIds()) {
             Object jsClassName = object.get(id);
 
-            if (jsClassName instanceof String) {
-                assert computedJavaClassName.equals(jsClassName);
+            if (jsClassName instanceof String || jsClassName instanceof ConsString) {
+                assert computedJavaClassName.equals(jsClassName.toString());
                 return;
             }
         }

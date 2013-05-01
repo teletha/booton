@@ -102,7 +102,7 @@ public class FormCatalogPage extends Page {
 
         public int type = 10;
 
-        public int[] test = {10, 2};
+        public int[] test = new int[1];
 
         private void aaa() {
             System.out.println("nested method " + name);

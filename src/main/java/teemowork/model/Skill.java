@@ -1761,6 +1761,20 @@ public class Skill extends Describable<SkillDescriptor> {
     /** The skill name. */
     public static final Skill LetsBounce = new Skill("Let's Bounce!", R);
 
+    public static final Skill Iceborn = new Skill("Iceborn", Passive);
+
+    /** The skill name. */
+    public static final Skill IceShard = new Skill("Ice Shard", Q);
+
+    /** The skill name. */
+    public static final Skill RingOfFrost = new Skill("Ring of Frost", W);
+
+    /** The skill name. */
+    public static final Skill GlacialPath = new Skill("Glacial Path", E);
+
+    /** The skill name. */
+    public static final Skill FrozenTomb = new Skill("Frozen Tomb", R);
+
     /** The skill name. */
     public final String name;
 
@@ -3623,6 +3637,36 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(100, 50)
                 .cd(90, -15)
                 .range(1200);
+
+        /** Lissandra */
+        Iceborn.update().passive("18秒毎に次に使うスキルのコストが0になる。Glacial Path以外のスキルを敵ユニットに命中させるたびに、このスキルのCDが1秒解消される。");
+        IceShard.update()
+                .active("指定方向に貫通する氷の槍を飛ばし、当たった敵ユニットに{1}を与える。このスキルが最初に命中した敵ユニットには更に1.5秒間{2}を与える。")
+                .variable(1, MagicDamage, 75, 35, ap(0.65))
+                .variable(2, MSSlowRatio, 16, 3)
+                .mana(85)
+                .cd(6, -0.5)
+                .range(725);
+        RingOfFrost.update()
+                .active("{1}にいるすべての敵ユニットに{2}と{3}を与える。")
+                .variable(1, Radius)
+                .variable(2, MagicDamage, 70, 40, ap(0.6))
+                .variable(3, Snare, 1.1, 0.1)
+                .mana(70)
+                .cd(18, -2);
+        GlacialPath.update()
+                .active("指定方向に貫通する氷の爪を飛ばし、当たった敵ユニットに{1}を与える。氷の爪が出ている間にこのスキルを再度使用すると、氷の爪の位置までワープし氷の爪が消滅する。")
+                .variable(1, MagicDamage, 70, 45, ap(0.6))
+                .mana(80, 5)
+                .cd(24, -3)
+                .range(1050);
+        FrozenTomb.update()
+                .active("対象の敵Championに{1}と{2}を与え、同時に対象の敵Championの周囲に3秒間持続するDark Iceを呼び出し、Dark Iceに触れた敵ユニットに{1}と{3}を与える。このスキルは自身を対象とする事が可能で、自身を対象とした場合は1.5秒間行動出来なくなる代わりに、ダメージを無効化かつターゲット不可状態になり、自身の周囲からDark Iceが出現する。")
+                .variable(1, MagicDamage, 150, 150, ap(0.7))
+                .variable(2, Stun, 1.5)
+                .variable(3, MSSlowRatio, 20)
+                .mana(100)
+                .cd(130, -25);
 
         /** Lulu */
         PixFaerieCompanion.update()
