@@ -100,6 +100,17 @@ function boot(global) {
         array[i] = 0;
       }
       return array;
+    },
+    
+    createTypedArray: function(type, size) {
+      var array = [];
+      
+      for (var i = 0; i < size; i++) {
+        array[i] = 0;
+      }
+      array.$ = type;
+      
+      return array;
     }
   });
   
@@ -122,8 +133,7 @@ function boot(global) {
     },
     
     getClass: function() {
-    console.log(111);
-      return this.$;
+      return new boot.A("[" + this.$, {}, {}, Object, [], 0);
     }
   });
   
@@ -261,6 +271,9 @@ function boot(global) {
           prototype[i] = definition[i];
         }
       }
+      
+      // assign "prototype" constructor
+      prototype.$ = Class;
 
       // Expose and define class at global scope.
       boot[name] = Class;
@@ -278,29 +291,13 @@ function boot(global) {
       Object.defineProperty(Class, "$", {
         get: function() {
           if (!metadata) {
-            metadata = new boot.A(name, prototype, annotation || {}, superclass.$, interfaces, 0)
+            metadata = new boot.A(name, prototype, annotation || {}, superclass.$, interfaces, 0);
           }
           return metadata;
         }
       });
       
-      // "Class" variable (js function) can't directly have functionalities of
-      // (Java) Class class. "Class" variable directly has static methods of the
-      // defiend class, if there is method name confliction between these and the
-      // instance methods of (java) Class class, we can't resolve it correctly.
-      Object.defineProperty(Class, "$A", {
-        get: function() {
-          if (!metadata) {
-            metadata = new boot.A("$" + name, prototype, {}, Object, [], 0)
-          }
-          return metadata;
-        }
-      });
 
-      // Define class object for the reference from instance.
-      define(prototype, {
-        $: Class
-      }, true);
       
       Object.defineProperty(Class, "toString", {
         value: function() {

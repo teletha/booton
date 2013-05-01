@@ -815,6 +815,7 @@ class JavaMethodCompiler extends MethodVisitor {
         // Opcodes.T_CHAR, Opcodes.T_FLOAT, Opcodes.T_DOUBLE, Opcodes.T_BYTE, Opcodes.T_SHORT,
         // Opcodes.T_INT or Opcodes.T_LONG.
         case NEWARRAY:
+            script.require(int.class);
             current.addOperand(new OperandArray(current.remove(0), true));
             break;
         }

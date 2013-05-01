@@ -69,7 +69,11 @@ class OperandArray extends Operand {
             // normal
             if (isPrimitive) {
                 // primitive
-                builder.append("Array.create(").append(this.size).append(')');
+                builder.append("Array.createTypedArray(\"")
+                        .append(Javascript.computeSimpleClassName(int.class))
+                        .append("\",")
+                        .append(this.size)
+                        .append(')');
             } else {
                 // Object
                 builder.append("new Array(").append(this.size).append(')');
