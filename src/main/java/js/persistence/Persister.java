@@ -9,9 +9,10 @@
  */
 package js.persistence;
 
+import java.lang.reflect.Array;
+
 import js.lang.Global;
 import js.lang.NativeObject;
-import js.util.jQuery;
 
 /**
  * @version 2013/04/29 13:24:31
@@ -39,9 +40,14 @@ public class Persister {
 
                     if (value instanceof Object) {
                         String className = js.getPropertyAs(String.class, "$" + key);
-                        
+
                         if (className.startsWith("[")) {
-                            
+                            className = className.substring(1);
+                            Class clazz = Class.forName(className);
+
+                            Object array = Array.newInstance(clazz, 0);
+                            restore((NativeObject) array, (NativeObject) value);
+                            java.setProperty(key, array);
                         } else {
                             Class clazz = Class.forName(className);
                             Object instance = clazz.newInstance();
@@ -50,7 +56,6 @@ public class Persister {
 
                             java.setProperty(key, instance);
                         }
-
                     } else {
                         java.setProperty(key, value);
                     }
@@ -63,33 +68,35 @@ public class Persister {
 
     public static String store(Object model) {
         StringBuilder builder = new StringBuilder("{");
-        NativeObject instance = (NativeObject) model;
+        NativeObject js = (NativeObject) model;
 
-        for (String key : instance.keys()) {
+        for (String key : js.keys()) {
             if (!key.startsWith("$")) {
-                Object value = instance.getProperty(key);
+                Object value = js.getProperty(key);
 
                 if (value == null) {
-                    // ignore
-                } else if (value instanceof Object) {
-                    builder.append("\"").append(key).append("\":").append(store(value));
-                    builder.append(",");
-                    builder.append("\"$")
-                            .append(key)
-                            .append("\":\"")
-                            .append(value.getClass().getSimpleName())
-                            .append("\"");
-                    builder.append(",");
-                } else if (value instanceof String) {
-                    builder.append("\"").append(key).append("\":\"").append(value).append("\"");
-                    builder.append(",");
-                } else if (jQuery.isArray(value)) {
-                    System.out.println("Arrayyyyyyy");
+                    // ignore null value
                 } else {
-                    builder.append("\"").append(key).append("\":").append(value);
+                    // write key
+                    builder.append("\"").append(key).append("\":");
+
+                    if (value instanceof String) {
+                        // string
+                        builder.append("\"").append(value).append("\"");
+                    } else if (value instanceof Object) {
+                        // object and array
+                        builder.append(store(value))
+                                .append(",\"$")
+                                .append(key)
+                                .append("\":\"")
+                                .append(value.getClass().getSimpleName())
+                                .append("\"");
+                    } else {
+                        // number
+                        builder.append(value);
+                    }
                     builder.append(",");
                 }
-
             }
         }
         builder.deleteCharAt(builder.length() - 1);
