@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ import java.util.List;
 import kiss.Extensible;
 import kiss.Manageable;
 import kiss.Singleton;
+import kiss.model.ClassUtil;
 
 import org.objectweb.asm.Type;
 
@@ -25,7 +26,7 @@ import org.objectweb.asm.Type;
  * Public {@link Translator} API.
  * </p>
  * 
- * @version 2012/12/02 16:41:59
+ * @version 2013/05/01 19:40:37
  */
 @Manageable(lifestyle = Singleton.class)
 public class Translator<T> implements Extensible {
@@ -54,7 +55,7 @@ public class Translator<T> implements Extensible {
      * @return A translated expression.
      */
     String translateConstructor(Class owner, String description, Class[] types, List<Operand> context) {
-        return write(search(owner.getSimpleName(), types), context);
+        return search(owner.getSimpleName(), types).write(context);
     }
 
     /**
@@ -77,7 +78,7 @@ public class Translator<T> implements Extensible {
         if (name.equals("hashCode") && description.equals("()I")) {
             return context.get(0) + ".hashCode()";
         }
-        return write(search(name, types), context);
+        return search(name, types).write(context);
     }
 
     /**
@@ -93,7 +94,7 @@ public class Translator<T> implements Extensible {
      * @return A translated expression.
      */
     String translateStaticMethod(Class owner, String name, String description, Class[] types, List<Operand> context) {
-        return write(search(name, types), context);
+        return search(name, types).write(context);
     }
 
     /**
@@ -109,7 +110,7 @@ public class Translator<T> implements Extensible {
      * @return A translated expression.
      */
     String translateSuperMethod(Class owner, String name, String description, Class[] types, List<Operand> context) {
-        return write(search(owner.getSimpleName(), types), context);
+        return search(owner.getSimpleName(), types).write(context);
     }
 
     /**
@@ -174,7 +175,7 @@ public class Translator<T> implements Extensible {
      * @param parameterTypes A method parameters.
      * @return A result.
      */
-    private Method search(String methodName, Class[] parameterTypes) {
+    private Writer search(String methodName, Class[] parameterTypes) {
         Class translator = getClass();
 
         if (translator == Translator.class) {
@@ -215,8 +216,18 @@ public class Translator<T> implements Extensible {
             // make accesible
             method.setAccessible(true);
 
-            return method;
+            return new Writer(this, method);
         } catch (NoSuchMethodException e) {
+            Class clazz = ClassUtil.getParameter(getClass(), Translator.class)[0].getSuperclass();
+
+            if (clazz != Object.class) {
+                Translator parentTranslator = TranslatorManager.getTranslator(clazz);
+
+                if (parameterTypes != null) {
+                    return parentTranslator.search(methodName, parameterTypes);
+                }
+            }
+
             TranslationError error = new TranslationError();
             error.write("You must define a translator method at ", translator.getName(), ".");
             error.writeMethod(Modifier.PUBLIC, methodName, String.class, parameterTypes);
@@ -226,65 +237,6 @@ public class Translator<T> implements Extensible {
             // If this exception will be thrown, it is bug of this program. So we must rethrow the
             // wrapped error in here.
             throw new Error(e);
-        }
-    }
-
-    /**
-     * <p>
-     * Translate the specified method invocation (include constructor call) to the user defined
-     * javascript expression. If the suitable translation method is not found,
-     * {@link NoSuchMethodException} will be thrown.
-     * </p>
-     * 
-     * @param methodName A method name that byte code want to invoke.
-     * @param types A prameter types of the specified method.
-     * @param context A current processing operands for the specified method.
-     * @return A javascript expression.
-     */
-    private String write(Method translator, List<Operand> context) {
-        // translate special method invocation
-        this.types = translator.getParameterTypes();
-        this.context = context;
-        this.that = context.get(0).toString();
-
-        // build dummy parameters
-        Object[] dummy = new Object[types.length];
-
-        for (int i = 0; i < dummy.length; i++) {
-            switch (Type.getType(types[i]).getSort()) {
-            case Type.CHAR:
-                dummy[i] = ' ';
-                break;
-
-            case Type.INT:
-            case Type.LONG:
-            case Type.FLOAT:
-            case Type.DOUBLE:
-            case Type.SHORT:
-            case Type.BYTE:
-                dummy[i] = 0;
-                break;
-
-            case Type.BOOLEAN:
-                dummy[i] = true;
-                break;
-
-            default:
-                dummy[i] = null;
-            }
-        }
-
-        try {
-            return (String) translator.invoke(this, dummy);
-        } catch (Exception e) {
-            // If this exception will be thrown, it is bug of this program. So we must rethrow
-            // the wrapped error in here.
-            throw new Error(e);
-        } finally {
-            // clear context data
-            this.types = null;
-            this.context = null;
-            this.that = null;
         }
     }
 
@@ -337,5 +289,85 @@ public class Translator<T> implements Extensible {
      */
     private Operand getOperand(int index) {
         return context.get(index + 1).cast(types[index]);
+    }
+
+    /**
+     * @version 2013/05/01 19:27:20
+     */
+    private static class Writer {
+
+        /** The code translator. */
+        private final Translator translator;
+
+        /** The code translation method. */
+        private final Method method;
+
+        /**
+         * @param translator
+         * @param method
+         */
+        private Writer(Translator translator, Method method) {
+            this.translator = translator;
+            this.method = method;
+        }
+
+        /**
+         * <p>
+         * Translate the specified method invocation (include constructor call) to the user defined
+         * javascript expression. If the suitable translation method is not found,
+         * {@link NoSuchMethodException} will be thrown.
+         * </p>
+         * 
+         * @param methodName A method name that byte code want to invoke.
+         * @param types A prameter types of the specified method.
+         * @param context A current processing operands for the specified method.
+         * @return A javascript expression.
+         */
+        private String write(List<Operand> context) {
+            // translate special method invocation
+            translator.types = method.getParameterTypes();
+            translator.context = context;
+            translator.that = context.get(0).toString();
+
+            // build dummy parameters
+            Object[] dummy = new Object[translator.types.length];
+
+            for (int i = 0; i < dummy.length; i++) {
+                switch (Type.getType(translator.types[i]).getSort()) {
+                case Type.CHAR:
+                    dummy[i] = ' ';
+                    break;
+
+                case Type.INT:
+                case Type.LONG:
+                case Type.FLOAT:
+                case Type.DOUBLE:
+                case Type.SHORT:
+                case Type.BYTE:
+                    dummy[i] = 0;
+                    break;
+
+                case Type.BOOLEAN:
+                    dummy[i] = true;
+                    break;
+
+                default:
+                    dummy[i] = null;
+                }
+            }
+
+            try {
+                return (String) method.invoke(translator, dummy);
+            } catch (Exception e) {
+                // If this exception will be thrown, it is bug of this program. So we must rethrow
+                // the wrapped error in here.
+                throw new Error(e);
+            } finally {
+                // clear context data
+                translator.types = null;
+                translator.context = null;
+                translator.that = null;
+            }
+        }
     }
 }

@@ -296,7 +296,6 @@ function boot(global) {
           return metadata;
         }
       });
-      
 
       
       Object.defineProperty(Class, "toString", {
@@ -349,19 +348,6 @@ function boot(global) {
       descriptor.set = descriptor.set.bind(descriptor);
 
       Object.defineProperty(object, name, descriptor);
-    },
-
-    /**
-     * <p>
-     * Write JSON text from the specified model with excluding the private properties.
-     * </p>
-     */
-    writeJSON: function(model) {
-      var a = JSON.stringify(model, function(key, value) {
-        return key.startsWith("$") ? undefined : value;
-      });
-      console.log("write ", a);
-      return a;
     },
     
     /**

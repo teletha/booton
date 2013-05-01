@@ -70,6 +70,7 @@ public class FormCatalogPage extends Page {
                 model.type++;
             }
         }));
+        model.modeler.test[0] = -110;
         model.modeler.name = "changed";
         model.type = 10101;
         Global.sessionStorage.set(model);
@@ -104,8 +105,12 @@ public class FormCatalogPage extends Page {
 
         public int[] test = new int[1];
 
+        private Modeler() {
+            test[0] = 222;
+        }
+
         private void aaa() {
-            System.out.println("nested method " + name);
+            System.out.println("nested method " + name + "   " + test[0]);
         }
     }
 }

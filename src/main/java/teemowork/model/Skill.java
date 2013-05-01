@@ -5130,7 +5130,7 @@ public class Skill extends Describable<SkillDescriptor> {
         KingsTribute.update()
                 .passive("{1}以内で敵ユニットが死んだとき、{2}する。レベル1、5、9、12、15で回復する割合が上昇する。")
                 .variable(1, Radius, 1000)
-                .variable(2, RestoreHealth, 0, 0, amplify(Health, new Per4LevelForTrundle(0.02, 0.01)));
+                .variable(2, RestoreHealth, 0, 0, amplify(TargetMaxHealthRatio, new Per4LevelForTrundle(2, 1)));
         Chomp.update()
                 .active("次の通常攻撃で与えるダメージは{1}になる。8秒間{2}を得て、攻撃を受けたユニットは{3}する。建物には無効。")
                 .variable(1, PhysicalDamage, 30, 15, amplify(AD, 0.8, 0.1))

@@ -464,7 +464,8 @@ public class Champion {
     public void applyIcon(jQuery element) {
         element.css("background-image", "url(src/main/resources/teemowork/champions.jpg)")
                 .css("background-position", id / (counter - 1) * 100 + "% 0%")
-                .css("background-size", "cover");
+                .css("background-size", "cover")
+                .css("background-origin", "border-box");
     }
 
     /**

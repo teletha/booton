@@ -73,7 +73,7 @@ public abstract class JSON {
          * @return
          */
         public String stringify(NativeObject value) {
-            return "boot.writeJSON(" + param(0) + ")";
+            return "JSON.stringify(" + param(0) + ")";
         }
     }
 }
