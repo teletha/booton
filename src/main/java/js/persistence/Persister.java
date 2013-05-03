@@ -13,6 +13,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
 import js.lang.Global;
+import js.lang.NativeArray;
 import js.lang.NativeObject;
 import js.ui.model.Property;
 
@@ -113,7 +114,6 @@ public class Persister {
             Object instance = type.newInstance();
 
             restore2(instance, object);
-
             return (T) instance;
         } catch (Exception e) {
             throw new Error(e);
@@ -131,6 +131,16 @@ public class Persister {
                         field.set(java, js.getProperty(name));
                     } else if (type == String.class) {
                         field.set(java, js.getProperty(name));
+                    } else if (type.isArray()) {
+                        NativeArray value = js.getPropertyAs(NativeArray.class, name);
+                        int length = Array.getLength(value);
+                        Object instance = Array.newInstance(type, length);
+
+                        for (int i = 0; i < length; i++) {
+                            Array.set(instance, i, Array.get(value, i));
+                        }
+
+                        field.set(java, instance);
                     } else {
                         Object instance = type.newInstance();
 
@@ -169,7 +179,18 @@ public class Persister {
                             builder.append(value);
                         } else if (type.isArray()) {
                             // array
-                            System.out.println("array");
+                            int length = Array.getLength(value);
+
+                            builder.append("[");
+
+                            for (int i = 0; i < length; i++) {
+                                builder.append(Array.get(value, i));
+
+                                if (i + 1 != length) {
+                                    builder.append(",");
+                                }
+                            }
+                            builder.append("]");
                         } else {
                             // object and array
                             builder.append(store2(value));

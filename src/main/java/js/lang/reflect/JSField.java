@@ -68,7 +68,11 @@ class JSField extends JSAnnotatedElement {
      *         object
      */
     public Class<?> getType() {
-        return getAnnotation(Signature.class).returnType();
+        try {
+            return Class.forName(getAnnotation(Signature.class).returnType());
+        } catch (ClassNotFoundException e) {
+            throw new Error(e);
+        }
     }
 
     /**

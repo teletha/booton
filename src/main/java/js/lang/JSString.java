@@ -7,14 +7,13 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.lang.reflect;
+package js.lang;
+
+import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/04/07 2:56:54
+ * @version 2013/05/03 15:09:03
  */
-public @interface Signature {
-
-    String returnType();
-
-    Class[] parameterTypes();
+@JavaAPIProvider(String.class)
+class JSString {
 }

@@ -243,10 +243,10 @@ public class PrimitiveAndWrapperClassTest extends ScriptTester {
         test(new Scriptable() {
 
             @Debuggable
-            Class act() {
+            boolean act() {
                 int[] values = new int[1];
                 values[0] = 10;
-                return values.getClass();
+                return values.getClass() == int[].class;
             }
         });
     }

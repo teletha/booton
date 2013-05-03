@@ -16,7 +16,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import js.lang.reflect.Signature;
@@ -100,10 +99,17 @@ class JavaAnnotationCompiler {
      */
     private void register(String name, AnnotatedElement element) {
         Annotation[] annotations = element.getAnnotations();
+        List<Annotation> list = new ArrayList();
 
-        if (annotations.length != 0) {
+        for (Annotation annotation : annotations) {
+            if (annotation.annotationType() != JavaAPIProvider.class) {
+                list.add(annotation);
+            }
+        }
+
+        if (!list.isEmpty()) {
             List<Annotation> defined = new ArrayList();
-            defined.addAll(Arrays.asList(annotations));
+            defined.addAll(list);
 
             if (element instanceof Method) {
                 defined.add(new MethodSignature((Method) element));
@@ -280,8 +286,8 @@ class JavaAnnotationCompiler {
          * {@inheritDoc}
          */
         @Override
-        public Class returnType() {
-            return method.getReturnType();
+        public String returnType() {
+            return Javascript.computeSimpleClassName(method.getReturnType());
         }
 
         /**
@@ -320,8 +326,8 @@ class JavaAnnotationCompiler {
          * {@inheritDoc}
          */
         @Override
-        public Class returnType() {
-            return field.getType();
+        public String returnType() {
+            return Javascript.computeSimpleClassName(field.getType());
         }
 
         /**

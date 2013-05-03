@@ -1169,7 +1169,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (className.charAt(0) == '[') {
                 isArray = true;
-                className = className.substring(1);
+                // className = className.substring(1);
 
             }
 

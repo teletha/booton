@@ -309,6 +309,16 @@ class JSClass<T> extends JSAnnotatedElement {
     }
 
     /**
+     * Determines if this {@code Class} object represents an array class.
+     * 
+     * @return {@code true} if this object represents an array class; {@code false} otherwise.
+     * @since JDK1.1
+     */
+    public boolean isArray() {
+        return name.startsWith("[");
+    }
+
+    /**
      * <p>
      * Returns the Class representing the superclass of the entity (class, interface, primitive type
      * or void) represented by this Class. If this Class represents either the Object class, an
@@ -464,6 +474,10 @@ class JSClass<T> extends JSAnnotatedElement {
      * @return The Class object for the class with the specified name.
      */
     public static Class forName(String fqcn) {
-        return (Class) boot.getPropertyAs(NativeObject.class, fqcn).getProperty("$");
+        if (!fqcn.startsWith("[")) {
+            return (Class) boot.getPropertyAs(NativeObject.class, fqcn).getProperty("$");
+        } else {
+            return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeObject(), Object.class, new String[] {});
+        }
     }
 }

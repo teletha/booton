@@ -45,4 +45,53 @@ class JSArray {
 
         return array;
     }
+
+    /**
+     * Returns the length of the specified array object, as an {@code int}.
+     * 
+     * @param array the array
+     * @return the length of the array
+     * @exception IllegalArgumentException if the object argument is not an array
+     */
+    public static int getLength(Object array) throws IllegalArgumentException {
+        return ((NativeArray) array).length();
+    }
+
+    /**
+     * Returns the value of the indexed component in the specified array object. The value is
+     * automatically wrapped in an object if it has a primitive type.
+     * 
+     * @param array the array
+     * @param index the index
+     * @return the (possibly wrapped) value of the indexed component in the specified array
+     * @exception NullPointerException If the specified object is null
+     * @exception IllegalArgumentException If the specified object is not an array
+     * @exception ArrayIndexOutOfBoundsException If the specified {@code index} argument is
+     *                negative, or if it is greater than or equal to the length of the specified
+     *                array
+     */
+    public static Object get(Object array, int index) throws IllegalArgumentException, ArrayIndexOutOfBoundsException {
+        return ((NativeArray) array).get(index);
+    }
+
+    /**
+     * Sets the value of the indexed component of the specified array object to the specified new
+     * value. The new value is first automatically unwrapped if the array has a primitive component
+     * type.
+     * 
+     * @param array the array
+     * @param index the index into the array
+     * @param value the new value of the indexed component
+     * @exception NullPointerException If the specified object argument is null
+     * @exception IllegalArgumentException If the specified object argument is not an array, or if
+     *                the array component type is primitive and an unwrapping conversion fails
+     * @exception ArrayIndexOutOfBoundsException If the specified {@code index} argument is
+     *                negative, or if it is greater than or equal to the length of the specified
+     *                array
+     */
+    public static void set(Object array, int index, Object value) throws IllegalArgumentException,
+            ArrayIndexOutOfBoundsException {
+        ((NativeArray) array).set(index, value);
+    }
+
 }

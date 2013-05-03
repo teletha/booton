@@ -199,6 +199,7 @@ function boot(global) {
      * @return A Class object.
      */
     getClass: function() {
+      if (typeof this === "string") return boot.S.$;
       return this.$.$;
     }
   });
@@ -230,7 +231,7 @@ function boot(global) {
       }
     
       // Default superclass is native Object class.
-      var superclass = superclassName.length === 0 ? Object : boot[superclassName];
+      var superclass = superclassName == String ? String : superclassName.length === 0 ? Object : boot[superclassName];
 
       // This is actual counstructor of class to define.
       function Class() {
