@@ -319,6 +319,19 @@ class JSClass<T> extends JSAnnotatedElement {
     }
 
     /**
+     * Returns the {@code Class} representing the component type of an array. If this class does not
+     * represent an array class this method returns null.
+     * 
+     * @return the {@code Class} representing the component type of this class if this class is an
+     *         array
+     * @see java.lang.reflect.Array
+     * @since JDK1.1
+     */
+    public Class<?> getComponentType() {
+        return isArray() ? forName(name.substring(1)) : null;
+    }
+
+    /**
      * <p>
      * Returns the Class representing the superclass of the entity (class, interface, primitive type
      * or void) represented by this Class. If this Class represents either the Object class, an
