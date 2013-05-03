@@ -184,7 +184,7 @@ public class Persister {
                             builder.append("[");
 
                             for (int i = 0; i < length; i++) {
-                                builder.append(Array.get(value, i));
+                                builder.append(write(type.getComponentType(), Array.get(value, i)));
 
                                 if (i + 1 != length) {
                                     builder.append(",");
@@ -206,5 +206,16 @@ public class Persister {
         } catch (Exception e) {
             throw new Error(e);
         }
+    }
+
+    private static String write(Class type, Object value) {
+        if (type == String.class) {
+            return "\"" + value + "\"";
+        }
+
+        if (type == int.class) {
+            return String.valueOf(value);
+        }
+        return store2(value);
     }
 }
