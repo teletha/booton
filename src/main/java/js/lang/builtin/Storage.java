@@ -110,7 +110,7 @@ public abstract class Storage implements JavascriptNative {
         }
 
         try {
-            return Persister.restore(modelClass, text);
+            return Persister.restore2(modelClass, text);
         } catch (Exception e) {
             throw new Error(e);
         }
@@ -126,8 +126,8 @@ public abstract class Storage implements JavascriptNative {
      */
     public void set(Object model) {
         if (model != null) {
-            System.out.println(Persister.store(model));
-            setItem(model.getClass().getName(), Persister.store(model));
+            System.out.println(Persister.store2(model));
+            setItem(model.getClass().getName(), Persister.store2(model));
         }
     }
 }

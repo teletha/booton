@@ -26,7 +26,7 @@ abstract class JSAnnotatedElement extends NativeObject {
     protected final String name;
 
     /** The annotation definition in runtime. */
-    private final NativeArray<Annotation> annotations;
+    protected final NativeArray<Annotation> annotations;
 
     /**
      * <p>

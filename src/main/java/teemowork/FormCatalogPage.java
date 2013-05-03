@@ -16,6 +16,7 @@ import js.ui.Button;
 import js.ui.Input;
 import js.ui.Select;
 import js.ui.UIEvent;
+import js.ui.model.Property;
 import js.ui.model.SelectableModel;
 import js.util.jQuery;
 import js.util.jQuery.Listener;
@@ -73,6 +74,7 @@ public class FormCatalogPage extends Page {
         model.modeler.test[0] = -110;
         model.modeler.name = "changed";
         model.type = 10101;
+        model.name = " changed !";
         Global.sessionStorage.set(model);
 
         SomeModel restored = Global.sessionStorage.get(SomeModel.class);
@@ -86,23 +88,29 @@ public class FormCatalogPage extends Page {
      */
     private static class SomeModel {
 
+        @Property
         public String name = "name";
 
+        @Property
         public int type = 10;
 
+        @Property
         public Modeler modeler = new Modeler();
 
         private void test() {
-            System.out.println("invoked " + type);
+            System.out.println("invoked " + type + "  " + name);
         }
     }
 
     private static class Modeler {
 
+        @Property
         public String name = "aa";
 
+        @Property
         public int type = 10;
 
+        @Property
         public int[] test = new int[1];
 
         private Modeler() {
