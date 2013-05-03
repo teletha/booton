@@ -447,10 +447,6 @@ public class Javascript {
             return "Object";
         }
 
-        if (clazz == String.class) {
-            return "String";
-        }
-
         if (clazz == Number.class) {
             return "Number";
         }
@@ -485,12 +481,19 @@ public class Javascript {
             return "";
         }
 
+        String prefix = "";
+
+        while (clazz.isArray()) {
+            prefix += "[";
+            clazz = clazz.getComponentType();
+        }
+
         Javascript script = getScript(clazz);
 
         if (script == null) {
             return clazz.getSimpleName();
         } else {
-            return mung32(script.id);
+            return prefix + mung32(script.id);
         }
     }
 
