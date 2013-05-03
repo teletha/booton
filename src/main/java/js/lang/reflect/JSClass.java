@@ -197,7 +197,7 @@ class JSClass<T> extends JSAnnotatedElement {
      * @return The array of Field objects representing the public fields.
      */
     public Field[] getFields() {
-        return null;
+        return getDeclaredFields();
     }
 
     /**
@@ -231,8 +231,10 @@ class JSClass<T> extends JSAnnotatedElement {
         NativeArray<JSField> container = new NativeArray();
 
         // collect non-static field only
-        for (String name : clazz.keys()) {
-            if (!name.startsWith("$")) {
+        for (String name : annotations.keys()) {
+            char ch = name.charAt(0);
+
+            if ('a' <= ch && ch <= 'p') {
                 container.push(new JSField(name, clazz, annotations.getPropertyAs(NativeArray.class, name)));
             }
         }

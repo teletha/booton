@@ -1727,6 +1727,9 @@ class JavaMethodCompiler extends MethodVisitor {
         case BOOLEAN:
             return boolean.class;
 
+        case VOID:
+            return void.class;
+
         case ARRAY:
             return Array.newInstance(convert(type.getElementType()), new int[type.getDimensions()]).getClass();
 
