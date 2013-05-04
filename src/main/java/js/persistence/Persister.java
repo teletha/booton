@@ -22,105 +22,19 @@ import js.ui.model.Property;
  */
 public class Persister {
 
-    public static <T> T restore(Class<T> type, String json) {
-        try {
-            NativeObject object = Global.JSON.parse(json);
-            NativeObject instance = (NativeObject) (Object) type.newInstance();
-
-            restore(instance, object);
-
-            return (T) instance;
-        } catch (Exception e) {
-            throw new Error(e);
-        }
-    }
-
-    private static void restore(NativeObject java, NativeObject js) {
-        try {
-            for (String key : js.keys()) {
-                if (!key.startsWith("$")) {
-                    Object value = js.getProperty(key);
-
-                    if (value instanceof Object) {
-                        String className = js.getPropertyAs(String.class, "$" + key);
-
-                        if (className.startsWith("[")) {
-                            className = className.substring(1);
-                            Class clazz = Class.forName(className);
-
-                            Object array = Array.newInstance(clazz, 0);
-                            restore((NativeObject) array, (NativeObject) value);
-                            java.setProperty(key, array);
-                        } else {
-                            Class clazz = Class.forName(className);
-                            Object instance = clazz.newInstance();
-
-                            restore((NativeObject) instance, (NativeObject) value);
-
-                            java.setProperty(key, instance);
-                        }
-                    } else {
-                        java.setProperty(key, value);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            throw new Error(e);
-        }
-    }
-
-    public static String store(Object model) {
-        StringBuilder builder = new StringBuilder("{");
-        NativeObject js = (NativeObject) model;
-
-        for (String key : js.keys()) {
-            if (!key.startsWith("$")) {
-                Object value = js.getProperty(key);
-
-                if (value == null) {
-                    // ignore null value
-                } else {
-                    // write key
-                    builder.append("\"").append(key).append("\":");
-
-                    if (value instanceof String) {
-                        // string
-                        builder.append("\"").append(value).append("\"");
-                    } else if (value instanceof Object) {
-                        // object and array
-                        builder.append(store(value))
-                                .append(",\"$")
-                                .append(key)
-                                .append("\":\"")
-                                .append(value.getClass().getSimpleName())
-                                .append("\"");
-                    } else {
-                        // number
-                        builder.append(value);
-                    }
-                    builder.append(",");
-                }
-            }
-        }
-        builder.deleteCharAt(builder.length() - 1);
-        builder.append("}");
-
-        return builder.toString();
-    }
-
-    public static <T> T restore2(Class<T> type, String json) {
+    public static <T> T read(Class<T> type, String json) {
         try {
             NativeObject object = Global.JSON.parse(json);
             Object instance = type.newInstance();
 
-            restore2(instance, object);
+            read(instance, object);
             return (T) instance;
         } catch (Exception e) {
             throw new Error(e);
         }
     }
 
-    private static void restore2(Object java, NativeObject js) {
+    private static void read(Object java, NativeObject js) {
         try {
             for (Field field : java.getClass().getFields()) {
                 if (field.isAnnotationPresent(Property.class)) {
@@ -144,7 +58,7 @@ public class Persister {
                     } else {
                         Object instance = type.newInstance();
 
-                        restore2(instance, js.getPropertyAs(NativeObject.class, name));
+                        read(instance, js.getPropertyAs(NativeObject.class, name));
 
                         field.set(java, instance);
                     }
@@ -155,48 +69,25 @@ public class Persister {
         }
     }
 
-    public static String store2(Object model) {
+    /**
+     * <p>
+     * Write object.
+     * </p>
+     * 
+     * @param model
+     * @return
+     */
+    public static String write(Object model) {
         try {
             StringBuilder builder = new StringBuilder("{");
 
             for (Field field : model.getClass().getFields()) {
                 if (field.isAnnotationPresent(Property.class)) {
-                    Object value = field.get(model);
-
-                    if (value == null) {
-                        // ignore null value
-                    } else {
-                        Class type = field.getType();
-
-                        // write key
-                        builder.append("\"").append(field.getName()).append("\":");
-
-                        if (type == String.class) {
-                            // string
-                            builder.append("\"").append(value).append("\"");
-                        } else if (type == int.class) {
-                            // number
-                            builder.append(value);
-                        } else if (type.isArray()) {
-                            // array
-                            int length = Array.getLength(value);
-
-                            builder.append("[");
-
-                            for (int i = 0; i < length; i++) {
-                                builder.append(write(type.getComponentType(), Array.get(value, i)));
-
-                                if (i + 1 != length) {
-                                    builder.append(",");
-                                }
-                            }
-                            builder.append("]");
-                        } else {
-                            // object and array
-                            builder.append(store2(value));
-                        }
-                        builder.append(",");
-                    }
+                    builder.append("\"")
+                            .append(field.getName())
+                            .append("\":")
+                            .append(write(field.getType(), field.get(model)))
+                            .append(",");
                 }
             }
             builder.deleteCharAt(builder.length() - 1);
@@ -208,14 +99,44 @@ public class Persister {
         }
     }
 
+    /**
+     * <p>
+     * Write value.
+     * </p>
+     * 
+     * @param type A value type.
+     * @param value A value.
+     * @return
+     */
     private static String write(Class type, Object value) {
+        if (value == null) {
+            return "null";
+        }
+
         if (type == String.class) {
             return "\"" + value + "\"";
         }
 
-        if (type == int.class) {
+        if (type.isPrimitive()) {
             return String.valueOf(value);
         }
-        return store2(value);
+
+        if (type.isArray()) {
+            int length = Array.getLength(value);
+            Class itemType = type.getComponentType();
+
+            StringBuilder builder = new StringBuilder("[");
+            for (int i = 0; i < length; i++) {
+                builder.append(write(itemType, Array.get(value, i)));
+
+                if (i + 1 != length) {
+                    builder.append(",");
+                }
+            }
+            builder.append("]");
+
+            return builder.toString();
+        }
+        return write(value);
     }
 }

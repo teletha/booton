@@ -21,9 +21,9 @@ public class JSONTest {
 
     @Test
     public void write() throws Exception {
-        String text = Persister.store(new Model());
+        String text = Persister.write(new Model());
 
-        assert Persister.restore(Model.class, text).value == 10;
+        assert Persister.read(Model.class, text).value == 10;
     }
 
     private static class Model extends NativeObject {
