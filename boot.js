@@ -292,6 +292,9 @@ function boot(global) {
       Object.defineProperty(Class, "$", {
         get: function() {
           if (!metadata) {
+          console.log(name);
+          console.time();
+          console.trace();
             metadata = new boot.A(name, prototype, annotation || {}, superclass.$, interfaces, 0);
           }
           return metadata;
