@@ -12,6 +12,7 @@ package js.lang.builtin;
 import js.lang.NativeObject;
 import js.persistence.Persister;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -20,6 +21,7 @@ import org.junit.Test;
 public class JSONTest {
 
     @Test
+    @Ignore
     public void write() throws Exception {
         String text = Persister.write(new Model());
 

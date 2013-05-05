@@ -200,6 +200,8 @@ public class ScriptTester {
                 if (input != NONE) {
                     if (input instanceof String || input instanceof Character) {
                         invoker.append('"').append(input).append('"');
+                    } else if (input instanceof Class) {
+                        invoker.append(Javascript.computeClass((Class) input));
                     } else {
                         invoker.append(input);
                     }
@@ -224,6 +226,7 @@ public class ScriptTester {
         } catch (AssertionError e) {
             throw e; // rethrow assertion error
         } catch (Throwable e) {
+
             TranslationError error = new TranslationError(e);
             error.write(e.getMessage());
             error.write(END, "Test Code :");
@@ -332,6 +335,8 @@ public class ScriptTester {
             return Arrays.asList((byte) 0, (byte) 1, (byte) 2, (byte) -1, (byte) -2);
         } else if (type == String.class) {
             return Arrays.asList("", "a", "some value");
+        } else if (type == Class.class) {
+            return Arrays.asList(method.getDeclaringClass(), int.class);
         } else {
             return Arrays.asList(null, "String", 1);
         }

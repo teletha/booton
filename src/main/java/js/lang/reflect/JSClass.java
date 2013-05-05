@@ -344,7 +344,9 @@ class JSClass<T> extends JSAnnotatedElement {
     public boolean isPrimitive() {
         Class type = (Class) (Object) this;
 
-        return type == int.class || type == long.class || type == float.class || type == double.class || type == boolean.class || type == short.class || type == byte.class;
+        return true;
+        // return type == int.class || type == long.class || type == float.class || type ==
+        // double.class || type == boolean.class || type == short.class || type == byte.class;
     }
 
     /**
