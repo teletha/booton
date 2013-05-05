@@ -1164,14 +1164,7 @@ class JavaMethodCompiler extends MethodVisitor {
         if (constant instanceof String) {
             current.stack.add(new OperandString((String) constant));
         } else if (constant instanceof Type) {
-            boolean isArray = false;
             String className = ((Type) constant).getInternalName();
-
-            if (className.charAt(0) == '[') {
-                isArray = true;
-                // className = className.substring(1);
-
-            }
 
             // add class operand
             Class clazz = convert(className);
@@ -1179,7 +1172,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (literal == null) {
                 // Booton support class literal in javascript runtime.
-                current.addOperand(Javascript.computeClass(clazz) + (isArray ? "A" : ""));
+                current.addOperand(Javascript.computeClass(clazz));
 
                 script.require(clazz);
             } else {

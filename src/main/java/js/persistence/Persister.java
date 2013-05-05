@@ -117,7 +117,7 @@ public class Persister {
             return "\"" + value + "\"";
         }
 
-        if (type.isPrimitive()) {
+        if (type == int.class) {
             return String.valueOf(value);
         }
 

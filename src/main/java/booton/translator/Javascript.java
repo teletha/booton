@@ -19,7 +19,6 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -191,7 +190,7 @@ public class Javascript {
         }
 
         // Record all defined classes to prevent duplicated definition.
-        write(output, new HashSet(Collections.singleton(source)));
+        write(output, new HashSet());
 
         // Write bootstrap method if needed.
         try {
@@ -223,6 +222,8 @@ public class Javascript {
      */
     private void write(Appendable output, Set defined) {
         compile();
+
+        defined.add(source);
 
         for (Class depndency : dependencies) {
             if (defined.add(depndency)) {

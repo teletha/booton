@@ -226,7 +226,6 @@ public class ScriptTester {
         } catch (AssertionError e) {
             throw e; // rethrow assertion error
         } catch (Throwable e) {
-
             TranslationError error = new TranslationError(e);
             error.write(e.getMessage());
             error.write(END, "Test Code :");
