@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2012/12/01 12:28:09
+ * @version 2013/05/06 1:43:46
  */
 @SuppressWarnings("unused")
 public class LogicalExpressionTest extends ScriptTester {
@@ -107,6 +107,18 @@ public class LogicalExpressionTest extends ScriptTester {
 
             public boolean act(@Param(from = 1, to = 24) int value) {
                 return value % 2 == 0 || value % 3 == 0 || value % 5 == 0;
+            }
+        });
+    }
+
+    @Test
+    public void OrWithOtherStatement() {
+        test(new Scriptable() {
+
+            public boolean act(int value) {
+                int i = value;
+
+                return i == 1 || i != -1;
             }
         });
     }

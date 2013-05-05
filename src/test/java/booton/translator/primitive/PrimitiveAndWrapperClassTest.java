@@ -11,7 +11,6 @@ package booton.translator.primitive;
 
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
@@ -238,16 +237,4 @@ public class PrimitiveAndWrapperClassTest extends ScriptTester {
         });
     }
 
-    @Test
-    public void IntegerPrimitiveArray() throws Exception {
-        test(new Scriptable() {
-
-            @Debuggable
-            boolean act() {
-                int[] values = new int[1];
-                values[0] = 10;
-                return values.getClass() == int[].class;
-            }
-        });
-    }
 }
