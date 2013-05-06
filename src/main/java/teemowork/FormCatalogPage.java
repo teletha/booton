@@ -78,7 +78,6 @@ public class FormCatalogPage extends Page {
         Global.sessionStorage.set(model);
 
         SomeModel restored = Global.sessionStorage.get(SomeModel.class);
-        System.out.println(restored);
         restored.test();
         restored.modeler.aaa();
     }

@@ -13,60 +13,64 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
 import js.lang.Global;
-import js.lang.NativeArray;
-import js.lang.NativeObject;
 import js.ui.model.Property;
 
 /**
- * @version 2013/04/29 13:24:31
+ * @version 2013/05/06 22:05:04
  */
 public class Persister {
 
+    /**
+     * <p>
+     * Read serialized object.
+     * </p>
+     * 
+     * @param type
+     * @param json
+     * @return
+     */
     public static <T> T read(Class<T> type, String json) {
         try {
-            NativeObject object = Global.JSON.parse(json);
-            Object instance = type.newInstance();
-
-            read(instance, object);
-            return (T) instance;
+            return read(type.newInstance(), Global.JSON.parse(json));
         } catch (Exception e) {
             throw new Error(e);
         }
     }
 
-    private static void read(Object java, NativeObject js) {
-        try {
-            for (Field field : java.getClass().getFields()) {
-                if (field.isAnnotationPresent(Property.class)) {
-                    Class type = field.getType();
-                    String name = field.getName();
+    /**
+     * <p>
+     * Read property and write it.
+     * </p>
+     * 
+     * @param java
+     * @param js
+     * @return
+     */
+    private static <T> T read(T java, Object js) throws Exception {
+        for (Field field : java.getClass().getFields()) {
+            if (field.isAnnotationPresent(Property.class)) {
+                Class type = field.getType();
+                Object value = field.get(js);
 
-                    if (type == int.class) {
-                        field.set(java, js.getProperty(name));
-                    } else if (type == String.class) {
-                        field.set(java, js.getProperty(name));
-                    } else if (type.isArray()) {
-                        NativeArray value = js.getPropertyAs(NativeArray.class, name);
-                        int length = Array.getLength(value);
-                        Object instance = Array.newInstance(type, length);
+                if (type == int.class) {
+                    field.set(java, value);
+                } else if (type == String.class) {
+                    field.set(java, value);
+                } else if (type.isArray()) {
+                    int length = Array.getLength(value);
+                    Object instance = Array.newInstance(type, length);
 
-                        for (int i = 0; i < length; i++) {
-                            Array.set(instance, i, Array.get(value, i));
-                        }
-
-                        field.set(java, instance);
-                    } else {
-                        Object instance = type.newInstance();
-
-                        read(instance, js.getPropertyAs(NativeObject.class, name));
-
-                        field.set(java, instance);
+                    for (int i = 0; i < length; i++) {
+                        Array.set(instance, i, Array.get(value, i));
                     }
+
+                    field.set(java, instance);
+                } else {
+                    field.set(java, read(type.newInstance(), value));
                 }
             }
-        } catch (Exception e) {
-            throw new Error(e);
         }
+        return java;
     }
 
     /**
