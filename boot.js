@@ -277,7 +277,31 @@ function boot(global) {
       prototype.$ = Class;
 
       // Expose and define class at global scope.
-      boot[name] = Class;
+      if (!init) {
+        // The class without static initializer can assign immediately.
+        boot[name] = Class;
+      } else {
+        // ======================================================
+        // The Emuration of Java Class Initialization
+        // ======================================================
+        // The static initializer must be invoked wheh the class is
+        // accessed for the first time. 
+        Object.defineProperty(boot, name, {
+          configurable: true,
+          get: function() {
+            // replace property
+            Object.defineProperty(boot, name, {
+              value: Class
+            });
+
+            // invoke static initializer at first time access.
+            init.call(Class);
+
+            // API definition
+            return Class;
+          }
+        });
+      }
 
       // Define class metadata as pseudo Class instance.
       // This variable is lazy initialized because define function requires
@@ -292,9 +316,6 @@ function boot(global) {
       Object.defineProperty(Class, "$", {
         get: function() {
           if (!metadata) {
-          console.log(name);
-          console.time();
-          console.trace();
             metadata = new boot.A(name, prototype, annotation || {}, superclass.$, interfaces, 0);
           }
           return metadata;
@@ -307,9 +328,6 @@ function boot(global) {
           return "Class " + name;
         }
       });
-
-      // Invoke static initialization.
-      if (init) init.call(Class);
     },
 
     /**
