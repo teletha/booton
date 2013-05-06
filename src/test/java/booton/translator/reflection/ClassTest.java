@@ -15,10 +15,20 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/04/08 14:26:59
+ * @version 2013/05/06 20:25:44
  */
 @SuppressWarnings("unused")
 public class ClassTest extends ScriptTester {
+
+    @Test
+    public void SingleInstance() throws Exception {
+        test(new Scriptable() {
+
+            boolean act() throws Exception {
+                return Parent.class == Parent.class;
+            }
+        });
+    }
 
     @Test
     public void NewInstance() throws Exception {

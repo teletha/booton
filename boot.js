@@ -281,9 +281,7 @@ function boot(global) {
         // The class without static initializer can assign immediately.
         boot[name] = Class;
       } else {
-        // ======================================================
-        // The Emuration of Java Class Initialization
-        // ======================================================
+        // This is emuration of Java class initialization.
         // The static initializer must be invoked wheh the class is
         // accessed for the first time. 
         Object.defineProperty(boot, name, {
@@ -296,9 +294,10 @@ function boot(global) {
 
             // invoke static initializer at first time access.
             init.call(Class);
+            init = null;
 
             // API definition
-            return Class;
+            return boot[name];
           }
         });
       }
@@ -307,18 +306,19 @@ function boot(global) {
       // This variable is lazy initialized because define function requires
       // native Class class (it will be "boot.A") in all classes, but Class
       // class can't be defined at first.
-      var metadata;
       
       // "Class" variable (js function) can't directly have functionalities of
       // (Java) Class class. "Class" variable directly has static methods of the
       // defiend class, if there is method name confliction between these and the
       // instance methods of (java) Class class, we can't resolve it correctly.
       Object.defineProperty(Class, "$", {
+        configurable: true,
         get: function() {
-          if (!metadata) {
-            metadata = new boot.A(name, prototype, annotation || {}, superclass.$, interfaces, 0);
-          }
-          return metadata;
+          Object.defineProperty(Class, "$", {
+            value: new boot.A(name, prototype, annotation || {}, superclass.$, interfaces, 0)
+          });
+          
+          return Class["$"];
         }
       });
 
