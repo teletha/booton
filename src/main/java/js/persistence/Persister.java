@@ -49,6 +49,8 @@ public class Persister {
     private static <T> T read(T java, Object js) throws Exception {
         for (Field field : java.getClass().getFields()) {
             if (field.isAnnotationPresent(Property.class)) {
+                field.setAccessible(true);
+
                 Class type = field.getType();
                 Object value = field.get(js);
 

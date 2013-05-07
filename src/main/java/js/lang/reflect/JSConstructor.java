@@ -26,7 +26,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/01/17 20:45:34
  */
 @JavaAPIProvider(Constructor.class)
-class JSConstructor<T> extends JSAnnotatedElement {
+class JSConstructor<T> extends JSAccessibleObject {
 
     /** The declared class definition in runtime. */
     private NativeObject clazz;

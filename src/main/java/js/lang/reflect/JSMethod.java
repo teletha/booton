@@ -26,7 +26,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/01/17 20:45:34
  */
 @JavaAPIProvider(Method.class)
-class JSMethod extends JSAnnotatedElement {
+class JSMethod extends JSAccessibleObject {
 
     /** The declaring class definition in runtime. */
     private NativeObject clazz;
