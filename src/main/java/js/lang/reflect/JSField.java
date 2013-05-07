@@ -25,7 +25,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/01/17 20:45:34
  */
 @JavaAPIProvider(Field.class)
-class JSField extends JSAnnotatedElement {
+class JSField extends JSAccessibleObject {
 
     /** The declaring class definition in runtime. */
     private NativeObject clazz;
