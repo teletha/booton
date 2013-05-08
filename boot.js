@@ -286,6 +286,7 @@ function boot(global) {
         // accessed for the first time. 
         Object.defineProperty(boot, name, {
           configurable: true,
+          enumerable: true,
           get: function() {
             // replace property
             Object.defineProperty(boot, name, {
@@ -297,7 +298,7 @@ function boot(global) {
             init = null;
 
             // API definition
-            return boot[name];
+            return Class;
           }
         });
       }
