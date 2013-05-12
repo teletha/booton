@@ -41,7 +41,7 @@ class JSMethod extends JSAccessibleObject {
      * @param annotations
      */
     JSMethod(String name, NativeObject clazz, NativeArray<Annotation> annotations) {
-        super(name, annotations);
+        super(name, annotations.slice(1));
 
         this.clazz = clazz;
     }
@@ -65,7 +65,18 @@ class JSMethod extends JSAccessibleObject {
      * @return the parameter types for the method this object represents
      */
     public Class<?>[] getParameterTypes() {
-        return getAnnotation(Signature.class).parameterTypes();
+        String[] names = getAnnotation(Signature.class).parameterTypes();
+        Class[] types = new Class[names.length];
+
+        for (int i = 0; i < names.length; i++) {
+            try {
+                types[i] = Class.forName(names[i]);
+            } catch (ClassNotFoundException e) {
+                throw new Error(e);
+            }
+        }
+
+        return types;
     }
 
     /**

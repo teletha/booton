@@ -60,7 +60,7 @@ class JSClass<T> extends JSAnnotatedElement {
      * @param annotations
      */
     private JSClass(String name, NativeObject clazz, NativeObject annotations, Class superclass, String[] interfaces) {
-        super(name, annotations.getPropertyAs(NativeArray.class, "$"));
+        super(name, annotations.getPropertyAs(NativeArray.class, "$").slice(1));
 
         this.clazz = clazz;
         this.annotations = annotations;
@@ -90,7 +90,7 @@ class JSClass<T> extends JSAnnotatedElement {
         NativeArray<JSConstructor> container = new NativeArray();
 
         for (String name : clazz.keys()) {
-            if (name.startsWith("$")) {
+            if (name.startsWith("$") && name.length() != 1) {
                 container.push(new JSConstructor(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
             }
         }
@@ -234,7 +234,7 @@ class JSClass<T> extends JSAnnotatedElement {
         for (String name : annotations.keys()) {
             char ch = name.charAt(0);
 
-            if ('a' <= ch && ch <= 'p') {
+            if ('a' <= ch && ch <= 'p' && ch != '$') {
                 container.push(new JSField(name, clazz, annotations.getPropertyAs(NativeArray.class, name)));
             }
         }
@@ -519,7 +519,7 @@ class JSClass<T> extends JSAnnotatedElement {
         if (!fqcn.startsWith("[")) {
             return (Class) boot.getPropertyAs(NativeObject.class, fqcn).getProperty("$");
         } else {
-            return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeObject(), Object.class, new String[] {});
+            return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeArray(new Object[] {0}), Object.class, new String[] {});
         }
     }
 }

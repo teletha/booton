@@ -16,5 +16,7 @@ public @interface Signature {
 
     String returnType();
 
-    Class[] parameterTypes();
+    String[] parameterTypes();
+
+    int modifier();
 }
