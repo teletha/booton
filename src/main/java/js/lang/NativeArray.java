@@ -11,13 +11,14 @@ package js.lang;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import kiss.I;
 import booton.translator.Translator;
 
 /**
- * @version 2013/04/15 16:19:13
+ * @version 2013/05/12 13:15:19
  */
 public class NativeArray<T> extends NativeObject implements Iterable<T> {
 
@@ -47,6 +48,13 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
     }
 
     /**
+     * 
+     */
+    public NativeArray(List<T> initial) {
+        list.addAll(initial);
+    }
+
+    /**
      * <p>
      * Retrieve the item at the specified index.
      * </p>
@@ -58,6 +66,20 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
         ensureSize(index + 1);
 
         return list.get(index);
+    }
+
+    /**
+     * <p>
+     * Retrieve the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
+     * @return A item at index.
+     */
+    public int getAsInt(int index) {
+        ensureSize(index + 1);
+
+        return ((Integer) list.get(index)).intValue();
     }
 
     /**
@@ -228,6 +250,40 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
     }
 
     /**
+     * <p>
+     * Returns a shallow copy of a portion of an array.
+     * </p>
+     * 
+     * @param begin Zero-based index at which to begin extraction. As a negative index, begin
+     *            indicates an offset from the end of the sequence. slice(-2) extracts the
+     *            second-to-last element and the last element in the sequence.
+     * @return
+     */
+    public NativeArray<T> slice(int begin) {
+        return slice(begin, list.size());
+    }
+
+    /**
+     * <p>
+     * Returns a shallow copy of a portion of an array.
+     * </p>
+     * 
+     * @param begin Zero-based index at which to begin extraction. As a negative index, begin
+     *            indicates an offset from the end of the sequence. slice(-2) extracts the
+     *            second-to-last element and the last element in the sequence.
+     * @param end Zero-based index at which to end extraction. slice extracts up to but not
+     *            including end. slice(1,4) extracts the second element through the fourth element
+     *            (elements indexed 1, 2, and 3). As a negative index, end indicates an offset from
+     *            the end of the sequence. slice(2,-1) extracts the third element through the
+     *            second-to-last element in the sequence. If end is omitted, slice extracts to the
+     *            end of the sequence.
+     * @return
+     */
+    public NativeArray<T> slice(int begin, int end) {
+        return new NativeArray(list.subList(begin, end));
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -305,6 +361,18 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
          * @return A item at index.
          */
         public String get(int index) {
+            return that + "[" + param(0) + "]";
+        }
+
+        /**
+         * <p>
+         * Retrieve the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @return A item at index.
+         */
+        public String getAsInt(int index) {
             return that + "[" + param(0) + "]";
         }
 
@@ -425,6 +493,40 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
          */
         public String splice(int param0, int param1, NativeArray param2) {
             return that + ".splice(" + param(0) + "," + param(1) + "," + param(2) + ")";
+        }
+
+        /**
+         * <p>
+         * Returns a shallow copy of a portion of an array.
+         * </p>
+         * 
+         * @param begin Zero-based index at which to begin extraction. As a negative index, begin
+         *            indicates an offset from the end of the sequence. slice(-2) extracts the
+         *            second-to-last element and the last element in the sequence.
+         * @return
+         */
+        public String slice(int begin) {
+            return that + ".slice(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Returns a shallow copy of a portion of an array.
+         * </p>
+         * 
+         * @param begin Zero-based index at which to begin extraction. As a negative index, begin
+         *            indicates an offset from the end of the sequence. slice(-2) extracts the
+         *            second-to-last element and the last element in the sequence.
+         * @param end Zero-based index at which to end extraction. slice extracts up to but not
+         *            including end. slice(1,4) extracts the second element through the fourth
+         *            element (elements indexed 1, 2, and 3). As a negative index, end indicates an
+         *            offset from the end of the sequence. slice(2,-1) extracts the third element
+         *            through the second-to-last element in the sequence. If end is omitted, slice
+         *            extracts to the end of the sequence.
+         * @return
+         */
+        public String slice(int begin, int end) {
+            return that + ".slice(" + param(0) + "," + param(1) + ")";
         }
 
         /**

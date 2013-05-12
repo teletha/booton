@@ -45,7 +45,7 @@ class JSConstructor<T> extends JSAccessibleObject {
      * @param annotations
      */
     JSConstructor(String name, NativeObject clazz, NativeFunction function, NativeArray<Annotation> annotations) {
-        super(name, annotations);
+        super(name, annotations.slice(2));
 
         this.clazz = clazz;
         this.function = function;
