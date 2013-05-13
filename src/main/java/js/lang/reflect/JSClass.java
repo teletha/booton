@@ -542,16 +542,11 @@ class JSClass<T> extends JSAnnotatedElement {
      * @return The Class object for the class with the specified name.
      */
     public static Class forName(String fqcn) {
-        if (!fqcn.startsWith("[")) {
-            NativeObject definition = boot.getPropertyAs(NativeObject.class, fqcn);
+        NativeObject definition = boot.getPropertyAs(NativeObject.class, fqcn);
 
-            if (definition == null) {
-                return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeObject(), Object.class, new String[] {});
-            }
-
-            return (Class) definition.getProperty("$");
-        } else {
+        if (definition == null) {
             return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeObject(), Object.class, new String[] {});
         }
+        return (Class) definition.getProperty("$");
     }
 }
