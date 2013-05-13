@@ -20,12 +20,10 @@ import java.util.List;
 
 import kiss.I;
 
-import org.objectweb.asm.Type;
-
 /**
  * @version 2013/01/17 21:15:48
  */
-class JavaAnnotationCompiler {
+class JavaMetadataCompiler {
 
     /** The reusable method. */
     private static final Method annotationType;
@@ -41,33 +39,43 @@ class JavaAnnotationCompiler {
     /** The current processing script. */
     private final Javascript script;
 
+    /** The target class. */
+    private final Class clazz;
+
     /** The code writer. */
     private final ScriptBuffer code = new ScriptBuffer();
 
     /**
      * 
      */
-    JavaAnnotationCompiler(Javascript script, Class clazz) {
+    JavaMetadataCompiler(Javascript script) {
         this.script = script;
+        this.clazz = script.source;
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
         List<Metadata> elements = new ArrayList();
 
         // class
-        elements.add(new ClassSignature(clazz));
+        elements.add(new ClassMetadata(clazz));
 
         // constructors
         for (Constructor constructor : clazz.getDeclaredConstructors()) {
-            elements.add(new ConstructorSignature(constructor));
+            elements.add(new ConstructorMetadata(constructor));
         }
 
         // fields
         for (Field field : clazz.getDeclaredFields()) {
-            elements.add(new FieldSignature(field));
+            elements.add(new FieldMetadata(field));
         }
 
         // methods
         for (Method method : clazz.getDeclaredMethods()) {
-            elements.add(new MethodSignature(method));
+            elements.add(new MethodMetadata(method));
         }
 
         // compile
@@ -76,20 +84,15 @@ class JavaAnnotationCompiler {
         for (int i = 0; i < elements.size(); i++) {
             Metadata element = elements.get(i);
             code.append(element.name).append(":");
-            compileAnnotations(element, element.annotations);
+            compileMetadata(element);
 
             if (i < elements.size() - 1) {
-                code.append(",");
+                code.separator();
             }
         }
         code.append("}");
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
+        // API definition
         return code.toString();
     }
 
@@ -98,11 +101,13 @@ class JavaAnnotationCompiler {
      * Compile annotation to javascript.
      * </p>
      */
-    private void compileAnnotations(Metadata signature, List<Annotation> annotations) {
+    private void compileMetadata(Metadata metadata) {
+        List<Annotation> annotations = metadata.annotations;
+
         code.append("[");
 
         // write metadata
-        code.append(signature.toString());
+        code.append(metadata);
 
         if (!annotations.isEmpty()) {
             code.append(",");
@@ -137,9 +142,7 @@ class JavaAnnotationCompiler {
 
             try {
                 Method method = methods[i];
-                String methodName = Javascript.computeMethodName(type, method.getName(), Type.getMethodDescriptor(method));
-
-                write(methodName, compileValue(method.invoke(annotation)));
+                write(Javascript.computeMethodName(method), compileValue(method.invoke(annotation)));
             } catch (Exception e) {
                 throw I.quiet(e);
             }
@@ -153,7 +156,7 @@ class JavaAnnotationCompiler {
      * </p>
      */
     private void write(String name, String value) {
-        code.append(name, ": ", "function() {", "return ", value, ";", "}");
+        code.write(name, ":", "function() {return", value, ";}");
     }
 
     /**
@@ -196,6 +199,20 @@ class JavaAnnotationCompiler {
         }
     }
 
+    private static String convert(Class[] types) {
+        StringBuilder builder = new StringBuilder("[");
+
+        for (int i = 0; i < types.length; i++) {
+            builder.append('"').append(Javascript.computeSimpleClassName(types[i])).append('"');
+
+            if (i + 1 != types.length) {
+                builder.append(",");
+            }
+        }
+        builder.append("]");
+        return builder.toString();
+    }
+
     /**
      * @version 2013/01/17 14:03:18
      */
@@ -222,24 +239,10 @@ class JavaAnnotationCompiler {
         }
     }
 
-    private static String convert(Class[] types) {
-        StringBuilder builder = new StringBuilder("[");
-
-        for (int i = 0; i < types.length; i++) {
-            builder.append('"').append(Javascript.computeSimpleClassName(types[i])).append('"');
-
-            if (i + 1 != types.length) {
-                builder.append(",");
-            }
-        }
-        builder.append("]");
-        return builder.toString();
-    }
-
     /**
      * @version 2013/05/12 14:07:59
      */
-    private static class ClassSignature extends Metadata {
+    private static class ClassMetadata extends Metadata {
 
         /** The clazz . */
         private final Class clazz;
@@ -247,7 +250,7 @@ class JavaAnnotationCompiler {
         /**
          * @param clazz
          */
-        private ClassSignature(Class clazz) {
+        private ClassMetadata(Class clazz) {
             super("$", clazz);
             this.clazz = clazz;
         }
@@ -264,7 +267,7 @@ class JavaAnnotationCompiler {
     /**
      * @version 2013/04/07 3:05:00
      */
-    private static class MethodSignature extends Metadata {
+    private static class MethodMetadata extends Metadata {
 
         /** The method . */
         private final Method method;
@@ -272,7 +275,7 @@ class JavaAnnotationCompiler {
         /**
          * @param method
          */
-        private MethodSignature(Method method) {
+        private MethodMetadata(Method method) {
             super(Javascript.computeMethodName(method), method);
             this.method = method;
         }
@@ -297,7 +300,7 @@ class JavaAnnotationCompiler {
     /**
      * @version 2013/04/07 3:05:00
      */
-    private static class FieldSignature extends Metadata {
+    private static class FieldMetadata extends Metadata {
 
         /** The field . */
         private final Field field;
@@ -305,7 +308,7 @@ class JavaAnnotationCompiler {
         /**
          * @param field
          */
-        private FieldSignature(Field field) {
+        private FieldMetadata(Field field) {
             super(Javascript.computeFieldName(field), field);
             this.field = field;
         }
@@ -326,7 +329,7 @@ class JavaAnnotationCompiler {
     /**
      * @version 2013/05/12 13:35:36
      */
-    private static class ConstructorSignature extends Metadata {
+    private static class ConstructorMetadata extends Metadata {
 
         /** The constructor . */
         private final Constructor constructor;
@@ -334,7 +337,7 @@ class JavaAnnotationCompiler {
         /**
          * @param constructor
          */
-        private ConstructorSignature(Constructor constructor) {
+        private ConstructorMetadata(Constructor constructor) {
             super(Javascript.computeMethodName(constructor), constructor);
             this.constructor = constructor;
         }
