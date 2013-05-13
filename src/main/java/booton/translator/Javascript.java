@@ -298,9 +298,7 @@ public class Javascript {
         // write annotation
         JavaAnnotationCompiler annotation = new JavaAnnotationCompiler(this, source);
 
-        if (annotation.hasAnnotation()) {
-            code.append(',').append(annotation);
-        }
+        code.append(',').append(annotation);
 
         // End class definition
         code.append(");");
@@ -342,9 +340,7 @@ public class Javascript {
         // write annotation
         JavaAnnotationCompiler annotation = new JavaAnnotationCompiler(this, source);
 
-        if (annotation.hasAnnotation()) {
-            code.append(',').append(annotation);
-        }
+        code.append(',').append(annotation);
 
         // End class definition
         code.append(");");
