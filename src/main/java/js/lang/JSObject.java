@@ -7,23 +7,13 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.inject;
+package js.lang;
 
+import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/05/05 17:55:10
+ * @version 2013/05/03 15:09:03
  */
-public class Injector {
-
-    /**
-     * <p>
-     * </p>
-     * 
-     * @param model
-     * @return
-     */
-    public <T> T getInstance(Class<T> model) {
-        return null;
-    }
-
+@JavaAPIProvider(JSObject.class)
+class JSObject {
 }

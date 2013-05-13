@@ -18,7 +18,7 @@ import booton.translator.JavascriptNative;
 import booton.translator.Translator;
 
 /**
- * @version 2013/01/18 10:37:21
+ * @version 2013/05/13 20:31:42
  */
 @JavaAPIProvider(Object.class)
 public class NativeObject {

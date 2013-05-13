@@ -105,4 +105,22 @@ abstract class JSAnnotatedElement extends NativeObject {
     public Annotation[] getDeclaredAnnotations() {
         return getAnnotations();
     }
+
+    /**
+     * <p>
+     * Search annotation descriptor.
+     * </p>
+     * 
+     * @param metadata
+     * @return
+     */
+    protected static NativeArray findAnnotations(NativeObject metadata, String key, int index) {
+        NativeArray js = metadata.getPropertyAs(NativeArray.class, key);
+
+        if (js == null) {
+            js = new NativeArray();
+        }
+
+        return js.slice(index);
+    }
 }

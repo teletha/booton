@@ -55,4 +55,19 @@ abstract class JSAccessibleObject extends JSAnnotatedElement {
     public void setAccessible(boolean flag) throws SecurityException {
         // do nothing
     }
+
+    protected Class[] convert(String[] names) {
+        Class[] types = new Class[names.length];
+
+        for (int i = 0; i < names.length; i++) {
+            try {
+                types[i] = Class.forName(names[i]);
+            } catch (Exception e) {
+                // If this exception will be thrown, it is bug of this program. So we must rethrow
+                // the wrapped error in here.
+                throw new Error(e);
+            }
+        }
+        return types;
+    }
 }

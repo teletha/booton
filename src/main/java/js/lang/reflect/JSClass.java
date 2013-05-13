@@ -60,7 +60,7 @@ class JSClass<T> extends JSAnnotatedElement {
      * @param annotations
      */
     private JSClass(String name, NativeObject clazz, NativeObject annotations, Class superclass, String[] interfaces) {
-        super(name, annotations.getPropertyAs(NativeArray.class, "$").slice(1));
+        super(name, findAnnotations(annotations, "$", 1));
 
         this.clazz = clazz;
         this.annotations = annotations;
@@ -70,6 +70,31 @@ class JSClass<T> extends JSAnnotatedElement {
         for (int i = 0; i < interfaces.length; i++) {
             this.interfaces[i] = forName(interfaces[i]);
         }
+    }
+
+    /**
+     * <p>
+     * Returns an array containing Constructor objects reflecting all the public constructors of the
+     * class represented by this Class object. An array of length 0 is returned if the class has no
+     * public constructors, or if the class is an array class, or if the class reflects a primitive
+     * type or void. Note that while this method returns an array of Constructor<T> objects (that is
+     * an array of constructors from this class), the return type of this method is Constructor<?>[]
+     * and not Constructor<T>[] as might be expected. This less informative return type is necessary
+     * since after being returned from this method, the array could be modified to hold Constructor
+     * objects for different classes, which would violate the type guarantees of Constructor<T>[].
+     * </p>
+     * 
+     * @return The array of Constructor objects representing the public constructors of this class.
+     */
+    public Constructor[] getDeclaredConstructors() {
+        NativeArray<JSConstructor> container = new NativeArray();
+
+        for (String name : clazz.keys()) {
+            if (name.startsWith("$") && name.length() != 1) {
+                container.push(new JSConstructor(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
+            }
+        }
+        return (Constructor[]) (Object) container;
     }
 
     /**
@@ -142,8 +167,9 @@ class JSClass<T> extends JSAnnotatedElement {
 
         // collect non-static methods only
         for (String name : clazz.keys()) {
-            // exclude "constructor" related properties
-            if (!name.startsWith("$")) {
+            char ch = name.charAt(0);
+
+            if (('A' <= ch && ch <= 'Z') || ('u' <= ch && ch <= 'z')) {
                 container.push(new JSMethod(name, clazz, annotations.getPropertyAs(NativeArray.class, name)));
             }
         }
@@ -234,7 +260,7 @@ class JSClass<T> extends JSAnnotatedElement {
         for (String name : annotations.keys()) {
             char ch = name.charAt(0);
 
-            if ('a' <= ch && ch <= 'p' && ch != '$') {
+            if ('a' <= ch && ch <= 'p') {
                 container.push(new JSField(name, clazz, annotations.getPropertyAs(NativeArray.class, name)));
             }
         }
@@ -344,7 +370,7 @@ class JSClass<T> extends JSAnnotatedElement {
     public boolean isPrimitive() {
         Class type = (Class) (Object) this;
 
-        return type == int.class || type == long.class || type == float.class || type == double.class || type == boolean.class || type == short.class || type == byte.class;
+        return type == int.class || type == long.class || type == float.class || type == double.class || type == boolean.class || type == short.class || type == byte.class || type == void.class;
     }
 
     /**
@@ -517,9 +543,15 @@ class JSClass<T> extends JSAnnotatedElement {
      */
     public static Class forName(String fqcn) {
         if (!fqcn.startsWith("[")) {
-            return (Class) boot.getPropertyAs(NativeObject.class, fqcn).getProperty("$");
+            NativeObject definition = boot.getPropertyAs(NativeObject.class, fqcn);
+
+            if (definition == null) {
+                return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeObject(), Object.class, new String[] {});
+            }
+
+            return (Class) definition.getProperty("$");
         } else {
-            return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeArray(new Object[] {0}), Object.class, new String[] {});
+            return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeObject(), Object.class, new String[] {});
         }
     }
 }

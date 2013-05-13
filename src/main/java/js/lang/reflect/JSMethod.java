@@ -31,6 +31,12 @@ class JSMethod extends JSAccessibleObject {
     /** The declaring class definition in runtime. */
     private NativeObject clazz;
 
+    /** The cache for return type. */
+    private final Class returnType;
+
+    /** The parameter types. */
+    private final Class[] parameterTypes;
+
     /**
      * <p>
      * Create native method.
@@ -41,9 +47,17 @@ class JSMethod extends JSAccessibleObject {
      * @param annotations
      */
     JSMethod(String name, NativeObject clazz, NativeArray<Annotation> annotations) {
-        super(name, annotations.slice(1));
+        super(name, annotations.slice(3));
 
-        this.clazz = clazz;
+        try {
+            this.clazz = clazz;
+            this.returnType = Class.forName(annotations.getPropertyAs(String.class, "1"));
+            this.parameterTypes = convert(annotations.getPropertyAs(String[].class, "2"));
+        } catch (Exception e) {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error(e);
+        }
     }
 
     /**
@@ -58,6 +72,16 @@ class JSMethod extends JSAccessibleObject {
     }
 
     /**
+     * Returns a {@code Class} object that represents the formal return type of the method
+     * represented by this {@code Method} object.
+     * 
+     * @return the return type for the method this object represents
+     */
+    public Class<?> getReturnType() {
+        return returnType;
+    }
+
+    /**
      * Returns an array of {@code Class} objects that represent the formal parameter types, in
      * declaration order, of the method represented by this {@code Method} object. Returns an array
      * of length 0 if the underlying method takes no parameters.
@@ -65,18 +89,7 @@ class JSMethod extends JSAccessibleObject {
      * @return the parameter types for the method this object represents
      */
     public Class<?>[] getParameterTypes() {
-        String[] names = getAnnotation(Signature.class).parameterTypes();
-        Class[] types = new Class[names.length];
-
-        for (int i = 0; i < names.length; i++) {
-            try {
-                types[i] = Class.forName(names[i]);
-            } catch (ClassNotFoundException e) {
-                throw new Error(e);
-            }
-        }
-
-        return types;
+        return parameterTypes;
     }
 
     /**
