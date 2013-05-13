@@ -25,7 +25,6 @@ public class SelectableModel<T> extends Publishable implements Iterable<T> {
     private int index = -1;
 
     /** The item manager. */
-    @Property
     private List<T> items = new ArrayList();
 
     /**
