@@ -295,10 +295,8 @@ public class Javascript {
             throw I.quiet(e);
         }
 
-        // write annotation
-        JavaAnnotationCompiler annotation = new JavaAnnotationCompiler(this, source);
-
-        code.append(',').append(annotation);
+        // write metadata
+        code.append(",").append(new JavaMetadataCompiler(this));
 
         // End class definition
         code.append(");");
@@ -337,10 +335,8 @@ public class Javascript {
             throw I.quiet(e);
         }
 
-        // write annotation
-        JavaAnnotationCompiler annotation = new JavaAnnotationCompiler(this, source);
-
-        code.append(',').append(annotation);
+        // write metadata
+        code.append(",").append(new JavaMetadataCompiler(this));
 
         // End class definition
         code.append(");");
