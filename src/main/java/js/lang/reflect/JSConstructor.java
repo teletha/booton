@@ -34,6 +34,12 @@ class JSConstructor<T> extends JSAccessibleObject {
     /** The constructor function in runtime. */
     private final NativeFunction function;
 
+    /** The parameter type names. */
+    private final String[] parameterTypeNames;
+
+    /** The cache for parameter types. */
+    private Class[] parameterTypes;
+
     /**
      * <p>
      * Create native constructor.
@@ -49,6 +55,7 @@ class JSConstructor<T> extends JSAccessibleObject {
 
         this.clazz = clazz;
         this.function = function;
+        this.parameterTypeNames = annotations.getPropertyAs(String[].class, "1");
     }
 
     /**
@@ -75,4 +82,41 @@ class JSConstructor<T> extends JSAccessibleObject {
         // API definition
         return (T) instance;
     }
+
+    /**
+     * Returns {@code true} if this constructor is a synthetic constructor; returns {@code false}
+     * otherwise.
+     * 
+     * @return true if and only if this constructor is a synthetic constructor as defined by
+     *         <cite>The Java&trade; Language Specification</cite>.
+     * @since 1.5
+     */
+    public boolean isSynthetic() {
+        return false;
+    }
+
+    /**
+     * Returns an array of {@code Class} objects that represent the formal parameter types, in
+     * declaration order, of the constructor represented by this {@code Constructor} object. Returns
+     * an array of length 0 if the underlying constructor takes no parameters.
+     * 
+     * @return the parameter types for the constructor this object represents
+     */
+    public Class<?>[] getParameterTypes() {
+        if (parameterTypes == null) {
+            parameterTypes = new Class[parameterTypeNames.length];
+
+            for (int i = 0; i < parameterTypeNames.length; i++) {
+                try {
+                    parameterTypes[i] = Class.forName(parameterTypeNames[i]);
+                } catch (ClassNotFoundException e) {
+                    // If this exception will be thrown, it is bug of this program. So we must
+                    // rethrow the wrapped error in here.
+                    throw new Error(e);
+                }
+            }
+        }
+        return parameterTypes;
+    }
+
 }

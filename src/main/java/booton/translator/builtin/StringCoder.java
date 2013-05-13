@@ -9,6 +9,7 @@
  */
 package booton.translator.builtin;
 
+import booton.translator.Javascript;
 import booton.translator.Translator;
 
 /**
@@ -81,8 +82,8 @@ class StringCoder extends Translator<String> {
         return that + ".length";
     }
 
-    public String charAt(int index) {
-        return that + ".charAt(" + param(0) + ")";
+    public String charAt(int index) throws Exception {
+        return "new " + Javascript.computeClassName(Class.forName("js.lang.JSChar")) + "(" + that + ".charAt(" + param(0) + "), 0)";
     }
 
     public String contains(CharSequence param0) {

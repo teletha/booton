@@ -30,6 +30,9 @@ class JSField extends JSAccessibleObject {
     /** The declaring class definition in runtime. */
     private NativeObject clazz;
 
+    /** The field type. */
+    private final Class<?> type;
+
     /**
      * <p>
      * Create native field.
@@ -40,9 +43,16 @@ class JSField extends JSAccessibleObject {
      * @param annotations
      */
     JSField(String name, NativeObject clazz, NativeArray<Annotation> annotations) {
-        super(name, annotations.slice(1));
+        super(name, annotations.slice(2));
 
-        this.clazz = clazz;
+        try {
+            this.clazz = clazz;
+            this.type = Class.forName(annotations.getPropertyAs(String.class, "1"));
+        } catch (ClassNotFoundException e) {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error(e);
+        }
     }
 
     /**
@@ -68,11 +78,7 @@ class JSField extends JSAccessibleObject {
      *         object
      */
     public Class<?> getType() {
-        try {
-            return Class.forName(getAnnotation(Signature.class).returnType());
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
+        return type;
     }
 
     /**

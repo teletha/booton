@@ -9,6 +9,7 @@
  */
 package jsx.inject;
 
+import jsx.Boot;
 import junit.framework.Test;
 
 import org.atinject.tck.Tck;
@@ -22,7 +23,7 @@ public class TCK {
 
     @Ignore
     public static Test aaa() {
-        Car car = new Injector().getInstance(Car.class);
+        Car car = new Boot().getInstance(Car.class);
         return Tck.testsFor(car, true, true);
     }
 }

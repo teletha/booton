@@ -14,6 +14,7 @@ import java.lang.reflect.Field;
 
 import js.lang.Global;
 import js.ui.model.Property;
+import jsx.Boot;
 
 /**
  * @version 2013/05/06 22:05:04
@@ -31,7 +32,7 @@ public class Persister {
      */
     public static <T> T read(Class<T> type, String json) {
         try {
-            return read(type.newInstance(), Global.JSON.parse(json));
+            return read(Boot.getInstance(type), Global.JSON.parse(json));
         } catch (Exception e) {
             throw new Error(e);
         }

@@ -111,33 +111,21 @@ class JavaAnnotationCompiler {
 
         if (element instanceof Class) {
             signature = new ClassSignature((Class) element);
-            list.add(signature);
         }
 
         if (element instanceof Method) {
             signature = new MethodSignature((Method) element);
-            list.add(signature);
         }
 
         if (element instanceof Field) {
             signature = new FieldSignature((Field) element);
-            list.add(signature);
         }
 
         if (element instanceof Constructor) {
             signature = new ConstructorSignature((Constructor) element);
-            list.add(signature);
         }
 
-        if (!list.isEmpty()) {
-            List<Annotation> defined = new ArrayList();
-            defined.addAll(list);
-
-            elements.add(new Metadata(name, signature, defined.toArray(new Annotation[defined.size()])));
-        }
-    }
-
-    private void register(Constructor constructor) {
+        elements.add(new Metadata(name, signature, list.toArray(new Annotation[list.size()])));
 
     }
 
@@ -166,11 +154,13 @@ class JavaAnnotationCompiler {
      * </p>
      */
     private void compileAnnotations(Signature signature, Annotation[] annotations) {
-        if (annotations.length != 0) {
-            code.append("[");
+        code.append("[");
 
-            // write metadata
-            code.append(signature.toString(), ",");
+        // write metadata
+        code.append(signature.toString());
+
+        if (annotations.length != 0) {
+            code.append(",");
 
             for (int i = 0; i < annotations.length; i++) {
                 compileAnnotation(annotations[i]);
@@ -179,8 +169,9 @@ class JavaAnnotationCompiler {
                     code.append(",");
                 }
             }
-            code.append("]");
         }
+
+        code.append("]");
     }
 
     /**
@@ -416,7 +407,15 @@ class JavaAnnotationCompiler {
          */
         @Override
         public String toString() {
-            return String.valueOf(method.getModifiers());
+            StringBuilder builder = new StringBuilder();
+            builder.append(method.getModifiers()).append(",");
+            builder.append('"')
+                    .append(Javascript.computeSimpleClassName(method.getReturnType()))
+                    .append('"')
+                    .append(",");
+            builder.append(convert2(method.getParameterTypes()));
+
+            return builder.toString();
         }
     }
 
@@ -472,7 +471,11 @@ class JavaAnnotationCompiler {
          */
         @Override
         public String toString() {
-            return String.valueOf(field.getModifiers());
+            StringBuilder builder = new StringBuilder();
+            builder.append(field.getModifiers()).append(",");
+            builder.append('"').append(Javascript.computeSimpleClassName(field.getType())).append('"');
+
+            return builder.toString();
         }
     }
 
