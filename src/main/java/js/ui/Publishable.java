@@ -61,13 +61,11 @@ public abstract class Publishable {
 
         if (subscribers != null) {
             subscriber = subscribers.get(listenerType);
-            System.out.println("subscribers");
+
             if (subscriber == null) {
-                System.out.println("new subscriber");
                 subscriber = new Subscribers();
             }
         } else {
-            System.out.println("new subscribers");
             subscriber = new Subscribers();
         }
         return Classes.newProxyInstance(listenerType, subscriber);

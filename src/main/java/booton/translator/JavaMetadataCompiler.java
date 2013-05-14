@@ -319,7 +319,7 @@ class JavaMetadataCompiler {
         @Override
         public String toString() {
             StringBuilder builder = new StringBuilder();
-            builder.append(field.getModifiers()).append(",");
+            builder.append("-").append(field.getModifiers()).append(",");
             builder.append('"').append(Javascript.computeSimpleClassName(field.getType())).append('"');
 
             return builder.toString();

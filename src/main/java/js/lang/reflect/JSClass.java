@@ -89,7 +89,7 @@ class JSClass<T> extends JSAnnotatedElement {
     public Constructor[] getDeclaredConstructors() {
         NativeArray<JSConstructor> container = new NativeArray();
 
-        for (String name : clazz.keys()) {
+        for (String name : annotations.keys()) {
             if (name.startsWith("$") && name.length() != 1) {
                 container.push(new JSConstructor(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
             }
@@ -114,7 +114,7 @@ class JSClass<T> extends JSAnnotatedElement {
     public Constructor[] getConstructors() {
         NativeArray<JSConstructor> container = new NativeArray();
 
-        for (String name : clazz.keys()) {
+        for (String name : annotations.keys()) {
             if (name.startsWith("$") && name.length() != 1) {
                 container.push(new JSConstructor(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
             }
@@ -166,10 +166,11 @@ class JSClass<T> extends JSAnnotatedElement {
         NativeArray<JSMethod> container = new NativeArray();
 
         // collect non-static methods only
-        for (String name : clazz.keys()) {
-            char ch = name.charAt(0);
+        for (String name : annotations.keys()) {
+            int modifier = annotations.getPropertyAs(NativeArray.class, name).getAsInt(0);
+            int ch = name.codePointAt(0);
 
-            if (('A' <= ch && ch <= 'Z') || ('u' <= ch && ch <= 'z')) {
+            if (ch != '$' && 0 <= modifier) {
                 container.push(new JSMethod(name, clazz, annotations.getPropertyAs(NativeArray.class, name)));
             }
         }
@@ -258,9 +259,10 @@ class JSClass<T> extends JSAnnotatedElement {
 
         // collect non-static field only
         for (String name : annotations.keys()) {
-            char ch = name.charAt(0);
+            int modifier = annotations.getPropertyAs(NativeArray.class, name).getAsInt(0);
+            int ch = name.codePointAt(0);
 
-            if ('a' <= ch && ch <= 'p') {
+            if (ch != '$' && modifier < 0) {
                 container.push(new JSField(name, clazz, annotations.getPropertyAs(NativeArray.class, name)));
             }
         }
