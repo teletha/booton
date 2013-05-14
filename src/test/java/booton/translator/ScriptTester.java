@@ -176,12 +176,14 @@ public class ScriptTester {
             throw I.quiet(e);
         }
 
+        StringBuilder script = new StringBuilder();
+
         // invoke as Javascript
-        String script = Javascript.getScript(source).toString();
+        Javascript.getScript(source).writeTo(script, Character.class);
 
         try {
             // compile as Javascript and script engine read it
-            engine.evaluateString(global, script, source.getSimpleName(), 1, null);
+            engine.evaluateString(global, script.toString(), source.getSimpleName(), 1, null);
 
             String className = Javascript.computeClassName(source);
             String descriptor = Type.getConstructorDescriptor(constructor);
@@ -198,8 +200,12 @@ public class ScriptTester {
                 invoker.append("new ").append(className).append("(").append(constructorName).append(").");
                 invoker.append(methodName).append("(");
                 if (input != NONE) {
-                    if (input instanceof String || input instanceof Character) {
+                    if (input instanceof String) {
                         invoker.append('"').append(input).append('"');
+                    } else if (input instanceof Character) {
+                        Class type = Class.forName("js.lang.JSChar");
+
+                        invoker.append("new " + Javascript.computeClassName(type) + "(\"" + input + "\",0)");
                     } else if (input instanceof Class) {
                         invoker.append(Javascript.computeClass((Class) input));
                     } else {
@@ -499,6 +505,9 @@ public class ScriptTester {
                 if (js instanceof Double) {
                     // numeric characters (i.e. 0, 1, 2...)
                     js = Character.valueOf((char) (((Double) js).intValue() + 48));
+                }
+                if (js instanceof NativeObject) {
+                    js = NativeObject.callMethod((NativeObject) js, "toString", new Object[] {});
                 }
                 assert ((Character) java).toString().equals(js.toString());
             } else if (Throwable.class.isAssignableFrom(type)) {

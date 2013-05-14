@@ -360,7 +360,7 @@ class JavaMethodCompiler extends MethodVisitor {
         Class owner = convert(ownerClassName);
 
         // current processing script depends on the owner class
-        script.require(owner);
+        Javascript.require(owner);
 
         Translator translator = TranslatorManager.getTranslator(owner);
 
@@ -815,7 +815,7 @@ class JavaMethodCompiler extends MethodVisitor {
         // Opcodes.T_CHAR, Opcodes.T_FLOAT, Opcodes.T_DOUBLE, Opcodes.T_BYTE, Opcodes.T_SHORT,
         // Opcodes.T_INT or Opcodes.T_LONG.
         case NEWARRAY:
-            script.require(int.class);
+            Javascript.require(int.class);
             current.addOperand(new OperandArray(current.remove(0), true));
             break;
         }
@@ -1174,7 +1174,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 // Booton support class literal in javascript runtime.
                 current.addOperand(Javascript.computeClass(clazz));
 
-                script.require(clazz);
+                Javascript.require(clazz);
             } else {
                 // Provide class literal support by user.
                 current.addOperand(literal.write(clazz));
@@ -1231,7 +1231,7 @@ class JavaMethodCompiler extends MethodVisitor {
         Class owner = convert(className);
 
         // current processing script depends on the owner class
-        script.require(owner);
+        Javascript.require(owner);
 
         // compute parameter types
         Type[] types = Type.getArgumentTypes(desc);
@@ -1442,7 +1442,7 @@ class JavaMethodCompiler extends MethodVisitor {
             Class clazz = convert(type);
 
             // load source
-            script.require(clazz);
+            Javascript.require(clazz);
 
             if (clazz == Object.class || clazz == NativeObject.class) {
                 current.addOperand(current.remove(0) + " instanceof Object");

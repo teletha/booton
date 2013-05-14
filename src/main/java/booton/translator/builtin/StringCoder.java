@@ -83,7 +83,10 @@ class StringCoder extends Translator<String> {
     }
 
     public String charAt(int index) throws Exception {
-        return "new " + Javascript.computeClassName(Class.forName("js.lang.JSChar")) + "(" + that + ".charAt(" + param(0) + "), 0)";
+        Class type = Class.forName("js.lang.JSChar");
+        Javascript.require(type);
+
+        return "new " + Javascript.computeClassName(type) + "(" + that + ".charAt(" + param(0) + "), 0)";
     }
 
     public String contains(CharSequence param0) {
