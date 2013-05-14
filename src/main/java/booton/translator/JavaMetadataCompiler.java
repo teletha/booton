@@ -36,9 +36,6 @@ class JavaMetadataCompiler {
         }
     }
 
-    /** The current processing script. */
-    private final Javascript script;
-
     /** The target class. */
     private final Class clazz;
 
@@ -49,7 +46,6 @@ class JavaMetadataCompiler {
      * 
      */
     JavaMetadataCompiler(Javascript script) {
-        this.script = script;
         this.clazz = script.source;
     }
 
@@ -176,7 +172,7 @@ class JavaMetadataCompiler {
         } else if (type == Class.class) {
             return Javascript.computeClass((Class) value);
         } else if (type.isEnum()) {
-            script.require(type);
+            Javascript.require(type);
 
             return Javascript.computeClassName(type) + "." + Javascript.computeFieldName(type, ((Enum) value).name());
         } else if (type.isArray()) {

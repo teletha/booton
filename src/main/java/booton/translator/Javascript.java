@@ -69,13 +69,16 @@ public class Javascript {
     /** The local identifier counter for {@link Javascript}. */
     private static int counter = 0;
 
+    /** The current compiling script. */
+    private static Javascript compiling = null;
+
     // initialization
     static {
         // Load Booton module
         I.load(Global.class, false);
 
-        // Define Class class at first. It is ensured that Class definition is assigned in 'boot.A'
-        // variable.
+        // Define Class class at first. It is ensured that Class definition is
+        // assigned in 'boot.A' variable.
         getScript(Class.class);
     }
 
@@ -100,7 +103,7 @@ public class Javascript {
     /** The field list of this script. */
     private final List<Integer> fields = new ArrayList();
 
-    /** The actual Javascript source code to be translated. This is initialized lazy */
+    /** The actual Javascript source code to be translated. This is initialized lazy. */
     private String code;
 
     /**
@@ -144,17 +147,6 @@ public class Javascript {
 
     /**
      * <p>
-     * Require the specified java source code.
-     * </p>
-     * 
-     * @param dependency A dependency class.
-     */
-    public void require(Class dependency) {
-        dependencies.add(dependency);
-    }
-
-    /**
-     * <p>
      * Write this script into the specified output. This method write out dependency scripts of this
      * script too.
      * </p>
@@ -180,6 +172,9 @@ public class Javascript {
      * @param requirements A list of required script classes.
      */
     public void writeTo(Appendable output, Class... requirements) {
+        // start compiling script
+        compiling = this;
+
         // Any class requires Class class.
         require(Class.class);
 
@@ -221,6 +216,13 @@ public class Javascript {
      * @param defined
      */
     private void write(Appendable output, Set defined) {
+        // store previous script
+        Javascript previous = compiling;
+
+        // update current script
+        compiling = this;
+
+        // compile script
         compile();
 
         defined.add(source);
@@ -242,6 +244,9 @@ public class Javascript {
         } catch (IOException e) {
             throw I.quiet(e);
         }
+
+        // restore previous script
+        compiling = previous;
     }
 
     /**
@@ -395,6 +400,17 @@ public class Javascript {
         writeTo(builder);
 
         return builder.toString();
+    }
+
+    /**
+     * <p>
+     * Require the specified java source code.
+     * </p>
+     * 
+     * @param dependency A dependency class.
+     */
+    public static final void require(Class dependency) {
+        compiling.dependencies.add(dependency);
     }
 
     /**
