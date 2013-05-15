@@ -11,7 +11,6 @@ package booton.translator.primitive;
 
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
@@ -35,7 +34,6 @@ public class CharTest extends ScriptTester {
     public void Equal() {
         test(new Scriptable() {
 
-            @Debuggable
             boolean act(char value) {
                 return value == 'a';
             }
@@ -46,7 +44,6 @@ public class CharTest extends ScriptTester {
     public void EqualNumber() {
         test(new Scriptable() {
 
-            @Debuggable
             boolean act(char value) {
                 return value == 97; // a
             }

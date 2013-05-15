@@ -10,26 +10,43 @@
 package js.lang.builtin;
 
 import js.lang.NativeObject;
-import js.persistence.Persister;
+import js.ui.model.Property;
+import jsx.Boot;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/05/01 22:01:29
+ * @version 2013/05/15 11:21:34
  */
+@RunWith(ScriptRunner.class)
 public class JSONTest {
 
     @Test
     public void write() throws Exception {
-        String text = Persister.write(new Model());
+        Model model = new Model();
+        model.intValue = -10;
+        model.stringValue = "changed";
 
-        assert Persister.read(Model.class, text).value == 10;
+        String text = Boot.write(model);
+        Model restored = Boot.read(Model.class, text);
+
+        assert restored != model;
+        assert restored.intValue == -10;
+        assert restored.stringValue.equals("changed");
     }
 
+    /**
+     * @version 2013/05/15 11:21:32
+     */
     private static class Model extends NativeObject {
 
-        private int value = 10;
+        @Property
+        private int intValue;
 
+        @Property
+        private String stringValue;
     }
-
 }

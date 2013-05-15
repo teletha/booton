@@ -24,6 +24,9 @@ public class TranslationError extends Error {
     /** The message buffer. */
     private final StringBuilder builder = new StringBuilder("\r\n");
 
+    /** The current processing script. */
+    Javascript script;
+
     /**
      * 
      */

@@ -16,9 +16,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import kiss.I;
+
+import org.junit.runner.RunWith;
 
 /**
  * @version 2013/01/17 21:15:48
@@ -28,9 +32,15 @@ class JavaMetadataCompiler {
     /** The reusable method. */
     private static final Method annotationType;
 
+    /** The ignorable annotation classes. */
+    private static final Set<Class<? extends Annotation>> ignorables = new HashSet();
+
     static {
         try {
             annotationType = Annotation.class.getMethod("annotationType");
+
+            ignorables.add(JavaAPIProvider.class);
+            ignorables.add(RunWith.class);
         } catch (Exception e) {
             throw I.quiet(e);
         }
@@ -228,7 +238,7 @@ class JavaMetadataCompiler {
             this.name = name;
 
             for (Annotation annotation : element.getAnnotations()) {
-                if (annotation.annotationType() != JavaAPIProvider.class) {
+                if (!ignorables.contains(annotation.annotationType())) {
                     annotations.add(annotation);
                 }
             }

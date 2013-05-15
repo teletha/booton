@@ -296,6 +296,10 @@ public class Javascript {
             code.append('{');
             new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
             code.append('}');
+        } catch (TranslationError e) {
+            e.write("\r\n at ", source.getName());
+
+            throw e;
         } catch (IOException e) {
             throw I.quiet(e);
         }
