@@ -34,8 +34,6 @@ import net.sourceforge.htmlunit.corejs.javascript.Script;
 import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
 import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
 
-import org.objectweb.asm.Type;
-
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebConsole.Logger;
@@ -186,9 +184,8 @@ public class ScriptTester {
             engine.evaluateString(global, script.toString(), source.getSimpleName(), 1, null);
 
             String className = Javascript.computeClassName(source);
-            String descriptor = Type.getConstructorDescriptor(constructor);
-            String constructorName = Javascript.computeMethodName(source, "<init>", descriptor).substring(1);
-            String methodName = Javascript.computeMethodName(source, method.getName(), Type.getMethodDescriptor(method));
+            String constructorName = Javascript.computeMethodName(constructor).substring(1);
+            String methodName = Javascript.computeMethodName(method);
 
             // invoke it and compare result
             for (int i = 0; i < inputs.size(); i++) {
