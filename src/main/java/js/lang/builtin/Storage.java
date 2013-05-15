@@ -9,7 +9,7 @@
  */
 package js.lang.builtin;
 
-import js.persistence.Persister;
+import jsx.Boot;
 import booton.translator.JavascriptNative;
 
 /**
@@ -110,7 +110,7 @@ public abstract class Storage implements JavascriptNative {
         }
 
         try {
-            return Persister.read(modelClass, text);
+            return Boot.read(modelClass, text);
         } catch (Exception e) {
             throw new Error(e);
         }
@@ -126,8 +126,8 @@ public abstract class Storage implements JavascriptNative {
      */
     public void set(Object model) {
         if (model != null) {
-            System.out.println(Persister.write(model));
-            setItem(model.getClass().getName(), Persister.write(model));
+            System.out.println(Boot.write(model));
+            setItem(model.getClass().getName(), Boot.write(model));
         }
     }
 }

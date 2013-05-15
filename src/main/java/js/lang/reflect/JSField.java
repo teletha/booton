@@ -197,6 +197,6 @@ class JSField extends JSAccessibleObject {
      * @see Field#set
      */
     public void setInt(Object object, int value) throws IllegalArgumentException, IllegalAccessException {
-        // set(object, value);
+        set(object, value);
     }
 }

@@ -83,7 +83,7 @@ public class Global {
      * and for converting JSON to values.
      * </p>
      */
-    public static JSON JSON;
+    public static final JSON JSON = new JSON();
 
     /**
      * <p>
