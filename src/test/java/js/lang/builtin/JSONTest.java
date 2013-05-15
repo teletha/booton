@@ -34,7 +34,7 @@ public class JSONTest {
         Model restored = Boot.read(Model.class, text);
 
         assert restored != model;
-        assert restored.intValue == -10;
+        assert restored.intValue == -100;
         assert restored.stringValue.equals("changed");
     }
 

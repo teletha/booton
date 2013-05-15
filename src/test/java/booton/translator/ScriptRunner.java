@@ -19,6 +19,7 @@ import net.sourceforge.htmlunit.corejs.javascript.Context;
 import net.sourceforge.htmlunit.corejs.javascript.EvaluatorException;
 import net.sourceforge.htmlunit.corejs.javascript.Script;
 import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
+import net.sourceforge.htmlunit.corejs.javascript.Undefined;
 
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
@@ -26,7 +27,6 @@ import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
-import org.objectweb.asm.Type;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -140,7 +140,9 @@ public class ScriptRunner extends BlockJUnit4ClassRunner {
      */
     @Override
     protected void runChild(FrameworkMethod method, RunNotifier notifier) {
-        super.runChild(method, notifier);
+        Description description = describeChild(method);
+
+        notifier.fireTestStarted(description);
 
         Class source = method.getMethod().getDeclaringClass();
         Constructor constructor = searchInstantiator(source);
@@ -155,50 +157,26 @@ public class ScriptRunner extends BlockJUnit4ClassRunner {
             engine.evaluateString(global, script.toString(), source.getSimpleName(), 1, null);
 
             String className = Javascript.computeClassName(source);
-            String descriptor = Type.getConstructorDescriptor(constructor);
-            String constructorName = Javascript.computeMethodName(source, "<init>", descriptor).substring(1);
+            String constructorName = Javascript.computeMethodName(constructor).substring(1);
             String methodName = Javascript.computeMethodName(method.getMethod());
-
-            // invoke it and compare result
-            Object input = NONE;
 
             // write test script
             StringBuilder invoker = new StringBuilder();
             invoker.append("try {");
-            invoker.append("news ").append(className).append("(").append(constructorName).append(").");
+            invoker.append("new ").append(className).append("(").append(constructorName).append(").");
             invoker.append(methodName).append("(");
-            if (input != NONE) {
-                if (input instanceof String) {
-                    invoker.append('"').append(input).append('"');
-                } else if (input instanceof Character) {
-                    Class type = Class.forName("js.lang.JSChar");
-
-                    invoker.append("new " + Javascript.computeClassName(type) + "(\"" + input + "\",0)");
-                } else if (input instanceof Class) {
-                    invoker.append(Javascript.computeClass((Class) input));
-                } else {
-                    invoker.append(input);
-                }
-            }
             invoker.append(");");
-            invoker.append("} catch(e) {e}");
+            invoker.append("} catch(e) {e;}");
 
-            try {
-                // execute and compare it to the java resul
-                engine.evaluateString(global, invoker.toString(), "", 1, null);
-            } catch (AssertionError e) {
-                StringBuilder builder = new StringBuilder();
-                builder.append("Compiling script is success but execution results of Java and JS are different.")
-                        .append(END);
+            // execute and compare it to the java resul
+            Object result = engine.evaluateString(global, invoker.toString(), "", 1, null);
 
-                if (input != NONE) {
-                    builder.append("Input value : ").append(input).append(END);
-                }
-                throw new AssertionError(builder.toString(), e);
+            if (result instanceof Undefined) {
+                // success
+            } else if (isFirst) {
+                notifier.fireTestFailure(new Failure(description, new AssertionError()));
+                return;
             }
-
-        } catch (AssertionError e) {
-            throw e; // rethrow assertion error
         } catch (Throwable e) {
             TranslationError error = new TranslationError(e);
             error.write(e.getMessage());
@@ -213,9 +191,12 @@ public class ScriptRunner extends BlockJUnit4ClassRunner {
                 error.write(END, "Around Cause :");
                 error.write(code.substring(Math.max(0, index - 20), Math.min(index + 20, code.length())));
             }
-            notifier.fireTestFailure(new Failure(Description.createTestDescription(source, method.getName()), error));
-            throw error;
+            notifier.fireTestFailure(new Failure(describeChild(method), error));
+        } finally {
+            notifier.fireTestFinished(description);
         }
+
+        // super.runChild(method, notifier);
     }
 
     /**
