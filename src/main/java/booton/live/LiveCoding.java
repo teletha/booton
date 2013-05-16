@@ -11,8 +11,11 @@ package booton.live;
 
 import static js.lang.Global.*;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Date;
 
+import js.lang.builtin.Console;
 import js.net.WebSocket;
 import js.ui.UIEvent;
 import js.util.jQuery.Listener;
@@ -49,7 +52,39 @@ public class LiveCoding {
                     window.location.reload(false);
                 }
             }
-
         });
+
+        System.setOut(new LiveConsole());
+    }
+
+    /**
+     * @version 2013/05/17 1:13:00
+     */
+    private static class LiveConsole extends PrintStream {
+
+        /**
+         * @param out
+         */
+        public LiveConsole() {
+            super((OutputStream) null);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void println(String x) {
+            super.println(x);
+            Console.log("@@@");
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void println(Object x) {
+            super.println(x);
+            Console.log("@@@");
+        }
     }
 }

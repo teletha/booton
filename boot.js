@@ -279,7 +279,7 @@ function boot(global) {
           }
         } else {
           // define member method
-          prototype[i] = definition[i];
+          prototype[i] = typeof definition[i] === "function" ? debug(name, i, definition[i]) : definition[i];
         }
       }
       

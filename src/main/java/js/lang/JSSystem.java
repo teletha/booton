@@ -64,6 +64,24 @@ class JSSystem {
     public static PrintStream err = new PrintStream(new ConsoleOutputStream());
 
     /**
+     * Reassigns the "standard" output stream.
+     * <p>
+     * First, if there is a security manager, its <code>checkPermission</code> method is called with
+     * a <code>RuntimePermission("setIO")</code> permission to see if it's ok to reassign the
+     * "standard" output stream.
+     * 
+     * @param out the new standard output stream
+     * @throws SecurityException if a security manager exists and its <code>checkPermission</code>
+     *             method doesn't allow reassigning of the standard output stream.
+     * @see SecurityManager#checkPermission
+     * @see java.lang.RuntimePermission
+     * @since JDK1.1
+     */
+    public static void setOut(PrintStream stream) {
+        out = stream;
+    }
+
+    /**
      * Copies an array from the specified source array, beginning at the specified position, to the
      * specified position of the destination array. A subsequence of array components are copied
      * from the source array referenced by <code>src</code> to the destination array referenced by
