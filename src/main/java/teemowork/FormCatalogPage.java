@@ -81,6 +81,8 @@ public class FormCatalogPage extends Page {
         restored.test();
         restored.modeler.aaa();
 
+        System.out.println(model);
+
         new Error().printStackTrace();
     }
 

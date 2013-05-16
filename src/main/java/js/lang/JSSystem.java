@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Array;
 
+import js.lang.builtin.Console;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -48,7 +49,19 @@ class JSSystem {
      * @see java.io.PrintStream#println(java.lang.Object)
      * @see java.io.PrintStream#println(java.lang.String)
      */
-    public final PrintStream out = new PrintStream((OutputStream) null);
+    public static PrintStream out = new PrintStream(new ConsoleOutputStream());
+
+    /**
+     * The "standard" error output stream. This stream is already open and ready to accept output
+     * data.
+     * <p>
+     * Typically this stream corresponds to display output or another output destination specified
+     * by the host environment or user. By convention, this output stream is used to display error
+     * messages or other information that should come to the immediate attention of a user even if
+     * the principal output stream, the value of the variable <code>out</code>, has been redirected
+     * to a file or other destination that is typically not continuously monitored.
+     */
+    public static PrintStream err = new PrintStream(new ConsoleOutputStream());
 
     /**
      * Copies an array from the specified source array, beginning at the specified position, to the
@@ -123,7 +136,21 @@ class JSSystem {
      */
     public static void arraycopy(Object src, int srcPos, Object dest, int destPos, int length) {
         for (int i = 0; i < length; i++) {
-            Array.set(dest, destPos + 1, Array.get(src, srcPos + i));
+            Array.set(dest, destPos + i, Array.get(src, srcPos + i));
+        }
+    }
+
+    /**
+     * @version 2013/05/16 19:27:00
+     */
+    private static class ConsoleOutputStream extends OutputStream {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void write(int b) throws IOException {
+            Console.log(b);
         }
     }
 }

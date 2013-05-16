@@ -23,6 +23,7 @@ import js.dom.DOMTokenList;
 import js.dom.Location;
 import js.dom.Window;
 import js.lang.Function;
+import js.lang.builtin.Console;
 import js.lang.builtin.JSON;
 import js.lang.builtin.Storage;
 import js.net.WebSocket;
@@ -65,6 +66,7 @@ class TranslatorManager {
         builtIn(Comparator.class);
         builtIn(Runnable.class);
         builtIn(Listener.class);
+        builtIn(Console.class);
     }
 
     /**
@@ -211,7 +213,7 @@ class TranslatorManager {
      * @version 2013/01/19 23:52:14
      */
     @Manageable(lifestyle = Singleton.class)
-    private static class GeneralTranslator extends Translator<GeneralTranslator> {
+    private static class GeneralTranslator extends Translator<Object> {
 
         /**
          * {@inheritDoc}

@@ -115,12 +115,6 @@ function boot(global) {
   });
   
   define(Array.prototype, {
-    copy: function(from, dest, dfrom, length) {
-      for (var i = 0; i < length; i++) {
-        dest[dfrom + i] = this[from + i];
-      } 
-    },
-
     /**
      * <p>
      * Sort by the specified Java comparator.
@@ -285,7 +279,7 @@ function boot(global) {
           }
         } else {
           // define member method
-          prototype[i] = debug(name, i, definition[i]);
+          prototype[i] = definition[i];
         }
       }
       

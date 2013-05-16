@@ -220,7 +220,7 @@ public class Translator<T> implements Extensible {
         } catch (NoSuchMethodException e) {
             Class clazz = ClassUtil.getParameter(getClass(), Translator.class)[0].getSuperclass();
 
-            if (clazz != Object.class) {
+            if (clazz != null && clazz != Object.class) {
                 Translator parentTranslator = TranslatorManager.getTranslator(clazz);
 
                 if (parameterTypes != null) {
