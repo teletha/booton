@@ -95,6 +95,6 @@ class JSThrowable {
      * {@inheritDoc}
      */
     public void printStackTrace() {
-        System.out.println(message);
+        Debugger.printStackTrace();
     }
 }

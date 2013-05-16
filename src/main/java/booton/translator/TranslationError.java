@@ -9,6 +9,7 @@
  */
 package booton.translator;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -218,5 +219,16 @@ public class TranslationError extends Error {
 
         // chainalbe API
         return this;
+    }
+
+    /**
+     * <p>
+     * Write constructor type.
+     * </p>
+     * 
+     * @param constructor A constructor.
+     * @return Chainable API.
+     */
+    public void writeConstructor(Constructor constructor) {
     }
 }

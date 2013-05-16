@@ -80,6 +80,8 @@ public class FormCatalogPage extends Page {
         SomeModel restored = Global.sessionStorage.get(SomeModel.class);
         restored.test();
         restored.modeler.aaa();
+
+        new Error().printStackTrace();
     }
 
     /**

@@ -428,6 +428,8 @@ public class Javascript {
     public static final Javascript getScript(Class source) {
         source = JavaAPIProviders.convert(source);
 
+        System.out.println(source);
+
         // check Native Class
         if (source == null || TranslatorManager.hasTranslator(source)) {
             return null;

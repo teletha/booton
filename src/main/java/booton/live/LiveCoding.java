@@ -17,7 +17,6 @@ import js.net.WebSocket;
 import js.ui.UIEvent;
 import js.util.jQuery.Listener;
 
-
 /**
  * @version 2013/01/08 13:33:11
  */
@@ -50,6 +49,7 @@ public class LiveCoding {
                     window.location.reload(false);
                 }
             }
+
         });
     }
 }

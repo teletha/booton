@@ -208,7 +208,23 @@ function boot(global) {
   //====================================================================
   // ECMAScript6 Extensions
   //====================================================================
+
+
+
+  //====================================================================
+  // Booton Debug Extensions
+  //====================================================================
+  var stacktrace = [];
   
+  function debug(clazz, method, invoker) {
+    return function() {
+      stacktrace.push("start " + clazz + "#" + method);
+      var result = invoker.apply(this, arguments);
+      stacktrace.pop();
+
+      return result;
+    };
+  }
   
   //====================================================================
   // Booton Extensions
@@ -269,7 +285,7 @@ function boot(global) {
           }
         } else {
           // define member method
-          prototype[i] = definition[i];
+          prototype[i] = debug(name, i, definition[i]);
         }
       }
       
@@ -383,6 +399,10 @@ function boot(global) {
      */
     isString: function(value) {
       return typeof value === "string" || value instanceof String;
+    },
+
+    printStackTrace: function() {
+      console.log(stacktrace);
     }
   });
 }
