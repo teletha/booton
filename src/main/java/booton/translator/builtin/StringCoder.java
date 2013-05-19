@@ -74,6 +74,26 @@ class StringCoder extends Translator<String> {
     }
 
     /**
+     * Constructs a new {@code String} by decoding the specified subarray of bytes using the
+     * platform's default charset. The length of the new {@code String} is a function of the
+     * charset, and hence may not be equal to the length of the subarray.
+     * <p>
+     * The behavior of this constructor when the given bytes are not valid in the default charset is
+     * unspecified. The {@link java.nio.charset.CharsetDecoder} class should be used when more
+     * control over the decoding process is required.
+     * 
+     * @param bytes The bytes to be decoded into characters
+     * @param offset The index of the first byte to decode
+     * @param length The number of bytes to decode
+     * @throws IndexOutOfBoundsException If the {@code offset} and the {@code length} arguments
+     *             index characters outside the bounds of the {@code bytes} array
+     * @since JDK1.1
+     */
+    public String String(byte bytes[], int offset, int length) {
+        return param(0) + ".slice(" + param(1) + "," + param(1) + "+" + param(2) + ").join(" + Q + Q + ")";
+    }
+
+    /**
      * Javascript native String class have length property instead of length method. And Javascript
      * manages object as hash, so object can't have same name method or property. We must convert
      * invoking java.lang.String#length() method to the accessing length property.

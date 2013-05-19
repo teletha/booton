@@ -19,6 +19,7 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -175,8 +176,9 @@ public class Javascript {
         // start compiling script
         compiling = this;
 
-        // Any class requires Class class.
+        // Any class requires these classes.
         require(Class.class);
+        require(Thread.class);
 
         if (requirements != null) {
             for (Class requirement : requirements) {
@@ -189,19 +191,17 @@ public class Javascript {
 
         // Write bootstrap method if needed.
         try {
-            Method main = source.getMethod("jsmain");
-            String className = Javascript.computeClassName(source);
-            String methodName = Javascript.computeMethodName(source, main.getName(), Type.getMethodDescriptor(main));
-
             output.append("try {");
-            if (Modifier.isStatic(main.getModifiers())) {
-                output.append(className + "." + methodName + "();");
-            } else {
-                output.append("new " + className + "(0)." + methodName + "();");
+            try {
+                output.append(invoke(source.getMethod("jsmain")));
+            } catch (Exception e) {
+                // ignore missing "jsmain" method
             }
-            output.append("} catch(e) {console.log(e)}");
+            output.append("} catch(e) {");
+            output.append(invoke(Thread.class, "handleUncaughtException", Object.class, "e"));
+            output.append("}");
         } catch (Exception e) {
-            // do nothing
+            throw I.quiet(e);
         }
 
         I.quiet(output);
@@ -391,6 +391,59 @@ public class Javascript {
             }
         }
         return "[" + I.join(list, ",") + "]";
+    }
+
+    /**
+     * <p>
+     * Write method call.
+     * </p>
+     * 
+     * @param method
+     * @return
+     */
+    private String invoke(Method method) {
+        String className = Javascript.computeClassName(method.getDeclaringClass());
+        String methodName = Javascript.computeMethodName(method);
+
+        if (Modifier.isStatic(method.getModifiers())) {
+            return className + "." + methodName + "();";
+        } else {
+            return "new " + className + "(0)." + methodName + "();";
+        }
+    }
+
+    /**
+     * <p>
+     * Write method call.
+     * </p>
+     * 
+     * @param method
+     * @return
+     */
+    private String invoke(Class clazz, String name, Object... parameters) {
+        try {
+            Class[] types = new Class[parameters.length / 2];
+            String[] params = new String[parameters.length / 2];
+
+            for (int i = 0; i < parameters.length; i = i + 2) {
+                types[i] = (Class) parameters[i];
+                params[i] = (String) parameters[i + 1];
+            }
+
+            Class source = getScript(clazz).source;
+            Method method = source.getDeclaredMethod(name, types);
+
+            String className = Javascript.computeClassName(source);
+            String methodName = Javascript.computeMethodName(method);
+
+            if (Modifier.isStatic(method.getModifiers())) {
+                return className + "." + methodName + "(" + I.join(Arrays.asList(params), ",") + ");";
+            } else {
+                return "new " + className + "(0)." + methodName + "(" + I.join(Arrays.asList(params), ",") + ");";
+            }
+        } catch (Exception e) {
+            throw I.quiet(e);
+        }
     }
 
     /**

@@ -76,6 +76,11 @@ public class ResourceServlet extends HttpServlet {
         long now = new Date().getTime();
         XML html = I.xml(file);
 
+        // append live coding script
+        html.find("script[src=\"application.js\"]").before(I.xml("script")
+                .attr("type", "text/javascript")
+                .attr("src", "live.js"));
+
         // ignore cache
         for (XML link : html.find("link[rel=stylesheet]")) {
             String href = link.attr("href");
@@ -92,9 +97,6 @@ public class ResourceServlet extends HttpServlet {
                 link.attr("src", src + "?" + now);
             }
         }
-
-        // append live coding script
-        html.find("body").child("script").attr("type", "text/javascript").attr("src", "live.js?" + now);
 
         return html;
     }

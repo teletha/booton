@@ -786,6 +786,13 @@ class JavaMethodCompiler extends MethodVisitor {
         case FCMPL:
         case FCMPG:
             break; // ignore, because we should handle it in visitJumpInsn method
+
+        case MONITORENTER:
+            current.remove(0);
+            break;
+
+        case MONITOREXIT:
+            break; // ignore
         }
     }
 

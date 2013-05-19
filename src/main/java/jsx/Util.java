@@ -21,7 +21,7 @@ import js.ui.model.Property;
 /**
  * @version 2013/05/05 17:55:10
  */
-public class Boot {
+public class Util {
 
     /**
      * <p>

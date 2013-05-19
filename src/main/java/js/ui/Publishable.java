@@ -11,12 +11,12 @@ package js.ui;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.EventListener;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import js.lang.Classes;
 import js.util.ArrayList;
 import js.util.HashMap;
 import js.util.HashSet;
@@ -68,7 +68,7 @@ public abstract class Publishable {
         } else {
             subscriber = new Subscribers();
         }
-        return Classes.newProxyInstance(listenerType, subscriber);
+        return (T) Proxy.newProxyInstance(null, new Class[] {listenerType}, subscriber);
     }
 
     /**

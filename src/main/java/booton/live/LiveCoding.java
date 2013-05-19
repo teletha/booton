@@ -13,48 +13,79 @@ import static js.lang.Global.*;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Date;
 
+import js.lang.Function;
+import js.lang.NativeFunction;
 import js.lang.builtin.Console;
 import js.net.WebSocket;
-import js.ui.UIEvent;
-import js.util.jQuery.Listener;
 
 /**
  * @version 2013/01/08 13:33:11
  */
-public class LiveCoding {
+public class LiveCoding extends WebSocket implements UncaughtExceptionHandler {
 
     /**
      * 
      */
-    public static void jsmain() {
-        $(window).on("error", new Listener() {
+    public void jsmain() {
+        Thread.setDefaultUncaughtExceptionHandler(this);
 
-            @Override
-            public void handler(UIEvent event) {
-                System.out.println(event);
-            }
-        });
-
-        connect("ws://localhost:10021/live" + window.location.pathname, new WebSocket() {
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            protected void message(MessageEvent event) {
-                String src = event.data;
-
-                if (src.endsWith("css")) {
-                    $("link[href^='" + src + "']").attr("href", src + "?" + new Date().getTime());
-                } else {
-                    window.location.reload(false);
-                }
-            }
-        });
+        connect("ws://localhost:10021/live" + window.location.pathname, this);
 
         System.setOut(new LiveConsole());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void uncaughtException(Thread thread, Throwable throwable) {
+        System.out.println("expection in live");
+        System.out.println(throwable.getStackTrace());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void open() {
+        System.out.println("open");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void message(MessageEvent event) {
+        String src = event.data;
+
+        if (src.endsWith("css")) {
+            $("link[href^='" + src + "']").attr("href", src + "?" + new Date().getTime());
+        } else {
+            window.location.reload(false);
+        }
+    }
+
+    /**
+     * <p>
+     * </p>
+     * 
+     * @param className
+     * @param methodName
+     * @param function
+     * @return
+     */
+    Function debug(final String className, final String methodName, final NativeFunction function) {
+        return new Function() {
+
+            void apply() {
+                System.out.println("start " + className + "#" + methodName);
+                function.apply(this, getArgumentArray());
+                System.out.println("end");
+            }
+        };
     }
 
     /**
@@ -75,7 +106,6 @@ public class LiveCoding {
         @Override
         public void println(String x) {
             super.println(x);
-            Console.log("@@@");
         }
 
         /**
