@@ -11,7 +11,7 @@ package js.lang.builtin;
 
 import js.lang.NativeObject;
 import js.ui.model.Property;
-import jsx.Boot;
+import jsx.Util;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,8 +30,8 @@ public class JSONTest {
         model.intValue = -10;
         model.stringValue = "changed";
 
-        String text = Boot.write(model);
-        Model restored = Boot.read(Model.class, text);
+        String text = Util.write(model);
+        Model restored = Util.read(Model.class, text);
 
         assert restored != model;
         assert restored.intValue == -100;

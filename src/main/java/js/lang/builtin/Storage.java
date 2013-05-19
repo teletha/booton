@@ -9,7 +9,7 @@
  */
 package js.lang.builtin;
 
-import jsx.Boot;
+import jsx.Util;
 import booton.translator.JavascriptNative;
 
 /**
@@ -110,7 +110,7 @@ public abstract class Storage implements JavascriptNative {
         }
 
         try {
-            return Boot.read(modelClass, text);
+            return Util.read(modelClass, text);
         } catch (Exception e) {
             throw new Error(e);
         }
@@ -126,8 +126,8 @@ public abstract class Storage implements JavascriptNative {
      */
     public void set(Object model) {
         if (model != null) {
-            System.out.println(Boot.write(model));
-            setItem(model.getClass().getName(), Boot.write(model));
+            System.out.println(Util.write(model));
+            setItem(model.getClass().getName(), Util.write(model));
         }
     }
 }

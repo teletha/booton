@@ -11,8 +11,6 @@ package js.lang;
 
 import static js.lang.Global.*;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.util.List;
 
 import js.util.ArrayList;
@@ -43,29 +41,30 @@ public class Classes {
         return matched;
     }
 
-    /**
-     * <p>
-     * Returns an instance of a proxy class for the specified interfaces that dispatches method
-     * invocations to the specified invocation handler.
-     * </p>
-     * 
-     * @param interfaceType The list of interfaces for the proxy class to implement.
-     * @param handler The invocation handler to dispatch method invocations to.
-     * @return A proxy instance with the specified invocation handler of a proxy class that is
-     *         defined by the specified class loader and that implements the specified interfaces.
-     */
-    public static <T> T newProxyInstance(Class<T> interfaceType, final InvocationHandler handler) {
-        final NativeObject proxy = new NativeObject();
-
-        for (final Method method : interfaceType.getMethods()) {
-            proxy.setProperty(method.getName(), new Function() {
-
-                @SuppressWarnings("unused")
-                public Object evaluate() throws Throwable {
-                    return handler.invoke(proxy, method, Global.getArgumentArray());
-                }
-            });
-        }
-        return (T) proxy;
-    }
+    // /**
+    // * <p>
+    // * Returns an instance of a proxy class for the specified interfaces that dispatches method
+    // * invocations to the specified invocation handler.
+    // * </p>
+    // *
+    // * @param interfaceType The list of interfaces for the proxy class to implement.
+    // * @param handler The invocation handler to dispatch method invocations to.
+    // * @return A proxy instance with the specified invocation handler of a proxy class that is
+    // * defined by the specified class loader and that implements the specified interfaces.
+    // */
+    // public static <T> T newProxyInstance(Class<T> interfaceType, final InvocationHandler handler)
+    // {
+    // final NativeObject proxy = new NativeObject();
+    //
+    // for (final Method method : interfaceType.getMethods()) {
+    // proxy.setProperty(method.getName(), new Function() {
+    //
+    // @SuppressWarnings("unused")
+    // public Object evaluate() throws Throwable {
+    // return handler.invoke(proxy, method, Global.getArgumentArray());
+    // }
+    // });
+    // }
+    // return (T) proxy;
+    // }
 }

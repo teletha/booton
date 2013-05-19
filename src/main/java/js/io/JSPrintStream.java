@@ -103,7 +103,7 @@ class JSPrintStream extends FilterOutputStream {
      * 
      * @param x an array of chars to print.
      */
-    public void println(char x[]) {
+    public void println(char[] x) {
         Console.log(x);
     }
 

@@ -24,8 +24,18 @@ class Debugger {
     static native void printStackTrace();
 
     /**
+     * <p>
+     * Create stack trace.
+     * </p>
+     * 
+     * @return
+     */
+    static native String createStackTrace();
+
+    /**
      * @version 2013/05/16 9:55:25
      */
+    @SuppressWarnings("unused")
     private static class Coder extends Translator<Debugger> {
 
         /**
@@ -34,7 +44,18 @@ class Debugger {
          * </p>
          */
         public String printStackTrace() {
-            return "boot.printStackTrace()";
+            return "boot.stacktrace()";
+        }
+
+        /**
+         * <p>
+         * Create stack trace.
+         * </p>
+         * 
+         * @return
+         */
+        public String createStackTrace() {
+            return "boot.createStackTrace()";
         }
     }
 }

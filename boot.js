@@ -239,9 +239,9 @@ function boot(global) {
       if (boot[name]) {
         return; // avoid to redefine
       }
-    
+
       // Default superclass is native Object class.
-      var superclass = superclassName == String ? String : superclassName.length === 0 ? Object : boot[superclassName];
+      var superclass = superclassName === String ? String : superclassName.length === 0 ? Object : boot[superclassName];
 
       // This is actual counstructor of class to define.
       function Class() {
@@ -279,7 +279,7 @@ function boot(global) {
           }
         } else {
           // define member method
-          prototype[i] = typeof definition[i] === "function" ? debug(name, i, definition[i]) : definition[i];
+          prototype[i] = definition[i];
         }
       }
       
@@ -395,8 +395,17 @@ function boot(global) {
       return typeof value === "string" || value instanceof String;
     },
 
-    printStackTrace: function() {
-      console.log(stacktrace);
+    stacktrace: function() {
+      return stacktrace;
+    },
+    
+    createStackTrace: function() {
+      try {
+        null.$;
+      } catch (e) {
+        console.log(e.stack.replace(/(?:\n@:0)?\s+$/m, ''));
+        return e.stack;
+      }
     }
   });
 }

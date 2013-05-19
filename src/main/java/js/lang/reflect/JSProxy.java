@@ -11,14 +11,17 @@ package js.lang.reflect;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 import js.lang.Function;
+import js.lang.Global;
 import js.lang.NativeObject;
+import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/01/20 11:36:30
+ * @version 2013/05/19 13:58:34
  */
-// @JavaNative(Proxy.class)
+@JavaAPIProvider(Proxy.class)
 class JSProxy {
 
     /**
@@ -42,7 +45,7 @@ class JSProxy {
 
                     @SuppressWarnings("unused")
                     public Object evaluate() throws Throwable {
-                        return handler.invoke(proxy, method, new Object[0]);
+                        return handler.invoke(proxy, method, Global.getArgumentArray());
                     }
                 });
             }
