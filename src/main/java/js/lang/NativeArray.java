@@ -325,6 +325,20 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
     }
 
     /**
+     * <p>
+     * Sorts the elements of an array in place and returns the array.
+     * </p>
+     * 
+     * @param comparator Specifies a function that defines the sort order. If omitted, the array is
+     *            sorted lexicographically (in dictionary order) according to the string conversion
+     *            of each element.
+     * @return
+     */
+    public NativeArray<T> sort(NativeFunction comparator) {
+        return this;
+    }
+
+    /**
      * @version 2013/05/01 19:40:46
      */
     @SuppressWarnings("unused")
@@ -567,6 +581,20 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
          */
         public String toArray(Object[] container) {
             return that;
+        }
+
+        /**
+         * <p>
+         * Sorts the elements of an array in place and returns the array.
+         * </p>
+         * 
+         * @param comparator Specifies a function that defines the sort order. If omitted, the array
+         *            is sorted lexicographically (in dictionary order) according to the string
+         *            conversion of each element.
+         * @return
+         */
+        public String sort(NativeFunction comparator) {
+            return that + ".sort(" + param(0) + ")";
         }
     }
 }

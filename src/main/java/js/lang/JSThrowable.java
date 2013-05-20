@@ -55,8 +55,12 @@ class JSThrowable {
         this.message = message;
         this.cause = cause;
 
-        String stacktrace = Debugger.createStackTrace();
+        String[] stacktrace = Debugger.createStackTrace();
+        this.stacktrace = new StackTraceElement[stacktrace.length];
 
+        for (int i = 0; i < stacktrace.length; i++) {
+            this.stacktrace[i] = new StackTraceElement("", stacktrace[i], "", 0);
+        }
     }
 
     /**

@@ -401,10 +401,37 @@ function boot(global) {
     
     createStackTrace: function() {
       try {
-        null.$;
+        a;
       } catch (e) {
-        console.log(e.stack.replace(/(?:\n@:0)?\s+$/m, ''));
-        return e.stack;
+        if (e['arguments']) {
+          // blink
+          var stack = (e.stack + '\n').replace(/^\S[^\(]+?[\n$]/gm, '')
+            .replace(/^\s+(at eval )?at\s+/gm, '')
+            .replace(/^([^\(]+?)([\n$])/gm, '{anonymous}()@$1$2')
+            .replace(/^Object.<anonymous>\s*\(([^\)]+)\)/gm, '{anonymous}()@$1')
+            .split('\n');
+          stack.pop();
+          
+          return stack;
+        } else if (e.sourceURL) {
+          // webkit
+          return e.stack.replace(/\[native code\]\n/m, '')
+            .replace(/^(?=\w+Error\:).*$\n/m, '')
+            .replace(/^@/gm, '{anonymous}()@')
+            .split('\n');
+        } else if (e.number) {
+          // ie
+          var lineRE = /^.*at (\w+) \(([^\)]+)\)$/gm;
+          return e.stack.replace(/at Anonymous function /gm, '{anonymous}()@')
+            .replace(/^(?=\w+Error\:).*$\n/m, '')
+            .replace(lineRE, '$1@$2')
+            .split('\n');
+        } else {
+          // firefox
+          return e.stack.replace(/(?:\n@:0)?\s+$/m, '')
+            .replace(/^[\(@]/gm, '{anonymous}()@')
+            .split('\n');
+        }
       }
     }
   });

@@ -9,7 +9,6 @@
  */
 package booton.translator.builtin;
 
-import java.util.Arrays;
 import java.util.Comparator;
 
 import booton.translator.Translator;
@@ -17,7 +16,7 @@ import booton.translator.Translator;
 /**
  * @version 2012/12/07 15:44:01
  */
-class ArraysCoder extends Translator<Arrays> {
+class ArraysCoder extends Translator<ArraysCoder> {
 
     public String copyOf(Object[] original, int newLength) {
         return param(0) + ".slice(" + param(1) + ")";
