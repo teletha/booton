@@ -30,7 +30,7 @@ class Debugger {
      * 
      * @return
      */
-    static native String createStackTrace();
+    static native String[] createStackTrace();
 
     /**
      * @version 2013/05/16 9:55:25

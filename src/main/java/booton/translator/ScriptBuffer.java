@@ -33,6 +33,20 @@ class ScriptBuffer {
 
     /**
      * <p>
+     * </p>
+     * 
+     * @param comment
+     */
+    public void comment(Object comment) {
+        if (!config.optimization) {
+            buffer.append("// ");
+            write(comment);
+            line();
+        }
+    }
+
+    /**
+     * <p>
      * Append debug infomation.
      * </p>
      * 

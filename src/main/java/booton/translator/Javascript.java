@@ -203,7 +203,6 @@ public class Javascript {
         } catch (Exception e) {
             throw I.quiet(e);
         }
-
         I.quiet(output);
     }
 
@@ -227,6 +226,10 @@ public class Javascript {
 
         defined.add(source);
 
+        if (source.getName().startsWith("j")) {
+            System.out.println(source + " depends " + dependencies);
+        }
+
         for (Class depndency : dependencies) {
             if (defined.add(depndency)) {
                 Javascript script = Javascript.getScript(depndency);
@@ -240,6 +243,7 @@ public class Javascript {
 
         try {
             // write this script
+            System.out.println("Write " + source);
             output.append(code);
         } catch (IOException e) {
             throw I.quiet(e);
@@ -288,7 +292,13 @@ public class Javascript {
         String className = Javascript.computeSimpleClassName(source);
         String superClass = parent == null || parent == Object.class ? "" : computeSimpleClassName(parent);
 
+        if (source == AssertionError.class) {
+            System.out.println(" AssertionError class");
+            // throw new Error();
+        }
+
         // write class definition
+        code.comment(source);
         code.append("boot.define(").string(className).append(",").string(superClass).append(",", interfaces(), ",");
 
         // write constructors, fields and methods
@@ -325,6 +335,7 @@ public class Javascript {
         String className = Javascript.computeSimpleClassName(source);
 
         // write interface definition
+        code.comment(source);
         code.append("boot.define(").string(className).append(",\"\",").append(interfaces()).append(",");
 
         // write constructors, fields and methods
@@ -467,7 +478,9 @@ public class Javascript {
      * @param dependency A dependency class.
      */
     public static final void require(Class dependency) {
-        compiling.dependencies.add(dependency);
+        if (dependency != compiling.source) {
+            compiling.dependencies.add(dependency);
+        }
     }
 
     /**
