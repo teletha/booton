@@ -18,19 +18,12 @@ class Debugger {
 
     /**
      * <p>
-     * Print stack trace.
-     * </p>
-     */
-    static native void printStackTrace();
-
-    /**
-     * <p>
      * Create stack trace.
      * </p>
      * 
      * @return
      */
-    static native String[] createStackTrace();
+    static native String[][] createStackTrace();
 
     /**
      * @version 2013/05/16 9:55:25
@@ -40,22 +33,13 @@ class Debugger {
 
         /**
          * <p>
-         * Print stack trace.
-         * </p>
-         */
-        public String printStackTrace() {
-            return "boot.stacktrace()";
-        }
-
-        /**
-         * <p>
          * Create stack trace.
          * </p>
          * 
          * @return
          */
         public String createStackTrace() {
-            return "boot.createStackTrace()";
+            return "boot.stacktrace()";
         }
     }
 }

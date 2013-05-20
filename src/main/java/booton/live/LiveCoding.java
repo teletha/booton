@@ -38,7 +38,10 @@ public class LiveCoding extends WebSocket implements UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
         System.out.println("expection in live");
-        // System.out.println(throwable.getStackTrace());
+
+        for (StackTraceElement element : throwable.getStackTrace()) {
+            System.out.println("Class " + element.getClassName() + "  Method " + element.getMethodName() + "   File " + element.getFileName() + "   Line " + element.getLineNumber());
+        }
     }
 
     /**
