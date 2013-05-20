@@ -7,34 +7,26 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.io;
+package booton.translator.builtin;
 
-import java.io.FilterOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import js.lang.builtin.Console;
-import booton.translator.JavaAPIProvider;
+import booton.translator.Translator;
 
 /**
- * @version 2013/05/16 16:31:56
+ * @version 2013/05/20 12:41:55
  */
-@JavaAPIProvider(PrintStream.class)
-class JSPrintStream extends FilterOutputStream {
+public class PrintStreamCoder extends Translator<PrintStream> {
 
     /**
-     * @param out
+     * Creates a new print stream. This stream will not flush automatically.
+     * 
+     * @param out The output stream to which values and objects will be printed
+     * @see java.io.PrintWriter#PrintWriter(java.io.OutputStream)
      */
-    public JSPrintStream(OutputStream out) {
-        super(out);
-    }
-
-    /**
-     * Terminates the current line by writing the line separator string. The line separator string
-     * is defined by the system property <code>line.separator</code>, and is not necessarily a
-     * single newline character (<code>'\n'</code>).
-     */
-    public void println() {
+    public String PrintStream(OutputStream out) {
+        return "console";
     }
 
     /**
@@ -43,8 +35,8 @@ class JSPrintStream extends FilterOutputStream {
      * 
      * @param x The <code>boolean</code> to be printed
      */
-    public void println(boolean x) {
-        Console.log(x);
+    public String println(boolean x) {
+        return that + ".log(" + param(0) + ")";
     }
 
     /**
@@ -53,8 +45,8 @@ class JSPrintStream extends FilterOutputStream {
      * 
      * @param x The <code>char</code> to be printed.
      */
-    public void println(char x) {
-        Console.log(x);
+    public String println(char x) {
+        return that + ".log(" + param(0) + ")";
     }
 
     /**
@@ -63,8 +55,8 @@ class JSPrintStream extends FilterOutputStream {
      * 
      * @param x The <code>int</code> to be printed.
      */
-    public void println(int x) {
-        Console.log(x);
+    public String println(int x) {
+        return that + ".log(" + param(0) + ")";
     }
 
     /**
@@ -73,8 +65,8 @@ class JSPrintStream extends FilterOutputStream {
      * 
      * @param x a The <code>long</code> to be printed.
      */
-    public void println(long x) {
-        Console.log(x);
+    public String println(long x) {
+        return that + ".log(" + param(0) + ")";
     }
 
     /**
@@ -83,8 +75,8 @@ class JSPrintStream extends FilterOutputStream {
      * 
      * @param x The <code>float</code> to be printed.
      */
-    public void println(float x) {
-        Console.log(x);
+    public String println(float x) {
+        return that + ".log(" + param(0) + ")";
     }
 
     /**
@@ -93,8 +85,8 @@ class JSPrintStream extends FilterOutputStream {
      * 
      * @param x The <code>double</code> to be printed.
      */
-    public void println(double x) {
-        Console.log(x);
+    public String println(double x) {
+        return that + ".log(" + param(0) + ")";
     }
 
     /**
@@ -103,8 +95,8 @@ class JSPrintStream extends FilterOutputStream {
      * 
      * @param x an array of chars to print.
      */
-    public void println(char[] x) {
-        Console.log(x);
+    public String println(char x[]) {
+        return that + ".log(" + param(0) + ")";
     }
 
     /**
@@ -113,8 +105,8 @@ class JSPrintStream extends FilterOutputStream {
      * 
      * @param x The <code>String</code> to be printed.
      */
-    public void println(String x) {
-        Console.log(x);
+    public String println(String x) {
+        return that + ".log(" + param(0) + ")";
     }
 
     /**
@@ -124,7 +116,7 @@ class JSPrintStream extends FilterOutputStream {
      * 
      * @param x The <code>Object</code> to be printed.
      */
-    public void println(Object x) {
-        Console.log(x);
+    public String println(Object x) {
+        return that + ".log(" + param(0) + ")";
     }
 }

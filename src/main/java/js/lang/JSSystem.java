@@ -14,7 +14,6 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Array;
 
-import js.lang.builtin.Console;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -49,7 +48,7 @@ class JSSystem {
      * @see java.io.PrintStream#println(java.lang.Object)
      * @see java.io.PrintStream#println(java.lang.String)
      */
-    public static PrintStream out = new PrintStream(new ConsoleOutputStream());
+    public static PrintStream out = new PrintStream(new DummyOutputStream());
 
     /**
      * The "standard" error output stream. This stream is already open and ready to accept output
@@ -61,7 +60,7 @@ class JSSystem {
      * the principal output stream, the value of the variable <code>out</code>, has been redirected
      * to a file or other destination that is typically not continuously monitored.
      */
-    public static PrintStream err = new PrintStream(new ConsoleOutputStream());
+    public static PrintStream err = new PrintStream(new DummyOutputStream());
 
     /**
      * Reassigns the "standard" output stream.
@@ -161,14 +160,14 @@ class JSSystem {
     /**
      * @version 2013/05/16 19:27:00
      */
-    private static class ConsoleOutputStream extends OutputStream {
+    private static class DummyOutputStream extends OutputStream {
 
         /**
          * {@inheritDoc}
          */
         @Override
         public void write(int b) throws IOException {
-            Console.log(b);
+            // dummy
         }
     }
 }
