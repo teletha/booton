@@ -224,17 +224,11 @@ public class Javascript {
         // compile script
         compile();
 
-        // write super class and interfaces
-        List<Class> types = new ArrayList();
-        types.add(source.getSuperclass());
-        types.addAll(Arrays.asList(source.getInterfaces()));
+        // write super class
+        Javascript script = Javascript.getScript(source.getSuperclass());
 
-        for (Class type : types) {
-            Javascript script = Javascript.getScript(type);
-
-            if (script != null) {
-                script.write(output, defined);
-            }
+        if (script != null) {
+            script.write(output, defined);
         }
 
         // write this class
@@ -244,7 +238,7 @@ public class Javascript {
 
         // write dependency classes
         for (Class depndency : dependencies) {
-            Javascript script = Javascript.getScript(depndency);
+            script = Javascript.getScript(depndency);
 
             if (script != null && !defined.contains(script.source)) {
                 script.write(output, defined);

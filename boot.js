@@ -394,44 +394,40 @@ function boot(global) {
     isString: function(value) {
       return typeof value === "string" || value instanceof String;
     },
-
-    stacktrace: function() {
-      return stacktrace;
-    },
     
-    createStackTrace: function() {
+    /**
+     * <p>
+     * Create normalized stack trace.
+     * </p>
+     */
+    stacktrace: function() {
       try {
         a;
       } catch (e) {
-        if (e['arguments']) {
-          // blink
-          var stack = (e.stack + '\n').replace(/^\S[^\(]+?[\n$]/gm, '')
-            .replace(/^\s+(at eval )?at\s+/gm, '')
-            .replace(/^([^\(]+?)([\n$])/gm, '{anonymous}()@$1$2')
-            .replace(/^Object.<anonymous>\s*\(([^\)]+)\)/gm, '{anonymous}()@$1')
-            .split('\n');
-          stack.pop();
-          
-          return stack;
+        var pattern;
+        var lines = e.stack.split("\n");
+        lines.shift(); // remove stacktrace call
+      
+        if (e.columnNumber) {
+          // firefox
+          pattern = /\.?(.+)?@(.+):(.+)/;
+          lines = lines.slice(0, lines.length - 4);
         } else if (e.sourceURL) {
           // webkit
-          return e.stack.replace(/\[native code\]\n/m, '')
-            .replace(/^(?=\w+Error\:).*$\n/m, '')
-            .replace(/^@/gm, '{anonymous}()@')
-            .split('\n');
         } else if (e.number) {
           // ie
-          var lineRE = /^.*at (\w+) \(([^\)]+)\)$/gm;
-          return e.stack.replace(/at Anonymous function /gm, '{anonymous}()@')
-            .replace(/^(?=\w+Error\:).*$\n/m, '')
-            .replace(lineRE, '$1@$2')
-            .split('\n');
+          pattern = /\s*at\s*(.+)\s\((.+):(.+):(.+)\)/;
+          lines.shift();
         } else {
-          // firefox
-          return e.stack.replace(/(?:\n@:0)?\s+$/m, '')
-            .replace(/^[\(@]/gm, '{anonymous}()@')
-            .split('\n');
+          // chrome
+          pattern = /\s*at\s*([^\s]+).+\((.+):(.+):(.+)\)/;
+          lines.shift();
         }
+        return lines.map(function(line) {
+          var info = pattern.exec(line);
+          var i = info[1].lastIndexOf(".");
+          return [i === -1 ? info[1] : info[1].substring(i+1),info[2],info[3]];
+        });
       }
     }
   });
