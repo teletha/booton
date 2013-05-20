@@ -60,7 +60,7 @@ import org.objectweb.asm.Type;
  * volatile
  * </p>
  * 
- * @version 2013/04/12 16:03:36
+ * @version 2013/05/20 22:31:29
  */
 public class Javascript {
 
@@ -186,11 +186,11 @@ public class Javascript {
             }
         }
 
-        // Record all defined classes to prevent duplicated definition.
-        write(output, new HashSet());
-
-        // Write bootstrap method if needed.
         try {
+            // Record all defined classes to prevent duplicated definition.
+            write(output, new HashSet());
+
+            // Write bootstrap method if needed.
             output.append("try {");
             try {
                 output.append(invoke(source.getMethod("jsmain")));
@@ -214,7 +214,7 @@ public class Javascript {
      * @param output A script output.
      * @param defined
      */
-    private void write(Appendable output, Set defined) {
+    private void write(Appendable output, Set defined) throws IOException {
         // store previous script
         Javascript previous = compiling;
 
@@ -224,29 +224,31 @@ public class Javascript {
         // compile script
         compile();
 
-        defined.add(source);
+        // write super class and interfaces
+        List<Class> types = new ArrayList();
+        types.add(source.getSuperclass());
+        types.addAll(Arrays.asList(source.getInterfaces()));
 
-        if (source.getName().startsWith("j")) {
-            System.out.println(source + " depends " + dependencies);
-        }
+        for (Class type : types) {
+            Javascript script = Javascript.getScript(type);
 
-        for (Class depndency : dependencies) {
-            if (defined.add(depndency)) {
-                Javascript script = Javascript.getScript(depndency);
-
-                // write dependency scripts ahead
-                if (script != null) {
-                    script.write(output, defined);
-                }
+            if (script != null) {
+                script.write(output, defined);
             }
         }
 
-        try {
-            // write this script
-            System.out.println("Write " + source);
+        // write this class
+        if (defined.add(source)) {
             output.append(code);
-        } catch (IOException e) {
-            throw I.quiet(e);
+        }
+
+        // write dependency classes
+        for (Class depndency : dependencies) {
+            Javascript script = Javascript.getScript(depndency);
+
+            if (script != null && !defined.contains(script.source)) {
+                script.write(output, defined);
+            }
         }
 
         // restore previous script
@@ -291,11 +293,6 @@ public class Javascript {
         // compute related class names
         String className = Javascript.computeSimpleClassName(source);
         String superClass = parent == null || parent == Object.class ? "" : computeSimpleClassName(parent);
-
-        if (source == AssertionError.class) {
-            System.out.println(" AssertionError class");
-            // throw new Error();
-        }
 
         // write class definition
         code.comment(source);
