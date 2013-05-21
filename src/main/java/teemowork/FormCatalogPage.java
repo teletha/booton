@@ -71,9 +71,9 @@ public class FormCatalogPage extends Page {
                 model.type++;
             }
         }));
-        if (true) {
-            throw new Error();
-        }
+        // if (true) {
+        // throw new Error();
+        // }
         model = null;
         model.modeler.test[0] = "acted";
         model.modeler.name = "changed";

@@ -75,25 +75,12 @@ class JSThread {
             Throwable throwable;
 
             if (error instanceof Throwable) {
-                System.out.println("user defined error");
                 throwable = (Throwable) error;
             } else {
-                System.out.println("native error");
                 throwable = new Error();
-                throwable.setStackTrace(JSThrowable.createStackTrace((NativeError) error));
+                throwable.setStackTrace(JSThrowable.createStackTrace((NativeError) error, false));
             }
             defaultUncaughtExceptionHandler.uncaughtException(null, throwable);
-        }
-    }
-
-    /**
-     * @version 2013/05/19 18:06:39
-     */
-    @SuppressWarnings("serial")
-    private static class SystemError extends Throwable {
-
-        private SystemError(NativeError error) {
-            System.out.println(error.getStackTrace());
         }
     }
 }

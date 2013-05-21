@@ -40,6 +40,9 @@ class Node {
     /** The try-catch-finally starting node list. */
     final List<TryCatchFinally> tries = new CopyOnWriteArrayList();
 
+    /** The line number. */
+    int number = -1;
+
     /** The previous node. */
     Node previous;
 
@@ -345,6 +348,10 @@ class Node {
     final void write(ScriptBuffer buffer) {
         if (!written) {
             written = true;
+
+            if (number != -1) {
+                buffer.comment(number);
+            }
 
             // =============================================================
             // Switch Block

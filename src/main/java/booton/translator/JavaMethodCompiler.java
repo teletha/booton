@@ -243,6 +243,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitEnd() {
         // Resolve shorthand syntax sugar of "if" statement.
         for (int i = nodes.size() - 1; 0 <= i; i--) {
@@ -314,6 +315,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
         if (desc.equals(Type.getType(Debuggable.class).getDescriptor())) {
             debuggable = true;
@@ -324,6 +326,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public AnnotationVisitor visitAnnotationDefault() {
         return null; // do nothing
     }
@@ -331,6 +334,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitAttribute(Attribute attr) {
         // do nothing
     }
@@ -338,6 +342,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitCode() {
         // do nothing
     }
@@ -345,6 +350,15 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
+    public void visitLineNumber(int line, Label start) {
+        getNode(start).number = line;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void visitFieldInsn(int opcode, String ownerClassName, String name, String desc) {
         // If this field access instruction is used for assertion, we should skip it to erase
         // compiler generated extra code.
@@ -435,6 +449,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
         switch (type) {
         case F_NEW:
@@ -466,6 +481,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitIincInsn(int position, int increment) {
         // retrieve the local variable name
         String variable = variables.name(position);
@@ -496,6 +512,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitInsn(int opcode) {
         // recode current instruction
         record(opcode);
@@ -799,6 +816,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitIntInsn(int opcode, int operand) {
         // recode current instruction
         record(opcode);
@@ -831,6 +849,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitJumpInsn(int opcode, Label label) {
         // If this jump instruction is used for assertion, we should skip it to erase compiler
         // generated extra code.
@@ -954,6 +973,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitLabel(Label label) {
         // recode current instruction
         record(LABEL);
@@ -1167,6 +1187,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * 
      * @see org.objectweb.asm.MethodVisitor#visitLdcInsn(java.lang.Object)
      */
+    @Override
     public void visitLdcInsn(Object constant) {
         if (constant instanceof String) {
             current.stack.add(new OperandString((String) constant));
@@ -1215,6 +1236,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
         // Compiler generated code (i.e. synthetic method) doesn't have local variable operand.
         // So we shouldn't use this method to salvage infomation.
@@ -1223,6 +1245,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitMaxs(int maxStack, int maxLocals) {
         variables.max = maxLocals;
     }
@@ -1230,6 +1253,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitMethodInsn(int opcode, String className, String methodName, String desc) {
         // recode current instruction
         record(opcode);
@@ -1370,6 +1394,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitMultiANewArrayInsn(String desc, int dimension) {
         // remove needless operands
         for (int i = 0; i < dimension - 1; i++) {
@@ -1381,6 +1406,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public AnnotationVisitor visitParameterAnnotation(int arg0, String arg1, boolean arg2) {
         return null;
     }
@@ -1388,6 +1414,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitTableSwitchInsn(int min, int max, Label defaults, Label... labels) {
         List<Node> nodes = new ArrayList();
 
@@ -1419,6 +1446,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
         tries.addTryCatchFinallyBlock(getNode(start), getNode(end), getNode(handler), convert(type));
     }
@@ -1468,6 +1496,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitVarInsn(int opcode, int position) {
         // recode current instruction
         record(opcode);
