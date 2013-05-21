@@ -10,15 +10,13 @@
 package js.lang;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import js.util.ArrayList;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/01/19 9:27:51
+ * @version 2013/05/22 0:35:14
  */
 @JavaAPIProvider(Throwable.class)
 class JSThrowable {
@@ -60,7 +58,7 @@ class JSThrowable {
     public JSThrowable(String message, Throwable cause) {
         this.message = message;
         this.cause = cause;
-        this.stacktrace = createStackTrace(Debugger.error());
+        this.stacktrace = createStackTrace(Debugger.error(), true);
     }
 
     /**
@@ -163,31 +161,33 @@ class JSThrowable {
      * @param error
      * @return
      */
-    static StackTraceElement[] createStackTrace(NativeError error) {
+    static StackTraceElement[] createStackTrace(NativeError error, boolean user) {
         Pattern pattern = null;
 
-        List<String> lines = new ArrayList(Arrays.asList(error.getStackTrace().split("\n")));
+        String[] lines = error.getStackTrace().split("\n");
+        int start = 0;
+        int end = lines.length - 1;
 
         if (error.hasProperty("columnNumber")) {
             // firefox
             pattern = Pattern.compile("\\.?(.+)?@(.+):(.+)");
-            lines = lines.subList(0, lines.size() - 2);
+            end--;
         } else if (error.hasProperty("sourceURL")) {
             // webkit
         } else if (error.hasProperty("number")) {
             // ie
             pattern = Pattern.compile("\\s*at\\s*(.+)\\s\\((.+):(.+):(.+)\\)");
-            lines.remove(0);
+            start++;
         } else {
             // blink
             pattern = Pattern.compile("\\s*at\\s*([^\\s]+).+\\((.+):(.+):(.+)\\)");
-            lines.remove(0);
+            start++;
         }
 
-        StackTraceElement[] elements = new StackTraceElement[lines.size()];
+        StackTraceElement[] elements = new StackTraceElement[end - start];
 
-        for (int i = 0; i < lines.size(); i++) {
-            Matcher matcher = pattern.matcher(lines.get(i));
+        for (int i = 0; i < elements.length; i++) {
+            Matcher matcher = pattern.matcher(lines[start + i]);
 
             if (matcher.matches()) {
                 String method = matcher.group(1);
@@ -196,6 +196,19 @@ class JSThrowable {
 
                 elements[i] = new StackTraceElement("", method, matcher.group(2), Integer.parseInt(matcher.group(3)));
             }
+        }
+
+        if (user) {
+            // remove the sequence of Throwable construction
+            int index = -1;
+
+            for (int i = 0; i < elements.length; i++) {
+                if (elements[i].getMethodName().equals("Class") && elements[i].getFileName().contains("boot.js")) {
+                    index = i;
+                    break;
+                }
+            }
+            elements = Arrays.copyOfRange(elements, index + 1, elements.length);
         }
         return elements;
     }
