@@ -397,37 +397,14 @@ function boot(global) {
     
     /**
      * <p>
-     * Create normalized stack trace.
+     * Throw native error to build stack trace.
      * </p>
      */
-    stacktrace: function() {
+    error: function() {
       try {
         a;
       } catch (e) {
-        var pattern;
-        var lines = e.stack.split("\n");
-        lines.shift(); // remove stacktrace call
-      
-        if (e.columnNumber) {
-          // firefox
-          pattern = /\.?(.+)?@(.+):(.+)/;
-          lines = lines.slice(0, lines.length - 4);
-        } else if (e.sourceURL) {
-          // webkit
-        } else if (e.number) {
-          // ie
-          pattern = /\s*at\s*(.+)\s\((.+):(.+):(.+)\)/;
-          lines.shift();
-        } else {
-          // chrome
-          pattern = /\s*at\s*([^\s]+).+\((.+):(.+):(.+)\)/;
-          lines.shift();
-        }
-        return lines.map(function(line) {
-          var info = pattern.exec(line);
-          var i = info[1].lastIndexOf(".");
-          return [i === -1 ? info[1] : info[1].substring(i+1),info[2],info[3]];
-        });
+        return e;
       }
     }
   });

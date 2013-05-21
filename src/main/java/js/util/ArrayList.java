@@ -43,6 +43,17 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
     }
 
     /**
+     * Constructs a list containing the elements of the specified collection, in the order they are
+     * returned by the collection's iterator.
+     * 
+     * @param items the collection whose elements are to be placed into this list
+     * @throws NullPointerException if the specified collection is null
+     */
+    public ArrayList(Collection<? extends E> items) {
+        addAll(items);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -177,9 +188,12 @@ public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
      */
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        List<E> sub = new ArrayList();
+
+        for (int i = fromIndex; i < toIndex; i++) {
+            sub.add(get(i));
+        }
+        return sub;
     }
 
     /**
