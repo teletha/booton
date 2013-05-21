@@ -72,13 +72,17 @@ class JSThread {
      */
     static void handleUncaughtException(Object error) {
         if (defaultUncaughtExceptionHandler != null) {
+            Throwable throwable;
+
             if (error instanceof Throwable) {
                 System.out.println("user defined error");
-                defaultUncaughtExceptionHandler.uncaughtException(null, (Throwable) error);
+                throwable = (Throwable) error;
             } else {
                 System.out.println("native error");
-                System.out.println(error);
+                throwable = new Error();
+                throwable.setStackTrace(JSThrowable.createStackTrace((NativeError) error));
             }
+            defaultUncaughtExceptionHandler.uncaughtException(null, throwable);
         }
     }
 

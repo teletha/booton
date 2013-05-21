@@ -18,12 +18,12 @@ class Debugger {
 
     /**
      * <p>
-     * Create stack trace.
+     * Throw native error to build stack trace.
      * </p>
      * 
      * @return
      */
-    static native String[][] createStackTrace();
+    static native NativeError error();
 
     /**
      * @version 2013/05/16 9:55:25
@@ -33,13 +33,13 @@ class Debugger {
 
         /**
          * <p>
-         * Create stack trace.
+         * Throw native error to build stack trace.
          * </p>
          * 
          * @return
          */
-        public String createStackTrace() {
-            return "boot.stacktrace()";
+        public String error() {
+            return "boot.error()";
         }
     }
 }

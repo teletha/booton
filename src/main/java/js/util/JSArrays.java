@@ -10,8 +10,11 @@
 package js.util;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
+import java.util.RandomAccess;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
@@ -23,6 +26,32 @@ import booton.translator.JavaAPIProvider;
  */
 @JavaAPIProvider(Arrays.class)
 class JSArrays {
+
+    /**
+     * Returns a fixed-size list backed by the specified array. (Changes to the returned list
+     * "write through" to the array.) This method acts as bridge between array-based and
+     * collection-based APIs, in combination with {@link Collection#toArray}. The returned list is
+     * serializable and implements {@link RandomAccess}.
+     * <p>
+     * This method also provides a convenient way to create a fixed-size list initialized to contain
+     * several elements:
+     * 
+     * <pre>
+     *     List&lt;String&gt; stooges = Arrays.asList("Larry", "Moe", "Curly");
+     * </pre>
+     * 
+     * @param items the array by which the list will be backed
+     * @return a list view of the specified array
+     */
+    @SafeVarargs
+    public static <T> List<T> asList(T... items) {
+        List<T> list = new ArrayList();
+
+        for (T item : items) {
+            list.add(item);
+        }
+        return list;
+    }
 
     /**
      * Returns <tt>true</tt> if the two specified arrays of longs are <i>equal</i> to one another.

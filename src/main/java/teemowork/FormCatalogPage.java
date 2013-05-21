@@ -74,6 +74,7 @@ public class FormCatalogPage extends Page {
         if (true) {
             throw new Error();
         }
+        model = null;
         model.modeler.test[0] = "acted";
         model.modeler.name = "changed";
         model.type = 10101;

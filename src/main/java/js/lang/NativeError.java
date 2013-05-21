@@ -14,7 +14,7 @@ import booton.translator.Translator;
 /**
  * @version 2013/05/19 17:35:44
  */
-public class NativeError {
+public class NativeError extends NativeObject {
 
     /**
      * <p>
