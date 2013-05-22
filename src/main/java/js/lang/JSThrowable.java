@@ -163,7 +163,6 @@ class JSThrowable {
      */
     static StackTraceElement[] createStackTrace(NativeError error, boolean user) {
         Pattern pattern = null;
-
         String[] lines = error.getStackTrace().split("\n");
         int start = 0;
         int end = lines.length - 1;
@@ -178,6 +177,9 @@ class JSThrowable {
             // ie
             pattern = Pattern.compile("\\s*at\\s*(.+)\\s\\((.+):(.+):(.+)\\)");
             start++;
+        } else if (error.getStackTrace().contains("@")) {
+            // html unit
+            return new StackTraceElement[0];
         } else {
             // blink
             pattern = Pattern.compile("\\s*at\\s*([^\\s]+).+\\((.+):(.+):(.+)\\)");
