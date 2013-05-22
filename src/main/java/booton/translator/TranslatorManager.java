@@ -26,7 +26,6 @@ import js.lang.Function;
 import js.lang.builtin.Console;
 import js.lang.builtin.JSON;
 import js.lang.builtin.Storage;
-import js.net.WebSocket;
 import js.util.ArrayList;
 import js.util.jQuery.Listener;
 import kiss.I;
@@ -58,7 +57,6 @@ class TranslatorManager {
         builtIn(Document.class);
         builtIn(Element.class);
         builtIn(DOMTokenList.class);
-        builtIn(WebSocket.class);
         builtIn(Window.class);
         builtIn(Location.class);
         builtIn(JSON.class);
