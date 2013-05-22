@@ -16,7 +16,6 @@ import js.dom.Location;
 import js.dom.Window;
 import js.lang.builtin.JSON;
 import js.lang.builtin.Storage;
-import js.net.WebSocket;
 import js.util.jQuery;
 
 import org.w3c.dom.DocumentFragment;
@@ -144,16 +143,6 @@ public class Global {
      * @return
      */
     public static native jQuery $(Window window);
-
-    /**
-     * <p>
-     * Establish connection to the specified uri.
-     * </p>
-     * 
-     * @param uri
-     * @param connection
-     */
-    public static native void connect(String uri, WebSocket connection);
 
     /**
      * <p>
@@ -411,10 +400,6 @@ public class Global {
          */
         public String $(Window object) {
             return "$(" + param(0) + ")";
-        }
-
-        public String connect(String param0, WebSocket param1) {
-            return "WebSocket.connect(" + param(0) + "," + param(1) + ")";
         }
 
         /**

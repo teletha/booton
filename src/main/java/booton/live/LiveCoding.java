@@ -15,9 +15,8 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Date;
 import java.util.List;
 
-import js.net.WebSocket;
-import js.net.WebSocket.Listener;
-import js.net.WebSocket.MessageEvent;
+import js.net.NativeWebSocket;
+import js.net.NativeWebSocket.Listener;
 import js.util.ArrayList;
 
 /**
@@ -31,7 +30,8 @@ public class LiveCoding implements UncaughtExceptionHandler, Listener {
     /** The cached error. */
     private List<Throwable> throwables = new ArrayList();
 
-    private WebSocket socket;
+    /** The connection. */
+    private NativeWebSocket socket;
 
     /**
      * 
@@ -39,7 +39,7 @@ public class LiveCoding implements UncaughtExceptionHandler, Listener {
     public void jsmain() {
         Thread.setDefaultUncaughtExceptionHandler(this);
 
-        socket = WebSocket.connect("ws://localhost:10021/live" + window.location.pathname, this);
+        socket = new NativeWebSocket("ws://localhost:10021/live" + window.location.pathname, this);
     }
 
     /**
@@ -93,6 +93,18 @@ public class LiveCoding implements UncaughtExceptionHandler, Listener {
      * {@inheritDoc}
      */
     @Override
+    public void message(String src) {
+        if (src.endsWith("css")) {
+            $("link[href^='" + src + "']").attr("href", src + "?" + new Date().getTime());
+        } else {
+            window.location.reload(false);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void close() {
     }
 
@@ -101,19 +113,5 @@ public class LiveCoding implements UncaughtExceptionHandler, Listener {
      */
     @Override
     public void error() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void message(MessageEvent event) {
-        String src = event.data;
-
-        if (src.endsWith("css")) {
-            $("link[href^='" + src + "']").attr("href", src + "?" + new Date().getTime());
-        } else {
-            window.location.reload(false);
-        }
     }
 }

@@ -149,7 +149,10 @@ function boot(global) {
       connection.onopen = listener.open.bind(listener);
       connection.onclose = listener.close.bind(listener);
       connection.onerror = listener.error.bind(listener);
-      connection.onmessage = listener.message.bind(listener);
+      connection.onmessage = function(e) {
+        listener.message(e.data);
+      };
+      return connection;
     }
   });
 
