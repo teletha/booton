@@ -146,10 +146,10 @@ function boot(global) {
      */
     connect: function(uri, listener) {
       var connection = new WebSocket(uri);
-      connection.onopen = listener.open;
-      connection.onclose = listener.close;
-      connection.onerror = listener.error;
-      connection.onmessage = listener.message;
+      connection.onopen = listener.open.bind(listener);
+      connection.onclose = listener.close.bind(listener);
+      connection.onerror = listener.error.bind(listener);
+      connection.onmessage = listener.message.bind(listener);
     }
   });
 

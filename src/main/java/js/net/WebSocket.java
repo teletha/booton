@@ -9,12 +9,14 @@
  */
 package js.net;
 
+import js.lang.NativeFunction;
+import js.lang.NativeObject;
 import booton.translator.JavascriptNative;
 
 /**
- * @version 2013/01/07 12:52:18
+ * @version 2013/05/22 16:44:02
  */
-public abstract class WebSocket {
+public final class WebSocket implements JavascriptNative {
 
     /**
      * <p>
@@ -27,37 +29,64 @@ public abstract class WebSocket {
 
     /**
      * <p>
-     * An event listener to be called when the WebSocket connection's readyState changes to OPEN;
-     * this indicates that the connection is ready to send and receive data. The event is a simple
-     * one with the name "open".
-     * </p>
-     */
-    protected native void open();
-
-    /**
-     * <p>
-     * An event listener to be called when the WebSocket connection's readyState changes to CLOSED.
-     * The listener receives a CloseEvent named "close".
-     * </p>
-     */
-    protected native void close();
-
-    /**
-     * <p>
-     * An event listener to be called when an error occurs. This is a simple event named "error".
-     * </p>
-     */
-    protected native void error();
-
-    /**
-     * <p>
-     * An event listener to be called when a message is received from the server. The listener
-     * receives a MessageEvent named "message".
+     * Establish connection to the specified uri.
      * </p>
      * 
-     * @param event
+     * @param uri
+     * @param connection
      */
-    protected native void message(MessageEvent event);
+    public static WebSocket connect(String uri, Listener listener) {
+        WebSocket socket = new WebSocket();
+        NativeObject nsocket = (NativeObject) (Object) socket;
+        NativeObject nlistener = (NativeObject) (Object) listener;
+        nsocket.setProperty("onopen", nlistener.getPropertyAs(NativeFunction.class, "open").bind(listener));
+        nsocket.setProperty("onclose", nlistener.getPropertyAs(NativeFunction.class, "close").bind(listener));
+        nsocket.setProperty("onerror", nlistener.getPropertyAs(NativeFunction.class, "error").bind(listener));
+        nsocket.setProperty("onmessage", nlistener.getPropertyAs(NativeFunction.class, "message").bind(listener));
+
+        return socket;
+    }
+
+    /**
+     * @version 2013/05/22 16:51:21
+     */
+    public static interface Listener extends JavascriptNative {
+
+        /**
+         * <p>
+         * An event listener to be called when the WebSocket connection's readyState changes to
+         * OPEN; this indicates that the connection is ready to send and receive data. The event is
+         * a simple one with the name "open".
+         * </p>
+         */
+        void open();
+
+        /**
+         * <p>
+         * An event listener to be called when the WebSocket connection's readyState changes to
+         * CLOSED. The listener receives a CloseEvent named "close".
+         * </p>
+         */
+        void close();
+
+        /**
+         * <p>
+         * An event listener to be called when an error occurs. This is a simple event named
+         * "error".
+         * </p>
+         */
+        void error();
+
+        /**
+         * <p>
+         * An event listener to be called when a message is received from the server. The listener
+         * receives a MessageEvent named "message".
+         * </p>
+         * 
+         * @param event
+         */
+        void message(MessageEvent event);
+    }
 
     /**
      * <p>
