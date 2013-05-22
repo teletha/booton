@@ -63,7 +63,7 @@ public class ScriptTester {
     static {
         try {
             // build client
-            WebClient client = new WebClient(BrowserVersion.FIREFOX_10);
+            WebClient client = new WebClient(BrowserVersion.FIREFOX_17);
             client.getWebConsole().setLogger(new Logger() {
 
                 /**
