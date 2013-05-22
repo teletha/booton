@@ -13,15 +13,25 @@ import static js.lang.Global.*;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Date;
+import java.util.List;
 
-import js.lang.Function;
-import js.lang.NativeFunction;
 import js.net.WebSocket;
+import js.net.WebSocket.Listener;
+import js.net.WebSocket.MessageEvent;
+import js.util.ArrayList;
 
 /**
  * @version 2013/01/08 13:33:11
  */
-public class LiveCoding extends WebSocket implements UncaughtExceptionHandler {
+public class LiveCoding implements UncaughtExceptionHandler, Listener {
+
+    /** The status of server connection. */
+    private boolean open = false;
+
+    /** The cached error. */
+    private List<Throwable> throwables = new ArrayList();
+
+    private WebSocket socket;
 
     /**
      * 
@@ -29,7 +39,7 @@ public class LiveCoding extends WebSocket implements UncaughtExceptionHandler {
     public void jsmain() {
         Thread.setDefaultUncaughtExceptionHandler(this);
 
-        connect("ws://localhost:10021/live" + window.location.pathname, this);
+        socket = WebSocket.connect("ws://localhost:10021/live" + window.location.pathname, this);
     }
 
     /**
@@ -37,10 +47,45 @@ public class LiveCoding extends WebSocket implements UncaughtExceptionHandler {
      */
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
-        System.out.println("expection in live");
+        if (open) {
+            sendError(throwable);
+        } else {
+            this.throwables.add(throwable);
+        }
+    }
+
+    /**
+     * <p>
+     * Send error to server.
+     * </p>
+     * 
+     * @param throwable
+     */
+    private void sendError(Throwable throwable) {
+        StringBuilder builder = new StringBuilder();
 
         for (StackTraceElement element : throwable.getStackTrace()) {
-            System.out.println("Class " + element.getClassName() + "  Method " + element.getMethodName() + "   File " + element.getFileName() + "   Line " + element.getLineNumber());
+            builder.append(element.getMethodName())
+                    .append(" ")
+                    .append(element.getFileName())
+                    .append(" ")
+                    .append(element.getLineNumber())
+                    .append("\r\n");
+        }
+        socket.send(builder.toString());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void open() {
+        open = true;
+
+        if (!throwables.isEmpty()) {
+            for (Throwable throwable : throwables) {
+                sendError(throwable);
+            }
         }
     }
 
@@ -48,15 +93,21 @@ public class LiveCoding extends WebSocket implements UncaughtExceptionHandler {
      * {@inheritDoc}
      */
     @Override
-    protected void open() {
-        System.out.println("open");
+    public void close() {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void message(MessageEvent event) {
+    public void error() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void message(MessageEvent event) {
         String src = event.data;
 
         if (src.endsWith("css")) {
@@ -64,25 +115,5 @@ public class LiveCoding extends WebSocket implements UncaughtExceptionHandler {
         } else {
             window.location.reload(false);
         }
-    }
-
-    /**
-     * <p>
-     * </p>
-     * 
-     * @param className
-     * @param methodName
-     * @param function
-     * @return
-     */
-    Function debug(final String className, final String methodName, final NativeFunction function) {
-        return new Function() {
-
-            void apply() {
-                System.out.println("start " + className + "#" + methodName);
-                function.apply(this, getArgumentArray());
-                System.out.println("end");
-            }
-        };
     }
 }

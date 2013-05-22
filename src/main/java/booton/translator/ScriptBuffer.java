@@ -28,6 +28,9 @@ class ScriptBuffer {
 
     private int mark = 0;
 
+    /** The current count of lines. */
+    private int lines = 1;
+
     /** The current depth of indentation for debug. */
     private int depth = 0;
 
@@ -85,6 +88,8 @@ class ScriptBuffer {
         if (!config.optimization) {
             // write line separator
             buffer.append("\r\n");
+
+            lines++;
 
             // write indent
             for (int i = 0; i < depth; i++) {
