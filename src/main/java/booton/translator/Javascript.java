@@ -198,6 +198,7 @@ public class Javascript {
                 // ignore missing "jsmain" method
             }
             output.append("} catch(e) {");
+            output.append("console.log(e);");
             output.append(invoke(Thread.class, "handleUncaughtException", Object.class, "e"));
             output.append("}");
         } catch (Exception e) {
