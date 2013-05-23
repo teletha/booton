@@ -10,8 +10,12 @@
 package booton.live;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -135,7 +139,17 @@ public class LiveCodingServlet extends WebSocketServlet {
          */
         @Override
         public void onMessage(String data) {
-            System.out.println("message  " + data);
+            Source source = new Source(html.resolveSibling("application.js"));
+            String[] elements = data.split("\\r\\n");
+
+            for (String element : elements) {
+                String[] info = element.split(" ");
+
+                if (info[1].contains("application.js")) {
+                    source.search(Integer.parseInt(info[2]));
+                }
+            }
+            new Error("message desu").printStackTrace();
         }
 
         /**
@@ -250,6 +264,61 @@ public class LiveCodingServlet extends WebSocketServlet {
             @Override
             public void modify(Path path) {
             }
+        }
+    }
+
+    /**
+     * @version 2013/05/23 22:57:49
+     */
+    private static class Source {
+
+        /** The source code. */
+        private final List<String> lines;
+
+        /**
+         * @param file
+         */
+        private Source(Path file) {
+            try {
+                lines = Files.readAllLines(file, StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                throw I.quiet(e);
+            }
+        }
+
+        /**
+         * <p>
+         * </p>
+         * 
+         * @param lineNumber
+         */
+        private void search(int lineNumber) {
+            Pattern line = Pattern.compile("^\\s*//\\s(\\d+)");
+            String number = find(lineNumber - 1, line).group(1);
+
+            Pattern pattern = Pattern.compile("^\\s*//\\s+(.+)#(.+)\\(.*\\)");
+            Matcher matcher = find(lineNumber, pattern);
+            String className = matcher.group(1);
+            String method = matcher.group(2);
+
+            System.out.println("\tat " + className + "." + method + "(" + className.substring(className.lastIndexOf(".") + 1) + ".java:" + number + ")");
+        }
+
+        /**
+         * <p>
+         * </p>
+         * 
+         * @param start
+         * @param pattern
+         * @return
+         */
+        private Matcher find(int start, Pattern pattern) {
+            Matcher matcher = pattern.matcher(lines.get(start));
+
+            while (!matcher.matches()) {
+                matcher = pattern.matcher(lines.get(start--));
+            }
+            return matcher;
         }
     }
 }
