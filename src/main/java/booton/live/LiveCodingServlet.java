@@ -13,13 +13,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
-import js.util.ArrayList;
 import kiss.Disposable;
 import kiss.I;
 import kiss.PathListener;
@@ -139,6 +139,7 @@ public class LiveCodingServlet extends WebSocketServlet {
          */
         @Override
         public void onMessage(String data) {
+            System.out.println(data);
             Source source = new Source(html.resolveSibling("application.js"));
             String[] elements = data.split("\\r\\n");
 

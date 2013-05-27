@@ -72,7 +72,7 @@ public class FormCatalogPage extends Page {
             }
         }));
         if (true) {
-            throw new Error();
+            throw new Error("Message desu!");
         }
         model.modeler.test[0] = "acted";
         model.modeler.name = "changed";
