@@ -104,7 +104,7 @@ public class JSON {
      * @param value The value to convert to a JSON string.
      * @return
      */
-    public native String stringify(NativeObject value);
+    public native String stringify(Object value);
 
     /**
      * @version 2013/04/26 11:04:31
@@ -134,7 +134,7 @@ public class JSON {
          * @param value The value to convert to a JSON string.
          * @return
          */
-        public String stringify(NativeObject value) {
+        public String stringify(Object value) {
             return "JSON.stringify(" + param(0) + ")";
         }
     }
