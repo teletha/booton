@@ -60,7 +60,7 @@ public class ScriptTester {
     private static ScriptableObject global;
 
     @BeforeClass
-    private static void setup() {
+    public static void setup() {
         try {
             // build client
             WebClient client = new WebClient(BrowserVersion.FIREFOX_17);
@@ -134,7 +134,7 @@ public class ScriptTester {
     }
 
     @AfterClass
-    private static void clear() {
+    public static void clear() {
         Context.exit();
     }
 
