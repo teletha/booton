@@ -34,6 +34,9 @@ import net.sourceforge.htmlunit.corejs.javascript.Script;
 import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
 import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebConsole.Logger;
@@ -56,11 +59,8 @@ public class ScriptTester {
     /** The global scope. */
     private static ScriptableObject global;
 
-    /** The compiled booton script. */
-    private static Script booton;
-
-    // initialization
-    static {
+    @BeforeClass
+    private static void setup() {
         try {
             // build client
             WebClient client = new WebClient(BrowserVersion.FIREFOX_17);
@@ -126,11 +126,16 @@ public class ScriptTester {
             global = dummy.getScriptObject();
 
             // compile boot script
-            booton = engine.compileReader(Files.newBufferedReader(I.locate("boot.js").toAbsolutePath(), UTF_8), "boot.js", 1, null);
+            Script booton = engine.compileReader(Files.newBufferedReader(I.locate("boot.js").toAbsolutePath(), UTF_8), "boot.js", 1, null);
             booton.exec(engine, global);
         } catch (Exception e) {
             throw I.quiet(e);
         }
+    }
+
+    @AfterClass
+    private static void clear() {
+        Context.exit();
     }
 
     /**
@@ -200,7 +205,7 @@ public class ScriptTester {
                     if (input instanceof String) {
                         invoker.append('"').append(input).append('"');
                     } else if (input instanceof Character) {
-                        Class type = Class.forName("js.lang.JSChar");
+                        Class type = Class.forName("js.lang.JSCharacter");
 
                         invoker.append("new " + Javascript.computeClassName(type) + "(\"" + input + "\",0)");
                     } else if (input instanceof Class) {

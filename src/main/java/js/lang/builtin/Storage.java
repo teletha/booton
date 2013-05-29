@@ -126,7 +126,6 @@ public abstract class Storage implements JavascriptNative {
      */
     public void set(Object model) {
         if (model != null) {
-            System.out.println(Util.write(model));
             setItem(model.getClass().getName(), Util.write(model));
         }
     }

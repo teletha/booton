@@ -139,7 +139,6 @@ public class LiveCodingServlet extends WebSocketServlet {
          */
         @Override
         public void onMessage(String data) {
-            System.out.println(data);
             Source source = new Source(html.resolveSibling("application.js"));
             String[] elements = data.split("\\r\\n");
 
@@ -150,7 +149,6 @@ public class LiveCodingServlet extends WebSocketServlet {
                     source.search(Integer.parseInt(info[2]));
                 }
             }
-            new Error("message desu").printStackTrace();
         }
 
         /**
@@ -302,7 +300,7 @@ public class LiveCodingServlet extends WebSocketServlet {
             String className = matcher.group(1);
             String method = matcher.group(2);
 
-            System.out.println("\tat " + className + "." + method + "(" + className.substring(className.lastIndexOf(".") + 1) + ".java:" + number + ")");
+            System.err.println("\tat " + className + "." + method + "(" + className.substring(className.lastIndexOf(".") + 1) + ".java:" + number + ")");
         }
 
         /**

@@ -43,16 +43,33 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
-     * Merge the contents of two or more objects together into the first object.
+     * Determine whether the argument is an array.
      * </p>
      * 
-     * @param deeply If true, the merge becomes recursive (aka. deep copy).
-     * @param base An object that will receive the new properties if additional objects are passed
-     *            in or that will extend the jQuery namespace if it is the sole argument.
-     * @param provider An object containing additional properties to merge in.
-     * @return
+     * @param provider Object to test whether or not it is an array.
+     * @return A result.
      */
     public static native boolean isArray(Object provider);
+
+    /**
+     * <p>
+     * Determines whether its argument is a number.
+     * </p>
+     * 
+     * @param character The value to be tested.
+     * @return A result.
+     */
+    public static native boolean isNumeric(char character);
+
+    /**
+     * <p>
+     * Determines whether its argument is a number.
+     * </p>
+     * 
+     * @param character The value to be tested.
+     * @return A result.
+     */
+    public static native boolean isNumeric(int character);
 
     /**
      * <p>
