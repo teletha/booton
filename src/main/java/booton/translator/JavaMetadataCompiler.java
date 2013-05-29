@@ -25,7 +25,7 @@ import kiss.I;
 import org.junit.runner.RunWith;
 
 /**
- * @version 2013/01/17 21:15:48
+ * @version 2013/05/29 19:49:16
  */
 class JavaMetadataCompiler {
 
@@ -220,7 +220,7 @@ class JavaMetadataCompiler {
     }
 
     /**
-     * @version 2013/01/17 14:03:18
+     * @version 2013/05/29 19:49:06
      */
     private static abstract class Metadata {
 
@@ -238,7 +238,11 @@ class JavaMetadataCompiler {
             this.name = name;
 
             for (Annotation annotation : element.getAnnotations()) {
-                if (!ignorables.contains(annotation.annotationType())) {
+                Class type = annotation.annotationType();
+
+                if (!ignorables.contains(type)) {
+                    Javascript.require(type);
+
                     annotations.add(annotation);
                 }
             }

@@ -12,6 +12,7 @@ package booton.translator;
 import static booton.Obfuscator.*;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -305,7 +306,9 @@ public class Javascript {
         } catch (IOException e) {
             throw I.quiet(e);
         }
-
+        for (Annotation annotation : source.getAnnotations()) {
+            require(annotation.annotationType());
+        }
         // write metadata
         code.append(",").append(new JavaMetadataCompiler(this));
 

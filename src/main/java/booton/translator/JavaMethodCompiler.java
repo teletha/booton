@@ -1168,11 +1168,7 @@ class JavaMethodCompiler extends MethodVisitor {
         Node node = getNode(label);
 
         if (current != null) {
-            // connect nodes each other
-            if (!current.outgoing.contains(node)) {
-                current.outgoing.add(node);
-                node.incoming.add(current);
-            }
+            current.connect(node);
         }
 
         // API definition
