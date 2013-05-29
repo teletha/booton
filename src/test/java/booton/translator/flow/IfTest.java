@@ -9,9 +9,9 @@
  */
 package booton.translator.flow;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
@@ -81,7 +81,6 @@ public class IfTest extends ScriptTester {
     public void multiple() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int o) {
                 if (o == 2) {
                     return o + 3;
@@ -98,7 +97,6 @@ public class IfTest extends ScriptTester {
     public void sequence() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int o) {
                 if (o == 2) {
                     o = o + 1;
@@ -143,38 +141,12 @@ public class IfTest extends ScriptTester {
     }
 
     @Test
-    public void shorthandWithExpression3() throws Exception {
-        test(new Scriptable() {
-
-            @Debuggable
-            public int act(int o) {
-                return o == 2 ? 10 : o;
-            }
-        });
-    }
-
-    @Test
+    @Ignore
     public void shorthandWithExpression() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int o) {
                 if (o == 2) o = o + 3;
-
-                return o;
-            }
-        });
-    }
-
-    @Test
-    public void shorthandWithExpression2() throws Exception {
-        test(new Scriptable() {
-
-            @Debuggable
-            public int act(int o) {
-                if (o == 2) {
-                    o = o + 3;
-                }
 
                 return o;
             }
