@@ -11,7 +11,6 @@ package teemowork;
 
 import js.application.Page;
 import js.application.PageInfo;
-import js.lang.Global;
 import js.ui.Button;
 import js.ui.Input;
 import js.ui.Select;
@@ -71,22 +70,16 @@ public class FormCatalogPage extends Page {
                 model.type++;
             }
         }));
-        if (true) {
-            throw new Error("Message desu!");
-        }
-        model.modeler.test[0] = "acted";
-        model.modeler.name = "changed";
-        model.type = 10101;
-        model.name = " changed !";
-        Global.sessionStorage.set(model);
 
-        SomeModel restored = Global.sessionStorage.get(SomeModel.class);
-        restored.test();
-        restored.modeler.aaa();
-
-        System.out.println(model);
-
-        new Error().printStackTrace();
+        // model.modeler.test[0] = "acted";
+        // model.modeler.name = "changed";
+        // model.type = 10101;
+        // model.name = " changed !";
+        // Global.sessionStorage.set(model);
+        //
+        // SomeModel restored = Global.sessionStorage.get(SomeModel.class);
+        // restored.test();
+        // restored.modeler.aaa();
     }
 
     /**

@@ -103,7 +103,7 @@ class StringCoder extends Translator<String> {
     }
 
     public String charAt(int index) throws Exception {
-        Class type = Class.forName("js.lang.JSChar");
+        Class type = Class.forName("js.lang.JSCharacter");
         Javascript.require(type);
 
         return "new " + Javascript.computeClassName(type) + "(" + that + ".charAt(" + param(0) + "), 0)";
