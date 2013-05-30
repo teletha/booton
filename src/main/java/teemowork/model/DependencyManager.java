@@ -11,9 +11,8 @@ package teemowork.model;
 
 import static teemowork.model.Skill.*;
 
+import java.util.HashSet;
 import java.util.Set;
-
-import js.util.HashSet;
 
 /**
  * @version 2013/03/12 10:43:36

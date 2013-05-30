@@ -13,10 +13,13 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 
+import booton.translator.JavaAPIProvider;
+
 /**
  * @version 2012/12/08 22:08:28
  */
-public abstract class AbstractCollection<E> implements Collection<E> {
+@JavaAPIProvider(java.util.AbstractCollection.class)
+abstract class AbstractCollection<E> implements Collection<E> {
 
     /**
      * {@inheritDoc}

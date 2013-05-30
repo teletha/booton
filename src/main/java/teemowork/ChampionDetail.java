@@ -13,12 +13,12 @@ import static js.lang.Global.*;
 import static teemowork.model.Status.*;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import js.bind.Notifiable;
 import js.bind.Observer;
 import js.math.Mathematics;
-import js.util.ArrayList;
 import js.util.jQuery;
 import js.util.jQuery.Listener;
 import jsx.application.Page;

@@ -9,9 +9,9 @@
  */
 package teemowork.model.variable;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import js.util.ArrayList;
 import js.util.jQuery;
 
 /**

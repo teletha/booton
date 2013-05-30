@@ -11,9 +11,8 @@ package js.lang;
 
 import static js.lang.Global.*;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import js.util.ArrayList;
 
 /**
  * @version 2013/01/18 21:54:32

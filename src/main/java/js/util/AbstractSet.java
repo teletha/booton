@@ -11,8 +11,11 @@ package js.util;
 
 import java.util.Set;
 
+import booton.translator.JavaAPIProvider;
+
 /**
  * @version 2012/12/08 22:07:59
  */
-public abstract class AbstractSet<E> extends AbstractCollection<E> implements Set<E> {
+@JavaAPIProvider(java.util.AbstractSet.class)
+abstract class AbstractSet<E> extends AbstractCollection<E> implements Set<E> {
 }

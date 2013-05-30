@@ -11,8 +11,11 @@ package js.util;
 
 import java.util.List;
 
+import booton.translator.JavaAPIProvider;
+
 /**
  * @version 2012/12/09 23:04:18
  */
-public abstract class AbstractList<E> extends AbstractCollection<E> implements List<E> {
+@JavaAPIProvider(java.util.AbstractList.class)
+abstract class AbstractList<E> extends AbstractCollection<E> implements List<E> {
 }

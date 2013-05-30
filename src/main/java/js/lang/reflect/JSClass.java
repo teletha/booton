@@ -14,14 +14,14 @@ import static js.lang.Global.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
-import js.util.ArrayList;
-import js.util.HashMap;
 import booton.translator.JavaAPIProvider;
 
 /**

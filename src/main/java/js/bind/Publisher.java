@@ -9,9 +9,8 @@
  */
 package js.bind;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import js.util.ArrayList;
 
 /**
  * @version 2013/03/16 23:55:56

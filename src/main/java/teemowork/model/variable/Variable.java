@@ -11,11 +11,11 @@ package teemowork.model.variable;
 
 import static teemowork.model.Status.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import js.util.ArrayList;
-import js.util.HashSet;
 import teemowork.model.Skill;
 import teemowork.model.Status;
 import teemowork.model.StatusCalculator;

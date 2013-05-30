@@ -11,9 +11,9 @@ package jsx.bwt.view;
 
 import static js.lang.Global.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import js.util.ArrayList;
 import js.util.jQuery;
 import jsx.bwt.Listen;
 import jsx.bwt.UI;

@@ -11,15 +11,16 @@ package booton.css.property;
 
 import static booton.css.Unit.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import js.util.ArrayList;
 import js.util.Color;
 import kiss.I;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
 import booton.css.Value;
+
 
 /**
  * @version 2012/12/16 15:39:53

@@ -12,10 +12,10 @@ package jsx.bwt;
 import static js.lang.Global.*;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import js.util.HashMap;
 import js.util.jQuery;
 import js.util.jQuery.Listener;
 import jsx.bwt.ImageGridStyle.Container;

@@ -11,12 +11,12 @@ package teemowork.model;
 
 import static teemowork.model.Status.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import js.bind.Notifiable;
-import js.util.ArrayList;
-import js.util.HashSet;
 import teemowork.model.variable.Variable;
 import teemowork.model.variable.VariableResolver;
 

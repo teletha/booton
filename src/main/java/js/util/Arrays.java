@@ -10,7 +10,6 @@
 package js.util;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -23,10 +22,10 @@ import js.lang.NativeObject;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/05/20 14:47:05
+ * @version 2013/05/30 20:40:36
  */
-@JavaAPIProvider(Arrays.class)
-class JSArrays {
+@JavaAPIProvider(java.util.Arrays.class)
+class Arrays {
 
     /**
      * Returns a fixed-size list backed by the specified array. (Changes to the returned list

@@ -9,9 +9,8 @@
  */
 package js.bwt;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import js.util.ArrayList;
 
 /**
  * @version 2013/02/03 21:39:32

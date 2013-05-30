@@ -11,9 +11,8 @@ package teemowork.model;
 
 import static teemowork.model.Champion.*;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import js.util.ArrayList;
 
 /**
  * @version 2013/02/16 13:44:47
