@@ -55,21 +55,18 @@ public class FormCatalogPage extends Page {
         Select<String> child = root.child(new Select(selectable));
         child.model.setSelectionIndex(180);
 
-        root.child(new Input<Integer>(model.type));
-        root.child(new Input(model.name)).root.click(new Listener() {
-
-            @Override
-            public void handler(UIEvent event) {
-                model.type = model.type - 1;
-            }
-        });
+        root.child(new Input(model.type));
+        root.child(new Input(model.name));
         root.child(new Button("Add", new Listener() {
 
             @Override
             public void handler(UIEvent event) {
                 model.type++;
+                System.out.println(model.type);
+                model.name = String.valueOf(model.type);
             }
         }));
+        model.type = 111000;
 
         // model.modeler.test[0] = "acted";
         // model.modeler.name = "changed";

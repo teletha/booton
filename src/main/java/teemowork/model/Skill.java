@@ -1926,6 +1926,9 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(20, 0)
                 .cost(Energy, 80, -5)
                 .range(700);
+        TwilightShroud.update(P307)
+                .active("指定地点に8秒間煙を発生させ{1}のユニットに以下の効果を与えて{5}。Akaliは{2}と{3}、{5}を得る。敵ユニットには{4}を与える。")
+                .variable(5, Visionable);
         CrescentSlash.update()
                 .active("{2}の敵ユニットに{1}を与える。")
                 .variable(1, PhysicalDamage, 30, 25, ap(0.3), ad(0.6))
@@ -1940,6 +1943,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cost(Charge, 1, 0)
                 .range(800);
         ShadowDance.update(P3051).variable(2, CDRAwareTime, 35, -10);
+        ShadowDance.update(P307).variable(2, CDRAwareTime, 30, -7.5);
 
         /** Alistar */
         Trample.update()
@@ -2195,6 +2199,8 @@ public class Skill extends Describable<SkillDescriptor> {
         Headshot.update()
                 .passive("通常攻撃{1}回毎にダメージが増加する(Minionには250%、Championには150%)。茂みから通常攻撃を行うと2回分としてカウントされる。レベル1、7、13でダメージが増加するまでの攻撃回数が減少する。")
                 .variable(1, Count, new Per6Level(8, -1));
+        Headshot.update(P307)
+                .passive("通常攻撃{1}回毎にダメージが増加する(Minionには250%、Championには150%、建物への攻撃は無効)。茂みから通常攻撃を行うと2回分としてカウントされる。レベル1、7、13でダメージが増加するまでの攻撃回数が減少する。");
         PiltoverPeacemaker.update()
                 .active("1秒詠唱後、指定方向に貫通する弾を発射し当たった敵ユニットに{1}を与える。ダメージは敵に当たるごとに10%減少していき最小で{2}を与える。")
                 .variable(1, PhysicalDamage, 20, 40, ad(1.3))
@@ -2407,6 +2413,8 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(1, ASRatio, 20)
                 .variable(2, MagicDamage, new Per1Level(new double[] {20, 25, 30, 40, 50, 65, 80, 95, 110, 125, 140,
                         155, 175, 195, 215, 240, 265, 290}));
+        MoonsilverBlade.update(P307).variable(2, MagicDamage, new Per1Level(new double[] {20, 25, 30, 35, 40, 50, 60,
+                70, 80, 90, 105, 120, 135, 155, 175, 200, 225, 250}));
         CrescentStrike.update()
                 .active("指定地点に弧を描くエネルギーを放ち、当たった敵ユニットと{2}のユニットに{1}とMoonlight(3秒)を与える。またMoonlightが付与されている敵ユニットの{3}。")
                 .variable(1, MagicDamage, 60, 35, ap(0.7))
@@ -2416,12 +2424,16 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(10, -1)
                 .range(830);
         PaleCascade.update()
-                .active("5秒間{1}を張ると同時に、Dianaの周りを回る3つの球体を召喚する。敵ユニットが触れた球体は爆発し、{2}の敵ユニットに{3}を与える。球体が全て爆発するとシールドが張りなおされる。")
+                .active("5秒間{1}を張ると同時に、Dianaの周りを回る3つの球体を召喚する。敵ユニットが触れた球体は爆発し、{2}の敵ユニットに{3}を与える。球体が全て爆発すると{1}が張りなおされる。")
                 .variable(1, Shield, 55, 25, ap(0.45))
                 .variable(2, Radius, 400)
                 .variable(3, MagicDamage, 20, 14, ap(0.2))
                 .mana(60, 10)
                 .cd(10);
+        PaleCascade.update(P307)
+                .active("5秒間{1}を張ると同時に、Dianaの周りを回る3つの球体を召喚する。敵ユニットが触れた球体は爆発し、{2}の敵ユニットに{3}を与える。球体が全て爆発すると{1}が追加される。")
+                .variable(1, Shield, 40, 15, ap(0.3))
+                .variable(3, MagicDamage, 22, 12, ap(0.2));
         Moonfall.update()
                 .active("{1}にいるすべての敵ユニットをDianaがいる方向に引き寄せた後、2秒間{3}を与える。")
                 .variable(1, Radius, 500)
@@ -2532,6 +2544,8 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, MR, 10, 5)
                 .variable(4, MS, 10)
                 .cd(4);
+        SpiderForm.update(P307)
+                .active("EliseがSpider Formに変身し射程125のMeleeになる。その間は通常攻撃に追加{1}が付与され、{4}する。またこのスキルに比例しSpiderlingの最大チャージ数、攻撃力が増加し、Spiderlingが受けるAoEダメージが低減される。");
         VenomousBite.update()
                 .active("対象の敵ユニットに飛びつき{1}を与える。")
                 .variable(1, MagicDamage, 50, 45, amplify(TargetMissingHealthRatio, 8, 0, ap(0.03)))
@@ -2545,6 +2559,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(2, ASRatio, 60, 20)
                 .variable(3, RestoreHealth, 4, 0, ap(0.02))
                 .cd(12);
+        SkitteringFrenzy.update(P307).variable(3, RestoreHealth, 4, 0, ap(0.04));
         Rappel.update()
                 .active("EliseとSpiderlingが上空に退避し(ターゲット不可になる)指定の方法で降下する。上空にいる間は射程内の視界を得る地面をクリックした場合: 最大2秒間上空に待機し、初期位置へ降下する。この間、敵ユニットをターゲットし裏側に降下できる。敵ユニットをクリックした場合: 即座に下降し裏側に降り立つ。")
                 .cd(26, -2)
@@ -2889,7 +2904,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(12, -1)
                 .range(750);
         Smokescreen.update()
-                .active("指定地点にスモーク弾を発射し範囲内の敵ユニットに{1}を与え、4秒間持続する煙幕を残す。煙幕内にいる敵Championに視界低下とス{2}を与える。")
+                .active("指定地点にスモーク弾を発射し範囲内の敵ユニットに{1}を与え、4秒間持続する煙幕を残す。煙幕内にいる敵Championに視界低下と{2}を与える。")
                 .variable(1, MagicDamage, 60, 50, ap(0.6))
                 .variable(2, MSSlowRatio, 15, 5)
                 .mana(70)
@@ -3089,13 +3104,16 @@ public class Skill extends Describable<SkillDescriptor> {
                 .passive("{1}し{2}を得る。")
                 .variable(1, ASRatio, 10, 3)
                 .variable(2, AR, 10, 3)
-                .active("指定地点に旗を投げ、{3}の敵ユニットに{4}を与える。旗は8秒間その場に残り視界を確保するとともに、{5}の味方ChampionにPassiveの効果を与える。(Jarvan IV自身はPassiveと合わせて倍の効果を受ける)")
+                .active("指定地点に旗を投げ、{3}の敵ユニットに{4}を与える。旗は8秒間その場に残り{6}の{7}とともに、{5}の味方ChampionにPassiveの効果を与える。(Jarvan IV自身はPassiveと合わせて倍の効果を受ける)")
                 .variable(3, Radius, 150)
                 .variable(4, MagicDamage, 60, 45, ap(0.8))
                 .variable(5, Radius, 1200)
+                .variable(6, Radius, 850)
+                .variable(7, Visionable)
                 .mana(55)
                 .cd(13)
                 .range(830);
+        DemacianStandard.update(P307).variable(6, Radius, 700);
         DemacianStandard.update(P304)
                 .active("指定地点に旗を投げ、{3}の敵ユニットに{4}を与える。旗は8秒間その場に残り視界を確保するとともに、{5}の味方Championは{1}する。(Jarvan IV自身はPassiveと合わせて倍の効果を受ける)");
         Cataclysm.update()
@@ -3900,13 +3918,15 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(9, -1)
                 .range(625);
         ImpureShots.update()
-                .passive("通常攻撃に{1}を与え、対象にスタックを付与する。1スタックにつき追加魔法DMが倍増していく。スタックは最大4スタック(最大4倍ダメージ)で5秒間持続する。")
+                .passive("通常攻撃に{1}を与え、対象にスタックを付与する。1スタックにつき追加魔法DMが倍増していく。最大{4}(最大4倍ダメージ)で5秒間持続する。")
                 .variable(1, MagicDamage, 6, 2, ap(0.05))
                 .active("6秒間{2}し、通常攻撃に{3}を付加する。")
                 .variable(2, ASRatio, 30, 5)
                 .variable(3, Wounds, 3)
+                .variable(4, Stack, 4)
                 .mana(50)
                 .cd(16);
+        ImpureShots.update(P307).variable(1, MagicDamage, 4, 2, ap(0.05)).variable(4, Stack, 5);
         MakeItRain.update()
                 .active("地点を指定した0.5秒後に2秒間銃弾の雨を降らし、{1}の敵ユニットに{2}と1秒間{3}を与える。")
                 .variable(1, Radius, 400)
@@ -3996,9 +4016,8 @@ public class Skill extends Describable<SkillDescriptor> {
         SoulShackles.update(P3051).mana(100);
 
         /** Nami */
-        SurgingTides.update()
-                .passive("スキルが味方Championに命中した際に、対象は1.5秒間{1}する。レベル1/7/13で増加量が上昇する。")
-                .variable(-1, MS, new Per6Level(40, 5));
+        SurgingTides.update().passive("スキルが味方Championに命中した際に、対象は1.5秒間{1}する。").variable(-1, MS, new Per6Level(30, 5));
+        SurgingTides.update(P307).variable(-1, MS, 40);
         AquaPrison.update()
                 .active("指定地点に泡を投げ、範囲内の敵ユニットに{1}と{2}を与える。")
                 .variable(1, MagicDamage, 75, 55, ap(0.65))
@@ -4006,6 +4025,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(60)
                 .cd(14, -1)
                 .range(875);
+        AquaPrison.update(P307).variable(2, Stun, 1.5);
         EbbandFlow.update()
                 .active("対象の味方Championまたは敵Championに、Championにのみ3回まで跳ね返る({3})水流を発射する。水流が味方Championに命中した場合は{1}し、敵Championに命中した場合は{2}を与える。水流は同一のChampionには一度しか跳ね返らず、味方Championに命中した場合は一番近くの敵Championに、敵Championに命中した場合は一番近くの味方Championに跳ね返る。")
                 .variable(1, RestoreHealth, 65, 30, ap(0.3))
@@ -4195,12 +4215,19 @@ public class Skill extends Describable<SkillDescriptor> {
         /** Nunu */
         Visionary.update().passive("通常攻撃を行うたびにスタックが増加する(最大5スタック)。5スタックの状態でスキルを使用すると、スタックを消費して対象のスキルの消費マナが0になる。");
         Consume.update()
-                .active("対象の敵MinionかPet及び中立クリープ1体に{1}を与え、{2}する。")
+                .active("対象の敵MinionかPet及びモンスター1体に{1}を与え、{2}する。")
                 .variable(1, TrueDamage, 500, 100)
                 .variable(2, RestoreHealth, 125, 55, ap(1))
                 .mana(60)
                 .cd(16, -2)
                 .range(125);
+        Consume.update(P307)
+                .active("対象の敵MinionかPet及びモンスター1体に{1}を与え、{2}する。特定のモンスターを対象とした場合{3}間、以下の追加効果を得る。<br>ゴーレム : {4}を得て{5}する。<br>リザード : 通常攻撃かスキルでダメージを与えると、{6}を与える。<br>レイス/ウルフ : 3秒間{7}する。")
+                .variable(3, Time, 120, 30)
+                .variable(4, Health, 0, 0, amplify(Health, 0.1))
+                .variable(5, Grow)
+                .variable(6, MagicDamage, 0, 0, amplify(Health, 0.01))
+                .variable(7, MSRatio, 15);
         BloodBoil.update()
                 .active("12秒間対象の味方ユニットは{1}し{2}する。自分以外に使用した場合は自身にも同様の効果が発生する。")
                 .variable(1, ASRatio, 25, 5)
@@ -4530,6 +4557,9 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(2, MagicDamage, 37.5, 29.1, ap(0.56))
                 .cd(6)
                 .range(600);
+        Flamespitter.update(P307)
+                .variable(1, MagicDamage, 25, 20, ap(0.33))
+                .variable(2, MagicDamage, 37.5, 30, ap(0.5));
         ScrapShield.update()
                 .active("2秒間{1}を得て1秒間{2}する。Danger Zone中は{3}を得て1秒間{4}する。")
                 .variable(1, Shield, 50, 30, ap(0.4))
@@ -4545,6 +4575,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(4, MSSlowRatio, 18.75, 6.25)
                 .cd(10)
                 .range(850);
+        ElectroHarpoon.update(P307).variable(1, MagicDamage, 45, 25, ap(0.4));
         TheEqualizer.update()
                 .active("指定した位置から指定方向({4})にロケットを打ち出し、当たった敵ユニットに{1}と{2}を与える。また5秒間ロケットの着弾した地面に炎が残り、その上にいる敵ユニットに毎秒{3}と{2}を与える。")
                 .variable(1, MagicDamage, 150, 75, ap(0.5))
@@ -5217,7 +5248,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(6)
                 .range(1450);
         PickACard.update()
-                .active("使用するとBlue、Red、Goldの3種のカードを選択し始め、再度使用でカードが決定する。決定したカードにより次の通常攻撃が魔法DMに変換され、以下の効果が追加される。Blue Card: {2}を与え{3}する。　Red Card: {4}の敵に{5}と2.5秒間{6}を与える。　Gold Card: {7}と{8}を与える。")
+                .active("使用するとBlue、Red、Goldの3種のカードを選択し始め、再度使用でカードが決定する。決定したカードにより次の通常攻撃が魔法DMに変換され、以下の効果が追加される。<br>Blue Card: {2}を与え{3}する。<br>Red Card: {4}の敵に{5}と2.5秒間{6}を与える。<br>Gold Card: {7}と{8}を与える。")
                 .variable(2, MagicDamage, 40, 20, ap(0.4), ad(1))
                 .variable(3, RestoreMana, 26, 13, ad(0.65))
                 .variable(4, Radius, 100)
@@ -5227,17 +5258,20 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(8, Stun, 1.2, 0.2)
                 .mana(40, 15)
                 .cd(6);
+        PickACard.update(P307).variable(3, RestoreMana, 50, 25);
         StackedDeck.update()
                 .passive("{1}を得て{2}する。通常攻撃4回毎に追加{3}を与える。")
                 .variable(1, CDR, 3, 3)
                 .variable(2, ASRatio, 3, 3)
                 .variable(3, MagicDamage, 55, 25, ap(0.4));
+        StackedDeck.update(P307).passive("{2}する。通常攻撃4回毎に追加{3}を与える。").variable(2, ASRatio, 10, 5);
         Destiny.update()
                 .active("{1}間すべての敵Champion(ステルス中のChampion含む)の視界を得る。効果中に再度使用すると2秒間移動・攻撃が不可能になった後、指定した地点にワープする。。効果中は敵Championの頭上にアイコンが表示される。")
                 .variable(1, Time, 6, 2)
                 .mana(150, -25)
                 .cd(150, -15)
                 .range(5500);
+        Destiny.update(P307).cd(180, -30);
 
         /** Twitch */
         DeadlyVenom.update()
@@ -5374,6 +5408,9 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(70, 5)
                 .cd(16, -2)
                 .range(new Diff(850, 0, 1), amplify(Duration, 200));
+        PiercingArrow.update(P307)
+                .variable(1, PhysicalDamage, 10, 37, ad(1))
+                .variable(2, PhysicalDamage, 15, 55, ad(1.65));
         BlightedQuiver.update()
                 .passive("通常攻撃に追加{1}と6秒間持続する疫病が付与される。疫病は3回までスタックする。疫病のスタックが付与されている敵ユニットにVarusの他のスキルが命中した場合、疫病のスタックを全て消費して1スタック毎に{2}を与える。")
                 .variable(1, MagicDamage, 10, 4, ap(0.25))
@@ -5386,6 +5423,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(80)
                 .cd(18, -2)
                 .range(925);
+        HailOfArrows.update(P307).variable(1, PhysicalDamage, 65, 35, bounusAD(0.6));
         ChainOfCorruption.update()
                 .active("指定方向に腐敗の蔓を投げつけ、当たった敵Championに{1}と{2}を与える。当たった敵Championからは徐々に腐敗が広がり({3})、腐敗に触れた敵Championにも同様の効果を与える。")
                 .variable(1, MagicDamage, 150, 100, ap(1))
@@ -5618,7 +5656,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, Visionable)
                 .cd(4);
         InfiniteDuress.update()
-                .active("対象の敵Championに突撃し{2}を与えて、その間{3}を得て0.36秒毎に{1}を、計5回で{4}を与える。")
+                .active("対象の敵Championに突撃し{2}を与えて、その間{3}を得て0.42秒毎に{1}を、計5回で{4}を与える。")
                 .variable(1, MagicDamage, 50, 17, bounusAD(0.4))
                 .variable(2, Suppression, 1.8)
                 .variable(3, LS, 30)
@@ -5628,6 +5666,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(100, 25)
                 .cd(90, -10)
                 .range(700);
+        InfiniteDuress.update(P307).active("対象の敵Championに突撃し{2}を与えて、その間{3}を得て0.3秒毎に{1}を、計5回で{4}を与える。");
 
         /** Wukong */
         StoneSkin.update()
@@ -5793,28 +5832,34 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(4, Tenacity, 75)
                 .cd(130, -15)
                 .range(300);
+        LetsBounce.update(P307).variable(1, MagicDamage, 140, 70, ap(0.4));
 
         /** Zed */
         ContemptforTheWeak.update()
                 .passive("HPが50%以下の敵ユニットへの通常攻撃に{1}を付与する。同一の対象には10秒に一度しか発動しない。レベル1、7、17でDMが上昇する。")
                 .variable(1, MagicDamage, 0, 0, amplify(TargetMaxHealthRatio, new Per6LevelForZed(6, 2)));
         RazorShuriken.update()
-                .active("Zedと「影」から指定方向に貫通する手裏剣を飛ばし、当たった敵ユニットに{1}を与える。手裏剣は一度敵ユニットに当たるとそれ以降の敵ユニットには80%のDMを与える。Zedと「影」が同一の対象に手裏剣を命中させた場合、2発目以降は{2}を与える。")
+                .active("Zedと「影」から指定方向に貫通する手裏剣を飛ばし、当たった敵ユニットに{1}を与える。手裏剣は一度敵ユニットに当たるとそれ以降の敵ユニットには{3}を与える。Zedと「影」が同一の対象に手裏剣を命中させた場合、2発目以降は{2}を与える。")
                 .variable(1, PhysicalDamage, 75, 35, bounusAD(1))
                 .variable(2, PhysicalDamage, 37.5, 20, bounusAD(0.5))
+                .variable(3, PhysicalDamage, 60, 32, bounusAD(0.8))
                 .cost(Energy, 75, -5)
                 .cd(6)
                 .range(900);
         RazorShuriken.update(P303).variable(1, PhysicalDamage, 75, 40, bounusAD(1));
+        RazorShuriken.update(P307).variable(3, PhysicalDamage, 45, 24, bounusAD(0.6));
         LivingShadow.update()
                 .passive("{1}を得る。")
                 .variable(1, AD, 0, 0, amplify(BounusAD, 0.05, 0.05))
-                .active("Zedの「影」が指定方向にダッシュし、4秒間その場に留まる。再度このスキルを使用するとZedと「影」の位置が入れ替わる。「影」はZedが通常スキルを使用すると同時に同じスキルを使用する。この時スキルがZedのスキルと同一の敵ユニットに命中した場合、{1}する。回復効果はスキル1回毎に1度のみ発動する。")
+                .active("Zedの「影」が指定方向にダッシュし、4秒間その場に留まり{2}の{3}。再度このスキルを使用するとZedと「影」の位置が入れ替わる。「影」はZedが通常スキルを使用すると同時に同じスキルを使用する。この時スキルがZedのスキルと同一の敵ユニットに命中した場合、{1}する。回復効果はスキル1回毎に1度のみ発動する。")
                 .variable(1, RestoreEnergy, 20, 5)
+                .variable(2, Radius, 1300)
+                .variable(3, Visionable)
                 .cost(Energy, 40, -5)
                 .cd(22, -1.5)
                 .range(550);
         LivingShadow.update(P306).cd(18, -1);
+        LivingShadow.update(P307).variable(2, Radius, 700);
         ShadowSlash.update()
                 .active("Zedと「影」から衝撃波を発生させ、{1}の敵ユニットに{2}を与える。ZedのShadow Slashは敵ユニットに当たる度にLiving ShadowのCDを1秒解消させる。「影」のShadow Slashはダメージと共に敵ユニットに1.5秒間{3}を与える。Zedと「影」が同一の対象にShadow Slashを命中させた場合、DMは重複しないがスローの効果が上昇する。")
                 .variable(1, Radius, 290)
@@ -5822,9 +5867,10 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, MSSlowRatio, 30, 7.5)
                 .cost(Energy, 50, 0)
                 .cd(3);
+        ShadowSlash.update(P303).variable(2, PhysicalDamage, 60, 30, bounusAD(0.9));
         ShadowSlash.update(P306)
                 .active("Zedと「影」から衝撃波を発生させ、{1}の敵ユニットに{2}を与える。ZedのShadow Slashは敵Championに当たる度にLiving ShadowのCDを2秒解消させる。「影」のShadow Slashはダメージと共に敵ユニットに1.5秒間{3}を与える。Zedと「影」が同一の対象にShadow Slashを命中させた場合、DMは重複しないがスローの効果が上昇する。");
-        ShadowSlash.update(P303).variable(2, PhysicalDamage, 60, 30, bounusAD(0.9));
+        ShadowSlash.update(P307).cd(4);
         DeathMark.update()
                 .active("対象の敵Championにダッシュしマークを付与する。ダッシュ中はターゲット不可状態になる。また対象の背後に4秒間持続する「影」を召喚する。再度このスキルを使用するとZedと「影」の位置が入れ替わる。付与から3秒後にマークは消費され、対象にマークが付与されている間にZedと「影」が与えた物理DMと魔法DMの合計に比例し{1}を与える。")
                 .variable(1, PhysicalDamage, 0, 0, ad(1), amplify(DealtDamageRatio, 20, 15))

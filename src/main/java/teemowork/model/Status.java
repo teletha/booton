@@ -205,6 +205,12 @@ public enum Status {
     /** Range */
     Range("射程"), RangePerLv, RangeRatio("射程"),
 
+    /** Projectile Speed. */
+    ProjectileSpeed("投射速度"),
+
+    /** Grow Body Size */
+    Grow("サイズ"),
+
     /** Level */
     Lv,
 
@@ -462,6 +468,7 @@ public enum Status {
         case LS:
         case Tenacity:
         case Percentage:
+        case Grow:
             return "%";
 
         case Gold:
@@ -498,6 +505,7 @@ public enum Status {
         case HealthRatio:
         case ExperimentRatio:
         case RestoreHealthRatio:
+        case Grow:
             return name + "が" + formatValue(computed) + "増加";
 
         case DamageReduction:
@@ -538,6 +546,9 @@ public enum Status {
             } else {
                 return name + "(距離" + formatValue(computed) + ")";
             }
+
+        case Stack:
+            return formatValue(computed) + "スタック";
         }
         return name + formatValue(computed);
     }
