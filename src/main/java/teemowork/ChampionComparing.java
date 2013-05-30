@@ -16,12 +16,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import js.application.Page;
-import js.application.PageInfo;
-import js.ui.UIEvent;
 import js.util.ArrayList;
 import js.util.jQuery;
 import js.util.jQuery.Listener;
+import jsx.application.Page;
+import jsx.application.PageInfo;
+import jsx.bwt.UIEvent;
 import teemowork.ChampionComparingStyle.Body;
 import teemowork.ChampionComparingStyle.Head;
 import teemowork.ChampionComparingStyle.Icon;

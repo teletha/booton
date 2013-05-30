@@ -9,7 +9,7 @@
  */
 package booton.live;
 
-import js.ui.model.Property;
+import jsx.model.Property;
 
 /**
  * @version 2013/05/26 11:31:27

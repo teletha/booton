@@ -14,9 +14,9 @@ import static teemowork.model.Status.*;
 import java.util.List;
 import java.util.Map.Entry;
 
-import js.application.Page;
-import js.application.PageInfo;
 import js.util.jQuery;
+import jsx.application.Page;
+import jsx.application.PageInfo;
 import teemowork.model.Item;
 import teemowork.model.ItemStatus;
 import teemowork.model.Status;

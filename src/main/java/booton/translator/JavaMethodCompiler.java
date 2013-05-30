@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 import js.lang.NativeObject;
-import js.ui.Input;
+import jsx.bwt.Input;
 import kiss.Extensible;
 import kiss.I;
 import kiss.model.ClassUtil;

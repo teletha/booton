@@ -16,7 +16,7 @@ import java.lang.reflect.Field;
 import js.lang.Global;
 import js.lang.NativeNumber;
 import js.lang.NativeObject;
-import js.ui.model.Property;
+import jsx.model.Property;
 
 /**
  * @version 2013/05/05 17:55:10

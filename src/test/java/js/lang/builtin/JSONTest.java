@@ -10,8 +10,8 @@
 package js.lang.builtin;
 
 import js.lang.NativeObject;
-import js.ui.model.Property;
 import jsx.Util;
+import jsx.model.Property;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

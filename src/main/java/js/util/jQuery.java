@@ -16,10 +16,10 @@ import java.util.Iterator;
 
 import js.dom.Element;
 import js.dom.Image;
-import js.ui.Listen;
-import js.ui.UI;
-import js.ui.UIAction;
-import js.ui.UIEvent;
+import jsx.bwt.Listen;
+import jsx.bwt.UI;
+import jsx.bwt.UIAction;
+import jsx.bwt.UIEvent;
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
 

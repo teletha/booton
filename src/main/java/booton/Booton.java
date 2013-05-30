@@ -16,9 +16,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import js.application.Application;
-import js.application.ApplicationTheme;
-import js.application.Page;
+import jsx.application.Application;
+import jsx.application.ApplicationTheme;
+import jsx.application.Page;
 import kiss.ClassListener;
 import kiss.I;
 import kiss.Manageable;

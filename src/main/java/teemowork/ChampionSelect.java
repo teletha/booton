@@ -11,11 +11,11 @@ package teemowork;
 
 import java.util.Collection;
 
-import js.application.Application;
-import js.application.Page;
-import js.application.PageInfo;
-import js.ui.ImageGrid;
 import js.util.jQuery;
+import jsx.application.Application;
+import jsx.application.Page;
+import jsx.application.PageInfo;
+import jsx.bwt.ImageGrid;
 import teemowork.model.Champion;
 
 /**

@@ -9,16 +9,16 @@
  */
 package teemowork;
 
-import js.application.Page;
-import js.application.PageInfo;
-import js.ui.Button;
-import js.ui.Input;
-import js.ui.Select;
-import js.ui.UIEvent;
-import js.ui.model.Property;
-import js.ui.model.SelectableModel;
 import js.util.jQuery;
 import js.util.jQuery.Listener;
+import jsx.application.Page;
+import jsx.application.PageInfo;
+import jsx.bwt.Button;
+import jsx.bwt.Input;
+import jsx.bwt.Select;
+import jsx.bwt.UIEvent;
+import jsx.model.Property;
+import jsx.model.SelectableModel;
 
 /**
  * @version 2013/04/02 15:53:46

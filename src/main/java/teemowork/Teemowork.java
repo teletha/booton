@@ -10,9 +10,9 @@
 package teemowork;
 
 import static js.lang.Global.*;
-import js.application.Application;
-import js.application.Header;
-import js.application.Header.Menu;
+import jsx.application.Application;
+import jsx.application.Header;
+import jsx.application.Header.Menu;
 import teemowork.TeemoworkTheme.Content;
 import teemowork.TeemoworkTheme.HTML;
 
