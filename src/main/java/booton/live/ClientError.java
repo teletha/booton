@@ -12,7 +12,7 @@ package booton.live;
 import java.util.ArrayList;
 import java.util.List;
 
-import js.ui.model.Property;
+import jsx.model.Property;
 
 /**
  * @version 2013/05/26 11:30:35

@@ -15,15 +15,15 @@ import static teemowork.model.Status.*;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import js.application.Page;
-import js.application.PageInfo;
 import js.bind.Notifiable;
 import js.bind.Observer;
 import js.math.Mathematics;
-import js.ui.UIEvent;
 import js.util.ArrayList;
 import js.util.jQuery;
 import js.util.jQuery.Listener;
+import jsx.application.Page;
+import jsx.application.PageInfo;
+import jsx.bwt.UIEvent;
 import teemowork.ChampionDetailStyle.Active;
 import teemowork.ChampionDetailStyle.Amplifier;
 import teemowork.ChampionDetailStyle.Assigned;

@@ -9,7 +9,7 @@
  */
 package js.util;
 
-import js.ui.validator.Invalid;
+import jsx.model.validator.Invalid;
 
 /**
  * @version 2013/04/12 16:12:29
