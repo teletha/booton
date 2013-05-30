@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,12 +12,13 @@ package js.util;
 import java.util.Iterator;
 
 import js.lang.NativeObject;
-
+import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2012/12/08 11:49:36
+ * @version 2013/05/30 20:38:55
  */
-public class HashSet<E> extends AbstractSet<E> {
+@JavaAPIProvider(java.util.HashSet.class)
+class HashSet<E> extends AbstractSet<E> {
 
     /** The item count. */
     private int size = 0;

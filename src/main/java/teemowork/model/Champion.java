@@ -13,13 +13,13 @@ import static teemowork.model.Skill.*;
 import static teemowork.model.Status.*;
 import static teemowork.model.Version.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import js.util.ArrayList;
 import js.util.jQuery;
 
 /**
- * 3.04準拠
+ * 3.07準拠
  * 
  * @version 2013/01/27 9:55:21
  */

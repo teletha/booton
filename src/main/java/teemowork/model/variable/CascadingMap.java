@@ -9,9 +9,8 @@
  */
 package teemowork.model.variable;
 
+import java.util.HashMap;
 import java.util.Map;
-
-import js.util.HashMap;
 
 /**
  * @version 2013/03/05 14:50:40

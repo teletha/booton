@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import booton.translator.JavaAPIProvider;
+
 /**
- * @version 2012/12/09 21:55:42
+ * @version 2013/05/30 20:36:49
  */
-public class HashMap<K, V> implements Map<K, V> {
+@JavaAPIProvider(java.util.HashMap.class)
+class HashMap<K, V> implements Map<K, V> {
 
     /** The item pool. */
     private final HashSet<Entry<K, V>> items = new HashSet();

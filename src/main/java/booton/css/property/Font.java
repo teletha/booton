@@ -9,9 +9,9 @@
  */
 package booton.css.property;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import js.util.ArrayList;
 import js.util.Color;
 import kiss.I;
 import booton.StylesheetManager;
@@ -22,6 +22,7 @@ import booton.css.Colorable;
 import booton.css.Unit;
 import booton.css.Value;
 import booton.util.Strings;
+
 
 /**
  * @version 2012/12/16 12:25:48

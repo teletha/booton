@@ -10,9 +10,8 @@
 package js.bind;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
-
-import js.util.ArrayList;
 
 /**
  * @version 2013/01/20 15:26:26

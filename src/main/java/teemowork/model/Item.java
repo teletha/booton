@@ -12,9 +12,9 @@ package teemowork.model;
 import static teemowork.model.Status.*;
 import static teemowork.model.Version.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import js.util.ArrayList;
 import teemowork.model.variable.Variable;
 import teemowork.model.variable.VariableResolver;
 import teemowork.model.variable.VariableResolver.Diff;

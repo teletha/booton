@@ -12,11 +12,11 @@ package teemowork;
 import static js.lang.Global.*;
 import static teemowork.model.Status.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import js.util.ArrayList;
 import js.util.jQuery;
 import js.util.jQuery.Listener;
 import jsx.application.Page;

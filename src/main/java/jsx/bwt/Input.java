@@ -9,16 +9,15 @@
  */
 package jsx.bwt;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import js.lang.NativeObject;
 import js.lang.NativeObject.PropertyDescriptor;
-import js.util.ArrayList;
 import js.util.Converter;
-import js.util.HashMap;
 import jsx.bwt.FormUIStyle.AbstractBorderForm;
-import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.FormUIStyle.InputForm;
 import jsx.bwt.FormUIStyle.InvalidInputForm;
 import jsx.model.validator.IntegerValidator;
@@ -85,8 +84,6 @@ public class Input<T> extends FormUI {
         // initial binding
         this.model.change(model, name, null, this.model.get());
     }
-
-
 
     /**
      * <p>

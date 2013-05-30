@@ -9,10 +9,10 @@
  */
 package jsx.model;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import js.util.ArrayList;
 import jsx.bwt.Publishable;
 
 /**

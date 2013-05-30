@@ -12,14 +12,14 @@ package jsx.application;
 import static js.lang.Global.*;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import js.lang.Classes;
-import js.util.ArrayList;
-import js.util.HashMap;
 import js.util.jQuery;
 import js.util.jQuery.Listener;
 import jsx.bwt.UIEvent;

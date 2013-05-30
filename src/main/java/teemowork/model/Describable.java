@@ -10,16 +10,12 @@
 package teemowork.model;
 
 import static teemowork.model.Status.*;
-
-import java.util.List;
-
-import js.util.ArrayList;
 import teemowork.model.variable.Variable;
 import teemowork.model.variable.VariableResolver;
 import teemowork.model.variable.VariableResolver.Diff;
 
 /**
- * @version 2013/03/16 12:53:49
+ * @version 2013/05/30 20:35:46
  */
 public abstract class Describable<T extends Descriptor> {
 
@@ -27,7 +23,7 @@ public abstract class Describable<T extends Descriptor> {
     private static Describable current;
 
     /** The version manager. */
-    private final List<T> versions = new ArrayList(Version.values().length);
+    private final Descriptor[] versions = new Descriptor[Version.values().length];
 
     /**
      * <p>
@@ -55,10 +51,10 @@ public abstract class Describable<T extends Descriptor> {
      */
     public final T getDescriptor(Version version) {
         for (int i = version.ordinal(); 0 <= i; i--) {
-            T descriptor = versions.get(i);
+            Descriptor descriptor = versions[i];
 
             if (descriptor != null) {
-                return descriptor;
+                return (T) descriptor;
             }
         }
         return createDescriptor(null);
@@ -86,7 +82,7 @@ public abstract class Describable<T extends Descriptor> {
         T descriptor = createDescriptor(getDescriptor(version));
 
         // versioning management
-        versions.set(version.ordinal(), descriptor);
+        versions[version.ordinal()] = descriptor;
 
         // for helper methods
         current = this;

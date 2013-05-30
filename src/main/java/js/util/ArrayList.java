@@ -15,11 +15,13 @@ import java.util.List;
 import java.util.ListIterator;
 
 import js.lang.NativeArray;
+import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/02/16 15:06:47
  */
-public class ArrayList<E> extends AbstractCollection<E> implements List<E> {
+@JavaAPIProvider(java.util.ArrayList.class)
+class ArrayList<E> extends AbstractCollection<E> implements List<E> {
 
     /** The actual container. */
     private NativeArray<E> array = new NativeArray();
