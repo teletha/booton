@@ -639,6 +639,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 650)
                 .set(MS, 325);
+        Caitlyn.update(P307).set(AS, 0.625, 4);
         Cassiopeia.update(P0000)
                 .set(Health, 380, 75)
                 .set(Hreg, 4.85, 0.5)
@@ -1172,7 +1173,9 @@ public class Champion {
                 .set(AR, 9, 4)
                 .set(MR, 30, 0)
                 .set(Range, 550)
-                .set(MS, 340);
+                .set(MS, 340)
+                .set(ProjectileSpeed, 1350);
+        Nami.update(P307).set(ProjectileSpeed, 1500);
         Nasus.update(P0000)
                 .set(Health, 410, 90)
                 .set(Hreg, 7.5, 0.9)
@@ -1618,6 +1621,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 575)
                 .set(MS, 335);
+        Varus.update(P307).set(MS, 330);
         Vayne.update(P0000)
                 .set(Health, 359, 83)
                 .set(Hreg, 4.5, 0.55)
@@ -1748,6 +1752,7 @@ public class Champion {
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
                 .set(MS, 335);
+        Zac.update(P307).set(Hreg, 7, 0.55);
         Zed.update(P0000)
                 .set(Health, 445, 85)
                 .set(Hreg, 6, 0.65)
