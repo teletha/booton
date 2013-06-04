@@ -15,19 +15,19 @@ import static teemowork.model.Version.*;
 /**
  * @version 2013/01/29 1:55:25
  */
-public class ItemAbility {
+public class Ability extends Describable<AbilityDescriptor> {
 
     /** The ability. */
-    public static final ItemAbility AbyssalAura = new ItemAbility("AbyssalAura");
+    public static final Ability AbyssalAura = new Ability("AbyssalAura");
 
     /** The ability. */
-    public static final ItemAbility Legion = new ItemAbility("Legion", true);
+    public static final Ability Legion = new Ability("Legion", true);
 
     /** The ability. */
-    public static final ItemAbility Insight = new ItemAbility("Insight", true);
+    public static final Ability Insight = new Ability("Insight", true);
 
     /** The ability. */
-    public static final ItemAbility ManaCharge = new ItemAbility("Mana Charge", true);
+    public static final Ability ManaCharge = new Ability("Mana Charge", true);
 
     /** The ability name. */
     public final String name;
@@ -35,13 +35,10 @@ public class ItemAbility {
     /** The visible name. */
     public final boolean visible;
 
-    /** The descriptor. */
-    private final ItemAbilityStatus[] versions = new ItemAbilityStatus[Version.values().length];
-
     /**
      * Create new ability with invisible name.
      */
-    ItemAbility(String name) {
+    Ability(String name) {
         this(name, false);
     }
 
@@ -52,41 +49,25 @@ public class ItemAbility {
      * 
      * @param name
      */
-    ItemAbility(String name, boolean visible) {
+    Ability(String name, boolean visible) {
         this.name = name;
         this.visible = visible;
     }
 
     /**
-     * <p>
-     * Retrieve a status at the specified version.
-     * </p>
+     * {@inheritDoc}
      */
-    public ItemAbilityStatus getStatus(Version version) {
-        for (int i = version.ordinal(); 0 <= i; i--) {
-            ItemAbilityStatus status = versions[i];
-
-            if (status != null) {
-                return status;
-            }
-        }
-        return null;
+    @Override
+    public int getMaxLevel() {
+        return 0;
     }
 
     /**
-     * <p>
-     * Update status.
-     * </p>
-     * 
-     * @param version A update version.
-     * @return A descriptor.
+     * {@inheritDoc}
      */
-    ItemAbilityStatus update(Version version) {
-        ItemAbilityStatus status = new ItemAbilityStatus(getStatus(version));
-
-        versions[version.ordinal()] = status;
-
-        return status;
+    @Override
+    protected AbilityDescriptor createDescriptor(AbilityDescriptor previous) {
+        return new AbilityDescriptor(this, previous);
     }
 
     static {

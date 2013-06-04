@@ -10,19 +10,14 @@
 package teemowork.model;
 
 import static teemowork.model.Status.*;
-import static teemowork.model.Version.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import teemowork.model.variable.Variable;
-import teemowork.model.variable.VariableResolver;
-import teemowork.model.variable.VariableResolver.Diff;
-
 /**
  * @version 2013/01/27 0:43:53
  */
-public class Item {
+public class Item extends Describable<ItemDescriptor> {
 
     /** The item manager. */
     private static final List<Item> items = new ArrayList();
@@ -441,9 +436,6 @@ public class Item {
     /** Zhonya's Hourglass */
     public static final Item ZhonyasHourglass = new Item(3157, "Zhonya's Hourglass");
 
-    /** The descriptor. */
-    private final ItemStatus[] versions = new ItemStatus[Version.values().length];
-
     /** The item id. */
     public final int id;
 
@@ -477,19 +469,19 @@ public class Item {
     }
 
     /**
-     * <p>
-     * Retrieve a status at the specified version.
-     * </p>
+     * {@inheritDoc}
      */
-    public ItemStatus getStatus(Version version) {
-        for (int i = version.ordinal(); 0 <= i; i--) {
-            ItemStatus status = versions[i];
+    @Override
+    public int getMaxLevel() {
+        return 0;
+    }
 
-            if (status != null) {
-                return status;
-            }
-        }
-        return null;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected ItemDescriptor createDescriptor(ItemDescriptor previous) {
+        return new ItemDescriptor(this, previous);
     }
 
     /**
@@ -501,7 +493,7 @@ public class Item {
      * @return
      */
     public double getTotalCost(Version version) {
-        ItemStatus status = getStatus(version);
+        ItemDescriptor status = getDescriptor(version);
 
         double sum = status.get(Cost);
 
@@ -509,38 +501,6 @@ public class Item {
             sum += material.getTotalCost(version);
         }
         return sum;
-    }
-
-    /**
-     * <p>
-     * Update status.
-     * </p>
-     * 
-     * @param version A update version.
-     * @return A champion descriptor.
-     */
-    ItemStatus update() {
-        ItemStatus status = new ItemStatus(getStatus(P0000));
-
-        versions[P0000.ordinal()] = status;
-
-        return status;
-    }
-
-    /**
-     * <p>
-     * Update status.
-     * </p>
-     * 
-     * @param version A update version.
-     * @return A champion descriptor.
-     */
-    ItemStatus update(Version version) {
-        ItemStatus status = new ItemStatus(getStatus(version));
-
-        versions[version.ordinal()] = status;
-
-        return status;
     }
 
     /**
@@ -571,100 +531,6 @@ public class Item {
         return null;
     }
 
-    /**
-     * <p>
-     * Create skill AD amplifier. This pattern is used frequently.
-     * </p>
-     * 
-     * @param rate An AD rate.
-     * @return
-     */
-    private static final Variable ad(double rate) {
-        return amplify(AD, rate);
-    }
-
-    /**
-     * <p>
-     * Create skill AD amplifier. This pattern is used frequently.
-     * </p>
-     * 
-     * @param rate An AD rate.
-     * @return
-     */
-    private static final Variable bounusAD(double rate) {
-        return amplify(BounusAD, rate);
-    }
-
-    /**
-     * <p>
-     * Create skill AP amplifier. This pattern is used frequently.
-     * </p>
-     * 
-     * @param rate An AP rate.
-     * @return
-     */
-    private static final Variable ap(double rate) {
-        return amplify(AP, rate);
-    }
-
-    /**
-     * <p>
-     * Create skill amplifier.
-     * </p>
-     * 
-     * @param status A status type.
-     * @param base A base value of amplifier rate.
-     * @return
-     */
-    private static final Variable amplify(Status status, double base) {
-        return amplify(status, base, 0);
-    }
-
-    /**
-     * <p>
-     * Create skill amplifier.
-     * </p>
-     * 
-     * @param status A status type.
-     * @param base A base value of amplifier rate.
-     * @param diff A diff value of amplifier rate.
-     * @return
-     */
-    private static final Variable amplify(Status status, double base, double diff) {
-        return amplify(status, new Diff(base, diff, 1));
-    }
-
-    /**
-     * <p>
-     * Create skill amplifier.
-     * </p>
-     * 
-     * @param status A status type.
-     * @param base A base value of amplifier rate.
-     * @param diff A diff value of amplifier rate.
-     * @return
-     */
-    private static final Variable amplify(Status status, VariableResolver resolver) {
-        return new Variable(status, resolver);
-    }
-
-    /**
-     * <p>
-     * Create skill amplifier.
-     * </p>
-     * 
-     * @param status A status type.
-     * @param base A base value of amplifier rate.
-     * @param diff A diff value of amplifier rate.
-     * @return
-     */
-    private static final Variable amplify(Status status, double base, double diff, Variable amplifier) {
-        Variable one = amplify(status, base, diff);
-        one.getAmplifiers().add(amplifier);
-
-        return one;
-    }
-
     static {
         AbyssalScepter.update().build(BlastingWand, NegatronCloak).cost(980).set(AP, 70).set(MR, 45);
         AegisOftheLegion.update()
@@ -673,9 +539,7 @@ public class Item {
                 .set(Health, 250)
                 .set(AR, 20)
                 .set(MR, 20)
-                .passive("Insight", "{1}を得る。")
-                .variable(1, AP, 0, 0, amplify(Mana, 0.03))
-                .passive("Mana Charge", "スキル使用時及びMana消費時に最大Manaが6だけ増加する(最大+750)。CD: 3s");
+                .variable(1, AP, 0, 0, amplify(Mana, 0.03));
         AmplifyingTome.update().cost(435).set(AP, 20);
         ArchangelsStaff.update()
                 .build(TearOftheGoddess, BlastingWand)

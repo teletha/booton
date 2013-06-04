@@ -67,8 +67,8 @@ class Collections {
      *             {@link Comparator} contract
      */
     public static <T> void sort(List<T> list, Comparator<? super T> comparator) {
-        Object[] values = list.toArray();
-        Arrays.sort(values, (Comparator) comparator);
+        T[] values = (T[]) list.toArray();
+        Arrays.sort(values, comparator);
 
         ListIterator iterator = list.listIterator();
 
