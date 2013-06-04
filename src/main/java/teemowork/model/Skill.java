@@ -5461,7 +5461,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(70);
 
         /** Veigar */
-        Equilibrium.update().passive("{1}を得る。").variable(1, MregRatio, 0, 0, amplify(MissingManaPercentage, 1));
+        Equilibrium.update().passive("{1}する。").variable(1, MregRatio, 0, 0, amplify(MissingManaPercentage, 0.01));
         BalefulStrike.update()
                 .passive("敵Championを倒すと{1}を得る。")
                 .variable(-1, AP, 1, 1)

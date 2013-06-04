@@ -11,12 +11,7 @@ package teemowork.model;
 
 import static teemowork.model.Status.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import js.lang.NativeArray;
-import teemowork.model.variable.Variable;
+import java.util.Arrays;
 
 /**
  * @version 2013/01/29 1:55:25
@@ -24,15 +19,13 @@ import teemowork.model.variable.Variable;
 public class ItemDescriptor extends Descriptor<ItemDescriptor> {
 
     /** The value store. */
-    private NativeArray<Double> values;
-
-    /** The variable store. */
-    private NativeArray<Variable> variables;
+    private double[] values = new double[Status.values().length];
 
     /** The item build. */
-    Item[] build;
+    private Item[] build = new Item[0];
 
-    public Map<String, List> passives;
+    /** The ability list. */
+    private Ability[] abilities = new Ability[0];
 
     /**
      * @param name
@@ -41,15 +34,9 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
         super(item, previous);
 
         if (previous != null) {
-            values = previous.values.copy();
-            variables = previous.variables;
+            values = Arrays.copyOf(previous.values, previous.values.length);
             build = previous.build;
-            passives = previous.passives;
-        } else {
-            values = new NativeArray();
-            variables = new NativeArray();
-            build = new Item[0];
-            passives = new HashMap();
+            abilities = previous.abilities;
         }
     }
 
@@ -62,9 +49,7 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
      * @return A result.
      */
     public double get(Status status) {
-        Double value = values.get(status.ordinal());
-
-        return value == null ? 0 : value;
+        return values[status.ordinal()];
     }
 
     /**
@@ -76,7 +61,7 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
      * @return Chainable API.
      */
     ItemDescriptor set(Status status, double value) {
-        values.set(status.ordinal(), value);
+        values[status.ordinal()] = value;
 
         return this;
     }
@@ -97,6 +82,17 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
 
     /**
      * <p>
+     * Get build items.
+     * </p>
+     * 
+     * @return items.
+     */
+    public Item[] getBuild() {
+        return build;
+    }
+
+    /**
+     * <p>
      * Set build items.
      * </p>
      * 
@@ -105,6 +101,30 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
      */
     ItemDescriptor build(Item... items) {
         this.build = items;
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * Get special abilities.
+     * </p>
+     * 
+     * @return Abilities.
+     */
+    public Ability[] getAbilities() {
+        return abilities;
+    }
+
+    /**
+     * <p>
+     * Set special abilities.
+     * </p>
+     * 
+     * @param abyssalaura
+     */
+    ItemDescriptor abilities(Ability... abilities) {
+        this.abilities = abilities;
 
         return this;
     }

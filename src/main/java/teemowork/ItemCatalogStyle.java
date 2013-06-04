@@ -127,4 +127,26 @@ class ItemCatalogStyle {
             text.verticalAlign.middle();
         }
     }
+
+    /**
+     * @version 2013/06/04 23:24:52
+     */
+    static class Ability extends CSS {
+
+        {
+            display.block();
+            font.size.smaller();
+        }
+    }
+
+    /**
+     * @version 2013/06/04 23:24:52
+     */
+    static class Unique extends CSS {
+
+        {
+            font.color(205, 146, 0).weight.bolder();
+            padding.right(0.5, em);
+        }
+    }
 }

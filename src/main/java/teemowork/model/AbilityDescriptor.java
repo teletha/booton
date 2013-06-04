@@ -9,7 +9,6 @@
  */
 package teemowork.model;
 
-import static teemowork.model.Status.*;
 import js.lang.NativeArray;
 
 /**
@@ -47,7 +46,7 @@ public class AbilityDescriptor extends Descriptor<AbilityDescriptor> {
             description = previous.description;
             values = previous.values;
         } else {
-            unique = false;
+            unique = true;
             aura = false;
             description = "";
             values = new NativeArray();
@@ -76,7 +75,7 @@ public class AbilityDescriptor extends Descriptor<AbilityDescriptor> {
      * @param status A target status.
      * @return Chainable API.
      */
-    public AbilityDescriptor set(Status status, double value) {
+    AbilityDescriptor set(Status status, double value) {
         values.set(status.ordinal(), value);
 
         return this;
@@ -90,7 +89,7 @@ public class AbilityDescriptor extends Descriptor<AbilityDescriptor> {
      * @param status A target status.
      * @return Chainable API.
      */
-    public AbilityDescriptor set(Status status, double base, double per) {
+    AbilityDescriptor set(Status status, double base, double per) {
         values.set(status.ordinal(), base);
         values.set(Status.valueOf(status.name() + "PerLv").ordinal(), per);
 
@@ -105,10 +104,9 @@ public class AbilityDescriptor extends Descriptor<AbilityDescriptor> {
      * @param range
      * @return
      */
-    public AbilityDescriptor aura(double range) {
+    AbilityDescriptor aura() {
         this.aura = true;
         this.unique = true;
-        set(Range, range);
 
         return this;
     }
@@ -131,8 +129,8 @@ public class AbilityDescriptor extends Descriptor<AbilityDescriptor> {
      * 
      * @return
      */
-    public AbilityDescriptor unique() {
-        this.unique = true;
+    AbilityDescriptor ununique() {
+        this.unique = false;
 
         return this;
     }
@@ -172,4 +170,5 @@ public class AbilityDescriptor extends Descriptor<AbilityDescriptor> {
     public String getDescription() {
         return description;
     }
+
 }

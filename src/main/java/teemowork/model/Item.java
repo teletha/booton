@@ -9,6 +9,7 @@
  */
 package teemowork.model;
 
+import static teemowork.model.Ability.*;
 import static teemowork.model.Status.*;
 
 import java.util.ArrayList;
@@ -497,7 +498,7 @@ public class Item extends Describable<ItemDescriptor> {
 
         double sum = status.get(Cost);
 
-        for (Item material : status.build) {
+        for (Item material : status.getBuild()) {
             sum += material.getTotalCost(version);
         }
         return sum;
@@ -532,43 +533,85 @@ public class Item extends Describable<ItemDescriptor> {
     }
 
     static {
-        AbyssalScepter.update().build(BlastingWand, NegatronCloak).cost(980).set(AP, 70).set(MR, 45);
+        AbyssalScepter.update()
+                .build(BlastingWand, NegatronCloak)
+                .cost(980)
+                .set(AP, 70)
+                .set(MR, 45)
+                .abilities(AbyssalAura);
         AegisOftheLegion.update()
                 .build(EmblemOfValor, NullMagicMantle, RubyCrystal)
                 .cost(625)
                 .set(Health, 250)
                 .set(AR, 20)
                 .set(MR, 20)
-                .variable(1, AP, 0, 0, amplify(Mana, 0.03));
+                .abilities(AegisLegion);
         AmplifyingTome.update().cost(435).set(AP, 20);
         ArchangelsStaff.update()
                 .build(TearOftheGoddess, BlastingWand)
                 .cost(1140)
                 .set(AP, 60)
                 .set(Mreg, 10)
-                .set(Mana, 250);
+                .set(Mana, 250)
+                .abilities(ArchangelInsight, ManaCharge);
         AthenesUnholyGrail.update()
                 .build(ChaliceOfHarmony, FiendishCodex)
                 .cost(900)
                 .set(AP, 60)
                 .set(Mreg, 15)
-                .set(MR, 40);
-        AtmasImpaler.update().build(AvariceBlade, ChainVest).cost(780).set(AR, 45).set(Critical, 15);
-        AugmentDeath.update().build(TheHexCore).cost(1000).set(AP, 45);
-        AugmentGravity.update().build(TheHexCore).cost(1000).set(CDR, 10).set(Mreg, 5).set(Mana, 200);
-        AugmentPower.update().build(TheHexCore).cost(1000).set(Health, 220).set(Hreg, 6);
-        AvariceBlade.update().build(BrawlersGloves).cost(400).set(Critical, 10);
+                .set(MR, 40)
+                .set(CDR, 20)
+                .abilities(AtheneRestore, ManaFont);
+        AtmasImpaler.update()
+                .build(AvariceBlade, ChainVest)
+                .cost(780)
+                .set(AR, 45)
+                .set(Critical, 15)
+                .abilities(AtamDamage);
+        AugmentDeath.update().build(TheHexCore).cost(1000).set(AP, 45).abilities(HexCorePower, HexCoreDeath);
+        AugmentGravity.update()
+                .build(TheHexCore)
+                .cost(1000)
+                .set(CDR, 10)
+                .set(Mreg, 5)
+                .set(Mana, 200)
+                .abilities(HexCorePower, HexCoreGravity);
+        AugmentPower.update()
+                .build(TheHexCore)
+                .cost(1000)
+                .set(Health, 220)
+                .set(Hreg, 6)
+                .abilities(HexCorePower, HexCoreTransfer);
+        AvariceBlade.update().build(BrawlersGloves).cost(400).set(Critical, 10).abilities(Avarice, Greed);
         BFSword.update().cost(1550).set(AD, 45);
-        BannerOfCommand.update().build(FiendishCodex, EmblemOfValor).cost(890).set(AP, 40).set(CDR, 10).set(AR, 30);
+        BannerOfCommand.update()
+                .build(FiendishCodex, EmblemOfValor)
+                .cost(890)
+                .set(AP, 40)
+                .set(CDR, 10)
+                .set(AR, 30)
+                .abilities(Valor, Promote);
         BansheesVeil.update()
                 .build(NegatronCloak, CatalystTheProtector)
                 .cost(600)
                 .set(Health, 400)
                 .set(Mana, 300)
-                .set(MR, 45);
-        BerserkersGreaves.update().build(BootsOfSpeed, Dagger).cost(150).set(ASRatio, 20);
-        BilgewaterCutlass.update().build(Pickaxe, VampiricScepter).cost(250).set(LS, 10).set(AD, 40);
-        BladeOftheRuinedKing.update().build(BilgewaterCutlass).cost(975).set(LS, 10).set(AD, 45);
+                .set(MR, 45)
+                .abilities(Banshee);
+        BerserkersGreaves.update().build(BootsOfSpeed, Dagger).cost(150).set(ASRatio, 20).abilities(EnhancedMovement2);
+        BilgewaterCutlass.update()
+                .build(LongSword, VampiricScepter)
+                .cost(150)
+                .set(LS, 12)
+                .set(AD, 25)
+                .abilities(Bilgewater);
+        BladeOftheRuinedKing.update()
+                .build(BilgewaterCutlass, Dagger, Dagger)
+                .cost(1000)
+                .set(LS, 15)
+                .set(AD, 25)
+                .set(ASRatio, 40)
+                .abilities(BotRKPassive, BotRKActive);
         BlastingWand.update().cost(860).set(AP, 40);
         BonetoothNecklace.update().cost(800).set(AD, 5);
         BootsOfMobility.update().build(BootsOfSpeed).cost(650);

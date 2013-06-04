@@ -162,7 +162,7 @@ public class BuildTest {
      */
     private Item createUniqueAbilityItem(String unique, Status status, double value) {
         Ability ability = new Ability(unique);
-        ability.update(Version.P0000).set(status, value).unique();
+        ability.update(Version.P0000).set(status, value);
 
         Item item = new EmptyItem();
         item.update(Version.P0000);
