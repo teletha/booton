@@ -18,7 +18,7 @@ import js.util.jQuery;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import teemowork.model.Item;
-import teemowork.model.ItemStatus;
+import teemowork.model.ItemDescriptor;
 import teemowork.model.Status;
 import teemowork.model.Version;
 import teemowork.model.variable.Variable;
@@ -44,7 +44,7 @@ public class ItemCatalog extends Page {
     @Override
     public void load(jQuery root) {
         for (Item item : Item.getAll()) {
-            ItemStatus status = item.getStatus(Version.Latest);
+            ItemDescriptor status = item.getDescriptor(Version.Latest);
 
             jQuery element = root.child(ItemCatalogStyle.ItemPanel.class);
             jQuery icons = element.child(ItemCatalogStyle.IconPanel.class);

@@ -332,7 +332,7 @@ public class Build extends Notifiable implements StatusCalculator {
             Item item = items[i];
 
             if (item != null) {
-                ItemStatus itemStatus = item.getStatus(version);
+                ItemDescriptor itemStatus = item.getDescriptor(version);
 
                 // compute item status
                 sum = status.compute(sum, itemStatus.get(status));

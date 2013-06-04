@@ -15,7 +15,7 @@ import js.lang.NativeArray;
 /**
  * @version 2013/01/29 1:55:25
  */
-public class ItemAbilityStatus {
+public class AbilityDescriptor extends Descriptor<AbilityDescriptor> {
 
     /** The unique flag. */
     private boolean unique;
@@ -38,7 +38,9 @@ public class ItemAbilityStatus {
      * @param unique
      * @param previous
      */
-    ItemAbilityStatus(ItemAbilityStatus previous) {
+    AbilityDescriptor(Ability ability, AbilityDescriptor previous) {
+        super(ability, previous);
+
         if (previous != null) {
             unique = previous.unique;
             aura = previous.aura;
@@ -74,7 +76,7 @@ public class ItemAbilityStatus {
      * @param status A target status.
      * @return Chainable API.
      */
-    public ItemAbilityStatus set(Status status, double value) {
+    public AbilityDescriptor set(Status status, double value) {
         values.set(status.ordinal(), value);
 
         return this;
@@ -88,7 +90,7 @@ public class ItemAbilityStatus {
      * @param status A target status.
      * @return Chainable API.
      */
-    public ItemAbilityStatus set(Status status, double base, double per) {
+    public AbilityDescriptor set(Status status, double base, double per) {
         values.set(status.ordinal(), base);
         values.set(Status.valueOf(status.name() + "PerLv").ordinal(), per);
 
@@ -103,7 +105,7 @@ public class ItemAbilityStatus {
      * @param range
      * @return
      */
-    public ItemAbilityStatus aura(double range) {
+    public AbilityDescriptor aura(double range) {
         this.aura = true;
         this.unique = true;
         set(Range, range);
@@ -129,7 +131,7 @@ public class ItemAbilityStatus {
      * 
      * @return
      */
-    public ItemAbilityStatus unique() {
+    public AbilityDescriptor unique() {
         this.unique = true;
 
         return this;
@@ -154,7 +156,7 @@ public class ItemAbilityStatus {
      * @param text
      * @return
      */
-    public ItemAbilityStatus description(String text) {
+    public AbilityDescriptor description(String text) {
         this.description = text;
 
         return this;
