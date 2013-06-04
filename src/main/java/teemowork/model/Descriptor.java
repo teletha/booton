@@ -102,6 +102,17 @@ public abstract class Descriptor<T extends Descriptor> {
 
     /**
      * <p>
+     * Test descriptor type.
+     * </p>
+     * 
+     * @return A result.
+     */
+    public final boolean isActive() {
+        return active.size() != 0;
+    }
+
+    /**
+     * <p>
      * Retrieve active text.
      * </p>
      * 

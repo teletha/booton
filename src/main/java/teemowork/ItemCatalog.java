@@ -10,18 +10,17 @@
 package teemowork;
 
 import static teemowork.model.Status.*;
-
-import java.util.List;
-import java.util.Map.Entry;
-
 import js.util.jQuery;
 import jsx.application.Page;
 import jsx.application.PageInfo;
+import teemowork.model.Ability;
+import teemowork.model.AbilityDescriptor;
+import teemowork.model.Describable;
+import teemowork.model.DescriptionView;
 import teemowork.model.Item;
 import teemowork.model.ItemDescriptor;
 import teemowork.model.Status;
 import teemowork.model.Version;
-import teemowork.model.variable.Variable;
 
 /**
  * @version 2013/02/19 18:31:47
@@ -73,16 +72,26 @@ public class ItemCatalog extends Page {
                 }
             }
 
-            for (Entry<String, List> entry : status.passives.entrySet()) {
-                descriptions.child(ItemCatalogStyle.Value.class).text(entry.getKey() + " - ");
+            for (Ability ability : status.getAbilities()) {
+                AbilityDescriptor descriptor = ability.getDescriptor(Version.Latest);
+                jQuery description = descriptions.child(ItemCatalogStyle.Ability.class);
 
-                for (Object token : entry.getValue()) {
-                    if (token instanceof Variable) {
-                        descriptions.append(token.toString());
-                    } else {
-                        descriptions.append(token.toString());
-                    }
+                if (descriptor.isUnique()) {
+                    description.child(ItemCatalogStyle.Unique.class).text("UNIQUE");
                 }
+
+                if (descriptor.isAura()) {
+                    description.child(ItemCatalogStyle.Unique.class).text("AURA");
+                }
+
+                if (descriptor.isActive()) {
+                    description.child(ItemCatalogStyle.Unique.class).text("Active");
+                }
+
+                if (ability.visible) {
+                    description.child(ItemCatalogStyle.Unique.class).text("[" + ability.name + "]");
+                }
+                new AbilityDescriptionView(description, ability, descriptor.isActive()).receive();
             }
         }
     }
@@ -93,5 +102,35 @@ public class ItemCatalog extends Page {
     @Override
     protected String getPageId() {
         return "ItemCatalog";
+    }
+
+    /**
+     * @version 2013/06/04 23:33:05
+     */
+    private static class AbilityDescriptionView extends DescriptionView {
+
+        /**
+         * @param root
+         * @param describable
+         */
+        private AbilityDescriptionView(jQuery root, Describable describable, boolean active) {
+            super(root, describable, !active);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected int getLevel() {
+            return 0;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected Version getVersion() {
+            return Version.Latest;
+        }
     }
 }

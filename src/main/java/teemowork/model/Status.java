@@ -221,7 +221,7 @@ public enum Status {
     Experiment("経験値"), ExperimentRatio("経験値"),
 
     /** Cooldown */
-    CD(1), CDPerLv, CDDecrease(1),
+    CD(1), CDPerLv, CDDecrease(1), ItemCD("CD", 1),
 
     // ==================================================
     // Heal Related
@@ -503,6 +503,9 @@ public enum Status {
         case ARRatio:
         case MRRatio:
         case HealthRatio:
+        case ManaRatio:
+        case HregRatio:
+        case MregRatio:
         case ExperimentRatio:
         case RestoreHealthRatio:
         case Grow:

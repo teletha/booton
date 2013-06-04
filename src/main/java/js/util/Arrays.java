@@ -54,6 +54,201 @@ class Arrays {
     }
 
     /**
+     * Copies the specified array, truncating or padding with zeros (if necessary) so the copy has
+     * the specified length. For all indices that are valid in both the original array and the copy,
+     * the two arrays will contain identical values. For any indices that are valid in the copy but
+     * not the original, the copy will contain <tt>(byte)0</tt>. Such indices will exist if and only
+     * if the specified length is greater than that of the original array.
+     * 
+     * @param original the array to be copied
+     * @param newLength the length of the copy to be returned
+     * @return a copy of the original array, truncated or padded with zeros to obtain the specified
+     *         length
+     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
+     * @throws NullPointerException if <tt>original</tt> is null
+     * @since 1.6
+     */
+    public static byte[] copyOf(byte[] original, int newLength) {
+        return copyOfRange(original, 0, newLength);
+    }
+
+    /**
+     * Copies the specified array, truncating or padding with zeros (if necessary) so the copy has
+     * the specified length. For all indices that are valid in both the original array and the copy,
+     * the two arrays will contain identical values. For any indices that are valid in the copy but
+     * not the original, the copy will contain <tt>(short)0</tt>. Such indices will exist if and
+     * only if the specified length is greater than that of the original array.
+     * 
+     * @param original the array to be copied
+     * @param newLength the length of the copy to be returned
+     * @return a copy of the original array, truncated or padded with zeros to obtain the specified
+     *         length
+     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
+     * @throws NullPointerException if <tt>original</tt> is null
+     * @since 1.6
+     */
+    public static short[] copyOf(short[] original, int newLength) {
+        return copyOfRange(original, 0, newLength);
+    }
+
+    /**
+     * Copies the specified array, truncating or padding with zeros (if necessary) so the copy has
+     * the specified length. For all indices that are valid in both the original array and the copy,
+     * the two arrays will contain identical values. For any indices that are valid in the copy but
+     * not the original, the copy will contain <tt>0</tt>. Such indices will exist if and only if
+     * the specified length is greater than that of the original array.
+     * 
+     * @param original the array to be copied
+     * @param newLength the length of the copy to be returned
+     * @return a copy of the original array, truncated or padded with zeros to obtain the specified
+     *         length
+     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
+     * @throws NullPointerException if <tt>original</tt> is null
+     * @since 1.6
+     */
+    public static int[] copyOf(int[] original, int newLength) {
+        return copyOfRange(original, 0, newLength);
+    }
+
+    /**
+     * Copies the specified array, truncating or padding with zeros (if necessary) so the copy has
+     * the specified length. For all indices that are valid in both the original array and the copy,
+     * the two arrays will contain identical values. For any indices that are valid in the copy but
+     * not the original, the copy will contain <tt>0L</tt>. Such indices will exist if and only if
+     * the specified length is greater than that of the original array.
+     * 
+     * @param original the array to be copied
+     * @param newLength the length of the copy to be returned
+     * @return a copy of the original array, truncated or padded with zeros to obtain the specified
+     *         length
+     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
+     * @throws NullPointerException if <tt>original</tt> is null
+     * @since 1.6
+     */
+    public static long[] copyOf(long[] original, int newLength) {
+        return copyOfRange(original, 0, newLength);
+    }
+
+    /**
+     * Copies the specified array, truncating or padding with null characters (if necessary) so the
+     * copy has the specified length. For all indices that are valid in both the original array and
+     * the copy, the two arrays will contain identical values. For any indices that are valid in the
+     * copy but not the original, the copy will contain <tt>'\\u000'</tt>. Such indices will exist
+     * if and only if the specified length is greater than that of the original array.
+     * 
+     * @param original the array to be copied
+     * @param newLength the length of the copy to be returned
+     * @return a copy of the original array, truncated or padded with null characters to obtain the
+     *         specified length
+     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
+     * @throws NullPointerException if <tt>original</tt> is null
+     * @since 1.6
+     */
+    public static char[] copyOf(char[] original, int newLength) {
+        return copyOfRange(original, 0, newLength);
+    }
+
+    /**
+     * Copies the specified array, truncating or padding with zeros (if necessary) so the copy has
+     * the specified length. For all indices that are valid in both the original array and the copy,
+     * the two arrays will contain identical values. For any indices that are valid in the copy but
+     * not the original, the copy will contain <tt>0f</tt>. Such indices will exist if and only if
+     * the specified length is greater than that of the original array.
+     * 
+     * @param original the array to be copied
+     * @param newLength the length of the copy to be returned
+     * @return a copy of the original array, truncated or padded with zeros to obtain the specified
+     *         length
+     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
+     * @throws NullPointerException if <tt>original</tt> is null
+     * @since 1.6
+     */
+    public static float[] copyOf(float[] original, int newLength) {
+        return copyOfRange(original, 0, newLength);
+    }
+
+    /**
+     * Copies the specified array, truncating or padding with zeros (if necessary) so the copy has
+     * the specified length. For all indices that are valid in both the original array and the copy,
+     * the two arrays will contain identical values. For any indices that are valid in the copy but
+     * not the original, the copy will contain <tt>0d</tt>. Such indices will exist if and only if
+     * the specified length is greater than that of the original array.
+     * 
+     * @param original the array to be copied
+     * @param newLength the length of the copy to be returned
+     * @return a copy of the original array, truncated or padded with zeros to obtain the specified
+     *         length
+     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
+     * @throws NullPointerException if <tt>original</tt> is null
+     * @since 1.6
+     */
+    public static double[] copyOf(double[] original, int newLength) {
+        return copyOfRange(original, 0, newLength);
+    }
+
+    /**
+     * Copies the specified array, truncating or padding with <tt>false</tt> (if necessary) so the
+     * copy has the specified length. For all indices that are valid in both the original array and
+     * the copy, the two arrays will contain identical values. For any indices that are valid in the
+     * copy but not the original, the copy will contain <tt>false</tt>. Such indices will exist if
+     * and only if the specified length is greater than that of the original array.
+     * 
+     * @param original the array to be copied
+     * @param newLength the length of the copy to be returned
+     * @return a copy of the original array, truncated or padded with false elements to obtain the
+     *         specified length
+     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
+     * @throws NullPointerException if <tt>original</tt> is null
+     * @since 1.6
+     */
+    public static boolean[] copyOf(boolean[] original, int newLength) {
+        return copyOfRange(original, 0, newLength);
+    }
+
+    /**
+     * Copies the specified array, truncating or padding with nulls (if necessary) so the copy has
+     * the specified length. For all indices that are valid in both the original array and the copy,
+     * the two arrays will contain identical values. For any indices that are valid in the copy but
+     * not the original, the copy will contain <tt>null</tt>. Such indices will exist if and only if
+     * the specified length is greater than that of the original array. The resulting array is of
+     * exactly the same class as the original array.
+     * 
+     * @param original the array to be copied
+     * @param newLength the length of the copy to be returned
+     * @return a copy of the original array, truncated or padded with nulls to obtain the specified
+     *         length
+     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
+     * @throws NullPointerException if <tt>original</tt> is null
+     * @since 1.6
+     */
+    public static <T> T[] copyOf(T[] original, int newLength) {
+        return copyOfRange(original, 0, newLength);
+    }
+
+    /**
+     * Copies the specified array, truncating or padding with nulls (if necessary) so the copy has
+     * the specified length. For all indices that are valid in both the original array and the copy,
+     * the two arrays will contain identical values. For any indices that are valid in the copy but
+     * not the original, the copy will contain <tt>null</tt>. Such indices will exist if and only if
+     * the specified length is greater than that of the original array. The resulting array is of
+     * the class <tt>newType</tt>.
+     * 
+     * @param original the array to be copied
+     * @param newLength the length of the copy to be returned
+     * @param newType the class of the copy to be returned
+     * @return a copy of the original array, truncated or padded with nulls to obtain the specified
+     *         length
+     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
+     * @throws NullPointerException if <tt>original</tt> is null
+     * @throws ArrayStoreException if an element copied from <tt>original</tt> is not of a runtime
+     *             type that can be stored in an array of class <tt>newType</tt>
+     * @since 1.6
+     */
+    public static <T, U> T[] copyOf(U[] original, int newLength, Class<? extends T[]> newType) {
+        return copyOfRange(original, 0, newLength, newType);
+    }
+
+    /**
      * Copies the specified range of the specified array into a new array. The initial index of the
      * range (<tt>from</tt>) must lie between zero and <tt>original.length</tt>, inclusive. The
      * value at <tt>original[from]</tt> is placed into the initial element of the copy (unless
