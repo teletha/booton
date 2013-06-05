@@ -65,7 +65,16 @@ public class Ability extends Describable<AbilityDescriptor> {
     public static final Ability Banshee = new Ability("Banshee");
 
     /** The ability. */
+    public static final Ability EnhancedMovement1 = new Ability("Enhanced Movement", true);
+
+    /** The ability. */
     public static final Ability EnhancedMovement2 = new Ability("Enhanced Movement", true);
+
+    /** The ability. */
+    public static final Ability EnhancedMovement3 = new Ability("Enhanced Movement", true);
+
+    /** The ability. */
+    public static final Ability EnhancedMovement5 = new Ability("Enhanced Movement", true);
 
     /** The ability. */
     public static final Ability Bilgewater = new Ability("Bilgewater");
@@ -75,6 +84,12 @@ public class Ability extends Describable<AbilityDescriptor> {
 
     /** The ability. */
     public static final Ability BotRKActive = new Ability("BotRKActive");
+
+    /** The ability. */
+    public static final Ability BonetoothNecklaceDamage = new Ability("BND");
+
+    /** The ability. */
+    public static final Ability BonetoothNecklaceSpecial = new Ability("BNS");
 
     /** The ability name. */
     public final String name;
@@ -146,7 +161,10 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .active("近くのSiege MinionをAnti-Turret-Minionに変身させる。Anti-Turret-Minionが敵ユニットを倒した場合、そのゴールドが得られる。またAnti-Turret Minionはタワーを最優先で攻撃する。{1}。")
                 .variable(1, ItemCD, 180);
         Banshee.update().passive("敵Championからのスキルを無効化するシールドを張る。シールドはスキルを無効化すると消費され、25秒間敵Championからダメージを受けないと再生する。");
+        EnhancedMovement1.update().passive("{1}する。").variable(1, MS, 25);
         EnhancedMovement2.update().passive("{1}する。").variable(1, MS, 45);
+        EnhancedMovement3.update().passive("{1}する。").variable(1, MS, 60);
+        EnhancedMovement5.update().passive("{1}する。5秒間戦闘をしなければ、{2}する。").variable(1, MS, 45).variable(2, MS, 105);
         Bilgewater.update()
                 .active("対象の敵Champion({0})に{1}と2秒間{2}与える。{3}。")
                 .variable(0, Radius, 500)
@@ -162,5 +180,11 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .variable(2, PhysicalDamage, 0, 0, amplify(TargetMaxHealthRatio, 15))
                 .variable(3, RestoreHealth, 0, 0, amplify(DealtDamage, 1))
                 .variable(4, MSSlowRatio, 30);
+        BonetoothNecklaceDamage.update().passive("{1}を得る。").variable(1, AD, 0, 0, amplify(Lv, 2));
+        BonetoothNecklaceSpecial.update()
+                .passive("キルまたはアシスト時に1 trophyを得て、死亡時に1 trophyを失う（最大値は14）。その数に応じて追加効果を得る。<br>3 : {1}と{2}を得る。<br>6 : {3}を得る。<br>9 : Unseen Predatorの射程が150増加する。<br>14 : Ultの効果時間が3秒増加する。またUltを使用した次にスキルを使用する際に1 Ferocityを追加で得る。")
+                .variable(1, ARPen, 10)
+                .variable(2, CDR, 5)
+                .variable(3, MS, 25);
     }
 }

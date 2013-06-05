@@ -613,8 +613,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(ASRatio, 40)
                 .abilities(BotRKPassive, BotRKActive);
         BlastingWand.update().cost(860).set(AP, 40);
-        BonetoothNecklace.update().cost(800).set(AD, 5);
-        BootsOfMobility.update().build(BootsOfSpeed).cost(650);
+        BonetoothNecklace.update().cost(800).set(AD, 5).abilities(BonetoothNecklaceDamage, BonetoothNecklaceSpecial);
+        BootsOfMobility.update().build(BootsOfSpeed).cost(650).abilities(EnhancedMovement5);
         BootsOfSpeed.update().cost(350);
         BootsOfSwiftness.update().build(BootsOfSpeed).cost(650);
         BrawlersGloves.update().cost(400).set(Critical, 8);
