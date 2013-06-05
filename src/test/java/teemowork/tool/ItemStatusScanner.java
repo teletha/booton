@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import kiss.I;
 import kiss.XML;
@@ -29,29 +28,53 @@ public class ItemStatusScanner {
     public static void main(String[] args) {
         XML xml = I.xml("http://loljp-clone.tk/wiki/index.php?Item");
 
+        boolean ok = false;
+
         for (XML row : xml.find(".item_description")) {
             String name = row.find(".name a").text();
-            String cost = row.find(".cost").text();
-            XML built = row.find(".built_from");
-            String stats = row.find(".stats").text();
 
-            String item = findItemName(name);
+            if (ok) {
+                XML list = row.find(".effect .list1");
 
-            if (item != null) {
-                System.out.print(item + ".update()");
+                for (XML dt : list.find("dt")) {
+                    String item = findItemName(name);
 
-                String from = computeBuild(built);
+                    if (item != null) {
+                        String title = dt.text();
+                        String description = dt.next().text();
 
-                if (from.length() != 0) {
-                    System.out.print(".build(" + from + ")");
+                        boolean isActive = title.toLowerCase().contains("active");
+                        boolean isUnique = title.toLowerCase().contains("unique");
+
+                        int start = title.indexOf("-");
+                        int end = title.indexOf(":");
+
+                        if (start == -1) {
+                            title = "";
+                        } else {
+                            title = title.substring(start + 2, end);
+                        }
+
+                        if (title.length() != 0) {
+                            System.out.print(convert(title));
+                        } else {
+                            System.out.print(convert(name));
+                        }
+                        System.out.print(".update()");
+
+                        if (!isUnique) {
+                            System.out.print(".ununique()");
+                        }
+
+                        if (isActive) {
+                            System.out.println(".active(\"" + description + "\");");
+                        } else {
+                            System.out.println(".passive(\"" + description + "\");");
+                        }
+                    }
                 }
-
-                System.out.print(".cost(" + computeCost(cost) + ")");
-
-                for (Entry<Status, String> set : computeStats(stats).entrySet()) {
-                    System.out.print(".set(" + set.getKey().name() + "," + set.getValue() + ")");
-                }
-                System.out.println(";");
+            } else if (name.equals("Madred's Razors")) {
+                ok = true;
             }
         }
     }
@@ -200,5 +223,16 @@ public class ItemStatusScanner {
         } else {
             return cost;
         }
+    }
+
+    private static String convert(String name) {
+        return name.replaceAll(" of ", "Of")
+                .replaceAll(" the ", "The")
+                .replaceAll("'", "")
+                .replaceAll(":", "")
+                .replaceAll(",", "")
+                .replaceAll("-", "")
+                .replaceAll("\\.", "")
+                .replaceAll("\\s", "");
     }
 }

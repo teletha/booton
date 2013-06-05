@@ -84,9 +84,7 @@ public class ItemCatalog extends Page {
                     description.child(ItemCatalogStyle.Unique.class).text("AURA");
                 }
 
-                if (descriptor.isActive()) {
-                    description.child(ItemCatalogStyle.Unique.class).text("Active");
-                }
+                description.child(ItemCatalogStyle.Unique.class).text(descriptor.isActive() ? "Active" : "Passive");
 
                 if (ability.visible) {
                     description.child(ItemCatalogStyle.Unique.class).text("[" + ability.name + "]");
