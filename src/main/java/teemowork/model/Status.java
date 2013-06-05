@@ -116,7 +116,7 @@ public enum Status {
     // Attack Related
     // ==================================================
     /** Attack Damage */
-    AD, ADPerLv, ADRatio("AD"), BounusAD("増加AD"),
+    AD, ADPerLv, ADRatio("AD"), BounusAD("増加AD"), BaseAD("基礎AD"),
 
     /** Attack Speed */
     AS(3), ASPerLv(3), ASRatio("攻撃速度"),
