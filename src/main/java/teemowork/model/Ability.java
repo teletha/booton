@@ -248,10 +248,10 @@ public class Ability extends Describable<AbilityDescriptor> {
     public static final Ability MikaelsCrucibleActive = new Ability();
 
     /** The ability. */
-    public static final Ability Morellonomicon = new Ability();
+    public static final Ability MorellonomiconPassive = new Ability();
 
     /** The ability. */
-    public static final Ability Muramana = new Ability();
+    public static final Ability MuramanaToggle = new Ability();
 
     /** The ability. */
     public static final Ability NashorsTooth = new Ability();
@@ -665,9 +665,12 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .variable(1, Radius, 800)
                 .variable(2, RestoreHealth, 150, 0, amplify(TargetMissingHealthRatio, 10))
                 .variable(3, ItemCD, 180);
-        Morellonomicon.update().passive("HPが40%以下の敵Championに魔法DMを与えた際に回復効果-50%を4秒間与える。");
-        Muramana.update().ununique().passive("自身の現在manaの3%を消費して、通常攻撃または単体対象かつDoTではないダメージスキルにそのmana消費量の2倍の追加物理DMを付与する。");
-        NashorsTooth.update().passive("");
+        MorellonomiconPassive.update().passive("HPが40%以下の敵Championに魔法DMを与えると{1}を与える。").variable(1, Wounds, 4);
+        MuramanaToggle.update()
+                .ununique()
+                .passive("現在のManaの3%を消費して、通常攻撃または単体対象かつDoTではないダメージスキルに{1}を付与する。")
+                .variable(1, PhysicalDamage, 0, 0, amplify(Status.CurrentManaRatio, 6));
+        NashorsTooth.update().passive("{1}を得る。").variable(1, CDR, 20);
         NinjaTabi.update().passive("タワー以外の通常攻撃の被ダメージを10%低減");
         EnhancedMovement.update().passive("");
         Ohmwrecker.update().active("一番近くのTowerからの攻撃を2.5秒間防ぐ。この効果は同一のTowerに対して7.5秒に一度しか使えない。CD: 120s");

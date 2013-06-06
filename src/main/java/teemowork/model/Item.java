@@ -795,8 +795,15 @@ public class Item extends Describable<ItemDescriptor> {
                 .cost(435)
                 .set(AP, 75)
                 .set(CDR, 20)
-                .set(Mreg, 12);
-        Muramana.update().build(Manamune).cost(0).set(AD, 20).set(Mreg, 7).set(Mana, 1000);
+                .set(Mreg, 12)
+                .abilities(MorellonomiconPassive);
+        Muramana.update()
+                .build(Manamune)
+                .cost(0)
+                .set(AD, 20)
+                .set(Mreg, 7)
+                .set(Mana, 1000)
+                .abilities(Awe, MuramanaToggle);
         NashorsTooth.update().build(Stinger, FiendishCodex).cost(200).set(AP, 65).set(ASRatio, 50);
         NeedlesslyLargeRod.update().cost(1600).set(AP, 80);
         NegatronCloak.update().cost(720).set(MR, 40);
