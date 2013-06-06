@@ -225,6 +225,10 @@ public class Build extends Notifiable implements StatusCalculator {
         return get(status).value;
     }
 
+    public Item getItem(int index) {
+        return items[index];
+    }
+
     /**
      * <p>
      * Set item.
