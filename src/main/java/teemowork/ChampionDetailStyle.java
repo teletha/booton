@@ -10,6 +10,8 @@
 package teemowork;
 
 import booton.css.CSS;
+import booton.css.Unit;
+import booton.css.Value;
 
 /**
  * @version 2013/02/26 23:49:51
@@ -21,6 +23,17 @@ class ChampionDetailStyle {
 
     /** The level box height. */
     int LevelBoxHeight = 5;
+
+    /**
+     * @version 2013/06/06 23:31:54
+     */
+    class UpperInfo extends CSS {
+
+        {
+            display.block();
+            margin.bottom(1, em);
+        }
+    }
 
     /**
      * @version 2013/02/06 20:03:25
@@ -201,7 +214,7 @@ class ChampionDetailStyle {
     /**
      * @version 2013/02/06 20:03:25
      */
-    class Value extends CSS {
+    class NormalValue extends CSS {
 
         {
             text.align.center();
@@ -247,7 +260,7 @@ class ChampionDetailStyle {
         {
             font.color(25, 111, 136);
 
-            while (inBackOf(Value.class)) {
+            while (inBackOf(NormalValue.class)) {
                 margin.left(0.4, em);
             }
 
@@ -267,17 +280,18 @@ class ChampionDetailStyle {
         }
     }
 
+    Value ChampionIconSize = new Value(70, Unit.px);
+
     /**
      * @version 2013/01/15 13:19:52
      */
     class ChampionIcon extends CSS {
 
         {
-            display.block();
-            box.size(70, px);
+            display.inlineBlock();
+            box.size(ChampionIconSize);
             border.radius(10, px).color(50, 50, 50).width(2, px).solid();
             position.relative();
-            margin.bottom(1, em);
             cursor.pointer();
         }
     }
@@ -344,6 +358,25 @@ class ChampionDetailStyle {
         {
             display.tableCell();
             box.width(50, px);
+        }
+    }
+
+    Value ItemIconSize = ChampionIconSize.divide(2);
+
+    class ItemViewBox extends CSS {
+
+        {
+            display.inlineBlock();
+            box.width(ItemIconSize.multiply(3));
+        }
+    }
+
+    class ItemIcon extends CSS {
+
+        {
+            display.inlineBlock();
+            box.size(ItemIconSize);
+            background.image("src/main/resources/teemowork/item/empty.png").cover();
         }
     }
 }

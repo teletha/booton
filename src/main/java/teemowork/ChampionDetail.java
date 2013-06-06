@@ -32,11 +32,14 @@ import teemowork.ChampionDetailStyle.ComputedValue;
 import teemowork.ChampionDetailStyle.Current;
 import teemowork.ChampionDetailStyle.DescriptionBox;
 import teemowork.ChampionDetailStyle.IconBox;
+import teemowork.ChampionDetailStyle.ItemIcon;
+import teemowork.ChampionDetailStyle.ItemViewBox;
 import teemowork.ChampionDetailStyle.Level;
 import teemowork.ChampionDetailStyle.LevelBox;
 import teemowork.ChampionDetailStyle.LevelMark;
 import teemowork.ChampionDetailStyle.LevelMark3;
 import teemowork.ChampionDetailStyle.Name;
+import teemowork.ChampionDetailStyle.NormalValue;
 import teemowork.ChampionDetailStyle.Passive;
 import teemowork.ChampionDetailStyle.Separator;
 import teemowork.ChampionDetailStyle.SkillIcon;
@@ -50,11 +53,12 @@ import teemowork.ChampionDetailStyle.StatusName;
 import teemowork.ChampionDetailStyle.StatusValue;
 import teemowork.ChampionDetailStyle.StatusViewBox;
 import teemowork.ChampionDetailStyle.Text;
-import teemowork.ChampionDetailStyle.Value;
+import teemowork.ChampionDetailStyle.UpperInfo;
 import teemowork.model.Build;
 import teemowork.model.Build.Computed;
 import teemowork.model.Champion;
 import teemowork.model.DependencyManager;
+import teemowork.model.Item;
 import teemowork.model.Skill;
 import teemowork.model.SkillDescriptor;
 import teemowork.model.SkillKey;
@@ -74,6 +78,9 @@ public class ChampionDetail extends Page {
 
     /** The status box. */
     private List<StatusView> statuses = new ArrayList();
+
+    /** The item box. */
+    private List<ItemView> items = new ArrayList();
 
     /** The your custom build. */
     private final Build build;
@@ -131,7 +138,10 @@ public class ChampionDetail extends Page {
      */
     @Override
     public void load(jQuery root) {
-        jQuery icon = root.child(ChampionIcon.class).click(new Listener() {
+        jQuery upper = root.child(UpperInfo.class);
+
+        // Icon
+        jQuery icon = upper.child(ChampionIcon.class).click(new Listener() {
 
             @Override
             public void handler(UIEvent event) {
@@ -150,7 +160,15 @@ public class ChampionDetail extends Page {
         });
         build.champion.applyIcon(icon);
 
+        // Level
         level = icon.child(Level.class);
+
+        // Items
+        jQuery itemViewBox = upper.child(ItemViewBox.class);
+
+        for (int i = 0; i < 6; i++) {
+            items.add(new ItemView(build.getItem(i), itemViewBox));
+        }
 
         jQuery statusView = root.child(StatusViewBox.class);
 
@@ -446,7 +464,7 @@ public class ChampionDetail extends Page {
                 root.append("(");
 
                 for (int i = 1; i <= size; i++) {
-                    jQuery element = root.child(Value.class).text(Mathematics.round(resolver.compute(i), 2));
+                    jQuery element = root.child(NormalValue.class).text(Mathematics.round(resolver.compute(i), 2));
 
                     if (i == level) {
                         element.add(Current.class);
@@ -485,7 +503,8 @@ public class ChampionDetail extends Page {
                 int size = resolver.estimateSize();
 
                 for (int i = 1; i <= size; i++) {
-                    jQuery value = element.child(Value.class).text(Mathematics.round(amplifier.calculate(i, build), 4));
+                    jQuery value = element.child(NormalValue.class)
+                            .text(Mathematics.round(amplifier.calculate(i, build), 4));
 
                     if (size != 1 && i == level) {
                         value.add(Current.class);
@@ -552,7 +571,21 @@ public class ChampionDetail extends Page {
     /**
      * @version 2013/03/13 10:41:24
      */
-    private class RuneView {
+    private class ItemView {
 
+        /** The item. */
+        private Item item;
+
+        /** The root element. */
+        private final jQuery icon;
+
+        /**
+         * @param item
+         * @param root
+         */
+        public ItemView(Item item, jQuery root) {
+            this.item = item;
+            this.icon = root.child(ItemIcon.class);
+        }
     }
 }

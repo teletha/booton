@@ -27,8 +27,8 @@ import teemowork.model.Version;
  */
 public class ItemCatalog extends Page {
 
-    private static final Status[] VISIBLE = {Health, Hreg, Mana, Mreg, AD, ASRatio, LS, Critical, AP, CDR, SV, MRPen,
-            AR, MR, MSRatio};
+    private static final Status[] VISIBLE = {Health, Hreg, Mana, Mreg, AD, ASRatio, ARPen, LS, Critical, AP, CDR, SV,
+            MRPen, AR, MR, MSRatio};
 
     /**
      * 
