@@ -12,7 +12,7 @@ package teemowork.model;
 import js.math.Mathematics;
 
 /**
- * @version 2013/02/19 11:52:02
+ * @version 2013/06/06 20:22:40
  */
 public enum Status {
 
@@ -38,7 +38,7 @@ public enum Status {
     DealtDamage("与えたDM"), DealtDamageRatio(DealtDamage),
 
     /** Received Damage */
-    ReceivedDamage("受けたDM"), ReceivedDamageRatio(ReceivedDamage),
+    ReceivedDamage("受けたDM"), ReceivedDamageRatio(ReceivedDamage), ReceivedDOriginalamageRatio("軽減前の受けたDM"),
 
     /** Received Damage */
     PreventedDamage("軽減したDM"), PreventedDamageRatio(ReceivedDamage),
