@@ -10,7 +10,10 @@
 package booton.css;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import kiss.I;
 
@@ -19,9 +22,16 @@ import kiss.I;
  */
 public class CSSWriter {
 
-    private static final String[] prefixies = {"-webkit-", "-ms-", "-o-", "-moz-", ""};
+    private static final String[] prefixies = {"-webkit-", "-ms-", "-moz-", ""};
 
-    private static final String[] specials = {"linear-gradient"};
+    private static final String[] specials = {"linear-gradient", "flex", "flex-end"};
+
+    private static final Map<String, String[]> illegals = new HashMap();
+
+    static {
+        illegals.put("flex", new String[] {"-ms-flexbox", "-webkit-flex", "flex"});
+        illegals.put("flex-end", new String[] {"end", "flex-end", "flex-end"});
+    }
 
     /** The actual builder. */
     private final StringBuilder builder = new StringBuilder();
@@ -112,8 +122,8 @@ public class CSSWriter {
 
                 builder.append(name).append(":").append(prefix + value).append("; ");
             } else {
-                for (String prefix : prefixies) {
-                    builder.append(name).append(":").append(prefix + value).append("; ");
+                for (String special : convert(value)) {
+                    builder.append(name).append(":").append(special).append("; ");
                 }
             }
         }
@@ -134,6 +144,29 @@ public class CSSWriter {
             }
         }
         return false;
+    }
+
+    /**
+     * <p>
+     * Create values with prefixes.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    private String[] convert(String value) {
+        for (Entry<String, String[]> entry : illegals.entrySet()) {
+            if (entry.getKey().equals(value)) {
+                return entry.getValue();
+            }
+        }
+
+        String[] values = new String[prefixies.length];
+
+        for (int i = 0; i < prefixies.length; i++) {
+            values[i] = prefixies[i] + value;
+        }
+        return values;
     }
 
     /**
