@@ -28,6 +28,7 @@ import kiss.Singleton;
 import kiss.model.ClassUtil;
 import kiss.model.Model;
 import booton.Obfuscator;
+import booton.css.property.AlignItems;
 import booton.css.property.Background;
 import booton.css.property.Box;
 import booton.css.property.BoxLength;
@@ -166,6 +167,14 @@ public abstract class CSS implements Extensible {
      * </p>
      */
     protected static final Unit percent = Unit.Percentage;
+
+    /**
+     * <p>
+     * The CSS align-items property aligns flex items of the current flex line the same way as
+     * justify-content but in the perpendicular direction.
+     * </p>
+     */
+    public AlignItems alignItems;
 
     /**
      * <p>

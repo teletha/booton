@@ -30,8 +30,9 @@ class ChampionDetailStyle {
     class UpperInfo extends CSS {
 
         {
-            display.block();
+            display.flex();
             margin.bottom(1, em);
+            alignItems.end();
         }
     }
 
@@ -288,7 +289,7 @@ class ChampionDetailStyle {
     class ChampionIcon extends CSS {
 
         {
-            display.inlineBlock();
+            display.block();
             box.size(ChampionIconSize);
             border.radius(10, px).color(50, 50, 50).width(2, px).solid();
             position.relative();
@@ -361,20 +362,21 @@ class ChampionDetailStyle {
         }
     }
 
-    Value ItemIconSize = ChampionIconSize.divide(2);
+    Value ItemIconSize = ChampionIconSize.divide(5).multiply(3);
 
     class ItemViewBox extends CSS {
 
         {
-            display.inlineBlock();
-            box.width(ItemIconSize.multiply(3));
+            display.flex();
+            box.width(ItemIconSize.multiply(6));
+            margin.left(137, px);
         }
     }
 
     class ItemIcon extends CSS {
 
         {
-            display.inlineBlock();
+            display.block();
             box.size(ItemIconSize);
             background.image("src/main/resources/teemowork/item/empty.png").cover();
         }
