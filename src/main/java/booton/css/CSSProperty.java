@@ -34,9 +34,6 @@ public class CSSProperty<T extends CSSProperty> {
     /** The API context. */
     private T context;
 
-    /** The prefix property. */
-    private final boolean usePrefix;
-
     /**
      * Create with default name.
      */
@@ -60,16 +57,6 @@ public class CSSProperty<T extends CSSProperty> {
      * @param context
      */
     protected CSSProperty(String name, T context) {
-        this(name, context, false);
-    }
-
-    /**
-     * Create with name.
-     * 
-     * @param name
-     * @param context
-     */
-    protected CSSProperty(String name, T context, boolean usePrefix) {
         if (name == null) {
             name = Strings.hyphenate(getClass().getSimpleName());
         }
@@ -80,7 +67,6 @@ public class CSSProperty<T extends CSSProperty> {
 
         this.name = name;
         this.context = context;
-        this.usePrefix = usePrefix;
     }
 
     /**
@@ -91,9 +77,7 @@ public class CSSProperty<T extends CSSProperty> {
      * @param writer
      */
     protected void write(CSSWriter writer) {
-        if (usePrefix) {
-            writer.propertyWithPrefix(name, value);
-        } else if (value instanceof VendorPrefixCSSProperty) {
+        if (value instanceof VendorPrefixCSSProperty) {
             writer.property((VendorPrefixCSSProperty) value);
         } else {
             writer.property(name, value);

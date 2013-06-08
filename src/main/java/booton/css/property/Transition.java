@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ import booton.css.Unit;
 import booton.css.Value;
 
 /**
- * @version 2012/12/13 18:12:01
+ * @version 2013/06/08 16:27:02
  */
 public class Transition extends CSSProperty<Transition> {
 
@@ -105,7 +105,7 @@ public class Transition extends CSSProperty<Transition> {
     }
 
     /**
-     * @version 2012/12/13 18:13:13
+     * @version 2013/06/08 16:27:10
      */
     public class Property extends CSSProperty<Transition> {
 
@@ -113,7 +113,7 @@ public class Transition extends CSSProperty<Transition> {
          * Hide.
          */
         private Property() {
-            super("transition-property", Transition.this, true);
+            super("transition-property", Transition.this);
         }
 
         /**
@@ -124,7 +124,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition all() {
-            return chain("all");
+            return chain(standard("all"));
         }
 
         /**
@@ -135,7 +135,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition none() {
-            return chain("none");
+            return chain(standard("none"));
         }
 
         /**
@@ -149,7 +149,7 @@ public class Transition extends CSSProperty<Transition> {
     }
 
     /**
-     * @version 2012/12/13 18:13:13
+     * @version 2013/06/08 16:27:14
      */
     public class Timing extends CSSProperty<Transition> {
 
@@ -157,7 +157,7 @@ public class Transition extends CSSProperty<Transition> {
          * Hide.
          */
         private Timing() {
-            super("transition-timing-function", Transition.this, true);
+            super("transition-timing-function", Transition.this);
         }
 
         /**
@@ -170,7 +170,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition linear() {
-            return chain("linear");
+            return chain(standard("linear"));
         }
 
         /**
@@ -183,7 +183,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition ease() {
-            return chain("ease");
+            return chain(standard("ease"));
         }
 
         /**
@@ -196,7 +196,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition easeIn() {
-            return chain("ease-in");
+            return chain(standard("ease-in"));
         }
 
         /**
@@ -210,7 +210,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition easeInOut() {
-            return chain("ease-in-out");
+            return chain(standard("ease-in-out"));
         }
 
         /**
@@ -223,7 +223,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition easeOut() {
-            return chain("ease-out");
+            return chain(standard("ease-out"));
         }
 
         /**
@@ -236,7 +236,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition stepStart() {
-            return chain("step-start");
+            return chain(standard("step-start"));
         }
 
         /**
@@ -249,7 +249,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition stepEnd() {
-            return chain("step-end");
+            return chain(standard("step-end"));
         }
     }
 }
