@@ -368,8 +368,9 @@ class ChampionDetailStyle {
 
         {
             display.flex();
-            box.width(ItemIconSize.multiply(6));
+            box.width(ItemIconSize.multiply(12));
             margin.left(137, px);
+            justifyContent.spaceBetween();
         }
     }
 
