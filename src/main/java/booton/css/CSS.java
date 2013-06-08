@@ -35,7 +35,9 @@ import booton.css.property.BoxLength;
 import booton.css.property.Content;
 import booton.css.property.Cursor;
 import booton.css.property.Display;
+import booton.css.property.FlexDirection;
 import booton.css.property.Font;
+import booton.css.property.JustifyContent;
 import booton.css.property.Line;
 import booton.css.property.ListStyle;
 import booton.css.property.Overflow;
@@ -175,6 +177,25 @@ public abstract class CSS implements Extensible {
      * </p>
      */
     public AlignItems alignItems;
+
+    /**
+     * <p>
+     * The CSS flex-direction property specifies how flex items are placed in the flex container
+     * defining the main axis and the direction (normal or reversed).
+     * </p>
+     */
+    public FlexDirection flexDirection;
+
+    /**
+     * <p>
+     * The CSS justify-content property defines how a browser distributes available space between
+     * and around elements when aligning flex items in the main-axis of the current line. The
+     * alignment is done after the lengths and auto margins are applied, meaning that, if there is
+     * at least one flexible element, with flex-grow different than 0, it will have no effect as
+     * there won't be any available space.
+     * </p>
+     */
+    public JustifyContent justifyContent;
 
     /**
      * <p>
