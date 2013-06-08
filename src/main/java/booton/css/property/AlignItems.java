@@ -10,30 +10,17 @@
 package booton.css.property;
 
 import booton.css.CSSProperty;
-import booton.css.CSSWriter;
-import booton.css.VendorPrefixCSSProperty;
 
 /**
  * @version 2013/06/08 2:22:03
  */
 public class AlignItems extends CSSProperty<AlignItems> {
 
-    /** The actual value. */
-    private VendorPrefixCSSProperty property;
-
     /**
      * @param name
      */
     public AlignItems() {
         super("align-items");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void write(CSSWriter writer) {
-        writer.property(property);
     }
 
     /**
@@ -45,9 +32,7 @@ public class AlignItems extends CSSProperty<AlignItems> {
      * @return
      */
     public AlignItems start() {
-        property = standard("flex-start").ie("box-align", "start");
-
-        return chain();
+        return chain(standard("flex-start").ie("box-align", "start"));
     }
 
     /**
@@ -58,9 +43,7 @@ public class AlignItems extends CSSProperty<AlignItems> {
      * @return
      */
     public AlignItems end() {
-        property = standard("flex-end").ie("box-align", "end");
-
-        return chain();
+        return chain(standard("flex-end").ie("box-align", "end"));
     }
 
     /**

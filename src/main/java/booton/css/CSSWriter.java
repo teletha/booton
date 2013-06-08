@@ -19,8 +19,6 @@ import kiss.I;
  */
 public class CSSWriter {
 
-    private static final String[] prefixies = {"-webkit-", "-ms-", "-moz-", ""};
-
     private static final String[] specials = {"linear-gradient"};
 
     /** The actual builder. */
@@ -63,8 +61,8 @@ public class CSSWriter {
      */
     public void propertyWithPrefix(String name, Object value) {
         if (value != null) {
-            for (String prefix : prefixies) {
-                property(prefix + name, value.toString());
+            for (VendorPrefix vendor : VendorPrefix.values()) {
+                property(vendor.prefix + name, value.toString());
             }
         }
     }
