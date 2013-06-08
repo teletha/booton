@@ -127,8 +127,20 @@ public class CSSProperty<T extends CSSProperty> {
      * @param value
      * @return
      */
-    protected final VendorPrefixCSSProperty standard(String value) {
-        return new VendorPrefixCSSProperty(name, value);
+    protected final VendorPrefixCSSProperty valueWithPrefix(String value) {
+        return new VendorPrefixCSSProperty(name, value, false, true);
+    }
+
+    /**
+     * <p>
+     * Write {@link VendorPrefixCSSProperty}.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    protected final VendorPrefixCSSProperty nameWithPrefix(String value) {
+        return new VendorPrefixCSSProperty(name, value, true, false);
     }
 
     /**

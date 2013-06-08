@@ -12,9 +12,9 @@ package booton.css;
 /**
  * @version 2013/06/08 9:10:26
  */
-public enum VendorPrefix {
+public enum Vendor {
 
-    IE("-ie-"),
+    IE("-ms-"),
 
     Mozilla("-moz-"),
 
@@ -28,7 +28,7 @@ public enum VendorPrefix {
     /**
      * @param prefix
      */
-    private VendorPrefix(String prefix) {
+    private Vendor(String prefix) {
         this.prefix = prefix;
     }
 }

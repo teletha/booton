@@ -10,9 +10,12 @@
 package booton.css;
 
 /**
- * @version 2013/06/08 9:14:53
+ * @version 2013/06/09 3:29:17
  */
 public class VendorPrefixCSSProperty {
+
+    /** The each value. */
+    private String[] standard;
 
     /** The each value. */
     private String[] ie;
@@ -23,8 +26,11 @@ public class VendorPrefixCSSProperty {
     /** The each value. */
     private String[] webkit;
 
-    /** The each value. */
-    private String[] standard;
+    /** The prefix flag. */
+    private boolean namePrefix;
+
+    /** The prefix flag. */
+    private boolean valuePrefix;
 
     /**
      * <p>
@@ -34,8 +40,10 @@ public class VendorPrefixCSSProperty {
      * @param name
      * @param value
      */
-    VendorPrefixCSSProperty(String name, String value) {
+    VendorPrefixCSSProperty(String name, String value, boolean namePrefix, boolean valuePrefix) {
         this.standard = new String[] {name, value};
+        this.namePrefix = namePrefix;
+        this.valuePrefix = valuePrefix;
 
         ie(value);
         moz(value);
@@ -52,9 +60,7 @@ public class VendorPrefixCSSProperty {
      * @return
      */
     public VendorPrefixCSSProperty ie(String value) {
-        this.ie = new String[] {VendorPrefix.IE.prefix + standard[0], value};
-
-        return this;
+        return ie(standard[0], value);
     }
 
     /**
@@ -67,7 +73,7 @@ public class VendorPrefixCSSProperty {
      * @return
      */
     public VendorPrefixCSSProperty ie(String name, String value) {
-        this.ie = new String[] {name, value};
+        this.ie = compute(Vendor.IE, name, value);
 
         return this;
     }
@@ -82,9 +88,7 @@ public class VendorPrefixCSSProperty {
      * @return
      */
     public VendorPrefixCSSProperty moz(String value) {
-        this.moz = new String[] {VendorPrefix.Mozilla.prefix + standard[0], value};
-
-        return this;
+        return moz(standard[0], value);
     }
 
     /**
@@ -97,7 +101,7 @@ public class VendorPrefixCSSProperty {
      * @return
      */
     public VendorPrefixCSSProperty moz(String name, String value) {
-        this.moz = new String[] {name, value};
+        this.moz = compute(Vendor.Mozilla, name, value);
 
         return this;
     }
@@ -112,9 +116,7 @@ public class VendorPrefixCSSProperty {
      * @return
      */
     public VendorPrefixCSSProperty webkit(String value) {
-        this.webkit = new String[] {VendorPrefix.Webkit.prefix + standard[0], value};
-
-        return this;
+        return webkit(standard[0], value);
     }
 
     /**
@@ -127,24 +129,27 @@ public class VendorPrefixCSSProperty {
      * @return
      */
     public VendorPrefixCSSProperty webkit(String name, String value) {
-        this.webkit = new String[] {name, value};
+        this.webkit = compute(Vendor.Webkit, name, value);
 
         return this;
     }
 
     /**
      * <p>
-     * Set property name and value.
+     * Helper method to construct property name and value pair.
      * </p>
      * 
+     * @param vendor
      * @param name
      * @param value
      * @return
      */
-    public VendorPrefixCSSProperty standard(String name, String value) {
-        this.ie = new String[] {name, value};
+    private String[] compute(Vendor vendor, String name, String value) {
+        String[] values = new String[2];
+        values[0] = namePrefix ? vendor.prefix + name : name;
+        values[1] = valuePrefix ? vendor.prefix + value : value;
 
-        return this;
+        return values;
     }
 
     /**
@@ -155,7 +160,7 @@ public class VendorPrefixCSSProperty {
      * @return
      */
     String[][] values() {
-        String[][] values = new String[VendorPrefix.values().length][];
+        String[][] values = new String[Vendor.values().length][];
         values[0] = ie;
         values[1] = moz;
         values[2] = webkit;
