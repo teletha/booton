@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,31 +10,34 @@
 package booton.css;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import kiss.I;
 
 /**
- * @version 2012/12/13 16:20:21
+ * @version 2013/06/08 13:29:18
  */
 public class CSSWriter {
 
     private static final String[] prefixies = {"-webkit-", "-ms-", "-moz-", ""};
 
-    private static final String[] specials = {"linear-gradient", "flex", "flex-end"};
-
-    private static final Map<String, String[]> illegals = new HashMap();
-
-    static {
-        illegals.put("flex", new String[] {"-ms-flexbox", "-webkit-flex", "flex"});
-        illegals.put("flex-end", new String[] {"end", "flex-end", "flex-end"});
-    }
+    private static final String[] specials = {"linear-gradient"};
 
     /** The actual builder. */
     private final StringBuilder builder = new StringBuilder();
+
+    /**
+     * <p>
+     * Write property.
+     * </p>
+     * 
+     * @param property
+     */
+    public void property(VendorPrefixCSSProperty property) {
+        for (String[] values : property.values()) {
+            property(values[0], values[1]);
+        }
+    }
 
     /**
      * <p>
@@ -122,8 +125,8 @@ public class CSSWriter {
 
                 builder.append(name).append(":").append(prefix + value).append("; ");
             } else {
-                for (String special : convert(value)) {
-                    builder.append(name).append(":").append(special).append("; ");
+                for (VendorPrefix vendor : VendorPrefix.values()) {
+                    builder.append(name).append(":").append(vendor.prefix + value).append("; ");
                 }
             }
         }
@@ -144,29 +147,6 @@ public class CSSWriter {
             }
         }
         return false;
-    }
-
-    /**
-     * <p>
-     * Create values with prefixes.
-     * </p>
-     * 
-     * @param value
-     * @return
-     */
-    private String[] convert(String value) {
-        for (Entry<String, String[]> entry : illegals.entrySet()) {
-            if (entry.getKey().equals(value)) {
-                return entry.getValue();
-            }
-        }
-
-        String[] values = new String[prefixies.length];
-
-        for (int i = 0; i < prefixies.length; i++) {
-            values[i] = prefixies[i] + value;
-        }
-        return values;
     }
 
     /**

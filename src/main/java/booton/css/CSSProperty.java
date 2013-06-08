@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ import kiss.I;
 import booton.util.Strings;
 
 /**
- * @version 2012/12/16 11:24:02
+ * @version 2013/06/08 13:29:25
  */
 public class CSSProperty<T extends CSSProperty> {
 
@@ -131,6 +131,18 @@ public class CSSProperty<T extends CSSProperty> {
         write(writer);
 
         return writer.toString();
+    }
+
+    /**
+     * <p>
+     * Write {@link VendorPrefixCSSProperty}.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    protected final VendorPrefixCSSProperty standard(String value) {
+        return new VendorPrefixCSSProperty(name, value);
     }
 
     /**
