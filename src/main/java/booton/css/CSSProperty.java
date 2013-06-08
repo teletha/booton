@@ -29,7 +29,7 @@ public class CSSProperty<T extends CSSProperty> {
     protected final String name;
 
     /** The property value. */
-    protected String value;
+    protected Object value;
 
     /** The API context. */
     private T context;
@@ -93,6 +93,8 @@ public class CSSProperty<T extends CSSProperty> {
     protected void write(CSSWriter writer) {
         if (usePrefix) {
             writer.propertyWithPrefix(name, value);
+        } else if (value instanceof VendorPrefixCSSProperty) {
+            writer.property((VendorPrefixCSSProperty) value);
         } else {
             writer.property(name, value);
         }
@@ -224,6 +226,20 @@ public class CSSProperty<T extends CSSProperty> {
      * @return
      */
     protected T chain(String value) {
+        this.value = value;
+        this.context.used = true;
+
+        return context;
+    }
+
+    /**
+     * <p>
+     * Make chainable API.
+     * </p>
+     * 
+     * @return
+     */
+    protected T chain(VendorPrefixCSSProperty value) {
         this.value = value;
         this.context.used = true;
 
