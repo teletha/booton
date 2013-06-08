@@ -12,7 +12,7 @@ package booton.css.property;
 import booton.css.CSSProperty;
 
 /**
- * @version 2013/01/15 21:39:18
+ * @version 2013/06/08 16:26:57
  */
 public class UserSelect extends CSSProperty<UserSelect> {
 
@@ -20,7 +20,7 @@ public class UserSelect extends CSSProperty<UserSelect> {
      * Hide.
      */
     public UserSelect() {
-        super("user-select", null, true);
+        super("user-select");
     }
 
     /**
@@ -32,7 +32,7 @@ public class UserSelect extends CSSProperty<UserSelect> {
      * @return
      */
     public UserSelect none() {
-        return chain("none");
+        return chain(standard("none"));
     }
 
     /**
@@ -43,7 +43,7 @@ public class UserSelect extends CSSProperty<UserSelect> {
      * @return
      */
     public UserSelect text() {
-        return chain("text");
+        return chain(standard("text"));
     }
 
     /**
@@ -55,7 +55,7 @@ public class UserSelect extends CSSProperty<UserSelect> {
      * @return
      */
     public UserSelect all() {
-        return chain("all");
+        return chain(standard("all"));
     }
 
     /**
@@ -67,6 +67,6 @@ public class UserSelect extends CSSProperty<UserSelect> {
      * @return
      */
     public UserSelect element() {
-        return chain("element");
+        return chain(standard("element"));
     }
 }
