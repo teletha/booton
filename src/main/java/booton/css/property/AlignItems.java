@@ -55,7 +55,7 @@ public class AlignItems extends CSSProperty<AlignItems> {
      * @return
      */
     public AlignItems center() {
-        return chain("center");
+        return chain(standard("center"));
     }
 
     /**
@@ -68,7 +68,7 @@ public class AlignItems extends CSSProperty<AlignItems> {
      * @return
      */
     public AlignItems baseline() {
-        return chain("baseline");
+        return chain(standard("baseline"));
     }
 
     /**
@@ -80,6 +80,6 @@ public class AlignItems extends CSSProperty<AlignItems> {
      * @return
      */
     public AlignItems stretch() {
-        return chain("stretch");
+        return chain(standard("stretch"));
     }
 }
