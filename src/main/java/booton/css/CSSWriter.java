@@ -61,7 +61,7 @@ public class CSSWriter {
      */
     public void propertyWithPrefix(String name, Object value) {
         if (value != null) {
-            for (VendorPrefix vendor : VendorPrefix.values()) {
+            for (Vendor vendor : Vendor.values()) {
                 property(vendor.prefix + name, value.toString());
             }
         }
@@ -123,7 +123,7 @@ public class CSSWriter {
 
                 builder.append(name).append(":").append(prefix + value).append("; ");
             } else {
-                for (VendorPrefix vendor : VendorPrefix.values()) {
+                for (Vendor vendor : Vendor.values()) {
                     builder.append(name).append(":").append(vendor.prefix + value).append("; ");
                 }
             }

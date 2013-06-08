@@ -32,7 +32,7 @@ public class AlignItems extends CSSProperty<AlignItems> {
      * @return
      */
     public AlignItems start() {
-        return chain(standard("flex-start").ie("box-align", "start"));
+        return chain(nameWithPrefix("flex-start").ie("flex-align", "start"));
     }
 
     /**
@@ -43,7 +43,7 @@ public class AlignItems extends CSSProperty<AlignItems> {
      * @return
      */
     public AlignItems end() {
-        return chain(standard("flex-end").ie("box-align", "end"));
+        return chain(nameWithPrefix("flex-end").ie("flex-align", "end"));
     }
 
     /**
@@ -55,7 +55,7 @@ public class AlignItems extends CSSProperty<AlignItems> {
      * @return
      */
     public AlignItems center() {
-        return chain(standard("center"));
+        return chain(nameWithPrefix("center").ie("flex-align", "center"));
     }
 
     /**
@@ -68,7 +68,7 @@ public class AlignItems extends CSSProperty<AlignItems> {
      * @return
      */
     public AlignItems baseline() {
-        return chain(standard("baseline"));
+        return chain(nameWithPrefix("baseline").ie("flex-align", "baseline"));
     }
 
     /**
@@ -80,6 +80,6 @@ public class AlignItems extends CSSProperty<AlignItems> {
      * @return
      */
     public AlignItems stretch() {
-        return chain(standard("stretch"));
+        return chain(nameWithPrefix("stretch").ie("flex-align", "stretch"));
     }
 }
