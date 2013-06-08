@@ -79,7 +79,7 @@ public final class Display extends CSSProperty<Display> {
      * model.
      */
     public Display flex() {
-        return chain("flex");
+        return chain(standard("flex").ie("display", "-ms-flexbox").webkit("display", "-webkit-flex"));
     }
 
     /**
