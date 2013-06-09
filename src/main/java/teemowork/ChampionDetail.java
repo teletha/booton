@@ -24,6 +24,7 @@ import js.util.jQuery.Listener;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.UIEvent;
+import jsx.bwt.view.Popup;
 import teemowork.ChampionDetailStyle.Active;
 import teemowork.ChampionDetailStyle.Amplifier;
 import teemowork.ChampionDetailStyle.Assigned;
@@ -81,7 +82,7 @@ public class ChampionDetail extends Page {
     private List<StatusView> statuses = new ArrayList();
 
     /** The item box. */
-    private List<ItemView> items = new ArrayList();
+    private List<ItemBox> items = new ArrayList();
 
     /** The your custom build. */
     private final Build build;
@@ -168,7 +169,7 @@ public class ChampionDetail extends Page {
         jQuery itemViewBox = upper.child(ItemViewBox.class);
 
         for (int i = 0; i < 6; i++) {
-            items.add(new ItemView(build.getItem(i), itemViewBox));
+            items.add(new ItemBox(build.getItem(i), itemViewBox));
         }
 
         jQuery statusView = root.child(StatusViewBox.class);
@@ -228,7 +229,7 @@ public class ChampionDetail extends Page {
             box.calcurate();
         }
 
-        for (ItemView box : items) {
+        for (ItemBox box : items) {
             box.calcurate();
         }
     }
@@ -576,7 +577,7 @@ public class ChampionDetail extends Page {
     /**
      * @version 2013/03/13 10:41:24
      */
-    private class ItemView {
+    private class ItemBox {
 
         /** The item. */
         private Item item;
@@ -588,7 +589,7 @@ public class ChampionDetail extends Page {
          * @param item
          * @param root
          */
-        public ItemView(Item item, jQuery root) {
+        public ItemBox(Item item, jQuery root) {
             this.item = item;
             this.icon = root.child(ItemIconBase.class).child(ItemIcon.class);
         }
@@ -601,6 +602,17 @@ public class ChampionDetail extends Page {
         private void calcurate() {
             if (item != null) {
                 item.applyIcon(icon);
+
+                new Popup(icon) {
+
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @Override
+                    protected void show(jQuery root) {
+                        new ItemView(item, root);
+                    }
+                };
             }
         }
     }

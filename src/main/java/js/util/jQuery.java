@@ -1131,6 +1131,15 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Remove the set of matched elements from the DOM.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public native jQuery remove();
+
+    /**
+     * <p>
      * Remove a class from each element in the set of matched elements.
      * </p>
      * 
