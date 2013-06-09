@@ -29,7 +29,7 @@ public class TeemoworkTheme {
     class HTML extends CSS {
 
         {
-            font.family(Main);
+            font.family(Main).sansSerif();
             padding.horizontal(10, percent).top(10, px);
         }
     }

@@ -122,7 +122,7 @@ class ItemCatalogStyle {
         {
             display.inlineBlock();
             box.size(size, px);
-            background.contain().size(size + 2, px).horizontal(-1, px).vertical(-1, px);
+            background.cover();
             border.radius(5, px).color(50, 50, 50).width(1, px).solid();
             text.verticalAlign.middle();
         }

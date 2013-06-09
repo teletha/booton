@@ -15,11 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kiss.I;
+import teemowork.model.Item;
 import teemowork.model.Mastery;
 import teemowork.tool.image.EditableImage;
 
 /**
- * @version 2013/03/29 13:33:23
+ * @version 2013/06/09 11:58:12
  */
 public class ClientImageBuilder {
 
@@ -140,6 +141,35 @@ public class ClientImageBuilder {
 
     /**
      * <p>
+     * Create item icon set.
+     * </p>
+     */
+    public void buildItemIconSet() {
+        List<Item> items = new ArrayList();
+
+        for (Field field : Item.class.getFields()) {
+            if (field.getType() == Item.class) {
+                try {
+                    items.add((Item) field.get(null));
+                } catch (Exception e) {
+                    throw I.quiet(e);
+                }
+            }
+        }
+
+        EditableImage container = new EditableImage();
+
+        for (Item item : items) {
+            EditableImage image = new EditableImage(ResourceLocator.ItemIcons.resolve(item.id + ".png"));
+            image.trim(2).resize(45);
+
+            container.concat(image);
+        }
+        container.write(ResourceLocator.Resources.resolve("items.jpg"));
+    }
+
+    /**
+     * <p>
      * Entry point.
      * </p>
      * 
@@ -149,5 +179,6 @@ public class ClientImageBuilder {
         ClientImageBuilder builder = new ClientImageBuilder();
         builder.buildChampionIconSet();
         builder.buildMasteryIconSet();
+        builder.buildItemIconSet();
     }
 }
