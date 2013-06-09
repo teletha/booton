@@ -47,7 +47,7 @@ public class ItemCatalog extends Page {
 
             jQuery element = root.child(ItemCatalogStyle.ItemPanel.class);
             jQuery icons = element.child(ItemCatalogStyle.IconPanel.class);
-            icons.child(ItemCatalogStyle.Icon.class).css("background-image", "url(" + item.getIcon() + ")");
+            item.applyIcon(icons.child(ItemCatalogStyle.Icon.class));
 
             jQuery descriptions = element.child(ItemCatalogStyle.DescriptionPanel.class);
             jQuery names = descriptions.child(ItemCatalogStyle.Names.class);

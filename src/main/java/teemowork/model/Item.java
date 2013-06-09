@@ -15,10 +15,15 @@ import static teemowork.model.Status.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import js.util.jQuery;
+
 /**
  * @version 2013/06/06 20:22:51
  */
 public class Item extends Describable<ItemDescriptor> {
+
+    /** The counter for id. */
+    private static int counter = 0;
 
     /** The item manager. */
     private static final List<Item> items = new ArrayList();
@@ -437,6 +442,9 @@ public class Item extends Describable<ItemDescriptor> {
     /** Zhonya's Hourglass */
     public static final Item ZhonyasHourglass = new Item(3157, "Zhonya's Hourglass");
 
+    /** The sequencial id. */
+    public final int position;
+
     /** The item id. */
     public final int id;
 
@@ -452,6 +460,7 @@ public class Item extends Describable<ItemDescriptor> {
      * @param string
      */
     Item(int id, String name) {
+        this.position = counter++;
         this.id = id;
         this.name = name;
 
@@ -460,13 +469,14 @@ public class Item extends Describable<ItemDescriptor> {
 
     /**
      * <p>
-     * Returns icon image path.
+     * Apply icon image.
      * </p>
-     * 
-     * @return
      */
-    public String getIcon() {
-        return "src/main/resources/teemowork/item/" + id + ".png";
+    public void applyIcon(jQuery element) {
+        element.css("background-image", "url(src/main/resources/teemowork/items.jpg)")
+                .css("background-position", position / (counter - 1) * 100 + "% 0%")
+                .css("background-size", "cover")
+                .css("background-origin", "border-box");
     }
 
     /**

@@ -33,6 +33,7 @@ import teemowork.ChampionDetailStyle.Current;
 import teemowork.ChampionDetailStyle.DescriptionBox;
 import teemowork.ChampionDetailStyle.IconBox;
 import teemowork.ChampionDetailStyle.ItemIcon;
+import teemowork.ChampionDetailStyle.ItemIconBase;
 import teemowork.ChampionDetailStyle.ItemViewBox;
 import teemowork.ChampionDetailStyle.Level;
 import teemowork.ChampionDetailStyle.LevelBox;
@@ -224,6 +225,10 @@ public class ChampionDetail extends Page {
         }
 
         for (StatusView box : statuses) {
+            box.calcurate();
+        }
+
+        for (ItemView box : items) {
             box.calcurate();
         }
     }
@@ -585,7 +590,18 @@ public class ChampionDetail extends Page {
          */
         public ItemView(Item item, jQuery root) {
             this.item = item;
-            this.icon = root.child(ItemIcon.class);
+            this.icon = root.child(ItemIconBase.class).child(ItemIcon.class);
+        }
+
+        /**
+         * <p>
+         * Calcurate status and show it
+         * </p>
+         */
+        private void calcurate() {
+            if (item != null) {
+                item.applyIcon(icon);
+            }
         }
     }
 }

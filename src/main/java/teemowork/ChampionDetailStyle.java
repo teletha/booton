@@ -368,9 +368,18 @@ class ChampionDetailStyle {
 
         {
             display.flex();
-            box.width(ItemIconSize.multiply(12));
+            box.width(ItemIconSize.multiply(6));
             margin.left(137, px);
-            justifyContent.spaceBetween();
+        }
+    }
+
+    class ItemIconBase extends CSS {
+
+        {
+            display.block();
+            box.size(ItemIconSize);
+            background.image("src/main/resources/teemowork/item/empty.png").cover();
+            padding.size(3, px);
         }
     }
 
@@ -378,8 +387,7 @@ class ChampionDetailStyle {
 
         {
             display.block();
-            box.size(ItemIconSize);
-            background.image("src/main/resources/teemowork/item/empty.png").cover();
+            box.size(100, percent);
         }
     }
 }
