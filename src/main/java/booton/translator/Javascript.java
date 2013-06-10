@@ -229,7 +229,7 @@ public class Javascript {
         // write super class
         Javascript script = Javascript.getScript(source.getSuperclass());
 
-        if (script != null) {
+        if (script != null && !defined.contains(script.source)) {
             script.write(output, defined);
         }
 

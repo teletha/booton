@@ -10,6 +10,7 @@
 package jsx.bwt;
 
 import static js.lang.Global.*;
+import static jsx.bwt.UIAction.*;
 import js.util.jQuery;
 
 /**
@@ -19,6 +20,9 @@ public abstract class UI extends Publishable {
 
     /** The root container element for this user interface. */
     public final jQuery root;
+
+    /** The tooltip ui. */
+    private UI tooltip;
 
     /**
      * <p>
@@ -40,4 +44,65 @@ public abstract class UI extends Publishable {
         this.root = $("<" + name + ">");
     }
 
+    /**
+     * <p>
+     * Set tooltip content.
+     * </p>
+     * 
+     * @param content A content to show on tooltip.
+     */
+    public void setTooltip(String content) {
+        setTooltip(new TextUI(content));
+    }
+
+    /**
+     * <p>
+     * Set tooltip content.
+     * </p>
+     * 
+     * @param content A content to show on tooltip.
+     */
+    public void setTooltip(UI content) {
+        System.out.println("set tooltip");
+        if (content == null) {
+            tooltip = null;
+            root.unbind(this);
+        } else {
+            tooltip = content;
+            root.bind(this);
+        }
+    }
+
+    /**
+     * <p>
+     * Show tooltip.
+     * </p>
+     */
+    @Listen(MouseEnter)
+    private void showTooltip() {
+        System.out.println("show");
+    }
+
+    /**
+     * <p>
+     * Hide tooltip.
+     * </p>
+     */
+    @Listen(MouseLeave)
+    private void hideTooltip() {
+        System.out.println("hide");
+    }
+
+    /**
+     * @version 2013/06/10 16:28:04
+     */
+    private static class TextUI extends UI {
+
+        /**
+         * @param text
+         */
+        private TextUI(String text) {
+            root.text(text);
+        }
+    }
 }

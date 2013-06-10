@@ -10,16 +10,16 @@
 package jsx.bwt.view;
 
 import static js.lang.Global.*;
-import jsx.bwt.Listen;
+
+import java.util.EventListener;
+
 import jsx.bwt.UI;
-import jsx.bwt.UIAction;
-import jsx.bwt.view.SlidableView.Listener;
 import jsx.bwt.view.SlidableViewStyle.Shown;
 
 /**
  * @version 2013/06/10 0:16:05
  */
-public class PopupView {
+public class PopupView extends UI {
 
     /** The current popup state. */
     private int shown = 0;
@@ -86,7 +86,6 @@ public class PopupView {
      * Toggle slide view.
      * </p>
      */
-    @Listen(UIAction.Click)
     public void toggle() {
         if (2 <= shown) {
             close();
@@ -104,5 +103,25 @@ public class PopupView {
      */
     public boolean isOpen() {
         return shown != 0;
+    }
+
+    /**
+     * @version 2013/06/10 14:12:29
+     */
+    public interface Listener extends EventListener {
+
+        /**
+         * <p>
+         * Receive open event.
+         * </p>
+         */
+        void open();
+
+        /**
+         * <p>
+         * Receive close event.
+         * </p>
+         */
+        void close();
     }
 }

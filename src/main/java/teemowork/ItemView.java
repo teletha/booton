@@ -9,18 +9,18 @@
  */
 package teemowork;
 
-import js.util.jQuery;
+import jsx.bwt.UI;
 import teemowork.model.Item;
 
 /**
  * @version 2013/06/09 19:05:04
  */
-public class ItemView {
+public class ItemView extends UI {
 
     /**
      * @param item
      */
-    public ItemView(Item item, jQuery root) {
+    public ItemView(Item item) {
 
     }
 }
