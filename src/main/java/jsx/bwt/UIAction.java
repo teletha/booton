@@ -67,6 +67,12 @@ public enum UIAction {
     MouseDoubleClick,
 
     /** The ui event type. */
+    MouseEnter,
+
+    /** The ui event type. */
+    MouseLeave,
+
+    /** The ui event type. */
     Selection,
 
     /** The ui key input type. */

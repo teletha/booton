@@ -23,8 +23,8 @@ import js.util.jQuery;
 import js.util.jQuery.Listener;
 import jsx.application.Page;
 import jsx.application.PageInfo;
+import jsx.bwt.UI;
 import jsx.bwt.UIEvent;
-import jsx.bwt.view.Popup;
 import teemowork.ChampionDetailStyle.Active;
 import teemowork.ChampionDetailStyle.Amplifier;
 import teemowork.ChampionDetailStyle.Assigned;
@@ -169,7 +169,7 @@ public class ChampionDetail extends Page {
         jQuery itemViewBox = upper.child(ItemViewBox.class);
 
         for (int i = 0; i < 6; i++) {
-            items.add(new ItemBox(build.getItem(i), itemViewBox));
+            items.add(itemViewBox.child(new ItemBox(build.getItem(i))));
         }
 
         jQuery statusView = root.child(StatusViewBox.class);
@@ -577,7 +577,7 @@ public class ChampionDetail extends Page {
     /**
      * @version 2013/03/13 10:41:24
      */
-    private class ItemBox {
+    private class ItemBox extends UI {
 
         /** The item. */
         private Item item;
@@ -587,11 +587,10 @@ public class ChampionDetail extends Page {
 
         /**
          * @param item
-         * @param root
          */
-        public ItemBox(Item item, jQuery root) {
+        public ItemBox(Item item) {
             this.item = item;
-            this.icon = root.child(ItemIconBase.class).child(ItemIcon.class);
+            this.icon = root.add(ItemIconBase.class).child(ItemIcon.class);
         }
 
         /**
@@ -603,16 +602,7 @@ public class ChampionDetail extends Page {
             if (item != null) {
                 item.applyIcon(icon);
 
-                new Popup(icon) {
-
-                    /**
-                     * {@inheritDoc}
-                     */
-                    @Override
-                    protected void show(jQuery root) {
-                        new ItemView(item, root);
-                    }
-                };
+                setTooltip(new ItemView(item));
             }
         }
     }
