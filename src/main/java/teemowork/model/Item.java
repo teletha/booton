@@ -231,7 +231,7 @@ public class Item extends Describable<ItemDescriptor> {
     public static final Item MadredsRazors = new Item(3106, "Madred's Razors");
 
     /** Malady */
-    public static final Item Malady = new Item(3114, "Malady", true);
+    public static final Item Malady = new Item(3114, "Malady");
 
     /** Mana Manipulator */
     public static final Item ManaManipulator = new Item(3037, "Mana Manipulator");
@@ -452,9 +452,6 @@ public class Item extends Describable<ItemDescriptor> {
     /** The item name. */
     public final String name;
 
-    /** The item status. */
-    public final boolean deprecated;
-
     /**
      * <p>
      * Create constructor.
@@ -464,22 +461,9 @@ public class Item extends Describable<ItemDescriptor> {
      * @param name
      */
     Item(int id, String name) {
-        this(id, name, false);
-    }
-
-    /**
-     * <p>
-     * Create constructor.
-     * </p>
-     * 
-     * @param i
-     * @param string
-     */
-    Item(int id, String name, boolean deprecated) {
         this.position = counter++;
         this.id = id;
         this.name = name;
-        this.deprecated = deprecated;
 
         items.add(this);
     }
@@ -769,7 +753,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(Critical, 25)
                 .abilities(InfinityEdgePassive);
 
-        IonianBootsOfLucidity.update().build(BootsOfSpeed).cost(650).abilities(IonianCDR, EnhancedMovement2);
+        IonianBootsOfLucidity.update().build(BootsOfSpeed).cost(700).abilities(IonianCDR, EnhancedMovement2);
+        IonianBootsOfLucidity.update(P306).cost(650);
         IonianBootsOfLucidity.update(P308).cost(675);
 
         KagesLuckyPick.update().build(AmplifyingTome).cost(330).set(AP, 25).abilities(LuckyShadow);
@@ -807,7 +792,11 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(AP, 25)
                 .set(ASRatio, 45)
                 .abilities(MaladyPassive);
-        ManaManipulator.update().build(FaerieCharm).cost(120).abilities(ManaWarp);
+        Malady.update(P308).deprecated();
+
+        ManaManipulator.update().build(FaerieCharm, FaerieCharm).cost(40).abilities(ManaWarp);
+        ManaManipulator.update(P307).build(FaerieCharm).cost(120).abilities(ManaWarp);
+
         Manamune.update()
                 .build(TearOftheGoddess, LongSword)
                 .cost(1000)
@@ -837,12 +826,20 @@ public class Item extends Describable<ItemDescriptor> {
         MercurysTreads.update(P308).cost(475);
 
         MikaelsCrucible.update()
+                .build(ChaliceOfHarmony, SapphireCrystal)
+                .cost(920)
+                .set(Mreg, 9)
+                .set(Mana, 300)
+                .set(MR, 40)
+                .abilities(ManaFont, MikaelsCrucibleActive);
+        MikaelsCrucible.update(P307)
                 .build(ChaliceOfHarmony, PhilosophersStone)
                 .cost(920)
                 .set(Mreg, 18)
                 .set(Hreg, 7)
                 .set(MR, 40)
                 .abilities(ManaFont, MikaelsCrucibleActive);
+
         Morellonomicon.update()
                 .build(FaerieCharm, FiendishCodex, KagesLuckyPick)
                 .cost(435)
@@ -912,13 +909,15 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(Health, 500)
                 .set(AR, 70)
                 .abilities(ColdSteel2, RanduinsOmenAvtive);
+
         RavenousHydra.update()
                 .build(Tiamat, VampiricScepter)
-                .cost(600)
+                .cost(200)
                 .set(LS, 12)
                 .set(AD, 75)
                 .set(Hreg, 15)
                 .abilities(RavenousHydraPassive, Cleave, Crescent);
+        RavenousHydra.update(P306).cost(600);
 
         RecurveBow.update().cost(950).set(ASRatio, 30);
         RecurveBow.update(P308).cost(900);
@@ -969,11 +968,13 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(Mreg, 10)
                 .set(Mana, 1000)
                 .abilities(Insight, ManaShield);
+
         ShardOfTrueIce.update()
                 .build(KagesLuckyPick, ManaManipulator)
                 .cost(535)
                 .set(AP, 45)
                 .abilities(LuckyShadow, ManaWarp, ShardOfTrueIceActive);
+
         Sheen.update()
                 .build(SapphireCrystal, AmplifyingTome)
                 .cost(365)
@@ -1079,12 +1080,15 @@ public class Item extends Describable<ItemDescriptor> {
         TheBrutalizer.update().build(LongSword, LongSword).cost(537).set(AD, 25).abilities(TheBrutalizerPassive);
         TheHexCore.update().cost(0).abilities(TheHexCorePassive);
         Thornmail.update().build(ChainVest, ClothArmor).cost(1180).set(AR, 100).abilities(ThornmailPassive);
+
         Tiamat.update()
                 .build(Pickaxe, LongSword, RejuvenationBead, RejuvenationBead)
-                .cost(265)
-                .set(AD, 40)
+                .cost(665)
+                .set(AD, 50)
                 .set(Hreg, 15)
                 .abilities(Cleave, Crescent);
+        Tiamat.update(P306).cost(265).set(AD, 40);
+
         TrinityForce.update()
                 .build(Zeal, Sheen, Phage)
                 .cost(3)

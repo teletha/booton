@@ -667,7 +667,10 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .passive("通常攻撃に{1}と{2}を与える。MR減少は7回までスタックし、8秒間持続する。")
                 .variable(1, MagicDamage, 15, 0, ap(0.1))
                 .variable(2, MRReduction, 4);
-        ManaWarp.update().passive("{1}の味方Championは{2}を得る。").variable(1, Radius, 1100).variable(2, Hreg, 5).aura();
+
+        ManaWarp.update().passive("{1}の味方Championは{2}を得る。").variable(1, Radius, 1100).variable(2, Hreg, 6).aura();
+        ManaWarp.update(P307).variable(2, Hreg, 5);
+
         Awe.update().passive("{1}を得る。").variable(1, AD, 0, 0, amplify(Mana, 0.02));
         ManamuneManaCharge.update().passive("通常攻撃時、スキル使用時及びマナ消費時に最大Manaが4増加する(最大増加量は750)。{1}。").variable(1, ItemCD, 3);
         ManaPotion.update().ununique().active("15秒かけてManaを100回復する");
@@ -678,11 +681,14 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .variable(2, CDR, 15);
 
         TenacityPassive.update().passive("{1} を得る。").variable(1, Status.Tenacity, 35);
+
         MikaelsCrucibleActive.update()
                 .active("対象の味方Champion({1})のStun, Snare, Taunt, Fear, Silence, Slowを全て解除し、{2}する。{3}")
                 .variable(1, Radius, 800)
-                .variable(2, RestoreHealth, 150, 0, amplify(TargetMissingHealthRatio, 10))
+                .variable(2, RestoreHealth, 150, 0, amplify(TargetMissingHealthRatio, 15))
                 .variable(3, ItemCD, 180);
+        MikaelsCrucibleActive.update(P307).variable(2, RestoreHealth, 150, 0, amplify(TargetMaxHealthRatio, 10));
+
         MorellonomiconPassive.update().passive("HPが40%以下の敵Championに魔法DMを与えると{1}を与える。").variable(1, Wounds, 4);
         MuramanaToggle.update()
                 .ununique()

@@ -27,6 +27,9 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
     /** The ability list. */
     private Ability[] abilities = new Ability[0];
 
+    /** The item status. */
+    private boolean deprecated = false;
+
     /**
      * @param name
      */
@@ -121,11 +124,35 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
      * Set special abilities.
      * </p>
      * 
-     * @param abyssalaura
+     * @param Ability list.
      */
     ItemDescriptor abilities(Ability... abilities) {
         this.abilities = abilities;
 
         return this;
+    }
+
+    /**
+     * <p>
+     * Make this item deprecated.
+     * </p>
+     * 
+     * @return
+     */
+    ItemDescriptor deprecated() {
+        this.deprecated = true;
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * Check whether this item is deprecated or not.
+     * </p>
+     * 
+     * @return A result.
+     */
+    public boolean isDeprecated() {
+        return deprecated;
     }
 }
