@@ -23,6 +23,7 @@ import teemowork.model.variable.VariableResolver.Per4LevelForTrundle;
 import teemowork.model.variable.VariableResolver.Per5Level;
 import teemowork.model.variable.VariableResolver.Per5LevelForHeimer;
 import teemowork.model.variable.VariableResolver.Per5LevelForSejuani;
+import teemowork.model.variable.VariableResolver.Per5LevelForYoric;
 import teemowork.model.variable.VariableResolver.Per6Level;
 import teemowork.model.variable.VariableResolver.Per6LevelForVi;
 import teemowork.model.variable.VariableResolver.Per6LevelForZed;
@@ -5027,24 +5028,39 @@ public class Skill extends Describable<SkillDescriptor> {
                 .type(SkillType.Toggle);
 
         /** Syndra */
-        Transcendent.update()
-                .passive("各スキルを最高ランクまで上げると追加効果が発生する。・Dark Sphere：Championに対するDMが15%増加する。・Force of Will：スローの効果時間が2sになる。・Scatter the Weak：扇形範囲の横幅が50%増加する。・Unleashed Power：射程が75増加する。");
+        Transcendent.update().passive("各スキルを最高ランクまで上げると追加効果が発生する。");
         DarkSphere.update()
-                .active("指定地点にDark Sphereを召喚し、周囲の敵ユニットに魔法DMを与える。Dark Sphereはその後6秒間持続する。")
+                .active("指定地点にDark Sphereを召喚し、{1}の敵ユニットに{2}を与える。Dark Sphereはその後6秒間持続する。Lv5になるとChampionに対して{3}を与える。")
+                .variable(1, Radius, 350)
+                .variable(2, MagicDamage, 70, 40, ap(0.6))
+                .variable(3, MagicDamage, 264.5, 0, ap(0.69))
                 .mana(40, 10)
                 .cd(4)
                 .range(800);
         ForceOfWill.update()
-                .active("指定したDark Sphereか敵minionまたは中立モンスター(DragonとBaronには無効)のいずれかを自身まで引き寄せ、最大5秒間引っ張り続ける。この際Dark Sphereを引き寄せた場合、そのDark Sphereの持続時間は引き寄せてから6秒間に更新される。その後再度地点を指定することで指定地点に引き寄せたものを投げ、その周囲の敵ユニットに魔法DMとスロー(1.5s)を与える。また指定地点の視界を得る。")
+                .active("指定したDark Sphereか敵minionまたは中立モンスター(DragonとBaronには無効)のいずれかを自身まで引き寄せ、最大5秒間引っ張り続ける。この際Dark Sphereを引き寄せた場合、そのDark Sphereの持続時間は引き寄せてから6秒間に更新される。その後再度地点を指定({5})することで指定地点に引き寄せたものを投げ、{1}の敵ユニットに{2}と1.5秒間{3}を与える。また指定地点の{4}。Lv5になるとスローの効果時間が2秒になる。")
+                .variable(1, Radius, 400)
+                .variable(2, MagicDamage, 80, 40, ap(0.7))
+                .variable(3, MSSlowRatio, 25, 5)
+                .variable(4, Visionable)
+                .variable(5, Radius, 900)
                 .mana(60, 10)
-                .cd(12, -1);
+                .cd(12, -1)
+                .range(925);
         ScatterTheWeak.update()
-                .active("指定方向扇形の範囲にいる敵ユニットに魔法DMを与え、ノックバックさせる。ノックバック距離はSyndraに近い地点にいるほど増加する。扇形の範囲内にDark Sphereがあった場合同様にノックバックさせ、それに当たった敵ユニットに同様の魔法DM(このスキルのDMとは重複しない)とスタン(1.5s)を与える。")
+                .active("指定方向扇形の{1}にいる敵ユニットに{2}と{3}を与える。ノックバック距離はSyndraに近い地点にいるほど増加する。扇形の範囲内にDark Sphereがあった場合同様にノックバックさせ、それに当たった敵ユニットに{2}(このスキルのDMとは重複しない)と{4}を与える。Lv5になると範囲の横幅が50%増加する。")
+                .variable(1, Radius)
+                .variable(2, MagicDamage, 70, 45, ap(0.4))
+                .variable(3, Knockback)
+                .variable(4, Stun, 1.5)
                 .mana(50)
                 .cd(18, -1.5)
                 .range(650);
         UnleashedPower.update()
-                .active("自身の周辺にDark Sphereを3つ召喚し、指定した敵Championに向けて自身の周囲に存在する全てのDark Sphereを向かわせ、魔法DMを与える。この際に召喚したDark Sphereは6秒間持続する。")
+                .active("自身の周辺にDark Sphereを3つ召喚し、指定した敵Championに向けて自身の周囲に存在する全てのDark Sphereを向かわせ、{1}を与える。3個で{2}、7個で{3}になる。この際に召喚したDark Sphereは6秒間持続する。Lv3になると射程が75増加する。")
+                .variable(1, MagicDamage, 90, 45, ap(0.2))
+                .variable(2, MagicDamage, 270, 135, ap(0.6))
+                .variable(3, MagicDamage, 630, 345, ap(1.4))
                 .mana(100)
                 .cd(100, -10)
                 .range(675);
@@ -5158,7 +5174,7 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Thresh */
         Damnation.update()
-                .passive("{1}で敵ユニットが死んだ場合、一定の確率で魂(Soul)を落とす。魂へ近づくかDark Passageのランタンを魂の近くに置くとその魂を回収する事ができ、自身のArmorとAbility Powerが上昇する。落とした魂は15秒間持続し、敵チームがThreshの視界を得ていた場合、敵チームからも視認することができる。")
+                .passive("{1}で敵ユニットが死んだ場合、一定の確率で魂を落とす。魂へ近づくか" + DarkPassage.name + "のランタンを魂の近くに置くとその魂を回収し、自身のArmorとAbility Powerが上昇する。落とした魂は15秒間持続し、敵チームがThreshの視界を得ていた場合、敵チームからも視認することができる。")
                 .variable(1, Radius, 2000);
         DeathSentence.update()
                 .active("指定方向に鎌を投げ、命中した敵ユニットに{1}と{2}を与え、対象を1.5秒かけて自身の方へ引き寄せる。このスキルを再度使用すると対象のユニットへ飛びつく。")
@@ -5169,7 +5185,9 @@ public class Skill extends Describable<SkillDescriptor> {
                 .range(1075);
         DeathSentence.update(P306).variable(1, MagicDamage, 80, 40, ap(0.5));
         DarkPassage.update()
-                .active("指定地点に6秒間持続するランタンを設置する。味方Championがランタンを指定すると、ランタンとその味方Championが自身の方へと引き寄せられる。更にランタンの周囲にいる魂を自動的に回収し、味方Championにダメージを一定値軽減するシールドを付与する。シールドを得られるのは1ユニットにつき1回のみ。自身がランタンから距離1500以上離れるとランタンは自動的に自身の下へと戻る。")
+                .active("指定地点に6秒間持続するランタンを設置する。味方Championがランタンを指定すると、ランタンとその味方Championが自身の方へと引き寄せられる。更にランタンの周囲にいる魂を自動的に回収し、{1}の味方Championは{2}を得る。。シールドを得られるのは1ユニットにつき1回のみ。自身がランタンから距離1500以上離れるとランタンは自動的に自身の下へと戻る。")
+                .variable(1, Radius)
+                .variable(2, Shield, 60, 40, ap(0.4))
                 .mana(40)
                 .cd(22, -1.5)
                 .range(950);
@@ -5185,7 +5203,11 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(2, MagicDamage, 65, 30, ap(0.4))
                 .variable(3, MagicDamage, 0, 0, amplify(Stack, 1));
         TheBox.update()
-                .active("自身の周囲に五角形の壁を創り出し、最初に壁に触れた敵Championに魔法DMとスロー(99%,2s)を与える。2つ目以降の壁に触れた敵championには半分の魔法DMとスロー(99%,1s)を与える。敵が触れた部分の壁は破壊され消滅する。")
+                .active("{4}に五角形の壁を創り出し、最初に壁に触れた敵Championに{1}と2秒間{2}を与える。2つ目以降の壁に触れた敵championには{3}と1秒間{2}を与える。敵が触れた部分の壁は破壊され消滅する。")
+                .variable(1, MagicDamage, 250, 150, ap(1))
+                .variable(2, MSSlowRatio, 99)
+                .variable(3, MagicDamage, 125, 75, ap(0.5))
+                .variable(4, Radius, 450)
                 .mana(100)
                 .cd(150, -10);
 
@@ -5597,24 +5619,42 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Viktor */
         EvolvingTechnology.update()
-                .passive("Viktorは最初からHex Coreという、自身のステータスとスキルの効果を強化するアイテムを所持している。Hex Coreは1度だけショップで1000Gを消費して以下の３通りのいずれかにアップグレードすることが出来る。Hex CoreはViktorのアイテムスロットを1つ占有し、売却することは出来ない。Hex Core : +3 ability power per levelAugment: Power+3 ability power per level、+220 health、+6 health regen per 5sを得る。また、Power Transfer使用・命中時に移動速度が3秒間30%増加する。Augment: Gravity+3 ability power per level、+200 mana、+10% cooldown reduction、+5 mana regen per 5sを得る。また、Gravity Fieldの射程が30%増加する。Augment: Death+3 ability power per level、+45 ability powerを得る。また、Death Rayにダメージの30%分の追加魔法DMが付与される。このダメージは4秒間かけて与える。");
+                .passive("Hex Coreという、自身のステータスとスキルの効果を強化するアイテムを所持している。Hex Coreは1度だけショップで1000Gを消費して以下の３通りのいずれかにアップグレードすることが出来る。Hex CoreはViktorのアイテムスロットを1つ占有し、売却することは出来ない。<br>Hex Core : {1}を得る。<br>Augment Power : {1}、{2}、{3}を得る。また、Power Transfer使用・命中時に移動速度が3秒間30%増加する。<br>Augment Gravity : {1}、{4}、{5}、{6}を得る。また、Gravity Fieldの射程が30%増加する。<br>Augment Death : {1}、{7}を得る。また、Death Rayにダメージの30%分の追加魔法DMが付与される。このダメージは4秒間かけて与える。")
+                .variable(-1, AP, 0, 0, amplify(Lv, 3))
+                .variable(-2, Health, 220)
+                .variable(-3, Hreg, 6)
+                .variable(-4, Mana, 200)
+                .variable(-5, CDR, 10)
+                .variable(-6, Mreg, 5)
+                .variable(-7, AP, 45);
         PowerTransfer.update()
-                .active("対象の敵ユニットに魔法DMを与え、ダメージの40%をシールドとして得る。シールドは3秒間持続する。")
+                .active("対象の敵ユニットに{1}を与え、3秒間{2}を得る。")
+                .variable(1, MagicDamage, 80, 45, ap(0.65))
+                .variable(2, Shield, 0, 0, amplify(DealtDamageRatio, 40))
                 .mana(45, 5)
                 .cd(9, -1)
                 .range(600);
         GravityField.update()
-                .active("0.25秒詠唱後、指定範囲に4秒間持続する重力束縛装置を呼び出し、範囲内の敵ユニットにスローを与え、0.5秒毎にスタックを付与する。スタックが3溜まった敵ユニットにはスタン(1.5s)を与える。")
+                .active("0.25秒詠唱後、指定範囲に4秒間持続する重力束縛装置を呼び出し、範囲内の敵ユニットに{1}を与え、0.5秒毎にスタックを付与する。スタックが3溜まった敵ユニットに{2}を与える。")
+                .variable(1, MSSlowRatio, 28, 4)
+                .variable(2, Stun, 1.5)
                 .mana(65)
                 .cd(17, -1)
                 .range(625);
         DeathRay.update()
-                .active("指定地点から指定方向にビームを発射し、ビームが通過する線上の敵ユニットに魔法DMを与える。また、ビームが通過した地点の視界を得る。")
+                .active("指定地点から指定方向にビームを発射し、ビームが通過する線上の敵ユニットに{1}を与える。また、ビームが通過した地点の{2}。")
+                .variable(1, MagicDamage, 70, 45, ap(0.7))
+                .variable(2, Visionable)
                 .mana(70, 10)
                 .cd(13, -1)
                 .range(700);
         ChaosStorm.update()
-                .active("指定地点に7秒間持続する特異点を呼び出し、範囲内の敵ユニットに魔法DMとサイレンス(0.5s)を与える。特異点は周囲の敵ユニットに毎秒魔法DMを与え、また近くにいる敵Championを自動的に追尾する。このスキルがActiveの間に再度地点を指定することで、特異点を指定した地点に手動で移動させる事が出来る。")
+                .active("指定地点に7秒間持続する特異点を呼び出し、{1}の敵ユニットに{2}と{3}を与える。特異点は周囲の敵ユニットに毎秒{4}を与え、また近くにいる敵Championを自動的に追尾する。このスキルがActiveの間に再度地点を指定することで、特異点を指定した地点に手動で移動させる事が出来る。最大で{5}を与える。")
+                .variable(1, Radius)
+                .variable(2, MagicDamage, 150, 100, ap(0.55))
+                .variable(3, Silence, 0.5)
+                .variable(4, MagicDamage, 40, 20, ap(0.25))
+                .variable(5, MagicDamage, 430, 240, ap(2.23))
                 .mana(125, 50)
                 .cd(120)
                 .range(700);
@@ -5841,23 +5881,42 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Yorick */
         UnholyCovenant.update()
-                .passive("(召喚中のGhoulsの数×5)%の被ダメージ軽減および通常攻撃のダメージ増加効果を得る。召喚したGhoulは5秒間持続し、また毎秒最大HPの20%が減少していく。同じ種類のGhoulを召喚した場合、先に召喚したGhoulが消滅する。ペット「Ghouls」HP: [YorickのHP × 35%] 攻撃力: [Yorickの攻撃力 × 35%]AR: 10 + (2 × Lv) MR: 20 + (2 × Lv)AS: 0.670 MS: 300/340/410/433 (レベル1、6、9、12で移動速度が上昇する。)【備考】任意の操作不可、スロー無効化、AoEスキルのダメージを50%低減。Ghoulsは敵ユニットの通行を妨げない(引っかからずにすり抜ける)。");
+                .passive("召喚中のGhoulの数に比例して{1}し{2}する。召喚したGhoulは5秒間持続し、毎秒最大HPの20%が減少していく。同じ種類のGhoulを召喚した場合、先に召喚したGhoulが消滅する。任意の操作不可、スロー無効化、AoEスキルのダメージを50%低減し敵ユニットの通行を妨げない。<br>Health : {3}<br>AD : {4}<br>AR : {5}<br>MR : {6}<br>AS : 0.670<br>MS : {7}")
+                .variable(1, DamageReductionRatio, 0, 0, amplify(Stack, 5))
+                .variable(2, AttackDamageRatio, 0, 0, amplify(Stack, 5))
+                .variable(3, Value, 0, 0, amplify(Health, 0.35))
+                .variable(4, Value, 0, 0, amplify(AD, 0.35))
+                .variable(5, Value, 10, 0, amplify(Lv, 2))
+                .variable(6, Value, 20, 0, amplify(Lv, 2))
+                .variable(7, Value, new Per5LevelForYoric(300, 40));
         OmenOfWar.update()
-                .active("次の通常攻撃時のダメージが増加し、通常攻撃時と同時にSpectral Ghoulを召喚する。Spectral GhoulはYorickの他のGhoulと比べて攻撃力が高く、移動速度が速い。Spectral Ghoulが生存している間、Yorick自身の移動速度も上昇する。")
+                .active("次の通常攻撃は{1}を与えると同時にSpectral Ghoulを召喚する。Spectral Ghoulは{3}を得る。Spectral Ghoulが生存している間、Ghoulと自身の{q2}する。")
+                .variable(1, PhysicalDamage, 30, 30, ad(1.2))
+                .variable(2, MSRatio, 15, 5)
+                .variable(-3, AD, 8, 8)
                 .mana(40)
                 .cd(9, -1);
         OmenOfPestilence.update()
-                .active("指定範囲を爆発させ範囲内の敵ユニットに魔法DMとスロー(1.5s)を与え、同時にその地点にDecaying Ghoulを召喚する。Decaying Ghoulは近くの敵ユニットに継続的にスローを与える。")
+                .active("指定地点を爆発させ{1}の敵ユニットに{2}と1.5秒{3}を与え、同時にその地点にDecaying Ghoulを召喚する。Decaying Ghoulは近くの敵ユニットに継続的に{4}与える。")
+                .variable(1, Radius, 200)
+                .variable(2, MagicDamage, 60, 35, ap(1))
+                .variable(3, MSSlowRatio, 20, 5)
+                .variable(4, MSSlowRatio, 10, 2.5)
                 .mana(55, 5)
                 .cd(12)
                 .range(600);
         OmenOfFamine.update()
-                .active("対象の敵ユニットに魔法DMを与え、与えたダメージの40%を回復し、対象の背後にRavenous Ghoulを召喚する。Ravenous Ghoulは、通常攻撃を行うたびにYorickのHPを回復する。回復量はRavenous Ghoulの攻撃力の半分となり、敵Championを攻撃した場合は回復量が2倍になる。")
+                .active("対象の敵ユニットに{1}を与え、{2}し対象の背後にRavenous Ghoulを召喚する。Ravenous Ghoulが通常攻撃を行うたびに{3}する。敵Championを攻撃した場合は{4}する。")
+                .variable(1, MagicDamage, 55, 30, bounusAD(1))
+                .variable(2, RestoreHealth, 0, 0, amplify(DealtDamageRatio, 40))
+                .variable(3, RestoreHealth, 0, 0, ad(0.175))
+                .variable(4, RestoreHealth, 0, 0, ad(0.35))
                 .mana(55, 5)
                 .cd(10, -1)
                 .range(550);
         OmenOfDeath.update()
-                .active("対象の味方Champion一人の姿形を持ったRevenant(死霊)を召喚する(RまたはALT押しながら右クリックで任意の操作可能)。Revenantは10秒間持続し、対象の味方Championの一定割合の攻撃力を持つ。Revenantが生存している間に対象となった味方Championが死亡した場合、Revenantが消滅し、死亡した味方ChampionはHPとMNが最大の状態で蘇生される。蘇生した味方Championは10秒経過すると消滅する。消費MN: 100 CD: 120/105/90s Range: 900ペット「Revenant」攻撃力: 元になったChampの45/60/75%【備考】元になったChampionのステータス・一部アイテムとスキルの効果を引き継ぐ。")
+                .active("対象の味方Champion一人の姿形を持ったRevenantを召喚する(ALT押しながら右クリックで任意の操作可能)。Revenantは10秒間持続し、対象の{1}の攻撃力を持つ。Revenantが生存している間に対象となった味方Championが死亡した場合、Revenantが消滅し、死亡した味方ChampionはHPとMNが最大の状態で蘇生される。蘇生した味方Championは10秒経過すると消滅する。")
+                .variable(1, Percentage, 45, 15)
                 .mana(100)
                 .cd(120, -15)
                 .range(900);

@@ -176,6 +176,19 @@ public abstract class VariableResolver {
     }
 
     /**
+     * @version 2013/06/11 19:50:49
+     */
+    public static class Per5LevelForYoric extends PerLevel {
+
+        /**
+         * @param values
+         */
+        public Per5LevelForYoric(double base, double diff) {
+            super(new int[] {1, 6, 9, 12}, base, diff);
+        }
+    }
+
+    /**
      * @version 2013/02/12 11:37:34
      */
     public static class Per5LevelForHeimer extends PerLevel {
