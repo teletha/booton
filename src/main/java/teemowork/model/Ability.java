@@ -10,6 +10,7 @@
 package teemowork.model;
 
 import static teemowork.model.Status.*;
+import static teemowork.model.Version.*;
 
 /**
  * @version 2013/06/06 20:22:46
@@ -428,6 +429,9 @@ public class Ability extends Describable<AbilityDescriptor> {
     public static final Ability Maim2 = new Ability("Maim");
 
     /** The ability. */
+    public static final Ability Maim3 = new Ability("Maim");
+
+    /** The ability. */
     public static final Ability WrigglesLanternAvtive = new Ability();
 
     /** The ability. */
@@ -549,8 +553,12 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .variable(2, MagicDamage, 0, 0, amplify(TargetMaxHealthRatio, 15))
                 .variable(3, ItemCD, 60);
         DransBladePassive.update().ununique().passive("敵ユニットに対して通常攻撃をする毎に{1}する。").variable(1, RestoreHealth, 5);
-        DransRingPassive.update().ununique().passive("敵ユニットを倒すと{1}する。").variable(1, Status.RestoreMana, 5);
+        DransRingPassive.update().ununique().passive("敵ユニットを倒すと{1}する。").variable(1, RestoreMana, 5);
+        DransRingPassive.update(P308).variable(1, RestoreMana, 4);
+
         DransShieldPassive.update().passive("敵Championからの{1}する。").variable(1, AttackDamageReduction, 6);
+        DransShieldPassive.update(P308).variable(1, AttackDamageReduction, 8);
+
         Aid.update().passive("サモナースペルのHeal, Clairvoyance, ClarityのCDを30%減少させる。");
         EleisasBlessing.update().passive("このアイテムを所持した状態でレベルを3上げるとこのアイテムは消費されるが、アイテムの効果はその後もそのまま得られるようになる。");
         ElixirOfFortitudeActive.update()
@@ -617,9 +625,12 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .variable(3, MSSlowRatio, 40)
                 .variable(4, ItemCD, 60);
         HextechRevolverPassive.update().passive("{1}を得る。").variable(1, SV, 12);
+
         Butcher1.update().passive("中立モンスターに対するダメージが10%上昇する。");
         Butcher2.update().passive("中立モンスターに対するダメージが20%上昇する。");
-        Butcher3.update().passive("中立モンスターに対するダメージが25%上昇する。");
+        Butcher3.update().passive("中立モンスターに対するダメージが{1}上昇する。").variable(1, Percentage, 25);
+        Butcher3.update(P308).variable(1, Percentage, 30);
+
         Rend.update().passive("中立モンスターに対する通常攻撃に{1}を付与する。").variable(1, TrueDamage, 10);
         Spellblade.update()
                 .passive("スキル使用後の通常攻撃に、周囲の敵ユニットに{1}を与える効果を付与し、範囲内の敵ユニットに{2}を与える円形のフィールド（Melee{3} Ranged{4}）を2秒間形成する。{5}。")
@@ -645,8 +656,13 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .variable(1, Radius, 600)
                 .variable(2, Shield, 50, 0, amplify(Lv, 10))
                 .variable(3, ItemCD, 60);
+
         Maim1.update().passive("Minionまたは中立モンスターに対して通常攻撃をした際、25%の確率で{1}を与える。").variable(1, MagicDamage, 300);
         Maim2.update().passive("Minionまたは中立モンスターに対して通常攻撃をした際、25%の確率で{1}を与える。").variable(1, MagicDamage, 500);
+        Maim1.update(P308).passive("Minionまたは中立モンスターへの通常攻撃は{1}を与える。").variable(1, MagicDamage, 10);
+        Maim2.update(P308).passive("Minionまたは中立モンスターへの通常攻撃は{1}を与える。").variable(1, MagicDamage, 60);
+        Maim3.update().passive("Minionまたは中立モンスターへの通常攻撃は{1}を与える。").variable(1, MagicDamage, 100);
+
         MaladyPassive.update()
                 .passive("通常攻撃に{1}と{2}を与える。MR減少は7回までスタックし、8秒間持続する。")
                 .variable(1, MagicDamage, 15, 0, ap(0.1))
@@ -672,7 +688,10 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .ununique()
                 .passive("現在のManaの3%を消費して、通常攻撃または単体対象かつDoTではないダメージスキルに{1}を付与する。")
                 .variable(1, PhysicalDamage, 0, 0, amplify(Status.CurrentManaRatio, 6));
+
         NashorsToothPassive.update().passive("{1}を得る。").variable(1, CDR, 20);
+        NashorsToothPassive.update(P308).passive("{1}を得る。通常攻撃に{2}を付与する。").variable(2, MagicDamage, 15, 0, ap(0.15));
+
         NinjaTabiPassive.update().passive("{1}する。").variable(1, AttackDamageReductionRatio, 10);
         OhmwreckerActive.update()
                 .active("一番近くのTowerからの攻撃を2.5秒間防ぐ。この効果は同一のTowerに対して7.5秒に一度しか使えない。{1}。")
@@ -827,11 +846,21 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .variable(2, AP, 30)
                 .variable(3, SV, 20)
                 .aura();
+
         WitsEndPassive.update()
                 .passive("通常攻撃は追加{1}を与え、{2}を得る。MRの増加は4回までスタックし、5秒間持続する。")
                 .variable(1, MagicDamage, 42)
                 .variable(2, MR, 0, 0, amplify(Stack, 5));
-        WrigglesLanternAvtive.update().active("Sight Wardと同等の効果があるオブジェクトを指定地点に設置する。{1}。").variable(1, ItemCD, 180);
+        WitsEndPassive.update(P308)
+                .passive("通常攻撃は追加{1}を与え、{2}を得る。また対象の敵に{3}を与える。MRの増減は5回までスタックし、5秒間持続する。")
+                .variable(3, MRReduction, 0, 0, amplify(Stack, 5));
+
+        WrigglesLanternAvtive.update()
+                .active("Sight Wardと同等の効果がある{2}間持続するオブジェクトを指定地点に設置する。{1}。")
+                .variable(1, ItemCD, 180)
+                .variable(2, Time, 180);
+        WrigglesLanternAvtive.update(P308).variable(1, ItemCD, 90).variable(2, Time, 90);
+
         YoumuusGhostbladePassive.update().passive("{1}を得る。").variable(1, ARPen, 20);
         YoumuusGhostbladeActive.update()
                 .active("Meleeなら6秒間、Rangedなら4秒間{1}と{2}を得る。{3}。")

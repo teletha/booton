@@ -158,13 +158,30 @@ public abstract class Descriptor<T extends Descriptor> {
         List tokens = new ArrayList();
 
         for (String token : text.split("[\\{\\}]")) {
-            if (token.length() != 1 || !Character.isDigit(token.charAt(0))) {
+            if (token.length() == 0 || !isDigit(token)) {
                 tokens.add(token);
             } else {
                 tokens.add(new VariableReference(token));
             }
         }
         return tokens;
+    }
+
+    /**
+     * <p>
+     * Helper method to check text type.
+     * </p>
+     * 
+     * @param text
+     * @return
+     */
+    private boolean isDigit(String text) {
+        for (int i = 0; i < text.length(); i++) {
+            if (!Character.isDigit(text.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

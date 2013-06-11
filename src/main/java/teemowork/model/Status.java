@@ -318,6 +318,8 @@ public enum Status {
 
     EnemyChampion("敵Championの数"),
 
+    Value(""),
+
     Percentage(""),
 
     Charge,

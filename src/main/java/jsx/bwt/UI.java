@@ -63,7 +63,6 @@ public abstract class UI extends Publishable {
      * @param content A content to show on tooltip.
      */
     public void setTooltip(UI content) {
-        System.out.println("set tooltip");
         if (content == null) {
             tooltip = null;
             root.unbind(this);
