@@ -4529,19 +4529,36 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Rengar */
         UnseenPredator.update()
-                .passive("ステルス状態または茂みの中から相手を攻撃する際には、通常攻撃の射程が増加し相手に飛びつくようになる。この効果はステルス状態が解除された、また茂みから出た後0.5秒の間でも発生し、またステルス状態や茂みの中の視界が取られていた場合でも発生する。増加後射程: 600(Bonetooth Necklaceが9 Trophies以上の場合は750)また、Rengarがスキルで敵ユニットにダメージを与える度に1 Ferocityを得て(最大5 Ferocity)、5 Ferocity時にはFerocityを消費して強化(Empowered)されたスキルを使用することが出来る。");
+                .passive("ステルス状態または茂みの中から相手を攻撃する際には、通常攻撃は{1}になり相手に飛びつくようになる。この効果はステルス状態が解除された、また茂みから出た後0.5秒の間でも発生し、またステルス状態や茂みの中の視界が取られていた場合でも発生する。また、Rengarがスキルで敵ユニットにダメージを与える度に1 Ferocityを得て、5 Ferocity貯まると全てを消費して強化されたスキルを使用することが出来る。")
+                .variable(1, Range, 600);
         Savagery.update()
-                .active("次の通常攻撃に追加物理DMを付与し、次の通常攻撃から4秒間攻撃速度が増加する。追加物理DM: 30/60/90/120/150増加AS: 30/35/40/45/50%CD: 8/7.5/7/6.5/6sEmpoweredActive:次の通常攻撃に追加物理DMを付与し、次の通常攻撃から4秒間攻撃速度が増加する。攻撃速度増加効果は通常のSavageryと重複する。")
+                .active("次の通常攻撃に追加{1}を付与し、次の通常攻撃から4秒間{2}する。強化されると次の通常攻撃に追加{3}を付与し、次の通常攻撃から4秒間{4}する。")
+                .variable(1, PhysicalDamage, 30, 30)
+                .variable(2, ASRatio, 30, 5)
+                .variable(3, PhysicalDamage, 30, 30, ad(1))
+                .variable(-4, ASRatio, 90, 15)
                 .cd(8, -0.5);
         BattleRoar.update()
-                .active("周囲の敵ユニットに魔法DMを与える。また、このスキルが敵ユニットに命中すると、3秒間自身のArmorとMagic Resistが増加する。魔法DM: 50/80/110/140/170 (+0.8) 効果範囲: 500増加AR/MR: 15/22/29/36/43CD: 15/14/13/12/11sEmpoweredActive:周囲の敵ユニットに魔法DMを与え、自身のHPを回復する。また、このスキルが敵ユニットに命中すると、3秒間自身のArmorとMagic Resistが増加する。ArmorとMagic Resistの増加効果は通常のBattle Roarと重複しない。")
+                .active("{1}の敵ユニットに{2}を与える。また、このスキルが敵ユニットに命中すると、3秒間{3}と{4}を得る。強化されると{5}するようになる。")
+                .variable(1, Radius, 500)
+                .variable(2, MagicDamage, 50, 30, ap(0.8))
+                .variable(3, AR, 15, 7)
+                .variable(4, MR, 15, 7)
+                .variable(5, RestoreHealth, 40, 0, amplify(Lv, 20))
                 .cd(15, -1);
         BolaStrike.update()
-                .active("対象の敵ユニットに投げ縄を投げ、物理DMとスロー(2.5s)を与える。スローは時間経過と共に元に戻る。物理DM: 60/105/150/195/240 + [増加攻撃力 × 70%]スロー: 50/55/60/65/70%CD: 12/11/10/9/8s Range: 575EmpoweredActive:対象の敵ユニットに投げ縄を投げ、物理DMとスネア(1s)とスロー(2.5s)を与える。スローは時間経過と共に元に戻る。")
+                .active("対象の敵ユニットに投げ縄を投げ、{1}と2.5秒{2}を与える。スローは時間経過と共に元に戻る。強化されると{3}を与えるようになる。")
+                .variable(1, PhysicalDamage, 60, 45, bounusAD(0.7))
+                .variable(2, MSSlowRatio, 50, 5)
+                .variable(3, Snare, 1)
                 .cd(12, -1)
                 .range(575);
         ThrillOftheHunt.update()
-                .active("1秒後に自身が最大7秒間(Bonetooth Necklaceが14 Trophiesの場合10秒間)ステルス状態になり、自身を中心とした広範囲内の敵Champion全員の視界を得る。ステルス準備中に攻撃を行うかダメージを受ける度に、ステルス状態になるのに必要な時間が1秒増加する。ステルス準備開始から3秒経過するとダメージを受けていてもステルス状態になる。ステルス状態の間は移動速度が増加し、0.75秒毎に1 Ferocityを得る。これらの効果はステルス状態が解除されると終了する。")
+                .active("1秒後に{1}になり、{2}の敵Champion全員の{3}。ステルス準備中に攻撃を行うかダメージを受ける度に、ステルス状態になるのに必要な時間が1秒増加する。ステルス準備開始から3秒経過するとダメージを受けていてもステルス状態になる。ステルス状態の間は{4}し、0.75秒毎に1 Ferocityを得る。これらの効果はステルス状態が解除されると終了する。")
+                .variable(1, Stealth, 7)
+                .variable(2, Radius, 2000, 1000)
+                .variable(3, Visionable)
+                .variable(4, MSRatio, 20, 5)
                 .cd(140, -35);
 
         /** Riven */
