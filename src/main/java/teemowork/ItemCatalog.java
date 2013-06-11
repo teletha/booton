@@ -45,6 +45,10 @@ public class ItemCatalog extends Page {
         for (Item item : Item.getAll()) {
             ItemDescriptor status = item.getDescriptor(Version.Latest);
 
+            if (status.isDeprecated()) {
+                continue;
+            }
+
             jQuery element = root.child(ItemCatalogStyle.ItemPanel.class);
             jQuery icons = element.child(ItemCatalogStyle.IconPanel.class);
             item.applyIcon(icons.child(ItemCatalogStyle.Icon.class));
