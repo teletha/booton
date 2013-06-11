@@ -1745,10 +1745,10 @@ public class Champion {
                 .set(Range, 125)
                 .set(MS, 345);
         Zac.update(P0000)
-                .set(Health, 450, 95)
+                .set(Health, 455, 95)
                 .set(Hreg, 12.5, 0.55)
                 .set(AD, 54, 3.375)
-                .set(AS, 0.658, 3.1)
+                .set(AS, 0.638, 1.6)
                 .set(AR, 14, 3.5)
                 .set(MR, 30, 1.25)
                 .set(Range, 125)

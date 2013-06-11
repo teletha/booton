@@ -5864,8 +5864,11 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Zac */
         CellDivision.update()
-                .passive("Zacのスキルが敵ユニットに命中する度に小型のスライムが出現する。スライムを回収すると{1}する。スライムが敵championに踏まれた場合は消滅する。また、ZacのHealthが0になった時4つのスライムに分裂し一定時間かけて復活する。復活中にすべてのスライムが死亡するとZacも死亡する。復活時のHealthは生きているスライムの数に比例し増加(10-50%)する。スライムはZacの最大Health10%のHealthと、50%のArmor及びMagic Resistを持つ。")
+                .passive("Zacのスキルが敵ユニットに命中する度に小型のスライムが出現する。スライムを回収すると{1}する。スライムが敵championに踏まれた場合は消滅する。また、ZacのHealthが0になった時4つのスライムに分裂し一定時間かけて復活する。復活中にすべてのスライムが死亡するとZacも死亡する。復活時のHealthは生きているスライムの数に比例し増加(10-50%)する。スライムは以下のステータスを持つ。<br>Health : {2}<br>AR : {3}<br>MR : {4}")
                 .variable(1, RestoreHealth, 0, 0, amplify(Health, 0.04))
+                .variable(2, Value, 0, 0, amplify(Health, 0.12))
+                .variable(3, Value, 0, 0, amplify(AR, 0.5))
+                .variable(4, Value, 0, 0, amplify(MR, 0.5))
                 .cd(300);
         StretchingStrike.update()
                 .active("指定方向に腕を伸ばし範囲内にいる敵ユニットに{1}と2秒間{2}を与える。")
@@ -5886,7 +5889,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(2, Knockback)
                 .cost(CurrentHealthRatio, 4, 0)
                 .cd(24, -3)
-                .range(1100);
+                .range(1150, 100);
         LetsBounce.update()
                 .active("Zacが4回飛び跳ね、その度に周囲にいる敵ユニットに{1}と{2}と1秒間{3}を与える。ノックバックは同一の対象に1度までしか発生せず、同一ユニットに複数回DMを与える場合、2回目以降は50%のダメージになる。このスキルが発動している間はUnstable Matterと移動のみが可能であり、また徐々に移動速度が増加する(20-50%増加)。使用中は{4}を得る。")
                 .variable(1, MagicDamage, 160, 80, ap(0.25))
