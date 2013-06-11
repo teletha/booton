@@ -2085,15 +2085,21 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(20)
                 .cd(10);
         SummonTibbers.update()
-                .active("指定地点の{1}の敵ユニットに{2}を与え、操作可能なTibbersを召喚する。Tibbersは{3}間持続し、{4}の敵ユニットに毎秒{5}を与える。")
+                .active("指定地点の{1}の敵ユニットに{2}を与え、操作可能なTibbersを召喚する。Tibbersは{3}間持続し、{4}の敵ユニットに毎秒{5}を与える。TibbersはALT押しながら右クリックで任意の操作が可能で以下のステータスを持つ。<br>Health : {6}<br>通常攻撃 : {7}<br>AR : {8}<br>MR : {9}<br>MS : {10}")
                 .variable(1, Radius, 150)
                 .variable(2, MagicDamage, 200, 125, ap(0.7))
                 .variable(3, Time, 45, 0)
                 .variable(4, Radius, 200)
                 .variable(5, MagicDamage, 35, 0, ap(0.2))
+                .variable(6, Value, 1200, 400)
+                .variable(7, MagicDamage, 80, 25)
+                .variable(8, Value, 30, 20)
+                .variable(9, Value, 25, 20)
+                .variable(10, Value, 350)
                 .mana(125, 50)
                 .cd(120)
                 .range(600);
+        SummonTibbers.update(P308).variable(6, Value, 1200, 900).variable(9, Value, 30, 20).mana(100);
 
         /** Ashe */
         Focus.update()
@@ -2959,12 +2965,15 @@ public class Skill extends Describable<SkillDescriptor> {
         OnslaughtOfShadows.update()
                 .active("亡霊の騎兵隊を従え指定地点に突撃し、Hecarimと騎兵に触れた敵ユニットに{1}を与える。指定した地点に到着すると衝撃波を放ち、{2}の敵ユニットに{3}と{4}を与える。Hecarimが指定した地点に到着しても、騎兵隊は常に最大距離まで突撃する。" + Terrified + "に陥ったユニットは強制的にHecarimから遠ざかるように移動する。この時、Hecarimとの距離に比例して移動速度が変化する。")
                 .variable(1, MagicDamage, 100, 100, ap(0.8))
-                .variable(2, Radius, 0)
+                .variable(2, Radius)
                 .variable(3, MagicDamage, 50, 75, ap(0.4))
                 .variable(4, Terrified, 1)
                 .mana(100)
                 .cd(140, -20)
                 .range(1000);
+        OnslaughtOfShadows.update(P308)
+                .active("亡霊の騎兵隊を従え指定地点に突撃し、Hecarimと騎兵に触れた敵ユニットに{1}を与える。指定した地点に到着すると衝撃波を放ち、{2}の敵ユニットに{4}を与える。Hecarimが指定した地点に到着しても、騎兵隊は常に最大距離まで突撃する。" + Terrified + "に陥ったユニットは強制的にHecarimから遠ざかるように移動する。この時、Hecarimとの距離に比例して移動速度が変化する。")
+                .variable(1, MagicDamage, 150, 100, ap(1));
 
         /** Heimerdinger */
         TechmaturgicalRepairBots.update()
@@ -3229,7 +3238,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(6);
         InnerFlame.update(P305)
                 .active("指定方向に炎を飛ばし、命中した敵と{1}の敵ユニットに{2}と1.5秒間{3}を与える。Mantraを付与した場合、追加の{4}を与え、更に炎が命中した地点にフィールドを発生させ、フィールドの上にいる敵ユニットに{5}を与える。フィールドは1.5秒後に爆発し、フィールドの上にいる敵ユニットに{6}を与える。炎が敵ユニットに命中しなかった場合、最大距離まで飛んだ後にフィールドが発生する。")
-                .variable(1, Radius, 200)
+                .variable(1, Radius, 230)
                 .variable(2, MagicDamage, 60, 50, ap(0.6))
                 .variable(3, MSSlowRatio, 25)
                 .variable(4, MagicDamage, new Refer(Mantra, 25, 50), ap(0.3), null)
@@ -3239,6 +3248,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(7, -0.5)
                 .range(950);
         InnerFlame.update(P306).variable(2, MagicDamage, 80, 45, ap(0.6));
+        InnerFlame.update(P308).variable(1, Radius, 250).mana(50, 5);
         FocusedResolve.update()
                 .active("対象のユニットと自身を繋ぐビームを発生させる。ビームは5秒間持続し、自身及び味方ユニットは{1}し、敵ユニットには{2}を与える。ビームに触れたChampion(敵味方問わず)にも同様の効果を与え、それが敵ユニットだった場合は更に{3}を与える。ビームを繋ぐ対象がステルス状態または距離1000まで離れた場合、効果が途切れる。Mantra Bonus:MS増加/MS低下の効果が2倍になる。")
                 .variable(1, MSRatio, 10, 2)
@@ -3263,6 +3273,9 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(4, RestoreHealth, 0, 0, amplify(MissingHealthRatio, 25, 0, ap(0.01)))
                 .mana(70, 5);
         FocusedResolve.update(P306).cd(16, -1);
+        FocusedResolve.update(P308)
+                .active("対象の敵Championと自身を繋ぐビームを発生させる。0.66秒毎に{1}を与え、2秒間ビームが持続していた場合{2}を与える。Mantraを付与した場合、追加の{3}を与え、{4}するようになる。2秒間ビームが持続していた場合、追加で{4}する。ダメージを与えるたびにGathering Fireの効果が発生する。")
+                .variable(4, RestoreHealth, 0, 0, amplify(MissingHealthRatio, 20, 0, ap(0.01)));
         Inspire.update()
                 .active("対象の味方ユニットに5秒間持続する{1}を付与する。Mantra Bonus:味方ユニットにシールドを付与した際、その味方ユニットの{2}にいる敵ユニットに{3}を与える。")
                 .variable(1, Shield, 80, 40, ap(0.8))
@@ -3485,6 +3498,10 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, PhysicalDamage, 0, 0, amplify(TargetMissingHealthRatio, 12))
                 .cd(3.5)
                 .range(325);
+        TasteTheirFear.update(P308)
+                .active("対象の敵ユニットに{1}を与える。マークが付与されている敵ユニットのマークの範囲内に他の敵ユニットがいない場合、{2}を与える。進化すると敵ユニットに追加{3}を与え、このスキルの射程と通常攻撃の射程が50増加する。")
+                .variable(2, PhysicalDamage, 101.5, 43.5, bounusAD(2.18))
+                .variable(3, PhysicalDamage, 0, 0, amplify(TargetMissingHealthRatio, 8));
         VoidSpike.update()
                 .active("指定方向に敵ユニットに命中すると爆発する針を発射し、{1}の敵ユニットに{2}を与える。自身が爆発範囲内にいる場合は更に{3}する。進化すると指定方向に対して扇形になるような3方向に針を発射するようになり、また爆発にUnseen Threatの追加魔法DMとスローを付与する。")
                 .mana(60, 10)
@@ -3493,6 +3510,11 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, RestoreHealth, 40, 30, ap(0.5))
                 .cd(8)
                 .range(1000);
+        VoidSpike.update(P308)
+                .active("指定方向に敵ユニットに命中すると爆発する針を発射し、{1}の敵ユニットに{2}と2秒間{4}を与える。自身が爆発範囲内にいる場合は更に{3}する。このスキルはLeap中に発動出来ない。進化すると指定方向に対して扇形になるような3方向に針を発射するようになる。")
+                .variable(2, PhysicalDamage, 75, 40, bounusAD(1))
+                .variable(4, MSSlowRatio, 20)
+                .mana(55, 5);
         Leap.update()
                 .active("指定地点にジャンプし、{1}の敵ユニットに{2}を与える。進化すると射程が400増加し、またkillやassistを取った場合にこのスキルの{3}する。")
                 .variable(1, Radius, 0)
@@ -3503,11 +3525,13 @@ public class Skill extends Describable<SkillDescriptor> {
                 .range(600);
         VoidAssault.update()
                 .passive("このスキルを取得、またはランクが上がる毎に、いずれかのスキルを選んで進化させることができる。")
-                .active("使用後{2}状態になり、{1}する。この際にUnseen Threatの効果が発動する。また使用後10秒以内であれば、消費mana無しでもう一度だけこのスキルを使用することができる。進化すると10秒以内に再度使用可能な回数が2回に増加し、またステルス状態の間に受けるDMを40%軽減するようになる。")
+                .active("使用後{2}状態になり、{1}する。この際にUnseen Threatの効果が発動する。また使用後10秒以内であれば、消費mana無しでもう一度だけこのスキルを使用することができる。進化すると10秒以内に再度使用可能な回数が2回に増加し、またステルス状態の間{3}する。")
                 .variable(1, MSRatio, 40)
                 .variable(2, Stealth, 1)
+                .variable(3, DamageReductionRatio, 40)
                 .mana(100)
                 .cd(3);
+        VoidAssault.update(P308).variable(3, DamageReductionRatio, 50);
 
         /** Kog'Maw */
         IcathianSurprise.update()
@@ -3672,6 +3696,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, Snare, 1.1, 0.1)
                 .mana(70)
                 .cd(18, -2);
+        RingOfFrost.update(P308).cd(14, -1).mana(50);
         GlacialPath.update()
                 .active("指定方向に貫通する氷の爪を飛ばし、当たった敵ユニットに{1}を与える。氷の爪が出ている間にこのスキルを再度使用すると、氷の爪の位置までワープし氷の爪が消滅する。")
                 .variable(1, MagicDamage, 70, 45, ap(0.6))
@@ -3679,12 +3704,17 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(24, -3)
                 .range(1050);
         FrozenTomb.update()
-                .active("対象の敵Championに{1}と{2}を与え、同時に対象の敵Championの周囲に3秒間持続するDark Iceを呼び出し、Dark Iceに触れた敵ユニットに{1}と{3}を与える。このスキルは自身を対象とする事が可能で、自身を対象とした場合は1.5秒間行動出来なくなる代わりに、ダメージを無効化かつターゲット不可状態になり、自身の周囲からDark Iceが出現する。")
+                .active("対象の敵Championに{1}と{2}を与え、同時に対象の敵Championの周囲に3秒間持続するDark Iceを呼び出し、Dark Iceに触れた敵ユニットに{1}と{3}を与える。このスキルは自身を対象とする事が可能で、自身を対象とした場合は{4}間行動出来なくなる代わりに、ダメージを無効化かつターゲット不可状態になり、自身の周囲からDark Iceが出現する。")
                 .variable(1, MagicDamage, 150, 150, ap(0.7))
                 .variable(2, Stun, 1.5)
                 .variable(3, MSSlowRatio, 20)
+                .variable(4, Time, 1.5)
                 .mana(100)
                 .cd(130, -25);
+        FrozenTomb.update(P308)
+                .variable(1, MagicDamage, 150, 100, ap(0.7))
+                .variable(3, MSSlowRatio, 20, 10)
+                .variable(4, Time, 2.5);
 
         /** Lulu */
         PixFaerieCompanion.update()
@@ -4098,10 +4128,11 @@ public class Skill extends Describable<SkillDescriptor> {
                 .active("10秒間{1}を得る。シールドが持続している間は通常攻撃時に対象とその周囲({2})にいる敵ユニットに{3}を与える。この魔法DMは2秒間かけて与えられる。")
                 .variable(1, Shield, 100, 50, amplify(BounusHealth, 0.1))
                 .variable(2, Radius, 350)
-                .variable(3, MagicDamage, 30, 15, ap(0.4))
+                .variable(3, MagicDamage, 30, 25, ap(0.4))
                 .mana(80)
                 .cd(26, -2);
         TitansWrath.update(P3051).cd(22, -1);
+        TitansWrath.update(P308).variable(3, MagicDamage, 40, 15, ap(0.4));
         Riptide.update()
                 .active("周囲を爆発させ命中した敵ユニットに{1}と２秒間{2}を与える。スローの効果は2秒かけて元に戻る。爆発はNautilusを中心に3回まで発生し、同一対象に対して複数hitする。2発目以降は本来の50%分の魔法DMを与える(3発hitで{3})。")
                 .variable(1, MagicDamage, 60, 40, ap(0.5))
@@ -4622,6 +4653,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, MagicDamage, 20, 10, ap(0.15), amplify(BounusHealth, 0.04))
                 .variable(4, MagicDamage, 120, 60, ap(0.9), amplify(BounusHealth, 0.16))
                 .cd(11, -1);
+        FlailOfTheNorthernWinds.update(P308).variable(4, MagicDamage, 120, 60, ap(0.9), amplify(BounusHealth, 0.1));
         Permafrost.update()
                 .active("{0}の敵ユニットのFrostをPermafrostにし、{1}を与える。Permafrost状態の敵ユニットは3秒間{2}を受ける。")
                 .variable(0, Radius, 1000)
@@ -4636,6 +4668,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(1, MagicDamage, 60, 50, ap(0.5))
                 .variable(2, Time, 2, 0.25)
                 .variable(3, MSSlowRatio, 50, 5);
+        Permafrost.update(P308).variable(2, Time, 1.5, 0.25);
         GlacialPrison.update()
                 .active("指定方向に武器を投げ、最大距離飛ぶか敵Championに命中するとその場で氷が爆発し、{1}の敵ユニットに{2}と{3}を与え、Frostにする。武器が直撃した敵Championには{4}を与える。")
                 .variable(1, Radius, 450)
@@ -4650,6 +4683,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, Stun, 1.5, 0.25)
                 .variable(4, MSSlowRatio, 90)
                 .variable(5, Time, 1.5, 0.25);
+        GlacialPrison.update(P308).variable(3, Stun, 1.25, 0.25).variable(5, Time, 1.25, 0.25);
 
         /** Shaco */
         Backstab.update().passive("対象の背後から攻撃した場合に{1}する。").variable(1, DamageRatio, 20);
@@ -4879,25 +4913,54 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Sona */
         PowerChord.update()
-                .passive("Auraを切り替えても、以前のAuraの効果が1秒間持続する。切替時は他のAuraスキルが0.5秒間CDになる。また、3回スキルを使用した後の通常攻撃に追加魔法DMと、そのとき展開しているAuraに応じた追加効果が発生する。");
+                .passive("Auraを切り替えても、以前のAuraの効果が1秒間持続する。切替時は他のAuraスキルが0.5秒間CDになる。また、3回スキルを使用した後の通常攻撃に{1}と、そのとき展開しているAuraに応じた追加効果が発生する。<br>" + HymnOfValor.name + " : 追加{1}を与える。<br>" + AriaOfPerseverance.name + " : {3}間対象が与えるダメージが20%減少するDebuffを与える。<br>" + SongOfCelerity.name + " : 2秒間{2}を与える。")
+                .variable(1, MagicDamage, 8, 0, amplify(Lv, 10))
+                .variable(2, MSSlowRatio, 40)
+                .variable(3, Time, 4);
+        PowerChord.update(P308)
+                .variable(1, MagicDamage, new Per1Level(new double[] {13, 20, 27, 35, 43, 52, 62, 72, 82, 92, 102, 112,
+                        122, 132, 147, 162, 177, 192}))
+                .variable(3, Time, 3);
         HymnOfValor.update()
-                .passive("Aura:周囲の味方ChampionのAD,APを増加させる。増加AD,AP: 4/8/12/16/20")
-                .active("最も近い敵ユニット2体に魔法DMを与える。Sonaの通常攻撃範囲内に敵Championがいる場合、それらを優先して狙う。魔法DM: 50/100/150/200/250 (+0.7)消費MN: 45/50/55/60/65 CD: 7s Range: 700Power Chord - Stacatto:追加魔法DMが2倍になる。")
+                .active("最も近い敵ユニット2体に{4}を与える。Sonaの通常攻撃範囲内に敵Championがいる場合、それらを優先して狙う。" + Crescendo.name + "以外の別のスキルを使うまで{1}の味方Championは{2}と{3}を得る。")
+                .variable(1, Radius, 1000)
+                .variable(2, AD, 4, 4)
+                .variable(3, AP, 4, 4)
+                .variable(4, MagicDamage, 50, 50, ap(0.7))
                 .mana(45, 5)
                 .cd(7)
                 .range(700);
         AriaOfPerseverance.update()
-                .passive("Aura:周囲の味方ChampionのAR,MRを増加させる。増加AR,MR: 3/6/9/12/15")
-                .active("近くにいる最もHPが減っている味方Champion1体とSonaのHPを回復する。HPを回復した対象と自身は3秒間、AuraのAR,MR増加が2倍になる。回復HP: 40/60/80/100/120 (+0.25)消費MN: 60/65/70/75/80 CD: 7s Range: 900Power Chord - Diminuendo:対象が与えるダメージを20%低下するDebuffを付与する。この効果は4秒間持続する。")
+                .active("近くにいる最もHPが減っている味方Champion1体とSonaは{1}し、3秒間{2}と{3}を得る。" + Crescendo.name + "以外の別のスキルを使うまで{4}の味方Championは{5}と{6}を得る。")
+                .variable(1, RestoreHealth, 40, 20, ap(0.25))
+                .variable(2, AR, 8, 3)
+                .variable(3, MR, 8, 3)
+                .variable(4, Radius, 1000)
+                .variable(5, AR, 3, 3)
+                .variable(6, MR, 3, 3)
                 .mana(60, 5)
                 .cd(7)
-                .range(900);
+                .range(1000);
+        AriaOfPerseverance.update(P308)
+                .variable(2, AR, 6, 1)
+                .variable(3, MR, 6, 1)
+                .variable(5, AR, 6, 1)
+                .variable(6, MR, 6, 1);
         SongOfCelerity.update()
-                .passive("Aura:周囲の味方Championの移動速度を増加させる。増加移動速度: 4/8/12/16/20")
-                .active("1.5秒間周囲の味方ユニットの移動速度を増加させる。増加移動速度: 6/8/10/12/14% 効果範囲: 850消費MN: 65 CD: 7sPower Chord - Tempo:スロー(40%,2s)効果を付与する。")
+                .active("1.5秒間{1}の味方ユニットは{2}する。" + Crescendo.name + "以外の別のスキルを使うまで{1}の味方Championは{3}する")
+                .variable(1, Radius, 1000)
+                .variable(2, MSRatio, 6, 2)
+                .variable(3, MSRatio, 4, 4)
                 .mana(65)
-                .cd(7);
-        Crescendo.update().active("前方範囲の敵Championに魔法DMを与え、1.5秒間強制的に踊らせる(スタン)。").mana(100, 50).cd(140, -20).range(1000);
+                .cd(7)
+                .range(1000);
+        Crescendo.update()
+                .active("前方{1}の敵Championに{2}と{3}を与える。")
+                .variable(1, Radius, 1000)
+                .variable(2, MagicDamage, 150, 100, ap(0.8))
+                .variable(3, Stun, 1.5)
+                .mana(100, 50)
+                .cd(140, -20);
 
         /** Soraka */
         Consecration.update().passive("{1}の味方Championは{2}を得る。").variable(1, Radius, 1000).variable(2, MR, 16);

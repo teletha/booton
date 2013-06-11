@@ -1456,6 +1456,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 330);
+        Sona.update(P308).set(Health, 380, 70).set(AR, 8, 3.3);
         Soraka.update(P0000)
                 .set(Health, 375, 71)
                 .set(Hreg, 4.5, 0.55)
