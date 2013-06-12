@@ -480,6 +480,10 @@ public class Item extends Describable<ItemDescriptor> {
                 .css("background-origin", "border-box");
     }
 
+    public String getIcon() {
+        return "src/main/resources/teemowork/items.jpg";
+    }
+
     /**
      * {@inheritDoc}
      */

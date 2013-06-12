@@ -13,6 +13,16 @@ import static teemowork.model.Status.*;
 import js.util.jQuery;
 import jsx.application.Page;
 import jsx.application.PageInfo;
+import teemowork.ItemCatalogStyle.AbilityArea;
+import teemowork.ItemCatalogStyle.Cost;
+import teemowork.ItemCatalogStyle.DescriptionPanel;
+import teemowork.ItemCatalogStyle.Icon;
+import teemowork.ItemCatalogStyle.ItemPanel;
+import teemowork.ItemCatalogStyle.Name;
+import teemowork.ItemCatalogStyle.Names;
+import teemowork.ItemCatalogStyle.TotalCost;
+import teemowork.ItemCatalogStyle.Unique;
+import teemowork.ItemCatalogStyle.Value;
 import teemowork.model.Ability;
 import teemowork.model.AbilityDescriptor;
 import teemowork.model.Describable;
@@ -23,7 +33,7 @@ import teemowork.model.Status;
 import teemowork.model.Version;
 
 /**
- * @version 2013/02/19 18:31:47
+ * @version 2013/06/12 12:45:51
  */
 public class ItemCatalog extends Page {
 
@@ -49,22 +59,21 @@ public class ItemCatalog extends Page {
                 continue;
             }
 
-            jQuery element = root.child(ItemCatalogStyle.ItemPanel.class);
-            jQuery icons = element.child(ItemCatalogStyle.IconPanel.class);
-            item.applyIcon(icons.child(ItemCatalogStyle.Icon.class));
+            jQuery element = root.child(ItemPanel.class);
+            item.applyIcon(element.child(Icon.class));
 
-            jQuery descriptions = element.child(ItemCatalogStyle.DescriptionPanel.class);
-            jQuery names = descriptions.child(ItemCatalogStyle.Names.class);
-            names.child(ItemCatalogStyle.Name.class).text(item.name);
+            jQuery descriptions = element.child(DescriptionPanel.class);
+            jQuery names = descriptions.child(Names.class);
+            names.child(Name.class).text(item.name);
 
             double cost = status.get(Cost);
             double total = item.getTotalCost(Version.Latest);
 
-            names.child(ItemCatalogStyle.TotalCost.class).text(total);
+            names.child(TotalCost.class).text(total);
 
             if (cost != total) {
                 names.append("(");
-                names.child(ItemCatalogStyle.Cost.class).text(cost);
+                names.child(Cost.class).text(cost);
                 names.append(")");
             }
 
@@ -72,26 +81,26 @@ public class ItemCatalog extends Page {
                 double value = status.get(entry);
 
                 if (value != 0) {
-                    descriptions.child(ItemCatalogStyle.Value.class).text(value + entry.getUnit() + " " + entry.name);
+                    descriptions.child(Value.class).text(value + entry.getUnit() + " " + entry.name);
                 }
             }
 
             for (Ability ability : status.getAbilities()) {
                 AbilityDescriptor descriptor = ability.getDescriptor(Version.Latest);
-                jQuery description = descriptions.child(ItemCatalogStyle.Ability.class);
+                jQuery description = descriptions.child(AbilityArea.class);
 
                 if (descriptor.isUnique()) {
-                    description.child(ItemCatalogStyle.Unique.class).text("UNIQUE");
+                    description.child(Unique.class).text("UNIQUE");
                 }
 
                 if (descriptor.isAura()) {
-                    description.child(ItemCatalogStyle.Unique.class).text("AURA");
+                    description.child(Unique.class).text("AURA");
                 }
 
-                description.child(ItemCatalogStyle.Unique.class).text(descriptor.isActive() ? "Active" : "Passive");
+                description.child(Unique.class).text(descriptor.isActive() ? "Active" : "Passive");
 
                 if (ability.visible) {
-                    description.child(ItemCatalogStyle.Unique.class).text("[" + ability.name + "]");
+                    description.child(Unique.class).text("[" + ability.name + "]");
                 }
                 new AbilityDescriptionView(description, ability, descriptor.isActive()).receive();
             }

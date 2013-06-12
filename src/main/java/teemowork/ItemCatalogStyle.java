@@ -36,12 +36,14 @@ class ItemCatalogStyle {
     /**
      * @version 2013/02/16 10:00:01
      */
-    static class IconPanel extends CSS {
+    static class Icon extends CSS {
 
         {
-            display.tableCell();
-            padding.right(IconSize / 5, px);
+            display.block();
+            margin.right(IconSize / 5, px);
             cursor.pointer();
+            box.size(44, px);
+            border.radius(5, px).color(50, 50, 50).width(1, px).solid();
         }
     }
 
@@ -113,25 +115,9 @@ class ItemCatalogStyle {
     }
 
     /**
-     * @version 2013/02/16 10:00:01
-     */
-    static class Icon extends CSS {
-
-        private int size = 44;
-
-        {
-            display.inlineBlock();
-            box.size(size, px);
-            background.cover();
-            border.radius(5, px).color(50, 50, 50).width(1, px).solid();
-            text.verticalAlign.middle();
-        }
-    }
-
-    /**
      * @version 2013/06/04 23:24:52
      */
-    static class Ability extends CSS {
+    static class AbilityArea extends CSS {
 
         {
             display.block();
