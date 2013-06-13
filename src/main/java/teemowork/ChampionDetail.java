@@ -66,6 +66,7 @@ import teemowork.model.SkillDescriptor;
 import teemowork.model.SkillKey;
 import teemowork.model.SkillType;
 import teemowork.model.Status;
+import teemowork.model.Version;
 import teemowork.model.variable.Variable;
 import teemowork.model.variable.VariableResolver;
 
@@ -602,7 +603,7 @@ public class ChampionDetail extends Page {
             if (item != null) {
                 item.applyIcon(icon);
 
-                setTooltip(new ItemView(item));
+                setTooltip(new ItemView(item, item.getDescriptor(Version.Latest)));
             }
         }
     }
