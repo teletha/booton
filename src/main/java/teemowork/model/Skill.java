@@ -1762,6 +1762,7 @@ public class Skill extends Describable<SkillDescriptor> {
     /** The skill name. */
     public static final Skill LetsBounce = new Skill("Let's Bounce!", R);
 
+    /** The skill name. */
     public static final Skill Iceborn = new Skill("Iceborn", Passive);
 
     /** The skill name. */
@@ -1775,6 +1776,24 @@ public class Skill extends Describable<SkillDescriptor> {
 
     /** The skill name. */
     public static final Skill FrozenTomb = new Skill("Frozen Tomb", R);
+
+    /** The skill name. */
+    public static final Skill BloodWell = new Skill("Blood Well", Passive);
+
+    /** The skill name. */
+    public static final Skill DarkFlight = new Skill("Dark Flight", Q);
+
+    /** The skill name. */
+    public static final Skill BloodThirst = new Skill("Blood Thirst", W);
+
+    /** The skill name. */
+    public static final Skill BloodPrice = new Skill("Blood Price", W);
+
+    /** The skill name. */
+    public static final Skill BladesOfTorment = new Skill("Blades of Torment", E);
+
+    /** The skill name. */
+    public static final Skill Massacre = new Skill("Massacre", R);
 
     /** The skill name. */
     public final String name;
