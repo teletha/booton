@@ -28,8 +28,20 @@ class ItemCatalogStyle {
     static class ItemPanel extends CSS {
 
         {
-            display.table();
-            margin.bottom(15, px);
+            display.flex();
+            margin.bottom(25, px);
+            box.maxWidth(600, px);
+        }
+    }
+
+    /**
+     * @version 2013/02/16 10:00:01
+     */
+    static class Icons extends CSS {
+
+        {
+            display.flex();
+            flexDirection.column();
         }
     }
 
@@ -40,7 +52,7 @@ class ItemCatalogStyle {
 
         {
             display.block();
-            margin.right(IconSize / 5, px);
+            margin.bottom(IconSize / 5, px);
             cursor.pointer();
             box.size(44, px);
             border.radius(5, px).color(50, 50, 50).width(1, px).solid();
@@ -53,9 +65,10 @@ class ItemCatalogStyle {
     static class DescriptionPanel extends CSS {
 
         {
-            display.tableCell();
+            display.flex();
             text.verticalAlign.top();
-            box.height(60, px);
+            flexDirection.column();
+            margin.left(IconSize / 5, px);
         }
     }
 
@@ -133,6 +146,30 @@ class ItemCatalogStyle {
         {
             font.color(205, 146, 0).weight.bolder();
             padding.right(0.5, em);
+        }
+    }
+
+    /**
+     * @version 2013/06/13 13:57:38
+     */
+    static class Materials extends CSS {
+
+        {
+            display.blockLine();
+            box.width(IconSize, px);
+        }
+    }
+
+    /**
+     * @version 2013/06/13 13:57:38
+     */
+    static class Material extends CSS {
+
+        {
+            display.block();
+            cursor.pointer();
+            box.size(22, px);
+            border.radius(3, px).color(50, 50, 50).width(1, px).solid();
         }
     }
 }

@@ -36,6 +36,7 @@ import booton.css.property.Content;
 import booton.css.property.Cursor;
 import booton.css.property.Display;
 import booton.css.property.FlexDirection;
+import booton.css.property.FlexWrap;
 import booton.css.property.Font;
 import booton.css.property.JustifyContent;
 import booton.css.property.Line;
@@ -185,6 +186,14 @@ public abstract class CSS implements Extensible {
      * </p>
      */
     public FlexDirection flexDirection;
+
+    /**
+     * <p>
+     * The CSS flex-wrap property specifies whether the children are forced into a single line or if
+     * the items can be flowed on multiple lines.
+     * </p>
+     */
+    public FlexWrap flexWrap;
 
     /**
      * <p>
@@ -490,7 +499,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean hover() {
+    public final boolean hover() {
         return rule(rules.selector + ":hover");
     }
 
@@ -506,7 +515,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean active() {
+    public final boolean active() {
         return rule(rules.selector + ":active");
     }
 
@@ -522,7 +531,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean focus() {
+    public final boolean focus() {
         return rule(rules.selector + ":focus");
     }
 
@@ -534,7 +543,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean firstChild() {
+    public final boolean firstChild() {
         return rule(rules.selector + ":first-child");
     }
 
@@ -546,7 +555,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean firstOfType() {
+    public final boolean firstOfType() {
         return rule(rules.selector + ":first-of-type");
     }
 
@@ -558,7 +567,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean lastChild() {
+    public final boolean lastChild() {
         return rule(rules.selector + ":last-child");
     }
 
@@ -570,7 +579,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean lastOfType() {
+    public final boolean lastOfType() {
         return rule(rules.selector + ":last-of-type");
     }
 
@@ -583,7 +592,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean onlyChild() {
+    public final boolean onlyChild() {
         return rule(rules.selector + ":only-child");
     }
 
@@ -595,7 +604,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean onlyOfType() {
+    public final boolean onlyOfType() {
         return rule(rules.selector + ":only-of-type");
     }
 
@@ -607,7 +616,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean nthChild(String pattern) {
+    public final boolean nthChild(String pattern) {
         return rule(rules.selector + ":nth-child");
     }
 
@@ -620,7 +629,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean nthLastChild(String pattern) {
+    public final boolean nthLastChild(String pattern) {
         return rule(rules.selector + ":nth-child");
     }
 
@@ -636,7 +645,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean nthOfType(String pattern) {
+    public final boolean nthOfType(String pattern) {
         return rule(rules.selector + ":nth-of-type");
     }
 
@@ -650,7 +659,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean nthLastOfType(String pattern) {
+    public final boolean nthLastOfType(String pattern) {
         return rule(rules.selector + ":nth-last-of-type");
     }
 
@@ -663,7 +672,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean before() {
+    public final boolean before() {
         return rule(rules.selector + ":before");
     }
 
@@ -676,7 +685,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean after() {
+    public final boolean after() {
         return rule(rules.selector + ":after");
     }
 
@@ -697,6 +706,10 @@ public abstract class CSS implements Extensible {
         return rule(rules.selector + ":selection");
     }
 
+    public final boolean children() {
+        return rule(rules.selector + ">*");
+    }
+
     /**
      * <p>
      * The CSS :after pseudo-element matches a virtual last child of the selected element. Typically
@@ -706,7 +719,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean inBackOf(Class<? extends CSS> clazz) {
+    public final boolean inBackOf(Class<? extends CSS> clazz) {
         return rule("." + Obfuscator.computeCSSName(clazz) + "+" + rules.selector);
     }
 
@@ -719,7 +732,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean insideOf(Class<? extends CSS> clazz) {
+    public final boolean insideOf(Class<? extends CSS> clazz) {
         return rule("." + Obfuscator.computeCSSName(clazz) + " " + rules.selector);
     }
 
@@ -732,7 +745,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean with(Class<? extends CSS> clazz) {
+    public final boolean with(Class<? extends CSS> clazz) {
         return rule("." + Obfuscator.computeCSSName(clazz) + rules.selector);
     }
 
@@ -748,7 +761,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean parentHover() {
+    public final boolean parentHover() {
         String current = rules.selector;
 
         if (current.endsWith(":after")) {
@@ -770,7 +783,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean adjacentHover() {
+    public final boolean adjacentHover() {
         return rule("*:hover+" + rules.selector);
     }
 
@@ -786,7 +799,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final boolean siblingHover() {
+    public final boolean siblingHover() {
         return rule("*:hover~" + rules.selector);
     }
 

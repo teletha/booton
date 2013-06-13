@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,12 +12,25 @@ package booton.css.property;
 import booton.css.CSSProperty;
 
 /**
- * @version 2012/12/12 9:45:24
+ * @version 2013/06/13 16:03:10
  */
 public final class Display extends CSSProperty<Display> {
 
-    /** The element generates a block element box. */
+    /**
+     * The element generates a block element box.
+     */
     public Display block() {
+        return chain("block");
+    }
+
+    /**
+     * The element generates a horizontal block element box.
+     */
+    public Display blockLine() {
+        while (css.children()) {
+            css.box.floating.left();
+        }
+
         return chain("block");
     }
 
