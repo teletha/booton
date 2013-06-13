@@ -10,8 +10,8 @@
 package teemowork;
 
 /**
- * @version 2013/06/13 16:44:26
+ * @version 2013/06/13 16:44:20
  */
-class ItemCatalogStyle {
+class ItemDetailStyle {
 
 }

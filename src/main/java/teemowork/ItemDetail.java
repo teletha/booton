@@ -13,35 +13,22 @@ import js.util.jQuery;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import teemowork.model.Item;
-import teemowork.model.ItemDescriptor;
 import teemowork.model.Version;
 
 /**
- * @version 2013/06/12 12:45:51
+ * @version 2013/06/13 16:43:49
  */
-public class ItemCatalog extends Page {
+public class ItemDetail extends Page {
+
+    /** The target item. */
+    private Item item;
 
     /**
      * 
      */
-    @PageInfo(path = "ItemCatalog")
-    public ItemCatalog() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void load(jQuery root) {
-        for (Item item : Item.getAll()) {
-            ItemDescriptor descriptor = item.getDescriptor(Version.Latest);
-
-            if (descriptor.isDeprecated()) {
-                continue;
-            }
-
-            root.child(new ItemView(item, descriptor));
-        }
+    @PageInfo(path = "Item/*")
+    public ItemDetail(String name) {
+        this.item = Item.getByName(name);
     }
 
     /**
@@ -49,6 +36,14 @@ public class ItemCatalog extends Page {
      */
     @Override
     protected String getPageId() {
-        return "ItemCatalog";
+        return "Item/" + item.name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void load(jQuery root) {
+        root.child(new ItemView(item, item.getDescriptor(Version.Latest)));
     }
 }
