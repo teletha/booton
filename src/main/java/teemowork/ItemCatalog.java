@@ -17,7 +17,10 @@ import teemowork.ItemCatalogStyle.AbilityArea;
 import teemowork.ItemCatalogStyle.Cost;
 import teemowork.ItemCatalogStyle.DescriptionPanel;
 import teemowork.ItemCatalogStyle.Icon;
+import teemowork.ItemCatalogStyle.Icons;
 import teemowork.ItemCatalogStyle.ItemPanel;
+import teemowork.ItemCatalogStyle.Material;
+import teemowork.ItemCatalogStyle.Materials;
 import teemowork.ItemCatalogStyle.Name;
 import teemowork.ItemCatalogStyle.Names;
 import teemowork.ItemCatalogStyle.TotalCost;
@@ -47,6 +50,58 @@ public class ItemCatalog extends Page {
     public ItemCatalog() {
     }
 
+    // private void test(jQuery root) {
+    // for (Item item : Item.getAll()) {
+    // ItemDescriptor descriptor = item.getDescriptor(Version.Latest);
+    //
+    // if (!descriptor.isDeprecated()) {
+    // double cost = descriptor.get(Cost);
+    // double total = item.getTotalCost(Version.Latest);
+    //
+    // Flex layout = new Flex(root, ItemPanel.class);
+    // layout.vmax(Icon.class);
+    // layout.hmax(box(Name.class).text(item.name), box(TotalCost.class).text(total),
+    // box(Cost.name).text(total == cost ? ""
+    // : "(" + cost + ")"));
+    // layout.item(Name.class).text(item.name);
+    // layout.item(TotalCost.class).text(total);
+    //
+    // if (total != cost) {
+    // layout.item(Cost.class).text("(" + cost + ")");
+    // }
+    // layout.hmax();
+    //
+    // for (Status entry : VISIBLE) {
+    // double value = descriptor.get(entry);
+    //
+    // if (value != 0) {
+    // layout.hbox(Value.class).text(value + entry.getUnit() + " " + entry.name);
+    // }
+    // }
+    //
+    // for (Ability ability : descriptor.getAbilities()) {
+    // AbilityDescriptor abilityDescriptor = ability.getDescriptor(Version.Latest);
+    //
+    // if (abilityDescriptor.isUnique()) {
+    // layout.hbox(Unique.class).text("UNIQUE");
+    // }
+    //
+    // if (abilityDescriptor.isAura()) {
+    // layout.hbox(Unique.class).text("AURA");
+    // }
+    //
+    // layout.hbox(Unique.class).text(abilityDescriptor.isActive() ? "Active" : "Passive");
+    //
+    // if (ability.visible) {
+    // layout.hbox(Unique.class).text("[" + ability.name + "]");
+    // }
+    // // new AbilityDescriptionView(description, ability,
+    // // abilityDescriptor.isActive()).receive();
+    // }
+    // }
+    // }
+    // }
+
     /**
      * {@inheritDoc}
      */
@@ -60,7 +115,14 @@ public class ItemCatalog extends Page {
             }
 
             jQuery element = root.child(ItemPanel.class);
-            item.applyIcon(element.child(Icon.class));
+            jQuery icons = element.child(Icons.class);
+            item.applyIcon(icons.child(Icon.class));
+
+            jQuery materials = icons.child(Materials.class);
+
+            for (Item material : status.getBuild()) {
+                material.applyIcon(materials.child(Material.class).attr("title", material.name));
+            }
 
             jQuery descriptions = element.child(DescriptionPanel.class);
             jQuery names = descriptions.child(Names.class);

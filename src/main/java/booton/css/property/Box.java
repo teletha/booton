@@ -33,6 +33,15 @@ public class Box extends CSSProperty<Box> {
      */
     public final Sizing sizing = new Sizing();
 
+    /**
+     * <p>
+     * The float CSS property specifies that an element should be taken from the normal flow and
+     * placed along the left or right side of its container, where text and inline elements will
+     * wrap around it. A floating element is one where the computed value of float is not none.
+     * </p>
+     */
+    public final Float floating = new Float();
+
     /** The box width. */
     private Value width;
 
@@ -569,4 +578,54 @@ public class Box extends CSSProperty<Box> {
             return chain("border-box");
         }
     }
+
+    /**
+     * @version 2013/06/13 16:18:05
+     */
+    public class Float extends CSSProperty<Box> {
+
+        /**
+         * Hide.
+         */
+        private Float() {
+            super("float", Box.this);
+        }
+
+        /**
+         * <p>
+         * Is a keyword indicating that the element must float on the left side of its containing
+         * block.
+         * </p>
+         * 
+         * @return Chainable API.
+         */
+        public Box left() {
+            return chain("left");
+
+        }
+
+        /**
+         * <p>
+         * Is a keyword indicating that the element must float on the right side of its containing
+         * block.
+         * </p>
+         * 
+         * @return Chainable API.
+         */
+        public Box right() {
+            return chain("right");
+        }
+
+        /**
+         * <p>
+         * Is a keyword indicating that the element must not float.
+         * </p>
+         * 
+         * @return Chainable API.
+         */
+        public Box none() {
+            return chain("none");
+        }
+    }
+
 }

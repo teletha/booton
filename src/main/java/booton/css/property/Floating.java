@@ -14,7 +14,14 @@ import booton.css.CSSProperty;
 /**
  * @version 2012/12/13 18:50:02
  */
-public class Float extends CSSProperty<Float> {
+public class Floating extends CSSProperty<Floating> {
+
+    /**
+     * 
+     */
+    public Floating() {
+        super("float");
+    }
 
     /**
      * <p>
@@ -23,7 +30,7 @@ public class Float extends CSSProperty<Float> {
      * 
      * @return Chainable API.
      */
-    public Float left() {
+    public Floating left() {
         return chain("left");
 
     }
@@ -36,7 +43,7 @@ public class Float extends CSSProperty<Float> {
      * 
      * @return Chainable API.
      */
-    public Float right() {
+    public Floating right() {
         return chain("right");
     }
 
@@ -47,7 +54,7 @@ public class Float extends CSSProperty<Float> {
      * 
      * @return Chainable API.
      */
-    public Float none() {
+    public Floating none() {
         return chain("none");
     }
 }
