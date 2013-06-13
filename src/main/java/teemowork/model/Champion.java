@@ -19,9 +19,9 @@ import java.util.List;
 import js.util.jQuery;
 
 /**
- * 3.07準拠
+ * 3.08準拠
  * 
- * @version 2013/01/27 9:55:21
+ * @version 2013/06/14 8:39:54
  */
 public class Champion {
 
@@ -30,6 +30,9 @@ public class Champion {
 
     /** The champion manager. */
     private static final List<Champion> champions = new ArrayList();
+
+    /** The champion name. */
+    public static final Champion Aatrox = new Champion("Aatrox", BloodWell, DarkFlight, BloodThirst, BladesOfTorment, Massacre);
 
     /** The champion name. */
     public static final Champion Ahri = new Champion("Ahri", EssenceTheft, OrbOfDeception, FoxFire, Skill.Charm, SpiritRush);
@@ -528,6 +531,17 @@ public class Champion {
     }
 
     static {
+        Aatrox.update(P0000)
+                .set(Health, 480, 85)
+                .set(Hreg, 1.25, 0.1)
+                .set(Mana, 75, 45)
+                .set(Mreg, 0, 0)
+                .set(AD, 58.2, 3.2)
+                .set(AS, 0.668, 2)
+                .set(AR, 10, 3.5)
+                .set(MR, 30, 0)
+                .set(Range, 550)
+                .set(MS, 330);
         Ahri.update(P0000)
                 .set(Health, 380, 80)
                 .set(Hreg, 5.5, 0.6)
