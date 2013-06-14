@@ -52,6 +52,9 @@ public enum Status {
     /** Health Regeneration */
     Hreg(2), HregPerLv(2), HregRatio("Hreg", 2),
 
+    /** Health Cost */
+    LoseHealth("Health"),
+
     // ==================================================
     // Mana Related
     // ==================================================
@@ -134,7 +137,7 @@ public enum Status {
     AP, APPerLv, APRatio("AP", 2),
 
     /** Cooldown Reduction */
-    CDR("CD減少"), CDRPerLv, CDRRatio,
+    CDR("CD減少"), CDRPerLv, CDRRatio, CDRUnaware("CD減少の影響を受けない"),
 
     /** Spell Vamp */
     SV("Spell Vamp"), SVPerLv, SVRatio,
@@ -528,6 +531,9 @@ public enum Status {
 
         case ADReduction:
             return name + "が" + formatValue(computed) + "減少";
+
+        case LoseHealth:
+            return name + "を" + formatValue(computed) + "消費";
 
         case RestoreEnergy:
         case RestoreHealth:

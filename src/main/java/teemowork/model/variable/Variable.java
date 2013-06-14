@@ -163,7 +163,12 @@ public class Variable {
         }
 
         if (status == CD || status == CDRAwareTime) {
-            value = value * (1 - calculator.calculate(CDR) / 100);
+            if (value < 0) {
+                // unaffected by cooldown reduction
+                value = -value;
+            } else {
+                value = value * (1 - calculator.calculate(CDR) / 100);
+            }
         }
 
         set.remove(calculator);
