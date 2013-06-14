@@ -1886,6 +1886,48 @@ public class Skill extends Describable<SkillDescriptor> {
     }
 
     static {
+        /** Aatrox */
+        BloodWell.update()
+                .passive("スキルを使用時に消費したHealthをBlood Wellとしてスタックし(最大スタック量は{1})、5秒間戦闘状態でなくなると毎秒2%ずつ失われていく。{2}する(最大で{3})。Healthが0になると3秒かけて{4}する(最大で{5})。{6}。")
+                .variable(1, Stack, 30, 0, amplify(Lv, 45))
+                .variable(-2, ASRatio, 0, 0, amplify(Stack, 0.05))
+                .variable(-3, ASRatio, 0.6, 0, amplify(Lv, 0.9))
+                .variable(4, RestoreHealth, 10.5, 0, amplify(Lv, 15.75), amplify(Stack, 1))
+                .variable(5, RestoreHealth, 40.5, 0, amplify(Lv, 60.75))
+                .variable(6, CDRUnaware)
+                .cd(-225);
+        DarkFlight.update()
+                .active("指定地点に飛びかかり、{1}の敵ユニットに{2}を与える。範囲内の中心にいる敵ユニットに対しては更に{3}を与える。")
+                .variable(1, Radius)
+                .variable(2, PhysicalDamage, 70, 45, bounusAD(0.6))
+                .variable(3, Knockup, 1)
+                .cd(16, -1)
+                .cost(CurrentHealthRatio, 10, 0)
+                .range(650);
+        BloodThirst.update()
+                .passive("通常攻撃3回ごとに{1}する。Healthが50%以下の場合、{2}する。ToggleOnの間、この効果は失われる。")
+                .variable(1, RestoreHealth, 20, 5, bounusAD(0.25))
+                .variable(2, RestoreHealth, 60, 15, bounusAD(0.75))
+                .active("通常攻撃3回ごとに{3}を与えて{4}する。")
+                .variable(3, PhysicalDamage, 60, 35, bounusAD(1))
+                .variable(4, LoseHealth, 15, 8.75, bounusAD(0.25))
+                .cd(0.5)
+                .type(SkillType.Toggle);
+        BladesOfTorment.update()
+                .active("指定方向に貫通するエネルギーを放ち、当たった敵ユニットに{1}と{2}間{3}を与える。")
+                .variable(1, MagicDamage, 75, 45, ap(0.6), bounusAD(0.6))
+                .variable(2, Time, 1.75, 0.25)
+                .variable(3, MSSlowRatio, 40)
+                .cost(CurrentHealthRatio, 5, 0)
+                .cd(12, -1)
+                .range(1000);
+        Massacre.update()
+                .active("{1}の敵Championに{2}を与え、12秒間{3}し、通常攻撃の射程が325に増加する。")
+                .variable(1, Radius)
+                .variable(2, MagicDamage, 200, 100, ap(1))
+                .variable(3, ASRatio, 40, 10)
+                .cd(100, -15);
+
         /** Ahri */
         EssenceTheft.update()
                 .passive("スキルが敵ユニットに当たる度に" + EssenceTheft + "のチャージを1つ得る(1回のスキルで得られる上限は3チャージまで)。9チャージの状態でスキルを使用すると、チャージを全て消費して使用したスキルに{1}が追加される。")
@@ -2039,10 +2081,11 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Anivia */
         Rebirth.update()
-                .passive("死亡時に卵になり6秒かけて復活する。復活中は{1}及び{2}を得る。復活中にHPが0になった場合は死亡する。レベル1、5、8、12、15で増加AR/MRが上昇する。")
+                .passive("死亡時に卵になり6秒かけて復活する。復活中は{1}及び{2}を得る。復活中にHPが0になった場合は死亡する。レベル1、5、8、12、15で増加AR/MRが上昇する。{3}。")
                 .variable(-1, AR, new Per4Level(-40, 15))
                 .variable(-2, MR, new Per4Level(-40, 15))
-                .cd(240);
+                .variable(3, CDRUnaware)
+                .cd(-240);
         FlashFrost.update()
                 .active("指定方向に貫通する氷を飛ばし、氷に触れた敵ユニットに{1}と3秒間{2}を与え、{4}状態にする。氷が飛んでいる最中に再度スキルを使用するか、最大距離まで飛ぶと氷が破裂し、破裂地点の{6}の敵ユニットにさらに{1}と{5}と3秒間{2}を与え、{4}状態にする。")
                 .variable(1, MagicDamage, 60, 30, ap(0.5))
@@ -3591,7 +3634,10 @@ public class Skill extends Describable<SkillDescriptor> {
                 .range(1400, 300);
 
         /** LeBlanc */
-        MirrorImage.update().passive("HPが40%以下になったとき0.5秒間ステルス状態になり、自分の分身を作り出す。分身は8秒間持続し、分身が敵にダメージを与えることはできない。").cd(60);
+        MirrorImage.update()
+                .passive("HPが40%以下になったとき0.5秒間ステルス状態になり、自分の分身を作り出す。分身は8秒間持続し、分身が敵にダメージを与えることはできない。{1}。")
+                .variable(1, CDRUnaware)
+                .cd(-60);
         SigilOfSilence.update()
                 .active("対象の敵ユニットに{1}と3.5秒間持続するマークを付与する。マークが付いている間に再度スキルでダメージを与えると、マークを消費して追加{2}と{3}を付与する。")
                 .variable(1, MagicDamage, 70, 40, ap(0.6))
@@ -5732,9 +5778,10 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Volibear */
         ChosenOftheStorm.update()
-                .passive("VolibearのHPが30%以下になったとき、6秒間かけて{1}する。")
+                .passive("VolibearのHPが30%以下になったとき、6秒間かけて{1}する。{2}。")
                 .variable(1, RestoreHealth, 0, 0, amplify(Health, 0.3))
-                .cd(120);
+                .variable(2, CDRUnaware)
+                .cd(-120);
         RollingThunder.update()
                 .active("4秒間{1}する。敵Championに向かって移動する場合は{2}する。また次の通常攻撃に追加{3}を付与し、対象をVolibearの後ろに投げ飛ばす。4秒間攻撃を行わないとCDになる。")
                 .variable(1, MSRatio, 15)
