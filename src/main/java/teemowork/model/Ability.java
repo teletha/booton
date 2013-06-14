@@ -17,6 +17,9 @@ import static teemowork.model.Version.*;
  */
 public class Ability extends Describable<AbilityDescriptor> {
 
+    /** The ability id counter. */
+    private static int counter = 0;
+
     /** The ability. */
     public static final Ability AbyssalAura = new Ability();
 
@@ -456,15 +459,22 @@ public class Ability extends Describable<AbilityDescriptor> {
      * Create new ability with invisible name.
      */
     Ability() {
-        this("");
+        this("ability" + counter++, false);
     }
 
     /**
      * Create new ability with visible name.
      */
     Ability(String name) {
+        this(name, true);
+    }
+
+    /**
+     * Create new ability with visible name.
+     */
+    private Ability(String name, boolean visible) {
         this.name = name;
-        this.visible = name.length() != 0;
+        this.visible = visible;
     }
 
     /**
@@ -590,19 +600,19 @@ public class Ability extends Describable<AbilityDescriptor> {
         GlacialShroudPassive.update().passive("{1}を得る。").variable(1, CDR, 10);
         GuardianAngelPassive.update()
                 .passive("Healthが0になった際、4秒後に{1}と{2}を得て復活する。{3}。")
-                .variable(1, Health, 0, 0, amplify(Health, 0.3))
-                .variable(2, Mana, 0, 0, amplify(Mana, 0.3))
+                .variable(-1, Health, 0, 0, amplify(Health, 0.3))
+                .variable(-2, Mana, 0, 0, amplify(Mana, 0.3))
                 .variable(3, ItemCD, 300);
         GuinsooPassive.update()
                 .ununique()
                 .passive("通常攻撃またはスキル使用時にスタックが1増加する。1スタックにつき{1}し{2}を得る。スタックは8秒持続し、最大8スタックまで増加する。")
-                .variable(1, ASRatio, 4)
-                .variable(2, AP, 4);
+                .variable(-1, ASRatio, 4)
+                .variable(-2, AP, 4);
         GuinsooUniquePassive.update()
                 .passive("自身のHealthが50%以下になった際に、戦闘状態が終わるまでの間{1}し{2}と{3}を得る。8秒間戦闘を行わないと解除される。{4}。")
-                .variable(1, ASRatio, 20)
-                .variable(2, LS, 10)
-                .variable(3, SV, 10)
+                .variable(-1, ASRatio, 20)
+                .variable(-2, LS, 10)
+                .variable(-3, SV, 10)
                 .variable(4, ItemCD, 30);
         EyesOfPain.update().passive("{1}を得る。").variable(1, MRPen, 15);
         PortionHealth.update().ununique().active("このアイテムを消費して15秒かけて{1}する。").variable(1, RestoreHealth, 150);
