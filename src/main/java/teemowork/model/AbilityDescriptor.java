@@ -9,7 +9,6 @@
  */
 package teemowork.model;
 
-import js.lang.NativeArray;
 
 /**
  * @version 2013/01/29 1:55:25
@@ -24,9 +23,6 @@ public class AbilityDescriptor extends Descriptor<AbilityDescriptor> {
 
     /** The ability description. */
     private String description;
-
-    /** The value store. */
-    private final NativeArray<Double> values;
 
     /**
      * <p>
@@ -44,56 +40,11 @@ public class AbilityDescriptor extends Descriptor<AbilityDescriptor> {
             unique = previous.unique;
             aura = previous.aura;
             description = previous.description;
-            values = previous.values;
         } else {
             unique = true;
             aura = false;
             description = "";
-            values = new NativeArray();
         }
-    }
-
-    /**
-     * <p>
-     * Retrieve status value.
-     * </p>
-     * 
-     * @param status A target status.
-     * @return A result.
-     */
-    public double get(Status status) {
-        Double value = values.get(status.ordinal());
-
-        return value == null ? 0 : value;
-    }
-
-    /**
-     * <p>
-     * Retrieve status value.
-     * </p>
-     * 
-     * @param status A target status.
-     * @return Chainable API.
-     */
-    AbilityDescriptor set(Status status, double value) {
-        values.set(status.ordinal(), value);
-
-        return this;
-    }
-
-    /**
-     * <p>
-     * Retrieve status value.
-     * </p>
-     * 
-     * @param status A target status.
-     * @return Chainable API.
-     */
-    AbilityDescriptor set(Status status, double base, double per) {
-        values.set(status.ordinal(), base);
-        values.set(Status.valueOf(status.name() + "PerLv").ordinal(), per);
-
-        return this;
     }
 
     /**

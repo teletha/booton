@@ -41,9 +41,6 @@ public class ScriptRunner extends BlockJUnit4ClassRunner {
     /** The line feed. */
     private static final String END = "\r\n";
 
-    /** No parameter. */
-    private static final Object NONE = new Object();
-
     /** The script engine manager. */
     private static Context engine;
 
@@ -57,7 +54,7 @@ public class ScriptRunner extends BlockJUnit4ClassRunner {
     static {
         try {
             // build client
-            WebClient client = new WebClient(BrowserVersion.FIREFOX_10);
+            WebClient client = new WebClient(BrowserVersion.FIREFOX_17);
             client.getWebConsole().setLogger(new Logger() {
 
                 /**

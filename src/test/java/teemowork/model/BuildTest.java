@@ -143,7 +143,6 @@ public class BuildTest {
      */
     private Item createAbilityItem(Status status, double value) {
         Ability ability = new Ability("Test Ability " + counter);
-        ability.update(Version.P0000).set(status, value);
 
         Item item = new EmptyItem();
         item.update(Version.P0000);
@@ -162,7 +161,6 @@ public class BuildTest {
      */
     private Item createUniqueAbilityItem(String unique, Status status, double value) {
         Ability ability = new Ability(unique);
-        ability.update(Version.P0000).set(status, value);
 
         Item item = new EmptyItem();
         item.update(Version.P0000);

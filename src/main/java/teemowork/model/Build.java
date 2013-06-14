@@ -79,7 +79,7 @@ public class Build extends Notifiable implements StatusCalculator {
 
         items[0] = Item.LastWhisper;
         // items[1] = Item.WarmogsArmor;
-        items[2] = Item.DeathfireGrasp;
+        items[2] = Item.GuinsoosRageblade;
         // items[3] = Item.ClothArmor;
     }
 
@@ -336,22 +336,21 @@ public class Build extends Notifiable implements StatusCalculator {
             Item item = items[i];
 
             if (item != null) {
-                ItemDescriptor itemStatus = item.getDescriptor(version);
+                ItemDescriptor itemDescriptor = item.getDescriptor(version);
 
                 // compute item status
-                sum = status.compute(sum, itemStatus.get(status));
+                sum = status.compute(sum, itemDescriptor.get(status));
 
-                // for (ItemAbility ability : itemStatus.abilities) {
-                // ItemAbilityStatus abilityDescriptor = ability.getStatus(version);
-                //
-                // if (abilityDescriptor.isUnique() && names.contains(ability.name)) {
-                // continue;
-                // }
-                // names.add(ability.name);
-                //
-                // // compute ability status
-                // sum = status.compute(sum, abilityDescriptor.get(status) * itemCounts[i]);
-                // }
+                for (Ability ability : itemDescriptor.getAbilities()) {
+                    AbilityDescriptor abilityDescriptor = ability.getDescriptor(version);
+
+                    if (abilityDescriptor.isUnique() && !names.add(ability.name)) {
+                        continue;
+                    }
+
+                    // compute ability status
+                    sum += sum(abilityDescriptor.getPassive(), status);
+                }
             }
         }
 
@@ -368,6 +367,32 @@ public class Build extends Notifiable implements StatusCalculator {
             // from active
             if (skillActivation[i]) {
                 sum += sum(skillStatus.getActive(), skill, status);
+            }
+        }
+        return sum;
+    }
+
+    /**
+     * <p>
+     * Compute sum value from the specified skill variables.
+     * </p>
+     * 
+     * @param tokens A descriptor tokens.
+     * @param skill A current processing skill.
+     * @param status A target status.
+     * @return A computed value.
+     */
+    private double sum(List tokens, Status status) {
+        double sum = 0;
+
+        for (Object token : tokens) {
+            if (token instanceof Variable) {
+                Variable variable = (Variable) token;
+                Status variableStatus = variable.getStatus();
+
+                if (variableStatus == status && !variable.isConditional()) {
+                    sum = variableStatus.compute(sum, variable.calculate(1, this));
+                }
             }
         }
         return sum;
