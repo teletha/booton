@@ -12,6 +12,7 @@ package jsx.bwt;
 import static js.lang.Global.*;
 import static jsx.bwt.UIAction.*;
 import js.util.jQuery;
+import jsx.bwt.view.PopupViewStyle;
 
 /**
  * @version 2012/12/11 14:39:54
@@ -79,7 +80,9 @@ public abstract class UI extends Publishable {
      */
     @Listen(MouseEnter)
     private void showTooltip() {
-        System.out.println("show");
+        tooltip.root.add(PopupViewStyle.Root.class);
+        root.css("position", "relative");
+        root.append(tooltip);
     }
 
     /**
@@ -89,7 +92,7 @@ public abstract class UI extends Publishable {
      */
     @Listen(MouseLeave)
     private void hideTooltip() {
-        System.out.println("hide");
+        tooltip.root.remove();
     }
 
     /**

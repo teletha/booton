@@ -18,11 +18,11 @@ import booton.css.Snippet;
  */
 public class PopupViewStyle {
 
-    class Root extends CSS {
+    public class Root extends CSS {
 
-        int IconSize = 35;
+        int IconSize = 40;
 
-        int Width = 220;
+        int Width = 280;
 
         int BorderWidth = 2;
 
@@ -32,7 +32,7 @@ public class PopupViewStyle {
 
         {
             display.block();
-            position.absolute().bottom(IconSize + 15, px).left(IconSize / 2 - Width / 2, px);
+            position.absolute().bottom(IconSize - 15, px).left(IconSize / 2 - Width / 2, px);
             box.width(Width, px).zIndex(100).shadow(0, px, 0, px, 7, px, color);
             background.image(linear(color.opacify(-0.25), color));
             border.radius(5, px).solid().width(BorderWidth, px).color(borderColor);

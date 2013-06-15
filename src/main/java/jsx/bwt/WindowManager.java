@@ -9,6 +9,7 @@
  */
 package jsx.bwt;
 
+import static jsx.bwt.UIAction.*;
 import js.util.jQuery;
 import kiss.Disposable;
 
@@ -17,6 +18,32 @@ import kiss.Disposable;
  */
 public class WindowManager {
 
+    /** The popup content. */
+    private final jQuery content;
+
+    /**
+     * 
+     */
+    private WindowManager(jQuery content) {
+        this.content = content;
+    }
+
+    @Listen(MouseEnter)
+    private void enter() {
+
+    }
+
+    @Listen(MouseLeave)
+    private void leave() {
+
+    }
+
+    public static void applyTooltip(jQuery target, jQuery content) {
+        if (target != null) {
+            target.bind(new WindowManager(content));
+        }
+    }
+
     /**
      * <p>
      * Show tooltip.
@@ -24,7 +51,7 @@ public class WindowManager {
      * 
      * @return
      */
-    public static Disposable showTooltip(jQuery content, jQuery target) {
+    public static Disposable showTooltip(jQuery target, jQuery content) {
         return null;
     }
 }

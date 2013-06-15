@@ -80,7 +80,7 @@ public class Build extends Notifiable implements StatusCalculator {
         items[0] = Item.LastWhisper;
         // items[1] = Item.WarmogsArmor;
         items[2] = Item.GuinsoosRageblade;
-        // items[3] = Item.ClothArmor;
+        items[3] = Item.TrinityForce;
     }
 
     /**
