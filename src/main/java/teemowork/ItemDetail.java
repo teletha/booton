@@ -44,6 +44,6 @@ public class ItemDetail extends Page {
      */
     @Override
     public void load(jQuery root) {
-        root.child(new ItemView(item, item.getDescriptor(Version.Latest)));
+        root.child(new ItemView(item, item.getDescriptor(Version.Latest), null));
     }
 }

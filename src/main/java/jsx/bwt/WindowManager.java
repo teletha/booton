@@ -9,8 +9,11 @@
  */
 package jsx.bwt;
 
+import static js.lang.Global.*;
 import static jsx.bwt.UIAction.*;
 import js.util.jQuery;
+import js.util.jQuery.Offset;
+import jsx.bwt.view.PopupViewStyle;
 import kiss.Disposable;
 
 /**
@@ -18,29 +21,47 @@ import kiss.Disposable;
  */
 public class WindowManager {
 
+    /** The popup area. */
+    private static jQuery popup;
+
+    /** The popup target. */
+    private final jQuery target;
+
     /** The popup content. */
     private final jQuery content;
 
     /**
      * 
      */
-    private WindowManager(jQuery content) {
+    private WindowManager(jQuery target, jQuery content) {
+        if (popup == null) {
+            popup = $("<div>").add(PopupViewStyle.Bottom.class);
+            $("body").append(popup);
+        }
+
+        this.target = target;
         this.content = content;
     }
 
     @Listen(MouseEnter)
     private void enter() {
+        popup.append(content);
+        popup.add(PopupViewStyle.Show.class);
 
+        Offset offset = target.position();
+        popup.css("top", offset.top + target.outerHeight() + 15 + "px")
+                .css("left", offset.left - popup.outerWidth() / 2 + target.outerWidth() / 2 + "px");
     }
 
     @Listen(MouseLeave)
     private void leave() {
-
+        popup.remove(PopupViewStyle.Show.class);
+        content.remove();
     }
 
     public static void applyTooltip(jQuery target, jQuery content) {
-        if (target != null) {
-            target.bind(new WindowManager(content));
+        if (target != null && content != null) {
+            target.bind(new WindowManager(target, content));
         }
     }
 

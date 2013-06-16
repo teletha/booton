@@ -42,6 +42,7 @@ public class ItemViewStyle {
         {
             display.flex();
             flexDirection.column();
+            margin.right(1.2, em);
         }
     }
 
@@ -63,7 +64,7 @@ public class ItemViewStyle {
      * @version 2013/06/13 13:57:38
      */
     static class Materials extends CSS {
-    
+
         {
             display.blockLine();
             box.width(IconSize, px);
@@ -74,14 +75,14 @@ public class ItemViewStyle {
      * @version 2013/06/13 13:57:38
      */
     static class Material extends CSS {
-    
+
         {
             display.block();
             cursor.pointer();
             box.size(22, px).opacity(0.7);
             border.radius(3, px).color(50, 50, 50).width(1, px).solid();
             transition.property.all().timing.easeInOut().duration(0.3, s);
-    
+
             while (hover()) {
                 box.opacity(1);
             }
@@ -97,7 +98,6 @@ public class ItemViewStyle {
             display.flex();
             text.verticalAlign.top();
             flexDirection.column();
-            margin.left(IconSize / 5, px);
         }
     }
 
@@ -164,6 +164,7 @@ public class ItemViewStyle {
         {
             display.block();
             font.size.smaller();
+            margin.top(0.4, em);
         }
     }
 

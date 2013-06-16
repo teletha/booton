@@ -4319,7 +4319,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(16, -2)
                 .range(125);
         Consume.update(P307)
-                .active("対象の敵MinionかPet及びモンスター1体に{1}を与え、{2}する。特定のモンスターを対象とした場合{3}間、以下の追加効果を得る。<br>ゴーレム : {4}を得て{5}する。<br>リザード : 通常攻撃かスキルでダメージを与えると、{6}を与える。<br>レイス/ウルフ : 3秒間{7}する。")
+                .active("対象の敵MinionかPet及びモンスター1体に{1}を与え、{2}する。特定のモンスターを対象とした場合{3}間、以下の追加効果を得る。<br>ゴーレム : {4}を得て{5}する。<br>リザード : 通常攻撃かスキルでダメージを与えると、{6}を与える。<br>レイス/ウルフ : 敵ユニットを倒すと3秒間{7}する。")
                 .variable(3, Time, 120, 30)
                 .variable(4, Health, 0, 0, amplify(Health, 0.1))
                 .variable(5, Grow)

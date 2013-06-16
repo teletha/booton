@@ -126,17 +126,6 @@ public class Variable {
 
     private Set set = new HashSet();
 
-    /**
-     * <p>
-     * Calculate value by using the specified calculator.
-     * </p>
-     * 
-     * @param level A level.
-     * @return A calculated value.
-     */
-    public double calculate(int level) {
-        return calculate(level, null);
-    }
 
     /**
      * <p>

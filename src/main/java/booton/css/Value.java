@@ -23,6 +23,9 @@ public class Value {
     /** The unit. */
     public final Unit unit;
 
+    /** The expression. */
+    private String expression;
+
     /**
      * Zero size.
      */
@@ -38,6 +41,15 @@ public class Value {
     public Value(double size, Unit unit) {
         this.size = size;
         this.unit = unit;
+    }
+
+    /**
+     * @param expression
+     */
+    private Value(String expression) {
+        this.expression = expression;
+        this.size = 0;
+        this.unit = null;
     }
 
     /**
@@ -61,7 +73,11 @@ public class Value {
      * @return
      */
     public Value add(Value value) {
-        return new Value(size + value.size, unit);
+        if (unit != null && unit == value.unit) {
+            return new Value(size + value.size, unit);
+        } else {
+            return new Value(toExpression() + " + " + value.toExpression());
+        }
     }
 
     /**
@@ -85,7 +101,11 @@ public class Value {
      * @return
      */
     public Value subtract(Value value) {
-        return new Value(size - value.size, unit);
+        if (unit != null && unit == value.unit) {
+            return new Value(size - value.size, unit);
+        } else {
+            return new Value(toExpression() + " - " + value.toExpression());
+        }
     }
 
     /**
@@ -109,7 +129,11 @@ public class Value {
      * @return
      */
     public Value multiply(Value value) {
-        return new Value(size * value.size, unit);
+        if (unit != null && unit == value.unit) {
+            return new Value(size * value.size, unit);
+        } else {
+            return new Value(toExpression() + " * " + value.toExpression());
+        }
     }
 
     /**
@@ -133,7 +157,11 @@ public class Value {
      * @return
      */
     public Value divide(Value value) {
-        return new Value(size / value.size, unit);
+        if (unit != null && unit == value.unit) {
+            return new Value(size / value.size, unit);
+        } else {
+            return new Value(toExpression() + " / " + value.toExpression());
+        }
     }
 
     /**
@@ -143,7 +171,18 @@ public class Value {
      * @return
      */
     public Value opposite() {
-        return new Value(size * -1, unit);
+        return multiply(new Value(-1, unit));
+    }
+
+    /**
+     * @return
+     */
+    private String toExpression() {
+        if (expression == null) {
+            return toString();
+        } else {
+            return expression;
+        }
     }
 
     /**
@@ -151,6 +190,10 @@ public class Value {
      */
     @Override
     public String toString() {
+        if (unit == null) {
+            return "calc(" + expression + ")";
+        }
+
         int i = (int) size;
 
         if (size == 0) {

@@ -78,9 +78,10 @@ public class Build extends Notifiable implements StatusCalculator {
         }
 
         items[0] = Item.LastWhisper;
-        // items[1] = Item.WarmogsArmor;
+        items[1] = Item.LichBane;
         items[2] = Item.GuinsoosRageblade;
         items[3] = Item.TrinityForce;
+        items[4] = Item.RabadonsDeathcap;
     }
 
     /**
@@ -150,6 +151,9 @@ public class Build extends Notifiable implements StatusCalculator {
         // }
 
         switch (status) {
+        case BaseAD:
+            return new Computed(0, get(AD).base, status);
+
         case Lv:
             return new Computed(level, level, Lv);
 
@@ -349,7 +353,7 @@ public class Build extends Notifiable implements StatusCalculator {
                     }
 
                     // compute ability status
-                    sum += sum(abilityDescriptor.getPassive(), status);
+                    sum = status.compute(sum, sum(abilityDescriptor.getPassive(), status));
                 }
             }
         }
@@ -362,11 +366,11 @@ public class Build extends Notifiable implements StatusCalculator {
             SkillDescriptor skillStatus = skill.getDescriptor(version);
 
             // form passive
-            sum += sum(skillStatus.getPassive(), skill, status);
+            sum = status.compute(sum, sum(skillStatus.getPassive(), skill, status));
 
             // from active
             if (skillActivation[i]) {
-                sum += sum(skillStatus.getActive(), skill, status);
+                sum = status.compute(sum, sum(skillStatus.getActive(), skill, status));
             }
         }
         return sum;

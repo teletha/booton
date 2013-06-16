@@ -27,6 +27,53 @@ public class Snippet {
      * 
      * @param bubbleHeight
      */
+    public static final void createTopBubble(int bubbleHeight) {
+        CSS css = CSS.current;
+
+        Value borderWidth = css.border.width();
+        Color borderColor = css.border.color();
+        Color boxBackColor = css.background.color();
+
+        if (!css.position.isAbsolute() && !css.position.isRelative()) {
+            css.position.relative();
+        }
+
+        Value width = borderWidth.add(bubbleHeight);
+
+        // write bubble border color
+        while (css.before()) {
+            css.display.block();
+            css.box.size(0, px);
+            css.content.text("");
+            css.position.absolute().left(50, percent).bottom(100, percent);
+            css.margin.left(width.opposite());
+            css.border.solid().color.transparent().width(width);
+            css.borderBottom.color(borderColor);
+        }
+
+        // write bubble background color
+        if (borderWidth.size != 0) {
+            width = width.subtract(borderWidth.multiply(1.5));
+
+            while (css.after()) {
+                css.display.block();
+                css.box.size(0, px);
+                css.content.text("");
+                css.position.absolute().left(50, percent).bottom(100, percent);
+                css.margin.left(width.opposite());
+                css.border.solid().color.transparent().width(width);
+                css.borderBottom.color(boxBackColor.opacify(1));
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Apply bubble border box style.
+     * </p>
+     * 
+     * @param bubbleHeight
+     */
     public static final void createBottomBubble(int bubbleHeight) {
         CSS css = CSS.current;
 
