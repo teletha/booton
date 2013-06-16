@@ -35,6 +35,7 @@ import teemowork.model.DescriptionView;
 import teemowork.model.Item;
 import teemowork.model.ItemDescriptor;
 import teemowork.model.Status;
+import teemowork.model.StatusCalculator;
 import teemowork.model.Version;
 
 /**
@@ -45,10 +46,14 @@ public class ItemView extends UI {
     private static final Status[] VISIBLE = {Health, Hreg, Mana, Mreg, AD, ASRatio, ARPen, LS, Critical, AP, CDR, SV,
             MRPen, AR, MR, MSRatio};
 
+    /** The status calculator. */
+    private final StatusCalculator calculator;
+
     /**
      * @param item
      */
-    public ItemView(Item item, ItemDescriptor itemDescriptor) {
+    public ItemView(Item item, ItemDescriptor itemDescriptor, StatusCalculator calculator) {
+        this.calculator = calculator;
         root.add(Root.class);
 
         // Icon Area
@@ -108,7 +113,7 @@ public class ItemView extends UI {
             if (ability.visible) {
                 element.child(UniqueAbility.class).text("[" + ability.name + "]");
             }
-            new AbilityDescriptionView(element, ability, abilityDescriptor.isActive()).receive();
+            new AbilityDescriptionView(element, ability, calculator, abilityDescriptor.isActive()).receive();
         }
     }
 
@@ -121,8 +126,8 @@ public class ItemView extends UI {
          * @param root
          * @param describable
          */
-        private AbilityDescriptionView(jQuery root, Describable describable, boolean active) {
-            super(root, describable, !active);
+        private AbilityDescriptionView(jQuery root, Describable describable, StatusCalculator calculator, boolean active) {
+            super(root, describable, calculator, !active);
         }
 
         /**
@@ -130,7 +135,7 @@ public class ItemView extends UI {
          */
         @Override
         protected int getLevel() {
-            return 0;
+            return calculator == null ? 0 : 1;
         }
 
         /**

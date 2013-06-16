@@ -603,7 +603,10 @@ public class ChampionDetail extends Page {
             if (item != null) {
                 item.applyIcon(icon);
 
-                setTooltip(new ItemView(item, item.getDescriptor(Version.Latest)));
+                ItemView view = new ItemView(item, item.getDescriptor(Version.Latest), build);
+                view.root.css("max-width", "350px");
+
+                setTooltip(view);
             }
         }
     }

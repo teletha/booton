@@ -327,7 +327,7 @@ public class MasteryBuilder extends Page implements Subscriber {
              * @param describable
              */
             private MasteryDescriptionView(jQuery root, Describable describable) {
-                super(root, describable, true);
+                super(root, describable, null, true);
             }
 
             /**

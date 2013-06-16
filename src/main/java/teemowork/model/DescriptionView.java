@@ -29,13 +29,16 @@ import teemowork.model.variable.VariableResolver;
 public abstract class DescriptionView implements Subscriber {
 
     /** The passive element. */
-    private final jQuery description;
+    protected final jQuery description;
 
     /** The target descriptor to view. */
-    private final Describable describable;
+    protected final Describable describable;
+
+    /** The calculator. */
+    protected final StatusCalculator calculator;
 
     /** The target type. */
-    private final boolean forPassive;
+    protected final boolean forPassive;
 
     /**
      * <p>
@@ -44,9 +47,10 @@ public abstract class DescriptionView implements Subscriber {
      * 
      * @param root
      */
-    public DescriptionView(jQuery root, Describable describable, boolean forPassive) {
+    protected DescriptionView(jQuery root, Describable describable, StatusCalculator calculator, boolean forPassive) {
         this.description = root.child(Passive.class);
         this.describable = describable;
+        this.calculator = calculator;
         this.forPassive = forPassive;
     }
 
@@ -104,7 +108,7 @@ public abstract class DescriptionView implements Subscriber {
         List<Variable> amplifiers = variable.getAmplifiers();
 
         // compute current value
-        root.child(ComputedValue.class).text(status.format(variable.calculate(Math.max(1, level))));
+        root.child(ComputedValue.class).text(status.format(variable.calculate(Math.max(1, level), calculator)));
 
         // All values
         int size = resolver.estimateSize();
@@ -146,7 +150,8 @@ public abstract class DescriptionView implements Subscriber {
             int size = amplifier.getResolver().estimateSize();
 
             for (int i = 1; i <= size; i++) {
-                jQuery value = element.child(Value.class).text(Mathematics.round(amplifier.calculate(i), 4));
+                jQuery value = element.child(Value.class)
+                        .text(Mathematics.round(amplifier.calculate(i, calculator), 4));
 
                 if (size != 1 && i == level) {
                     value.add(Current.class);

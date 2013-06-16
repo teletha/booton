@@ -101,7 +101,7 @@ public class Transition extends CSSProperty<Transition> {
      * @return Chainable API.
      */
     public Transition property(String id) {
-        return property.chain("id");
+        return property.chain(id);
     }
 
     /**
