@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @version 2013/04/06 21:32:17
+ * @version 2013/06/17 14:09:34
  */
 public abstract class Publishable {
 
@@ -34,22 +34,51 @@ public abstract class Publishable {
      * </p>
      */
     public void bind(Object subscriber) {
-        for (Class type : getTypes(subscriber.getClass())) {
-            Class[] interfaces = type.getInterfaces();
+        if (subscriber != null) {
+            for (Class type : getTypes(subscriber.getClass())) {
+                Class[] interfaces = type.getInterfaces();
 
-            for (Class interfaceType : interfaces) {
-                if (interfaceType == EventListener.class) {
-                    if (subscribers == null) {
-                        subscribers = new HashMap();
+                for (Class interfaceType : interfaces) {
+                    if (interfaceType == EventListener.class) {
+                        if (subscribers == null) {
+                            subscribers = new HashMap();
+                        }
+                        Subscribers list = subscribers.get(type);
+
+                        if (list == null) {
+                            list = new Subscribers();
+                            subscribers.put(type, list);
+                        }
+
+                        list.add(subscriber);
                     }
-                    Subscribers list = subscribers.get(type);
+                }
+            }
+        }
+    }
 
-                    if (list == null) {
-                        list = new Subscribers();
-                        subscribers.put(type, list);
+    /**
+     * <p>
+     * Unregister event listener.
+     * </p>
+     */
+    public void unbind(Object subscriber) {
+        if (subscriber != null && subscribers != null) {
+            for (Class type : getTypes(subscriber.getClass())) {
+                Class[] interfaces = type.getInterfaces();
+
+                for (Class interfaceType : interfaces) {
+                    if (interfaceType == EventListener.class) {
+                        Subscribers list = subscribers.get(type);
+
+                        if (list != null) {
+                            list.remove(subscriber);
+
+                            if (list.subscribers.isEmpty()) {
+                                subscribers.remove(type);
+                            }
+                        }
                     }
-
-                    list.add(subscriber);
                 }
             }
         }
@@ -103,7 +132,7 @@ public abstract class Publishable {
     }
 
     /**
-     * @version 2013/04/06 19:48:48
+     * @version 2013/06/17 14:07:04
      */
     private static class Subscribers implements InvocationHandler {
 
@@ -115,11 +144,24 @@ public abstract class Publishable {
          * Register as listener.
          * </p>
          * 
-         * @param subscriber
+         * @param subscriber A listener to add.
          */
         private void add(Object subscriber) {
             if (subscriber != null && !subscribers.contains(subscriber)) {
                 subscribers.add(subscriber);
+            }
+        }
+
+        /**
+         * <p>
+         * Unregister from listeners.
+         * </p>
+         * 
+         * @param subscriber A listener to remove.
+         */
+        private void remove(Object subscriber) {
+            if (subscriber != null) {
+                subscribers.remove(subscriber);
             }
         }
 

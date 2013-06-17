@@ -13,13 +13,16 @@ import static js.lang.Global.*;
 import static jsx.bwt.UIAction.*;
 import js.util.jQuery;
 import js.util.jQuery.Offset;
+import jsx.application.Application;
+import jsx.application.PageListener;
+import jsx.application.PageUnload;
 import jsx.bwt.view.PopupViewStyle;
 import kiss.Disposable;
 
 /**
  * @version 2013/06/12 9:11:13
  */
-public class WindowManager {
+public class WindowManager implements PageListener {
 
     /** The popup area. */
     private static jQuery popup;
@@ -51,12 +54,28 @@ public class WindowManager {
         Offset offset = target.position();
         popup.css("top", offset.top + target.outerHeight() + 15 + "px")
                 .css("left", offset.left - popup.outerWidth() / 2 + target.outerWidth() / 2 + "px");
+
+        Application.bind(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void load() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Subscribe
     @Listen(MouseLeave)
-    private void leave() {
+    public void unload(PageUnload event) {
         popup.remove(PopupViewStyle.Show.class);
         content.remove();
+
+        Application.unbind(this);
     }
 
     public static void applyTooltip(jQuery target, jQuery content) {

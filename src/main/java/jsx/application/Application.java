@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 import js.lang.Classes;
 import js.util.jQuery;
 import js.util.jQuery.Listener;
+import jsx.bwt.Publishable;
 import jsx.bwt.UIEvent;
 
 /**
@@ -92,9 +93,27 @@ public abstract class Application {
     }
 
     /**
-     * @version 2013/01/10 12:15:45
+     * <p>
+     * Register event listener.
+     * </p>
      */
-    private static class Router implements Listener {
+    public static void bind(PageListener subscriber) {
+        router.bind(subscriber);
+    }
+
+    /**
+     * <p>
+     * Register event listener.
+     * </p>
+     */
+    public static void unbind(PageListener subscriber) {
+        router.unbind(subscriber);
+    }
+
+    /**
+     * @version 2013/06/17 13:57:06
+     */
+    private static class Router extends Publishable implements Listener {
 
         /** The current page. */
         private static Page current;
@@ -156,6 +175,14 @@ public abstract class Application {
          * @param pageId
          */
         private void dispatch(Page page) {
+            // fire page unload event
+            if (page != null) {
+                publish(PageListener.class).unload();
+            }
+
+            // fire page load event
+            publish(PageListener.class).load();
+
             // create element cradle
             jQuery cradle = $(document.createDocumentFragment());
 
