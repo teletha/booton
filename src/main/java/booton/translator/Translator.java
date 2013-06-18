@@ -1,0 +1,373 @@
+/*
+ * Copyright (C) 2013 Nameless Production Committee
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *          http://opensource.org/licenses/mit-license.php
+ */
+package booton.translator;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.List;
+
+import kiss.Extensible;
+import kiss.Manageable;
+import kiss.Singleton;
+import kiss.model.ClassUtil;
+
+import org.objectweb.asm.Type;
+
+/**
+ * <p>
+ * Public {@link Translator} API.
+ * </p>
+ * 
+ * @version 2013/05/01 19:40:37
+ */
+@Manageable(lifestyle = Singleton.class)
+public class Translator<T> implements Extensible {
+
+    /** The quote literal. */
+    protected static final String Q = "\"";
+
+    /** The current processing method expression. */
+    protected String that;
+
+    /** The current processing method context stack. */
+    private List<Operand> context;
+
+    /** The current processing method paramter types. */
+    private Class[] types;
+
+    /**
+     * <p>
+     * Translate a constructor invocation to javascript expression.
+     * </p>
+     * 
+     * @param owner A constructor owner.
+     * @param description A constructor description.
+     * @param types A constructor parameter types.
+     * @param context A operand stacks.
+     * @return A translated expression.
+     */
+    String translateConstructor(Class owner, String description, Class[] types, List<Operand> context) {
+        return search(owner.getSimpleName(), types).write(context);
+    }
+
+    /**
+     * <p>
+     * Translate a method invocation to javascript expression.
+     * </p>
+     * 
+     * @param owner A method owner.
+     * @param name A method name.
+     * @param description A method description.
+     * @param types A method parameter types.
+     * @param context A operand stacks.
+     * @return A translated expression.
+     */
+    String translateMethod(Class owner, String name, String description, Class[] types, List<Operand> context) {
+        if (name.equals("equals") && description.equals("(Ljava/lang/Object;)Z")) {
+            return context.get(0) + ".equals(" + context.get(1) + ")";
+        }
+
+        if (name.equals("hashCode") && description.equals("()I")) {
+            return context.get(0) + ".hashCode()";
+        }
+        return search(name, types).write(context);
+    }
+
+    /**
+     * <p>
+     * Translate a static method invocation to javascript expression.
+     * </p>
+     * 
+     * @param owner A method owner.
+     * @param name A method name.
+     * @param description A method description.
+     * @param types A method parameter types.
+     * @param context A operand stacks.
+     * @return A translated expression.
+     */
+    String translateStaticMethod(Class owner, String name, String description, Class[] types, List<Operand> context) {
+        return search(name, types).write(context);
+    }
+
+    /**
+     * <p>
+     * Translate a super method invocation to javascript expression.
+     * </p>
+     * 
+     * @param owner A method owner.
+     * @param name A method name.
+     * @param description A method description.
+     * @param types A method parameter types.
+     * @param context A operand stacks.
+     * @return A translated expression.
+     */
+    String translateSuperMethod(Class owner, String name, String description, Class[] types, List<Operand> context) {
+        return search(owner.getSimpleName(), types).write(context);
+    }
+
+    /**
+     * <p>
+     * Translate a field access invocation.
+     * </p>
+     * 
+     * @param ownerClass A field owner.
+     * @param name A field name.
+     * @param context A operand stack.
+     * @return A translated expression.
+     */
+    Object translateField(Class ownerClass, String name, Operand context) {
+        return context + "." + Javascript.computeFieldName(ownerClass, name);
+    }
+
+    /**
+     * <p>
+     * Translate a static field access invocation.
+     * </p>
+     * 
+     * @param ownerClass A field owner.
+     * @param name A field name.
+     * @return A translated expression.
+     */
+    String translateStaticField(Class owner, String name) {
+        return writeFieldAccess(name);
+    }
+
+    /**
+     * <p>
+     * Translate the specified field invocation.
+     * </p>
+     * 
+     * @param fieldName
+     * @return
+     */
+    private String writeFieldAccess(String fieldName) {
+        try {
+            Field field = getClass().getDeclaredField(fieldName);
+
+            if (field.isSynthetic() || field.getType() != String.class) {
+                throw new Error();
+            }
+
+            field.setAccessible(true);
+
+            return (String) field.get(this);
+        } catch (Exception e) {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error(e);
+        }
+    }
+
+    /**
+     * <p>
+     * Search translator method's existence.
+     * </p>
+     * 
+     * @param methodName A method name.
+     * @param parameterTypes A method parameters.
+     * @return A result.
+     */
+    private Writer search(String methodName, Class[] parameterTypes) {
+        Class translator = getClass();
+
+        if (translator == Translator.class) {
+            return null; // use generic translator
+        }
+
+        try {
+            Method method = getClass().getMethod(methodName, parameterTypes);
+
+            // ===============================
+            // Validation
+            // ===============================
+            // if (method.isBridge() || method.isSynthetic()) {
+            // TranslationError error = new TranslationError();
+            // System.out.println(method.isBridge());
+            // error.write("Translation method is system defined. [", translator.getName(), "]");
+            // error.writeMethod(method);
+            //
+            // throw error;
+            // }
+
+            if (!Modifier.isPublic(method.getModifiers())) {
+                TranslationError error = new TranslationError();
+                error.write("Translation method must be public. [", translator.getName(), "]");
+                error.writeMethod(method);
+
+                throw error;
+            }
+
+            if (method.getReturnType() != String.class) {
+                TranslationError error = new TranslationError();
+                error.write("Translation method must return String type. [", translator.getName(), "]");
+                error.writeMethod(method);
+
+                throw error;
+            }
+
+            // make accesible
+            method.setAccessible(true);
+
+            return new Writer(this, method);
+        } catch (NoSuchMethodException e) {
+            Class clazz = ClassUtil.getParameter(getClass(), Translator.class)[0].getSuperclass();
+
+            if (clazz != null && clazz != Object.class) {
+                Translator parentTranslator = TranslatorManager.getTranslator(clazz);
+
+                if (parameterTypes != null) {
+                    return parentTranslator.search(methodName, parameterTypes);
+                }
+            }
+
+            TranslationError error = new TranslationError();
+            error.write("You must define a translator method at ", translator.getName(), ".");
+            error.writeMethod(Modifier.PUBLIC, methodName, String.class, parameterTypes);
+
+            throw error;
+        } catch (Exception e) {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error(e);
+        }
+    }
+
+    /**
+     * Helper method to write the specified parameter as expression.
+     * 
+     * @param index
+     * @return
+     */
+    protected final String param(int index) {
+        return getOperand(index).toString();
+    }
+
+    /**
+     * Helper method to write the specified parameter as Regular Expression literal.
+     * 
+     * @param index
+     * @return
+     */
+    protected final String regex(int index) {
+        return regex(index, null);
+    }
+
+    /**
+     * Helper method to write the specified parameter as Regular Expression literal.
+     * 
+     * @param index
+     * @return
+     */
+    protected final String regex(int index, String options) {
+        // normalize options expression
+        if (options == null) {
+            options = "";
+        }
+
+        Operand regex = getOperand(index);
+
+        if (regex instanceof OperandString) {
+            return "/" + ((OperandString) regex).expression + "/" + options;
+        } else {
+            return "new RegExp(" + regex + ",\"" + options + "\")";
+        }
+    }
+
+    /**
+     * Helper method to write the specified parameter as expression.
+     * 
+     * @param index
+     * @return
+     */
+    private Operand getOperand(int index) {
+        return context.get(index + 1).cast(types[index]);
+    }
+
+    /**
+     * @version 2013/05/01 19:27:20
+     */
+    private static class Writer {
+
+        /** The code translator. */
+        private final Translator translator;
+
+        /** The code translation method. */
+        private final Method method;
+
+        /**
+         * @param translator
+         * @param method
+         */
+        private Writer(Translator translator, Method method) {
+            this.translator = translator;
+            this.method = method;
+        }
+
+        /**
+         * <p>
+         * Translate the specified method invocation (include constructor call) to the user defined
+         * javascript expression. If the suitable translation method is not found,
+         * {@link NoSuchMethodException} will be thrown.
+         * </p>
+         * 
+         * @param methodName A method name that byte code want to invoke.
+         * @param types A prameter types of the specified method.
+         * @param context A current processing operands for the specified method.
+         * @return A javascript expression.
+         */
+        private String write(List<Operand> context) {
+            // translate special method invocation
+            translator.types = method.getParameterTypes();
+            translator.context = context;
+            translator.that = context.get(0).toString();
+
+            // build dummy parameters
+            Object[] dummy = new Object[translator.types.length];
+
+            for (int i = 0; i < dummy.length; i++) {
+                switch (Type.getType(translator.types[i]).getSort()) {
+                case Type.CHAR:
+                    dummy[i] = ' ';
+                    break;
+
+                case Type.INT:
+                case Type.LONG:
+                case Type.FLOAT:
+                case Type.DOUBLE:
+                case Type.SHORT:
+                case Type.BYTE:
+                    dummy[i] = 0;
+                    break;
+
+                case Type.BOOLEAN:
+                    dummy[i] = true;
+                    break;
+
+                default:
+                    dummy[i] = null;
+                }
+            }
+
+            try {
+                return (String) method.invoke(translator, dummy);
+            } catch (Exception e) {
+                // If this exception will be thrown, it is bug of this program. So we must rethrow
+                // the wrapped error in here.
+                throw new Error(e);
+            } finally {
+                // clear context data
+                translator.types = null;
+                translator.context = null;
+                translator.that = null;
+            }
+        }
+    }
+}
