@@ -15,7 +15,6 @@ import js.util.jQuery;
 import js.util.jQuery.Offset;
 import jsx.application.Application;
 import jsx.application.PageListener;
-import jsx.application.PageUnload;
 import jsx.bwt.view.PopupViewStyle;
 import kiss.Disposable;
 
@@ -46,7 +45,7 @@ public class WindowManager implements PageListener {
         this.content = content;
     }
 
-    @Listen(MouseEnter)
+    @Listen(ui = MouseEnter)
     private void enter() {
         popup.append(content);
         popup.add(PopupViewStyle.Show.class);
@@ -70,8 +69,8 @@ public class WindowManager implements PageListener {
      */
     @Override
     @Subscribe
-    @Listen(MouseLeave)
-    public void unload(PageUnload event) {
+    @Listen(ui = MouseLeave)
+    public void unload() {
         popup.remove(PopupViewStyle.Show.class);
         content.remove();
 

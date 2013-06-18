@@ -126,7 +126,7 @@ public class ScrollableListView extends UI {
      * Render all list items.
      * </p>
      */
-    @Listen(value = UIAction.Scroll, debounce = 100)
+    @Listen(ui = UIAction.Scroll, debounce = 100)
     private void render() {
         int viewableTopIndex = Math.round(-renderableItemView.position().top / itemHeight);
         int renderableTopIndex = Math.max(0, viewableTopIndex - extraTopRenderableItemSize);

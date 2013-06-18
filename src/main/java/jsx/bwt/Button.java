@@ -41,6 +41,26 @@ public class Button extends FormUI<Button> {
         form.add(Icons.class).attr("icon", icon.code);
     }
 
+    /**
+     * @param label
+     */
+    public Button(Icon icon, Object subscriber) {
+        this("", subscriber);
+
+        form.add(Icons.class).attr("icon", icon.code);
+    }
+
+    /**
+     * @param label
+     */
+    public Button(String label, Object subscriber) {
+        super("span");
+
+        form.add(ButtonForm.class).text(label).bind(subscriber);
+
+        this.label = label;
+    }
+
     public void label(String label) {
         form.text(label);
     }

@@ -11,7 +11,6 @@ package jsx.bwt;
 
 import static js.lang.Global.*;
 import js.util.jQuery;
-import js.util.jQuery.Listener;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.SelectStyle.SelectArrow;
 import jsx.bwt.SelectStyle.SelectForm;
@@ -19,8 +18,8 @@ import jsx.bwt.SelectStyle.SelectItem;
 import jsx.bwt.SelectStyle.SelectItemList;
 import jsx.bwt.SelectStyle.SelectedItem;
 import jsx.bwt.view.ScrollableListView;
-import jsx.bwt.view.SlidableView;
 import jsx.bwt.view.ScrollableListView.ItemRenderer;
+import jsx.bwt.view.SlidableView;
 import jsx.model.SelectableListener;
 import jsx.model.SelectableModel;
 
@@ -67,39 +66,33 @@ public class Select<M> extends FormUI<Select> {
         view = new ScrollableListView(10, 28).provide(binder);
         view.root.add(SelectItemList.class).bind(binder);
 
-        arrow = root.child(new Button(Icon.BottomArrow, new Listener() {
-
-            @Override
-            public void handler(UIEvent event) {
-                options.toggle();
-            }
-        }));
-        arrow.root.add(SelectArrow.class);
-
         options = root.child(new SlidableView(view));
         options.bind(binder);
+
+        arrow = root.child(new Button(Icon.BottomArrow, options));
+        arrow.root.add(SelectArrow.class);
 
         if (model.size() == 0) {
             disable();
         }
     }
 
-    @Listen(UIAction.Key_Up)
+    @Listen(ui = UIAction.Key_Up)
     private void selectPrevious() {
         model.selectPrevious();
     }
 
-    @Listen(UIAction.Key_Down)
+    @Listen(ui = UIAction.Key_Down)
     private void selectNext() {
         model.selectNext();
     }
 
-    @Listen(UIAction.Focus)
+    @Listen(ui = UIAction.Focus)
     private void startInput() {
         root.add(Focus.class);
     }
 
-    @Listen(UIAction.Blur)
+    @Listen(ui = UIAction.Blur)
     private void endInput() {
         root.remove(Focus.class);
     }
@@ -109,7 +102,7 @@ public class Select<M> extends FormUI<Select> {
      */
     private class Binder implements ItemRenderer, SelectableListener<M> {
 
-        @Listen(UIAction.Click)
+        @Listen(ui = UIAction.Click)
         private void selectItem(UIEvent event) {
             model.setSelectionIndex(Integer.parseInt($(event.target).attr("index")));
         }

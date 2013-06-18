@@ -81,7 +81,7 @@ public abstract class UI extends Publishable {
      * Show tooltip.
      * </p>
      */
-    @Listen(MouseEnter)
+    @Listen(ui = MouseEnter)
     private void showTooltip() {
         tooltip.root.add(PopupViewStyle.Bottom.class);
 
@@ -96,7 +96,7 @@ public abstract class UI extends Publishable {
      * Hide tooltip.
      * </p>
      */
-    @Listen(MouseLeave)
+    @Listen(ui = MouseLeave)
     private void hideTooltip() {
         tooltip.root.remove();
     }

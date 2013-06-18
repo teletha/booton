@@ -91,7 +91,7 @@ public class SlidableView extends UI {
      * Toggle slide view.
      * </p>
      */
-    @Listen(UIAction.Click)
+    @Listen(ui = UIAction.Click)
     public void toggle() {
         if (2 <= shown) {
             close();

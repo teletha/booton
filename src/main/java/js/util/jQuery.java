@@ -355,7 +355,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
                         listener = new Debounce(time, listener);
                     }
 
-                    for (final UIAction type : listen.value()) {
+                    for (final UIAction type : listen.ui()) {
                         // ===========================
                         // KeyCode Wrapper
                         // ===========================
@@ -1395,7 +1395,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
                 Listen annotation = method.getAnnotation(Listen.class);
 
                 if (annotation != null) {
-                    for (UIAction type : annotation.value()) {
+                    for (UIAction type : annotation.ui()) {
                         off(type.name + namespace);
                     }
                 }

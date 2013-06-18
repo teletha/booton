@@ -87,12 +87,12 @@ public class FormUI<T extends FormUI> extends UI {
         return (T) this;
     }
 
-    @Listen(UIAction.Focus)
+    @Listen(ui = UIAction.Focus)
     private void startInput() {
         root.add(Focus.class);
     }
 
-    @Listen(UIAction.Blur)
+    @Listen(ui = UIAction.Blur)
     private void endInput() {
         root.remove(Focus.class);
     }
