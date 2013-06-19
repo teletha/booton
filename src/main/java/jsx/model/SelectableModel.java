@@ -79,7 +79,8 @@ public class SelectableModel<T> extends Publishable implements Iterable<T> {
         }
 
         if (index != -1) {
-            publish(SelectableListener.class).select(index, items.get(index));
+            // publish(SelectableListener.class).select(index, items.get(index));
+            publish(new Select(index, items.get(index)));
         }
     }
 
@@ -302,5 +303,26 @@ public class SelectableModel<T> extends Publishable implements Iterable<T> {
     @Override
     public final Iterator<T> iterator() {
         return items.iterator();
+    }
+
+    /**
+     * @version 2013/06/19 14:06:38
+     */
+    public static class Select<T> {
+
+        /** The item index. */
+        public final int index;
+
+        /** The selected item. */
+        public final T item;
+
+        /**
+         * @param index
+         * @param item
+         */
+        private Select(int index, T item) {
+            this.index = index;
+            this.item = item;
+        }
     }
 }

@@ -18,7 +18,7 @@ import js.util.jQuery.Listener;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Button;
-import jsx.bwt.Select;
+import jsx.bwt.Selection;
 import jsx.bwt.UIEvent;
 import jsx.model.SelectableListener;
 import jsx.model.SelectableModel;
@@ -88,7 +88,7 @@ public class MasteryBuilder extends Page implements Subscriber {
 
     private jQuery name;
 
-    private Select<MasterySet> menu;
+    private Selection<MasterySet> menu;
 
     @PageInfo(path = "Mastery")
     public MasteryBuilder() {
@@ -114,8 +114,9 @@ public class MasteryBuilder extends Page implements Subscriber {
         System.out.println(set);
 
         jQuery infomation = root.child(Information.class);
-        menu = infomation.child(new Select(set));
+        menu = infomation.child(new Selection(set));
         menu.model.bind(new MasterySelector());
+        menu.model.register(this);
 
         reset = infomation.child(new Button("30", new Listener() {
 

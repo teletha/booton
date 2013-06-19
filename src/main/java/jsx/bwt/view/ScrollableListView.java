@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import js.util.jQuery;
-import jsx.bwt.Listen;
+import jsx.bwt.ListenUI;
 import jsx.bwt.UI;
 import jsx.bwt.UIAction;
 import jsx.bwt.view.ScrollableListViewStyle.ItemColumnView;
@@ -126,7 +126,7 @@ public class ScrollableListView extends UI {
      * Render all list items.
      * </p>
      */
-    @Listen(ui = UIAction.Scroll, debounce = 100)
+    @ListenUI(ui = UIAction.Scroll, debounce = 100)
     private void render() {
         int viewableTopIndex = Math.round(-renderableItemView.position().top / itemHeight);
         int renderableTopIndex = Math.max(0, viewableTopIndex - extraTopRenderableItemSize);

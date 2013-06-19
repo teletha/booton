@@ -21,5 +21,5 @@ import java.lang.annotation.Target;
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Subscribe {
+public @interface ListenModel {
 }

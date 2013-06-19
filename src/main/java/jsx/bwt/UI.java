@@ -81,14 +81,17 @@ public abstract class UI extends Publishable {
      * Show tooltip.
      * </p>
      */
-    @Listen(ui = MouseEnter)
+    @ListenUI(ui = MouseEnter)
     private void showTooltip() {
-        tooltip.root.add(PopupViewStyle.Bottom.class);
+        if (tooltip != null) {
+            tooltip.root.add(PopupViewStyle.Bottom.class);
 
-        root.append(tooltip);
-        Offset offset = root.position();
-        tooltip.root.css("top", offset.top + root.outerHeight() + 15 + "px");
-        tooltip.root.css("left", offset.left - tooltip.root.outerWidth() / 2 + root.outerWidth() / 2 + "px");
+            root.append(tooltip);
+            Offset offset = root.position();
+            tooltip.root.css("top", offset.top + root.outerHeight() + 15 + "px");
+            tooltip.root.css("left", offset.left - tooltip.root.outerWidth() / 2 + root.outerWidth() / 2 + "px");
+        }
+
     }
 
     /**
@@ -96,9 +99,11 @@ public abstract class UI extends Publishable {
      * Hide tooltip.
      * </p>
      */
-    @Listen(ui = MouseLeave)
+    @ListenUI(ui = MouseLeave)
     private void hideTooltip() {
-        tooltip.root.remove();
+        if (tooltip != null) {
+            tooltip.root.remove();
+        }
     }
 
     /**
