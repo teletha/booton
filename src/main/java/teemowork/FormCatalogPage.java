@@ -15,7 +15,7 @@ import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Button;
 import jsx.bwt.Input;
-import jsx.bwt.Select;
+import jsx.bwt.Selection;
 import jsx.bwt.UIEvent;
 import jsx.model.Property;
 import jsx.model.SelectableModel;
@@ -52,7 +52,7 @@ public class FormCatalogPage extends Page {
             selectable.add(String.valueOf(i));
         }
 
-        Select<String> child = root.child(new Select(selectable));
+        Selection<String> child = root.child(new Selection(selectable));
         child.model.setSelectionIndex(180);
 
         root.child(new Input(model.type));

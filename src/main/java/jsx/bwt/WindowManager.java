@@ -45,7 +45,7 @@ public class WindowManager implements PageListener {
         this.content = content;
     }
 
-    @Listen(ui = MouseEnter)
+    @ListenUI(ui = MouseEnter)
     private void enter() {
         popup.append(content);
         popup.add(PopupViewStyle.Show.class);
@@ -68,8 +68,8 @@ public class WindowManager implements PageListener {
      * {@inheritDoc}
      */
     @Override
-    @Subscribe
-    @Listen(ui = MouseLeave)
+    @ListenModel
+    @ListenUI(ui = MouseLeave)
     public void unload() {
         popup.remove(PopupViewStyle.Show.class);
         content.remove();

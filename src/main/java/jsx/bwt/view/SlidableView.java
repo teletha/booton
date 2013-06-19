@@ -13,7 +13,7 @@ import static js.lang.Global.*;
 
 import java.util.EventListener;
 
-import jsx.bwt.Listen;
+import jsx.bwt.ListenUI;
 import jsx.bwt.UI;
 import jsx.bwt.UIAction;
 import jsx.bwt.view.SlidableViewStyle.Shown;
@@ -91,7 +91,7 @@ public class SlidableView extends UI {
      * Toggle slide view.
      * </p>
      */
-    @Listen(ui = UIAction.Click)
+    @ListenUI(ui = UIAction.Click)
     public void toggle() {
         if (2 <= shown) {
             close();

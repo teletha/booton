@@ -16,7 +16,7 @@ import java.util.Iterator;
 
 import js.dom.Element;
 import js.dom.Image;
-import jsx.bwt.Listen;
+import jsx.bwt.ListenUI;
 import jsx.bwt.UI;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
@@ -320,7 +320,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
             String namespace = "." + clazz.getSimpleName() + subscriber.hashCode();
 
             for (Method method : clazz.getMethods()) {
-                Listen listen = method.getAnnotation(Listen.class);
+                ListenUI listen = method.getAnnotation(ListenUI.class);
 
                 if (listen != null) {
                     Listener listener = new Subscriber(subscriber, method, listen.abort());
@@ -1392,7 +1392,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
             String namespace = "." + clazz.getSimpleName() + subscriber.hashCode();
 
             for (Method method : clazz.getMethods()) {
-                Listen annotation = method.getAnnotation(Listen.class);
+                ListenUI annotation = method.getAnnotation(ListenUI.class);
 
                 if (annotation != null) {
                     for (UIAction type : annotation.ui()) {

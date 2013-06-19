@@ -28,6 +28,9 @@ public abstract class Publishable {
     /** The lazy initialized event listener holder. */
     private transient Map<Class, Subscribers> subscribers;
 
+    /** The lazy initialized event listener holder. */
+    private transient Map<Class, MethodSubscribers> methods;
+
     /**
      * <p>
      * Register event listener.
@@ -99,6 +102,53 @@ public abstract class Publishable {
         return (T) Proxy.newProxyInstance(null, new Class[] {listenerType}, subscriber);
     }
 
+    public void register(Object subscriber) {
+        System.out.println("register");
+        if (subscriber != null) {
+
+            for (Method method : subscriber.getClass().getDeclaredMethods()) {
+                ListenModel subscribe = method.getAnnotation(ListenModel.class);
+
+                if (subscribe != null) {
+
+                    Class[] parameters = method.getParameterTypes();
+
+                    if (parameters.length == 1) {
+                        if (methods == null) {
+                            methods = new HashMap();
+                        }
+
+                        MethodSubscribers subscribers = methods.get(parameters[0]);
+
+                        if (subscribers == null) {
+                            subscribers = new MethodSubscribers();
+                            methods.put(parameters[0], subscribers);
+                        }
+
+                        subscribers.add(subscriber, method);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Publish the specified event which has type and context.
+     * </p>
+     * 
+     * @param event
+     */
+    protected void publish(Object event) {
+        if (event != null && methods != null) {
+            MethodSubscribers subscribers = methods.get(event.getClass());
+
+            if (subscribers != null) {
+                subscribers.fire(event);
+            }
+        }
+    }
+
     /**
      * <p>
      * Helper method to collect all classes which are extended or implemented by the target class.
@@ -129,6 +179,72 @@ public abstract class Publishable {
 
         // API definition
         return set;
+    }
+
+    /**
+     * @version 2013/06/19 14:16:06
+     */
+    private static class MethodSubscribers {
+
+        /** The listener instance. */
+        private final List<Object> subscribers = new ArrayList();
+
+        /** The listener instance. */
+        private final List<Method> listeners = new ArrayList();
+
+        /**
+         * <p>
+         * Register as listener.
+         * </p>
+         * 
+         * @param subscriber A listener to add.
+         */
+        private void add(Object subscriber, Method listener) {
+            if (subscriber != null && !subscribers.contains(subscriber)) {
+                subscribers.add(subscriber);
+                listeners.add(listener);
+            }
+        }
+
+        /**
+         * <p>
+         * Fire event.
+         * </p>
+         * 
+         * @param event
+         */
+        private void fire(Object event) {
+            for (int i = 0; i < subscribers.size(); i++) {
+                try {
+                    listeners.get(i).invoke(subscribers.get(i), event);
+                } catch (Exception e) {
+                    // If this exception will be thrown, it is bug of this program. So we must
+                    // rethrow the wrapped error in here.
+                    throw new Error(e);
+                }
+            }
+        }
+    }
+
+    /**
+     * @version 2013/06/19 14:16:06
+     */
+    private static class MethodSubscriber {
+
+        /** The listener instance. */
+        private final Object instance;
+
+        /** The listener method. */
+        private final Method method;
+
+        /**
+         * @param instance
+         * @param method
+         */
+        private MethodSubscriber(Object instance, Method method) {
+            this.instance = instance;
+            this.method = method;
+        }
     }
 
     /**
