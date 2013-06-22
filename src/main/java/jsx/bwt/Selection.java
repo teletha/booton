@@ -79,12 +79,12 @@ public class Selection<M> extends FormUI<Selection> {
         }
     }
 
-    @ListenUI(ui = UIAction.Key_Up)
+    @KeyBind(Key.Up)
     private void selectPrevious() {
         model.selectPrevious();
     }
 
-    @ListenUI(ui = UIAction.Key_Down)
+    @KeyBind(Key.Down)
     private void selectNext() {
         model.selectNext();
     }
