@@ -7,20 +7,10 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.application;
+package jsx.bwt.event;
 
 /**
- * @version 2013/06/17 15:40:41
+ * @version 2013/06/26 11:40:55
  */
-public final class PageLoad {
-
-    /** The loading page. */
-    public final Page page;
-
-    /**
-     * @param page
-     */
-    public PageLoad(Page page) {
-        this.page = page;
-    }
+public class MouseLeave extends UIEvent {
 }

@@ -10,7 +10,7 @@
 package js.dom;
 
 import static js.lang.Global.*;
-import js.util.jQuery;
+import jsx.jQuery;
 import booton.css.CSS;
 
 /**

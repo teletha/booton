@@ -12,7 +12,7 @@ package teemowork.model.variable;
 import java.util.ArrayList;
 import java.util.List;
 
-import js.util.jQuery;
+import jsx.jQuery;
 
 /**
  * @version 2013/03/05 14:15:36

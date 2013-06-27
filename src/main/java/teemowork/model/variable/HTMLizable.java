@@ -9,7 +9,7 @@
  */
 package teemowork.model.variable;
 
-import js.util.jQuery;
+import jsx.jQuery;
 
 /**
  * @version 2013/03/11 11:46:14

@@ -14,7 +14,7 @@ import static js.lang.Global.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import js.util.jQuery;
+import jsx.jQuery;
 import jsx.bwt.Listen;
 import jsx.bwt.UI;
 import jsx.bwt.UIAction;

@@ -11,18 +11,16 @@ package jsx.bwt;
 
 import static js.lang.Global.*;
 import static jsx.bwt.UIAction.*;
-import js.util.jQuery;
-import js.util.jQuery.Offset;
-import jsx.application.Application;
-import jsx.application.PageListener;
+import jsx.jQuery;
 import jsx.application.PageUnload;
 import jsx.bwt.view.PopupViewStyle;
+import jsx.jQuery.Offset;
 import kiss.Disposable;
 
 /**
  * @version 2013/06/12 9:11:13
  */
-public class WindowManager implements PageListener {
+public class WindowManager {
 
     /** The popup area. */
     private static jQuery popup;
@@ -44,38 +42,43 @@ public class WindowManager implements PageListener {
 
         this.target = target;
         this.content = content;
+
+        System.out.println("register");
+        EventBus.Global.register(this);
     }
 
+    /**
+     * 
+     */
     @Listen(MouseEnter)
-    private void enter() {
+    private void show() {
         popup.append(content);
         popup.add(PopupViewStyle.Show.class);
 
         Offset offset = target.position();
         popup.css("top", offset.top + target.outerHeight() + 15 + "px")
                 .css("left", offset.left - popup.outerWidth() / 2 + target.outerWidth() / 2 + "px");
-
-        Application.bind(this);
     }
 
     /**
-     * {@inheritDoc}
+     * 
      */
-    @Override
-    public void load() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Subscribe
     @Listen(MouseLeave)
-    public void unload(PageUnload event) {
+    private void hide() {
         popup.remove(PopupViewStyle.Show.class);
         content.remove();
+    }
 
-        Application.unbind(this);
+    /**
+     * 
+     */
+    @Subscribe(PageUnload.class)
+    private void unload() {
+        System.out.println("unload");
+
+        EventBus.Global.unregister(this);
+        target.unbind(this);
+        hide();
     }
 
     public static void applyTooltip(jQuery target, jQuery content) {

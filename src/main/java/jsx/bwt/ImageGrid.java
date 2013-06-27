@@ -16,8 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import js.util.jQuery;
-import js.util.jQuery.Listener;
+import jsx.jQuery;
 import jsx.bwt.ImageGridStyle.Container;
 import jsx.bwt.ImageGridStyle.IconImage;
 import jsx.bwt.ImageGridStyle.ImageSet;
@@ -25,6 +24,7 @@ import jsx.bwt.ImageGridStyle.Input;
 import jsx.bwt.ImageGridStyle.Root;
 import jsx.bwt.ImageGridStyle.Title;
 import jsx.bwt.ImageGridStyle.Unselected;
+import jsx.jQuery.Listener;
 
 /**
  * @version 2012/12/19 9:51:49

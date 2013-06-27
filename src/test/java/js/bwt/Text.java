@@ -9,7 +9,7 @@
  */
 package js.bwt;
 
-import js.util.jQuery;
+import jsx.jQuery;
 
 /**
  * @version 2013/02/03 14:57:09

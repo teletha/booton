@@ -16,7 +16,7 @@ import static teemowork.model.Version.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import js.util.jQuery;
+import jsx.jQuery;
 
 /**
  * @version 2013/06/06 20:22:51
