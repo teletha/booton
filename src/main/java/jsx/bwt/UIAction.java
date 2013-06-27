@@ -16,6 +16,18 @@ package jsx.bwt;
 public enum UIAction {
 
     /** The ui event type. */
+    Load(0),
+
+    /** The ui event type. */
+    Unload(0),
+
+    /** The ui event type. */
+    PageLoad(0),
+
+    /** The ui event type. */
+    PageUnload(0),
+
+    /** The ui event type. */
     Close,
 
     /** The ui event type. */
@@ -273,11 +285,17 @@ public enum UIAction {
     /** The ui key input type. */
     Key_F12(123);
 
+    /** The global event holder. */
+    private static final Publishable listeners = new Publishable();
+
     /** The key code. */
     public final int code;
 
     /** The event type name. */
     public final String name;
+
+    /** The event type. */
+    public final boolean global;
 
     /**
      * 
@@ -295,6 +313,8 @@ public enum UIAction {
      */
     private UIAction(int code) {
         this.code = code;
-        this.name = code == -1 ? name().toLowerCase() : "keydown";
+        this.global = code == 0;
+        this.name = 0 < code ? "keydown" : name().toLowerCase();
     }
+
 }

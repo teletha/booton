@@ -9,9 +9,9 @@
  */
 package jsx.bwt;
 
-import js.util.jQuery.Listener;
 import jsx.bwt.FormUIStyle.ButtonForm;
 import jsx.bwt.FormUIStyle.Icons;
+import jsx.jQuery.Listener;
 
 /**
  * @version 2013/04/17 16:09:04

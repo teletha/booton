@@ -9,7 +9,7 @@
  */
 package teemowork;
 
-import js.util.jQuery;
+import jsx.jQuery;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import teemowork.model.Item;

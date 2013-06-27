@@ -27,7 +27,7 @@ import js.lang.Function;
 import js.lang.builtin.Console;
 import js.lang.builtin.JSON;
 import js.lang.builtin.Storage;
-import js.util.jQuery.Listener;
+import jsx.jQuery.Listener;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;

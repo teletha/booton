@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.util;
+package jsx;
 
 import static js.lang.Global.*;
 
@@ -319,7 +319,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
             Class clazz = subscriber.getClass();
             String namespace = "." + clazz.getSimpleName() + subscriber.hashCode();
 
-            for (Method method : clazz.getMethods()) {
+            for (Method method : clazz.getDeclaredMethods()) {
                 Listen listen = method.getAnnotation(Listen.class);
 
                 if (listen != null) {
@@ -355,7 +355,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
                         listener = new Debounce(time, listener);
                     }
 
-                    for (final UIAction type : listen.value()) {
+                    for (UIAction type : listen.value()) {
                         // ===========================
                         // KeyCode Wrapper
                         // ===========================
@@ -1376,6 +1376,33 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
         // API definition
         return this;
     }
+
+    /**
+     * <p>
+     * Execute all handlers and behaviors attached to the matched elements for the given event type.
+     * </p>
+     * 
+     * @param eventType A string containing a JavaScript event type, such as click or submit.
+     * @return A chainable API.
+     */
+    public jQuery trigger(UIAction type) {
+        if (type != null) {
+            trigger(type.name);
+        }
+
+        // API defintion
+        return this;
+    }
+
+    /**
+     * <p>
+     * Execute all handlers and behaviors attached to the matched elements for the given event type.
+     * </p>
+     * 
+     * @param eventType A string containing a JavaScript event type, such as click or submit.
+     * @return A chainable API.
+     */
+    public native jQuery trigger(String eventType);
 
     /**
      * <p>

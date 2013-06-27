@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import js.lang.Global;
 import js.lang.NativeObject;
-import js.util.jQuery;
+import jsx.jQuery;
 import kiss.ClassListener;
 import kiss.I;
 import kiss.Manageable;

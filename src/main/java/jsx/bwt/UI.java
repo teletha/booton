@@ -11,9 +11,9 @@ package jsx.bwt;
 
 import static js.lang.Global.*;
 import static jsx.bwt.UIAction.*;
-import js.util.jQuery;
-import js.util.jQuery.Offset;
+import jsx.jQuery;
 import jsx.bwt.view.PopupViewStyle;
+import jsx.jQuery.Offset;
 
 /**
  * @version 2012/12/11 14:39:54
