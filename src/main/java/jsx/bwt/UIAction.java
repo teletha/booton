@@ -16,6 +16,9 @@ package jsx.bwt;
 public enum UIAction {
 
     /** The ui event type. */
+    Popup,
+
+    /** The ui event type. */
     Load(0),
 
     /** The ui event type. */
