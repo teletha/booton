@@ -24,27 +24,52 @@ import booton.translator.JavaAPIProvider;
 @JavaAPIProvider(java.util.concurrent.CopyOnWriteArrayList.class)
 public class CopyOnWriteArrayList<E> implements List<E> {
 
-    /** The array, accessed only via getArray/setArray. */
+    /** Accessed only via accessor. */
     private volatile transient Object[] array;
 
     /**
-     * Creates an empty list.
+     * Create an empty list.
      */
     public CopyOnWriteArrayList() {
         setArray(new Object[0]);
     }
 
     /**
-     * Gets the array. Non-private so as to also be accessible from CopyOnWriteArraySet class.
+     * <p>
+     * Create with collection items.
+     * </p>
+     * 
+     * @param collection
      */
-    final Object[] getArray() {
+    public CopyOnWriteArrayList(Collection<? extends E> collection) {
+        setArray(collection.toArray());
+    }
+
+    /**
+     * Creates a list holding a copy of the given array.
+     * 
+     * @param items the array (a copy of this array is used as the internal array)
+     * @throws NullPointerException if the specified array is null
+     */
+    public CopyOnWriteArrayList(E[] items) {
+        setArray(Arrays.copyOf(items, items.length, Object[].class));
+    }
+
+    /**
+     * <p>
+     * Getter for actual items.
+     * </p>
+     */
+    protected final Object[] getArray() {
         return array;
     }
 
     /**
-     * Sets the array.
+     * <p>
+     * Setter for actual items.
+     * </p>
      */
-    final void setArray(Object[] array) {
+    protected final void setArray(Object[] array) {
         this.array = array;
     }
 
@@ -53,7 +78,7 @@ public class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public int size() {
-        return getArray().length;
+        return array.length;
     }
 
     /**
@@ -68,9 +93,9 @@ public class CopyOnWriteArrayList<E> implements List<E> {
      * {@inheritDoc}
      */
     @Override
-    public boolean contains(Object o) {
-        Object[] elements = getArray();
-        return indexOf(o, elements, 0, elements.length) >= 0;
+    public boolean contains(Object item) {
+        Object[] items = this.array;
+        return indexOf(item, items, 0, items.length) >= 0;
     }
 
     /**
@@ -78,7 +103,7 @@ public class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return new View<E>(getArray(), 0);
+        return new View(this.array, 0);
     }
 
     /**
@@ -86,28 +111,41 @@ public class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public Object[] toArray() {
-        Object[] elements = getArray();
-        return Arrays.copyOf(elements, elements.length);
+        return Arrays.copyOf(array, array.length);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public <T> T[] toArray(T[] a) {
-        return null;
+    public <T> T[] toArray(T[] destination) {
+        Object[] items = this.array;
+        int length = items.length;
+
+        if (destination.length < length) {
+            return (T[]) Arrays.copyOf(items, length, destination.getClass());
+        } else {
+            System.arraycopy(items, 0, destination, 0, length);
+
+            if (destination.length > length) {
+                destination[length] = null;
+            }
+            return destination;
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean add(E e) {
-        Object[] elements = getArray();
-        int len = elements.length;
-        Object[] newElements = Arrays.copyOf(elements, len + 1);
-        newElements[len] = e;
-        setArray(newElements);
+    public boolean add(E item) {
+        Object[] items = array;
+        int length = items.length;
+
+        Object[] copy = Arrays.copyOf(items, length + 1);
+        copy[length] = item;
+        array = copy;
+
         return true;
     }
 
@@ -115,30 +153,30 @@ public class CopyOnWriteArrayList<E> implements List<E> {
      * {@inheritDoc}
      */
     @Override
-    public boolean remove(Object o) {
-        Object[] elements = getArray();
-        int len = elements.length;
-        if (len != 0) {
-            // Copy while searching for element to remove
-            // This wins in the normal case of element being present
-            int newlen = len - 1;
-            Object[] newElements = new Object[newlen];
+    public boolean remove(Object item) {
+        Object[] items = this.array;
+        int length = items.length;
 
-            for (int i = 0; i < newlen; ++i) {
-                if (eq(o, elements[i])) {
-                    // found one; copy remaining and exit
-                    for (int k = i + 1; k < len; ++k) {
-                        newElements[k - 1] = elements[k];
+        if (length != 0) {
+            int newLength = length - 1;
+            Object[] newItems = new Object[newLength];
+
+            for (int i = 0; i < newLength; i++) {
+                if (equal(item, items[i])) {
+                    // found the specified item, copy remaining and exit
+                    for (int k = i + 1; k < length; ++k) {
+                        newItems[k - 1] = items[k];
                     }
-                    setArray(newElements);
+                    array = newItems;
                     return true;
-                } else
-                    newElements[i] = elements[i];
+                } else {
+                    newItems[i] = items[i];
+                }
             }
 
             // special handling for last cell
-            if (eq(o, elements[newlen])) {
-                setArray(newElements);
+            if (equal(item, items[newLength])) {
+                array = newItems;
                 return true;
             }
         }
@@ -149,31 +187,96 @@ public class CopyOnWriteArrayList<E> implements List<E> {
      * {@inheritDoc}
      */
     @Override
-    public boolean containsAll(Collection<?> c) {
-        return false;
+    public boolean containsAll(Collection<?> collection) {
+        Object[] items = this.array;
+        int length = items.length;
+
+        for (Object item : collection) {
+            if (indexOf(item, items, 0, length) < 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean addAll(Collection<? extends E> c) {
-        return false;
+    public boolean addAll(Collection<? extends E> collection) {
+        Object[] additions = collection.toArray();
+
+        if (additions.length == 0) {
+            return false;
+        }
+
+        Object[] items = this.array;
+        int length = items.length;
+        Object[] newItems = Arrays.copyOf(items, length + additions.length);
+        System.arraycopy(additions, 0, newItems, length, additions.length);
+        this.array = newItems;
+        return true;
+
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
-        return false;
+    public boolean addAll(int index, Collection<? extends E> collection) {
+        Object[] additions = collection.toArray();
+
+        Object[] items = this.array;
+        int length = items.length;
+
+        if (index > length || index < 0) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + length);
+        }
+
+        if (additions.length == 0) {
+            return false;
+        }
+
+        int numMoved = length - index;
+        Object[] newItems;
+
+        if (numMoved == 0) {
+            newItems = Arrays.copyOf(items, length + additions.length);
+        } else {
+            newItems = new Object[length + additions.length];
+            System.arraycopy(items, 0, newItems, 0, index);
+            System.arraycopy(items, index, newItems, index + additions.length, numMoved);
+        }
+        System.arraycopy(additions, 0, newItems, index, additions.length);
+        this.array = newItems;
+        return true;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(Collection<?> collection) {
+        Object[] items = this.array;
+        int length = items.length;
+
+        if (length != 0) {
+            int newLength = 0;
+            Object[] temporary = new Object[length];
+
+            for (int i = 0; i < length; ++i) {
+                Object item = items[i];
+
+                if (!collection.contains(item)) {
+                    temporary[newLength++] = item;
+                }
+            }
+
+            if (newLength != length) {
+                this.array = Arrays.copyOf(temporary, newLength);
+                return true;
+            }
+        }
         return false;
     }
 
@@ -182,6 +285,24 @@ public class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public boolean retainAll(Collection<?> c) {
+        Object[] items = this.array;
+        int length = items.length;
+
+        if (length != 0) {
+            int newLength = 0;
+            Object[] temporary = new Object[length];
+
+            for (int i = 0; i < length; ++i) {
+                Object item = items[i];
+
+                if (c.contains(item)) temporary[newLength++] = item;
+            }
+
+            if (newLength != length) {
+                this.array = Arrays.copyOf(temporary, newLength);
+                return true;
+            }
+        }
         return false;
     }
 
@@ -190,7 +311,7 @@ public class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public void clear() {
-        setArray(new Object[0]);
+        this.array = new Object[0];
     }
 
     /**
@@ -198,7 +319,7 @@ public class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public E get(int index) {
-        return (E) getArray()[index];
+        return (E) array[index];
     }
 
     /**
@@ -206,26 +327,42 @@ public class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public E set(int index, E element) {
-        Object[] elements = getArray();
-        E oldValue = (E) elements[index];
+        Object[] items = this.array;
+        E old = (E) items[index];
 
-        if (oldValue != element) {
-            int len = elements.length;
-            Object[] newElements = Arrays.copyOf(elements, len);
-            newElements[index] = element;
-            setArray(newElements);
-        } else {
-            // Not quite a no-op; ensures volatile write semantics
-            setArray(elements);
+        if (old != element) {
+            int length = items.length;
+            Object[] newItems = Arrays.copyOf(items, length);
+            newItems[index] = element;
+            this.array = newItems;
         }
-        return oldValue;
+        return old;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void add(int index, E element) {
+    public void add(int index, E item) {
+        Object[] items = this.array;
+        int length = items.length;
+
+        if (index > length || index < 0) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + length);
+        }
+
+        Object[] newItems;
+        int numMoved = length - index;
+
+        if (numMoved == 0)
+            newItems = Arrays.copyOf(items, length + 1);
+        else {
+            newItems = new Object[length + 1];
+            System.arraycopy(items, 0, newItems, 0, index);
+            System.arraycopy(items, index, newItems, index + 1, numMoved);
+        }
+        newItems[index] = item;
+        this.array = newItems;
     }
 
     /**
@@ -233,35 +370,36 @@ public class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public E remove(int index) {
-        Object[] elements = getArray();
-        int len = elements.length;
-        E oldValue = (E) elements[index];
-        int numMoved = len - index - 1;
+        Object[] items = this.array;
+        int length = items.length;
+        E old = (E) items[index];
+        int numMoved = length - index - 1;
+
         if (numMoved == 0) {
-            setArray(Arrays.copyOf(elements, len - 1));
+            setArray(Arrays.copyOf(items, length - 1));
         } else {
-            Object[] newElements = new Object[len - 1];
-            System.arraycopy(elements, 0, newElements, 0, index);
-            System.arraycopy(elements, index + 1, newElements, index, numMoved);
-            setArray(newElements);
+            Object[] newItems = new Object[length - 1];
+            System.arraycopy(items, 0, newItems, 0, index);
+            System.arraycopy(items, index + 1, newItems, index, numMoved);
+            this.array = newItems;
         }
-        return oldValue;
+        return old;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int indexOf(Object o) {
-        return 0;
+    public int indexOf(Object item) {
+        return indexOf(item, this.array, 0, this.array.length);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int lastIndexOf(Object o) {
-        return 0;
+    public int lastIndexOf(Object item) {
+        return lastIndexOf(item, this.array, this.array.length - 1);
     }
 
     /**
@@ -269,7 +407,7 @@ public class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public ListIterator<E> listIterator() {
-        return null;
+        return new View(this.array, 0);
     }
 
     /**
@@ -277,7 +415,13 @@ public class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public ListIterator<E> listIterator(int index) {
-        return null;
+        Object[] items = this.array;
+        int length = items.length;
+
+        if (index < 0 || index > length) {
+            throw new IndexOutOfBoundsException("Index: " + index);
+        }
+        return new View(items, index);
     }
 
     /**
@@ -285,44 +429,62 @@ public class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     /**
-     * static version of indexOf, to allow repeated calls without needing to re-acquire array each
-     * time.
+     * <p>
+     * Helper method to search item.
+     * </p>
      * 
-     * @param o element to search for
-     * @param elements the array
-     * @param index first index to search
-     * @param fence one past last index to search
-     * @return index of element, or -1 if absent
+     * @param item The item to search for.
+     * @param items The current item set.
+     * @param index The first index to search.
+     * @param fence The one past last index to search.
+     * @return A index of element, or -1 if absent.
      */
-    private static int indexOf(Object o, Object[] elements, int index, int fence) {
-        if (o == null) {
-            for (int i = index; i < fence; i++) {
-                if (elements[i] == null) {
-                    return i;
-                }
-            }
-        } else {
-            for (int i = index; i < fence; i++) {
-                if (o.equals(elements[i])) {
-                    return i;
-                }
+    private static int indexOf(Object item, Object[] items, int index, int fence) {
+        for (int i = index; i < fence; i++) {
+            if (equal(items[i], item)) {
+                return i;
             }
         }
         return -1;
     }
 
     /**
-     * Test for equality, coping with nulls.
+     * <p>
+     * Helper method to search item.
+     * </p>
+     * 
+     * @param item The item to search for.
+     * @param items The current item set.
+     * @param index The first index to search.
+     * @return A index of element, or -1 if absent.
      */
-    private static boolean eq(Object o1, Object o2) {
-        if (o1 == null) {
-            return o2 == null;
+    private static int lastIndexOf(Object item, Object[] items, int index) {
+        for (int i = index; i >= 0; i--) {
+            if (equal(items[i], item)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * <p>
+     * Helper method to test for equality, coping with nulls.
+     * </p>
+     * 
+     * @param item1
+     * @param item2
+     * @return
+     */
+    private static boolean equal(Object item1, Object item2) {
+        if (item1 == null) {
+            return item2 == null;
         } else {
-            return o1.equals(o2);
+            return item1.equals(item2);
         }
     }
 
@@ -331,19 +493,19 @@ public class CopyOnWriteArrayList<E> implements List<E> {
      */
     private static class View<E> implements ListIterator<E> {
 
-        /** Snapshot of the array */
+        /** Snapshot of items. */
         private final Object[] snapshot;
 
-        /** Index of element to be returned by subsequent call to next. */
+        /** The index of element to be returned by subsequent call to next. */
         private int cursor;
 
         /**
-         * @param elements
-         * @param initialCursor
+         * @param items
+         * @param cursor
          */
-        private View(Object[] elements, int initialCursor) {
-            cursor = initialCursor;
-            snapshot = elements;
+        private View(Object[] items, int cursor) {
+            this.snapshot = items;
+            this.cursor = cursor;
         }
 
         /**
@@ -357,14 +519,16 @@ public class CopyOnWriteArrayList<E> implements List<E> {
          * {@inheritDoc}
          */
         public boolean hasPrevious() {
-            return cursor > 0;
+            return 0 < cursor;
         }
 
         /**
          * {@inheritDoc}
          */
         public E next() {
-            if (!hasNext()) throw new NoSuchElementException();
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
             return (E) snapshot[cursor++];
         }
 
@@ -372,7 +536,9 @@ public class CopyOnWriteArrayList<E> implements List<E> {
          * {@inheritDoc}
          */
         public E previous() {
-            if (!hasPrevious()) throw new NoSuchElementException();
+            if (!hasPrevious()) {
+                throw new NoSuchElementException();
+            }
             return (E) snapshot[--cursor];
         }
 
