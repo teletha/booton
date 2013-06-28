@@ -19,19 +19,19 @@ import java.util.NoSuchElementException;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/06/28 3:59:10
+ * @version 2013/06/28 21:20:39
  */
 @JavaAPIProvider(java.util.concurrent.CopyOnWriteArrayList.class)
 class CopyOnWriteArrayList<E> implements List<E> {
 
-    /** Accessed only via accessor. */
-    private volatile transient Object[] array;
+    /** The actual items. */
+    private volatile transient Object[] items;
 
     /**
      * Create an empty list.
      */
     public CopyOnWriteArrayList() {
-        setArray(new Object[0]);
+        this.items = new Object[0];
     }
 
     /**
@@ -42,7 +42,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
      * @param collection
      */
     public CopyOnWriteArrayList(Collection<? extends E> collection) {
-        setArray(collection.toArray());
+        this.items = collection.toArray();
     }
 
     /**
@@ -52,25 +52,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
      * @throws NullPointerException if the specified array is null
      */
     public CopyOnWriteArrayList(E[] items) {
-        setArray(Arrays.copyOf(items, items.length, Object[].class));
-    }
-
-    /**
-     * <p>
-     * Getter for actual items.
-     * </p>
-     */
-    protected final Object[] getArray() {
-        return array;
-    }
-
-    /**
-     * <p>
-     * Setter for actual items.
-     * </p>
-     */
-    protected final void setArray(Object[] array) {
-        this.array = array;
+        this.items = Arrays.copyOf(items, items.length, Object[].class);
     }
 
     /**
@@ -78,7 +60,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public int size() {
-        return array.length;
+        return items.length;
     }
 
     /**
@@ -94,8 +76,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public boolean contains(Object item) {
-        Object[] items = this.array;
-        return indexOf(item, items, 0, items.length) >= 0;
+        return indexOf(item, this.items, 0, this.items.length) >= 0;
     }
 
     /**
@@ -103,7 +84,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return new View(this.array, 0);
+        return new View(this.items, 0);
     }
 
     /**
@@ -111,7 +92,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public Object[] toArray() {
-        return Arrays.copyOf(array, array.length);
+        return Arrays.copyOf(items, items.length);
     }
 
     /**
@@ -119,7 +100,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public <T> T[] toArray(T[] destination) {
-        Object[] items = this.array;
+        Object[] items = this.items;
         int length = items.length;
 
         if (destination.length < length) {
@@ -127,7 +108,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
         } else {
             System.arraycopy(items, 0, destination, 0, length);
 
-            if (destination.length > length) {
+            if (length < destination.length) {
                 destination[length] = null;
             }
             return destination;
@@ -138,57 +119,8 @@ class CopyOnWriteArrayList<E> implements List<E> {
      * {@inheritDoc}
      */
     @Override
-    public boolean add(E item) {
-        Object[] items = array;
-        int length = items.length;
-
-        Object[] copy = Arrays.copyOf(items, length + 1);
-        copy[length] = item;
-        array = copy;
-
-        return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean remove(Object item) {
-        Object[] items = this.array;
-        int length = items.length;
-
-        if (length != 0) {
-            int newLength = length - 1;
-            Object[] newItems = new Object[newLength];
-
-            for (int i = 0; i < newLength; i++) {
-                if (equal(item, items[i])) {
-                    // found the specified item, copy remaining and exit
-                    for (int k = i + 1; k < length; ++k) {
-                        newItems[k - 1] = items[k];
-                    }
-                    array = newItems;
-                    return true;
-                } else {
-                    newItems[i] = items[i];
-                }
-            }
-
-            // special handling for last cell
-            if (equal(item, items[newLength])) {
-                array = newItems;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean containsAll(Collection<?> collection) {
-        Object[] items = this.array;
+        Object[] items = this.items;
         int length = items.length;
 
         for (Object item : collection) {
@@ -210,13 +142,54 @@ class CopyOnWriteArrayList<E> implements List<E> {
             return false;
         }
 
-        Object[] items = this.array;
+        Object[] items = this.items;
         int length = items.length;
         Object[] newItems = Arrays.copyOf(items, length + additions.length);
         System.arraycopy(additions, 0, newItems, length, additions.length);
-        this.array = newItems;
-        return true;
+        this.items = newItems;
 
+        return true;
+    }
+
+    /**
+     * <p>
+     * Appends all of the elements in the specified collection that are not already contained in
+     * this list, to the end of this list, in the order that they are returned by the specified
+     * collection's iterator.
+     * </p>
+     * 
+     * @param collection collection containing elements to be added to this list
+     * @return the number of elements added
+     * @throws NullPointerException if the specified collection is null
+     * @see #addIfAbsent(Object)
+     */
+    public int addAllAbsent(Collection<? extends E> collection) {
+        Object[] collectionItems = collection.toArray();
+
+        if (collectionItems.length == 0) {
+            return 0;
+        }
+
+        Object[] unique = new Object[collectionItems.length];
+        Object[] items = this.items;
+        int length = items.length;
+        int added = 0;
+
+        // search duplications
+        for (int i = 0; i < collectionItems.length; ++i) {
+            Object item = collectionItems[i];
+
+            if (indexOf(item, items, 0, length) < 0 && indexOf(item, unique, 0, added) < 0) {
+                unique[added++] = item;
+            }
+        }
+
+        if (0 < added) {
+            Object[] newItems = Arrays.copyOf(items, length + added);
+            System.arraycopy(unique, 0, newItems, length, added);
+            this.items = newItems;
+        }
+        return added;
     }
 
     /**
@@ -226,7 +199,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
     public boolean addAll(int index, Collection<? extends E> collection) {
         Object[] additions = collection.toArray();
 
-        Object[] items = this.array;
+        Object[] items = this.items;
         int length = items.length;
 
         if (index > length || index < 0) {
@@ -248,7 +221,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
             System.arraycopy(items, index, newItems, index + additions.length, numMoved);
         }
         System.arraycopy(additions, 0, newItems, index, additions.length);
-        this.array = newItems;
+        this.items = newItems;
         return true;
     }
 
@@ -257,7 +230,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public boolean removeAll(Collection<?> collection) {
-        Object[] items = this.array;
+        Object[] items = this.items;
         int length = items.length;
 
         if (length != 0) {
@@ -273,7 +246,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
             }
 
             if (newLength != length) {
-                this.array = Arrays.copyOf(temporary, newLength);
+                this.items = Arrays.copyOf(temporary, newLength);
                 return true;
             }
         }
@@ -285,7 +258,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public boolean retainAll(Collection<?> c) {
-        Object[] items = this.array;
+        Object[] items = this.items;
         int length = items.length;
 
         if (length != 0) {
@@ -299,7 +272,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
             }
 
             if (newLength != length) {
-                this.array = Arrays.copyOf(temporary, newLength);
+                this.items = Arrays.copyOf(temporary, newLength);
                 return true;
             }
         }
@@ -311,7 +284,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public void clear() {
-        this.array = new Object[0];
+        this.items = new Object[0];
     }
 
     /**
@@ -319,7 +292,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public E get(int index) {
-        return (E) array[index];
+        return (E) items[index];
     }
 
     /**
@@ -327,16 +300,26 @@ class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public E set(int index, E element) {
-        Object[] items = this.array;
+        Object[] items = this.items;
         E old = (E) items[index];
 
         if (old != element) {
-            int length = items.length;
-            Object[] newItems = Arrays.copyOf(items, length);
+            Object[] newItems = Arrays.copyOf(items, items.length);
             newItems[index] = element;
-            this.array = newItems;
+            this.items = newItems;
         }
         return old;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean add(E item) {
+        add(items.length, item);
+
+        // API definition
+        return true;
     }
 
     /**
@@ -344,25 +327,31 @@ class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public void add(int index, E item) {
-        Object[] items = this.array;
+        Object[] items = this.items;
         int length = items.length;
 
-        if (index > length || index < 0) {
+        if (index < 0 || length < index) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + length);
         }
 
-        Object[] newItems;
-        int numMoved = length - index;
-
-        if (numMoved == 0)
-            newItems = Arrays.copyOf(items, length + 1);
-        else {
-            newItems = new Object[length + 1];
-            System.arraycopy(items, 0, newItems, 0, index);
-            System.arraycopy(items, index, newItems, index + 1, numMoved);
-        }
+        Object[] newItems = new Object[length + 1];
+        System.arraycopy(items, 0, newItems, 0, index);
+        System.arraycopy(items, index, newItems, index + 1, length - index);
         newItems[index] = item;
-        this.array = newItems;
+
+        this.items = newItems;
+    }
+
+    /**
+     * <p>
+     * Append the element if not present.
+     * </p>
+     * 
+     * @param item element to be added to this list, if absent
+     * @return <tt>true</tt> if the element was added
+     */
+    public boolean addIfAbsent(E item) {
+        return indexOf(item) != -1 ? false : add(item);
     }
 
     /**
@@ -370,19 +359,15 @@ class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public E remove(int index) {
-        Object[] items = this.array;
-        int length = items.length;
+        Object[] items = this.items;
         E old = (E) items[index];
-        int numMoved = length - index - 1;
+        int newLength = items.length - 1;
 
-        if (numMoved == 0) {
-            setArray(Arrays.copyOf(items, length - 1));
-        } else {
-            Object[] newItems = new Object[length - 1];
-            System.arraycopy(items, 0, newItems, 0, index);
-            System.arraycopy(items, index + 1, newItems, index, numMoved);
-            this.array = newItems;
-        }
+        Object[] newItems = new Object[newLength];
+        System.arraycopy(items, 0, newItems, 0, index);
+        System.arraycopy(items, index + 1, newItems, index, newLength - index);
+        this.items = newItems;
+
         return old;
     }
 
@@ -390,8 +375,23 @@ class CopyOnWriteArrayList<E> implements List<E> {
      * {@inheritDoc}
      */
     @Override
+    public boolean remove(Object item) {
+        int index = indexOf(item);
+
+        if (index == -1) {
+            return false;
+        } else {
+            remove(index);
+            return true;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int indexOf(Object item) {
-        return indexOf(item, this.array, 0, this.array.length);
+        return indexOf(item, this.items, 0, this.items.length);
     }
 
     /**
@@ -399,7 +399,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public int lastIndexOf(Object item) {
-        return lastIndexOf(item, this.array, this.array.length - 1);
+        return lastIndexOf(item, this.items, this.items.length - 1);
     }
 
     /**
@@ -407,7 +407,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public ListIterator<E> listIterator() {
-        return new View(this.array, 0);
+        return new View(this.items, 0);
     }
 
     /**
@@ -415,10 +415,10 @@ class CopyOnWriteArrayList<E> implements List<E> {
      */
     @Override
     public ListIterator<E> listIterator(int index) {
-        Object[] items = this.array;
+        Object[] items = this.items;
         int length = items.length;
 
-        if (index < 0 || index > length) {
+        if (index < 0 || length < index) {
             throw new IndexOutOfBoundsException("Index: " + index);
         }
         return new View(items, index);
@@ -430,6 +430,14 @@ class CopyOnWriteArrayList<E> implements List<E> {
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
         throw new UnsupportedOperationException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return Arrays.toString(toArray());
     }
 
     /**

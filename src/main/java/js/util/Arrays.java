@@ -969,6 +969,47 @@ class Arrays {
     }
 
     /**
+     * Returns a string representation of the contents of the specified array. If the array contains
+     * other arrays as elements, they are converted to strings by the {@link Object#toString} method
+     * inherited from <tt>Object</tt>, which describes their <i>identities</i> rather than their
+     * contents.
+     * <p>
+     * The value returned by this method is equal to the value that would be returned by
+     * <tt>Arrays.asList(a).toString()</tt>, unless <tt>a</tt> is <tt>null</tt>, in which case
+     * <tt>"null"</tt> is returned.
+     * 
+     * @param array the array whose string representation to return
+     * @return a string representation of <tt>a</tt>
+     * @see #deepToString(Object[])
+     * @since 1.5
+     */
+    public static String toString(Object[] array) {
+        if (array == null) {
+            return "null";
+        }
+
+        int length = array.length - 1;
+
+        if (length == -1) {
+            return "[]";
+        }
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+
+        for (int i = 0; i <= length; i++) {
+            builder.append(String.valueOf(array[i]));
+
+            if (i != length) {
+                builder.append(", ");
+            }
+        }
+        builder.append("]");
+
+        return builder.toString();
+    }
+
+    /**
      * Returns a hash code based on the contents of the specified array. If the array contains other
      * arrays as elements, the hash code is based on their identities rather than their contents. It
      * is therefore acceptable to invoke this method on an array that contains itself as an element,
