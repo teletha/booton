@@ -22,7 +22,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/06/28 3:59:10
  */
 @JavaAPIProvider(java.util.concurrent.CopyOnWriteArrayList.class)
-public class CopyOnWriteArrayList<E> implements List<E> {
+class CopyOnWriteArrayList<E> implements List<E> {
 
     /** Accessed only via accessor. */
     private volatile transient Object[] array;
