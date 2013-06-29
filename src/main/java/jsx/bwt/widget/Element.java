@@ -9,14 +9,10 @@
  */
 package jsx.bwt.widget;
 
-import org.junit.Test;
 
 /**
- * @version 2013/06/29 2:11:44
+ * @version 2013/06/29 12:48:02
  */
-public class WidgetTest {
+public class Element {
 
-    @Test
-    public void widget() throws Exception {
-    }
 }

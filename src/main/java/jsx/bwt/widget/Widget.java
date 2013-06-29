@@ -9,10 +9,18 @@
  */
 package jsx.bwt.widget;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import kiss.Disposable;
+
 /**
  * @version 2013/06/29 1:33:54
  */
-public class Widget {
+public abstract class Widget implements Disposable {
+
+    /** The manageable child widgets. */
+    private final List<Widget> children = new CopyOnWriteArrayList();
 
     /**
      * <p>
@@ -32,5 +40,15 @@ public class Widget {
      */
     public Widget append(Widget child) {
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void dispose() {
+        for (Widget child : children) {
+            child.dispose();
+        }
     }
 }
