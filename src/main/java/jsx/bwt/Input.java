@@ -90,7 +90,7 @@ public class Input<T> extends FormUI {
      * Validate the input value by user or API.
      * </p>
      */
-    @ListenUI(ui = UIAction.KeyUp)
+    @Listen(UIAction.KeyUp)
     private void validateInput() {
         String input = form.val();
 

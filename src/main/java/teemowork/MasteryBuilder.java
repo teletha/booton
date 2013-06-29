@@ -14,12 +14,12 @@ import static teemowork.model.Mastery.*;
 import js.bind.Subscriber;
 import js.dom.Image;
 import jsx.jQuery;
+import jsx.jQuery.Listener;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Button;
-import jsx.bwt.Selection;
+import jsx.bwt.Select;
 import jsx.bwt.UIEvent;
-import jsx.jQuery.Listener;
 import jsx.model.SelectableListener;
 import jsx.model.SelectableModel;
 import teemowork.MasteryBuilderStyle.Completed;
@@ -88,7 +88,7 @@ public class MasteryBuilder extends Page implements Subscriber {
 
     private jQuery name;
 
-    private Selection<MasterySet> menu;
+    private Select<MasterySet> menu;
 
     @PageInfo(path = "Mastery")
     public MasteryBuilder() {
@@ -114,7 +114,7 @@ public class MasteryBuilder extends Page implements Subscriber {
         System.out.println(set);
 
         jQuery infomation = root.child(Information.class);
-        menu = infomation.child(new Selection(set));
+        menu = infomation.child(new Select(set));
         menu.model.bind(new MasterySelector());
         menu.model.register(this);
 
