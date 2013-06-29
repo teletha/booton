@@ -9,14 +9,10 @@
  */
 package jsx.bwt.widget;
 
-import org.junit.Test;
-
 /**
- * @version 2013/06/29 2:11:44
+ * @version 2013/06/29 13:11:10
  */
-public class WidgetTest {
+public interface Subscribable extends Terminable {
 
-    @Test
-    public void widget() throws Exception {
-    }
+    public void subscribe(Publishable publishable);
 }

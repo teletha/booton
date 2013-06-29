@@ -9,14 +9,12 @@
  */
 package jsx.bwt.widget;
 
-import org.junit.Test;
-
 /**
- * @version 2013/06/29 2:11:44
+ * @version 2013/06/29 13:04:33
  */
-public class WidgetTest {
+public interface Terminable {
 
-    @Test
-    public void widget() throws Exception {
-    }
+    boolean isTaminated();
+
+    void terminate();
 }

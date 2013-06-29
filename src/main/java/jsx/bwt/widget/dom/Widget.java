@@ -7,16 +7,11 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.bwt.widget;
-
-import org.junit.Test;
+package jsx.bwt.widget.dom;
 
 /**
- * @version 2013/06/29 2:11:44
+ * @version 2013/06/29 15:07:07
  */
-public class WidgetTest {
+class Widget extends jsx.bwt.widget.Widget {
 
-    @Test
-    public void widget() throws Exception {
-    }
 }
