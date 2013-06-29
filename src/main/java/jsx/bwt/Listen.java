@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ListenUI {
+public @interface Listen {
 
     /**
      * <p>
@@ -30,7 +30,7 @@ public @interface ListenUI {
      * 
      * @return
      */
-    UIAction[] ui();
+    UIAction[] value();
 
     /**
      * <p>

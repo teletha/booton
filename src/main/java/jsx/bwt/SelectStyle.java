@@ -16,7 +16,7 @@ import booton.css.Priority;
 /**
  * @version 2013/04/06 0:04:01
  */
-class SelectionStyle extends FormUIStyle {
+class SelectStyle extends FormUIStyle {
 
     @Priority(10)
     class SelectForm extends InputForm {

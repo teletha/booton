@@ -10,10 +10,10 @@
 package jsx.bwt;
 
 import jsx.jQuery;
+import jsx.jQuery.Listener;
 import jsx.bwt.FormUIStyle.Disable;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.FormUIStyle.FormRoot;
-import jsx.jQuery.Listener;
 
 /**
  * @version 2013/03/31 17:40:08
@@ -87,12 +87,12 @@ public class FormUI<T extends FormUI> extends UI {
         return (T) this;
     }
 
-    @ListenUI(ui = UIAction.Focus)
+    @Listen(UIAction.Focus)
     private void startInput() {
         root.add(Focus.class);
     }
 
-    @ListenUI(ui = UIAction.Blur)
+    @Listen(UIAction.Blur)
     private void endInput() {
         root.remove(Focus.class);
     }

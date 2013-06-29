@@ -107,7 +107,7 @@ public class Publishable {
         if (subscriber != null) {
 
             for (Method method : subscriber.getClass().getDeclaredMethods()) {
-                ListenModel subscribe = method.getAnnotation(ListenModel.class);
+                Subscribe subscribe = method.getAnnotation(Subscribe.class);
 
                 if (subscribe != null) {
 
