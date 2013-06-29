@@ -9,11 +9,11 @@
  */
 package jsx.bwt;
 
-import js.util.jQuery;
-import js.util.jQuery.Listener;
+import jsx.jQuery;
 import jsx.bwt.FormUIStyle.Disable;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.FormUIStyle.FormRoot;
+import jsx.jQuery.Listener;
 
 /**
  * @version 2013/03/31 17:40:08

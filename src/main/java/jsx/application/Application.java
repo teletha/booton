@@ -20,10 +20,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import js.lang.Classes;
-import js.util.jQuery;
-import js.util.jQuery.Listener;
+import jsx.jQuery;
+import jsx.bwt.EventBus;
 import jsx.bwt.Publishable;
 import jsx.bwt.UIEvent;
+import jsx.jQuery.Listener;
 
 /**
  * @version 2012/12/11 14:19:29
@@ -93,24 +94,6 @@ public abstract class Application {
     }
 
     /**
-     * <p>
-     * Register event listener.
-     * </p>
-     */
-    public static void bind(PageListener subscriber) {
-        router.bind(subscriber);
-    }
-
-    /**
-     * <p>
-     * Register event listener.
-     * </p>
-     */
-    public static void unbind(PageListener subscriber) {
-        router.unbind(subscriber);
-    }
-
-    /**
      * @version 2013/06/17 13:57:06
      */
     private static class Router extends Publishable implements Listener {
@@ -177,11 +160,11 @@ public abstract class Application {
         private void dispatch(Page page) {
             // fire page unload event
             if (page != null) {
-                publish(PageListener.class).unload();
+                EventBus.Global.publish(new PageUnload(page));
             }
 
             // fire page load event
-            publish(PageListener.class).load();
+            // window.trigger(UIAction.PageLoad);
 
             // create element cradle
             jQuery cradle = $(document.createDocumentFragment());

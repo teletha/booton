@@ -24,7 +24,7 @@ import booton.translator.JavaAPIProvider;
 class ArrayList<E> extends AbstractCollection<E> implements List<E> {
 
     /** The actual container. */
-    private NativeArray<E> array = new NativeArray();
+    protected NativeArray<E> array = new NativeArray();
 
     /**
      * <p>

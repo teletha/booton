@@ -9,7 +9,7 @@
  */
 package jsx.application;
 
-import js.util.jQuery;
+import jsx.jQuery;
 
 /**
  * @version 2012/12/26 13:02:53

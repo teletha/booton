@@ -7,20 +7,14 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.application;
+package jsx.bwt.enhance;
+
+import jsx.bwt.UI;
 
 /**
- * @version 2013/06/17 15:40:41
+ * @version 2013/06/29 0:43:00
  */
-public final class PageLoad {
+public interface Popupable {
 
-    /** The loading page. */
-    public final Page page;
-
-    /**
-     * @param page
-     */
-    public PageLoad(Page page) {
-        this.page = page;
-    }
+    UI createPopup();
 }

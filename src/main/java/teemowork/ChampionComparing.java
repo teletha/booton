@@ -17,11 +17,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import js.util.jQuery;
-import js.util.jQuery.Listener;
+import jsx.jQuery;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.UIEvent;
+import jsx.jQuery.Listener;
 import teemowork.ChampionComparingStyle.Body;
 import teemowork.ChampionComparingStyle.Head;
 import teemowork.ChampionComparingStyle.Icon;

@@ -7,21 +7,17 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package teemowork.model.variable;
+package jsx.bwt.widget;
 
-import jsx.jQuery;
+import org.junit.Test;
 
 /**
- * @version 2013/03/11 11:46:14
+ * @version 2013/06/29 2:11:44
  */
-public interface HTMLizable {
+public class WidgetTest {
 
-    /**
-     * <p>
-     * Generate DOM representation of this object state.
-     * </p>
-     * 
-     * @param root
-     */
-    void toDOM(jQuery root);
+    @Test
+    public void widget() throws Exception {
+
+    }
 }

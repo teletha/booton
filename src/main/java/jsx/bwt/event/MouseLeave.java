@@ -7,21 +7,10 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package teemowork.model.variable;
-
-import jsx.jQuery;
+package jsx.bwt.event;
 
 /**
- * @version 2013/03/11 11:46:14
+ * @version 2013/06/26 11:40:55
  */
-public interface HTMLizable {
-
-    /**
-     * <p>
-     * Generate DOM representation of this object state.
-     * </p>
-     * 
-     * @param root
-     */
-    void toDOM(jQuery root);
+public class MouseLeave extends UIEvent {
 }

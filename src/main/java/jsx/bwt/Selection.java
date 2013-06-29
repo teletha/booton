@@ -10,24 +10,24 @@
 package jsx.bwt;
 
 import static js.lang.Global.*;
-import js.util.jQuery;
+import jsx.jQuery;
 import jsx.bwt.FormUIStyle.Focus;
-import jsx.bwt.SelectionStyle.SelectArrow;
-import jsx.bwt.SelectionStyle.SelectForm;
-import jsx.bwt.SelectionStyle.SelectItem;
-import jsx.bwt.SelectionStyle.SelectItemList;
-import jsx.bwt.SelectionStyle.SelectedItem;
+import jsx.bwt.SelectStyle.SelectArrow;
+import jsx.bwt.SelectStyle.SelectForm;
+import jsx.bwt.SelectStyle.SelectItem;
+import jsx.bwt.SelectStyle.SelectItemList;
+import jsx.bwt.SelectStyle.SelectedItem;
 import jsx.bwt.view.ScrollableListView;
-import jsx.bwt.view.ScrollableListView.ItemRenderer;
 import jsx.bwt.view.SlidableView;
+import jsx.bwt.view.ScrollableListView.ItemRenderer;
+import jsx.jQuery.Listener;
 import jsx.model.SelectableListener;
 import jsx.model.SelectableModel;
-import jsx.model.SelectableModel.Select;
 
 /**
  * @version 2013/04/08 23:38:34
  */
-public class Selection<M> extends FormUI<Selection> {
+public class Select<M> extends FormUI<Select> {
 
     /** The associated model. */
     public final SelectableModel<M> model;
@@ -49,7 +49,7 @@ public class Selection<M> extends FormUI<Selection> {
      * Create select form.
      * </p>
      */
-    public Selection(M... model) {
+    public Select(M... model) {
         this(new SelectableModel(model));
     }
 
@@ -58,43 +58,48 @@ public class Selection<M> extends FormUI<Selection> {
      * Create select form.
      * </p>
      */
-    public Selection(SelectableModel<M> selectable) {
+    public Select(SelectableModel<M> selectable) {
         model = selectable;
         model.bind(binder);
-        model.register(binder);
 
         form.add(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
 
         view = new ScrollableListView(10, 28).provide(binder);
         view.root.add(SelectItemList.class).bind(binder);
 
+        arrow = root.child(new Button(Icon.BottomArrow, new Listener() {
+
+            @Override
+            public void handler(UIEvent event) {
+                options.toggle();
+            }
+        }));
+        arrow.root.add(SelectArrow.class);
+
         options = root.child(new SlidableView(view));
         options.bind(binder);
-
-        arrow = root.child(new Button(Icon.BottomArrow, options));
-        arrow.root.add(SelectArrow.class);
 
         if (model.size() == 0) {
             disable();
         }
     }
 
-    @KeyBind(Key.Up)
+    @Listen(UIAction.Key_Up)
     private void selectPrevious() {
         model.selectPrevious();
     }
 
-    @KeyBind(Key.Down)
+    @Listen(UIAction.Key_Down)
     private void selectNext() {
         model.selectNext();
     }
 
-    @ListenUI(ui = UIAction.Focus)
+    @Listen(UIAction.Focus)
     private void startInput() {
         root.add(Focus.class);
     }
 
-    @ListenUI(ui = UIAction.Blur)
+    @Listen(UIAction.Blur)
     private void endInput() {
         root.remove(Focus.class);
     }
@@ -104,23 +109,9 @@ public class Selection<M> extends FormUI<Selection> {
      */
     private class Binder implements ItemRenderer, SelectableListener<M> {
 
-        @ListenUI(ui = UIAction.Click)
-        private void selectUIItem(UIEvent event) {
+        @Listen(UIAction.Click)
+        private void selectItem(UIEvent event) {
             model.setSelectionIndex(Integer.parseInt($(event.target).attr("index")));
-        }
-
-        /**
-         * <p>
-         * Select event from model.
-         * </p>
-         * 
-         * @param event
-         */
-        @ListenModel
-        private void model(Select event) {
-            form.val(event.item.toString());
-
-            view.render(event.index);
         }
 
         /**

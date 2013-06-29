@@ -9,7 +9,7 @@
  */
 package js.lang;
 
-import js.util.jQuery;
+import jsx.jQuery;
 import booton.translator.JavaAPIProvider;
 import booton.translator.JavascriptNativePrimitiveNumber;
 
