@@ -10,7 +10,7 @@
 package jsx.application;
 
 import static js.lang.Global.*;
-import js.util.jQuery;
+import jsx.jQuery;
 import jsx.application.HeaderStyle.MenuLink;
 import jsx.application.HeaderStyle.SubMenu;
 import jsx.application.HeaderStyle.SubMenuGroup;

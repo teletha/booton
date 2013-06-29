@@ -7,26 +7,30 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.application;
-
-import java.util.EventListener;
+package jsx.bwt.widget;
 
 /**
- * @version 2013/06/17 14:00:12
+ * @version 2013/06/29 1:33:54
  */
-public interface PageListener extends EventListener {
+public class Widget {
 
     /**
      * <p>
-     * This method is called whenever the user enter an application page.
+     * Initialization phase.
      * </p>
      */
-    void load();
+    protected Widget() {
+    }
 
     /**
      * <p>
-     * This method is called whenever the user leave an application page.
+     * Appedn child {@link Widget}.
      * </p>
+     * 
+     * @param child
+     * @return
      */
-    void unload();
+    public Widget append(Widget child) {
+        return null;
+    }
 }

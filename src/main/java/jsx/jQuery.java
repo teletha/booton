@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.util;
+package jsx;
 
 import static js.lang.Global.*;
 
@@ -16,7 +16,7 @@ import java.util.Iterator;
 
 import js.dom.Element;
 import js.dom.Image;
-import jsx.bwt.ListenUI;
+import jsx.bwt.Listen;
 import jsx.bwt.UI;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
@@ -319,8 +319,8 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
             Class clazz = subscriber.getClass();
             String namespace = "." + clazz.getSimpleName() + subscriber.hashCode();
 
-            for (Method method : clazz.getMethods()) {
-                ListenUI listen = method.getAnnotation(ListenUI.class);
+            for (Method method : clazz.getDeclaredMethods()) {
+                Listen listen = method.getAnnotation(Listen.class);
 
                 if (listen != null) {
                     Listener listener = new Subscriber(subscriber, method, listen.abort());
@@ -355,7 +355,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
                         listener = new Debounce(time, listener);
                     }
 
-                    for (final UIAction type : listen.ui()) {
+                    for (UIAction type : listen.value()) {
                         // ===========================
                         // KeyCode Wrapper
                         // ===========================
@@ -1379,6 +1379,33 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
      * <p>
+     * Execute all handlers and behaviors attached to the matched elements for the given event type.
+     * </p>
+     * 
+     * @param eventType A string containing a JavaScript event type, such as click or submit.
+     * @return A chainable API.
+     */
+    public jQuery trigger(UIAction type) {
+        if (type != null) {
+            trigger(type.name);
+        }
+
+        // API defintion
+        return this;
+    }
+
+    /**
+     * <p>
+     * Execute all handlers and behaviors attached to the matched elements for the given event type.
+     * </p>
+     * 
+     * @param eventType A string containing a JavaScript event type, such as click or submit.
+     * @return A chainable API.
+     */
+    public native jQuery trigger(String eventType);
+
+    /**
+     * <p>
      * Dettach all event handlers which are defined in the given subscriber from the selected
      * elements.
      * </p>
@@ -1392,10 +1419,10 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
             String namespace = "." + clazz.getSimpleName() + subscriber.hashCode();
 
             for (Method method : clazz.getMethods()) {
-                ListenUI annotation = method.getAnnotation(ListenUI.class);
+                Listen annotation = method.getAnnotation(Listen.class);
 
                 if (annotation != null) {
-                    for (UIAction type : annotation.ui()) {
+                    for (UIAction type : annotation.value()) {
                         off(type.name + namespace);
                     }
                 }

@@ -16,7 +16,7 @@ import js.dom.Location;
 import js.dom.Window;
 import js.lang.builtin.JSON;
 import js.lang.builtin.Storage;
-import js.util.jQuery;
+import jsx.jQuery;
 
 import org.w3c.dom.DocumentFragment;
 

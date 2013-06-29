@@ -19,12 +19,13 @@ import java.util.List;
 import js.bind.Notifiable;
 import js.bind.Observer;
 import js.math.Mathematics;
-import js.util.jQuery;
-import js.util.jQuery.Listener;
+import jsx.jQuery;
+import jsx.jQuery.Listener;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.UI;
 import jsx.bwt.UIEvent;
+import jsx.bwt.enhance.Popupable;
 import teemowork.ChampionDetailStyle.Active;
 import teemowork.ChampionDetailStyle.Amplifier;
 import teemowork.ChampionDetailStyle.Assigned;
@@ -578,7 +579,7 @@ public class ChampionDetail extends Page {
     /**
      * @version 2013/03/13 10:41:24
      */
-    private class ItemBox extends UI {
+    private class ItemBox extends UI implements Popupable {
 
         /** The item. */
         private Item item;
@@ -608,6 +609,17 @@ public class ChampionDetail extends Page {
 
                 setTooltip(view);
             }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public UI createPopup() {
+            ItemView view = new ItemView(item, item.getDescriptor(Version.Latest), build);
+            view.root.css("max-width", "350px");
+
+            return view;
         }
     }
 }

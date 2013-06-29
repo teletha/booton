@@ -16,7 +16,7 @@ import static teemowork.model.Version.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import js.util.jQuery;
+import jsx.jQuery;
 
 /**
  * 3.08準拠

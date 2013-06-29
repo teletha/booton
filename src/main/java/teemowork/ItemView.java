@@ -10,11 +10,11 @@
 package teemowork;
 
 import static teemowork.model.Status.*;
-import js.util.jQuery;
-import js.util.jQuery.Listener;
+import jsx.jQuery;
 import jsx.application.Application;
 import jsx.bwt.UI;
 import jsx.bwt.UIEvent;
+import jsx.jQuery.Listener;
 import teemowork.ItemViewStyle.AbilityArea;
 import teemowork.ItemViewStyle.Cost;
 import teemowork.ItemViewStyle.DescriptionArea;

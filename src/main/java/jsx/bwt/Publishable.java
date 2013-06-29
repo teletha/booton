@@ -23,7 +23,7 @@ import java.util.Set;
 /**
  * @version 2013/06/17 14:09:34
  */
-public abstract class Publishable {
+public class Publishable {
 
     /** The lazy initialized event listener holder. */
     private transient Map<Class, Subscribers> subscribers;

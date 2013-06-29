@@ -11,7 +11,7 @@ package teemowork;
 
 import java.util.Collection;
 
-import js.util.jQuery;
+import jsx.jQuery;
 import jsx.application.Application;
 import jsx.application.Page;
 import jsx.application.PageInfo;

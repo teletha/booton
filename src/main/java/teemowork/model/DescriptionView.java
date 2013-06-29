@@ -13,7 +13,7 @@ import java.util.List;
 
 import js.bind.Subscriber;
 import js.math.Mathematics;
-import js.util.jQuery;
+import jsx.jQuery;
 import teemowork.model.DescriptionViewStyle.Amplifier;
 import teemowork.model.DescriptionViewStyle.ComputedValue;
 import teemowork.model.DescriptionViewStyle.Current;
