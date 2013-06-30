@@ -15,6 +15,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.TypeInfo;
 
+import booton.css.CSS;
 import booton.translator.JavascriptNative;
 
 /**
@@ -24,7 +25,25 @@ import booton.translator.JavascriptNative;
  * 
  * @version 2013/03/31 21:09:35
  */
-public abstract class Element extends js.dom.Node implements org.w3c.dom.Element, JavascriptNative {
+public abstract class Element extends js.dom.Node implements JavascriptNative {
+
+    /** The localName attribute must return the context object's local name. */
+    public String localName;
+
+    /**
+     * <p>
+     * The tagName attribute must run these steps:
+     * </p>
+     * <ol>
+     * <li>If context object's namespace prefix is not null, let qualified name be its namespace
+     * prefix, followed by a ":" (U+003A), followed by its local name. Otherwise, let qualified name
+     * be its local name.</li>
+     * <li>If the context object is in the HTML namespace and its node document is an HTML document,
+     * let qualified name be converted to ASCII uppercase.</li>
+     * <li>Return qualified name.</li>
+     * </ol>
+     */
+    public String tagName;
 
     /** The class name list. */
     public DOMTokenList classList;
@@ -39,123 +58,208 @@ public abstract class Element extends js.dom.Node implements org.w3c.dom.Element
     public String textContent;
 
     /**
-     * {@inheritDoc}
+     * <p>
+     * Adds the specified class to each of the set of matched elements.
+     * </p>
+     * 
+     * @param classNames A class name to be added to the class attribute of each matched element.
+     * @return Chainable API.
      */
-    @Override
-    public native String getTagName();
+    public Element add(Class<? extends CSS> className) {
+        classList.add(className);
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Adds the specified class(es) to each of the set of matched elements.
+     * </p>
+     * 
+     * @param classes A list of class names to assign.
+     * @return Chainable API.
+     */
+    public Element add(Class<? extends CSS>... classes) {
+        for (Class<? extends CSS> clazz : classes) {
+            add(clazz);
+        }
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Insert content, specified by the parameter, to the end of each element in the set of matched
+     * elements.
+     * </p>
+     * 
+     * @param contents DOM element to insert at the end of each element in the set of matched
+     *            elements.
+     * @return Chainable API.
+     */
+    public Element append(Element contents) {
+        appedChild(contents);
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Get the value of an attribute for the first element in the set of matched elements.
+     * </p>
+     * 
+     * @param name The name of the attribute to get.
+     * @return The specified attribute value.
+     */
+    public String attr(String name) {
+        return getAttribute(name);
+    }
+
+    /**
+     * <p>
+     * Set one or more attributes for the set of matched elements.
+     * </p>
+     * 
+     * @param name The name of the attribute to set.
+     * @param value A value to set for the attribute.
+     * @return A chainable API.
+     */
+    public Element attr(String name, Object value) {
+        setAttribute(name, value.toString());
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Remove an attribute from each element in the set of matched elements.
+     * </p>
+     * 
+     * @param attributeName An attribute to remove.
+     * @return A chainable API.
+     */
+    public Element remove(String name) {
+        removeAttribute(name);
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Remove a class from each element in the set of matched elements.
+     * </p>
+     * 
+     * @param className A class name to be removed from the class attribute of each matched element.
+     * @return Chainable API.
+     */
+    public Element remove(Class<? extends CSS> className) {
+        classList.remove(className);
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Remove a single class, multiple classes, or all classes from each element in the set of
+     * matched elements.
+     * </p>
+     * 
+     * @param classes A list of class names to remove.
+     * @return Chainable API.
+     */
+    public Element remove(Class<? extends CSS>... classes) {
+        for (Class<? extends CSS> clazz : classes) {
+            remove(clazz);
+        }
+
+        // API definition
+        return this;
+    }
 
     /**
      * {@inheritDoc}
      */
-    @Override
-    public native String getAttribute(String name);
+    protected abstract String getAttribute(String name);
 
     /**
      * {@inheritDoc}
      */
-    @Override
-    public native void setAttribute(String name, String value);
+    protected abstract void setAttribute(String name, String value);
 
     /**
      * {@inheritDoc}
      */
-    @Override
-    public native void removeAttribute(String name);
+    protected abstract void removeAttribute(String name);
 
     /**
      * {@inheritDoc}
      */
-    @Override
-    public native Attr getAttributeNode(String name);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public native Attr setAttributeNode(Attr newAttr);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public native Attr removeAttributeNode(Attr oldAttr);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public native NodeList getElementsByTagName(String name);
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public native String getAttributeNS(String namespaceURI, String localName);
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public native void setAttributeNS(String namespaceURI, String qualifiedName, String value);
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public native void removeAttributeNS(String namespaceURI, String localName);
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public native Attr getAttributeNodeNS(String namespaceURI, String localName);
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public native Attr setAttributeNodeNS(Attr newAttr);
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public native NodeList getElementsByTagNameNS(String namespaceURI, String localName);
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public native boolean hasAttribute(String name);
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public native boolean hasAttributeNS(String namespaceURI, String localName);
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public native TypeInfo getSchemaTypeInfo();
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public native void setIdAttribute(String name, boolean isId);
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public native void setIdAttributeNS(String namespaceURI, String localName, boolean isId);
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public native void setIdAttributeNode(Attr idAttr, boolean isId);
 
     /**

@@ -9,6 +9,8 @@
  */
 package js.dom;
 
+import org.w3c.dom.DocumentFragment;
+
 import booton.translator.JavascriptNative;
 
 /**
@@ -18,7 +20,16 @@ import booton.translator.JavascriptNative;
  * 
  * @version 2013/03/23 14:13:30
  */
-public abstract class Document implements org.w3c.dom.Document, JavascriptNative {
+public abstract class Document implements JavascriptNative {
+
+    /**
+     * <p>
+     * Return a new DocumentFragment node with its node document set to the context object.
+     * </p>
+     * 
+     * @return
+     */
+    public native DocumentFragment createDocumentFragment();
 
     /**
      * <p>
