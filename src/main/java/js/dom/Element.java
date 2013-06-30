@@ -9,11 +9,7 @@
  */
 package js.dom;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.TypeInfo;
 
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
@@ -23,7 +19,7 @@ import booton.translator.JavascriptNative;
  * Enhanced {@link org.w3c.dom.Element} for web platform.
  * </p>
  * 
- * @version 2013/03/31 21:09:35
+ * @version 2013/07/01 2:12:14
  */
 public abstract class Element extends js.dom.Node implements JavascriptNative {
 
@@ -57,12 +53,21 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
     /** The text contents. */
     public String textContent;
 
+    /** Returns the child elements. */
+    public HTMLCollection children;
+
+    /** Returns the first preceding sibling that is an element, and null otherwise. */
+    public Element previousElementSibling;
+
+    /** Returns the first following sibling that is an element, and null otherwise. */
+    public Element nextElementSibling;
+
     /**
      * <p>
-     * Adds the specified class to each of the set of matched elements.
+     * Adds the specified class to this elements.
      * </p>
      * 
-     * @param classNames A class name to be added to the class attribute of each matched element.
+     * @param classNames A class name to be added to the class attribute of this element.
      * @return Chainable API.
      */
     public Element add(Class<? extends CSS> className) {
@@ -74,7 +79,7 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
 
     /**
      * <p>
-     * Adds the specified class(es) to each of the set of matched elements.
+     * Adds the specified class(es) to this elements.
      * </p>
      * 
      * @param classes A list of class names to assign.
@@ -91,12 +96,10 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
 
     /**
      * <p>
-     * Insert content, specified by the parameter, to the end of each element in the set of matched
-     * elements.
+     * Insert content, specified by the parameter, to the end of this element.
      * </p>
      * 
-     * @param contents DOM element to insert at the end of each element in the set of matched
-     *            elements.
+     * @param contents DOM element to insert at the end of this element.
      * @return Chainable API.
      */
     public Element append(Element contents) {
@@ -108,27 +111,60 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
 
     /**
      * <p>
-     * Get the value of an attribute for the first element in the set of matched elements.
+     * Insert content, specified by the parameter, to the end of this element.
+     * </p>
+     * 
+     * @param contents DOM element to insert at the end of this element.
+     * @return Chainable API.
+     */
+    public Element append(Object contents) {
+        if (contents instanceof Element) {
+            appedChild((Element) contents);
+        } else {
+            appedChild(String.valueOf(contents));
+        }
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Get the value of the specified attribute.
      * </p>
      * 
      * @param name The name of the attribute to get.
      * @return The specified attribute value.
      */
     public String attr(String name) {
-        return getAttribute(name);
+        return getAttribute(String.valueOf(name));
     }
 
     /**
      * <p>
-     * Set one or more attributes for the set of matched elements.
+     * Set attribute for this element.
      * </p>
      * 
-     * @param name The name of the attribute to set.
-     * @param value A value to set for the attribute.
+     * @param name An attribute name.
+     * @param value An attribute value.
      * @return A chainable API.
      */
     public Element attr(String name, Object value) {
-        setAttribute(name, value.toString());
+        return attr(null, name, value);
+    }
+
+    /**
+     * <p>
+     * Set attribute with namespace for this element.
+     * </p>
+     * 
+     * @param namespace The namespace uri of the attribute.
+     * @param name An attribute name.
+     * @param value An attribute value.
+     * @return A chainable API.
+     */
+    public Element attr(String namespace, String name, Object value) {
+        setAttributeNS(namespace, name, String.valueOf(value));
 
         // API definition
         return this;
@@ -136,14 +172,14 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
 
     /**
      * <p>
-     * Remove an attribute from each element in the set of matched elements.
+     * Remove an attribute from this element.
      * </p>
      * 
      * @param attributeName An attribute to remove.
      * @return A chainable API.
      */
     public Element remove(String name) {
-        removeAttribute(name);
+        removeAttribute(String.valueOf(name));
 
         // API definition
         return this;
@@ -151,10 +187,10 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
 
     /**
      * <p>
-     * Remove a class from each element in the set of matched elements.
+     * Remove a class from this element.
      * </p>
      * 
-     * @param className A class name to be removed from the class attribute of each matched element.
+     * @param className A class name to be removed from the class attribute of this element.
      * @return Chainable API.
      */
     public Element remove(Class<? extends CSS> className) {
@@ -166,8 +202,7 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
 
     /**
      * <p>
-     * Remove a single class, multiple classes, or all classes from each element in the set of
-     * matched elements.
+     * Remove a single class, multiple classes, or all classes from this element.
      * </p>
      * 
      * @param classes A list of class names to remove.
@@ -195,72 +230,12 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
     /**
      * {@inheritDoc}
      */
+    protected abstract void setAttributeNS(String namespace, String name, String value);
+
+    /**
+     * {@inheritDoc}
+     */
     protected abstract void removeAttribute(String name);
-
-    /**
-     * {@inheritDoc}
-     */
-    public native NodeList getElementsByTagName(String name);
-
-    /**
-     * {@inheritDoc}
-     */
-    public native String getAttributeNS(String namespaceURI, String localName);
-
-    /**
-     * {@inheritDoc}
-     */
-    public native void setAttributeNS(String namespaceURI, String qualifiedName, String value);
-
-    /**
-     * {@inheritDoc}
-     */
-    public native void removeAttributeNS(String namespaceURI, String localName);
-
-    /**
-     * {@inheritDoc}
-     */
-    public native Attr getAttributeNodeNS(String namespaceURI, String localName);
-
-    /**
-     * {@inheritDoc}
-     */
-    public native Attr setAttributeNodeNS(Attr newAttr);
-
-    /**
-     * {@inheritDoc}
-     */
-    public native NodeList getElementsByTagNameNS(String namespaceURI, String localName);
-
-    /**
-     * {@inheritDoc}
-     */
-    public native boolean hasAttribute(String name);
-
-    /**
-     * {@inheritDoc}
-     */
-    public native boolean hasAttributeNS(String namespaceURI, String localName);
-
-    /**
-     * {@inheritDoc}
-     */
-    public native TypeInfo getSchemaTypeInfo();
-
-    /**
-     * {@inheritDoc}
-     */
-    public native void setIdAttribute(String name, boolean isId);
-
-    /**
-     * {@inheritDoc}
-     */
-    public native void setIdAttributeNS(String namespaceURI, String localName, boolean isId);
-
-    /**
-     * {@inheritDoc}
-     */
-    public native void setIdAttributeNode(Attr idAttr, boolean isId);
 
     /**
      * <p>
@@ -283,111 +258,6 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
      * @return
      */
     public native Element[] querySelectorAll(String selector);
-
-    /**
-     * Adds a new attribute. If an attribute with that name is already present in the element, its
-     * value is changed to be that of the value parameter. This value is a simple string; it is not
-     * parsed as it is being set. So any markup (such as syntax to be recognized as an entity
-     * reference) is treated as literal text, and needs to be appropriately escaped by the
-     * implementation when it is written out. In order to assign an attribute value that contains
-     * entity references, the user must create an <code>Attr</code> node plus any <code>Text</code>
-     * and <code>EntityReference</code> nodes, build the appropriate subtree, and use
-     * <code>setAttributeNode</code> to assign it as the value of an attribute. <br>
-     * To set an attribute with a qualified name and namespace URI, use the
-     * <code>setAttributeNS</code> method.
-     * 
-     * @param name The name of the attribute to create or alter.
-     * @param value Value to set.
-     * @exception DOMException INVALID_CHARACTER_ERR: Raised if the specified name is not an XML
-     *                name according to the XML version in use specified in the
-     *                <code>Document.xmlVersion</code> attribute. <br>
-     *                NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
-     */
-    public native void setAttribute(String name, boolean value);
-
-    /**
-     * Adds a new attribute. If an attribute with that name is already present in the element, its
-     * value is changed to be that of the value parameter. This value is a simple string; it is not
-     * parsed as it is being set. So any markup (such as syntax to be recognized as an entity
-     * reference) is treated as literal text, and needs to be appropriately escaped by the
-     * implementation when it is written out. In order to assign an attribute value that contains
-     * entity references, the user must create an <code>Attr</code> node plus any <code>Text</code>
-     * and <code>EntityReference</code> nodes, build the appropriate subtree, and use
-     * <code>setAttributeNode</code> to assign it as the value of an attribute. <br>
-     * To set an attribute with a qualified name and namespace URI, use the
-     * <code>setAttributeNS</code> method.
-     * 
-     * @param name The name of the attribute to create or alter.
-     * @param value Value to set.
-     * @exception DOMException INVALID_CHARACTER_ERR: Raised if the specified name is not an XML
-     *                name according to the XML version in use specified in the
-     *                <code>Document.xmlVersion</code> attribute. <br>
-     *                NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
-     */
-    public native void setAttribute(String name, int value);
-
-    /**
-     * Adds a new attribute. If an attribute with that name is already present in the element, its
-     * value is changed to be that of the value parameter. This value is a simple string; it is not
-     * parsed as it is being set. So any markup (such as syntax to be recognized as an entity
-     * reference) is treated as literal text, and needs to be appropriately escaped by the
-     * implementation when it is written out. In order to assign an attribute value that contains
-     * entity references, the user must create an <code>Attr</code> node plus any <code>Text</code>
-     * and <code>EntityReference</code> nodes, build the appropriate subtree, and use
-     * <code>setAttributeNode</code> to assign it as the value of an attribute. <br>
-     * To set an attribute with a qualified name and namespace URI, use the
-     * <code>setAttributeNS</code> method.
-     * 
-     * @param name The name of the attribute to create or alter.
-     * @param value Value to set.
-     * @exception DOMException INVALID_CHARACTER_ERR: Raised if the specified name is not an XML
-     *                name according to the XML version in use specified in the
-     *                <code>Document.xmlVersion</code> attribute. <br>
-     *                NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
-     */
-    public native void setAttribute(String name, long value);
-
-    /**
-     * Adds a new attribute. If an attribute with that name is already present in the element, its
-     * value is changed to be that of the value parameter. This value is a simple string; it is not
-     * parsed as it is being set. So any markup (such as syntax to be recognized as an entity
-     * reference) is treated as literal text, and needs to be appropriately escaped by the
-     * implementation when it is written out. In order to assign an attribute value that contains
-     * entity references, the user must create an <code>Attr</code> node plus any <code>Text</code>
-     * and <code>EntityReference</code> nodes, build the appropriate subtree, and use
-     * <code>setAttributeNode</code> to assign it as the value of an attribute. <br>
-     * To set an attribute with a qualified name and namespace URI, use the
-     * <code>setAttributeNS</code> method.
-     * 
-     * @param name The name of the attribute to create or alter.
-     * @param value Value to set.
-     * @exception DOMException INVALID_CHARACTER_ERR: Raised if the specified name is not an XML
-     *                name according to the XML version in use specified in the
-     *                <code>Document.xmlVersion</code> attribute. <br>
-     *                NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
-     */
-    public native void setAttribute(String name, float value);
-
-    /**
-     * Adds a new attribute. If an attribute with that name is already present in the element, its
-     * value is changed to be that of the value parameter. This value is a simple string; it is not
-     * parsed as it is being set. So any markup (such as syntax to be recognized as an entity
-     * reference) is treated as literal text, and needs to be appropriately escaped by the
-     * implementation when it is written out. In order to assign an attribute value that contains
-     * entity references, the user must create an <code>Attr</code> node plus any <code>Text</code>
-     * and <code>EntityReference</code> nodes, build the appropriate subtree, and use
-     * <code>setAttributeNode</code> to assign it as the value of an attribute. <br>
-     * To set an attribute with a qualified name and namespace URI, use the
-     * <code>setAttributeNS</code> method.
-     * 
-     * @param name The name of the attribute to create or alter.
-     * @param value Value to set.
-     * @exception DOMException INVALID_CHARACTER_ERR: Raised if the specified name is not an XML
-     *                name according to the XML version in use specified in the
-     *                <code>Document.xmlVersion</code> attribute. <br>
-     *                NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
-     */
-    public native void setAttribute(String name, double value);
 
     /**
      * <p>

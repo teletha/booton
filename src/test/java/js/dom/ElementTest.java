@@ -27,4 +27,30 @@ public class ElementTest {
         element.remove("key");
         assert element.attr("key") == null;
     }
+
+    @Test
+    public void attributeWithNull() throws Exception {
+        Element element = new EmulateElement();
+        assert element.attr(null) == null;
+        assert element.attr("null") == null;
+
+        element.attr(null, null);
+        assert element.attr(null).equals("null");
+        assert element.attr("null").equals("null");
+
+        element.remove((String) null);
+        assert element.attr(null) == null;
+        assert element.attr("null") == null;
+    }
+
+    @Test
+    public void append() throws Exception {
+        Element element = new EmulateElement();
+        Element child = new EmulateElement();
+
+        assert element.children.length == 0;
+
+        element.append(child);
+        assert element.children.length == 1;
+    }
 }
