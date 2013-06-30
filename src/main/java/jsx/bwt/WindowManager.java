@@ -12,9 +12,9 @@ package jsx.bwt;
 import static js.lang.Global.*;
 import static jsx.bwt.UIAction.*;
 import jsx.jQuery;
+import jsx.jQuery.Offset;
 import jsx.application.PageUnload;
 import jsx.bwt.view.PopupViewStyle;
-import jsx.jQuery.Offset;
 import kiss.Disposable;
 
 /**
@@ -58,6 +58,8 @@ public class WindowManager {
         Offset offset = target.position();
         popup.css("top", offset.top + target.outerHeight() + 15 + "px")
                 .css("left", offset.left - popup.outerWidth() / 2 + target.outerWidth() / 2 + "px");
+
+        System.out.println(popup.get(0).attr("style"));
     }
 
     /**
