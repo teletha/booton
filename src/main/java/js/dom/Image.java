@@ -14,7 +14,7 @@ import jsx.jQuery;
 import booton.css.CSS;
 
 /**
- * @version 2013/03/22 14:53:36
+ * @version 2013/07/01 2:12:00
  */
 public class Image {
 
@@ -38,8 +38,8 @@ public class Image {
      */
     public Image(jQuery parent, Class<? extends CSS> className) {
         image = document.createElementNS(SVG, "image");
-        image.setAttribute("width", "100%");
-        image.setAttribute("height", "100%");
+        image.attr("width", "100%");
+        image.attr("height", "100%");
         filters = $(document.createElementNS(SVG, "filter"));
         filters.attr("id", "filter" + hashCode());
 
@@ -61,8 +61,8 @@ public class Image {
      * @return
      */
     public Image size(int width, int height) {
-        image.setAttribute("width", width);
-        image.setAttribute("height", height);
+        image.attr("width", width);
+        image.attr("height", height);
         svg.attr("width", width);
         svg.attr("height", height);
 
@@ -79,7 +79,7 @@ public class Image {
      * @return
      */
     public Image src(String src) {
-        image.setAttributeNS(XLINK, "xlink:href", src);
+        image.attr(XLINK, "xlink:href", src);
 
         // Chainable API
         return this;
@@ -127,7 +127,7 @@ public class Image {
         filters.append(filter);
 
         // apply filter
-        image.setAttribute("filter", "url('#filter" + hashCode() + "')");
+        image.attr("filter", "url('#filter" + hashCode() + "')");
 
         // Chainable API
         return this;
@@ -146,11 +146,11 @@ public class Image {
      */
     public Image clip(int x, int y, int width, int height) {
         // apply clip
-        image.setAttribute("x", "-" + x);
-        image.setAttribute("y", "-" + y);
-        image.setAttribute("width", x + width);
-        image.setAttribute("height", y + height);
-        image.setAttribute("preserveAspectRatio", "xMinYMin slice");
+        image.attr("x", "-" + x);
+        image.attr("y", "-" + y);
+        image.attr("width", x + width);
+        image.attr("height", y + height);
+        image.attr("preserveAspectRatio", "xMinYMin slice");
 
         return this;
     }
@@ -167,7 +167,7 @@ public class Image {
         filters.empty();
 
         // unapply filter
-        image.removeAttribute("filter");
+        image.remove("filter");
 
         // Chainable API
         return this;

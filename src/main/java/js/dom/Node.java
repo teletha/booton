@@ -22,6 +22,8 @@ import booton.translator.JavascriptNative;
  */
 public abstract class Node implements JavascriptNative {
 
+    protected abstract Node appedChild(Object child);
+
     /**
      * {@inheritDoc}
      */
@@ -96,8 +98,6 @@ public abstract class Node implements JavascriptNative {
      * {@inheritDoc}
      */
     public native Node removeChild(org.w3c.dom.Node oldChild) throws DOMException;
-
-    protected abstract Node appedChild(Node child);
 
     /**
      * {@inheritDoc}

@@ -10,9 +10,9 @@
 package js.dom;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * @version 2013/06/30 12:21:46
@@ -20,17 +20,24 @@ import java.util.Map;
 public class EmulateElement extends Element {
 
     /** The attribute holder. */
-    private final Map<String, String> attributes = new HashMap();
+    private final AttributesImpl attributes = new AttributesImpl();
 
-    /** The child nodes holder. */
-    private final List<Node> children = new ArrayList();
+    /** The child nodes. */
+    private final List childNodes = new ArrayList();
+
+    /**
+     * 
+     */
+    public EmulateElement() {
+        this.children = new EmulateHTMLCollection();
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     protected String getAttribute(String name) {
-        return attributes.get(name);
+        return attributes.getValue(name);
     }
 
     /**
@@ -38,7 +45,17 @@ public class EmulateElement extends Element {
      */
     @Override
     protected void setAttribute(String name, String value) {
-        attributes.put(name, value);
+        attributes.addAttribute("", name, name, "", value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void setAttributeNS(String namespace, String name, String value) {
+        name = String.valueOf(name);
+
+        attributes.addAttribute(namespace, name, name, "", value);
     }
 
     /**
@@ -46,17 +63,28 @@ public class EmulateElement extends Element {
      */
     @Override
     protected void removeAttribute(String name) {
-        attributes.remove(name);
+        attributes.removeAttribute(attributes.getIndex(name));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected Node appedChild(Node child) {
+    protected Node appedChild(Object child) {
         if (child != null) {
-            children.add(child);
+            childNodes().add(child);
         }
         return null;
+    }
+
+    /**
+     * <p>
+     * Helper method to {@link EmulateHTMLCollection} for child elements.
+     * </p>
+     * 
+     * @return
+     */
+    private EmulateHTMLCollection childNodes() {
+        return (EmulateHTMLCollection) children;
     }
 }
