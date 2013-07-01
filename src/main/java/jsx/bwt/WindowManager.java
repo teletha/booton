@@ -60,9 +60,9 @@ public class WindowManager {
         popup.css("top", offset.top + target.outerHeight() + 15 + "px")
                 .css("left", offset.left - popup.outerWidth() / 2 + target.outerWidth() / 2 + "px");
 
-        for (Element e : document.querySelector("#Content").children) {
-            System.out.println(e);
-        }
+        Element e = document.querySelector("#Content");
+        System.out.println(e.text());
+        e.text(null);
     }
 
     /**
