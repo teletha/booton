@@ -7,12 +7,10 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator;
+package js.dom;
 
 /**
- * @version 2013/05/18 3:20:44
+ * @version 2013/07/01 12:01:48
  */
-public @interface JavascriptMethod {
-
-    String value();
+public abstract class Text extends Node {
 }

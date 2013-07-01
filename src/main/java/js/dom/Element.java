@@ -9,8 +9,6 @@
  */
 package js.dom;
 
-import org.w3c.dom.Node;
-
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
 
@@ -43,15 +41,6 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
 
     /** The class name list. */
     public DOMTokenList classList;
-
-    /** The first direct child node of an element, or null if this element has no child nodes. */
-    public Node firstChild;
-
-    /** The last direct child node of an element, or null if this element has no child nodes. */
-    public Node lastChild;
-
-    /** The text contents. */
-    public String textContent;
 
     /** Returns the child elements. */
     public HTMLCollection children;
@@ -96,7 +85,7 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
 
     /**
      * <p>
-     * Insert content, specified by the parameter, to the end of this element.
+     * Insert content to the end of this element.
      * </p>
      * 
      * @param contents DOM element to insert at the end of this element.
@@ -111,7 +100,7 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
 
     /**
      * <p>
-     * Insert content, specified by the parameter, to the end of this element.
+     * Insert content to the end of this element.
      * </p>
      * 
      * @param contents DOM element to insert at the end of this element.
@@ -172,6 +161,21 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
 
     /**
      * <p>
+     * Insert content to the begining of this element.
+     * </p>
+     * 
+     * @param contents DOM element to insert at the begining of this element.
+     * @return Chainable API.
+     */
+    public Element prepend(Element contents) {
+        insertBefore(contents, firstChild);
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
      * Remove an attribute from this element.
      * </p>
      * 
@@ -212,6 +216,32 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
         for (Class<? extends CSS> clazz : classes) {
             remove(clazz);
         }
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Get the combined text contents of this element, including its descendants.
+     * </p>
+     * 
+     * @return A text contents.
+     */
+    public String text() {
+        return getTextContent();
+    }
+
+    /**
+     * <p>
+     * Set the content of this element.
+     * </p>
+     * 
+     * @param text A text to set.
+     * @return Chainable API.
+     */
+    public Element text(Object text) {
+        setTextContent(String.valueOf(text));
 
         // API definition
         return this;

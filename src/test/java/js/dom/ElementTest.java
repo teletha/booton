@@ -52,5 +52,48 @@ public class ElementTest {
 
         element.append(child);
         assert element.children.length == 1;
+        assert element.children.item(0) == child;
+    }
+
+    @Test
+    public void appendMultiple() throws Exception {
+        Element element = new EmulateElement();
+        Element child1 = new EmulateElement();
+        Element child2 = new EmulateElement();
+
+        assert element.children.length == 0;
+
+        element.append(child1).append(child2);
+        assert element.children.length == 2;
+        assert element.children.item(0) == child1;
+        assert element.children.item(1) == child2;
+    }
+
+    @Test
+    public void appendDuplication() throws Exception {
+        Element element = new EmulateElement();
+        Element child1 = new EmulateElement();
+        Element child2 = new EmulateElement();
+
+        assert element.children.length == 0;
+
+        element.append(child1).append(child2).append(child1);
+        assert element.children.length == 2;
+        assert element.children.item(0) == child2;
+        assert element.children.item(1) == child1;
+    }
+
+    @Test
+    public void prepend() throws Exception {
+        Element element = new EmulateElement();
+        Element child1 = new EmulateElement();
+        Element child2 = new EmulateElement();
+
+        assert element.children.length == 0;
+
+        element.prepend(child1).prepend(child2);
+        assert element.children.length == 2;
+        assert element.children.item(0) == child2;
+        assert element.children.item(1) == child1;
     }
 }
