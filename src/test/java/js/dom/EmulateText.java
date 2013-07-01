@@ -10,7 +10,7 @@
 package js.dom;
 
 /**
- * @version 2013/07/01 12:01:30
+ * @version 2013/07/01 21:30:14
  */
 public class EmulateText extends Text {
 
@@ -44,7 +44,25 @@ public class EmulateText extends Text {
      * {@inheritDoc}
      */
     @Override
-    protected String getTextContent() {
+    protected Node firstChild() {
+        // API definition
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Node lastChild() {
+        // API definition
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String textContent() {
         return text;
     }
 
@@ -52,7 +70,7 @@ public class EmulateText extends Text {
      * {@inheritDoc}
      */
     @Override
-    protected void setTextContent(String textContent) {
+    protected void textContent(String textContent) {
         text = String.valueOf(textContent);
     }
 

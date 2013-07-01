@@ -61,8 +61,10 @@ public class WindowManager {
                 .css("left", offset.left - popup.outerWidth() / 2 + target.outerWidth() / 2 + "px");
 
         Element e = document.querySelector("#Content");
-        System.out.println(e.text());
-        e.text(null);
+
+        for (Element child : e.children()) {
+            System.out.println(child);
+        }
     }
 
     /**

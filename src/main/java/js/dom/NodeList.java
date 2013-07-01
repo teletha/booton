@@ -17,7 +17,7 @@ import booton.translator.JavascriptNativePropertyAccessor;
 /**
  * @version 2013/07/01 3:32:52
  */
-public abstract class HTMLCollection implements Iterable<Element>, JavascriptNative {
+public abstract class NodeList<T extends Node> implements Iterable<T>, JavascriptNative {
 
     /**
      * <p>
@@ -38,14 +38,14 @@ public abstract class HTMLCollection implements Iterable<Element>, JavascriptNat
      * @param index A element index.
      * @return A indexth element.
      */
-    public abstract Element item(int index);
+    public abstract T item(int index);
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Iterator<Element> iterator() {
-        return new Iterator<Element>() {
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
 
             /** The cursor. */
             private int cursor = 0;
@@ -62,7 +62,7 @@ public abstract class HTMLCollection implements Iterable<Element>, JavascriptNat
              * {@inheritDoc}
              */
             @Override
-            public Element next() {
+            public T next() {
                 return item(cursor++);
             }
 
@@ -73,7 +73,6 @@ public abstract class HTMLCollection implements Iterable<Element>, JavascriptNat
             public void remove() {
                 throw new UnsupportedOperationException();
             }
-
         };
     }
 }
