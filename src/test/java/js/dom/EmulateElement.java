@@ -10,12 +10,13 @@
 package js.dom;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.xml.sax.helpers.AttributesImpl;
 
 /**
- * @version 2013/06/30 12:21:46
+ * @version 2013/07/01 23:55:23
  */
 public class EmulateElement extends Element {
 
@@ -25,11 +26,13 @@ public class EmulateElement extends Element {
     /** The child nodes holder. */
     private final Nodes nodes = new Nodes();
 
+    /** The parent element. */
+    private EmulateElement parent;
+
     /**
      * 
      */
     public EmulateElement() {
-        this.children = nodes;
     }
 
     /**
@@ -105,11 +108,28 @@ public class EmulateElement extends Element {
      * {@inheritDoc}
      */
     @Override
-    protected String getTextContent() {
+    protected Node firstChild() {
+        return nodes.size() == 0 ? null : nodes.get(0);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Node lastChild() {
+        int size = nodes.size();
+        return size == 0 ? null : nodes.get(size - 1);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String textContent() {
         StringBuilder text = new StringBuilder();
 
         for (Node item : nodes) {
-            text.append(item.getTextContent());
+            text.append(item.textContent());
         }
         return text.toString();
     }
@@ -118,15 +138,97 @@ public class EmulateElement extends Element {
      * {@inheritDoc}
      */
     @Override
-    protected void setTextContent(String textContent) {
+    protected void textContent(String textContent) {
         nodes.clear();
         nodes.add(textContent);
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Element firstElementChild() {
+        for (int i = 0; i < nodes.size(); i++) {
+            Node node = nodes.get(i);
+
+            if (node instanceof Element) {
+                return (Element) node;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Element lastElementChild() {
+        for (int i = nodes.size() - 1; 0 <= i; i--) {
+            Node node = nodes.get(i);
+
+            if (node instanceof Element) {
+                return (Element) node;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Element previousElementSibling() {
+        if (parent == null) {
+            return null;
+        }
+
+        int index = parent.nodes.indexOf(this) - 1;
+
+        while (0 <= index) {
+            Node node = parent.nodes.get(index);
+
+            if (node instanceof Element) {
+                return (Element) node;
+            }
+            index--;
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Element nextElementSibling() {
+        if (parent == null) {
+            return null;
+        }
+
+        int index = parent.nodes.indexOf(this) + 1;
+
+        while (index < parent.nodes.size()) {
+            Node node = parent.nodes.get(index);
+
+            if (node instanceof Element) {
+                return (Element) node;
+            }
+            index++;
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected NodeList<Element> querySelectorAll(String selector) {
+        return null;
+    }
+
+    /**
      * @version 2013/07/01 9:30:36
      */
-    private class Nodes extends HTMLCollection {
+    private class Nodes implements Iterable<Node> {
 
         /** The current node set. */
         private final List<Node> nodes = new ArrayList();
@@ -135,17 +237,8 @@ public class EmulateElement extends Element {
          * {@inheritDoc}
          */
         @Override
-        public Element item(int index) {
-            int counter = 0;
-
-            for (int i = 0; i < nodes.size(); i++) {
-                Object node = nodes.get(i);
-
-                if (node instanceof Element && counter++ == index) {
-                    return (Element) node;
-                }
-            }
-            return null;
+        public Iterator<Node> iterator() {
+            return nodes.iterator();
         }
 
         /**
@@ -185,7 +278,6 @@ public class EmulateElement extends Element {
                 int found = nodes.indexOf(node);
 
                 if (found != -1) {
-                    length--;
                     nodes.remove(found);
 
                     if (found <= index) {
@@ -195,11 +287,29 @@ public class EmulateElement extends Element {
 
                 // append it
                 nodes.add(index, node);
-                length++;
 
-                // modify first child
-                if (index == 0) {
-                    firstChild = node;
+                // modify tree
+                if (node instanceof EmulateElement) {
+                    ((EmulateElement) node).parent = EmulateElement.this;
+                }
+            }
+        }
+
+        /**
+         * <p>
+         * Add node.
+         * </p>
+         * 
+         * @param contents
+         */
+        private void remove(int index) {
+            if (0 <= index && index < size()) {
+                // remove it
+                Node node = nodes.remove(index);
+
+                // modify tree
+                if (node instanceof EmulateElement) {
+                    ((EmulateElement) node).parent = null;
                 }
             }
         }
@@ -238,8 +348,61 @@ public class EmulateElement extends Element {
          * </p>
          */
         private void clear() {
-            nodes.clear();
-            length = 0;
+            while (0 < size()) {
+                remove(0);
+            }
+        }
+
+        /**
+         * <p>
+         * Helperr method to get node by index.
+         * </p>
+         * 
+         * @param index
+         * @return
+         */
+        private Node get(int index) {
+            return nodes.get(index);
+        }
+    }
+
+    /**
+     * @version 2013/07/01 20:41:28
+     */
+    private class Children extends HTMLCollection {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int length() {
+            int counter = 0;
+
+            for (int i = 0; i < nodes.size(); i++) {
+                Node node = nodes.get(i);
+
+                if (node instanceof Element) {
+                    counter++;
+                }
+            }
+            return counter;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Element item(int index) {
+            int counter = 0;
+
+            for (int i = 0; i < nodes.size(); i++) {
+                Node node = nodes.get(i);
+
+                if (node instanceof Element && counter++ == index) {
+                    return (Element) node;
+                }
+            }
+            return null;
         }
     }
 }

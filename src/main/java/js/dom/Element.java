@@ -9,8 +9,12 @@
  */
 package js.dom;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativePropertyAccessor;
 
 /**
  * <p>
@@ -41,15 +45,6 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
 
     /** The class name list. */
     public DOMTokenList classList;
-
-    /** Returns the child elements. */
-    public HTMLCollection children;
-
-    /** Returns the first preceding sibling that is an element, and null otherwise. */
-    public Element previousElementSibling;
-
-    /** Returns the first following sibling that is an element, and null otherwise. */
-    public Element nextElementSibling;
 
     /**
      * <p>
@@ -161,6 +156,25 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
 
     /**
      * <p>
+     * Get the children of this element.
+     * </p>
+     * 
+     * @return A list of child elements.
+     */
+    public List<Element> children() {
+        List<Element> list = new ArrayList();
+        Element element = firstElementChild();
+
+        while (element != null) {
+            list.add(element);
+
+            element = element.nextElementSibling();
+        }
+        return list;
+    }
+
+    /**
+     * <p>
      * Insert content to the begining of this element.
      * </p>
      * 
@@ -168,10 +182,22 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
      * @return Chainable API.
      */
     public Element prepend(Element contents) {
-        insertBefore(contents, firstChild);
+        insertBefore(contents, firstChild());
 
         // API definition
         return this;
+    }
+
+    /**
+     * <p>
+     * Find
+     * </p>
+     * 
+     * @param selector
+     * @return
+     */
+    public List<Element> query(String selector) {
+        return null;
     }
 
     /**
@@ -229,7 +255,7 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
      * @return A text contents.
      */
     public String text() {
-        return getTextContent();
+        return textContent();
     }
 
     /**
@@ -241,11 +267,51 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
      * @return Chainable API.
      */
     public Element text(Object text) {
-        setTextContent(String.valueOf(text));
+        textContent(String.valueOf(text));
 
         // API definition
         return this;
     }
+
+    /**
+     * <p>
+     * Returns the first child that is an element, and null otherwise.
+     * </p>
+     * 
+     * @return The first child that is an element, and null otherwise.
+     */
+    @JavascriptNativePropertyAccessor
+    protected abstract Element firstElementChild();
+
+    /**
+     * <p>
+     * Returns the last child that is an element, and null otherwise.
+     * </p>
+     * 
+     * @return The last child that is an element, and null otherwise.
+     */
+    @JavascriptNativePropertyAccessor
+    protected abstract Element lastElementChild();
+
+    /**
+     * <p>
+     * Returns the first preceding sibling that is an element, and null otherwise.
+     * </p>
+     * 
+     * @return The first preceding sibling that is an element, and null otherwise.
+     */
+    @JavascriptNativePropertyAccessor
+    protected abstract Element previousElementSibling();
+
+    /**
+     * <p>
+     * Returns the first following sibling that is an element, and null otherwise.
+     * </p>
+     * 
+     * @return The first following sibling that is an element, and null otherwise.
+     */
+    @JavascriptNativePropertyAccessor
+    protected abstract Element nextElementSibling();
 
     /**
      * {@inheritDoc}
@@ -276,7 +342,7 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
      * @param selector
      * @return
      */
-    public native Element querySelector(String selector);
+    protected native Element querySelector(String selector);
 
     /**
      * <p>
@@ -287,7 +353,7 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
      * @param selector
      * @return
      */
-    public native Element[] querySelectorAll(String selector);
+    protected abstract NodeList<Element> querySelectorAll(String selector);
 
     /**
      * <p>

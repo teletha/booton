@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import js.dom.DOMTokenList;
+import js.dom.HTMLCollection;
 import js.dom.Location;
 import js.dom.Window;
 import js.lang.Function;
@@ -40,7 +41,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
- * @version 2013/04/13 12:41:47
+ * @version 2013/07/01 21:24:27
  */
 class TranslatorManager {
 
@@ -49,6 +50,9 @@ class TranslatorManager {
 
     /** The native methods. */
     private static final Table<Integer, Class> nativeMethods = new Table();
+
+    /** The native accessor methods. */
+    private static final Table<Integer, Class> nativeAccessorMethods = new Table();
 
     static {
         // built-in native class.
@@ -65,6 +69,10 @@ class TranslatorManager {
         builtIn(Runnable.class);
         builtIn(Listener.class);
         builtIn(Console.class);
+
+        builtInDOM(js.dom.Node.class);
+        builtInDOM(js.dom.Element.class);
+        builtInDOM(HTMLCollection.class);;
     }
 
     /**
@@ -85,6 +93,21 @@ class TranslatorManager {
             set.add(field.getName());
         }
         nativeFields.put(type, set);
+    }
+
+    /**
+     * <p>
+     * Register the given class as native.
+     * </p>
+     * 
+     * @param type
+     */
+    private static void builtInDOM(Class type) {
+        for (Method method : type.getDeclaredMethods()) {
+            if (method.isAnnotationPresent(JavascriptNativePropertyAccessor.class)) {
+                nativeAccessorMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), type);
+            }
+        }
     }
 
     /**
@@ -169,6 +192,27 @@ class TranslatorManager {
 
         // normal translator
         return I.make(GeneralTranslator.class);
+    }
+
+    /**
+     * <p>
+     * Detect this is native method or not.
+     * </p>
+     * 
+     * @param owner A method owner.
+     * @param name A method name.
+     * @param description A method description.
+     * @return A result.
+     */
+    static boolean isNativeAccessorMethod(Class owner, String name, String description) {
+        List<Class> classes = nativeAccessorMethods.get(hash(name, description));
+
+        for (Class clazz : classes) {
+            if (clazz.isAssignableFrom(owner)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -284,6 +328,15 @@ class TranslatorManager {
          */
         @Override
         protected String translateMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
+            if (isNativeAccessorMethod(owner, name, desc)) {
+                if (types.length == 0) {
+                    // getter
+                    return context.get(0) + "." + name;
+                } else {
+                    // setter
+                    return context.get(0) + "." + name + "=" + writeParameter(types, context, false);
+                }
+            }
             return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + writeParameter(types, context);
         }
 
@@ -321,8 +374,18 @@ class TranslatorManager {
          * @return
          */
         private static String writeParameter(Class[] types, List<Operand> operands) {
+            return writeParameter(types, operands, true);
+        }
+
+        /**
+         * Helper method to write parameter expression.
+         * 
+         * @param operands
+         * @return
+         */
+        private static String writeParameter(Class[] types, List<Operand> operands, boolean useBracket) {
             StringBuilder builder = new StringBuilder();
-            builder.append('(');
+            if (useBracket) builder.append('(');
 
             for (int i = 1; i < operands.size(); i++) {
                 if (i - 1 < types.length) {
@@ -349,7 +412,7 @@ class TranslatorManager {
                     builder.append(',');
                 }
             }
-            builder.append(')');
+            if (useBracket) builder.append(')');
 
             return builder.toString();
         }

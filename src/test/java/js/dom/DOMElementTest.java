@@ -21,11 +21,11 @@ public class DOMElementTest {
         Element element = new EmulateElement();
         Element child1 = new EmulateElement();
 
-        assert element.children.length == 0;
+        assert element.children().size() == 0;
 
         Node node = element.appedChild(child1);
-        assert element.children.length == 1;
-        assert element.children.item(0) == child1;
+        assert element.children().size() == 1;
+        assert element.children().get(0) == child1;
         assert node == child1;
     }
 
@@ -41,12 +41,12 @@ public class DOMElementTest {
         Element child1 = new EmulateElement();
         Element child2 = new EmulateElement();
 
-        assert element.children.length == 0;
+        assert element.children().size() == 0;
 
         element.append(child1).insertBefore(child2, child1);
-        assert element.children.length == 2;
-        assert element.children.item(0) == child2;
-        assert element.children.item(1) == child1;
+        assert element.children().size() == 2;
+        assert element.children().get(0) == child2;
+        assert element.children().get(1) == child1;
     }
 
     @Test
@@ -55,12 +55,12 @@ public class DOMElementTest {
         Element child1 = new EmulateElement();
         Element child2 = new EmulateElement();
 
-        assert element.children.length == 0;
+        assert element.children().size() == 0;
 
         element.append(child1).insertBefore(child2, null);
-        assert element.children.length == 2;
-        assert element.children.item(0) == child1;
-        assert element.children.item(1) == child2;
+        assert element.children().size() == 2;
+        assert element.children().get(0) == child1;
+        assert element.children().get(1) == child2;
     }
 
     @Test(expected = Error.class)
@@ -75,24 +75,24 @@ public class DOMElementTest {
     @Test
     public void textContent() throws Exception {
         Element element = new EmulateElement();
-        assert element.getTextContent().equals("");
+        assert element.textContent().equals("");
 
         element.appedChild("c");
         element.appedChild("a");
         element.appedChild("t");
-        assert element.getTextContent().equals("cat");
+        assert element.textContent().equals("cat");
     }
 
     @Test
     public void textContentWithElement() throws Exception {
         Element element = new EmulateElement();
-        assert element.getTextContent().equals("");
+        assert element.textContent().equals("");
 
         element.appedChild("c");
         Element child = new EmulateElement();
-        child.appedChild("c");
+        child.appedChild("a");
         element.appedChild(child);
         element.appedChild("t");
-        assert element.getTextContent().equals("cat");
+        assert element.textContent().equals("cat");
     }
 }
