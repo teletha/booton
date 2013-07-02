@@ -10,12 +10,14 @@
 package jsx.bwt;
 
 import js.dom.Element;
+import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 
 /**
  * @version 2012/12/02 23:06:56
  */
-public class UIEvent implements JavascriptNative {
+@JavascriptAPIProvider("Event")
+public class UIEvent {
 
     /** The DOM element that initiated the event. */
     public Element target;
@@ -101,6 +103,10 @@ public class UIEvent implements JavascriptNative {
      * </p>
      */
     public native void stopImmediatePropagation();
+
+    public void test() {
+        System.out.println("aa");
+    }
 
     /**
      * @version 2013/04/02 16:51:33

@@ -144,6 +144,10 @@ public class Javascript {
                 return true;
             }
         }
+
+        if (source.isAnnotationPresent(JavascriptAPIProvider.class)) {
+            return true;
+        }
         return false;
     }
 

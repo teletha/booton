@@ -29,6 +29,7 @@ import js.lang.builtin.Console;
 import js.lang.builtin.JSON;
 import js.lang.builtin.Storage;
 import jsx.jQuery.Listener;
+import kiss.ClassListener;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
@@ -43,7 +44,7 @@ import org.w3c.dom.Node;
 /**
  * @version 2013/07/01 21:24:27
  */
-class TranslatorManager {
+class TranslatorManager implements ClassListener<JavascriptNative> {
 
     /** The native fields. */
     private static final Map<Class, Set<String>> nativeFields = new ConcurrentHashMap();
@@ -187,6 +188,7 @@ class TranslatorManager {
 
         // javascript native class
         if (JavascriptNative.class.isAssignableFrom(type) && !nativeFields.containsKey(type)) {
+            System.out.println(type);
             register(type);
         }
 
@@ -249,6 +251,21 @@ class TranslatorManager {
         Set<String> fields = nativeFields.get(owner);
 
         return fields != null && fields.contains(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void load(Class<JavascriptNative> clazz) {
+        System.out.println(clazz);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void unload(Class<JavascriptNative> clazz) {
     }
 
     /**
