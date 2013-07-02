@@ -18,13 +18,13 @@ import org.xml.sax.helpers.AttributesImpl;
 /**
  * @version 2013/07/01 23:55:23
  */
-public class EmulateElement extends Element {
+public class EmulateElement extends Element implements Nodable {
+
+    /** The child nodes holder. */
+    final Nodes nodes = new Nodes();
 
     /** The attribute holder. */
     private final AttributesImpl attributes = new AttributesImpl();
-
-    /** The child nodes holder. */
-    private final Nodes nodes = new Nodes();
 
     /** The parent element. */
     private EmulateElement parent;
@@ -33,6 +33,14 @@ public class EmulateElement extends Element {
      * 
      */
     public EmulateElement() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setParent(EmulateElement parent) {
+        this.parent = parent;
     }
 
     /**
@@ -125,6 +133,32 @@ public class EmulateElement extends Element {
      * {@inheritDoc}
      */
     @Override
+    protected Node previousSibling() {
+        if (parent == null) {
+            return null;
+        }
+
+        int index = parent.nodes.indexOf(this) - 1;
+        return index < 0 ? null : parent.nodes.get(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Node nextSibling() {
+        if (parent == null) {
+            return null;
+        }
+
+        int index = parent.nodes.indexOf(this) + 1;
+        return parent.nodes.size() <= index ? null : parent.nodes.get(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected String textContent() {
         StringBuilder text = new StringBuilder();
 
@@ -141,6 +175,14 @@ public class EmulateElement extends Element {
     protected void textContent(String textContent) {
         nodes.clear();
         nodes.add(textContent);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Element parentElement() {
+        return parent;
     }
 
     /**
@@ -218,17 +260,9 @@ public class EmulateElement extends Element {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected NodeList<Element> querySelectorAll(String selector) {
-        return null;
-    }
-
-    /**
      * @version 2013/07/01 9:30:36
      */
-    private class Nodes implements Iterable<Node> {
+    class Nodes implements Iterable<Node> {
 
         /** The current node set. */
         private final List<Node> nodes = new ArrayList();
@@ -248,7 +282,7 @@ public class EmulateElement extends Element {
          * 
          * @return
          */
-        private int size() {
+        int size() {
             return nodes.size();
         }
 
@@ -259,7 +293,7 @@ public class EmulateElement extends Element {
          * 
          * @param node
          */
-        private void add(Object node) {
+        void add(Object node) {
             add(size(), node);
         }
 
@@ -270,7 +304,7 @@ public class EmulateElement extends Element {
          * 
          * @param contents
          */
-        private void add(int index, Object contents) {
+        void add(int index, Object contents) {
             if (contents != null) {
                 Node node = makeNode(contents);
 
@@ -289,8 +323,8 @@ public class EmulateElement extends Element {
                 nodes.add(index, node);
 
                 // modify tree
-                if (node instanceof EmulateElement) {
-                    ((EmulateElement) node).parent = EmulateElement.this;
+                if (node instanceof Nodable) {
+                    ((Nodable) node).setParent(EmulateElement.this);
                 }
             }
         }
@@ -302,14 +336,15 @@ public class EmulateElement extends Element {
          * 
          * @param contents
          */
-        private void remove(int index) {
+        void remove(int index) {
             if (0 <= index && index < size()) {
                 // remove it
                 Node node = nodes.remove(index);
 
                 // modify tree
-                if (node instanceof EmulateElement) {
-                    ((EmulateElement) node).parent = null;
+                // modify tree
+                if (node instanceof Nodable) {
+                    ((Nodable) node).setParent(null);
                 }
             }
         }
@@ -322,8 +357,31 @@ public class EmulateElement extends Element {
          * @param node A target node to search.
          * @return A index.
          */
-        private int indexOf(Object node) {
+        int indexOf(Object node) {
             return nodes.indexOf(node);
+        }
+
+        /**
+         * <p>
+         * Helper method to clear all nodes.
+         * </p>
+         */
+        void clear() {
+            while (0 < size()) {
+                remove(0);
+            }
+        }
+
+        /**
+         * <p>
+         * Helperr method to get node by index.
+         * </p>
+         * 
+         * @param index
+         * @return
+         */
+        Node get(int index) {
+            return nodes.get(index);
         }
 
         /**
@@ -340,69 +398,6 @@ public class EmulateElement extends Element {
             } else {
                 return new EmulateText(node);
             }
-        }
-
-        /**
-         * <p>
-         * Helper method to clear all nodes.
-         * </p>
-         */
-        private void clear() {
-            while (0 < size()) {
-                remove(0);
-            }
-        }
-
-        /**
-         * <p>
-         * Helperr method to get node by index.
-         * </p>
-         * 
-         * @param index
-         * @return
-         */
-        private Node get(int index) {
-            return nodes.get(index);
-        }
-    }
-
-    /**
-     * @version 2013/07/01 20:41:28
-     */
-    private class Children extends HTMLCollection {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public int length() {
-            int counter = 0;
-
-            for (int i = 0; i < nodes.size(); i++) {
-                Node node = nodes.get(i);
-
-                if (node instanceof Element) {
-                    counter++;
-                }
-            }
-            return counter;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Element item(int index) {
-            int counter = 0;
-
-            for (int i = 0; i < nodes.size(); i++) {
-                Node node = nodes.get(i);
-
-                if (node instanceof Element && counter++ == index) {
-                    return (Element) node;
-                }
-            }
-            return null;
         }
     }
 }

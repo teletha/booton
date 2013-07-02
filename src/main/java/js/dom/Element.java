@@ -80,6 +80,25 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
 
     /**
      * <p>
+     * Insert content, specified by the parameter, after this element.
+     * </p>
+     * 
+     * @param element A content to insert.
+     * @return Chainable API.
+     */
+    public Element after(Element element) {
+        Node parent = parentElement();
+
+        if (parent != null) {
+            parent.insertBefore(element, nextSibling());
+        }
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
      * Insert content to the end of this element.
      * </p>
      * 
@@ -175,6 +194,28 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
 
     /**
      * <p>
+     * Returns the first following sibling that is an element, and null otherwise.
+     * </p>
+     * 
+     * @return The first following sibling that is an element, and null otherwise.
+     */
+    public Element next() {
+        return nextElementSibling();
+    }
+
+    /**
+     * <p>
+     * Returns the first following sibling that is an element, and null otherwise.
+     * </p>
+     * 
+     * @return The first following sibling that is an element, and null otherwise.
+     */
+    public Element parent() {
+        return parentElement();
+    }
+
+    /**
+     * <p>
      * Insert content to the begining of this element.
      * </p>
      * 
@@ -190,14 +231,13 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
 
     /**
      * <p>
-     * Find
+     * Returns the first preceding sibling that is an element, and null otherwise.
      * </p>
      * 
-     * @param selector
-     * @return
+     * @return The first preceding sibling that is an element, and null otherwise.
      */
-    public List<Element> query(String selector) {
-        return null;
+    public Element prev() {
+        return nextElementSibling();
     }
 
     /**
@@ -275,6 +315,16 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
 
     /**
      * <p>
+     * Returns the DOM node's parent Element, or null if the node either has no parent, or its
+     * parent isn't a DOM Element.
+     * </p>
+     * 
+     * @return The parent element.
+     */
+    protected abstract Element parentElement();
+
+    /**
+     * <p>
      * Returns the first child that is an element, and null otherwise.
      * </p>
      * 
@@ -342,7 +392,7 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
      * @param selector
      * @return
      */
-    protected native Element querySelector(String selector);
+    protected final native Element querySelector(String selector);
 
     /**
      * <p>
@@ -353,12 +403,23 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
      * @param selector
      * @return
      */
-    protected abstract NodeList<Element> querySelectorAll(String selector);
+    protected final native NodeList<Element> querySelectorAll(String selector);
+
+    /**
+     * <p>
+     * Returns true if the element would be selected by the specified selector; otherwise, returns
+     * false.
+     * </p>
+     * 
+     * @param selector A css selector.
+     * @return A result.
+     */
+    protected final native boolean matchesSelector(String selector);
 
     /**
      * <p>
      * The scrollIntoView() method scrolls the element into view.
      * </p>
      */
-    public native void scrollIntoView();
+    public final native void scrollIntoView();
 }
