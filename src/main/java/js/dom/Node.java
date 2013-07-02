@@ -10,6 +10,7 @@
 package js.dom;
 
 import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativeMethod;
 import booton.translator.JavascriptNativePropertyAccessor;
 
 /**
@@ -39,6 +40,30 @@ public abstract class Node implements JavascriptNative {
     protected abstract Node lastChild();
 
     /**
+     * <p>
+     * Returns the node immediately preceding the specified one in its parent's childNodes list,
+     * null if the specified node is the first in that list.
+     * </p>
+     * 
+     * @return The node immediately preceding the specified one in its parent's childNodes list,
+     *         null if the specified node is the first in that list.
+     */
+    @JavascriptNativePropertyAccessor
+    protected abstract Node previousSibling();
+
+    /**
+     * <p>
+     * Returns the node immediately following the specified one in its parent's childNodes list, or
+     * null if the specified node is the last node in that list.
+     * </p>
+     * 
+     * @return The node immediately following the specified one in its parent's childNodes list, or
+     *         null if the specified node is the last node in that list.
+     */
+    @JavascriptNativePropertyAccessor
+    protected abstract Node nextSibling();
+
+    /**
      * Get the textContent property of this {@link Node}.
      * 
      * @return The textContent property.
@@ -63,6 +88,7 @@ public abstract class Node implements JavascriptNative {
      * @param newNode The node to append.
      * @return The node being appended, that is newElement.
      */
+    @JavascriptNativeMethod
     protected abstract <T> T appedChild(T newNode);
 
     /**
@@ -74,5 +100,6 @@ public abstract class Node implements JavascriptNative {
      * @param referenceNode The node before which newNode is inserted.
      * @return The node being inserted, that is newNode.
      */
+    @JavascriptNativeMethod
     protected abstract <T> T insertBefore(T newNode, Object referenceNode);
 }

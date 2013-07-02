@@ -12,16 +12,27 @@ package js.dom;
 /**
  * @version 2013/07/01 21:30:14
  */
-public class EmulateText extends Text {
+public class EmulateText extends Text implements Nodable {
 
     /** The text. */
     private String text;
+
+    /** The parent element. */
+    private EmulateElement parent;
 
     /**
      * @param contents
      */
     public EmulateText(Object contents) {
         this.text = String.valueOf(contents);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setParent(EmulateElement parent) {
+        this.parent = parent;
     }
 
     /**
@@ -56,6 +67,32 @@ public class EmulateText extends Text {
     protected Node lastChild() {
         // API definition
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Node previousSibling() {
+        if (parent == null) {
+            return null;
+        }
+
+        int index = parent.nodes.indexOf(this) - 1;
+        return index < 0 ? null : parent.nodes.get(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Node nextSibling() {
+        if (parent == null) {
+            return null;
+        }
+
+        int index = parent.nodes.indexOf(this) + 1;
+        return parent.nodes.size() <= index ? null : parent.nodes.get(index);
     }
 
     /**
