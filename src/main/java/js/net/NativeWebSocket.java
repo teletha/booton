@@ -9,7 +9,8 @@
  */
 package js.net;
 
-import booton.translator.JavascriptNative;
+import booton.translator.JavascriptAPIProvider;
+import booton.translator.JavascriptNativeMethod;
 import booton.translator.Translator;
 
 /**
@@ -52,7 +53,8 @@ public class NativeWebSocket {
     /**
      * @version 2013/05/22 23:33:41
      */
-    public static interface Listener extends JavascriptNative {
+    @JavascriptAPIProvider
+    public static interface Listener {
 
         /**
          * <p>
@@ -61,6 +63,7 @@ public class NativeWebSocket {
          * a simple one with the name "open".
          * </p>
          */
+        @JavascriptNativeMethod
         void open();
 
         /**
@@ -69,6 +72,7 @@ public class NativeWebSocket {
          * CLOSED. The listener receives a CloseEvent named "close".
          * </p>
          */
+        @JavascriptNativeMethod
         void close();
 
         /**
@@ -77,6 +81,7 @@ public class NativeWebSocket {
          * "error".
          * </p>
          */
+        @JavascriptNativeMethod
         void error();
 
         /**
@@ -87,6 +92,7 @@ public class NativeWebSocket {
          * 
          * @param message
          */
+        @JavascriptNativeMethod
         void message(String message);
     }
 

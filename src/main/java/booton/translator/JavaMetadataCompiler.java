@@ -40,6 +40,7 @@ class JavaMetadataCompiler {
             annotationType = Annotation.class.getMethod("annotationType");
 
             ignorables.add(JavaAPIProvider.class);
+            ignorables.add(JavascriptAPIProvider.class);
             ignorables.add(RunWith.class);
         } catch (Exception e) {
             throw I.quiet(e);

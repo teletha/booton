@@ -10,6 +10,7 @@
 package js.lang;
 
 import booton.translator.JavaAPIProvider;
+import booton.translator.JavascriptNativeMethod;
 import booton.translator.JavascriptNativePrimitiveNumber;
 
 /**
@@ -123,6 +124,7 @@ abstract class JSNumber implements JavascriptNativePrimitiveNumber {
      * {@inheritDoc}
      */
     @Override
+    @JavascriptNativeMethod
     public NativeNumber valueOf() {
         return value;
     }

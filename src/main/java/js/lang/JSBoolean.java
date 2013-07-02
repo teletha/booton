@@ -10,6 +10,7 @@
 package js.lang;
 
 import booton.translator.JavaAPIProvider;
+import booton.translator.JavascriptNativeMethod;
 import booton.translator.JavascriptNativePrimitiveBoolean;
 
 /**
@@ -50,6 +51,7 @@ class JSBoolean implements JavascriptNativePrimitiveBoolean {
      * {@inheritDoc}
      */
     @Override
+    @JavascriptNativeMethod
     public boolean valueOf() {
         return value;
     }
