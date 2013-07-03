@@ -350,6 +350,17 @@ function boot(global) {
           return Class["$"];
         }
       });
+      
+      Object.defineProperty(Class, "$$", {
+        configurable: true,
+        get: function() {
+          Object.defineProperty(Class, "$$", {
+            value: new boot.A("[" + name, Object.prototype, {}, Object.$, {}, 0)
+          });
+          
+          return Class["$$"];
+        }
+      });
 
       
       Object.defineProperty(Class, "toString", {

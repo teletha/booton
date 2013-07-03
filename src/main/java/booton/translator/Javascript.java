@@ -184,6 +184,7 @@ public class Javascript {
         // Any class requires these classes.
         require(Class.class);
         require(Thread.class);
+        require(Object.class);
 
         if (requirements != null) {
             for (Class requirement : requirements) {
@@ -521,6 +522,17 @@ public class Javascript {
      * @return An identified class object for ECMAScript.
      */
     public static final String computeClass(Class clazz) {
+        String prefix = "";
+
+        while (clazz.isArray()) {
+            prefix += "[";
+            clazz = clazz.getComponentType();
+        }
+
+        if (prefix.length() != 0) {
+            return computeClassName(clazz) + ".$$";
+        }
+
         if (clazz == Object.class) {
             return "Object";
         }
