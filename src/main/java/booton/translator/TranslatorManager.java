@@ -188,7 +188,6 @@ class TranslatorManager implements ClassListener<JavascriptNative> {
 
         // javascript native class
         if (JavascriptNative.class.isAssignableFrom(type) && !nativeFields.containsKey(type)) {
-            System.out.println(type);
             register(type);
         }
 
@@ -258,7 +257,6 @@ class TranslatorManager implements ClassListener<JavascriptNative> {
      */
     @Override
     public void load(Class<JavascriptNative> clazz) {
-        System.out.println(clazz);
     }
 
     /**

@@ -9,7 +9,7 @@
  */
 package js.net;
 
-import booton.translator.JavascriptAPIProvider;
+import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeMethod;
 import booton.translator.Translator;
 
@@ -53,8 +53,7 @@ public class NativeWebSocket {
     /**
      * @version 2013/05/22 23:33:41
      */
-    @JavascriptAPIProvider
-    public static interface Listener {
+    public static interface Listener extends JavascriptNative {
 
         /**
          * <p>
