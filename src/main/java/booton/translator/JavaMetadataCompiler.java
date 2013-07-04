@@ -171,8 +171,6 @@ class JavaMetadataCompiler {
      * Compile annotation value.
      * </p>
      * 
-     * @param buffer
-     * @param type
      * @param value
      */
     private String compileValue(Object value) {

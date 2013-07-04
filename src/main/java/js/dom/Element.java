@@ -181,6 +181,25 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
+     * Insert content, specified by the parameter, before this element.
+     * </p>
+     * 
+     * @param element A content to insert.
+     * @return Chainable API.
+     */
+    public Element before(Element element) {
+        Node parent = parentElement();
+
+        if (parent != null) {
+            parent.insertBefore(element, this);
+        }
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
      * Get the children of this element.
      * </p>
      * 
@@ -196,6 +215,20 @@ public abstract class Element extends Node implements JavascriptNative {
             element = element.nextElementSibling();
         }
         return list;
+    }
+
+    /**
+     * <p>
+     * Remove all child nodes of this element from the DOM.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public Element empty() {
+        textContent("");
+
+        // API definition
+        return this;
     }
 
     /**
@@ -244,6 +277,25 @@ public abstract class Element extends Node implements JavascriptNative {
      */
     public Element prev() {
         return nextElementSibling();
+    }
+
+    /**
+     * <p>
+     * Remove this element from the DOM.
+     * </p>
+     * 
+     * @param element
+     * @return
+     */
+    public Element remove() {
+        Element parent = parentElement();
+
+        if (parent != null) {
+            parent.removeChild(this);
+        }
+
+        // API definition
+        return this;
     }
 
     /**

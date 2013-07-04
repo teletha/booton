@@ -94,7 +94,22 @@ public class EmulateElement extends Element implements Nodable {
      * {@inheritDoc}
      */
     @Override
-    protected <T> T insertBefore(T newNode, Object referenceNode) {
+    protected Node removeChild(Node childNode) {
+        int index = nodes.indexOf(childNode);
+
+        if (index == -1) {
+            throw new Error();
+        }
+        nodes.remove(index);
+
+        return childNode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Node insertBefore(Node newNode, Node referenceNode) {
         if (newNode != null) {
             int index;
 
