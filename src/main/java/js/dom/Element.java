@@ -9,9 +9,16 @@
  */
 package js.dom;
 
+import static js.lang.Global.*;
+
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import jsx.jQuery;
+import jsx.bwt.Listen;
+import jsx.bwt.UIAction;
+import jsx.bwt.UIEvent;
 import booton.css.CSS;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
@@ -112,7 +119,7 @@ public abstract class Element extends Node implements JavascriptNative {
      * @return Chainable API.
      */
     public Element append(Element contents) {
-        appedChild(contents);
+        appendChild(contents);
 
         // API definition
         return this;
@@ -128,9 +135,27 @@ public abstract class Element extends Node implements JavascriptNative {
      */
     public Element append(Object contents) {
         if (contents instanceof Element) {
-            appedChild((Element) contents);
+            appendChild((Element) contents);
         } else {
-            appedChild(String.valueOf(contents));
+            appendChild(String.valueOf(contents));
+        }
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Insert this element to the end of the target element.
+     * </p>
+     * 
+     * @param target This element will be inserted at the end of the element specified by this
+     *            parameter.
+     * @return Chainable API.
+     */
+    public Element appendTo(Element target) {
+        if (target != null) {
+            target.append(this);
         }
 
         // API definition
@@ -200,6 +225,42 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
+     * Create child element.
+     * </p>
+     * 
+     * @param name A element name.
+     * @return A created child element.
+     */
+    public Element child(String name) {
+        return document.createElement(name).appendTo(this);
+    }
+
+    /**
+     * <p>
+     * Create a child element with the specified class.
+     * </p>
+     * 
+     * @param className A class name of the new child element.
+     * @return A created child element.
+     */
+    public Element child(Class<? extends CSS> className) {
+        return child("span", className);
+    }
+
+    /**
+     * <p>
+     * Create a child element with the specified class.
+     * </p>
+     * 
+     * @param className A class name of the new child element.
+     * @return A created child element.
+     */
+    public Element child(String name, Class<? extends CSS> className) {
+        return child(name).add(className);
+    }
+
+    /**
+     * <p>
      * Get the children of this element.
      * </p>
      * 
@@ -228,6 +289,106 @@ public abstract class Element extends Node implements JavascriptNative {
         textContent("");
 
         // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * This is a shortcut for .trigger("keyup").
+     * </p>
+     * 
+     * @return
+     */
+    public native jQuery keyup();
+
+    /**
+     * <p>
+     * Bind an event handler to the "keyup" event, or trigger that event on an element.
+     * </p>
+     * 
+     * @param listener A function to execute each time the event is triggered.
+     * @return Chainable API.
+     */
+    public Element keyup(EventListener listener) {
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Attach all event handlers which are defined in the given subscriber to the selected elements.
+     * </p>
+     * 
+     * @param subscriber A subscriber that holds user action event listeners.
+     * @return A chainable API.
+     */
+    public Element bind(Object subscriber) {
+        if (subscriber != null) {
+            Class clazz = subscriber.getClass();
+            String namespace = "." + clazz.getSimpleName() + subscriber.hashCode();
+
+            for (Method method : clazz.getDeclaredMethods()) {
+                Listen listen = method.getAnnotation(Listen.class);
+
+                if (listen != null) {
+                    EventListener listener = new Subscriber(subscriber, method, listen.abort());
+
+                    // ===========================
+                    // Execution Count Wrapper
+                    // ===========================
+                    int count = listen.count();
+
+                    if (0 < count) {
+                        listener = new Count(count, listener);
+                    }
+
+                    // ===========================
+                    // Timing Related Wrappers
+                    // ===========================
+                    long time = listen.delay();
+
+                    if (0 < time) {
+                        listener = new Delay(time, listener);
+                    }
+
+                    time = listen.throttle();
+
+                    if (0 < time) {
+                        listener = new Throttle(time, listener);
+                    }
+
+                    time = listen.debounce();
+
+                    if (0 < time) {
+                        listener = new Debounce(time, listener);
+                    }
+
+                    for (UIAction type : listen.value()) {
+                        // ===========================
+                        // KeyCode Wrapper
+                        // ===========================
+                        int keyCode = type.code;
+
+                        if (keyCode != -1) {
+                            listener = new KeyBind(keyCode, listener);
+                        }
+                        bind(type.name + namespace, listener);
+                    }
+                }
+            }
+        }
+
+        // API defintion
+        return this;
+    }
+
+    public Element bind(UIAction type, EventListener listener) {
+        if (type != null && listener != null) {
+            addEventListener(type.name, listener);
+        }
+
+        // API defintion
         return this;
     }
 
@@ -373,6 +534,28 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
+     * Get the current value of this element.
+     * </p>
+     * <p>
+     * The .val() method is primarily used to get the values of form elements such as input, select
+     * and textarea. In the case of <select multiple="multiple"> elements, the .val() method returns
+     * an array containing each selected option; if no option is selected, it returns null.
+     * </p>
+     * 
+     * @return
+     */
+    public String val() {
+        return value();
+    }
+
+    @JavascriptNativePropertyAccessor
+    protected abstract String value();
+
+    @JavascriptNativePropertyAccessor
+    protected abstract void value(String value);
+
+    /**
+     * <p>
      * Returns the DOM node's parent Element, or null if the node either has no parent, or its
      * parent isn't a DOM Element.
      * </p>
@@ -421,6 +604,38 @@ public abstract class Element extends Node implements JavascriptNative {
      */
     @JavascriptNativePropertyAccessor
     protected abstract Element nextElementSibling();
+
+    /**
+     * <p>
+     * Registers the specified listener on the EventTarget it's called on.
+     * </p>
+     * 
+     * @param type A string representing the event type to listen for.
+     * @param listener The object that receives a notification when an event of the specified type
+     *            occurs.
+     */
+    protected native void addEventListener(String type, EventListener listener);
+
+    /**
+     * <p>
+     * Removes the event listener previously registered.
+     * </p>
+     * 
+     * @param type A string representing the event type being removed.
+     * @param listener The listener to be removed.
+     */
+    protected native void removeEventListener(String type, EventListener listener);
+
+    /**
+     * <p>
+     * Indicates whether a node is a descendant of a given node.
+     * </p>
+     * 
+     * @param target The node that's being compared against.
+     * @return Return true if target is a descendant of this element, or element itself. Otherwise
+     *         false.
+     */
+    protected native boolean contains(Element target);
 
     /**
      * {@inheritDoc}
@@ -485,4 +700,275 @@ public abstract class Element extends Node implements JavascriptNative {
      */
     @JavascriptNativeProperty
     public final native void scrollIntoView();
+
+    /**
+     * @version 2013/07/05 1:19:49
+     */
+    public static interface EventListener extends JavascriptNative {
+
+        /**
+         * <p>
+         * Handle registered event.
+         * </p>
+         * 
+         * @param event
+         * @return
+         */
+        @JavascriptNativeProperty
+        void handleEvent(UIEvent event);
+    }
+
+    /**
+     * @version 2013/04/08 10:11:19
+     */
+    private static class Subscriber implements EventListener {
+
+        /** The subscriber instance. */
+        private final Object subscriber;
+
+        /** The subscriber method. */
+        private final Method method;
+
+        /** The event termination. */
+        private final boolean abort;
+
+        /**
+         * @param subscriber
+         * @param method
+         * @param abort
+         */
+        private Subscriber(Object subscriber, Method method, boolean abort) {
+            this.subscriber = subscriber;
+            this.method = method;
+            this.abort = abort;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handleEvent(UIEvent event) {
+            if (abort) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+
+            try {
+                method.invoke(subscriber, event);
+            } catch (Exception e) {
+                throw new Error(e);
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Built-in listener wrapper.
+     * </p>
+     * 
+     * @version 2013/04/08 10:11:19
+     */
+    private static class KeyBind implements EventListener {
+
+        /** The target key code. */
+        private final int keyCode;
+
+        /** The delegation. */
+        private final EventListener listener;
+
+        /**
+         * @param keyCode
+         * @param listener
+         */
+        private KeyBind(int keyCode, EventListener listener) {
+            this.keyCode = keyCode;
+            this.listener = listener;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handleEvent(UIEvent event) {
+            if (event.which == keyCode) {
+                listener.handleEvent(event);
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Built-in listener wrapper.
+     * </p>
+     * 
+     * @version 2013/04/08 13:42:03
+     */
+    private static class Count implements EventListener {
+
+        /** The delegator. */
+        private final EventListener listener;
+
+        /** The execution limit. */
+        private final int limit;
+
+        /** The current number of execution. */
+        private int current = 0;
+
+        /**
+         * @param limit
+         */
+        private Count(int limit, EventListener listener) {
+            this.limit = limit;
+            this.listener = listener;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handleEvent(UIEvent event) {
+            listener.handleEvent(event);
+
+            if (++current == limit) {
+                $(event.target).off(event);
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Built-in listener wrapper.
+     * </p>
+     * 
+     * @version 2013/04/08 14:58:44
+     */
+    private static class Debounce implements EventListener, Runnable {
+
+        /** The delay time. */
+        private final long delay;
+
+        /** The delegator. */
+        private final EventListener listener;
+
+        /** The lastest event. */
+        private UIEvent event;
+
+        /** The time out id. */
+        private long id = -1;
+
+        /**
+         * @param listener
+         */
+        private Debounce(long delay, EventListener listener) {
+            this.delay = delay;
+            this.listener = listener;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handleEvent(UIEvent event) {
+            if (id != -1) {
+                clearTimeout(id);
+            }
+            this.event = event;
+            this.id = setTimeout(this, delay);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void run() {
+            id = -1;
+            listener.handleEvent(event);
+            event = null;
+        }
+    }
+
+    /**
+     * <p>
+     * Built-in listener wrapper.
+     * </p>
+     * 
+     * @version 2013/04/08 14:37:30
+     */
+    private static class Throttle implements EventListener {
+
+        /** The delay time. */
+        private final long delay;
+
+        /** The delegator. */
+        private final EventListener listener;
+
+        /** The latest execution time. */
+        private long latest;
+
+        /**
+         * @param listener
+         */
+        private Throttle(long delay, EventListener listener) {
+            this.delay = delay;
+            this.listener = listener;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handleEvent(UIEvent event) {
+            long now = event.timeStamp;
+
+            if (latest + delay < now) {
+                latest = now;
+
+                listener.handleEvent(event);
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Built-in listener wrapper.
+     * </p>
+     * 
+     * @version 2013/04/08 13:57:10
+     */
+    private static class Delay implements EventListener, Runnable {
+
+        /** The delay time. */
+        private final long delay;
+
+        /** The delegator. */
+        private final EventListener listener;
+
+        /** The lastest event. */
+        private UIEvent event;
+
+        /**
+         * @param listener
+         */
+        public Delay(long delay, EventListener listener) {
+            this.delay = delay;
+            this.listener = listener;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handleEvent(UIEvent event) {
+            this.event = event;
+            setTimeout(this, delay);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void run() {
+            listener.handleEvent(event);
+        }
+    }
 }

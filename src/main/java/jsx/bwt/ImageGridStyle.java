@@ -38,7 +38,7 @@ class ImageGridStyle {
     class ImageSet extends CSS {
 
         {
-            display.block();
+            display.inlineBlock();
             // background.color(backColor);
             borderTop.solid().width(2, px).color(backColor);
             borderLeft.solid().width(2, px).color(backColor);

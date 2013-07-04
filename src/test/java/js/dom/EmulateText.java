@@ -39,7 +39,7 @@ public class EmulateText extends Text implements Nodable {
      * {@inheritDoc}
      */
     @Override
-    protected <T> T appedChild(T newNode) {
+    protected <T> T appendChild(T newNode) {
         throw new Error();
     }
 

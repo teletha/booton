@@ -81,7 +81,7 @@ public class EmulateElement extends Element implements Nodable {
      * {@inheritDoc}
      */
     @Override
-    protected <T> T appedChild(T newNode) {
+    protected <T> T appendChild(T newNode) {
         if (newNode == null) {
             throw new Error();
         }
@@ -272,6 +272,26 @@ public class EmulateElement extends Element implements Nodable {
             index++;
         }
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String value() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void value(String value) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**

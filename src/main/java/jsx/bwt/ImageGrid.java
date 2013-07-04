@@ -9,14 +9,13 @@
  */
 package jsx.bwt;
 
-import static js.lang.Global.*;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import jsx.jQuery;
+import js.dom.Element;
+import js.dom.Element.EventListener;
 import jsx.bwt.ImageGridStyle.Container;
 import jsx.bwt.ImageGridStyle.IconImage;
 import jsx.bwt.ImageGridStyle.ImageSet;
@@ -24,7 +23,6 @@ import jsx.bwt.ImageGridStyle.Input;
 import jsx.bwt.ImageGridStyle.Root;
 import jsx.bwt.ImageGridStyle.Title;
 import jsx.bwt.ImageGridStyle.Unselected;
-import jsx.jQuery.Listener;
 
 /**
  * @version 2012/12/19 9:51:49
@@ -32,7 +30,7 @@ import jsx.jQuery.Listener;
 public abstract class ImageGrid<T> extends UI {
 
     /** The image elements. */
-    private Map<T, jQuery> images = new HashMap();
+    private Map<T, Element> images = new HashMap();
 
     /** The image sources. */
     private Collection<T> sources;
@@ -44,19 +42,19 @@ public abstract class ImageGrid<T> extends UI {
      */
     public ImageGrid() {
         sources = sources();
-        root.add(Root.class);
+        rootElement.add(Root.class);
 
-        final jQuery search = $("<input type='text'>");
-        search.appendTo(root);
+        final Element search = rootElement.child("input", Input.class).attr("type", "text");
+        search.bind(UIAction.KeyUp, new EventListener() {
 
-        search.add(Input.class);
-        search.keyup(new Listener() {
-
+            /**
+             * {@inheritDoc}
+             */
             @Override
-            public void handler(UIEvent event) {
+            public void handleEvent(UIEvent event) {
                 String name = search.val().toLowerCase().replace("\\s", "");
 
-                for (Entry<T, jQuery> entry : images.entrySet()) {
+                for (Entry<T, Element> entry : images.entrySet()) {
                     if (getTitle(entry.getKey()).toLowerCase().contains(name)) {
                         entry.getValue().remove(Unselected.class);
                     } else {
@@ -66,20 +64,20 @@ public abstract class ImageGrid<T> extends UI {
             }
         });
 
-        jQuery set = root.child(ImageSet.class);
+        Element set = rootElement.child(ImageSet.class);
 
         for (final T source : sources) {
-            jQuery container = set.child(Container.class);
-            jQuery image = container.child(IconImage.class);
+            Element container = set.child(Container.class);
+            Element image = container.child(IconImage.class);
 
             apply(source, image);
 
             container.child(Title.class).text(getTitle(source));
 
-            image.click(new Listener() {
+            image.bind(UIAction.Click, new EventListener() {
 
                 @Override
-                public void handler(UIEvent event) {
+                public void handleEvent(UIEvent event) {
                     select(source);
                 }
             });
@@ -116,7 +114,7 @@ public abstract class ImageGrid<T> extends UI {
      * @param element A images element.
      * @return
      */
-    protected abstract void apply(T source, jQuery element);
+    protected abstract void apply(T source, Element element);
 
     /**
      * <p>

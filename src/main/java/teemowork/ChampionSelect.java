@@ -9,8 +9,11 @@
  */
 package teemowork;
 
+import static js.lang.Global.*;
+
 import java.util.Collection;
 
+import js.dom.Element;
 import jsx.jQuery;
 import jsx.application.Application;
 import jsx.application.Page;
@@ -40,8 +43,8 @@ public class ChampionSelect extends Page {
          * {@inheritDoc}
          */
         @Override
-        protected void apply(Champion source, jQuery element) {
-            source.applyIcon(element);
+        protected void apply(Champion source, Element element) {
+            source.applyIcon($(element));
         }
 
         /**

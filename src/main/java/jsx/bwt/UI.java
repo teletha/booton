@@ -11,6 +11,7 @@ package jsx.bwt;
 
 import static js.lang.Global.*;
 import static jsx.bwt.UIAction.*;
+import js.dom.Element;
 import jsx.jQuery;
 import jsx.jQuery.Offset;
 import jsx.bwt.view.PopupViewStyle;
@@ -22,6 +23,9 @@ public abstract class UI extends Publishable {
 
     /** The root container element for this user interface. */
     public final jQuery root;
+
+    /** The root container element for this user interface. */
+    public final Element rootElement;
 
     /** The tooltip ui. */
     private UI tooltip;
@@ -44,6 +48,7 @@ public abstract class UI extends Publishable {
      */
     protected UI(String name) {
         this.root = $("<" + name + ">");
+        this.rootElement = root.get(0);
     }
 
     /**
