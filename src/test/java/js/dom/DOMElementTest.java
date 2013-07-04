@@ -36,6 +36,33 @@ public class DOMElementTest {
     }
 
     @Test
+    public void removeChild() throws Exception {
+        Element element = new EmulateElement();
+        Element child = new EmulateElement();
+        element.appedChild(child);
+
+        assert element.children().size() == 1;
+        assert element.children().get(0) == child;
+
+        Node removed = element.removeChild(child);
+        assert element.children().size() == 0;
+        assert removed == child;
+    }
+
+    @Test(expected = Error.class)
+    public void removeChildNull() throws Exception {
+        Element element = new EmulateElement();
+        element.appedChild(null);
+    }
+
+    @Test(expected = Error.class)
+    public void removeNonChild() throws Exception {
+        Element element = new EmulateElement();
+        Element child = new EmulateElement();
+        element.removeChild(child);
+    }
+
+    @Test
     public void insertBefore() throws Exception {
         Element element = new EmulateElement();
         Element child1 = new EmulateElement();

@@ -47,7 +47,15 @@ public class EmulateText extends Text implements Nodable {
      * {@inheritDoc}
      */
     @Override
-    protected <T> T insertBefore(T newNode, Object referenceNode) {
+    protected Node removeChild(Node childNode) {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Node insertBefore(Node newNode, Node referenceNode) {
         throw new Error();
     }
 

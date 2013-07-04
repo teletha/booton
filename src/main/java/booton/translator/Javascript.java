@@ -84,9 +84,6 @@ public class Javascript {
         getScript(Class.class);
     }
 
-    /** The typed class to translate. */
-    public final Class type;
-
     /** The actual script class to translate. */
     public final Class<?> source;
 
@@ -113,22 +110,19 @@ public class Javascript {
      * 
      * @param source A Java class as source.
      */
-    private Javascript(Class type, Class source) {
-        this.type = type;
+    private Javascript(Class source) {
         this.source = source;
         this.id = counter++;
 
-        if (type != Object.class) {
-            // copy all member fields for override mechanism
-            Javascript script = getScript(source.getSuperclass());
+        // copy all member fields for override mechanism
+        Javascript script = getScript(source.getSuperclass());
 
-            if (script != null) {
-                fields.addAll(script.fields);
-            }
+        if (script != null) {
+            fields.addAll(script.fields);
+        }
 
-            for (Field field : source.getDeclaredFields()) {
-                order(fields, field.getName().hashCode() + source.hashCode());
-            }
+        for (Field field : source.getDeclaredFields()) {
+            order(fields, field.getName().hashCode() + source.hashCode());
         }
     }
 
@@ -212,12 +206,10 @@ public class Javascript {
         compile();
 
         // write super class
-        if (type != Object.class) {
-            Javascript script = Javascript.getScript(source.getSuperclass());
+        Javascript script = Javascript.getScript(source.getSuperclass());
 
-            if (script != null && !defined.contains(script.source)) {
-                script.write(output, defined);
-            }
+        if (script != null && !defined.contains(script.source)) {
+            script.write(output, defined);
         }
 
         // write this class
@@ -225,14 +217,12 @@ public class Javascript {
             output.append(code);
         }
 
-        if (type != Object.class) {
-            // write dependency classes
-            for (Class depndency : dependencies) {
-                Javascript script = Javascript.getScript(depndency);
+        // write dependency classes
+        for (Class depndency : dependencies) {
+            script = Javascript.getScript(depndency);
 
-                if (script != null && !defined.contains(script.source)) {
-                    script.write(output, defined);
-                }
+            if (script != null && !defined.contains(script.source)) {
+                script.write(output, defined);
             }
         }
 
@@ -478,8 +468,8 @@ public class Javascript {
      * @param source A Java class to compile.
      * @return A compiled Javascript source.
      */
-    public static final Javascript getScript(Class type) {
-        Class source = JavaAPIProviders.convert(type);
+    public static final Javascript getScript(Class source) {
+        source = JavaAPIProviders.convert(source);
 
         // check Native Class
         if (source == null || TranslatorManager.hasTranslator(source)) {
@@ -490,7 +480,7 @@ public class Javascript {
         Javascript script = scripts.get(source);
 
         if (script == null) {
-            script = new Javascript(type, source);
+            script = new Javascript(source);
 
             // cache it
             scripts.put(source, script);

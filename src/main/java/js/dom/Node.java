@@ -95,6 +95,18 @@ public abstract class Node implements JavascriptNative {
 
     /**
      * <p>
+     * Adds a node to the end of the list of children of a specified parent node. If the node
+     * already exists it is removed from current parent node, then added to new parent node.
+     * </p>
+     * 
+     * @param childNode The node to be removed.
+     * @return The node being removed, that is child node.
+     */
+    @JavascriptNativeProperty
+    protected abstract Node removeChild(Node childNode);
+
+    /**
+     * <p>
      * Inserts the specified node before a reference element as a child of the current node.
      * </p>
      * 
@@ -103,5 +115,5 @@ public abstract class Node implements JavascriptNative {
      * @return The node being inserted, that is newNode.
      */
     @JavascriptNativeProperty
-    protected abstract <T> T insertBefore(T newNode, Object referenceNode);
+    protected abstract Node insertBefore(Node newNode, Node referenceNode);
 }
