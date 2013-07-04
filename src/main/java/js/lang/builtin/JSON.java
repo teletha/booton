@@ -21,6 +21,9 @@ import js.lang.NativeNumber;
 import js.lang.NativeObject;
 import kiss.model.Model;
 import sun.org.mozilla.javascript.internal.IdScriptableObject;
+import booton.translator.JavascriptAPIProvider;
+import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativeProperty;
 import booton.translator.Translator;
 
 /**
@@ -31,7 +34,8 @@ import booton.translator.Translator;
  * 
  * @version 2013/04/24 9:54:05
  */
-public class JSON {
+@JavascriptAPIProvider
+public class JSON implements JavascriptNative {
 
     /** The javascript engine for reuse. */
     private static final ScriptEngine script;
@@ -50,6 +54,7 @@ public class JSON {
      *            syntax.
      * @return
      */
+    @JavascriptNativeProperty
     public NativeObject parse(String text) {
         try {
             return parse(new NativeObject(), script.eval("a=" + text));
@@ -104,6 +109,7 @@ public class JSON {
      * @param value The value to convert to a JSON string.
      * @return
      */
+    @JavascriptNativeProperty
     public native String stringify(Object value);
 
     /**

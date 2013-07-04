@@ -13,7 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import booton.css.CSS;
+import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
 
 /**
@@ -23,9 +25,11 @@ import booton.translator.JavascriptNativePropertyAccessor;
  * 
  * @version 2013/07/01 2:12:14
  */
-public abstract class Element extends js.dom.Node implements JavascriptNative {
+@JavascriptAPIProvider
+public abstract class Element extends Node implements JavascriptNative {
 
     /** The localName attribute must return the context object's local name. */
+    @JavascriptNativeProperty
     public String localName;
 
     /**
@@ -41,9 +45,11 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
      * <li>Return qualified name.</li>
      * </ol>
      */
+    @JavascriptNativeProperty
     public String tagName;
 
     /** The class name list. */
+    @JavascriptNativeProperty
     public DOMTokenList classList;
 
     /**
@@ -321,6 +327,7 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
      * 
      * @return The parent element.
      */
+    @JavascriptNativePropertyAccessor
     protected abstract Element parentElement();
 
     /**
@@ -366,22 +373,22 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
     /**
      * {@inheritDoc}
      */
-    protected abstract String getAttribute(String name);
+    protected native String getAttribute(String name);
 
     /**
      * {@inheritDoc}
      */
-    protected abstract void setAttribute(String name, String value);
+    protected native void setAttribute(String name, String value);
 
     /**
      * {@inheritDoc}
      */
-    protected abstract void setAttributeNS(String namespace, String name, String value);
+    protected native void setAttributeNS(String namespace, String name, String value);
 
     /**
      * {@inheritDoc}
      */
-    protected abstract void removeAttribute(String name);
+    protected native void removeAttribute(String name);
 
     /**
      * <p>
@@ -392,6 +399,7 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
      * @param selector
      * @return
      */
+    @JavascriptNativeProperty
     protected final native Element querySelector(String selector);
 
     /**
@@ -403,6 +411,7 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
      * @param selector
      * @return
      */
+    @JavascriptNativeProperty
     protected final native NodeList<Element> querySelectorAll(String selector);
 
     /**
@@ -414,6 +423,7 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
      * @param selector A css selector.
      * @return A result.
      */
+    @JavascriptNativeProperty
     protected final native boolean matchesSelector(String selector);
 
     /**
@@ -421,5 +431,6 @@ public abstract class Element extends js.dom.Node implements JavascriptNative {
      * The scrollIntoView() method scrolls the element into view.
      * </p>
      */
+    @JavascriptNativeProperty
     public final native void scrollIntoView();
 }

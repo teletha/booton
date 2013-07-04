@@ -20,16 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import js.dom.DOMTokenList;
-import js.dom.HTMLCollection;
-import js.dom.Location;
-import js.dom.Window;
 import js.lang.Function;
-import js.lang.builtin.Console;
-import js.lang.builtin.JSON;
-import js.lang.builtin.Storage;
-import jsx.jQuery.Listener;
-import kiss.ClassListener;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
@@ -37,14 +28,14 @@ import kiss.Table;
 import kiss.model.ClassUtil;
 
 import org.objectweb.asm.Type;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 /**
- * @version 2013/07/01 21:24:27
+ * @version 2013/07/04 21:02:47
  */
-class TranslatorManager implements ClassListener<JavascriptNative> {
+class TranslatorManager {
+
+    /** The native classes. */
+    private static final Set<Class> natives = new HashSet();
 
     /** The native fields. */
     private static final Map<Class, Set<String>> nativeFields = new ConcurrentHashMap();
@@ -58,22 +49,8 @@ class TranslatorManager implements ClassListener<JavascriptNative> {
     static {
         // built-in native class.
         builtIn(Object.class);
-        builtIn(Node.class);
-        builtIn(Document.class);
-        builtIn(Element.class);
-        builtIn(DOMTokenList.class);
-        builtIn(Window.class);
-        builtIn(Location.class);
-        builtIn(JSON.class);
-        builtIn(Storage.class);
         builtIn(Comparator.class);
         builtIn(Runnable.class);
-        builtIn(Listener.class);
-        builtIn(Console.class);
-
-        builtInDOM(js.dom.Node.class);
-        builtInDOM(js.dom.Element.class);
-        builtInDOM(HTMLCollection.class);;
     }
 
     /**
@@ -87,28 +64,6 @@ class TranslatorManager implements ClassListener<JavascriptNative> {
         for (Method method : type.getDeclaredMethods()) {
             nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), Object.class);
         }
-
-        Set<String> set = new HashSet();
-
-        for (Field field : type.getFields()) {
-            set.add(field.getName());
-        }
-        nativeFields.put(type, set);
-    }
-
-    /**
-     * <p>
-     * Register the given class as native.
-     * </p>
-     * 
-     * @param type
-     */
-    private static void builtInDOM(Class type) {
-        for (Method method : type.getDeclaredMethods()) {
-            if (method.isAnnotationPresent(JavascriptNativePropertyAccessor.class)) {
-                nativeAccessorMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), type);
-            }
-        }
     }
 
     /**
@@ -119,24 +74,32 @@ class TranslatorManager implements ClassListener<JavascriptNative> {
      * @param nativeClass A target class to register.
      */
     private static void register(Class nativeClass) {
-        for (Class type : ClassUtil.getTypes(nativeClass)) {
-            for (Class interfaceType : type.getInterfaces()) {
-                if (interfaceType == JavascriptNative.class) {
-                    // The current class implements it directly.
-                    for (Method method : type.getDeclaredMethods()) {
-                        // Methods defined in interface are as native.
-                        // Methods defined in class are as native if these have native modifier.
-                        if (type.isInterface() || Modifier.isNative(method.getModifiers())) {
-                            nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), nativeClass);
+        if (natives.add(nativeClass)) {
+            for (Class type : ClassUtil.getTypes(nativeClass)) {
+                for (Class interfaceType : type.getInterfaces()) {
+                    if (interfaceType == JavascriptNative.class) {
+                        // The current class implements it directly.
+                        for (Method method : type.getDeclaredMethods()) {
+                            // Methods defined in interface are as native.
+                            // Methods defined in class are as native if these have native modifier.
+                            if (type.isInterface() || Modifier.isNative(method.getModifiers()) || method.isAnnotationPresent(JavascriptNativeProperty.class)) {
+                                nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), nativeClass);
+                            }
+
+                            if (method.isAnnotationPresent(JavascriptNativePropertyAccessor.class)) {
+                                nativeAccessorMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), type);
+                            }
                         }
-                    }
 
-                    Set<String> set = new HashSet();
+                        Set<String> set = new HashSet();
 
-                    for (Field field : type.getDeclaredFields()) {
-                        set.add(field.getName());
+                        for (Field field : type.getDeclaredFields()) {
+                            if (field.isAnnotationPresent(JavascriptNativeProperty.class)) {
+                                set.add(field.getName());
+                            }
+                        }
+                        nativeFields.put(type, set);
                     }
-                    nativeFields.put(type, set);
                 }
             }
         }
@@ -187,7 +150,7 @@ class TranslatorManager implements ClassListener<JavascriptNative> {
         }
 
         // javascript native class
-        if (JavascriptNative.class.isAssignableFrom(type) && !nativeFields.containsKey(type)) {
+        if (JavascriptNative.class.isAssignableFrom(type)) {
             register(type);
         }
 
@@ -250,20 +213,6 @@ class TranslatorManager implements ClassListener<JavascriptNative> {
         Set<String> fields = nativeFields.get(owner);
 
         return fields != null && fields.contains(name);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void load(Class<JavascriptNative> clazz) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void unload(Class<JavascriptNative> clazz) {
     }
 
     /**

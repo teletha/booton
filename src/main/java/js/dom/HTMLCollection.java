@@ -11,12 +11,15 @@ package js.dom;
 
 import java.util.Iterator;
 
+import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
 
 /**
- * @version 2013/07/01 3:32:52
+ * @version 2013/07/04 20:42:49
  */
+@JavascriptAPIProvider
 public abstract class HTMLCollection implements Iterable<Element>, JavascriptNative {
 
     /**
@@ -38,6 +41,7 @@ public abstract class HTMLCollection implements Iterable<Element>, JavascriptNat
      * @param index A element index.
      * @return A indexth element.
      */
+    @JavascriptNativeProperty
     public abstract Element item(int index);
 
     /**
@@ -73,7 +77,6 @@ public abstract class HTMLCollection implements Iterable<Element>, JavascriptNat
             public void remove() {
                 throw new UnsupportedOperationException();
             }
-
         };
     }
 }

@@ -16,10 +16,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @version 2013/07/01 16:38:45
+ * @version 2013/07/04 20:33:03
  */
 @Documented
-@Target(ElementType.METHOD)
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface JavascriptNativeMethod {
+public @interface JavascriptNativeProperty {
 }

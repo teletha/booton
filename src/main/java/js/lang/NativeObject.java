@@ -13,12 +13,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kiss.I;
+import booton.translator.JavaAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.Translator;
 
 /**
  * @version 2013/05/13 20:31:42
  */
+@JavaAPIProvider(Object.class)
 public class NativeObject {
 
     /** The java implementation. */
@@ -63,6 +65,18 @@ public class NativeObject {
 
     /**
      * <p>
+     * Retireve property by key as the int type.
+     * </p>
+     * 
+     * @param key A property key.
+     * @return An associated value.
+     */
+    public int getPropertyAsInt(Object key) {
+        return (int) container.get(literal(key));
+    }
+
+    /**
+     * <p>
      * Set property value by key.
      * </p>
      * 
@@ -71,6 +85,21 @@ public class NativeObject {
      * @return A newly associated value.
      */
     public Object setProperty(int key, Object value) {
+        container.put(literal(key), value);
+
+        return value;
+    }
+
+    /**
+     * <p>
+     * Set property value by key.
+     * </p>
+     * 
+     * @param key A property key.
+     * @param value A value to set.
+     * @return A newly associated value.
+     */
+    public Object setProperty(Object key, int value) {
         container.put(literal(key), value);
 
         return value;
@@ -302,6 +331,19 @@ public class NativeObject {
 
         /**
          * <p>
+         * Retireve property by key as the specified type.
+         * </p>
+         * 
+         * @param type A property type.
+         * @param key A property key.
+         * @return An associated value.
+         */
+        public String getPropertyAsInt(Object key) {
+            return that + "[" + param(0) + "]";
+        }
+
+        /**
+         * <p>
          * Set property value by key.
          * </p>
          * 
@@ -311,6 +353,19 @@ public class NativeObject {
          */
         public String setProperty(int key, Object value) {
             return setProperty((java.lang.Integer) key, value);
+        }
+
+        /**
+         * <p>
+         * Set property value by key.
+         * </p>
+         * 
+         * @param key A property key.
+         * @param value A value to set.
+         * @return A value to set.
+         */
+        public String setProperty(Object key, int value) {
+            return that + "[" + param(0) + "]=" + param(1);
         }
 
         /**

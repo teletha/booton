@@ -10,8 +10,8 @@
 package js.lang;
 
 import booton.translator.JavaAPIProvider;
-import booton.translator.JavascriptNativeMethod;
-import booton.translator.JavascriptNativePrimitiveBoolean;
+import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativeProperty;
 
 /**
  * <p>
@@ -22,7 +22,7 @@ import booton.translator.JavascriptNativePrimitiveBoolean;
  * @version 2013/04/12 12:58:25
  */
 @JavaAPIProvider(Boolean.class)
-class JSBoolean implements JavascriptNativePrimitiveBoolean {
+class JSBoolean implements JavascriptNative {
 
     /**
      * The {@code Boolean} object corresponding to the primitive value {@code true}.
@@ -48,10 +48,22 @@ class JSBoolean implements JavascriptNativePrimitiveBoolean {
     }
 
     /**
-     * {@inheritDoc}
+     * <p>
+     * Returns the primitive value of this object.
+     * </p>
+     * <p>
+     * JavaScript calls the valueOf method to convert an object to a primitive value. You rarely
+     * need to invoke the valueOf method yourself; JavaScript automatically invokes it when
+     * encountering an object where a primitive value is expected.
+     * </p>
+     * <p>
+     * You can create a function to be called in place of the default valueOf method. Your function
+     * must take no arguments.
+     * </p>
+     * 
+     * @return A primitive value.
      */
-    @Override
-    @JavascriptNativeMethod
+    @JavascriptNativeProperty
     public boolean valueOf() {
         return value;
     }

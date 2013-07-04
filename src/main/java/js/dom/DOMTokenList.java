@@ -10,11 +10,13 @@
 package js.dom;
 
 import booton.css.CSS;
+import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 
 /**
  * @version 2013/03/22 16:42:04
  */
+@JavascriptAPIProvider
 public class DOMTokenList implements JavascriptNative {
 
     /**

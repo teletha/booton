@@ -9,6 +9,9 @@
  */
 package js.dom;
 
+import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativeProperty;
+
 /**
  * <p>
  * Returns a Location object, which contains information about the URL of the document and provides
@@ -17,7 +20,7 @@ package js.dom;
  * 
  * @version 2013/01/08 12:51:46
  */
-public abstract class Location {
+public abstract class Location implements JavascriptNative {
 
     /**
      * <p>
@@ -25,27 +28,35 @@ public abstract class Location {
      * hashchange event to get notified of changes to the hash in supporting browsers.
      * </p>
      */
+    @JavascriptNativeProperty
     public String hash;
 
     /** the host name and port number. */
+    @JavascriptNativeProperty
     public String host;
 
     /** the host name (without the port number or square brackets). */
+    @JavascriptNativeProperty
     public String hostname;
 
     /** the entire URL. */
+    @JavascriptNativeProperty
     public String href;
 
     /** the path (relative to the host). */
+    @JavascriptNativeProperty
     public String pathname;
 
     /** the port number of the URL. */
+    @JavascriptNativeProperty
     public int port;
 
     /** the protocol of the URL. */
+    @JavascriptNativeProperty
     public String protocol;
 
     /** the part of the URL that follows the ? symbol, including the ? symbol. */
+    @JavascriptNativeProperty
     public String search;
 
     /**

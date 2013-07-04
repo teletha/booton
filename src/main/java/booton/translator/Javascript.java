@@ -84,11 +84,11 @@ public class Javascript {
         getScript(Class.class);
     }
 
-    /** The actual script class to translate. */
-    public final Class source;
+    /** The typed class to translate. */
+    public final Class type;
 
-    /** The flag whether javascript has native class or not. */
-    public final boolean isJavascritpNative;
+    /** The actual script class to translate. */
+    public final Class<?> source;
 
     /** The identifier of this script. */
     private final int id;
@@ -113,42 +113,23 @@ public class Javascript {
      * 
      * @param source A Java class as source.
      */
-    private Javascript(Class source) {
+    private Javascript(Class type, Class source) {
+        this.type = type;
         this.source = source;
         this.id = counter++;
-        this.isJavascritpNative = isJavascriptNative();
 
-        // copy all member fields for override mechanism
-        Javascript script = getScript(source.getSuperclass());
+        if (type != Object.class) {
+            // copy all member fields for override mechanism
+            Javascript script = getScript(source.getSuperclass());
 
-        if (script != null) {
-            fields.addAll(script.fields);
-        }
+            if (script != null) {
+                fields.addAll(script.fields);
+            }
 
-        for (Field field : source.getDeclaredFields()) {
-            order(fields, field.getName().hashCode() + source.hashCode());
-        }
-    }
-
-    /**
-     * <p>
-     * Helper method to detect whether this script implements {@link JavascriptNative} directly or
-     * not.
-     * </p>
-     * 
-     * @return A result.
-     */
-    private boolean isJavascriptNative() {
-        for (Class type : source.getInterfaces()) {
-            if (type == JavascriptNative.class) {
-                return true;
+            for (Field field : source.getDeclaredFields()) {
+                order(fields, field.getName().hashCode() + source.hashCode());
             }
         }
-
-        if (source.isAnnotationPresent(JavascriptAPIProvider.class)) {
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -184,7 +165,6 @@ public class Javascript {
         // Any class requires these classes.
         require(Class.class);
         require(Thread.class);
-        require(Object.class);
 
         if (requirements != null) {
             for (Class requirement : requirements) {
@@ -232,10 +212,12 @@ public class Javascript {
         compile();
 
         // write super class
-        Javascript script = Javascript.getScript(source.getSuperclass());
+        if (type != Object.class) {
+            Javascript script = Javascript.getScript(source.getSuperclass());
 
-        if (script != null && !defined.contains(script.source)) {
-            script.write(output, defined);
+            if (script != null && !defined.contains(script.source)) {
+                script.write(output, defined);
+            }
         }
 
         // write this class
@@ -243,12 +225,14 @@ public class Javascript {
             output.append(code);
         }
 
-        // write dependency classes
-        for (Class depndency : dependencies) {
-            script = Javascript.getScript(depndency);
+        if (type != Object.class) {
+            // write dependency classes
+            for (Class depndency : dependencies) {
+                Javascript script = Javascript.getScript(depndency);
 
-            if (script != null && !defined.contains(script.source)) {
-                script.write(output, defined);
+                if (script != null && !defined.contains(script.source)) {
+                    script.write(output, defined);
+                }
             }
         }
 
@@ -265,8 +249,10 @@ public class Javascript {
         if (code == null) {
             ScriptBuffer code = new ScriptBuffer();
 
-            if (isJavascritpNative) {
-                compileNative(code);
+            JavascriptAPIProvider provider = source.getAnnotation(JavascriptAPIProvider.class);
+
+            if (provider != null) {
+                compileNative(code, provider.value().length() != 0 ? provider.value() : source.getSimpleName());
             } else if (source.isInterface()) {
                 compileInterface(code);
             } else {
@@ -369,10 +355,11 @@ public class Javascript {
      * </p>
      * 
      * @param code
+     * @param nativeClassName A javascript native class name.
      */
-    private void compileNative(ScriptBuffer code) {
+    private void compileNative(ScriptBuffer code, String nativeClassName) {
         // Start class definition
-        code.append("boot.defineNative(\"").append(source.getSimpleName()).append("\",{");
+        code.append("boot.defineNative(\"").append(nativeClassName).append("\",{");
 
         try {
             new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
@@ -491,8 +478,8 @@ public class Javascript {
      * @param source A Java class to compile.
      * @return A compiled Javascript source.
      */
-    public static final Javascript getScript(Class source) {
-        source = JavaAPIProviders.convert(source);
+    public static final Javascript getScript(Class type) {
+        Class source = JavaAPIProviders.convert(type);
 
         // check Native Class
         if (source == null || TranslatorManager.hasTranslator(source)) {
@@ -503,7 +490,7 @@ public class Javascript {
         Javascript script = scripts.get(source);
 
         if (script == null) {
-            script = new Javascript(source);
+            script = new Javascript(type, source);
 
             // cache it
             scripts.put(source, script);
@@ -554,6 +541,10 @@ public class Javascript {
     public static final String computeClassName(Class clazz) {
         if (clazz == jQuery.class) {
             return "$";
+        }
+
+        if (clazz == Object.class) {
+            return "Object";
         }
         return "boot." + computeSimpleClassName(clazz);
     }
@@ -645,6 +636,10 @@ public class Javascript {
                 return "$" + order(getScript(owner).constructors, description.hashCode());
             }
         } else {
+            if (name.endsWith("$Alias")) {
+                name = name.substring(0, name.length() - 6);
+            }
+
             // method
             JavaAPIProviders.validateMethod(owner, name, description);
 

@@ -10,7 +10,7 @@
 package js.net;
 
 import booton.translator.JavascriptNative;
-import booton.translator.JavascriptNativeMethod;
+import booton.translator.JavascriptNativeProperty;
 import booton.translator.Translator;
 
 /**
@@ -62,7 +62,7 @@ public class NativeWebSocket {
          * a simple one with the name "open".
          * </p>
          */
-        @JavascriptNativeMethod
+        @JavascriptNativeProperty
         void open();
 
         /**
@@ -71,7 +71,7 @@ public class NativeWebSocket {
          * CLOSED. The listener receives a CloseEvent named "close".
          * </p>
          */
-        @JavascriptNativeMethod
+        @JavascriptNativeProperty
         void close();
 
         /**
@@ -80,7 +80,7 @@ public class NativeWebSocket {
          * "error".
          * </p>
          */
-        @JavascriptNativeMethod
+        @JavascriptNativeProperty
         void error();
 
         /**
@@ -91,7 +91,7 @@ public class NativeWebSocket {
          * 
          * @param message
          */
-        @JavascriptNativeMethod
+        @JavascriptNativeProperty
         void message(String message);
     }
 

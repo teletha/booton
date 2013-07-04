@@ -10,48 +10,57 @@
 package jsx.bwt;
 
 import js.dom.Element;
-import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativeProperty;
 
 /**
  * @version 2012/12/02 23:06:56
  */
-@JavascriptAPIProvider("Event")
-public class UIEvent {
+public class UIEvent implements JavascriptNative {
 
     /** The DOM element that initiated the event. */
+    @JavascriptNativeProperty
     public Element target;
 
     /** The current DOM element within the event bubbling phase. */
+    @JavascriptNativeProperty
     public Element currentTarget;
 
     /** The other DOM element involved in the event, if any. */
+    @JavascriptNativeProperty
     public Element relatedTarget;
 
     /** The element where the currently-called jQuery event handler was attached. */
+    @JavascriptNativeProperty
     public Element delegateTarget;
 
     /** The namespace specified when the event was triggered. */
+    @JavascriptNativeProperty
     public String namespace;
 
     /** The mouse position relative to the left edge of the document. */
+    @JavascriptNativeProperty
     public int pageX;
 
     /** The mouse position relative to the top edge of the document. */
+    @JavascriptNativeProperty
     public int pageY;
 
     /**
      * The difference in milliseconds between the time the browser created the event and January 1,
      * 1970.
      */
+    @JavascriptNativeProperty
     public long timeStamp;
 
     /** Describes the nature of the event. */
+    @JavascriptNativeProperty
     public String type;
 
     /**
      * For key or mouse events, this property indicates the specific key or button that was pressed.
      */
+    @JavascriptNativeProperty
     public int which;
 
     /**
@@ -104,19 +113,17 @@ public class UIEvent {
      */
     public native void stopImmediatePropagation();
 
-    public void test() {
-        System.out.println("aa");
-    }
-
     /**
      * @version 2013/04/02 16:51:33
      */
     public static class Offset implements JavascriptNative {
 
         /** The top offset. */
+        @JavascriptNativeProperty
         public int top;
 
         /** The left offset. */
+        @JavascriptNativeProperty
         public int left;
     }
 }

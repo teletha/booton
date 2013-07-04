@@ -11,7 +11,8 @@ package js.lang;
 
 import jsx.jQuery;
 import booton.translator.JavaAPIProvider;
-import booton.translator.JavascriptNativePrimitiveNumber;
+import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativeProperty;
 
 /**
  * <p>
@@ -22,7 +23,7 @@ import booton.translator.JavascriptNativePrimitiveNumber;
  * @version 2013/04/12 12:58:25
  */
 @JavaAPIProvider(Character.class)
-class JSCharacter implements JavascriptNativePrimitiveNumber {
+class JSCharacter implements JavascriptNative {
 
     /** The primitive char class. */
     public static final Class TYPE = Primitive.class;
@@ -158,9 +159,22 @@ class JSCharacter implements JavascriptNativePrimitiveNumber {
     }
 
     /**
-     * {@inheritDoc}
+     * <p>
+     * Returns the primitive value of this object.
+     * </p>
+     * <p>
+     * JavaScript calls the valueOf method to convert an object to a primitive value. You rarely
+     * need to invoke the valueOf method yourself; JavaScript automatically invokes it when
+     * encountering an object where a primitive value is expected.
+     * </p>
+     * <p>
+     * You can create a function to be called in place of the default valueOf method. Your function
+     * must take no arguments.
+     * </p>
+     * 
+     * @return A primitive value.
      */
-    @Override
+    @JavascriptNativeProperty
     public NativeNumber valueOf() {
         return new NativeNumber(character.charCodeAt(0));
     }

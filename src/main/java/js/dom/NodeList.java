@@ -11,12 +11,14 @@ package js.dom;
 
 import java.util.Iterator;
 
+import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativePropertyAccessor;
 
 /**
  * @version 2013/07/01 3:32:52
  */
+@JavascriptAPIProvider
 public abstract class NodeList<T extends Node> implements Iterable<T>, JavascriptNative {
 
     /**

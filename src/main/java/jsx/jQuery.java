@@ -21,11 +21,14 @@ import jsx.bwt.UI;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
 import booton.css.CSS;
+import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativeProperty;
 
 /**
- * @version 2013/04/26 12:37:01
+ * @version 2013/07/04 20:44:18
  */
+@JavascriptAPIProvider
 public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
 
     /**
@@ -1628,16 +1631,18 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
     public static class Offset implements JavascriptNative {
 
         /** The top offset. */
+        @JavascriptNativeProperty
         public int top;
 
         /** The left offset. */
+        @JavascriptNativeProperty
         public int left;
     }
 
     /**
      * @version 2012/12/02 23:08:01
      */
-    public static interface Listener {
+    public static interface Listener extends JavascriptNative {
 
         /**
          * <p>
@@ -1647,6 +1652,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
          * @param event
          * @return
          */
+        @JavascriptNativeProperty
         void handler(UIEvent event);
     }
 
