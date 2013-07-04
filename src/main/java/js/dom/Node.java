@@ -9,12 +9,15 @@
  */
 package js.dom;
 
+import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
 
 /**
- * @version 2013/07/01 21:31:06
+ * @version 2013/07/04 20:41:55
  */
+@JavascriptAPIProvider
 public abstract class Node implements JavascriptNative {
 
     /**
@@ -87,6 +90,7 @@ public abstract class Node implements JavascriptNative {
      * @param newNode The node to append.
      * @return The node being appended, that is newElement.
      */
+    @JavascriptNativeProperty
     protected abstract <T> T appedChild(T newNode);
 
     /**
@@ -98,5 +102,6 @@ public abstract class Node implements JavascriptNative {
      * @param referenceNode The node before which newNode is inserted.
      * @return The node being inserted, that is newNode.
      */
+    @JavascriptNativeProperty
     protected abstract <T> T insertBefore(T newNode, Object referenceNode);
 }

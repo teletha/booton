@@ -9,8 +9,11 @@
  */
 package js.dom;
 
+import booton.translator.JavascriptAPIProvider;
+
 /**
  * @version 2013/07/01 12:01:48
  */
+@JavascriptAPIProvider
 public abstract class Text extends Node {
 }

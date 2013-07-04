@@ -10,14 +10,14 @@
 package js.lang;
 
 import booton.translator.JavaAPIProvider;
-import booton.translator.JavascriptNativeMethod;
-import booton.translator.JavascriptNativePrimitiveNumber;
+import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativeProperty;
 
 /**
- * @version 2013/04/13 18:56:37
+ * @version 2013/07/04 20:43:57
  */
 @JavaAPIProvider(Number.class)
-abstract class JSNumber implements JavascriptNativePrimitiveNumber {
+abstract class JSNumber implements JavascriptNative {
 
     /** The actual value. */
     protected final NativeNumber value;
@@ -121,10 +121,22 @@ abstract class JSNumber implements JavascriptNativePrimitiveNumber {
     }
 
     /**
-     * {@inheritDoc}
+     * <p>
+     * Returns the primitive value of this object.
+     * </p>
+     * <p>
+     * JavaScript calls the valueOf method to convert an object to a primitive value. You rarely
+     * need to invoke the valueOf method yourself; JavaScript automatically invokes it when
+     * encountering an object where a primitive value is expected.
+     * </p>
+     * <p>
+     * You can create a function to be called in place of the default valueOf method. Your function
+     * must take no arguments.
+     * </p>
+     * 
+     * @return A primitive value.
      */
-    @Override
-    @JavascriptNativeMethod
+    @JavascriptNativeProperty
     public NativeNumber valueOf() {
         return value;
     }

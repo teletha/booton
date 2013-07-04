@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -9,12 +9,13 @@
  */
 package js.dom;
 
-
+import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativeProperty;
 
 /**
- * @version 2013/01/04 14:00:47
+ * @version 2013/07/04 20:51:10
  */
-public abstract class Window {
+public abstract class Window implements JavascriptNative {
 
     /**
      * <p>
@@ -23,5 +24,6 @@ public abstract class Window {
      * URL.
      * </p>
      */
+    @JavascriptNativeProperty
     public Location location;
 }

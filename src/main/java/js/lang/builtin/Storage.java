@@ -10,6 +10,7 @@
 package js.lang.builtin;
 
 import jsx.Util;
+import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 
 /**
@@ -22,6 +23,7 @@ import booton.translator.JavascriptNative;
  * 
  * @version 2013/04/23 19:35:55
  */
+@JavascriptAPIProvider
 public abstract class Storage implements JavascriptNative {
 
     /**
