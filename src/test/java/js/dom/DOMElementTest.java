@@ -23,7 +23,7 @@ public class DOMElementTest {
 
         assert element.children().size() == 0;
 
-        Node node = element.appedChild(child1);
+        Node node = element.appendChild(child1);
         assert element.children().size() == 1;
         assert element.children().get(0) == child1;
         assert node == child1;
@@ -32,14 +32,14 @@ public class DOMElementTest {
     @Test(expected = Error.class)
     public void apendChildNull() throws Exception {
         Element element = new EmulateElement();
-        element.appedChild(null);
+        element.appendChild(null);
     }
 
     @Test
     public void removeChild() throws Exception {
         Element element = new EmulateElement();
         Element child = new EmulateElement();
-        element.appedChild(child);
+        element.appendChild(child);
 
         assert element.children().size() == 1;
         assert element.children().get(0) == child;
@@ -52,7 +52,7 @@ public class DOMElementTest {
     @Test(expected = Error.class)
     public void removeChildNull() throws Exception {
         Element element = new EmulateElement();
-        element.appedChild(null);
+        element.appendChild(null);
     }
 
     @Test(expected = Error.class)
@@ -104,9 +104,9 @@ public class DOMElementTest {
         Element element = new EmulateElement();
         assert element.textContent().equals("");
 
-        element.appedChild("c");
-        element.appedChild("a");
-        element.appedChild("t");
+        element.appendChild("c");
+        element.appendChild("a");
+        element.appendChild("t");
         assert element.textContent().equals("cat");
     }
 
@@ -115,11 +115,11 @@ public class DOMElementTest {
         Element element = new EmulateElement();
         assert element.textContent().equals("");
 
-        element.appedChild("c");
+        element.appendChild("c");
         Element child = new EmulateElement();
-        child.appedChild("a");
-        element.appedChild(child);
-        element.appedChild("t");
+        child.appendChild("a");
+        element.appendChild(child);
+        element.appendChild("t");
         assert element.textContent().equals("cat");
     }
 }

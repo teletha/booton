@@ -91,7 +91,7 @@ public abstract class Node implements JavascriptNative {
      * @return The node being appended, that is newElement.
      */
     @JavascriptNativeProperty
-    protected abstract <T> T appedChild(T newNode);
+    protected abstract <T> T appendChild(T newNode);
 
     /**
      * <p>
