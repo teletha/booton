@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import jsx.bwt.ImageGridStyle.Title;
 import jsx.bwt.ImageGridStyle.Unselected;
 
 /**
- * @version 2012/12/19 9:51:49
+ * @version 2013/07/05 15:02:47
  */
 public abstract class ImageGrid<T> extends UI {
 
@@ -35,6 +35,25 @@ public abstract class ImageGrid<T> extends UI {
     /** The image sources. */
     private Collection<T> sources;
 
+    private Element search = rootElement.child("input", Input.class).attr("type", "text").bind(this);
+
+    /**
+     * Filter image by user input.
+     */
+    @Listen(UIAction.KeyUp)
+    private void search() {
+        System.out.println("aa");
+        String name = search.val().toLowerCase().replace("\\s", "");
+
+        for (Entry<T, Element> entry : images.entrySet()) {
+            if (getTitle(entry.getKey()).toLowerCase().contains(name)) {
+                entry.getValue().remove(Unselected.class);
+            } else {
+                entry.getValue().add(Unselected.class);
+            }
+        }
+    }
+
     /**
      * Create image grid.
      * 
@@ -43,26 +62,6 @@ public abstract class ImageGrid<T> extends UI {
     public ImageGrid() {
         sources = sources();
         rootElement.add(Root.class);
-
-        final Element search = rootElement.child("input", Input.class).attr("type", "text");
-        search.bind(UIAction.KeyUp, new EventListener() {
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void handleEvent(UIEvent event) {
-                String name = search.val().toLowerCase().replace("\\s", "");
-
-                for (Entry<T, Element> entry : images.entrySet()) {
-                    if (getTitle(entry.getKey()).toLowerCase().contains(name)) {
-                        entry.getValue().remove(Unselected.class);
-                    } else {
-                        entry.getValue().add(Unselected.class);
-                    }
-                }
-            }
-        });
 
         Element set = rootElement.child(ImageSet.class);
 
