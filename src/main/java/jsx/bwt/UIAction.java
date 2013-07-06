@@ -16,6 +16,15 @@ package jsx.bwt;
 public enum UIAction {
 
     /** The ui event type. */
+    DOMNodeInserted("DOMNodeInserted"),
+
+    /** The ui event type. */
+    DOMNodeRemoved("DOMNodeRemoved"),
+
+    /** The ui event type. */
+    DOMAttrModified("DOMAttrModified"),
+
+    /** The ui event type. */
     Popup,
 
     /** The ui event type. */
@@ -305,6 +314,15 @@ public enum UIAction {
      */
     private UIAction() {
         this(-1);
+    }
+
+    /**
+     * @param name
+     */
+    private UIAction(String name) {
+        this.code = -1;
+        this.global = false;
+        this.name = name;
     }
 
     /**

@@ -6059,10 +6059,10 @@ public class Skill extends Describable<SkillDescriptor> {
         LivingShadow.update()
                 .passive("{1}を得る。")
                 .variable(1, AD, 0, 0, amplify(BounusAD, 0.05, 0.05))
-                .active("Zedの「影」が指定方向にダッシュし、4秒間その場に留まり{2}の{3}。再度このスキルを使用するとZedと「影」の位置が入れ替わる。「影」はZedが通常スキルを使用すると同時に同じスキルを使用する。この時スキルがZedのスキルと同一の敵ユニットに命中した場合、{1}する。回復効果はスキル1回毎に1度のみ発動する。")
-                .variable(1, RestoreEnergy, 20, 5)
+                .active("Zedの「影」が指定方向にダッシュし、4秒間その場に留まり{2}の{3}。再度このスキルを使用するとZedと「影」の位置が入れ替わる。「影」はZedが通常スキルを使用すると同時に同じスキルを使用する。この時スキルがZedのスキルと同一の敵ユニットに命中した場合、{4}する。回復効果はスキル1回毎に1度のみ発動する。")
                 .variable(2, Radius, 1300)
                 .variable(3, Visionable)
+                .variable(4, RestoreEnergy, 20, 5)
                 .cost(Energy, 40, -5)
                 .cd(22, -1.5)
                 .range(550);
