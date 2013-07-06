@@ -242,7 +242,8 @@ public class Javascript {
             JavascriptAPIProvider provider = source.getAnnotation(JavascriptAPIProvider.class);
 
             if (provider != null) {
-                compileNative(code, provider.value().length() != 0 ? provider.value() : source.getSimpleName());
+                compileNative(code, provider.polyfill(), provider.value().length() != 0 ? provider.value()
+                        : source.getSimpleName());
             } else if (source.isInterface()) {
                 compileInterface(code);
             } else {
@@ -347,9 +348,11 @@ public class Javascript {
      * @param code
      * @param nativeClassName A javascript native class name.
      */
-    private void compileNative(ScriptBuffer code, String nativeClassName) {
+    private void compileNative(ScriptBuffer code, boolean polyfill, String nativeClassName) {
+        String method = polyfill ? "Polyfill" : "Native";
+
         // Start class definition
-        code.append("boot.defineNative(\"").append(nativeClassName).append("\",{");
+        code.append("boot.define" + method + "(\"").append(nativeClassName).append("\",{");
 
         try {
             new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
@@ -528,7 +531,7 @@ public class Javascript {
      * @param clazz A class with fully qualified class name(e.g. java.lang.String).
      * @return An identified class name for ECMAScript.
      */
-    public static final String computeClassName(Class clazz) {
+    public static final String computeClassName(Class<?> clazz) {
         if (clazz == jQuery.class) {
             return "$";
         }
@@ -536,6 +539,13 @@ public class Javascript {
         if (clazz == Object.class) {
             return "Object";
         }
+
+        JavascriptAPIProvider provider = clazz.getAnnotation(JavascriptAPIProvider.class);
+
+        if (provider != null) {
+            return provider.value().length() != 0 ? provider.value() : clazz.getSimpleName();
+        }
+
         return "boot." + computeSimpleClassName(clazz);
     }
 
@@ -580,7 +590,7 @@ public class Javascript {
      *            (Ljava/lang/String;)V)
      * @return An identified class name for ECMAScript.
      */
-    public static final String computeMethodName(Constructor constructor) {
+    public static final String computeMethodName(Constructor<?> constructor) {
         return computeMethodName(constructor.getDeclaringClass(), "<init>", Type.getConstructorDescriptor(constructor));
     }
 

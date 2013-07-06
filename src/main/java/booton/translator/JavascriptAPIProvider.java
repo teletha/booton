@@ -11,6 +11,7 @@ package booton.translator;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -27,6 +28,7 @@ import java.lang.annotation.Target;
  * @version 2013/04/14 14:02:55
  */
 @Documented
+@Inherited
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JavascriptAPIProvider {
@@ -39,4 +41,6 @@ public @interface JavascriptAPIProvider {
      * @return A target class.
      */
     String value() default "";
+
+    boolean polyfill() default false;
 }

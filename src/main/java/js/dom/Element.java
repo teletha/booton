@@ -373,7 +373,7 @@ public abstract class Element extends Node implements JavascriptNative {
                         if (keyCode != -1) {
                             listener = new KeyBind(keyCode, listener);
                         }
-                        bind(type.name + namespace, listener);
+                        bind(type, listener);
                     }
                 }
             }

@@ -383,7 +383,60 @@ function boot(global) {
         define(global[name].prototype, properties);
       }
     },
-    
+
+    /**
+     * <p>
+     * Define properties in javascript native object prototype.
+     * </p>
+     * 
+     * @param {String} name A fully qualified class name of a class to define.
+     * @param {Object} properties A property definition.
+     */
+    definePolyfill: function(name, properties) {
+      var prefix = ["", "Moz", "Webkit", "MS"];
+
+      for (var i = 0; i < 4; ++i) {
+        var def = global[prefix[i] + name];
+        
+        if (def) {
+          // use native implementation
+          global[name] = def;
+          return; 
+        }
+      }
+      
+      // This is actual counstructor of class to define.
+      function Class() {
+        // Invoke the specified constructor function.
+        this.$0.apply(this, arguments);
+      }
+      
+      // We must store static initialization function.
+      var init;
+
+      // We must copy the properties over onto the new prototype.
+      // At first, from superclass definition.
+      var prototype = Class.prototype = Object.create(Object.prototype);
+
+      // Then, from user defined class definition.
+      for (var i in properties) {
+        // static method
+        if (i.charAt(0) == "_") {
+          if (i.length == 1) {
+            // invoke static initializer
+            init = properties[i];
+          } else {
+            // define static method
+            Class[i.substring(1)] = properties[i];
+          }
+        } else {
+          // define member method
+          prototype[i] = properties[i];
+        }
+      }
+      // global[name] = Class;
+    },
+
     /**
      * <p>
      * Helper method for Runnable interface.

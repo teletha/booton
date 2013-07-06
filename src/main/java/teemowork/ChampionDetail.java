@@ -117,6 +117,7 @@ public class ChampionDetail extends Page {
         this.build = new Build(champion);
 
         bind(build);
+
     }
 
     /**
