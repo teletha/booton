@@ -31,7 +31,7 @@ public class MutationObserver implements JavascriptNative {
 
     @JavascriptNativeProperty
     public void observe(final Element target, MutationObserverOption option) {
-        target.bind(UIAction.DOMNodeInserted, new EventListener() {
+        target.on(UIAction.DOMNodeInserted, new EventListener() {
 
             @Override
             public void handleEvent(UIEvent event) {

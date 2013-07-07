@@ -73,7 +73,7 @@ public abstract class ImageGrid<T> extends UI {
 
             container.child(Title.class).text(getTitle(source));
 
-            image.bind(UIAction.Click, new EventListener() {
+            image.on(UIAction.Click, new EventListener() {
 
                 @Override
                 public void handleEvent(UIEvent event) {

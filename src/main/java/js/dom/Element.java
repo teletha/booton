@@ -13,9 +13,11 @@ import static js.lang.Global.*;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import jsx.jQuery;
 import jsx.bwt.Listen;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
@@ -58,6 +60,9 @@ public abstract class Element extends Node implements JavascriptNative {
     /** The class name list. */
     @JavascriptNativeProperty
     public DOMTokenList classList;
+
+    /** The event listener holder. */
+    private Map<UIAction, Listeners> events;
 
     /**
      * <p>
@@ -294,29 +299,6 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
-     * This is a shortcut for .trigger("keyup").
-     * </p>
-     * 
-     * @return
-     */
-    public native jQuery keyup();
-
-    /**
-     * <p>
-     * Bind an event handler to the "keyup" event, or trigger that event on an element.
-     * </p>
-     * 
-     * @param listener A function to execute each time the event is triggered.
-     * @return Chainable API.
-     */
-    public Element keyup(EventListener listener) {
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
      * Attach all event handlers which are defined in the given subscriber to the selected elements.
      * </p>
      * 
@@ -373,19 +355,10 @@ public abstract class Element extends Node implements JavascriptNative {
                         if (keyCode != -1) {
                             listener = new KeyBind(keyCode, listener);
                         }
-                        bind(type, listener);
+                        on(type, listener);
                     }
                 }
             }
-        }
-
-        // API defintion
-        return this;
-    }
-
-    public Element bind(UIAction type, EventListener listener) {
-        if (type != null && listener != null) {
-            addEventListener(type.name, listener);
         }
 
         // API defintion
@@ -401,6 +374,64 @@ public abstract class Element extends Node implements JavascriptNative {
      */
     public Element next() {
         return nextElementSibling();
+    }
+
+    /**
+     * <p>
+     * Attach all event handlers which are defined in the given subscriber to the selected elements.
+     * </p>
+     * 
+     * @param subscriber A subscriber that holds user action event listeners.
+     * @return A chainable API.
+     */
+    public Element off(UIAction type, EventListener subscriber) {
+        if (events != null && type != null && subscriber != null) {
+            Listeners listeners = events.get(type);
+
+            if (listeners != null) {
+                int size = listeners.remove(subscriber);
+
+                if (size == 0) {
+                    events.remove(type);
+                    removeEventListener(type.name, listeners);
+
+                    if (events.size() == 0) {
+                        events = null;
+                    }
+                }
+            }
+        }
+
+        // API defintion
+        return this;
+    }
+
+    /**
+     * <p>
+     * Attach all event handlers which are defined in the given subscriber to the selected elements.
+     * </p>
+     * 
+     * @param subscriber A subscriber that holds user action event listeners.
+     * @return A chainable API.
+     */
+    public Element on(UIAction type, EventListener subscriber) {
+        if (type != null && subscriber != null) {
+            if (events == null) {
+                events = new HashMap();
+            }
+
+            Listeners listeners = events.get(type);
+
+            if (listeners == null) {
+                listeners = new Listeners();
+                events.put(type, listeners);
+                addEventListener(type.name, listeners);
+            }
+            listeners.add(subscriber);
+        }
+
+        // API defintion
+        return this;
     }
 
     /**
@@ -700,6 +731,50 @@ public abstract class Element extends Node implements JavascriptNative {
      */
     @JavascriptNativeProperty
     public final native void scrollIntoView();
+
+    /**
+     * @version 2013/07/07 13:50:26
+     */
+    private static class Listeners implements EventListener {
+
+        /** The actual listener holder. */
+        private CopyOnWriteArrayList<EventListener> listeners = new CopyOnWriteArrayList();
+
+        /**
+         * <p>
+         * Register event listener.
+         * </p>
+         * 
+         * @param listener
+         */
+        private void add(EventListener listener) {
+            listeners.addIfAbsent(listener);
+        }
+
+        /**
+         * <p>
+         * Unregister event listener.
+         * </p>
+         * 
+         * @param listener
+         * @return
+         */
+        private int remove(EventListener listener) {
+            listeners.remove(listener);
+
+            return listeners.size();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handleEvent(UIEvent event) {
+            for (EventListener listener : listeners) {
+                listener.handleEvent(event);
+            }
+        }
+    }
 
     /**
      * @version 2013/07/05 1:19:49
