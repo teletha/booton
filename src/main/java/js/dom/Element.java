@@ -230,75 +230,6 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
-     * Create child element.
-     * </p>
-     * 
-     * @param name A element name.
-     * @return A created child element.
-     */
-    public Element child(String name) {
-        return document.createElement(name).appendTo(this);
-    }
-
-    /**
-     * <p>
-     * Create a child element with the specified class.
-     * </p>
-     * 
-     * @param className A class name of the new child element.
-     * @return A created child element.
-     */
-    public Element child(Class<? extends CSS> className) {
-        return child("span", className);
-    }
-
-    /**
-     * <p>
-     * Create a child element with the specified class.
-     * </p>
-     * 
-     * @param className A class name of the new child element.
-     * @return A created child element.
-     */
-    public Element child(String name, Class<? extends CSS> className) {
-        return child(name).add(className);
-    }
-
-    /**
-     * <p>
-     * Get the children of this element.
-     * </p>
-     * 
-     * @return A list of child elements.
-     */
-    public List<Element> children() {
-        List<Element> list = new ArrayList();
-        Element element = firstElementChild();
-
-        while (element != null) {
-            list.add(element);
-
-            element = element.nextElementSibling();
-        }
-        return list;
-    }
-
-    /**
-     * <p>
-     * Remove all child nodes of this element from the DOM.
-     * </p>
-     * 
-     * @return Chainable API.
-     */
-    public Element empty() {
-        textContent("");
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
      * Attach all event handlers which are defined in the given subscriber to the selected elements.
      * </p>
      * 
@@ -367,6 +298,96 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
+     * Create child element.
+     * </p>
+     * 
+     * @param name A element name.
+     * @return A created child element.
+     */
+    public Element child(String name) {
+        return document.createElement(name).appendTo(this);
+    }
+
+    /**
+     * <p>
+     * Create a child element with the specified class.
+     * </p>
+     * 
+     * @param className A class name of the new child element.
+     * @return A created child element.
+     */
+    public Element child(Class<? extends CSS> className) {
+        return child("span", className);
+    }
+
+    /**
+     * <p>
+     * Create a child element with the specified class.
+     * </p>
+     * 
+     * @param className A class name of the new child element.
+     * @return A created child element.
+     */
+    public Element child(String name, Class<? extends CSS> className) {
+        return child(name).add(className);
+    }
+
+    /**
+     * <p>
+     * Get the children of this element.
+     * </p>
+     * 
+     * @return A list of child elements.
+     */
+    public List<Element> children() {
+        List<Element> list = new ArrayList();
+        Element element = firstElementChild();
+
+        while (element != null) {
+            list.add(element);
+
+            element = element.nextElementSibling();
+        }
+        return list;
+    }
+
+    /**
+     * <p>
+     * Clean this element.
+     * </p>
+     * 
+     * @return
+     */
+    private Element clean() {
+        for (Element child : children()) {
+            child.clean();
+        }
+        off();
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Remove all child nodes of this element from the DOM.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public Element empty() {
+        for (Element child : childElements()) {
+            child.clean();
+        }
+
+        textContent("");
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
      * Returns the first following sibling that is an element, and null otherwise.
      * </p>
      * 
@@ -378,7 +399,51 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
-     * Attach all event handlers which are defined in the given subscriber to the selected elements.
+     * Dettach all event handlers from this element.
+     * </p>
+     * 
+     * @return A chainable API.
+     */
+    public Element off() {
+        if (events != null) {
+            for (UIAction type : events.keySet()) {
+                off(type);
+            }
+        }
+
+        // API defintion
+        return this;
+    }
+
+    /**
+     * <p>
+     * Dettach all specified-type event handlers from this element.
+     * </p>
+     * 
+     * @return A chainable API.
+     */
+    public Element off(UIAction type) {
+        if (events != null) {
+            Listeners listeners = events.get(type);
+
+            if (listeners != null) {
+                events.remove(type);
+                removeEventListener(type.name, listeners);
+
+                if (events.size() == 0) {
+                    events = null;
+                }
+            }
+        }
+
+        // API defintion
+        return this;
+    }
+
+    /**
+     * <p>
+     * Dettach all event handlers which are defined in the given subscriber to the selected
+     * elements.
      * </p>
      * 
      * @param subscriber A subscriber that holds user action event listeners.
@@ -593,6 +658,17 @@ public abstract class Element extends Node implements JavascriptNative {
      * 
      * @return The parent element.
      */
+    @JavascriptNativePropertyAccessor("children")
+    protected abstract HTMLCollection childElements();
+
+    /**
+     * <p>
+     * Returns the DOM node's parent Element, or null if the node either has no parent, or its
+     * parent isn't a DOM Element.
+     * </p>
+     * 
+     * @return The parent element.
+     */
     @JavascriptNativePropertyAccessor
     protected abstract Element parentElement();
 
@@ -763,6 +839,15 @@ public abstract class Element extends Node implements JavascriptNative {
             listeners.remove(listener);
 
             return listeners.size();
+        }
+
+        /**
+         * <p>
+         * Unregister all event listeners.
+         * </p>
+         */
+        private void clear() {
+            listeners.clear();
         }
 
         /**
