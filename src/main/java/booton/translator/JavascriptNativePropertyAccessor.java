@@ -22,4 +22,13 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JavascriptNativePropertyAccessor {
+
+    /**
+     * <p>
+     * Specify property name in javascript runtime.
+     * </p>
+     * 
+     * @return A property name.
+     */
+    String value() default "";
 }

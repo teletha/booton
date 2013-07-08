@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,9 @@ class TranslatorManager {
 
     /** The native accessor methods. */
     private static final Table<Integer, Class> nativeAccessorMethods = new Table();
+
+    /** The native accessor methods. */
+    private static final Map<Integer, String> nativeAccessorMethodNames = new HashMap();
 
     static {
         // built-in native class.
@@ -86,8 +90,17 @@ class TranslatorManager {
                                 nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), nativeClass);
                             }
 
-                            if (method.isAnnotationPresent(JavascriptNativePropertyAccessor.class)) {
-                                nativeAccessorMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), type);
+                            JavascriptNativePropertyAccessor accessor = method.getAnnotation(JavascriptNativePropertyAccessor.class);
+
+                            if (accessor != null) {
+                                Integer hash = hash(method.getName(), Type.getMethodDescriptor(method));
+                                String name = accessor.value();
+
+                                if (name.length() == 0) {
+                                    name = method.getName();
+                                }
+                                nativeAccessorMethods.push(hash, type);
+                                nativeAccessorMethodNames.put(hash, name);
                             }
                         }
 
@@ -168,15 +181,16 @@ class TranslatorManager {
      * @param description A method description.
      * @return A result.
      */
-    static boolean isNativeAccessorMethod(Class owner, String name, String description) {
-        List<Class> classes = nativeAccessorMethods.get(hash(name, description));
+    private static String getNativeAccessor(Class owner, String name, String description) {
+        Integer hash = hash(name, description);
+        List<Class> classes = nativeAccessorMethods.get(hash);
 
         for (Class clazz : classes) {
             if (clazz.isAssignableFrom(owner)) {
-                return true;
+                return nativeAccessorMethodNames.get(hash);
             }
         }
-        return false;
+        return null;
     }
 
     /**
@@ -292,13 +306,15 @@ class TranslatorManager {
          */
         @Override
         protected String translateMethod(Class owner, String name, String desc, Class[] types, List<Operand> context) {
-            if (isNativeAccessorMethod(owner, name, desc)) {
+            String accessor = getNativeAccessor(owner, name, desc);
+
+            if (accessor != null) {
                 if (types.length == 0) {
                     // getter
-                    return context.get(0) + "." + name;
+                    return context.get(0) + "." + accessor;
                 } else {
                     // setter
-                    return context.get(0) + "." + name + "=" + writeParameter(types, context, false);
+                    return context.get(0) + "." + accessor + "=" + writeParameter(types, context, false);
                 }
             }
             return context.get(0) + "." + Javascript.computeMethodName(owner, name, desc) + writeParameter(types, context);

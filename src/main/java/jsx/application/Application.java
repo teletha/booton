@@ -21,10 +21,10 @@ import java.util.regex.Pattern;
 
 import js.lang.Classes;
 import jsx.jQuery;
+import jsx.jQuery.Listener;
 import jsx.bwt.EventBus;
 import jsx.bwt.Publishable;
 import jsx.bwt.UIEvent;
-import jsx.jQuery.Listener;
 
 /**
  * @version 2012/12/11 14:19:29
@@ -173,7 +173,7 @@ public abstract class Application {
             page.load(cradle);
 
             // clear old page and append new page
-            $("#Content").empty().append(cradle);
+            document.querySelector("#Content").empty().append(cradle.get(0));
 
             // record page
             current = page;

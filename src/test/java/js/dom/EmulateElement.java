@@ -196,6 +196,14 @@ public class EmulateElement extends Element implements Nodable {
      * {@inheritDoc}
      */
     @Override
+    protected HTMLCollection childElements() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected Element parentElement() {
         return parent;
     }
