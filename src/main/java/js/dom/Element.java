@@ -123,27 +123,8 @@ public abstract class Element extends Node implements JavascriptNative {
      * @param contents DOM element to insert at the end of this element.
      * @return Chainable API.
      */
-    public Element append(Element contents) {
-        appendChild(contents);
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
-     * Insert content to the end of this element.
-     * </p>
-     * 
-     * @param contents DOM element to insert at the end of this element.
-     * @return Chainable API.
-     */
     public Element append(Object contents) {
-        if (contents instanceof Element) {
-            appendChild((Element) contents);
-        } else {
-            appendChild(String.valueOf(contents));
-        }
+        appendChild(contents);
 
         // API definition
         return this;
@@ -353,19 +334,20 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
-     * Clean this element.
+     * Dispose this element.
      * </p>
-     * 
-     * @return
      */
-    private Element clean() {
+    private void dispose() {
+        // Dispose child elements.
         for (Element child : children()) {
-            child.clean();
+            child.dispose();
         }
-        off();
 
-        // API definition
-        return this;
+        // =======================
+        // Disposal Process
+        // =======================
+        // Dettach event handlers.
+        off();
     }
 
     /**
@@ -377,7 +359,7 @@ public abstract class Element extends Node implements JavascriptNative {
      */
     public Element empty() {
         for (Element child : childElements()) {
-            child.clean();
+            child.dispose();
         }
 
         textContent("");
@@ -545,11 +527,10 @@ public abstract class Element extends Node implements JavascriptNative {
      * @return
      */
     public Element remove() {
-        Element parent = parentElement();
+        dispose();
 
-        if (parent != null) {
-            parent.removeChild(this);
-        }
+        // parent node exist surely
+        parent().removeChild(this);
 
         // API definition
         return this;

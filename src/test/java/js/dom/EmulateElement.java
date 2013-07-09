@@ -23,6 +23,9 @@ public class EmulateElement extends Element implements Nodable {
     /** The child nodes holder. */
     final Nodes nodes = new Nodes();
 
+    /** The child nodes holder. */
+    final EmulateHTMLCollection elements = new EmulateHTMLCollection();
+
     /** The attribute holder. */
     private final AttributesImpl attributes = new AttributesImpl();
 
@@ -441,6 +444,172 @@ public class EmulateElement extends Element implements Nodable {
             } else {
                 return new EmulateText(node);
             }
+        }
+    }
+
+    /**
+     * @version 2013/07/01 9:30:36
+     */
+    private class NodeCollection<T extends Node> implements Iterable<T> {
+
+        /** The current node set. */
+        private final List<T> nodes = new ArrayList();
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Iterator<T> iterator() {
+            return nodes.iterator();
+        }
+
+        /**
+         * <p>
+         * Return collection size.
+         * </p>
+         * 
+         * @return
+         */
+        int size() {
+            return nodes.size();
+        }
+
+        /**
+         * <p>
+         * Add node at end.
+         * </p>
+         * 
+         * @param node
+         */
+        void add(Object node) {
+            add(size(), node);
+        }
+
+        /**
+         * <p>
+         * Add node.
+         * </p>
+         * 
+         * @param contents
+         */
+        void add(int index, Object contents) {
+            if (contents != null) {
+                T node = makeNode(contents);
+
+                // remove duplication for live emulation
+                int found = nodes.indexOf(node);
+
+                if (found != -1) {
+                    nodes.remove(found);
+
+                    if (found <= index) {
+                        index--;
+                    }
+                }
+
+                // append it
+                nodes.add(index, node);
+
+                // modify tree
+                if (node instanceof Nodable) {
+                    ((Nodable) node).setParent(EmulateElement.this);
+                }
+            }
+        }
+
+        /**
+         * <p>
+         * Add node.
+         * </p>
+         * 
+         * @param contents
+         */
+        void remove(int index) {
+            if (0 <= index && index < size()) {
+                // remove it
+                Node node = nodes.remove(index);
+
+                // modify tree
+                // modify tree
+                if (node instanceof Nodable) {
+                    ((Nodable) node).setParent(null);
+                }
+            }
+        }
+
+        /**
+         * <p>
+         * Find index of the specified node.
+         * </p>
+         * 
+         * @param node A target node to search.
+         * @return A index.
+         */
+        int indexOf(Object node) {
+            return nodes.indexOf(node);
+        }
+
+        /**
+         * <p>
+         * Helper method to clear all nodes.
+         * </p>
+         */
+        void clear() {
+            while (0 < size()) {
+                remove(0);
+            }
+        }
+
+        /**
+         * <p>
+         * Helperr method to get node by index.
+         * </p>
+         * 
+         * @param index
+         * @return
+         */
+        T get(int index) {
+            return nodes.get(index);
+        }
+
+        /**
+         * <p>
+         * Helper method to create node object.
+         * </p>
+         * 
+         * @param node
+         * @return
+         */
+        private T makeNode(Object node) {
+            if (node instanceof Node) {
+                return (T) node;
+            } else {
+                return (T) new EmulateText(node);
+            }
+        }
+    }
+
+    /**
+     * @version 2013/07/09 9:42:24
+     */
+    private class EmulateHTMLCollection extends HTMLCollection {
+
+        private NodeCollection<Element> elements = new NodeCollection();
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int length() {
+            return elements.size();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Element item(int index) {
+            return elements.get(index);
         }
     }
 }
