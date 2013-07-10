@@ -87,7 +87,7 @@ public class EmulateText extends Text implements Nodable {
         }
 
         int index = parent.nodes.indexOf(this) - 1;
-        return index < 0 ? null : parent.nodes.get(index);
+        return index < 0 ? null : parent.nodes.getNode(index);
     }
 
     /**
@@ -100,7 +100,7 @@ public class EmulateText extends Text implements Nodable {
         }
 
         int index = parent.nodes.indexOf(this) + 1;
-        return parent.nodes.size() <= index ? null : parent.nodes.get(index);
+        return parent.nodes.size() <= index ? null : parent.nodes.getNode(index);
     }
 
     /**

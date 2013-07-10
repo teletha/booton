@@ -96,4 +96,19 @@ public class ElementTest {
         assert element.children().get(0) == child2;
         assert element.children().get(1) == child1;
     }
+
+    @Test
+    public void empty() throws Exception {
+        Element element = new EmulateElement();
+        Element child1 = new EmulateElement().text("1");
+        Element child2 = new EmulateElement().text("2");
+        element.append(child1).append(child2);
+
+        assert element.children().size() == 2;
+        assert element.text().equals("12");
+
+        element.empty();
+        assert element.children().size() == 0;
+        assert element.text().equals("");
+    }
 }
