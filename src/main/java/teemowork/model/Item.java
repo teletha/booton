@@ -815,6 +815,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(AD, 55)
                 .set(MR, 36)
                 .abilities(MawOfMalmortiusPassive, Lifeline2);
+        MawOfMalmortius.update(P309).set(AD, 60).set(MR, 40);
         MejaisSoulstealer.update().build(AmplifyingTome).cost(800).set(AP, 20).abilities(MejaisSoulstealerPassive);
         MercurialScimitar.update()
                 .build(QuicksilverSash, BFSword)

@@ -171,6 +171,7 @@ public class Build extends Notifiable implements StatusCalculator {
         case AttackDamageRatio:
         case CurrentManaRatio:
         case Stack:
+        case ConsumedStack:
         case Duration:
         case Energy:
         case Ereg:
