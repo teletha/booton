@@ -135,7 +135,7 @@ public class EmulateElement extends Element implements Nodable {
      */
     @Override
     protected Node firstChild() {
-        return nodes.size() == 0 ? null : nodes.get(0);
+        return nodes.size() == 0 ? null : nodes.getNode(0);
     }
 
     /**
@@ -144,7 +144,7 @@ public class EmulateElement extends Element implements Nodable {
     @Override
     protected Node lastChild() {
         int size = nodes.size();
-        return size == 0 ? null : nodes.get(size - 1);
+        return size == 0 ? null : nodes.getNode(size - 1);
     }
 
     /**
@@ -157,7 +157,7 @@ public class EmulateElement extends Element implements Nodable {
         }
 
         int index = parent.nodes.indexOf(this) - 1;
-        return index < 0 ? null : parent.nodes.get(index);
+        return index < 0 ? null : parent.nodes.getNode(index);
     }
 
     /**
@@ -170,7 +170,7 @@ public class EmulateElement extends Element implements Nodable {
         }
 
         int index = parent.nodes.indexOf(this) + 1;
-        return parent.nodes.size() <= index ? null : parent.nodes.get(index);
+        return parent.nodes.size() <= index ? null : parent.nodes.getNode(index);
     }
 
     /**
@@ -200,7 +200,7 @@ public class EmulateElement extends Element implements Nodable {
      */
     @Override
     protected HTMLCollection childElements() {
-        return null;
+        return elements;
     }
 
     /**
@@ -217,7 +217,7 @@ public class EmulateElement extends Element implements Nodable {
     @Override
     protected Element firstElementChild() {
         for (int i = 0; i < nodes.size(); i++) {
-            Node node = nodes.get(i);
+            Node node = nodes.getNode(i);
 
             if (node instanceof Element) {
                 return (Element) node;
@@ -232,7 +232,7 @@ public class EmulateElement extends Element implements Nodable {
     @Override
     protected Element lastElementChild() {
         for (int i = nodes.size() - 1; 0 <= i; i--) {
-            Node node = nodes.get(i);
+            Node node = nodes.getNode(i);
 
             if (node instanceof Element) {
                 return (Element) node;
@@ -253,7 +253,7 @@ public class EmulateElement extends Element implements Nodable {
         int index = parent.nodes.indexOf(this) - 1;
 
         while (0 <= index) {
-            Node node = parent.nodes.get(index);
+            Node node = parent.nodes.getNode(index);
 
             if (node instanceof Element) {
                 return (Element) node;
@@ -275,7 +275,7 @@ public class EmulateElement extends Element implements Nodable {
         int index = parent.nodes.indexOf(this) + 1;
 
         while (index < parent.nodes.size()) {
-            Node node = parent.nodes.get(index);
+            Node node = parent.nodes.getNode(index);
 
             if (node instanceof Element) {
                 return (Element) node;
@@ -312,6 +312,9 @@ public class EmulateElement extends Element implements Nodable {
 
         /** The current node set. */
         private final List<Node> nodes = new ArrayList();
+
+        /** The number of elements. */
+        private int elementCount = 0;
 
         /**
          * {@inheritDoc}
@@ -372,6 +375,10 @@ public class EmulateElement extends Element implements Nodable {
                 if (node instanceof Nodable) {
                     ((Nodable) node).setParent(EmulateElement.this);
                 }
+
+                if (node instanceof Element && found == -1) {
+                    elementCount++;
+                }
             }
         }
 
@@ -388,9 +395,12 @@ public class EmulateElement extends Element implements Nodable {
                 Node node = nodes.remove(index);
 
                 // modify tree
-                // modify tree
                 if (node instanceof Nodable) {
                     ((Nodable) node).setParent(null);
+                }
+
+                if (node instanceof Element) {
+                    elementCount--;
                 }
             }
         }
@@ -426,8 +436,39 @@ public class EmulateElement extends Element implements Nodable {
          * @param index
          * @return
          */
-        Node get(int index) {
+        Node getNode(int index) {
+            if (index < 0 || size() <= index) {
+                throw new Error();
+            }
             return nodes.get(index);
+        }
+
+        /**
+         * <p>
+         * Helper method to get element by index.
+         * </p>
+         * 
+         * @param index
+         * @return
+         */
+        Element getElement(int index) {
+            if (index < 0 || elementCount <= index) {
+                throw new Error();
+            }
+
+            int count = 0;
+
+            for (Node node : nodes) {
+                if (node instanceof Element) {
+                    if (index == count++) {
+                        return (Element) node;
+                    }
+                }
+            }
+
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
         }
 
         /**
@@ -448,160 +489,16 @@ public class EmulateElement extends Element implements Nodable {
     }
 
     /**
-     * @version 2013/07/01 9:30:36
-     */
-    private class NodeCollection<T extends Node> implements Iterable<T> {
-
-        /** The current node set. */
-        private final List<T> nodes = new ArrayList();
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Iterator<T> iterator() {
-            return nodes.iterator();
-        }
-
-        /**
-         * <p>
-         * Return collection size.
-         * </p>
-         * 
-         * @return
-         */
-        int size() {
-            return nodes.size();
-        }
-
-        /**
-         * <p>
-         * Add node at end.
-         * </p>
-         * 
-         * @param node
-         */
-        void add(Object node) {
-            add(size(), node);
-        }
-
-        /**
-         * <p>
-         * Add node.
-         * </p>
-         * 
-         * @param contents
-         */
-        void add(int index, Object contents) {
-            if (contents != null) {
-                T node = makeNode(contents);
-
-                // remove duplication for live emulation
-                int found = nodes.indexOf(node);
-
-                if (found != -1) {
-                    nodes.remove(found);
-
-                    if (found <= index) {
-                        index--;
-                    }
-                }
-
-                // append it
-                nodes.add(index, node);
-
-                // modify tree
-                if (node instanceof Nodable) {
-                    ((Nodable) node).setParent(EmulateElement.this);
-                }
-            }
-        }
-
-        /**
-         * <p>
-         * Add node.
-         * </p>
-         * 
-         * @param contents
-         */
-        void remove(int index) {
-            if (0 <= index && index < size()) {
-                // remove it
-                Node node = nodes.remove(index);
-
-                // modify tree
-                // modify tree
-                if (node instanceof Nodable) {
-                    ((Nodable) node).setParent(null);
-                }
-            }
-        }
-
-        /**
-         * <p>
-         * Find index of the specified node.
-         * </p>
-         * 
-         * @param node A target node to search.
-         * @return A index.
-         */
-        int indexOf(Object node) {
-            return nodes.indexOf(node);
-        }
-
-        /**
-         * <p>
-         * Helper method to clear all nodes.
-         * </p>
-         */
-        void clear() {
-            while (0 < size()) {
-                remove(0);
-            }
-        }
-
-        /**
-         * <p>
-         * Helperr method to get node by index.
-         * </p>
-         * 
-         * @param index
-         * @return
-         */
-        T get(int index) {
-            return nodes.get(index);
-        }
-
-        /**
-         * <p>
-         * Helper method to create node object.
-         * </p>
-         * 
-         * @param node
-         * @return
-         */
-        private T makeNode(Object node) {
-            if (node instanceof Node) {
-                return (T) node;
-            } else {
-                return (T) new EmulateText(node);
-            }
-        }
-    }
-
-    /**
      * @version 2013/07/09 9:42:24
      */
     private class EmulateHTMLCollection extends HTMLCollection {
-
-        private NodeCollection<Element> elements = new NodeCollection();
 
         /**
          * {@inheritDoc}
          */
         @Override
         public int length() {
-            return elements.size();
+            return nodes.elementCount;
         }
 
         /**
@@ -609,7 +506,7 @@ public class EmulateElement extends Element implements Nodable {
          */
         @Override
         public Element item(int index) {
-            return elements.get(index);
+            return nodes.getElement(index);
         }
     }
 }

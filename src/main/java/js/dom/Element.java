@@ -339,7 +339,7 @@ public abstract class Element extends Node implements JavascriptNative {
      */
     private void dispose() {
         // Dispose child elements.
-        for (Element child : children()) {
+        for (Element child : childElements()) {
             child.dispose();
         }
 
