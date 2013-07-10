@@ -292,6 +292,8 @@ public enum Status {
 
     Visionable("視界を得る"),
 
+    NotSpellCast("このスキルはSpellcastとして扱われない"),
+
     Chill,
 
     // ==================================================
@@ -302,7 +304,7 @@ public enum Status {
 
     Sell,
 
-    Gold(""), GoldPer10Sec,
+    Gold, GoldPer10Sec,
 
     // ==================================================
     // Time Related
@@ -327,7 +329,7 @@ public enum Status {
 
     Charge,
 
-    Stack("スタック");
+    Stack("スタック"), ConsumedStack("消費したスタック");
 
     /** The status name. */
     public final String name;
@@ -476,10 +478,6 @@ public enum Status {
         case Grow:
             return "%";
 
-        case Gold:
-        case GoldPer10Sec:
-            return "Gold";
-
         default:
             return "";
         }
@@ -546,8 +544,11 @@ public enum Status {
         case Stealth:
             return formatValue(computed) + "ステルス";
 
+        case Gold:
+            return formatValue(computed) + "Gold";
+
         case GoldPer10Sec:
-            return "10秒毎に" + formatValue(computed);
+            return "10秒毎に" + formatValue(computed) + "Gold";
 
         case Knockback:
             String length = formatValue(computed);
@@ -559,6 +560,7 @@ public enum Status {
             }
 
         case Stack:
+        case ConsumedStack:
             return formatValue(computed) + "スタック";
         }
         return name + formatValue(computed);

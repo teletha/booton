@@ -19,7 +19,7 @@ import java.util.List;
 import jsx.jQuery;
 
 /**
- * 3.08準拠
+ * 3.9準拠
  * 
  * @version 2013/06/14 8:39:54
  */
@@ -80,7 +80,7 @@ public class Champion {
     public static final Champion Diana = new Champion("Diana", MoonsilverBlade, CrescentStrike, PaleCascade, Moonfall, LunarRush);
 
     /** The champion name. */
-    public static final Champion Draven = new Champion("Draven", WickedBlades, SpinningAxe, BloodRush, StandAside, WhirlingDeath);
+    public static final Champion Draven = new Champion("Draven", LeagueOfDraven, SpinningAxe, BloodRush, StandAside, WhirlingDeath);
 
     /** The champion name. */
     public static final Champion DrMundo = new Champion("Dr.Mundo", AdrenalineRush, InfectedCleaver, BurningAgony, Masochism, Sadism);
@@ -272,7 +272,7 @@ public class Champion {
     public static final Champion Shen = new Champion("Shen", KiStrike, VorpalBlade, Feint, ShadowDash, StandUnited);
 
     /** The champion name. */
-    public static final Champion Shyvana = new Champion("Shyvana", FuryOftheDragonborn, TwinBite, Burnout, FlameBreath, DragonsDescent);
+    public static final Champion Shyvana = new Champion("Shyvana", Dragonborn, TwinBite, Burnout, FlameBreath, DragonsDescent);
 
     /** The champion name. */
     public static final Champion Singed = new Champion("Singed", EmpoweredBulwark, PoisonTrail, MegaAdhesive, Fling, InsanityPotion);
@@ -1012,6 +1012,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 335);
+        Kennen.update(P309).set(AD, 47.2, 3.3);
         KhaZix.update(P0000)
                 .set(Health, 430, 85)
                 .set(Hreg, 6.25, 0.75)
@@ -1259,6 +1260,7 @@ public class Champion {
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
                 .set(MS, 350);
+        Nunu.update(P309).set(Health, 437, 96);
         Olaf.update(P0000)
                 .set(Health, 441, 93)
                 .set(Hreg, 7, 0.9)

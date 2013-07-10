@@ -503,7 +503,8 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .variable(3, MR, 15)
                 .variable(4, Hreg, 10);
         ArchangelInsight.update().passive("{1}を得る。").variable(1, AP, 0, 0, amplify(Mana, 0.03));
-        ManaCharge.update().passive("スキル使用時及びマナ消費時に最大Manaが６増加する(最大増加量は750)。{1}。").variable(1, ItemCD, 3);
+        ManaCharge.update().passive("スキル使用時及びマナ消費時に最大Manaが6増加する(最大増加量は750)。{1}。").variable(1, ItemCD, 3);
+        ManaCharge.update(P309).passive("スキル使用時及びマナ消費時に最大Manaが8増加する(最大増加量は750)。{1}。").variable(1, ItemCD, 4);
         AtheneRestore.update().passive("キルまたはアシスト時に{1}する。").variable(1, RestoreMana, 0, 0, amplify(Mana, 0.12));
         ManaFont.update().passive("{1}する。").variable(1, MregRatio, 0, 0, amplify(MissingManaPercentage, 0.01));
         AtamDamage.update().passive("{1}を得る。").variable(1, AD, 0, 0, amplify(Health, 0.015));
@@ -683,8 +684,12 @@ public class Ability extends Describable<AbilityDescriptor> {
 
         Awe.update().passive("{1}を得る。").variable(1, AD, 0, 0, amplify(Mana, 0.02));
         ManamuneManaCharge.update().passive("通常攻撃時、スキル使用時及びマナ消費時に最大Manaが4増加する(最大増加量は750)。{1}。").variable(1, ItemCD, 3);
+        ManamuneManaCharge.update(P309).variable(1, ItemCD, 4);
         ManaPotion.update().ununique().active("15秒かけてManaを100回復する");
         MawOfMalmortiusPassive.update().passive("{1}を得る。").variable(1, AD, 0, 0, amplify(MissingHealthPercentage, 0.4));
+        MawOfMalmortiusPassive.update(P309)
+                .passive("{1}を得る。(最大35)")
+                .variable(1, AD, 0, 0, amplify(MissingHealthPercentage, 0.5));
         MejaisSoulstealerPassive.update()
                 .passive("キル時2スタック、アシスト時1スタックを得て、死亡時に3割を失う（最大20スタック）。{1}を得て、20スタック時は{2}を得る。")
                 .variable(1, AP, 0, 0, amplify(Stack, 8))
@@ -716,6 +721,9 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .ununique()
                 .active("このアイテムを消費して{1}のStealth状態の敵が味方に見えるようになる。5分経つか、死亡すると効果が切れる。")
                 .variable(1, Radius, 750);
+        OraclesElixirActive.update(P309)
+                .active("このアイテムを消費して{1}のStealth状態の敵が味方に見えるようになる。4分経つと効果が切れる。")
+                .variable(1, Radius, 600);
         PhantomDancerPassive.update().passive("{1}を得る。").variable(1, IgnoreUnitCollision);
         Transmute.update().passive("{1}を得る。").variable(1, GoldPer10Sec, 5);
         Quicksilver1.update().active("自身のDebuffをすべて除去する。{1}。").variable(1, ItemCD, 90);
@@ -828,6 +836,7 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .variable(1, AD, 0, 0, amplify(Stack, 5))
                 .variable(2, MSRatio, 15);
         TearManaCharge.update().passive("スキル使用時またはmana消費時に最大Manaが4増加する(最大増加量は750)。{1}。").variable(1, ItemCD, 3);
+        TearManaCharge.update(P309).variable(1, ItemCD, 4);
         TheBlackCleaverPassive.update()
                 .ununique()
                 .passive("敵Championに物理DMを与えた際、{1}を与える。5回（計25％）までスタックし、4秒間持続する。")
