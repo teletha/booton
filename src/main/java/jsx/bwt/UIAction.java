@@ -67,6 +67,9 @@ public enum UIAction {
     Click,
 
     /** The ui event type. */
+    ClickLeft("contextmenu"),
+
+    /** The ui event type. */
     Scroll,
 
     /** The ui event type. */

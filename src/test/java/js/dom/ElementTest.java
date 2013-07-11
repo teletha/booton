@@ -14,7 +14,7 @@ import org.junit.Test;
 import booton.css.CSS;
 
 /**
- * @version 2013/06/30 12:23:59
+ * @version 2013/07/11 16:24:56
  */
 public class ElementTest {
 
@@ -123,9 +123,54 @@ public class ElementTest {
         assert element.has(CSS1.class);
     }
 
+    @Test
+    public void addClasses() throws Exception {
+        Element element = new EmulateElement();
+        assert !element.has(CSS1.class);
+
+        element.add(CSS1.class, CSS2.class);
+        assert element.has(CSS1.class);
+        assert element.has(CSS2.class);
+    }
+
+    @Test
+    public void removeClass() throws Exception {
+        Element element = new EmulateElement();
+        element.add(CSS1.class);
+        assert element.has(CSS1.class);
+
+        element.remove(CSS1.class);
+        assert !element.has(CSS1.class);
+    }
+
+    @Test
+    public void toggleClass() throws Exception {
+        Element element = new EmulateElement();
+        element.toggle(CSS1.class);
+        assert element.has(CSS1.class);
+
+        element.toggle(CSS1.class);
+        assert !element.has(CSS1.class);
+    }
+
+    @Test
+    public void hasClass() throws Exception {
+        Element element = new EmulateElement();
+        element.add(CSS1.class);
+        assert element.has(CSS1.class);
+        assert !element.has(CSS1.class, CSS2.class);
+        assert !element.has(CSS2.class);
+    }
+
     /**
-     * @version 2013/07/11 11:54:32
+     * sion 2013/07/11 11:54:32
      */
     private static class CSS1 extends CSS {
+    }
+
+    /**
+     * @version 2013/07/11 16:24:48
+     */
+    private static class CSS2 extends CSS {
     }
 }
