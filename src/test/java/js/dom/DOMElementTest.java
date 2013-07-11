@@ -124,6 +124,27 @@ public class DOMElementTest {
     }
 
     @Test
+    public void childElements() throws Exception {
+        Element element = new EmulateElement();
+        Element child1 = new EmulateElement();
+        Element child2 = new EmulateElement();
+        HTMLCollection collection = element.childElements();
+
+        assert collection.length() == 0;
+
+        element.append(child1).append(child2);
+
+        assert collection.length() == 2;
+        assert collection.item(0) == child1;
+        assert collection.item(1) == child2;
+
+        element.removeChild(child1);
+
+        assert collection.length() == 1;
+        assert collection.item(0) == child2;
+    }
+
+    @Test
     public void setAttribute() throws Exception {
         Element element = new EmulateElement();
         assert element.getAttribute("key") == null;
