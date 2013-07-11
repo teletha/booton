@@ -1193,7 +1193,7 @@ public class Skill extends Describable<SkillDescriptor> {
     public static final Skill StandUnited = new Skill("Stand United", R);
 
     /** The skill name. */
-    public static final Skill Dragonborn = new Skill("Fury of the Dragonborn", Passive);
+    public static final Skill Dragonborn = new Skill("Dragonborn", Passive);
 
     /** The skill name. */
     public static final Skill TwinBite = new Skill("Twin Bite", Q);

@@ -11,8 +11,6 @@ package js.dom;
 
 import org.junit.Test;
 
-import booton.css.CSS;
-
 /**
  * @version 2013/06/30 12:23:59
  */
@@ -24,7 +22,7 @@ public class ElementTest {
         assert element.attr("key") == null;
 
         element.attr("key", "value");
-        assert "value".equals(element.attr("key"));
+        assert element.attr("key").equals("value");
 
         element.remove("key");
         assert element.attr("key") == null;
@@ -100,17 +98,17 @@ public class ElementTest {
     }
 
     @Test
-    public void addClass() throws Exception {
+    public void empty() throws Exception {
         Element element = new EmulateElement();
-        assert !element.classList.contains(CSS1.class);
+        Element child1 = new EmulateElement().text("1");
+        Element child2 = new EmulateElement().text("2");
+        element.append(child1).append(child2);
 
-        element.add(CSS1.class);
-        assert !element.classList.contains(CSS1.class);
-    }
+        assert element.children().size() == 2;
+        assert element.text().equals("12");
 
-    /**
-     * @version 2013/07/11 11:54:32
-     */
-    private static class CSS1 extends CSS {
+        element.empty();
+        assert element.children().size() == 0;
+        assert element.text().equals("");
     }
 }
