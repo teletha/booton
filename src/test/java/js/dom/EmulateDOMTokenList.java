@@ -11,11 +11,12 @@ package js.dom;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import kiss.I;
 import booton.Obfuscator;
 import booton.css.CSS;
 
 /**
- * @version 2013/07/11 11:58:08
+ * @version 2013/07/11 16:14:29
  */
 public class EmulateDOMTokenList extends DOMTokenList {
 
@@ -27,14 +28,7 @@ public class EmulateDOMTokenList extends DOMTokenList {
      */
     @Override
     public void add(String className) {
-        if (className == null) {
-            className = "null";
-        }
-
-        if (className.length() == 0) {
-            throw new Error();
-        }
-        classes.addIfAbsent(className);
+        classes.addIfAbsent(normalize(className));
     }
 
     /**
@@ -54,14 +48,7 @@ public class EmulateDOMTokenList extends DOMTokenList {
      */
     @Override
     public void remove(String className) {
-        if (className == null) {
-            className = "null";
-        }
-
-        if (className.length() == 0) {
-            throw new Error();
-        }
-        classes.remove(className);
+        classes.remove(normalize(className));
     }
 
     /**
@@ -107,14 +94,7 @@ public class EmulateDOMTokenList extends DOMTokenList {
      */
     @Override
     public boolean contains(String className) {
-        if (className == null) {
-            className = "null";
-        }
-
-        if (className.length() == 0) {
-            throw new Error();
-        }
-        return classes.contains(className);
+        return classes.contains(normalize(className));
     }
 
     /**
@@ -143,5 +123,49 @@ public class EmulateDOMTokenList extends DOMTokenList {
     @Override
     public String item(int index) {
         return classes.get(index);
+    }
+
+    /**
+     * <p>
+     * Helper method to clear all classes.
+     * </p>
+     */
+    void clear() {
+        classes.clear();
+    }
+
+    /**
+     * <p>
+     * Helper method to normalize class name.
+     * </p>
+     * 
+     * @param className
+     * @return
+     */
+    private String normalize(String className) {
+        if (className == null) {
+            className = "null";
+        }
+
+        if (className.length() == 0) {
+            throw new DOMError();
+        }
+
+        for (int i = 0; i < className.length(); i++) {
+            char c = className.charAt(i);
+
+            if (Character.isWhitespace(c)) {
+                throw new DOMError();
+            }
+        }
+        return className;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return I.join(classes, " ");
     }
 }
