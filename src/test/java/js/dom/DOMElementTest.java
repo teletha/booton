@@ -29,7 +29,7 @@ public class DOMElementTest {
         assert node == child1;
     }
 
-    @Test(expected = Error.class)
+    @Test(expected = DOMError.class)
     public void apendChildNull() throws Exception {
         Element element = new EmulateElement();
         element.appendChild(null);
@@ -49,13 +49,13 @@ public class DOMElementTest {
         assert removed == child;
     }
 
-    @Test(expected = Error.class)
+    @Test(expected = DOMError.class)
     public void removeChildNull() throws Exception {
         Element element = new EmulateElement();
         element.appendChild(null);
     }
 
-    @Test(expected = Error.class)
+    @Test(expected = DOMError.class)
     public void removeNonChild() throws Exception {
         Element element = new EmulateElement();
         Element child = new EmulateElement();
@@ -90,7 +90,7 @@ public class DOMElementTest {
         assert element.children().get(1) == child2;
     }
 
-    @Test(expected = Error.class)
+    @Test(expected = DOMError.class)
     public void insertBeforeNotChildReference() throws Exception {
         Element element = new EmulateElement();
         Element child1 = new EmulateElement();
@@ -183,5 +183,66 @@ public class DOMElementTest {
         element.setAttribute("KEY", "override");
         assert element.getAttribute("key").equals("override");
         assert element.getAttribute("KEY").equals("override");
+    }
+
+    @Test
+    public void setClassAttribute() throws Exception {
+        Element element = new EmulateElement();
+
+        element.setAttribute("class", "value");
+        assert element.getAttribute("class").equals("value");
+        assert element.classList().contains("value");
+        assert element.classList().length() == 1;
+
+        element.setAttribute("class", "override");
+        assert element.getAttribute("class").equals("override");
+        assert element.classList().contains("override");
+        assert element.classList().length() == 1;
+    }
+
+    @Test
+    public void setMultiClassAttribute() throws Exception {
+        Element element = new EmulateElement();
+
+        element.setAttribute("class", "multi value");
+        assert element.getAttribute("class").equals("multi value");
+        assert element.classList().contains("value");
+        assert element.classList().contains("multi");
+        assert element.classList().length() == 2;
+    }
+
+    @Test
+    public void removeAttribute() throws Exception {
+        Element element = new EmulateElement();
+        assert element.getAttribute("key") == null;
+
+        element.setAttribute("key", "value");
+        assert element.hasAttribute("key");
+
+        element.removeAttribute("key");
+        assert !element.hasAttribute("key");
+    }
+
+    @Test
+    public void removeAttributeCaseIgnore() throws Exception {
+        Element element = new EmulateElement();
+        assert element.getAttribute("key") == null;
+
+        element.setAttribute("key", "value");
+        assert element.hasAttribute("key");
+
+        element.removeAttribute("KEY");
+        assert !element.hasAttribute("key");
+    }
+
+    @Test
+    public void removeClassAttribute() throws Exception {
+        Element element = new EmulateElement();
+
+        element.setAttribute("class", "multi value");
+        assert element.classList().length() == 2;
+
+        element.removeAttribute("class");
+        assert element.classList().length() == 0;
     }
 }

@@ -11,6 +11,8 @@ package js.dom;
 
 import org.junit.Test;
 
+import booton.css.CSS;
+
 /**
  * @version 2013/06/30 12:23:59
  */
@@ -110,5 +112,20 @@ public class ElementTest {
         element.empty();
         assert element.children().size() == 0;
         assert element.text().equals("");
+    }
+
+    @Test
+    public void addClass() throws Exception {
+        Element element = new EmulateElement();
+        assert !element.has(CSS1.class);
+
+        element.add(CSS1.class);
+        assert element.has(CSS1.class);
+    }
+
+    /**
+     * @version 2013/07/11 11:54:32
+     */
+    private static class CSS1 extends CSS {
     }
 }

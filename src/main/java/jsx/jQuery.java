@@ -105,7 +105,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      */
     public jQuery add(Class<? extends CSS> className) {
         for (int i = 0; i < size(); i++) {
-            get(i).classList.add(className);
+            get(i).add(className);
         }
 
         // API definition
@@ -1151,7 +1151,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      */
     public jQuery remove(Class<? extends CSS> className) {
         for (int i = 0; i < size(); i++) {
-            get(i).classList.remove(className);
+            get(i).remove(className);
         }
 
         // API definition
@@ -1355,7 +1355,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      */
     public jQuery toggle(Class<? extends CSS> className) {
         for (int i = 0; i < size(); i++) {
-            get(i).classList.toggle(className);
+            get(i).toggle(className);
         }
 
         // API definition
