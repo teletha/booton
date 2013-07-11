@@ -330,7 +330,7 @@ public class EmulateElement extends Element implements Nodable {
     protected String value() {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped DOMError in here.
-        throw new DOMError();
+        throw new Error();
     }
 
     /**
@@ -340,7 +340,7 @@ public class EmulateElement extends Element implements Nodable {
     protected void value(String value) {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped DOMError in here.
-        throw new DOMError();
+        throw new Error();
     }
 
     /**

@@ -9,6 +9,8 @@
  */
 package js.dom;
 
+import static js.lang.Global.*;
+import booton.css.CSS;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
@@ -19,6 +21,42 @@ import booton.translator.JavascriptNativePropertyAccessor;
  */
 @JavascriptAPIProvider
 public abstract class Node implements JavascriptNative {
+
+    /**
+     * <p>
+     * Create child element.
+     * </p>
+     * 
+     * @param name A element name.
+     * @return A created child element.
+     */
+    public Element child(String name) {
+        return appendChild(document.createElement(name));
+    }
+
+    /**
+     * <p>
+     * Create a child element with the specified class.
+     * </p>
+     * 
+     * @param className A class name of the new child element.
+     * @return A created child element.
+     */
+    public Element child(Class<? extends CSS> className) {
+        return child("span", className);
+    }
+
+    /**
+     * <p>
+     * Create a child element with the specified class.
+     * </p>
+     * 
+     * @param className A class name of the new child element.
+     * @return A created child element.
+     */
+    public Element child(String name, Class<? extends CSS> className) {
+        return child(name).add(className);
+    }
 
     /**
      * <p>

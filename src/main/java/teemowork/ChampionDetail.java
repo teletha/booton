@@ -18,12 +18,15 @@ import java.util.List;
 
 import js.bind.Notifiable;
 import js.bind.Observer;
+import js.dom.Element;
 import js.math.Mathematics;
 import jsx.jQuery;
 import jsx.jQuery.Listener;
 import jsx.application.Page;
 import jsx.application.PageInfo;
+import jsx.bwt.Listen;
 import jsx.bwt.UI;
+import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
 import jsx.bwt.enhance.Popupable;
 import teemowork.ChampionDetailStyle.Active;
@@ -90,7 +93,7 @@ public class ChampionDetail extends Page {
     private final Build build;
 
     /** The status. */
-    private jQuery level;
+    private Element level;
 
     /** The skill view. */
     private jQuery skillView;
@@ -138,38 +141,33 @@ public class ChampionDetail extends Page {
         }
     }
 
+    @Listen(value = UIAction.Click, abort = true)
+    private void levelUp() {
+        build.setLevel(build.getLevel() + 1);
+    }
+
+    @Listen(value = UIAction.ClickLeft, abort = true)
+    private void levelDown() {
+        build.setLevel(build.getLevel() - 1);
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void load(jQuery root) {
-        jQuery upper = root.child(UpperInfo.class);
+        Element rootElement = root.get(0);
+        Element upper = rootElement.child(UpperInfo.class);
 
         // Icon
-        jQuery icon = upper.child(ChampionIcon.class).click(new Listener() {
-
-            @Override
-            public void handler(UIEvent event) {
-                event.preventDefault();
-
-                build.setLevel(build.getLevel() + 1);
-            }
-        }).on("contextmenu", new Listener() {
-
-            @Override
-            public void handler(UIEvent event) {
-                event.preventDefault();
-
-                build.setLevel(build.getLevel() - 1);
-            }
-        });
-        build.champion.applyIcon(icon);
+        Element icon = upper.child(ChampionIcon.class).bind(this);
+        build.champion.applyIcon($(icon));
 
         // Level
         level = icon.child(Level.class);
 
         // Items
-        jQuery itemViewBox = upper.child(ItemViewBox.class);
+        jQuery itemViewBox = $(upper.child(ItemViewBox.class));
 
         for (int i = 0; i < 6; i++) {
             items.add(itemViewBox.child(new ItemBox(build.getItem(i))));

@@ -275,42 +275,6 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
-     * Create child element.
-     * </p>
-     * 
-     * @param name A element name.
-     * @return A created child element.
-     */
-    public Element child(String name) {
-        return document.createElement(name).appendTo(this);
-    }
-
-    /**
-     * <p>
-     * Create a child element with the specified class.
-     * </p>
-     * 
-     * @param className A class name of the new child element.
-     * @return A created child element.
-     */
-    public Element child(Class<? extends CSS> className) {
-        return child("span", className);
-    }
-
-    /**
-     * <p>
-     * Create a child element with the specified class.
-     * </p>
-     * 
-     * @param className A class name of the new child element.
-     * @return A created child element.
-     */
-    public Element child(String name, Class<? extends CSS> className) {
-        return child(name).add(className);
-    }
-
-    /**
-     * <p>
      * Get the children of this element.
      * </p>
      * 
