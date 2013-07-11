@@ -24,7 +24,7 @@ public class EmulateElement extends Element implements Nodable {
     final Nodes nodes = new Nodes();
 
     /** The child nodes holder. */
-    final EmulateHTMLCollection elements = new EmulateHTMLCollection();
+    private final EmulateHTMLCollection elements = new EmulateHTMLCollection();
 
     /** The attribute holder. */
     private final Attributes attributes = new Attributes();
@@ -36,7 +36,6 @@ public class EmulateElement extends Element implements Nodable {
      * 
      */
     public EmulateElement() {
-        classList = new EmulateDOMTokenList();
     }
 
     /**
@@ -117,7 +116,7 @@ public class EmulateElement extends Element implements Nodable {
     @Override
     protected <T> T appendChild(T newNode) {
         if (newNode == null) {
-            throw new Error();
+            throw new DOMError();
         }
         nodes.add(newNode);
 
@@ -132,7 +131,7 @@ public class EmulateElement extends Element implements Nodable {
         int index = nodes.indexOf(childNode);
 
         if (index == -1) {
-            throw new Error();
+            throw new DOMError();
         }
         nodes.remove(index);
 
@@ -154,7 +153,7 @@ public class EmulateElement extends Element implements Nodable {
             }
 
             if (index == -1) {
-                throw new Error();
+                throw new DOMError();
             }
             nodes.add(index, newNode);
         }
@@ -224,6 +223,14 @@ public class EmulateElement extends Element implements Nodable {
     protected void textContent(String textContent) {
         nodes.clear();
         nodes.add(textContent);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected DOMTokenList classList() {
+        return attributes.classes;
     }
 
     /**
@@ -322,8 +329,8 @@ public class EmulateElement extends Element implements Nodable {
     @Override
     protected String value() {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        // wrapped DOMError in here.
+        throw new DOMError();
     }
 
     /**
@@ -332,8 +339,8 @@ public class EmulateElement extends Element implements Nodable {
     @Override
     protected void value(String value) {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        // wrapped DOMError in here.
+        throw new DOMError();
     }
 
     /**
@@ -469,7 +476,7 @@ public class EmulateElement extends Element implements Nodable {
          */
         Node getNode(int index) {
             if (index < 0 || size() <= index) {
-                throw new Error();
+                throw new DOMError();
             }
             return nodes.get(index);
         }
@@ -484,7 +491,7 @@ public class EmulateElement extends Element implements Nodable {
          */
         Element getElement(int index) {
             if (index < 0 || elementCount <= index) {
-                throw new Error();
+                throw new DOMError();
             }
 
             int count = 0;
@@ -498,8 +505,8 @@ public class EmulateElement extends Element implements Nodable {
             }
 
             // If this exception will be thrown, it is bug of this program. So we must rethrow the
-            // wrapped error in here.
-            throw new Error();
+            // wrapped DOMError in here.
+            throw new DOMError();
         }
 
         /**
@@ -549,6 +556,9 @@ public class EmulateElement extends Element implements Nodable {
         /** The manager. */
         private final Map<Key, String> map = new HashMap();
 
+        /** The class attribute. */
+        private final EmulateDOMTokenList classes = new EmulateDOMTokenList();
+
         /**
          * <p>
          * Add attribute.
@@ -559,10 +569,18 @@ public class EmulateElement extends Element implements Nodable {
          * @param value
          */
         private void add(String namespace, String name, String value) {
-            Key attr = new Key(namespace, name);
+            Key key = new Key(namespace, name);
             value = String.valueOf(value);
 
-            map.put(attr, value);
+            if (Key.CLASS.equals(key)) {
+                classes.clear();
+
+                for (String className : value.trim().split(" ")) {
+                    classes.add(className);
+                }
+            } else {
+                map.put(key, value);
+            }
         }
 
         /**
@@ -574,8 +592,13 @@ public class EmulateElement extends Element implements Nodable {
          * @param name
          */
         private void remove(String namespace, String name) {
-            Key attr = new Key(namespace, name);
-            map.remove(attr);
+            Key key = new Key(namespace, name);
+
+            if (Key.CLASS.equals(key)) {
+                classes.clear();
+            } else {
+                map.remove(key);
+            }
         }
 
         /**
@@ -588,9 +611,13 @@ public class EmulateElement extends Element implements Nodable {
          * @return
          */
         private boolean has(String namespace, String name) {
-            Key attr = new Key(namespace, name);
+            Key key = new Key(namespace, name);
 
-            return map.containsKey(attr);
+            if (Key.CLASS.equals(key)) {
+                return classes.length() != 0;
+            } else {
+                return map.containsKey(key);
+            }
         }
 
         /**
@@ -603,9 +630,13 @@ public class EmulateElement extends Element implements Nodable {
          * @return
          */
         private String get(String namespace, String name) {
-            Key attr = new Key(namespace, name);
+            Key key = new Key(namespace, name);
 
-            return map.get(attr);
+            if (Key.CLASS.equals(key)) {
+                return classes.toString();
+            } else {
+                return map.get(key);
+            }
         }
     }
 
@@ -636,7 +667,7 @@ public class EmulateElement extends Element implements Nodable {
             this.name = String.valueOf(name).toLowerCase();
 
             if (this.name.length() == 0) {
-                throw new Error();
+                throw new DOMError();
             }
         }
 

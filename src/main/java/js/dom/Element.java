@@ -57,10 +57,6 @@ public abstract class Element extends Node implements JavascriptNative {
     @JavascriptNativeProperty
     public String tagName;
 
-    /** The class name list. */
-    @JavascriptNativeProperty
-    public DOMTokenList classList;
-
     /** The event listener holder. */
     private Map<UIAction, Listeners> events;
 
@@ -73,7 +69,7 @@ public abstract class Element extends Node implements JavascriptNative {
      * @return Chainable API.
      */
     public Element add(Class<? extends CSS> className) {
-        classList.add(className);
+        classList().add(className);
 
         // API definition
         return this;
@@ -370,6 +366,35 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
+     * Determine whether any of this element is assigned the given class.
+     * </p>
+     * 
+     * @param className The class name to search for.
+     * @return A result
+     */
+    public boolean has(Class<? extends CSS> className) {
+        return classList().contains(className);
+    }
+
+    /**
+     * <p>
+     * Determine whether any of this element is assigned the given class.
+     * </p>
+     * 
+     * @param classes A list of class names to check.
+     * @return A result.
+     */
+    public boolean has(Class<? extends CSS>... classes) {
+        for (Class<? extends CSS> clazz : classes) {
+            if (!has(clazz)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * <p>
      * Returns the first following sibling that is an element, and null otherwise.
      * </p>
      * 
@@ -560,7 +585,7 @@ public abstract class Element extends Node implements JavascriptNative {
      * @return Chainable API.
      */
     public Element remove(Class<? extends CSS> className) {
-        classList.remove(className);
+        classList().remove(className);
 
         // API definition
         return this;
@@ -611,6 +636,40 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
+     * Add or remove class from this element, depending on either the class's presence or the value
+     * of the switch argument.
+     * </p>
+     * 
+     * @param className A class name to be toggled for this element.
+     * @return Chainable API.
+     */
+    public Element toggle(Class<? extends CSS> className) {
+        classList().toggle(className);
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Add or remove one or more classes from this element, depending on either the class's presence
+     * or the value of the switch argument.
+     * </p>
+     * 
+     * @param classes A list of class names to add or remove.
+     * @return Chainable API.
+     */
+    public Element toggle(Class<? extends CSS>... classes) {
+        for (Class<? extends CSS> clazz : classes) {
+            classList().toggle(clazz);
+        }
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
      * Get the current value of this element.
      * </p>
      * <p>
@@ -630,6 +689,16 @@ public abstract class Element extends Node implements JavascriptNative {
 
     @JavascriptNativePropertyAccessor
     protected abstract void value(String value);
+
+    /**
+     * <p>
+     * Returns a token list of the class attribute of the element.
+     * </p>
+     * 
+     * @return
+     */
+    @JavascriptNativePropertyAccessor()
+    protected abstract DOMTokenList classList();
 
     /**
      * <p>

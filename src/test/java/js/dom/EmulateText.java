@@ -40,7 +40,7 @@ public class EmulateText extends Text implements Nodable {
      */
     @Override
     protected <T> T appendChild(T newNode) {
-        throw new Error();
+        throw new DOMError();
     }
 
     /**
@@ -48,7 +48,7 @@ public class EmulateText extends Text implements Nodable {
      */
     @Override
     protected Node removeChild(Node childNode) {
-        throw new Error();
+        throw new DOMError();
     }
 
     /**
@@ -56,7 +56,7 @@ public class EmulateText extends Text implements Nodable {
      */
     @Override
     protected Node insertBefore(Node newNode, Node referenceNode) {
-        throw new Error();
+        throw new DOMError();
     }
 
     /**
