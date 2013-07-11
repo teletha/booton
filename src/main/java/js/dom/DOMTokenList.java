@@ -57,21 +57,23 @@ public class DOMTokenList implements JavascriptNative {
 
     /**
      * <p>
-     * Toggle class.
+     * Removes class from string and returns false. If class doesn't exist it's added and the
+     * function returns true.
      * </p>
      * 
      * @param className A class name to toggle.
      */
-    public native void toggle(String className);
+    public native boolean toggle(String className);
 
     /**
      * <p>
-     * Toggle class.
+     * Removes class from string and returns false. If class doesn't exist it's added and the
+     * function returns true.
      * </p>
      * 
      * @param className A class name to toggle.
      */
-    public native void toggle(Class<? extends CSS> className);
+    public native boolean toggle(Class<? extends CSS> className);
 
     /**
      * <p>

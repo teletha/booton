@@ -10,10 +10,10 @@
 package js.dom;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-import org.xml.sax.helpers.AttributesImpl;
+import java.util.Map;
 
 /**
  * @version 2013/07/01 23:55:23
@@ -27,7 +27,7 @@ public class EmulateElement extends Element implements Nodable {
     final EmulateHTMLCollection elements = new EmulateHTMLCollection();
 
     /** The attribute holder. */
-    private final AttributesImpl attributes = new AttributesImpl();
+    private final Attributes attributes = new Attributes();
 
     /** The parent element. */
     private EmulateElement parent;
@@ -36,6 +36,7 @@ public class EmulateElement extends Element implements Nodable {
      * 
      */
     public EmulateElement() {
+        classList = new EmulateDOMTokenList();
     }
 
     /**
@@ -51,7 +52,15 @@ public class EmulateElement extends Element implements Nodable {
      */
     @Override
     protected String getAttribute(String name) {
-        return attributes.getValue(name);
+        return getAttributeNS(null, name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getAttributeNS(String namespaces, String name) {
+        return attributes.get(namespaces, name);
     }
 
     /**
@@ -59,7 +68,7 @@ public class EmulateElement extends Element implements Nodable {
      */
     @Override
     protected void setAttribute(String name, String value) {
-        attributes.addAttribute("", name, name, "", value);
+        setAttributeNS(null, name, value);
     }
 
     /**
@@ -67,9 +76,7 @@ public class EmulateElement extends Element implements Nodable {
      */
     @Override
     protected void setAttributeNS(String namespace, String name, String value) {
-        name = String.valueOf(name);
-
-        attributes.addAttribute(namespace, name, name, "", value);
+        attributes.add(namespace, name, value);
     }
 
     /**
@@ -77,7 +84,31 @@ public class EmulateElement extends Element implements Nodable {
      */
     @Override
     protected void removeAttribute(String name) {
-        attributes.removeAttribute(attributes.getIndex(name));
+        removeAttributeNS(null, name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void removeAttributeNS(String namespace, String name) {
+        attributes.remove(namespace, name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean hasAttribute(String name) {
+        return hasAttributeNS(null, name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean hasAttributeNS(String namespace, String name) {
+        return attributes.has(namespace, name);
     }
 
     /**
@@ -388,7 +419,6 @@ public class EmulateElement extends Element implements Nodable {
                 Node node = nodes.remove(index);
 
                 // modify tree
-                // modify tree
                 if (node instanceof Nodable) {
                     ((Nodable) node).setParent(null);
                 }
@@ -610,6 +640,127 @@ public class EmulateElement extends Element implements Nodable {
         @Override
         public Element item(int index) {
             return elements.get(index);
+        }
+    }
+
+    /**
+     * @version 2013/07/11 14:10:27
+     */
+    private class Attributes {
+
+        /** The manager. */
+        private final Map<Key, String> map = new HashMap();
+
+        /**
+         * <p>
+         * Add attribute.
+         * </p>
+         * 
+         * @param namespace
+         * @param name
+         * @param value
+         */
+        private void add(String namespace, String name, String value) {
+            Key attr = new Key(namespace, name);
+            value = String.valueOf(value);
+
+            map.put(attr, value);
+        }
+
+        /**
+         * <p>
+         * Remove attribute.
+         * </p>
+         * 
+         * @param namespace
+         * @param name
+         */
+        private void remove(String namespace, String name) {
+            Key attr = new Key(namespace, name);
+            map.remove(attr);
+        }
+
+        /**
+         * <p>
+         * Test attribute.
+         * </p>
+         * 
+         * @param namespace
+         * @param name
+         * @return
+         */
+        private boolean has(String namespace, String name) {
+            Key attr = new Key(namespace, name);
+
+            return map.containsKey(attr);
+        }
+
+        /**
+         * <p>
+         * Get attribute.
+         * </p>
+         * 
+         * @param namespace
+         * @param name
+         * @return
+         */
+        private String get(String namespace, String name) {
+            Key attr = new Key(namespace, name);
+
+            return map.get(attr);
+        }
+    }
+
+    /**
+     * @version 2013/07/11 14:16:13
+     */
+    private static class Key {
+
+        /** The html class attribute name. */
+        private static final Key CLASS = new Key("", "class");
+
+        /** The uri. */
+        private final String namespace;
+
+        /** The name. */
+        private final String name;
+
+        /**
+         * @param namespace
+         * @param name
+         */
+        private Key(String namespace, String name) {
+            if (namespace == null) {
+                namespace = "";
+            }
+
+            this.namespace = namespace.toLowerCase();
+            this.name = String.valueOf(name).toLowerCase();
+
+            if (this.name.length() == 0) {
+                throw new Error();
+            }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof Key) {
+                Key attr = (Key) obj;
+
+                return name.equals(attr.name) && namespace.equals(attr.namespace);
+            }
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int hashCode() {
+            return name.hashCode() + namespace.hashCode();
         }
     }
 }

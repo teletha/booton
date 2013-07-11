@@ -122,4 +122,45 @@ public class DOMElementTest {
         element.appendChild("t");
         assert element.textContent().equals("cat");
     }
+
+    @Test
+    public void setAttribute() throws Exception {
+        Element element = new EmulateElement();
+        assert element.getAttribute("key") == null;
+
+        element.setAttribute("key", "value");
+        assert element.getAttribute("key").equals("value");
+    }
+
+    @Test
+    public void setAttributeDuplicated() throws Exception {
+        Element element = new EmulateElement();
+        assert element.getAttribute("key") == null;
+
+        element.setAttribute("key", "value");
+        assert element.getAttribute("key").equals("value");
+
+        element.setAttribute("key", "override");
+        assert element.getAttribute("key").equals("override");
+    }
+
+    @Test
+    public void setAttributeNull() throws Exception {
+        Element element = new EmulateElement();
+        assert element.getAttribute(null) == null;
+
+        element.setAttribute(null, null);
+        assert element.getAttribute(null).equals("null");
+    }
+
+    @Test
+    public void setAttributeCaseIgnore() throws Exception {
+        Element element = new EmulateElement();
+        element.setAttribute("key", "value");
+        assert element.getAttribute("key").equals("value");
+
+        element.setAttribute("KEY", "override");
+        assert element.getAttribute("key").equals("override");
+        assert element.getAttribute("KEY").equals("override");
+    }
 }

@@ -726,24 +726,90 @@ public abstract class Element extends Node implements JavascriptNative {
     protected native boolean contains(Element target);
 
     /**
-     * {@inheritDoc}
+     * <p>
+     * Returns the string value of the attribute with the specified name. If the named attribute
+     * does not exist, the value returned will either be null.
+     * </p>
+     * 
+     * @param name The name of the attribute to look for.
+     * @return The string value of the specified attribute. If the attribute doesn't exist, the
+     *         result is null.
      */
     protected native String getAttribute(String name);
 
     /**
-     * {@inheritDoc}
+     * <p>
+     * Returns the string value of the attribute with the specified namespace and name. If the named
+     * attribute does not exist, the value returned will either be null.
+     * </p>
+     * 
+     * @param namespaces The namespace in which to look for the specified attribute.
+     * @param name The name of the attribute to look for.
+     * @return The string value of the specified attribute. If the attribute doesn't exist, the
+     *         result is null.
+     */
+    protected native String getAttributeNS(String namespaces, String name);
+
+    /**
+     * <p>
+     * Adds a new attribute or changes the value of an attribute with the given name.
+     * </p>
+     * 
+     * @param name A string identifying the attribute to be set.
+     * @param value The desired string value of the new attribute.
      */
     protected native void setAttribute(String name, String value);
 
     /**
-     * {@inheritDoc}
+     * <p>
+     * Adds a new attribute or changes the value of an attribute with the given namespace and name.
+     * </p>
+     * 
+     * @param namespace A string specifying the namespace of the attribute.
+     * @param name A string identifying the attribute to be set.
+     * @param value The desired string value of the new attribute.
      */
     protected native void setAttributeNS(String namespace, String name, String value);
 
     /**
-     * {@inheritDoc}
+     * <p>
+     * Removes the specified attribute from an element.
+     * </p>
+     * 
+     * @param name A string that names the attribute to be removed from the current node.
      */
     protected native void removeAttribute(String name);
+
+    /**
+     * <p>
+     * Removes the specified attribute from an element.
+     * </p>
+     * 
+     * @param namespace A string that contains the namespace of the attribute.
+     * @param name A string that names the attribute to be removed from the current node.
+     */
+    protected native void removeAttributeNS(String namespace, String name);
+
+    /**
+     * <p>
+     * Returns a boolean value indicating whether the current element has the specified attribute.
+     * </p>
+     * 
+     * @param name The name of the attribute.
+     * @return A result.
+     */
+    protected native boolean hasAttribute(String name);
+
+    /**
+     * <p>
+     * Returns a boolean value indicating whether the current element has the specified attribute.
+     * </p>
+     * 
+     * @param namespace A string specifying the namespace of the attribute.
+     * @param name The name of the attribute.
+     * @return A result.
+     */
+    protected native boolean hasAttributeNS(String namespace, String name);
 
     /**
      * <p>
