@@ -9,12 +9,14 @@
  */
 package teemowork;
 
+import static js.lang.Global.*;
 import static teemowork.model.Status.*;
-import jsx.jQuery;
+import js.dom.Element;
+import js.dom.Element.EventListener;
 import jsx.application.Application;
 import jsx.bwt.UI;
+import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
-import jsx.jQuery.Listener;
 import teemowork.ItemViewStyle.AbilityArea;
 import teemowork.ItemViewStyle.Cost;
 import teemowork.ItemViewStyle.DescriptionArea;
@@ -54,32 +56,34 @@ public class ItemView extends UI {
      */
     public ItemView(Item item, ItemDescriptor itemDescriptor, StatusCalculator calculator) {
         this.calculator = calculator;
-        root.add(Root.class);
+        rootElement.add(Root.class);
 
         // Icon Area
-        jQuery icons = root.child(IconArea.class);
-        item.applyIcon(icons.child(Icon.class));
+        Element icons = rootElement.child(IconArea.class);
+        item.applyIcon($(icons.child(Icon.class)));
 
-        jQuery materials = icons.child(Materials.class);
+        Element materials = icons.child(Materials.class);
 
         for (final Item material : itemDescriptor.getBuild()) {
-            material.applyIcon(materials.child(Material.class).attr("title", material.name).click(new Listener() {
+            material.applyIcon($(materials.child(Material.class)
+                    .attr("title", material.name)
+                    .on(UIAction.Click, new EventListener() {
 
-                @Override
-                public void handler(UIEvent event) {
-                    Application.show(new ItemDetail(material.name));
-                }
-            }));
+                        @Override
+                        public void handleEvent(UIEvent event) {
+                            Application.show(new ItemDetail(material.name));
+                        }
+                    })));
         }
 
         // Description Area
-        jQuery descriptions = root.child(DescriptionArea.class);
+        Element descriptions = rootElement.child(DescriptionArea.class);
 
         // Name and Cost
         double cost = itemDescriptor.get(Cost);
         double total = item.getTotalCost(Version.Latest);
 
-        jQuery heading = descriptions.child(Heading.class);
+        Element heading = descriptions.child(Heading.class);
         heading.child(Name.class).text(item.name);
         heading.child(TotalCost.class).text(total);
         if (cost != total) {
@@ -98,7 +102,7 @@ public class ItemView extends UI {
         // Ability
         for (Ability ability : itemDescriptor.getAbilities()) {
             AbilityDescriptor abilityDescriptor = ability.getDescriptor(Version.Latest);
-            jQuery element = descriptions.child(AbilityArea.class);
+            Element element = descriptions.child(AbilityArea.class);
 
             if (abilityDescriptor.isUnique()) {
                 element.child(UniqueAbility.class).text("UNIQUE");
@@ -126,7 +130,7 @@ public class ItemView extends UI {
          * @param root
          * @param describable
          */
-        private AbilityDescriptionView(jQuery root, Describable describable, StatusCalculator calculator, boolean active) {
+        private AbilityDescriptionView(Element root, Describable describable, StatusCalculator calculator, boolean active) {
             super(root, describable, calculator, !active);
         }
 

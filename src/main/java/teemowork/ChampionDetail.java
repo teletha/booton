@@ -584,14 +584,14 @@ public class ChampionDetail extends Page {
         private Item item;
 
         /** The root element. */
-        private final jQuery icon;
+        private final Element icon;
 
         /**
          * @param item
          */
         public ItemBox(Item item) {
             this.item = item;
-            this.icon = root.add(ItemIconBase.class).child(ItemIcon.class);
+            this.icon = rootElement.add(ItemIconBase.class).child(ItemIcon.class);
         }
 
         /**
@@ -601,7 +601,7 @@ public class ChampionDetail extends Page {
          */
         private void calcurate() {
             if (item != null) {
-                item.applyIcon(icon);
+                item.applyIcon($(icon));
 
                 ItemView view = new ItemView(item, item.getDescriptor(Version.Latest), build);
                 view.root.css("max-width", "350px");

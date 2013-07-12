@@ -12,8 +12,8 @@ package teemowork.model;
 import java.util.List;
 
 import js.bind.Subscriber;
+import js.dom.Element;
 import js.math.Mathematics;
-import jsx.jQuery;
 import teemowork.model.DescriptionViewStyle.Amplifier;
 import teemowork.model.DescriptionViewStyle.ComputedValue;
 import teemowork.model.DescriptionViewStyle.Current;
@@ -29,7 +29,7 @@ import teemowork.model.variable.VariableResolver;
 public abstract class DescriptionView implements Subscriber {
 
     /** The passive element. */
-    protected final jQuery description;
+    protected final Element description;
 
     /** The target descriptor to view. */
     protected final Describable describable;
@@ -47,7 +47,7 @@ public abstract class DescriptionView implements Subscriber {
      * 
      * @param root
      */
-    protected DescriptionView(jQuery root, Describable describable, StatusCalculator calculator, boolean forPassive) {
+    protected DescriptionView(Element root, Describable describable, StatusCalculator calculator, boolean forPassive) {
         this.description = root.child(Passive.class);
         this.describable = describable;
         this.calculator = calculator;
@@ -102,7 +102,7 @@ public abstract class DescriptionView implements Subscriber {
      * @param variable
      * @param level
      */
-    private void writeVariable(jQuery root, Variable variable, int level) {
+    private void writeVariable(Element root, Variable variable, int level) {
         VariableResolver resolver = variable.getResolver();
         Status status = variable.getStatus();
         List<Variable> amplifiers = variable.getAmplifiers();
@@ -117,7 +117,7 @@ public abstract class DescriptionView implements Subscriber {
             root.append("(");
 
             for (int i = 1; i <= size; i++) {
-                jQuery element = root.child(Value.class).text(Mathematics.round(resolver.compute(i), 2));
+                Element element = root.child(Value.class).text(Mathematics.round(resolver.compute(i), 2));
 
                 if (i == level) {
                     element.add(Current.class);
@@ -142,15 +142,15 @@ public abstract class DescriptionView implements Subscriber {
      * @param amplifiers A list of variable amplifiers.
      * @param level A current variable level.
      */
-    private void writeAmplifier(jQuery root, List<Variable> amplifiers, int level) {
+    private void writeAmplifier(Element root, List<Variable> amplifiers, int level) {
         for (Variable amplifier : amplifiers) {
-            jQuery element = root.child(Amplifier.class);
+            Element element = root.child(Amplifier.class);
             element.append("+");
 
             int size = amplifier.getResolver().estimateSize();
 
             for (int i = 1; i <= size; i++) {
-                jQuery value = element.child(Value.class)
+                Element value = element.child(Value.class)
                         .text(Mathematics.round(amplifier.calculate(i, calculator), 4));
 
                 if (size != 1 && i == level) {
