@@ -33,6 +33,16 @@ public abstract class Document implements JavascriptNative {
 
     /**
      * <p>
+     * Creates a new Text node.
+     * </p>
+     * 
+     * @param text A string containing the data to be put in the text node.
+     * @return A text node.
+     */
+    public native Text createTextNode(String text);
+
+    /**
+     * <p>
      * Returns the first element within the document (using depth-first pre-order traversal of the
      * document's nodes) that matches the specified group of selectors.
      * </p>

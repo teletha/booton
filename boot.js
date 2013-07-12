@@ -494,7 +494,3 @@ function boot(global) {
 
 // Activate Initialization
 boot(Function("return this")());
-
-document.addEventListener("DOMNodeRemoved", function(e) {
-	console.log(e.target);
-});

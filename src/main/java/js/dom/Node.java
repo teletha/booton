@@ -129,7 +129,7 @@ public abstract class Node implements JavascriptNative {
      * @return The node being appended, that is newElement.
      */
     @JavascriptNativeProperty
-    protected abstract <T> T appendChild(T newNode);
+    protected abstract <T extends Node> T appendChild(T newNode);
 
     /**
      * <p>
@@ -141,7 +141,7 @@ public abstract class Node implements JavascriptNative {
      * @return The node being removed, that is child node.
      */
     @JavascriptNativeProperty
-    protected abstract Node removeChild(Node childNode);
+    protected abstract <T extends Node> T removeChild(T childNode);
 
     /**
      * <p>

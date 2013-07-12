@@ -96,7 +96,6 @@ public abstract class UI extends Publishable {
             tooltip.root.css("top", offset.top + root.outerHeight() + 15 + "px");
             tooltip.root.css("left", offset.left - tooltip.root.outerWidth() / 2 + root.outerWidth() / 2 + "px");
         }
-
     }
 
     /**

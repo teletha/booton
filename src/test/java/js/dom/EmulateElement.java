@@ -23,6 +23,9 @@ public class EmulateElement extends Element implements Nodable {
     /** The child nodes holder. */
     final Nodes nodes = new Nodes();
 
+    /** The element name. */
+    private final String name;
+
     /** The child nodes holder. */
     private final EmulateHTMLCollection elements = new EmulateHTMLCollection();
 
@@ -36,6 +39,18 @@ public class EmulateElement extends Element implements Nodable {
      * 
      */
     public EmulateElement() {
+        this("span");
+    }
+
+    /**
+     * <p>
+     * Create new element.
+     * </p>
+     * 
+     * @param name
+     */
+    public EmulateElement(String name) {
+        this.name = name.toUpperCase();
     }
 
     /**
@@ -114,7 +129,7 @@ public class EmulateElement extends Element implements Nodable {
      * {@inheritDoc}
      */
     @Override
-    protected <T> T appendChild(T newNode) {
+    protected <T extends Node> T appendChild(T newNode) {
         if (newNode == null) {
             throw new DOMError();
         }
@@ -321,6 +336,14 @@ public class EmulateElement extends Element implements Nodable {
             index++;
         }
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String tagName() {
+        return name;
     }
 
     /**

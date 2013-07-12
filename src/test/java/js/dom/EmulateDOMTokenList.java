@@ -11,6 +11,7 @@ package js.dom;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import js.dom.DOMTokenList;
 import kiss.I;
 import booton.Obfuscator;
 import booton.css.CSS;

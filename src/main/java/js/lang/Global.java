@@ -11,6 +11,7 @@ package js.lang;
 
 import js.dom.Document;
 import js.dom.Element;
+import js.dom.EmulateDocument;
 import js.dom.History;
 import js.dom.Location;
 import js.dom.Window;
@@ -38,7 +39,7 @@ public class Global {
     public static Window window;
 
     /** The root document in web environment. */
-    public static Document document;
+    public static final Document document = new EmulateDocument();
 
     /**
      * <p>

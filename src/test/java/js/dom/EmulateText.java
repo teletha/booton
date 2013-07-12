@@ -9,6 +9,9 @@
  */
 package js.dom;
 
+import js.dom.Node;
+import js.dom.Text;
+
 /**
  * @version 2013/07/01 21:30:14
  */
@@ -39,7 +42,7 @@ public class EmulateText extends Text implements Nodable {
      * {@inheritDoc}
      */
     @Override
-    protected <T> T appendChild(T newNode) {
+    protected <T extends Node> T appendChild(T newNode) {
         throw new DOMError();
     }
 

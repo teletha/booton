@@ -31,7 +31,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import js.lang.Global;
 import js.lang.NativeObject;
-import jsx.jQuery;
 import kiss.ClassListener;
 import kiss.I;
 import kiss.Manageable;
@@ -532,10 +531,6 @@ public class Javascript {
      * @return An identified class name for ECMAScript.
      */
     public static final String computeClassName(Class<?> clazz) {
-        if (clazz == jQuery.class) {
-            return "$";
-        }
-
         if (clazz == Object.class) {
             return "Object";
         }
@@ -543,7 +538,12 @@ public class Javascript {
         JavascriptAPIProvider provider = clazz.getAnnotation(JavascriptAPIProvider.class);
 
         if (provider != null) {
-            return provider.value().length() != 0 ? provider.value() : clazz.getSimpleName();
+            String name = provider.value();
+
+            if (name.length() == 0) {
+                name = clazz.getSimpleName();
+            }
+            return name;
         }
 
         return "boot." + computeSimpleClassName(clazz);
