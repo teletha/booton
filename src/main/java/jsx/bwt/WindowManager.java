@@ -53,7 +53,11 @@ public class WindowManager {
      */
     @Listen(MouseEnter)
     private void show() {
+        System.out.println("start");
         popup.append(content);
+        System.out.println(content);
+        System.out.println(hashCode());
+        System.out.println("end");
         popup.add(PopupViewStyle.Show.class);
 
         Offset offset = target.position();
@@ -84,13 +88,13 @@ public class WindowManager {
         System.out.println("unload");
 
         EventBus.Global.unregister(this);
-        target.unbind(this);
+        target.get(0).off();
         hide();
     }
 
     public static void applyTooltip(jQuery target, jQuery content) {
         if (target != null && content != null) {
-            target.bind(new WindowManager(target, content));
+            target.get(0).bind(new WindowManager(target, content));
         }
     }
 

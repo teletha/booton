@@ -9,168 +9,248 @@
  */
 package js.dom;
 
+import static js.lang.Global.*;
+
 import org.junit.Test;
 
-import booton.css.CSS;
-
 /**
- * @version 2013/07/11 16:24:56
+ * @version 2013/06/30 12:23:59
  */
 public class ElementTest {
 
     @Test
-    public void attribute() throws Exception {
-        Element element = new EmulateElement();
-        assert element.attr("key") == null;
-
-        element.attr("key", "value");
-        assert element.attr("key").equals("value");
-
-        element.remove("key");
-        assert element.attr("key") == null;
+    public void tagName() throws Exception {
+        Element element = new EmulateElement("test");
+        assert element.tagName().equals("TEST");
     }
 
     @Test
-    public void attributeWithNull() throws Exception {
+    public void apendChild() throws Exception {
         Element element = new EmulateElement();
-        assert element.attr(null) == null;
-        assert element.attr("null") == null;
-
-        element.attr(null, null);
-        assert element.attr(null).equals("null");
-        assert element.attr("null").equals("null");
-
-        element.remove((String) null);
-        assert element.attr(null) == null;
-        assert element.attr("null") == null;
-    }
-
-    @Test
-    public void append() throws Exception {
-        Element element = new EmulateElement();
-        Element child = new EmulateElement();
+        Element child1 = new EmulateElement();
 
         assert element.children().size() == 0;
 
-        element.append(child);
+        Node node = element.appendChild(child1);
         assert element.children().size() == 1;
-        assert element.children().get(0) == child;
+        assert element.children().get(0) == child1;
+        assert node == child1;
+    }
+
+    @Test(expected = DOMError.class)
+    public void apendChildNull() throws Exception {
+        Element element = new EmulateElement();
+        element.appendChild(null);
     }
 
     @Test
-    public void appendMultiple() throws Exception {
+    public void removeChild() throws Exception {
+        Element element = new EmulateElement();
+        Element child = new EmulateElement();
+        element.appendChild(child);
+
+        assert element.children().size() == 1;
+        assert element.children().get(0) == child;
+
+        Node removed = element.removeChild(child);
+        assert element.children().size() == 0;
+        assert removed == child;
+    }
+
+    @Test(expected = DOMError.class)
+    public void removeChildNull() throws Exception {
+        Element element = new EmulateElement();
+        element.appendChild(null);
+    }
+
+    @Test(expected = DOMError.class)
+    public void removeNonChild() throws Exception {
+        Element element = new EmulateElement();
+        Element child = new EmulateElement();
+        element.removeChild(child);
+    }
+
+    @Test
+    public void insertBefore() throws Exception {
         Element element = new EmulateElement();
         Element child1 = new EmulateElement();
         Element child2 = new EmulateElement();
 
         assert element.children().size() == 0;
 
-        element.append(child1).append(child2);
+        element.append(child1).insertBefore(child2, child1);
+        assert element.children().size() == 2;
+        assert element.children().get(0) == child2;
+        assert element.children().get(1) == child1;
+    }
+
+    @Test
+    public void insertBeforeNull() throws Exception {
+        Element element = new EmulateElement();
+        Element child1 = new EmulateElement();
+        Element child2 = new EmulateElement();
+
+        assert element.children().size() == 0;
+
+        element.append(child1).insertBefore(child2, null);
         assert element.children().size() == 2;
         assert element.children().get(0) == child1;
         assert element.children().get(1) == child2;
     }
 
-    @Test
-    public void appendDuplication() throws Exception {
+    @Test(expected = DOMError.class)
+    public void insertBeforeNotChildReference() throws Exception {
         Element element = new EmulateElement();
         Element child1 = new EmulateElement();
         Element child2 = new EmulateElement();
 
-        assert element.children().size() == 0;
-
-        element.append(child1).append(child2).append(child1);
-        assert element.children().size() == 2;
-        assert element.children().get(0) == child2;
-        assert element.children().get(1) == child1;
+        element.insertBefore(child2, child1);
     }
 
     @Test
-    public void prepend() throws Exception {
+    public void textContent() throws Exception {
+        Element element = new EmulateElement();
+        assert element.textContent().equals("");
+
+        element.appendChild(document.createTextNode("c"));
+        element.appendChild(document.createTextNode("a"));
+        element.appendChild(document.createTextNode("t"));
+        assert element.textContent().equals("cat");
+    }
+
+    @Test
+    public void textContentWithElement() throws Exception {
+        Element element = new EmulateElement();
+        assert element.textContent().equals("");
+
+        element.appendChild(document.createTextNode("c"));
+        Element child = new EmulateElement();
+        child.appendChild(document.createTextNode("a"));
+        element.appendChild(child);
+        element.appendChild(document.createTextNode("t"));
+        assert element.textContent().equals("cat");
+    }
+
+    @Test
+    public void childElements() throws Exception {
         Element element = new EmulateElement();
         Element child1 = new EmulateElement();
         Element child2 = new EmulateElement();
+        HTMLCollection collection = element.childElements();
 
-        assert element.children().size() == 0;
+        assert collection.length() == 0;
 
-        element.prepend(child1).prepend(child2);
-        assert element.children().size() == 2;
-        assert element.children().get(0) == child2;
-        assert element.children().get(1) == child1;
-    }
-
-    @Test
-    public void empty() throws Exception {
-        Element element = new EmulateElement();
-        Element child1 = new EmulateElement().text("1");
-        Element child2 = new EmulateElement().text("2");
         element.append(child1).append(child2);
 
-        assert element.children().size() == 2;
-        assert element.text().equals("12");
+        assert collection.length() == 2;
+        assert collection.item(0) == child1;
+        assert collection.item(1) == child2;
 
-        element.empty();
-        assert element.children().size() == 0;
-        assert element.text().equals("");
+        element.removeChild(child1);
+
+        assert collection.length() == 1;
+        assert collection.item(0) == child2;
     }
 
     @Test
-    public void addClass() throws Exception {
+    public void setAttribute() throws Exception {
         Element element = new EmulateElement();
-        assert !element.has(CSS1.class);
+        assert element.getAttribute("key") == null;
 
-        element.add(CSS1.class);
-        assert element.has(CSS1.class);
+        element.setAttribute("key", "value");
+        assert element.getAttribute("key").equals("value");
     }
 
     @Test
-    public void addClasses() throws Exception {
+    public void setAttributeDuplicated() throws Exception {
         Element element = new EmulateElement();
-        assert !element.has(CSS1.class);
+        assert element.getAttribute("key") == null;
 
-        element.add(CSS1.class, CSS2.class);
-        assert element.has(CSS1.class);
-        assert element.has(CSS2.class);
+        element.setAttribute("key", "value");
+        assert element.getAttribute("key").equals("value");
+
+        element.setAttribute("key", "override");
+        assert element.getAttribute("key").equals("override");
     }
 
     @Test
-    public void removeClass() throws Exception {
+    public void setAttributeNull() throws Exception {
         Element element = new EmulateElement();
-        element.add(CSS1.class);
-        assert element.has(CSS1.class);
+        assert element.getAttribute(null) == null;
 
-        element.remove(CSS1.class);
-        assert !element.has(CSS1.class);
+        element.setAttribute(null, null);
+        assert element.getAttribute(null).equals("null");
     }
 
     @Test
-    public void toggleClass() throws Exception {
+    public void setAttributeCaseIgnore() throws Exception {
         Element element = new EmulateElement();
-        element.toggle(CSS1.class);
-        assert element.has(CSS1.class);
+        element.setAttribute("key", "value");
+        assert element.getAttribute("key").equals("value");
 
-        element.toggle(CSS1.class);
-        assert !element.has(CSS1.class);
+        element.setAttribute("KEY", "override");
+        assert element.getAttribute("key").equals("override");
+        assert element.getAttribute("KEY").equals("override");
     }
 
     @Test
-    public void hasClass() throws Exception {
+    public void setClassAttribute() throws Exception {
         Element element = new EmulateElement();
-        element.add(CSS1.class);
-        assert element.has(CSS1.class);
-        assert !element.has(CSS1.class, CSS2.class);
-        assert !element.has(CSS2.class);
+
+        element.setAttribute("class", "value");
+        assert element.getAttribute("class").equals("value");
+        assert element.classList().contains("value");
+        assert element.classList().length() == 1;
+
+        element.setAttribute("class", "override");
+        assert element.getAttribute("class").equals("override");
+        assert element.classList().contains("override");
+        assert element.classList().length() == 1;
     }
 
-    /**
-     * sion 2013/07/11 11:54:32
-     */
-    private static class CSS1 extends CSS {
+    @Test
+    public void setMultiClassAttribute() throws Exception {
+        Element element = new EmulateElement();
+
+        element.setAttribute("class", "multi value");
+        assert element.getAttribute("class").equals("multi value");
+        assert element.classList().contains("value");
+        assert element.classList().contains("multi");
+        assert element.classList().length() == 2;
     }
 
-    /**
-     * @version 2013/07/11 16:24:48
-     */
-    private static class CSS2 extends CSS {
+    @Test
+    public void removeAttribute() throws Exception {
+        Element element = new EmulateElement();
+        assert element.getAttribute("key") == null;
+
+        element.setAttribute("key", "value");
+        assert element.hasAttribute("key");
+
+        element.removeAttribute("key");
+        assert !element.hasAttribute("key");
+    }
+
+    @Test
+    public void removeAttributeCaseIgnore() throws Exception {
+        Element element = new EmulateElement();
+        assert element.getAttribute("key") == null;
+
+        element.setAttribute("key", "value");
+        assert element.hasAttribute("key");
+
+        element.removeAttribute("KEY");
+        assert !element.hasAttribute("key");
+    }
+
+    @Test
+    public void removeClassAttribute() throws Exception {
+        Element element = new EmulateElement();
+
+        element.setAttribute("class", "multi value");
+        assert element.classList().length() == 2;
+
+        element.removeAttribute("class");
+        assert element.classList().length() == 0;
     }
 }

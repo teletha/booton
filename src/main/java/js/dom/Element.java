@@ -37,26 +37,6 @@ import booton.translator.JavascriptNativePropertyAccessor;
 @JavascriptAPIProvider
 public abstract class Element extends Node implements JavascriptNative {
 
-    /** The localName attribute must return the context object's local name. */
-    @JavascriptNativeProperty
-    public String localName;
-
-    /**
-     * <p>
-     * The tagName attribute must run these steps:
-     * </p>
-     * <ol>
-     * <li>If context object's namespace prefix is not null, let qualified name be its namespace
-     * prefix, followed by a ":" (U+003A), followed by its local name. Otherwise, let qualified name
-     * be its local name.</li>
-     * <li>If the context object is in the HTML namespace and its node document is an HTML document,
-     * let qualified name be converted to ASCII uppercase.</li>
-     * <li>Return qualified name.</li>
-     * </ol>
-     */
-    @JavascriptNativeProperty
-    public String tagName;
-
     /** The event listener holder. */
     private Map<UIAction, Listeners> events;
 
@@ -97,14 +77,16 @@ public abstract class Element extends Node implements JavascriptNative {
      * Insert content, specified by the parameter, after this element.
      * </p>
      * 
-     * @param element A content to insert.
+     * @param content A content to insert.
      * @return Chainable API.
      */
-    public Element after(Element element) {
-        Node parent = parentElement();
+    public Element after(Object content) {
+        if (content != null) {
+            Node parent = parentElement();
 
-        if (parent != null) {
-            parent.insertBefore(element, nextSibling());
+            if (parent != null) {
+                parent.insertBefore(nodify(content), nextSibling());
+            }
         }
 
         // API definition
@@ -116,11 +98,13 @@ public abstract class Element extends Node implements JavascriptNative {
      * Insert content to the end of this element.
      * </p>
      * 
-     * @param contents DOM element to insert at the end of this element.
+     * @param content DOM element to insert at the end of this element.
      * @return Chainable API.
      */
-    public Element append(Object contents) {
-        appendChild(contents);
+    public Element append(Object content) {
+        if (content != null) {
+            appendChild(nodify(content));
+        }
 
         // API definition
         return this;
@@ -191,14 +175,16 @@ public abstract class Element extends Node implements JavascriptNative {
      * Insert content, specified by the parameter, before this element.
      * </p>
      * 
-     * @param element A content to insert.
+     * @param content A content to insert.
      * @return Chainable API.
      */
-    public Element before(Element element) {
-        Node parent = parentElement();
+    public Element before(Object content) {
+        if (content != null) {
+            Node parent = parentElement();
 
-        if (parent != null) {
-            parent.insertBefore(element, this);
+            if (parent != null) {
+                parent.insertBefore(nodify(content), this);
+            }
         }
 
         // API definition
@@ -216,7 +202,6 @@ public abstract class Element extends Node implements JavascriptNative {
     public Element bind(Object subscriber) {
         if (subscriber != null) {
             Class clazz = subscriber.getClass();
-            String namespace = "." + clazz.getSimpleName() + subscriber.hashCode();
 
             for (Method method : clazz.getDeclaredMethods()) {
                 Listen listen = method.getAnnotation(Listen.class);
@@ -498,11 +483,13 @@ public abstract class Element extends Node implements JavascriptNative {
      * Insert content to the begining of this element.
      * </p>
      * 
-     * @param contents DOM element to insert at the begining of this element.
+     * @param content DOM element to insert at the begining of this element.
      * @return Chainable API.
      */
-    public Element prepend(Element contents) {
-        insertBefore(contents, firstChild());
+    public Element prepend(Object content) {
+        if (content != null) {
+            insertBefore(nodify(content), firstChild());
+        }
 
         // API definition
         return this;
@@ -660,11 +647,43 @@ public abstract class Element extends Node implements JavascriptNative {
         return value();
     }
 
+    /**
+     * <p>
+     * Create {@link Node}.
+     * </p>
+     * 
+     * @param content A content like {@link Element}, {@link String}.
+     * @return
+     */
+    private Node nodify(Object content) {
+        if (content instanceof Node) {
+            return (Node) content;
+        } else {
+            return document.createTextNode(content.toString());
+        }
+    }
+
     @JavascriptNativePropertyAccessor
     protected abstract String value();
 
     @JavascriptNativePropertyAccessor
     protected abstract void value(String value);
+
+    /**
+     * <p>
+     * The tagName attribute must run these steps:
+     * </p>
+     * <ol>
+     * <li>If context object's namespace prefix is not null, let qualified name be its namespace
+     * prefix, followed by a ":" (U+003A), followed by its local name. Otherwise, let qualified name
+     * be its local name.</li>
+     * <li>If the context object is in the HTML namespace and its node document is an HTML document,
+     * let qualified name be converted to ASCII uppercase.</li>
+     * <li>Return qualified name.</li>
+     * </ol>
+     */
+    @JavascriptNativeProperty
+    protected abstract String tagName();
 
     /**
      * <p>

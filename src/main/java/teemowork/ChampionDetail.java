@@ -18,7 +18,6 @@ import java.util.List;
 
 import js.bind.Notifiable;
 import js.bind.Observer;
-import js.dom.Element;
 import js.math.Mathematics;
 import jsx.jQuery;
 import jsx.jQuery.Listener;
@@ -93,7 +92,7 @@ public class ChampionDetail extends Page {
     private final Build build;
 
     /** The status. */
-    private Element level;
+    private jQuery level;
 
     /** The skill view. */
     private jQuery skillView;
@@ -156,18 +155,17 @@ public class ChampionDetail extends Page {
      */
     @Override
     public void load(jQuery root) {
-        Element rootElement = root.get(0);
-        Element upper = rootElement.child(UpperInfo.class);
+        jQuery upper = root.child(UpperInfo.class);
 
         // Icon
-        Element icon = upper.child(ChampionIcon.class).bind(this);
-        build.champion.applyIcon($(icon));
+        jQuery icon = upper.child(ChampionIcon.class).bind(this);
+        build.champion.applyIcon(icon);
 
         // Level
         level = icon.child(Level.class);
 
         // Items
-        jQuery itemViewBox = $(upper.child(ItemViewBox.class));
+        jQuery itemViewBox = upper.child(ItemViewBox.class);
 
         for (int i = 0; i < 6; i++) {
             items.add(itemViewBox.child(new ItemBox(build.getItem(i))));
@@ -584,14 +582,14 @@ public class ChampionDetail extends Page {
         private Item item;
 
         /** The root element. */
-        private final Element icon;
+        private final jQuery icon;
 
         /**
          * @param item
          */
         public ItemBox(Item item) {
             this.item = item;
-            this.icon = rootElement.add(ItemIconBase.class).child(ItemIcon.class);
+            this.icon = root.add(ItemIconBase.class).child(ItemIcon.class);
         }
 
         /**
@@ -601,7 +599,7 @@ public class ChampionDetail extends Page {
          */
         private void calcurate() {
             if (item != null) {
-                item.applyIcon($(icon));
+                item.applyIcon(icon);
 
                 ItemView view = new ItemView(item, item.getDescriptor(Version.Latest), build);
                 view.root.css("max-width", "350px");
