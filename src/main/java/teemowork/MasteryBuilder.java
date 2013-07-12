@@ -12,6 +12,8 @@ package teemowork;
 import static js.lang.Global.*;
 import static teemowork.model.Mastery.*;
 import js.bind.Subscriber;
+import js.dom.Element;
+import js.dom.Element.EventListener;
 import js.dom.Image;
 import jsx.jQuery;
 import jsx.jQuery.Listener;
@@ -19,6 +21,7 @@ import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Button;
 import jsx.bwt.Select;
+import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
 import jsx.model.SelectableListener;
 import jsx.model.SelectableModel;
@@ -69,16 +72,16 @@ public class MasteryBuilder extends Page implements Subscriber {
     private final MasterySet masterySet;
 
     /** The sum. */
-    private jQuery sum;
+    private Element sum;
 
     /** The offense value. */
-    private jQuery offense;
+    private Element offense;
 
     /** The offense value. */
-    private jQuery defense;
+    private Element defense;
 
     /** The offense value. */
-    private jQuery utility;
+    private Element utility;
 
     /** The reset button. */
     private Button reset;
@@ -86,7 +89,7 @@ public class MasteryBuilder extends Page implements Subscriber {
     /** The add button. */
     private Button add;
 
-    private jQuery name;
+    private Element name;
 
     private Select<MasterySet> menu;
 
@@ -106,6 +109,7 @@ public class MasteryBuilder extends Page implements Subscriber {
      */
     @Override
     public void load(jQuery root) {
+        Element rootElement = root.get(0);
         set = localStorage.get(SelectableModel.class);
 
         if (set == null) {
@@ -134,9 +138,9 @@ public class MasteryBuilder extends Page implements Subscriber {
             }
         }));
 
-        offense = build(root.child(Offense.class), OFFENSE);
-        defense = build(root.child(Defense.class), DEFEMSE);
-        utility = build(root.child(Utility.class), UTILITY);
+        offense = build(rootElement.child(Offense.class), OFFENSE);
+        defense = build(rootElement.child(Defense.class), DEFEMSE);
+        utility = build(rootElement.child(Utility.class), UTILITY);
 
         masterySet.publish();
     }
@@ -149,12 +153,12 @@ public class MasteryBuilder extends Page implements Subscriber {
      * @param root
      * @param set
      */
-    private jQuery build(jQuery root, Mastery[][] set) {
+    private Element build(Element root, Mastery[][] set) {
         for (Mastery[] masteries : set) {
-            jQuery rank = root.child(RankPane.class);
+            Element rank = root.child(RankPane.class);
 
             for (final Mastery mastery : masteries) {
-                jQuery pane = rank.child(MasteryPane.class);
+                Element pane = rank.child(MasteryPane.class);
 
                 if (mastery == null) {
                     pane.add(EmptyPane.class);
@@ -236,16 +240,16 @@ public class MasteryBuilder extends Page implements Subscriber {
         private final Mastery mastery;
 
         /** The root element. */
-        private final jQuery root;
+        private final Element root;
 
         /** The icon image. */
         private final Image image;
 
         /** The value element. */
-        private final jQuery currentLevel;
+        private final Element currentLevel;
 
         /** The popup element. */
-        private final jQuery popup;
+        private final Element popup;
 
         /**
          * <p>
@@ -255,7 +259,7 @@ public class MasteryBuilder extends Page implements Subscriber {
          * @param root
          * @param mastery
          */
-        private MasteryView(final jQuery root, final Mastery mastery) {
+        private MasteryView(final Element root, final Mastery mastery) {
             this.root = root;
             this.mastery = mastery;
 
@@ -263,7 +267,7 @@ public class MasteryBuilder extends Page implements Subscriber {
             image = root.image(IconImage.class).src(mastery.getSpriteImage()).clip(mastery.id * size, 0, size, size);
 
             // Mastery Level Pane
-            jQuery levelPane = root.child(LevelPane.class);
+            Element levelPane = root.child(LevelPane.class);
             currentLevel = levelPane.child(LevelValue.class).text(0);
             levelPane.child(LevelSeparator.class).text("/");
             levelPane.child(LevelValue.class).text(mastery.getMaxLevel());
@@ -274,17 +278,17 @@ public class MasteryBuilder extends Page implements Subscriber {
             masterySet.register(new MasteryDescriptionView(popup, mastery));
 
             // Event Handlers
-            root.click(new Listener() {
+            root.on(UIAction.Click, new EventListener() {
 
                 @Override
-                public void handler(UIEvent event) {
+                public void handleEvent(UIEvent event) {
                     event.preventDefault();
                     masterySet.up(mastery);
                 }
-            }).contextmenu(new Listener() {
+            }).on(UIAction.ClickLeft, new EventListener() {
 
                 @Override
-                public void handler(UIEvent event) {
+                public void handleEvent(UIEvent event) {
                     event.preventDefault();
                     masterySet.down(mastery);
                 }
@@ -327,7 +331,7 @@ public class MasteryBuilder extends Page implements Subscriber {
              * @param root
              * @param describable
              */
-            private MasteryDescriptionView(jQuery root, Describable describable) {
+            private MasteryDescriptionView(Element root, Describable describable) {
                 super(root, describable, null, true);
             }
 
