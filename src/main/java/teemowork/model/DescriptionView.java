@@ -11,7 +11,6 @@ package teemowork.model;
 
 import java.util.List;
 
-import js.bind.Subscriber;
 import js.dom.Element;
 import js.math.Mathematics;
 import teemowork.model.DescriptionViewStyle.Amplifier;
@@ -26,7 +25,7 @@ import teemowork.model.variable.VariableResolver;
 /**
  * @version 2013/03/23 12:41:01
  */
-public abstract class DescriptionView implements Subscriber {
+public abstract class DescriptionView {
 
     /** The passive element. */
     protected final Element description;
@@ -73,10 +72,9 @@ public abstract class DescriptionView implements Subscriber {
     protected abstract Version getVersion();
 
     /**
-     * {@inheritDoc}
+     * 
      */
-    @Override
-    public final void receive() {
+    public void receive() {
         description.empty();
 
         Descriptor descriptor = describable.getDescriptor(getVersion());

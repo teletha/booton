@@ -16,7 +16,7 @@ public interface Publishable extends Subscribable {
 
     void publish(Object event);
 
-    void register(Publishable subscribable);
+    void register(Object subscribable);
 
-    void unregister(Publishable subscribable);
+    void unregister(Object subscribable);
 }

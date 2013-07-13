@@ -11,7 +11,6 @@ package teemowork;
 
 import static js.lang.Global.*;
 import static teemowork.model.Mastery.*;
-import js.bind.Subscriber;
 import js.dom.Element;
 import js.dom.Element.EventListener;
 import js.dom.Image;
@@ -21,6 +20,7 @@ import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Button;
 import jsx.bwt.Select;
+import jsx.bwt.Subscribe;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
 import jsx.model.SelectableListener;
@@ -50,7 +50,7 @@ import teemowork.model.Version;
 /**
  * @version 2013/03/23 14:06:31
  */
-public class MasteryBuilder extends Page implements Subscriber {
+public class MasteryBuilder extends Page {
 
     private static final Mastery[][] OFFENSE = { {SummonersWrath, Fury, Sorcery, Butcher},
             {null, Deadliness, Blast, Destruction}, {Havoc, WeaponExpertise, ArcaneKnowledge, null},
@@ -142,7 +142,7 @@ public class MasteryBuilder extends Page implements Subscriber {
         defense = build(rootElement.child(Defense.class), DEFEMSE);
         utility = build(rootElement.child(Utility.class), UTILITY);
 
-        masterySet.publish();
+        masterySet.publish(masterySet);
     }
 
     /**
@@ -171,9 +171,9 @@ public class MasteryBuilder extends Page implements Subscriber {
     }
 
     /**
-     * {@inheritDoc}
+     * 
      */
-    @Override
+    @Subscribe(MasterySet.class)
     public void receive() {
         reset.label(String.valueOf(30 - masterySet.getSum()));
 
@@ -232,7 +232,7 @@ public class MasteryBuilder extends Page implements Subscriber {
     /**
      * @version 2013/03/23 14:05:25
      */
-    private class MasteryView implements Subscriber {
+    private class MasteryView {
 
         private final int size = 45;
 
@@ -296,9 +296,9 @@ public class MasteryBuilder extends Page implements Subscriber {
         }
 
         /**
-         * {@inheritDoc}
+         * 
          */
-        @Override
+        @Subscribe(MasterySet.class)
         public void receive() {
             int current = masterySet.getLevel(mastery);
 
@@ -349,6 +349,15 @@ public class MasteryBuilder extends Page implements Subscriber {
             @Override
             protected Version getVersion() {
                 return Version.Latest;
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            @Subscribe(MasterySet.class)
+            public void receive() {
+                super.receive();
             }
         }
     }

@@ -16,14 +16,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import js.bind.Notifiable;
+import jsx.bwt.widget.EventHub;
 import teemowork.model.variable.Variable;
 import teemowork.model.variable.VariableResolver;
 
 /**
  * @version 2013/03/28 23:46:05
  */
-public class Build extends Notifiable implements StatusCalculator {
+public class Build extends EventHub implements StatusCalculator {
 
     /** The selected champion. */
     public Champion champion;
@@ -109,7 +109,7 @@ public class Build extends Notifiable implements StatusCalculator {
         if (0 < level && level < 19) {
             this.level = level;
 
-            fire();
+            publish(this);
         }
     }
 
@@ -131,7 +131,7 @@ public class Build extends Notifiable implements StatusCalculator {
         if (version != null) {
             this.version = version;
 
-            fire();
+            publish(this);
         }
     }
 
@@ -247,7 +247,7 @@ public class Build extends Notifiable implements StatusCalculator {
             items[index] = item;
             itemCounts[index] = 1;
 
-            fire();
+            publish(this);
         }
     }
 
@@ -265,7 +265,7 @@ public class Build extends Notifiable implements StatusCalculator {
         if (now < skill.getMaxLevel()) {
             skillLevel[index] = now + 1;
 
-            fire();
+            publish(this);
         }
     }
 
@@ -283,7 +283,7 @@ public class Build extends Notifiable implements StatusCalculator {
         if (skill.getMinLevel() < now) {
             skillLevel[index] = now - 1;
 
-            fire();
+            publish(this);
         }
     }
 
@@ -526,7 +526,7 @@ public class Build extends Notifiable implements StatusCalculator {
             }
         }
 
-        fire();
+        publish(this);
     }
 
     /**

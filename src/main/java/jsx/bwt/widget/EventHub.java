@@ -59,13 +59,7 @@ public class EventHub implements Publishable {
 
             if (listeners != null) {
                 for (Listener listener : listeners) {
-                    try {
-                        listener.method.invoke(listener.instance);
-                    } catch (Exception e) {
-                        // If this exception will be thrown, it is bug of this program. So we must
-                        // rethrow the wrapped error in here.
-                        throw new Error(e);
-                    }
+                    listener.fire(event);
                 }
             }
         }
@@ -75,15 +69,23 @@ public class EventHub implements Publishable {
      * {@inheritDoc}
      */
     @Override
-    public void register(Publishable subscribable) {
+    public void register(Object subscribable) {
         if (subscribable != null) {
             for (Method method : subscribable.getClass().getDeclaredMethods()) {
                 Subscribe subscribe = method.getAnnotation(Subscribe.class);
 
                 if (subscribe != null) {
+                    Class eventType;
+
+                    if (method.getParameterTypes().length == 1) {
+                        eventType = method.getParameterTypes()[0];
+                    } else {
+                        eventType = subscribe.value();
+                    }
+
                     Listener listener = new Listener(subscribable, method);
 
-                    for (Class type : getTypes(subscribe.value())) {
+                    for (Class type : getTypes(eventType)) {
                         if (holder == null) {
                             holder = new HashMap();
                         }
@@ -111,13 +113,22 @@ public class EventHub implements Publishable {
      * {@inheritDoc}
      */
     @Override
-    public void unregister(Publishable subscribable) {
+    public void unregister(Object subscribable) {
         if (holder != null && subscribable != null) {
             for (Method method : subscribable.getClass().getDeclaredMethods()) {
+
                 Subscribe subscribe = method.getAnnotation(Subscribe.class);
 
                 if (subscribe != null) {
-                    for (Class type : getTypes(subscribe.value())) {
+                    Class eventType;
+
+                    if (method.getParameterTypes().length == 1) {
+                        eventType = method.getParameterTypes()[0];
+                    } else {
+                        eventType = subscribe.value();
+                    }
+
+                    for (Class type : getTypes(eventType)) {
                         List<Listener> listeners = holder.get(type);
 
                         if (listeners != null) {
@@ -174,18 +185,41 @@ public class EventHub implements Publishable {
     private static class Listener {
 
         /** The listener instance. */
-        private final Subscribable instance;
+        private final Object instance;
 
         /** The listener method. */
         private final Method method;
+
+        /** The parameter flag. */
+        private final boolean hasParam;
 
         /**
          * @param instance
          * @param method
          */
-        private Listener(Subscribable instance, Method method) {
+        private Listener(Object instance, Method method) {
             this.instance = instance;
             this.method = method;
+            this.hasParam = method.getParameterTypes().length == 1;
+        }
+
+        /**
+         * <p>
+         * Fire event.
+         * </p>
+         * 
+         * @param event
+         */
+        private void fire(Object event) {
+            try {
+                if (hasParam) {
+                    method.invoke(instance, event);
+                } else {
+                    method.invoke(instance);
+                }
+            } catch (Exception e) {
+                throw new Error(e);
+            }
         }
     }
 }
