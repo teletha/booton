@@ -12,18 +12,16 @@ package teemowork;
 import static js.lang.Global.*;
 import static teemowork.model.Status.*;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import js.bind.Notifiable;
-import js.bind.Observer;
 import js.math.Mathematics;
 import jsx.jQuery;
 import jsx.jQuery.Listener;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Listen;
+import jsx.bwt.Subscribe;
 import jsx.bwt.UI;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
@@ -118,26 +116,7 @@ public class ChampionDetail extends Page {
         }
         this.build = new Build(champion);
 
-        bind(build);
-
-    }
-
-    /**
-     * <p>
-     * Bind.
-     * </p>
-     * 
-     * @param notifiable
-     */
-    private void bind(Notifiable notifiable) {
-        if (notifiable != null) {
-            // collect observer
-            for (Method method : getClass().getMethods()) {
-                if (method.isAnnotationPresent(Observer.class)) {
-                    notifiable.register(this, method);
-                }
-            }
-        }
+        build.register(this);
     }
 
     @Listen(value = UIAction.Click, abort = true)
@@ -213,7 +192,7 @@ public class ChampionDetail extends Page {
      * Calcurate current status.
      * </p>
      */
-    @Observer
+    @Subscribe(Build.class)
     private void calcurate() {
         // update each status
         level.text(String.valueOf(build.getLevel()));

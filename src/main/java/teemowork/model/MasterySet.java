@@ -10,12 +10,12 @@
 package teemowork.model;
 
 import static teemowork.model.Mastery.*;
-import js.bind.Publisher;
+import jsx.bwt.widget.EventHub;
 
 /**
  * @version 2013/03/15 16:51:59
  */
-public class MasterySet extends Publisher {
+public class MasterySet extends EventHub {
 
     /** The human-readable name. */
     private String name = "";
@@ -90,7 +90,7 @@ public class MasterySet extends Publisher {
      */
     public void up(Mastery mastery) {
         if (isAvailable(mastery) && changeLevel(mastery, 1)) {
-            publish();
+            publish(this);
         }
     }
 
@@ -103,7 +103,7 @@ public class MasterySet extends Publisher {
      */
     public void down(Mastery mastery) {
         if (isUnavailable(mastery) && changeLevel(mastery, -1)) {
-            publish();
+            publish(this);
         }
     }
 
@@ -122,7 +122,7 @@ public class MasterySet extends Publisher {
         }
 
         if (changed) {
-            publish();
+            publish(this);
         }
     }
 
@@ -473,7 +473,7 @@ public class MasterySet extends Publisher {
             decode(3, 2, serialized.substring(8, 14));
             decode(4, 3, serialized.substring(14, 19));
 
-            publish();
+            publish(this);
         }
     }
 }
