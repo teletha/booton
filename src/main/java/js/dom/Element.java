@@ -351,7 +351,7 @@ public abstract class Element extends Node implements JavascriptNative {
      * @return A created image.
      */
     public Image image(Class<? extends CSS> className) {
-        return new Image($(this), className);
+        return new Image(this, className);
     }
 
     /**

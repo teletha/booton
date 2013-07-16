@@ -10,7 +10,6 @@
 package js.dom;
 
 import static js.lang.Global.*;
-import jsx.jQuery;
 import booton.css.CSS;
 
 /**
@@ -25,25 +24,25 @@ public class Image {
     private static final String XLINK = "http://www.w3.org/1999/xlink";
 
     /** The root element. */
-    private final jQuery svg;
+    private final Element svg;
 
     /** The image element. */
     private final Element image;
 
     /** The filter element. */
-    private final jQuery filters;
+    private final Element filters;
 
     /**
      * 
      */
-    public Image(jQuery parent, Class<? extends CSS> className) {
+    public Image(Element parent, Class<? extends CSS> className) {
         image = document.createElementNS(SVG, "image");
         image.attr("width", "100%");
         image.attr("height", "100%");
-        filters = $(document.createElementNS(SVG, "filter"));
+        filters = document.createElementNS(SVG, "filter");
         filters.attr("id", "filter" + hashCode());
 
-        svg = $(document.createElementNS(SVG, "svg"));
+        svg = document.createElementNS(SVG, "svg");
         svg.append(filters);
         svg.append(image);
         svg.attr("class", className.toString());
@@ -94,7 +93,8 @@ public class Image {
      * @return
      */
     public Image grayscale(double amount) {
-        return applyFilter($(document.createElementNS(SVG, "feColorMatrix")).attr("type", "matrix")
+        return applyFilter(document.createElementNS(SVG, "feColorMatrix")
+                .attr("type", "matrix")
                 .attr("values", amount + " " + amount + " " + amount + " 0 0 " + amount + " " + amount + " " + amount + " 0 0 " + amount + " " + amount + " " + amount + " 0 0 0 0 0 1 0"));
     }
 
@@ -107,7 +107,8 @@ public class Image {
      * @return
      */
     public Image saturate(double amount) {
-        return applyFilter($(document.createElementNS(SVG, "feColorMatrix")).attr("type", "saturate")
+        return applyFilter(document.createElementNS(SVG, "feColorMatrix")
+                .attr("type", "saturate")
                 .attr("values", amount));
     }
 
@@ -119,7 +120,7 @@ public class Image {
      * @param filter
      * @return
      */
-    private Image applyFilter(jQuery filter) {
+    private Image applyFilter(Element filter) {
         // remove filter
         filters.empty();
 

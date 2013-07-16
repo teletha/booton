@@ -792,18 +792,6 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
     public native int outerHeight(boolean includeMargin);
 
     /**
-     * <p>
-     * Create child {@link Image} element.
-     * </p>
-     * 
-     * @param classNames A class name to be added to the class attribute of each matched element.
-     * @return A created image.
-     */
-    public Image image(Class<? extends CSS> className) {
-        return new Image(this, className);
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
