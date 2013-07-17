@@ -30,6 +30,7 @@ import teemowork.ChampionDetailStyle.Active;
 import teemowork.ChampionDetailStyle.Amplifier;
 import teemowork.ChampionDetailStyle.Assigned;
 import teemowork.ChampionDetailStyle.ChampionIcon;
+import teemowork.ChampionDetailStyle.ChampionLevelIndicator;
 import teemowork.ChampionDetailStyle.ComputedValue;
 import teemowork.ChampionDetailStyle.Current;
 import teemowork.ChampionDetailStyle.DescriptionBox;
@@ -450,6 +451,11 @@ public class ChampionDetail extends Page {
                 for (int i = 1; i <= size; i++) {
                     jQuery element = root.child(NormalValue.class).text(Mathematics.round(resolver.compute(i), 2));
 
+                    if (!resolver.isSkillLevelBased()) {
+                        element.attr("title", "Level " + resolver.convertChampionLevel(i))
+                                .add(ChampionLevelIndicator.class);
+                    }
+
                     if (i == level) {
                         element.add(Current.class);
                     }
@@ -489,6 +495,11 @@ public class ChampionDetail extends Page {
                 for (int i = 1; i <= size; i++) {
                     jQuery value = element.child(NormalValue.class)
                             .text(Mathematics.round(amplifier.calculate(i, build), 4));
+
+                    if (!resolver.isSkillLevelBased()) {
+                        value.attr("title", "Level " + resolver.convertChampionLevel(i))
+                                .add(ChampionLevelIndicator.class);
+                    }
 
                     if (size != 1 && i == level) {
                         value.add(Current.class);

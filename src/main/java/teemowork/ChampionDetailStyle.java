@@ -225,6 +225,17 @@ class ChampionDetailStyle {
     /**
      * @version 2013/02/06 20:03:25
      */
+    class ChampionLevelIndicator extends CSS {
+
+        {
+            cursor.help();
+            borderBottom.dotted().width(1, px);
+        }
+    }
+
+    /**
+     * @version 2013/02/06 20:03:25
+     */
     class Separator extends CSS {
 
         {

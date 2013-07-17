@@ -979,6 +979,17 @@ public abstract class CSS implements Extensible {
     }
 
     /**
+     * <p>
+     * Share styles.
+     * </p>
+     * 
+     * @param classes
+     */
+    protected static final void share(Class<? extends CSS>... classes) {
+
+    }
+
+    /**
      * @version 2012/12/13 10:02:01
      */
     private static class RuleSet {

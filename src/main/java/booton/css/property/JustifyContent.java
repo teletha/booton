@@ -33,7 +33,7 @@ public class JustifyContent extends CSSProperty<JustifyContent> {
      * @return
      */
     public JustifyContent start() {
-        return chain(nameWithPrefix("flex-start").ie("flex-pack ", "start"));
+        return chain(nameWithPrefix("flex-start").ie("flex-pack", "start"));
     }
 
     /**
@@ -46,7 +46,7 @@ public class JustifyContent extends CSSProperty<JustifyContent> {
      * @return
      */
     public JustifyContent end() {
-        return chain(nameWithPrefix("flex-end").ie("flex-pack ", "end"));
+        return chain(nameWithPrefix("flex-end").ie("flex-pack", "end"));
     }
 
     /**
@@ -59,7 +59,7 @@ public class JustifyContent extends CSSProperty<JustifyContent> {
      * @return
      */
     public JustifyContent center() {
-        return chain(nameWithPrefix("center").ie("flex-pack ", "center"));
+        return chain(nameWithPrefix("center").ie("flex-pack", "center"));
     }
 
     /**
@@ -72,7 +72,7 @@ public class JustifyContent extends CSSProperty<JustifyContent> {
      * @return
      */
     public JustifyContent spaceBetween() {
-        return chain(nameWithPrefix("space-between").ie("flex-pack ", "justify"));
+        return chain(nameWithPrefix("space-between").ie("flex-pack", "justify"));
     }
 
     /**
@@ -85,6 +85,6 @@ public class JustifyContent extends CSSProperty<JustifyContent> {
      * @return
      */
     public JustifyContent spaceAround() {
-        return chain(nameWithPrefix("space-around").ie("flex-pack ", "justify"));
+        return chain(nameWithPrefix("space-around").ie("flex-pack", "justify"));
     }
 }
