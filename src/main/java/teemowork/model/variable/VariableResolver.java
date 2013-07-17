@@ -49,6 +49,18 @@ public abstract class VariableResolver {
 
     /**
      * <p>
+     * Compute champion level from skill level.
+     * </p>
+     * 
+     * @param skillLevel
+     * @return
+     */
+    public int convertChampionLevel(int skillLevel) {
+        return -1;
+    }
+
+    /**
+     * <p>
      * Compute skill level.
      * </p>
      * 
@@ -61,10 +73,10 @@ public abstract class VariableResolver {
     /**
      * @version 2013/02/12 13:10:53
      */
-    private static abstract class PerLevel extends VariableResolver {
+    public static abstract class PerLevel extends VariableResolver {
 
         /** The level pattern. */
-        private final int[] levels;
+        public final int[] levels;
 
         /** The values. */
         private final double base;
@@ -105,6 +117,14 @@ public abstract class VariableResolver {
         @Override
         public boolean isSkillLevelBased() {
             return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int convertChampionLevel(int skillLevel) {
+            return levels[skillLevel - 1];
         }
 
         /**
@@ -328,6 +348,14 @@ public abstract class VariableResolver {
         @Override
         public boolean isSkillLevelBased() {
             return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int convertChampionLevel(int skillLevel) {
+            return skillLevel;
         }
     }
 

@@ -60,7 +60,7 @@ public class ItemView extends UI {
 
         // Icon Area
         Element icons = rootElement.child(IconArea.class);
-        icons.child(Icon.class).backgound(item.getIcon());
+        // icons.child(Icon.class).backgound(item.getIcon());
         item.applyIcon($(icons.child(Icon.class)));
 
         Element materials = icons.child(Materials.class);

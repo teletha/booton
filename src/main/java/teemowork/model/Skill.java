@@ -2434,13 +2434,18 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(16)
                 .range(600);
         MissileBarrage.update()
-                .active("指定方向にミサイルを発射し、当たった敵ユニットの{1}に{2}を与える。使用時にスタックを消費する。スタックは{3}毎に1つ増加し最大7つまでスタックされる。4発毎に大きいミサイル(効果範囲2倍、ダメージ50%上昇)を発射させる。スタック増加時間はCD低減の影響を受ける。")
-                .variable(1, Radius, 150, 0)
-                .variable(2, MagicDamage, 120, 70, ap(0.3), amplify(AD, 0.2))
+                .active("スタックを消費して、指定方向にミサイルを発射し当たった敵ユニットの{1}に{2}を与える。スタックは{3}毎に増加する（最大数7）。4発毎に大きいミサイルを発射する({4}に{5})。スタック増加時間はCD低減の影響を受ける。")
+                .variable(1, Radius, 150)
+                .variable(2, MagicDamage, 120, 70, ap(0.3), ad(0.2))
                 .variable(3, CDRAwareTime, 12)
+                .variable(4, Radius, 300)
+                .variable(5, MagicDamage, 180, 105, ap(0.45), ad(0.3))
                 .mana(30, 5)
                 .cd(1.2)
-                .range(1200);
+                .range(1225);
+        MissileBarrage.update(P305)
+                .active("スタックを消費して、指定方向にミサイルを発射し当たった敵ユニットの{1}に{2}を与える。スタックは{3}毎に増加する（最大数7）。3発毎に大きいミサイル({4}に{5})を発射させる。スタック増加時間はCD低減の影響を受ける。")
+                .variable(3, CDRAwareTime, 12, -2);
         MissileBarrage.update(P309).mana(20);
 
         /** Darius */
@@ -4536,7 +4541,7 @@ public class Skill extends Describable<SkillDescriptor> {
         /** Quinn */
         Harrier.update()
                 .passive("ValorがQuinnの周辺に存在する敵ユニット一体(Champion優先)に自動的に4.5秒間持続するマークを付与する。マークが付与された敵ユニットにQuinnが通常攻撃を行うと、付与されたマークを消費して{1}を与える。またマークが付与された敵ユニットの{2}。Valorと交代している間はこのスキルは無効になる。")
-                .variable(1, PhysicalDamage, new Fixed(new double[] {25, 35, 45, 55, 65, 75, 85, 95, 105, 115, 125,
+                .variable(1, PhysicalDamage, new Per1Level(new double[] {25, 35, 45, 55, 65, 75, 85, 95, 105, 115, 125,
                         135, 145, 155, 170, 185, 190, 215}), bounusAD(0.5), null)
                 .variable(2, Visionable)
                 .cd(10);
@@ -4993,6 +4998,8 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Sivir */
         FleetOfFoot.update().passive("敵Championに通常攻撃でダメージを与えると、2秒間{1}する。").variable(-1, MSRatio, 50);
+        FleetOfFoot.update(P306)
+                .passive(("敵Championに通常攻撃か" + BoomerangBlade.name + "もしくは" + Ricochet.name + "でダメージを与えると、2秒間{1}する。"));
         BoomerangBlade.update()
                 .active("指定方向にブーメランを投げ、当たった敵ユニットに{1}を与える。ダメージは敵に当たるごとに20%ずつ減り、最大で40%まで低下する。行きと帰りそれぞれに攻撃判定がある。")
                 .variable(1, PhysicalDamage, 60, 45, ap(0.5), bounusAD(1.1))
@@ -6031,7 +6038,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(1, DamageReductionRatio, 0, 0, amplify(Stack, 5))
                 .variable(2, AttackDamageRatio, 0, 0, amplify(Stack, 5))
                 .variable(3, Value, 0, 0, amplify(Health, 0.35))
-                .variable(4, Value, 0, 0, amplify(AD, 0.35))
+                .variable(4, Value, 0, 0, ad(0.35))
                 .variable(5, Value, 10, 0, amplify(Lv, 2))
                 .variable(6, Value, 20, 0, amplify(Lv, 2))
                 .variable(7, Value, new Per5LevelForYoric(300, 40));
