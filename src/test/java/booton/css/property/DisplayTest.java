@@ -50,34 +50,4 @@ public class DisplayTest {
         assert css.has("display", "-webkit-flex");
         assert css.has("display", "-ms-flexbox");
     }
-
-    @Test
-    public void flexDirection() throws Exception {
-        MyCSS css = new MyCSS();
-        css.flexDirection.column();
-
-        assert css.has("flex-direction", "column");
-        assert css.has("-webkit-flex-direction", "column");
-        assert css.has("-ms-flex-direction", "column");
-    }
-
-    @Test
-    public void justifyContentStart() throws Exception {
-        MyCSS css = new MyCSS();
-        css.justifyContent.start();
-
-        assert css.has("justify-content", "flex-start");
-        assert css.has("-webkit-justify-content", "flex-start");
-        assert css.has("-ms-flex-pack", "start");
-    }
-
-    @Test
-    public void justifyContentEnd() throws Exception {
-        MyCSS css = new MyCSS();
-        css.justifyContent.end();
-
-        assert css.has("justify-content", "flex-end");
-        assert css.has("-webkit-justify-content", "flex-end");
-        assert css.has("-ms-flex-pack", "end");
-    }
 }
