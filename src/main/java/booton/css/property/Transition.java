@@ -15,7 +15,7 @@ import booton.css.Unit;
 import booton.css.Value;
 
 /**
- * @version 2013/06/08 16:27:02
+ * @version 2013/07/18 16:27:39
  */
 public class Transition extends CSSProperty<Transition> {
 
@@ -101,7 +101,7 @@ public class Transition extends CSSProperty<Transition> {
      * @return Chainable API.
      */
     public Transition property(String id) {
-        return property.chain(id);
+        return property.specify(id);
     }
 
     /**
@@ -139,13 +139,22 @@ public class Transition extends CSSProperty<Transition> {
         }
 
         /**
-         * {@inheritDoc}
+         * <p>
+         * The transition-property CSS property is used to specify the names of CSS properties to
+         * which a transition effect should be applied.
+         * </p>
+         * 
+         * @param id A string identifying the property to which a transition effect should be
+         *            applied when its value changes. This identifier is composed by
+         *            case-insensitive letter a to z, numbers 0 to 9, an underscore (_) or a
+         *            dash(-). The first non-dash character must be a letter (that is no number at
+         *            the beginning of it, even preceded by a dash). Also two dashes are forbidden
+         *            at the beginning of the identifier.
+         * @return Chainable API.
          */
-        @Override
-        protected Transition chain(String value) {
-            return super.chain(value);
+        private Transition specify(String id) {
+            return chain(id);
         }
-
     }
 
     /**

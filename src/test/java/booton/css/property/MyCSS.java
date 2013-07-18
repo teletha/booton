@@ -24,6 +24,30 @@ public class MyCSS extends CSS {
 
     /**
      * <p>
+     * Test property name.
+     * </p>
+     * 
+     * @param name
+     * @return
+     */
+    boolean omit(String name) {
+        return !toString().contains(name + ":");
+    }
+
+    /**
+     * <p>
+     * Test property name.
+     * </p>
+     * 
+     * @param name
+     * @return
+     */
+    boolean has(String name) {
+        return toString().contains(name + ":");
+    }
+
+    /**
+     * <p>
      * Test property name and value.
      * </p>
      * 

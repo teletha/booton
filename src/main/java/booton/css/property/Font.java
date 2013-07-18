@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,8 @@ import booton.css.Unit;
 import booton.css.Value;
 import booton.util.Strings;
 
-
 /**
- * @version 2012/12/16 12:25:48
+ * @version 2013/07/18 16:03:10
  */
 public final class Font extends CSSProperty<Font> implements Colorable<Font> {
 
@@ -129,7 +128,7 @@ public final class Font extends CSSProperty<Font> implements Colorable<Font> {
      * @return
      */
     public Font weight(int size) {
-        return weight.chain(String.valueOf(size));
+        return weight.number(size);
     }
 
     /**
@@ -460,11 +459,24 @@ public final class Font extends CSSProperty<Font> implements Colorable<Font> {
         }
 
         /**
-         * {@inheritDoc}
+         * <p>
+         * The font-weight CSS property specifies the weight or boldness of the font. However, some
+         * fonts are not available in all weights; some are available only on normal and bold.
+         * </p>
+         * <p>
+         * Numeric font weights for fonts that provide more than just normal and bold. If the exact
+         * weight given is unavailable, then 600-900 use the closest available darker weight (or, if
+         * there is none, the closest available lighter weight), and 100-500 use the closest
+         * available lighter weight (or, if there is none, the closest available darker weight).
+         * This means that for fonts that provide only normal and bold, 100-500 are normal, and
+         * 600-900 are bold.
+         * </p>
+         * 
+         * @param size
+         * @return
          */
-        @Override
-        protected Font chain(String value) {
-            return super.chain(value);
+        private Font number(int size) {
+            return chain(String.valueOf(size));
         }
     }
 
