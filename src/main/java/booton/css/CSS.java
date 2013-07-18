@@ -9,14 +9,10 @@
  */
 package booton.css;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -25,7 +21,6 @@ import kiss.Extensible;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
-import kiss.model.ClassUtil;
 import kiss.model.Model;
 import booton.Obfuscator;
 import booton.css.property.AlignItems;
@@ -474,9 +469,6 @@ public abstract class CSS implements Extensible {
      */
     public UserSelect userSelect;
 
-    /** The initialization flag. */
-    private boolean initialized = false;
-
     /** The current procesing rule set. */
     private RuleSet rules = new RuleSet(getClass());
 
@@ -861,32 +853,6 @@ public abstract class CSS implements Extensible {
      */
     @Override
     public String toString() {
-        if (!initialized) {
-            initialized = true;
-
-            for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(getClass()).entrySet()) {
-                for (Annotation annotation : entry.getValue()) {
-                    if (annotation.annotationType() == Selector.class) {
-                        Method method = entry.getKey();
-                        method.setAccessible(true);
-                        Selector selector = (Selector) annotation;
-
-                        try {
-                            // create sub rule set
-                            load(new RuleSet(rules, selector.value()));
-
-                            method.invoke(this);
-                        } catch (Exception e) {
-                            throw I.quiet(e);
-                        } finally {
-                            // restore parent rule set
-                            load(rules.parent);
-                        }
-                    }
-                }
-            }
-        }
-
         StringBuilder builder = new StringBuilder();
         rules.writeTo("", builder);
 
