@@ -92,7 +92,7 @@ public final class Display extends CSSProperty<Display> {
      * model.
      */
     public Display flex() {
-        return chain(valueWithPrefix("flex").ie("flexbox"));
+        return chain(standard("flex").ie("flexbox"));
     }
 
     /**

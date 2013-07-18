@@ -121,13 +121,54 @@ public class CSSProperty<T extends CSSProperty> {
 
     /**
      * <p>
+     * Make chainable API.
+     * </p>
+     * 
+     * @return
+     */
+    protected final T chain() {
+        this.context.used = true;
+
+        return context;
+    }
+
+    /**
+     * <p>
+     * Make chainable API.
+     * </p>
+     * 
+     * @return
+     */
+    protected final T chain(String value) {
+        this.value = value;
+        this.context.used = true;
+
+        return context;
+    }
+
+    /**
+     * <p>
+     * Make chainable API.
+     * </p>
+     * 
+     * @return
+     */
+    protected final T chain(VendorPrefixCSSProperty value) {
+        this.value = value;
+        this.context.used = true;
+
+        return context;
+    }
+
+    /**
+     * <p>
      * Write {@link VendorPrefixCSSProperty}.
      * </p>
      * 
      * @param value
      * @return
      */
-    protected final VendorPrefixCSSProperty valueWithPrefix(String value) {
+    protected final VendorPrefixCSSProperty standard(String value) {
         return new VendorPrefixCSSProperty(name, value, false, true);
     }
 
@@ -141,105 +182,6 @@ public class CSSProperty<T extends CSSProperty> {
      */
     protected final VendorPrefixCSSProperty nameWithPrefix(String value) {
         return new VendorPrefixCSSProperty(name, value, true, false);
-    }
-
-    /**
-     * <p>
-     * Write css property.
-     * </p>
-     * 
-     * @param name
-     * @param value
-     */
-    protected final String property(String name, Object value) {
-        if (value != null) {
-            return property(name, value.toString());
-        }
-        return "";
-    }
-
-    /**
-     * <p>
-     * Write css property.
-     * </p>
-     * 
-     * @param name
-     * @param value
-     */
-    protected final String property(String name, String value) {
-        if (name != null && name.length() != 0 && value != null && value.length() != 0) {
-            return name + ":" + value + ";";
-        }
-        return "";
-    }
-
-    /**
-     * <p>
-     * Write css property.
-     * </p>
-     * 
-     * @param name
-     * @param calcurated
-     */
-    protected final String property(String name, String... values) {
-        StringBuilder out = new StringBuilder();
-
-        if (name != null && name.length() != 0) {
-            out.append(name).append(':');
-
-            for (String value : values) {
-                if (value != null && value.length() != 0) {
-                    if (out.charAt(out.length() - 1) != ':') {
-                        out.append(' ');
-                    }
-                    out.append(value);
-                }
-            }
-            out.append(';');
-        }
-
-        return out.toString();
-    }
-
-    /**
-     * <p>
-     * Make chainable API.
-     * </p>
-     * 
-     * @return
-     */
-    protected T chain() {
-        this.context.used = true;
-
-        return context;
-    }
-
-    /**
-     * <p>
-     * Make chainable API.
-     * </p>
-     * 
-     * @return
-     */
-    protected T chain(String value) {
-        this.value = value;
-        this.context.used = true;
-
-        return context;
-    }
-
-    /**
-     * <p>
-     * Make chainable API.
-     * </p>
-     * 
-     * @return
-     */
-    protected T chain(VendorPrefixCSSProperty value) {
-        this.value = value;
-        this.context.used = true;
-
-        return context;
     }
 
     /**
