@@ -12,7 +12,7 @@ package booton.css;
 /**
  * @version 2013/06/09 3:29:17
  */
-public class VendorPrefixCSSProperty {
+public class PrefixAwareProperty {
 
     /** The each value. */
     private String[] standard;
@@ -40,7 +40,7 @@ public class VendorPrefixCSSProperty {
      * @param name
      * @param value
      */
-    VendorPrefixCSSProperty(String name, String value, boolean namePrefix, boolean valuePrefix) {
+    PrefixAwareProperty(String name, String value, boolean namePrefix, boolean valuePrefix) {
         this.standard = new String[] {name, value};
         this.namePrefix = namePrefix;
         this.valuePrefix = valuePrefix;
@@ -59,7 +59,7 @@ public class VendorPrefixCSSProperty {
      * @param value
      * @return
      */
-    public VendorPrefixCSSProperty ie(String value) {
+    public PrefixAwareProperty ie(String value) {
         return ie(standard[0], value);
     }
 
@@ -72,7 +72,7 @@ public class VendorPrefixCSSProperty {
      * @param value
      * @return
      */
-    public VendorPrefixCSSProperty ie(String name, String value) {
+    public PrefixAwareProperty ie(String name, String value) {
         this.ie = compute(Vendor.IE, name, value);
 
         return this;
@@ -87,7 +87,7 @@ public class VendorPrefixCSSProperty {
      * @param value
      * @return
      */
-    public VendorPrefixCSSProperty moz(String value) {
+    public PrefixAwareProperty moz(String value) {
         return moz(standard[0], value);
     }
 
@@ -100,7 +100,7 @@ public class VendorPrefixCSSProperty {
      * @param value
      * @return
      */
-    public VendorPrefixCSSProperty moz(String name, String value) {
+    public PrefixAwareProperty moz(String name, String value) {
         this.moz = compute(Vendor.Mozilla, name, value);
 
         return this;
@@ -115,7 +115,7 @@ public class VendorPrefixCSSProperty {
      * @param value
      * @return
      */
-    public VendorPrefixCSSProperty webkit(String value) {
+    public PrefixAwareProperty webkit(String value) {
         return webkit(standard[0], value);
     }
 
@@ -128,7 +128,7 @@ public class VendorPrefixCSSProperty {
      * @param value
      * @return
      */
-    public VendorPrefixCSSProperty webkit(String name, String value) {
+    public PrefixAwareProperty webkit(String name, String value) {
         this.webkit = compute(Vendor.Webkit, name, value);
 
         return this;

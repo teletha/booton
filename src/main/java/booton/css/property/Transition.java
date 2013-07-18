@@ -9,6 +9,7 @@
  */
 package booton.css.property;
 
+import static booton.css.Vendor.*;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
@@ -50,8 +51,8 @@ public class Transition extends CSSProperty<Transition> {
     protected void write(CSSWriter writer) {
         super.write(writer);
 
-        writer.propertyWithPrefix("transition-duration", duration);
-        writer.propertyWithPrefix("transition-delay", delay);
+        writer.property("transition-duration", duration, Webkit);
+        writer.property("transition-delay", delay, Webkit);
     }
 
     /**

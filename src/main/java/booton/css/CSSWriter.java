@@ -15,7 +15,7 @@ import java.util.List;
 import kiss.I;
 
 /**
- * @version 2013/06/08 13:29:18
+ * @version 2013/07/18 23:23:37
  */
 public class CSSWriter {
 
@@ -31,7 +31,7 @@ public class CSSWriter {
      * 
      * @param property
      */
-    public void property(VendorPrefixCSSProperty property) {
+    public void property(PrefixAwareProperty property) {
         for (String[] values : property.values()) {
             property(values[0], values[1]);
         }
@@ -53,17 +53,45 @@ public class CSSWriter {
 
     /**
      * <p>
-     * Write property.
+     * Write property with the specified vendor.
      * </p>
      * 
-     * @param name
-     * @param value
+     * @param name A property name.
+     * @param value A property value.
+     * @param vendor A vendor type.
      */
-    public void propertyWithPrefix(String name, Object value) {
-        if (value != null) {
-            for (Vendor vendor : Vendor.values()) {
-                property(vendor.prefix + name, value.toString());
-            }
+    public void property(String name, Object value, Vendor vendor) {
+        propertyWithPrefix(name, value, vendor);
+        property(name, value);
+    }
+
+    /**
+     * <p>
+     * Write property with the specified vendor.
+     * </p>
+     * 
+     * @param name A property name.
+     * @param value A property value.
+     * @param vendor A vendor type.
+     */
+    public void property(String name, Object value, Vendor vendor1, Vendor vendor2) {
+        propertyWithPrefix(name, value, vendor1);
+        propertyWithPrefix(name, value, vendor2);
+        property(name, value);
+    }
+
+    /**
+     * <p>
+     * Helper method to write vender prefixed property.
+     * </p>
+     * 
+     * @param name A property name.
+     * @param value A property value.
+     * @param vendor A vendor type.
+     */
+    private void propertyWithPrefix(String name, Object value, Vendor vendor) {
+        if (vendor != null) {
+            property(vendor.prefix + name, value);
         }
     }
 
