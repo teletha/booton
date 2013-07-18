@@ -9,6 +9,8 @@
  */
 package booton.css.property;
 
+import static booton.css.Vendor.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class Transform extends CSSProperty<Transform> {
      */
     @Override
     protected void write(CSSWriter writer) {
-        writer.propertyWithPrefix("transform", I.join(functions, " "));
+        writer.property("transform", I.join(functions, " "), Webkit);
     }
 
     /**

@@ -77,8 +77,8 @@ public class CSSProperty<T extends CSSProperty> {
      * @param writer
      */
     protected void write(CSSWriter writer) {
-        if (value instanceof VendorPrefixCSSProperty) {
-            writer.property((VendorPrefixCSSProperty) value);
+        if (value instanceof PrefixAwareProperty) {
+            writer.property((PrefixAwareProperty) value);
         } else {
             writer.property(name, value);
         }
@@ -95,12 +95,8 @@ public class CSSProperty<T extends CSSProperty> {
 
                 Object value = field.get(this);
 
-                if (value == null) {
-                    continue;
-                } else if (value instanceof CSSProperty) {
+                if (value instanceof CSSProperty) {
                     ((CSSProperty) value).write(writer);
-                } else {
-                    // writer.property(Strings.hyphenate(field.getName()), value);
                 }
             }
         } catch (Exception e) {
@@ -139,7 +135,7 @@ public class CSSProperty<T extends CSSProperty> {
      * 
      * @return
      */
-    protected final T chain(String value) {
+    protected final T chain(Object value) {
         this.value = value;
         this.context.used = true;
 
@@ -148,40 +144,26 @@ public class CSSProperty<T extends CSSProperty> {
 
     /**
      * <p>
-     * Make chainable API.
-     * </p>
-     * 
-     * @return
-     */
-    protected final T chain(VendorPrefixCSSProperty value) {
-        this.value = value;
-        this.context.used = true;
-
-        return context;
-    }
-
-    /**
-     * <p>
-     * Write {@link VendorPrefixCSSProperty}.
+     * Write {@link PrefixAwareProperty}.
      * </p>
      * 
      * @param value
      * @return
      */
-    protected final VendorPrefixCSSProperty standard(String value) {
-        return new VendorPrefixCSSProperty(name, value, false, true);
+    protected final PrefixAwareProperty valueWithPrefix(String value) {
+        return new PrefixAwareProperty(name, value, false, true);
     }
 
     /**
      * <p>
-     * Write {@link VendorPrefixCSSProperty}.
+     * Write {@link PrefixAwareProperty}.
      * </p>
      * 
      * @param value
      * @return
      */
-    protected final VendorPrefixCSSProperty nameWithPrefix(String value) {
-        return new VendorPrefixCSSProperty(name, value, true, false);
+    protected final PrefixAwareProperty nameWithPrefix(String value) {
+        return new PrefixAwareProperty(name, value, true, false);
     }
 
     /**
