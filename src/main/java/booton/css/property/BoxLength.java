@@ -12,7 +12,7 @@ package booton.css.property;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
-import booton.css.Value;
+import booton.css.value.Value;
 
 /**
  * @version 2013/03/24 2:06:03

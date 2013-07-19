@@ -19,7 +19,7 @@ import kiss.I;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
-import booton.css.Value;
+import booton.css.value.Value;
 
 
 /**

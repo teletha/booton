@@ -11,10 +11,10 @@ package teemowork;
 
 import js.util.Color;
 import booton.css.CSS;
-import booton.css.GradientValue;
 import booton.css.Snippet;
 import booton.css.Unit;
-import booton.css.Value;
+import booton.css.value.GradientValue;
+import booton.css.value.Value;
 
 /**
  * @version 2013/03/13 15:05:12

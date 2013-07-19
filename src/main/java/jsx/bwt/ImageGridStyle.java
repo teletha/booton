@@ -14,7 +14,7 @@ import js.util.Color;
 import teemowork.TeemoworkTheme;
 import booton.css.CSS;
 import booton.css.Snippet;
-import booton.css.Value;
+import booton.css.value.Value;
 
 /**
  * @version 2013/03/24 10:50:33

@@ -11,6 +11,7 @@ package booton.css;
 
 import static booton.css.CSS.*;
 import js.util.Color;
+import booton.css.value.Value;
 import booton.util.Font;
 
 /**

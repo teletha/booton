@@ -44,6 +44,8 @@ import booton.css.property.Transform;
 import booton.css.property.Transition;
 import booton.css.property.UserSelect;
 import booton.css.property.Visibility;
+import booton.css.value.BorderValue;
+import booton.css.value.GradientValue;
 import booton.util.Strings;
 
 /**
