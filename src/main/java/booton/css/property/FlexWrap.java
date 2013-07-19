@@ -33,7 +33,7 @@ public class FlexWrap extends CSSProperty<FlexWrap> {
      * @return
      */
     public FlexWrap wrap() {
-        return chain(nameWithPrefix("wrap"));
+        return chain(prefixName("wrap"));
     }
 
     /**
@@ -45,7 +45,7 @@ public class FlexWrap extends CSSProperty<FlexWrap> {
      * @return
      */
     public FlexWrap noWrap() {
-        return chain(nameWithPrefix("nowrap").ie("none"));
+        return chain(prefixName("nowrap").ie("none"));
     }
 
     /**
@@ -56,6 +56,6 @@ public class FlexWrap extends CSSProperty<FlexWrap> {
      * @return
      */
     public FlexWrap wrapReverse() {
-        return chain(nameWithPrefix("wrap-reverse"));
+        return chain(prefixName("wrap-reverse"));
     }
 }

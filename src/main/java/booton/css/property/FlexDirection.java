@@ -32,7 +32,7 @@ public class FlexDirection extends CSSProperty<FlexDirection> {
      * @return
      */
     public FlexDirection row() {
-        return chain(nameWithPrefix("row"));
+        return chain(prefixName("row"));
     }
 
     /**
@@ -44,7 +44,7 @@ public class FlexDirection extends CSSProperty<FlexDirection> {
      * @return
      */
     public FlexDirection rowReverse() {
-        return chain(nameWithPrefix("row-reverse"));
+        return chain(prefixName("row-reverse"));
     }
 
     /**
@@ -56,7 +56,7 @@ public class FlexDirection extends CSSProperty<FlexDirection> {
      * @return
      */
     public FlexDirection column() {
-        return chain(nameWithPrefix("column"));
+        return chain(prefixName("column"));
     }
 
     /**
@@ -68,6 +68,6 @@ public class FlexDirection extends CSSProperty<FlexDirection> {
      * @return
      */
     public FlexDirection columnReverse() {
-        return chain(nameWithPrefix("column-reverse"));
+        return chain(prefixName("column-reverse"));
     }
 }

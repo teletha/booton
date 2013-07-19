@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,7 +10,7 @@
 package booton.css;
 
 /**
- * @version 2012/12/13 15:12:37
+ * @version 2013/07/20 4:48:50
  */
 public class Value {
 

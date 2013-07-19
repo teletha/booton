@@ -32,7 +32,7 @@ public class UserSelect extends CSSProperty<UserSelect> {
      * @return
      */
     public UserSelect none() {
-        return chain(nameWithPrefix("none"));
+        return chain(prefixName("none"));
     }
 
     /**
@@ -43,7 +43,7 @@ public class UserSelect extends CSSProperty<UserSelect> {
      * @return
      */
     public UserSelect text() {
-        return chain(nameWithPrefix("text"));
+        return chain(prefixName("text"));
     }
 
     /**
@@ -55,7 +55,7 @@ public class UserSelect extends CSSProperty<UserSelect> {
      * @return
      */
     public UserSelect all() {
-        return chain(nameWithPrefix("all"));
+        return chain(prefixName("all"));
     }
 
     /**
@@ -67,6 +67,6 @@ public class UserSelect extends CSSProperty<UserSelect> {
      * @return
      */
     public UserSelect element() {
-        return chain(nameWithPrefix("element"));
+        return chain(prefixName("element"));
     }
 }

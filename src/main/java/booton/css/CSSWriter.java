@@ -29,19 +29,6 @@ public class CSSWriter {
      * Write property.
      * </p>
      * 
-     * @param property
-     */
-    public void property(PrefixAwareProperty property) {
-        for (String[] values : property.values()) {
-            property(values[0], values[1]);
-        }
-    }
-
-    /**
-     * <p>
-     * Write property.
-     * </p>
-     * 
      * @param name
      * @param value
      */
