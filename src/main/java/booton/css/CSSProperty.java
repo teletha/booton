@@ -29,7 +29,7 @@ public class CSSProperty<T extends CSSProperty> {
     protected final String name;
 
     /** The property value. */
-    protected Object value;
+    private Object value;
 
     /** The API context. */
     private T context;
@@ -199,4 +199,18 @@ public class CSSProperty<T extends CSSProperty> {
         return "url(\"" + url + "\")";
     }
 
+    /**
+     * <p>
+     * Test value.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    protected final boolean match(Object value) {
+        if (this.value == null) {
+            return value == null;
+        }
+        return this.value.equals(value);
+    }
 }
