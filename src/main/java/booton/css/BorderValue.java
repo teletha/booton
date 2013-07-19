@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@ package booton.css;
 import js.util.Color;
 
 /**
- * @version 2012/12/11 22:52:28
+ * @version 2013/07/20 4:49:03
  */
 public class BorderValue extends CSSProperty<BorderValue> implements Colorable<BorderValue> {
 

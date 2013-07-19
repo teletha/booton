@@ -9,13 +9,16 @@
  */
 package booton.css;
 
+import static booton.css.Vendor.*;
+
 import java.lang.reflect.Field;
+import java.util.EnumMap;
 
 import kiss.I;
 import booton.util.Strings;
 
 /**
- * @version 2013/06/08 13:29:25
+ * @version 2013/07/20 4:30:38
  */
 public class CSSProperty<T extends CSSProperty> {
 
@@ -77,8 +80,16 @@ public class CSSProperty<T extends CSSProperty> {
      * @param writer
      */
     protected void write(CSSWriter writer) {
-        if (value instanceof PrefixAwareProperty) {
-            writer.property((PrefixAwareProperty) value);
+        if (value instanceof Property) {
+            Property property = (Property) value;
+
+            for (Vendor vendor : Vendor.values()) {
+                String name = property.names.get(vendor);
+
+                if (name != null) {
+                    writer.property(name, property.values.get(vendor));
+                }
+            }
         } else {
             writer.property(name, value);
         }
@@ -144,26 +155,26 @@ public class CSSProperty<T extends CSSProperty> {
 
     /**
      * <p>
-     * Write {@link PrefixAwareProperty}.
+     * Write {@link Property}.
      * </p>
      * 
      * @param value
      * @return
      */
-    protected final PrefixAwareProperty valueWithPrefix(String value) {
-        return new PrefixAwareProperty(name, value, false, true);
+    protected final Property prefixValue(String value) {
+        return new Property(name, value, false, true);
     }
 
     /**
      * <p>
-     * Write {@link PrefixAwareProperty}.
+     * Write {@link Property}.
      * </p>
      * 
      * @param value
      * @return
      */
-    protected final PrefixAwareProperty nameWithPrefix(String value) {
-        return new PrefixAwareProperty(name, value, true, false);
+    protected final Property prefixName(String value) {
+        return new Property(name, value, true, false);
     }
 
     /**
@@ -212,5 +223,139 @@ public class CSSProperty<T extends CSSProperty> {
             return value == null;
         }
         return this.value.equals(value);
+    }
+
+    /**
+     * @version 2013/07/20 4:33:40
+     */
+    protected static class Property {
+
+        /** The name holder. */
+        private final EnumMap<Vendor, String> names = new EnumMap(Vendor.class);
+
+        /** The value holder. */
+        private final EnumMap<Vendor, String> values = new EnumMap(Vendor.class);
+
+        /** The prefix flag. */
+        private boolean namePrefix;
+
+        /** The prefix flag. */
+        private boolean valuePrefix;
+
+        /**
+         * <p>
+         * Set standard property name and value.
+         * </p>
+         * 
+         * @param name
+         * @param value
+         */
+        private Property(String name, String value, boolean namePrefix, boolean valuePrefix) {
+            this.namePrefix = namePrefix;
+            this.valuePrefix = valuePrefix;
+
+            set(Standard, name, value);
+            ie(value);
+            moz(value);
+            webkit(value);
+        }
+
+        /**
+         * <p>
+         * Set property name and value.
+         * </p>
+         * 
+         * @param name
+         * @param value
+         * @return
+         */
+        public Property ie(String value) {
+            return ie(names.get(Standard), value);
+        }
+
+        /**
+         * <p>
+         * Set property name and value.
+         * </p>
+         * 
+         * @param name
+         * @param value
+         * @return
+         */
+        public Property ie(String name, String value) {
+            set(IE, name, value);
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Set property name and value.
+         * </p>
+         * 
+         * @param name
+         * @param value
+         * @return
+         */
+        public Property moz(String value) {
+            return moz(names.get(Standard), value);
+        }
+
+        /**
+         * <p>
+         * Set property name and value.
+         * </p>
+         * 
+         * @param name
+         * @param value
+         * @return
+         */
+        public Property moz(String name, String value) {
+            set(Mozilla, name, value);
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Set property name and value.
+         * </p>
+         * 
+         * @param name
+         * @param value
+         * @return
+         */
+        public Property webkit(String value) {
+            return webkit(names.get(Standard), value);
+        }
+
+        /**
+         * <p>
+         * Set property name and value.
+         * </p>
+         * 
+         * @param name
+         * @param value
+         * @return
+         */
+        public Property webkit(String name, String value) {
+            set(Webkit, name, value);
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Helper method to construct property name and value pair.
+         * </p>
+         * 
+         * @param vendor
+         * @param name
+         * @param value
+         */
+        private void set(Vendor vendor, String name, String value) {
+            names.put(vendor, namePrefix ? vendor.prefix + name : name);
+            values.put(vendor, valuePrefix ? vendor.prefix + value : value);
+        }
     }
 }

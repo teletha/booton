@@ -21,7 +21,7 @@ public class TransitionTest {
     @Test
     public void center() throws Exception {
         MyCSS css = new MyCSS();
-        css.transition.delay(10, Second);
+        css.transition.delay(10, s);
 
         assert css.has("transition-delay", "10s");
         assert css.has("-webkit-transition-delay");

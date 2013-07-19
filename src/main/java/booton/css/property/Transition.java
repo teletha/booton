@@ -125,7 +125,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition all() {
-            return chain(nameWithPrefix("all"));
+            return chain(prefixName("all"));
         }
 
         /**
@@ -136,7 +136,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition none() {
-            return chain(nameWithPrefix("none"));
+            return chain(prefixName("none"));
         }
 
         /**
@@ -180,7 +180,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition linear() {
-            return chain(nameWithPrefix("linear"));
+            return chain(prefixName("linear"));
         }
 
         /**
@@ -193,7 +193,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition ease() {
-            return chain(nameWithPrefix("ease"));
+            return chain(prefixName("ease"));
         }
 
         /**
@@ -206,7 +206,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition easeIn() {
-            return chain(nameWithPrefix("ease-in"));
+            return chain(prefixName("ease-in"));
         }
 
         /**
@@ -220,7 +220,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition easeInOut() {
-            return chain(nameWithPrefix("ease-in-out"));
+            return chain(prefixName("ease-in-out"));
         }
 
         /**
@@ -233,7 +233,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition easeOut() {
-            return chain(nameWithPrefix("ease-out"));
+            return chain(prefixName("ease-out"));
         }
 
         /**
@@ -246,7 +246,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition stepStart() {
-            return chain(nameWithPrefix("step-start"));
+            return chain(prefixName("step-start"));
         }
 
         /**
@@ -259,7 +259,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition stepEnd() {
-            return chain(nameWithPrefix("step-end"));
+            return chain(prefixName("step-end"));
         }
     }
 }

@@ -135,7 +135,7 @@ public abstract class CSS implements Extensible {
      * value of 0.5em should be used.
      * </p>
      */
-    protected static final Unit s = Unit.Second;
+    protected static final Unit s = Unit.s;
 
     /**
      * <p>
@@ -147,7 +147,7 @@ public abstract class CSS implements Extensible {
      * value of 0.5em should be used.
      * </p>
      */
-    protected static final Unit ms = Unit.MillSecond;
+    protected static final Unit ms = Unit.ms;
 
     /**
      * <p>
@@ -164,7 +164,7 @@ public abstract class CSS implements Extensible {
      * value of that property.
      * </p>
      */
-    protected static final Unit percent = Unit.Percentage;
+    protected static final Unit percent = Unit.percent;
 
     /**
      * <p>
