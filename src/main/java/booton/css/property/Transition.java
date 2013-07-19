@@ -13,7 +13,7 @@ import static booton.css.Vendor.*;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
-import booton.css.Value;
+import booton.css.value.Value;
 
 /**
  * @version 2013/07/18 16:27:39

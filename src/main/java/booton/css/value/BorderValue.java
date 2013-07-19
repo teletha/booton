@@ -7,8 +7,11 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css;
+package booton.css.value;
 
+import booton.css.CSSProperty;
+import booton.css.CSSWriter;
+import booton.css.Unit;
 import js.util.Color;
 
 /**

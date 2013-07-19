@@ -7,7 +7,9 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css;
+package booton.css.value;
+
+import booton.css.Unit;
 
 /**
  * @version 2013/07/20 4:48:50

@@ -15,10 +15,10 @@ import java.util.List;
 import js.util.Color;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
-import booton.css.ColorValue;
-import booton.css.Colorable;
-import booton.css.GradientValue;
 import booton.css.Unit;
+import booton.css.value.ColorValue;
+import booton.css.value.Colorable;
+import booton.css.value.GradientValue;
 
 /**
  * @version 2013/03/28 22:39:12

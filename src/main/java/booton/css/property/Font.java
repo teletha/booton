@@ -17,10 +17,10 @@ import kiss.I;
 import booton.StylesheetManager;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
-import booton.css.ColorValue;
-import booton.css.Colorable;
 import booton.css.Unit;
-import booton.css.Value;
+import booton.css.value.ColorValue;
+import booton.css.value.Colorable;
+import booton.css.value.Value;
 import booton.util.Strings;
 
 /**

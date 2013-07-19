@@ -12,7 +12,7 @@ package jsx.bwt.view;
 import js.util.Color;
 import booton.css.CSS;
 import booton.css.Snippet;
-import booton.css.Value;
+import booton.css.value.Value;
 
 /**
  * @version 2013/06/09 18:48:17

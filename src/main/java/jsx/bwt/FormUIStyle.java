@@ -12,7 +12,7 @@ package jsx.bwt;
 import static booton.css.Unit.*;
 import js.util.Color;
 import booton.css.CSS;
-import booton.css.Value;
+import booton.css.value.Value;
 import booton.util.Font;
 
 /**
