@@ -24,12 +24,21 @@ class ChampionDetailStyle {
     /** The level box height. */
     int LevelBoxHeight = 5;
 
+    class Flex extends CSS {
+
+        {
+            border.width(1, px).color.black().doubles();
+        }
+    }
+
     /**
      * @version 2013/06/06 23:31:54
      */
     class UpperInfo extends CSS {
 
         {
+            require(Flex.class);
+
             display.flex();
             margin.bottom(1, em);
             alignItems.end();

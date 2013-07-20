@@ -11,8 +11,10 @@ package booton.css;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -23,6 +25,7 @@ import kiss.Manageable;
 import kiss.Singleton;
 import kiss.model.Model;
 import booton.Obfuscator;
+import booton.StylesheetManager;
 import booton.css.property.AlignItems;
 import booton.css.property.Background;
 import booton.css.property.Box;
@@ -855,10 +858,7 @@ public abstract class CSS implements Extensible {
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        rules.writeTo("", builder);
-
-        return builder.toString();
+        return rules.toString();
     }
 
     // ====================================================
@@ -877,7 +877,7 @@ public abstract class CSS implements Extensible {
      *            will be round up to 0 or 255.
      * @return A new color.
      */
-    protected static final Color rgb(int red, int green, int blue) {
+    protected final Color rgb(int red, int green, int blue) {
         return Color.rgb(red, green, blue);
     }
 
@@ -894,7 +894,7 @@ public abstract class CSS implements Extensible {
      *            will be round up to 0 or 255.
      * @return A new color.
      */
-    protected static final Color rgba(int red, int green, int blue, double alpha) {
+    protected final Color rgba(int red, int green, int blue, double alpha) {
         return Color.rgba(red, green, blue, alpha);
     }
 
@@ -910,7 +910,7 @@ public abstract class CSS implements Extensible {
      * @param lightness The brightness relative to the brightness of a similarly illuminated white.
      * @return A new color.
      */
-    protected static final Color hsl(int hue, int saturation, int lightness) {
+    protected final Color hsl(int hue, int saturation, int lightness) {
         return hsla(hue, saturation, lightness, 1);
     }
 
@@ -927,7 +927,7 @@ public abstract class CSS implements Extensible {
      * @param alpha The transparency.
      * @return A new color.
      */
-    protected static final Color hsla(int hue, int saturation, int lightness, double alpha) {
+    protected final Color hsla(int hue, int saturation, int lightness, double alpha) {
         return new Color(hue, saturation, lightness, alpha);
     }
 
@@ -942,19 +942,36 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected static final GradientValue linear(Color start, Color end) {
+    protected final GradientValue linear(Color start, Color end) {
         return new GradientValue(start, end);
     }
 
     /**
      * <p>
-     * Share styles.
+     * Import styles.
      * </p>
      * 
      * @param classes
      */
-    protected static final void share(Class<? extends CSS>... classes) {
+    protected final void require(Class<? extends CSS>... classes) {
+        StylesheetManager manager = I.make(StylesheetManager.class);
 
+        // store the processing css
+        CSS css = current;
+
+        try {
+            String selector = rules.selector;
+
+            for (Class<? extends CSS> clazz : classes) {
+                CSS style = I.make(clazz);
+                style.rules.selectors.add(selector);
+
+                manager.write(clazz);
+            }
+        } finally {
+            // restore the processing css
+            current = css;
+        }
     }
 
     /**
@@ -967,6 +984,9 @@ public abstract class CSS implements Extensible {
 
         /** The selector. */
         private final String selector;
+
+        /** The required selectors. */
+        private final List<String> selectors = new ArrayList();
 
         /** The property store. */
         private final Set<CSSProperty> rules = new TreeSet(new PropertySorter());
@@ -994,6 +1014,11 @@ public abstract class CSS implements Extensible {
         private RuleSet(RuleSet parent, String selector) {
             this.parent = parent;
             this.selector = selector;
+            this.selectors.add(selector);
+
+            if (selector.endsWith(":selection")) {
+                this.selectors.add(selector.replace(":selection", "::-moz-selection"));
+            }
 
             // store as sub rule in parent rule
             if (parent != null) {
@@ -1021,15 +1046,12 @@ public abstract class CSS implements Extensible {
         }
 
         /**
-         * <p>
-         * Write out properties.
-         * </p>
-         * 
-         * @param prefix
-         * @param builder
+         * {@inheritDoc}
          */
-        private void writeTo(String prefix, StringBuilder builder) {
-            builder.append(selector).append(" {\r\n");
+        @Override
+        public String toString() {
+            StringBuilder builder = new StringBuilder();
+            builder.append(I.join(selectors, ",")).append(" {\r\n");
 
             for (CSSProperty property : rules) {
                 if (property.used) {
@@ -1038,20 +1060,10 @@ public abstract class CSS implements Extensible {
             }
             builder.append("}\r\n");
 
-            if (selector.endsWith(":selection")) {
-                builder.append(selector.replace(":selection", "::-moz-selection")).append(" {\r\n");
-
-                for (CSSProperty property : rules) {
-                    if (property.used) {
-                        builder.append("  ").append(property).append("\r\n");
-                    }
-                }
-                builder.append("}\r\n");
-            }
-
             for (RuleSet sub : subs) {
-                sub.writeTo(prefix, builder);
+                builder.append(sub);
             }
+            return builder.toString();
         }
     }
 
