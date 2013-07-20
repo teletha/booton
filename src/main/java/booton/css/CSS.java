@@ -25,7 +25,7 @@ import kiss.Manageable;
 import kiss.Singleton;
 import kiss.model.Model;
 import booton.Obfuscator;
-import booton.StylesheetManager;
+import booton.Stylish;
 import booton.css.property.AlignItems;
 import booton.css.property.Background;
 import booton.css.property.Box;
@@ -877,7 +877,7 @@ public abstract class CSS implements Extensible {
      *            will be round up to 0 or 255.
      * @return A new color.
      */
-    protected final Color rgb(int red, int green, int blue) {
+    protected static final Color rgb(int red, int green, int blue) {
         return Color.rgb(red, green, blue);
     }
 
@@ -894,7 +894,7 @@ public abstract class CSS implements Extensible {
      *            will be round up to 0 or 255.
      * @return A new color.
      */
-    protected final Color rgba(int red, int green, int blue, double alpha) {
+    protected static final Color rgba(int red, int green, int blue, double alpha) {
         return Color.rgba(red, green, blue, alpha);
     }
 
@@ -910,7 +910,7 @@ public abstract class CSS implements Extensible {
      * @param lightness The brightness relative to the brightness of a similarly illuminated white.
      * @return A new color.
      */
-    protected final Color hsl(int hue, int saturation, int lightness) {
+    protected static final Color hsl(int hue, int saturation, int lightness) {
         return hsla(hue, saturation, lightness, 1);
     }
 
@@ -927,7 +927,7 @@ public abstract class CSS implements Extensible {
      * @param alpha The transparency.
      * @return A new color.
      */
-    protected final Color hsla(int hue, int saturation, int lightness, double alpha) {
+    protected static final Color hsla(int hue, int saturation, int lightness, double alpha) {
         return new Color(hue, saturation, lightness, alpha);
     }
 
@@ -942,7 +942,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected final GradientValue linear(Color start, Color end) {
+    protected static final GradientValue linear(Color start, Color end) {
         return new GradientValue(start, end);
     }
 
@@ -953,18 +953,16 @@ public abstract class CSS implements Extensible {
      * 
      * @param classes
      */
-    protected final void require(Class<? extends CSS>... classes) {
-        StylesheetManager manager = I.make(StylesheetManager.class);
+    protected static final void require(Class<? extends CSS>... classes) {
+        Stylish manager = I.make(Stylish.class);
 
         // store the processing css
         CSS css = current;
 
         try {
-            String selector = rules.selector;
-
             for (Class<? extends CSS> clazz : classes) {
                 CSS style = I.make(clazz);
-                style.rules.selectors.add(selector);
+                style.rules.selectors.add(css.rules.selector);
 
                 manager.write(clazz);
             }
