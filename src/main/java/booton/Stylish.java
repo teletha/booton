@@ -31,13 +31,16 @@ import booton.util.Font;
  * @version 2013/07/20 16:57:52
  */
 @Manageable(lifestyle = Singleton.class)
-public class StylesheetManager implements Literal<CSS> {
+public class Stylish implements Literal<CSS> {
 
     /** The used web fonts. */
     private static final Set<Font> fonts = new HashSet();
 
-    /** The used styles. */
+    /** The style classes which javascript reference. */
     private final CopyOnWriteArrayList<Class<? extends CSS>> used = new CopyOnWriteArrayList();
+
+    /** The style classes which stylesheet requires. */
+    private final Set<Class<? extends CSS>> requires = new HashSet();
 
     /**
      * <p>
@@ -70,7 +73,6 @@ public class StylesheetManager implements Literal<CSS> {
                     return 0;
                 }
                 return value1 < value2 ? -1 : 1;
-
             }
         });
 
@@ -94,11 +96,24 @@ public class StylesheetManager implements Literal<CSS> {
     }
 
     /**
+     * <p>
+     * Collect style definition.
+     * </p>
+     * 
+     * @param style
+     */
+    public void require(Class<? extends CSS> style) {
+        if (style != null) {
+            used.addIfAbsent(style);
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public String write(Class<? extends CSS> clazz) {
-        used.addIfAbsent(clazz);
+        require(clazz);
 
         return '"' + Obfuscator.computeCSSName(clazz) + '"';
     }

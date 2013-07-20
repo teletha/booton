@@ -14,7 +14,7 @@ import java.util.List;
 
 import js.util.Color;
 import kiss.I;
-import booton.StylesheetManager;
+import booton.Stylish;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
@@ -178,7 +178,7 @@ public final class Font extends CSSProperty<Font> implements Colorable<Font> {
         for (booton.util.Font font : fonts) {
             family.add(font.name);
 
-            StylesheetManager.register(font);
+            Stylish.register(font);
         }
         return family;
     }

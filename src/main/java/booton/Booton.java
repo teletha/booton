@@ -177,7 +177,7 @@ public class Booton {
             Javascript.getScript(LiveCoding.class).writeTo(root.resolve("live.js"));
 
             // build css file
-            I.make(StylesheetManager.class).write(css);
+            I.make(Stylish.class).write(css);
         } catch (Exception e) {
             e.printStackTrace(System.out);
         } finally {
@@ -206,7 +206,6 @@ public class Booton {
         body.child("footer").attr("id", "Footer");
 
         body.child("script").attr("type", "text/javascript").attr("src", "jQuery.js");
-        body.child("script").attr("type", "text/javascript").attr("src", "pointer-events.js");
         body.child("script").attr("type", "text/javascript").attr("src", "boot.js");
         body.child("script").attr("type", "text/javascript").attr("src", root.relativize(js));
 
