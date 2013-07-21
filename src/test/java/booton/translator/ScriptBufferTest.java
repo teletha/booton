@@ -18,7 +18,7 @@ public class ScriptBufferTest {
 
     @Test
     public void optimize() throws Exception {
-        ScriptBuffer buffer = new ScriptBuffer();
+        ScriptWriter buffer = new ScriptWriter();
         buffer.append(",");
         assert buffer.toString().length() == 1;
 
@@ -28,7 +28,7 @@ public class ScriptBufferTest {
 
     @Test
     public void optimizeReturn() throws Exception {
-        ScriptBuffer buffer = new ScriptBuffer();
+        ScriptWriter buffer = new ScriptWriter();
         buffer.append("return;");
         assert buffer.toString().length() == 9;
 

@@ -345,7 +345,7 @@ class Node {
      * 
      * @param buffer
      */
-    final void write(ScriptBuffer buffer) {
+    final void write(ScriptWriter buffer) {
         if (!written) {
             written = true;
 
@@ -552,7 +552,7 @@ class Node {
      * @param node A next node to write.
      * @param buffer A script code buffer.
      */
-    private final void process(Node node, ScriptBuffer buffer) {
+    private final void process(Node node, ScriptWriter buffer) {
         if (node != null) {
             Node dominator = node.getDominator();
 

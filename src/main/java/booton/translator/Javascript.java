@@ -236,7 +236,7 @@ public class Javascript {
      */
     private synchronized void compile() {
         if (code == null) {
-            ScriptBuffer code = new ScriptBuffer();
+            ScriptWriter code = new ScriptWriter();
 
             JavascriptAPIProvider provider = source.getAnnotation(JavascriptAPIProvider.class);
 
@@ -262,7 +262,7 @@ public class Javascript {
      * @param code
      * @param parent A parent class.
      */
-    private void compileClass(ScriptBuffer code, Class parent) {
+    private void compileClass(ScriptWriter code, Class parent) {
         if (source.isArray()) {
             return;
         }
@@ -306,7 +306,7 @@ public class Javascript {
      * @param code
      * @param parent A parent class.
      */
-    private void compileInterface(ScriptBuffer code) {
+    private void compileInterface(ScriptWriter code) {
         // compute related class names
         String className = Javascript.computeSimpleClassName(source);
 
@@ -347,7 +347,7 @@ public class Javascript {
      * @param code
      * @param nativeClassName A javascript native class name.
      */
-    private void compileNative(ScriptBuffer code, boolean polyfill, String nativeClassName) {
+    private void compileNative(ScriptWriter code, boolean polyfill, String nativeClassName) {
         String method = polyfill ? "Polyfill" : "Native";
 
         // Start class definition

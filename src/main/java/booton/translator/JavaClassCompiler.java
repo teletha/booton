@@ -26,7 +26,7 @@ class JavaClassCompiler extends ClassVisitor {
     private final Javascript script;
 
     /** The javascript object code. */
-    private final ScriptBuffer code;
+    private final ScriptWriter code;
 
     /**
      * JavaClassCompiler
@@ -34,7 +34,7 @@ class JavaClassCompiler extends ClassVisitor {
      * @param script The java source(byte) code.
      * @param code The javascript object code.
      */
-    JavaClassCompiler(Javascript script, ScriptBuffer code) {
+    JavaClassCompiler(Javascript script, ScriptWriter code) {
         super(ASM4);
 
         this.script = script;

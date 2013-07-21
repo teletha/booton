@@ -16,9 +16,9 @@ import org.objectweb.asm.Type;
 import booton.BootonConfiguration;
 
 /**
- * @version 2013/04/15 11:12:28
+ * @version 2013/07/21 15:12:10
  */
-class ScriptBuffer {
+class ScriptWriter {
 
     /** The optimization flag. */
     private final BootonConfiguration config = I.make(BootonConfiguration.class);
@@ -30,20 +30,6 @@ class ScriptBuffer {
 
     /** The current depth of indentation for debug. */
     private int depth = 0;
-
-    /**
-     * <p>
-     * </p>
-     * 
-     * @param comment
-     */
-    public void comment(Object comment) {
-        if (!config.optimization) {
-            buffer.append("// ");
-            write(comment);
-            line();
-        }
-    }
 
     /**
      * <p>
@@ -76,12 +62,29 @@ class ScriptBuffer {
 
     /**
      * <p>
+     * Write comment.
+     * </p>
+     * 
+     * @param comment
+     */
+    public ScriptWriter comment(Object comment) {
+        if (!config.optimization) {
+            buffer.append("// ");
+            write(comment);
+            line();
+        }
+    
+        return this;
+    }
+
+    /**
+     * <p>
      * Formt line for debug.
      * </p>
      * 
      * @return A chainable API.
      */
-    public ScriptBuffer line() {
+    public ScriptWriter line() {
         if (!config.optimization) {
             // write line separator
             buffer.append("\r\n");
@@ -101,7 +104,7 @@ class ScriptBuffer {
      * 
      * @return A chainable API.
      */
-    private ScriptBuffer startIndent() {
+    private ScriptWriter startIndent() {
         depth++;
         return line();
     }
@@ -113,7 +116,7 @@ class ScriptBuffer {
      * 
      * @return A chainable API.
      */
-    private ScriptBuffer endIndent() {
+    private ScriptWriter endIndent() {
         depth--;
         return line();
     }
@@ -124,7 +127,7 @@ class ScriptBuffer {
      * @param fragments
      * @return
      */
-    public ScriptBuffer append(Object... fragments) {
+    public ScriptWriter append(Object... fragments) {
         for (Object fragment : fragments) {
             write(fragment);
         }
@@ -138,7 +141,7 @@ class ScriptBuffer {
      * Helper method to write script code with white space.
      * </p>
      */
-    public ScriptBuffer write(Object... fragments) {
+    public ScriptWriter write(Object... fragments) {
         for (int i = 0; i < fragments.length; i++) {
             write(fragments[i], false);
 
@@ -156,7 +159,7 @@ class ScriptBuffer {
      * @param fragments
      * @return
      */
-    public ScriptBuffer string(String literal) {
+    public ScriptWriter string(String literal) {
         return append('"', literal, '"');
     }
 
@@ -165,7 +168,7 @@ class ScriptBuffer {
      * Helper method to write separator ",".
      * </p>
      */
-    public ScriptBuffer separator() {
+    public ScriptWriter separator() {
         return append(",").line();
     }
 
@@ -233,7 +236,7 @@ class ScriptBuffer {
      * @param fragment
      * @return
      */
-    private ScriptBuffer write(Object fragment) {
+    private ScriptWriter write(Object fragment) {
         return write(fragment, true);
     }
 
@@ -243,7 +246,7 @@ class ScriptBuffer {
      * @param fragment
      * @return
      */
-    private ScriptBuffer write(Object fragment, boolean line) {
+    private ScriptWriter write(Object fragment, boolean line) {
         String value = fragment.toString();
         int length = value.length();
 

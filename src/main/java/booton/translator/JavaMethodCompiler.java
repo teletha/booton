@@ -152,7 +152,7 @@ class JavaMethodCompiler extends MethodVisitor {
     private final Javascript script;
 
     /** The javascript object code. */
-    private final ScriptBuffer code;
+    private final ScriptWriter code;
 
     /** The current processing method name. */
     private final String methodName;
@@ -229,7 +229,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * @param description A method description.
      * @param isStatic A static flag.
      */
-    JavaMethodCompiler(Javascript script, ScriptBuffer code, String original, String name, String description, boolean isStatic) {
+    JavaMethodCompiler(Javascript script, ScriptWriter code, String original, String name, String description, boolean isStatic) {
         super(ASM4);
 
         this.script = script;

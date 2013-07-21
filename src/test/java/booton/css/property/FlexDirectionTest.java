@@ -24,5 +24,6 @@ public class FlexDirectionTest {
         assert css.has("flex-direction", "column");
         assert css.has("-webkit-flex-direction", "column");
         assert css.has("-ms-flex-direction", "column");
+        assert css.omit("-moz-flex-direction");
     }
 }
