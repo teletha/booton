@@ -16,7 +16,6 @@ import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import js.util.Color;
 import kiss.Extensible;
@@ -52,7 +51,7 @@ import booton.css.value.GradientValue;
 import booton.util.Strings;
 
 /**
- * @version 2013/04/03 16:58:44
+ * @version 2013/07/21 16:27:27
  */
 @Manageable(lifestyle = Singleton.class)
 public abstract class CSS implements Extensible {
@@ -973,7 +972,7 @@ public abstract class CSS implements Extensible {
     }
 
     /**
-     * @version 2012/12/13 10:02:01
+     * @version 2013/07/21 16:27:34
      */
     private static class RuleSet {
 
@@ -987,7 +986,7 @@ public abstract class CSS implements Extensible {
         private final List<String> selectors = new ArrayList();
 
         /** The property store. */
-        private final Set<CSSProperty> rules = new TreeSet(new PropertySorter());
+        private final List<CSSProperty> rules = new ArrayList();
 
         /** The flag whether this rule set process sub rule or not. */
         private int id = -1;
@@ -1048,20 +1047,30 @@ public abstract class CSS implements Extensible {
          */
         @Override
         public String toString() {
-            StringBuilder builder = new StringBuilder();
-            builder.append(I.join(selectors, ",")).append(" {\r\n");
+            // count requested properties
+            int counter = 0;
+
+            // write requested properties only.
+            CSSWriter writer = new CSSWriter();
+            writer.write(I.join(selectors, ","), "{");
 
             for (CSSProperty property : rules) {
                 if (property.used) {
-                    builder.append("  ").append(property).append("\r\n");
+                    counter++;
+                    writer.write(property.toString());
                 }
             }
-            builder.append("}\r\n");
+            writer.write("}");
+
+            if (counter == 0) {
+                // this class has no properties, so we can remove it
+                writer = new CSSWriter();
+            }
 
             for (RuleSet sub : subs) {
-                builder.append(sub);
+                writer.write(sub.toString());
             }
-            return builder.toString();
+            return writer.toString();
         }
     }
 

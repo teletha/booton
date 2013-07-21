@@ -56,6 +56,6 @@ public class MyCSS extends CSS {
      * @return
      */
     boolean has(String name, String value) {
-        return toString().contains(name + ":" + value + ";");
+        return toString().contains(name + ": " + value + ";");
     }
 }

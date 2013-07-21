@@ -51,7 +51,7 @@ class JavaMetadataCompiler {
     private final Class clazz;
 
     /** The code writer. */
-    private final ScriptBuffer code = new ScriptBuffer();
+    private final ScriptWriter code = new ScriptWriter();
 
     /**
      * 
@@ -163,7 +163,7 @@ class JavaMetadataCompiler {
      * </p>
      */
     private void write(String name, String value) {
-        code.write(name, ":", "function() {return", value, ";}");
+        code.write(name, ":", "function() {return ", value, ";}");
     }
 
     /**

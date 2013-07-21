@@ -10,7 +10,7 @@
 package js.util;
 
 /**
- * @version 2013/02/27 21:50:53
+ * @version 2013/07/21 17:18:00
  */
 public class Color {
 
@@ -171,7 +171,7 @@ public class Color {
         if (alpha == 1) {
             return "hsl(" + hue + "," + saturation + "%," + lightness + "%)";
         } else {
-            return "hsla(" + hue + "," + saturation + "%," + lightness + "%," + alpha + ")";
+            return "hsla(" + hue + "," + saturation + "%," + lightness + "%," + (alpha == 0 ? "0" : alpha) + ")";
         }
     }
 

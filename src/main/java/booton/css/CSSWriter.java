@@ -13,16 +13,64 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kiss.I;
+import booton.BootonConfiguration;
 
 /**
- * @version 2013/07/18 23:23:37
+ * @version 2013/07/21 15:10:33
  */
 public class CSSWriter {
 
     private static final String[] specials = {"linear-gradient"};
 
+    /** The optimization flag. */
+    private final BootonConfiguration config = I.make(BootonConfiguration.class);
+
     /** The actual builder. */
     private final StringBuilder builder = new StringBuilder();
+
+    /**
+     * <p>
+     * Write comment for debug.
+     * </p>
+     * 
+     * @param comment A comment.
+     * @return Chainable API.
+     */
+    public CSSWriter comment(Object comment) {
+        if (!config.optimization) {
+            builder.append("/* ").append(comment).append(" */");
+            line();
+        }
+        return this;
+    }
+
+    /**
+     * <p>
+     * Formt line for debug.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public CSSWriter line() {
+        if (!config.optimization) {
+            builder.append("\r\n");
+        }
+        return this;
+    }
+
+    /**
+     * <p>
+     * Formt indent for debug.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public CSSWriter indent() {
+        if (!config.optimization) {
+            builder.append("  ");
+        }
+        return this;
+    }
 
     /**
      * <p>
@@ -131,18 +179,60 @@ public class CSSWriter {
     public void property(String name, String value) {
         if (name != null && name.length() != 0 && value != null && value.length() != 0) {
             if (!isSpecialValue(value)) {
-                builder.append(name).append(":").append(value).append("; ");
+                indent().write(name, ":", value, ";");
             } else if (name.charAt(0) == '-') {
                 int index = name.indexOf('-', 1);
                 String prefix = name.substring(0, index + 1);
 
-                builder.append(name).append(":").append(prefix + value).append("; ");
+                indent().write(name, ":", prefix + value, ";");
             } else {
                 for (Vendor vendor : Vendor.values()) {
-                    builder.append(name).append(":").append(vendor.prefix + value).append("; ");
+                    indent().write(name, ":", vendor.prefix + value, ";");
                 }
             }
         }
+    }
+
+    /**
+     * <p>
+     * Helper method to write css.
+     * </p>
+     * 
+     * @param params
+     * @return Chainable API.
+     */
+    public CSSWriter write(String... params) {
+        for (String param : params) {
+            if (param != null) {
+                if (!config.optimization) {
+                    switch (param) {
+                    case "{":
+                        builder.append(" ");
+                        break;
+                    }
+                }
+
+                builder.append(param);
+
+                if (!config.optimization) {
+                    switch (param) {
+                    case ":":
+                        builder.append(" ");
+                        break;
+
+                    case ";":
+                    case "{":
+                        line();
+                        break;
+
+                    case "}":
+                        line().line();
+                        break;
+                    }
+                }
+            }
+        }
+        return this;
     }
 
     /**

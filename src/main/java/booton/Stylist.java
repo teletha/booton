@@ -17,17 +17,17 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
 import booton.css.CSS;
+import booton.css.CSSWriter;
 import booton.css.Priority;
 import booton.util.Font;
 
 /**
- * @version 2013/07/20 16:57:52
+ * @version 2013/07/21 15:09:13
  */
 @Manageable(lifestyle = Singleton.class)
 public class Stylist {
@@ -36,10 +36,7 @@ public class Stylist {
     private final Set<Font> fonts = new HashSet();
 
     /** The style classes which javascript reference. */
-    private final CopyOnWriteArrayList<Class<? extends CSS>> styles = new CopyOnWriteArrayList();
-
-    /** The style classes which stylesheet requires. */
-    private final Set<Class<? extends CSS>> requires = new HashSet();
+    private final List<CSS> styles = new ArrayList();
 
     /**
      * <p>
@@ -49,45 +46,26 @@ public class Stylist {
      * @param file
      */
     public void write(Path file) throws Exception {
-        // collect required styles
-        List<CSS> required = new ArrayList();
-
-        for (int i = 0; i < styles.size(); i++) {
-            required.add(I.make(styles.get(i)));
-        }
-
-        Collections.sort(required, new Comparator<CSS>() {
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public int compare(CSS o1, CSS o2) {
-                Priority priority1 = o1.getClass().getAnnotation(Priority.class);
-                Priority priority2 = o2.getClass().getAnnotation(Priority.class);
-                int value1 = priority1 == null ? 0 : priority1.value();
-                int value2 = priority2 == null ? 0 : priority2.value();
-
-                if (value1 == value2) {
-                    return 0;
-                }
-                return value1 < value2 ? -1 : 1;
-            }
-        });
-
-        StringBuilder builder = new StringBuilder();
+        CSSWriter writer = new CSSWriter();
 
         // write font imports
         for (Font font : fonts) {
-            builder.append("@import url(" + font.uri + ");\r\n");
+            writer.write("@import url(" + font.uri + ");").line();
         }
 
         // write require styles
-        for (CSS style : required) {
-            builder.append(style);
+        Collections.sort(styles, new Sorter());
+
+        for (CSS style : styles) {
+            String css = style.toString();
+
+            if (css.length() != 0) {
+                writer.comment(style.getClass().getName());
+                writer.write(css);
+            }
         }
 
-        Files.write(file, builder.toString().getBytes(I.$encoding));
+        Files.write(file, writer.toString().getBytes(I.$encoding));
     }
 
     /**
@@ -112,7 +90,33 @@ public class Stylist {
      */
     public void register(Class<? extends CSS> style) {
         if (style != null) {
-            styles.addIfAbsent(style);
+            CSS css = I.make(style);
+
+            if (!styles.contains(css)) {
+                styles.add(css);
+            }
+        }
+    }
+
+    /**
+     * @version 2013/07/21 14:42:48
+     */
+    private static class Sorter implements Comparator<CSS> {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int compare(CSS o1, CSS o2) {
+            Priority priority1 = o1.getClass().getAnnotation(Priority.class);
+            Priority priority2 = o2.getClass().getAnnotation(Priority.class);
+            int value1 = priority1 == null ? 0 : priority1.value();
+            int value2 = priority2 == null ? 0 : priority2.value();
+
+            if (value1 == value2) {
+                return 0;
+            }
+            return value1 < value2 ? -1 : 1;
         }
     }
 }
