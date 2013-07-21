@@ -25,7 +25,7 @@ import kiss.Manageable;
 import kiss.Singleton;
 import kiss.model.Model;
 import booton.Obfuscator;
-import booton.Stylish;
+import booton.Stylist;
 import booton.css.property.AlignItems;
 import booton.css.property.Background;
 import booton.css.property.Box;
@@ -954,7 +954,7 @@ public abstract class CSS implements Extensible {
      * @param classes
      */
     protected static final void require(Class<? extends CSS>... classes) {
-        Stylish manager = I.make(Stylish.class);
+        Stylist stylist = I.make(Stylist.class);
 
         // store the processing css
         CSS css = current;
@@ -964,7 +964,7 @@ public abstract class CSS implements Extensible {
                 CSS style = I.make(clazz);
                 style.rules.selectors.add(css.rules.selector);
 
-                manager.write(clazz);
+                stylist.register(clazz);
             }
         } finally {
             // restore the processing css

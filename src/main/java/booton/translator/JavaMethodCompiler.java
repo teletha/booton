@@ -18,7 +18,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
@@ -26,7 +25,6 @@ import java.util.Set;
 
 import js.lang.NativeObject;
 import jsx.bwt.Input;
-import kiss.Extensible;
 import kiss.I;
 import kiss.model.ClassUtil;
 
@@ -38,6 +36,8 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
 import booton.Obfuscator;
+import booton.Stylist;
+import booton.css.CSS;
 import booton.translator.Node.Switch;
 import booton.translator.Node.TryCatchFinallyBlocks;
 
@@ -1192,41 +1192,21 @@ class JavaMethodCompiler extends MethodVisitor {
 
             // add class operand
             Class clazz = convert(className);
-            Literal literal = findLiteral(clazz);
 
-            if (literal == null) {
-                // Booton support class literal in javascript runtime.
+            if (CSS.class.isAssignableFrom(clazz)) {
+                // support stylesheet class
+                I.make(Stylist.class).register(clazz);
+
+                current.addOperand('"' + Obfuscator.computeCSSName(clazz) + '"');
+            } else {
+                // support class literal in javascript runtime.
                 current.addOperand(Javascript.computeClass(clazz));
 
                 Javascript.require(clazz);
-            } else {
-                // Provide class literal support by user.
-                current.addOperand(literal.write(clazz));
             }
         } else {
             current.addOperand(constant);
         }
-    }
-
-    /**
-     * <p>
-     * Helper method to find literal writer.
-     * </p>
-     * 
-     * @param clazz
-     * @return
-     */
-    private Literal findLiteral(Class clazz) {
-        for (Class extensionPoint : ClassUtil.getTypes(clazz)) {
-            if (Arrays.asList(extensionPoint.getInterfaces()).contains(Extensible.class)) {
-                Literal literal = I.find(Literal.class, extensionPoint);
-
-                if (literal != null) {
-                    return literal;
-                }
-            }
-        }
-        return null;
     }
 
     /**
