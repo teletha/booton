@@ -10,27 +10,17 @@
 package booton.css;
 
 /**
- * @version 2013/06/08 9:10:26
+ * @version 2013/07/22 0:06:11
  */
-public enum Vendor {
-
-    IE("-ms-"),
-
-    Mozilla("-moz-"),
-
-    Safari("-webkit-"),
-
-    Webkit("-webkit-"),
-
-    Standard("");
-
-    /** The prefix. */
-    public final String prefix;
+public abstract class VendorPrefixValue {
 
     /**
-     * @param prefix
+     * <p>
+     * Write vendor specific value. Returning <code>null</code> or empty string, {@link CSSWriter}
+     * will omit the target property.
+     * </p>
+     * 
+     * @param vendor A target vendor.
      */
-    private Vendor(String prefix) {
-        this.prefix = prefix;
-    }
+    protected abstract String toString(Vendor vendor);
 }

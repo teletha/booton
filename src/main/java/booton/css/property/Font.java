@@ -12,12 +12,12 @@ package booton.css.property;
 import java.util.ArrayList;
 import java.util.List;
 
-import js.util.Color;
 import kiss.I;
 import booton.Stylist;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
+import booton.css.value.Color;
 import booton.css.value.ColorValue;
 import booton.css.value.Colorable;
 import booton.css.value.Value;
@@ -174,10 +174,10 @@ public final class Font extends CSSProperty<Font> implements Colorable<Font> {
      * @param fonts
      * @return
      */
-    public Family family(booton.util.Font... fonts) {
+    public Family family(booton.css.value.Font... fonts) {
         Stylist stylist = I.make(Stylist.class);
 
-        for (booton.util.Font font : fonts) {
+        for (booton.css.value.Font font : fonts) {
             family.add(font.name);
 
             stylist.register(font);

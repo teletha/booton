@@ -20,8 +20,6 @@ import booton.BootonConfiguration;
  */
 public class CSSWriter {
 
-    private static final String[] specials = {"linear-gradient"};
-
     /** The optimization flag. */
     private final BootonConfiguration config = I.make(BootonConfiguration.class);
 
@@ -70,20 +68,6 @@ public class CSSWriter {
             builder.append("  ");
         }
         return this;
-    }
-
-    /**
-     * <p>
-     * Write property.
-     * </p>
-     * 
-     * @param name
-     * @param value
-     */
-    public void property(String name, Object value) {
-        if (value != null) {
-            property(name, value.toString());
-        }
     }
 
     /**
@@ -138,15 +122,8 @@ public class CSSWriter {
      * @param name
      * @param calcurated
      */
-    public void property(String name, Object... values) {
-        List<String> list = new ArrayList();
-
-        for (Object value : values) {
-            if (value != null) {
-                list.add(value.toString());
-            }
-        }
-        property(name, I.join(list, " "));
+    public void property(String name, List values) {
+        property(name, values.toArray());
     }
 
     /**
@@ -157,37 +134,37 @@ public class CSSWriter {
      * @param name
      * @param calcurated
      */
-    public void property(String name, List values) {
-        List<String> list = new ArrayList();
+    public void property(String name, Object... values) {
+        if (name != null && name.length() != 0 && values != null) {
+            List<List<String>> container = new ArrayList();
 
-        for (Object value : values) {
-            if (value != null) {
-                list.add(value.toString());
+            boolean has = false;
+
+            for (Vendor vendor : Vendor.values()) {
+                List<String> list = new ArrayList();
+
+                for (Object value : values) {
+                    if (value != null) {
+                        if (value instanceof VendorPrefixValue) {
+                            has = true;
+                            list.add(((VendorPrefixValue) value).toString(vendor));
+                        } else {
+                            list.add(value.toString());
+                        }
+                    }
+                }
+                container.add(list);
+
+                if (!has) {
+                    break;
+                }
             }
-        }
-        property(name, I.join(list, ","));
-    }
 
-    /**
-     * <p>
-     * Write property.
-     * </p>
-     * 
-     * @param name
-     * @param value
-     */
-    public void property(String name, String value) {
-        if (name != null && name.length() != 0 && value != null && value.length() != 0) {
-            if (!isSpecialValue(value)) {
-                indent().write(name, ":", value, ";");
-            } else if (name.charAt(0) == '-') {
-                int index = name.indexOf('-', 1);
-                String prefix = name.substring(0, index + 1);
+            for (List<String> text : container) {
+                String value = I.join(text, " ");
 
-                indent().write(name, ":", prefix + value, ";");
-            } else {
-                for (Vendor vendor : Vendor.values()) {
-                    indent().write(name, ":", vendor.prefix + value, ";");
+                if (value.length() != 0) {
+                    indent().write(name, ":", value, ";");
                 }
             }
         }
@@ -233,23 +210,6 @@ public class CSSWriter {
             }
         }
         return this;
-    }
-
-    /**
-     * <p>
-     * Check special property value.
-     * </p>
-     * 
-     * @param value
-     * @return
-     */
-    private boolean isSpecialValue(String value) {
-        for (String special : specials) {
-            if (value.startsWith(special)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

@@ -9,7 +9,7 @@
  */
 package booton.css.property;
 
-import js.util.Color;
+import booton.css.value.Color;
 import booton.css.value.Value;
 
 /**

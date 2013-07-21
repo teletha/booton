@@ -24,7 +24,7 @@ import kiss.Singleton;
 import booton.css.CSS;
 import booton.css.CSSWriter;
 import booton.css.Priority;
-import booton.util.Font;
+import booton.css.value.Font;
 
 /**
  * @version 2013/07/21 15:09:13

@@ -12,10 +12,10 @@ package booton.css.property;
 import java.util.ArrayList;
 import java.util.List;
 
-import js.util.Color;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
+import booton.css.value.Color;
 import booton.css.value.ColorValue;
 import booton.css.value.Colorable;
 import booton.css.value.GradientValue;
@@ -35,7 +35,7 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
 
     private String size;
 
-    private List<String> images = new ArrayList();
+    private List<Object> images = new ArrayList();
 
     private GradientValue gradient;
 
@@ -143,7 +143,7 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
      */
     public Background image(GradientValue gradient) {
         this.gradient = gradient;
-        this.images.add(gradient.toString());
+        this.images.add(gradient);
 
         return chain();
     }
@@ -164,10 +164,10 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
             if (image instanceof String) {
                 this.images.add(url((String) image));
             } else {
-                this.images.add(image.toString());
+                this.images.add(image);
             }
         }
-    
+
         return chain();
     }
 

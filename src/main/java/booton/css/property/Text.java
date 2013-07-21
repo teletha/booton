@@ -14,11 +14,11 @@ import static booton.css.Unit.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import js.util.Color;
 import kiss.I;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
+import booton.css.value.Color;
 import booton.css.value.Value;
 
 

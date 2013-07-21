@@ -9,6 +9,7 @@
  */
 package booton.css.property;
 
+import static booton.css.Vendor.*;
 import booton.css.CSSProperty;
 
 /**
@@ -92,7 +93,7 @@ public final class Display extends CSSProperty<Display> {
      * model.
      */
     public Display flex() {
-        return chain(prefixValue("flex").ie("flexbox"));
+        return chain(prefixValue("flex").ie("flexbox").safari("box").omit(Mozilla));
     }
 
     /**
@@ -100,7 +101,7 @@ public final class Display extends CSSProperty<Display> {
      * model.
      */
     public Display inlineFlex() {
-        return chain("inline-flex");
+        return chain(prefixValue("inline-flex").ie("inline-flexbox").safari("box").omit(Mozilla));
     }
 
     /**
