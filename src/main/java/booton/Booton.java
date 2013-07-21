@@ -177,7 +177,7 @@ public class Booton {
             Javascript.getScript(LiveCoding.class).writeTo(root.resolve("live.js"));
 
             // build css file
-            I.make(Stylish.class).write(css);
+            I.make(Stylist.class).write(css);
         } catch (Exception e) {
             e.printStackTrace(System.out);
         } finally {

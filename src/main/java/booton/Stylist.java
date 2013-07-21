@@ -24,20 +24,19 @@ import kiss.Manageable;
 import kiss.Singleton;
 import booton.css.CSS;
 import booton.css.Priority;
-import booton.translator.Literal;
 import booton.util.Font;
 
 /**
  * @version 2013/07/20 16:57:52
  */
 @Manageable(lifestyle = Singleton.class)
-public class Stylish implements Literal<CSS> {
+public class Stylist {
 
     /** The used web fonts. */
-    private static final Set<Font> fonts = new HashSet();
+    private final Set<Font> fonts = new HashSet();
 
     /** The style classes which javascript reference. */
-    private final CopyOnWriteArrayList<Class<? extends CSS>> used = new CopyOnWriteArrayList();
+    private final CopyOnWriteArrayList<Class<? extends CSS>> styles = new CopyOnWriteArrayList();
 
     /** The style classes which stylesheet requires. */
     private final Set<Class<? extends CSS>> requires = new HashSet();
@@ -53,8 +52,8 @@ public class Stylish implements Literal<CSS> {
         // collect required styles
         List<CSS> required = new ArrayList();
 
-        for (int i = 0; i < used.size(); i++) {
-            required.add(I.make(used.get(i)));
+        for (int i = 0; i < styles.size(); i++) {
+            required.add(I.make(styles.get(i)));
         }
 
         Collections.sort(required, new Comparator<CSS>() {
@@ -91,30 +90,29 @@ public class Stylish implements Literal<CSS> {
         Files.write(file, builder.toString().getBytes(I.$encoding));
     }
 
-    public static void register(Font font) {
-        fonts.add(font);
-    }
-
     /**
      * <p>
-     * Collect style definition.
+     * Register font definition.
      * </p>
      * 
-     * @param style
+     * @param font
      */
-    public void require(Class<? extends CSS> style) {
-        if (style != null) {
-            used.addIfAbsent(style);
+    public void register(Font font) {
+        if (font != null) {
+            fonts.add(font);
         }
     }
 
     /**
-     * {@inheritDoc}
+     * <p>
+     * Register style definition.
+     * </p>
+     * 
+     * @param style
      */
-    @Override
-    public String write(Class<? extends CSS> clazz) {
-        require(clazz);
-
-        return '"' + Obfuscator.computeCSSName(clazz) + '"';
+    public void register(Class<? extends CSS> style) {
+        if (style != null) {
+            styles.addIfAbsent(style);
+        }
     }
 }
