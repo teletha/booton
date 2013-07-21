@@ -9,9 +9,9 @@
  */
 package jsx.bwt.view;
 
-import js.util.Color;
 import booton.css.CSS;
 import booton.css.Snippet;
+import booton.css.value.Color;
 import booton.css.value.Value;
 
 /**

@@ -9,9 +9,9 @@
  */
 package jsx.bwt;
 
-import js.util.Color;
 import booton.css.CSS;
 import booton.css.Priority;
+import booton.css.value.Color;
 
 /**
  * @version 2013/04/06 0:04:01

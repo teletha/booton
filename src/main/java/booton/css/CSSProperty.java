@@ -82,6 +82,7 @@ public class CSSProperty<T extends CSSProperty> {
     protected void write(CSSWriter writer) {
         if (value instanceof Property) {
             Property property = (Property) value;
+            property.compactWebkit();
 
             for (Vendor vendor : Vendor.values()) {
                 String name = property.names.get(vendor);
@@ -250,13 +251,14 @@ public class CSSProperty<T extends CSSProperty> {
          * @param name
          * @param value
          */
-        private Property(String name, String value, boolean namePrefix, boolean valuePrefix) {
+        protected Property(String name, String value, boolean namePrefix, boolean valuePrefix) {
             this.namePrefix = namePrefix;
             this.valuePrefix = valuePrefix;
 
             set(Standard, name, value);
             ie(value);
             moz(value);
+            safari(value);
             webkit(value);
         }
 
@@ -325,6 +327,34 @@ public class CSSProperty<T extends CSSProperty> {
          * @param value
          * @return
          */
+        public Property safari(String value) {
+            return safari(names.get(Standard), value);
+        }
+
+        /**
+         * <p>
+         * Set property name and value.
+         * </p>
+         * 
+         * @param name
+         * @param value
+         * @return
+         */
+        public Property safari(String name, String value) {
+            set(Safari, name, value);
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Set property name and value.
+         * </p>
+         * 
+         * @param name
+         * @param value
+         * @return
+         */
         public Property webkit(String value) {
             return webkit(names.get(Standard), value);
         }
@@ -346,6 +376,23 @@ public class CSSProperty<T extends CSSProperty> {
 
         /**
          * <p>
+         * Omit the specified vendor's properties.
+         * </p>
+         * 
+         * @param vendors
+         * @return
+         */
+        public Property omit(Vendor... vendors) {
+            for (Vendor vendor : vendors) {
+                names.remove(vendor);
+                values.remove(vendor);
+            }
+
+            return this;
+        }
+
+        /**
+         * <p>
          * Helper method to construct property name and value pair.
          * </p>
          * 
@@ -356,6 +403,27 @@ public class CSSProperty<T extends CSSProperty> {
         private void set(Vendor vendor, String name, String value) {
             names.put(vendor, namePrefix ? vendor.prefix + name : name);
             values.put(vendor, valuePrefix ? vendor.prefix + value : value);
+        }
+
+        /**
+         * <p>
+         * Compact webkit and safari property.
+         * </p>
+         */
+        private void compactWebkit() {
+            String webkit = values.get(Webkit);
+            String safari = values.get(Safari);
+
+            if (webkit == null) {
+                if (safari != null) {
+                    return;
+                }
+            } else if (!webkit.equals(safari)) {
+                return;
+            }
+
+            // remove safari property
+            omit(Safari);
         }
     }
 }

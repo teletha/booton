@@ -9,12 +9,13 @@
  */
 package booton.css.value;
 
-import js.util.Color;
+import booton.css.Vendor;
+import booton.css.VendorPrefixValue;
 
 /**
  * @version 2013/03/24 13:09:14
  */
-public class GradientValue {
+public class GradientValue extends VendorPrefixValue {
 
     /** The start color. */
     public final Color start;
@@ -35,7 +36,14 @@ public class GradientValue {
      * {@inheritDoc}
      */
     @Override
-    public String toString() {
-        return "linear-gradient(" + start + "," + end + ")";
+    protected String toString(Vendor vendor) {
+        switch (vendor) {
+        case Webkit:
+        case Standard:
+            return vendor.prefix + "linear-gradient(" + start + "," + end + ")";
+
+        default:
+            return "";
+        }
     }
 }

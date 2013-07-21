@@ -9,9 +9,9 @@
  */
 package jsx.application;
 
-import js.util.Color;
 import teemowork.TeemoworkTheme;
 import booton.css.CSS;
+import booton.css.value.Color;
 
 class HeaderStyle {
 

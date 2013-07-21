@@ -10,7 +10,7 @@
 package teemowork;
 
 import booton.css.CSS;
-import booton.util.Font;
+import booton.css.value.Font;
 
 /**
  * @version 2013/03/24 16:34:23

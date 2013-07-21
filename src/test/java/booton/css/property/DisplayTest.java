@@ -46,8 +46,21 @@ public class DisplayTest {
         css.display.flex();
 
         assert css.has("display", "flex");
-        assert css.has("display", "-moz-flex");
+        assert css.omit("display", "-moz-flex");
         assert css.has("display", "-webkit-flex");
+        assert css.has("display", "-webkit-box");
         assert css.has("display", "-ms-flexbox");
+    }
+
+    @Test
+    public void inlineFlex() throws Exception {
+        MyCSS css = new MyCSS();
+        css.display.inlineFlex();
+
+        assert css.has("display", "inline-flex");
+        assert css.omit("display", "-moz-inline-flex");
+        assert css.has("display", "-webkit-inline-flex");
+        assert css.has("display", "-webkit-box");
+        assert css.has("display", "-ms-inline-flexbox");
     }
 }

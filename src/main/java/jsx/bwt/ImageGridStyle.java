@@ -10,10 +10,10 @@
 package jsx.bwt;
 
 import static booton.css.Unit.*;
-import js.util.Color;
 import teemowork.TeemoworkTheme;
 import booton.css.CSS;
 import booton.css.Snippet;
+import booton.css.value.Color;
 import booton.css.value.Value;
 
 /**

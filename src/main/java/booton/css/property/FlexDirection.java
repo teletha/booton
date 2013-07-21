@@ -9,18 +9,33 @@
  */
 package booton.css.property;
 
+import static booton.css.Vendor.*;
 import booton.css.CSSProperty;
+import booton.css.CSSWriter;
 
 /**
- * @version 2013/06/08 2:22:03
+ * @version 2013/07/21 23:26:23
  */
 public class FlexDirection extends CSSProperty<FlexDirection> {
+
+    /** The safari property. */
+    private String orient;
 
     /**
      * @param name
      */
     public FlexDirection() {
         super("flex-direction");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void write(CSSWriter writer) {
+        super.write(writer);
+
+        writer.property("-webkit-box-orient", orient);
     }
 
     /**
@@ -32,7 +47,9 @@ public class FlexDirection extends CSSProperty<FlexDirection> {
      * @return
      */
     public FlexDirection row() {
-        return chain(prefixName("row"));
+        orient = "horizontal";
+
+        return chain(prefixName("row").safari("box-direction", "normal").omit(Mozilla));
     }
 
     /**
@@ -44,7 +61,9 @@ public class FlexDirection extends CSSProperty<FlexDirection> {
      * @return
      */
     public FlexDirection rowReverse() {
-        return chain(prefixName("row-reverse"));
+        orient = "horizontal";
+
+        return chain(prefixName("row-reverse").safari("box-direction", "reverse").omit(Mozilla));
     }
 
     /**
@@ -56,7 +75,9 @@ public class FlexDirection extends CSSProperty<FlexDirection> {
      * @return
      */
     public FlexDirection column() {
-        return chain(prefixName("column"));
+        orient = "vertical";
+
+        return chain(prefixName("column").safari("box-direction", "normal").omit(Mozilla));
     }
 
     /**
@@ -68,6 +89,8 @@ public class FlexDirection extends CSSProperty<FlexDirection> {
      * @return
      */
     public FlexDirection columnReverse() {
-        return chain(prefixName("column-reverse"));
+        orient = "vertical";
+
+        return chain(prefixName("column-reverse").safari("box-direction", "reverse").omit(Mozilla));
     }
 }

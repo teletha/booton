@@ -11,7 +11,6 @@ package booton.css.value;
 
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
-import js.util.Color;
 
 /**
  * @version 2013/07/20 4:49:22

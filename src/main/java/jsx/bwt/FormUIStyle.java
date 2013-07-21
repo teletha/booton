@@ -10,10 +10,10 @@
 package jsx.bwt;
 
 import static booton.css.Unit.*;
-import js.util.Color;
 import booton.css.CSS;
+import booton.css.value.Color;
+import booton.css.value.Font;
 import booton.css.value.Value;
-import booton.util.Font;
 
 /**
  * @version 2013/03/28 1:34:10

@@ -17,7 +17,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import js.util.Color;
 import kiss.Extensible;
 import kiss.I;
 import kiss.Manageable;
@@ -47,6 +46,7 @@ import booton.css.property.Transition;
 import booton.css.property.UserSelect;
 import booton.css.property.Visibility;
 import booton.css.value.BorderValue;
+import booton.css.value.Color;
 import booton.css.value.GradientValue;
 import booton.util.Strings;
 

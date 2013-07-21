@@ -55,6 +55,19 @@ public class MyCSS extends CSS {
      * @param value
      * @return
      */
+    boolean omit(String name, String value) {
+        return !toString().contains(name + ": " + value + ";");
+    }
+
+    /**
+     * <p>
+     * Test property name and value.
+     * </p>
+     * 
+     * @param name
+     * @param value
+     * @return
+     */
     boolean has(String name, String value) {
         return toString().contains(name + ": " + value + ";");
     }

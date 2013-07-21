@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.util;
+package booton.css.value;
 
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
@@ -16,7 +16,7 @@ import java.net.URLConnection;
 import kiss.I;
 
 /**
- * @version 2012/12/23 19:49:51
+ * @version 2013/07/21 18:15:42
  */
 public class Font {
 
