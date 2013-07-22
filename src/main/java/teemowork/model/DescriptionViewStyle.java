@@ -9,6 +9,7 @@
  */
 package teemowork.model;
 
+import static booton.css.value.Color.*;
 import booton.css.CSS;
 
 /**
@@ -86,7 +87,7 @@ class DescriptionViewStyle {
             display.block();
             box.size(SkillIconSize, px);
             background.contain().size(SkillIconSize, px);
-            border.radius(10, px).color(50, 50, 50).width(2, px).solid();
+            border.radius(10, px).color(rgb(50, 50, 50)).width(2, px).solid();
         }
     }
 
@@ -98,7 +99,7 @@ class DescriptionViewStyle {
         {
             display.table();
             box.width(SkillIconSize, px).height(LevelBoxHeight, px);
-            border.width(1, px).solid().color.black();
+            border.width(1, px).solid().color(Black);
             margin.top(2, px).bottom(5, px);
         }
     }
@@ -111,7 +112,7 @@ class DescriptionViewStyle {
         {
             display.tableCell();
             box.width(SkillIconSize / 5, px).height(LevelBoxHeight, px);
-            borderLeft.solid().color.black().width(1, px);
+            border.left.solid().color(Black).width(1, px);
             background.image(linear(rgba(240, 192, 28, 0.5), rgba(160, 123, 1, 0.5)));
 
             while (firstChild()) {
@@ -276,7 +277,7 @@ class DescriptionViewStyle {
             display.block();
             box.size(70, px);
             background.contain().size(80, px).horizontal(-5, px).vertical(-5, px);
-            border.radius(10, px).color(50, 50, 50).width(2, px).solid();
+            border.radius(10, px).color(rgb(50, 50, 50)).width(2, px).solid();
             position.relative();
             margin.bottom(1, em);
             cursor.pointer();

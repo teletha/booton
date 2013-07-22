@@ -134,7 +134,7 @@ class MasteryBuilderStyle {
             box.width(IconSize - IconBorderSize * 2, px);
             position.bottom(IconBorderSize, px).left(IconBorderSize, px).absolute();
             padding.right(5, px);
-            border.radius(0, px, 0, px, Corner, px, Corner, px);
+            border.bottom.radius(Corner, px);
             background.color(hsla(0, 0, 0, 0.3));
             font.color(AvailableColor).size(11, px);
             text.outline(1).align.right();
@@ -327,12 +327,12 @@ class MasteryBuilderStyle {
             line.height(20, px);
             text.verticalAlign.middle();
 
-            border.width(1, px).solid().color(204, 204, 204);
+            border.width(1, px).solid().color(rgb(204, 204, 204));
             background.color(255, 255, 255);
             transition.property.all().duration(0.2, s).timing.linear();
 
             while (focus()) {
-                border.color(82, 168, 236, 0.8f);
+                border.color(rgba(82, 168, 236, 0.8));
                 outline.none();
                 box.shadowInset(0, px, 1, px, 1, px, rgba(0, 0, 0, 0.075))
                         .shadow(0, px, 0, px, 8, px, rgba(82, 168, 236, 0.6));

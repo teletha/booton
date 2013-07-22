@@ -26,7 +26,7 @@ import booton.Stylist;
 import booton.css.property.AlignContent;
 import booton.css.property.AlignItems;
 import booton.css.property.Background;
-import booton.css.property.Borders;
+import booton.css.property.Border;
 import booton.css.property.Box;
 import booton.css.property.BoxLength;
 import booton.css.property.Content;
@@ -204,52 +204,7 @@ public abstract class CSS implements Extensible {
      * more of: border-width, border-style, border-color.
      * </p>
      */
-    public Borders borders;
-
-    /**
-     * <p>
-     * The border CSS property is a shorthand property for setting the individual border property
-     * values in a single place in the style sheet. border can be used to set the values for one or
-     * more of: border-width, border-style, border-color.
-     * </p>
-     */
-    public BorderValue border;
-
-    /**
-     * <p>
-     * The border CSS property is a shorthand property for setting the individual border property
-     * values in a single place in the style sheet. border can be used to set the values for one or
-     * more of: border-width, border-style, border-color.
-     * </p>
-     */
-    public BorderValue borderLeft;
-
-    /**
-     * <p>
-     * The border CSS property is a shorthand property for setting the individual border property
-     * values in a single place in the style sheet. border can be used to set the values for one or
-     * more of: border-width, border-style, border-color.
-     * </p>
-     */
-    public BorderValue borderRight;
-
-    /**
-     * <p>
-     * The border CSS property is a shorthand property for setting the individual border property
-     * values in a single place in the style sheet. border can be used to set the values for one or
-     * more of: border-width, border-style, border-color.
-     * </p>
-     */
-    public BorderValue borderTop;
-
-    /**
-     * <p>
-     * The border CSS property is a shorthand property for setting the individual border property
-     * values in a single place in the style sheet. border can be used to set the values for one or
-     * more of: border-width, border-style, border-color.
-     * </p>
-     */
-    public BorderValue borderBottom;
+    public Border border;
 
     /**
      * <p>

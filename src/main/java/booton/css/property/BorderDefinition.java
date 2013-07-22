@@ -12,15 +12,35 @@ package booton.css.property;
 import booton.css.CSSProperty;
 import booton.css.Unit;
 import booton.css.value.Color;
-import booton.css.value.ColorValue;
 import booton.css.value.Value;
 
 /**
  * @version 2013/07/22 16:56:21
  */
-public abstract class BorderDescriptor<T extends BorderDescriptor> extends CSSProperty<T> {
+public abstract class BorderDefinition<T extends BorderDefinition> extends CSSProperty<T> {
 
-    public final ColorValue color = new ColorValue("", this);
+    /**
+     * <p>
+     * Set the radius of this border.
+     * </p>
+     * 
+     * @param size A radius to set.
+     * @return Chainable API.
+     */
+    public abstract T radius(Value size);
+
+    /**
+     * <p>
+     * Set the radius of this border.
+     * </p>
+     * 
+     * @param size A radius to set.
+     * @param unit A width unit to set.
+     * @return Chainable API.
+     */
+    public final T radius(double size, Unit unit) {
+        return radius(new Value(size, unit));
+    }
 
     /**
      * <p>

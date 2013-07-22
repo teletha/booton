@@ -79,7 +79,7 @@ class ChampionComparingStyle {
         {
             display.inlineBlock();
             box.size(size, px);
-            border.radius(5, px).color(50, 50, 50).width(1, px).solid();
+            border.radius(5, px).color(rgb(50, 50, 50)).width(1, px).solid();
             text.verticalAlign.middle();
         }
     }

@@ -15,7 +15,7 @@ import booton.css.Unit;
 import booton.css.value.Value;
 
 /**
- * @version 2013/03/24 2:06:03
+ * @version 2013/07/22 17:36:29
  */
 public class BoxLength extends CSSProperty<BoxLength> {
 
@@ -42,7 +42,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * {@inheritDoc}
      */
     @Override
-    public void write(CSSWriter writer) {
+    protected void write(CSSWriter writer) {
         if (right.equals(left)) {
             if (top.equals(bottom)) {
                 if (top.equals(right)) {

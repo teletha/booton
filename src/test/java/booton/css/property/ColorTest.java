@@ -12,16 +12,32 @@ package booton.css.property;
 import org.junit.Test;
 
 /**
- * @version 2013/07/21 16:34:43
+ * @version 2013/07/22 23:36:22
  */
 public class ColorTest {
 
     @Test
-    public void hsl() throws Exception {
+    public void white() throws Exception {
         MyCSS css = new MyCSS();
         css.font.color(255, 255, 255);
 
-        assert css.has("color", "hsl(0,0%,100%)");
+        assert css.has("color", "white");
+    }
+
+    @Test
+    public void black() throws Exception {
+        MyCSS css = new MyCSS();
+        css.font.color(0, 0, 0);
+
+        assert css.has("color", "black");
+    }
+
+    @Test
+    public void hsl() throws Exception {
+        MyCSS css = new MyCSS();
+        css.font.color(255, 0, 0);
+
+        assert css.has("color", "hsl(0,100%,50%)");
     }
 
     @Test

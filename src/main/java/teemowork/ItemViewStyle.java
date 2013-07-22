@@ -56,7 +56,7 @@ public class ItemViewStyle {
             margin.bottom(IconSize / 5, px);
             cursor.pointer();
             box.size(44, px);
-            border.radius(5, px).color(50, 50, 50).width(1, px).solid();
+            border.radius(5, px).color(rgb(50, 50, 50)).width(1, px).solid();
         }
     }
 
@@ -80,7 +80,7 @@ public class ItemViewStyle {
             display.block();
             cursor.pointer();
             box.size(22, px).opacity(0.7);
-            border.radius(3, px).color(50, 50, 50).width(1, px).solid();
+            border.radius(3, px).color(rgb(50, 50, 50)).width(1, px).solid();
             transition.property.all().timing.easeInOut().duration(0.3, s);
 
             while (hover()) {
