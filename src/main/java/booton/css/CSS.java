@@ -24,6 +24,7 @@ import kiss.Singleton;
 import kiss.model.Model;
 import booton.Obfuscator;
 import booton.Stylist;
+import booton.css.property.AlignContent;
 import booton.css.property.AlignItems;
 import booton.css.property.Background;
 import booton.css.property.Box;
@@ -51,7 +52,7 @@ import booton.css.value.GradientValue;
 import booton.util.Strings;
 
 /**
- * @version 2013/07/21 16:27:27
+ * @version 2013/07/22 11:49:16
  */
 @Manageable(lifestyle = Singleton.class)
 public abstract class CSS implements Extensible {
@@ -177,6 +178,15 @@ public abstract class CSS implements Extensible {
      * </p>
      */
     public AlignItems alignItems;
+
+    /**
+     * <p>
+     * The CSS align-content property aligns a flex container's lines within the flex container when
+     * there is extra space on the cross-axis. This property has no effect on single line flexible
+     * boxes.
+     * </p>
+     */
+    public AlignContent alignContent;
 
     /**
      * <p>

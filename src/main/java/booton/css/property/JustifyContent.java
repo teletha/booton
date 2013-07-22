@@ -9,10 +9,11 @@
  */
 package booton.css.property;
 
+import static booton.css.Vendor.*;
 import booton.css.CSSProperty;
 
 /**
- * @version 2013/06/08 2:22:03
+ * @version 2013/07/22 11:27:09
  */
 public class JustifyContent extends CSSProperty<JustifyContent> {
 
@@ -33,7 +34,7 @@ public class JustifyContent extends CSSProperty<JustifyContent> {
      * @return
      */
     public JustifyContent start() {
-        return chain(prefixName("flex-start").ie("flex-pack", "start"));
+        return chain(prefixName("flex-start").ie("flex-pack", "start").safari("box-pack", "start").omit(Mozilla));
     }
 
     /**
@@ -46,7 +47,7 @@ public class JustifyContent extends CSSProperty<JustifyContent> {
      * @return
      */
     public JustifyContent end() {
-        return chain(prefixName("flex-end").ie("flex-pack", "end"));
+        return chain(prefixName("flex-end").ie("flex-pack", "end").safari("box-pack", "end").omit(Mozilla));
     }
 
     /**
@@ -59,7 +60,7 @@ public class JustifyContent extends CSSProperty<JustifyContent> {
      * @return
      */
     public JustifyContent center() {
-        return chain(prefixName("center").ie("flex-pack", "center"));
+        return chain(prefixName("center").ie("flex-pack", "center").safari("box-pack", "center").omit(Mozilla));
     }
 
     /**
@@ -72,7 +73,7 @@ public class JustifyContent extends CSSProperty<JustifyContent> {
      * @return
      */
     public JustifyContent spaceBetween() {
-        return chain(prefixName("space-between").ie("flex-pack", "justify"));
+        return chain(prefixName("space-between").ie("flex-pack", "justify").safari("box-pack", "justify").omit(Mozilla));
     }
 
     /**
@@ -85,6 +86,6 @@ public class JustifyContent extends CSSProperty<JustifyContent> {
      * @return
      */
     public JustifyContent spaceAround() {
-        return chain(prefixName("space-around").ie("flex-pack", "justify"));
+        return chain(prefixName("space-around").ie("flex-pack", "justify").safari("box-pack", "justify").omit(Mozilla));
     }
 }

@@ -9,19 +9,13 @@
  */
 package booton.css.property;
 
+import static booton.css.Vendor.*;
 import booton.css.CSSProperty;
 
 /**
- * @version 2013/06/08 2:22:03
+ * @version 2013/07/22 11:33:09
  */
 public class AlignItems extends CSSProperty<AlignItems> {
-
-    /**
-     * @param name
-     */
-    public AlignItems() {
-        super("align-items");
-    }
 
     /**
      * <p>
@@ -32,7 +26,7 @@ public class AlignItems extends CSSProperty<AlignItems> {
      * @return
      */
     public AlignItems start() {
-        return chain(prefixName("flex-start").ie("flex-align", "start"));
+        return chain(prefixName("flex-start").ie("flex-align", "start").safari("box-align", "start").omit(Mozilla));
     }
 
     /**
@@ -43,7 +37,7 @@ public class AlignItems extends CSSProperty<AlignItems> {
      * @return
      */
     public AlignItems end() {
-        return chain(prefixName("flex-end").ie("flex-align", "end"));
+        return chain(prefixName("flex-end").ie("flex-align", "end").safari("box-align", "end").omit(Mozilla));
     }
 
     /**
@@ -55,7 +49,7 @@ public class AlignItems extends CSSProperty<AlignItems> {
      * @return
      */
     public AlignItems center() {
-        return chain(prefixName("center").ie("flex-align", "center"));
+        return chain(prefixName("center").ie("flex-align", "center").safari("box-align", "center").omit(Mozilla));
     }
 
     /**
@@ -68,7 +62,7 @@ public class AlignItems extends CSSProperty<AlignItems> {
      * @return
      */
     public AlignItems baseline() {
-        return chain(prefixName("baseline").ie("flex-align", "baseline"));
+        return chain(prefixName("baseline").ie("flex-align", "baseline").safari("box-align", "baseline").omit(Mozilla));
     }
 
     /**
@@ -80,6 +74,6 @@ public class AlignItems extends CSSProperty<AlignItems> {
      * @return
      */
     public AlignItems stretch() {
-        return chain(prefixName("stretch").ie("flex-align", "stretch"));
+        return chain(prefixName("stretch").ie("flex-align", "stretch").safari("box-align", "stretch").omit(Mozilla));
     }
 }

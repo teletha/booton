@@ -11,6 +11,8 @@ package booton.css.property;
 
 import org.junit.Test;
 
+import booton.css.Vendor;
+
 /**
  * @version 2013/07/18 9:57:02
  */
@@ -26,7 +28,7 @@ public class FlexDirectionTest {
         assert css.has("-webkit-box-direction", "normal");
         assert css.has("-webkit-box-orient", "horizontal");
         assert css.has("-ms-flex-direction", "row");
-        assert css.omit("-moz-flex-direction");
+        assert css.no(Vendor.Mozilla);
     }
 
     @Test
@@ -39,7 +41,7 @@ public class FlexDirectionTest {
         assert css.has("-webkit-box-direction", "reverse");
         assert css.has("-webkit-box-orient", "horizontal");
         assert css.has("-ms-flex-direction", "row-reverse");
-        assert css.omit("-moz-flex-direction");
+        assert css.no(Vendor.Mozilla);
     }
 
     @Test
@@ -52,7 +54,7 @@ public class FlexDirectionTest {
         assert css.has("-webkit-box-direction", "normal");
         assert css.has("-webkit-box-orient", "vertical");
         assert css.has("-ms-flex-direction", "column");
-        assert css.omit("-moz-flex-direction");
+        assert css.no(Vendor.Mozilla);
     }
 
     @Test
@@ -65,6 +67,6 @@ public class FlexDirectionTest {
         assert css.has("-webkit-box-direction", "reverse");
         assert css.has("-webkit-box-orient", "vertical");
         assert css.has("-ms-flex-direction", "column-reverse");
-        assert css.omit("-moz-flex-direction");
+        assert css.no(Vendor.Mozilla);
     }
 }
