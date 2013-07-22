@@ -148,6 +148,14 @@ public class CSSWriter {
                         if (value instanceof VendorPrefixValue) {
                             has = true;
                             list.add(((VendorPrefixValue) value).toString(vendor));
+                        } else if (value instanceof Double) {
+                            Double d = (Double) value;
+
+                            if (d.intValue() == d.doubleValue()) {
+                                list.add(String.valueOf(d.intValue()));
+                            } else {
+                                list.add(d.toString());
+                            }
                         } else {
                             list.add(value.toString());
                         }
