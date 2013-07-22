@@ -10,6 +10,7 @@
 package booton.css.property;
 
 import static booton.css.Unit.*;
+import static booton.css.Vendor.*;
 
 import org.junit.Test;
 
@@ -25,7 +26,6 @@ public class TransitionTest {
 
         assert css.has("transition-delay", "10s");
         assert css.has("-webkit-transition-delay");
-        assert css.omit("-moz-transition-delay");
-        assert css.omit("-ms-transition-delay");
+        assert css.no(Mozilla, IE);
     }
 }

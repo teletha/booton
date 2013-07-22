@@ -9,6 +9,8 @@
  */
 package booton.css.property;
 
+import static booton.css.Vendor.*;
+
 import org.junit.Test;
 
 /**
@@ -22,6 +24,7 @@ public class DisplayTest {
         css.display.block();
 
         assert css.has("display", "block");
+        assert css.noVendor();
     }
 
     @Test
@@ -30,6 +33,7 @@ public class DisplayTest {
         css.display.inline();
 
         assert css.has("display", "inline");
+        assert css.noVendor();
     }
 
     @Test
@@ -38,6 +42,7 @@ public class DisplayTest {
         css.display.inlineBlock();
 
         assert css.has("display", "inline-block");
+        assert css.noVendor();
     }
 
     @Test
@@ -46,10 +51,10 @@ public class DisplayTest {
         css.display.flex();
 
         assert css.has("display", "flex");
-        assert css.omit("display", "-moz-flex");
         assert css.has("display", "-webkit-flex");
         assert css.has("display", "-webkit-box");
         assert css.has("display", "-ms-flexbox");
+        assert css.no(Mozilla);
     }
 
     @Test
@@ -58,9 +63,9 @@ public class DisplayTest {
         css.display.inlineFlex();
 
         assert css.has("display", "inline-flex");
-        assert css.omit("display", "-moz-inline-flex");
         assert css.has("display", "-webkit-inline-flex");
         assert css.has("display", "-webkit-box");
         assert css.has("display", "-ms-inline-flexbox");
+        assert css.no(Mozilla);
     }
 }

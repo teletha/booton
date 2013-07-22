@@ -411,19 +411,13 @@ public class CSSProperty<T extends CSSProperty> {
          * </p>
          */
         private void compactWebkit() {
-            String webkit = values.get(Webkit);
-            String safari = values.get(Safari);
+            String webkit = names.get(Webkit) + values.get(Webkit);
+            String safari = names.get(Safari) + values.get(Safari);
 
-            if (webkit == null) {
-                if (safari != null) {
-                    return;
-                }
-            } else if (!webkit.equals(safari)) {
-                return;
+            if (webkit.equals(safari)) {
+                // remove safari property
+                omit(Safari);
             }
-
-            // remove safari property
-            omit(Safari);
         }
     }
 }

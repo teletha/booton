@@ -9,10 +9,11 @@
  */
 package booton.css.property;
 
+import static booton.css.Vendor.*;
 import booton.css.CSSProperty;
 
 /**
- * @version 2013/06/08 2:22:03
+ * @version 2013/07/22 11:39:30
  */
 public class FlexWrap extends CSSProperty<FlexWrap> {
 
@@ -33,7 +34,7 @@ public class FlexWrap extends CSSProperty<FlexWrap> {
      * @return
      */
     public FlexWrap wrap() {
-        return chain(prefixName("wrap"));
+        return chain(prefixName("wrap").omit(Mozilla));
     }
 
     /**
@@ -45,7 +46,7 @@ public class FlexWrap extends CSSProperty<FlexWrap> {
      * @return
      */
     public FlexWrap noWrap() {
-        return chain(prefixName("nowrap").ie("none"));
+        return chain(prefixName("nowrap").ie("none").omit(Mozilla));
     }
 
     /**
@@ -56,6 +57,6 @@ public class FlexWrap extends CSSProperty<FlexWrap> {
      * @return
      */
     public FlexWrap wrapReverse() {
-        return chain(prefixName("wrap-reverse"));
+        return chain(prefixName("wrap-reverse").omit(Mozilla));
     }
 }
