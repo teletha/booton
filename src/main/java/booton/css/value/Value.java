@@ -217,6 +217,10 @@ public class Value {
 
             return size == other.size && unit == other.unit;
         }
+
+        if (obj instanceof String) {
+            return toString().equals(obj);
+        }
         return false;
     }
 }

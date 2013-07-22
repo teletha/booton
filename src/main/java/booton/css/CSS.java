@@ -12,7 +12,6 @@ package booton.css;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +26,7 @@ import booton.Stylist;
 import booton.css.property.AlignContent;
 import booton.css.property.AlignItems;
 import booton.css.property.Background;
+import booton.css.property.Borders;
 import booton.css.property.Box;
 import booton.css.property.BoxLength;
 import booton.css.property.Content;
@@ -190,104 +190,6 @@ public abstract class CSS implements Extensible {
 
     /**
      * <p>
-     * The CSS flex-direction property specifies how flex items are placed in the flex container
-     * defining the main axis and the direction (normal or reversed).
-     * </p>
-     */
-    public FlexDirection flexDirection;
-
-    /**
-     * <p>
-     * The CSS flex-wrap property specifies whether the children are forced into a single line or if
-     * the items can be flowed on multiple lines.
-     * </p>
-     */
-    public FlexWrap flexWrap;
-
-    /**
-     * <p>
-     * The CSS justify-content property defines how a browser distributes available space between
-     * and around elements when aligning flex items in the main-axis of the current line. The
-     * alignment is done after the lengths and auto margins are applied, meaning that, if there is
-     * at least one flexible element, with flex-grow different than 0, it will have no effect as
-     * there won't be any available space.
-     * </p>
-     */
-    public JustifyContent justifyContent;
-
-    /**
-     * <p>
-     * The display CSS property specifies the type of rendering box used for an element. In HTML,
-     * default display property values are taken from behaviors described in the HTML specifications
-     * or from the browser/user default stylesheet. The default value in XML is inline.
-     * </p>
-     * <p>
-     * In addition to the many different display box types, the value none lets you turn off the
-     * display of an element; when you use none, all child elements also have their display turned
-     * off. The document is rendered as though the element doesn't exist in the document tree.
-     * </p>
-     */
-    public Display display;
-
-    /**
-     * <p>
-     * The width, height and box-sizing property.
-     * </p>
-     */
-    public Box box;
-
-    /**
-     * <p>
-     * The cursor CSS property specifies the mouse cursor displayed when the mouse pointer is over
-     * an element.
-     * </p>
-     */
-    public Cursor cursor;
-
-    /**
-     * <p>
-     * The margin CSS property sets the margin for all four sides. It is a shorthand to avoid
-     * setting each side separately with the other margin properties: margin-top, margin-right,
-     * margin-bottom and margin-left. Negative value are also allowed.
-     * </p>
-     * <p>
-     * One single value applies to all four sides.
-     * </p>
-     */
-    public BoxLength margin;
-
-    /**
-     * <p>
-     * The padding CSS property sets the required padding space on all sides of an element. The
-     * padding area is the space between the content of the element and its border. Negative values
-     * are not allowed.
-     * </p>
-     * <p>
-     * The padding property is a shorthand to avoid setting each side separately (padding-top,
-     * padding-right, padding-bottom, padding-left).
-     * </p>
-     */
-    public BoxLength padding;
-
-    /**
-     * <p>
-     * The CSS outline property is a shorthand property for setting one or more of the individual
-     * outline properties outline-style, outline-width and outline-color in a single rule. In most
-     * cases the use of this shortcut is preferable and more convenient.
-     * </p>
-     * <p>
-     * Outlines differ from borders in the following ways:
-     * </p>
-     * <ul>
-     * <li>Outlines do not take up space, they are drawn above the content.</li>
-     * <li>Outlines may be non-rectangular. They are rectangular in Gecko/Firefox. But e.g. Opera
-     * draws a non-rectangular shape around a construct like this:</li>
-     * </ul>
-     */
-    public BorderValue outline;
-
-    /**
-     * <p>
      * The background CSS property is a shorthand for setting the individual background values in a
      * single place in the style sheet. background can be used to set the values for one or more of:
      * background-color, background-image, background-position, background-repeat, background-size,
@@ -297,29 +199,12 @@ public abstract class CSS implements Extensible {
 
     /**
      * <p>
-     * The position CSS property chooses alternative rules for positioning elements, designed to be
-     * useful for scripted animation effects.
+     * The border CSS property is a shorthand property for setting the individual border property
+     * values in a single place in the style sheet. border can be used to set the values for one or
+     * more of: border-width, border-style, border-color.
      * </p>
      */
-    public Position position;
-
-    /**
-     * <p>
-     * On inline elements, the line-height CSS property specifies the height that is used in the
-     * calculation of the line box height. On block level elements, line-height specifies the
-     * minimal height of line boxes within the element.
-     * </p>
-     */
-    public Line line;
-
-    /**
-     * <p>
-     * The font CSS property is either a shorthand property for setting font-style, font-variant,
-     * font-weight, font-size, line-height and font-family, or a way to set the element's font to a
-     * system font, using specific keywords.
-     * </p>
-     */
-    public Font font;
+    public Borders borders;
 
     /**
      * <p>
@@ -368,12 +253,10 @@ public abstract class CSS implements Extensible {
 
     /**
      * <p>
-     * The CSS property pointer-events allows authors to control under what circumstances (if any) a
-     * particular graphic element can become the target of mouse events. When this property is
-     * unspecified, the same characteristics of the visiblePainted value apply to SVG content.
+     * The width, height and box-sizing property.
      * </p>
      */
-    public PointerEvents pointerEvents;
+    public Box box;
 
     /**
      * <p>
@@ -386,25 +269,70 @@ public abstract class CSS implements Extensible {
 
     /**
      * <p>
-     * The CSS transform property lets you modify the coordinate space of the CSS visual formatting
-     * model. Using it, elements can be translated, rotated, scaled, and skewed according to the
-     * values set.
-     * </p>
-     * <p>
-     * If the property has a value different than none, a stacking context will be created. In that
-     * case the object will act as a containing block for position: fixed elements that it contains.
+     * The cursor CSS property specifies the mouse cursor displayed when the mouse pointer is over
+     * an element.
      * </p>
      */
-    public Transform transform;
+    public Cursor cursor;
 
     /**
      * <p>
-     * The CSS transition property is a shorthand property for transition-property,
-     * transition-duration, transition-timing-function, and transition-delay. It allows to define
-     * the transition between two states of an element.
+     * The display CSS property specifies the type of rendering box used for an element. In HTML,
+     * default display property values are taken from behaviors described in the HTML specifications
+     * or from the browser/user default stylesheet. The default value in XML is inline.
+     * </p>
+     * <p>
+     * In addition to the many different display box types, the value none lets you turn off the
+     * display of an element; when you use none, all child elements also have their display turned
+     * off. The document is rendered as though the element doesn't exist in the document tree.
      * </p>
      */
-    public Transition transition;
+    public Display display;
+
+    /**
+     * <p>
+     * The CSS flex-direction property specifies how flex items are placed in the flex container
+     * defining the main axis and the direction (normal or reversed).
+     * </p>
+     */
+    public FlexDirection flexDirection;
+
+    /**
+     * <p>
+     * The CSS flex-wrap property specifies whether the children are forced into a single line or if
+     * the items can be flowed on multiple lines.
+     * </p>
+     */
+    public FlexWrap flexWrap;
+
+    /**
+     * <p>
+     * The font CSS property is either a shorthand property for setting font-style, font-variant,
+     * font-weight, font-size, line-height and font-family, or a way to set the element's font to a
+     * system font, using specific keywords.
+     * </p>
+     */
+    public Font font;
+
+    /**
+     * <p>
+     * The CSS justify-content property defines how a browser distributes available space between
+     * and around elements when aligning flex items in the main-axis of the current line. The
+     * alignment is done after the lengths and auto margins are applied, meaning that, if there is
+     * at least one flexible element, with flex-grow different than 0, it will have no effect as
+     * there won't be any available space.
+     * </p>
+     */
+    public JustifyContent justifyContent;
+
+    /**
+     * <p>
+     * On inline elements, the line-height CSS property specifies the height that is used in the
+     * calculation of the line box height. On block level elements, line-height specifies the
+     * minimal height of line boxes within the element.
+     * </p>
+     */
+    public Line line;
 
     /**
      * <p>
@@ -414,8 +342,47 @@ public abstract class CSS implements Extensible {
      */
     public ListStyle listStyle;
 
-    /** The text related style. */
-    public Text text;
+    /**
+     * <p>
+     * The margin CSS property sets the margin for all four sides. It is a shorthand to avoid
+     * setting each side separately with the other margin properties: margin-top, margin-right,
+     * margin-bottom and margin-left. Negative value are also allowed.
+     * </p>
+     * <p>
+     * One single value applies to all four sides.
+     * </p>
+     */
+    public BoxLength margin;
+
+    /**
+     * <p>
+     * The padding CSS property sets the required padding space on all sides of an element. The
+     * padding area is the space between the content of the element and its border. Negative values
+     * are not allowed.
+     * </p>
+     * <p>
+     * The padding property is a shorthand to avoid setting each side separately (padding-top,
+     * padding-right, padding-bottom, padding-left).
+     * </p>
+     */
+    public BoxLength padding;
+
+    /**
+     * <p>
+     * The CSS outline property is a shorthand property for setting one or more of the individual
+     * outline properties outline-style, outline-width and outline-color in a single rule. In most
+     * cases the use of this shortcut is preferable and more convenient.
+     * </p>
+     * <p>
+     * Outlines differ from borders in the following ways:
+     * </p>
+     * <ul>
+     * <li>Outlines do not take up space, they are drawn above the content.</li>
+     * <li>Outlines may be non-rectangular. They are rectangular in Gecko/Firefox. But e.g. Opera
+     * draws a non-rectangular shape around a construct like this:</li>
+     * </ul>
+     */
+    public BorderValue outline;
 
     /**
      * <p>
@@ -468,10 +435,45 @@ public abstract class CSS implements Extensible {
 
     /**
      * <p>
-     * The visibility CSS property has two purposes:
+     * The position CSS property chooses alternative rules for positioning elements, designed to be
+     * useful for scripted animation effects.
      * </p>
      */
-    public Visibility visibility;
+    public Position position;
+
+    /**
+     * <p>
+     * The CSS property pointer-events allows authors to control under what circumstances (if any) a
+     * particular graphic element can become the target of mouse events. When this property is
+     * unspecified, the same characteristics of the visiblePainted value apply to SVG content.
+     * </p>
+     */
+    public PointerEvents pointerEvents;
+
+    /**
+     * <p>
+     * The CSS transform property lets you modify the coordinate space of the CSS visual formatting
+     * model. Using it, elements can be translated, rotated, scaled, and skewed according to the
+     * values set.
+     * </p>
+     * <p>
+     * If the property has a value different than none, a stacking context will be created. In that
+     * case the object will act as a containing block for position: fixed elements that it contains.
+     * </p>
+     */
+    public Transform transform;
+
+    /**
+     * <p>
+     * The CSS transition property is a shorthand property for transition-property,
+     * transition-duration, transition-timing-function, and transition-delay. It allows to define
+     * the transition between two states of an element.
+     * </p>
+     */
+    public Transition transition;
+
+    /** The text related style. */
+    public Text text;
 
     /**
      * <p>
@@ -482,6 +484,13 @@ public abstract class CSS implements Extensible {
      * </p>
      */
     public UserSelect userSelect;
+
+    /**
+     * <p>
+     * The visibility CSS property has two purposes:
+     * </p>
+     */
+    public Visibility visibility;
 
     /** The current procesing rule set. */
     private RuleSet rules = new RuleSet(getClass());
@@ -1081,20 +1090,6 @@ public abstract class CSS implements Extensible {
                 writer.write(sub.toString());
             }
             return writer.toString();
-        }
-    }
-
-    /**
-     * @version 2012/12/13 1:39:08
-     */
-    private static class PropertySorter implements Comparator<CSSProperty> {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public int compare(CSSProperty o1, CSSProperty o2) {
-            return o1.name.compareTo(o2.name);
         }
     }
 }
