@@ -43,7 +43,7 @@ class HeaderStyle {
         {
             position.relative();
             display.inlineBlock();
-            borderRight.width(1, px).solid().color(DarkBack);
+            border.right.width(1, px).solid().color(DarkBack);
             box.minWidth(MenuWidth, px).zIndex(1);
             text.align.center();
         }
@@ -89,17 +89,17 @@ class HeaderStyle {
         {
             display.block();
             border.width(0, px);
-            borderBottom.width(1, px).solid().color(81, 81, 81);
+            border.bottom.width(1, px).solid().color(rgb(81, 81, 81));
 
             while (hover()) {
                 background.color(1, 134, 186).image(linear(rgba(4, 172, 236, 1), rgba(1, 134, 186, 1)));
 
                 while (firstChild()) {
-                    border.radius(Radius, px, Radius, px, 0, px, 0, px);
+                    border.top.radius(Radius, px);
                 }
 
                 while (lastChild()) {
-                    border.radius(0, px, 0, px, Radius, px, Radius, px);
+                    border.bottom.radius(Radius, px);
                 }
             }
         }

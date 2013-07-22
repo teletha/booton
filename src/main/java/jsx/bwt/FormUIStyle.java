@@ -164,8 +164,7 @@ class FormUIStyle {
     class AbstractFirstBorderForm extends AbstractBorderForm {
 
         {
-            borderRight.none();
-            borderRight.radius(0, px);
+            border.right.none().radius(0, px);
         }
     }
 
@@ -179,8 +178,7 @@ class FormUIStyle {
     class AbstractLastBorderForm extends AbstractBorderForm {
 
         {
-            borderLeft.none();
-            borderLeft.radius(0, px);
+            border.left.none().radius(0, px);
         }
     }
 

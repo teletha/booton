@@ -18,10 +18,10 @@ import booton.css.value.Value;
 /**
  * @version 2013/07/22 16:16:51
  */
-class BorderDescriptorSet extends BorderDescriptor {
+class BorderSet extends BorderDefinition {
 
     /** The descriptor set. */
-    private final List<BorderDescriptor> descriptors = new ArrayList();
+    private final List<BorderDefinition> descriptors = new ArrayList();
 
     /**
      * <p>
@@ -30,8 +30,8 @@ class BorderDescriptorSet extends BorderDescriptor {
      * 
      * @param descriptors
      */
-    protected final BorderDescriptorSet add(BorderDescriptor... descriptors) {
-        for (BorderDescriptor descriptor : descriptors) {
+    protected final BorderSet add(BorderDefinition... descriptors) {
+        for (BorderDefinition descriptor : descriptors) {
             this.descriptors.add(descriptor);
         }
         return this;
@@ -41,17 +41,28 @@ class BorderDescriptorSet extends BorderDescriptor {
      * {@inheritDoc}
      */
     @Override
-    public Value width() {
-        throw new UnsupportedOperationException();
+    public BorderDefinition radius(Value size) {
+        for (BorderDefinition descriptor : descriptors) {
+            descriptor.radius(size);
+        }
+        return this;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public BorderDescriptor width(Value value) {
-        for (BorderDescriptor descriptor : descriptors) {
-            descriptor.width(value);
+    public Value width() {
+        return descriptors.get(0).width();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public BorderDefinition width(Value size) {
+        for (BorderDefinition descriptor : descriptors) {
+            descriptor.width(size);
         }
         return this;
     }
@@ -61,15 +72,15 @@ class BorderDescriptorSet extends BorderDescriptor {
      */
     @Override
     public Color color() {
-        throw new UnsupportedOperationException();
+        return descriptors.get(0).color();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public BorderDescriptor color(Color color) {
-        for (BorderDescriptor descriptor : descriptors) {
+    public BorderDefinition color(Color color) {
+        for (BorderDefinition descriptor : descriptors) {
             descriptor.color(color);
         }
         return this;
@@ -80,15 +91,15 @@ class BorderDescriptorSet extends BorderDescriptor {
      */
     @Override
     public BorderStyle style() {
-        throw new UnsupportedOperationException();
+        return descriptors.get(0).style();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected BorderDescriptor style(BorderStyle style) {
-        for (BorderDescriptor descriptor : descriptors) {
+    protected BorderDefinition style(BorderStyle style) {
+        for (BorderDefinition descriptor : descriptors) {
             descriptor.style(style);
         }
         return this;

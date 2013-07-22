@@ -40,8 +40,8 @@ class ImageGridStyle {
         {
             display.inlineBlock();
             // background.color(backColor);
-            borderTop.solid().width(2, px).color(backColor);
-            borderLeft.solid().width(2, px).color(backColor);
+            border.top.solid().width(2, px).color(backColor);
+            border.left.solid().width(2, px).color(backColor);
         }
     }
 
@@ -57,8 +57,8 @@ class ImageGridStyle {
         {
             display.inlineBlock();
             box.size(ImageSize);
-            borderBottom.solid().width(2, px).color(backColor);
-            borderRight.solid().width(2, px).color(backColor);
+            border.bottom.solid().width(2, px).color(backColor);
+            border.right.solid().width(2, px).color(backColor);
             cursor.pointer();
             position.relative();
             transition.property.all().duration(0.2, s).timing.easeInOut();
@@ -125,12 +125,12 @@ class ImageGridStyle {
             font.size(14, px).color(85, 85, 85);
             line.height(20, px);
             text.verticalAlign.middle();
-            border.radius(4, px).width(1, px).solid().color(204, 204, 204);
+            border.radius(4, px).width(1, px).solid().color(rgb(204, 204, 204));
             background.color(255, 255, 255);
             transition.property.all().duration(0.2, s).timing.linear();
 
             while (focus()) {
-                border.color(82, 168, 236, 0.8f);
+                border.color(rgba(82, 168, 236, 0.8));
                 outline.none();
                 box.shadowInset(0, px, 1, px, 1, px, rgba(0, 0, 0, 0.075))
                         .shadow(0, px, 0, px, 8, px, rgba(82, 168, 236, 0.6));

@@ -11,6 +11,7 @@ package booton.css.property;
 
 import static booton.css.Unit.*;
 import static booton.css.property.BorderStyle.*;
+import static booton.css.value.Color.*;
 
 import org.junit.Test;
 
@@ -22,71 +23,72 @@ public class BordersTest {
     @Test
     public void width() throws Exception {
         MyCSS css = new MyCSS();
-        css.borders.width(2, em);
+        css.border.width(2, em);
 
-        assert css.borders.top.width().equals("2em");
-        assert css.borders.right.width().equals("2em");
-        assert css.borders.bottom.width().equals("2em");
-        assert css.borders.left.width().equals("2em");
+        assert css.border.top.width().equals("2em");
+        assert css.border.right.width().equals("2em");
+        assert css.border.bottom.width().equals("2em");
+        assert css.border.left.width().equals("2em");
+        assert css.has("border", "2em");
     }
 
     @Test
     public void style() throws Exception {
         MyCSS css = new MyCSS();
-        css.borders.solid();
+        css.border.solid();
 
-        assert css.borders.top.style() == Solid;
-        assert css.borders.left.style() == Solid;
-        assert css.borders.bottom.style() == Solid;
-        assert css.borders.right.style() == Solid;
+        assert css.border.top.style() == Solid;
+        assert css.border.left.style() == Solid;
+        assert css.border.bottom.style() == Solid;
+        assert css.border.right.style() == Solid;
+        assert css.has("border", "solid");
+    }
+
+    @Test
+    public void color() throws Exception {
+        MyCSS css = new MyCSS();
+        css.border.color(White);
+
+        assert css.border.top.color() == White;
+        assert css.border.left.color() == White;
+        assert css.border.bottom.color() == White;
+        assert css.border.right.color() == White;
+        assert css.has("border", "white");
     }
 
     @Test
     public void chain() throws Exception {
         MyCSS css = new MyCSS();
-        css.borders.solid().width(2, em).color.black();
+        css.border.solid().width(2, em).color(Black);
 
-        assert css.borders.top.style() == Solid;
-        assert css.borders.left.style() == Solid;
-        assert css.borders.bottom.style() == Solid;
-        assert css.borders.right.style() == Solid;
-        assert css.borders.top.width().equals("2em");
-        assert css.borders.right.width().equals("2em");
-        assert css.borders.bottom.width().equals("2em");
-        assert css.borders.left.width().equals("2em");
+        assert css.has("border", "2em solid black");
     }
 
-    //
-    // @Test
-    // public void width2Sides() throws Exception {
-    // MyCSS css = new MyCSS();
-    // css.borders.width(2, em, 1, em);
-    //
-    // assert css.borders.top.width().equals("2em");
-    // assert css.borders.right.width().equals("1em");
-    // assert css.borders.bottom.width().equals("2em");
-    // assert css.borders.left.width().equals("1em");
-    // }
-    //
-    // @Test
-    // public void width3Sides() throws Exception {
-    // MyCSS css = new MyCSS();
-    // css.borders.width(2, em, 1, em, 4, em);
-    //
-    // assert css.borders.top.width().equals("2em");
-    // assert css.borders.right.width().equals("1em");
-    // assert css.borders.bottom.width().equals("4em");
-    // assert css.borders.left.width().equals("1em");
-    // }
-    //
-    // @Test
-    // public void width4Sides() throws Exception {
-    // MyCSS css = new MyCSS();
-    // css.borders.width(2, em, 1, em, 4, em, 3, em);
-    //
-    // assert css.borders.top.width().equals("2em");
-    // assert css.borders.right.width().equals("1em");
-    // assert css.borders.bottom.width().equals("4em");
-    // assert css.borders.left.width().equals("3em");
-    // }
+    @Test
+    public void top() throws Exception {
+        MyCSS css = new MyCSS();
+        css.border.top.solid().width(1, px).color(Black);
+
+        assert css.border.top.color() == Black;
+        assert css.border.top.style() == Solid;
+        assert css.border.top.width().equals("1px");
+        assert css.has("border-top", "1px solid black");
+    }
+
+    @Test
+    public void radius() throws Exception {
+        MyCSS css = new MyCSS();
+        css.border.radius(5, px);
+
+        assert css.has("border-radius", "5px");
+    }
+
+    @Test
+    public void radiusTop() throws Exception {
+        MyCSS css = new MyCSS();
+        css.border.top.radius(5, px);
+
+        assert css.has("border-top-left-radius", "5px");
+        assert css.has("border-top-right-radius", "5px");
+    }
 }

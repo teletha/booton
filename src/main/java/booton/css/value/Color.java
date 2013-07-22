@@ -169,6 +169,13 @@ public class Color {
     @Override
     public String toString() {
         if (alpha == 1) {
+            if (hue == 0 && saturation == 0) {
+                if (lightness == 0) {
+                    return "black";
+                } else if (lightness == 100) {
+                    return "white";
+                }
+            }
             return "hsl(" + hue + "," + saturation + "%," + lightness + "%)";
         } else {
             return "hsla(" + hue + "," + saturation + "%," + lightness + "%," + (alpha == 0 ? "0" : alpha) + ")";

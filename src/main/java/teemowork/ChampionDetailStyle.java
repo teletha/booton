@@ -9,6 +9,7 @@
  */
 package teemowork;
 
+import static booton.css.value.Color.*;
 import booton.css.CSS;
 import booton.css.Unit;
 import booton.css.value.Value;
@@ -27,7 +28,7 @@ class ChampionDetailStyle {
     class Flex extends CSS {
 
         {
-            border.width(1, px).color.black().doubles();
+            border.width(1, px).color(Black).doubles();
         }
     }
 
@@ -109,7 +110,7 @@ class ChampionDetailStyle {
             display.block();
             box.size(SkillIconSize, px);
             background.contain().size(SkillIconSize, px).borderBox();
-            border.radius(10, px).color(50, 50, 50).width(2, px).solid();
+            border.radius(10, px).color(rgb(50, 50, 50)).width(2, px).solid();
         }
     }
 
@@ -121,7 +122,7 @@ class ChampionDetailStyle {
         {
             display.table();
             box.width(SkillIconSize, px).height(LevelBoxHeight, px);
-            border.width(1, px).solid().color.black();
+            border.width(1, px).solid().color(Black);
             margin.top(2, px).bottom(5, px);
         }
     }
@@ -134,7 +135,7 @@ class ChampionDetailStyle {
         {
             display.tableCell();
             box.width(SkillIconSize / 5, px).height(LevelBoxHeight, px);
-            borderLeft.solid().color.black().width(1, px);
+            border.left.solid().color(Black).width(1, px);
             background.image(linear(rgba(240, 192, 28, 0.5), rgba(160, 123, 1, 0.5)));
 
             while (firstChild()) {
@@ -238,7 +239,7 @@ class ChampionDetailStyle {
 
         {
             cursor.help();
-            borderBottom.dotted().width(1, px);
+            border.bottom.dotted().width(1, px);
         }
     }
 
@@ -311,7 +312,7 @@ class ChampionDetailStyle {
         {
             display.block();
             box.size(ChampionIconSize);
-            border.radius(10, px).color(50, 50, 50).width(2, px).solid();
+            border.radius(10, px).color(rgb(50, 50, 50)).width(2, px).solid();
             position.relative();
             cursor.pointer();
         }

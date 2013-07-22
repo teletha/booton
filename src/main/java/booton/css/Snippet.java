@@ -10,6 +10,7 @@
 package booton.css;
 
 import static booton.css.CSS.*;
+import static booton.css.value.Color.*;
 import booton.css.value.Color;
 import booton.css.value.Font;
 import booton.css.value.Value;
@@ -48,8 +49,8 @@ public class Snippet {
             css.content.text("");
             css.position.absolute().left(50, percent).bottom(100, percent);
             css.margin.left(width.opposite());
-            css.border.solid().color.transparent().width(width);
-            css.borderBottom.color(borderColor);
+            css.border.solid().color(Transparent).width(width);
+            css.border.bottom.color(borderColor);
         }
 
         // write bubble background color
@@ -62,8 +63,8 @@ public class Snippet {
                 css.content.text("");
                 css.position.absolute().left(50, percent).bottom(100, percent);
                 css.margin.left(width.opposite());
-                css.border.solid().color.transparent().width(width);
-                css.borderBottom.color(boxBackColor.opacify(1));
+                css.border.solid().color(Transparent).width(width);
+                css.border.bottom.color(boxBackColor.opacify(1));
             }
         }
     }
@@ -95,8 +96,8 @@ public class Snippet {
             css.content.text("");
             css.position.absolute().left(50, percent).top(100, percent);
             css.margin.left(width.opposite());
-            css.border.solid().color.transparent().width(width);
-            css.borderTop.color(borderColor);
+            css.border.solid().color(Transparent).width(width);
+            css.border.top.color(borderColor);
         }
 
         // write bubble background color
@@ -109,8 +110,8 @@ public class Snippet {
                 css.content.text("");
                 css.position.absolute().left(50, percent).top(100, percent);
                 css.margin.left(width.opposite());
-                css.border.solid().color.transparent().width(width);
-                css.borderTop.color(boxBackColor.opacify(1));
+                css.border.solid().color(Transparent).width(width);
+                css.border.top.color(boxBackColor.opacify(1));
             }
         }
     }
