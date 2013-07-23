@@ -48,36 +48,38 @@ class MasteryBuilderStyle {
 
     String noise = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAABlBMVEUAAAAAAAClZ7nPAAAAAnRSTlMAGovxNEIAAAAoSURBVDhPYxBEAgIMSkhAgcEFCTgwdCCBBoZRfaP6RvWN6hvVR5Y+APADQlQnmrINAAAAAElFTkSuQmCC";
 
-    class Offense extends CSS {
+    class MasteryBox extends CSS {
 
         {
             display.inlineBlock();
             box.width(TreeWidth, px).height(TreeHeight, px);
             padding.size(TreePadding, px);
-            background.color(Blue.adjustHue(120)).image(transparent, noise);
+            background.image(transparent, noise);
             font.color(background.color().lighten(-25));
+        }
+    }
+
+    class Offense extends CSS {
+
+        {
+            require(MasteryBox.class);
+            background.color(Blue.adjustHue(120));
         }
     }
 
     class Defense extends CSS {
 
         {
-            display.inlineBlock();
-            box.width(TreeWidth, px).height(TreeHeight, px);
-            padding.size(TreePadding, px);
-            background.color(Blue).image(transparent, noise);
-            font.color(background.color().lighten(-25));
+            require(MasteryBox.class);
+            background.color(Blue);
         }
     }
 
     class Utility extends CSS {
 
         {
-            display.inlineBlock();
-            box.width(TreeWidth, px).height(TreeHeight, px);
-            padding.size(TreePadding, px);
-            background.color(Blue.adjustHue(-120)).image(transparent, noise);
-            font.color(background.color().lighten(-25));
+            require(MasteryBox.class);
+            background.color(Blue.adjustHue(-120));
         }
     }
 

@@ -10,27 +10,40 @@
 package booton.css;
 
 /**
- * @version 2013/06/08 9:10:26
+ * @version 2013/07/23 23:12:12
  */
 public enum Vendor {
 
+    /** Internet Explorer */
     IE("-ms-"),
 
+    /** Mozilla */
     Mozilla("-moz-"),
 
+    /** Safari */
     Safari("-webkit-"),
 
+    /** Webkit */
     Webkit("-webkit-"),
 
+    /** Standard */
     Standard("");
 
     /** The prefix. */
-    public final String prefix;
+    private final String prefix;
 
     /**
      * @param prefix
      */
     private Vendor(String prefix) {
         this.prefix = prefix;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return prefix;
     }
 }

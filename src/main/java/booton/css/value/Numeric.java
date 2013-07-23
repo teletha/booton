@@ -19,7 +19,7 @@ import booton.css.Unit;
 import booton.css.Vendor;
 
 /**
- * @version 2013/07/23 19:32:10
+ * @version 2013/07/23 23:50:06
  */
 public class Numeric extends CSSValue {
 
@@ -30,10 +30,13 @@ public class Numeric extends CSSValue {
     public final double size;
 
     /** The unit. */
-    protected final Unit unit;
+    public final Unit unit;
 
     /** The expression. */
     protected final String expression;
+
+    /** The flag. */
+    private final boolean calculated;
 
     /**
      * <p>
@@ -46,16 +49,28 @@ public class Numeric extends CSSValue {
 
     /**
      * <p>
+     * {@link Numeric} value as number.
+     * </p>
+     * 
+     * @param value A numeric size.
+     */
+    public Numeric(double size) {
+        this(size, null);
+    }
+
+    /**
+     * <p>
      * {@link Numeric} value.
      * </p>
      * 
-     * @param size A numeric size.
+     * @param value A numeric size.
      * @param unit A unit.
      */
-    public Numeric(double size, Unit unit) {
-        this.size = size;
-        this.unit = unit == null ? px : unit;
+    public Numeric(double value, Unit unit) {
+        this.size = value;
+        this.unit = unit;
         this.expression = value();
+        this.calculated = false;
     }
 
     /**
@@ -69,6 +84,21 @@ public class Numeric extends CSSValue {
         this.size = 0;
         this.unit = null;
         this.expression = expression;
+        this.calculated = true;
+    }
+
+    /**
+     * <p>
+     * Copy {@link Numeric} value.
+     * </p>
+     * 
+     * @param numeric A valut to copy..
+     */
+    protected Numeric(Numeric numeric) {
+        this.size = numeric.size;
+        this.unit = numeric.unit;
+        this.expression = numeric.expression;
+        this.calculated = numeric.calculated;
     }
 
     /**
@@ -92,7 +122,7 @@ public class Numeric extends CSSValue {
      * @return
      */
     public Numeric add(Numeric value) {
-        if (unit != null && unit == value.unit) {
+        if (unit == value.unit) {
             return new Numeric(size + value.size, unit);
         } else {
             return new Numeric(expression + " + " + value.expression);
@@ -120,7 +150,7 @@ public class Numeric extends CSSValue {
      * @return
      */
     public Numeric subtract(Numeric value) {
-        if (unit != null && unit == value.unit) {
+        if (unit == value.unit) {
             return new Numeric(size - value.size, unit);
         } else {
             return new Numeric(expression + " - " + value.expression);
@@ -148,7 +178,7 @@ public class Numeric extends CSSValue {
      * @return
      */
     public Numeric multiply(Numeric value) {
-        if (unit != null && unit == value.unit) {
+        if (unit == value.unit) {
             return new Numeric(size * value.size, unit);
         } else {
             return new Numeric(expression + " * " + value.expression);
@@ -176,7 +206,7 @@ public class Numeric extends CSSValue {
      * @return
      */
     public Numeric divide(Numeric value) {
-        if (unit != null && unit == value.unit) {
+        if (unit == value.unit) {
             return new Numeric(size / value.size, unit);
         } else {
             return new Numeric(expression + " / " + value.expression);
@@ -215,7 +245,7 @@ public class Numeric extends CSSValue {
      */
     @Override
     protected EnumSet<Vendor> vendors() {
-        if (unit == null) {
+        if (calculated) {
             return EnumSet.of(Standard, Webkit);
         } else {
             return NoVendors;
@@ -227,13 +257,10 @@ public class Numeric extends CSSValue {
      */
     @Override
     protected String valueFor(Vendor vendor) {
-        switch (vendor) {
-        case Webkit:
-            return vendor.prefix + value();
-
-        default:
-            return value();
+        if (!calculated) {
+            vendor = Standard;
         }
+        return vendor + value();
     }
 
     /**
@@ -244,7 +271,7 @@ public class Numeric extends CSSValue {
      * @return A string expression.
      */
     private String value() {
-        if (unit == null) {
+        if (calculated) {
             return "calc(" + expression + ")";
         }
 
@@ -253,9 +280,9 @@ public class Numeric extends CSSValue {
         if (size == 0) {
             return "0";
         } else if (integer == size) {
-            return String.valueOf(integer) + unit;
+            return String.valueOf(integer) + (unit == null ? "" : unit);
         } else {
-            return String.valueOf(size) + unit;
+            return String.valueOf(size) + (unit == null ? "" : unit);
         }
     }
 }
