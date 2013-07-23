@@ -12,7 +12,7 @@ package teemowork;
 import static booton.css.value.Color.*;
 import booton.css.CSS;
 import booton.css.Unit;
-import booton.css.value.Value;
+import booton.css.value.Numeric;
 
 /**
  * @version 2013/02/26 23:49:51
@@ -302,7 +302,7 @@ class ChampionDetailStyle {
         }
     }
 
-    Value ChampionIconSize = new Value(70, Unit.px);
+    Numeric ChampionIconSize = new Numeric(70, Unit.px);
 
     /**
      * @version 2013/01/15 13:19:52
@@ -383,7 +383,7 @@ class ChampionDetailStyle {
         }
     }
 
-    Value ItemIconSize = ChampionIconSize.divide(5).multiply(3);
+    Numeric ItemIconSize = ChampionIconSize.divide(5).multiply(3);
 
     class ItemViewBox extends CSS {
 

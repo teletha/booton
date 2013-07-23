@@ -14,8 +14,8 @@ import booton.css.CSS;
 import booton.css.Snippet;
 import booton.css.Unit;
 import booton.css.value.Color;
-import booton.css.value.GradientValue;
-import booton.css.value.Value;
+import booton.css.value.Gradient;
+import booton.css.value.Numeric;
 
 /**
  * @version 2013/03/13 15:05:12
@@ -44,7 +44,7 @@ class MasteryBuilderStyle {
 
     Color Blue = new Color(220, 50, 85);
 
-    GradientValue transparent = new GradientValue(new Color(0, 100, 100, 0.6), new Color(0, 100, 100, 0));
+    Gradient transparent = new Gradient(new Color(0, 100, 100, 0.6), new Color(0, 100, 100, 0));
 
     String noise = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAABlBMVEUAAAAAAAClZ7nPAAAAAnRSTlMAGovxNEIAAAAoSURBVDhPYxBEAgIMSkhAgcEFCTgwdCCBBoZRfaP6RvWN6hvVR5Y+APADQlQnmrINAAAAAElFTkSuQmCC";
 
@@ -312,9 +312,9 @@ class MasteryBuilderStyle {
         }
     }
 
-    Value BorderWidth = new Value(1, Unit.px);
+    Numeric BorderWidth = new Numeric(1, Unit.px);
 
-    Value BorderRadius = new Value(4, Unit.px);
+    Numeric BorderRadius = new Numeric(4, Unit.px);
 
     Color BorderColor = new Color(0, 0, 80);
 

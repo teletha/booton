@@ -15,7 +15,7 @@ import java.util.List;
 import booton.css.CSSWriter;
 import booton.css.Unit;
 import booton.css.value.Color;
-import booton.css.value.GradientValue;
+import booton.css.value.Gradient;
 
 /**
  * @version 2013/07/23 13:26:06
@@ -34,7 +34,7 @@ public class Background extends ColorableProperty<Background> {
 
     private List<Object> images = new ArrayList();
 
-    private GradientValue gradient;
+    private Gradient gradient;
 
     private String origin;
 
@@ -124,7 +124,7 @@ public class Background extends ColorableProperty<Background> {
      * @param uri
      * @return
      */
-    public Background image(GradientValue gradient) {
+    public Background image(Gradient gradient) {
         this.gradient = gradient;
         this.images.add(gradient);
 

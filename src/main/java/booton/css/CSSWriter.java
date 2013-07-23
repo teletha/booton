@@ -9,7 +9,10 @@
  */
 package booton.css;
 
+import static booton.css.Vendor.*;
+
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import kiss.I;
@@ -175,21 +178,24 @@ public class CSSWriter {
         if (name != null && name.length() != 0 && values != null) {
             List<List<String>> container = new ArrayList();
 
-            boolean has = false;
+            // calculate dependent vendors
+            EnumSet<Vendor> vendors = EnumSet.of(Standard);
 
-            root: for (Vendor vendor : Vendor.values()) {
+            for (Object value : values) {
+                if (value instanceof CSSValue) {
+                    vendors.addAll(((CSSValue) value).vendors());
+                }
+            }
+
+            for (Vendor vendor : vendors) {
                 List<String> list = new ArrayList();
 
                 for (Object value : values) {
                     if (value != null) {
-                        if (value instanceof VendorPrefixValue) {
-                            has = true;
+                        if (value instanceof CSSValue) {
+                            String vendered = ((CSSValue) value).valueFor(vendor);
 
-                            String vendered = ((VendorPrefixValue) value).toString(vendor);
-
-                            if (vendered == null) {
-                                continue root;
-                            } else {
+                            if (vendered != null && vendered.length() != 0) {
                                 list.add(vendered);
                             }
                         } else if (value instanceof Double) {
@@ -210,10 +216,6 @@ public class CSSWriter {
                     }
                 }
                 container.add(list);
-
-                if (!has) {
-                    break;
-                }
             }
 
             for (List<String> text : container) {

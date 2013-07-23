@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import booton.css.value.Color;
-import booton.css.value.Value;
+import booton.css.value.Numeric;
 
 /**
  * @version 2013/07/23 13:23:08
@@ -54,7 +54,7 @@ class BorderSet extends Border {
      * {@inheritDoc}
      */
     @Override
-    public Border radius(Value size) {
+    public Border radius(Numeric size) {
         for (Border descriptor : descriptors) {
             descriptor.radius(size);
         }
@@ -65,7 +65,7 @@ class BorderSet extends Border {
      * {@inheritDoc}
      */
     @Override
-    public Value width() {
+    public Numeric width() {
         return descriptors.get(0).width();
     }
 
@@ -73,7 +73,7 @@ class BorderSet extends Border {
      * {@inheritDoc}
      */
     @Override
-    public Border width(Value size) {
+    public Border width(Numeric size) {
         for (Border descriptor : descriptors) {
             descriptor.width(size);
         }

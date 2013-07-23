@@ -12,7 +12,7 @@ package jsx.bwt.view;
 import booton.css.CSS;
 import booton.css.Snippet;
 import booton.css.value.Color;
-import booton.css.value.Value;
+import booton.css.value.Numeric;
 
 /**
  * @version 2013/06/09 18:48:17
@@ -48,9 +48,9 @@ public class PopupViewStyle {
 
     public class Bottom extends CSS {
 
-        Value IconSize = new Value(40, px);
+        Numeric IconSize = new Numeric(40, px);
 
-        Value Width = new Value(300, px);
+        Numeric Width = new Numeric(300, px);
 
         int BorderWidth = 2;
 

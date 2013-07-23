@@ -13,7 +13,7 @@ import static booton.css.CSS.*;
 import static booton.css.value.Color.*;
 import booton.css.value.Color;
 import booton.css.value.Font;
-import booton.css.value.Value;
+import booton.css.value.Numeric;
 
 /**
  * @version 2013/03/24 16:07:10
@@ -32,7 +32,7 @@ public class Snippet {
     public static final void createTopBubble(int bubbleHeight) {
         CSS css = CSS.current;
 
-        Value borderWidth = css.border.width();
+        Numeric borderWidth = css.border.width();
         Color borderColor = css.border.color();
         Color boxBackColor = css.background.color();
 
@@ -40,7 +40,7 @@ public class Snippet {
             css.position.relative();
         }
 
-        Value width = borderWidth.add(bubbleHeight);
+        Numeric width = borderWidth.add(bubbleHeight);
 
         // write bubble border color
         while (css.before()) {
@@ -79,7 +79,7 @@ public class Snippet {
     public static final void createBottomBubble(int bubbleHeight) {
         CSS css = CSS.current;
 
-        Value borderWidth = css.border.width();
+        Numeric borderWidth = css.border.width();
         Color borderColor = css.border.color();
         Color boxBackColor = css.background.color();
 
@@ -87,7 +87,7 @@ public class Snippet {
             css.position.relative();
         }
 
-        Value width = borderWidth.add(bubbleHeight);
+        Numeric width = borderWidth.add(bubbleHeight);
 
         // write bubble border color
         while (css.before()) {

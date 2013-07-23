@@ -18,7 +18,7 @@ import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
 import booton.css.value.Color;
-import booton.css.value.Value;
+import booton.css.value.Numeric;
 import booton.util.Strings;
 
 /**
@@ -102,7 +102,7 @@ public final class Font extends ColorableProperty<Font> {
      * @return
      */
     public Font size(double size, Unit unit) {
-        return size(new Value(size, unit));
+        return size(new Numeric(size, unit));
     }
 
     /**
@@ -115,7 +115,7 @@ public final class Font extends ColorableProperty<Font> {
      * @param value
      * @return
      */
-    public Font size(Value value) {
+    public Font size(Numeric value) {
         return this.size.set(value);
     }
 
@@ -231,7 +231,7 @@ public final class Font extends ColorableProperty<Font> {
          * @param value
          * @return
          */
-        private Font set(Value value) {
+        private Font set(Numeric value) {
             return chain(value.toString());
         }
 

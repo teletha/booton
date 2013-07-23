@@ -15,7 +15,7 @@ import teemowork.TeemoworkTheme;
 import booton.css.CSS;
 import booton.css.Snippet;
 import booton.css.value.Color;
-import booton.css.value.Value;
+import booton.css.value.Numeric;
 
 /**
  * @version 2013/03/24 10:50:33
@@ -24,7 +24,7 @@ class ImageGridStyle {
 
     Color backColor = new Color(0, 10, 10);
 
-    Value ImageSize = new Value(70, px);
+    Numeric ImageSize = new Numeric(70, px);
 
     class Root extends CSS {
 
@@ -80,7 +80,7 @@ class ImageGridStyle {
 
     class Title extends CSS {
 
-        Value boxWidth = ImageSize.add(40);
+        Numeric boxWidth = ImageSize.add(40);
 
         Color color = new Color(0, 98, 97, 1);
 

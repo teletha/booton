@@ -12,7 +12,7 @@ package booton.css.property;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
-import booton.css.value.Value;
+import booton.css.value.Numeric;
 
 /**
  * @version 2012/12/12 10:12:14
@@ -20,16 +20,16 @@ import booton.css.value.Value;
 public class Position extends CSSProperty<Position> {
 
     /** The position. */
-    private Value top;
+    private Numeric top;
 
     /** The position. */
-    private Value bottom;
+    private Numeric bottom;
 
     /** The position. */
-    private Value left;
+    private Numeric left;
 
     /** The position. */
-    private Value right;
+    private Numeric right;
 
     /**
      * {@inheritDoc}
@@ -119,7 +119,7 @@ public class Position extends CSSProperty<Position> {
      * @param value A position value.
      * @return Chainable API.
      */
-    public Position left(Value value) {
+    public Position left(Numeric value) {
         left = value;
 
         return chain();
@@ -140,7 +140,7 @@ public class Position extends CSSProperty<Position> {
      * @return Chainable API.
      */
     public Position left(double size, Unit unit) {
-        left = new Value(size, unit);
+        left = new Numeric(size, unit);
 
         return chain();
     }
@@ -168,7 +168,7 @@ public class Position extends CSSProperty<Position> {
      * @param value A position value.
      * @return Chainable API.
      */
-    public Position right(Value value) {
+    public Position right(Numeric value) {
         right = value;
 
         return chain();
@@ -199,7 +199,7 @@ public class Position extends CSSProperty<Position> {
      * @return Chainable API.
      */
     public Position right(double size, Unit unit) {
-        right = new Value(size, unit);
+        right = new Numeric(size, unit);
 
         return chain();
     }
@@ -227,7 +227,7 @@ public class Position extends CSSProperty<Position> {
      * @param value A position value.
      * @return Chainable API.
      */
-    public Position top(Value value) {
+    public Position top(Numeric value) {
         top = value;
 
         return chain();
@@ -258,7 +258,7 @@ public class Position extends CSSProperty<Position> {
      * @return Chainable API.
      */
     public Position top(double size, Unit unit) {
-        top = new Value(size, unit);
+        top = new Numeric(size, unit);
 
         return chain();
     }
@@ -286,7 +286,7 @@ public class Position extends CSSProperty<Position> {
      * @return Chainable API.
      */
     public Position bottom(double size, Unit unit) {
-        return bottom(new Value(size, unit));
+        return bottom(new Numeric(size, unit));
     }
 
     /**
@@ -311,7 +311,7 @@ public class Position extends CSSProperty<Position> {
      * @param unit A unit.
      * @return Chainable API.
      */
-    public Position bottom(Value value) {
+    public Position bottom(Numeric value) {
         bottom = value;
 
         return chain();
