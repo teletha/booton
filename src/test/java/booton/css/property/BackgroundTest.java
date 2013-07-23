@@ -9,11 +9,13 @@
  */
 package booton.css.property;
 
-import static booton.css.CSS.*;
 import static booton.css.Vendor.*;
 import static booton.css.value.Color.*;
 
 import org.junit.Test;
+
+import booton.css.MyCSS;
+import booton.css.value.Gradient;
 
 /**
  * @version 2013/07/23 16:49:41
@@ -39,7 +41,7 @@ public class BackgroundTest {
     @Test
     public void imageGradient() throws Exception {
         MyCSS css = new MyCSS();
-        css.background.image(linear(Black, White));
+        css.background.image(new Gradient(Black, White));
 
         assert css.has("background-image", "-webkit-linear-gradient(black,white)");
         assert css.has("background-image", "linear-gradient(black,white)");
@@ -49,7 +51,7 @@ public class BackgroundTest {
     @Test
     public void imageGradients() throws Exception {
         MyCSS css = new MyCSS();
-        css.background.image(linear(Black, White)).image(linear(White, Black));
+        css.background.image(new Gradient(Black, White)).image(new Gradient(White, Black));
 
         assert css.has("background-image", "-webkit-linear-gradient(black,white),-webkit-linear-gradient(white,black)");
         assert css.has("background-image", "linear-gradient(black,white),linear-gradient(white,black)");

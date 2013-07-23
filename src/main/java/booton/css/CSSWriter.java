@@ -126,12 +126,13 @@ public class CSSWriter {
 
     /**
      * <p>
-     * Write property.
+     * Helper method to write property.
      * </p>
      * 
-     * @param separator
-     * @param name
-     * @param values
+     * @param prefixes A list of vendors for property name.
+     * @param separator A value separator.
+     * @param name A property name.
+     * @param values A list of property values.
      */
     private void property(EnumSet<Vendor> prefixes, String separator, String name, Object... values) {
         if (name != null && name.length() != 0 && values != null) {
@@ -182,7 +183,11 @@ public class CSSWriter {
 
                 if (value.length() != 0) {
                     Vendor vendor = property.getKey();
-                    indent().write(prefixes.contains(vendor) ? vendor + name : name, ":", value, ";");
+
+                    if (!prefixes.contains(vendor)) {
+                        vendor = Standard;
+                    }
+                    indent().write(vendor + name, ":", value, ";");
                 }
             }
         }

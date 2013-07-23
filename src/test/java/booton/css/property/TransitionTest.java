@@ -14,6 +14,8 @@ import static booton.css.Vendor.*;
 
 import org.junit.Test;
 
+import booton.css.MyCSS;
+
 /**
  * @version 2013/07/23 0:47:54
  */

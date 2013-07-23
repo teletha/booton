@@ -15,6 +15,8 @@ import static booton.css.value.Color.*;
 
 import org.junit.Test;
 
+import booton.css.MyCSS;
+
 /**
  * @version 2013/07/22 12:51:59
  */
