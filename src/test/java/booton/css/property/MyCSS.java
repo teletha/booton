@@ -58,7 +58,7 @@ public class MyCSS extends CSS {
      * @return
      */
     boolean has(Vendor vendor) {
-        return toString().contains(vendor.prefix);
+        return toString().contains(vendor.toString());
     }
 
     /**
@@ -73,7 +73,7 @@ public class MyCSS extends CSS {
         String code = toString();
 
         for (Vendor vendor : vendors) {
-            if (code.contains(vendor.prefix)) {
+            if (code.contains(vendor.toString())) {
                 return false;
             }
         }
@@ -90,5 +90,25 @@ public class MyCSS extends CSS {
      */
     boolean noVendor() {
         return no(IE, Mozilla, Webkit);
+    }
+
+    /**
+     * <p>
+     * Count a number of properties.
+     * </p>
+     * 
+     * @return A number of properties.
+     */
+    int count() {
+        int counter = 0;
+        String code = toString();
+        int index = code.indexOf(';');
+
+        while (index != -1) {
+            counter++;
+
+            index = code.indexOf(';', index + 1);
+        }
+        return counter;
     }
 }

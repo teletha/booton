@@ -12,14 +12,16 @@ package booton.css;
 import static booton.css.Vendor.*;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map.Entry;
 
 import kiss.I;
 import booton.BootonConfiguration;
 
 /**
- * @version 2013/07/23 17:14:15
+ * @version 2013/07/23 22:25:05
  */
 public class CSSWriter {
 
@@ -75,58 +77,15 @@ public class CSSWriter {
 
     /**
      * <p>
-     * Write property with the specified vendor.
-     * </p>
-     * 
-     * @param name A property name.
-     * @param value A property value.
-     * @param vendor A vendor type.
-     */
-    public void property(String name, Object value, Vendor vendor) {
-        propertyWithPrefix(name, value, vendor);
-        property(name, value);
-    }
-
-    /**
-     * <p>
-     * Write property with the specified vendor.
-     * </p>
-     * 
-     * @param name A property name.
-     * @param value A property value.
-     * @param vendor A vendor type.
-     */
-    public void property(String name, Object value, Vendor vendor1, Vendor vendor2) {
-        propertyWithPrefix(name, value, vendor1);
-        propertyWithPrefix(name, value, vendor2);
-        property(name, value);
-    }
-
-    /**
-     * <p>
-     * Helper method to write vender prefixed property.
-     * </p>
-     * 
-     * @param name A property name.
-     * @param value A property value.
-     * @param vendor A vendor type.
-     */
-    private void propertyWithPrefix(String name, Object value, Vendor vendor) {
-        if (vendor != null) {
-            property(vendor.prefix + name, value);
-        }
-    }
-
-    /**
-     * <p>
      * Write property.
      * </p>
      * 
      * @param name
      * @param values
+     * @param vendors
      */
-    public void property(String name, List values) {
-        property(name, values.toArray());
+    public void property(String name, List values, Vendor... vendors) {
+        property(EnumSet.of(Standard, vendors), " ", name, values.toArray());
     }
 
     /**
@@ -150,7 +109,7 @@ public class CSSWriter {
      * @param calcurated
      */
     public void property(String name, Object... values) {
-        property(" ", name, values);
+        property(EnumSet.of(Standard), " ", name, values);
     }
 
     /**
@@ -162,7 +121,7 @@ public class CSSWriter {
      * @param calcurated
      */
     public void propertyWithSeparator(String name, Object... values) {
-        property(",", name, values);
+        property(EnumSet.of(Standard), ",", name, values);
     }
 
     /**
@@ -174,12 +133,12 @@ public class CSSWriter {
      * @param name
      * @param values
      */
-    private void property(String separator, String name, Object... values) {
+    private void property(EnumSet<Vendor> prefixes, String separator, String name, Object... values) {
         if (name != null && name.length() != 0 && values != null) {
-            List<List<String>> container = new ArrayList();
+            EnumMap<Vendor, List<String>> properties = new EnumMap(Vendor.class);
 
             // calculate dependent vendors
-            EnumSet<Vendor> vendors = EnumSet.of(Standard);
+            EnumSet<Vendor> vendors = EnumSet.copyOf(prefixes);
 
             for (Object value : values) {
                 if (value instanceof CSSValue) {
@@ -188,7 +147,7 @@ public class CSSWriter {
             }
 
             for (Vendor vendor : vendors) {
-                List<String> list = new ArrayList();
+                List<String> text = new ArrayList();
 
                 for (Object value : values) {
                     if (value != null) {
@@ -196,33 +155,34 @@ public class CSSWriter {
                             String vendered = ((CSSValue) value).valueFor(vendor);
 
                             if (vendered != null && vendered.length() != 0) {
-                                list.add(vendered);
+                                text.add(vendered);
                             }
-                        } else if (value instanceof Double) {
-                            Double d = (Double) value;
+                        } else if (value instanceof Number) {
+                            Number number = (Number) value;
 
-                            if (d.intValue() == d.doubleValue()) {
-                                list.add(String.valueOf(d.intValue()));
+                            if (number.intValue() == number.doubleValue()) {
+                                text.add(String.valueOf(number.intValue()));
                             } else {
-                                list.add(d.toString());
+                                text.add(number.toString());
                             }
                         } else {
                             String decoded = value.toString();
 
                             if (decoded != null && decoded.length() != 0) {
-                                list.add(decoded);
+                                text.add(decoded);
                             }
                         }
                     }
                 }
-                container.add(list);
+                properties.put(vendor, text);
             }
 
-            for (List<String> text : container) {
-                String value = I.join(text, separator);
+            for (Entry<Vendor, List<String>> property : properties.entrySet()) {
+                String value = I.join(property.getValue(), separator);
 
                 if (value.length() != 0) {
-                    indent().write(name, ":", value, ";");
+                    Vendor vendor = property.getKey();
+                    indent().write(prefixes.contains(vendor) ? vendor + name : name, ":", value, ";");
                 }
             }
         }

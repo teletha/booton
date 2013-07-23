@@ -401,8 +401,8 @@ public class CSSProperty<T extends CSSProperty> {
          * @param value
          */
         private void set(Vendor vendor, String name, String value) {
-            names.put(vendor, namePrefix ? vendor.prefix + name : name);
-            values.put(vendor, valuePrefix ? vendor.prefix + value : value);
+            names.put(vendor, namePrefix ? vendor + name : name);
+            values.put(vendor, valuePrefix ? vendor + value : value);
         }
 
         /**

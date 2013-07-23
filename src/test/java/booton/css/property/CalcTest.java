@@ -43,4 +43,24 @@ public class CalcTest {
         assert css.has("width", "calc(1px + 2em)");
         assert css.no(IE, Mozilla);
     }
+
+    @Test
+    public void inPrefixedProperty() throws Exception {
+        MyCSS css = new MyCSS();
+        css.transform.translateY(one.add(two));
+
+        assert css.has("-webkit-transform", "translateY(-webkit-calc(1px + 2em))");
+        assert css.has("transform", "translateY(calc(1px + 2em))");
+        assert css.count() == 2;
+    }
+
+    @Test
+    public void noneInPrefixedProperty() throws Exception {
+        MyCSS css = new MyCSS();
+        css.transform.translateY(one);
+
+        assert css.has("-webkit-transform", "translateY(1px)");
+        assert css.has("transform", "translateY(1px)");
+        assert css.count() == 2;
+    }
 }

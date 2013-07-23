@@ -43,7 +43,7 @@ public class Gradient extends CSSValue {
     protected String valueFor(Vendor vendor) {
         switch (vendor) {
         case Webkit:
-            return vendor.prefix + "linear-gradient(" + start + "," + end + ")";
+            return vendor + "linear-gradient(" + start + "," + end + ")";
 
         default:
             return "linear-gradient(" + start + "," + end + ")";
