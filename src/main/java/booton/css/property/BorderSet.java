@@ -18,10 +18,23 @@ import booton.css.value.Value;
 /**
  * @version 2013/07/22 16:16:51
  */
-class BorderSet extends BorderDefinition {
+class BorderSet extends Border {
 
     /** The descriptor set. */
-    private final List<BorderDefinition> descriptors = new ArrayList();
+    private final List<Border> descriptors = new ArrayList();
+
+    /**
+     * 
+     */
+    protected BorderSet() {
+    }
+
+    /**
+     * @param name
+     */
+    protected BorderSet(String name) {
+        super(name);
+    }
 
     /**
      * <p>
@@ -30,8 +43,8 @@ class BorderSet extends BorderDefinition {
      * 
      * @param descriptors
      */
-    protected final BorderSet add(BorderDefinition... descriptors) {
-        for (BorderDefinition descriptor : descriptors) {
+    protected final BorderSet add(Border... descriptors) {
+        for (Border descriptor : descriptors) {
             this.descriptors.add(descriptor);
         }
         return this;
@@ -41,8 +54,8 @@ class BorderSet extends BorderDefinition {
      * {@inheritDoc}
      */
     @Override
-    public BorderDefinition radius(Value size) {
-        for (BorderDefinition descriptor : descriptors) {
+    public Border radius(Value size) {
+        for (Border descriptor : descriptors) {
             descriptor.radius(size);
         }
         return this;
@@ -60,8 +73,8 @@ class BorderSet extends BorderDefinition {
      * {@inheritDoc}
      */
     @Override
-    public BorderDefinition width(Value size) {
-        for (BorderDefinition descriptor : descriptors) {
+    public Border width(Value size) {
+        for (Border descriptor : descriptors) {
             descriptor.width(size);
         }
         return this;
@@ -79,8 +92,8 @@ class BorderSet extends BorderDefinition {
      * {@inheritDoc}
      */
     @Override
-    public BorderDefinition color(Color color) {
-        for (BorderDefinition descriptor : descriptors) {
+    public Border color(Color color) {
+        for (Border descriptor : descriptors) {
             descriptor.color(color);
         }
         return this;
@@ -98,8 +111,8 @@ class BorderSet extends BorderDefinition {
      * {@inheritDoc}
      */
     @Override
-    protected BorderDefinition style(BorderStyle style) {
-        for (BorderDefinition descriptor : descriptors) {
+    protected Border style(BorderStyle style) {
+        for (Border descriptor : descriptors) {
             descriptor.style(style);
         }
         return this;

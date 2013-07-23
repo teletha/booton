@@ -26,7 +26,7 @@ import booton.Stylist;
 import booton.css.property.AlignContent;
 import booton.css.property.AlignItems;
 import booton.css.property.Background;
-import booton.css.property.Border;
+import booton.css.property.Borders;
 import booton.css.property.Box;
 import booton.css.property.BoxLength;
 import booton.css.property.Content;
@@ -46,7 +46,6 @@ import booton.css.property.Transform;
 import booton.css.property.Transition;
 import booton.css.property.UserSelect;
 import booton.css.property.Visibility;
-import booton.css.value.BorderValue;
 import booton.css.value.Color;
 import booton.css.value.GradientValue;
 import booton.util.Strings;
@@ -204,7 +203,7 @@ public abstract class CSS implements Extensible {
      * more of: border-width, border-style, border-color.
      * </p>
      */
-    public Border border;
+    public Borders border;
 
     /**
      * <p>
@@ -337,7 +336,7 @@ public abstract class CSS implements Extensible {
      * draws a non-rectangular shape around a construct like this:</li>
      * </ul>
      */
-    public BorderValue outline;
+    public Borders outline;
 
     /**
      * <p>
@@ -962,11 +961,11 @@ public abstract class CSS implements Extensible {
         /** The property store. */
         private final List<CSSProperty> rules = new ArrayList();
 
-        /** The flag whether this rule set process sub rule or not. */
-        private int id = -1;
-
         /** The sub rule sets. */
         private final Set<RuleSet> subs = new LinkedHashSet();
+
+        /** The flag whether this rule set process sub rule or not. */
+        private int id = -1;
 
         /**
          * <p>

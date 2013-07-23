@@ -16,7 +16,7 @@ import booton.css.Unit;
 import booton.css.value.Value;
 
 /**
- * @version 2013/07/18 16:27:39
+ * @version 2013/07/23 0:48:06
  */
 public class Transition extends CSSProperty<Transition> {
 
@@ -106,7 +106,7 @@ public class Transition extends CSSProperty<Transition> {
     }
 
     /**
-     * @version 2013/06/08 16:27:10
+     * @version 2013/07/23 0:48:11
      */
     public class Property extends CSSProperty<Transition> {
 
@@ -125,7 +125,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition all() {
-            return chain(prefixName("all"));
+            return chain(prefixName("all").omit(Mozilla, IE));
         }
 
         /**
@@ -136,7 +136,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition none() {
-            return chain(prefixName("none"));
+            return chain(prefixName("none").omit(Mozilla, IE));
         }
 
         /**
@@ -154,12 +154,12 @@ public class Transition extends CSSProperty<Transition> {
          * @return Chainable API.
          */
         private Transition specify(String id) {
-            return chain(id);
+            return chain(prefixName(id).omit(Mozilla, IE));
         }
     }
 
     /**
-     * @version 2013/06/08 16:27:14
+     * @version 2013/07/23 0:48:16
      */
     public class Timing extends CSSProperty<Transition> {
 
@@ -180,7 +180,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition linear() {
-            return chain(prefixName("linear"));
+            return chain(prefixName("linear").omit(Mozilla, IE));
         }
 
         /**
@@ -193,7 +193,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition ease() {
-            return chain(prefixName("ease"));
+            return chain(prefixName("ease").omit(Mozilla, IE));
         }
 
         /**
@@ -206,7 +206,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition easeIn() {
-            return chain(prefixName("ease-in"));
+            return chain(prefixName("ease-in").omit(Mozilla, IE));
         }
 
         /**
@@ -220,7 +220,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition easeInOut() {
-            return chain(prefixName("ease-in-out"));
+            return chain(prefixName("ease-in-out").omit(Mozilla, IE));
         }
 
         /**
@@ -233,7 +233,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition easeOut() {
-            return chain(prefixName("ease-out"));
+            return chain(prefixName("ease-out").omit(Mozilla, IE));
         }
 
         /**
@@ -246,7 +246,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition stepStart() {
-            return chain(prefixName("step-start"));
+            return chain(prefixName("step-start").omit(Mozilla, IE));
         }
 
         /**
@@ -259,7 +259,7 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition stepEnd() {
-            return chain(prefixName("step-end"));
+            return chain(prefixName("step-end").omit(Mozilla, IE));
         }
     }
 }
