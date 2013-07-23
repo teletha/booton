@@ -914,7 +914,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    protected static final GradientValue linear(Color start, Color end) {
+    public static final GradientValue linear(Color start, Color end) {
         return new GradientValue(start, end);
     }
 

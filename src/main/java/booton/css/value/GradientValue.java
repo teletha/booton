@@ -43,7 +43,7 @@ public class GradientValue extends VendorPrefixValue {
             return vendor.prefix + "linear-gradient(" + start + "," + end + ")";
 
         default:
-            return "";
+            return null;
         }
     }
 }

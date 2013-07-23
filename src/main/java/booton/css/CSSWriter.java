@@ -16,7 +16,7 @@ import kiss.I;
 import booton.BootonConfiguration;
 
 /**
- * @version 2013/07/21 15:10:33
+ * @version 2013/07/23 17:14:15
  */
 public class CSSWriter {
 
@@ -120,10 +120,22 @@ public class CSSWriter {
      * </p>
      * 
      * @param name
-     * @param calcurated
+     * @param values
      */
     public void property(String name, List values) {
         property(name, values.toArray());
+    }
+
+    /**
+     * <p>
+     * Write property with separator.
+     * </p>
+     * 
+     * @param name
+     * @param values
+     */
+    public void propertyWithSeparator(String name, List values) {
+        propertyWithSeparator(name, values.toArray());
     }
 
     /**
@@ -135,19 +147,51 @@ public class CSSWriter {
      * @param calcurated
      */
     public void property(String name, Object... values) {
+        property(" ", name, values);
+    }
+
+    /**
+     * <p>
+     * Write property.
+     * </p>
+     * 
+     * @param name
+     * @param calcurated
+     */
+    public void propertyWithSeparator(String name, Object... values) {
+        property(",", name, values);
+    }
+
+    /**
+     * <p>
+     * Write property.
+     * </p>
+     * 
+     * @param separator
+     * @param name
+     * @param values
+     */
+    private void property(String separator, String name, Object... values) {
         if (name != null && name.length() != 0 && values != null) {
             List<List<String>> container = new ArrayList();
 
             boolean has = false;
 
-            for (Vendor vendor : Vendor.values()) {
+            root: for (Vendor vendor : Vendor.values()) {
                 List<String> list = new ArrayList();
 
                 for (Object value : values) {
                     if (value != null) {
                         if (value instanceof VendorPrefixValue) {
                             has = true;
-                            list.add(((VendorPrefixValue) value).toString(vendor));
+
+                            String vendered = ((VendorPrefixValue) value).toString(vendor);
+
+                            if (vendered == null) {
+                                continue root;
+                            } else {
+                                list.add(vendered);
+                            }
                         } else if (value instanceof Double) {
                             Double d = (Double) value;
 
@@ -157,7 +201,11 @@ public class CSSWriter {
                                 list.add(d.toString());
                             }
                         } else {
-                            list.add(value.toString());
+                            String decoded = value.toString();
+
+                            if (decoded != null && decoded.length() != 0) {
+                                list.add(decoded);
+                            }
                         }
                     }
                 }
@@ -169,7 +217,7 @@ public class CSSWriter {
             }
 
             for (List<String> text : container) {
-                String value = I.join(text, " ");
+                String value = I.join(text, separator);
 
                 if (value.length() != 0) {
                     indent().write(name, ":", value, ";");

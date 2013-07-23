@@ -24,8 +24,8 @@ public class TransitionTest {
         MyCSS css = new MyCSS();
         css.transition.property.all();
 
-        assert css.has("transition-property", "all");
-        assert css.has("-webkit-transition-property", "all");
+        assert css.has("transition", "all");
+        assert css.has("-webkit-transition", "all");
         assert css.no(Mozilla, IE);
     }
 
@@ -34,8 +34,8 @@ public class TransitionTest {
         MyCSS css = new MyCSS();
         css.transition.delay(10, s);
 
-        assert css.has("transition-delay", "10s");
-        assert css.has("-webkit-transition-delay", "10s");
+        assert css.has("transition", "10s");
+        assert css.has("-webkit-transition", "10s");
         assert css.no(Mozilla, IE);
     }
 
@@ -44,8 +44,8 @@ public class TransitionTest {
         MyCSS css = new MyCSS();
         css.transition.duration(10, s);
 
-        assert css.has("transition-duration", "10s");
-        assert css.has("-webkit-transition-duration", "10s");
+        assert css.has("transition", "10s");
+        assert css.has("-webkit-transition", "10s");
         assert css.no(Mozilla, IE);
     }
 
@@ -54,8 +54,8 @@ public class TransitionTest {
         MyCSS css = new MyCSS();
         css.transition.timing.ease();
 
-        assert css.has("transition-timing-function", "ease");
-        assert css.has("-webkit-transition-timing-function", "ease");
+        assert css.has("transition", "ease");
+        assert css.has("-webkit-transition", "ease");
         assert css.no(Mozilla, IE);
     }
 }

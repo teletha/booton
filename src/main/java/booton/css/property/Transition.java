@@ -9,7 +9,6 @@
  */
 package booton.css.property;
 
-import static booton.css.Vendor.*;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
@@ -49,10 +48,13 @@ public class Transition extends CSSProperty<Transition> {
      */
     @Override
     protected void write(CSSWriter writer) {
-        super.write(writer);
+        // super.write(writer);
 
-        writer.property("transition-duration", duration, Webkit);
-        writer.property("transition-delay", delay, Webkit);
+        writer.property("-webkit-transition", property, duration, timing, delay);
+        writer.property("transition", property, duration, timing, delay);
+
+        // writer.property("transition-duration", duration, Webkit);
+        // writer.property("transition-delay", delay, Webkit);
     }
 
     /**
@@ -106,16 +108,12 @@ public class Transition extends CSSProperty<Transition> {
     }
 
     /**
-     * @version 2013/07/23 0:48:11
+     * @version 2013/07/23 16:33:59
      */
-    public class Property extends CSSProperty<Transition> {
+    public class Property {
 
-        /**
-         * Hide.
-         */
-        private Property() {
-            super("transition-property", Transition.this);
-        }
+        /** The property/. */
+        private String value;
 
         /**
          * <p>
@@ -125,7 +123,8 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition all() {
-            return chain(prefixName("all").omit(Mozilla, IE));
+            value = "all";
+            return chain();
         }
 
         /**
@@ -136,7 +135,8 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition none() {
-            return chain(prefixName("none").omit(Mozilla, IE));
+            value = "none";
+            return chain();
         }
 
         /**
@@ -154,21 +154,26 @@ public class Transition extends CSSProperty<Transition> {
          * @return Chainable API.
          */
         private Transition specify(String id) {
-            return chain(prefixName(id).omit(Mozilla, IE));
+            value = id;
+            return chain();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return value;
         }
     }
 
     /**
-     * @version 2013/07/23 0:48:16
+     * @version 2013/07/23 16:33:52
      */
-    public class Timing extends CSSProperty<Transition> {
+    public class Timing {
 
-        /**
-         * Hide.
-         */
-        private Timing() {
-            super("transition-timing-function", Transition.this);
-        }
+        /** The timing. */
+        private String value;
 
         /**
          * <p>
@@ -180,7 +185,8 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition linear() {
-            return chain(prefixName("linear").omit(Mozilla, IE));
+            value = "liner";
+            return chain();
         }
 
         /**
@@ -193,7 +199,8 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition ease() {
-            return chain(prefixName("ease").omit(Mozilla, IE));
+            value = "ease";
+            return chain();
         }
 
         /**
@@ -206,7 +213,8 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition easeIn() {
-            return chain(prefixName("ease-in").omit(Mozilla, IE));
+            value = "ease-in";
+            return chain();
         }
 
         /**
@@ -220,7 +228,8 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition easeInOut() {
-            return chain(prefixName("ease-in-out").omit(Mozilla, IE));
+            value = "ease-in-out";
+            return chain();
         }
 
         /**
@@ -233,7 +242,8 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition easeOut() {
-            return chain(prefixName("ease-out").omit(Mozilla, IE));
+            value = "ease-out";
+            return chain();
         }
 
         /**
@@ -246,7 +256,8 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition stepStart() {
-            return chain(prefixName("step-start").omit(Mozilla, IE));
+            value = "step-start";
+            return chain();
         }
 
         /**
@@ -259,7 +270,16 @@ public class Transition extends CSSProperty<Transition> {
          * @return
          */
         public Transition stepEnd() {
-            return chain(prefixName("step-end").omit(Mozilla, IE));
+            value = "step-end";
+            return chain();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return value;
         }
     }
 }

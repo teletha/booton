@@ -49,7 +49,7 @@ public class Background extends ColorableProperty<Background> {
         writer.property("background-repeat", repeat);
         writer.property("background-position", horizontalPosition, verticalPosition);
         writer.property("background-size", size);
-        writer.property("background-image", images);
+        writer.propertyWithSeparator("background-image", images);
         writer.property("background-origin", origin);
     }
 
