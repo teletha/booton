@@ -9,15 +9,13 @@
  */
 package booton.css.property;
 
-import booton.css.CSSProperty;
 import booton.css.Unit;
-import booton.css.value.Color;
 import booton.css.value.Value;
 
 /**
- * @version 2013/07/22 16:56:21
+ * @version 2013/07/23 13:24:53
  */
-public abstract class Border<T extends Border> extends CSSProperty<T> {
+public abstract class Border extends ColorableProperty<Border> {
 
     /**
      * 
@@ -45,7 +43,7 @@ public abstract class Border<T extends Border> extends CSSProperty<T> {
      * @param size A radius to set.
      * @return Chainable API.
      */
-    public abstract T radius(Value size);
+    public abstract Border radius(Value size);
 
     /**
      * <p>
@@ -61,7 +59,7 @@ public abstract class Border<T extends Border> extends CSSProperty<T> {
      * @param unit A width unit to set.
      * @return Chainable API.
      */
-    public final T radius(double size, Unit unit) {
+    public final Border radius(double size, Unit unit) {
         return radius(new Value(size, unit));
     }
 
@@ -82,7 +80,7 @@ public abstract class Border<T extends Border> extends CSSProperty<T> {
      * @param size A width to set.
      * @return Chainable API.
      */
-    public abstract T width(Value size);
+    public abstract Border width(Value size);
 
     /**
      * <p>
@@ -93,28 +91,9 @@ public abstract class Border<T extends Border> extends CSSProperty<T> {
      * @param unit A width unit to set.
      * @return Chainable API.
      */
-    public final T width(double size, Unit unit) {
+    public final Border width(double size, Unit unit) {
         return width(new Value(size, unit));
     }
-
-    /**
-     * <p>
-     * Return the color of this border.
-     * </p>
-     * 
-     * @return A border color.
-     */
-    public abstract Color color();
-
-    /**
-     * <p>
-     * Set the color of this border.
-     * </p>
-     * 
-     * @param color A color to set.
-     * @return Chainable API.
-     */
-    public abstract T color(Color color);
 
     /**
      * <p>
@@ -133,7 +112,7 @@ public abstract class Border<T extends Border> extends CSSProperty<T> {
      * @param style A style to set.
      * @return Chainable API.
      */
-    protected abstract T style(BorderStyle style);
+    protected abstract Border style(BorderStyle style);
 
     /**
      * <p>
@@ -145,7 +124,7 @@ public abstract class Border<T extends Border> extends CSSProperty<T> {
      * 
      * @return Chainable API.
      */
-    public final T none() {
+    public final Border none() {
         return style(BorderStyle.None);
     }
 
@@ -159,7 +138,7 @@ public abstract class Border<T extends Border> extends CSSProperty<T> {
      * 
      * @return Chainable API.
      */
-    public final T hidden() {
+    public final Border hidden() {
         return style(BorderStyle.Hidden);
     }
 
@@ -172,7 +151,7 @@ public abstract class Border<T extends Border> extends CSSProperty<T> {
      * 
      * @return Chainable API.
      */
-    public final T dotted() {
+    public final Border dotted() {
         return style(BorderStyle.Dotted);
     }
 
@@ -184,7 +163,7 @@ public abstract class Border<T extends Border> extends CSSProperty<T> {
      * 
      * @return Chainable API.
      */
-    public final T dashed() {
+    public final Border dashed() {
         return style(BorderStyle.Dashed);
     }
 
@@ -195,7 +174,7 @@ public abstract class Border<T extends Border> extends CSSProperty<T> {
      * 
      * @return Chainable API.
      */
-    public final T solid() {
+    public final Border solid() {
         return style(BorderStyle.Solid);
     }
 
@@ -206,7 +185,7 @@ public abstract class Border<T extends Border> extends CSSProperty<T> {
      * 
      * @return Chainable API.
      */
-    public final T doubles() {
+    public final Border doubles() {
         return style(BorderStyle.Doubles);
     }
 
@@ -217,7 +196,7 @@ public abstract class Border<T extends Border> extends CSSProperty<T> {
      * 
      * @return Chainable API.
      */
-    public final T groove() {
+    public final Border groove() {
         return style(BorderStyle.Groove);
     }
 
@@ -229,7 +208,7 @@ public abstract class Border<T extends Border> extends CSSProperty<T> {
      * 
      * @return Chainable API.
      */
-    public final T ridge() {
+    public final Border ridge() {
         return style(BorderStyle.Ridge);
     }
 
@@ -242,7 +221,7 @@ public abstract class Border<T extends Border> extends CSSProperty<T> {
      * 
      * @return Chainable API.
      */
-    public final T inset() {
+    public final Border inset() {
         return style(BorderStyle.Inset);
     }
 
@@ -255,7 +234,7 @@ public abstract class Border<T extends Border> extends CSSProperty<T> {
      * 
      * @return Chainable API.
      */
-    public final T outset() {
+    public final Border outset() {
         return style(BorderStyle.Outset);
     }
 }

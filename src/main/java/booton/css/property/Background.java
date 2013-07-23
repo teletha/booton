@@ -12,20 +12,17 @@ package booton.css.property;
 import java.util.ArrayList;
 import java.util.List;
 
-import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
 import booton.css.value.Color;
-import booton.css.value.ColorValue;
-import booton.css.value.Colorable;
 import booton.css.value.GradientValue;
 
 /**
- * @version 2013/03/28 22:39:12
+ * @version 2013/07/23 13:26:06
  */
-public class Background extends CSSProperty<Background> implements Colorable<Background> {
+public class Background extends ColorableProperty<Background> {
 
-    public final ColorValue<Background> color = new ColorValue("background-color", this);
+    private Color color;
 
     private String repeat;
 
@@ -48,6 +45,7 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
     protected void write(CSSWriter writer) {
         super.write(writer);
 
+        writer.property("background-color", color);
         writer.property("background-repeat", repeat);
         writer.property("background-position", horizontalPosition, verticalPosition);
         writer.property("background-size", size);
@@ -59,32 +57,8 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
      * {@inheritDoc}
      */
     @Override
-    public Background color(int red, int green, int blue) {
-        return color.color(red, green, blue);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Background color(int red, int green, int blue, double alpha) {
-        return color.color(red, green, blue, alpha);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Background color(Color color) {
-        return this.color.color(color);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public Color color() {
-        Color backgroundColor = color.color();
+        Color backgroundColor = color;
 
         if (backgroundColor == null) {
             if (gradient == null) {
@@ -94,6 +68,15 @@ public class Background extends CSSProperty<Background> implements Colorable<Bac
             }
         }
         return backgroundColor;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Background color(Color color) {
+        this.color = color;
+        return chain();
     }
 
     /**

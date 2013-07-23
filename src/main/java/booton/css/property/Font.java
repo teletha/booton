@@ -18,15 +18,13 @@ import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
 import booton.css.value.Color;
-import booton.css.value.ColorValue;
-import booton.css.value.Colorable;
 import booton.css.value.Value;
 import booton.util.Strings;
 
 /**
- * @version 2013/07/18 16:03:10
+ * @version 2013/07/23 13:25:53
  */
-public final class Font extends CSSProperty<Font> implements Colorable<Font> {
+public final class Font extends ColorableProperty<Font> {
 
     /**
      * <p>
@@ -80,7 +78,17 @@ public final class Font extends CSSProperty<Font> implements Colorable<Font> {
      * appearance in CSS Level 1.
      * </p>
      */
-    public final ColorValue<Font> color = new ColorValue("color", this);
+    private Color color;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void write(CSSWriter writer) {
+        super.write(writer);
+
+        writer.property("color", color);
+    }
 
     /**
      * <p>
@@ -189,16 +197,8 @@ public final class Font extends CSSProperty<Font> implements Colorable<Font> {
      * {@inheritDoc}
      */
     @Override
-    public Font color(int red, int green, int blue) {
-        return color.color(red, green, blue);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Font color(int red, int green, int blue, double alpha) {
-        return color.color(red, green, blue, alpha);
+    public Color color() {
+        return color;
     }
 
     /**
@@ -206,15 +206,9 @@ public final class Font extends CSSProperty<Font> implements Colorable<Font> {
      */
     @Override
     public Font color(Color color) {
-        return this.color.color(color);
-    }
+        this.color = color;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Color color() {
-        return color.color();
+        return chain();
     }
 
     /**

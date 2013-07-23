@@ -18,7 +18,7 @@ import kiss.I;
 import booton.util.Strings;
 
 /**
- * @version 2013/07/20 4:30:38
+ * @version 2013/07/23 13:22:58
  */
 public class CSSProperty<T extends CSSProperty> {
 

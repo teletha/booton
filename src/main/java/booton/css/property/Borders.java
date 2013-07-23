@@ -16,7 +16,7 @@ import booton.css.value.Color;
 import booton.css.value.Value;
 
 /**
- * @version 2013/07/22 22:50:31
+ * @version 2013/07/23 13:24:28
  */
 public class Borders extends BorderSet {
 
@@ -163,9 +163,9 @@ public class Borders extends BorderSet {
     }
 
     /**
-     * @version 2013/07/22 12:46:33
+     * @version 2013/07/23 13:24:38
      */
-    private class Single extends Border<Single> {
+    private class Single extends Border {
 
         /** The target side. */
         private final Side side;
@@ -181,7 +181,7 @@ public class Borders extends BorderSet {
          * {@inheritDoc}
          */
         @Override
-        public Single radius(Value size) {
+        public Border radius(Value size) {
             switch (side) {
             case Top:
                 radius.put(Side.Top, size);
@@ -206,7 +206,7 @@ public class Borders extends BorderSet {
 
             Borders.this.chain();
 
-            return this;
+            return chain();
         }
 
         /**
@@ -223,12 +223,12 @@ public class Borders extends BorderSet {
          * {@inheritDoc}
          */
         @Override
-        public Single width(Value size) {
+        public Border width(Value size) {
             widths.put(side, size);
 
             Borders.this.chain();
 
-            return this;
+            return chain();
         }
 
         /**
@@ -243,12 +243,12 @@ public class Borders extends BorderSet {
          * {@inheritDoc}
          */
         @Override
-        public Single color(Color color) {
+        public Border color(Color color) {
             colors.put(side, color);
 
             Borders.this.chain();
 
-            return this;
+            return chain();
         }
 
         /**
@@ -263,12 +263,12 @@ public class Borders extends BorderSet {
          * {@inheritDoc}
          */
         @Override
-        protected Single style(BorderStyle style) {
+        protected Border style(BorderStyle style) {
             styles.put(side, style);
 
             Borders.this.chain();
 
-            return this;
+            return chain();
         }
     }
 }

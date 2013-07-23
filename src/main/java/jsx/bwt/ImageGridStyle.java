@@ -10,6 +10,7 @@
 package jsx.bwt;
 
 import static booton.css.Unit.*;
+import static booton.css.value.Color.*;
 import teemowork.TeemoworkTheme;
 import booton.css.CSS;
 import booton.css.Snippet;
@@ -126,7 +127,7 @@ class ImageGridStyle {
             line.height(20, px);
             text.verticalAlign.middle();
             border.radius(4, px).width(1, px).solid().color(rgb(204, 204, 204));
-            background.color(255, 255, 255);
+            background.color(White);
             transition.property.all().duration(0.2, s).timing.linear();
 
             while (focus()) {

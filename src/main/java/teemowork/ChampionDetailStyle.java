@@ -333,7 +333,7 @@ class ChampionDetailStyle {
             cursor.defaults();
 
             while (selection()) {
-                background.color.transparent();
+                background.color(Transparent);
             }
         }
     }

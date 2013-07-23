@@ -16,7 +16,7 @@ import booton.css.value.Color;
 import booton.css.value.Value;
 
 /**
- * @version 2013/07/22 16:16:51
+ * @version 2013/07/23 13:23:08
  */
 class BorderSet extends Border {
 
@@ -58,7 +58,7 @@ class BorderSet extends Border {
         for (Border descriptor : descriptors) {
             descriptor.radius(size);
         }
-        return this;
+        return chain();
     }
 
     /**
@@ -77,7 +77,7 @@ class BorderSet extends Border {
         for (Border descriptor : descriptors) {
             descriptor.width(size);
         }
-        return this;
+        return chain();
     }
 
     /**
@@ -96,7 +96,7 @@ class BorderSet extends Border {
         for (Border descriptor : descriptors) {
             descriptor.color(color);
         }
-        return this;
+        return chain();
     }
 
     /**
@@ -115,6 +115,6 @@ class BorderSet extends Border {
         for (Border descriptor : descriptors) {
             descriptor.style(style);
         }
-        return this;
+        return chain();
     }
 }

@@ -299,7 +299,7 @@ class DescriptionViewStyle {
             cursor.defaults();
 
             while (selection()) {
-                background.color.transparent();
+                background.color(Transparent);
             }
         }
     }

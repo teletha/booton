@@ -71,7 +71,7 @@ class HeaderStyle {
             padding.size(0, px);
             visibility.hidden();
             position.absolute().top(42, px).left(0, px);
-            background.color(68, 68, 68).image(linear(LightBack, DarkBack));
+            background.color(rgb(68, 68, 68)).image(linear(LightBack, DarkBack));
             box.width(MenuWidth, px).shadow(0, px, -1, px, 0, px, rgba(255, 255, 255, 0.3)).opacity(0);
             border.radius(Radius, px);
             transition.property.all().duration(0.2, s).timing.easeInOut().delay(80, ms);
@@ -91,7 +91,7 @@ class HeaderStyle {
             border.bottom.width(1, px).solid().color(rgb(81, 81, 81));
 
             while (hover()) {
-                background.color(1, 134, 186).image(linear(rgba(4, 172, 236, 1), rgba(1, 134, 186, 1)));
+                background.color(rgb(1, 134, 186)).image(linear(rgba(4, 172, 236, 1), rgba(1, 134, 186, 1)));
 
                 while (firstChild()) {
                     border.top.radius(Radius, px);

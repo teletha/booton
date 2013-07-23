@@ -10,6 +10,7 @@
 package booton.css.property;
 
 import static booton.css.Unit.*;
+import static booton.css.value.Color.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,6 @@ import booton.css.CSSWriter;
 import booton.css.Unit;
 import booton.css.value.Color;
 import booton.css.value.Value;
-
 
 /**
  * @version 2012/12/16 15:39:53
@@ -199,7 +199,7 @@ public class Text extends CSSProperty<Text> {
         css.userSelect.none();
 
         while (css.selection()) {
-            css.background.color.transparent();
+            css.background.color(Transparent);
         }
 
         return chain();
