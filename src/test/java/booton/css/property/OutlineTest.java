@@ -29,7 +29,7 @@ public class OutlineTest {
         assert css.outline.right.width().equals("2em");
         assert css.outline.bottom.width().equals("2em");
         assert css.outline.left.width().equals("2em");
-        assert css.has("outline", "2em");
+        assert css.has("outline-width", "2em");
     }
 
     @Test
@@ -41,7 +41,7 @@ public class OutlineTest {
         assert css.outline.left.style() == Solid;
         assert css.outline.bottom.style() == Solid;
         assert css.outline.right.style() == Solid;
-        assert css.has("outline", "solid");
+        assert css.has("outline-style", "solid");
     }
 
     @Test
@@ -53,7 +53,7 @@ public class OutlineTest {
         assert css.outline.left.color() == White;
         assert css.outline.bottom.color() == White;
         assert css.outline.right.color() == White;
-        assert css.has("outline", "white");
+        assert css.has("outline-color", "white");
     }
 
     @Test
@@ -73,5 +73,14 @@ public class OutlineTest {
         assert css.outline.top.style() == Solid;
         assert css.outline.top.width().equals("1px");
         assert css.has("outline-top", "1px solid black");
+    }
+
+    @Test
+    public void topColor() throws Exception {
+        MyCSS css = new MyCSS();
+        css.outline.top.color(Black);
+
+        assert css.outline.top.color() == Black;
+        assert css.has("outline-top-color", "black");
     }
 }

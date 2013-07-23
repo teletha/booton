@@ -29,7 +29,7 @@ public class BorderTest {
         assert css.border.right.width().equals("2em");
         assert css.border.bottom.width().equals("2em");
         assert css.border.left.width().equals("2em");
-        assert css.has("border", "2em");
+        assert css.has("border-width", "2em");
     }
 
     @Test
@@ -41,7 +41,7 @@ public class BorderTest {
         assert css.border.left.style() == Solid;
         assert css.border.bottom.style() == Solid;
         assert css.border.right.style() == Solid;
-        assert css.has("border", "solid");
+        assert css.has("border-style", "solid");
     }
 
     @Test
@@ -53,13 +53,21 @@ public class BorderTest {
         assert css.border.left.color() == White;
         assert css.border.bottom.color() == White;
         assert css.border.right.color() == White;
-        assert css.has("border", "white");
+        assert css.has("border-color", "white");
     }
 
     @Test
     public void chain() throws Exception {
         MyCSS css = new MyCSS();
         css.border.solid().width(2, em).color(Black);
+
+        assert css.has("border", "2em solid black");
+    }
+
+    @Test
+    public void chainOrder() throws Exception {
+        MyCSS css = new MyCSS();
+        css.border.color(Black).solid().width(2, em);
 
         assert css.has("border", "2em solid black");
     }
@@ -73,6 +81,15 @@ public class BorderTest {
         assert css.border.top.style() == Solid;
         assert css.border.top.width().equals("1px");
         assert css.has("border-top", "1px solid black");
+    }
+
+    @Test
+    public void topColor() throws Exception {
+        MyCSS css = new MyCSS();
+        css.border.top.color(Black);
+
+        assert css.border.top.color() == Black;
+        assert css.has("border-top-color", "black");
     }
 
     @Test
