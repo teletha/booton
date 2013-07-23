@@ -9,27 +9,30 @@
  */
 package booton.css.property;
 
+import java.util.EnumSet;
+
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
-import booton.css.value.Value;
+import booton.css.Vendor;
+import booton.css.value.Numeric;
 
 /**
- * @version 2013/07/22 17:36:29
+ * @version 2013/07/23 20:40:20
  */
 public class BoxLength extends CSSProperty<BoxLength> {
 
     /** The top value. */
-    private Value top = new Value();
+    private Numeric top = new Numeric();
 
     /** The right value. */
-    private Value right = new Value();
+    private Numeric right = new Numeric();
 
     /** The bottom value. */
-    private Value bottom = new Value();
+    private Numeric bottom = new Numeric();
 
     /** The left value. */
-    private Value left = new Value();
+    private Numeric left = new Numeric();
 
     /**
      * @param name
@@ -86,7 +89,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @param unit
      * @return
      */
-    public BoxLength size(Value value) {
+    public BoxLength size(Numeric value) {
         horizontal(value);
         vertical(value);
 
@@ -118,7 +121,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @return
      */
     public BoxLength top(double size, Unit unit) {
-        return top(new Value(size, unit));
+        return top(new Numeric(size, unit));
     }
 
     /**
@@ -131,7 +134,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @param unit
      * @return
      */
-    public BoxLength top(Value value) {
+    public BoxLength top(Numeric value) {
         top = value;
 
         // Chainable API
@@ -149,7 +152,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @return
      */
     public BoxLength bottom(double size, Unit unit) {
-        return bottom(new Value(size, unit));
+        return bottom(new Numeric(size, unit));
     }
 
     /**
@@ -162,7 +165,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @param unit
      * @return
      */
-    public BoxLength bottom(Value value) {
+    public BoxLength bottom(Numeric value) {
         bottom = value;
 
         // Chainable API
@@ -180,7 +183,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @return
      */
     public BoxLength left(double size, Unit unit) {
-        return left(new Value(size, unit));
+        return left(new Numeric(size, unit));
     }
 
     /**
@@ -193,7 +196,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @param unit
      * @return
      */
-    public BoxLength left(Value value) {
+    public BoxLength left(Numeric value) {
         left = value;
 
         // Chainable API
@@ -211,7 +214,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @return
      */
     public BoxLength right(double size, Unit unit) {
-        return right(new Value(size, unit));
+        return right(new Numeric(size, unit));
     }
 
     /**
@@ -224,7 +227,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @param unit
      * @return
      */
-    public BoxLength right(Value value) {
+    public BoxLength right(Numeric value) {
         right = value;
 
         // Chainable API
@@ -259,7 +262,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @param unit
      * @return
      */
-    public BoxLength horizontal(Value value) {
+    public BoxLength horizontal(Numeric value) {
         left(value);
         right(value);
 
@@ -295,7 +298,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * @param unit
      * @return
      */
-    public BoxLength vertical(Value value) {
+    public BoxLength vertical(Numeric value) {
         top(value);
         bottom(value);
 
@@ -304,23 +307,31 @@ public class BoxLength extends CSSProperty<BoxLength> {
     }
 
     /**
-     * @version 2012/12/16 17:22:30
+     * @version 2013/07/23 20:39:36
      */
-    private static class Auto extends Value {
+    private static class Auto extends Numeric {
 
         /**
          * Hide
          */
         private Auto() {
-            super(0, null);
+            super("auto");
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public String toString() {
-            return "auto";
+        protected EnumSet<Vendor> vendors() {
+            return NoVendors;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected String valueFor(Vendor vendor) {
+            return expression;
         }
     }
 }

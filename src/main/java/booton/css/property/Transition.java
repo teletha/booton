@@ -12,7 +12,7 @@ package booton.css.property;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
-import booton.css.value.Value;
+import booton.css.value.Numeric;
 
 /**
  * @version 2013/07/23 0:48:06
@@ -38,10 +38,10 @@ public class Transition extends CSSProperty<Transition> {
     public final Timing timing = new Timing();
 
     /** The time duration. */
-    private Value duration;
+    private Numeric duration;
 
     /** The time delay. */
-    private Value delay;
+    private Numeric delay;
 
     /**
      * {@inheritDoc}
@@ -69,7 +69,7 @@ public class Transition extends CSSProperty<Transition> {
      * @return
      */
     public Transition duration(double time, Unit unit) {
-        duration = new Value(time, unit);
+        duration = new Numeric(time, unit);
 
         return chain();
     }
@@ -85,7 +85,7 @@ public class Transition extends CSSProperty<Transition> {
      * @return
      */
     public Transition delay(double time, Unit unit) {
-        delay = new Value(time, unit);
+        delay = new Numeric(time, unit);
 
         return chain();
     }

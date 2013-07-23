@@ -17,7 +17,7 @@ import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
 import booton.css.value.Color;
-import booton.css.value.Value;
+import booton.css.value.Numeric;
 
 /**
  * @version 2012/12/13 17:54:06
@@ -43,22 +43,22 @@ public class Box extends CSSProperty<Box> {
     public final Float floating = new Float();
 
     /** The box width. */
-    private Value width;
+    private Numeric width;
 
     /** The box min-width. */
-    private Value minWidth;
+    private Numeric minWidth;
 
     /** The box max-width. */
-    private Value maxWidth;
+    private Numeric maxWidth;
 
     /** The box height. */
-    private Value height;
+    private Numeric height;
 
     /** The box min-width. */
-    private Value minHeight;
+    private Numeric minHeight;
 
     /** The box max-width. */
-    private Value maxHeight;
+    private Numeric maxHeight;
 
     /** The z-index. */
     private int index;
@@ -97,7 +97,7 @@ public class Box extends CSSProperty<Box> {
      * @return
      */
     public Box size(double size, Unit unit) {
-        return size(new Value(size, unit));
+        return size(new Numeric(size, unit));
     }
 
     /**
@@ -109,7 +109,7 @@ public class Box extends CSSProperty<Box> {
      * @param unit
      * @return
      */
-    public Box size(Value value) {
+    public Box size(Numeric value) {
         width(value);
         height(value);
 
@@ -123,8 +123,8 @@ public class Box extends CSSProperty<Box> {
      * 
      * @return A current value.
      */
-    public Value width() {
-        return width == null ? minWidth == null ? Value.Zero : minWidth : width;
+    public Numeric width() {
+        return width == null ? minWidth == null ? Numeric.Zero : minWidth : width;
     }
 
     /**
@@ -141,7 +141,7 @@ public class Box extends CSSProperty<Box> {
      * @return Chainable API.
      */
     public Box width(double size, Unit unit) {
-        width = new Value(size, unit);
+        width = new Numeric(size, unit);
 
         return chain();
     }
@@ -159,7 +159,7 @@ public class Box extends CSSProperty<Box> {
      * @param unit A unit.
      * @return Chainable API.
      */
-    public Box width(Value value) {
+    public Box width(Numeric value) {
         width = value;
 
         return chain();
@@ -177,7 +177,7 @@ public class Box extends CSSProperty<Box> {
      * @return
      */
     public Box minWidth(double size, Unit unit) {
-        return minWidth(new Value(size, unit));
+        return minWidth(new Numeric(size, unit));
     }
 
     /**
@@ -191,7 +191,7 @@ public class Box extends CSSProperty<Box> {
      * @param unit
      * @return
      */
-    public Box minWidth(Value value) {
+    public Box minWidth(Numeric value) {
         minWidth = value;
 
         return chain();
@@ -209,7 +209,7 @@ public class Box extends CSSProperty<Box> {
      * @return
      */
     public Box maxWidth(double size, Unit unit) {
-        return maxWidth(new Value(size, unit));
+        return maxWidth(new Numeric(size, unit));
     }
 
     /**
@@ -223,7 +223,7 @@ public class Box extends CSSProperty<Box> {
      * @param unit
      * @return
      */
-    public Box maxWidth(Value value) {
+    public Box maxWidth(Numeric value) {
         maxWidth = value;
 
         return chain();
@@ -236,7 +236,7 @@ public class Box extends CSSProperty<Box> {
      * 
      * @return A current value.
      */
-    public Value height() {
+    public Numeric height() {
         return height;
     }
 
@@ -254,7 +254,7 @@ public class Box extends CSSProperty<Box> {
      * @return Chainable API.
      */
     public Box height(double size, Unit unit) {
-        height = new Value(size, unit);
+        height = new Numeric(size, unit);
 
         return chain();
     }
@@ -272,7 +272,7 @@ public class Box extends CSSProperty<Box> {
      * @param unit A unit.
      * @return Chainable API.
      */
-    public Box height(Value value) {
+    public Box height(Numeric value) {
         height = value;
 
         return chain();
@@ -290,7 +290,7 @@ public class Box extends CSSProperty<Box> {
      * @return
      */
     public Box minHeight(double size, Unit unit) {
-        return minHeight(new Value(size, unit));
+        return minHeight(new Numeric(size, unit));
     }
 
     /**
@@ -304,7 +304,7 @@ public class Box extends CSSProperty<Box> {
      * @param unit
      * @return
      */
-    public Box minHeight(Value value) {
+    public Box minHeight(Numeric value) {
         minHeight = value;
 
         return chain();
@@ -322,7 +322,7 @@ public class Box extends CSSProperty<Box> {
      * @return
      */
     public Box maxHeight(double size, Unit unit) {
-        return maxHeight(new Value(size, unit));
+        return maxHeight(new Numeric(size, unit));
     }
 
     /**
@@ -336,7 +336,7 @@ public class Box extends CSSProperty<Box> {
      * @param unit
      * @return
      */
-    public Box maxHeight(Value value) {
+    public Box maxHeight(Numeric value) {
         maxHeight = value;
 
         return chain();
@@ -388,8 +388,8 @@ public class Box extends CSSProperty<Box> {
      */
     public Box shadow(double offsetX, Unit unitX, double offsetY, Unit unitY, Color color) {
         ShadowValue shadow = new ShadowValue();
-        shadow.offsetX = new Value(offsetX, unitX);
-        shadow.offsetY = new Value(offsetY, unitY);
+        shadow.offsetX = new Numeric(offsetX, unitX);
+        shadow.offsetY = new Numeric(offsetY, unitY);
         shadow.color = color;
         shadows.add(shadow);
 
@@ -413,8 +413,8 @@ public class Box extends CSSProperty<Box> {
      */
     public Box shadowInset(double offsetX, Unit unitX, double offsetY, Unit unitY, Color color) {
         ShadowValue shadow = new ShadowValue();
-        shadow.offsetX = new Value(offsetX, unitX);
-        shadow.offsetY = new Value(offsetY, unitY);
+        shadow.offsetX = new Numeric(offsetX, unitX);
+        shadow.offsetY = new Numeric(offsetY, unitY);
         shadow.color = color;
         shadows.add(shadow);
 
@@ -440,9 +440,9 @@ public class Box extends CSSProperty<Box> {
      */
     public Box shadow(double offsetX, Unit unitX, double offsetY, Unit unitY, double blur, Unit unitBlur, Color color) {
         ShadowValue shadow = new ShadowValue();
-        shadow.offsetX = new Value(offsetX, unitX);
-        shadow.offsetY = new Value(offsetY, unitY);
-        shadow.blur = new Value(blur, unitBlur);
+        shadow.offsetX = new Numeric(offsetX, unitX);
+        shadow.offsetY = new Numeric(offsetY, unitY);
+        shadow.blur = new Numeric(blur, unitBlur);
         shadow.color = color;
         shadows.add(shadow);
 
@@ -468,9 +468,9 @@ public class Box extends CSSProperty<Box> {
      */
     public Box shadowInset(double offsetX, Unit unitX, double offsetY, Unit unitY, double blur, Unit unitBlur, Color color) {
         ShadowValue shadow = new ShadowValue();
-        shadow.offsetX = new Value(offsetX, unitX);
-        shadow.offsetY = new Value(offsetY, unitY);
-        shadow.blur = new Value(blur, unitBlur);
+        shadow.offsetX = new Numeric(offsetX, unitX);
+        shadow.offsetY = new Numeric(offsetY, unitY);
+        shadow.blur = new Numeric(blur, unitBlur);
         shadow.inset = true;
         shadow.color = color;
         shadows.add(shadow);
@@ -499,10 +499,10 @@ public class Box extends CSSProperty<Box> {
      */
     public Box shadow(double offsetX, Unit unitX, double offsetY, Unit unitY, double blur, Unit unitBlur, double spread, Unit unitSpread, Color color) {
         ShadowValue shadow = new ShadowValue();
-        shadow.offsetX = new Value(offsetX, unitX);
-        shadow.offsetY = new Value(offsetY, unitY);
-        shadow.blur = new Value(blur, unitBlur);
-        shadow.spread = new Value(spread, unitSpread);
+        shadow.offsetX = new Numeric(offsetX, unitX);
+        shadow.offsetY = new Numeric(offsetY, unitY);
+        shadow.blur = new Numeric(blur, unitBlur);
+        shadow.spread = new Numeric(spread, unitSpread);
         shadow.color = color;
         shadows.add(shadow);
 
@@ -530,10 +530,10 @@ public class Box extends CSSProperty<Box> {
      */
     public Box shadowInset(double offsetX, Unit unitX, double offsetY, Unit unitY, double blur, Unit unitBlur, double spread, Unit unitSpread, Color color) {
         ShadowValue shadow = new ShadowValue();
-        shadow.offsetX = new Value(offsetX, unitX);
-        shadow.offsetY = new Value(offsetY, unitY);
-        shadow.blur = new Value(blur, unitBlur);
-        shadow.spread = new Value(spread, unitSpread);
+        shadow.offsetX = new Numeric(offsetX, unitX);
+        shadow.offsetY = new Numeric(offsetY, unitY);
+        shadow.blur = new Numeric(blur, unitBlur);
+        shadow.spread = new Numeric(spread, unitSpread);
         shadow.inset = true;
         shadow.color = color;
         shadows.add(shadow);

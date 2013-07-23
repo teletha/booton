@@ -47,7 +47,7 @@ import booton.css.property.Transition;
 import booton.css.property.UserSelect;
 import booton.css.property.Visibility;
 import booton.css.value.Color;
-import booton.css.value.GradientValue;
+import booton.css.value.Gradient;
 import booton.util.Strings;
 
 /**
@@ -914,8 +914,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public static final GradientValue linear(Color start, Color end) {
-        return new GradientValue(start, end);
+    public static final Gradient linear(Color start, Color end) {
+        return new Gradient(start, end);
     }
 
     /**

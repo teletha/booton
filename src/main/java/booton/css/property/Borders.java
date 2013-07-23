@@ -13,7 +13,7 @@ import java.util.EnumMap;
 
 import booton.css.CSSWriter;
 import booton.css.value.Color;
-import booton.css.value.Value;
+import booton.css.value.Numeric;
 
 /**
  * @version 2013/07/23 14:35:11
@@ -21,7 +21,7 @@ import booton.css.value.Value;
 public class Borders extends BorderSet {
 
     /** The width properties. */
-    private final EnumMap<Side, Value> widths = new EnumMap(Side.class);
+    private final EnumMap<Side, Numeric> widths = new EnumMap(Side.class);
 
     /** The style properties. */
     private final EnumMap<Side, BorderStyle> styles = new EnumMap(Side.class);
@@ -30,7 +30,7 @@ public class Borders extends BorderSet {
     private final EnumMap<Side, Color> colors = new EnumMap(Side.class);
 
     /** The radius properties. */
-    private final EnumMap<Side, Value> radius = new EnumMap(Side.class);
+    private final EnumMap<Side, Numeric> radius = new EnumMap(Side.class);
 
     /**
      * <p>
@@ -96,7 +96,7 @@ public class Borders extends BorderSet {
     @Override
     protected void write(CSSWriter writer) {
         if (match(widths) && match(styles) && match(colors)) {
-            Value width = widths.get(Side.Top);
+            Numeric width = widths.get(Side.Top);
             BorderStyle style = styles.get(Side.Top);
             Color color = colors.get(Side.Top);
 
@@ -162,7 +162,7 @@ public class Borders extends BorderSet {
      * @return A result.
      */
     private boolean match(Side side) {
-        Value width = widths.get(side);
+        Numeric width = widths.get(side);
         BorderStyle style = styles.get(side);
         Color color = colors.get(side);
 
@@ -213,7 +213,7 @@ public class Borders extends BorderSet {
          * {@inheritDoc}
          */
         @Override
-        public Border radius(Value size) {
+        public Border radius(Numeric size) {
             switch (side) {
             case Top:
                 radius.put(Side.Top, size);
@@ -245,17 +245,17 @@ public class Borders extends BorderSet {
          * {@inheritDoc}
          */
         @Override
-        public Value width() {
-            Value value = widths.get(side);
+        public Numeric width() {
+            Numeric value = widths.get(side);
 
-            return value == null ? Value.Zero : value;
+            return value == null ? Numeric.Zero : value;
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public Border width(Value size) {
+        public Border width(Numeric size) {
             widths.put(side, size);
 
             Borders.this.chain();

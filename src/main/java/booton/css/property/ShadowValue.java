@@ -10,7 +10,7 @@
 package booton.css.property;
 
 import booton.css.value.Color;
-import booton.css.value.Value;
+import booton.css.value.Numeric;
 
 /**
  * @version 2012/12/16 15:36:06
@@ -21,16 +21,16 @@ class ShadowValue {
     boolean inset = false;
 
     /** The shadow property. */
-    Value offsetX;
+    Numeric offsetX;
 
     /** The shadow property. */
-    Value offsetY;
+    Numeric offsetY;
 
     /** The shadow property. */
-    Value blur;
+    Numeric blur;
 
     /** The shadow property. */
-    Value spread;
+    Numeric spread;
 
     /** The color property. */
     Color color;

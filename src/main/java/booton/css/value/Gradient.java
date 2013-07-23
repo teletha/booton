@@ -9,13 +9,17 @@
  */
 package booton.css.value;
 
+import static booton.css.Vendor.*;
+
+import java.util.EnumSet;
+
+import booton.css.CSSValue;
 import booton.css.Vendor;
-import booton.css.VendorPrefixValue;
 
 /**
- * @version 2013/03/24 13:09:14
+ * @version 2013/07/23 19:01:31
  */
-public class GradientValue extends VendorPrefixValue {
+public class Gradient extends CSSValue {
 
     /** The start color. */
     public final Color start;
@@ -27,7 +31,7 @@ public class GradientValue extends VendorPrefixValue {
      * @param start
      * @param end
      */
-    public GradientValue(Color start, Color end) {
+    public Gradient(Color start, Color end) {
         this.start = start;
         this.end = end;
     }
@@ -36,14 +40,21 @@ public class GradientValue extends VendorPrefixValue {
      * {@inheritDoc}
      */
     @Override
-    protected String toString(Vendor vendor) {
+    protected String valueFor(Vendor vendor) {
         switch (vendor) {
         case Webkit:
-        case Standard:
             return vendor.prefix + "linear-gradient(" + start + "," + end + ")";
 
         default:
-            return null;
+            return "linear-gradient(" + start + "," + end + ")";
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected EnumSet<Vendor> vendors() {
+        return EnumSet.of(Standard, Webkit);
     }
 }

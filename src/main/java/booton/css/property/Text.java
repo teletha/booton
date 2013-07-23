@@ -20,7 +20,7 @@ import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
 import booton.css.value.Color;
-import booton.css.value.Value;
+import booton.css.value.Numeric;
 
 /**
  * @version 2012/12/16 15:39:53
@@ -65,7 +65,7 @@ public class Text extends CSSProperty<Text> {
     private final List<ShadowValue> shadows = new ArrayList();
 
     /** The text-indent property. */
-    private Value indent;
+    private Numeric indent;
 
     /**
      * {@inheritDoc}
@@ -87,7 +87,7 @@ public class Text extends CSSProperty<Text> {
      * </p>
      */
     public Text indent(double size, Unit unit) {
-        this.indent = new Value(size, unit);
+        this.indent = new Numeric(size, unit);
 
         return chain();
     }
@@ -157,8 +157,8 @@ public class Text extends CSSProperty<Text> {
      */
     public Text shadow(double offsetX, Unit unitX, double offsetY, Unit unitY, Color color) {
         ShadowValue shadow = new ShadowValue();
-        shadow.offsetX = new Value(offsetX, unitX);
-        shadow.offsetY = new Value(offsetY, unitY);
+        shadow.offsetX = new Numeric(offsetX, unitX);
+        shadow.offsetY = new Numeric(offsetY, unitY);
         shadow.color = color;
         shadows.add(shadow);
 
@@ -181,9 +181,9 @@ public class Text extends CSSProperty<Text> {
      */
     public Text shadow(double offsetX, Unit unitX, double offsetY, Unit unitY, double blur, Unit unitBlur, Color color) {
         ShadowValue shadow = new ShadowValue();
-        shadow.offsetX = new Value(offsetX, unitX);
-        shadow.offsetY = new Value(offsetY, unitY);
-        shadow.blur = new Value(blur, unitBlur);
+        shadow.offsetX = new Numeric(offsetX, unitX);
+        shadow.offsetY = new Numeric(offsetY, unitY);
+        shadow.blur = new Numeric(blur, unitBlur);
         shadow.color = color;
         shadows.add(shadow);
 

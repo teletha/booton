@@ -18,7 +18,7 @@ import kiss.I;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
-import booton.css.value.Value;
+import booton.css.value.Numeric;
 
 /**
  * @version 2012/12/26 21:35:04
@@ -49,7 +49,7 @@ public class Transform extends CSSProperty<Transform> {
      * @return
      */
     public Transform rotate(double angle, Unit unit) {
-        functions.add("rotate(" + new Value(angle, unit) + ")");
+        functions.add("rotate(" + new Numeric(angle, unit) + ")");
 
         return chain();
     }
@@ -95,7 +95,7 @@ public class Transform extends CSSProperty<Transform> {
      * @return
      */
     public Transform translateY(double size, Unit unit) {
-        return translateY(new Value(size, unit));
+        return translateY(new Numeric(size, unit));
     }
 
     /**
@@ -107,7 +107,7 @@ public class Transform extends CSSProperty<Transform> {
      * @param value
      * @return
      */
-    public Transform translateY(Value value) {
+    public Transform translateY(Numeric value) {
         functions.add("translateY(" + value + ")");
 
         return chain();

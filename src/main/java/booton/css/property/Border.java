@@ -10,7 +10,7 @@
 package booton.css.property;
 
 import booton.css.Unit;
-import booton.css.value.Value;
+import booton.css.value.Numeric;
 
 /**
  * @version 2013/07/23 13:24:53
@@ -43,7 +43,7 @@ public abstract class Border extends ColorableProperty<Border> {
      * @param size A radius to set.
      * @return Chainable API.
      */
-    public abstract Border radius(Value size);
+    public abstract Border radius(Numeric size);
 
     /**
      * <p>
@@ -60,7 +60,7 @@ public abstract class Border extends ColorableProperty<Border> {
      * @return Chainable API.
      */
     public final Border radius(double size, Unit unit) {
-        return radius(new Value(size, unit));
+        return radius(new Numeric(size, unit));
     }
 
     /**
@@ -70,7 +70,7 @@ public abstract class Border extends ColorableProperty<Border> {
      * 
      * @return A border width.
      */
-    public abstract Value width();
+    public abstract Numeric width();
 
     /**
      * <p>
@@ -80,7 +80,7 @@ public abstract class Border extends ColorableProperty<Border> {
      * @param size A width to set.
      * @return Chainable API.
      */
-    public abstract Border width(Value size);
+    public abstract Border width(Numeric size);
 
     /**
      * <p>
@@ -92,7 +92,7 @@ public abstract class Border extends ColorableProperty<Border> {
      * @return Chainable API.
      */
     public final Border width(double size, Unit unit) {
-        return width(new Value(size, unit));
+        return width(new Numeric(size, unit));
     }
 
     /**

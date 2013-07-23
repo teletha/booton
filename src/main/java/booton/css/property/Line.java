@@ -12,7 +12,7 @@ package booton.css.property;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
-import booton.css.value.Value;
+import booton.css.value.Numeric;
 
 /**
  * @version 2012/12/16 16:15:46
@@ -56,7 +56,7 @@ public class Line extends CSSProperty<Line> {
      * @param size
      * @return
      */
-    public Line height(Value size) {
+    public Line height(Numeric size) {
         height = size.toString();
 
         return chain();
@@ -73,7 +73,7 @@ public class Line extends CSSProperty<Line> {
      * @return
      */
     public Line height(double size, Unit unit) {
-        height = new Value(size, unit).toString();
+        height = new Numeric(size, unit).toString();
 
         return chain();
     }
