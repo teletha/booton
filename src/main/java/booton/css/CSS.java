@@ -12,6 +12,7 @@ package booton.css;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -469,7 +470,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean hover() {
-        return rule(rules.selector + ":hover");
+        return rule(rules.name() + ":hover");
     }
 
     /**
@@ -485,7 +486,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean active() {
-        return rule(rules.selector + ":active");
+        return rule(rules.name() + ":active");
     }
 
     /**
@@ -501,7 +502,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean focus() {
-        return rule(rules.selector + ":focus");
+        return rule(rules.name() + ":focus");
     }
 
     /**
@@ -513,7 +514,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean firstChild() {
-        return rule(rules.selector + ":first-child");
+        return rule(rules.name() + ":first-child");
     }
 
     /**
@@ -525,7 +526,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean firstOfType() {
-        return rule(rules.selector + ":first-of-type");
+        return rule(rules.name() + ":first-of-type");
     }
 
     /**
@@ -537,7 +538,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean lastChild() {
-        return rule(rules.selector + ":last-child");
+        return rule(rules.name() + ":last-child");
     }
 
     /**
@@ -549,7 +550,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean lastOfType() {
-        return rule(rules.selector + ":last-of-type");
+        return rule(rules.name() + ":last-of-type");
     }
 
     /**
@@ -562,7 +563,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean onlyChild() {
-        return rule(rules.selector + ":only-child");
+        return rule(rules.name() + ":only-child");
     }
 
     /**
@@ -574,7 +575,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean onlyOfType() {
-        return rule(rules.selector + ":only-of-type");
+        return rule(rules.name() + ":only-of-type");
     }
 
     /**
@@ -586,7 +587,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean nthChild(String pattern) {
-        return rule(rules.selector + ":nth-child");
+        return rule(rules.name() + ":nth-child");
     }
 
     /**
@@ -599,7 +600,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean nthLastChild(String pattern) {
-        return rule(rules.selector + ":nth-child");
+        return rule(rules.name() + ":nth-child");
     }
 
     /**
@@ -615,7 +616,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean nthOfType(String pattern) {
-        return rule(rules.selector + ":nth-of-type");
+        return rule(rules.name() + ":nth-of-type");
     }
 
     /**
@@ -629,7 +630,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean nthLastOfType(String pattern) {
-        return rule(rules.selector + ":nth-last-of-type");
+        return rule(rules.name() + ":nth-last-of-type");
     }
 
     /**
@@ -642,7 +643,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean before() {
-        return rule(rules.selector + ":before");
+        return rule(rules.name() + ":before");
     }
 
     /**
@@ -655,7 +656,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean after() {
-        return rule(rules.selector + ":after");
+        return rule(rules.name() + ":after");
     }
 
     /**
@@ -672,11 +673,11 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean selection() {
-        return rule(rules.selector + ":selection");
+        return rule(rules.name() + ":selection");
     }
 
     public final boolean children() {
-        return rule(rules.selector + ">*");
+        return rule(rules.name() + ">*");
     }
 
     /**
@@ -689,7 +690,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean inBackOf(Class<? extends CSS> clazz) {
-        return rule("." + Obfuscator.computeCSSName(clazz) + "+" + rules.selector);
+        return rule("." + Obfuscator.computeCSSName(clazz) + "+" + rules.name());
     }
 
     /**
@@ -702,7 +703,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean insideOf(Class<? extends CSS> clazz) {
-        return rule("." + Obfuscator.computeCSSName(clazz) + " " + rules.selector);
+        return rule("." + Obfuscator.computeCSSName(clazz) + " " + rules.name());
     }
 
     /**
@@ -715,7 +716,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean with(Class<? extends CSS> clazz) {
-        return rule("." + Obfuscator.computeCSSName(clazz) + rules.selector);
+        return rule("." + Obfuscator.computeCSSName(clazz) + rules.name());
     }
 
     /**
@@ -731,7 +732,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean parentHover() {
-        String current = rules.selector;
+        String current = rules.name();
 
         if (current.endsWith(":after")) {
             return rule(current.substring(0, current.length() - 6) + ":hover:after");
@@ -753,7 +754,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean adjacentHover() {
-        return rule("*:hover+" + rules.selector);
+        return rule("*:hover+" + rules.name());
     }
 
     /**
@@ -769,7 +770,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean siblingHover() {
-        return rule("*:hover~" + rules.selector);
+        return rule("*:hover~" + rules.name());
     }
 
     /**
@@ -816,7 +817,7 @@ public abstract class CSS implements Extensible {
             rules = set;
 
             // load property and assign it to field
-            for (CSSProperty property : set.rules) {
+            for (CSSProperty property : set.properties) {
                 property.css = this;
                 CSS.class.getField(Strings.unhyphenate(property.name)).set(this, property);
             }
@@ -914,7 +915,7 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public static final Gradient linear(Color start, Color end) {
+    protected static final Gradient linear(Color start, Color end) {
         return new Gradient(start, end);
     }
 
@@ -929,40 +930,42 @@ public abstract class CSS implements Extensible {
         Stylist stylist = I.make(Stylist.class);
 
         // store the processing css
-        CSS css = current;
+        CSS processing = current;
 
         try {
             for (Class<? extends CSS> clazz : classes) {
-                CSS style = I.make(clazz);
-                style.rules.selectors.add(css.rules.selector);
+                CSS css = I.make(clazz);
+                css.rules.importSelectorsFrom(processing.rules);
+
+                processing.rules.dependencies.add(css.rules);
 
                 stylist.register(clazz);
             }
         } finally {
             // restore the processing css
-            current = css;
+            current = processing;
         }
     }
 
     /**
      * @version 2013/07/21 16:27:34
      */
-    private static class RuleSet {
+    static class RuleSet {
 
         /** The parent rule set. */
         private final RuleSet parent;
 
-        /** The selector. */
-        private final String selector;
+        /** The sub rule set. */
+        private final Set<RuleSet> children = new LinkedHashSet();
 
-        /** The required selectors. */
+        /** The rule set that this rule set depends on. */
+        private final Set<RuleSet> dependencies = new HashSet();
+
+        /** The list of selectors. */
         private final List<String> selectors = new ArrayList();
 
         /** The property store. */
-        private final List<CSSProperty> rules = new ArrayList();
-
-        /** The sub rule sets. */
-        private final Set<RuleSet> subs = new LinkedHashSet();
+        private final List<CSSProperty> properties = new ArrayList();
 
         /** The flag whether this rule set process sub rule or not. */
         private int id = -1;
@@ -983,7 +986,6 @@ public abstract class CSS implements Extensible {
          */
         private RuleSet(RuleSet parent, String selector) {
             this.parent = parent;
-            this.selector = selector;
             this.selectors.add(selector);
 
             if (selector.endsWith(":selection")) {
@@ -992,7 +994,7 @@ public abstract class CSS implements Extensible {
 
             // store as sub rule in parent rule
             if (parent != null) {
-                parent.subs.add(this);
+                parent.children.add(this);
             }
 
             // create all properties
@@ -1008,10 +1010,36 @@ public abstract class CSS implements Extensible {
                     } catch (NoSuchMethodException e) {
                         value = type.newInstance();
                     }
-                    rules.add((CSSProperty) value);
+                    properties.add((CSSProperty) value);
                 }
             } catch (Exception e) {
                 throw I.quiet(e);
+            }
+        }
+
+        /**
+         * <p>
+         * Return the identical selector name of this {@link RuleSet}.
+         * </p>
+         * 
+         * @return The identical selector name.
+         */
+        private String name() {
+            return selectors.get(0);
+        }
+
+        /**
+         * <p>
+         * Import selectors.
+         * </p>
+         * 
+         * @param set
+         */
+        private void importSelectorsFrom(RuleSet set) {
+            selectors.addAll(set.selectors);
+
+            for (RuleSet dependence : dependencies) {
+                dependence.importSelectorsFrom(set);
             }
         }
 
@@ -1027,7 +1055,7 @@ public abstract class CSS implements Extensible {
             CSSWriter writer = new CSSWriter();
             writer.write(I.join(selectors, ","), "{");
 
-            for (CSSProperty property : rules) {
+            for (CSSProperty property : properties) {
                 if (property.used) {
                     counter++;
                     writer.write(property.toString());
@@ -1040,8 +1068,8 @@ public abstract class CSS implements Extensible {
                 writer = new CSSWriter();
             }
 
-            for (RuleSet sub : subs) {
-                writer.write(sub.toString());
+            for (RuleSet child : children) {
+                writer.write(child.toString());
             }
             return writer.toString();
         }

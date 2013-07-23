@@ -14,6 +14,7 @@ import static booton.css.Vendor.*;
 
 import org.junit.Test;
 
+import booton.css.MyCSS;
 import booton.css.value.Numeric;
 
 /**
@@ -51,7 +52,7 @@ public class CalcTest {
 
         assert css.has("-webkit-transform", "translateY(-webkit-calc(1px + 2em))");
         assert css.has("transform", "translateY(calc(1px + 2em))");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 
     @Test
@@ -61,6 +62,6 @@ public class CalcTest {
 
         assert css.has("-webkit-transform", "translateY(1px)");
         assert css.has("transform", "translateY(1px)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 }

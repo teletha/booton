@@ -11,6 +11,7 @@ package booton.css.property;
 
 import org.junit.Test;
 
+import booton.css.MyCSS;
 import booton.css.Vendor;
 
 /**

@@ -7,16 +7,14 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css.property;
+package booton.css;
 
 import static booton.css.Vendor.*;
 import kiss.I;
 import booton.Booton;
-import booton.css.CSS;
-import booton.css.Vendor;
 
 /**
- * 13/07/16 16:10:32
+ * @version 2013/07/24 0:37:47
  */
 public class MyCSS extends CSS {
 
@@ -32,7 +30,7 @@ public class MyCSS extends CSS {
      * @param name
      * @return
      */
-    boolean has(String name) {
+    public boolean has(String name) {
         return toString().contains(name + ":");
     }
 
@@ -45,7 +43,7 @@ public class MyCSS extends CSS {
      * @param value
      * @return
      */
-    boolean has(String name, String value) {
+    public boolean has(String name, String value) {
         return toString().contains(name + ": " + value + ";");
     }
 
@@ -57,7 +55,7 @@ public class MyCSS extends CSS {
      * @param vendor
      * @return
      */
-    boolean has(Vendor vendor) {
+    public boolean has(Vendor vendor) {
         return toString().contains(vendor.toString());
     }
 
@@ -69,7 +67,7 @@ public class MyCSS extends CSS {
      * @param vendor
      * @return
      */
-    boolean no(Vendor... vendors) {
+    public boolean no(Vendor... vendors) {
         String code = toString();
 
         for (Vendor vendor : vendors) {
@@ -88,8 +86,29 @@ public class MyCSS extends CSS {
      * @param vendor
      * @return
      */
-    boolean noVendor() {
+    public boolean noVendor() {
         return no(IE, Mozilla, Webkit);
+    }
+
+    /**
+     * <p>
+     * Count a number of selectors.
+     * </p>
+     * 
+     * @return A number of selectors.
+     */
+    public int countSelector() {
+        int counter = 1;
+        String code = toString();
+        code = code.substring(0, code.indexOf('{'));
+        int index = code.indexOf(',');
+
+        while (index != -1) {
+            counter++;
+
+            index = code.indexOf(',', index + 1);
+        }
+        return counter;
     }
 
     /**
@@ -99,7 +118,7 @@ public class MyCSS extends CSS {
      * 
      * @return A number of properties.
      */
-    int count() {
+    public int countProperty() {
         int counter = 0;
         String code = toString();
         int index = code.indexOf(';');

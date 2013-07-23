@@ -13,6 +13,8 @@ import static booton.css.Unit.*;
 
 import org.junit.Test;
 
+import booton.css.MyCSS;
+
 /**
  * @version 2013/07/23 0:47:54
  */
@@ -25,7 +27,7 @@ public class TransformTest {
 
         assert css.has("-webkit-transform", "rotate(10deg)");
         assert css.has("transform", "rotate(10deg)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 
     @Test
@@ -35,7 +37,7 @@ public class TransformTest {
 
         assert css.has("-webkit-transform", "rotateX(10deg)");
         assert css.has("transform", "rotateX(10deg)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 
     @Test
@@ -45,7 +47,7 @@ public class TransformTest {
 
         assert css.has("-webkit-transform", "rotateY(10deg)");
         assert css.has("transform", "rotateY(10deg)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 
     @Test
@@ -55,7 +57,7 @@ public class TransformTest {
 
         assert css.has("-webkit-transform", "rotateZ(10deg)");
         assert css.has("transform", "rotateZ(10deg)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 
     @Test
@@ -65,7 +67,7 @@ public class TransformTest {
 
         assert css.has("-webkit-transform", "translate(10px)");
         assert css.has("transform", "translate(10px)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 
     @Test
@@ -75,7 +77,7 @@ public class TransformTest {
 
         assert css.has("-webkit-transform", "translateX(10px)");
         assert css.has("transform", "translateX(10px)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 
     @Test
@@ -85,7 +87,7 @@ public class TransformTest {
 
         assert css.has("-webkit-transform", "translateY(10px)");
         assert css.has("transform", "translateY(10px)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 
     @Test
@@ -95,7 +97,7 @@ public class TransformTest {
 
         assert css.has("-webkit-transform", "translateZ(10px)");
         assert css.has("transform", "translateZ(10px)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 
     @Test
@@ -105,7 +107,7 @@ public class TransformTest {
 
         assert css.has("-webkit-transform", "scale(10)");
         assert css.has("transform", "scale(10)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 
     @Test
@@ -115,7 +117,7 @@ public class TransformTest {
 
         assert css.has("-webkit-transform", "scale(10,5)");
         assert css.has("transform", "scale(10,5)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 
     @Test
@@ -125,7 +127,7 @@ public class TransformTest {
 
         assert css.has("-webkit-transform", "scaleX(10)");
         assert css.has("transform", "scaleX(10)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 
     @Test
@@ -135,7 +137,7 @@ public class TransformTest {
 
         assert css.has("-webkit-transform", "scaleY(10)");
         assert css.has("transform", "scaleY(10)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 
     @Test
@@ -145,7 +147,7 @@ public class TransformTest {
 
         assert css.has("-webkit-transform", "scaleZ(10)");
         assert css.has("transform", "scaleZ(10)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 
     @Test
@@ -155,7 +157,7 @@ public class TransformTest {
 
         assert css.has("-webkit-transform", "skew(10deg)");
         assert css.has("transform", "skew(10deg)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 
     @Test
@@ -165,7 +167,7 @@ public class TransformTest {
 
         assert css.has("-webkit-transform", "skewX(10deg)");
         assert css.has("transform", "skewX(10deg)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 
     @Test
@@ -175,6 +177,6 @@ public class TransformTest {
 
         assert css.has("-webkit-transform", "skewY(10deg)");
         assert css.has("transform", "skewY(10deg)");
-        assert css.count() == 2;
+        assert css.countProperty() == 2;
     }
 }
