@@ -88,7 +88,6 @@ class HeaderStyle {
 
         {
             display.block();
-            border.width(0, px);
             border.bottom.width(1, px).solid().color(rgb(81, 81, 81));
 
             while (hover()) {

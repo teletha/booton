@@ -18,7 +18,7 @@ import org.junit.Test;
 /**
  * @version 2013/07/22 12:51:59
  */
-public class BordersTest {
+public class BorderTest {
 
     @Test
     public void width() throws Exception {

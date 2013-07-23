@@ -9,264 +9,253 @@
  */
 package booton.css.property;
 
-import java.util.EnumMap;
-
-import booton.css.CSSWriter;
+import booton.css.CSSProperty;
+import booton.css.Unit;
 import booton.css.value.Color;
 import booton.css.value.Value;
 
 /**
- * @version 2013/07/22 22:50:31
+ * @version 2013/07/22 16:56:21
  */
-public class Border extends BorderSet {
-
-    /** The width properties. */
-    private final EnumMap<Side, Value> widths = new EnumMap(Side.class);
-
-    /** The style properties. */
-    private final EnumMap<Side, BorderStyle> styles = new EnumMap(Side.class);
-
-    /** The color properties. */
-    private final EnumMap<Side, Color> colors = new EnumMap(Side.class);
-
-    /** The radius properties. */
-    private final EnumMap<Side, Value> radius = new EnumMap(Side.class);
-
-    /**
-     * <p>
-     * The border-top CSS property is a shorthand that sets the values of border-top-color,
-     * border-top-style, and border-top-width. These properties describe the top border of elements.
-     * </p>
-     */
-    public final BorderDefinition top = new Single(Side.Top);
-
-    /**
-     * <p>
-     * The border-bottom CSS property is a shorthand that sets the values of border-bottom-color,
-     * border-bottom-style, and border-bottom-width. These properties describe the bottom border of
-     * elements.
-     * </p>
-     */
-    public final BorderDefinition bottom = new Single(Side.Bottom);
-
-    /**
-     * <p>
-     * The border-left CSS property is a shorthand that sets the values of border-left-color,
-     * border-left-style, and border-left-width. These properties describe the left border of
-     * elements.
-     * </p>
-     */
-    public final BorderDefinition left = new Single(Side.Left);
-
-    /**
-     * <p>
-     * The border-right CSS property is a shorthand that sets the values of border-right-color,
-     * border-right-style, and border-right-width. These properties describe the right border of
-     * elements.
-     * </p>
-     */
-    public final BorderDefinition right = new Single(Side.Right);
-
-    /**
-     * <p>
-     * A shorthand that sets the values of border-right and border-left.
-     * </p>
-     */
-    public final BorderDefinition horizontal = new BorderSet().add(left, right);
-
-    /**
-     * <p>
-     * A shorthand that sets the values of border-top and border-bottom.
-     * </p>
-     */
-    public final BorderDefinition vertical = new BorderSet().add(top, bottom);
+public abstract class Border<T extends Border> extends CSSProperty<T> {
 
     /**
      * 
      */
-    public Border() {
-        add(top, right, bottom, left);
+    protected Border() {
     }
 
     /**
-     * {@inheritDoc}
+     * @param name
      */
-    @Override
-    protected void write(CSSWriter writer) {
-        if (match(widths) && match(styles) && match(colors)) {
-            writer.property("border", widths.get(Side.Top), styles.get(Side.Top), colors.get(Side.Top));
-        } else {
-            for (Side side : Side.values()) {
-                writer.property("border-" + side, widths.get(side), styles.get(side), colors.get(side));
-            }
-        }
-
-        if (match(radius)) {
-            writer.property("border-radius", radius.get(Side.Top));
-        } else {
-            for (Side side : Side.values()) {
-                writer.property("border-" + side.radius + "-radius", radius.get(side));
-            }
-        }
+    protected Border(String name) {
+        super(name);
     }
 
     /**
      * <p>
-     * Helper method to check equality between all objects.
+     * Set the radius of this border.
+     * </p>
+     * <p>
+     * The border-radius CSS property allows Web authors to define how rounded border corners are.
+     * The curve of each corner is defined using one or two radii, defining its shape: circle or
+     * ellipse.
      * </p>
      * 
-     * @param map
-     * @return A result.
+     * @param size A radius to set.
+     * @return Chainable API.
      */
-    private boolean match(EnumMap map) {
-        Object object = map.get(Side.Top);
-        Side[] sides = Side.values();
+    public abstract T radius(Value size);
 
-        for (int i = 1; i < 4; i++) {
-            Object current = map.get(sides[i]);
-            if (object == null) {
-                if (current != null) {
-                    return false;
-                }
-            } else if (!object.equals(current)) {
-                return false;
-            }
-        }
-        return true;
+    /**
+     * <p>
+     * Set the radius of this border.
+     * </p>
+     * <p>
+     * The border-radius CSS property allows Web authors to define how rounded border corners are.
+     * The curve of each corner is defined using one or two radii, defining its shape: circle or
+     * ellipse.
+     * </p>
+     * 
+     * @param size A radius to set.
+     * @param unit A width unit to set.
+     * @return Chainable API.
+     */
+    public final T radius(double size, Unit unit) {
+        return radius(new Value(size, unit));
     }
 
     /**
-     * @version 2013/07/22 14:12:03
+     * <p>
+     * Return the widht of this border.
+     * </p>
+     * 
+     * @return A border width.
      */
-    private static enum Side {
-        Top("top-left"), Right("top-right"), Bottom("bottom-right"), Left("bottom-left");
+    public abstract Value width();
 
-        /** The radius corner name. */
-        private final String radius;
+    /**
+     * <p>
+     * Set the width of this border.
+     * </p>
+     * 
+     * @param size A width to set.
+     * @return Chainable API.
+     */
+    public abstract T width(Value size);
 
-        /**
-         * @param radius
-         */
-        private Side(String radius) {
-            this.radius = radius;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String toString() {
-            return name().toLowerCase();
-        }
+    /**
+     * <p>
+     * Set the width of this border.
+     * </p>
+     * 
+     * @param size A width to set.
+     * @param unit A width unit to set.
+     * @return Chainable API.
+     */
+    public final T width(double size, Unit unit) {
+        return width(new Value(size, unit));
     }
 
     /**
-     * @version 2013/07/22 12:46:33
+     * <p>
+     * Return the color of this border.
+     * </p>
+     * 
+     * @return A border color.
      */
-    private class Single extends BorderDefinition<Single> {
+    public abstract Color color();
 
-        /** The target side. */
-        private final Side side;
+    /**
+     * <p>
+     * Set the color of this border.
+     * </p>
+     * 
+     * @param color A color to set.
+     * @return Chainable API.
+     */
+    public abstract T color(Color color);
 
-        /**
-         * @param side
-         */
-        public Single(Side side) {
-            this.side = side;
-        }
+    /**
+     * <p>
+     * Return the style of this border.
+     * </p>
+     * 
+     * @return A border style.
+     */
+    public abstract BorderStyle style();
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Single radius(Value size) {
-            switch (side) {
-            case Top:
-                radius.put(Side.Top, size);
-                radius.put(Side.Right, size);
-                break;
+    /**
+     * <p>
+     * Set the style of this border.
+     * </p>
+     * 
+     * @param style A style to set.
+     * @return Chainable API.
+     */
+    protected abstract T style(BorderStyle style);
 
-            case Right:
-                radius.put(Side.Right, size);
-                radius.put(Side.Bottom, size);
-                break;
+    /**
+     * <p>
+     * Like for the hidden keyword, displays no border. In that case, except if a background image
+     * is set, the calculated values of border-width will be 0, even if specified otherwise through
+     * the property. In case of table cell and border collapsing, the none value has the lowest
+     * priority: it means that if any other conflicting border is set, it will be displayed.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public final T none() {
+        return style(BorderStyle.None);
+    }
 
-            case Bottom:
-                radius.put(Side.Bottom, size);
-                radius.put(Side.Left, size);
-                break;
+    /**
+     * <p>
+     * Like for the none keyword, displays no border. In that case, except if a background image is
+     * set, the calculated values of border-width will be 0, even if specified otherwise through the
+     * property. In case of table cell and border collapsing, the hidden value has the highest
+     * priority: it means that if any other conflicting border is set, it won't be displayed.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public final T hidden() {
+        return style(BorderStyle.Hidden);
+    }
 
-            case Left:
-                radius.put(Side.Left, size);
-                radius.put(Side.Top, size);
-                break;
-            }
+    /**
+     * <p>
+     * Displays a series of rounded dots. The spacing of the dots are not defined by the
+     * specification and are implementation-specific. The radius of the dots is half the calculated
+     * border-width.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public final T dotted() {
+        return style(BorderStyle.Dotted);
+    }
 
-            Border.this.chain();
+    /**
+     * <p>
+     * Displays a series of short square-ended dashes or line segments. The exact size and length of
+     * the segments are not defined by the specification and are implementation-specific.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public final T dashed() {
+        return style(BorderStyle.Dashed);
+    }
 
-            return this;
-        }
+    /**
+     * <p>
+     * Displays a single, straight, solid line.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public final T solid() {
+        return style(BorderStyle.Solid);
+    }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Value width() {
-            Value value = widths.get(side);
+    /**
+     * <p>
+     * Displays two straight lines that add up to the pixel amount defined as border-width .
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public final T doubles() {
+        return style(BorderStyle.Doubles);
+    }
 
-            return value == null ? Value.Zero : value;
-        }
+    /**
+     * <p>
+     * Displays a border leading to a carved effect. It is the opposite of ridge.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public final T groove() {
+        return style(BorderStyle.Groove);
+    }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Single width(Value size) {
-            widths.put(side, size);
+    /**
+     * <p>
+     * Displays a border with a 3D effect, like if it is coming out of the page. It is the opposite
+     * of groove.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public final T ridge() {
+        return style(BorderStyle.Ridge);
+    }
 
-            Border.this.chain();
+    /**
+     * <p>
+     * Displays a border that makes the box appear embedded. It is the opposite of outset. When
+     * applied to a table cell with border-collapse set to collapsed, this value behaves like
+     * groove.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public final T inset() {
+        return style(BorderStyle.Inset);
+    }
 
-            return this;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Color color() {
-            return colors.get(side);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Single color(Color color) {
-            colors.put(side, color);
-
-            Border.this.chain();
-
-            return this;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public BorderStyle style() {
-            return styles.get(side);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected Single style(BorderStyle style) {
-            styles.put(side, style);
-
-            Border.this.chain();
-
-            return this;
-        }
+    /**
+     * <p>
+     * Displays a border that makes the box appear in 3D, embossed. It is the opposite of inset.
+     * When applied to a table cell with border-collapse set to collapsed, this value behaves like
+     * ridge.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public final T outset() {
+        return style(BorderStyle.Outset);
     }
 }

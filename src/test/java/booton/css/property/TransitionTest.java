@@ -15,17 +15,47 @@ import static booton.css.Vendor.*;
 import org.junit.Test;
 
 /**
- * @version 2013/07/18 16:42:45
+ * @version 2013/07/23 0:47:54
  */
 public class TransitionTest {
 
     @Test
-    public void center() throws Exception {
+    public void property() throws Exception {
+        MyCSS css = new MyCSS();
+        css.transition.property.all();
+
+        assert css.has("transition-property", "all");
+        assert css.has("-webkit-transition-property", "all");
+        assert css.no(Mozilla, IE);
+    }
+
+    @Test
+    public void delay() throws Exception {
         MyCSS css = new MyCSS();
         css.transition.delay(10, s);
 
         assert css.has("transition-delay", "10s");
-        assert css.has("-webkit-transition-delay");
+        assert css.has("-webkit-transition-delay", "10s");
+        assert css.no(Mozilla, IE);
+    }
+
+    @Test
+    public void duration() throws Exception {
+        MyCSS css = new MyCSS();
+        css.transition.duration(10, s);
+
+        assert css.has("transition-duration", "10s");
+        assert css.has("-webkit-transition-duration", "10s");
+        assert css.no(Mozilla, IE);
+    }
+
+    @Test
+    public void timing() throws Exception {
+        MyCSS css = new MyCSS();
+        css.transition.timing.ease();
+
+        assert css.has("transition-timing-function", "ease");
+        assert css.has("-webkit-transition-timing-function", "ease");
         assert css.no(Mozilla, IE);
     }
 }
