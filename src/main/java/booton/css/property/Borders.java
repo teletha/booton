@@ -16,7 +16,7 @@ import booton.css.value.Color;
 import booton.css.value.Value;
 
 /**
- * @version 2013/07/23 13:24:28
+ * @version 2013/07/23 14:35:11
  */
 public class Borders extends BorderSet {
 
@@ -96,10 +96,26 @@ public class Borders extends BorderSet {
     @Override
     protected void write(CSSWriter writer) {
         if (match(widths) && match(styles) && match(colors)) {
-            writer.property(name, widths.get(Side.Top), styles.get(Side.Top), colors.get(Side.Top));
-        } else {
+            Value width = widths.get(Side.Top);
+            BorderStyle style = styles.get(Side.Top);
+            Color color = colors.get(Side.Top);
+
+            if (width != null && style != null && color != null) {
+                writer.property(name, width, style, color);
+            } else {
+                writer.property(name + "-width", width);
+                writer.property(name + "-style", style);
+                writer.property(name + "-color", color);
+            }
+        } else if (match(Side.Top) && match(Side.Right) && match(Side.Bottom) && match(Side.Left)) {
             for (Side side : Side.values()) {
                 writer.property(name + "-" + side, widths.get(side), styles.get(side), colors.get(side));
+            }
+        } else {
+            for (Side side : Side.values()) {
+                writer.property(name + "-" + side + "-width", widths.get(side));
+                writer.property(name + "-" + side + "-style", styles.get(side));
+                writer.property(name + "-" + side + "-color", colors.get(side));
             }
         }
 
@@ -135,6 +151,22 @@ public class Borders extends BorderSet {
             }
         }
         return true;
+    }
+
+    /**
+     * <p>
+     * Helper method to check equality between all objects.
+     * </p>
+     * 
+     * @param map
+     * @return A result.
+     */
+    private boolean match(Side side) {
+        Value width = widths.get(side);
+        BorderStyle style = styles.get(side);
+        Color color = colors.get(side);
+
+        return (width == null && style == null && color == null) || (width != null && style != null && color != null);
     }
 
     /**
