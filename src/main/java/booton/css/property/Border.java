@@ -186,7 +186,7 @@ public abstract class Border extends ColorableProperty<Border> {
      * @return Chainable API.
      */
     public final Border doubles() {
-        return style(BorderStyle.Doubles);
+        return style(BorderStyle.Double);
     }
 
     /**

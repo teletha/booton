@@ -16,7 +16,7 @@ import org.junit.Test;
 /**
  * @version 2013/07/24 0:36:04
  */
-public class CSSRequireTest {
+public class RequireNestTest {
 
     @Test
     public void require() throws Exception {
