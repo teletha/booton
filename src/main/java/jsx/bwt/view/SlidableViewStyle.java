@@ -20,7 +20,7 @@ class SlidableViewStyle {
 
         {
             // In firefox, "overflow : hidden" will render dirty, so don't use it.
-            overflowY.hidden();
+            overflow.y.hidden();
             visibility.hidden();
             box.width(100, percent).zIndex(1);
             position.absolute().top(100, percent).left(0, px);
