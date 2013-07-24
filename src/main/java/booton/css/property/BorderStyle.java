@@ -63,7 +63,7 @@ public enum BorderStyle {
      * Displays two straight lines that add up to the pixel amount defined as border-width .
      * </p>
      */
-    Doubles,
+    Double,
 
     /**
      * <p>

@@ -52,7 +52,7 @@ import booton.css.value.Gradient;
 import booton.util.Strings;
 
 /**
- * @version 2013/07/22 11:49:16
+ * @version 2013/07/24 12:22:58
  */
 @Manageable(lifestyle = Singleton.class)
 public abstract class CSS implements Extensible {
@@ -459,6 +459,37 @@ public abstract class CSS implements Extensible {
 
     /**
      * <p>
+     * The :link CSS pseudo-class lets you select links inside elements. This will select any link,
+     * even those already styled using selector with other link-related pseudo-classes like :hover,
+     * :active or :visited. In order to style only non-visited links, you need to put the :link rule
+     * before the other ones, as defined by the LVHA-order: :link — :visited — :hover — :active. The
+     * :focus pseudo-class is usually placed right before or right after :hover, depending of the
+     * expected effect.
+     * </p>
+     * 
+     * @return
+     */
+    public final boolean link() {
+        return rule(rules.name() + ":link");
+    }
+
+    /**
+     * <p>
+     * The :visited CSS pseudo-class lets you select only links that have been visited. This style
+     * may be overridden by any other link-related pseudo-classes, that is :link, :hover, and
+     * :active, appearing in subsequent rules. In order to style appropriately links, you need to
+     * put the :visited rule after the :link rule but before the other ones, defined in the
+     * LVHA-order: :link — :visited — :hover — :active.
+     * </p>
+     * 
+     * @return
+     */
+    public final boolean visited() {
+        return rule(rules.name() + ":visited");
+    }
+
+    /**
+     * <p>
      * The :hover CSS pseudo-class matches when the user designates an element with a pointing
      * device, but does not necessarily activate it. This style may be overridden by any other
      * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent
@@ -503,6 +534,112 @@ public abstract class CSS implements Extensible {
      */
     public final boolean focus() {
         return rule(rules.name() + ":focus");
+    }
+
+    /**
+     * <p>
+     * The :enabled CSS pseudo-class represents any enabled element. An element is enabled if it can
+     * be activated (e.g. selected, clicked on or accept text input) or accept focus. The element
+     * also has an disabled state, in which it can't be activated or accept focus.
+     * </p>
+     * 
+     * @return
+     */
+    public final boolean enabled() {
+        return rule(rules.name() + ":enabled");
+    }
+
+    /**
+     * <p>
+     * The :disabled CSS pseudo-class represents any disabled element. An element is disabled if it
+     * can't be activated (e.g. selected, clicked on or accept text input) or accept focus. The
+     * element also has an enabled state, in which it can be activated or accept focus.
+     * </p>
+     * 
+     * @return
+     */
+    public final boolean disabled() {
+        return rule(rules.name() + ":disabled");
+    }
+
+    /**
+     * <p>
+     * The :checked CSS pseudo-class selector represents any radio (<input type="radio">), checkbox
+     * (<input type="checkbox">) or option (<option> in a <select>) element that is checked or
+     * toggled to an on state. The user can change this state by clicking on the element, or
+     * selecting a different value, in which case the :checked pseudo-class no longer applies to
+     * this element, but will to the relevant one.
+     * </p>
+     * 
+     * @return
+     */
+    public final boolean checked() {
+        return rule(rules.name() + ":checked");
+    }
+
+    /**
+     * <p>
+     * The :indeterminate CSS pseudo-class represents any <input type="checkbox"> element whose
+     * indeterminate DOM property is set to true by JavaScript. In addition, in some browsers, it
+     * can be used to match to <progress> elements in an indeterminate state.
+     * </p>
+     * 
+     * @return
+     */
+    public final boolean indeterminate() {
+        return rule(rules.name() + ":indeterminate");
+    }
+
+    /**
+     * <p>
+     * The :required CSS pseudo-class represents any <input> element that has the required attribute
+     * set on it. This allows forms to easily indicate which fields must have valid data before the
+     * form can be submitted.
+     * </p>
+     * 
+     * @return
+     */
+    public final boolean required() {
+        return rule(rules.name() + ":required");
+    }
+
+    /**
+     * <p>
+     * The :optional CSS pseudo-class represents any <input> element that does not have the required
+     * attribute set on it. This allows forms to easily indicate optional fields, and to style them
+     * accordingly.
+     * </p>
+     * 
+     * @return
+     */
+    public final boolean optional() {
+        return rule(rules.name() + ":optional");
+    }
+
+    /**
+     * <p>
+     * The :valid CSS pseudo-class represents any <input> element whose content validates correctly
+     * according to the input's type setting. This allows to easily make valid fields adopt an
+     * appearance that helps the user confirm that their data is formatted properly.
+     * </p>
+     * 
+     * @return
+     */
+    public final boolean valid() {
+        return rule(rules.name() + ":valid");
+    }
+
+    /**
+     * <p>
+     * The :invalid CSS pseudo-class represents any <input> or <form> element whose content fails to
+     * validate according to the input's type setting. This allows you to easily have invalid fields
+     * adopt an appearance that helps the user identify and correct errors.
+     * </p>
+     * 
+     * @return
+     */
+    public final boolean invalid() {
+        return rule(rules.name() + ":invalid");
     }
 
     /**
@@ -587,7 +724,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean nthChild(String pattern) {
-        return rule(rules.name() + ":nth-child");
+        return rule(rules.name() + ":nth-child(" + pattern + ")");
     }
 
     /**
@@ -600,7 +737,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean nthLastChild(String pattern) {
-        return rule(rules.name() + ":nth-child");
+        return rule(rules.name() + ":nth-last-child(" + pattern + ")");
     }
 
     /**
@@ -616,7 +753,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean nthOfType(String pattern) {
-        return rule(rules.name() + ":nth-of-type");
+        return rule(rules.name() + ":nth-of-type(" + pattern + ")");
     }
 
     /**
@@ -630,20 +767,46 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean nthLastOfType(String pattern) {
-        return rule(rules.name() + ":nth-last-of-type");
+        return rule(rules.name() + ":nth-last-of-type(" + pattern + ")");
     }
 
     /**
      * <p>
-     * :before creates a pseudo-element that is the first child of the element matched. Often used
-     * to add cosmetic content to an element, by using the content property. This element is inline
-     * by default.
+     * The :empty pseudo-class represents any element that has no children at all. Only element
+     * nodes and text (including whitespace) are considered. Comments or processing instructions do
+     * not affect whether an element is considered empty or not.
+     * </p>
+     * 
+     * @return
+     */
+    public final boolean empty() {
+        return rule(rules.name() + ":empty");
+    }
+
+    /**
+     * <p>
+     * The :empty pseudo-class represents any element that has no children at all. Only element
+     * nodes and text (including whitespace) are considered. Comments or processing instructions do
+     * not affect whether an element is considered empty or not.
+     * </p>
+     * 
+     * @return
+     */
+    public final boolean not(Class<? extends CSS> clazz) {
+        return rule(rules.name() + ":not(." + Obfuscator.computeCSSName(clazz) + ")");
+    }
+
+    /**
+     * <p>
+     * The negation CSS pseudo-class, :not(X), is a functional notation taking a simple selector X
+     * as an argument. It matches an element that is not represented by the argument. X must not
+     * contain another negation selector, or any pseudo-elements.
      * </p>
      * 
      * @return
      */
     public final boolean before() {
-        return rule(rules.name() + ":before");
+        return rule(rules.name() + "::before");
     }
 
     /**
@@ -656,7 +819,33 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean after() {
-        return rule(rules.name() + ":after");
+        return rule(rules.name() + "::after");
+    }
+
+    /**
+     * <p>
+     * The ::first-letter CSS pseudo-element selects the first letter of the first line of a block,
+     * if it is not preceded by any other content (such as images or inline tables) on its line.
+     * </p>
+     * 
+     * @return
+     */
+    public final boolean firstLetter() {
+        return rule(rules.name() + "::first-letter");
+    }
+
+    /**
+     * <p>
+     * The ::first-line CSS pseudo-element applies styles only to the first line of an element. The
+     * amount of the text on the first line depends of numerous factors, like the width of the
+     * elements or of the document, but also of the font size of the text. As all pseudo-elements,
+     * the selectors containing ::first-line does not match any real HTML element.
+     * </p>
+     * 
+     * @return
+     */
+    public final boolean firstLine() {
+        return rule(rules.name() + "::first-line");
     }
 
     /**
@@ -673,7 +862,7 @@ public abstract class CSS implements Extensible {
      * @return
      */
     public final boolean selection() {
-        return rule(rules.name() + ":selection");
+        return rule(rules.name() + "::selection");
     }
 
     public final boolean children() {
@@ -948,7 +1137,7 @@ public abstract class CSS implements Extensible {
     }
 
     /**
-     * @version 2013/07/21 16:27:34
+     * @version 2013/07/24 12:22:53
      */
     static class RuleSet {
 
@@ -988,8 +1177,8 @@ public abstract class CSS implements Extensible {
             this.parent = parent;
             this.selectors.add(selector);
 
-            if (selector.endsWith(":selection")) {
-                this.selectors.add(selector.replace(":selection", "::-moz-selection"));
+            if (selector.endsWith("::selection")) {
+                this.selectors.add(selector.replace("::selection", "::-moz-selection"));
             }
 
             // store as sub rule in parent rule
