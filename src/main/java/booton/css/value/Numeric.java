@@ -19,12 +19,27 @@ import booton.css.Unit;
 import booton.css.Vendor;
 
 /**
- * @version 2013/07/23 23:50:06
+ * @version 2013/07/24 23:48:00
  */
 public class Numeric extends CSSValue {
 
     /** The zero value. */
-    public static final Numeric Zero = new Numeric(0, Unit.px);
+    public static final Numeric Zero = new Numeric(0, px);
+
+    /** The numerical value. */
+    public static final Numeric Top = new Numeric(0, percent);
+
+    /** The numerical value. */
+    public static final Numeric Left = Top;
+
+    /** The numerical value. */
+    public static final Numeric Center = new Numeric(50, percent);
+
+    /** The numerical value. */
+    public static final Numeric Bottom = new Numeric(100, percent);
+
+    /** The numerical value. */
+    public static final Numeric Right = Bottom;
 
     /** The size. */
     public final double size;
