@@ -49,6 +49,7 @@ import booton.css.property.UserSelect;
 import booton.css.property.Visibility;
 import booton.css.value.Color;
 import booton.css.value.LinearGradient;
+import booton.css.value.RadialGradient;
 import booton.util.Strings;
 
 /**
@@ -1088,6 +1089,32 @@ public abstract class CSS implements Extensible {
      */
     protected static final LinearGradient linear(Color start, Color end) {
         return new LinearGradient().color(start, end);
+    }
+
+    /**
+     * <p>
+     * The CSS radial-gradient() function creates an <image> which represents a gradient of colors
+     * radiating from an origin, the center of the gradient. The result of this function is an
+     * object of the CSS <gradient> data type.
+     * </p>
+     * 
+     * @return A new linear gradient image.
+     */
+    protected static final RadialGradient radial() {
+        return new RadialGradient();
+    }
+
+    /**
+     * <p>
+     * The CSS radial-gradient() function creates an <image> which represents a gradient of colors
+     * radiating from an origin, the center of the gradient. The result of this function is an
+     * object of the CSS <gradient> data type.
+     * </p>
+     * 
+     * @return A new linear gradient image.
+     */
+    protected static final RadialGradient radial(Color start, Color end) {
+        return new RadialGradient().color(start, end);
     }
 
     /**

@@ -23,13 +23,16 @@ import booton.css.Vendor;
 /**
  * @version 2013/07/24 16:02:18
  */
-public class LinearGradient extends CSSValue {
+public class LinearGradient<T extends LinearGradient> extends CSSValue {
 
     /** The angle of direction for the gradient. */
-    private Numeric angle;
+    protected Numeric angle;
 
     /** The color steps. */
-    private List<Step> steps = new ArrayList();
+    protected List<Step> steps = new ArrayList();
+
+    /** The flag for repeat. */
+    protected boolean repeatable = false;
 
     /**
      * <p>
@@ -40,7 +43,7 @@ public class LinearGradient extends CSSValue {
      * @param unit An angle unit of direction for the gradient.
      * @return Chainable API.
      */
-    public LinearGradient angle(double size, Unit unit) {
+    public T angle(double size, Unit unit) {
         return angle(new Numeric(size, unit));
     }
 
@@ -52,10 +55,10 @@ public class LinearGradient extends CSSValue {
      * @param angle An angle of direction for the gradient.
      * @return Chainable API.
      */
-    public LinearGradient angle(Numeric angle) {
+    public T angle(Numeric angle) {
         this.angle = angle;
 
-        return this;
+        return (T) this;
     }
 
     /**
@@ -68,11 +71,11 @@ public class LinearGradient extends CSSValue {
      * @param color A color.
      * @return Chainable API.
      */
-    public LinearGradient color(Color... colors) {
+    public T color(Color... colors) {
         for (Color color : colors) {
             color(color, null);
         }
-        return this;
+        return (T) this;
     }
 
     /**
@@ -86,7 +89,7 @@ public class LinearGradient extends CSSValue {
      * @param percentage A percentage of length.
      * @return Chainable API.
      */
-    public LinearGradient color(Color color, int percentage) {
+    public T color(Color color, int percentage) {
         return color(color, new Numeric(percentage, percent));
     }
 
@@ -101,10 +104,23 @@ public class LinearGradient extends CSSValue {
      * @param length A length.
      * @return Chainable API.
      */
-    public LinearGradient color(Color color, Numeric length) {
+    public T color(Color color, Numeric length) {
         steps.add(new Step(color, length));
 
-        return this;
+        return (T) this;
+    }
+
+    /**
+     * <p>
+     * Make this gradient image repeatable.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public T repeat() {
+        this.repeatable = true;
+
+        return (T) this;
     }
 
     /**
@@ -151,6 +167,9 @@ public class LinearGradient extends CSSValue {
         Numeric baseAngle = new Numeric(vendor == Standard ? 0 : 270, deg);
 
         StringBuilder builder = new StringBuilder();
+        if (repeatable) {
+            builder.append("repeating-");
+        }
         builder.append("linear-gradient(");
         if (angle != null && angle.size != 0) {
             builder.append(baseAngle.add(angle).valueFor(vendor)).append(",");
@@ -179,15 +198,15 @@ public class LinearGradient extends CSSValue {
     }
 
     /**
-     * @version 2013/07/24 16:08:01
+     * @version 2013/07/24 19:42:00
      */
-    private static class Step {
+    protected static class Step {
 
         /** The color. */
-        private final Color color;
+        protected final Color color;
 
         /** The length. */
-        private final Numeric length;
+        protected final Numeric length;
 
         /**
          * @param color A color.

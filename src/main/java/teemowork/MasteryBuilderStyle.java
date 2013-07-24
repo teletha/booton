@@ -14,7 +14,7 @@ import booton.css.CSS;
 import booton.css.Snippet;
 import booton.css.Unit;
 import booton.css.value.Color;
-import booton.css.value.Gradient;
+import booton.css.value.LinearGradient;
 import booton.css.value.Numeric;
 
 /**
@@ -44,7 +44,7 @@ class MasteryBuilderStyle {
 
     Color Blue = new Color(220, 50, 85);
 
-    Gradient transparent = new Gradient(new Color(0, 100, 100, 0.6), new Color(0, 100, 100, 0));
+    LinearGradient transparent = new LinearGradient().color(new Color(0, 100, 100, 0.6), new Color(0, 100, 100, 0));
 
     String noise = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAABlBMVEUAAAAAAAClZ7nPAAAAAnRSTlMAGovxNEIAAAAoSURBVDhPYxBEAgIMSkhAgcEFCTgwdCCBBoZRfaP6RvWN6hvVR5Y+APADQlQnmrINAAAAAElFTkSuQmCC";
 
