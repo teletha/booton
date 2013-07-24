@@ -48,7 +48,7 @@ import booton.css.property.Transition;
 import booton.css.property.UserSelect;
 import booton.css.property.Visibility;
 import booton.css.value.Color;
-import booton.css.value.Gradient;
+import booton.css.value.LinearGradient;
 import booton.util.Strings;
 
 /**
@@ -1069,10 +1069,25 @@ public abstract class CSS implements Extensible {
      * match the one of the element it applies to.
      * </p>
      * 
-     * @return
+     * @return A new linear gradient image.
      */
-    protected static final Gradient linear(Color start, Color end) {
-        return new Gradient(start, end);
+    protected static final LinearGradient linear() {
+        return new LinearGradient();
+    }
+
+    /**
+     * <p>
+     * The CSS linear-gradient() function creates an <image> which represents a linear gradient of
+     * colors. The result of this function is an object of the CSS <gradient> data type. Like any
+     * other gradient, a CSS linear gradient is not a CSS <color> but an image with no intrinsic
+     * dimensions; that is, it has no natural or preferred size, nor ratio. Its concrete size will
+     * match the one of the element it applies to.
+     * </p>
+     * 
+     * @return A new linear gradient image.
+     */
+    protected static final LinearGradient linear(Color start, Color end) {
+        return new LinearGradient().color(start, end);
     }
 
     /**

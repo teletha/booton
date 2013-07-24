@@ -67,10 +67,26 @@ public class Numeric extends CSSValue {
      * @param unit A unit.
      */
     public Numeric(double value, Unit unit) {
+        if (unit == deg) {
+            value = range(0, value, 360);
+        }
+
         this.size = value;
         this.unit = unit;
         this.expression = value();
         this.calculated = false;
+    }
+
+    /**
+     * Helper method to check range.
+     * 
+     * @param min
+     * @param value
+     * @param max
+     * @return
+     */
+    private static double range(double min, double value, double max) {
+        return value < min ? value + max : max < value ? value - max : value;
     }
 
     /**

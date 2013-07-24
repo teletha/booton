@@ -15,10 +15,10 @@ import java.util.List;
 import booton.css.CSSWriter;
 import booton.css.Unit;
 import booton.css.value.Color;
-import booton.css.value.Gradient;
+import booton.css.value.LinearGradient;
 
 /**
- * @version 2013/07/23 13:26:06
+ * @version 2013/07/24 17:10:14
  */
 public class Background extends ColorableProperty<Background> {
 
@@ -33,8 +33,6 @@ public class Background extends ColorableProperty<Background> {
     private String size;
 
     private List<Object> images = new ArrayList();
-
-    private Gradient gradient;
 
     private String origin;
 
@@ -61,11 +59,16 @@ public class Background extends ColorableProperty<Background> {
         Color backgroundColor = color;
 
         if (backgroundColor == null) {
-            if (gradient == null) {
-                backgroundColor = Color.Transparent;
-            } else {
-                backgroundColor = gradient.end;
+            for (Object image : images) {
+                if (image instanceof LinearGradient) {
+                    backgroundColor = ((LinearGradient) image).getEndColor();
+                    break;
+                }
             }
+        }
+
+        if (backgroundColor == null) {
+            backgroundColor = Color.Transparent;
         }
         return backgroundColor;
     }
@@ -109,24 +112,6 @@ public class Background extends ColorableProperty<Background> {
      */
     public Background image(String uri) {
         images.add(url(uri));
-
-        return chain();
-    }
-
-    /**
-     * <p>
-     * The CSS background-image property sets the background images for an element. The images are
-     * drawn on successive stacking context layers, with the first specified being drawn as if it is
-     * the closest to the user. The borders of the element are then drawn on top of them, and the
-     * background-color is drawn beneath them.
-     * </p>
-     * 
-     * @param uri
-     * @return
-     */
-    public Background image(Gradient gradient) {
-        this.gradient = gradient;
-        this.images.add(gradient);
 
         return chain();
     }
