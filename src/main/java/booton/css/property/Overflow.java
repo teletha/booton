@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,15 +12,31 @@ package booton.css.property;
 import booton.css.CSSProperty;
 
 /**
- * @version 2012/12/26 21:46:01
+ * @version 2013/07/24 13:43:52
  */
-public class Overflow extends CSSProperty<Overflow> {
+public class Overflow<T extends Overflow> extends CSSProperty<T> {
 
     /**
-     * @param name
+     * <p>
+     * Create property.
+     * </p>
+     * 
+     * @param name A property name.
      */
-    public Overflow(String name) {
+    protected Overflow(String name) {
         super(name);
+    }
+
+    /**
+     * <p>
+     * Create property.
+     * </p>
+     * 
+     * @param name A property name.
+     * @param context A context object for chainable API.
+     */
+    protected Overflow(String name, T context) {
+        super(name, context);
     }
 
     /**
@@ -30,7 +46,7 @@ public class Overflow extends CSSProperty<Overflow> {
      * 
      * @return
      */
-    public Overflow visible() {
+    public T visible() {
         return chain("visible");
     }
 
@@ -41,7 +57,7 @@ public class Overflow extends CSSProperty<Overflow> {
      * 
      * @return
      */
-    public Overflow hidden() {
+    public T hidden() {
         return chain("hidden");
     }
 
@@ -54,7 +70,7 @@ public class Overflow extends CSSProperty<Overflow> {
      * 
      * @return
      */
-    public Overflow scroll() {
+    public T scroll() {
         return chain("scroll");
     }
 
@@ -66,7 +82,7 @@ public class Overflow extends CSSProperty<Overflow> {
      * 
      * @return
      */
-    public Overflow auto() {
+    public T auto() {
         return chain("auto");
     }
 }
