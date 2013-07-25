@@ -121,6 +121,7 @@ public class Image {
      * @return
      */
     private Image applyFilter(Element filter) {
+        filters.append(filter);
         // remove filter
         filters.empty();
 

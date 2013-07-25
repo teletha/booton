@@ -154,7 +154,7 @@ class MasteryBuilderStyle {
     class SumPoint extends CSS {
 
         {
-            font.color(hsla(10, 30, 50, 0.7)).size(26, px);
+            font.color(hsla(0, 0, 100, 0.7)).size(26, px);
             text.unselectable();
             padding.left(7, px);
         }

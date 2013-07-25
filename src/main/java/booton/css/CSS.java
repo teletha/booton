@@ -1247,17 +1247,6 @@ public abstract class CSS implements Extensible {
             }
         }
 
-        // /**
-        // * <p>
-        // * Return the identical selector name of this {@link RuleSet}.
-        // * </p>
-        // *
-        // * @return The identical selector name.
-        // */
-        // private String name() {
-        // return selectors.get(0);
-        // }
-
         /**
          * <p>
          * Import selectors.

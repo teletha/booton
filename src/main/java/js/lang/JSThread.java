@@ -14,7 +14,7 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/05/19 17:15:55
+ * @version 2013/07/25 19:21:41
  */
 @JavaAPIProvider(Thread.class)
 class JSThread {
@@ -77,7 +77,7 @@ class JSThread {
             if (error instanceof Throwable) {
                 throwable = (Throwable) error;
             } else {
-                throwable = new Error();
+                throwable = new Error(((NativeError) error).getMessage());
                 throwable.setStackTrace(JSThrowable.createStackTrace((NativeError) error, false));
             }
             defaultUncaughtExceptionHandler.uncaughtException(null, throwable);
