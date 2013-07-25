@@ -12,9 +12,20 @@ package js.lang;
 import booton.translator.Translator;
 
 /**
- * @version 2013/05/19 17:35:44
+ * @version 2013/07/25 19:21:47
  */
 public class NativeError extends NativeObject {
+
+    /**
+     * <p>
+     * Retrieve current error message.
+     * </p>
+     * 
+     * @return
+     */
+    public String getMessage() {
+        return "";
+    }
 
     /**
      * <p>
@@ -28,10 +39,21 @@ public class NativeError extends NativeObject {
     }
 
     /**
-     * @version 2013/05/19 17:57:36
+     * @version 2013/07/25 19:21:51
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<NativeError> {
+
+        /**
+         * <p>
+         * Retrieve current error message.
+         * </p>
+         * 
+         * @return
+         */
+        public String getMessage() {
+            return that + ".message";
+        }
 
         /**
          * <p>

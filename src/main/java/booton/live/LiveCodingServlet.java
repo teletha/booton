@@ -139,14 +139,19 @@ public class LiveCodingServlet extends WebSocketServlet {
          */
         @Override
         public void onMessage(String data) {
-            Source source = new Source(html.resolveSibling("application.js"));
+            Source application = new Source(html.resolveSibling("application.js"));
+            Source live = new Source(html.resolveSibling("live.js"));
             String[] elements = data.split("\\r\\n");
 
             for (String element : elements) {
                 String[] info = element.split(" ");
 
                 if (info[1].contains("application.js")) {
-                    source.search(Integer.parseInt(info[2]));
+                    application.search(Integer.parseInt(info[2]));
+                }
+
+                if (info[1].contains("live.js")) {
+                    live.search(Integer.parseInt(info[2]));
                 }
             }
         }

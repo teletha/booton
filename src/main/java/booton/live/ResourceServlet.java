@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kiss.XML;
 import booton.util.HTMLWriter;
 
 /**
- * @version 2013/01/05 0:16:22
+ * @version 2013/07/25 22:39:40
  */
 @SuppressWarnings("serial")
 public class ResourceServlet extends HttpServlet {
@@ -59,6 +59,10 @@ public class ResourceServlet extends HttpServlet {
         } else {
             if (path.endsWith(".css")) {
                 response.addHeader("Content-Type", "text/css");
+            }
+
+            if (path.endsWith(".js")) {
+                response.addHeader("Content-Type", "text/javascript");
             }
 
             I.copy(Files.newInputStream(file), response.getOutputStream(), true);
