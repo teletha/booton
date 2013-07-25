@@ -390,4 +390,24 @@ public class PseudoClassTest {
             }
         }
     }
+
+    @Test
+    public void nest() throws Exception {
+        MyCSS css = I.make(Nest.class);
+        assert css.hasSelector(Nest.class, ":active:invalid");
+    }
+
+    /**
+     * @version 2013/07/24 9:08:22
+     */
+    private static class Nest extends MyCSS {
+
+        {
+            while (active()) {
+                while (invalid()) {
+                    display.none();
+                }
+            }
+        }
+    }
 }

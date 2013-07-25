@@ -55,7 +55,6 @@ class MasteryBuilderStyle {
             box.width(TreeWidth, px).height(TreeHeight, px);
             padding.size(TreePadding, px);
             background.image(transparent, noise);
-            font.color(background.color().lighten(-25));
         }
     }
 
@@ -155,9 +154,8 @@ class MasteryBuilderStyle {
     class SumPoint extends CSS {
 
         {
-            // font.color(hsl(0, 50, 70)).size(26, px);
-            font.size(26, px);
-            text.unselectable(); // .shadow();
+            font.color(hsla(10, 30, 50, 0.7)).size(26, px);
+            text.unselectable();
             padding.left(7, px);
         }
     }
@@ -166,6 +164,7 @@ class MasteryBuilderStyle {
 
         {
             text.unselectable();
+            cursor.pointer();
         }
     }
 
@@ -174,6 +173,7 @@ class MasteryBuilderStyle {
         {
             margin.horizontal(2, px);
             text.unselectable();
+            cursor.pointer();
         }
     }
 

@@ -71,7 +71,10 @@ class ImageGridStyle {
                 box.width(100, percent).height(100, percent);
                 background.color(hsla(0, 100, 100, 0.2));
 
-                while (parentHover()) {
+            }
+
+            while (hover()) {
+                while (after()) {
                     visibility.hidden();
                 }
             }

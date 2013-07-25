@@ -68,7 +68,8 @@ public class PseudoElementTest {
     public void select() throws Exception {
         MyCSS css = I.make(Select.class);
         assert css.countSelector() == 2;
-        assert css.countProperty() == 1;
+        assert css.countProperty() == 2;
+        assert css.countRule() == 2;
         assert css.hasSelector(Select.class, "::selection");
         assert css.hasSelector(Select.class, "::-moz-selection");
     }
