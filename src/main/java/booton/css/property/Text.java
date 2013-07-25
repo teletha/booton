@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kiss.I;
+import booton.css.CSS;
 import booton.css.CSSProperty;
 import booton.css.CSSWriter;
 import booton.css.Unit;
@@ -196,11 +197,7 @@ public class Text extends CSSProperty<Text> {
      * </p>
      */
     public Text unselectable() {
-        css.userSelect.none();
-
-        while (css.selection()) {
-            css.background.color(Transparent);
-        }
+        CSS.require(Unselectable.class);
 
         return chain();
     }
@@ -511,6 +508,21 @@ public class Text extends CSSProperty<Text> {
          */
         public Text ellipsis() {
             return chain("ellipsis");
+        }
+    }
+
+    /**
+     * @version 2013/07/25 11:39:57
+     */
+    private static class Unselectable extends CSS {
+
+        {
+            userSelect.none();
+            cursor.defaults();
+
+            while (selection()) {
+                background.color(Transparent);
+            }
         }
     }
 }

@@ -131,6 +131,17 @@ public class MyCSS extends CSS {
 
     /**
      * <p>
+     * Count a number of rules.
+     * </p>
+     * 
+     * @return A number of rules.
+     */
+    public int countRule() {
+        return parse().rules.size();
+    }
+
+    /**
+     * <p>
      * Test selector.
      * </p>
      * 

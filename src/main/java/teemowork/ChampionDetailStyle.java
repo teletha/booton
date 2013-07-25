@@ -327,14 +327,10 @@ class ChampionDetailStyle {
             display.block();
             box.size(22, px);
             font.size(20, px).color(240, 240, 240).weight.bold().family("Arial");
-            text.align.center().shadow(0, px, 0, px, 1, px, rgba(0, 0, 0, 1));
+            text.align.center().shadow(0, px, 0, px, 1, px, rgba(0, 0, 0, 1)).unselectable();
             position.absolute().bottom(4, px).right(4, px);
             userSelect.none();
             cursor.defaults();
-
-            while (selection()) {
-                background.color(Transparent);
-            }
         }
     }
 
