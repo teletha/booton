@@ -51,7 +51,7 @@ public class WindowManager {
     /**
      * 
      */
-    @Listen(MouseEnter)
+    @Listen(PointerEnter)
     private void show() {
         System.out.println("start");
         popup.append(content);
@@ -74,7 +74,7 @@ public class WindowManager {
     /**
      * 
      */
-    @Listen(MouseLeave)
+    @Listen(PointerLeave)
     private void hide() {
         popup.remove(PopupViewStyle.Show.class);
         content.remove();

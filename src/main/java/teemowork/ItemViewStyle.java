@@ -98,6 +98,7 @@ public class ItemViewStyle {
             display.flex();
             text.verticalAlign.top();
             flexDirection.column();
+            box.maxWidth(290, px);
         }
     }
 
