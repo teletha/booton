@@ -63,6 +63,7 @@ public class LiveCoding implements UncaughtExceptionHandler, Listener {
      */
     private void sendError(Throwable throwable) {
         StringBuilder builder = new StringBuilder();
+        builder.append(throwable.getClass().getName()).append("\r\n");
         builder.append(throwable.getMessage()).append("\r\n");
 
         for (StackTraceElement element : throwable.getStackTrace()) {

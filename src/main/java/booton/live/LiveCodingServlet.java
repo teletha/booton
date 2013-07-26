@@ -29,6 +29,7 @@ import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketServlet;
 
 import booton.Booton;
+import booton.SourceMap;
 
 /**
  * @version 2013/07/26 12:34:16
@@ -148,7 +149,14 @@ public class LiveCodingServlet extends WebSocketServlet {
             for (String line : data.split("\\r\\n")) {
                 elements.add(line);
             }
-            System.err.println(elements.remove(0));
+            String className = elements.remove(0);
+            String message = elements.remove(0);
+
+            SourceMap map = I.make(SourceMap.class);
+            map.read();
+            className = map.decodeClassName(className);
+
+            System.err.println("Exception in thread \"main\" " + className + ": " + message);
 
             for (String element : elements) {
                 String[] info = element.split(" ");

@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,6 +39,8 @@ import kiss.Singleton;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
+
+import booton.SourceMap;
 
 /**
  * <h2>The Reserved words in ECMA Script Third Edition</h2>
@@ -490,6 +493,22 @@ public class Javascript {
 
         // API definition
         return script;
+    }
+
+    /**
+     * <p>
+     * Create source map file.
+     * </p>
+     * 
+     * @param resolve
+     */
+    public static void createSourceMap(Path file) {
+        SourceMap map = I.make(SourceMap.class);
+
+        for (Entry<Class, Javascript> entry : scripts.entrySet()) {
+            map.getClassNames().put(computeSimpleClassName(entry.getKey()), entry.getKey());
+        }
+        map.write();
     }
 
     /**
