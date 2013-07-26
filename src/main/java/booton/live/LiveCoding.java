@@ -20,7 +20,7 @@ import js.net.NativeWebSocket;
 import js.net.NativeWebSocket.Listener;
 
 /**
- * @version 2013/01/08 13:33:11
+ * @version 2013/07/26 15:27:23
  */
 public class LiveCoding implements UncaughtExceptionHandler, Listener {
 
@@ -63,6 +63,7 @@ public class LiveCoding implements UncaughtExceptionHandler, Listener {
      */
     private void sendError(Throwable throwable) {
         StringBuilder builder = new StringBuilder();
+        builder.append(throwable.getMessage()).append("\r\n");
 
         for (StackTraceElement element : throwable.getStackTrace()) {
             builder.append(element.getMethodName())

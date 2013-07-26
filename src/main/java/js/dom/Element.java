@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import js.lang.NativeMutationObserver;
+import js.lang.NativeMutationObserver.MutationListener;
+import js.lang.NativeMutationObserver.MutationObserverOption;
+import js.lang.NativeMutationObserver.MutationRecord;
 import jsx.bwt.Listen;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
@@ -39,6 +43,9 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /** The event listener holder. */
     private Map<UIAction, Listeners> events;
+
+    /** The event listeners cleaner. */
+    private Cleaner cleaner;
 
     /**
      * <p>
@@ -451,6 +458,14 @@ public abstract class Element extends Node implements JavascriptNative {
         if (type != null && subscriber != null) {
             if (events == null) {
                 events = new HashMap();
+                cleaner = new Cleaner(this);
+
+                MutationObserverOption option = new MutationObserverOption();
+                option.childList = true;
+                option.subtree = true;
+
+                NativeMutationObserver observer = new NativeMutationObserver(cleaner);
+                observer.observe(document.querySelector("#Content"), option);
             }
 
             Listeners listeners = events.get(type);
@@ -1240,6 +1255,29 @@ public abstract class Element extends Node implements JavascriptNative {
         @Override
         public void run() {
             listener.handleEvent(event);
+        }
+    }
+
+    /**
+     * @version 2013/07/26 12:23:57
+     */
+    private static class Cleaner implements MutationListener {
+
+        private final Element target;
+
+        /**
+         * @param target
+         */
+        private Cleaner(Element target) {
+            this.target = target;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void change(MutationRecord[] events) {
+            System.out.println(events);
         }
     }
 }

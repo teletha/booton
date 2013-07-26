@@ -163,7 +163,15 @@ class JSThrowable {
      */
     static StackTraceElement[] createStackTrace(NativeError error, boolean user) {
         Pattern pattern = null;
-        String[] lines = error.getStackTrace().split("\n");
+        String[] lines;
+        String stack = error.getStackTrace();
+
+        if (stack != null) {
+            lines = stack.split("\n");
+        } else {
+            lines = new String[] {error.getName() + "@" + error.getFileName() + ":" + error.getLineNumber(), "", ""};
+        }
+
         int start = 0;
         int end = lines.length - 1;
 
