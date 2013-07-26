@@ -11,7 +11,6 @@ package jsx.bwt;
 
 import static js.lang.Global.*;
 import static jsx.bwt.UIAction.*;
-import js.dom.Element;
 import jsx.jQuery;
 import jsx.jQuery.Offset;
 import jsx.application.PageUnload;
@@ -53,22 +52,12 @@ public class WindowManager {
      */
     @Listen(PointerEnter)
     private void show() {
-        System.out.println("start");
         popup.append(content);
-        System.out.println(content);
-        System.out.println(hashCode());
-        System.out.println("end");
         popup.add(PopupViewStyle.Show.class);
 
         Offset offset = target.position();
         popup.css("top", offset.top + target.outerHeight() + 15 + "px")
                 .css("left", offset.left - popup.outerWidth() / 2 + target.outerWidth() / 2 + "px");
-
-        Element e = document.querySelector("#Content");
-
-        for (Element child : e.children()) {
-            System.out.println(child);
-        }
     }
 
     /**
