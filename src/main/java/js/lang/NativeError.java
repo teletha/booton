@@ -16,6 +16,9 @@ import booton.translator.Translator;
  */
 public class NativeError extends NativeObject {
 
+    /** The name. */
+    private String name;
+
     /**
      * <p>
      * Retrieve current error message.
@@ -36,6 +39,42 @@ public class NativeError extends NativeObject {
      */
     public String getStackTrace() {
         return "";
+    }
+
+    /**
+     * <p>
+     * The value for the method name property on the created Error object. Defaults to the name of
+     * the file containing the code that called the Error() constructor.
+     * </p>
+     * 
+     * @return
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * <p>
+     * The value for the fileName property on the created Error object. Defaults to the name of the
+     * file containing the code that called the Error() constructor.
+     * </p>
+     * 
+     * @return
+     */
+    public String getFileName() {
+        return name;
+    }
+
+    /**
+     * <p>
+     * The value for the lineNumber property on the created Error object. Defaults to the line
+     * number containing the Error() constructor invokation.
+     * </p>
+     * 
+     * @return
+     */
+    public String getLineNumber() {
+        return name;
     }
 
     /**
@@ -64,6 +103,42 @@ public class NativeError extends NativeObject {
          */
         public String getStackTrace() {
             return that + ".stack";
+        }
+
+        /**
+         * <p>
+         * The value for the method name property on the created Error object. Defaults to the name
+         * of the file containing the code that called the Error() constructor.
+         * </p>
+         * 
+         * @return
+         */
+        public String getName() {
+            return that + ".name";
+        }
+
+        /**
+         * <p>
+         * The value for the fileName property on the created Error object. Defaults to the name of
+         * the file containing the code that called the Error() constructor.
+         * </p>
+         * 
+         * @return
+         */
+        public String getFileName() {
+            return that + ".filename";
+        }
+
+        /**
+         * <p>
+         * The value for the lineNumber property on the created Error object. Defaults to the line
+         * number containing the Error() constructor invokation.
+         * </p>
+         * 
+         * @return
+         */
+        public String getLineNumber() {
+            return that + ".lineNumber";
         }
     }
 }

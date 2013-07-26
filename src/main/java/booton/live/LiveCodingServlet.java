@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import org.eclipse.jetty.websocket.WebSocketServlet;
 import booton.Booton;
 
 /**
- * @version 2013/01/04 15:44:31
+ * @version 2013/07/26 12:34:16
  */
 @SuppressWarnings("serial")
 public class LiveCodingServlet extends WebSocketServlet {
@@ -57,7 +57,7 @@ public class LiveCodingServlet extends WebSocketServlet {
     }
 
     /**
-     * @version 2013/01/04 15:45:16
+     * @version 2013/07/26 12:34:12
      */
     private static class LiveCodingSocket implements WebSocket.OnTextMessage {
 
@@ -106,6 +106,7 @@ public class LiveCodingServlet extends WebSocketServlet {
                     new FileObserver(src);
                 }
             }
+            new FileObserver("live.js");
 
             // observe css
             for (XML css : xml.find("link[rel=stylesheet]")) {
@@ -141,7 +142,13 @@ public class LiveCodingServlet extends WebSocketServlet {
         public void onMessage(String data) {
             Source application = new Source(html.resolveSibling("application.js"));
             Source live = new Source(html.resolveSibling("live.js"));
-            String[] elements = data.split("\\r\\n");
+
+            List<String> elements = new ArrayList();
+
+            for (String line : data.split("\\r\\n")) {
+                elements.add(line);
+            }
+            System.err.println(elements.remove(0));
 
             for (String element : elements) {
                 String[] info = element.split(" ");
