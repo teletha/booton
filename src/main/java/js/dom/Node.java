@@ -60,6 +60,28 @@ public abstract class Node implements JavascriptNative {
 
     /**
      * <p>
+     * Indicates whether a node is a descendant of a given node.
+     * </p>
+     * 
+     * @param node The node that's being compared.
+     * @return A result.
+     */
+    @JavascriptNativePropertyAccessor
+    public abstract boolean contains(Node node);
+
+    /**
+     * <p>
+     * Returns the parent of the specified node in the DOM tree.
+     * </p>
+     * 
+     * @return The parent of the current node. The parent of an element is an Element node, a
+     *         Document node, or a DocumentFragment node.
+     */
+    @JavascriptNativePropertyAccessor
+    protected abstract Node parentNode();
+
+    /**
+     * <p>
      * Return the first direct child node of an element, or null if this element has no child nodes.
      * </p>
      * 

@@ -179,6 +179,28 @@ public class EmulateElement extends Element implements Nodable {
      * {@inheritDoc}
      */
     @Override
+    public boolean contains(Node node) {
+        while (node != null) {
+            if (node == this) {
+                return true;
+            }
+            node = node.parentNode();
+        }
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Node parentNode() {
+        return parent;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected Node firstChild() {
         return nodes.size() == 0 ? null : nodes.getNode(0);
     }

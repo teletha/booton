@@ -9,9 +9,6 @@
  */
 package js.dom;
 
-import js.dom.Node;
-import js.dom.Text;
-
 /**
  * @version 2013/07/01 21:30:14
  */
@@ -36,6 +33,22 @@ public class EmulateText extends Text implements Nodable {
     @Override
     public void setParent(EmulateElement parent) {
         this.parent = parent;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean contains(Node node) {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Node parentNode() {
+        return parent;
     }
 
     /**

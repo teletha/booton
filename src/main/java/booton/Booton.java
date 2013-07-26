@@ -206,6 +206,7 @@ public class Booton {
         body.child("footer").attr("id", "Footer");
 
         body.child("script").attr("type", "text/javascript").attr("src", "jQuery.js");
+        body.child("script").attr("type", "text/javascript").attr("src", "pointer-events.js");
         body.child("script").attr("type", "text/javascript").attr("src", "boot.js");
         body.child("script").attr("type", "text/javascript").attr("src", root.relativize(js));
 

@@ -16,13 +16,28 @@ package jsx.bwt;
 public enum UIAction {
 
     /** The ui event type. */
-    DOMNodeInserted("DOMNodeInserted"),
+    PointerDown,
 
     /** The ui event type. */
-    DOMNodeRemoved("DOMNodeRemoved"),
+    PointerUp,
 
     /** The ui event type. */
-    DOMAttrModified("DOMAttrModified"),
+    PointerMove,
+
+    /** The ui event type. */
+    PointerOver,
+
+    /** The ui event type. */
+    PointerOut,
+
+    /** The ui event type. */
+    PointerEnter,
+
+    /** The ui event type. */
+    PointerLeave,
+
+    /** The ui event type. */
+    PointerCancel,
 
     /** The ui event type. */
     Popup,
