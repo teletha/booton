@@ -26,7 +26,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -39,8 +38,6 @@ import kiss.Singleton;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
-
-import booton.Decrypter;
 
 /**
  * <h2>The Reserved words in ECMA Script Third Edition</h2>
@@ -275,7 +272,7 @@ public class Javascript {
         String superClass = parent == null || parent == Object.class ? "" : computeSimpleClassName(parent);
 
         // write class definition
-        code.comment(source);
+        code.comment(source + " " + computeSimpleClassName(source));
         code.append("boot.define(").string(className).append(",").string(superClass).append(",", interfaces(), ",");
 
         // write constructors, fields and methods
@@ -493,20 +490,6 @@ public class Javascript {
 
         // API definition
         return script;
-    }
-
-    /**
-     * <p>
-     * Create source info file.
-     * </p>
-     */
-    public static void createSourceInfo() {
-        Decrypter map = I.make(Decrypter.class);
-
-        for (Entry<Class, Javascript> entry : scripts.entrySet()) {
-            map.classNames.put(computeSimpleClassName(entry.getKey()), entry.getKey());
-        }
-        map.save();
     }
 
     /**

@@ -14,7 +14,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,7 +31,6 @@ import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketServlet;
 
 import booton.Booton;
-import booton.Decrypter;
 
 /**
  * @version 2013/07/26 12:34:16
@@ -141,7 +142,6 @@ public class LiveCodingServlet extends WebSocketServlet {
          */
         @Override
         public void onMessage(String data) {
-            Decrypter decrypter = I.make(Decrypter.class);
             Source application = new Source(html.resolveSibling("application.js"));
             Source live = new Source(html.resolveSibling("live.js"));
 
@@ -150,7 +150,7 @@ public class LiveCodingServlet extends WebSocketServlet {
             for (String line : data.split("\\r\\n")) {
                 elements.add(line);
             }
-            String className = decrypter.decryptClassName(elements.remove(0));
+            String className = application.decodeClassName(elements.remove(0));
             String message = elements.remove(0);
 
             System.err.println("Exception in thread \"main\" " + className + ": " + message);
@@ -291,12 +291,26 @@ public class LiveCodingServlet extends WebSocketServlet {
         /** The source code. */
         private final List<String> lines;
 
+        /** The class name mapping. */
+        private final Map<String, String> classNames = new HashMap();
+
         /**
          * @param file
          */
         private Source(Path file) {
             try {
                 lines = Files.readAllLines(file, StandardCharsets.UTF_8);
+
+                // construct class name mapping
+                Pattern pattern = Pattern.compile("^\\s*//\\sclass\\s(\\.+)\\s(.+)");
+
+                for (String line : lines) {
+                    Matcher matcher = pattern.matcher(line);
+
+                    if (matcher.matches()) {
+                        classNames.put(matcher.group(2), matcher.group(1));
+                    }
+                }
             } catch (IOException e) {
                 throw I.quiet(e);
             }
@@ -335,6 +349,23 @@ public class LiveCodingServlet extends WebSocketServlet {
                 matcher = pattern.matcher(lines.get(start--));
             }
             return matcher;
+        }
+
+        /**
+         * <p>
+         * Decrypt class name.
+         * </p>
+         * 
+         * @param name
+         * @return
+         */
+        private String decodeClassName(String name) {
+            if (name.startsWith("boot.")) {
+                name = name.substring(5);
+            }
+
+            String decrypted = classNames.get(name);
+            return decrypted == null ? name : decrypted;
         }
     }
 }

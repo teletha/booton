@@ -176,9 +176,6 @@ public class Booton {
             // compiled and obfuscated class information.
             Javascript.getScript(LiveCoding.class).writeTo(root.resolve("live.js"));
 
-            // create source map
-            Javascript.createSourceInfo();
-
             // build css file
             I.make(Stylist.class).write(css);
         } catch (Exception e) {
