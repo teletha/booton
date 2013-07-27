@@ -54,7 +54,7 @@ class HeaderStyle {
         {
             display.block();
             padding.vertical(12, px).horizontal(20, px);
-            font.color(153, 153, 153).weight.bold().size(12, px).family(TeemoworkTheme.Header);
+            font.color(153, 153, 153).weight.bold().size(14, px).family(TeemoworkTheme.Header);
             text.decoration.none().shadow();
 
             while (hover()) {

@@ -29,7 +29,7 @@ import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketServlet;
 
 import booton.Booton;
-import booton.SourceMap;
+import booton.Decrypter;
 
 /**
  * @version 2013/07/26 12:34:16
@@ -141,6 +141,7 @@ public class LiveCodingServlet extends WebSocketServlet {
          */
         @Override
         public void onMessage(String data) {
+            Decrypter decrypter = I.make(Decrypter.class);
             Source application = new Source(html.resolveSibling("application.js"));
             Source live = new Source(html.resolveSibling("live.js"));
 
@@ -149,12 +150,8 @@ public class LiveCodingServlet extends WebSocketServlet {
             for (String line : data.split("\\r\\n")) {
                 elements.add(line);
             }
-            String className = elements.remove(0);
+            String className = decrypter.decryptClassName(elements.remove(0));
             String message = elements.remove(0);
-
-            SourceMap map = I.make(SourceMap.class);
-            map.read();
-            className = map.decodeClassName(className);
 
             System.err.println("Exception in thread \"main\" " + className + ": " + message);
 

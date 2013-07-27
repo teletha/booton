@@ -115,7 +115,6 @@ public class MasteryBuilder extends Page {
         if (set == null) {
             set = new SelectableModel();
         }
-        System.out.println(set);
 
         jQuery infomation = root.child(Information.class);
         menu = infomation.child(new Select(set));

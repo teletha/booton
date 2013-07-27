@@ -13,11 +13,10 @@ import java.util.Iterator;
 
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
-import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
 
 /**
- * @version 2013/07/04 20:42:49
+ * @version 2013/07/27 15:57:10
  */
 @JavascriptAPIProvider
 public abstract class HTMLCollection implements Iterable<Element>, JavascriptNative {
@@ -41,8 +40,7 @@ public abstract class HTMLCollection implements Iterable<Element>, JavascriptNat
      * @param index A element index.
      * @return A indexth element.
      */
-    @JavascriptNativeProperty
-    public abstract Element item(int index);
+    public native Element item(int index);
 
     /**
      * {@inheritDoc}

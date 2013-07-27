@@ -11,12 +11,13 @@ package js.dom;
 
 import java.util.Iterator;
 
+import booton.translator.Debuggable;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativePropertyAccessor;
 
 /**
- * @version 2013/07/01 3:32:52
+ * @version 2013/07/27 15:56:45
  */
 @JavascriptAPIProvider
 public abstract class NodeList<T extends Node> implements Iterable<T>, JavascriptNative {
@@ -40,41 +41,47 @@ public abstract class NodeList<T extends Node> implements Iterable<T>, Javascrip
      * @param index A element index.
      * @return A indexth element.
      */
-    public abstract T item(int index);
+    public native T item(int index);
 
     /**
      * {@inheritDoc}
      */
     @Override
     public Iterator<T> iterator() {
-        return new Iterator<T>() {
+        return new NodeIterator();
+    }
 
-            /** The cursor. */
-            private int cursor = 0;
+    /**
+     * @version 2013/07/27 11:57:29
+     */
+    private class NodeIterator implements Iterator<T> {
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public boolean hasNext() {
-                return cursor < length();
-            }
+        /** The cursor. */
+        private int cursor = 0;
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public T next() {
-                return item(cursor++);
-            }
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean hasNext() {
+            return cursor < length();
+        }
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        };
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @Debuggable
+        public T next() {
+            return item(cursor++);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
     }
 }

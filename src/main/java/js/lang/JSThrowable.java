@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/05/22 0:35:14
+ * @version 2013/07/27 10:48:12
  */
 @JavaAPIProvider(Throwable.class)
 class JSThrowable {
@@ -158,7 +158,8 @@ class JSThrowable {
      * Create stack trace ement from the specified {@link NativeError}.
      * </p>
      * 
-     * @param error
+     * @param error A native error.
+     * @param user A flag for user constructed error.
      * @return
      */
     static StackTraceElement[] createStackTrace(NativeError error, boolean user) {

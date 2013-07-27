@@ -177,7 +177,7 @@ public class Booton {
             Javascript.getScript(LiveCoding.class).writeTo(root.resolve("live.js"));
 
             // create source map
-            Javascript.createSourceMap(root.resolve("sourcemap.js"));
+            Javascript.createSourceInfo();
 
             // build css file
             I.make(Stylist.class).write(css);
