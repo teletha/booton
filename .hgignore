@@ -9,3 +9,4 @@ syntax: regexp
 ^application\.css$
 ^index\.html$
 ^live\.js$
+^source-info\.xml$
