@@ -284,7 +284,7 @@ public class LiveCodingServlet extends WebSocketServlet {
     }
 
     /**
-     * @version 2013/05/23 22:57:49
+     * @version 2013/07/28 3:43:53
      */
     private static class Source {
 
@@ -302,7 +302,7 @@ public class LiveCodingServlet extends WebSocketServlet {
                 lines = Files.readAllLines(file, StandardCharsets.UTF_8);
 
                 // construct class name mapping
-                Pattern pattern = Pattern.compile("^\\s*//\\sclass\\s(\\.+)\\s(.+)");
+                Pattern pattern = Pattern.compile("^\\s*//\\sclass\\s(.+)\\s(.+)");
 
                 for (String line : lines) {
                     Matcher matcher = pattern.matcher(line);
