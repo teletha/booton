@@ -9,5 +9,3 @@ syntax: regexp
 ^application\.css$
 ^index\.html$
 ^live\.js$
-syntax: regexp
-^source-info\.xml$
