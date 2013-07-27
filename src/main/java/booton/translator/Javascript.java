@@ -40,7 +40,7 @@ import kiss.Singleton;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 
-import booton.SourceMap;
+import booton.Decrypter;
 
 /**
  * <h2>The Reserved words in ECMA Script Third Edition</h2>
@@ -497,18 +497,16 @@ public class Javascript {
 
     /**
      * <p>
-     * Create source map file.
+     * Create source info file.
      * </p>
-     * 
-     * @param resolve
      */
-    public static void createSourceMap(Path file) {
-        SourceMap map = I.make(SourceMap.class);
+    public static void createSourceInfo() {
+        Decrypter map = I.make(Decrypter.class);
 
         for (Entry<Class, Javascript> entry : scripts.entrySet()) {
-            map.getClassNames().put(computeSimpleClassName(entry.getKey()), entry.getKey());
+            map.classNames.put(computeSimpleClassName(entry.getKey()), entry.getKey());
         }
-        map.write();
+        map.save();
     }
 
     /**
@@ -655,10 +653,6 @@ public class Javascript {
                 return "$" + order(getScript(owner).constructors, description.hashCode());
             }
         } else {
-            if (name.endsWith("$Alias")) {
-                name = name.substring(0, name.length() - 6);
-            }
-
             // method
             JavaAPIProviders.validateMethod(owner, name, description);
 

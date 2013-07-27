@@ -95,9 +95,6 @@ public class ItemViewStyle {
     static class DescriptionArea extends CSS {
 
         {
-            display.flex();
-            text.verticalAlign.top();
-            flexDirection.column();
             box.maxWidth(290, px);
         }
     }

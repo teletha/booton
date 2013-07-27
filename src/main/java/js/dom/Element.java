@@ -284,7 +284,7 @@ public abstract class Element extends Node implements JavascriptNative {
      */
     private void dispose() {
         // Dispose child elements.
-        for (Element child : childElements()) {
+        for (Element child : children()) {
             child.dispose();
         }
 
@@ -303,13 +303,7 @@ public abstract class Element extends Node implements JavascriptNative {
      * @return Chainable API.
      */
     public Element empty() {
-        if (true) {
-            // If this exception will be thrown, it is bug of this program. So we must rethrow the
-            // wrapped error in here.
-            throw new Error("aaaaa");
-        }
-
-        for (Element child : childElements()) {
+        for (Element child : children()) {
             child.dispose();
         }
 
