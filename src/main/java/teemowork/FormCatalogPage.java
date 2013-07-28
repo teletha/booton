@@ -9,8 +9,8 @@
  */
 package teemowork;
 
+import js.dom.Element.EventListener;
 import jsx.jQuery;
-import jsx.jQuery.Listener;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Button;
@@ -57,10 +57,10 @@ public class FormCatalogPage extends Page {
 
         root.get(0).child(new Input(model.type));
         root.get(0).child(new Input(model.name));
-        root.get(0).child(new Button("Add", new Listener() {
+        root.get(0).child(new Button("Add", new EventListener() {
 
             @Override
-            public void handler(UIEvent event) {
+            public void handleEvent(UIEvent event) {
                 model.type++;
                 System.out.println(model.type);
                 model.name = String.valueOf(model.type);

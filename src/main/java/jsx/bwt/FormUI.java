@@ -9,7 +9,7 @@
  */
 package jsx.bwt;
 
-import jsx.jQuery;
+import js.dom.Element;
 import jsx.jQuery.Listener;
 import jsx.bwt.FormUIStyle.Disable;
 import jsx.bwt.FormUIStyle.Focus;
@@ -33,7 +33,7 @@ public class FormUI<T extends FormUI> extends UI {
     };
 
     /** The actual form element. */
-    public final jQuery form;
+    public final Element form;
 
     /** The enable flag. */
     private boolean enable = true;
@@ -51,7 +51,7 @@ public class FormUI<T extends FormUI> extends UI {
     public FormUI(String elementName) {
         root.add(FormRoot.class);
 
-        form = root.child(elementName);
+        form = rootElement.child(elementName);
         form.bind(this);
     }
 
@@ -82,7 +82,7 @@ public class FormUI<T extends FormUI> extends UI {
         enable = true;
         root.remove(Disable.class);
         root.off(Events, Disabler);
-        form.removeAttr("disabled");
+        form.remove("disabled");
 
         return (T) this;
     }
