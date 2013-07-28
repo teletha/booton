@@ -10,8 +10,8 @@
 package jsx.bwt;
 
 import static js.lang.Global.*;
+import js.dom.Element;
 import js.dom.Element.EventListener;
-import jsx.jQuery;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.SelectStyle.SelectArrow;
 import jsx.bwt.SelectStyle.SelectForm;
@@ -25,7 +25,7 @@ import jsx.model.SelectableListener;
 import jsx.model.SelectableModel;
 
 /**
- * @version 2013/04/08 23:38:34
+ * @version 2013/07/29 2:00:34
  */
 public class Select<M> extends FormUI<Select> {
 
@@ -126,7 +126,7 @@ public class Select<M> extends FormUI<Select> {
          * {@inheritDoc}
          */
         @Override
-        public void renderItem(int itemIndex, jQuery element) {
+        public void renderItem(int itemIndex, Element element) {
             element.add(SelectItem.class).attr("index", itemIndex).text(model.get(itemIndex));
 
             if (itemIndex == model.getSelectionIndex()) {

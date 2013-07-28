@@ -9,12 +9,10 @@
  */
 package jsx.bwt.view;
 
-import static js.lang.Global.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import jsx.jQuery;
+import js.dom.Element;
 import jsx.bwt.Listen;
 import jsx.bwt.UI;
 import jsx.bwt.UIAction;
@@ -24,7 +22,7 @@ import jsx.bwt.view.ScrollableListViewStyle.Spacer;
 import jsx.bwt.view.ScrollableListViewStyle.ViewabletemView;
 
 /**
- * @version 2013/04/08 14:34:22
+ * @version 2013/07/29 2:00:26
  */
 public class ScrollableListView extends UI {
 
@@ -35,16 +33,16 @@ public class ScrollableListView extends UI {
     private final int viewableItemSize;
 
     /** The scrollable item view. */
-    private final jQuery viewableItemView;
+    private final Element viewableItemView;
 
     /** The scrollable item view. */
-    private final jQuery renderableItemView;
+    private final Element renderableItemView;
 
     /** The spacer. */
-    private final jQuery spacer;
+    private final Element spacer;
 
     /** The item list. */
-    private final List<jQuery> items = new ArrayList();
+    private final List<Element> items = new ArrayList();
 
     /** The extra renderable item size for top direction. */
     private int extraTopRenderableItemSize;
@@ -73,7 +71,7 @@ public class ScrollableListView extends UI {
         this.itemHeight = itemHeight;
         this.viewableItemSize = viewableItemSize;
 
-        this.viewableItemView = root.add(ViewabletemView.class).bind(this);
+        this.viewableItemView = rootElement.add(ViewabletemView.class).bind(this);
         this.renderableItemView = viewableItemView.child(RenderableItemView.class);
         this.spacer = renderableItemView.child(Spacer.class);
     }
@@ -169,11 +167,11 @@ public class ScrollableListView extends UI {
      * 
      * @param index A item index to render.
      */
-    public jQuery item(int index) {
+    public Element item(int index) {
         if (lastRenderedTopIndex <= index && index < lastRenderedTopIndex + renderableItemSize) {
             return items.get(index - lastRenderedTopIndex);
         } else {
-            return $();
+            return null;
         }
     }
 
@@ -199,7 +197,7 @@ public class ScrollableListView extends UI {
          * @param index A index of item.
          * @param element A element to render.
          */
-        void renderItem(int index, jQuery element);
+        void renderItem(int index, Element element);
     }
 
     /**
@@ -219,7 +217,7 @@ public class ScrollableListView extends UI {
          * {@inheritDoc}
          */
         @Override
-        public void renderItem(int index, jQuery element) {
+        public void renderItem(int index, Element element) {
         }
     }
 }
