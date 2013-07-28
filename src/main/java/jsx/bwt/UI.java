@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,12 @@ import static js.lang.Global.*;
 import js.dom.Element;
 
 /**
- * @version 2012/12/11 14:39:54
+ * @version 2013/07/29 2:28:28
  */
 public abstract class UI extends Publishable {
 
     /** The root container element for this user interface. */
-    public final Element rootElement;
+    public final Element root;
 
     /**
      * <p>
@@ -37,7 +37,7 @@ public abstract class UI extends Publishable {
      * @param name
      */
     protected UI(String name) {
-        this.rootElement = document.createElement(name);
+        this.root = document.createElement(name);
     }
 
     /**
@@ -59,7 +59,7 @@ public abstract class UI extends Publishable {
      * @param content A content to show on tooltip.
      */
     public void setTooltip(UI content) {
-        WindowManager.applyTooltip(rootElement, content.rootElement);
+        WindowManager.applyTooltip(root, content.root);
     }
 
     /**
@@ -71,7 +71,7 @@ public abstract class UI extends Publishable {
          * @param text
          */
         private TextUI(String text) {
-            rootElement.text(text);
+            root.text(text);
         }
     }
 }

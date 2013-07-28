@@ -218,7 +218,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public jQuery append(UI contents) {
-        return append(contents.rootElement);
+        return append(contents.root);
     }
 
     /**
@@ -433,7 +433,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return Chainable API.
      */
     public <T extends UI> T child(T ui) {
-        append(ui.rootElement);
+        append(ui.root);
 
         return ui;
     }

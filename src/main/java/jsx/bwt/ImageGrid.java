@@ -35,7 +35,7 @@ public abstract class ImageGrid<T> extends UI {
     /** The image sources. */
     private Collection<T> sources;
 
-    private Element search = rootElement.child("input", Input.class).attr("type", "text").bind(this);
+    private Element search = root.child("input", Input.class).attr("type", "text").bind(this);
 
     /**
      * Filter image by user input.
@@ -61,9 +61,9 @@ public abstract class ImageGrid<T> extends UI {
      */
     public ImageGrid() {
         sources = sources();
-        rootElement.add(Root.class);
+        root.add(Root.class);
 
-        Element set = rootElement.child(ImageSet.class);
+        Element set = root.child(ImageSet.class);
 
         for (final T source : sources) {
             Element container = set.child(Container.class);

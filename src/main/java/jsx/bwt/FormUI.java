@@ -50,9 +50,9 @@ public class FormUI<T extends FormUI> extends UI {
      * 
      */
     public FormUI(String elementName) {
-        rootElement.add(FormRoot.class);
+        root.add(FormRoot.class);
 
-        form = rootElement.child(elementName);
+        form = root.child(elementName);
         form.bind(this);
     }
 
@@ -65,8 +65,8 @@ public class FormUI<T extends FormUI> extends UI {
      */
     public T disable() {
         enable = false;
-        rootElement.add(Disable.class);
-        rootElement.on(Actions, Disabler);
+        root.add(Disable.class);
+        root.on(Actions, Disabler);
         form.attr("disabled", "true");
 
         return (T) this;
@@ -81,8 +81,8 @@ public class FormUI<T extends FormUI> extends UI {
      */
     public T enable() {
         enable = true;
-        rootElement.remove(Disable.class);
-        rootElement.off(Actions, Disabler);
+        root.remove(Disable.class);
+        root.off(Actions, Disabler);
         form.remove("disabled");
 
         return (T) this;
@@ -90,12 +90,12 @@ public class FormUI<T extends FormUI> extends UI {
 
     @Listen(UIAction.Focus)
     private void startInput() {
-        rootElement.add(Focus.class);
+        root.add(Focus.class);
     }
 
     @Listen(UIAction.Blur)
     private void endInput() {
-        rootElement.remove(Focus.class);
+        root.remove(Focus.class);
     }
 
     /**
