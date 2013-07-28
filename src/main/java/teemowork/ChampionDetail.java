@@ -594,7 +594,7 @@ public class ChampionDetail extends Page {
                 item.applyIcon($(icon));
 
                 ItemView view = new ItemView(item, item.getDescriptor(Version.Latest), build);
-                view.root.css("max-width", "350px");
+                view.rootElement.css("max-width", "350px");
 
                 setTooltip(view);
             }
@@ -606,7 +606,7 @@ public class ChampionDetail extends Page {
         @Override
         public UI createPopup() {
             ItemView view = new ItemView(item, item.getDescriptor(Version.Latest), build);
-            view.root.css("max-width", "350px");
+            view.rootElement.css("max-width", "350px");
 
             return view;
         }

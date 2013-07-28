@@ -15,7 +15,6 @@ import java.lang.reflect.Method;
 import java.util.Iterator;
 
 import js.dom.Element;
-import js.dom.Image;
 import jsx.bwt.Listen;
 import jsx.bwt.UI;
 import jsx.bwt.UIAction;
@@ -219,7 +218,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return
      */
     public jQuery append(UI contents) {
-        return append(contents.root);
+        return append(contents.rootElement);
     }
 
     /**
@@ -434,7 +433,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      * @return Chainable API.
      */
     public <T extends UI> T child(T ui) {
-        append(ui.root);
+        append(ui.rootElement);
 
         return ui;
     }
