@@ -52,12 +52,12 @@ public class FormCatalogPage extends Page {
             selectable.add(String.valueOf(i));
         }
 
-        Select<String> child = root.child(new Select(selectable));
+        Select<String> child = root.get(0).child(new Select(selectable));
         child.model.setSelectionIndex(180);
 
-        root.child(new Input(model.type));
-        root.child(new Input(model.name));
-        root.child(new Button("Add", new Listener() {
+        root.get(0).child(new Input(model.type));
+        root.get(0).child(new Input(model.name));
+        root.get(0).child(new Button("Add", new Listener() {
 
             @Override
             public void handler(UIEvent event) {

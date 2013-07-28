@@ -10,6 +10,7 @@
 package js.dom;
 
 import static js.lang.Global.*;
+import jsx.bwt.UI;
 import booton.css.CSS;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
@@ -56,6 +57,20 @@ public abstract class Node implements JavascriptNative {
      */
     public Element child(String name, Class<? extends CSS> className) {
         return child(name).add(className);
+    }
+
+    /**
+     * <p>
+     * Create child user interface.
+     * </p>
+     * 
+     * @param ui A child ui.
+     * @return Chainable API.
+     */
+    public <T extends UI> T child(T ui) {
+        appendChild(ui.rootElement);
+
+        return ui;
     }
 
     /**

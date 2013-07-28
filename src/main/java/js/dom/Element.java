@@ -277,22 +277,10 @@ public abstract class Element extends Node implements JavascriptNative {
         return list;
     }
 
-    /**
-     * <p>
-     * Dispose this element.
-     * </p>
-     */
-    private void dispose() {
-        // Dispose child elements.
-        for (Element child : children()) {
-            child.dispose();
-        }
+    public Element css(String name, String value) {
+        $(this).css(name, value);
 
-        // =======================
-        // Disposal Process
-        // =======================
-        // Dettach event handlers.
-        off();
+        return this;
     }
 
     /**
@@ -303,13 +291,8 @@ public abstract class Element extends Node implements JavascriptNative {
      * @return Chainable API.
      */
     public Element empty() {
-        if (true) {
-            // If this exception will be thrown, it is bug of this program. So we must rethrow the
-            // wrapped error in here.
-            throw new Error();
-        }
-        for (Element child : children()) {
-            child.dispose();
+        for (Element child : getElementsByClassName(EventListenable.class)) {
+            child.off();
         }
 
         textContent("");
@@ -405,6 +388,7 @@ public abstract class Element extends Node implements JavascriptNative {
 
                 if (events.size() == 0) {
                     events = null;
+                    remove(EventListenable.class);
                 }
             }
         }
@@ -435,6 +419,7 @@ public abstract class Element extends Node implements JavascriptNative {
 
                     if (events.size() == 0) {
                         events = null;
+                        remove(EventListenable.class);
                     }
                 }
             }
@@ -456,6 +441,7 @@ public abstract class Element extends Node implements JavascriptNative {
         if (type != null && subscriber != null) {
             if (events == null) {
                 events = new HashMap();
+                add(EventListenable.class);
             }
 
             Listeners listeners = events.get(type);
@@ -520,7 +506,10 @@ public abstract class Element extends Node implements JavascriptNative {
      * @return
      */
     public Element remove() {
-        dispose();
+        for (Element child : getElementsByClassName(EventListenable.class)) {
+            child.off();
+        }
+        off();
 
         // parent node exist surely
         parent().removeChild(this);
@@ -902,7 +891,7 @@ public abstract class Element extends Node implements JavascriptNative {
      * @return
      */
     @JavascriptNativeProperty
-    protected final native NodeList<Element> querySelectorAll(String selector);
+    public final native NodeList<Element> querySelectorAll(String selector);
 
     /**
      * <p>
@@ -914,7 +903,37 @@ public abstract class Element extends Node implements JavascriptNative {
      * @return A result.
      */
     @JavascriptNativeProperty
-    protected final native boolean matchesSelector(String selector);
+    public final native boolean matchesSelector(String selector);
+
+    /**
+     * <p>
+     * Returns a set of elements which have all the given class names. When called on the document
+     * object, the complete document is searched, including the root node. You may also call
+     * getElementsByClassName on any element; it will return only elements which are descendants of
+     * the specified root element with the given class names.
+     * </p>
+     * 
+     * @param className A class name.
+     * @return A HTMLCollection of found elements.
+     */
+    @JavascriptNativeProperty
+    public abstract HTMLCollection getElementsByClassName(Class<? extends CSS> className);
+
+    /**
+     * <p>
+     * Returns a HTMLCollection of elements with the given tag name. The complete document is
+     * searched, including the root node. The returned HTMLCollection is live, meaning that it
+     * updates itself automatically to stay in sync with the DOM tree without having to call
+     * document.getElementsByTagName again.
+     * </p>
+     * 
+     * @param tagName A string representing the name of the elements. The special string "*"
+     *            represents all elements.
+     * @return A live HTMLCollection (but see the note below) of found elements in the order they
+     *         appear in the tree.
+     */
+    @JavascriptNativeProperty
+    public final native HTMLCollection getElementsByTagName(String tagName);
 
     /**
      * <p>
@@ -975,6 +994,16 @@ public abstract class Element extends Node implements JavascriptNative {
                 listener.handleEvent(event);
             }
         }
+    }
+
+    /**
+     * <p>
+     * Marker class.
+     * </p>
+     * 
+     * @version 2013/07/28 18:15:38
+     */
+    private static class EventListenable extends CSS {
     }
 
     /**

@@ -357,6 +357,14 @@ public abstract class VariableResolver {
         public int convertChampionLevel(int skillLevel) {
             return skillLevel;
         }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int convertLevel(StatusCalculator calculator) {
+            return calculator.getLevel();
+        }
     }
 
     /**

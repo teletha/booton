@@ -17,11 +17,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import js.dom.Element;
+import js.dom.Element.EventListener;
 import jsx.jQuery;
 import jsx.application.Page;
 import jsx.application.PageInfo;
+import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
-import jsx.jQuery.Listener;
 import teemowork.ChampionComparingStyle.Body;
 import teemowork.ChampionComparingStyle.Head;
 import teemowork.ChampionComparingStyle.Icon;
@@ -37,7 +39,7 @@ import teemowork.model.Status;
 import teemowork.model.Version;
 
 /**
- * @version 2013/02/15 15:12:54
+ * @version 2013/07/29 0:02:56
  */
 public class ChampionComparing extends Page {
 
@@ -47,7 +49,7 @@ public class ChampionComparing extends Page {
     private List<Row> rows = new ArrayList();
 
     /** The root element. */
-    private jQuery body;
+    private Element body;
 
     /** The current sort key. */
     private Sorter sorter;
@@ -66,16 +68,16 @@ public class ChampionComparing extends Page {
      */
     @Override
     public void load(jQuery root) {
-        jQuery table = root.child(Table.class);
-        jQuery head = table.child(Head.class);
+        Element table = root.get(0).child(Table.class);
+        Element head = table.child(Head.class);
         head.child(NoIcon.class);
         head.child(Name.class).text("Name");
 
         for (final Status value : STATUS) {
-            head.child(StatusView.class).text(value.name).click(new Listener() {
+            head.child(StatusView.class).text(value.name).on(UIAction.Click, new EventListener() {
 
                 @Override
-                public void handler(UIEvent event) {
+                public void handleEvent(UIEvent event) {
                     sort(value);
                 }
             });
@@ -87,8 +89,8 @@ public class ChampionComparing extends Page {
         for (Champion champion : Champion.getAll()) {
             ChampionStatus status = champion.getStatus(Version.Latest);
 
-            jQuery row = $("<div>").add(RowLine.class);
-            champion.applyIcon(row.child(Icon.class));
+            Element row = document.createElement("div").add(RowLine.class);
+            champion.applyIcon($(row.child(Icon.class)));
             row.child(Name.class).text(champion.name);
 
             for (Status value : STATUS) {
@@ -152,13 +154,13 @@ public class ChampionComparing extends Page {
         private final ChampionStatus status;
 
         /** The actual element. */
-        private final jQuery element;
+        private final Element element;
 
         /**
          * @param champion
          * @param element
          */
-        private Row(Champion champion, jQuery element) {
+        private Row(Champion champion, Element element) {
             this.champion = champion;
             this.status = champion.getStatus(Version.Latest);
             this.element = element;
