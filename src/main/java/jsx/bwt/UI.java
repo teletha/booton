@@ -70,7 +70,7 @@ public abstract class UI extends Publishable {
      * @param content A content to show on tooltip.
      */
     public void setTooltip(UI content) {
-        WindowManager.applyTooltip(root, content.root);
+        WindowManager.applyTooltip(rootElement, content.rootElement);
 
         // if (content == null) {
         // tooltip = null;
