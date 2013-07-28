@@ -43,16 +43,16 @@ public class PopupView extends UI {
     public void open() {
         if (shown++ == 0) {
             // fit to parent box
-            String left = root.parent().css("border-left-width");
-            String right = root.parent().css("border-right-width");
-            String bottom = root.parent().css("border-bottom-width");
+            String left = rootElement.parent().css("border-left-width");
+            String right = rootElement.parent().css("border-right-width");
+            String bottom = rootElement.parent().css("border-bottom-width");
 
-            root.css("top", "calc(100% + " + bottom + ")")
+            rootElement.css("top", "calc(100% + " + bottom + ")")
                     .css("left", "-" + left)
                     .css("width", "calc(100% + " + right + " + " + left + ")");
 
             // show slide view
-            root.add(Shown.class);
+            rootElement.add(Shown.class);
 
             // notify event
             publish(Listener.class).open();
@@ -71,7 +71,7 @@ public class PopupView extends UI {
         if (2 <= shown) {
             // hide slide view
             shown = 0;
-            root.remove(Shown.class);
+            rootElement.remove(Shown.class);
 
             // notify event
             publish(Listener.class).close();

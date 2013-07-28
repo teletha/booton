@@ -20,6 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import jsx.jQuery.Offset;
 import jsx.bwt.Listen;
+import jsx.bwt.UI;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
 import booton.css.CSS;
@@ -647,7 +648,11 @@ public abstract class Element extends Node implements JavascriptNative {
         off();
 
         // parent node exist surely
-        parent().removeChild(this);
+        Node parent = parent();
+
+        if (parent != null) {
+            parent.removeChild(this);
+        }
 
         // API definition
         return this;
@@ -863,6 +868,8 @@ public abstract class Element extends Node implements JavascriptNative {
     private Node nodify(Object content) {
         if (content instanceof Node) {
             return (Node) content;
+        } else if (content instanceof UI) {
+            return ((UI) content).rootElement;
         } else {
             return document.createTextNode(content.toString());
         }

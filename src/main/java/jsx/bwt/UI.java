@@ -10,11 +10,7 @@
 package jsx.bwt;
 
 import static js.lang.Global.*;
-import static jsx.bwt.UIAction.*;
 import js.dom.Element;
-import jsx.jQuery;
-import jsx.jQuery.Offset;
-import jsx.bwt.view.PopupViewStyle;
 
 /**
  * @version 2012/12/11 14:39:54
@@ -22,13 +18,7 @@ import jsx.bwt.view.PopupViewStyle;
 public abstract class UI extends Publishable {
 
     /** The root container element for this user interface. */
-    public final jQuery root;
-
-    /** The root container element for this user interface. */
     public final Element rootElement;
-
-    /** The tooltip ui. */
-    private UI tooltip;
 
     /**
      * <p>
@@ -47,8 +37,7 @@ public abstract class UI extends Publishable {
      * @param name
      */
     protected UI(String name) {
-        this.root = $("<" + name + ">");
-        this.rootElement = root.get(0);
+        this.rootElement = document.createElement(name);
     }
 
     /**
@@ -71,43 +60,6 @@ public abstract class UI extends Publishable {
      */
     public void setTooltip(UI content) {
         WindowManager.applyTooltip(rootElement, content.rootElement);
-
-        // if (content == null) {
-        // tooltip = null;
-        // root.unbind(this);
-        // } else {
-        // tooltip = content;
-        // root.bind(this);
-        // }
-    }
-
-    /**
-     * <p>
-     * Show tooltip.
-     * </p>
-     */
-    @Listen(MouseEnter)
-    private void showTooltip() {
-        if (tooltip != null) {
-            tooltip.root.add(PopupViewStyle.Bottom.class);
-
-            root.append(tooltip);
-            Offset offset = root.position();
-            tooltip.root.css("top", offset.top + root.outerHeight() + 15 + "px");
-            tooltip.root.css("left", offset.left - tooltip.root.outerWidth() / 2 + root.outerWidth() / 2 + "px");
-        }
-    }
-
-    /**
-     * <p>
-     * Hide tooltip.
-     * </p>
-     */
-    @Listen(MouseLeave)
-    private void hideTooltip() {
-        if (tooltip != null) {
-            tooltip.root.remove();
-        }
     }
 
     /**
@@ -119,7 +71,7 @@ public abstract class UI extends Publishable {
          * @param text
          */
         private TextUI(String text) {
-            root.text(text);
+            rootElement.text(text);
         }
     }
 }

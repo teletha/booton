@@ -65,18 +65,18 @@ public class Select<M> extends FormUI<Select> {
         form.add(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
 
         view = new ScrollableListView(10, 28).provide(binder);
-        view.root.add(SelectItemList.class).bind(binder);
+        view.rootElement.add(SelectItemList.class).bind(binder);
 
-        arrow = root.child(new Button(Icon.BottomArrow, new EventListener() {
+        arrow = rootElement.child(new Button(Icon.BottomArrow, new EventListener() {
 
             @Override
             public void handleEvent(UIEvent event) {
                 options.toggle();
             }
         }));
-        arrow.root.add(SelectArrow.class);
+        arrow.rootElement.add(SelectArrow.class);
 
-        options = root.child(new SlidableView(view));
+        options = rootElement.child(new SlidableView(view));
         options.bind(binder);
 
         if (model.size() == 0) {
@@ -96,12 +96,12 @@ public class Select<M> extends FormUI<Select> {
 
     @Listen(UIAction.Focus)
     private void startInput() {
-        root.add(Focus.class);
+        rootElement.add(Focus.class);
     }
 
     @Listen(UIAction.Blur)
     private void endInput() {
-        root.remove(Focus.class);
+        rootElement.remove(Focus.class);
     }
 
     /**
