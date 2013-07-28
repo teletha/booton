@@ -486,6 +486,26 @@ public abstract class Element extends Node implements JavascriptNative {
      * @param subscriber A subscriber that holds user action event listeners.
      * @return A chainable API.
      */
+    public Element off(UIAction[] types, EventListener subscriber) {
+        if (events != null) {
+            for (UIAction type : types) {
+                off(type, subscriber);
+            }
+        }
+
+        // API defintion
+        return this;
+    }
+
+    /**
+     * <p>
+     * Dettach all event handlers which are defined in the given subscriber to the selected
+     * elements.
+     * </p>
+     * 
+     * @param subscriber A subscriber that holds user action event listeners.
+     * @return A chainable API.
+     */
     public Element off(UIAction type, EventListener subscriber) {
         if (events != null && type != null && subscriber != null) {
             Listeners listeners = events.get(type);
@@ -502,6 +522,25 @@ public abstract class Element extends Node implements JavascriptNative {
                         remove(EventListenable.class);
                     }
                 }
+            }
+        }
+
+        // API defintion
+        return this;
+    }
+
+    /**
+     * <p>
+     * Attach all event handlers which are defined in the given subscriber to the selected elements.
+     * </p>
+     * 
+     * @param subscriber A subscriber that holds user action event listeners.
+     * @return A chainable API.
+     */
+    public Element on(UIAction[] types, EventListener subscriber) {
+        if (types != null && subscriber != null) {
+            for (UIAction type : types) {
+                on(type, subscriber);
             }
         }
 

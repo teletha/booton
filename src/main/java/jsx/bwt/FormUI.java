@@ -9,8 +9,9 @@
  */
 package jsx.bwt;
 
+import static jsx.bwt.UIAction.*;
 import js.dom.Element;
-import jsx.jQuery.Listener;
+import js.dom.Element.EventListener;
 import jsx.bwt.FormUIStyle.Disable;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.FormUIStyle.FormRoot;
@@ -21,13 +22,13 @@ import jsx.bwt.FormUIStyle.FormRoot;
 public class FormUI<T extends FormUI> extends UI {
 
     /** The event types. */
-    private static final String Events = "click contextmenu dbclick mouseover mouseout mouseon";
+    private static final UIAction[] Actions = {Click, ClickLeft, MouseDoubleClick, PointerOver, PointerOut, PointerMove};
 
     /** The event disabler. */
-    private static final Listener Disabler = new Listener() {
+    private static final EventListener Disabler = new EventListener() {
 
         @Override
-        public void handler(UIEvent event) {
+        public void handleEvent(UIEvent event) {
             event.stopImmediatePropagation();
         }
     };
@@ -49,7 +50,7 @@ public class FormUI<T extends FormUI> extends UI {
      * 
      */
     public FormUI(String elementName) {
-        root.add(FormRoot.class);
+        rootElement.add(FormRoot.class);
 
         form = rootElement.child(elementName);
         form.bind(this);
@@ -64,8 +65,8 @@ public class FormUI<T extends FormUI> extends UI {
      */
     public T disable() {
         enable = false;
-        root.add(Disable.class);
-        root.on(Events, Disabler);
+        rootElement.add(Disable.class);
+        rootElement.on(Actions, Disabler);
         form.attr("disabled", "true");
 
         return (T) this;
@@ -80,8 +81,8 @@ public class FormUI<T extends FormUI> extends UI {
      */
     public T enable() {
         enable = true;
-        root.remove(Disable.class);
-        root.off(Events, Disabler);
+        rootElement.remove(Disable.class);
+        rootElement.off(Actions, Disabler);
         form.remove("disabled");
 
         return (T) this;
@@ -89,12 +90,12 @@ public class FormUI<T extends FormUI> extends UI {
 
     @Listen(UIAction.Focus)
     private void startInput() {
-        root.add(Focus.class);
+        rootElement.add(Focus.class);
     }
 
     @Listen(UIAction.Blur)
     private void endInput() {
-        root.remove(Focus.class);
+        rootElement.remove(Focus.class);
     }
 
     /**
