@@ -869,7 +869,7 @@ public abstract class Element extends Node implements JavascriptNative {
         if (content instanceof Node) {
             return (Node) content;
         } else if (content instanceof UI) {
-            return ((UI) content).rootElement;
+            return ((UI) content).root;
         } else {
             return document.createTextNode(content.toString());
         }

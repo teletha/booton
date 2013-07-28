@@ -56,10 +56,10 @@ public class ItemView extends UI {
      */
     public ItemView(Item item, ItemDescriptor itemDescriptor, StatusCalculator calculator) {
         this.calculator = calculator;
-        rootElement.add(Root.class);
+        root.add(Root.class);
 
         // Icon Area
-        Element icons = rootElement.child(IconArea.class);
+        Element icons = root.child(IconArea.class);
         // icons.child(Icon.class).backgound(item.getIcon());
         item.applyIcon($(icons.child(Icon.class)));
 
@@ -78,7 +78,7 @@ public class ItemView extends UI {
         }
 
         // Description Area
-        Element descriptions = rootElement.child(DescriptionArea.class);
+        Element descriptions = root.child(DescriptionArea.class);
 
         // Name and Cost
         double cost = itemDescriptor.get(Cost);

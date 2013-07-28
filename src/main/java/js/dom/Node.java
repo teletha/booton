@@ -68,7 +68,7 @@ public abstract class Node implements JavascriptNative {
      * @return Chainable API.
      */
     public <T extends UI> T child(T ui) {
-        appendChild(ui.rootElement);
+        appendChild(ui.root);
 
         return ui;
     }

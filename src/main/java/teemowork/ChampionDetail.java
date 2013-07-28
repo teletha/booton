@@ -581,7 +581,7 @@ public class ChampionDetail extends Page {
          */
         public ItemBox(Item item) {
             this.item = item;
-            this.icon = rootElement.add(ItemIconBase.class).child(ItemIcon.class);
+            this.icon = root.add(ItemIconBase.class).child(ItemIcon.class);
         }
 
         /**
@@ -594,7 +594,7 @@ public class ChampionDetail extends Page {
                 item.applyIcon($(icon));
 
                 ItemView view = new ItemView(item, item.getDescriptor(Version.Latest), build);
-                view.rootElement.css("max-width", "350px");
+                view.root.css("max-width", "350px");
 
                 setTooltip(view);
             }
@@ -606,7 +606,7 @@ public class ChampionDetail extends Page {
         @Override
         public UI createPopup() {
             ItemView view = new ItemView(item, item.getDescriptor(Version.Latest), build);
-            view.rootElement.css("max-width", "350px");
+            view.root.css("max-width", "350px");
 
             return view;
         }

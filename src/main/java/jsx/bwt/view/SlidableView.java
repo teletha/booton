@@ -36,8 +36,8 @@ public class SlidableView extends UI {
      * @param content
      */
     public SlidableView(UI content) {
-        rootElement.add(ViewableArea.class);
-        rootElement.child(Slider.class).append(content);
+        root.add(ViewableArea.class);
+        root.child(Slider.class).append(content);
     }
 
     /**
@@ -48,16 +48,16 @@ public class SlidableView extends UI {
     public void open() {
         if (shown++ == 0) {
             // fit to parent box
-            String left = rootElement.parent().css("border-left-width");
-            String right = rootElement.parent().css("border-right-width");
-            String bottom = rootElement.parent().css("border-bottom-width");
+            String left = root.parent().css("border-left-width");
+            String right = root.parent().css("border-right-width");
+            String bottom = root.parent().css("border-bottom-width");
 
-            rootElement.css("top", "calc(100% + " + bottom + ")")
+            root.css("top", "calc(100% + " + bottom + ")")
                     .css("left", "-" + left)
                     .css("width", "calc(100% + " + right + " + " + left + ")");
 
             // show slide view
-            rootElement.add(Shown.class);
+            root.add(Shown.class);
 
             // notify event
             publish(Listener.class).open();
@@ -76,7 +76,7 @@ public class SlidableView extends UI {
         if (2 <= shown) {
             // hide slide view
             shown = 0;
-            rootElement.remove(Shown.class);
+            root.remove(Shown.class);
 
             // notify event
             publish(Listener.class).close();
