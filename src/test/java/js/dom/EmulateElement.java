@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import booton.css.CSS;
+
 /**
  * @version 2013/07/01 23:55:23
  */
@@ -389,6 +391,25 @@ public class EmulateElement extends Element implements Nodable {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public HTMLCollection getElementsByClassName(Class<? extends CSS> className) {
+        return new ByClassNameCollection(className);
+    }
+
+    /**
+     * <p>
+     * Notify element mutation.
+     * </p>
+     * 
+     * @param event
+     */
+    private void notify(MutationEvent event) {
+
+    }
+
+    /**
      * @version 2013/07/01 9:30:36
      */
     class Nodes implements Iterable<Node> {
@@ -594,6 +615,60 @@ public class EmulateElement extends Element implements Nodable {
     }
 
     /**
+     * @version 2013/07/28 19:11:23
+     */
+    private class ByClassNameCollection extends HTMLCollection {
+
+        private Class<? extends CSS> className;
+
+        /**
+         * @param className
+         */
+        private ByClassNameCollection(Class<? extends CSS> className) {
+            this.className = className;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int length() {
+            int count = 0;
+
+            for (int i = 0; i < nodes.elementCount; i++) {
+                Element element = nodes.getElement(i);
+
+                if (element.classList().contains(className)) {
+                    count++;
+                }
+                count += element.getElementsByClassName(className).length();
+            }
+            return count;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Element item(int index) {
+            int count = 0;
+
+            for (int i = 0; i < nodes.elementCount; i++) {
+                Element element = nodes.getElement(i);
+
+                if (element.classList().contains(className)) {
+                    if (index == count) {
+                        return element;
+                    }
+                    count++;
+                }
+                count += element.getElementsByClassName(className).length();
+            }
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
+    /**
      * @version 2013/07/11 14:10:27
      */
     private class Attributes {
@@ -736,5 +811,12 @@ public class EmulateElement extends Element implements Nodable {
         public int hashCode() {
             return name.hashCode() + namespace.hashCode();
         }
+    }
+
+    /**
+     * @version 2013/07/28 22:26:35
+     */
+    private static class MutationEvent {
+
     }
 }

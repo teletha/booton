@@ -15,6 +15,8 @@ import static teemowork.model.Status.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import js.dom.Element;
+import js.dom.Element.EventListener;
 import js.math.Mathematics;
 import jsx.jQuery;
 import jsx.jQuery.Listener;
@@ -91,10 +93,10 @@ public class ChampionDetail extends Page {
     private final Build build;
 
     /** The status. */
-    private jQuery level;
+    private Element level;
 
     /** The skill view. */
-    private jQuery skillView;
+    private Element skillView;
 
     /**
      * Build page.
@@ -135,28 +137,28 @@ public class ChampionDetail extends Page {
      */
     @Override
     public void load(jQuery root) {
-        jQuery upper = root.child(UpperInfo.class);
+        Element upper = root.get(0).child(UpperInfo.class);
 
         // Icon
-        jQuery icon = upper.child(ChampionIcon.class).bind(this);
-        build.champion.applyIcon(icon);
+        Element icon = upper.child(ChampionIcon.class).bind(this);
+        build.champion.applyIcon($(icon));
 
         // Level
         level = icon.child(Level.class);
 
         // Items
-        jQuery itemViewBox = upper.child(ItemViewBox.class);
+        Element itemViewBox = upper.child(ItemViewBox.class);
 
         for (int i = 0; i < 6; i++) {
             items.add(itemViewBox.child(new ItemBox(build.getItem(i))));
         }
 
-        jQuery statusView = root.child(StatusViewBox.class);
+        Element statusView = root.get(0).child(StatusViewBox.class);
 
         for (Status status : VISIBLE) {
             statuses.add(new StatusView(status, statusView));
         }
-        skillView = root.child(SkillTable.class);
+        skillView = root.get(0).child(SkillTable.class);
 
         $(window).keypress(new Listener() {
 
@@ -230,62 +232,62 @@ public class ChampionDetail extends Page {
         private final Skill skill;
 
         /** The icon element. */
-        private final jQuery icon;
+        private final Element icon;
 
         /** The skill level. */
-        private final jQuery[] levels;
+        private final Element[] levels;
 
         /** The skill text. */
-        private final jQuery passive;
+        private final Element passive;
 
         /** The skill text. */
-        private final jQuery active;
+        private final Element active;
 
         /** The cool down. */
-        private final jQuery cooldown;
+        private final Element cooldown;
 
         /** The cost. */
-        private final jQuery cost;
+        private final Element cost;
 
         /** The cost. */
-        private final jQuery range;
+        private final Element range;
 
         /**
          * @param skill
          */
-        private SkillView(final Skill skill, jQuery root) {
+        private SkillView(final Skill skill, Element root) {
             int size = skill.getMaxLevel();
 
             this.skill = skill;
-            this.levels = new jQuery[size];
+            this.levels = new Element[size];
 
-            jQuery iconBox = root.child(IconBox.class);
+            Element iconBox = root.child(IconBox.class);
             icon = iconBox.child(SkillIcon.class).css("background-image", "url(" + skill.getIcon() + ")");
-            iconBox.click(new Listener() {
+            iconBox.on(UIAction.Click, new EventListener() {
 
                 @Override
-                public void handler(UIEvent event) {
+                public void handleEvent(UIEvent event) {
                     event.preventDefault();
                     build.up(skill);
                 }
-            }).on("contextmenu", new Listener() {
+            }).on(UIAction.ClickLeft, new EventListener() {
 
                 @Override
-                public void handler(UIEvent event) {
+                public void handleEvent(UIEvent event) {
                     event.preventDefault();
                     build.down(skill);
                 }
             });
 
             if (skill.key != SkillKey.Passive) {
-                jQuery levels = iconBox.child(LevelBox.class);
+                Element levels = iconBox.child(LevelBox.class);
 
                 for (int i = 0; i < size; i++) {
                     this.levels[i] = levels.child(size == 3 ? LevelMark3.class : LevelMark.class);
                 }
             }
 
-            jQuery descriptor = root.child(DescriptionBox.class);
+            Element descriptor = root.child(DescriptionBox.class);
             descriptor.child(Name.class).text(skill.name);
 
             this.range = descriptor.child(SkillStatusValues.class);
@@ -377,7 +379,7 @@ public class ChampionDetail extends Page {
          * @param skill A current processing skill.
          * @param variable A target skill variable.
          */
-        private void write(jQuery root, SkillDescriptor skill, Variable variable) {
+        private void write(Element root, SkillDescriptor skill, Variable variable) {
             root.empty();
 
             if (variable != null) {
@@ -403,7 +405,7 @@ public class ChampionDetail extends Page {
 
                 for (int i = 1; i <= size; i++) {
                     double value = status.round(variable.calculate(i, build));
-                    jQuery element = root.child(SkillStatusValue.class).text(value == -1 ? "∞" : value);
+                    Element element = root.child(SkillStatusValue.class).text(value == -1 ? "∞" : value);
 
                     if (size != 1 && i == level) {
                         element.add(Current.class);
@@ -430,7 +432,7 @@ public class ChampionDetail extends Page {
          * @param variable
          * @param level
          */
-        private void writeVariable(jQuery root, Variable variable, int level) {
+        private void writeVariable(Element root, Variable variable, int level) {
             VariableResolver resolver = variable.getResolver();
             Status status = variable.getStatus();
             List<Variable> amplifiers = variable.getAmplifiers();
@@ -449,7 +451,7 @@ public class ChampionDetail extends Page {
                 root.append("(");
 
                 for (int i = 1; i <= size; i++) {
-                    jQuery element = root.child(NormalValue.class).text(Mathematics.round(resolver.compute(i), 2));
+                    Element element = root.child(NormalValue.class).text(Mathematics.round(resolver.compute(i), 2));
 
                     if (!resolver.isSkillLevelBased()) {
                         element.attr("title", "Level " + resolver.convertChampionLevel(i))
@@ -479,9 +481,9 @@ public class ChampionDetail extends Page {
          * @param amplifiers A list of skill amplifiers.
          * @param level A current skill level.
          */
-        private void writeAmplifier(jQuery root, List<Variable> amplifiers, int level) {
+        private void writeAmplifier(Element root, List<Variable> amplifiers, int level) {
             for (Variable amplifier : amplifiers) {
-                jQuery element = root.child(Amplifier.class);
+                Element element = root.child(Amplifier.class);
                 element.append("+");
 
                 VariableResolver resolver = amplifier.getResolver();
@@ -493,7 +495,7 @@ public class ChampionDetail extends Page {
                 int size = resolver.estimateSize();
 
                 for (int i = 1; i <= size; i++) {
-                    jQuery value = element.child(NormalValue.class)
+                    Element value = element.child(NormalValue.class)
                             .text(Mathematics.round(amplifier.calculate(i, build), 4));
 
                     if (!resolver.isSkillLevelBased()) {
@@ -530,13 +532,13 @@ public class ChampionDetail extends Page {
         private final Status status;
 
         /** The value for curernt Lv. */
-        private final jQuery current;
+        private final Element current;
 
         /**
          * @param name
          */
-        private StatusView(Status status, jQuery root) {
-            jQuery box = root.child(StatusBox.class);
+        private StatusView(Status status, Element root) {
+            Element box = root.child(StatusBox.class);
             box.child(StatusName.class).text(status.name());
 
             this.status = status;
@@ -572,14 +574,14 @@ public class ChampionDetail extends Page {
         private Item item;
 
         /** The root element. */
-        private final jQuery icon;
+        private final Element icon;
 
         /**
          * @param item
          */
         public ItemBox(Item item) {
             this.item = item;
-            this.icon = root.add(ItemIconBase.class).child(ItemIcon.class);
+            this.icon = rootElement.add(ItemIconBase.class).child(ItemIcon.class);
         }
 
         /**
@@ -589,7 +591,7 @@ public class ChampionDetail extends Page {
          */
         private void calcurate() {
             if (item != null) {
-                item.applyIcon(icon);
+                item.applyIcon($(icon));
 
                 ItemView view = new ItemView(item, item.getDescriptor(Version.Latest), build);
                 view.root.css("max-width", "350px");

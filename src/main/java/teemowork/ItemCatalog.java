@@ -40,7 +40,7 @@ public class ItemCatalog extends Page {
                 continue;
             }
 
-            root.child(new ItemView(item, descriptor, null));
+            root.get(0).child(new ItemView(item, descriptor, null));
         }
     }
 
