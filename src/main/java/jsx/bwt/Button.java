@@ -9,9 +9,9 @@
  */
 package jsx.bwt;
 
+import js.dom.Element.EventListener;
 import jsx.bwt.FormUIStyle.ButtonForm;
 import jsx.bwt.FormUIStyle.Icons;
-import jsx.jQuery.Listener;
 
 /**
  * @version 2013/04/17 16:09:04
@@ -24,10 +24,10 @@ public class Button extends FormUI<Button> {
     /**
      * @param label
      */
-    public Button(String label, Listener action) {
+    public Button(String label, EventListener action) {
         super("span");
 
-        form.add(ButtonForm.class).text(label).click(action);
+        form.add(ButtonForm.class).text(label).on(UIAction.Click, action);
 
         this.label = label;
     }
@@ -35,7 +35,7 @@ public class Button extends FormUI<Button> {
     /**
      * @param label
      */
-    public Button(Icon icon, Listener action) {
+    public Button(Icon icon, EventListener action) {
         this("", action);
 
         form.add(Icons.class).attr("icon", icon.code);

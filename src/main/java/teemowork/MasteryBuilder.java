@@ -15,7 +15,6 @@ import js.dom.Element;
 import js.dom.Element.EventListener;
 import js.dom.Image;
 import jsx.jQuery;
-import jsx.jQuery.Listener;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Button;
@@ -121,18 +120,18 @@ public class MasteryBuilder extends Page {
         menu.model.bind(new MasterySelector());
         menu.model.register(this);
 
-        reset = infomation.child(new Button("30", new Listener() {
+        reset = infomation.child(new Button("30", new EventListener() {
 
             @Override
-            public void handler(UIEvent event) {
+            public void handleEvent(UIEvent event) {
                 masterySet.reset();
             }
         }));
 
-        add = infomation.child(new Button("ADD", new Listener() {
+        add = infomation.child(new Button("ADD", new EventListener() {
 
             @Override
-            public void handler(UIEvent event) {
+            public void handleEvent(UIEvent event) {
                 menu.model.add(new MasterySet(masterySet.getCode()));
             }
         }));

@@ -10,6 +10,7 @@
 package jsx.bwt;
 
 import static js.lang.Global.*;
+import js.dom.Element.EventListener;
 import jsx.jQuery;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.SelectStyle.SelectArrow;
@@ -18,9 +19,8 @@ import jsx.bwt.SelectStyle.SelectItem;
 import jsx.bwt.SelectStyle.SelectItemList;
 import jsx.bwt.SelectStyle.SelectedItem;
 import jsx.bwt.view.ScrollableListView;
-import jsx.bwt.view.SlidableView;
 import jsx.bwt.view.ScrollableListView.ItemRenderer;
-import jsx.jQuery.Listener;
+import jsx.bwt.view.SlidableView;
 import jsx.model.SelectableListener;
 import jsx.model.SelectableModel;
 
@@ -67,10 +67,10 @@ public class Select<M> extends FormUI<Select> {
         view = new ScrollableListView(10, 28).provide(binder);
         view.root.add(SelectItemList.class).bind(binder);
 
-        arrow = root.child(new Button(Icon.BottomArrow, new Listener() {
+        arrow = root.child(new Button(Icon.BottomArrow, new EventListener() {
 
             @Override
-            public void handler(UIEvent event) {
+            public void handleEvent(UIEvent event) {
                 options.toggle();
             }
         }));
