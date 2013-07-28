@@ -11,7 +11,7 @@ package jsx.bwt;
 
 import static js.lang.Global.*;
 import static jsx.bwt.UIAction.*;
-import jsx.jQuery;
+import js.dom.Element;
 import jsx.jQuery.Offset;
 import jsx.application.PageUnload;
 import jsx.bwt.view.PopupViewStyle;
@@ -23,20 +23,20 @@ import kiss.Disposable;
 public class WindowManager {
 
     /** The popup area. */
-    private static jQuery popup;
+    private static Element popup;
 
     /** The popup target. */
-    private final jQuery target;
+    private final Element target;
 
     /** The popup content. */
-    private final jQuery content;
+    private final Element content;
 
     /**
      * 
      */
-    private WindowManager(jQuery target, jQuery content) {
+    private WindowManager(Element target, Element content) {
         if (popup == null) {
-            popup = $("<div>").add(PopupViewStyle.Bottom.class);
+            popup = document.createElement("div").add(PopupViewStyle.Bottom.class);
             $("body").append(popup);
         }
 
@@ -77,13 +77,13 @@ public class WindowManager {
         System.out.println("unload");
 
         EventBus.Global.unregister(this);
-        target.get(0).off();
+        target.off();
         hide();
     }
 
-    public static void applyTooltip(jQuery target, jQuery content) {
+    public static void applyTooltip(Element target, Element content) {
         if (target != null && content != null) {
-            target.get(0).bind(new WindowManager(target, content));
+            target.bind(new WindowManager(target, content));
         }
     }
 
@@ -94,7 +94,7 @@ public class WindowManager {
      * 
      * @return
      */
-    public static Disposable showTooltip(jQuery target, jQuery content) {
+    public static Disposable showTooltip(Element target, Element content) {
         return null;
     }
 }
