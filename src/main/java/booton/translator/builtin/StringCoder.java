@@ -9,11 +9,10 @@
  */
 package booton.translator.builtin;
 
-import booton.translator.Javascript;
 import booton.translator.Translator;
 
 /**
- * @version 2013/04/15 16:19:02
+ * @version 2013/07/29 16:05:34
  */
 class StringCoder extends Translator<String> {
 
@@ -103,10 +102,7 @@ class StringCoder extends Translator<String> {
     }
 
     public String charAt(int index) throws Exception {
-        Class type = Class.forName("js.lang.JSCharacter");
-        Javascript.require(type);
-
-        return "new " + Javascript.computeClassName(type) + "(" + that + ".charAt(" + param(0) + "), 0)";
+        return that + ".charAt(" + param(0) + ")";
     }
 
     public String contains(CharSequence param0) {

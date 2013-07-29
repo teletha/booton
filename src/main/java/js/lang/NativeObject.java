@@ -250,6 +250,16 @@ public class NativeObject {
     public static native void defineProperty(Object object, String propertyName, PropertyDescriptor descriptor);
 
     /**
+     * <p>
+     * Check property by key.
+     * </p>
+     * 
+     * @param propertyName A property name.
+     * @return A result.
+     */
+    public static native boolean hasProperty(Object object, String propertyName);
+
+    /**
      * @version 2013/04/09 2:35:51
      */
     public static interface PropertyDescriptor<T> extends JavascriptNative {
@@ -495,5 +505,18 @@ public class NativeObject {
         public String defineProperty(Object object, String propertyName, PropertyDescriptor descriptor) {
             return "boot.defineProperty(" + param(0) + "," + param(1) + "," + param(2) + ")";
         }
+
+        /**
+         * <p>
+         * Check property by key.
+         * </p>
+         * 
+         * @param propertyName A property name.
+         * @return A result.
+         */
+        public String hasProperty(Object object, String propertyName) {
+            return param(1) + " in " + param(0);
+        }
+
     }
 }

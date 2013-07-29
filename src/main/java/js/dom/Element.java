@@ -288,7 +288,7 @@ public abstract class Element extends Node implements JavascriptNative {
      * @return
      */
     public String css(String property) {
-        return $(this).css(property);
+        return window.getComputedStyle(this).get(property);
     }
 
     /**
@@ -296,12 +296,12 @@ public abstract class Element extends Node implements JavascriptNative {
      * Set one or more CSS properties for the set of matched elements.
      * </p>
      * 
-     * @param property A CSS property name.
+     * @param name A CSS property name.
      * @param value A value to set for the property.
      * @return
      */
-    public Element css(String property, Object value) {
-        $(this).css(property, String.valueOf(value));
+    public Element css(String name, Object value) {
+        style().set(name, String.valueOf(value));
 
         // API definition
         return this;
@@ -602,6 +602,17 @@ public abstract class Element extends Node implements JavascriptNative {
      * </p>
      */
     public Offset position() {
+        System.out.println("position");
+
+        Element offsetParent = offsetParent();
+        int[] parentOffset = {0, 0};
+
+        if (css("position").equals("fixed")) {
+            // Fixed elements are offset from window, because it is it's only offset parent.
+            // We assume that getBoundingClientRect is available when computed position is fixed.
+            parentOffset = getBoundingClientRect();
+        }
+
         return $(this).offset();
     }
 
@@ -875,6 +886,30 @@ public abstract class Element extends Node implements JavascriptNative {
         }
     }
 
+    /**
+     * <p>
+     * a reference to the object which is the closest (nearest in the containment hierarchy)
+     * positioned containing element. If the element is non-positioned, the nearest table cell or
+     * root element (html in standards compliant mode; body in quirks rendering mode) is the
+     * offsetParent. offsetParent returns null when the element has style.display set to "none". The
+     * offsetParent is useful because offsetTop and offsetLeft are relative to its padding edge.
+     * </p>
+     * 
+     * @return
+     */
+    @JavascriptNativePropertyAccessor
+    protected native Element offsetParent();
+
+    /**
+     * <p>
+     * Returns an object that represents the element's style attribute.
+     * </p>
+     * 
+     * @return
+     */
+    @JavascriptNativePropertyAccessor
+    protected native CSSStyleDeclaration style();
+
     @JavascriptNativePropertyAccessor
     protected abstract String value();
 
@@ -1086,6 +1121,15 @@ public abstract class Element extends Node implements JavascriptNative {
      * @return A result.
      */
     protected native boolean hasAttributeNS(String namespace, String name);
+
+    /**
+     * <p>
+     * Returns a text rectangle object that encloses a group of text rectangles.
+     * </p>
+     * 
+     * @return
+     */
+    protected native ClientRect getBoundingClientRect();
 
     /**
      * <p>

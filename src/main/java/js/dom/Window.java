@@ -13,7 +13,7 @@ import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 
 /**
- * @version 2013/07/04 20:51:10
+ * @version 2013/07/29 16:07:48
  */
 public abstract class Window implements JavascriptNative {
 
@@ -26,4 +26,14 @@ public abstract class Window implements JavascriptNative {
      */
     @JavascriptNativeProperty
     public Location location;
+
+    /**
+     * <p>
+     * Gives the final used values of all the CSS properties of an element.
+     * </p>
+     * 
+     * @param element A target element to compute styles.
+     * @return A computed style rule.
+     */
+    public native CSSStyleDeclaration getComputedStyle(Element element);
 }

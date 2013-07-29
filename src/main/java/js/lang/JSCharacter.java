@@ -159,6 +159,78 @@ class JSCharacter implements JavascriptNative {
     }
 
     /**
+     * Converts the character argument to lowercase using case mapping information from the
+     * UnicodeData file.
+     * <p>
+     * Note that {@code Character.isLowerCase(Character.toLowerCase(ch))} does not always return
+     * {@code true} for some ranges of characters, particularly those that are symbols or
+     * ideographs.
+     * <p>
+     * In general, {@link String#toLowerCase()} should be used to map characters to lowercase.
+     * {@code String} case mapping methods have several benefits over {@code Character} case mapping
+     * methods. {@code String} case mapping methods can perform locale-sensitive mappings,
+     * context-sensitive mappings, and 1:M character mappings, whereas the {@code Character} case
+     * mapping methods cannot.
+     * <p>
+     * <b>Note:</b> This method cannot handle <a href="#supplementary"> supplementary
+     * characters</a>. To support all Unicode characters, including supplementary characters, use
+     * the {@link #toLowerCase(int)} method.
+     * 
+     * @param ch the character to be converted.
+     * @return the lowercase equivalent of the character, if any; otherwise, the character itself.
+     * @see Character#isLowerCase(char)
+     * @see String#toLowerCase()
+     */
+    public static char toLowerCase(char ch) {
+        NativeString value = new NativeString(ch);
+        return value.toLowerCase().charAt(0);
+    }
+
+    /**
+     * Converts the character argument to uppercase using case mapping information from the
+     * UnicodeData file.
+     * <p>
+     * Note that {@code Character.isUpperCase(Character.toUpperCase(ch))} does not always return
+     * {@code true} for some ranges of characters, particularly those that are symbols or
+     * ideographs.
+     * <p>
+     * In general, {@link String#toUpperCase()} should be used to map characters to uppercase.
+     * {@code String} case mapping methods have several benefits over {@code Character} case mapping
+     * methods. {@code String} case mapping methods can perform locale-sensitive mappings,
+     * context-sensitive mappings, and 1:M character mappings, whereas the {@code Character} case
+     * mapping methods cannot.
+     * <p>
+     * <b>Note:</b> This method cannot handle <a href="#supplementary"> supplementary
+     * characters</a>. To support all Unicode characters, including supplementary characters, use
+     * the {@link #toUpperCase(int)} method.
+     * 
+     * @param ch the character to be converted.
+     * @return the uppercase equivalent of the character, if any; otherwise, the character itself.
+     * @see Character#isUpperCase(char)
+     * @see String#toUpperCase()
+     */
+    public static char toUpperCase(char ch) {
+        NativeString value = new NativeString(ch);
+        return value.toUpperCase().charAt(0);
+    }
+
+    /**
+     * Returns a <tt>Character</tt> instance representing the specified <tt>char</tt> value. If a
+     * new <tt>Character</tt> instance is not required, this method should generally be used in
+     * preference to the constructor {@link #Character(char)}, as this method is likely to yield
+     * significantly better space and time performance by caching frequently requested values. This
+     * method will always cache values in the range {@code '\u005Cu0000'} to {@code '\u005Cu007F'},
+     * inclusive, and may cache other values outside of this range.
+     * 
+     * @param ch a char value.
+     * @return a <tt>Character</tt> instance representing <tt>c</tt>.
+     * @since 1.5
+     */
+    public static Character valueOf(char ch) {
+        return (Character) (Object) new JSCharacter(new NativeString(ch));
+    }
+
+    /**
      * <p>
      * Returns the primitive value of this object.
      * </p>
