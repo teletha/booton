@@ -12,7 +12,7 @@ package js.lang;
 import booton.translator.Translator;
 
 /**
- * @version 2013/04/15 18:40:50
+ * @version 2013/07/29 15:23:02
  */
 class NativeString {
 
@@ -30,6 +30,13 @@ class NativeString {
      */
     public NativeString(String text) {
         builder.append(text);
+    }
+
+    /**
+     * 
+     */
+    public NativeString(char c) {
+        builder.append(c);
     }
 
     /**
@@ -117,6 +124,28 @@ class NativeString {
 
     /**
      * <p>
+     * Returns the calling string value converted to uppercase.
+     * </p>
+     * 
+     * @return
+     */
+    public NativeString toUpperCase() {
+        return new NativeString(builder.toString().toUpperCase());
+    }
+
+    /**
+     * <p>
+     * Returns the calling string value converted to lowercase.
+     * </p>
+     * 
+     * @return
+     */
+    public NativeString toLowerCase() {
+        return new NativeString(builder.toString().toLowerCase());
+    }
+
+    /**
+     * <p>
      * Count text length.
      * </p>
      * 
@@ -135,7 +164,7 @@ class NativeString {
     }
 
     /**
-     * @version 2013/04/15 18:41:22
+     * @version 2013/07/29 15:23:07
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<NativeString> {
@@ -145,6 +174,13 @@ class NativeString {
          */
         public String NativeString() {
             return Q + Q;
+        }
+
+        /**
+         * 
+         */
+        public String NativeString(char c) {
+            return param(0);
         }
 
         /**
@@ -227,6 +263,28 @@ class NativeString {
          */
         public String substring(int start, int end) {
             return that + ".substring(" + param(0) + "," + param(1) + ")";
+        }
+
+        /**
+         * <p>
+         * Returns the calling string value converted to uppercase.
+         * </p>
+         * 
+         * @return
+         */
+        public String toUpperCase() {
+            return that + ".toUpperCase()";
+        }
+
+        /**
+         * <p>
+         * Returns the calling string value converted to lowercase.
+         * </p>
+         * 
+         * @return
+         */
+        public String toLowerCase() {
+            return that + ".toLowerCase()";
         }
 
         /**

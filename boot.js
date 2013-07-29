@@ -381,6 +381,10 @@ function boot(global) {
     defineNative: function(name, properties) {
       if (global[name]) {
         define(global[name].prototype, properties);
+        
+        if (properties._) {
+        	properties._();
+        }
       }
     },
 

@@ -21,7 +21,7 @@ public class TeemoworkTheme {
     public static final Font Main = new Font("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600");
 
     /** The header font. */
-    public static final Font Header = new Font("http://fonts.googleapis.com/css?family=Play");
+    public static final Font Header = Main;
 
     /** The title/heading font. */
     public static final Font Title = new Font("http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz");
