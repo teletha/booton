@@ -11,15 +11,14 @@ package js.dom;
 
 import java.util.Iterator;
 
-import booton.translator.Debuggable;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativePropertyAccessor;
 
 /**
- * @version 2013/07/27 15:56:45
+ * @version 2013/07/30 11:16:20
  */
-@JavascriptAPIProvider
+@JavascriptAPIProvider("NodeList HTMLCollection")
 public abstract class NodeList<T extends Node> implements Iterable<T>, JavascriptNative {
 
     /**
@@ -71,7 +70,6 @@ public abstract class NodeList<T extends Node> implements Iterable<T>, Javascrip
          * {@inheritDoc}
          */
         @Override
-        @Debuggable
         public T next() {
             return item(cursor++);
         }

@@ -11,8 +11,8 @@ package jsx.bwt;
 
 import static js.lang.Global.*;
 import static jsx.bwt.UIAction.*;
+import js.dom.ClientRect;
 import js.dom.Element;
-import jsx.jQuery.Offset;
 import jsx.application.PageUnload;
 import jsx.bwt.view.PopupViewStyle;
 import kiss.Disposable;
@@ -55,9 +55,12 @@ public class WindowManager {
         popup.append(content);
         popup.add(PopupViewStyle.Show.class);
 
-        Offset offset = target.position();
-        popup.css("top", offset.top + target.outerHeight() + 15 + "px")
-                .css("left", offset.left - popup.outerWidth() / 2 + target.outerWidth() / 2 + "px");
+        ClientRect popupArea = popup.getBoundingClientRect();
+        System.out.println(popupArea);
+        ClientRect targetArea = target.getBoundingClientRect();
+
+        popup.css("top", targetArea.bottom() + 15 + "px")
+                .css("left", targetArea.left() - popupArea.width() / 2 + targetArea.width() / 2 + "px");
     }
 
     /**

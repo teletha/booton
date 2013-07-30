@@ -604,14 +604,26 @@ public abstract class Element extends Node implements JavascriptNative {
     public Offset position() {
         System.out.println("position");
 
-        Element offsetParent = offsetParent();
-        int[] parentOffset = {0, 0};
-
-        if (css("position").equals("fixed")) {
-            // Fixed elements are offset from window, because it is it's only offset parent.
-            // We assume that getBoundingClientRect is available when computed position is fixed.
-            parentOffset = getBoundingClientRect();
-        }
+        // Element offsetParent = offsetParent();
+        // float[] offset = {0, 0};
+        // float[] parentOffset = {0, 0};
+        //
+        // if (css("position").equals("fixed")) {
+        // // Fixed elements are offset from window, because it is it's only offset parent.
+        // // We assume that getBoundingClientRect is available when computed position is fixed.
+        // ClientRect rect = getBoundingClientRect();
+        // offset[0] = rect.top();
+        // offset[1] = rect.left();
+        // } else {
+        // // Get *real* offsetParent
+        // offsetParent = offsetParent();
+        //
+        // // Get correct offsets
+        // offset = this.offset();
+        // if (!jQuery.nodeName(offsetParent[0], "html")) {
+        // parentOffset = offsetParent.offset();
+        // }
+        // }
 
         return $(this).offset();
     }
@@ -888,7 +900,7 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
-     * a reference to the object which is the closest (nearest in the containment hierarchy)
+     * A reference to the object which is the closest (nearest in the containment hierarchy)
      * positioned containing element. If the element is non-positioned, the nearest table cell or
      * root element (html in standards compliant mode; body in quirks rendering mode) is the
      * offsetParent. offsetParent returns null when the element has style.display set to "none". The
@@ -1129,7 +1141,7 @@ public abstract class Element extends Node implements JavascriptNative {
      * 
      * @return
      */
-    protected native ClientRect getBoundingClientRect();
+    public native ClientRect getBoundingClientRect();
 
     /**
      * <p>
@@ -1179,7 +1191,7 @@ public abstract class Element extends Node implements JavascriptNative {
      * @return A HTMLCollection of found elements.
      */
     @JavascriptNativeProperty
-    public abstract HTMLCollection getElementsByClassName(Class<? extends CSS> className);
+    public abstract NodeList<Element> getElementsByClassName(Class<? extends CSS> className);
 
     /**
      * <p>
@@ -1195,7 +1207,7 @@ public abstract class Element extends Node implements JavascriptNative {
      *         appear in the tree.
      */
     @JavascriptNativeProperty
-    public final native HTMLCollection getElementsByTagName(String tagName);
+    public final native NodeList<Element> getElementsByTagName(String tagName);
 
     /**
      * <p>
