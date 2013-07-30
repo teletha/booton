@@ -17,9 +17,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import js.dom.DocumentFragment;
 import js.dom.Element;
 import js.dom.Element.EventListener;
-import jsx.jQuery;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.UIAction;
@@ -67,8 +67,8 @@ public class ChampionComparing extends Page {
      * {@inheritDoc}
      */
     @Override
-    public void load(jQuery root) {
-        Element table = root.get(0).child(Table.class);
+    public void load(DocumentFragment root) {
+        Element table = root.child(Table.class);
         Element head = table.child(Head.class);
         head.child(NoIcon.class);
         head.child(Name.class).text("Name");
@@ -90,7 +90,7 @@ public class ChampionComparing extends Page {
             ChampionStatus status = champion.getStatus(Version.Latest);
 
             Element row = document.createElement("div").add(RowLine.class);
-            champion.applyIcon($(row.child(Icon.class)));
+            champion.applyIcon(row.child(Icon.class));
             row.child(Name.class).text(champion.name);
 
             for (Status value : STATUS) {

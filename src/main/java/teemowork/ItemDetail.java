@@ -9,7 +9,7 @@
  */
 package teemowork;
 
-import jsx.jQuery;
+import js.dom.DocumentFragment;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import teemowork.model.Item;
@@ -43,7 +43,7 @@ public class ItemDetail extends Page {
      * {@inheritDoc}
      */
     @Override
-    public void load(jQuery root) {
+    public void load(DocumentFragment root) {
         root.child(new ItemView(item, item.getDescriptor(Version.Latest), null));
     }
 }

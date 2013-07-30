@@ -9,7 +9,7 @@
  */
 package js.bwt;
 
-import jsx.jQuery;
+import js.dom.Element;
 
 /**
  * @version 2013/02/03 14:57:09
@@ -17,7 +17,7 @@ import jsx.jQuery;
 public class Text extends Widget<String> {
 
     /** The actual element. */
-    private jQuery element;
+    private Element element;
 
     public Text text(String text) {
         bind(text);

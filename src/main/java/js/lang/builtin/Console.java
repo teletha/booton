@@ -82,6 +82,13 @@ public class Console {
     public static native void trace();
 
     /**
+     * <p>
+     * Clears the console output area.
+     * </p>
+     */
+    public static native void clear();
+
+    /**
      * @version 2013/05/16 19:08:55
      */
     @SuppressWarnings("unused")
@@ -156,6 +163,15 @@ public class Console {
          */
         public String trace() {
             return "console.trace()";
+        }
+
+        /**
+         * <p>
+         * Clears the console output area.
+         * </p>
+         */
+        public String clear() {
+            return "console.clear()";
         }
     }
 }

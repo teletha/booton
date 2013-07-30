@@ -9,7 +9,6 @@
  */
 package js.lang;
 
-import jsx.jQuery;
 import booton.translator.JavaAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
@@ -20,7 +19,7 @@ import booton.translator.JavascriptNativeProperty;
  * functionalities.
  * </p>
  * 
- * @version 2013/04/12 12:58:25
+ * @version 2013/07/30 19:34:51
  */
 @JavaAPIProvider(Character.class)
 class JSCharacter implements JavascriptNative {
@@ -66,7 +65,21 @@ class JSCharacter implements JavascriptNative {
      * @see Character#getType(char)
      */
     public static boolean isDigit(char ch) {
-        return jQuery.isNumeric(ch);
+        /**
+         * The following code is ideal, but it is too slow because try-catch block in javascript
+         * runtime (especially webkit). So we can't adopt it.
+         * 
+         * <pre>
+         * try {
+         *   Float.parseFloat(String.valueOf(ch));
+         *
+         *   return true;
+         * } catch (NumberFormatException e) {
+         *   return false;
+         * }
+         * </pre>
+         */
+        return Global.isNumeric(ch);
     }
 
     /**
@@ -93,7 +106,10 @@ class JSCharacter implements JavascriptNative {
      * @since 1.5
      */
     public static boolean isDigit(int codePoint) {
-        return jQuery.isNumeric(codePoint);
+        // FIXME
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**

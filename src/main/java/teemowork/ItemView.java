@@ -9,7 +9,6 @@
  */
 package teemowork;
 
-import static js.lang.Global.*;
 import static teemowork.model.Status.*;
 import js.dom.Element;
 import js.dom.Element.EventListener;
@@ -61,12 +60,12 @@ public class ItemView extends UI {
         // Icon Area
         Element icons = root.child(IconArea.class);
         // icons.child(Icon.class).backgound(item.getIcon());
-        item.applyIcon($(icons.child(Icon.class)));
+        item.applyIcon(icons.child(Icon.class));
 
         Element materials = icons.child(Materials.class);
 
         for (final Item material : itemDescriptor.getBuild()) {
-            material.applyIcon($(materials.child(Material.class)
+            material.applyIcon(materials.child(Material.class)
                     .attr("title", material.name)
                     .on(UIAction.Click, new EventListener() {
 
@@ -74,7 +73,7 @@ public class ItemView extends UI {
                         public void handleEvent(UIEvent event) {
                             Application.show(new ItemDetail(material.name));
                         }
-                    })));
+                    }));
         }
 
         // Description Area

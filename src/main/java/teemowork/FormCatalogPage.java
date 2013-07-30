@@ -9,8 +9,8 @@
  */
 package teemowork;
 
+import js.dom.DocumentFragment;
 import js.dom.Element.EventListener;
-import jsx.jQuery;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Button;
@@ -46,18 +46,18 @@ public class FormCatalogPage extends Page {
      * {@inheritDoc}
      */
     @Override
-    public void load(jQuery root) {
+    public void load(DocumentFragment root) {
         SelectableModel<String> selectable = new SelectableModel<String>();
         for (int i = 0; i < 200; i++) {
             selectable.add(String.valueOf(i));
         }
 
-        Select<String> child = root.get(0).child(new Select(selectable));
+        Select<String> child = root.child(new Select(selectable));
         child.model.setSelectionIndex(180);
 
-        root.get(0).child(new Input(model.type));
-        root.get(0).child(new Input(model.name));
-        root.get(0).child(new Button("Add", new EventListener() {
+        root.child(new Input(model.type));
+        root.child(new Input(model.name));
+        root.child(new Button("Add", new EventListener() {
 
             @Override
             public void handleEvent(UIEvent event) {

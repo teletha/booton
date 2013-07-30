@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import js.lang.builtin.Console;
 import js.net.NativeWebSocket;
 import js.net.NativeWebSocket.Listener;
 
@@ -101,6 +102,9 @@ public class LiveCoding implements UncaughtExceptionHandler, Listener {
         } else {
             window.location.reload(false);
         }
+
+        // clean up console message
+        Console.clear();
     }
 
     /**

@@ -485,6 +485,18 @@ function boot(global) {
     
     /**
      * <p>
+     * Helper method to chech whether the specified value is Number or not.
+     * </p>
+     *
+     * @param {Object} value The value to test.
+     * @return {boolean} The result.
+     */
+    isNumeric: function(value) {
+		  return !isNaN(parseFloat(value)) && isFinite(value);
+	  },
+    
+    /**
+     * <p>
      * Throw native error to build stack trace.
      * </p>
      */

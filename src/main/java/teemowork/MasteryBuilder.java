@@ -11,10 +11,10 @@ package teemowork;
 
 import static js.lang.Global.*;
 import static teemowork.model.Mastery.*;
+import js.dom.DocumentFragment;
 import js.dom.Element;
 import js.dom.Element.EventListener;
 import js.dom.Image;
-import jsx.jQuery;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Button;
@@ -107,15 +107,14 @@ public class MasteryBuilder extends Page {
      * {@inheritDoc}
      */
     @Override
-    public void load(jQuery root) {
-        Element rootElement = root.get(0);
+    public void load(DocumentFragment root) {
         set = localStorage.get(SelectableModel.class);
 
         if (set == null) {
             set = new SelectableModel();
         }
 
-        Element infomation = rootElement.child(Information.class);
+        Element infomation = root.child(Information.class);
         menu = infomation.child(new Select(set));
         menu.model.bind(new MasterySelector());
         menu.model.register(this);
@@ -136,9 +135,9 @@ public class MasteryBuilder extends Page {
             }
         }));
 
-        offense = build(rootElement.child(Offense.class), OFFENSE);
-        defense = build(rootElement.child(Defense.class), DEFEMSE);
-        utility = build(rootElement.child(Utility.class), UTILITY);
+        offense = build(root.child(Offense.class), OFFENSE);
+        defense = build(root.child(Defense.class), DEFEMSE);
+        utility = build(root.child(Utility.class), UTILITY);
 
         masterySet.publish(masterySet);
     }

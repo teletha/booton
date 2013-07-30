@@ -28,7 +28,7 @@ import booton.translator.Translator;
  * Define global objects and static methods in Booton environment.
  * </p>
  * 
- * @version 2013/04/12 13:09:07
+ * @version 2013/07/30 19:34:38
  */
 public class Global {
 
@@ -207,6 +207,16 @@ public class Global {
      * @param value A string that represents the value you want to parse.
      * @return A parsed number value.
      */
+    public static native float parseFloat(char value);
+
+    /**
+     * <p>
+     * Parses a string argument and returns a floating point number.
+     * </p>
+     * 
+     * @param value A string that represents the value you want to parse.
+     * @return A parsed number value.
+     */
     public static native float parseFloat(String value);
 
     /**
@@ -248,8 +258,7 @@ public class Global {
      * interested in ECMAScript 6 Number.isNaN.
      * </p>
      * 
-     * @param value The value to be tested.
-     * @return A result.
+     * @param value The value to be tested. Stringt.
      */
     public static native boolean isNaN(double value);
 
@@ -265,7 +274,92 @@ public class Global {
     public static native boolean isNaN(Object value);
 
     /**
-     * @version 2013/04/15 23:20:23
+     * <p>
+     * Evaluates an argument to determine whether it is a finite number.
+     * </p>
+     * <p>
+     * You can use this function to determine whether a number is a finite number. The isFinite
+     * function examines the number in its argument. If the argument is NaN, positive infinity, or
+     * negative infinity, this method returns false; otherwise, it returns true.
+     * </p>
+     * 
+     * @param value The number to evaluate.
+     * @return A result.
+     */
+    public static native boolean isFinit(int value);
+
+    /**
+     * <p>
+     * Evaluates an argument to determine whether it is a finite number.
+     * </p>
+     * <p>
+     * You can use this function to determine whether a number is a finite number. The isFinite
+     * function examines the number in its argument. If the argument is NaN, positive infinity, or
+     * negative infinity, this method returns false; otherwise, it returns true.
+     * </p>
+     * 
+     * @param value The number to evaluate.
+     * @return A result.
+     */
+    public static native boolean isFinit(long value);
+
+    /**
+     * <p>
+     * Evaluates an argument to determine whether it is a finite number.
+     * </p>
+     * <p>
+     * You can use this function to determine whether a number is a finite number. The isFinite
+     * function examines the number in its argument. If the argument is NaN, positive infinity, or
+     * negative infinity, this method returns false; otherwise, it returns true.
+     * </p>
+     * 
+     * @param value The number to evaluate.
+     * @return A result.
+     */
+    public static native boolean isFinit(float value);
+
+    /**
+     * <p>
+     * Evaluates an argument to determine whether it is a finite number.
+     * </p>
+     * <p>
+     * You can use this function to determine whether a number is a finite number. The isFinite
+     * function examines the number in its argument. If the argument is NaN, positive infinity, or
+     * negative infinity, this method returns false; otherwise, it returns true.
+     * </p>
+     * 
+     * @param value The number to evaluate.
+     * @return A result.
+     */
+    public static native boolean isFinit(double value);
+
+    /**
+     * <p>
+     * Evaluates an argument to determine whether it is a finite number.
+     * </p>
+     * <p>
+     * You can use this function to determine whether a number is a finite number. The isFinite
+     * function examines the number in its argument. If the argument is NaN, positive infinity, or
+     * negative infinity, this method returns false; otherwise, it returns true.
+     * </p>
+     * 
+     * @param value The number to evaluate.
+     * @return A result.
+     */
+    public static native boolean isFinit(Object value);
+
+    /**
+     * <p>
+     * Determines whether its argument is a number.
+     * </p>
+     * 
+     * @param character The value to be tested.
+     * @return A result.
+     */
+    public static native boolean isNumeric(char value);
+
+    /**
+     * @version 2013/07/30 19:34:33
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<Global> {
@@ -543,6 +637,103 @@ public class Global {
          */
         public String isNaN(Object value) {
             return "isNaN(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Evaluates an argument to determine whether it is a finite number.
+         * </p>
+         * <p>
+         * You can use this function to determine whether a number is a finite number. The isFinite
+         * function examines the number in its argument. If the argument is NaN, positive infinity,
+         * or negative infinity, this method returns false; otherwise, it returns true.
+         * </p>
+         * 
+         * @param value The number to evaluate.
+         * @return A result.
+         */
+        public String isFinit(int value) {
+            return "isFinite(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Evaluates an argument to determine whether it is a finite number.
+         * </p>
+         * <p>
+         * You can use this function to determine whether a number is a finite number. The isFinite
+         * function examines the number in its argument. If the argument is NaN, positive infinity,
+         * or negative infinity, this method returns false; otherwise, it returns true.
+         * </p>
+         * 
+         * @param value The number to evaluate.
+         * @return A result.
+         */
+        public String isFinit(long value) {
+            return "isFinite(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Evaluates an argument to determine whether it is a finite number.
+         * </p>
+         * <p>
+         * You can use this function to determine whether a number is a finite number. The isFinite
+         * function examines the number in its argument. If the argument is NaN, positive infinity,
+         * or negative infinity, this method returns false; otherwise, it returns true.
+         * </p>
+         * 
+         * @param value The number to evaluate.
+         * @return A result.
+         */
+        public String isFinit(float value) {
+            return "isFinite(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Evaluates an argument to determine whether it is a finite number.
+         * </p>
+         * <p>
+         * You can use this function to determine whether a number is a finite number. The isFinite
+         * function examines the number in its argument. If the argument is NaN, positive infinity,
+         * or negative infinity, this method returns false; otherwise, it returns true.
+         * </p>
+         * 
+         * @param value The number to evaluate.
+         * @return A result.
+         */
+        public String isFinit(double value) {
+            return "isFinite(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Evaluates an argument to determine whether it is a finite number.
+         * </p>
+         * <p>
+         * You can use this function to determine whether a number is a finite number. The isFinite
+         * function examines the number in its argument. If the argument is NaN, positive infinity,
+         * or negative infinity, this method returns false; otherwise, it returns true.
+         * </p>
+         * 
+         * @param value The number to evaluate.
+         * @return A result.
+         */
+        public String isFinit(Object value) {
+            return "isFinite(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Determines whether its argument is a number.
+         * </p>
+         * 
+         * @param character The value to be tested.
+         * @return A result.
+         */
+        public String isNumeric(char value) {
+            return "boot.isNumeric(" + param(0) + ")";
         }
     }
 }
