@@ -114,10 +114,12 @@ public class Javascript {
         this.id = counter++;
 
         // copy all member fields for override mechanism
-        Javascript script = getScript(source.getSuperclass());
+        if (!source.getName().equals("js.lang.JSObject")) {
+            Javascript script = getScript(source.getSuperclass());
 
-        if (script != null) {
-            fields.addAll(script.fields);
+            if (script != null) {
+                fields.addAll(script.fields);
+            }
         }
 
         for (Field field : source.getDeclaredFields()) {
@@ -205,10 +207,12 @@ public class Javascript {
         compile();
 
         // write super class
-        Javascript script = Javascript.getScript(source.getSuperclass());
+        if (!source.getName().equals("js.lang.JSObject")) {
+            Javascript script = Javascript.getScript(source.getSuperclass());
 
-        if (script != null && !defined.contains(script.source)) {
-            script.write(output, defined);
+            if (script != null && !defined.contains(script.source)) {
+                script.write(output, defined);
+            }
         }
 
         // write this class
@@ -216,12 +220,16 @@ public class Javascript {
             output.append(code);
         }
 
-        // write dependency classes
-        for (Class depndency : dependencies) {
-            script = Javascript.getScript(depndency);
+        if (!source.getName().equals("js.lang.JSObject")) {
+            Javascript script = Javascript.getScript(source.getSuperclass());
 
-            if (script != null && !defined.contains(script.source)) {
-                script.write(output, defined);
+            // write dependency classes
+            for (Class depndency : dependencies) {
+                script = Javascript.getScript(depndency);
+
+                if (script != null && !defined.contains(script.source)) {
+                    script.write(output, defined);
+                }
             }
         }
 
@@ -533,10 +541,6 @@ public class Javascript {
             return computeClassName(clazz) + ".$$";
         }
 
-        if (clazz == Object.class) {
-            return "Object";
-        }
-
         if (clazz == Number.class) {
             return "Number";
         }
@@ -552,10 +556,6 @@ public class Javascript {
      * @return An identified class name for ECMAScript.
      */
     public static final String computeClassName(Class<?> clazz) {
-        if (clazz == Object.class) {
-            return "Object";
-        }
-
         JavascriptAPIProvider provider = clazz.getAnnotation(JavascriptAPIProvider.class);
 
         if (provider != null) {

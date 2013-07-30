@@ -25,7 +25,7 @@ import jsx.bwt.ImageGridStyle.Title;
 import jsx.bwt.ImageGridStyle.Unselected;
 
 /**
- * @version 2013/07/05 15:02:47
+ * @version 2013/07/31 3:21:20
  */
 public abstract class ImageGrid<T> extends UI {
 
@@ -42,7 +42,6 @@ public abstract class ImageGrid<T> extends UI {
      */
     @Listen(type = UIAction.KeyUp)
     private void search() {
-        System.out.println("aa");
         String name = search.val().toLowerCase().replace("\\s", "");
 
         for (Entry<T, Element> entry : images.entrySet()) {

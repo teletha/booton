@@ -13,6 +13,7 @@ import static booton.css.Unit.*;
 import static booton.css.value.Color.*;
 import teemowork.TeemoworkTheme;
 import booton.css.CSS;
+import booton.css.Priority;
 import booton.css.Snippet;
 import booton.css.value.Color;
 import booton.css.value.Numeric;
@@ -40,7 +41,6 @@ class ImageGridStyle {
 
         {
             display.inlineBlock();
-            // background.color(backColor);
             border.top.solid().width(2, px).color(backColor);
             border.left.solid().width(2, px).color(backColor);
         }
@@ -56,8 +56,8 @@ class ImageGridStyle {
     class IconImage extends CSS {
 
         {
-            display.inlineBlock();
-            box.size(ImageSize);
+            display.block();
+            box.size(ImageSize).floating.left();
             border.bottom.solid().width(2, px).color(backColor);
             border.right.solid().width(2, px).color(backColor);
             cursor.pointer();
@@ -111,6 +111,7 @@ class ImageGridStyle {
         }
     }
 
+    @Priority(100)
     class Unselected extends CSS {
 
         {
