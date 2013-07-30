@@ -13,14 +13,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kiss.I;
-import booton.translator.JavaAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.Translator;
 
 /**
- * @version 2013/05/13 20:31:42
+ * @version 2013/07/31 3:20:24
  */
-@JavaAPIProvider(Object.class)
 public class NativeObject {
 
     /** The java implementation. */

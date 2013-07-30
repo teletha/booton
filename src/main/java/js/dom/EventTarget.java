@@ -41,53 +41,56 @@ public class EventTarget<T extends EventTarget<T>> implements JavascriptNative {
         if (subscriber != null) {
             Class clazz = subscriber.getClass();
 
-            for (Method method : clazz.getDeclaredMethods()) {
-                Listen listen = method.getAnnotation(Listen.class);
+            while (clazz != null) {
+                for (Method method : clazz.getDeclaredMethods()) {
+                    Listen listen = method.getAnnotation(Listen.class);
 
-                if (listen != null) {
-                    EventListener listener = new Subscriber(subscriber, method, listen.abort());
+                    if (listen != null) {
+                        EventListener listener = new Subscriber(subscriber, method, listen.abort());
 
-                    // ===========================
-                    // Execution Count Wrapper
-                    // ===========================
-                    int count = listen.count();
+                        // ===========================
+                        // Execution Count Wrapper
+                        // ===========================
+                        int count = listen.count();
 
-                    if (0 < count) {
-                        listener = new Count(count, listener);
+                        if (0 < count) {
+                            listener = new Count(count, listener);
+                        }
+
+                        // ===========================
+                        // Timing Related Wrappers
+                        // ===========================
+                        long time = listen.delay();
+
+                        if (0 < time) {
+                            listener = new Delay(time, listener);
+                        }
+
+                        time = listen.throttle();
+
+                        if (0 < time) {
+                            listener = new Throttle(time, listener);
+                        }
+
+                        time = listen.debounce();
+
+                        if (0 < time) {
+                            listener = new Debounce(time, listener);
+                        }
+
+                        // ===========================
+                        // KeyCode Wrapper
+                        // ===========================
+                        UIAction type = listen.type();
+                        int keyCode = type.code;
+
+                        if (keyCode != -1) {
+                            listener = new KeyBind(keyCode, listener);
+                        }
+                        on(type, listener);
                     }
-
-                    // ===========================
-                    // Timing Related Wrappers
-                    // ===========================
-                    long time = listen.delay();
-
-                    if (0 < time) {
-                        listener = new Delay(time, listener);
-                    }
-
-                    time = listen.throttle();
-
-                    if (0 < time) {
-                        listener = new Throttle(time, listener);
-                    }
-
-                    time = listen.debounce();
-
-                    if (0 < time) {
-                        listener = new Debounce(time, listener);
-                    }
-
-                    // ===========================
-                    // KeyCode Wrapper
-                    // ===========================
-                    UIAction type = listen.type();
-                    int keyCode = type.code;
-
-                    if (keyCode != -1) {
-                        listener = new KeyBind(keyCode, listener);
-                    }
-                    on(type, listener);
                 }
+                clazz = clazz.getSuperclass();
             }
         }
 
