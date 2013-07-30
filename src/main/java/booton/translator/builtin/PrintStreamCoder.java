@@ -117,6 +117,6 @@ public class PrintStreamCoder extends Translator<PrintStream> {
      * @param x The <code>Object</code> to be printed.
      */
     public String println(Object x) {
-        return that + ".log(" + param(0) + ")";
+        return that + ".dir(" + param(0) + ")";
     }
 }

@@ -55,9 +55,8 @@ public class WindowManager {
         popup.append(content);
         popup.add(PopupViewStyle.Show.class);
 
-        ClientRect popupArea = popup.getBoundingClientRect();
-        System.out.println(popupArea);
-        ClientRect targetArea = target.getBoundingClientRect();
+        ClientRect popupArea = popup.position();
+        ClientRect targetArea = target.position();
 
         popup.css("top", targetArea.bottom() + 15 + "px")
                 .css("left", targetArea.left() - popupArea.width() / 2 + targetArea.width() / 2 + "px");
