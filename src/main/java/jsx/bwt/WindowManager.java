@@ -37,7 +37,7 @@ public class WindowManager {
     private WindowManager(Element target, Element content) {
         if (popup == null) {
             popup = document.createElement("div").add(PopupViewStyle.Bottom.class);
-            $("body").append(popup);
+            document.getElementsByTagName("body").item(0).append(popup);
         }
 
         this.target = target;

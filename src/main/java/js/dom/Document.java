@@ -12,6 +12,7 @@ package js.dom;
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
+import booton.translator.JavascriptNativePropertyAccessor;
 
 /**
  * <p>
@@ -21,6 +22,17 @@ import booton.translator.JavascriptNativeProperty;
  * @version 2013/07/30 21:22:36
  */
 public abstract class Document implements JavascriptNative {
+
+    /**
+     * <p>
+     * The Element that is the root element of the document (for example, the <html> element for
+     * HTML documents).
+     * </p>
+     * 
+     * @return
+     */
+    @JavascriptNativePropertyAccessor
+    public native Element documentElement();
 
     /**
      * <p>

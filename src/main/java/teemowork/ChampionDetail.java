@@ -19,7 +19,6 @@ import js.dom.DocumentFragment;
 import js.dom.Element;
 import js.dom.EventListener;
 import js.math.Mathematics;
-import jsx.jQuery.Listener;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Listen;
@@ -160,10 +159,13 @@ public class ChampionDetail extends Page {
         }
         skillView = root.child(SkillTable.class);
 
-        $(window).keypress(new Listener() {
+        window.on(UIAction.KeyPress, new EventListener() {
 
+            /**
+             * {@inheritDoc}
+             */
             @Override
-            public void handler(UIEvent event) {
+            public void handleEvent(UIEvent event) {
                 switch (event.which) {
                 case 113:// Q
                     build.active(SkillKey.Q);

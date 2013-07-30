@@ -98,7 +98,7 @@ public class LiveCoding implements UncaughtExceptionHandler, Listener {
     @Override
     public void message(String src) {
         if (src.endsWith("css")) {
-            $("link[href^='" + src + "']").attr("href", src + "?" + new Date().getTime());
+            document.querySelector("link[href^='" + src + "']").attr("href", src + "?" + new Date().getTime());
         } else {
             window.location.reload(false);
         }

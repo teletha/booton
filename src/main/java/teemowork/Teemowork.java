@@ -26,8 +26,8 @@ public class Teemowork extends Application {
      */
     @Override
     public void jsmain() {
-        $("html").add(HTML.class);
-        $("#Content").add(Content.class);
+        document.documentElement().add(HTML.class);
+        document.getElementById("Content").add(Content.class);
 
         Header nav = new Header();
         nav.add("< ^ v ^ > Teemowork", "");
