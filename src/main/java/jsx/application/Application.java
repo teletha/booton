@@ -20,10 +20,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import js.dom.DocumentFragment;
+import js.dom.EventListener;
 import js.lang.Classes;
-import jsx.jQuery.Listener;
 import jsx.bwt.EventBus;
 import jsx.bwt.Publishable;
+import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
 
 /**
@@ -56,7 +57,7 @@ public abstract class Application {
         }
 
         // Activate router system.
-        $(window).on("hashchange", router);
+        window.on(UIAction.HashChange, router);
 
         // View initial page by URL.
         router.dispatch(location.hash);
@@ -96,7 +97,7 @@ public abstract class Application {
     /**
      * @version 2013/06/17 13:57:06
      */
-    private static class Router extends Publishable implements Listener {
+    private static class Router extends Publishable implements EventListener {
 
         /** The current page. */
         private static Page current;
@@ -111,10 +112,9 @@ public abstract class Application {
          * <p>
          * URI dispatcher.
          * </p>
-         * {@inheritDoc}
          */
         @Override
-        public void handler(UIEvent event) {
+        public void handleEvent(UIEvent event) {
             dispatch(location.hash);
         }
 
@@ -173,7 +173,7 @@ public abstract class Application {
             page.load(cradle);
 
             // clear old page and append new page
-            document.querySelector("#Content").empty().append(cradle);
+            document.getElementById("Content").empty().append(cradle);
 
             // record page
             current = page;

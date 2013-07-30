@@ -9,7 +9,6 @@
  */
 package jsx.bwt;
 
-import static js.lang.Global.*;
 import js.dom.Element;
 import js.dom.EventListener;
 import jsx.bwt.FormUIStyle.Focus;
@@ -105,13 +104,13 @@ public class Select<M> extends FormUI<Select> {
     }
 
     /**
-     * @version 2013/04/05 10:06:20
+     * @version 2013/07/31 1:26:46
      */
     private class Binder implements ItemRenderer, SelectableListener<M> {
 
         @Listen(type = UIAction.Click)
         private void selectItem(UIEvent event) {
-            model.setSelectionIndex(Integer.parseInt($(event.target).attr("index")));
+            model.setSelectionIndex(Integer.parseInt(event.target.attr("index")));
         }
 
         /**

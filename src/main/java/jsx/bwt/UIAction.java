@@ -43,6 +43,9 @@ public enum UIAction {
     Popup,
 
     /** The ui event type. */
+    HashChange,
+
+    /** The ui event type. */
     Load(0),
 
     /** The ui event type. */
