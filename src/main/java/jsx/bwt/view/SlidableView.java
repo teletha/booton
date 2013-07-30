@@ -63,7 +63,7 @@ public class SlidableView extends UI {
             publish(Listener.class).open();
 
             // prepare closer
-            $(window).bind(this);
+            window.bind(this);
         }
     }
 
@@ -82,7 +82,7 @@ public class SlidableView extends UI {
             publish(Listener.class).close();
 
             // discard closer
-            $(window).unbind(this);
+            window.unbind(this);
         }
     }
 
@@ -91,7 +91,7 @@ public class SlidableView extends UI {
      * Toggle slide view.
      * </p>
      */
-    @Listen(UIAction.Click)
+    @Listen(type = UIAction.Click)
     public void toggle() {
         if (2 <= shown) {
             close();

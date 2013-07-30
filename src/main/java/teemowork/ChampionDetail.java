@@ -17,7 +17,7 @@ import java.util.List;
 
 import js.dom.DocumentFragment;
 import js.dom.Element;
-import js.dom.Element.EventListener;
+import js.dom.EventListener;
 import js.math.Mathematics;
 import jsx.jQuery.Listener;
 import jsx.application.Page;
@@ -122,12 +122,12 @@ public class ChampionDetail extends Page {
         build.register(this);
     }
 
-    @Listen(value = UIAction.Click, abort = true)
+    @Listen(type = UIAction.Click, abort = true)
     private void levelUp() {
         build.setLevel(build.getLevel() + 1);
     }
 
-    @Listen(value = UIAction.ClickLeft, abort = true)
+    @Listen(type = UIAction.ClickLeft, abort = true)
     private void levelDown() {
         build.setLevel(build.getLevel() - 1);
     }
@@ -188,6 +188,11 @@ public class ChampionDetail extends Page {
         });
 
         calcurate();
+    }
+
+    @Listen(type = UIAction.Click)
+    private void activeSkill() {
+
     }
 
     /**

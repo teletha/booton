@@ -241,8 +241,9 @@ public class Javascript {
             JavascriptAPIProvider provider = source.getAnnotation(JavascriptAPIProvider.class);
 
             if (provider != null) {
-                compileNative(code, provider.polyfill(), provider.value().length() != 0 ? provider.value()
-                        : source.getSimpleName());
+                String nativeClass = provider.value().length() != 0 ? provider.value() : source.getSimpleName();
+
+                compileNative(code, provider.polyfill(), nativeClass, searchSuperClass(source));
             } else if (source.isInterface()) {
                 compileInterface(code);
             } else {
@@ -347,7 +348,7 @@ public class Javascript {
      * @param code
      * @param nativeClassName A javascript native class name.
      */
-    private void compileNative(ScriptWriter code, boolean polyfill, String nativeClassName) {
+    private void compileNative(ScriptWriter code, boolean polyfill, String nativeClassName, Class superClass) {
         String method = polyfill ? "Polyfill" : "Native";
 
         // Start class definition
@@ -358,9 +359,29 @@ public class Javascript {
         } catch (IOException e) {
             throw I.quiet(e);
         }
+        code.append('}');
+
+        if (superClass != null) {
+            code.append(",\"").append(computeSimpleClassName(superClass)).append("\"");
+        }
 
         // End class definition
-        code.append("});");
+        code.append(");");
+    }
+
+    /**
+     * <p>
+     * Helper method to search the nearest non-native class.
+     * </p>
+     * 
+     * @param clazz
+     * @return
+     */
+    private Class searchSuperClass(Class clazz) {
+        while (clazz.isAnnotationPresent(JavascriptAPIProvider.class)) {
+            clazz = clazz.getSuperclass();
+        }
+        return clazz == Object.class ? null : clazz;
     }
 
     /**

@@ -50,7 +50,7 @@ public class WindowManager {
     /**
      * 
      */
-    @Listen(PointerEnter)
+    @Listen(type = PointerEnter)
     private void show() {
         popup.append(content);
         popup.add(PopupViewStyle.Show.class);
@@ -65,7 +65,7 @@ public class WindowManager {
     /**
      * 
      */
-    @Listen(PointerLeave)
+    @Listen(type = PointerLeave)
     private void hide() {
         popup.remove(PopupViewStyle.Show.class);
         content.remove();

@@ -11,17 +11,10 @@ package js.dom;
 
 import static js.lang.Global.*;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import jsx.bwt.Listen;
 import jsx.bwt.UI;
-import jsx.bwt.UIAction;
-import jsx.bwt.UIEvent;
 import booton.css.CSS;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
@@ -36,10 +29,7 @@ import booton.translator.JavascriptNativePropertyAccessor;
  * @version 2013/07/30 19:05:51
  */
 @JavascriptAPIProvider
-public abstract class Element extends Node implements JavascriptNative {
-
-    /** The event listener holder. */
-    private Map<UIAction, Listeners> events;
+public abstract class Element extends Node<Element> implements JavascriptNative {
 
     /**
      * <p>
@@ -194,73 +184,6 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
-     * Attach all event handlers which are defined in the given subscriber to the selected elements.
-     * </p>
-     * 
-     * @param subscriber A subscriber that holds user action event listeners.
-     * @return A chainable API.
-     */
-    public Element bind(Object subscriber) {
-        if (subscriber != null) {
-            Class clazz = subscriber.getClass();
-
-            for (Method method : clazz.getDeclaredMethods()) {
-                Listen listen = method.getAnnotation(Listen.class);
-
-                if (listen != null) {
-                    EventListener listener = new Subscriber(subscriber, method, listen.abort());
-
-                    // ===========================
-                    // Execution Count Wrapper
-                    // ===========================
-                    int count = listen.count();
-
-                    if (0 < count) {
-                        listener = new Count(count, listener);
-                    }
-
-                    // ===========================
-                    // Timing Related Wrappers
-                    // ===========================
-                    long time = listen.delay();
-
-                    if (0 < time) {
-                        listener = new Delay(time, listener);
-                    }
-
-                    time = listen.throttle();
-
-                    if (0 < time) {
-                        listener = new Throttle(time, listener);
-                    }
-
-                    time = listen.debounce();
-
-                    if (0 < time) {
-                        listener = new Debounce(time, listener);
-                    }
-
-                    for (UIAction type : listen.value()) {
-                        // ===========================
-                        // KeyCode Wrapper
-                        // ===========================
-                        int keyCode = type.code;
-
-                        if (keyCode != -1) {
-                            listener = new KeyBind(keyCode, listener);
-                        }
-                        on(type, listener);
-                    }
-                }
-            }
-        }
-
-        // API defintion
-        return this;
-    }
-
-    /**
-     * <p>
      * Get the children of this element.
      * </p>
      * 
@@ -374,150 +297,6 @@ public abstract class Element extends Node implements JavascriptNative {
      */
     public Element next() {
         return nextElementSibling();
-    }
-
-    /**
-     * <p>
-     * Dettach all event handlers from this element.
-     * </p>
-     * 
-     * @return A chainable API.
-     */
-    public Element off() {
-        if (events != null) {
-            for (UIAction type : events.keySet()) {
-                off(type);
-            }
-        }
-
-        // API defintion
-        return this;
-    }
-
-    /**
-     * <p>
-     * Dettach all specified-type event handlers from this element.
-     * </p>
-     * 
-     * @return A chainable API.
-     */
-    public Element off(UIAction type) {
-        if (events != null) {
-            Listeners listeners = events.get(type);
-
-            if (listeners != null) {
-                events.remove(type);
-                removeEventListener(type.name, listeners);
-
-                if (events.size() == 0) {
-                    events = null;
-                    remove(EventListenable.class);
-                }
-            }
-        }
-
-        // API defintion
-        return this;
-    }
-
-    /**
-     * <p>
-     * Dettach all event handlers which are defined in the given subscriber to the selected
-     * elements.
-     * </p>
-     * 
-     * @param subscriber A subscriber that holds user action event listeners.
-     * @return A chainable API.
-     */
-    public Element off(UIAction[] types, EventListener subscriber) {
-        if (events != null) {
-            for (UIAction type : types) {
-                off(type, subscriber);
-            }
-        }
-
-        // API defintion
-        return this;
-    }
-
-    /**
-     * <p>
-     * Dettach all event handlers which are defined in the given subscriber to the selected
-     * elements.
-     * </p>
-     * 
-     * @param subscriber A subscriber that holds user action event listeners.
-     * @return A chainable API.
-     */
-    public Element off(UIAction type, EventListener subscriber) {
-        if (events != null && type != null && subscriber != null) {
-            Listeners listeners = events.get(type);
-
-            if (listeners != null) {
-                int size = listeners.remove(subscriber);
-
-                if (size == 0) {
-                    events.remove(type);
-                    removeEventListener(type.name, listeners);
-
-                    if (events.size() == 0) {
-                        events = null;
-                        remove(EventListenable.class);
-                    }
-                }
-            }
-        }
-
-        // API defintion
-        return this;
-    }
-
-    /**
-     * <p>
-     * Attach all event handlers which are defined in the given subscriber to the selected elements.
-     * </p>
-     * 
-     * @param subscriber A subscriber that holds user action event listeners.
-     * @return A chainable API.
-     */
-    public Element on(UIAction[] types, EventListener subscriber) {
-        if (types != null && subscriber != null) {
-            for (UIAction type : types) {
-                on(type, subscriber);
-            }
-        }
-
-        // API defintion
-        return this;
-    }
-
-    /**
-     * <p>
-     * Attach all event handlers which are defined in the given subscriber to the selected elements.
-     * </p>
-     * 
-     * @param subscriber A subscriber that holds user action event listeners.
-     * @return A chainable API.
-     */
-    public Element on(UIAction type, EventListener subscriber) {
-        if (type != null && subscriber != null) {
-            if (events == null) {
-                events = new HashMap();
-                add(EventListenable.class);
-            }
-
-            Listeners listeners = events.get(type);
-
-            if (listeners == null) {
-                listeners = new Listeners();
-                events.put(type, listeners);
-                addEventListener(type.name, listeners);
-            }
-            listeners.add(subscriber);
-        }
-
-        // API defintion
-        return this;
     }
 
     /**
@@ -738,6 +517,22 @@ public abstract class Element extends Node implements JavascriptNative {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void startListening() {
+        add(EventListenable.class);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void stopListening() {
+        remove(EventListenable.class);
+    }
+
+    /**
      * <p>
      * Create {@link Node}.
      * </p>
@@ -872,27 +667,6 @@ public abstract class Element extends Node implements JavascriptNative {
      */
     @JavascriptNativePropertyAccessor
     protected abstract Element nextElementSibling();
-
-    /**
-     * <p>
-     * Registers the specified listener on the EventTarget it's called on.
-     * </p>
-     * 
-     * @param type A string representing the event type to listen for.
-     * @param listener The object that receives a notification when an event of the specified type
-     *            occurs.
-     */
-    protected native void addEventListener(String type, EventListener listener);
-
-    /**
-     * <p>
-     * Removes the event listener previously registered.
-     * </p>
-     * 
-     * @param type A string representing the event type being removed.
-     * @param listener The listener to be removed.
-     */
-    protected native void removeEventListener(String type, EventListener listener);
 
     /**
      * <p>
@@ -1087,59 +861,6 @@ public abstract class Element extends Node implements JavascriptNative {
     public final native void scrollIntoView();
 
     /**
-     * @version 2013/07/07 13:50:26
-     */
-    private static class Listeners implements EventListener {
-
-        /** The actual listener holder. */
-        private CopyOnWriteArrayList<EventListener> listeners = new CopyOnWriteArrayList();
-
-        /**
-         * <p>
-         * Register event listener.
-         * </p>
-         * 
-         * @param listener
-         */
-        private void add(EventListener listener) {
-            listeners.addIfAbsent(listener);
-        }
-
-        /**
-         * <p>
-         * Unregister event listener.
-         * </p>
-         * 
-         * @param listener
-         * @return
-         */
-        private int remove(EventListener listener) {
-            listeners.remove(listener);
-
-            return listeners.size();
-        }
-
-        /**
-         * <p>
-         * Unregister all event listeners.
-         * </p>
-         */
-        private void clear() {
-            listeners.clear();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void handleEvent(UIEvent event) {
-            for (EventListener listener : listeners) {
-                listener.handleEvent(event);
-            }
-        }
-    }
-
-    /**
      * <p>
      * Marker class.
      * </p>
@@ -1147,279 +868,5 @@ public abstract class Element extends Node implements JavascriptNative {
      * @version 2013/07/28 18:15:38
      */
     private static class EventListenable extends CSS {
-    }
-
-    /**
-     * @version 2013/07/05 1:19:49
-     */
-    public static interface EventListener extends JavascriptNative {
-
-        /**
-         * <p>
-         * Handle registered event.
-         * </p>
-         * 
-         * @param event
-         * @return
-         */
-        @JavascriptNativeProperty
-        void handleEvent(UIEvent event);
-    }
-
-    /**
-     * @version 2013/04/08 10:11:19
-     */
-    private static class Subscriber implements EventListener {
-
-        /** The subscriber instance. */
-        private final Object subscriber;
-
-        /** The subscriber method. */
-        private final Method method;
-
-        /** The event termination. */
-        private final boolean abort;
-
-        /**
-         * @param subscriber
-         * @param method
-         * @param abort
-         */
-        private Subscriber(Object subscriber, Method method, boolean abort) {
-            this.subscriber = subscriber;
-            this.method = method;
-            this.abort = abort;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void handleEvent(UIEvent event) {
-            if (abort) {
-                event.stopPropagation();
-                event.preventDefault();
-            }
-
-            try {
-                method.invoke(subscriber, event);
-            } catch (Exception e) {
-                throw new Error(e);
-            }
-        }
-    }
-
-    /**
-     * <p>
-     * Built-in listener wrapper.
-     * </p>
-     * 
-     * @version 2013/04/08 10:11:19
-     */
-    private static class KeyBind implements EventListener {
-
-        /** The target key code. */
-        private final int keyCode;
-
-        /** The delegation. */
-        private final EventListener listener;
-
-        /**
-         * @param keyCode
-         * @param listener
-         */
-        private KeyBind(int keyCode, EventListener listener) {
-            this.keyCode = keyCode;
-            this.listener = listener;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void handleEvent(UIEvent event) {
-            if (event.which == keyCode) {
-                listener.handleEvent(event);
-            }
-        }
-    }
-
-    /**
-     * <p>
-     * Built-in listener wrapper.
-     * </p>
-     * 
-     * @version 2013/04/08 13:42:03
-     */
-    private static class Count implements EventListener {
-
-        /** The delegator. */
-        private final EventListener listener;
-
-        /** The execution limit. */
-        private final int limit;
-
-        /** The current number of execution. */
-        private int current = 0;
-
-        /**
-         * @param limit
-         */
-        private Count(int limit, EventListener listener) {
-            this.limit = limit;
-            this.listener = listener;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void handleEvent(UIEvent event) {
-            listener.handleEvent(event);
-
-            if (++current == limit) {
-                // FIXME
-                // If this exception will be thrown, it is bug of this program. So we must rethrow
-                // the wrapped error in here.
-                throw new Error();
-            }
-        }
-    }
-
-    /**
-     * <p>
-     * Built-in listener wrapper.
-     * </p>
-     * 
-     * @version 2013/04/08 14:58:44
-     */
-    private static class Debounce implements EventListener, Runnable {
-
-        /** The delay time. */
-        private final long delay;
-
-        /** The delegator. */
-        private final EventListener listener;
-
-        /** The lastest event. */
-        private UIEvent event;
-
-        /** The time out id. */
-        private long id = -1;
-
-        /**
-         * @param listener
-         */
-        private Debounce(long delay, EventListener listener) {
-            this.delay = delay;
-            this.listener = listener;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void handleEvent(UIEvent event) {
-            if (id != -1) {
-                clearTimeout(id);
-            }
-            this.event = event;
-            this.id = setTimeout(this, delay);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void run() {
-            id = -1;
-            listener.handleEvent(event);
-            event = null;
-        }
-    }
-
-    /**
-     * <p>
-     * Built-in listener wrapper.
-     * </p>
-     * 
-     * @version 2013/04/08 14:37:30
-     */
-    private static class Throttle implements EventListener {
-
-        /** The delay time. */
-        private final long delay;
-
-        /** The delegator. */
-        private final EventListener listener;
-
-        /** The latest execution time. */
-        private long latest;
-
-        /**
-         * @param listener
-         */
-        private Throttle(long delay, EventListener listener) {
-            this.delay = delay;
-            this.listener = listener;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void handleEvent(UIEvent event) {
-            long now = event.timeStamp;
-
-            if (latest + delay < now) {
-                latest = now;
-
-                listener.handleEvent(event);
-            }
-        }
-    }
-
-    /**
-     * <p>
-     * Built-in listener wrapper.
-     * </p>
-     * 
-     * @version 2013/04/08 13:57:10
-     */
-    private static class Delay implements EventListener, Runnable {
-
-        /** The delay time. */
-        private final long delay;
-
-        /** The delegator. */
-        private final EventListener listener;
-
-        /** The lastest event. */
-        private UIEvent event;
-
-        /**
-         * @param listener
-         */
-        public Delay(long delay, EventListener listener) {
-            this.delay = delay;
-            this.listener = listener;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void handleEvent(UIEvent event) {
-            this.event = event;
-            setTimeout(this, delay);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void run() {
-            listener.handleEvent(event);
-        }
     }
 }

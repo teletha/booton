@@ -378,10 +378,16 @@ function boot(global) {
      * @param {String} names A fully qualified class name of a class to define.
      * @param {Object} properties A property definition.
      */
-    defineNative: function(names, properties) {
+    defineNative: function(names, properties, superclassName) {
       names.split(" ").forEach(function(name) {
-        if (global[name]) {
-          define(global[name].prototype, properties);
+        var clazz = global[name];
+      
+        if (clazz) {
+          define(clazz.prototype, properties);
+          
+          if (superclassName) {
+            define(clazz.prototype, boot[superclassName].prototype);
+          }
           
           if (properties._) {
           	properties._();

@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import js.dom.Element;
-import js.dom.Element.EventListener;
+import js.dom.EventListener;
 import jsx.bwt.ImageGridStyle.Container;
 import jsx.bwt.ImageGridStyle.IconImage;
 import jsx.bwt.ImageGridStyle.ImageSet;
@@ -40,7 +40,7 @@ public abstract class ImageGrid<T> extends UI {
     /**
      * Filter image by user input.
      */
-    @Listen(UIAction.KeyUp)
+    @Listen(type = UIAction.KeyUp)
     private void search() {
         System.out.println("aa");
         String name = search.val().toLowerCase().replace("\\s", "");

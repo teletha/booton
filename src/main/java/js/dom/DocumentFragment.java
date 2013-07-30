@@ -16,5 +16,5 @@ package js.dom;
  * 
  * @version 2013/07/30 21:21:50
  */
-public abstract class DocumentFragment extends Node {
+public abstract class DocumentFragment extends Node<DocumentFragment> {
 }
