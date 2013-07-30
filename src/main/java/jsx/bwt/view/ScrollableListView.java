@@ -126,7 +126,7 @@ public class ScrollableListView extends UI {
      */
     @Listen(value = UIAction.Scroll, debounce = 100)
     private void render() {
-        int viewableTopIndex = Math.round(-renderableItemView.position().top / itemHeight);
+        int viewableTopIndex = Math.round(-renderableItemView.position().top() / itemHeight);
         int renderableTopIndex = Math.max(0, viewableTopIndex - extraTopRenderableItemSize);
 
         // 既に最後の要素まで到達可能な範囲にいたら末尾から数えるようにする。

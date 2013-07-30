@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import jsx.jQuery.Offset;
 import jsx.bwt.Listen;
 import jsx.bwt.UI;
 import jsx.bwt.UIAction;
@@ -34,7 +33,7 @@ import booton.translator.JavascriptNativePropertyAccessor;
  * Enhanced {@link org.w3c.dom.Element} for web platform.
  * </p>
  * 
- * @version 2013/07/01 2:12:14
+ * @version 2013/07/30 19:05:51
  */
 @JavascriptAPIProvider
 public abstract class Element extends Node implements JavascriptNative {
@@ -281,7 +280,7 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
-     * Get the value of a style property for the first element in the set of matched elements.
+     * Get the value of a style property for this element.
      * </p>
      * 
      * @param property A CSS property.
@@ -364,63 +363,6 @@ public abstract class Element extends Node implements JavascriptNative {
      */
     public Image image(Class<? extends CSS> className) {
         return new Image(this, className);
-    }
-
-    /**
-     * <p>
-     * Get the current computed height for the first element in the set of matched elements.
-     * </p>
-     * <p>
-     * The difference between .css('height') and .height() is that the latter returns a unit-less
-     * pixel value (for example, 400) while the former returns a value with units intact (for
-     * example, 400px). The .height() method is recommended when an element's height needs to be
-     * used in a mathematical calculation.
-     * </p>
-     * 
-     * @return
-     */
-    public int height() {
-        return $(this).height();
-    }
-
-    /**
-     * <p>
-     * Get the current computed height for the first element in the set of matched elements,
-     * including padding but not border.
-     * </p>
-     * 
-     * @return
-     */
-    public int innerHeight() {
-        return $(this).innerHeight();
-    }
-
-    /**
-     * <p>
-     * Get the current computed height for the first element in the set of matched elements,
-     * including padding, border, and optionally margin. Returns an integer (without "px")
-     * representation of the value or null if called on an empty set of elements.
-     * </p>
-     * 
-     * @return
-     */
-    public int outerHeight() {
-        return $(this).outerHeight();
-    }
-
-    /**
-     * <p>
-     * Get the current computed height for the first element in the set of matched elements,
-     * including padding, border, and optionally margin. Returns an integer (without "px")
-     * representation of the value or null if called on an empty set of elements.
-     * </p>
-     * 
-     * @param includeMargin A Boolean indicating whether to include the element's margin in the
-     *            calculation.
-     * @return
-     */
-    public int outerHeight(boolean includeMargin) {
-        return $(this).outerHeight(includeMargin);
     }
 
     /**
@@ -591,41 +533,11 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
-     * Get the current coordinates of the first element in the set of matched elements, relative to
-     * the offset parent.
-     * </p>
-     * <p>
-     * The .position() method allows us to retrieve the current position of an element relative to
-     * the offset parent. Contrast this with .offset(), which retrieves the current position
-     * relative to the document. When positioning a new element near another one and within the same
-     * containing DOM element, .position() is the more useful.
+     * Get the current coordinates of this element, relative to the owner document.
      * </p>
      */
-    public Offset position() {
-        System.out.println("position");
-
-        // Element offsetParent = offsetParent();
-        // float[] offset = {0, 0};
-        // float[] parentOffset = {0, 0};
-        //
-        // if (css("position").equals("fixed")) {
-        // // Fixed elements are offset from window, because it is it's only offset parent.
-        // // We assume that getBoundingClientRect is available when computed position is fixed.
-        // ClientRect rect = getBoundingClientRect();
-        // offset[0] = rect.top();
-        // offset[1] = rect.left();
-        // } else {
-        // // Get *real* offsetParent
-        // offsetParent = offsetParent();
-        //
-        // // Get correct offsets
-        // offset = this.offset();
-        // if (!jQuery.nodeName(offsetParent[0], "html")) {
-        // parentOffset = offsetParent.offset();
-        // }
-        // }
-
-        return $(this).offset();
+    public ClientRect position() {
+        return getBoundingClientRect();
     }
 
     /**
@@ -806,7 +718,7 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
-     * Set the value of each element in the set of matched elements.
+     * Set the value of this element.
      * </p>
      * <p>
      * The .val() method is primarily used to get the values of form elements such as input, select
@@ -823,61 +735,6 @@ public abstract class Element extends Node implements JavascriptNative {
 
         // API definition
         return this;
-    }
-
-    /**
-     * <p>
-     * Get the current computed width for the first element in the set of matched elements.
-     * </p>
-     * <p>
-     * The difference between .css(width) and .width() is that the latter returns a unit-less pixel
-     * value (for example, 400) while the former returns a value with units intact (for example,
-     * 400px). The .width() method is recommended when an element's width needs to be used in a
-     * mathematical calculation.
-     * </p>
-     * 
-     * @return
-     */
-    public int width() {
-        return $(this).width();
-    }
-
-    /**
-     * <p>
-     * Get the current computed width for the first element in the set of matched elements,
-     * including padding but not border.
-     * </p>
-     * 
-     * @return
-     */
-    public int innerWidth() {
-        return $(this).innerWidth();
-    }
-
-    /**
-     * <p>
-     * Get the current computed width for the first element in the set of matched elements,
-     * including padding and border.
-     * </p>
-     * 
-     * @return
-     */
-    public int outerWidth() {
-        return $(this).outerWidth();
-    }
-
-    /**
-     * <p>
-     * Get the current computed width for the first element in the set of matched elements,
-     * including padding and border.
-     * </p>
-     * 
-     * @param includeMargin A Boolean indicating whether to include the element's margin in the
-     *            calculation.
-     * @return
-     */
-    public int outerWidth(boolean includeMargin) {
-        return $(this).outerWidth(includeMargin);
     }
 
     /**
@@ -1141,7 +998,7 @@ public abstract class Element extends Node implements JavascriptNative {
      * 
      * @return
      */
-    public native ClientRect getBoundingClientRect();
+    protected native ClientRect getBoundingClientRect();
 
     /**
      * <p>
@@ -1409,7 +1266,10 @@ public abstract class Element extends Node implements JavascriptNative {
             listener.handleEvent(event);
 
             if (++current == limit) {
-                $(event.target).off(event);
+                // FIXME
+                // If this exception will be thrown, it is bug of this program. So we must rethrow
+                // the wrapped error in here.
+                throw new Error();
             }
         }
     }
