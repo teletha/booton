@@ -394,7 +394,7 @@ public class EmulateElement extends Element implements Nodable {
      * {@inheritDoc}
      */
     @Override
-    public HTMLCollection getElementsByClassName(Class<? extends CSS> className) {
+    public NodeList<Element> getElementsByClassName(Class<? extends CSS> className) {
         return new ByClassNameCollection(className);
     }
 
@@ -617,7 +617,7 @@ public class EmulateElement extends Element implements Nodable {
     /**
      * @version 2013/07/28 19:11:23
      */
-    private class ByClassNameCollection extends HTMLCollection {
+    private class ByClassNameCollection extends NodeList<Element> {
 
         private Class<? extends CSS> className;
 

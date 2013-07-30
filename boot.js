@@ -375,17 +375,19 @@ function boot(global) {
      * Define properties in javascript native object prototype.
      * </p>
      * 
-     * @param {String} name A fully qualified class name of a class to define.
+     * @param {String} names A fully qualified class name of a class to define.
      * @param {Object} properties A property definition.
      */
-    defineNative: function(name, properties) {
-      if (global[name]) {
-        define(global[name].prototype, properties);
-        
-        if (properties._) {
-        	properties._();
+    defineNative: function(names, properties) {
+      names.split(" ").forEach(function(name) {
+        if (global[name]) {
+          define(global[name].prototype, properties);
+          
+          if (properties._) {
+          	properties._();
+          }
         }
-      }
+      });
     },
 
     /**
