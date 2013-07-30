@@ -17,7 +17,7 @@ import booton.translator.JavaAPIProvider;
  * functionalities.
  * </p>
  * 
- * @version 2013/04/12 12:58:25
+ * @version 2013/07/30 19:34:24
  */
 @JavaAPIProvider(Float.class)
 class JSFloat extends JSNumber {
@@ -30,6 +30,29 @@ class JSFloat extends JSNumber {
      */
     private JSFloat(double value) {
         super(value);
+    }
+
+    /**
+     * Returns {@code true} if the specified number is infinitely large in magnitude, {@code false}
+     * otherwise.
+     * 
+     * @param value the value to be tested.
+     * @return {@code true} if the argument is positive infinity or negative infinity; {@code false}
+     *         otherwise.
+     */
+    public static boolean isInfinite(float value) {
+        return !Global.isFinit(value);
+    }
+
+    /**
+     * Returns {@code true} if the specified number is a Not-a-Number (NaN) value, {@code false}
+     * otherwise.
+     * 
+     * @param value the value to be tested.
+     * @return {@code true} if the argument is NaN; {@code false} otherwise.
+     */
+    public static boolean isNaN(float value) {
+        return Global.isNaN(value);
     }
 
     /**

@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import js.dom.DocumentFragment;
 import js.lang.Classes;
-import jsx.jQuery;
 import jsx.jQuery.Listener;
 import jsx.bwt.EventBus;
 import jsx.bwt.Publishable;
@@ -167,13 +167,13 @@ public abstract class Application {
             // window.trigger(UIAction.PageLoad);
 
             // create element cradle
-            jQuery cradle = $(document.createDocumentFragment());
+            DocumentFragment cradle = document.createDocumentFragment();
 
             // build page element
             page.load(cradle);
 
             // clear old page and append new page
-            document.querySelector("#Content").empty().append(cradle.get(0));
+            document.querySelector("#Content").empty().append(cradle);
 
             // record page
             current = page;

@@ -7,21 +7,14 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package teemowork.model.variable;
-
-import jsx.jQuery;
+package js.dom;
 
 /**
- * @version 2013/03/11 11:46:14
+ * <p>
+ * Enhanced {@link org.w3c.dom.DocumentFragment} for web platform.
+ * </p>
+ * 
+ * @version 2013/07/30 21:21:50
  */
-public interface HTMLizable {
-
-    /**
-     * <p>
-     * Generate DOM representation of this object state.
-     * </p>
-     * 
-     * @param root
-     */
-    void toDOM(jQuery root);
+public abstract class DocumentFragment extends Node {
 }

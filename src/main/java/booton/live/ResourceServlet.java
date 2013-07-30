@@ -76,7 +76,7 @@ public class ResourceServlet extends HttpServlet {
      * 
      * @param file
      */
-    private XML rebuild(Path file) {
+    private synchronized XML rebuild(Path file) {
         long now = new Date().getTime();
         XML html = I.xml(file);
 

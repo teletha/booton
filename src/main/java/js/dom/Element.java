@@ -1068,6 +1068,18 @@ public abstract class Element extends Node implements JavascriptNative {
 
     /**
      * <p>
+     * Returns a reference to the element by its ID.
+     * </p>
+     * 
+     * @param id A case-sensitive string representing the unique ID of the element being sought.
+     * @return A reference to an Element object, or null if an element with the specified ID is not
+     *         in the document.
+     */
+    @JavascriptNativeProperty
+    public final native Element getElementById(String id);
+
+    /**
+     * <p>
      * The scrollIntoView() method scrolls the element into view.
      * </p>
      */

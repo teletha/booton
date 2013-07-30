@@ -9,12 +9,10 @@
  */
 package teemowork;
 
-import static js.lang.Global.*;
-
 import java.util.Collection;
 
+import js.dom.DocumentFragment;
 import js.dom.Element;
-import jsx.jQuery;
 import jsx.application.Application;
 import jsx.application.Page;
 import jsx.application.PageInfo;
@@ -44,7 +42,7 @@ public class ChampionSelect extends Page {
          */
         @Override
         protected void apply(Champion source, Element element) {
-            source.applyIcon($(element));
+            source.applyIcon(element);
         }
 
         /**
@@ -64,8 +62,8 @@ public class ChampionSelect extends Page {
      * {@inheritDoc}
      */
     @Override
-    public void load(jQuery root) {
-        root.append(champions);
+    public void load(DocumentFragment root) {
+        root.child(champions);
     }
 
     /**

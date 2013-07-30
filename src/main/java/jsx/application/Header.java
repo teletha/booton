@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,7 +10,7 @@
 package jsx.application;
 
 import static js.lang.Global.*;
-import jsx.jQuery;
+import js.dom.Element;
 import jsx.application.HeaderStyle.MenuLink;
 import jsx.application.HeaderStyle.SubMenu;
 import jsx.application.HeaderStyle.SubMenuGroup;
@@ -18,18 +18,18 @@ import jsx.application.HeaderStyle.TopMenu;
 import jsx.application.HeaderStyle.TopMenuGroup;
 
 /**
- * @version 2012/12/15 9:58:38
+ * @version 2013/07/30 21:32:12
  */
 public class Header {
 
     /** The application header. */
-    private final jQuery container;
+    private final Element container;
 
     /**
      * @param root
      */
     public Header() {
-        container = $("#Header").add(TopMenuGroup.class);
+        container = document.getElementById("Header").add(TopMenuGroup.class);
     }
 
     /**
@@ -41,24 +41,24 @@ public class Header {
      * @param uri
      */
     public Menu add(String label, String uri) {
-        jQuery item = container.child("li").add(TopMenu.class);
+        Element item = container.child("li").add(TopMenu.class);
         item.child("a").add(MenuLink.class).attr("href", uri).text(label);
 
         return new Menu(item);
     }
 
     /**
-     * @version 2012/12/15 9:59:53
+     * @version 2013/07/30 21:32:24
      */
     public class Menu {
 
         /** The container element. */
-        private final jQuery container;
+        private final Element container;
 
         /**
      * 
      */
-        private Menu(jQuery root) {
+        private Menu(Element root) {
             this.container = root.child("ul").add(SubMenuGroup.class);
         }
 
@@ -71,7 +71,7 @@ public class Header {
          * @param uri
          */
         public Menu add(String label, String uri) {
-            jQuery item = container.child("li").add(SubMenu.class);
+            Element item = container.child("li").add(SubMenu.class);
             item.child("a").add(MenuLink.class).attr("href", uri).text(label);
 
             return new Menu(item);

@@ -9,7 +9,7 @@
  */
 package jsx.application;
 
-import jsx.jQuery;
+import js.dom.DocumentFragment;
 
 /**
  * @version 2012/12/26 13:02:53
@@ -33,5 +33,5 @@ public abstract class Page {
      * 
      * @param root
      */
-    public abstract void load(jQuery root);
+    public abstract void load(DocumentFragment root);
 }

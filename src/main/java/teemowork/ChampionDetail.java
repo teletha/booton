@@ -15,10 +15,10 @@ import static teemowork.model.Status.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import js.dom.DocumentFragment;
 import js.dom.Element;
 import js.dom.Element.EventListener;
 import js.math.Mathematics;
-import jsx.jQuery;
 import jsx.jQuery.Listener;
 import jsx.application.Page;
 import jsx.application.PageInfo;
@@ -136,12 +136,12 @@ public class ChampionDetail extends Page {
      * {@inheritDoc}
      */
     @Override
-    public void load(jQuery root) {
-        Element upper = root.get(0).child(UpperInfo.class);
+    public void load(DocumentFragment root) {
+        Element upper = root.child(UpperInfo.class);
 
         // Icon
         Element icon = upper.child(ChampionIcon.class).bind(this);
-        build.champion.applyIcon($(icon));
+        build.champion.applyIcon(icon);
 
         // Level
         level = icon.child(Level.class);
@@ -153,12 +153,12 @@ public class ChampionDetail extends Page {
             items.add(itemViewBox.child(new ItemBox(build.getItem(i))));
         }
 
-        Element statusView = root.get(0).child(StatusViewBox.class);
+        Element statusView = root.child(StatusViewBox.class);
 
         for (Status status : VISIBLE) {
             statuses.add(new StatusView(status, statusView));
         }
-        skillView = root.get(0).child(SkillTable.class);
+        skillView = root.child(SkillTable.class);
 
         $(window).keypress(new Listener() {
 
@@ -591,7 +591,7 @@ public class ChampionDetail extends Page {
          */
         private void calcurate() {
             if (item != null) {
-                item.applyIcon($(icon));
+                item.applyIcon(icon);
 
                 ItemView view = new ItemView(item, item.getDescriptor(Version.Latest), build);
                 view.root.css("max-width", "350px");

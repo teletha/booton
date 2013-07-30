@@ -16,7 +16,7 @@ import static teemowork.model.Version.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import jsx.jQuery;
+import js.dom.Element;
 
 /**
  * @version 2013/06/06 20:22:51
@@ -473,7 +473,7 @@ public class Item extends Describable<ItemDescriptor> {
      * Apply icon image.
      * </p>
      */
-    public void applyIcon(jQuery element) {
+    public void applyIcon(Element element) {
         element.css("background-image", "url(src/main/resources/teemowork/items.jpg)")
                 .css("background-position", position / (counter - 1) * 100 + "% 0%")
                 .css("background-size", "cover")

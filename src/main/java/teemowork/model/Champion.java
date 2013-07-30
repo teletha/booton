@@ -16,7 +16,7 @@ import static teemowork.model.Version.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import jsx.jQuery;
+import js.dom.Element;
 
 /**
  * 3.9準拠
@@ -464,7 +464,7 @@ public class Champion {
      * Apply icon image.
      * </p>
      */
-    public void applyIcon(jQuery element) {
+    public void applyIcon(Element element) {
         element.css("background-image", "url(src/main/resources/teemowork/champions.jpg)")
                 .css("background-position", id / (counter - 1) * 100 + "% 0%")
                 .css("background-size", "cover")
