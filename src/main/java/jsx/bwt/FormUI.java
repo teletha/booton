@@ -11,7 +11,7 @@ package jsx.bwt;
 
 import static jsx.bwt.UIAction.*;
 import js.dom.Element;
-import js.dom.Element.EventListener;
+import js.dom.EventListener;
 import jsx.bwt.FormUIStyle.Disable;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.FormUIStyle.FormRoot;
@@ -88,12 +88,12 @@ public class FormUI<T extends FormUI> extends UI {
         return (T) this;
     }
 
-    @Listen(UIAction.Focus)
+    @Listen(type = UIAction.Focus)
     private void startInput() {
         root.add(Focus.class);
     }
 
-    @Listen(UIAction.Blur)
+    @Listen(type = UIAction.Blur)
     private void endInput() {
         root.remove(Focus.class);
     }

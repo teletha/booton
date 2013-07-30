@@ -11,7 +11,7 @@ package teemowork;
 
 import static teemowork.model.Status.*;
 import js.dom.Element;
-import js.dom.Element.EventListener;
+import js.dom.EventListener;
 import jsx.application.Application;
 import jsx.bwt.UI;
 import jsx.bwt.UIAction;

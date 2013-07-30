@@ -10,7 +10,7 @@
 package teemowork;
 
 import js.dom.DocumentFragment;
-import js.dom.Element.EventListener;
+import js.dom.EventListener;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Button;

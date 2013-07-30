@@ -21,7 +21,7 @@ import booton.translator.JavascriptNativePropertyAccessor;
  * @version 2013/07/04 20:41:55
  */
 @JavascriptAPIProvider
-public abstract class Node implements JavascriptNative {
+public abstract class Node<T extends Node<T>> extends EventTarget<T> implements JavascriptNative {
 
     /**
      * <p>

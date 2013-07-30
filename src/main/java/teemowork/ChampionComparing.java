@@ -19,7 +19,7 @@ import java.util.List;
 
 import js.dom.DocumentFragment;
 import js.dom.Element;
-import js.dom.Element.EventListener;
+import js.dom.EventListener;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.UIAction;

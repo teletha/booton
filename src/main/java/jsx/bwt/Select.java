@@ -11,7 +11,7 @@ package jsx.bwt;
 
 import static js.lang.Global.*;
 import js.dom.Element;
-import js.dom.Element.EventListener;
+import js.dom.EventListener;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.SelectStyle.SelectArrow;
 import jsx.bwt.SelectStyle.SelectForm;
@@ -84,22 +84,22 @@ public class Select<M> extends FormUI<Select> {
         }
     }
 
-    @Listen(UIAction.Key_Up)
+    @Listen(type = UIAction.Key_Up)
     private void selectPrevious() {
         model.selectPrevious();
     }
 
-    @Listen(UIAction.Key_Down)
+    @Listen(type = UIAction.Key_Down)
     private void selectNext() {
         model.selectNext();
     }
 
-    @Listen(UIAction.Focus)
+    @Listen(type = UIAction.Focus)
     private void startInput() {
         root.add(Focus.class);
     }
 
-    @Listen(UIAction.Blur)
+    @Listen(type = UIAction.Blur)
     private void endInput() {
         root.remove(Focus.class);
     }
@@ -109,7 +109,7 @@ public class Select<M> extends FormUI<Select> {
      */
     private class Binder implements ItemRenderer, SelectableListener<M> {
 
-        @Listen(UIAction.Click)
+        @Listen(type = UIAction.Click)
         private void selectItem(UIEvent event) {
             model.setSelectionIndex(Integer.parseInt($(event.target).attr("index")));
         }

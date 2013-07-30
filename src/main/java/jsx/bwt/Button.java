@@ -9,7 +9,7 @@
  */
 package jsx.bwt;
 
-import js.dom.Element.EventListener;
+import js.dom.EventListener;
 import jsx.bwt.FormUIStyle.ButtonForm;
 import jsx.bwt.FormUIStyle.Icons;
 

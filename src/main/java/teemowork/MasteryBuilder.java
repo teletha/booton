@@ -13,7 +13,7 @@ import static js.lang.Global.*;
 import static teemowork.model.Mastery.*;
 import js.dom.DocumentFragment;
 import js.dom.Element;
-import js.dom.Element.EventListener;
+import js.dom.EventListener;
 import js.dom.Image;
 import jsx.application.Page;
 import jsx.application.PageInfo;
