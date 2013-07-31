@@ -50,6 +50,8 @@ class ImageGridStyle {
 
         {
             position.relative();
+            display.block();
+            box.floating.left();
         }
     }
 
@@ -57,11 +59,10 @@ class ImageGridStyle {
 
         {
             display.block();
-            box.size(ImageSize).floating.left();
+            box.size(ImageSize);
             border.bottom.solid().width(2, px).color(backColor);
             border.right.solid().width(2, px).color(backColor);
             cursor.pointer();
-            position.relative();
             transition.property.all().duration(0.2, s).timing.easeInOut();
 
             while (after()) {
@@ -105,7 +106,7 @@ class ImageGridStyle {
 
             while (siblingHover()) {
                 box.opacity(1);
-                position.bottom(ImageSize.add(5));
+                position.bottom(ImageSize);
                 visibility.visible();
             }
         }

@@ -9,6 +9,8 @@
  */
 package teemowork.model;
 
+import static js.lang.Global.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -157,8 +159,10 @@ public abstract class Descriptor<T extends Descriptor> {
     private List parse(String text) {
         List tokens = new ArrayList();
 
-        for (String token : text.split("[\\{\\}]")) {
-            if (token.length() == 0 || !isDigit(token)) {
+        for (String token : text.split("[\\{\\}<>]")) {
+            if (token.equals("br")) {
+                tokens.add(document.createElement("br"));
+            } else if (token.length() == 0 || !isDigit(token)) {
                 tokens.add(token);
             } else {
                 tokens.add(new VariableReference(token));

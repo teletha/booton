@@ -21,6 +21,7 @@ import teemowork.model.variable.VariableResolver.Per3LevelForKarma;
 import teemowork.model.variable.VariableResolver.Per4Level;
 import teemowork.model.variable.VariableResolver.Per4LevelForTrundle;
 import teemowork.model.variable.VariableResolver.Per5Level;
+import teemowork.model.variable.VariableResolver.Per5LevelForAshe;
 import teemowork.model.variable.VariableResolver.Per5LevelForHeimer;
 import teemowork.model.variable.VariableResolver.Per5LevelForSejuani;
 import teemowork.model.variable.VariableResolver.Per5LevelForYoric;
@@ -2168,6 +2169,10 @@ public class Skill extends Describable<SkillDescriptor> {
         Focus.update()
                 .passive("3秒毎に{1}する(最大100%)。通常攻撃を行うとリセットされる。上昇値は3レベル毎に増加する。")
                 .variable(-1, Critical, new Per3Level(3, 3));
+        Focus.update(P308)
+                .passive("3秒間通常攻撃を行わないと毎秒{1}増加していく(最大100)。スタックが100の時、建物以外に通常攻撃を行うと、スタックをすべて消費して通常攻撃がクリティカルになり、スタックの値がクリティカル率と同じ値となる。")
+                .variable(1, Stack, new Per5LevelForAshe(3, 1));
+        Focus.update(P310).variable(1, Stack, new Per5LevelForAshe(4, 1));
         FrostShot.update().active("通常攻撃に2秒間の{1}を付与する。").variable(1, MSSlowRatio, 15, 5).mana(8).type(SkillType.Toggle);
         Volley.update()
                 .active("指定方向扇形57.5°の方向に非貫通の矢7本を飛ばし当たった敵ユニットに{1}と{2}(" + FrostShot + "のLvに依存)を与える。" + FrostShot + "を覚えていない場合はスローは発生しない。")
@@ -2316,6 +2321,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(60)
                 .cd(3.5)
                 .range(650);
+        Overload.update(P310).range(600);
         RunePrison.update()
                 .active("対象の敵ユニットに{1}と{2}を与える。")
                 .variable(1, MagicDamage, 60, 35, ap(0.6), amplify(Mana, 0.045))
@@ -2323,6 +2329,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(80, 10)
                 .cd(14)
                 .range(625);
+        RunePrison.update(P310).mana(60, 10).range(600);
         SpellFlux.update()
                 .active("対象の敵ユニットに魔法弾を飛ばし{1}と{2}を与える。魔法弾は{3}の敵ユニット及び自身に4回まで跳ね返る(最大5hit)。この跳ね返りは同一ユニットに何度も跳ね返り、また自身から跳ね返った弾は敵Championを優先で狙う。")
                 .variable(1, MagicDamage, 50, 20, ap(0.35), amplify(Mana, 0.01))
@@ -2331,6 +2338,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(60, 10)
                 .cd(14)
                 .range(675);
+        SpellFlux.update(P310).range(600);
         DesperatePower.update()
                 .active("{1}間、{2}を得て{3}する。更にスキルに50%のスプラッシュダメージ({4})が付与される。")
                 .variable(1, Time, 5, 1)
@@ -2338,6 +2346,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, MS, 35, 10)
                 .variable(4, Radius, 200)
                 .cd(70, -10);
+        DesperatePower.update(P310).variable(3, MS, 60, 10);
 
         /** Cassiopeia */
         DeadlyCadence.update().passive("スキル使用後の5秒間、全てのスキルのコストが1スタックにつき10%低減する。");
@@ -2595,7 +2604,17 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Elise */
         SpiderSwarm.update()
-                .passive("Human Form時に使用したスキルが敵ユニットに命中するとSpiderlingのチャージを1得る。Spider Formになるとチャージ数に比例したSpiderlingを召喚する。召喚される数はSpider Formのレベルに比例し増加する。召喚されたSpiderlingは死亡するとチャージが減るが、再度Human Formに戻ると再度チャージ状態に戻る。");
+                .passive("Human Form時に使用したスキルが敵ユニットに命中するとSpiderlingのチャージを1得る。Spider Formになるとチャージ数に比例したSpiderlingを召喚する。召喚される数はSpider Formのレベルに比例し増加する。召喚されたSpiderlingは死亡するとチャージが減るが、再度Human Formに戻ると再度チャージ状態に戻る。<br>Health: {1}<br>AD: {2}<br>AS: 0.665<br>AR: {3}<br>MR: {4}<br>MS: 370<br>AoEスキルのダメージを{5}低減")
+                .variable(1, Value, 100, 0, amplify(Lv, 25))
+                .variable(2, Value, new Refer(SpiderForm, 10, 10), ap(0.1), null)
+                .variable(3, Value, 30)
+                .variable(4, Value, 50)
+                .variable(5, Percentage, 25);
+        SpiderSwarm.update(P310)
+                .variable(1, Value, 80, 0, amplify(Lv, 10))
+                .variable(3, Value, new Refer(SpiderForm, 30, 20))
+                .variable(4, Value, new Refer(SpiderForm, 50, 20))
+                .variable(5, Percentage, new Refer(SpiderForm, 10, 10));
         Neurotoxin.update()
                 .active("対象の敵ユニットに毒を放ち{1}を与える。")
                 .variable(1, MagicDamage, 50, 45, amplify(TargetCurrentHealthRatio, 8, 0, ap(0.03)))
@@ -3424,6 +3443,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(30, 12)
                 .cd(0.5)
                 .type(SkillType.Toggle);
+        Defile.update(P310).variable(3, MagicDamage, 30, 20, ap(0.2));
         Requiem.update()
                 .active("3秒詠唱後にすべての敵Championに{1}を与える。")
                 .variable(1, MagicDamage, 250, 150, ap(0.6))
@@ -3705,7 +3725,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(100, -50)
                 .cd(40, -8);
         Mimic.update(P309)
-                .active("直前に使ったスキルをコピーする。(ダメージ値が下記のように変化する)<br/>Sigil of Silence: {1}<br/>Distortion: {2}<br/>Ethereal Chains: {3}")
+                .active("直前に使ったスキルをコピーする。(ダメージ値が下記のように変化する)<br>Sigil of Silence: {1}<br>Distortion: {2}<br>Ethereal Chains: {3}")
                 .variable(1, MagicDamage, 100, 100, ap(0.65))
                 .variable(2, MagicDamage, 150, 150, ap(0.975))
                 .variable(3, MagicDamage, 100, 100, ap(0.65))
@@ -3937,9 +3957,9 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Malzahar */
         SummonVoidling.update()
-                .passive("スキルを4回使う度にVoidlingを召喚する。Voidlingは21秒間持続し、また召喚から7秒後にDMとARが1.5倍、14秒後にASが2倍に増加する。「Voidling」最大HP: {1} 通常攻撃DM: {2} AR: 30 MR: 50 AS: 0.831 MS: 451【備考】任意の操作不可。攻撃する優先順位は、Ultを掛けた相手、Malefic Visionsを掛けた相手、Malzaharがターゲットしている相手の順。")
-                .variable(1, Count, 200, 0, amplify(Lv, 40))
-                .variable(2, Count, 20, 0, amplify(Lv, 5), bounusAD(1));
+                .passive("スキルを4回使う度にVoidlingを召喚する。Voidlingは21秒間持続し、7秒後にADとARが1.5倍、14秒後にASが2倍に増加する。任意の操作不可。攻撃対象は、Ultを掛けた相手、" + MaleficVisions.name + "を掛けた相手、Malzaharがターゲットしている相手の順。<br>Health: {1}<br>AD: {2}<br>AR: 30<br>MR: 50<br>AS: 0.831<br>MS: 451")
+                .variable(1, Value, 200, 0, amplify(Lv, 40))
+                .variable(2, Value, 20, 0, amplify(Lv, 5), bounusAD(1));
         CallOftheVoid.update()
                 .active("指定した地点の左右から挟み込む様に2本の波動が出現し、当たった敵ユニットに{1}と{2}を与える。また、指定した場所の視界を得る。")
                 .variable(1, MagicDamage, 80, 55, ap(0.8))
@@ -4012,6 +4032,7 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Master Yi */
         DoubleStrike.update().passive("通常攻撃7回毎に2回分ダメージを与える。対象が建物の場合も有効。");
+        DoubleStrike.update(P310).passive("連続した通常攻撃4回毎に2回攻撃をする。この追加攻撃は50%のダメージを与える。");
         AlphaStrike.update()
                 .active("対象の敵ユニットと近くの敵ユニット3体({1})をランダムに対象とし{2}を与え、対象の近くにワープする。minionの場合は50%の確率で追加{3}を与える。")
                 .variable(1, Radius, 600)
@@ -4020,6 +4041,14 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(60, 10)
                 .cd(18, -2)
                 .range(600);
+        AlphaStrike.update(P310)
+                .active("対象の敵ユニットと近くの敵ユニット3体({1})をランダムに対象とし{2}を与え(クリティカル発生時は{5})、対象の近くにワープする。ミニオンには追加{3}を与える。通常攻撃をする毎に{4}する。")
+                .variable(2, PhysicalDamage, 25, 35, ad(1))
+                .variable(3, PhysicalDamage, 75, 25)
+                .variable(4, CDDecrease, 1)
+                .variable(5, PhysicalDamage, 25, 35, ad(1.6))
+                .mana(70, 10)
+                .cd(18, -1);
         Meditate.update()
                 .active("5秒間詠唱を行い、毎秒{1}し、詠唱中は{2}と{3}を得る。")
                 .variable(1, RestoreHealth, 40, 30, ap(0.4))
@@ -4028,6 +4057,11 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(50, 15)
                 .cd(35)
                 .type(SkillType.Channel);
+        Meditate.update(P310)
+                .active("4秒間詠唱を行い、{1}を得る（タワーに対しては{2}）。また、毎秒{3}する。この効果は失われているHealth1%に毎に1%増加する。")
+                .variable(1, DamageReductionRatio, 40, 5)
+                .variable(2, DamageReduction, 20, 2.5)
+                .variable(3, RestoreHealth, 30, 20, ap(0.3));
         WujuStyle.update()
                 .passive("{1}を得る。")
                 .variable(1, AD, 15, 5)
@@ -4035,6 +4069,13 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(2, AD, 30, 10)
                 .mana(40)
                 .cd(25, -2);
+        WujuStyle.update(P310)
+                .passive("{1}を得る。CD中この効果は失われる。")
+                .variable(1, AD, 0, 0, amplify(AD, 0.07, 0.02))
+                .active("5秒間通常攻撃に{2}が追加される。")
+                .variable(2, TrueDamage, 10, 5, amplify(AD, 0.1, 0.025))
+                .mana(0)
+                .cd(18, -1);
         Highlander.update()
                 .active("{4}間{1}、{2}し、{3}を得る。効果中に敵Championを倒すとすべてのスキルの{5}する。")
                 .variable(1, MSRatio, 40)
@@ -4044,6 +4085,15 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(5, CDDecrease)
                 .mana(100)
                 .cd(75);
+        Highlander.update(P310)
+                .passive("Championを倒すと" + Highlander.name + "以外のスキルは{5}する。（アシストの場合は{6}）")
+                .variable(5, CDDecrease, 18)
+                .variable(6, CDDecrease, 9)
+                .active("{4}間{1}、{2}する。効果中にChampionを倒すと効果時間が{7}延長する。")
+                .variable(1, MSRatio, 25, 10)
+                .variable(2, ASRatio, 30, 25)
+                .variable(4, Time, 10)
+                .variable(7, Time, 4);
 
         /** Miss Fortune */
         Strut.update()
@@ -5326,8 +5376,11 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Thresh */
         Damnation.update()
-                .passive("{1}で敵ユニットが死んだ場合、一定の確率で魂を落とす。魂へ近づくか" + DarkPassage.name + "のランタンを魂の近くに置くとその魂を回収し、自身のArmorとAbility Powerが上昇する。落とした魂は15秒間持続し、敵チームがThreshの視界を得ていた場合、敵チームからも視認することができる。")
-                .variable(1, Radius, 2000);
+                .passive("{1}で敵ユニットが死んだ場合、一定の確率で魂を落とす。魂へ近づくか" + DarkPassage.name + "のランタンを魂の近くに置くとその魂を回収し、{2}と{3}を得る。落とした魂は15秒間持続し、敵チームがThreshの視界を得ていた場合、敵チームからも視認することができる。")
+                .variable(1, Radius, 2000)
+                .variable(2, AR, 0, 0, amplify(Stack, 1))
+                .variable(3, AP, 0, 0, amplify(Stack, 1));
+        Damnation.update(P310).variable(2, AR, 0, 0, amplify(Stack, 0.75)).variable(3, AP, 0, 0, amplify(Stack, 0.75));
         DeathSentence.update()
                 .active("指定方向に鎌を投げ、命中した敵ユニットに{1}と{2}を与え、対象を1.5秒かけて自身の方へ引き寄せる。このスキルを再度使用すると対象のユニットへ飛びつく。")
                 .variable(1, MagicDamage, 80, 30, ap(0.5))
@@ -5478,6 +5531,7 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Twisted Fate */
         LoadedDice.update().passive("味方Championが敵を倒した時に追加で{1}を得るようになる。").variable(1, Gold, 2);
+        LoadedDice.update(P310).passive("ユニットを倒すたびに追加の{1}(1~6でランダム、但し期待値は3.5よりも大きくなる)を得る。").variable(1, Gold);
         WildCards.update()
                 .active("指定向き3方向に貫通するカードを飛ばし、当たった敵ユニットに{1}を与える。")
                 .variable(1, MagicDamage, 60, 50, ap(0.65))
@@ -5485,7 +5539,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(6)
                 .range(1450);
         PickACard.update()
-                .active("使用するとBlue、Red、Goldの3種のカードを選択し始め、再度使用でカードが決定する。決定したカードにより次の通常攻撃が魔法DMに変換され、以下の効果が追加される。<br>Blue Card: {2}を与え{3}する。<br>Red Card: {4}の敵に{5}と2.5秒間{6}を与える。<br>Gold Card: {7}と{8}を与える。")
+                .active("3種類のカードが順番に出現し、8秒以内に再度使用してカードを決定する。4秒以内の次の通常攻撃が魔法DMに変換され、以下の効果が追加される。<br>Blue Card: {2}を与え{3}する。<br>Red Card: {4}の敵に{5}と2.5秒間{6}を与える。<br>Gold Card: {7}と{8}を与える。")
                 .variable(2, MagicDamage, 40, 20, ap(0.4), ad(1))
                 .variable(3, RestoreMana, 26, 13, ad(0.65))
                 .variable(4, Radius, 100)
@@ -5679,16 +5733,17 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(6, -1);
         Tumble.update(P303).mana(30);
         SilverBolts.update()
-                .passive("同じターゲットに3回連続して通常攻撃またはスキルで攻撃すると、{1}を与える。")
+                .passive("同じターゲットに3回連続して通常攻撃またはスキルで攻撃すると、{1}を与える。（モンスターやミニオンに対しては上限200）")
                 .variable(1, TrueDamage, 20, 10, amplify(TargetMaxHealthRatio, 3, 1));
         Condemn.update()
                 .active("対象の敵ユニットをヘビークロスボウで狙撃し{1}と{2}を与える。ノックバックした敵が壁等に当たると追加で{1}と{3}を与える。")
                 .variable(1, PhysicalDamage, 45, 35, bounusAD(0.5))
-                .variable(2, Knockback)
+                .variable(2, Knockback, 470)
                 .variable(3, Stun, 1.5)
                 .mana(90)
                 .cd(20, -2)
-                .range(450);
+                .range(650);
+        Condemn.update(P310).range(550);
         FinalHour.update()
                 .active("{1}間{2}を得て、Tumbleを使うと{3}になり、Night Hunterの移動速度増加が3倍になる。")
                 .variable(1, Time, 8, 2)
@@ -6102,6 +6157,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cost(CurrentHealthRatio, 4, 0)
                 .cd(24, -3)
                 .range(1150, 100);
+        ElasticSlingshot.update(P310).variable(1, MagicDamage, 80, 40, ap(0.7));
         LetsBounce.update()
                 .active("Zacが4回飛び跳ね、その度に周囲にいる敵ユニットに{1}と{2}と1秒間{3}を与える。ノックバックは同一の対象に1度までしか発生せず、同一ユニットに複数回DMを与える場合、2回目以降は50%のダメージになる。このスキルが発動している間はUnstable Matterと移動のみが可能であり、また徐々に移動速度が増加する(20-50%増加)。使用中は{4}を得る。")
                 .variable(1, MagicDamage, 160, 80, ap(0.25))
