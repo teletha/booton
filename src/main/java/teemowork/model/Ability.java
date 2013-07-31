@@ -66,7 +66,10 @@ public class Ability extends Describable<AbilityDescriptor> {
     public static final Ability Promote = new Ability("Promote");
 
     /** The ability. */
-    public static final Ability Banshee = new Ability();
+    public static final Ability BansheeShield = new Ability();
+
+    /** The ability. */
+    public static final Ability BansheeRegene = new Ability();
 
     /** The ability. */
     public static final Ability EnhancedMovement1 = new Ability("Enhanced Movement");
@@ -449,6 +452,9 @@ public class Ability extends Describable<AbilityDescriptor> {
     /** The ability. */
     public static final Ability Stasis = new Ability("Stasis");
 
+    /** The ability. */
+    public static final Ability SpectresCowlPassive = new Ability();
+
     /** The ability name. */
     public final String name;
 
@@ -502,6 +508,7 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .variable(2, AR, 10)
                 .variable(3, MR, 15)
                 .variable(4, Hreg, 10);
+        AegisLegion.update(P310).passive("{1}の味方Championは{3}、{4}を得る。").variable(3, MR, 20);
         ArchangelInsight.update().passive("{1}を得る。").variable(1, AP, 0, 0, amplify(Mana, 0.03));
         ManaCharge.update().passive("スキル使用時及びマナ消費時に最大Manaが6増加する(最大増加量は750)。{1}。").variable(1, ItemCD, 3);
         ManaCharge.update(P309).passive("スキル使用時及びマナ消費時に最大Manaが8増加する(最大増加量は750)。{1}。").variable(1, ItemCD, 4);
@@ -522,7 +529,9 @@ public class Ability extends Describable<AbilityDescriptor> {
         Promote.update()
                 .active("近くのSiege MinionをAnti-Turret-Minionに変身させる。Anti-Turret-Minionが敵ユニットを倒した場合、そのゴールドが得られる。またAnti-Turret Minionはタワーを最優先で攻撃する。{1}。")
                 .variable(1, ItemCD, 180);
-        Banshee.update().passive("敵Championからのスキルを無効化するシールドを張る。シールドはスキルを無効化すると消費され、25秒間敵Championからダメージを受けないと再生する。");
+        BansheeShield.update()
+                .passive("敵Championからのスキルを無効化するシールドを張る。シールドはスキルを無効化すると消費され、25秒間敵Championからダメージを受けないと再生する。");
+
         EnhancedMovement1.update().passive("{1}する。").variable(1, MS, 25);
         EnhancedMovement2.update().passive("{1}する。").variable(1, MS, 45);
         EnhancedMovement3.update().passive("{1}する。").variable(1, MS, 60);
@@ -537,11 +546,13 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .passive("通常攻撃に{1}(Minionに対しては60が上限)を付与する。")
                 .variable(1, PhysicalDamage, 0, 0, amplify(TargetCurrentHealthRatio, 5));
         BotRKActive.update()
-                .active("対象の敵Champion({1})に{2}(下限100)を与え、{3}する。また4秒間{4}を与え、自身の移動速度がその分だけ増加する。")
+                .active("対象の敵Champion({1})に{2}(下限100)を与え、{3}する。また{5}間{4}を与え、自身の移動速度がその分だけ増加する。")
                 .variable(1, Radius, 500)
                 .variable(2, PhysicalDamage, 0, 0, amplify(TargetMaxHealthRatio, 15))
                 .variable(3, RestoreHealth, 0, 0, amplify(DealtDamage, 1))
-                .variable(4, MSSlowRatio, 30);
+                .variable(4, MSSlowRatio, 30)
+                .variable(5, Time, 4);
+        BotRKActive.update(P310).variable(5, Time, 3);
         BonetoothNecklaceDamage.update().passive("{1}を得る。").variable(1, AD, 0, 0, amplify(Lv, 2));
         BonetoothNecklaceSpecial.update()
                 .passive("キルまたはアシスト時に1 trophyを得て、死亡時に1 trophyを失う（最大値は14）。その数に応じて追加効果を得る。<br>3 : {1}と{2}を得る。<br>6 : {3}を得る。<br>9 : Unseen Predatorの射程が150増加する。<br>14 : Ultの効果時間が3秒増加する。またUltを使用した次にスキルを使用する際に1 Ferocityを追加で得る。")
@@ -732,11 +743,15 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .variable(1, MSRatio, 50)
                 .variable(2, ItemCD, 90);
         RabadonsDeathcapPassive.update().passive("{1}する。").variable(1, APRatio, 30);
-        ColdSteel1.update().passive("通常攻撃を受けた際に対象に2秒間{1}を与える。").variable(1, ASSlowRatio, 15);
+
+        ColdSteel1.update().passive("通常攻撃を受けた際に対象に{2}間{1}を与える。").variable(1, ASSlowRatio, 15).variable(2, Time, 1.5);
+        ColdSteel1.update(P310).variable(2, Time, 1);
         ColdSteel2.update()
-                .passive("通常攻撃を受けた際に対象に1.5秒間{1}と{2}を与える。")
+                .passive("通常攻撃を受けた際に対象に{3}間{1}と{2}を与える。")
                 .variable(1, ASSlowRatio, 15)
-                .variable(2, MSSlowRatio, 10);
+                .variable(2, MSSlowRatio, 10)
+                .variable(3, Time, 1.5);
+        ColdSteel2.update(P310).variable(3, Time, 1);
         RanduinsOmenAvtive.update()
                 .active("{1}の敵ユニットに2秒間{2}を与える。この効果時間は、自身のArmor+Magic Resistの値100につき1秒増加する。{3}。")
                 .variable(1, Radius, 525)
@@ -899,5 +914,8 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .variable(3, LS, 10)
                 .aura();
         Stasis.update().active("2.5秒間、自身を行動不能かつ無敵(ダメージ無効, ターゲット不可)にする。{1}。").variable(1, ItemCD, 90);
+
+        SpectresCowlPassive.update(P310).passive("Championからダメージを受けると10秒間{1}を得る。").variable(-1, Hreg, 15);
+        BansheeRegene.update(P310).passive("Championからダメージを受けると10秒間{1}を得る。").variable(-1, Hreg, 45);
     }
 }

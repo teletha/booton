@@ -359,6 +359,9 @@ public class Item extends Describable<ItemDescriptor> {
     /** Sorcerer's Shoes */
     public static final Item SorcerersShoes = new Item(3020, "Sorcerer's Shoes");
 
+    /** Spectre's Cowl */
+    public static final Item SpectresCowl = new Item(9999, "Spectre's Cowl");
+
     /** Spirit Stone */
     public static final Item SpiritStone = new Item(1080, "Spirit Stone");
 
@@ -561,6 +564,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(AR, 20)
                 .set(MR, 20)
                 .abilities(AegisLegion);
+        AegisOftheLegion.update(P310).cost(375).set(Health, 200).set(MR, 0);
         AmplifyingTome.update().cost(435).set(AP, 20);
         ArchangelsStaff.update()
                 .build(TearOftheGoddess, BlastingWand)
@@ -612,7 +616,14 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(Health, 400)
                 .set(Mana, 300)
                 .set(MR, 45)
-                .abilities(Banshee);
+                .abilities(BansheeShield);
+        BansheesVeil.update(P310)
+                .build(SpectresCowl, RubyCrystal)
+                .cost(875)
+                .set(Health, 450)
+                .set(MR, 55)
+                .set(Mana, 0)
+                .abilities(BansheeShield, BansheeRegene);
 
         BerserkersGreaves.update().build(BootsOfSpeed, Dagger).cost(150).set(ASRatio, 20).abilities(EnhancedMovement2);
         BerserkersGreaves.update(P308).cost(175);
@@ -712,6 +723,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(AR, 50)
                 .set(MR, 30)
                 .abilities(GuardianAngelPassive);
+        GuardianAngel.update(P310).build(NegatronCloak, ChainVest).cost(1310).set(MR, 40);
         GuinsoosRageblade.update()
                 .build(BlastingWand, Pickaxe)
                 .cost(865)
@@ -785,6 +797,15 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(AR, 35)
                 .set(Hreg, 5)
                 .abilities(SolariActive);
+        LocketOftheIronSolari.update(P310)
+                .build(AegisOftheLegion)
+                .cost(600)
+                .set(Health, 300)
+                .set(AR, 20)
+                .set(CDR, 10)
+                .set(Hreg, 0)
+                .abilities(SolariActive, AegisLegion);
+
         LongSword.update().cost(400).set(AD, 10);
 
         MadredsRazors.update().build(ClothArmor, HuntersMachete).cost(100).set(AR, 25).abilities(Maim1, Rend);
@@ -953,6 +974,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(AR, 20)
                 .set(MR, 30)
                 .abilities(BulwarkLegion);
+        RunicBulwark.update(P310).deprecated();
         RylaisCrystalScepter.update()
                 .build(BlastingWand, AmplifyingTome, GiantsBelt)
                 .cost(605)
@@ -1000,6 +1022,13 @@ public class Item extends Describable<ItemDescriptor> {
         SorcerersShoes.update().build(BootsOfSpeed).cost(750).set(MRPen, 15).abilities(EnhancedMovement2);
         SorcerersShoes.update(P308).cost(775);
 
+        SpectresCowl.update()
+                .build(NegatronCloak, RubyCrystal)
+                .cost(205)
+                .set(Health, 200)
+                .set(MR, 45)
+                .abilities(SpectresCowlPassive);
+
         SpiritOftheAncientGolem.update()
                 .build(SpiritStone, Kindlegem)
                 .cost(450)
@@ -1043,6 +1072,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(CDR, 20)
                 .set(MR, 50)
                 .abilities(SpiritVisagePassive);
+        SpiritVisage.update(P310).build(SpectresCowl, Kindlegem).cost(375).set(Health, 400).set(MR, 55).set(Hreg, 20);
         StatikkShiv.update()
                 .build(Zeal, AvariceBlade)
                 .cost(525)
@@ -1115,7 +1145,10 @@ public class Item extends Describable<ItemDescriptor> {
         VampiricScepter.update().build(LongSword).cost(400).set(LS, 10).set(AD, 10);
         VisionWard.update().cost(125).abilities(VisionWardAvtive);
         VoidStaff.update().build(BlastingWand, AmplifyingTome).cost(1000).set(AP, 70).abilities(VoidStaffPassive);
+
         WardensMail.update().build(ClothArmor, ClothArmor).cost(500).set(AR, 50).abilities(ColdSteel1);
+        WardensMail.update(P310).cost(400);
+
         WarmogsArmor.update()
                 .build(GiantsBelt, RubyCrystal, RejuvenationBead, RejuvenationBead)
                 .cost(995)

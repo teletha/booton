@@ -1797,6 +1797,21 @@ public class Skill extends Describable<SkillDescriptor> {
     public static final Skill Massacre = new Skill("Massacre", R);
 
     /** The skill name. */
+    public static final Skill Lightslinger = new Skill("Lightslinger", Passive);
+
+    /** The skill name. */
+    public static final Skill PiercingLight = new Skill("Piercing Light", Q);
+
+    /** The skill name. */
+    public static final Skill ArdentBlaze = new Skill("Ardent Blaze", W);
+
+    /** The skill name. */
+    public static final Skill RelentlessPursuit = new Skill("Relentless Pursuit", E);
+
+    /** The skill name. */
+    public static final Skill TheCulling = new Skill("The Culling", R);
+
+    /** The skill name. */
     public final String name;
 
     /** The skill system name. */
@@ -4089,7 +4104,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .passive("Championを倒すと" + Highlander.name + "以外のスキルは{5}する。（アシストの場合は{6}）")
                 .variable(5, CDDecrease, 18)
                 .variable(6, CDDecrease, 9)
-                .active("{4}間{1}、{2}する。効果中にChampionを倒すと効果時間が{7}延長する。")
+                .active("{4}間{1}、{2}し、{3}を得る。効果中にChampionを倒すと効果時間が{7}延長する。")
                 .variable(1, MSRatio, 25, 10)
                 .variable(2, ASRatio, 30, 25)
                 .variable(4, Time, 10)
@@ -5539,7 +5554,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(6)
                 .range(1450);
         PickACard.update()
-                .active("3種類のカードが順番に出現し、8秒以内に再度使用してカードを決定する。4秒以内の次の通常攻撃が魔法DMに変換され、以下の効果が追加される。<br>Blue Card: {2}を与え{3}する。<br>Red Card: {4}の敵に{5}と2.5秒間{6}を与える。<br>Gold Card: {7}と{8}を与える。")
+                .active("使用するとBlue、Red、Goldの3種のカードを選択し始め、再度使用でカードが決定する。決定したカードにより次の通常攻撃が魔法DMに変換され、以下の効果が追加される。<br>Blue Card: {2}を与え{3}する。<br>Red Card: {4}の敵に{5}と2.5秒間{6}を与える。<br>Gold Card: {7}と{8}を与える。")
                 .variable(2, MagicDamage, 40, 20, ap(0.4), ad(1))
                 .variable(3, RestoreMana, 26, 13, ad(0.65))
                 .variable(4, Radius, 100)
@@ -5550,6 +5565,8 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(40, 15)
                 .cd(6);
         PickACard.update(P307).variable(3, RestoreMana, 50, 25);
+        PickACard.update(P310)
+                .active("3種類のカードが順番に出現し、8秒以内に再度使用してカードを決定する。4秒以内の次の通常攻撃が魔法DMに変換され、以下の効果が追加される。<br>Blue Card: {2}を与え{3}する。<br>Red Card: {4}の敵に{5}と2.5秒間{6}を与える。<br>Gold Card: {7}と{8}を与える。");
         StackedDeck.update()
                 .passive("{1}を得て{2}する。通常攻撃4回毎に追加{3}を与える。")
                 .variable(1, CDR, 3, 3)

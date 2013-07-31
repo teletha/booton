@@ -182,6 +182,9 @@ public class Champion {
     public static final Champion Lissandra = new Champion("Lissandra", Iceborn, IceShard, RingOfFrost, GlacialPath, FrozenTomb);
 
     /** The champion name. */
+    public static final Champion Lucian = new Champion("Lucian", Lightslinger, PiercingLight, ArdentBlaze, RelentlessPursuit, TheCulling);
+
+    /** The champion name. */
     public static final Champion Lulu = new Champion("Lulu", PixFaerieCompanion, Glitterlance, Whimsy, HelpPix, WildGrowth);
 
     /** The champion name. */
@@ -1079,6 +1082,17 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 325);
+        Lucian.update(P310)
+                .set(Health, 390, 80)
+                .set(Hreg, 5.1, 0.65)
+                .set(Mana, 230, 41)
+                .set(Mreg, 6, 0.65)
+                .set(AD, 46, 3)
+                .set(AS, 0.638, 3.3)
+                .set(AR, 15, 3)
+                .set(MR, 30, 0)
+                .set(Range, 550)
+                .set(MS, 330);
         Lulu.update(P0000)
                 .set(Health, 415, 82)
                 .set(Hreg, 6, 0.72)
