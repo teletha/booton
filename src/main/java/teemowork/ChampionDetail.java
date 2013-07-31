@@ -72,6 +72,7 @@ import teemowork.model.Status;
 import teemowork.model.Version;
 import teemowork.model.variable.Variable;
 import teemowork.model.variable.VariableResolver;
+import teemowork.model.variable.VariableResolver.Refer;
 
 /**
  * @version 2013/01/10 2:36:58
@@ -346,7 +347,7 @@ public class ChampionDetail extends Page {
                     if (token instanceof Variable) {
                         writeVariable(passive, (Variable) token, level);
                     } else {
-                        passive.append(token.toString());
+                        passive.append(token);
                     }
                 }
             }
@@ -364,7 +365,7 @@ public class ChampionDetail extends Page {
                 if (token instanceof Variable) {
                     writeVariable(active, (Variable) token, level);
                 } else {
-                    active.append(token.toString());
+                    active.append(token);
                 }
             }
 
@@ -461,8 +462,15 @@ public class ChampionDetail extends Page {
                     Element element = root.child(NormalValue.class).text(Mathematics.round(resolver.compute(i), 2));
 
                     if (!resolver.isSkillLevelBased()) {
-                        element.attr("title", "Level " + resolver.convertChampionLevel(i))
-                                .add(ChampionLevelIndicator.class);
+                        String title;
+
+                        if (resolver instanceof Refer) {
+                            Refer refer = (Refer) resolver;
+                            title = refer.reference.name + " level " + i;
+                        } else {
+                            title = "Level " + resolver.convertChampionLevel(i);
+                        }
+                        element.attr("title", title).add(ChampionLevelIndicator.class);
                     }
 
                     if (i == level) {
