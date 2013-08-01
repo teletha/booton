@@ -121,7 +121,7 @@ class ImageGridStyle {
         }
     }
 
-    class Input extends CSS {
+    class InputStyle extends CSS {
 
         {
             display.block();
