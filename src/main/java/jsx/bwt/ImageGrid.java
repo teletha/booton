@@ -19,7 +19,7 @@ import js.dom.EventListener;
 import jsx.bwt.ImageGridStyle.Container;
 import jsx.bwt.ImageGridStyle.IconImage;
 import jsx.bwt.ImageGridStyle.ImageSet;
-import jsx.bwt.ImageGridStyle.Input;
+import jsx.bwt.ImageGridStyle.InputStyle;
 import jsx.bwt.ImageGridStyle.Root;
 import jsx.bwt.ImageGridStyle.Title;
 import jsx.bwt.ImageGridStyle.Unselected;
@@ -35,7 +35,9 @@ public abstract class ImageGrid<T> extends UI {
     /** The image sources. */
     private Collection<T> sources;
 
-    private Element search = root.child("input", Input.class).attr("type", "text").bind(this);
+    private Input input;
+
+    private Element search = root.child("input", InputStyle.class).attr("type", "text").bind(this);
 
     /**
      * Filter image by user input.
