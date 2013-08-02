@@ -191,6 +191,16 @@ public class LongTest extends ScriptTester {
     }
 
     @Test
+    public void bitFlag() {
+        test(new Scriptable() {
+
+            boolean act(long value) {
+                return (value & 1) == 0;
+            }
+        });
+    }
+
+    @Test
     public void bitAnd() {
         test(new Scriptable() {
 

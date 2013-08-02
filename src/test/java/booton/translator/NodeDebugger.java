@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ import java.util.Set;
 import booton.translator.Node.TryCatchFinally;
 
 /**
- * @version 2013/01/11 17:42:51
+ * @version 2013/08/03 1:30:19
  */
 public class NodeDebugger {
 
@@ -94,7 +94,7 @@ public class NodeDebugger {
             String testClassName = computeTestClassName(script.source);
             String testMethodName = computeTestMethodName(testClassName);
 
-            System.out.println(testClassName + "  " + testMethodName);
+            System.out.println(testClassName + "  " + (testMethodName == null ? methodName : testClassName));
             dump(nodes);
         } else {
             System.out.println(script.source.getName() + "  " + methodName);
@@ -135,10 +135,7 @@ public class NodeDebugger {
                 return element.getMethodName();
             }
         }
-
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return null;
     }
 
     /**

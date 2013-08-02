@@ -293,9 +293,13 @@ public class Javascript {
             e.write("\r\n at ", source.getName());
 
             throw e;
-        } catch (IOException e) {
-            throw I.quiet(e);
+        } catch (Exception e) {
+            TranslationError error = new TranslationError(e);
+            error.write("Can't compile ", source.getName() + ".");
+
+            throw error;
         }
+
         for (Annotation annotation : source.getAnnotations()) {
             require(annotation.annotationType());
         }
