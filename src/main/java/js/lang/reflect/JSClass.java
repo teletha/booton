@@ -441,7 +441,13 @@ class JSClass<T> extends JSAnnotatedElement {
      * @return The superclass of the class represented by this object.
      */
     public Class<? super T> getSuperclass() {
-        return superclass;
+        if ((Object) this == Object.class) {
+            return null;
+        } else if (superclass == null) {
+            return Object.class;
+        } else {
+            return superclass;
+        }
     }
 
     /**

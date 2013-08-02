@@ -21,6 +21,16 @@ import booton.translator.Scriptable;
 public class ClassTest extends ScriptTester {
 
     @Test
+    public void Object() throws Exception {
+        test(new Scriptable() {
+
+            Class act() throws Exception {
+                return Object.class;
+            }
+        });
+    }
+
+    @Test
     public void SingleInstance() throws Exception {
         test(new Scriptable() {
 
