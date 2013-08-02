@@ -7,19 +7,12 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.bwt;
+package js.bwt.model;
+
 
 /**
- * @version 2013/02/03 15:02:24
+ * @version 2013/08/02 10:41:43
  */
-public interface Bindable<T> {
+public class Group {
 
-    /**
-     * <p>
-     * This method is invoked whenever the bound value is updated.
-     * </p>
-     * 
-     * @param value A new value.
-     */
-    void update(T value);
 }

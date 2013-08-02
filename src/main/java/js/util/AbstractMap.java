@@ -7,18 +7,14 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.bwt;
+package js.util;
+
+import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/02/03 15:25:14
+ * @version 2013/08/02 17:00:22
  */
-class BindableObject {
+@JavaAPIProvider(java.util.AbstractMap.class)
+class AbstractMap {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return "BindableObject";
-    }
 }

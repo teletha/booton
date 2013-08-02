@@ -9,18 +9,149 @@
  */
 package js.util;
 
+import java.util.AbstractList;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.RandomAccess;
+import java.util.Set;
 
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/02/16 11:28:44
+ * @version 2013/08/02 15:53:23
  */
 @JavaAPIProvider(java.util.Collections.class)
 class Collections {
+
+    /**
+     * The empty set (immutable). This set is serializable.
+     * 
+     * @see #emptySet()
+     */
+    public static final Set EMPTY_SET = new EmptySet();
+
+    /**
+     * The empty list (immutable). This list is serializable.
+     * 
+     * @see #emptyList()
+     */
+    public static final List EMPTY_LIST = new EmptyList();
+
+    /**
+     * The empty map (immutable). This map is serializable.
+     * 
+     * @see #emptyMap()
+     * @since 1.3
+     */
+    public static final Map EMPTY_MAP = new EmptyMap();
+
+    /**
+     * Returns an iterator that has no elements. More precisely,
+     * <ul compact>
+     * <li>{@link Iterator#hasNext hasNext} always returns {@code false}.
+     * <li>{@link Iterator#next next} always throws {@link NoSuchElementException}.
+     * <li>{@link Iterator#remove remove} always throws {@link IllegalStateException}.
+     * </ul>
+     * <p>
+     * Implementations of this method are permitted, but not required, to return the same object
+     * from multiple invocations.
+     * 
+     * @return an empty iterator
+     * @since 1.7
+     */
+    public static <T> Iterator<T> emptyIterator() {
+        return (Iterator<T>) EmptyIterator.EMPTY_ITERATOR;
+    }
+
+    /**
+     * Returns a list iterator that has no elements. More precisely,
+     * <ul compact>
+     * <li>{@link Iterator#hasNext hasNext} and {@link ListIterator#hasPrevious hasPrevious} always
+     * return {@code false}.
+     * <li>{@link Iterator#next next} and {@link ListIterator#previous previous} always throw
+     * {@link NoSuchElementException}.
+     * <li>{@link Iterator#remove remove} and {@link ListIterator#set set} always throw
+     * {@link IllegalStateException}.
+     * <li>{@link ListIterator#add add} always throws {@link UnsupportedOperationException}.
+     * <li>{@link ListIterator#nextIndex nextIndex} always returns {@code 0} .
+     * <li>{@link ListIterator#previousIndex previousIndex} always returns {@code -1}.
+     * </ul>
+     * <p>
+     * Implementations of this method are permitted, but not required, to return the same object
+     * from multiple invocations.
+     * 
+     * @return an empty list iterator
+     * @since 1.7
+     */
+    public static <T> ListIterator<T> emptyListIterator() {
+        return (ListIterator<T>) EmptyListIterator.EMPTY_ITERATOR;
+    }
+
+    /**
+     * Returns the empty list (immutable). This list is serializable.
+     * <p>
+     * This example illustrates the type-safe way to obtain an empty list:
+     * 
+     * <pre>
+     *     List&lt;String&gt; s = Collections.emptyList();
+     * </pre>
+     * Implementation note: Implementations of this method need not create a separate <tt>List</tt>
+     * object for each call. Using this method is likely to have comparable cost to using the
+     * like-named field. (Unlike this method, the field does not provide type safety.)
+     * 
+     * @see #EMPTY_LIST
+     * @since 1.5
+     */
+    public static <T> List<T> emptyList() {
+        return (List<T>) EMPTY_LIST;
+    }
+
+    /**
+     * Returns the empty set (immutable). This set is serializable. Unlike the like-named field,
+     * this method is parameterized.
+     * <p>
+     * This example illustrates the type-safe way to obtain an empty set:
+     * 
+     * <pre>
+     *     Set&lt;String&gt; s = Collections.emptySet();
+     * </pre>
+     * Implementation note: Implementations of this method need not create a separate <tt>Set</tt>
+     * object for each call. Using this method is likely to have comparable cost to using the
+     * like-named field. (Unlike this method, the field does not provide type safety.)
+     * 
+     * @see #EMPTY_SET
+     * @since 1.5
+     */
+    public static <T> Set<T> emptySet() {
+        return (Set<T>) EMPTY_SET;
+    }
+
+    /**
+     * Returns the empty map (immutable). This map is serializable.
+     * <p>
+     * This example illustrates the type-safe way to obtain an empty set:
+     * 
+     * <pre>
+     *     Map&lt;String, Date&gt; s = Collections.emptyMap();
+     * </pre>
+     * Implementation note: Implementations of this method need not create a separate <tt>Map</tt>
+     * object for each call. Using this method is likely to have comparable cost to using the
+     * like-named field. (Unlike this method, the field does not provide type safety.)
+     * 
+     * @see #EMPTY_MAP
+     * @since 1.5
+     */
+    public static <K, V> Map<K, V> emptyMap() {
+        return (Map<K, V>) EMPTY_MAP;
+    }
 
     /**
      * Sorts the specified list according to the order induced by the specified comparator. All
@@ -75,6 +206,296 @@ class Collections {
         for (int i = 0; i < values.length; i++) {
             iterator.next();
             iterator.set(values[i]);
+        }
+    }
+
+    /**
+     * @version 2013/08/02 15:52:29
+     */
+    private static class EmptyMap<K, V> extends AbstractMap<K, V> {
+
+        /**
+         * {@inheritDoc}
+         */
+        public int size() {
+            return 0;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean isEmpty() {
+            return true;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean containsKey(Object key) {
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean containsValue(Object value) {
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public V get(Object key) {
+            return null;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public Set<K> keySet() {
+            return emptySet();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public Collection<V> values() {
+            return emptySet();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public Set<Map.Entry<K, V>> entrySet() {
+            return emptySet();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean equals(Object o) {
+            if (o instanceof Map) {
+                return ((Map) o).isEmpty();
+            }
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public int hashCode() {
+            return 0;
+        }
+    }
+
+    /**
+     * @version 2013/08/02 15:51:09
+     */
+    private static class EmptySet<E> extends AbstractSet<E> {
+
+        /**
+         * {@inheritDoc}
+         */
+        public Iterator<E> iterator() {
+            return emptyIterator();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public int size() {
+            return 0;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean isEmpty() {
+            return true;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean contains(Object item) {
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean containsAll(Collection<?> collection) {
+            return collection.isEmpty();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public Object[] toArray() {
+            return new Object[0];
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public <T> T[] toArray(T[] array) {
+            if (array.length > 0) {
+                array[0] = null;
+            }
+            return array;
+        }
+    }
+
+    /**
+     * @version 2013/08/02 15:48:37
+     */
+    private static class EmptyList<E> extends AbstractList<E> implements RandomAccess {
+
+        /**
+         * {@inheritDoc}
+         */
+        public Iterator<E> iterator() {
+            return emptyIterator();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public ListIterator<E> listIterator() {
+            return emptyListIterator();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public int size() {
+            return 0;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean isEmpty() {
+            return true;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean contains(Object obj) {
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean containsAll(Collection<?> collection) {
+            return collection.isEmpty();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public Object[] toArray() {
+            return new Object[0];
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public <T> T[] toArray(T[] array) {
+            if (array.length > 0) {
+                array[0] = null;
+            }
+            return array;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public E get(int index) {
+            throw new IndexOutOfBoundsException("Index: " + index);
+        }
+    }
+
+    /**
+     * @version 2013/08/02 15:45:44
+     */
+    private static class EmptyIterator<E> implements Iterator<E> {
+
+        /** The singleton. */
+        private static final EmptyIterator EMPTY_ITERATOR = new EmptyIterator();
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean hasNext() {
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public E next() {
+            throw new NoSuchElementException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void remove() {
+            throw new IllegalStateException();
+        }
+    }
+
+    /**
+     * @version 2013/08/02 15:46:25
+     */
+    private static class EmptyListIterator<E> extends EmptyIterator<E> implements ListIterator<E> {
+
+        /** The singleton. */
+        private static final EmptyListIterator EMPTY_ITERATOR = new EmptyListIterator();
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean hasPrevious() {
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public E previous() {
+            throw new NoSuchElementException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public int nextIndex() {
+            return 0;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public int previousIndex() {
+            return -1;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void set(E e) {
+            throw new IllegalStateException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void add(E e) {
+            throw new UnsupportedOperationException();
         }
     }
 }

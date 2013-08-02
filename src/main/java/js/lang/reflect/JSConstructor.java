@@ -11,6 +11,7 @@ package js.lang.reflect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
@@ -31,6 +32,9 @@ class JSConstructor<T> extends JSAccessibleObject {
     /** The declared class definition in runtime. */
     private NativeObject clazz;
 
+    /** The modifier value. */
+    private final int modifiers;
+
     /** The constructor function in runtime. */
     private final NativeFunction function;
 
@@ -48,14 +52,26 @@ class JSConstructor<T> extends JSAccessibleObject {
      * @param name
      * @param clazz
      * @param function
-     * @param annotations
+     * @param metadata
      */
-    JSConstructor(String name, NativeObject clazz, NativeFunction function, NativeArray<Annotation> annotations) {
-        super(name, annotations.slice(2));
+    JSConstructor(String name, NativeObject clazz, NativeFunction function, NativeArray<Annotation> metadata) {
+        super(name, metadata.slice(2));
 
         this.clazz = clazz;
+        this.modifiers = metadata.getAsInt(0);
         this.function = function;
-        this.parameterTypeNames = annotations.getPropertyAs(String[].class, "1");
+        this.parameterTypeNames = metadata.getPropertyAs(String[].class, "1");
+    }
+
+    /**
+     * Returns the Java language modifiers for the constructor represented by this
+     * {@code Constructor} object, as an integer. The {@code Modifier} class should be used to
+     * decode the modifiers.
+     * 
+     * @see Modifier
+     */
+    public int getModifiers() {
+        return modifiers;
     }
 
     /**

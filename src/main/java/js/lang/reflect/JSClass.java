@@ -29,8 +29,9 @@ import booton.translator.JavaAPIProvider;
  * {@link Class} representation in Javascript runtime. This class doesn't provide all
  * functionalities.
  * </p>
+ * /.
  * 
- * @version 2013/01/17 15:58:55
+ * @version 2013/08/02 13:11:30
  */
 @JavaAPIProvider(Class.class)
 class JSClass<T> extends JSAnnotatedElement {
@@ -39,13 +40,16 @@ class JSClass<T> extends JSAnnotatedElement {
     private final NativeObject clazz;
 
     /** The annotation in runtime. */
-    private final NativeObject annotations;
+    private final NativeObject metadata;
 
     /** The super class. */
     private final Class superclass;
 
     /** The interface classes. */
     private final Class[] interfaces;
+
+    /** The modifier value. */
+    private final int modifiers;
 
     /** The cache for enum constants. */
     private Map<String, Enum> enumerationConstants;
@@ -57,19 +61,47 @@ class JSClass<T> extends JSAnnotatedElement {
      * 
      * @param name
      * @param clazz
-     * @param annotations
+     * @param metadata
      */
-    private JSClass(String name, NativeObject clazz, NativeObject annotations, Class superclass, String[] interfaces) {
-        super(name, findAnnotations(annotations, "$", 1));
+    private JSClass(String name, NativeObject clazz, NativeObject metadata, Class superclass, String[] interfaces) {
+        super(name, findAnnotations(metadata, "$", 1));
 
         this.clazz = clazz;
-        this.annotations = annotations;
+        this.metadata = metadata;
         this.superclass = superclass;
         this.interfaces = new Class[interfaces.length];
 
         for (int i = 0; i < interfaces.length; i++) {
             this.interfaces[i] = forName(interfaces[i]);
         }
+
+        NativeArray info = metadata.getPropertyAs(NativeArray.class, "$");
+        this.modifiers = info == null ? 0 : info.getAsInt(0);
+    }
+
+    /**
+     * Returns the Java language modifiers for this class or interface, encoded in an integer. The
+     * modifiers consist of the Java Virtual Machine's constants for {@code public},
+     * {@code protected}, {@code private}, {@code final}, {@code static}, {@code abstract} and
+     * {@code interface}; they should be decoded using the methods of class {@code Modifier}.
+     * <p>
+     * If the underlying class is an array class, then its {@code public}, {@code private} and
+     * {@code protected} modifiers are the same as those of its component type. If this
+     * {@code Class} represents a primitive type or void, its {@code public} modifier is always
+     * {@code true}, and its {@code protected} and {@code private} modifiers are always
+     * {@code false}. If this object represents an array class, a primitive type or void, then its
+     * {@code final} modifier is always {@code true} and its interface modifier is always
+     * {@code false}. The values of its other modifiers are not determined by this specification.
+     * <p>
+     * The modifier encodings are defined in <em>The Java Virtual Machine
+     * Specification</em>, table 4.1.
+     * 
+     * @return the {@code int} representing the modifiers for this class
+     * @see java.lang.reflect.Modifier
+     * @since JDK1.1
+     */
+    public int getModifiers() {
+        return modifiers;
     }
 
     /**
@@ -89,9 +121,9 @@ class JSClass<T> extends JSAnnotatedElement {
     public Constructor[] getDeclaredConstructors() {
         NativeArray<JSConstructor> container = new NativeArray();
 
-        for (String name : annotations.keys()) {
+        for (String name : metadata.keys()) {
             if (name.startsWith("$") && name.length() != 1) {
-                container.push(new JSConstructor(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
+                container.push(new JSConstructor(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), metadata.getPropertyAs(NativeArray.class, name)));
             }
         }
         return (Constructor[]) (Object) container;
@@ -114,9 +146,9 @@ class JSClass<T> extends JSAnnotatedElement {
     public Constructor[] getConstructors() {
         NativeArray<JSConstructor> container = new NativeArray();
 
-        for (String name : annotations.keys()) {
+        for (String name : metadata.keys()) {
             if (name.startsWith("$") && name.length() != 1) {
-                container.push(new JSConstructor(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), annotations.getPropertyAs(NativeArray.class, name)));
+                container.push(new JSConstructor(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), metadata.getPropertyAs(NativeArray.class, name)));
             }
         }
         return (Constructor[]) (Object) container;
@@ -166,12 +198,12 @@ class JSClass<T> extends JSAnnotatedElement {
         NativeArray<JSMethod> container = new NativeArray();
 
         // collect non-static methods only
-        for (String name : annotations.keys()) {
-            int modifier = annotations.getPropertyAs(NativeArray.class, name).getAsInt(0);
+        for (String name : metadata.keys()) {
+            int modifier = metadata.getPropertyAs(NativeArray.class, name).getAsInt(0);
             int ch = name.codePointAt(0);
 
             if (ch != '$' && 0 <= modifier) {
-                container.push(new JSMethod(name, clazz, annotations.getPropertyAs(NativeArray.class, name)));
+                container.push(new JSMethod(name, clazz, metadata.getPropertyAs(NativeArray.class, name)));
             }
         }
 
@@ -258,12 +290,12 @@ class JSClass<T> extends JSAnnotatedElement {
         NativeArray<JSField> container = new NativeArray();
 
         // collect non-static field only
-        for (String name : annotations.keys()) {
-            int modifier = annotations.getPropertyAs(NativeArray.class, name).getAsInt(0);
+        for (String name : metadata.keys()) {
+            int modifier = metadata.getPropertyAs(NativeArray.class, name).getAsInt(0);
             int ch = name.codePointAt(0);
 
             if (ch != '$' && modifier < 0) {
-                container.push(new JSField(name, clazz, annotations.getPropertyAs(NativeArray.class, name)));
+                container.push(new JSField(name, clazz, metadata.getPropertyAs(NativeArray.class, name)));
             }
         }
 
@@ -373,6 +405,16 @@ class JSClass<T> extends JSAnnotatedElement {
         Class type = (Class) (Object) this;
 
         return type == int.class || type == long.class || type == float.class || type == double.class || type == boolean.class || type == short.class || type == byte.class || type == void.class;
+    }
+
+    /**
+     * Returns {@code true} if and only if the underlying class is a local class.
+     * 
+     * @return {@code true} if and only if this class is a local class.
+     * @since 1.5
+     */
+    public boolean isLocalClass() {
+        return false; // FIXME
     }
 
     /**

@@ -11,6 +11,7 @@ package js.lang.reflect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
@@ -31,6 +32,9 @@ class JSMethod extends JSAccessibleObject {
     /** The declaring class definition in runtime. */
     private NativeObject clazz;
 
+    /** The modifier value. */
+    private final int modifiers;
+
     /** The cache for return type. */
     private final Class returnType;
 
@@ -44,20 +48,31 @@ class JSMethod extends JSAccessibleObject {
      * 
      * @param name
      * @param clazz
-     * @param annotations
+     * @param metadata
      */
-    JSMethod(String name, NativeObject clazz, NativeArray<Annotation> annotations) {
-        super(name, annotations.slice(3));
+    JSMethod(String name, NativeObject clazz, NativeArray<Annotation> metadata) {
+        super(name, metadata.slice(3));
 
         try {
             this.clazz = clazz;
-            this.returnType = Class.forName(annotations.getPropertyAs(String.class, "1"));
-            this.parameterTypes = convert(annotations.getPropertyAs(String[].class, "2"));
+            this.modifiers = metadata.getAsInt(0);
+            this.returnType = Class.forName(metadata.getPropertyAs(String.class, "1"));
+            this.parameterTypes = convert(metadata.getPropertyAs(String[].class, "2"));
         } catch (Exception e) {
             // If this exception will be thrown, it is bug of this program. So we must rethrow the
             // wrapped error in here.
             throw new Error(e);
         }
+    }
+
+    /**
+     * Returns the Java language modifiers for the method represented by this {@code Method} object,
+     * as an integer. The {@code Modifier} class should be used to decode the modifiers.
+     * 
+     * @see Modifier
+     */
+    public int getModifiers() {
+        return modifiers;
     }
 
     /**
