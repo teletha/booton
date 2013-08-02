@@ -1,0 +1,11 @@
+syntax: regexp
+\.settings
+target
+\.classpath
+\.project
+\.factorypath
+syntax: regexp
+^application\.js$
+^application\.css$
+^index\.html$
+^live\.js$
