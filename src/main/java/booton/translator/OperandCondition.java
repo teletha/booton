@@ -103,7 +103,7 @@ class OperandCondition extends Operand {
     }
 
     /**
-     * @see booton.translator.Operand#invert()
+     * {@inheritDoc}
      */
     @Override
     Operand invert() {
@@ -119,7 +119,7 @@ class OperandCondition extends Operand {
     }
 
     /**
-     * @see java.lang.Object#toString()
+     * {@inheritDoc}
      */
     @Override
     public String toString() {

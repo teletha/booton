@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * @version 2013/04/15 11:12:23
+ * @version 2013/08/03 2:24:36
  */
 class Node {
 
@@ -203,7 +203,7 @@ class Node {
      * @return Chainable API.
      */
     final Node enclose() {
-        stack.add(new OperandExpression("(" + remove(0) + ")"));
+        stack.add(new OperandEnclose(remove(0)));
 
         // API definition
         return this;

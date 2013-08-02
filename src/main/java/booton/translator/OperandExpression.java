@@ -1,22 +1,16 @@
 /*
- * Copyright (C) 2009 Nameless Production Committee.
+ * Copyright (C) 2013 Nameless Production Committee
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *          http://opensource.org/licenses/mit-license.php
  */
 package booton.translator;
 
 /**
- * @version 2009/08/21 0:10:03
+ * @version 2013/08/03 2:21:03
  */
 class OperandExpression extends Operand {
 
@@ -31,17 +25,21 @@ class OperandExpression extends Operand {
     }
 
     /**
-     * @see booton.translator.Operand#invert()
+     * {@inheritDoc}
      */
     @Override
     Operand invert() {
         if (expression != null) {
-            String value = expression.toString();
+            if (expression instanceof Operand) {
+                ((Operand) expression).invert();
+            } else {
+                String value = expression.toString();
 
-            if (value.charAt(0) == '(') {
-                expression = "!".concat(value);
-            } else if (value.charAt(0) == '!') {
-                expression = value.substring(1);
+                if (value.charAt(0) == '(') {
+                    expression = "!".concat(value);
+                } else if (value.charAt(0) == '!') {
+                    expression = value.substring(1);
+                }
             }
         }
 
@@ -50,7 +48,7 @@ class OperandExpression extends Operand {
     }
 
     /**
-     * @see java.lang.Object#toString()
+     * {@inheritDoc}
      */
     @Override
     public String toString() {
