@@ -22,28 +22,25 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import kiss.I;
 import net.sourceforge.htmlunit.corejs.javascript.ConsString;
-import net.sourceforge.htmlunit.corejs.javascript.Context;
 import net.sourceforge.htmlunit.corejs.javascript.EvaluatorException;
 import net.sourceforge.htmlunit.corejs.javascript.NativeArray;
 import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
-import net.sourceforge.htmlunit.corejs.javascript.Script;
-import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
 import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebConsole.Logger;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine;
 
 /**
- * @version 2013/04/11 11:03:09
+ * @version 2013/08/03 20:53:27
  */
 public class ScriptTester {
 
@@ -53,89 +50,35 @@ public class ScriptTester {
     /** No parameter. */
     private static final Object NONE = new Object();
 
-    /** The script engine manager. */
-    private static Context engine;
+    /** The testable client. */
+    private static WebClient client;
 
-    /** The global scope. */
-    private static ScriptableObject global;
+    /** The dummy page for test. */
+    private static HtmlPage html;
 
-    @BeforeClass
-    public static void setup() {
+    /** The javascript runtime. */
+    private static JavaScriptEngine engine;
+
+    /** The defined classes. */
+    private static Set<Class> defined = new HashSet();
+
+    static {
         try {
             // build client
-            WebClient client = new WebClient(BrowserVersion.FIREFOX_17);
-            client.getWebConsole().setLogger(new Logger() {
-
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public void warn(Object message) {
-                    log(message);
-                }
-
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public void trace(Object message) {
-                    log(message);
-                }
-
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public void info(Object message) {
-                    log(message);
-                }
-
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public void error(Object message) {
-                    log(message);
-                }
-
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public void debug(Object message) {
-                    log(message);
-                }
-
-                /**
-                 * <p>
-                 * Rewrite console message to {@link System.out}.
-                 * </p>
-                 * 
-                 * @param message
-                 */
-                private void log(Object message) {
-                    System.out.println(message);
-                }
-            });
+            client = new WebClient(BrowserVersion.FIREFOX_17);
+            client.getWebConsole().setLogger(new Debugger());
 
             // build dummy page
-            HtmlPage dummy = (HtmlPage) client.getPage(I.locate("src/test/resources/empty.html").toUri().toURL());
+            html = (HtmlPage) client.getPage(I.locate("src/test/resources/empty.html").toUri().toURL());
 
             // build script engine
-            engine = client.getJavaScriptEngine().getContextFactory().enterContext();
-            global = dummy.getScriptObject();
+            engine = client.getJavaScriptEngine();
 
-            // compile boot script
-            Script booton = engine.compileReader(Files.newBufferedReader(I.locate("boot.js").toAbsolutePath(), UTF_8), "boot.js", 1, null);
-            booton.exec(engine, global);
+            // compile and load boot script
+            engine.execute(html, engine.compile(html, new String(Files.readAllBytes(I.locate("boot.js")), UTF_8), "boot.js", 1));
         } catch (Exception e) {
             throw I.quiet(e);
         }
-    }
-
-    @AfterClass
-    public static void clear() {
-        Context.exit();
     }
 
     /**
@@ -182,11 +125,11 @@ public class ScriptTester {
         StringBuilder script = new StringBuilder();
 
         // invoke as Javascript
-        Javascript.getScript(source).writeTo(script, Character.class);
+        Javascript.getScript(source).writeTo(script, defined, Character.class);
 
         try {
             // compile as Javascript and script engine read it
-            engine.evaluateString(global, script.toString(), source.getSimpleName(), 1, null);
+            engine.execute(html, script.toString(), source.getSimpleName(), 1);
 
             String className = Javascript.computeClassName(source);
             String constructorName = Javascript.computeMethodName(constructor).substring(1);
@@ -219,7 +162,7 @@ public class ScriptTester {
 
                 try {
                     // execute and compare it to the java resul
-                    assertObject(results.get(i), engine.evaluateString(global, invoker.toString(), "", 1, null));
+                    assertObject(results.get(i), engine.execute(html, invoker.toString(), "", 1));
                 } catch (AssertionError e) {
                     StringBuilder builder = new StringBuilder();
                     builder.append("Compiling script is success but execution results of Java and JS are different.")
@@ -548,7 +491,7 @@ public class ScriptTester {
 
         // check each items
         for (int i = 0; i < array.getLength(); i++) {
-            assertObject(Array.get(java, i), array.get(i, global));
+            assertObject(Array.get(java, i), array.get(i, null));
         }
     }
 
@@ -599,5 +542,62 @@ public class ScriptTester {
             }
         }
         throw new AssertionError("Class name is not found.");
+    }
+
+    /**
+     * @version 2013/08/03 20:44:05
+     */
+    private static class Debugger implements Logger {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void warn(Object message) {
+            log(message);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void trace(Object message) {
+            log(message);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void info(Object message) {
+            log(message);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void error(Object message) {
+            log(message);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void debug(Object message) {
+            log(message);
+        }
+
+        /**
+         * <p>
+         * Rewrite console message to {@link System.out}.
+         * </p>
+         * 
+         * @param message
+         */
+        private void log(Object message) {
+            System.out.println(message);
+        }
     }
 }

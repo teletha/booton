@@ -13,6 +13,7 @@ import static java.nio.charset.StandardCharsets.*;
 
 import java.lang.reflect.Constructor;
 import java.nio.file.Files;
+import java.util.HashSet;
 
 import kiss.I;
 import net.sourceforge.htmlunit.corejs.javascript.Context;
@@ -147,7 +148,7 @@ public class ScriptRunner extends BlockJUnit4ClassRunner {
         StringBuilder script = new StringBuilder();
 
         // invoke as Javascript
-        Javascript.getScript(source).writeTo(script, Character.class);
+        Javascript.getScript(source).writeTo(script, new HashSet(), Character.class);
 
         try {
             // compile as Javascript and script engine read it
@@ -170,7 +171,8 @@ public class ScriptRunner extends BlockJUnit4ClassRunner {
 
             if (result instanceof Undefined) {
                 // success
-            } else if (isFirst) {
+            } else {
+                System.out.println(result);
                 notifier.fireTestFailure(new Failure(description, new AssertionError()));
                 return;
             }

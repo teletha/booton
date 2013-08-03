@@ -60,7 +60,7 @@ import org.objectweb.asm.Type;
  * volatile
  * </p>
  * 
- * @version 2013/05/20 22:31:29
+ * @version 2013/08/03 21:29:22
  */
 public class Javascript {
 
@@ -139,7 +139,24 @@ public class Javascript {
      */
     public void writeTo(Path output, Class... requirements) {
         try {
-            writeTo(Files.newBufferedWriter(output, I.$encoding), requirements);
+            writeTo(Files.newBufferedWriter(output, I.$encoding), new HashSet(), requirements);
+        } catch (IOException e) {
+            throw I.quiet(e);
+        }
+    }
+
+    /**
+     * <p>
+     * Write this script into the specified output. This method write out dependency scripts of this
+     * script too.
+     * </p>
+     * 
+     * @param outout A script output.
+     * @param requirements A list of required script classes.
+     */
+    public void writeTo(Path output, Set<Class> defined, Class... requirements) {
+        try {
+            writeTo(Files.newBufferedWriter(output, I.$encoding), defined, requirements);
         } catch (IOException e) {
             throw I.quiet(e);
         }
@@ -155,6 +172,19 @@ public class Javascript {
      * @param requirements A list of required script classes.
      */
     public void writeTo(Appendable output, Class... requirements) {
+        writeTo(output, new HashSet(), requirements);
+    }
+
+    /**
+     * <p>
+     * Write this script into the specified output. This method write out dependency scripts of this
+     * script too.
+     * </p>
+     * 
+     * @param outout A script output.
+     * @param requirements A list of required script classes.
+     */
+    public void writeTo(Appendable output, Set<Class> defined, Class... requirements) {
         // start compiling script
         compiling = this;
 
@@ -171,7 +201,7 @@ public class Javascript {
 
         try {
             // Record all defined classes to prevent duplicated definition.
-            write(output, new HashSet());
+            write(output, defined);
 
             // Write bootstrap method if needed.
             output.append("try {");
