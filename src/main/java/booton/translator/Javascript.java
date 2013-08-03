@@ -81,6 +81,7 @@ public class Javascript {
         // Define Class class at first. It is ensured that Class definition is
         // assigned in 'boot.A' variable.
         getScript(Class.class);
+        getScript(Object.class);
     }
 
     /** The actual script class to translate. */
@@ -158,6 +159,7 @@ public class Javascript {
         compiling = this;
 
         // Any class requires these classes.
+        require(Object.class);
         require(Class.class);
         require(Thread.class);
 
@@ -220,16 +222,12 @@ public class Javascript {
             output.append(code);
         }
 
-        if (!source.getName().equals("js.lang.JSObject")) {
-            Javascript script = Javascript.getScript(source.getSuperclass());
+        // write dependency classes
+        for (Class depndency : dependencies) {
+            Javascript script = Javascript.getScript(depndency);
 
-            // write dependency classes
-            for (Class depndency : dependencies) {
-                script = Javascript.getScript(depndency);
-
-                if (script != null && !defined.contains(script.source)) {
-                    script.write(output, defined);
-                }
+            if (script != null && !defined.contains(script.source)) {
+                script.write(output, defined);
             }
         }
 

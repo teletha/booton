@@ -13,6 +13,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.translator.ScriptTester;
@@ -145,6 +146,7 @@ public class ClassTest extends ScriptTester {
     }
 
     @Test
+    @Ignore
     public void genericSuperClass1() throws Exception {
         test(new Scriptable() {
 
