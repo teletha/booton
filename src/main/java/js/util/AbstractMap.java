@@ -15,6 +15,5 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/08/02 17:00:22
  */
 @JavaAPIProvider(java.util.AbstractMap.class)
-class AbstractMap {
-
+class AbstractMap<K, V> {
 }

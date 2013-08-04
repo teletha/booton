@@ -13,18 +13,16 @@ import js.lang.NativeObject;
 import jsx.Util;
 import jsx.model.Property;
 
+import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/05/15 11:21:34
+ * @version 2013/08/04 9:37:41
  */
-@RunWith(ScriptRunner.class)
 public class JSONTest {
 
     @Test
+    @Ignore
     public void write() throws Exception {
         Model model = new Model();
         model.intValue = -10;
