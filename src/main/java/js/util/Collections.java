@@ -9,9 +9,6 @@
  */
 package js.util;
 
-import java.util.AbstractList;
-import java.util.AbstractMap;
-import java.util.AbstractSet;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -19,14 +16,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
-import java.util.RandomAccess;
+import java.util.Objects;
 import java.util.Set;
 
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/08/02 15:53:23
+ * @version 2013/08/04 12:19:30
  */
 @JavaAPIProvider(java.util.Collections.class)
 class Collections {
@@ -36,14 +34,14 @@ class Collections {
      * 
      * @see #emptySet()
      */
-    public static final Set EMPTY_SET = new EmptySet();
+    public static final Set EMPTY_SET = new UnmodifiableSet(new HashSet());
 
     /**
      * The empty list (immutable). This list is serializable.
      * 
      * @see #emptyList()
      */
-    public static final List EMPTY_LIST = new EmptyList();
+    public static final List EMPTY_LIST = new UnmodifiableList(new ArrayList());
 
     /**
      * The empty map (immutable). This map is serializable.
@@ -51,7 +49,7 @@ class Collections {
      * @see #emptyMap()
      * @since 1.3
      */
-    public static final Map EMPTY_MAP = new EmptyMap();
+    public static final Map EMPTY_MAP = new UnmodifiableMap(new HashMap());
 
     /**
      * Returns an iterator that has no elements. More precisely,
@@ -210,215 +208,6 @@ class Collections {
     }
 
     /**
-     * @version 2013/08/02 15:52:29
-     */
-    private static class EmptyMap<K, V> extends AbstractMap<K, V> {
-
-        /**
-         * {@inheritDoc}
-         */
-        public int size() {
-            return 0;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public boolean isEmpty() {
-            return true;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public boolean containsKey(Object key) {
-            return false;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public boolean containsValue(Object value) {
-            return false;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public V get(Object key) {
-            return null;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public Set<K> keySet() {
-            return emptySet();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public Collection<V> values() {
-            return emptySet();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public Set<Map.Entry<K, V>> entrySet() {
-            return emptySet();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public boolean equals(Object o) {
-            if (o instanceof Map) {
-                return ((Map) o).isEmpty();
-            }
-            return false;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public int hashCode() {
-            return 0;
-        }
-    }
-
-    /**
-     * @version 2013/08/02 15:51:09
-     */
-    private static class EmptySet<E> extends AbstractSet<E> {
-
-        /**
-         * {@inheritDoc}
-         */
-        public Iterator<E> iterator() {
-            return emptyIterator();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public int size() {
-            return 0;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public boolean isEmpty() {
-            return true;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public boolean contains(Object item) {
-            return false;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public boolean containsAll(Collection<?> collection) {
-            return collection.isEmpty();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public Object[] toArray() {
-            return new Object[0];
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public <T> T[] toArray(T[] array) {
-            if (array.length > 0) {
-                array[0] = null;
-            }
-            return array;
-        }
-    }
-
-    /**
-     * @version 2013/08/02 15:48:37
-     */
-    private static class EmptyList<E> extends AbstractList<E> implements RandomAccess {
-
-        /**
-         * {@inheritDoc}
-         */
-        public Iterator<E> iterator() {
-            return emptyIterator();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public ListIterator<E> listIterator() {
-            return emptyListIterator();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public int size() {
-            return 0;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public boolean isEmpty() {
-            return true;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public boolean contains(Object obj) {
-            return false;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public boolean containsAll(Collection<?> collection) {
-            return collection.isEmpty();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public Object[] toArray() {
-            return new Object[0];
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public <T> T[] toArray(T[] array) {
-            if (array.length > 0) {
-                array[0] = null;
-            }
-            return array;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public E get(int index) {
-            throw new IndexOutOfBoundsException("Index: " + index);
-        }
-    }
-
-    /**
      * @version 2013/08/02 15:45:44
      */
     private static class EmptyIterator<E> implements Iterator<E> {
@@ -496,6 +285,711 @@ class Collections {
          */
         public void add(E e) {
             throw new UnsupportedOperationException();
+        }
+    }
+
+    /**
+     * @version 2013/08/04 11:35:14
+     */
+    private static class UnmodifiableCollection<E> implements Collection<E> {
+
+        /** The delegator. */
+        protected final Collection<E> collection;
+
+        /**
+         * @param collection
+         */
+        private UnmodifiableCollection(Collection<E> collection) {
+            if (collection == null) {
+                throw new NullPointerException();
+            }
+            this.collection = collection;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int size() {
+            return collection.size();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isEmpty() {
+            return collection.isEmpty();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean contains(Object o) {
+            return collection.contains(o);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Object[] toArray() {
+            return collection.toArray();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public <T> T[] toArray(T[] a) {
+            return collection.toArray(a);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return collection.toString();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Iterator<E> iterator() {
+            return new UnmodifiableIterator(collection.iterator());
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean add(E item) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean remove(Object object) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean containsAll(Collection<?> colletion) {
+            return collection.containsAll(colletion);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean addAll(Collection<? extends E> colletion) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean removeAll(Collection<?> colletion) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean retainAll(Collection<?> collection) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void clear() {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    /**
+     * @version 2013/08/04 11:38:47
+     */
+    private static class UnmodifiableIterator<E> implements Iterator<E>, ListIterator<E> {
+
+        /** The delegator. */
+        protected final Iterator<E> iterator;
+
+        /**
+         * @param iterator
+         */
+        private UnmodifiableIterator(Iterator<E> iterator) {
+            this.iterator = iterator;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean hasNext() {
+            return iterator.hasNext();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E next() {
+            return iterator.next();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean hasPrevious() {
+            return ((ListIterator<E>) iterator).hasPrevious();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E previous() {
+            return ((ListIterator<E>) iterator).previous();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int nextIndex() {
+            return ((ListIterator<E>) iterator).nextIndex();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int previousIndex() {
+            return ((ListIterator<E>) iterator).previousIndex();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void set(E item) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void add(E item) {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    /**
+     * @version 2013/08/04 11:41:29
+     */
+    private static class UnmodifiableSet<E> extends UnmodifiableCollection<E> implements Set<E> {
+
+        /**
+         * @param set
+         */
+        private UnmodifiableSet(Set<E> set) {
+            super(set);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(Object object) {
+            return object == this || collection.equals(object);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int hashCode() {
+            return collection.hashCode();
+        }
+    }
+
+    /**
+     * @version 2013/08/04 11:34:48
+     */
+    private static class UnmodifiableList<E> extends UnmodifiableCollection<E> implements List<E> {
+
+        /** The delegator. */
+        private final List<? extends E> list;
+
+        /**
+         * @param list
+         */
+        private UnmodifiableList(List<E> list) {
+            super(list);
+
+            this.list = list;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(Object object) {
+            return object == this || list.equals(object);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int hashCode() {
+            return list.hashCode();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E get(int index) {
+            return list.get(index);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E set(int index, E element) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void add(int index, E element) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E remove(int index) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int indexOf(Object item) {
+            return list.indexOf(item);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int lastIndexOf(Object item) {
+            return list.lastIndexOf(item);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean addAll(int index, Collection<? extends E> collection) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public ListIterator<E> listIterator() {
+            return listIterator(0);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public ListIterator<E> listIterator(int index) {
+            return new UnmodifiableIterator(list.listIterator(index));
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public List<E> subList(int fromIndex, int toIndex) {
+            return new UnmodifiableList(list.subList(fromIndex, toIndex));
+        }
+    }
+
+    /**
+     * @version 2013/08/04 16:38:01
+     */
+    private static class UnmodifiableEntry<K, V> implements Entry<K, V> {
+
+        /** The delegator. */
+        private Entry<? extends K, ? extends V> entry;
+
+        /**
+         * @param entry
+         */
+        private UnmodifiableEntry(Entry<? extends K, ? extends V> entry) {
+            this.entry = entry;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public K getKey() {
+            return entry.getKey();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public V getValue() {
+            return entry.getValue();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public V setValue(V value) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int hashCode() {
+            return entry.hashCode();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(Object object) {
+            if (this == object) {
+                return true;
+            }
+
+            if (!(object instanceof Entry)) {
+                return false;
+            }
+            Entry candidate = (Entry) object;
+            return Objects.equals(entry.getKey(), candidate.getKey()) && Objects.equals(entry.getValue(), candidate.getValue());
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return entry.toString();
+        }
+    }
+
+    /**
+     * We need this class in addition to UnmodifiableSet as Map.Entries themselves permit
+     * modification of the backing Map via their setValue operation. This class is subtle: there are
+     * many possible attacks that must be thwarted.
+     * 
+     * @serial include
+     */
+    private static class UnmodifiableEntrySet<K, V> extends UnmodifiableSet<Entry<K, V>> {
+
+        /**
+         * @param set
+         */
+        private UnmodifiableEntrySet(Set<? extends Entry<? extends K, ? extends V>> set) {
+            super((Set) set);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public Iterator<Entry<K, V>> iterator() {
+            return new UnmodifiableIterator<Entry<K, V>>(collection.iterator()) {
+
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                public Entry<K, V> next() {
+                    return new UnmodifiableEntry(iterator.next());
+                }
+            };
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Object[] toArray() {
+            Object[] a = collection.toArray();
+
+            for (int i = 0; i < a.length; i++) {
+                a[i] = new UnmodifiableEntry((Entry<K, V>) a[i]);
+            }
+            return a;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public <T> T[] toArray(T[] a) {
+            // We don't pass a to c.toArray, to avoid window of
+            // vulnerability wherein an unscrupulous multithreaded client
+            // could get his hands on raw (unwrapped) Entries from c.
+            Object[] arr = collection.toArray(a.length == 0 ? a : Arrays.copyOf(a, 0));
+
+            for (int i = 0; i < arr.length; i++) {
+                arr[i] = new UnmodifiableEntry<>((Entry<K, V>) arr[i]);
+            }
+
+            if (arr.length > a.length) {
+                return (T[]) arr;
+            }
+
+            System.arraycopy(arr, 0, a, 0, arr.length);
+
+            if (a.length > arr.length) {
+                a[arr.length] = null;
+            }
+            return a;
+        }
+
+        /**
+         * This method is overridden to protect the backing set against an object with a nefarious
+         * equals function that senses that the equality-candidate is Entry and calls its setValue
+         * method.
+         */
+        public boolean contains(Object o) {
+            if (!(o instanceof Entry)) {
+                return false;
+            }
+            return collection.contains(new UnmodifiableEntry<>((Entry<?, ?>) o));
+        }
+
+        /**
+         * The next two methods are overridden to protect against an unscrupulous List whose
+         * contains(Object o) method senses when o is a Entry, and calls o.setValue.
+         */
+        public boolean containsAll(Collection<?> coll) {
+            for (Object e : coll) {
+                if (!contains(e)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(Object o) {
+            if (o == this) return true;
+
+            if (!(o instanceof Set)) {
+                return false;
+            }
+            Set s = (Set) o;
+            if (s.size() != collection.size()) {
+                return false;
+            }
+            return containsAll(s); // Invokes safe containsAll() above
+        }
+    }
+
+    /**
+     * @version 2013/08/04 12:10:19
+     */
+    private static class UnmodifiableMap<K, V> implements Map<K, V> {
+
+        /** The delegator. */
+        private final Map<? extends K, ? extends V> map;
+
+        /** cache. */
+        private transient Set<K> keySet = null;
+
+        /** cache. */
+        private transient Set<Entry<K, V>> entrySet = null;
+
+        /** cache. */
+        private transient Collection<V> values = null;
+
+        /**
+         * @param map
+         */
+        private UnmodifiableMap(Map<? extends K, ? extends V> map) {
+            if (map == null) {
+                throw new NullPointerException();
+            }
+            this.map = map;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int size() {
+            return map.size();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isEmpty() {
+            return map.isEmpty();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean containsKey(Object key) {
+            return map.containsKey(key);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean containsValue(Object val) {
+            return map.containsValue(val);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public V get(Object key) {
+            return map.get(key);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public V put(K key, V value) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public V remove(Object key) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void putAll(Map<? extends K, ? extends V> m) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void clear() {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Set<K> keySet() {
+            if (keySet == null) {
+                keySet = new UnmodifiableSet(map.keySet());
+            }
+            return keySet;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Set<Entry<K, V>> entrySet() {
+            if (entrySet == null) {
+                entrySet = new UnmodifiableEntrySet(map.entrySet());
+            }
+            return entrySet;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Collection<V> values() {
+            if (values == null) {
+                values = new UnmodifiableCollection(map.values());
+            }
+            return values;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(Object o) {
+            return o == this || map.equals(o);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int hashCode() {
+            return map.hashCode();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return map.toString();
         }
     }
 }

@@ -12,6 +12,7 @@ package js.util;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Objects;
 
 import booton.translator.JavaAPIProvider;
 
@@ -114,5 +115,39 @@ abstract class AbstractCollection<E> implements Collection<E> {
             array[i] = (T) item;
         }
         return array;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean add(E e) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean remove(Object object) {
+        Iterator<E> iterator = iterator();
+
+        while (iterator.hasNext()) {
+            if (Objects.equals(iterator.next(), object)) {
+                iterator.remove();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void clear() {
+        Iterator<E> iterator = iterator();
+
+        while (iterator.hasNext()) {
+            iterator.next();
+            iterator.remove();
+        }
     }
 }

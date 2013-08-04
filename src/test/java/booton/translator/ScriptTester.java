@@ -82,6 +82,12 @@ public class ScriptTester {
     }
 
     /**
+     * Hide constructor.
+     */
+    protected ScriptTester() {
+    }
+
+    /**
      * <p>
      * Compile specified class and evaluate it.
      * </p>
@@ -89,11 +95,22 @@ public class ScriptTester {
      * @param scriptable A target scriptable source.
      */
     protected final void test(Scriptable scriptable) {
-        // search invocation
         Class source = scriptable.getClass();
+
+        execute(source, searchInvocation(source));
+    }
+
+    /**
+     * <p>
+     * Compile specified class and evaluate it.
+     * </p>
+     * 
+     * @param scriptable A target scriptable source.
+     */
+    final void execute(Class source, Method method) {
+        // search invocation
         Constructor constructor = searchInstantiator(source);
         Object[] parameter = constructor.getParameterTypes().length == 0 ? new Object[0] : new Object[] {this};
-        Method method = searchInvocation(source);
 
         // prepare input and result store
         List inputs = prepareInputs(method);
