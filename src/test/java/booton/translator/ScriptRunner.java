@@ -9,11 +9,12 @@
  */
 package booton.translator;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.junit.runner.Description;
-import org.junit.runner.notification.Failure;
-import org.junit.runner.notification.RunNotifier;
+import org.junit.internal.runners.model.ReflectiveCallable;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
@@ -35,24 +36,56 @@ public class ScriptRunner extends BlockJUnit4ClassRunner {
      * {@inheritDoc}
      */
     @Override
-    protected void runChild(FrameworkMethod method, RunNotifier notifier) {
-        // execute as Java
-        super.runChild(method, notifier);
+    protected List<FrameworkMethod> computeTestMethods() {
+        List<FrameworkMethod> doubles = new ArrayList();
+        List<FrameworkMethod> methods = super.computeTestMethods();
 
-        // execute as Javascript
-        Description description = describeChild(method);
-        notifier.fireTestStarted(description);
+        for (FrameworkMethod method : methods) {
+            doubles.add(method);
+            doubles.add(new JavascriptMethod(method.getMethod()));
+        }
+        return doubles;
+    }
 
-        try {
-            Method test = method.getMethod();
+    /**
+     * @version 2013/08/05 14:34:15
+     */
+    private static class JavascriptMethod extends FrameworkMethod {
 
-            ScriptTester tester = new ScriptTester();
-            tester.execute(test.getDeclaringClass(), test);
-        } catch (Throwable e) {
-            notifier.fireTestFailure(new Failure(describeChild(method), e));
-        } finally {
-            notifier.fireTestFinished(description);
+        /** The test method. */
+        private Method method;
+
+        /**
+         * @param method
+         */
+        private JavascriptMethod(Method method) {
+            super(method);
+
+            this.method = method;
         }
 
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String getName() {
+            return super.getName() + "JS";
+        }
+
+        /**
+         * Returns the result of invoking this method on {@code target} with parameters
+         * {@code params}. {@link InvocationTargetException}s thrown are unwrapped, and their causes
+         * rethrown.
+         */
+        public Object invokeExplosively(final Object target, final Object... params) throws Throwable {
+            return new ReflectiveCallable() {
+
+                @Override
+                protected Object runReflectiveCall() throws Throwable {
+                    ScriptTester tester = new ScriptTester();
+                    return tester.executeAsJavascript(method);
+                }
+            }.run();
+        }
     }
 }

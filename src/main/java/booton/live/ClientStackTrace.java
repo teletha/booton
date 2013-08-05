@@ -9,26 +9,39 @@
  */
 package booton.live;
 
-import jsx.model.Property;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @version 2013/05/26 11:31:27
  */
 public class ClientStackTrace {
 
-    /** The class name. */
-    @Property
-    public String className;
+    /**
+     * <p>
+     * Encode error message.
+     * </p>
+     * 
+     * @param throwable
+     * @return
+     */
+    public static String encode(Throwable throwable) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(throwable.getClass().getName()).append("\r\n");
+        builder.append(throwable.getMessage()).append("\r\n");
 
-    /** The method name. */
-    @Property
-    public String methodName;
-
-    /** The file name. */
-    @Property
-    public String file;
-
-    /** The line number. */
-    @Property
-    public int line;
+        for (StackTraceElement element : throwable.getStackTrace()) {
+            builder.append(element.getMethodName())
+                    .append(" ")
+                    .append(element.getFileName())
+                    .append(" ")
+                    .append(element.getLineNumber())
+                    .append("\r\n");
+        }
+        return builder.toString();
+    }
 }
