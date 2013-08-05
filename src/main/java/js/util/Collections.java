@@ -152,6 +152,21 @@ class Collections {
     }
 
     /**
+     * Returns an unmodifiable view of the specified set. This method allows modules to provide
+     * users with "read-only" access to internal sets. Query operations on the returned set
+     * "read through" to the specified set, and attempts to modify the returned set, whether direct
+     * or via its iterator, result in an <tt>UnsupportedOperationException</tt>.
+     * <p>
+     * The returned set will be serializable if the specified set is serializable.
+     * 
+     * @param set the set for which an unmodifiable view is to be returned.
+     * @return an unmodifiable view of the specified set.
+     */
+    public static <T> Set<T> unmodifiableSet(Set<? extends T> set) {
+        return new UnmodifiableSet(set);
+    }
+
+    /**
      * Sorts the specified list according to the order induced by the specified comparator. All
      * elements in the list must be <i>mutually comparable</i> using the specified comparator (that
      * is, {@code c.compare(e1, e2)} must not throw a {@code ClassCastException} for any elements
@@ -297,6 +312,10 @@ class Collections {
         protected final Collection<E> collection;
 
         /**
+         * <p>
+         * Create delegator.
+         * </p>
+         * 
          * @param collection
          */
         private UnmodifiableCollection(Collection<E> collection) {
@@ -422,15 +441,19 @@ class Collections {
     /**
      * @version 2013/08/04 11:38:47
      */
-    private static class UnmodifiableIterator<E> implements Iterator<E>, ListIterator<E> {
+    private static class UnmodifiableIterator<E, I extends Iterator<E>> implements Iterator<E> {
 
         /** The delegator. */
-        protected final Iterator<E> iterator;
+        protected final I iterator;
 
         /**
+         * <p>
+         * Create delegator.
+         * </p>
+         * 
          * @param iterator
          */
-        private UnmodifiableIterator(Iterator<E> iterator) {
+        protected UnmodifiableIterator(I iterator) {
             this.iterator = iterator;
         }
 
@@ -457,13 +480,31 @@ class Collections {
         public void remove() {
             throw new UnsupportedOperationException();
         }
+    }
+
+    /**
+     * @version 2013/08/05 9:05:23
+     */
+    private static class UnmodifiableListIterator<E> extends UnmodifiableIterator<E, ListIterator<E>>
+            implements ListIterator<E> {
+
+        /**
+         * <p>
+         * Create delegator.
+         * </p>
+         * 
+         * @param iterator
+         */
+        private UnmodifiableListIterator(ListIterator<E> iterator) {
+            super(iterator);
+        }
 
         /**
          * {@inheritDoc}
          */
         @Override
         public boolean hasPrevious() {
-            return ((ListIterator<E>) iterator).hasPrevious();
+            return iterator.hasPrevious();
         }
 
         /**
@@ -471,7 +512,7 @@ class Collections {
          */
         @Override
         public E previous() {
-            return ((ListIterator<E>) iterator).previous();
+            return iterator.previous();
         }
 
         /**
@@ -479,7 +520,7 @@ class Collections {
          */
         @Override
         public int nextIndex() {
-            return ((ListIterator<E>) iterator).nextIndex();
+            return iterator.nextIndex();
         }
 
         /**
@@ -487,14 +528,14 @@ class Collections {
          */
         @Override
         public int previousIndex() {
-            return ((ListIterator<E>) iterator).previousIndex();
+            return iterator.previousIndex();
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public void set(E item) {
+        public void set(E e) {
             throw new UnsupportedOperationException();
         }
 
@@ -502,7 +543,7 @@ class Collections {
          * {@inheritDoc}
          */
         @Override
-        public void add(E item) {
+        public void add(E e) {
             throw new UnsupportedOperationException();
         }
     }
@@ -513,6 +554,10 @@ class Collections {
     private static class UnmodifiableSet<E> extends UnmodifiableCollection<E> implements Set<E> {
 
         /**
+         * <p>
+         * Create delegator.
+         * </p>
+         * 
          * @param set
          */
         private UnmodifiableSet(Set<E> set) {
@@ -542,12 +587,16 @@ class Collections {
     private static class UnmodifiableList<E> extends UnmodifiableCollection<E> implements List<E> {
 
         /** The delegator. */
-        private final List<? extends E> list;
+        protected final List<E> list;
 
         /**
+         * <p>
+         * Create delegator.
+         * </p>
+         * 
          * @param list
          */
-        private UnmodifiableList(List<E> list) {
+        protected UnmodifiableList(List<E> list) {
             super(list);
 
             this.list = list;
@@ -638,7 +687,7 @@ class Collections {
          */
         @Override
         public ListIterator<E> listIterator(int index) {
-            return new UnmodifiableIterator(list.listIterator(index));
+            return new UnmodifiableListIterator(list.listIterator(index));
         }
 
         /**
@@ -651,17 +700,182 @@ class Collections {
     }
 
     /**
+     * @version 2013/08/04 12:10:19
+     */
+    private static class UnmodifiableMap<K, V> implements Map<K, V> {
+
+        /** The delegator. */
+        private final Map<K, V> map;
+
+        /** cache. */
+        private transient Set<K> keySet = null;
+
+        /** cache. */
+        private transient Set<Entry<K, V>> entrySet = null;
+
+        /** cache. */
+        private transient Collection<V> values = null;
+
+        /**
+         * <p>
+         * Create delegator.
+         * </p>
+         * 
+         * @param map
+         */
+        private UnmodifiableMap(Map<K, V> map) {
+            if (map == null) {
+                throw new NullPointerException();
+            }
+            this.map = map;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int size() {
+            return map.size();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isEmpty() {
+            return map.isEmpty();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean containsKey(Object key) {
+            return map.containsKey(key);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean containsValue(Object val) {
+            return map.containsValue(val);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public V get(Object key) {
+            return map.get(key);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public V put(K key, V value) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public V remove(Object key) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void putAll(Map<? extends K, ? extends V> map) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void clear() {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Set<K> keySet() {
+            if (keySet == null) {
+                keySet = new UnmodifiableSet(map.keySet());
+            }
+            return keySet;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Set<Entry<K, V>> entrySet() {
+            if (entrySet == null) {
+                entrySet = new UnmodifiableEntrySet(map.entrySet());
+            }
+            return entrySet;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Collection<V> values() {
+            if (values == null) {
+                values = new UnmodifiableCollection(map.values());
+            }
+            return values;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(Object object) {
+            return object == this || map.equals(object);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int hashCode() {
+            return map.hashCode();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return map.toString();
+        }
+    }
+
+    /**
      * @version 2013/08/04 16:38:01
      */
     private static class UnmodifiableEntry<K, V> implements Entry<K, V> {
 
         /** The delegator. */
-        private Entry<? extends K, ? extends V> entry;
+        private final Entry<K, V> entry;
 
         /**
+         * <p>
+         * Create delegator.
+         * </p>
+         * 
          * @param entry
          */
-        private UnmodifiableEntry(Entry<? extends K, ? extends V> entry) {
+        private UnmodifiableEntry(Entry<K, V> entry) {
             this.entry = entry;
         }
 
@@ -732,17 +946,21 @@ class Collections {
     private static class UnmodifiableEntrySet<K, V> extends UnmodifiableSet<Entry<K, V>> {
 
         /**
+         * <p>
+         * Create delegator.
+         * </p>
+         * 
          * @param set
          */
-        private UnmodifiableEntrySet(Set<? extends Entry<? extends K, ? extends V>> set) {
-            super((Set) set);
+        private UnmodifiableEntrySet(Set<Entry<K, V>> set) {
+            super(set);
         }
 
         /**
          * {@inheritDoc}
          */
         public Iterator<Entry<K, V>> iterator() {
-            return new UnmodifiableIterator<Entry<K, V>>(collection.iterator()) {
+            return new UnmodifiableIterator<Entry<K, V>, Iterator<Entry<K, V>>>(collection.iterator()) {
 
                 /**
                  * {@inheritDoc}
@@ -759,38 +977,38 @@ class Collections {
          */
         @Override
         public Object[] toArray() {
-            Object[] a = collection.toArray();
+            Object[] array = collection.toArray();
 
-            for (int i = 0; i < a.length; i++) {
-                a[i] = new UnmodifiableEntry((Entry<K, V>) a[i]);
+            for (int i = 0; i < array.length; i++) {
+                array[i] = new UnmodifiableEntry((Entry<K, V>) array[i]);
             }
-            return a;
+            return array;
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public <T> T[] toArray(T[] a) {
+        public <T> T[] toArray(T[] dest) {
             // We don't pass a to c.toArray, to avoid window of
             // vulnerability wherein an unscrupulous multithreaded client
             // could get his hands on raw (unwrapped) Entries from c.
-            Object[] arr = collection.toArray(a.length == 0 ? a : Arrays.copyOf(a, 0));
+            Object[] array = collection.toArray(dest.length == 0 ? dest : Arrays.copyOf(dest, 0));
 
-            for (int i = 0; i < arr.length; i++) {
-                arr[i] = new UnmodifiableEntry<>((Entry<K, V>) arr[i]);
+            for (int i = 0; i < array.length; i++) {
+                array[i] = new UnmodifiableEntry((Entry<K, V>) array[i]);
             }
 
-            if (arr.length > a.length) {
-                return (T[]) arr;
+            if (array.length > dest.length) {
+                return (T[]) array;
             }
 
-            System.arraycopy(arr, 0, a, 0, arr.length);
+            System.arraycopy(array, 0, dest, 0, array.length);
 
-            if (a.length > arr.length) {
-                a[arr.length] = null;
+            if (dest.length > array.length) {
+                dest[array.length] = null;
             }
-            return a;
+            return dest;
         }
 
         /**
@@ -798,20 +1016,22 @@ class Collections {
          * equals function that senses that the equality-candidate is Entry and calls its setValue
          * method.
          */
-        public boolean contains(Object o) {
-            if (!(o instanceof Entry)) {
-                return false;
+        @Override
+        public boolean contains(Object object) {
+            if (object instanceof Entry) {
+                return collection.contains(new UnmodifiableEntry((Entry) object));
             }
-            return collection.contains(new UnmodifiableEntry<>((Entry<?, ?>) o));
+            return false;
         }
 
         /**
-         * The next two methods are overridden to protect against an unscrupulous List whose
-         * contains(Object o) method senses when o is a Entry, and calls o.setValue.
+         * This method is overridden to protect against an unscrupulous List whose contains(Object
+         * o) method senses when o is a Entry, and calls o.setValue.
          */
-        public boolean containsAll(Collection<?> coll) {
-            for (Object e : coll) {
-                if (!contains(e)) {
+        @Override
+        public boolean containsAll(Collection collection) {
+            for (Object object : collection) {
+                if (!contains(object)) {
                     return false;
                 }
             }
@@ -819,177 +1039,23 @@ class Collections {
         }
 
         /**
-         * {@inheritDoc}
+         * This method is overridden to protect against an unscrupulous List whose contains(Object
+         * o) method senses when o is a Entry, and calls o.setValue.
          */
         @Override
-        public boolean equals(Object o) {
-            if (o == this) return true;
-
-            if (!(o instanceof Set)) {
-                return false;
+        public boolean equals(Object object) {
+            if (object == this) {
+                return true;
             }
-            Set s = (Set) o;
-            if (s.size() != collection.size()) {
-                return false;
+
+            if (object instanceof Set) {
+                Set set = (Set) object;
+
+                if (set.size() == collection.size()) {
+                    return containsAll(set);
+                }
             }
-            return containsAll(s); // Invokes safe containsAll() above
-        }
-    }
-
-    /**
-     * @version 2013/08/04 12:10:19
-     */
-    private static class UnmodifiableMap<K, V> implements Map<K, V> {
-
-        /** The delegator. */
-        private final Map<? extends K, ? extends V> map;
-
-        /** cache. */
-        private transient Set<K> keySet = null;
-
-        /** cache. */
-        private transient Set<Entry<K, V>> entrySet = null;
-
-        /** cache. */
-        private transient Collection<V> values = null;
-
-        /**
-         * @param map
-         */
-        private UnmodifiableMap(Map<? extends K, ? extends V> map) {
-            if (map == null) {
-                throw new NullPointerException();
-            }
-            this.map = map;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public int size() {
-            return map.size();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean isEmpty() {
-            return map.isEmpty();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean containsKey(Object key) {
-            return map.containsKey(key);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean containsValue(Object val) {
-            return map.containsValue(val);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public V get(Object key) {
-            return map.get(key);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public V put(K key, V value) {
-            throw new UnsupportedOperationException();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public V remove(Object key) {
-            throw new UnsupportedOperationException();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void putAll(Map<? extends K, ? extends V> m) {
-            throw new UnsupportedOperationException();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void clear() {
-            throw new UnsupportedOperationException();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Set<K> keySet() {
-            if (keySet == null) {
-                keySet = new UnmodifiableSet(map.keySet());
-            }
-            return keySet;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Set<Entry<K, V>> entrySet() {
-            if (entrySet == null) {
-                entrySet = new UnmodifiableEntrySet(map.entrySet());
-            }
-            return entrySet;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Collection<V> values() {
-            if (values == null) {
-                values = new UnmodifiableCollection(map.values());
-            }
-            return values;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean equals(Object o) {
-            return o == this || map.equals(o);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public int hashCode() {
-            return map.hashCode();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String toString() {
-            return map.toString();
+            return false;
         }
     }
 }

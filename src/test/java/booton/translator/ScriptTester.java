@@ -31,7 +31,9 @@ import net.sourceforge.htmlunit.corejs.javascript.ConsString;
 import net.sourceforge.htmlunit.corejs.javascript.EvaluatorException;
 import net.sourceforge.htmlunit.corejs.javascript.NativeArray;
 import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
+import net.sourceforge.htmlunit.corejs.javascript.Undefined;
 import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
+import booton.live.ClientStackTrace;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -95,9 +97,7 @@ public class ScriptTester {
      * @param scriptable A target scriptable source.
      */
     protected final void test(Scriptable scriptable) {
-        Class source = scriptable.getClass();
-
-        execute(source, searchInvocation(source));
+        execute(searchInvocation(scriptable.getClass()));
     }
 
     /**
@@ -107,8 +107,9 @@ public class ScriptTester {
      * 
      * @param scriptable A target scriptable source.
      */
-    final void execute(Class source, Method method) {
+    final void execute(Method method) {
         // search invocation
+        Class source = method.getDeclaringClass();
         Constructor constructor = searchInstantiator(source);
         Object[] parameter = constructor.getParameterTypes().length == 0 ? new Object[0] : new Object[] {this};
 
@@ -208,6 +209,55 @@ public class ScriptTester {
                 error.write(code.substring(Math.max(0, index - 20), Math.min(index + 20, code.length())));
             }
             throw error;
+        }
+    }
+
+    /**
+     * <p>
+     * Compile specified class and evaluate it.
+     * </p>
+     * 
+     * @param scriptable A target scriptable source.
+     */
+    final Object executeAsJavascript(Method method) {
+        try {
+            Class source = method.getDeclaringClass();
+            StringBuilder script = new StringBuilder();
+
+            // invoke as Javascript
+            Javascript.getScript(source).writeTo(script, defined, Character.class, ClientStackTrace.class);
+
+            // compile as Javascript and script engine read it
+            engine.execute(html, script.toString(), source.getSimpleName(), 1);
+
+            String className = Javascript.computeClassName(source);
+            String constructorName = Javascript.computeMethodName(searchInstantiator(source)).substring(1);
+            String methodName = Javascript.computeMethodName(method);
+
+            String clientStackTrace = Javascript.computeClassName(ClientStackTrace.class);
+            String encode = Javascript.computeMethodName(ClientStackTrace.class.getMethod("encode", Throwable.class));
+
+            // write test script
+            StringBuilder invoker = new StringBuilder();
+            invoker.append("try {");
+            invoker.append("new ").append(className).append("(").append(constructorName).append(").");
+            invoker.append(methodName).append("();} catch(e) {new Error('aaa').stack == null;}");
+            System.out.println(clientStackTrace + "." + encode + "(e)");
+
+            Object result = engine.execute(html, invoker.toString(), "", 1);
+
+            if (result == null || result instanceof Undefined || result instanceof UniqueTag) {
+                return null;
+            } else {
+                // some error
+                System.out.println(result);
+
+                throw new AssertionError("error in js");
+            }
+        } catch (Exception e) {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error(e);
         }
     }
 
@@ -383,7 +433,7 @@ public class ScriptTester {
      */
     private void assertObject(Object java, Object js) {
         if (java == null) {
-            assert js instanceof UniqueTag || js == null;
+            assert js instanceof UniqueTag || js instanceof Undefined || js == null;
         } else {
             if (js.getClass().getSimpleName().equals("NativeError")) {
                 // Internal javascript error was thrown (e.g. invalid syntax error, property was not

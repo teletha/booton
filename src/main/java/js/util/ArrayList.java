@@ -21,7 +21,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/02/16 15:06:47
  */
 @JavaAPIProvider(java.util.ArrayList.class)
-class ArrayList<E> extends AbstractCollection<E> implements List<E> {
+class ArrayList<E> extends AbstractList<E> implements List<E> {
 
     /** The actual container. */
     protected NativeArray<E> array = new NativeArray();
@@ -105,14 +105,7 @@ class ArrayList<E> extends AbstractCollection<E> implements List<E> {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
-        return false;
-    }
-
+ 
     /**
      * {@inheritDoc}
      */
@@ -167,14 +160,6 @@ class ArrayList<E> extends AbstractCollection<E> implements List<E> {
     @Override
     public int lastIndexOf(Object item) {
         return array.lastIndexOf(item);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ListIterator<E> listIterator() {
-        return new View(0);
     }
 
     /**

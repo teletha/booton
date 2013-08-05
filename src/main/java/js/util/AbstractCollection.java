@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,12 +12,11 @@ package js.util;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Objects;
 
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2012/12/08 22:08:28
+ * @version 2013/08/05 9:43:18
  */
 @JavaAPIProvider(java.util.AbstractCollection.class)
 abstract class AbstractCollection<E> implements Collection<E> {
@@ -115,39 +114,5 @@ abstract class AbstractCollection<E> implements Collection<E> {
             array[i] = (T) item;
         }
         return array;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean add(E e) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean remove(Object object) {
-        Iterator<E> iterator = iterator();
-
-        while (iterator.hasNext()) {
-            if (Objects.equals(iterator.next(), object)) {
-                iterator.remove();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void clear() {
-        Iterator<E> iterator = iterator();
-
-        while (iterator.hasNext()) {
-            iterator.next();
-            iterator.remove();
-        }
     }
 }

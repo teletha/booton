@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ import java.util.Objects;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2012/12/09 23:04:18
+ * @version 2013/08/05 9:41:44
  */
 @JavaAPIProvider(java.util.AbstractList.class)
 abstract class AbstractList<E> extends AbstractCollection<E> implements List<E> {
@@ -25,27 +25,7 @@ abstract class AbstractList<E> extends AbstractCollection<E> implements List<E> 
     /**
      * {@inheritDoc}
      */
-    public E set(int index, E element) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void add(int index, E element) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public E remove(int index) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public int indexOf(Object object) {
         ListIterator<E> iterator = listIterator();
 
@@ -60,6 +40,7 @@ abstract class AbstractList<E> extends AbstractCollection<E> implements List<E> 
     /**
      * {@inheritDoc}
      */
+    @Override
     public int lastIndexOf(Object object) {
         ListIterator<E> iterator = listIterator(size());
 
@@ -74,6 +55,7 @@ abstract class AbstractList<E> extends AbstractCollection<E> implements List<E> 
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean addAll(int index, Collection<? extends E> collection) {
         boolean modified = false;
 
@@ -86,11 +68,8 @@ abstract class AbstractList<E> extends AbstractCollection<E> implements List<E> 
 
     /**
      * {@inheritDoc}
-     * <p>
-     * This implementation returns {@code listIterator(0)}.
-     * 
-     * @see #listIterator(int)
      */
+    @Override
     public ListIterator<E> listIterator() {
         return listIterator(0);
     }
