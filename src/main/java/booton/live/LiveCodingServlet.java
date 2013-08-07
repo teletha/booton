@@ -302,7 +302,7 @@ public class LiveCodingServlet extends WebSocketServlet {
                 lines = Files.readAllLines(file, StandardCharsets.UTF_8);
 
                 // construct class name mapping
-                Pattern pattern = Pattern.compile("^\\s*//\\sclass\\s(.+)\\s(.+)");
+                Pattern pattern = Pattern.compile("^\\s*\\/\\/\\sclass\\s(.+)\\s(.+)");
 
                 for (String line : lines) {
                     Matcher matcher = pattern.matcher(line);
@@ -323,10 +323,10 @@ public class LiveCodingServlet extends WebSocketServlet {
          * @param lineNumber
          */
         private void search(int lineNumber) {
-            Pattern line = Pattern.compile("^\\s*//\\s(\\d+)");
+            Pattern line = Pattern.compile("^\\s*\\/\\/\\s(\\d+)");
             String number = find(lineNumber - 1, line).group(1);
 
-            Pattern pattern = Pattern.compile("^\\s*//\\s+(.+)#(.+)\\(.*\\)");
+            Pattern pattern = Pattern.compile("^\\s*\\/\\/\\s+(.+)#(.+)\\(.*\\)");
             Matcher matcher = find(lineNumber, pattern);
             String className = matcher.group(1);
             String method = matcher.group(2);

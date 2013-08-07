@@ -188,7 +188,9 @@ class JSThrowable {
             start++;
         } else if (error.getStackTrace().contains("@")) {
             // html unit
-            return new StackTraceElement[0];
+            pattern = Pattern.compile("(.+)?@(.+):(.+)");
+            start += 6;
+            end--;
         } else {
             // blink
             pattern = Pattern.compile("\\s*at\\s*([^\\s]+).+\\((.+):(.+):(.+)\\)");
@@ -202,6 +204,11 @@ class JSThrowable {
 
             if (matcher.matches()) {
                 String method = matcher.group(1);
+
+                if (method == null) {
+                    method = "";
+                }
+
                 int index = method.lastIndexOf(".");
                 method = index == -1 ? method : method.substring(index + 1);
 

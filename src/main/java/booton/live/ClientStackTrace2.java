@@ -45,7 +45,7 @@ public class ClientStackTrace2 {
         return builder.toString();
     }
 
-    public static void decode(String data, String source) {
+    public static Throwable decode(String data, String source) {
         Source application = new Source(source);
         List<String> elements = new ArrayList();
 
@@ -55,12 +55,32 @@ public class ClientStackTrace2 {
         String className = application.decodeClassName(elements.remove(0));
         String message = elements.remove(0);
 
-        System.err.println("Exception in thread \"main\" " + className + ": " + message);
+        try {
+            Throwable throwable;
+            Class clazz = Class.forName(className);
 
-        for (String element : elements) {
-            String[] info = element.split(" ");
+            try {
+                throwable = (Throwable) clazz.getConstructor(String.class).newInstance(message);
+            } catch (NoSuchMethodException e) {
+                try {
+                    throwable = (Throwable) clazz.getConstructor().newInstance();
+                } catch (NoSuchMethodException error) {
+                    throw new Error(error);
+                }
+            }
 
-            application.search(Integer.parseInt(info[2]));
+            StackTraceElement[] stacks = new StackTraceElement[elements.size()];
+
+            for (int i = 0; i < stacks.length; i++) {
+                String[] info = elements.get(i).split(" ");
+
+                stacks[i] = application.search(Integer.parseInt(info[2]));
+            }
+            throwable.setStackTrace(stacks);
+
+            return throwable;
+        } catch (Exception e) {
+            throw new Error(e);
         }
     }
 
@@ -99,7 +119,7 @@ public class ClientStackTrace2 {
          * 
          * @param lineNumber
          */
-        private void search(int lineNumber) {
+        private StackTraceElement search(int lineNumber) {
             Pattern line = Pattern.compile("^\\s*//\\s(\\d+)");
             String number = find(lineNumber - 1, line).group(1);
 
@@ -108,7 +128,7 @@ public class ClientStackTrace2 {
             String className = matcher.group(1);
             String method = matcher.group(2);
 
-            System.err.println("\tat " + className + "." + method + "(" + className.substring(className.lastIndexOf(".") + 1) + ".java:" + number + ")");
+            return new StackTraceElement(className, method, "source", Integer.parseInt(number));
         }
 
         /**

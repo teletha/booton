@@ -230,7 +230,6 @@ class ChampionDetailStyle {
 
         {
             cursor.help();
-            border.bottom.dotted().width(1, px);
         }
     }
 

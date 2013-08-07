@@ -415,6 +415,18 @@ public class ChampionDetail extends Page {
                     double value = status.round(variable.calculate(i, build));
                     Element element = root.child(SkillStatusValue.class).text(value == -1 ? "∞" : value);
 
+                    if (!resolver.isSkillLevelBased()) {
+                        String title;
+
+                        if (resolver instanceof Refer) {
+                            Refer refer = (Refer) resolver;
+                            title = refer.reference.name + " level " + i;
+                        } else {
+                            title = "Level " + resolver.convertChampionLevel(i);
+                        }
+                        element.attr("title", title).add(ChampionLevelIndicator.class);
+                    }
+
                     if (size != 1 && i == level) {
                         element.add(Current.class);
                     }

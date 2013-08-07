@@ -549,8 +549,38 @@ class JSClass<T> extends JSAnnotatedElement {
         }
     }
 
-    public Constructor getConstructor() {
-        return null;
+    /**
+     * Returns a {@code Constructor} object that reflects the specified public constructor of the
+     * class represented by this {@code Class} object. The {@code parameterTypes} parameter is an
+     * array of {@code Class} objects that identify the constructor's formal parameter types, in
+     * declared order. If this {@code Class} object represents an inner class declared in a
+     * non-static context, the formal parameter types include the explicit enclosing instance as the
+     * first parameter.
+     * <p>
+     * The constructor to reflect is the public constructor of the class represented by this
+     * {@code Class} object whose formal parameter types match those specified by
+     * {@code parameterTypes}.
+     * 
+     * @param parameterTypes the parameter array
+     * @return the {@code Constructor} object of the public constructor that matches the specified
+     *         {@code parameterTypes}
+     * @exception NoSuchMethodException if a matching method is not found.
+     * @exception SecurityException If a security manager, <i>s</i>, is present and any of the
+     *                following conditions is met:
+     *                <ul>
+     *                <li> invocation of {@link SecurityManager#checkMemberAccess
+     *                s.checkMemberAccess(this, Member.PUBLIC)} denies access to the constructor 
+     *                <li> the caller's class loader is not the same as or an ancestor of the class
+     *                loader for the current class and invocation of
+     *                {@link SecurityManager#checkPackageAccess s.checkPackageAccess()} denies
+     *                access to the package of this class
+     *                </ul>
+     * @since JDK1.1
+     */
+    public Constructor<T> getConstructor(Class<?>... parameterTypes) throws NoSuchMethodException, SecurityException {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**

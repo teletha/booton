@@ -508,7 +508,7 @@ function boot(global) {
      */
     error: function() {
       try {
-        a;
+        Z;
       } catch (e) {
         return e;
       }
