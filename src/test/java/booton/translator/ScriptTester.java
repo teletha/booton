@@ -34,6 +34,7 @@ import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
 import net.sourceforge.htmlunit.corejs.javascript.Undefined;
 import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
 import booton.live.ClientStackTrace;
+import booton.live.ClientStackTrace2;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -241,8 +242,7 @@ public class ScriptTester {
             StringBuilder invoker = new StringBuilder();
             invoker.append("try {");
             invoker.append("new ").append(className).append("(").append(constructorName).append(").");
-            invoker.append(methodName).append("();} catch(e) {new Error('aaa').stack == null;}");
-            System.out.println(clientStackTrace + "." + encode + "(e)");
+            invoker.append(methodName).append("();} catch(e) {" + clientStackTrace + "." + encode + "(e)" + ";}");
 
             Object result = engine.execute(html, invoker.toString(), "", 1);
 
@@ -250,13 +250,13 @@ public class ScriptTester {
                 return null;
             } else {
                 // some error
-                System.out.println(result);
-
-                throw new AssertionError("error in js");
+                throw I.quiet(ClientStackTrace2.decode((String) result, Javascript.getScript(source).toString()));
             }
         } catch (Exception e) {
             // If this exception will be thrown, it is bug of this program. So we must rethrow the
             // wrapped error in here.
+            Javascript.getScript(method.getDeclaringClass())
+                    .writeTo(I.locate("E:\\text.js"), Character.class, ClientStackTrace.class);
             throw new Error(e);
         }
     }

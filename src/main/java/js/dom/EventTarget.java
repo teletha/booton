@@ -11,6 +11,7 @@ package js.dom;
 
 import static js.lang.Global.*;
 
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -353,8 +354,16 @@ public class EventTarget<T extends EventTarget<T>> implements JavascriptNative {
          */
         @Override
         public void handleEvent(UIEvent event) {
-            for (EventListener listener : listeners) {
-                listener.handleEvent(event);
+            try {
+                for (EventListener listener : listeners) {
+                    listener.handleEvent(event);
+                }
+            } catch (Throwable e) {
+                UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
+
+                if (handler != null) {
+                    handler.uncaughtException(null, e);
+                }
             }
         }
     }

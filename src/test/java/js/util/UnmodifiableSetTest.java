@@ -10,6 +10,7 @@
 package js.util;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Test;
@@ -28,7 +29,12 @@ public class UnmodifiableSetTest {
         Set<String> set = new HashSet();
         Set<String> unmodifiable = Collections.unmodifiableSet(set);
 
-        assert set.size() == 1;
+        dasdas(set);
         assert unmodifiable.size() == 0;
+    }
+
+    private void dasdas(Set set) {
+        System.out.println(set.size());
+        assert set.size() == 1;
     }
 }
