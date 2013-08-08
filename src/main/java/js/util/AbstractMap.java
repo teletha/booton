@@ -9,11 +9,32 @@
  */
 package js.util;
 
+import java.util.Map;
+
 import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/08/02 17:00:22
  */
 @JavaAPIProvider(java.util.AbstractMap.class)
-class AbstractMap<K, V> {
+abstract class AbstractMap<K, V> implements Map<K, V> {
+
+    /**
+     * <p>
+     * This implementation iterates over the specified map's <tt>entrySet()</tt> collection, and
+     * calls this map's <tt>put</tt> operation once for each entry returned by the iteration.
+     * <p>
+     * Note that this implementation throws an <tt>UnsupportedOperationException</tt> if this map
+     * does not support the <tt>put</tt> operation and the specified map is nonempty.
+     * 
+     * @throws UnsupportedOperationException {@inheritDoc}
+     * @throws ClassCastException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
+     */
+    public void putAll(Map<? extends K, ? extends V> map) {
+        for (Entry<? extends K, ? extends V> e : map.entrySet()) {
+            put(e.getKey(), e.getValue());
+        }
+    }
 }
