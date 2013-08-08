@@ -9,7 +9,8 @@
  */
 package js.lang;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -197,10 +198,10 @@ class JSThrowable {
             start++;
         }
 
-        StackTraceElement[] elements = new StackTraceElement[end - start];
+        List<StackTraceElement> elements = new ArrayList();
 
-        for (int i = 0; i < elements.length; i++) {
-            Matcher matcher = pattern.matcher(lines[start + i]);
+        for (int i = start; i < end; i++) {
+            Matcher matcher = pattern.matcher(lines[i]);
 
             if (matcher.matches()) {
                 String method = matcher.group(1);
@@ -212,7 +213,7 @@ class JSThrowable {
                 int index = method.lastIndexOf(".");
                 method = index == -1 ? method : method.substring(index + 1);
 
-                elements[i] = new StackTraceElement("", method, matcher.group(2), Integer.parseInt(matcher.group(3)));
+                elements.add(new StackTraceElement("", method, matcher.group(2), Integer.parseInt(matcher.group(3))));
             }
         }
 
@@ -220,14 +221,16 @@ class JSThrowable {
             // remove the sequence of Throwable construction
             int index = -1;
 
-            for (int i = 0; i < elements.length; i++) {
-                if (elements[i].getMethodName().equals("Class") && elements[i].getFileName().contains("boot.js")) {
+            for (int i = 0; i < elements.size(); i++) {
+                if (elements.get(i).getMethodName().equals("Class") && elements.get(i)
+                        .getFileName()
+                        .contains("boot.js")) {
                     index = i;
                     break;
                 }
             }
-            elements = Arrays.copyOfRange(elements, index + 1, elements.length);
+            elements = elements.subList(index + 1, elements.size());
         }
-        return elements;
+        return elements.toArray(new StackTraceElement[elements.size()]);
     }
 }
