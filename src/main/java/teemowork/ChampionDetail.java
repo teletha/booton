@@ -124,15 +124,11 @@ public class ChampionDetail extends Page {
 
     @Listen(type = UIAction.Click, abort = true)
     private void levelUp() {
-        if (true) {
-            throw new IllegalAccessError("user error");
-        }
         build.setLevel(build.getLevel() + 1);
     }
 
     @Listen(type = UIAction.ClickLeft, abort = true)
     private void levelDown() {
-        build = null;
         build.setLevel(build.getLevel() - 1);
     }
 

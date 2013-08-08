@@ -233,4 +233,25 @@ class JSThrowable {
         }
         return elements.toArray(new StackTraceElement[elements.size()]);
     }
+
+    /**
+     * <p>
+     * Convert to {@link Throwable} object if the specified error is native.
+     * </p>
+     * 
+     * @param error A native error object or not.
+     * @return A wrapped {@link Throwable} object.
+     */
+    static Throwable wrap(Object error) {
+        Throwable throwable;
+
+        if (error instanceof Throwable) {
+            throwable = (Throwable) error;
+        } else {
+            NativeError nativeError = (NativeError) error;
+            throwable = new Error(nativeError.getMessage());
+            throwable.setStackTrace(createStackTrace(nativeError, false));
+        }
+        return throwable;
+    }
 }
