@@ -90,7 +90,7 @@ public class ChampionDetail extends Page {
     private List<ItemBox> items = new ArrayList();
 
     /** The your custom build. */
-    private final Build build;
+    private Build build;
 
     /** The status. */
     private Element level;
@@ -124,11 +124,15 @@ public class ChampionDetail extends Page {
 
     @Listen(type = UIAction.Click, abort = true)
     private void levelUp() {
+        if (true) {
+            throw new IllegalAccessError("user error");
+        }
         build.setLevel(build.getLevel() + 1);
     }
 
     @Listen(type = UIAction.ClickLeft, abort = true)
     private void levelDown() {
+        build = null;
         build.setLevel(build.getLevel() - 1);
     }
 
