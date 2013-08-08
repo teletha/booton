@@ -206,13 +206,12 @@ public class Javascript {
             // Write bootstrap method if needed.
             output.append("try {");
             try {
-                output.append(invoke(source.getMethod("jsmain")));
+                output.append(writeCode(source.getMethod("jsmain")));
             } catch (Exception e) {
                 // ignore missing "jsmain" method
             }
             output.append("} catch(e) {");
-            output.append("console.log(e);");
-            output.append(invoke(Thread.class, "handleUncaughtException", Object.class, "e"));
+            output.append(writeCode(Thread.class, "handleUncaughtException", Object.class, "e"));
             output.append("}");
         } catch (Exception e) {
             throw I.quiet(e);
@@ -445,6 +444,19 @@ public class Javascript {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        // write out
+        writeTo(builder);
+
+        return builder.toString();
+    }
+
+    /**
      * <p>
      * Write method call.
      * </p>
@@ -452,7 +464,7 @@ public class Javascript {
      * @param method
      * @return
      */
-    private String invoke(Method method) {
+    public static final String writeCode(Method method) {
         String className = Javascript.computeClassName(method.getDeclaringClass());
         String methodName = Javascript.computeMethodName(method);
 
@@ -471,7 +483,7 @@ public class Javascript {
      * @param method
      * @return
      */
-    private String invoke(Class clazz, String name, Object... parameters) {
+    public static final String writeCode(Class clazz, String name, Object... parameters) {
         try {
             Class[] types = new Class[parameters.length / 2];
             String[] params = new String[parameters.length / 2];
@@ -495,19 +507,6 @@ public class Javascript {
         } catch (Exception e) {
             throw I.quiet(e);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-
-        // write out
-        writeTo(builder);
-
-        return builder.toString();
     }
 
     /**
