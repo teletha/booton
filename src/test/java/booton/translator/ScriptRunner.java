@@ -15,6 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.internal.runners.model.ReflectiveCallable;
+import org.junit.runner.Description;
+import org.junit.runner.manipulation.Filter;
+import org.junit.runner.manipulation.NoTestsRemainException;
+import org.junit.runner.notification.Failure;
+import org.junit.runner.notification.RunListener;
+import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
@@ -23,6 +29,9 @@ import org.junit.runners.model.InitializationError;
  * @version 2013/08/04 9:26:13
  */
 public class ScriptRunner extends BlockJUnit4ClassRunner {
+
+    /** The test listener. */
+    private Listener listener = new Listener();
 
     /**
      * @param klass
@@ -36,15 +45,54 @@ public class ScriptRunner extends BlockJUnit4ClassRunner {
      * {@inheritDoc}
      */
     @Override
+    protected void runChild(FrameworkMethod method, RunNotifier notifier) {
+        if (method instanceof JavascriptMethod) {
+            notifier.removeListener(listener);
+
+            // chech Java result
+            if (listener.ignore) {
+                listener.ignore = false;
+                notifier.fireTestIgnored(describeChild(method));
+                return;
+            }
+        } else {
+            notifier.addListener(listener);
+        }
+        super.runChild(method, notifier);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected List<FrameworkMethod> computeTestMethods() {
         List<FrameworkMethod> doubles = new ArrayList();
-        List<FrameworkMethod> methods = super.computeTestMethods();
 
-        for (FrameworkMethod method : methods) {
+        for (FrameworkMethod method : super.computeTestMethods()) {
             doubles.add(method);
             doubles.add(new JavascriptMethod(method.getMethod()));
         }
         return doubles;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void filter(final Filter filter) throws NoTestsRemainException {
+        super.filter(new Filter() {
+
+            @Override
+            public boolean shouldRun(Description description) {
+                return filter.shouldRun(description) || filter.shouldRun(Description.createTestDescription(description.getTestClass(), description.getMethodName()
+                        .replace("JS", "")));
+            }
+
+            @Override
+            public String describe() {
+                return "Accept JS";
+            }
+        });
     }
 
     /**
@@ -86,6 +134,39 @@ public class ScriptRunner extends BlockJUnit4ClassRunner {
                     return tester.executeAsJavascript(method);
                 }
             }.run();
+        }
+    }
+
+    /**
+     * @version 2013/08/08 13:12:06
+     */
+    private static class Listener extends RunListener {
+
+        /** The state of previous processing test method for Java. */
+        private boolean ignore = false;
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void testFailure(Failure failure) throws Exception {
+            ignore = true;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void testAssumptionFailure(Failure failure) {
+            ignore = true;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void testIgnored(Description description) throws Exception {
+            ignore = true;
         }
     }
 }

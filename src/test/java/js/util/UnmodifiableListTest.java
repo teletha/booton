@@ -22,7 +22,7 @@ import booton.translator.ScriptRunner;
  * @version 2013/08/05 9:49:16
  */
 @RunWith(ScriptRunner.class)
-public class UnmodifiableSetTest {
+public class UnmodifiableListTest {
 
     @Test
     public void size() throws Exception {
@@ -41,20 +41,5 @@ public class UnmodifiableSetTest {
     @Test(expected = UnsupportedOperationException.class)
     public void remove() throws Exception {
         Collections.unmodifiableSet(new HashSet()).remove("");
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void addAll() throws Exception {
-        Collections.unmodifiableSet(new HashSet()).addAll(new HashSet());
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void removeAll() throws Exception {
-        Collections.unmodifiableSet(new HashSet()).removeAll(new HashSet());
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void clear() throws Exception {
-        Collections.unmodifiableSet(new HashSet()).clear();
     }
 }
