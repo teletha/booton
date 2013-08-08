@@ -14,11 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,7 +29,7 @@ import org.eclipse.jetty.websocket.WebSocketServlet;
 import booton.Booton;
 
 /**
- * @version 2013/07/26 12:34:16
+ * @version 2013/08/08 11:48:43
  */
 @SuppressWarnings("serial")
 public class LiveCodingServlet extends WebSocketServlet {
@@ -59,7 +55,7 @@ public class LiveCodingServlet extends WebSocketServlet {
     }
 
     /**
-     * @version 2013/07/26 12:34:12
+     * @version 2013/08/08 11:48:39
      */
     private static class LiveCodingSocket implements WebSocket.OnTextMessage {
 
@@ -138,34 +134,29 @@ public class LiveCodingServlet extends WebSocketServlet {
         }
 
         /**
+         * <p>
+         * Helper method to create source code.
+         * </p>
+         * 
+         * @param path
+         * @return
+         */
+        private Source create(Path path) {
+            try {
+                return new Source(path.getFileName().toString(), Files.readAllLines(path, StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                throw I.quiet(e);
+            }
+        }
+
+        /**
          * {@inheritDoc}
          */
         @Override
         public void onMessage(String data) {
-            Source application = new Source(html.resolveSibling("application.js"));
-            Source live = new Source(html.resolveSibling("live.js"));
-
-            List<String> elements = new ArrayList();
-
-            for (String line : data.split("\\r\\n")) {
-                elements.add(line);
-            }
-            String className = application.decodeClassName(elements.remove(0));
-            String message = elements.remove(0);
-
-            System.err.println("Exception in thread \"main\" " + className + ": " + message);
-
-            for (String element : elements) {
-                String[] info = element.split(" ");
-
-                if (info[1].contains("application.js")) {
-                    application.search(Integer.parseInt(info[2]));
-                }
-
-                if (info[1].contains("live.js")) {
-                    live.search(Integer.parseInt(info[2]));
-                }
-            }
+            Source application = create(html.resolveSibling("application.js"));
+            Source live = create(html.resolveSibling("live.js"));
+            ClientStackTrace.decode(data, application, live).printStackTrace(System.err);
         }
 
         /**
@@ -280,92 +271,6 @@ public class LiveCodingServlet extends WebSocketServlet {
             @Override
             public void modify(Path path) {
             }
-        }
-    }
-
-    /**
-     * @version 2013/07/28 3:43:53
-     */
-    private static class Source {
-
-        /** The source code. */
-        private final List<String> lines;
-
-        /** The class name mapping. */
-        private final Map<String, String> classNames = new HashMap();
-
-        /**
-         * @param file
-         */
-        private Source(Path file) {
-            try {
-                lines = Files.readAllLines(file, StandardCharsets.UTF_8);
-
-                // construct class name mapping
-                Pattern pattern = Pattern.compile("^\\s*\\/\\/\\sclass\\s(.+)\\s(.+)");
-
-                for (String line : lines) {
-                    Matcher matcher = pattern.matcher(line);
-
-                    if (matcher.matches()) {
-                        classNames.put(matcher.group(2), matcher.group(1));
-                    }
-                }
-            } catch (IOException e) {
-                throw I.quiet(e);
-            }
-        }
-
-        /**
-         * <p>
-         * </p>
-         * 
-         * @param lineNumber
-         */
-        private void search(int lineNumber) {
-            Pattern line = Pattern.compile("^\\s*\\/\\/\\s(\\d+)");
-            String number = find(lineNumber - 1, line).group(1);
-
-            Pattern pattern = Pattern.compile("^\\s*\\/\\/\\s+(.+)#(.+)\\(.*\\)");
-            Matcher matcher = find(lineNumber, pattern);
-            String className = matcher.group(1);
-            String method = matcher.group(2);
-
-            System.err.println("\tat " + className + "." + method + "(" + className.substring(className.lastIndexOf(".") + 1) + ".java:" + number + ")");
-        }
-
-        /**
-         * <p>
-         * </p>
-         * 
-         * @param start
-         * @param pattern
-         * @return
-         */
-        private Matcher find(int start, Pattern pattern) {
-            Matcher matcher = pattern.matcher(lines.get(start));
-
-            while (!matcher.matches()) {
-                matcher = pattern.matcher(lines.get(start--));
-            }
-            return matcher;
-        }
-
-        /**
-         * <p>
-         * Decrypt class name.
-         * </p>
-         * 
-         * @param name
-         * @return
-         */
-        private String decodeClassName(String name) {
-            if (name.startsWith("boot.")) {
-                name = name.substring(5);
-            }
-
-            String decrypted = classNames.get(name);
-            return decrypted == null ? name : decrypted;
         }
     }
 }

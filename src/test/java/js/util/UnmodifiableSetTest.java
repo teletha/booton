@@ -29,12 +29,17 @@ public class UnmodifiableSetTest {
         Set<String> set = new HashSet();
         Set<String> unmodifiable = Collections.unmodifiableSet(set);
 
-        dasdas(set);
+        assert set.size() == 1;
         assert unmodifiable.size() == 0;
     }
 
-    private void dasdas(Set set) {
-        System.out.println(set.size());
-        assert set.size() == 1;
+    @Test(expected = UnsupportedOperationException.class)
+    public void add() throws Exception {
+        Collections.unmodifiableSet(new HashSet()).add("");
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void remove() throws Exception {
+        Collections.unmodifiableSet(new HashSet()).remove("");
     }
 }
