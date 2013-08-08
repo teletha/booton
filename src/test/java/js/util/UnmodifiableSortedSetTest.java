@@ -10,8 +10,8 @@
 package js.util;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,12 +22,12 @@ import booton.translator.ScriptRunner;
  * @version 2013/08/09 0:44:17
  */
 @RunWith(ScriptRunner.class)
-public class UnmodifiableSetTest {
+public class UnmodifiableSortedSetTest {
 
     @Test
     public void size() throws Exception {
-        Set<String> set = new HashSet();
-        Set<String> unmodifiable = Collections.unmodifiableSet(set);
+        SortedSet<String> set = new TreeSet();
+        SortedSet<String> unmodifiable = Collections.unmodifiableSortedSet(set);
 
         assert set.size() == 0;
         assert unmodifiable.size() == 0;
@@ -39,31 +39,31 @@ public class UnmodifiableSetTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void add() throws Exception {
-        Collections.unmodifiableSet(new HashSet()).add("");
+        Collections.unmodifiableSortedSet(new TreeSet()).add("");
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void remove() throws Exception {
-        Collections.unmodifiableSet(new HashSet()).remove("");
+        Collections.unmodifiableSortedSet(new TreeSet()).remove("");
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void addAll() throws Exception {
-        Collections.unmodifiableSet(new HashSet()).addAll(new HashSet());
+        Collections.unmodifiableSortedSet(new TreeSet()).addAll(new TreeSet());
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void removeAll() throws Exception {
-        Collections.unmodifiableSet(new HashSet()).removeAll(new HashSet());
+        Collections.unmodifiableSortedSet(new TreeSet()).removeAll(new TreeSet());
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void clear() throws Exception {
-        Collections.unmodifiableSet(new HashSet()).clear();
+        Collections.unmodifiableSortedSet(new TreeSet()).clear();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void iterator() throws Exception {
-        Collections.unmodifiableSet(new HashSet()).iterator().remove();
+        Collections.unmodifiableSortedSet(new TreeSet()).iterator().remove();
     }
 }

@@ -19,7 +19,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.RandomAccess;
 import java.util.Set;
+import java.util.SortedSet;
 
 import booton.translator.JavaAPIProvider;
 
@@ -50,6 +52,18 @@ class Collections {
      * @since 1.3
      */
     public static final Map EMPTY_MAP = new UnmodifiableMap(new HashMap());
+
+    /** The natural order. */
+    private static final Comparator<Comparable> NATURAL_COMPARATOR = new Comparator<Comparable>() {
+    
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int compare(Comparable o1, Comparable o2) {
+            return o1.compareTo(o2);
+        }
+    };
 
     /**
      * Returns an iterator that has no elements. More precisely,
@@ -152,6 +166,37 @@ class Collections {
     }
 
     /**
+     * Returns an unmodifiable view of the specified list. This method allows modules to provide
+     * users with "read-only" access to internal lists. Query operations on the returned list
+     * "read through" to the specified list, and attempts to modify the returned list, whether
+     * direct or via its iterator, result in an <tt>UnsupportedOperationException</tt>.
+     * <p>
+     * The returned list will be serializable if the specified list is serializable. Similarly, the
+     * returned list will implement {@link RandomAccess} if the specified list does.
+     * 
+     * @param list the list for which an unmodifiable view is to be returned.
+     * @return an unmodifiable view of the specified list.
+     */
+    public static <T> List<T> unmodifiableList(List<? extends T> list) {
+        return new UnmodifiableList(list);
+    }
+
+    /**
+     * Returns an unmodifiable view of the specified map. This method allows modules to provide
+     * users with "read-only" access to internal maps. Query operations on the returned map
+     * "read through" to the specified map, and attempts to modify the returned map, whether direct
+     * or via its collection views, result in an <tt>UnsupportedOperationException</tt>.
+     * <p>
+     * The returned map will be serializable if the specified map is serializable.
+     * 
+     * @param map the map for which an unmodifiable view is to be returned.
+     * @return an unmodifiable view of the specified map.
+     */
+    public static <K, V> Map<K, V> unmodifiableMap(Map<? extends K, ? extends V> map) {
+        return new UnmodifiableMap(map);
+    }
+
+    /**
      * Returns an unmodifiable view of the specified set. This method allows modules to provide
      * users with "read-only" access to internal sets. Query operations on the returned set
      * "read through" to the specified set, and attempts to modify the returned set, whether direct
@@ -164,6 +209,23 @@ class Collections {
      */
     public static <T> Set<T> unmodifiableSet(Set<? extends T> set) {
         return new UnmodifiableSet(set);
+    }
+
+    /**
+     * Returns an unmodifiable view of the specified sorted set. This method allows modules to
+     * provide users with "read-only" access to internal sorted sets. Query operations on the
+     * returned sorted set "read through" to the specified sorted set. Attempts to modify the
+     * returned sorted set, whether direct, via its iterator, or via its <tt>subSet</tt>,
+     * <tt>headSet</tt>, or <tt>tailSet</tt> views, result in an
+     * <tt>UnsupportedOperationException</tt>.
+     * <p>
+     * The returned sorted set will be serializable if the specified sorted set is serializable.
+     * 
+     * @param set the sorted set for which an unmodifiable view is to be returned.
+     * @return an unmodifiable view of the specified sorted set.
+     */
+    public static <T> SortedSet<T> unmodifiableSortedSet(SortedSet<T> set) {
+        return new UnmodifiableSortedSet(set);
     }
 
     /**
@@ -223,6 +285,99 @@ class Collections {
     }
 
     /**
+     * Returns a comparator that imposes the reverse of the <em>natural
+     * ordering</em> on a collection of objects that implement the {@code Comparable} interface.
+     * (The natural ordering is the ordering imposed by the objects' own {@code compareTo} method.)
+     * This enables a simple idiom for sorting (or maintaining) collections (or arrays) of objects
+     * that implement the {@code Comparable} interface in reverse-natural-order. For example,
+     * suppose {@code a} is an array of strings. Then:
+     * 
+     * <pre>
+     *          Arrays.sort(a, Collections.reverseOrder());
+     * </pre>
+     * 
+     * sorts the array in reverse-lexicographic (alphabetical) order.
+     * <p>
+     * The returned comparator is serializable.
+     * 
+     * @return A comparator that imposes the reverse of the <i>natural ordering</i> on a collection
+     *         of objects that implement the <tt>Comparable</tt> interface.
+     * @see Comparable
+     */
+    public static <T> Comparator<T> reverseOrder() {
+        return reverseOrder(null);
+    }
+
+    /**
+     * Returns a comparator that imposes the reverse ordering of the specified comparator. If the
+     * specified comparator is {@code null}, this method is equivalent to {@link #reverseOrder()}
+     * (in other words, it returns a comparator that imposes the reverse of the
+     * <em>natural ordering</em> on a collection of objects that implement the Comparable
+     * interface).
+     * <p>
+     * The returned comparator is serializable (assuming the specified comparator is also
+     * serializable or {@code null}).
+     * 
+     * @param comparator a comparator who's ordering is to be reversed by the returned comparator or
+     *            {@code null}
+     * @return A comparator that imposes the reverse ordering of the specified comparator.
+     * @since 1.5
+     */
+    public static <T> Comparator<T> reverseOrder(Comparator<T> comparator) {
+        if (comparator == null) {
+            comparator = (Comparator<T>) NATURAL_COMPARATOR;
+        }
+
+        if (comparator instanceof ReverseComparator) {
+            return ((ReverseComparator<T>) comparator).comparator;
+        }
+        return new ReverseComparator<>(comparator);
+    }
+
+    /**
+     * @version 2013/08/09 1:14:11
+     */
+    private static class ReverseComparator<T> implements Comparator<T> {
+
+        /**
+         * The comparator specified in the static factory. This will never be null, as the static
+         * factory returns a ReverseComparator instance if its argument is null.
+         */
+        private final Comparator<T> comparator;
+
+        /**
+         * @param comparator
+         */
+        private ReverseComparator(Comparator<T> comparator) {
+            this.comparator = comparator;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int compare(T object1, T object2) {
+            return comparator.compare(object2, object1);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(Object object) {
+            return object == this || (object instanceof ReverseComparator && comparator.equals(((ReverseComparator) object).comparator));
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int hashCode() {
+            return comparator.hashCode() ^ Integer.MIN_VALUE;
+        }
+    }
+
+    /**
      * @version 2013/08/02 15:45:44
      */
     private static class EmptyIterator<E> implements Iterator<E> {
@@ -233,6 +388,7 @@ class Collections {
         /**
          * {@inheritDoc}
          */
+        @Override
         public boolean hasNext() {
             return false;
         }
@@ -240,6 +396,7 @@ class Collections {
         /**
          * {@inheritDoc}
          */
+        @Override
         public E next() {
             throw new NoSuchElementException();
         }
@@ -247,6 +404,7 @@ class Collections {
         /**
          * {@inheritDoc}
          */
+        @Override
         public void remove() {
             throw new IllegalStateException();
         }
@@ -263,6 +421,7 @@ class Collections {
         /**
          * {@inheritDoc}
          */
+        @Override
         public boolean hasPrevious() {
             return false;
         }
@@ -270,6 +429,7 @@ class Collections {
         /**
          * {@inheritDoc}
          */
+        @Override
         public E previous() {
             throw new NoSuchElementException();
         }
@@ -277,6 +437,7 @@ class Collections {
         /**
          * {@inheritDoc}
          */
+        @Override
         public int nextIndex() {
             return 0;
         }
@@ -284,6 +445,7 @@ class Collections {
         /**
          * {@inheritDoc}
          */
+        @Override
         public int previousIndex() {
             return -1;
         }
@@ -291,6 +453,7 @@ class Collections {
         /**
          * {@inheritDoc}
          */
+        @Override
         public void set(E e) {
             throw new IllegalStateException();
         }
@@ -298,6 +461,7 @@ class Collections {
         /**
          * {@inheritDoc}
          */
+        @Override
         public void add(E e) {
             throw new UnsupportedOperationException();
         }
@@ -306,10 +470,10 @@ class Collections {
     /**
      * @version 2013/08/04 11:35:14
      */
-    private static class UnmodifiableCollection<E> implements Collection<E> {
+    private static class UnmodifiableCollection<E, C extends Collection<E>> implements Collection<E> {
 
         /** The delegator. */
-        protected final Collection<E> collection;
+        protected final C collection;
 
         /**
          * <p>
@@ -318,7 +482,7 @@ class Collections {
          * 
          * @param collection
          */
-        private UnmodifiableCollection(Collection<E> collection) {
+        private UnmodifiableCollection(C collection) {
             if (collection == null) {
                 throw new NullPointerException();
             }
@@ -551,7 +715,7 @@ class Collections {
     /**
      * @version 2013/08/04 11:41:29
      */
-    private static class UnmodifiableSet<E> extends UnmodifiableCollection<E> implements Set<E> {
+    private static class UnmodifiableSet<E, S extends Set<E>> extends UnmodifiableCollection<E, S> implements Set<E> {
 
         /**
          * <p>
@@ -560,7 +724,7 @@ class Collections {
          * 
          * @param set
          */
-        private UnmodifiableSet(Set<E> set) {
+        private UnmodifiableSet(S set) {
             super(set);
         }
 
@@ -582,12 +746,74 @@ class Collections {
     }
 
     /**
+     * @version 2013/08/09 0:52:29
+     */
+    private static class UnmodifiableSortedSet<E> extends UnmodifiableSet<E, SortedSet<E>> implements SortedSet<E> {
+
+        /**
+         * <p>
+         * Create delegator.
+         * </p>
+         * 
+         * @param set
+         */
+        private UnmodifiableSortedSet(SortedSet<E> set) {
+            super(set);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Comparator<? super E> comparator() {
+            return collection.comparator();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public SortedSet<E> subSet(E fromElement, E toElement) {
+            return new UnmodifiableSortedSet<>(collection.subSet(fromElement, toElement));
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public SortedSet<E> headSet(E toElement) {
+            return new UnmodifiableSortedSet<>(collection.headSet(toElement));
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public SortedSet<E> tailSet(E fromElement) {
+            return new UnmodifiableSortedSet<>(collection.tailSet(fromElement));
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E first() {
+            return collection.first();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E last() {
+            return collection.last();
+        }
+    }
+
+    /**
      * @version 2013/08/04 11:34:48
      */
-    private static class UnmodifiableList<E> extends UnmodifiableCollection<E> implements List<E> {
-
-        /** The delegator. */
-        protected final List<E> list;
+    private static class UnmodifiableList<E> extends UnmodifiableCollection<E, List<E>> implements List<E> {
 
         /**
          * <p>
@@ -599,7 +825,6 @@ class Collections {
         protected UnmodifiableList(List<E> list) {
             super(list);
 
-            this.list = list;
         }
 
         /**
@@ -607,7 +832,7 @@ class Collections {
          */
         @Override
         public boolean equals(Object object) {
-            return object == this || list.equals(object);
+            return object == this || collection.equals(object);
         }
 
         /**
@@ -615,7 +840,7 @@ class Collections {
          */
         @Override
         public int hashCode() {
-            return list.hashCode();
+            return collection.hashCode();
         }
 
         /**
@@ -623,7 +848,7 @@ class Collections {
          */
         @Override
         public E get(int index) {
-            return list.get(index);
+            return collection.get(index);
         }
 
         /**
@@ -655,7 +880,7 @@ class Collections {
          */
         @Override
         public int indexOf(Object item) {
-            return list.indexOf(item);
+            return collection.indexOf(item);
         }
 
         /**
@@ -663,7 +888,7 @@ class Collections {
          */
         @Override
         public int lastIndexOf(Object item) {
-            return list.lastIndexOf(item);
+            return collection.lastIndexOf(item);
         }
 
         /**
@@ -687,7 +912,7 @@ class Collections {
          */
         @Override
         public ListIterator<E> listIterator(int index) {
-            return new UnmodifiableListIterator(list.listIterator(index));
+            return new UnmodifiableListIterator(collection.listIterator(index));
         }
 
         /**
@@ -695,7 +920,7 @@ class Collections {
          */
         @Override
         public List<E> subList(int fromIndex, int toIndex) {
-            return new UnmodifiableList(list.subList(fromIndex, toIndex));
+            return new UnmodifiableList(collection.subList(fromIndex, toIndex));
         }
     }
 
@@ -943,7 +1168,7 @@ class Collections {
      * 
      * @serial include
      */
-    private static class UnmodifiableEntrySet<K, V> extends UnmodifiableSet<Entry<K, V>> {
+    private static class UnmodifiableEntrySet<K, V> extends UnmodifiableSet<Entry<K, V>, Set<Entry<K, V>>> {
 
         /**
          * <p>

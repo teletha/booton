@@ -17,10 +17,10 @@ import java.util.Set;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/05/30 20:36:49
+ * @version 2013/08/09 1:06:35
  */
 @JavaAPIProvider(java.util.HashMap.class)
-class HashMap<K, V> implements Map<K, V> {
+class HashMap<K, V> extends AbstractMap<K, V> {
 
     /** The item pool. */
     private final HashSet<Entry<K, V>> items = new HashSet();
@@ -118,16 +118,6 @@ class HashMap<K, V> implements Map<K, V> {
             return null;
         } else {
             return removed.getValue();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void putAll(Map<? extends K, ? extends V> map) {
-        for (Entry<? extends K, ? extends V> entry : map.entrySet()) {
-            put(entry.getKey(), entry.getValue());
         }
     }
 

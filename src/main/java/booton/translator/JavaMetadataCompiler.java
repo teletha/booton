@@ -82,7 +82,9 @@ class JavaMetadataCompiler {
 
         // methods
         for (Method method : clazz.getDeclaredMethods()) {
-            elements.add(new MethodMetadata(method));
+            if (!TranslatorManager.isSerializerMethod(method)) {
+                elements.add(new MethodMetadata(method));
+            }
         }
 
         // compile

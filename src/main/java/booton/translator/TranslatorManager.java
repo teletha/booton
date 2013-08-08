@@ -9,6 +9,7 @@
  */
 package booton.translator;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -227,6 +228,38 @@ class TranslatorManager {
         Set<String> fields = nativeFields.get(owner);
 
         return fields != null && fields.contains(name);
+    }
+
+    /**
+     * <p>
+     * Detect this is {@link Serializable} related method or not.
+     * </p>
+     * 
+     * @param method A method to test.
+     * @return A result.
+     */
+    static boolean isSerializerMethod(Method method) {
+        return isSerializerMethod(method.getName(), Type.getMethodDescriptor(method));
+    }
+
+    /**
+     * <p>
+     * Detect this is {@link Serializable} related method or not.
+     * </p>
+     * 
+     * @param name A method name.
+     * @param description A method signature.
+     * @return A result.
+     */
+    static boolean isSerializerMethod(String name, String description) {
+        if (name.equals("writeObject") && description.equals("(Ljava/io/ObjectOutputStream;)V")) {
+            return true;
+        }
+
+        if (name.equals("readObject") && description.equals("(Ljava/io/ObjectInputStream;)V")) {
+            return true;
+        }
+        return false;
     }
 
     /**
