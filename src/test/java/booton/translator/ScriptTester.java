@@ -34,7 +34,7 @@ import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
 import net.sourceforge.htmlunit.corejs.javascript.Undefined;
 import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
 import booton.live.ClientStackTrace;
-import booton.live.ClientStackTrace2;
+import booton.live.Source;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -249,15 +249,17 @@ public class ScriptTester {
             if (result == null || result instanceof Undefined || result instanceof UniqueTag) {
                 return null;
             } else {
-                // some error
-                throw I.quiet(ClientStackTrace2.decode((String) result, Javascript.getScript(source).toString()));
+                // create source map
+                Source map = new Source(source.getSimpleName(), Javascript.getScript(source).toString());
+
+                // decode error
+                Throwable throwable = ClientStackTrace.decode((String) result, map);
+
+                // rethrow error
+                throw I.quiet(throwable);
             }
-        } catch (Exception e) {
-            // If this exception will be thrown, it is bug of this program. So we must rethrow the
-            // wrapped error in here.
-            Javascript.getScript(method.getDeclaringClass())
-                    .writeTo(I.locate("E:\\text.js"), Character.class, ClientStackTrace.class);
-            throw new Error(e);
+        } catch (Throwable e) {
+            throw I.quiet(e);
         }
     }
 

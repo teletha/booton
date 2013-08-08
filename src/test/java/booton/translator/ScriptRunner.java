@@ -15,11 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.internal.runners.model.ReflectiveCallable;
-import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
-import org.junit.runners.model.Statement;
 
 /**
  * @version 2013/08/04 9:26:13
@@ -32,15 +30,6 @@ public class ScriptRunner extends BlockJUnit4ClassRunner {
      */
     public ScriptRunner(Class<?> klass) throws InitializationError {
         super(klass);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Statement childrenInvoker(RunNotifier notifier) {
-        System.out.println(notifier);
-        return super.childrenInvoker(notifier);
     }
 
     /**
