@@ -49,7 +49,7 @@ import booton.translator.Node.TryCatchFinallyBlocks;
  * completely, garbage goto code will remain.
  * </p>
  * 
- * @version 2013/04/11 11:23:33
+ * @version 2013/08/09 15:57:44
  */
 class JavaMethodCompiler extends MethodVisitor {
 
@@ -1033,11 +1033,26 @@ class JavaMethodCompiler extends MethodVisitor {
 
         if (first instanceof OperandCondition) {
             merge();
-        } else if (second instanceof OperandCondition) {
-            merge();
 
+            // If the previous instruction is not JUMP, it is part of Ternary operator or
+            // Conditional operator.
+            if (match(JUMP, LABEL)) {
+                return;
+            }
+        }
+
+        if (second instanceof OperandCondition) {
+            merge();
             dispose(current);
-        } else if (third instanceof OperandCondition) {
+
+            // If the previous instruction is not JUMP, it is part of Ternary operator or
+            // Conditional operator.
+            if (match(JUMP, LABEL)) {
+                return;
+            }
+        }
+
+        if (third instanceof OperandCondition) {
             // =======================
             // Conditional Operator
             // =======================
