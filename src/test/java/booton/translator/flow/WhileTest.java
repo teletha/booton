@@ -183,4 +183,19 @@ public class WhileTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void InIf() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 5) int value) {
+                while (value < 3) {
+                    value++;
+                }
+
+                return value;
+            }
+        });
+    }
+
 }
