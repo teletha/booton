@@ -271,7 +271,7 @@ class JavaMethodCompiler extends MethodVisitor {
             NodeDebugger.dump(script, methodNameOriginal, nodes);
         }
 
-        if (methodNameOriginal.equals("valEquals")) {
+        if (methodNameOriginal.equals("getFirstEntry")) {
             NodeDebugger.dump(script, methodNameOriginal, nodes);
         }
 
@@ -290,7 +290,7 @@ class JavaMethodCompiler extends MethodVisitor {
             System.out.println(code.toFragment());
         }
 
-        if (methodNameOriginal.equals("valEquals")) {
+        if (methodNameOriginal.equals("getFirstEntry")) {
             System.out.println(code.toFragment());
         }
     }
@@ -1133,6 +1133,7 @@ class JavaMethodCompiler extends MethodVisitor {
         group.add(current);
 
         boolean found = false;
+        Node incoming = null;
 
         // Decide target node
         Node target = current.previous;
@@ -1146,11 +1147,12 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 if (!found) {
                     found = true;
+                    incoming = target;
 
                     // This is first operand condition.
                     group.add(condition.transition);
 
-                    // Set next appering node for grouping.
+                    // Set next appearing node for grouping.
                     condition.next = current;
                 } else if (group.contains(condition.transition)) {
                     // Merge two adjucent conditional operands.
@@ -1158,7 +1160,6 @@ class JavaMethodCompiler extends MethodVisitor {
                 } else {
                     return; // Stop here.
                 }
-            } else {
             }
         }
 
@@ -1170,7 +1171,12 @@ class JavaMethodCompiler extends MethodVisitor {
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
 
-                if (group.contains(condition.transition)) {
+                if (methodNameOriginal.equals("act")) {
+                    System.out.println(target.id);
+                    NodeDebugger.dump(nodes);
+                }
+
+                if (group.contains(condition.transition) && equalDeeply(target.outgoing, target.previous.outgoing)) {
                     dispose(target);
 
                     // Merge recursively
@@ -1178,6 +1184,16 @@ class JavaMethodCompiler extends MethodVisitor {
                 }
             }
         }
+    }
+
+    private boolean equalDeeply(List<Node> one, List<Node> other) {
+
+        for (Node node : one) {
+            if (!other.contains(node)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
