@@ -24,14 +24,23 @@ abstract class AbstractSet<E> extends AbstractCollection<E> implements Set<E> {
     /**
      * {@inheritDoc}
      */
-    public boolean equals(Object o) {
-        if (o == this) return true;
+    @Override
+    public boolean equals(Object object) {
+        if (object == this) {
+            return true;
+        }
 
-        if (!(o instanceof Set)) return false;
-        Collection c = (Collection) o;
-        if (c.size() != size()) return false;
+        if (!(object instanceof Set)) {
+            return false;
+        }
+
+        Collection collection = (Collection) object;
+
+        if (collection.size() != size()) {
+            return false;
+        }
         try {
-            return containsAll(c);
+            return containsAll(collection);
         } catch (ClassCastException unused) {
             return false;
         } catch (NullPointerException unused) {
@@ -42,12 +51,16 @@ abstract class AbstractSet<E> extends AbstractCollection<E> implements Set<E> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int hashCode() {
         int h = 0;
         Iterator<E> i = iterator();
         while (i.hasNext()) {
             E obj = i.next();
-            if (obj != null) h += obj.hashCode();
+
+            if (obj != null) {
+                h += obj.hashCode();
+            }
         }
         return h;
     }
@@ -55,15 +68,17 @@ abstract class AbstractSet<E> extends AbstractCollection<E> implements Set<E> {
     /**
      * {@inheritDoc}
      */
-    public boolean removeAll(Collection<?> c) {
+    @Override
+    public boolean removeAll(Collection<?> collection) {
         boolean modified = false;
 
-        if (size() > c.size()) {
-            for (Iterator<?> i = c.iterator(); i.hasNext();)
+        if (size() > collection.size()) {
+            for (Iterator<?> i = collection.iterator(); i.hasNext();) {
                 modified |= remove(i.next());
+            }
         } else {
             for (Iterator<?> i = iterator(); i.hasNext();) {
-                if (c.contains(i.next())) {
+                if (collection.contains(i.next())) {
                     i.remove();
                     modified = true;
                 }
