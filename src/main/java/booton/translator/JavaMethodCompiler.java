@@ -271,6 +271,10 @@ class JavaMethodCompiler extends MethodVisitor {
             NodeDebugger.dump(script, methodNameOriginal, nodes);
         }
 
+        if (methodNameOriginal.equals("valEquals")) {
+            NodeDebugger.dump(script, methodNameOriginal, nodes);
+        }
+
         // ===============================================
         // Script Code
         // ===============================================
@@ -283,6 +287,10 @@ class JavaMethodCompiler extends MethodVisitor {
         code.separator();
 
         if (debuggable) {
+            System.out.println(code.toFragment());
+        }
+
+        if (methodNameOriginal.equals("valEquals")) {
             System.out.println(code.toFragment());
         }
     }
@@ -302,7 +310,7 @@ class JavaMethodCompiler extends MethodVisitor {
         // Step into outgoing nodes.
         for (Node out : node.outgoing) {
             if (nodes.contains(out)) {
-                out.backedges.add(node);
+                out.backedges.addIfAbsent(node);
             } else {
                 searchBackEdge(out, nodes);
             }

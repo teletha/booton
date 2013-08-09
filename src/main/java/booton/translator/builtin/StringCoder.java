@@ -109,6 +109,10 @@ class StringCoder extends Translator<String> {
         return that + ".indexOf(" + param(0) + ") != -1";
     }
 
+    public String compareTo(String param) {
+        return that + ".localeCompare(" + param(0) + ")";
+    }
+
     public String indexOf(int value) {
         return that + ".indexOf(" + param(0) + ")";
     }

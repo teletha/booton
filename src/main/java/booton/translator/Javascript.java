@@ -764,7 +764,7 @@ public class Javascript {
     }
 
     /**
-     * @version 2013/04/14 14:04:15
+     * @version 2013/08/09 9:14:27
      */
     @Manageable(lifestyle = Singleton.class)
     private static class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
@@ -777,7 +777,17 @@ public class Javascript {
          */
         @Override
         public void load(Class<JavaAPIProvider> clazz) {
-            definitions.put(clazz.getAnnotation(JavaAPIProvider.class).value(), new Definition(clazz));
+            JavaAPIProvider api = clazz.getAnnotation(JavaAPIProvider.class);
+
+            if (api != null && !definitions.containsKey(api.value())) {
+                definitions.put(api.value(), new Definition(clazz));
+            }
+
+            Class parent = clazz.getSuperclass();
+
+            if (parent != null) {
+                load(parent);
+            }
         }
 
         /**
@@ -785,7 +795,17 @@ public class Javascript {
          */
         @Override
         public void unload(Class<JavaAPIProvider> clazz) {
-            definitions.remove(clazz.getAnnotation(JavaAPIProvider.class).value());
+            JavaAPIProvider api = clazz.getAnnotation(JavaAPIProvider.class);
+
+            if (api != null && !definitions.containsKey(api.value())) {
+                definitions.remove(api.value());
+            }
+
+            Class parent = clazz.getSuperclass();
+
+            if (parent != null) {
+                load(parent);
+            }
         }
 
         /**
@@ -873,7 +893,15 @@ public class Javascript {
                     methods.add(method.getName() + Type.getMethodDescriptor(method));
                 }
 
+                for (Method method : clazz.getDeclaredMethods()) {
+                    methods.add(method.getName() + Type.getMethodDescriptor(method));
+                }
+
                 for (Field field : clazz.getFields()) {
+                    fields.add(field.getName());
+                }
+
+                for (Field field : clazz.getDeclaredFields()) {
                     fields.add(field.getName());
                 }
             }

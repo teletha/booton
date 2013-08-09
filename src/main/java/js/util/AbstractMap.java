@@ -9,7 +9,9 @@
  */
 package js.util;
 
+import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 import booton.translator.JavaAPIProvider;
 
@@ -18,6 +20,12 @@ import booton.translator.JavaAPIProvider;
  */
 @JavaAPIProvider(java.util.AbstractMap.class)
 abstract class AbstractMap<K, V> implements Map<K, V> {
+
+    /** The cache for key view. */
+    transient volatile Set<K> keySet = null;
+
+    /** The cache for value view. */
+    transient volatile Collection<V> values = null;
 
     /**
      * <p>

@@ -469,23 +469,23 @@ class Node {
                             update.remove(0);
                         }
 
-                        // setup following node
-                        follower = outgoing.get(1);
+                        // detect process and follower node
+                        Node process = detectFollower();
 
                         // write script fragment
                         buffer.write("l" + id + ":", "for", "(;", this + ";", update + ")", "{");
-                        process(outgoing.get(0), buffer);
+                        process(process, buffer);
                         buffer.write("}");
                         process(follower, buffer);
                     } else {
                         // while with break only
-
-                        // setup following node
-                        follower = outgoing.get(1);
+                        //
+                        // detect process and follower node
+                        Node process = detectFollower();
 
                         // write script fragment
                         buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
-                        process(outgoing.get(0), buffer);
+                        process(process, buffer);
                         buffer.write("}");
                         process(follower, buffer);
                     }
@@ -575,6 +575,29 @@ class Node {
                 buffer.append("break l", dominator.id, ";");
             };
         }
+    }
+
+    /**
+     * <p>
+     * Detect the follower node.
+     * </p>
+     * 
+     * @return A non-follower node.
+     */
+    private final Node detectFollower() {
+        Node process;
+        Node first = outgoing.get(0);
+        Node last = outgoing.get(1);
+
+        if (backedges.get(0).hasDominator(first)) {
+            process = first;
+            follower = last;
+        } else {
+            process = last;
+            follower = first;
+            stack.peekLast().invert();
+        }
+        return process;
     }
 
     /**

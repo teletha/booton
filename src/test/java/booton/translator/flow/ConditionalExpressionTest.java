@@ -11,14 +11,26 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/03/23 13:05:40
+ * @version 2013/08/09 12:38:04
  */
 @SuppressWarnings("unused")
 public class ConditionalExpressionTest extends ScriptTester {
+
+    @Test
+    public void logicalExpressionInLeft() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public boolean act(int value) {
+                return value < 3 ? value == 2 : false;
+            }
+        });
+    }
 
     @Test
     public void withExpression() {
