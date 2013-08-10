@@ -183,6 +183,40 @@ class Node {
     }
 
     /**
+     * <p>
+     * Helper method to set the operand at the specified index from the operands stack.
+     * </p>
+     * 
+     * @param index An index that you want to peek from the operands stack.
+     * @return A target operand.
+     */
+    final Operand set(int index, Operand operand) {
+        // Calculate index
+        index = stack.size() - 1 - index;
+
+        if (index < 0) {
+            // Set operand to the previous node if we can.
+            //
+            // calculated = stack.size() - 1 - index
+            // index - stack.size() = -calculated - 1;
+            return previous == null || incoming.isEmpty() ? null : previous.set(-index - 1, operand);
+        }
+
+        // Retrieve and remove it
+        operand = stack.set(index, operand);
+
+        if (operand.duplicated) {
+            operand.duplicated = false;
+
+            // Duplicate pointer
+            stack.add(index, operand);
+        }
+
+        // API definition
+        return operand;
+    }
+
+    /**
      * Helper method to join latest two operands.
      * 
      * @param separator

@@ -1139,8 +1139,32 @@ class JavaMethodCompiler extends MethodVisitor {
         Node target = current.previous;
 
         // Merge the sequencial conditional operands in this node from right to left.
-        for (int i = target.stack.size() - 1; 0 <= i; i--) {
-            Operand operand = target.stack.get(i);
+        // for (int i = 0; i < target.stack.size(); i++) {
+        // Operand operand = target.peek(i);
+        //
+        // if (operand instanceof OperandCondition) {
+        // OperandCondition condition = (OperandCondition) operand;
+        //
+        // if (!found) {
+        // found = true;
+        // incoming = target;
+        //
+        // // This is first operand condition.
+        // group.add(condition.transition);
+        //
+        // // Set next appearing node for grouping.
+        // condition.next = current;
+        // } else if (group.contains(condition.transition)) {
+        // // Merge two adjucent conditional operands.
+        // target.set(i, new OperandCondition(condition, (OperandCondition) target.remove(i + 1)));
+        // } else {
+        // return; // Stop here.
+        // }
+        // }
+        // }
+
+        for (int i = 0; i < target.stack.size(); i++) {
+            Operand operand = target.peek(i);
 
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
@@ -1156,7 +1180,9 @@ class JavaMethodCompiler extends MethodVisitor {
                     condition.next = current;
                 } else if (group.contains(condition.transition)) {
                     // Merge two adjucent conditional operands.
-                    target.stack.set(i, new OperandCondition(condition, (OperandCondition) target.stack.remove(i + 1)));
+                    i--;
+
+                    target.set(i, new OperandCondition(condition, (OperandCondition) target.remove(i)));
                 } else {
                     return; // Stop here.
                 }
@@ -1171,12 +1197,14 @@ class JavaMethodCompiler extends MethodVisitor {
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
 
-                if (methodNameOriginal.equals("act")) {
-                    System.out.println(target.id);
-                    NodeDebugger.dump(nodes);
-                }
+                // if (methodNameOriginal.equals("act") ||
+                // methodNameOriginal.equals("getFirstEntry")) {
+                // System.out.println(target.id);
+                // NodeDebugger.dump(nodes);
+                // }
+                //
 
-                if (group.contains(condition.transition) && equalDeeply(target.outgoing, target.previous.outgoing)) {
+                if (group.contains(condition.transition)) {
                     dispose(target);
 
                     // Merge recursively
@@ -1184,6 +1212,10 @@ class JavaMethodCompiler extends MethodVisitor {
                 }
             }
         }
+    }
+
+    private void merge2() {
+
     }
 
     private boolean equalDeeply(List<Node> one, List<Node> other) {
