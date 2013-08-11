@@ -197,8 +197,8 @@ public class LogicalExpressionInControlStructureTest extends ScriptTester {
             @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 if (1 < value && value <= 10) {
-                    while (value % 3 != 0) {
-                        if (value == 5) {
+                    while (value % 3 != 0 || value % 2 != 0) {
+                        if (value == 5 || value == 7) {
                             return 100;
                         }
                         value++;

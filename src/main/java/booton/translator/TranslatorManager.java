@@ -32,7 +32,7 @@ import kiss.model.ClassUtil;
 import org.objectweb.asm.Type;
 
 /**
- * sion 2013/07/04 21:02:47
+ * @version 2013/08/11 15:39:07
  */
 class TranslatorManager {
 
