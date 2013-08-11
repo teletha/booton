@@ -16,7 +16,7 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/02/25 18:20:26
+ * @version 2013/08/11 9:53:05
  */
 @SuppressWarnings("unused")
 public class IfTest extends ScriptTester {
@@ -136,6 +136,47 @@ public class IfTest extends ScriptTester {
             public int act(int o) {
                 if (o == 2) return o + 3;
                 return o;
+            }
+        });
+    }
+
+    @Test
+    public void shorthandLine() throws Exception {
+        test(new Scriptable() {
+
+            public int act(int o) {
+                if (o == 2) // need line
+                    return o + 3;
+
+                return o;
+            }
+        });
+    }
+
+    @Test
+    public void shorthandElse() throws Exception {
+        test(new Scriptable() {
+
+            public int act(int o) {
+                if (o == 2)
+                    return o + 3;
+                else
+                    return o;
+            }
+        });
+    }
+
+    @Test
+    public void shorthandMultiple() throws Exception {
+        test(new Scriptable() {
+
+            public int act(int o) {
+                if (o == 2)
+                    return o + 3;
+                else if (o == 1)
+                    return -10;
+                else
+                    return o;
             }
         });
     }

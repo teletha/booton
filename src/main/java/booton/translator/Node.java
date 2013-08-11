@@ -53,7 +53,7 @@ class Node {
     private Switch switchy;
 
     /** The dominator node. */
-    private Node dominator;
+    Node dominator;
 
     /** The flag whether this node has already written or not. */
     private boolean written = false;
