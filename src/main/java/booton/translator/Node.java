@@ -471,21 +471,28 @@ class Node {
 
                     if (outgoing.get(0).incoming.size() == 1) {
                         if (outgoing.get(1).incoming.size() == 1) {
+                            Node then = null;
+                            Node elze = null;
+
                             if (outgoing.get(0).written) {
                                 ccc.invert();
 
-                                buffer.write("if", "(" + this + ")", "{");
-                                process(outgoing.get(1), buffer);
-                                buffer.write("}");
-                                process(follower, buffer);
+                                then = outgoing.get(1);
+                            } else if (outgoing.get(1).written) {
+                                then = outgoing.get(0);
                             } else {
-                                buffer.write("if", "(" + this + ")", "{");
-                                process(outgoing.get(0), buffer);
-                                buffer.write("}", "else", "{");
-                                process(outgoing.get(1), buffer);
-                                buffer.write("}");
-                                process(follower, buffer);
+                                then = outgoing.get(0);
+                                elze = outgoing.get(1);
                             }
+
+                            buffer.write("if", "(" + this + ")", "{");
+                            process(then, buffer);
+                            if (elze != null) {
+                                buffer.write("}", "else", "{");
+                                process(elze, buffer);
+                            }
+                            buffer.write("}");
+                            process(follower, buffer);
                         } else {
                             buffer.write("if", "(" + this + ")", "{");
                             process(outgoing.get(0), buffer);
