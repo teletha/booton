@@ -51,6 +51,19 @@ class OperandExpression extends Operand {
      * {@inheritDoc}
      */
     @Override
+    Operand disclose() {
+        if (expression != null) {
+            if (expression instanceof Operand) {
+                ((Operand) expression).disclose();
+            }
+        }
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String toString() {
         return expression == null ? null : expression.toString();
     }

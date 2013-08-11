@@ -12,7 +12,7 @@ package booton.translator;
 import java.util.ArrayList;
 
 /**
- * @version 2013/02/12 11:20:19
+ * @version 2013/08/11 15:10:23
  */
 class OperandArray extends Operand {
 
@@ -34,7 +34,7 @@ class OperandArray extends Operand {
      * @param isPrimitive An array type.
      */
     OperandArray(Operand size, boolean isPrimitive) {
-        this.size = size;
+        this.size = size.disclose();
         this.isPrimitive = isPrimitive;
     }
 

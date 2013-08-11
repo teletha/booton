@@ -12,6 +12,7 @@ package booton.translator.flow;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
@@ -20,6 +21,98 @@ import booton.translator.Scriptable;
  */
 @SuppressWarnings("unused")
 public class IfTest extends ScriptTester {
+
+    @Test
+    public void normal() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 5) int value) {
+                if (value < 3) {
+                    return 2;
+                }
+                return 1;
+            }
+        });
+    }
+
+    @Test
+    public void then() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 5) int value) {
+                if (value < 3) {
+                    value++;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void thenNest() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 10) int value) {
+                if (value < 5) {
+                    value += 1;
+
+                    if (value < 5) {
+                        value += 2;
+                    }
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void thenNestImmidiately() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 10) int value) {
+                if (value < 5) {
+                    if (value < 3) {
+                        value += 1;
+                    }
+                    value += 2;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void nestReturn() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 5) int value) {
+                if (value < 3) {
+                    if (1 < value) {
+                        return 0;
+                    }
+                    return 2;
+                }
+                return 1;
+            }
+        });
+    }
+
+    @Test
+    public void nestComplexLogicalExpression() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 5) int value) {
+                if (value < 3 && 1 < value || value % 2 == 0) {
+                    if (1 < value && value < 2) {
+                        return 0;
+                    } else {
+                        return 11;
+                    }
+                }
+                return 1;
+            }
+        });
+    }
 
     @Test
     public void integer() throws Exception {

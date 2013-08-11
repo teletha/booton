@@ -16,7 +16,7 @@
 package booton.translator;
 
 /**
- * @version 2013/04/11 10:13:44
+ * @version 2013/08/11 14:12:04
  */
 abstract class Operand {
 
@@ -31,7 +31,25 @@ abstract class Operand {
         return this;
     }
 
+    /**
+     * <p>
+     * Invert operand value if we can.
+     * </p>
+     * 
+     * @return A inverted operand.
+     */
     Operand invert() {
+        return this;
+    }
+
+    /**
+     * <p>
+     * Disclose the outmost parenthesis if we can.
+     * </p>
+     * 
+     * @return A disclosed operand.
+     */
+    Operand disclose() {
         return this;
     }
 }

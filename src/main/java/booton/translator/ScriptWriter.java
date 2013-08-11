@@ -73,7 +73,7 @@ class ScriptWriter {
             write(comment);
             line();
         }
-    
+
         return this;
     }
 
