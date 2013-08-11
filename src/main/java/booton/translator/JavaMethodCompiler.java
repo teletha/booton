@@ -736,13 +736,7 @@ class JavaMethodCompiler extends MethodVisitor {
         case LRETURN:
         case FRETURN:
         case DRETURN:
-            if (match(DUP, JUMP, ARETURN)) {
-                current.addExpression("return ", current.remove(1));
-                current = null;
-                return;
-            }
-
-            current.addExpression("return ", current.remove(0));
+            current.addExpression("return ", current.remove(match(DUP, JUMP, ARETURN) ? 1 : 0));
 
             // disconnect the next appearing node from the current node
             current = null;
@@ -1065,7 +1059,7 @@ class JavaMethodCompiler extends MethodVisitor {
             } else if (first == ZERO && second == ONE) {
                 current.addOperand(third.invert());
             } else {
-                current.addOperand("(" + third.invert() + "?" + second + ":" + first + ")");
+                current.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose())));
             }
 
             // resolve recursively

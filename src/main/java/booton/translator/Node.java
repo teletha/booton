@@ -53,7 +53,7 @@ class Node {
     private Switch switchy;
 
     /** The dominator node. */
-    Node dominator;
+    private Node dominator;
 
     /** The flag whether this node has already written or not. */
     private boolean written = false;
@@ -471,12 +471,21 @@ class Node {
 
                     if (outgoing.get(0).incoming.size() == 1) {
                         if (outgoing.get(1).incoming.size() == 1) {
-                            buffer.write("if", "(" + this + ")", "{");
-                            process(outgoing.get(0), buffer);
-                            buffer.write("}", "else", "{");
-                            process(outgoing.get(1), buffer);
-                            buffer.write("}");
-                            process(follower, buffer);
+                            if (outgoing.get(0).written) {
+                                ccc.invert();
+
+                                buffer.write("if", "(" + this + ")", "{");
+                                process(outgoing.get(1), buffer);
+                                buffer.write("}");
+                                process(follower, buffer);
+                            } else {
+                                buffer.write("if", "(" + this + ")", "{");
+                                process(outgoing.get(0), buffer);
+                                buffer.write("}", "else", "{");
+                                process(outgoing.get(1), buffer);
+                                buffer.write("}");
+                                process(follower, buffer);
+                            }
                         } else {
                             buffer.write("if", "(" + this + ")", "{");
                             process(outgoing.get(0), buffer);
@@ -484,7 +493,8 @@ class Node {
                             process(outgoing.get(1), buffer);
                         }
                     } else {
-                        buffer.write("if", "(!(" + this + "))", "{");
+                        ccc.invert();
+                        buffer.write("if", "(" + this + ")", "{");
                         process(outgoing.get(1), buffer);
                         buffer.write("}");
                         process(outgoing.get(0), buffer);
@@ -629,7 +639,7 @@ class Node {
         } else {
             process = last;
             follower = first;
-            stack.peekLast().invert();
+            // stack.peekLast().invert();
         }
         return process;
     }
@@ -642,7 +652,7 @@ class Node {
         StringBuilder builder = new StringBuilder();
 
         for (Operand operand : stack) {
-            builder.append(operand);
+            builder.append(operand.disclose());
         }
         return builder.toString();
     }

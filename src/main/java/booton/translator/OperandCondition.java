@@ -122,6 +122,16 @@ class OperandCondition extends Operand {
      * {@inheritDoc}
      */
     @Override
+    Operand disclose() {
+        group = false;
+
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
@@ -164,6 +174,7 @@ class OperandCondition extends Operand {
             builder.append(">=");
             break;
         }
+
         builder.append(right);
 
         if (group) {

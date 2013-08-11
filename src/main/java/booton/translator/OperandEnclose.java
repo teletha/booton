@@ -15,7 +15,7 @@ package booton.translator;
 class OperandEnclose extends Operand {
 
     /** The value operand. */
-    private final Operand value;
+    final Operand value;
 
     /**
      * @param value
@@ -32,6 +32,14 @@ class OperandEnclose extends Operand {
         value.invert();
 
         return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    Operand disclose() {
+        return value;
     }
 
     /**
