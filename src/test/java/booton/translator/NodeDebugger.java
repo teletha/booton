@@ -11,14 +11,16 @@ package booton.translator;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import booton.translator.Node.TryCatchFinally;
 
 /**
- * @version 2013/08/03 1:30:19
+ * @version 2013/08/11 12:01:30
  */
 public class NodeDebugger {
 
@@ -197,7 +199,7 @@ public class NodeDebugger {
             format.write("out : ");
             format.formatNode(node.outgoing, outgoing);
             format.write("dom : ");
-            format.formatNode(list(node.getDominator()), 1);
+            format.formatNode(list(getDominator(node, new HashSet())), 1);
             if (backedge != 0) {
                 format.write("back : ");
                 format.formatNode(node.backedges, backedge);
@@ -226,6 +228,83 @@ public class NodeDebugger {
             return Collections.EMPTY_LIST;
         }
         return Arrays.asList(node);
+    }
+
+    /**
+     * Compute the immediate dominator of this node.
+     * 
+     * @return A dominator node. If this node is root, <code>null</code>.
+     */
+    private static Node getDominator(Node target, Set<Node> nodes) {
+        if (!nodes.add(target)) {
+            return null;
+        }
+
+        // check cache
+        // We must search a immediate dominator.
+        //
+        // At first, we can ignore the older incoming nodes.
+        List<Node> candidates = new CopyOnWriteArrayList(target.incoming);
+
+        // compute backedges
+        for (Node node : candidates) {
+            if (target.backedges.contains(node)) {
+                candidates.remove(node);
+            }
+        }
+
+        int size = candidates.size();
+
+        switch (size) {
+        case 0: // this is root node
+            return null;
+
+        case 1: // only one incoming node
+            return candidates.get(0);
+
+        default: // multiple incoming nodes
+            Node candidate = candidates.get(0);
+
+            while (true) {
+                boolean result = true;
+
+                for (int i = 1; i < size; i++) {
+                    if (!hasDominator(candidates.get(i), candidate, nodes)) {
+                        result = false;
+                        break;
+                    }
+                }
+
+                if (result) {
+                    return candidate;
+                } else {
+                    if (candidate == null) {
+                        return null;
+                    }
+                    candidate = getDominator(candidate, nodes);
+                }
+            }
+        }
+    }
+
+    /**
+     * Helper method to check whether the specified node dominate this node or not.
+     * 
+     * @param dominator A dominator node.
+     * @return A result.
+     */
+    private static boolean hasDominator(Node target, Node dominator, Set<Node> nodes) {
+        Node current = target;
+
+        while (current != null) {
+            if (current == dominator) {
+                return true;
+            }
+            current = getDominator(current, nodes);
+        }
+
+        // Not Found
+        return false;
     }
 
     /**

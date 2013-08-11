@@ -1197,12 +1197,10 @@ class JavaMethodCompiler extends MethodVisitor {
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
 
-                // if (methodNameOriginal.equals("act") ||
-                // methodNameOriginal.equals("getFirstEntry")) {
-                // System.out.println(target.id);
-                // NodeDebugger.dump(nodes);
-                // }
-                //
+                if (methodNameOriginal.equals("act") || methodNameOriginal.equals("getFirstEntry")) {
+                    // System.out.println(target.id);
+                    NodeDebugger.dump(nodes);
+                }
 
                 if (group.contains(condition.transition)) {
                     dispose(target);

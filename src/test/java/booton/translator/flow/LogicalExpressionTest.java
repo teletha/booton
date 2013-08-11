@@ -759,7 +759,7 @@ public class LogicalExpressionTest extends ScriptTester {
     }
 
     @Test
-    public void IfElseAfter() {
+    public void lfElseAfter() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -790,12 +790,12 @@ public class LogicalExpressionTest extends ScriptTester {
     }
 
     @Test
-    public void IfNest2() {
+    public void IfNestComplex() {
         test(new Scriptable() {
 
-            public int act(@Param(from = 0, to = 5) int value) {
+            public int act(@Param(from = 0, to = 10) int value) {
                 if (value < 3 && 1 < value || value % 2 == 0) {
-                    if (1 < value && value < 2) {
+                    if (1 < value && value < 4) {
                         return 0;
                     } else {
                         return 11;
