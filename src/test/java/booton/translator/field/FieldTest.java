@@ -194,5 +194,4 @@ public class FieldTest extends ScriptTester {
             return value + this.field + super.field;
         }
     }
-
 }

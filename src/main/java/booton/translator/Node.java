@@ -46,14 +46,14 @@ class Node {
     /** The previous node. */
     Node previous;
 
-    /** The following node. */
-    Node follower;
-
     /** This node is switch starting node. */
     private Switch switchy;
 
     /** The dominator node. */
     private Node dominator;
+
+    /** The following node. */
+    private Node follower;
 
     /** The flag whether this node has already written or not. */
     private boolean written = false;
@@ -90,20 +90,6 @@ class Node {
             addOperand(operand);
         }
         stack.add(END);
-    }
-
-    /**
-     * <p>
-     * Helper method to add new conditional operand on the top of this stack.
-     * </p>
-     * 
-     * @param left A left operand.
-     * @param operator A condition operator.
-     * @param right A right operand.
-     * @param transition A transition node.
-     */
-    final void condition(Operand left, int operator, Operand right, Node transition) {
-        stack.add(new OperandCondition(left, operator, right, transition));
     }
 
     /**
@@ -217,6 +203,20 @@ class Node {
     }
 
     /**
+     * <p>
+     * Helper method to add new conditional operand on the top of this stack.
+     * </p>
+     * 
+     * @param left A left operand.
+     * @param operator A condition operator.
+     * @param right A right operand.
+     * @param transition A transition node.
+     */
+    final void condition(Operand left, int operator, Operand right, Node transition) {
+        stack.add(new OperandCondition(left, operator, right, transition));
+    }
+
+    /**
      * Helper method to join latest two operands.
      * 
      * @param separator
@@ -327,18 +327,6 @@ class Node {
 
     /**
      * <p>
-     * Helper method to disconnect nodes each other.
-     * </p>
-     * 
-     * @param node A target node.
-     */
-    final void disconnect(Node node) {
-        outgoing.remove(node);
-        node.incoming.remove(this);
-    }
-
-    /**
-     * <p>
      * Helper method to connect nodes each other.
      * </p>
      * 
@@ -347,6 +335,18 @@ class Node {
     final void connect(Node node) {
         outgoing.addIfAbsent(node);
         node.incoming.addIfAbsent(this);
+    }
+
+    /**
+     * <p>
+     * Helper method to disconnect nodes each other.
+     * </p>
+     * 
+     * @param node A target node.
+     */
+    final void disconnect(Node node) {
+        outgoing.remove(node);
+        node.incoming.remove(this);
     }
 
     /**
@@ -646,7 +646,6 @@ class Node {
         } else {
             process = last;
             follower = first;
-            // stack.peekLast().invert();
         }
         return process;
     }

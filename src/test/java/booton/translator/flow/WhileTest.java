@@ -11,12 +11,13 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/08/09 9:44:11
+ * @version 2013/08/13 7:37:56
  */
 @SuppressWarnings("unused")
 public class WhileTest extends ScriptTester {
@@ -207,6 +208,45 @@ public class WhileTest extends ScriptTester {
                     value++;
                 }
                 return value;
+            }
+        });
+    }
+
+    @Test
+    public void method() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 5) int value) {
+                while ((value = test(value)) < 10) {
+                    value++;
+                }
+                return value;
+            }
+
+            private int test(int value) {
+                return value + 2;
+            }
+        });
+    }
+
+    @Test
+    public void method2() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(@Param(from = 0, to = 5) int value) {
+                while ((value = test(value)) < 10) {
+                    value++;
+
+                    if (value == 7) {
+                        return value;
+                    }
+                }
+                return value;
+            }
+
+            private int test(int value) {
+                return value + 3;
             }
         });
     }
