@@ -300,20 +300,6 @@ public class IfTest extends ScriptTester {
     }
 
     @Test
-    public void shorthandWithExpression2() throws Exception {
-        test(new Scriptable() {
-
-            public int act(int o) {
-                if (o == 2) {
-                    o = o + 3;
-                }
-
-                return o;
-            }
-        });
-    }
-
-    @Test
     public void shorthandInFlow() throws Exception {
         test(new Scriptable() {
 

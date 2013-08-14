@@ -127,4 +127,76 @@ public class Source {
         String decrypted = classNames.get(name);
         return decrypted == null ? name : decrypted;
     }
+
+    /**
+     * <p>
+     * Helper method to find method block from the specified line number.
+     * </p>
+     * 
+     * @param number
+     * @return
+     */
+    public String findBlock(int number) {
+        int start = findMethodStart(number);
+        int end = findMethodEnd(number, lines[start].indexOf("//"));
+
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = start; i < end; i++) {
+            builder.append(lines[i].replaceAll("\t", "  "));
+
+            if (i == number - 1) {
+                builder.append("        <<<  ERROR");
+            }
+            builder.append("\r\n");
+        }
+        return builder.toString();
+    }
+
+    /**
+     * <p>
+     * Search start position of the method declaration.
+     * </p>
+     * 
+     * @param number
+     * @return
+     */
+    private int findMethodStart(int number) {
+        for (int i = number; 0 <= i; i--) {
+            if (lines[i].contains(":function(")) {
+                return i - 1;
+            }
+        }
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * <p>
+     * Search end position of the method declaration.
+     * </p>
+     * 
+     * @param number
+     * @return
+     */
+    private int findMethodEnd(int number, int size) {
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < size; i++) {
+            builder.append("\t");
+        }
+        builder.append("}");
+
+        String prefix = builder.toString();
+
+        for (int i = number; i < lines.length; i++) {
+            if (lines[i].startsWith(prefix)) {
+                return i + 1;
+            }
+        }
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
 }

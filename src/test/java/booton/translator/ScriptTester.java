@@ -37,6 +37,7 @@ import booton.live.ClientStackTrace;
 import booton.live.Source;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.ScriptException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebConsole.Logger;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -221,13 +222,14 @@ public class ScriptTester {
      * @param scriptable A target scriptable source.
      */
     final Object executeAsJavascript(Method method) {
+        Class source = method.getDeclaringClass();
+
         try {
-            Class source = method.getDeclaringClass();
             StringBuilder script = new StringBuilder();
 
             // invoke as Javascript
             Javascript.getScript(source).writeTo(script, defined, Character.class, ClientStackTrace.class);
-
+            Files.write(I.locate("e:\\test.js"), script.toString().getBytes());
             // compile as Javascript and script engine read it
             engine.execute(html, script.toString(), source.getSimpleName(), 1);
 
@@ -258,6 +260,17 @@ public class ScriptTester {
                 // rethrow error
                 throw I.quiet(throwable);
             }
+        } catch (ScriptException e) {
+            String script = e.getScriptSourceCode();
+
+            if (script != null) {
+                Source code = new Source(source.getSimpleName(), e.getScriptSourceCode());
+
+                TranslationError error = new TranslationError(e);
+                error.write(code.findBlock(e.getFailingLineNumber()));
+                throw error;
+            }
+            throw e;
         } catch (Throwable e) {
             throw I.quiet(e);
         }

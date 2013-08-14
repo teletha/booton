@@ -19,8 +19,10 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import js.lang.NativeObject;
@@ -266,7 +268,7 @@ class JavaMethodCompiler extends MethodVisitor {
         // Resolve all try-catch-finally blocks.
         tries.process();
 
-        if (debuggable) {
+        if (debuggable || methodNameOriginal.equals("getFirstEntry")) {
             NodeDebugger.dump(script, methodNameOriginal, nodes);
         }
 
@@ -1015,11 +1017,6 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void resolveLabel() {
-        // if (methodNameOriginal.equals("act") || methodNameOriginal.equals("getFirstEntry")) {
-        // System.out.println(current.id + " in resolveLabel");
-        // NodeDebugger.dump(nodes);
-        // }
-
         Operand first = current.peek(0);
         Operand second = current.peek(1);
         Operand third = current.peek(2);
@@ -1108,11 +1105,18 @@ class JavaMethodCompiler extends MethodVisitor {
             nodes.get(index + 1).previous = index < 1 ? null : nodes.get(index - 1);
         }
 
+        Label label = labels.get(target);
+
+        if (label != null) {
+            labels.put(target.previous, label);
+            label.info = target.previous;
+        }
+
         // Merge the current processing node
         nodes.remove(target);
 
         // Remove it from outgoings of all previous-sibling nodes.
-        for (Node node : nodes) {
+        for (Node node : labels.keySet()) {
             node.incoming.remove(target);
             node.outgoing.remove(target);
         }
@@ -1152,40 +1156,19 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void merge() {
+        if (methodNameOriginal.equals("getFirstEntry")) {
+            System.out.println(current.id + " in merge");
+            NodeDebugger.dump(nodes);
+        }
         Set<Node> group = new HashSet();
         group.add(current);
 
         boolean found = false;
-        Node incoming = null;
 
         // Decide target node
         Node target = current.previous;
 
         // Merge the sequencial conditional operands in this node from right to left.
-        // for (int i = 0; i < target.stack.size(); i++) {
-        // Operand operand = target.peek(i);
-        //
-        // if (operand instanceof OperandCondition) {
-        // OperandCondition condition = (OperandCondition) operand;
-        //
-        // if (!found) {
-        // found = true;
-        // incoming = target;
-        //
-        // // This is first operand condition.
-        // group.add(condition.transition);
-        //
-        // // Set next appearing node for grouping.
-        // condition.next = current;
-        // } else if (group.contains(condition.transition)) {
-        // // Merge two adjucent conditional operands.
-        // target.set(i, new OperandCondition(condition, (OperandCondition) target.remove(i + 1)));
-        // } else {
-        // return; // Stop here.
-        // }
-        // }
-        // }
-
         for (int i = 0; i < target.stack.size(); i++) {
             Operand operand = target.peek(i);
 
@@ -1194,7 +1177,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 if (!found) {
                     found = true;
-                    incoming = target;
 
                     // This is first operand condition.
                     group.add(condition.transition);
@@ -1228,20 +1210,6 @@ class JavaMethodCompiler extends MethodVisitor {
                 }
             }
         }
-    }
-
-    private void merge2() {
-
-    }
-
-    private boolean equalDeeply(List<Node> one, List<Node> other) {
-
-        for (Node node : one) {
-            if (!other.contains(node)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
@@ -1627,6 +1595,8 @@ class JavaMethodCompiler extends MethodVisitor {
         }
     }
 
+    private final Map<Node, Label> labels = new HashMap<>();
+
     /**
      * <p>
      * Retrieve the asossiated node of the specified label.
@@ -1636,13 +1606,16 @@ class JavaMethodCompiler extends MethodVisitor {
      * @return An asossiated and cached node.
      */
     private final Node getNode(Label label) {
+        Node node = (Node) label.info;
+
         // search cached node
-        if (label.info == null) {
-            label.info = new Node(counter++);
+        if (node == null) {
+            label.info = node = new Node(counter++);
+            labels.put(node, label);
         }
 
         // API definition
-        return (Node) label.info;
+        return node;
     }
 
     /**
