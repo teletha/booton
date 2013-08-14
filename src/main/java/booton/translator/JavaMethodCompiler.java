@@ -253,7 +253,6 @@ class JavaMethodCompiler extends MethodVisitor {
                 // create condition node
                 Node condition = createNode(node);
                 Node out = node.outgoing.get(0);
-                node.disconnect(out);
                 condition.connect(node);
                 condition.connect(out);
 
@@ -271,26 +270,23 @@ class JavaMethodCompiler extends MethodVisitor {
             NodeDebugger.dump(script, methodNameOriginal, nodes);
         }
 
-        if (methodNameOriginal.equals("getFirstEntry")) {
-            NodeDebugger.dump(script, methodNameOriginal, nodes);
-        }
-
         // ===============================================
         // Script Code
         // ===============================================
         // write method declaration
-        code.mark();
-        code.append(methodName, ":", "function(", I.join(variables.names(), ","), "){");
-        nodes.get(0).write(code);
-        code.optimize();
-        code.append('}'); // method end
-        code.separator();
-
-        if (debuggable) {
-            System.out.println(code.toFragment());
+        try {
+            code.mark();
+            code.append(methodName, ":", "function(", I.join(variables.names(), ","), "){");
+            nodes.get(0).write(code);
+            code.optimize();
+            code.append('}'); // method end
+            code.separator();
+        } catch (Exception e) {
+            System.out.println(methodNameOriginal);
+            throw I.quiet(e);
         }
 
-        if (methodNameOriginal.equals("getFirstEntry")) {
+        if (debuggable) {
             System.out.println(code.toFragment());
         }
     }
@@ -411,7 +407,15 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 current.addOperand(new OperandExpression("--" + current.remove(0) + "." + Javascript.computeFieldName(owner, name)));
             } else {
-                current.addExpression(current.remove(1), ".", Javascript.computeFieldName(owner, name), "=", current.remove(0));
+                OperandExpression assignment = new OperandExpression(current.remove(1) + "." + Javascript.computeFieldName(owner, name) + "=" + current.remove(0));
+
+                if (match(DUPLICATE_X1, PUTFIELD)) {
+                    // multiple assignment (i.e. this.a = this.b = 0;)
+                    current.addOperand(assignment);
+                } else {
+                    // normal assignment
+                    current.addExpression(assignment);
+                }
             }
             break;
 
@@ -1605,7 +1609,7 @@ class JavaMethodCompiler extends MethodVisitor {
                         enumValues[1] = current.remove(0);
                     }
 
-                    OperandExpression assignment = new OperandExpression(variable + "=" + operand.disclose());
+                    OperandExpression assignment = new OperandExpression(variable + "=" + operand);
 
                     if (!operand.duplicated) {
                         current.addExpression(assignment);

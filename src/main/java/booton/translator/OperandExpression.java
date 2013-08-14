@@ -28,6 +28,14 @@ class OperandExpression extends Operand {
      * {@inheritDoc}
      */
     @Override
+    Operand copy() {
+        return new OperandExpression(expression);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     Operand invert() {
         if (expression != null) {
             if (expression instanceof Operand) {
