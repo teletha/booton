@@ -383,25 +383,37 @@ public class NodeDebugger {
         private void formatCodeFragment(List<Operand> operands) {
             for (int i = 0; i < operands.size(); i++) {
                 Operand operand = operands.get(i);
-                builder.append(operand);
-                builder.append(" [");
-                if (operand instanceof OperandString) {
-                    builder.append("String");
-                } else if (operand instanceof OperandExpression) {
-                    builder.append("Expression");
-                } else if (operand instanceof OperandCondition) {
-                    builder.append("Condition");
-                } else if (operand instanceof OperandArray) {
-                    builder.append("Array");
-                } else if (operand instanceof OperandNumber) {
-                    builder.append("Number");
-                }
-                builder.append("]");
+                builder.append(operand).append(" [").append(type(operand)).append("]");
 
                 if (i != operands.size() - 1) {
                     builder.append(" ");
                 }
             }
+        }
+
+        /**
+         * <p>
+         * Helper method to detect type of {@link Operand}.
+         * </p>
+         * 
+         * @param operand
+         * @return
+         */
+        private String type(Operand operand) {
+            if (operand instanceof OperandString) {
+                return "String";
+            } else if (operand instanceof OperandExpression) {
+                return "Expression";
+            } else if (operand instanceof OperandCondition) {
+                return "Condition";
+            } else if (operand instanceof OperandArray) {
+                return "Array";
+            } else if (operand instanceof OperandNumber) {
+                return "Number";
+            } else if (operand instanceof OperandEnclose) {
+                return type(((OperandEnclose) operand).value) + " in Enclose";
+            }
+            return "";
         }
 
         /**

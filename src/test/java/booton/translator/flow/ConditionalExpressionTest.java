@@ -85,4 +85,15 @@ public class ConditionalExpressionTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void afterLogicalExpression() {
+        test(new Scriptable() {
+
+            public int act(int value) {
+                boolean result = value % 2 == 0;
+                return result ? value : value + 1;
+            }
+        });
+    }
 }

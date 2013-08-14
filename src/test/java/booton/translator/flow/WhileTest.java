@@ -11,19 +11,18 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/08/13 7:37:56
+ * @version 2013/08/14 10:22:03
  */
 @SuppressWarnings("unused")
 public class WhileTest extends ScriptTester {
 
     @Test
-    public void Normal() {
+    public void normal() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -37,7 +36,7 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
-    public void Break() {
+    public void withBreak() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -54,7 +53,7 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
-    public void InfiniteBreak() {
+    public void infiniteBreak() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -71,7 +70,7 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
-    public void MultipuleBreaks() {
+    public void multipuleBreaks() {
         test(new Scriptable() {
 
             public int act(int value) {
@@ -92,7 +91,7 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
-    public void Continue() {
+    public void withContinue() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -110,7 +109,7 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
-    public void Return() {
+    public void withReturn() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -127,7 +126,7 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
-    public void Mix() {
+    public void mix() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -147,7 +146,7 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
-    public void Nest() {
+    public void nest() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 10) int value) {
@@ -164,7 +163,7 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
-    public void LabeledBreak() {
+    public void labeledBreak() {
         test(new Scriptable() {
 
             public int act(@Param(from = 1, to = 10) int value) {
@@ -186,7 +185,7 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
-    public void InIf() {
+    public void inIf() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -213,7 +212,7 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
-    public void method() {
+    public void assignWithMethod() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -225,28 +224,6 @@ public class WhileTest extends ScriptTester {
 
             private int test(int value) {
                 return value + 2;
-            }
-        });
-    }
-
-    @Test
-    public void method2() {
-        test(new Scriptable() {
-
-            @Debuggable
-            public int act(@Param(from = 0, to = 5) int value) {
-                while ((value = test(value)) < 10) {
-                    value++;
-
-                    if (value == 7) {
-                        return value;
-                    }
-                }
-                return value;
-            }
-
-            private int test(int value) {
-                return value + 3;
             }
         });
     }

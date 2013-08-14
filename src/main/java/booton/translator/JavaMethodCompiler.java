@@ -49,7 +49,7 @@ import booton.translator.Node.TryCatchFinallyBlocks;
  * completely, garbage goto code will remain.
  * </p>
  * 
- * @version 2013/08/09 15:57:44
+ * @version 2013/08/14 10:26:28
  */
 class JavaMethodCompiler extends MethodVisitor {
 
@@ -1016,10 +1016,11 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void resolveLabel() {
-        if (methodNameOriginal.equals("act") || methodNameOriginal.equals("getFirstEntry")) {
-            System.out.println(current.id);
-            NodeDebugger.dump(nodes);
-        }
+        // if (methodNameOriginal.equals("act") || methodNameOriginal.equals("getFirstEntry")) {
+        // System.out.println(current.id + " in resolveLabel");
+        // NodeDebugger.dump(nodes);
+        // }
+
         Operand first = current.peek(0);
         Operand second = current.peek(1);
         Operand third = current.peek(2);
@@ -1051,24 +1052,49 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         if (third instanceof OperandCondition) {
-            // =======================
-            // Conditional Operator
-            // =======================
-            first = current.remove(0);
-            second = current.remove(0);
-            third = current.remove(0);
+            Node firstNode = findNodeBy(first);
+            Node secondNode = findNodeBy(second);
+            Node thirdNode = findNodeBy(third);
 
-            if (first == ONE && second == ZERO) {
-                current.addOperand(third);
-            } else if (first == ZERO && second == ONE) {
-                current.addOperand(third.invert());
-            } else {
-                current.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose())));
+            if (firstNode.equalsAsIncoming(thirdNode) && secondNode.equalsAsIncoming(thirdNode)) {
+                // =======================
+                // Conditional Operator
+                // =======================
+                first = current.remove(0);
+                second = current.remove(0);
+                third = current.remove(0);
+
+                if (first == ONE && second == ZERO) {
+                    current.addOperand(third);
+                } else if (first == ZERO && second == ONE) {
+                    current.addOperand(third.invert());
+                } else {
+                    current.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose())));
+                }
+
+                // resolve recursively
+                resolveLabel();
             }
-
-            // resolve recursively
-            resolveLabel();
         }
+    }
+
+    /**
+     * <p>
+     * Search the node which has the specified operand.
+     * </p>
+     * 
+     * @param operand
+     * @return
+     */
+    private Node findNodeBy(Operand operand) {
+        for (int i = nodes.size() - 1; 0 <= i; i--) {
+            Node node = nodes.get(i);
+
+            if (node.has(operand)) {
+                return node;
+            }
+        }
+        throw new IllegalArgumentException("The operand [" + operand + "] is not found in the current context.");
     }
 
     /**
@@ -1579,9 +1605,11 @@ class JavaMethodCompiler extends MethodVisitor {
                         enumValues[1] = current.remove(0);
                     }
 
-                    current.addExpression(variable, "=", operand);
+                    OperandExpression assignment = new OperandExpression(variable + "=" + operand.disclose());
 
-                    if (operand.duplicated) {
+                    if (!operand.duplicated) {
+                        current.addExpression(assignment);
+                    } else {
                         operand.duplicated = false;
 
                         // Enum#values produces special bytecode,
@@ -1592,7 +1620,7 @@ class JavaMethodCompiler extends MethodVisitor {
                         }
 
                         // duplicate pointer
-                        current.addOperand(variable);
+                        current.addOperand(new OperandEnclose(assignment));
                     }
                 }
             }
