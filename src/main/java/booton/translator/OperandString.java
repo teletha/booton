@@ -25,14 +25,6 @@ class OperandString extends Operand {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    Operand copy() {
-        return new OperandString(expression);
-    }
-
-    /**
      * @see booton.translator.Operand#toString()
      */
     @Override

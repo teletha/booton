@@ -39,14 +39,6 @@ class OperandArray extends Operand {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    Operand copy() {
-        return new OperandArray(size, isPrimitive);
-    }
-
-    /**
      * <p>
      * Set the value operand to the index operand. This method is used only for syntax sugar of
      * array initialization. So we can compute the actual index value safely.

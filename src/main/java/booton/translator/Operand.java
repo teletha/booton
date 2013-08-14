@@ -52,13 +52,4 @@ abstract class Operand {
     Operand disclose() {
         return this;
     }
-
-    /**
-     * <p>
-     * Copy this operand.
-     * </p>
-     * 
-     * @return
-     */
-    abstract Operand copy();
 }

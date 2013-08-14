@@ -106,14 +106,6 @@ class OperandCondition extends Operand {
      * {@inheritDoc}
      */
     @Override
-    Operand copy() {
-        return new OperandCondition(left, operator, right, transition);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     Operand invert() {
         // invert each operands
         left.invert();

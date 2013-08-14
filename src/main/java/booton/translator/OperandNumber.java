@@ -31,14 +31,6 @@ class OperandNumber extends Operand {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    Operand copy() {
-        return new OperandNumber(value);
-    }
-
-    /**
      * @see booton.translator.Operand#cast(java.lang.Class)
      */
     @Override
