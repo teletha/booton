@@ -94,6 +94,23 @@ class Node {
 
     /**
      * <p>
+     * Helper method to chech whether this node has the specified operand or not.
+     * </p>
+     * 
+     * @param test
+     * @return
+     */
+    final boolean has(Operand test) {
+        for (Operand operand : stack) {
+            if (operand == test) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * <p>
      * Helper method to remove the operand which is stored in the specified index from the operands
      * stack.
      * </p>
@@ -323,6 +340,30 @@ class Node {
 
         // API definition
         return dominator;
+    }
+
+    /**
+     * <p>
+     * Helper method to check whether the specified node is incoming.
+     * </p>
+     * 
+     * @param node
+     * @return
+     */
+    final boolean equalsAsIncoming(Node node) {
+        return node == this || incoming.contains(node);
+    }
+
+    /**
+     * <p>
+     * Helper method to check whether the specified node is outgoing.
+     * </p>
+     * 
+     * @param node
+     * @return
+     */
+    final boolean equalsAsOutgoing(Node node) {
+        return node == this || outgoing.contains(node);
     }
 
     /**

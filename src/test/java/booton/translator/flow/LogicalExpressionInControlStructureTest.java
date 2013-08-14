@@ -11,7 +11,6 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -194,7 +193,6 @@ public class LogicalExpressionInControlStructureTest extends ScriptTester {
     public void nest() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 if (1 < value && value <= 10) {
                     while (value % 3 != 0 || value % 2 != 0) {

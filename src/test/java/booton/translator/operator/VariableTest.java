@@ -11,12 +11,11 @@ package booton.translator.operator;
 
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/08/13 7:54:15
+ * @version 2013/08/14 10:23:29
  */
 @SuppressWarnings("unused")
 public class VariableTest extends ScriptTester {
@@ -36,10 +35,9 @@ public class VariableTest extends ScriptTester {
     }
 
     @Test
-    public void enclose() {
+    public void assignAndExpressionInOneLine() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int value) {
                 boolean result = (value = value + 3) % 2 == 0;
 
@@ -48,17 +46,4 @@ public class VariableTest extends ScriptTester {
         });
     }
 
-    @Test
-    public void enclose2() {
-        test(new Scriptable() {
-
-            @Debuggable
-            public int act(int value) {
-                value = value + 3;
-                boolean result = value % 2 == 0;
-
-                return result ? value : value + 1;
-            }
-        });
-    }
 }

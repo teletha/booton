@@ -14,7 +14,6 @@ import java.io.IOException;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -604,7 +603,6 @@ public class TryTest extends ScriptTester {
                 return count(value) + counter;
             }
 
-            @Debuggable
             private int count(int value) {
                 try {
                     if (value % 2 == 0) {
