@@ -11,7 +11,6 @@ package booton.translator;
 
 import static java.nio.charset.StandardCharsets.*;
 
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -38,7 +37,6 @@ import booton.live.ClientStackTrace;
 import booton.live.Source;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.ScriptException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebConsole.Logger;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -260,15 +258,7 @@ public class ScriptTester {
                 // rethrow error
                 throw I.quiet(throwable);
             }
-        } catch (ScriptException e) {
-            try {
-                Files.write(I.locate("E:\\test.js"), e.getScriptSourceCode().getBytes());
-            } catch (IOException e1) {
-                throw I.quiet(e);
-            }
-            throw I.quiet(e);
         } catch (Throwable e) {
-            System.out.println(e);
             throw I.quiet(e);
         }
     }

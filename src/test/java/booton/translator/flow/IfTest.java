@@ -9,7 +9,6 @@
  */
 package booton.translator.flow;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.translator.Param;
@@ -275,12 +274,39 @@ public class IfTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void shorthandWithExpression() throws Exception {
         test(new Scriptable() {
 
             public int act(int o) {
                 if (o == 2) o = o + 3;
+
+                return o;
+            }
+        });
+    }
+
+    @Test
+    public void shorthandElseWithExpression() throws Exception {
+        test(new Scriptable() {
+
+            public int act(int o) {
+                if (o == 2)
+                    o = o + 3;
+                else
+                    o = o + 10;
+                return o;
+            }
+        });
+    }
+
+    @Test
+    public void shorthandWithExpression2() throws Exception {
+        test(new Scriptable() {
+
+            public int act(int o) {
+                if (o == 2) {
+                    o = o + 3;
+                }
 
                 return o;
             }

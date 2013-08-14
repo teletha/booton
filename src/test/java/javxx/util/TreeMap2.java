@@ -2136,7 +2136,9 @@ public class TreeMap2<K, V> extends AbstractMap<K, V> implements NavigableMap<K,
             p.left = p.right = p.parent = null;
 
             // Fix replacement
-            if (p.color == BLACK) fixAfterDeletion(replacement);
+            if (p.color == BLACK) {
+                fixAfterDeletion(replacement);
+            }
         } else if (p.parent == null) { // return if we are the only node.
             root = null;
         } else { // No children. Use self as phantom replacement and unlink.

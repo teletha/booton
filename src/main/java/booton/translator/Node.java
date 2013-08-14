@@ -140,7 +140,7 @@ class Node {
             //
             // calculated = stack.size() - 1 - index
             // index - stack.size() = -calculated - 1;
-            return previous == null || incoming.isEmpty() ? null : previous.remove(-index - 1);
+            return previous == null || incoming.isEmpty() ? null : previous.remove(-index - 1, processDuplication);
         }
 
         // Retrieve and remove it
@@ -583,13 +583,13 @@ class Node {
                     }
                 } else {
                     // while with continue and break
-
-                    // setup following node
-                    follower = outgoing.get(1);
+                    //
+                    // detect process and follower node
+                    Node process = detectFollower();
 
                     // write script fragment
                     buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
-                    process(outgoing.get(0), buffer);
+                    process(process, buffer);
                     buffer.write("}");
                     process(follower, buffer);
                 }
