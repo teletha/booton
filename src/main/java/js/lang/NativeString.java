@@ -9,10 +9,13 @@
  */
 package js.lang;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import booton.translator.Translator;
 
 /**
- * @version 2013/07/29 15:23:02
+ * @version 2013/08/15 20:15:33
  */
 class NativeString {
 
@@ -37,6 +40,13 @@ class NativeString {
      */
     public NativeString(char c) {
         builder.append(c);
+    }
+
+    /**
+     * 
+     */
+    public NativeString(char[] text) {
+        builder.append(text);
     }
 
     /**
@@ -99,6 +109,203 @@ class NativeString {
 
     /**
      * <p>
+     * Determines whether one string may be found within another string, returning true or false as
+     * appropriate.
+     * </p>
+     * 
+     * @param value A string to be searched for within this string.
+     * @return A result.
+     */
+    public boolean contains(String value) {
+        return builder.indexOf(value) != -1;
+    }
+
+    /**
+     * <p>
+     * Determines whether a string ends with the characters of another string, returning true or
+     * false as appropriate.
+     * </p>
+     * 
+     * @param value The characters to be searched for at the end of this string.
+     * @return A result.
+     */
+    public boolean endsWith(String value) {
+        return builder.toString().endsWith(value);
+    }
+
+    /**
+     * <p>
+     * Returns the index within the calling String object of the last occurrence of the specified
+     * value, or -1 if not found. The calling string is searched backward, starting at fromIndex.
+     * </p>
+     * 
+     * @param text A string representing the value to search for.
+     * @return
+     */
+    public int lastIndexOf(String text) {
+        return builder.lastIndexOf(text);
+    }
+
+    /**
+     * <p>
+     * Returns the index within the calling String object of the first occurrence of the specified
+     * value, starting the search at fromIndex, returns -1 if the value is not found.
+     * </p>
+     * 
+     * @param text A string representing the value to search for.
+     * @return
+     */
+    public int indexOf(String text) {
+        return builder.indexOf(text);
+    }
+
+    /**
+     * <p>
+     * Returns the index within the calling String object of the first occurrence of the specified
+     * value, starting the search at fromIndex, returns -1 if the value is not found.
+     * </p>
+     * 
+     * @param text A string representing the value to search for.
+     * @param fromIndex omIndex The location within the calling string to start the search from. It
+     *            can be any integer between 0 and the length of the string. The default value is 0.
+     * @return
+     */
+    public int indexOf(String text, int fromIndex) {
+        return builder.indexOf(text, fromIndex);
+    }
+
+    /**
+     * <p>
+     * Returns the index within the calling String object of the last occurrence of the specified
+     * value, or -1 if not found. The calling string is searched backward, starting at fromIndex.
+     * </p>
+     * 
+     * @param text A string representing the value to search for.
+     * @param from The location within the calling string to start the search from, indexed from
+     *            left to right. It can be any integer between 0 and the length of the string. The
+     *            default value is the length of the string.
+     * @return
+     */
+    public int lastIndexOf(String text, int from) {
+        return builder.lastIndexOf(text, from);
+    }
+
+    /**
+     * <pReturns a new string with some or all matches of a pattern replaced by a replacement. The
+     * pattern can be a string or a RegExp, and the replacement can be a string or a function to be
+     * called for each match.
+     * 
+     * @param target A RegExp object. The match is replaced by the return value of parameter #2.
+     * @param replacement The String that replaces the substring received from parameter #1. A
+     *            number of special replacement patterns are supported; see the
+     *            "Specifying a string as a parameter" section below.
+     * @return
+     */
+    public NativeString replace(char target, char replacement) {
+        return new NativeString(builder.toString().replace(target, replacement));
+    }
+
+    /**
+     * <pReturns a new string with some or all matches of a pattern replaced by a replacement. The
+     * pattern can be a string or a RegExp, and the replacement can be a string or a function to be
+     * called for each match.
+     * 
+     * @param regex A RegExp object. The match is replaced by the return value of parameter #2.
+     * @param replacement The String that replaces the substring received from parameter #1. A
+     *            number of special replacement patterns are supported; see the
+     *            "Specifying a string as a parameter" section below.
+     * @return
+     */
+    public NativeString replace(CharSequence regex, CharSequence replacement) {
+        return new NativeString(builder.toString().replace(regex, replacement));
+    }
+
+    /**
+     * <pReturns a new string with some or all matches of a pattern replaced by a replacement. The
+     * pattern can be a string or a RegExp, and the replacement can be a string or a function to be
+     * called for each match.
+     * 
+     * @param regex A RegExp object. The match is replaced by the return value of parameter #2.
+     * @param replacement The String that replaces the substring received from parameter #1. A
+     *            number of special replacement patterns are supported; see the
+     *            "Specifying a string as a parameter" section below.
+     * @return
+     */
+    public NativeString replaceFirst(String regex, String replacement) {
+        return new NativeString(builder.toString().replaceFirst(regex, replacement));
+    }
+
+    /**
+     * <p>
+     * Splits a String object into an array of strings by separating the string into substrings.
+     * </p>
+     * 
+     * @param separator Specifies the character(s) to use for separating the string. The separator
+     *            is treated as a string or a regular expression. If separator is omitted, the array
+     *            returned contains one element consisting of the entire string.
+     * @return
+     */
+    public NativeString[] split(String separator) {
+        List<NativeString> list = new ArrayList();
+
+        for (String text : builder.toString().split(separator)) {
+            list.add(new NativeString(text));
+        }
+        return list.toArray(new NativeString[list.size()]);
+    }
+
+    /**
+     * <p>
+     * Splits a String object into an array of strings by separating the string into substrings.
+     * </p>
+     * 
+     * @param separator Specifies the character(s) to use for separating the string. The separator
+     *            is treated as a string or a regular expression. If separator is omitted, the array
+     *            returned contains one element consisting of the entire string.
+     * @param limit Integer specifying a limit on the number of splits to be found. The split method
+     *            still splits on every match of separator, but it truncates the returned array to
+     *            at most limit elements.
+     * @return
+     */
+    public NativeString[] split(String separator, int limit) {
+        List<NativeString> list = new ArrayList();
+
+        for (String text : builder.toString().split(separator, limit)) {
+            list.add(new NativeString(text));
+        }
+        return list.toArray(new NativeString[list.size()]);
+    }
+
+    /**
+     * <p>
+     * Determines whether a string begins with the characters of another string, returning true or
+     * false as appropriate.
+     * </p>
+     * 
+     * @param text The characters to be searched for at the start of this string.
+     * @return A result.
+     */
+    public boolean startsWith(String text) {
+        return builder.toString().startsWith(text);
+    }
+
+    /**
+     * <p>
+     * Determines whether a string begins with the characters of another string, returning true or
+     * false as appropriate.
+     * </p>
+     * 
+     * @param text The characters to be searched for at the start of this string.
+     * @param position The position in this string at which to begin searching for searchString;
+     *            defaults to 0.
+     * @return A result.
+     */
+    public boolean startsWith(String text, int position) {
+        return builder.toString().startsWith(text, position);
+    }
+
+    /**
+     * <p>
      * Returns a subset of a string between one index and another, or through the end of the string.
      * </p>
      * 
@@ -146,6 +353,17 @@ class NativeString {
 
     /**
      * <p>
+     * Removes whitespace from both ends of the string.
+     * </p>
+     * 
+     * @return
+     */
+    public NativeString trim() {
+        return new NativeString(builder.toString().trim());
+    }
+
+    /**
+     * <p>
      * Count text length.
      * </p>
      * 
@@ -164,7 +382,7 @@ class NativeString {
     }
 
     /**
-     * @version 2013/07/29 15:23:07
+     * @version 2013/08/15 20:15:40
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<NativeString> {
@@ -180,6 +398,20 @@ class NativeString {
          * 
          */
         public String NativeString(char c) {
+            return param(0);
+        }
+
+        /**
+         * 
+         */
+        public String NativeString(char[] text) {
+            return param(0) + ".join(" + Q + Q + ")";
+        }
+
+        /**
+         * 
+         */
+        public String NativeString(String text) {
             return param(0);
         }
 
@@ -240,6 +472,198 @@ class NativeString {
 
         /**
          * <p>
+         * Determines whether one string may be found within another string, returning true or false
+         * as appropriate.
+         * </p>
+         * 
+         * @param value A string to be searched for within this string.
+         * @return A result.
+         */
+        public String contains(String value) {
+            return that + ".contains(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Determines whether a string ends with the characters of another string, returning true or
+         * false as appropriate.
+         * </p>
+         * 
+         * @param value The characters to be searched for at the end of this string.
+         * @return A result.
+         */
+        public String endsWith(String value) {
+            return that + ".endsWith(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Returns the index within the calling String object of the first occurrence of the
+         * specified value, starting the search at fromIndex, returns -1 if the value is not found.
+         * </p>
+         * 
+         * @param text A string representing the value to search for.
+         * @return
+         */
+        public String indexOf(String text) {
+            return that + ".indexOf(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Returns the index within the calling String object of the first occurrence of the
+         * specified value, starting the search at fromIndex, returns -1 if the value is not found.
+         * </p>
+         * 
+         * @param text A string representing the value to search for.
+         * @param fromIndex omIndex The location within the calling string to start the search from.
+         *            It can be any integer between 0 and the length of the string. The default
+         *            value is 0.
+         * @return
+         */
+        public String indexOf(String text, int fromIndex) {
+            return that + ".indexOf(" + param(0) + "," + param(1) + ")";
+        }
+
+        /**
+         * <p>
+         * Returns the index within the calling String object of the last occurrence of the
+         * specified value, or -1 if not found. The calling string is searched backward, starting at
+         * fromIndex.
+         * </p>
+         * 
+         * @param text A string representing the value to search for.
+         * @return
+         */
+        public String lastIndexOf(String text) {
+            return that + ".lastIndexOf(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Returns the index within the calling String object of the last occurrence of the
+         * specified value, or -1 if not found. The calling string is searched backward, starting at
+         * fromIndex.
+         * </p>
+         * 
+         * @param text A string representing the value to search for.
+         * @param from The location within the calling string to start the search from, indexed from
+         *            left to right. It can be any integer between 0 and the length of the string.
+         *            The default value is the length of the string.
+         * @return
+         */
+        public String lastIndexOf(String text, int from) {
+            return that + ".lastIndexOf(" + param(0) + "," + param(1) + ")";
+        }
+
+        /**
+         * <pReturns a new string with some or all matches of a pattern replaced by a replacement.
+         * The pattern can be a string or a RegExp, and the replacement can be a string or a
+         * function to be called for each match.
+         * 
+         * @param target A RegExp object. The match is replaced by the return value of parameter #2.
+         * @param replacement The String that replaces the substring received from parameter #1. A
+         *            number of special replacement patterns are supported; see the
+         *            "Specifying a string as a parameter" section below.
+         * @return
+         */
+        public String replace(char target, char replacement) {
+            return that + ".replace(" + regex(0, "g") + "," + param(1) + ")";
+        }
+
+        /**
+         * <pReturns a new string with some or all matches of a pattern replaced by a replacement.
+         * The pattern can be a string or a RegExp, and the replacement can be a string or a
+         * function to be called for each match.
+         * 
+         * @param regex A RegExp object. The match is replaced by the return value of parameter #2.
+         * @param replacement The String that replaces the substring received from parameter #1. A
+         *            number of special replacement patterns are supported; see the
+         *            "Specifying a string as a parameter" section below.
+         * @return
+         */
+        public String replace(CharSequence regex, CharSequence replacement) {
+            return that + ".replace(" + regex(0, "g") + "," + param(1) + ")";
+        }
+
+        /**
+         * <pReturns a new string with some or all matches of a pattern replaced by a replacement.
+         * The pattern can be a string or a RegExp, and the replacement can be a string or a
+         * function to be called for each match.
+         * 
+         * @param regex A RegExp object. The match is replaced by the return value of parameter #2.
+         * @param replacement The String that replaces the substring received from parameter #1. A
+         *            number of special replacement patterns are supported; see the
+         *            "Specifying a string as a parameter" section below.
+         * @return
+         */
+        public String replaceFirst(String regex, String replacement) {
+            return that + ".replace(" + regex(0) + "," + param(1) + ")";
+        }
+
+        /**
+         * <p>
+         * Splits a String object into an array of strings by separating the string into substrings.
+         * </p>
+         * 
+         * @param separator Specifies the character(s) to use for separating the string. The
+         *            separator is treated as a string or a regular expression. If separator is
+         *            omitted, the array returned contains one element consisting of the entire
+         *            string.
+         * @return
+         */
+        public String split(String separator) {
+            return that + ".split(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Splits a String object into an array of strings by separating the string into substrings.
+         * </p>
+         * 
+         * @param separator Specifies the character(s) to use for separating the string. The
+         *            separator is treated as a string or a regular expression. If separator is
+         *            omitted, the array returned contains one element consisting of the entire
+         *            string.
+         * @param limit Integer specifying a limit on the number of splits to be found. The split
+         *            method still splits on every match of separator, but it truncates the returned
+         *            array to at most limit elements.
+         * @return
+         */
+        public String split(String separator, int limit) {
+            return that + ".split(" + param(0) + "," + param(1) + ")";
+        }
+
+        /**
+         * <p>
+         * Determines whether a string begins with the characters of another string, returning true
+         * or false as appropriate.
+         * </p>
+         * 
+         * @param text The characters to be searched for at the start of this string.
+         * @return A result.
+         */
+        public String startsWith(String text) {
+            return that + ".startsWith(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Determines whether a string begins with the characters of another string, returning true
+         * or false as appropriate.
+         * </p>
+         * 
+         * @param text The characters to be searched for at the start of this string.
+         * @param position The position in this string at which to begin searching for searchString;
+         *            defaults to 0.
+         * @return A result.
+         */
+        public String startsWith(String text, int position) {
+            return that + ".startsWith(" + param(0) + "," + param(1) + ")";
+        }
+
+        /**
+         * <p>
          * Returns a subset of a string between one index and another, or through the end of the
          * string.
          * </p>
@@ -285,6 +709,17 @@ class NativeString {
          */
         public String toLowerCase() {
             return that + ".toLowerCase()";
+        }
+
+        /**
+         * <p>
+         * Removes whitespace from both ends of the string.
+         * </p>
+         * 
+         * @return
+         */
+        public String trim() {
+            return that + ".trim()";
         }
 
         /**

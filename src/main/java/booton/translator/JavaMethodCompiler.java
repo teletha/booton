@@ -268,7 +268,7 @@ class JavaMethodCompiler extends MethodVisitor {
         // Resolve all try-catch-finally blocks.
         tries.process();
 
-        if (debuggable || methodNameOriginal.equals("getFirstEntry")) {
+        if (debuggable) {
             NodeDebugger.dump(script, methodNameOriginal, nodes);
         }
 
@@ -1156,10 +1156,6 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void merge() {
-        if (methodNameOriginal.equals("getFirstEntry")) {
-            System.out.println(current.id + " in merge");
-            NodeDebugger.dump(nodes);
-        }
         Set<Node> group = new HashSet();
         group.add(current);
 

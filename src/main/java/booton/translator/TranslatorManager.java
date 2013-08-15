@@ -32,7 +32,7 @@ import kiss.model.ClassUtil;
 import org.objectweb.asm.Type;
 
 /**
- * @version 2013/08/11 15:39:07
+ * @version 2013/08/15 16:10:55
  */
 class TranslatorManager {
 
@@ -416,6 +416,8 @@ class TranslatorManager {
                                 operands.set(i, new OperandExpression(true));
                             }
                         }
+                    } else if (type == char.class) {
+                        operands.set(i, operands.get(i).cast(char.class));
                     }
                 }
 

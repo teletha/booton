@@ -108,6 +108,18 @@ class JSLong extends JSNumber {
     }
 
     /**
+     * Returns a {@code String} object representing the specified {@code long}. The argument is
+     * converted to signed decimal representation and returned as a string, exactly as if the
+     * argument and the radix 10 were given as arguments to the {@link #toString(long, int)} method.
+     * 
+     * @param value a {@code long} to be converted.
+     * @return a string representation of the argument in base&nbsp;10.
+     */
+    public static String toString(long value) {
+        return valueOf(value).toString();
+    }
+
+    /**
      * Returns a {@code Long} object holding the value of the specified {@code String}. The argument
      * is interpreted as representing a signed decimal {@code long}, exactly as if the argument were
      * given to the {@link #parseLong(java.lang.String)} method. The result is a {@code Long} object

@@ -11,6 +11,7 @@ package booton.translator;
 
 import static java.nio.charset.StandardCharsets.*;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -55,19 +56,25 @@ public class ScriptTester {
     private static final Object NONE = new Object();
 
     /** The testable client. */
-    private static WebClient client;
+    private static final WebClient client;
 
     /** The dummy page for test. */
-    private static HtmlPage html;
+    private static final HtmlPage html;
 
     /** The javascript runtime. */
-    private static JavaScriptEngine engine;
+    private static final JavaScriptEngine engine;
 
     /** The defined classes. */
-    private static Set<Class> defined = new HashSet();
+    private static final Set<Class> defined = new HashSet();
+
+    /** The boot.js file. */
+    private static final String boot;
 
     static {
         try {
+            // read boot.js
+            boot = new String(Files.readAllBytes(I.locate("boot.js")), UTF_8);
+
             // build client
             client = new WebClient(BrowserVersion.FIREFOX_17);
             client.getWebConsole().setLogger(new Debugger());
@@ -79,7 +86,7 @@ public class ScriptTester {
             engine = client.getJavaScriptEngine();
 
             // compile and load boot script
-            engine.execute(html, engine.compile(html, new String(Files.readAllBytes(I.locate("boot.js")), UTF_8), "boot.js", 1));
+            engine.execute(html, engine.compile(html, boot, "boot.js", 1));
         } catch (Exception e) {
             throw I.quiet(e);
         }
@@ -223,55 +230,58 @@ public class ScriptTester {
      */
     final Object executeAsJavascript(Method method) {
         Class source = method.getDeclaringClass();
+        String sourceName = source.getSimpleName();
 
         try {
             StringBuilder script = new StringBuilder();
 
             // invoke as Javascript
             Javascript.getScript(source).writeTo(script, defined, Character.class, ClientStackTrace.class);
-            Files.write(I.locate("e:\\test.js"), script.toString().getBytes());
+
             // compile as Javascript and script engine read it
-            engine.execute(html, script.toString(), source.getSimpleName(), 1);
-
-            String className = Javascript.computeClassName(source);
-            String constructorName = Javascript.computeMethodName(searchInstantiator(source)).substring(1);
-            String methodName = Javascript.computeMethodName(method);
-
-            String clientStackTrace = Javascript.computeClassName(ClientStackTrace.class);
-            String encode = Javascript.computeMethodName(ClientStackTrace.class.getMethod("encode", Throwable.class));
+            engine.execute(html, script.toString(), sourceName, 1);
 
             // write test script
-            StringBuilder invoker = new StringBuilder();
-            invoker.append("try {");
-            invoker.append("new ").append(className).append("(").append(constructorName).append(").");
-            invoker.append(methodName).append("();} catch(e) {" + clientStackTrace + "." + encode + "(e)" + ";}");
+            String wraped = Javascript.writeCode(Throwable.class, "wrap", Object.class, "e");
+            String invoker = "try {" + Javascript.writeCode(source, method.getName()) + ";} catch(e) {" + Javascript.writeCode(ClientStackTrace.class, "encode", Throwable.class, wraped) + ";}";
 
-            Object result = engine.execute(html, invoker.toString(), "", 1);
+            // invoke test script
+            Object result = engine.execute(html, invoker, sourceName, 1);
 
             if (result == null || result instanceof Undefined || result instanceof UniqueTag) {
-                return null;
+                return null; // success
             } else {
-                // create source map
-                Source map = new Source(source.getSimpleName(), Javascript.getScript(source).toString());
+                // fail (AssertionError) or error
 
-                // decode error
-                Throwable throwable = ClientStackTrace.decode((String) result, map);
-
-                // rethrow error
-                throw I.quiet(throwable);
+                // decode as Java's error and rethrow it
+                Source code = new Source(sourceName, Javascript.getScript(source).toString());
+                throw I.quiet(ClientStackTrace.decode((String) result, code));
             }
         } catch (ScriptException e) {
+            // script parse error (translation fails) or runtime error
             String script = e.getScriptSourceCode();
 
-            if (script != null) {
-                Source code = new Source(source.getSimpleName(), e.getScriptSourceCode());
+            if (script == null) {
+                // error in boot.js
+                Source code = new Source(sourceName, boot);
+
+                TranslationError error = new TranslationError(e);
+                error.write(code.findBlock(e.getFailingLineNumber()));
+                throw error;
+            } else {
+                // error in test script
+                Source code = new Source(sourceName, Javascript.getScript(source).toString());
 
                 TranslationError error = new TranslationError(e);
                 error.write(code.findBlock(e.getFailingLineNumber()));
                 throw error;
             }
-            throw e;
         } catch (Throwable e) {
+            try {
+                Files.write(I.locate("e:\\test.js"), Javascript.getScript(source).toString().getBytes());
+            } catch (IOException e1) {
+                throw I.quiet(e);
+            }
             throw I.quiet(e);
         }
     }

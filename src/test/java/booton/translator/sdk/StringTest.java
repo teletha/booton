@@ -16,7 +16,7 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/04/13 3:27:34
+ * @version 2013/08/15 16:45:04
  */
 @SuppressWarnings("unused")
 public class StringTest extends ScriptTester {
@@ -282,11 +282,22 @@ public class StringTest extends ScriptTester {
     }
 
     @Test
-    public void replaceAllWithRegexEscaped() {
+    public void replaceAllWithEscapedRegex() {
         test(new Scriptable() {
 
             public String act() {
                 return "j a v a".replaceAll("\\s", "");
+            }
+        });
+    }
+
+    @Test
+    public void replaceAllWithEscapedRegexVariable() {
+        test(new Scriptable() {
+
+            public String act() {
+                String regex = "\\s";
+                return "j a v a".replaceAll(regex, "");
             }
         });
     }

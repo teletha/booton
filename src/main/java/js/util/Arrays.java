@@ -536,7 +536,7 @@ class Arrays {
         T dest = (T) Array.newInstance(type.getComponentType(), length);
 
         // copy
-        System.arraycopy(original, from, dest, 0, Math.max(Array.getLength(original) - from, length));
+        System.arraycopy(original, from, dest, 0, Math.min(Array.getLength(original) - from, length));
 
         // API definition
         return dest;

@@ -21,7 +21,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -31,10 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import js.lang.Global;
 import js.lang.NativeObject;
-import kiss.ClassListener;
 import kiss.I;
-import kiss.Manageable;
-import kiss.Singleton;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
@@ -192,6 +188,7 @@ public class Javascript {
         require(Object.class);
         require(Class.class);
         require(Thread.class);
+        require(String.class);
 
         if (requirements != null) {
             for (Class requirement : requirements) {
@@ -206,12 +203,12 @@ public class Javascript {
             // Write bootstrap method if needed.
             output.append("try {");
             try {
-                output.append(writeCode(source.getMethod("jsmain")));
+                output.append(writeCode(source.getMethod("jsmain"))).append(";");
             } catch (Exception e) {
                 // ignore missing "jsmain" method
             }
             output.append("} catch(e) {");
-            output.append(writeCode(Thread.class, "handleUncaughtException", Object.class, "e"));
+            output.append(writeCode(Thread.class, "handleUncaughtException", Object.class, "e")).append(";");
             output.append("}");
         } catch (Exception e) {
             throw I.quiet(e);
@@ -469,9 +466,9 @@ public class Javascript {
         String methodName = Javascript.computeMethodName(method);
 
         if (Modifier.isStatic(method.getModifiers())) {
-            return className + "." + methodName + "();";
+            return className + "." + methodName + "()";
         } else {
-            return "new " + className + "(0)." + methodName + "();";
+            return "new " + className + "(0)." + methodName + "()";
         }
     }
 
@@ -500,9 +497,9 @@ public class Javascript {
             String methodName = Javascript.computeMethodName(method);
 
             if (Modifier.isStatic(method.getModifiers())) {
-                return className + "." + methodName + "(" + I.join(Arrays.asList(params), ",") + ");";
+                return className + "." + methodName + "(" + I.join(Arrays.asList(params), ",") + ")";
             } else {
-                return "new " + className + "(0)." + methodName + "(" + I.join(Arrays.asList(params), ",") + ");";
+                return "new " + className + "(0)." + methodName + "(" + I.join(Arrays.asList(params), ",") + ")";
             }
         } catch (Exception e) {
             throw I.quiet(e);
@@ -761,150 +758,5 @@ public class Javascript {
 
         // API definition
         return members.size() - 1;
-    }
-
-    /**
-     * @version 2013/08/09 9:14:27
-     */
-    @Manageable(lifestyle = Singleton.class)
-    private static class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
-
-        /** The mapping between Java class and JS implementation class. */
-        private static final Map<Class, Definition> definitions = new HashMap();
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void load(Class<JavaAPIProvider> clazz) {
-            JavaAPIProvider api = clazz.getAnnotation(JavaAPIProvider.class);
-
-            if (api != null && !definitions.containsKey(api.value())) {
-                definitions.put(api.value(), new Definition(clazz));
-            }
-
-            Class parent = clazz.getSuperclass();
-
-            if (parent != null) {
-                load(parent);
-            }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void unload(Class<JavaAPIProvider> clazz) {
-            JavaAPIProvider api = clazz.getAnnotation(JavaAPIProvider.class);
-
-            if (api != null && !definitions.containsKey(api.value())) {
-                definitions.remove(api.value());
-            }
-
-            Class parent = clazz.getSuperclass();
-
-            if (parent != null) {
-                load(parent);
-            }
-        }
-
-        /**
-         * <p>
-         * Convert Java class to Javascript runtime class (normaly, it is simplified).
-         * </p>
-         * 
-         * @param type A target class to convert.
-         * @return A converted class.
-         */
-        private static Class convert(Class type) {
-            Definition definition = definitions.get(type);
-
-            return definition == null ? type : definition.clazz;
-        }
-
-        /**
-         * <p>
-         * Validate method implementation in Javascript class.
-         * </p>
-         * 
-         * @param owner
-         * @param name
-         * @param description
-         */
-        private static void validateMethod(Class owner, String name, String description) {
-            Definition definition = definitions.get(owner);
-
-            if (definition != null && !definition.methods.contains(name + description)) {
-                TranslationError error = new TranslationError();
-                error.write("You must define the method in " + definition.clazz + ".");
-                error.writeMethod(name, Type.getReturnType(description), Type.getArgumentTypes(description));
-
-                throw error;
-            }
-        }
-
-        /**
-         * <p>
-         * Validate method implementation in Javascript class.
-         * </p>
-         * 
-         * @param owner
-         * @param name
-         * @param description
-         */
-        private static void validateField(Class owner, Field field) {
-            Definition definition = definitions.get(owner);
-
-            if (definition != null && !definition.fields.contains(field.getName())) {
-                TranslationError error = new TranslationError();
-                error.write("You must define the field in ", definition.clazz, ".");
-                error.write("");
-                error.writeField(field);
-
-                throw error;
-            }
-        }
-
-        /**
-         * <p>
-         * Cache for API definitions.
-         * </p>
-         * 
-         * @version 2013/04/14 14:07:33
-         */
-        private static class Definition {
-
-            /** The actual provider class. */
-            private final Class clazz;
-
-            /** The method signatures. */
-            private final Set<String> methods = new HashSet();
-
-            /** The method signatures. */
-            private final Set<String> fields = new HashSet();
-
-            /**
-             * @param clazz
-             */
-            private Definition(Class clazz) {
-                this.clazz = clazz;
-
-                for (Method method : clazz.getMethods()) {
-                    methods.add(method.getName() + Type.getMethodDescriptor(method));
-                }
-
-                for (Method method : clazz.getDeclaredMethods()) {
-                    methods.add(method.getName() + Type.getMethodDescriptor(method));
-                }
-
-                for (Field field : clazz.getFields()) {
-                    fields.add(field.getName());
-                }
-
-                for (Field field : clazz.getDeclaredFields()) {
-                    fields.add(field.getName());
-                }
-            }
-        }
     }
 }
