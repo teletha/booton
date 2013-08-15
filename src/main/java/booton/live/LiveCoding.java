@@ -48,6 +48,7 @@ public class LiveCoding implements UncaughtExceptionHandler, Listener {
      */
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
+        System.out.println(throwable);
         if (open) {
             sendError(throwable);
         } else {

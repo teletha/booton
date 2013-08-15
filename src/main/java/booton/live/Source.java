@@ -162,14 +162,15 @@ public class Source {
      * @return
      */
     private int findMethodStart(int number) {
+        number = Math.min(number, lines.length - 1);
+
         for (int i = number; 0 <= i; i--) {
             if (lines[i].contains(":function(")) {
                 return i - 1;
             }
         }
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+
+        return 1;
     }
 
     /**
@@ -195,8 +196,6 @@ public class Source {
                 return i + 1;
             }
         }
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return lines.length - 1;
     }
 }

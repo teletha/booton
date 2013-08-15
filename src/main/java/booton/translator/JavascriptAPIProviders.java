@@ -9,27 +9,52 @@
  */
 package booton.translator;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import kiss.ClassListener;
 import kiss.Manageable;
 import kiss.Singleton;
 
 /**
- * @version 2013/08/15 11:14:35
+ * @version 2013/08/15 23:02:07
  */
 @Manageable(lifestyle = Singleton.class)
 class JavascriptAPIProviders implements ClassListener<JavascriptAPIProvider> {
 
+    /** The class name mapping. */
+    private static final Map<String, Class> definitions = new HashMap();
+
     /**
-     * {@inheritDoc}
+     * <p>
+     * Find {@link JavascriptAPIProvider} provider.
+     * </p>
+     * 
+     * @param type
+     * @return
      */
-    @Override
-    public void load(Class clazz) {
+    static Class findProvider(String type) {
+        return definitions.get(type);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void unload(Class clazz) {
+    public void load(Class<JavascriptAPIProvider> clazz) {
+        JavascriptAPIProvider provider = clazz.getAnnotation(JavascriptAPIProvider.class);
+        String type = provider.value();
+
+        if (type.length() == 0) {
+            type = clazz.getSimpleName();
+        }
+        definitions.put(type, clazz);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void unload(Class<JavascriptAPIProvider> clazz) {
     }
 }
