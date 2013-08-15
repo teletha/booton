@@ -214,6 +214,18 @@ class JSInteger extends JSNumber {
     }
 
     /**
+     * Returns a {@code String} object representing the specified integer. The argument is converted
+     * to signed decimal representation and returned as a string, exactly as if the argument and
+     * radix 10 were given as arguments to the {@link #toString(int, int)} method.
+     * 
+     * @param value an integer to be converted.
+     * @return a string representation of the argument in base&nbsp;10.
+     */
+    public static String toString(int value) {
+        return valueOf(value).toString();
+    }
+
+    /**
      * Returns a string representation of the first argument in the radix specified by the second
      * argument.
      * <p>

@@ -55,7 +55,7 @@ class Collections {
 
     /** The natural order. */
     private static final Comparator<Comparable> NATURAL_COMPARATOR = new Comparator<Comparable>() {
-    
+
         /**
          * {@inheritDoc}
          */

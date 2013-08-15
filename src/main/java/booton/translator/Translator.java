@@ -26,7 +26,7 @@ import org.objectweb.asm.Type;
  * Public {@link Translator} API.
  * </p>
  * 
- * @version 2013/05/01 19:40:37
+ * @version 2013/08/15 16:35:18
  */
 @Manageable(lifestyle = Singleton.class)
 public class Translator<T> implements Extensible {
@@ -271,14 +271,8 @@ public class Translator<T> implements Extensible {
         if (options == null) {
             options = "";
         }
+        return "new RegExp(" + getOperand(index) + ",\"" + options + "\")";
 
-        Operand regex = getOperand(index);
-
-        if (regex instanceof OperandString) {
-            return "/" + ((OperandString) regex).expression + "/" + options;
-        } else {
-            return "new RegExp(" + regex + ",\"" + options + "\")";
-        }
     }
 
     /**

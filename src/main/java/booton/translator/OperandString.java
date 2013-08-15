@@ -10,7 +10,7 @@
 package booton.translator;
 
 /**
- * @version 2013/04/13 3:11:42
+ * @version 2013/08/15 16:35:58
  */
 class OperandString extends Operand {
 
@@ -21,7 +21,10 @@ class OperandString extends Operand {
      * Create String operand.
      */
     OperandString(String expression) {
-        this.expression = expression.replaceAll("\"", "\\\\\"").replaceAll("\r", "\\\\r").replaceAll("\n", "\\\\n");
+        this.expression = expression.replaceAll("\\\\", "\\\\\\\\")
+                .replaceAll("\"", "\\\\\"")
+                .replaceAll("\r", "\\\\r")
+                .replaceAll("\n", "\\\\n");
     }
 
     /**

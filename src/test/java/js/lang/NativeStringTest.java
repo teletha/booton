@@ -17,6 +17,7 @@ import booton.translator.Scriptable;
 /**
  * @version 2013/04/15 18:44:46
  */
+@SuppressWarnings("unused")
 public class NativeStringTest extends ScriptTester {
 
     @Test
