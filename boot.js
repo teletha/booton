@@ -387,6 +387,7 @@ function boot(global) {
           
           if (superclassName) {
             define(clazz.prototype, boot[superclassName].prototype);
+            define(clazz, boot[superclassName]);
           }
           
           if (properties._) {

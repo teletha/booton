@@ -11,27 +11,22 @@ package js.lang;
 
 import static js.lang.JSStringHelper.*;
 
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.regex.PatternSyntaxException;
 
 import booton.translator.JavaAPIProvider;
-import booton.translator.JavascriptAPIProvider;
 
 /**
- * @version 2013/08/15 11:03:24
+ * @version 2013/08/15 22:13:27
  */
 @JavaAPIProvider(String.class)
-@JavascriptAPIProvider("String")
-public class JSString implements Comparable {
+class JSString implements Comparable {
 
     /**
      * Initializes a newly created {@code String} object so that it represents an empty character
      * sequence. Note that use of this constructor is unnecessary since Strings are immutable.
      */
-    @SuppressWarnings("all")
-    public static NativeString JSString() {
-        return new NativeString();
+    public JSString() {
     }
 
     /**
@@ -42,50 +37,8 @@ public class JSString implements Comparable {
      * 
      * @param original A {@code String}
      */
-    @SuppressWarnings("all")
-    public static NativeString JSString(String original) {
-        return new NativeString(original);
-    }
-
-    /**
-     * Allocates a new {@code String} so that it represents the sequence of characters currently
-     * contained in the character array argument. The contents of the character array are copied;
-     * subsequent modification of the character array does not affect the newly created string.
-     * 
-     * @param value The initial value of the string
-     */
-    @SuppressWarnings("all")
-    public static NativeString JSString(char[] value) {
-        return new NativeString(value);
-    }
-
-    /**
-     * Allocates a new {@code String} that contains characters from a subarray of the character
-     * array argument. The {@code offset} argument is the index of the first character of the
-     * subarray and the {@code count} argument specifies the length of the subarray. The contents of
-     * the subarray are copied; subsequent modification of the character array does not affect the
-     * newly created string.
-     * 
-     * @param value Array that is the source of characters
-     * @param offset The initial offset
-     * @param count The length
-     * @throws IndexOutOfBoundsException If the {@code offset} and {@code count} arguments index
-     *             characters outside the bounds of the {@code value} array
-     */
-    @SuppressWarnings("all")
-    public static NativeString JSString(char[] value, int offset, int count) {
-        if (offset < 0) {
-            throw new StringIndexOutOfBoundsException(offset);
-        }
-        if (count < 0) {
-            throw new StringIndexOutOfBoundsException(count);
-        }
-
-        // Note: offset or count might be near -1>>>1.
-        if (offset > value.length - count) {
-            throw new StringIndexOutOfBoundsException(offset + count);
-        }
-        return new NativeString(Arrays.copyOfRange(value, offset, offset + count));
+    public JSString(String original) {
+        this();
     }
 
     /**
@@ -191,7 +144,7 @@ public class JSString implements Comparable {
      * @since 1.5
      */
     public boolean contains(CharSequence text) {
-        return that.contains(text.toString());
+        return that.indexOf(text.toString()) != -1;
     }
 
     /**

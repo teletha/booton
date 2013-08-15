@@ -15,7 +15,7 @@ import java.util.List;
 import booton.translator.Translator;
 
 /**
- * @version 2013/08/15 20:15:33
+ * @version 2013/08/15 23:03:12
  */
 class NativeString {
 
@@ -105,19 +105,6 @@ class NativeString {
         builder.append(value);
 
         return this;
-    }
-
-    /**
-     * <p>
-     * Determines whether one string may be found within another string, returning true or false as
-     * appropriate.
-     * </p>
-     * 
-     * @param value A string to be searched for within this string.
-     * @return A result.
-     */
-    public boolean contains(String value) {
-        return builder.indexOf(value) != -1;
     }
 
     /**
@@ -468,19 +455,6 @@ class NativeString {
          */
         public String concat(NativeString value) {
             return that + "+" + param(0);
-        }
-
-        /**
-         * <p>
-         * Determines whether one string may be found within another string, returning true or false
-         * as appropriate.
-         * </p>
-         * 
-         * @param value A string to be searched for within this string.
-         * @return A result.
-         */
-        public String contains(String value) {
-            return that + ".contains(" + param(0) + ")";
         }
 
         /**

@@ -34,7 +34,7 @@ public class UnmodifiableSortedSetTest {
         assert set.size() == 0;
         assert unmodifiable.size() == 0;
 
-        set.add("asd");
+        set.add("");
         assert set.size() == 1;
         assert unmodifiable.size() == 1;
     }

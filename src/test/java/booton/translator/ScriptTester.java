@@ -208,7 +208,11 @@ public class ScriptTester {
             error.write(e.getMessage());
             error.write(END, "Test Code :");
             error.write(script.substring(script.indexOf("boot.define(\"" + Javascript.computeSimpleClassName(source) + "\",")));
-
+            try {
+                Files.write(I.locate("e:\\test.js"), Javascript.getScript(source).toString().getBytes());
+            } catch (IOException e1) {
+                throw I.quiet(e);
+            }
             if (e instanceof EvaluatorException) {
                 EvaluatorException exception = (EvaluatorException) e;
 
@@ -277,11 +281,6 @@ public class ScriptTester {
                 throw error;
             }
         } catch (Throwable e) {
-            try {
-                Files.write(I.locate("e:\\test.js"), Javascript.getScript(source).toString().getBytes());
-            } catch (IOException e1) {
-                throw I.quiet(e);
-            }
             throw I.quiet(e);
         }
     }

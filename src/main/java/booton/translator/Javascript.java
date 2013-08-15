@@ -188,7 +188,7 @@ public class Javascript {
         require(Object.class);
         require(Class.class);
         require(Thread.class);
-        require(String.class);
+        require(JavascriptAPIProviders.findProvider("String"));
 
         if (requirements != null) {
             for (Class requirement : requirements) {
