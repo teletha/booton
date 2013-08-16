@@ -20,7 +20,10 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/08/15 22:13:27
  */
 @JavaAPIProvider(String.class)
-class JSString implements Comparable {
+class JSString implements Comparable<String> {
+
+    /** The cache for hash. */
+    private int hash = 0;
 
     /**
      * Initializes a newly created {@code String} object so that it represents an empty character
@@ -106,8 +109,8 @@ class JSString implements Comparable {
      * {@inheritDoc}
      */
     @Override
-    public int compareTo(Object object) {
-        return 0;
+    public int compareTo(String object) {
+        return that.localeCompare(object);
     }
 
     /**
@@ -158,7 +161,7 @@ class JSString implements Comparable {
      *         {@link #equals(Object)} method.
      */
     public boolean endsWith(String suffix) {
-        return that.endsWith(suffix);
+        return startsWith(suffix, length() - suffix.length());
     }
 
     /**
@@ -197,6 +200,22 @@ class JSString implements Comparable {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        int h = hash;
+
+        if (h == 0 && 0 < length()) {
+            for (int i = 0; i < length(); i++) {
+                h = 31 * h + codePointAt(i);
+            }
+            hash = h;
+        }
+        return h;
+    }
+
+    /**
      * Returns the index within this string of the first occurrence of the specified substring.
      * <p>
      * The returned index is the smallest value <i>k</i> for which: <blockquote>
@@ -232,6 +251,16 @@ class JSString implements Comparable {
      */
     public int indexOf(String text, int fromIndex) {
         return that.indexOf(text, fromIndex);
+    }
+
+    /**
+     * Returns <tt>true</tt> if, and only if, {@link #length()} is <tt>0</tt>.
+     * 
+     * @return <tt>true</tt> if {@link #length()} is <tt>0</tt>, otherwise <tt>false</tt>
+     * @since 1.6
+     */
+    public boolean isEmpty() {
+        return that.length() == 0;
     }
 
     /**
@@ -514,6 +543,21 @@ class JSString implements Comparable {
     }
 
     /**
+     * Tests if this string starts with the specified prefix.
+     * 
+     * @param prefix the prefix.
+     * @return <code>true</code> if the character sequence represented by the argument is a prefix
+     *         of the character sequence represented by this string; <code>false</code> otherwise.
+     *         Note also that <code>true</code> will be returned if the argument is an empty string
+     *         or is equal to this <code>String</code> object as determined by the
+     *         {@link #equals(Object)} method.
+     * @since 1. 0
+     */
+    public boolean startsWith(String prefix) {
+        return startsWith(prefix, 0);
+    }
+
+    /**
      * Tests if the substring of this string beginning at the specified index starts with the
      * specified prefix.
      * 
@@ -531,22 +575,7 @@ class JSString implements Comparable {
      *          </pre>
      */
     public boolean startsWith(String prefix, int toffset) {
-        return that.startsWith(prefix, toffset);
-    }
-
-    /**
-     * Tests if this string starts with the specified prefix.
-     * 
-     * @param prefix the prefix.
-     * @return <code>true</code> if the character sequence represented by the argument is a prefix
-     *         of the character sequence represented by this string; <code>false</code> otherwise.
-     *         Note also that <code>true</code> will be returned if the argument is an empty string
-     *         or is equal to this <code>String</code> object as determined by the
-     *         {@link #equals(Object)} method.
-     * @since 1. 0
-     */
-    public boolean startsWith(String prefix) {
-        return that.startsWith(prefix);
+        return that.indexOf(prefix, toffset) == toffset;
     }
 
     /**

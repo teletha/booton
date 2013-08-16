@@ -211,7 +211,7 @@ public class ScriptTester {
             try {
                 Files.write(I.locate("e:\\test.js"), Javascript.getScript(source).toString().getBytes());
             } catch (IOException e1) {
-                throw I.quiet(e);
+                throw I.quiet(e1);
             }
             if (e instanceof EvaluatorException) {
                 EvaluatorException exception = (EvaluatorException) e;
@@ -256,7 +256,11 @@ public class ScriptTester {
                 return null; // success
             } else {
                 // fail (AssertionError) or error
-
+                try {
+                    Files.write(I.locate("e:\\test.js"), Javascript.getScript(source).toString().getBytes());
+                } catch (IOException e1) {
+                    throw I.quiet(e1);
+                }
                 // decode as Java's error and rethrow it
                 Source code = new Source(sourceName, Javascript.getScript(source).toString());
                 throw I.quiet(ClientStackTrace.decode((String) result, code));

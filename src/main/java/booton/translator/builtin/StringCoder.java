@@ -12,7 +12,7 @@ package booton.translator.builtin;
 import booton.translator.Translator;
 
 /**
- * @version 2013/07/29 16:05:34
+ * @version 2013/08/16 23:57:38
  */
 class StringCoder extends Translator<String> {
 
@@ -93,53 +93,88 @@ class StringCoder extends Translator<String> {
     }
 
     /**
-     * Javascript native String class have length property instead of length method. And Javascript
-     * manages object as hash, so object can't have same name method or property. We must convert
-     * invoking java.lang.String#length() method to the accessing length property.
+     * Returns the <code>char</code> value at the specified index. An index ranges from
+     * <code>0</code> to <code>length() - 1</code>. The first <code>char</code> value of the
+     * sequence is at index <code>0</code>, the next at index <code>1</code>, and so on, as for
+     * array indexing.
+     * <p>
+     * If the <code>char</code> value specified by the index is a <a
+     * href="Character.html#unicode">surrogate</a>, the surrogate value is returned.
+     * 
+     * @param index the index of the <code>char</code> value.
+     * @return the <code>char</code> value at the specified index of this string. The first
+     *         <code>char</code> value is at index <code>0</code>.
+     * @exception IndexOutOfBoundsException if the <code>index</code> argument is negative or not
+     *                less than the length of this string.
      */
-    public String length() {
-        return that + ".length";
-    }
-
     public String charAt(int index) throws Exception {
         return that + ".charAt(" + param(0) + ")";
+    }
+
+    public String codePointAt(int index) {
+        return that + ".charCodeAt(" + param(0) + ")";
+    }
+
+    public String codePointBefore(int index) {
+        return that + ".charCodeAt(" + param(0) + "-1)";
+    }
+
+    /**
+     * Compares this object with the specified object for order. Returns a negative integer, zero,
+     * or a positive integer as this object is less than, equal to, or greater than the specified
+     * object.
+     * <p>
+     * The implementor must ensure <tt>sgn(x.compareTo(y)) ==
+     * -sgn(y.compareTo(x))</tt> for all <tt>x</tt> and <tt>y</tt>. (This implies that
+     * <tt>x.compareTo(y)</tt> must throw an exception iff <tt>y.compareTo(x)</tt> throws an
+     * exception.)
+     * <p>
+     * The implementor must also ensure that the relation is transitive:
+     * <tt>(x.compareTo(y)&gt;0 &amp;&amp; y.compareTo(z)&gt;0)</tt> implies
+     * <tt>x.compareTo(z)&gt;0</tt>.
+     * <p>
+     * Finally, the implementor must ensure that <tt>x.compareTo(y)==0</tt> implies that
+     * <tt>sgn(x.compareTo(z)) == sgn(y.compareTo(z))</tt>, for all <tt>z</tt>.
+     * <p>
+     * It is strongly recommended, but <i>not</i> strictly required that
+     * <tt>(x.compareTo(y)==0) == (x.equals(y))</tt>. Generally speaking, any class that implements
+     * the <tt>Comparable</tt> interface and violates this condition should clearly indicate this
+     * fact. The recommended language is "Note: this class has a natural ordering that is
+     * inconsistent with equals."
+     * <p>
+     * In the foregoing description, the notation <tt>sgn(</tt><i>expression</i><tt>)</tt>
+     * designates the mathematical <i>signum</i> function, which is defined to return one of
+     * <tt>-1</tt>, <tt>0</tt>, or <tt>1</tt> according to whether the value of <i>expression</i> is
+     * negative, zero or positive.
+     * 
+     * @param o the object to be compared.
+     * @return a negative integer, zero, or a positive integer as this object is less than, equal
+     *         to, or greater than the specified object.
+     * @throws NullPointerException if the specified object is null
+     * @throws ClassCastException if the specified object's type prevents it from being compared to
+     *             this object.
+     */
+    public native int compareTo(String object);
+
+    public String concat(String value) {
+        return that + ".concat(" + param(0) + ")";
     }
 
     public String contains(CharSequence param0) {
         return that + ".indexOf(" + param(0) + ") != -1";
     }
 
-    public String compareTo(String param) {
-        return that + ".localeCompare(" + param(0) + ")";
-    }
-
-    public String indexOf(int value) {
-        return that + ".indexOf(" + param(0) + ")";
-    }
-
-    public String indexOf(String value) {
-        return that + ".indexOf(" + param(0) + ")";
-    }
-
-    public String lastIndexOf(String value) {
-        return that + ".lastIndexOf(" + param(0) + ")";
-    }
-
-    public String lastIndexOf(int value) {
-        return that + ".lastIndexOf(" + param(0) + ")";
-    }
-
-    public String startsWith(String value) {
-        return that + ".startsWith(" + param(0) + ")";
-    }
-
-    public String endsWith(String value) {
-        return that + ".endsWith(" + param(0) + ")";
-    }
-
-    public String concat(String value) {
-        return that + ".concat(" + param(0) + ")";
-    }
+    /**
+     * Tests if this string ends with the specified suffix.
+     * 
+     * @param suffix the suffix.
+     * @return <code>true</code> if the character sequence represented by the argument is a suffix
+     *         of the character sequence represented by this object; <code>false</code> otherwise.
+     *         Note that the result will be <code>true</code> if the argument is the empty string or
+     *         is equal to this <code>String</code> object as determined by the
+     *         {@link #equals(Object)} method.
+     */
+    public native boolean endsWith(String suffix);
 
     /**
      * Compares this {@code String} to another {@code String}, ignoring case considerations. Two
@@ -166,6 +201,96 @@ class StringCoder extends Translator<String> {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public native int hashCode();
+
+    public String indexOf(int value) {
+        return that + ".indexOf(" + param(0) + ")";
+    }
+
+    public String indexOf(String value) {
+        return that + ".indexOf(" + param(0) + ")";
+    }
+
+    public String intern() {
+        return that;
+    }
+
+    /**
+     * Returns <tt>true</tt> if, and only if, {@link #length()} is <tt>0</tt>.
+     * 
+     * @return <tt>true</tt> if {@link #length()} is <tt>0</tt>, otherwise <tt>false</tt>
+     * @since 1.6
+     */
+    public native boolean isEmpty();
+
+    public String lastIndexOf(String value) {
+        return that + ".lastIndexOf(" + param(0) + ")";
+    }
+
+    public String lastIndexOf(int value) {
+        return that + ".lastIndexOf(" + param(0) + ")";
+    }
+
+    /**
+     * Javascript native String class have length property instead of length method. And Javascript
+     * manages object as hash, so object can't have same name method or property. We must convert
+     * invoking java.lang.String#length() method to the accessing length property.
+     */
+    public String length() {
+        return that + ".length";
+    }
+
+    public String replace(char oldChar, char newChar) {
+        return that + ".replace(" + regex(0, "g") + "," + param(1) + ")";
+    }
+
+    public String replace(CharSequence regex, CharSequence replace) {
+        return that + ".replace(" + regex(0, "g") + "," + param(1) + ")";
+    }
+
+    public String replaceAll(String regex, String replacement) {
+        return that + ".replace(" + regex(0, "g") + "," + param(1) + ")";
+    }
+
+    public String replaceFirst(String regex, String replacement) {
+        return that + ".replace(" + regex(0) + "," + param(1) + ")";
+    }
+
+    /**
+     * Tests if this string starts with the specified prefix.
+     * 
+     * @param prefix the prefix.
+     * @return <code>true</code> if the character sequence represented by the argument is a prefix
+     *         of the character sequence represented by this string; <code>false</code> otherwise.
+     *         Note also that <code>true</code> will be returned if the argument is an empty string
+     *         or is equal to this <code>String</code> object as determined by the
+     *         {@link #equals(Object)} method.
+     * @since 1. 0
+     */
+    public native boolean startsWith(String value);
+
+    /**
+     * Tests if the substring of this string beginning at the specified index starts with the
+     * specified prefix.
+     * 
+     * @param prefix the prefix.
+     * @param toffset where to begin looking in this string.
+     * @return <code>true</code> if the character sequence represented by the argument is a prefix
+     *         of the substring of this object starting at index <code>toffset</code>;
+     *         <code>false</code> otherwise. The result is <code>false</code> if
+     *         <code>toffset</code> is negative or greater than the length of this
+     *         <code>String</code> object; otherwise the result is the same as the result of the
+     *         expression
+     * 
+     * <pre>
+     *          this.substring(toffset).startsWith(prefix)
+     *          </pre>
+     */
+    public native boolean startsWith(String prefix, int toffset);
+
+    /**
      * <p>
      * Converts this string to a new character array.
      * </p>
@@ -186,40 +311,8 @@ class StringCoder extends Translator<String> {
         return that + ".toUpperCase()";
     }
 
-    public String intern() {
-        return that;
-    }
-
-    public String isEmpty() {
-        return that + ".length==0";
-    }
-
     public String trim() {
         return that + ".trim()";
-    }
-
-    public String replace(char oldChar, char newChar) {
-        return that + ".replace(" + regex(0, "g") + "," + param(1) + ")";
-    }
-
-    public String replace(CharSequence regex, CharSequence replace) {
-        return that + ".replace(" + regex(0, "g") + "," + param(1) + ")";
-    }
-
-    public String replaceAll(String regex, String replacement) {
-        return that + ".replace(" + regex(0, "g") + "," + param(1) + ")";
-    }
-
-    public String replaceFirst(String regex, String replacement) {
-        return that + ".replace(" + regex(0) + "," + param(1) + ")";
-    }
-
-    public String codePointAt(int index) {
-        return that + ".charCodeAt(" + param(0) + ")";
-    }
-
-    public String codePointBefore(int index) {
-        return that + ".charCodeAt(" + param(0) + "-1)";
     }
 
     public String split(String param0) {
@@ -280,9 +373,7 @@ class StringCoder extends Translator<String> {
      * @param value A value to parse.
      * @return A compiled expression.
      */
-    public String valueOf(float value) {
-        return Q + Q + "+" + param(0);
-    }
+    public native String valueOf(float value);
 
     /**
      * <p>
@@ -292,9 +383,7 @@ class StringCoder extends Translator<String> {
      * @param value A value to parse.
      * @return A compiled expression.
      */
-    public String valueOf(double value) {
-        return Q + Q + "+" + param(0);
-    }
+    public native String valueOf(double value);
 
     /**
      * <p>
@@ -304,9 +393,7 @@ class StringCoder extends Translator<String> {
      * @param value A value to parse.
      * @return A compiled expression.
      */
-    public String valueOf(boolean value) {
-        return Q + Q + "+" + param(0);
-    }
+    public native String valueOf(boolean value);
 
     /**
      * <p>
@@ -316,9 +403,7 @@ class StringCoder extends Translator<String> {
      * @param value A value to parse.
      * @return A compiled expression.
      */
-    public String valueOf(char value) {
-        return param(0);
-    }
+    public native String valueOf(char value);
 
     /**
      * <p>
@@ -328,7 +413,5 @@ class StringCoder extends Translator<String> {
      * @param value A value to parse.
      * @return A compiled expression.
      */
-    public String valueOf(char[] value) {
-        return param(0) + ".join()";
-    }
+    public native String valueOf(char[] value);
 }
