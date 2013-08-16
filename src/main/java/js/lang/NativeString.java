@@ -109,32 +109,6 @@ class NativeString {
 
     /**
      * <p>
-     * Determines whether a string ends with the characters of another string, returning true or
-     * false as appropriate.
-     * </p>
-     * 
-     * @param value The characters to be searched for at the end of this string.
-     * @return A result.
-     */
-    public boolean endsWith(String value) {
-        return builder.toString().endsWith(value);
-    }
-
-    /**
-     * <p>
-     * Returns the index within the calling String object of the last occurrence of the specified
-     * value, or -1 if not found. The calling string is searched backward, starting at fromIndex.
-     * </p>
-     * 
-     * @param text A string representing the value to search for.
-     * @return
-     */
-    public int lastIndexOf(String text) {
-        return builder.lastIndexOf(text);
-    }
-
-    /**
-     * <p>
      * Returns the index within the calling String object of the first occurrence of the specified
      * value, starting the search at fromIndex, returns -1 if the value is not found.
      * </p>
@@ -168,6 +142,19 @@ class NativeString {
      * </p>
      * 
      * @param text A string representing the value to search for.
+     * @return
+     */
+    public int lastIndexOf(String text) {
+        return builder.lastIndexOf(text);
+    }
+
+    /**
+     * <p>
+     * Returns the index within the calling String object of the last occurrence of the specified
+     * value, or -1 if not found. The calling string is searched backward, starting at fromIndex.
+     * </p>
+     * 
+     * @param text A string representing the value to search for.
      * @param from The location within the calling string to start the search from, indexed from
      *            left to right. It can be any integer between 0 and the length of the string. The
      *            default value is the length of the string.
@@ -175,6 +162,33 @@ class NativeString {
      */
     public int lastIndexOf(String text, int from) {
         return builder.lastIndexOf(text, from);
+    }
+
+    /**
+     * <p>
+     * Count text length.
+     * </p>
+     * 
+     * @return
+     */
+    public int length() {
+        return builder.length();
+    }
+
+    /**
+     * <p>
+     * Returns a number indicating whether a reference string comes before or after or is the same
+     * as the given string in sort order. The new locales and options arguments let applications
+     * specify the language whose sort order should be used and customize the behavior of the
+     * function. In older implementations, which ignore the locales and options arguments, the
+     * locale and sort order used are entirely implementation dependent.
+     * </p>
+     * 
+     * @param object The string against which the referring string is comparing.
+     * @return A result.
+     */
+    public int localeCompare(String object) {
+        return builder.toString().compareTo(object);
     }
 
     /**
@@ -265,34 +279,6 @@ class NativeString {
 
     /**
      * <p>
-     * Determines whether a string begins with the characters of another string, returning true or
-     * false as appropriate.
-     * </p>
-     * 
-     * @param text The characters to be searched for at the start of this string.
-     * @return A result.
-     */
-    public boolean startsWith(String text) {
-        return builder.toString().startsWith(text);
-    }
-
-    /**
-     * <p>
-     * Determines whether a string begins with the characters of another string, returning true or
-     * false as appropriate.
-     * </p>
-     * 
-     * @param text The characters to be searched for at the start of this string.
-     * @param position The position in this string at which to begin searching for searchString;
-     *            defaults to 0.
-     * @return A result.
-     */
-    public boolean startsWith(String text, int position) {
-        return builder.toString().startsWith(text, position);
-    }
-
-    /**
-     * <p>
      * Returns a subset of a string between one index and another, or through the end of the string.
      * </p>
      * 
@@ -347,17 +333,6 @@ class NativeString {
      */
     public NativeString trim() {
         return new NativeString(builder.toString().trim());
-    }
-
-    /**
-     * <p>
-     * Count text length.
-     * </p>
-     * 
-     * @return
-     */
-    public int length() {
-        return builder.length();
     }
 
     /**
@@ -459,19 +434,6 @@ class NativeString {
 
         /**
          * <p>
-         * Determines whether a string ends with the characters of another string, returning true or
-         * false as appropriate.
-         * </p>
-         * 
-         * @param value The characters to be searched for at the end of this string.
-         * @return A result.
-         */
-        public String endsWith(String value) {
-            return that + ".endsWith(" + param(0) + ")";
-        }
-
-        /**
-         * <p>
          * Returns the index within the calling String object of the first occurrence of the
          * specified value, starting the search at fromIndex, returns -1 if the value is not found.
          * </p>
@@ -528,6 +490,22 @@ class NativeString {
          */
         public String lastIndexOf(String text, int from) {
             return that + ".lastIndexOf(" + param(0) + "," + param(1) + ")";
+        }
+
+        /**
+         * <p>
+         * Returns a number indicating whether a reference string comes before or after or is the
+         * same as the given string in sort order. The new locales and options arguments let
+         * applications specify the language whose sort order should be used and customize the
+         * behavior of the function. In older implementations, which ignore the locales and options
+         * arguments, the locale and sort order used are entirely implementation dependent.
+         * </p>
+         * 
+         * @param object The string against which the referring string is comparing.
+         * @return A result.
+         */
+        public String localeCompare(String object) {
+            return that + ".localeCompare(" + param(0) + ")";
         }
 
         /**
@@ -606,34 +584,6 @@ class NativeString {
          */
         public String split(String separator, int limit) {
             return that + ".split(" + param(0) + "," + param(1) + ")";
-        }
-
-        /**
-         * <p>
-         * Determines whether a string begins with the characters of another string, returning true
-         * or false as appropriate.
-         * </p>
-         * 
-         * @param text The characters to be searched for at the start of this string.
-         * @return A result.
-         */
-        public String startsWith(String text) {
-            return that + ".startsWith(" + param(0) + ")";
-        }
-
-        /**
-         * <p>
-         * Determines whether a string begins with the characters of another string, returning true
-         * or false as appropriate.
-         * </p>
-         * 
-         * @param text The characters to be searched for at the start of this string.
-         * @param position The position in this string at which to begin searching for searchString;
-         *            defaults to 0.
-         * @return A result.
-         */
-        public String startsWith(String text, int position) {
-            return that + ".startsWith(" + param(0) + "," + param(1) + ")";
         }
 
         /**

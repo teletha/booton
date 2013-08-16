@@ -26,7 +26,7 @@ import org.objectweb.asm.Type;
  * Public {@link Translator} API.
  * </p>
  * 
- * @version 2013/08/15 16:35:18
+ * @version 2013/08/16 23:54:25
  */
 @Manageable(lifestyle = Singleton.class)
 public class Translator<T> implements Extensible {
@@ -188,21 +188,16 @@ public class Translator<T> implements Extensible {
             // ===============================
             // Validation
             // ===============================
-            // if (method.isBridge() || method.isSynthetic()) {
-            // TranslationError error = new TranslationError();
-            // System.out.println(method.isBridge());
-            // error.write("Translation method is system defined. [", translator.getName(), "]");
-            // error.writeMethod(method);
-            //
-            // throw error;
-            // }
-
             if (!Modifier.isPublic(method.getModifiers())) {
                 TranslationError error = new TranslationError();
                 error.write("Translation method must be public. [", translator.getName(), "]");
                 error.writeMethod(method);
 
                 throw error;
+            }
+
+            if (Modifier.isNative(method.getModifiers())) {
+                return new NativeWriter(method);
             }
 
             if (method.getReturnType() != String.class) {
@@ -216,7 +211,7 @@ public class Translator<T> implements Extensible {
             // make accesible
             method.setAccessible(true);
 
-            return new Writer(this, method);
+            return new CodeWriter(this, method);
         } catch (NoSuchMethodException e) {
             Class clazz = ClassUtil.getParameter(getClass(), Translator.class)[0].getSuperclass();
 
@@ -286,9 +281,79 @@ public class Translator<T> implements Extensible {
     }
 
     /**
-     * @version 2013/05/01 19:27:20
+     * Helper method to write parameter expression.
+     * 
+     * @param operands
+     * @return
      */
-    private static class Writer {
+    static String writeParameter(Class[] types, List<Operand> operands) {
+        return writeParameter(types, operands, true);
+    }
+
+    /**
+     * Helper method to write parameter expression.
+     * 
+     * @param operands
+     * @return
+     */
+    static String writeParameter(Class[] types, List<Operand> operands, boolean useBracket) {
+        StringBuilder builder = new StringBuilder();
+        if (useBracket) builder.append('(');
+
+        for (int i = 1; i < operands.size(); i++) {
+            if (i - 1 < types.length) {
+                Class type = types[i - 1];
+
+                if (type == boolean.class) {
+                    Operand operand = operands.get(i);
+
+                    if (operand instanceof OperandNumber) {
+                        OperandNumber number = (OperandNumber) operand;
+
+                        if (number.value.intValue() == 0) {
+                            operands.set(i, new OperandExpression(false));
+                        } else {
+                            operands.set(i, new OperandExpression(true));
+                        }
+                    }
+                } else if (type == char.class) {
+                    operands.set(i, operands.get(i).cast(char.class));
+                }
+            }
+
+            builder.append(operands.get(i).disclose());
+
+            if (i + 1 != operands.size()) {
+                builder.append(',');
+            }
+        }
+        if (useBracket) builder.append(')');
+
+        return builder.toString();
+    }
+
+    /**
+     * @version 2013/08/16 23:33:50
+     */
+    private static interface Writer {
+
+        /**
+         * <p>
+         * Translate the specified method invocation (include constructor call) to the user defined
+         * javascript expression. If the suitable translation method is not found,
+         * {@link NoSuchMethodException} will be thrown.
+         * </p>
+         * 
+         * @param context A current processing operands for the specified method.
+         * @return A javascript expression.
+         */
+        String write(List<Operand> context);
+    }
+
+    /**
+     * @version 2013/08/16 23:53:56
+     */
+    private static class CodeWriter implements Writer {
 
         /** The code translator. */
         private final Translator translator;
@@ -300,24 +365,16 @@ public class Translator<T> implements Extensible {
          * @param translator
          * @param method
          */
-        private Writer(Translator translator, Method method) {
+        private CodeWriter(Translator translator, Method method) {
             this.translator = translator;
             this.method = method;
         }
 
         /**
-         * <p>
-         * Translate the specified method invocation (include constructor call) to the user defined
-         * javascript expression. If the suitable translation method is not found,
-         * {@link NoSuchMethodException} will be thrown.
-         * </p>
-         * 
-         * @param methodName A method name that byte code want to invoke.
-         * @param types A prameter types of the specified method.
-         * @param context A current processing operands for the specified method.
-         * @return A javascript expression.
+         * {@inheritDoc}
          */
-        private String write(List<Operand> context) {
+        @Override
+        public String write(List<Operand> context) {
             // translate special method invocation
             translator.types = method.getParameterTypes();
             translator.context = context;
@@ -362,6 +419,30 @@ public class Translator<T> implements Extensible {
                 translator.context = null;
                 translator.that = null;
             }
+        }
+    }
+
+    /**
+     * @version 2013/08/16 23:32:09
+     */
+    private static class NativeWriter implements Writer {
+
+        /** The target method. */
+        private final Method method;
+
+        /**
+         * @param method
+         */
+        private NativeWriter(Method method) {
+            this.method = method;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String write(List<Operand> context) {
+            return context.get(0) + "." + Javascript.computeMethodName(method) + writeParameter(method.getParameterTypes(), context);
         }
     }
 }

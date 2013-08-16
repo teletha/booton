@@ -36,67 +36,6 @@ function boot(global) {
 
 
   //====================================================================
-  // String Extensions
-  //====================================================================
-  define(String.prototype, {
-    /**
-     * <p>
-     * Returns the runtime class of this Object. The returned Class object is the object
-     * that is locked by static synchronized methods of the represented class. 
-     * </p>
-     *
-     * @return String class.
-     */
-    $: String,
-  
-    /**
-     * Retrieve the object identifier.
-     *
-     * @return An identifier.
-     */
-    hashCode: function() {
-      if (this.$hashCode !== undefined) return this.$hashCode;
-
-      var hash = 0;
-      
-      for (var i = 0; i < this.length; i++) {
-        hash = 31 * hash + this.charCodeAt(i);
-      }
-      return this.$hashCode = hash;
-    },
-
-    /**
-     * <p>
-     * Tests if this string starts with the specified prefix.
-     * </p>
-     * 
-     * @param {String} prefix A prefix to test.
-     * @return {boolean} true if the character sequence represented by the argument is a prefix of
-     *         the character sequence represented by this string; false otherwise. Note also that
-     *         true will be returned if the argument is an empty string or is equal to this String
-     *         object as determined by the equals(Object) method.
-     */
-    startsWith: function(prefix) {
-        return prefix.length <= this.length && prefix == this.substring(0, prefix.length);
-    },
-
-    /**
-     * <p>
-     * Tests if this string ends with the specified suffix.
-     * </p>
-     * 
-     * @param {String} suffix A suffix to test.
-     * @return {boolean} <code>true</code> if the character sequence represented by the argument
-     *         is a suffix of the character sequence represented by this object; false otherwise.
-     *         Note that the result will be true if the argument is the empty string or is equal to
-     *         this String object as determined by the equals(Object) method.
-     */
-    endsWith: function(suffix) {
-        return suffix.length <= this.length && suffix == this.slice(~suffix.length + 1);
-    }
-  });
-
-  //====================================================================
   // Array Extensions
   //====================================================================
   define(Array, {
@@ -211,7 +150,6 @@ function boot(global) {
      * @return A Class object.
      */
     getClass: function() {
-      if (typeof this === "string") return boot.S.$;
       return this.$.$;
     }
   });
@@ -221,22 +159,6 @@ function boot(global) {
   // ECMAScript6 Extensions
   //====================================================================
 
-
-
-  //====================================================================
-  // Booton Debug Extensions
-  //====================================================================
-  var stacktrace = [];
-  
-  function debug(clazz, method, invoker) {
-    return function() {
-      stacktrace.push("start " + clazz + "#" + method);
-      var result = invoker.apply(this, arguments);
-      stacktrace.pop();
-
-      return result;
-    };
-  }
   
   //====================================================================
   // Booton Extensions
@@ -386,8 +308,8 @@ function boot(global) {
           define(clazz.prototype, properties);
           
           if (superclassName) {
-            define(clazz.prototype, boot[superclassName].prototype);
-            define(clazz, boot[superclassName]);
+            define(clazz.prototype, boot[superclassName].prototype, true);
+            define(clazz, boot[superclassName], true);
           }
           
           if (properties._) {

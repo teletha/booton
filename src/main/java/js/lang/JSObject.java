@@ -15,5 +15,5 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/07/31 2:34:36
  */
 @JavaAPIProvider(Object.class)
-public class JSObject {
+class JSObject {
 }

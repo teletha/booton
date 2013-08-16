@@ -263,7 +263,7 @@ class TranslatorManager {
     }
 
     /**
-     * @version 2013/01/19 23:52:14
+     * @version 2013/08/16 23:58:02
      */
     @Manageable(lifestyle = Singleton.class)
     private static class GeneralTranslator extends Translator<Object> {
@@ -378,58 +378,6 @@ class TranslatorManager {
         @Override
         protected String translateStaticField(Class owner, String fieldName) {
             return Javascript.computeClassName(owner) + "." + Javascript.computeFieldName(owner, fieldName);
-        }
-
-        /**
-         * Helper method to write parameter expression.
-         * 
-         * @param operands
-         * @return
-         */
-        private static String writeParameter(Class[] types, List<Operand> operands) {
-            return writeParameter(types, operands, true);
-        }
-
-        /**
-         * Helper method to write parameter expression.
-         * 
-         * @param operands
-         * @return
-         */
-        private static String writeParameter(Class[] types, List<Operand> operands, boolean useBracket) {
-            StringBuilder builder = new StringBuilder();
-            if (useBracket) builder.append('(');
-
-            for (int i = 1; i < operands.size(); i++) {
-                if (i - 1 < types.length) {
-                    Class type = types[i - 1];
-
-                    if (type == boolean.class) {
-                        Operand operand = operands.get(i);
-
-                        if (operand instanceof OperandNumber) {
-                            OperandNumber number = (OperandNumber) operand;
-
-                            if (number.value.intValue() == 0) {
-                                operands.set(i, new OperandExpression(false));
-                            } else {
-                                operands.set(i, new OperandExpression(true));
-                            }
-                        }
-                    } else if (type == char.class) {
-                        operands.set(i, operands.get(i).cast(char.class));
-                    }
-                }
-
-                builder.append(operands.get(i).disclose());
-
-                if (i + 1 != operands.size()) {
-                    builder.append(',');
-                }
-            }
-            if (useBracket) builder.append(')');
-
-            return builder.toString();
         }
     }
 }
