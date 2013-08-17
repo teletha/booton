@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * @version 2013/08/14 19:00:54
+ * @version 2013/08/17 18:58:51
  */
 class Node {
 
@@ -532,19 +532,19 @@ class Node {
                                 buffer.write("}", "else", "{");
                                 process(elze, buffer);
                             }
-                            buffer.write("}");
+                            buffer.write("}").line();
                             process(follower, buffer);
                         } else {
                             buffer.write("if", "(" + this + ")", "{");
                             process(outgoing.get(0), buffer);
-                            buffer.write("}");
+                            buffer.write("}").line();
                             process(outgoing.get(1), buffer);
                         }
                     } else {
                         ccc.invert();
                         buffer.write("if", "(" + this + ")", "{");
                         process(outgoing.get(1), buffer);
-                        buffer.write("}");
+                        buffer.write("}").line();
                         process(outgoing.get(0), buffer);
                     }
                 } else if (backs == 1) {
@@ -567,7 +567,7 @@ class Node {
                         // write script fragment
                         buffer.write("l" + id + ":", "for", "(;", this + ";", update + ")", "{");
                         process(process, buffer);
-                        buffer.write("}");
+                        buffer.write("}").line();
                         process(follower, buffer);
                     } else {
                         // while with break only
@@ -578,7 +578,7 @@ class Node {
                         // write script fragment
                         buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
                         process(process, buffer);
-                        buffer.write("}");
+                        buffer.write("}").line();
                         process(follower, buffer);
                     }
                 } else {
@@ -590,7 +590,7 @@ class Node {
                     // write script fragment
                     buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
                     process(process, buffer);
-                    buffer.write("}");
+                    buffer.write("}").line();
                     process(follower, buffer);
                 }
             }
