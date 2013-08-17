@@ -11,6 +11,7 @@ package js.lang;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import booton.translator.Translator;
 
@@ -263,6 +264,25 @@ class NativeString {
      * @param separator Specifies the character(s) to use for separating the string. The separator
      *            is treated as a string or a regular expression. If separator is omitted, the array
      *            returned contains one element consisting of the entire string.
+     * @return
+     */
+    public NativeString[] split(Pattern separator) {
+        List<NativeString> list = new ArrayList();
+
+        for (String text : builder.toString().split(separator.pattern())) {
+            list.add(new NativeString(text));
+        }
+        return list.toArray(new NativeString[list.size()]);
+    }
+
+    /**
+     * <p>
+     * Splits a String object into an array of strings by separating the string into substrings.
+     * </p>
+     * 
+     * @param separator Specifies the character(s) to use for separating the string. The separator
+     *            is treated as a string or a regular expression. If separator is omitted, the array
+     *            returned contains one element consisting of the entire string.
      * @param limit Integer specifying a limit on the number of splits to be found. The split method
      *            still splits on every match of separator, but it truncates the returned array to
      *            at most limit elements.
@@ -341,6 +361,18 @@ class NativeString {
     @Override
     public String toString() {
         return builder.toString();
+    }
+
+    /**
+     * <p>
+     * Returns a string created by using the specified sequence of Unicode values.
+     * </p>
+     * 
+     * @param codes A sequence of numbers that are Unicode values.
+     * @return
+     */
+    public static NativeString fromCharCode(int... codes) {
+        return new NativeString(String.valueOf(codes));
     }
 
     /**
@@ -577,6 +609,21 @@ class NativeString {
          *            separator is treated as a string or a regular expression. If separator is
          *            omitted, the array returned contains one element consisting of the entire
          *            string.
+         * @return
+         */
+        public String split(Pattern separator) {
+            return that + ".split(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Splits a String object into an array of strings by separating the string into substrings.
+         * </p>
+         * 
+         * @param separator Specifies the character(s) to use for separating the string. The
+         *            separator is treated as a string or a regular expression. If separator is
+         *            omitted, the array returned contains one element consisting of the entire
+         *            string.
          * @param limit Integer specifying a limit on the number of splits to be found. The split
          *            method still splits on every match of separator, but it truncates the returned
          *            array to at most limit elements.
@@ -663,6 +710,18 @@ class NativeString {
         @Override
         public String toString() {
             return that;
+        }
+
+        /**
+         * <p>
+         * Returns a string created by using the specified sequence of Unicode values.
+         * </p>
+         * 
+         * @param codes A sequence of numbers that are Unicode values.
+         * @return
+         */
+        public String fromCharCode(int... codes) {
+            return "String.fromCharCode(" + param(0) + ")";
         }
     }
 }

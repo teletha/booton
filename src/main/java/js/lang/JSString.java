@@ -12,37 +12,20 @@ package js.lang;
 import static js.lang.JSStringHelper.*;
 
 import java.util.Locale;
+import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/08/15 22:13:27
+ * @version 2013/08/17 16:53:39
  */
 @JavaAPIProvider(String.class)
-class JSString implements Comparable<String> {
+class JSString implements Comparable<String>, CharSequence {
 
     /** The cache for hash. */
     private int hash = 0;
-
-    /**
-     * Initializes a newly created {@code String} object so that it represents an empty character
-     * sequence. Note that use of this constructor is unnecessary since Strings are immutable.
-     */
-    public JSString() {
-    }
-
-    /**
-     * Initializes a newly created {@code String} object so that it represents the same sequence of
-     * characters as the argument; in other words, the newly created string is a copy of the
-     * argument string. Unless an explicit copy of {@code original} is needed, use of this
-     * constructor is unnecessary since Strings are immutable.
-     * 
-     * @param original A {@code String}
-     */
-    public JSString(String original) {
-        this();
-    }
 
     /**
      * Returns the <code>char</code> value at the specified index. An index ranges from
@@ -59,7 +42,11 @@ class JSString implements Comparable<String> {
      * @exception IndexOutOfBoundsException if the <code>index</code> argument is negative or not
      *                less than the length of this string.
      */
+    @Override
     public char charAt(int index) {
+        if (index < 0 || length() <= index) {
+            throw new IndexOutOfBoundsException(String.valueOf(index));
+        }
         return that.charAt(index);
     }
 
@@ -81,6 +68,9 @@ class JSString implements Comparable<String> {
      * @since 1.5
      */
     public int codePointAt(int index) {
+        if (index < 0 || length() <= index) {
+            throw new IndexOutOfBoundsException(String.valueOf(index));
+        }
         return that.charCodeAt(index);
     }
 
@@ -102,7 +92,12 @@ class JSString implements Comparable<String> {
      * @since 1.5
      */
     public int codePointBefore(int index) {
-        return that.charCodeAt(index - 1);
+        index--;
+
+        if (index < 0 || length() <= index) {
+            throw new IndexOutOfBoundsException(String.valueOf(index + 1));
+        }
+        return that.charCodeAt(index);
     }
 
     /**
@@ -135,6 +130,7 @@ class JSString implements Comparable<String> {
      *         the string argument's characters.
      */
     public String concat(String value) {
+        Objects.requireNonNull(value);
         return (String) (Object) that.concat(value);
     }
 
@@ -147,6 +143,7 @@ class JSString implements Comparable<String> {
      * @since 1.5
      */
     public boolean contains(CharSequence text) {
+        Objects.requireNonNull(text);
         return that.indexOf(text.toString()) != -1;
     }
 
@@ -161,6 +158,7 @@ class JSString implements Comparable<String> {
      *         {@link #equals(Object)} method.
      */
     public boolean endsWith(String suffix) {
+        Objects.requireNonNull(suffix);
         return startsWith(suffix, length() - suffix.length());
     }
 
@@ -216,6 +214,73 @@ class JSString implements Comparable<String> {
     }
 
     /**
+     * Returns the index within this string of the first occurrence of the specified character. If a
+     * character with value <code>ch</code> occurs in the character sequence represented by this
+     * <code>String</code> object, then the index (in Unicode code units) of the first such
+     * occurrence is returned. For values of <code>ch</code> in the range from 0 to 0xFFFF
+     * (inclusive), this is the smallest value <i>k</i> such that: <blockquote>
+     * 
+     * <pre>
+     * this.charAt(<i>k</i>) == ch
+     * </pre>
+     * 
+     * </blockquote> is true. For other values of <code>ch</code>, it is the smallest value <i>k</i>
+     * such that: <blockquote>
+     * 
+     * <pre>
+     * this.codePointAt(<i>k</i>) == ch
+     * </pre>
+     * 
+     * </blockquote> is true. In either case, if no such character occurs in this string, then
+     * <code>-1</code> is returned.
+     * 
+     * @param ch a character (Unicode code point).
+     * @return the index of the first occurrence of the character in the character sequence
+     *         represented by this object, or <code>-1</code> if the character does not occur.
+     */
+    public int indexOf(int ch) {
+        return indexOf(ch, 0);
+    }
+
+    /**
+     * Returns the index within this string of the first occurrence of the specified character,
+     * starting the search at the specified index.
+     * <p>
+     * If a character with value <code>ch</code> occurs in the character sequence represented by
+     * this <code>String</code> object at an index no smaller than <code>fromIndex</code>, then the
+     * index of the first such occurrence is returned. For values of <code>ch</code> in the range
+     * from 0 to 0xFFFF (inclusive), this is the smallest value <i>k</i> such that: <blockquote>
+     * 
+     * <pre>
+     * (this.charAt(<i>k</i>) == ch) && (<i>k</i> &gt;= fromIndex)
+     * </pre>
+     * </blockquote> is true. For other values of <code>ch</code>, it is the smallest value <i>k</i>
+     * such that: <blockquote>
+     * 
+     * <pre>
+     * (this.codePointAt(<i>k</i>) == ch) && (<i>k</i> &gt;= fromIndex)
+     * </pre>
+     * </blockquote> is true. In either case, if no such character occurs in this string at or after
+     * position <code>fromIndex</code>, then <code>-1</code> is returned.
+     * <p>
+     * There is no restriction on the value of <code>fromIndex</code>. If it is negative, it has the
+     * same effect as if it were zero: this entire string may be searched. If it is greater than the
+     * length of this string, it has the same effect as if it were equal to the length of this
+     * string: <code>-1</code> is returned.
+     * <p>
+     * All indices are specified in <code>char</code> values (Unicode code units).
+     * 
+     * @param ch a character (Unicode code point).
+     * @param fromIndex the index to start the search from.
+     * @return the index of the first occurrence of the character in the character sequence
+     *         represented by this object that is greater than or equal to <code>fromIndex</code>,
+     *         or <code>-1</code> if the character does not occur.
+     */
+    public int indexOf(int ch, int fromIndex) {
+        return indexOf((String) (Object) NativeString.fromCharCode(ch), fromIndex);
+    }
+
+    /**
      * Returns the index within this string of the first occurrence of the specified substring.
      * <p>
      * The returned index is the smallest value <i>k</i> for which: <blockquote>
@@ -264,6 +329,70 @@ class JSString implements Comparable<String> {
     }
 
     /**
+     * Returns the index within this string of the last occurrence of the specified character. For
+     * values of <code>ch</code> in the range from 0 to 0xFFFF (inclusive), the index (in Unicode
+     * code units) returned is the largest value <i>k</i> such that: <blockquote>
+     * 
+     * <pre>
+     * this.charAt(<i>k</i>) == ch
+     * </pre>
+     * 
+     * </blockquote> is true. For other values of <code>ch</code>, it is the largest value <i>k</i>
+     * such that: <blockquote>
+     * 
+     * <pre>
+     * this.codePointAt(<i>k</i>) == ch
+     * </pre>
+     * 
+     * </blockquote> is true. In either case, if no such character occurs in this string, then
+     * <code>-1</code> is returned. The <code>String</code> is searched backwards starting at the
+     * last character.
+     * 
+     * @param ch a character (Unicode code point).
+     * @return the index of the last occurrence of the character in the character sequence
+     *         represented by this object, or <code>-1</code> if the character does not occur.
+     */
+    public int lastIndexOf(int ch) {
+        return lastIndexOf(ch, length() - 1);
+    }
+
+    /**
+     * Returns the index within this string of the last occurrence of the specified character,
+     * searching backward starting at the specified index. For values of <code>ch</code> in the
+     * range from 0 to 0xFFFF (inclusive), the index returned is the largest value <i>k</i> such
+     * that: <blockquote>
+     * 
+     * <pre>
+     * (this.charAt(<i>k</i>) == ch) && (<i>k</i> &lt;= fromIndex)
+     * </pre>
+     * 
+     * </blockquote> is true. For other values of <code>ch</code>, it is the largest value <i>k</i>
+     * such that: <blockquote>
+     * 
+     * <pre>
+     * (this.codePointAt(<i>k</i>) == ch) && (<i>k</i> &lt;= fromIndex)
+     * </pre>
+     * 
+     * </blockquote> is true. In either case, if no such character occurs in this string at or
+     * before position <code>fromIndex</code>, then <code>-1</code> is returned.
+     * <p>
+     * All indices are specified in <code>char</code> values (Unicode code units).
+     * 
+     * @param ch a character (Unicode code point).
+     * @param fromIndex the index to start the search from. There is no restriction on the value of
+     *            <code>fromIndex</code>. If it is greater than or equal to the length of this
+     *            string, it has the same effect as if it were equal to one less than the length of
+     *            this string: this entire string may be searched. If it is negative, it has the
+     *            same effect as if it were -1: -1 is returned.
+     * @return the index of the last occurrence of the character in the character sequence
+     *         represented by this object that is less than or equal to <code>fromIndex</code>, or
+     *         <code>-1</code> if the character does not occur before that point.
+     */
+    public int lastIndexOf(int ch, int fromIndex) {
+        return lastIndexOf((String) (Object) NativeString.fromCharCode(ch), fromIndex);
+    }
+
+    /**
      * Returns the index within this string of the last occurrence of the specified substring. The
      * last occurrence of the empty string "" is considered to occur at the index value
      * {@code this.length()}.
@@ -300,7 +429,7 @@ class JSString implements Comparable<String> {
      *         the specified index, or {@code -1} if there is no such occurrence.
      */
     public int lastIndexOf(String text, int from) {
-        return lastIndexOf(text, from);
+        return that.lastIndexOf(text, from);
     }
 
     /**
@@ -309,6 +438,7 @@ class JSString implements Comparable<String> {
      * 
      * @return the length of the sequence of characters represented by this object.
      */
+    @Override
     public int length() {
         return that.length();
     }
@@ -360,6 +490,9 @@ class JSString implements Comparable<String> {
      * @since 1.5
      */
     public String replace(CharSequence target, CharSequence replacement) {
+        Objects.requireNonNull(target);
+        Objects.requireNonNull(replacement);
+
         return (String) (Object) that.replace(target, replacement);
     }
 
@@ -539,7 +672,8 @@ class JSString implements Comparable<String> {
      * @spec JSR-51
      */
     public String[] split(String regex) {
-        return (String[]) (Object) that.split(regex);
+        Objects.requireNonNull(regex);
+        return (String[]) (Object) that.split(Pattern.compile(regex));
     }
 
     /**
@@ -575,7 +709,37 @@ class JSString implements Comparable<String> {
      *          </pre>
      */
     public boolean startsWith(String prefix, int toffset) {
+        Objects.requireNonNull(prefix);
         return that.indexOf(prefix, toffset) == toffset;
+    }
+
+    /**
+     * Returns a new character sequence that is a subsequence of this sequence.
+     * <p>
+     * An invocation of this method of the form <blockquote>
+     * 
+     * <pre>
+     * str.subSequence(begin,&nbsp;end)</pre>
+     * </blockquote> behaves in exactly the same way as the invocation <blockquote>
+     * 
+     * <pre>
+     * str.substring(begin,&nbsp;end)</pre>
+     * </blockquote> This method is defined so that the <tt>String</tt> class can implement the
+     * {@link CharSequence} interface.
+     * </p>
+     * 
+     * @param beginIndex the begin index, inclusive.
+     * @param endIndex the end index, exclusive.
+     * @return the specified subsequence.
+     * @throws IndexOutOfBoundsException if <tt>beginIndex</tt> or <tt>endIndex</tt> are negative,
+     *             if <tt>endIndex</tt> is greater than <tt>length()</tt>, or if <tt>beginIndex</tt>
+     *             is greater than <tt>startIndex</tt>
+     * @since 1.4
+     * @spec JSR-51
+     */
+    @Override
+    public CharSequence subSequence(int beginIndex, int endIndex) {
+        return substring(beginIndex, endIndex);
     }
 
     /**
@@ -597,7 +761,7 @@ class JSString implements Comparable<String> {
      *                the length of this <code>String</code> object.
      */
     public String substring(int beginIndex) {
-        return (String) (Object) that.substring(beginIndex);
+        return substring(beginIndex, length());
     }
 
     /**
@@ -622,7 +786,34 @@ class JSString implements Comparable<String> {
      *                object, or <code>beginIndex</code> is larger than <code>endIndex</code>.
      */
     public String substring(int beginIndex, int endIndex) {
+        if (beginIndex < 0) {
+            throw new StringIndexOutOfBoundsException(beginIndex);
+        }
+
+        if (length() < endIndex) {
+            throw new StringIndexOutOfBoundsException(endIndex);
+        }
+
+        if (endIndex < beginIndex) {
+            throw new StringIndexOutOfBoundsException("The start index[" + beginIndex + "] is bigger than the end index[" + endIndex + "].");
+        }
         return (String) (Object) that.substring(beginIndex, endIndex);
+    }
+
+    /**
+     * Converts this string to a new character array.
+     * 
+     * @return a newly allocated character array whose length is the length of this string and whose
+     *         contents are initialized to contain the character sequence represented by this
+     *         string.
+     */
+    public char[] toCharArray() {
+        char[] result = new char[length()];
+
+        for (int i = 0; i < result.length; i++) {
+            result[i] = charAt(i);
+        }
+        return result;
     }
 
     /**
@@ -726,6 +917,19 @@ class JSString implements Comparable<String> {
      */
     public static String valueOf(char c) {
         return (String) (Object) new NativeString(c);
+    }
+
+    /**
+     * Returns the string representation of the <code>char</code> array argument. The contents of
+     * the character array are copied; subsequent modification of the character array does not
+     * affect the newly created string.
+     * 
+     * @param data a <code>char</code> array.
+     * @return a newly allocated string representing the same sequence of characters contained in
+     *         the character array argument.
+     */
+    public static String valueOf(char[] data) {
+        return new String(data);
     }
 
     /**

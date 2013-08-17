@@ -55,7 +55,7 @@ public class Translator<T> implements Extensible {
      * @return A translated expression.
      */
     String translateConstructor(Class owner, String description, Class[] types, List<Operand> context) {
-        return search(owner.getSimpleName(), types).write(context);
+        return search(owner.getSimpleName(), description, types).write(context);
     }
 
     /**
@@ -78,7 +78,7 @@ public class Translator<T> implements Extensible {
         if (name.equals("hashCode") && description.equals("()I")) {
             return context.get(0) + ".hashCode()";
         }
-        return search(name, types).write(context);
+        return search(name, description, types).write(context);
     }
 
     /**
@@ -94,7 +94,7 @@ public class Translator<T> implements Extensible {
      * @return A translated expression.
      */
     String translateStaticMethod(Class owner, String name, String description, Class[] types, List<Operand> context) {
-        return search(name, types).write(context);
+        return search(name, description, types).write(context);
     }
 
     /**
@@ -110,7 +110,7 @@ public class Translator<T> implements Extensible {
      * @return A translated expression.
      */
     String translateSuperMethod(Class owner, String name, String description, Class[] types, List<Operand> context) {
-        return search(owner.getSimpleName(), types).write(context);
+        return search(owner.getSimpleName(), description, types).write(context);
     }
 
     /**
@@ -172,10 +172,11 @@ public class Translator<T> implements Extensible {
      * </p>
      * 
      * @param methodName A method name.
+     * @param description A method description.
      * @param parameterTypes A method parameters.
      * @return A result.
      */
-    private Writer search(String methodName, Class[] parameterTypes) {
+    private Writer search(String methodName, String description, Class[] parameterTypes) {
         Class translator = getClass();
 
         if (translator == Translator.class) {
@@ -196,10 +197,6 @@ public class Translator<T> implements Extensible {
                 throw error;
             }
 
-            if (Modifier.isNative(method.getModifiers())) {
-                return new NativeWriter(method);
-            }
-
             if (method.getReturnType() != String.class) {
                 TranslationError error = new TranslationError();
                 error.write("Translation method must return String type. [", translator.getName(), "]");
@@ -213,16 +210,34 @@ public class Translator<T> implements Extensible {
 
             return new CodeWriter(this, method);
         } catch (NoSuchMethodException e) {
-            Class clazz = ClassUtil.getParameter(getClass(), Translator.class)[0].getSuperclass();
+            // Find translation class.
+            Class type = ClassUtil.getParameter(getClass(), Translator.class)[0];
 
-            if (clazz != null && clazz != Object.class) {
-                Translator parentTranslator = TranslatorManager.getTranslator(clazz);
+            // Search JavaAPIProvider.
+            if (JavaAPIProviders.hasProvider(type)) {
+                // Validate API
+                JavaAPIProviders.validateMethod(type, methodName, description);
+
+                // Use API provider.
+                Class provider = JavaAPIProviders.convert(type);
+
+                Javascript.require(provider);
+
+                return new NativeWriter(provider, methodName, description, parameterTypes);
+            }
+
+            // Search translator of parent type
+            Class parant = type.getSuperclass();
+
+            if (parant != null && parant != Object.class) {
+                Translator parentTranslator = TranslatorManager.getTranslator(parant);
 
                 if (parameterTypes != null) {
-                    return parentTranslator.search(methodName, parameterTypes);
+                    return parentTranslator.search(methodName, description, parameterTypes);
                 }
             }
 
+            // There is no way to translate.
             TranslationError error = new TranslationError();
             error.write("You must define a translator method at ", translator.getName(), ".");
             error.writeMethod(Modifier.PUBLIC, methodName, String.class, parameterTypes);
@@ -427,14 +442,25 @@ public class Translator<T> implements Extensible {
      */
     private static class NativeWriter implements Writer {
 
-        /** The target method. */
-        private final Method method;
+        private final Class owner;
+
+        private final String name;
+
+        private final String description;
+
+        private final Class[] parameters;
 
         /**
-         * @param method
+         * @param owner
+         * @param name
+         * @param description
+         * @param parameters
          */
-        private NativeWriter(Method method) {
-            this.method = method;
+        private NativeWriter(Class owner, String name, String description, Class[] parameters) {
+            this.owner = owner;
+            this.name = name;
+            this.description = description;
+            this.parameters = parameters;
         }
 
         /**
@@ -442,7 +468,7 @@ public class Translator<T> implements Extensible {
          */
         @Override
         public String write(List<Operand> context) {
-            return context.get(0) + "." + Javascript.computeMethodName(method) + writeParameter(method.getParameterTypes(), context);
+            return context.get(0) + "." + Javascript.computeMethodName(owner, name, description) + writeParameter(parameters, context);
         }
     }
 }
