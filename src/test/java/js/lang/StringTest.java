@@ -13,7 +13,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.Debuggable;
 import booton.translator.ScriptRunner;
 
 /**
@@ -410,7 +409,6 @@ public class StringTest {
     }
 
     @Test
-    @Debuggable
     public void valueOf() throws Exception {
         assert String.valueOf((Object) null).equals("null");
         assert String.valueOf(new char[] {'a', 'b', 'c'}).equals("abc");

@@ -19,6 +19,7 @@ import java.util.RandomAccess;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
+import booton.translator.Debuggable;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -1073,6 +1074,7 @@ class Arrays {
      * @throws IllegalArgumentException (optional) if the comparator is found to violate the
      *             {@link Comparator} contract
      */
+    @Debuggable
     public static <T> void sort(T[] a, Comparator<? super T> c) {
         NativeArray array = (NativeArray) (Object) a;
         array.sort(((NativeObject) c).getPropertyAs(NativeFunction.class, "compare").bind(c));

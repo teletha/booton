@@ -69,17 +69,6 @@ function boot(global) {
   });
   
   define(Array.prototype, {
-    /**
-     * <p>
-     * Sort by the specified Java comparator.
-     * </p>
-     *
-     * @param comparator A entry comparator.
-     */
-    sortBy: function(comparator) {
-      this.sort(comparator.compare.bind(comparator));
-    },
-    
     getClass: function() {
       return new boot.A("[" + this.$, {}, {}, Object, [], 0);
     }
