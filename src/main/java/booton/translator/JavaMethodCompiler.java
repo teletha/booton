@@ -383,6 +383,9 @@ class JavaMethodCompiler extends MethodVisitor {
         // current processing script depends on the owner class
         Javascript.require(owner);
 
+        // Field type
+        Class type = convert(Type.getType(desc));
+
         Translator translator = TranslatorManager.getTranslator(owner);
 
         switch (opcode) {
@@ -423,7 +426,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case GETFIELD:
-            current.addOperand(translator.translateField(owner, name, current.remove(0)));
+            current.addOperand(translator.translateField(owner, name, current.remove(0)), type);
             break;
 
         case PUTSTATIC:
@@ -456,7 +459,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case GETSTATIC:
-            current.addOperand(translator.translateStaticField(owner, name));
+            current.addOperand(translator.translateStaticField(owner, name), type);
             break;
         }
     }

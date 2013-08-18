@@ -11,24 +11,39 @@ package js.lang;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import kiss.I;
 import booton.translator.Javascript;
 import booton.translator.Translator;
 
 /**
  * @version 2013/08/18 13:06:42
  */
-public class NativeFunction extends NativeObject {
+public class NativeFunction<T> extends NativeObject {
+
+    /** The single abstract method type. */
+    final T type;
 
     /** The actual method. */
-    private final Method method;
+    final Method method;
+
+    /** The binded context. */
+    private T context;
+
+    /** The binded parameters. */
+    private final List parameters = new ArrayList();
 
     /**
-     * @param method
+     * <p>
+     * Create function statement form the specified object which has only one method.
+     * </p>
+     * 
+     * @param functional
      */
-    public NativeFunction(Method method) {
-        this.method = method;
+    public NativeFunction(T functional) {
+        this(functional, findSAM(functional.getClass()), null, null);
     }
 
     /**
@@ -38,8 +53,16 @@ public class NativeFunction extends NativeObject {
      * 
      * @param functional
      */
-    public NativeFunction(Object functional) {
-        this.method = findFunction(functional.getClass());
+    private NativeFunction(T functional, Method method, T context, List parameters) {
+        method.setAccessible(true);
+
+        this.type = functional;
+        this.method = method;
+        this.context = context;
+
+        if (parameters != null) {
+            this.parameters.addAll(parameters);
+        }
     }
 
     /**
@@ -56,8 +79,39 @@ public class NativeFunction extends NativeObject {
      *            called, or null or undefined if no arguments should be provided to the function.
      * @return A invocation result of this function.
      */
-    public Object apply(Object context, Object[] parameters) {
-        return null;
+    public Object apply(T context, Object... parameters) {
+        try {
+            return method.invoke(this.context == null ? context : this.context, parameter(parameters));
+        } catch (Exception e) {
+            throw I.quiet(e);
+        }
+    }
+
+    /**
+     * <p>
+     * Create valid parameter list.
+     * </p>
+     * 
+     * @param parameters
+     * @return
+     */
+    private Object[] parameter(Object[] parameters) {
+        List list = new ArrayList(this.parameters);
+        list.addAll(Arrays.asList(parameters));
+
+        int size = method.getParameterTypes().length;
+
+        if (size < list.size()) {
+            list = list.subList(0, size);
+        }
+
+        if (list.size() < size) {
+            for (int i = list.size(); i < size; i++) {
+                list.add(null);
+            }
+        }
+
+        return list.toArray();
     }
 
     /**
@@ -71,8 +125,29 @@ public class NativeFunction extends NativeObject {
      *            constructed using the new operator.
      * @return A new function.
      */
-    public NativeFunction bind(Object context) {
-        return null;
+    public NativeFunction<T> bind(T context) {
+        return bind(context, new Object[0]);
+    }
+
+    /**
+     * <p>
+     * Creates a new function that, when called, has its this keyword set to the provided value,
+     * with a given sequence of arguments preceding any provided when the new function is called.
+     * </p>
+     * 
+     * @param context The value to be passed as the this parameter to the target function when the
+     *            bound function is called. The value is ignored if the bound function is
+     *            constructed using the new operator.
+     * @param parameter Arguments to prepend to arguments provided to the bound function when
+     *            invoking the target function.
+     * @return A new function.
+     */
+    public NativeFunction<T> bind(T context, Object... parameters) {
+        NativeFunction<T> function = new NativeFunction(type, method, context, this.parameters);
+        function.context = context;
+        function.parameters.addAll(Arrays.asList(parameters));
+
+        return function;
     }
 
     /**
@@ -83,7 +158,7 @@ public class NativeFunction extends NativeObject {
      * @param functional
      * @return
      */
-    public static NativeFunction by(Object functional) {
+    public static <T> NativeFunction<T> by(T functional) {
         return new NativeFunction(functional).bind(functional);
     }
 
@@ -95,7 +170,7 @@ public class NativeFunction extends NativeObject {
      * @param type
      * @return
      */
-    public static Method findFunction(Class type) {
+    public static Method findSAM(Class type) {
         List<Method> methods = new ArrayList();
 
         for (Method method : type.getDeclaredMethods()) {
@@ -146,7 +221,7 @@ public class NativeFunction extends NativeObject {
          * @param functional
          */
         public String NativeFunction(Object functional) {
-            return param(0) + "." + Javascript.computeMethodName(findFunction(type(0)));
+            return param(0) + "." + Javascript.computeMethodName(findSAM(type(0)));
         }
 
         /**
@@ -182,6 +257,24 @@ public class NativeFunction extends NativeObject {
          */
         public String bind(Object context) {
             return that + ".bind(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Creates a new function that, when called, has its this keyword set to the provided value,
+         * with a given sequence of arguments preceding any provided when the new function is
+         * called.
+         * </p>
+         * 
+         * @param context The value to be passed as the this parameter to the target function when
+         *            the bound function is called. The value is ignored if the bound function is
+         *            constructed using the new operator.
+         * @param parameter Arguments to prepend to arguments provided to the bound function when
+         *            invoking the target function.
+         * @return A new function.
+         */
+        public String bind(Object context, Object[] parameter) {
+            return that + ".bind(" + param(0) + "," + param(1) + ")";
         }
 
         /**
