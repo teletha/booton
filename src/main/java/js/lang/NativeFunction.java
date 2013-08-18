@@ -95,7 +95,7 @@ public class NativeFunction extends NativeObject {
      * @param type
      * @return
      */
-    private static Method findFunction(Class type) {
+    public static Method findFunction(Class type) {
         List<Method> methods = new ArrayList();
 
         for (Method method : type.getDeclaredMethods()) {

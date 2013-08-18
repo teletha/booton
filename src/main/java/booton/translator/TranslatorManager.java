@@ -53,7 +53,6 @@ class TranslatorManager {
     static {
         // built-in native class.
         builtIn(Object.class);
-        builtIn(Runnable.class);
     }
 
     /**

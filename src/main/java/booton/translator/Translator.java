@@ -292,7 +292,6 @@ public class Translator<T> implements Extensible {
             options = "";
         }
         return "new RegExp(" + getOperand(index) + ",\"" + options + "\")";
-
     }
 
     /**

@@ -51,7 +51,7 @@ import booton.translator.Node.TryCatchFinallyBlocks;
  * completely, garbage goto code will remain.
  * </p>
  * 
- * @version 2013/08/14 10:26:28
+ * @version 2013/08/18 17:02:49
  */
 class JavaMethodCompiler extends MethodVisitor {
 
@@ -1313,7 +1313,8 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         // write mode
-        boolean immediately = Type.getReturnType(desc) == Type.VOID_TYPE;
+        Class returnType = convert(Type.getReturnType(desc));
+        boolean immediately = returnType == void.class;
 
         // retrieve translator for this method owner
         Translator translator = TranslatorManager.getTranslator(owner);
@@ -1329,10 +1330,10 @@ class JavaMethodCompiler extends MethodVisitor {
             if (!methodName.equals("<init>")) {
                 if (owner == script.source) {
                     // private method invocation
-                    current.addOperand(translator.translateMethod(owner, methodName, desc, parameters, contexts));
+                    current.addOperand(translator.translateMethod(owner, methodName, desc, parameters, contexts), returnType);
                 } else {
                     // super method invocation
-                    current.addOperand(translator.translateSuperMethod(owner, methodName, desc, parameters, contexts));
+                    current.addOperand(translator.translateSuperMethod(owner, methodName, desc, parameters, contexts), returnType);
                 }
             } else {
                 // constructor
@@ -1351,10 +1352,10 @@ class JavaMethodCompiler extends MethodVisitor {
                         contexts.add(new OperandString(path));
 
                         current.addOperand(translator.translateConstructor(owner, "(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;)V", new Class[] {
-                                Class.class, Object.class, String.class}, contexts));
+                                Class.class, Object.class, String.class}, contexts), owner);
                     } else {
                         // instance initialization method invocation
-                        current.addOperand(translator.translateConstructor(owner, desc, parameters, contexts));
+                        current.addOperand(translator.translateConstructor(owner, desc, parameters, contexts), owner);
                     }
 
                     countInitialization--;
@@ -1363,7 +1364,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     immediately = false;
                 } else {
                     if (!className.equals("java/lang/Object")) {
-                        current.addOperand(translator.translateSuperMethod(owner, methodName, desc, parameters, contexts));
+                        current.addOperand(translator.translateSuperMethod(owner, methodName, desc, parameters, contexts), returnType);
                     }
                 }
             }
@@ -1375,7 +1376,7 @@ class JavaMethodCompiler extends MethodVisitor {
             contexts.add(0, current.remove(0));
 
             // translate
-            current.addOperand(translator.translateMethod(owner, methodName, desc, parameters, contexts));
+            current.addOperand(translator.translateMethod(owner, methodName, desc, parameters, contexts), returnType);
             break;
 
         case INVOKESTATIC: // static method call
@@ -1392,7 +1393,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 contexts.add(0, new OperandExpression(Javascript.computeClassName(owner)));
 
                 // translate
-                current.addOperand(translator.translateStaticMethod(owner, methodName, desc, parameters, contexts));
+                current.addOperand(translator.translateStaticMethod(owner, methodName, desc, parameters, contexts), returnType);
             }
             break;
         }

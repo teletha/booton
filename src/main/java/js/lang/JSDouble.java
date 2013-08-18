@@ -210,7 +210,7 @@ class JSDouble extends JSNumber {
      * @throws NumberFormatException if the string does not contain a parsable number.
      */
     public static Double valueOf(String value) throws NumberFormatException {
-        return valueOf(Global.parseFloat(value));
+        return valueOf(NativeGlobal.parseFloat(value));
     }
 
     /**

@@ -83,6 +83,17 @@ class Node {
     }
 
     /**
+     * <p>
+     * Helper method to add new operand to the top of operands stack.
+     * </p>
+     * 
+     * @param operand A new operand to add.
+     */
+    final void addOperand(Object operand, Class type) {
+        stack.add(new OperandExpression(operand, new InferredType(type)));
+    }
+
+    /**
      * @param operands
      */
     final void addExpression(Object... operands) {
