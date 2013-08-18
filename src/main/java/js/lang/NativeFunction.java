@@ -13,10 +13,11 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import booton.translator.Javascript;
 import booton.translator.Translator;
 
 /**
- * @version 2013/05/20 14:59:09
+ * @version 2013/08/18 13:06:42
  */
 public class NativeFunction extends NativeObject {
 
@@ -38,19 +39,7 @@ public class NativeFunction extends NativeObject {
      * @param functional
      */
     public NativeFunction(Object functional) {
-        Class type = functional.getClass();
-        List<Method> methods = new ArrayList();
-
-        for (Method method : type.getDeclaredMethods()) {
-            if (!method.isBridge() && !method.isSynthetic()) {
-                methods.add(method);
-            }
-        }
-
-        if (methods.size() != 1) {
-            throw new IllegalArgumentException(functional + " is not functional object.");
-        }
-        this.method = methods.get(0);
+        this.method = findFunction(functional.getClass());
     }
 
     /**
@@ -87,7 +76,64 @@ public class NativeFunction extends NativeObject {
     }
 
     /**
-     * @version 2013/05/20 14:59:20
+     * <p>
+     * Create the binded function form the specified object which has only one method.
+     * </p>
+     * 
+     * @param functional
+     * @return
+     */
+    public static NativeFunction by(Object functional) {
+        return new NativeFunction(functional).bind(functional);
+    }
+
+    /**
+     * <p>
+     * Find functional method from the specified {@link Class}.
+     * </p>
+     * 
+     * @param type
+     * @return
+     */
+    private static Method findFunction(Class type) {
+        List<Method> methods = new ArrayList();
+
+        for (Method method : type.getDeclaredMethods()) {
+            if (method.isBridge() || method.isSynthetic()) {
+                continue;
+            }
+
+            if (isObjectMethod(method)) {
+                continue;
+            }
+            methods.add(method);
+        }
+
+        if (methods.size() != 1) {
+            throw new IllegalArgumentException(type + " is not functional type.");
+        }
+        return methods.get(0);
+    }
+
+    /**
+     * <p>
+     * Check method signature.
+     * </p>
+     * 
+     * @param method
+     * @return
+     */
+    private static boolean isObjectMethod(Method method) {
+        try {
+            Object.class.getMethod(method.getName(), method.getParameterTypes());
+            return true;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+    }
+
+    /**
+     * @version 2013/08/18 13:06:39
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<NativeFunction> {
@@ -100,8 +146,7 @@ public class NativeFunction extends NativeObject {
          * @param functional
          */
         public String NativeFunction(Object functional) {
-            System.out.println(functional + "   @@");
-            return "func";
+            return param(0) + "." + Javascript.computeMethodName(findFunction(type(0)));
         }
 
         /**
@@ -137,6 +182,18 @@ public class NativeFunction extends NativeObject {
          */
         public String bind(Object context) {
             return that + ".bind(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Create the binded function form the specified object which has only one method.
+         * </p>
+         * 
+         * @param functional
+         * @return
+         */
+        public String by(Object functional) {
+            return NativeFunction(functional) + ".bind(" + param(0) + ")";
         }
     }
 }

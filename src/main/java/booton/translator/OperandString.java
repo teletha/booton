@@ -28,6 +28,14 @@ class OperandString extends Operand {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    InferredType infer() {
+        return new InferredType(String.class);
+    }
+
+    /**
      * @see booton.translator.Operand#toString()
      */
     @Override

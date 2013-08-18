@@ -17,11 +17,31 @@ class OperandExpression extends Operand {
     /** The actual string expression of this operand. */
     private Object expression;
 
+    /** The inferred type. */
+    private final InferredType type;
+
     /**
      * 
      */
     OperandExpression(Object expression) {
         this.expression = expression;
+        this.type = null;
+    }
+
+    /**
+     * 
+     */
+    OperandExpression(Object expression, InferredType type) {
+        this.expression = expression;
+        this.type = type;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    InferredType infer() {
+        return type;
     }
 
     /**

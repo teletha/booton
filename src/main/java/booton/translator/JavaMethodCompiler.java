@@ -240,6 +240,12 @@ class JavaMethodCompiler extends MethodVisitor {
         this.methodNameOriginal = original;
         this.returnType = Type.getReturnType(description);
         this.variables = new LocalVariables(isStatic);
+
+        Type[] parameters = Type.getArgumentTypes(description);
+
+        for (int i = 0; i < parameters.length; i++) {
+            variables.type(isStatic ? i : i + 1).set(convert(parameters[i]));
+        }
     }
 
     /**
@@ -1537,7 +1543,7 @@ class JavaMethodCompiler extends MethodVisitor {
         case FLOAD:
         case LLOAD:
         case DLOAD:
-            current.addOperand(variable);
+            current.addOperand(new OperandExpression(variable, variables.type(position)));
             break;
 
         case ASTORE:
@@ -1847,6 +1853,9 @@ class JavaMethodCompiler extends MethodVisitor {
         /** The ignorable variable index. */
         private final List<Integer> ignores = new ArrayList();
 
+        /** The local type mapping. */
+        private final Map<Integer, InferredType> types = new HashMap();
+
         /**
          * @param isStatic
          */
@@ -1914,6 +1923,24 @@ class JavaMethodCompiler extends MethodVisitor {
                 }
             }
             return names;
+        }
+
+        /**
+         * <p>
+         * Find {@link InferredType} for the specified position.
+         * </p>
+         * 
+         * @param position
+         * @return
+         */
+        private InferredType type(int position) {
+            InferredType type = types.get(position);
+
+            if (type == null) {
+                type = new InferredType();
+                types.put(position, type);
+            }
+            return type;
         }
     }
 }

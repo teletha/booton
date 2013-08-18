@@ -28,6 +28,14 @@ class OperandNumber extends Operand {
      * {@inheritDoc}
      */
     @Override
+    InferredType infer() {
+        return new InferredType(Number.class);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected Operand cast(Class type) {
         if (type == char.class) {
             return new OperandString(String.valueOf((char) value.intValue()));

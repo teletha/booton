@@ -106,6 +106,14 @@ class OperandCondition extends Operand {
      * {@inheritDoc}
      */
     @Override
+    InferredType infer() {
+        return new InferredType(boolean.class);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     Operand invert() {
         // invert each operands
         left.invert();

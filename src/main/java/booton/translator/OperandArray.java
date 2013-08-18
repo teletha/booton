@@ -9,6 +9,7 @@
  */
 package booton.translator;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -36,6 +37,14 @@ class OperandArray extends Operand {
     OperandArray(Operand size, boolean isPrimitive) {
         this.size = size.disclose();
         this.isPrimitive = isPrimitive;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    InferredType infer() {
+        return new InferredType(Array.class);
     }
 
     /**
