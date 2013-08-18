@@ -9,7 +9,7 @@
  */
 package jsx.application;
 
-import static js.lang.Global.*;
+import static js.lang.NativeGlobal.*;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;

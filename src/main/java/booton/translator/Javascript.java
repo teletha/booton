@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import js.lang.Global;
+import js.lang.NativeGlobal;
 import js.lang.NativeObject;
 import kiss.I;
 
@@ -72,7 +72,7 @@ public class Javascript {
     // initialization
     static {
         // Load Booton module
-        I.load(Global.class, false);
+        I.load(NativeGlobal.class, false);
 
         // Define Class class at first. It is ensured that Class definition is
         // assigned in 'boot.A' variable.

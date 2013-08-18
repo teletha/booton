@@ -9,7 +9,7 @@
  */
 package js.dom;
 
-import static js.lang.Global.*;
+import static js.lang.NativeGlobal.*;
 import booton.css.CSS;
 
 /**

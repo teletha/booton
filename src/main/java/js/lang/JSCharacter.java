@@ -79,7 +79,7 @@ class JSCharacter implements JavascriptNative {
          * }
          * </pre>
          */
-        return Global.isNumeric(ch);
+        return NativeGlobal.isNumeric(ch);
     }
 
     /**

@@ -360,18 +360,6 @@ function boot(global) {
       }
       // global[name] = Class;
     },
-
-    /**
-     * <p>
-     * Helper method for Runnable interface.
-     * </p>
-     * 
-     * @param {String} name A fully qualified class name of a class to define.
-     * @param {Object} properties A property definition.
-     */
-    functionalize: function(runnable) {
-      return runnable.run.bind(runnable);
-    },
     
     /**
      * <p>

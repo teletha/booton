@@ -9,7 +9,7 @@
  */
 package jsx.bwt;
 
-import static js.lang.Global.*;
+import static js.lang.NativeGlobal.*;
 import static jsx.bwt.UIAction.*;
 import js.dom.ClientRect;
 import js.dom.Element;

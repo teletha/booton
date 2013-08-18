@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 import js.lang.Function;
-import js.lang.Global;
+import js.lang.NativeGlobal;
 import js.lang.NativeObject;
 import booton.translator.JavaAPIProvider;
 
@@ -45,7 +45,7 @@ class JSProxy {
 
                     @SuppressWarnings("unused")
                     public Object evaluate() throws Throwable {
-                        return handler.invoke(proxy, method, Global.getArgumentArray());
+                        return handler.invoke(proxy, method, NativeGlobal.getArgumentArray());
                     }
                 });
             }

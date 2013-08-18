@@ -99,9 +99,9 @@ class JSLong extends JSNumber {
      * @throws NumberFormatException if the string does not contain a parsable {@code long}.
      */
     public static long parseLong(String value, int radix) throws NumberFormatException {
-        long parsed = Global.parseInt(value, radix);
+        long parsed = NativeGlobal.parseInt(value, radix);
 
-        if (Global.isNaN(parsed)) {
+        if (NativeGlobal.isNaN(parsed)) {
             throw new NumberFormatException(value + " is not a number.");
         }
         return parsed;
