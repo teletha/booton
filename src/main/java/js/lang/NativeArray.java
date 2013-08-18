@@ -10,7 +10,8 @@
 package js.lang;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ import booton.translator.Translator;
 /**
  * @version 2013/05/12 13:15:19
  */
-public class NativeArray<T> extends NativeObject implements Iterable<T> {
+public class NativeArray<T> extends NativeObject {
 
     /** The java emulation. */
     private final ArrayList<T> list = new ArrayList();
@@ -284,14 +285,6 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Iterator<T> iterator() {
-        return list.iterator();
-    }
-
-    /**
      * <p>
      * Create new {@link NativeArray} with copied elements.
      * </p>
@@ -334,7 +327,9 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
      *            of each element.
      * @return
      */
-    public NativeArray<T> sort(NativeFunction comparator) {
+    public NativeArray<T> sort(NativeFunction<? extends Comparator<? super T>> comparator) {
+        Collections.sort(list, comparator.type);
+
         return this;
     }
 
