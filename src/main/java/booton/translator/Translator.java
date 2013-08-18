@@ -270,6 +270,10 @@ public class Translator<T> implements Extensible {
         return regex(index, null);
     }
 
+    protected final Class type(int index) {
+        return getOperand(index).infer();
+    }
+
     /**
      * Helper method to write the specified parameter as Regular Expression literal.
      * 
