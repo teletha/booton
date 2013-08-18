@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.RandomAccess;
 
+import js.lang.Function;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
-import js.lang.NativeObject;
 import booton.translator.Debuggable;
 import booton.translator.JavaAPIProvider;
 
@@ -1076,7 +1076,33 @@ class Arrays {
      */
     @Debuggable
     public static <T> void sort(T[] a, Comparator<? super T> c) {
-        NativeArray array = (NativeArray) (Object) a;
-        array.sort(((NativeObject) c).getPropertyAs(NativeFunction.class, "compare").bind(c));
+        new NativeArray(a).sort(new NativeFunction(c).bind(c));
+
+        // NativeArray array = (NativeArray) (Object) a;
+        // array.sort(((NativeObject) c).getPropertyAs(NativeFunction.class, "compare").bind(c));
+    }
+
+    /**
+     * @version 2013/08/18 10:36:07
+     */
+    private static class Sorter implements Comparator, Function {
+
+        /** The actual sorter. */
+        private final Comparator comparator;
+
+        /**
+         * @param comparator
+         */
+        private Sorter(Comparator comparator) {
+            this.comparator = comparator;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int compare(Object o1, Object o2) {
+            return comparator.compare(o1, o2);
+        }
     }
 }

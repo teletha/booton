@@ -10,6 +10,8 @@
 package js.lang;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import booton.translator.Translator;
 
@@ -26,6 +28,29 @@ public class NativeFunction extends NativeObject {
      */
     public NativeFunction(Method method) {
         this.method = method;
+    }
+
+    /**
+     * <p>
+     * Create function statement form the specified object which has only one method.
+     * </p>
+     * 
+     * @param functional
+     */
+    public NativeFunction(Object functional) {
+        Class type = functional.getClass();
+        List<Method> methods = new ArrayList();
+
+        for (Method method : type.getDeclaredMethods()) {
+            if (!method.isBridge() && !method.isSynthetic()) {
+                methods.add(method);
+            }
+        }
+
+        if (methods.size() != 1) {
+            throw new IllegalArgumentException(functional + " is not functional object.");
+        }
+        this.method = methods.get(0);
     }
 
     /**
@@ -66,6 +91,18 @@ public class NativeFunction extends NativeObject {
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<NativeFunction> {
+
+        /**
+         * <p>
+         * Create function statement form the specified object which has only one method.
+         * </p>
+         * 
+         * @param functional
+         */
+        public String NativeFunction(Object functional) {
+            System.out.println(functional + "   @@");
+            return "func";
+        }
 
         /**
          * <p>
