@@ -52,4 +52,8 @@ abstract class Operand {
     Operand disclose() {
         return this;
     }
+
+    InferredType infer() {
+        return null;
+    }
 }

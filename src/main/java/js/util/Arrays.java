@@ -16,14 +16,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.RandomAccess;
 
-import js.lang.Function;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
-import booton.translator.Debuggable;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/05/30 20:40:36
+ * @version 2013/08/18 13:49:30
  */
 @JavaAPIProvider(java.util.Arrays.class)
 class Arrays {
@@ -1066,43 +1064,16 @@ class Arrays {
      * Complexity", in Proceedings of the Fourth Annual ACM-SIAM Symposium on Discrete Algorithms,
      * pp 467-474, January 1993.
      * 
-     * @param a the array to be sorted
-     * @param c the comparator to determine the order of the array. A {@code null} value indicates
-     *            that the elements' {@linkplain Comparable natural ordering} should be used.
+     * @param array the array to be sorted
+     * @param comparator the comparator to determine the order of the array. A {@code null} value
+     *            indicates that the elements' {@linkplain Comparable natural ordering} should be
+     *            used.
      * @throws ClassCastException if the array contains elements that are not <i>mutually
      *             comparable</i> using the specified comparator
      * @throws IllegalArgumentException (optional) if the comparator is found to violate the
      *             {@link Comparator} contract
      */
-    @Debuggable
-    public static <T> void sort(T[] a, Comparator<? super T> c) {
-        new NativeArray(a).sort(new NativeFunction(c).bind(c));
-
-        // NativeArray array = (NativeArray) (Object) a;
-        // array.sort(((NativeObject) c).getPropertyAs(NativeFunction.class, "compare").bind(c));
-    }
-
-    /**
-     * @version 2013/08/18 10:36:07
-     */
-    private static class Sorter implements Comparator, Function {
-
-        /** The actual sorter. */
-        private final Comparator comparator;
-
-        /**
-         * @param comparator
-         */
-        private Sorter(Comparator comparator) {
-            this.comparator = comparator;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public int compare(Object o1, Object o2) {
-            return comparator.compare(o1, o2);
-        }
+    public static <T> void sort(T[] array, Comparator<? super T> comparator) {
+        NativeArray.by(array).sort(NativeFunction.by(comparator));
     }
 }

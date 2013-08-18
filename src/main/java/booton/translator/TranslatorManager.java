@@ -14,7 +14,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +31,7 @@ import kiss.model.ClassUtil;
 import org.objectweb.asm.Type;
 
 /**
- * @version 2013/08/15 16:10:55
+ * @version 2013/08/18 13:37:11
  */
 class TranslatorManager {
 
@@ -54,7 +53,6 @@ class TranslatorManager {
     static {
         // built-in native class.
         builtIn(Object.class);
-        builtIn(Comparator.class);
         builtIn(Runnable.class);
     }
 

@@ -339,6 +339,18 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
     }
 
     /**
+     * <p>
+     * Shorthand method to create native array.
+     * </p>
+     * 
+     * @param array
+     * @return
+     */
+    public static <T> NativeArray<T> by(T[] array) {
+        return new NativeArray(array);
+    }
+
+    /**
      * @version 2013/05/01 19:40:46
      */
     @SuppressWarnings("unused")
@@ -595,6 +607,18 @@ public class NativeArray<T> extends NativeObject implements Iterable<T> {
          */
         public String sort(NativeFunction comparator) {
             return that + ".sort(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Shorthand method to create native array.
+         * </p>
+         * 
+         * @param array
+         * @return
+         */
+        public String by(T[] array) {
+            return param(0);
         }
     }
 }

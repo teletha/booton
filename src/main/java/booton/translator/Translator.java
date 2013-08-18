@@ -26,7 +26,7 @@ import org.objectweb.asm.Type;
  * Public {@link Translator} API.
  * </p>
  * 
- * @version 2013/08/16 23:54:25
+ * @version 2013/08/18 13:08:30
  */
 @Manageable(lifestyle = Singleton.class)
 public class Translator<T> implements Extensible {
@@ -253,7 +253,7 @@ public class Translator<T> implements Extensible {
     /**
      * Helper method to write the specified parameter as expression.
      * 
-     * @param index
+     * @param index A index of parameters.
      * @return
      */
     protected final String param(int index) {
@@ -263,15 +263,21 @@ public class Translator<T> implements Extensible {
     /**
      * Helper method to write the specified parameter as Regular Expression literal.
      * 
-     * @param index
+     * @param index A index of parameters.
      * @return
      */
     protected final String regex(int index) {
         return regex(index, null);
     }
 
+    /**
+     * Helper method to infer type of the specified parameter.
+     * 
+     * @param index A index of parameters.
+     * @return
+     */
     protected final Class type(int index) {
-        return getOperand(index).infer();
+        return getOperand(index).infer().type();
     }
 
     /**
