@@ -98,9 +98,9 @@ class JSInteger extends JSNumber {
      *                {@code int}.
      */
     public static int parseInt(String value, int radix) throws NumberFormatException {
-        int parsed = NativeGlobal.parseInt(value, radix);
+        int parsed = Global.parseInt(value, radix);
 
-        if (NativeGlobal.isNaN(parsed)) {
+        if (Global.isNaN(parsed)) {
             throw new NumberFormatException(value + " is not a number.");
         }
         return parsed;

@@ -9,7 +9,7 @@
  */
 package jsx.bwt;
 
-import static js.lang.NativeGlobal.*;
+import static js.lang.Global.*;
 import js.dom.Element;
 
 /**

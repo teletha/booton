@@ -9,7 +9,7 @@
  */
 package jsx.bwt.view;
 
-import static js.lang.NativeGlobal.*;
+import static js.lang.Global.*;
 
 import java.util.EventListener;
 

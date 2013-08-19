@@ -9,7 +9,7 @@
  */
 package teemowork;
 
-import static js.lang.NativeGlobal.*;
+import static js.lang.Global.*;
 import jsx.application.Application;
 import jsx.application.Header;
 import jsx.application.Header.Menu;
