@@ -419,9 +419,9 @@ function boot(global) {
      * Throw native error to build stack trace.
      * </p>
      */
-    error: function() {
+    error: function(a) {
       try {
-        Z;
+        a.a;
       } catch (e) {
         return e;
       }

@@ -11,6 +11,7 @@ package booton.translator;
 
 import static java.nio.charset.StandardCharsets.*;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -251,12 +252,14 @@ public class ScriptTester {
                 return null; // success
             } else {
                 // fail (AssertionError) or error
+                dumpCode(source);
 
                 // decode as Java's error and rethrow it
                 Source code = new Source(sourceName, Javascript.getScript(source).toString());
                 throw I.quiet(ClientStackTrace.decode((String) result, code));
             }
         } catch (ScriptException e) {
+            dumpCode(source);
             // script parse error (translation fails) or runtime error
             String script = e.getScriptSourceCode();
 
@@ -628,6 +631,21 @@ public class ScriptTester {
             }
         }
         throw new AssertionError("Class name is not found.");
+    }
+
+    /**
+     * <p>
+     * Helper method to dump code.
+     * </p>
+     * 
+     * @param source
+     */
+    private void dumpCode(Class source) {
+        try {
+            Files.write(I.locate("e:\\test.js"), Javascript.getScript(source).toString().getBytes());
+        } catch (IOException e) {
+            throw I.quiet(e);
+        }
     }
 
     /**

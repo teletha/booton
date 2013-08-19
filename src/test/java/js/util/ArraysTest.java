@@ -23,10 +23,21 @@ import booton.translator.ScriptRunner;
 public class ArraysTest {
 
     @Test
-    public void copyOf() throws Exception {
-        int[] values = {1, 2, 3, 4, 5};
-        int[] dest = Arrays.copyOfRange(values, 0, 3);
+    public void copyOfRange() throws Exception {
+        int[] values = {1, 2, 3, 4};
 
+        int[] dest = Arrays.copyOfRange(values, 0, 3);
         assert dest.length == 3;
+        assert dest[0] == 1;
+        assert dest[1] == 2;
+        assert dest[2] == 3;
+
+        dest = Arrays.copyOfRange(values, 0, 5);
+        assert dest.length == 5;
+        assert dest[0] == 1;
+        assert dest[1] == 2;
+        assert dest[2] == 3;
+        assert dest[3] == 4;
+        assert dest[4] == 0;
     }
 }

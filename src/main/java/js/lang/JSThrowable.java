@@ -190,7 +190,6 @@ class JSThrowable {
         } else if (error.getStackTrace().contains("@")) {
             // html unit
             pattern = Pattern.compile("(.+)?@(.+):(.+)");
-            start += 6;
             end--;
         } else {
             // blink

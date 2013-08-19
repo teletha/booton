@@ -278,7 +278,13 @@ public class Translator<T> implements Extensible {
      * @return
      */
     protected final Class type(int index) {
-        return getOperand(index).infer().type();
+        Class type = types[index];
+
+        if (type != Object.class) {
+            return type;
+        } else {
+            return getOperand(index).infer().type();
+        }
     }
 
     /**
@@ -287,7 +293,7 @@ public class Translator<T> implements Extensible {
      * @param index A index of parameters.
      * @return
      */
-    protected final String binded(int index) {
+    protected final String function(int index) {
         return "boot.bind(\"" + Javascript.computeMethodName(NativeFunction.findSAM(type(index))) + "\"," + param(index) + ")";
     }
 

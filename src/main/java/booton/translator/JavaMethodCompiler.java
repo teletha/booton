@@ -165,6 +165,9 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The method return type. */
     private final Type returnType;
 
+    /** The method return type. */
+    private final Type[] parameterTypes;
+
     /** The local variable manager. */
     private final LocalVariables variables;
 
@@ -239,9 +242,14 @@ class JavaMethodCompiler extends MethodVisitor {
         this.methodName = name;
         this.methodNameOriginal = original;
         this.returnType = Type.getReturnType(description);
+        this.parameterTypes = Type.getArgumentTypes(description);
         this.variables = new LocalVariables(isStatic);
 
         Type[] parameters = Type.getArgumentTypes(description);
+
+        if (!isStatic) {
+            variables.type(0).set(script.source);
+        }
 
         for (int i = 0; i < parameters.length; i++) {
             variables.type(isStatic ? i : i + 1).set(convert(parameters[i]));
@@ -281,13 +289,22 @@ class JavaMethodCompiler extends MethodVisitor {
         // ===============================================
         // Script Code
         // ===============================================
-        // write method declaration
-        code.mark();
-        code.append(methodName, ":", "function(", I.join(variables.names(), ","), "){");
-        nodes.get(0).write(code);
-        code.optimize();
-        code.append('}'); // method end
-        code.separator();
+        try {
+            // write method declaration
+            code.mark();
+            code.append(methodName, ":", "function(", I.join(variables.names(), ","), "){");
+            nodes.get(0).write(code);
+            code.optimize();
+            code.append('}'); // method end
+            code.separator();
+        } catch (Exception e) {
+            TranslationError error = new TranslationError(e);
+            error.write("Can't compile method because");
+            error.write(e.getMessage());
+            error.writeMethod(methodNameOriginal, returnType, parameterTypes);
+
+            throw error;
+        }
 
         if (debuggable) {
             System.out.println(code.toFragment());
