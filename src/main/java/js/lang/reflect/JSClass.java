@@ -63,7 +63,7 @@ class JSClass<T> extends JSAnnotatedElement {
      * @param clazz
      * @param metadata
      */
-    private JSClass(String name, NativeObject clazz, NativeObject metadata, Class superclass, String[] interfaces) {
+    protected JSClass(String name, NativeObject clazz, NativeObject metadata, Class superclass, String[] interfaces) {
         super(name, findAnnotations(metadata, "$", 1));
 
         this.clazz = clazz;
@@ -102,6 +102,30 @@ class JSClass<T> extends JSAnnotatedElement {
      */
     public int getModifiers() {
         return modifiers;
+    }
+
+    /**
+     * Returns the class loader for the class. Some implementations may use null to represent the
+     * bootstrap class loader. This method will return null in such implementations if this class
+     * was loaded by the bootstrap class loader.
+     * <p>
+     * If a security manager is present, and the caller's class loader is not null and the caller's
+     * class loader is not the same as or an ancestor of the class loader for the class whose class
+     * loader is requested, then this method calls the security manager's {@code checkPermission}
+     * method with a {@code RuntimePermission("getClassLoader")} permission to ensure it's ok to
+     * access the class loader for the class.
+     * <p>
+     * If this object represents a primitive type or void, null is returned.
+     * 
+     * @return the class loader that loaded the class or interface represented by this object.
+     * @throws SecurityException if a security manager exists and its {@code checkPermission} method
+     *             denies access to the class loader for the class.
+     * @see java.lang.ClassLoader
+     * @see SecurityManager#checkPermission
+     * @see java.lang.RuntimePermission
+     */
+    public ClassLoader getClassLoader() {
+        return null;
     }
 
     /**

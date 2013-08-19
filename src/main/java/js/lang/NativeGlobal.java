@@ -175,7 +175,9 @@ public class NativeGlobal {
      * 
      * @param timeoutId The ID of the timeout you wish to clear, as returned by setTimeout().
      */
-    public static native void clearTimeout(long timeoutId);
+    public static void clearTimeout(long timeoutId) {
+        manager.remove(timeoutId);
+    }
 
     /**
      * <p>
