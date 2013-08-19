@@ -548,7 +548,7 @@ public class Global {
          * @return A timeout id.
          */
         public String setTimeout(Runnable runnable, long delay) {
-            return "setTimeout(" + binded(0) + "," + param(1) + ")";
+            return "setTimeout(" + function(0) + "," + param(1) + ")";
         }
 
         /**

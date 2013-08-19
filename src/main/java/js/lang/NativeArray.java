@@ -64,9 +64,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A item at index.
      */
     public T get(int index) {
-        ensureSize(index + 1);
-
-        return list.get(index);
+        return (T) get(index, Object.class);
     }
 
     /**
@@ -78,9 +76,106 @@ public class NativeArray<T> extends NativeObject {
      * @return A item at index.
      */
     public int getAsInt(int index) {
+        return get(index, Integer.class).intValue();
+    }
+
+    /**
+     * <p>
+     * Retrieve the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
+     * @return A item at index.
+     */
+    public long getAsLong(int index) {
+        return get(index, Long.class).longValue();
+    }
+
+    /**
+     * <p>
+     * Retrieve the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
+     * @return A item at index.
+     */
+    public float getAsFloat(int index) {
+        return get(index, Float.class).floatValue();
+    }
+
+    /**
+     * <p>
+     * Retrieve the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
+     * @return A item at index.
+     */
+    public double getAsDouble(int index) {
+        return get(index, Double.class).doubleValue();
+    }
+
+    /**
+     * <p>
+     * Retrieve the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
+     * @return A item at index.
+     */
+    public boolean getAsBoolean(int index) {
+        return get(index, Boolean.class).booleanValue();
+    }
+
+    /**
+     * <p>
+     * Retrieve the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
+     * @return A item at index.
+     */
+    public short getAsShort(int index) {
+        return get(index, Short.class).shortValue();
+    }
+
+    /**
+     * <p>
+     * Retrieve the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
+     * @return A item at index.
+     */
+    public byte getAsByte(int index) {
+        return get(index, Byte.class).byteValue();
+    }
+
+    /**
+     * <p>
+     * Retrieve the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
+     * @return A item at index.
+     */
+    public char getAsChar(int index) {
+        return get(index, Character.class).charValue();
+    }
+
+    /**
+     * <p>
+     * Helper method to get value.
+     * </p>
+     * 
+     * @param index
+     * @param type
+     * @return
+     */
+    private <X> X get(int index, Class<X> type) {
         ensureSize(index + 1);
 
-        return ((Integer) list.get(index)).intValue();
+        return (X) list.get(index);
     }
 
     /**
@@ -382,6 +477,90 @@ public class NativeArray<T> extends NativeObject {
          * @return A item at index.
          */
         public String getAsInt(int index) {
+            return that + "[" + param(0) + "]";
+        }
+
+        /**
+         * <p>
+         * Retrieve the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @return A item at index.
+         */
+        public String getAsLong(int index) {
+            return that + "[" + param(0) + "]";
+        }
+
+        /**
+         * <p>
+         * Retrieve the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @return A item at index.
+         */
+        public String getAsFloat(int index) {
+            return that + "[" + param(0) + "]";
+        }
+
+        /**
+         * <p>
+         * Retrieve the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @return A item at index.
+         */
+        public String getAsDouble(int index) {
+            return that + "[" + param(0) + "]";
+        }
+
+        /**
+         * <p>
+         * Retrieve the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @return A item at index.
+         */
+        public String getAsBoolean(int index) {
+            return that + "[" + param(0) + "]";
+        }
+
+        /**
+         * <p>
+         * Retrieve the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @return A item at index.
+         */
+        public String getAsShort(int index) {
+            return that + "[" + param(0) + "]";
+        }
+
+        /**
+         * <p>
+         * Retrieve the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @return A item at index.
+         */
+        public String getAsByte(int index) {
+            return that + "[" + param(0) + "]";
+        }
+
+        /**
+         * <p>
+         * Retrieve the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @return A item at index.
+         */
+        public String getAsChar(int index) {
             return that + "[" + param(0) + "]";
         }
 

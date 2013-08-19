@@ -531,7 +531,7 @@ class Arrays {
             throw new IllegalArgumentException(from + " > " + to);
         }
 
-        // create newe array
+        // create new array
         T dest = (T) Array.newInstance(type.getComponentType(), length);
 
         // copy
