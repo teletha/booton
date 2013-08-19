@@ -12,7 +12,6 @@ package js.lang;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.Debuggable;
 import booton.translator.ScriptRunner;
 
 /**
@@ -28,26 +27,31 @@ public class NativeFunctionTest {
     @Test
     public void apply() throws Exception {
         NativeFunction<Character> say = new NativeFunction(ayase);
-        assert say.apply(ayase, new Object[] {"通報しますよ！"}).equals("あやせ「通報しますよ！」");
+        assert say.apply(ayase, "通報しますよ！").equals("あやせ「通報しますよ！」");
     }
 
     @Test
     public void context() throws Exception {
         NativeFunction<Character> say = new NativeFunction(ayase);
-        assert say.apply(kuroneko, new Object[] {"バカ言わないで頂戴"}).equals("黒猫「バカ言わないで頂戴」");
+        assert say.apply(kuroneko, "バカ言わないで頂戴").equals("黒猫「バカ言わないで頂戴」");
     }
 
     @Test
     public void bindContext() throws Exception {
         NativeFunction<Character> say = new NativeFunction(ayase).bind(kuroneko);
-        assert say.apply(ayase, new Object[] {"通報しますよ！"}).equals("黒猫「通報しますよ！」");
+        assert say.apply(ayase, "通報しますよ！").equals("黒猫「通報しますよ！」");
     }
 
     @Test
-    @Debuggable
     public void bindParameter() throws Exception {
-        NativeFunction<Character> say = new NativeFunction(ayase).bind(null, "ば、莫迦じゃないの");
-        assert say.apply(ayase, new Object[] {"通報しますよ！"}).equals("あやせ「ば、莫迦じゃないの」");
+        NativeFunction<Character> say = new NativeFunction(ayase).bind(ayase, "ば、バカじゃないの");
+        assert say.apply(ayase, "通報しますよ！").equals("あやせ「ば、バカじゃないの」");
+    }
+
+    @Test
+    public void bindBoth() throws Exception {
+        NativeFunction<Character> say = new NativeFunction(ayase).bind(kuroneko, "ば、バカじゃないの");
+        assert say.apply(ayase, "通報しますよ！").equals("黒猫「ば、バカじゃないの」");
     }
 
     /**
