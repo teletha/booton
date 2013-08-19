@@ -12,6 +12,10 @@ package js.lang.reflect;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import js.lang.Function;
 import js.lang.NativeGlobal;
@@ -19,10 +23,45 @@ import js.lang.NativeObject;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/05/19 13:58:34
+ * @version 2013/08/19 15:23:57
  */
 @JavaAPIProvider(Proxy.class)
 class JSProxy {
+
+    /** The class manager. */
+    private static final Map<Integer, Class> classes = new HashMap();
+
+    /**
+     * Returns the invocation handler for the specified proxy instance.
+     * 
+     * @param proxy the proxy instance to return the invocation handler for
+     * @return the invocation handler for the proxy instance
+     * @throws IllegalArgumentException if the argument is not a proxy instance
+     */
+    public static InvocationHandler getInvocationHandler(Object proxy) throws IllegalArgumentException {
+        if (!isProxyClass(proxy.getClass())) {
+            throw new IllegalArgumentException("not a proxy instance");
+        }
+        return ((ProxyBase) proxy).handler;
+    }
+
+    /**
+     * Returns true if and only if the specified class was dynamically generated to be a proxy class
+     * using the {@code getProxyClass} method or the {@code newProxyInstance} method.
+     * <p>
+     * The reliability of this method is important for the ability to use it to make security
+     * decisions, so its implementation should not just test if the class in question extends
+     * {@code Proxy}.
+     * 
+     * @param clazz the class to test
+     * @return {@code true} if the class is a proxy class and {@code false} otherwise
+     * @throws NullPointerException if {@code cl} is {@code null}
+     */
+    public static boolean isProxyClass(Class<?> clazz) {
+        Objects.requireNonNull(clazz);
+
+        return ProxyBase.class.isAssignableFrom(clazz);
+    }
 
     /**
      * <p>
@@ -37,7 +76,7 @@ class JSProxy {
      *         defined by the specified class loader and that implements the specified interfaces.
      */
     public static Object newProxyInstance(ClassLoader loader, Class<?>[] interfaces, final InvocationHandler handler) {
-        final NativeObject proxy = new NativeObject();
+        final NativeObject proxy = (NativeObject) (Object) new ProxyBase(handler);
 
         for (Class<?> interfaceType : interfaces) {
             for (final Method method : interfaceType.getMethods()) {
@@ -50,6 +89,61 @@ class JSProxy {
                 });
             }
         }
+
+        // create interfaces list
+        String[] names = new String[interfaces.length];
+
+        for (int i = 0; i < names.length; i++) {
+            names[i] = interfaces[i].getSimpleName();
+        }
+
+        // find proxy class
+        Integer hash = Math.abs(Arrays.hashCode(names));
+        Class clazz = classes.get(hash);
+
+        if (clazz == null) {
+            clazz = (Class) (Object) new ProxyClass(hash, names);
+            classes.put(hash, clazz);
+        }
+
+        NativeObject dummy = new NativeObject();
+        dummy.setProperty("$", clazz);
+        proxy.setProperty("$", dummy);
+
+        // API definition
         return proxy;
+    }
+
+    /**
+     * @version 2013/08/19 14:25:00
+     */
+    private static class ProxyBase {
+
+        /** The delegator. */
+        private final InvocationHandler handler;
+
+        /**
+         * @param handler
+         */
+        private ProxyBase(InvocationHandler handler) {
+            this.handler = handler;
+        }
+    }
+
+    /**
+     * @version 2013/08/19 14:33:20
+     */
+    private static class ProxyClass extends JSClass {
+
+        /**
+         * @param name
+         * @param clazz
+         * @param metadata
+         * @param superclass
+         * @param interfaces
+         */
+        private ProxyClass(int id, String[] interfaces) {
+            super("Proxy" + id, new NativeObject(), new NativeObject(), ProxyBase.class, interfaces);
+        }
     }
 }
