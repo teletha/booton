@@ -19,9 +19,12 @@ import booton.translator.Javascript;
 import booton.translator.Translator;
 
 /**
- * @version 2013/08/18 13:06:42
+ * @version 2013/08/19 12:58:02
  */
 public class NativeFunction<T> extends NativeObject {
+
+    /** The empty flag. */
+    private static final Object EMPTY = new Object();
 
     /** The single abstract method type. */
     final T type;
@@ -53,12 +56,24 @@ public class NativeFunction<T> extends NativeObject {
      * 
      * @param functional
      */
+    public NativeFunction(T functional, Method method) {
+        this(functional, method, null, null);
+    }
+
+    /**
+     * <p>
+     * Create function statement form the specified object which has only one method.
+     * </p>
+     * 
+     * @param functional
+     */
     private NativeFunction(T functional, Method method, T context, List parameters) {
         method.setAccessible(true);
 
         this.type = functional;
         this.method = method;
-        this.context = context;
+
+        setContext(context);
 
         if (parameters != null) {
             this.parameters.addAll(parameters);
@@ -81,7 +96,7 @@ public class NativeFunction<T> extends NativeObject {
      */
     public Object apply(T context, Object... parameters) {
         try {
-            return method.invoke(this.context == null ? context : this.context, parameter(parameters));
+            return method.invoke(this.context == EMPTY ? context : this.context, parameter(parameters));
         } catch (Exception e) {
             throw I.quiet(e);
         }
@@ -126,7 +141,10 @@ public class NativeFunction<T> extends NativeObject {
      * @return A new function.
      */
     public NativeFunction<T> bind(T context) {
-        return bind(context, new Object[0]);
+        NativeFunction<T> function = new NativeFunction(type, method, context, this.parameters);
+        function.setContext(context);
+
+        return function;
     }
 
     /**
@@ -142,24 +160,227 @@ public class NativeFunction<T> extends NativeObject {
      *            invoking the target function.
      * @return A new function.
      */
-    public NativeFunction<T> bind(T context, Object... parameters) {
+    public NativeFunction<T> bind(T context, Object p1) {
         NativeFunction<T> function = new NativeFunction(type, method, context, this.parameters);
-        function.context = context;
-        function.parameters.addAll(Arrays.asList(parameters));
+        function.setContext(context);
+        function.parameters.add(p1);
 
         return function;
     }
 
     /**
      * <p>
-     * Create the binded function form the specified object which has only one method.
+     * Creates a new function that, when called, has its this keyword set to the provided value,
+     * with a given sequence of arguments preceding any provided when the new function is called.
      * </p>
      * 
-     * @param functional
-     * @return
+     * @param context The value to be passed as the this parameter to the target function when the
+     *            bound function is called. The value is ignored if the bound function is
+     *            constructed using the new operator.
+     * @param parameter Arguments to prepend to arguments provided to the bound function when
+     *            invoking the target function.
+     * @return A new function.
      */
-    public static <T> NativeFunction<T> by(T functional) {
-        return new NativeFunction(functional).bind(functional);
+    public NativeFunction<T> bind(T context, Object p1, Object p2) {
+        NativeFunction<T> function = new NativeFunction(type, method, context, this.parameters);
+        function.setContext(context);
+        function.parameters.add(p1);
+        function.parameters.add(p2);
+
+        return function;
+    }
+
+    /**
+     * <p>
+     * Creates a new function that, when called, has its this keyword set to the provided value,
+     * with a given sequence of arguments preceding any provided when the new function is called.
+     * </p>
+     * 
+     * @param context The value to be passed as the this parameter to the target function when the
+     *            bound function is called. The value is ignored if the bound function is
+     *            constructed using the new operator.
+     * @param parameter Arguments to prepend to arguments provided to the bound function when
+     *            invoking the target function.
+     * @return A new function.
+     */
+    public NativeFunction<T> bind(T context, Object p1, Object p2, Object p3) {
+        NativeFunction<T> function = new NativeFunction(type, method, context, this.parameters);
+        function.setContext(context);
+        function.parameters.add(p1);
+        function.parameters.add(p2);
+        function.parameters.add(p3);
+
+        return function;
+    }
+
+    /**
+     * <p>
+     * Creates a new function that, when called, has its this keyword set to the provided value,
+     * with a given sequence of arguments preceding any provided when the new function is called.
+     * </p>
+     * 
+     * @param context The value to be passed as the this parameter to the target function when the
+     *            bound function is called. The value is ignored if the bound function is
+     *            constructed using the new operator.
+     * @param parameter Arguments to prepend to arguments provided to the bound function when
+     *            invoking the target function.
+     * @return A new function.
+     */
+    public NativeFunction<T> bind(T context, Object p1, Object p2, Object p3, Object p4) {
+        NativeFunction<T> function = new NativeFunction(type, method, context, this.parameters);
+        function.setContext(context);
+        function.parameters.add(p1);
+        function.parameters.add(p2);
+        function.parameters.add(p3);
+        function.parameters.add(p4);
+
+        return function;
+    }
+
+    /**
+     * <p>
+     * Creates a new function that, when called, has its this keyword set to the provided value,
+     * with a given sequence of arguments preceding any provided when the new function is called.
+     * </p>
+     * 
+     * @param context The value to be passed as the this parameter to the target function when the
+     *            bound function is called. The value is ignored if the bound function is
+     *            constructed using the new operator.
+     * @param parameter Arguments to prepend to arguments provided to the bound function when
+     *            invoking the target function.
+     * @return A new function.
+     */
+    public NativeFunction<T> bind(T context, Object p1, Object p2, Object p3, Object p4, Object p5) {
+        NativeFunction<T> function = new NativeFunction(type, method, context, this.parameters);
+        function.setContext(context);
+        function.parameters.add(p1);
+        function.parameters.add(p2);
+        function.parameters.add(p3);
+        function.parameters.add(p4);
+        function.parameters.add(p5);
+
+        return function;
+    }
+
+    /**
+     * <p>
+     * Creates a new function that, when called, has its this keyword set to the provided value,
+     * with a given sequence of arguments preceding any provided when the new function is called.
+     * </p>
+     * 
+     * @param context The value to be passed as the this parameter to the target function when the
+     *            bound function is called. The value is ignored if the bound function is
+     *            constructed using the new operator.
+     * @param parameter Arguments to prepend to arguments provided to the bound function when
+     *            invoking the target function.
+     * @return A new function.
+     */
+    public NativeFunction<T> bind(T context, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6) {
+        NativeFunction<T> function = new NativeFunction(type, method, context, this.parameters);
+        function.setContext(context);
+        function.parameters.add(p1);
+        function.parameters.add(p2);
+        function.parameters.add(p3);
+        function.parameters.add(p4);
+        function.parameters.add(p5);
+        function.parameters.add(p6);
+
+        return function;
+    }
+
+    /**
+     * <p>
+     * Creates a new function that, when called, has its this keyword set to the provided value,
+     * with a given sequence of arguments preceding any provided when the new function is called.
+     * </p>
+     * 
+     * @param context The value to be passed as the this parameter to the target function when the
+     *            bound function is called. The value is ignored if the bound function is
+     *            constructed using the new operator.
+     * @param parameter Arguments to prepend to arguments provided to the bound function when
+     *            invoking the target function.
+     * @return A new function.
+     */
+    public NativeFunction<T> bind(T context, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7) {
+        NativeFunction<T> function = new NativeFunction(type, method, context, this.parameters);
+        function.setContext(context);
+        function.parameters.add(p1);
+        function.parameters.add(p2);
+        function.parameters.add(p3);
+        function.parameters.add(p4);
+        function.parameters.add(p5);
+        function.parameters.add(p6);
+        function.parameters.add(p7);
+
+        return function;
+    }
+
+    /**
+     * <p>
+     * Creates a new function that, when called, has its this keyword set to the provided value,
+     * with a given sequence of arguments preceding any provided when the new function is called.
+     * </p>
+     * 
+     * @param context The value to be passed as the this parameter to the target function when the
+     *            bound function is called. The value is ignored if the bound function is
+     *            constructed using the new operator.
+     * @param parameter Arguments to prepend to arguments provided to the bound function when
+     *            invoking the target function.
+     * @return A new function.
+     */
+    public NativeFunction<T> bind(T context, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8) {
+        NativeFunction<T> function = new NativeFunction(type, method, context, this.parameters);
+        function.setContext(context);
+        function.parameters.add(p1);
+        function.parameters.add(p2);
+        function.parameters.add(p3);
+        function.parameters.add(p4);
+        function.parameters.add(p5);
+        function.parameters.add(p6);
+        function.parameters.add(p7);
+        function.parameters.add(p8);
+
+        return function;
+    }
+
+    /**
+     * <p>
+     * Creates a new function that, when called, has its this keyword set to the provided value,
+     * with a given sequence of arguments preceding any provided when the new function is called.
+     * </p>
+     * 
+     * @param context The value to be passed as the this parameter to the target function when the
+     *            bound function is called. The value is ignored if the bound function is
+     *            constructed using the new operator.
+     * @param parameter Arguments to prepend to arguments provided to the bound function when
+     *            invoking the target function.
+     * @return A new function.
+     */
+    public NativeFunction<T> bind(T context, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9) {
+        NativeFunction<T> function = new NativeFunction(type, method, context, this.parameters);
+        function.setContext(context);
+        function.parameters.add(p1);
+        function.parameters.add(p2);
+        function.parameters.add(p3);
+        function.parameters.add(p4);
+        function.parameters.add(p5);
+        function.parameters.add(p6);
+        function.parameters.add(p7);
+        function.parameters.add(p8);
+        function.parameters.add(p9);
+
+        return function;
+    }
+
+    /**
+     * <p>
+     * Helper method to set context object.
+     * </p>
+     * 
+     * @param context
+     */
+    private void setContext(T context) {
+        this.context = context == null ? (T) EMPTY : context;
     }
 
     /**
@@ -170,7 +391,7 @@ public class NativeFunction<T> extends NativeObject {
      * @param type
      * @return
      */
-    public static Method findSAM(Class type) {
+    private static Method findSAM(Class type) {
         List<Method> methods = new ArrayList();
 
         for (Method method : type.getDeclaredMethods()) {
@@ -208,7 +429,7 @@ public class NativeFunction<T> extends NativeObject {
     }
 
     /**
-     * @version 2013/08/18 13:06:39
+     * @version 2013/08/19 12:57:55
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<NativeFunction> {
@@ -273,20 +494,152 @@ public class NativeFunction<T> extends NativeObject {
          *            invoking the target function.
          * @return A new function.
          */
-        public String bind(Object context, Object[] parameter) {
+        public String bind(Object context, Object p1) {
             return that + ".bind(" + param(0) + "," + param(1) + ")";
         }
 
         /**
          * <p>
-         * Create the binded function form the specified object which has only one method.
+         * Creates a new function that, when called, has its this keyword set to the provided value,
+         * with a given sequence of arguments preceding any provided when the new function is
+         * called.
          * </p>
          * 
-         * @param functional
-         * @return
+         * @param context The value to be passed as the this parameter to the target function when
+         *            the bound function is called. The value is ignored if the bound function is
+         *            constructed using the new operator.
+         * @param parameter Arguments to prepend to arguments provided to the bound function when
+         *            invoking the target function.
+         * @return A new function.
          */
-        public String by(Object functional) {
-            return NativeFunction(functional) + ".bind(" + param(0) + ")";
+        public String bind(Object context, Object p1, Object p2) {
+            return that + ".bind(" + param(0) + "," + param(1) + "," + param(2) + ")";
+        }
+
+        /**
+         * <p>
+         * Creates a new function that, when called, has its this keyword set to the provided value,
+         * with a given sequence of arguments preceding any provided when the new function is
+         * called.
+         * </p>
+         * 
+         * @param context The value to be passed as the this parameter to the target function when
+         *            the bound function is called. The value is ignored if the bound function is
+         *            constructed using the new operator.
+         * @param parameter Arguments to prepend to arguments provided to the bound function when
+         *            invoking the target function.
+         * @return A new function.
+         */
+        public String bind(Object context, Object p1, Object p2, Object p3) {
+            return that + ".bind(" + param(0) + "," + param(1) + "," + param(2) + "," + param(3) + ")";
+        }
+
+        /**
+         * <p>
+         * Creates a new function that, when called, has its this keyword set to the provided value,
+         * with a given sequence of arguments preceding any provided when the new function is
+         * called.
+         * </p>
+         * 
+         * @param context The value to be passed as the this parameter to the target function when
+         *            the bound function is called. The value is ignored if the bound function is
+         *            constructed using the new operator.
+         * @param parameter Arguments to prepend to arguments provided to the bound function when
+         *            invoking the target function.
+         * @return A new function.
+         */
+        public String bind(Object context, Object p1, Object p2, Object p3, Object p4) {
+            return that + ".bind(" + param(0) + "," + param(1) + "," + param(2) + "," + param(3) + "," + param(4) + ")";
+        }
+
+        /**
+         * <p>
+         * Creates a new function that, when called, has its this keyword set to the provided value,
+         * with a given sequence of arguments preceding any provided when the new function is
+         * called.
+         * </p>
+         * 
+         * @param context The value to be passed as the this parameter to the target function when
+         *            the bound function is called. The value is ignored if the bound function is
+         *            constructed using the new operator.
+         * @param parameter Arguments to prepend to arguments provided to the bound function when
+         *            invoking the target function.
+         * @return A new function.
+         */
+        public String bind(Object context, Object p1, Object p2, Object p3, Object p4, Object p5) {
+            return that + ".bind(" + param(0) + "," + param(1) + "," + param(2) + "," + param(3) + "," + param(4) + "," + param(5) + ")";
+        }
+
+        /**
+         * <p>
+         * Creates a new function that, when called, has its this keyword set to the provided value,
+         * with a given sequence of arguments preceding any provided when the new function is
+         * called.
+         * </p>
+         * 
+         * @param context The value to be passed as the this parameter to the target function when
+         *            the bound function is called. The value is ignored if the bound function is
+         *            constructed using the new operator.
+         * @param parameter Arguments to prepend to arguments provided to the bound function when
+         *            invoking the target function.
+         * @return A new function.
+         */
+        public String bind(Object context, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6) {
+            return that + ".bind(" + param(0) + "," + param(1) + "," + param(2) + "," + param(3) + "," + param(4) + "," + param(5) + "," + param(6) + ")";
+        }
+
+        /**
+         * <p>
+         * Creates a new function that, when called, has its this keyword set to the provided value,
+         * with a given sequence of arguments preceding any provided when the new function is
+         * called.
+         * </p>
+         * 
+         * @param context The value to be passed as the this parameter to the target function when
+         *            the bound function is called. The value is ignored if the bound function is
+         *            constructed using the new operator.
+         * @param parameter Arguments to prepend to arguments provided to the bound function when
+         *            invoking the target function.
+         * @return A new function.
+         */
+        public String bind(Object context, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7) {
+            return that + ".bind(" + param(0) + "," + param(1) + "," + param(2) + "," + param(3) + "," + param(4) + "," + param(5) + "," + param(6) + "," + param(7) + ")";
+        }
+
+        /**
+         * <p>
+         * Creates a new function that, when called, has its this keyword set to the provided value,
+         * with a given sequence of arguments preceding any provided when the new function is
+         * called.
+         * </p>
+         * 
+         * @param context The value to be passed as the this parameter to the target function when
+         *            the bound function is called. The value is ignored if the bound function is
+         *            constructed using the new operator.
+         * @param parameter Arguments to prepend to arguments provided to the bound function when
+         *            invoking the target function.
+         * @return A new function.
+         */
+        public String bind(Object context, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8) {
+            return that + ".bind(" + param(0) + "," + param(1) + "," + param(2) + "," + param(3) + "," + param(4) + "," + param(5) + "," + param(6) + "," + param(7) + "," + param(8) + ")";
+        }
+
+        /**
+         * <p>
+         * Creates a new function that, when called, has its this keyword set to the provided value,
+         * with a given sequence of arguments preceding any provided when the new function is
+         * called.
+         * </p>
+         * 
+         * @param context The value to be passed as the this parameter to the target function when
+         *            the bound function is called. The value is ignored if the bound function is
+         *            constructed using the new operator.
+         * @param parameter Arguments to prepend to arguments provided to the bound function when
+         *            invoking the target function.
+         * @return A new function.
+         */
+        public String bind(Object context, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9) {
+            return that + ".bind(" + param(0) + "," + param(1) + "," + param(2) + "," + param(3) + "," + param(4) + "," + param(5) + "," + param(6) + "," + param(7) + "," + param(8) + "," + param(9) + ")";
         }
     }
 }

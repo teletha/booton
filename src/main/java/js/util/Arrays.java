@@ -1074,6 +1074,6 @@ class Arrays {
      *             {@link Comparator} contract
      */
     public static <T> void sort(T[] array, Comparator<? super T> comparator) {
-        NativeArray.by(array).sort(NativeFunction.by(comparator));
+        new NativeArray(array).sort(new NativeFunction(comparator).bind(comparator));
     }
 }

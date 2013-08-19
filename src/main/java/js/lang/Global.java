@@ -24,7 +24,7 @@ public class Global {
      * @return A timeout id.
      */
     public static long setTimeout(Runnable runnable, long delay) {
-        return NativeGlobal.setTimeout(NativeFunction.by(runnable), delay);
+        return NativeGlobal.setTimeout(new NativeFunction(runnable).bind(runnable), delay);
     }
 
     /**
