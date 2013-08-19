@@ -159,7 +159,7 @@ class JSString implements Comparable<String>, CharSequence {
      */
     public boolean endsWith(String suffix) {
         Objects.requireNonNull(suffix);
-        return startsWith(suffix, length() - suffix.length());
+        return indexOf(suffix, length() - suffix.length()) != -1;
     }
 
     /**

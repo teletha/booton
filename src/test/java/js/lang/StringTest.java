@@ -144,7 +144,8 @@ public class StringTest {
     @Test
     public void endsWith() {
         assert "abc".endsWith("bc");
-        assert !"abc".endsWith("zzz");
+        assert !"abc".endsWith("ab");
+        assert !"abc".endsWith("zzzz");
         assert "abc".endsWith("");
     }
 
