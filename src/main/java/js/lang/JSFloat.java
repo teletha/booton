@@ -41,7 +41,7 @@ class JSFloat extends JSNumber {
      *         otherwise.
      */
     public static boolean isInfinite(float value) {
-        return !NativeGlobal.isFinit(value);
+        return !Global.isFinit(value);
     }
 
     /**
@@ -52,7 +52,7 @@ class JSFloat extends JSNumber {
      * @return {@code true} if the argument is NaN; {@code false} otherwise.
      */
     public static boolean isNaN(float value) {
-        return NativeGlobal.isNaN(value);
+        return Global.isNaN(value);
     }
 
     /**
@@ -71,9 +71,9 @@ class JSFloat extends JSNumber {
             throw new NullPointerException();
         }
 
-        float parsed = NativeGlobal.parseFloat(value);
+        float parsed = Global.parseFloat(value);
 
-        if (NativeGlobal.isNaN(parsed)) {
+        if (Global.isNaN(parsed)) {
             throw new NumberFormatException(value + " is not a number.");
         }
         return parsed;

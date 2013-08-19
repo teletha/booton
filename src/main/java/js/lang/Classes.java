@@ -9,7 +9,7 @@
  */
 package js.lang;
 
-import static js.lang.NativeGlobal.*;
+import static js.lang.Global.*;
 
 import java.util.ArrayList;
 import java.util.List;

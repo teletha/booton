@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+import js.lang.NativeFunction;
 import kiss.Extensible;
 import kiss.Manageable;
 import kiss.Singleton;
@@ -278,6 +279,16 @@ public class Translator<T> implements Extensible {
      */
     protected final Class type(int index) {
         return getOperand(index).infer().type();
+    }
+
+    /**
+     * Helper method to create binded function of the specified parameter.
+     * 
+     * @param index A index of parameters.
+     * @return
+     */
+    protected final String binded(int index) {
+        return "boot.bind(\"" + Javascript.computeMethodName(NativeFunction.findSAM(type(index))) + "\"," + param(index) + ")";
     }
 
     /**

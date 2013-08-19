@@ -9,7 +9,7 @@
  */
 package jsx.application;
 
-import static js.lang.NativeGlobal.*;
+import static js.lang.Global.*;
 import js.dom.Element;
 import jsx.application.HeaderStyle.MenuLink;
 import jsx.application.HeaderStyle.SubMenu;

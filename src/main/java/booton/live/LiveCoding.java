@@ -9,7 +9,7 @@
  */
 package booton.live;
 
-import static js.lang.NativeGlobal.*;
+import static js.lang.Global.*;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.ArrayList;

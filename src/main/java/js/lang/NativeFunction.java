@@ -19,7 +19,7 @@ import booton.translator.Javascript;
 import booton.translator.Translator;
 
 /**
- * @version 2013/08/19 12:58:02
+ * @version 2013/08/19 16:39:08
  */
 public class NativeFunction<T> extends NativeObject {
 
@@ -391,7 +391,7 @@ public class NativeFunction<T> extends NativeObject {
      * @param type
      * @return
      */
-    private static Method findSAM(Class type) {
+    public static Method findSAM(Class type) {
         List<Method> methods = new ArrayList();
 
         for (Method method : type.getDeclaredMethods()) {

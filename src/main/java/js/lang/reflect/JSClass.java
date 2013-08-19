@@ -9,7 +9,7 @@
  */
 package js.lang.reflect;
 
-import static js.lang.NativeGlobal.*;
+import static js.lang.Global.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

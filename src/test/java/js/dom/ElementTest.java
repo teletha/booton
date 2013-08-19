@@ -9,7 +9,7 @@
  */
 package js.dom;
 
-import static js.lang.NativeGlobal.*;
+import static js.lang.Global.*;
 
 import org.junit.Test;
 

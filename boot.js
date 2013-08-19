@@ -268,12 +268,12 @@ function boot(global) {
           Object.defineProperty(Class, "$$", {
             value: new boot.A("[" + name, Object.prototype, {}, Object.$, {}, 0)
           });
-          
+
           return Class["$$"];
         }
       });
 
-      
+
       Object.defineProperty(Class, "toString", {
         value: function() {
           return "Class " + name;
@@ -292,15 +292,15 @@ function boot(global) {
     defineNative: function(names, properties, superclassName) {
       names.split(" ").forEach(function(name) {
         var clazz = global[name];
-      
+
         if (clazz) {
           define(clazz.prototype, properties);
-          
+
           if (superclassName) {
             define(clazz.prototype, boot[superclassName].prototype, true);
             define(clazz, boot[superclassName], true);
           }
-          
+
           if (properties._) {
           	properties._();
           }
@@ -321,20 +321,20 @@ function boot(global) {
 
       for (var i = 0; i < 4; ++i) {
         var def = global[prefix[i] + name];
-        
+
         if (def) {
           // use native implementation
           global[name] = def;
           return; 
         }
       }
-      
+
       // This is actual counstructor of class to define.
       function Class() {
         // Invoke the specified constructor function.
         this.$0.apply(this, arguments);
       }
-      
+
       // We must store static initialization function.
       var init;
 
@@ -360,7 +360,7 @@ function boot(global) {
       }
       // global[name] = Class;
     },
-    
+
     /**
      * <p>
      * Helper method to define property descriptor for Java environment.
@@ -376,7 +376,7 @@ function boot(global) {
 
       Object.defineProperty(object, name, descriptor);
     },
-    
+
     /**
      * <p>
      * Helper method to chech whether the specified value is String or not.
@@ -388,7 +388,7 @@ function boot(global) {
     isString: function(value) {
       return typeof value === "string" || value instanceof String;
     },
-    
+
     /**
      * <p>
      * Helper method to chech whether the specified value is Number or not.
@@ -398,9 +398,22 @@ function boot(global) {
      * @return {boolean} The result.
      */
     isNumeric: function(value) {
-		  return !isNaN(parseFloat(value)) && isFinite(value);
-	  },
-    
+	  return !isNaN(parseFloat(value)) && isFinite(value);
+	},
+
+	/**
+     * <p>
+     * Helper method to bind a context object of the specified function.
+     * </p>
+     *
+     * @param {String} functionName The property name of the target function.
+     * @param {Object} context The context value.
+     * @return {Function} The context binded function.
+     */
+    bind: function(functionName, context) {
+	  return context[functionName].bind(context);
+	},
+
     /**
      * <p>
      * Throw native error to build stack trace.

@@ -13,7 +13,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
-import js.lang.NativeGlobal;
+import js.lang.Global;
 import js.lang.NativeNumber;
 import js.lang.NativeObject;
 import jsx.model.Property;
@@ -78,7 +78,7 @@ public class Util {
      */
     public static <T> T read(Class<T> type, String json) {
         try {
-            return read(getInstance(type), NativeGlobal.JSON.parse(json));
+            return read(getInstance(type), Global.JSON.parse(json));
         } catch (Exception e) {
             throw new Error(e);
         }

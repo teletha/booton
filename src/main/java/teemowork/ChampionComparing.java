@@ -9,7 +9,7 @@
  */
 package teemowork;
 
-import static js.lang.NativeGlobal.*;
+import static js.lang.Global.*;
 import static teemowork.model.Status.*;
 
 import java.util.ArrayList;
