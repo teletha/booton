@@ -33,46 +33,6 @@ function boot(global) {
                    : Element.prototype.mozMatchesSelector ? Element.prototype.mozMatchesSelector
                    : Element.prototype.msMatchesSelector
   });
-
-
-  //====================================================================
-  // Array Extensions
-  //====================================================================
-  define(Array, {
-    /**
-     * <p>
-     * Create primitive array with the specified size. (all elements are initialized by 0)
-     * </p>
-     *
-     * @param {Number} size A initila size.
-     * @return {Array} A initialized array.
-     */
-    create: function(size) {
-      var array = [];
-    
-      for (var i = 0; i < size; i++) {
-        array[i] = 0;
-      }
-      return array;
-    },
-    
-    createTypedArray: function(type, size) {
-      var array = [];
-      
-      for (var i = 0; i < size; i++) {
-        array[i] = 0;
-      }
-      array.$ = type;
-      
-      return array;
-    }
-  });
-  
-  define(Array.prototype, {
-    getClass: function() {
-      return new boot.A("[" + this.$, {}, {}, Object, [], 0);
-    }
-  });
   
 
   //====================================================================
@@ -257,26 +217,7 @@ function boot(global) {
           Object.defineProperty(Class, "$", {
             value: new boot.A(name, prototype, annotation || {}, superclass.$, interfaces, 0)
           });
-          
           return Class["$"];
-        }
-      });
-      
-      Object.defineProperty(Class, "$$", {
-        configurable: true,
-        get: function() {
-          Object.defineProperty(Class, "$$", {
-            value: new boot.A("[" + name, Object.prototype, {}, Object.$, {}, 0)
-          });
-
-          return Class["$$"];
-        }
-      });
-
-
-      Object.defineProperty(Class, "toString", {
-        value: function() {
-          return "Class " + name;
         }
       });
     },
@@ -294,7 +235,7 @@ function boot(global) {
         var clazz = global[name];
 
         if (clazz) {
-          define(clazz.prototype, properties);
+          define(clazz.prototype, properties, true);
 
           if (superclassName) {
             define(clazz.prototype, boot[superclassName].prototype, true);
@@ -413,6 +354,37 @@ function boot(global) {
     bind: function(functionName, context) {
 	  return context[functionName].bind(context);
 	},
+
+    /**
+     * <p>
+     * Create primitive array with the specified size. (all elements are initialized by 0)
+     * </p>
+     *
+     * @param {Number} size A initila size.
+     * @return {Array} A initialized array.
+     */
+    array: function(elements, className) {
+      elements.$ = className;
+      return elements;
+    },
+    
+    /**
+     * <p>
+     * Create array with the specified size. (all elements are initialized by 0 or null)
+     * </p>
+     *
+     * @param {Number} size A initila size.
+     * @param {Object} initial A initial value.
+     * @return {Array} A initialized array.
+     */
+    initArray: function(size, initial) {
+	  var array = [];
+    
+      for (var i = 0; i < size; i++) {
+        array[i] = initial;
+      }
+      return array;
+    },
 
     /**
      * <p>

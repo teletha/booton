@@ -869,8 +869,49 @@ class JavaMethodCompiler extends MethodVisitor {
         // Opcodes.T_CHAR, Opcodes.T_FLOAT, Opcodes.T_DOUBLE, Opcodes.T_BYTE, Opcodes.T_SHORT,
         // Opcodes.T_INT or Opcodes.T_LONG.
         case NEWARRAY:
-            Javascript.require(int.class);
-            current.addOperand(new OperandArray(current.remove(0), true));
+            Class type = null;
+
+            switch (operand) {
+            case T_INT:
+                type = int[].class;
+                break;
+
+            case T_LONG:
+                type = long[].class;
+                break;
+
+            case T_FLOAT:
+                type = float[].class;
+                break;
+
+            case T_DOUBLE:
+                type = double[].class;
+                break;
+
+            case T_BOOLEAN:
+                type = boolean[].class;
+                break;
+
+            case T_BYTE:
+                type = byte[].class;
+                break;
+
+            case T_CHAR:
+                type = char[].class;
+                break;
+
+            case T_SHORT:
+                type = short[].class;
+                break;
+
+            default:
+                // If this exception will be thrown, it is bug of this program. So we must rethrow
+                // the wrapped error in here.
+                throw new Error();
+            }
+
+            Javascript.require(type);
+            current.addOperand(new OperandArray(current.remove(0), type, true));
             break;
         }
     }
@@ -1454,7 +1495,7 @@ class JavaMethodCompiler extends MethodVisitor {
         for (int i = 0; i < dimension - 1; i++) {
             current.remove(0);
         }
-        current.addOperand(new OperandArray(current.remove(0), false));
+        current.addOperand(new OperandArray(current.remove(0), convert(desc), false));
     }
 
     /**
@@ -1520,7 +1561,12 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case ANEWARRAY:
-            current.addOperand(new OperandArray(current.remove(0), false));
+            if (type.charAt(0) == '[') {
+                type = "[" + type;
+            } else {
+                type = "[L" + type + ";";
+            }
+            current.addOperand(new OperandArray(current.remove(0), convert(type), false));
             break;
 
         case CHECKCAST:
