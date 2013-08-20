@@ -20,7 +20,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/01/18 1:15:38
  */
 @JavaAPIProvider(AnnotatedElement.class)
-abstract class JSAnnotatedElement extends NativeObject {
+abstract class JSAnnotatedElement {
 
     /** The function name in runtime. */
     protected final String name;

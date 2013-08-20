@@ -54,6 +54,9 @@ class JSClass<T> extends JSAnnotatedElement {
     /** The cache for enum constants. */
     private Map<String, Enum> enumerationConstants;
 
+    /** The cache for array class. */
+    private JSClass arrayClass;
+
     /**
      * <p>
      * Create native class.
@@ -671,11 +674,31 @@ class JSClass<T> extends JSAnnotatedElement {
      * @return The Class object for the class with the specified name.
      */
     public static Class forName(String fqcn) {
+        int size = 0;
+
+        while (fqcn.startsWith("[")) {
+            size++;
+            fqcn = fqcn.substring(1);
+        }
+
         NativeObject definition = boot.getPropertyAs(NativeObject.class, fqcn);
 
         if (definition == null) {
             return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeObject(), Object.class, new String[] {});
         }
-        return (Class) definition.getProperty("$");
+
+        JSClass clazz = (JSClass) definition.getProperty("$");
+
+        for (int i = 0; i < size; i++) {
+            clazz = clazz.getArrayClass();
+        }
+        return (Class) (Object) clazz;
+    }
+
+    JSClass getArrayClass() {
+        if (arrayClass == null) {
+            arrayClass = new JSClass("[" + name, new NativeObject(), new NativeObject(), null, new String[0]);
+        }
+        return arrayClass;
     }
 }

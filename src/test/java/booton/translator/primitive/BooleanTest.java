@@ -73,4 +73,45 @@ public class BooleanTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void clazz() {
+        test(new Scriptable() {
+
+            Class act() {
+                return boolean.class;
+            }
+        });
+    }
+
+    @Test
+    public void classEquality() {
+        test(new Scriptable() {
+
+            boolean act() {
+                return boolean.class == boolean.class;
+            }
+        });
+    }
+
+    @Test
+    public void array() {
+        test(new Scriptable() {
+
+            Class act() {
+                return boolean[].class;
+            }
+        });
+    }
+
+    @Test
+    public void arrayClassEquality() {
+        test(new Scriptable() {
+
+            boolean act() {
+                boolean[] array = {};
+                return boolean[].class == array.getClass();
+            }
+        });
+    }
 }

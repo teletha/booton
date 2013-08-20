@@ -23,6 +23,12 @@ class OperandArray extends Operand {
     /** The flag whether this array is primitive or not. */
     private final boolean isPrimitive;
 
+    /** The array type. */
+    private final Class type;
+
+    /** The array dimmension depth. */
+    private final int dimmension;
+
     /** The list of item operands. */
     private final ArrayList<Operand> items = new ArrayList();
 
@@ -34,9 +40,18 @@ class OperandArray extends Operand {
      * @param size A initial size.
      * @param isPrimitive An array type.
      */
-    OperandArray(Operand size, boolean isPrimitive) {
+    OperandArray(Operand size, Class type, boolean isPrimitive) {
         this.size = size.disclose();
+        this.type = type;
         this.isPrimitive = isPrimitive;
+
+        int dimmension = 1;
+
+        while (type.isArray()) {
+            dimmension++;
+            type = type.getComponentType();
+        }
+        this.dimmension = dimmension;
     }
 
     /**
@@ -76,20 +91,17 @@ class OperandArray extends Operand {
 
         if (items.size() == 0) {
             // normal
+            builder.append("boot.initArray(").append(this.size).append(",");
+
             if (isPrimitive) {
-                // primitive
-                builder.append("Array.createTypedArray(\"")
-                        .append(Javascript.computeSimpleClassName(int.class))
-                        .append("\",")
-                        .append(this.size)
-                        .append(')');
+                builder.append("0");
             } else {
-                // Object
-                builder.append("new Array(").append(this.size).append(')');
+                builder.append("null");
             }
+            builder.append(")");
         } else {
             // syntax sugar
-            builder.append('[');
+            builder.append("[");
 
             String undefined = isPrimitive ? "0" : "null";
             int requiredSize = Integer.valueOf(this.size.toString()).intValue();
@@ -111,10 +123,10 @@ class OperandArray extends Operand {
                     builder.append(',');
                 }
             }
-            builder.append(']');
+            builder.append("]");
         }
 
         // API definition
-        return builder.toString();
+        return "boot.array(" + builder + ",\"" + Javascript.computeSimpleClassName(type) + "\")";
     }
 }

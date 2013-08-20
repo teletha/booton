@@ -189,6 +189,7 @@ public class Javascript {
         require(Class.class);
         require(Thread.class);
         require(JavascriptAPIProviders.findProvider("String"));
+        require(JavascriptAPIProviders.findProvider("Array"));
 
         if (requirements != null) {
             for (Class requirement : requirements) {
@@ -508,6 +509,42 @@ public class Javascript {
 
     /**
      * <p>
+     * Write method call.
+     * </p>
+     * 
+     * @param method
+     * @return
+     */
+    public static final String writeMethodCode(Class clazz, String name, Object... parameters) {
+        try {
+            Class[] types = new Class[parameters.length / 2];
+            String[] params = new String[parameters.length / 2];
+
+            for (int i = 0; i < parameters.length; i = i + 2) {
+                types[i] = (Class) parameters[i];
+                params[i] = (String) parameters[i + 1];
+            }
+
+            Class source = getScript(clazz).source;
+            Method method = source.getDeclaredMethod(name, types);
+
+            StringBuilder code = new StringBuilder();
+
+            if (Modifier.isStatic(method.getModifiers())) {
+                code.append(Javascript.computeClassName(source));
+            }
+            return code.append(Javascript.computeMethodName(method))
+                    .append('(')
+                    .append(I.join(Arrays.asList(params), ","))
+                    .append(')')
+                    .toString();
+        } catch (Exception e) {
+            throw I.quiet(e);
+        }
+    }
+
+    /**
+     * <p>
      * Require the specified java source code.
      * </p>
      * 
@@ -558,15 +595,20 @@ public class Javascript {
      * @return An identified class object for ECMAScript.
      */
     public static final String computeClass(Class clazz) {
-        String prefix = "";
+        int dimension = 0;
 
         while (clazz.isArray()) {
-            prefix += "[";
+            dimension++;
             clazz = clazz.getComponentType();
         }
 
-        if (prefix.length() != 0) {
-            return computeClassName(clazz) + ".$$";
+        if (dimension != 0) {
+            String type = computeClassName(clazz) + ".$";
+
+            for (int i = 0; i < dimension; i++) {
+                type = type + "." + writeMethodCode(Class.class, "getArrayClass");
+            }
+            return type;
         }
 
         if (clazz == Number.class) {
@@ -672,6 +714,10 @@ public class Javascript {
      * @return An identified class name for ECMAScript.
      */
     public static final String computeMethodName(Class owner, String name, String description) {
+        if (name.startsWith("$")) {
+            name = name.substring(1);
+        }
+
         if (TranslatorManager.isNativeMethod(owner, name, description)) {
             return name;
         }

@@ -204,6 +204,8 @@ public class ScriptTester {
         } catch (AssertionError e) {
             throw e; // rethrow assertion error
         } catch (Throwable e) {
+            dumpCode(source);
+
             TranslationError error = new TranslationError(e);
             error.write(e.getMessage());
             error.write(END, "Test Code :");
@@ -265,11 +267,17 @@ public class ScriptTester {
 
             if (script == null) {
                 // error in boot.js
-                Source code = new Source(sourceName, boot);
+                int number = e.getFailingLineNumber();
 
-                TranslationError error = new TranslationError(e);
-                error.write(code.findBlock(e.getFailingLineNumber()));
-                throw error;
+                if (number != -1) {
+                    Source code = new Source(sourceName, boot);
+
+                    TranslationError error = new TranslationError(e);
+                    error.write(code.findBlock(number));
+                    throw error;
+                } else {
+                    throw I.quiet(e);
+                }
             } else {
                 // error in test script
                 Source code = new Source(sourceName, Javascript.getScript(source).toString());
@@ -279,6 +287,7 @@ public class ScriptTester {
                 throw error;
             }
         } catch (Throwable e) {
+            dumpCode(source);
             throw I.quiet(e);
         }
     }

@@ -42,7 +42,7 @@ class JSArray {
      */
     public static Object newInstance(Class<?> componentType, int length) throws NegativeArraySizeException {
         NativeArray array = new NativeArray();
-        array.setProperty("$", componentType.getSimpleName());
+        array.setProperty("$", ((JSClass) (Object) componentType).getArrayClass().getSimpleName());
 
         for (int i = 0; i < length; i++) {
             array.set(i, componentType.isPrimitive() ? 0 : null);
