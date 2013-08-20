@@ -299,7 +299,6 @@ function boot(global) {
           prototype[i] = properties[i];
         }
       }
-      // global[name] = Class;
     },
 
     /**
@@ -339,10 +338,10 @@ function boot(global) {
      * @return {boolean} The result.
      */
     isNumeric: function(value) {
-	  return !isNaN(parseFloat(value)) && isFinite(value);
-	},
+	    return !isNaN(parseFloat(value)) && isFinite(value);
+	  },
 
-	/**
+	  /**
      * <p>
      * Helper method to bind a context object of the specified function.
      * </p>
@@ -352,8 +351,8 @@ function boot(global) {
      * @return {Function} The context binded function.
      */
     bind: function(functionName, context) {
-	  return context[functionName].bind(context);
-	},
+	    return context[functionName].bind(context);
+	  },
 
     /**
      * <p>
@@ -378,7 +377,7 @@ function boot(global) {
      * @return {Array} A initialized array.
      */
     initArray: function(size, initial) {
-	  var array = [];
+	    var array = [];
     
       for (var i = 0; i < size; i++) {
         array[i] = initial;

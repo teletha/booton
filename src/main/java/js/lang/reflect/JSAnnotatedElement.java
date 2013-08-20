@@ -114,13 +114,17 @@ abstract class JSAnnotatedElement {
      * @param metadata
      * @return
      */
-    protected static NativeArray findAnnotations(NativeObject metadata, String key, int index) {
+    protected static NativeArray findAnnotations(NativeObject metadata, String key, int index, String name) {
         NativeArray js = metadata.getPropertyAs(NativeArray.class, key);
 
         if (js == null) {
             js = new NativeArray();
         }
 
+        System.out.println("@@  " + name);
+        System.out.println(metadata);
+        System.out.println("@@");
+        System.out.println(js + " @  " + js.getProperty("slice") + "  " + key);
         return js.slice(index);
     }
 }

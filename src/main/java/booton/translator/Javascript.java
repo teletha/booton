@@ -188,6 +188,7 @@ public class Javascript {
         require(Object.class);
         require(Class.class);
         require(Thread.class);
+        require(JavascriptAPIProviders.findProvider("Object"));
         require(JavascriptAPIProviders.findProvider("String"));
         require(JavascriptAPIProviders.findProvider("Array"));
 

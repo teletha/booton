@@ -11,6 +11,7 @@ package booton.translator.reflection;
 
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
@@ -124,6 +125,7 @@ public class ClassTest extends ScriptTester {
     public void primitiveArrayClassLiteralIsSingleton1() throws Exception {
         test(new Scriptable() {
 
+            @Debuggable
             boolean act() throws Exception {
                 return short[].class == short[].class;
             }
