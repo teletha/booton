@@ -29,7 +29,6 @@ import booton.translator.JavaAPIProvider;
  * {@link Class} representation in Javascript runtime. This class doesn't provide all
  * functionalities.
  * </p>
- * /.
  * 
  * @version 2013/08/02 13:11:30
  */
@@ -67,7 +66,7 @@ class JSClass<T> extends JSAnnotatedElement {
      * @param metadata
      */
     protected JSClass(String name, NativeObject clazz, NativeObject metadata, Class superclass, String[] interfaces) {
-        super(name, findAnnotations(metadata, "$", 1));
+        super(name, findAnnotations(metadata, "$", 1, name));
 
         this.clazz = clazz;
         this.metadata = metadata;
@@ -681,13 +680,7 @@ class JSClass<T> extends JSAnnotatedElement {
             fqcn = fqcn.substring(1);
         }
 
-        NativeObject definition = boot.getPropertyAs(NativeObject.class, fqcn);
-
-        if (definition == null) {
-            return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeObject(), Object.class, new String[] {});
-        }
-
-        JSClass clazz = (JSClass) definition.getProperty("$");
+        JSClass clazz = (JSClass) boot.getPropertyAs(NativeObject.class, fqcn).getProperty("$");
 
         for (int i = 0; i < size; i++) {
             clazz = clazz.getArrayClass();
@@ -697,7 +690,8 @@ class JSClass<T> extends JSAnnotatedElement {
 
     JSClass getArrayClass() {
         if (arrayClass == null) {
-            arrayClass = new JSClass("[" + name, new NativeObject(), new NativeObject(), null, new String[0]);
+            System.out.println("crate array class");
+            arrayClass = new JSClass("[".concat(name), new NativeObject(), new NativeObject(), null, (String[]) (Object) new NativeArray());
         }
         return arrayClass;
     }

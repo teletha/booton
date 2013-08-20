@@ -18,23 +18,19 @@ import booton.translator.JavascriptAPIProvider;
 @JavascriptAPIProvider("Array")
 class NativeArrayExtension {
 
+    private Class type;
+
     public Class $getClass() {
-        Object object = ((NativeObject) (Object) this).getProperty("$");
-
-        if (object instanceof Class) {
-            return (Class) object;
-        } else {
+        if (type == null) {
             try {
-                Class clazz = Class.forName(object.toString());
-
-                ((NativeObject) (Object) this).setProperty("$", clazz);
-
-                return clazz;
+                System.out.println(((NativeObject) (Object) this).getProperty("$").toString());
+                type = Class.forName(((NativeObject) (Object) this).getProperty("$").toString());
             } catch (ClassNotFoundException e) {
                 // If this exception will be thrown, it is bug of this program. So we must rethrow
                 // the wrapped error in here.
                 throw new Error(e);
             }
         }
+        return type;
     }
 }

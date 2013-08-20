@@ -9,12 +9,11 @@
  */
 package js.lang;
 
-import booton.translator.JavaAPIProvider;
+import booton.translator.JavascriptAPIProvider;
 
 /**
- * @version 2013/07/31 2:34:36
+ * @version 2013/08/15 22:19:36
  */
-@JavaAPIProvider(Object.class)
-class JSObject {
-
+@JavascriptAPIProvider("Object")
+class NativeObjectExtension extends JSObject {
 }
