@@ -390,7 +390,11 @@ public class Javascript {
         String method = polyfill ? "Polyfill" : "Native";
 
         // Start class definition
-        code.append("boot.define" + method + "(\"").append(nativeClassName).append("\",{");
+        code.append("boot.define" + method + "(\"")
+                .append(computeSimpleClassName(source))
+                .append("\",\"")
+                .append(nativeClassName)
+                .append("\",{");
 
         try {
             new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);

@@ -31,7 +31,7 @@ import booton.translator.JavaAPIProvider;
  * functionalities.
  * </p>
  * 
- * @version 2013/08/02 13:11:30
+ * @version 2013/08/21 17:01:17
  */
 @JavaAPIProvider(Class.class)
 class JSClass<T> extends JSAnnotatedElement {
@@ -681,6 +681,20 @@ class JSClass<T> extends JSAnnotatedElement {
 
     /**
      * <p>
+     * Create {@link Class} for the array of this {@link Class}.
+     * </p>
+     * 
+     * @return
+     */
+    protected JSClass getArrayClass() {
+        if (arrayClass == null) {
+            arrayClass = new JSClass("[".concat(name), new NativeObject(), new NativeObject(), null, new String[0]);
+        }
+        return arrayClass;
+    }
+
+    /**
+     * <p>
      * Returns the Class object associated with the class or interface with the given string name.
      * </p>
      * 
@@ -695,18 +709,17 @@ class JSClass<T> extends JSAnnotatedElement {
             fqcn = fqcn.substring(1);
         }
 
-        JSClass clazz = (JSClass) boot.getPropertyAs(NativeObject.class, fqcn).getProperty("$");
+        NativeObject definition = boot.getPropertyAs(NativeObject.class, fqcn);
+
+        if (definition == null) {
+            return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeObject(), Object.class, new String[0]);
+        }
+
+        JSClass clazz = (JSClass) definition.getProperty("$");
 
         for (int i = 0; i < size; i++) {
             clazz = clazz.getArrayClass();
         }
         return (Class) (Object) clazz;
-    }
-
-    JSClass getArrayClass() {
-        if (arrayClass == null) {
-            arrayClass = new JSClass("[".concat(name), new NativeObject(), new NativeObject(), null, (String[]) (Object) new NativeArray());
-        }
-        return arrayClass;
     }
 }
