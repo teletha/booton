@@ -16,7 +16,6 @@ import java.lang.reflect.Proxy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.Debuggable;
 import booton.translator.ScriptRunner;
 
 /**
@@ -48,7 +47,6 @@ public class ProxyTest {
     };
 
     @Test
-    @Debuggable
     public void proxy() throws Exception {
         Machine machine = (Machine) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {Machine.class,
                 Bird.class}, proxy);

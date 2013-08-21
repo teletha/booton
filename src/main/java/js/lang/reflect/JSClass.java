@@ -202,7 +202,12 @@ class JSClass<T> extends JSAnnotatedElement {
             for (Method method : clazz.getDeclaredMethods()) {
                 methods.add(method);
             }
-            clazz = clazz.getSuperclass();
+
+            if (isInterface()) {
+                clazz = null;
+            } else {
+                clazz = clazz.getSuperclass();
+            }
         }
         return methods.toArray(new Method[methods.size()]);
     }
@@ -226,7 +231,6 @@ class JSClass<T> extends JSAnnotatedElement {
 
         // collect non-static methods only
         for (String name : metadata.keys()) {
-            System.out.println("@ " + name);
             int modifier = metadata.getPropertyAs(NativeArray.class, name).getAsInt(0);
             int ch = name.codePointAt(0);
 

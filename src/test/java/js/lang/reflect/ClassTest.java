@@ -22,6 +22,7 @@ import booton.translator.Scriptable;
 /**
  * @version 2013/08/02 22:51:26
  */
+@SuppressWarnings("unused")
 public class ClassTest extends ScriptTester {
 
     @Test
