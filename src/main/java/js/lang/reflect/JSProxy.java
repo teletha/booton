@@ -96,7 +96,6 @@ class JSProxy {
 
         for (Class<?> interfaceType : interfaces) {
             for (final Method method : interfaceType.getMethods()) {
-                System.out.println(method.getName());
                 proxy.setProperty(method.getName(), new Function() {
 
                     @SuppressWarnings("unused")
@@ -106,6 +105,10 @@ class JSProxy {
                 });
             }
         }
+
+        // NativeObject dummy = new NativeObject();
+        // dummy.setProperty("$", clazz);
+        // proxy.setProperty("$", dummy);
 
         // API definition
         return proxy;
@@ -132,7 +135,6 @@ class JSProxy {
 
         @SuppressWarnings("unused")
         public Class $getClass() {
-            System.out.println("from proxy");
             return type;
         }
     }
@@ -143,10 +145,7 @@ class JSProxy {
     private static class ProxyClass extends JSClass {
 
         /**
-         * @param name
-         * @param type
-         * @param metadata
-         * @param superclass
+         * @param id
          * @param interfaces
          */
         private ProxyClass(int id, String[] interfaces) {
