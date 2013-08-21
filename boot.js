@@ -66,6 +66,35 @@ function boot(global) {
   define(boot, {
     /**
      * <p>
+     * Define properties in javascript native object prototype.
+     * </p>
+     * 
+     * @param {String} names A fully qualified class name of a class to define.
+     * @param {Object} properties A property definition.
+     */
+    defineNative2: function(name, superclassName, interfaces, nativeClassNames, definition, annotation) {
+      boot.define(name, superclassName, interfaces, definition, annotation);
+      
+      nativeClassNames.split(" ").forEach(function(nativeClassName) {
+        var clazz = global[nativeClassName];
+
+        if (clazz) {
+          define(clazz.prototype, properties, true);
+
+          if (superclassName) {
+            define(clazz.prototype, boot[superclassName].prototype, true);
+            define(clazz, boot[superclassName], true);
+          }
+
+          if (properties._) {
+          	properties._();
+          }
+        }
+      });
+    },
+
+    /**
+     * <p>
      * Define class in booton core library namespace.
      * </p>
      * 
