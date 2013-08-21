@@ -23,7 +23,6 @@ class NativeArrayExtension {
     public Class $getClass() {
         if (type == null) {
             try {
-                System.out.println(((NativeObject) (Object) this).getProperty("$").toString());
                 type = Class.forName(((NativeObject) (Object) this).getProperty("$").toString());
             } catch (ClassNotFoundException e) {
                 // If this exception will be thrown, it is bug of this program. So we must rethrow

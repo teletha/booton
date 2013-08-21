@@ -120,11 +120,6 @@ abstract class JSAnnotatedElement {
         if (js == null) {
             js = new NativeArray();
         }
-
-        System.out.println("@@  " + name);
-        System.out.println(metadata);
-        System.out.println("@@");
-        System.out.println(js + " @  " + js.getProperty("slice") + "  " + key);
         return js.slice(index);
     }
 }

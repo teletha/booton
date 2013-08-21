@@ -14,6 +14,7 @@ import static js.lang.Global.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -225,6 +226,7 @@ class JSClass<T> extends JSAnnotatedElement {
 
         // collect non-static methods only
         for (String name : metadata.keys()) {
+            System.out.println("@ " + name);
             int modifier = metadata.getPropertyAs(NativeArray.class, name).getAsInt(0);
             int ch = name.codePointAt(0);
 
@@ -402,6 +404,15 @@ class JSClass<T> extends JSAnnotatedElement {
      */
     public boolean isArray() {
         return name.startsWith("[");
+    }
+
+    /**
+     * Determines if the specified {@code Class} object represents an interface type.
+     * 
+     * @return {@code true} if this object represents an interface; {@code false} otherwise.
+     */
+    public boolean isInterface() {
+        return Modifier.isInterface(modifiers);
     }
 
     /**
@@ -690,7 +701,6 @@ class JSClass<T> extends JSAnnotatedElement {
 
     JSClass getArrayClass() {
         if (arrayClass == null) {
-            System.out.println("crate array class");
             arrayClass = new JSClass("[".concat(name), new NativeObject(), new NativeObject(), null, (String[]) (Object) new NativeArray());
         }
         return arrayClass;

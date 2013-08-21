@@ -1585,7 +1585,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 Operand operand = current.remove(0);
                 current.addOperand("boot.isString(" + operand + ")");
             } else if (clazz.isInterface()) {
-                current.addOperand(Javascript.computeClass(clazz) + "." + Javascript.computeMethodName(assignable) + "(" + current.remove(0) + ".$.$)");
+                current.addOperand(Javascript.computeClass(clazz) + "." + Javascript.computeMethodName(assignable) + "(" + current.remove(0) + "." + Javascript.writeMethodCode(Object.class, "$getClass") + ")");
             } else {
                 current.addOperand(current.remove(0) + " instanceof " + Javascript.computeClassName(clazz));
             }
