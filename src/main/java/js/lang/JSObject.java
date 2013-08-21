@@ -10,10 +10,12 @@
 package js.lang;
 
 import booton.translator.JavaAPIProvider;
+import booton.translator.JavascriptAPIProvider;
 
 /**
  * @version 2013/08/21 9:32:59
  */
+@JavascriptAPIProvider("Object")
 @JavaAPIProvider(Object.class)
 class JSObject {
 

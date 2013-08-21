@@ -278,6 +278,7 @@ public class Javascript {
                 String nativeClass = provider.value().length() != 0 ? provider.value() : source.getSimpleName();
 
                 compileNative(code, provider.polyfill(), nativeClass, searchSuperClass(source));
+                compileClass(code, source.getSuperclass());
             } else if (source.isInterface()) {
                 compileInterface(code);
             } else {
