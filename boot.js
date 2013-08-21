@@ -81,7 +81,7 @@ function boot(global) {
       }
 
       // Default superclass is native Object class.
-      var superclass = superclassName === String ? String : superclassName.length === 0 ? Object : boot[superclassName];
+      var superclass = superclassName.length === 0 ? Object : boot[superclassName];
 
       // This is actual counstructor of class to define.
       function Class() {
@@ -181,7 +181,7 @@ function boot(global) {
      * @param {String} names A fully qualified class name of a class to define.
      * @param {Object} properties A property definition.
      */
-    defineNative: function(names, properties, superclassName) {
+    defineNative: function(bootonName, names, properties, superclassName) {
       names.split(" ").forEach(function(name) {
         var clazz = global[name];
 
