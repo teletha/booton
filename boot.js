@@ -7,7 +7,7 @@ function boot(global) {
   function define(object, properties, override) {
     if (object) {
       Object.keys(properties).forEach(function(name) {
-        if (!object[name] || override) {
+        if (name != "$" && (!object[name] || override)) {
           Object.defineProperty(object, name, {
             configurable: false,
             enumerable: false,
@@ -51,55 +51,6 @@ function boot(global) {
         listener.message(e.data);
       };
       return connection;
-    }
-  });
-
-  
-  //====================================================================
-  // Object Extensions
-  //====================================================================
-  // Global object identifier
-  var hashcode = 0;
-  
-  define(Object.prototype, {
-    /** The identifier for this object. */
-    $hashCode: undefined,
-  
-    /**
-     * Retrieve the object identifier.
-     *
-     * @return An identifier.
-     */
-    hashCode: function() {
-      return this.$hashCode !== undefined ? this.$hashCode : this.$hashCode = hashcode++;
-    },
-    
-    /**
-     * Test whether this object is equals to the specified object or not.
-     *
-     * @param other A test object.
-     * @return A result.
-     */
-    equals: function(other) {
-      return this == other;
-    },
-
-    /**
-     * Create object expression.
-     *
-     * @return A string expression.
-     */
-    toString: function() {
-      return this.constructor.name + "#" + this.hashCode();
-    },
-    
-    /**
-     * Retrieve the class object.
-     * 
-     * @return A Class object.
-     */
-    getClass: function() {
-      return this.$.$;
     }
   });
 

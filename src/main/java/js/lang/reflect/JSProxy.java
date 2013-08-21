@@ -76,20 +76,6 @@ class JSProxy {
      *         defined by the specified class loader and that implements the specified interfaces.
      */
     public static Object newProxyInstance(ClassLoader loader, Class<?>[] interfaces, final InvocationHandler handler) {
-        final NativeObject proxy = (NativeObject) (Object) new ProxyBase(handler);
-
-        for (Class<?> interfaceType : interfaces) {
-            for (final Method method : interfaceType.getMethods()) {
-                proxy.setProperty(method.getName(), new Function() {
-
-                    @SuppressWarnings("unused")
-                    public Object evaluate() throws Throwable {
-                        return handler.invoke(proxy, method, Global.getArgumentArray());
-                    }
-                });
-            }
-        }
-
         // create interfaces list
         String[] names = new String[interfaces.length];
 
@@ -106,9 +92,20 @@ class JSProxy {
             classes.put(hash, clazz);
         }
 
-        NativeObject dummy = new NativeObject();
-        dummy.setProperty("$", clazz);
-        proxy.setProperty("$", dummy);
+        final NativeObject proxy = (NativeObject) (Object) new ProxyBase(clazz, handler);
+
+        for (Class<?> interfaceType : interfaces) {
+            for (final Method method : interfaceType.getMethods()) {
+                System.out.println(method.getName());
+                proxy.setProperty(method.getName(), new Function() {
+
+                    @SuppressWarnings("unused")
+                    public Object evaluate() throws Throwable {
+                        return handler.invoke(proxy, method, Global.getArgumentArray());
+                    }
+                });
+            }
+        }
 
         // API definition
         return proxy;
@@ -119,14 +116,24 @@ class JSProxy {
      */
     private static class ProxyBase {
 
+        /** The type of this proxy. */
+        private final Class type;
+
         /** The delegator. */
         private final InvocationHandler handler;
 
         /**
          * @param handler
          */
-        private ProxyBase(InvocationHandler handler) {
+        private ProxyBase(Class type, InvocationHandler handler) {
+            this.type = type;
             this.handler = handler;
+        }
+
+        @SuppressWarnings("unused")
+        public Class $getClass() {
+            System.out.println("from proxy");
+            return type;
         }
     }
 
@@ -137,7 +144,7 @@ class JSProxy {
 
         /**
          * @param name
-         * @param clazz
+         * @param type
          * @param metadata
          * @param superclass
          * @param interfaces
