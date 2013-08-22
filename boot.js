@@ -4,10 +4,10 @@ function boot(global) {
   /**
    * Define user properties.
    */
-  function define(object, properties, override) {
+  function define(object, properties) {
     if (object) {
       Object.keys(properties).forEach(function(name) {
-        if (name != "$" && (!object[name] || override)) {
+        if (name != "$") {
           Object.defineProperty(object, name, {
             configurable: false,
             enumerable: false,
@@ -56,61 +56,28 @@ function boot(global) {
 
 
   //====================================================================
-  // ECMAScript6 Extensions
-  //====================================================================
-
-  
-  //====================================================================
-  // Booton Extensions
+  // Booton Core Library
   //====================================================================
   define(boot, {
-    /**
-     * <p>
-     * Define properties in javascript native object prototype.
-     * </p>
-     * 
-     * @param {String} names A fully qualified class name of a class to define.
-     * @param {Object} properties A property definition.
-     */
-    defineNative2: function(name, superclassName, interfaces, nativeClassNames, definition, annotation) {
-      boot.define(name, superclassName, interfaces, definition, annotation);
-      
-      nativeClassNames.split(" ").forEach(function(nativeClassName) {
-        var clazz = global[nativeClassName];
-
-        if (clazz) {
-          define(clazz.prototype, properties, true);
-
-          if (superclassName) {
-            define(clazz.prototype, boot[superclassName].prototype, true);
-            define(clazz, boot[superclassName], true);
-          }
-
-          if (properties._) {
-          	properties._();
-          }
-        }
-      });
-    },
-
     /**
      * <p>
      * Define class in booton core library namespace.
      * </p>
      * 
      * @param {String} name A simple class name of a class to define.
-     * @param {String} superclassName A simple parent class name.
+     * @param {String} superClassName A simple parent class name.
      * @param {Array}  interfaces A list of interface name.
      * @param {Object} definition A class definition.
      * @param {Object} annotation A annotation definition.
+     * @param {} nativeClasses
      */
-    define: function(name, superclassName, interfaces, definition, annotation) {
+    define: function(name, superClassName, interfaces, definition, annotation, nativeClasses) {
       if (boot[name]) {
         return; // avoid to redefine
       }
 
-      // Default superclass is native Object class.
-      var superclass = superclassName.length === 0 ? Object : boot[superclassName];
+      // Default superClass is native Object class.
+      var superClass = superClassName.length === 0 ? Object : boot[superClassName];
 
       // This is actual counstructor of class to define.
       function Class() {
@@ -132,8 +99,8 @@ function boot(global) {
       var init;
 
       // We must copy the properties over onto the new prototype.
-      // At first, from superclass definition.
-      var prototype = Class.prototype = Object.create(superclass.prototype);
+      // At first, from superClass definition.
+      var prototype = Class.prototype = Object.create(superClass.prototype);
 
       // Then, from user defined class definition.
       for (var i in definition) {
@@ -195,89 +162,29 @@ function boot(global) {
         configurable: true,
         get: function() {
           Object.defineProperty(Class, "$", {
-            value: new boot.A(name, prototype, annotation || {}, superclass.$, interfaces, 0)
+            value: new boot.A(name, prototype, annotation || {}, superClass.$, interfaces, 0)
           });
           return Class["$"];
         }
       });
-    },
+      
+      // Imports Java-defined methods for Native Class. (i.e. Window, Element, WebStorage etc...)
+      if (nativeClasses) {        
+        nativeClasses.split(" ").forEach(function(nativeClass) {
+          var clazz = global[nativeClass];
 
-    /**
-     * <p>
-     * Define properties in javascript native object prototype.
-     * </p>
-     * 
-     * @param {String} names A fully qualified class name of a class to define.
-     * @param {Object} properties A property definition.
-     */
-    defineNative: function(bootonName, names, properties, superclassName) {
-      names.split(" ").forEach(function(name) {
-        var clazz = global[name];
+          if (clazz) {
+            define(clazz.prototype, Class.prototype);
 
-        if (clazz) {
-          define(clazz.prototype, properties, true);
-
-          if (superclassName) {
-            define(clazz.prototype, boot[superclassName].prototype, true);
-            define(clazz, boot[superclassName], true);
+            // define function uses not "for-in loop" but "Object.keys" to enumerate properties,
+            // so Class.prototype property hides prototype chained properties.
+            // The class which has class-tree (i.e. Element <- Node) must also imports methods
+            // from super class.
+            if (superClass != Object) {
+              define(clazz.prototype, superClass.prototype);
+            }
           }
-
-          if (properties._) {
-          	properties._();
-          }
-        }
-      });
-    },
-
-    /**
-     * <p>
-     * Define properties in javascript native object prototype.
-     * </p>
-     * 
-     * @param {String} name A fully qualified class name of a class to define.
-     * @param {Object} properties A property definition.
-     */
-    definePolyfill: function(name, properties) {
-      var prefix = ["", "Moz", "Webkit", "MS"];
-
-      for (var i = 0; i < 4; ++i) {
-        var def = global[prefix[i] + name];
-
-        if (def) {
-          // use native implementation
-          global[name] = def;
-          return; 
-        }
-      }
-
-      // This is actual counstructor of class to define.
-      function Class() {
-        // Invoke the specified constructor function.
-        this.$0.apply(this, arguments);
-      }
-
-      // We must store static initialization function.
-      var init;
-
-      // We must copy the properties over onto the new prototype.
-      // At first, from superclass definition.
-      var prototype = Class.prototype = Object.create(Object.prototype);
-
-      // Then, from user defined class definition.
-      for (var i in properties) {
-        // static method
-        if (i.charAt(0) == "_") {
-          if (i.length == 1) {
-            // invoke static initializer
-            init = properties[i];
-          } else {
-            // define static method
-            Class[i.substring(1)] = properties[i];
-          }
-        } else {
-          // define member method
-          prototype[i] = properties[i];
-        }
+        });
       }
     },
 

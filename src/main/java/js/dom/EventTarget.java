@@ -23,7 +23,11 @@ import jsx.bwt.UIEvent;
 import booton.translator.JavascriptNative;
 
 /**
- * @version 2013/07/30 23:27:52
+ * <p>
+ * EventTarget is not common class in variaous platforms. (IE and Webkit doesn't have it.)
+ * </p>
+ * 
+ * @version 2013/08/22 15:56:25
  */
 public class EventTarget<T extends EventTarget<T>> implements JavascriptNative {
 
@@ -306,6 +310,17 @@ public class EventTarget<T extends EventTarget<T>> implements JavascriptNative {
      * @param listener The listener to be removed.
      */
     protected native void removeEventListener(String type, EventListener listener);
+
+    /**
+     * <p>
+     * Dispatches an Event at the specified EventTarget, invoking the affected EventListeners in the
+     * appropriate order. The normal event processing rules (including the capturing and optional
+     * bubbling phase) apply to events dispatched manually with dispatchEvent().
+     * </p>
+     * 
+     * @param event A Event object to be dispatched.
+     */
+    protected native void dispatchEvent(UIEvent event);
 
     /**
      * @version 2013/07/07 13:50:26

@@ -15,8 +15,8 @@ import booton.translator.JavascriptAPIProvider;
 /**
  * @version 2013/08/21 9:32:59
  */
-@JavascriptAPIProvider("Object")
 @JavaAPIProvider(Object.class)
+@JavascriptAPIProvider("Object")
 class JSObject {
 
     /** The global counter for hash. */

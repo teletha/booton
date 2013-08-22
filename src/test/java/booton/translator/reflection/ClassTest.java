@@ -11,7 +11,6 @@ package booton.translator.reflection;
 
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
@@ -157,7 +156,6 @@ public class ClassTest extends ScriptTester {
     public void object() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             Class act() throws Exception {
                 return Object.class;
             }
