@@ -205,12 +205,12 @@ public class Javascript {
             // Write bootstrap method if needed.
             output.append("try {");
             try {
-                output.append(writeCode(source.getMethod("jsmain"))).append(";");
+                output.append(writeCode(source, "jsmain")).append(";");
             } catch (Exception e) {
                 // ignore missing "jsmain" method
             }
             output.append("} catch(e) {");
-            output.append(writeCode(Thread.class, "handleUncaughtException", Object.class, "e")).append(";");
+            output.append(writeMethod(Thread.class, "handleUncaughtException", Object.class, "e")).append(";");
             output.append("}");
         } catch (Exception e) {
             throw I.quiet(e);
@@ -292,17 +292,13 @@ public class Javascript {
      * @param parent A parent class.
      */
     private void compileClass(ScriptWriter code, Class parent) {
-        if (source.isArray()) {
-            return;
-        }
-
         // compute related class names
         String className = Javascript.computeSimpleClassName(source);
-        String superClass = parent == null || parent == Object.class ? "" : computeSimpleClassName(parent);
+        String superClassName = parent == Object.class ? "" : computeSimpleClassName(parent);
 
         // write class definition
         code.comment(source + " " + computeSimpleClassName(source));
-        code.append("boot.define(").string(className).append(",").string(superClass).append(",", interfaces(), ",");
+        code.append("boot.define(").string(className).append(",").string(superClassName).append(",", interfaces(), ",");
 
         // write constructors, fields and methods
         try {
@@ -423,25 +419,6 @@ public class Javascript {
      * @param method
      * @return
      */
-    public static final String writeCode(Method method) {
-        String className = Javascript.computeClassName(method.getDeclaringClass());
-        String methodName = Javascript.computeMethodName(method);
-
-        if (Modifier.isStatic(method.getModifiers())) {
-            return className + "." + methodName + "()";
-        } else {
-            return "new " + className + "(0)." + methodName + "()";
-        }
-    }
-
-    /**
-     * <p>
-     * Write method call.
-     * </p>
-     * 
-     * @param method
-     * @return
-     */
     public static final String writeCode(Class clazz, String name, Object... parameters) {
         try {
             Class[] types = new Class[parameters.length / 2];
@@ -470,13 +447,15 @@ public class Javascript {
 
     /**
      * <p>
-     * Write method call.
+     * Write method calling code.
      * </p>
      * 
-     * @param method
+     * @param type A target class.
+     * @param name A target method name.
+     * @param parameters A parameter code.
      * @return
      */
-    public static final String writeMethodCode(Class clazz, String name, Object... parameters) {
+    public static final String writeMethod(Class type, String name, Object... parameters) {
         try {
             Class[] types = new Class[parameters.length / 2];
             String[] params = new String[parameters.length / 2];
@@ -486,19 +465,10 @@ public class Javascript {
                 params[i] = (String) parameters[i + 1];
             }
 
-            Class source = getScript(clazz).source;
+            Class source = getScript(type).source;
             Method method = source.getDeclaredMethod(name, types);
 
-            StringBuilder code = new StringBuilder();
-
-            if (Modifier.isStatic(method.getModifiers())) {
-                code.append(Javascript.computeClassName(source));
-            }
-            return code.append(Javascript.computeMethodName(method))
-                    .append('(')
-                    .append(I.join(Arrays.asList(params), ","))
-                    .append(')')
-                    .toString();
+            return (Modifier.isStatic(method.getModifiers()) ? computeClassName(source) + "." : "") + computeMethodName(method) + "(" + I.join(Arrays.asList(params), ",") + ")";
         } catch (Exception e) {
             throw I.quiet(e);
         }
@@ -529,7 +499,7 @@ public class Javascript {
         source = JavaAPIProviders.convert(source);
 
         // check Native Class
-        if (source == null || TranslatorManager.hasTranslator(source)) {
+        if (source == null || source.isArray() || TranslatorManager.hasTranslator(source)) {
             return null;
         }
 
@@ -567,7 +537,7 @@ public class Javascript {
             String type = computeClassName(clazz) + ".$";
 
             for (int i = 0; i < dimension; i++) {
-                type = type + "." + writeMethodCode(Class.class, "getArrayClass");
+                type = type + "." + writeMethod(Class.class, "getArrayClass");
             }
             return type;
         }

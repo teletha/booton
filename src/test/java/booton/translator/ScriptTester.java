@@ -244,8 +244,9 @@ public class ScriptTester {
             engine.execute(html, script.toString(), sourceName, 1);
 
             // write test script
-            String wraped = Javascript.writeCode(Throwable.class, "wrap", Object.class, "e");
-            String invoker = "try {" + Javascript.writeCode(source, method.getName()) + ";} catch(e) {" + Javascript.writeCode(ClientStackTrace.class, "encode", Throwable.class, wraped) + ";}";
+            String wraped = Javascript.writeMethod(Throwable.class, "wrap", Object.class, "e");
+            String encode = Javascript.writeMethod(ClientStackTrace.class, "encode", Throwable.class, wraped);
+            String invoker = "try {" + Javascript.writeCode(source, method.getName()) + ";} catch(e) {" + encode + ";}";
 
             // invoke test script
             Object result = engine.execute(html, invoker, sourceName, 1);
