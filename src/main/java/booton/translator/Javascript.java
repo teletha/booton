@@ -272,14 +272,7 @@ public class Javascript {
         if (code == null) {
             ScriptWriter code = new ScriptWriter();
 
-            JavascriptAPIProvider provider = source.getAnnotation(JavascriptAPIProvider.class);
-
-            if (provider != null) {
-                String nativeClass = provider.value().length() != 0 ? provider.value() : source.getSimpleName();
-
-                compileNative(code, provider.polyfill(), nativeClass, searchSuperClass(source));
-                compileClass(code, source.getSuperclass());
-            } else if (source.isInterface()) {
+            if (source.isInterface()) {
                 compileInterface(code);
             } else {
                 compileClass(code, source.getSuperclass());
@@ -330,8 +323,18 @@ public class Javascript {
         for (Annotation annotation : source.getAnnotations()) {
             require(annotation.annotationType());
         }
+
         // write metadata
         code.append(",").append(new JavaMetadataCompiler(this));
+
+        // write native class enhancement
+        JavascriptAPIProvider provider = source.getAnnotation(JavascriptAPIProvider.class);
+
+        if (provider != null) {
+            String nativeClasses = provider.value().length() != 0 ? provider.value() : source.getSimpleName();
+
+            code.append(",").string(nativeClasses);
+        }
 
         // End class definition
         code.append(");");
@@ -377,54 +380,6 @@ public class Javascript {
         // End class definition
         code.append(");");
         code.line();
-    }
-
-    /**
-     * <p>
-     * Compile java class for {@link JavascriptNative}.
-     * </p>
-     * 
-     * @param code
-     * @param nativeClassName A javascript native class name.
-     */
-    private void compileNative(ScriptWriter code, boolean polyfill, String nativeClassName, Class superClass) {
-        String method = polyfill ? "Polyfill" : "Native";
-
-        // Start class definition
-        code.append("boot.define" + method + "(\"")
-                .append(computeSimpleClassName(source))
-                .append("\",\"")
-                .append(nativeClassName)
-                .append("\",{");
-
-        try {
-            new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
-        } catch (IOException e) {
-            throw I.quiet(e);
-        }
-        code.append('}');
-
-        if (superClass != null) {
-            code.append(",\"").append(computeSimpleClassName(superClass)).append("\"");
-        }
-
-        // End class definition
-        code.append(");");
-    }
-
-    /**
-     * <p>
-     * Helper method to search the nearest non-native class.
-     * </p>
-     * 
-     * @param clazz
-     * @return
-     */
-    private Class searchSuperClass(Class clazz) {
-        while (clazz.isAnnotationPresent(JavascriptAPIProvider.class)) {
-            clazz = clazz.getSuperclass();
-        }
-        return clazz == Object.class ? null : clazz;
     }
 
     /**

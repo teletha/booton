@@ -17,11 +17,13 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import booton.translator.JavaAPIProvider;
+import booton.translator.JavascriptAPIProvider;
 
 /**
- * @version 2013/08/17 16:53:39
+ * @version 2013/08/22 9:36:04
  */
 @JavaAPIProvider(String.class)
+@JavascriptAPIProvider("String")
 class JSString implements Comparable<String>, CharSequence {
 
     /** The cache for hash. */

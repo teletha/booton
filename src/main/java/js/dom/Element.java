@@ -593,7 +593,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * <li>Return qualified name.</li>
      * </ol>
      */
-    @JavascriptNativeProperty
+    @JavascriptNativePropertyAccessor
     protected abstract String tagName();
 
     /**
