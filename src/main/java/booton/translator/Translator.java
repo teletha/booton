@@ -32,6 +32,8 @@ import org.objectweb.asm.Type;
 @Manageable(lifestyle = Singleton.class)
 public class Translator<T> implements Extensible {
 
+    private static final String AliasPrefix = "$";
+
     /** The quote literal. */
     protected static final String Q = "\"";
 
@@ -72,13 +74,6 @@ public class Translator<T> implements Extensible {
      * @return A translated expression.
      */
     String translateMethod(Class owner, String name, String description, Class[] types, List<Operand> context) {
-        if (name.equals("equals") && description.equals("(Ljava/lang/Object;)Z")) {
-            return context.get(0) + ".equals(" + context.get(1) + ")";
-        }
-
-        if (name.equals("hashCode") && description.equals("()I")) {
-            return context.get(0) + ".hashCode()";
-        }
         return search(name, description, types).write(context);
     }
 
@@ -186,6 +181,10 @@ public class Translator<T> implements Extensible {
 
         try {
             Method method = getClass().getMethod(methodName, parameterTypes);
+
+            if (method.getDeclaringClass() == Object.class) {
+                throw new NoSuchMethodException();
+            }
 
             // ===============================
             // Validation
@@ -468,12 +467,16 @@ public class Translator<T> implements Extensible {
      */
     private static class NativeWriter implements Writer {
 
+        /** The method owner. */
         private final Class owner;
 
+        /** The method name. */
         private final String name;
 
+        /** The method description. */
         private final String description;
 
+        /** The parameter types. */
         private final Class[] parameters;
 
         /**

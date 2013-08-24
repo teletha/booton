@@ -25,7 +25,7 @@ class OperandExpression extends Operand {
      */
     OperandExpression(Object expression) {
         this.expression = expression;
-        this.type = null;
+        this.type = new InferredType(Object.class);
     }
 
     /**

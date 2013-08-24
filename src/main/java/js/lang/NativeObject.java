@@ -302,6 +302,35 @@ public class NativeObject {
 
         /**
          * <p>
+         * Write property accessor.
+         * </p>
+         * 
+         * @param position
+         * @return
+         */
+        private String accessor(int position) {
+            String param = param(position);
+
+            if (type(position) != String.class) {
+                return "[" + param + "]";
+            }
+
+            int length = param.length();
+
+            if (param.charAt(0) != '"' || param.charAt(length - 1) != '"') {
+                return "[" + param + "]";
+            }
+
+            param = param.substring(1, length - 1);
+
+            if (Character.isDigit(param.charAt(0))) {
+                return "[" + param + "]";
+            }
+            return "." + param;
+        }
+
+        /**
+         * <p>
          * Retireve property by key.
          * </p>
          * 
@@ -321,7 +350,7 @@ public class NativeObject {
          * @return A property value.
          */
         public String getProperty(Object key) {
-            return that + "[" + param(0) + "]";
+            return that + accessor(0);
         }
 
         /**
@@ -334,7 +363,7 @@ public class NativeObject {
          * @return An associated value.
          */
         public String getPropertyAs(Class type, Object key) {
-            return that + "[" + param(1) + "]";
+            return that + accessor(1);
         }
 
         /**
@@ -347,7 +376,7 @@ public class NativeObject {
          * @return An associated value.
          */
         public String getPropertyAsInt(Object key) {
-            return that + "[" + param(0) + "]";
+            return that + accessor(1);
         }
 
         /**
@@ -373,7 +402,7 @@ public class NativeObject {
          * @return A value to set.
          */
         public String setProperty(Object key, int value) {
-            return that + "[" + param(0) + "]=" + param(1);
+            return that + accessor(0) + "=" + param(1);
         }
 
         /**
@@ -386,7 +415,7 @@ public class NativeObject {
          * @return A value to set.
          */
         public String setProperty(Object key, Object value) {
-            return that + "[" + param(0) + "]=" + param(1);
+            return that + accessor(0) + "=" + param(1);
         }
 
         /**
@@ -438,7 +467,7 @@ public class NativeObject {
          * @return A result.
          */
         public String deleteProperty(Object key) {
-            return "delete " + that + "[" + param(0) + "]";
+            return "delete " + that + accessor(0);
         }
 
         /**
