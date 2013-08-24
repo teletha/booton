@@ -10,63 +10,22 @@
 package js.lang;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import booton.translator.ScriptTester;
-import booton.translator.Scriptable;
+import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/04/17 3:16:19
+ * @version 2013/08/24 23:21:57
  */
-@SuppressWarnings("unused")
-public class BooleanTest extends ScriptTester {
+@RunWith(ScriptRunner.class)
+public class BooleanTest {
 
     @Test
-    public void parseTrue() throws Exception {
-        test(new Scriptable() {
-
-            boolean act() {
-                return Boolean.parseBoolean("true");
-            }
-        });
-    }
-
-    @Test
-    public void parseFalse() throws Exception {
-        test(new Scriptable() {
-
-            boolean act() {
-                return Boolean.parseBoolean("false");
-            }
-        });
-    }
-
-    @Test
-    public void parseSome() throws Exception {
-        test(new Scriptable() {
-
-            boolean act() {
-                return Boolean.parseBoolean("Some");
-            }
-        });
-    }
-
-    @Test
-    public void empty() throws Exception {
-        test(new Scriptable() {
-
-            boolean act() {
-                return Boolean.parseBoolean("");
-            }
-        });
-    }
-
-    @Test
-    public void Null() throws Exception {
-        test(new Scriptable() {
-
-            boolean act() {
-                return Boolean.parseBoolean(null);
-            }
-        });
+    public void parse() throws Exception {
+        assert Boolean.parseBoolean("true");
+        assert !Boolean.parseBoolean("false");
+        assert !Boolean.parseBoolean("Some");
+        assert !Boolean.parseBoolean("");
+        assert !Boolean.parseBoolean(null);
     }
 }

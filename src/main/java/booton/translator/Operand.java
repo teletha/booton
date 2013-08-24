@@ -16,7 +16,7 @@
 package booton.translator;
 
 /**
- * @version 2013/08/11 14:12:04
+ * @version 2013/08/23 23:35:09
  */
 abstract class Operand {
 
@@ -53,7 +53,12 @@ abstract class Operand {
         return this;
     }
 
-    InferredType infer() {
-        return null;
-    }
+    /**
+     * <p>
+     * Infer the type of this {@link Operand}.
+     * </p>
+     * 
+     * @return
+     */
+    abstract InferredType infer();
 }

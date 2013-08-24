@@ -205,12 +205,12 @@ public class Javascript {
             // Write bootstrap method if needed.
             output.append("try {");
             try {
-                output.append(writeCode(source, "jsmain")).append(";");
+                output.append(writeMethodCode(source, "jsmain")).append(";");
             } catch (Exception e) {
                 // ignore missing "jsmain" method
             }
             output.append("} catch(e) {");
-            output.append(writeMethod(Thread.class, "handleUncaughtException", Object.class, "e")).append(";");
+            output.append(writeMethodCode(Thread.class, "handleUncaughtException", Object.class, "e")).append(";");
             output.append("}");
         } catch (Exception e) {
             throw I.quiet(e);
@@ -413,49 +413,23 @@ public class Javascript {
 
     /**
      * <p>
-     * Write method call.
-     * </p>
-     * 
-     * @param method
-     * @return
-     */
-    public static final String writeCode(Class clazz, String name, Object... parameters) {
-        try {
-            Class[] types = new Class[parameters.length / 2];
-            String[] params = new String[parameters.length / 2];
-
-            for (int i = 0; i < parameters.length; i = i + 2) {
-                types[i] = (Class) parameters[i];
-                params[i] = (String) parameters[i + 1];
-            }
-
-            Class source = getScript(clazz).source;
-            Method method = source.getDeclaredMethod(name, types);
-
-            String className = Javascript.computeClassName(source);
-            String methodName = Javascript.computeMethodName(method);
-
-            if (Modifier.isStatic(method.getModifiers())) {
-                return className + "." + methodName + "(" + I.join(Arrays.asList(params), ",") + ")";
-            } else {
-                return "new " + className + "(0)." + methodName + "(" + I.join(Arrays.asList(params), ",") + ")";
-            }
-        } catch (Exception e) {
-            throw I.quiet(e);
-        }
-    }
-
-    /**
-     * <p>
      * Write method calling code.
      * </p>
      * 
      * @param type A target class.
      * @param name A target method name.
-     * @param parameters A parameter code.
+     * @param contextAndParameters A parameter code.
      * @return
      */
-    public static final String writeMethod(Class type, String name, Object... parameters) {
+    public static final String writeMethodCode(Class type, String name, Object... contextAndParameters) {
+        Object context = null;
+        Object[] parameters = contextAndParameters;
+
+        if (contextAndParameters.length % 2 == 1) {
+            context = contextAndParameters[0];
+            parameters = Arrays.copyOfRange(contextAndParameters, 1, contextAndParameters.length);
+        }
+
         try {
             Class[] types = new Class[parameters.length / 2];
             String[] params = new String[parameters.length / 2];
@@ -468,7 +442,16 @@ public class Javascript {
             Class source = getScript(type).source;
             Method method = source.getDeclaredMethod(name, types);
 
-            return (Modifier.isStatic(method.getModifiers()) ? computeClassName(source) + "." : "") + computeMethodName(method) + "(" + I.join(Arrays.asList(params), ",") + ")";
+            String code;
+
+            if (Modifier.isStatic(method.getModifiers())) {
+                code = computeClassName(source);
+            } else if (context == null) {
+                code = "new " + computeClassName(source) + "(0)";
+            } else {
+                code = context.toString();
+            }
+            return code + "." + computeMethodName(method) + "(" + I.join(Arrays.asList(params), ",") + ")";
         } catch (Exception e) {
             throw I.quiet(e);
         }
@@ -537,7 +520,7 @@ public class Javascript {
             String type = computeClassName(clazz) + ".$";
 
             for (int i = 0; i < dimension; i++) {
-                type = type + "." + writeMethod(Class.class, "getArrayClass");
+                type = writeMethodCode(Class.class, "getArrayClass", type);
             }
             return type;
         }

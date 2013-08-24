@@ -611,7 +611,7 @@ class Node {
             // =============================================================
             for (TryCatchFinally block : tries) {
                 buffer.write("}", "catch", "($)", "{");
-                buffer.write("$", "=", Javascript.writeMethod(Throwable.class, "wrap", Object.class, "$"), ";").line();
+                buffer.write("$", "=", Javascript.writeMethodCode(Throwable.class, "wrap", Object.class, "$"), ";").line();
 
                 for (int i = 0; i < block.catches.size(); i++) {
                     Catch current = block.catches.get(i);

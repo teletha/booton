@@ -10,75 +10,34 @@
 package js.lang;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import booton.translator.ScriptTester;
-import booton.translator.Scriptable;
+import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/04/17 3:16:19
+ * @version 2013/08/24 23:25:52
  */
-@SuppressWarnings("unused")
-public class ByteTest extends ScriptTester {
+@RunWith(ScriptRunner.class)
+public class ByteTest {
 
     @Test
     public void parse() throws Exception {
-        test(new Scriptable() {
-
-            byte act() {
-                return Byte.parseByte("1");
-            }
-        });
+        assert Byte.parseByte("1") == 1;
+        assert Byte.parseByte("-1") == -1;
     }
 
-    @Test
-    public void parseNegative() throws Exception {
-        test(new Scriptable() {
-
-            byte act() {
-                return Byte.parseByte("-1");
-            }
-        });
-    }
-
-    @Test
+    @Test(expected = NumberFormatException.class)
     public void parseNaN() throws Exception {
-        test(new Scriptable() {
-
-            byte act() {
-                try {
-                    return Byte.parseByte("Number");
-                } catch (NumberFormatException e) {
-                    return 10;
-                }
-            }
-        });
+        Byte.parseByte("Number");
     }
 
-    @Test
-    public void empty() throws Exception {
-        test(new Scriptable() {
-
-            byte act() {
-                try {
-                    return Byte.parseByte("");
-                } catch (NumberFormatException e) {
-                    return 10;
-                }
-            }
-        });
+    @Test(expected = NumberFormatException.class)
+    public void parseEmpty() throws Exception {
+        Byte.parseByte("");
     }
 
-    @Test
-    public void Null() throws Exception {
-        test(new Scriptable() {
-
-            byte act() {
-                try {
-                    return Byte.parseByte(null);
-                } catch (NumberFormatException e) {
-                    return 10;
-                }
-            }
-        });
+    @Test(expected = NumberFormatException.class)
+    public void parseNull() throws Exception {
+        Byte.parseByte(null);
     }
 }
