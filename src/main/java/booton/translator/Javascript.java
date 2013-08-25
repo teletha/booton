@@ -516,19 +516,14 @@ public class Javascript {
             clazz = clazz.getComponentType();
         }
 
-        if (dimension != 0) {
-            String type = computeClassName(clazz) + ".$";
+        String type = computeClassName(clazz) + ".$";
 
+        if (dimension != 0) {
             for (int i = 0; i < dimension; i++) {
                 type = writeMethodCode(Class.class, "getArrayClass", type);
             }
-            return type;
         }
-
-        if (clazz == Number.class) {
-            return "Number";
-        }
-        return computeClassName(clazz) + ".$";
+        return type;
     }
 
     /**
@@ -550,7 +545,6 @@ public class Javascript {
             }
             return name;
         }
-
         return "boot." + computeSimpleClassName(clazz);
     }
 
@@ -687,10 +681,7 @@ public class Javascript {
 
             Javascript js = getScript(owner);
 
-            // transient prefix
-            String prefix = Modifier.isTransient(field.getModifiers()) ? "$" : "";
-
-            return prefix + mung16(order(js.fields, fieldName.hashCode() + js.source.hashCode()));
+            return mung16(order(js.fields, fieldName.hashCode() + js.source.hashCode()));
         } catch (NoSuchFieldException e) {
             return computeFieldName(owner.getSuperclass(), fieldName);
         }

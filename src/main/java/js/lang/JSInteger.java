@@ -101,7 +101,7 @@ class JSInteger extends JSNumber {
         int parsed = Global.parseInt(value, radix);
 
         if (Global.isNaN(parsed)) {
-            throw new NumberFormatException(value + " is not a number.");
+            throw new NumberFormatException("The input value \"" + value + "\" is not a number.");
         }
         return parsed;
     }

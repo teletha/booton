@@ -29,6 +29,22 @@ class JSObject {
      * {@inheritDoc}
      */
     @Override
+    protected void finalize() throws Throwable {
+        // do nothing
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        throw new CloneNotSupportedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int hashCode() {
         if (hash == 0) {
             hash = ++counter;

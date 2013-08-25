@@ -80,7 +80,7 @@ public class Source {
      * 
      * @param lineNumber
      */
-    StackTraceElement search(int lineNumber) {
+    public StackTraceElement search(int lineNumber) {
         Pattern line = Pattern.compile("^\\s*\\/\\/\\s(\\d+)");
         String number = find(lineNumber - 1, line).group(1);
 

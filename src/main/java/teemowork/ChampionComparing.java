@@ -20,6 +20,7 @@ import java.util.List;
 import js.dom.DocumentFragment;
 import js.dom.Element;
 import js.dom.EventListener;
+import jsx.application.Application;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.UIAction;
@@ -43,7 +44,7 @@ import teemowork.model.Version;
  */
 public class ChampionComparing extends Page {
 
-    private static final Status[] STATUS = {Health, Mana, AD, AS, AR, MR, MS, Range};
+    private static final Status[] STATUS = {Health, Hreg, HregPerLv, Mana, AD, ADPerLv, AS, AR, MR, MS, Range};
 
     /** The champion list. */
     private List<Row> rows = new ArrayList();
@@ -54,7 +55,7 @@ public class ChampionComparing extends Page {
     /** The current sort key. */
     private Sorter sorter;
 
-    private ChampionGroup group = ChampionGroup.RANGED;
+    private ChampionGroup group = ChampionGroup.ALL;
 
     /**
      * 
@@ -86,11 +87,17 @@ public class ChampionComparing extends Page {
         body = table.child(Body.class);
 
         // create row
-        for (Champion champion : Champion.getAll()) {
+        for (final Champion champion : Champion.getAll()) {
             ChampionStatus status = champion.getStatus(Version.Latest);
 
             Element row = document.createElement("div").add(RowLine.class);
-            champion.applyIcon(row.child(Icon.class));
+            champion.applyIcon(row.child(Icon.class).on(UIAction.Click, new EventListener() {
+
+                @Override
+                public void handleEvent(UIEvent event) {
+                    Application.show(new ChampionDetail(champion));
+                }
+            }));
             row.child(Name.class).text(champion.name);
 
             for (Status value : STATUS) {

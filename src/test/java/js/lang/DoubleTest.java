@@ -10,33 +10,24 @@
 package js.lang;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import booton.translator.ScriptTester;
-import booton.translator.Scriptable;
+import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/04/15 22:48:15
+ * @version 2013/08/25 21:37:56
  */
-@SuppressWarnings("unused")
-public class DoubleTest extends ScriptTester {
+@RunWith(ScriptRunner.class)
+public class DoubleTest {
 
     @Test
     public void valueOf() throws Exception {
-        test(new Scriptable() {
-
-            double act() {
-                return Double.valueOf(0.1d).doubleValue();
-            }
-        });
+        assert Double.valueOf(0.1d).doubleValue() == 0.1;
+        assert Double.valueOf(0).doubleValue() == 0;
     }
 
     @Test
     public void valueOfString() throws Exception {
-        test(new Scriptable() {
-
-            double act() {
-                return Double.valueOf("0.1").doubleValue();
-            }
-        });
+        assert Double.valueOf("0.1").doubleValue() == 0.1;
     }
 }

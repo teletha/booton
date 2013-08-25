@@ -859,6 +859,14 @@ class JSString implements Comparable<String>, CharSequence {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return that.toString();
+    }
+
+    /**
      * Returns a copy of the string, with leading and trailing whitespace omitted.
      * <p>
      * If this <code>String</code> object represents an empty character sequence, or the first and

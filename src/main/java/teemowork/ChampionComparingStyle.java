@@ -81,6 +81,7 @@ class ChampionComparingStyle {
             box.size(size, px);
             border.radius(5, px).color(rgb(50, 50, 50)).width(1, px).solid();
             text.verticalAlign.middle();
+            cursor.pointer();
         }
     }
 

@@ -29,6 +29,7 @@ import java.util.Set;
 
 import kiss.I;
 import net.sourceforge.htmlunit.corejs.javascript.ConsString;
+import net.sourceforge.htmlunit.corejs.javascript.EcmaError;
 import net.sourceforge.htmlunit.corejs.javascript.EvaluatorException;
 import net.sourceforge.htmlunit.corejs.javascript.NativeArray;
 import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
@@ -265,30 +266,32 @@ public class ScriptTester {
             dumpCode(source);
             // script parse error (translation fails) or runtime error
             String script = e.getScriptSourceCode();
+            Source code = new Source(sourceName, Javascript.getScript(source).toString());
 
             if (script == null) {
-                // error in boot.js
-                int number = e.getFailingLineNumber();
+                Throwable cause = e.getCause();
 
-                if (number != -1) {
-                    Source code = new Source(sourceName, boot);
-
-                    TranslationError error = new TranslationError(e);
-                    error.write(code.findBlock(number));
-                    throw error;
+                if (cause instanceof EcmaError) {
+                    throw new ScriptRuntimeError(code, (EcmaError) cause);
                 } else {
-                    throw I.quiet(e);
+                    // error in boot.js
+                    int number = e.getFailingLineNumber();
+
+                    if (number != -1) {
+                        TranslationError error = new TranslationError(e);
+                        error.write(code.findBlock(number));
+                        throw error;
+                    } else {
+                        throw I.quiet(e);
+                    }
                 }
             } else {
                 // error in test script
-                Source code = new Source(sourceName, Javascript.getScript(source).toString());
-
                 TranslationError error = new TranslationError(e);
                 error.write(code.findBlock(e.getFailingLineNumber()));
                 throw error;
             }
         } catch (Throwable e) {
-            dumpCode(source);
             throw I.quiet(e);
         }
     }
@@ -551,7 +554,7 @@ public class ScriptTester {
                     js = Character.valueOf((char) (((Double) js).intValue() + 48));
                 }
                 if (js instanceof NativeObject) {
-                    js = NativeObject.callMethod((NativeObject) js, "toString", new Object[] {});
+                    js = NativeObject.callMethod((NativeObject) js, Javascript.computeMethodName(Object.class, "toString", "()Ljava/lang/String;"), new Object[] {});
                 }
                 assert ((Character) java).toString().equals(js.toString());
             } else if (Throwable.class.isAssignableFrom(type)) {
@@ -622,6 +625,10 @@ public class ScriptTester {
      * @param js
      */
     private void assertClass(Class clazz, Object js) {
+        if (js instanceof Undefined) {
+            throw new AssertionError("Java requires Class [" + clazz.getName() + "] object but JS returns undefined.");
+        }
+
         String prefix = "";
 
         while (clazz.isArray()) {
