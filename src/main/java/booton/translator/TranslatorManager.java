@@ -31,7 +31,7 @@ import kiss.model.ClassUtil;
 import org.objectweb.asm.Type;
 
 /**
- * @version 2013/08/18 13:37:11
+ * @version 2013/08/26 1:23:36
  */
 class TranslatorManager {
 
@@ -49,24 +49,6 @@ class TranslatorManager {
 
     /** The native accessor methods. */
     private static final Map<Integer, String> nativeAccessorMethodNames = new HashMap();
-
-    static {
-        // built-in native class.
-        builtIn(Object.class);
-    }
-
-    /**
-     * <p>
-     * Register the given class as native.
-     * </p>
-     * 
-     * @param type
-     */
-    private static void builtIn(Class type) {
-        for (Method method : type.getDeclaredMethods()) {
-            nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), Object.class);
-        }
-    }
 
     /**
      * <p>

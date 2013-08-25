@@ -12,17 +12,19 @@ package teemowork.model;
 import static teemowork.model.Champion.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
- * @version 2013/02/16 13:44:47
+ * @version 2013/08/25 17:10:19
  */
 public class ChampionGroup {
 
     /** The built-in group. */
-    public static final ChampionGroup RANGED = new ChampionGroup(new Champion[] {Ashe, Caitlyn, Corki, Draven, Ezreal,
-            Graves, Jayce, Kennen, KogMaw, MissFortune, Quinn, Sivir, Teemo, Thresh, Tristana, TwistedFate, Twitch,
-            Urgot, Varus, Vayne});
+    public static final ChampionGroup RANGED = new ChampionGroup(Ashe, Caitlyn, Corki, Draven, Ezreal, Graves, Jayce, Kennen, KogMaw, MissFortune, Quinn, Sivir, Teemo, Thresh, Tristana, TwistedFate, Twitch, Urgot, Varus, Vayne);
+
+    /** The built-in group. */
+    public static final ChampionGroup ALL = new ChampionGroup(Champion.getAll());
 
     /** The group members. */
     private final List<Champion> members = new ArrayList();
@@ -30,10 +32,17 @@ public class ChampionGroup {
     /**
      * @param members
      */
-    public ChampionGroup(Champion[] members) {
+    public ChampionGroup(List<Champion> members) {
         for (Champion champion : members) {
             this.members.add(champion);
         }
+    }
+
+    /**
+     * @param members
+     */
+    public ChampionGroup(Champion... members) {
+        this(Arrays.asList(members));
     }
 
     /**

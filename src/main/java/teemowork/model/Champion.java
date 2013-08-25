@@ -822,7 +822,7 @@ public class Champion {
                 .set(MS, 335);
         Gangplank.update(P0000)
                 .set(Health, 495, 81)
-                .set(Hreg, 425, 0.75)
+                .set(Hreg, 4.25, 0.75)
                 .set(Mana, 215, 40)
                 .set(Mreg, 6.5, 0.7)
                 .set(AD, 54, 3)
@@ -1051,7 +1051,7 @@ public class Champion {
                 .set(MS, 335);
         LeeSin.update(P0000)
                 .set(Health, 428, 85)
-                .set(Hreg, 6.25, 075)
+                .set(Hreg, 6.25, 0.7)
                 .set(Ereg, 200)
                 .set(Ereg, 50)
                 .set(AD, 55.8, 3.2)
@@ -1195,7 +1195,7 @@ public class Champion {
                 .set(MS, 335);
         Nami.update(P0000)
                 .set(Health, 365, 74)
-                .set(Hreg, 4.5, 055)
+                .set(Hreg, 4.5, 0.55)
                 .set(Mana, 305, 43)
                 .set(Mreg, 6.9, 0.6)
                 .set(AD, 48, 3.1)

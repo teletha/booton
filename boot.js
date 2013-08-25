@@ -72,10 +72,6 @@ function boot(global) {
      * @param {} nativeClasses
      */
     define: function(name, superClassName, interfaces, definition, annotation, nativeClasses) {
-      if (boot[name]) {
-        return; // avoid to redefine
-      }
-
       // Default superClass is native Object class.
       var superClass = superClassName.length === 0 ? Object : boot[superClassName];
 
@@ -169,7 +165,7 @@ function boot(global) {
       });
       
       // Imports Java-defined methods for Native Class. (i.e. Window, Element, WebStorage etc...)
-      if (nativeClasses) {        
+      if (nativeClasses) {
         nativeClasses.split(" ").forEach(function(nativeClass) {
           var clazz = global[nativeClass];
 

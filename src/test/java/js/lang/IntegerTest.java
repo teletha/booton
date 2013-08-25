@@ -10,75 +10,34 @@
 package js.lang;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import booton.translator.ScriptTester;
-import booton.translator.Scriptable;
+import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/04/14 0:03:00
+ * @version 2013/08/25 13:38:20
  */
-@SuppressWarnings("unused")
-public class IntegerTest extends ScriptTester {
+@RunWith(ScriptRunner.class)
+public class IntegerTest {
 
     @Test
     public void parse() throws Exception {
-        test(new Scriptable() {
-
-            int act() {
-                return Integer.parseInt("1");
-            }
-        });
+        assert Integer.parseInt("1") == 1;
+        assert Integer.parseInt("-1") == -1;
     }
 
-    @Test
-    public void parseNegative() throws Exception {
-        test(new Scriptable() {
-
-            int act() {
-                return Integer.parseInt("-1");
-            }
-        });
-    }
-
-    @Test
+    @Test(expected = NumberFormatException.class)
     public void parseNaN() throws Exception {
-        test(new Scriptable() {
-
-            int act() {
-                try {
-                    return Integer.parseInt("Number");
-                } catch (NumberFormatException e) {
-                    return 10;
-                }
-            }
-        });
+        Integer.parseInt("Number");
     }
 
-    @Test
-    public void empty() throws Exception {
-        test(new Scriptable() {
-
-            int act() {
-                try {
-                    return Integer.parseInt("");
-                } catch (NumberFormatException e) {
-                    return 10;
-                }
-            }
-        });
+    @Test(expected = NumberFormatException.class)
+    public void parseEmpty() throws Exception {
+        Integer.parseInt("");
     }
 
-    @Test
-    public void Null() throws Exception {
-        test(new Scriptable() {
-
-            int act() {
-                try {
-                    return Integer.parseInt(null);
-                } catch (NumberFormatException e) {
-                    return 10;
-                }
-            }
-        });
+    @Test(expected = NumberFormatException.class)
+    public void parseNull() throws Exception {
+        Integer.parseInt(null);
     }
 }
