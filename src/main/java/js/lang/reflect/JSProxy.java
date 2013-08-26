@@ -17,8 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import js.lang.Function;
 import js.lang.Global;
+import js.lang.NativeFunction;
 import js.lang.NativeObject;
 import booton.translator.JavaAPIProvider;
 
@@ -92,23 +92,14 @@ class JSProxy {
             classes.put(hash, clazz);
         }
 
-        final NativeObject proxy = (NativeObject) (Object) new ProxyBase(clazz, handler);
+        final ProxyBase proxy = new ProxyBase(clazz, handler);
 
         for (Class<?> interfaceType : interfaces) {
             for (final Method method : interfaceType.getMethods()) {
-                proxy.setProperty(method.getName(), new Function() {
-
-                    @SuppressWarnings("unused")
-                    public Object evaluate() throws Throwable {
-                        return handler.invoke(proxy, method, Global.getArgumentArray());
-                    }
-                });
+                ProxyFunction function = new ProxyFunction(proxy, method);
+                NativeObject.by(proxy).setProperty(method.getName(), new NativeFunction(function).bind(function));
             }
         }
-
-        // NativeObject dummy = new NativeObject();
-        // dummy.setProperty("$", clazz);
-        // proxy.setProperty("$", dummy);
 
         // API definition
         return proxy;
@@ -133,6 +124,24 @@ class JSProxy {
             this.handler = handler;
         }
 
+        /**
+         * Returns the runtime class of this {@code Object}. The returned {@code Class} object is
+         * the object that is locked by {@code static synchronized} methods of the represented
+         * class.
+         * <p>
+         * <b>The actual result type is {@code Class<? extends |X|>} where {@code |X|} is the
+         * erasure of the static type of the expression on which {@code getClass} is called.</b> For
+         * example, no cast is required in this code fragment:
+         * </p>
+         * <p>
+         * {@code Number n = 0;                             }<br>
+         * {@code Class<? extends Number> c = n.getClass(); }
+         * </p>
+         * 
+         * @return The {@code Class} object that represents the runtime class of this object.
+         * @see Class Literals, section 15.8.2 of <cite>The Java&trade; Language
+         *      Specification</cite>.
+         */
         @SuppressWarnings("unused")
         public Class $getClass() {
             return type;
@@ -150,6 +159,40 @@ class JSProxy {
          */
         private ProxyClass(int id, String[] interfaces) {
             super("Proxy" + id, new NativeObject(), new NativeObject(), ProxyBase.class, interfaces);
+        }
+    }
+
+    /**
+     * @version 2013/08/26 7:19:46
+     */
+    private static class ProxyFunction {
+
+        /** The context of invocation. */
+        private final ProxyBase context;
+
+        /** The method of invocation. */
+        private final Method method;
+
+        /**
+         * @param context
+         * @param method
+         */
+        private ProxyFunction(ProxyBase context, Method method) {
+            this.context = context;
+            this.method = method;
+        }
+
+        /**
+         * <p>
+         * Bridge method to {@link InvocationHandler}.
+         * </p>
+         * 
+         * @return
+         * @throws Throwable
+         */
+        @SuppressWarnings("unused")
+        public Object invoke() throws Throwable {
+            return context.handler.invoke(context, method, Global.getArgumentArray());
         }
     }
 }

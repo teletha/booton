@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kiss.I;
+import booton.translator.JavaAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.Translator;
 
@@ -32,7 +33,7 @@ public class NativeObject {
      * @param key A property key.
      * @return An associated value.
      */
-    public Object getProperty(int key) {
+    public final Object getProperty(int key) {
         return container.get(literal(key));
     }
 
@@ -44,7 +45,7 @@ public class NativeObject {
      * @param key A property key.
      * @return An associated value.
      */
-    public Object getProperty(Object key) {
+    public final Object getProperty(Object key) {
         return container.get(literal(key));
     }
 
@@ -57,7 +58,7 @@ public class NativeObject {
      * @param key A property key.
      * @return An associated value.
      */
-    public <A> A getPropertyAs(Class<A> type, Object key) {
+    public final <A> A getPropertyAs(Class<A> type, Object key) {
         return (A) container.get(literal(key));
     }
 
@@ -69,7 +70,7 @@ public class NativeObject {
      * @param key A property key.
      * @return An associated value.
      */
-    public int getPropertyAsInt(Object key) {
+    public final int getPropertyAsInt(Object key) {
         return (int) container.get(literal(key));
     }
 
@@ -82,7 +83,7 @@ public class NativeObject {
      * @param value A value to set.
      * @return A newly associated value.
      */
-    public Object setProperty(int key, Object value) {
+    public final Object setProperty(int key, Object value) {
         container.put(literal(key), value);
 
         return value;
@@ -97,7 +98,7 @@ public class NativeObject {
      * @param value A value to set.
      * @return A newly associated value.
      */
-    public Object setProperty(Object key, int value) {
+    public final Object setProperty(Object key, int value) {
         container.put(literal(key), value);
 
         return value;
@@ -112,7 +113,7 @@ public class NativeObject {
      * @param value A value to set.
      * @return A newly associated value.
      */
-    public Object setProperty(Object key, Object value) {
+    public final Object setProperty(Object key, Object value) {
         container.put(literal(key), value);
 
         return value;
@@ -126,7 +127,7 @@ public class NativeObject {
      * @param key A property key.
      * @return A property value.
      */
-    public boolean hasProperty(int key) {
+    public final boolean hasProperty(int key) {
         return container.containsKey(literal(key));
     }
 
@@ -138,7 +139,7 @@ public class NativeObject {
      * @param key A property key.
      * @return A property value.
      */
-    public boolean hasProperty(Object key) {
+    public final boolean hasProperty(Object key) {
         return container.containsKey(literal(key));
     }
 
@@ -152,7 +153,7 @@ public class NativeObject {
      * @param key A property key.
      * @return A result.
      */
-    public boolean deleteProperty(int key) {
+    public final boolean deleteProperty(int key) {
         container.remove(literal(key));
 
         return true;
@@ -168,7 +169,7 @@ public class NativeObject {
      * @param key A property key.
      * @return A result.
      */
-    public boolean deleteProperty(Object key) {
+    public final boolean deleteProperty(Object key) {
         container.remove(literal(key));
 
         return true;
@@ -193,7 +194,7 @@ public class NativeObject {
      * 
      * @return A property name array.
      */
-    public String[] keys() {
+    public final String[] keys() {
         return new NativeArray<String>(container.keySet()).toArray(new String[container.size()]);
     }
 
@@ -204,7 +205,7 @@ public class NativeObject {
      * 
      * @return A new object.
      */
-    public NativeObject create() {
+    public final NativeObject create() {
         NativeObject instance = I.make(getClass());
         instance.container.putAll(container);
 
@@ -218,8 +219,20 @@ public class NativeObject {
      * 
      * @return A result.
      */
-    public boolean isArray() {
+    public final boolean isArray() {
         return this instanceof NativeArray;
+    }
+
+    /**
+     * <p>
+     * Helper method to cast to {@link NativeObject}.
+     * </p>
+     * 
+     * @param object
+     * @return
+     */
+    public static final NativeObject by(Object object) {
+        throw new UnsupportedOperationException("This method is supported in " + JavaAPIProvider.class.getSimpleName() + " class only.");
     }
 
     /**
@@ -501,6 +514,18 @@ public class NativeObject {
          */
         public String isArray() {
             return "Array.isArray(" + that + ")";
+        }
+
+        /**
+         * <p>
+         * Helper method to cast to {@link NativeObject}.
+         * </p>
+         * 
+         * @param object
+         * @return
+         */
+        public String by(Object object) {
+            return param(0);
         }
 
         /**

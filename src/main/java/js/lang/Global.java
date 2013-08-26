@@ -553,19 +553,6 @@ public class Global {
 
         /**
          * <p>
-         * Calls a function or executes a code snippet after specified delay.
-         * </p>
-         * 
-         * @param function A callable function.
-         * @param delay A delay time.
-         * @return A timeout id.
-         */
-        public String setTimeout(NativeFunction<Runnable> runnable, long delay) {
-            return "setTimeout(" + param(0) + "," + param(1) + ")";
-        }
-
-        /**
-         * <p>
          * Clears the delay set by setTimeout().
          * </p>
          * 
