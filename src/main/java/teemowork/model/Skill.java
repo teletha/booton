@@ -3881,7 +3881,10 @@ public class Skill extends Describable<SkillDescriptor> {
                 .range(425);
         RelentlessPursuit.update()
                 .active("指定方向にダッシュし、自身にかかっているスローを解除する。" + TheCulling.name + "発動中に敵Championをキルかアシストした場合このスキルの{1}する。")
-                .variable(1, CDDecrease);
+                .variable(1, CDDecrease)
+                .mana(60, -15)
+                .cd(18, -2)
+                .range(425);
         TheCulling.update()
                 .active("3秒間、指定方向に{1}発の弾を連射し一発毎に{2}を与える（最大で{3}）。銃を連射している間は移動と" + RelentlessPursuit.name + "のみが可能であり、ミニオンに対しては400%のダメージを与える。また連射中にこのスキルを再使用することで連射を解除できる。")
                 .variable(1, Value, 7.5, 0, amplify(AS, 7.5, 1.5))
