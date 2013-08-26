@@ -144,12 +144,6 @@ public class Build extends EventHub implements StatusCalculator {
      * @return A computed value.
      */
     public Computed get(Status status) {
-        // Computed value = cache.get(status.ordinal());
-        //
-        // if (value != null) {
-        // return value;
-        // }
-
         switch (status) {
         case BaseAD:
             return new Computed(0, get(AD).base, status);
@@ -177,6 +171,7 @@ public class Build extends EventHub implements StatusCalculator {
         case Ereg:
         case EnemyChampion:
         case Time:
+        case Value:
             return new Computed(0, 0, status);
 
         case BounusAD:

@@ -710,6 +710,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(Mana, 400)
                 .abilities(FrozenHeartPassive);
         FrozenMallet.update().build(Phage, GiantsBelt).cost(835).set(AD, 30).set(Health, 700).abilities(Icy2);
+        FrozenMallet.update(P310A).build(GiantsBelt, Pickaxe, RubyCrystal).cost(950);
+
         GiantsBelt.update().cost(1000).set(Health, 380);
         GlacialShroud.update()
                 .build(SapphireCrystal, ChainVest)
@@ -908,7 +910,10 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(Hreg, 15)
                 .abilities(OhmwreckerActive);
         OraclesElixir.update().cost(400).abilities(OraclesElixirActive);
+
         Phage.update().build(RubyCrystal, LongSword).cost(590).set(AD, 20).set(Health, 200).abilities(Icy1);
+        Phage.update(P310A).cost(375).abilities(Rage);
+
         PhantomDancer.update()
                 .build(CloakOfAgility, Zeal, Dagger)
                 .cost(495)
@@ -1073,6 +1078,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(MR, 50)
                 .abilities(SpiritVisagePassive);
         SpiritVisage.update(P310).build(SpectresCowl, Kindlegem).cost(375).set(Health, 400).set(MR, 55).set(Hreg, 20);
+        SpiritVisage.update(P310A).cost(500);
         StatikkShiv.update()
                 .build(Zeal, AvariceBlade)
                 .cost(525)
@@ -1135,6 +1141,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(MSRatio, 8)
                 .set(Critical, 10)
                 .abilities(Icy1, TrinitySpellblade);
+        TrinityForce.update(P310A).abilities(Rage, TrinitySpellblade);
+
         TwinShadows.update()
                 .build(KagesLuckyPick, NullMagicMantle)
                 .cost(735)

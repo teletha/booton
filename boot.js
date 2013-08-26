@@ -72,6 +72,10 @@ function boot(global) {
      * @param {} nativeClasses
      */
     define: function(name, superClassName, interfaces, definition, annotation, nativeClasses) {
+      if (boot.hasOwnProperty(name)) {
+        return;
+      }
+    
       // Default superClass is native Object class.
       var superClass = superClassName.length === 0 ? Object : boot[superClassName];
 
@@ -81,14 +85,7 @@ function boot(global) {
         var name = params.pop();
         
         // Invoke the specified constructor function.
-        this["$" + (name in this ? 0 : name)].apply(this, params);
-        
-        // Return function if this class is functional.
-        if (name in this) {
-          return function() {
-            return this[name].apply(this, arguments);
-          }.bind(this);
-        }
+        this["$" + name].apply(this, params);
       }
 
       // We must store static initialization function.

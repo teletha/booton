@@ -455,6 +455,9 @@ public class Ability extends Describable<AbilityDescriptor> {
     /** The ability. */
     public static final Ability SpectresCowlPassive = new Ability();
 
+    /** The ability. */
+    public static final Ability Rage = new Ability("Rage");
+
     /** The ability name. */
     public final String name;
 
@@ -538,21 +541,24 @@ public class Ability extends Describable<AbilityDescriptor> {
         EnhancedMovement5.update().passive("{1}する。5秒間戦闘をしなければ、{2}する。").variable(1, MS, 45).variable(2, MS, 105);
         Bilgewater.update()
                 .active("対象の敵Champion({0})に{1}と2秒間{2}与える。{3}。")
-                .variable(0, Radius, 500)
+                .variable(0, Radius, 550)
                 .variable(1, MagicDamage, 100)
                 .variable(2, MSSlowRatio, 25)
                 .variable(3, ItemCD, 90);
+        Bilgewater.update(P310A).variable(0, Radius, 450);
         BotRKPassive.update()
                 .passive("通常攻撃に{1}(Minionに対しては60が上限)を付与する。")
                 .variable(1, PhysicalDamage, 0, 0, amplify(TargetCurrentHealthRatio, 5));
         BotRKActive.update()
-                .active("対象の敵Champion({1})に{2}(下限100)を与え、{3}する。また{5}間{4}を与え、自身の移動速度がその分だけ増加する。")
-                .variable(1, Radius, 500)
+                .active("対象の敵Champion({1})に{2}(下限100)を与え、{3}する。また{5}間{4}を与え、自身の移動速度がその分だけ増加する。{6}。")
+                .variable(1, Radius, 550)
                 .variable(2, PhysicalDamage, 0, 0, amplify(TargetMaxHealthRatio, 15))
                 .variable(3, RestoreHealth, 0, 0, amplify(DealtDamage, 1))
                 .variable(4, MSSlowRatio, 30)
-                .variable(5, Time, 4);
+                .variable(5, Time, 4)
+                .variable(6, ItemCD, 60);
         BotRKActive.update(P310).variable(5, Time, 3);
+        BotRKActive.update(P310A).variable(1, Radius, 450).variable(6, ItemCD, 90);
         BonetoothNecklaceDamage.update().passive("{1}を得る。").variable(1, AD, 0, 0, amplify(Lv, 2));
         BonetoothNecklaceSpecial.update()
                 .passive("キルまたはアシスト時に1 trophyを得て、死亡時に1 trophyを失う（最大値は14）。その数に応じて追加効果を得る。<br>3 : {1}と{2}を得る。<br>6 : {3}を得る。<br>9 : Unseen Predatorの射程が150増加する。<br>14 : Ultの効果時間が3秒増加する。またUltを使用した次にスキルを使用する際に1 Ferocityを追加で得る。")
@@ -871,6 +877,8 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .passive("スキル使用後の通常攻撃に、{1}を付与する。{2}。")
                 .variable(1, PhysicalDamage, 0, 0, amplify(BaseAD, 1.5))
                 .variable(2, ItemCD, 2);
+        TrinitySpellblade.update(P310A).variable(1, PhysicalDamage, 0, 0, amplify(BaseAD, 2));
+
         Hunt.update()
                 .active("6秒間持続する無敵のゴーストを2体召喚する。ゴーストは最も近くにいる最大2人の敵Championの元まで移動していき(移動速度は450)、ゴーストが敵Championに触れた場合ゴーストが消滅し、その敵Championに2.5秒{1}を与え、2.5秒間対象の視界を得る。{2}。")
                 .variable(1, MSSlowRatio, 40)
@@ -917,5 +925,10 @@ public class Ability extends Describable<AbilityDescriptor> {
 
         SpectresCowlPassive.update(P310).passive("Championからダメージを受けると10秒間{1}を得る。").variable(-1, Hreg, 15);
         BansheeRegene.update(P310).passive("Championからダメージを受けると10秒間{1}を得る。").variable(-1, Hreg, 45);
+
+        Rage.update(P310A)
+                .passive("通常攻撃をする毎に2秒間{1}する。ミニオンかモンスター、Championを倒すと2秒間{2}する。")
+                .variable(1, MS, 20)
+                .variable(2, MS, 60);
     }
 }
