@@ -19,7 +19,7 @@ import java.util.List;
 import js.dom.Element;
 
 /**
- * 3.10準拠
+ * 3.10A準拠
  * 
  * @version 2013/06/14 8:39:54
  */
@@ -1049,6 +1049,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 525)
                 .set(MS, 335);
+        LeBlanc.update(Version.P310A).set(Hreg, 6.5, 0.55).set(AD, 51, 3.5);
         LeeSin.update(P0000)
                 .set(Health, 428, 85)
                 .set(Hreg, 6.25, 0.7)
@@ -1082,7 +1083,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 325);
-        Lucian.update(P310)
+        Lucian.update(P310A)
                 .set(Health, 390, 80)
                 .set(Hreg, 5.1, 0.65)
                 .set(Mana, 230, 41)
@@ -1162,6 +1163,7 @@ public class Champion {
                 .set(Range, 125)
                 .set(MS, 355);
         MasterYi.update(P310).set(Health, 444, 92).set(Mana, 180, 42).set(AR, 15, 3).set(AS, 0.679, 2.75);
+        MasterYi.update(P310A).set(AS, 0.679, 2);
         MissFortune.update(P0000)
                 .set(Health, 435, 85)
                 .set(Hreg, 5.1, 0.65)

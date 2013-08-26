@@ -3860,6 +3860,37 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, MSSlowRatio, 20, 10)
                 .variable(4, Time, 2.5);
 
+        /** Lucian */
+        Lightslinger.update()
+                .passive("スキル使用した後の通常攻撃が2回攻撃になる。この効果は通常攻撃を行うか、6秒経過すると解消される。2回目の攻撃は50%のダメージとなるが、対象がMinionの場合は100%のダメージを与える。またon-hitエフェクトは通常通り適用され、クリティカルも発生する。");
+        PiercingLight.update()
+                .active("対象の敵ユニットに向けて0.35秒後に光のボルトを放ち、対象とその直線状({1})にいるすべての敵ユニットに{2}を与える(ミニオンに対しては75%)。")
+                .variable(1, Length, 1100)
+                .variable(2, PhysicalDamage, 80, 40, amplify(BounusAD, 0.6, 0.15))
+                .variable(3, PhysicalDamage)
+                .mana(60, 5)
+                .cd(9, -1)
+                .range(570);
+        ArdentBlaze.update()
+                .active("指定方向に爆発する弾を放つ。敵ユニットに当たるか最大距離まで飛ぶと十字型に爆風が広がり、範囲内の敵ユニットに{1}と6秒間マークを与える。マークを受けている敵ユニットにダメージを与えると、2秒間{2}する。また爆風が発生した地点の{3}。")
+                .variable(1, MagicDamage, 60, 40, ap(0.9), bounusAD(0.8))
+                .variable(2, MS, 40)
+                .variable(3, Visionable)
+                .mana(60)
+                .cd(18, -2)
+                .range(425);
+        RelentlessPursuit.update()
+                .active("指定方向にダッシュし、自身にかかっているスローを解除する。" + TheCulling.name + "発動中に敵Championをキルかアシストした場合このスキルの{1}する。")
+                .variable(1, CDDecrease);
+        TheCulling.update()
+                .active("3秒間、指定方向に{1}発の弾を連射し一発毎に{2}を与える（最大で{3}）。銃を連射している間は移動と" + RelentlessPursuit.name + "のみが可能であり、ミニオンに対しては400%のダメージを与える。また連射中にこのスキルを再使用することで連射を解除できる。")
+                .variable(1, Value, 7.5, 0, amplify(AS, 7.5, 1.5))
+                .variable(2, PhysicalDamage, 40, 10, ap(0.1), bounusAD(0.25))
+                .variable(3, PhysicalDamage, 1040, 460, amplify(AP, 2.6, 0.4), amplify(BounusAD, 6.5, 1.0))
+                .mana(100)
+                .cd(100, -25)
+                .range(1400);
+
         /** Lulu */
         PixFaerieCompanion.update()
                 .passive("Pixという妖精がお供になる。Pixが付いている味方Championが通常攻撃を行った場合、Pixは同一の敵ユニットの方向に3発の弾を放ち1発毎に{1}を与える。この弾は敵ユニットを追尾するが、弾の進行方向上にいる敵ユニットにも当たる。建物を攻撃した場合はPixは弾を撃たない。")
@@ -4077,6 +4108,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(1, DamageReductionRatio, 40, 5)
                 .variable(2, DamageReduction, 20, 2.5)
                 .variable(3, RestoreHealth, 30, 20, ap(0.3));
+        Meditate.update(P310A).variable(1, DamageReductionRatio, 50, 5);
         WujuStyle.update()
                 .passive("{1}を得る。")
                 .variable(1, AD, 15, 5)
@@ -4091,6 +4123,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(2, TrueDamage, 10, 5, amplify(AD, 0.1, 0.025))
                 .mana(0)
                 .cd(18, -1);
+        WujuStyle.update(P310A).variable(1, AD, 0, 0, amplify(AD, 0.1));
         Highlander.update()
                 .active("{4}間{1}、{2}し、{3}を得る。効果中に敵Championを倒すとすべてのスキルの{5}する。")
                 .variable(1, MSRatio, 40)
@@ -4109,6 +4142,9 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(2, ASRatio, 30, 25)
                 .variable(4, Time, 10)
                 .variable(7, Time, 4);
+        Highlander.update(P310A)
+                .passive("Championを倒すと（アシストを含む）" + Highlander.name + "以外のスキルは{5}する。")
+                .variable(5, CDDecreaseRatio, 70);
 
         /** Miss Fortune */
         Strut.update()
@@ -4755,6 +4791,9 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(5, PhysicalDamage, 90, 75, bounusAD(2.1))
                 .cd(1)
                 .range(260);
+        BrokenWings.update(P310A)
+                .active("前方にステップし、{1}の敵ユニットを剣で切りつけて{2}を与える。このスキルは短期間の間、3回まで連続して使用できる。3度目の使用でジャンプを行い、着地時に{3}の敵ユニットに{2}と{4}を与える。また、スキルを使用する度にオートアタックタイマーがリセットされる。最大DMは{5}。3度目のジャンプのみ壁を飛び越えられる。")
+                .variable(4, Knockup);
         KiBurst.update()
                 .active("{1}の敵ユニットに{2}と{3}を与える。")
                 .variable(1, Radius, 125)
@@ -4934,6 +4973,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(1, Shield, 70, 45, ap(0.6))
                 .cd(9, -1)
                 .cost(Energy, 50, 0);
+        Feint.update(P310A).variable(1, Shield, 60, 40, ap(0.6));
         ShadowDash.update()
                 .active("指定地点まで素早く移動し接触した敵Championに{1}と{2}を与える。ShenはTaunt効果中の対象から受ける通常攻撃のダメージを半減する。またこのスキルが敵Championに命中する度に{3}する。")
                 .variable(1, MagicDamage, 50, 35, ap(0.5))
@@ -4947,6 +4987,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(1, Shield, 250, 300, ap(1.5))
                 .cd(200, -20)
                 .range(-1);
+        StandUnited.update(P310A).active("対象の味方Championに5秒間{1}を付与し、3秒詠唱後そこまでワープする。詠唱中にスロー以外のCCを受けると中断される。");
 
         /** Shyvana */
         Dragonborn.update()
@@ -5605,6 +5646,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(2, PhysicalDamage, 40, 10, amplify(Stack, 15, 5, ap(0.2), bounusAD(0.25)))
                 .mana(50, 10)
                 .cd(12, -1);
+        Expunge.update(P310A).variable(2, PhysicalDamage, 20, 15, amplify(Stack, 15, 5, ap(0.2), bounusAD(0.25)));
         SprayandPray.update()
                 .active("7秒間射程が850になり{1}を得て、通常攻撃が敵ユニットを貫通するようになる。対象との直線上にいる敵ユニットにもダメージと毒スタックを与える。ダメージは敵に当たるごとに20%減少する。最小で40%。")
                 .variable(1, AD, 20, 8)
@@ -6148,12 +6190,14 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Zac */
         CellDivision.update()
-                .passive("Zacのスキルが敵ユニットに命中する度に小型のスライムが出現する。スライムを回収すると{1}する。スライムが敵championに踏まれた場合は消滅する。また、ZacのHealthが0になった時4つのスライムに分裂し一定時間かけて復活する。復活中にすべてのスライムが死亡するとZacも死亡する。復活時のHealthは生きているスライムの数に比例し増加(10-50%)する。スライムは以下のステータスを持つ。<br>Health : {2}<br>AR : {3}<br>MR : {4}")
+                .passive("Zacのスキルが敵ユニットに命中する度に小型のスライムが出現する。スライム({5})を自身が回収すると{1}し、敵が回収すると消滅する。また、ZacのHealthが0になった時4つのスライムに分裂し一定時間かけて復活する。復活中にすべてのスライムが死亡するとZacも死亡する。復活時のHealthは生きているスライムの数に比例し増加(10-50%)する。スライムは以下のステータスを持つ。<br>Health : {2}<br>AR : {3}<br>MR : {4}")
                 .variable(1, RestoreHealth, 0, 0, amplify(Health, 0.04))
                 .variable(2, Value, 0, 0, amplify(Health, 0.12))
                 .variable(3, Value, 0, 0, amplify(AR, 0.5))
                 .variable(4, Value, 0, 0, amplify(MR, 0.5))
+                .variable(5, Radius, 100)
                 .cd(300);
+        CellDivision.update(P310).variable(5, Radius, 25);
         StretchingStrike.update()
                 .active("指定方向に腕を伸ばし範囲内にいる敵ユニットに{1}と2秒間{2}を与える。")
                 .variable(1, MagicDamage, 70, 40, ap(0.5))
@@ -6176,7 +6220,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .range(1150, 100);
         ElasticSlingshot.update(P310).variable(1, MagicDamage, 80, 40, ap(0.7));
         LetsBounce.update()
-                .active("Zacが4回飛び跳ね、その度に周囲にいる敵ユニットに{1}と{2}と1秒間{3}を与える。ノックバックは同一の対象に1度までしか発生せず、同一ユニットに複数回DMを与える場合、2回目以降は50%のダメージになる。このスキルが発動している間はUnstable Matterと移動のみが可能であり、また徐々に移動速度が増加する(20-50%増加)。使用中は{4}を得る。")
+                .active("Zacが4回飛び跳ね、その度に周囲にいる敵ユニットに{1}と{2}と1秒間{3}を与える。ノックバックは同一の対象に1度までしか発生せず、同一ユニットに複数回DMを与える場合、2回目以降は50%のダメージになる。このスキルが発動している間はUnstable Matterと移動のみが可能であり、また徐々に移動速度が増加する(20-50%増加)。使用中は{4}を得る。またこのスキル使用時に自身にかかっているスローを解除する。")
                 .variable(1, MagicDamage, 160, 80, ap(0.25))
                 .variable(2, Knockback)
                 .variable(3, MSSlowRatio, 20)
@@ -6184,6 +6228,8 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(130, -15)
                 .range(300);
         LetsBounce.update(P307).variable(1, MagicDamage, 140, 70, ap(0.4));
+        LetsBounce.update(P310A)
+                .active("Zacが4回飛び跳ね、その度に周囲にいる敵ユニットに{1}と{2}と1秒間{3}を与える。ノックバックは同一の対象に1度までしか発生せず、同一ユニットに複数回DMを与える場合、2回目以降は50%のダメージになる。このスキルが発動している間はUnstable Matterと移動のみが可能であり、また徐々に移動速度が増加する(20-50%増加)。またこのスキル使用時に自身にかかっているスローを解除する。");
 
         /** Zed */
         ContemptforTheWeak.update()

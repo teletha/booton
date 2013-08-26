@@ -224,7 +224,7 @@ public enum Status {
     Experiment("経験値"), ExperimentRatio("経験値"),
 
     /** Cooldown */
-    CD(1), CDPerLv, CDDecrease(1), ItemCD("CD", 1),
+    CD(1), CDPerLv, CDDecrease(1), CDDecreaseRatio(1), ItemCD("CD", 1),
 
     // ==================================================
     // Heal Related
@@ -323,7 +323,7 @@ public enum Status {
 
     EnemyChampion("敵Championの数"),
 
-    Value(""),
+    Value("", 0),
 
     Percentage(""),
 
@@ -539,6 +539,7 @@ public enum Status {
             return name + "が" + formatValue(computed) + "回復";
 
         case CDDecrease:
+        case CDDecreaseRatio:
             return "CDが" + formatValue(computed) + "解消";
 
         case Stealth:
