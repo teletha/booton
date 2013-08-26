@@ -23,7 +23,7 @@ import js.lang.NativeObject;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/08/19 15:23:57
+ * @version 2013/08/26 23:57:04
  */
 @JavaAPIProvider(Proxy.class)
 class JSProxy {

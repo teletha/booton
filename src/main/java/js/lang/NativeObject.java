@@ -188,6 +188,14 @@ public class NativeObject {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
+    /**
      * <p>
      * List up all property names.
      * </p>
@@ -481,6 +489,13 @@ public class NativeObject {
          */
         public String deleteProperty(Object key) {
             return "delete " + that + accessor(0);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public String toString() {
+            return that + ".toString()";
         }
 
         /**
