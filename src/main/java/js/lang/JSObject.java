@@ -65,7 +65,7 @@ class JSObject {
      */
     @Override
     public String toString() {
-        return getClass().getName() + "#" + hashCode();
+        return NativeObject.by(this).toString();
     }
 
     /**
@@ -85,6 +85,6 @@ class JSObject {
      * @see Class Literals, section 15.8.2 of <cite>The Java&trade; Language Specification</cite>.
      */
     public Class<?> $getClass() {
-        return ((NativeObject) (Object) this).getPropertyAs(NativeObject.class, "$").getPropertyAs(Class.class, "$");
+        return NativeObject.by(this).getPropertyAs(NativeObject.class, "$").getPropertyAs(Class.class, "$");
     }
 }
