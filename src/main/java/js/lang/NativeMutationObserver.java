@@ -104,7 +104,7 @@ public class NativeMutationObserver extends NativeObject {
     /**
      * @version 2013/07/26 12:01:00
      */
-    public static interface MutationListener extends Function {
+    public static interface MutationListener {
 
         /**
          * <p>

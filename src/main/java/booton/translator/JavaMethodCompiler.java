@@ -1641,6 +1641,9 @@ class JavaMethodCompiler extends MethodVisitor {
                         enumValues[1] = current.remove(0);
                     }
 
+                    // infer local variable type
+                    variables.type(position).set(operand.infer().type());
+
                     OperandExpression assignment = new OperandExpression(variable + "=" + operand);
 
                     if (!operand.duplicated) {

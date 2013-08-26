@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +20,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import js.lang.Function;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
@@ -253,64 +251,10 @@ class TranslatorManager {
         @Override
         protected String translateConstructor(Class owner, String desc, Class[] types, List<Operand> context) {
             // append identifier of constructor method
-            Operand id;
-
-            Method functional = findFunctionMethod(owner);
-
-            if (functional == null) {
-                id = new OperandNumber(Integer.valueOf(Javascript.computeMethodName(owner, "<init>", desc).substring(1)));
-            } else {
-                id = new OperandString(Javascript.computeMethodName(functional));
-            }
-            context.add(id);
+            context.add(new OperandNumber(Integer.valueOf(Javascript.computeMethodName(owner, "<init>", desc)
+                    .substring(1))));
 
             return "new " + Javascript.computeClassName(owner) + writeParameter(types, context);
-        }
-
-        /**
-         * <p>
-         * Search single function method.
-         * </p>
-         * 
-         * @param clazz
-         * @return
-         */
-        private Method findFunctionMethod(Class clazz) {
-            if (Function.class.isAssignableFrom(clazz)) {
-                for (Class type : ClassUtil.getTypes(clazz)) {
-                    Method method = getFunctionMethod(type);
-
-                    if (method != null) {
-                        return method;
-                    }
-                }
-            }
-            return null;
-        }
-
-        /**
-         * <p>
-         * Check whether the specified class implements {@link Function} directly or not.
-         * </p>
-         * 
-         * @param clazz A target class to check.
-         * @return A result.
-         */
-        private Method getFunctionMethod(Class clazz) {
-            for (Class type : clazz.getInterfaces()) {
-                if (type == Function.class) {
-                    List<Method> userDefined = new ArrayList();
-                    Method[] methods = clazz.getDeclaredMethods();
-
-                    for (Method method : methods) {
-                        if (!method.isSynthetic() && !method.isBridge()) {
-                            userDefined.add(method);
-                        }
-                    }
-                    return userDefined.size() == 1 ? userDefined.get(0) : null;
-                }
-            }
-            return null;
         }
 
         /**
