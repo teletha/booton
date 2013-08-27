@@ -18,17 +18,28 @@ import booton.translator.JavascriptAPIProvider;
 @JavascriptAPIProvider("Array")
 class NativeArrayExtension {
 
+    /** The cached type. */
     private Class type;
 
-    public Class $getClass() {
+    /**
+     * Returns the runtime class of this {@code Object}. The returned {@code Class} object is the
+     * object that is locked by {@code static synchronized} methods of the represented class.
+     * <p>
+     * <b>The actual result type is {@code Class<? extends |X|>} where {@code |X|} is the erasure of
+     * the static type of the expression on which {@code getClass} is called.</b> For example, no
+     * cast is required in this code fragment:
+     * </p>
+     * <p>
+     * {@code Number n = 0;                             }<br>
+     * {@code Class<? extends Number> c = n.getClass(); }
+     * </p>
+     * 
+     * @return The {@code Class} object that represents the runtime class of this object.
+     * @see Class Literals, section 15.8.2 of <cite>The Java&trade; Language Specification</cite>.
+     */
+    public Class $getClass() throws ClassNotFoundException {
         if (type == null) {
-            try {
-                type = Class.forName(((NativeObject) (Object) this).getProperty("$").toString());
-            } catch (ClassNotFoundException e) {
-                // If this exception will be thrown, it is bug of this program. So we must rethrow
-                // the wrapped error in here.
-                throw new Error(e);
-            }
+            type = Class.forName(NativeObject.by(this).getPropertyAs(String.class, "$"));
         }
         return type;
     }

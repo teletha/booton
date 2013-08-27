@@ -56,6 +56,7 @@ public class ClientStackTrace {
         for (String line : data.split("\\r\\n")) {
             elements.add(line);
         }
+
         String className = maps[0].decodeClassName(elements.remove(0));
         String message = elements.remove(0);
 

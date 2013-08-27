@@ -400,6 +400,15 @@ public class Global {
     public static native boolean isNumeric(char value);
 
     /**
+     * <p>
+     * Throw native error to build stack trace.
+     * </p>
+     * 
+     * @return
+     */
+    static native NativeError error();
+
+    /**
      * @version 2013/07/30 19:34:33
      */
     @SuppressWarnings("unused")
@@ -775,6 +784,17 @@ public class Global {
          */
         public String isNumeric(char value) {
             return "boot.isNumeric(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Throw native error to build stack trace.
+         * </p>
+         * 
+         * @return
+         */
+        public String error() {
+            return "boot.error()";
         }
     }
 

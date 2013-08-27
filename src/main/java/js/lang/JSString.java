@@ -13,7 +13,6 @@ import static js.lang.JSStringHelper.*;
 
 import java.util.Locale;
 import java.util.Objects;
-import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import booton.translator.JavaAPIProvider;
@@ -675,7 +674,7 @@ class JSString implements Comparable<String>, CharSequence {
      */
     public String[] split(String regex) {
         Objects.requireNonNull(regex);
-        return (String[]) (Object) that.split(Pattern.compile(regex));
+        return (String[]) (Object) that.split(new NativeRegExp(regex));
     }
 
     /**

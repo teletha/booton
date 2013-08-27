@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
 import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/08/17 18:06:57
+ * @version 2013/08/27 14:36:00
  */
 @RunWith(ScriptRunner.class)
 public class StringTest {
@@ -413,5 +413,11 @@ public class StringTest {
     public void valueOf() throws Exception {
         assert String.valueOf((Object) null).equals("null");
         assert String.valueOf(new char[] {'a', 'b', 'c'}).equals("abc");
+        assert String.valueOf(1).equals("1");
+        assert String.valueOf(1234567890L).equals("1234567890");
+        assert String.valueOf(0.1F).equals("0.1");
+        assert String.valueOf(0.12345678901D).equals("0.12345678901");
+        assert String.valueOf(true).equals("true");
+        assert String.valueOf('Q').equals("Q");
     }
 }

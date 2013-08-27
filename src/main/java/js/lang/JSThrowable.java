@@ -59,7 +59,7 @@ class JSThrowable {
     public JSThrowable(String message, Throwable cause) {
         this.message = message;
         this.cause = cause;
-        this.stacktrace = createStackTrace(Debugger.error(), true);
+        this.stacktrace = createStackTrace(Global.error(), true);
     }
 
     /**

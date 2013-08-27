@@ -47,7 +47,7 @@ class JSObject {
     @Override
     public int hashCode() {
         if (hash == 0) {
-            hash = ++counter;
+            hash = counter++;
         }
         return hash;
     }

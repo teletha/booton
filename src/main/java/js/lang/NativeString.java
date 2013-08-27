@@ -11,7 +11,6 @@ package js.lang;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import booton.translator.Translator;
 
@@ -266,10 +265,10 @@ class NativeString {
      *            returned contains one element consisting of the entire string.
      * @return
      */
-    public NativeString[] split(Pattern separator) {
+    public NativeString[] split(NativeRegExp separator) {
         List<NativeString> list = new ArrayList();
 
-        for (String text : builder.toString().split(separator.pattern())) {
+        for (String text : builder.toString().split(separator.source())) {
             list.add(new NativeString(text));
         }
         return list.toArray(new NativeString[list.size()]);
@@ -611,7 +610,7 @@ class NativeString {
          *            string.
          * @return
          */
-        public String split(Pattern separator) {
+        public String split(NativeRegExp separator) {
             return that + ".split(" + param(0) + ")";
         }
 
