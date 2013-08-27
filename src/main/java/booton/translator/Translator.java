@@ -27,12 +27,10 @@ import org.objectweb.asm.Type;
  * Public {@link Translator} API.
  * </p>
  * 
- * @version 2013/08/18 13:08:30
+ * @version 2013/08/27 23:26:01
  */
 @Manageable(lifestyle = Singleton.class)
 public class Translator<T> implements Extensible {
-
-    private static final String AliasPrefix = "$";
 
     /** The quote literal. */
     protected static final String Q = "\"";
@@ -120,7 +118,7 @@ public class Translator<T> implements Extensible {
      * @return A translated expression.
      */
     Object translateField(Class ownerClass, String name, Operand context) {
-        return context + "." + Javascript.computeFieldName(ownerClass, name);
+        return writeFieldAccess(name);
     }
 
     /**

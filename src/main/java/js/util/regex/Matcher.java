@@ -9,22 +9,20 @@
  */
 package js.util.regex;
 
-import js.lang.NativeRegExp;
 import js.lang.NativeRegExp.Result;
-import booton.translator.Debuggable;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/08/27 15:08:41
+ * @version 2013/08/28 8:39:33
  */
 @JavaAPIProvider(java.util.regex.Matcher.class)
 class Matcher {
 
     /** The regular expression. */
-    private final NativeRegExp regex;
+    private Pattern pattern;
 
     /** The user input. */
-    private final CharSequence input;
+    private String input;
 
     /** The matching result. */
     private Result result;
@@ -33,9 +31,18 @@ class Matcher {
      * @param regex
      * @param input
      */
-    Matcher(NativeRegExp regex, CharSequence input) {
-        this.regex = regex;
-        this.input = input;
+    Matcher(Pattern pattern, CharSequence input) {
+        this.pattern = pattern;
+        this.input = input.toString();
+    }
+
+    /**
+     * Returns the pattern that is interpreted by this matcher.
+     * 
+     * @return The pattern for which this matcher was created
+     */
+    public java.util.regex.Pattern pattern() {
+        return (java.util.regex.Pattern) (Object) pattern;
     }
 
     /**
@@ -49,8 +56,29 @@ class Matcher {
      *         pattern
      */
     public boolean matches() {
-        result = regex.exec(input);
-        // regex.lastIndex = 0;
+        result = pattern.head.exec(input);
+        pattern.head.lastIndex(0);
+
+        return result != null && result.group(0).length() == input.length();
+    }
+
+    /**
+     * Attempts to match the input sequence, starting at the beginning of the region, against the
+     * pattern.
+     * <p>
+     * Like the {@link #matches matches} method, this method always starts at the beginning of the
+     * region; unlike that method, it does not require that the entire region be matched.
+     * <p>
+     * If the match succeeds then more information can be obtained via the <tt>start</tt>,
+     * <tt>end</tt>, and <tt>group</tt> methods.
+     * </p>
+     * 
+     * @return <tt>true</tt> if, and only if, a prefix of the input sequence matches this matcher's
+     *         pattern
+     */
+    public boolean lookingAt() {
+        result = pattern.head.exec(input);
+        pattern.head.lastIndex(0);
 
         return result != null;
     }
@@ -104,7 +132,6 @@ class Matcher {
      * @throws IndexOutOfBoundsException If there is no capturing group in the pattern with the
      *             given index
      */
-    @Debuggable
     public String group(int group) {
         if (result == null) {
             throw new IllegalStateException("No match found");
@@ -146,10 +173,34 @@ class Matcher {
      *         matcher's pattern
      */
     public boolean find() {
-        result = regex.exec(input);
-        System.out.println("find " + result);
+        result = pattern.regex.exec(input);
 
         return result != null;
+    }
+
+    /**
+     * Resets this matcher and then attempts to find the next subsequence of the input sequence that
+     * matches the pattern, starting at the specified index.
+     * <p>
+     * If the match succeeds then more information can be obtained via the <tt>start</tt>,
+     * <tt>end</tt>, and <tt>group</tt> methods, and subsequent invocations of the {@link #find()}
+     * method will start at the first character not matched by this match.
+     * </p>
+     * 
+     * @throws IndexOutOfBoundsException If start is less than zero or if start is greater than the
+     *             length of the input sequence.
+     * @return <tt>true</tt> if, and only if, a subsequence of the input sequence starting at the
+     *         given index matches this matcher's pattern
+     */
+    public boolean find(int start) {
+        if (start < 0 || input.length() < start) {
+            throw new IndexOutOfBoundsException("Illegal start index");
+        }
+
+        // update context infomation
+        pattern.regex.lastIndex(start);
+
+        return find();
     }
 
     /**
@@ -162,10 +213,51 @@ class Matcher {
      * 
      * @return This matcher
      */
-    public Matcher reset() {
-        // regex.lastIndex = 0;
+    public java.util.regex.Matcher reset() {
+        pattern.regex.lastIndex(0);
 
-        return this;
+        return (java.util.regex.Matcher) (Object) this;
     }
 
+    /**
+     * Resets this matcher with a new input sequence.
+     * <p>
+     * Resetting a matcher discards all of its explicit state information and sets its append
+     * position to zero. The matcher's region is set to the default region, which is its entire
+     * character sequence. The anchoring and transparency of this matcher's region boundaries are
+     * unaffected.
+     * 
+     * @param input The new input character sequence
+     * @return This matcher
+     */
+    public java.util.regex.Matcher reset(CharSequence input) {
+        this.input = input.toString();
+
+        return reset();
+    }
+
+    /**
+     * Changes the <tt>Pattern</tt> that this <tt>Matcher</tt> uses to find matches with.
+     * <p>
+     * This method causes this matcher to lose information about the groups of the last match that
+     * occurred. The matcher's position in the input is maintained and its last append position is
+     * unaffected.
+     * </p>
+     * 
+     * @param pattern The new pattern used by this matcher
+     * @return This matcher
+     * @throws IllegalArgumentException If newPattern is <tt>null</tt>
+     * @since 1.5
+     */
+    public java.util.regex.Matcher usePattern(java.util.regex.Pattern pattern) {
+        if (pattern == null) {
+            throw new IllegalArgumentException("Pattern cannot be null");
+        }
+
+        Pattern old = this.pattern;
+        this.pattern = (Pattern) (Object) pattern;
+        this.pattern.regex.lastIndex(old.regex.lastIndex());
+
+        return (java.util.regex.Matcher) (Object) this;
+    }
 }

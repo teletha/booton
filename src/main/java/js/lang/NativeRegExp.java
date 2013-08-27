@@ -19,9 +19,6 @@ import booton.translator.Translator;
  */
 public class NativeRegExp extends NativeObject {
 
-    /** A read/write integer property that specifies the index at which to start the next match. */
-    // public int lastIndex;
-
     /** The actual pattern. */
     private final Pattern pattern;
 
@@ -68,6 +65,24 @@ public class NativeRegExp extends NativeObject {
     public String source() {
         return pattern.pattern();
     }
+
+    /**
+     * <p>
+     * A read/write integer property that specifies the index at which to start the next match.
+     * </p>
+     * 
+     * @return
+     */
+    public native int lastIndex();
+
+    /**
+     * <p>
+     * A read/write integer property that specifies the index at which to start the next match.
+     * </p>
+     * 
+     * @return
+     */
+    public native void lastIndex(int index);
 
     /**
      * @version 2013/08/27 14:58:58
@@ -118,6 +133,28 @@ public class NativeRegExp extends NativeObject {
          */
         public String exec(CharSequence text) {
             return that + ".exec(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * A read/write integer property that specifies the index at which to start the next match.
+         * </p>
+         * 
+         * @return
+         */
+        public String lastIndex() {
+            return that + ".lastIndex";
+        }
+
+        /**
+         * <p>
+         * A read/write integer property that specifies the index at which to start the next match.
+         * </p>
+         * 
+         * @return
+         */
+        public String lastIndex(int index) {
+            return that + ".lastIndex=" + param(0);
         }
     }
 
