@@ -21,6 +21,42 @@ import booton.translator.ScriptRunner;
 public class ObjectTest {
 
     @Test
+    public void callEquals() throws Exception {
+        Object one = new Parent();
+        assert one.equals(one);
+
+        Object two = new Parent();
+        assert !one.equals(two);
+    }
+
+    @Test
+    public void callHashCode() throws Exception {
+        Object one = new Parent();
+        assert one.hashCode() == one.hashCode();
+
+        Object two = new Parent();
+        assert one.hashCode() != two.hashCode();
+    }
+
+    @Test
+    public void callGetClass() throws Exception {
+        assert new Parent().getClass() == Parent.class;
+        assert new Child().getClass() == Child.class;
+    }
+
+    /**
+     * @version 2013/08/27 14:32:42
+     */
+    private static class Parent {
+    }
+
+    /**
+     * @version 2013/01/16 21:36:02
+     */
+    private static class Child extends Parent {
+    }
+
+    @Test
     public void callFinalize() throws Throwable {
         new Exposer().callFinalize();
     }
