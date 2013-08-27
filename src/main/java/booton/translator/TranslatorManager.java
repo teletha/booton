@@ -240,7 +240,7 @@ class TranslatorManager {
     }
 
     /**
-     * @version 2013/08/16 23:58:02
+     * @version 2013/08/27 23:26:48
      */
     @Manageable(lifestyle = Singleton.class)
     private static class GeneralTranslator extends Translator<Object> {
@@ -293,6 +293,14 @@ class TranslatorManager {
             context.add(1, new OperandExpression("this"));
 
             return Javascript.computeClassName(owner) + ".prototype." + Javascript.computeMethodName(owner, name, desc) + ".call" + writeParameter(types, context);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected Object translateField(Class ownerClass, String name, Operand context) {
+            return context + "." + Javascript.computeFieldName(ownerClass, name);
         }
 
         /**

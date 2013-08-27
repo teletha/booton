@@ -17,7 +17,7 @@ import org.junit.runner.RunWith;
 import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/08/27 16:48:40
+ * @version 2013/08/28 8:39:00
  */
 @RunWith(ScriptRunner.class)
 public class PatternTest {
@@ -38,5 +38,11 @@ public class PatternTest {
         assert pattern.matcher("success").matches();
         assert !pattern.matcher("fail").matches();
         assert pattern.matcher("SUCCESS").matches();
+    }
+
+    @Test
+    public void matches() throws Exception {
+        assert Pattern.matches("\\d+", "12345");
+        assert !Pattern.matches("\\d+", "123F5");
     }
 }

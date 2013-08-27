@@ -430,9 +430,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 current.addOperand(new OperandExpression("--" + current.remove(0) + "." + Javascript.computeFieldName(owner, name)));
             } else {
-                OperandExpression assignment = new OperandExpression(current.remove(1) + "." + Javascript.computeFieldName(owner, name) + "=" + current.remove(0));
-                // new OperandExpression(translator.translateField(owner, name, current.remove(1)) +
-                // "=" + current.remove(0));
+                OperandExpression assignment = new OperandExpression(translator.translateField(owner, name, current.remove(1)) + "=" + current.remove(0));
 
                 if (match(DUPLICATE_X1, PUTFIELD)) {
                     // multiple assignment (i.e. this.a = this.b = 0;)

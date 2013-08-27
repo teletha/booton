@@ -24,6 +24,22 @@ import booton.translator.ScriptRunner;
 public class MatcherTest {
 
     @Test
+    public void matches() throws Exception {
+        Pattern pattern = Pattern.compile("text");
+        assert pattern.matcher("text").matches();
+        assert !pattern.matcher("my text").matches();
+        assert !pattern.matcher("textual").matches();
+    }
+
+    @Test
+    public void lookingAt() throws Exception {
+        Pattern pattern = Pattern.compile("text");
+        assert pattern.matcher("text").lookingAt();
+        assert !pattern.matcher("my text").lookingAt();
+        assert pattern.matcher("textual").lookingAt();
+    }
+
+    @Test
     public void group() {
         Matcher matcher = Pattern.compile("text").matcher("text");
         assert matcher.matches();
@@ -56,6 +72,70 @@ public class MatcherTest {
         assert matcher.find();
         assert matcher.group().equals("text3");
         assert !matcher.find();
+
+        try {
+            matcher.group();
+            throw new AssertionError();
+        } catch (IllegalStateException e) {
+            // success
+        }
+    }
+
+    @Test
+    public void findWithStartIndex() {
+        Matcher matcher = Pattern.compile("text\\d").matcher("text1 text2 text3");
+        assert matcher.find(10);
+        assert matcher.group().equals("text3");
+        assert matcher.find(3);
+        assert matcher.group().equals("text2");
+        assert matcher.find();
+        assert matcher.group().equals("text3");
+        assert !matcher.find();
+    }
+
+    @Test
+    public void reset() throws Exception {
+        Matcher matcher = Pattern.compile("text\\d").matcher("text1 text2 text3");
+        assert matcher.find();
+        assert matcher.group().equals("text1");
+        assert matcher.find();
+        assert matcher.group().equals("text2");
+
+        matcher.reset();
+
+        assert matcher.find();
+        assert matcher.group().equals("text1");
+    }
+
+    @Test
+    public void resetWithNewInput() throws Exception {
+        Matcher matcher = Pattern.compile("text\\d").matcher("text1 text2 text3");
+        assert matcher.find();
+        assert matcher.group().equals("text1");
+        assert matcher.find();
+        assert matcher.group().equals("text2");
+
+        matcher.reset("text5 text6 text7");
+
+        assert matcher.find();
+        assert matcher.group().equals("text5");
+    }
+
+    @Test
+    public void usePattern() throws Exception {
+        Matcher matcher = Pattern.compile("text\\d").matcher("text1 text2 text3");
+        assert matcher.find();
+        assert matcher.group().equals("text1");
+
+        matcher.usePattern(Pattern.compile("\\d"));
+        assert matcher.find();
+        assert matcher.group().equals("2");
+    }
+
+    @Test
+    public void pattern() throws Exception {
+        Pattern pattern = Pattern.compile("text");
+        assert pattern.matcher("text").pattern() == pattern;
     }
 
 }
