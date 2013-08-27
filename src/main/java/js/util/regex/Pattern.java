@@ -32,7 +32,7 @@ class Pattern {
      * @param flag
      */
     private Pattern(String pattern, int flag) {
-        String flagText = "";
+        String flagText = "g";
 
         if ((java.util.regex.Pattern.CASE_INSENSITIVE & flag) != 0 || (java.util.regex.Pattern.UNICODE_CASE & flag) != 0) {
             flagText = flagText.concat("i");
@@ -71,7 +71,7 @@ class Pattern {
      * @return A new matcher for this pattern
      */
     public Matcher matcher(CharSequence input) {
-        return (Matcher) (Object) new js.util.regex.Matcher(regex.exec(input));
+        return (Matcher) (Object) new js.util.regex.Matcher(regex, input);
     }
 
     /**
