@@ -25,25 +25,37 @@ public class MatcherTest {
 
     @Test
     public void group() {
-        Matcher matcher = Pattern.compile("test.+").matcher("testman");
-        matcher.matches();
+        Matcher matcher = Pattern.compile("text").matcher("text");
+        assert matcher.matches();
+        assert matcher.group().equals("text");
+        assert matcher.groupCount() == 0;
 
-        assert matcher.group().equals("testman");
+        // call multiple
+        assert matcher.matches();
+        assert matcher.group().equals("text");
+
     }
 
     @Test
-    public void parameter0() {
-        Matcher matcher = Pattern.compile("test.+").matcher("testman");
-        matcher.matches();
-
-        assert matcher.group(0).equals("testman");
-    }
-
-    @Test
-    public void groupCount() {
-        Matcher matcher = Pattern.compile("test(.+)").matcher("testman");
-        matcher.matches();
-
+    public void groupInt() {
+        Matcher matcher = Pattern.compile("text(\\d+)").matcher("text14");
+        assert matcher.matches();
+        assert matcher.group().equals("text14");
         assert matcher.groupCount() == 1;
+        assert matcher.group(0).equals("text14");
+        assert matcher.group(1).equals("14");
     }
+
+    @Test
+    public void find() {
+        Matcher matcher = Pattern.compile("text\\d").matcher("text1 text2 text3");
+        assert matcher.find();
+        assert matcher.group().equals("text1");
+        assert matcher.find();
+        assert matcher.group().equals("text2");
+        assert matcher.find();
+        assert matcher.group().equals("text3");
+        assert !matcher.find();
+    }
+
 }

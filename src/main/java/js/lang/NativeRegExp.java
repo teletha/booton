@@ -19,6 +19,9 @@ import booton.translator.Translator;
  */
 public class NativeRegExp extends NativeObject {
 
+    /** A read/write integer property that specifies the index at which to start the next match. */
+    // public int lastIndex;
+
     /** The actual pattern. */
     private final Pattern pattern;
 
@@ -71,7 +74,7 @@ public class NativeRegExp extends NativeObject {
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<NativeRegExp> {
-    
+
         /**
          * <p>
          * Creates a regular expression object for matching text with a pattern.
@@ -82,7 +85,7 @@ public class NativeRegExp extends NativeObject {
         public String NativeRegExp(String pattern) {
             return "new RegExp(" + param(0) + ")";
         }
-    
+
         /**
          * <p>
          * Creates a regular expression object for matching text with a pattern.
@@ -94,7 +97,7 @@ public class NativeRegExp extends NativeObject {
         public String NativeRegExp(String pattern, String flags) {
             return "new RegExp(" + param(0) + "," + param(1) + ")";
         }
-    
+
         /**
          * <p>
          * A read-only property that contains the text of the pattern, excluding the forward
@@ -104,7 +107,7 @@ public class NativeRegExp extends NativeObject {
         public String source() {
             return that + ".source";
         }
-    
+
         /**
          * <p>
          * Executes a search for a match in its string parameter.

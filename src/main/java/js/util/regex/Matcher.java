@@ -9,7 +9,9 @@
  */
 package js.util.regex;
 
+import js.lang.NativeRegExp;
 import js.lang.NativeRegExp.Result;
+import booton.translator.Debuggable;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -18,14 +20,22 @@ import booton.translator.JavaAPIProvider;
 @JavaAPIProvider(java.util.regex.Matcher.class)
 class Matcher {
 
+    /** The regular expression. */
+    private final NativeRegExp regex;
+
+    /** The user input. */
+    private final CharSequence input;
+
     /** The matching result. */
-    private final Result result;
+    private Result result;
 
     /**
-     * @param result
+     * @param regex
+     * @param input
      */
-    Matcher(Result result) {
-        this.result = result;
+    Matcher(NativeRegExp regex, CharSequence input) {
+        this.regex = regex;
+        this.input = input;
     }
 
     /**
@@ -39,6 +49,9 @@ class Matcher {
      *         pattern
      */
     public boolean matches() {
+        result = regex.exec(input);
+        // regex.lastIndex = 0;
+
         return result != null;
     }
 
@@ -91,6 +104,7 @@ class Matcher {
      * @throws IndexOutOfBoundsException If there is no capturing group in the pattern with the
      *             given index
      */
+    @Debuggable
     public String group(int group) {
         if (result == null) {
             throw new IllegalStateException("No match found");
@@ -116,4 +130,42 @@ class Matcher {
     public int groupCount() {
         return result.length() - 1;
     }
+
+    /**
+     * Attempts to find the next subsequence of the input sequence that matches the pattern.
+     * <p>
+     * This method starts at the beginning of this matcher's region, or, if a previous invocation of
+     * the method was successful and the matcher has not since been reset, at the first character
+     * not matched by the previous match.
+     * <p>
+     * If the match succeeds then more information can be obtained via the <tt>start</tt>,
+     * <tt>end</tt>, and <tt>group</tt> methods.
+     * </p>
+     * 
+     * @return <tt>true</tt> if, and only if, a subsequence of the input sequence matches this
+     *         matcher's pattern
+     */
+    public boolean find() {
+        result = regex.exec(input);
+        System.out.println("find " + result);
+
+        return result != null;
+    }
+
+    /**
+     * Resets this matcher.
+     * <p>
+     * Resetting a matcher discards all of its explicit state information and sets its append
+     * position to zero. The matcher's region is set to the default region, which is its entire
+     * character sequence. The anchoring and transparency of this matcher's region boundaries are
+     * unaffected.
+     * 
+     * @return This matcher
+     */
+    public Matcher reset() {
+        // regex.lastIndex = 0;
+
+        return this;
+    }
+
 }
