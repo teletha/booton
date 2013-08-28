@@ -200,7 +200,7 @@ class JSThrowable {
         List<StackTraceElement> elements = new ArrayList();
 
         for (int i = start; i < end; i++) {
-            Matcher matcher = pattern.matcher(lines[i]);
+            Matcher matcher = pattern.matcher(lines[i].trim());
 
             if (matcher.matches()) {
                 String method = matcher.group(1);
