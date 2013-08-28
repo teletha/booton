@@ -35,7 +35,6 @@ import net.sourceforge.htmlunit.corejs.javascript.NativeArray;
 import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
 import net.sourceforge.htmlunit.corejs.javascript.Undefined;
 import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
-import antibug.bytecode.Agent;
 import booton.live.ClientStackTrace;
 import booton.live.Source;
 
@@ -237,12 +236,6 @@ public class ScriptTester {
         String sourceName = source.getSimpleName();
 
         try {
-            System.out.println("invoke test " + defined.contains(source));
-
-            if (defined.contains(source)) {
-                System.out.println(Javascript.getScript(source).recompile(Agent.getTransformedCode(source)).toString());
-            }
-
             StringBuilder script = new StringBuilder();
 
             // invoke as Javascript
@@ -262,7 +255,6 @@ public class ScriptTester {
             if (result == null || result instanceof Undefined || result instanceof UniqueTag) {
                 return null; // success
             } else {
-                System.out.println("Test fails.");
                 // fail (AssertionError) or error
                 dumpCode(source);
 
