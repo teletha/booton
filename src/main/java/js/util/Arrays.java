@@ -21,7 +21,7 @@ import js.lang.NativeFunction;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/08/18 13:49:30
+ * @version 2013/08/28 15:35:40
  */
 @JavaAPIProvider(java.util.Arrays.class)
 class Arrays {
@@ -968,6 +968,126 @@ class Arrays {
     }
 
     /**
+     * Returns a string representation of the contents of the specified array. The string
+     * representation consists of a list of the array's elements, enclosed in square brackets (
+     * <tt>"[]"</tt>). Adjacent elements are separated by the characters <tt>", "</tt> (a comma
+     * followed by a space). Elements are converted to strings as by <tt>String.valueOf(long)</tt>.
+     * Returns <tt>"null"</tt> if <tt>a</tt> is <tt>null</tt>.
+     * 
+     * @param array the array whose string representation to return
+     * @return a string representation of <tt>a</tt>
+     * @since 1.5
+     */
+    public static String toString(long[] array) {
+        return write(array);
+    }
+
+    /**
+     * Returns a string representation of the contents of the specified array. The string
+     * representation consists of a list of the array's elements, enclosed in square brackets (
+     * <tt>"[]"</tt>). Adjacent elements are separated by the characters <tt>", "</tt> (a comma
+     * followed by a space). Elements are converted to strings as by <tt>String.valueOf(int)</tt>.
+     * Returns <tt>"null"</tt> if <tt>a</tt> is <tt>null</tt>.
+     * 
+     * @param array the array whose string representation to return
+     * @return a string representation of <tt>a</tt>
+     * @since 1.5
+     */
+    public static String toString(int[] array) {
+        return write(array);
+    }
+
+    /**
+     * Returns a string representation of the contents of the specified array. The string
+     * representation consists of a list of the array's elements, enclosed in square brackets (
+     * <tt>"[]"</tt>). Adjacent elements are separated by the characters <tt>", "</tt> (a comma
+     * followed by a space). Elements are converted to strings as by <tt>String.valueOf(short)</tt>.
+     * Returns <tt>"null"</tt> if <tt>a</tt> is <tt>null</tt>.
+     * 
+     * @param array the array whose string representation to return
+     * @return a string representation of <tt>a</tt>
+     * @since 1.5
+     */
+    public static String toString(short[] array) {
+        return write(array);
+    }
+
+    /**
+     * Returns a string representation of the contents of the specified array. The string
+     * representation consists of a list of the array's elements, enclosed in square brackets (
+     * <tt>"[]"</tt>). Adjacent elements are separated by the characters <tt>", "</tt> (a comma
+     * followed by a space). Elements are converted to strings as by <tt>String.valueOf(char)</tt>.
+     * Returns <tt>"null"</tt> if <tt>a</tt> is <tt>null</tt>.
+     * 
+     * @param array the array whose string representation to return
+     * @return a string representation of <tt>a</tt>
+     * @since 1.5
+     */
+    public static String toString(char[] array) {
+        return write(array);
+    }
+
+    /**
+     * Returns a string representation of the contents of the specified array. The string
+     * representation consists of a list of the array's elements, enclosed in square brackets (
+     * <tt>"[]"</tt>). Adjacent elements are separated by the characters <tt>", "</tt> (a comma
+     * followed by a space). Elements are converted to strings as by <tt>String.valueOf(byte)</tt>.
+     * Returns <tt>"null"</tt> if <tt>a</tt> is <tt>null</tt>.
+     * 
+     * @param array the array whose string representation to return
+     * @return a string representation of <tt>a</tt>
+     * @since 1.5
+     */
+    public static String toString(byte[] array) {
+        return write(array);
+    }
+
+    /**
+     * Returns a string representation of the contents of the specified array. The string
+     * representation consists of a list of the array's elements, enclosed in square brackets (
+     * <tt>"[]"</tt>). Adjacent elements are separated by the characters <tt>", "</tt> (a comma
+     * followed by a space). Elements are converted to strings as by
+     * <tt>String.valueOf(boolean)</tt>. Returns <tt>"null"</tt> if <tt>a</tt> is <tt>null</tt>.
+     * 
+     * @param array the array whose string representation to return
+     * @return a string representation of <tt>a</tt>
+     * @since 1.5
+     */
+    public static String toString(boolean[] array) {
+        return write(array);
+    }
+
+    /**
+     * Returns a string representation of the contents of the specified array. The string
+     * representation consists of a list of the array's elements, enclosed in square brackets (
+     * <tt>"[]"</tt>). Adjacent elements are separated by the characters <tt>", "</tt> (a comma
+     * followed by a space). Elements are converted to strings as by <tt>String.valueOf(float)</tt>.
+     * Returns <tt>"null"</tt> if <tt>a</tt> is <tt>null</tt>.
+     * 
+     * @param array the array whose string representation to return
+     * @return a string representation of <tt>a</tt>
+     * @since 1.5
+     */
+    public static String toString(float[] array) {
+        return write(array);
+    }
+
+    /**
+     * Returns a string representation of the contents of the specified array. The string
+     * representation consists of a list of the array's elements, enclosed in square brackets (
+     * <tt>"[]"</tt>). Adjacent elements are separated by the characters <tt>", "</tt> (a comma
+     * followed by a space). Elements are converted to strings as by <tt>String.valueOf(double)</tt>
+     * . Returns <tt>"null"</tt> if <tt>a</tt> is <tt>null</tt>.
+     * 
+     * @param array the array whose string representation to return
+     * @return a string representation of <tt>a</tt>
+     * @since 1.5
+     */
+    public static String toString(double[] array) {
+        return write(array);
+    }
+
+    /**
      * Returns a string representation of the contents of the specified array. If the array contains
      * other arrays as elements, they are converted to strings by the {@link Object#toString} method
      * inherited from <tt>Object</tt>, which describes their <i>identities</i> rather than their
@@ -983,11 +1103,23 @@ class Arrays {
      * @since 1.5
      */
     public static String toString(Object[] array) {
+        return write(array);
+    }
+
+    /**
+     * <p>
+     * Helper method to write out items.
+     * </p>
+     * 
+     * @param array
+     * @return
+     */
+    private static String write(Object array) {
         if (array == null) {
             return "null";
         }
 
-        int length = array.length - 1;
+        int length = Array.getLength(array);
 
         if (length == -1) {
             return "[]";
@@ -997,7 +1129,7 @@ class Arrays {
         builder.append("[");
 
         for (int i = 0; i <= length; i++) {
-            builder.append(String.valueOf(array[i]));
+            builder.append(String.valueOf(Array.get(array, i)));
 
             if (i != length) {
                 builder.append(", ");

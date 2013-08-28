@@ -1610,6 +1610,9 @@ class JavaMethodCompiler extends MethodVisitor {
         case FLOAD:
         case LLOAD:
         case DLOAD:
+            if (current == null) {
+                System.out.println(methodNameOriginal);
+            }
             current.addOperand(new OperandExpression(variable, variables.type(position)));
             break;
 

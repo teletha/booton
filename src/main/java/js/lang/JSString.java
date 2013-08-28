@@ -962,6 +962,19 @@ class JSString implements Comparable<String>, CharSequence {
     }
 
     /**
+     * Returns a String that represents the character sequence in the array specified.
+     * 
+     * @param data the character array.
+     * @param offset initial offset of the subarray.
+     * @param count length of the subarray.
+     * @return a <code>String</code> that contains the characters of the specified subarray of the
+     *         character array.
+     */
+    public static String valueOf(char[] data, int offset, int count) {
+        return new String(data, offset, count);
+    }
+
+    /**
      * Returns the string representation of the <code>int</code> argument.
      * <p>
      * The representation is exactly the one returned by the <code>Integer.toString</code> method of

@@ -158,6 +158,19 @@ class JSSystem {
     }
 
     /**
+     * Returns the same hash code for the given object as would be returned by the default method
+     * hashCode(), whether or not the given object's class overrides hashCode(). The hash code for
+     * the null reference is zero.
+     * 
+     * @param object object for which the hashCode is to be calculated
+     * @return the hashCode
+     * @since JDK1.1
+     */
+    public static int identityHashCode(Object object) {
+        return object.hashCode();
+    }
+
+    /**
      * @version 2013/05/16 19:27:00
      */
     private static class DummyOutputStream extends OutputStream {

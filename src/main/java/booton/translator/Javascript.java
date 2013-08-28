@@ -275,12 +275,22 @@ public class Javascript {
             if (source.isInterface()) {
                 compileInterface(code);
             } else {
-                compileClass(code, source.getSuperclass());
+                compileClass(code, source.getSuperclass(), null);
             }
 
             // create cache
             this.code = code.toString();
         }
+    }
+
+    Javascript recompile(byte[] bytes) {
+        ScriptWriter code = new ScriptWriter();
+        compileClass(code, source.getSuperclass(), bytes);
+
+        // create cache
+        this.code = code.toString();
+
+        return this;
     }
 
     /**
@@ -291,7 +301,7 @@ public class Javascript {
      * @param code
      * @param parent A parent class.
      */
-    private void compileClass(ScriptWriter code, Class parent) {
+    private void compileClass(ScriptWriter code, Class parent, byte[] bytes) {
         // compute related class names
         String className = Javascript.computeSimpleClassName(source);
         String superClassName = parent == Object.class ? "" : computeSimpleClassName(parent);
@@ -303,7 +313,15 @@ public class Javascript {
         // write constructors, fields and methods
         try {
             code.append('{');
-            new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
+            ClassReader reader;
+
+            if (bytes == null) {
+                reader = new ClassReader(source.getName());
+            } else {
+                reader = new ClassReader(bytes);
+            }
+            reader.accept(new JavaClassCompiler(this, code), 0);
+
             code.append('}');
         } catch (TranslationError e) {
             e.write("\r\n at ", source.getName());

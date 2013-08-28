@@ -14,8 +14,8 @@ import booton.translator.JavaAPIProvider;
 /**
  * @version 2013/04/15 21:24:44
  */
-@JavaAPIProvider(StringBuilder.class)
-class JSStringBuilder {
+@JavaAPIProvider(StringBuffer.class)
+class JSStringBuffer {
 
     /** The native strint expression. */
     private NativeString text;
@@ -24,7 +24,7 @@ class JSStringBuilder {
      * Constructs a string builder with no characters in it and an initial capacity of 16
      * characters.
      */
-    public JSStringBuilder() {
+    public JSStringBuffer() {
         text = new NativeString();
     }
 
@@ -36,7 +36,7 @@ class JSStringBuilder {
      * @throws NegativeArraySizeException if the <code>capacity</code> argument is less than
      *             <code>0</code>.
      */
-    public JSStringBuilder(int capacity) {
+    public JSStringBuffer(int capacity) {
         this();
     }
 
@@ -47,7 +47,7 @@ class JSStringBuilder {
      * @param value the initial contents of the buffer.
      * @throws NullPointerException if <code>value</code> is <code>null</code>
      */
-    public JSStringBuilder(String value) {
+    public JSStringBuffer(String value) {
         this();
 
         append(value);
@@ -61,7 +61,7 @@ class JSStringBuilder {
      * @param seq the sequence to copy.
      * @throws NullPointerException if <code>seq</code> is <code>null</code>
      */
-    public JSStringBuilder(CharSequence seq) {
+    public JSStringBuffer(CharSequence seq) {
         this();
 
         append(seq);
@@ -80,7 +80,7 @@ class JSStringBuilder {
      * @param value A value to append.
      * @return Chainable API.
      */
-    public StringBuilder append(Object value) {
+    public StringBuffer append(Object value) {
         return append(String.valueOf(value));
     }
 
@@ -97,7 +97,7 @@ class JSStringBuilder {
      * @param value A value to append.
      * @return Chainable API.
      */
-    public StringBuilder append(int value) {
+    public StringBuffer append(int value) {
         return append(String.valueOf(value));
     }
 
@@ -114,7 +114,7 @@ class JSStringBuilder {
      * @param value A value to append.
      * @return Chainable API.
      */
-    public StringBuilder append(long value) {
+    public StringBuffer append(long value) {
         return append(String.valueOf(value));
     }
 
@@ -131,7 +131,7 @@ class JSStringBuilder {
      * @param value A value to append.
      * @return Chainable API.
      */
-    public StringBuilder append(float value) {
+    public StringBuffer append(float value) {
         return append(String.valueOf(value));
     }
 
@@ -148,7 +148,7 @@ class JSStringBuilder {
      * @param value A value to append.
      * @return Chainable API.
      */
-    public StringBuilder append(double value) {
+    public StringBuffer append(double value) {
         return append(String.valueOf(value));
     }
 
@@ -165,7 +165,7 @@ class JSStringBuilder {
      * @param value A value to append.
      * @return Chainable API.
      */
-    public StringBuilder append(boolean value) {
+    public StringBuffer append(boolean value) {
         return append(String.valueOf(value));
     }
 
@@ -182,7 +182,7 @@ class JSStringBuilder {
      * @param value A value to append.
      * @return Chainable API.
      */
-    public StringBuilder append(byte value) {
+    public StringBuffer append(byte value) {
         return append(String.valueOf(value));
     }
 
@@ -199,7 +199,7 @@ class JSStringBuilder {
      * @param value A value to append.
      * @return Chainable API.
      */
-    public StringBuilder append(short value) {
+    public StringBuffer append(short value) {
         return append(String.valueOf(value));
     }
 
@@ -216,8 +216,31 @@ class JSStringBuilder {
      * @param value A value to append.
      * @return Chainable API.
      */
-    public StringBuilder append(char value) {
+    public StringBuffer append(char value) {
         return append(String.valueOf(value));
+    }
+
+    /**
+     * Appends the string representation of a subarray of the {@code char} array argument to this
+     * sequence.
+     * <p>
+     * Characters of the {@code char} array {@code str}, starting at index {@code offset}, are
+     * appended, in order, to the contents of this sequence. The length of this sequence increases
+     * by the value of {@code len}.
+     * <p>
+     * The overall effect is exactly as if the arguments were converted to a string by the method
+     * {@link String#valueOf(char[],int,int)}, and the characters of that string were then
+     * {@link #append(String) appended} to this character sequence.
+     * 
+     * @param chars the characters to be appended.
+     * @param offset the index of the first {@code char} to append.
+     * @param length the number of {@code char}s to append.
+     * @return a reference to this object.
+     * @throws IndexOutOfBoundsException if {@code offset < 0} or {@code len < 0} or
+     *             {@code offset+len > str.length}
+     */
+    public StringBuffer append(char[] chars, int offset, int length) {
+        return append(String.valueOf(chars, offset, length));
     }
 
     /**
@@ -239,10 +262,10 @@ class JSStringBuilder {
      * @param value
      * @return Chainable API.
      */
-    public StringBuilder append(String value) {
+    public StringBuffer append(String value) {
         text = text.concat(value);
 
-        return (StringBuilder) (Object) this;
+        return (StringBuffer) (Object) this;
     }
 
     /**
@@ -295,10 +318,10 @@ class JSStringBuilder {
      * @param end The ending index, exclusive.
      * @return Chainable API.
      */
-    public StringBuilder delete(int start, int end) {
+    public StringBuffer delete(int start, int end) {
         text = text.substring(0, start - 1).concat(text.substring(end));
 
-        return (StringBuilder) (Object) this;
+        return (StringBuffer) (Object) this;
     }
 
     /**
@@ -316,7 +339,7 @@ class JSStringBuilder {
      * @param index Index of char to remove.
      * @return Chainable API.
      */
-    public StringBuilder deleteCharAt(int index) {
+    public StringBuffer deleteCharAt(int index) {
         return delete(index + 1, index + 1);
     }
 
@@ -344,7 +367,7 @@ class JSStringBuilder {
      * @return a reference to this object.
      * @throws StringIndexOutOfBoundsException if the offset is invalid.
      */
-    public StringBuilder insert(int offset, int value) {
+    public StringBuffer insert(int offset, int value) {
         return insert(offset, String.valueOf(value));
     }
 
@@ -366,7 +389,7 @@ class JSStringBuilder {
      * @return a reference to this object.
      * @throws IndexOutOfBoundsException if the offset is invalid.
      */
-    public StringBuilder insert(int dstOffset, CharSequence value) {
+    public StringBuffer insert(int dstOffset, CharSequence value) {
         return insert(dstOffset, (Object) value);
     }
 
@@ -386,7 +409,7 @@ class JSStringBuilder {
      * @return a reference to this object.
      * @throws StringIndexOutOfBoundsException if the offset is invalid.
      */
-    public StringBuilder insert(int offset, Object value) {
+    public StringBuffer insert(int offset, Object value) {
         return insert(offset, String.valueOf(value));
     }
 
@@ -416,7 +439,7 @@ class JSStringBuilder {
      * @return a reference to this object.
      * @throws StringIndexOutOfBoundsException if the offset is invalid.
      */
-    public StringBuilder insert(int offset, String value) {
+    public StringBuffer insert(int offset, String value) {
         if (offset < 0 || length() < offset) {
             throw new StringIndexOutOfBoundsException(offset);
         }
@@ -424,7 +447,7 @@ class JSStringBuilder {
         // normalize value
         value = String.valueOf(value);
 
-        return (StringBuilder) (Object) this;
+        return (StringBuffer) (Object) this;
     }
 
     /**
