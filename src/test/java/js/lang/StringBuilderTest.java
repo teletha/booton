@@ -10,146 +10,70 @@
 package js.lang;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import booton.translator.ScriptTester;
-import booton.translator.Scriptable;
+import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/04/15 16:37:18
+ * @version 2013/08/28 12:57:57
  */
-@SuppressWarnings("unused")
-public class StringBuilderTest extends ScriptTester {
+@RunWith(ScriptRunner.class)
+public class StringBuilderTest {
 
     @Test
-    public void constructorEmpty() throws Exception {
-        test(new Scriptable() {
-
-            String act() {
-                StringBuilder builder = new StringBuilder();
-                return builder.toString();
-            }
-        });
+    public void constructor() throws Exception {
+        assert new StringBuilder().toString().equals("");
+        assert new StringBuilder("init").toString().equals("init");
     }
 
     @Test
-    public void constructorString() throws Exception {
-        test(new Scriptable() {
+    public void append() throws Exception {
+        StringBuilder builder = new StringBuilder();
+        assert builder.append(1).toString().equals("1");
+        assert builder.append(0.1D).toString().equals("10.1");
+        assert builder.append(12345678901L).toString().equals("10.112345678901");
 
-            String act() {
-                StringBuilder builder = new StringBuilder("init");
-                return builder.toString();
-            }
-        });
-    }
-
-    @Test
-    public void appendInt() throws Exception {
-        test(new Scriptable() {
-
-            String act() {
-                StringBuilder builder = new StringBuilder();
-                builder.append(1);
-
-                assert builder.toString().equals("1");
-
-                return builder.toString();
-            }
-        });
-    }
-
-    @Test
-    public void appendDouble() throws Exception {
-        test(new Scriptable() {
-
-            String act() {
-                StringBuilder builder = new StringBuilder();
-                builder.append(0.1d);
-                assert builder.toString().equals("0.1");
-
-                return builder.toString();
-            }
-        });
-    }
-
-    @Test
-    public void appendString() throws Exception {
-        test(new Scriptable() {
-
-            String act() {
-                StringBuilder builder = new StringBuilder();
-                builder.append("add");
-
-                assert builder.toString().equals("add");
-
-                return builder.toString();
-            }
-        });
-    }
-
-    @Test
-    public void appendObject() throws Exception {
-        test(new Scriptable() {
-
-            String act() {
-                StringBuilder builder = new StringBuilder();
-                builder.append(this);
-
-                assert builder.toString().equals("scriptable object");
-
-                return builder.toString();
-            }
-
-            public String toString() {
-                return "scriptable object";
-            }
-        });
+        builder = new StringBuilder();
+        assert builder.append("add").toString().equals("add");
+        assert builder.append(this).toString().equals("addTest");
     }
 
     @Test
     public void appendNull() throws Exception {
-        test(new Scriptable() {
+        StringBuilder builder = new StringBuilder();
+        assert builder.append((String) null).toString().equals("null");
+        assert builder.append((Object) null).toString().equals("nullnull");
+    }
 
-            String act() {
-                StringBuilder builder = new StringBuilder();
-                builder.append((Object) null);
-                builder.append((String) null);
-
-                assert builder.toString().equals("nullnull");
-
-                return builder.toString();
-            }
-        });
+    @Test
+    public void insert() throws Exception {
+        StringBuilder builder = new StringBuilder("0123456789");
+        assert builder.insert(8, 0).toString().equals("01234567089");
     }
 
     @Test
     public void delete() throws Exception {
-        test(new Scriptable() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("test");
+        builder.delete(0, 2);
 
-            String act() {
-                StringBuilder builder = new StringBuilder();
-                builder.append("test");
-                builder.delete(0, 2);
-
-                assert builder.toString().equals("st");
-
-                return builder.toString();
-            }
-        });
+        assert builder.toString().equals("st");
     }
 
     @Test
     public void deleteCharAt() throws Exception {
-        test(new Scriptable() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("test");
+        builder.deleteCharAt(1);
 
-            String act() {
-                StringBuilder builder = new StringBuilder();
-                builder.append("test");
-                builder.deleteCharAt(1);
+        assert builder.toString().equals("tst");
+    }
 
-                assert builder.toString().equals("tst");
-
-                return builder.toString();
-            }
-        });
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "Test";
     }
 }

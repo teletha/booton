@@ -9,6 +9,8 @@
  */
 package js.util.regex;
 
+import java.util.regex.MatchResult;
+
 import js.lang.NativeRegExp.Result;
 import booton.translator.JavaAPIProvider;
 
@@ -259,5 +261,16 @@ class Matcher {
         this.pattern.regex.lastIndex(old.regex.lastIndex());
 
         return (java.util.regex.Matcher) (Object) this;
+    }
+
+    /**
+     * Returns the match state of this matcher as a {@link MatchResult}. The result is unaffected by
+     * subsequent operations performed upon this matcher.
+     * 
+     * @return a <code>MatchResult</code> with the state of this matcher
+     * @since 1.5
+     */
+    public MatchResult toMatchResult() {
+        return null;
     }
 }
