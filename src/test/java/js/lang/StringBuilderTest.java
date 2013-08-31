@@ -213,6 +213,23 @@ public class StringBuilderTest {
     }
 
     @Test
+    public void charAt() throws Exception {
+        StringBuilder builder = new StringBuilder("test");
+        assert builder.charAt(1) == 'e';
+        assert builder.charAt(2) == 's';
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void charAtInvalidRange1() throws Exception {
+        new StringBuilder("test").charAt(-10);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void charAtInvalidRange2() throws Exception {
+        new StringBuilder("test").charAt(4);
+    }
+
+    @Test
     public void delete() throws Exception {
         StringBuilder builder = new StringBuilder("test");
         assert builder.delete(0, 2).toString().equals("st");

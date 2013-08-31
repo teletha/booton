@@ -357,6 +357,9 @@ class JSStringBuilder {
      * @return The char value at the specified index.
      */
     public char charAt(int index) {
+        if (index < 0 || length() <= index) {
+            throw new StringIndexOutOfBoundsException(index);
+        }
         return text.charAt(index);
     }
 

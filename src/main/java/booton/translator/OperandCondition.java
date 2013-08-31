@@ -17,7 +17,7 @@ package booton.translator;
  * change depending on the content of the description of the logical expression.
  * </p>
  * 
- * @version 2013/01/24 13:55:44
+ * @version 2013/08/31 21:33:37
  */
 class OperandCondition extends Operand {
 
@@ -46,10 +46,10 @@ class OperandCondition extends Operand {
     static final int GE = ~LT;
 
     /** The left operand of this conditional expression. */
-    final Operand left;
+    private Operand left;
 
     /** The right operand of this conditional expression. */
-    final Operand right;
+    private Operand right;
 
     /** The transition node. */
     final Node transition;
@@ -141,6 +141,19 @@ class OperandCondition extends Operand {
      */
     @Override
     public String toString() {
+        // convert int to char if needed
+        Class leftType = left.infer().type();
+        Class rightType = right.infer().type();
+
+        if (leftType == char.class && rightType != char.class) {
+            right = right.cast(char.class);
+        }
+
+        if (rightType == char.class && leftType != char.class) {
+            left = left.cast(char.class);
+        }
+
+        // write out
         StringBuilder builder = new StringBuilder();
 
         if (group) {

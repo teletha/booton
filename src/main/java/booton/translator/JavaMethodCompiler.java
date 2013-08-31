@@ -248,11 +248,11 @@ class JavaMethodCompiler extends MethodVisitor {
         Type[] parameters = Type.getArgumentTypes(description);
 
         if (!isStatic) {
-            variables.type(0).set(script.source);
+            variables.type(0).type(script.source);
         }
 
         for (int i = 0; i < parameters.length; i++) {
-            variables.type(isStatic ? i : i + 1).set(convert(parameters[i]));
+            variables.type(isStatic ? i : i + 1).type(convert(parameters[i]));
         }
     }
 
@@ -839,6 +839,11 @@ class JavaMethodCompiler extends MethodVisitor {
 
         case MONITOREXIT:
             break; // ignore
+
+        case I2C:
+            // cast int to char
+            current.addOperand("String.fromCharCode(" + current.remove(0) + ")", char.class);
+            break;
         }
     }
 
@@ -1645,7 +1650,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     }
 
                     // infer local variable type
-                    variables.type(position).set(operand.infer().type());
+                    variables.type(position).type(operand.infer().type());
 
                     OperandExpression assignment = new OperandExpression(variable + "=" + operand);
 

@@ -90,7 +90,7 @@ class Node {
      * @param operand A new operand to add.
      */
     final void addOperand(Object operand, Class type) {
-        stack.add(new OperandExpression(operand, new InferredType(type)));
+        stack.add(new OperandExpression(operand, type));
     }
 
     /**
@@ -251,7 +251,18 @@ class Node {
      * @return Chainable API.
      */
     final Node join(String separator) {
-        stack.add(new OperandExpression(remove(1) + separator + remove(0)));
+        Operand left = remove(0);
+        Operand right = remove(0);
+
+        if (left.infer().type() == char.class) {
+            left = new OperandExpression(Javascript.writeMethodCode(String.class, "codePointAt", left, int.class, 0), int.class);
+        }
+
+        if (right.infer().type() == char.class) {
+            right = new OperandExpression(Javascript.writeMethodCode(String.class, "codePointAt", right, int.class, 0), int.class);
+        }
+
+        stack.add(new OperandExpression(right + separator + left));
 
         // API definition
         return this;
@@ -611,7 +622,8 @@ class Node {
             // =============================================================
             for (TryCatchFinally block : tries) {
                 buffer.write("}", "catch", "($)", "{");
-                buffer.write("$", "=", Javascript.writeMethodCode(Throwable.class, "wrap", Object.class, "$"), ";").line();
+                buffer.write("$", "=", Javascript.writeMethodCode(Throwable.class, "wrap", Object.class, "$"), ";")
+                        .line();
 
                 for (int i = 0; i < block.catches.size(); i++) {
                     Catch current = block.catches.get(i);

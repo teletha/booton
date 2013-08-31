@@ -24,8 +24,14 @@ class OperandExpression extends Operand {
      * 
      */
     OperandExpression(Object expression) {
-        this.expression = expression;
-        this.type = new InferredType(Object.class);
+        this(expression, Object.class);
+    }
+
+    /**
+     * 
+     */
+    OperandExpression(Object expression, Class type) {
+        this(expression, new InferredType(type));
     }
 
     /**

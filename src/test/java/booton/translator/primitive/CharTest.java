@@ -15,13 +15,13 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/05/13 11:58:55
+ * @version 2013/08/31 22:21:41
  */
 @SuppressWarnings("unused")
 public class CharTest extends ScriptTester {
 
     @Test
-    public void Char() {
+    public void primitive() {
         test(new Scriptable() {
 
             char act(char value) {
@@ -31,7 +31,7 @@ public class CharTest extends ScriptTester {
     }
 
     @Test
-    public void Equal() {
+    public void equalToChar() {
         test(new Scriptable() {
 
             boolean act(char value) {
@@ -41,11 +41,21 @@ public class CharTest extends ScriptTester {
     }
 
     @Test
-    public void EqualNumber() {
+    public void equalToNumber1() {
         test(new Scriptable() {
 
             boolean act(char value) {
                 return value == 97; // a
+            }
+        });
+    }
+
+    @Test
+    public void equalToNumber2() {
+        test(new Scriptable() {
+
+            boolean act(char value) {
+                return 97 == value; // a
             }
         });
     }
@@ -61,13 +71,31 @@ public class CharTest extends ScriptTester {
     }
 
     @Test
-    public void VariableDual() {
+    public void subtract() {
         test(new Scriptable() {
 
-            boolean act(boolean value) {
-                value = !!value;
+            int act(char value) {
+                return value - 10;
+            }
+        });
+    }
 
-                return value;
+    @Test
+    public void codition() {
+        test(new Scriptable() {
+
+            boolean act(char value) {
+                return value < 60;
+            }
+        });
+    }
+
+    @Test
+    public void cast() {
+        test(new Scriptable() {
+
+            char act(char value) {
+                return (char) (value + 1);
             }
         });
     }

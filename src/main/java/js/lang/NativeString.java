@@ -15,7 +15,7 @@ import java.util.List;
 import booton.translator.Translator;
 
 /**
- * @version 2013/08/15 23:03:12
+ * @version 2013/08/31 22:16:34
  */
 class NativeString {
 
@@ -370,12 +370,29 @@ class NativeString {
      * @param codes A sequence of numbers that are Unicode values.
      * @return
      */
-    public static NativeString fromCharCode(int... codes) {
-        return new NativeString(String.valueOf(codes));
+    public static NativeString fromCharCode(int code) {
+        return new NativeString(String.valueOf((char) code));
     }
 
     /**
-     * @version 2013/08/15 20:15:40
+     * <p>
+     * Returns a string created by using the specified sequence of Unicode values.
+     * </p>
+     * 
+     * @param codes A sequence of numbers that are Unicode values.
+     * @return
+     */
+    public static NativeString fromCharCode(int... codes) {
+        char[] chars = new char[codes.length];
+
+        for (int i = 0; i < chars.length; i++) {
+            chars[i] = (char) codes[i];
+        }
+        return new NativeString(String.valueOf(chars));
+    }
+
+    /**
+     * @version 2013/08/31 22:16:27
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<NativeString> {
@@ -709,6 +726,18 @@ class NativeString {
         @Override
         public String toString() {
             return that;
+        }
+
+        /**
+         * <p>
+         * Returns a string created by using the specified sequence of Unicode values.
+         * </p>
+         * 
+         * @param codes A sequence of numbers that are Unicode values.
+         * @return
+         */
+        public String fromCharCode(int code) {
+            return "String.fromCharCode(" + param(0) + ")";
         }
 
         /**

@@ -454,7 +454,7 @@ public class Javascript {
 
             for (int i = 0; i < parameters.length; i = i + 2) {
                 types[i / 2] = (Class) parameters[i];
-                params[i / 2] = (String) parameters[i + 1];
+                params[i / 2] = String.valueOf(parameters[i + 1]);
             }
 
             Class source = getScript(type).source;
