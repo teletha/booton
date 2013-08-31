@@ -105,7 +105,7 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
     static void validateMethod(Class owner, String name, String description) {
         JavaAPIProviders.Definition definition = definitions.get(owner);
 
-        if (definition != null && !definition.methods.contains(name + description)) {
+        if (definition != null && !definition.methods.contains(Javascript.computeMethodSignature(name, description))) {
             TranslationError error = new TranslationError();
             error.write("You must define the method in " + definition.clazz + ".");
             error.writeMethod(name, Type.getReturnType(description), Type.getArgumentTypes(description));
@@ -161,11 +161,11 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
             this.clazz = clazz;
 
             for (Method method : clazz.getMethods()) {
-                methods.add(method.getName() + Type.getMethodDescriptor(method));
+                methods.add(Javascript.computeMethodSignature(method.getName(), Type.getMethodDescriptor(method)));
             }
 
             for (Method method : clazz.getDeclaredMethods()) {
-                methods.add(method.getName() + Type.getMethodDescriptor(method));
+                methods.add(Javascript.computeMethodSignature(method.getName(), Type.getMethodDescriptor(method)));
             }
 
             for (Field field : clazz.getFields()) {

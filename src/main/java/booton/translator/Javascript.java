@@ -660,8 +660,21 @@ public class Javascript {
             // method
             JavaAPIProviders.validateMethod(owner, name, description);
 
-            return mung32(order(methods, name.hashCode() ^ description.hashCode()));
+            return mung32(order(methods, computeMethodSignature(name, description).hashCode()));
         }
+    }
+
+    /**
+     * <p>
+     * Compute the signature of method.
+     * </p>
+     * 
+     * @param name A method name.
+     * @param descriptor A method descriptor.
+     * @return A method signature.
+     */
+    static final String computeMethodSignature(String name, String descriptor) {
+        return name + descriptor.substring(0, descriptor.indexOf(')') + 1);
     }
 
     /**
