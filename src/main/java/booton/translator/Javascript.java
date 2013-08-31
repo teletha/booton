@@ -453,8 +453,8 @@ public class Javascript {
             String[] params = new String[parameters.length / 2];
 
             for (int i = 0; i < parameters.length; i = i + 2) {
-                types[i] = (Class) parameters[i];
-                params[i] = (String) parameters[i + 1];
+                types[i / 2] = (Class) parameters[i];
+                params[i / 2] = (String) parameters[i + 1];
             }
 
             Class source = getScript(type).source;
