@@ -391,6 +391,9 @@ class JSStringBuilder {
      * @return Chainable API.
      */
     public StringBuilder delete(int start, int end) {
+        if (start < 0 || length() < start || end < start) {
+            throw new StringIndexOutOfBoundsException(start);
+        }
         text = text.substring(0, start - 1).concat(text.substring(end));
 
         return (StringBuilder) (Object) this;
