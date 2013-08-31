@@ -173,12 +173,8 @@ public class ScriptTester {
                 invoker.append("new ").append(className).append("(").append(constructorName).append(").");
                 invoker.append(methodName).append("(");
                 if (input != NONE) {
-                    if (input instanceof String) {
+                    if (input instanceof String || input instanceof Character) {
                         invoker.append('"').append(input).append('"');
-                    } else if (input instanceof Character) {
-                        Class type = Class.forName("js.lang.JSCharacter");
-
-                        invoker.append("new " + Javascript.computeClassName(type) + "(\"" + input + "\",0)");
                     } else if (input instanceof Class) {
                         invoker.append(Javascript.computeClass((Class) input));
                     } else {

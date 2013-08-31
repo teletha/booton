@@ -10,7 +10,7 @@
 package booton.translator;
 
 /**
- * @version 2013/08/18 13:34:04
+ * @version 2013/08/31 21:55:20
  */
 class InferredType {
 
@@ -37,7 +37,7 @@ class InferredType {
      * 
      * @param type
      */
-    void set(Class type) {
+    void type(Class type) {
         this.type = type;
     }
 
