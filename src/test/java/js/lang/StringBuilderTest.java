@@ -197,37 +197,59 @@ public class StringBuilderTest {
         new StringBuilder("value").insert(2, (char[]) null, 0, 0);
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test(expected = StringIndexOutOfBoundsException.class)
     public void insertCharInvalidStartRange() throws Exception {
         new StringBuilder("value").insert(2, "value".toCharArray(), -1, 3);
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test(expected = StringIndexOutOfBoundsException.class)
     public void insertCharInvalidEndRange() throws Exception {
         new StringBuilder("value").insert(2, "value".toCharArray(), 1, 100);
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test(expected = StringIndexOutOfBoundsException.class)
     public void insertCharInvalidRange() throws Exception {
         new StringBuilder("value").insert(2, "value".toCharArray(), 2, -1);
     }
 
     @Test
     public void delete() throws Exception {
-        StringBuilder builder = new StringBuilder();
-        builder.append("test");
-        builder.delete(0, 2);
+        StringBuilder builder = new StringBuilder("test");
+        assert builder.delete(0, 2).toString().equals("st");
+        assert builder.delete(0, 0).toString().equals("st");
+        assert builder.delete(0, 100).toString().equals("");
+    }
 
-        assert builder.toString().equals("st");
+    @Test(expected = StringIndexOutOfBoundsException.class)
+    public void deleteInvalidStartRange1() throws Exception {
+        new StringBuilder("test").delete(-100, 2);
+    }
+
+    @Test(expected = StringIndexOutOfBoundsException.class)
+    public void deleteInvalidStartRange2() throws Exception {
+        new StringBuilder("test").delete(4, 0);
+    }
+
+    @Test(expected = StringIndexOutOfBoundsException.class)
+    public void deleteInvalidRange() throws Exception {
+        new StringBuilder("test").delete(3, 2).equals("test");
     }
 
     @Test
     public void deleteCharAt() throws Exception {
-        StringBuilder builder = new StringBuilder();
-        builder.append("test");
-        builder.deleteCharAt(1);
+        StringBuilder builder = new StringBuilder("test");
+        assert builder.deleteCharAt(1).toString().equals("tst");
+        assert builder.deleteCharAt(2).toString().equals("ts");
+    }
 
-        assert builder.toString().equals("tst");
+    @Test(expected = StringIndexOutOfBoundsException.class)
+    public void deleteCharInvalidRange1() throws Exception {
+        new StringBuilder("test").deleteCharAt(-10);
+    }
+
+    @Test(expected = StringIndexOutOfBoundsException.class)
+    public void deleteCharInvalidRange2() throws Exception {
+        new StringBuilder("test").deleteCharAt(4);
     }
 
     /**
