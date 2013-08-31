@@ -9,6 +9,8 @@
  */
 package js.lang;
 
+import java.util.Objects;
+
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -19,8 +21,6 @@ class JSStringBuilder {
 
     /** The native strint expression. */
     private NativeString text;
-
-    private NativeArray values;
 
     /**
      * Constructs a string builder with no characters in it and an initial capacity of 16
@@ -711,6 +711,94 @@ class JSStringBuilder {
      */
     public StringBuilder insert(int offset, double value) {
         return insert(offset, String.valueOf(value));
+    }
+
+    /**
+     * Returns the index within this string of the first occurrence of the specified substring. The
+     * integer returned is the smallest value <i>k</i> such that: <blockquote>
+     * 
+     * <pre>
+     * this.toString().startsWith(str, <i>k</i>)
+     * </pre>
+     * 
+     * </blockquote> is <code>true</code>.
+     * 
+     * @param search any string.
+     * @return if the string argument occurs as a substring within this object, then the index of
+     *         the first character of the first such substring is returned; if it does not occur as
+     *         a substring, <code>-1</code> is returned.
+     * @throws java.lang.NullPointerException if <code>str</code> is <code>null</code>.
+     */
+    public int indexOf(String search) {
+        return indexOf(search, 0);
+    }
+
+    /**
+     * Returns the index within this string of the first occurrence of the specified substring,
+     * starting at the specified index. The integer returned is the smallest value <tt>k</tt> for
+     * which: <blockquote>
+     * 
+     * <pre>
+     *     k >= Math.min(fromIndex, str.length()) &&
+     *                   this.toString().startsWith(str, k)
+     * </pre>
+     * 
+     * </blockquote> If no such value of <i>k</i> exists, then -1 is returned.
+     * 
+     * @param search the substring for which to search.
+     * @param fromIndex the index from which to start the search.
+     * @return the index within this string of the first occurrence of the specified substring,
+     *         starting at the specified index.
+     * @throws java.lang.NullPointerException if <code>str</code> is <code>null</code>.
+     */
+    public int indexOf(String search, int fromIndex) {
+        Objects.requireNonNull(search);
+
+        return text.indexOf(search, fromIndex);
+    }
+
+    /**
+     * Returns the index within this string of the rightmost occurrence of the specified substring.
+     * The rightmost empty string "" is considered to occur at the index value
+     * <code>this.length()</code>. The returned index is the largest value <i>k</i> such that
+     * <blockquote>
+     * 
+     * <pre>
+     * this.toString().startsWith(str, k)
+     * </pre>
+     * 
+     * </blockquote> is true.
+     * 
+     * @param value the substring to search for.
+     * @return if the string argument occurs one or more times as a substring within this object,
+     *         then the index of the first character of the last such substring is returned. If it
+     *         does not occur as a substring, <code>-1</code> is returned.
+     * @throws java.lang.NullPointerException if <code>str</code> is <code>null</code>.
+     */
+    public int lastIndexOf(String value) {
+        return lastIndexOf(value, length());
+    }
+
+    /**
+     * Returns the index within this string of the last occurrence of the specified substring. The
+     * integer returned is the largest value <i>k</i> such that: <blockquote>
+     * 
+     * <pre>
+     *     k <= Math.min(fromIndex, str.length()) &&
+     *                   this.toString().startsWith(str, k)
+     * </pre>
+     * 
+     * </blockquote> If no such value of <i>k</i> exists, then -1 is returned.
+     * 
+     * @param search the substring to search for.
+     * @param fromIndex the index to start the search from.
+     * @return the index within this sequence of the last occurrence of the specified substring.
+     * @throws java.lang.NullPointerException if <code>str</code> is <code>null</code>.
+     */
+    public int lastIndexOf(String search, int fromIndex) {
+        Objects.requireNonNull(search);
+
+        return text.lastIndexOf(search, fromIndex);
     }
 
     /**

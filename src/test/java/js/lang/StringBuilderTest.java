@@ -252,6 +252,57 @@ public class StringBuilderTest {
         new StringBuilder("test").deleteCharAt(4);
     }
 
+    @Test
+    public void indexOf() throws Exception {
+        StringBuilder builder = new StringBuilder("speak like a child");
+        assert builder.indexOf("a") == 3;
+        assert builder.indexOf("children") == -1;
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void indexOfNull() throws Exception {
+        new StringBuilder("speak like a child").indexOf(null);
+    }
+
+    @Test
+    public void indexOfFrom() throws Exception {
+        StringBuilder builder = new StringBuilder("speak like a child");
+        assert builder.indexOf("a", 6) == 11;
+        assert builder.indexOf("a", -1) == 3;
+        assert builder.indexOf("a", 100) == -1;
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void indexOfFromNull() throws Exception {
+        new StringBuilder("speak like a child").indexOf(null, 3);
+    }
+
+    @Test
+    public void lastIndexOf() throws Exception {
+        StringBuilder builder = new StringBuilder("speak like a child");
+        assert builder.lastIndexOf("a") == 11;
+        assert builder.lastIndexOf("children") == -1;
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void lastIndexOfNull() throws Exception {
+        new StringBuilder("speak like a child").lastIndexOf(null);
+    }
+
+    @Test
+    public void lastIndexOfFrom() throws Exception {
+        StringBuilder builder = new StringBuilder("speak like a child");
+        assert builder.lastIndexOf("a", 14) == 11;
+        assert builder.lastIndexOf("a", 8) == 3;
+        assert builder.lastIndexOf("a", -10) == -1;
+        assert builder.lastIndexOf("a", 200) == 11;
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void lastIndexOfFromNull() throws Exception {
+        new StringBuilder("speak like a child").lastIndexOf(null, 3);
+    }
+
     /**
      * {@inheritDoc}
      */
