@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/08/28 12:57:57
+ * @version 2013/08/31 23:28:11
  */
 @RunWith(ScriptRunner.class)
 public class StringBuilderTest {
@@ -318,6 +318,132 @@ public class StringBuilderTest {
     @Test(expected = NullPointerException.class)
     public void lastIndexOfFromNull() throws Exception {
         new StringBuilder("speak like a child").lastIndexOf(null, 3);
+    }
+
+    @Test
+    public void replace() throws Exception {
+        StringBuilder builder = new StringBuilder("speak like a child");
+        assert builder.replace(0, 5, "sleep").toString().equals("sleep like a child");
+        assert builder.replace(0, 500, "as").toString().equals("as");
+        assert builder.replace(2, 2, "h").toString().equals("ash");
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void replaceNull() throws Exception {
+        new StringBuilder("speak like a child").replace(3, 5, null);
+    }
+
+    @Test(expected = StringIndexOutOfBoundsException.class)
+    public void replaceInvalidStartRange1() throws Exception {
+        new StringBuilder("speak like a child").replace(-100, 5, "test");
+    }
+
+    @Test(expected = StringIndexOutOfBoundsException.class)
+    public void replaceInvalidStartRange2() throws Exception {
+        new StringBuilder("speak like a child").replace(100, 101, "test");
+    }
+
+    @Test(expected = StringIndexOutOfBoundsException.class)
+    public void replaceInvalidEndRange() throws Exception {
+        new StringBuilder("speak like a child").replace(4, 3, "test");
+    }
+
+    @Test
+    public void substring() throws Exception {
+        StringBuilder builder = new StringBuilder("speak like a child");
+        assert builder.substring(11).equals("a child");
+        assert builder.substring(0).equals("speak like a child");
+        assert builder.substring(18).equals("");
+
+        assert builder.substring(0, 5).equals("speak");
+        assert builder.substring(6, 10).equals("like");
+        assert builder.substring(11, 18).equals("a child");
+    }
+
+    @Test(expected = StringIndexOutOfBoundsException.class)
+    public void substringInvalidRange1() throws Exception {
+        new StringBuilder("speak like a child").substring(-1);
+    }
+
+    @Test(expected = StringIndexOutOfBoundsException.class)
+    public void substringInvalidRange2() throws Exception {
+        new StringBuilder("speak like a child").substring(100);
+    }
+
+    @Test(expected = StringIndexOutOfBoundsException.class)
+    public void substringInvalidRange3() throws Exception {
+        new StringBuilder("speak like a child").substring(-1, 3);
+    }
+
+    @Test(expected = StringIndexOutOfBoundsException.class)
+    public void substringInvalidRange4() throws Exception {
+        new StringBuilder("speak like a child").substring(100, 101);
+    }
+
+    @Test(expected = StringIndexOutOfBoundsException.class)
+    public void substringInvalidRange5() throws Exception {
+        new StringBuilder("speak like a child").substring(2, 101);
+    }
+
+    @Test(expected = StringIndexOutOfBoundsException.class)
+    public void substringInvalidRange6() throws Exception {
+        new StringBuilder("speak like a child").substring(10, 2);
+    }
+
+    @Test
+    public void subSequence() throws Exception {
+        StringBuilder builder = new StringBuilder("speak like a child");
+        assert builder.subSequence(0, 5).toString().equals("speak");
+        assert builder.subSequence(6, 10).toString().equals("like");
+        assert builder.subSequence(11, 18).toString().equals("a child");
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void subSequenceInvalidRange1() throws Exception {
+        new StringBuilder("speak like a child").subSequence(-1, 3);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void subSequenceInvalidRange2() throws Exception {
+        new StringBuilder("speak like a child").subSequence(100, 101);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void subSequenceInvalidRange3() throws Exception {
+        new StringBuilder("speak like a child").subSequence(2, 101);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void subSequenceInvalidRange4() throws Exception {
+        new StringBuilder("speak like a child").subSequence(10, 2);
+    }
+
+    @Test
+    public void reverse() throws Exception {
+        StringBuilder builder = new StringBuilder("live");
+        assert builder.reverse().toString().equals("evil");
+    }
+
+    @Test
+    public void setChar() throws Exception {
+        StringBuilder builder = new StringBuilder("live");
+        builder.setCharAt(1, 'o');
+        assert builder.toString().equals("love");
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void setCharInvalidRange1() throws Exception {
+        new StringBuilder("live").setCharAt(-1, 'x');
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void setCharInvalidRange2() throws Exception {
+        new StringBuilder("live").setCharAt(4, 'x');
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void setCharInvalidRange3() throws Exception {
+        new StringBuilder("live").setCharAt(100, 'x');
     }
 
     /**

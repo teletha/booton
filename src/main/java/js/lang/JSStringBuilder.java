@@ -14,7 +14,7 @@ import java.util.Objects;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/04/15 21:24:44
+ * @version 2013/08/31 23:28:04
  */
 @JavaAPIProvider(StringBuilder.class)
 class JSStringBuilder {
@@ -457,17 +457,7 @@ class JSStringBuilder {
      * @throws StringIndexOutOfBoundsException if the offset is invalid.
      */
     public StringBuilder insert(int offset, String value) {
-        if (offset < 0 || length() < offset) {
-            throw new StringIndexOutOfBoundsException(offset);
-        }
-
-        // normalize value
-        value = String.valueOf(value);
-
-        text = text.substring(0, offset).concat(value).concat(text.substring(offset));
-
-        // API definiton
-        return (StringBuilder) (Object) this;
+        return replace(offset, offset, String.valueOf(value));
     }
 
     /**
@@ -802,6 +792,192 @@ class JSStringBuilder {
         Objects.requireNonNull(search);
 
         return text.lastIndexOf(search, fromIndex);
+    }
+
+    /**
+     * Replaces the characters in a substring of this sequence with characters in the specified
+     * <code>String</code>. The substring begins at the specified <code>start</code> and extends to
+     * the character at index <code>end - 1</code> or to the end of the sequence if no such
+     * character exists. First the characters in the substring are removed and then the specified
+     * <code>String</code> is inserted at <code>start</code>. (This sequence will be lengthened to
+     * accommodate the specified String if necessary.)
+     * 
+     * @param start The beginning index, inclusive.
+     * @param end The ending index, exclusive.
+     * @param value String that will replace previous contents.
+     * @return This object.
+     * @throws StringIndexOutOfBoundsException if <code>start</code> is negative, greater than
+     *             <code>length()</code>, or greater than <code>end</code>.
+     */
+    public StringBuilder replace(int start, int end, String value) {
+        Objects.requireNonNull(value);
+
+        if (start < 0 || length() < start || end < start) {
+            throw new StringIndexOutOfBoundsException(start);
+        }
+
+        text = text.substring(0, start).concat(value).concat(text.substring(end));
+
+        // API definiton
+        return (StringBuilder) (Object) this;
+    }
+
+    /**
+     * Causes this character sequence to be replaced by the reverse of the sequence. If there are
+     * any surrogate pairs included in the sequence, these are treated as single characters for the
+     * reverse operation. Thus, the order of the high-low surrogates is never reversed. Let <i>n</i>
+     * be the character length of this character sequence (not the length in <code>char</code>
+     * values) just prior to execution of the <code>reverse</code> method. Then the character at
+     * index <i>k</i> in the new character sequence is equal to the character at index <i>n-k-1</i>
+     * in the old character sequence.
+     * <p>
+     * Note that the reverse operation may result in producing surrogate pairs that were unpaired
+     * low-surrogates and high-surrogates before the operation. For example, reversing
+     * "&#92;uDC00&#92;uD800" produces "&#92;uD800&#92;uDC00" which is a valid surrogate pair.
+     * 
+     * @return a reference to this object.
+     */
+    public StringBuilder reverse() {
+        text = (NativeString) (Object) new NativeArray(text.split("")).reverse().join("");
+
+        // API definiton
+        return (StringBuilder) (Object) this;
+    }
+
+    /**
+     * The character at the specified index is set to <code>ch</code>. This sequence is altered to
+     * represent a new character sequence that is identical to the old character sequence, except
+     * that it contains the character <code>ch</code> at position <code>index</code>.
+     * <p>
+     * The index argument must be greater than or equal to <code>0</code>, and less than the length
+     * of this sequence.
+     * 
+     * @param index the index of the character to modify.
+     * @param c the new character.
+     * @throws IndexOutOfBoundsException if <code>index</code> is negative or greater than or equal
+     *             to <code>length()</code>.
+     */
+    public void setCharAt(int index, char c) {
+        if (length() <= index) {
+            throw new IndexOutOfBoundsException();
+        }
+        replace(index, index + 1, String.valueOf(c));
+    }
+
+    /**
+     * Returns a new character sequence that is a subsequence of this sequence.
+     * <p>
+     * An invocation of this method of the form <blockquote>
+     * 
+     * <pre>
+     * sb.subSequence(begin,&nbsp;end)</pre>
+     * </blockquote> behaves in exactly the same way as the invocation <blockquote>
+     * 
+     * <pre>
+     * sb.substring(begin,&nbsp;end)</pre>
+     * </blockquote> This method is provided so that this class can implement the
+     * {@link CharSequence} interface.
+     * </p>
+     * 
+     * @param start the start index, inclusive.
+     * @param end the end index, exclusive.
+     * @return the specified subsequence.
+     * @throws IndexOutOfBoundsException if <tt>start</tt> or <tt>end</tt> are negative, if
+     *             <tt>end</tt> is greater than <tt>length()</tt>, or if <tt>start</tt> is greater
+     *             than <tt>end</tt>
+     * @spec JSR-51
+     */
+    public CharSequence subSequence(int start, int end) {
+        return substring(start, end);
+    }
+
+    /**
+     * Returns a new <code>String</code> that contains a subsequence of characters currently
+     * contained in this character sequence. The substring begins at the specified index and extends
+     * to the end of this sequence.
+     * 
+     * @param start The beginning index, inclusive.
+     * @return The new string.
+     * @throws StringIndexOutOfBoundsException if <code>start</code> is less than zero, or greater
+     *             than the length of this object.
+     */
+    public String substring(int start) {
+        return substring(start, length());
+    }
+
+    /**
+     * Returns a new <code>String</code> that contains a subsequence of characters currently
+     * contained in this sequence. The substring begins at the specified <code>start</code> and
+     * extends to the character at index <code>end - 1</code>.
+     * 
+     * @param start The beginning index, inclusive.
+     * @param end The ending index, exclusive.
+     * @return The new string.
+     * @throws StringIndexOutOfBoundsException if <code>start</code> or <code>end</code> are
+     *             negative or greater than <code>length()</code>, or <code>start</code> is greater
+     *             than <code>end</code>.
+     */
+    public String substring(int start, int end) {
+        if (start < 0 || length() < end || end < start) {
+            throw new StringIndexOutOfBoundsException(start);
+        }
+        return (String) (Object) text.substring(start, end);
+    }
+
+    /**
+     * Returns the current capacity. The capacity is the amount of storage available for newly
+     * inserted characters, beyond which an allocation will occur.
+     * 
+     * @return the current capacity
+     */
+    public int capacity() {
+        return text.length();
+    }
+
+    /**
+     * Ensures that the capacity is at least equal to the specified minimum. If the current capacity
+     * is less than the argument, then a new internal array is allocated with greater capacity. The
+     * new capacity is the larger of:
+     * <ul>
+     * <li>The <code>minimumCapacity</code> argument.
+     * <li>Twice the old capacity, plus <code>2</code>.
+     * </ul>
+     * If the <code>minimumCapacity</code> argument is nonpositive, this method takes no action and
+     * simply returns.
+     * 
+     * @param minimumCapacity the minimum desired capacity.
+     */
+    public void ensureCapacity(int minimumCapacity) {
+    }
+
+    /**
+     * Sets the length of the character sequence. The sequence is changed to a new character
+     * sequence whose length is specified by the argument. For every nonnegative index <i>k</i> less
+     * than <code>newLength</code>, the character at index <i>k</i> in the new character sequence is
+     * the same as the character at index <i>k</i> in the old sequence if <i>k</i> is less than the
+     * length of the old character sequence; otherwise, it is the null character
+     * <code>'&#92;u0000'</code>. In other words, if the <code>newLength</code> argument is less
+     * than the current length, the length is changed to the specified length.
+     * <p>
+     * If the <code>newLength</code> argument is greater than or equal to the current length,
+     * sufficient null characters (<code>'&#92;u0000'</code>) are appended so that length becomes
+     * the <code>newLength</code> argument.
+     * <p>
+     * The <code>newLength</code> argument must be greater than or equal to <code>0</code>.
+     * 
+     * @param newLength the new length
+     * @throws IndexOutOfBoundsException if the <code>newLength</code> argument is negative.
+     */
+    public void setLength(int newLength) {
+    }
+
+    /**
+     * Attempts to reduce storage used for the character sequence. If the buffer is larger than
+     * necessary to hold its current sequence of characters, then it may be resized to become more
+     * space efficient. Calling this method may, but is not required to, affect the value returned
+     * by a subsequent call to the {@link #capacity()} method.
+     */
+    public void trimToSize() {
     }
 
     /**

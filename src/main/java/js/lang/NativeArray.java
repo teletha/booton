@@ -19,7 +19,7 @@ import kiss.I;
 import booton.translator.Translator;
 
 /**
- * @version 2013/05/12 13:15:19
+ * @version 2013/08/31 23:26:44
  */
 public class NativeArray<T> extends NativeObject {
 
@@ -392,6 +392,20 @@ public class NativeArray<T> extends NativeObject {
 
     /**
      * <p>
+     * Reverses an array in place. The first array element becomes the last and the last becomes the
+     * first.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public NativeArray<T> reverse() {
+        Collections.reverse(list);
+
+        return this;
+    }
+
+    /**
+     * <p>
      * Convert type to Java array.
      * </p>
      * 
@@ -429,7 +443,7 @@ public class NativeArray<T> extends NativeObject {
     }
 
     /**
-     * @version 2013/05/01 19:40:46
+     * @version 2013/08/31 23:26:39
      */
     @SuppressWarnings("unused")
     private static class Coder<T> extends Translator<NativeArray> {
@@ -733,6 +747,18 @@ public class NativeArray<T> extends NativeObject {
          */
         public String copy() {
             return that + ".slice(0)";
+        }
+
+        /**
+         * <p>
+         * Reverses an array in place. The first array element becomes the last and the last becomes
+         * the first.
+         * </p>
+         * 
+         * @return Chainable API.
+         */
+        public String reverse() {
+            return that + ".reverse()";
         }
 
         /**
