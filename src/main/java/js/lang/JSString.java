@@ -11,6 +11,7 @@ package js.lang;
 
 import static js.lang.JSStringHelper.*;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.PatternSyntaxException;
@@ -953,25 +954,42 @@ class JSString implements Comparable<String>, CharSequence {
      * the character array are copied; subsequent modification of the character array does not
      * affect the newly created string.
      * 
-     * @param data a <code>char</code> array.
+     * @param values a <code>char</code> array.
      * @return a newly allocated string representing the same sequence of characters contained in
      *         the character array argument.
      */
-    public static String valueOf(char[] data) {
-        return new String(data);
+    public static String valueOf(char[] values) {
+        Objects.requireNonNull(values);
+
+        return valueOf(values, 0, values.length);
     }
 
     /**
      * Returns a String that represents the character sequence in the array specified.
      * 
-     * @param data the character array.
+     * @param values the character array.
      * @param offset initial offset of the subarray.
      * @param count length of the subarray.
      * @return a <code>String</code> that contains the characters of the specified subarray of the
      *         character array.
      */
-    public static String valueOf(char[] data, int offset, int count) {
-        return new String(data, offset, count);
+    public static String valueOf(char[] values, int offset, int count) {
+        Objects.requireNonNull(values);
+
+        if (offset < 0) {
+            throw new StringIndexOutOfBoundsException(offset);
+        }
+
+        if (count < 0) {
+            throw new StringIndexOutOfBoundsException(count);
+        }
+
+        int end = offset + count;
+
+        if (values.length < end) {
+            throw new StringIndexOutOfBoundsException(end);
+        }
+        return (String) (Object) new NativeString(Arrays.copyOfRange(values, offset, end));
     }
 
     /**

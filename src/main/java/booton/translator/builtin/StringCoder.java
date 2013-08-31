@@ -9,6 +9,7 @@
  */
 package booton.translator.builtin;
 
+import booton.translator.Javascript;
 import booton.translator.Translator;
 
 /**
@@ -50,7 +51,7 @@ class StringCoder extends Translator<String> {
      * @param value The initial value of the string
      */
     public String String(char[] value) {
-        return param(0) + ".join(" + Q + Q + ")";
+        return Javascript.writeMethodCode(String.class, "valueOf", char[].class, param(0));
     }
 
     /**
@@ -69,7 +70,7 @@ class StringCoder extends Translator<String> {
      *             characters outside the bounds of the {@code value} array
      */
     public String String(char[] value, int offset, int count) {
-        return param(0) + ".slice(" + param(1) + "," + param(1) + "+" + param(2) + ").join(" + Q + Q + ")";
+        return Javascript.writeMethodCode(String.class, "valueOf", char[].class, param(0), int.class, param(1), int.class, param(2));
     }
 
     /**
