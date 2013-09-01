@@ -306,6 +306,10 @@ public class Javascript {
         String className = Javascript.computeSimpleClassName(source);
         String superClassName = parent == Object.class ? "" : computeSimpleClassName(parent);
 
+        if (source.getGenericSuperclass() != parent) {
+            System.out.println(source.getGenericSuperclass() + "            " + source.getSuperclass());
+        }
+
         // write class definition
         code.comment(source + " " + computeSimpleClassName(source));
         code.append("boot.define(").string(className).append(",").string(superClassName).append(",", interfaces(), ",");

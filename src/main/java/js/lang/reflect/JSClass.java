@@ -15,6 +15,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -489,6 +490,40 @@ class JSClass<T> extends JSAnnotatedElement {
         } else {
             return superclass;
         }
+    }
+
+    /**
+     * Returns the {@code Type} representing the direct superclass of the entity (class, interface,
+     * primitive type or void) represented by this {@code Class}.
+     * <p>
+     * If the superclass is a parameterized type, the {@code Type} object returned must accurately
+     * reflect the actual type parameters used in the source code. The parameterized type
+     * representing the superclass is created if it had not been created before. See the declaration
+     * of {@link java.lang.reflect.ParameterizedType ParameterizedType} for the semantics of the
+     * creation process for parameterized types. If this {@code Class} represents either the
+     * {@code Object} class, an interface, a primitive type, or void, then null is returned. If this
+     * object represents an array class then the {@code Class} object representing the
+     * {@code Object} class is returned.
+     * 
+     * @throws java.lang.reflect.GenericSignatureFormatError if the generic class signature does not
+     *             conform to the format specified in <cite>The Java&trade; Virtual Machine
+     *             Specification</cite>
+     * @throws TypeNotPresentException if the generic superclass refers to a non-existent type
+     *             declaration
+     * @throws java.lang.reflect.MalformedParameterizedTypeException if the generic superclass
+     *             refers to a parameterized type that cannot be instantiated for any reason
+     * @return the superclass of the class represented by this object
+     * @since 1.5
+     */
+    public Type getGenericSuperclass() {
+        // if (getGenericSignature() != null) {
+        // // Historical irregularity:
+        // // Generic signature marks interfaces with superclass = Object
+        // // but this API returns null for interfaces
+        // if (isInterface()) return null;
+        // return getGenericInfo().getSuperclass();
+        // } else
+        return getSuperclass();
     }
 
     /**

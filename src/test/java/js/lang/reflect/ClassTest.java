@@ -10,73 +10,42 @@
 package js.lang.reflect;
 
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import booton.translator.ScriptTester;
-import booton.translator.Scriptable;
+import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/08/02 22:51:26
+ * @version 2013/09/01 23:29:05
  */
-@SuppressWarnings("unused")
-public class ClassTest extends ScriptTester {
+@RunWith(ScriptRunner.class)
+public class ClassTest {
 
     @Test
     public void modifierPrivate() throws Exception {
-        test(new Scriptable() {
-
-            int act() {
-                int modifier = Private.class.getModifiers();
-                assert Modifier.isPrivate(modifier);
-
-                return modifier;
-            }
-        });
+        int modifier = Private.class.getModifiers();
+        assert Modifier.isPrivate(modifier);
     }
 
     @Test
     public void modifierPackage() throws Exception {
-        test(new Scriptable() {
-
-            int act() {
-                int modifier = Package.class.getModifiers();
-                assert !Modifier.isPrivate(modifier);
-                assert !Modifier.isProtected(modifier);
-                assert !Modifier.isPublic(modifier);
-
-                return modifier;
-            }
-        });
+        int modifier = Package.class.getModifiers();
+        assert !Modifier.isPrivate(modifier);
+        assert !Modifier.isProtected(modifier);
+        assert !Modifier.isPublic(modifier);
     }
 
     @Test
     public void modifierProtected() throws Exception {
-        test(new Scriptable() {
-
-            int act() {
-                int modifier = Protected.class.getModifiers();
-                assert Modifier.isProtected(modifier);
-
-                return modifier;
-            }
-        });
+        int modifier = Protected.class.getModifiers();
+        assert Modifier.isProtected(modifier);
     }
 
     @Test
     public void modifierPublic() throws Exception {
-        test(new Scriptable() {
-
-            int act() {
-                int modifier = Public.class.getModifiers();
-                assert Modifier.isPublic(modifier);
-
-                return modifier;
-            }
-        });
+        int modifier = Public.class.getModifiers();
+        assert Modifier.isPublic(modifier);
     }
 
     /**
@@ -104,33 +73,10 @@ public class ClassTest extends ScriptTester {
     }
 
     @Test
-    public void superClass1() throws Exception {
-        test(new Scriptable() {
-
-            Class act() {
-                return Child.class.getSuperclass();
-            }
-        });
-    }
-
-    @Test
-    public void superClass2() throws Exception {
-        test(new Scriptable() {
-
-            Class act() {
-                return Parent.class.getSuperclass();
-            }
-        });
-    }
-
-    @Test
-    public void superClass3() throws Exception {
-        test(new Scriptable() {
-
-            Class act() {
-                return Object.class.getSuperclass();
-            }
-        });
+    public void getSuperclass() throws Exception {
+        assert Child.class.getSuperclass() == Parent.class;
+        assert Parent.class.getSuperclass() == Object.class;
+        assert Object.class.getSuperclass() == null;
     }
 
     /**
@@ -143,32 +89,5 @@ public class ClassTest extends ScriptTester {
      * @version 2013/08/03 2:49:45
      */
     private static class Child extends Parent {
-    }
-
-    @Test
-    @Ignore
-    public void genericSuperClass1() throws Exception {
-        test(new Scriptable() {
-
-            int act() {
-                Type type = TypeVariableChild.class.getGenericSuperclass();
-                assert type != null;
-                assert type instanceof TypeVariable;
-
-                return 1;
-            }
-        });
-    }
-
-    /**
-     * @version 2013/08/03 2:49:26
-     */
-    private static class TypeVariableParent<T> {
-    }
-
-    /**
-     * @version 2013/08/03 2:49:45
-     */
-    private static class TypeVariableChild extends TypeVariableParent<Parent> {
     }
 }
