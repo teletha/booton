@@ -143,7 +143,7 @@ class JSProxy {
          *      Specification</cite>.
          */
         @SuppressWarnings("unused")
-        public Class $getClass() {
+        public Class $alias$getClass() {
             return type;
         }
     }

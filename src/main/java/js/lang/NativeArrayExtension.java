@@ -7,9 +7,8 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.lang.reflect;
+package js.lang;
 
-import js.lang.NativeObject;
 import booton.translator.JavascriptAPIProvider;
 
 /**
@@ -37,7 +36,7 @@ class NativeArrayExtension {
      * @return The {@code Class} object that represents the runtime class of this object.
      * @see Class Literals, section 15.8.2 of <cite>The Java&trade; Language Specification</cite>.
      */
-    public Class $getClass() throws ClassNotFoundException {
+    public Class $alias$getClass() throws ClassNotFoundException {
         if (type == null) {
             type = Class.forName(NativeObject.by(this).getPropertyAs(String.class, "$"));
         }

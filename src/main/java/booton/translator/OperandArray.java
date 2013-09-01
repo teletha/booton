@@ -9,11 +9,10 @@
  */
 package booton.translator;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
- * @version 2013/08/11 15:10:23
+ * @version 2013/09/01 15:49:43
  */
 class OperandArray extends Operand {
 
@@ -59,7 +58,7 @@ class OperandArray extends Operand {
      */
     @Override
     InferredType infer() {
-        return new InferredType(Array.class);
+        return new InferredType(type);
     }
 
     /**
