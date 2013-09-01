@@ -234,35 +234,30 @@ function boot(global) {
     bind: function(functionName, context) {
 	    return context[functionName].bind(context);
 	  },
-
-    /**
-     * <p>
-     * Create primitive array with the specified size. (all elements are initialized by 0)
-     * </p>
-     *
-     * @param {Number} size A initila size.
-     * @return {Array} A initialized array.
-     */
-    array: function(elements, className) {
-      elements.$ = className;
-      return elements;
-    },
     
     /**
      * <p>
-     * Create array with the specified size. (all elements are initialized by 0 or null)
+     * Initialize the specified array. (all elements are initialized by 0, false or null)
      * </p>
      *
-     * @param {Number} size A initila size.
-     * @param {Object} initial A initial value.
+     * @param {String} type A type of new array.
+     * @param {Array or Number} array A new array or A length of new array.
+     * @param {Object} initia A initial item value of new array.
      * @return {Array} A initialized array.
      */
-    initArray: function(size, initial) {
-	    var array = [];
+    array: function(type, array, initial) {
+	    if (initial !== undefined) {
+	      var length = array, array = [], i = 0;
+	      
+        for (; i < length; i++) {
+          array[i] = initial;
+        }
+	    }
+	    
+	    // set Class information
+	    array.$ = "[" + type;
     
-      for (var i = 0; i < size; i++) {
-        array[i] = initial;
-      }
+      // API definition
       return array;
     },
 

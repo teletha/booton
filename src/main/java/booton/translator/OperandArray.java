@@ -12,15 +12,12 @@ package booton.translator;
 import java.util.ArrayList;
 
 /**
- * @version 2013/09/01 15:49:43
+ * @version 2013/09/01 20:23:18
  */
 class OperandArray extends Operand {
 
     /** The operand which indicates the size of this array. */
     private final Operand size;
-
-    /** The flag whether this array is primitive or not. */
-    private final boolean isPrimitive;
 
     /** The array type. */
     private final Class type;
@@ -37,12 +34,11 @@ class OperandArray extends Operand {
      * </p>
      * 
      * @param size A initial size.
-     * @param isPrimitive An array type.
+     * @param type A array type.
      */
-    OperandArray(Operand size, Class type, boolean isPrimitive) {
+    OperandArray(Operand size, Class type) {
         this.size = size.disclose();
         this.type = type;
-        this.isPrimitive = isPrimitive;
 
         int dimmension = 1;
 
@@ -86,46 +82,43 @@ class OperandArray extends Operand {
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        Class component = type.getComponentType();
+        String undefined = component.isPrimitive() ? component == boolean.class ? "false" : "0" : "null";
+
+        ScriptWriter writer = new ScriptWriter();
+        writer.append("boot.array(").string(Javascript.computeSimpleClassName(component)).append(",");
 
         if (items.size() == 0) {
-            // normal
-            builder.append("boot.initArray(").append(this.size).append(",");
-
-            if (isPrimitive) {
-                builder.append("0");
-            } else {
-                builder.append("null");
-            }
-            builder.append(")");
+            // new array with the specified size
+            writer.append(size, ",", undefined);
         } else {
-            // syntax sugar
-            builder.append("[");
+            // new array by syntax sugar
+            writer.append("[");
 
-            String undefined = isPrimitive ? "0" : "null";
-            int requiredSize = Integer.valueOf(this.size.toString()).intValue();
+            int length = Integer.valueOf(size.toString()).intValue();
 
-            for (int i = 0; i < requiredSize; i++) {
+            for (int i = 0; i < length; i++) {
                 if (items.size() <= i) {
-                    builder.append(undefined);
+                    writer.append(undefined);
                 } else {
                     Operand item = items.get(i);
 
                     if (item == null) {
-                        builder.append(undefined);
+                        writer.append(undefined);
                     } else {
-                        builder.append(item);
+                        writer.append(item);
                     }
                 }
 
-                if (i + 1 != requiredSize) {
-                    builder.append(',');
+                if (i + 1 != length) {
+                    writer.append(",");
                 }
             }
-            builder.append("]");
+            writer.append("]");
         }
+        writer.append(")");
 
         // API definition
-        return "boot.array(" + builder + ",\"" + Javascript.computeSimpleClassName(type) + "\")";
+        return writer.toString();
     }
 }

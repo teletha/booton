@@ -905,7 +905,7 @@ class JavaMethodCompiler extends MethodVisitor {
             }
 
             Javascript.require(type);
-            current.addOperand(new OperandArray(current.remove(0), type, true));
+            current.addOperand(new OperandArray(current.remove(0), type));
             break;
         }
     }
@@ -1489,7 +1489,7 @@ class JavaMethodCompiler extends MethodVisitor {
         for (int i = 0; i < dimension - 1; i++) {
             current.remove(0);
         }
-        current.addOperand(new OperandArray(current.remove(0), convert(desc), false));
+        current.addOperand(new OperandArray(current.remove(0), convert(desc)));
     }
 
     /**
@@ -1560,7 +1560,7 @@ class JavaMethodCompiler extends MethodVisitor {
             } else {
                 type = "[L" + type + ";";
             }
-            current.addOperand(new OperandArray(current.remove(0), convert(type), false));
+            current.addOperand(new OperandArray(current.remove(0), convert(type)));
             break;
 
         case CHECKCAST:
