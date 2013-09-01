@@ -51,20 +51,9 @@ import booton.translator.Node.TryCatchFinallyBlocks;
  * completely, garbage goto code will remain.
  * </p>
  * 
- * @version 2013/08/18 17:02:49
+ * @version 2013/09/01 15:50:00
  */
 class JavaMethodCompiler extends MethodVisitor {
-
-    /** The {@link Class#isAssignableFrom(Class)} method signature. */
-    private static final Method assignable;
-
-    static {
-        try {
-            assignable = Class.class.getMethod("isAssignableFrom", Class.class);
-        } catch (Exception e) {
-            throw I.quiet(e);
-        }
-    }
 
     /**
      * Represents an expanded frame. See {@link ClassReader#EXPAND_FRAMES}.
@@ -1584,16 +1573,18 @@ class JavaMethodCompiler extends MethodVisitor {
             // load source
             Javascript.require(clazz);
 
+            String code;
+
             if (clazz == Object.class || clazz == NativeObject.class) {
-                current.addOperand(current.remove(0) + " instanceof Object");
+                code = current.remove(0) + " instanceof Object";
             } else if (clazz == String.class) {
-                Operand operand = current.remove(0);
-                current.addOperand("boot.isString(" + operand + ")");
+                code = "boot.isString(" + current.remove(0) + ")";
             } else if (clazz.isInterface()) {
-                current.addOperand(Javascript.computeClass(clazz) + "." + Javascript.computeMethodName(assignable) + "(" + Javascript.writeMethodCode(Object.class, "$getClass", current.remove(0)) + ")");
+                code = Javascript.writeMethodCode(Class.class, "isAssignableFrom", Javascript.computeClass(clazz), Class.class, Javascript.writeMethodCode(Object.class, "getClass", current.remove(0)));
             } else {
-                current.addOperand(current.remove(0) + " instanceof " + Javascript.computeClassName(clazz));
+                code = current.remove(0) + " instanceof " + Javascript.computeClassName(clazz);
             }
+            current.addOperand(code, boolean.class);
             break;
         }
     }

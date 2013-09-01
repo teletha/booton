@@ -458,8 +458,21 @@ public class Javascript {
             }
 
             Class source = getScript(type).source;
-            Method method = source.getDeclaredMethod(name, types);
 
+            // Search original or alias method by name and parameter types.
+            Method method;
+
+            try {
+                method = source.getDeclaredMethod(name, types);
+            } catch (NoSuchMethodException e) {
+                try {
+                    method = source.getDeclaredMethod("$alias$" + name, types);
+                } catch (NoSuchMethodException error) {
+                    throw I.quiet(e);
+                }
+            }
+
+            // Write method invocation code.
             String code;
 
             if (Modifier.isStatic(method.getModifiers())) {
@@ -640,8 +653,9 @@ public class Javascript {
      * @return An identified class name for ECMAScript.
      */
     public static final String computeMethodName(Class owner, String name, String description) {
-        if (name.startsWith("$")) {
-            name = name.substring(1);
+        // convert an alias to an actual method name
+        if (name.startsWith("$alias$")) {
+            name = name.substring(7);
         }
 
         if (TranslatorManager.isNativeMethod(owner, name, description)) {
