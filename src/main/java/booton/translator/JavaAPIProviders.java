@@ -23,7 +23,7 @@ import kiss.Singleton;
 import org.objectweb.asm.Type;
 
 /**
- * @version 2013/08/15 17:34:41
+ * @version 2013/09/01 13:09:18
  */
 @Manageable(lifestyle = Singleton.class)
 class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
@@ -98,20 +98,28 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
      * Validate method implementation in Javascript class.
      * </p>
      * 
-     * @param owner
-     * @param name
-     * @param description
+     * @param owner A method owner class.
+     * @param name A method name.
+     * @param description A method descriptor.
+     * @return A original method descriptor.
      */
-    static void validateMethod(Class owner, String name, String description) {
+    static String validateMethod(Class owner, String name, String description) {
         JavaAPIProviders.Definition definition = definitions.get(owner);
 
-        if (definition != null && !definition.methods.contains(Javascript.computeMethodSignature(name, description))) {
+        if (definition == null) {
+            return description;
+        }
+
+        String originalDescriptor = definition.methods.get(computeMethodSignature(name, description));
+
+        if (originalDescriptor == null) {
             TranslationError error = new TranslationError();
             error.write("You must define the method in " + definition.clazz + ".");
             error.writeMethod(name, Type.getReturnType(description), Type.getArgumentTypes(description));
 
             throw error;
         }
+        return originalDescriptor;
     }
 
     /**
@@ -138,10 +146,23 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
 
     /**
      * <p>
+     * Compute method signature.
+     * </p>
+     * 
+     * @param name A method name.
+     * @param description A method descriptor.
+     * @return A signature of the specified method.
+     */
+    private static String computeMethodSignature(String name, String description) {
+        return name + description.substring(0, description.indexOf(')') + 1);
+    }
+
+    /**
+     * <p>
      * Cache for API definitions.
      * </p>
      * 
-     * @version 2013/04/14 14:07:33
+     * @version 2013/09/01 13:09:28
      */
     private static class Definition {
 
@@ -149,7 +170,7 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
         private final Class clazz;
 
         /** The method signatures. */
-        private final Set<String> methods = new HashSet();
+        private final Map<String, String> methods = new HashMap();
 
         /** The method signatures. */
         private final Set<String> fields = new HashSet();
@@ -161,11 +182,13 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
             this.clazz = clazz;
 
             for (Method method : clazz.getMethods()) {
-                methods.add(Javascript.computeMethodSignature(method.getName(), Type.getMethodDescriptor(method)));
+                String descriptor = Type.getMethodDescriptor(method);
+                methods.put(computeMethodSignature(method.getName(), descriptor), descriptor);
             }
 
             for (Method method : clazz.getDeclaredMethods()) {
-                methods.add(Javascript.computeMethodSignature(method.getName(), Type.getMethodDescriptor(method)));
+                String descriptor = Type.getMethodDescriptor(method);
+                methods.put(computeMethodSignature(method.getName(), descriptor), descriptor);
             }
 
             for (Field field : clazz.getFields()) {
