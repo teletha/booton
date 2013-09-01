@@ -9,96 +9,41 @@
  */
 package js.lang.reflect;
 
+import static java.lang.reflect.Modifier.*;
+
 import java.lang.reflect.Modifier;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import booton.translator.ScriptTester;
-import booton.translator.Scriptable;
+import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/08/03 0:42:29
+ * @version 2013/09/01 22:44:29
  */
-@SuppressWarnings("unused")
-public class ModifierTest extends ScriptTester {
+@RunWith(ScriptRunner.class)
+public class ModifierTest {
 
     @Test
-    public void Public() throws Exception {
-        test(new Scriptable() {
-
-            boolean act() {
-                return Modifier.isPublic(Modifier.PUBLIC);
-            }
-        });
+    public void modifiers() throws Exception {
+        assert isPublic(PUBLIC);
+        assert isProtected(PROTECTED);
+        assert isPrivate(PRIVATE);
+        assert isStatic(STATIC);
+        assert isAbstract(ABSTRACT);
+        assert isFinal(FINAL);
+        assert isInterface(INTERFACE);
+        assert isNative(NATIVE);
+        assert isSynchronized(SYNCHRONIZED);
+        assert isStrict(STRICT);
+        assert isTransient(TRANSIENT);
+        assert isVolatile(VOLATILE);
+        assert !isNative(PUBLIC | FINAL | STATIC | SYNCHRONIZED);
     }
 
     @Test
-    public void Protected() throws Exception {
-        test(new Scriptable() {
-
-            boolean act() {
-                return Modifier.isProtected(Modifier.PROTECTED);
-            }
-        });
-    }
-
-    @Test
-    public void Private() throws Exception {
-        test(new Scriptable() {
-
-            boolean act() {
-                return Modifier.isPrivate(Modifier.PRIVATE);
-            }
-        });
-    }
-
-    @Test
-    public void Static() throws Exception {
-        test(new Scriptable() {
-
-            boolean act() {
-                return Modifier.isStatic(Modifier.STATIC);
-            }
-        });
-    }
-
-    @Test
-    public void Abstract() throws Exception {
-        test(new Scriptable() {
-
-            boolean act() {
-                return Modifier.isAbstract(Modifier.ABSTRACT);
-            }
-        });
-    }
-
-    @Test
-    public void Final() throws Exception {
-        test(new Scriptable() {
-
-            boolean act() {
-                return Modifier.isFinal(Modifier.FINAL);
-            }
-        });
-    }
-
-    @Test
-    public void Interface() throws Exception {
-        test(new Scriptable() {
-
-            boolean act() {
-                return Modifier.isInterface(Modifier.INTERFACE);
-            }
-        });
-    }
-
-    @Test
-    public void ToString() throws Exception {
-        test(new Scriptable() {
-
-            String act() {
-                return Modifier.toString(Modifier.PUBLIC);
-            }
-        });
+    public void strnigize() throws Exception {
+        assert Modifier.toString(PUBLIC).equals("public");
+        assert Modifier.toString(PUBLIC | FINAL).equals("public final");
     }
 }
