@@ -9,11 +9,10 @@
  */
 package js.lang.reflect;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 
-import js.lang.NativeArray;
+import js.lang.NativeObject;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -26,7 +25,7 @@ abstract class JSAccessibleObject extends JSAnnotatedElement {
      * @param name
      * @param annotations
      */
-    protected JSAccessibleObject(String name, NativeArray<Annotation> annotations) {
+    protected JSAccessibleObject(String name, NativeObject annotations) {
         super(name, annotations);
     }
 

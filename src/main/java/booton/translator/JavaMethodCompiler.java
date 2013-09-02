@@ -1700,6 +1700,10 @@ class JavaMethodCompiler extends MethodVisitor {
     private final Node createNode(Node next) {
         Node node = new Node(counter++);
 
+        // switch line number
+        node.number = next.number;
+        next.number = -1;
+
         // switch previous node
         Node previous = next.previous;
         node.previous = previous;

@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/07/27 10:48:12
+ * @version 2013/09/03 1:11:17
  */
 @JavaAPIProvider(Throwable.class)
 class JSThrowable {
@@ -190,8 +190,11 @@ class JSThrowable {
         } else if (error.getStackTrace().contains("@")) {
             // html unit
             pattern = Pattern.compile("(.+)?@(.+):(.+)");
-            start = start + 5;
             end--;
+
+            if (user) {
+                start = start + 5;
+            }
         } else {
             // blink
             pattern = Pattern.compile("\\s*at\\s*([^\\s]+).+\\((.+):(.+):(.+)\\)");
