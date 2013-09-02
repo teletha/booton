@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/08/19 15:23:42
+ * @version 2013/09/03 1:25:49
  */
 @RunWith(ScriptRunner.class)
 public class ProxyTest {
@@ -56,6 +56,7 @@ public class ProxyTest {
         assert machine.echo("ignored").equals("PROXY");
         assert machine instanceof Bird;
         assert ((Bird) machine).tweet("ignored").equals("PROXY");
+        assert machine instanceof Object;
     }
 
     @Test
@@ -86,6 +87,8 @@ public class ProxyTest {
     public void handler() throws Exception {
         Machine machine = (Machine) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {Machine.class}, echo);
 
+        assert machine instanceof Machine;
+        assert !(machine instanceof Bird);
         assert machine.echo("echo").equals("echo");
     }
 

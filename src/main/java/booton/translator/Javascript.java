@@ -306,10 +306,6 @@ public class Javascript {
         String className = Javascript.computeSimpleClassName(source);
         String superClassName = parent == Object.class ? "" : computeSimpleClassName(parent);
 
-        if (source.getGenericSuperclass() != parent) {
-            System.out.println(source.getGenericSuperclass() + "            " + source.getSuperclass());
-        }
-
         // write class definition
         code.comment(source + " " + computeSimpleClassName(source));
         code.append("boot.define(").string(className).append(",").string(superClassName).append(",", interfaces(), ",");
@@ -343,7 +339,7 @@ public class Javascript {
         }
 
         // write metadata
-        code.append(",").append(new JavaMetadataCompiler(this));
+        code.append(",").append(new JavaMetadataCompiler(source));
 
         // write native class enhancement
         JavascriptAPIProvider provider = source.getAnnotation(JavascriptAPIProvider.class);
@@ -393,7 +389,7 @@ public class Javascript {
         }
 
         // write metadata
-        code.append(",").append(new JavaMetadataCompiler(this));
+        code.append(",").append(new JavaMetadataCompiler(source));
 
         // End class definition
         code.append(");");

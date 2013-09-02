@@ -16,6 +16,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -457,6 +458,34 @@ class JSClass<T> extends JSAnnotatedElement {
      */
     public boolean isLocalClass() {
         return false; // FIXME
+    }
+
+    /**
+     * Returns an array of {@code TypeVariable} objects that represent the type variables declared
+     * by the generic declaration represented by this {@code GenericDeclaration} object, in
+     * declaration order. Returns an array of length 0 if the underlying generic declaration
+     * declares no type variables.
+     * 
+     * @return an array of {@code TypeVariable} objects that represent the type variables declared
+     *         by this generic declaration
+     * @throws java.lang.reflect.GenericSignatureFormatError if the generic signature of this
+     *             generic declaration does not conform to the format specified in <cite>The
+     *             Java&trade; Virtual Machine Specification</cite>
+     * @since 1.5
+     */
+    public TypeVariable<Class<T>>[] getTypeParameters() {
+        if (getGenericSignature() != null) {
+            return (TypeVariable<Class<T>>[]) null;
+        } else {
+            return (TypeVariable<Class<T>>[]) new TypeVariable<?>[0];
+        }
+    }
+
+    /**
+     * @return
+     */
+    private Object getGenericSignature() {
+        return null;
     }
 
     /**

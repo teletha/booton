@@ -51,7 +51,7 @@ class JSMethod extends JSAccessibleObject {
      * @param metadata
      */
     JSMethod(String name, NativeObject clazz, NativeArray<Annotation> metadata) {
-        super(name, metadata.slice(3));
+        super(name, metadata.getPropertyAs(NativeObject.class, 3));
 
         try {
             this.clazz = clazz;

@@ -15,6 +15,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -47,24 +48,13 @@ class JavaMetadataCompiler {
         }
     }
 
-    /** The target class. */
-    private final Class clazz;
-
     /** The code writer. */
     private final ScriptWriter code = new ScriptWriter();
 
     /**
      * 
      */
-    JavaMetadataCompiler(Javascript script) {
-        this.clazz = script.source;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
+    JavaMetadataCompiler(Class clazz) {
         List<Metadata> elements = new ArrayList();
 
         // class
@@ -87,22 +77,32 @@ class JavaMetadataCompiler {
             }
         }
 
-        // compile
+        // write metadata
         code.append("{");
 
         for (int i = 0; i < elements.size(); i++) {
-            Metadata element = elements.get(i);
-            code.append(element.name).append(":");
-            compileMetadata(element);
+            Metadata metadata = elements.get(i);
+            code.append(metadata.name, ":", "[");
+
+            metadata.write();
+            code.append(",", "{");
+
+            for (int j = 0; j < metadata.annotations.size(); j++) {
+                compileAnnotation2(metadata.annotations.get(j));
+
+                if (j + 1 != metadata.annotations.size()) {
+                    code.separator();
+                }
+            }
+            code.append("}");
+
+            code.append("]");
 
             if (i < elements.size() - 1) {
                 code.separator();
             }
         }
         code.append("}");
-
-        // API definition
-        return code.toString();
     }
 
     /**
@@ -110,27 +110,27 @@ class JavaMetadataCompiler {
      * Compile annotation to javascript.
      * </p>
      */
-    private void compileMetadata(Metadata metadata) {
-        List<Annotation> annotations = metadata.annotations;
+    private void compileAnnotation2(Annotation annotation) {
+        Class type = annotation.annotationType();
+        code.append(Javascript.computeSimpleClassName(type), ":", "{");
 
-        code.append("[");
+        // collect annotation methods and compile to javascript expression
+        Method[] methods = type.getDeclaredMethods();
 
-        // write metadata
-        code.append(metadata);
+        for (int i = 0; i < methods.length; i++) {
+            try {
+                // code.append(Javascript.computeMethodName(methods[i]), ":",
+                // compileValue(methods[i].invoke(annotation)));
+                write(Javascript.computeMethodName(methods[i]), compileValue(methods[i].invoke(annotation)));
 
-        if (!annotations.isEmpty()) {
-            code.append(",");
-
-            for (int i = 0; i < annotations.size(); i++) {
-                compileAnnotation(annotations.get(i));
-
-                if (i < annotations.size() - 1) {
-                    code.append(",");
+                if (i + 1 != methods.length) {
+                    code.separator();
                 }
+            } catch (Exception e) {
+                throw I.quiet(e);
             }
         }
-
-        code.append("]");
+        code.append("}");
     }
 
     /**
@@ -206,6 +206,14 @@ class JavaMetadataCompiler {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return code.toString();
+    }
+
     private static String convert(Class[] types) {
         StringBuilder builder = new StringBuilder("[");
 
@@ -221,9 +229,21 @@ class JavaMetadataCompiler {
     }
 
     /**
+     * <p>
+     * Compile metadata.
+     * </p>
+     * 
+     * @param clazz
+     * @param writer
+     */
+    public static void compile(Class clazz, ScriptWriter writer) {
+
+    }
+
+    /**
      * @version 2013/05/29 19:49:06
      */
-    private static abstract class Metadata {
+    private abstract class Metadata {
 
         /** The class, constructor, field or method name. */
         private final String name;
@@ -248,12 +268,17 @@ class JavaMetadataCompiler {
                 }
             }
         }
+
+        /**
+         * 
+         */
+        protected abstract void write();
     }
 
     /**
      * @version 2013/05/12 14:07:59
      */
-    private static class ClassMetadata extends Metadata {
+    private class ClassMetadata extends Metadata {
 
         /** The clazz . */
         private final Class clazz;
@@ -270,15 +295,20 @@ class JavaMetadataCompiler {
          * {@inheritDoc}
          */
         @Override
-        public String toString() {
-            return String.valueOf(clazz.getModifiers());
+        protected void write() {
+            code.append(clazz.getModifiers());
+        }
+
+        private String compile(TypeVariable[] variables) {
+
+            return "";
         }
     }
 
     /**
      * @version 2013/04/07 3:05:00
      */
-    private static class MethodMetadata extends Metadata {
+    private class MethodMetadata extends Metadata {
 
         /** The method . */
         private final Method method;
@@ -295,23 +325,17 @@ class JavaMetadataCompiler {
          * {@inheritDoc}
          */
         @Override
-        public String toString() {
-            StringBuilder builder = new StringBuilder();
-            builder.append(method.getModifiers()).append(",");
-            builder.append('"')
-                    .append(Javascript.computeSimpleClassName(method.getReturnType()))
-                    .append('"')
-                    .append(",");
-            builder.append(convert(method.getParameterTypes()));
-
-            return builder.toString();
+        protected void write() {
+            code.append(method.getModifiers()).append(",");
+            code.append('"', Javascript.computeSimpleClassName(method.getReturnType()), '"', ",");
+            code.append(convert(method.getParameterTypes()));
         }
     }
 
     /**
      * @version 2013/04/07 3:05:00
      */
-    private static class FieldMetadata extends Metadata {
+    private class FieldMetadata extends Metadata {
 
         /** The field . */
         private final Field field;
@@ -328,19 +352,16 @@ class JavaMetadataCompiler {
          * {@inheritDoc}
          */
         @Override
-        public String toString() {
-            StringBuilder builder = new StringBuilder();
-            builder.append("-").append(field.getModifiers()).append(",");
-            builder.append('"').append(Javascript.computeSimpleClassName(field.getType())).append('"');
-
-            return builder.toString();
+        protected void write() {
+            code.append("-").append(field.getModifiers()).append(",");
+            code.append('"').append(Javascript.computeSimpleClassName(field.getType())).append('"');
         }
     }
 
     /**
      * @version 2013/05/12 13:35:36
      */
-    private static class ConstructorMetadata extends Metadata {
+    private class ConstructorMetadata extends Metadata {
 
         /** The constructor . */
         private final Constructor constructor;
@@ -357,12 +378,9 @@ class JavaMetadataCompiler {
          * {@inheritDoc}
          */
         @Override
-        public String toString() {
-            StringBuilder builder = new StringBuilder();
-            builder.append(constructor.getModifiers()).append(",");
-            builder.append(convert(constructor.getParameterTypes()));
-
-            return builder.toString();
+        protected void write() {
+            code.append(constructor.getModifiers()).append(",");
+            code.append(convert(constructor.getParameterTypes()));
         }
     }
 }

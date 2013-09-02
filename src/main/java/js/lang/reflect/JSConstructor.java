@@ -9,7 +9,6 @@
  */
 package js.lang.reflect;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 
@@ -54,8 +53,8 @@ class JSConstructor<T> extends JSAccessibleObject {
      * @param function
      * @param metadata
      */
-    JSConstructor(String name, NativeObject clazz, NativeFunction function, NativeArray<Annotation> metadata) {
-        super(name, metadata.slice(2));
+    JSConstructor(String name, NativeObject clazz, NativeFunction function, NativeArray metadata) {
+        super(name, metadata.getPropertyAs(NativeObject.class, 2));
 
         this.clazz = clazz;
         this.modifiers = metadata.getAsInt(0);
