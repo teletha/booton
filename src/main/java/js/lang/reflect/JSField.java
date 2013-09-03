@@ -11,6 +11,7 @@ package js.lang.reflect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 import js.lang.NativeArray;
 import js.lang.NativeObject;
@@ -33,6 +34,9 @@ class JSField extends JSAccessibleObject {
     /** The field type. */
     private final Class<?> type;
 
+    /** The modifier value. */
+    private final int modifiers;
+
     /**
      * <p>
      * Create native field.
@@ -48,6 +52,7 @@ class JSField extends JSAccessibleObject {
         try {
             this.clazz = clazz;
             this.type = Class.forName(annotations.getPropertyAs(String.class, "1"));
+            this.modifiers = annotations.getAsInt(0);
         } catch (ClassNotFoundException e) {
             // If this exception will be thrown, it is bug of this program. So we must rethrow the
             // wrapped error in here.
@@ -60,6 +65,16 @@ class JSField extends JSAccessibleObject {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Returns the Java language modifiers for the field represented by this {@code Field} object,
+     * as an integer. The {@code Modifier} class should be used to decode the modifiers.
+     * 
+     * @see Modifier
+     */
+    public int getModifiers() {
+        return modifiers;
     }
 
     /**
