@@ -333,7 +333,7 @@ class JavaMetadataCompiler {
     }
 
     /**
-     * @version 2013/04/07 3:05:00
+     * @version 2013/09/03 22:50:57
      */
     private class FieldMetadata extends Metadata {
 
@@ -345,6 +345,7 @@ class JavaMetadataCompiler {
          */
         private FieldMetadata(Field field) {
             super(Javascript.computeFieldName(field), field);
+
             this.field = field;
         }
 
@@ -353,8 +354,7 @@ class JavaMetadataCompiler {
          */
         @Override
         protected void write() {
-            code.append("-").append(field.getModifiers()).append(",");
-            code.append('"').append(Javascript.computeSimpleClassName(field.getType())).append('"');
+            code.append(field.getModifiers(), ",").string(Javascript.computeSimpleClassName(field.getType()));
         }
     }
 

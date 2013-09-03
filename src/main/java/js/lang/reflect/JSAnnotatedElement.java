@@ -158,7 +158,6 @@ abstract class JSAnnotatedElement {
          */
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            System.out.println(method.getName());
             NativeFunction function = object.getPropertyAs(NativeFunction.class, method.getName());
 
             if (function == null) {

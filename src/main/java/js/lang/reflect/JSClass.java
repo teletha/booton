@@ -17,11 +17,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
@@ -61,7 +63,16 @@ class JSClass<T> extends JSAnnotatedElement {
     private JSClass arrayClass;
 
     /** The cache for public methods. */
-    private ConcurrentHashMap<Integer, Method> publicMethods;
+    private Map<Integer, Method> publicMethods;
+
+    /** The cache for declared methods. */
+    private List<Method> privateMethods;
+
+    /** The cache for public fields. */
+    private Map<Integer, Field> publicFields;
+
+    /** The cache for declared fields. */
+    private List<Field> privateFields;
 
     /**
      * <p>
@@ -202,48 +213,21 @@ class JSClass<T> extends JSAnnotatedElement {
      */
     public Method[] getMethods() {
         if (publicMethods == null) {
-            publicMethods = new ConcurrentHashMap();
+            publicMethods = new HashMap();
 
-            Class clazz = (Class) (Object) this;
+            for (Class type : collectTypes((Class) (Object) this, new HashSet())) {
+                for (Method method : type.getDeclaredMethods()) {
+                    Integer hash = hash(method.getName(), method.getParameterTypes());
 
-            while (clazz != null) {
-                for (Method method : clazz.getDeclaredMethods()) {
-                    if (Modifier.isPublic(method.getModifiers())) {
-                        System.out.println(method.getName() + "  " + hash(method.getName(), method.getParameterTypes()));
-                        publicMethods.putIfAbsent(hash(method.getName(), method.getParameterTypes()), method);
+                    if (Modifier.isPublic(method.getModifiers()) && !publicMethods.containsKey(hash)) {
+                        publicMethods.put(hash, method);
                     }
                 }
-
-                if (isInterface()) {
-                    clazz = null;
-                } else {
-                    clazz = clazz.getSuperclass();
-                }
             }
-            System.out.println(publicMethods.size());
         }
 
         // defensive copy
         return publicMethods.values().toArray(new Method[publicMethods.size()]);
-    }
-
-    /**
-     * <p>
-     * Compute hash.
-     * </p>
-     * 
-     * @param name
-     * @param types
-     * @return
-     */
-    private Integer hash(String name, Class[] types) {
-        return name.hashCode() + Arrays.hashCode(types);
-    }
-
-    private void collectTypes(Class type, Set<Class> types) {
-        if (types.add(type)) {
-            // super class
-        }
     }
 
     /**
@@ -261,20 +245,52 @@ class JSClass<T> extends JSAnnotatedElement {
      * @return The array of Method objects representing all the declared methods of this class.
      */
     public Method[] getDeclaredMethods() {
-        NativeArray<JSMethod> container = new NativeArray();
+        if (privateMethods == null) {
+            privateMethods = new ArrayList();
 
-        // collect non-static methods only
-        for (String name : metadata.keys()) {
-            int modifier = metadata.getPropertyAs(NativeArray.class, name).getAsInt(0);
-            int ch = name.codePointAt(0);
+            // collect non-static methods only
+            for (String name : metadata.keys()) {
+                char ch = name.charAt(0);
 
-            if (ch != '$' && 0 <= modifier) {
-                container.push(new JSMethod(name, clazz, metadata.getPropertyAs(NativeArray.class, name)));
+                if (ch != '$' && ch < 'a' || 'p' < ch) {
+                    privateMethods.add((Method) (Object) new JSMethod(name, clazz, metadata.getPropertyAs(NativeArray.class, name)));
+                }
             }
         }
 
-        // API definition
-        return (Method[]) (Object) container;
+        // defensive copy
+        return privateMethods.toArray(new Method[privateMethods.size()]);
+    }
+
+    /**
+     * <p>
+     * Compute hash.
+     * </p>
+     * 
+     * @param name
+     * @param types
+     * @return
+     */
+    private Integer hash(String name, Class[] types) {
+        return name.hashCode() * Arrays.hashCode(types);
+    }
+
+    private Set<Class> collectTypes(Class type, Set<Class> types) {
+        System.out.println(type);
+        if (type != null) {
+            System.out.println(type.hashCode() + "    " + type.getName());
+        }
+
+        if (type != null && types.add(type)) {
+            // super class
+            collectTypes(type.getSuperclass(), types);
+
+            // interfaces
+            for (Class interfaceType : type.getInterfaces()) {
+                collectTypes(interfaceType, types);
+            }
+        }
+        return types;
     }
 
     /**
@@ -322,7 +338,23 @@ class JSClass<T> extends JSAnnotatedElement {
      * @return The array of Field objects representing the public fields.
      */
     public Field[] getFields() {
-        return getDeclaredFields();
+        if (publicFields == null) {
+            publicFields = new HashMap();
+
+            for (Class type : collectTypes((Class) (Object) this, new HashSet())) {
+                System.out.println(type);
+                for (Field field : type.getDeclaredFields()) {
+                    Integer hash = hash(field.getName(), new Class[] {field.getDeclaringClass(), field.getType()});
+
+                    if (Modifier.isPublic(field.getModifiers()) && !publicFields.containsKey(hash)) {
+                        publicFields.put(hash, field);
+                    }
+                }
+            }
+        }
+
+        // defensive copy
+        return publicFields.values().toArray(new Field[publicFields.size()]);
     }
 
     /**
@@ -353,20 +385,21 @@ class JSClass<T> extends JSAnnotatedElement {
      * @since JDK1.1
      */
     public Field[] getDeclaredFields() throws SecurityException {
-        NativeArray<JSField> container = new NativeArray();
+        if (privateFields == null) {
+            privateFields = new ArrayList();
 
-        // collect non-static field only
-        for (String name : metadata.keys()) {
-            int modifier = metadata.getPropertyAs(NativeArray.class, name).getAsInt(0);
-            int ch = name.codePointAt(0);
+            // collect non-static methods only
+            for (String name : metadata.keys()) {
+                char ch = name.charAt(0);
 
-            if (ch != '$' && modifier < 0) {
-                container.push(new JSField(name, clazz, metadata.getPropertyAs(NativeArray.class, name)));
+                if ('a' <= ch && ch <= 'p') {
+                    privateFields.add((Field) (Object) new JSField(name, clazz, metadata.getPropertyAs(NativeArray.class, name)));
+                }
             }
         }
 
-        // API definition
-        return (Field[]) (Object) container;
+        // defensive copy
+        return privateFields.toArray(new Field[privateFields.size()]);
     }
 
     /**
@@ -544,7 +577,7 @@ class JSClass<T> extends JSAnnotatedElement {
      * @return The superclass of the class represented by this object.
      */
     public Class<? super T> getSuperclass() {
-        if ((Object) this == Object.class) {
+        if ((Object) this == Object.class || isInterface()) {
             return null;
         } else if (superclass == null) {
             return Object.class;
