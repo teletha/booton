@@ -377,10 +377,11 @@ public class Javascript {
             Method[] methods = source.getDeclaredMethods();
 
             for (int i = 0; i < methods.length; i++) {
+                code.comment(methods[i]);
                 code.append(computeMethodName(methods[i])).append(":null");
 
                 if (i < methods.length - 1) {
-                    code.append(",");
+                    code.separator();
                 }
             }
             code.append('}');

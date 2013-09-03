@@ -17,10 +17,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
@@ -58,6 +59,9 @@ class JSClass<T> extends JSAnnotatedElement {
 
     /** The cache for array class. */
     private JSClass arrayClass;
+
+    /** The cache for public methods. */
+    private ConcurrentHashMap<Integer, Method> publicMethods;
 
     /**
      * <p>
@@ -197,21 +201,49 @@ class JSClass<T> extends JSAnnotatedElement {
      * @return The array of Method objects representing the public methods of this class.
      */
     public Method[] getMethods() {
-        Class clazz = (Class) (Object) this;
-        List<Method> methods = new ArrayList();
+        if (publicMethods == null) {
+            publicMethods = new ConcurrentHashMap();
 
-        while (clazz != null) {
-            for (Method method : clazz.getDeclaredMethods()) {
-                methods.add(method);
-            }
+            Class clazz = (Class) (Object) this;
 
-            if (isInterface()) {
-                clazz = null;
-            } else {
-                clazz = clazz.getSuperclass();
+            while (clazz != null) {
+                for (Method method : clazz.getDeclaredMethods()) {
+                    if (Modifier.isPublic(method.getModifiers())) {
+                        System.out.println(method.getName() + "  " + hash(method.getName(), method.getParameterTypes()));
+                        publicMethods.putIfAbsent(hash(method.getName(), method.getParameterTypes()), method);
+                    }
+                }
+
+                if (isInterface()) {
+                    clazz = null;
+                } else {
+                    clazz = clazz.getSuperclass();
+                }
             }
+            System.out.println(publicMethods.size());
         }
-        return methods.toArray(new Method[methods.size()]);
+
+        // defensive copy
+        return publicMethods.values().toArray(new Method[publicMethods.size()]);
+    }
+
+    /**
+     * <p>
+     * Compute hash.
+     * </p>
+     * 
+     * @param name
+     * @param types
+     * @return
+     */
+    private Integer hash(String name, Class[] types) {
+        return name.hashCode() + Arrays.hashCode(types);
+    }
+
+    private void collectTypes(Class type, Set<Class> types) {
+        if (types.add(type)) {
+            // super class
+        }
     }
 
     /**

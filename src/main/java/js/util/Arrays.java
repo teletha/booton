@@ -1153,18 +1153,21 @@ class Arrays {
      * <tt>Arrays.asList(a).hashCode()</tt>, unless <tt>a</tt> is <tt>null</tt>, in which case
      * <tt>0</tt> is returned.
      * 
-     * @param a the array whose content-based hash code to compute
+     * @param items the array whose content-based hash code to compute
      * @return a content-based hash code for <tt>a</tt>
      * @see #deepHashCode(Object[])
      * @since 1.5
      */
-    public static int hashCode(Object a[]) {
-        if (a == null) return 0;
+    public static int hashCode(Object[] items) {
+        if (items == null) {
+            return 0;
+        }
 
         int result = 1;
 
-        for (Object element : a)
-            result = 31 * result + (element == null ? 0 : element.hashCode());
+        for (Object item : items) {
+            result = 31 * result + (item == null ? 0 : item.hashCode());
+        }
 
         return result;
     }

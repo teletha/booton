@@ -145,6 +145,18 @@ public class NativeObject {
 
     /**
      * <p>
+     * Check own property by key.
+     * </p>
+     * 
+     * @param key A property key.
+     * @return A property value.
+     */
+    public final boolean hasOwnProperty(Object key) {
+        return container.containsKey(literal(key));
+    }
+
+    /**
+     * <p>
      * Remove property by key from an object. Returns false only if the property exists on the
      * object itself, regardless of its prototypes, and cannot be deleted. It returns true in all
      * other cases.
@@ -461,6 +473,18 @@ public class NativeObject {
          */
         public String hasProperty(Object key) {
             return param(0) + " in " + that;
+        }
+
+        /**
+         * <p>
+         * Check own property by key.
+         * </p>
+         * 
+         * @param key A property key.
+         * @return A property value.
+         */
+        public String hasOwnProperty(Object key) {
+            return that + ".hasOwnProperty(" + param(0) + ")";
         }
 
         /**

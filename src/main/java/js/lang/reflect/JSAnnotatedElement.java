@@ -14,17 +14,14 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.HashMap;
-import java.util.Map;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
-import booton.translator.Debuggable;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/01/18 1:15:38
+ * @version 2013/09/03 13:14:26
  */
 @JavaAPIProvider(AnnotatedElement.class)
 abstract class JSAnnotatedElement {
@@ -34,8 +31,6 @@ abstract class JSAnnotatedElement {
 
     /** The annotation definition in runtime. */
     protected final NativeObject annotations;
-
-    private Map<Class, Annotation> ann;
 
     /**
      * <p>
@@ -61,7 +56,7 @@ abstract class JSAnnotatedElement {
      *         else false.
      */
     public <A extends Annotation> boolean isAnnotationPresent(Class<A> annotationClass) {
-        return getAnnotation(annotationClass) != null;
+        return annotations.hasOwnProperty(annotationClass.getSimpleName());
     }
 
     /**
@@ -74,22 +69,21 @@ abstract class JSAnnotatedElement {
      * @return This element's annotation for the specified annotation type if present on this
      *         element, else null.
      */
-    @Debuggable
     public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
         if (annotations != null) {
-            if (ann == null) {
-                ann = new HashMap();
-            }
+            String name = annotationClass.getSimpleName();
 
-            Annotation annotation = ann.get(annotationClass);
-            System.out.println(annotations);
-            System.out.println(annotationClass.getSimpleName());
-            System.out.println(annotations.hasProperty(annotationClass.getSimpleName()));
-            if (annotation == null && annotations.hasProperty(annotationClass.getSimpleName())) {
-                annotation = (Annotation) Proxy.newProxyInstance(annotationClass.getClassLoader(), new Class[] {annotationClass}, new AnnotationProxy(annotations.getPropertyAs(NativeObject.class, annotationClass.getSimpleName())));
-                ann.put(annotationClass, annotation);
+            if (annotations.hasOwnProperty(name)) {
+                Object value = annotations.getProperty(name);
+
+                if (!(value instanceof Annotation)) {
+                    value = Proxy.newProxyInstance(null, new Class[] {annotationClass}, new AnnotationProxy(annotationClass, value));
+
+                    // update as annotation instance
+                    annotations.setProperty(name, value);
+                }
+                return (A) value;
             }
-            return (A) annotation;
         }
         return null;
     }
@@ -144,14 +138,19 @@ abstract class JSAnnotatedElement {
      */
     private static class AnnotationProxy implements InvocationHandler {
 
+        /** The annotation class. */
+        private final Class<? extends Annotation> type;
+
         /** The properties. */
         private final NativeObject object;
 
         /**
+         * @param type
          * @param object
          */
-        private AnnotationProxy(NativeObject object) {
-            this.object = object;
+        private AnnotationProxy(Class type, Object object) {
+            this.type = type;
+            this.object = (NativeObject) object;
         }
 
         /**
@@ -159,7 +158,14 @@ abstract class JSAnnotatedElement {
          */
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            return object.getPropertyAs(NativeFunction.class, method.getName()).apply(null);
+            System.out.println(method.getName());
+            NativeFunction function = object.getPropertyAs(NativeFunction.class, method.getName());
+
+            if (function == null) {
+                return type;
+            } else {
+                return function.apply(null);
+            }
         }
     }
 }

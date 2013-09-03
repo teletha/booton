@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.lang.reflect;
+package js.lang.annotation;
 
 import java.lang.annotation.Annotation;
 
@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.translator.ScriptRunner;
+import booton.translator.annotation.NotReferenced;
 import booton.translator.annotation.PrimitiveMarker;
 
 /**
@@ -24,12 +25,29 @@ import booton.translator.annotation.PrimitiveMarker;
 public class AnnotationTest {
 
     @Test
+    public void isAnnotationPresent() throws Exception {
+        assert Annotated.class.isAnnotationPresent(PrimitiveMarker.class);
+        assert !Annotated.class.isAnnotationPresent(NotReferenced.class);
+    }
+
+    @Test
     public void getAnnotation() throws Exception {
         PrimitiveMarker annotation = Annotated.class.getAnnotation(PrimitiveMarker.class);
         assert annotation != null;
         assert annotation instanceof Annotation;
         assert annotation instanceof PrimitiveMarker;
         assert annotation.intValue() == 5;
+        assert annotation.booleanValue();
+        assert annotation.longValue() == 10;
+        assert annotation.annotationType() == PrimitiveMarker.class;
+
+        assert annotation == Annotated.class.getAnnotation(PrimitiveMarker.class);
+    }
+
+    @Test
+    public void getAnnotationNotReferenced() throws Exception {
+        NotReferenced annotation = Annotated.class.getAnnotation(NotReferenced.class);
+        assert annotation == null;
     }
 
     /**
