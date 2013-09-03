@@ -9,6 +9,7 @@
  */
 package js.lang.reflect;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import org.junit.Test;
@@ -89,5 +90,92 @@ public class ClassTest {
      * @version 2013/08/03 2:49:45
      */
     private static class Child extends Parent {
+    }
+
+    @Test
+    public void getMethods() throws Exception {
+        Method[] methods = Methods.class.getMethods();
+        assert methods != null;
+        assert methods.length == 10;
+
+        methods = ExtendedMethods.class.getMethods();
+        assert methods != null;
+        assert methods.length == 12;
+
+        // check defensive copy
+        methods[0] = methods[1];
+        assert methods[0] == methods[1];
+
+        methods = ExtendedMethods.class.getMethods();
+        assert methods[0] != methods[1];
+
+    }
+
+    @Test
+    public void getDeclaredMethods() throws Exception {
+        Method[] methods = Methods.class.getDeclaredMethods();
+        assert methods != null;
+        assert methods.length == 4;
+    }
+
+    /**
+     * @version 2013/09/03 15:04:55
+     */
+    private static class Methods {
+
+        /**
+         * 
+         */
+        public native void publicMethod();
+
+        /**
+         * 
+         */
+        protected native void protectedMethod();
+
+        /**
+         * 
+         */
+        native void packageMethod();
+
+        /**
+         * 
+         */
+        private native void privateMethod();
+    }
+
+    /**
+     * @version 2013/09/03 15:14:17
+     */
+    private static class ExtendedMethods extends Methods {
+
+        /**
+         * 
+         */
+        public native void extendedMethod();
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void publicMethod() {
+            super.publicMethod();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void protectedMethod() {
+            super.protectedMethod();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        void packageMethod() {
+            super.packageMethod();
+        }
     }
 }

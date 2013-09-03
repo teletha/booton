@@ -31,16 +31,6 @@ public class ClassAnnotationTest extends ScriptTester {
     }
 
     @Test
-    public void NotReferenced() throws Exception {
-        test(new Scriptable() {
-
-            boolean act() {
-                return Annotated.class.isAnnotationPresent(NotReferenced.class);
-            }
-        });
-    }
-
-    @Test
     public void Annotated() throws Exception {
         test(new Scriptable() {
 

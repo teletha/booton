@@ -92,6 +92,17 @@ public class ProxyTest {
         assert machine.echo("echo").equals("echo");
     }
 
+    @Test
+    public void extend() throws Exception {
+        Chicken chicken = (Chicken) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {Chicken.class}, proxy);
+
+        assert chicken instanceof Bird;
+        assert chicken instanceof Chicken;
+        assert !(chicken instanceof Machine);
+        assert chicken.tweet("koke-").equals("PROXY");
+        assert chicken.talk("moti ummai").equals("PROXY");
+    }
+
     /**
      * @version 2013/08/19 14:05:50
      */
@@ -112,5 +123,17 @@ public class ProxyTest {
          * @param message
          */
         String tweet(String message);
+    }
+
+    /**
+     * @version 2013/09/03 13:35:06
+     */
+    private static interface Chicken extends Bird {
+
+        /**
+         * @param message
+         * @return
+         */
+        String talk(String message);
     }
 }
