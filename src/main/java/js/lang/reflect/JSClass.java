@@ -63,10 +63,10 @@ class JSClass<T> extends JSAnnotatedElement {
     private JSClass arrayClass;
 
     /** The cache for public constructors. */
-    private List<Constructor> publicConstructors;
+    private Map<Integer, Constructor> publicConstructors;
 
     /** The cache for declared constructors. */
-    private List<Constructor> privateConstructors;
+    private Map<Integer, Constructor> privateConstructors;
 
     /** The cache for public methods. */
     private Map<Integer, Method> publicMethods;
@@ -155,6 +155,48 @@ class JSClass<T> extends JSAnnotatedElement {
     }
 
     /**
+     * Returns a {@code Constructor} object that reflects the specified public constructor of the
+     * class represented by this {@code Class} object. The {@code parameterTypes} parameter is an
+     * array of {@code Class} objects that identify the constructor's formal parameter types, in
+     * declared order. If this {@code Class} object represents an inner class declared in a
+     * non-static context, the formal parameter types include the explicit enclosing instance as the
+     * first parameter.
+     * <p>
+     * The constructor to reflect is the public constructor of the class represented by this
+     * {@code Class} object whose formal parameter types match those specified by
+     * {@code parameterTypes}.
+     * 
+     * @param parameterTypes the parameter array
+     * @return the {@code Constructor} object of the public constructor that matches the specified
+     *         {@code parameterTypes}
+     * @exception NoSuchMethodException if a matching method is not found.
+     * @exception SecurityException If a security manager, <i>s</i>, is present and any of the
+     *                following conditions is met:
+     *                <ul>
+     *                <li> invocation of {@link SecurityManager#checkMemberAccess
+     *                s.checkMemberAccess(this, Member.PUBLIC)} denies access to the constructor 
+     *                <li> the caller's class loader is not the same as or an ancestor of the class
+     *                loader for the current class and invocation of
+     *                {@link SecurityManager#checkPackageAccess s.checkPackageAccess()} denies
+     *                access to the package of this class
+     *                </ul>
+     * @since JDK1.1
+     */
+    public Constructor<T> getConstructor(Class<?>... parameterTypes) throws NoSuchMethodException, SecurityException {
+        if (publicConstructors == null) {
+            getConstructors();
+        }
+
+        Constructor constructor = publicConstructors.get(hash("", parameterTypes));
+
+        if (constructor == null) {
+            throw new NoSuchMethodException();
+        } else {
+            return constructor;
+        }
+    }
+
+    /**
      * <p>
      * Returns an array containing Constructor objects reflecting all the public constructors of the
      * class represented by this Class object. An array of length 0 is returned if the class has no
@@ -170,17 +212,56 @@ class JSClass<T> extends JSAnnotatedElement {
      */
     public Constructor[] getConstructors() {
         if (publicConstructors == null) {
-            publicConstructors = new ArrayList();
+            publicConstructors = new HashMap();
 
             for (Constructor constructor : ((Class) (Object) this).getDeclaredConstructors()) {
                 if (Modifier.isPublic(constructor.getModifiers())) {
-                    publicConstructors.add(constructor);
+                    publicConstructors.put(hash("", constructor.getParameterTypes()), constructor);
                 }
             }
         }
 
         // defensive copy
-        return publicConstructors.toArray(new Constructor[publicConstructors.size()]);
+        return publicConstructors.values().toArray(new Constructor[publicConstructors.size()]);
+    }
+
+    /**
+     * Returns a {@code Constructor} object that reflects the specified constructor of the class or
+     * interface represented by this {@code Class} object. The {@code parameterTypes} parameter is
+     * an array of {@code Class} objects that identify the constructor's formal parameter types, in
+     * declared order. If this {@code Class} object represents an inner class declared in a
+     * non-static context, the formal parameter types include the explicit enclosing instance as the
+     * first parameter.
+     * 
+     * @param parameterTypes the parameter array
+     * @return The {@code Constructor} object for the constructor with the specified parameter list
+     * @exception NoSuchMethodException if a matching method is not found.
+     * @exception SecurityException If a security manager, <i>s</i>, is present and any of the
+     *                following conditions is met:
+     *                <ul>
+     *                <li>invocation of {@link SecurityManager#checkMemberAccess
+     *                s.checkMemberAccess(this, Member.DECLARED)} denies access to the declared
+     *                constructor
+     *                <li>the caller's class loader is not the same as or an ancestor of the class
+     *                loader for the current class and invocation of
+     *                {@link SecurityManager#checkPackageAccess s.checkPackageAccess()} denies
+     *                access to the package of this class
+     *                </ul>
+     * @since JDK1.1
+     */
+    public Constructor<T> getDeclaredConstructor(Class<?>... parameterTypes) throws NoSuchMethodException,
+            SecurityException {
+        if (privateConstructors == null) {
+            getDeclaredConstructors();
+        }
+
+        Constructor constructor = privateConstructors.get(hash("", parameterTypes));
+
+        if (constructor == null) {
+            throw new NoSuchMethodException();
+        } else {
+            return constructor;
+        }
     }
 
     /**
@@ -199,20 +280,21 @@ class JSClass<T> extends JSAnnotatedElement {
      */
     public Constructor[] getDeclaredConstructors() {
         if (privateConstructors == null) {
-            privateConstructors = new ArrayList();
+            privateConstructors = new HashMap();
 
             // collect non-static methods only
             for (String name : metadata.keys()) {
                 char ch = name.charAt(0);
 
                 if (ch == '$' && name.length() != 1) {
-                    privateConstructors.add((Constructor) (Object) new JSConstructor(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), metadata.getPropertyAs(NativeArray.class, name)));
+                    Constructor constructor = (Constructor) (Object) new JSConstructor(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), metadata.getPropertyAs(NativeArray.class, name));
+                    privateConstructors.put(hash("", constructor.getParameterTypes()), constructor);
                 }
             }
         }
 
         // defensive copy
-        return privateConstructors.toArray(new Constructor[privateConstructors.size()]);
+        return privateConstructors.values().toArray(new Constructor[privateConstructors.size()]);
     }
 
     /**
@@ -277,32 +359,6 @@ class JSClass<T> extends JSAnnotatedElement {
 
         // defensive copy
         return privateMethods.toArray(new Method[privateMethods.size()]);
-    }
-
-    /**
-     * <p>
-     * Compute hash.
-     * </p>
-     * 
-     * @param name
-     * @param types
-     * @return
-     */
-    private Integer hash(String name, Class[] types) {
-        return name.hashCode() + Arrays.hashCode(types);
-    }
-
-    private Set<Class> collectTypes(Class type, Set<Class> types) {
-        if (type != null && types.add(type)) {
-            // super class
-            collectTypes(type.getSuperclass(), types);
-
-            // interfaces
-            for (Class interfaceType : type.getInterfaces()) {
-                collectTypes(interfaceType, types);
-            }
-        }
-        return types;
     }
 
     /**
@@ -411,6 +467,32 @@ class JSClass<T> extends JSAnnotatedElement {
 
         // defensive copy
         return privateFields.toArray(new Field[privateFields.size()]);
+    }
+
+    /**
+     * <p>
+     * Compute hash.
+     * </p>
+     * 
+     * @param name
+     * @param types
+     * @return
+     */
+    private Integer hash(String name, Class[] types) {
+        return name.hashCode() + Arrays.hashCode(types);
+    }
+
+    private Set<Class> collectTypes(Class type, Set<Class> types) {
+        if (type != null && types.add(type)) {
+            // super class
+            collectTypes(type.getSuperclass(), types);
+
+            // interfaces
+            for (Class interfaceType : type.getInterfaces()) {
+                collectTypes(interfaceType, types);
+            }
+        }
+        return types;
     }
 
     /**
@@ -728,40 +810,6 @@ class JSClass<T> extends JSAnnotatedElement {
         } catch (Exception e) {
             throw new Error(e);
         }
-    }
-
-    /**
-     * Returns a {@code Constructor} object that reflects the specified public constructor of the
-     * class represented by this {@code Class} object. The {@code parameterTypes} parameter is an
-     * array of {@code Class} objects that identify the constructor's formal parameter types, in
-     * declared order. If this {@code Class} object represents an inner class declared in a
-     * non-static context, the formal parameter types include the explicit enclosing instance as the
-     * first parameter.
-     * <p>
-     * The constructor to reflect is the public constructor of the class represented by this
-     * {@code Class} object whose formal parameter types match those specified by
-     * {@code parameterTypes}.
-     * 
-     * @param parameterTypes the parameter array
-     * @return the {@code Constructor} object of the public constructor that matches the specified
-     *         {@code parameterTypes}
-     * @exception NoSuchMethodException if a matching method is not found.
-     * @exception SecurityException If a security manager, <i>s</i>, is present and any of the
-     *                following conditions is met:
-     *                <ul>
-     *                <li> invocation of {@link SecurityManager#checkMemberAccess
-     *                s.checkMemberAccess(this, Member.PUBLIC)} denies access to the constructor 
-     *                <li> the caller's class loader is not the same as or an ancestor of the class
-     *                loader for the current class and invocation of
-     *                {@link SecurityManager#checkPackageAccess s.checkPackageAccess()} denies
-     *                access to the package of this class
-     *                </ul>
-     * @since JDK1.1
-     */
-    public Constructor<T> getConstructor(Class<?>... parameterTypes) throws NoSuchMethodException, SecurityException {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
     }
 
     /**

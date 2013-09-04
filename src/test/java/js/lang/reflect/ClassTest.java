@@ -401,6 +401,17 @@ public class ClassTest {
     }
 
     @Test
+    public void getConstructor() throws Exception {
+        Constructor constructor = Constructors.class.getConstructor();
+        assert constructor != null;
+    }
+
+    @Test(expected = NoSuchMethodException.class)
+    public void getIvalidConstructor() throws Exception {
+        Constructors.class.getConstructor(int.class);
+    }
+
+    @Test
     public void getConstructors() throws Exception {
         Constructor[] constructors = Constructors.class.getConstructors();
         assert constructors != null;
@@ -427,6 +438,26 @@ public class ClassTest {
         constructors = ExtendedInterface.class.getConstructors();
         assert constructors != null;
         assert constructors.length == 0;
+    }
+
+    @Test
+    public void getDeclaredConstructor() throws Exception {
+        Constructor constructor = Constructors.class.getDeclaredConstructor(int.class);
+        assert constructor != null;
+
+        constructor = Constructors.class.getDeclaredConstructor(double.class);
+        assert constructor != null;
+
+        constructor = Constructors.class.getDeclaredConstructor(boolean.class);
+        assert constructor != null;
+
+        constructor = Constructors.class.getDeclaredConstructor();
+        assert constructor != null;
+    }
+
+    @Test(expected = NoSuchMethodException.class)
+    public void getIvalidDeclaredConstructor() throws Exception {
+        Constructors.class.getDeclaredConstructor(int.class, double.class, float.class);
     }
 
     @Test
