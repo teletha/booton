@@ -13,7 +13,7 @@ import booton.translator.JavaAPIProvider;
 import booton.translator.JavascriptAPIProvider;
 
 /**
- * @version 2013/09/03 15:12:53
+ * @version 2013/09/04 16:55:40
  */
 @JavaAPIProvider(Object.class)
 @JavascriptAPIProvider("Object")

@@ -9,6 +9,7 @@
  */
 package js.lang.reflect;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -328,6 +329,9 @@ public class ClassTest {
         fields[0] = fields[1];
         assert fields[0] == fields[1];
 
+        fields = ExtendedFields.class.getDeclaredFields();
+        assert fields[0] != fields[1];
+
         // interface
         fields = Interface.class.getFields();
         assert fields != null;
@@ -335,13 +339,6 @@ public class ClassTest {
 
         // extended interface
         fields = ExtendedInterface.class.getFields();
-        assert fields != null;
-        assert fields.length == 2;
-    }
-
-    @Test
-    public void getFields2() throws Exception {
-        Field[] fields = ExtendedInterface.class.getFields();
         assert fields != null;
         assert fields.length == 2;
     }
@@ -360,6 +357,9 @@ public class ClassTest {
         // check defensive copy
         fields[0] = fields[1];
         assert fields[0] == fields[1];
+
+        fields = ExtendedFields.class.getDeclaredFields();
+        assert fields[0] != fields[1];
 
         // interface
         fields = Interface.class.getDeclaredFields();
@@ -398,5 +398,97 @@ public class ClassTest {
         public int extendedField;
 
         public int protectedField;
+    }
+
+    @Test
+    public void getConstructors() throws Exception {
+        Constructor[] constructors = Constructors.class.getConstructors();
+        assert constructors != null;
+        assert constructors.length == 1;
+
+        // extends
+        constructors = ExtendedConstructors.class.getConstructors();
+        assert constructors != null;
+        assert constructors.length == 1;
+
+        // check defensive copy
+        constructors[0] = null;
+        assert constructors[0] == null;
+
+        constructors = ExtendedConstructors.class.getConstructors();
+        assert constructors[0] != null;
+
+        // interface
+        constructors = Interface.class.getConstructors();
+        assert constructors != null;
+        assert constructors.length == 0;
+
+        // extended interface
+        constructors = ExtendedInterface.class.getConstructors();
+        assert constructors != null;
+        assert constructors.length == 0;
+    }
+
+    @Test
+    public void getDeclaredConstructors() throws Exception {
+        Constructor[] constructors = Constructors.class.getDeclaredConstructors();
+        assert constructors != null;
+        assert constructors.length == 4;
+
+        // extends
+        constructors = ExtendedConstructors.class.getDeclaredConstructors();
+        assert constructors != null;
+        assert constructors.length == 2;
+
+        // check defensive copy
+        constructors[0] = constructors[1];
+        assert constructors[0] == constructors[1];
+
+        constructors = ExtendedConstructors.class.getDeclaredConstructors();
+        assert constructors[0] != constructors[1];
+
+        // interface
+        constructors = Interface.class.getDeclaredConstructors();
+        assert constructors != null;
+        assert constructors.length == 0;
+
+        // extended interface
+        constructors = ExtendedInterface.class.getDeclaredConstructors();
+        assert constructors != null;
+        assert constructors.length == 0;
+    }
+
+    /**
+     * @version 2013/09/04 16:57:20
+     */
+    @SuppressWarnings("unused")
+    private static class Constructors {
+
+        public Constructors() {
+        }
+
+        protected Constructors(int one) {
+        }
+
+        Constructors(double one) {
+        }
+
+        private Constructors(boolean one) {
+        }
+    }
+
+    /**
+     * @version 2013/09/04 16:57:17
+     */
+    @SuppressWarnings("unused")
+    private static class ExtendedConstructors extends Constructors {
+
+        public ExtendedConstructors(int one) {
+            super(one);
+        }
+
+        private ExtendedConstructors(byte one) {
+            super(one);
+        }
     }
 }

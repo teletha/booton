@@ -62,6 +62,12 @@ class JSClass<T> extends JSAnnotatedElement {
     /** The cache for array class. */
     private JSClass arrayClass;
 
+    /** The cache for public constructors. */
+    private List<Constructor> publicConstructors;
+
+    /** The cache for declared constructors. */
+    private List<Constructor> privateConstructors;
+
     /** The cache for public methods. */
     private Map<Integer, Method> publicMethods;
 
@@ -162,15 +168,19 @@ class JSClass<T> extends JSAnnotatedElement {
      * 
      * @return The array of Constructor objects representing the public constructors of this class.
      */
-    public Constructor[] getDeclaredConstructors() {
-        NativeArray<JSConstructor> container = new NativeArray();
+    public Constructor[] getConstructors() {
+        if (publicConstructors == null) {
+            publicConstructors = new ArrayList();
 
-        for (String name : metadata.keys()) {
-            if (name.startsWith("$") && name.length() != 1) {
-                container.push(new JSConstructor(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), metadata.getPropertyAs(NativeArray.class, name)));
+            for (Constructor constructor : ((Class) (Object) this).getDeclaredConstructors()) {
+                if (Modifier.isPublic(constructor.getModifiers())) {
+                    publicConstructors.add(constructor);
+                }
             }
         }
-        return (Constructor[]) (Object) container;
+
+        // defensive copy
+        return publicConstructors.toArray(new Constructor[publicConstructors.size()]);
     }
 
     /**
@@ -187,15 +197,22 @@ class JSClass<T> extends JSAnnotatedElement {
      * 
      * @return The array of Constructor objects representing the public constructors of this class.
      */
-    public Constructor[] getConstructors() {
-        NativeArray<JSConstructor> container = new NativeArray();
+    public Constructor[] getDeclaredConstructors() {
+        if (privateConstructors == null) {
+            privateConstructors = new ArrayList();
 
-        for (String name : metadata.keys()) {
-            if (name.startsWith("$") && name.length() != 1) {
-                container.push(new JSConstructor(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), metadata.getPropertyAs(NativeArray.class, name)));
+            // collect non-static methods only
+            for (String name : metadata.keys()) {
+                char ch = name.charAt(0);
+
+                if (ch == '$' && name.length() != 1) {
+                    privateConstructors.add((Constructor) (Object) new JSConstructor(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), metadata.getPropertyAs(NativeArray.class, name)));
+                }
             }
         }
-        return (Constructor[]) (Object) container;
+
+        // defensive copy
+        return privateConstructors.toArray(new Constructor[privateConstructors.size()]);
     }
 
     /**
@@ -272,15 +289,10 @@ class JSClass<T> extends JSAnnotatedElement {
      * @return
      */
     private Integer hash(String name, Class[] types) {
-        return name.hashCode() * Arrays.hashCode(types);
+        return name.hashCode() + Arrays.hashCode(types);
     }
 
     private Set<Class> collectTypes(Class type, Set<Class> types) {
-        System.out.println(type);
-        if (type != null) {
-            System.out.println(type.hashCode() + "    " + type.getName());
-        }
-
         if (type != null && types.add(type)) {
             // super class
             collectTypes(type.getSuperclass(), types);
@@ -342,7 +354,6 @@ class JSClass<T> extends JSAnnotatedElement {
             publicFields = new HashMap();
 
             for (Class type : collectTypes((Class) (Object) this, new HashSet())) {
-                System.out.println(type);
                 for (Field field : type.getDeclaredFields()) {
                     Integer hash = hash(field.getName(), new Class[] {field.getDeclaringClass(), field.getType()});
 
