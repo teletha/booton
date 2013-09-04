@@ -22,7 +22,7 @@ import booton.translator.annotation.PrimitiveMarker;
  * @version 2013/09/03 0:32:13
  */
 @RunWith(ScriptRunner.class)
-public class AnnotationTest {
+public class ClassAnnotationTest {
 
     @Test
     public void isAnnotationPresent() throws Exception {

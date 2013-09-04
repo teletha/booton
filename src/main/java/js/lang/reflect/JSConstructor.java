@@ -54,7 +54,7 @@ class JSConstructor<T> extends JSAccessibleObject {
      * @param metadata
      */
     JSConstructor(String name, NativeObject clazz, NativeFunction function, NativeArray metadata) {
-        super(name, metadata.getPropertyAs(NativeObject.class, 2));
+        super(name, (NativeObject) metadata.get(2));
 
         this.clazz = clazz;
         this.modifiers = metadata.getAsInt(0);

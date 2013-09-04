@@ -567,15 +567,17 @@ public class Javascript {
      * @return An identified class name for ECMAScript.
      */
     public static final String computeClassName(Class<?> clazz) {
-        JavascriptAPIProvider provider = clazz.getAnnotation(JavascriptAPIProvider.class);
+        if (!clazz.isAnnotationPresent(JavaAPIProvider.class)) {
+            JavascriptAPIProvider provider = clazz.getAnnotation(JavascriptAPIProvider.class);
 
-        if (provider != null) {
-            String name = provider.value();
+            if (provider != null && clazz != Object.class) {
+                String name = provider.value();
 
-            if (name.length() == 0) {
-                name = clazz.getSimpleName();
+                if (name.length() == 0) {
+                    name = clazz.getSimpleName();
+                }
+                return name;
             }
-            return name;
         }
         return "boot." + computeSimpleClassName(clazz);
     }

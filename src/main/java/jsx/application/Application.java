@@ -126,6 +126,7 @@ public abstract class Application {
          * @param pageId
          */
         private void dispatch(String pageId) {
+
             if (pageId.length() != 0 && pageId.startsWith("#")) {
                 pageId = pageId.substring(1);
             }

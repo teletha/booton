@@ -47,7 +47,7 @@ class JSField extends JSAccessibleObject {
      * @param annotations
      */
     JSField(String name, NativeObject clazz, NativeArray<Annotation> annotations) {
-        super(name, annotations.getPropertyAs(NativeObject.class, 2));
+        super(name, (NativeObject) annotations.get(2));
 
         try {
             this.clazz = clazz;
