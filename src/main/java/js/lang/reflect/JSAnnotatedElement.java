@@ -21,13 +21,16 @@ import js.lang.NativeObject;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/09/03 13:14:26
+ * @version 2013/09/06 7:50:18
  */
 @JavaAPIProvider(AnnotatedElement.class)
 abstract class JSAnnotatedElement {
 
-    /** The function name in runtime. */
+    /** The property name at Java definition. */
     protected final String name;
+
+    /** The property name at JavaScript runtime. */
+    protected final String nameJS;
 
     /** The annotation definition in runtime. */
     protected final NativeObject annotations;
@@ -37,11 +40,13 @@ abstract class JSAnnotatedElement {
      * Create {@link AnnotatedElement} in Javascript runtime.
      * </p>
      * 
-     * @param name
+     * @param name The property name at Java definition.
+     * @param nameJS The property name at JavaScript runtime.
      * @param annotations
      */
-    protected JSAnnotatedElement(String name, NativeObject annotations) {
+    protected JSAnnotatedElement(String name, String nameJS, NativeObject annotations) {
         this.name = name;
+        this.nameJS = nameJS;
         this.annotations = annotations;
     }
 
@@ -158,7 +163,7 @@ abstract class JSAnnotatedElement {
          */
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            NativeFunction function = object.getPropertyAs(NativeFunction.class, method.getName());
+            NativeFunction function = object.getPropertyAs(NativeFunction.class, ((JSMethod) (Object) method).nameJS);
 
             if (function == null) {
                 return type;

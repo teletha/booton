@@ -69,7 +69,7 @@ public class NativeFunctionTest {
         }
 
         /**
-         * @param name
+         * @param nameJS
          * @return
          */
         @SuppressWarnings("unused")

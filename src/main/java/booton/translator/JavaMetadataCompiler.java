@@ -94,9 +94,7 @@ class JavaMetadataCompiler {
                     code.separator();
                 }
             }
-            code.append("}");
-
-            code.append("]");
+            code.append("}]");
 
             if (i < elements.size() - 1) {
                 code.separator();
@@ -326,7 +324,7 @@ class JavaMetadataCompiler {
          */
         @Override
         protected void write() {
-            code.append(method.getModifiers()).append(",");
+            code.append(method.getModifiers(), ",\"", method.getName(), "\",");
             code.append('"', Javascript.computeSimpleClassName(method.getReturnType()), '"', ",");
             code.append(convert(method.getParameterTypes()));
         }
@@ -354,7 +352,8 @@ class JavaMetadataCompiler {
          */
         @Override
         protected void write() {
-            code.append(field.getModifiers(), ",").string(Javascript.computeSimpleClassName(field.getType()));
+            code.append(field.getModifiers(), ",\"", field.getName(), "\",")
+                    .string(Javascript.computeSimpleClassName(field.getType()));
         }
     }
 

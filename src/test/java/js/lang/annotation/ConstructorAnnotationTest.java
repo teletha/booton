@@ -24,7 +24,7 @@ import booton.translator.annotation.PrimitiveMarker;
 public class ConstructorAnnotationTest {
 
     @Test
-    public void testname() throws Exception {
+    public void annotation() throws Exception {
         Constructor<?> constructor = Annotated.class.getDeclaredConstructors()[0];
         PrimitiveMarker annotation = constructor.getAnnotation(PrimitiveMarker.class);
         assert annotation != null;

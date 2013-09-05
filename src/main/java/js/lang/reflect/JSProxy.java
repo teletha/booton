@@ -97,7 +97,8 @@ class JSProxy {
         for (Class<?> interfaceType : interfaces) {
             for (final Method method : interfaceType.getMethods()) {
                 ProxyFunction function = new ProxyFunction(proxy, method);
-                NativeObject.by(proxy).setProperty(method.getName(), new NativeFunction(function).bind(function));
+                NativeObject.by(proxy)
+                        .setProperty(((JSMethod) (Object) method).nameJS, new NativeFunction(function).bind(function));
             }
         }
 
