@@ -267,7 +267,6 @@ public class CSSProperty<T extends CSSProperty> {
          * Set property name and value.
          * </p>
          * 
-         * @param nameJS
          * @param value
          * @return
          */

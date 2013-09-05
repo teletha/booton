@@ -562,7 +562,6 @@ public class ChampionDetail extends Page {
         private final Element current;
 
         /**
-         * @param nameJS
          */
         private StatusView(Status status, Element root) {
             Element box = root.child(StatusBox.class);
