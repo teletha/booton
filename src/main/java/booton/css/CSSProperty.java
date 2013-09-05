@@ -267,7 +267,7 @@ public class CSSProperty<T extends CSSProperty> {
          * Set property name and value.
          * </p>
          * 
-         * @param name
+         * @param nameJS
          * @param value
          * @return
          */
@@ -295,7 +295,7 @@ public class CSSProperty<T extends CSSProperty> {
          * Set property name and value.
          * </p>
          * 
-         * @param name
+         * @param nameJS
          * @param value
          * @return
          */
@@ -323,7 +323,7 @@ public class CSSProperty<T extends CSSProperty> {
          * Set property name and value.
          * </p>
          * 
-         * @param name
+         * @param nameJS
          * @param value
          * @return
          */
@@ -351,7 +351,7 @@ public class CSSProperty<T extends CSSProperty> {
          * Set property name and value.
          * </p>
          * 
-         * @param name
+         * @param nameJS
          * @param value
          * @return
          */

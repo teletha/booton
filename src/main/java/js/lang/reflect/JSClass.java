@@ -85,12 +85,12 @@ class JSClass<T> extends JSAnnotatedElement {
      * Create native class.
      * </p>
      * 
-     * @param name
+     * @param nameJS
      * @param clazz
      * @param metadata
      */
-    protected JSClass(String name, NativeObject clazz, NativeObject metadata, Class superclass, String[] interfaces) {
-        super(name, findAnnotations(metadata, "$", 1, name));
+    protected JSClass(String nameJS, NativeObject clazz, NativeObject metadata, Class superclass, String[] interfaces) {
+        super(nameJS, nameJS, findAnnotations(metadata, "$", 1, nameJS));
 
         this.clazz = clazz;
         this.metadata = metadata;
@@ -567,7 +567,7 @@ class JSClass<T> extends JSAnnotatedElement {
      * @since JDK1.1
      */
     public boolean isArray() {
-        return name.startsWith("[");
+        return nameJS.startsWith("[");
     }
 
     /**
@@ -656,7 +656,7 @@ class JSClass<T> extends JSAnnotatedElement {
      * @since JDK1.1
      */
     public Class<?> getComponentType() {
-        return isArray() ? forName(name.substring(1)) : null;
+        return isArray() ? forName(nameJS.substring(1)) : null;
     }
 
     /**
@@ -754,7 +754,7 @@ class JSClass<T> extends JSAnnotatedElement {
      * @return
      */
     public String getName() {
-        return "boot." + name;
+        return "boot." + nameJS;
     }
 
     /**
@@ -770,7 +770,7 @@ class JSClass<T> extends JSAnnotatedElement {
      * @return The simple name of the underlying class.
      */
     public String getSimpleName() {
-        return name;
+        return nameJS;
     }
 
     /**
@@ -785,7 +785,7 @@ class JSClass<T> extends JSAnnotatedElement {
      * @since 1.5
      */
     public String getCanonicalName() {
-        return name;
+        return nameJS;
     }
 
     /**
@@ -876,7 +876,7 @@ class JSClass<T> extends JSAnnotatedElement {
      */
     protected JSClass getArrayClass() {
         if (arrayClass == null) {
-            arrayClass = new JSClass("[".concat(name), new NativeObject(), new NativeObject(), null, new String[0]);
+            arrayClass = new JSClass("[".concat(nameJS), new NativeObject(), new NativeObject(), null, new String[0]);
         }
         return arrayClass;
     }

@@ -9,7 +9,6 @@
  */
 package js.lang.reflect;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -46,18 +45,18 @@ class JSMethod extends JSAccessibleObject {
      * Create native method.
      * </p>
      * 
-     * @param name
+     * @param nameJS
      * @param clazz
      * @param metadata
      */
-    JSMethod(String name, NativeObject clazz, NativeArray<Annotation> metadata) {
-        super(name, metadata.getPropertyAs(NativeObject.class, 3));
+    JSMethod(String nameJS, NativeObject clazz, NativeArray metadata) {
+        super((String) metadata.get(1), nameJS, (NativeObject) metadata.get(4));
 
         try {
             this.clazz = clazz;
             this.modifiers = metadata.getAsInt(0);
-            this.returnType = Class.forName(metadata.getPropertyAs(String.class, "1"));
-            this.parameterTypes = convert(metadata.getPropertyAs(String[].class, "2"));
+            this.returnType = Class.forName(metadata.getPropertyAs(String.class, "2"));
+            this.parameterTypes = convert(metadata.getPropertyAs(String[].class, "3"));
         } catch (Exception e) {
             // If this exception will be thrown, it is bug of this program. So we must rethrow the
             // wrapped error in here.
@@ -145,6 +144,6 @@ class JSMethod extends JSAccessibleObject {
      *         parameters args.
      */
     public Object invoke(Object context, Object... parameters) {
-        return ((NativeObject) context).getPropertyAs(NativeFunction.class, name).apply(context, parameters);
+        return ((NativeObject) context).getPropertyAs(NativeFunction.class, nameJS).apply(context, parameters);
     }
 }

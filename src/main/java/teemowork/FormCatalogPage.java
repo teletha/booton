@@ -31,7 +31,7 @@ public class FormCatalogPage extends Page {
      * 
      */
     @PageInfo(path = "GridTest")
-    private FormCatalogPage() {
+    public FormCatalogPage() {
     }
 
     /**
@@ -48,6 +48,7 @@ public class FormCatalogPage extends Page {
     @Override
     public void load(DocumentFragment root) {
         SelectableModel<String> selectable = new SelectableModel<String>();
+
         for (int i = 0; i < 200; i++) {
             selectable.add(String.valueOf(i));
         }

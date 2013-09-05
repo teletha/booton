@@ -9,7 +9,6 @@
  */
 package js.lang.reflect;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
@@ -23,7 +22,7 @@ import booton.translator.JavaAPIProvider;
  * functionalities.
  * </p>
  * 
- * @version 2013/01/17 20:45:34
+ * @version 2013/09/06 7:52:57
  */
 @JavaAPIProvider(Field.class)
 class JSField extends JSAccessibleObject {
@@ -42,16 +41,16 @@ class JSField extends JSAccessibleObject {
      * Create native field.
      * </p>
      * 
-     * @param name
+     * @param nameJS
      * @param clazz
      * @param annotations
      */
-    JSField(String name, NativeObject clazz, NativeArray<Annotation> annotations) {
-        super(name, (NativeObject) annotations.get(2));
+    JSField(String nameJS, NativeObject clazz, NativeArray annotations) {
+        super((String) annotations.get(1), nameJS, (NativeObject) annotations.get(3));
 
         try {
             this.clazz = clazz;
-            this.type = Class.forName(annotations.getPropertyAs(String.class, "1"));
+            this.type = Class.forName(annotations.getPropertyAs(String.class, "2"));
             this.modifiers = annotations.getAsInt(0);
         } catch (ClassNotFoundException e) {
             // If this exception will be thrown, it is bug of this program. So we must rethrow the
@@ -64,7 +63,7 @@ class JSField extends JSAccessibleObject {
      * Returns the name of the field represented by this {@code Field} object.
      */
     public String getName() {
-        return name;
+        return nameJS;
     }
 
     /**
@@ -135,7 +134,7 @@ class JSField extends JSAccessibleObject {
      * @exception ExceptionInInitializerError if the initialization provoked by this method fails.
      */
     public Object get(Object object) throws IllegalArgumentException, IllegalAccessException {
-        return ((NativeObject) object).getProperty(name);
+        return ((NativeObject) object).getProperty(nameJS);
     }
 
     /**
@@ -191,7 +190,7 @@ class JSField extends JSAccessibleObject {
      * @exception ExceptionInInitializerError if the initialization provoked by this method fails.
      */
     public void set(Object object, Object value) throws IllegalArgumentException, IllegalAccessException {
-        ((NativeObject) object).setProperty(name, value);
+        ((NativeObject) object).setProperty(nameJS, value);
     }
 
     /**

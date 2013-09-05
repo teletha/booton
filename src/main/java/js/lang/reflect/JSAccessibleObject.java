@@ -16,17 +16,18 @@ import js.lang.NativeObject;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/05/08 1:15:15
+ * @version 2013/09/06 7:52:03
  */
 @JavaAPIProvider(AccessibleObject.class)
 abstract class JSAccessibleObject extends JSAnnotatedElement {
 
     /**
-     * @param name
+     * @param name The property name at Java definition.
+     * @param nameJS The property name at JavaScript runtime.
      * @param annotations
      */
-    protected JSAccessibleObject(String name, NativeObject annotations) {
-        super(name, annotations);
+    protected JSAccessibleObject(String name, String nameJS, NativeObject annotations) {
+        super(name, nameJS, annotations);
     }
 
     /**

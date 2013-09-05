@@ -16,7 +16,7 @@ import org.objectweb.asm.Type;
 import booton.BootonConfiguration;
 
 /**
- * @version 2013/07/21 15:12:10
+ * @version 2013/09/05 21:00:37
  */
 class ScriptWriter {
 
@@ -253,12 +253,20 @@ class ScriptWriter {
         // brace makes indentation
         if (length != 0 && value.charAt(0) == '}') {
             int last = buffer.length() - 1;
+            int lastNonSpace = last;
 
-            if (buffer.charAt(last) == '\t') {
-                buffer.deleteCharAt(last);
+            while (Character.isWhitespace(buffer.charAt(lastNonSpace))) {
+                lastNonSpace--;
+            }
+
+            if (last == lastNonSpace) {
+                endIndent();
+            } else if (buffer.charAt(lastNonSpace) == '{') {
+                buffer.delete(lastNonSpace + 1, last + 1);
                 depth--;
             } else {
-                endIndent();
+                buffer.deleteCharAt(last);
+                depth--;
             }
         }
 
