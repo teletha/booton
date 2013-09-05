@@ -69,8 +69,6 @@ public class NativeFunctionTest {
         }
 
         /**
-         * @param nameJS
-         * @return
          */
         @SuppressWarnings("unused")
         private String say(String message) {
