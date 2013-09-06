@@ -17,12 +17,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import js.lang.NativeArray;
@@ -72,13 +71,13 @@ class JSClass<T> extends JSAnnotatedElement {
     private Map<Integer, Method> publicMethods;
 
     /** The cache for declared methods. */
-    private List<Method> privateMethods;
+    private Map<Integer, Method> privateMethods;
 
     /** The cache for public fields. */
-    private Map<Integer, Field> publicFields;
+    private Map<String, Field> publicFields;
 
     /** The cache for declared fields. */
-    private List<Field> privateFields;
+    private Map<String, Field> privateFields;
 
     /**
      * <p>
@@ -298,6 +297,74 @@ class JSClass<T> extends JSAnnotatedElement {
     }
 
     /**
+     * Returns a {@code Method} object that reflects the specified public member method of the class
+     * or interface represented by this {@code Class} object. The {@code name} parameter is a
+     * {@code String} specifying the simple name of the desired method. The {@code parameterTypes}
+     * parameter is an array of {@code Class} objects that identify the method's formal parameter
+     * types, in declared order. If {@code parameterTypes} is {@code null}, it is treated as if it
+     * were an empty array.
+     * <p>
+     * If the {@code name} is "{@code <init>};"or "{@code <clinit>}" a {@code NoSuchMethodException}
+     * is raised. Otherwise, the method to be reflected is determined by the algorithm that follows.
+     * Let C be the class represented by this object:
+     * <OL>
+     * <LI>C is searched for any <I>matching methods</I>. If no matching method is found, the
+     * algorithm of step 1 is invoked recursively on the superclass of C.</LI>
+     * <LI>If no method was found in step 1 above, the superinterfaces of C are searched for a
+     * matching method. If any such method is found, it is reflected.</LI>
+     * </OL>
+     * To find a matching method in a class C:&nbsp; If C declares exactly one public method with
+     * the specified name and exactly the same formal parameter types, that is the method reflected.
+     * If more than one such method is found in C, and one of these methods has a return type that
+     * is more specific than any of the others, that method is reflected; otherwise one of the
+     * methods is chosen arbitrarily.
+     * <p>
+     * Note that there may be more than one matching method in a class because while the Java
+     * language forbids a class to declare multiple methods with the same signature but different
+     * return types, the Java virtual machine does not. This increased flexibility in the virtual
+     * machine can be used to implement various language features. For example, covariant returns
+     * can be implemented with {@linkplain java.lang.reflect.Method#isBridge bridge methods}; the
+     * bridge method and the method being overridden would have the same signature but different
+     * return types.
+     * <p>
+     * See <em>The Java Language Specification</em>, sections 8.2 and 8.4.
+     * 
+     * @param name the name of the method
+     * @param parameterTypes the list of parameters
+     * @return the {@code Method} object that matches the specified {@code name} and
+     *         {@code parameterTypes}
+     * @exception NoSuchMethodException if a matching method is not found or if the name is
+     *                "&lt;init&gt;"or "&lt;clinit&gt;".
+     * @exception NullPointerException if {@code name} is {@code null}
+     * @exception SecurityException If a security manager, <i>s</i>, is present and any of the
+     *                following conditions is met:
+     *                <ul>
+     *                <li> invocation of {@link SecurityManager#checkMemberAccess
+     *                s.checkMemberAccess(this, Member.PUBLIC)} denies access to the method <li> the
+     *                caller's class loader is not the same as or an ancestor of the class loader
+     *                for the current class and invocation of
+     *                {@link SecurityManager#checkPackageAccess s.checkPackageAccess()} denies
+     *                access to the package of this class
+     *                </ul>
+     * @since JDK1.1
+     */
+    public Method getMethod(String name, Class<?>... parameterTypes) throws NoSuchMethodException, SecurityException {
+        Objects.requireNonNull(name);
+
+        if (publicMethods == null) {
+            getMethods();
+        }
+
+        Method method = publicMethods.get(hash(name, parameterTypes));
+
+        if (method == null) {
+            throw new NoSuchMethodException();
+        } else {
+            return method;
+        }
+    }
+
+    /**
      * <p>
      * Returns an array containing Method objects reflecting all the public member methods of the
      * class or interface represented by this Class object, including those declared by the class or
@@ -330,6 +397,52 @@ class JSClass<T> extends JSAnnotatedElement {
     }
 
     /**
+     * Returns a {@code Method} object that reflects the specified declared method of the class or
+     * interface represented by this {@code Class} object. The {@code name} parameter is a
+     * {@code String} that specifies the simple name of the desired method, and the
+     * {@code parameterTypes} parameter is an array of {@code Class} objects that identify the
+     * method's formal parameter types, in declared order. If more than one method with the same
+     * parameter types is declared in a class, and one of these methods has a return type that is
+     * more specific than any of the others, that method is returned; otherwise one of the methods
+     * is chosen arbitrarily. If the name is "&lt;init&gt;"or "&lt;clinit&gt;" a
+     * {@code NoSuchMethodException} is raised.
+     * 
+     * @param name the name of the method
+     * @param parameterTypes the parameter array
+     * @return the {@code Method} object for the method of this class matching the specified name
+     *         and parameters
+     * @exception NoSuchMethodException if a matching method is not found.
+     * @exception NullPointerException if {@code name} is {@code null}
+     * @exception SecurityException If a security manager, <i>s</i>, is present and any of the
+     *                following conditions is met:
+     *                <ul>
+     *                <li>invocation of {@link SecurityManager#checkMemberAccess
+     *                s.checkMemberAccess(this, Member.DECLARED)} denies access to the declared
+     *                method
+     *                <li>the caller's class loader is not the same as or an ancestor of the class
+     *                loader for the current class and invocation of
+     *                {@link SecurityManager#checkPackageAccess s.checkPackageAccess()} denies
+     *                access to the package of this class
+     *                </ul>
+     * @since JDK1.1
+     */
+    public Method getDeclaredMethod(String name, Class<?>... parameterTypes) throws NoSuchMethodException {
+        Objects.requireNonNull(name);
+
+        if (privateMethods == null) {
+            getDeclaredMethods();
+        }
+
+        Method method = privateMethods.get(hash(name, parameterTypes));
+
+        if (method == null) {
+            throw new NoSuchMethodException();
+        } else {
+            return method;
+        }
+    }
+
+    /**
      * <p>
      * Returns an array of Method objects reflecting all the methods declared by the class or
      * interface represented by this Class object. This includes public, protected, default
@@ -345,20 +458,21 @@ class JSClass<T> extends JSAnnotatedElement {
      */
     public Method[] getDeclaredMethods() {
         if (privateMethods == null) {
-            privateMethods = new ArrayList();
+            privateMethods = new HashMap();
 
             // collect non-static methods only
             for (String name : metadata.keys()) {
                 char ch = name.charAt(0);
 
                 if (ch != '$' && ch < 'a' || 'p' < ch) {
-                    privateMethods.add((Method) (Object) new JSMethod(name, clazz, metadata.getPropertyAs(NativeArray.class, name)));
+                    Method method = (Method) (Object) new JSMethod(name, clazz, metadata.getPropertyAs(NativeArray.class, name));
+                    privateMethods.put(hash(method.getName(), method.getParameterTypes()), method);
                 }
             }
         }
 
         // defensive copy
-        return privateMethods.toArray(new Method[privateMethods.size()]);
+        return privateMethods.values().toArray(new Method[privateMethods.size()]);
     }
 
     /**
@@ -381,8 +495,20 @@ class JSClass<T> extends JSAnnotatedElement {
      * 
      * @return The array of Field objects representing the public fields.
      */
-    public Field getField(String name) {
-        return null;
+    public Field getField(String name) throws NoSuchFieldException {
+        Objects.requireNonNull(name);
+
+        if (publicFields == null) {
+            getFields();
+        }
+
+        Field field = publicFields.get(name);
+
+        if (field == null) {
+            throw new NoSuchFieldException();
+        } else {
+            return field;
+        }
     }
 
     /**
@@ -411,10 +537,8 @@ class JSClass<T> extends JSAnnotatedElement {
 
             for (Class type : collectTypes((Class) (Object) this, new HashSet())) {
                 for (Field field : type.getDeclaredFields()) {
-                    Integer hash = hash(field.getName(), new Class[] {field.getDeclaringClass(), field.getType()});
-
-                    if (Modifier.isPublic(field.getModifiers()) && !publicFields.containsKey(hash)) {
-                        publicFields.put(hash, field);
+                    if (Modifier.isPublic(field.getModifiers()) && !publicFields.containsKey(field.getName())) {
+                        publicFields.put(field.getName(), field);
                     }
                 }
             }
@@ -422,6 +546,45 @@ class JSClass<T> extends JSAnnotatedElement {
 
         // defensive copy
         return publicFields.values().toArray(new Field[publicFields.size()]);
+    }
+
+    /**
+     * Returns a {@code Field} object that reflects the specified declared field of the class or
+     * interface represented by this {@code Class} object. The {@code name} parameter is a
+     * {@code String} that specifies the simple name of the desired field. Note that this method
+     * will not reflect the {@code length} field of an array class.
+     * 
+     * @param name the name of the field
+     * @return the {@code Field} object for the specified field in this class
+     * @exception NoSuchFieldException if a field with the specified name is not found.
+     * @exception NullPointerException if {@code name} is {@code null}
+     * @exception SecurityException If a security manager, <i>s</i>, is present and any of the
+     *                following conditions is met:
+     *                <ul>
+     *                <li>invocation of {@link SecurityManager#checkMemberAccess
+     *                s.checkMemberAccess(this, Member.DECLARED)} denies access to the declared
+     *                field
+     *                <li>the caller's class loader is not the same as or an ancestor of the class
+     *                loader for the current class and invocation of
+     *                {@link SecurityManager#checkPackageAccess s.checkPackageAccess()} denies
+     *                access to the package of this class
+     *                </ul>
+     * @since JDK1.1
+     */
+    public Field getDeclaredField(String name) throws NoSuchFieldException, SecurityException {
+        Objects.requireNonNull(name);
+
+        if (privateFields == null) {
+            getFields();
+        }
+
+        Field field = privateFields.get(name);
+
+        if (field == null) {
+            throw new NoSuchFieldException();
+        } else {
+            return field;
+        }
     }
 
     /**
@@ -453,20 +616,21 @@ class JSClass<T> extends JSAnnotatedElement {
      */
     public Field[] getDeclaredFields() throws SecurityException {
         if (privateFields == null) {
-            privateFields = new ArrayList();
+            privateFields = new HashMap();
 
             // collect non-static methods only
             for (String name : metadata.keys()) {
                 char ch = name.charAt(0);
 
                 if ('a' <= ch && ch <= 'p') {
-                    privateFields.add((Field) (Object) new JSField(name, clazz, metadata.getPropertyAs(NativeArray.class, name)));
+                    Field field = (Field) (Object) new JSField(name, clazz, metadata.getPropertyAs(NativeArray.class, name));
+                    privateFields.put(field.getName(), field);
                 }
             }
         }
 
         // defensive copy
-        return privateFields.toArray(new Field[privateFields.size()]);
+        return privateFields.values().toArray(new Field[privateFields.size()]);
     }
 
     /**
