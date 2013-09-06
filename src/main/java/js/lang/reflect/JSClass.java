@@ -286,7 +286,7 @@ class JSClass<T> extends JSAnnotatedElement {
                 char ch = name.charAt(0);
 
                 if (ch == '$' && name.length() != 1) {
-                    Constructor constructor = (Constructor) (Object) new JSConstructor(name, clazz, clazz.getPropertyAs(NativeFunction.class, name), metadata.getPropertyAs(NativeArray.class, name));
+                    Constructor constructor = (Constructor) (Object) new JSConstructor(name, (Class) (Object) this, clazz, clazz.getPropertyAs(NativeFunction.class, name), metadata.getPropertyAs(NativeArray.class, name));
                     privateConstructors.put(hash("", constructor.getParameterTypes()), constructor);
                 }
             }
@@ -465,7 +465,7 @@ class JSClass<T> extends JSAnnotatedElement {
                 char ch = name.charAt(0);
 
                 if (ch != '$' && ch < 'a' || 'p' < ch) {
-                    Method method = (Method) (Object) new JSMethod(name, clazz, metadata.getPropertyAs(NativeArray.class, name));
+                    Method method = (Method) (Object) new JSMethod(name, (Class) (Object) this, clazz, metadata.getPropertyAs(NativeArray.class, name));
                     privateMethods.put(hash(method.getName(), method.getParameterTypes()), method);
                 }
             }
@@ -623,7 +623,7 @@ class JSClass<T> extends JSAnnotatedElement {
                 char ch = name.charAt(0);
 
                 if ('a' <= ch && ch <= 'p') {
-                    Field field = (Field) (Object) new JSField(name, clazz, metadata.getPropertyAs(NativeArray.class, name));
+                    Field field = (Field) (Object) new JSField(name, (Class) (Object) this, clazz, metadata.getPropertyAs(NativeArray.class, name));
                     privateFields.put(field.getName(), field);
                 }
             }

@@ -10,7 +10,6 @@
 package js.lang.reflect;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
@@ -31,9 +30,6 @@ class JSMethod extends JSAccessibleObject {
     /** The declaring class definition in runtime. */
     private NativeObject clazz;
 
-    /** The modifier value. */
-    private final int modifiers;
-
     /** The cache for return type. */
     private final Class returnType;
 
@@ -49,12 +45,11 @@ class JSMethod extends JSAccessibleObject {
      * @param clazz
      * @param metadata
      */
-    JSMethod(String nameJS, NativeObject clazz, NativeArray metadata) {
-        super((String) metadata.get(1), nameJS, (NativeObject) metadata.get(4));
+    JSMethod(String nameJS, Class owner, NativeObject clazz, NativeArray metadata) {
+        super((String) metadata.get(1), nameJS, owner, metadata, 4);
 
         try {
             this.clazz = clazz;
-            this.modifiers = metadata.getAsInt(0);
             this.returnType = Class.forName(metadata.getPropertyAs(String.class, "2"));
             this.parameterTypes = convert(metadata.getPropertyAs(String[].class, "3"));
         } catch (Exception e) {
@@ -62,27 +57,6 @@ class JSMethod extends JSAccessibleObject {
             // wrapped error in here.
             throw new Error(e);
         }
-    }
-
-    /**
-     * Returns the Java language modifiers for the method represented by this {@code Method} object,
-     * as an integer. The {@code Modifier} class should be used to decode the modifiers.
-     * 
-     * @see Modifier
-     */
-    public int getModifiers() {
-        return modifiers;
-    }
-
-    /**
-     * <p>
-     * Returns the name of the method represented by this Method object, as a String.
-     * </p>
-     * 
-     * @return The simple name of the underlying member.
-     */
-    public String getName() {
-        return name;
     }
 
     /**

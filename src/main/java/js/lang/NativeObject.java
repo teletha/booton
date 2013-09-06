@@ -18,7 +18,7 @@ import booton.translator.JavascriptNative;
 import booton.translator.Translator;
 
 /**
- * @version 2013/07/31 3:20:24
+ * @version 2013/09/07 1:44:24
  */
 public class NativeObject {
 
@@ -70,8 +70,92 @@ public class NativeObject {
      * @param key A property key.
      * @return An associated value.
      */
-    public final int getPropertyAsInt(Object key) {
+    public final int getInt(Object key) {
         return (int) container.get(literal(key));
+    }
+
+    /**
+     * <p>
+     * Retireve property by key as the long type.
+     * </p>
+     * 
+     * @param key A property key.
+     * @return An associated value.
+     */
+    public final long getLong(Object key) {
+        return (long) container.get(literal(key));
+    }
+
+    /**
+     * <p>
+     * Retireve property by key as the float type.
+     * </p>
+     * 
+     * @param key A property key.
+     * @return An associated value.
+     */
+    public final float getFloat(Object key) {
+        return (float) container.get(literal(key));
+    }
+
+    /**
+     * <p>
+     * Retireve property by key as the double type.
+     * </p>
+     * 
+     * @param key A property key.
+     * @return An associated value.
+     */
+    public final double getDouble(Object key) {
+        return (double) container.get(literal(key));
+    }
+
+    /**
+     * <p>
+     * Retireve property by key as the byte type.
+     * </p>
+     * 
+     * @param key A property key.
+     * @return An associated value.
+     */
+    public final byte getByte(Object key) {
+        return (byte) container.get(literal(key));
+    }
+
+    /**
+     * <p>
+     * Retireve property by key as the short type.
+     * </p>
+     * 
+     * @param key A property key.
+     * @return An associated value.
+     */
+    public final short getShort(Object key) {
+        return (short) container.get(literal(key));
+    }
+
+    /**
+     * <p>
+     * Retireve property by key as the boolean type.
+     * </p>
+     * 
+     * @param key A property key.
+     * @return An associated value.
+     */
+    public final boolean getBoolean(Object key) {
+        return (boolean) container.get(literal(key));
+    }
+
+    /**
+     * <p>
+     * Retireve property by key as the char type.
+     * </p>
+     * 
+     * @param key A property key.
+     * @return An associated value.
+     */
+    public final char getChar(Object key) {
+        return (char) container.get(literal(key));
     }
 
     /**
@@ -114,6 +198,126 @@ public class NativeObject {
      * @return A newly associated value.
      */
     public final Object setProperty(Object key, Object value) {
+        container.put(literal(key), value);
+
+        return value;
+    }
+
+    /**
+     * <p>
+     * Set property value by key.
+     * </p>
+     * 
+     * @param key A property key.
+     * @param value A value to set.
+     * @return A newly associated value.
+     */
+    public final int setInt(Object key, int value) {
+        container.put(literal(key), value);
+
+        return value;
+    }
+
+    /**
+     * <p>
+     * Set property value by key.
+     * </p>
+     * 
+     * @param key A property key.
+     * @param value A value to set.
+     * @return A newly associated value.
+     */
+    public final long setLong(Object key, long value) {
+        container.put(literal(key), value);
+
+        return value;
+    }
+
+    /**
+     * <p>
+     * Set property value by key.
+     * </p>
+     * 
+     * @param key A property key.
+     * @param value A value to set.
+     * @return A newly associated value.
+     */
+    public final float setFloat(Object key, float value) {
+        container.put(literal(key), value);
+
+        return value;
+    }
+
+    /**
+     * <p>
+     * Set property value by key.
+     * </p>
+     * 
+     * @param key A property key.
+     * @param value A value to set.
+     * @return A newly associated value.
+     */
+    public final double setDouble(Object key, double value) {
+        container.put(literal(key), value);
+
+        return value;
+    }
+
+    /**
+     * <p>
+     * Set property value by key.
+     * </p>
+     * 
+     * @param key A property key.
+     * @param value A value to set.
+     * @return A newly associated value.
+     */
+    public final byte setByte(Object key, byte value) {
+        container.put(literal(key), value);
+
+        return value;
+    }
+
+    /**
+     * <p>
+     * Set property value by key.
+     * </p>
+     * 
+     * @param key A property key.
+     * @param value A value to set.
+     * @return A newly associated value.
+     */
+    public final short setShort(Object key, short value) {
+        container.put(literal(key), value);
+
+        return value;
+    }
+
+    /**
+     * <p>
+     * Set property value by key.
+     * </p>
+     * 
+     * @param key A property key.
+     * @param value A value to set.
+     * @return A newly associated value.
+     */
+    public final boolean setBoolean(Object key, boolean value) {
+        container.put(literal(key), value);
+
+        return value;
+    }
+
+    /**
+     * <p>
+     * Set property value by key.
+     * </p>
+     * 
+     * @param key A property key.
+     * @param value A value to set.
+     * @return A newly associated value.
+     */
+    public final char setChar(Object key, char value) {
         container.put(literal(key), value);
 
         return value;
@@ -317,7 +521,7 @@ public class NativeObject {
     }
 
     /**
-     * @version 2013/01/18 10:37:14
+     * @version 2013/09/07 1:44:20
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<NativeObject> {
@@ -401,15 +605,98 @@ public class NativeObject {
 
         /**
          * <p>
-         * Retireve property by key as the specified type.
+         * Retireve property by key as the int type.
          * </p>
          * 
-         * @param type A property type.
          * @param key A property key.
          * @return An associated value.
          */
-        public String getPropertyAsInt(Object key) {
-            return that + accessor(1);
+        public String getInt(Object key) {
+            return that + accessor(0);
+        }
+
+        /**
+         * <p>
+         * Retireve property by key as the long type.
+         * </p>
+         * 
+         * @param key A property key.
+         * @return An associated value.
+         */
+        public String getLong(Object key) {
+            return that + accessor(0);
+        }
+
+        /**
+         * <p>
+         * Retireve property by key as the float type.
+         * </p>
+         * 
+         * @param key A property key.
+         * @return An associated value.
+         */
+        public String getFloat(Object key) {
+            return that + accessor(0);
+        }
+
+        /**
+         * <p>
+         * Retireve property by key as the double type.
+         * </p>
+         * 
+         * @param key A property key.
+         * @return An associated value.
+         */
+        public String getDouble(Object key) {
+            return that + accessor(0);
+        }
+
+        /**
+         * <p>
+         * Retireve property by key as the byte type.
+         * </p>
+         * 
+         * @param key A property key.
+         * @return An associated value.
+         */
+        public String getByte(Object key) {
+            return that + accessor(0);
+        }
+
+        /**
+         * <p>
+         * Retireve property by key as the short type.
+         * </p>
+         * 
+         * @param key A property key.
+         * @return An associated value.
+         */
+        public String getShort(Object key) {
+            return that + accessor(0);
+        }
+
+        /**
+         * <p>
+         * Retireve property by key as the boolean type.
+         * </p>
+         * 
+         * @param key A property key.
+         * @return An associated value.
+         */
+        public String getBoolean(Object key) {
+            return that + accessor(0);
+        }
+
+        /**
+         * <p>
+         * Retireve property by key as the char type.
+         * </p>
+         * 
+         * @param key A property key.
+         * @return An associated value.
+         */
+        public String getChar(Object key) {
+            return that + accessor(0);
         }
 
         /**
@@ -448,6 +735,110 @@ public class NativeObject {
          * @return A value to set.
          */
         public String setProperty(Object key, Object value) {
+            return that + accessor(0) + "=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Set property value by key.
+         * </p>
+         * 
+         * @param key A property key.
+         * @param value A value to set.
+         * @return A newly associated value.
+         */
+        public String setInt(Object key, int value) {
+            return that + accessor(0) + "=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Set property value by key.
+         * </p>
+         * 
+         * @param key A property key.
+         * @param value A value to set.
+         * @return A newly associated value.
+         */
+        public String setLong(Object key, long value) {
+            return that + accessor(0) + "=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Set property value by key.
+         * </p>
+         * 
+         * @param key A property key.
+         * @param value A value to set.
+         * @return A newly associated value.
+         */
+        public String setFloat(Object key, float value) {
+            return that + accessor(0) + "=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Set property value by key.
+         * </p>
+         * 
+         * @param key A property key.
+         * @param value A value to set.
+         * @return A newly associated value.
+         */
+        public String setDouble(Object key, double value) {
+            return that + accessor(0) + "=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Set property value by key.
+         * </p>
+         * 
+         * @param key A property key.
+         * @param value A value to set.
+         * @return A newly associated value.
+         */
+        public String setByte(Object key, byte value) {
+            return that + accessor(0) + "=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Set property value by key.
+         * </p>
+         * 
+         * @param key A property key.
+         * @param value A value to set.
+         * @return A newly associated value.
+         */
+        public String setShort(Object key, short value) {
+            return that + accessor(0) + "=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Set property value by key.
+         * </p>
+         * 
+         * @param key A property key.
+         * @param value A value to set.
+         * @return A newly associated value.
+         */
+        public String setBoolean(Object key, boolean value) {
+            return that + accessor(0) + "=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Set property value by key.
+         * </p>
+         * 
+         * @param key A property key.
+         * @param value A value to set.
+         * @return A newly associated value.
+         */
+        public String setChar(Object key, char value) {
             return that + accessor(0) + "=" + param(1);
         }
 
