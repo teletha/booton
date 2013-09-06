@@ -12,6 +12,7 @@ package booton.translator;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.List;
 
 import js.lang.NativeFunction;
@@ -389,7 +390,7 @@ public class Translator<T> implements Extensible {
     }
 
     /**
-     * @version 2013/08/16 23:53:56
+     * @version 2013/09/07 2:07:07
      */
     private static class CodeWriter implements Writer {
 
@@ -431,9 +432,15 @@ public class Translator<T> implements Extensible {
                 case Type.LONG:
                 case Type.FLOAT:
                 case Type.DOUBLE:
-                case Type.SHORT:
-                case Type.BYTE:
                     dummy[i] = 0;
+                    break;
+
+                case Type.SHORT:
+                    dummy[i] = (short) 0;
+                    break;
+
+                case Type.BYTE:
+                    dummy[i] = (byte) 0;
                     break;
 
                 case Type.BOOLEAN:
@@ -448,6 +455,8 @@ public class Translator<T> implements Extensible {
             try {
                 return (String) method.invoke(translator, dummy);
             } catch (Exception e) {
+                System.out.println(method);
+                System.out.println(Arrays.toString(dummy));
                 // If this exception will be thrown, it is bug of this program. So we must rethrow
                 // the wrapped error in here.
                 throw new Error(e);

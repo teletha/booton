@@ -11,23 +11,34 @@ package js.lang.reflect;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Member;
 
+import js.lang.NativeArray;
 import js.lang.NativeObject;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/09/06 7:52:03
+ * @version 2013/09/07 2:26:11
  */
 @JavaAPIProvider(AccessibleObject.class)
-abstract class JSAccessibleObject extends JSAnnotatedElement {
+abstract class JSAccessibleObject extends JSAnnotatedElement implements Member {
+
+    /** The modifier value. */
+    private final int modifiers;
+
+    /** The declaring class. */
+    private final Class owner;
 
     /**
      * @param name The property name at Java definition.
      * @param nameJS The property name at JavaScript runtime.
-     * @param annotations
+     * @param metadata
      */
-    protected JSAccessibleObject(String name, String nameJS, NativeObject annotations) {
-        super(name, nameJS, annotations);
+    protected JSAccessibleObject(String name, String nameJS, Class owner, NativeArray metadata, int indexForAnnotation) {
+        super(name, nameJS, (NativeObject) metadata.get(indexForAnnotation));
+
+        this.owner = owner;
+        this.modifiers = metadata.getAsInt(0);
     }
 
     /**
@@ -54,6 +65,38 @@ abstract class JSAccessibleObject extends JSAnnotatedElement {
      */
     public void setAccessible(boolean flag) throws SecurityException {
         // do nothing
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final Class<?> getDeclaringClass() {
+        return owner;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final String getName() {
+        return name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final int getModifiers() {
+        return modifiers;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final boolean isSynthetic() {
+        return JSModifier.isSynthetic(modifiers);
     }
 
     protected Class[] convert(String[] names) {

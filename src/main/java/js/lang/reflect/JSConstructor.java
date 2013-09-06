@@ -10,7 +10,6 @@
 package js.lang.reflect;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
@@ -31,9 +30,6 @@ class JSConstructor<T> extends JSAccessibleObject {
     /** The declared class definition in runtime. */
     private NativeObject clazz;
 
-    /** The modifier value. */
-    private final int modifiers;
-
     /** The constructor function in runtime. */
     private final NativeFunction function;
 
@@ -53,24 +49,12 @@ class JSConstructor<T> extends JSAccessibleObject {
      * @param function
      * @param metadata
      */
-    JSConstructor(String name, NativeObject clazz, NativeFunction function, NativeArray metadata) {
-        super(name, name, (NativeObject) metadata.get(2));
+    JSConstructor(String name, Class owner, NativeObject clazz, NativeFunction function, NativeArray metadata) {
+        super(name, name, owner, metadata, 2);
 
         this.clazz = clazz;
-        this.modifiers = metadata.getAsInt(0);
         this.function = function;
         this.parameterTypeNames = metadata.getPropertyAs(String[].class, "1");
-    }
-
-    /**
-     * Returns the Java language modifiers for the constructor represented by this
-     * {@code Constructor} object, as an integer. The {@code Modifier} class should be used to
-     * decode the modifiers.
-     * 
-     * @see Modifier
-     */
-    public int getModifiers() {
-        return modifiers;
     }
 
     /**
@@ -96,18 +80,6 @@ class JSConstructor<T> extends JSAccessibleObject {
 
         // API definition
         return (T) instance;
-    }
-
-    /**
-     * Returns {@code true} if this constructor is a synthetic constructor; returns {@code false}
-     * otherwise.
-     * 
-     * @return true if and only if this constructor is a synthetic constructor as defined by
-     *         <cite>The Java&trade; Language Specification</cite>.
-     * @since 1.5
-     */
-    public boolean isSynthetic() {
-        return false;
     }
 
     /**
