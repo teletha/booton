@@ -128,7 +128,6 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
      * </p>
      * 
      * @param owner
-     * @param nameJS
      * @param description
      */
     static void validateField(Class owner, Field field) {

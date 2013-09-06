@@ -63,7 +63,7 @@ class JSField extends JSAccessibleObject {
      * Returns the name of the field represented by this {@code Field} object.
      */
     public String getName() {
-        return nameJS;
+        return name;
     }
 
     /**

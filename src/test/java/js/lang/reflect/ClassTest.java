@@ -186,6 +186,25 @@ public class ClassTest {
     }
 
     @Test
+    public void getMethod() throws Exception {
+        Method method = Methods.class.getMethod("publicMethod");
+        assert method != null;
+
+        method = Methods.class.getMethod("publicMethod", (Class[]) null);
+        assert method != null;
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void getMethodNullName() throws Exception {
+        Methods.class.getMethod(null);
+    }
+
+    @Test(expected = NoSuchMethodException.class)
+    public void getIvalidMethod() throws Exception {
+        Methods.class.getMethod("protectedMethod");
+    }
+
+    @Test
     public void getMethods() throws Exception {
         Method[] methods = Methods.class.getMethods();
         assert methods != null;
@@ -217,6 +236,28 @@ public class ClassTest {
         methods = ExtendedInterface.class.getMethods();
         assert methods != null;
         assert methods.length == 2;
+    }
+
+    @Test
+    public void getDeclaredMethod() throws Exception {
+        Method method = Methods.class.getDeclaredMethod("protectedMethod");
+        assert method != null;
+
+        method = Methods.class.getDeclaredMethod("packageMethod", (Class[]) null);
+        assert method != null;
+
+        method = Methods.class.getDeclaredMethod("privateMethod", int.class);
+        assert method != null;
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void getDeclaredMethodNullName() throws Exception {
+        Methods.class.getDeclaredMethod(null);
+    }
+
+    @Test(expected = NoSuchMethodException.class)
+    public void getDeclaredInvalidMethod() throws Exception {
+        Methods.class.getDeclaredMethod("invalid");
     }
 
     @Test
@@ -276,7 +317,7 @@ public class ClassTest {
         /**
          * 
          */
-        private native void privateMethod();
+        private native void privateMethod(int value);
     }
 
     /**
@@ -315,6 +356,25 @@ public class ClassTest {
     }
 
     @Test
+    public void getField() throws Exception {
+        Field field = Fields.class.getField("publicField");
+        assert field != null;
+
+        field = Fields.class.getField("staticPublicField");
+        assert field != null;
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void getFieldNullName() throws Exception {
+        Methods.class.getField(null);
+    }
+
+    @Test(expected = NoSuchFieldException.class)
+    public void getInvalidField() throws Exception {
+        Methods.class.getField("protectedField");
+    }
+
+    @Test
     public void getFields() throws Exception {
         Field[] fields = Fields.class.getFields();
         assert fields != null;
@@ -344,10 +404,41 @@ public class ClassTest {
     }
 
     @Test
+    public void getDeclaredField() throws Exception {
+        Field field = Fields.class.getDeclaredField("publicField");
+        assert field != null;
+
+        field = Fields.class.getDeclaredField("protectedField");
+        assert field != null;
+
+        field = Fields.class.getDeclaredField("packageField");
+        assert field != null;
+
+        field = Fields.class.getDeclaredField("privateField");
+        assert field != null;
+
+        field = Fields.class.getDeclaredField("staticPublicField");
+        assert field != null;
+
+        field = Fields.class.getDeclaredField("staticProtectedField");
+        assert field != null;
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void getDeclaredFieldNullName() throws Exception {
+        Methods.class.getDeclaredField(null);
+    }
+
+    @Test(expected = NoSuchFieldException.class)
+    public void getDeclaredInvalidField() throws Exception {
+        Methods.class.getDeclaredField("invalid");
+    }
+
+    @Test
     public void getDeclaredFields() throws Exception {
         Field[] fields = Fields.class.getDeclaredFields();
         assert fields != null;
-        assert fields.length == 5;
+        assert fields.length == 6;
 
         // extends
         fields = ExtendedFields.class.getDeclaredFields();
@@ -378,7 +469,9 @@ public class ClassTest {
     @SuppressWarnings("unused")
     private static class Fields {
 
-        public static int staticField;
+        public static int staticPublicField;
+
+        protected static int staticProtectedField;
 
         public int publicField;
 
