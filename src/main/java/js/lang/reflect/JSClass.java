@@ -35,25 +35,25 @@ import booton.translator.JavaAPIProvider;
  * functionalities.
  * </p>
  * 
- * @version 2013/08/21 17:01:17
+ * @version 2013/09/07 21:27:26
  */
 @JavaAPIProvider(Class.class)
 class JSClass<T> extends JSAnnotatedElement {
 
-    /** The class definition in runtime. */
-    private final NativeObject clazz;
+    /** The prototype definition in runtime. */
+    private final NativeObject prototype;
 
-    /** The annotation in runtime. */
-    private final NativeObject metadata;
+    /** The metadata definition in runtime. */
+    private final NativeObject definition;
+
+    /** The modifier value. */
+    private final int modifiers;
 
     /** The super class. */
     private final Class superclass;
 
     /** The interface classes. */
     private final Class[] interfaces;
-
-    /** The modifier value. */
-    private final int modifiers;
 
     /** The cache for enum constants. */
     private Map<String, Enum> enumerationConstants;
@@ -84,24 +84,25 @@ class JSClass<T> extends JSAnnotatedElement {
      * Create native class.
      * </p>
      * 
-     * @param nameJS
-     * @param clazz
-     * @param metadata
+     * @param nameJS A class name in JavaScript runtime.
+     * @param prototype A property definition. (constructors and methods)
+     * @param metadata A class metadata.
+     * @param superclass A super class of this class.
+     * @param interfaces All implemented interfaces.
+     * @param definition A full metadata info for class, constructors, methods and fields.
      */
-    protected JSClass(String nameJS, NativeObject clazz, NativeObject metadata, Class superclass, String[] interfaces) {
-        super(nameJS, nameJS, findAnnotations(metadata, "$", 1, nameJS));
+    protected JSClass(String nameJS, NativeObject prototype, NativeArray metadata, Class superclass, String[] interfaces, NativeObject definition) {
+        super(nameJS, nameJS, (NativeObject) metadata.get(1));
 
-        this.clazz = clazz;
-        this.metadata = metadata;
+        this.prototype = prototype;
+        this.definition = definition;
+        this.modifiers = metadata.getAsInt(0, 0);
         this.superclass = superclass;
         this.interfaces = new Class[interfaces.length];
 
         for (int i = 0; i < interfaces.length; i++) {
             this.interfaces[i] = forName(interfaces[i]);
         }
-
-        NativeArray info = metadata.getPropertyAs(NativeArray.class, "$");
-        this.modifiers = info == null ? 0 : info.getAsInt(0);
     }
 
     /**
@@ -282,11 +283,11 @@ class JSClass<T> extends JSAnnotatedElement {
             privateConstructors = new HashMap();
 
             // collect non-static methods only
-            for (String name : metadata.keys()) {
+            for (String name : definition.keys()) {
                 char ch = name.charAt(0);
 
                 if (ch == '$' && name.length() != 1) {
-                    Constructor constructor = (Constructor) (Object) new JSConstructor(name, (Class) (Object) this, clazz, clazz.getPropertyAs(NativeFunction.class, name), metadata.getPropertyAs(NativeArray.class, name));
+                    Constructor constructor = (Constructor) (Object) new JSConstructor(name, (Class) (Object) this, prototype, prototype.getPropertyAs(NativeFunction.class, name), definition.getPropertyAs(NativeArray.class, name));
                     privateConstructors.put(hash("", constructor.getParameterTypes()), constructor);
                 }
             }
@@ -461,11 +462,11 @@ class JSClass<T> extends JSAnnotatedElement {
             privateMethods = new HashMap();
 
             // collect non-static methods only
-            for (String name : metadata.keys()) {
+            for (String name : definition.keys()) {
                 char ch = name.charAt(0);
 
                 if (ch != '$' && ch < 'a' || 'p' < ch) {
-                    Method method = (Method) (Object) new JSMethod(name, (Class) (Object) this, clazz, metadata.getPropertyAs(NativeArray.class, name));
+                    Method method = (Method) (Object) new JSMethod(name, (Class) (Object) this, prototype, definition.getPropertyAs(NativeArray.class, name));
                     privateMethods.put(hash(method.getName(), method.getParameterTypes()), method);
                 }
             }
@@ -619,11 +620,11 @@ class JSClass<T> extends JSAnnotatedElement {
             privateFields = new HashMap();
 
             // collect non-static methods only
-            for (String name : metadata.keys()) {
+            for (String name : definition.keys()) {
                 char ch = name.charAt(0);
 
                 if ('a' <= ch && ch <= 'p') {
-                    Field field = (Field) (Object) new JSField(name, (Class) (Object) this, clazz, metadata.getPropertyAs(NativeArray.class, name));
+                    Field field = (Field) (Object) new JSField(name, (Class) (Object) this, prototype, definition.getPropertyAs(NativeArray.class, name));
                     privateFields.put(field.getName(), field);
                 }
             }
@@ -1045,7 +1046,7 @@ class JSClass<T> extends JSAnnotatedElement {
         if (enumerationConstants == null) {
             enumerationConstants = new HashMap();
 
-            NativeObject definition = clazz.getPropertyAs(NativeObject.class, "$");
+            NativeObject definition = prototype.getPropertyAs(NativeObject.class, "$");
 
             for (String name : definition.keys()) {
                 NativeObject value = definition.getPropertyAs(NativeObject.class, name);
@@ -1094,7 +1095,7 @@ class JSClass<T> extends JSAnnotatedElement {
      */
     protected JSClass getArrayClass() {
         if (arrayClass == null) {
-            arrayClass = new JSClass("[".concat(nameJS), new NativeObject(), new NativeObject(), null, new String[0]);
+            arrayClass = new JSClass("[".concat(nameJS), new NativeObject(), new NativeArray(), null, new String[0], new NativeObject());
         }
         return arrayClass;
     }
@@ -1118,7 +1119,7 @@ class JSClass<T> extends JSAnnotatedElement {
         NativeObject definition = boot.getPropertyAs(NativeObject.class, fqcn);
 
         if (definition == null) {
-            return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeObject(), Object.class, new String[0]);
+            return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeArray(), Object.class, new String[0], new NativeObject());
         }
 
         JSClass clazz = (JSClass) definition.getProperty("$");

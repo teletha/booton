@@ -308,10 +308,18 @@ class JavaMetadataCompiler {
                 modifier |= 0x00020000;
             }
             code.append(modifier);
+            // code.append(modifier, ",").string(compile(clazz.getTypeParameters()));
         }
 
+        /**
+         * <p>
+         * Compile generic types.
+         * </p>
+         * 
+         * @param variables
+         * @return
+         */
         private String compile(TypeVariable[] variables) {
-
             return "";
         }
     }
