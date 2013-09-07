@@ -26,7 +26,7 @@ import kiss.I;
 import org.junit.runner.RunWith;
 
 /**
- * @version 2013/05/29 19:49:16
+ * @version 2013/09/07 10:22:02
  */
 class JavaMetadataCompiler {
 
@@ -274,7 +274,7 @@ class JavaMetadataCompiler {
     }
 
     /**
-     * @version 2013/05/12 14:07:59
+     * @version 2013/09/07 10:21:55
      */
     private class ClassMetadata extends Metadata {
 
@@ -294,7 +294,20 @@ class JavaMetadataCompiler {
          */
         @Override
         protected void write() {
-            code.append(clazz.getModifiers());
+            int modifier = clazz.getModifiers();
+
+            if (clazz.isMemberClass()) {
+                modifier |= 0x00008000;
+            }
+
+            if (clazz.isAnonymousClass()) {
+                modifier |= 0x00010000;
+            }
+
+            if (clazz.isLocalClass()) {
+                modifier |= 0x00020000;
+            }
+            code.append(modifier);
         }
 
         private String compile(TypeVariable[] variables) {

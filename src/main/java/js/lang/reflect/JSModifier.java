@@ -318,9 +318,11 @@ class JSModifier {
 
     static final int ENUM = 0x00004000;
 
-    static boolean isSynthetic(int mod) {
-        return (mod & SYNTHETIC) != 0;
-    }
+    static final int MEMBER = 0x00008000;
+
+    static final int ANONYMOUS = 0x00010000;
+
+    static final int LOCAL = 0x00020000;
 
     /**
      * See JLSv3 section 8.1.1.

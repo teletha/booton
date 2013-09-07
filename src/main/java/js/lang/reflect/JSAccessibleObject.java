@@ -96,7 +96,7 @@ abstract class JSAccessibleObject extends JSAnnotatedElement implements Member {
      */
     @Override
     public final boolean isSynthetic() {
-        return JSModifier.isSynthetic(modifiers);
+        return (modifiers & JSModifier.SYNTHETIC) != 0;
     }
 
     protected Class[] convert(String[] names) {
