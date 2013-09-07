@@ -12,7 +12,6 @@ package booton.translator;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.List;
 
 import js.lang.NativeFunction;
@@ -455,8 +454,6 @@ public class Translator<T> implements Extensible {
             try {
                 return (String) method.invoke(translator, dummy);
             } catch (Exception e) {
-                System.out.println(method);
-                System.out.println(Arrays.toString(dummy));
                 // If this exception will be thrown, it is bug of this program. So we must rethrow
                 // the wrapped error in here.
                 throw new Error(e);
