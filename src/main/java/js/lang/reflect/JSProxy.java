@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import js.lang.Global;
+import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
 import booton.translator.JavaAPIProvider;
@@ -159,7 +160,7 @@ class JSProxy {
          * @param interfaces
          */
         private ProxyClass(int id, String[] interfaces) {
-            super("Proxy" + id, new NativeObject(), new NativeObject(), ProxyBase.class, interfaces);
+            super("Proxy" + id, new NativeObject(), new NativeArray(), ProxyBase.class, interfaces, new NativeObject());
         }
     }
 

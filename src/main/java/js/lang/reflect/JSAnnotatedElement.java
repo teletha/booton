@@ -15,13 +15,12 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/09/06 7:50:18
+ * @version 2013/09/07 21:27:17
  */
 @JavaAPIProvider(AnnotatedElement.class)
 abstract class JSAnnotatedElement {
@@ -119,23 +118,6 @@ abstract class JSAnnotatedElement {
      */
     public Annotation[] getDeclaredAnnotations() {
         return getAnnotations();
-    }
-
-    /**
-     * <p>
-     * Search annotation descriptor.
-     * </p>
-     * 
-     * @param metadata
-     * @return
-     */
-    protected static NativeObject findAnnotations(NativeObject metadata, String key, int index, String name) {
-        NativeArray js = metadata.getPropertyAs(NativeArray.class, key);
-
-        if (js == null) {
-            return new NativeObject();
-        }
-        return (NativeObject) js.get(1);
     }
 
     /**

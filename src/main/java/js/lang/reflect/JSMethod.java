@@ -9,11 +9,15 @@
  */
 package js.lang.reflect;
 
+import java.lang.annotation.AnnotationFormatError;
 import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
+import sun.reflect.annotation.AnnotationParser;
+import sun.reflect.annotation.AnnotationType;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -57,6 +61,22 @@ class JSMethod extends JSAccessibleObject {
             // wrapped error in here.
             throw new Error(e);
         }
+    }
+
+    /**
+     * Returns the default value for the annotation member represented by this {@code Method}
+     * instance. If the member is of a primitive type, an instance of the corresponding wrapper type
+     * is returned. Returns null if no default is associated with the member, or if the method
+     * instance does not represent a declared member of an annotation type.
+     * 
+     * @return the default value for the annotation member represented by this {@code Method}
+     *         instance.
+     * @throws TypeNotPresentException if the annotation is of type {@link Class} and no definition
+     *             can be found for the default class value.
+     * @since 1.5
+     */
+    public Object getDefaultValue() {
+        return null;
     }
 
     /**
