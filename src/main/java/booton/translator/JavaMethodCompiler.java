@@ -1581,7 +1581,7 @@ class JavaMethodCompiler extends MethodVisitor {
             } else if (clazz == String.class) {
                 code = "boot.isString(" + current.remove(0) + ")";
             } else if (clazz.isInterface()) {
-                code = Javascript.writeMethodCode(Class.class, "isAssignableFrom", Javascript.computeClass(clazz), Class.class, Javascript.writeMethodCode(Object.class, "getClass", current.remove(0)));
+                code = Javascript.writeMethodCode(Class.class, "isInstance", Javascript.computeClass(clazz), Object.class, current.remove(0));
             } else {
                 code = current.remove(0) + " instanceof " + Javascript.computeClassName(clazz);
             }

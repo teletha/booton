@@ -9,6 +9,7 @@
  */
 package js.lang.reflect;
 
+import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -24,6 +25,11 @@ import booton.translator.ScriptRunner;
  */
 @RunWith(ScriptRunner.class)
 public class ClassTest {
+
+    private static final Cloneable anonymous = new Cloneable() {
+    };
+
+    private static final Class anonymousClass = anonymous.getClass();
 
     @Test
     public void modifierPrivate() throws Exception {
@@ -614,5 +620,96 @@ public class ClassTest {
         private ExtendedConstructors(byte one) {
             super(one);
         }
+    }
+
+    @Test
+    public void isAnnonymousClass() throws Exception {
+        assert !Public.class.isAnonymousClass();
+        assert !ClassTest.class.isAnonymousClass();
+        assert anonymousClass.isAnonymousClass();
+
+        class Local {
+        }
+        assert !Local.class.isAnonymousClass();
+    }
+
+    @Test
+    public void isArray() throws Exception {
+        assert !Public.class.isArray();
+        assert Public[].class.isArray();
+        assert !int.class.isArray();
+        assert int[].class.isArray();
+    }
+
+    @Test
+    public void isAssignableFrom() throws Exception {
+        assert Object.class.isAssignableFrom(Public.class);
+        assert SuperClass.class.isAssignableFrom(ExtendedClass.class);
+        assert !SuperClass.class.isAssignableFrom(Public.class);
+        assert Interface.class.isAssignableFrom(ExtendedInterface.class);
+        assert Interface.class.isAssignableFrom(ImplementdExtendedClass.class);
+        assert !Interface.class.isAssignableFrom(Runnable.class);
+    }
+
+    @Test
+    public void isEnum() throws Exception {
+        assert RetentionPolicy.class.isEnum();
+        assert !Enum.class.isEnum();
+        assert !Public.class.isEnum();
+    }
+
+    @Test
+    public void isInstance() throws Exception {
+        assert SuperClass.class.isInstance(new SuperClass());
+        assert SuperClass.class.isInstance(new ExtendedClass());
+        assert !SuperClass.class.isInstance(new Public());
+        assert Object.class.isInstance(new Public());
+        assert String.class.isInstance("test");
+    }
+
+    @Test
+    public void isInterface() throws Exception {
+        assert Runnable.class.isInterface();
+        assert Interface.class.isInterface();
+        assert !Object.class.isInterface();
+        assert !Public.class.isInterface();
+    }
+
+    @Test
+    public void isLocalClass() throws Exception {
+        assert !Public.class.isLocalClass();
+        assert !anonymousClass.isLocalClass();
+
+        class Local {
+        }
+        assert Local.class.isLocalClass();
+    }
+
+    @Test
+    public void isMemberClass() throws Exception {
+        assert Public.class.isMemberClass();
+        assert !ClassTest.class.isMemberClass();
+        assert !anonymousClass.isMemberClass();
+
+        class Local {
+        }
+        assert !Local.class.isMemberClass();
+    }
+
+    @Test
+    public void isPrimitive() throws Exception {
+        assert int.class.isPrimitive();
+        assert long.class.isPrimitive();
+        assert float.class.isPrimitive();
+        assert double.class.isPrimitive();
+        assert byte.class.isPrimitive();
+        assert short.class.isPrimitive();
+        assert boolean.class.isPrimitive();
+        assert void.class.isPrimitive();
+
+        assert !int[].class.isPrimitive();
+        assert !Object.class.isPrimitive();
+        assert !Throwable.class.isPrimitive();
+        assert !Runnable.class.isPrimitive();
     }
 }

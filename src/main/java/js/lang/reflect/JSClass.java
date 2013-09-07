@@ -660,6 +660,39 @@ class JSClass<T> extends JSAnnotatedElement {
     }
 
     /**
+     * Returns true if this {@code Class} object represents an annotation type. Note that if this
+     * method returns true, {@link #isInterface()} would also return true, as all annotation types
+     * are also interfaces.
+     * 
+     * @return {@code true} if this class object represents an annotation type; {@code false}
+     *         otherwise
+     * @since 1.5
+     */
+    public boolean isAnnotation() {
+        return (modifiers & JSModifier.ANNOTATION) != 0;
+    }
+
+    /**
+     * Returns {@code true} if and only if the underlying class is an anonymous class.
+     * 
+     * @return {@code true} if and only if this class is an anonymous class.
+     * @since 1.5
+     */
+    public boolean isAnonymousClass() {
+        return (modifiers & JSModifier.ANONYMOUS) != 0;
+    }
+
+    /**
+     * Determines if this {@code Class} object represents an array class.
+     * 
+     * @return {@code true} if this object represents an array class; {@code false} otherwise.
+     * @since JDK1.1
+     */
+    public boolean isArray() {
+        return nameJS.startsWith("[");
+    }
+
+    /**
      * <p>
      * Determines if the class or interface represented by this Class object is either the same as,
      * or is a superclass or superinterface of, the class or interface represented by the specified
@@ -697,6 +730,16 @@ class JSClass<T> extends JSAnnotatedElement {
     }
 
     /**
+     * Returns true if and only if this class was declared as an enum in the source code.
+     * 
+     * @return true if and only if this class was declared as an enum in the source code
+     * @since 1.5
+     */
+    public boolean isEnum() {
+        return (modifiers & JSModifier.ENUM) != 0 && getSuperclass() == Enum.class;
+    }
+
+    /**
      * <p>
      * Determines if the specified {@code Object} is assignment-compatible with the object
      * represented by this {@code Class}. This method is the dynamic equivalent of the Java language
@@ -725,22 +768,32 @@ class JSClass<T> extends JSAnnotatedElement {
     }
 
     /**
-     * Determines if this {@code Class} object represents an array class.
-     * 
-     * @return {@code true} if this object represents an array class; {@code false} otherwise.
-     * @since JDK1.1
-     */
-    public boolean isArray() {
-        return nameJS.startsWith("[");
-    }
-
-    /**
      * Determines if the specified {@code Class} object represents an interface type.
      * 
      * @return {@code true} if this object represents an interface; {@code false} otherwise.
      */
     public boolean isInterface() {
         return Modifier.isInterface(modifiers);
+    }
+
+    /**
+     * Returns {@code true} if and only if the underlying class is a local class.
+     * 
+     * @return {@code true} if and only if this class is a local class.
+     * @since 1.5
+     */
+    public boolean isLocalClass() {
+        return (modifiers & JSModifier.LOCAL) != 0;
+    }
+
+    /**
+     * Returns {@code true} if and only if the underlying class is a member class.
+     * 
+     * @return {@code true} if and only if this class is a member class.
+     * @since 1.5
+     */
+    public boolean isMemberClass() {
+        return (modifiers & JSModifier.MEMBER) != 0;
     }
 
     /**
@@ -773,13 +826,14 @@ class JSClass<T> extends JSAnnotatedElement {
     }
 
     /**
-     * Returns {@code true} if and only if the underlying class is a local class.
+     * Returns {@code true} if this class is a synthetic class; returns {@code false} otherwise.
      * 
-     * @return {@code true} if and only if this class is a local class.
+     * @return {@code true} if and only if this class is a synthetic class as defined by the Java
+     *         Language Specification.
      * @since 1.5
      */
-    public boolean isLocalClass() {
-        return false; // FIXME
+    public boolean isSynthetic() {
+        return (modifiers & JSModifier.SYNTHETIC) != 0;
     }
 
     /**
