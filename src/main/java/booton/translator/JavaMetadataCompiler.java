@@ -15,7 +15,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -307,20 +306,9 @@ class JavaMetadataCompiler {
             if (clazz.isLocalClass()) {
                 modifier |= 0x00020000;
             }
-            code.append(modifier);
-            // code.append(modifier, ",").string(compile(clazz.getTypeParameters()));
-        }
 
-        /**
-         * <p>
-         * Compile generic types.
-         * </p>
-         * 
-         * @param variables
-         * @return
-         */
-        private String compile(TypeVariable[] variables) {
-            return "";
+            // code.append(modifier);
+            code.append(modifier, ",\"", new JavaSignatureCompiler(clazz.getTypeParameters(), " "), "\",\"", new JavaSignatureCompiler(clazz.getGenericSuperclass()), "\",\"", new JavaSignatureCompiler(clazz.getGenericInterfaces(), " "), "\"");
         }
     }
 

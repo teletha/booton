@@ -113,6 +113,30 @@ class JSCharacter implements JavascriptNative {
     }
 
     /**
+     * Determines if the specified character (Unicode code point) is an alphabet.
+     * <p>
+     * A character is considered to be alphabetic if its general category type, provided by
+     * {@link Character#getType(int) getType(codePoint)}, is any of the following:
+     * <ul>
+     * <li> <code>UPPERCASE_LETTER</code>
+     * <li> <code>LOWERCASE_LETTER</code>
+     * <li> <code>TITLECASE_LETTER</code>
+     * <li> <code>MODIFIER_LETTER</code>
+     * <li> <code>OTHER_LETTER</code>
+     * <li> <code>LETTER_NUMBER</code>
+     * </ul>
+     * or it has contributory property Other_Alphabetic as defined by the Unicode Standard.
+     * 
+     * @param codePoint the character (Unicode code point) to be tested.
+     * @return <code>true</code> if the character is a Unicode alphabet character,
+     *         <code>false</code> otherwise.
+     * @since 1.7
+     */
+    public static boolean isAlphabetic(int codePoint) {
+        return 'a' <= codePoint && codePoint <= 'z' || 'A' <= codePoint && codePoint <= 'Z';
+    }
+
+    /**
      * Determines if the specified character is white space according to Java. A character is a Java
      * whitespace character if and only if it satisfies one of the following criteria:
      * <ul>

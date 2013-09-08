@@ -13,13 +13,17 @@ import static js.lang.Global.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -38,7 +42,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/09/07 21:27:26
  */
 @JavaAPIProvider(Class.class)
-class JSClass<T> extends JSAnnotatedElement {
+class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
 
     /** The prototype definition in runtime. */
     private final NativeObject prototype;
@@ -52,8 +56,20 @@ class JSClass<T> extends JSAnnotatedElement {
     /** The super class. */
     private final Class superclass;
 
+    /** The type description. */
+    private final String signatures;
+
+    /** The type description. */
+    private final String signaturesSuperClass;
+
+    /** The type description. */
+    private final String signaturesInterfaces;
+
     /** The interface classes. */
-    private final Class[] interfaces;
+    private List<Class> interfaces;
+
+    /** The cache fo declaring type variables. */
+    private List<Type> interfaceTypes;
 
     /** The cache for enum constants. */
     private Map<String, Enum> enumerationConstants;
@@ -79,6 +95,12 @@ class JSClass<T> extends JSAnnotatedElement {
     /** The cache for declared fields. */
     private Map<String, Field> privateFields;
 
+    /** The cache fo declaring type variables. */
+    private List<TypeVariable> parameters;
+
+    /** The cache fo declaring type variables. */
+    private Type superclassType;
+
     /**
      * <p>
      * Create native class.
@@ -92,17 +114,21 @@ class JSClass<T> extends JSAnnotatedElement {
      * @param definition A full metadata info for class, constructors, methods and fields.
      */
     protected JSClass(String nameJS, NativeObject prototype, NativeArray metadata, Class superclass, String[] interfaces, NativeObject definition) {
-        super(nameJS, nameJS, (NativeObject) metadata.get(1));
+        super(nameJS, nameJS, (NativeObject) metadata.get(4));
 
         this.prototype = prototype;
         this.definition = definition;
         this.modifiers = metadata.getAsInt(0, 0);
         this.superclass = superclass;
-        this.interfaces = new Class[interfaces.length];
+        this.interfaces = new ArrayList();
 
-        for (int i = 0; i < interfaces.length; i++) {
-            this.interfaces[i] = forName(interfaces[i]);
+        for (String name : interfaces) {
+            this.interfaces.add(forName(name));
         }
+
+        this.signatures = (String) metadata.get(1);
+        this.signaturesSuperClass = (String) metadata.get(2);
+        this.signaturesInterfaces = (String) metadata.get(3);
     }
 
     /**
@@ -850,19 +876,16 @@ class JSClass<T> extends JSAnnotatedElement {
      *             Java&trade; Virtual Machine Specification</cite>
      * @since 1.5
      */
+    @Override
     public TypeVariable<Class<T>>[] getTypeParameters() {
-        if (getGenericSignature() != null) {
-            return (TypeVariable<Class<T>>[]) null;
-        } else {
-            return (TypeVariable<Class<T>>[]) new TypeVariable<?>[0];
+        if (signatures.length() == 0) {
+            return (TypeVariable<Class<T>>[]) new TypeVariable[0];
         }
-    }
 
-    /**
-     * @return
-     */
-    private Object getGenericSignature() {
-        return null;
+        if (parameters == null) {
+            parameters = new Signature(signatures, this).types;
+        }
+        return parameters.toArray(new TypeVariable[parameters.size()]);
     }
 
     /**
@@ -922,14 +945,14 @@ class JSClass<T> extends JSAnnotatedElement {
      * @since 1.5
      */
     public Type getGenericSuperclass() {
-        // if (getGenericSignature() != null) {
-        // // Historical irregularity:
-        // // Generic signature marks interfaces with superclass = Object
-        // // but this API returns null for interfaces
-        // if (isInterface()) return null;
-        // return getGenericInfo().getSuperclass();
-        // } else
-        return getSuperclass();
+        if (signaturesSuperClass.length() == 0) {
+            return getSuperclass();
+        }
+
+        if (superclassType == null) {
+            superclassType = (Type) new Signature(signaturesSuperClass, this).types.get(0);
+        }
+        return superclassType;
     }
 
     /**
@@ -953,7 +976,51 @@ class JSClass<T> extends JSAnnotatedElement {
      * @return
      */
     public Class<?>[] getInterfaces() {
-        return interfaces;
+        return interfaces.toArray(new Class[interfaces.size()]);
+    }
+
+    /**
+     * Returns the {@code Type}s representing the interfaces directly implemented by the class or
+     * interface represented by this object.
+     * <p>
+     * If a superinterface is a parameterized type, the {@code Type} object returned for it must
+     * accurately reflect the actual type parameters used in the source code. The parameterized type
+     * representing each superinterface is created if it had not been created before. See the
+     * declaration of {@link java.lang.reflect.ParameterizedType ParameterizedType} for the
+     * semantics of the creation process for parameterized types.
+     * <p>
+     * If this object represents a class, the return value is an array containing objects
+     * representing all interfaces implemented by the class. The order of the interface objects in
+     * the array corresponds to the order of the interface names in the {@code implements} clause of
+     * the declaration of the class represented by this object. In the case of an array class, the
+     * interfaces {@code Cloneable} and {@code Serializable} are returned in that order.
+     * <p>
+     * If this object represents an interface, the array contains objects representing all
+     * interfaces directly extended by the interface. The order of the interface objects in the
+     * array corresponds to the order of the interface names in the {@code extends} clause of the
+     * declaration of the interface represented by this object.
+     * <p>
+     * If this object represents a class or interface that implements no interfaces, the method
+     * returns an array of length 0.
+     * <p>
+     * If this object represents a primitive type or void, the method returns an array of length 0.
+     * 
+     * @throws java.lang.reflect.GenericSignatureFormatError if the generic class signature does not
+     *             conform to the format specified in <cite>The Java&trade; Virtual Machine
+     *             Specification</cite>
+     * @throws TypeNotPresentException if any of the generic superinterfaces refers to a
+     *             non-existent type declaration
+     * @throws java.lang.reflect.MalformedParameterizedTypeException if any of the generic
+     *             superinterfaces refer to a parameterized type that cannot be instantiated for any
+     *             reason
+     * @return an array of interfaces implemented by this class
+     * @since 1.5
+     */
+    public Type[] getGenericInterfaces() {
+        if (interfaceTypes == null) {
+            interfaceTypes = new Signature(signaturesInterfaces, this).types;
+        }
+        return interfaceTypes.toArray(new Type[interfaceTypes.size()]);
     }
 
     /**
@@ -1098,6 +1165,23 @@ class JSClass<T> extends JSAnnotatedElement {
             arrayClass = new JSClass("[".concat(nameJS), new NativeObject(), new NativeArray(), null, new String[0], new NativeObject());
         }
         return arrayClass;
+    }
+
+    /**
+     * <p>
+     * Helper method to conver {@link Type} to {@link Class}.
+     * </p>
+     * 
+     * @param types
+     * @return
+     */
+    private List<Class> convert(Type[] types) {
+        List<Class> classes = new ArrayList();
+
+        for (Type type : types) {
+            classes.add((Class) (type instanceof ParameterizedType ? ((ParameterizedType) type).getRawType() : type));
+        }
+        return classes;
     }
 
     /**
