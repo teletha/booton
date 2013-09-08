@@ -24,18 +24,168 @@ import org.junit.runner.RunWith;
 import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/09/02 2:12:10
+ * @version 2013/09/08 0:26:33
  */
 @RunWith(ScriptRunner.class)
 public class GenericClassTest {
 
     @Test
-    public void getTypeParameters() throws Exception {
+    public void parameter() throws Exception {
         TypeVariable[] types = SingleTypeVariable.class.getTypeParameters();
         assert types != null;
         assert types.length == 1;
-        assert types[0].getGenericDeclaration() == SingleTypeVariable.class;
-        assert types[0].getName().equals("T");
+
+        TypeVariable type = types[0];
+        assert type instanceof Type;
+        assert type instanceof TypeVariable;
+        assert type.getGenericDeclaration() == SingleTypeVariable.class;
+        assert type.getName().equals("T");
+        assert type.getBounds().length == 1;
+        assert type.getBounds()[0] == Object.class;
+
+        types[0] = null;
+        assert types[0] == null;
+        assert SingleTypeVariable.class.getTypeParameters()[0] != null;
+
+        // non single character
+        types = ListParameterizedType.class.getTypeParameters();
+        assert types != null;
+        assert types.length == 1;
+
+        type = types[0];
+        assert type.getGenericDeclaration() == ListParameterizedType.class;
+        assert type.getName().equals("Item");
+        assert type.getBounds().length == 1;
+        assert type.getBounds()[0] == Object.class;
+
+    }
+
+    @Test
+    public void parameters() throws Exception {
+        TypeVariable[] types = MapParameterizedType.class.getTypeParameters();
+        assert types != null;
+        assert types.length == 2;
+
+        TypeVariable type = types[0];
+        assert type.getGenericDeclaration() == MapParameterizedType.class;
+        assert type.getName().equals("K");
+        assert type.getBounds().length == 1;
+        assert type.getBounds()[0] == Object.class;
+
+        type = types[1];
+        assert type.getGenericDeclaration() == MapParameterizedType.class;
+        assert type.getName().equals("V");
+        assert type.getBounds().length == 1;
+        assert type.getBounds()[0] == Object.class;
+    }
+
+    @Test
+    public void parameterWildcardList() throws Exception {
+        TypeVariable[] types = WildcardListType.class.getTypeParameters();
+        assert types != null;
+        assert types.length == 1;
+
+        TypeVariable type = types[0];
+        assert type.getGenericDeclaration() == WildcardListType.class;
+        assert type.getName().equals("T");
+        assert type.getBounds().length == 1;
+        assert type.getBounds()[0] == List.class;
+    }
+
+    @Test
+    public void parameterWildcardStringList() throws Exception {
+        TypeVariable[] types = WildcardStringListType.class.getTypeParameters();
+        assert types != null;
+        assert types.length == 1;
+
+        TypeVariable type = types[0];
+        assert type.getGenericDeclaration() == WildcardStringListType.class;
+        assert type.getName().equals("T");
+        assert type.getBounds().length == 1;
+
+        Type bound = type.getBounds()[0];
+        assert bound instanceof ParameterizedType;
+
+        ParameterizedType parameterized = (ParameterizedType) bound;
+        assert parameterized.getRawType() == List.class;
+        assert parameterized.getActualTypeArguments().length == 1;
+        assert parameterized.getActualTypeArguments()[0] == String.class;
+        assert parameterized.getOwnerType() == null;
+    }
+
+    @Test
+    public void parameterWildcardGenericList() throws Exception {
+        TypeVariable[] types = WildcardGenericListType.class.getTypeParameters();
+        assert types != null;
+        assert types.length == 1;
+
+        TypeVariable type = types[0];
+        assert type.getGenericDeclaration() == WildcardGenericListType.class;
+        assert type.getName().equals("T");
+        assert type.getBounds().length == 1;
+
+        Type bound = type.getBounds()[0];
+        assert bound instanceof ParameterizedType;
+
+        ParameterizedType parameterized = (ParameterizedType) bound;
+        assert parameterized.getRawType() == List.class;
+        assert parameterized.getOwnerType() == null;
+        assert parameterized.getActualTypeArguments().length == 1;
+        assert parameterized.getActualTypeArguments()[0].equals(type);
+    }
+
+    @Test
+    public void parameterWildcardNestedGeneric() throws Exception {
+        TypeVariable[] types = WildcardNestedType.class.getTypeParameters();
+        assert types != null;
+        assert types.length == 2;
+
+        TypeVariable first = types[0];
+        assert first.getGenericDeclaration() == WildcardNestedType.class;
+        assert first.getName().equals("T");
+        assert first.getBounds().length == 1;
+
+        TypeVariable second = types[1];
+        assert second.getGenericDeclaration() == WildcardNestedType.class;
+        assert second.getName().equals("S");
+        assert second.getBounds().length == 1;
+
+        ParameterizedType firstParameter = (ParameterizedType) first.getBounds()[0];
+        assert firstParameter.getRawType() == Map.class;
+        assert firstParameter.getActualTypeArguments().length == 2;
+        assert firstParameter.getActualTypeArguments()[0] == String.class;
+
+        ParameterizedType firstNested = (ParameterizedType) firstParameter.getActualTypeArguments()[1];
+        assert firstNested.getRawType() == Map.class;
+        assert firstNested.getActualTypeArguments().length == 2;
+        assert firstNested.getActualTypeArguments()[0] == first;
+        assert firstNested.getActualTypeArguments()[1] == second;
+
+        ParameterizedType secondParameter = (ParameterizedType) second.getBounds()[0];
+        assert secondParameter.getRawType() == List.class;
+        assert secondParameter.getActualTypeArguments().length == 1;
+        assert secondParameter.getActualTypeArguments()[0].equals(first);
+    }
+
+    @Test
+    public void parameterWildcards() throws Exception {
+        TypeVariable[] types = MultipleWildcardType.class.getTypeParameters();
+        assert types != null;
+        assert types.length == 1;
+
+        TypeVariable type = types[0];
+        assert type.getGenericDeclaration() == MultipleWildcardType.class;
+        assert type.getName().equals("T");
+        assert type.getBounds().length == 2;
+        assert type.getBounds()[0] == List.class;
+        assert type.getBounds()[1] == RandomAccess.class;
+    }
+
+    @Test
+    public void noParameters() throws Exception {
+        TypeVariable[] types = ArrayListWildcardType.class.getTypeParameters();
+        assert types != null;
+        assert types.length == 0;
     }
 
     @Test
@@ -55,6 +205,21 @@ public class GenericClassTest {
         assert bounds != null;
         assert bounds.length == 1;
         assert bounds[0] == Object.class;
+    }
+
+    @Test
+    public void interfaces() throws Exception {
+        Type[] types = MapType.class.getGenericInterfaces();
+        assert types != null;
+        assert types.length == 1;
+
+        ParameterizedType type = (ParameterizedType) types[0];
+        assert type.getRawType() == Map.class;
+        assert type.getOwnerType() == null;
+
+        Type[] params = type.getActualTypeArguments();
+        assert params[0] == String.class;
+        assert params[1] == Throwable.class;
     }
 
     /**
@@ -82,6 +247,12 @@ public class GenericClassTest {
     }
 
     /**
+     * @version 2013/09/08 22:44:13
+     */
+    private static abstract class MapType implements Map<String, Throwable> {
+    }
+
+    /**
      * @version 2013/09/02 2:14:44
      */
     private static class ListParameterizedType<Item> extends SingleTypeVariable<List<Item>> {
@@ -96,13 +267,31 @@ public class GenericClassTest {
     /**
      * @version 2013/09/02 2:15:41
      */
-    private static class ExtendsWildcardType<T extends List> {
+    private static class WildcardListType<T extends List> {
+    }
+
+    /**
+     * @version 2013/09/02 2:15:41
+     */
+    private static class WildcardStringListType<T extends List<String>> {
+    }
+
+    /**
+     * @version 2013/09/02 2:15:41
+     */
+    private static class WildcardGenericListType<T extends List<T>> {
+    }
+
+    /**
+     * @version 2013/09/02 2:15:41
+     */
+    private static class WildcardNestedType<T extends Map<String, Map<T, S>>, S extends List<T>> {
     }
 
     /**
      * @version 2013/09/02 2:19:23
      */
-    private static class LinkedListWildcardType extends ExtendsWildcardType<LinkedList> {
+    private static class LinkedListWildcardType extends WildcardListType<LinkedList> {
     }
 
     /**
