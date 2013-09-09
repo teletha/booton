@@ -155,7 +155,7 @@ class JSProxy {
         private ProxyClass(int id, Class[] interfaces) {
             super("Proxy" + id, new NativeObject(), new NativeArray(), ProxyBase.class, new NativeObject());
 
-            interfaceTypes = Arrays.asList(interfaces);
+            interfacesType = Arrays.asList(interfaces);
         }
     }
 

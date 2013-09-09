@@ -76,10 +76,10 @@ public class NativeArray<T> extends NativeObject {
      * @param defaultValue A default value.
      * @return A item at index.
      */
-    public T get(int index, T defaultValue) {
+    public <S> S get(int index, S defaultValue) {
         T item = list.get(index);
 
-        return item == null ? defaultValue : item;
+        return item == null ? defaultValue : (S) (Object) item;
     }
 
     /**
@@ -525,7 +525,7 @@ public class NativeArray<T> extends NativeObject {
          * @param defaultValue A default value.
          * @return A item at index.
          */
-        public String get(int index, T defaultValue) {
+        public String get(int index, Object defaultValue) {
             return that + "[" + param(0) + "]||" + param(1);
         }
 
