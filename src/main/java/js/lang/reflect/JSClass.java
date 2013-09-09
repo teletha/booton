@@ -50,6 +50,9 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
     /** The metadata definition in runtime. */
     private final NativeObject definition;
 
+    /** The class metadata in runtime. */
+    private final NativeArray<?> metadata;
+
     /** The modifier value. */
     private final int modifiers;
 
@@ -67,9 +70,6 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
 
     /** The cache fo declaring type variables. */
     List<Type> interfacesType; // package private modifier for Proxy
-
-    /** The type description. */
-    private String interfacesSignature;
 
     /** The cache for enum constants. */
     private Map<String, Enum> enumerationConstants;
@@ -118,12 +118,12 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
 
         this.prototype = prototype;
         this.definition = definition;
+        this.metadata = metadata;
         this.modifiers = metadata.getAsInt(0, 0);
         this.superclass = superclass;
 
         this.signatures = (String) metadata.get(1);
         this.signaturesSuperClass = (String) metadata.get(2);
-        this.interfacesSignature = (String) metadata.get(3);
     }
 
     /**
@@ -1016,8 +1016,8 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      */
     public Type[] getGenericInterfaces() {
         if (interfacesType == null) {
-            interfacesType = new Signature(interfacesSignature, this).types;
-            interfacesSignature = null;
+            interfacesType = new Signature((String) metadata.get(3), this).types;
+            metadata.deleteProperty(3);
         }
         return interfacesType.toArray(new Type[interfacesType.size()]);
     }
