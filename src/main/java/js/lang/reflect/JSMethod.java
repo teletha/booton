@@ -9,15 +9,11 @@
  */
 package js.lang.reflect;
 
-import java.lang.annotation.AnnotationFormatError;
 import java.lang.reflect.Method;
-import java.nio.ByteBuffer;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
-import sun.reflect.annotation.AnnotationParser;
-import sun.reflect.annotation.AnnotationType;
 import booton.translator.JavaAPIProvider;
 
 /**

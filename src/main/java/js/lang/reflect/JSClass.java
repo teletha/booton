@@ -69,7 +69,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
     private List<Class> interfaces;
 
     /** The cache fo declaring type variables. */
-    private List<Type> interfaceTypes;
+    List<Type> interfaceTypes; // package private modifier for Proxy
 
     /** The cache for enum constants. */
     private Map<String, Enum> enumerationConstants;
@@ -113,22 +113,17 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @param interfaces All implemented interfaces.
      * @param definition A full metadata info for class, constructors, methods and fields.
      */
-    protected JSClass(String nameJS, NativeObject prototype, NativeArray metadata, Class superclass, String[] interfaces, NativeObject definition) {
+    protected JSClass(String nameJS, NativeObject prototype, NativeArray metadata, Class superclass, NativeObject definition) {
         super(nameJS, nameJS, (NativeObject) metadata.get(4));
 
         this.prototype = prototype;
         this.definition = definition;
         this.modifiers = metadata.getAsInt(0, 0);
         this.superclass = superclass;
-        this.interfaces = new ArrayList();
-
-        for (String name : interfaces) {
-            this.interfaces.add(forName(name));
-        }
 
         this.signatures = (String) metadata.get(1);
         this.signaturesSuperClass = (String) metadata.get(2);
-        this.signaturesInterfaces = (String) metadata.get(3);
+        this.signaturesInterfaces = (String) metadata.get(3, "");
     }
 
     /**
@@ -976,6 +971,9 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @return
      */
     public Class<?>[] getInterfaces() {
+        if (interfaces == null) {
+            interfaces = convert(getGenericInterfaces());
+        }
         return interfaces.toArray(new Class[interfaces.size()]);
     }
 
@@ -1162,7 +1160,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      */
     protected JSClass getArrayClass() {
         if (arrayClass == null) {
-            arrayClass = new JSClass("[".concat(nameJS), new NativeObject(), new NativeArray(), null, new String[0], new NativeObject());
+            arrayClass = new JSClass("[".concat(nameJS), new NativeObject(), new NativeArray(), null, new NativeObject());
         }
         return arrayClass;
     }
@@ -1179,7 +1177,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         List<Class> classes = new ArrayList();
 
         for (Type type : types) {
-            classes.add((Class) (type instanceof ParameterizedType ? ((ParameterizedType) type).getRawType() : type));
+            classes.add((Class) (type instanceof Class ? type : ((ParameterizedType) type).getRawType()));
         }
         return classes;
     }
@@ -1203,7 +1201,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         NativeObject definition = boot.getPropertyAs(NativeObject.class, fqcn);
 
         if (definition == null) {
-            return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeArray(), Object.class, new String[0], new NativeObject());
+            return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeArray(), Object.class, new NativeObject());
         }
 
         JSClass clazz = (JSClass) definition.getProperty("$");

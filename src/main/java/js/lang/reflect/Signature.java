@@ -39,8 +39,10 @@ class Signature {
     Signature(String signatures, GenericDeclaration declaration) {
         this.declaration = declaration;
 
-        for (String signature : signatures.split(" ")) {
-            types.add(parseType(signature, declaration));
+        if (signatures.length() != 0) {
+            for (String signature : signatures.split(" ")) {
+                types.add(parseType(signature, declaration));
+            }
         }
     }
 
