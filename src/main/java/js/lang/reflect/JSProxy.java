@@ -77,19 +77,12 @@ class JSProxy {
      *         defined by the specified class loader and that implements the specified interfaces.
      */
     public static Object newProxyInstance(ClassLoader loader, Class<?>[] interfaces, final InvocationHandler handler) {
-        // create interfaces list
-        String[] names = new String[interfaces.length];
-
-        for (int i = 0; i < names.length; i++) {
-            names[i] = interfaces[i].getSimpleName();
-        }
-
         // find proxy class
-        Integer hash = Math.abs(Arrays.hashCode(names));
+        Integer hash = Math.abs(Arrays.hashCode(interfaces));
         Class clazz = classes.get(hash);
 
         if (clazz == null) {
-            clazz = (Class) (Object) new ProxyClass(hash, names);
+            clazz = (Class) (Object) new ProxyClass(hash, interfaces);
             classes.put(hash, clazz);
         }
 
@@ -151,16 +144,18 @@ class JSProxy {
     }
 
     /**
-     * @version 2013/08/19 14:33:20
+     * @version 2013/09/09 12:44:31
      */
     private static class ProxyClass extends JSClass {
 
         /**
-         * @param id
-         * @param interfaces
+         * @param id A proxy id.
+         * @param interfaces A interface list.
          */
-        private ProxyClass(int id, String[] interfaces) {
-            super("Proxy" + id, new NativeObject(), new NativeArray(), ProxyBase.class, interfaces, new NativeObject());
+        private ProxyClass(int id, Class[] interfaces) {
+            super("Proxy" + id, new NativeObject(), new NativeArray(), ProxyBase.class, new NativeObject());
+
+            interfaceTypes = Arrays.asList(interfaces);
         }
     }
 

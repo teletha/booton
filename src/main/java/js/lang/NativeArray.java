@@ -73,6 +73,21 @@ public class NativeArray<T> extends NativeObject {
      * </p>
      * 
      * @param index A array index;
+     * @param defaultValue A default value.
+     * @return A item at index.
+     */
+    public T get(int index, T defaultValue) {
+        T item = list.get(index);
+
+        return item == null ? defaultValue : item;
+    }
+
+    /**
+     * <p>
+     * Retrieve the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
      * @return A item at index.
      */
     public int getAsInt(int index) {
@@ -499,6 +514,19 @@ public class NativeArray<T> extends NativeObject {
          */
         public String get(int index) {
             return that + "[" + param(0) + "]";
+        }
+
+        /**
+         * <p>
+         * Retrieve the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @param defaultValue A default value.
+         * @return A item at index.
+         */
+        public String get(int index, T defaultValue) {
+            return that + "[" + param(0) + "]||" + param(1);
         }
 
         /**

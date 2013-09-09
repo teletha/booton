@@ -308,7 +308,7 @@ public class Javascript {
 
         // write class definition
         code.comment(source + " " + computeSimpleClassName(source));
-        code.append("boot.define(").string(className).append(",").string(superClassName).append(",", interfaces(), ",");
+        code.append("boot.define(").string(className).append(",").string(superClassName).append(",");
 
         // write constructors, fields and methods
         try {
@@ -369,7 +369,7 @@ public class Javascript {
 
         // write interface definition
         code.comment(source);
-        code.append("boot.define(").string(className).append(",\"\",").append(interfaces()).append(",");
+        code.append("boot.define(").string(className).append(",\"\",");
 
         // write constructors, fields and methods
         try {
@@ -395,26 +395,6 @@ public class Javascript {
         // End class definition
         code.append(");");
         code.line();
-    }
-
-    /**
-     * <p>
-     * Compute interface definition.
-     * </p>
-     * 
-     * @return
-     */
-    private String interfaces() {
-        List<String> list = new ArrayList();
-
-        for (Class type : source.getInterfaces()) {
-            if (!JavascriptNative.class.isAssignableFrom(type)) {
-                require(type);
-
-                list.add("\"" + computeSimpleClassName(type) + "\"");
-            }
-        }
-        return "[" + I.join(list, ",") + "]";
     }
 
     /**
