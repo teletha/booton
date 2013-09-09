@@ -304,11 +304,11 @@ public class Javascript {
     private void compileClass(ScriptWriter code, Class parent, byte[] bytes) {
         // compute related class names
         String className = Javascript.computeSimpleClassName(source);
-        String superClassName = parent == Object.class ? "" : computeSimpleClassName(parent);
+        String superClassName = parent == Object.class ? "\"\"" : new JavaSignatureCompiler(parent).toString();
 
         // write class definition
         code.comment(source + " " + computeSimpleClassName(source));
-        code.append("boot.define(").string(className).append(",").string(superClassName).append(",");
+        code.append("boot.define(").string(className).append(",", superClassName, ",");
 
         // write constructors, fields and methods
         try {

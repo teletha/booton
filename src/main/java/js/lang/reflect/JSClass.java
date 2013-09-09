@@ -59,17 +59,17 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
     /** The super class. */
     private final Class superclass;
 
-    /** The type description. */
-    private final String signatures;
-
-    /** The type description. */
-    private final String signaturesSuperClass;
+    /** The cache fo declaring type variables. */
+    private Type superclassType;
 
     /** The interface classes. */
     private List<Class> interfaces;
 
     /** The cache fo declaring type variables. */
     List<Type> interfacesType; // package private modifier for Proxy
+
+    /** The cache fo declaring type variables. */
+    private List<TypeVariable> parameters;
 
     /** The cache for enum constants. */
     private Map<String, Enum> enumerationConstants;
@@ -95,12 +95,6 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
     /** The cache for declared fields. */
     private Map<String, Field> privateFields;
 
-    /** The cache fo declaring type variables. */
-    private List<TypeVariable> parameters;
-
-    /** The cache fo declaring type variables. */
-    private Type superclassType;
-
     /**
      * <p>
      * Create native class.
@@ -121,9 +115,6 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         this.metadata = metadata;
         this.modifiers = metadata.getAsInt(0, 0);
         this.superclass = superclass;
-
-        this.signatures = (String) metadata.get(1);
-        this.signaturesSuperClass = (String) metadata.get(2);
     }
 
     /**
@@ -859,6 +850,19 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
     }
 
     /**
+     * Returns the {@code Class} representing the component type of an array. If this class does not
+     * represent an array class this method returns null.
+     * 
+     * @return the {@code Class} representing the component type of this class if this class is an
+     *         array
+     * @see java.lang.reflect.Array
+     * @since JDK1.1
+     */
+    public Class<?> getComponentType() {
+        return isArray() ? forName(nameJS.substring(1)) : null;
+    }
+
+    /**
      * Returns an array of {@code TypeVariable} objects that represent the type variables declared
      * by the generic declaration represented by this {@code GenericDeclaration} object, in
      * declaration order. Returns an array of length 0 if the underlying generic declaration
@@ -873,27 +877,11 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      */
     @Override
     public TypeVariable<Class<T>>[] getTypeParameters() {
-        if (signatures.length() == 0) {
-            return (TypeVariable<Class<T>>[]) new TypeVariable[0];
-        }
-
         if (parameters == null) {
-            parameters = new Signature(signatures, this).types;
+            parameters = new Signature((String) metadata.get(1), this).types;
+            metadata.deleteProperty(1);
         }
         return parameters.toArray(new TypeVariable[parameters.size()]);
-    }
-
-    /**
-     * Returns the {@code Class} representing the component type of an array. If this class does not
-     * represent an array class this method returns null.
-     * 
-     * @return the {@code Class} representing the component type of this class if this class is an
-     *         array
-     * @see java.lang.reflect.Array
-     * @since JDK1.1
-     */
-    public Class<?> getComponentType() {
-        return isArray() ? forName(nameJS.substring(1)) : null;
     }
 
     /**
@@ -940,12 +928,9 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @since 1.5
      */
     public Type getGenericSuperclass() {
-        if (signaturesSuperClass.length() == 0) {
-            return getSuperclass();
-        }
-
         if (superclassType == null) {
-            superclassType = (Type) new Signature(signaturesSuperClass, this).types.get(0);
+            superclassType = (Type) new Signature((String) metadata.get(2), this).types.get(0);
+            metadata.deleteProperty(2);
         }
         return superclassType;
     }
@@ -1161,9 +1146,21 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      */
     protected JSClass getArrayClass() {
         if (arrayClass == null) {
-            arrayClass = new JSClass("[".concat(nameJS), new NativeObject(), new NativeArray(), null, new NativeObject());
+            arrayClass = new JSClass("[".concat(nameJS), new NativeObject(), new NativeArray(), Object.class, new NativeObject());
         }
         return arrayClass;
+    }
+
+    /**
+     * <p>
+     * Helper method to conver {@link Type} to {@link Class}.
+     * </p>
+     * 
+     * @param types
+     * @return
+     */
+    private Class convert(Type type) {
+        return (Class) (type instanceof Class ? type : ((ParameterizedType) type).getRawType());
     }
 
     /**

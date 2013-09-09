@@ -100,6 +100,6 @@ class JavaSignatureCompiler {
      */
     @Override
     public String toString() {
-        return code.toString();
+        return '"' + code.toString() + '"';
     }
 }
