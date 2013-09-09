@@ -62,14 +62,14 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
     /** The type description. */
     private final String signaturesSuperClass;
 
-    /** The type description. */
-    private final String signaturesInterfaces;
-
     /** The interface classes. */
     private List<Class> interfaces;
 
     /** The cache fo declaring type variables. */
-    List<Type> interfaceTypes; // package private modifier for Proxy
+    List<Type> interfacesType; // package private modifier for Proxy
+
+    /** The type description. */
+    private String interfacesSignature;
 
     /** The cache for enum constants. */
     private Map<String, Enum> enumerationConstants;
@@ -113,7 +113,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @param interfaces All implemented interfaces.
      * @param definition A full metadata info for class, constructors, methods and fields.
      */
-    protected JSClass(String nameJS, NativeObject prototype, NativeArray metadata, Class superclass, NativeObject definition) {
+    protected JSClass(String nameJS, NativeObject prototype, NativeArray<?> metadata, Class superclass, NativeObject definition) {
         super(nameJS, nameJS, (NativeObject) metadata.get(4));
 
         this.prototype = prototype;
@@ -123,7 +123,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
 
         this.signatures = (String) metadata.get(1);
         this.signaturesSuperClass = (String) metadata.get(2);
-        this.signaturesInterfaces = (String) metadata.get(3, "");
+        this.interfacesSignature = (String) metadata.get(3);
     }
 
     /**
@@ -1015,10 +1015,11 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @since 1.5
      */
     public Type[] getGenericInterfaces() {
-        if (interfaceTypes == null) {
-            interfaceTypes = new Signature(signaturesInterfaces, this).types;
+        if (interfacesType == null) {
+            interfacesType = new Signature(interfacesSignature, this).types;
+            interfacesSignature = null;
         }
-        return interfaceTypes.toArray(new Type[interfaceTypes.size()]);
+        return interfacesType.toArray(new Type[interfacesType.size()]);
     }
 
     /**

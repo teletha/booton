@@ -449,6 +449,17 @@ public class NativeObject {
 
     /**
      * <p>
+     * Delete property.
+     * </p>
+     * 
+     * @param property
+     */
+    public static final void deleteField(Object property) {
+        // do nothing
+    }
+
+    /**
+     * <p>
      * Helper method to cast to {@link NativeObject}.
      * </p>
      * 
@@ -944,6 +955,17 @@ public class NativeObject {
          */
         public String isArray() {
             return "Array.isArray(" + that + ")";
+        }
+
+        /**
+         * <p>
+         * Delete property.
+         * </p>
+         * 
+         * @param property
+         */
+        public String deleteField(Object property) {
+            return "delete " + param(0);
         }
 
         /**
