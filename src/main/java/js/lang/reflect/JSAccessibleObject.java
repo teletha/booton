@@ -18,13 +18,10 @@ import js.lang.NativeObject;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/09/07 2:26:11
+ * @version 2013/09/11 0:19:34
  */
 @JavaAPIProvider(AccessibleObject.class)
 abstract class JSAccessibleObject extends JSAnnotatedElement implements Member {
-
-    /** The modifier value. */
-    protected final int modifiers;
 
     /** The declaring class. */
     protected final Class owner;
@@ -35,10 +32,9 @@ abstract class JSAccessibleObject extends JSAnnotatedElement implements Member {
      * @param metadata
      */
     protected JSAccessibleObject(String name, String nameJS, Class owner, NativeArray metadata, int indexForAnnotation) {
-        super(name, nameJS, (NativeObject) metadata.get(indexForAnnotation));
+        super(name, nameJS, metadata, (NativeObject) metadata.get(indexForAnnotation));
 
         this.owner = owner;
-        this.modifiers = metadata.getAsInt(0);
     }
 
     /**
@@ -87,30 +83,7 @@ abstract class JSAccessibleObject extends JSAnnotatedElement implements Member {
      * {@inheritDoc}
      */
     @Override
-    public final int getModifiers() {
-        return modifiers;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public final boolean isSynthetic() {
         return (modifiers & JSModifier.SYNTHETIC) != 0;
-    }
-
-    protected Class[] convert(String[] names) {
-        Class[] types = new Class[names.length];
-
-        for (int i = 0; i < names.length; i++) {
-            try {
-                types[i] = Class.forName(names[i]);
-            } catch (Exception e) {
-                // If this exception will be thrown, it is bug of this program. So we must rethrow
-                // the wrapped error in here.
-                throw new Error(e);
-            }
-        }
-        return types;
     }
 }

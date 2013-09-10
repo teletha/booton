@@ -10,6 +10,9 @@
 package js.lang.reflect;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.GenericSignatureFormatError;
+import java.lang.reflect.MalformedParameterizedTypeException;
+import java.lang.reflect.Type;
 
 import js.lang.NativeArray;
 import js.lang.NativeObject;
@@ -21,16 +24,16 @@ import booton.translator.JavaAPIProvider;
  * functionalities.
  * </p>
  * 
- * @version 2013/09/06 7:52:57
+ * @version 2013/09/11 0:21:14
  */
 @JavaAPIProvider(Field.class)
 class JSField extends JSAccessibleObject {
 
-    /** The declaring class definition in runtime. */
-    private NativeObject clazz;
+    /** The cache for field {@link Class}. */
+    private Class field;
 
-    /** The field type. */
-    private final Class<?> type;
+    /** The cache for field {@link Type}. */
+    private Type fieldType;
 
     /**
      * <p>
@@ -38,20 +41,10 @@ class JSField extends JSAccessibleObject {
      * </p>
      * 
      * @param nameJS
-     * @param clazz
      * @param metadata
      */
-    JSField(String nameJS, Class owner, NativeObject clazz, NativeArray metadata) {
+    JSField(String nameJS, Class owner, NativeArray metadata) {
         super((String) metadata.get(1), nameJS, owner, metadata, 3);
-
-        try {
-            this.clazz = clazz;
-            this.type = Class.forName(metadata.getPropertyAs(String.class, "2"));
-        } catch (ClassNotFoundException e) {
-            // If this exception will be thrown, it is bug of this program. So we must rethrow the
-            // wrapped error in here.
-            throw new Error(e);
-        }
     }
 
     /**
@@ -62,7 +55,38 @@ class JSField extends JSAccessibleObject {
      *         object
      */
     public Class<?> getType() {
-        return type;
+        if (field == null) {
+            field = Signature.convert(getGenericType());
+        }
+        return field;
+    }
+
+    /**
+     * Returns a {@code Type} object that represents the declared type for the field represented by
+     * this {@code Field} object.
+     * <p>
+     * If the {@code Type} is a parameterized type, the {@code Type} object returned must accurately
+     * reflect the actual type parameters used in the source code.
+     * <p>
+     * If the type of the underlying field is a type variable or a parameterized type, it is
+     * created. Otherwise, it is resolved.
+     * 
+     * @return a {@code Type} object that represents the declared type for the field represented by
+     *         this {@code Field} object
+     * @throws GenericSignatureFormatError if the generic field signature does not conform to the
+     *             format specified in <cite>The Java&trade; Virtual Machine Specification</cite>
+     * @throws TypeNotPresentException if the generic type signature of the underlying field refers
+     *             to a non-existent type declaration
+     * @throws MalformedParameterizedTypeException if the generic signature of the underlying field
+     *             refers to a parameterized type that cannot be instantiated for any reason
+     * @since 1.5
+     */
+    public Type getGenericType() {
+        if (fieldType == null) {
+            fieldType = (Type) new Signature((String) metadata.get(2), owner).types.get(0);
+            metadata.deleteProperty(2);
+        }
+        return fieldType;
     }
 
     /**

@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @version 2013/09/08 8:53:56
+ * @version 2013/09/11 0:39:23
  */
 class JavaSignatureCompiler {
 
@@ -40,10 +40,9 @@ class JavaSignatureCompiler {
 
     /**
      * @param types
-     * @param separator
      */
-    JavaSignatureCompiler(Type[] types, String separator) {
-        compile(types, separator);
+    JavaSignatureCompiler(Type[] types) {
+        compile(types, " ");
     }
 
     /**
@@ -64,6 +63,13 @@ class JavaSignatureCompiler {
         }
     }
 
+    /**
+     * <p>
+     * Compile {@link Type}.
+     * </p>
+     * 
+     * @param type
+     */
     private void compile(Type type) {
         if (type == null) {
             return;
@@ -88,16 +94,37 @@ class JavaSignatureCompiler {
         }
     }
 
+    /**
+     * <p>
+     * Compile {@link GenericArrayType}.
+     * </p>
+     * 
+     * @param array
+     */
     private void compile(GenericArrayType array) {
         code.append("[");
         compile(array.getGenericComponentType());
     }
 
+    /**
+     * <p>
+     * Compile {@link TypeVariable}.
+     * </p>
+     * 
+     * @param variable
+     */
     private void compile(TypeVariable variable) {
         code.append(variable.getName(), ":");
         compile(variable.getBounds(), "&");
     }
 
+    /**
+     * <p>
+     * Compile {@link ParameterizedType}.
+     * </p>
+     * 
+     * @param parameterized
+     */
     private void compile(ParameterizedType parameterized) {
         compile(parameterized.getRawType());
         code.append("<");

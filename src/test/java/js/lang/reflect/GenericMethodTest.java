@@ -9,6 +9,7 @@
  */
 package js.lang.reflect;
 
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -138,9 +139,33 @@ public class GenericMethodTest {
     /**
      * @version 2013/09/10 15:02:50
      */
-    @SuppressWarnings("unused")
     private static abstract class ThrowType<E extends Error, T extends Throwable, X extends Exception, R extends RuntimeException> {
 
         abstract void method() throws E, T, X, R;
+    }
+
+    @Test
+    public void parameterArray() throws Exception {
+        Method method = ArrayType.class.getDeclaredMethod("method", Object[].class);
+        assert method.getParameterTypes()[0] == Object[].class;
+
+        Type[] types = method.getGenericParameterTypes();
+        assert types.length == 1;
+
+        GenericArrayType array = (GenericArrayType) types[0];
+        assert array.getGenericComponentType() instanceof TypeVariable;
+
+        TypeVariable variable = (TypeVariable) array.getGenericComponentType();
+        assert variable.getGenericDeclaration() == ArrayType.class;
+        assert variable.getName().equals("T");
+        assert variable.getBounds()[0] == Object.class;
+    }
+
+    /**
+     * @version 2013/09/10 23:16:44
+     */
+    private static abstract class ArrayType<T> {
+
+        abstract void method(T[] values);
     }
 }
