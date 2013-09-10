@@ -334,8 +334,9 @@ class JavaMetadataCompiler {
         @Override
         protected void write() {
             code.append(method.getModifiers(), ",\"", method.getName(), "\",");
-            code.append('"', Javascript.computeSimpleClassName(method.getReturnType()), '"', ",");
-            code.append(convert(method.getParameterTypes()));
+            code.append(new JavaSignatureCompiler(method.getGenericReturnType()), ",");
+            code.append(new JavaSignatureCompiler(method.getGenericParameterTypes(), " "), ",");
+            code.append(new JavaSignatureCompiler(method.getGenericExceptionTypes(), " "));
         }
     }
 
@@ -388,7 +389,8 @@ class JavaMetadataCompiler {
         @Override
         protected void write() {
             code.append(constructor.getModifiers()).append(",");
-            code.append(convert(constructor.getParameterTypes()));
+            code.append(new JavaSignatureCompiler(constructor.getGenericParameterTypes(), " "), ",");
+            code.append(new JavaSignatureCompiler(constructor.getGenericExceptionTypes(), " "));
         }
     }
 }

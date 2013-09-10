@@ -14,6 +14,9 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
@@ -118,6 +121,23 @@ abstract class JSAnnotatedElement {
      */
     public Annotation[] getDeclaredAnnotations() {
         return getAnnotations();
+    }
+
+    /**
+     * <p>
+     * Helper method to conver {@link Type} to {@link Class}.
+     * </p>
+     * 
+     * @param types
+     * @return
+     */
+    protected List<Class> convert(Type[] types) {
+        List<Class> classes = new ArrayList();
+
+        for (Type type : types) {
+            classes.add(Signature.convert(type));
+        }
+        return classes;
     }
 
     /**

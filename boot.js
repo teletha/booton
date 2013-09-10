@@ -76,15 +76,7 @@ function boot(global) {
       }
     
       // Default superClass is native Object.
-      var superClass;
-      
-      if (superClassName.length === 0) {
-        superClass = Object;
-      } else {
-        var index = superClassName.indexOf("<");
-        if (index !== -1) console.log(superClassName);
-        superClass = boot[index === -1 ? superClassName : superClassName.substring(0, index)];
-      }
+      var superClass = boot[superClassName] || Object;
 
       // This is actual counstructor of class to define.
       function Class() {

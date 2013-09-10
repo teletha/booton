@@ -9,6 +9,7 @@
  */
 package booton.translator;
 
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -32,7 +33,9 @@ class JavaSignatureCompiler {
      * @param separator
      */
     JavaSignatureCompiler(Type type) {
-        compile(type);
+        if (type != Object.class) {
+            compile(type);
+        }
     }
 
     /**
@@ -78,9 +81,16 @@ class JavaSignatureCompiler {
             compile((ParameterizedType) type);
         } else if (type instanceof WildcardType) {
 
+        } else if (type instanceof GenericArrayType) {
+            compile((GenericArrayType) type);
         } else {
             code.append(Javascript.computeSimpleClassName((Class) type));
         }
+    }
+
+    private void compile(GenericArrayType array) {
+        code.append("[");
+        compile(array.getGenericComponentType());
     }
 
     private void compile(TypeVariable variable) {
