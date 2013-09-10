@@ -16,10 +16,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -478,7 +476,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
                 char ch = name.charAt(0);
 
                 if (ch != '$' && ch < 'a' || 'p' < ch) {
-                    Method method = (Method) (Object) new JSMethod(name, (Class) (Object) this, prototype, definition.getPropertyAs(NativeArray.class, name));
+                    Method method = (Method) (Object) new JSMethod(name, (Class) (Object) this, definition.getPropertyAs(NativeArray.class, name));
                     privateMethods.put(hash(method.getName(), method.getParameterTypes()), method);
                 }
             }
@@ -1149,35 +1147,6 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
             arrayClass = new JSClass("[".concat(nameJS), new NativeObject(), new NativeArray(), Object.class, new NativeObject());
         }
         return arrayClass;
-    }
-
-    /**
-     * <p>
-     * Helper method to conver {@link Type} to {@link Class}.
-     * </p>
-     * 
-     * @param types
-     * @return
-     */
-    private Class convert(Type type) {
-        return (Class) (type instanceof Class ? type : ((ParameterizedType) type).getRawType());
-    }
-
-    /**
-     * <p>
-     * Helper method to conver {@link Type} to {@link Class}.
-     * </p>
-     * 
-     * @param types
-     * @return
-     */
-    private List<Class> convert(Type[] types) {
-        List<Class> classes = new ArrayList();
-
-        for (Type type : types) {
-            classes.add((Class) (type instanceof Class ? type : ((ParameterizedType) type).getRawType()));
-        }
-        return classes;
     }
 
     /**

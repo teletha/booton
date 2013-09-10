@@ -24,10 +24,10 @@ import booton.translator.JavaAPIProvider;
 abstract class JSAccessibleObject extends JSAnnotatedElement implements Member {
 
     /** The modifier value. */
-    private final int modifiers;
+    protected final int modifiers;
 
     /** The declaring class. */
-    private final Class owner;
+    protected final Class owner;
 
     /**
      * @param name The property name at Java definition.

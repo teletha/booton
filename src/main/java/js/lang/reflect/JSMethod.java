@@ -9,7 +9,12 @@
  */
 package js.lang.reflect;
 
+import java.lang.reflect.GenericSignatureFormatError;
+import java.lang.reflect.MalformedParameterizedTypeException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
+import java.util.List;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
@@ -27,14 +32,26 @@ import booton.translator.JavaAPIProvider;
 @JavaAPIProvider(Method.class)
 class JSMethod extends JSAccessibleObject {
 
-    /** The declaring class definition in runtime. */
-    private NativeObject clazz;
+    /** The method metadata. */
+    private final NativeArray<?> metadata;
 
-    /** The cache for return type. */
-    private final Class returnType;
+    /** The cache for return {@link Class}. */
+    private Class returns;
 
-    /** The parameter types. */
-    private final Class[] parameterTypes;
+    /** The cache for return {@link Type}. */
+    private Type returnType;
+
+    /** The cache for parameter {@link Class}. */
+    private List<Class> parameters;
+
+    /** The cache for parameter {@link Type}. */
+    private List<Type> parameterTypes;
+
+    /** The cache for exception {@link Class}. */
+    private List<Class> exceptions;
+
+    /** The cache for exception {@link Type}. */
+    private List<Type> exceptionTypes;
 
     /**
      * <p>
@@ -42,21 +59,12 @@ class JSMethod extends JSAccessibleObject {
      * </p>
      * 
      * @param nameJS
-     * @param clazz
      * @param metadata
      */
-    JSMethod(String nameJS, Class owner, NativeObject clazz, NativeArray metadata) {
-        super((String) metadata.get(1), nameJS, owner, metadata, 4);
+    JSMethod(String nameJS, Class owner, NativeArray metadata) {
+        super((String) metadata.get(1), nameJS, owner, metadata, 5);
 
-        try {
-            this.clazz = clazz;
-            this.returnType = Class.forName(metadata.getPropertyAs(String.class, "2"));
-            this.parameterTypes = convert(metadata.getPropertyAs(String[].class, "3"));
-        } catch (Exception e) {
-            // If this exception will be thrown, it is bug of this program. So we must rethrow the
-            // wrapped error in here.
-            throw new Error(e);
-        }
+        this.metadata = metadata;
     }
 
     /**
@@ -82,6 +90,36 @@ class JSMethod extends JSAccessibleObject {
      * @return the return type for the method this object represents
      */
     public Class<?> getReturnType() {
+        if (returns == null) {
+            returns = Signature.convert(getGenericReturnType());
+        }
+        return returns;
+    }
+
+    /**
+     * Returns a {@code Type} object that represents the formal return type of the method
+     * represented by this {@code Method} object.
+     * <p>
+     * If the return type is a parameterized type, the {@code Type} object returned must accurately
+     * reflect the actual type parameters used in the source code.
+     * <p>
+     * If the return type is a type variable or a parameterized type, it is created. Otherwise, it
+     * is resolved.
+     * 
+     * @return a {@code Type} object that represents the formal return type of the underlying method
+     * @throws GenericSignatureFormatError if the generic method signature does not conform to the
+     *             format specified in <cite>The Java&trade; Virtual Machine Specification</cite>
+     * @throws TypeNotPresentException if the underlying method's return type refers to a
+     *             non-existent type declaration
+     * @throws MalformedParameterizedTypeException if the underlying method's return typed refers to
+     *             a parameterized type that cannot be instantiated for any reason
+     * @since 1.5
+     */
+    public Type getGenericReturnType() {
+        if (returnType == null) {
+            returnType = (Type) new Signature((String) metadata.get(2), owner).types.get(0);
+            metadata.deleteProperty(2);
+        }
         return returnType;
     }
 
@@ -93,7 +131,80 @@ class JSMethod extends JSAccessibleObject {
      * @return the parameter types for the method this object represents
      */
     public Class<?>[] getParameterTypes() {
-        return parameterTypes;
+        if (parameters == null) {
+            parameters = convert(getGenericParameterTypes());
+        }
+        return parameters.toArray(new Class[parameters.size()]);
+    }
+
+    /**
+     * Returns an array of {@code Type} objects that represent the formal parameter types, in
+     * declaration order, of the method represented by this {@code Method} object. Returns an array
+     * of length 0 if the underlying method takes no parameters.
+     * <p>
+     * If a formal parameter type is a parameterized type, the {@code Type} object returned for it
+     * must accurately reflect the actual type parameters used in the source code.
+     * <p>
+     * If a formal parameter type is a type variable or a parameterized type, it is created.
+     * Otherwise, it is resolved.
+     * 
+     * @return an array of Types that represent the formal parameter types of the underlying method,
+     *         in declaration order
+     * @throws GenericSignatureFormatError if the generic method signature does not conform to the
+     *             format specified in <cite>The Java&trade; Virtual Machine Specification</cite>
+     * @throws TypeNotPresentException if any of the parameter types of the underlying method refers
+     *             to a non-existent type declaration
+     * @throws MalformedParameterizedTypeException if any of the underlying method's parameter types
+     *             refer to a parameterized type that cannot be instantiated for any reason
+     * @since 1.5
+     */
+    public Type[] getGenericParameterTypes() {
+        if (parameterTypes == null) {
+            parameterTypes = new Signature((String) metadata.get(3), owner).types;
+            metadata.deleteProperty(3);
+        }
+        return parameterTypes.toArray(new Type[parameterTypes.size()]);
+    }
+
+    /**
+     * Returns an array of {@code Class} objects that represent the types of exceptions declared to
+     * be thrown by the underlying constructor represented by this {@code Constructor} object.
+     * Returns an array of length 0 if the constructor declares no exceptions in its {@code throws}
+     * clause.
+     * 
+     * @return the exception types declared as being thrown by the constructor this object
+     *         represents
+     */
+    public Class<?>[] getExceptionTypes() {
+        if (exceptions == null) {
+            exceptions = convert(getGenericExceptionTypes());
+        }
+        return exceptions.toArray(new Class[exceptions.size()]);
+    }
+
+    /**
+     * Returns an array of {@code Type} objects that represent the exceptions declared to be thrown
+     * by this {@code Constructor} object. Returns an array of length 0 if the underlying method
+     * declares no exceptions in its {@code throws} clause.
+     * <p>
+     * If an exception type is a type variable or a parameterized type, it is created. Otherwise, it
+     * is resolved.
+     * 
+     * @return an array of Types that represent the exception types thrown by the underlying method
+     * @throws GenericSignatureFormatError if the generic method signature does not conform to the
+     *             format specified in <cite>The Java&trade; Virtual Machine Specification</cite>
+     * @throws TypeNotPresentException if the underlying method's {@code throws} clause refers to a
+     *             non-existent type declaration
+     * @throws MalformedParameterizedTypeException if the underlying method's {@code throws} clause
+     *             refers to a parameterized type that cannot be instantiated for any reason
+     * @since 1.5
+     */
+    public Type[] getGenericExceptionTypes() {
+        if (exceptionTypes == null) {
+            exceptionTypes = new Signature((String) metadata.get(4), owner).types;
+            metadata.deleteProperty(4);
+        }
+        return exceptionTypes.toArray(new Type[exceptionTypes.size()]);
     }
 
     /**
@@ -135,5 +246,51 @@ class JSMethod extends JSAccessibleObject {
      */
     public Object invoke(Object context, Object... parameters) {
         return ((NativeObject) context).getPropertyAs(NativeFunction.class, nameJS).apply(context, parameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        int mod = getModifiers() & Modifier.methodModifiers();
+
+        if (mod != 0) {
+            builder.append(Modifier.toString(mod)).append(' ');
+        }
+        builder.append(getTypeName(getReturnType())).append(' ');
+        builder.append(getTypeName(getDeclaringClass())).append('.');
+        builder.append(getName()).append('(');
+        Class<?>[] params = getParameterTypes(); // avoid clone
+        for (int j = 0; j < params.length; j++) {
+            builder.append(getTypeName(params[j]));
+            if (j < (params.length - 1)) {
+                builder.append(',');
+            }
+        }
+        builder.append(')');
+        return builder.toString();
+    }
+
+    /*
+     * Utility routine to paper over array type names
+     */
+    static String getTypeName(Class<?> type) {
+        if (type.isArray()) {
+            Class<?> cl = type;
+            int dimensions = 0;
+            while (cl.isArray()) {
+                dimensions++;
+                cl = cl.getComponentType();
+            }
+            StringBuffer sb = new StringBuffer();
+            sb.append(cl.getName());
+            for (int i = 0; i < dimensions; i++) {
+                sb.append("[]");
+            }
+            return sb.toString();
+        }
+        return type.getName();
     }
 }

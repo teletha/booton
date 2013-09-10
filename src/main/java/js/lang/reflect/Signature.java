@@ -9,6 +9,7 @@
  */
 package js.lang.reflect;
 
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -61,6 +62,10 @@ class Signature {
                 return get(signature.substring(0, index));
             }
 
+            if (c == '[') {
+                return new GenericArrayTypeInfo(signature.substring(1), declaration);
+            }
+
             if (c == '<') {
                 return new ParameterizedTypeInfo(signature.substring(0, index), split(signature.substring(index + 1, signature.length() - 1), ','), declaration);
             }
@@ -102,9 +107,32 @@ class Signature {
     }
 
     /**
+     * <p>
+     * Helper method to conver {@link Type} to {@link Class}.
+     * </p>
+     * 
+     * @param types
+     * @return
+     */
+    static Class convert(Type type) {
+        if (type instanceof TypeVariableInfo) {
+            return convert(((TypeVariableInfo) type).bounds[0]);
+        }
+
+        if (type instanceof ParameterizedTypeInfo) {
+            return (Class) ((ParameterizedType) type).getRawType();
+        }
+
+        if (type instanceof GenericArrayTypeInfo) {
+            return (Class) (Object) ((JSClass) (Object) convert(((GenericArrayType) type).getGenericComponentType())).getArrayClass();
+        }
+        return (Class) type;
+    }
+
+    /**
      * @version 2013/09/07 22:35:55
      */
-    class TypeVariableInfo implements TypeVariable {
+    private class TypeVariableInfo implements TypeVariable {
 
         /** The variable name. */
         private final String name;
@@ -173,7 +201,7 @@ class Signature {
     /**
      * @version 2013/09/08 9:57:17
      */
-    class ParameterizedTypeInfo implements ParameterizedType {
+    private class ParameterizedTypeInfo implements ParameterizedType {
 
         /** The arugument types. */
         private final Type[] arguments;
@@ -224,4 +252,27 @@ class Signature {
         }
     }
 
+    /**
+     * @version 2013/09/10 15:21:33
+     */
+    private class GenericArrayTypeInfo implements GenericArrayType {
+
+        /** The component type. */
+        private final Type component;
+
+        /**
+         * @param component
+         */
+        private GenericArrayTypeInfo(String signature, GenericDeclaration declaration) {
+            this.component = parseType(signature, declaration);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Type getGenericComponentType() {
+            return component;
+        }
+    }
 }

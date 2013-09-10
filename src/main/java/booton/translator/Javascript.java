@@ -303,12 +303,12 @@ public class Javascript {
      */
     private void compileClass(ScriptWriter code, Class parent, byte[] bytes) {
         // compute related class names
-        String className = Javascript.computeSimpleClassName(source);
-        String superClassName = parent == Object.class ? "\"\"" : new JavaSignatureCompiler(parent).toString();
+        String className = computeSimpleClassName(source);
+        String superClassName = parent == Object.class ? "" : computeSimpleClassName(parent);
 
         // write class definition
-        code.comment(source + " " + computeSimpleClassName(source));
-        code.append("boot.define(").string(className).append(",", superClassName, ",");
+        code.comment(source + " " + className);
+        code.append("boot.define(").string(className).append(",\"", superClassName, "\",");
 
         // write constructors, fields and methods
         try {
