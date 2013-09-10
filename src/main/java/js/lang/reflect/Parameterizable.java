@@ -9,6 +9,7 @@
  */
 package js.lang.reflect;
 
+import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.GenericSignatureFormatError;
 import java.lang.reflect.MalformedParameterizedTypeException;
 import java.lang.reflect.Type;
@@ -19,7 +20,7 @@ import js.lang.NativeArray;
 /**
  * @version 2013/09/10 23:35:53
  */
-class Parameterizable extends JSAccessibleObject {
+class Parameterizable extends JSAccessibleObject implements GenericDeclaration {
 
     /** The cache for parameter {@link Class}. */
     private List<Class> parameters;
@@ -81,8 +82,8 @@ class Parameterizable extends JSAccessibleObject {
      */
     public final Type[] getGenericParameterTypes() {
         if (parameterTypes == null) {
-            parameterTypes = new Signature((String) metadata.get(1), owner).types;
-            metadata.deleteProperty(1);
+            parameterTypes = new Signature((String) metadata.get(2), owner).types;
+            metadata.deleteProperty(2);
         }
         return parameterTypes.toArray(new Type[parameterTypes.size()]);
     }
@@ -122,8 +123,8 @@ class Parameterizable extends JSAccessibleObject {
      */
     public final Type[] getGenericExceptionTypes() {
         if (exceptionTypes == null) {
-            exceptionTypes = new Signature((String) metadata.get(2), owner).types;
-            metadata.deleteProperty(2);
+            exceptionTypes = new Signature((String) metadata.get(3), owner).types;
+            metadata.deleteProperty(3);
         }
         return exceptionTypes.toArray(new Type[exceptionTypes.size()]);
     }

@@ -11,10 +11,12 @@ package js.lang.reflect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,9 @@ abstract class JSAnnotatedElement {
 
     /** The annotation definition in runtime. */
     protected final NativeObject annotations;
+
+    /** The cache for declaration {@link TypeVariable}. */
+    private List<Type> types;
 
     /**
      * <p>
@@ -85,6 +90,27 @@ abstract class JSAnnotatedElement {
      */
     public final int getModifiers() {
         return modifiers;
+    }
+
+    /**
+     * Returns an array of {@code TypeVariable} objects that represent the type variables declared
+     * by the generic declaration represented by this {@code GenericDeclaration} object, in
+     * declaration order. Returns an array of length 0 if the underlying generic declaration
+     * declares no type variables.
+     * 
+     * @return an array of {@code TypeVariable} objects that represent the type variables declared
+     *         by this generic declaration
+     * @throws java.lang.reflect.GenericSignatureFormatError if the generic signature of this
+     *             generic declaration does not conform to the format specified in <cite>The
+     *             Java&trade; Virtual Machine Specification</cite>
+     * @since 1.5
+     */
+    public final TypeVariable<Class>[] getTypeParameters() {
+        if (types == null) {
+            types = new Signature((String) metadata.get(1), (GenericDeclaration) this).types;
+            metadata.deleteProperty(1);
+        }
+        return types.toArray(new TypeVariable[types.size()]);
     }
 
     /**
