@@ -17,7 +17,6 @@ import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -62,9 +61,6 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
 
     /** The cache fo declaring type variables. */
     List<Type> interfacesType; // package private modifier for Proxy
-
-    /** The cache fo declaring type variables. */
-    private List<TypeVariable> parameters;
 
     /** The cache for enum constants. */
     private Map<String, Enum> enumerationConstants;
@@ -829,28 +825,6 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      */
     public Class<?> getComponentType() {
         return isArray() ? forName(nameJS.substring(1)) : null;
-    }
-
-    /**
-     * Returns an array of {@code TypeVariable} objects that represent the type variables declared
-     * by the generic declaration represented by this {@code GenericDeclaration} object, in
-     * declaration order. Returns an array of length 0 if the underlying generic declaration
-     * declares no type variables.
-     * 
-     * @return an array of {@code TypeVariable} objects that represent the type variables declared
-     *         by this generic declaration
-     * @throws java.lang.reflect.GenericSignatureFormatError if the generic signature of this
-     *             generic declaration does not conform to the format specified in <cite>The
-     *             Java&trade; Virtual Machine Specification</cite>
-     * @since 1.5
-     */
-    @Override
-    public TypeVariable<Class<T>>[] getTypeParameters() {
-        if (parameters == null) {
-            parameters = new Signature((String) metadata.get(1), this).types;
-            metadata.deleteProperty(1);
-        }
-        return parameters.toArray(new TypeVariable[parameters.size()]);
     }
 
     /**

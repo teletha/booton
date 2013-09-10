@@ -168,4 +168,24 @@ public class GenericMethodTest {
 
         abstract void method(T[] values);
     }
+
+    @Test
+    public void getTypeParameters() throws Exception {
+        Method method = Declaration.class.getDeclaredMethod("method", Object.class);
+        TypeVariable[] variables = method.getTypeParameters();
+        assert variables.length == 1;
+
+        TypeVariable variable = variables[0];
+        assert variable.getName().equals("T");
+        assert variable.getGenericDeclaration() == method;
+        assert variable.getBounds()[0] == Object.class;
+    }
+
+    /**
+     * @version 2013/09/11 8:29:24
+     */
+    private static abstract class Declaration {
+
+        abstract <T> T method(T value);
+    }
 }

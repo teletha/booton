@@ -44,7 +44,7 @@ class JSConstructor<T> extends Parameterizable {
      * @param metadata
      */
     JSConstructor(String name, Class owner, NativeObject clazz, NativeFunction function, NativeArray metadata) {
-        super(name, name, owner, metadata, 3);
+        super(name, name, owner, metadata, 4);
 
         this.clazz = clazz;
         this.function = function;

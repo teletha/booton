@@ -46,7 +46,7 @@ class JSMethod extends Parameterizable {
      * @param metadata
      */
     JSMethod(String nameJS, Class owner, NativeArray metadata) {
-        super((String) metadata.get(4), nameJS, owner, metadata, 5);
+        super((String) metadata.get(5), nameJS, owner, metadata, 6);
     }
 
     /**
@@ -111,8 +111,8 @@ class JSMethod extends Parameterizable {
      */
     public Type getGenericReturnType() {
         if (returnType == null) {
-            returnType = (Type) new Signature((String) metadata.get(3), owner).types.get(0);
-            metadata.deleteProperty(3);
+            returnType = (Type) new Signature((String) metadata.get(4), owner).types.get(0);
+            metadata.deleteProperty(4);
         }
         return returnType;
     }

@@ -320,6 +320,7 @@ class JavaMetadataCompiler {
         @Override
         protected void write() {
             code.append(method.getModifiers(), ",");
+            code.append(new JavaSignatureCompiler(method.getTypeParameters()), ",");
             code.append(new JavaSignatureCompiler(method.getGenericParameterTypes()), ",");
             code.append(new JavaSignatureCompiler(method.getGenericExceptionTypes()), ",");
             code.append(new JavaSignatureCompiler(method.getGenericReturnType()), ",").string(method.getName());
@@ -374,6 +375,7 @@ class JavaMetadataCompiler {
         @Override
         protected void write() {
             code.append(constructor.getModifiers()).append(",");
+            code.append(new JavaSignatureCompiler(constructor.getTypeParameters()), ",");
             code.append(new JavaSignatureCompiler(constructor.getGenericParameterTypes()), ",");
             code.append(new JavaSignatureCompiler(constructor.getGenericExceptionTypes()));
         }
