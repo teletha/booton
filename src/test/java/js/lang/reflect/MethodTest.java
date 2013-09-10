@@ -9,6 +9,7 @@
  */
 package js.lang.reflect;
 
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 
 import org.junit.Test;
@@ -17,7 +18,7 @@ import org.junit.runner.RunWith;
 import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/09/07 16:50:21
+ * @version 2013/09/10 23:57:01
  */
 @RunWith(ScriptRunner.class)
 public class MethodTest {
@@ -52,6 +53,21 @@ public class MethodTest {
         assert method.getDefaultValue() == null;
     }
 
+    @Test
+    public void getReturnType() throws Exception {
+        Method method = Methods.class.getMethod("publicMethod");
+        assert method.getReturnType() == String.class;
+
+        method = ExtendedMethods.class.getMethod("publicMethod");
+        assert method.getReturnType() == String.class;
+
+        method = ExtendedMethods.class.getMethod("protectedMethod");
+        assert method.getReturnType() == int.class;
+
+        method = ExtendedMethods.class.getMethod("extendedMethod");
+        assert method.getReturnType() == void.class;
+    }
+
     /**
      * @version 2013/09/03 15:04:55
      */
@@ -60,12 +76,12 @@ public class MethodTest {
         /**
          * 
          */
-        public native void publicMethod();
+        public native String publicMethod();
 
         /**
          * 
          */
-        private native void privateMethod(int value);
+        private native Number privateMethod(int value);
     }
 
     /**
@@ -80,7 +96,7 @@ public class MethodTest {
 
         /**
          */
-        public native void protectedMethod();
+        public native int protectedMethod();
     }
 
     /**
@@ -93,5 +109,35 @@ public class MethodTest {
         double doubleValue();
 
         String stringValue() default "default";
+    }
+
+    @Test
+    public void variableArgument() throws Exception {
+        Method method = VarArg.class.getDeclaredMethod("primitive", int[].class);
+        assert method.isVarArgs();
+        assert method.getParameterTypes()[0] == int[].class;
+
+        method = VarArg.class.getDeclaredMethod("string", String[].class);
+        assert method.isVarArgs();
+        assert method.getParameterTypes()[0] == String[].class;
+
+        method = VarArg.class.getDeclaredMethod("variable", Object[].class);
+        assert method.isVarArgs();
+        assert method.getParameterTypes()[0] == Object[].class;
+
+        GenericArrayType array = (GenericArrayType) method.getGenericParameterTypes()[0];
+        assert array.getGenericComponentType().equals(VarArg.class.getTypeParameters()[0]);
+    }
+
+    /**
+     * @version 2013/09/11 0:23:15
+     */
+    private static class VarArg<T> {
+
+        public native void primitive(int... values);
+
+        public native void string(String... values);
+
+        public native void variable(T... values);
     }
 }

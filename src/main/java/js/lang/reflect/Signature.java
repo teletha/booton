@@ -29,7 +29,7 @@ class Signature {
     private final GenericDeclaration declaration;
 
     /** The variable manager. */
-    private final Map<String, TypeVariableInfo> variables = new HashMap();
+    private final Map<String, Variable> variables = new HashMap();
 
     /** The variable declaring order. */
     final List types = new ArrayList();
@@ -47,12 +47,21 @@ class Signature {
         }
     }
 
+    /**
+     * <p>
+     * Parse generics expression.
+     * </p>
+     * 
+     * @param signature
+     * @param declaration
+     * @return
+     */
     private Type parseType(String signature, GenericDeclaration declaration) {
         for (int index = 0; index < signature.length(); index++) {
             char c = signature.charAt(index);
 
             if (c == ':') {
-                TypeVariableInfo variable = get(signature.substring(0, index));
+                Variable variable = get(signature.substring(0, index));
                 variable.parse(split(signature.substring(index + 1), '&'));
 
                 return variable;
@@ -63,26 +72,43 @@ class Signature {
             }
 
             if (c == '[') {
-                return new GenericArrayTypeInfo(signature.substring(1), declaration);
+                return new Array(signature.substring(1), declaration);
             }
 
             if (c == '<') {
-                return new ParameterizedTypeInfo(signature.substring(0, index), split(signature.substring(index + 1, signature.length() - 1), ','), declaration);
+                return new Parameterized(signature.substring(0, index), split(signature.substring(index + 1, signature.length() - 1), ','), declaration);
             }
         }
         return JSClass.forName(signature);
     }
 
-    private TypeVariableInfo get(String name) {
-        TypeVariableInfo variable = variables.get(name);
+    /**
+     * <p>
+     * Retrieve the named {@link TypeVariable} from cache.
+     * </p>
+     * 
+     * @param name
+     * @return
+     */
+    private Variable get(String name) {
+        Variable variable = variables.get(name);
 
         if (variable == null) {
-            variable = new TypeVariableInfo(name, declaration);
+            variable = new Variable(name, declaration);
             variables.put(name, variable);
         }
         return variable;
     }
 
+    /**
+     * <p>
+     * Split tokens.
+     * </p>
+     * 
+     * @param signature
+     * @param separator
+     * @return
+     */
     private String[] split(String signature, char separator) {
         int start = 0;
         int nest = 0;
@@ -115,15 +141,15 @@ class Signature {
      * @return
      */
     static Class convert(Type type) {
-        if (type instanceof TypeVariableInfo) {
-            return convert(((TypeVariableInfo) type).bounds[0]);
+        if (type instanceof Variable) {
+            return convert(((Variable) type).bounds[0]);
         }
 
-        if (type instanceof ParameterizedTypeInfo) {
+        if (type instanceof Parameterized) {
             return (Class) ((ParameterizedType) type).getRawType();
         }
 
-        if (type instanceof GenericArrayTypeInfo) {
+        if (type instanceof Array) {
             return (Class) (Object) ((JSClass) (Object) convert(((GenericArrayType) type).getGenericComponentType())).getArrayClass();
         }
         return (Class) type;
@@ -132,7 +158,7 @@ class Signature {
     /**
      * @version 2013/09/07 22:35:55
      */
-    private class TypeVariableInfo implements TypeVariable {
+    private class Variable implements TypeVariable {
 
         /** The variable name. */
         private final String name;
@@ -146,7 +172,7 @@ class Signature {
         /**
          * 
          */
-        private TypeVariableInfo(String name, GenericDeclaration declaration) {
+        private Variable(String name, GenericDeclaration declaration) {
             this.name = name;
             this.declaration = declaration;
         }
@@ -201,7 +227,7 @@ class Signature {
     /**
      * @version 2013/09/08 9:57:17
      */
-    private class ParameterizedTypeInfo implements ParameterizedType {
+    private class Parameterized implements ParameterizedType {
 
         /** The arugument types. */
         private final Type[] arguments;
@@ -217,7 +243,7 @@ class Signature {
          * @param raw
          * @param owner
          */
-        private ParameterizedTypeInfo(String raw, String[] parameters, GenericDeclaration declaration) {
+        private Parameterized(String raw, String[] parameters, GenericDeclaration declaration) {
             this.raw = JSClass.forName(raw);
             this.owner = null;
             this.arguments = new Type[parameters.length];
@@ -255,7 +281,7 @@ class Signature {
     /**
      * @version 2013/09/10 15:21:33
      */
-    private class GenericArrayTypeInfo implements GenericArrayType {
+    private class Array implements GenericArrayType {
 
         /** The component type. */
         private final Type component;
@@ -263,7 +289,7 @@ class Signature {
         /**
          * @param component
          */
-        private GenericArrayTypeInfo(String signature, GenericDeclaration declaration) {
+        private Array(String signature, GenericDeclaration declaration) {
             this.component = parseType(signature, declaration);
         }
 

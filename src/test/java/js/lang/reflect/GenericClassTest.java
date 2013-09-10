@@ -305,5 +305,4 @@ public class GenericClassTest {
      */
     private static class ArrayListWildcardType extends MultipleWildcardType<ArrayList> {
     }
-
 }

@@ -48,9 +48,6 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
     /** The metadata definition in runtime. */
     private final NativeObject definition;
 
-    /** The class metadata in runtime. */
-    private final NativeArray<?> metadata;
-
     /** The modifier value. */
     private final int modifiers;
 
@@ -106,38 +103,12 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @param definition A full metadata info for class, constructors, methods and fields.
      */
     protected JSClass(String nameJS, NativeObject prototype, NativeArray<?> metadata, Class superclass, NativeObject definition) {
-        super(nameJS, nameJS, (NativeObject) metadata.get(4));
+        super(nameJS, nameJS, metadata, (NativeObject) metadata.get(4));
 
         this.prototype = prototype;
         this.definition = definition;
-        this.metadata = metadata;
         this.modifiers = metadata.getAsInt(0, 0);
         this.superclass = superclass;
-    }
-
-    /**
-     * Returns the Java language modifiers for this class or interface, encoded in an integer. The
-     * modifiers consist of the Java Virtual Machine's constants for {@code public},
-     * {@code protected}, {@code private}, {@code final}, {@code static}, {@code abstract} and
-     * {@code interface}; they should be decoded using the methods of class {@code Modifier}.
-     * <p>
-     * If the underlying class is an array class, then its {@code public}, {@code private} and
-     * {@code protected} modifiers are the same as those of its component type. If this
-     * {@code Class} represents a primitive type or void, its {@code public} modifier is always
-     * {@code true}, and its {@code protected} and {@code private} modifiers are always
-     * {@code false}. If this object represents an array class, a primitive type or void, then its
-     * {@code final} modifier is always {@code true} and its interface modifier is always
-     * {@code false}. The values of its other modifiers are not determined by this specification.
-     * <p>
-     * The modifier encodings are defined in <em>The Java Virtual Machine
-     * Specification</em>, table 4.1.
-     * 
-     * @return the {@code int} representing the modifiers for this class
-     * @see java.lang.reflect.Modifier
-     * @since JDK1.1
-     */
-    public int getModifiers() {
-        return modifiers;
     }
 
     /**
@@ -634,7 +605,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
                 char ch = name.charAt(0);
 
                 if ('a' <= ch && ch <= 'p') {
-                    Field field = (Field) (Object) new JSField(name, (Class) (Object) this, prototype, definition.getPropertyAs(NativeArray.class, name));
+                    Field field = (Field) (Object) new JSField(name, (Class) (Object) this, definition.getPropertyAs(NativeArray.class, name));
                     privateFields.put(field.getName(), field);
                 }
             }

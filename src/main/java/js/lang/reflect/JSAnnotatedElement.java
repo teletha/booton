@@ -18,12 +18,13 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/09/07 21:27:17
+ * @version 2013/09/10 23:43:34
  */
 @JavaAPIProvider(AnnotatedElement.class)
 abstract class JSAnnotatedElement {
@@ -33,6 +34,12 @@ abstract class JSAnnotatedElement {
 
     /** The property name at JavaScript runtime. */
     protected final String nameJS;
+
+    /** The modifier value. */
+    protected final int modifiers;
+
+    /** The metadata definition in runtime. */
+    protected final NativeArray<?> metadata;
 
     /** The annotation definition in runtime. */
     protected final NativeObject annotations;
@@ -44,12 +51,40 @@ abstract class JSAnnotatedElement {
      * 
      * @param name The property name at Java definition.
      * @param nameJS The property name at JavaScript runtime.
+     * @param metadata A metadata difinition.
      * @param annotations
      */
-    protected JSAnnotatedElement(String name, String nameJS, NativeObject annotations) {
+    protected JSAnnotatedElement(String name, String nameJS, NativeArray metadata, NativeObject annotations) {
         this.name = name;
         this.nameJS = nameJS;
+        this.metadata = metadata;
         this.annotations = annotations;
+        this.modifiers = metadata.getAsInt(0);
+    }
+
+    /**
+     * Returns the Java language modifiers for this class or interface, encoded in an integer. The
+     * modifiers consist of the Java Virtual Machine's constants for {@code public},
+     * {@code protected}, {@code private}, {@code final}, {@code static}, {@code abstract} and
+     * {@code interface}; they should be decoded using the methods of class {@code Modifier}.
+     * <p>
+     * If the underlying class is an array class, then its {@code public}, {@code private} and
+     * {@code protected} modifiers are the same as those of its component type. If this
+     * {@code Class} represents a primitive type or void, its {@code public} modifier is always
+     * {@code true}, and its {@code protected} and {@code private} modifiers are always
+     * {@code false}. If this object represents an array class, a primitive type or void, then its
+     * {@code final} modifier is always {@code true} and its interface modifier is always
+     * {@code false}. The values of its other modifiers are not determined by this specification.
+     * <p>
+     * The modifier encodings are defined in <em>The Java Virtual Machine
+     * Specification</em>, table 4.1.
+     * 
+     * @return the {@code int} representing the modifiers for this class
+     * @see java.lang.reflect.Modifier
+     * @since JDK1.1
+     */
+    public final int getModifiers() {
+        return modifiers;
     }
 
     /**
@@ -62,7 +97,7 @@ abstract class JSAnnotatedElement {
      * @return True if an annotation for the specified annotation type is present on this element, .
      *         else false.
      */
-    public <A extends Annotation> boolean isAnnotationPresent(Class<A> annotationClass) {
+    public final <A extends Annotation> boolean isAnnotationPresent(Class<A> annotationClass) {
         return annotations.hasOwnProperty(annotationClass.getSimpleName());
     }
 
@@ -76,7 +111,7 @@ abstract class JSAnnotatedElement {
      * @return This element's annotation for the specified annotation type if present on this
      *         element, else null.
      */
-    public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
+    public final <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
         if (annotations != null) {
             String name = annotationClass.getSimpleName();
 
@@ -104,7 +139,7 @@ abstract class JSAnnotatedElement {
      * 
      * @return All annotations present on this element.
      */
-    public Annotation[] getAnnotations() {
+    public final Annotation[] getAnnotations() {
         return null;
     }
 
@@ -119,7 +154,7 @@ abstract class JSAnnotatedElement {
      * 
      * @return All annotations directly present on this element.
      */
-    public Annotation[] getDeclaredAnnotations() {
+    public final Annotation[] getDeclaredAnnotations() {
         return getAnnotations();
     }
 

@@ -211,20 +211,6 @@ class JavaMetadataCompiler {
         return code.toString();
     }
 
-    private static String convert(Class[] types) {
-        StringBuilder builder = new StringBuilder("[");
-
-        for (int i = 0; i < types.length; i++) {
-            builder.append('"').append(Javascript.computeSimpleClassName(types[i])).append('"');
-
-            if (i + 1 != types.length) {
-                builder.append(",");
-            }
-        }
-        builder.append("]");
-        return builder.toString();
-    }
-
     /**
      * <p>
      * Compile metadata.
@@ -308,7 +294,7 @@ class JavaMetadataCompiler {
             }
 
             // code.append(modifier);
-            code.append(modifier, ",", new JavaSignatureCompiler(clazz.getTypeParameters(), " "), ",", new JavaSignatureCompiler(clazz.getGenericSuperclass()), ",", new JavaSignatureCompiler(clazz.getGenericInterfaces(), " "));
+            code.append(modifier, ",", new JavaSignatureCompiler(clazz.getTypeParameters()), ",", new JavaSignatureCompiler(clazz.getGenericSuperclass()), ",", new JavaSignatureCompiler(clazz.getGenericInterfaces()));
         }
     }
 
@@ -333,10 +319,10 @@ class JavaMetadataCompiler {
          */
         @Override
         protected void write() {
-            code.append(method.getModifiers(), ",\"", method.getName(), "\",");
-            code.append(new JavaSignatureCompiler(method.getGenericReturnType()), ",");
-            code.append(new JavaSignatureCompiler(method.getGenericParameterTypes(), " "), ",");
-            code.append(new JavaSignatureCompiler(method.getGenericExceptionTypes(), " "));
+            code.append(method.getModifiers(), ",");
+            code.append(new JavaSignatureCompiler(method.getGenericParameterTypes()), ",");
+            code.append(new JavaSignatureCompiler(method.getGenericExceptionTypes()), ",");
+            code.append(new JavaSignatureCompiler(method.getGenericReturnType()), ",").string(method.getName());
         }
     }
 
@@ -362,8 +348,7 @@ class JavaMetadataCompiler {
          */
         @Override
         protected void write() {
-            code.append(field.getModifiers(), ",\"", field.getName(), "\",")
-                    .string(Javascript.computeSimpleClassName(field.getType()));
+            code.append(field.getModifiers(), ",\"", field.getName(), "\",", new JavaSignatureCompiler(field.getGenericType()));
         }
     }
 
@@ -389,8 +374,8 @@ class JavaMetadataCompiler {
         @Override
         protected void write() {
             code.append(constructor.getModifiers()).append(",");
-            code.append(new JavaSignatureCompiler(constructor.getGenericParameterTypes(), " "), ",");
-            code.append(new JavaSignatureCompiler(constructor.getGenericExceptionTypes(), " "));
+            code.append(new JavaSignatureCompiler(constructor.getGenericParameterTypes()), ",");
+            code.append(new JavaSignatureCompiler(constructor.getGenericExceptionTypes()));
         }
     }
 }
