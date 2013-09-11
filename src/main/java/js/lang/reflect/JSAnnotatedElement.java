@@ -63,7 +63,7 @@ abstract class JSAnnotatedElement {
         this.name = name;
         this.nameJS = nameJS;
         this.metadata = metadata;
-        this.annotations = annotations;
+        this.annotations = annotations.getProperty("$", new NativeObject());
         this.modifiers = metadata.getAsInt(0);
     }
 
