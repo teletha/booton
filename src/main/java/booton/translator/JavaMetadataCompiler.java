@@ -82,49 +82,13 @@ class JavaMetadataCompiler {
         for (int i = 0; i < elements.size(); i++) {
             Metadata metadata = elements.get(i);
             code.append(metadata.name, ":", "[");
-
-            metadata.write();
+            metadata.writeMetadata();
             code.append(",", "{");
-
-            for (int j = 0; j < metadata.annotations.size(); j++) {
-                compileAnnotation2(metadata.annotations.get(j));
-
-                if (j + 1 != metadata.annotations.size()) {
-                    code.separator();
-                }
-            }
+            metadata.writeAnnotation();
             code.append("}]");
 
             if (i < elements.size() - 1) {
                 code.separator();
-            }
-        }
-        code.append("}");
-    }
-
-    /**
-     * <p>
-     * Compile annotation to javascript.
-     * </p>
-     */
-    private void compileAnnotation2(Annotation annotation) {
-        Class type = annotation.annotationType();
-        code.append(Javascript.computeSimpleClassName(type), ":", "{");
-
-        // collect annotation methods and compile to javascript expression
-        Method[] methods = type.getDeclaredMethods();
-
-        for (int i = 0; i < methods.length; i++) {
-            try {
-                // code.append(Javascript.computeMethodName(methods[i]), ":",
-                // compileValue(methods[i].invoke(annotation)));
-                write(Javascript.computeMethodName(methods[i]), compileValue(methods[i].invoke(annotation)));
-
-                if (i + 1 != methods.length) {
-                    code.separator();
-                }
-            } catch (Exception e) {
-                throw I.quiet(e);
             }
         }
         code.append("}");
@@ -255,7 +219,62 @@ class JavaMetadataCompiler {
         /**
          * 
          */
-        protected abstract void write();
+        protected abstract void writeMetadata();
+
+        /**
+         * 
+         */
+        protected void writeAnnotation() {
+            writeAnnotation("$", annotations.toArray(new Annotation[annotations.size()]));
+        }
+
+        /**
+         * <p>
+         * Write annotations.
+         * </p>
+         * 
+         * @param name
+         * @param annotations
+         */
+        protected void writeAnnotation(String name, Annotation[] annotations) {
+            code.append(name, ":{");
+            for (int i = 0; i < annotations.length; i++) {
+                compileAnnotation(annotations[i]);
+
+                if (i + 1 != annotations.length) {
+                    code.separator();
+                }
+            }
+            code.append("}");
+        }
+
+        /**
+         * <p>
+         * Compile annotation to javascript.
+         * </p>
+         */
+        private void compileAnnotation(Annotation annotation) {
+            Class type = annotation.annotationType();
+            code.append(Javascript.computeSimpleClassName(type), ":", "{");
+
+            // collect annotation methods and compile to javascript expression
+            Method[] methods = type.getDeclaredMethods();
+
+            for (int i = 0; i < methods.length; i++) {
+                try {
+                    // code.append(Javascript.computeMethodName(methods[i]), ":",
+                    // compileValue(methods[i].invoke(annotation)));
+                    write(Javascript.computeMethodName(methods[i]), compileValue(methods[i].invoke(annotation)));
+
+                    if (i + 1 != methods.length) {
+                        code.separator();
+                    }
+                } catch (Exception e) {
+                    throw I.quiet(e);
+                }
+            }
+            code.append("}");
+        }
     }
 
     /**
@@ -278,7 +297,7 @@ class JavaMetadataCompiler {
          * {@inheritDoc}
          */
         @Override
-        protected void write() {
+        protected void writeMetadata() {
             int modifier = clazz.getModifiers();
 
             if (clazz.isMemberClass()) {
@@ -318,7 +337,7 @@ class JavaMetadataCompiler {
          * {@inheritDoc}
          */
         @Override
-        protected void write() {
+        protected void writeMetadata() {
             code.append(method.getModifiers(), ",");
             code.append(new JavaSignatureCompiler(method.getTypeParameters()), ",");
             code.append(new JavaSignatureCompiler(method.getGenericParameterTypes()), ",");
@@ -348,7 +367,7 @@ class JavaMetadataCompiler {
          * {@inheritDoc}
          */
         @Override
-        protected void write() {
+        protected void writeMetadata() {
             code.append(field.getModifiers(), ",\"", field.getName(), "\",", new JavaSignatureCompiler(field.getGenericType()));
         }
     }
@@ -373,7 +392,7 @@ class JavaMetadataCompiler {
          * {@inheritDoc}
          */
         @Override
-        protected void write() {
+        protected void writeMetadata() {
             code.append(constructor.getModifiers()).append(",");
             code.append(new JavaSignatureCompiler(constructor.getTypeParameters()), ",");
             code.append(new JavaSignatureCompiler(constructor.getGenericParameterTypes()), ",");

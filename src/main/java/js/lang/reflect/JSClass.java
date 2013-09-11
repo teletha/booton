@@ -99,7 +99,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @param definition A full metadata info for class, constructors, methods and fields.
      */
     protected JSClass(String nameJS, NativeObject prototype, NativeArray<?> metadata, Class superclass, NativeObject definition) {
-        super(nameJS, nameJS, metadata, (NativeObject) metadata.get(4));
+        super(nameJS, nameJS, metadata, metadata.get(4, new NativeObject()));
 
         this.prototype = prototype;
         this.definition = definition;
