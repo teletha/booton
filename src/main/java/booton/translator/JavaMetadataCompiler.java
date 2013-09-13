@@ -344,6 +344,15 @@ class JavaMetadataCompiler {
             code.append(new JavaSignatureCompiler(method.getGenericExceptionTypes()), ",");
             code.append(new JavaSignatureCompiler(method.getGenericReturnType()), ",").string(method.getName());
         }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void writeAnnotation() {
+            super.writeAnnotation();
+        }
+
     }
 
     /**

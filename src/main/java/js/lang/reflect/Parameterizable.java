@@ -16,11 +16,15 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import js.lang.NativeArray;
+import js.lang.NativeObject;
 
 /**
  * @version 2013/09/10 23:35:53
  */
 class Parameterizable extends JSAccessibleObject implements GenericDeclaration {
+
+    /** The annotation definition for parameters. */
+    protected NativeObject parameterAnnotatons;
 
     /** The cache for parameter {@link Class}. */
     private List<Class> parameters;
@@ -43,6 +47,10 @@ class Parameterizable extends JSAccessibleObject implements GenericDeclaration {
      */
     public Parameterizable(String name, String nameJS, Class owner, NativeArray metadata, int indexForAnnotation) {
         super(name, nameJS, owner, metadata, indexForAnnotation);
+
+        NativeObject object = (NativeObject) metadata.get(indexForAnnotation);
+        object.deleteProperty("$");
+        parameterAnnotatons = object;
     }
 
     /**
