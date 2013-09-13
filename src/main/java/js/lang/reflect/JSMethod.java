@@ -9,6 +9,7 @@
  */
 package js.lang.reflect;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.GenericSignatureFormatError;
 import java.lang.reflect.MalformedParameterizedTypeException;
 import java.lang.reflect.Method;
@@ -115,6 +116,25 @@ class JSMethod extends Parameterizable {
             metadata.deleteProperty(4);
         }
         return returnType;
+    }
+
+    /**
+     * Returns an array of arrays that represent the annotations on the formal parameters, in
+     * declaration order, of the method represented by this {@code Method} object. (Returns an array
+     * of length zero if the underlying method is parameterless. If the method has one or more
+     * parameters, a nested array of length zero is returned for each parameter with no
+     * annotations.) The annotation objects contained in the returned arrays are serializable. The
+     * caller of this method is free to modify the returned arrays; it will have no effect on the
+     * arrays returned to other callers.
+     * 
+     * @return an array of arrays that represent the annotations on the formal parameters, in
+     *         declaration order, of the method represented by this Method object
+     * @since 1.5
+     */
+    public Annotation[][] getParameterAnnotations() {
+        int size = getParameterTypes().length;
+
+        return null;
     }
 
     /**
