@@ -16,8 +16,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import kiss.I;
@@ -92,41 +94,6 @@ class JavaMetadataCompiler {
             }
         }
         code.append("}");
-    }
-
-    /**
-     * <p>
-     * Compile annotation to javascript.
-     * </p>
-     */
-    private void compileAnnotation(Annotation annotation) {
-        Class type = annotation.annotationType();
-        code.append("{");
-        write(Javascript.computeMethodName(annotationType), Javascript.computeClass(type));
-
-        // collect annotation methods and compile to javascript expression
-        Method[] methods = type.getDeclaredMethods();
-
-        for (int i = 0; i < methods.length; i++) {
-            code.separator();
-
-            try {
-                Method method = methods[i];
-                write(Javascript.computeMethodName(method), compileValue(method.invoke(annotation)));
-            } catch (Exception e) {
-                throw I.quiet(e);
-            }
-        }
-        code.append("}");
-    }
-
-    /**
-     * <p>
-     * Helper method to write annotation property.
-     * </p>
-     */
-    private void write(String name, String value) {
-        code.write(name, ":", "function() {return ", value, ";}");
     }
 
     /**
@@ -255,25 +222,19 @@ class JavaMetadataCompiler {
          */
         private void compileAnnotation(Annotation annotation) {
             Class type = annotation.annotationType();
-            code.append(Javascript.computeSimpleClassName(type), ":", "{");
+            code.append(Javascript.computeSimpleClassName(type), ":");
 
             // collect annotation methods and compile to javascript expression
-            Method[] methods = type.getDeclaredMethods();
+            Map<String, String> values = new HashMap();
 
-            for (int i = 0; i < methods.length; i++) {
+            for (Method method : type.getDeclaredMethods()) {
                 try {
-                    // code.append(Javascript.computeMethodName(methods[i]), ":",
-                    // compileValue(methods[i].invoke(annotation)));
-                    write(Javascript.computeMethodName(methods[i]), compileValue(methods[i].invoke(annotation)));
-
-                    if (i + 1 != methods.length) {
-                        code.separator();
-                    }
+                    values.put(Javascript.computeMethodName(method), "function() {return " + compileValue(method.invoke(annotation)) + ";}");
                 } catch (Exception e) {
                     throw I.quiet(e);
                 }
             }
-            code.append("}");
+            code.write(values);
         }
     }
 
