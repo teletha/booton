@@ -9,6 +9,11 @@
  */
 package booton.translator;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import kiss.I;
 
 import org.objectweb.asm.Type;
@@ -247,44 +252,76 @@ class ScriptWriter {
      * @return
      */
     private ScriptWriter write(Object fragment, boolean line) {
-        String value = fragment.toString();
-        int length = value.length();
+        if (fragment instanceof Map) {
+            write("{");
+            Iterator<Entry> iterator = ((Map) fragment).entrySet().iterator();
 
-        // brace makes indentation
-        if (length != 0 && value.charAt(0) == '}') {
-            int last = buffer.length() - 1;
-            int lastNonSpace = last;
+            if (iterator.hasNext()) {
+                Entry entry = iterator.next();
+                write(entry.getKey(), ":", entry.getValue());
 
-            while (Character.isWhitespace(buffer.charAt(lastNonSpace))) {
-                lastNonSpace--;
+                while (iterator.hasNext()) {
+                    separator();
+
+                    entry = iterator.next();
+                    write(entry.getKey(), ":", entry.getValue());
+                }
+            }
+            write("}");
+        } else if (fragment instanceof List) {
+            write("[");
+
+            Iterator<Entry> iterator = ((List) fragment).iterator();
+
+            if (iterator.hasNext()) {
+                write(iterator.next());
+
+                while (iterator.hasNext()) {
+                    write(",", iterator.next());
+                }
+            }
+            write("]");
+        } else {
+
+            String value = fragment.toString();
+            int length = value.length();
+
+            // brace makes indentation
+            if (length != 0 && value.charAt(0) == '}') {
+                int last = buffer.length() - 1;
+                int lastNonSpace = last;
+
+                while (Character.isWhitespace(buffer.charAt(lastNonSpace))) {
+                    lastNonSpace--;
+                }
+
+                if (last == lastNonSpace) {
+                    endIndent();
+                } else if (buffer.charAt(lastNonSpace) == '{') {
+                    buffer.delete(lastNonSpace + 1, last + 1);
+                    depth--;
+                } else {
+                    buffer.deleteCharAt(last);
+                    depth--;
+                }
             }
 
-            if (last == lastNonSpace) {
-                endIndent();
-            } else if (buffer.charAt(lastNonSpace) == '{') {
-                buffer.delete(lastNonSpace + 1, last + 1);
-                depth--;
-            } else {
-                buffer.deleteCharAt(last);
-                depth--;
-            }
-        }
+            // write actual code
+            buffer.append(value);
 
-        // write actual code
-        buffer.append(value);
+            // brace makes indentation
+            if (length != 0) {
+                char last = value.charAt(length - 1);
 
-        // brace makes indentation
-        if (length != 0) {
-            char last = value.charAt(length - 1);
+                switch (last) {
+                case '{':
+                    startIndent();
+                    break;
 
-            switch (last) {
-            case '{':
-                startIndent();
-                break;
-
-            case ';':
-                if (line) line();
-                break;
+                case ';':
+                    if (line) line();
+                    break;
+                }
             }
         }
 
