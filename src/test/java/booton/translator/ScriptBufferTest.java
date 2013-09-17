@@ -35,4 +35,14 @@ public class ScriptBufferTest {
         buffer.optimize();
         assert buffer.toString().length() == 0;
     }
+
+    @Test
+    public void end() throws Exception {
+        ScriptWriter writer = new ScriptWriter();
+        writer.append("a , ");
+        assert writer.toString().length() == 4;
+
+        writer.append("}");
+        assert writer.toString().length() == 2;
+    }
 }

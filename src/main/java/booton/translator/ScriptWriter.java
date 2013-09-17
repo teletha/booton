@@ -236,6 +236,23 @@ class ScriptWriter {
     }
 
     /**
+     * <p>
+     * Remove tailing whitespaces and separator.
+     * </p>
+     * 
+     * @return A last position.
+     */
+    private int removeSeparator() {
+        int last = removeWhitespaces();
+
+        if (buffer.charAt(last) == ',') {
+            buffer.deleteCharAt(last);
+            last = removeWhitespaces();
+        }
+        return last;
+    }
+
+    /**
      * Helper method to write script source.
      * 
      * @param fragment
@@ -285,6 +302,15 @@ class ScriptWriter {
 
             String value = fragment.toString();
             int length = value.length();
+
+            if (length != 0) {
+                switch (value.charAt(0)) {
+                case '}':
+                case ']':
+                    remove(",");
+                    break;
+                }
+            }
 
             // brace makes indentation
             if (length != 0 && value.charAt(0) == '}') {
