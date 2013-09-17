@@ -16,10 +16,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import kiss.I;
@@ -44,6 +42,7 @@ class JavaMetadataCompiler {
             ignorables.add(JavaAPIProvider.class);
             ignorables.add(JavascriptAPIProvider.class);
             ignorables.add(RunWith.class);
+            ignorables.add(Override.class);
         } catch (Exception e) {
             throw I.quiet(e);
         }
@@ -87,11 +86,7 @@ class JavaMetadataCompiler {
             metadata.writeMetadata();
             code.append(",", "{");
             metadata.writeAnnotation();
-            code.append("}]");
-
-            if (i < elements.size() - 1) {
-                code.separator();
-            }
+            code.append("}]").separator();
         }
         code.append("}");
     }
@@ -207,10 +202,7 @@ class JavaMetadataCompiler {
             code.append(name, ":{");
             for (int i = 0; i < annotations.length; i++) {
                 compileAnnotation(annotations[i]);
-
-                if (i + 1 != annotations.length) {
-                    code.separator();
-                }
+                code.separator();
             }
             code.append("}");
         }
@@ -222,19 +214,18 @@ class JavaMetadataCompiler {
          */
         private void compileAnnotation(Annotation annotation) {
             Class type = annotation.annotationType();
-            code.append(Javascript.computeSimpleClassName(type), ":");
+            code.append(Javascript.computeSimpleClassName(type), ":", "{");
 
             // collect annotation methods and compile to javascript expression
-            Map<String, String> values = new HashMap();
-
             for (Method method : type.getDeclaredMethods()) {
                 try {
-                    values.put(Javascript.computeMethodName(method), "function() {return " + compileValue(method.invoke(annotation)) + ";}");
+                    code.append(Javascript.computeMethodName(method), ":", "function() {return " + compileValue(method.invoke(annotation)) + ";}")
+                            .separator();
                 } catch (Exception e) {
                     throw I.quiet(e);
                 }
             }
-            code.write(values);
+            code.append("}");
         }
     }
 
