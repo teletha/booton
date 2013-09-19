@@ -303,8 +303,14 @@ class JavaMetadataCompiler {
         @Override
         protected void writeAnnotation() {
             super.writeAnnotation();
-        }
 
+            Annotation[][] set = method.getParameterAnnotations();
+
+            for (int i = 0; i < set.length; i++) {
+                code.separator();
+                writeAnnotation(String.valueOf(i), set[i]);
+            }
+        }
     }
 
     /**
