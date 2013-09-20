@@ -1580,7 +1580,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 code = current.remove(0) + " instanceof Object";
             } else if (clazz == String.class) {
                 code = "boot.isString(" + current.remove(0) + ")";
-            } else if (clazz.isInterface()) {
+            } else if (clazz.isInterface() || clazz.isArray()) {
                 code = Javascript.writeMethodCode(Class.class, "isInstance", Javascript.computeClass(clazz), Object.class, current.remove(0));
             } else {
                 code = current.remove(0) + " instanceof " + Javascript.computeClassName(clazz);

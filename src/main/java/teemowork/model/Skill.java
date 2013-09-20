@@ -2590,6 +2590,9 @@ public class Skill extends Describable<SkillDescriptor> {
         LeagueOfDraven.update(P309)
                 .passive("Spinning Axeをキャッチするか、ミニオンかモンスターを倒すと、スタックを得る。敵Championを倒すと、スタックの半分を消費して{1}を得る。死亡時にスタックを半分失う。")
                 .variable(1, Gold, 0, 0, amplify(ConsumedStack, 3));
+        LeagueOfDraven.update(P311)
+                .passive("Spinning Axeをキャッチするか、ミニオンかモンスターを倒すと、スタックを得る。敵Championを倒すと、スタックを消費して{1}を得る。死亡時にスタックを半分失う。")
+                .variable(1, Gold, 50, 0, amplify(ConsumedStack, 2));
         SpinningAxe.update()
                 .active("次に行う通常攻撃に追加{1}が付与される。このスキルによる通常攻撃が敵ユニットに命中すると、斧がDravenの近くに跳ね返る。その斧をキャッチするとBlood RushのCDが解消され、更に次の通常攻撃もSpinning Axeの効果を受けるようになる。このスキルは連続で使用する事で最大2回分までチャージできる。")
                 .variable(1, PhysicalDamage, 0, 0, amplify(AD, 0.45, 0.1))
@@ -2901,6 +2904,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(100, 50)
                 .cd(170, -20)
                 .type(SkillType.Channel);
+        IdolOfDurand.update(P311).cd(150, -15).mana(100);
 
         /** Gangplank */
         GrogSoakedBlade.update()
