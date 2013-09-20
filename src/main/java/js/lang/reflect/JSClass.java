@@ -742,6 +742,9 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @return True if {@code instance} is an instance of this class.
      */
     public boolean isInstance(Object instance) {
+        if (instance == null) {
+            return false;
+        }
         return isAssignableFrom(instance.getClass());
     }
 

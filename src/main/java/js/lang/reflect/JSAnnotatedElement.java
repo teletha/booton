@@ -18,7 +18,9 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
@@ -48,6 +50,8 @@ abstract class JSAnnotatedElement {
 
     /** The cache for declaration {@link TypeVariable}. */
     private List<Type> types;
+
+    private Map<Class, Annotation> annotationList;
 
     /**
      * <p>
@@ -138,12 +142,17 @@ abstract class JSAnnotatedElement {
      *         element, else null.
      */
     public final <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
+        // if (annotationList == null) {
+        // getAnnotations();
+        // }
+        // return annotationList.get(annotationClass);
+
         if (annotations != null) {
             String name = annotationClass.getSimpleName();
 
             if (annotations.hasOwnProperty(name)) {
                 Object value = annotations.getProperty(name);
-
+                System.out.println("@ " + name);
                 if (!(value instanceof Annotation)) {
                     value = Proxy.newProxyInstance(null, new Class[] {annotationClass}, new AnnotationProxy(annotationClass, value));
 
@@ -166,7 +175,16 @@ abstract class JSAnnotatedElement {
      * @return All annotations present on this element.
      */
     public final Annotation[] getAnnotations() {
-        return null;
+        if (annotationList == null) {
+            annotationList = new HashMap();
+
+            for (String name : annotations.keys()) {
+                Class type = JSClass.forName(name);
+                System.out.println(name);
+                annotationList.put(type, (Annotation) Proxy.newProxyInstance(null, new Class[] {type}, new AnnotationProxy(type, annotations.getProperty(name))));
+            }
+        }
+        return annotationList.values().toArray(new Annotation[annotationList.size()]);
     }
 
     /**

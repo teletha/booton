@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import booton.translator.ScriptRunner;
 import booton.translator.annotation.NotReferenced;
 import booton.translator.annotation.PrimitiveMarker;
+import booton.translator.annotation.StringMarker;
 
 /**
  * @version 2013/09/03 0:32:13
@@ -50,10 +51,19 @@ public class ClassAnnotationTest {
         assert annotation == null;
     }
 
+    @Test
+    public void getAnnotations() throws Exception {
+        Annotation[] annotations = Annotated.class.getAnnotations();
+        assert annotations instanceof Annotation[];
+        assert annotations.length == 2;
+        assert annotations[0] instanceof StringMarker;
+    }
+
     /**
      * @version 2013/01/17 9:50:08
      */
     @PrimitiveMarker(intValue = 5)
+    @StringMarker("value")
     private static class Annotated {
     }
 }
