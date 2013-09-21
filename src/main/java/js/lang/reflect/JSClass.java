@@ -11,6 +11,8 @@ package js.lang.reflect;
 
 import static js.lang.Global.*;
 
+import java.lang.annotation.Annotation;
+import java.lang.annotation.Inherited;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericDeclaration;
@@ -86,6 +88,9 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
     /** The cache for declared fields. */
     private Map<String, Field> privateFields;
 
+    /** The cache for inherited {@link Annotation}. */
+    private Map<Class, Annotation> publicAnnotations;
+
     /**
      * <p>
      * Create native class.
@@ -105,6 +110,57 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         this.definition = definition;
         this.modifiers = metadata.getAsInt(0, 0);
         this.superclass = superclass;
+    }
+
+    /**
+     * <p>
+     * Returns this element's annotation for the specified type if such an annotation is present,
+     * else null.
+     * </p>
+     * 
+     * @param annotationClass The Class object corresponding to the annotation type.
+     * @return This element's annotation for the specified annotation type if present on this
+     *         element, else null.
+     */
+    public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
+        Objects.requireNonNull(annotationClass);
+
+        if (publicAnnotations == null) {
+            getAnnotations();
+        }
+        return (A) publicAnnotations.get(annotationClass);
+    }
+
+    /**
+     * <p>
+     * Returns all annotations present on this element. (Returns an array of length zero if this
+     * element has no annotations.) The caller of this method is free to modify the returned array;
+     * it will have no effect on the arrays returned to other callers.
+     * </p>
+     * 
+     * @return All annotations present on this element.
+     */
+    public Annotation[] getAnnotations() {
+        if (publicAnnotations == null) {
+            publicAnnotations = new HashMap();
+
+            Class parent = getSuperclass();
+
+            if (parent != null) {
+                for (Annotation annotation : parent.getAnnotations()) {
+                    Class type = annotation.annotationType();
+
+                    if (type.isAnnotationPresent(Inherited.class)) {
+                        publicAnnotations.put(type, annotation);
+                    }
+                }
+            }
+
+            for (Annotation annotation : getDeclaredAnnotations()) {
+                publicAnnotations.put(annotation.annotationType(), annotation);
+            }
+        }
+        return publicAnnotations.values().toArray(new Annotation[publicAnnotations.size()]);
     }
 
     /**

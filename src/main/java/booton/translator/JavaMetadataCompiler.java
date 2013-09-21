@@ -167,7 +167,7 @@ class JavaMetadataCompiler {
         private Metadata(String name, AnnotatedElement element) {
             this.name = name;
 
-            for (Annotation annotation : element.getAnnotations()) {
+            for (Annotation annotation : element.getDeclaredAnnotations()) {
                 Class type = annotation.annotationType();
 
                 if (!ignorables.contains(type)) {
