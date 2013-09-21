@@ -10,9 +10,9 @@
 package js.lang.annotation;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -27,10 +27,33 @@ import booton.translator.annotation.StringMarker;
 public class ParameterAnnotationTest {
 
     @Test
-    @Ignore
     public void method() throws Exception {
         Method method = Annotated.class.getMethod("method", int.class, int.class, String.class);
         Annotation[][] annotations = method.getParameterAnnotations();
+        assert annotations.length == 3;
+
+        Annotation[] set = annotations[0];
+        assert set.length == 1;
+        assert set[0] instanceof PrimitiveMarker;
+
+        PrimitiveMarker primitive = (PrimitiveMarker) set[0];
+        assert primitive.intValue() == 2;
+
+        set = annotations[1];
+        assert set.length == 1;
+        assert set[0] instanceof StringMarker;
+
+        StringMarker string = (StringMarker) set[0];
+        assert string.value().equals("string");
+
+        set = annotations[2];
+        assert set.length == 0;
+    }
+
+    @Test
+    public void constructor() throws Exception {
+        Constructor constructor = Annotated.class.getConstructor(int.class, int.class, String.class);
+        Annotation[][] annotations = constructor.getParameterAnnotations();
         assert annotations.length == 3;
 
         Annotation[] set = annotations[0];
@@ -55,6 +78,9 @@ public class ParameterAnnotationTest {
      * @version 2013/09/13 16:17:19
      */
     private static class Annotated {
+
+        public Annotated(@PrimitiveMarker(intValue = 2) int first, @StringMarker("string") int second, String none) {
+        }
 
         public void method(@PrimitiveMarker(intValue = 2) int first, @StringMarker("string") int second, String none) {
         }

@@ -50,7 +50,7 @@ abstract class JSAnnotatedElement {
     protected final NativeObject annotations;
 
     /** The cache for declared {@link Annotation}. */
-    private Map<Class, Annotation> annotationDeclared;
+    private Map<Class, Annotation> privateAnnotations;
 
     /** The cache for declaration {@link TypeVariable}. */
     private List<Type> types;
@@ -146,10 +146,10 @@ abstract class JSAnnotatedElement {
     public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
         Objects.requireNonNull(annotationClass);
 
-        if (annotationDeclared == null) {
+        if (privateAnnotations == null) {
             getDeclaredAnnotations();
         }
-        return (A) annotationDeclared.get(annotationClass);
+        return (A) privateAnnotations.get(annotationClass);
     }
 
     /**
@@ -177,16 +177,16 @@ abstract class JSAnnotatedElement {
      * @return All annotations directly present on this element.
      */
     public final Annotation[] getDeclaredAnnotations() {
-        if (annotationDeclared == null) {
-            annotationDeclared = new HashMap();
+        if (privateAnnotations == null) {
+            privateAnnotations = new HashMap();
 
             for (String name : annotations.keys()) {
                 Class type = JSClass.forName(name);
 
-                annotationDeclared.put(type, (Annotation) Proxy.newProxyInstance(null, new Class[] {type}, new AnnotationProxy(type, annotations.getProperty(name))));
+                privateAnnotations.put(type, (Annotation) Proxy.newProxyInstance(null, new Class[] {type}, new AnnotationProxy(type, annotations.getProperty(name))));
             }
         }
-        return annotationDeclared.values().toArray(new Annotation[annotationDeclared.size()]);
+        return privateAnnotations.values().toArray(new Annotation[privateAnnotations.size()]);
     }
 
     /**
@@ -207,9 +207,9 @@ abstract class JSAnnotatedElement {
     }
 
     /**
-     * @version 2013/09/03 1:42:36
+     * @version 2013/09/21 22:47:21
      */
-    private static class AnnotationProxy implements InvocationHandler {
+    protected static class AnnotationProxy implements InvocationHandler {
 
         /** The annotation class. */
         private final Class<? extends Annotation> type;
@@ -221,7 +221,7 @@ abstract class JSAnnotatedElement {
          * @param type
          * @param object
          */
-        private AnnotationProxy(Class type, Object object) {
+        protected AnnotationProxy(Class type, Object object) {
             this.type = type;
             this.object = (NativeObject) object;
         }

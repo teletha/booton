@@ -252,6 +252,7 @@ public class ScriptTester {
                 return null; // success
             } else {
                 // fail (AssertionError) or error
+                dumpCode(source);
 
                 // decode as Java's error and rethrow it
                 Source code = new Source(sourceName, Javascript.getScript(source).toString());
