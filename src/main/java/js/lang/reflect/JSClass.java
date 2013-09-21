@@ -38,7 +38,7 @@ import booton.translator.JavaAPIProvider;
  * functionalities.
  * </p>
  * 
- * @version 2013/09/07 21:27:26
+ * @version 2013/09/21 23:38:00
  */
 @JavaAPIProvider(Class.class)
 class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
@@ -680,6 +680,11 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         return name.hashCode() + Arrays.hashCode(types);
     }
 
+    /**
+     * @param type
+     * @param types
+     * @return
+     */
     private Set<Class> collectTypes(Class type, Set<Class> types) {
         if (type != null && types.add(type)) {
             // super class

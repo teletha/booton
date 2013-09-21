@@ -21,7 +21,7 @@ import booton.translator.annotation.PrimitiveMarker;
 import booton.translator.annotation.StringMarker;
 
 /**
- * @version 2013/09/13 16:16:55
+ * @version 2013/09/21 23:36:58
  */
 @RunWith(ScriptRunner.class)
 public class ParameterAnnotationTest {
@@ -77,6 +77,7 @@ public class ParameterAnnotationTest {
     /**
      * @version 2013/09/13 16:17:19
      */
+    @SuppressWarnings("unused")
     private static class Annotated {
 
         public Annotated(@PrimitiveMarker(intValue = 2) int first, @StringMarker("string") int second, String none) {

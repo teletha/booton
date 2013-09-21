@@ -22,7 +22,7 @@ import js.lang.NativeArray;
 import js.lang.NativeObject;
 
 /**
- * @version 2013/09/10 23:35:53
+ * @version 2013/09/21 23:37:10
  */
 class Parameterizable extends JSAccessibleObject implements GenericDeclaration {
 
