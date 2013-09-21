@@ -15,12 +15,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.translator.ScriptRunner;
+import booton.translator.annotation.InheritableMarker;
 import booton.translator.annotation.NotReferenced;
 import booton.translator.annotation.PrimitiveMarker;
 import booton.translator.annotation.StringMarker;
 
 /**
- * @version 2013/09/03 0:32:13
+ * @version 2013/09/21 22:20:30
  */
 @RunWith(ScriptRunner.class)
 public class ClassAnnotationTest {
@@ -29,6 +30,13 @@ public class ClassAnnotationTest {
     public void isAnnotationPresent() throws Exception {
         assert Annotated.class.isAnnotationPresent(PrimitiveMarker.class);
         assert !Annotated.class.isAnnotationPresent(NotReferenced.class);
+
+        assert Parent.class.isAnnotationPresent(InheritableMarker.class);
+        assert Parent.class.isAnnotationPresent(PrimitiveMarker.class);
+        assert Base.class.isAnnotationPresent(InheritableMarker.class);
+        assert !Base.class.isAnnotationPresent(PrimitiveMarker.class);
+        assert Child.class.isAnnotationPresent(InheritableMarker.class);
+        assert !Child.class.isAnnotationPresent(PrimitiveMarker.class);
     }
 
     @Test
@@ -72,11 +80,45 @@ public class ClassAnnotationTest {
         assert a2.value().equals("value");
     }
 
+    @Test
+    public void inheritable() throws Exception {
+        InheritableMarker annotation = Base.class.getAnnotation(InheritableMarker.class);
+        assert annotation != null;
+        assert annotation.value().equals("parent");
+        assert annotation == Parent.class.getAnnotation(InheritableMarker.class);
+
+        annotation = Child.class.getAnnotation(InheritableMarker.class);
+        assert annotation != null;
+        assert annotation.value().equals("child");
+        assert annotation != Parent.class.getAnnotation(InheritableMarker.class);
+    }
+
     /**
      * @version 2013/01/17 9:50:08
      */
     @PrimitiveMarker(intValue = 5)
     @StringMarker("value")
     private static class Annotated {
+    }
+
+    /**
+     * @version 2013/09/21 21:33:33
+     */
+    @PrimitiveMarker(intValue = 50)
+    @InheritableMarker("parent")
+    private static class Parent {
+    }
+
+    /**
+     * @version 2013/09/21 21:33:33
+     */
+    private static class Base extends Parent {
+    }
+
+    /**
+     * @version 2013/09/21 21:33:33
+     */
+    @InheritableMarker("child")
+    private static class Child extends Base {
     }
 }
