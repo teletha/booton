@@ -245,6 +245,11 @@ public class Javascript {
             }
         }
 
+        // require interfaces
+        for (Class interfaceType : source.getInterfaces()) {
+            require(interfaceType);
+        }
+
         // write this class
         if (defined.add(source)) {
             output.append(code);

@@ -48,10 +48,11 @@ abstract class JSAnnotatedElement {
     /** The annotation definition in runtime. */
     protected final NativeObject annotations;
 
+    /** The cache for declared {@link Annotation}. */
+    private Map<Class, Annotation> annotationCache;
+
     /** The cache for declaration {@link TypeVariable}. */
     private List<Type> types;
-
-    private Map<Class, Annotation> annotationList;
 
     /**
      * <p>
@@ -128,7 +129,7 @@ abstract class JSAnnotatedElement {
      *         else false.
      */
     public final <A extends Annotation> boolean isAnnotationPresent(Class<A> annotationClass) {
-        return annotations.hasOwnProperty(annotationClass.getSimpleName());
+        return annotationClass != null && annotations.hasOwnProperty(annotationClass.getSimpleName());
     }
 
     /**
@@ -142,33 +143,10 @@ abstract class JSAnnotatedElement {
      *         element, else null.
      */
     public final <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
-        if (annotationList == null) {
+        if (annotationCache == null) {
             getAnnotations();
-            System.out.println("find");
-            Annotation annotation = annotationList.get(annotationClass);
-
-            if (annotation != null) {
-                return (A) annotation;
-            } else {
-                return null;
-            }
         }
-        // return (A) annotationList.get(annotationClass);
-
-        String name = annotationClass.getSimpleName();
-
-        if (annotations.hasOwnProperty(name)) {
-            Object value = annotations.getProperty(name);
-            System.out.println("@ " + name);
-            if (!(value instanceof Annotation)) {
-                value = Proxy.newProxyInstance(null, new Class[] {annotationClass}, new AnnotationProxy(annotationClass, value));
-
-                // update as annotation instance
-                annotations.setProperty(name, value);
-            }
-            return (A) value;
-        }
-        return null;
+        return (A) annotationCache.get(annotationClass);
     }
 
     /**
@@ -181,16 +159,16 @@ abstract class JSAnnotatedElement {
      * @return All annotations present on this element.
      */
     public final Annotation[] getAnnotations() {
-        if (annotationList == null) {
-            annotationList = new HashMap();
+        if (annotationCache == null) {
+            annotationCache = new HashMap();
 
             for (String name : annotations.keys()) {
                 Class type = JSClass.forName(name);
-                System.out.println(name);
-                annotationList.put(type, (Annotation) Proxy.newProxyInstance(null, new Class[] {type}, new AnnotationProxy(type, annotations.getProperty(name))));
+
+                annotationCache.put(type, (Annotation) Proxy.newProxyInstance(null, new Class[] {type}, new AnnotationProxy(type, annotations.getProperty(name))));
             }
         }
-        return annotationList.values().toArray(new Annotation[annotationList.size()]);
+        return annotationCache.values().toArray(new Annotation[annotationCache.size()]);
     }
 
     /**
