@@ -13,7 +13,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.GenericSignatureFormatError;
 import java.lang.reflect.MalformedParameterizedTypeException;
+import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import js.lang.NativeArray;
@@ -25,7 +27,10 @@ import js.lang.NativeObject;
 class Parameterizable extends JSAccessibleObject implements GenericDeclaration {
 
     /** The annotation definition for parameters. */
-    protected NativeObject parameterAnnotatons;
+    private final NativeObject annotations;
+
+    /** The cache for parameter {@link Annotation}. */
+    private NativeArray<List<Annotation>> parameterAnnotations;
 
     /** The cache for parameter {@link Class}. */
     private List<Class> parameters;
@@ -51,7 +56,7 @@ class Parameterizable extends JSAccessibleObject implements GenericDeclaration {
 
         NativeObject object = (NativeObject) metadata.get(indexForAnnotation);
         object.deleteProperty("$");
-        parameterAnnotatons = object;
+        annotations = object;
     }
 
     /**
@@ -152,8 +157,33 @@ class Parameterizable extends JSAccessibleObject implements GenericDeclaration {
      * @since 1.5
      */
     public final Annotation[][] getParameterAnnotations() {
-        int size = getParameterTypes().length;
+        if (parameterAnnotations == null) {
+            parameterAnnotations = new NativeArray(getParameterTypes().length);
 
-        return null;
+            for (String index : annotations.keys()) {
+                List<Annotation> container = new ArrayList();
+                NativeObject definition = annotations.getProperty(index, new NativeObject());
+
+                for (String name : definition.keys()) {
+                    Class type = JSClass.forName(name);
+
+                    container.add((Annotation) Proxy.newProxyInstance(null, new Class[] {type}, new AnnotationProxy(type, definition.getProperty(name))));
+                }
+                parameterAnnotations.setProperty(index, container);
+            }
+        }
+
+        Annotation[][] annotations = new Annotation[parameterAnnotations.length()][];
+
+        for (int i = 0; i < annotations.length; i++) {
+            List<Annotation> container = parameterAnnotations.get(i);
+
+            if (container == null) {
+                annotations[i] = new Annotation[0];
+            } else {
+                annotations[i] = container.toArray(new Annotation[0]);
+            }
+        }
+        return annotations;
     }
 }

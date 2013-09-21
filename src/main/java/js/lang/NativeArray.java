@@ -35,6 +35,15 @@ public class NativeArray<T> extends NativeObject {
     /**
      * 
      */
+    public NativeArray(int initialSize) {
+        for (int i = 0; i < initialSize; i++) {
+            list.add(null);
+        }
+    }
+
+    /**
+     * 
+     */
     public NativeArray(T[] initial) {
         for (T item : initial) {
             list.add(item);
@@ -491,6 +500,15 @@ public class NativeArray<T> extends NativeObject {
          */
         public String NativeArray() {
             return "[]";
+        }
+
+        /**
+         * <p>
+         * Create array.
+         * </p>
+         */
+        public String NativeArray(int initialSize) {
+            return "new Array(" + param(0) + ")";
         }
 
         /**

@@ -187,7 +187,10 @@ class JavaMetadataCompiler {
          * 
          */
         protected void writeAnnotation() {
-            writeAnnotation("$", annotations.toArray(new Annotation[annotations.size()]));
+            if (!annotations.isEmpty()) {
+                writeAnnotation("$", annotations.toArray(new Annotation[annotations.size()]));
+                code.separator();
+            }
         }
 
         /**
@@ -307,8 +310,12 @@ class JavaMetadataCompiler {
             Annotation[][] set = method.getParameterAnnotations();
 
             for (int i = 0; i < set.length; i++) {
-                code.separator();
-                writeAnnotation(String.valueOf(i), set[i]);
+                Annotation[] annotations = set[i];
+
+                if (annotations.length != 0) {
+                    writeAnnotation(String.valueOf(i), annotations);
+                    code.separator();
+                }
             }
         }
     }
@@ -364,6 +371,25 @@ class JavaMetadataCompiler {
             code.append(new JavaSignatureCompiler(constructor.getTypeParameters()), ",");
             code.append(new JavaSignatureCompiler(constructor.getGenericParameterTypes()), ",");
             code.append(new JavaSignatureCompiler(constructor.getGenericExceptionTypes()));
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void writeAnnotation() {
+            super.writeAnnotation();
+
+            Annotation[][] set = constructor.getParameterAnnotations();
+
+            for (int i = 0; i < set.length; i++) {
+                Annotation[] annotations = set[i];
+
+                if (annotations.length != 0) {
+                    writeAnnotation(String.valueOf(i), annotations);
+                    code.separator();
+                }
+            }
         }
     }
 }
