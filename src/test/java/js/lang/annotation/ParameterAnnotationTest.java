@@ -12,6 +12,7 @@ package js.lang.annotation;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -26,6 +27,7 @@ import booton.translator.annotation.StringMarker;
 public class ParameterAnnotationTest {
 
     @Test
+    @Ignore
     public void method() throws Exception {
         Method method = Annotated.class.getMethod("method", int.class, int.class, String.class);
         Annotation[][] annotations = method.getParameterAnnotations();
