@@ -142,25 +142,31 @@ abstract class JSAnnotatedElement {
      *         element, else null.
      */
     public final <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
-        // if (annotationList == null) {
-        // getAnnotations();
-        // }
-        // return annotationList.get(annotationClass);
+        if (annotationList == null) {
+            getAnnotations();
+            System.out.println("find");
+            Annotation annotation = annotationList.get(annotationClass);
 
-        if (annotations != null) {
-            String name = annotationClass.getSimpleName();
-
-            if (annotations.hasOwnProperty(name)) {
-                Object value = annotations.getProperty(name);
-                System.out.println("@ " + name);
-                if (!(value instanceof Annotation)) {
-                    value = Proxy.newProxyInstance(null, new Class[] {annotationClass}, new AnnotationProxy(annotationClass, value));
-
-                    // update as annotation instance
-                    annotations.setProperty(name, value);
-                }
-                return (A) value;
+            if (annotation != null) {
+                return (A) annotation;
+            } else {
+                return null;
             }
+        }
+        // return (A) annotationList.get(annotationClass);
+
+        String name = annotationClass.getSimpleName();
+
+        if (annotations.hasOwnProperty(name)) {
+            Object value = annotations.getProperty(name);
+            System.out.println("@ " + name);
+            if (!(value instanceof Annotation)) {
+                value = Proxy.newProxyInstance(null, new Class[] {annotationClass}, new AnnotationProxy(annotationClass, value));
+
+                // update as annotation instance
+                annotations.setProperty(name, value);
+            }
+            return (A) value;
         }
         return null;
     }

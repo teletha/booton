@@ -56,7 +56,20 @@ public class ClassAnnotationTest {
         Annotation[] annotations = Annotated.class.getAnnotations();
         assert annotations instanceof Annotation[];
         assert annotations.length == 2;
-        assert annotations[0] instanceof StringMarker;
+
+        PrimitiveMarker a1;
+        StringMarker a2;
+
+        if (annotations[0] instanceof PrimitiveMarker) {
+            a1 = (PrimitiveMarker) annotations[0];
+            a2 = (StringMarker) annotations[1];
+        } else {
+            a1 = (PrimitiveMarker) annotations[1];
+            a2 = (StringMarker) annotations[0];
+        }
+
+        assert a1.intValue() == 5;
+        assert a2.value().equals("value");
     }
 
     /**
