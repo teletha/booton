@@ -14,7 +14,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 
 import js.lang.NativeArray;
-import js.lang.NativeObject;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -32,7 +31,7 @@ abstract class JSAccessibleObject extends JSAnnotatedElement implements Member {
      * @param metadata
      */
     protected JSAccessibleObject(String name, String nameJS, Class owner, NativeArray metadata, int indexForAnnotation) {
-        super(name, nameJS, metadata, (NativeObject) metadata.get(indexForAnnotation));
+        super(name, nameJS, metadata, indexForAnnotation);
 
         this.owner = owner;
     }

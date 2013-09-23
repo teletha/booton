@@ -382,6 +382,17 @@ class ScriptWriter {
     }
 
     /**
+     * <p>
+     * Calcurate size of this code.
+     * </p>
+     * 
+     * @return
+     */
+    public int length() {
+        return buffer.length();
+    }
+
+    /**
      * @see java.lang.Object#toString()
      */
     @Override

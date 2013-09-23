@@ -49,9 +49,6 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
     /** The metadata definition in runtime. */
     private final NativeObject definition;
 
-    /** The modifier value. */
-    private final int modifiers;
-
     /** The super class. */
     private final Class superclass;
 
@@ -104,11 +101,10 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @param definition A full metadata info for class, constructors, methods and fields.
      */
     protected JSClass(String nameJS, NativeObject prototype, NativeArray<?> metadata, Class superclass, NativeObject definition) {
-        super(nameJS, nameJS, metadata, metadata.get(4, new NativeObject()));
+        super(nameJS, nameJS, metadata, 4);
 
         this.prototype = prototype;
         this.definition = definition;
-        this.modifiers = metadata.getAsInt(0, 0);
         this.superclass = superclass;
     }
 
@@ -1008,7 +1004,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      */
     public Type[] getGenericInterfaces() {
         if (interfacesType == null) {
-            interfacesType = new Signature((String) metadata.get(3), this).types;
+            interfacesType = new Signature(metadata.get(3, ""), this).types;
             metadata.deleteProperty(3);
         }
         return interfacesType.toArray(new Type[interfacesType.size()]);

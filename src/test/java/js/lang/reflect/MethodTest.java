@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.translator.ScriptRunner;
+import booton.translator.annotation.StringMarker;
 
 /**
  * @version 2013/09/10 23:57:01
@@ -117,9 +118,9 @@ public class MethodTest {
         assert method.isVarArgs();
         assert method.getParameterTypes()[0] == int[].class;
 
-        method = VarArg.class.getDeclaredMethod("string", String[].class);
+        method = VarArg.class.getDeclaredMethod("string", int.class, String[].class);
         assert method.isVarArgs();
-        assert method.getParameterTypes()[0] == String[].class;
+        assert method.getParameterTypes()[1] == String[].class;
 
         method = VarArg.class.getDeclaredMethod("variable", Object[].class);
         assert method.isVarArgs();
@@ -136,7 +137,7 @@ public class MethodTest {
 
         public native void primitive(int... values);
 
-        public native void string(String... values);
+        public native void string(int some, @StringMarker("aaa") String... values);
 
         public native void variable(T... values);
     }

@@ -51,12 +51,10 @@ class Parameterizable extends JSAccessibleObject implements GenericDeclaration {
      * @param metadata
      * @param indexForAnnotation
      */
-    public Parameterizable(String name, String nameJS, Class owner, NativeArray metadata, int indexForAnnotation) {
+    public Parameterizable(String name, String nameJS, Class owner, NativeArray<?> metadata, int indexForAnnotation) {
         super(name, nameJS, owner, metadata, indexForAnnotation);
 
-        NativeObject object = (NativeObject) metadata.get(indexForAnnotation);
-        object.deleteProperty("$");
-        annotations = object;
+        annotations = metadata.get(indexForAnnotation + 1, new NativeObject());
     }
 
     /**
@@ -96,7 +94,7 @@ class Parameterizable extends JSAccessibleObject implements GenericDeclaration {
      */
     public final Type[] getGenericParameterTypes() {
         if (parameterTypes == null) {
-            parameterTypes = new Signature((String) metadata.get(2), owner).types;
+            parameterTypes = new Signature(metadata.get(2, ""), owner).types;
             metadata.deleteProperty(2);
         }
         return parameterTypes.toArray(new Type[parameterTypes.size()]);
@@ -137,7 +135,7 @@ class Parameterizable extends JSAccessibleObject implements GenericDeclaration {
      */
     public final Type[] getGenericExceptionTypes() {
         if (exceptionTypes == null) {
-            exceptionTypes = new Signature((String) metadata.get(3), owner).types;
+            exceptionTypes = new Signature(metadata.get(3, ""), owner).types;
             metadata.deleteProperty(3);
         }
         return exceptionTypes.toArray(new Type[exceptionTypes.size()]);

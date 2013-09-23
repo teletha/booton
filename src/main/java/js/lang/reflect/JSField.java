@@ -83,7 +83,7 @@ class JSField extends JSAccessibleObject {
      */
     public Type getGenericType() {
         if (fieldType == null) {
-            fieldType = (Type) new Signature((String) metadata.get(2), owner).types.get(0);
+            fieldType = (Type) new Signature(metadata.get(2, ""), owner).types.get(0);
             metadata.deleteProperty(2);
         }
         return fieldType;

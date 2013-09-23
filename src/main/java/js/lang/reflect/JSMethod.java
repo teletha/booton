@@ -111,7 +111,7 @@ class JSMethod extends Parameterizable {
      */
     public Type getGenericReturnType() {
         if (returnType == null) {
-            returnType = (Type) new Signature((String) metadata.get(4), owner).types.get(0);
+            returnType = (Type) new Signature(metadata.get(4, ""), owner).types.get(0);
             metadata.deleteProperty(4);
         }
         return returnType;

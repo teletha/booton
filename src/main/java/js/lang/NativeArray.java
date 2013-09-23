@@ -544,7 +544,7 @@ public class NativeArray<T> extends NativeObject {
          * @return A item at index.
          */
         public String get(int index, Object defaultValue) {
-            return that + "[" + param(0) + "]||" + param(1);
+            return "(" + that + "[" + param(0) + "]||" + param(1) + ")";
         }
 
         /**

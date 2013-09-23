@@ -29,16 +29,11 @@ import org.junit.runner.RunWith;
  */
 class JavaMetadataCompiler {
 
-    /** The reusable method. */
-    private static final Method annotationType;
-
     /** The ignorable annotation classes. */
     private static final Set<Class<? extends Annotation>> ignorables = new HashSet();
 
     static {
         try {
-            annotationType = Annotation.class.getMethod("annotationType");
-
             ignorables.add(JavaAPIProvider.class);
             ignorables.add(JavascriptAPIProvider.class);
             ignorables.add(RunWith.class);
@@ -83,10 +78,10 @@ class JavaMetadataCompiler {
         for (int i = 0; i < elements.size(); i++) {
             Metadata metadata = elements.get(i);
             code.append(metadata.name, ":", "[");
-            metadata.writeMetadata();
-            code.append(",", "{");
-            metadata.writeAnnotation();
-            code.append("}]").separator();
+            metadata.defineMetadata();
+            code.append(",");
+            metadata.defineAnnotation();
+            code.append("]").separator();
         }
         code.append("}");
     }
@@ -139,14 +134,36 @@ class JavaMetadataCompiler {
 
     /**
      * <p>
-     * Compile metadata.
+     * Cehck whether the spcified annotation set is valid or not.
      * </p>
      * 
-     * @param clazz
-     * @param writer
+     * @param annotations
+     * @return
      */
-    public static void compile(Class clazz, ScriptWriter writer) {
+    private static boolean hasAnnotation(Annotation[][] annotations) {
+        for (Annotation[] list : annotations) {
+            if (hasAnnotation(list)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    /**
+     * <p>
+     * Cehck whether the spcified annotation set is valid or not.
+     * </p>
+     * 
+     * @param annotations
+     * @return
+     */
+    private static boolean hasAnnotation(Annotation[] annotations) {
+        for (Annotation annotation : annotations) {
+            if (!ignorables.contains(annotation.annotationType())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -158,56 +175,72 @@ class JavaMetadataCompiler {
         private final String name;
 
         /** The annotation. */
-        private final List<Annotation> annotations = new ArrayList();
+        private final AnnotatedElement element;
 
         /**
-         * @param name
-         * @param annotations
+         * @param name A runtime name.
+         * @param element An {@link AnnotatedElement}.
          */
         private Metadata(String name, AnnotatedElement element) {
             this.name = name;
-
-            for (Annotation annotation : element.getDeclaredAnnotations()) {
-                Class type = annotation.annotationType();
-
-                if (!ignorables.contains(type)) {
-                    Javascript.require(type);
-
-                    annotations.add(annotation);
-                }
-            }
+            this.element = element;
         }
 
         /**
          * 
          */
-        protected abstract void writeMetadata();
+        protected abstract void defineMetadata();
 
         /**
          * 
          */
-        protected void writeAnnotation() {
-            if (!annotations.isEmpty()) {
-                writeAnnotation("$", annotations.toArray(new Annotation[annotations.size()]));
-                code.separator();
+        protected void defineAnnotation() {
+            writeAnnotation(-1, element.getDeclaredAnnotations());
+        }
+
+        /**
+         * <p>
+         * Write annotaion definition.
+         * </p>
+         * 
+         * @param annotations
+         */
+        protected void writeAnnotation(Annotation[][] annotations) {
+            if (hasAnnotation(annotations)) {
+                code.append(",", "{");
+
+                for (int i = 0; i < annotations.length; i++) {
+                    writeAnnotation(i, annotations[i]);
+                }
+                code.append("}");
             }
         }
 
         /**
          * <p>
-         * Write annotations.
+         * Write annotaion definition.
          * </p>
          * 
-         * @param name
          * @param annotations
          */
-        protected void writeAnnotation(String name, Annotation[] annotations) {
-            code.append(name, ":{");
-            for (int i = 0; i < annotations.length; i++) {
-                compileAnnotation(annotations[i]);
-                code.separator();
+        protected void writeAnnotation(int index, Annotation[] annotations) {
+            if (hasAnnotation(annotations)) {
+                if (index < 0) {
+                    code.append("{");
+                } else {
+                    code.append(index, ":{");
+                }
+
+                for (Annotation annotation : annotations) {
+                    if (!ignorables.contains(annotation.annotationType())) {
+                        Javascript.require(annotation.annotationType());
+
+                        writeAnnotation(annotation);
+                        code.separator();
+                    }
+                }
+                code.append("}").separator();
             }
-            code.append("}");
         }
 
         /**
@@ -215,7 +248,7 @@ class JavaMetadataCompiler {
          * Compile annotation to javascript.
          * </p>
          */
-        private void compileAnnotation(Annotation annotation) {
+        protected void writeAnnotation(Annotation annotation) {
             Class type = annotation.annotationType();
             code.append(Javascript.computeSimpleClassName(type), ":", "{");
 
@@ -252,7 +285,7 @@ class JavaMetadataCompiler {
          * {@inheritDoc}
          */
         @Override
-        protected void writeMetadata() {
+        protected void defineMetadata() {
             int modifier = clazz.getModifiers();
 
             if (clazz.isMemberClass()) {
@@ -269,54 +302,6 @@ class JavaMetadataCompiler {
 
             // code.append(modifier);
             code.append(modifier, ",", new JavaSignatureCompiler(clazz.getTypeParameters()), ",", new JavaSignatureCompiler(clazz.getGenericSuperclass()), ",", new JavaSignatureCompiler(clazz.getGenericInterfaces()));
-        }
-    }
-
-    /**
-     * @version 2013/04/07 3:05:00
-     */
-    private class MethodMetadata extends Metadata {
-
-        /** The method . */
-        private final Method method;
-
-        /**
-         * @param method
-         */
-        private MethodMetadata(Method method) {
-            super(Javascript.computeMethodName(method), method);
-            this.method = method;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void writeMetadata() {
-            code.append(method.getModifiers(), ",");
-            code.append(new JavaSignatureCompiler(method.getTypeParameters()), ",");
-            code.append(new JavaSignatureCompiler(method.getGenericParameterTypes()), ",");
-            code.append(new JavaSignatureCompiler(method.getGenericExceptionTypes()), ",");
-            code.append(new JavaSignatureCompiler(method.getGenericReturnType()), ",").string(method.getName());
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void writeAnnotation() {
-            super.writeAnnotation();
-
-            Annotation[][] set = method.getParameterAnnotations();
-
-            for (int i = 0; i < set.length; i++) {
-                Annotation[] annotations = set[i];
-
-                if (annotations.length != 0) {
-                    writeAnnotation(String.valueOf(i), annotations);
-                    code.separator();
-                }
-            }
         }
     }
 
@@ -341,8 +326,47 @@ class JavaMetadataCompiler {
          * {@inheritDoc}
          */
         @Override
-        protected void writeMetadata() {
+        protected void defineMetadata() {
             code.append(field.getModifiers(), ",\"", field.getName(), "\",", new JavaSignatureCompiler(field.getGenericType()));
+        }
+    }
+
+    /**
+     * @version 2013/04/07 3:05:00
+     */
+    private class MethodMetadata extends Metadata {
+
+        /** The method . */
+        private final Method method;
+
+        /**
+         * @param method
+         */
+        private MethodMetadata(Method method) {
+            super(Javascript.computeMethodName(method), method);
+            this.method = method;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void defineMetadata() {
+            code.append(method.getModifiers(), ",");
+            code.append(new JavaSignatureCompiler(method.getTypeParameters()), ",");
+            code.append(new JavaSignatureCompiler(method.getGenericParameterTypes()), ",");
+            code.append(new JavaSignatureCompiler(method.getGenericExceptionTypes()), ",");
+            code.append(new JavaSignatureCompiler(method.getGenericReturnType()), ",").string(method.getName());
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void defineAnnotation() {
+            super.defineAnnotation();
+
+            writeAnnotation(method.getParameterAnnotations());
         }
     }
 
@@ -366,7 +390,7 @@ class JavaMetadataCompiler {
          * {@inheritDoc}
          */
         @Override
-        protected void writeMetadata() {
+        protected void defineMetadata() {
             code.append(constructor.getModifiers()).append(",");
             code.append(new JavaSignatureCompiler(constructor.getTypeParameters()), ",");
             code.append(new JavaSignatureCompiler(constructor.getGenericParameterTypes()), ",");
@@ -377,19 +401,10 @@ class JavaMetadataCompiler {
          * {@inheritDoc}
          */
         @Override
-        protected void writeAnnotation() {
-            super.writeAnnotation();
+        protected void defineAnnotation() {
+            super.defineAnnotation();
 
-            Annotation[][] set = constructor.getParameterAnnotations();
-
-            for (int i = 0; i < set.length; i++) {
-                Annotation[] annotations = set[i];
-
-                if (annotations.length != 0) {
-                    writeAnnotation(String.valueOf(i), annotations);
-                    code.separator();
-                }
-            }
+            writeAnnotation(constructor.getParameterAnnotations());
         }
     }
 }
