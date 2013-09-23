@@ -51,6 +51,24 @@ public class NativeObject {
 
     /**
      * <p>
+     * Retireve property by index key.
+     * </p>
+     * 
+     * @param key A property key.
+     * @return An associated value.
+     */
+    public final <S> S getProperty(int key, S defaultValue) {
+        Object value = container.get(literal(key));
+
+        if (value == null) {
+            return defaultValue;
+        } else {
+            return (S) value;
+        }
+    }
+
+    /**
+     * <p>
      * Retireve property by key.
      * </p>
      * 
@@ -610,6 +628,18 @@ public class NativeObject {
 
         /**
          * <p>
+         * Retireve property by index key.
+         * </p>
+         * 
+         * @param key A property key.
+         * @return An associated value.
+         */
+        public String getProperty(int key, Object defaultValue) {
+            return getProperty(Integer.valueOf(key), defaultValue);
+        }
+
+        /**
+         * <p>
          * Retireve property by key.
          * </p>
          * 
@@ -617,7 +647,7 @@ public class NativeObject {
          * @return An associated value.
          */
         public String getProperty(Object key, Object defaultValue) {
-            return that + accessor(0) + "||" + param(1);
+            return "(" + that + accessor(0) + "||" + param(1) + ")";
         }
 
         /**

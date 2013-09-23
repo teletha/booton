@@ -410,7 +410,7 @@ class JSThrowable {
             throwable = (Throwable) error;
         } else {
             NativeError nativeError = (NativeError) error;
-            throwable = new Error(nativeError.getMessage());
+            throwable = new InternalError(nativeError.getMessage());
             throwable.setStackTrace(createStackTrace(nativeError, false));
         }
         return throwable;

@@ -252,12 +252,15 @@ public class ScriptTester {
                 return null; // success
             } else {
                 // fail (AssertionError) or error
-                dumpCode(source);
 
                 // decode as Java's error and rethrow it
                 Source code = new Source(sourceName, Javascript.getScript(source).toString());
+                Throwable throwable = ClientStackTrace.decode((String) result, code);
 
-                throw I.quiet(ClientStackTrace.decode((String) result, code));
+                if (throwable instanceof AssertionError || throwable instanceof InternalError) {
+                    dumpCode(source);
+                }
+                throw I.quiet(throwable);
             }
         } catch (ScriptException e) {
             dumpCode(source);

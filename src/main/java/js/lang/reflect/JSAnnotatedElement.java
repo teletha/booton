@@ -65,12 +65,12 @@ abstract class JSAnnotatedElement {
      * @param metadata A metadata difinition.
      * @param annotations
      */
-    protected JSAnnotatedElement(String name, String nameJS, NativeArray metadata, NativeObject annotations) {
+    protected JSAnnotatedElement(String name, String nameJS, NativeArray<?> metadata, int indexForAnnotation) {
         this.name = name;
         this.nameJS = nameJS;
         this.metadata = metadata;
-        this.annotations = annotations.getProperty("$", new NativeObject());
-        this.modifiers = metadata.getAsInt(0);
+        this.annotations = metadata.get(indexForAnnotation, new NativeObject());
+        this.modifiers = metadata.getAsInt(0, 0);
     }
 
     /**
@@ -113,7 +113,7 @@ abstract class JSAnnotatedElement {
      */
     public final TypeVariable<Class>[] getTypeParameters() {
         if (types == null) {
-            types = new Signature((String) metadata.get(1), (GenericDeclaration) this).types;
+            types = new Signature(metadata.get(1, ""), (GenericDeclaration) this).types;
             metadata.deleteProperty(1);
         }
         return types.toArray(new TypeVariable[types.size()]);
