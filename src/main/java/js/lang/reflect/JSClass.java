@@ -44,7 +44,7 @@ import booton.translator.JavaAPIProvider;
 class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
 
     /** The prototype definition in runtime. */
-    private final NativeObject prototype;
+    final NativeObject prototype; // package private modifier for Annotation default value
 
     /** The metadata definition in runtime. */
     private final NativeObject definition;

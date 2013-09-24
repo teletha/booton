@@ -19,7 +19,7 @@ import booton.translator.JavascriptNativeProperty;
  * functionalities.
  * </p>
  * 
- * @version 2013/07/30 19:34:51
+ * @version 2013/09/24 13:09:55
  */
 @JavaAPIProvider(Character.class)
 class JSCharacter implements JavascriptNative {
@@ -297,6 +297,17 @@ class JSCharacter implements JavascriptNative {
     @Override
     public String toString() {
         return character.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof JSCharacter) {
+            return character.equals(((JSCharacter) obj).character);
+        }
+        return false;
     }
 
     /**

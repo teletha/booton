@@ -13,7 +13,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * @version 2013/01/16 16:12:01
+ * @version 2013/09/24 13:04:08
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PrimitiveMarker {
@@ -80,4 +80,13 @@ public @interface PrimitiveMarker {
      * @return
      */
     boolean booleanValue() default true;
+
+    /**
+     * <p>
+     * Primitive value.
+     * </p>
+     * 
+     * @return
+     */
+    char charValue() default 'c';
 }

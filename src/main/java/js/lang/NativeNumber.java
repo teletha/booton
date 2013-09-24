@@ -109,6 +109,28 @@ public class NativeNumber extends NativeObject {
 
     /**
      * <p>
+     * Convert to primitive short type.
+     * </p>
+     * 
+     * @return A short value.
+     */
+    public short shortValue() {
+        return value.shortValue();
+    }
+
+    /**
+     * <p>
+     * Convert to primitive byte type.
+     * </p>
+     * 
+     * @return A byte value.
+     */
+    public byte byteValue() {
+        return value.byteValue();
+    }
+
+    /**
+     * <p>
      * Returns a string expression.
      * </p>
      * 
@@ -222,6 +244,28 @@ public class NativeNumber extends NativeObject {
          * @return A double value.
          */
         public String doubleValue() {
+            return that;
+        }
+
+        /**
+         * <p>
+         * Convert to primitive short type.
+         * </p>
+         * 
+         * @return A short value.
+         */
+        public String shortValue() {
+            return that;
+        }
+
+        /**
+         * <p>
+         * Convert to primitive byte type.
+         * </p>
+         * 
+         * @return A byte value.
+         */
+        public String byteValue() {
             return that;
         }
 

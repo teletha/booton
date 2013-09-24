@@ -9,6 +9,8 @@
  */
 package js.lang.reflect;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 
@@ -16,7 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.translator.ScriptRunner;
-import booton.translator.annotation.StringMarker;
+import booton.translator.annotation.PrimitiveMarker;
 
 /**
  * @version 2013/09/10 23:57:01
@@ -37,21 +39,6 @@ public class MethodTest {
 
         method = ExtendedMethods.class.getMethod("extendedMethod");
         assert method.getDeclaringClass() == ExtendedMethods.class;
-    }
-
-    @Test
-    public void getDefaultValue() throws Exception {
-        Method method = Methods.class.getMethod("publicMethod");
-        assert method.getDefaultValue() == null;
-
-        method = Mark.class.getMethod("intValue");
-        assert method.getDefaultValue().equals(10);
-
-        method = Mark.class.getMethod("stringValue");
-        assert method.getDefaultValue().equals("default");
-
-        method = Mark.class.getMethod("doubleValue");
-        assert method.getDefaultValue() == null;
     }
 
     @Test
@@ -100,14 +87,42 @@ public class MethodTest {
         public native int protectedMethod();
     }
 
+    @Test
+    public void getDefaultValue() throws Exception {
+        Method method = Methods.class.getMethod("publicMethod");
+        assert method.getDefaultValue() == null;
+
+        method = Mark.class.getMethod("intValue");
+        assert method.getDefaultValue().equals(10);
+
+        method = Mark.class.getMethod("stringValue");
+        assert method.getDefaultValue().equals("default");
+
+        method = Mark.class.getMethod("noDefault");
+        assert method.getDefaultValue() == null;
+    }
+
+    @Test
+    public void getDefaultValuePrimitives() throws Exception {
+        assert PrimitiveMarker.class.getMethod("intValue").getDefaultValue().equals(10);
+        assert PrimitiveMarker.class.getMethod("longValue").getDefaultValue().equals(10L);
+        assert PrimitiveMarker.class.getMethod("floatValue").getDefaultValue().equals(10F);
+        assert PrimitiveMarker.class.getMethod("doubleValue").getDefaultValue().equals(10D);
+        assert PrimitiveMarker.class.getMethod("byteValue").getDefaultValue().equals((byte) 10);
+        assert PrimitiveMarker.class.getMethod("shortValue").getDefaultValue().equals((short) 10);
+        assert PrimitiveMarker.class.getMethod("booleanValue").getDefaultValue().equals(true);
+        assert PrimitiveMarker.class.getMethod("charValue").getDefaultValue().equals('c');
+    }
+
     /**
      * @version 2013/09/07 16:57:54
      */
+    @Retention(RetentionPolicy.RUNTIME)
     private static @interface Mark {
 
         int intValue() default 10;
 
-        double doubleValue();
+        double noDefault();
 
         String stringValue() default "default";
     }
@@ -131,14 +146,19 @@ public class MethodTest {
     }
 
     /**
-     * @version 2013/09/11 0:23:15
+     * @version 2013/09/24 11:42:05
      */
+
+    @SuppressWarnings("unused")
     private static class VarArg<T> {
 
-        public native void primitive(int... values);
+        public void primitive(int... values) {
+        }
 
-        public native void string(int some, @StringMarker("aaa") String... values);
+        public void string(int some, @Mark(noDefault = 10, intValue = 200) String... values) {
+        }
 
-        public native void variable(T... values);
+        public void variable(T... values) {
+        }
     }
 }
