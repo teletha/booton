@@ -11,13 +11,16 @@ package kiss;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -41,6 +44,22 @@ class JSKiss {
 
     /** The cache between Model and Lifestyle. */
     private static final ConcurrentHashMap<Class, Lifestyle> lifestyles = new ConcurrentHashMap();
+
+    /**
+     * <p>
+     * Make the {@link Map} which has {@link Class} key be recognized to the module unloading event
+     * and disposes the key which is associated with the module automatically.
+     * </p>
+     * <p>
+     * This method has same syntax of {@link Collections#synchronizedMap(Map)}.
+     * </p>
+     * 
+     * @param map A target {@link Map} object to be aware of module unloading event.
+     * @return The given {@link Map} object.
+     */
+    public static <M extends Map<Class, ?>> M aware(M map) {
+        return map;
+    }
 
     /**
      * <p>
@@ -216,5 +235,83 @@ class JSKiss {
         } finally {
             dependency.pollLast();
         }
+    }
+
+    /**
+     * <p>
+     * Close the specified object quietly if it is {@link AutoCloseable}. Equivalent to
+     * {@link AutoCloseable#close()}, except any exceptions will be ignored. This is typically used
+     * in finally block like the following.
+     * </p>
+     * 
+     * <pre>
+     * AutoCloseable input = null;
+     * 
+     * try {
+     *     // some IO action
+     * } catch (Exception e) {
+     *     throw e;
+     * } finally {
+     *     I.quiet(input);
+     * }
+     * </pre>
+     * <p>
+     * Throw the specified checked exception quietly or close the specified {@link AutoCloseable}
+     * object quietly.
+     * </p>
+     * <p>
+     * This method <em>doesn't</em> wrap checked exception around unchecked exception (e.g. new
+     * RuntimeException(e)) and <em>doesn't</em> shelve it. This method deceive the compiler that
+     * the checked exception is unchecked one. So you can catch a raw checked exception in the
+     * caller of the method which calls this method.
+     * </p>
+     * 
+     * <pre>
+     * private void callerWithoutErrorHandling() {
+     *     methodQuietly();
+     * }
+     * 
+     * private void callerWithErrorHandling() {
+     *     try {
+     *         methodQuietly();
+     *     } catch (Exception e) {
+     *         // you can catch the checked exception here
+     *     }
+     * }
+     * 
+     * private void methodQuietly() {
+     *     try {
+     *         // throw some cheched exception
+     *     } catch (CheckedException e) {
+     *         throw I.quiet(e); // rethrow checked exception quietly
+     *     }
+     * }
+     * </pre>
+     * 
+     * @param object A exception to throw quietly or a object to close quietly.
+     * @return A pseudo unchecked exception.
+     * @throws NullPointerException If the specified exception is <code>null</code>.
+     */
+    public static RuntimeException quiet(Object object) {
+        if (object instanceof Throwable) {
+            Throwable throwable = (Throwable) object;
+
+            // retrieve original exception from the specified wrapped exception
+            if (throwable instanceof InvocationTargetException) throwable = throwable.getCause();
+
+            // throw quietly
+            return (RuntimeException) throwable;
+        }
+
+        if (object instanceof AutoCloseable) {
+            try {
+                ((AutoCloseable) object).close();
+            } catch (Exception e) {
+                throw quiet(e);
+            }
+        }
+
+        // API definition
+        return null;
     }
 }

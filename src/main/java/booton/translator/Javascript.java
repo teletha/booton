@@ -19,8 +19,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -56,7 +58,7 @@ import org.objectweb.asm.Type;
  * volatile
  * </p>
  * 
- * @version 2013/08/03 21:29:22
+ * @version 2013/09/24 15:56:44
  */
 public class Javascript {
 
@@ -66,8 +68,8 @@ public class Javascript {
     /** The local identifier counter for {@link Javascript}. */
     private static int counter = 0;
 
-    /** The current compiling script. */
-    private static Javascript compiling = null;
+    /** The compiling route. */
+    private static Deque<Javascript> compiling = new ArrayDeque();
 
     // initialization
     static {
@@ -181,41 +183,46 @@ public class Javascript {
      * @param requirements A list of required script classes.
      */
     public void writeTo(Appendable output, Set<Class> defined, Class... requirements) {
-        // start compiling script
-        compiling = this;
-
-        // Any class requires these classes.
-        require(Object.class);
-        require(Class.class);
-        require(Thread.class);
-        require(JavascriptAPIProviders.findProvider("Object"));
-        require(JavascriptAPIProviders.findProvider("String"));
-        require(JavascriptAPIProviders.findProvider("Array"));
-
-        if (requirements != null) {
-            for (Class requirement : requirements) {
-                require(requirement);
-            }
-        }
+        // record compile route
+        compiling.addFirst(this);
 
         try {
-            // Record all defined classes to prevent duplicated definition.
-            write(output, defined);
+            // Any class requires these classes.
+            require(Object.class);
+            require(Class.class);
+            require(Thread.class);
+            require(JavascriptAPIProviders.findProvider("Object"));
+            require(JavascriptAPIProviders.findProvider("String"));
+            require(JavascriptAPIProviders.findProvider("Array"));
 
-            // Write bootstrap method if needed.
-            output.append("try {");
-            try {
-                output.append(writeMethodCode(source, "jsmain")).append(";");
-            } catch (Exception e) {
-                // ignore missing "jsmain" method
+            if (requirements != null) {
+                for (Class requirement : requirements) {
+                    require(requirement);
+                }
             }
-            output.append("} catch(e) {");
-            output.append(writeMethodCode(Thread.class, "handleUncaughtException", Object.class, "e")).append(";");
-            output.append("}");
-        } catch (Exception e) {
-            throw I.quiet(e);
+
+            try {
+                // Record all defined classes to prevent duplicated definition.
+                write(output, defined);
+
+                // Write bootstrap method if needed.
+                output.append("try {");
+                try {
+                    output.append(writeMethodCode(source, "jsmain")).append(";");
+                } catch (Exception e) {
+                    // ignore missing "jsmain" method
+                }
+                output.append("} catch(e) {");
+                output.append(writeMethodCode(Thread.class, "handleUncaughtException", Object.class, "e")).append(";");
+                output.append("}");
+            } catch (Exception e) {
+                throw I.quiet(e);
+            }
+            I.quiet(output);
+        } finally {
+            // record compile route
+            compiling.removeFirst();
         }
-        I.quiet(output);
     }
 
     /**
@@ -227,45 +234,44 @@ public class Javascript {
      * @param defined
      */
     private void write(Appendable output, Set defined) throws IOException {
-        // store previous script
-        Javascript previous = compiling;
+        // record compile route
+        compiling.addFirst(this);
 
-        // update current script
-        compiling = this;
+        try {
+            // compile script
+            compile();
 
-        // compile script
-        compile();
+            // write super class
+            if (!source.getName().equals("js.lang.JSObject")) {
+                Javascript script = Javascript.getScript(source.getSuperclass());
 
-        // write super class
-        if (!source.getName().equals("js.lang.JSObject")) {
-            Javascript script = Javascript.getScript(source.getSuperclass());
-
-            if (script != null && !defined.contains(script.source)) {
-                script.write(output, defined);
+                if (script != null && !defined.contains(script.source)) {
+                    script.write(output, defined);
+                }
             }
-        }
 
-        // require interfaces
-        for (Class interfaceType : source.getInterfaces()) {
-            require(interfaceType);
-        }
-
-        // write this class
-        if (defined.add(source)) {
-            output.append(code);
-        }
-
-        // write dependency classes
-        for (Class depndency : dependencies) {
-            Javascript script = Javascript.getScript(depndency);
-
-            if (script != null && !defined.contains(script.source)) {
-                script.write(output, defined);
+            // require interfaces
+            for (Class interfaceType : source.getInterfaces()) {
+                require(interfaceType);
             }
-        }
 
-        // restore previous script
-        compiling = previous;
+            // write this class
+            if (defined.add(source)) {
+                output.append(code);
+            }
+
+            // write dependency classes
+            for (Class depndency : dependencies) {
+                Javascript script = Javascript.getScript(depndency);
+
+                if (script != null && !defined.contains(script.source)) {
+                    script.write(output, defined);
+                }
+            }
+        } finally {
+            // record compile route
+            compiling.removeFirst();
+        }
     }
 
     /**
@@ -329,7 +335,11 @@ public class Javascript {
 
             code.append('}');
         } catch (TranslationError e) {
-            e.write("\r\n at ", source.getName());
+            e.write("\r\n");
+
+            for (Javascript script : compiling) {
+                e.write(" at ", script.source.getName());
+            }
 
             throw e;
         } catch (Exception e) {
@@ -494,8 +504,10 @@ public class Javascript {
      * @param dependency A dependency class.
      */
     public static final void require(Class dependency) {
-        if (dependency != compiling.source) {
-            compiling.dependencies.add(dependency);
+        Javascript current = compiling.peekFirst();
+
+        if (dependency != current.source) {
+            current.dependencies.add(dependency);
         }
     }
 

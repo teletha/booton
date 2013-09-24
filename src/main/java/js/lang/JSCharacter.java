@@ -199,6 +199,151 @@ class JSCharacter implements JavascriptNative {
     }
 
     /**
+     * Determines if the specified character is a lowercase character.
+     * <p>
+     * A character is lowercase if its general category type, provided by
+     * {@code Character.getType(ch)}, is {@code LOWERCASE_LETTER}, or it has contributory property
+     * Other_Lowercase as defined by the Unicode Standard.
+     * <p>
+     * The following are examples of lowercase characters:
+     * <p>
+     * <blockquote>
+     * 
+     * <pre>
+     * a b c d e f g h i j k l m n o p q r s t u v w x y z
+     * '&#92;u00DF' '&#92;u00E0' '&#92;u00E1' '&#92;u00E2' '&#92;u00E3' '&#92;u00E4' '&#92;u00E5' '&#92;u00E6'
+     * '&#92;u00E7' '&#92;u00E8' '&#92;u00E9' '&#92;u00EA' '&#92;u00EB' '&#92;u00EC' '&#92;u00ED' '&#92;u00EE'
+     * '&#92;u00EF' '&#92;u00F0' '&#92;u00F1' '&#92;u00F2' '&#92;u00F3' '&#92;u00F4' '&#92;u00F5' '&#92;u00F6'
+     * '&#92;u00F8' '&#92;u00F9' '&#92;u00FA' '&#92;u00FB' '&#92;u00FC' '&#92;u00FD' '&#92;u00FE' '&#92;u00FF'
+     * </pre>
+     * </blockquote>
+     * <p>
+     * Many other Unicode characters are lowercase too.
+     * <p>
+     * <b>Note:</b> This method cannot handle <a href="#supplementary"> supplementary
+     * characters</a>. To support all Unicode characters, including supplementary characters, use
+     * the {@link #isLowerCase(int)} method.
+     * 
+     * @param ch the character to be tested.
+     * @return {@code true} if the character is lowercase; {@code false} otherwise.
+     * @see Character#isLowerCase(char)
+     * @see Character#isTitleCase(char)
+     * @see Character#toLowerCase(char)
+     * @see Character#getType(char)
+     */
+    public static boolean isLowerCase(char ch) {
+        return ch == toLowerCase(ch);
+    }
+
+    /**
+     * Determines if the specified character (Unicode code point) is a lowercase character.
+     * <p>
+     * A character is lowercase if its general category type, provided by {@link Character#getType
+     * getType(codePoint)}, is {@code LOWERCASE_LETTER}, or it has contributory property
+     * Other_Lowercase as defined by the Unicode Standard.
+     * <p>
+     * The following are examples of lowercase characters:
+     * <p>
+     * <blockquote>
+     * 
+     * <pre>
+     * a b c d e f g h i j k l m n o p q r s t u v w x y z
+     * '&#92;u00DF' '&#92;u00E0' '&#92;u00E1' '&#92;u00E2' '&#92;u00E3' '&#92;u00E4' '&#92;u00E5' '&#92;u00E6'
+     * '&#92;u00E7' '&#92;u00E8' '&#92;u00E9' '&#92;u00EA' '&#92;u00EB' '&#92;u00EC' '&#92;u00ED' '&#92;u00EE'
+     * '&#92;u00EF' '&#92;u00F0' '&#92;u00F1' '&#92;u00F2' '&#92;u00F3' '&#92;u00F4' '&#92;u00F5' '&#92;u00F6'
+     * '&#92;u00F8' '&#92;u00F9' '&#92;u00FA' '&#92;u00FB' '&#92;u00FC' '&#92;u00FD' '&#92;u00FE' '&#92;u00FF'
+     * </pre>
+     * </blockquote>
+     * <p>
+     * Many other Unicode characters are lowercase too.
+     * 
+     * @param codePoint the character (Unicode code point) to be tested.
+     * @return {@code true} if the character is lowercase; {@code false} otherwise.
+     * @see Character#isLowerCase(int)
+     * @see Character#isTitleCase(int)
+     * @see Character#toLowerCase(int)
+     * @see Character#getType(int)
+     * @since 1.5
+     */
+    public static boolean isLowerCase(int codePoint) {
+        return isLowerCase(NativeString.fromCharCode(codePoint).charAt(0));
+    }
+
+    /**
+     * Determines if the specified character is an uppercase character.
+     * <p>
+     * A character is uppercase if its general category type, provided by
+     * {@code Character.getType(ch)}, is {@code UPPERCASE_LETTER}. or it has contributory property
+     * Other_Uppercase as defined by the Unicode Standard.
+     * <p>
+     * The following are examples of uppercase characters:
+     * <p>
+     * <blockquote>
+     * 
+     * <pre>
+     * A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+     * '&#92;u00C0' '&#92;u00C1' '&#92;u00C2' '&#92;u00C3' '&#92;u00C4' '&#92;u00C5' '&#92;u00C6' '&#92;u00C7'
+     * '&#92;u00C8' '&#92;u00C9' '&#92;u00CA' '&#92;u00CB' '&#92;u00CC' '&#92;u00CD' '&#92;u00CE' '&#92;u00CF'
+     * '&#92;u00D0' '&#92;u00D1' '&#92;u00D2' '&#92;u00D3' '&#92;u00D4' '&#92;u00D5' '&#92;u00D6' '&#92;u00D8'
+     * '&#92;u00D9' '&#92;u00DA' '&#92;u00DB' '&#92;u00DC' '&#92;u00DD' '&#92;u00DE'
+     * </pre>
+     * </blockquote>
+     * <p>
+     * Many other Unicode characters are uppercase too.
+     * <p>
+     * <p>
+     * <b>Note:</b> This method cannot handle <a href="#supplementary"> supplementary
+     * characters</a>. To support all Unicode characters, including supplementary characters, use
+     * the {@link #isUpperCase(int)} method.
+     * 
+     * @param ch the character to be tested.
+     * @return {@code true} if the character is uppercase; {@code false} otherwise.
+     * @see Character#isLowerCase(char)
+     * @see Character#isTitleCase(char)
+     * @see Character#toUpperCase(char)
+     * @see Character#getType(char)
+     * @since 1.0
+     */
+    public static boolean isUpperCase(char ch) {
+        return ch == toUpperCase(ch);
+    }
+
+    /**
+     * Determines if the specified character (Unicode code point) is an uppercase character.
+     * <p>
+     * A character is uppercase if its general category type, provided by
+     * {@link Character#getType(int) getType(codePoint)}, is {@code UPPERCASE_LETTER}, or it has
+     * contributory property Other_Uppercase as defined by the Unicode Standard.
+     * <p>
+     * The following are examples of uppercase characters:
+     * <p>
+     * <blockquote>
+     * 
+     * <pre>
+     * A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+     * '&#92;u00C0' '&#92;u00C1' '&#92;u00C2' '&#92;u00C3' '&#92;u00C4' '&#92;u00C5' '&#92;u00C6' '&#92;u00C7'
+     * '&#92;u00C8' '&#92;u00C9' '&#92;u00CA' '&#92;u00CB' '&#92;u00CC' '&#92;u00CD' '&#92;u00CE' '&#92;u00CF'
+     * '&#92;u00D0' '&#92;u00D1' '&#92;u00D2' '&#92;u00D3' '&#92;u00D4' '&#92;u00D5' '&#92;u00D6' '&#92;u00D8'
+     * '&#92;u00D9' '&#92;u00DA' '&#92;u00DB' '&#92;u00DC' '&#92;u00DD' '&#92;u00DE'
+     * </pre>
+     * </blockquote>
+     * <p>
+     * Many other Unicode characters are uppercase too.
+     * <p>
+     * 
+     * @param codePoint the character (Unicode code point) to be tested.
+     * @return {@code true} if the character is uppercase; {@code false} otherwise.
+     * @see Character#isLowerCase(int)
+     * @see Character#isTitleCase(int)
+     * @see Character#toUpperCase(int)
+     * @see Character#getType(int)
+     * @since 1.5
+     */
+    public static boolean isUpperCase(int codePoint) {
+        return isUpperCase(NativeString.fromCharCode(codePoint).charAt(0));
+    }
+
+    /**
      * Converts the character argument to lowercase using case mapping information from the
      * UnicodeData file.
      * <p>
