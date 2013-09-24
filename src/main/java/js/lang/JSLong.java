@@ -108,6 +108,18 @@ class JSLong extends JSNumber {
     }
 
     /**
+     * Returns the value obtained by reversing the order of the bytes in the two's complement
+     * representation of the specified {@code long} value.
+     * 
+     * @return the value obtained by reversing the bytes in the specified {@code long} value.
+     * @since 1.5
+     */
+    public static long reverseBytes(long value) {
+        value = (value & 0x00ff00ff00ff00ffL) << 8 | (value >>> 8) & 0x00ff00ff00ff00ffL;
+        return (value << 48) | ((value & 0xffff0000L) << 16) | ((value >>> 16) & 0xffff0000L) | (value >>> 48);
+    }
+
+    /**
      * Returns a {@code String} object representing the specified {@code long}. The argument is
      * converted to signed decimal representation and returned as a string, exactly as if the
      * argument and the radix 10 were given as arguments to the {@link #toString(long, int)} method.

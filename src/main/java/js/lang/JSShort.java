@@ -85,6 +85,18 @@ class JSShort extends JSNumber {
     }
 
     /**
+     * Returns the value obtained by reversing the order of the bytes in the two's complement
+     * representation of the specified {@code short} value.
+     * 
+     * @return the value obtained by reversing (or, equivalently, swapping) the bytes in the
+     *         specified {@code short} value.
+     * @since 1.5
+     */
+    public static short reverseBytes(short value) {
+        return (short) (((value & 0xFF00) >> 8) | (value << 8));
+    }
+
+    /**
      * Returns a {@code Short} object holding the value given by the specified {@code String}. The
      * argument is interpreted as representing a signed decimal {@code short}, exactly as if the
      * argument were given to the {@link #parseShort(java.lang.String)} method. The result is a

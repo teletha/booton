@@ -170,6 +170,17 @@ class JSInteger extends JSNumber {
     }
 
     /**
+     * Returns the value obtained by reversing the order of the bytes in the two's complement
+     * representation of the specified {@code int} value.
+     * 
+     * @return the value obtained by reversing the bytes in the specified {@code int} value.
+     * @since 1.5
+     */
+    public static int reverseBytes(int value) {
+        return ((value >>> 24)) | ((value >> 8) & 0xFF00) | ((value << 8) & 0xFF0000) | ((value << 24));
+    }
+
+    /**
      * Returns a string representation of the integer argument as an unsigned integer in
      * base&nbsp;2.
      * <p>
