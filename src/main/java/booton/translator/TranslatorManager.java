@@ -13,9 +13,11 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,6 +35,9 @@ import org.objectweb.asm.Type;
  */
 class TranslatorManager {
 
+    /** The ignorable classes. */
+    private static final Set<String> ignorables = new HashSet();
+
     /** The native classes. */
     private static final Set<Class> natives = new HashSet();
 
@@ -47,6 +52,11 @@ class TranslatorManager {
 
     /** The native accessor methods. */
     private static final Map<Integer, String> nativeAccessorMethodNames = new HashMap();
+
+    static {
+        ignorables.add(Type.getDescriptor(Path.class));
+        ignorables.add(Type.getDescriptor(Locale.class));
+    }
 
     /**
      * <p>
@@ -215,8 +225,8 @@ class TranslatorManager {
      * @param method A method to test.
      * @return A result.
      */
-    static boolean isSerializerMethod(Method method) {
-        return isSerializerMethod(method.getName(), Type.getMethodDescriptor(method));
+    static boolean isIgnorableMethod(Method method) {
+        return isIgnorableMethod(method.getName(), Type.getMethodDescriptor(method));
     }
 
     /**
@@ -228,13 +238,19 @@ class TranslatorManager {
      * @param description A method signature.
      * @return A result.
      */
-    static boolean isSerializerMethod(String name, String description) {
+    static boolean isIgnorableMethod(String name, String description) {
         if (name.equals("writeObject") && description.equals("(Ljava/io/ObjectOutputStream;)V")) {
             return true;
         }
 
         if (name.equals("readObject") && description.equals("(Ljava/io/ObjectInputStream;)V")) {
             return true;
+        }
+
+        for (String type : ignorables) {
+            if (description.contains(type)) {
+                return true;
+            }
         }
         return false;
     }

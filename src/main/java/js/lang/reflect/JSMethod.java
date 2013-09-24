@@ -53,6 +53,17 @@ class JSMethod extends Parameterizable {
     }
 
     /**
+     * Returns {@code true} if this method is a bridge method; returns {@code false} otherwise.
+     * 
+     * @return true if and only if this method is a bridge method as defined by the Java Language
+     *         Specification.
+     * @since 1.5
+     */
+    public boolean isBridge() {
+        return (modifiers & JSModifier.BRIDGE) != 0;
+    }
+
+    /**
      * Returns {@code true} if this method was declared to take a variable number of arguments;
      * returns {@code false} otherwise.
      * 

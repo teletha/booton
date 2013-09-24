@@ -105,7 +105,6 @@ class ArrayList<E> extends AbstractList<E> implements List<E> {
         }
     }
 
- 
     /**
      * {@inheritDoc}
      */
@@ -198,6 +197,14 @@ class ArrayList<E> extends AbstractList<E> implements List<E> {
         if (size() <= index) {
             throw new IndexOutOfBoundsException("Index is overflowed. Size: " + size() + "  Index: " + index);
         }
+    }
+
+    /**
+     * Trims the capacity of this <tt>ArrayList</tt> instance to be the list's current size. An
+     * application can use this operation to minimize the storage of an <tt>ArrayList</tt> instance.
+     */
+    public void trimToSize() {
+        // do nothing
     }
 
     /**
