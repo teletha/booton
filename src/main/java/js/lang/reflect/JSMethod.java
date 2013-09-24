@@ -16,8 +16,11 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
 import js.lang.NativeArray;
+import js.lang.NativeBoolean;
 import js.lang.NativeFunction;
+import js.lang.NativeNumber;
 import js.lang.NativeObject;
+import js.lang.NativeString;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -26,7 +29,7 @@ import booton.translator.JavaAPIProvider;
  * functionalities.
  * </p>
  * 
- * @version 2013/09/10 23:45:07
+ * @version 2013/09/24 13:11:23
  */
 @JavaAPIProvider(Method.class)
 class JSMethod extends Parameterizable {
@@ -74,7 +77,52 @@ class JSMethod extends Parameterizable {
      * @since 1.5
      */
     public Object getDefaultValue() {
-        return null;
+        Class declared = getDeclaringClass();
+
+        if (!declared.isAnnotation()) {
+            return null;
+        }
+
+        NativeObject prototype = ((JSClass) (Object) declared).prototype;
+
+        if (prototype.getProperty(nameJS) == null) {
+            return null;
+        }
+
+        Class type = getReturnType();
+        Object value = invoke(prototype);
+
+        if (type == int.class) {
+            return Integer.valueOf(((NativeNumber) value).intValue());
+        }
+
+        if (type == long.class) {
+            return Long.valueOf(((NativeNumber) value).longValue());
+        }
+
+        if (type == float.class) {
+            return Float.valueOf(((NativeNumber) value).floatValue());
+        }
+
+        if (type == double.class) {
+            return Double.valueOf(((NativeNumber) value).doubleValue());
+        }
+
+        if (type == short.class) {
+            return Short.valueOf(((NativeNumber) value).shortValue());
+        }
+        if (type == byte.class) {
+            return Byte.valueOf(((NativeNumber) value).byteValue());
+        }
+
+        if (type == boolean.class) {
+            return Boolean.valueOf(((NativeBoolean) value).booleanValue());
+        }
+
+        if (type == char.class) {
+            return Character.valueOf(((NativeString) value).charAt(0));
+        }
+        return value;
     }
 
     /**

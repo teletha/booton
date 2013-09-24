@@ -74,6 +74,23 @@ public class ParameterAnnotationTest {
         assert set.length == 0;
     }
 
+    @Test
+    public void variableArguments() throws Exception {
+        Method method = Annotated.class.getMethod("var", int.class, int[].class);
+        Annotation[][] annotations = method.getParameterAnnotations();
+        assert annotations.length == 2;
+
+        Annotation[] set = annotations[0];
+        assert set.length == 0;
+
+        set = annotations[1];
+        assert set.length == 1;
+        assert set[0] instanceof PrimitiveMarker;
+
+        PrimitiveMarker primitive = (PrimitiveMarker) set[0];
+        assert primitive.intValue() == 1000;
+    }
+
     /**
      * @version 2013/09/13 16:17:19
      */
@@ -84,6 +101,9 @@ public class ParameterAnnotationTest {
         }
 
         public void method(@PrimitiveMarker(intValue = 2) int first, @StringMarker("string") int second, String none) {
+        }
+
+        public void var(int first, @PrimitiveMarker(intValue = 1000) int... second) {
         }
     }
 }

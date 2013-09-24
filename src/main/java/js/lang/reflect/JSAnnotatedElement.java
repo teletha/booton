@@ -207,7 +207,7 @@ abstract class JSAnnotatedElement {
     }
 
     /**
-     * @version 2013/09/21 22:47:21
+     * @version 2013/09/24 11:02:00
      */
     protected static class AnnotationProxy implements InvocationHandler {
 
@@ -231,13 +231,21 @@ abstract class JSAnnotatedElement {
          */
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            // from user value
             NativeFunction function = object.getPropertyAs(NativeFunction.class, ((JSMethod) (Object) method).nameJS);
 
-            if (function == null) {
-                return type;
-            } else {
+            if (function != null) {
                 return function.apply(null);
             }
+
+            String name = method.getName();
+
+            if (name.equals("annotationType")) {
+                return type;
+            }
+
+            // from default value
+            return type.getMethod(name).invoke(((JSClass) (Object) type).prototype);
         }
     }
 }

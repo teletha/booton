@@ -17,7 +17,7 @@ import booton.translator.Translator;
 /**
  * @version 2013/08/31 22:16:34
  */
-class NativeString {
+public class NativeString {
 
     /** The actual text holder. */
     private final StringBuilder builder = new StringBuilder();

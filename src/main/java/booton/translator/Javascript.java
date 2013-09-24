@@ -383,7 +383,19 @@ public class Javascript {
 
             for (int i = 0; i < methods.length; i++) {
                 code.comment(methods[i]);
-                code.append(computeMethodName(methods[i])).append(":null");
+                code.append(computeMethodName(methods[i])).append(":");
+
+                if (source.isAnnotation()) {
+                    Object value = methods[i].getDefaultValue();
+
+                    if (value == null) {
+                        code.append("null");
+                    } else {
+                        code.append("function() {return " + JavaMetadataCompiler.compileValue(value) + ";}");
+                    }
+                } else {
+                    code.append("null");
+                }
 
                 if (i < methods.length - 1) {
                     code.separator();

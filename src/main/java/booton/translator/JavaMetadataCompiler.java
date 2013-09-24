@@ -18,6 +18,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import kiss.I;
@@ -25,7 +26,7 @@ import kiss.I;
 import org.junit.runner.RunWith;
 
 /**
- * @version 2013/09/07 10:22:02
+ * @version 2013/09/24 13:11:30
  */
 class JavaMetadataCompiler {
 
@@ -93,10 +94,14 @@ class JavaMetadataCompiler {
      * 
      * @param value
      */
-    private String compileValue(Object value) {
+    static String compileValue(Object value) {
+        if (value == null) {
+            return "null";
+        }
+
         Class type = value.getClass();
 
-        if (type == String.class) {
+        if (type == String.class || type == char.class || type == Character.class) {
             return "\"" + value + "\"";
         } else if (type == Class.class) {
             return Javascript.computeClass((Class) value);
@@ -254,9 +259,16 @@ class JavaMetadataCompiler {
 
             // collect annotation methods and compile to javascript expression
             for (Method method : type.getDeclaredMethods()) {
+                method.setAccessible(true);
+
                 try {
-                    code.append(Javascript.computeMethodName(method), ":", "function() {return " + compileValue(method.invoke(annotation)) + ";}")
-                            .separator();
+                    Object value = method.invoke(annotation);
+                    Object defaultValue = method.getDefaultValue();
+
+                    if (!Objects.equals(value, defaultValue)) {
+                        code.append(Javascript.computeMethodName(method), ":", "function() {return " + compileValue(value) + ";}")
+                                .separator();
+                    }
                 } catch (Exception e) {
                     throw I.quiet(e);
                 }
