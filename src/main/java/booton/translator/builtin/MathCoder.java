@@ -169,6 +169,19 @@ class MathCoder extends Translator<Math> {
     }
 
     /**
+     * Returns the smaller of two {@code long} values. That is, the result is the argument closer to
+     * the value of {@link Long#MIN_VALUE}. If the arguments have the same value, the result is that
+     * same value.
+     * 
+     * @param a an argument.
+     * @param b another argument.
+     * @return the smaller of {@code a} and {@code b}.
+     */
+    public String min(long a, long b) {
+        return "Math.min(" + param(0) + "," + param(1) + ")";
+    }
+
+    /**
      * <p>
      * Returns the smaller of two {@code int} values. That is, the result the argument closer to the
      * value of {@link Integer#MIN_VALUE}. If the arguments have the same value, the result is that

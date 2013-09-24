@@ -723,23 +723,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         // c) Inner classes (non-static member classes)
         // d) Local classes (named classes declared within a method)
         // e) Anonymous classes
-
-        // JVM Spec 4.8.6: A class must have an EnclosingMethod
-        // attribute if and only if it is a local class or an
-        // anonymous class.
-        EnclosingMethodInfo enclosingInfo = getEnclosingMethodInfo();
-
-        if (enclosingInfo == null) {
-            // This is a top level or a nested class or an inner class (a, b, or c)
-            return getDeclaringClass();
-        } else {
-            Class<?> enclosingClass = enclosingInfo.getEnclosingClass();
-            // This is a local class or an anonymous class (d or e)
-            if (enclosingClass == this || enclosingClass == null)
-                throw new InternalError("Malformed enclosing method information");
-            else
-                return enclosingClass;
-        }
+        return null;
     }
 
     /**

@@ -68,4 +68,25 @@ class JSSecurityManager {
     public void checkPackageAccess(String pkg) {
         // do nothing
     }
+
+    /**
+     * Throws a <code>SecurityException</code> if the calling thread is not allowed to create a new
+     * class loader.
+     * <p>
+     * This method calls <code>checkPermission</code> with the
+     * <code>RuntimePermission("createClassLoader")</code> permission.
+     * <p>
+     * If you override this method, then you should make a call to
+     * <code>super.checkCreateClassLoader</code> at the point the overridden method would normally
+     * throw an exception.
+     * 
+     * @exception SecurityException if the calling thread does not have permission to create a new
+     *                class loader.
+     * @see java.lang.ClassLoader#ClassLoader()
+     * @see #checkPermission(java.security.Permission) checkPermission
+     */
+    public void checkCreateClassLoader() {
+        // do nothing
+    }
+
 }

@@ -314,4 +314,19 @@ class JSKiss {
         // API definition
         return null;
     }
+
+    /**
+     * <p>
+     * Transform any type object into the specified type possible.
+     * </p>
+     * 
+     * @param <M> A output type you want to transform into.
+     * @param input A target object.
+     * @param output A target type.
+     * @return A transformed object.
+     * @throws NullPointerException If the output type is <code>null</code>.
+     */
+    public static <M> M transform(Object input, Class<M> output) {
+        throw new UnsupportedOperationException();
+    }
 }

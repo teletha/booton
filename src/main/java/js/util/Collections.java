@@ -21,12 +21,13 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.RandomAccess;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.SortedSet;
 
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/08/04 12:19:30
+ * @version 2013/09/24 22:50:17
  */
 @JavaAPIProvider(java.util.Collections.class)
 class Collections {
@@ -226,6 +227,210 @@ class Collections {
      */
     public static <T> SortedSet<T> unmodifiableSortedSet(SortedSet<T> set) {
         return new UnmodifiableSortedSet(set);
+    }
+
+    /**
+     * Returns a synchronized (thread-safe) collection backed by the specified collection. In order
+     * to guarantee serial access, it is critical that <strong>all</strong> access to the backing
+     * collection is accomplished through the returned collection.
+     * <p>
+     * It is imperative that the user manually synchronize on the returned collection when iterating
+     * over it:
+     * 
+     * <pre>
+     *  Collection c = Collections.synchronizedCollection(myCollection);
+     *     ...
+     *  synchronized (c) {
+     *      Iterator i = c.iterator(); // Must be in the synchronized block
+     *      while (i.hasNext())
+     *         foo(i.next());
+     *  }
+     * </pre>
+     * Failure to follow this advice may result in non-deterministic behavior.
+     * <p>
+     * The returned collection does <i>not</i> pass the <tt>hashCode</tt> and <tt>equals</tt>
+     * operations through to the backing collection, but relies on <tt>Object</tt>'s equals and
+     * hashCode methods. This is necessary to preserve the contracts of these operations in the case
+     * that the backing collection is a set or a list.
+     * <p>
+     * The returned collection will be serializable if the specified collection is serializable.
+     * 
+     * @param collection the collection to be "wrapped" in a synchronized collection.
+     * @return a synchronized view of the specified collection.
+     */
+    public static <T> Collection<T> synchronizedCollection(Collection<T> collection) {
+        return collection;
+    }
+
+    /**
+     * Returns a synchronized (thread-safe) list backed by the specified list. In order to guarantee
+     * serial access, it is critical that <strong>all</strong> access to the backing list is
+     * accomplished through the returned list.
+     * <p>
+     * It is imperative that the user manually synchronize on the returned list when iterating over
+     * it:
+     * 
+     * <pre>
+     *  List list = Collections.synchronizedList(new ArrayList());
+     *      ...
+     *  synchronized (list) {
+     *      Iterator i = list.iterator(); // Must be in synchronized block
+     *      while (i.hasNext())
+     *          foo(i.next());
+     *  }
+     * </pre>
+     * Failure to follow this advice may result in non-deterministic behavior.
+     * <p>
+     * The returned list will be serializable if the specified list is serializable.
+     * 
+     * @param list the list to be "wrapped" in a synchronized list.
+     * @return a synchronized view of the specified list.
+     */
+    public static <T> List<T> synchronizedList(List<T> list) {
+        return list;
+    }
+
+    /**
+     * Returns a synchronized (thread-safe) set backed by the specified set. In order to guarantee
+     * serial access, it is critical that <strong>all</strong> access to the backing set is
+     * accomplished through the returned set.
+     * <p>
+     * It is imperative that the user manually synchronize on the returned set when iterating over
+     * it:
+     * 
+     * <pre>
+     *  Set s = Collections.synchronizedSet(new HashSet());
+     *      ...
+     *  synchronized (s) {
+     *      Iterator i = s.iterator(); // Must be in the synchronized block
+     *      while (i.hasNext())
+     *          foo(i.next());
+     *  }
+     * </pre>
+     * Failure to follow this advice may result in non-deterministic behavior.
+     * <p>
+     * The returned set will be serializable if the specified set is serializable.
+     * 
+     * @param set the set to be "wrapped" in a synchronized set.
+     * @return a synchronized view of the specified set.
+     */
+    public static <T> Set<T> synchronizedSet(Set<T> set) {
+        return set;
+    }
+
+    /**
+     * Returns a synchronized (thread-safe) sorted set backed by the specified sorted set. In order
+     * to guarantee serial access, it is critical that <strong>all</strong> access to the backing
+     * sorted set is accomplished through the returned sorted set (or its views).
+     * <p>
+     * It is imperative that the user manually synchronize on the returned sorted set when iterating
+     * over it or any of its <tt>subSet</tt>, <tt>headSet</tt>, or <tt>tailSet</tt> views.
+     * 
+     * <pre>
+     *  SortedSet s = Collections.synchronizedSortedSet(new TreeSet());
+     *      ...
+     *  synchronized (s) {
+     *      Iterator i = s.iterator(); // Must be in the synchronized block
+     *      while (i.hasNext())
+     *          foo(i.next());
+     *  }
+     * </pre>
+     * or:
+     * 
+     * <pre>
+     *  SortedSet s = Collections.synchronizedSortedSet(new TreeSet());
+     *  SortedSet s2 = s.headSet(foo);
+     *      ...
+     *  synchronized (s) {  // Note: s, not s2!!!
+     *      Iterator i = s2.iterator(); // Must be in the synchronized block
+     *      while (i.hasNext())
+     *          foo(i.next());
+     *  }
+     * </pre>
+     * Failure to follow this advice may result in non-deterministic behavior.
+     * <p>
+     * The returned sorted set will be serializable if the specified sorted set is serializable.
+     * 
+     * @param set the sorted set to be "wrapped" in a synchronized sorted set.
+     * @return a synchronized view of the specified sorted set.
+     */
+    public static <T> SortedSet<T> synchronizedSortedSet(SortedSet<T> set) {
+        return set;
+    }
+
+    /**
+     * Returns a synchronized (thread-safe) map backed by the specified map. In order to guarantee
+     * serial access, it is critical that <strong>all</strong> access to the backing map is
+     * accomplished through the returned map.
+     * <p>
+     * It is imperative that the user manually synchronize on the returned map when iterating over
+     * any of its collection views:
+     * 
+     * <pre>
+     *  Map m = Collections.synchronizedMap(new HashMap());
+     *      ...
+     *  Set s = m.keySet();  // Needn't be in synchronized block
+     *      ...
+     *  synchronized (m) {  // Synchronizing on m, not s!
+     *      Iterator i = s.iterator(); // Must be in synchronized block
+     *      while (i.hasNext())
+     *          foo(i.next());
+     *  }
+     * </pre>
+     * Failure to follow this advice may result in non-deterministic behavior.
+     * <p>
+     * The returned map will be serializable if the specified map is serializable.
+     * 
+     * @param map the map to be "wrapped" in a synchronized map.
+     * @return a synchronized view of the specified map.
+     */
+    public static <K, V> Map<K, V> synchronizedMap(Map<K, V> map) {
+        return map;
+    }
+
+    /**
+     * Returns a synchronized (thread-safe) sorted map backed by the specified sorted map. In order
+     * to guarantee serial access, it is critical that <strong>all</strong> access to the backing
+     * sorted map is accomplished through the returned sorted map (or its views).
+     * <p>
+     * It is imperative that the user manually synchronize on the returned sorted map when iterating
+     * over any of its collection views, or the collections views of any of its <tt>subMap</tt>,
+     * <tt>headMap</tt> or <tt>tailMap</tt> views.
+     * 
+     * <pre>
+     *  SortedMap m = Collections.synchronizedSortedMap(new TreeMap());
+     *      ...
+     *  Set s = m.keySet();  // Needn't be in synchronized block
+     *      ...
+     *  synchronized (m) {  // Synchronizing on m, not s!
+     *      Iterator i = s.iterator(); // Must be in synchronized block
+     *      while (i.hasNext())
+     *          foo(i.next());
+     *  }
+     * </pre>
+     * or:
+     * 
+     * <pre>
+     *  SortedMap m = Collections.synchronizedSortedMap(new TreeMap());
+     *  SortedMap m2 = m.subMap(foo, bar);
+     *      ...
+     *  Set s2 = m2.keySet();  // Needn't be in synchronized block
+     *      ...
+     *  synchronized (m) {  // Synchronizing on m, not m2 or s2!
+     *      Iterator i = s.iterator(); // Must be in synchronized block
+     *      while (i.hasNext())
+     *          foo(i.next());
+     *  }
+     * </pre>
+     * Failure to follow this advice may result in non-deterministic behavior.
+     * <p>
+     * The returned sorted map will be serializable if the specified sorted map is serializable.
+     * 
+     * @param map the sorted map to be "wrapped" in a synchronized sorted map.
+     * @return a synchronized view of the specified sorted map.
+     */
+    public static <K, V> SortedMap<K, V> synchronizedSortedMap(SortedMap<K, V> map) {
+        return map;
     }
 
     /**

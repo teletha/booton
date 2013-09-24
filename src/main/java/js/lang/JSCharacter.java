@@ -38,6 +38,24 @@ class JSCharacter implements JavascriptNative {
     }
 
     /**
+     * Compares two {@code char} values numerically. The value returned is identical to what would
+     * be returned by:
+     * 
+     * <pre>
+     *    Character.valueOf(x).compareTo(Character.valueOf(y))
+     * </pre>
+     * 
+     * @param x the first {@code char} to compare
+     * @param y the second {@code char} to compare
+     * @return the value {@code 0} if {@code x == y}; a value less than {@code 0} if {@code x < y};
+     *         and a value greater than {@code 0} if {@code x > y}
+     * @since 1.7
+     */
+    public static int compare(char x, char y) {
+        return new NativeString(x).charCodeAt(0) - new NativeString(y).charAt(0);
+    }
+
+    /**
      * Determines if the specified character is a digit.
      * <p>
      * A character is a digit if its general category type, provided by
@@ -397,6 +415,18 @@ class JSCharacter implements JavascriptNative {
     public static char toUpperCase(char ch) {
         NativeString value = new NativeString(ch);
         return value.toUpperCase().charAt(0);
+    }
+
+    /**
+     * Returns the value obtained by reversing the order of the bytes in the specified <tt>char</tt>
+     * value.
+     * 
+     * @return the value obtained by reversing (or, equivalently, swapping) the bytes in the
+     *         specified <tt>char</tt> value.
+     * @since 1.5
+     */
+    public static char reverseBytes(char c) {
+        return (char) (((c & 0xFF00) >> 8) | (c << 8));
     }
 
     /**
