@@ -109,6 +109,21 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
     }
 
     /**
+     * Casts an object to the class or interface represented by this {@code Class} object.
+     * 
+     * @param object the object to be cast
+     * @return the object after casting, or null if obj is null
+     * @throws ClassCastException if the object is not null and is not assignable to the type T.
+     * @since 1.5
+     */
+    public T cast(Object object) {
+        if (object != null && !isInstance(object)) {
+            throw new ClassCastException(object + " is not " + getName() + ".");
+        }
+        return (T) object;
+    }
+
+    /**
      * <p>
      * Returns this element's annotation for the specified type if such an annotation is present,
      * else null.
@@ -692,6 +707,39 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
             }
         }
         return types;
+    }
+
+    /**
+     * Returns the immediately enclosing class of the underlying class. If the underlying class is a
+     * top level class this method returns {@code null}.
+     * 
+     * @return the immediately enclosing class of the underlying class
+     * @since 1.5
+     */
+    public Class<?> getEnclosingClass() {
+        // There are five kinds of classes (or interfaces):
+        // a) Top level classes
+        // b) Nested classes (static member classes)
+        // c) Inner classes (non-static member classes)
+        // d) Local classes (named classes declared within a method)
+        // e) Anonymous classes
+
+        // JVM Spec 4.8.6: A class must have an EnclosingMethod
+        // attribute if and only if it is a local class or an
+        // anonymous class.
+        EnclosingMethodInfo enclosingInfo = getEnclosingMethodInfo();
+
+        if (enclosingInfo == null) {
+            // This is a top level or a nested class or an inner class (a, b, or c)
+            return getDeclaringClass();
+        } else {
+            Class<?> enclosingClass = enclosingInfo.getEnclosingClass();
+            // This is a local class or an anonymous class (d or e)
+            if (enclosingClass == this || enclosingClass == null)
+                throw new InternalError("Malformed enclosing method information");
+            else
+                return enclosingClass;
+        }
     }
 
     /**

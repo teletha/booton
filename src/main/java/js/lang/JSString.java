@@ -20,7 +20,7 @@ import booton.translator.JavaAPIProvider;
 import booton.translator.JavascriptAPIProvider;
 
 /**
- * @version 2013/08/22 9:36:04
+ * @version 2013/09/24 16:25:46
  */
 @JavaAPIProvider(String.class)
 @JavascriptAPIProvider("String")
@@ -558,6 +558,120 @@ class JSString implements Comparable<String>, CharSequence {
      */
     public String replaceFirst(String regex, String replacement) {
         return (String) (Object) that.replaceFirst(regex, replacement);
+    }
+
+    /**
+     * Tests if two string regions are equal.
+     * <p>
+     * A substring of this <tt>String</tt> object is compared to a substring of the argument other.
+     * The result is true if these substrings represent identical character sequences. The substring
+     * of this <tt>String</tt> object to be compared begins at index <tt>toffset</tt> and has length
+     * <tt>len</tt>. The substring of other to be compared begins at index <tt>ooffset</tt> and has
+     * length <tt>len</tt>. The result is <tt>false</tt> if and only if at least one of the
+     * following is true:
+     * <ul>
+     * <li><tt>toffset</tt> is negative.
+     * <li><tt>ooffset</tt> is negative.
+     * <li><tt>toffset+len</tt> is greater than the length of this <tt>String</tt> object.
+     * <li><tt>ooffset+len</tt> is greater than the length of the other argument.
+     * <li>There is some nonnegative integer <i>k</i> less than <tt>len</tt> such that:
+     * <tt>this.charAt(toffset+<i>k</i>)&nbsp;!=&nbsp;other.charAt(ooffset+<i>k</i>)</tt>
+     * </ul>
+     * 
+     * @param offset the starting offset of the subregion in this string.
+     * @param other the string argument.
+     * @param otherOffset the starting offset of the subregion in the string argument.
+     * @param length the number of characters to compare.
+     * @return <code>true</code> if the specified subregion of this string exactly matches the
+     *         specified subregion of the string argument; <code>false</code> otherwise.
+     */
+    public boolean regionMatches(int offset, String other, int otherOffset, int length) {
+        return regionMatches(false, offset, other, otherOffset, length);
+    }
+
+    /**
+     * Tests if two string regions are equal.
+     * <p>
+     * A substring of this <tt>String</tt> object is compared to a substring of the argument
+     * <tt>other</tt>. The result is <tt>true</tt> if these substrings represent character sequences
+     * that are the same, ignoring case if and only if <tt>ignoreCase</tt> is true. The substring of
+     * this <tt>String</tt> object to be compared begins at index <tt>toffset</tt> and has length
+     * <tt>len</tt>. The substring of <tt>other</tt> to be compared begins at index <tt>ooffset</tt>
+     * and has length <tt>len</tt>. The result is <tt>false</tt> if and only if at least one of the
+     * following is true:
+     * <ul>
+     * <li><tt>toffset</tt> is negative.
+     * <li><tt>ooffset</tt> is negative.
+     * <li><tt>toffset+len</tt> is greater than the length of this <tt>String</tt> object.
+     * <li><tt>ooffset+len</tt> is greater than the length of the other argument.
+     * <li><tt>ignoreCase</tt> is <tt>false</tt> and there is some nonnegative integer <i>k</i> less
+     * than <tt>len</tt> such that: <blockquote>
+     * 
+     * <pre>
+     * this.charAt(toffset+k) != other.charAt(ooffset+k)
+     * </pre>
+     * </blockquote>
+     * <li><tt>ignoreCase</tt> is <tt>true</tt> and there is some nonnegative integer <i>k</i> less
+     * than <tt>len</tt> such that: <blockquote>
+     * 
+     * <pre>
+     * Character.toLowerCase(this.charAt(toffset+k)) !=
+     Character.toLowerCase(other.charAt(ooffset+k))
+     * </pre>
+     * </blockquote> and: <blockquote>
+     * 
+     * <pre>
+     * Character.toUpperCase(this.charAt(toffset+k)) !=
+     *         Character.toUpperCase(other.charAt(ooffset+k))
+     * </pre>
+     * </blockquote>
+     * </ul>
+     * 
+     * @param ignoreCase if <code>true</code>, ignore case when comparing characters.
+     * @param offset the starting offset of the subregion in this string.
+     * @param other the string argument.
+     * @param otherOffset the starting offset of the subregion in the string argument.
+     * @param length the number of characters to compare.
+     * @return <code>true</code> if the specified subregion of this string matches the specified
+     *         subregion of the string argument; <code>false</code> otherwise. Whether the matching
+     *         is exact or case insensitive depends on the <code>ignoreCase</code> argument.
+     */
+    public boolean regionMatches(boolean ignoreCase, int offset, String other, int otherOffset, int length) {
+        char chars1[] = toCharArray();
+        char chars2[] = other.toCharArray();
+
+        if (otherOffset < 0 || offset < 0 || offset > length() - length || otherOffset > other.length() - length) {
+            return false;
+        }
+
+        while (0 < length--) {
+            char c1 = chars1[offset++];
+            char c2 = chars2[otherOffset++];
+
+            if (c1 == c2) {
+                continue;
+            }
+
+            if (ignoreCase) {
+                // If characters don't match but case may be ignored,
+                // try converting both characters to uppercase.
+                // If the results match, then the comparison scan should
+                // continue.
+                if (Character.toUpperCase(c1) == Character.toUpperCase(c2)) {
+                    continue;
+                }
+
+                // Unfortunately, conversion to uppercase does not work properly
+                // for the Georgian alphabet, which has strange rules about case
+                // conversion. So we need to make one last check before
+                // exiting.
+                if (Character.toLowerCase(c1) == Character.toLowerCase(c2)) {
+                    continue;
+                }
+            }
+            return false;
+        }
+        return true;
     }
 
     /**

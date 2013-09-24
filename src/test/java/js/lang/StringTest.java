@@ -304,6 +304,12 @@ public class StringTest {
     }
 
     @Test
+    public void regionMatches() throws Exception {
+        assert "abcdef".regionMatches(false, 2, "oocdoo", 2, 2);
+        assert "abcdef".regionMatches(true, 2, "ooCDoo", 2, 2);
+    }
+
+    @Test
     public void split() throws Exception {
         String[] values = "abcabc".split("b");
         assert values.length == 3;

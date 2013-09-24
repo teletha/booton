@@ -22,6 +22,9 @@ import booton.translator.JavaAPIProvider;
 @JavaAPIProvider(System.class)
 class JSSystem {
 
+    /** The dummy. */
+    private static final JSSecurityManager security = new JSSecurityManager();
+
     /**
      * The "standard" output stream. This stream is already open and ready to accept output data.
      * Typically this stream corresponds to display output or another output destination specified
@@ -168,6 +171,17 @@ class JSSystem {
      */
     public static int identityHashCode(Object object) {
         return object.hashCode();
+    }
+
+    /**
+     * Gets the system security interface.
+     * 
+     * @return if a security manager has already been established for the current application, then
+     *         that security manager is returned; otherwise, <code>null</code> is returned.
+     * @see #setSecurityManager
+     */
+    public static SecurityManager getSecurityManager() {
+        return (SecurityManager) (Object) security;
     }
 
     /**
