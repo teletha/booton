@@ -712,4 +712,15 @@ public class ClassTest {
         assert !Throwable.class.isPrimitive();
         assert !Runnable.class.isPrimitive();
     }
+
+    @Test
+    public void cast() throws Exception {
+        CharSequence.class.cast("test");
+        CharSequence.class.cast(null);
+    }
+
+    @Test(expected = ClassCastException.class)
+    public void castFail() throws Exception {
+        Number.class.cast("as");
+    }
 }

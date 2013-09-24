@@ -79,6 +79,15 @@ abstract class JSAccessibleObject extends JSAnnotatedElement implements Member {
     }
 
     /**
+     * Get the value of the {@code accessible} flag for this object.
+     * 
+     * @return the value of the object's {@code accessible} flag
+     */
+    public boolean isAccessible() {
+        return true;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
