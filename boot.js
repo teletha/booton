@@ -132,7 +132,7 @@ function boot(global) {
             });
 
             // invoke static initializer at first time access.
-            init.call(Class);
+            init();
             init = null;
 
             // API definition

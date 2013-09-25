@@ -27,7 +27,7 @@ import java.util.SortedSet;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/09/24 22:50:17
+ * @version 2013/09/25 13:00:16
  */
 @JavaAPIProvider(java.util.Collections.class)
 class Collections {
@@ -227,6 +227,51 @@ class Collections {
      */
     public static <T> SortedSet<T> unmodifiableSortedSet(SortedSet<T> set) {
         return new UnmodifiableSortedSet(set);
+    }
+
+    /**
+     * Returns an immutable set containing only the specified object. The returned set is
+     * serializable.
+     * 
+     * @param item the sole object to be stored in the returned set.
+     * @return an immutable set containing only the specified object.
+     */
+    public static <T> Set<T> singleton(T item) {
+        Set<T> set = new HashSet();
+        set.add(item);
+
+        return new UnmodifiableSet(set);
+    }
+
+    /**
+     * Returns an immutable list containing only the specified object. The returned list is
+     * serializable.
+     * 
+     * @param item the sole object to be stored in the returned list.
+     * @return an immutable list containing only the specified object.
+     * @since 1.3
+     */
+    public static <T> List<T> singletonList(T item) {
+        List<T> list = new ArrayList();
+        list.add(item);
+
+        return new UnmodifiableList(list);
+    }
+
+    /**
+     * Returns an immutable map, mapping only the specified key to the specified value. The returned
+     * map is serializable.
+     * 
+     * @param key the sole key to be stored in the returned map.
+     * @param value the value to which the returned map maps <tt>key</tt>.
+     * @return an immutable map containing only the specified key-value mapping.
+     * @since 1.3
+     */
+    public static <K, V> Map<K, V> singletonMap(K key, V value) {
+        Map<K, V> map = new HashMap();
+        map.put(key, value);
+
+        return new UnmodifiableMap(map);
     }
 
     /**

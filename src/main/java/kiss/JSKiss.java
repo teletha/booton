@@ -18,6 +18,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -40,10 +41,17 @@ class JSKiss {
     private static final Table<Integer, Class> keys = new Table();
 
     /** The circularity dependency graph per thread. */
-    private static final ThreadSpecific<Deque<Class>> dependencies = new ThreadSpecific(ArrayDeque.class);
+    static final ThreadSpecific<Deque<Class>> dependencies = new ThreadSpecific(ArrayDeque.class);
 
     /** The cache between Model and Lifestyle. */
     private static final ConcurrentHashMap<Class, Lifestyle> lifestyles = new ConcurrentHashMap();
+
+    static {
+        // built-in lifestyles
+        lifestyles.put(List.class, new Prototype(ArrayList.class));
+        lifestyles.put(Map.class, new Prototype(HashMap.class));
+        lifestyles.put(Prototype.class, new Prototype(Prototype.class));
+    }
 
     /**
      * <p>
@@ -159,7 +167,9 @@ class JSKiss {
         // there is no such cache, we will try to create newly lifestyle.
         Lifestyle<M> lifestyle = lifestyles.get(modelClass);
 
-        if (lifestyle != null) return lifestyle; // use cache
+        if (lifestyle != null) {
+            return lifestyle; // use cache
+        }
 
         // Skip null check because this method can throw NullPointerException.
         // if (modelClass == null) throw new NullPointerException("NPE");
