@@ -28,4 +28,78 @@ public class KissTest {
 
         assert person.getAge() == 10;
     }
+
+    @Test
+    public void prototype() throws Exception {
+        PrototypeClass object1 = I.make(PrototypeClass.class);
+        PrototypeClass object2 = I.make(PrototypeClass.class);
+
+        assert object1 != object2;
+    }
+
+    @Test
+    public void singleton() throws Exception {
+        SingletonClass object1 = I.make(SingletonClass.class);
+        SingletonClass object2 = I.make(SingletonClass.class);
+
+        assert object1 == object2;
+    }
+
+    @Test
+    public void constructorInjetion() throws Exception {
+        Injector injector = I.make(Injector.class);
+
+        assert injector.singleton == I.make(SingletonClass.class);
+    }
+
+    @Test
+    public void lifestyleInjection() throws Exception {
+        LifestyleInjector injector = I.make(LifestyleInjector.class);
+
+        assert injector.singleton.resolve() == I.make(SingletonClass.class);
+    }
+
+    /**
+     * @version 2013/09/25 19:16:21
+     */
+    @Manageable(lifestyle = Prototype.class)
+    private static class PrototypeClass {
+    }
+
+    /**
+     * @version 2013/09/25 19:16:21
+     */
+    @Manageable(lifestyle = Singleton.class)
+    private static class SingletonClass {
+    }
+
+    /**
+     * @version 2013/09/25 20:47:13
+     */
+    private static class Injector {
+
+        private SingletonClass singleton;
+
+        /**
+         * @param singleton
+         */
+        private Injector(SingletonClass singleton) {
+            this.singleton = singleton;
+        }
+    }
+
+    /**
+     * @version 2013/09/25 20:47:13
+     */
+    private static class LifestyleInjector {
+
+        private Lifestyle<SingletonClass> singleton;
+
+        /**
+         * @param singleton
+         */
+        private LifestyleInjector(Lifestyle<SingletonClass> singleton) {
+            this.singleton = singleton;
+        }
+    }
 }

@@ -26,7 +26,7 @@ import kiss.I;
 import org.junit.runner.RunWith;
 
 /**
- * @version 2013/09/24 13:11:30
+ * @version 2013/09/25 20:44:43
  */
 class JavaMetadataCompiler {
 
@@ -104,6 +104,8 @@ class JavaMetadataCompiler {
         if (type == String.class || type == char.class || type == Character.class) {
             return "\"" + value + "\"";
         } else if (type == Class.class) {
+            Javascript.require((Class) value);
+
             return Javascript.computeClass((Class) value);
         } else if (type.isEnum()) {
             Javascript.require(type);

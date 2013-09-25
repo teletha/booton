@@ -157,15 +157,15 @@ class ArrayDeque<E> extends AbstractCollection<E> implements Deque<E> {
             return false;
         }
 
-        Iterator<E> iterator = iterator();
+        int index = items.indexOf(o);
 
-        while (iterator.hasNext()) {
-            if (o.equals(iterator.next())) {
-                iterator.remove();
-                return true;
-            }
+        if (index == -1) {
+            return false;
+        } else {
+            items.remove(index);
+
+            return true;
         }
-        return false;
     }
 
     /**
@@ -177,15 +177,15 @@ class ArrayDeque<E> extends AbstractCollection<E> implements Deque<E> {
             return false;
         }
 
-        Iterator<E> iterator = descendingIterator();
+        int index = items.lastIndexOf(o);
 
-        while (iterator.hasNext()) {
-            if (o.equals(iterator.next())) {
-                iterator.remove();
-                return true;
-            }
+        if (index == -1) {
+            return false;
+        } else {
+            items.remove(index);
+
+            return true;
         }
-        return false;
     }
 
     /**
@@ -209,7 +209,7 @@ class ArrayDeque<E> extends AbstractCollection<E> implements Deque<E> {
      */
     @Override
     public E remove() {
-        return null;
+        return removeFirst();
     }
 
     /**
@@ -217,7 +217,7 @@ class ArrayDeque<E> extends AbstractCollection<E> implements Deque<E> {
      */
     @Override
     public E poll() {
-        return null;
+        return pollFirst();
     }
 
     /**
@@ -225,7 +225,7 @@ class ArrayDeque<E> extends AbstractCollection<E> implements Deque<E> {
      */
     @Override
     public E element() {
-        return null;
+        return getFirst();
     }
 
     /**
@@ -233,7 +233,7 @@ class ArrayDeque<E> extends AbstractCollection<E> implements Deque<E> {
      */
     @Override
     public E peek() {
-        return null;
+        return peekFirst();
     }
 
     /**
@@ -241,6 +241,7 @@ class ArrayDeque<E> extends AbstractCollection<E> implements Deque<E> {
      */
     @Override
     public void push(E e) {
+        addFirst(e);
     }
 
     /**
@@ -248,7 +249,7 @@ class ArrayDeque<E> extends AbstractCollection<E> implements Deque<E> {
      */
     @Override
     public E pop() {
-        return null;
+        return removeFirst();
     }
 
     /**
@@ -256,7 +257,7 @@ class ArrayDeque<E> extends AbstractCollection<E> implements Deque<E> {
      */
     @Override
     public boolean remove(Object o) {
-        return false;
+        return removeFirstOccurrence(o);
     }
 
     /**
@@ -264,7 +265,7 @@ class ArrayDeque<E> extends AbstractCollection<E> implements Deque<E> {
      */
     @Override
     public boolean contains(Object o) {
-        return false;
+        return items.indexOf(o) != -1;
     }
 
     /**
@@ -272,7 +273,7 @@ class ArrayDeque<E> extends AbstractCollection<E> implements Deque<E> {
      */
     @Override
     public int size() {
-        return 0;
+        return items.length();
     }
 
     /**
@@ -280,7 +281,7 @@ class ArrayDeque<E> extends AbstractCollection<E> implements Deque<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new Sequence(-1, 1);
     }
 
     /**
@@ -288,6 +289,62 @@ class ArrayDeque<E> extends AbstractCollection<E> implements Deque<E> {
      */
     @Override
     public Iterator<E> descendingIterator() {
-        return null;
+        return new Sequence(size(), -1);
+    }
+
+    /**
+     * @version 2013/09/25 18:38:17
+     */
+    private class Sequence implements Iterator<E> {
+
+        /** The current index. */
+        private int current;
+
+        /** The diff for move. */
+        private int diff;
+
+        /** The remove flag. */
+        private boolean removed = false;
+
+        /**
+         * @param current
+         * @param diff
+         */
+        private Sequence(int current, int diff) {
+            this.current = current;
+            this.diff = diff;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean hasNext() {
+            int next = current + diff;
+
+            return 0 <= next && next < items.length();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E next() {
+            removed = false;
+            return items.get(current += diff);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void remove() {
+            if (removed) {
+                throw new IllegalStateException();
+            } else {
+                items.remove(current);
+                removed = true;
+            }
+        }
     }
 }

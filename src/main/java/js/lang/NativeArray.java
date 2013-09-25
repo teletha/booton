@@ -694,6 +694,18 @@ public class NativeArray<T> extends NativeObject {
 
         /**
          * <p>
+         * The pop method removes the last element from an array and returns that value to the
+         * caller.
+         * </p>
+         * 
+         * @return A removed item.
+         */
+        public String pop() {
+            return that + ".pop()";
+        }
+
+        /**
+         * <p>
          * Adds one or more elements to the end of an array and returns the new length of the array.
          * </p>
          * 
@@ -873,6 +885,30 @@ public class NativeArray<T> extends NativeObject {
          */
         public String sort(NativeFunction<? extends Comparator<? super T>> comparator) {
             return that + ".sort(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Removes the first element from an array and returns that element. This method changes the
+         * length of the array.
+         * </p>
+         * 
+         * @return A removed item.
+         */
+        public String shift() {
+            return that + ".shift()";
+        }
+
+        /**
+         * <p>
+         * Adds one or more elements to the front of an array and returns the new length of the
+         * array.
+         * </p>
+         * 
+         * @return The new length property of the object upon which the method was called.
+         */
+        public String unshift(T item) {
+            return that + ".unshift(" + param(0) + ")";
         }
     }
 }
