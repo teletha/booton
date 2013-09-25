@@ -67,7 +67,6 @@ class JSConstructor<T> extends Parameterizable {
     public T newInstance(Object... parameters) {
         // create new instance
         Object instance = clazz.create();
-        System.out.println(parameters);
 
         // invoke function
         function.apply(instance, parameters);

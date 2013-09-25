@@ -11,6 +11,7 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
@@ -33,6 +34,25 @@ public class ForTest extends ScriptTester {
                 String.valueOf(m); // noise
 
                 return String.valueOf(m);
+            }
+        });
+    }
+
+    @Test
+    public void nestContinue() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            int act(int value) {
+                root: for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 5; j++) {
+                        if (j == 3) {
+                            continue root;
+                        }
+                    }
+                    value++;
+                }
+                return value;
             }
         });
     }

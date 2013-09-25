@@ -14,8 +14,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
@@ -26,6 +28,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import kiss.model.ClassUtil;
+import booton.translator.Debuggable;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -187,8 +190,8 @@ class JSKiss {
 
         // If this model is non-private or final class, we can extend it for interceptor mechanism.
         if (((Modifier.PRIVATE | Modifier.FINAL) & modifier) == 0) {
-            Table<Method, Annotation> interceptables = ClassUtil.getAnnotations(actualClass);
-
+            Table<Method, Annotation> interceptables = getAnnotations(actualClass);
+            System.out.println("aaaaaa " + interceptables.size());
             // Enhance the actual model class if needed.
             if (!interceptables.isEmpty()) {
                 // If this exception will be thrown, it is bug of this program. So we must rethrow
@@ -338,5 +341,81 @@ class JSKiss {
      */
     public static <M> M transform(Object input, Class<M> output) {
         throw new UnsupportedOperationException();
+    }
+
+    /**
+     * <p>
+     * Load the file as an additional classpath into JVM. If the file indicates the classpath which
+     * is already loaded, that will do nothing at all. The classpath can accept directory or archive
+     * (like Jar). If it is <code>null</code> or a file, this method does nothing.
+     * </p>
+     * <p>
+     * There are two advantages in the classpath loaded by this method. One is that you can add
+     * classpath dynamically and the other is that you can listen to the specified class loading
+     * event.
+     * </p>
+     * <p>
+     * Generally, JVM collects classpath information from various sources (environment variable,
+     * command line option and so on). However those means can't add or remove a classpath
+     * dynamically. This method removes such limitations.
+     * </p>
+     * <p>
+     * <em>NOTE</em> : System class loader in JVM can recognize the classpath which is specified by
+     * usual means, but not by this method. Because Sinobu manages additional classpath for enabling
+     * dynamic manipulation.
+     * </p>
+     * 
+     * @param classPath A classpath to load.
+     * @param filter Filter classes by package of the specified class.
+     * @return A managed {@link ClassLoader}.
+     * @see #unload(Path)
+     * @see kiss.ClassListener#load(Class)
+     * @see java.lang.ClassLoader#getSystemClassLoader()
+     */
+    public static ClassLoader load(Class classPath, boolean filter) {
+        return null;
+    }
+
+    /**
+     * <p>
+     * Helper method to collect all annotated methods and thire annotations.
+     * </p>
+     * 
+     * @param clazz A target class.
+     * @return A table of method and annnotations.
+     */
+    @Debuggable
+    public static Table<Method, Annotation> getAnnotations(Class clazz) {
+        Table<Method, Annotation> table = new Table();
+
+        for (Class type : ClassUtil.getTypes(clazz)) {
+            for (Method method : type.getDeclaredMethods()) {
+                // exclude the method which is created by compiler
+                // exclude the private method which is not declared in the specified class
+                if (!method.isBridge() && !method.isSynthetic() && (((method.getModifiers() & Modifier.PRIVATE) == 0) || method.getDeclaringClass() == clazz)) {
+                    Annotation[] annotations = method.getAnnotations();
+
+                    if (annotations.length != 0) {
+                        // check method overriding
+                        for (Method candidate : table.keySet()) {
+                            if (candidate.getName().equals(method.getName()) && Arrays.deepEquals(candidate.getParameterTypes(), method.getParameterTypes())) {
+                                method = candidate; // detect overriding
+                                break;
+                            }
+                        }
+
+                        add: for (Annotation annotation : annotations) {
+                            for (Annotation item : table.get(method)) {
+                                if (item.annotationType() == annotation.annotationType()) {
+                                    continue add;
+                                }
+                            }
+                            table.push(method, annotation);
+                        }
+                    }
+                }
+            }
+        }
+        return table;
     }
 }
