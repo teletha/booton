@@ -17,4 +17,32 @@ import booton.translator.JavaAPIProvider;
 @JavaAPIProvider(java.util.Locale.class)
 class Locale {
 
+    /** The base language. */
+    private String language = "en";
+
+    /**
+     * Returns the language code of this Locale.
+     * <p>
+     * <b>Note:</b> ISO 639 is not a stable standard&mdash; some languages' codes have changed.
+     * Locale's constructor recognizes both the new and the old codes for the languages whose codes
+     * have changed, but this function always returns the old code. If you want to check for a
+     * specific language whose code has changed, don't do
+     * 
+     * <pre>
+     * if (locale.getLanguage().equals("he")) // BAD!
+     *    ...
+     * </pre>
+     * Instead, do
+     * 
+     * <pre>
+     * if (locale.getLanguage().equals(new Locale("he").getLanguage()))
+     *    ...
+     * </pre>
+     * 
+     * @return The language code, or the empty string if none is defined.
+     * @see #getDisplayLanguage
+     */
+    public String getLanguage() {
+        return language;
+    }
 }

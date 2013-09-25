@@ -9,6 +9,7 @@
  */
 package js.util;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 import js.lang.NativeObject;
@@ -25,6 +26,65 @@ class HashSet<E> extends AbstractSet<E> {
 
     /** The item pool. */
     private NativeObject items = new NativeObject();
+
+    /**
+     * Constructs a new, empty set; the backing <tt>HashMap</tt> instance has default initial
+     * capacity (16) and load factor (0.75).
+     */
+    public HashSet() {
+    }
+
+    /**
+     * Constructs a new set containing the elements in the specified collection. The
+     * <tt>HashMap</tt> is created with default load factor (0.75) and an initial capacity
+     * sufficient to contain the elements in the specified collection.
+     * 
+     * @param collection the collection whose elements are to be placed into this set
+     * @throws NullPointerException if the specified collection is null
+     */
+    public HashSet(Collection<? extends E> collection) {
+        this();
+        addAll(collection);
+    }
+
+    /**
+     * Constructs a new, empty set; the backing <tt>HashMap</tt> instance has the specified initial
+     * capacity and the specified load factor.
+     * 
+     * @param initialCapacity the initial capacity of the hash map
+     * @param loadFactor the load factor of the hash map
+     * @throws IllegalArgumentException if the initial capacity is less than zero, or if the load
+     *             factor is nonpositive
+     */
+    public HashSet(int initialCapacity, float loadFactor) {
+        this();
+    }
+
+    /**
+     * Constructs a new, empty set; the backing <tt>HashMap</tt> instance has the specified initial
+     * capacity and default load factor (0.75).
+     * 
+     * @param initialCapacity the initial capacity of the hash table
+     * @throws IllegalArgumentException if the initial capacity is less than zero
+     */
+    public HashSet(int initialCapacity) {
+        this();
+    }
+
+    /**
+     * Constructs a new, empty linked hash set. (This package private constructor is only used by
+     * LinkedHashSet.) The backing HashMap instance is a LinkedHashMap with the specified initial
+     * capacity and the specified load factor.
+     * 
+     * @param initialCapacity the initial capacity of the hash map
+     * @param loadFactor the load factor of the hash map
+     * @param dummy ignored (distinguishes this constructor from other int, float constructor.)
+     * @throws IllegalArgumentException if the initial capacity is less than zero, or if the load
+     *             factor is nonpositive
+     */
+    HashSet(int initialCapacity, float loadFactor, boolean dummy) {
+        this();
+    }
 
     /**
      * {@inheritDoc}

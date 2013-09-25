@@ -19,6 +19,7 @@ import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.security.ProtectionDomain;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1094,6 +1095,24 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
     }
 
     /**
+     * Returns the {@code ProtectionDomain} of this class. If there is a security manager installed,
+     * this method first calls the security manager's {@code checkPermission} method with a
+     * {@code RuntimePermission("getProtectionDomain")} permission to ensure it's ok to get the
+     * {@code ProtectionDomain}.
+     * 
+     * @return the ProtectionDomain of this class
+     * @throws SecurityException if a security manager exists and its {@code checkPermission} method
+     *             doesn't allow getting the ProtectionDomain.
+     * @see java.security.ProtectionDomain
+     * @see SecurityManager#checkPermission
+     * @see java.lang.RuntimePermission
+     * @since 1.2
+     */
+    public ProtectionDomain getProtectionDomain() {
+        return (ProtectionDomain) (Object) new JSProtectionDomain();
+    }
+
+    /**
      * <p>
      * Creates a new instance of the class represented by this Class object. The class is
      * instantiated as if by a new expression with an empty argument list. The class is initialized
@@ -1214,5 +1233,13 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
             clazz = clazz.getArrayClass();
         }
         return (Class) (Object) clazz;
+    }
+
+    /**
+     * @version 2013/09/25 12:52:15
+     */
+    @JavaAPIProvider(ProtectionDomain.class)
+    private static class JSProtectionDomain {
+
     }
 }

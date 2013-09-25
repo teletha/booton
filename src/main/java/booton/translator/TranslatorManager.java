@@ -9,7 +9,9 @@
  */
 package booton.translator;
 
+import java.io.Reader;
 import java.io.Serializable;
+import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -30,7 +32,7 @@ import kiss.model.ClassUtil;
 import org.objectweb.asm.Type;
 
 /**
- * @version 2013/08/26 1:23:36
+ * @version 2013/09/25 12:55:04
  */
 class TranslatorManager {
 
@@ -54,6 +56,8 @@ class TranslatorManager {
 
     static {
         ignorables.add(Type.getDescriptor(Path.class));
+        ignorables.add(Type.getDescriptor(Reader.class));
+        ignorables.add(Type.getDescriptor(Writer.class));
     }
 
     /**

@@ -13,17 +13,22 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Array;
+import java.util.HashMap;
+import java.util.Map;
 
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/05/16 16:20:51
+ * @version 2013/09/25 12:49:02
  */
 @JavaAPIProvider(System.class)
 class JSSystem {
 
     /** The dummy. */
     private static final JSSecurityManager security = new JSSecurityManager();
+
+    /** The properties. */
+    private static final Map<String, String> properties = new HashMap();
 
     /**
      * The "standard" output stream. This stream is already open and ready to accept output data.
@@ -244,6 +249,118 @@ class JSSystem {
      */
     public static long nanoTime() {
         return currentTimeMillis();
+    }
+
+    /**
+     * Gets the system property indicated by the specified key.
+     * <p>
+     * First, if there is a security manager, its <code>checkPropertyAccess</code> method is called
+     * with the key as its argument. This may result in a SecurityException.
+     * <p>
+     * If there is no current set of system properties, a set of system properties is first created
+     * and initialized in the same manner as for the <code>getProperties</code> method.
+     * 
+     * @param key the name of the system property.
+     * @return the string value of the system property, or <code>null</code> if there is no property
+     *         with that key.
+     * @exception SecurityException if a security manager exists and its
+     *                <code>checkPropertyAccess</code> method doesn't allow access to the specified
+     *                system property.
+     * @exception NullPointerException if <code>key</code> is <code>null</code>.
+     * @exception IllegalArgumentException if <code>key</code> is empty.
+     * @see #setProperty
+     * @see java.lang.SecurityException
+     * @see java.lang.SecurityManager#checkPropertyAccess(java.lang.String)
+     * @see java.lang.System#getProperties()
+     */
+    public static String getProperty(String key) {
+        return properties.get(key);
+    }
+
+    /**
+     * Gets the system property indicated by the specified key.
+     * <p>
+     * First, if there is a security manager, its <code>checkPropertyAccess</code> method is called
+     * with the <code>key</code> as its argument.
+     * <p>
+     * If there is no current set of system properties, a set of system properties is first created
+     * and initialized in the same manner as for the <code>getProperties</code> method.
+     * 
+     * @param key the name of the system property.
+     * @param def a default value.
+     * @return the string value of the system property, or the default value if there is no property
+     *         with that key.
+     * @exception SecurityException if a security manager exists and its
+     *                <code>checkPropertyAccess</code> method doesn't allow access to the specified
+     *                system property.
+     * @exception NullPointerException if <code>key</code> is <code>null</code>.
+     * @exception IllegalArgumentException if <code>key</code> is empty.
+     * @see #setProperty
+     * @see java.lang.SecurityManager#checkPropertyAccess(java.lang.String)
+     * @see java.lang.System#getProperties()
+     */
+    public static String getProperty(String key, String def) {
+        String value = properties.get(key);
+
+        return value == null ? def : value;
+    }
+
+    /**
+     * Sets the system property indicated by the specified key.
+     * <p>
+     * First, if a security manager exists, its <code>SecurityManager.checkPermission</code> method
+     * is called with a <code>PropertyPermission(key, "write")</code> permission. This may result in
+     * a SecurityException being thrown. If no exception is thrown, the specified property is set to
+     * the given value.
+     * <p>
+     * 
+     * @param key the name of the system property.
+     * @param value the value of the system property.
+     * @return the previous value of the system property, or <code>null</code> if it did not have
+     *         one.
+     * @exception SecurityException if a security manager exists and its
+     *                <code>checkPermission</code> method doesn't allow setting of the specified
+     *                property.
+     * @exception NullPointerException if <code>key</code> or <code>value</code> is
+     *                <code>null</code>.
+     * @exception IllegalArgumentException if <code>key</code> is empty.
+     * @see #getProperty
+     * @see java.lang.System#getProperty(java.lang.String)
+     * @see java.lang.System#getProperty(java.lang.String, java.lang.String)
+     * @see java.util.PropertyPermission
+     * @see SecurityManager#checkPermission
+     * @since 1.2
+     */
+    public static String setProperty(String key, String value) {
+        return properties.put(key, value);
+    }
+
+    /**
+     * Removes the system property indicated by the specified key.
+     * <p>
+     * First, if a security manager exists, its <code>SecurityManager.checkPermission</code> method
+     * is called with a <code>PropertyPermission(key, "write")</code> permission. This may result in
+     * a SecurityException being thrown. If no exception is thrown, the specified property is
+     * removed.
+     * <p>
+     * 
+     * @param key the name of the system property to be removed.
+     * @return the previous string value of the system property, or <code>null</code> if there was
+     *         no property with that key.
+     * @exception SecurityException if a security manager exists and its
+     *                <code>checkPropertyAccess</code> method doesn't allow access to the specified
+     *                system property.
+     * @exception NullPointerException if <code>key</code> is <code>null</code>.
+     * @exception IllegalArgumentException if <code>key</code> is empty.
+     * @see #getProperty
+     * @see #setProperty
+     * @see java.util.Properties
+     * @see java.lang.SecurityException
+     * @see java.lang.SecurityManager#checkPropertiesAccess()
+     * @since 1.5
+     */
+    public static String clearProperty(String key) {
+        return properties.remove(key);
     }
 
     /**
