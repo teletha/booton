@@ -17,7 +17,6 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
@@ -28,7 +27,6 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import kiss.model.ClassUtil;
-import booton.translator.Debuggable;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -190,14 +188,11 @@ class JSKiss {
 
         // If this model is non-private or final class, we can extend it for interceptor mechanism.
         if (((Modifier.PRIVATE | Modifier.FINAL) & modifier) == 0) {
-            Table<Method, Annotation> interceptables = getAnnotations(actualClass);
-            System.out.println("aaaaaa " + interceptables.size());
+            Table<Method, Annotation> interceptables = ClassUtil.getAnnotations(actualClass);
+
             // Enhance the actual model class if needed.
             if (!interceptables.isEmpty()) {
-                // If this exception will be thrown, it is bug of this program. So we must rethrow
-                // the wrapped error in here.
-                throw new Error("Write intercept code!");
-                // actualClass = define(actualClass, interceptables);
+                define(actualClass, interceptables);
             }
         }
 
@@ -378,44 +373,13 @@ class JSKiss {
 
     /**
      * <p>
-     * Helper method to collect all annotated methods and thire annotations.
+     * Define interceptor code.
      * </p>
      * 
-     * @param clazz A target class.
-     * @return A table of method and annnotations.
+     * @param source
+     * @param interceptors
      */
-    @Debuggable
-    public static Table<Method, Annotation> getAnnotations(Class clazz) {
-        Table<Method, Annotation> table = new Table();
+    private static void define(Class source, Table<Method, Annotation> interceptors) {
 
-        for (Class type : ClassUtil.getTypes(clazz)) {
-            for (Method method : type.getDeclaredMethods()) {
-                // exclude the method which is created by compiler
-                // exclude the private method which is not declared in the specified class
-                if (!method.isBridge() && !method.isSynthetic() && (((method.getModifiers() & Modifier.PRIVATE) == 0) || method.getDeclaringClass() == clazz)) {
-                    Annotation[] annotations = method.getAnnotations();
-
-                    if (annotations.length != 0) {
-                        // check method overriding
-                        for (Method candidate : table.keySet()) {
-                            if (candidate.getName().equals(method.getName()) && Arrays.deepEquals(candidate.getParameterTypes(), method.getParameterTypes())) {
-                                method = candidate; // detect overriding
-                                break;
-                            }
-                        }
-
-                        add: for (Annotation annotation : annotations) {
-                            for (Annotation item : table.get(method)) {
-                                if (item.annotationType() == annotation.annotationType()) {
-                                    continue add;
-                                }
-                            }
-                            table.push(method, annotation);
-                        }
-                    }
-                }
-            }
-        }
-        return table;
     }
 }
