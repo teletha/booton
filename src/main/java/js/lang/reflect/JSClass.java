@@ -621,7 +621,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         Objects.requireNonNull(name);
 
         if (privateFields == null) {
-            getFields();
+            getDeclaredFields();
         }
 
         Field field = privateFields.get(name);

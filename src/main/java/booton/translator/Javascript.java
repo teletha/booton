@@ -32,7 +32,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import js.lang.Global;
 import js.lang.NativeObject;
+import jsx.application.Page;
+import kiss.ClassListener;
+import kiss.Extensible;
 import kiss.I;
+import kiss.Interceptor;
+import kiss.Manageable;
+import kiss.Singleton;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
@@ -199,6 +205,10 @@ public class Javascript {
                 for (Class requirement : requirements) {
                     require(requirement);
                 }
+            }
+
+            for (Class requirement : ExtensionCollector.getExtensions()) {
+                require(requirement);
             }
 
             try {
@@ -753,5 +763,55 @@ public class Javascript {
 
         // API definition
         return members.size() - 1;
+    }
+
+    /**
+     * @version 2013/09/26 14:29:26
+     */
+    @Manageable(lifestyle = Singleton.class)
+    private static class ExtensionCollector implements ClassListener<Extensible> {
+
+        /** The extensions. */
+        private static final List<Class<Extensible>> extensions = new ArrayList();
+
+        /** The extension points. */
+        private static final Set<Class> collectable = new HashSet();
+
+        static {
+            collectable.add(Interceptor.class);
+            collectable.add(Page.class);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void load(Class<Extensible> clazz) {
+            for (Class type : collectable) {
+                if (type.isAssignableFrom(clazz)) {
+                    extensions.add(clazz);
+                    return;
+                }
+            }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void unload(Class<Extensible> clazz) {
+            extensions.remove(clazz);
+        }
+
+        /**
+         * <p>
+         * List up all extensions.
+         * </p>
+         * 
+         * @return
+         */
+        private static Class[] getExtensions() {
+            return extensions.toArray(new Class[extensions.size()]);
+        }
     }
 }

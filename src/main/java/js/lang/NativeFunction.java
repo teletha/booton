@@ -447,6 +447,17 @@ public class NativeFunction<T> extends NativeObject {
 
         /**
          * <p>
+         * Create function statement form the specified object which has only one method.
+         * </p>
+         * 
+         * @param functional
+         */
+        public String NativeFunction(Object functional, Method method) {
+            return param(0) + "." + Javascript.computeMethodName(findSAM(type(1)));
+        }
+
+        /**
+         * <p>
          * Calls a function with a given this value and arguments provided as an array (or an array
          * like object).
          * </p>

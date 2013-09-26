@@ -35,7 +35,7 @@ import booton.translator.Translator;
  * Define global objects and static methods in Booton environment.
  * </p>
  * 
- * @version 2013/07/30 19:34:38
+ * @version 2013/09/26 16:30:55
  */
 public class Global {
 
@@ -178,6 +178,24 @@ public class Global {
     public static void clearTimeout(long timeoutId) {
         manager.remove(timeoutId);
     }
+
+    /**
+     * <p>
+     * Retrieve context (this).
+     * </p>
+     * 
+     * @return
+     */
+    public static native Object getContext();
+
+    /**
+     * <p>
+     * Retrieve current function (arguments.callee).
+     * </p>
+     * 
+     * @return
+     */
+    public static native NativeFunction getContextFuntion();
 
     /**
      * <p>
@@ -569,6 +587,28 @@ public class Global {
          */
         public String clearTimeout(long timeoutId) {
             return "clearTimeout(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Retrieve context (this).
+         * </p>
+         * 
+         * @return
+         */
+        public String getContext() {
+            return "this";
+        }
+
+        /**
+         * <p>
+         * Retrieve current function (arguments.callee).
+         * </p>
+         * 
+         * @return
+         */
+        public String getContextFuntion() {
+            return "arguments.callee";
         }
 
         /**
