@@ -260,8 +260,6 @@ public class ScriptTester {
 
                 if (throwable instanceof AssertionError || throwable instanceof InternalError) {
                     dumpCode(source);
-                } else {
-                    dumpCode(source);
                 }
                 throw I.quiet(throwable);
             }

@@ -15,18 +15,25 @@ import java.lang.invoke.WrongMethodTypeException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import js.lang.NativeFunction;
+import js.lang.reflect.Reflections;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/09/24 23:07:23
+ * @version 2013/09/26 19:49:24
  */
 @JavaAPIProvider(MethodHandle.class)
 class JSMethodHandle {
+
+    /** The actual function. */
+    private NativeFunction function;
 
     /**
      * @param method
      */
     JSMethodHandle(Method method) {
+        function = Reflections.getPrototype(method.getDeclaringClass())
+                .getPropertyAs(NativeFunction.class, Reflections.getPropertyName(method));
     }
 
     /**
@@ -34,6 +41,13 @@ class JSMethodHandle {
      * @param b
      */
     JSMethodHandle(Field field, boolean setter) {
+    }
+
+    /**
+     * 
+     */
+    private JSMethodHandle(NativeFunction function) {
+        this.function = function;
     }
 
     /**
@@ -135,7 +149,7 @@ class JSMethodHandle {
      * @see MethodHandles#insertArguments
      */
     public MethodHandle bindTo(Object x) {
-        throw new UnsupportedOperationException();
+        return (MethodHandle) (Object) new JSMethodHandle(function.bind(x));
     }
 
     /**
@@ -192,6 +206,6 @@ class JSMethodHandle {
      * @see MethodHandles#spreadInvoker
      */
     public Object invokeWithArguments(Object... arguments) throws Throwable {
-        throw new UnsupportedOperationException();
+        return function.apply(null, arguments);
     }
 }

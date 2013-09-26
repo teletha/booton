@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2013 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,11 +10,12 @@
 package jsx.application;
 
 import js.dom.DocumentFragment;
+import kiss.Extensible;
 
 /**
- * @version 2012/12/26 13:02:53
+ * @version 2013/09/26 23:25:47
  */
-public abstract class Page {
+public abstract class Page implements Extensible {
 
     /**
      * <p>

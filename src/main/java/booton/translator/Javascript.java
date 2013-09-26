@@ -188,23 +188,16 @@ public class Javascript {
      * @param outout A script output.
      * @param requirements A list of required script classes.
      */
-    public void writeTo(Appendable output, Set<Class> defined, Class... requirements) {
+    void writeTo(Appendable output, Set<Class> defined, Class... requirements) {
         // record compile route
         compiling.addFirst(this);
 
         try {
             // Any class requires these classes.
-            require(Object.class);
-            require(Class.class);
-            require(Thread.class);
-            require(JavascriptAPIProviders.findProvider("Object"));
-            require(JavascriptAPIProviders.findProvider("String"));
             require(JavascriptAPIProviders.findProvider("Array"));
 
-            if (requirements != null) {
-                for (Class requirement : requirements) {
-                    require(requirement);
-                }
+            for (Class requirement : requirements) {
+                require(requirement);
             }
 
             for (Class requirement : ExtensionCollector.getExtensions()) {
@@ -352,9 +345,13 @@ public class Javascript {
             }
 
             throw e;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             TranslationError error = new TranslationError(e);
             error.write("Can't compile ", source.getName() + ".");
+
+            for (Javascript script : compiling) {
+                error.write(" at ", script.source.getName());
+            }
 
             throw error;
         }
@@ -790,6 +787,7 @@ public class Javascript {
             for (Class type : collectable) {
                 if (type.isAssignableFrom(clazz)) {
                     extensions.add(clazz);
+                    System.out.println(clazz);
                     return;
                 }
             }

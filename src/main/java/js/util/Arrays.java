@@ -1128,10 +1128,10 @@ class Arrays {
         StringBuilder builder = new StringBuilder();
         builder.append("[");
 
-        for (int i = 0; i <= length; i++) {
+        for (int i = 0; i < length; i++) {
             builder.append(String.valueOf(Array.get(array, i)));
 
-            if (i != length) {
+            if (i + 1 != length) {
                 builder.append(", ");
             }
         }
