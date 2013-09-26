@@ -683,10 +683,21 @@ class Node {
                 return;
             }
 
+            Node backedgedDominator = dominator;
+
+            while (backedgedDominator != null) {
+                if (backedgedDominator.backedges.contains(node)) {
+                    buffer.append("continue l", backedgedDominator.id, ";");
+                    return;
+                }
+                backedgedDominator = backedgedDominator.getDominator();
+            }
+
             if (dominator.backedges.size() == 0) {
                 // stop here
                 node.getDominator().follower = node;
             } else {
+                // search destination
                 buffer.append("break l", dominator.id, ";");
             };
         }
