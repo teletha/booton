@@ -10,6 +10,7 @@
 package js.lang.invoke;
 
 import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.invoke.WrongMethodTypeException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -69,7 +70,7 @@ class JSMethodHandle {
      *             method handle call
      */
     public Object invoke(Object o1) throws Throwable {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -106,6 +107,91 @@ class JSMethodHandle {
      *             method handle call
      */
     public Object invoke(Object o1, Object o2) throws Throwable {
-        return null;
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Binds a value {@code x} to the first argument of a method handle, without invoking it. The
+     * new method handle adapts, as its <i>target</i>, the current method handle by binding it to
+     * the given argument. The type of the bound handle will be the same as the type of the target,
+     * except that a single leading reference parameter will be omitted.
+     * <p>
+     * When called, the bound handle inserts the given value {@code x} as a new leading argument to
+     * the target. The other arguments are also passed unchanged. What the target eventually returns
+     * is returned unchanged by the bound handle.
+     * <p>
+     * The reference {@code x} must be convertible to the first parameter type of the target.
+     * <p>
+     * (<em>Note:</em> Because method handles are immutable, the target method handle retains its
+     * original type and behavior.)
+     * 
+     * @param x the value to bind to the first argument of the target
+     * @return a new method handle which prepends the given value to the incoming argument list,
+     *         before calling the original method handle
+     * @throws IllegalArgumentException if the target does not have a leading parameter type that is
+     *             a reference type
+     * @throws ClassCastException if {@code x} cannot be converted to the leading parameter type of
+     *             the target
+     * @see MethodHandles#insertArguments
+     */
+    public MethodHandle bindTo(Object x) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Performs a variable arity invocation, passing the arguments in the given array to the method
+     * handle, as if via an inexact {@link #invoke invoke} from a call site which mentions only the
+     * type {@code Object}, and whose arity is the length of the argument array.
+     * <p>
+     * Specifically, execution proceeds as if by the following steps, although the methods are not
+     * guaranteed to be called if the JVM can predict their effects.
+     * <ul>
+     * <li>Determine the length of the argument array as {@code N}. For a null reference,
+     * {@code N=0}.</li>
+     * <li>Determine the general type {@code TN} of {@code N} arguments as as
+     * {@code TN=MethodType.genericMethodType(N)}.</li>
+     * <li>Force the original target method handle {@code MH0} to the required type, as
+     * {@code MH1 = MH0.asType(TN)}.</li>
+     * <li>Spread the array into {@code N} separate arguments {@code A0, ...}.</li>
+     * <li>Invoke the type-adjusted method handle on the unpacked arguments: MH1.invokeExact(A0,
+     * ...).</li>
+     * <li>Take the return value as an {@code Object} reference.</li>
+     * </ul>
+     * <p>
+     * Because of the action of the {@code asType} step, the following argument conversions are
+     * applied as necessary:
+     * <ul>
+     * <li>reference casting
+     * <li>unboxing
+     * <li>widening primitive conversions
+     * </ul>
+     * <p>
+     * The result returned by the call is boxed if it is a primitive, or forced to null if the
+     * return type is void.
+     * <p>
+     * This call is equivalent to the following code:
+     * <p>
+     * <blockquote>
+     * 
+     * <pre>
+     * MethodHandle invoker = MethodHandles.spreadInvoker(this.type(), 0);
+     * Object result = invoker.invokeExact(this, arguments);
+     * </pre>
+     * </blockquote>
+     * <p>
+     * Unlike the signature polymorphic methods {@code invokeExact} and {@code invoke},
+     * {@code invokeWithArguments} can be accessed normally via the Core Reflection API and JNI. It
+     * can therefore be used as a bridge between native or reflective code and method handles.
+     * 
+     * @param arguments the arguments to pass to the target
+     * @return the result returned by the target
+     * @throws ClassCastException if an argument cannot be converted by reference casting
+     * @throws WrongMethodTypeException if the target's type cannot be adjusted to take the given
+     *             number of {@code Object} arguments
+     * @throws Throwable anything thrown by the target method invocation
+     * @see MethodHandles#spreadInvoker
+     */
+    public Object invokeWithArguments(Object... arguments) throws Throwable {
+        throw new UnsupportedOperationException();
     }
 }

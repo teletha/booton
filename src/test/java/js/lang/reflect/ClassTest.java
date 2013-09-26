@@ -57,6 +57,18 @@ public class ClassTest {
         assert Modifier.isPublic(modifier);
     }
 
+    @Test
+    public void modifierAbstract() throws Exception {
+        assert Modifier.isAbstract(Package.class.getModifiers());
+        assert !Modifier.isAbstract(Public.class.getModifiers());
+    }
+
+    @Test
+    public void modifierInterface() throws Exception {
+        assert Modifier.isInterface(Protected.class.getModifiers());
+        assert !Modifier.isInterface(Public.class.getModifiers());
+    }
+
     /**
      * @version 2013/08/03 0:25:14
      */
@@ -66,13 +78,13 @@ public class ClassTest {
     /**
      * @version 2013/08/03 0:25:14
      */
-    static class Package {
+    static abstract class Package {
     }
 
     /**
      * @version 2013/08/03 0:25:14
      */
-    protected static class Protected {
+    protected static interface Protected {
     }
 
     /**

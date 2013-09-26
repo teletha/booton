@@ -9,7 +9,11 @@
  */
 package kiss;
 
+import static js.lang.Global.*;
+
 import java.lang.annotation.Annotation;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -17,15 +21,21 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+import js.lang.Global;
+import js.lang.NativeFunction;
+import js.lang.NativeObject;
+import js.lang.reflect.Reflections;
 import kiss.model.ClassUtil;
 import booton.translator.JavaAPIProvider;
 
@@ -36,7 +46,7 @@ import booton.translator.JavaAPIProvider;
 class JSKiss {
 
     /** The mapping from extension point to extensions. */
-    private static final Table<Class, Class> extensions = new Table();
+    private static Table<Class, Class> extensions;
 
     /** The mapping from extension point to assosiated extension mapping. */
     private static final Table<Integer, Class> keys = new Table();
@@ -116,6 +126,8 @@ class JSKiss {
      *         <code>null</code>.
      */
     public static <E extends Extensible> E find(Class<E> extensionPoint, Class key) {
+        initialize();
+
         Class<E> clazz = keys.find(Objects.hash(extensionPoint, key));
 
         return clazz == null ? null : make(clazz);
@@ -380,6 +392,128 @@ class JSKiss {
      * @param interceptors
      */
     private static void define(Class source, Table<Method, Annotation> interceptors) {
+        try {
+            NativeObject prototype = Reflections.getPrototype(source);
 
+            for (Entry<Method, List<Annotation>> entry : interceptors.entrySet()) {
+                Method method = entry.getKey();
+                List<Annotation> annotations = entry.getValue();
+
+                if (!annotations.isEmpty()) {
+                    prototype.setProperty(Reflections.getPropertyName(method), new NativeFunction(new InterceptorFunction(method, annotations)));
+                }
+            }
+        } catch (Exception e) {
+            throw I.quiet(e);
+        }
+    }
+
+    /**
+     * Lazy initialization.
+     */
+    private static void initialize() {
+        if (extensions == null) {
+            extensions = new Table();
+
+            for (Class<? extends Extensible> extension : search(Extensible.class)) {
+                load(extension);
+            }
+        }
+    }
+
+    private static void load(Class extension) {
+        // search and collect information for all extension points
+        for (Class extensionPoint : ClassUtil.getTypes(extension)) {
+            if (Arrays.asList(extensionPoint.getInterfaces()).contains(Extensible.class)) {
+                // register new extension
+                extensions.push(extensionPoint, extension);
+
+                // register extension key
+                Class[] params = ClassUtil.getParameter(extension, extensionPoint);
+
+                if (params.length != 0 && params[0] != Object.class) {
+                    keys.push(Objects.hash(extensionPoint, params[0]), extension);
+
+                    // The user has registered a newly custom lifestyle, so we should update
+                    // lifestyle for this extension key class. Normally, when we update some data,
+                    // it is desirable to store the previous data to be able to restore it later.
+                    // But, in this case, the contextual sensitive instance that the lifestyle emits
+                    // changes twice on "load" and "unload" event from the point of view of the
+                    // user. So the previous data becomes all but meaningless for a cacheable
+                    // lifestyles (e.g. Singleton and ThreadSpecifiec). Therefore we we completely
+                    // refresh lifestyles associated with this extension key class.
+                    if (extensionPoint == Lifestyle.class) {
+                        lifestyles.remove(params[0]);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Find all sub class of the specified class.
+     * </p>
+     * 
+     * @param type A type to search.
+     * @return A list of found classes.
+     */
+    private static <T> List<Class<? extends T>> search(Class<T> type) {
+        List<Class<? extends T>> matched = new ArrayList();
+
+        for (String name : boot.keys()) {
+            NativeObject object = boot.getPropertyAs(NativeObject.class, name);
+
+            if (object != null) {
+                Class clazz = object.getPropertyAs(Class.class, "$");
+
+                if (((Modifier.INTERFACE | Modifier.ABSTRACT) & clazz.getModifiers()) == 0 && type != clazz && type.isAssignableFrom(clazz)) {
+                    matched.add(clazz);
+                }
+            }
+        }
+        return matched;
+    }
+
+    /**
+     * @version 2013/09/26 14:55:33
+     */
+    private static class InterceptorFunction {
+
+        /** The method name. */
+        private final String name;
+
+        /** The method handle. */
+        private final MethodHandle method;
+
+        /** The all defined annotations. */
+        private final Annotation[] annotations;
+
+        /**
+         * @param name
+         * @param method
+         * @param annotations
+         * @throws IllegalAccessException
+         */
+        private InterceptorFunction(Method method, List<Annotation> annotations) throws IllegalAccessException {
+            this.name = method.getName();
+            this.method = MethodHandles.lookup().unreflect(method);
+            this.annotations = annotations.toArray(new Annotation[annotations.size()]);
+        }
+
+        /**
+         * <p>
+         * Invoke interceptor entry point.
+         * </p>
+         * 
+         * @param params
+         * @return
+         */
+        @SuppressWarnings("unused")
+        private Object invoke(Object... params) {
+            NativeFunction function = Global.getContextFuntion();
+            System.out.println(function == null);
+            return Interceptor.invoke(name, method, Global.getContext(), Global.getArgumentArray(), annotations);
+        }
     }
 }
