@@ -13,16 +13,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 
 import jsx.application.Application;
 import jsx.application.ApplicationTheme;
-import jsx.application.Page;
-import kiss.ClassListener;
 import kiss.I;
-import kiss.Manageable;
-import kiss.Singleton;
 import kiss.XML;
 
 import org.eclipse.jetty.server.Server;
@@ -37,7 +31,7 @@ import booton.translator.Javascript;
 import booton.util.HTMLWriter;
 
 /**
- * @version 2013/07/24 13:19:32
+ * @version 2013/09/26 23:26:07
  */
 public class Booton {
 
@@ -170,7 +164,7 @@ public class Booton {
             buildHTML();
 
             // build js file
-            Javascript.getScript(application).writeTo(js, PageManager.getPages());
+            Javascript.getScript(application).writeTo(js);
 
             // Don't build live coding script out of build process, because all scripts must share
             // compiled and obfuscated class information.
@@ -224,38 +218,5 @@ public class Booton {
         Booton booton = new Booton(null, Teemowork.class);
         booton.launch(10021);
         booton.build();
-    }
-
-    /**
-     * @version 2013/01/19 10:56:11
-     */
-    @Manageable(lifestyle = Singleton.class)
-    private static class PageManager implements ClassListener<Page> {
-
-        /** The pages. */
-        private static final List<Class<Page>> pages = new ArrayList();
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void load(Class<Page> clazz) {
-            pages.add(clazz);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void unload(Class<Page> clazz) {
-            pages.remove(clazz);
-        }
-
-        /**
-         * @return
-         */
-        private static Class[] getPages() {
-            return pages.toArray(new Class[pages.size()]);
-        }
     }
 }

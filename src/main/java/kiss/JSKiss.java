@@ -99,6 +99,8 @@ class JSKiss {
      * @throws NullPointerException If the Extension Point is <code>null</code>.
      */
     public static <E extends Extensible> List<E> find(Class<E> extensionPoint) {
+        initialize();
+
         // Skip null check because this method can throw NullPointerException.
         List<Class> classes = extensions.get(extensionPoint);
 
@@ -380,6 +382,10 @@ class JSKiss {
      * @see java.lang.ClassLoader#getSystemClassLoader()
      */
     public static ClassLoader load(Class classPath, boolean filter) {
+        // reset
+        extensions = null;
+
+        // API definition
         return null;
     }
 
@@ -400,7 +406,12 @@ class JSKiss {
                 List<Annotation> annotations = entry.getValue();
 
                 if (!annotations.isEmpty()) {
-                    prototype.setProperty(Reflections.getPropertyName(method), new NativeFunction(new InterceptorFunction(method, annotations)));
+                    NativeFunction delegator = new NativeFunction(new InterceptorFunction());
+                    delegator.setProperty("1", method.getName());
+                    delegator.setProperty("2", MethodHandles.lookup().unreflect(method));
+                    delegator.setProperty("3", annotations.toArray(new Annotation[annotations.size()]));
+
+                    prototype.setProperty(Reflections.getPropertyName(method), delegator);
                 }
             }
         } catch (Exception e) {
@@ -480,27 +491,6 @@ class JSKiss {
      */
     private static class InterceptorFunction {
 
-        /** The method name. */
-        private final String name;
-
-        /** The method handle. */
-        private final MethodHandle method;
-
-        /** The all defined annotations. */
-        private final Annotation[] annotations;
-
-        /**
-         * @param name
-         * @param method
-         * @param annotations
-         * @throws IllegalAccessException
-         */
-        private InterceptorFunction(Method method, List<Annotation> annotations) throws IllegalAccessException {
-            this.name = method.getName();
-            this.method = MethodHandles.lookup().unreflect(method);
-            this.annotations = annotations.toArray(new Annotation[annotations.size()]);
-        }
-
         /**
          * <p>
          * Invoke interceptor entry point.
@@ -512,8 +502,7 @@ class JSKiss {
         @SuppressWarnings("unused")
         private Object invoke(Object... params) {
             NativeFunction function = Global.getContextFuntion();
-            System.out.println(function == null);
-            return Interceptor.invoke(name, method, Global.getContext(), Global.getArgumentArray(), annotations);
+            return Interceptor.invoke(function.getPropertyAs(String.class, "1"), function.getPropertyAs(MethodHandle.class, "2"), Global.getContext(), Global.getArgumentArray(), function.getPropertyAs(Annotation[].class, "3"));
         }
     }
 }

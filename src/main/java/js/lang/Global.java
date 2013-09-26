@@ -28,6 +28,7 @@ import jsx.jQuery;
 
 import org.w3c.dom.DocumentFragment;
 
+import booton.translator.Javascript;
 import booton.translator.Translator;
 
 /**
@@ -619,7 +620,7 @@ public class Global {
          * @param timeoutId The ID of the timeout you wish to clear, as returned by setTimeout().
          */
         public String getArgumentArray() {
-            return "Array.prototype.slice.call(arguments)";
+            return "boot.array(\"" + Javascript.computeSimpleClassName(Object.class) + "\",Array.prototype.slice.call(arguments))";
         }
 
         /**

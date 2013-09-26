@@ -10,11 +10,13 @@
 package js.lang;
 
 import booton.translator.JavascriptAPIProvider;
+import booton.translator.Require;
 
 /**
  * @version 2013/08/20 15:59:22
  */
 @JavascriptAPIProvider("Array")
+@Require
 class NativeArrayExtension {
 
     /** The cached type. */

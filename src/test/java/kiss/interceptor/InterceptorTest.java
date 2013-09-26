@@ -33,7 +33,6 @@ public class InterceptorTest {
     @Test
     public void interceptor() throws Exception {
         InterceptedClass intercepted = I.make(InterceptedClass.class);
-        System.out.println(intercepted.call("Yuigahama"));
         assert intercepted.call("Yuigahama").equals("Hello Yuigahama!");
     }
 
