@@ -64,12 +64,14 @@ class JavaMetadataCompiler {
 
         // fields
         for (Field field : clazz.getDeclaredFields()) {
-            elements.add(new FieldMetadata(field));
+            if (!field.getName().equals("serialVersionUID")) {
+                elements.add(new FieldMetadata(field));
+            }
         }
 
         // methods
         for (Method method : clazz.getDeclaredMethods()) {
-            if (!TranslatorManager.isIgnorableMethod(method)) {
+            if (!TranslatorManager.isIgnorableMethod(method) && !method.isBridge()) {
                 elements.add(new MethodMetadata(method));
             }
         }

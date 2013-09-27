@@ -1419,7 +1419,9 @@ class JavaMethodCompiler extends MethodVisitor {
                     // don't write
                     immediately = false;
                 } else {
-                    if (!className.equals("java/lang/Object")) {
+                    if (className.equals("java/lang/Object")) {
+                        current.remove(0);
+                    } else {
                         current.addOperand(translator.translateSuperMethod(owner, methodName, desc, parameters, contexts), returnType);
                     }
                 }
