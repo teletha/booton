@@ -39,6 +39,7 @@ class JavaMetadataCompiler {
             ignorables.add(JavascriptAPIProvider.class);
             ignorables.add(RunWith.class);
             ignorables.add(Override.class);
+            ignorables.add(Require.class);
         } catch (Exception e) {
             throw I.quiet(e);
         }

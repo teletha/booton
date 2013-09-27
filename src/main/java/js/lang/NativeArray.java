@@ -269,7 +269,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A built expression.
      */
     public String join(String separator) {
-        return I.join(list, separator);
+        return I.join(separator, list);
     }
 
     /**

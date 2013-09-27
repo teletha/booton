@@ -1282,7 +1282,7 @@ public abstract class CSS implements Extensible {
 
             // write requested properties only.
             CSSWriter writer = new CSSWriter();
-            writer.write(I.join(assigned, ","), "{");
+            writer.write(I.join(",", assigned), "{");
 
             for (CSSProperty property : properties) {
                 if (property.used) {

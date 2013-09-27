@@ -32,11 +32,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import js.lang.Global;
 import js.lang.NativeObject;
-import jsx.application.Page;
 import kiss.ClassListener;
 import kiss.Extensible;
 import kiss.I;
-import kiss.Interceptor;
 import kiss.Manageable;
 import kiss.Singleton;
 
@@ -67,6 +65,9 @@ import org.objectweb.asm.Type;
  * @version 2013/09/24 15:56:44
  */
 public class Javascript {
+
+    /** The dependency manager. */
+    private static final DepenedencyManager manager = I.make(DepenedencyManager.class);
 
     /** The all cached scripts. */
     private static final Map<Class, Javascript> scripts = I.aware(new ConcurrentHashMap());
@@ -158,23 +159,6 @@ public class Javascript {
      * @param outout A script output.
      * @param requirements A list of required script classes.
      */
-    public void writeTo(Path output, Set<Class> defined, Class... requirements) {
-        try {
-            writeTo(Files.newBufferedWriter(output, I.$encoding), defined, requirements);
-        } catch (IOException e) {
-            throw I.quiet(e);
-        }
-    }
-
-    /**
-     * <p>
-     * Write this script into the specified output. This method write out dependency scripts of this
-     * script too.
-     * </p>
-     * 
-     * @param outout A script output.
-     * @param requirements A list of required script classes.
-     */
     public void writeTo(Appendable output, Class... requirements) {
         writeTo(output, new HashSet(), requirements);
     }
@@ -193,16 +177,7 @@ public class Javascript {
         compiling.addFirst(this);
 
         try {
-            // Any class requires these classes.
-            require(JavascriptAPIProviders.findProvider("Array"));
-
-            for (Class requirement : requirements) {
-                require(requirement);
-            }
-
-            for (Class requirement : ExtensionCollector.getExtensions()) {
-                require(requirement);
-            }
+            manager.add(requirements);
 
             try {
                 // Record all defined classes to prevent duplicated definition.
@@ -497,7 +472,7 @@ public class Javascript {
             } else {
                 code = context.toString();
             }
-            return code + "." + computeMethodName(method) + "(" + I.join(Arrays.asList(params), ",") + ")";
+            return code + "." + computeMethodName(method) + "(" + I.join(",", params) + ")";
         } catch (Exception e) {
             throw I.quiet(e);
         }
@@ -763,53 +738,50 @@ public class Javascript {
     }
 
     /**
-     * @version 2013/09/26 14:29:26
+     * @version 2013/09/27 15:27:16
      */
     @Manageable(lifestyle = Singleton.class)
-    private static class ExtensionCollector implements ClassListener<Extensible> {
+    private static class DepenedencyManager implements ClassListener<Require> {
 
         /** The extensions. */
-        private static final List<Class<Extensible>> extensions = new ArrayList();
+        private final List<Class> collection = new ArrayList();
 
-        /** The extension points. */
-        private static final Set<Class> collectable = new HashSet();
-
-        static {
-            collectable.add(Interceptor.class);
-            collectable.add(Page.class);
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void load(Class clazz) {
+            collection.add(clazz);
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public void load(Class<Extensible> clazz) {
-            for (Class type : collectable) {
-                if (type.isAssignableFrom(clazz)) {
-                    extensions.add(clazz);
-                    System.out.println(clazz);
-                    return;
-                }
-            }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void unload(Class<Extensible> clazz) {
-            extensions.remove(clazz);
+        public void unload(Class clazz) {
+            collection.remove(clazz);
         }
 
         /**
          * <p>
-         * List up all extensions.
+         * Collect all required classes.
          * </p>
          * 
-         * @return
+         * @param requirements
          */
-        private static Class[] getExtensions() {
-            return extensions.toArray(new Class[extensions.size()]);
+        private void add(Class... requirements) {
+            List<Class> list = new ArrayList();
+            list.addAll(collection);
+            list.addAll(Arrays.asList(requirements));
+
+            for (Class clazz : list) {
+                if (Extensible.class.isAssignableFrom(clazz)) {
+                    for (Class<Extensible> extension : I.collect((Class<Extensible>) clazz)) {
+                        require(extension);
+                    }
+                }
+                require(clazz);
+            }
         }
     }
 }

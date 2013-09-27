@@ -76,7 +76,7 @@ public class Text extends CSSProperty<Text> {
         super.write(writer);
 
         writer.property("text-indent", indent);
-        writer.property("text-shadow", I.join(shadows, ","));
+        writer.property("text-shadow", I.join(",", shadows));
     }
 
     /**

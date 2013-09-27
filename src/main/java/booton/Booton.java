@@ -16,6 +16,7 @@ import java.nio.file.Path;
 
 import jsx.application.Application;
 import jsx.application.ApplicationTheme;
+import jsx.application.Page;
 import kiss.I;
 import kiss.XML;
 
@@ -164,7 +165,7 @@ public class Booton {
             buildHTML();
 
             // build js file
-            Javascript.getScript(application).writeTo(js);
+            Javascript.getScript(application).writeTo(js, Page.class);
 
             // Don't build live coding script out of build process, because all scripts must share
             // compiled and obfuscated class information.

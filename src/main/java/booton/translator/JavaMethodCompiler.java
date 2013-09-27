@@ -281,7 +281,7 @@ class JavaMethodCompiler extends MethodVisitor {
         try {
             // write method declaration
             code.mark();
-            code.append(methodName, ":", "function(", I.join(variables.names(), ","), "){");
+            code.append(methodName, ":", "function(", I.join(",", variables.names()), "){");
             nodes.get(0).write(code);
             code.optimize();
             code.append('}'); // method end

@@ -146,7 +146,7 @@ public class EditableImage {
      */
     public void write(Path output) {
         if (output != null && image != null) {
-            String[] names = I.call(output);
+            String[] names = call(output);
 
             switch (names[1].toLowerCase()) {
             case "jpg":
@@ -169,7 +169,7 @@ public class EditableImage {
      */
     public void write(Path directory, ImageType type) {
         if (directory != null && type != null && image != null) {
-            write(directory.resolve(I.call(file)[0] + "." + type.name().toLowerCase()));
+            write(directory.resolve(call(file)[0] + "." + type.name().toLowerCase()));
         }
     }
 
@@ -226,5 +226,28 @@ public class EditableImage {
             return 0;
         }
 
+    }
+
+    /**
+     * <p>
+     * Retrieve file name and extension from the specified path.
+     * </p>
+     * 
+     * @param path A target path.
+     * @return A file name array like the following [name, extension].
+     * @throws NullPointerException A path is <code>null</code>.
+     */
+    private static String[] call(Path path) {
+        String[] names = {"", ""};
+        String name = path.getFileName().toString();
+        int index = name.lastIndexOf('.');
+
+        if (index == -1) {
+            names[0] = name;
+        } else {
+            names[0] = name.substring(0, index);
+            names[1] = name.substring(index + 1);
+        }
+        return names;
     }
 }
