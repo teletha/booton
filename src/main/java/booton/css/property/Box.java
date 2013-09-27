@@ -84,7 +84,7 @@ public class Box extends CSSProperty<Box> {
         writer.property("min-width", minWidth);
         writer.property("max-height", maxHeight);
         writer.property("min-height", minHeight);
-        writer.property("box-shadow", I.join(shadows, ","));
+        writer.property("box-shadow", I.join(",", shadows));
     }
 
     /**

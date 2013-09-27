@@ -154,7 +154,7 @@ public class ScriptTester {
         StringBuilder script = new StringBuilder();
 
         // invoke as Javascript
-        Javascript.getScript(source).writeTo(script, defined, Character.class);
+        Javascript.getScript(source).writeTo(script, defined);
 
         try {
             // compile as Javascript and script engine read it
@@ -236,7 +236,7 @@ public class ScriptTester {
             StringBuilder script = new StringBuilder();
 
             // invoke as Javascript
-            Javascript.getScript(source).writeTo(script, defined, Character.class, ClientStackTrace.class);
+            Javascript.getScript(source).writeTo(script, defined, ClientStackTrace.class);
 
             // compile as Javascript and script engine read it
             engine.execute(html, script.toString(), sourceName, 1);

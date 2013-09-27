@@ -179,7 +179,7 @@ public class CSSWriter {
             }
 
             for (Entry<Vendor, List<String>> property : properties.entrySet()) {
-                String value = I.join(property.getValue(), separator);
+                String value = I.join(separator, property.getValue());
 
                 if (value.length() != 0) {
                     Vendor vendor = property.getKey();

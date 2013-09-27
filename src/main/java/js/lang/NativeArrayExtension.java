@@ -15,8 +15,8 @@ import booton.translator.Require;
 /**
  * @version 2013/08/20 15:59:22
  */
-@JavascriptAPIProvider("Array")
 @Require
+@JavascriptAPIProvider("Array")
 class NativeArrayExtension {
 
     /** The cached type. */

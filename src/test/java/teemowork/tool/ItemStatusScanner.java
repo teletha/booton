@@ -102,7 +102,7 @@ public class ItemStatusScanner {
             }
         }
 
-        return I.join(items, ",");
+        return I.join(",", items);
     }
 
     private static String findItemName(String name) {

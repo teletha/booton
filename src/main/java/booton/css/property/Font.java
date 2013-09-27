@@ -533,7 +533,7 @@ public final class Font extends ColorableProperty<Font> {
          */
         @Override
         protected void write(CSSWriter writer) {
-            writer.property(name, I.join(names, ","));
+            writer.property(name, I.join(",", names));
         }
 
         /**
