@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.PatternSyntaxException;
 
+import booton.translator.Debuggable;
 import booton.translator.JavaAPIProvider;
 import booton.translator.JavascriptAPIProvider;
 
@@ -636,6 +637,7 @@ class JSString implements Comparable<String>, CharSequence {
      *         subregion of the string argument; <code>false</code> otherwise. Whether the matching
      *         is exact or case insensitive depends on the <code>ignoreCase</code> argument.
      */
+    @Debuggable
     public boolean regionMatches(boolean ignoreCase, int offset, String other, int otherOffset, int length) {
         char chars1[] = toCharArray();
         char chars2[] = other.toCharArray();

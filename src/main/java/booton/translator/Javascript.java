@@ -371,13 +371,14 @@ public class Javascript {
         // write constructors, fields and methods
         try {
             code.append('{');
-            Method[] methods = source.getDeclaredMethods();
 
-            for (int i = 0; i < methods.length; i++) {
-                code.comment(methods[i]);
-                code.append(computeMethodName(methods[i])).append(":");
+            if (source.isAnnotation()) {
+                Method[] methods = source.getDeclaredMethods();
 
-                if (source.isAnnotation()) {
+                for (int i = 0; i < methods.length; i++) {
+                    code.comment(methods[i]);
+                    code.append(computeMethodName(methods[i])).append(":");
+
                     Object value = methods[i].getDefaultValue();
 
                     if (value == null) {
@@ -385,12 +386,10 @@ public class Javascript {
                     } else {
                         code.append("function() {return " + JavaMetadataCompiler.compileValue(value) + ";}");
                     }
-                } else {
-                    code.append("null");
-                }
 
-                if (i < methods.length - 1) {
-                    code.separator();
+                    if (i < methods.length - 1) {
+                        code.separator();
+                    }
                 }
             }
             code.append('}');

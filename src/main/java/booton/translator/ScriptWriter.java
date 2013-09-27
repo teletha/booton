@@ -190,6 +190,7 @@ class ScriptWriter {
     public void optimize() {
         remove(",");
         remove("return;");
+        remove(";");
     }
 
     /**
@@ -307,7 +308,9 @@ class ScriptWriter {
                 switch (value.charAt(0)) {
                 case '}':
                 case ']':
-                    remove(",");
+                    do {
+                        remove(",");
+                    } while (buffer.charAt(buffer.length() - 1) == ',');
                     break;
                 }
             }
