@@ -21,11 +21,11 @@ import java.util.regex.Pattern;
 
 import js.dom.DocumentFragment;
 import js.dom.EventListener;
-import js.lang.Classes;
 import jsx.bwt.EventBus;
 import jsx.bwt.Publishable;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
+import kiss.I;
 
 /**
  * @version 2012/12/11 14:19:29
@@ -42,7 +42,7 @@ public abstract class Application {
      */
     protected Application() {
         // Collect all pages and register it.
-        for (Class page : Classes.find(Page.class)) {
+        for (Class page : I.collect(Page.class)) {
             for (Constructor<?> constructor : page.getConstructors()) {
                 PageInfo info = constructor.getAnnotation(PageInfo.class);
 
