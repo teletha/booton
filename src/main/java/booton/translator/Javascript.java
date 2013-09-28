@@ -743,7 +743,7 @@ public class Javascript {
     private static class DepenedencyManager implements ClassListener<Require> {
 
         /** The extensions. */
-        private final List<Class> collection = new ArrayList();
+        private final Set<Class> collection = new HashSet();
 
         /**
          * {@inheritDoc}
@@ -769,7 +769,7 @@ public class Javascript {
          * @param requirements
          */
         private void add(Class... requirements) {
-            List<Class> list = new ArrayList();
+            Set<Class> list = new HashSet();
             list.addAll(collection);
             list.addAll(Arrays.asList(requirements));
 

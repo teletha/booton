@@ -14,7 +14,9 @@ import static js.lang.Global.*;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -32,11 +34,16 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.script.ScriptException;
+
 import js.lang.Global;
 import js.lang.NativeFunction;
+import js.lang.NativeNumber;
 import js.lang.NativeObject;
 import js.lang.reflect.Reflections;
 import kiss.model.ClassUtil;
+import kiss.model.Model;
+import kiss.model.Property;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -517,6 +524,98 @@ class JSKiss {
             }
         }
         return matched;
+    }
+
+    /**
+     * <p>
+     * Reads Java object tree from the given XML or JSON input.
+     * </p>
+     * 
+     * @param input A serialized Java object tree data as XML or JSON. If the input is incompatible
+     *            with Java object, this method ignores the input. <code>null</code> will throw
+     *            {@link NullPointerException}. The empty or invalid format data will throw
+     *            {@link ScriptException}.
+     * @param output A root Java object. All properties will be assigned from the given data deeply.
+     *            If the input is incompatible with Java object, this method ignores the input.
+     *            <code>null</code> will throw {@link java.lang.NullPointerException}.
+     * @return A root Java object.
+     * @throws NullPointerException If the input data or the root Java object is <code>null</code>.
+     * @throws ScriptException If the input data is empty or invalid format.
+     */
+    public static <M> M read(CharSequence input, M output) {
+        try {
+            return read(output, Global.JSON.parse(input.toString()));
+        } catch (Exception e) {
+            throw I.quiet(e);
+        }
+    }
+
+    /**
+     * <p>
+     * Read property and write it.
+     * </p>
+     * 
+     * @param java
+     * @param js
+     * @return
+     */
+    private static <T> T read(T java, NativeObject js) throws Exception {
+        for (Field field : java.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+
+            Class type = field.getType();
+            Object value = js.getProperty(field.getName());
+
+            if (type == int.class) {
+                field.setInt(java, ((NativeNumber) value).intValue());
+            } else if (type == String.class) {
+                field.set(java, value);
+            } else if (type.isArray()) {
+                int length = Array.getLength(value);
+                Object instance = Array.newInstance(type, length);
+
+                for (int i = 0; i < length; i++) {
+                    Array.set(instance, i, Array.get(value, i));
+                }
+
+                field.set(java, instance);
+            } else {
+
+                field.set(java, read(make(type), (NativeObject) value));
+            }
+        }
+        return java;
+    }
+
+    /**
+     * <p>
+     * Writes Java object tree to the given output as XML or JSON.
+     * </p>
+     * <p>
+     * If the output object implements {@link AutoCloseable}, {@link AutoCloseable#close()} method
+     * will be invoked certainly.
+     * </p>
+     * 
+     * @param input A Java object. All properties will be serialized deeply. <code>null</code> will
+     *            throw {@link java.lang.NullPointerException}.
+     * @param output A serialized data output. <code>null</code> will throw
+     *            {@link NullPointerException}.
+     * @param json <code>true</code> will produce JSON expression, <code>false</code> will produce
+     *            XML expression.
+     * @throws NullPointerException If the input Java object or the output is <code>null</code> .
+     */
+    public static void write(Object input, Appendable output, boolean json) {
+        if (output == null) {
+            throw new NullPointerException();
+        }
+
+        Model model = Model.load(input.getClass());
+        System.out.println(model.name);
+        Property property = new Property(model, model.name);
+        System.out.println(property.name);
+
+        // traverse configuration as json
+        new JSON(output).walk(model, property, input);
     }
 
     /**

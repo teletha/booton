@@ -102,4 +102,21 @@ public class KissTest {
             this.singleton = singleton;
         }
     }
+
+    @Test
+    public void readWrite() {
+        Person person = I.make(Person.class);
+        person.setAge(16);
+        person.setLastName("Yuigahama");
+        person.setFirstName("Yui");
+
+        StringBuilder builder = new StringBuilder();
+        I.write(person, builder, true);
+        System.out.println(builder + "   @");
+        assert builder.toString().equals("{\"age\":\"16\",\"firstName\":\"Yui\",\"lastName\":\"Yuigahama\"}");
+
+        // Person other = I.read(builder, I.make(Person.class));
+        // System.out.println(other.getAge());
+        // assert other.getAge() == 16;
+    }
 }

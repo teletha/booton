@@ -34,6 +34,27 @@ class HashMap<K, V> extends AbstractMap<K, V> {
     }
 
     /**
+     * Constructs an empty <tt>HashMap</tt> with the specified initial capacity and load factor.
+     * 
+     * @param initialCapacity the initial capacity
+     * @param loadFactor the load factor
+     * @throws IllegalArgumentException if the initial capacity is negative or the load factor is
+     *             nonpositive
+     */
+    public HashMap(int initialCapacity, float loadFactor) {
+    }
+
+    /**
+     * Constructs an empty <tt>HashMap</tt> with the specified initial capacity and the default load
+     * factor (0.75).
+     * 
+     * @param initialCapacity the initial capacity.
+     * @throws IllegalArgumentException if the initial capacity is negative.
+     */
+    public HashMap(int initialCapacity) {
+    }
+
+    /**
      * <p>
      * Constructs a new HashMap with the same mappings as the specified Map. the specified Map.
      * </p>

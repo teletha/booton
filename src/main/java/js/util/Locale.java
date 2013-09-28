@@ -9,6 +9,8 @@
  */
 package js.util;
 
+import java.util.Locale.Category;
+
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -44,5 +46,38 @@ class Locale {
      */
     public String getLanguage() {
         return language;
+    }
+
+    /**
+     * Gets the current value of the default locale for this instance of the Java Virtual Machine.
+     * <p>
+     * The Java Virtual Machine sets the default locale during startup based on the host
+     * environment. It is used by many locale-sensitive methods if no locale is explicitly
+     * specified. It can be changed using the {@link #setDefault(java.util.Locale) setDefault}
+     * method.
+     * 
+     * @return the default locale for this instance of the Java Virtual Machine
+     */
+    public static Locale getDefault() {
+        return new Locale();
+    }
+
+    /**
+     * Gets the current value of the default locale for the specified Category for this instance of
+     * the Java Virtual Machine.
+     * <p>
+     * The Java Virtual Machine sets the default locale during startup based on the host
+     * environment. It is used by many locale-sensitive methods if no locale is explicitly
+     * specified. It can be changed using the setDefault(Locale.Category, Locale) method.
+     * 
+     * @param category - the specified category to get the default locale
+     * @throws NullPointerException - if category is null
+     * @return the default locale for the specified Category for this instance of the Java Virtual
+     *         Machine
+     * @see #setDefault(Locale.Category, Locale)
+     * @since 1.7
+     */
+    public static Locale getDefault(Category category) {
+        return getDefault();
     }
 }
