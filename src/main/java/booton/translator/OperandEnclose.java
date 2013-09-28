@@ -28,6 +28,14 @@ class OperandEnclose extends Operand {
      * {@inheritDoc}
      */
     @Override
+    Operand cast(Class type) {
+        return value.cast(type);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     InferredType infer() {
         return value.infer();
     }

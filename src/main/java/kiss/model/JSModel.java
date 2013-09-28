@@ -40,15 +40,16 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import kiss.I;
+import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/09/26 13:28:35
  */
-// @JavaAPIProvider(Model.class)
+@JavaAPIProvider(Model.class)
 public class JSModel {
 
     /** The model repository. */
-    private static final Map<Class, Model> models = new ConcurrentHashMap();
+    private static final Map<Class, JSModel> models = new ConcurrentHashMap();
 
     /** The repository of built-in codecs. */
     private static final ArrayList<Class> codecs = new ArrayList();
@@ -106,6 +107,7 @@ public class JSModel {
 
         // To avoid StackOverFlowException caused by circular reference of Model, you must define
         // this model in here.
+        models.put(type, this);
 
         // search from built-in codecs
         codec = codecs.contains(type) || type.isEnum() ? new Codec(type) : I.find(Codec.class, type);
@@ -124,7 +126,6 @@ public class JSModel {
                 if (method.isBridge() || method.isSynthetic()) {
                     continue;
                 }
-
                 // if (method.getAnnotations().length != 0) {
                 // intercepts.add(method);
                 // }
@@ -319,6 +320,7 @@ public class JSModel {
             for (Property property : properties) {
                 Object value = get(object, property);
 
+                if (value != null) walker.walk((Model) (Object) this, property, value);
             }
         }
     }
@@ -351,7 +353,7 @@ public class JSModel {
         }
 
         // check cache
-        Model model = models.get(modelClass);
+        Model model = (Model) (Object) models.get(modelClass);
 
         if (model == null) {
             // create new model
@@ -378,6 +380,7 @@ public class JSModel {
      * @param base A declaration class.
      * @return A cached model information.
      * @throws IllegalArgumentException If the given model type is null.
+     * @see TypeVariable
      */
     static Model load(Type type, Type base) {
         // class
@@ -427,7 +430,16 @@ public class JSModel {
             TypeVariable[] variables = variable.getGenericDeclaration().getTypeParameters();
 
             for (int i = 0; i < variables.length; i++) {
-                if (variable == variables[i]) {
+                // use equals method instead of "==".
+                //
+                // +++ From TypeVariable Javadoc +++
+                // Multiple objects may be instantiated at run-time to represent a given type
+                // variable. Even though a type variable is created only once, this does not imply
+                // any requirement to cache instances representing the type variable. However, all
+                // instances representing a type variable must be equal() to each other. As a
+                // consequence, users of type variables must not rely on the identity of instances
+                // of classes implementing this interface.
+                if (variable.equals(variables[i])) {
                     if (base == variable.getGenericDeclaration()) {
                         return load(variable.getBounds()[0], base);
                     } else {
@@ -443,7 +455,6 @@ public class JSModel {
         }
 
         // If this error will be thrown, it is bug of this program. Please send a bug report to us.
-
         throw new Error();
     }
 }

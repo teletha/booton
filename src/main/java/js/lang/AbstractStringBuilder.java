@@ -419,6 +419,47 @@ class AbstractStringBuilder<T extends Appendable> implements Appendable, CharSeq
     }
 
     /**
+     * Characters are copied from this sequence into the destination character array
+     * <code>dst</code>. The first character to be copied is at index <code>srcBegin</code>; the
+     * last character to be copied is at index <code>srcEnd-1</code>. The total number of characters
+     * to be copied is <code>srcEnd-srcBegin</code>. The characters are copied into the subarray of
+     * <code>dst</code> starting at index <code>dstBegin</code> and ending at index:
+     * <p>
+     * <blockquote>
+     * 
+     * <pre>
+     * dstbegin + (srcEnd-srcBegin) - 1
+     * </pre>
+     * </blockquote>
+     * 
+     * @param srcBegin start copying at this offset.
+     * @param srcEnd stop copying at this offset.
+     * @param dst the array to copy the data into.
+     * @param dstBegin offset into <code>dst</code>.
+     * @throws NullPointerException if <code>dst</code> is <code>null</code>.
+     * @throws IndexOutOfBoundsException if any of the following is true:
+     *             <ul>
+     *             <li><code>srcBegin</code> is negative <li><code>dstBegin</code> is negative <li>
+     *             the <code>srcBegin</code> argument is greater than the <code>srcEnd</code>
+     *             argument. <li><code>srcEnd</code> is greater than <code>this.length()</code>. 
+     *             <li><code>dstBegin+srcEnd-srcBegin</code> is greater than <code>dst.length</code>
+     *             </ul>
+     */
+    public void getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin) {
+        if (srcBegin < 0 || srcEnd < 0 || text.length() < srcEnd) {
+            throw new StringIndexOutOfBoundsException();
+        }
+
+        if (srcEnd < srcBegin) {
+            throw new StringIndexOutOfBoundsException("srcEnd < srcBegin");
+        }
+
+        for (int i = 0; i < srcEnd - srcBegin; i++) {
+            dst[dstBegin + i] = text.charAt(srcBegin + i);
+        }
+    }
+
+    /**
      * Returns the length (character count).
      * 
      * @return the length of the sequence of characters currently represented by this object

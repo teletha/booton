@@ -10,7 +10,7 @@
 package booton.translator;
 
 /**
- * @version 2013/08/31 21:55:20
+ * @version 2013/09/28 8:50:37
  */
 class InferredType {
 
@@ -28,6 +28,20 @@ class InferredType {
      */
     InferredType(Class type) {
         this.type = type;
+    }
+
+    /**
+     * 
+     */
+    InferredType(Operand... operands) {
+        for (Operand operand : operands) {
+            InferredType type = operand.infer();
+
+            if (type != null) {
+                this.type = type.type;
+                return;
+            }
+        }
     }
 
     /**

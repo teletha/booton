@@ -10,7 +10,7 @@
 package booton.translator;
 
 /**
- * @version 2013/08/03 2:21:03
+ * @version 2013/09/28 8:48:19
  */
 class OperandExpression extends Operand {
 
@@ -84,6 +84,17 @@ class OperandExpression extends Operand {
             }
         }
         return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    Operand cast(Class type) {
+        if (type == char.class && this.type.type() == Number.class) {
+            return new OperandExpression("String.fromCharCode(" + this + ")", type);
+        }
+        return super.cast(type);
     }
 
     /**

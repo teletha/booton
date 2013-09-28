@@ -615,6 +615,99 @@ class Node {
                     buffer.write("}").line();
                     process(follower, buffer);
                 }
+            } else if (outs == 3) {
+                // // while, for or if
+                // if (backs == 0) {
+                // // if
+                // OperandCondition ccc = (OperandCondition) stack.peekLast();
+                //
+                // if (ccc != null && ccc.next == outgoing.get(0)) {
+                // ccc.invert();
+                // }
+                //
+                // if (outgoing.get(1).incoming.size() == 1) {
+                // if (outgoing.get(2).incoming.size() == 1) {
+                // Node then = null;
+                // Node elze = null;
+                //
+                // if (outgoing.get(1).written) {
+                // ccc.invert();
+                //
+                // then = outgoing.get(2);
+                // } else if (outgoing.get(2).written) {
+                // then = outgoing.get(1);
+                // } else {
+                // then = outgoing.get(1);
+                // elze = outgoing.get(2);
+                // }
+                //
+                // buffer.write("if", "(" + this + ")", "{");
+                // process(then, buffer);
+                // if (elze != null) {
+                // buffer.write("}", "else", "{");
+                // process(elze, buffer);
+                // }
+                // buffer.write("}").line();
+                // process(follower, buffer);
+                // } else {
+                // buffer.write("if", "(" + this + ")", "{");
+                // process(outgoing.get(1), buffer);
+                // buffer.write("}").line();
+                // process(outgoing.get(2), buffer);
+                // }
+                // } else {
+                // ccc.invert();
+                // buffer.write("if", "(" + this + ")", "{");
+                // process(outgoing.get(2), buffer);
+                // buffer.write("}").line();
+                // process(outgoing.get(1), buffer);
+                // }
+                // } else if (backs == 1) {
+                // // while or for
+                // if (backedges.get(0).outgoing.size() == 1) {
+                // // for
+                //
+                // // setup update expression node
+                // Node update = backedges.get(0);
+                // update.written = true;
+                //
+                // // literalize
+                // if (update.stack.peekLast() == END) {
+                // update.remove(0);
+                // }
+                //
+                // // detect process and follower node
+                // Node process = detectFollower();
+                //
+                // // write script fragment
+                // buffer.write("l" + id + ":", "for", "(;", this + ";", update + ")", "{");
+                // process(process, buffer);
+                // buffer.write("}").line();
+                // process(follower, buffer);
+                // } else {
+                // // while with break only
+                // //
+                // // detect process and follower node
+                // Node process = detectFollower();
+                //
+                // // write script fragment
+                // buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
+                // process(process, buffer);
+                // buffer.write("}").line();
+                // process(follower, buffer);
+                // }
+                // } else {
+                // // while with continue and break
+                // //
+                // // detect process and follower node
+                // Node process = detectFollower();
+                //
+                // // write script fragment
+                // buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
+                // process(process, buffer);
+                // buffer.write("}").line();
+                // process(follower, buffer);
+                // }
             }
 
             // =============================================================

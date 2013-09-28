@@ -9,8 +9,17 @@
  */
 package booton.translator.flow;
 
+import static java.lang.reflect.Modifier.*;
+
+import java.lang.reflect.Method;
+
+import kiss.model.ClassUtil;
+
+import org.junit.Ignore;
 import org.junit.Test;
 
+import booton.Person;
+import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -152,6 +161,76 @@ public class ForTest extends ScriptTester {
                         }
                     }
                     value++;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void continueWithLogicalExpression() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            int act(int value) {
+                for (int i = 0; i < 3; i++) {
+                    value++;
+
+                    if (i == -1 || value % 5 == 0) {
+                        continue;
+                    }
+                    value++;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    @Ignore
+    public void continueMultiple() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            int act() {
+                int value = 0;
+
+                for (Class clazz : ClassUtil.getTypes(Person.class)) {
+                    for (Method method : clazz.getDeclaredMethods()) {
+                        // exclude the method which modifier is final, static, private or native
+                        if (((STATIC | PRIVATE | NATIVE) & method.getModifiers()) != 0) {
+                            continue;
+                        }
+
+                        // exclude the method which is created by compiler
+                        if (method.isBridge() || method.isSynthetic()) {
+                            continue;
+                        }
+                        System.out.println("@@@@@@@@@@@");
+                        // if (method.getAnnotations().length != 0) {
+                        // intercepts.add(method);
+                        // }
+
+                        int length = 1;
+                        String prefix = "set";
+                        String name = method.getName();
+
+                        if (method.getGenericReturnType() != Void.TYPE) {
+                            length = 0;
+                            prefix = name.charAt(0) == 'i' ? "is" : "get";
+                        }
+
+                        // exclude the method (by name)
+                        if (name.length() <= prefix.length() || !name.startsWith(prefix) || Character.isLowerCase(name.charAt(prefix.length()))) {
+                            continue;
+                        }
+
+                        // exclude the method (by parameter signature)
+                        if (method.getGenericParameterTypes().length != length) {
+                            continue;
+                        }
+                        value++;
+                    }
                 }
                 return value;
             }
