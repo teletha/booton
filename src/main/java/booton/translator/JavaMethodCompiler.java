@@ -715,7 +715,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.remove(0);
                 current.remove(0);
 
-                merge();
+                merge(current);
                 dispose(current);
             } else if (match(JUMP, ICONST_1, IRETURN, LABEL, FRAME_SAME, ICONST_0, IRETURN) || match(JUMP, ICONST_1, IRETURN, LABEL, FRAME_APPEND, ICONST_0, IRETURN)) {
                 // merge the node sequence of logical expression
@@ -724,7 +724,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.remove(0);
                 current.remove(0);
 
-                merge();
+                merge(current);
                 dispose(current);
 
                 // invert the latest condition
@@ -1067,7 +1067,9 @@ class JavaMethodCompiler extends MethodVisitor {
         if (1 < nodes.size()) {
             current.previous = nodes.get(nodes.size() - 2);
 
+            if (current.previous.stack.size() != 0) {
                 resolveLabel();
+            }
         }
     }
 
@@ -1091,7 +1093,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         if (first instanceof OperandCondition) {
-            merge();
+            merge(current);
 
             // If the previous instruction is not JUMP, it is part of Ternary operator or
             // Conditional operator.
@@ -1101,7 +1103,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         if (second instanceof OperandCondition) {
-            merge();
+            merge(current);
             dispose(current);
 
             // If the previous instruction is not JUMP, it is part of Ternary operator or
@@ -1154,7 +1156,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 return node;
             }
         }
-        throw new IllegalArgumentException("The operand [" + operand + "] is not found in the current context.");
+        throw new IllegalArgumentException("The operand [" + operand + "] is not found in the current context. (" + methodNameOriginal + ")");
     }
 
     /**
@@ -1218,20 +1220,20 @@ class JavaMethodCompiler extends MethodVisitor {
      * <p>
      * Helper method to merge all conditional operands.
      * </p>
+     * 
+     * @param target A target node to merge.
      */
-    private void merge() {
+    private void merge(Node target) {
         Set<Node> group = new HashSet();
-        group.add(current);
+        group.add(target);
 
         boolean found = false;
 
-        // Decide target node
-        Node target = current.previous;
-        group.addAll(target.outgoing);
+        Node previous = target.previous;
 
         // Merge the sequencial conditional operands in this node from right to left.
-        for (int i = 0; i < target.stack.size(); i++) {
-            Operand operand = target.peek(i);
+        for (int i = 0; i < previous.stack.size(); i++) {
+            Operand operand = previous.peek(i);
 
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
@@ -1248,12 +1250,12 @@ class JavaMethodCompiler extends MethodVisitor {
                     group.add(condition.transition);
 
                     // Set next appearing node for grouping.
-                    condition.next = current;
+                    condition.next = target;
                 } else if (group.contains(condition.transition)) {
                     // Merge two adjucent conditional operands.
                     i--;
 
-                    target.set(i, new OperandCondition(condition, (OperandCondition) target.remove(i)));
+                    previous.set(i, new OperandCondition(condition, (OperandCondition) previous.remove(i)));
                 } else {
                     return; // Stop here.
                 }
@@ -1262,17 +1264,17 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // Merge this node and the specified node.
         // Rearch the start of node
-        if (target.previous != null) {
-            Operand operand = target.previous.peek(0);
+        if (previous.previous != null) {
+            Operand operand = previous.previous.peek(0);
 
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
 
                 if (group.contains(condition.transition)) {
-                    dispose(target);
+                    dispose(previous);
 
                     // Merge recursively
-                    merge();
+                    merge(target);
                 }
             }
         }
