@@ -42,8 +42,10 @@ import js.lang.NativeNumber;
 import js.lang.NativeObject;
 import js.lang.reflect.Reflections;
 import kiss.model.ClassUtil;
+import kiss.model.Codec;
 import kiss.model.Model;
 import kiss.model.Property;
+import kiss.model.PropertyWalker;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -389,7 +391,45 @@ class JSKiss {
      * @throws NullPointerException If the output type is <code>null</code>.
      */
     public static <M> M transform(Object input, Class<M> output) {
-        throw new UnsupportedOperationException();
+        // check null
+        if (input == null) {
+            return null;
+        }
+
+        Model inputModel = Model.load((Class) input.getClass());
+        Model outputModel = Model.load(output);
+
+        // no conversion
+        if (inputModel == outputModel) {
+            return (M) input;
+        }
+
+        Codec inputCodec = inputModel.getCodec();
+        Codec<M> outputCodec = outputModel.getCodec();
+
+        // check whether each model are attribute model or not
+        if (inputCodec == null && outputCodec == null) {
+            // we should copy property values
+
+            // create destination object
+            M m = make(output);
+
+            // copy actually
+            inputModel.walk(input, new Copy(m, outputModel));
+
+            // API definition
+            return m;
+        } else {
+            // type conversion
+            if (output == String.class) {
+                return (M) ((inputCodec != null) ? inputCodec.encode(input) : input.toString());
+            }
+
+            if (inputModel.type == String.class && outputCodec != null) {
+                return outputCodec.decode((String) input);
+            }
+            return (M) input;
+        }
     }
 
     /**
@@ -610,9 +650,7 @@ class JSKiss {
         }
 
         Model model = Model.load(input.getClass());
-        System.out.println(model.name);
         Property property = new Property(model, model.name);
-        System.out.println(property.name);
 
         // traverse configuration as json
         new JSON(output).walk(model, property, input);
@@ -635,6 +673,37 @@ class JSKiss {
         private Object invoke(Object... params) {
             NativeFunction function = Global.getContextFuntion();
             return Interceptor.invoke(function.getPropertyAs(String.class, "1"), function.getPropertyAs(MethodHandle.class, "2"), Global.getContext(), Global.getArgumentArray(), function.getPropertyAs(Annotation[].class, "3"));
+        }
+    }
+
+    /**
+     * @version 2013/10/01 15:53:27
+     */
+    private static class Copy implements PropertyWalker {
+
+        /** The current model. */
+        private Model model;
+
+        /** The curret object. */
+        private Object object;
+
+        /**
+         * @param model
+         * @param object
+         */
+        private Copy(Object object, Model model) {
+            this.model = model;
+            this.object = object;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void walk(Model model, Property property, Object node) {
+            Property dest = this.model.getProperty(property.name);
+
+            // never check null because PropertyWalker traverses existing properties
+            this.model.set(object, dest, I.transform(node, dest.model.type));
         }
     }
 }
