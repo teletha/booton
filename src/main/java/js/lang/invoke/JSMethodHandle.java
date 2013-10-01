@@ -84,7 +84,7 @@ class JSMethodHandle {
      *             method handle call
      */
     public Object invoke(Object o1) throws Throwable {
-        throw new UnsupportedOperationException();
+        return function.apply(o1);
     }
 
     /**

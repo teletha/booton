@@ -9,8 +9,11 @@
  */
 package js.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +21,7 @@ import org.junit.runner.RunWith;
 import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/08/20 0:19:15
+ * @version 2013/10/01 16:32:43
  */
 @RunWith(ScriptRunner.class)
 public class CollectionsTest {
@@ -53,5 +56,25 @@ public class CollectionsTest {
         public int compare(String o1, String o2) {
             return o1.compareTo(o2);
         }
+    }
+
+    @Test
+    public void sort() throws Exception {
+        List<String> list = new ArrayList();
+        list.add("one");
+        list.add("two");
+        list.add("three");
+        list.add("four");
+
+        assert list.get(0).equals("one");
+        assert list.get(1).equals("two");
+        assert list.get(2).equals("three");
+        assert list.get(3).equals("four");
+
+        Collections.sort(list);
+        assert list.get(0).equals("four");
+        assert list.get(1).equals("one");
+        assert list.get(2).equals("three");
+        assert list.get(3).equals("two");
     }
 }

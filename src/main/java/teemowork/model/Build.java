@@ -172,6 +172,7 @@ public class Build extends EventHub implements StatusCalculator {
         case EnemyChampion:
         case Time:
         case Value:
+        case Distance:
             return new Computed(0, 0, status);
 
         case BounusAD:

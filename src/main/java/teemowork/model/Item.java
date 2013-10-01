@@ -913,6 +913,7 @@ public class Item extends Describable<ItemDescriptor> {
 
         Phage.update().build(RubyCrystal, LongSword).cost(590).set(AD, 20).set(Health, 200).abilities(Icy1);
         Phage.update(P310A).cost(375).abilities(Rage);
+        Phage.update(P312).cost(475);
 
         PhantomDancer.update()
                 .build(CloakOfAgility, Zeal, Dagger)
