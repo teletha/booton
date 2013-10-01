@@ -930,5 +930,6 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .passive("通常攻撃をする毎に2秒間{1}する。ミニオンかモンスター、Championを倒すと2秒間{2}する。")
                 .variable(1, MS, 20)
                 .variable(2, MS, 60);
+        Rage.update(P312).passive("通常攻撃をする毎に2秒間{1}する。ミニオンかモンスター、Championを倒すと2秒間{2}する。Rangedは半分の効果になる。");
     }
 }

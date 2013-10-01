@@ -118,50 +118,43 @@ public class JSModel {
         for (Class clazz : ClassUtil.getTypes(type)) {
             for (Method method : clazz.getDeclaredMethods()) {
                 // exclude the method which modifier is final, static, private or native
-                if (((STATIC | PRIVATE | NATIVE) & method.getModifiers()) != 0) {
-                    continue;
-                }
+                if (((STATIC | PRIVATE | NATIVE) & method.getModifiers()) == 0) {
+                    // exclude the method which is created by compiler
+                    if (!method.isBridge() && !method.isSynthetic()) {
+                        // if (method.getAnnotations().length != 0) {
+                        // intercepts.add(method);
+                        // }
 
-                // exclude the method which is created by compiler
-                if (method.isBridge() || method.isSynthetic()) {
-                    continue;
-                }
-                // if (method.getAnnotations().length != 0) {
-                // intercepts.add(method);
-                // }
+                        int length = 1;
+                        String prefix = "set";
+                        String name = method.getName();
 
-                int length = 1;
-                String prefix = "set";
-                String name = method.getName();
+                        if (method.getGenericReturnType() != Void.TYPE) {
+                            length = 0;
+                            prefix = name.charAt(0) == 'i' ? "is" : "get";
+                        }
 
-                if (method.getGenericReturnType() != Void.TYPE) {
-                    length = 0;
-                    prefix = name.charAt(0) == 'i' ? "is" : "get";
-                }
+                        // exclude the method (by name)
+                        if (name.length() > prefix.length() && name.startsWith(prefix) && !Character.isLowerCase(name.charAt(prefix.length()))) {
+                            // exclude the method (by parameter signature)
+                            if (method.getGenericParameterTypes().length == length) {
+                                // compute property name
+                                name = Introspector.decapitalize(name.substring(prefix.length()));
 
-                // exclude the method (by name)
-                if (name.length() <= prefix.length() || !name.startsWith(prefix) || Character.isLowerCase(name.charAt(prefix.length()))) {
-                    continue;
-                }
+                                // store a candidate of property accessor
+                                Method[] methods = candidates.get(name);
 
-                // exclude the method (by parameter signature)
-                if (method.getGenericParameterTypes().length != length) {
-                    continue;
-                }
+                                if (methods == null) {
+                                    methods = new Method[2];
+                                    candidates.put(name, methods);
+                                }
 
-                // compute property name
-                name = Introspector.decapitalize(name.substring(prefix.length()));
-
-                // store a candidate of property accessor
-                Method[] methods = candidates.get(name);
-
-                if (methods == null) {
-                    methods = new Method[2];
-                    candidates.put(name, methods);
-                }
-
-                if (methods[length] == null) {
-                    methods[length] = method;
+                                if (methods[length] == null) {
+                                    methods[length] = method;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -318,6 +311,7 @@ public class JSModel {
         // check whether this model is attribute or not.
         if (walker != null && getCodec() == null) {
             for (Property property : properties) {
+                System.out.println(object.hashCode() + "   " + properties.size() + "   " + property.name);
                 Object value = get(object, property);
 
                 if (value != null) walker.walk((Model) (Object) this, property, value);
