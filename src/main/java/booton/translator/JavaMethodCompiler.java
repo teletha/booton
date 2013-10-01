@@ -1067,7 +1067,9 @@ class JavaMethodCompiler extends MethodVisitor {
         if (1 < nodes.size()) {
             current.previous = nodes.get(nodes.size() - 2);
 
+            if (current.previous.stack.size() != 0) {
                 resolveLabel();
+            }
         }
     }
 
@@ -1080,10 +1082,6 @@ class JavaMethodCompiler extends MethodVisitor {
         Operand first = current.peek(0);
         Operand second = current.peek(1);
         Operand third = current.peek(2);
-
-        if (debuggable) {
-            NodeDebugger.dump(nodes);
-        }
 
         if (first == Node.END) {
             // The current node represents single expression.
@@ -1227,7 +1225,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // Decide target node
         Node target = current.previous;
-        group.addAll(target.outgoing);
 
         // Merge the sequencial conditional operands in this node from right to left.
         for (int i = 0; i < target.stack.size(); i++) {
@@ -1235,12 +1232,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
-                if (debuggable) {
-                    System.out.println(condition.transition.id + "   @@");
-                    for (Node node : group) {
-                        System.out.println(node.id);
-                    }
-                }
+
                 if (!found) {
                     found = true;
 

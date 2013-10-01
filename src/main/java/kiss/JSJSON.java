@@ -47,6 +47,7 @@ public class JSJSON implements PropertyWalker {
      */
     @Override
     public void walk(Model model, Property property, Object node) {
+        System.out.println(model.name + "(" + model.properties.size() + ")" + "  :  " + property.name);
         if (!property.isTransient()) {
             try {
                 // ========================================
