@@ -2362,6 +2362,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(4, Radius, 200)
                 .cd(70, -10);
         DesperatePower.update(P310).variable(3, MS, 60, 10);
+        DesperatePower.update(P312).variable(3, MS, 80);
 
         /** Cassiopeia */
         DeadlyCadence.update().passive("スキル使用後の5秒間、全てのスキルのコストが1スタックにつき10%低減する。");
@@ -2395,6 +2396,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(120, 40)
                 .cd(130, -10)
                 .range(750);
+        PetrifyingGaze.update(P312).mana(100);
 
         /** Cho'Gath */
         Carnivore.update()
@@ -3526,12 +3528,17 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(12, -1.5)
                 .range(700);
         DeathLotus.update()
-                .active("Katarinaが最大2秒間回転する。その間は0.2秒毎に{2}にいる最も近い敵Champion3体にナイフを連続で飛ばし、都度{1}と3秒間HP回復量-50%を与える。敵一体に与える最大DMは{3}。")
+                .active("最大2秒間回転する。その間は0.2秒毎に{2}にいる最も近い敵Champion3体にナイフを連続で飛ばし、都度{1}と3秒間HP回復量-50%を与える。敵一体に与える最大DMは{3}。")
                 .variable(1, MagicDamage, 40, 10, ap(0.2), bounusAD(0.3))
                 .variable(2, Radius, 550)
                 .variable(3, MagicDamage, 400, 100, ap(2), bounusAD(3))
                 .cd(60, -5)
                 .type(SkillType.Channel);
+        DeathLotus.update(P312)
+                .active("最大2.5秒間回転する。その間は0.25秒毎に{2}にいる最も近い敵Champion3体にナイフを連続で飛ばし、都度{1}と3秒間HP回復量-50%を与える。敵一体に与える最大DMは{3}。")
+                .variable(1, MagicDamage, 40, 17.5, ap(0.25), bounusAD(0.375))
+                .variable(3, MagicDamage, 400, 175, ap(2.5), bounusAD(3.75))
+                .cd(60, -7.5);
 
         /** Kayle */
         HolyFervor.update()
@@ -4513,13 +4520,19 @@ public class Skill extends Describable<SkillDescriptor> {
         /** Olaf */
         BerserkerRage.update().passive("{1}する。").variable(1, ASRatio, 0, 0, amplify(MissingHealthPercentage, 1));
         Undertow.update()
-                .active("指定地点に貫通する斧を投げ、当たった敵ユニットに{1}と2.5秒間{2}を与える。このスローは2.5秒かけて元に戻る。投げた斧は指定地点に7秒間留まり、斧を回収するとこのスキルの{3}する。")
+                .active("指定地点に貫通する斧を投げ、当たった敵ユニットに{1}と{4}間{2}を与える。このスローは2.5秒かけて元に戻る。投げた斧は指定地点に7秒間留まり、斧を回収するとこのスキルの{3}する。")
                 .variable(1, PhysicalDamage, 80, 45, bounusAD(1))
                 .variable(2, MSSlowRatio, 24, 4)
                 .variable(3, CDDecrease, 4.5)
+                .variable(4, Time, 2.5)
                 .mana(55, 5)
                 .cd(8)
                 .range(1000);
+        Undertow.update(P312)
+                .active("指定地点に貫通する斧を投げ(最短飛距離400)、当たった敵ユニットに{1}と{4}間{2}を与える。投げた斧は指定地点に7秒間留まり、斧を回収するとこのスキルの{3}する。")
+                .variable(1, PhysicalDamage, 70, 45, bounusAD(1))
+                .variable(2, MSSlowRatio, 35, 5)
+                .variable(4, Time, 1, 0, amplify(Distance, 1));
         ViciousStrikes.update()
                 .active("6秒間{1}と{2}と{3}を得る。")
                 .variable(1, AD, 7, 7, amplify(Health, 0.01))
@@ -4527,12 +4540,23 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, SV, 9, 3)
                 .mana(40, 5)
                 .cd(16);
+        ViciousStrikes.update(P312)
+                .active("6秒間{4}し、{2}を得る。また{5}する。")
+                .variable(4, ASRatio, 20, 15)
+                .variable(5, RestoreHealthRatio, 0, 0, amplify(MissingHealthPercentage, 0.4))
+                .mana(30);
         RecklessSwing.update()
                 .active("対象の敵ユニットに{1}を与える。")
                 .variable(1, TrueDamage, 100, 60)
                 .cost(Health, 40, 24)
                 .cd(9, -1)
                 .range(325);
+        RecklessSwing.update(P312)
+                .active("対象の敵ユニットに{1}を与える。このスキルで対象を倒した場合、使用コストとして消費したHealthは返還される。通常攻撃をする度にこのスキルの{2}する。")
+                .variable(1, TrueDamage, 70, 45, ad(0.4))
+                .variable(2, CDDecrease, 1)
+                .cd(12, -1)
+                .cost(Health, new Diff(28, 18, 5), ad(0.16));
         Ragnarok.update()
                 .active("6秒間{1}、{2}、{3}と{4}を得る。既にCCを受けていた場合はそれらを解除する。StunなどのDisable中でも使用可能。")
                 .variable(1, ARPen, 10, 10)
@@ -4541,6 +4565,14 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(4, IgnoreCC)
                 .mana(100, -25)
                 .cd(100);
+        Ragnarok.update(P312)
+                .passive("{2}と{3}を得る。")
+                .variable(2, AR, 10, 10)
+                .variable(3, MR, 10, 10)
+                .active("6秒間パッシブの効果が消失して、{1}と{4}を得る。既にCCを受けていた場合はそれらを解除する。StunなどのDisable中でも使用可能。")
+                .variable(1, AD, 40, 20)
+                .cd(120, -20)
+                .mana(0);
 
         /** Orianna */
         ClockworkWindup.update()
@@ -4982,13 +5014,15 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cost(Energy, 50, 0);
         Feint.update(P310A).variable(1, Shield, 60, 40, ap(0.6));
         ShadowDash.update()
-                .active("指定地点まで素早く移動し接触した敵Championに{1}と{2}を与える。ShenはTaunt効果中の対象から受ける通常攻撃のダメージを半減する。またこのスキルが敵Championに命中する度に{3}する。")
+                .active("指定地点まで素早く移動し接触した敵Championに{1}と{2}を与える。ShenはTaunt効果中の対象から受ける物理DMを半減する。またこのスキルが敵Championに命中する度に{3}する。")
                 .variable(1, MagicDamage, 50, 35, ap(0.5))
                 .variable(2, Taunt, 1.5)
                 .variable(3, RestoreEnergy, 40)
                 .cd(16, -2)
                 .cost(Energy, 120, 0)
                 .range(600);
+        ShadowDash.update(P312)
+                .active("指定地点まで素早く移動し接触した敵Championに{1}と{2}を与える。ShenはTaunt効果中の対象から受ける通常攻撃のDMを半減する。またこのスキルが敵Championに命中する度に{3}する。");
         StandUnited.update()
                 .active("対象の味方Championに5秒間{1}を付与し、3秒詠唱後そこまでワープする。")
                 .variable(1, Shield, 250, 300, ap(1.5))
@@ -5436,6 +5470,9 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(1)
                 .mana(75, 25)
                 .range(230);
+        NoxiousTrap.update(P312)
+                .active("指定地点に10分間持続するキノコの罠を仕掛ける(設置後1秒で{1}になる)。使用時にスタックを消費する。敵ユニットがステルス状態の罠を踏むと破裂し、{2}のユニットに4秒かけて{3}と4秒間{4}を与える。{5}毎にスタック数が1つ増加し最大3つまでスタックされる。スタック増加時間はCD低減の影響を受ける。設置したキノコはChampionの通常攻撃でのみダメージを与えられ、破壊すると{6}を得る。")
+                .variable(6, Gold, 10);
 
         /** Thresh */
         Damnation.update()
@@ -5452,6 +5489,10 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(18, -1.5)
                 .range(1075);
         DeathSentence.update(P306).variable(1, MagicDamage, 80, 40, ap(0.5));
+        DeathSentence.update(P312)
+                .active("指定方向に鎌を投げ、命中した敵ユニットに{1}と{2}を与え、対象を1.5秒かけて自身の方へ引き寄せる。このスキルを再度使用すると対象のユニットへ飛びつく。鎌が敵に命中した場合、このスキルの{3}する。")
+                .variable(3, CDDecrease, 3)
+                .cd(20, -2);
         DarkPassage.update()
                 .active("指定地点に6秒間持続するランタンを設置する。味方Championがランタンを指定すると、ランタンとその味方Championが自身の方へと引き寄せられる。更にランタンの周囲にいる魂を自動的に回収し、{1}の味方Championは{2}を得る。。シールドを得られるのは1ユニットにつき1回のみ。自身がランタンから距離1500以上離れるとランタンは自動的に自身の下へと戻る。")
                 .variable(1, Radius)
@@ -6155,14 +6196,15 @@ public class Skill extends Describable<SkillDescriptor> {
 
         /** Yorick */
         UnholyCovenant.update()
-                .passive("召喚中のGhoulの数に比例して{1}し{2}する。召喚したGhoulは5秒間持続し、毎秒最大HPの20%が減少していく。同じ種類のGhoulを召喚した場合、先に召喚したGhoulが消滅する。任意の操作不可、スロー無効化、AoEスキルのダメージを50%低減し敵ユニットの通行を妨げない。<br>Health : {3}<br>AD : {4}<br>AR : {5}<br>MR : {6}<br>AS : 0.670<br>MS : {7}")
+                .passive("召喚中のGhoulの数に比例して{1}し{2}する。召喚したGhoulは5秒間持続し、毎秒最大HPの20%が減少していく。同じ種類のGhoulを召喚した場合、先に召喚したGhoulが消滅する。任意の操作不可、スロー無効化、AoEスキルのダメージを50%低減し敵ユニットの通行を妨げない。<br>Health : {3}<br>AD : {4}<br>AR : {5}<br>MR : {6}<br>AS : 0.670<br>MS : {7}<br>Kill : {8}")
                 .variable(1, DamageReductionRatio, 0, 0, amplify(Stack, 5))
                 .variable(2, AttackDamageRatio, 0, 0, amplify(Stack, 5))
                 .variable(3, Value, 0, 0, amplify(Health, 0.35))
                 .variable(4, Value, 0, 0, ad(0.35))
                 .variable(5, Value, 10, 0, amplify(Lv, 2))
                 .variable(6, Value, 20, 0, amplify(Lv, 2))
-                .variable(7, Value, new Per5LevelForYoric(300, 40));
+                .variable(7, Value, new Per5LevelForYoric(300, 40))
+                .variable(8, Gold, 5);
         OmenOfWar.update()
                 .active("次の通常攻撃は{1}を与えると同時にSpectral Ghoulを召喚する。Spectral Ghoulは{3}を得る。Spectral Ghoulが生存している間、Ghoulと自身の{q2}する。")
                 .variable(1, PhysicalDamage, 30, 30, ad(1.2))

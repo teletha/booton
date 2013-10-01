@@ -1094,6 +1094,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 330);
+        Lucian.update(P312).set(Mreg, 7, 0.7);
         Lulu.update(P0000)
                 .set(Health, 415, 82)
                 .set(Hreg, 6, 0.72)
@@ -1289,6 +1290,7 @@ public class Champion {
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
                 .set(MS, 350);
+        Olaf.update(P312).set(Mana, 190, 45);
         Orianna.update(P0000)
                 .set(Health, 385, 79)
                 .set(Hreg, 5.95, 0.55)
@@ -1391,6 +1393,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 335);
+        Ryze.update(P312).set(MS, 340);
         Sejuani.update(P0000)
                 .set(Health, 450, 85)
                 .set(Hreg, 7.35, 0.85)
