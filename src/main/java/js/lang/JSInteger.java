@@ -17,7 +17,7 @@ import booton.translator.JavaAPIProvider;
  * functionalities.
  * </p>
  * 
- * @version 2013/04/12 12:58:25
+ * @version 2013/10/02 23:00:09
  */
 @JavaAPIProvider(Integer.class)
 class JSInteger extends JSNumber {
@@ -26,10 +26,26 @@ class JSInteger extends JSNumber {
     public static final Class TYPE = Primitive.class;
 
     /**
-     * @param value
+     * Constructs a newly allocated {@code Integer} object that represents the specified {@code int}
+     * value.
+     * 
+     * @param value the value to be represented by the {@code Integer} object.
      */
-    private JSInteger(double value) {
+    public JSInteger(int value) {
         super(value);
+    }
+
+    /**
+     * Constructs a newly allocated {@code Integer} object that represents the {@code int} value
+     * indicated by the {@code String} parameter. The string is converted to an {@code int} value in
+     * exactly the manner used by the {@code parseInt} method for radix 10.
+     * 
+     * @param value the {@code String} to be converted to an {@code Integer}.
+     * @exception NumberFormatException if the {@code String} does not contain a parsable integer.
+     * @see java.lang.Integer#parseInt(java.lang.String, int)
+     */
+    public JSInteger(String value) throws NumberFormatException {
+        super(parseInt(value));
     }
 
     /**

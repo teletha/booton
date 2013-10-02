@@ -14,9 +14,7 @@ import static js.lang.Global.*;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -39,9 +37,7 @@ import javax.script.ScriptException;
 
 import js.lang.Global;
 import js.lang.NativeFunction;
-import js.lang.NativeNumber;
 import js.lang.NativeObject;
-import js.lang.NativeString;
 import js.lang.reflect.Reflections;
 import kiss.model.ClassUtil;
 import kiss.model.Codec;
@@ -242,6 +238,9 @@ class JSKiss {
      */
     public static <M> M make(Class<M> modelClass) {
         System.out.println(modelClass.getName());
+        if (modelClass.getName().equals("boot.NativeArray")) {
+            throw new Error();
+        }
         return makeLifestyle(modelClass).resolve();
     }
 
@@ -638,7 +637,7 @@ class JSKiss {
      */
     public static <M> M read(CharSequence input, M output) {
         try {
-            return read(output, Global.JSON.parse(input.toString()));
+            return read(Model.load(output.getClass()), output, Global.JSON.parse(input.toString()));
         } catch (Exception e) {
             throw I.quiet(e);
         }
@@ -653,38 +652,47 @@ class JSKiss {
      * @param js
      * @return
      */
-    private static <T> T read(T java, NativeObject js) throws Exception {
-        for (Field field : java.getClass().getDeclaredFields()) {
-            Class type = field.getType();
-            Object value = js.getProperty(field.getName());
+    private static <T> T read(Model model, T java, NativeObject js) throws Exception {
+        for (Property property : model.properties) {
+            Object value;
 
-            if (type == int.class) {
-                field.setInt(java, ((NativeNumber) value).intValue());
-            } else if (type == long.class) {
-                field.setLong(java, ((NativeNumber) value).longValue());
-            } else if (type == char.class) {
-                field.setChar(java, ((NativeString) value).charAt(0));
-            } else if (type == double.class) {
-                field.setDouble(java, ((NativeNumber) value).doubleValue());
-            } else if (type == float.class) {
-                field.setFloat(java, ((NativeNumber) value).floatValue());
-            } else if (type == short.class) {
-                field.setShort(java, ((NativeNumber) value).shortValue());
-            } else if (type == byte.class) {
-                field.setByte(java, ((NativeNumber) value).byteValue());
-            } else if (type == String.class) {
-                field.set(java, value);
-            } else if (type.isArray()) {
-                int length = Array.getLength(value);
-                Object instance = Array.newInstance(type, length);
-
-                for (int i = 0; i < length; i++) {
-                    Array.set(instance, i, Array.get(value, i));
-                }
-                field.set(java, instance);
+            if (property.isAttribute()) {
+                System.out.println(js.getProperty(property.name) + "  " + property.model.type.getSimpleName());
+                value = transform(js.getProperty(property.name), property.model.type);
             } else {
-                field.set(java, read(make(type), (NativeObject) value));
+                value = read(property.model, make(property.model.type), js.getPropertyAs(NativeObject.class, property.name));
             }
+
+            // assign value
+            model.set(java, property, value);
+            // if (type == int.class) {
+            //
+            // property.setInt(java, ((NativeNumber) value).intValue());
+            // } else if (type == long.class) {
+            // field.setLong(java, ((NativeNumber) value).longValue());
+            // } else if (type == char.class) {
+            // field.setChar(java, ((NativeString) value).charAt(0));
+            // } else if (type == double.class) {
+            // field.setDouble(java, ((NativeNumber) value).doubleValue());
+            // } else if (type == float.class) {
+            // field.setFloat(java, ((NativeNumber) value).floatValue());
+            // } else if (type == short.class) {
+            // field.setShort(java, ((NativeNumber) value).shortValue());
+            // } else if (type == byte.class) {
+            // field.setByte(java, ((NativeNumber) value).byteValue());
+            // } else if (type == String.class) {
+            // field.set(java, value);
+            // } else if (type.isArray()) {
+            // int length = Array.getLength(value);
+            // Object instance = Array.newInstance(type, length);
+            //
+            // for (int i = 0; i < length; i++) {
+            // Array.set(instance, i, Array.get(value, i));
+            // }
+            // field.set(java, instance);
+            // } else {
+            // field.set(java, read(make(type), (NativeObject) value));
+            // }
         }
         return java;
     }

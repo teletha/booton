@@ -26,10 +26,26 @@ class JSByte extends JSNumber {
     public static final Class TYPE = Primitive.class;
 
     /**
-     * @param value
+     * Constructs a newly allocated {@code Byte} object that represents the specified {@code byte}
+     * value.
+     * 
+     * @param value the value to be represented by the {@code Byte}.
      */
-    private JSByte(double value) {
+    public JSByte(byte value) {
         super(value);
+    }
+
+    /**
+     * Constructs a newly allocated {@code Byte} object that represents the {@code byte} value
+     * indicated by the {@code String} parameter. The string is converted to a {@code byte} value in
+     * exactly the manner used by the {@code parseByte} method for radix 10.
+     * 
+     * @param value the {@code String} to be converted to a {@code Byte}
+     * @throws NumberFormatException If the {@code String} does not contain a parsable {@code byte}.
+     * @see java.lang.Byte#parseByte(java.lang.String, int)
+     */
+    public JSByte(String value) throws NumberFormatException {
+        super(parseByte(value));
     }
 
     /**

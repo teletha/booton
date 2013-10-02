@@ -26,10 +26,26 @@ class JSLong extends JSNumber {
     public static final Class TYPE = Primitive.class;
 
     /**
-     * @param value
+     * Constructs a newly allocated {@code Long} object that represents the specified {@code long}
+     * argument.
+     * 
+     * @param value the value to be represented by the {@code Long} object.
      */
-    private JSLong(double value) {
+    public JSLong(long value) {
         super(value);
+    }
+
+    /**
+     * Constructs a newly allocated {@code Long} object that represents the {@code long} value
+     * indicated by the {@code String} parameter. The string is converted to a {@code long} value in
+     * exactly the manner used by the {@code parseLong} method for radix 10.
+     * 
+     * @param value the {@code String} to be converted to a {@code Long}.
+     * @throws NumberFormatException if the {@code String} does not contain a parsable {@code long}.
+     * @see java.lang.Long#parseLong(java.lang.String, int)
+     */
+    public JSLong(String value) throws NumberFormatException {
+        super(parseLong(value));
     }
 
     /**

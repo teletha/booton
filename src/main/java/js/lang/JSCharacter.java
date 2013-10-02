@@ -31,6 +31,19 @@ class JSCharacter implements JavascriptNative {
     private final NativeString character;
 
     /**
+     * Constructs a newly allocated {@code Character} object that represents the specified
+     * {@code char} value.
+     * 
+     * @param value the value to be represented by the {@code Character} object.
+     */
+    public JSCharacter(char value) {
+        System.out.println(value);
+        System.out.println(new NativeString(value));
+        this.character = new NativeString(value);
+        System.out.println(this.character);
+    }
+
+    /**
      * @param character
      */
     private JSCharacter(NativeString character) {
@@ -462,8 +475,9 @@ class JSCharacter implements JavascriptNative {
      * @return A primitive value.
      */
     @JavascriptNativeProperty
-    public NativeNumber valueOf() {
-        return new NativeNumber(character.charCodeAt(0));
+    public NativeString valueOf() {
+        System.out.println(character);
+        return character;
     }
 
     /**

@@ -26,10 +26,26 @@ class JSDouble extends JSNumber {
     public static final Class TYPE = Primitive.class;
 
     /**
-     * @param value
+     * Constructs a newly allocated {@code Double} object that represents the primitive
+     * {@code double} argument.
+     * 
+     * @param value the value to be represented by the {@code Double}.
      */
-    private JSDouble(double value) {
+    public JSDouble(double value) {
         super(value);
+    }
+
+    /**
+     * Constructs a newly allocated {@code Double} object that represents the floating-point value
+     * of type {@code double} represented by the string. The string is converted to a {@code double}
+     * value as if by the {@code valueOf} method.
+     * 
+     * @param value a string to be converted to a {@code Double}.
+     * @throws NumberFormatException if the string does not contain a parsable number.
+     * @see java.lang.Double#valueOf(java.lang.String)
+     */
+    public JSDouble(String value) throws NumberFormatException {
+        super(valueOf(value).doubleValue());
     }
 
     /**
