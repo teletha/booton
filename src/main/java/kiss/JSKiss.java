@@ -41,6 +41,7 @@ import js.lang.Global;
 import js.lang.NativeFunction;
 import js.lang.NativeNumber;
 import js.lang.NativeObject;
+import js.lang.NativeString;
 import js.lang.reflect.Reflections;
 import kiss.model.ClassUtil;
 import kiss.model.Codec;
@@ -240,6 +241,7 @@ class JSKiss {
      * @throws InstantiationException If Sinobu can't instantiate(resolve) the model class.
      */
     public static <M> M make(Class<M> modelClass) {
+        System.out.println(modelClass.getName());
         return makeLifestyle(modelClass).resolve();
     }
 
@@ -284,6 +286,15 @@ class JSKiss {
         // In the second place, we must find the actual model class which is associated with this
         // model class. If the actual model class is a concreate, we can use it directly.
         Class<M> actualClass = modelClass;
+
+        // if (((Modifier.ABSTRACT | Modifier.INTERFACE) & modifier) != 0) {
+        // // TODO model provider finding strategy
+        // // This strategy is decided at execution phase.
+        // actualClass = make(Modules.class).find(modelClass);
+        //
+        // // updata to the actual model class's modifier
+        // modifier = actualClass.getModifiers();
+        // }
 
         // If this model is non-private or final class, we can extend it for interceptor mechanism.
         if (((Modifier.PRIVATE | Modifier.FINAL) & modifier) == 0) {
@@ -644,13 +655,23 @@ class JSKiss {
      */
     private static <T> T read(T java, NativeObject js) throws Exception {
         for (Field field : java.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-
             Class type = field.getType();
             Object value = js.getProperty(field.getName());
 
             if (type == int.class) {
                 field.setInt(java, ((NativeNumber) value).intValue());
+            } else if (type == long.class) {
+                field.setLong(java, ((NativeNumber) value).longValue());
+            } else if (type == char.class) {
+                field.setChar(java, ((NativeString) value).charAt(0));
+            } else if (type == double.class) {
+                field.setDouble(java, ((NativeNumber) value).doubleValue());
+            } else if (type == float.class) {
+                field.setFloat(java, ((NativeNumber) value).floatValue());
+            } else if (type == short.class) {
+                field.setShort(java, ((NativeNumber) value).shortValue());
+            } else if (type == byte.class) {
+                field.setByte(java, ((NativeNumber) value).byteValue());
             } else if (type == String.class) {
                 field.set(java, value);
             } else if (type.isArray()) {
@@ -660,10 +681,8 @@ class JSKiss {
                 for (int i = 0; i < length; i++) {
                     Array.set(instance, i, Array.get(value, i));
                 }
-
                 field.set(java, instance);
             } else {
-
                 field.set(java, read(make(type), (NativeObject) value));
             }
         }
