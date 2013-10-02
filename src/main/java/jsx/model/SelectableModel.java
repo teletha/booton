@@ -21,7 +21,6 @@ import jsx.bwt.Publishable;
 public class SelectableModel<T> extends Publishable implements Iterable<T> {
 
     /** The index of current selected item. */
-    @Property
     private int index = -1;
 
     /** The item manager. */

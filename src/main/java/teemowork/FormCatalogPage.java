@@ -17,7 +17,6 @@ import jsx.bwt.Button;
 import jsx.bwt.Input;
 import jsx.bwt.Select;
 import jsx.bwt.UIEvent;
-import jsx.model.Property;
 import jsx.model.SelectableModel;
 
 /**
@@ -85,13 +84,10 @@ public class FormCatalogPage extends Page {
      */
     private static class SomeModel {
 
-        @Property
         public String name = "name";
 
-        @Property
         public int type = 10;
 
-        @Property
         public Modeler modeler = new Modeler();
 
         private void test() {
@@ -101,13 +97,10 @@ public class FormCatalogPage extends Page {
 
     private static class Modeler {
 
-        @Property
         public String name = "aa";
 
-        @Property
         public int type = 10;
 
-        @Property
         public String[] test = {"act"};
 
         private void aaa() {

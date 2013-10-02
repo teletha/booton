@@ -9,7 +9,7 @@
  */
 package js.lang.builtin;
 
-import jsx.Util;
+import kiss.I;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 
@@ -112,7 +112,7 @@ public abstract class Storage implements JavascriptNative {
         }
 
         try {
-            return Util.read(modelClass, text);
+            return I.read(text, I.make(modelClass));
         } catch (Exception e) {
             throw new Error(e);
         }
@@ -128,7 +128,10 @@ public abstract class Storage implements JavascriptNative {
      */
     public void set(Object model) {
         if (model != null) {
-            setItem(model.getClass().getName(), Util.write(model));
+            StringBuilder builder = new StringBuilder();
+            I.write(model, builder, true);;
+
+            setItem(model.getClass().getName(), builder.toString());
         }
     }
 }
