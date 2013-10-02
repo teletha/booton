@@ -11,7 +11,7 @@ package booton.translator;
 
 import org.junit.Test;
 
-import booton.Person;
+import booton.sample.Person;
 
 /**
  * @version 2012/11/30 15:33:32

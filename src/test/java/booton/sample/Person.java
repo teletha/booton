@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package booton;
+package booton.sample;
 
 /**
  * @version 2009/04/12 16:26:19

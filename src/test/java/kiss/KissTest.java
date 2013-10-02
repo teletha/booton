@@ -12,7 +12,7 @@ package kiss;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.Person;
+import booton.sample.Person;
 import booton.translator.ScriptRunner;
 
 /**
@@ -101,23 +101,5 @@ public class KissTest {
         private LifestyleInjector(Lifestyle<SingletonClass> singleton) {
             this.singleton = singleton;
         }
-    }
-
-    @Test
-    public void readWrite() {
-        Person person = I.make(Person.class);
-        person.setAge(16);
-        person.setLastName("Yuigahama");
-        person.setFirstName("Yui");
-
-        StringBuilder builder = new StringBuilder();
-        I.write(person, builder, true);
-        assert builder.toString().equals("{\"age\":\"16\",\"firstName\":\"Yui\",\"lastName\":\"Yuigahama\"}");
-
-        Person other = I.read(builder, I.make(Person.class));
-        assert other.getAge() == 16;
-        assert other.getFirstName().equals("Yui");
-        assert other.getLastName().equals("Yuigahama");
-        assert other != person;
     }
 }
