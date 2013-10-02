@@ -26,16 +26,19 @@ public class ArraySortTest {
     @Test
     public void sort() throws Exception {
         String[] array = {"b", "c", "a"};
+        assert array.length == 3;
         assert array[0].equals("b");
         assert array[1].equals("c");
         assert array[2].equals("a");
 
         Arrays.sort(array, new Natural());
+        assert array.length == 3;
         assert array[0].equals("a");
         assert array[1].equals("b");
         assert array[2].equals("c");
 
         Arrays.sort(array, new Reverse());
+        assert array.length == 3;
         assert array[0].equals("c");
         assert array[1].equals("b");
         assert array[2].equals("a");

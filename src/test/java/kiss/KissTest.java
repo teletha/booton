@@ -16,7 +16,7 @@ import booton.Person;
 import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/09/24 13:54:25
+ * @version 2013/10/02 9:48:35
  */
 @RunWith(ScriptRunner.class)
 public class KissTest {
@@ -112,11 +112,12 @@ public class KissTest {
 
         StringBuilder builder = new StringBuilder();
         I.write(person, builder, true);
-        System.out.println(builder + "   @");
         assert builder.toString().equals("{\"age\":\"16\",\"firstName\":\"Yui\",\"lastName\":\"Yuigahama\"}");
 
-        // Person other = I.read(builder, I.make(Person.class));
-        // System.out.println(other.getAge());
-        // assert other.getAge() == 16;
+        Person other = I.read(builder, I.make(Person.class));
+        assert other.getAge() == 16;
+        assert other.getFirstName().equals("Yui");
+        assert other.getLastName().equals("Yuigahama");
+        assert other != person;
     }
 }

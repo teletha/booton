@@ -286,7 +286,7 @@ class ArrayList<E> extends AbstractList<E> implements List<E> {
          */
         @Override
         public void set(E e) {
-            array.set(index, e);
+            array.set(index - 1, e);
         }
 
         /**
@@ -294,9 +294,7 @@ class ArrayList<E> extends AbstractList<E> implements List<E> {
          */
         @Override
         public void add(E e) {
-            // If this exception will be thrown, it is bug of this program. So we must rethrow the
-            // wrapped error in here.
-            throw new Error();
+            array.add(index++, e);
         }
     }
 }
