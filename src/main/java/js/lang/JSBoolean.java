@@ -41,10 +41,30 @@ class JSBoolean implements JavascriptNative {
     private final boolean value;
 
     /**
-     * @param value
+     * Allocates a {@code Boolean} object representing the {@code value} argument.
+     * <p>
+     * <b>Note: It is rarely appropriate to use this constructor. Unless a <i>new</i> instance is
+     * required, the static factory {@link #valueOf(boolean)} is generally a better choice. It is
+     * likely to yield significantly better space and time performance.</b>
+     * 
+     * @param value the value of the {@code Boolean}.
      */
-    private JSBoolean(boolean value) {
+    public JSBoolean(boolean value) {
         this.value = value;
+    }
+
+    /**
+     * Allocates a {@code Boolean} object representing the value {@code true} if the string argument
+     * is not {@code null} and is equal, ignoring case, to the string {@code "true"}. Otherwise,
+     * allocate a {@code Boolean} object representing the value {@code false}. Examples:
+     * <p>
+     * {@code new Boolean("True")} produces a {@code Boolean} object that represents {@code true}.<br>
+     * {@code new Boolean("yes")} produces a {@code Boolean} object that represents {@code false}.
+     * 
+     * @param value the string to be converted to a {@code Boolean}.
+     */
+    public JSBoolean(String value) {
+        this(toBoolean(value));
     }
 
     /**

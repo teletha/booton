@@ -26,10 +26,36 @@ class JSFloat extends JSNumber {
     public static final Class TYPE = Primitive.class;
 
     /**
-     * @param value
+     * Constructs a newly allocated {@code Float} object that represents the primitive {@code float}
+     * argument.
+     * 
+     * @param value the value to be represented by the {@code Float}.
      */
-    private JSFloat(double value) {
+    public JSFloat(float value) {
         super(value);
+    }
+
+    /**
+     * Constructs a newly allocated {@code Float} object that represents the argument converted to
+     * type {@code float}.
+     * 
+     * @param value the value to be represented by the {@code Float}.
+     */
+    public JSFloat(double value) {
+        super(value);
+    }
+
+    /**
+     * Constructs a newly allocated {@code Float} object that represents the floating-point value of
+     * type {@code float} represented by the string. The string is converted to a {@code float}
+     * value as if by the {@code valueOf} method.
+     * 
+     * @param value a string to be converted to a {@code Float}.
+     * @throws NumberFormatException if the string does not contain a parsable number.
+     * @see java.lang.Float#valueOf(java.lang.String)
+     */
+    public JSFloat(String value) throws NumberFormatException {
+        super(valueOf(value).floatValue());
     }
 
     /**

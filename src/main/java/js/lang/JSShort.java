@@ -26,10 +26,27 @@ class JSShort extends JSNumber {
     public static final Class TYPE = Primitive.class;
 
     /**
-     * @param value
+     * Constructs a newly allocated {@code Short} object that represents the specified {@code short}
+     * value.
+     * 
+     * @param value the value to be represented by the {@code Short}.
      */
-    private JSShort(double value) {
+    public JSShort(short value) {
         super(value);
+    }
+
+    /**
+     * Constructs a newly allocated {@code Short} object that represents the {@code short} value
+     * indicated by the {@code String} parameter. The string is converted to a {@code short} value
+     * in exactly the manner used by the {@code parseShort} method for radix 10.
+     * 
+     * @param value the {@code String} to be converted to a {@code Short}
+     * @throws NumberFormatException If the {@code String} does not contain a parsable {@code short}
+     *             .
+     * @see java.lang.Short#parseShort(java.lang.String, int)
+     */
+    public JSShort(String value) throws NumberFormatException {
+        super(parseShort(value));
     }
 
     /**
