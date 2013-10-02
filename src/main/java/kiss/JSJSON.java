@@ -16,12 +16,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import kiss.model.Model;
 import kiss.model.Property;
 import kiss.model.PropertyWalker;
-import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/09/28 1:49:49
  */
-@JavaAPIProvider(JSON.class)
+// @JavaAPIProvider(JSON.class)
 public class JSJSON implements PropertyWalker {
 
     /** The record for traversed objects. */

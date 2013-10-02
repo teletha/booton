@@ -523,6 +523,7 @@ class Collections {
      */
     public static <T extends Comparable<? super T>> void sort(List<T> list) {
         Object[] values = list.toArray();
+
         Arrays.sort(values);
 
         ListIterator<T> iterator = list.listIterator();

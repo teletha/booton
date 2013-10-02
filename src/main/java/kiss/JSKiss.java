@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -175,6 +176,48 @@ class JSKiss {
         Class<E> clazz = keys.find(Objects.hash(extensionPoint, key));
 
         return clazz == null ? null : make(clazz);
+    }
+
+    /**
+     * <p>
+     * Returns a string containing the string representation of each of items, using the specified
+     * separator between each.
+     * </p>
+     * 
+     * @param delimiter A sequence of characters that is used to separate each of the elements in
+     *            the resulting String.
+     * @param items A {@link Iterable} items.
+     * @return A concat expression.
+     * @throws NullPointerException If items is <code>null</code>.
+     */
+    public static String join(CharSequence delimiter, CharSequence... items) {
+        return join(delimiter, Arrays.asList(items));
+    }
+
+    /**
+     * <p>
+     * Returns a string containing the string representation of each of items, using the specified
+     * separator between each.
+     * </p>
+     * 
+     * @param delimiter A sequence of characters that is used to separate each of the elements in
+     *            the resulting String.
+     * @param items A {@link Iterable} items.
+     * @return A concat expression.
+     * @throws NullPointerException If items is <code>null</code>.
+     */
+    public static String join(CharSequence delimiter, Iterable items) {
+        StringBuilder builder = new StringBuilder();
+        Iterator iterator = items.iterator();
+
+        if (iterator.hasNext()) {
+            builder.append(iterator.next());
+
+            while (iterator.hasNext()) {
+                builder.append(delimiter).append(iterator.next());
+            }
+        }
+        return builder.toString();
     }
 
     /**

@@ -40,12 +40,11 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import kiss.I;
-import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/09/26 13:28:35
  */
-@JavaAPIProvider(Model.class)
+// @JavaAPIProvider(Model.class)
 public class JSModel {
 
     /** The model repository. */

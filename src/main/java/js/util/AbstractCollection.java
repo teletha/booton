@@ -13,6 +13,7 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 
+import kiss.I;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -114,5 +115,16 @@ abstract class AbstractCollection<E> implements Collection<E> {
             array[i] = (T) item;
         }
         return array;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder("[");
+        builder.append(I.join(",", this)).append("]");
+
+        return builder.toString();
     }
 }
