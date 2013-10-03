@@ -74,7 +74,6 @@ public class ReadWriteTest {
         collections.setList(list);
 
         Collections other = writeThenRead(collections);
-
         assert other.getList().size() == 3;
         assert other.getList().get(0).equals("one");
         assert other.getList().get(1).equals("two");

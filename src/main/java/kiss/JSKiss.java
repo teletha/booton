@@ -237,10 +237,6 @@ class JSKiss {
      * @throws InstantiationException If Sinobu can't instantiate(resolve) the model class.
      */
     public static <M> M make(Class<M> modelClass) {
-        System.out.println(modelClass.getName());
-        if (modelClass.getName().equals("boot.NativeArray")) {
-            throw new Error();
-        }
         return makeLifestyle(modelClass).resolve();
     }
 
@@ -653,11 +649,11 @@ class JSKiss {
      * @return
      */
     private static <T> T read(Model model, T java, NativeObject js) throws Exception {
-        for (Property property : model.properties) {
+        for (String name : js.keys()) {
             Object value;
+            Property property = model.getProperty(name);
 
             if (property.isAttribute()) {
-                System.out.println(js.getProperty(property.name) + "  " + property.model.type.getSimpleName());
                 value = transform(js.getProperty(property.name), property.model.type);
             } else {
                 value = read(property.model, make(property.model.type), js.getPropertyAs(NativeObject.class, property.name));
@@ -665,34 +661,6 @@ class JSKiss {
 
             // assign value
             model.set(java, property, value);
-            // if (type == int.class) {
-            //
-            // property.setInt(java, ((NativeNumber) value).intValue());
-            // } else if (type == long.class) {
-            // field.setLong(java, ((NativeNumber) value).longValue());
-            // } else if (type == char.class) {
-            // field.setChar(java, ((NativeString) value).charAt(0));
-            // } else if (type == double.class) {
-            // field.setDouble(java, ((NativeNumber) value).doubleValue());
-            // } else if (type == float.class) {
-            // field.setFloat(java, ((NativeNumber) value).floatValue());
-            // } else if (type == short.class) {
-            // field.setShort(java, ((NativeNumber) value).shortValue());
-            // } else if (type == byte.class) {
-            // field.setByte(java, ((NativeNumber) value).byteValue());
-            // } else if (type == String.class) {
-            // field.set(java, value);
-            // } else if (type.isArray()) {
-            // int length = Array.getLength(value);
-            // Object instance = Array.newInstance(type, length);
-            //
-            // for (int i = 0; i < length; i++) {
-            // Array.set(instance, i, Array.get(value, i));
-            // }
-            // field.set(java, instance);
-            // } else {
-            // field.set(java, read(make(type), (NativeObject) value));
-            // }
         }
         return java;
     }
