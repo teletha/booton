@@ -12,6 +12,7 @@ package booton.translator.builtin;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import booton.translator.Javascript;
 import booton.translator.Translator;
 
 /**
@@ -117,6 +118,6 @@ public class PrintStreamCoder extends Translator<PrintStream> {
      * @param x The <code>Object</code> to be printed.
      */
     public String println(Object x) {
-        return that + ".dir(" + param(0) + ")";
+        return that + ".log(" + Javascript.writeMethodCode(String.class, "valueOf", Object.class, param(0)) + ")";
     }
 }

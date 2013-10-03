@@ -25,6 +25,7 @@ public class KissTest {
     public void make() throws Exception {
         Person person = I.make(Person.class);
         person.setAge(10);
+        System.out.println(person.getClass());
 
         assert person.getAge() == 10;
     }
