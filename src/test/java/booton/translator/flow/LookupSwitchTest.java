@@ -11,7 +11,6 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -45,7 +44,6 @@ public class LookupSwitchTest extends ScriptTester {
     public void StrangeOrder() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 switch (value * 2000) {
                 case 2000:

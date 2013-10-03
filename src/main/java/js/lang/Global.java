@@ -413,10 +413,20 @@ public class Global {
      * Determines whether its argument is a number.
      * </p>
      * 
-     * @param character The value to be tested.
+     * @param value The value to be tested.
      * @return A result.
      */
     public static native boolean isNumeric(char value);
+
+    /**
+     * <p>
+     * Determines whether its argument is a string.
+     * </p>
+     * 
+     * @param value The value to be tested.
+     * @return A result.
+     */
+    public static native boolean isString(Object value);
 
     /**
      * <p>
@@ -825,6 +835,18 @@ public class Global {
          */
         public String isNumeric(char value) {
             return "boot.isNumeric(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Determines whether its argument is a string.
+         * </p>
+         * 
+         * @param value The value to be tested.
+         * @return A result.
+         */
+        public String isString(Object value) {
+            return "boot.isString(" + param(0) + ")";
         }
 
         /**

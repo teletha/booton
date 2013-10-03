@@ -28,7 +28,7 @@ class JSCharacter implements JavascriptNative {
     public static final Class TYPE = Primitive.class;
 
     /** The actual character. */
-    private final NativeString character;
+    private NativeString character;
 
     /**
      * Constructs a newly allocated {@code Character} object that represents the specified
@@ -37,10 +37,11 @@ class JSCharacter implements JavascriptNative {
      * @param value the value to be represented by the {@code Character} object.
      */
     public JSCharacter(char value) {
-        System.out.println(value);
-        System.out.println(new NativeString(value));
         this.character = new NativeString(value);
-        System.out.println(this.character);
+
+        if (!Global.isString(character)) {
+            this.character = ((JSCharacter) (Object) character).character;
+        }
     }
 
     /**
@@ -476,7 +477,6 @@ class JSCharacter implements JavascriptNative {
      */
     @JavascriptNativeProperty
     public NativeString valueOf() {
-        System.out.println(character);
         return character;
     }
 
