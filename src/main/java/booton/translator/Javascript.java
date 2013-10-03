@@ -485,6 +485,10 @@ public class Javascript {
      * @param dependency A dependency class.
      */
     public static final void require(Class dependency) {
+        while (dependency.isArray()) {
+            dependency = dependency.getComponentType();
+        }
+
         Javascript current = compiling.peekFirst();
 
         if (dependency != current.source) {

@@ -10,7 +10,9 @@
 package kiss;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +20,8 @@ import org.junit.runner.RunWith;
 import booton.sample.Person;
 import booton.sample.beans.Collections;
 import booton.sample.beans.Primitives;
+import booton.sample.beans.StringList;
+import booton.sample.beans.StringMap;
 import booton.translator.ScriptRunner;
 
 /**
@@ -64,7 +68,7 @@ public class ReadWriteTest {
     }
 
     @Test
-    public void list() throws Exception {
+    public void listProperty() throws Exception {
         List<String> list = new ArrayList();
         list.add("one");
         list.add("two");
@@ -78,6 +82,51 @@ public class ReadWriteTest {
         assert other.getList().get(0).equals("one");
         assert other.getList().get(1).equals("two");
         assert other.getList().get(2).equals("three");
+    }
+
+    @Test
+    public void mapProperty() throws Exception {
+        Map<String, String> map = new HashMap();
+        map.put("1", "one");
+        map.put("2", "two");
+        map.put("3", "three");
+
+        Collections collections = I.make(Collections.class);
+        collections.setMap(map);
+
+        Collections other = writeThenRead(collections);
+        assert other.getMap().size() == 3;
+        assert other.getMap().get("1").equals("one");
+        assert other.getMap().get("2").equals("two");
+        assert other.getMap().get("3").equals("three");
+    }
+
+    @Test
+    public void list() throws Exception {
+        List<String> list = new StringList();
+        list.add("one");
+        list.add("two");
+        list.add("three");
+
+        List<String> other = writeThenRead(list);
+        assert other.size() == 3;
+        assert other.get(0).equals("one");
+        assert other.get(1).equals("two");
+        assert other.get(2).equals("three");
+    }
+
+    @Test
+    public void map() throws Exception {
+        Map<String, String> map = new StringMap();
+        map.put("1", "one");
+        map.put("2", "two");
+        map.put("3", "three");
+
+        Map<String, String> other = writeThenRead(map);
+        assert other.size() == 3;
+        assert other.get("1").equals("one");
+        assert other.get("2").equals("two");
+        assert other.get("3").equals("three");
     }
 
     /**

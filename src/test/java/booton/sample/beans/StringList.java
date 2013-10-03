@@ -7,12 +7,13 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package kiss.model;
+package booton.sample.beans;
 
+import java.util.ArrayList;
 
 /**
- * @version 2013/09/28 1:32:47
+ * @version 2013/10/03 11:14:12
  */
-// @JavaAPIProvider(CodecDate.class)
-class JSCodecDate {
+@SuppressWarnings("serial")
+public class StringList extends ArrayList<String> {
 }
