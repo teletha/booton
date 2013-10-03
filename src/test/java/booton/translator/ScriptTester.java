@@ -637,7 +637,7 @@ public class ScriptTester {
             clazz = clazz.getComponentType();
         }
 
-        String computedJavaClassName = prefix + Javascript.computeSimpleClassName(clazz);
+        String computedJavaClassName = prefix + clazz.getName();
         NativeObject object = (NativeObject) js;
 
         for (Object id : object.getAllIds()) {
