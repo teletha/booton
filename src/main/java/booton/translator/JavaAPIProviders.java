@@ -23,13 +23,16 @@ import kiss.Singleton;
 import org.objectweb.asm.Type;
 
 /**
- * @version 2013/09/01 13:09:18
+ * @version 2013/10/03 12:43:41
  */
 @Manageable(lifestyle = Singleton.class)
 class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
 
     /** The mapping between Java class and JS implementation class. */
-    private static final Map<Class, JavaAPIProviders.Definition> definitions = new HashMap();
+    private static final Map<Class, Definition> definitions = new HashMap();
+
+    /** The mapping between Java class and JS implementation class. */
+    private static final Map<Class, Class> revert = new HashMap();
 
     /**
      * {@inheritDoc}
@@ -40,6 +43,7 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
 
         if (api != null && !definitions.containsKey(api.value())) {
             definitions.put(api.value(), new Definition(clazz));
+            revert.put(clazz, api.value());
         }
 
         Class parent = clazz.getSuperclass();
@@ -58,12 +62,13 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
 
         if (api != null && !definitions.containsKey(api.value())) {
             definitions.remove(api.value());
+            revert.remove(clazz);
         }
 
         Class parent = clazz.getSuperclass();
 
         if (parent != null) {
-            load(parent);
+            unload(parent);
         }
     }
 
@@ -81,6 +86,20 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
 
     /**
      * <p>
+     * Convert Javascript runtime class to Java class.
+     * </p>
+     * 
+     * @param type A target class to convert.
+     * @return A converted class.
+     */
+    static Class revert(Class type) {
+        Class java = revert.get(type);
+
+        return java == null ? type : java;
+    }
+
+    /**
+     * <p>
      * Convert Java class to Javascript runtime class (normaly, it is simplified).
      * </p>
      * 
@@ -88,7 +107,7 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
      * @return A converted class.
      */
     static Class convert(Class type) {
-        JavaAPIProviders.Definition definition = definitions.get(type);
+        Definition definition = definitions.get(type);
 
         return definition == null ? type : definition.clazz;
     }
@@ -104,7 +123,7 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
      * @return A original method descriptor.
      */
     static String validateMethod(Class owner, String name, String description) {
-        JavaAPIProviders.Definition definition = definitions.get(owner);
+        Definition definition = definitions.get(owner);
 
         if (definition == null) {
             return description;
@@ -131,7 +150,7 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
      * @param description
      */
     static void validateField(Class owner, Field field) {
-        JavaAPIProviders.Definition definition = definitions.get(owner);
+        Definition definition = definitions.get(owner);
 
         if (definition != null && !definition.fields.contains(field.getName())) {
             TranslationError error = new TranslationError();

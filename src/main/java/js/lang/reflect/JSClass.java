@@ -102,7 +102,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @param definition A full metadata info for class, constructors, methods and fields.
      */
     protected JSClass(String nameJS, NativeObject prototype, NativeArray<?> metadata, Class superclass, NativeObject definition) {
-        super(nameJS, nameJS, metadata, 4);
+        super((String) metadata.remove(1), nameJS, metadata, 4);
 
         this.prototype = prototype;
         this.definition = definition;
@@ -1200,7 +1200,10 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      */
     protected JSClass getArrayClass() {
         if (arrayClass == null) {
-            arrayClass = new JSClass("[".concat(nameJS), new NativeObject(), new NativeArray(), Object.class, new NativeObject());
+            NativeArray metadata = new NativeArray();
+            metadata.set(1, "[".concat(name));
+
+            arrayClass = new JSClass("[".concat(nameJS), new NativeObject(), metadata, Object.class, new NativeObject());
         }
         return arrayClass;
     }

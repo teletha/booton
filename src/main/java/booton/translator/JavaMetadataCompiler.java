@@ -318,7 +318,7 @@ class JavaMetadataCompiler {
             }
 
             // code.append(modifier);
-            code.append(modifier, ",", new JavaSignatureCompiler(clazz.getTypeParameters()), ",", new JavaSignatureCompiler(clazz.getGenericSuperclass()), ",", new JavaSignatureCompiler(clazz.getGenericInterfaces()));
+            code.append(modifier, ",\"" + JavaAPIProviders.revert(clazz).getName() + "\"", ",", new JavaSignatureCompiler(clazz.getTypeParameters()), ",", new JavaSignatureCompiler(clazz.getGenericSuperclass()), ",", new JavaSignatureCompiler(clazz.getGenericInterfaces()));
         }
     }
 
