@@ -58,6 +58,8 @@ class TranslatorManager {
         ignorables.add(Type.getDescriptor(Path.class));
         ignorables.add(Type.getDescriptor(Reader.class));
         ignorables.add(Type.getDescriptor(Writer.class));
+
+        nativeMethods.push(hash("toString", "()Ljava/lang/String;"), Object.class);
     }
 
     /**

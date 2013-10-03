@@ -1209,6 +1209,20 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
     }
 
     /**
+     * Converts the object to a string. The string representation is the string "class" or
+     * "interface", followed by a space, and then by the fully qualified name of the class in the
+     * format returned by {@code getName}. If this {@code Class} object represents a primitive type,
+     * this method returns the name of the primitive type. If this {@code Class} object represents
+     * void this method returns "void".
+     * 
+     * @return a string representation of this class object.
+     */
+    @Override
+    public String toString() {
+        return (isInterface() ? "interface " : isPrimitive() ? "" : "class ") + name;
+    }
+
+    /**
      * <p>
      * Returns the Class object associated with the class or interface with the given string name.
      * </p>
