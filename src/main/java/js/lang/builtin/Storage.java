@@ -129,7 +129,7 @@ public abstract class Storage implements JavascriptNative {
     public void set(Object model) {
         if (model != null) {
             StringBuilder builder = new StringBuilder();
-            I.write(model, builder, true);;
+            I.write(model, builder, true);
 
             setItem(model.getClass().getName(), builder.toString());
         }

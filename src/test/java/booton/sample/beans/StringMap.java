@@ -7,13 +7,13 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package kiss;
+package booton.sample.beans;
 
+import java.util.HashMap;
 
 /**
- * @version 2013/09/27 21:18:05
+ * @version 2013/10/03 11:15:05
  */
-// @JavaAPIProvider(ClassCodec.class)
-class JSClassCodec {
-
+@SuppressWarnings("serial")
+public class StringMap extends HashMap<String, String> {
 }
