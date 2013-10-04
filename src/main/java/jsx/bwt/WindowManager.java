@@ -15,6 +15,8 @@ import js.dom.ClientRect;
 import js.dom.Element;
 import jsx.application.PageUnload;
 import jsx.bwt.view.PopupViewStyle;
+import jsx.bwt.widget.EventHub;
+import jsx.bwt.widget.Subscribe;
 import kiss.Disposable;
 
 /**
@@ -44,7 +46,7 @@ public class WindowManager {
         this.content = content;
 
         System.out.println("register");
-        EventBus.Global.register(this);
+        EventHub.Global.register(this);
     }
 
     /**
@@ -76,9 +78,7 @@ public class WindowManager {
      */
     @Subscribe(PageUnload.class)
     private void unload() {
-        System.out.println("unload");
-
-        EventBus.Global.unregister(this);
+        EventHub.Global.unregister(this);
         target.off();
         hide();
     }

@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.bwt;
+package jsx.bwt.widget;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

@@ -9,25 +9,22 @@
  */
 package js.lang.builtin;
 
-import js.lang.NativeObject;
-import kiss.I;
-import booton.translator.JavascriptAPIProvider;
-import booton.translator.JavascriptNative;
-import booton.translator.JavascriptNativeProperty;
-import booton.translator.JavascriptNativePropertyAccessor;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import js.lang.builtin.Storage;
 
 /**
- * <p>
- * The DOM Storage mechanism is a means through which string key/value pairs can be securely stored
- * and later retrieved for use. The goal of this addition is to provide a comprehensive means
- * through which interactive applications can be built (including advanced abilities, such as being
- * able to work "offline" for extended periods of time).
- * </p>
- * 
- * @version 2013/10/04 11:24:39
+ * @version 2013/10/04 11:11:32
  */
-@JavascriptAPIProvider
-public abstract class Storage extends NativeObject implements JavascriptNative {
+public class EmulateStorage extends Storage {
+
+    /** The key storage. */
+    private CopyOnWriteArrayList<String> keys = new CopyOnWriteArrayList();
+
+    /** The actual storage. */
+    private Map<String, String> map = new HashMap();
 
     /**
      * <p>
@@ -37,8 +34,9 @@ public abstract class Storage extends NativeObject implements JavascriptNative {
      * 
      * @return
      */
-    @JavascriptNativePropertyAccessor
-    public abstract int length();
+    public int length() {
+        return map.size();
+    }
 
     /**
      * <p>
@@ -52,8 +50,9 @@ public abstract class Storage extends NativeObject implements JavascriptNative {
      * @param index
      * @return
      */
-    @JavascriptNativeProperty
-    public native String key(int index);
+    public String key(int index) {
+        return keys.get(index);
+    }
 
     /**
      * <p>
@@ -65,7 +64,9 @@ public abstract class Storage extends NativeObject implements JavascriptNative {
      * @param key
      * @return
      */
-    public native String getItem(String key);
+    public String getItem(String key) {
+        return map.get(key);
+    }
 
     /**
      * <p>
@@ -76,7 +77,10 @@ public abstract class Storage extends NativeObject implements JavascriptNative {
      * @param key
      * @param value
      */
-    public native String setItem(String key, String value);
+    public String setItem(String key, String value) {
+        keys.addIfAbsent(key);
+        return map.put(key, value);
+    }
 
     /**
      * <p>
@@ -87,7 +91,10 @@ public abstract class Storage extends NativeObject implements JavascriptNative {
      * 
      * @param key
      */
-    public native void removeItem(String key);
+    public void removeItem(String key) {
+        keys.remove(key);
+        map.remove(key);
+    }
 
     /**
      * <p>
@@ -95,43 +102,8 @@ public abstract class Storage extends NativeObject implements JavascriptNative {
      * all key/value pairs, if there are any. If there are none, then the method must do nothing.
      * </p>
      */
-    public native void clear();
-
-    /**
-     * <p>
-     * Retrieve the model instance of the specified class.
-     * </p>
-     * 
-     * @param modelClass
-     * @return
-     */
-    public <T> T get(Class<T> modelClass) {
-        if (modelClass == null) {
-            return null;
-        }
-
-        String text = getItem(modelClass.getName());
-
-        if (text == null) {
-            return null;
-        }
-
-        return I.read(text, I.make(modelClass));
-    }
-
-    /**
-     * <p>
-     * Retrieve the model instance of the specified class.
-     * </p>
-     * 
-     * @param modelClass
-     * @return
-     */
-    public void set(Object model) {
-        if (model != null) {
-            StringBuilder builder = new StringBuilder();
-            I.write(model, builder, true);
-            setItem(model.getClass().getName(), builder.toString());
-        }
+    public void clear() {
+        keys.clear();
+        map.clear();
     }
 }

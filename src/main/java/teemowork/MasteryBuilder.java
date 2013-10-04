@@ -19,11 +19,12 @@ import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Button;
 import jsx.bwt.Select;
-import jsx.bwt.Subscribe;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
+import jsx.bwt.widget.Subscribe;
 import jsx.model.SelectableListener;
 import jsx.model.SelectableModel;
+import kiss.I;
 import teemowork.MasteryBuilderStyle.Completed;
 import teemowork.MasteryBuilderStyle.Defense;
 import teemowork.MasteryBuilderStyle.EmptyPane;
@@ -66,7 +67,7 @@ public class MasteryBuilder extends Page {
             {Wealth, Awareness, StrengthOfSpirit, Explorer}, {Pickpocket, Intelligence, null, null},
             {null, Nimble, null, null}};
 
-    private SelectableModel<MasterySet> set;
+    private MasteryManager set;
 
     private final MasterySet masterySet;
 
@@ -108,10 +109,11 @@ public class MasteryBuilder extends Page {
      */
     @Override
     public void load(DocumentFragment root) {
-        set = localStorage.get(SelectableModel.class);
+        System.out.println("load");
+        set = localStorage.get(MasteryManager.class);
 
         if (set == null) {
-            set = new SelectableModel();
+            set = new MasteryManager();
         }
 
         Element infomation = root.child(Information.class);
@@ -180,6 +182,10 @@ public class MasteryBuilder extends Page {
 
         history.replaceState("", "", "#" + getPageId());
 
+        System.out.println("save");
+        StringBuilder builder = new StringBuilder();
+        I.write(set, builder, true);
+        System.out.println(builder.toString());
         localStorage.set(set);
     }
 
@@ -357,5 +363,11 @@ public class MasteryBuilder extends Page {
                 super.receive();
             }
         }
+    }
+
+    /**
+     * @version 2013/10/04 13:04:34
+     */
+    private static class MasteryManager extends SelectableModel<MasterySet> {
     }
 }

@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import jsx.bwt.widget.Subscribe;
+
 /**
  * @version 2013/06/17 14:09:34
  */

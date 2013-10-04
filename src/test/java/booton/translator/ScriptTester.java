@@ -250,6 +250,7 @@ public class ScriptTester {
             Object result = engine.execute(html, invoker, sourceName, 1);
 
             if (result == null || result instanceof Undefined || result instanceof UniqueTag) {
+                dumpCode(source);
                 return null; // success
             } else {
                 // fail (AssertionError) or error
