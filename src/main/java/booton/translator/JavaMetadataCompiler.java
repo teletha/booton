@@ -37,6 +37,8 @@ class JavaMetadataCompiler {
         try {
             ignorables.add(JavaAPIProvider.class);
             ignorables.add(JavascriptAPIProvider.class);
+            ignorables.add(JavascriptNativeProperty.class);
+            ignorables.add(JavascriptNativePropertyAccessor.class);
             ignorables.add(RunWith.class);
             ignorables.add(Override.class);
             ignorables.add(Require.class);

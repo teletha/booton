@@ -22,6 +22,7 @@ import js.dom.EmulateDocument;
 import js.dom.History;
 import js.dom.Location;
 import js.dom.Window;
+import js.lang.builtin.EmulateStorage;
 import js.lang.builtin.JSON;
 import js.lang.builtin.Storage;
 import jsx.jQuery;
@@ -36,7 +37,7 @@ import booton.translator.Translator;
  * Define global objects and static methods in Booton environment.
  * </p>
  * 
- * @version 2013/09/26 16:30:55
+ * @version 2013/10/04 11:24:24
  */
 public class Global {
 
@@ -73,7 +74,7 @@ public class Global {
      * persistent. localStorage was introduced in Firefox 3.5.
      * </p>
      */
-    public static Storage localStorage;
+    public static Storage localStorage = new EmulateStorage();
 
     /**
      * <p>
@@ -83,7 +84,7 @@ public class Global {
      * new session to be initiated.
      * </p>
      */
-    public static Storage sessionStorage;
+    public static Storage sessionStorage = new EmulateStorage();
 
     /**
      * <p>
