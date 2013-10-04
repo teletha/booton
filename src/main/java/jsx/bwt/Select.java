@@ -20,8 +20,11 @@ import jsx.bwt.SelectStyle.SelectedItem;
 import jsx.bwt.view.ScrollableListView;
 import jsx.bwt.view.ScrollableListView.ItemRenderer;
 import jsx.bwt.view.SlidableView;
-import jsx.model.SelectableListener;
+import jsx.bwt.widget.Subscribe;
 import jsx.model.SelectableModel;
+import jsx.model.SelectableModel.Add;
+import jsx.model.SelectableModel.Deselect;
+import jsx.model.SelectableModel.Remove;
 
 /**
  * @version 2013/07/29 2:00:34
@@ -59,7 +62,7 @@ public class Select<M> extends FormUI<Select> {
      */
     public Select(SelectableModel<M> selectable) {
         model = selectable;
-        model.bind(binder);
+        model.register(binder);
 
         form.add(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
 
@@ -76,7 +79,7 @@ public class Select<M> extends FormUI<Select> {
         arrow.root.add(SelectArrow.class);
 
         options = root.child(new SlidableView(view));
-        options.bind(binder);
+        // options.bind(binder);
 
         if (model.size() == 0) {
             disable();
@@ -106,7 +109,7 @@ public class Select<M> extends FormUI<Select> {
     /**
      * @version 2013/07/31 1:26:46
      */
-    private class Binder implements ItemRenderer, SelectableListener<M> {
+    private class Binder implements ItemRenderer {
 
         @Listen(type = UIAction.Click)
         private void selectItem(UIEvent event) {
@@ -135,40 +138,29 @@ public class Select<M> extends FormUI<Select> {
             }
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void select(int index, M item) {
-            form.val(item.toString());
+        @Subscribe(jsx.model.SelectableModel.Select.class)
+        public void select(jsx.model.SelectableModel.Select select) {
+            System.out.println("select");
+            form.val(select.item.toString());
 
-            view.render(index);
+            view.render(select.index);
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void deselect(int index, M item) {
-            view.render(index);
+        @Subscribe(Deselect.class)
+        public void deselect(Deselect event) {
+            view.render(event.index);
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void add(int index, M item) {
+        @Subscribe(Add.class)
+        public void add(Add event) {
             view.provide(this);
-            view.render(index);
+            view.render(event.index);
 
             enable();
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void remove(int index, M item) {
+        @Subscribe(Remove.class)
+        public void remove(Remove event) {
             view.provide(this);
 
             if (model.size() == 0) {

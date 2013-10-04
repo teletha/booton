@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import jsx.bwt.Publishable;
+import jsx.bwt.widget.EventHub;
 
 /**
  * @version 2013/04/05 9:31:56
  */
-public class SelectableModel<T> extends Publishable implements Iterable<T> {
+public class SelectableModel<T> extends EventHub implements Iterable<T> {
 
     /** The index of current selected item. */
     private int index = -1;
@@ -75,7 +75,8 @@ public class SelectableModel<T> extends Publishable implements Iterable<T> {
         // notify
         if (old != -1) {
             System.out.println(" notify " + index);
-            publish(SelectableListener.class).deselect(old, items.get(old));
+            // publish(SelectableListener.class).deselect(old, items.get(old));
+            publish(new Deselect(index, items.get(index)));
         }
 
         if (index != -1) {
@@ -203,7 +204,8 @@ public class SelectableModel<T> extends Publishable implements Iterable<T> {
             index = items.size();
             items.add(item);
 
-            publish(SelectableListener.class).add(index, item);
+            // publish(SelectableListener.class).add(index, item);
+            publish(new Add(index, item));
         }
         return index;
     }
@@ -254,7 +256,8 @@ public class SelectableModel<T> extends Publishable implements Iterable<T> {
             }
 
             // At first, notify item removing.
-            publish(SelectableListener.class).remove(index, removed);
+            publish(new Remove(index, removed));
+            // publish(SelectableListener.class).remove(index, removed);
 
             // Then notify selection changing.
             setSelectionIndex(index);
@@ -309,6 +312,48 @@ public class SelectableModel<T> extends Publishable implements Iterable<T> {
     /**
      * @version 2013/06/19 14:06:38
      */
+    public static class Add<T> {
+
+        /** The item index. */
+        public final int index;
+
+        /** The selected item. */
+        public final T item;
+
+        /**
+         * @param index
+         * @param item
+         */
+        private Add(int index, T item) {
+            this.index = index;
+            this.item = item;
+        }
+    }
+
+    /**
+     * @version 2013/06/19 14:06:38
+     */
+    public static class Remove<T> {
+
+        /** The item index. */
+        public final int index;
+
+        /** The selected item. */
+        public final T item;
+
+        /**
+         * @param index
+         * @param item
+         */
+        private Remove(int index, T item) {
+            this.index = index;
+            this.item = item;
+        }
+    }
+
+    /**
+     * @version 2013/06/19 14:06:38
+     */
     public static class Select<T> {
 
         /** The item index. */
@@ -322,6 +367,27 @@ public class SelectableModel<T> extends Publishable implements Iterable<T> {
          * @param item
          */
         private Select(int index, T item) {
+            this.index = index;
+            this.item = item;
+        }
+    }
+
+    /**
+     * @version 2013/06/19 14:06:38
+     */
+    public static class Deselect<T> {
+
+        /** The item index. */
+        public final int index;
+
+        /** The selected item. */
+        public final T item;
+
+        /**
+         * @param index
+         * @param item
+         */
+        private Deselect(int index, T item) {
             this.index = index;
             this.item = item;
         }

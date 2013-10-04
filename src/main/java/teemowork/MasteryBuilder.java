@@ -22,7 +22,6 @@ import jsx.bwt.Select;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
 import jsx.bwt.widget.Subscribe;
-import jsx.model.SelectableListener;
 import jsx.model.SelectableModel;
 import kiss.I;
 import teemowork.MasteryBuilderStyle.Completed;
@@ -118,7 +117,6 @@ public class MasteryBuilder extends Page {
 
         Element infomation = root.child(Information.class);
         menu = infomation.child(new Select(set));
-        menu.model.bind(new MasterySelector());
         menu.model.register(this);
 
         reset = infomation.child(new Button("30", new EventListener() {
@@ -197,39 +195,9 @@ public class MasteryBuilder extends Page {
         return "Mastery/" + masterySet.toString();
     }
 
-    /**
-     * @version 2013/04/05 15:32:50
-     */
-    private class MasterySelector implements SelectableListener<MasterySet> {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void select(int index, MasterySet item) {
-            masterySet.setCode(item.getCode());
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void deselect(int index, MasterySet item) {
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void add(int index, MasterySet item) {
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void remove(int index, MasterySet item) {
-        }
+    @Subscribe(jsx.model.SelectableModel.Select.class)
+    private void select(jsx.model.SelectableModel.Select<MasterySet> event) {
+        masterySet.setCode(event.item.getCode());
     }
 
     /**
