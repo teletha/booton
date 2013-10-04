@@ -37,12 +37,14 @@ public class EventHub {
      */
     public void publish(Object event) {
         if (holder != null && event != null) {
+            System.out.println(event.getClass());
             List<Listener> listeners = holder.get(event.getClass());
-
             if (listeners != null) {
+                System.out.println(listeners.size());
                 for (Listener listener : listeners) {
                     try {
                         if (listener.hasParam) {
+                            System.out.println("invoke " + listener.instance.getClass());
                             listener.method.invoke(listener.instance, event);
                         } else {
                             listener.method.invoke(listener.instance);
@@ -75,8 +77,9 @@ public class EventHub {
                     }
 
                     Listener listener = new Listener(subscribable, method);
-
+                    System.out.println(ClassUtil.getTypes(eventType));
                     for (Class type : ClassUtil.getTypes(eventType)) {
+
                         if (holder == null) {
                             holder = new HashMap();
                         }
@@ -87,12 +90,13 @@ public class EventHub {
                             listeners = new CopyOnWriteArrayList();
                             holder.put(type, listeners);
                         }
-
+                        System.out.println(type);
                         for (Listener in : listeners) {
                             if (in.instance == subscribable) {
                                 return;
                             }
                         }
+                        System.out.println(type);
                         listeners.add(listener);
                     }
                 }
