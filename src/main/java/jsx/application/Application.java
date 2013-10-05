@@ -21,10 +21,10 @@ import java.util.regex.Pattern;
 
 import js.dom.DocumentFragment;
 import js.dom.EventListener;
+import jsx.bwt.EventHub;
 import jsx.bwt.Publishable;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
-import jsx.bwt.widget.EventHub;
 import kiss.I;
 
 /**

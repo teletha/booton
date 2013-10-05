@@ -10,7 +10,7 @@
 package teemowork.model;
 
 import static teemowork.model.Mastery.*;
-import jsx.bwt.widget.EventHub;
+import jsx.bwt.EventHub;
 
 /**
  * @version 2013/03/15 16:51:59

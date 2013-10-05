@@ -15,10 +15,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import jsx.bwt.UIEvent;
 import booton.css.CSS;
 
 /**
- * @version 2013/07/01 23:55:23
+ * @version 2013/10/05 10:40:36
  */
 public class EmulateElement extends Element implements Nodable {
 
@@ -28,6 +29,12 @@ public class EmulateElement extends Element implements Nodable {
     /** The element name. */
     private final String name;
 
+    /** The style manager. */
+    private final EmulateCSSStyleDeclaration css = new EmulateCSSStyleDeclaration();
+
+    /** The event listeners holder. */
+    private final EmulateEventTarget events = new EmulateEventTarget();
+
     /** The child nodes holder. */
     private final EmulateHTMLCollection elements = new EmulateHTMLCollection();
 
@@ -36,6 +43,9 @@ public class EmulateElement extends Element implements Nodable {
 
     /** The parent element. */
     private EmulateElement parent;
+
+    /** The form value. */
+    private String value;
 
     /**
      * 
@@ -61,6 +71,30 @@ public class EmulateElement extends Element implements Nodable {
     @Override
     public void setParent(EmulateElement parent) {
         this.parent = parent;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void addEventListener(String type, EventListener listener) {
+        events.addEventListener(type, listener);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void removeEventListener(String type, EventListener listener) {
+        events.removeEventListener(type, listener);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void dispatchEvent(UIEvent event) {
+        events.dispatchEvent(event);
     }
 
     /**
@@ -375,9 +409,7 @@ public class EmulateElement extends Element implements Nodable {
      */
     @Override
     protected String value() {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped DOMError in here.
-        throw new Error();
+        return value;
     }
 
     /**
@@ -385,9 +417,7 @@ public class EmulateElement extends Element implements Nodable {
      */
     @Override
     protected void value(String value) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped DOMError in here.
-        throw new Error();
+        this.value = value;
     }
 
     /**
@@ -407,6 +437,22 @@ public class EmulateElement extends Element implements Nodable {
      */
     private void notify(MutationEvent event) {
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected CSSStyleDeclaration style() {
+        return css;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected ClientRect getBoundingClientRect() {
+        return new EmulateClientRect();
     }
 
     /**

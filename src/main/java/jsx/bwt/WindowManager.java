@@ -15,8 +15,6 @@ import js.dom.ClientRect;
 import js.dom.Element;
 import jsx.application.PageUnload;
 import jsx.bwt.view.PopupViewStyle;
-import jsx.bwt.widget.EventHub;
-import jsx.bwt.widget.Subscribe;
 import kiss.Disposable;
 
 /**

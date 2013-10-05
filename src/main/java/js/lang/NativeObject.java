@@ -528,7 +528,12 @@ public class NativeObject {
      * @param propertyName A property name.
      * @return A result.
      */
-    public static native boolean hasProperty(Object object, String propertyName);
+    public static boolean hasProperty(Object object, String propertyName) {
+        if (object instanceof NativeObject) {
+            return ((NativeObject) object).hasProperty(propertyName);
+        }
+        return false;
+    }
 
     /**
      * @version 2013/04/09 2:35:51

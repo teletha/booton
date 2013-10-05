@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import jsx.bwt.widget.EventHub;
+import jsx.bwt.EventHub;
 import teemowork.model.variable.Variable;
 import teemowork.model.variable.VariableResolver;
 
