@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.bwt;
+package jsx.bwt;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -16,10 +16,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @version 2013/08/02 9:09:31
+ * @version 2013/10/05 11:27:24
  */
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Bind {
+public @interface Subscribe {
+
+    /**
+     * <p>
+     * Specify event type.
+     * </p>
+     * 
+     * @return
+     */
+    Class value() default Object.class;
 }
