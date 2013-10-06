@@ -11,6 +11,7 @@ package js.lang.builtin;
 
 import js.lang.Global;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -21,6 +22,7 @@ import booton.translator.ScriptRunner;
  * @version 2013/10/04 10:35:29
  */
 @RunWith(ScriptRunner.class)
+@Ignore
 public class EmulateStorageTest {
 
     @Test

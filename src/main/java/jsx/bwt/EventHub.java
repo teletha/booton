@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kiss.model.ClassUtil;
+import booton.translator.Debuggable;
 
 /**
  * @version 2013/10/05 11:45:30
@@ -62,15 +63,14 @@ public class EventHub {
      * Register event listener.
      * </p>
      */
+    @Debuggable
     public void register(Object subscribable) {
         if (subscribable != null) {
-            System.out.println(ClassUtil.getAnnotations(subscribable.getClass()));
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
                     if (annotation.annotationType() == Subscribe.class) {
                         Class eventType;
                         Method method = entry.getKey();
-                        System.out.println(method + "  " + annotation);
 
                         if (method.getParameterTypes().length == 1) {
                             eventType = method.getParameterTypes()[0];
@@ -105,6 +105,58 @@ public class EventHub {
                         }
                     }
 
+                }
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Register event listener.
+     * </p>
+     */
+    @Debuggable
+    public void registerFail(Object subscribable) {
+        if (subscribable != null) {
+            for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
+                for (Annotation annotation : entry.getValue()) {
+                    if (annotation.annotationType() == Subscribe.class) {
+                        Class eventType;
+                        Method method = entry.getKey();
+
+                        if (method.getParameterTypes().length == 1) {
+                            eventType = method.getParameterTypes()[0];
+                        } else {
+                            eventType = ((Subscribe) annotation).value();
+                        }
+
+                        Listener listener = new Listener(subscribable, method);
+
+                        for (Class type : ClassUtil.getTypes(eventType)) {
+                            if (type != Object.class) {
+                                type = ClassUtil.wrap(type);
+
+                                if (holder == null) {
+                                    holder = new HashMap();
+                                }
+
+                                List<Listener> listeners = holder.get(type);
+
+                                if (listeners == null) {
+                                    listeners = new CopyOnWriteArrayList();
+                                    holder.put(type, listeners);
+                                } else {
+                                    for (Listener registered : listeners) {
+                                        if (registered.instance == subscribable) {
+                                            return;
+                                        }
+                                    }
+                                }
+                                listeners.add(listener);
+                                System.out.println(listener);
+                            }
+                        }
+                    }
                 }
             }
         }

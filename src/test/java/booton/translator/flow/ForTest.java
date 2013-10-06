@@ -12,6 +12,7 @@ package booton.translator.flow;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -145,12 +146,54 @@ public class ForTest extends ScriptTester {
     public void continueNest() throws Exception {
         test(new Scriptable() {
 
+            @Debuggable
             int act(int value) {
                 root: for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 5; j++) {
                         if (i == 1) {
                             continue root;
                         }
+                        value++;
+                    }
+                    value++;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void breakNest() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            int act(int value) {
+                root: for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 5; j++) {
+                        if (i == 1) {
+                            break root;
+                        }
+                        value++;
+                    }
+                    value++;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void returnNest() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            int act(int value) {
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 5; j++) {
+                        if (i == 1) {
+                            return 100;
+                        }
+                        value++;
                     }
                     value++;
                 }
@@ -172,6 +215,27 @@ public class ForTest extends ScriptTester {
                         continue;
                     }
                     value++;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void returnInNest() throws Exception {
+        test(new Scriptable() {
+
+            int act(int value) {
+                if (value == 0) {
+                    value++;
+                } else {
+                    for (int i = 0; i < 3; i++) {
+                        value++;
+
+                        if (i == -1 || value % 5 == 0) {
+                            return 1000;
+                        }
+                    }
                 }
                 return value;
             }

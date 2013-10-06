@@ -10,10 +10,14 @@
 package jsx.bwt;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import booton.translator.ScriptRunner;
 
 /**
  * @version 2013/10/05 11:24:20
  */
+@RunWith(ScriptRunner.class)
 public class EventHubTest {
 
     @Test

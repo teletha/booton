@@ -74,13 +74,11 @@ public class SelectableModel<T> extends EventHub implements Iterable<T> {
 
         // notify
         if (old != -1) {
-            System.out.println(" notify " + index);
             // publish(SelectableListener.class).deselect(old, items.get(old));
             publish(new Deselect(index, items.get(index)));
         }
 
         if (index != -1) {
-            System.out.println("publish selection " + index);
             // publish(SelectableListener.class).select(index, items.get(index));
             publish(new Select(index, items.get(index)));
         }
