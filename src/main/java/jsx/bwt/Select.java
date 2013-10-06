@@ -61,7 +61,6 @@ public class Select<M> extends FormUI<Select> {
      */
     public Select(SelectableModel<M> selectable) {
         model = selectable;
-        System.out.println("register binder to model");
         model.register(binder);
 
         form.add(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");

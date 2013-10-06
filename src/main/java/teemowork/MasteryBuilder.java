@@ -108,8 +108,7 @@ public class MasteryBuilder extends Page {
      */
     @Override
     public void load(DocumentFragment root) {
-        System.out.println("load");
-        set = localStorage.get(MasteryManager.class);
+        // set = localStorage.get(MasteryManager.class);
 
         if (set == null) {
             set = new MasteryManager();
@@ -271,6 +270,7 @@ public class MasteryBuilder extends Page {
          */
         @Subscribe(MasterySet.class)
         public void receive() {
+            System.out.println("set mastery");
             int current = masterySet.getLevel(mastery);
 
             // Update current level
