@@ -146,7 +146,6 @@ public class ForTest extends ScriptTester {
     public void continueNest() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(int value) {
                 root: for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 5; j++) {
@@ -166,7 +165,6 @@ public class ForTest extends ScriptTester {
     public void breakNest() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(int value) {
                 root: for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 5; j++) {
@@ -186,7 +184,6 @@ public class ForTest extends ScriptTester {
     public void returnNest() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(int value) {
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 5; j++) {
@@ -196,6 +193,45 @@ public class ForTest extends ScriptTester {
                         value++;
                     }
                     value++;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void continueWithLogicalExpressionFail() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            int act(int value) {
+                root: for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 4; j++) {
+                        value++;
+
+                        if ((i + j) % 3 == 0) {
+                            continue root;
+                        }
+                    }
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void continueWithLogicalExpressionAndAfterProcess() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            int act(int value) {
+                root: for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 4; j++) {
+                        if ((i + j) % 3 == 0) {
+                            continue root;
+                        }
+                        value++;
+                    }
                 }
                 return value;
             }
