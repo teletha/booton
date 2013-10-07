@@ -526,10 +526,10 @@ class Node {
                 // while, for or if
                 if (backs == 0) {
                     // if
-                    OperandCondition ccc = (OperandCondition) stack.peekLast();
+                    OperandCondition condition = (OperandCondition) stack.peekLast();
 
-                    if (ccc != null && ccc.next == outgoing.get(0)) {
-                        ccc.invert();
+                    if (condition != null && condition.next == outgoing.get(0)) {
+                        condition.invert();
                     }
 
                     if (outgoing.get(0).incoming.size() == 1) {
@@ -538,7 +538,7 @@ class Node {
                             Node elze = null;
 
                             if (outgoing.get(0).written) {
-                                ccc.invert();
+                                condition.invert();
 
                                 then = outgoing.get(1);
                             } else if (outgoing.get(1).written) {
@@ -555,9 +555,6 @@ class Node {
                                 process(elze, buffer);
                             }
                             buffer.write("}").line();
-                            if (id == 23) {
-                                System.out.println("Follower  " + follower);
-                            }
                             process(follower, buffer);
                         } else {
                             buffer.write("if", "(" + this + ")", "{");
@@ -566,7 +563,7 @@ class Node {
                             process(outgoing.get(1), buffer);
                         }
                     } else {
-                        ccc.invert();
+                        condition.invert();
                         buffer.write("if", "(" + this + ")", "{");
                         process(outgoing.get(1), buffer);
                         buffer.write("}").line();
@@ -775,7 +772,7 @@ class Node {
             }
 
             if (hasDominator(node)) {
-                buffer.append("continue l", node.id, "; // p@@@@");
+                buffer.append("continue l", node.id, ";");
                 return;
             }
 
@@ -783,11 +780,8 @@ class Node {
 
             while (backedgedDominator != null) {
                 if (backedgedDominator.backedges.contains(node)) {
-                    buffer.append("continue l", backedgedDominator.id, "; // ############");
+                    buffer.append("continue l", backedgedDominator.id, ";");
                     // node.getDominator().follower = node;
-                    if (id == 29 || id == 27) {
-                        System.out.println("process " + id + "   " + node.id + "   " + node.getDominator().id);
-                    }
                     return;
                 }
                 backedgedDominator = backedgedDominator.getDominator();
@@ -795,9 +789,6 @@ class Node {
 
             if (dominator.backedges.size() == 0) {
                 // stop here
-                if (node.id == 28) {
-                    System.out.println("set follower at " + id + "  " + node.getDominator().id);
-                }
                 node.getDominator().follower = node;
             } else {
                 // search destination
