@@ -772,7 +772,7 @@ class Node {
             }
 
             if (hasDominator(node)) {
-                buffer.append("continue l", node.id, ";");
+                buffer.append("// continue l", node.id, "; // ", id);
                 return;
             }
 
@@ -795,6 +795,41 @@ class Node {
                 buffer.append("break l", dominator.id, ";");
             };
         }
+    }
+
+    private boolean testThisFollowerTreeIsDominatableOrNot(Node follower) {
+        follower = follower.followSingleNodePath();
+
+        // check whether this node dominates the end following node or not
+        if (follower.hasDominator(this)) {
+            // no break, continue or return
+            return true;
+        }
+
+        if (hasDominator(follower)) {
+            // no break, continue or return
+            return true;
+        }
+
+        // break, continue or return
+        return false;
+    }
+
+    /**
+     * <p>
+     * Helper method to follow single node path and return the end node.
+     * </p>
+     * 
+     * @return A end node.
+     */
+    private Node followSingleNodePath() {
+        Node node = this;
+
+        // step into single node path
+        while (node.incoming.size() == 1 && node.outgoing.size() == 1) {
+            node = node.outgoing.get(0);
+        }
+        return node;
     }
 
     /**

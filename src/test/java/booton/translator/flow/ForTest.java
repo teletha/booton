@@ -146,6 +146,7 @@ public class ForTest extends ScriptTester {
     public void continueNest() throws Exception {
         test(new Scriptable() {
 
+            @Debuggable
             int act(int value) {
                 root: for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 5; j++) {
@@ -165,6 +166,7 @@ public class ForTest extends ScriptTester {
     public void breakNest() throws Exception {
         test(new Scriptable() {
 
+            @Debuggable
             int act(int value) {
                 root: for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 5; j++) {
@@ -203,7 +205,6 @@ public class ForTest extends ScriptTester {
     public void continueWithLogicalExpressionFail() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(int value) {
                 root: for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 4; j++) {
@@ -223,7 +224,6 @@ public class ForTest extends ScriptTester {
     public void continueWithLogicalExpressionAndAfterProcess() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(int value) {
                 root: for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 4; j++) {
