@@ -110,12 +110,13 @@ public class ForTest extends ScriptTester {
     public void breakNoLabel() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 8, to = 10) int value) {
                 for (int i = 0; i < 3; i++) {
                     value++;
 
                     if (value == 10) {
-                        value--;
+                        value += 10;
                         break;
                     }
                 }
@@ -128,14 +129,15 @@ public class ForTest extends ScriptTester {
     public void continueNoLabel() {
         test(new Scriptable() {
 
-            public int act(@Param(from = 8, to = 10) int value) {
+            @Debuggable
+            public int act(@Param(from = 1, to = 10) int value) {
                 for (int i = 0; i < 3; i++) {
                     value++;
 
-                    if (value == 10) {
+                    if (value % 2 == 0) {
                         continue;
                     }
-                    value++;
+                    value += 3;
                 }
                 return value;
             }
@@ -163,17 +165,20 @@ public class ForTest extends ScriptTester {
     }
 
     @Test
-    public void breakNest() throws Exception {
+    public void breakNestWithProcess() throws Exception {
         test(new Scriptable() {
 
             @Debuggable
             int act(int value) {
-                root: for (int i = 0; i < 3; i++) {
-                    for (int j = 0; j < 5; j++) {
-                        if (i == 1) {
-                            break root;
-                        }
-                        value++;
+                for (int i = 0; i < 3; i++) {
+                    value++;
+
+                    if (i == 1) {
+                        value = 200;
+                        break;
+                    } else if (i == 3) {
+                        value += 100;
+                        continue;
                     }
                     value++;
                 }
@@ -205,6 +210,7 @@ public class ForTest extends ScriptTester {
     public void continueWithLogicalExpressionFail() throws Exception {
         test(new Scriptable() {
 
+            @Debuggable
             int act(int value) {
                 root: for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 4; j++) {

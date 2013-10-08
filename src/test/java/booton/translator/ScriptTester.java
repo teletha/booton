@@ -30,7 +30,6 @@ import java.util.Set;
 import kiss.I;
 import net.sourceforge.htmlunit.corejs.javascript.ConsString;
 import net.sourceforge.htmlunit.corejs.javascript.EcmaError;
-import net.sourceforge.htmlunit.corejs.javascript.EvaluatorException;
 import net.sourceforge.htmlunit.corejs.javascript.NativeArray;
 import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
 import net.sourceforge.htmlunit.corejs.javascript.Undefined;
@@ -201,22 +200,18 @@ public class ScriptTester {
             }
         } catch (AssertionError e) {
             throw e; // rethrow assertion error
+        } catch (ScriptException e) {
+            dumpCode(source);
+
+            Source code = new Source(source.getSimpleName(), Javascript.getScript(source).toString());
+            TranslationError error = new TranslationError(e);
+            error.write(code.findBlock(e.getFailingLineNumber()));
+
+            throw error;
         } catch (Throwable e) {
             dumpCode(source);
 
             TranslationError error = new TranslationError(e);
-            error.write(e.getMessage());
-            error.write(END, "Test Code :");
-            error.write(script.substring(script.indexOf("boot.define(\"" + Javascript.computeSimpleClassName(source) + "\",")));
-
-            if (e instanceof EvaluatorException) {
-                EvaluatorException exception = (EvaluatorException) e;
-
-                int index = exception.columnNumber();
-                String code = exception.lineSource();
-                error.write(END, "Around Cause :");
-                error.write(code.substring(Math.max(0, index - 20), Math.min(index + 20, code.length())));
-            }
             throw error;
         }
     }

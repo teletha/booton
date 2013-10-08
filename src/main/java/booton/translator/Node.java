@@ -758,28 +758,47 @@ class Node {
      * Helper method to process script writing.
      * </p>
      * 
-     * @param node A next node to write.
+     * @param next A next node to write.
      * @param buffer A script code buffer.
      */
-    private final void process(Node node, ScriptWriter buffer) {
-        if (node != null) {
-            Node dominator = node.getDominator();
+    private final void processIf(Node next, ScriptWriter buffer) {
+        if (next != null) {
+            Node dominator = next.getDominator();
 
             if (dominator == null || dominator == this) {
                 // normal process
-                node.write(buffer);
+                next.write(buffer);
                 return;
             }
 
-            if (hasDominator(node)) {
-                buffer.append("// continue l", node.id, "; // ", id);
+            // // find the single-path end node
+            // Node end = next.followSingleNodePath();
+            //
+            // // check whether the end node is post dominator of this next node or not
+            // if (end.hasDominator(next)) {
+            // // normal process
+            // follower = next;
+            // next.write(buffer);
+            // return;
+            // }
+            //
+            // if (next.hasDominator(end)) {
+            // // the end node is backedged of this next node -> loop with continue
+            // buffer.append("continue l", end.id, ";");
+            // } else {
+            // // the end node is not backedge of this next node -> loop with break
+            // buffer.append("break l", end.getDominator().id, ";");
+            // }
+
+            if (hasDominator(next)) {
+                buffer.append("// continue l", next.id, "; // ", id);
                 return;
             }
 
             Node backedgedDominator = dominator;
 
             while (backedgedDominator != null) {
-                if (backedgedDominator.backedges.contains(node)) {
+                if (backedgedDominator.backedges.contains(next)) {
                     buffer.append("continue l", backedgedDominator.id, ";");
                     // node.getDominator().follower = node;
                     return;
@@ -789,12 +808,118 @@ class Node {
 
             if (dominator.backedges.size() == 0) {
                 // stop here
-                node.getDominator().follower = node;
+                next.getDominator().follower = next;
             } else {
                 // search destination
-                buffer.append("break l", dominator.id, ";");
-            };
+                buffer.append("break l", dominator.id, ";", "// ", id + "  " + next.id + "  " + dominator.id);
+            }
         }
+    }
+
+    /**
+     * <p>
+     * Helper method to process script writing.
+     * </p>
+     * 
+     * @param next A next node to write.
+     * @param buffer A script code buffer.
+     */
+    private final void process(Node next, ScriptWriter buffer) {
+        if (next != null) {
+            Node dominator = next.getDominator();
+
+            if (dominator == null || dominator == this) {
+                // normal process
+                next.write(buffer);
+                return;
+            }
+
+            // if (hasDominator(next)) {
+            // buffer.append("// continue l", next.id, "; // ", id + "  " + next.id);
+            // return;
+            // }
+
+            // find the single-path end node
+            // Node end = next.followSingleNodePath();
+
+            Node fork = next.searchFirstFork();
+
+            if (hasDominator(fork)) {
+                // the first fork-node is backedged by this next node -> loop with continue
+                buffer.append("continue l", fork.id, ";");
+                return;
+            }
+
+            if (hasDominator(fork.getDominator()) & fork.getDominator().backedges.size() != 0) {
+                // the end node is not backedge of this next node -> loop with break
+                buffer.append("break l", fork.getDominator().id, ";");
+                return;
+            }
+
+            // // check whether the end node is post dominator of this next node or not
+            // if (end.hasDominator(next)) {
+            // // normal process
+            // follower = next;
+            // next.write(buffer);
+            // return;
+            // }
+
+            // if (next.hasDominator(end)) {
+            // if (end.backedges.size() != 0) {
+            //
+            // } else if (end.getDominator().backedges.size() != 0) {
+            // // the end node is not backedge of this next node -> loop with break
+            // buffer.append("break l", end.getDominator().id, "; // aa" + end.id + "  " + id + "  "
+            // + next.id + "  " + end.getDominator().id + "   " + getDominator().id);
+            // }
+            // } else {
+            // // the end node is not backedge of this next node -> loop with break
+            // buffer.append("break l", end.getDominator().id, ";");
+            // }
+
+            // Node backedgedDominator = dominator;
+            //
+            // while (backedgedDominator != null) {
+            // if (backedgedDominator.backedges.contains(next)) {
+            // buffer.append("continue l", backedgedDominator.id, "; /*" + id + "  " +
+            // backedgedDominator.id + "  " + dominator.id + "  " + next.id + " */");
+            // // node.getDominator().follower = node;
+            // return;
+            // }
+            // backedgedDominator = backedgedDominator.getDominator();
+            // }
+
+            if (dominator.backedges.size() == 0) {
+                // stop here
+                next.getDominator().follower = next;
+
+            } else {
+                // // search destination
+                // buffer.append("break l", dominator.id, ";", "// ", id + "  " + next.id + "  " +
+                // dominator.id);
+            }
+        }
+    }
+
+    private Node searchBackedgedDominator(Node dominator, Node next) {
+        Node backedgedDominator = dominator;
+
+        while (backedgedDominator != null) {
+            if (backedgedDominator.backedges.contains(next)) {
+                return dominator;
+            }
+            backedgedDominator = backedgedDominator.getDominator();
+        }
+        return null;
+    }
+
+    private Node searchFirstFork() {
+        Node node = this;
+
+        while (node.outgoing.size() == 1) {
+            node = node.outgoing.get(0);
+        }
+        return node;
     }
 
     private boolean testThisFollowerTreeIsDominatableOrNot(Node follower) {
