@@ -32,6 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import js.lang.Global;
 import js.lang.NativeObject;
+import js.lang.NativeString;
 import kiss.ClassListener;
 import kiss.Extensible;
 import kiss.I;
@@ -65,6 +66,12 @@ import org.objectweb.asm.Type;
  * @version 2013/09/24 15:56:44
  */
 public class Javascript {
+
+    /** The primitive types. */
+    private static final List<Class<?>> primitives = Arrays.asList(int.class, long.class, float.class, double.class, boolean.class, byte.class, short.class, char.class, void.class);
+
+    /** The fixed id for primitives. */
+    private static final List<Integer> primitiveIds = Arrays.asList(8, 9, 5, 3, 25, 1, 18, 2, 21);
 
     /** The dependency manager. */
     private static final DepenedencyManager manager = I.make(DepenedencyManager.class);
@@ -117,7 +124,18 @@ public class Javascript {
      */
     private Javascript(Class source) {
         this.source = source;
-        this.id = counter++;
+
+        Class reverted = JavaAPIProviders.revert(source);
+
+        if (reverted.isPrimitive()) {
+            this.id = primitiveIds.get(primitives.indexOf(reverted));
+        } else {
+            while (primitiveIds.indexOf(counter) != -1) {
+                // skip preserved id for primitives
+                counter++;
+            }
+            this.id = counter++;
+        }
 
         // copy all member fields for override mechanism
         if (!source.getName().equals("js.lang.JSObject")) {
@@ -587,6 +605,10 @@ public class Javascript {
     public static final String computeSimpleClassName(Class clazz) {
         if (clazz == NativeObject.class) {
             return "";
+        }
+
+        if (clazz == NativeString.class) {
+            clazz = String.class;
         }
 
         String prefix = "";
