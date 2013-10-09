@@ -14,12 +14,12 @@ import jsx.model.SelectableModel;
 import org.junit.Test;
 
 /**
- * @version 2013/10/05 9:57:44
+ * @version 2013/10/09 16:19:05
  */
 public class SelectTest {
 
     @Test
-    public void base() throws Exception {
+    public void selection() throws Exception {
         Items items = create();
 
         Select select = new Select(items);
@@ -30,6 +30,10 @@ public class SelectTest {
         assert select.model.getSelectionIndex() == 2;
         assert select.form.val() != null;
         assert select.form.val().equals("3");
+
+        items.deselect();
+        assert select.model.getSelectionIndex() == 0;
+        assert select.form.val().equals("1");
     }
 
     /**
