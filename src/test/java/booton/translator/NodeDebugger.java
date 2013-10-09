@@ -25,6 +25,9 @@ import booton.translator.Node.TryCatchFinally;
 public class NodeDebugger {
 
     /** The processing environment. */
+    static boolean whileProcess = false;
+
+    /** The processing environment. */
     private static final boolean whileTest;
 
     static {
@@ -199,7 +202,7 @@ public class NodeDebugger {
             format.write("out : ");
             format.formatNode(node.outgoing, outgoing);
             format.write("dom : ");
-            format.formatNode(list(getDominator(node, new HashSet())), 1);
+            format.formatNode(list(getDominator(node)), 1);
             if (backedge != 0) {
                 format.write("back : ");
                 format.formatNode(node.backedges, backedge);
@@ -228,6 +231,22 @@ public class NodeDebugger {
             return Collections.EMPTY_LIST;
         }
         return Arrays.asList(node);
+    }
+
+    /**
+     * <p>
+     * Helper method to compute dominator node.
+     * </p>
+     * 
+     * @param target
+     * @return
+     */
+    private static Node getDominator(Node target) {
+        if (whileProcess) {
+            return getDominator(target, new HashSet());
+        } else {
+            return target.getDominator();
+        }
     }
 
     /**
