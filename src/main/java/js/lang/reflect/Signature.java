@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @version 2013/09/08 18:25:36
+ * @version 2013/10/10 2:03:44
  */
 class Signature {
 
@@ -57,6 +57,10 @@ class Signature {
      * @return
      */
     private Type parseType(String signature, GenericDeclaration declaration) {
+        if (signature.isEmpty()) {
+            return Object.class;
+        }
+
         for (int index = 0; index < signature.length(); index++) {
             char c = signature.charAt(index);
 

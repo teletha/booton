@@ -28,10 +28,10 @@ import java.util.List;
 import java.util.Set;
 
 import kiss.I;
-import net.sourceforge.htmlunit.corejs.javascript.ConsString;
 import net.sourceforge.htmlunit.corejs.javascript.EcmaError;
 import net.sourceforge.htmlunit.corejs.javascript.NativeArray;
 import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
+import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
 import net.sourceforge.htmlunit.corejs.javascript.Undefined;
 import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
 import booton.live.ClientStackTrace;
@@ -245,7 +245,6 @@ public class ScriptTester {
             Object result = engine.execute(html, invoker, sourceName, 1);
 
             if (result == null || result instanceof Undefined || result instanceof UniqueTag) {
-                dumpCode(source);
                 return null; // success
             } else {
                 // fail (AssertionError) or error
@@ -626,25 +625,8 @@ public class ScriptTester {
             throw new AssertionError("Java requires Class [" + clazz.getName() + "] object but JS returns undefined.");
         }
 
-        String prefix = "";
-
-        while (clazz.isArray()) {
-            prefix += "[";
-            clazz = clazz.getComponentType();
-        }
-
-        String computedJavaClassName = prefix + clazz.getName();
-        NativeObject object = (NativeObject) js;
-
-        for (Object id : object.getAllIds()) {
-            Object jsClassName = object.get(id);
-
-            if (jsClassName instanceof String || jsClassName instanceof ConsString) {
-                assert computedJavaClassName.equals(jsClassName.toString());
-                return;
-            }
-        }
-        throw new AssertionError("Class name is not found.");
+        String methodName = Javascript.computeMethodName(Class.class, "getName", "()Ljava/lang/String;");
+        assert clazz.getName().equals(ScriptableObject.callMethod((ScriptableObject) js, methodName, new Object[0]));
     }
 
     /**

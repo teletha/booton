@@ -893,7 +893,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
     public boolean isPrimitive() {
         Class type = (Class) (Object) this;
 
-        return type == int.class || type == long.class || type == float.class || type == double.class || type == boolean.class || type == short.class || type == byte.class || type == void.class;
+        return type == int.class || type == long.class || type == float.class || type == double.class || type == boolean.class || type == char.class || type == short.class || type == byte.class || type == void.class;
     }
 
     /**
@@ -1060,7 +1060,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @return
      */
     public String getName() {
-        return "boot." + nameJS;
+        return name;
     }
 
     /**
@@ -1076,7 +1076,14 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @return The simple name of the underlying class.
      */
     public String getSimpleName() {
-        return nameJS;
+        if (isPrimitive()) {
+            return name;
+        } else if (isArray()) {
+            return getComponentType().getSimpleName().concat("[]");
+        } else {
+            int index = name.lastIndexOf(".");
+            return index == -1 ? name : name.substring(index + 1);
+        }
     }
 
     /**
@@ -1200,8 +1207,18 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      */
     protected JSClass getArrayClass() {
         if (arrayClass == null) {
+            String name;
+
+            if (isArray()) {
+                name = "[".concat(this.name);
+            } else if (isPrimitive()) {
+                name = "[".concat(nameJS);
+            } else {
+                name = "[L".concat(this.name).concat(";");
+            }
+
             NativeArray metadata = new NativeArray();
-            metadata.set(1, "[".concat(name));
+            metadata.set(1, name);
 
             arrayClass = new JSClass("[".concat(nameJS), new NativeObject(), metadata, Object.class, new NativeObject());
         }
@@ -1238,16 +1255,22 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
             fqcn = fqcn.substring(1);
         }
 
-        // String js = boot.getPropertyAs(NativeObject.class, "names").getPropertyAs(String.class,
-        // fqcn);
-        //
-        // if (js == null) {
-        // js = fqcn;
-        // }
+        if (fqcn.contains(".")) {
+            if (fqcn.endsWith(";")) {
+                // retrieve array component type
+                fqcn = fqcn.substring(1, fqcn.length() - 1);
+            }
+
+            // convert java class name to javascript class name
+            fqcn = boot.getPropertyAs(NativeObject.class, "names").getPropertyAs(String.class, fqcn);
+        }
+
         NativeObject definition = boot.getPropertyAs(NativeObject.class, fqcn);
 
         if (definition == null) {
-            return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeArray(), Object.class, new NativeObject());
+            throw (RuntimeException) (Object) new ClassNotFoundException(fqcn);
+            // return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeArray(),
+            // Object.class, new NativeObject());
         }
 
         JSClass clazz = (JSClass) definition.getProperty("$");
@@ -1257,29 +1280,6 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         }
         return (Class) (Object) clazz;
     }
-
-    // public static Class forName(String fqcn) {
-    // int size = 0;
-    //
-    // while (fqcn.startsWith("[")) {
-    // size++;
-    // fqcn = fqcn.substring(1);
-    // }
-    //
-    // NativeObject definition = boot.getPropertyAs(NativeObject.class, fqcn);
-    //
-    // if (definition == null) {
-    // return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeArray(),
-    // Object.class, new NativeObject());
-    // }
-    //
-    // JSClass clazz = (JSClass) definition.getProperty("$");
-    //
-    // for (int i = 0; i < size; i++) {
-    // clazz = clazz.getArrayClass();
-    // }
-    // return (Class) (Object) clazz;
-    // }
 
     /**
      * Returns the {@code Class} object associated with the class or interface with the given string

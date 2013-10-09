@@ -75,7 +75,7 @@ public class SelectableModel<T> extends EventHub implements Iterable<T> {
         // notify
         if (old != -1) {
             // publish(SelectableListener.class).deselect(old, items.get(old));
-            publish(new Deselect(index, items.get(index)));
+            publish(new Deselect(old, items.get(old)));
         }
 
         if (index != -1) {

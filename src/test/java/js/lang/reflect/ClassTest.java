@@ -14,6 +14,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -718,6 +719,7 @@ public class ClassTest {
         assert byte.class.isPrimitive();
         assert short.class.isPrimitive();
         assert boolean.class.isPrimitive();
+        assert char.class.isPrimitive();
         assert void.class.isPrimitive();
 
         assert !int[].class.isPrimitive();
@@ -740,5 +742,45 @@ public class ClassTest {
     @Test
     public void forName() throws Exception {
         assert Class.forName("java.lang.String") == String.class;
+        assert Class.forName("[Ljava.lang.String;") == String[].class;
+        assert Class.forName("[[Ljava.lang.String;") == String[][].class;
+        assert Class.forName("[I") == int[].class;
+        assert Class.forName("[[J") == long[][].class;
+        assert Class.forName("[F") == float[].class;
+        assert Class.forName("[D") == double[].class;
+        assert Class.forName("[Z") == boolean[].class;
+        assert Class.forName("[B") == byte[].class;
+        assert Class.forName("[S") == short[].class;
+        assert Class.forName("[C") == char[].class;
+    }
+
+    @Test(expected = ClassNotFoundException.class)
+    public void forNamePrimitive() throws Exception {
+        Class.forName("int");
+    }
+
+    @Test(expected = ClassNotFoundException.class)
+    public void forNameUnknown() throws Exception {
+        Class.forName("this.class.is.invalid.Class");
+    }
+
+    @Test
+    public void getName() throws Exception {
+        assert String.class.getName().equals("java.lang.String");
+        assert int.class.getName().equals("int");
+        assert boolean.class.getName().equals("boolean");
+        assert Map[].class.getName().equals("[Ljava.util.Map;");
+        assert long[].class.getName().equals("[J");
+        assert char[][].class.getName().equals("[[C");
+    }
+
+    @Test
+    public void getSimpleName() throws Exception {
+        assert String.class.getSimpleName().equals("String");
+        assert int.class.getSimpleName().equals("int");
+        assert boolean.class.getSimpleName().equals("boolean");
+        assert Map[].class.getSimpleName().equals("Map[]");
+        assert long[].class.getSimpleName().equals("long[]");
+        assert char[][].class.getSimpleName().equals("char[][]");
     }
 }
