@@ -139,7 +139,6 @@ public class Select<M> extends FormUI<Select> {
 
         @Subscribe(jsx.model.SelectableModel.Select.class)
         public void select(jsx.model.SelectableModel.Select select) {
-            System.out.println("select");
             form.val(select.item.toString());
 
             view.render(select.index);

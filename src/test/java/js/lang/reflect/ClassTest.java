@@ -736,4 +736,9 @@ public class ClassTest {
     public void castFail() throws Exception {
         Number.class.cast("as");
     }
+
+    @Test
+    public void forName() throws Exception {
+        assert Class.forName("java.lang.String") == String.class;
+    }
 }

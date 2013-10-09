@@ -108,7 +108,7 @@ public class MasteryBuilder extends Page {
      */
     @Override
     public void load(DocumentFragment root) {
-        // set = localStorage.get(MasteryManager.class);
+        set = localStorage.get(MasteryManager.class);
 
         if (set == null) {
             set = new MasteryManager();

@@ -140,6 +140,9 @@ function boot(global) {
           }
         });
       }
+      
+      // real name mapping
+      boot.names[metadata.$[1]] = name;
 
       // Define class metadata as pseudo Class instance.
       // This variable is lazy initialized because define function requires
@@ -180,6 +183,13 @@ function boot(global) {
         });
       }
     },
+    
+    /**
+     * <p>
+     * Helper property to map from the specified Java class name to javascript runtime class name.
+     * </p>
+     */
+    names: {},
 
     /**
      * <p>

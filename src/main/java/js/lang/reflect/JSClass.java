@@ -1238,6 +1238,12 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
             fqcn = fqcn.substring(1);
         }
 
+        // String js = boot.getPropertyAs(NativeObject.class, "names").getPropertyAs(String.class,
+        // fqcn);
+        //
+        // if (js == null) {
+        // js = fqcn;
+        // }
         NativeObject definition = boot.getPropertyAs(NativeObject.class, fqcn);
 
         if (definition == null) {
@@ -1251,6 +1257,29 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         }
         return (Class) (Object) clazz;
     }
+
+    // public static Class forName(String fqcn) {
+    // int size = 0;
+    //
+    // while (fqcn.startsWith("[")) {
+    // size++;
+    // fqcn = fqcn.substring(1);
+    // }
+    //
+    // NativeObject definition = boot.getPropertyAs(NativeObject.class, fqcn);
+    //
+    // if (definition == null) {
+    // return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeArray(),
+    // Object.class, new NativeObject());
+    // }
+    //
+    // JSClass clazz = (JSClass) definition.getProperty("$");
+    //
+    // for (int i = 0; i < size; i++) {
+    // clazz = clazz.getArrayClass();
+    // }
+    // return (Class) (Object) clazz;
+    // }
 
     /**
      * Returns the {@code Class} object associated with the class or interface with the given string
