@@ -12,13 +12,12 @@ package booton.translator.flow;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/09/26 10:31:14
+ * @version 2013/10/09 15:55:09
  */
 @SuppressWarnings("unused")
 public class ForTest extends ScriptTester {
@@ -110,7 +109,6 @@ public class ForTest extends ScriptTester {
     public void breakNoLabel() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 8, to = 10) int value) {
                 for (int i = 0; i < 3; i++) {
                     value++;
@@ -129,7 +127,6 @@ public class ForTest extends ScriptTester {
     public void continueNoLabel() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 1, to = 10) int value) {
                 for (int i = 0; i < 3; i++) {
                     value++;
@@ -148,7 +145,6 @@ public class ForTest extends ScriptTester {
     public void continueNest() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(int value) {
                 root: for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 5; j++) {
@@ -165,20 +161,21 @@ public class ForTest extends ScriptTester {
     }
 
     @Test
-    public void breakNestWithProcess() throws Exception {
+    public void continueMultiple() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(int value) {
-                for (int i = 0; i < 3; i++) {
-                    value++;
+                root: for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 5; j++) {
+                        if (i == 1) {
+                            continue root;
+                        }
+                        value++;
 
-                    if (i == 1) {
-                        value = 200;
-                        break;
-                    } else if (i == 3) {
-                        value += 100;
-                        continue;
+                        if (i == 2) {
+                            continue root;
+                        }
+                        value++;
                     }
                     value++;
                 }
@@ -207,10 +204,10 @@ public class ForTest extends ScriptTester {
     }
 
     @Test
+    @Ignore
     public void continueWithLogicalExpressionFail() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(int value) {
                 root: for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 4; j++) {
@@ -278,6 +275,26 @@ public class ForTest extends ScriptTester {
                             return 1000;
                         }
                     }
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void complex() throws Exception {
+        test(new Scriptable() {
+
+            int act(int value) {
+                for (int j = 0; j < 2; j++) {
+                    if (value % 2 == 0) {
+                        if (value % 3 == 0) {
+                            value += 100;
+                        } else if (value % 4 == 0) {
+                            value += 200;
+                        }
+                    }
+                    value += 2;
                 }
                 return value;
             }

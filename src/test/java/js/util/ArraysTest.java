@@ -17,7 +17,7 @@ import org.junit.runner.RunWith;
 import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/08/15 19:39:00
+ * @version 2013/10/09 15:52:13
  */
 @RunWith(ScriptRunner.class)
 public class ArraysTest {
@@ -39,5 +39,14 @@ public class ArraysTest {
         assert dest[2] == 3;
         assert dest[3] == 4;
         assert dest[4] == 0;
+    }
+
+    @Test
+    public void deepEquals() throws Exception {
+        Object[] one = {1, 2};
+
+        assert Arrays.deepEquals(one, one);
+        assert Arrays.deepEquals(one, new Object[] {1, 2});
+        assert !Arrays.deepEquals(one, new Object[] {2, 3});
     }
 }

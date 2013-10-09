@@ -21,7 +21,7 @@ import js.lang.NativeFunction;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/08/28 15:35:40
+ * @version 2013/10/09 15:52:21
  */
 @JavaAPIProvider(java.util.Arrays.class)
 class Arrays {
@@ -934,37 +934,47 @@ class Arrays {
             // Figure out whether the two elements are equal
             boolean eq = deepEquals0(e1, e2);
 
-            if (!eq) return false;
+            if (!eq) {
+                return false;
+            }
         }
         return true;
     }
 
-    public static boolean deepEquals0(Object e1, Object e2) {
-        // assert e1 != null;
-        // boolean eq;
-        // if (e1 instanceof Object[] && e2 instanceof Object[]) {
-        // eq = deepEquals((Object[]) e1, (Object[]) e2);
-        // } else if (e1 instanceof byte[] && e2 instanceof byte[]) {
-        // eq = equals((byte[]) e1, (byte[]) e2);
-        // } else if (e1 instanceof short[] && e2 instanceof short[]) {
-        // eq = equals((short[]) e1, (short[]) e2);
-        // } else if (e1 instanceof int[] && e2 instanceof int[]) {
-        // eq = equals((int[]) e1, (int[]) e2);
-        // } else if (e1 instanceof long[] && e2 instanceof long[]) {
-        // eq = equals((long[]) e1, (long[]) e2);
-        // } else if (e1 instanceof char[] && e2 instanceof char[]) {
-        // eq = equals((char[]) e1, (char[]) e2);
-        // } else if (e1 instanceof float[] && e2 instanceof float[]) {
-        // eq = equals((float[]) e1, (float[]) e2);
-        // } else if (e1 instanceof double[] && e2 instanceof double[]) {
-        // eq = equals((double[]) e1, (double[]) e2);
-        // } else if (e1 instanceof boolean[] && e2 instanceof boolean[]) {
-        // eq = equals((boolean[]) e1, (boolean[]) e2);
-        // } else {
-        // eq = e1.equals(e2);
-        // }
-        // return eq;
-        return true;
+    /**
+     * <p>
+     * Helper method to chech equality of array's elements.
+     * </p>
+     * 
+     * @param e1
+     * @param e2
+     * @return
+     */
+    static boolean deepEquals0(Object e1, Object e2) {
+        boolean eq;
+
+        if (e1 instanceof Object[] && e2 instanceof Object[]) {
+            eq = deepEquals((Object[]) e1, (Object[]) e2);
+        } else if (e1 instanceof byte[] && e2 instanceof byte[]) {
+            eq = equals((byte[]) e1, (byte[]) e2);
+        } else if (e1 instanceof short[] && e2 instanceof short[]) {
+            eq = equals((short[]) e1, (short[]) e2);
+        } else if (e1 instanceof int[] && e2 instanceof int[]) {
+            eq = equals((int[]) e1, (int[]) e2);
+        } else if (e1 instanceof long[] && e2 instanceof long[]) {
+            eq = equals((long[]) e1, (long[]) e2);
+        } else if (e1 instanceof char[] && e2 instanceof char[]) {
+            eq = equals((char[]) e1, (char[]) e2);
+        } else if (e1 instanceof float[] && e2 instanceof float[]) {
+            eq = equals((float[]) e1, (float[]) e2);
+        } else if (e1 instanceof double[] && e2 instanceof double[]) {
+            eq = equals((double[]) e1, (double[]) e2);
+        } else if (e1 instanceof boolean[] && e2 instanceof boolean[]) {
+            eq = equals((boolean[]) e1, (boolean[]) e2);
+        } else {
+            eq = e1.equals(e2);
+        }
+        return eq;
     }
 
     /**

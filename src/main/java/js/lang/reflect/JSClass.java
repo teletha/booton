@@ -931,7 +931,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @return The superclass of the class represented by this object.
      */
     public Class<? super T> getSuperclass() {
-        if ((Object) this == Object.class || isInterface()) {
+        if ((Object) this == Object.class || isInterface() || isPrimitive()) {
             return null;
         } else if (superclass == null) {
             return Object.class;

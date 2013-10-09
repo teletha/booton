@@ -101,6 +101,7 @@ public class ClassTest {
 
         assert Interface.class.getSuperclass() == null;
         assert ExtendedInterface.class.getSuperclass() == null;
+        assert int.class.getSuperclass() == null;
     }
 
     @Test

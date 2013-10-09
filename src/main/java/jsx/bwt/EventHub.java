@@ -18,10 +18,9 @@ import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kiss.model.ClassUtil;
-import booton.translator.Debuggable;
 
 /**
- * @version 2013/10/05 11:45:30
+ * @version 2013/10/09 15:53:49
  */
 public class EventHub {
 
@@ -63,7 +62,6 @@ public class EventHub {
      * Register event listener.
      * </p>
      */
-    @Debuggable
     public void register(Object subscribable) {
         if (subscribable != null) {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
@@ -101,58 +99,6 @@ public class EventHub {
                                     }
                                 }
                                 listeners.add(listener);
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
-    }
-
-    /**
-     * <p>
-     * Register event listener.
-     * </p>
-     */
-    public void registerFail(Object subscribable) {
-        if (subscribable != null) {
-            for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
-                for (Annotation annotation : entry.getValue()) {
-                    if (annotation.annotationType() == Subscribe.class) {
-                        Class eventType;
-                        Method method = entry.getKey();
-
-                        if (method.getParameterTypes().length == 1) {
-                            eventType = method.getParameterTypes()[0];
-                        } else {
-                            eventType = ((Subscribe) annotation).value();
-                        }
-
-                        Listener listener = new Listener(subscribable, method);
-
-                        for (Class type : ClassUtil.getTypes(eventType)) {
-                            if (type != Object.class) {
-                                type = ClassUtil.wrap(type);
-
-                                if (holder == null) {
-                                    holder = new HashMap();
-                                }
-
-                                List<Listener> listeners = holder.get(type);
-
-                                if (listeners == null) {
-                                    listeners = new CopyOnWriteArrayList();
-                                    holder.put(type, listeners);
-                                } else {
-                                    for (Listener registered : listeners) {
-                                        if (registered.instance == subscribable) {
-                                            return;
-                                        }
-                                    }
-                                }
-                                listeners.add(listener);
-                                System.out.println(listener);
                             }
                         }
                     }
@@ -205,7 +151,7 @@ public class EventHub {
     }
 
     /**
-     * @version 2013/06/28 2:50:52
+     * @version 2013/10/09 15:53:55
      */
     private static class Listener {
 

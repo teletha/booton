@@ -243,6 +243,7 @@ class JavaMethodCompiler extends MethodVisitor {
         for (int i = 0; i < parameters.length; i++) {
             variables.type(isStatic ? i : i + 1).type(convert(parameters[i]));
         }
+        NodeDebugger.whileProcess = true;
     }
 
     /**
@@ -250,6 +251,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitEnd() {
+        NodeDebugger.whileProcess = false;
+
         // Resolve shorthand syntax sugar of "if" statement.
         for (int i = nodes.size() - 1; 0 <= i; i--) {
             Node node = nodes.get(i);
