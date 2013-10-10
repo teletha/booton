@@ -711,6 +711,26 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
     }
 
     /**
+     * If the class or interface represented by this {@code Class} object is a member of another
+     * class, returns the {@code Class} object representing the class in which it was declared. This
+     * method returns null if this class or interface is not a member of any other class. If this
+     * {@code Class} object represents an array class, a primitive type, or void,then this method
+     * returns null.
+     * 
+     * @return the declaring class for this class
+     * @since JDK1.1
+     */
+    public Class<?> getDeclaringClass() {
+        if (isPrimitive() || isArray()) {
+            return null;
+        }
+
+        int index = name.lastIndexOf("$");
+
+        return index == -1 ? null : forName(name.substring(0, index));
+    }
+
+    /**
      * Returns the immediately enclosing class of the underlying class. If the underlying class is a
      * top level class this method returns {@code null}.
      * 
@@ -724,7 +744,11 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         // c) Inner classes (non-static member classes)
         // d) Local classes (named classes declared within a method)
         // e) Anonymous classes
-        return null;
+
+        // JVM Spec 4.8.6: A class must have an EnclosingMethod
+        // attribute if and only if it is a local class or an
+        // anonymous class.
+        return getDeclaringClass();
     }
 
     /**
@@ -1081,7 +1105,13 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         } else if (isArray()) {
             return getComponentType().getSimpleName().concat("[]");
         } else {
-            int index = name.lastIndexOf(".");
+            int index = name.lastIndexOf("$");
+
+            if (index != -1) {
+                return name.substring(index + 1);
+            }
+
+            index = name.lastIndexOf(".");
             return index == -1 ? name : name.substring(index + 1);
         }
     }
@@ -1098,7 +1128,22 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @since 1.5
      */
     public String getCanonicalName() {
-        return nameJS;
+        if (isArray()) {
+            return getComponentType().getCanonicalName().concat("[]");
+        } else {
+            Class enclosingClass = getEnclosingClass();
+
+            if (enclosingClass == null) { // top level class
+                return getName();
+            } else {
+                String enclosingName = enclosingClass.getCanonicalName();
+
+                if (enclosingName == null) {
+                    return null;
+                }
+                return enclosingName.concat(".").concat(getSimpleName());
+            }
+        }
     }
 
     /**

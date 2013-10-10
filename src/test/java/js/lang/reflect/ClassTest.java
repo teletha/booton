@@ -214,6 +214,12 @@ public class ClassTest {
         assert method != null;
     }
 
+    @Test
+    public void getMethodForAlias() throws Exception {
+        Method method = Methods.class.getMethod("getClass");
+        assert method != null;
+    }
+
     @Test(expected = NullPointerException.class)
     public void getMethodNullName() throws Exception {
         Methods.class.getMethod(null);
@@ -767,6 +773,7 @@ public class ClassTest {
     @Test
     public void getName() throws Exception {
         assert String.class.getName().equals("java.lang.String");
+        assert Fields.class.getName().equals("js.lang.reflect.ClassTest$Fields");
         assert int.class.getName().equals("int");
         assert boolean.class.getName().equals("boolean");
         assert Map[].class.getName().equals("[Ljava.util.Map;");
@@ -777,10 +784,38 @@ public class ClassTest {
     @Test
     public void getSimpleName() throws Exception {
         assert String.class.getSimpleName().equals("String");
+        assert Fields.class.getSimpleName().equals("Fields");
         assert int.class.getSimpleName().equals("int");
         assert boolean.class.getSimpleName().equals("boolean");
         assert Map[].class.getSimpleName().equals("Map[]");
         assert long[].class.getSimpleName().equals("long[]");
         assert char[][].class.getSimpleName().equals("char[][]");
+    }
+
+    @Test
+    public void getCanonicalName() throws Exception {
+        assert String.class.getCanonicalName().equals("java.lang.String");
+        assert Fields.class.getCanonicalName().equals("js.lang.reflect.ClassTest.Fields");
+        assert int.class.getCanonicalName().equals("int");
+        assert boolean.class.getCanonicalName().equals("boolean");
+        assert Map[].class.getCanonicalName().equals("java.util.Map[]");
+        assert long[].class.getCanonicalName().equals("long[]");
+        assert char[][].class.getCanonicalName().equals("char[][]");
+    }
+
+    @Test
+    public void getEnclosingClass() throws Exception {
+        assert String.class.getEnclosingClass() == null;
+        assert Fields.class.getEnclosingClass() == ClassTest.class;
+        assert int.class.getEnclosingClass() == null;
+        assert Integer[].class.getEnclosingClass() == null;
+    }
+
+    @Test
+    public void getDeclaringClass() throws Exception {
+        assert String.class.getDeclaringClass() == null;
+        assert Fields.class.getDeclaringClass() == ClassTest.class;
+        assert int.class.getDeclaringClass() == null;
+        assert Integer[].class.getDeclaringClass() == null;
     }
 }
