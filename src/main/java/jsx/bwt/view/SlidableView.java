@@ -10,9 +10,6 @@
 package jsx.bwt.view;
 
 import static js.lang.Global.*;
-
-import java.util.EventListener;
-
 import jsx.bwt.Listen;
 import jsx.bwt.UI;
 import jsx.bwt.UIAction;
@@ -21,7 +18,7 @@ import jsx.bwt.view.SlidableViewStyle.Slider;
 import jsx.bwt.view.SlidableViewStyle.ViewableArea;
 
 /**
- * @version 2013/04/19 12:54:30
+ * @version 2013/10/10 13:42:11
  */
 public class SlidableView extends UI {
 
@@ -60,7 +57,7 @@ public class SlidableView extends UI {
             root.add(Shown.class);
 
             // notify event
-            publish(Listener.class).open();
+            publish(new Open());
 
             // prepare closer
             window.bind(this);
@@ -79,7 +76,7 @@ public class SlidableView extends UI {
             root.remove(Shown.class);
 
             // notify event
-            publish(Listener.class).close();
+            publish(new Close());
 
             // discard closer
             window.unbind(this);
@@ -112,22 +109,14 @@ public class SlidableView extends UI {
     }
 
     /**
-     * @version 2013/04/07 1:03:07
+     * @version 2013/10/10 13:36:42
      */
-    public interface Listener extends EventListener {
+    public static class Open {
+    }
 
-        /**
-         * <p>
-         * Receive open event.
-         * </p>
-         */
-        void open();
-
-        /**
-         * <p>
-         * Receive close event.
-         * </p>
-         */
-        void close();
+    /**
+     * @version 2013/10/10 13:36:58
+     */
+    public static class Close {
     }
 }

@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
 import js.dom.DocumentFragment;
 import js.dom.EventListener;
 import jsx.bwt.EventHub;
-import jsx.bwt.Publishable;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
 import kiss.I;
@@ -97,7 +96,7 @@ public abstract class Application {
     /**
      * @version 2013/06/17 13:57:06
      */
-    private static class Router extends Publishable implements EventListener {
+    private static class Router implements EventListener {
 
         /** The current page. */
         private static Page current;
