@@ -15,7 +15,7 @@ import js.dom.Element;
 /**
  * @version 2013/07/29 2:28:28
  */
-public abstract class UI extends Publishable {
+public abstract class UI extends EventHub {
 
     /** The root container element for this user interface. */
     public final Element root;

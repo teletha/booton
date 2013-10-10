@@ -17,6 +17,7 @@ import js.dom.EventListener;
 import js.dom.Image;
 import jsx.application.Page;
 import jsx.application.PageInfo;
+import jsx.application.PageUnload;
 import jsx.bwt.Button;
 import jsx.bwt.Select;
 import jsx.bwt.Subscribe;
@@ -47,7 +48,7 @@ import teemowork.model.MasterySet;
 import teemowork.model.Version;
 
 /**
- * @version 2013/03/23 14:06:31
+ * @version 2013/10/10 9:47:05
  */
 public class MasteryBuilder extends Page {
 
@@ -101,6 +102,8 @@ public class MasteryBuilder extends Page {
     public MasteryBuilder(String levels) {
         masterySet = new MasterySet(levels);
         masterySet.register(this);
+
+        // EventHub.Global.register(this);
     }
 
     /**
@@ -178,8 +181,11 @@ public class MasteryBuilder extends Page {
         utility.text("UTILITY　" + masterySet.getSum(Mastery.Utility));
 
         history.replaceState("", "", "#" + getPageId());
+    }
 
-        System.out.println("save");
+    @Subscribe(PageUnload.class)
+    private void save() {
+        System.out.println("save mastery");
         StringBuilder builder = new StringBuilder();
         I.write(set, builder, true);
         System.out.println(builder.toString());
@@ -270,7 +276,6 @@ public class MasteryBuilder extends Page {
          */
         @Subscribe(MasterySet.class)
         public void receive() {
-            System.out.println("set mastery");
             int current = masterySet.getLevel(mastery);
 
             // Update current level

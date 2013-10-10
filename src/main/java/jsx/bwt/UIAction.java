@@ -11,7 +11,7 @@
 package jsx.bwt;
 
 /**
- * @version 2013/04/07 19:37:45
+ * @version 2013/10/10 13:45:14
  */
 public enum UIAction {
 
@@ -317,9 +317,6 @@ public enum UIAction {
 
     /** The ui key input type. */
     Key_F12(123);
-
-    /** The global event holder. */
-    private static final Publishable listeners = new Publishable();
 
     /** The key code. */
     public final int code;

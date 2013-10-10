@@ -10,14 +10,11 @@
 package jsx.bwt.view;
 
 import static js.lang.Global.*;
-
-import java.util.EventListener;
-
 import jsx.bwt.UI;
 import jsx.bwt.view.SlidableViewStyle.Shown;
 
 /**
- * @version 2013/06/10 0:16:05
+ * @version 2013/10/10 13:42:34
  */
 public class PopupView extends UI {
 
@@ -55,7 +52,7 @@ public class PopupView extends UI {
             root.add(Shown.class);
 
             // notify event
-            publish(Listener.class).open();
+            publish(new Open());
 
             // prepare closer
             window.bind(this);
@@ -74,7 +71,7 @@ public class PopupView extends UI {
             root.remove(Shown.class);
 
             // notify event
-            publish(Listener.class).close();
+            publish(new Close());
 
             // discard closer
             window.unbind(this);
@@ -106,22 +103,14 @@ public class PopupView extends UI {
     }
 
     /**
-     * @version 2013/06/10 14:12:29
+     * @version 2013/10/10 13:36:42
      */
-    public interface Listener extends EventListener {
+    public static class Open {
+    }
 
-        /**
-         * <p>
-         * Receive open event.
-         * </p>
-         */
-        void open();
-
-        /**
-         * <p>
-         * Receive close event.
-         * </p>
-         */
-        void close();
+    /**
+     * @version 2013/10/10 13:36:58
+     */
+    public static class Close {
     }
 }

@@ -22,7 +22,7 @@ public class EventHubTest {
 
     @Test
     public void register() throws Exception {
-        Listener listener = new Listener();
+        ObjectListener listener = new ObjectListener();
         assert listener.name == null;
 
         EventHub hub = new EventHub();
@@ -33,7 +33,7 @@ public class EventHubTest {
 
     @Test
     public void registerDuplication() throws Exception {
-        Listener listener = new Listener();
+        ObjectListener listener = new ObjectListener();
         assert listener.name == null;
 
         EventHub hub = new EventHub();
@@ -45,9 +45,9 @@ public class EventHubTest {
 
     @Test
     public void registerMultiple() throws Exception {
-        Listener listener1 = new Listener();
+        ObjectListener listener1 = new ObjectListener();
         assert listener1.name == null;
-        Listener listener2 = new Listener();
+        ObjectListener listener2 = new ObjectListener();
         assert listener2.name == null;
 
         EventHub hub = new EventHub();
@@ -60,7 +60,7 @@ public class EventHubTest {
 
     @Test
     public void unregister() throws Exception {
-        Listener listener = new Listener();
+        ObjectListener listener = new ObjectListener();
         assert listener.name == null;
 
         EventHub hub = new EventHub();
@@ -75,7 +75,7 @@ public class EventHubTest {
 
     @Test
     public void publishPrimitive() throws Exception {
-        Primitive primitive = new Primitive();
+        PrimitiveListener primitive = new PrimitiveListener();
         assert primitive.intValue == 0;
 
         EventHub hub = new EventHub();
@@ -86,7 +86,7 @@ public class EventHubTest {
 
     @Test
     public void subscribeFromSuperType() throws Exception {
-        Primitive primitive = new Primitive();
+        PrimitiveListener primitive = new PrimitiveListener();
         assert primitive.name == null;
 
         EventHub hub = new EventHub();
@@ -98,7 +98,7 @@ public class EventHubTest {
     /**
      * @version 2013/10/05 11:25:52
      */
-    protected static class Listener {
+    protected static class ObjectListener {
 
         protected int count = 0;
 
@@ -117,7 +117,7 @@ public class EventHubTest {
     /**
      * @version 2013/10/05 11:51:41
      */
-    private static class Primitive extends Listener {
+    private static class PrimitiveListener extends ObjectListener {
 
         private int intValue;
 

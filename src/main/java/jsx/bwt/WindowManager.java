@@ -15,7 +15,6 @@ import js.dom.ClientRect;
 import js.dom.Element;
 import jsx.application.PageUnload;
 import jsx.bwt.view.PopupViewStyle;
-import kiss.Disposable;
 
 /**
  * @version 2013/06/12 9:11:13
@@ -88,13 +87,9 @@ public class WindowManager {
     }
 
     /**
-     * <p>
-     * Show tooltip.
-     * </p>
-     * 
-     * @return
+     * @version 2013/10/10 12:44:47
      */
-    public static Disposable showTooltip(Element target, Element content) {
-        return null;
+    private static class Popup {
+
     }
 }
