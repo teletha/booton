@@ -21,9 +21,9 @@ import java.util.regex.Pattern;
 
 import js.dom.DocumentFragment;
 import js.dom.EventListener;
-import jsx.bwt.EventHub;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
+import jsx.event.Publishable;
 import kiss.I;
 
 /**
@@ -159,7 +159,7 @@ public abstract class Application {
         private void dispatch(Page page) {
             // fire page unload event
             if (page != null) {
-                EventHub.Global.publish(new PageUnload(page));
+                Publishable.Global.publish(new PageUnload(page));
             }
 
             // fire page load event

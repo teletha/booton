@@ -20,9 +20,9 @@ import jsx.application.PageInfo;
 import jsx.application.PageUnload;
 import jsx.bwt.Button;
 import jsx.bwt.Select;
-import jsx.bwt.Subscribe;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
+import jsx.event.Subscribable;
 import jsx.model.SelectableModel;
 import kiss.I;
 import teemowork.MasteryBuilderStyle.Completed;
@@ -172,7 +172,7 @@ public class MasteryBuilder extends Page {
     /**
      * 
      */
-    @Subscribe(MasterySet.class)
+    @Subscribable(MasterySet.class)
     public void receive() {
         reset.label(String.valueOf(30 - masterySet.getSum()));
 
@@ -183,7 +183,7 @@ public class MasteryBuilder extends Page {
         history.replaceState("", "", "#" + getPageId());
     }
 
-    @Subscribe(PageUnload.class)
+    @Subscribable(PageUnload.class)
     private void save() {
         System.out.println("save mastery");
         StringBuilder builder = new StringBuilder();
@@ -200,7 +200,7 @@ public class MasteryBuilder extends Page {
         return "Mastery/" + masterySet.toString();
     }
 
-    @Subscribe(jsx.model.SelectableModel.Select.class)
+    @Subscribable(jsx.model.SelectableModel.Select.class)
     private void select(jsx.model.SelectableModel.Select<MasterySet> event) {
         masterySet.setCode(event.item.getCode());
     }
@@ -274,7 +274,7 @@ public class MasteryBuilder extends Page {
         /**
          * 
          */
-        @Subscribe(MasterySet.class)
+        @Subscribable(MasterySet.class)
         public void receive() {
             int current = masterySet.getLevel(mastery);
 
@@ -331,7 +331,7 @@ public class MasteryBuilder extends Page {
              * {@inheritDoc}
              */
             @Override
-            @Subscribe(MasterySet.class)
+            @Subscribable(MasterySet.class)
             public void receive() {
                 super.receive();
             }

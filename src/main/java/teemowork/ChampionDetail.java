@@ -22,10 +22,10 @@ import js.math.Mathematics;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Listen;
-import jsx.bwt.Subscribe;
 import jsx.bwt.UI;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
+import jsx.event.Subscribable;
 import teemowork.ChampionDetailStyle.Active;
 import teemowork.ChampionDetailStyle.Amplifier;
 import teemowork.ChampionDetailStyle.Assigned;
@@ -202,7 +202,7 @@ public class ChampionDetail extends Page {
      * Calcurate current status.
      * </p>
      */
-    @Subscribe(Build.class)
+    @Subscribable(Build.class)
     private void calcurate() {
         // update each status
         level.text(String.valueOf(build.getLevel()));

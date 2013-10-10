@@ -16,14 +16,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import jsx.bwt.EventHub;
+import jsx.event.Publishable;
 import teemowork.model.variable.Variable;
 import teemowork.model.variable.VariableResolver;
 
 /**
  * @version 2013/03/28 23:46:05
  */
-public class Build extends EventHub implements StatusCalculator {
+public class Build extends Publishable implements StatusCalculator {
 
     /** The selected champion. */
     public Champion champion;

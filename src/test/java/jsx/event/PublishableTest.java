@@ -7,7 +7,10 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.bwt;
+package jsx.event;
+
+import jsx.event.Publishable;
+import jsx.event.Subscribable;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,14 +21,14 @@ import booton.translator.ScriptRunner;
  * @version 2013/10/05 11:24:20
  */
 @RunWith(ScriptRunner.class)
-public class EventHubTest {
+public class PublishableTest {
 
     @Test
     public void register() throws Exception {
         ObjectListener listener = new ObjectListener();
         assert listener.name == null;
 
-        EventHub hub = new EventHub();
+        Publishable hub = new Publishable();
         hub.register(listener);
         hub.publish("Yukinosita Yukino");
         assert listener.name.equals("Yukinosita Yukino");
@@ -36,7 +39,7 @@ public class EventHubTest {
         ObjectListener listener = new ObjectListener();
         assert listener.name == null;
 
-        EventHub hub = new EventHub();
+        Publishable hub = new Publishable();
         hub.register(listener);
         hub.register(listener);
         hub.publish("Yukinosita Yukino");
@@ -50,7 +53,7 @@ public class EventHubTest {
         ObjectListener listener2 = new ObjectListener();
         assert listener2.name == null;
 
-        EventHub hub = new EventHub();
+        Publishable hub = new Publishable();
         hub.register(listener1);
         hub.register(listener2);
         hub.publish("Yukinosita Yukino");
@@ -63,7 +66,7 @@ public class EventHubTest {
         ObjectListener listener = new ObjectListener();
         assert listener.name == null;
 
-        EventHub hub = new EventHub();
+        Publishable hub = new Publishable();
         hub.register(listener);
         hub.publish("Yukinosita Yukino");
         assert listener.name.equals("Yukinosita Yukino");
@@ -78,7 +81,7 @@ public class EventHubTest {
         PrimitiveListener primitive = new PrimitiveListener();
         assert primitive.intValue == 0;
 
-        EventHub hub = new EventHub();
+        Publishable hub = new Publishable();
         hub.register(primitive);
         hub.publish(10);
         assert primitive.intValue == 10;
@@ -89,7 +92,7 @@ public class EventHubTest {
         PrimitiveListener primitive = new PrimitiveListener();
         assert primitive.name == null;
 
-        EventHub hub = new EventHub();
+        Publishable hub = new Publishable();
         hub.register(primitive);
         hub.publish("Yukinosita Yukino");
         assert primitive.name.equals("Yukinosita Yukino");
@@ -107,7 +110,7 @@ public class EventHubTest {
         /**
          * @param name
          */
-        @Subscribe
+        @Subscribable
         protected void listen(String name) {
             this.count++;
             this.name = name;
@@ -123,12 +126,12 @@ public class EventHubTest {
 
         private double doubleValue;
 
-        @Subscribe
+        @Subscribable
         private void listen(int value) {
             this.intValue = value;
         }
 
-        @Subscribe
+        @Subscribable
         private void listen(double value) {
             this.doubleValue = value;
         }
