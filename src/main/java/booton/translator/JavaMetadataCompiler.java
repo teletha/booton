@@ -26,7 +26,7 @@ import kiss.I;
 import org.junit.runner.RunWith;
 
 /**
- * @version 2013/09/25 20:44:43
+ * @version 2013/10/10 9:13:49
  */
 class JavaMetadataCompiler {
 
@@ -351,7 +351,7 @@ class JavaMetadataCompiler {
     }
 
     /**
-     * @version 2013/04/07 3:05:00
+     * @version 2013/10/10 9:13:44
      */
     private class MethodMetadata extends Metadata {
 
@@ -371,11 +371,17 @@ class JavaMetadataCompiler {
          */
         @Override
         protected void defineMetadata() {
+            String methodName = method.getName();
+
+            if (methodName.startsWith("$alias$")) {
+                methodName = methodName.substring(7);
+            }
+
             code.append(method.getModifiers(), ",");
             code.append(new JavaSignatureCompiler(method.getTypeParameters()), ",");
             code.append(new JavaSignatureCompiler(method.getGenericParameterTypes()), ",");
             code.append(new JavaSignatureCompiler(method.getGenericExceptionTypes()), ",");
-            code.append(new JavaSignatureCompiler(method.getGenericReturnType()), ",").string(method.getName());
+            code.append(new JavaSignatureCompiler(method.getGenericReturnType()), ",").string(methodName);
         }
 
         /**
