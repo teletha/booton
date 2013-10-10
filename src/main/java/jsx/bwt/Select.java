@@ -20,6 +20,7 @@ import jsx.bwt.SelectStyle.SelectedItem;
 import jsx.bwt.view.ScrollableListView;
 import jsx.bwt.view.ScrollableListView.ItemRenderer;
 import jsx.bwt.view.SlidableView;
+import jsx.event.Subscribable;
 import jsx.model.SelectableModel;
 import jsx.model.SelectableModel.Add;
 import jsx.model.SelectableModel.Deselect;
@@ -137,19 +138,19 @@ public class Select<M> extends FormUI<Select> {
             }
         }
 
-        @Subscribe(jsx.model.SelectableModel.Select.class)
+        @Subscribable(jsx.model.SelectableModel.Select.class)
         public void select(jsx.model.SelectableModel.Select select) {
             form.val(select.item.toString());
 
             view.render(select.index);
         }
 
-        @Subscribe(Deselect.class)
+        @Subscribable(Deselect.class)
         public void deselect(Deselect event) {
             view.render(event.index);
         }
 
-        @Subscribe(Add.class)
+        @Subscribable(Add.class)
         public void add(Add event) {
             view.provide(this);
             view.render(event.index);
@@ -157,7 +158,7 @@ public class Select<M> extends FormUI<Select> {
             enable();
         }
 
-        @Subscribe(Remove.class)
+        @Subscribable(Remove.class)
         public void remove(Remove event) {
             view.provide(this);
 

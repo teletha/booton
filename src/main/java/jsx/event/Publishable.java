@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.bwt;
+package jsx.event;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -22,10 +22,10 @@ import kiss.model.ClassUtil;
 /**
  * @version 2013/10/09 15:53:49
  */
-public class EventHub {
+public class Publishable {
 
     /** The global event bus. */
-    public static final EventHub Global = new EventHub();
+    public static final Publishable Global = new Publishable();
 
     /** The actual listeners holder. */
     private Map<Class, List<Listener>> holder;
@@ -66,14 +66,14 @@ public class EventHub {
         if (subscribable != null) {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
-                    if (annotation.annotationType() == Subscribe.class) {
+                    if (annotation.annotationType() == Subscribable.class) {
                         Class eventType;
                         Method method = entry.getKey();
 
                         if (method.getParameterTypes().length == 1) {
                             eventType = method.getParameterTypes()[0];
                         } else {
-                            eventType = ((Subscribe) annotation).value();
+                            eventType = ((Subscribable) annotation).value();
                         }
 
                         Listener listener = new Listener(subscribable, method);
@@ -116,14 +116,14 @@ public class EventHub {
         if (holder != null && subscribable != null) {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
-                    if (annotation.annotationType() == Subscribe.class) {
+                    if (annotation.annotationType() == Subscribable.class) {
                         Class eventType;
                         Method method = entry.getKey();
 
                         if (method.getParameterTypes().length == 1) {
                             eventType = method.getParameterTypes()[0];
                         } else {
-                            eventType = ((Subscribe) annotation).value();
+                            eventType = ((Subscribable) annotation).value();
                         }
 
                         for (Class type : ClassUtil.getTypes(eventType)) {

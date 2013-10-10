@@ -10,12 +10,12 @@
 package teemowork.model;
 
 import static teemowork.model.Mastery.*;
-import jsx.bwt.EventHub;
+import jsx.event.Publishable;
 
 /**
  * @version 2013/03/15 16:51:59
  */
-public class MasterySet extends EventHub {
+public class MasterySet extends Publishable {
 
     /** The human-readable name. */
     private String name = "";

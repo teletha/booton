@@ -15,6 +15,8 @@ import js.dom.ClientRect;
 import js.dom.Element;
 import jsx.application.PageUnload;
 import jsx.bwt.view.PopupViewStyle;
+import jsx.event.Publishable;
+import jsx.event.Subscribable;
 
 /**
  * @version 2013/06/12 9:11:13
@@ -43,7 +45,7 @@ public class WindowManager {
         this.content = content;
 
         System.out.println("register");
-        EventHub.Global.register(this);
+        Publishable.Global.register(this);
     }
 
     /**
@@ -73,9 +75,9 @@ public class WindowManager {
     /**
      * 
      */
-    @Subscribe(PageUnload.class)
+    @Subscribable(PageUnload.class)
     private void unload() {
-        EventHub.Global.unregister(this);
+        Publishable.Global.unregister(this);
         target.off();
         hide();
     }

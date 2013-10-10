@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.bwt;
+package jsx.event;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Subscribe {
+public @interface Subscribable {
 
     /**
      * <p>

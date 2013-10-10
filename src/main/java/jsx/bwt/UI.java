@@ -11,11 +11,12 @@ package jsx.bwt;
 
 import static js.lang.Global.*;
 import js.dom.Element;
+import jsx.event.Publishable;
 
 /**
  * @version 2013/07/29 2:28:28
  */
-public abstract class UI extends EventHub {
+public abstract class UI extends Publishable {
 
     /** The root container element for this user interface. */
     public final Element root;
