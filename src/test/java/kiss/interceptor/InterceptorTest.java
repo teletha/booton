@@ -22,7 +22,7 @@ import booton.translator.Require;
 import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/09/25 22:14:26
+ * @version 2013/10/12 0:00:21
  */
 @RunWith(ScriptRunner.class)
 public class InterceptorTest {
@@ -35,6 +35,7 @@ public class InterceptorTest {
     public void interceptor() throws Exception {
         InterceptedClass intercepted = I.make(InterceptedClass.class);
         assert intercepted.call("Yuigahama").equals("Hello Yuigahama!");
+        assert intercepted.say("Yuigahama").equals("Goodby Yuigahama!");
     }
 
     /**
@@ -46,6 +47,19 @@ public class InterceptorTest {
         @Hello
         public String call(String name) {
             return name;
+        }
+
+        @Goodby
+        public String say(String name) {
+            return name;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return getClass().getName();
         }
     }
 
@@ -68,6 +82,28 @@ public class InterceptorTest {
         @Override
         protected Object invoke(Object... params) {
             return super.invoke("Hello " + params[0] + "!");
+        }
+    }
+
+    /**
+     * @version 2013/09/25 22:07:26
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    private static @interface Goodby {
+    }
+
+    /**
+     * @version 2013/09/25 22:08:49
+     */
+    @Require
+    protected static class GoodbyInterceptor extends Interceptor<Goodby> {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected Object invoke(Object... params) {
+            return super.invoke("Goodby " + params[0] + "!");
         }
     }
 }

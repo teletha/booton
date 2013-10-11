@@ -15,8 +15,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import js.lang.Global;
 import js.lang.NativeFunction;
+import js.lang.NativeFunction.Delegator;
 import js.lang.NativeObject;
 import js.lang.reflect.Reflections;
 import kiss.I;
@@ -103,12 +103,9 @@ public class JSBinds extends Interceptor<Bind> {
 
                                 try {
                                     name = Reflections.getPropertyName(model.type.getMethod(name, property.model.type));
-                                    NativeFunction function = new NativeFunction(new BindingFunction());
-                                    function.setProperty("$A", prototype.getProperty(name));
-                                    function.setProperty("$B", property.name);
-                                    System.out.println(function.hashCode() + "  " + property.name);
 
-                                    prototype.setProperty(name, function);
+                                    BindingFunction function = new BindingFunction(prototype.getPropertyAs(NativeFunction.class, name), property.name);
+                                    prototype.setProperty(name, new NativeFunction(function));
                                 } catch (Exception e) {
                                     throw I.quiet(e);
                                 }
@@ -133,8 +130,6 @@ public class JSBinds extends Interceptor<Bind> {
         Table<String, JSBinds> binds = contexts.get(model);
 
         if (binds != null) {
-            System.out.println(property);
-            new Error().printStackTrace();
             for (JSBinds bind : binds.get(property)) {
                 bind.recall();
             }
@@ -148,35 +143,45 @@ public class JSBinds extends Interceptor<Bind> {
      */
     private final void recall() {
         try {
-            System.out.println("recall with " + Arrays.toString(params));
             super.invoke(params);
-            System.out.println("recalled");
         } catch (Throwable e) {
             throw I.quiet(e);
         }
     }
 
     /**
-     * @version 2013/09/26 14:55:33
+     * @version 2013/10/12 0:35:46
      */
-    private static class BindingFunction {
+    private static class BindingFunction implements Delegator {
+
+        /** The original function. */
+        private final NativeFunction function;
+
+        /** The property name. */
+        private final String name;
 
         /**
-         * <p>
-         * Invoke interceptor entry point.
-         * </p>
-         * 
-         * @param params
-         * @return
+         * @param function
+         * @param name
          */
-        @SuppressWarnings("unused")
-        private void invoke() {
-            System.out.println(hashCode() + "  " + Global.getContextFuntion().getPropertyAs(String.class, "$B"));
+        private BindingFunction(NativeFunction function, String name) {
+            this.function = function;
+            this.name = name;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Object delegate(Object that, Object[] arguments) {
             // call original function
-            Global.getContextFuntion().getPropertyAs(NativeFunction.class, "$A").apply(this, Global.getArgumentArray());
+            function.apply(that, arguments);
 
             // recall binding function
-            recall(this, Global.getContextFuntion().getPropertyAs(String.class, "$B"));
+            recall(that, name);
+
+            // API definition
+            return null;
         }
     }
 }
