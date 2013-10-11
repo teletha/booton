@@ -243,7 +243,7 @@ function boot(global) {
     bind: function(functionName, context) {
 	    return context[functionName].bind(context);
 	  },
-    
+
     /**
      * <p>
      * Initialize the specified array. (all elements are initialized by 0, false or null)

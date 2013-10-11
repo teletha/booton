@@ -10,7 +10,7 @@
 package teemowork.model;
 
 import static teemowork.model.Mastery.*;
-import jsx.event.Publishable;
+import jsx.Publishable;
 
 /**
  * @version 2013/03/15 16:51:59

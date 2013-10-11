@@ -7,28 +7,17 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.event;
+package jsx.bwt;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @version 2013/10/05 11:27:24
+ * @version 2013/10/11 9:53:19
  */
-@Documented
-@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Subscribable {
-
-    /**
-     * <p>
-     * Specify event type.
-     * </p>
-     * 
-     * @return
-     */
-    Class value() default Object.class;
+@Target(ElementType.METHOD)
+public @interface Bind {
 }

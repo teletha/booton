@@ -22,9 +22,7 @@ public class Person {
 
     private int age;
 
-    private String firstName;
-
-    private String lastName;
+    private String name;
 
     /**
      * Get the age property of this {@link Person}.
@@ -45,46 +43,28 @@ public class Person {
     }
 
     /**
-     * Get the firstName property of this {@link Person}.
+     * Get the name property of this {@link Person}.
      * 
-     * @return The firstName prperty.
+     * @return The name prperty.
      */
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Set the firstName property of this {@link Person}.
+     * Set the name property of this {@link Person}.
      * 
-     * @param firstName The firstName value to set.
+     * @param name The name value to set.
      */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
-     * Get the lastName property of this {@link Person}.
-     * 
-     * @return The lastName prperty.
-     */
-    public String getLastName() {
-        return lastName;
-    }
-
-    /**
-     * Set the lastName property of this {@link Person}.
-     * 
-     * @param lastName The lastName value to set.
-     */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    /**
-     * @see java.lang.Object#toString()
+     * {@inheritDoc}
      */
     @Override
     public String toString() {
-        return "Person [age=" + age + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+        return "Person [age=" + age + ", name=" + name + "]";
     }
 }

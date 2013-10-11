@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.event;
+package jsx;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

@@ -44,15 +44,13 @@ public class EmulateStorageTest {
     public void model() throws Exception {
         Person person = new Person();
         person.setAge(16);
-        person.setFirstName("Yui");
-        person.setLastName("Yuigahama");
+        person.setName("Yuigahama Yui");
 
         Storage storage = Global.localStorage;
         storage.set(person);
 
         Person other = storage.get(Person.class);
         assert other.getAge() == 16;
-        assert other.getFirstName().equals("Yui");
-        assert other.getLastName().equals("Yuigahama");
+        assert other.getName().equals("Yuigahama Yui");
     }
 }

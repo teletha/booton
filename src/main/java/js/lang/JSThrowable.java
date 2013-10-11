@@ -309,7 +309,9 @@ class JSThrowable {
      * @param stream {@code PrintStream} to use for output
      */
     public void printStackTrace(PrintStream stream) {
-
+        for (StackTraceElement element : stacktrace) {
+            System.out.println(element);
+        }
     }
 
     /**
