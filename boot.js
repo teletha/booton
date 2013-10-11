@@ -246,6 +246,21 @@ function boot(global) {
 
     /**
      * <p>
+     * Helper method to call delegator function.
+     * </p>
+     *
+     * @param {Function} delegator The delegator function.
+     * @param {Object} instance The actual delegator instance.
+     * @return {Function} The delegated function with lexical scope.
+     */
+	  delegate: function(delegator, instance) {
+	    return function() {
+	      return delegator.call(instance, this, arguments);
+	    };
+	  },
+
+    /**
+     * <p>
      * Initialize the specified array. (all elements are initialized by 0, false or null)
      * </p>
      *

@@ -45,6 +45,17 @@ public class NativeFunction<T> extends NativeObject {
      * 
      * @param functional
      */
+    public NativeFunction(Delegator<T> functional) {
+        this((T) functional);
+    }
+
+    /**
+     * <p>
+     * Create function statement form the specified object which has only one method.
+     * </p>
+     * 
+     * @param functional
+     */
     public NativeFunction(T functional) {
         this(functional, findSAM(functional.getClass()), null, null);
     }
@@ -429,10 +440,38 @@ public class NativeFunction<T> extends NativeObject {
     }
 
     /**
+     * @version 2013/10/11 21:06:30
+     */
+    public interface Delegator<T> {
+
+        /**
+         * <p>
+         * Invoke delegator function.
+         * </p>
+         * 
+         * @param that A context object.
+         * @param arguments An actual arguments.
+         * @return
+         */
+        T delegate(Object that, Object[] arguments);
+    }
+
+    /**
      * @version 2013/08/19 12:57:55
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<NativeFunction> {
+
+        /**
+         * <p>
+         * Create function statement form the specified object which has only one method.
+         * </p>
+         * 
+         * @param functional
+         */
+        public String NativeFunction(Delegator functional) {
+            return "boot.delegate(" + param(0) + "." + Javascript.computeMethodName(findSAM(type(0))) + "," + param(0) + ")";
+        }
 
         /**
          * <p>

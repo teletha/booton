@@ -37,6 +37,7 @@ import javax.script.ScriptException;
 
 import js.lang.Global;
 import js.lang.NativeFunction;
+import js.lang.NativeFunction.Delegator;
 import js.lang.NativeObject;
 import js.lang.reflect.Reflections;
 import kiss.model.ClassUtil;
@@ -535,12 +536,9 @@ class JSKiss {
                 List<Annotation> annotations = entry.getValue();
 
                 if (!annotations.isEmpty()) {
-                    NativeFunction delegator = new NativeFunction(new InterceptorFunction());
-                    delegator.setProperty("1", method.getName());
-                    delegator.setProperty("2", MethodHandles.lookup().unreflect(method));
-                    delegator.setProperty("3", annotations.toArray(new Annotation[annotations.size()]));
-
-                    prototype.setProperty(Reflections.getPropertyName(method), delegator);
+                    InterceptorFunction function = new InterceptorFunction(method.getName(), MethodHandles.lookup()
+                            .unreflect(method), annotations.toArray(new Annotation[annotations.size()]));
+                    prototype.setProperty(Reflections.getPropertyName(method), new NativeFunction(function));
                 }
             }
         } catch (Exception e) {
@@ -697,20 +695,34 @@ class JSKiss {
     /**
      * @version 2013/09/26 14:55:33
      */
-    private static class InterceptorFunction {
+    private static class InterceptorFunction implements Delegator {
+
+        /** The method name. */
+        private final String name;
+
+        /** The method handle. */
+        private final MethodHandle method;
+
+        /** The annotations. */
+        private final Annotation[] annotations;
 
         /**
-         * <p>
-         * Invoke interceptor entry point.
-         * </p>
-         * 
-         * @param params
-         * @return
+         * @param name
+         * @param method
+         * @param annotations
          */
-        @SuppressWarnings("unused")
-        private Object invoke(Object... params) {
-            NativeFunction function = Global.getContextFuntion();
-            return Interceptor.invoke(function.getPropertyAs(String.class, "1"), function.getPropertyAs(MethodHandle.class, "2"), Global.getContext(), Global.getArgumentArray(), function.getPropertyAs(Annotation[].class, "3"));
+        private InterceptorFunction(String name, MethodHandle method, Annotation[] annotations) {
+            this.name = name;
+            this.method = method;
+            this.annotations = annotations;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Object delegate(Object that, Object[] arguments) {
+            return Interceptor.invoke(name, method, that, arguments, annotations);
         }
     }
 

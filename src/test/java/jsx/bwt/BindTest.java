@@ -41,7 +41,6 @@ public class BindTest {
         assert listener.age == 16;
         assert listener.name.equals("Yuigahama Yui");
 
-        System.out.println("try bind");
         person.setAge(27);
         assert listener.age == 27;
 
