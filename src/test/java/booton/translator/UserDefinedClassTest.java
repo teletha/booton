@@ -39,8 +39,7 @@ public class UserDefinedClassTest extends ScriptTester {
             String act(String value) {
                 Person user = new Person();
                 user.setAge(17);
-                user.setFirstName(value);
-                user.setLastName(value + value);
+                user.setName(value);
 
                 return user.toString();
             }

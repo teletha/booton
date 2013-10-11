@@ -21,9 +21,9 @@ import java.util.regex.Pattern;
 
 import js.dom.DocumentFragment;
 import js.dom.EventListener;
+import jsx.Publishable;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
-import jsx.event.Publishable;
 import kiss.I;
 
 /**

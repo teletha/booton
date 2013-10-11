@@ -7,10 +7,10 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.event;
+package jsx;
 
-import jsx.event.Publishable;
-import jsx.event.Subscribable;
+import jsx.Publishable;
+import jsx.Subscribable;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

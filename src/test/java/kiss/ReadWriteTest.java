@@ -34,14 +34,12 @@ public class ReadWriteTest {
     public void bean() {
         Person person = I.make(Person.class);
         person.setAge(16);
-        person.setLastName("Yuigahama");
-        person.setFirstName("Yui");
+        person.setName("Yuigahama Yui");
 
         Person other = writeThenRead(person);
 
         assert other.getAge() == 16;
-        assert other.getFirstName().equals("Yui");
-        assert other.getLastName().equals("Yuigahama");
+        assert other.getName().equals("Yuigahama Yui");
     }
 
     @Test
