@@ -11,10 +11,7 @@ package jsx.bwt;
 
 import static org.objectweb.asm.Opcodes.*;
 
-import java.beans.Introspector;
-import java.lang.invoke.MethodHandle;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,12 +22,6 @@ import kiss.Interceptor;
 import kiss.Table;
 import kiss.model.Model;
 import kiss.model.Property;
-
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Type;
-
 import antibug.bytecode.Agent;
 import antibug.bytecode.Agent.Translator;
 import booton.translator.Require;
@@ -100,8 +91,8 @@ public class Binds extends Interceptor<Bind> {
                         }
 
                         // collect bindable properties
-                        for (String property : collectProperies(model)) {
-                            binds.push(property, this);
+                        for (Property property : model.properties) {
+                            binds.push(property.name, this);
                         }
 
                         // rewrite model code to publish their state modification
@@ -113,26 +104,6 @@ public class Binds extends Interceptor<Bind> {
             }
         }
         return super.invoke(params);
-    }
-
-    /**
-     * <p>
-     * Collect calling properties of the specified model in the current method.
-     * </p>
-     * 
-     * @param model
-     * @return
-     */
-    private Set<String> collectProperies(Model model) {
-        try {
-            MethodSearch seacher = new MethodSearch(name, method, model);
-            ClassReader reader = new ClassReader(Model.load(that.getClass()).type.getName());
-            reader.accept(seacher, ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
-
-            return seacher.properties;
-        } catch (Exception e) {
-            throw I.quiet(e);
-        }
     }
 
     /**
@@ -199,86 +170,6 @@ public class Binds extends Interceptor<Bind> {
                 mv.visitVarInsn(ALOAD, 0);
                 mv.visitLdcInsn(name);
                 mv.visitMethodInsn(INVOKESTATIC, "jsx/bwt/Binds", "recall", "(Ljava/lang/Object;Ljava/lang/String;)V");
-            }
-        }
-    }
-
-    /**
-     * @version 2013/10/11 9:54:37
-     */
-    private static class MethodSearch extends ClassVisitor {
-
-        /** The method name. */
-        private final String name;
-
-        /** The method description. */
-        private final String desc;
-
-        /** The target model name. */
-        private final Model model;
-
-        /** The internal model name. */
-        private final String modelInternl;
-
-        /** The property names. */
-        private final Set<String> properties = new HashSet();
-
-        /**
-         * 
-         */
-        private MethodSearch(String name, MethodHandle method, Model model) {
-            super(ASM4);
-
-            this.name = name;
-            this.desc = method.type().dropParameterTypes(0, 1).toMethodDescriptorString();
-            this.model = model;
-            this.modelInternl = Type.getType(model.type).getInternalName();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-            if (this.name.equals(name) && this.desc.equals(desc)) {
-                return new PropertySearch();
-            }
-            return null;
-        }
-
-        /**
-         * @version 2012/03/06 13:23:11
-         */
-        private class PropertySearch extends MethodVisitor {
-
-            /**
-             * 
-             */
-            protected PropertySearch() {
-                super(ASM4);
-            }
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void visitMethodInsn(int opcode, String owner, String name, String desc) {
-                if (modelInternl.equals(owner) && Type.getArgumentTypes(desc).length == 0) {
-                    Type returnType = Type.getReturnType(desc);
-                    String prefix = "get";
-
-                    if (returnType == Type.BOOLEAN_TYPE) {
-                        prefix = "is";
-                    }
-
-                    if (name.startsWith(prefix)) {
-                        Property property = model.getProperty(Introspector.decapitalize(name.substring(prefix.length())));
-
-                        if (property != null) {
-                            properties.add(property.name);
-                        }
-                    }
-                }
             }
         }
     }
