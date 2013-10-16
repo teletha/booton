@@ -18,7 +18,32 @@ public enum SkillType {
 
     Toggle,
 
+    ToggleForAttack("TOGGLE"),
+
     Channel,
 
     OnHitEffectable;
+
+    private String name;
+
+    /**
+     */
+    private SkillType() {
+        name = name().toUpperCase();
+    }
+
+    /**
+     * @param name
+     */
+    private SkillType(String name) {
+        this.name = name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return name;
+    }
 }

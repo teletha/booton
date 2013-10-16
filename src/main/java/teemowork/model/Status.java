@@ -551,6 +551,9 @@ public enum Status {
         case GoldPer10Sec:
             return "10秒毎に" + formatValue(computed) + "Gold";
 
+        case Range:
+            return "射程が" + formatValue(computed) + "増加";
+
         case Knockback:
             String length = formatValue(computed);
 
