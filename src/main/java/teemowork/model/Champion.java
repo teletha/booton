@@ -146,6 +146,9 @@ public class Champion {
     public static final Champion JayceCannon = new Champion("Jayce", true, HextechCapacitor, ShockBlast, HyperCharge, AccelerationGate, TransformMercuryHammer);
 
     /** The champion name. */
+    public static final Champion Jinx = new Champion("Jinx", GetExcited, Switcheroo, Zap, FlameChompers, SuperMegaDeathRocket);
+
+    /** The champion name. */
     public static final Champion Karma = new Champion("Karma", GatheringFire, InnerFlame, FocusedResolve, Inspire, Mantra);
 
     /** The champion name. */
@@ -950,6 +953,17 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 500)
                 .set(MS, 335);
+        Jinx.update(Version.P312)
+                .set(Health, 420, 80)
+                .set(Hreg, 5, 0.5)
+                .set(Mana, 170, 45)
+                .set(Mreg, 5, 1)
+                .set(AD, 50, 3)
+                .set(AS, 0.625, 1)
+                .set(AR, 13, 3.5)
+                .set(MR, 30, 0)
+                .set(Range, 525)
+                .set(MS, 325);
         Karma.update(P0000)
                 .set(Health, 410, 86)
                 .set(Hreg, 4.7, 0.55)

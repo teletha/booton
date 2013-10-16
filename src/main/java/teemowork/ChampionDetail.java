@@ -357,7 +357,7 @@ public class ChampionDetail extends Page {
             SkillType type = status.getType();
 
             if (type != SkillType.Active && type != SkillType.OnHitEffectable) {
-                active.child(Passive.class).text(status.getType().name().toUpperCase());
+                active.child(Passive.class).text(status.getType());
             }
 
             for (Object token : status.getActive()) {
@@ -402,8 +402,12 @@ public class ChampionDetail extends Page {
                 // write label
                 String label = status.name;
 
-                if (status != Range && status != CD && skill.getType() == SkillType.Toggle) {
-                    label = "毎秒" + label;
+                if (status != Range && status != CD) {
+                    if (skill.getType() == SkillType.Toggle) {
+                        label = "毎秒" + label;
+                    } else if (skill.getType() == SkillType.ToggleForAttack) {
+                        label = "攻撃毎" + label;
+                    }
                 }
                 root.child(StatusLabel.class).text(label);
 

@@ -21,7 +21,7 @@ import java.util.List;
 public class ChampionGroup {
 
     /** The built-in group. */
-    public static final ChampionGroup RANGED = new ChampionGroup(Ashe, Caitlyn, Corki, Draven, Ezreal, Graves, Jayce, Kennen, KogMaw, MissFortune, Quinn, Sivir, Teemo, Thresh, Tristana, TwistedFate, Twitch, Urgot, Varus, Vayne);
+    public static final ChampionGroup RANGED = new ChampionGroup(Ashe, Caitlyn, Corki, Draven, Ezreal, Graves, Jayce, Jinx, Kennen, KogMaw, MissFortune, Quinn, Sivir, Teemo, Thresh, Tristana, TwistedFate, Twitch, Urgot, Varus, Vayne);
 
     /** The built-in group. */
     public static final ChampionGroup ALL = new ChampionGroup(Champion.getAll());

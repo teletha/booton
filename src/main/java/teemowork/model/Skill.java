@@ -1812,6 +1812,21 @@ public class Skill extends Describable<SkillDescriptor> {
     public static final Skill TheCulling = new Skill("The Culling", R);
 
     /** The skill name. */
+    public static final Skill GetExcited = new Skill("Get Excited!", Passive);
+
+    /** The skill name. */
+    public static final Skill Switcheroo = new Skill("Switcheroo!", Q);
+
+    /** The skill name. */
+    public static final Skill Zap = new Skill("Zap!", W);
+
+    /** The skill name. */
+    public static final Skill FlameChompers = new Skill("Flame Chompers!", E);
+
+    /** The skill name. */
+    public static final Skill SuperMegaDeathRocket = new Skill("Super Mega Death Rocket!", R);
+
+    /** The skill name. */
     public final String name;
 
     /** The skill system name. */
@@ -2188,7 +2203,11 @@ public class Skill extends Describable<SkillDescriptor> {
                 .passive("3秒間通常攻撃を行わないと毎秒{1}増加していく(最大100)。スタックが100の時、建物以外に通常攻撃を行うと、スタックをすべて消費して通常攻撃がクリティカルになり、スタックの値がクリティカル率と同じ値となる。")
                 .variable(1, Stack, new Per5LevelForAshe(3, 1));
         Focus.update(P310).variable(1, Stack, new Per5LevelForAshe(4, 1));
-        FrostShot.update().active("通常攻撃に2秒間の{1}を付与する。").variable(1, MSSlowRatio, 15, 5).mana(8).type(SkillType.Toggle);
+        FrostShot.update()
+                .active("通常攻撃に2秒間の{1}を付与する。")
+                .variable(1, MSSlowRatio, 15, 5)
+                .mana(8)
+                .type(SkillType.ToggleForAttack);
         Volley.update()
                 .active("指定方向扇形57.5°の方向に非貫通の矢7本を飛ばし当たった敵ユニットに{1}と{2}(" + FrostShot + "のLvに依存)を与える。" + FrostShot + "を覚えていない場合はスローは発生しない。")
                 .variable(1, PhysicalDamage, 40, 10, ad(1))
@@ -3284,6 +3303,8 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(100)
                 .cd(80);
 
+        Jinx();
+
         /** Jayce */
         HextechCapacitor.update()
                 .passive("Transformを使用すると1.25秒の間{1}し、{2}を得る。")
@@ -3686,7 +3707,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(8)
                 .range(625);
         BioArcaneBarrage.update()
-                .active("8秒間通常攻撃の射程が{1}増加し、通常攻撃時に{2}を追加で与える。")
+                .active("8秒間通常攻撃の{1}し、通常攻撃時に{2}を追加で与える。")
                 .variable(1, Range, 130, 20)
                 .variable(2, MagicDamage, 0, 0, amplify(TargetMaxHealthRatio, 2, 1, ap(0.01)))
                 .mana(50)
@@ -5079,10 +5100,11 @@ public class Skill extends Describable<SkillDescriptor> {
         /** Singed */
         EmpoweredBulwark.update().passive("{1}を得る。").variable(1, Health, 0, 0, amplify(Mana, 0.25));
         PoisonTrail.update()
-                .passive("Singedの通り道に3.25秒間持続する毒を撒き、触れた敵ユニットに3秒間毎秒{1}を与える。")
+                .active("Singedの通り道に3.25秒間持続する毒を撒き、触れた敵ユニットに3秒間毎秒{1}を与える。")
                 .variable(1, MagicDamage, 22, 0, ap(0.3))
                 .mana(13)
-                .cd(1);
+                .cd(1)
+                .type(SkillType.Toggle);
         MegaAdhesive.update()
                 .active("指定地点に5秒間持続する粘着剤を撒き、{1}の敵ユニットに{2}を与え続ける。この効果は範囲外に出てからも1秒間持続する。")
                 .variable(1, Radius, 350)
@@ -5129,7 +5151,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, MagicDamage, 100, 50, ap(0.9))
                 .mana(70, 10);
         Enrage.update()
-                .passive("{1}を得る。使用中にLHをとるとSionの最大HPが{2}増加する。対象が敵Champion/SiegeまたはSuperMinion/Buffを持った中立クリープの場合、増加値は2倍になる。")
+                .active("{1}を得る。使用中にLHをとるとSionの最大HPが{2}増加する。対象が敵Champion/SiegeまたはSuperMinion/Buffを持った中立クリープの場合、増加値は2倍になる。")
                 .variable(1, AD, 25, 10)
                 .variable(2, Count, 1, 0.5)
                 .cost(Health, 6, 2)
@@ -6429,6 +6451,48 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(100, 20)
                 .cd(130, -10)
                 .range(700);
+    }
 
+    private static void Jinx() {
+        GetExcited.update(P312)
+                .passive("攻撃した敵Championまたはタワーが3秒以内に死亡/破壊された場合、4秒間{1}する。移動速度は4秒かけて元に戻る。")
+                .variable(-1, MSRatio, 175);
+        Switcheroo.update(P312)
+                .passive("通常攻撃毎に{1}する。この効果は2.5秒間持続し、3回までスタックする(最大で{5}する)。攻撃を行わないと、スタックは2.5秒間毎に1つずつ減少していく。このスキルを使用するとスタックによる攻撃速度増加は無効になる。")
+                .variable(-1, ASRatio, 16.6, 6.7)
+                .variable(-5, ASRatio, 50, 20)
+                .active("通常攻撃は{2}し{4}が付与され、対象の{3}にいる敵にも同様のダメージを与えるようになる。")
+                .variable(2, Range, 50, 20)
+                .variable(3, Radius, 150)
+                .variable(4, PhysicalDamage, 0, 0, ad(0.1))
+                .mana(20)
+                .cd(1)
+                .type(SkillType.ToggleForAttack);
+        Zap.update(P312)
+                .active("約0.6秒詠唱後、指定方向に電撃を放ち、当たった敵ユニットに{1}と2秒間{2}を与え、2秒間そのユニットの{3}。")
+                .variable(1, PhysicalDamage, 30, 45, ad(1.4))
+                .variable(2, MSSlowRatio, 30, 10)
+                .variable(3, Visionable)
+                .mana(45, 10)
+                .cd(10, -1)
+                .range(1450);
+        FlameChompers.update(P312)
+                .active("指定地点に3つの罠を仕掛ける。敵Championが罠に触れると爆発し、{1}にいる敵ユニットに1.5秒かけて{2}を与え、更に罠に触れた敵Championに{3}を与える。罠はひとつづつしか反応せず、一人のChampionが３つ全ての罠にかかった場合は{5}を与える。罠は5秒経過すると自動的に爆発する。また罠は{4}。")
+                .variable(1, Radius, 50)
+                .variable(2, MagicDamage, 100, 50, ap(1))
+                .variable(3, Snare, 1.5)
+                .variable(4, Visionable)
+                .variable(5, MagicDamage, 300, 150, ap(3))
+                .mana(50)
+                .cd(24, -2)
+                .range(950);
+        SuperMegaDeathRocket.update(P312)
+                .active("指定方向にロケットを放つ。ロケットが敵Championに命中すると爆発し、{1}の敵ユニットに{2}を与える。ロケットが発射から当たるまでの時間に比例してダメージが増加する(1秒で最大値になり{3}を与える、またミニオンに対しては300DMが上限)。ロケットの爆風に当たった敵ユニットには80%のダメージを与える。")
+                .variable(1, Radius, 225)
+                .variable(2, PhysicalDamage, 125, 50, bounusAD(0.5), amplify(TargetMissingHealthRatio, 25, 5))
+                .variable(3, PhysicalDamage, 250, 100, bounusAD(1), amplify(TargetMissingHealthRatio, 25, 5))
+                .mana(100)
+                .cd(90, -15)
+                .range(-1);
     }
 }
