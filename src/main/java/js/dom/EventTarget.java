@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import js.lang.NativeFunction;
+import js.lang.NativeObject;
 import jsx.bwt.Listen;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
@@ -265,7 +267,8 @@ public class EventTarget<T extends EventTarget<T>> implements JavascriptNative {
             if (listeners == null) {
                 listeners = new Listeners();
                 events.put(type, listeners);
-                addEventListener(type.name, listeners);
+                addEventListener(type.name, ((NativeObject) (Object) listeners).getPropertyAs(NativeFunction.class, "handleEvent")
+                        .bind(listeners));
             }
             listeners.add(subscriber);
         }
@@ -303,6 +306,17 @@ public class EventTarget<T extends EventTarget<T>> implements JavascriptNative {
 
     /**
      * <p>
+     * Registers the specified listener on the EventTarget it's called on.
+     * </p>
+     * 
+     * @param type A string representing the event type to listen for.
+     * @param listener The object that receives a notification when an event of the specified type
+     *            occurs.
+     */
+    protected native void addEventListener(String type, NativeFunction listener);
+
+    /**
+     * <p>
      * Removes the event listener previously registered.
      * </p>
      * 
@@ -325,7 +339,7 @@ public class EventTarget<T extends EventTarget<T>> implements JavascriptNative {
     /**
      * @version 2013/07/07 13:50:26
      */
-    private static class Listeners implements EventListener {
+    private static class Listeners extends NativeObject implements EventListener {
 
         /** The actual listener holder. */
         private CopyOnWriteArrayList<EventListener> listeners = new CopyOnWriteArrayList();

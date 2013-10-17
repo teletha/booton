@@ -12,6 +12,8 @@ package js.lang;
 import java.util.HashMap;
 import java.util.Map;
 
+import js.dom.EventListener;
+import jsx.bwt.UIEvent;
 import kiss.I;
 import booton.translator.JavaAPIProvider;
 import booton.translator.JavascriptNative;
@@ -95,6 +97,15 @@ public class NativeObject {
      * @return An associated value.
      */
     public final <A> A getPropertyAs(Class<A> type, Object key) {
+        if (key.equals("handleEvent")) {
+            return (A) new NativeFunction(new EventListener() {
+
+                @Override
+                public void handleEvent(UIEvent event) {
+                }
+            });
+        }
+
         return (A) container.get(literal(key));
     }
 
