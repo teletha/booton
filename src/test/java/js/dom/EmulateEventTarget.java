@@ -9,6 +9,7 @@
  */
 package js.dom;
 
+import js.lang.NativeFunction;
 import jsx.bwt.UIEvent;
 import kiss.Table;
 
@@ -27,6 +28,22 @@ public class EmulateEventTarget extends EventTarget {
     protected void addEventListener(String type, EventListener listener) {
         if (type != null && listener != null) {
             listeners.push(type, listener);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void addEventListener(String type, final NativeFunction listener) {
+        if (type != null && listener != null) {
+            listeners.push(type, new EventListener() {
+
+                @Override
+                public void handleEvent(UIEvent event) {
+                    listener.apply(null, event);
+                }
+            });
         }
     }
 
