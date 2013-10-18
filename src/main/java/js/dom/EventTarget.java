@@ -267,8 +267,7 @@ public class EventTarget<T extends EventTarget<T>> implements JavascriptNative {
             if (listeners == null) {
                 listeners = new Listeners();
                 events.put(type, listeners);
-                addEventListener(type.name, ((NativeObject) (Object) listeners).getPropertyAs(NativeFunction.class, "handleEvent")
-                        .bind(listeners));
+                addEventListener(type.name, new NativeFunction(listeners).bind(listeners));
             }
             listeners.add(subscriber);
         }
@@ -292,17 +291,6 @@ public class EventTarget<T extends EventTarget<T>> implements JavascriptNative {
      */
     protected void stopListening() {
     }
-
-    /**
-     * <p>
-     * Registers the specified listener on the EventTarget it's called on.
-     * </p>
-     * 
-     * @param type A string representing the event type to listen for.
-     * @param listener The object that receives a notification when an event of the specified type
-     *            occurs.
-     */
-    protected native void addEventListener(String type, EventListener listener);
 
     /**
      * <p>

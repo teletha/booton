@@ -78,14 +78,6 @@ public class EmulateElement extends Element implements Nodable {
      * {@inheritDoc}
      */
     @Override
-    protected void addEventListener(String type, EventListener listener) {
-        events.addEventListener(type, listener);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     protected void addEventListener(String type, NativeFunction listener) {
         events.addEventListener(type, listener);
     }
