@@ -25,16 +25,6 @@ public class EmulateEventTarget extends EventTarget {
      * {@inheritDoc}
      */
     @Override
-    protected void addEventListener(String type, EventListener listener) {
-        if (type != null && listener != null) {
-            listeners.push(type, listener);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     protected void addEventListener(String type, final NativeFunction listener) {
         if (type != null && listener != null) {
             listeners.push(type, new EventListener() {

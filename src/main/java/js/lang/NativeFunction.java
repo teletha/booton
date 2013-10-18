@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import js.dom.EventListener;
 import kiss.I;
 import booton.translator.Javascript;
 import booton.translator.Translator;
@@ -47,6 +48,17 @@ public class NativeFunction<T> extends NativeObject {
      */
     public NativeFunction(Delegator<T> functional) {
         this((T) functional);
+    }
+
+    /**
+     * <p>
+     * Create function statement form the specified object which has only one method.
+     * </p>
+     * 
+     * @param functional
+     */
+    public NativeFunction(EventListener functional) {
+        this((T) functional, findSAM(EventListener.class), null, null);
     }
 
     /**
@@ -471,6 +483,17 @@ public class NativeFunction<T> extends NativeObject {
          */
         public String NativeFunction(Delegator functional) {
             return "boot.delegate(" + param(0) + "." + Javascript.computeMethodName(findSAM(type(0))) + "," + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Create function statement form the specified object which has only one method.
+         * </p>
+         * 
+         * @param functional
+         */
+        public String NativeFunction(EventListener functional) {
+            return param(0) + "." + Javascript.computeMethodName(findSAM(EventListener.class));
         }
 
         /**
