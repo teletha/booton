@@ -10,7 +10,9 @@
 package js.dom;
 
 import static js.lang.Global.*;
-import jsx.bwt.UIAction;
+import js.dom.event.Click;
+import js.dom.event.MouseOver;
+import jsx.Subscribable;
 import jsx.bwt.UIEvent;
 
 import org.junit.Test;
@@ -30,17 +32,17 @@ public class EventTargetTest {
         assert listener.invoked == 0;
 
         Element element = document.createElement("div");
-        element.on(UIAction.Click, listener);
+        element.register(listener);
 
-        element.dispatchEvent(click());
+        element.publish(new Click());
         assert listener.invoked == 1;
 
-        element.dispatchEvent(mousedown());
+        element.publish(new MouseOver());
         assert listener.invoked == 1;
 
-        element.off(UIAction.Click, listener);
+        element.unregister(listener);
 
-        element.dispatchEvent(click());
+        element.publish(new Click());
         assert listener.invoked == 1;
     }
 
@@ -75,15 +77,12 @@ public class EventTargetTest {
     /**
      * @version 2013/10/18 12:39:19
      */
-    private static class Listener implements EventListener {
+    private static class Listener {
 
         private int invoked = 0;
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void handleEvent(UIEvent event) {
+        @Subscribable
+        private void click(Click event) {
             invoked++;
         }
     }

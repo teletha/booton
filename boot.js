@@ -176,12 +176,16 @@ function boot(global) {
             // so Class.prototype property hides prototype chained properties.
             // The class which has class-tree (i.e. Element <- Node) must also imports methods
             // from super class.
-            if (superClass != Object) {
+            while (superClass != Object) {
               define(clazz.prototype, superClass.prototype);
+              
+              superClass = superClass.super;
             }
           }
         });
       }
+      
+      Class.super = superClass;
     },
     
     /**

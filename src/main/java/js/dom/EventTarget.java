@@ -17,8 +17,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import js.dom.event.DOMEvent;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
+import jsx.Publishable;
 import jsx.bwt.Listen;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
@@ -31,7 +33,7 @@ import booton.translator.JavascriptNative;
  * 
  * @version 2013/08/22 15:56:25
  */
-public class EventTarget<T extends EventTarget<T>> implements JavascriptNative {
+public class EventTarget<T extends EventTarget<T>> extends Publishable implements JavascriptNative {
 
     /** The event listener holder. */
     private Map<UIAction, Listeners> events;
@@ -166,7 +168,6 @@ public class EventTarget<T extends EventTarget<T>> implements JavascriptNative {
                 removeEventListener(type.name, listeners);
 
                 if (events.size() == 0) {
-                    stopListening();
                     events = null;
                 }
             }
@@ -217,7 +218,6 @@ public class EventTarget<T extends EventTarget<T>> implements JavascriptNative {
                     removeEventListener(type.name, listeners);
 
                     if (events.size() == 0) {
-                        stopListening();
                         events = null;
                     }
                 }
@@ -259,7 +259,6 @@ public class EventTarget<T extends EventTarget<T>> implements JavascriptNative {
         if (type != null && subscriber != null) {
             if (events == null) {
                 events = new HashMap();
-                startListening();
             }
 
             Listeners listeners = events.get(type);
@@ -276,20 +275,28 @@ public class EventTarget<T extends EventTarget<T>> implements JavascriptNative {
         return (T) this;
     }
 
-    /**
-     * <p>
-     * This method is called whenever this event target starts listening event.
-     * </p>
-     */
-    protected void startListening() {
+    public void trigger(UIAction type) {
+
     }
 
     /**
-     * <p>
-     * This method is called whenever this event target stops listening event.
-     * </p>
+     * {@inheritDoc}
      */
-    protected void stopListening() {
+    @Override
+    protected void startListening(Class type) {
+        if (DOMEvent.class.isAssignableFrom(type)) {
+            System.out.println(type);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void stopListening(Class type) {
+        if (DOMEvent.class.isAssignableFrom(type)) {
+
+        }
     }
 
     /**
@@ -323,6 +330,19 @@ public class EventTarget<T extends EventTarget<T>> implements JavascriptNative {
      * @param event A Event object to be dispatched.
      */
     protected native void dispatchEvent(UIEvent event);
+
+    /**
+     * @version 2013/10/19 18:19:12
+     */
+    private static class DOMListener implements EventListener {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handleEvent(UIEvent event) {
+        }
+    }
 
     /**
      * @version 2013/07/07 13:50:26

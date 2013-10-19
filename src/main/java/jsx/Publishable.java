@@ -84,6 +84,7 @@ public class Publishable {
 
                                 if (holder == null) {
                                     holder = new HashMap();
+                                    startListening(Object.class);
                                 }
 
                                 List<Listener> listeners = holder.get(type);
@@ -91,6 +92,8 @@ public class Publishable {
                                 if (listeners == null) {
                                     listeners = new CopyOnWriteArrayList();
                                     holder.put(type, listeners);
+
+                                    startListening(type);
                                 } else {
                                     for (Listener registered : listeners) {
                                         if (registered.instance == subscribable) {
@@ -138,6 +141,16 @@ public class Publishable {
 
                                         if (listener.instance == subscribable) {
                                             listeners.remove(i);
+
+                                            if (listeners.isEmpty()) {
+                                                holder.remove(type);
+                                                stopListening(type);
+
+                                                if (holder.isEmpty()) {
+                                                    holder = null;
+                                                    stopListening(Object.class);
+                                                }
+                                            }
                                             break;
                                         }
                                     }
@@ -148,6 +161,22 @@ public class Publishable {
                 }
             }
         }
+    }
+
+    /**
+     * <p>
+     * This method is called whenever this event target starts listening event.
+     * </p>
+     */
+    protected void startListening(Class type) {
+    }
+
+    /**
+     * <p>
+     * This method is called whenever this event target stops listening event.
+     * </p>
+     */
+    protected void stopListening(Class type) {
     }
 
     /**

@@ -520,16 +520,24 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * {@inheritDoc}
      */
     @Override
-    protected void startListening() {
-        add(EventListenable.class);
+    protected void startListening(Class type) {
+        super.startListening(type);
+
+        if (type == Object.class) {
+            add(EventListenable.class);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void stopListening() {
-        remove(EventListenable.class);
+    protected void stopListening(Class type) {
+        super.stopListening(type);
+
+        if (type == Object.class) {
+            remove(EventListenable.class);
+        }
     }
 
     /**
