@@ -9,8 +9,10 @@
  */
 package js.dom.event;
 
+import jsx.bwt.UIEvent;
+
 /**
  * @version 2013/10/19 9:30:39
  */
-public class MouseOver extends DOMEvent {
+public class MouseOver extends UIEvent {
 }

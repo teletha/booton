@@ -196,6 +196,10 @@ class TranslatorManager {
      * @return A result.
      */
     static boolean isNativeMethod(Class owner, String name, String description) {
+        if (JavascriptNative.class.isAssignableFrom(owner)) {
+            register(owner);
+        }
+
         List<Class> classes = nativeMethods.get(hash(name, description));
 
         for (Class clazz : classes) {

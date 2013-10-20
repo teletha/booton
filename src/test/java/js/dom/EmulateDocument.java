@@ -9,7 +9,7 @@
  */
 package js.dom;
 
-import js.dom.event.DOMEvent;
+import jsx.bwt.UIEvent;
 
 /**
  * @version 2013/07/12 20:39:00
@@ -36,9 +36,9 @@ public class EmulateDocument extends Document {
      * {@inheritDoc}
      */
     @Override
-    public DOMEvent createEvent(String type) {
+    public UIEvent createEvent(String type) {
         if (type.equals("UIEvent")) {
-            return new UIEvent();
+            return new Event();
         }
         return super.createEvent(type);
     }
@@ -46,7 +46,7 @@ public class EmulateDocument extends Document {
     /**
      * @version 2013/10/20 10:10:21
      */
-    private static class UIEvent extends DOMEvent {
+    private static class Event extends UIEvent {
 
         private boolean bubbles;
 
