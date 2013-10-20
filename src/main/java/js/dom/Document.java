@@ -9,6 +9,7 @@
  */
 package js.dom;
 
+import js.dom.event.DOMEvent;
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
@@ -62,6 +63,18 @@ public abstract class Document implements JavascriptNative {
      * {@inheritDoc}
      */
     public native Element createElementNS(String namespaceURI, String qualifiedName);
+
+    /**
+     * <p>
+     * Creates an event of the type specified. The returned object should be first initialized and
+     * can then be passed to element.dispatchEvent.
+     * </p>
+     * 
+     * @param type A string that represents the type of event to be created. Possible event types
+     *            include "UIEvents", "MouseEvents", "MutationEvents", and "HTMLEvents".
+     * @return The created Event object.
+     */
+    public native DOMEvent createEvent(String type);
 
     /**
      * <p>

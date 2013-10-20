@@ -4,10 +4,10 @@ function boot(global) {
   /**
    * Define user properties.
    */
-  function define(object, properties) {
+  function define(object, properties, protect) {
     if (object) {
       Object.keys(properties).forEach(function(name) {
-        if (name != "$") {
+        if (name != "$" && (!protect || !object[name])) {
           Object.defineProperty(object, name, {
             configurable: false,
             enumerable: false,
@@ -177,7 +177,7 @@ function boot(global) {
             // The class which has class-tree (i.e. Element <- Node) must also imports methods
             // from super class.
             while (superClass != Object) {
-              define(clazz.prototype, superClass.prototype);
+              define(clazz.prototype, superClass.prototype, true);
               
               superClass = superClass.super;
             }

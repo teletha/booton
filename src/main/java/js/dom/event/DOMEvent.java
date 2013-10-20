@@ -65,6 +65,18 @@ public abstract class DOMEvent implements JavascriptNative {
 
     /**
      * <p>
+     * Initialize event.
+     * </p>
+     * 
+     * @param type The type of event.
+     * @param bubbles A boolean indicating whether the event should bubble up through the event
+     *            chain or not.
+     * @param cancelable A boolean indicating whether the event can be canceled.
+     */
+    public native void initEvent(String type, boolean bubbles, boolean cancelable);
+
+    /**
+     * <p>
      * Returns whether event.preventDefault() was ever called on this event object.
      * </p>
      * 
