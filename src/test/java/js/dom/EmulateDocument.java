@@ -9,6 +9,8 @@
  */
 package js.dom;
 
+import js.dom.event.DOMEvent;
+
 /**
  * @version 2013/07/12 20:39:00
  */
@@ -28,5 +30,36 @@ public class EmulateDocument extends Document {
     @Override
     public Element createElement(String name) {
         return new EmulateElement(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DOMEvent createEvent(String type) {
+        if (type.equals("UIEvent")) {
+            return new UIEvent();
+        }
+        return super.createEvent(type);
+    }
+
+    /**
+     * @version 2013/10/20 10:10:21
+     */
+    private static class UIEvent extends DOMEvent {
+
+        private boolean bubbles;
+
+        private boolean cancelabe;
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void initEvent(String type, boolean bubbles, boolean cancelable) {
+            this.type = type;
+            this.bubbles = bubbles;
+            this.cancelabe = cancelable;
+        }
     }
 }

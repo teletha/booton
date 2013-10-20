@@ -13,13 +13,13 @@ import static js.lang.Global.*;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import js.dom.event.Click;
 import js.dom.event.DOMEvent;
-import js.lang.NativeFunction;
-import js.lang.NativeObject;
 import jsx.Publishable;
 import jsx.bwt.Listen;
 import jsx.bwt.UIAction;
@@ -266,7 +266,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
             if (listeners == null) {
                 listeners = new Listeners();
                 events.put(type, listeners);
-                addEventListener(type.name, new NativeFunction(listeners).bind(listeners));
+                addEventListener(type.name, listeners);
             }
             listeners.add(subscriber);
         }
@@ -284,8 +284,16 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      */
     @Override
     protected void startListening(Class type) {
-        if (DOMEvent.class.isAssignableFrom(type)) {
-            System.out.println(type);
+        if (DOMEvent.class.isAssignableFrom(type) && !Modifier.isAbstract(type.getModifiers())) {
+            System.out.println("register native listener " + type.getSimpleName().toLowerCase());
+            addEventListener(type.getSimpleName().toLowerCase(), new EventListener() {
+
+                @Override
+                public void handleEvent(UIEvent event) {
+                    System.out.println("native event invoked  " + event);
+                    publish(new Click());
+                }
+            });
         }
     }
 
@@ -294,7 +302,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      */
     @Override
     protected void stopListening(Class type) {
-        if (DOMEvent.class.isAssignableFrom(type)) {
+        if (DOMEvent.class.isAssignableFrom(type) && !Modifier.isAbstract(type.getModifiers())) {
 
         }
     }
@@ -308,7 +316,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      * @param listener The object that receives a notification when an event of the specified type
      *            occurs.
      */
-    protected native void addEventListener(String type, NativeFunction listener);
+    protected native void addEventListener(String type, EventListener listener);
 
     /**
      * <p>
@@ -332,22 +340,20 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
     protected native void dispatchEvent(UIEvent event);
 
     /**
-     * @version 2013/10/19 18:19:12
+     * <p>
+     * Dispatches an Event at the specified EventTarget, invoking the affected EventListeners in the
+     * appropriate order. The normal event processing rules (including the capturing and optional
+     * bubbling phase) apply to events dispatched manually with dispatchEvent().
+     * </p>
+     * 
+     * @param event A Event object to be dispatched.
      */
-    private static class DOMListener implements EventListener {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void handleEvent(UIEvent event) {
-        }
-    }
+    protected native void dispatchEvent(DOMEvent event);
 
     /**
      * @version 2013/07/07 13:50:26
      */
-    private static class Listeners extends NativeObject implements EventListener {
+    private static class Listeners implements EventListener {
 
         /** The actual listener holder. */
         private CopyOnWriteArrayList<EventListener> listeners = new CopyOnWriteArrayList();

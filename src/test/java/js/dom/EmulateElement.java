@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import js.lang.NativeFunction;
+import js.dom.event.DOMEvent;
 import jsx.bwt.UIEvent;
 import booton.css.CSS;
 
@@ -78,7 +78,7 @@ public class EmulateElement extends Element implements Nodable {
      * {@inheritDoc}
      */
     @Override
-    protected void addEventListener(String type, NativeFunction listener) {
+    protected void addEventListener(String type, EventListener listener) {
         events.addEventListener(type, listener);
     }
 
@@ -95,6 +95,14 @@ public class EmulateElement extends Element implements Nodable {
      */
     @Override
     protected void dispatchEvent(UIEvent event) {
+        events.dispatchEvent(event);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void dispatchEvent(DOMEvent event) {
         events.dispatchEvent(event);
     }
 

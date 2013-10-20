@@ -27,7 +27,7 @@ import booton.translator.ScriptRunner;
 public class EventTargetTest {
 
     @Test
-    public void addAndRemove() throws Exception {
+    public void fromAPI() throws Exception {
         Listener listener = new Listener();
         assert listener.invoked == 0;
 
@@ -35,6 +35,26 @@ public class EventTargetTest {
         element.register(listener);
 
         element.publish(new Click());
+        assert listener.invoked == 1;
+
+        element.publish(new MouseOver());
+        assert listener.invoked == 1;
+
+        element.unregister(listener);
+
+        element.publish(new Click());
+        assert listener.invoked == 1;
+    }
+
+    @Test
+    public void fromUserAction() throws Exception {
+        Listener listener = new Listener();
+        assert listener.invoked == 0;
+
+        Element element = document.createElement("div");
+        element.register(listener);
+
+        User.click(element);
         assert listener.invoked == 1;
 
         element.publish(new MouseOver());
