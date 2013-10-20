@@ -511,8 +511,12 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
                 char ch = name.charAt(0);
 
                 if (ch != '$' && ch < 'a' || 'p' < ch) {
-                    Method method = (Method) (Object) new JSMethod(name, (Class) (Object) this, definition.getPropertyAs(NativeArray.class, name));
-                    privateMethods.put(hash(method.getName(), method.getParameterTypes()), method);
+                    NativeArray metadata = definition.getPropertyAs(NativeArray.class, name);
+
+                    if (4 < metadata.length()) {
+                        Method method = (Method) (Object) new JSMethod(name, (Class) (Object) this, metadata);
+                        privateMethods.put(hash(method.getName(), method.getParameterTypes()), method);
+                    }
                 }
             }
         }
@@ -669,8 +673,12 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
                 char ch = name.charAt(0);
 
                 if ('a' <= ch && ch <= 'p') {
-                    Field field = (Field) (Object) new JSField(name, (Class) (Object) this, definition.getPropertyAs(NativeArray.class, name));
-                    privateFields.put(field.getName(), field);
+                    NativeArray metadata = definition.getPropertyAs(NativeArray.class, name);
+
+                    if (metadata.length() <= 4) {
+                        Field field = (Field) (Object) new JSField(name, (Class) (Object) this, metadata);
+                        privateFields.put(field.getName(), field);
+                    }
                 }
             }
         }

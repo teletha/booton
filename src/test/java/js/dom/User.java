@@ -10,7 +10,7 @@
 package js.dom;
 
 import static js.lang.Global.*;
-import js.dom.event.DOMEvent;
+import jsx.bwt.UIEvent;
 
 /**
  * @version 2013/10/20 10:02:05
@@ -26,8 +26,24 @@ public class User {
      */
     public static void click(Element element) {
         if (element != null) {
-            DOMEvent event = document.createEvent("UIEvent");
+            UIEvent event = document.createEvent("UIEvent");
             event.initEvent("click", true, true);
+
+            element.dispatchEvent(event);
+        }
+    }
+
+    /**
+     * <p>
+     * Emulate user mouse down action.
+     * </p>
+     * 
+     * @param element
+     */
+    public static void mouseDown(Element element) {
+        if (element != null) {
+            UIEvent event = document.createEvent("UIEvent");
+            event.initEvent("mousedown", true, true);
 
             element.dispatchEvent(event);
         }

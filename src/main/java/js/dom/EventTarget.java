@@ -18,12 +18,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import js.dom.event.Click;
-import js.dom.event.DOMEvent;
+import js.lang.NativeFunction;
 import jsx.Publishable;
 import jsx.bwt.Listen;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
+import kiss.I;
 import booton.translator.JavascriptNative;
 
 /**
@@ -37,6 +37,9 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
 
     /** The event listener holder. */
     private Map<UIAction, Listeners> events;
+
+    /** The event listener holder. */
+    private Map<Class, NativeListener> natives;
 
     /**
      * <p>
@@ -165,7 +168,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
 
             if (listeners != null) {
                 events.remove(type);
-                removeEventListener(type.name, listeners);
+                removeEventListener(type.name, listeners.nativeListener);
 
                 if (events.size() == 0) {
                     events = null;
@@ -215,7 +218,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
 
                 if (size == 0) {
                     events.remove(type);
-                    removeEventListener(type.name, listeners);
+                    removeEventListener(type.name, listeners.nativeListener);
 
                     if (events.size() == 0) {
                         events = null;
@@ -266,7 +269,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
             if (listeners == null) {
                 listeners = new Listeners();
                 events.put(type, listeners);
-                addEventListener(type.name, listeners);
+                addEventListener(type.name, listeners.nativeListener);
             }
             listeners.add(subscriber);
         }
@@ -284,16 +287,18 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      */
     @Override
     protected void startListening(Class type) {
-        if (DOMEvent.class.isAssignableFrom(type) && !Modifier.isAbstract(type.getModifiers())) {
-            System.out.println("register native listener " + type.getSimpleName().toLowerCase());
-            addEventListener(type.getSimpleName().toLowerCase(), new EventListener() {
+        if (UIEvent.class.isAssignableFrom(type) && !Modifier.isAbstract(type.getModifiers())) {
+            if (natives == null) {
+                natives = new HashMap();
+            }
 
-                @Override
-                public void handleEvent(UIEvent event) {
-                    System.out.println("native event invoked  " + event);
-                    publish(new Click());
-                }
-            });
+            NativeListener listener = natives.get(type);
+
+            if (listener == null) {
+                listener = new NativeListener(type);
+                natives.put(type, listener);
+            }
+            addEventListener(type.getSimpleName().toLowerCase(), listener.dom);
         }
     }
 
@@ -302,7 +307,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      */
     @Override
     protected void stopListening(Class type) {
-        if (DOMEvent.class.isAssignableFrom(type) && !Modifier.isAbstract(type.getModifiers())) {
+        if (UIEvent.class.isAssignableFrom(type) && !Modifier.isAbstract(type.getModifiers())) {
 
         }
     }
@@ -316,7 +321,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      * @param listener The object that receives a notification when an event of the specified type
      *            occurs.
      */
-    protected native void addEventListener(String type, EventListener listener);
+    protected native void addEventListener(String type, NativeFunction listener);
 
     /**
      * <p>
@@ -326,7 +331,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      * @param type A string representing the event type being removed.
      * @param listener The listener to be removed.
      */
-    protected native void removeEventListener(String type, EventListener listener);
+    protected native void removeEventListener(String type, NativeFunction listener);
 
     /**
      * <p>
@@ -340,15 +345,31 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
     protected native void dispatchEvent(UIEvent event);
 
     /**
-     * <p>
-     * Dispatches an Event at the specified EventTarget, invoking the affected EventListeners in the
-     * appropriate order. The normal event processing rules (including the capturing and optional
-     * bubbling phase) apply to events dispatched manually with dispatchEvent().
-     * </p>
-     * 
-     * @param event A Event object to be dispatched.
+     * @version 2013/10/20 22:43:45
      */
-    protected native void dispatchEvent(DOMEvent event);
+    private class NativeListener implements EventListener {
+
+        /** The event type. */
+        private final Class type;
+
+        /** The cache for native event listener. */
+        private final NativeFunction dom = new NativeFunction(this).bind(this);
+
+        /**
+         * @param type
+         */
+        private NativeListener(Class type) {
+            this.type = type;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handleEvent(UIEvent event) {
+            publish(I.make(type));
+        }
+    }
 
     /**
      * @version 2013/07/07 13:50:26
@@ -356,7 +377,10 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
     private static class Listeners implements EventListener {
 
         /** The actual listener holder. */
-        private CopyOnWriteArrayList<EventListener> listeners = new CopyOnWriteArrayList();
+        private final CopyOnWriteArrayList<EventListener> listeners = new CopyOnWriteArrayList();
+
+        /** The cache for native event listener. */
+        private final NativeFunction nativeListener = new NativeFunction(this).bind(this);
 
         /**
          * <p>

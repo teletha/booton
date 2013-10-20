@@ -65,6 +65,18 @@ public class UIEvent implements JavascriptNative {
 
     /**
      * <p>
+     * Initialize event.
+     * </p>
+     * 
+     * @param type The type of event.
+     * @param bubbles A boolean indicating whether the event should bubble up through the event
+     *            chain or not.
+     * @param cancelable A boolean indicating whether the event can be canceled.
+     */
+    public native void initEvent(String type, boolean bubbles, boolean cancelable);
+
+    /**
+     * <p>
      * Returns whether event.preventDefault() was ever called on this event object.
      * </p>
      * 
@@ -112,18 +124,4 @@ public class UIEvent implements JavascriptNative {
      * </p>
      */
     public native void stopImmediatePropagation();
-
-    /**
-     * @version 2013/04/02 16:51:33
-     */
-    public static class Offset implements JavascriptNative {
-
-        /** The top offset. */
-        @JavascriptNativeProperty
-        public int top;
-
-        /** The left offset. */
-        @JavascriptNativeProperty
-        public int left;
-    }
 }

@@ -57,41 +57,13 @@ public class EventTargetTest {
         User.click(element);
         assert listener.invoked == 1;
 
-        element.publish(new MouseOver());
+        User.mouseDown(element);
         assert listener.invoked == 1;
 
         element.unregister(listener);
 
-        element.publish(new Click());
+        User.click(element);
         assert listener.invoked == 1;
-    }
-
-    /**
-     * <p>
-     * Helper method to create click event.
-     * </p>
-     * 
-     * @return
-     */
-    private UIEvent click() {
-        UIEvent event = new UIEvent();
-        event.type = "click";
-
-        return event;
-    }
-
-    /**
-     * <p>
-     * Helper method to create mousedown event.
-     * </p>
-     * 
-     * @return
-     */
-    private UIEvent mousedown() {
-        UIEvent event = new UIEvent();
-        event.type = "mousedown";
-
-        return event;
     }
 
     /**

@@ -9,8 +9,10 @@
  */
 package js.dom.event;
 
+import jsx.bwt.UIEvent;
+
 /**
  * @version 2013/10/19 9:30:39
  */
-public class Click extends DOMEvent {
+public class Click extends UIEvent {
 }
