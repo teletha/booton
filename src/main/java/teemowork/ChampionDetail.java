@@ -192,11 +192,6 @@ public class ChampionDetail extends Page {
         calcurate();
     }
 
-    @Listen(type = UIAction.Click)
-    private void activeSkill() {
-
-    }
-
     /**
      * <p>
      * Calcurate current status.
@@ -627,6 +622,44 @@ public class ChampionDetail extends Page {
 
                 setTooltip(view);
             }
+        }
+    }
+
+    private static class Component {
+
+        public Element child() {
+            return null;
+        }
+    }
+
+    /**
+     * @version 2013/10/22 10:00:56
+     */
+    private class ChampionFaceIcon {
+
+        private Element level;
+
+        private void render(Element me) {
+            // apply champion icon
+
+            // display level
+            level = me.child(Level.class);
+        }
+
+        @Listen(type = UIAction.Click, abort = true)
+        private void levelUp() {
+            build.setLevel(build.getLevel() + 1);
+        }
+
+        @Listen(type = UIAction.ClickLeft, abort = true)
+        private void levelDown() {
+            build.setLevel(build.getLevel() - 1);
+        }
+
+        @Subscribable
+        private void modify(Build build) {
+            // change level text
+            level.text(build.getLevel());
         }
     }
 }
