@@ -7,9 +7,11 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.util.concurrent;
+package js.util;
 
-import java.util.HashMap;
+import java.util.Set;
+import java.util.Spliterator;
+import java.util.concurrent.ConcurrentHashMap.KeySetView;
 import java.util.concurrent.ConcurrentMap;
 
 import booton.translator.JavaAPIProvider;
@@ -29,6 +31,7 @@ class ConcurrentHashMap<K, V> extends HashMap<K, V> implements ConcurrentMap<K, 
         if (containsKey(key)) {
             return get(key);
         }
+
         return put(key, value);
     }
 
@@ -66,4 +69,47 @@ class ConcurrentHashMap<K, V> extends HashMap<K, V> implements ConcurrentMap<K, 
         }
         return null;
     }
+
+    /**
+     * Returns a {@link Set} view of the keys contained in this map. The set is backed by the map,
+     * so changes to the map are reflected in the set, and vice-versa. The set supports element
+     * removal, which removes the corresponding mapping from this map, via the
+     * {@code Iterator.remove}, {@code Set.remove}, {@code removeAll}, {@code retainAll}, and
+     * {@code clear} operations. It does not support the {@code add} or {@code addAll} operations.
+     * <p>
+     * The view's iterators and spliterators are <a href="package-summary.html#Weakly"><i>weakly
+     * consistent</i></a>.
+     * <p>
+     * The view's {@code spliterator} reports {@link Spliterator#CONCURRENT},
+     * {@link Spliterator#DISTINCT}, and {@link Spliterator#NONNULL}.
+     * 
+     * @return the set view
+     */
+    @Override
+    public KeySetView<K, V> keySet() {
+        return (KeySetView<K, V>) (Object) new Keys();
+    }
+
+    // /**
+    // * @version 2013/10/24 2:33:08
+    // */
+    // @JavaAPIProvider(KeySetView.class)
+    // private static class Entries<K, V> extends AbstractSet<K> {
+    //
+    // /**
+    // * {@inheritDoc}
+    // */
+    // @Override
+    // public Iterator<K> iterator() {
+    // return null;
+    // }
+    //
+    // /**
+    // * {@inheritDoc}
+    // */
+    // @Override
+    // public int size() {
+    // return 0;
+    // }
+    // }
 }

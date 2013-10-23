@@ -10,6 +10,7 @@
 package js.lang;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -418,7 +419,7 @@ public class NativeFunction<T> extends NativeObject {
         List<Method> methods = new ArrayList();
 
         for (Method method : type.getDeclaredMethods()) {
-            if (method.isBridge() || method.isSynthetic()) {
+            if (method.isBridge() || method.isSynthetic() || method.isDefault() || Modifier.isStatic(method.getModifiers())) {
                 continue;
             }
 

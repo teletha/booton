@@ -32,7 +32,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/09/10 23:43:34
  */
 @JavaAPIProvider(AnnotatedElement.class)
-abstract class JSAnnotatedElement {
+abstract class JSAnnotatedElement implements AnnotatedElement {
 
     /** The property name at Java definition. */
     protected final String name;
@@ -129,7 +129,8 @@ abstract class JSAnnotatedElement {
      * @return True if an annotation for the specified annotation type is present on this element, .
      *         else false.
      */
-    public final <A extends Annotation> boolean isAnnotationPresent(Class<A> annotationClass) {
+    @Override
+    public final boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
         return getAnnotation(annotationClass) != null;
     }
 
@@ -187,6 +188,36 @@ abstract class JSAnnotatedElement {
             }
         }
         return privateAnnotations.values().toArray(new Annotation[privateAnnotations.size()]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T extends Annotation> T[] getAnnotationsByType(Class<T> annotationClass) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T extends Annotation> T getDeclaredAnnotation(Class<T> annotationClass) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T extends Annotation> T[] getDeclaredAnnotationsByType(Class<T> annotationClass) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**

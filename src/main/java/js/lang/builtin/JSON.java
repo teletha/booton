@@ -20,7 +20,6 @@ import js.lang.NativeArray;
 import js.lang.NativeNumber;
 import js.lang.NativeObject;
 import kiss.model.Model;
-import sun.org.mozilla.javascript.internal.IdScriptableObject;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
@@ -77,10 +76,10 @@ public class JSON implements JavascriptNative {
      * @return A restored java object.
      */
     private NativeObject parse(NativeObject java, Object js) {
-        if (js instanceof IdScriptableObject) {
-            IdScriptableObject object = (IdScriptableObject) js;
+        if (js instanceof Map) {
+            Map<String, Object> object = (Map) js;
 
-            for (Object id : object.getIds()) {
+            for (String id : object.keySet()) {
                 String key = id.toString();
                 Object value = object.get(id);
 

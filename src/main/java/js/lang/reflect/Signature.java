@@ -9,6 +9,8 @@
  */
 package js.lang.reflect;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.ParameterizedType;
@@ -212,6 +214,76 @@ class Signature {
         @Override
         public String getName() {
             return name;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Annotation[] getAnnotations() {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public <T extends Annotation> T[] getAnnotationsByType(Class<T> annotationClass) {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public <T extends Annotation> T getDeclaredAnnotation(Class<T> annotationClass) {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public <T extends Annotation> T[] getDeclaredAnnotationsByType(Class<T> annotationClass) {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Annotation[] getDeclaredAnnotations() {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public AnnotatedType[] getAnnotatedBounds() {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
         }
 
         /**

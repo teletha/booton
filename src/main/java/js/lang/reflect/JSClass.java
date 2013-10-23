@@ -820,7 +820,8 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
 
             // match agains interfaces
             for (Class type : clazz.getInterfaces()) {
-                if (isAssignableFrom(type)) {
+                System.out.println(clazz + "   " + type.getName());
+                if (clazz == type || isAssignableFrom(type)) {
                     return true;
                 }
             }
@@ -1385,6 +1386,6 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      */
     @JavaAPIProvider(ProtectionDomain.class)
     private static class JSProtectionDomain {
-
     }
+
 }
