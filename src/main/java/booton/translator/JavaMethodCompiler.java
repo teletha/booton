@@ -226,6 +226,8 @@ class JavaMethodCompiler extends MethodVisitor {
     JavaMethodCompiler(Javascript script, ScriptWriter code, String original, String name, String description, boolean isStatic) {
         super(ASM4);
 
+        Recoder.addMethod(original);
+
         this.script = script;
         this.code = code;
         this.methodName = name;

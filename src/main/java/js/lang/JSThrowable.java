@@ -361,7 +361,7 @@ class JSThrowable {
             start++;
         }
 
-        List<StackTraceElement> elements = new ArrayList();
+        List<JSStackTraceElement> elements = new ArrayList();
 
         for (int i = start; i < end; i++) {
             Matcher matcher = pattern.matcher(lines[i].trim());
@@ -376,7 +376,7 @@ class JSThrowable {
                 int index = method.lastIndexOf(".");
                 method = index == -1 ? method : method.substring(index + 1);
 
-                elements.add(new StackTraceElement("", method, matcher.group(2), Integer.parseInt(matcher.group(3))));
+                elements.add(new JSStackTraceElement("", method, matcher.group(2), Integer.parseInt(matcher.group(3))));
             }
         }
 

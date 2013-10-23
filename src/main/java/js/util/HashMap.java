@@ -237,7 +237,7 @@ class HashMap<K, V> extends AbstractMap<K, V> {
     /**
      * @version 2012/12/09 21:04:03
      */
-    private class Keys extends AbstractSet<K> {
+    protected class Keys extends AbstractSet<K> {
 
         /**
          * {@inheritDoc}

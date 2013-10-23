@@ -19,16 +19,15 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentHashMap.KeySetView;
 
 import js.lang.Global;
 import js.lang.NativeObject;
@@ -81,9 +80,6 @@ public class Javascript {
 
     /** The local identifier counter for {@link Javascript}. */
     private static int counter = 0;
-
-    /** The compiling route. */
-    private static Deque<Javascript> compiling = new ArrayDeque();
 
     // initialization
     static {
@@ -192,7 +188,7 @@ public class Javascript {
      */
     void writeTo(Appendable output, Set<Class> defined, Class... requirements) {
         // record compile route
-        compiling.addFirst(this);
+        Recoder.add(this);
 
         try {
             manager.add(requirements);
@@ -217,7 +213,7 @@ public class Javascript {
             I.quiet(output);
         } finally {
             // record compile route
-            compiling.removeFirst();
+            Recoder.remove();
         }
     }
 
@@ -231,7 +227,7 @@ public class Javascript {
      */
     private void write(Appendable output, Set defined) throws IOException {
         // record compile route
-        compiling.addFirst(this);
+        Recoder.add(this);
 
         try {
             // compile script
@@ -266,7 +262,7 @@ public class Javascript {
             }
         } finally {
             // record compile route
-            compiling.removeFirst();
+            Recoder.remove();
         }
     }
 
@@ -333,20 +329,12 @@ public class Javascript {
         } catch (TranslationError e) {
             e.write("\r\n");
 
-            for (Javascript script : compiling) {
-                e.write(" at ", script.source.getName());
-            }
-
-            throw e;
+            throw Recoder.write(e);
         } catch (Throwable e) {
             TranslationError error = new TranslationError(e);
             error.write("Can't compile ", source.getName() + ".");
 
-            for (Javascript script : compiling) {
-                error.write(" at ", script.source.getName());
-            }
-
-            throw error;
+            throw Recoder.write(error);
         }
 
         for (Annotation annotation : source.getAnnotations()) {
@@ -507,9 +495,9 @@ public class Javascript {
             dependency = dependency.getComponentType();
         }
 
-        Javascript current = compiling.peekFirst();
+        Javascript current = Recoder.getCurrent();
 
-        if (dependency != current.source) {
+        if (dependency != current.source && dependency != KeySetView.class) {
             current.dependencies.add(dependency);
         }
     }
