@@ -49,6 +49,28 @@ class JSInteger extends JSNumber {
     }
 
     /**
+     * Returns a hash code for this {@code Integer}.
+     * 
+     * @return a hash code value for this object, equal to the primitive {@code int} value
+     *         represented by this {@code Integer} object.
+     */
+    @Override
+    public int hashCode() {
+        return value.intValue();
+    }
+
+    /**
+     * Returns a hash code for a {@code int} value; compatible with {@code Integer.hashCode()}.
+     * 
+     * @param value the value to hash
+     * @since 1.8
+     * @return a hash code value for a {@code int} value.
+     */
+    public static int hashCode(int value) {
+        return value;
+    }
+
+    /**
      * <p>
      * Parses the string argument as a signed decimal integer. The characters in the string must all
      * be decimal digits, except that the first character may be an ASCII minus sign {@code '-'} (

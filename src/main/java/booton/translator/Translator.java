@@ -12,6 +12,7 @@ package booton.translator;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.List;
 
 import js.lang.NativeFunction;
@@ -358,7 +359,7 @@ public class Translator<T> implements Extensible {
                     operands.set(i, operands.get(i).cast(char.class));
                 }
             }
-
+            System.out.println(Arrays.toString(types) + "   " + operands.get(i));
             builder.append(operands.get(i).disclose());
 
             if (i + 1 != operands.size()) {

@@ -7,8 +7,9 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.util;
+package js.util.concurrent;
 
+import java.util.HashMap;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.concurrent.ConcurrentHashMap.KeySetView;
@@ -87,29 +88,6 @@ class ConcurrentHashMap<K, V> extends HashMap<K, V> implements ConcurrentMap<K, 
      */
     @Override
     public KeySetView<K, V> keySet() {
-        return (KeySetView<K, V>) (Object) new Keys();
+        return (KeySetView<K, V>) (Object) super.keySet();
     }
-
-    // /**
-    // * @version 2013/10/24 2:33:08
-    // */
-    // @JavaAPIProvider(KeySetView.class)
-    // private static class Entries<K, V> extends AbstractSet<K> {
-    //
-    // /**
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // public Iterator<K> iterator() {
-    // return null;
-    // }
-    //
-    // /**
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // public int size() {
-    // return 0;
-    // }
-    // }
 }
