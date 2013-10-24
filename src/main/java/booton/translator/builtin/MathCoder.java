@@ -139,6 +139,19 @@ class MathCoder extends Translator<Math> {
     }
 
     /**
+     * Returns the greater of two {@code long} values. That is, the result is the argument closer to
+     * the value of {@link Long#MAX_VALUE}. If the arguments have the same value, the result is that
+     * same value.
+     * 
+     * @param a an argument.
+     * @param b another argument.
+     * @return the larger of {@code a} and {@code b}.
+     */
+    public String max(long a, long b) {
+        return "Math.max(" + param(0) + "," + param(1) + ")";
+    }
+
+    /**
      * <p>
      * Returns the greater of two {@code int} values. That is, the result is the argument closer to
      * the value of {@link Integer#MAX_VALUE}. If the arguments have the same value, the result is
