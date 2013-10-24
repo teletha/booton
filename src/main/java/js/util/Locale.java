@@ -19,8 +19,36 @@ import booton.translator.JavaAPIProvider;
 @JavaAPIProvider(java.util.Locale.class)
 class Locale {
 
+    /**
+     * Useful constant for country.
+     */
+    public static final Locale US = new Locale("en", "US");
+
     /** The base language. */
     private String language = "en";
+
+    /** The base country. */
+    private String country = "US";
+
+    /**
+     * @param language
+     * @param country
+     */
+    private Locale(String language, String country) {
+        this.language = language;
+        this.country = country;
+    }
+
+    /**
+     * Returns the country/region code for this locale, which should either be the empty string, an
+     * uppercase ISO 3166 2-letter code, or a UN M.49 3-digit code.
+     * 
+     * @return The country/region code, or the empty string if none is defined.
+     * @see #getDisplayCountry
+     */
+    public String getCountry() {
+        return country;
+    }
 
     /**
      * Returns the language code of this Locale.
@@ -59,7 +87,7 @@ class Locale {
      * @return the default locale for this instance of the Java Virtual Machine
      */
     public static Locale getDefault() {
-        return new Locale();
+        return US;
     }
 
     /**

@@ -9,6 +9,8 @@
  */
 package js.lang;
 
+import java.math.BigInteger;
+
 import sun.misc.DoubleConsts;
 import booton.translator.JavaAPIProvider;
 
@@ -161,7 +163,42 @@ class JSDouble extends JSNumber {
      * @return the bits that represent the floating-point number.
      * @since 1.3
      */
-    public static native long doubleToRawLongBits(double value);
+    public static long doubleToRawLongBits(double value) {
+        boolean negative = value < 0;
+
+        if (negative) {
+            value *= -1;
+        }
+
+        double exp = Math.floor(Math.log(value) / Math.log(2));
+        double frac = Math.floor(value * Math.pow(2, 52 - exp));
+        exp += 1023;
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(negative ? "1" : "0");
+
+        String mix = "0000000000".concat(Long.toBinaryString((long) exp));
+        mix = mix.substring(mix.length() - 11);
+
+        builder.append(mix).append(Long.toBinaryString((long) frac).substring(1));
+
+        return new BigInteger(builder.toString(), 2).longValue();
+    }
+
+    /**
+     * Returns a new {@code double} initialized to the value represented by the specified
+     * {@code String}, as performed by the {@code valueOf} method of class {@code Double}.
+     * 
+     * @param s the string to be parsed.
+     * @return the {@code double} value represented by the string argument.
+     * @throws NullPointerException if the string is null
+     * @throws NumberFormatException if the string does not contain a parsable {@code double}.
+     * @see java.lang.Double#valueOf(String)
+     * @since 1.2
+     */
+    public static double parseDouble(String s) throws NumberFormatException {
+        return Global.parseFloat(s);
+    }
 
     /**
      * Returns a string representation of the {@code double} argument. All characters mentioned

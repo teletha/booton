@@ -12,7 +12,6 @@ package js.lang;
 import static js.lang.JSStringHelper.*;
 
 import java.util.Arrays;
-import java.util.Formatter;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.PatternSyntaxException;
@@ -1054,7 +1053,7 @@ class JSString implements Comparable<String>, CharSequence {
      * @since 1.5
      */
     public static String format(String format, Object... args) {
-        return new Formatter().format(format, args).toString();
+        return format;
     }
 
     /**

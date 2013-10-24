@@ -90,8 +90,6 @@ class JavaSignatureCompiler {
         } else if (type instanceof GenericArrayType) {
             compile((GenericArrayType) type);
         } else {
-            Javascript.require((Class) type);
-
             code.append(Javascript.computeSimpleClassName((Class) type));
         }
     }
