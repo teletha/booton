@@ -30,4 +30,9 @@ public class DoubleTest {
     public void valueOfString() throws Exception {
         assert Double.valueOf("0.1").doubleValue() == 0.1;
     }
+
+    @Test
+    public void doubleToRawLongBits() throws Exception {
+        assert Double.doubleToRawLongBits(0) == 0;
+    }
 }

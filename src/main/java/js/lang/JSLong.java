@@ -49,6 +49,30 @@ class JSLong extends JSNumber {
     }
 
     /**
+     * Returns a hash code for this {@code Long}. The result is the exclusive OR of the two halves
+     * of the primitive {@code long} value held by this {@code Long} object. That is, the hashcode
+     * is the value of the expression: <blockquote>
+     * {@code (int)(this.longValue()^(this.longValue()>>>32))} </blockquote>
+     * 
+     * @return a hash code value for this object.
+     */
+    @Override
+    public int hashCode() {
+        return hashCode(value.longValue());
+    }
+
+    /**
+     * Returns a hash code for a {@code long} value; compatible with {@code Long.hashCode()}.
+     * 
+     * @param value the value to hash
+     * @return a hash code value for a {@code long} value.
+     * @since 1.8
+     */
+    public static int hashCode(long value) {
+        return (int) (value ^ (value >>> 32));
+    }
+
+    /**
      * Parses the string argument as a signed decimal {@code long}. The characters in the string
      * must all be decimal digits, except that the first character may be an ASCII minus sign
      * {@code '-'} (<code>&#92;u002D'</code>) to indicate a negative value or an ASCII plus sign

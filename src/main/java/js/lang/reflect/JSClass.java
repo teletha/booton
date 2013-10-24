@@ -820,8 +820,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
 
             // match agains interfaces
             for (Class type : clazz.getInterfaces()) {
-                System.out.println(clazz + "   " + type.getName());
-                if (clazz == type || isAssignableFrom(type)) {
+                if (isAssignableFrom(type)) {
                     return true;
                 }
             }

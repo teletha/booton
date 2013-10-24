@@ -32,7 +32,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/09/10 23:43:34
  */
 @JavaAPIProvider(AnnotatedElement.class)
-abstract class JSAnnotatedElement implements AnnotatedElement {
+abstract class JSAnnotatedElement {
 
     /** The property name at Java definition. */
     protected final String name;
@@ -129,7 +129,6 @@ abstract class JSAnnotatedElement implements AnnotatedElement {
      * @return True if an annotation for the specified annotation type is present on this element, .
      *         else false.
      */
-    @Override
     public final boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
         return getAnnotation(annotationClass) != null;
     }
@@ -191,9 +190,21 @@ abstract class JSAnnotatedElement implements AnnotatedElement {
     }
 
     /**
-     * {@inheritDoc}
+     * Returns annotations that are <em>associated</em> with this element. If there are no
+     * annotations <em>associated</em> with this element, the return value is an array of length 0.
+     * The difference between this method and {@link #getAnnotation(Class)} is that this method
+     * detects if its argument is a <em>repeatable
+     * annotation type</em> (JLS 9.6), and if so, attempts to find one or more annotations of that
+     * type by "looking through" a container annotation. The caller of this method is free to modify
+     * the returned array; it will have no effect on the arrays returned to other callers.
+     * 
+     * @param <T> the type of the annotation to query for and return if present
+     * @param annotationClass the Class object corresponding to the annotation type
+     * @return all this element's annotations for the specified annotation type if associated with
+     *         this element, else an array of length zero
+     * @throws NullPointerException if the given annotation class is null
+     * @since 1.8
      */
-    @Override
     public <T extends Annotation> T[] getAnnotationsByType(Class<T> annotationClass) {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
@@ -201,9 +212,17 @@ abstract class JSAnnotatedElement implements AnnotatedElement {
     }
 
     /**
-     * {@inheritDoc}
+     * Returns this element's annotation for the specified type if such an annotation is
+     * <em>directly present</em>, else null. This method ignores inherited annotations. (Returns
+     * null if no annotations are directly present on this element.)
+     * 
+     * @param <T> the type of the annotation to query for and return if directly present
+     * @param annotationClass the Class object corresponding to the annotation type
+     * @return this element's annotation for the specified annotation type if directly present on
+     *         this element, else null
+     * @throws NullPointerException if the given annotation class is null
+     * @since 1.8
      */
-    @Override
     public <T extends Annotation> T getDeclaredAnnotation(Class<T> annotationClass) {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
@@ -211,9 +230,24 @@ abstract class JSAnnotatedElement implements AnnotatedElement {
     }
 
     /**
-     * {@inheritDoc}
+     * Returns this element's annotation(s) for the specified type if such annotations are either
+     * <em>directly present</em> or <em>indirectly present</em>. This method ignores inherited
+     * annotations. If there are no specified annotations directly or indirectly present on this
+     * element, the return value is an array of length 0. The difference between this method and
+     * {@link #getDeclaredAnnotation(Class)} is that this method detects if its argument is a
+     * <em>repeatable annotation type</em> (JLS 9.6), and if so, attempts to find one or more
+     * annotations of that type by "looking through" a container annotation if one is present. The
+     * caller of this method is free to modify the returned array; it will have no effect on the
+     * arrays returned to other callers.
+     * 
+     * @param <T> the type of the annotation to query for and return if directly or indirectly
+     *            present
+     * @param annotationClass the Class object corresponding to the annotation type
+     * @return all this element's annotations for the specified annotation type if directly or
+     *         indirectly present on this element, else an array of length zero
+     * @throws NullPointerException if the given annotation class is null
+     * @since 1.8
      */
-    @Override
     public <T extends Annotation> T[] getDeclaredAnnotationsByType(Class<T> annotationClass) {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.

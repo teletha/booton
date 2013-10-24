@@ -9,6 +9,7 @@
  */
 package js.lang;
 
+import sun.misc.DoubleConsts;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -47,6 +48,120 @@ class JSDouble extends JSNumber {
     public JSDouble(String value) throws NumberFormatException {
         super(valueOf(value).doubleValue());
     }
+
+    /**
+     * Returns a hash code for this {@code Double} object. The result is the exclusive OR of the two
+     * halves of the {@code long} integer bit representation, exactly as produced by the method
+     * {@link #doubleToLongBits(double)}, of the primitive {@code double} value represented by this
+     * {@code Double} object. That is, the hash code is the value of the expression: <blockquote>
+     * {@code (int)(v^(v>>>32))} </blockquote> where {@code v} is defined by: <blockquote>
+     * {@code long v = Double.doubleToLongBits(this.doubleValue());} </blockquote>
+     * 
+     * @return a {@code hash code} value for this object.
+     */
+    @Override
+    public int hashCode() {
+        return value.intValue();
+    }
+
+    /**
+     * Returns a hash code for a {@code double} value; compatible with {@code Double.hashCode()}.
+     * 
+     * @param value the value to hash
+     * @return a hash code value for a {@code double} value.
+     * @since 1.8
+     */
+    public static int hashCode(double value) {
+        long bits = doubleToLongBits(value);
+        return (int) (bits ^ (bits >>> 32));
+    }
+
+    /**
+     * Compares the two specified {@code double} values. The sign of the integer value returned is
+     * the same as that of the integer that would be returned by the call:
+     * 
+     * <pre>
+     *    new Double(d1).compareTo(new Double(d2))
+     * </pre>
+     * 
+     * @param d1 the first {@code double} to compare
+     * @param d2 the second {@code double} to compare
+     * @return the value {@code 0} if {@code d1} is numerically equal to {@code d2}; a value less
+     *         than {@code 0} if {@code d1} is numerically less than {@code d2}; and a value greater
+     *         than {@code 0} if {@code d1} is numerically greater than {@code d2}.
+     * @since 1.4
+     */
+    public static int compare(double d1, double d2) {
+        if (d1 < d2) {
+            return -1; // Neither val is NaN, thisVal is smaller
+        }
+
+        if (d1 > d2) {
+            return 1; // Neither val is NaN, thisVal is larger
+        }
+        return 0;
+    }
+
+    /**
+     * Returns a representation of the specified floating-point value according to the IEEE 754
+     * floating-point "double format" bit layout.
+     * <p>
+     * Bit 63 (the bit that is selected by the mask {@code 0x8000000000000000L}) represents the sign
+     * of the floating-point number. Bits 62-52 (the bits that are selected by the mask
+     * {@code 0x7ff0000000000000L}) represent the exponent. Bits 51-0 (the bits that are selected by
+     * the mask {@code 0x000fffffffffffffL}) represent the significand (sometimes called the
+     * mantissa) of the floating-point number.
+     * <p>
+     * If the argument is positive infinity, the result is {@code 0x7ff0000000000000L}.
+     * <p>
+     * If the argument is negative infinity, the result is {@code 0xfff0000000000000L}.
+     * <p>
+     * If the argument is NaN, the result is {@code 0x7ff8000000000000L}.
+     * <p>
+     * In all cases, the result is a {@code long} integer that, when given to the
+     * {@link #longBitsToDouble(long)} method, will produce a floating-point value the same as the
+     * argument to {@code doubleToLongBits} (except all NaN values are collapsed to a single
+     * "canonical" NaN value).
+     * 
+     * @param value a {@code double} precision floating-point number.
+     * @return the bits that represent the floating-point number.
+     */
+    public static long doubleToLongBits(double value) {
+        long result = doubleToRawLongBits(value);
+        // Check for NaN based on values of bit fields, maximum
+        // exponent and nonzero significand.
+        if (((result & DoubleConsts.EXP_BIT_MASK) == DoubleConsts.EXP_BIT_MASK) && (result & DoubleConsts.SIGNIF_BIT_MASK) != 0L)
+            result = 0x7ff8000000000000L;
+        return result;
+    }
+
+    /**
+     * Returns a representation of the specified floating-point value according to the IEEE 754
+     * floating-point "double format" bit layout, preserving Not-a-Number (NaN) values.
+     * <p>
+     * Bit 63 (the bit that is selected by the mask {@code 0x8000000000000000L}) represents the sign
+     * of the floating-point number. Bits 62-52 (the bits that are selected by the mask
+     * {@code 0x7ff0000000000000L}) represent the exponent. Bits 51-0 (the bits that are selected by
+     * the mask {@code 0x000fffffffffffffL}) represent the significand (sometimes called the
+     * mantissa) of the floating-point number.
+     * <p>
+     * If the argument is positive infinity, the result is {@code 0x7ff0000000000000L}.
+     * <p>
+     * If the argument is negative infinity, the result is {@code 0xfff0000000000000L}.
+     * <p>
+     * If the argument is NaN, the result is the {@code long} integer representing the actual NaN
+     * value. Unlike the {@code doubleToLongBits} method, {@code doubleToRawLongBits} does not
+     * collapse all the bit patterns encoding a NaN to a single "canonical" NaN value.
+     * <p>
+     * In all cases, the result is a {@code long} integer that, when given to the
+     * {@link #longBitsToDouble(long)} method, will produce a floating-point value the same as the
+     * argument to {@code doubleToRawLongBits}.
+     * 
+     * @param value a {@code double} precision floating-point number.
+     * @return the bits that represent the floating-point number.
+     * @since 1.3
+     */
+    public static native long doubleToRawLongBits(double value);
 
     /**
      * Returns a string representation of the {@code double} argument. All characters mentioned
