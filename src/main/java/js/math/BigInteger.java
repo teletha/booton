@@ -9,13 +9,15 @@
  */
 package js.math;
 
+import java.util.Arrays;
+
 import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/09/24 16:43:40
  */
 @JavaAPIProvider(java.math.BigInteger.class)
-class BigInteger extends Number {
+public class BigInteger extends Number {
 
     /**
      * The {@code BigInteger} constant 1.
@@ -179,9 +181,10 @@ class BigInteger extends Number {
      */
     @Override
     public long longValue() {
+        System.out.println(numberLength + "  @@@  " + Arrays.toString(digits) + "   " + (digits[0] & 0xFFFFFFFFL));
         long value = (numberLength > 1) ? (((long) digits[1]) << 32) | (digits[0] & 0xFFFFFFFFL)
                 : (digits[0] & 0xFFFFFFFFL);
-
+        System.out.println(value);
         return (sign * value);
     }
 
@@ -224,18 +227,18 @@ class BigInteger extends Number {
     /**
      * @see BigInteger#BigInteger(String, int)
      */
-    private static void setFromString(BigInteger bi, String val, int radix) {
+    private static void setFromString(BigInteger big, String value, int radix) {
         int sign;
         int[] digits;
         int numberLength;
-        int stringLength = val.length();
+        int length = value.length();
         int startChar;
-        int endChar = stringLength;
+        int endChar = length;
 
-        if (val.charAt(0) == '-') {
+        if (value.charAt(0) == '-') {
             sign = -1;
             startChar = 1;
-            stringLength--;
+            length--;
         } else {
             sign = 1;
             startChar = 0;
@@ -249,8 +252,8 @@ class BigInteger extends Number {
          */
 
         int charsPerInt = Conversion.digitFitInInt[radix];
-        int bigRadixDigitsLength = stringLength / charsPerInt;
-        int topChars = stringLength % charsPerInt;
+        int bigRadixDigitsLength = (int) Math.floor(length / charsPerInt);
+        int topChars = length % charsPerInt;
 
         if (topChars != 0) {
             bigRadixDigitsLength++;
@@ -265,19 +268,25 @@ class BigInteger extends Number {
         int substrStart = startChar;
 
         while (substrStart < endChar) {
-            int bigRadixDigit = Integer.parseInt(val.substring(substrStart, substrEnd), radix);
+            int bigRadixDigit = Integer.parseInt(value.substring(substrStart, substrEnd), radix);
+            // System.out.println(bigRadixDigit);
             newDigit = Multiplication.multiplyByInt(digits, digitIndex, bigRadix);
+            System.out.println(Arrays.toString(digits) + "   " + digitIndex + "   " + bigRadixDigit + " @");
             newDigit += Elementary.inplaceAdd(digits, digitIndex, bigRadixDigit);
             digits[digitIndex++] = newDigit;
-
+            System.out.println(Arrays.toString(digits) + "   ##   " + newDigit);
             substrStart = substrEnd;
             substrEnd = substrStart + charsPerInt;
+            System.out.println(substrStart + " __  " + substrEnd);
         }
+
         numberLength = digitIndex;
-        bi.sign = sign;
-        bi.numberLength = numberLength;
-        bi.digits = digits;
-        bi.cutOffLeadingZeroes();
+        big.sign = sign;
+        big.numberLength = numberLength;
+        big.digits = digits;
+        big.cutOffLeadingZeroes();
+
+        System.out.println("result " + big.longValue());
     }
 
     public static BigInteger valueOf(long val) {

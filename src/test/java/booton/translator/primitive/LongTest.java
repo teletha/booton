@@ -11,6 +11,8 @@ package booton.translator.primitive;
 
 import org.junit.Test;
 
+import booton.translator.Debuggable;
+import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
@@ -288,6 +290,28 @@ public class LongTest extends ScriptTester {
                 return value >> 1;
             }
         });
+    }
+
+    @Test
+    public void shiftRight2() {
+        test(new Scriptable() {
+
+            private int aa = 2145386496;
+
+            @Debuggable
+            long act(@Param(longs = {2145386496L}) long value) {
+                System.out.println(aa >> 32);
+                System.out.println(value >> 32);
+                System.out.println(shift(value, 32));
+                return value >> 32;
+            }
+
+            @Debuggable
+            private long shift(long num, int pow) {
+                return Math.round(num / Math.pow(2, pow));
+            }
+        });
+
     }
 
     @Test

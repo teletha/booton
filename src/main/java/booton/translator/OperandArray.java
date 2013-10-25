@@ -70,7 +70,7 @@ class OperandArray extends Operand {
         int i = Integer.valueOf(index.toString()).intValue();
 
         if (items.size() <= i) {
-            for (int j = 0; j < i + 2 - items.size(); j++) {
+            for (int j = 0; j < i + 2; j++) {
                 items.add(null);
             }
         }

@@ -9,8 +9,6 @@
  */
 package js.lang;
 
-import java.math.BigInteger;
-
 import sun.misc.DoubleConsts;
 import booton.translator.JavaAPIProvider;
 
@@ -181,8 +179,8 @@ class JSDouble extends JSNumber {
         mix = mix.substring(mix.length() - 11);
 
         builder.append(mix).append(Long.toBinaryString((long) frac).substring(1));
-
-        return new BigInteger(builder.toString(), 2).longValue();
+        System.out.println(Long.parseLong(builder.toString(), 2));
+        return Long.parseLong(builder.toString(), 2);
     }
 
     /**

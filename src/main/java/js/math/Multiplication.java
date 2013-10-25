@@ -53,7 +53,7 @@ class Multiplication {
         for (int i = 0; i < aSize; i++) {
             carry = unsignedMultAddAdd(a[i], factor, (int) carry, 0);
             res[i] = (int) carry;
-            carry >>>= 32;
+            carry = Elementary.shift(carry, 32);
         }
         return (int) carry;
     }
