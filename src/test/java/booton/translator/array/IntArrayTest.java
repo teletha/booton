@@ -74,6 +74,16 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
+    public void ArrayByShorthandWithFirstZero2() {
+        test(new Scriptable() {
+
+            public int[] act() {
+                return new int[] {0, 0, -1};
+            }
+        });
+    }
+
+    @Test
     public void ArrayByShorthandWithlastZero() {
         test(new Scriptable() {
 

@@ -19,15 +19,20 @@ class Elementary {
      * 
      * @return a possible generated carry (0 or 1)
      */
-    static int inplaceAdd(int a[], final int aSize, final int addend) {
+    static int inplaceAdd(int[] array, int aSize, int addend) {
         long carry = addend & 0xFFFFFFFFL;
 
         for (int i = 0; (carry != 0) && (i < aSize); i++) {
-            carry += a[i] & 0xFFFFFFFFL;
-            a[i] = (int) carry;
-            carry >>= 32;
+            carry += array[i] & 0xFFFFFFFFL;
+            System.out.println(carry + "   carry");
+            array[i] = (int) carry;
+            carry = shift(carry, 32);
+            System.out.println(carry + "     carry change");
         }
         return (int) carry;
     }
 
+    static long shift(long num, int pow) {
+        return Math.round(num / Math.pow(2, pow));
+    }
 }
