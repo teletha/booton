@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalDouble;
 import java.util.Set;
 
 import js.lang.NativeObject;
@@ -246,6 +247,10 @@ class JavaMethodCompiler extends MethodVisitor {
             variables.type(isStatic ? i : i + 1).type(convert(parameters[i]));
         }
         NodeDebugger.whileProcess = true;
+
+        if (script.source == OptionalDouble.class && original.equals("equals")) {
+            debuggable = true;
+        }
     }
 
     /**

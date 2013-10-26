@@ -9,10 +9,11 @@
  */
 package js.util.concurrent;
 
+import java.util.AbstractSet;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.Spliterator;
-import java.util.concurrent.ConcurrentHashMap.KeySetView;
 import java.util.concurrent.ConcurrentMap;
 
 import booton.translator.JavaAPIProvider;
@@ -87,7 +88,30 @@ class ConcurrentHashMap<K, V> extends HashMap<K, V> implements ConcurrentMap<K, 
      * @return the set view
      */
     @Override
-    public KeySetView<K, V> keySet() {
-        return (KeySetView<K, V>) (Object) super.keySet();
+    public java.util.concurrent.ConcurrentHashMap.KeySetView<K, V> keySet() {
+        return (java.util.concurrent.ConcurrentHashMap.KeySetView<K, V>) (Object) super.keySet();
+    }
+
+    /**
+     * @version 2013/10/26 12:27:31
+     */
+    @JavaAPIProvider(java.util.concurrent.ConcurrentHashMap.KeySetView.class)
+    private static class KeySetView<K, V> extends AbstractSet<K> {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Iterator<K> iterator() {
+            return null;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int size() {
+            return 0;
+        }
     }
 }

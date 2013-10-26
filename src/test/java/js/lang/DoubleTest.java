@@ -35,8 +35,6 @@ public class DoubleTest {
 
     @Test
     public void doubleToRawLongBits() throws Exception {
-        System.out.println(aaa(1));
-        System.out.println("\r\n");
         // assert Double.doubleToRawLongBits(1) == 4607182418800017408L;
         // assert Double.doubleToRawLongBits(2) == 4611686018427387904L;
         // assert Double.doubleToRawLongBits(-1) == -4616189618054758400L;

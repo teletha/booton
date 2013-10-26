@@ -17,7 +17,7 @@ import org.objectweb.asm.util.ASMifier;
 public class BytecodeDump {
 
     public static void main(String[] args) throws Exception {
-        dump(js.util.Optional.class);
+        dump(js.util.OptionalDouble.class);
     }
 
     private static void dump(Class type) throws Exception {

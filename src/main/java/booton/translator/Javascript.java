@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentHashMap.KeySetView;
 
 import js.lang.Global;
 import js.lang.NativeObject;
@@ -100,6 +99,9 @@ public class Javascript {
 
     /** The all dependency scripts. */
     private final Set<Class> dependencies = new LinkedHashSet();
+
+    /** The all dependency scripts. */
+    private final Set<Class> metadataDependencies = new LinkedHashSet();
 
     /** The constructor list of this script. */
     private final List<Integer> constructors = new ArrayList();
@@ -497,8 +499,27 @@ public class Javascript {
 
         Javascript current = Recoder.getCurrent();
 
-        if (dependency != current.source && dependency != KeySetView.class) {
+        if (dependency != current.source) {
             current.dependencies.add(dependency);
+        }
+    }
+
+    /**
+     * <p>
+     * Require the specified java source code.
+     * </p>
+     * 
+     * @param dependency A dependency class.
+     */
+    public static final void requireMetadata(Class dependency) {
+        while (dependency.isArray()) {
+            dependency = dependency.getComponentType();
+        }
+
+        Javascript current = Recoder.getCurrent();
+
+        if (dependency != current.source) {
+            current.metadataDependencies.add(dependency);
         }
     }
 
