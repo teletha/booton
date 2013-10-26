@@ -9,7 +9,6 @@
  */
 package js.lang;
 
-import sun.misc.DoubleConsts;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -72,8 +71,7 @@ class JSDouble extends JSNumber {
      * @since 1.8
      */
     public static int hashCode(double value) {
-        long bits = doubleToLongBits(value);
-        return (int) (bits ^ (bits >>> 32));
+        return Double.valueOf(value).intValue();
     }
 
     /**
@@ -102,86 +100,90 @@ class JSDouble extends JSNumber {
         return 0;
     }
 
-    /**
-     * Returns a representation of the specified floating-point value according to the IEEE 754
-     * floating-point "double format" bit layout.
-     * <p>
-     * Bit 63 (the bit that is selected by the mask {@code 0x8000000000000000L}) represents the sign
-     * of the floating-point number. Bits 62-52 (the bits that are selected by the mask
-     * {@code 0x7ff0000000000000L}) represent the exponent. Bits 51-0 (the bits that are selected by
-     * the mask {@code 0x000fffffffffffffL}) represent the significand (sometimes called the
-     * mantissa) of the floating-point number.
-     * <p>
-     * If the argument is positive infinity, the result is {@code 0x7ff0000000000000L}.
-     * <p>
-     * If the argument is negative infinity, the result is {@code 0xfff0000000000000L}.
-     * <p>
-     * If the argument is NaN, the result is {@code 0x7ff8000000000000L}.
-     * <p>
-     * In all cases, the result is a {@code long} integer that, when given to the
-     * {@link #longBitsToDouble(long)} method, will produce a floating-point value the same as the
-     * argument to {@code doubleToLongBits} (except all NaN values are collapsed to a single
-     * "canonical" NaN value).
-     * 
-     * @param value a {@code double} precision floating-point number.
-     * @return the bits that represent the floating-point number.
-     */
-    public static long doubleToLongBits(double value) {
-        long result = doubleToRawLongBits(value);
-        // Check for NaN based on values of bit fields, maximum
-        // exponent and nonzero significand.
-        if (((result & DoubleConsts.EXP_BIT_MASK) == DoubleConsts.EXP_BIT_MASK) && (result & DoubleConsts.SIGNIF_BIT_MASK) != 0L)
-            result = 0x7ff8000000000000L;
-        return result;
-    }
+    // /**
+    // * Returns a representation of the specified floating-point value according to the IEEE 754
+    // * floating-point "double format" bit layout.
+    // * <p>
+    // * Bit 63 (the bit that is selected by the mask {@code 0x8000000000000000L}) represents the
+    // sign
+    // * of the floating-point number. Bits 62-52 (the bits that are selected by the mask
+    // * {@code 0x7ff0000000000000L}) represent the exponent. Bits 51-0 (the bits that are selected
+    // by
+    // * the mask {@code 0x000fffffffffffffL}) represent the significand (sometimes called the
+    // * mantissa) of the floating-point number.
+    // * <p>
+    // * If the argument is positive infinity, the result is {@code 0x7ff0000000000000L}.
+    // * <p>
+    // * If the argument is negative infinity, the result is {@code 0xfff0000000000000L}.
+    // * <p>
+    // * If the argument is NaN, the result is {@code 0x7ff8000000000000L}.
+    // * <p>
+    // * In all cases, the result is a {@code long} integer that, when given to the
+    // * {@link #longBitsToDouble(long)} method, will produce a floating-point value the same as the
+    // * argument to {@code doubleToLongBits} (except all NaN values are collapsed to a single
+    // * "canonical" NaN value).
+    // *
+    // * @param value a {@code double} precision floating-point number.
+    // * @return the bits that represent the floating-point number.
+    // */
+    // public static long doubleToLongBits(double value) {
+    // long result = doubleToRawLongBits(value);
+    // // Check for NaN based on values of bit fields, maximum
+    // // exponent and nonzero significand.
+    // if (((result & DoubleConsts.EXP_BIT_MASK) == DoubleConsts.EXP_BIT_MASK) && (result &
+    // DoubleConsts.SIGNIF_BIT_MASK) != 0L)
+    // result = 0x7ff8000000000000L;
+    // return result;
+    // }
 
-    /**
-     * Returns a representation of the specified floating-point value according to the IEEE 754
-     * floating-point "double format" bit layout, preserving Not-a-Number (NaN) values.
-     * <p>
-     * Bit 63 (the bit that is selected by the mask {@code 0x8000000000000000L}) represents the sign
-     * of the floating-point number. Bits 62-52 (the bits that are selected by the mask
-     * {@code 0x7ff0000000000000L}) represent the exponent. Bits 51-0 (the bits that are selected by
-     * the mask {@code 0x000fffffffffffffL}) represent the significand (sometimes called the
-     * mantissa) of the floating-point number.
-     * <p>
-     * If the argument is positive infinity, the result is {@code 0x7ff0000000000000L}.
-     * <p>
-     * If the argument is negative infinity, the result is {@code 0xfff0000000000000L}.
-     * <p>
-     * If the argument is NaN, the result is the {@code long} integer representing the actual NaN
-     * value. Unlike the {@code doubleToLongBits} method, {@code doubleToRawLongBits} does not
-     * collapse all the bit patterns encoding a NaN to a single "canonical" NaN value.
-     * <p>
-     * In all cases, the result is a {@code long} integer that, when given to the
-     * {@link #longBitsToDouble(long)} method, will produce a floating-point value the same as the
-     * argument to {@code doubleToRawLongBits}.
-     * 
-     * @param value a {@code double} precision floating-point number.
-     * @return the bits that represent the floating-point number.
-     * @since 1.3
-     */
-    public static long doubleToRawLongBits(double value) {
-        boolean negative = value < 0;
-
-        if (negative) {
-            value *= -1;
-        }
-
-        double exp = Math.floor(Math.log(value) / Math.log(2));
-        double frac = Math.floor(value * Math.pow(2, 52 - exp));
-        exp += 1023;
-
-        StringBuilder builder = new StringBuilder();
-        builder.append(negative ? "1" : "0");
-
-        String mix = "0000000000".concat(Long.toBinaryString((long) exp));
-        mix = mix.substring(mix.length() - 11);
-
-        builder.append(mix).append(Long.toBinaryString((long) frac).substring(1));
-        System.out.println(Long.parseLong(builder.toString(), 2));
-        return Long.parseLong(builder.toString(), 2);
-    }
+    // /**
+    // * Returns a representation of the specified floating-point value according to the IEEE 754
+    // * floating-point "double format" bit layout, preserving Not-a-Number (NaN) values.
+    // * <p>
+    // * Bit 63 (the bit that is selected by the mask {@code 0x8000000000000000L}) represents the
+    // sign
+    // * of the floating-point number. Bits 62-52 (the bits that are selected by the mask
+    // * {@code 0x7ff0000000000000L}) represent the exponent. Bits 51-0 (the bits that are selected
+    // by
+    // * the mask {@code 0x000fffffffffffffL}) represent the significand (sometimes called the
+    // * mantissa) of the floating-point number.
+    // * <p>
+    // * If the argument is positive infinity, the result is {@code 0x7ff0000000000000L}.
+    // * <p>
+    // * If the argument is negative infinity, the result is {@code 0xfff0000000000000L}.
+    // * <p>
+    // * If the argument is NaN, the result is the {@code long} integer representing the actual NaN
+    // * value. Unlike the {@code doubleToLongBits} method, {@code doubleToRawLongBits} does not
+    // * collapse all the bit patterns encoding a NaN to a single "canonical" NaN value.
+    // * <p>
+    // * In all cases, the result is a {@code long} integer that, when given to the
+    // * {@link #longBitsToDouble(long)} method, will produce a floating-point value the same as the
+    // * argument to {@code doubleToRawLongBits}.
+    // *
+    // * @param value a {@code double} precision floating-point number.
+    // * @return the bits that represent the floating-point number.
+    // * @since 1.3
+    // */
+    // public static long doubleToRawLongBits(double value) {
+    // boolean negative = value < 0;
+    //
+    // if (negative) {
+    // value *= -1;
+    // }
+    //
+    // double exp = Math.floor(Math.log(value) / Math.log(2));
+    // double frac = Math.floor(value * Math.pow(2, 52 - exp));
+    // exp += 1023;
+    //
+    // StringBuilder builder = new StringBuilder();
+    // builder.append(negative ? "1" : "0");
+    //
+    // String mix = "0000000000".concat(Long.toBinaryString((long) exp));
+    // mix = mix.substring(mix.length() - 11);
+    //
+    // builder.append(mix).append(Long.toBinaryString((long) frac).substring(1));
+    // return Long.parseLong(builder.toString(), 2);
+    // }
 
     /**
      * Returns a new {@code double} initialized to the value represented by the specified

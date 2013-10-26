@@ -9,6 +9,8 @@
  */
 package js.lang;
 
+import java.security.Permission;
+
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -89,4 +91,18 @@ class JSSecurityManager {
         // do nothing
     }
 
+    /**
+     * Throws a <code>SecurityException</code> if the requested access, specified by the given
+     * permission, is not permitted based on the security policy currently in effect.
+     * <p>
+     * This method calls <code>AccessController.checkPermission</code> with the given permission.
+     * 
+     * @param perm the requested permission.
+     * @exception SecurityException if access is not permitted based on the current security policy.
+     * @exception NullPointerException if the permission argument is <code>null</code>.
+     * @since 1.2
+     */
+    public void checkPermission(Permission perm) {
+        // do nothing
+    }
 }

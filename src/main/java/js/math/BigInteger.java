@@ -271,13 +271,10 @@ public class BigInteger extends Number {
             int bigRadixDigit = Integer.parseInt(value.substring(substrStart, substrEnd), radix);
             // System.out.println(bigRadixDigit);
             newDigit = Multiplication.multiplyByInt(digits, digitIndex, bigRadix);
-            System.out.println(Arrays.toString(digits) + "   " + digitIndex + "   " + bigRadixDigit + " @");
             newDigit += Elementary.inplaceAdd(digits, digitIndex, bigRadixDigit);
             digits[digitIndex++] = newDigit;
-            System.out.println(Arrays.toString(digits) + "   ##   " + newDigit);
             substrStart = substrEnd;
             substrEnd = substrStart + charsPerInt;
-            System.out.println(substrStart + " __  " + substrEnd);
         }
 
         numberLength = digitIndex;
@@ -285,8 +282,6 @@ public class BigInteger extends Number {
         big.numberLength = numberLength;
         big.digits = digits;
         big.cutOffLeadingZeroes();
-
-        System.out.println("result " + big.longValue());
     }
 
     public static BigInteger valueOf(long val) {

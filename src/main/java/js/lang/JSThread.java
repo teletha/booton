@@ -23,6 +23,135 @@ class JSThread {
     private static volatile UncaughtExceptionHandler defaultUncaughtExceptionHandler;
 
     /**
+     * Tests if this thread is alive. A thread is alive if it has been started and has not yet died.
+     * 
+     * @return <code>true</code> if this thread is alive; <code>false</code> otherwise.
+     */
+    public final boolean isAlive() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Waits at most {@code millis} milliseconds for this thread to die. A timeout of {@code 0}
+     * means to wait forever.
+     * <p>
+     * This implementation uses a loop of {@code this.wait} calls conditioned on
+     * {@code this.isAlive}. As a thread terminates the {@code this.notifyAll} method is invoked. It
+     * is recommended that applications not use {@code wait}, {@code notify}, or {@code notifyAll}
+     * on {@code Thread} instances.
+     * 
+     * @param millis the time to wait in milliseconds
+     * @throws IllegalArgumentException if the value of {@code millis} is negative
+     * @throws InterruptedException if any thread has interrupted the current thread. The
+     *             <i>interrupted status</i> of the current thread is cleared when this exception is
+     *             thrown.
+     */
+    public final synchronized void join(long millis) throws InterruptedException {
+        long base = System.currentTimeMillis();
+        long now = 0;
+
+        if (millis < 0) {
+            throw new IllegalArgumentException("timeout value is negative");
+        }
+
+        if (millis == 0) {
+            while (isAlive()) {
+                wait(0);
+            }
+        } else {
+            while (isAlive()) {
+                long delay = millis - now;
+                if (delay <= 0) {
+                    break;
+                }
+                wait(delay);
+                now = System.currentTimeMillis() - base;
+            }
+        }
+    }
+
+    /**
+     * Waits at most {@code millis} milliseconds plus {@code nanos} nanoseconds for this thread to
+     * die.
+     * <p>
+     * This implementation uses a loop of {@code this.wait} calls conditioned on
+     * {@code this.isAlive}. As a thread terminates the {@code this.notifyAll} method is invoked. It
+     * is recommended that applications not use {@code wait}, {@code notify}, or {@code notifyAll}
+     * on {@code Thread} instances.
+     * 
+     * @param millis the time to wait in milliseconds
+     * @param nanos {@code 0-999999} additional nanoseconds to wait
+     * @throws IllegalArgumentException if the value of {@code millis} is negative, or the value of
+     *             {@code nanos} is not in the range {@code 0-999999}
+     * @throws InterruptedException if any thread has interrupted the current thread. The
+     *             <i>interrupted status</i> of the current thread is cleared when this exception is
+     *             thrown.
+     */
+    public final synchronized void join(long millis, int nanos) throws InterruptedException {
+
+        if (millis < 0) {
+            throw new IllegalArgumentException("timeout value is negative");
+        }
+
+        if (nanos < 0 || nanos > 999999) {
+            throw new IllegalArgumentException("nanosecond timeout value out of range");
+        }
+
+        if (nanos >= 500000 || (nanos != 0 && millis == 0)) {
+            millis++;
+        }
+        join(millis);
+    }
+
+    /**
+     * Causes the currently executing thread to sleep (temporarily cease execution) for the
+     * specified number of milliseconds, subject to the precision and accuracy of system timers and
+     * schedulers. The thread does not lose ownership of any monitors.
+     * 
+     * @param millis the length of time to sleep in milliseconds
+     * @throws IllegalArgumentException if the value of {@code millis} is negative
+     * @throws InterruptedException if any thread has interrupted the current thread. The
+     *             <i>interrupted status</i> of the current thread is cleared when this exception is
+     *             thrown.
+     */
+    public static void sleep(long millis) throws InterruptedException {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Causes the currently executing thread to sleep (temporarily cease execution) for the
+     * specified number of milliseconds plus the specified number of nanoseconds, subject to the
+     * precision and accuracy of system timers and schedulers. The thread does not lose ownership of
+     * any monitors.
+     * 
+     * @param millis the length of time to sleep in milliseconds
+     * @param nanos {@code 0-999999} additional nanoseconds to sleep
+     * @throws IllegalArgumentException if the value of {@code millis} is negative, or the value of
+     *             {@code nanos} is not in the range {@code 0-999999}
+     * @throws InterruptedException if any thread has interrupted the current thread. The
+     *             <i>interrupted status</i> of the current thread is cleared when this exception is
+     *             thrown.
+     */
+    public static void sleep(long millis, int nanos) throws InterruptedException {
+        if (millis < 0) {
+            throw new IllegalArgumentException("timeout value is negative");
+        }
+
+        if (nanos < 0 || nanos > 999999) {
+            throw new IllegalArgumentException("nanosecond timeout value out of range");
+        }
+
+        if (nanos >= 500000 || (nanos != 0 && millis == 0)) {
+            millis++;
+        }
+        sleep(millis);
+    }
+
+    /**
      * Set the default handler invoked when a thread abruptly terminates due to an uncaught
      * exception, and no other handler has been defined for that thread.
      * <p>

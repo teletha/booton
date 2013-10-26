@@ -874,6 +874,20 @@ class Arrays {
     }
 
     /**
+     * Assigns the specified Object reference to each element of the specified array of Objects.
+     * 
+     * @param array the array to be filled
+     * @param value the value to be stored in all elements of the array
+     * @throws ArrayStoreException if the specified value is not of a runtime type that can be
+     *             stored in the specified array
+     */
+    public static void fill(Object[] array, Object value) {
+        for (int i = 0, len = array.length; i < len; i++) {
+            array[i] = value;
+        }
+    }
+
+    /**
      * Returns <tt>true</tt> if the two specified arrays are <i>deeply equal</i> to one another.
      * Unlike the {@link #equals(Object[],Object[])} method, this method is appropriate for use with
      * nested arrays of arbitrary depth.
