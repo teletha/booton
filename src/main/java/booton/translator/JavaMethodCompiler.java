@@ -1068,6 +1068,9 @@ class JavaMethodCompiler extends MethodVisitor {
         // Ternary operator (e.g. int i = (j == 0) ? 0 : 1;) is represented as [LABEL,
         // THEN_EXPRESSION, GOTO, LABEL, ELSE_EXPRESSION, LABEL] in bytecode.
 
+        if (script.source.getSimpleName().equals("OptionalDouble") && methodNameOriginal.equals("equals")) {
+            NodeDebugger.dump(nodes);
+        }
         // build new node
         current = connect(label);
 
