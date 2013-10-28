@@ -84,6 +84,7 @@ class JavaClassCompiler extends ClassVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         // ignore serializable related methods and file system related methods
         if (TranslatorManager.isIgnorableMethod(name, desc)) {

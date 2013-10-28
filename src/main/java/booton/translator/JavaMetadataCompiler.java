@@ -80,7 +80,6 @@ class JavaMetadataCompiler {
 
         // write metadata
         code.append("{");
-
         for (int i = 0; i < elements.size(); i++) {
             Metadata metadata = elements.get(i);
             code.append(metadata.name, ":", "[");
