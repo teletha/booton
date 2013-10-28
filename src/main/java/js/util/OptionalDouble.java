@@ -14,12 +14,12 @@ import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-import booton.translator.Debuggable;
+import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/10/26 13:08:14
  */
-// @JavaAPIProvider(java.util.OptionalDouble.class)
+@JavaAPIProvider(java.util.OptionalDouble.class)
 public final class OptionalDouble {
 
     /**
@@ -167,7 +167,6 @@ public final class OptionalDouble {
      * @return {code true} if the other object is "equal to" this object otherwise {@code false}
      */
     @Override
-    @Debuggable
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

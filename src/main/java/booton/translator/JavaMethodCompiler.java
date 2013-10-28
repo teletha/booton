@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.OptionalDouble;
 import java.util.Set;
 
 import js.lang.NativeObject;
@@ -227,7 +226,7 @@ class JavaMethodCompiler extends MethodVisitor {
     JavaMethodCompiler(Javascript script, ScriptWriter code, String original, String name, String description, boolean isStatic) {
         super(ASM4);
 
-        Recoder.addMethod(original);
+        CompilerRecorder.recordMethodName(original);
 
         this.script = script;
         this.code = code;
@@ -247,10 +246,6 @@ class JavaMethodCompiler extends MethodVisitor {
             variables.type(isStatic ? i : i + 1).type(convert(parameters[i]));
         }
         NodeDebugger.whileProcess = true;
-
-        if (script.source == OptionalDouble.class && original.equals("equals")) {
-            debuggable = true;
-        }
     }
 
     /**
@@ -376,6 +371,8 @@ class JavaMethodCompiler extends MethodVisitor {
     @Override
     public void visitLineNumber(int line, Label start) {
         getNode(start).number = line;
+
+        CompilerRecorder.recordMethodLineNumber(line);
     }
 
     /**
@@ -1068,9 +1065,6 @@ class JavaMethodCompiler extends MethodVisitor {
         // Ternary operator (e.g. int i = (j == 0) ? 0 : 1;) is represented as [LABEL,
         // THEN_EXPRESSION, GOTO, LABEL, ELSE_EXPRESSION, LABEL] in bytecode.
 
-        if (script.source.getSimpleName().equals("OptionalDouble") && methodNameOriginal.equals("equals")) {
-            NodeDebugger.dump(nodes);
-        }
         // build new node
         current = connect(label);
 

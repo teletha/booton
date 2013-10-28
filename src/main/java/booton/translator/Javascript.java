@@ -22,7 +22,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -96,12 +95,6 @@ public class Javascript {
 
     /** The identifier of this script. */
     private final int id;
-
-    /** The all dependency scripts. */
-    private final Set<Class> dependencies = new LinkedHashSet();
-
-    /** The all dependency scripts. */
-    private final Set<Class> metadataDependencies = new LinkedHashSet();
 
     /** The constructor list of this script. */
     private final List<Integer> constructors = new ArrayList();
@@ -190,7 +183,7 @@ public class Javascript {
      */
     void writeTo(Appendable output, Set<Class> defined, Class... requirements) {
         // record compile route
-        Recoder.add(this);
+        CompilerRecorder.startCompiling(this);
 
         try {
             manager.add(requirements);
@@ -215,7 +208,7 @@ public class Javascript {
             I.quiet(output);
         } finally {
             // record compile route
-            Recoder.remove();
+            CompilerRecorder.finishCompiling(this);
         }
     }
 
@@ -229,7 +222,7 @@ public class Javascript {
      */
     private void write(Appendable output, Set defined) throws IOException {
         // record compile route
-        Recoder.add(this);
+        CompilerRecorder.startCompiling(this);
 
         try {
             // compile script
@@ -255,8 +248,8 @@ public class Javascript {
             }
 
             // write dependency classes
-            for (Class depndency : dependencies) {
-                Javascript script = Javascript.getScript(depndency);
+            for (Class dependency : CompilerRecorder.getDependencies()) {
+                Javascript script = Javascript.getScript(dependency);
 
                 if (script != null && !defined.contains(script.source)) {
                     script.write(output, defined);
@@ -264,7 +257,7 @@ public class Javascript {
             }
         } finally {
             // record compile route
-            Recoder.remove();
+            CompilerRecorder.finishCompiling(this);
         }
     }
 
@@ -331,12 +324,12 @@ public class Javascript {
         } catch (TranslationError e) {
             e.write("\r\n");
 
-            throw Recoder.write(e);
+            throw CompilerRecorder.rethrow(e);
         } catch (Throwable e) {
             TranslationError error = new TranslationError(e);
             error.write("Can't compile ", source.getName() + ".");
 
-            throw Recoder.write(error);
+            throw CompilerRecorder.rethrow(error);
         }
 
         for (Annotation annotation : source.getAnnotations()) {
@@ -493,34 +486,7 @@ public class Javascript {
      * @param dependency A dependency class.
      */
     public static final void require(Class dependency) {
-        while (dependency.isArray()) {
-            dependency = dependency.getComponentType();
-        }
-
-        Javascript current = Recoder.getCurrent();
-
-        if (dependency != current.source) {
-            current.dependencies.add(dependency);
-        }
-    }
-
-    /**
-     * <p>
-     * Require the specified java source code.
-     * </p>
-     * 
-     * @param dependency A dependency class.
-     */
-    public static final void requireMetadata(Class dependency) {
-        while (dependency.isArray()) {
-            dependency = dependency.getComponentType();
-        }
-
-        Javascript current = Recoder.getCurrent();
-
-        if (dependency != current.source) {
-            current.metadataDependencies.add(dependency);
-        }
+        CompilerRecorder.addDependency(dependency);
     }
 
     /**
@@ -777,8 +743,15 @@ public class Javascript {
     @Manageable(lifestyle = Singleton.class)
     private static class DepenedencyManager implements ClassListener<Require> {
 
+        /** The ignored classes. */
+        private final Set<Class> ignores = new HashSet();
+
         /** The extensions. */
         private final Set<Class> collection = new HashSet();
+
+        {
+            ignores.add(ScriptTester.class);
+        }
 
         /**
          * {@inheritDoc}
