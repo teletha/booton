@@ -70,7 +70,7 @@ function boot(global) {
      * @param {Object} metadata A metadata definition.
      * @param {} nativeClass A native object name.
      */
-    define: function(name, superClassName, definition, metadata, nativeClass) {
+    define: function(name, superClassName, interfaces, definition, metadata, nativeClass) {
       if (boot.hasOwnProperty(name)) {
         return;
       }
@@ -93,6 +93,16 @@ function boot(global) {
       // We must copy the properties over onto the new prototype.
       // At first, from superClass definition.
       var prototype = Class.prototype = Object.create(superClass.prototype);
+      
+      var types = interfaces.split(" ");
+      
+      for (var i = 0; i < types.length; i++) {
+        var interfaceClass = boot[types[i]];
+        
+        if (interfaceClass) {
+          define(prototype, interfaceClass.prototype, true);
+        }
+      }
 
       // Then, from user defined class definition.
       for (var i in definition) {

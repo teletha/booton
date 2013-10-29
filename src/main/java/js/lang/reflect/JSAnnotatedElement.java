@@ -26,13 +26,11 @@ import java.util.Objects;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
-import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/09/10 23:43:34
  */
-@JavaAPIProvider(AnnotatedElement.class)
-abstract class JSAnnotatedElement {
+abstract class JSAnnotatedElement implements AnnotatedElement {
 
     /** The property name at Java definition. */
     protected final String name;

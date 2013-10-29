@@ -83,7 +83,7 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
         }
 
         Class type = api.value();
-        System.out.println(type);
+
         if (type == Emulator.class) {
             try {
                 type = Class.forName(declared.getName().replace("js.", "java."));

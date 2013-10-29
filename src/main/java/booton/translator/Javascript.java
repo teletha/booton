@@ -246,7 +246,11 @@ public class Javascript {
 
             // require interfaces
             for (Class interfaceType : source.getInterfaces()) {
-                require(interfaceType);
+                Javascript script = Javascript.getScript(interfaceType);
+
+                if (script != null && !defined.contains(script.source)) {
+                    script.write(output, defined);
+                }
             }
 
             // write this class
@@ -310,10 +314,21 @@ public class Javascript {
         // compute related class names
         String className = computeSimpleClassName(source);
         String superClassName = parent == Object.class ? "" : computeSimpleClassName(parent);
+        List<String> interfaces = new ArrayList();
+
+        for (Class type : source.getInterfaces()) {
+            if (hasDefault(type)) {
+                interfaces.add(computeSimpleClassName(type));
+            }
+        }
 
         // write class definition
         code.comment(source + " " + className);
-        code.append("boot.define(").string(className).append(",\"", superClassName, "\",");
+        code.append("boot.define(")
+                .string(className)
+                .append(",\"", superClassName, "\",")
+                .string(I.join(" ", interfaces))
+                .append(",");
 
         // write constructors, fields and methods
         try {
@@ -371,10 +386,17 @@ public class Javascript {
     private void compileInterface(ScriptWriter code) {
         // compute related class names
         String className = Javascript.computeSimpleClassName(source);
+        List<String> interfaces = new ArrayList();
+
+        for (Class type : source.getInterfaces()) {
+            if (hasDefault(type)) {
+                interfaces.add(computeSimpleClassName(type));
+            }
+        }
 
         // write interface definition
         code.comment(source);
-        code.append("boot.define(").string(className).append(",\"\",");
+        code.append("boot.define(").string(className).append(",").string(I.join(" ", interfaces)).append(",\"\",");
 
         // write constructors, fields and methods
         try {
@@ -440,6 +462,23 @@ public class Javascript {
         writeTo(builder);
 
         return builder.toString();
+    }
+
+    /**
+     * <p>
+     * Check interface default method
+     * </p>
+     * 
+     * @param type
+     * @return
+     */
+    private boolean hasDefault(Class type) {
+        for (Method method : type.getDeclaredMethods()) {
+            if (method.isDefault()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
