@@ -11,6 +11,8 @@ package booton.translator;
 
 import static org.objectweb.asm.Opcodes.*;
 
+import java.lang.reflect.AnnotatedElement;
+
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -96,6 +98,14 @@ class JavaClassCompiler extends ClassVisitor {
         // ignore compiler generated method (e.g. generics)
         if ((access & (ACC_NATIVE | ACC_ABSTRACT)) != 0) {
             return null;
+        }
+
+        if (script.source.isInterface() && script.source != AnnotatedElement.class) {
+            return null;
+        }
+
+        if (script.source.isInterface()) {
+            System.out.println(script.source);
         }
 
         // ignore compiler generated method for enum switch
