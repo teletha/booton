@@ -34,6 +34,7 @@ import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
 import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
 import net.sourceforge.htmlunit.corejs.javascript.Undefined;
 import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
+import booton.Unnecessary;
 import booton.live.ClientStackTrace;
 import booton.live.Source;
 
@@ -47,6 +48,7 @@ import com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine;
 /**
  * @version 2013/08/03 20:53:27
  */
+@Unnecessary
 public class ScriptTester {
 
     /** The line feed. */

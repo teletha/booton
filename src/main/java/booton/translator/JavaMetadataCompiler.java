@@ -25,6 +25,9 @@ import kiss.I;
 
 import org.junit.runner.RunWith;
 
+import booton.Necessary;
+import booton.Unnecessary;
+
 /**
  * @version 2013/10/10 9:13:49
  */
@@ -41,7 +44,8 @@ class JavaMetadataCompiler {
             ignorables.add(JavascriptNativePropertyAccessor.class);
             ignorables.add(RunWith.class);
             ignorables.add(Override.class);
-            ignorables.add(Require.class);
+            ignorables.add(Necessary.class);
+            ignorables.add(Unnecessary.class);
         } catch (Exception e) {
             throw I.quiet(e);
         }

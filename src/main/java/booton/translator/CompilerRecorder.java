@@ -11,16 +11,11 @@ package booton.translator;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @version 2013/10/28 15:23:03
  */
 class CompilerRecorder {
-
-    /** The igrnore classes. */
-    private static Set<Class> ignores = new HashSet();
 
     /** The compiling route. */
     private static Deque<CompilerContext> route = new ArrayDeque();
@@ -35,9 +30,7 @@ class CompilerRecorder {
     static void startCompiling(Javascript script) {
         CompilerContext context = route.peekFirst();
 
-        if (context == null || context.clazz != script.source) {
-            route.addFirst(new CompilerContext(script.source));
-        }
+        route.addFirst(new CompilerContext(script));
     }
 
     /**
@@ -96,34 +89,13 @@ class CompilerRecorder {
 
     /**
      * <p>
-     * Add dependency for the current compiling script.
+     * Retrieve the current compiling script.
      * </p>
      * 
-     * @param dependency A dependency class.
+     * @return The current compiling script.
      */
-    static void addDependency(Class dependency) {
-        while (dependency.isArray()) {
-            dependency = dependency.getComponentType();
-        }
-
-        if (!ignores.contains(dependency)) {
-            CompilerContext context = route.peekFirst();
-
-            if (context.clazz != dependency) {
-                context.dependencies.add(dependency);
-            }
-        }
-    }
-
-    /**
-     * <p>
-     * Retrieve all dependencies for the current compiling script.
-     * </p>
-     * 
-     * @return A set of dependency classes.
-     */
-    static Set<Class> getDependencies() {
-        return route.peekFirst().dependencies;
+    static Javascript getCurrent() {
+        return route.peekFirst().clazz;
     }
 
     /**
@@ -131,11 +103,8 @@ class CompilerRecorder {
      */
     private static class CompilerContext {
 
-        /** The dependencies. */
-        private final Set<Class> dependencies = new HashSet();
-
         /** The current compiling class. */
-        private final Class clazz;
+        private final Javascript clazz;
 
         /** The current compiling method. */
         private String method;
@@ -146,7 +115,7 @@ class CompilerRecorder {
         /**
          * 
          */
-        private CompilerContext(Class clazz) {
+        private CompilerContext(Javascript clazz) {
             this.clazz = clazz;
         }
 
@@ -155,11 +124,11 @@ class CompilerRecorder {
          */
         @Override
         public String toString() {
-            StringBuilder builder = new StringBuilder(" at ").append(clazz.getName())
+            StringBuilder builder = new StringBuilder(" at ").append(clazz.source.getName())
                     .append('.')
                     .append(method)
                     .append('(')
-                    .append(clazz.getSimpleName())
+                    .append(clazz.source.getSimpleName())
                     .append(".java:")
                     .append(line)
                     .append(')');

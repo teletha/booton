@@ -9,13 +9,13 @@
  */
 package js.lang;
 
+import booton.Necessary;
 import booton.translator.JavascriptAPIProvider;
-import booton.translator.Require;
 
 /**
  * @version 2013/08/20 15:59:22
  */
-@Require
+@Necessary
 @JavascriptAPIProvider("Array")
 class NativeArrayExtension {
 
