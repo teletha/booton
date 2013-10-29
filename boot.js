@@ -68,9 +68,9 @@ function boot(global) {
      * @param {String} superClassName A simple parent class name.
      * @param {Object} definition A class definition.
      * @param {Object} metadata A metadata definition.
-     * @param {} nativeClasses
+     * @param {} nativeClass A native object name.
      */
-    define: function(name, superClassName, definition, metadata, nativeClasses) {
+    define: function(name, superClassName, definition, metadata, nativeClass) {
       if (boot.hasOwnProperty(name)) {
         return;
       }
@@ -164,25 +164,23 @@ function boot(global) {
       });
       
       // Imports Java-defined methods for Native Class. (i.e. Window, Element, WebStorage etc...)
-      if (nativeClasses) {
-        nativeClasses.split(" ").forEach(function(nativeClass) {
-          var clazz = global[nativeClass];
+      if (nativeClass) {
+        var clazz = global[nativeClass];
 
-          if (clazz) {
-            define(clazz.prototype, Class.prototype);
-            define(clazz, Class);
+        if (clazz) {
+          define(clazz.prototype, Class.prototype);
+          define(clazz, Class);
 
-            // define function uses not "for-in loop" but "Object.keys" to enumerate properties,
-            // so Class.prototype property hides prototype chained properties.
-            // The class which has class-tree (i.e. Element <- Node) must also imports methods
-            // from super class.
-            while (superClass != Object) {
-              define(clazz.prototype, superClass.prototype, true);
-              
-              superClass = superClass.super;
-            }
+          // define function uses not "for-in loop" but "Object.keys" to enumerate properties,
+          // so Class.prototype property hides prototype chained properties.
+          // The class which has class-tree (i.e. Element <- Node) must also imports methods
+          // from super class.
+          while (superClass != Object) {
+            define(clazz.prototype, superClass.prototype, true);
+            
+            superClass = superClass.super;
           }
-        });
+        }
       }
       
       Class.super = superClass;
