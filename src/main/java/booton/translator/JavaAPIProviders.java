@@ -17,10 +17,13 @@ import java.util.Map;
 import java.util.Set;
 
 import kiss.ClassListener;
+import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
 
 import org.objectweb.asm.Type;
+
+import booton.Emulator;
 
 /**
  * @version 2013/10/03 12:43:41
@@ -39,11 +42,11 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
      */
     @Override
     public void load(Class<JavaAPIProvider> clazz) {
-        JavaAPIProvider api = clazz.getAnnotation(JavaAPIProvider.class);
+        Class api = find(clazz);
 
-        if (api != null && !definitions.containsKey(api.value())) {
-            definitions.put(api.value(), new Definition(clazz));
-            revert.put(clazz, api.value());
+        if (api != null && !definitions.containsKey(api)) {
+            definitions.put(api, new Definition(clazz));
+            revert.put(clazz, api);
         }
 
         Class parent = clazz.getSuperclass();
@@ -58,10 +61,10 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
      */
     @Override
     public void unload(Class<JavaAPIProvider> clazz) {
-        JavaAPIProvider api = clazz.getAnnotation(JavaAPIProvider.class);
+        Class api = find(clazz);
 
-        if (api != null && !definitions.containsKey(api.value())) {
-            definitions.remove(api.value());
+        if (api != null && !definitions.containsKey(api)) {
+            definitions.remove(api);
             revert.remove(clazz);
         }
 
@@ -70,6 +73,26 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
         if (parent != null) {
             unload(parent);
         }
+    }
+
+    private Class find(Class<?> declared) {
+        JavaAPIProvider api = declared.getAnnotation(JavaAPIProvider.class);
+
+        if (api == null) {
+            return null;
+        }
+
+        Class type = api.value();
+        System.out.println(type);
+        if (type == Emulator.class) {
+            try {
+                type = Class.forName(declared.getName().replace("js.", "java."));
+
+            } catch (ClassNotFoundException e) {
+                throw I.quiet(e);
+            }
+        }
+        return type;
     }
 
     /**

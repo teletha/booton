@@ -20,7 +20,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/08/09 1:06:35
  */
 @JavaAPIProvider(java.util.HashMap.class)
-class HashMap<K, V> extends AbstractMap<K, V> {
+public class HashMap<K, V> extends AbstractMap<K, V> {
 
     /** The item pool. */
     private final HashSet<Entry<K, V>> items = new HashSet();

@@ -10,12 +10,12 @@
 package js.util.concurrent;
 
 import java.util.AbstractSet;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.concurrent.ConcurrentMap;
 
+import js.util.HashMap;
 import booton.translator.JavaAPIProvider;
 
 /**

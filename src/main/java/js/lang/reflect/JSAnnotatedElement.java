@@ -121,20 +121,6 @@ abstract class JSAnnotatedElement {
 
     /**
      * <p>
-     * Returns true if an annotation for the specified type is present on this element, else false.
-     * This method is designed primarily for convenient access to marker annotations.
-     * </p>
-     * 
-     * @param annotationClass The Class object corresponding to the annotation type.
-     * @return True if an annotation for the specified annotation type is present on this element, .
-     *         else false.
-     */
-    public final boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
-        return getAnnotation(annotationClass) != null;
-    }
-
-    /**
-     * <p>
      * Returns this element's annotation for the specified type if such an annotation is present,
      * else null.
      * </p>
