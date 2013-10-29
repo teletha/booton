@@ -18,7 +18,7 @@ import booton.translator.JavascriptNativePropertyAccessor;
 /**
  * @version 2013/07/30 11:16:20
  */
-@JavascriptAPIProvider("NodeList HTMLCollection")
+@JavascriptAPIProvider
 public abstract class NodeList<T extends Node> implements Iterable<T>, JavascriptNative {
 
     /**
