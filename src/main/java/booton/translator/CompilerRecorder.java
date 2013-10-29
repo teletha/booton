@@ -13,7 +13,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 /**
- * @version 2013/10/28 15:23:03
+ * @version 2013/10/29 10:54:48
  */
 class CompilerRecorder {
 
@@ -30,7 +30,9 @@ class CompilerRecorder {
     static void startCompiling(Javascript script) {
         CompilerContext context = route.peekFirst();
 
-        route.addFirst(new CompilerContext(script));
+        if (context == null || context.script != script) {
+            route.addFirst(new CompilerContext(script));
+        }
     }
 
     /**
@@ -95,7 +97,7 @@ class CompilerRecorder {
      * @return The current compiling script.
      */
     static Javascript getCurrent() {
-        return route.peekFirst().clazz;
+        return route.peekFirst().script;
     }
 
     /**
@@ -104,7 +106,7 @@ class CompilerRecorder {
     private static class CompilerContext {
 
         /** The current compiling class. */
-        private final Javascript clazz;
+        private final Javascript script;
 
         /** The current compiling method. */
         private String method;
@@ -113,10 +115,10 @@ class CompilerRecorder {
         private int line = 1;
 
         /**
-         * 
+         * @param script An associated script.
          */
-        private CompilerContext(Javascript clazz) {
-            this.clazz = clazz;
+        private CompilerContext(Javascript script) {
+            this.script = script;
         }
 
         /**
@@ -124,11 +126,11 @@ class CompilerRecorder {
          */
         @Override
         public String toString() {
-            StringBuilder builder = new StringBuilder(" at ").append(clazz.source.getName())
+            StringBuilder builder = new StringBuilder(" at ").append(script.source.getName())
                     .append('.')
                     .append(method)
                     .append('(')
-                    .append(clazz.source.getSimpleName())
+                    .append(script.source.getSimpleName())
                     .append(".java:")
                     .append(line)
                     .append(')');
