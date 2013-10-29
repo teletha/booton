@@ -46,36 +46,38 @@ class JavaClassCompiler extends ClassVisitor {
      */
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-        // In Java, initial value for primitives are defined in Java specification. But in
-        // Javascript, initial value (in property) will be "undefined". So we must declare
-        // uninitialized primiteve field explicitly.
-        //
-        // Skip final field, it is assured that the constructor will initialize it.
-        // Skip javascript native class, we have no permission to modify its prototype.
-        if ((access & ACC_FINAL) == 0) {
-            name = Javascript.computeFieldName(script.source, name);
+        if (!script.source.isInterface()) {
+            // In Java, initial value for primitives are defined in Java specification. But in
+            // Javascript, initial value (in property) will be "undefined". So we must declare
+            // uninitialized primiteve field explicitly.
+            //
+            // Skip final field, it is assured that the constructor will initialize it.
+            // Skip javascript native class, we have no permission to modify its prototype.
+            if ((access & ACC_FINAL) == 0) {
+                name = Javascript.computeFieldName(script.source, name);
 
-            if ((access & ACC_STATIC) != 0) {
-                name = "_" + name;
-            }
+                if ((access & ACC_STATIC) != 0) {
+                    name = "_" + name;
+                }
 
-            switch (desc) {
-            case "I": // int
-            case "J": // long
-            case "F": // float
-            case "D": // double
-            case "B": // byte
-            case "S": // short
-                code.append(name, ":0").separator();
-                break;
+                switch (desc) {
+                case "I": // int
+                case "J": // long
+                case "F": // float
+                case "D": // double
+                case "B": // byte
+                case "S": // short
+                    code.append(name, ":0").separator();
+                    break;
 
-            case "C": // char
-                code.append(name, ":").string("\0").separator();
-                break;
+                case "C": // char
+                    code.append(name, ":").string("\0").separator();
+                    break;
 
-            case "Z": // boolean
-                code.append(name, ":false").separator();
-                break;
+                case "Z": // boolean
+                    code.append(name, ":false").separator();
+                    break;
+                }
             }
         }
         return null;

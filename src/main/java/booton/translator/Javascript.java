@@ -379,6 +379,7 @@ public class Javascript {
         // write constructors, fields and methods
         try {
             code.append('{');
+            ClassReader reader;
 
             if (source.isAnnotation()) {
                 Method[] methods = source.getDeclaredMethods();
@@ -399,10 +400,25 @@ public class Javascript {
                         code.separator();
                     }
                 }
+            } else {
+                reader = new ClassReader(source.getName());
+                reader.accept(new JavaClassCompiler(this, code), 0);
             }
+
             code.append('}');
-        } catch (Exception e) {
-            throw I.quiet(e);
+        } catch (TranslationError e) {
+            e.write("\r\n");
+
+            throw CompilerRecorder.rethrow(e);
+        } catch (Throwable e) {
+            TranslationError error = new TranslationError(e);
+            error.write("Can't compile ", source.getName() + ".");
+
+            throw CompilerRecorder.rethrow(error);
+        }
+
+        for (Annotation annotation : source.getAnnotations()) {
+            require(annotation.annotationType());
         }
 
         // write metadata
