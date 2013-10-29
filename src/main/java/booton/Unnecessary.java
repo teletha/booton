@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator;
+package booton;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -17,11 +17,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @version 2013/09/26 23:00:48
+ * @version 2013/10/29 10:39:50
  */
 @Documented
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Require {
+public @interface Unnecessary {
 }

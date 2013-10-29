@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +39,9 @@ import kiss.Singleton;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
+
+import booton.Necessary;
+import booton.Unnecessary;
 
 /**
  * <h2>The Reserved words in ECMA Script Third Edition</h2>
@@ -60,7 +64,7 @@ import org.objectweb.asm.Type;
  * volatile
  * </p>
  * 
- * @version 2013/09/24 15:56:44
+ * @version 2013/10/29 10:38:02
  */
 public class Javascript {
 
@@ -104,6 +108,9 @@ public class Javascript {
 
     /** The field list of this script. */
     private final List<Integer> fields = new ArrayList();
+
+    /** The dependencies. */
+    private final Set<Class> dependencies = new LinkedHashSet();
 
     /** The actual Javascript source code to be translated. This is initialized lazy. */
     private String code;
@@ -248,7 +255,7 @@ public class Javascript {
             }
 
             // write dependency classes
-            for (Class dependency : CompilerRecorder.getDependencies()) {
+            for (Class dependency : dependencies) {
                 Javascript script = Javascript.getScript(dependency);
 
                 if (script != null && !defined.contains(script.source)) {
@@ -486,7 +493,17 @@ public class Javascript {
      * @param dependency A dependency class.
      */
     public static final void require(Class dependency) {
-        CompilerRecorder.addDependency(dependency);
+        while (dependency.isArray()) {
+            dependency = dependency.getComponentType();
+        }
+
+        if (!dependency.isAnnotationPresent(Unnecessary.class)) {
+            Javascript context = CompilerRecorder.getCurrent();
+
+            if (context.source != dependency) {
+                context.dependencies.add(dependency);
+            }
+        }
     }
 
     /**
@@ -741,7 +758,7 @@ public class Javascript {
      * @version 2013/09/27 15:27:16
      */
     @Manageable(lifestyle = Singleton.class)
-    private static class DepenedencyManager implements ClassListener<Require> {
+    private static class DepenedencyManager implements ClassListener<Necessary> {
 
         /** The ignored classes. */
         private final Set<Class> ignores = new HashSet();

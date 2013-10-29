@@ -92,7 +92,7 @@ class JavaSignatureCompiler {
         } else {
             Class clazz = (Class) type;
 
-            // Javascript.require(clazz);
+            Javascript.require(clazz);
 
             code.append(Javascript.computeSimpleClassName(clazz));
         }

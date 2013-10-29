@@ -18,7 +18,7 @@ import kiss.Interceptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.Require;
+import booton.Necessary;
 import booton.translator.ScriptRunner;
 
 /**
@@ -73,7 +73,7 @@ public class InterceptorTest {
     /**
      * @version 2013/09/25 22:08:49
      */
-    @Require
+    @Necessary
     protected static class HelloInterceptor extends Interceptor<Hello> {
 
         /**
@@ -95,7 +95,7 @@ public class InterceptorTest {
     /**
      * @version 2013/09/25 22:08:49
      */
-    @Require
+    @Necessary
     protected static class GoodbyInterceptor extends Interceptor<Goodby> {
 
         /**
