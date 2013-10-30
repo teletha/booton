@@ -276,6 +276,10 @@ class JavaMethodCompiler extends MethodVisitor {
         // Resolve all try-catch-finally blocks.
         tries.process();
 
+        if (methodNameOriginal.equals("equals") && script.source.getName().endsWith("OptionalDouble")) {
+            debuggable = true;
+        }
+
         if (debuggable) {
             NodeDebugger.dump(script, methodNameOriginal, nodes);
         }
@@ -1064,6 +1068,10 @@ class JavaMethodCompiler extends MethodVisitor {
         // Ternary Operator
         // Ternary operator (e.g. int i = (j == 0) ? 0 : 1;) is represented as [LABEL,
         // THEN_EXPRESSION, GOTO, LABEL, ELSE_EXPRESSION, LABEL] in bytecode.
+
+        if (methodNameOriginal.equals("equals") && script.source.getName().endsWith("OptionalDouble")) {
+            NodeDebugger.dump(nodes);
+        }
 
         // build new node
         current = connect(label);

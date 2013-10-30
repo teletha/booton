@@ -104,10 +104,6 @@ class JavaClassCompiler extends ClassVisitor {
             return null;
         }
 
-        if (script.source.isInterface()) {
-            System.out.println(script.source);
-        }
-
         // ignore compiler generated method for enum switch
         if (Switch.isEnumSwitchTable(name, desc)) {
             return null;
