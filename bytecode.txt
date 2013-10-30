@@ -1,0 +1,187 @@
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (!(obj instanceof OptionalDouble)) {
+            return false;
+        }
+
+        OptionalDouble other = (OptionalDouble) obj;
+        return (isPresent && other.isPresent) //
+        ? Double.compare(value, other.value) == 0//
+                : isPresent == other.isPresent;
+    }
+
+{
+mv = cw.visitMethod(ACC_PUBLIC, "equals", "(Ljava/lang/Object;)Z", null, null);
+mv.visitCode();
+Label l0 = new Label();
+mv.visitLabel(l0);
+mv.visitLineNumber(203, l0);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitVarInsn(ALOAD, 1);
+Label l1 = new Label();
+mv.visitJumpInsn(IF_ACMPNE, l1);
+Label l2 = new Label();
+mv.visitLabel(l2);
+mv.visitLineNumber(204, l2);
+mv.visitInsn(ICONST_1);
+mv.visitInsn(IRETURN);
+mv.visitLabel(l1);
+mv.visitLineNumber(207, l1);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitTypeInsn(INSTANCEOF, "java/util/OptionalDouble");
+Label l3 = new Label();
+mv.visitJumpInsn(IFNE, l3);
+Label l4 = new Label();
+mv.visitLabel(l4);
+mv.visitLineNumber(208, l4);
+mv.visitInsn(ICONST_0);
+mv.visitInsn(IRETURN);
+mv.visitLabel(l3);
+mv.visitLineNumber(211, l3);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitTypeInsn(CHECKCAST, "java/util/OptionalDouble");
+mv.visitVarInsn(ASTORE, 2);
+Label l5 = new Label();
+mv.visitLabel(l5);
+mv.visitLineNumber(212, l5);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitFieldInsn(GETFIELD, "java/util/OptionalDouble", "isPresent", "Z");
+Label l6 = new Label();
+mv.visitJumpInsn(IFEQ, l6);
+mv.visitVarInsn(ALOAD, 2);
+mv.visitFieldInsn(GETFIELD, "java/util/OptionalDouble", "isPresent", "Z");
+mv.visitJumpInsn(IFEQ, l6);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitFieldInsn(GETFIELD, "java/util/OptionalDouble", "value", "D");
+mv.visitVarInsn(ALOAD, 2);
+mv.visitFieldInsn(GETFIELD, "java/util/OptionalDouble", "value", "D");
+Label l7 = new Label();
+mv.visitLabel(l7);
+mv.visitLineNumber(213, l7);
+mv.visitMethodInsn(INVOKESTATIC, "java/lang/Double", "compare", "(DD)I");
+Label l8 = new Label();
+mv.visitJumpInsn(IFNE, l8);
+mv.visitInsn(ICONST_1);
+Label l9 = new Label();
+mv.visitJumpInsn(GOTO, l9);
+mv.visitLabel(l8);
+mv.visitFrame(Opcodes.F_APPEND,1, new Object[] {"java/util/OptionalDouble"}, 0, null);
+mv.visitInsn(ICONST_0);
+mv.visitJumpInsn(GOTO, l9);
+mv.visitLabel(l6);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitFieldInsn(GETFIELD, "java/util/OptionalDouble", "isPresent", "Z");
+mv.visitVarInsn(ALOAD, 2);
+mv.visitFieldInsn(GETFIELD, "java/util/OptionalDouble", "isPresent", "Z");
+Label l10 = new Label();
+mv.visitJumpInsn(IF_ICMPNE, l10);
+mv.visitInsn(ICONST_1);
+mv.visitJumpInsn(GOTO, l9);
+mv.visitLabel(l10);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitInsn(ICONST_0);
+mv.visitLabel(l9);
+mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[] {Opcodes.INTEGER});
+mv.visitInsn(IRETURN);
+mv.visitMaxs(4, 3);
+mv.visitEnd();
+}
+cw.visitEnd();
+
+return cw.toByteArray();
+}
+}
+
+
+
+
+0	  in : []	out : [1]	dom : []	code : this!=A [Condition]
+
+0	  in : []	out : [1,2]	dom : []	code : this!=A [Condition]
+2	  in : [0]	out : []	dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+
+0	  in : []	out : [1,2]	dom : []	code : this!=A [Condition]
+2	  in : [0]	out : []	dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]	out : [3]	dom : [0]	code : A instanceof boot.K!=0 [Condition]
+
+0	  in : []	out : [1,2]	dom : []	code : this!=A [Condition]
+2	  in : [0]	out : []	dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]	out : [3,4]	dom : [0]	code : A instanceof boot.K!=0 [Condition]
+4	  in : [1]	out : []	dom : [1]	code : return  [Expression] false [Expression] ; [Expression]
+
+0	  in : []	out : [1,2]	dom : []	code : this!=A [Condition]
+2	  in : [0]	out : []	dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]	out : [3,4]	dom : [0]	code : A instanceof boot.K!=0 [Condition]
+4	  in : [1]	out : []	dom : [1]	code : return  [Expression] false [Expression] ; [Expression]
+3	  in : [1]	out : []	dom : [1]	code : B=A [Expression] ; [Expression]
+
+0	  in : []	out : [1,2]	dom : []	code : this!=A [Condition]
+2	  in : [0]	out : []	dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]	out : [3,4]	dom : [0]	code : A instanceof boot.K!=0 [Condition]
+4	  in : [1]	out : []	dom : [1]	code : return  [Expression] false [Expression] ; [Expression]
+3	  in : [1]	out : [5]	dom : [1]	code : B=A [Expression] ; [Expression]
+5	  in : [3]	out : [6]	dom : [3]	code : this.d==0 [Condition] B.d==0 [Condition] this.e [Expression] B.e [Expression]
+
+0	  in : []	out : [1,2]		dom : []	code : this!=A [Condition]
+2	  in : [0]	out : []		dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]	out : [3,4]		dom : [0]	code : A instanceof boot.K!=0 [Condition]
+4	  in : [1]	out : []		dom : [1]	code : return  [Expression] false [Expression] ; [Expression]
+3	  in : [1]	out : [5]		dom : [1]	code : B=A [Expression] ; [Expression]
+5	  in : [3]	out : [6,8,9]		dom : [3]	code : boot.CG.PW(this.d==0,B.d!=0?this.e:B.e)!=0 [Condition] 1 [Number]
+
+0	  in : []	out : [1,2]	dom : []	code : this!=A [Condition]
+2	  in : [0]	out : []	dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]	out : [3,4]	dom : [0]	code : A instanceof boot.K!=0 [Condition]
+4	  in : [1]	out : []	dom : [1]	code : return  [Expression] false [Expression] ; [Expression]
+3	  in : [1]	out : [5]	dom : [1]	code : B=A [Expression] ; [Expression]
+5	  in : [3]	out : [6,9]	dom : [3]	code : boot.CG.PW(this.d==0,B.d!=0?this.e:B.e)!=0 [Condition] 1 [Number] 0 [Number]
+
+0	  in : []	out : [1,2]	dom : []	code : this!=A [Condition]
+2	  in : [0]	out : []	dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]	out : [3,4]	dom : [0]	code : A instanceof boot.K!=0 [Condition]
+4	  in : [1]	out : []	dom : [1]	code : return  [Expression] false [Expression] ; [Expression]
+3	  in : [1]	out : [5]	dom : [1]	code : B=A [Expression] ; [Expression]
+5	  in : [3]	out : [6,9]	dom : [3]	code : 
+6	  in : [5]	out : [10,9]	dom : [5]	code : boot.CG.PW(this.d==0,B.d!=0?this.e:B.e)==0 [Condition] this.d!=B.d [Condition] 1 [Number]
+
+0	  in : []	out : [1,2]	dom : []	code : this!=A [Condition]
+2	  in : [0]	out : []	dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]	out : [3,4]	dom : [0]	code : A instanceof boot.K!=0 [Condition]
+4	  in : [1]	out : []	dom : [1]	code : return  [Expression] false [Expression] ; [Expression]
+3	  in : [1]	out : [5]	dom : [1]	code : B=A [Expression] ; [Expression]
+5	  in : [3]	out : [6,9]	dom : [3]	code : 
+6	  in : [5]	out : [9]	dom : [5]	code : boot.CG.PW(this.d==0,B.d!=0?this.e:B.e)==0 [Condition] this.d!=B.d [Condition] 1 [Number] 0 [Number]
+
+java.util.OptionalDouble  equals
+0	  in : []	out : [1,2]	dom : []	code : this!=A [Condition]
+2	  in : [0]	out : []	dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]	out : [3,4]	dom : [0]	code : A instanceof boot.K!=0 [Condition]
+4	  in : [1]	out : []	dom : [1]	code : return  [Expression] false [Expression] ; [Expression]
+3	  in : [1]	out : [5]	dom : [1]	code : B=A [Expression] ; [Expression]
+5	  in : [3]	out : [6]	dom : [3]	code : 
+6	  in : [5]	out : []	dom : [5]	code : boot.CG.PW(this.d==0,B.d!=0?this.e:B.e)==0 [Condition] return  [Expression] this.d==B.d [Condition] ; [Expression]
+
+F:function(A,B){
+		// 203
+		if (this!=A) {
+			// 207
+			if (A instanceof boot.K!=0) {
+				// 211
+				B=A;
+				// 213
+				boot.CG.PW(this.d==0,B.d!=0?this.e:B.e)==0return this.d==B.d;
+			} else {
+				// 208
+				return false;
+			}
+		} else {
+			// 204
+			return true;
+		}
+	}
