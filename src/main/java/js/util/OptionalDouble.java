@@ -14,10 +14,12 @@ import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+import booton.translator.JavaAPIProvider;
+
 /**
  * @version 2013/10/26 13:08:14
  */
-// @JavaAPIProvider(java.util.OptionalDouble.class)
+@JavaAPIProvider(java.util.OptionalDouble.class)
 public final class OptionalDouble {
 
     /**
