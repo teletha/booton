@@ -25,7 +25,7 @@ import org.objectweb.asm.util.TraceMethodVisitor;
 public class BytecodeDump {
 
     public static void main(String[] args) throws Exception {
-        dump(Class.forName("java.util.OptionalDouble"), "equals");
+        dump(Class.forName("js.util.OptionalDouble"), "equals");
     }
 
     /**

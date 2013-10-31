@@ -216,6 +216,9 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The debug flag. */
     private boolean debuggable = false;
 
+    /** The debug flag. */
+    private boolean detail = false;
+
     /**
      * @param script A target script to compile.
      * @param code A code writer.
@@ -245,6 +248,7 @@ class JavaMethodCompiler extends MethodVisitor {
         for (int i = 0; i < parameters.length; i++) {
             variables.type(isStatic ? i : i + 1).type(convert(parameters[i]));
         }
+
         NodeDebugger.whileProcess = true;
     }
 
@@ -275,10 +279,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // Resolve all try-catch-finally blocks.
         tries.process();
-
-        if (methodNameOriginal.equals("equals") && script.source.getName().endsWith("OptionalDouble")) {
-            debuggable = true;
-        }
 
         if (debuggable) {
             NodeDebugger.dump(script, methodNameOriginal, nodes);
@@ -341,6 +341,18 @@ class JavaMethodCompiler extends MethodVisitor {
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
         if (desc.equals(Type.getType(Debuggable.class).getDescriptor())) {
             debuggable = true;
+
+            return new AnnotationVisitor(ASM4) {
+
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                public AnnotationVisitor visitAnnotation(String name, String desc) {
+                    System.out.println(name + "  " + desc);
+                    return super.visitAnnotation(name, desc);
+                }
+            };
         }
         return null; // do nothing
     }
@@ -726,7 +738,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.remove(0);
                 current.remove(0);
 
-                merge();
+                mergeConditions(current);
                 dispose(current);
             } else if (match(JUMP, ICONST_1, IRETURN, LABEL, FRAME_SAME, ICONST_0, IRETURN) || match(JUMP, ICONST_1, IRETURN, LABEL, FRAME_APPEND, ICONST_0, IRETURN)) {
                 // merge the node sequence of logical expression
@@ -735,7 +747,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.remove(0);
                 current.remove(0);
 
-                merge();
+                mergeConditions(current);
                 dispose(current);
 
                 // invert the latest condition
@@ -1069,12 +1081,13 @@ class JavaMethodCompiler extends MethodVisitor {
         // Ternary operator (e.g. int i = (j == 0) ? 0 : 1;) is represented as [LABEL,
         // THEN_EXPRESSION, GOTO, LABEL, ELSE_EXPRESSION, LABEL] in bytecode.
 
-        if (methodNameOriginal.equals("equals") && script.source.getName().endsWith("OptionalDouble")) {
-            NodeDebugger.dump(nodes);
-        }
-
         // build new node
         current = connect(label);
+
+        if (debuggable) {
+            System.out.println(current.id);
+            NodeDebugger.dump(nodes);
+        }
 
         // store the node in appearing order
         nodes.add(current);
@@ -1085,6 +1098,11 @@ class JavaMethodCompiler extends MethodVisitor {
             if (current.previous.stack.size() != 0) {
                 resolveLabel();
             }
+        }
+
+        if (debuggable) {
+            System.out.println(current.id);
+            NodeDebugger.dump(nodes);
         }
     }
 
@@ -1104,7 +1122,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         if (first instanceof OperandCondition) {
-            merge();
+            mergeConditions(current);
 
             // If the previous instruction is not JUMP, it is part of Ternary operator or
             // Conditional operator.
@@ -1114,7 +1132,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         if (second instanceof OperandCondition) {
-            merge();
+            mergeConditions(current);
             dispose(current);
 
             // If the previous instruction is not JUMP, it is part of Ternary operator or
@@ -1125,28 +1143,34 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         if (third instanceof OperandCondition) {
-            Node firstNode = findNodeBy(first);
-            Node secondNode = findNodeBy(second);
-            Node thirdNode = findNodeBy(third);
+            // mergeConditions(current);
 
-            if (firstNode.equalsAsIncoming(thirdNode) && secondNode.equalsAsIncoming(thirdNode)) {
-                // =======================
-                // Conditional Operator
-                // =======================
-                first = current.remove(0);
-                second = current.remove(0);
-                third = current.remove(0);
+            try {
+                Node firstNode = findNodeBy(first);
+                Node secondNode = findNodeBy(second);
+                Node thirdNode = findNodeBy(third);
 
-                if (first == ONE && second == ZERO) {
-                    current.addOperand(third);
-                } else if (first == ZERO && second == ONE) {
-                    current.addOperand(third.invert());
-                } else {
-                    current.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
+                if (firstNode.equalsAsIncoming(thirdNode) && secondNode.equalsAsIncoming(thirdNode)) {
+                    // =======================
+                    // Conditional Operator
+                    // =======================
+                    first = current.remove(0);
+                    second = current.remove(0);
+                    third = current.remove(0);
+
+                    if (first == ONE && second == ZERO) {
+                        current.addOperand(third);
+                    } else if (first == ZERO && second == ONE) {
+                        current.addOperand(third.invert());
+                    } else {
+                        current.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
+                    }
+
+                    // resolve recursively
+                    resolveLabel();
                 }
-
-                // resolve recursively
-                resolveLabel();
+            } catch (IllegalArgumentException e) {
+                // TODO: handle exception
             }
         }
     }
@@ -1227,19 +1251,77 @@ class JavaMethodCompiler extends MethodVisitor {
         }
     }
 
+    // /**
+    // * <p>
+    // * Helper method to merge all conditional operands.
+    // * </p>
+    // */
+    // private void merge() {
+    // Set<Node> group = new HashSet();
+    // group.add(current);
+    //
+    // boolean found = false;
+    //
+    // // Decide target node
+    // Node target = current.previous;
+    //
+    // // Merge the sequencial conditional operands in this node from right to left.
+    // for (int i = 0; i < target.stack.size(); i++) {
+    // Operand operand = target.peek(i);
+    //
+    // if (operand instanceof OperandCondition) {
+    // OperandCondition condition = (OperandCondition) operand;
+    //
+    // if (!found) {
+    // found = true;
+    //
+    // // This is first operand condition.
+    // group.add(condition.transition);
+    //
+    // // Set next appearing node for grouping.
+    // condition.next = current;
+    // } else if (group.contains(condition.transition)) {
+    // // Merge two adjucent conditional operands.
+    // i--;
+    //
+    // target.set(i, new OperandCondition(condition, (OperandCondition) target.remove(i)));
+    // } else {
+    // return; // Stop here.
+    // }
+    // }
+    // }
+    //
+    // // Merge this node and the specified node.
+    // // Rearch the start of node
+    // if (target.previous != null) {
+    // Operand operand = target.previous.peek(0);
+    //
+    // if (operand instanceof OperandCondition) {
+    // OperandCondition condition = (OperandCondition) operand;
+    //
+    // if (group.contains(condition.transition)) {
+    // dispose(target);
+    //
+    // // Merge recursively
+    // merge();
+    // }
+    // }
+    // }
+    // }
+
     /**
      * <p>
      * Helper method to merge all conditional operands.
      * </p>
      */
-    private void merge() {
+    private void mergeConditions(Node node) {
         Set<Node> group = new HashSet();
-        group.add(current);
+        group.add(node);
 
         boolean found = false;
 
         // Decide target node
-        Node target = current.previous;
+        Node target = node.previous;
 
         // Merge the sequencial conditional operands in this node from right to left.
         for (int i = 0; i < target.stack.size(); i++) {
@@ -1255,7 +1337,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     group.add(condition.transition);
 
                     // Set next appearing node for grouping.
-                    condition.next = current;
+                    condition.next = node;
                 } else if (group.contains(condition.transition)) {
                     // Merge two adjucent conditional operands.
                     i--;
@@ -1279,7 +1361,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     dispose(target);
 
                     // Merge recursively
-                    merge();
+                    mergeConditions(node);
                 }
             }
         }
