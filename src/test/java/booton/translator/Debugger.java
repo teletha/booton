@@ -9,6 +9,8 @@
  */
 package booton.translator;
 
+import static org.objectweb.asm.Opcodes.*;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -17,15 +19,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.objectweb.asm.AnnotationVisitor;
+
 import booton.translator.Node.TryCatchFinally;
 
 /**
- * @version 2013/08/11 12:01:30
+ * @version 2013/11/01 9:49:36
  */
-public class NodeDebugger {
-
-    /** The processing environment. */
-    static boolean whileProcess = false;
+public class Debugger extends AnnotationVisitor {
 
     /** The processing environment. */
     private static final boolean whileTest;
@@ -42,6 +43,39 @@ public class NodeDebugger {
         whileTest = flag;
     }
 
+    /** The Java original method name. */
+    final String methodName;
+
+    boolean enable = false;
+
+    boolean beforeLabel = false;
+
+    boolean afterLabel = false;
+
+    /** The processing flag. */
+    boolean whileProcess = false;
+
+    /**
+     * 
+     */
+    public Debugger(String methodName) {
+        super(ASM5);
+
+        this.methodName = methodName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visit(String name, Object value) {
+        if (name.equals("beforeLabel")) {
+            beforeLabel = Boolean.parseBoolean(value.toString());
+        } else if (name.equals("afterLabel")) {
+            afterLabel = Boolean.parseBoolean(value.toString());
+        }
+    }
+
     /**
      * <p>
      * Dump node tree.
@@ -49,7 +83,7 @@ public class NodeDebugger {
      * 
      * @param node
      */
-    public static void dump(Node node) {
+    public void dump(Node node) {
         if (node != null) {
             dump(Collections.singletonList(node));
         }
@@ -62,27 +96,18 @@ public class NodeDebugger {
      * 
      * @param nodes
      */
-    public static void dump(List<Node> nodes) {
+    public void dump(List<Node> nodes) {
         System.out.println(format(nodes));
     }
 
     /**
      * <p>
-     * Dump node tree with method info.
+     * Dump the current nodes in detail.
      * </p>
-     * 
-     * @param script A current processing script.
-     * @param methodName A original method name.
-     * @param nodes A node info.
      */
-    public static void dump(String methodName, List<Node> nodes) {
-        if (whileTest) {
-            if (methodName.equals("act")) {
-                dump(nodes);
-            }
-        } else {
-            dump(nodes);
-        }
+    public void dump(String message, List<Node> nodes) {
+        System.out.println(message);
+        dump(nodes);
     }
 
     /**
@@ -94,7 +119,7 @@ public class NodeDebugger {
      * @param methodName A original method name.
      * @param nodes A node info.
      */
-    public static void dump(Javascript script, String methodName, List<Node> nodes) {
+    public void dump(Javascript script, String methodName, List<Node> nodes) {
         if (whileTest) {
             String testClassName = computeTestClassName(script.source);
             String testMethodName = computeTestMethodName(testClassName);
@@ -115,7 +140,7 @@ public class NodeDebugger {
      * @param clazz
      * @return
      */
-    private static String computeTestClassName(Class clazz) {
+    private String computeTestClassName(Class clazz) {
         String name = clazz.getName();
 
         int index = name.indexOf('$');
@@ -134,7 +159,7 @@ public class NodeDebugger {
      * @param testClassName
      * @return
      */
-    private static String computeTestMethodName(String testClassName) {
+    private String computeTestMethodName(String testClassName) {
         for (StackTraceElement element : new Error().getStackTrace()) {
             if (element.getClassName().equals(testClassName)) {
                 return element.getMethodName();
@@ -151,7 +176,7 @@ public class NodeDebugger {
      * @param nodes
      * @return
      */
-    private static String format(List<Node> nodes) {
+    private String format(List<Node> nodes) {
         Set<TryCatchFinally> tries = new LinkedHashSet();
 
         for (Node node : nodes) {
@@ -226,7 +251,7 @@ public class NodeDebugger {
      * @param node
      * @return
      */
-    private static List<Node> list(Node node) {
+    private List<Node> list(Node node) {
         if (node == null) {
             return Collections.EMPTY_LIST;
         }
@@ -241,7 +266,7 @@ public class NodeDebugger {
      * @param target
      * @return
      */
-    private static Node getDominator(Node target) {
+    private Node getDominator(Node target) {
         if (whileProcess) {
             return getDominator(target, new HashSet());
         } else {
@@ -254,7 +279,7 @@ public class NodeDebugger {
      * 
      * @return A dominator node. If this node is root, <code>null</code>.
      */
-    private static Node getDominator(Node target, Set<Node> nodes) {
+    private Node getDominator(Node target, Set<Node> nodes) {
         if (!nodes.add(target)) {
             return null;
         }
@@ -312,7 +337,7 @@ public class NodeDebugger {
      * @param dominator A dominator node.
      * @return A result.
      */
-    private static boolean hasDominator(Node target, Node dominator, Set<Node> nodes) {
+    private boolean hasDominator(Node target, Node dominator, Set<Node> nodes) {
         Node current = target;
 
         while (current != null) {

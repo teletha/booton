@@ -139,6 +139,9 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The frequently used operand for cache. */
     private static final OperandNumber ONE = new OperandNumber(1);
 
+    /** The debug flag. */
+    private final Debugger debugger;
+
     /** The java source(byte) code. */
     private final Javascript script;
 
@@ -147,9 +150,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
     /** The current processing method name. */
     private final String methodName;
-
-    /** The Java original method name. */
-    private final String methodNameOriginal;
 
     /** The method return type. */
     private final Type returnType;
@@ -213,12 +213,6 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private boolean enumSwitchInvoked;
 
-    /** The debug flag. */
-    private boolean debuggable = false;
-
-    /** The debug flag. */
-    private boolean detail = false;
-
     /**
      * @param script A target script to compile.
      * @param code A code writer.
@@ -227,17 +221,17 @@ class JavaMethodCompiler extends MethodVisitor {
      * @param isStatic A static flag.
      */
     JavaMethodCompiler(Javascript script, ScriptWriter code, String original, String name, String description, boolean isStatic) {
-        super(ASM4);
+        super(ASM5);
 
         CompilerRecorder.recordMethodName(original);
 
         this.script = script;
         this.code = code;
         this.methodName = name;
-        this.methodNameOriginal = original;
         this.returnType = Type.getReturnType(description);
         this.parameterTypes = Type.getArgumentTypes(description);
         this.variables = new LocalVariables(isStatic);
+        this.debugger = new Debugger(original);
 
         Type[] parameters = Type.getArgumentTypes(description);
 
@@ -248,8 +242,6 @@ class JavaMethodCompiler extends MethodVisitor {
         for (int i = 0; i < parameters.length; i++) {
             variables.type(isStatic ? i : i + 1).type(convert(parameters[i]));
         }
-
-        NodeDebugger.whileProcess = true;
     }
 
     /**
@@ -257,7 +249,7 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitEnd() {
-        NodeDebugger.whileProcess = false;
+        debugger.whileProcess = false;
 
         // Resolve shorthand syntax sugar of "if" statement.
         for (int i = nodes.size() - 1; 0 <= i; i--) {
@@ -280,8 +272,8 @@ class JavaMethodCompiler extends MethodVisitor {
         // Resolve all try-catch-finally blocks.
         tries.process();
 
-        if (debuggable) {
-            NodeDebugger.dump(script, methodNameOriginal, nodes);
+        if (debugger.enable) {
+            debugger.dump(script, debugger.methodName, nodes);
         }
 
         // ===============================================
@@ -299,12 +291,12 @@ class JavaMethodCompiler extends MethodVisitor {
             TranslationError error = new TranslationError(e);
             error.write("Can't compile method because");
             error.write(e.getMessage());
-            error.writeMethod(methodNameOriginal, returnType, parameterTypes);
+            error.writeMethod(debugger.methodName, returnType, parameterTypes);
 
             throw error;
         }
 
-        if (debuggable) {
+        if (debugger.enable) {
             System.out.println(code.toFragment());
         }
     }
@@ -340,19 +332,9 @@ class JavaMethodCompiler extends MethodVisitor {
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
         if (desc.equals(Type.getType(Debuggable.class).getDescriptor())) {
-            debuggable = true;
+            debugger.enable = true;
 
-            return new AnnotationVisitor(ASM4) {
-
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public AnnotationVisitor visitAnnotation(String name, String desc) {
-                    System.out.println(name + "  " + desc);
-                    return super.visitAnnotation(name, desc);
-                }
-            };
+            return debugger;
         }
         return null; // do nothing
     }
@@ -1084,9 +1066,8 @@ class JavaMethodCompiler extends MethodVisitor {
         // build new node
         current = connect(label);
 
-        if (debuggable) {
-            System.out.println(current.id);
-            NodeDebugger.dump(nodes);
+        if (debugger.beforeLabel) {
+            debugger.dump("Before node" + current.id, nodes);
         }
 
         // store the node in appearing order
@@ -1100,9 +1081,8 @@ class JavaMethodCompiler extends MethodVisitor {
             }
         }
 
-        if (debuggable) {
-            System.out.println(current.id);
-            NodeDebugger.dump(nodes);
+        if (debugger.afterLabel) {
+            debugger.dump("After node" + current.id, nodes);
         }
     }
 

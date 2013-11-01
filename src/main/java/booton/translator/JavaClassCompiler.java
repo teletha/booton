@@ -37,7 +37,7 @@ class JavaClassCompiler extends ClassVisitor {
      * @param code The javascript object code.
      */
     JavaClassCompiler(Javascript script, ScriptWriter code) {
-        super(ASM4);
+        super(ASM5);
 
         this.script = script;
         this.code = code;

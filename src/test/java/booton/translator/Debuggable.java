@@ -15,7 +15,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @version 2013/04/06 13:14:00
+ * @version 2013/11/01 10:53:45
  */
 @Target({ElementType.METHOD, ElementType.CONSTRUCTOR})
 @Retention(RetentionPolicy.CLASS)
@@ -28,5 +28,14 @@ public @interface Debuggable {
      * 
      * @return
      */
-    boolean detail() default false;
+    boolean beforeLabel() default false;
+
+    /**
+     * <p>
+     * Show debug info in detail.
+     * </p>
+     * 
+     * @return
+     */
+    boolean afterLabel() default false;
 }
