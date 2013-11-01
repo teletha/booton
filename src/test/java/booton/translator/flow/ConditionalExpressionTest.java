@@ -36,6 +36,7 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void logicalExpressionInLeft() {
         test(new Scriptable() {
 
+            @Debuggable
             public boolean act(int value) {
                 return value < 3 ? value == 2 : false;
             }
@@ -46,9 +47,11 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void logicalExpressionInRight() {
         test(new Scriptable() {
 
+            private boolean a = true;
+
             @Debuggable
             public boolean act(int value) {
-                return value < 3 ? true : value == 4;
+                return value < 3 ? a : value == 4;
             }
         });
     }

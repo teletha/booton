@@ -517,6 +517,24 @@ class JavaMethodCompiler extends MethodVisitor {
 
         case F_SAME:
             record(FRAME_SAME);
+
+            if (nLocal == 0 && nStack == 0 && debugger.enable) {
+                Operand first = current.peek(0);
+                Operand second = current.peek(1);
+
+                if (first == ONE && second == ZERO) {
+                    current.remove(0);
+                    current.remove(0);
+                    current.addOperand(current.remove(0));
+                } else if (first == ZERO && second == ONE) {
+                    current.remove(0);
+                    current.remove(0);
+                    current.addOperand(current.remove(0).invert());
+                }
+                debugger.dump(script, nodes);
+                // resolve recursively
+                // resolveLabel();
+            }
             break;
 
         case F_SAME1:
@@ -524,10 +542,33 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (nLocal == 0 && nStack == 1 && debugger.enable) {
                 System.out.println(script.source.getName() + "#" + debugger.methodName + "  " + Arrays.toString(local) + "  " + nStack + "  " + Arrays.toString(stack));
+
+                resolve();
             }
 
             break;
         }
+    }
+
+    private void resolve() {
+        if (current.) {
+            
+        }
+        Operand first = current.remove(0);
+        Operand second = current.remove(0);
+        Operand third = current.remove(0);
+
+        if (first == ONE && second == ZERO) {
+            current.addOperand(third);
+        } else if (first == ZERO && second == ONE) {
+            current.addOperand(third.invert());
+        } else {
+            current.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
+        }
+
+        debugger.dump(nodes);
+
+        resolve();
     }
 
     /**
@@ -1154,7 +1195,7 @@ class JavaMethodCompiler extends MethodVisitor {
             }
         }
 
-        if (third instanceof OperandCondition) {
+        if (third instanceof OperandCondition && !debugger.enable) {
             // mergeConditions(current);
 
             Node firstNode = findNodeBy(first);
