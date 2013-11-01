@@ -18,6 +18,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -249,6 +250,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitEnd() {
+        if (debugger.asmable) debugger.tracer.visitEnd();
+
         debugger.whileProcess = false;
 
         // Resolve shorthand syntax sugar of "if" statement.
@@ -273,7 +276,7 @@ class JavaMethodCompiler extends MethodVisitor {
         tries.process();
 
         if (debugger.enable) {
-            debugger.dump(script, debugger.methodName, nodes);
+            debugger.dump(script, nodes);
         }
 
         // ===============================================
@@ -331,6 +334,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+        if (debugger.asmable) debugger.tracer.visitAnnotation(desc, visible);
+
         if (desc.equals(Type.getType(Debuggable.class).getDescriptor())) {
             debugger.enable = true;
 
@@ -344,6 +349,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public AnnotationVisitor visitAnnotationDefault() {
+        if (debugger.asmable) debugger.tracer.visitAnnotationDefault();
+
         return null; // do nothing
     }
 
@@ -352,6 +359,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitAttribute(Attribute attr) {
+        if (debugger.asmable) debugger.tracer.visitAttribute(attr);
+
         // do nothing
     }
 
@@ -360,6 +369,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitCode() {
+        if (debugger.asmable) debugger.tracer.visitCode();
+
         // do nothing
     }
 
@@ -368,6 +379,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitLineNumber(int line, Label start) {
+        if (debugger.asmable) debugger.tracer.visitLineNumber(line, start);
+
         getNode(start).number = line;
 
         CompilerRecorder.recordMethodLineNumber(line);
@@ -378,6 +391,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitFieldInsn(int opcode, String ownerClassName, String name, String desc) {
+        if (debugger.asmable) debugger.tracer.visitFieldInsn(opcode, ownerClassName, name, desc);
+
         // If this field access instruction is used for assertion, we should skip it to erase
         // compiler generated extra code.
         if (name.equals("$assertionsDisabled")) {
@@ -481,6 +496,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
+        if (debugger.asmable) debugger.tracer.visitFrame(type, nLocal, local, nStack, stack);
+
         switch (type) {
         case F_NEW:
             record(FRAME_NEW);
@@ -504,6 +521,11 @@ class JavaMethodCompiler extends MethodVisitor {
 
         case F_SAME1:
             record(FRAME_SAME1);
+
+            if (nLocal == 0 && nStack == 1 && debugger.enable) {
+                System.out.println(script.source.getName() + "#" + debugger.methodName + "  " + Arrays.toString(local) + "  " + nStack + "  " + Arrays.toString(stack));
+            }
+
             break;
         }
     }
@@ -513,6 +535,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitIincInsn(int position, int increment) {
+        if (debugger.asmable) debugger.tracer.visitIincInsn(position, increment);
+
         // retrieve the local variable name
         String variable = variables.name(position);
 
@@ -544,6 +568,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitInsn(int opcode) {
+        if (debugger.asmable) debugger.tracer.visitInsn(opcode);
+
         // recode current instruction
         record(opcode);
 
@@ -847,6 +873,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitIntInsn(int opcode, int operand) {
+        if (debugger.asmable) debugger.tracer.visitIntInsn(opcode, operand);
+
         // recode current instruction
         record(opcode);
 
@@ -921,6 +949,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitJumpInsn(int opcode, Label label) {
+        if (debugger.asmable) debugger.tracer.visitJumpInsn(opcode, label);
+
         // If this jump instruction is used for assertion, we should skip it to erase compiler
         // generated extra code.
         if (assertJump) {
@@ -1045,6 +1075,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitLabel(Label label) {
+        if (debugger.asmable) debugger.tracer.visitLabel(label);
+
         // recode current instruction
         record(LABEL);
 
@@ -1125,32 +1157,28 @@ class JavaMethodCompiler extends MethodVisitor {
         if (third instanceof OperandCondition) {
             // mergeConditions(current);
 
-            try {
-                Node firstNode = findNodeBy(first);
-                Node secondNode = findNodeBy(second);
-                Node thirdNode = findNodeBy(third);
+            Node firstNode = findNodeBy(first);
+            Node secondNode = findNodeBy(second);
+            Node thirdNode = findNodeBy(third);
 
-                if (firstNode.equalsAsIncoming(thirdNode) && secondNode.equalsAsIncoming(thirdNode)) {
-                    // =======================
-                    // Conditional Operator
-                    // =======================
-                    first = current.remove(0);
-                    second = current.remove(0);
-                    third = current.remove(0);
+            if (firstNode.equalsAsIncoming(thirdNode) && secondNode.equalsAsIncoming(thirdNode)) {
+                // =======================
+                // Conditional Operator
+                // =======================
+                first = current.remove(0);
+                second = current.remove(0);
+                third = current.remove(0);
 
-                    if (first == ONE && second == ZERO) {
-                        current.addOperand(third);
-                    } else if (first == ZERO && second == ONE) {
-                        current.addOperand(third.invert());
-                    } else {
-                        current.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
-                    }
-
-                    // resolve recursively
-                    resolveLabel();
+                if (first == ONE && second == ZERO) {
+                    current.addOperand(third);
+                } else if (first == ZERO && second == ONE) {
+                    current.addOperand(third.invert());
+                } else {
+                    current.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
                 }
-            } catch (IllegalArgumentException e) {
-                // TODO: handle exception
+
+                // resolve recursively
+                resolveLabel();
             }
         }
     }
@@ -1375,6 +1403,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitLdcInsn(Object constant) {
+        if (debugger.asmable) debugger.tracer.visitLdcInsn(constant);
+
         if (constant instanceof String) {
             current.stack.add(new OperandString((String) constant));
         } else if (constant instanceof Type) {
@@ -1404,6 +1434,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
+        if (debugger.asmable) debugger.tracer.visitLocalVariable(name, desc, signature, start, end, index);
+
         // Compiler generated code (i.e. synthetic method) doesn't have local variable operand.
         // So we shouldn't use this method to salvage infomation.
     }
@@ -1413,6 +1445,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitMaxs(int maxStack, int maxLocals) {
+        if (debugger.asmable) debugger.tracer.visitMaxs(maxStack, maxLocals);
+
         variables.max = maxLocals;
     }
 
@@ -1421,6 +1455,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitMethodInsn(int opcode, String className, String methodName, String desc) {
+        if (debugger.asmable) debugger.tracer.visitMethodInsn(opcode, className, methodName, desc);
+
         // recode current instruction
         record(opcode);
 
@@ -1565,6 +1601,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitMultiANewArrayInsn(String desc, int dimension) {
+        if (debugger.asmable) debugger.tracer.visitMultiANewArrayInsn(desc, dimension);
+
         // remove needless operands
         for (int i = 0; i < dimension - 1; i++) {
             current.remove(0);
@@ -1577,6 +1615,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public AnnotationVisitor visitParameterAnnotation(int arg0, String arg1, boolean arg2) {
+        if (debugger.asmable) debugger.tracer.visitParameterAnnotation(arg0, arg1, arg2);
+
         return null;
     }
 
@@ -1585,6 +1625,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitTableSwitchInsn(int min, int max, Label defaults, Label... labels) {
+        if (debugger.asmable) debugger.tracer.visitTableSwitchInsn(min, max, defaults, labels);
+
         List<Node> nodes = new ArrayList();
 
         for (Label label : labels) {
@@ -1604,6 +1646,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitLookupSwitchInsn(Label defaults, int[] keys, Label[] labels) {
+        if (debugger.asmable) debugger.tracer.visitLookupSwitchInsn(defaults, keys, labels);
+
         List<Node> nodes = new ArrayList();
 
         for (Label label : labels) {
@@ -1617,6 +1661,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
+        if (debugger.asmable) debugger.tracer.visitTryCatchBlock(start, end, handler, type);
+
         tries.addTryCatchFinallyBlock(getNode(start), getNode(end), getNode(handler), convert(type));
     }
 
@@ -1624,6 +1670,8 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     public void visitTypeInsn(int opcode, String type) {
+        if (debugger.asmable) debugger.tracer.visitTypeInsn(opcode, type);
+
         // recode current instruction
         record(opcode);
 
@@ -1674,6 +1722,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitVarInsn(int opcode, int position) {
+        if (debugger.asmable) debugger.tracer.visitVarInsn(opcode, position);
+
         // recode current instruction
         record(opcode);
 

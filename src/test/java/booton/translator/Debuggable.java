@@ -38,4 +38,13 @@ public @interface Debuggable {
      * @return
      */
     boolean afterLabel() default false;
+
+    /**
+     * <p>
+     * Show debug info in detail.
+     * </p>
+     * 
+     * @return
+     */
+    boolean asm() default false;
 }
