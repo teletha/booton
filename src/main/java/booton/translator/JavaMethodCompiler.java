@@ -18,7 +18,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -521,19 +520,23 @@ class JavaMethodCompiler extends MethodVisitor {
             if (nLocal == 0 && nStack == 0 && debugger.enable) {
                 Operand first = current.peek(0);
                 Operand second = current.peek(1);
+                Operand third = current.peek(2);
 
-                if (first == ONE && second == ZERO) {
-                    current.remove(0);
-                    current.remove(0);
-                    current.addOperand(current.remove(0));
-                } else if (first == ZERO && second == ONE) {
-                    current.remove(0);
-                    current.remove(0);
-                    current.addOperand(current.remove(0).invert());
+                if (third instanceof OperandCondition) {
+                    if (first == ONE && second == ZERO) {
+                        current.remove(0);
+                        current.remove(0);
+                        current.addOperand(current.remove(0));
+                    } else if (first == ZERO && second == ONE) {
+                        current.remove(0);
+                        current.remove(0);
+                        current.addOperand(current.remove(0).invert());
+                    }
+                    debugger.dump(script, nodes);
+
+                    // resolve recursively
+                    // resolveLabel();
                 }
-                debugger.dump(script, nodes);
-                // resolve recursively
-                // resolveLabel();
             }
             break;
 
@@ -541,34 +544,32 @@ class JavaMethodCompiler extends MethodVisitor {
             record(FRAME_SAME1);
 
             if (nLocal == 0 && nStack == 1 && debugger.enable) {
-                System.out.println(script.source.getName() + "#" + debugger.methodName + "  " + Arrays.toString(local) + "  " + nStack + "  " + Arrays.toString(stack));
-
                 resolve();
             }
-
             break;
         }
     }
 
     private void resolve() {
-        if (current.) {
-            
+        Operand third = current.peek(2);
+
+        if (third instanceof OperandCondition) {
+            Operand first = current.remove(0);
+            Operand second = current.remove(0);
+            third = current.remove(0);
+
+            if (first == ONE && second == ZERO) {
+                current.addOperand(third);
+            } else if (first == ZERO && second == ONE) {
+                current.addOperand(third.invert());
+            } else {
+                current.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
+            }
+
+            debugger.dump(nodes);
+
+            resolve();
         }
-        Operand first = current.remove(0);
-        Operand second = current.remove(0);
-        Operand third = current.remove(0);
-
-        if (first == ONE && second == ZERO) {
-            current.addOperand(third);
-        } else if (first == ZERO && second == ONE) {
-            current.addOperand(third.invert());
-        } else {
-            current.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
-        }
-
-        debugger.dump(nodes);
-
-        resolve();
     }
 
     /**
