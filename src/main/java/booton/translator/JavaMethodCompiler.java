@@ -18,6 +18,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,6 +34,7 @@ import kiss.model.ClassUtil;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
@@ -245,6 +247,10 @@ class JavaMethodCompiler extends MethodVisitor {
             variables.type(isStatic ? i : i + 1).type(convert(parameters[i]));
         }
         debugger.whileProcess = true;
+
+        if (script.source.getName().endsWith("ReferencePipeline") && original.equals("collect")) {
+            debugger.enable = true;
+        }
     }
 
     /**
@@ -543,9 +549,9 @@ class JavaMethodCompiler extends MethodVisitor {
             Node secondNode = findNodeBy(second);
             Node thirdNode = findNodeBy(third);
             debugger.print(current.id + "     " + condition.transition.id + "   " + firstNode.id + "  " + secondNode.id + "   " + thirdNode.id);
+            debugger.print(nodes);
 
             if (firstNode.equalsAsIncoming(thirdNode) && secondNode.equalsAsIncoming(thirdNode) && (condition.transition == firstNode || condition.transition == secondNode)) {
-                debugger.print(nodes);
 
                 if (first == ONE && second == ZERO) {
                     current.remove(0);
@@ -1002,6 +1008,14 @@ class JavaMethodCompiler extends MethodVisitor {
             current.addOperand(new OperandArray(current.remove(0), type));
             break;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
+        System.out.println(name + "   " + desc + "  " + bsm + "   " + Arrays.toString(bsmArgs));
     }
 
     /**

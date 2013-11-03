@@ -15,6 +15,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.RandomAccess;
+import java.util.Spliterator;
+import java.util.stream.Stream;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
@@ -1286,5 +1288,63 @@ class Arrays {
         public int compare(Comparable o1, Comparable o2) {
             return o1.compareTo(o2);
         }
+    }
+
+    /**
+     * Returns a {@link Spliterator} covering the specified range of the specified array.
+     * <p>
+     * The spliterator reports {@link Spliterator#SIZED}, {@link Spliterator#SUBSIZED},
+     * {@link Spliterator#ORDERED}, and {@link Spliterator#IMMUTABLE}.
+     * 
+     * @param <T> type of elements
+     * @param array the array, assumed to be unmodified during use
+     * @param startInclusive the first index to cover, inclusive
+     * @param endExclusive index immediately past the last index to cover
+     * @return a spliterator for the array elements
+     * @throws ArrayIndexOutOfBoundsException if {@code startInclusive} is negative,
+     *             {@code endExclusive} is less than {@code startInclusive}, or {@code endExclusive}
+     *             is greater than the array size
+     * @since 1.8
+     */
+    public static <T> Spliterator<T> spliterator(T[] array, int startInclusive, int endExclusive) {
+        // return Spliterators.spliterator(array, startInclusive, endExclusive, Spliterator.ORDERED
+        // | Spliterator.IMMUTABLE);
+
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns a sequential {@link Stream} with the specified array as its source.
+     * 
+     * @param <T> The type of the array elements
+     * @param array The array, assumed to be unmodified during use
+     * @return a {@code Stream} for the array
+     * @since 1.8
+     */
+    public static <T> Stream<T> stream(T[] array) {
+        return stream(array, 0, array.length);
+    }
+
+    /**
+     * Returns a sequential {@link Stream} with the specified range of the specified array as its
+     * source.
+     * 
+     * @param <T> the type of the array elements
+     * @param array the array, assumed to be unmodified during use
+     * @param startInclusive the first index to cover, inclusive
+     * @param endExclusive index immediately past the last index to cover
+     * @return a {@code Stream} for the array range
+     * @throws ArrayIndexOutOfBoundsException if {@code startInclusive} is negative,
+     *             {@code endExclusive} is less than {@code startInclusive}, or {@code endExclusive}
+     *             is greater than the array size
+     * @since 1.8
+     */
+    public static <T> Stream<T> stream(T[] array, int startInclusive, int endExclusive) {
+        // return StreamSupport.stream(spliterator(array, startInclusive, endExclusive), false);
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 }

@@ -33,6 +33,17 @@ class JSThrowable {
     private StackTraceElement[] stacktrace;
 
     /**
+     * The list of suppressed exceptions, as returned by {@link #getSuppressed()}. The list is
+     * initialized to a zero-element unmodifiable sentinel list. When a serialized Throwable is read
+     * in, if the {@code suppressedExceptions} field points to a zero-element list, the field is
+     * reset to the sentinel value.
+     * 
+     * @serial
+     * @since 1.7
+     */
+    private List<Throwable> suppressedExceptions;
+
+    /**
      * 
      */
     public JSThrowable() {
@@ -312,6 +323,56 @@ class JSThrowable {
         for (StackTraceElement element : stacktrace) {
             System.out.println(element);
         }
+    }
+
+    /**
+     * Appends the specified exception to the exceptions that were suppressed in order to deliver
+     * this exception. This method is thread-safe and typically called (automatically and
+     * implicitly) by the {@code try}-with-resources statement.
+     * <p>
+     * The suppression behavior is enabled <em>unless</em> disabled
+     * {@linkplain #Throwable(String, Throwable, boolean, boolean) via a constructor}. When
+     * suppression is disabled, this method does nothing other than to validate its argument.
+     * <p>
+     * Note that when one exception {@linkplain #initCause(Throwable) causes} another exception, the
+     * first exception is usually caught and then the second exception is thrown in response. In
+     * other words, there is a causal connection between the two exceptions. In contrast, there are
+     * situations where two independent exceptions can be thrown in sibling code blocks, in
+     * particular in the {@code try} block of a {@code try}-with-resources statement and the
+     * compiler-generated {@code finally} block which closes the resource. In these situations, only
+     * one of the thrown exceptions can be propagated. In the {@code try}-with-resources statement,
+     * when there are two such exceptions, the exception originating from the {@code try} block is
+     * propagated and the exception from the {@code finally} block is added to the list of
+     * exceptions suppressed by the exception from the {@code try} block. As an exception unwinds
+     * the stack, it can accumulate multiple suppressed exceptions.
+     * <p>
+     * An exception may have suppressed exceptions while also being caused by another exception.
+     * Whether or not an exception has a cause is semantically known at the time of its creation,
+     * unlike whether or not an exception will suppress other exceptions which is typically only
+     * determined after an exception is thrown.
+     * <p>
+     * Note that programmer written code is also able to take advantage of calling this method in
+     * situations where there are multiple sibling exceptions and only one can be propagated.
+     * 
+     * @param exception the exception to be added to the list of suppressed exceptions
+     * @throws IllegalArgumentException if {@code exception} is this throwable; a throwable cannot
+     *             suppress itself.
+     * @throws NullPointerException if {@code exception} is {@code null}
+     * @since 1.7
+     */
+    public final synchronized void addSuppressed(Throwable exception) {
+        if (exception == (Object) this) {
+            throw new IllegalArgumentException("Self-suppression not permitted", exception);
+        }
+
+        if (exception == null) {
+            throw new NullPointerException("Cannot suppress a null exception.");
+        }
+
+        if (suppressedExceptions == null) {
+            suppressedExceptions = new ArrayList();
+        }
+        suppressedExceptions.add(exception);
     }
 
     /**
