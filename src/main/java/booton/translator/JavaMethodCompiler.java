@@ -548,8 +548,7 @@ class JavaMethodCompiler extends MethodVisitor {
             Node thirdNode = findNodeBy(third);
             debugger.print(current.id + "     " + condition.transition.id + "   " + firstNode.id + "  " + secondNode.id + "   " + thirdNode.id);
 
-            if (condition.transition == firstNode || condition.transition == secondNode) {
-                debugger.print(debugger.whileProcess);
+            if (firstNode.equalsAsIncoming(thirdNode) && secondNode.equalsAsIncoming(thirdNode) && (condition.transition == firstNode || condition.transition == secondNode)) {
                 debugger.print(nodes);
 
                 if (first == ONE && second == ZERO) {
