@@ -100,7 +100,8 @@ class JavaClassCompiler extends ClassVisitor {
             return null;
         }
 
-        if (script.source.isInterface() && script.source != AnnotatedElement.class) {
+        if (script.source.isInterface() && script.source != AnnotatedElement.class && script.source.getName()
+                .startsWith("java.")) {
             return null;
         }
 
