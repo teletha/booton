@@ -530,9 +530,14 @@ class JavaMethodCompiler extends MethodVisitor {
         Operand third = current.peek(2);
 
         if (third instanceof OperandCondition) {
-            OperandCondition condition = (OperandCondition) third;
             Operand first = current.peek(0);
+
+            if (first == Node.END) {
+                return;
+            }
+
             Operand second = current.peek(1);
+            OperandCondition condition = (OperandCondition) third;
 
             Node firstNode = findNodeBy(first);
             Node secondNode = findNodeBy(second);
