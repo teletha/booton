@@ -163,6 +163,8 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The pool of try-catch-finally blocks. */
     private final TryCatchFinallyBlocks tries = new TryCatchFinallyBlocks();
 
+    private final Map<Node, Label> labels = new HashMap<>();
+
     /** The current processing node. */
     private Node current = null;
 
@@ -506,7 +508,7 @@ class JavaMethodCompiler extends MethodVisitor {
         case F_FULL:
             record(FRAME_FULL);
 
-            resolve();
+            processTernaryOperator();
             break;
 
         case F_APPEND:
@@ -521,7 +523,7 @@ class JavaMethodCompiler extends MethodVisitor {
             record(FRAME_SAME);
 
             if (nLocal == 0 && nStack == 0) {
-                resolve();
+                processTernaryOperator();
             }
             break;
 
@@ -529,13 +531,18 @@ class JavaMethodCompiler extends MethodVisitor {
             record(FRAME_SAME1);
 
             if (nLocal == 0 && nStack == 1) {
-                resolve();
+                processTernaryOperator();
             }
             break;
         }
     }
 
-    private void resolve() {
+    /**
+     * <p>
+     * Helper method to resolve ternary operator.
+     * </p>
+     */
+    private void processTernaryOperator() {
         Operand third = current.peek(2);
 
         if (third instanceof OperandCondition) {
@@ -565,11 +572,39 @@ class JavaMethodCompiler extends MethodVisitor {
                     current.remove(0);
                     thirdNode.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
                 }
-                if (firstNode.stack.isEmpty()) dispose(firstNode);
-                if (secondNode.stack.isEmpty()) dispose(secondNode);
-                resolve();
+
+                // dispose empty nodes
+                if (firstNode.stack.isEmpty()) {
+                    disposeNode(firstNode);
+                }
+
+                if (secondNode.stack.isEmpty()) {
+                    disposeNode(secondNode);
+                }
+
+                // process recursively
+                processTernaryOperator();
             }
         }
+    }
+
+    /**
+     * <p>
+     * Search the node which has the specified operand.
+     * </p>
+     * 
+     * @param operand
+     * @return
+     */
+    private Node findNodeBy(Operand operand) {
+        for (int i = nodes.size() - 1; 0 <= i; i--) {
+            Node node = nodes.get(i);
+
+            if (node.has(operand)) {
+                return node;
+            }
+        }
+        throw new IllegalArgumentException("The operand [" + operand + "] is not found in the current context.");
     }
 
     /**
@@ -789,7 +824,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.remove(0);
 
                 mergeConditions(current);
-                dispose(current);
+                disposeNode(current);
             } else if (match(JUMP, ICONST_1, IRETURN, LABEL, FRAME_SAME, ICONST_0, IRETURN) || match(JUMP, ICONST_1, IRETURN, LABEL, FRAME_APPEND, ICONST_0, IRETURN)) {
                 // merge the node sequence of logical expression
                 current.remove(0);
@@ -798,7 +833,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.remove(0);
 
                 mergeConditions(current);
-                dispose(current);
+                disposeNode(current);
 
                 // invert the latest condition
                 if (!current.stack.isEmpty()) {
@@ -1156,7 +1191,9 @@ class JavaMethodCompiler extends MethodVisitor {
             current.previous = nodes.get(nodes.size() - 2);
 
             if (current.previous.stack.size() != 0) {
-                resolveLabel();
+                if (current.peek(0) != Node.END) {
+                    mergeConditions(current);
+                }
             }
         }
 
@@ -1167,208 +1204,22 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
-     * <p>
-     * Helper method to resolve conditional operands.
-     * </p>
-     */
-    private void resolveLabel() {
-        Operand first = current.peek(0);
-
-        if (first == Node.END) {
-            // The current node represents single expression.
-            return;
-        }
-
-        mergeConditions(current);
-        //
-        // if (first instanceof OperandCondition) {
-        // mergeConditions(current);
-        //
-        // // If the previous instruction is not JUMP, it is part of Ternary operator or
-        // // Conditional operator.
-        // if (match(JUMP, LABEL)) {
-        // return;
-        // }
-        // }
-        //
-        // if (second instanceof OperandCondition && !debugger.enable) {
-        // mergeConditions(current);
-        // dispose(current);
-        //
-        // // If the previous instruction is not JUMP, it is part of Ternary operator or
-        // // Conditional operator.
-        // if (match(JUMP, LABEL)) {
-        // return;
-        // }
-        // }
-        //
-        // if (third instanceof OperandCondition && !debugger.enable) {
-        // // mergeConditions(current);
-        //
-        // Node firstNode = findNodeBy(first);
-        // Node secondNode = findNodeBy(second);
-        // Node thirdNode = findNodeBy(third);
-        //
-        // if (firstNode.equalsAsIncoming(thirdNode) && secondNode.equalsAsIncoming(thirdNode)) {
-        // // =======================
-        // // Conditional Operator
-        // // =======================
-        // first = current.remove(0);
-        // second = current.remove(0);
-        // third = current.remove(0);
-        //
-        // if (first == ONE && second == ZERO) {
-        // current.addOperand(third);
-        // } else if (first == ZERO && second == ONE) {
-        // current.addOperand(third.invert());
-        // } else {
-        // current.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() +
-        // "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
-        // }
-        //
-        // // resolve recursively
-        // resolveLabel();
-        // }
-        // }
-    }
-
-    /**
-     * <p>
-     * Search the node which has the specified operand.
-     * </p>
+     * Connect the current node and the specified labed node.
      * 
-     * @param operand
+     * @param label
      * @return
      */
-    private Node findNodeBy(Operand operand) {
-        for (int i = nodes.size() - 1; 0 <= i; i--) {
-            Node node = nodes.get(i);
+    private Node connect(Label label) {
+        // search cached node
+        Node node = getNode(label);
 
-            if (node.has(operand)) {
-                return node;
-            }
+        if (current != null) {
+            current.connect(node);
         }
-        throw new IllegalArgumentException("The operand [" + operand + "] is not found in the current context.");
+
+        // API definition
+        return node;
     }
-
-    /**
-     * <p>
-     * Helper method to dispose the current processing node.
-     * </p>
-     */
-    private void dispose(Node target) {
-        debugger.print("dispose" + target.id);
-
-        int index = nodes.indexOf(target);
-
-        if (0 < index && index + 1 < nodes.size()) {
-            nodes.get(index + 1).previous = index < 1 ? null : nodes.get(index - 1);
-        }
-
-        Label label = labels.get(target);
-
-        if (label != null) {
-            labels.put(target.previous, label);
-            label.info = target.previous;
-        }
-
-        // Merge the current processing node
-        nodes.remove(target);
-
-        // Remove it from outgoings of all previous-sibling nodes.
-        for (Node node : labels.keySet()) {
-            if (node != null) {
-                node.incoming.remove(target);
-                node.outgoing.remove(target);
-            }
-        }
-
-        for (Node out : target.outgoing) {
-            for (Node in : target.incoming) {
-                if (!in.outgoing.contains(out)) {
-                    in.outgoing.add(out);
-                }
-            }
-        }
-
-        for (Node in : target.incoming) {
-            for (Node out : target.outgoing) {
-                if (!out.incoming.contains(in)) {
-                    out.incoming.add(in);
-                }
-            }
-        }
-
-        // Copy all operands to the previous node
-        if (target.previous != null) {
-            target.previous.stack.addAll(target.stack);
-        }
-
-        // Delete all operands from the current processing node
-        target.stack.clear();
-
-        if (target == current) {
-            current = target.previous;
-        }
-    }
-
-    // /**
-    // * <p>
-    // * Helper method to merge all conditional operands.
-    // * </p>
-    // */
-    // private void merge() {
-    // Set<Node> group = new HashSet();
-    // group.add(current);
-    //
-    // boolean found = false;
-    //
-    // // Decide target node
-    // Node target = current.previous;
-    //
-    // // Merge the sequencial conditional operands in this node from right to left.
-    // for (int i = 0; i < target.stack.size(); i++) {
-    // Operand operand = target.peek(i);
-    //
-    // if (operand instanceof OperandCondition) {
-    // OperandCondition condition = (OperandCondition) operand;
-    //
-    // if (!found) {
-    // found = true;
-    //
-    // // This is first operand condition.
-    // group.add(condition.transition);
-    //
-    // // Set next appearing node for grouping.
-    // condition.next = current;
-    // } else if (group.contains(condition.transition)) {
-    // // Merge two adjucent conditional operands.
-    // i--;
-    //
-    // target.set(i, new OperandCondition(condition, (OperandCondition) target.remove(i)));
-    // } else {
-    // return; // Stop here.
-    // }
-    // }
-    // }
-    //
-    // // Merge this node and the specified node.
-    // // Rearch the start of node
-    // if (target.previous != null) {
-    // Operand operand = target.previous.peek(0);
-    //
-    // if (operand instanceof OperandCondition) {
-    // OperandCondition condition = (OperandCondition) operand;
-    //
-    // if (group.contains(condition.transition)) {
-    // dispose(target);
-    //
-    // // Merge recursively
-    // merge();
-    // }
-    // }
-    // }
-    // }
 
     /**
      * <p>
@@ -1419,31 +1270,13 @@ class JavaMethodCompiler extends MethodVisitor {
                 OperandCondition condition = (OperandCondition) operand;
 
                 if (group.contains(condition.transition)) {
-                    dispose(target);
+                    disposeNode(target);
 
                     // Merge recursively
                     mergeConditions(node);
                 }
             }
         }
-    }
-
-    /**
-     * Connect the current node and the specified labed node.
-     * 
-     * @param label
-     * @return
-     */
-    private Node connect(Label label) {
-        // search cached node
-        Node node = getNode(label);
-
-        if (current != null) {
-            current.connect(node);
-        }
-
-        // API definition
-        return node;
     }
 
     /**
@@ -1846,29 +1679,6 @@ class JavaMethodCompiler extends MethodVisitor {
         }
     }
 
-    private final Map<Node, Label> labels = new HashMap<>();
-
-    /**
-     * <p>
-     * Retrieve the asossiated node of the specified label.
-     * </p>
-     * 
-     * @param label A label for node.
-     * @return An asossiated and cached node.
-     */
-    private final Node getNode(Label label) {
-        Node node = (Node) label.info;
-
-        // search cached node
-        if (node == null) {
-            label.info = node = new Node(counter++);
-            labels.put(node, label);
-        }
-
-        // API definition
-        return node;
-    }
-
     /**
      * <p>
      * Create new node before the specified node.
@@ -1899,6 +1709,88 @@ class JavaMethodCompiler extends MethodVisitor {
         // insert to node list
         nodes.add(nodes.indexOf(next), node);
 
+        return node;
+    }
+
+    /**
+     * <p>
+     * Helper method to dispose the specified node.
+     * </p>
+     */
+    private final void disposeNode(Node target) {
+        debugger.print("dispose" + target.id);
+
+        int index = nodes.indexOf(target);
+
+        if (0 < index && index + 1 < nodes.size()) {
+            nodes.get(index + 1).previous = index < 1 ? null : nodes.get(index - 1);
+        }
+
+        Label label = labels.get(target);
+
+        if (label != null) {
+            labels.put(target.previous, label);
+            label.info = target.previous;
+        }
+
+        // Merge the current processing node
+        nodes.remove(target);
+
+        // Remove it from outgoings of all previous-sibling nodes.
+        for (Node node : labels.keySet()) {
+            if (node != null) {
+                node.incoming.remove(target);
+                node.outgoing.remove(target);
+            }
+        }
+
+        for (Node out : target.outgoing) {
+            for (Node in : target.incoming) {
+                if (!in.outgoing.contains(out)) {
+                    in.outgoing.add(out);
+                }
+            }
+        }
+
+        for (Node in : target.incoming) {
+            for (Node out : target.outgoing) {
+                if (!out.incoming.contains(in)) {
+                    out.incoming.add(in);
+                }
+            }
+        }
+
+        // Copy all operands to the previous node
+        if (target.previous != null) {
+            target.previous.stack.addAll(target.stack);
+        }
+
+        // Delete all operands from the current processing node
+        target.stack.clear();
+
+        if (target == current) {
+            current = target.previous;
+        }
+    }
+
+    /**
+     * <p>
+     * Retrieve the asossiated node of the specified label.
+     * </p>
+     * 
+     * @param label A label for node.
+     * @return An asossiated and cached node.
+     */
+    private final Node getNode(Label label) {
+        Node node = (Node) label.info;
+
+        // search cached node
+        if (node == null) {
+            label.info = node = new Node(counter++);
+            labels.put(node, label);
+        }
+
+        // API definition
         return node;
     }
 
