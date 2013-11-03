@@ -16,15 +16,16 @@ import static org.objectweb.asm.Type.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import js.lang.NativeObject;
 import jsx.bwt.Input;
@@ -1014,8 +1015,44 @@ class JavaMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     @Override
-    public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
-        System.out.println(name + "   " + desc + "  " + bsm + "   " + Arrays.toString(bsmArgs));
+    public void visitInvokeDynamicInsn(String name, String description, Handle bsm, Object... bsmArgs) {
+        Handle handle = (Handle) bsmArgs[1];
+
+        // detect functional interface
+        Type interfaceType = Type.getMethodType(description);
+        String interfaceClass = Javascript.computeClass(convert(interfaceType.getReturnType()));
+
+        // build parameter from local environment
+        StringJoiner parameters = new StringJoiner(",", "[", "]");
+
+        for (int i = interfaceType.getArgumentTypes().length - 1; 0 <= i; i--) {
+            parameters.add(current.remove(i).toString());
+        }
+
+        // detect lambda method
+        Class lambdaClass = convert(handle.getOwner());
+        String lambdaMethodName = '"' + Javascript.computeMethodName(lambdaClass, handle.getName(), handle.getDesc()) + '"';
+
+        // decide lambda context
+        String context = null;
+
+        switch (handle.getTag()) {
+        case H_INVOKESTATIC:
+            context = Javascript.computeClassName(lambdaClass);
+            break;
+
+        case H_INVOKEVIRTUAL:
+            context = "this";
+            break;
+
+        default:
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
+        }
+
+        // create lambda proxy class
+        current.addOperand(Javascript.writeMethodCode(Proxy.class, "newLambdaInstance", Class.class, interfaceClass, NativeObject.class, context, String.class, lambdaMethodName, Object[].class, parameters.toString()));
     }
 
     /**

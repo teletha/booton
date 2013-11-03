@@ -19,13 +19,15 @@ import org.objectweb.asm.util.ASMifier;
 import org.objectweb.asm.util.Printer;
 import org.objectweb.asm.util.TraceMethodVisitor;
 
+import booton.translator.lambda.LambdaTest;
+
 /**
  * @version 2013/10/24 14:44:43
  */
 public class BytecodeDump {
 
     public static void main(String[] args) throws Exception {
-        dump(Class.forName("js.util.stream.AbstractSpinedBuffer"), "chunkSize");
+        dump(LambdaTest.class, "base");
     }
 
     /**
