@@ -11,7 +11,6 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -26,7 +25,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void base() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int value) {
                 return value < 3 ? 10 : 20;
             }
@@ -37,7 +35,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void logicalExpressionInLeft() {
         test(new Scriptable() {
 
-            @Debuggable
             public boolean act(int value) {
                 return value < 3 ? value == 2 : false;
             }
@@ -50,7 +47,6 @@ public class ConditionalExpressionTest extends ScriptTester {
 
             private boolean a = true;
 
-            @Debuggable
             public boolean act(int value) {
                 return value < 3 ? a : value == 4;
             }
@@ -73,7 +69,6 @@ public class ConditionalExpressionTest extends ScriptTester {
 
             private boolean a = true;
 
-            @Debuggable
             public boolean act(int value) {
                 return value < 0 || 2 < value ? a : false;
             }
@@ -84,7 +79,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void string() {
         test(new Scriptable() {
 
-            @Debuggable
             public String act(int value) {
                 return (value < 0 ? "negative" : "positive") + " value";
             }
@@ -95,7 +89,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void stringNest() {
         test(new Scriptable() {
 
-            @Debuggable
             public String act(int value) {
                 return (value < 0 ? "negative" : value == 1 ? "one" : "positive") + " value";
             }
@@ -106,7 +99,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void stringComplex() {
         test(new Scriptable() {
 
-            @Debuggable
             public String act(@Param(ints = {-1, 0, 1, 2, 3}) int value) {
                 return value < 0 ? "negative" : value % 2 != 0 && value != 3 ? "one" : value == 0 ? "zero" : "other";
             }
@@ -117,7 +109,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void nestRight() {
         test(new Scriptable() {
 
-            @Debuggable
             public String act(int value) {
                 return value == 0 ? "zero" : value == 1 ? "one" : "other";
             }
@@ -128,7 +119,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void nestLeft() {
         test(new Scriptable() {
 
-            @Debuggable
             public String act(int value) {
                 return 0 < value ? value == 1 ? "one" : "other" : "negative";
             }
@@ -175,7 +165,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void afterLogicalExpression() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int value) {
                 boolean result = value % 2 == 0;
                 return result ? value : value + 1;

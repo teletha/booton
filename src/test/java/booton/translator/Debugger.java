@@ -66,9 +66,6 @@ public class Debugger extends AnnotationVisitor {
 
     boolean asmable = false;
 
-    /** The method tracer. */
-    MethodVisitor tracer;
-
     /** The processing flag. */
     boolean whileProcess = false;
 
@@ -92,10 +89,6 @@ public class Debugger extends AnnotationVisitor {
             afterLabel = Boolean.parseBoolean(value.toString());
         } else if (name.equals("asm")) {
             asmable = Boolean.parseBoolean(value.toString());
-
-            if (asmable) {
-                tracer = new MethodTracer2();
-            }
         }
     }
 
@@ -803,19 +796,6 @@ public class Debugger extends AnnotationVisitor {
         public void visitEnd() {
             printer.visitMethodEnd();
             super.visitEnd();
-        }
-    }
-
-    /**
-     * @version 2013/11/01 14:12:25
-     */
-    private static class MethodTracer2 extends MethodVisitor {
-
-        /**
-         * @param api
-         */
-        private MethodTracer2() {
-            super(ASM5);
         }
     }
 }
