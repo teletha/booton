@@ -1022,19 +1022,13 @@ class JavaMethodCompiler extends MethodVisitor {
         Type interfaceType = Type.getMethodType(description);
         String interfaceClass = Javascript.computeClass(convert(interfaceType.getReturnType()));
 
-        // build parameter from local environment
-        StringJoiner parameters = new StringJoiner(",", "[", "]");
-
-        for (int i = interfaceType.getArgumentTypes().length - 1; 0 <= i; i--) {
-            parameters.add(current.remove(i).toString());
-        }
-
         // detect lambda method
         Class lambdaClass = convert(handle.getOwner());
         String lambdaMethodName = '"' + Javascript.computeMethodName(lambdaClass, handle.getName(), handle.getDesc()) + '"';
 
         // decide lambda context
-        String context = null;
+        Object context = null;
+        int parameterSize = interfaceType.getArgumentTypes().length - 1;
 
         switch (handle.getTag()) {
         case H_INVOKESTATIC:
@@ -1045,10 +1039,22 @@ class JavaMethodCompiler extends MethodVisitor {
             context = "this";
             break;
 
+        case H_INVOKEINTERFACE:
+            context = current.remove(0);
+            parameterSize--;
+            break;
+
         default:
             // If this exception will be thrown, it is bug of this program. So we must rethrow the
             // wrapped error in here.
             throw new Error();
+        }
+
+        // build parameter from local environment
+        StringJoiner parameters = new StringJoiner(",", "[", "]");
+
+        for (int i = parameterSize; 0 <= i; i--) {
+            parameters.add(current.remove(i).toString());
         }
 
         // create lambda proxy class

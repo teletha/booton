@@ -9,6 +9,8 @@
  */
 package booton.translator.lambda;
 
+import static booton.translator.lambda.LambdaTest.Lambda.*;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -59,10 +61,29 @@ public class LambdaTest {
         assert lambda.param10((int param) -> param * variable) == 30;
     }
 
+    @Test
+    public void instanceMethodReference() throws Exception {
+        Lambda lambda = new Lambda();
+        assert lambda.nothingInt(lambda::int7) == 7;
+    }
+
+    @Test
+    public void defaultMethodReference() throws Exception {
+        Lambda lambda = new Lambda();
+        assert lambda.nothingInt(lambda::int3) == 3;
+        assert lambda.param10(lambda::multiply11) == 110;
+    }
+
+    @Test
+    public void staticMethodReference() throws Exception {
+        Lambda lambda = new Lambda();
+        assert lambda.nothingInt(Lambda::int12) == 12;
+    }
+
     /**
      * @version 2013/11/03 17:27:16
      */
-    private static class Lambda {
+    public static class Lambda implements DefaultMethod {
 
         /**
          * @param runnable
@@ -86,6 +107,20 @@ public class LambdaTest {
          */
         private int param10(IntParameter value) {
             return value.value(10);
+        }
+
+        /**
+         * @return
+         */
+        private int int7() {
+            return 7;
+        }
+
+        /**
+         * @return
+         */
+        private static int int12() {
+            return 12;
         }
     }
 
@@ -123,6 +158,26 @@ public class LambdaTest {
          * @return
          */
         int value(int value);
+    }
+
+    /**
+     * @version 2013/11/04 7:30:05
+     */
+    public static interface DefaultMethod {
+
+        /**
+         * @return
+         */
+        default int int3() {
+            return 3;
+        }
+
+        /**
+         * @return
+         */
+        default int multiply11(int value) {
+            return 11 * value;
+        }
     }
 
     // @Test
