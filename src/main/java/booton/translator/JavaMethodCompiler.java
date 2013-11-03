@@ -242,6 +242,7 @@ class JavaMethodCompiler extends MethodVisitor {
         for (int i = 0; i < parameters.length; i++) {
             variables.type(isStatic ? i : i + 1).type(convert(parameters[i]));
         }
+        debugger.whileProcess = true;
     }
 
     /**
@@ -275,7 +276,7 @@ class JavaMethodCompiler extends MethodVisitor {
         tries.process();
 
         if (debugger.enable) {
-            debugger.dump(script, nodes);
+            debugger.print(script, nodes);
         }
 
         // ===============================================
@@ -504,6 +505,8 @@ class JavaMethodCompiler extends MethodVisitor {
 
         case F_FULL:
             record(FRAME_FULL);
+
+            resolve();
             break;
 
         case F_APPEND:
@@ -517,33 +520,15 @@ class JavaMethodCompiler extends MethodVisitor {
         case F_SAME:
             record(FRAME_SAME);
 
-            if (nLocal == 0 && nStack == 0 && debugger.enable) {
-                Operand first = current.peek(0);
-                Operand second = current.peek(1);
-                Operand third = current.peek(2);
-
-                if (third instanceof OperandCondition) {
-                    if (first == ONE && second == ZERO) {
-                        current.remove(0);
-                        current.remove(0);
-                        current.addOperand(current.remove(0));
-                    } else if (first == ZERO && second == ONE) {
-                        current.remove(0);
-                        current.remove(0);
-                        current.addOperand(current.remove(0).invert());
-                    }
-                    debugger.dump(script, nodes);
-
-                    // resolve recursively
-                    // resolveLabel();
-                }
+            if (nLocal == 0 && nStack == 0) {
+                resolve();
             }
             break;
 
         case F_SAME1:
             record(FRAME_SAME1);
 
-            if (nLocal == 0 && nStack == 1 && debugger.enable) {
+            if (nLocal == 0 && nStack == 1) {
                 resolve();
             }
             break;
@@ -554,21 +539,37 @@ class JavaMethodCompiler extends MethodVisitor {
         Operand third = current.peek(2);
 
         if (third instanceof OperandCondition) {
-            Operand first = current.remove(0);
-            Operand second = current.remove(0);
-            third = current.remove(0);
+            OperandCondition condition = (OperandCondition) third;
+            Operand first = current.peek(0);
+            Operand second = current.peek(1);
 
-            if (first == ONE && second == ZERO) {
-                current.addOperand(third);
-            } else if (first == ZERO && second == ONE) {
-                current.addOperand(third.invert());
-            } else {
-                current.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
+            Node firstNode = findNodeBy(first);
+            Node secondNode = findNodeBy(second);
+            Node thirdNode = findNodeBy(third);
+            debugger.print(current.id + "     " + condition.transition.id + "   " + firstNode.id + "  " + secondNode.id + "   " + thirdNode.id);
+
+            if (condition.transition == firstNode || condition.transition == secondNode) {
+                debugger.print(debugger.whileProcess);
+                debugger.print(nodes);
+
+                if (first == ONE && second == ZERO) {
+                    current.remove(0);
+                    current.remove(0);
+                    thirdNode.addOperand(current.remove(0));
+                } else if (first == ZERO && second == ONE) {
+                    current.remove(0);
+                    current.remove(0);
+                    thirdNode.addOperand(current.remove(0).invert());
+                } else {
+                    current.remove(0);
+                    current.remove(0);
+                    current.remove(0);
+                    thirdNode.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
+                }
+                if (firstNode.stack.isEmpty()) dispose(firstNode);
+                if (secondNode.stack.isEmpty()) dispose(secondNode);
+                resolve();
             }
-
-            debugger.dump(nodes);
-
-            resolve();
         }
     }
 
@@ -1140,8 +1141,13 @@ class JavaMethodCompiler extends MethodVisitor {
         // build new node
         current = connect(label);
 
+        if (debugger.enable) {
+            System.out.println("visit label " + current.id);
+        }
+
         if (debugger.beforeLabel) {
-            debugger.dump("Before node" + current.id, nodes);
+            debugger.print("Before node" + current.id);
+            debugger.print(nodes);
         }
 
         // store the node in appearing order
@@ -1156,7 +1162,8 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         if (debugger.afterLabel) {
-            debugger.dump("After node" + current.id, nodes);
+            debugger.print("After node" + current.id);
+            debugger.print(nodes);
         }
     }
 
@@ -1167,62 +1174,63 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private void resolveLabel() {
         Operand first = current.peek(0);
-        Operand second = current.peek(1);
-        Operand third = current.peek(2);
 
         if (first == Node.END) {
             // The current node represents single expression.
             return;
         }
 
-        if (first instanceof OperandCondition) {
-            mergeConditions(current);
-
-            // If the previous instruction is not JUMP, it is part of Ternary operator or
-            // Conditional operator.
-            if (match(JUMP, LABEL)) {
-                return;
-            }
-        }
-
-        if (second instanceof OperandCondition) {
-            mergeConditions(current);
-            dispose(current);
-
-            // If the previous instruction is not JUMP, it is part of Ternary operator or
-            // Conditional operator.
-            if (match(JUMP, LABEL)) {
-                return;
-            }
-        }
-
-        if (third instanceof OperandCondition && !debugger.enable) {
-            // mergeConditions(current);
-
-            Node firstNode = findNodeBy(first);
-            Node secondNode = findNodeBy(second);
-            Node thirdNode = findNodeBy(third);
-
-            if (firstNode.equalsAsIncoming(thirdNode) && secondNode.equalsAsIncoming(thirdNode)) {
-                // =======================
-                // Conditional Operator
-                // =======================
-                first = current.remove(0);
-                second = current.remove(0);
-                third = current.remove(0);
-
-                if (first == ONE && second == ZERO) {
-                    current.addOperand(third);
-                } else if (first == ZERO && second == ONE) {
-                    current.addOperand(third.invert());
-                } else {
-                    current.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
-                }
-
-                // resolve recursively
-                resolveLabel();
-            }
-        }
+        mergeConditions(current);
+        //
+        // if (first instanceof OperandCondition) {
+        // mergeConditions(current);
+        //
+        // // If the previous instruction is not JUMP, it is part of Ternary operator or
+        // // Conditional operator.
+        // if (match(JUMP, LABEL)) {
+        // return;
+        // }
+        // }
+        //
+        // if (second instanceof OperandCondition && !debugger.enable) {
+        // mergeConditions(current);
+        // dispose(current);
+        //
+        // // If the previous instruction is not JUMP, it is part of Ternary operator or
+        // // Conditional operator.
+        // if (match(JUMP, LABEL)) {
+        // return;
+        // }
+        // }
+        //
+        // if (third instanceof OperandCondition && !debugger.enable) {
+        // // mergeConditions(current);
+        //
+        // Node firstNode = findNodeBy(first);
+        // Node secondNode = findNodeBy(second);
+        // Node thirdNode = findNodeBy(third);
+        //
+        // if (firstNode.equalsAsIncoming(thirdNode) && secondNode.equalsAsIncoming(thirdNode)) {
+        // // =======================
+        // // Conditional Operator
+        // // =======================
+        // first = current.remove(0);
+        // second = current.remove(0);
+        // third = current.remove(0);
+        //
+        // if (first == ONE && second == ZERO) {
+        // current.addOperand(third);
+        // } else if (first == ZERO && second == ONE) {
+        // current.addOperand(third.invert());
+        // } else {
+        // current.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() +
+        // "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
+        // }
+        //
+        // // resolve recursively
+        // resolveLabel();
+        // }
+        // }
     }
 
     /**
@@ -1250,6 +1258,8 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void dispose(Node target) {
+        debugger.print("dispose" + target.id);
+
         int index = nodes.indexOf(target);
 
         if (0 < index && index + 1 < nodes.size()) {
@@ -1268,8 +1278,10 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // Remove it from outgoings of all previous-sibling nodes.
         for (Node node : labels.keySet()) {
-            node.incoming.remove(target);
-            node.outgoing.remove(target);
+            if (node != null) {
+                node.incoming.remove(target);
+                node.outgoing.remove(target);
+            }
         }
 
         for (Node out : target.outgoing) {

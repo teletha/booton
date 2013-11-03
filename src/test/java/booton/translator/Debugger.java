@@ -36,7 +36,7 @@ import org.objectweb.asm.util.Printer;
 import booton.translator.Node.TryCatchFinally;
 
 /**
- * @version 2013/11/01 9:49:36
+ * @version 2013/11/03 10:17:20
  */
 public class Debugger extends AnnotationVisitor {
 
@@ -100,15 +100,24 @@ public class Debugger extends AnnotationVisitor {
     }
 
     /**
+     * @param message
+     */
+    public void print(Object message) {
+        if (enable) {
+            System.out.println(message);
+        }
+    }
+
+    /**
      * <p>
      * Dump node tree.
      * </p>
      * 
      * @param node
      */
-    public void dump(Node node) {
+    public void print(Node node) {
         if (node != null) {
-            dump(Collections.singletonList(node));
+            print(Collections.singletonList(node));
         }
     }
 
@@ -119,18 +128,10 @@ public class Debugger extends AnnotationVisitor {
      * 
      * @param nodes
      */
-    public void dump(List<Node> nodes) {
-        System.out.println(format(nodes));
-    }
-
-    /**
-     * <p>
-     * Dump the current nodes in detail.
-     * </p>
-     */
-    public void dump(String message, List<Node> nodes) {
-        System.out.println(message);
-        dump(nodes);
+    public void print(List<Node> nodes) {
+        if (enable) {
+            System.out.println(format(nodes));
+        }
     }
 
     /**
@@ -142,23 +143,25 @@ public class Debugger extends AnnotationVisitor {
      * @param methodName A original method name.
      * @param nodes A node info.
      */
-    public void dump(Javascript script, List<Node> nodes) {
-        if (whileTest) {
-            String testClassName = computeTestClassName(script.source);
-            String testMethodName = computeTestMethodName(testClassName);
+    public void print(Javascript script, List<Node> nodes) {
+        if (enable) {
+            if (whileTest) {
+                String testClassName = computeTestClassName(script.source);
+                String testMethodName = computeTestMethodName(testClassName);
 
-            System.out.println(testClassName + "  " + (testMethodName == null ? methodName : testClassName));
-            dump(nodes);
+                print(testClassName + " " + (testMethodName == null ? methodName : testClassName));
+                print(nodes);
 
-            try {
-                ClassReader reader = new ClassReader(script.source.getName());
-                reader.accept(new ClassTracer(methodName, new ASMifier(), new PrintWriter(System.out)), 0);
-            } catch (Exception e) {
-                throw I.quiet(e);
+                try {
+                    ClassReader reader = new ClassReader(script.source.getName());
+                    reader.accept(new ClassTracer(methodName, new ASMifier(), new PrintWriter(System.out)), 0);
+                } catch (Exception e) {
+                    throw I.quiet(e);
+                }
+            } else {
+                print(script.source.getName() + " " + methodName);
+                print(nodes);
             }
-        } else {
-            System.out.println(script.source.getName() + "  " + methodName);
-            dump(nodes);
         }
     }
 
