@@ -89,6 +89,55 @@ class JSInteger extends JSNumber {
     }
 
     /**
+     * Returns the number of zero bits preceding the highest-order ("leftmost") one-bit in the two's
+     * complement binary representation of the specified {@code int} value. Returns 32 if the
+     * specified value has no one-bits in its two's complement representation, in other words if it
+     * is equal to zero.
+     * <p>
+     * Note that this method is closely related to the logarithm base 2. For all positive
+     * {@code int} values x:
+     * <ul>
+     * <li>floor(log<sub>2</sub>(x)) = {@code 31 - numberOfLeadingZeros(x)}
+     * <li>ceil(log<sub>2</sub>(x)) = {@code 32 - numberOfLeadingZeros(x - 1)}
+     * </ul>
+     * 
+     * @param value the value whose number of leading zeros is to be computed
+     * @return the number of zero bits preceding the highest-order ("leftmost") one-bit in the two's
+     *         complement binary representation of the specified {@code int} value, or 32 if the
+     *         value is equal to zero.
+     * @since 1.5
+     */
+    public static int numberOfLeadingZeros(int value) {
+        if (value == 0) {
+            return 32;
+        }
+
+        int n = 1;
+
+        if (value >>> 16 == 0) {
+            n += 16;
+            value <<= 16;
+        }
+
+        if (value >>> 24 == 0) {
+            n += 8;
+            value <<= 8;
+        }
+
+        if (value >>> 28 == 0) {
+            n += 4;
+            value <<= 4;
+        }
+
+        if (value >>> 30 == 0) {
+            n += 2;
+            value <<= 2;
+        }
+        n -= value >>> 31;
+        return n;
+    }
+
+    /**
      * <p>
      * Parses the string argument as a signed decimal integer. The characters in the string must all
      * be decimal digits, except that the first character may be an ASCII minus sign {@code '-'} (

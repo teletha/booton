@@ -45,4 +45,18 @@ abstract class AbstractMap<K, V> implements Map<K, V> {
             put(e.getKey(), e.getValue());
         }
     }
+
+    /**
+     * Returns a shallow copy of this <tt>AbstractMap</tt> instance: the keys and values themselves
+     * are not cloned.
+     * 
+     * @return a shallow copy of this map
+     */
+    protected Object clone() throws CloneNotSupportedException {
+        AbstractMap result = (AbstractMap) super.clone();
+        result.keySet = null;
+        result.values = null;
+        return result;
+    }
+
 }

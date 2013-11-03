@@ -68,6 +68,15 @@ class JSBoolean implements JavascriptNative {
     }
 
     /**
+     * Returns the value of this {@code Boolean} object as a boolean primitive.
+     * 
+     * @return the primitive {@code boolean} value of this object.
+     */
+    public boolean booleanValue() {
+        return value;
+    }
+
+    /**
      * <p>
      * Returns the primitive value of this object.
      * </p>

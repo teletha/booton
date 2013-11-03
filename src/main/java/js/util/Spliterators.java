@@ -94,13 +94,10 @@ class Spliterators {
     }
 
     /**
-     * @version 2013/10/29 16:28:27
-     */
-    // @JavaAPIProvider(Emulator.class)
-    /**
      * A Spliterator designed for use by sources that traverse and split elements maintained in an
      * unmodifiable {@code Object[]} array.
      */
+    // @JavaAPIProvider(Emulator.class)
     static final class ArraySpliterator<T> implements Spliterator<T> {
 
         /**
@@ -198,6 +195,7 @@ class Spliterators {
      * A Spliterator.OfInt designed for use by sources that traverse and split elements maintained
      * in an unmodifiable {@code int[]} array.
      */
+    // @JavaAPIProvider(Emulator.class)
     static final class IntArraySpliterator implements Spliterator.OfInt {
 
         private final int[] array;
