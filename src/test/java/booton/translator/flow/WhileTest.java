@@ -11,6 +11,7 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -73,6 +74,7 @@ public class WhileTest extends ScriptTester {
     public void multipuleBreaks() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(int value) {
                 while (value < 5) {
                     value++;

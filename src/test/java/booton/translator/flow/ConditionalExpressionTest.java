@@ -12,6 +12,7 @@ package booton.translator.flow;
 import org.junit.Test;
 
 import booton.translator.Debuggable;
+import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
@@ -62,6 +63,74 @@ public class ConditionalExpressionTest extends ScriptTester {
 
             public boolean act(int value) {
                 return value < 3 ? value == 2 : value == 4;
+            }
+        });
+    }
+
+    @Test
+    public void logicalCondition() {
+        test(new Scriptable() {
+
+            private boolean a = true;
+
+            @Debuggable
+            public boolean act(int value) {
+                return value < 0 || 2 < value ? a : false;
+            }
+        });
+    }
+
+    @Test
+    public void string() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public String act(int value) {
+                return (value < 0 ? "negative" : "positive") + " value";
+            }
+        });
+    }
+
+    @Test
+    public void stringNest() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public String act(int value) {
+                return (value < 0 ? "negative" : value == 1 ? "one" : "positive") + " value";
+            }
+        });
+    }
+
+    @Test
+    public void stringComplex() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public String act(@Param(ints = {-1, 0, 1, 2, 3}) int value) {
+                return value < 0 ? "negative" : value % 2 != 0 && value != 3 ? "one" : value == 0 ? "zero" : "other";
+            }
+        });
+    }
+
+    @Test
+    public void nestRight() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public String act(int value) {
+                return value == 0 ? "zero" : value == 1 ? "one" : "other";
+            }
+        });
+    }
+
+    @Test
+    public void nestLeft() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public String act(int value) {
+                return 0 < value ? value == 1 ? "one" : "other" : "negative";
             }
         });
     }
