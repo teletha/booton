@@ -12,7 +12,6 @@ package booton.translator.interfaces;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.Debuggable;
 import booton.translator.ScriptRunner;
 
 /**
@@ -27,7 +26,6 @@ public class InterfaceMethodTest {
     }
 
     @Test
-    @Debuggable
     public void defaultMethod() throws Exception {
         Implementation implementation = new Implementation();
         assert implementation.defaultInt() == -10;

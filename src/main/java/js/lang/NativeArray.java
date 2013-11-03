@@ -262,6 +262,24 @@ public class NativeArray<T> extends NativeObject {
 
     /**
      * <p>
+     * Returns a new array comprised of this array joined with other array(s) and/or value(s).
+     * </p>
+     * 
+     * @param values Arrays and/or values to concatenate to the resulting array.
+     * @return
+     */
+    public NativeArray<T> concat(T[] values) {
+        List<T> items = new ArrayList();
+        items.addAll(list);
+
+        for (T item : items) {
+            items.add(item);
+        }
+        return new NativeArray(items);
+    }
+
+    /**
+     * <p>
      * Joins all elements of an array into a string.
      * </p>
      * 
@@ -678,6 +696,18 @@ public class NativeArray<T> extends NativeObject {
          */
         public String length() {
             return that + ".length";
+        }
+
+        /**
+         * <p>
+         * Returns a new array comprised of this array joined with other array(s) and/or value(s).
+         * </p>
+         * 
+         * @param values Arrays and/or values to concatenate to the resulting array.
+         * @return
+         */
+        public String concat(T[] values) {
+            return that + ".concat(" + param(0) + ")";
         }
 
         /**
