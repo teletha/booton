@@ -11,6 +11,7 @@ package js.util.stream;
 
 import java.util.stream.Stream;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,6 +24,7 @@ import booton.translator.ScriptRunner;
 public class StreamTest {
 
     @Test
+    @Ignore
     public void count() throws Exception {
         Stream<String> stream = Stream.of("A", "B", "C");
         assert stream.count() == 3;
