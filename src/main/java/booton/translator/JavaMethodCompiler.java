@@ -175,7 +175,7 @@ class JavaMethodCompiler extends MethodVisitor {
     private List<Node> nodes = new ArrayList();
 
     /** The counter for the current processing node identifier. */
-    private int counter = 0;
+    private int counter = -1;
 
     /** The counter for construction of the object initialization. */
     private int countInitialization = 0;
@@ -248,8 +248,13 @@ class JavaMethodCompiler extends MethodVisitor {
             variables.type(isStatic ? i : i + 1).type(convert(parameters[i]));
         }
         debugger.whileProcess = true;
-
-        if (script.source.getName().endsWith("ReferencePipeline") && original.equals("collect")) {
+        //
+        // if (script.source.getName().endsWith("AbstractSpinedBuffer") &&
+        // original.equals("chunkSize")) {
+        // debugger.enable = true;
+        // }
+        //
+        if (script.source.getName().endsWith("AbstractPipeline") && original.equals("spliterator")) {
             debugger.enable = true;
         }
     }
@@ -370,7 +375,7 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitCode() {
-        // do nothing
+        visitLabel(new Label());
     }
 
     /**
@@ -549,11 +554,15 @@ class JavaMethodCompiler extends MethodVisitor {
             Node firstNode = findNodeBy(first);
             Node secondNode = findNodeBy(second);
             Node thirdNode = findNodeBy(third);
+
             debugger.print(current.id + "     " + condition.transition.id + "   " + firstNode.id + "  " + secondNode.id + "   " + thirdNode.id);
             debugger.print(nodes);
 
-            if (firstNode.equalsAsIncoming(thirdNode) && secondNode.equalsAsIncoming(thirdNode) && (condition.transition == firstNode || condition.transition == secondNode)) {
+            if (firstNode == secondNode) {
+                return;
+            }
 
+            if ((firstNode == thirdNode && secondNode != thirdNode) || (firstNode != thirdNode && secondNode == thirdNode) || (thirdNode.outgoing.contains(firstNode) && thirdNode.outgoing.contains(secondNode))) {
                 if (first == ONE && second == ZERO) {
                     current.remove(0);
                     current.remove(0);
@@ -1035,6 +1044,7 @@ class JavaMethodCompiler extends MethodVisitor {
             context = Javascript.computeClassName(lambdaClass);
             break;
 
+        case H_INVOKESPECIAL:
         case H_INVOKEVIRTUAL:
             context = "this";
             break;
@@ -1263,6 +1273,9 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void mergeConditions(Node node) {
+        debugger.print("merge" + node.id);
+        debugger.print(nodes);
+
         Set<Node> group = new HashSet();
         group.add(node);
 
@@ -1286,7 +1299,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
                     // Set next appearing node for grouping.
                     condition.next = node;
-                } else if (group.contains(condition.transition)) {
+                } else if (group.contains(condition.transition) && target.peek(i - 1) instanceof OperandCondition) {
                     // Merge two adjucent conditional operands.
                     i--;
 
@@ -1501,6 +1514,10 @@ class JavaMethodCompiler extends MethodVisitor {
      * @return
      */
     private boolean hasStaticMethod(Class owner, String name, Class[] types) {
+        if (owner == null) {
+            return false;
+        }
+
         try {
             Method method = owner.getDeclaredMethod(name, types);
 
@@ -1733,6 +1750,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private final void disposeNode(Node target) {
         debugger.print("dispose" + target.id);
+
+        debugger.print(nodes);
 
         int index = nodes.indexOf(target);
 

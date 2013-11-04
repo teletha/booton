@@ -23,7 +23,7 @@ import kiss.Singleton;
 
 import org.objectweb.asm.Type;
 
-import booton.Emulator;
+import booton.JDKEmulator;
 
 /**
  * @version 2013/10/03 12:43:41
@@ -84,7 +84,7 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
 
         Class type = api.value();
 
-        if (type == Emulator.class) {
+        if (type == JDKEmulator.class) {
             try {
                 type = Class.forName(declared.getName().replace("js.", "java."));
 

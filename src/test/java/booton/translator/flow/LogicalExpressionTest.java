@@ -16,7 +16,7 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/05/06 1:43:46
+ * @version 2013/11/04 17:19:06
  */
 @SuppressWarnings("unused")
 public class LogicalExpressionTest extends ScriptTester {
