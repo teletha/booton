@@ -164,7 +164,7 @@ class ScriptWriter {
      * @param fragments
      * @return
      */
-    public ScriptWriter string(String literal) {
+    public ScriptWriter string(Object literal) {
         return append('"', literal, '"');
     }
 

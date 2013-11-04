@@ -26,6 +26,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 
 import js.lang.Global;
@@ -284,22 +285,12 @@ public class Javascript {
             if (source.isInterface()) {
                 compileInterface(code);
             } else {
-                compileClass(code, source.getSuperclass(), null);
+                compileClass(code, true);
             }
 
             // create cache
             this.code = code.toString();
         }
-    }
-
-    Javascript recompile(byte[] bytes) {
-        ScriptWriter code = new ScriptWriter();
-        compileClass(code, source.getSuperclass(), bytes);
-
-        // create cache
-        this.code = code.toString();
-
-        return this;
     }
 
     /**
@@ -308,13 +299,13 @@ public class Javascript {
      * </p>
      * 
      * @param code
-     * @param parent A parent class.
      */
-    private void compileClass(ScriptWriter code, Class parent, byte[] bytes) {
+    private void compileClass(ScriptWriter code, boolean implementation) {
         // compute related class names
-        String className = computeSimpleClassName(source);
-        String superClassName = parent == Object.class ? "" : computeSimpleClassName(parent);
-        List<String> interfaces = new ArrayList();
+        Class superClass = source.getSuperclass();
+        String className = '"' + computeSimpleClassName(source) + '"';
+        String superClassName = '"' + (superClass == Object.class ? "" : computeSimpleClassName(superClass)) + '"';
+        StringJoiner interfaces = new StringJoiner(" ", "\"", "\"");
 
         for (Class type : source.getInterfaces()) {
             if (hasDefault(type)) {
@@ -324,50 +315,32 @@ public class Javascript {
 
         // write class definition
         code.comment(source + " " + className);
-        code.append("boot.define(")
-                .string(className)
-                .append(",\"", superClassName, "\",")
-                .string(I.join(" ", interfaces))
-                .append(",");
+        code.append("boot.define(", className, ",", superClassName, ",", interfaces, ",{");
 
         // write constructors, fields and methods
-        try {
-            code.append('{');
-            ClassReader reader;
+        if (implementation) {
+            try {
+                new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
+            } catch (TranslationError e) {
+                e.write("\r\n");
 
-            if (bytes == null) {
-                reader = new ClassReader(source.getName());
-            } else {
-                reader = new ClassReader(bytes);
+                throw CompilerRecorder.rethrow(e);
+            } catch (Throwable e) {
+                TranslationError error = new TranslationError(e);
+                error.write("Can't compile ", source.getName() + ".");
+
+                throw CompilerRecorder.rethrow(error);
             }
-            reader.accept(new JavaClassCompiler(this, code), 0);
-
-            code.append('}');
-        } catch (TranslationError e) {
-            e.write("\r\n");
-
-            throw CompilerRecorder.rethrow(e);
-        } catch (Throwable e) {
-            TranslationError error = new TranslationError(e);
-            error.write("Can't compile ", source.getName() + ".");
-
-            throw CompilerRecorder.rethrow(error);
-        }
-
-        for (Annotation annotation : source.getAnnotations()) {
-            require(annotation.annotationType());
         }
 
         // write metadata
-        code.append(",").append(new JavaMetadataCompiler(source));
+        code.append("},", new JavaMetadataCompiler(source));
 
         // write native class enhancement
         JavascriptAPIProvider provider = source.getAnnotation(JavascriptAPIProvider.class);
 
         if (provider != null) {
-            String nativeClasses = provider.value().length() != 0 ? provider.value() : source.getSimpleName();
-
-            code.append(",").string(nativeClasses);
+            code.append(",").string(provider.value().length() != 0 ? provider.value() : source.getSimpleName());
         }
 
         // End class definition
@@ -396,7 +369,12 @@ public class Javascript {
 
         // write interface definition
         code.comment(source);
-        code.append("boot.define(").string(className).append(",").string(I.join(" ", interfaces)).append(",\"\",");
+        code.append("boot.define(")
+                .string(className)
+                .append(",")
+                .append("\"\",")
+                .string(I.join(" ", interfaces))
+                .append(",");
 
         // write constructors, fields and methods
         try {
