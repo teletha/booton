@@ -12,5 +12,5 @@ package booton;
 /**
  * @version 2013/10/29 16:21:03
  */
-public @interface Emulator {
+public @interface JDKEmulator {
 }

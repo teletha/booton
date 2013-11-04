@@ -9,6 +9,9 @@
  */
 package js.util.stream;
 
+import java.util.stream.Stream;
+
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.translator.ScriptRunner;
@@ -19,9 +22,9 @@ import booton.translator.ScriptRunner;
 @RunWith(ScriptRunner.class)
 public class StreamTest {
 
-    // @Test
-    // public void count() throws Exception {
-    // Stream<String> stream = Stream.of("A", "B", "C");
-    // assert stream.count() == 3;
-    // }
+    @Test
+    public void count() throws Exception {
+        Stream<String> stream = Stream.of("A", "B", "C");
+        assert stream.count() == 3;
+    }
 }

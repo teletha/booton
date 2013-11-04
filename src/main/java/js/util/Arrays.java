@@ -1291,6 +1291,23 @@ class Arrays {
     }
 
     /**
+     * Returns a {@link Spliterator} covering all of the specified array.
+     * <p>
+     * The spliterator reports {@link Spliterator#SIZED}, {@link Spliterator#SUBSIZED},
+     * {@link Spliterator#ORDERED}, and {@link Spliterator#IMMUTABLE}.
+     * 
+     * @param <T> type of elements
+     * @param array the array, assumed to be unmodified during use
+     * @return a spliterator for the array elements
+     * @since 1.8
+     */
+    public static <T> Spliterator<T> spliterator(T[] array) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
      * Returns a {@link Spliterator} covering the specified range of the specified array.
      * <p>
      * The spliterator reports {@link Spliterator#SIZED}, {@link Spliterator#SUBSIZED},
@@ -1307,9 +1324,117 @@ class Arrays {
      * @since 1.8
      */
     public static <T> Spliterator<T> spliterator(T[] array, int startInclusive, int endExclusive) {
-        // return Spliterators.spliterator(array, startInclusive, endExclusive, Spliterator.ORDERED
-        // | Spliterator.IMMUTABLE);
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
 
+    /**
+     * Returns a {@link Spliterator.OfInt} covering all of the specified array.
+     * <p>
+     * The spliterator reports {@link Spliterator#SIZED}, {@link Spliterator#SUBSIZED},
+     * {@link Spliterator#ORDERED}, and {@link Spliterator#IMMUTABLE}.
+     * 
+     * @param array the array, assumed to be unmodified during use
+     * @return a spliterator for the array elements
+     * @since 1.8
+     */
+    public static Spliterator.OfInt spliterator(int[] array) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns a {@link Spliterator.OfInt} covering the specified range of the specified array.
+     * <p>
+     * The spliterator reports {@link Spliterator#SIZED}, {@link Spliterator#SUBSIZED},
+     * {@link Spliterator#ORDERED}, and {@link Spliterator#IMMUTABLE}.
+     * 
+     * @param array the array, assumed to be unmodified during use
+     * @param startInclusive the first index to cover, inclusive
+     * @param endExclusive index immediately past the last index to cover
+     * @return a spliterator for the array elements
+     * @throws ArrayIndexOutOfBoundsException if {@code startInclusive} is negative,
+     *             {@code endExclusive} is less than {@code startInclusive}, or {@code endExclusive}
+     *             is greater than the array size
+     * @since 1.8
+     */
+    public static Spliterator.OfInt spliterator(int[] array, int startInclusive, int endExclusive) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns a {@link Spliterator.OfLong} covering all of the specified array.
+     * <p>
+     * The spliterator reports {@link Spliterator#SIZED}, {@link Spliterator#SUBSIZED},
+     * {@link Spliterator#ORDERED}, and {@link Spliterator#IMMUTABLE}.
+     * 
+     * @param array the array, assumed to be unmodified during use
+     * @return the spliterator for the array elements
+     * @since 1.8
+     */
+    public static Spliterator.OfLong spliterator(long[] array) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns a {@link Spliterator.OfLong} covering the specified range of the specified array.
+     * <p>
+     * The spliterator reports {@link Spliterator#SIZED}, {@link Spliterator#SUBSIZED},
+     * {@link Spliterator#ORDERED}, and {@link Spliterator#IMMUTABLE}.
+     * 
+     * @param array the array, assumed to be unmodified during use
+     * @param startInclusive the first index to cover, inclusive
+     * @param endExclusive index immediately past the last index to cover
+     * @return a spliterator for the array elements
+     * @throws ArrayIndexOutOfBoundsException if {@code startInclusive} is negative,
+     *             {@code endExclusive} is less than {@code startInclusive}, or {@code endExclusive}
+     *             is greater than the array size
+     * @since 1.8
+     */
+    public static Spliterator.OfLong spliterator(long[] array, int startInclusive, int endExclusive) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns a {@link Spliterator.OfDouble} covering all of the specified array.
+     * <p>
+     * The spliterator reports {@link Spliterator#SIZED}, {@link Spliterator#SUBSIZED},
+     * {@link Spliterator#ORDERED}, and {@link Spliterator#IMMUTABLE}.
+     * 
+     * @param array the array, assumed to be unmodified during use
+     * @return a spliterator for the array elements
+     * @since 1.8
+     */
+    public static Spliterator.OfDouble spliterator(double[] array) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns a {@link Spliterator.OfDouble} covering the specified range of the specified array.
+     * <p>
+     * The spliterator reports {@link Spliterator#SIZED}, {@link Spliterator#SUBSIZED},
+     * {@link Spliterator#ORDERED}, and {@link Spliterator#IMMUTABLE}.
+     * 
+     * @param array the array, assumed to be unmodified during use
+     * @param startInclusive the first index to cover, inclusive
+     * @param endExclusive index immediately past the last index to cover
+     * @return a spliterator for the array elements
+     * @throws ArrayIndexOutOfBoundsException if {@code startInclusive} is negative,
+     *             {@code endExclusive} is less than {@code startInclusive}, or {@code endExclusive}
+     *             is greater than the array size
+     * @since 1.8
+     */
+    public static Spliterator.OfDouble spliterator(double[] array, int startInclusive, int endExclusive) {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
         throw new Error();

@@ -18,6 +18,9 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
+import booton.JDKEmulator;
+import booton.translator.JavaAPIProvider;
+
 /**
  * @version 2013/10/29 16:19:18
  */
@@ -97,7 +100,7 @@ class Spliterators {
      * A Spliterator designed for use by sources that traverse and split elements maintained in an
      * unmodifiable {@code Object[]} array.
      */
-    // @JavaAPIProvider(Emulator.class)
+    @JavaAPIProvider(JDKEmulator.class)
     static final class ArraySpliterator<T> implements Spliterator<T> {
 
         /**
