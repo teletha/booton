@@ -253,10 +253,6 @@ class JavaMethodCompiler extends MethodVisitor {
         // original.equals("chunkSize")) {
         // debugger.enable = true;
         // }
-        //
-        if (script.source.getName().endsWith("AbstractPipeline") && original.equals("spliterator")) {
-            debugger.enable = true;
-        }
     }
 
     /**

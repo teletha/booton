@@ -9,7 +9,6 @@
  */
 package js.util.stream;
 
-import booton.translator.Debuggable;
 
 /**
  * @version 2013/11/03 12:27:10
@@ -92,7 +91,6 @@ class AbstractSpinedBuffer {
     /**
      * How big should the nth chunk be?
      */
-    @Debuggable
     protected int chunkSize(int n) {
         int power = (n == 0 || n == 1) //
         ? initialChunkPower
