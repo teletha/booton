@@ -10,7 +10,7 @@ function boot(global) {
         if (name != "$" && (!protect || !object[name])) {
           Object.defineProperty(object, name, {
             configurable: false,
-            enumerable: false,
+            enumerable: protect,
             writable: true,
             value: properties[name]
           });

@@ -30,6 +30,7 @@ public class InterfaceMethodTest {
         Implementation implementation = new Implementation();
         assert implementation.defaultInt() == -10;
         assert implementation.defaultString().equals("default");
+        assert implementation.superString().equals("super");
     }
 
     /**
@@ -49,10 +50,17 @@ public class InterfaceMethodTest {
     /**
      * @version 2013/11/03 16:22:54
      */
-    private static interface OtherInterface {
+    private static interface OtherInterface extends SuperInterface {
 
         default String defaultString() {
             return "default";
+        }
+    }
+
+    private static interface SuperInterface {
+
+        default String superString() {
+            return "super";
         }
     }
 
