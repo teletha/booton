@@ -12,7 +12,6 @@ package booton.translator;
 import static booton.Obfuscator.*;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -30,7 +29,6 @@ import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 
 import js.lang.Global;
-import js.lang.NativeObject;
 import js.lang.NativeString;
 import kiss.ClassListener;
 import kiss.Extensible;
@@ -282,45 +280,46 @@ public class Javascript {
         if (code == null) {
             ScriptWriter code = new ScriptWriter();
 
-            if (source.isInterface()) {
-                compileInterface(code);
-            } else {
-                compileClass(code, true);
+            // compute related class names
+            Class parent = source.getSuperclass();
+            String className = '"' + computeSimpleClassName(source) + '"';
+            String parentName = '"' + (parent == null || parent == Object.class ? "" : computeSimpleClassName(parent)) + '"';
+            StringJoiner interfaces = new StringJoiner(" ", "\"", "\"");
+
+            for (Class type : source.getInterfaces()) {
+                if (hasDefault(type)) {
+                    interfaces.add(computeSimpleClassName(type));
+                }
             }
 
-            // create cache
-            this.code = code.toString();
-        }
-    }
+            // write class definition
+            code.comment(source + " " + className);
+            code.append("boot.define(", className, ",", parentName, ",", interfaces, ",{");
 
-    /**
-     * <p>
-     * Compile java class to javascript.
-     * </p>
-     * 
-     * @param code
-     */
-    private void compileClass(ScriptWriter code, boolean implementation) {
-        // compute related class names
-        Class superClass = source.getSuperclass();
-        String className = '"' + computeSimpleClassName(source) + '"';
-        String superClassName = '"' + (superClass == Object.class ? "" : computeSimpleClassName(superClass)) + '"';
-        StringJoiner interfaces = new StringJoiner(" ", "\"", "\"");
-
-        for (Class type : source.getInterfaces()) {
-            if (hasDefault(type)) {
-                interfaces.add(computeSimpleClassName(type));
-            }
-        }
-
-        // write class definition
-        code.comment(source + " " + className);
-        code.append("boot.define(", className, ",", superClassName, ",", interfaces, ",{");
-
-        // write constructors, fields and methods
-        if (implementation) {
+            // write constructors, fields and methods
             try {
-                new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
+                if (source.isAnnotation()) {
+                    Method[] methods = source.getDeclaredMethods();
+
+                    for (int i = 0; i < methods.length; i++) {
+                        code.comment(methods[i]);
+                        code.append(computeMethodName(methods[i]), ":");
+
+                        Object value = methods[i].getDefaultValue();
+
+                        if (value == null) {
+                            code.append("null");
+                        } else {
+                            code.append("function() {return " + JavaMetadataCompiler.compileValue(value) + ";}");
+                        }
+
+                        if (i < methods.length - 1) {
+                            code.separator();
+                        }
+                    }
+                } else {
+                    new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
+                }
             } catch (TranslationError e) {
                 e.write("\r\n");
 
@@ -331,115 +330,24 @@ public class Javascript {
 
                 throw CompilerRecorder.rethrow(error);
             }
-        }
 
-        // write metadata
-        code.append("},", new JavaMetadataCompiler(source));
+            // write metadata
+            code.append("},", new JavaMetadataCompiler(source));
 
-        // write native class enhancement
-        JavascriptAPIProvider provider = source.getAnnotation(JavascriptAPIProvider.class);
+            // write native class enhancement
+            JavascriptAPIProvider provider = source.getAnnotation(JavascriptAPIProvider.class);
 
-        if (provider != null) {
-            code.append(",").string(provider.value().length() != 0 ? provider.value() : source.getSimpleName());
-        }
-
-        // End class definition
-        code.append(");");
-        code.line();
-    }
-
-    /**
-     * <p>
-     * Compile java class to javascript.
-     * </p>
-     * 
-     * @param code
-     * @param parent A parent class.
-     */
-    private void compileInterface(ScriptWriter code) {
-        // compute related class names
-        String className = Javascript.computeSimpleClassName(source);
-        List<String> interfaces = new ArrayList();
-
-        for (Class type : source.getInterfaces()) {
-            if (hasDefault(type)) {
-                interfaces.add(computeSimpleClassName(type));
-            }
-        }
-
-        // write interface definition
-        code.comment(source);
-        code.append("boot.define(")
-                .string(className)
-                .append(",")
-                .append("\"\",")
-                .string(I.join(" ", interfaces))
-                .append(",");
-
-        // write constructors, fields and methods
-        try {
-            code.append('{');
-            ClassReader reader;
-
-            if (source.isAnnotation()) {
-                Method[] methods = source.getDeclaredMethods();
-
-                for (int i = 0; i < methods.length; i++) {
-                    code.comment(methods[i]);
-                    code.append(computeMethodName(methods[i])).append(":");
-
-                    Object value = methods[i].getDefaultValue();
-
-                    if (value == null) {
-                        code.append("null");
-                    } else {
-                        code.append("function() {return " + JavaMetadataCompiler.compileValue(value) + ";}");
-                    }
-
-                    if (i < methods.length - 1) {
-                        code.separator();
-                    }
-                }
-            } else {
-                reader = new ClassReader(source.getName());
-                reader.accept(new JavaClassCompiler(this, code), 0);
+            if (provider != null) {
+                code.append(",").string(provider.value().length() != 0 ? provider.value() : source.getSimpleName());
             }
 
-            code.append('}');
-        } catch (TranslationError e) {
-            e.write("\r\n");
+            // End class definition
+            code.append(");");
+            code.line();
 
-            throw CompilerRecorder.rethrow(e);
-        } catch (Throwable e) {
-            TranslationError error = new TranslationError(e);
-            error.write("Can't compile ", source.getName() + ".");
-
-            throw CompilerRecorder.rethrow(error);
+            // create cache
+            this.code = code.toString();
         }
-
-        for (Annotation annotation : source.getAnnotations()) {
-            require(annotation.annotationType());
-        }
-
-        // write metadata
-        code.append(",").append(new JavaMetadataCompiler(source));
-
-        // End class definition
-        code.append(");");
-        code.line();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-
-        // write out
-        writeTo(builder);
-
-        return builder.toString();
     }
 
     /**
@@ -457,6 +365,19 @@ public class Javascript {
             }
         }
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        // write out
+        writeTo(builder);
+
+        return builder.toString();
     }
 
     /**
@@ -628,10 +549,6 @@ public class Javascript {
      * @return An identified class name for ECMAScript.
      */
     public static final String computeSimpleClassName(Class clazz) {
-        if (clazz == NativeObject.class) {
-            return "";
-        }
-
         if (clazz == NativeString.class) {
             clazz = String.class;
         }
