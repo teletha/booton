@@ -64,7 +64,7 @@ import booton.Unnecessary;
  * volatile
  * </p>
  * 
- * @version 2013/10/29 10:38:02
+ * @version 2013/11/05 10:13:44
  */
 public class Javascript {
 
@@ -77,11 +77,14 @@ public class Javascript {
     /** The all cached scripts. */
     private static final Map<Class, Javascript> scripts = I.aware(new ConcurrentHashMap());
 
-    /** The local identifier counter for {@link Javascript}. */
-    private static int counter = 0;
-
     /** The root class of javascript model. */
     private static final Class rootClass;
+
+    /** The method list. Method signature must have identity in compiling environment */
+    private static final List<Integer> methods = new ArrayList();
+
+    /** The local identifier counter for {@link Javascript}. */
+    private static int counter = 0;
 
     // initialization
     static {
@@ -108,9 +111,6 @@ public class Javascript {
 
     /** The constructor list of this script. */
     private final List<Integer> constructors = new ArrayList();
-
-    /** The method list of this script. */
-    private static final List<Integer> methods = new ArrayList();
 
     /** The field list of this script. */
     private final List<Integer> fields = new ArrayList();
@@ -150,6 +150,7 @@ public class Javascript {
             }
         }
 
+        // define all declared member fields
         for (Field field : source.getDeclaredFields()) {
             order(fields, field.getName().hashCode() + source.hashCode());
         }
@@ -314,14 +315,14 @@ public class Javascript {
 
                     for (int i = 0; i < methods.length; i++) {
                         code.comment(methods[i]);
-                        code.append(computeMethodName(methods[i]), ":");
+                        code.write(computeMethodName(methods[i]), ":");
 
                         Object value = methods[i].getDefaultValue();
 
                         if (value == null) {
-                            code.append("null");
+                            code.write("null");
                         } else {
-                            code.append("function() {return " + JavaMetadataCompiler.compileValue(value) + ";}");
+                            code.write("function()", "{return " + JavaMetadataCompiler.compileValue(value) + ";}");
                         }
 
                         if (i < methods.length - 1) {
