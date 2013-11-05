@@ -30,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import js.lang.Global;
 import js.lang.NativeString;
+import js.util.concurrent.CopyOnWriteArraySet;
 import kiss.ClassListener;
 import kiss.Extensible;
 import kiss.I;
@@ -73,17 +74,23 @@ public class Javascript {
     /** The fixed id for primitives. */
     private static final List<Integer> primitiveIds = Arrays.asList(8, 9, 5, 3, 25, 1, 18, 2, 21);
 
-    /** The dependency manager. */
-    private static final DepenedencyManager manager = I.make(DepenedencyManager.class);
-
     /** The all cached scripts. */
     private static final Map<Class, Javascript> scripts = I.aware(new ConcurrentHashMap());
 
     /** The local identifier counter for {@link Javascript}. */
     private static int counter = 0;
 
+    /** The root class of javascript model. */
+    private static final Class rootClass;
+
     // initialization
     static {
+        try {
+            rootClass = Class.forName("js.lang.JSObject");
+        } catch (ClassNotFoundException e) {
+            throw I.quiet(e);
+        }
+
         // Load Booton module
         I.load(Global.class, false);
 
@@ -135,7 +142,7 @@ public class Javascript {
         }
 
         // copy all member fields for override mechanism
-        if (!source.getName().equals("js.lang.JSObject")) {
+        if (source != rootClass) {
             Javascript script = getScript(source.getSuperclass());
 
             if (script != null) {
@@ -159,7 +166,7 @@ public class Javascript {
      */
     public void writeTo(Path output, Class... requirements) {
         try {
-            writeTo(Files.newBufferedWriter(output, I.$encoding), new HashSet(), requirements);
+            writeTo(Files.newBufferedWriter(output, I.$encoding), requirements);
         } catch (IOException e) {
             throw I.quiet(e);
         }
@@ -185,37 +192,32 @@ public class Javascript {
      * </p>
      * 
      * @param outout A script output.
-     * @param requirements A list of required script classes.
+     * @param defined A list of compiled script classes.
+     * @param necessaries A list of required script classes.
      */
-    void writeTo(Appendable output, Set<Class> defined, Class... requirements) {
-        // record compile route
-        CompilerRecorder.startCompiling(this);
-
-        try {
-            manager.add(requirements);
-
-            try {
-                // Record all defined classes to prevent duplicated definition.
-                write(output, defined);
-
-                // Write bootstrap method if needed.
-                output.append("try {");
-                try {
-                    output.append(writeMethodCode(source, "jsmain")).append(";");
-                } catch (Exception e) {
-                    // ignore missing "jsmain" method
-                }
-                output.append("} catch(e) {");
-                output.append(writeMethodCode(Thread.class, "handleUncaughtException", Object.class, "e")).append(";");
-                output.append("}");
-            } catch (Exception e) {
-                throw I.quiet(e);
-            }
-            I.quiet(output);
-        } finally {
-            // record compile route
-            CompilerRecorder.finishCompiling(this);
+    void writeTo(Appendable output, Set<Class> defined, Class... necessaries) {
+        // find all necessaries and write it
+        for (Class necessary : I.make(NecessaryManager.class).collect(necessaries)) {
+            getScript(necessary).write(output, defined);
         }
+
+        // write this script
+        write(output, defined);
+
+        // write bootstrap method if needed.
+        try {
+            String main = writeMethodCode(source, "jsmain");
+            String error = writeMethodCode(Thread.class, "handleUncaughtException", Object.class, "e");
+
+            ScriptWriter code = new ScriptWriter();
+            code.write("try", "{", main, ";", "}", "catch(e)", "{", error, ";", "}");
+            output.append(code.toString());
+        } catch (Exception e) {
+            // ignore missing "jsmain" method
+        }
+
+        // close stream
+        I.quiet(output);
     }
 
     /**
@@ -226,7 +228,7 @@ public class Javascript {
      * @param output A script output.
      * @param defined
      */
-    private void write(Appendable output, Set defined) throws IOException {
+    private void write(Appendable output, Set<Class> defined) {
         // record compile route
         CompilerRecorder.startCompiling(this);
 
@@ -234,40 +236,49 @@ public class Javascript {
             // compile script
             compile();
 
-            // write super class
-            if (!source.getName().equals("js.lang.JSObject")) {
-                Javascript script = Javascript.getScript(source.getSuperclass());
+            // write super class and interfaces
+            if (source != rootClass) {
+                write(output, defined, source.getSuperclass());
 
-                if (script != null && !defined.contains(script.source)) {
-                    script.write(output, defined);
-                }
-            }
-
-            // require interfaces
-            for (Class interfaceType : source.getInterfaces()) {
-                Javascript script = Javascript.getScript(interfaceType);
-
-                if (script != null && !defined.contains(script.source)) {
-                    script.write(output, defined);
+                for (Class interfaceType : source.getInterfaces()) {
+                    write(output, defined, interfaceType);
                 }
             }
 
             // write this class
             if (defined.add(source)) {
-                output.append(code);
+                try {
+                    output.append(code);
+                } catch (IOException e) {
+                    throw I.quiet(e);
+                }
             }
 
             // write dependency classes
             for (Class dependency : dependencies) {
-                Javascript script = Javascript.getScript(dependency);
-
-                if (script != null && !defined.contains(script.source)) {
-                    script.write(output, defined);
-                }
+                write(output, defined, dependency);
             }
         } finally {
             // record compile route
             CompilerRecorder.finishCompiling(this);
+        }
+    }
+
+    /**
+     * <p>
+     * Write code of the specified class.
+     * </p>
+     * 
+     * @param output
+     * @param defined
+     * @param type
+     * @throws IOException
+     */
+    private void write(Appendable output, Set<Class> defined, Class type) {
+        Javascript script = Javascript.getScript(type);
+
+        if (script != null && !defined.contains(script.source)) {
+            script.write(output, defined);
         }
     }
 
@@ -705,27 +716,20 @@ public class Javascript {
     }
 
     /**
-     * @version 2013/09/27 15:27:16
+     * @version 2013/11/05 9:58:05
      */
     @Manageable(lifestyle = Singleton.class)
-    private static class DepenedencyManager implements ClassListener<Necessary> {
-
-        /** The ignored classes. */
-        private final Set<Class> ignores = new HashSet();
+    private static class NecessaryManager implements ClassListener<Necessary> {
 
         /** The extensions. */
-        private final Set<Class> collection = new HashSet();
-
-        {
-            ignores.add(ScriptTester.class);
-        }
+        private final Set<Class> classes = new HashSet();
 
         /**
          * {@inheritDoc}
          */
         @Override
         public void load(Class clazz) {
-            collection.add(clazz);
+            classes.add(clazz);
         }
 
         /**
@@ -733,29 +737,32 @@ public class Javascript {
          */
         @Override
         public void unload(Class clazz) {
-            collection.remove(clazz);
+            classes.remove(clazz);
         }
 
         /**
          * <p>
-         * Collect all required classes.
+         * Collect all necessaries.
          * </p>
          * 
-         * @param requirements
+         * @param necessaries
+         * @return
          */
-        private void add(Class... requirements) {
-            Set<Class> list = new HashSet();
-            list.addAll(collection);
-            list.addAll(Arrays.asList(requirements));
+        private Set<Class> collect(Class[] necessaries) {
+            Set<Class> set = new CopyOnWriteArraySet();
+            set.addAll(classes);
+            set.addAll(Arrays.asList(necessaries));
 
-            for (Class clazz : list) {
-                if (Extensible.class.isAssignableFrom(clazz)) {
-                    for (Class<Extensible> extension : I.collect((Class<Extensible>) clazz)) {
-                        require(extension);
+            for (Class necessary : necessaries) {
+                set.add(necessary);
+
+                if (Extensible.class.isAssignableFrom(necessary)) {
+                    for (Class<Extensible> extension : I.collect((Class<Extensible>) necessary)) {
+                        set.add(extension);
                     }
                 }
-                require(clazz);
             }
+            return set;
         }
     }
 }
