@@ -7,16 +7,23 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.bwt.widget;
+package js.lang;
 
 import org.junit.Test;
 
 /**
- * @version 2013/06/29 2:11:44
+ * @version 2013/11/06 10:26:52
  */
-public class WidgetTest {
+public class CharSequenceTest {
 
     @Test
-    public void widget() throws Exception {
+    public void chars() throws Exception {
+        String value = "test";
+        assert value.chars().count() == 4;
+    }
+
+    @Test
+    public void codePoints() throws Exception {
+
     }
 }
