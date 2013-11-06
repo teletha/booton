@@ -17,7 +17,10 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.util.ASMifier;
 import org.objectweb.asm.util.Printer;
+import org.objectweb.asm.util.TraceClassVisitor;
 import org.objectweb.asm.util.TraceMethodVisitor;
+
+import booton.translator.lambda.ConstructorReferenceTest;
 
 /**
  * @version 2013/10/24 14:44:43
@@ -25,7 +28,7 @@ import org.objectweb.asm.util.TraceMethodVisitor;
 public class BytecodeDump {
 
     public static void main(String[] args) throws Exception {
-        dump(Class.forName("java.util.stream.Tripwire"));
+        dump(ConstructorReferenceTest.class, "constructor");
     }
 
     /**

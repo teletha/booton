@@ -11,12 +11,10 @@ package js.util;
 
 import java.util.Iterator;
 
-import booton.translator.JavaAPIProvider;
-
 /**
  * @version 2013/02/20 13:45:51
  */
-@JavaAPIProvider(java.util.EnumSet.class)
+// @JavaAPIProvider(java.util.EnumSet.class)
 class EnumSet<E extends Enum<E>> extends AbstractSet<E> {
 
     /**

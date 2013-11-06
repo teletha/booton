@@ -12,6 +12,7 @@ package js.util;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.PrimitiveIterator;
 import java.util.Spliterator;
@@ -24,8 +25,103 @@ import booton.translator.JavaAPIProvider;
 /**
  * @version 2013/10/29 16:19:18
  */
-// @JavaAPIProvider(java.util.Spliterators.class)
+@JavaAPIProvider(java.util.Spliterators.class)
 class Spliterators {
+
+    /** reuse */
+    private static final Spliterator EMPTY_SPLITERATOR = new Spliterator() {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean tryAdvance(Consumer action) {
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Spliterator trySplit() {
+            return null;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public long estimateSize() {
+            return 0;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int characteristics() {
+            return Spliterator.SIZED | Spliterator.SUBSIZED;
+        }
+    };
+
+    /**
+     * Creates an empty {@code Spliterator}
+     * <p>
+     * The empty spliterator reports {@link Spliterator#SIZED} and {@link Spliterator#SUBSIZED}.
+     * Calls to {@link java.util.Spliterator#trySplit()} always return {@code null}.
+     * 
+     * @param <T> Type of elements
+     * @return An empty spliterator
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Spliterator<T> emptySpliterator() {
+        return (Spliterator<T>) EMPTY_SPLITERATOR;
+    }
+
+    /**
+     * Creates an {@code Iterator} from a {@code Spliterator}.
+     * <p>
+     * Traversal of elements should be accomplished through the iterator. The behaviour of traversal
+     * is undefined if the spliterator is operated after the iterator is returned.
+     * 
+     * @param <T> Type of elements
+     * @param spliterator The spliterator
+     * @return An iterator
+     * @throws NullPointerException if the given spliterator is {@code null}
+     */
+    public static <T> Iterator<T> iterator(Spliterator<? extends T> spliterator) {
+        Objects.requireNonNull(spliterator);
+        class Adapter implements Iterator<T>, Consumer<T> {
+
+            boolean valueReady = false;
+
+            T nextElement;
+
+            @Override
+            public void accept(T t) {
+                valueReady = true;
+                nextElement = t;
+            }
+
+            @Override
+            public boolean hasNext() {
+                if (!valueReady) spliterator.tryAdvance(this);
+                return valueReady;
+            }
+
+            @Override
+            public T next() {
+                if (!valueReady && !hasNext())
+                    throw new NoSuchElementException();
+                else {
+                    valueReady = false;
+                    return nextElement;
+                }
+            }
+        }
+
+        return new Adapter();
+    }
 
     /**
      * Creates a {@code Spliterator.OfInt} using a given {@code IntStream.IntIterator} as the source
@@ -94,6 +190,29 @@ class Spliterators {
      */
     public static Spliterator.OfInt spliteratorUnknownSize(PrimitiveIterator.OfInt iterator, int characteristics) {
         return new IntIteratorSpliterator(Objects.requireNonNull(iterator), characteristics);
+    }
+
+    /**
+     * Creates a {@code Spliterator} using a given {@code Iterator} as the source of elements, with
+     * no initial size estimate.
+     * <p>
+     * The spliterator is not <em><a href="Spliterator.html#binding">late-binding</a></em>, inherits
+     * the <em>fail-fast</em> properties of the iterator, and implements {@code trySplit} to permit
+     * limited parallelism.
+     * <p>
+     * Traversal of elements should be accomplished through the spliterator. The behaviour of
+     * splitting and traversal is undefined if the iterator is operated on after the spliterator is
+     * returned.
+     * 
+     * @param <T> Type of elements
+     * @param iterator The iterator for the source
+     * @param characteristics Characteristics of this spliterator's source or elements ({@code SIZED}
+     *            and {@code SUBSIZED}, if supplied, are ignored and are not reported.)
+     * @return A spliterator from an iterator
+     * @throws NullPointerException if the given iterator is {@code null}
+     */
+    public static <T> Spliterator<T> spliteratorUnknownSize(Iterator<? extends T> iterator, int characteristics) {
+        return new IteratorSpliterator<>(Objects.requireNonNull(iterator), characteristics);
     }
 
     /**
