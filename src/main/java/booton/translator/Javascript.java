@@ -299,7 +299,7 @@ public class Javascript {
             StringJoiner interfaces = new StringJoiner(" ", "\"", "\"");
 
             for (Class type : source.getInterfaces()) {
-                if (hasDefault(type)) {
+                if (hasImplementation(type, false)) {
                     interfaces.add(computeSimpleClassName(type));
                 }
             }
@@ -310,24 +310,9 @@ public class Javascript {
 
             // write constructors, fields and methods
             try {
-                if (source.isAnnotation()) {
-                    Method[] methods = source.getDeclaredMethods();
-
-                    for (int i = 0; i < methods.length; i++) {
-                        code.comment(methods[i]);
-                        code.write(computeMethodName(methods[i]), ":");
-
-                        Object value = methods[i].getDefaultValue();
-
-                        if (value == null) {
-                            code.write("null");
-                        } else {
-                            code.write("function()", "{return " + JavaMetadataCompiler.compileValue(value) + ";}");
-                        }
-
-                        if (i < methods.length - 1) {
-                            code.separator();
-                        }
+                if (source.isInterface() && !hasImplementation(source, true)) {
+                    if (source.isAnnotation()) {
+                        compileAnnotation(code);
                     }
                 } else {
                     new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
@@ -364,15 +349,48 @@ public class Javascript {
 
     /**
      * <p>
-     * Check interface default method
+     * Compile annotation body.
+     * </p>
+     * 
+     * @param code
+     */
+    private void compileAnnotation(ScriptWriter code) {
+        Method[] methods = source.getDeclaredMethods();
+
+        for (int i = 0; i < methods.length; i++) {
+            code.comment(methods[i]);
+            code.write(computeMethodName(methods[i]), ":");
+
+            Object value = methods[i].getDefaultValue();
+
+            if (value == null) {
+                code.write("null");
+            } else {
+                code.write("function()", "{return " + JavaMetadataCompiler.compileValue(value) + ";}");
+            }
+
+            if (i < methods.length - 1) {
+                code.separator();
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Check interface method
      * </p>
      * 
      * @param type
+     * @param includeStatic
      * @return
      */
-    private boolean hasDefault(Class type) {
+    private boolean hasImplementation(Class type, boolean includeStatic) {
         for (Method method : type.getDeclaredMethods()) {
             if (method.isDefault()) {
+                return true;
+            }
+
+            if (includeStatic && Modifier.isStatic(method.getModifiers())) {
                 return true;
             }
         }
