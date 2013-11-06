@@ -1050,6 +1050,10 @@ class JavaMethodCompiler extends MethodVisitor {
             parameterSize--;
             break;
 
+        case H_NEWINVOKESPECIAL:
+            context = Javascript.computeClassName(lambdaClass);
+            break;
+
         default:
             // If this exception will be thrown, it is bug of this program. So we must rethrow the
             // wrapped error in here.
