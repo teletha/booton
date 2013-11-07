@@ -823,7 +823,8 @@ public class ClassTest {
     public void getEnumConstants() throws Exception {
         RetentionPolicy[] policies = RetentionPolicy.class.getEnumConstants();
         assert policies.length == 3;
-        System.out.println(policies[0].hashCode() + "   " + RetentionPolicy.SOURCE.hashCode());
         assert policies[0] == RetentionPolicy.SOURCE;
+        assert policies[1] == RetentionPolicy.CLASS;
+        assert policies[2] == RetentionPolicy.RUNTIME;
     }
 }

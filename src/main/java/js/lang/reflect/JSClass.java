@@ -774,8 +774,38 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
             return null;
         } else {
             Map<String, Enum> map = enumConstantDirectory();
-            return map.keySet().toArray((T[]) Array.newInstance((Class) (Object) this, map.size()));
+            return map.values().toArray((T[]) Array.newInstance((Class) (Object) this, map.size()));
         }
+    }
+
+    /**
+     * <p>
+     * Returns a map from simple name to enum constant. This package-private method is used
+     * internally by Enum to implement public static <T extends Enum<T>> T valueOf(Class<T>, String)
+     * efficiently.
+     * </p>
+     * <p>
+     * Note that the map is returned by this method is created lazily on first use. Typically it
+     * won't ever get created.
+     * </p>
+     */
+    Map<String, Enum> enumConstantDirectory() {
+        if (enumerationConstants == null) {
+            enumerationConstants = new HashMap();
+
+            NativeObject definition = prototype.getPropertyAs(NativeObject.class, "$");
+
+            for (String name : definition.keys()) {
+                NativeObject value = definition.getPropertyAs(NativeObject.class, name);
+
+                if (value.isArray()) {
+                    for (Enum item : (Enum[]) (Object) value) {
+                        enumerationConstants.put(item.name(), item);
+                    }
+                }
+            }
+        }
+        return enumerationConstants;
     }
 
     /**
@@ -1213,36 +1243,6 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         } catch (Exception e) {
             throw new Error(e);
         }
-    }
-
-    /**
-     * <p>
-     * Returns a map from simple name to enum constant. This package-private method is used
-     * internally by Enum to implement public static <T extends Enum<T>> T valueOf(Class<T>, String)
-     * efficiently.
-     * </p>
-     * <p>
-     * Note that the map is returned by this method is created lazily on first use. Typically it
-     * won't ever get created.
-     * </p>
-     */
-    public Map<String, Enum> enumConstantDirectory() {
-        if (enumerationConstants == null) {
-            enumerationConstants = new HashMap();
-
-            NativeObject definition = prototype.getPropertyAs(NativeObject.class, "$");
-
-            for (String name : definition.keys()) {
-                NativeObject value = definition.getPropertyAs(NativeObject.class, name);
-
-                if (value.isArray()) {
-                    for (Enum item : (Enum[]) (Object) value) {
-                        enumerationConstants.put(item.name(), item);
-                    }
-                }
-            }
-        }
-        return enumerationConstants;
     }
 
     /**
