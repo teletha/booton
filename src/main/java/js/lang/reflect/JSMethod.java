@@ -64,6 +64,19 @@ class JSMethod extends Parameterizable {
     }
 
     /**
+     * Returns {@code true} if this method is a default method; returns {@code false} otherwise. A
+     * default method is a public non-abstract instance method, that is, a non-static method with a
+     * body, declared in an interface type.
+     * 
+     * @return true if and only if this method is a default method as defined by the Java Language
+     *         Specification.
+     * @since 1.8
+     */
+    public boolean isDefault() {
+        return (getModifiers() & (JSModifier.ABSTRACT | JSModifier.PUBLIC | JSModifier.STATIC)) == JSModifier.PUBLIC && getDeclaringClass().isInterface();
+    }
+
+    /**
      * Returns {@code true} if this method was declared to take a variable number of arguments;
      * returns {@code false} otherwise.
      * 
