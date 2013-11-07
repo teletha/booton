@@ -248,11 +248,10 @@ class JavaMethodCompiler extends MethodVisitor {
             variables.type(isStatic ? i : i + 1).type(convert(parameters[i]));
         }
         debugger.whileProcess = true;
-        //
-        // if (script.source.getName().endsWith("AbstractSpinedBuffer") &&
-        // original.equals("chunkSize")) {
-        // debugger.enable = true;
-        // }
+
+        if (script.source.getName().endsWith("Iterable") && original.equals("forEach")) {
+            debugger.enable = true;
+        }
     }
 
     /**

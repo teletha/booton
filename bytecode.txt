@@ -1,58 +1,72 @@
+visit label -1
+visit label 0
+visit label 1
+visit label 2
+visit label 4
+visit label 5
+visit label 3
+java.lang.Iterable forEach
+-1	  in : []		out : [0]		dom : []	back : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	back : []	code : boot.BR.CE(A) [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	back : []	code : B=this.HO() [Expression] ; [Expression]
+2	  in : [1,5]		out : [3,4]		dom : [1]	back : [5]	code : B.Hw()==0 [Condition] C=B.Hu() [Expression] ; [Expression]
+4	  in : [2]		out : [5]		dom : [2]	back : []	code : A.IN(C) [Expression] ; [Expression]
+5	  in : [4]		out : [2]		dom : [4]	back : []	code : 
+3	  in : [2]		out : []		dom : [2]	back : []	code : return [Expression] ; [Expression]
+
 {
-mv = cw.visitMethod(ACC_PUBLIC, "constructor", "()V", null, new String[] { "java/lang/Exception" });
-{
-av0 = mv.visitAnnotation("Lorg/junit/Test;", true);
-av0.visitEnd();
-}
+mv = cw.visitMethod(ACC_PUBLIC, "forEach", "(Ljava/util/function/Consumer;)V", "(Ljava/util/function/Consumer<-TT;>;)V", null);
 mv.visitCode();
 Label l0 = new Label();
 mv.visitLabel(l0);
-mv.visitLineNumber(27, l0);
-mv.visitInvokeDynamicInsn("apply", "()Ljava/util/function/Function;", new Handle(Opcodes.H_INVOKESTATIC, "java/lang/invoke/LambdaMetafactory", "metafactory", "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;"), new Object[]{Type.getType("(Ljava/lang/Object;)Ljava/lang/Object;"), new Handle(Opcodes.H_NEWINVOKESPECIAL, "java/lang/String", "<init>", "([C)V"), Type.getType("([C)Ljava/lang/String;")});
-mv.visitVarInsn(ASTORE, 1);
+mv.visitLineNumber(72, l0);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitMethodInsn(INVOKESTATIC, "java/util/Objects", "requireNonNull", "(Ljava/lang/Object;)Ljava/lang/Object;");
+mv.visitInsn(POP);
 Label l1 = new Label();
 mv.visitLabel(l1);
-mv.visitLineNumber(28, l1);
-mv.visitFieldInsn(GETSTATIC, "booton/translator/lambda/ConstructorReferenceTest", "$assertionsDisabled", "Z");
+mv.visitLineNumber(73, l1);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/lang/Iterable", "iterator", "()Ljava/util/Iterator;");
+mv.visitVarInsn(ASTORE, 2);
 Label l2 = new Label();
-mv.visitJumpInsn(IFNE, l2);
-mv.visitVarInsn(ALOAD, 1);
-mv.visitInsn(ICONST_3);
-mv.visitIntInsn(NEWARRAY, T_CHAR);
-mv.visitInsn(DUP);
-mv.visitInsn(ICONST_0);
-mv.visitIntInsn(BIPUSH, 97);
-mv.visitInsn(CASTORE);
-mv.visitInsn(DUP);
-mv.visitInsn(ICONST_1);
-mv.visitIntInsn(BIPUSH, 98);
-mv.visitInsn(CASTORE);
-mv.visitInsn(DUP);
-mv.visitInsn(ICONST_2);
-mv.visitIntInsn(BIPUSH, 99);
-mv.visitInsn(CASTORE);
-mv.visitMethodInsn(INVOKEINTERFACE, "java/util/function/Function", "apply", "(Ljava/lang/Object;)Ljava/lang/Object;");
-mv.visitTypeInsn(CHECKCAST, "java/lang/String");
-mv.visitLdcInsn("abc");
-mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/String", "equals", "(Ljava/lang/Object;)Z");
-mv.visitJumpInsn(IFNE, l2);
-mv.visitTypeInsn(NEW, "java/lang/AssertionError");
-mv.visitInsn(DUP);
-mv.visitMethodInsn(INVOKESPECIAL, "java/lang/AssertionError", "<init>", "()V");
-mv.visitInsn(ATHROW);
 mv.visitLabel(l2);
-mv.visitLineNumber(29, l2);
-mv.visitFrame(Opcodes.F_APPEND,1, new Object[] {"java/util/function/Function"}, 0, null);
-mv.visitInsn(RETURN);
+mv.visitFrame(Opcodes.F_APPEND,1, new Object[] {"java/util/Iterator"}, 0, null);
+mv.visitVarInsn(ALOAD, 2);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "hasNext", "()Z");
 Label l3 = new Label();
+mv.visitJumpInsn(IFEQ, l3);
+mv.visitVarInsn(ALOAD, 2);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "next", "()Ljava/lang/Object;");
+mv.visitVarInsn(ASTORE, 3);
+Label l4 = new Label();
+mv.visitLabel(l4);
+mv.visitLineNumber(74, l4);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitVarInsn(ALOAD, 3);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/function/Consumer", "accept", "(Ljava/lang/Object;)V");
+Label l5 = new Label();
+mv.visitLabel(l5);
+mv.visitLineNumber(75, l5);
+mv.visitJumpInsn(GOTO, l2);
 mv.visitLabel(l3);
-mv.visitLocalVariable("this", "Lbooton/translator/lambda/ConstructorReferenceTest;", null, l0, l3, 0);
-mv.visitLocalVariable("f", "Ljava/util/function/Function;", "Ljava/util/function/Function<[CLjava/lang/String;>;", l1, l3, 1);
-mv.visitMaxs(5, 2);
+mv.visitLineNumber(76, l3);
+mv.visitFrame(Opcodes.F_CHOP,1, null, 0, null);
+mv.visitInsn(RETURN);
+mv.visitMaxs(2, 4);
 mv.visitEnd();
 }
-cw.visitEnd();
-
-return cw.toByteArray();
-}
-}
+IM:function(A,B,C){
+		// 72
+		boot.BR.CE(A);
+		// 73
+		B=this.HO();
+		l2: for (; B.Hw()==0C=B.Hu();; ) {
+			// 74
+			A.IN(C);
+		}
+		// 76
+	},
+	
+11 07, 2013 10:59:20 åﬂå„ com.gargoylesoftware.htmlunit.javascript.StrictErrorReporter error
+èdëÂ: error: message=[missing ; after for-loop condition] sourceName=[EnumSetTest] line=[2462] lineSource=[		l2: for (; B.Hw()==0C=B.Hu();; ) {] lineOffset=[24]

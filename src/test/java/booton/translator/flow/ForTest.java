@@ -12,6 +12,7 @@ package booton.translator.flow;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -297,6 +298,29 @@ public class ForTest extends ScriptTester {
                     value += 2;
                 }
                 return value;
+            }
+        });
+    }
+
+    @Test
+    public void infinite() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            int act(int value) {
+                for (;;) {
+                    value++;
+
+                    if (value % 5 == 0) {
+                        return value;
+                    } else {
+                        if (value % 9 == 0) {
+                            return value;
+                        } else {
+                            value++;
+                        }
+                    }
+                }
             }
         });
     }

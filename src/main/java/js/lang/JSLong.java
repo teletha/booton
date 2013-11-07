@@ -9,6 +9,8 @@
  */
 package js.lang;
 
+import java.math.BigInteger;
+
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -21,6 +23,16 @@ import booton.translator.JavaAPIProvider;
  */
 @JavaAPIProvider(Long.class)
 class JSLong extends JSNumber {
+
+    /**
+     * A constant holding the minimum value a {@code long} can have, -2<sup>63</sup>.
+     */
+    public static final long MIN_VALUE = 0x8000000000000000L;
+
+    /**
+     * A constant holding the maximum value a {@code long} can have, 2<sup>63</sup>-1.
+     */
+    public static final long MAX_VALUE = 0x7fffffffffffffffL;
 
     /** The primitive long class. */
     public static final Class TYPE = Primitive.class;
@@ -62,6 +74,26 @@ class JSLong extends JSNumber {
     }
 
     /**
+     * Returns the number of one-bits in the two's complement binary representation of the specified
+     * {@code long} value. This function is sometimes referred to as the <i>population count</i>.
+     * 
+     * @param i the value whose bits are to be counted
+     * @return the number of one-bits in the two's complement binary representation of the specified
+     *         {@code long} value.
+     * @since 1.5
+     */
+    public static int bitCount(long i) {
+        // HD, Figure 5-14
+        i = i - ((i >>> 1) & 0x5555555555555555L);
+        i = (i & 0x3333333333333333L) + ((i >>> 2) & 0x3333333333333333L);
+        i = (i + (i >>> 4)) & 0x0f0f0f0f0f0f0f0fL;
+        i = i + (i >>> 8);
+        i = i + (i >>> 16);
+        i = i + (i >>> 32);
+        return (int) i & 0x7f;
+    }
+
+    /**
      * Compares two {@code long} values numerically. The value returned is identical to what would
      * be returned by:
      * 
@@ -80,23 +112,51 @@ class JSLong extends JSNumber {
     }
 
     /**
-     * Returns the number of one-bits in the two's complement binary representation of the specified
-     * {@code long} value. This function is sometimes referred to as the <i>population count</i>.
+     * Compares two {@code long} values numerically treating the values as unsigned.
      * 
-     * @param i the value whose bits are to be counted
-     * @return the number of one-bits in the two's complement binary representation of the specified
-     *         {@code long} value.
-     * @since 1.5
+     * @param x the first {@code long} to compare
+     * @param y the second {@code long} to compare
+     * @return the value {@code 0} if {@code x == y}; a value less than {@code 0} if {@code x < y}
+     *         as unsigned values; and a value greater than {@code 0} if {@code x > y} as unsigned
+     *         values
+     * @since 1.8
      */
-    public static int bitCount(long i) {
-        // HD, Figure 5-14
-        i = i - ((i >>> 1) & 0x5555555555555555L);
-        i = (i & 0x3333333333333333L) + ((i >>> 2) & 0x3333333333333333L);
-        i = (i + (i >>> 4)) & 0x0f0f0f0f0f0f0f0fL;
-        i = i + (i >>> 8);
-        i = i + (i >>> 16);
-        i = i + (i >>> 32);
-        return (int) i & 0x7f;
+    public static int compareUnsigned(long x, long y) {
+        return compare(x + MIN_VALUE, y + MIN_VALUE);
+    }
+
+    /**
+     * Returns the unsigned quotient of dividing the first argument by the second where each
+     * argument and the result is interpreted as an unsigned value.
+     * <p>
+     * Note that in two's complement arithmetic, the three other basic arithmetic operations of add,
+     * subtract, and multiply are bit-wise identical if the two operands are regarded as both being
+     * signed or both being unsigned. Therefore separate {@code addUnsigned}, etc. methods are not
+     * provided.
+     * 
+     * @param dividend the value to be divided
+     * @param divisor the value doing the dividing
+     * @return the unsigned quotient of the first argument divided by the second argument
+     * @see #remainderUnsigned
+     * @since 1.8
+     */
+    public static long divideUnsigned(long dividend, long divisor) {
+        if (divisor < 0L) { // signed comparison
+            // Answer must be 0 or 1 depending on relative magnitude
+            // of dividend and divisor.
+            return (compareUnsigned(dividend, divisor)) < 0 ? 0L : 1L;
+        }
+
+        if (dividend > 0) // Both inputs non-negative
+            return dividend / divisor;
+        else {
+            /*
+             * For simple code, leveraging BigInteger. Longer and faster code written directly in
+             * terms of operations on longs is possible; see "Hacker's Delight" for divide and
+             * remainder algorithms.
+             */
+            return toUnsignedBigInteger(dividend).divide(toUnsignedBigInteger(divisor)).longValue();
+        }
     }
 
     /**
@@ -358,6 +418,22 @@ class JSLong extends JSNumber {
      */
     public static String toString(long value) {
         return valueOf(value).toString();
+    }
+
+    /**
+     * Return a BigInteger equal to the unsigned value of the argument.
+     */
+    private static BigInteger toUnsignedBigInteger(long i) {
+        if (i >= 0L) {
+            return BigInteger.valueOf(i);
+        } else {
+            int upper = (int) (i >>> 32);
+            int lower = (int) i;
+
+            // return (upper << 32) + lower
+            return (BigInteger.valueOf(Integer.toUnsignedLong(upper))).shiftLeft(32)
+                    .add(BigInteger.valueOf(Integer.toUnsignedLong(lower)));
+        }
     }
 
     /**

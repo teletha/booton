@@ -174,6 +174,47 @@ public class BigInteger extends Number {
     }
 
     /**
+     * Returns a BigInteger whose value is {@code (this + val)}.
+     * 
+     * @param val value to be added to this BigInteger.
+     * @return {@code this + val}
+     */
+    public BigInteger add(java.math.BigInteger val) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns a BigInteger whose value is {@code (this / val)}.
+     * 
+     * @param val value by which this BigInteger is to be divided.
+     * @return {@code this / val}
+     * @throws ArithmeticException if {@code val} is zero.
+     */
+    public BigInteger divide(java.math.BigInteger val) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns a BigInteger whose value is {@code (this << n)}. The shift distance, {@code n}, may
+     * be negative, in which case this method performs a right shift. (Computes
+     * <tt>floor(this * 2<sup>n</sup>)</tt>.)
+     * 
+     * @param n shift distance, in bits.
+     * @return {@code this << n}
+     * @throws ArithmeticException if the shift distance is {@code Integer.MIN_VALUE}.
+     * @see #shiftRight
+     */
+    public BigInteger shiftLeft(int n) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
      * Returns this {@code BigInteger} as an long value. If {@code this} is too big to be
      * represented as an long, then {@code this} % 2^64 is returned.
      * 

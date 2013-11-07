@@ -20,15 +20,13 @@ import org.objectweb.asm.util.Printer;
 import org.objectweb.asm.util.TraceClassVisitor;
 import org.objectweb.asm.util.TraceMethodVisitor;
 
-import booton.translator.lambda.ConstructorReferenceTest;
-
 /**
  * @version 2013/10/24 14:44:43
  */
 public class BytecodeDump {
 
     public static void main(String[] args) throws Exception {
-        dump(ConstructorReferenceTest.class, "constructor");
+        dump(js.lang.Iterable.class, "forEach");
     }
 
     /**

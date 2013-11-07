@@ -40,6 +40,7 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
     private static final Map<Class, Class> revert = new HashMap();
 
     static {
+        // builtin(Iterable.class);
         builtin(Spliterator.class);
         builtin(Spliterator.OfInt.class);
         builtin(Spliterator.OfLong.class);
