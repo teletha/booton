@@ -9,7 +9,9 @@
  */
 package booton.translator.lambda;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,26 +25,62 @@ import booton.translator.ScriptRunner;
 public class ConstructorReferenceTest {
 
     @Test
-    public void constructor() throws Exception {
-        Function<char[], String> f = String::new;
-        assert f.apply(new char[] {'a', 'b', 'c'}).equals("abc");
+    public void intParameter() throws Exception {
+        Function<Integer, Constructors> function = Constructors::new;
+        assert function.apply(1).value.equals("Int1");
+    }
+
+    @Test
+    public void longParameter() throws Exception {
+        Function<Long, Constructors> function = Constructors::new;
+        assert function.apply(10L).value.equals("Long10");
+    }
+
+    @Test
+    public void multiParameter() throws Exception {
+        BiFunction<Integer, Integer, Constructors> function = Constructors::new;
+        assert function.apply(10, 5).value.equals("Sum15");
+    }
+
+    @Test
+    public void noParameter() throws Exception {
+        Supplier<Constructors> function = Constructors::new;
+        assert function.get().value.equals("default");
     }
 
     /**
      * @version 2013/11/07 2:13:34
      */
-    private static class Target {
+    public static class Constructors {
+
+        private String value;
 
         /**
          * 
          */
-        Target() {
+        public Constructors() {
+            this.value = "default";
         }
 
         /**
          * @param value
          */
-        Target(int value) {
+        public Constructors(int value) {
+            this.value = "Int" + value;
+        }
+
+        /**
+         * @param value
+         */
+        public Constructors(long value) {
+            this.value = "Long" + value;
+        }
+
+        /**
+         * @param value
+         */
+        public Constructors(int one, int two) {
+            this.value = "Sum" + (one + two);
         }
     }
 }
