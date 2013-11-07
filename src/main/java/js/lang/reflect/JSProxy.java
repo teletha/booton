@@ -120,8 +120,21 @@ class JSProxy {
              */
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                return context.getPropertyAs(NativeFunction.class, lambdaMethodName)
-                        .apply(context, ((NativeArray) (Object) parameters).concat(args).toArray());
+                if (lambdaMethodName.charAt(0) == '$') {
+                    // constructor
+                    // create new instance
+                    Object instance = context.create();
+
+                    // invoke constructor
+                    context.getPropertyAs(NativeFunction.class, lambdaMethodName).apply(instance, args);
+
+                    // API definition
+                    return instance;
+                } else {
+                    // method
+                    return context.getPropertyAs(NativeFunction.class, lambdaMethodName)
+                            .apply(context, ((NativeArray) (Object) parameters).concat(args).toArray());
+                }
             }
         });
     }

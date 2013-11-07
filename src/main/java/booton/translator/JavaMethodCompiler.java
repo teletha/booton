@@ -1051,7 +1051,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case H_NEWINVOKESPECIAL:
-            context = Javascript.computeClassName(lambdaClass);
+            context = Javascript.computeClassName(lambdaClass) + ".prototype";
             break;
 
         default:
