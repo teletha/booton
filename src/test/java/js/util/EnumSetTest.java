@@ -93,17 +93,63 @@ public class EnumSetTest {
         Iterator<Flag> iterator = set.iterator();
 
         assert iterator.hasNext();
-        Flag flag = iterator.next();
-        System.out.println(flag.hashCode() + "    " + Flag.One.hashCode());
-        assert flag == Flag.One;
+        assert iterator.next() == Flag.One;
 
         assert iterator.hasNext();
-        iterator.next();
+        assert iterator.next() == Flag.Two;
 
         assert iterator.hasNext();
-        iterator.next();
+        assert iterator.next() == Flag.Three;
 
         assert !iterator.hasNext();
+
+        iterator.remove();
+        assert !set.contains(Flag.Three);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void iteratorRemoveFirst() throws Exception {
+        EnumSet<Flag> set = EnumSet.allOf(Flag.class);
+        Iterator<Flag> iterator = set.iterator();
+        iterator.remove();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void iteratorRemoveMultiple() throws Exception {
+        EnumSet<Flag> set = EnumSet.allOf(Flag.class);
+        Iterator<Flag> iterator = set.iterator();
+
+        assert iterator.hasNext();
+        assert iterator.next() == Flag.One;
+        iterator.remove();
+        iterator.remove();
+    }
+
+    @Test
+    public void range() throws Exception {
+        EnumSet<Flag> set = EnumSet.range(Flag.Two, Flag.Three);
+        assert set.size() == 2;
+        assert !set.contains(Flag.One);
+        assert set.contains(Flag.Two);
+        assert set.contains(Flag.Three);
+    }
+
+    @Test
+    public void copyOf() throws Exception {
+        EnumSet<Flag> set = EnumSet.copyOf(EnumSet.of(Flag.Two));
+        assert set.size() == 1;
+        assert !set.contains(Flag.One);
+        assert set.contains(Flag.Two);
+        assert !set.contains(Flag.Three);
+    }
+
+    @Test
+    public void complementOf() throws Exception {
+        EnumSet<Flag> set = EnumSet.complementOf(EnumSet.of(Flag.Two));
+        assert set.size() == 2;
+        assert set.contains(Flag.One);
+        assert !set.contains(Flag.Two);
+        assert set.contains(Flag.Three);
     }
 
     /**
