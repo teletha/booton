@@ -158,6 +158,36 @@ public class Javascript {
 
     /**
      * <p>
+     * Write this script. This method write out dependency scripts of this script too.
+     * </p>
+     * 
+     * @param defined A list of compiled script classes.
+     * @param necessaries A list of required script classes.
+     * @return A script output.
+     */
+    public String write(Class... necessaries) {
+        return write(new HashSet(), necessaries);
+    }
+
+    /**
+     * <p>
+     * Write this script. This method write out dependency scripts of this script too.
+     * </p>
+     * 
+     * @param defined A list of compiled script classes.
+     * @param necessaries A list of required script classes.
+     * @return A script output.
+     */
+    String write(Set<Class> defined, Class... necessaries) {
+        StringBuilder builder = new StringBuilder();
+
+        writeTo(builder, defined, necessaries);
+
+        return builder.toString();
+    }
+
+    /**
+     * <p>
      * Write this script into the specified output. This method write out dependency scripts of this
      * script too.
      * </p>
@@ -402,12 +432,7 @@ public class Javascript {
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-
-        // write out
-        writeTo(builder);
-
-        return builder.toString();
+        return write();
     }
 
     /**
