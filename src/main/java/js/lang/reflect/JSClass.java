@@ -13,6 +13,7 @@ import static js.lang.Global.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Inherited;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericDeclaration;
@@ -757,6 +758,24 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         // attribute if and only if it is a local class or an
         // anonymous class.
         return getDeclaringClass();
+    }
+
+    /**
+     * Returns the elements of this enum class or null if this Class object does not represent an
+     * enum type.
+     * 
+     * @return an array containing the values comprising the enum class represented by this Class
+     *         object in the order they're declared, or null if this Class object does not represent
+     *         an enum type
+     * @since 1.5
+     */
+    public T[] getEnumConstants() {
+        if (!isEnum()) {
+            return null;
+        } else {
+            Map<String, Enum> map = enumConstantDirectory();
+            return map.keySet().toArray((T[]) Array.newInstance((Class) (Object) this, map.size()));
+        }
     }
 
     /**
