@@ -586,6 +586,10 @@ class Node {
                         // detect process and follower node
                         Node process = detectFollower();
 
+                        while (!(stack.peekLast() instanceof OperandCondition)) {
+                            process.stack.addFirst(remove(0));
+                        }
+
                         // write script fragment
                         buffer.write("l" + id + ":", "for", "(;", this + ";", update + ")", "{");
                         process(process, buffer);

@@ -16,7 +16,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.RandomAccess;
 import java.util.Spliterator;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
@@ -1741,9 +1745,90 @@ class Arrays {
      * @since 1.8
      */
     public static <T> Stream<T> stream(T[] array, int startInclusive, int endExclusive) {
-        // return StreamSupport.stream(spliterator(array, startInclusive, endExclusive), false);
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return StreamSupport.stream(spliterator(array, startInclusive, endExclusive), false);
+    }
+
+    /**
+     * Returns a sequential {@link IntStream} with the specified array as its source.
+     * 
+     * @param array the array, assumed to be unmodified during use
+     * @return an {@code IntStream} for the array
+     * @since 1.8
+     */
+    public static IntStream stream(int[] array) {
+        return stream(array, 0, array.length);
+    }
+
+    /**
+     * Returns a sequential {@link IntStream} with the specified range of the specified array as its
+     * source.
+     * 
+     * @param array the array, assumed to be unmodified during use
+     * @param startInclusive the first index to cover, inclusive
+     * @param endExclusive index immediately past the last index to cover
+     * @return an {@code IntStream} for the array range
+     * @throws ArrayIndexOutOfBoundsException if {@code startInclusive} is negative,
+     *             {@code endExclusive} is less than {@code startInclusive}, or {@code endExclusive}
+     *             is greater than the array size
+     * @since 1.8
+     */
+    public static IntStream stream(int[] array, int startInclusive, int endExclusive) {
+        return StreamSupport.intStream(spliterator(array, startInclusive, endExclusive), false);
+    }
+
+    /**
+     * Returns a sequential {@link LongStream} with the specified array as its source.
+     * 
+     * @param array the array, assumed to be unmodified during use
+     * @return a {@code LongStream} for the array
+     * @since 1.8
+     */
+    public static LongStream stream(long[] array) {
+        return stream(array, 0, array.length);
+    }
+
+    /**
+     * Returns a sequential {@link LongStream} with the specified range of the specified array as
+     * its source.
+     * 
+     * @param array the array, assumed to be unmodified during use
+     * @param startInclusive the first index to cover, inclusive
+     * @param endExclusive index immediately past the last index to cover
+     * @return a {@code LongStream} for the array range
+     * @throws ArrayIndexOutOfBoundsException if {@code startInclusive} is negative,
+     *             {@code endExclusive} is less than {@code startInclusive}, or {@code endExclusive}
+     *             is greater than the array size
+     * @since 1.8
+     */
+    public static LongStream stream(long[] array, int startInclusive, int endExclusive) {
+        return StreamSupport.longStream(spliterator(array, startInclusive, endExclusive), false);
+    }
+
+    /**
+     * Returns a sequential {@link DoubleStream} with the specified array as its source.
+     * 
+     * @param array the array, assumed to be unmodified during use
+     * @return a {@code DoubleStream} for the array
+     * @since 1.8
+     */
+    public static DoubleStream stream(double[] array) {
+        return stream(array, 0, array.length);
+    }
+
+    /**
+     * Returns a sequential {@link DoubleStream} with the specified range of the specified array as
+     * its source.
+     * 
+     * @param array the array, assumed to be unmodified during use
+     * @param startInclusive the first index to cover, inclusive
+     * @param endExclusive index immediately past the last index to cover
+     * @return a {@code DoubleStream} for the array range
+     * @throws ArrayIndexOutOfBoundsException if {@code startInclusive} is negative,
+     *             {@code endExclusive} is less than {@code startInclusive}, or {@code endExclusive}
+     *             is greater than the array size
+     * @since 1.8
+     */
+    public static DoubleStream stream(double[] array, int startInclusive, int endExclusive) {
+        return StreamSupport.doubleStream(spliterator(array, startInclusive, endExclusive), false);
     }
 }

@@ -439,7 +439,7 @@ public interface Spliterator<T> {
      * 
      * @since 1.8
      */
-    @JavaAPIProvider(java.util.Spliterator.OfLong.class)
+    @JavaAPIProvider(java.util.Spliterator.OfDouble.class)
     public interface OfDouble extends OfPrimitive<Double, DoubleConsumer, OfDouble> {
 
         @Override
