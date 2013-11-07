@@ -80,6 +80,26 @@ class JSLong extends JSNumber {
     }
 
     /**
+     * Returns the number of one-bits in the two's complement binary representation of the specified
+     * {@code long} value. This function is sometimes referred to as the <i>population count</i>.
+     * 
+     * @param i the value whose bits are to be counted
+     * @return the number of one-bits in the two's complement binary representation of the specified
+     *         {@code long} value.
+     * @since 1.5
+     */
+    public static int bitCount(long i) {
+        // HD, Figure 5-14
+        i = i - ((i >>> 1) & 0x5555555555555555L);
+        i = (i & 0x3333333333333333L) + ((i >>> 2) & 0x3333333333333333L);
+        i = (i + (i >>> 4)) & 0x0f0f0f0f0f0f0f0fL;
+        i = i + (i >>> 8);
+        i = i + (i >>> 16);
+        i = i + (i >>> 32);
+        return (int) i & 0x7f;
+    }
+
+    /**
      * Returns a hash code for a {@code long} value; compatible with {@code Long.hashCode()}.
      * 
      * @param value the value to hash
@@ -88,6 +108,117 @@ class JSLong extends JSNumber {
      */
     public static int hashCode(long value) {
         return (int) (value ^ (value >>> 32));
+    }
+
+    /**
+     * Returns the number of zero bits preceding the highest-order ("leftmost") one-bit in the two's
+     * complement binary representation of the specified {@code long} value. Returns 64 if the
+     * specified value has no one-bits in its two's complement representation, in other words if it
+     * is equal to zero.
+     * <p>
+     * Note that this method is closely related to the logarithm base 2. For all positive
+     * {@code long} values x:
+     * <ul>
+     * <li>floor(log<sub>2</sub>(x)) = {@code 63 - numberOfLeadingZeros(x)}
+     * <li>ceil(log<sub>2</sub>(x)) = {@code 64 - numberOfLeadingZeros(x - 1)}
+     * </ul>
+     * 
+     * @param i the value whose number of leading zeros is to be computed
+     * @return the number of zero bits preceding the highest-order ("leftmost") one-bit in the two's
+     *         complement binary representation of the specified {@code long} value, or 64 if the
+     *         value is equal to zero.
+     * @since 1.5
+     */
+    public static int numberOfLeadingZeros(long i) {
+        // HD, Figure 5-6
+        if (i == 0) {
+            return 64;
+        }
+
+        int n = 1;
+        int x = (int) (i >>> 32);
+
+        if (x == 0) {
+            n += 32;
+            x = (int) i;
+        }
+        if (x >>> 16 == 0) {
+            n += 16;
+            x <<= 16;
+        }
+        if (x >>> 24 == 0) {
+            n += 8;
+            x <<= 8;
+        }
+        if (x >>> 28 == 0) {
+            n += 4;
+            x <<= 4;
+        }
+        if (x >>> 30 == 0) {
+            n += 2;
+            x <<= 2;
+        }
+        n -= x >>> 31;
+        return n;
+    }
+
+    /**
+     * Returns the number of zero bits following the lowest-order ("rightmost") one-bit in the two's
+     * complement binary representation of the specified {@code long} value. Returns 64 if the
+     * specified value has no one-bits in its two's complement representation, in other words if it
+     * is equal to zero.
+     * 
+     * @param i the value whose number of trailing zeros is to be computed
+     * @return the number of zero bits following the lowest-order ("rightmost") one-bit in the two's
+     *         complement binary representation of the specified {@code long} value, or 64 if the
+     *         value is equal to zero.
+     * @since 1.5
+     */
+    public static int numberOfTrailingZeros(long i) {
+        // HD, Figure 5-14
+        int x, y;
+        if (i == 0) {
+            return 64;
+        }
+
+        int n = 63;
+        y = (int) i;
+
+        if (y != 0) {
+            n = n - 32;
+            x = y;
+        } else {
+            x = (int) (i >>> 32);
+        }
+
+        y = x << 16;
+
+        if (y != 0) {
+            n = n - 16;
+            x = y;
+        }
+
+        y = x << 8;
+
+        if (y != 0) {
+            n = n - 8;
+            x = y;
+        }
+
+        y = x << 4;
+
+        if (y != 0) {
+            n = n - 4;
+            x = y;
+        }
+
+        y = x << 2;
+
+        if (y != 0) {
+            n = n - 2;
+            x = y;
+        }
+        return n - ((x << 1) >>> 31);
     }
 
     /**
@@ -175,6 +306,19 @@ class JSLong extends JSNumber {
     public static long reverseBytes(long value) {
         value = (value & 0x00ff00ff00ff00ffL) << 8 | (value >>> 8) & 0x00ff00ff00ff00ffL;
         return (value << 48) | ((value & 0xffff0000L) << 16) | ((value >>> 16) & 0xffff0000L) | (value >>> 48);
+    }
+
+    /**
+     * Adds two {@code long} values together as per the + operator.
+     * 
+     * @param a the first operand
+     * @param b the second operand
+     * @return the sum of {@code a} and {@code b}
+     * @see java.util.function.BinaryOperator
+     * @since 1.8
+     */
+    public static long sum(long a, long b) {
+        return a + b;
     }
 
     /**

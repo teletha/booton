@@ -876,6 +876,246 @@ class Arrays {
     }
 
     /**
+     * Assigns the specified int value to each element of the specified array of ints.
+     * 
+     * @param array the array to be filled
+     * @param value the value to be stored in all elements of the array
+     */
+    public static void fill(int[] array, int value) {
+        fill(array, 0, array.length, value);
+    }
+
+    /**
+     * Assigns the specified int value to each element of the specified range of the specified array
+     * of ints. The range to be filled extends from index <tt>fromIndex</tt>, inclusive, to index
+     * <tt>toIndex</tt>, exclusive. (If <tt>fromIndex==toIndex</tt>, the range to be filled is
+     * empty.)
+     * 
+     * @param array the array to be filled
+     * @param fromIndex the index of the first element (inclusive) to be filled with the specified
+     *            value
+     * @param toIndex the index of the last element (exclusive) to be filled with the specified
+     *            value
+     * @param value the value to be stored in all elements of the array
+     * @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
+     * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
+     *             <tt>toIndex &gt; a.length</tt>
+     */
+    public static void fill(int[] array, int fromIndex, int toIndex, int value) {
+        fill((Object[]) (Object) array, fromIndex, toIndex, value);
+    }
+
+    /**
+     * Assigns the specified long value to each element of the specified array of longs.
+     * 
+     * @param array the array to be filled
+     * @param value the value to be stored in all elements of the array
+     */
+    public static void fill(long[] array, long value) {
+        fill(array, 0, array.length, value);
+    }
+
+    /**
+     * Assigns the specified long value to each element of the specified range of the specified
+     * array of longs. The range to be filled extends from index <tt>fromIndex</tt>, inclusive, to
+     * index <tt>toIndex</tt>, exclusive. (If <tt>fromIndex==toIndex</tt>, the range to be filled is
+     * empty.)
+     * 
+     * @param array the array to be filled
+     * @param fromIndex the index of the first element (inclusive) to be filled with the specified
+     *            value
+     * @param toIndex the index of the last element (exclusive) to be filled with the specified
+     *            value
+     * @param value the value to be stored in all elements of the array
+     * @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
+     * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
+     *             <tt>toIndex &gt; a.length</tt>
+     */
+    public static void fill(long[] array, int fromIndex, int toIndex, long value) {
+        fill((Object[]) (Object) array, fromIndex, toIndex, value);
+    }
+
+    /**
+     * Assigns the specified long value to each element of the specified array of longs.
+     * 
+     * @param array the array to be filled
+     * @param value the value to be stored in all elements of the array
+     */
+    public static void fill(float[] array, float value) {
+        fill(array, 0, array.length, value);
+    }
+
+    /**
+     * Assigns the specified long value to each element of the specified range of the specified
+     * array of longs. The range to be filled extends from index <tt>fromIndex</tt>, inclusive, to
+     * index <tt>toIndex</tt>, exclusive. (If <tt>fromIndex==toIndex</tt>, the range to be filled is
+     * empty.)
+     * 
+     * @param array the array to be filled
+     * @param fromIndex the index of the first element (inclusive) to be filled with the specified
+     *            value
+     * @param toIndex the index of the last element (exclusive) to be filled with the specified
+     *            value
+     * @param value the value to be stored in all elements of the array
+     * @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
+     * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
+     *             <tt>toIndex &gt; a.length</tt>
+     */
+    public static void fill(float[] array, int fromIndex, int toIndex, float value) {
+        fill((Object[]) (Object) array, fromIndex, toIndex, value);
+    }
+
+    /**
+     * Assigns the specified long value to each element of the specified array of longs.
+     * 
+     * @param array the array to be filled
+     * @param value the value to be stored in all elements of the array
+     */
+    public static void fill(double[] array, double value) {
+        fill(array, 0, array.length, value);
+    }
+
+    /**
+     * Assigns the specified long value to each element of the specified range of the specified
+     * array of longs. The range to be filled extends from index <tt>fromIndex</tt>, inclusive, to
+     * index <tt>toIndex</tt>, exclusive. (If <tt>fromIndex==toIndex</tt>, the range to be filled is
+     * empty.)
+     * 
+     * @param array the array to be filled
+     * @param fromIndex the index of the first element (inclusive) to be filled with the specified
+     *            value
+     * @param toIndex the index of the last element (exclusive) to be filled with the specified
+     *            value
+     * @param value the value to be stored in all elements of the array
+     * @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
+     * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
+     *             <tt>toIndex &gt; a.length</tt>
+     */
+    public static void fill(double[] array, int fromIndex, int toIndex, double value) {
+        fill((Object[]) (Object) array, fromIndex, toIndex, value);
+    }
+
+    /**
+     * Assigns the specified long value to each element of the specified array of longs.
+     * 
+     * @param array the array to be filled
+     * @param value the value to be stored in all elements of the array
+     */
+    public static void fill(short[] array, short value) {
+        fill(array, 0, array.length, value);
+    }
+
+    /**
+     * Assigns the specified long value to each element of the specified range of the specified
+     * array of longs. The range to be filled extends from index <tt>fromIndex</tt>, inclusive, to
+     * index <tt>toIndex</tt>, exclusive. (If <tt>fromIndex==toIndex</tt>, the range to be filled is
+     * empty.)
+     * 
+     * @param array the array to be filled
+     * @param fromIndex the index of the first element (inclusive) to be filled with the specified
+     *            value
+     * @param toIndex the index of the last element (exclusive) to be filled with the specified
+     *            value
+     * @param value the value to be stored in all elements of the array
+     * @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
+     * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
+     *             <tt>toIndex &gt; a.length</tt>
+     */
+    public static void fill(short[] array, int fromIndex, int toIndex, short value) {
+        fill((Object[]) (Object) array, fromIndex, toIndex, value);
+    }
+
+    /**
+     * Assigns the specified long value to each element of the specified array of longs.
+     * 
+     * @param array the array to be filled
+     * @param value the value to be stored in all elements of the array
+     */
+    public static void fill(byte[] array, byte value) {
+        fill(array, 0, array.length, value);
+    }
+
+    /**
+     * Assigns the specified long value to each element of the specified range of the specified
+     * array of longs. The range to be filled extends from index <tt>fromIndex</tt>, inclusive, to
+     * index <tt>toIndex</tt>, exclusive. (If <tt>fromIndex==toIndex</tt>, the range to be filled is
+     * empty.)
+     * 
+     * @param array the array to be filled
+     * @param fromIndex the index of the first element (inclusive) to be filled with the specified
+     *            value
+     * @param toIndex the index of the last element (exclusive) to be filled with the specified
+     *            value
+     * @param value the value to be stored in all elements of the array
+     * @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
+     * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
+     *             <tt>toIndex &gt; a.length</tt>
+     */
+    public static void fill(byte[] array, int fromIndex, int toIndex, byte value) {
+        fill((Object[]) (Object) array, fromIndex, toIndex, value);
+    }
+
+    /**
+     * Assigns the specified long value to each element of the specified array of longs.
+     * 
+     * @param array the array to be filled
+     * @param value the value to be stored in all elements of the array
+     */
+    public static void fill(char[] array, char value) {
+        fill(array, 0, array.length, value);
+    }
+
+    /**
+     * Assigns the specified long value to each element of the specified range of the specified
+     * array of longs. The range to be filled extends from index <tt>fromIndex</tt>, inclusive, to
+     * index <tt>toIndex</tt>, exclusive. (If <tt>fromIndex==toIndex</tt>, the range to be filled is
+     * empty.)
+     * 
+     * @param array the array to be filled
+     * @param fromIndex the index of the first element (inclusive) to be filled with the specified
+     *            value
+     * @param toIndex the index of the last element (exclusive) to be filled with the specified
+     *            value
+     * @param value the value to be stored in all elements of the array
+     * @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
+     * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
+     *             <tt>toIndex &gt; a.length</tt>
+     */
+    public static void fill(char[] array, int fromIndex, int toIndex, char value) {
+        fill((Object[]) (Object) array, fromIndex, toIndex, value);
+    }
+
+    /**
+     * Assigns the specified long value to each element of the specified array of longs.
+     * 
+     * @param array the array to be filled
+     * @param value the value to be stored in all elements of the array
+     */
+    public static void fill(boolean[] array, boolean value) {
+        fill(array, 0, array.length, value);
+    }
+
+    /**
+     * Assigns the specified long value to each element of the specified range of the specified
+     * array of longs. The range to be filled extends from index <tt>fromIndex</tt>, inclusive, to
+     * index <tt>toIndex</tt>, exclusive. (If <tt>fromIndex==toIndex</tt>, the range to be filled is
+     * empty.)
+     * 
+     * @param array the array to be filled
+     * @param fromIndex the index of the first element (inclusive) to be filled with the specified
+     *            value
+     * @param toIndex the index of the last element (exclusive) to be filled with the specified
+     *            value
+     * @param value the value to be stored in all elements of the array
+     * @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
+     * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
+     *             <tt>toIndex &gt; a.length</tt>
+     */
+    public static void fill(boolean[] array, int fromIndex, int toIndex, boolean value) {
+        fill((Object[]) (Object) array, fromIndex, toIndex, value);
+    }
+
+    /**
      * Assigns the specified Object reference to each element of the specified array of Objects.
      * 
      * @param array the array to be filled
@@ -884,7 +1124,41 @@ class Arrays {
      *             stored in the specified array
      */
     public static void fill(Object[] array, Object value) {
-        for (int i = 0, len = array.length; i < len; i++) {
+        fill(array, 0, array.length, value);
+    }
+
+    /**
+     * Assigns the specified Object reference to each element of the specified range of the
+     * specified array of Objects. The range to be filled extends from index <tt>fromIndex</tt>,
+     * inclusive, to index <tt>toIndex</tt>, exclusive. (If <tt>fromIndex==toIndex</tt>, the range
+     * to be filled is empty.)
+     * 
+     * @param array the array to be filled
+     * @param fromIndex the index of the first element (inclusive) to be filled with the specified
+     *            value
+     * @param toIndex the index of the last element (exclusive) to be filled with the specified
+     *            value
+     * @param value the value to be stored in all elements of the array
+     * @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
+     * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
+     *             <tt>toIndex &gt; a.length</tt>
+     * @throws ArrayStoreException if the specified value is not of a runtime type that can be
+     *             stored in the specified array
+     */
+    public static void fill(Object[] array, int fromIndex, int toIndex, Object value) {
+        if (toIndex < fromIndex) {
+            throw new IllegalArgumentException("fromIndex(" + fromIndex + ") > toIndex(" + toIndex + ")");
+        }
+
+        if (fromIndex < 0) {
+            throw new ArrayIndexOutOfBoundsException(fromIndex);
+        }
+
+        if (array.length < toIndex) {
+            throw new ArrayIndexOutOfBoundsException(toIndex);
+        }
+
+        for (int i = fromIndex; i < toIndex; i++) {
             array[i] = value;
         }
     }

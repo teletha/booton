@@ -17,10 +17,100 @@ import org.junit.runner.RunWith;
 import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/10/09 15:52:13
+ * @version 2013/11/07 14:48:16
  */
 @RunWith(ScriptRunner.class)
 public class ArraysTest {
+
+    @Test
+    public void fillInt() throws Exception {
+        int[] values = {1, 2, 3};
+        Arrays.fill(values, 10);
+        assert values[0] == 10;
+        assert values[1] == 10;
+        assert values[2] == 10;
+    }
+
+    @Test
+    public void fillIntRange() throws Exception {
+        int[] values = {1, 2, 3};
+        Arrays.fill(values, 1, 3, 10);
+        assert values[0] == 1;
+        assert values[1] == 10;
+        assert values[2] == 10;
+    }
+
+    @Test
+    public void fillLong() throws Exception {
+        long[] values = {1, 2, 3};
+        Arrays.fill(values, 10L);
+        assert values[0] == 10;
+        assert values[1] == 10;
+        assert values[2] == 10;
+    }
+
+    @Test
+    public void fillLongRange() throws Exception {
+        long[] values = {1, 2, 3};
+        Arrays.fill(values, 0, 2, 10L);
+        assert values[0] == 10;
+        assert values[1] == 10;
+        assert values[2] == 3;
+    }
+
+    @Test
+    public void fillFloat() throws Exception {
+        float[] values = {1, 2, 3};
+        Arrays.fill(values, 10F);
+        assert values[0] == 10;
+        assert values[1] == 10;
+        assert values[2] == 10;
+    }
+
+    @Test
+    public void fillFloatRange() throws Exception {
+        float[] values = {1, 2, 3};
+        Arrays.fill(values, 1, 3, 10F);
+        assert values[0] == 1;
+        assert values[1] == 10;
+        assert values[2] == 10;
+    }
+
+    @Test
+    public void fillDouble() throws Exception {
+        double[] values = {1, 2, 3};
+        Arrays.fill(values, 10D);
+        assert values[0] == 10;
+        assert values[1] == 10;
+        assert values[2] == 10;
+    }
+
+    @Test
+    public void fillDoubleRange() throws Exception {
+        double[] values = {1, 2, 3};
+        Arrays.fill(values, 1, 3, 10D);
+        assert values[0] == 1;
+        assert values[1] == 10;
+        assert values[2] == 10;
+    }
+
+    @Test
+    public void fillBoolean() throws Exception {
+        boolean[] values = {false, false, false};
+        Arrays.fill(values, true);
+        assert values[0];
+        assert values[1];
+        assert values[2];
+    }
+
+    @Test
+    public void fillBooleanRange() throws Exception {
+        boolean[] values = {false, false, false};
+        Arrays.fill(values, 1, 2, true);
+        assert !values[0];
+        assert values[1];
+        assert !values[2];
+    }
 
     @Test
     public void copyOfRange() throws Exception {
