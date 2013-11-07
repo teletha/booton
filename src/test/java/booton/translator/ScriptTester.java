@@ -228,15 +228,11 @@ public class ScriptTester {
     final Object executeAsJavascript(Method method) {
         Class source = method.getDeclaringClass();
         String sourceName = source.getSimpleName();
+        Javascript script = Javascript.getScript(source);
 
         try {
-            StringBuilder script = new StringBuilder();
-
-            // invoke as Javascript
-            Javascript.getScript(source).writeTo(script, defined, ClientStackTrace.class);
-
             // compile as Javascript and script engine read it
-            engine.execute(html, script.toString(), sourceName, 1);
+            engine.execute(html, script.write(defined, ClientStackTrace.class), sourceName, 1);
 
             // write test script
             String wraped = Javascript.writeMethodCode(Throwable.class, "wrap", Object.class, "e");
@@ -252,7 +248,7 @@ public class ScriptTester {
                 // fail (AssertionError) or error
 
                 // decode as Java's error and rethrow it
-                Source code = new Source(sourceName, Javascript.getScript(source).toString());
+                Source code = new Source(sourceName, script.write(ClientStackTrace.class));
                 Throwable throwable = ClientStackTrace.decode((String) result, code);
 
                 if (throwable instanceof AssertionError || throwable instanceof InternalError) {
@@ -263,10 +259,9 @@ public class ScriptTester {
         } catch (ScriptException e) {
             dumpCode(source);
             // script parse error (translation fails) or runtime error
-            String script = e.getScriptSourceCode();
-            Source code = new Source(sourceName, Javascript.getScript(source).toString());
+            Source code = new Source(sourceName, script.write(ClientStackTrace.class));
 
-            if (script == null) {
+            if (e.getScriptSourceCode() == null) {
                 Throwable cause = e.getCause();
 
                 if (cause instanceof EcmaError) {
