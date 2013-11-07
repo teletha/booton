@@ -11,28 +11,29 @@ package js.util;
 
 import java.util.Iterator;
 
+import booton.translator.JavaAPIProvider;
+
 /**
  * @version 2013/02/20 13:45:51
  */
-// @JavaAPIProvider(java.util.EnumSet.class)
+@JavaAPIProvider(java.util.EnumSet.class)
 class EnumSet<E extends Enum<E>> extends AbstractSet<E> {
+
+    /** The target enum. */
+    private final Class<E> type;
+
+    /** The size. */
+    private int size = 0;
+
+    /** The items. */
+    private boolean[] items;
 
     /**
      * Hide constructor.
      */
-    private EnumSet() {
-    }
-
-    /**
-     * <p>
-     * Creates an empty enum set with the specified element type.
-     * </p>
-     * 
-     * @param elementType A class object of the element type for this enum set.
-     * @return
-     */
-    public static <E extends Enum<E>> EnumSet<E> nonOf(Class<E> elementType) {
-        return new EnumSet();
+    private EnumSet(Class<E> type) {
+        this.type = type;
+        this.items = new boolean[type.getEnumConstants().length];
     }
 
     /**
@@ -40,7 +41,7 @@ class EnumSet<E extends Enum<E>> extends AbstractSet<E> {
      */
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     /**
@@ -48,6 +49,9 @@ class EnumSet<E extends Enum<E>> extends AbstractSet<E> {
      */
     @Override
     public boolean contains(Object o) {
+        if (o instanceof Enum) {
+            return items[((Enum) o).ordinal()];
+        }
         return false;
     }
 
@@ -56,7 +60,7 @@ class EnumSet<E extends Enum<E>> extends AbstractSet<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return Arrays.asList(type.getEnumConstants()).iterator();
     }
 
     /**
@@ -64,7 +68,14 @@ class EnumSet<E extends Enum<E>> extends AbstractSet<E> {
      */
     @Override
     public boolean add(E e) {
-        return false;
+        int index = e.ordinal();
+
+        if (items[index]) {
+            return false;
+        }
+        size++;
+        items[index] = true;
+        return true;
     }
 
     /**
@@ -72,6 +83,16 @@ class EnumSet<E extends Enum<E>> extends AbstractSet<E> {
      */
     @Override
     public boolean remove(Object o) {
+        if (o instanceof Enum) {
+            int index = ((Enum) o).ordinal();
+
+            if (!items[index]) {
+                return false;
+            }
+            size--;
+            items[index] = false;
+            return true;
+        }
         return false;
     }
 
@@ -80,5 +101,35 @@ class EnumSet<E extends Enum<E>> extends AbstractSet<E> {
      */
     @Override
     public void clear() {
+        size = 0;
+        Arrays.fill(items, false);
+    }
+
+    /**
+     * Creates an empty enum set with the specified element type.
+     * 
+     * @param <E> The class of the elements in the set
+     * @param elementType the class object of the element type for this enum set
+     * @return An empty enum set of the specified type.
+     * @throws NullPointerException if <tt>elementType</tt> is null
+     */
+    public static <E extends Enum<E>> EnumSet<E> noneOf(Class<E> elementType) {
+        return new EnumSet(elementType);
+    }
+
+    /**
+     * Creates an enum set containing all of the elements in the specified element type.
+     * 
+     * @param <E> The class of the elements in the set
+     * @param elementType the class object of the element type for this enum set
+     * @return An enum set containing all the elements in the specified type.
+     * @throws NullPointerException if <tt>elementType</tt> is null
+     */
+    public static <E extends Enum<E>> EnumSet<E> allOf(Class<E> elementType) {
+        EnumSet<E> set = new EnumSet(elementType);
+        set.size = set.items.length;
+        Arrays.fill(set.items, true);
+
+        return set;
     }
 }
