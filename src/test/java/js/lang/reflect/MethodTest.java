@@ -148,7 +148,6 @@ public class MethodTest {
     /**
      * @version 2013/09/24 11:42:05
      */
-
     @SuppressWarnings("unused")
     private static class VarArg<T> {
 
@@ -159,6 +158,26 @@ public class MethodTest {
         }
 
         public void variable(T... values) {
+        }
+    }
+
+    @Test
+    public void isDefault() throws Exception {
+        Method method = DefaultMethod.class.getDeclaredMethod("def");
+        assert method.isDefault();
+
+        method = DefaultMethod.class.getDeclaredMethod("not");
+        assert !method.isDefault();
+    }
+
+    /**
+     * @version 2013/11/07 18:49:22
+     */
+    private static interface DefaultMethod {
+
+        void not();
+
+        default void def() {
         }
     }
 }
