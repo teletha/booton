@@ -249,9 +249,9 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("Iterable") && original.equals("forEach")) {
-            debugger.enable = true;
-        }
+        // if (script.source.getName().endsWith("Map") && original.equals("merge")) {
+        // debugger.enable = true;
+        // }
     }
 
     /**
@@ -1718,7 +1718,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * @return A created node.
      */
     private final Node createNode(Node next) {
-        Node node = new Node(counter++);
+        Node node = new Node(counter++, debugger);
 
         // switch line number
         node.number = next.number;
@@ -1818,7 +1818,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // search cached node
         if (node == null) {
-            label.info = node = new Node(counter++);
+            label.info = node = new Node(counter++, debugger);
             labels.put(node, label);
         }
 

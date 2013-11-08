@@ -11,6 +11,7 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -25,6 +26,7 @@ public class DoWhiteTest extends ScriptTester {
     public void normal() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 do {
                     value++;
@@ -39,6 +41,7 @@ public class DoWhiteTest extends ScriptTester {
     public void equivalent() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 while (true) {
                     value++;
@@ -56,6 +59,7 @@ public class DoWhiteTest extends ScriptTester {
     public void breakNoLabel() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 do {
                     value++;
@@ -74,6 +78,7 @@ public class DoWhiteTest extends ScriptTester {
     public void breakInfinite() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 do {
                     value++;
@@ -92,6 +97,7 @@ public class DoWhiteTest extends ScriptTester {
     public void continueNoLabel() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 do {
                     value += 2;
@@ -101,6 +107,30 @@ public class DoWhiteTest extends ScriptTester {
                     }
 
                     value += 3;
+                } while (value < 4);
+
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void continueAndBreak() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                do {
+                    value++;
+
+                    if (value % 2 == 0) {
+                        continue;
+                    }
+
+                    if (value < 0) {
+                        break;
+                    }
+                    value++;
                 } while (value < 4);
 
                 return value;
