@@ -1,72 +1,151 @@
 visit label -1
 visit label 0
 visit label 1
-visit label 2
-visit label 4
-visit label 5
 visit label 3
-java.lang.Iterable forEach
+merge3
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1]		dom : [-1]	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]	out : [2,3]		dom : [0]	code : A%2!=0 [Condition]
+3	  in : [1]	out : []		dom : [1]	code : 
+
+visit label 2
+visit label 6
+merge6
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1]		dom : [-1]	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]	out : [2,3]		dom : [0]	code : A%2!=0 [Condition]
+3	  in : [1]	out : [4]		dom : [1]	code : 
+2	  in : [1]	out : [5,6]		dom : [1]	code : A>=0 [Condition]
+6	  in : [2]	out : []		dom : [2]	code : 
+
+visit label 5
+visit label 4
+visit label 8
+merge8
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]		out : [2,3]		dom : [0]	code : A%2!=0 [Condition]
+3	  in : [1]		out : [4]		dom : [1]	code : 
+2	  in : [1]		out : [5,6]		dom : [1]	code : A>=0 [Condition]
+6	  in : [2]		out : [7]		dom : [2]	code : 
+5	  in : [2]		out : [4]		dom : [2]	code : ++ [Expression] A [Expression] ; [Expression]
+4	  in : [3,5]		out : [8]		dom : []	code : A [Expression] 4 [Number]
+8	  in : [4]		out : []		dom : [4]	code : 
+
+visit label 7
+merge7
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1,8]		out : [1]		dom : []	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]		out : [2,3]		dom : [0]	code : A%2!=0 [Condition]
+3	  in : [1]		out : [4]		dom : [1]	code : 
+2	  in : [1]		out : [5,6]		dom : [1]	code : A>=0 [Condition]
+6	  in : [2]		out : [7]		dom : [2]	code : 
+5	  in : [2]		out : [4]		dom : [2]	code : ++ [Expression] A [Expression] ; [Expression]
+4	  in : [3,5]		out : [8]		dom : []	code : 
+8	  in : [4]		out : [0,7]		dom : [4]	code : A<4 [Condition]
+7	  in : [6,8]		out : []		dom : []	code : 
+
+visit label 9
+merge9
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1,8]		out : [1]		dom : []	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]		out : [2,3]		dom : [0]	code : A%2!=0 [Condition]
+3	  in : [1]		out : [4]		dom : [1]	code : 
+2	  in : [1]		out : [5,6]		dom : [1]	code : A>=0 [Condition]
+6	  in : [2]		out : [7]		dom : [2]	code : 
+5	  in : [2]		out : [4]		dom : [2]	code : ++ [Expression] A [Expression] ; [Expression]
+4	  in : [3,5]		out : [8]		dom : []	code : 
+8	  in : [4]		out : [0,7]		dom : [4]	code : A<4 [Condition]
+7	  in : [6,8]		out : []		dom : []	code : return  [Expression] A [Expression] ; [Expression]
+9	  in : []		out : []		dom : []	code : 
+
+booton.translator.flow.DoWhiteTest booton.translator.flow.DoWhiteTest
 -1	  in : []		out : [0]		dom : []	back : []	code : 
-0	  in : [-1]		out : [1]		dom : [-1]	back : []	code : boot.BR.CE(A) [Expression] ; [Expression]
-1	  in : [0]		out : [2]		dom : [0]	back : []	code : B=this.HO() [Expression] ; [Expression]
-2	  in : [1,5]		out : [3,4]		dom : [1]	back : [5]	code : B.Hw()==0 [Condition] C=B.Hu() [Expression] ; [Expression]
-4	  in : [2]		out : [5]		dom : [2]	back : []	code : A.IN(C) [Expression] ; [Expression]
-5	  in : [4]		out : [2]		dom : [4]	back : []	code : 
-3	  in : [2]		out : []		dom : [2]	back : []	code : return [Expression] ; [Expression]
+0	  in : [-1,8]		out : [1]		dom : [-1]	back : [8]	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]		out : [2,3]		dom : [0]	back : []	code : A%2!=0 [Condition]
+3	  in : [1]		out : [4]		dom : [1]	back : []	code : 
+2	  in : [1]		out : [5,6]		dom : [1]	back : []	code : A>=0 [Condition]
+6	  in : [2]		out : [7]		dom : [2]	back : []	code : 
+5	  in : [2]		out : [4]		dom : [2]	back : []	code : ++ [Expression] A [Expression] ; [Expression]
+4	  in : [3,5]		out : [8]		dom : [1]	back : []	code : 
+8	  in : [4]		out : [0,7]		dom : [4]	back : []	code : A<4 [Condition]
+7	  in : [6,8]		out : []		dom : [1]	back : []	code : return  [Expression] A [Expression] ; [Expression]
+9	  in : []		out : []		dom : []	back : []	code : 
 
 {
-mv = cw.visitMethod(ACC_PUBLIC, "forEach", "(Ljava/util/function/Consumer;)V", "(Ljava/util/function/Consumer<-TT;>;)V", null);
+mv = cw.visitMethod(ACC_PUBLIC, "act", "(I)I", null, null);
 mv.visitCode();
 Label l0 = new Label();
 mv.visitLabel(l0);
-mv.visitLineNumber(72, l0);
-mv.visitVarInsn(ALOAD, 1);
-mv.visitMethodInsn(INVOKESTATIC, "java/util/Objects", "requireNonNull", "(Ljava/lang/Object;)Ljava/lang/Object;");
-mv.visitInsn(POP);
+mv.visitLineNumber(124, l0);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitIincInsn(1, 1);
 Label l1 = new Label();
 mv.visitLabel(l1);
-mv.visitLineNumber(73, l1);
-mv.visitVarInsn(ALOAD, 0);
-mv.visitMethodInsn(INVOKEINTERFACE, "java/lang/Iterable", "iterator", "()Ljava/util/Iterator;");
-mv.visitVarInsn(ASTORE, 2);
+mv.visitLineNumber(126, l1);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitInsn(ICONST_2);
+mv.visitInsn(IREM);
 Label l2 = new Label();
-mv.visitLabel(l2);
-mv.visitFrame(Opcodes.F_APPEND,1, new Object[] {"java/util/Iterator"}, 0, null);
-mv.visitVarInsn(ALOAD, 2);
-mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "hasNext", "()Z");
+mv.visitJumpInsn(IFNE, l2);
 Label l3 = new Label();
-mv.visitJumpInsn(IFEQ, l3);
-mv.visitVarInsn(ALOAD, 2);
-mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "next", "()Ljava/lang/Object;");
-mv.visitVarInsn(ASTORE, 3);
-Label l4 = new Label();
-mv.visitLabel(l4);
-mv.visitLineNumber(74, l4);
-mv.visitVarInsn(ALOAD, 1);
-mv.visitVarInsn(ALOAD, 3);
-mv.visitMethodInsn(INVOKEINTERFACE, "java/util/function/Consumer", "accept", "(Ljava/lang/Object;)V");
-Label l5 = new Label();
-mv.visitLabel(l5);
-mv.visitLineNumber(75, l5);
-mv.visitJumpInsn(GOTO, l2);
 mv.visitLabel(l3);
-mv.visitLineNumber(76, l3);
-mv.visitFrame(Opcodes.F_CHOP,1, null, 0, null);
-mv.visitInsn(RETURN);
-mv.visitMaxs(2, 4);
+mv.visitLineNumber(127, l3);
+Label l4 = new Label();
+mv.visitJumpInsn(GOTO, l4);
+mv.visitLabel(l2);
+mv.visitLineNumber(130, l2);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ILOAD, 1);
+Label l5 = new Label();
+mv.visitJumpInsn(IFGE, l5);
+Label l6 = new Label();
+mv.visitLabel(l6);
+mv.visitLineNumber(131, l6);
+Label l7 = new Label();
+mv.visitJumpInsn(GOTO, l7);
+mv.visitLabel(l5);
+mv.visitLineNumber(133, l5);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitIincInsn(1, 1);
+mv.visitLabel(l4);
+mv.visitLineNumber(134, l4);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitInsn(ICONST_4);
+Label l8 = new Label();
+mv.visitLabel(l8);
+mv.visitLineNumber(123, l8);
+mv.visitJumpInsn(IF_ICMPLT, l0);
+mv.visitLabel(l7);
+mv.visitLineNumber(136, l7);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitInsn(IRETURN);
+Label l9 = new Label();
+mv.visitLabel(l9);
+mv.visitLocalVariable("this", "Lbooton/translator/flow/DoWhiteTest$6;", null, l0, l9, 0);
+mv.visitLocalVariable("value", "I", null, l0, l9, 1);
+mv.visitMaxs(2, 2);
 mv.visitEnd();
 }
-IM:function(A,B,C){
-		// 72
-		boot.BR.CE(A);
-		// 73
-		B=this.HO();
-		l2: for (; B.Hw()==0C=B.Hu();; ) {
-			// 74
-			A.IN(C);
-		}
-		// 76
+BDJ:function(A){
+		// 124
+		l8 : do {
+			++A;
+			// 126
+			if (A%2!=0) {
+				// 130
+				if (A>=0) {
+					// 133
+					++A;
+				} else {
+					// 131
+				}
+			} else {
+				// 127
+			}
+			// 134
+		} while (A<4)
 	},
 	
-11 07, 2013 10:59:20 ŒßŒã com.gargoylesoftware.htmlunit.javascript.StrictErrorReporter error
-d‘å: error: message=[missing ; after for-loop condition] sourceName=[EnumSetTest] line=[2462] lineSource=[		l2: for (; B.Hw()==0C=B.Hu();; ) {] lineOffset=[24]

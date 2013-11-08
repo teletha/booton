@@ -41,6 +41,7 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
 
     static {
         // builtin(Iterable.class);
+        builtin(Map.class);
         builtin(Spliterator.class);
         builtin(Spliterator.OfInt.class);
         builtin(Spliterator.OfLong.class);

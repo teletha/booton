@@ -25,6 +25,9 @@ class Node {
     /** The identified label for this node. */
     final int id;
 
+    /** The debug flag. */
+    final Debugger debugger;
+
     /** The actual operand stack. */
     final LinkedList<Operand> stack = new LinkedList();
 
@@ -61,8 +64,9 @@ class Node {
     /**
      * @param label
      */
-    Node(int id) {
+    Node(int id, Debugger debugger) {
         this.id = id;
+        this.debugger = debugger;
     }
 
     /**
