@@ -9,9 +9,13 @@
  */
 package booton.translator;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -366,6 +370,35 @@ class Node {
 
         // API definition
         return dominator;
+    }
+
+    /**
+     * <p>
+     * Detect whether the specified node is traversable from this node.
+     * </p>
+     * 
+     * @param node A target node.
+     * @return A result.
+     */
+    final boolean canReachTo(Node node) {
+        Set<Node> recorder = new HashSet();
+        recorder.add(this);
+
+        Deque<Node> queue = new ArrayDeque();
+        queue.add(this);
+
+        while (!queue.isEmpty()) {
+            for (Node out : queue.pollFirst().outgoing) {
+                if (out == node) {
+                    return true;
+                }
+
+                if (recorder.add(out)) {
+                    queue.addLast(out);
+                }
+            }
+        }
+        return false;
     }
 
     /**

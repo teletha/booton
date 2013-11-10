@@ -56,6 +56,7 @@ public class DoWhiteTest extends ScriptTester {
         });
     }
 
+    @Test
     public void breakNoLabel() {
         test(new Scriptable() {
 
