@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kiss.model.ClassUtil;
+import booton.translator.Debuggable;
 
 /**
  * @version 2013/10/09 15:53:49
@@ -62,6 +63,7 @@ public class Publishable {
      * Register event listener.
      * </p>
      */
+    @Debuggable
     public void register(Object subscribable) {
         if (subscribable != null) {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
