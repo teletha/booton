@@ -55,6 +55,9 @@ public class Debugger extends AnnotationVisitor {
         whileTest = flag;
     }
 
+    /** The Java original class. */
+    final Class clazz;
+
     /** The Java original method name. */
     final String methodName;
 
@@ -72,9 +75,10 @@ public class Debugger extends AnnotationVisitor {
     /**
      * 
      */
-    public Debugger(String methodName) {
+    public Debugger(Class clazz, String methodName) {
         super(ASM5);
 
+        this.clazz = clazz;
         this.methodName = methodName;
     }
 
@@ -90,6 +94,15 @@ public class Debugger extends AnnotationVisitor {
         } else if (name.equals("asm")) {
             asmable = Boolean.parseBoolean(value.toString());
         }
+    }
+
+    /**
+     * <p>
+     * Print method info.
+     * </p>
+     */
+    public void printInfo() {
+        System.out.println(clazz.getName() + "#" + methodName);
     }
 
     /**

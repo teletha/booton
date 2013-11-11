@@ -236,7 +236,7 @@ class JavaMethodCompiler extends MethodVisitor {
         this.returnType = Type.getReturnType(description);
         this.parameterTypes = Type.getArgumentTypes(description);
         this.variables = new LocalVariables(isStatic);
-        this.debugger = new Debugger(original);
+        this.debugger = new Debugger(script.source, original);
 
         Type[] parameters = Type.getArgumentTypes(description);
 

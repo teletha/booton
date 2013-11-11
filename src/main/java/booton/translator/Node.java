@@ -65,6 +65,12 @@ class Node {
     /** The flag whether this node has already written or not. */
     private boolean written = false;
 
+    private boolean loopCondition;
+
+    private boolean loopExit;
+
+    private Node loopEntrance;
+
     /**
      * @param label
      */
@@ -622,6 +628,7 @@ class Node {
 
                         // detect process and follower node
                         Node process = detectFollower();
+                        set(this, follower);
 
                         while (!(stack.peekLast() instanceof OperandCondition)) {
                             process.stack.addFirst(remove(0));
@@ -637,6 +644,7 @@ class Node {
                         //
                         // detect process and follower node
                         Node process = detectFollower();
+                        set(this, follower);
 
                         // write script fragment
                         buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
@@ -649,6 +657,7 @@ class Node {
                     //
                     // detect process and follower node
                     Node process = detectFollower();
+                    set(this, follower);
 
                     // write script fragment
                     buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
@@ -794,6 +803,12 @@ class Node {
         }
     }
 
+    private void set(Node entrance, Node exit) {
+        entrance.loopCondition = true;
+        exit.loopExit = true;
+        exit.loopEntrance = this;
+    }
+
     /**
      * <p>
      * Helper method to process script writing.
@@ -819,9 +834,31 @@ class Node {
 
             if (nextDominator.backedges.isEmpty()) {
                 // stop here
+                if (!nextDominator.loopCondition || !next.loopExit) {
+                    // If this exception will be thrown, it is bug of this program. So we must
+                    // rethrow the wrapped error in here.
+                    debugger.printInfo();
+                    throw new Error();
+                }
                 nextDominator.follower = next;
                 return;
             }
+
+            // if (next.loopCondition) {
+            // buffer.append("continue l", next.id, ";");
+            // return;
+            // }
+            //
+            // if (next.loopExit) {
+            // if (next.loopEntrance == this) {
+            // // normal process
+            // next.write(buffer);
+            // return;
+            // }
+            // debugger.print(id + "   " + next.id);
+            // buffer.append("break l", next.loopEntrance.id, ";");
+            // return;
+            // }
 
             Node backedgedDominator = nextDominator;
 
