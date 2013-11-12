@@ -42,6 +42,9 @@ class Node {
     final CopyOnWriteArrayList<Node> outgoing = new CopyOnWriteArrayList();
 
     /** The node list. */
+    final CopyOnWriteArrayList<Node> dominators = new CopyOnWriteArrayList();
+
+    /** The node list. */
     final CopyOnWriteArrayList<Node> backedges = new CopyOnWriteArrayList();
 
     /** The try-catch-finally starting node list. */
@@ -555,15 +558,28 @@ class Node {
                     Node condition = backedges.get(0);
                     condition.written = true;
 
+                    Node follow;
+                    Node process;
+
+                    if (condition.outgoing.get(0) == this) {
+                        follow = condition.outgoing.get(1);
+                        process = condition.outgoing.get(0);
+                    } else {
+                        follow = condition.outgoing.get(0);
+                        process = condition.outgoing.get(1);
+                    }
+                    set(condition, follow, this);
+
                     // setup actual do-while block and its following node
-                    condition.follower = condition.outgoing.get(condition.outgoing.size() - 1);
+                    // condition.follower = condition.outgoing.get(condition.outgoing.size() - 1);
+                    // set(condition, condition.follower, this);
 
                     // write script fragment
-                    buffer.write("l" + condition.id, ":", "do", "{");
+                    buffer.write("l" + id, ":", "do", "{");
                     buffer.append(this);
-                    process(this.outgoing.get(0), buffer);
+                    process(outgoing.get(0), buffer);
                     buffer.write("}", "while", "(" + condition + ")");
-                    condition.process(condition.follower, buffer);
+                    condition.process(follow, buffer);
                 }
             } else if (outs == 2) {
                 // while, for or if
@@ -579,16 +595,31 @@ class Node {
                         if (outgoing.get(1).incoming.size() == 1) {
                             Node then = null;
                             Node elze = null;
+                            Node follower = null;
+                            boolean originalWritten = false;
+                            boolean revert = false;
 
                             if (outgoing.get(0).written) {
                                 condition.invert();
 
                                 then = outgoing.get(1);
+                                follower = outgoing.get(0);
                             } else if (outgoing.get(1).written) {
                                 then = outgoing.get(0);
+                                follower = outgoing.get(1);
+                            } else if (dominators.size() == 2) {
+                                then = outgoing.get(0);
+                                elze = outgoing.get(1);
                             } else {
                                 then = outgoing.get(0);
                                 elze = outgoing.get(1);
+                                System.out.println(dominators);
+                                Set<Node> nodes = new HashSet(dominators);
+                                nodes.removeAll(outgoing);
+                                follower = nodes.iterator().next();
+                                originalWritten = follower.written;
+                                follower.written = true;
+                                revert = true;
                             }
 
                             buffer.write("if", "(" + this + ")", "{");
@@ -598,6 +629,11 @@ class Node {
                                 process(elze, buffer);
                             }
                             buffer.write("}").line();
+
+                            if (follower != null && revert) {
+                                follower.written = originalWritten;
+                            }
+
                             process(follower, buffer);
                         } else {
                             buffer.write("if", "(" + this + ")", "{");
@@ -628,7 +664,9 @@ class Node {
 
                         // detect process and follower node
                         Node process = detectFollower();
-                        set(this, follower);
+                        set(update, follower, this);
+                        set(this, follower, this);
+                        debugger.print("set " + update.id + "  " + follower.id + "  " + id);
 
                         while (!(stack.peekLast() instanceof OperandCondition)) {
                             process.stack.addFirst(remove(0));
@@ -644,7 +682,7 @@ class Node {
                         //
                         // detect process and follower node
                         Node process = detectFollower();
-                        set(this, follower);
+                        set(this, follower, this);
 
                         // write script fragment
                         buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
@@ -657,7 +695,7 @@ class Node {
                     //
                     // detect process and follower node
                     Node process = detectFollower();
-                    set(this, follower);
+                    set(this, follower, this);
 
                     // write script fragment
                     buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
@@ -665,99 +703,6 @@ class Node {
                     buffer.write("}").line();
                     process(follower, buffer);
                 }
-            } else if (outs == 3) {
-                // // while, for or if
-                // if (backs == 0) {
-                // // if
-                // OperandCondition ccc = (OperandCondition) stack.peekLast();
-                //
-                // if (ccc != null && ccc.next == outgoing.get(0)) {
-                // ccc.invert();
-                // }
-                //
-                // if (outgoing.get(1).incoming.size() == 1) {
-                // if (outgoing.get(2).incoming.size() == 1) {
-                // Node then = null;
-                // Node elze = null;
-                //
-                // if (outgoing.get(1).written) {
-                // ccc.invert();
-                //
-                // then = outgoing.get(2);
-                // } else if (outgoing.get(2).written) {
-                // then = outgoing.get(1);
-                // } else {
-                // then = outgoing.get(1);
-                // elze = outgoing.get(2);
-                // }
-                //
-                // buffer.write("if", "(" + this + ")", "{");
-                // process(then, buffer);
-                // if (elze != null) {
-                // buffer.write("}", "else", "{");
-                // process(elze, buffer);
-                // }
-                // buffer.write("}").line();
-                // process(follower, buffer);
-                // } else {
-                // buffer.write("if", "(" + this + ")", "{");
-                // process(outgoing.get(1), buffer);
-                // buffer.write("}").line();
-                // process(outgoing.get(2), buffer);
-                // }
-                // } else {
-                // ccc.invert();
-                // buffer.write("if", "(" + this + ")", "{");
-                // process(outgoing.get(2), buffer);
-                // buffer.write("}").line();
-                // process(outgoing.get(1), buffer);
-                // }
-                // } else if (backs == 1) {
-                // // while or for
-                // if (backedges.get(0).outgoing.size() == 1) {
-                // // for
-                //
-                // // setup update expression node
-                // Node update = backedges.get(0);
-                // update.written = true;
-                //
-                // // literalize
-                // if (update.stack.peekLast() == END) {
-                // update.remove(0);
-                // }
-                //
-                // // detect process and follower node
-                // Node process = detectFollower();
-                //
-                // // write script fragment
-                // buffer.write("l" + id + ":", "for", "(;", this + ";", update + ")", "{");
-                // process(process, buffer);
-                // buffer.write("}").line();
-                // process(follower, buffer);
-                // } else {
-                // // while with break only
-                // //
-                // // detect process and follower node
-                // Node process = detectFollower();
-                //
-                // // write script fragment
-                // buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
-                // process(process, buffer);
-                // buffer.write("}").line();
-                // process(follower, buffer);
-                // }
-                // } else {
-                // // while with continue and break
-                // //
-                // // detect process and follower node
-                // Node process = detectFollower();
-                //
-                // // write script fragment
-                // buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
-                // process(process, buffer);
-                // buffer.write("}").line();
-                // process(follower, buffer);
-                // }
             }
 
             // =============================================================
@@ -803,11 +748,20 @@ class Node {
         }
     }
 
-    private void set(Node entrance, Node exit) {
-        entrance.loopCondition = true;
+    private void set(Node condition, Node exit, Node entrance) {
+        condition.loopCondition = true;
         exit.loopExit = true;
-        exit.loopEntrance = this;
+
+        if (exit.loopEntrance == null) {
+            exit.loopEntrance = entrance;
+        }
+
+        if (condition.loopEntrance == null) {
+            condition.loopEntrance = entrance;
+        }
     }
+
+    private int writes = 0;
 
     /**
      * <p>
@@ -821,33 +775,32 @@ class Node {
         if (next != null) {
             Node nextDominator = next.getDominator();
 
-            if (nextDominator == null || nextDominator == this) {
+            if (nextDominator == null || nextDominator == this || (loopCondition && next.loopExit)) {
+
                 // normal process
                 next.write(buffer);
                 return;
             }
 
-            if (hasDominator(next)) {
-                buffer.append("continue l", next.id, ";");
+            if (next.loopCondition) {
+                buffer.append("continue l", next.loopEntrance.id, ";");
+                return;
+            }
+
+            if (next.loopExit && next.canReachTo(next.loopEntrance)) {
+                debugger.print("braker " + id + "  " + next.id);
+                buffer.append("break l", next.loopEntrance.id, ";");
                 return;
             }
 
             if (nextDominator.backedges.isEmpty()) {
                 // stop here
-                if (!nextDominator.loopCondition || !next.loopExit) {
-                    // If this exception will be thrown, it is bug of this program. So we must
-                    // rethrow the wrapped error in here.
-                    debugger.printInfo();
-                    throw new Error();
-                }
-                nextDominator.follower = next;
+                // debugger.print("stop  herer " + id + "  " + nextDominator.id + "   " + next.id +
+                // "   " + next.loopEntrance);
+                if (nextDominator.follower == null) nextDominator.follower = next;
                 return;
             }
 
-            // if (next.loopCondition) {
-            // buffer.append("continue l", next.id, ";");
-            // return;
-            // }
             //
             // if (next.loopExit) {
             // if (next.loopEntrance == this) {
@@ -860,15 +813,15 @@ class Node {
             // return;
             // }
 
-            Node backedgedDominator = nextDominator;
-
-            while (backedgedDominator != null) {
-                if (backedgedDominator.backedges.contains(next)) {
-                    buffer.append("continue l", backedgedDominator.id, ";");
-                    return;
-                }
-                backedgedDominator = backedgedDominator.getDominator();
-            }
+            // Node backedgedDominator = nextDominator;
+            //
+            // while (backedgedDominator != null) {
+            // if (backedgedDominator.backedges.contains(next)) {
+            // buffer.append("continue l", backedgedDominator.id, ";");
+            // return;
+            // }
+            // backedgedDominator = backedgedDominator.getDominator();
+            // }
 
             // search destination
             buffer.append("break l", nextDominator.id, ";");

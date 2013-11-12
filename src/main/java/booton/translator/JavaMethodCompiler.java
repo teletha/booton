@@ -249,9 +249,9 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        // if (script.source.getName().endsWith("Map") && original.equals("merge")) {
-        // debugger.enable = true;
-        // }
+        if (script.source.getName().endsWith("ClassUtil") && original.equals("getAnnotations")) {
+            debugger.enable = true;
+        }
     }
 
     /**
@@ -281,6 +281,15 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // Resolve all try-catch-finally blocks.
         tries.process();
+
+        // Build dominator tree
+        for (Node node : nodes) {
+            Node dominator = node.getDominator();
+
+            if (dominator != null) {
+                dominator.dominators.addIfAbsent(node);
+            }
+        }
 
         if (debugger.enable) {
             debugger.print(script, nodes);

@@ -26,6 +26,7 @@ import java.util.Objects;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
+import booton.translator.Debuggable;
 
 /**
  * @version 2013/09/10 23:43:34
@@ -160,6 +161,7 @@ abstract class JSAnnotatedElement implements AnnotatedElement {
      * 
      * @return All annotations directly present on this element.
      */
+    @Debuggable
     public final Annotation[] getDeclaredAnnotations() {
         if (privateAnnotations == null) {
             privateAnnotations = new HashMap();
