@@ -1,3 +1,1822 @@
+[D=E.X("\n");, D=boot.array("L",[new boot.x(boot.L.U(A.name),0).Y("@").Y(A.filename).Y(":").Y(A.lineNumber).G(),"",""]);, F=0;]
+[C=boot.z.Z("\\.?(.+)?@(.+):(.+)");, "sourceURL" in A!=0, H=new boot.u(0);]
+[B=A;, C=A;, return B;]
+visit label -1
+visit label 0
+visit label 2
+merge2
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1,2]		dom : [-1]	code : A!=B [Condition]
+2	  in : [0]	out : []		dom : [0]	code : 
+
+visit label 1
+visit label 3
+merge3
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1,2]		dom : [-1]	code : A!=B [Condition]
+2	  in : [0]	out : []		dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]	out : [3,4]		dom : [0]	code : A==null [Condition] B!=null [Condition]
+3	  in : [1]	out : []		dom : [1]	code : 
+
+visit label 4
+visit label 5
+visit label 7
+merge7
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1,2]		dom : [-1]	code : A!=B [Condition]
+2	  in : [0]	out : []		dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]	out : [3,4]		dom : [0]	code : (A!=null&&B!=null) [Condition]
+3	  in : [1]	out : []		dom : [1]	code : return  [Expression] false [Expression] ; [Expression]
+4	  in : [1]	out : [5]		dom : [1]	code : C=A.length [Expression] ; [Expression]
+5	  in : [4]	out : [6,7]		dom : [4]	code : B.length==C [Condition]
+7	  in : [5]	out : []		dom : [5]	code : 
+
+visit label 6
+visit label 8
+visit label 10
+visit label 11
+visit label 12
+visit label 14
+merge14
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1,2]		dom : [-1]	code : A!=B [Condition]
+2	  in : [0]	out : []		dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]	out : [3,4]		dom : [0]	code : (A!=null&&B!=null) [Condition]
+3	  in : [1]	out : []		dom : [1]	code : return  [Expression] false [Expression] ; [Expression]
+4	  in : [1]	out : [5]		dom : [1]	code : C=A.length [Expression] ; [Expression]
+5	  in : [4]	out : [6,7]		dom : [4]	code : B.length==C [Condition]
+7	  in : [5]	out : []		dom : [5]	code : return  [Expression] false [Expression] ; [Expression]
+6	  in : [5]	out : [8]		dom : [5]	code : D=0 [Expression] ; [Expression]
+8	  in : [6]	out : [9]		dom : [6]	code : 
+10	  in : []	out : [11]		dom : []	code : E=A[D] [Expression] ; [Expression]
+11	  in : [10]	out : [12]		dom : [10]	code : F=B[D] [Expression] ; [Expression]
+12	  in : [11]	out : [13,14]		dom : [11]	code : E!=F [Condition]
+14	  in : [12]	out : []		dom : [12]	code : 
+
+visit label 13
+visit label 17
+merge17
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1,2]		dom : [-1]	code : A!=B [Condition]
+2	  in : [0]	out : []		dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]	out : [3,4]		dom : [0]	code : (A!=null&&B!=null) [Condition]
+3	  in : [1]	out : []		dom : [1]	code : return  [Expression] false [Expression] ; [Expression]
+4	  in : [1]	out : [5]		dom : [1]	code : C=A.length [Expression] ; [Expression]
+5	  in : [4]	out : [6,7]		dom : [4]	code : B.length==C [Condition]
+7	  in : [5]	out : []		dom : [5]	code : return  [Expression] false [Expression] ; [Expression]
+6	  in : [5]	out : [8]		dom : [5]	code : D=0 [Expression] ; [Expression]
+8	  in : [6]	out : [9]		dom : [6]	code : 
+10	  in : []	out : [11]		dom : []	code : E=A[D] [Expression] ; [Expression]
+11	  in : [10]	out : [12]		dom : [10]	code : F=B[D] [Expression] ; [Expression]
+12	  in : [11]	out : [13,14]		dom : [11]	code : E!=F [Condition]
+14	  in : [12]	out : [15]		dom : [12]	code : 
+13	  in : [12]	out : [16,17]		dom : [12]	code : E!=null [Condition]
+17	  in : [13]	out : []		dom : [13]	code : 
+
+visit label 16
+visit label 18
+visit label 19
+merge19
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1,2]		dom : [-1]	code : A!=B [Condition]
+2	  in : [0]	out : []		dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]	out : [3,4]		dom : [0]	code : (A!=null&&B!=null) [Condition]
+3	  in : [1]	out : []		dom : [1]	code : return  [Expression] false [Expression] ; [Expression]
+4	  in : [1]	out : [5]		dom : [1]	code : C=A.length [Expression] ; [Expression]
+5	  in : [4]	out : [6,7]		dom : [4]	code : B.length==C [Condition]
+7	  in : [5]	out : []		dom : [5]	code : return  [Expression] false [Expression] ; [Expression]
+6	  in : [5]	out : [8]		dom : [5]	code : D=0 [Expression] ; [Expression]
+8	  in : [6]	out : [9]		dom : [6]	code : 
+10	  in : []	out : [11]		dom : []	code : E=A[D] [Expression] ; [Expression]
+11	  in : [10]	out : [12]		dom : [10]	code : F=B[D] [Expression] ; [Expression]
+12	  in : [11]	out : [13,14]		dom : [11]	code : E!=F [Condition]
+14	  in : [12]	out : [15]		dom : [12]	code : 
+13	  in : [12]	out : [16,17]		dom : [12]	code : E!=null [Condition]
+17	  in : [13]	out : []		dom : [13]	code : return  [Expression] false [Expression] ; [Expression]
+16	  in : [13]	out : [18]		dom : [13]	code : G=boot.BU.DX(E,F) [Expression] ; [Expression]
+18	  in : [16]	out : [15,19]		dom : [16]	code : G!=0 [Condition]
+19	  in : [18]	out : []		dom : [18]	code : 
+
+visit label 15
+visit label 9
+visit label 20
+merge20
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1,2]		dom : [-1]	code : A!=B [Condition]
+2	  in : [0]		out : []		dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]		out : [3,4]		dom : [0]	code : (A!=null&&B!=null) [Condition]
+3	  in : [1]		out : []		dom : [1]	code : return  [Expression] false [Expression] ; [Expression]
+4	  in : [1]		out : [5]		dom : [1]	code : C=A.length [Expression] ; [Expression]
+5	  in : [4]		out : [6,7]		dom : [4]	code : B.length==C [Condition]
+7	  in : [5]		out : []		dom : [5]	code : return  [Expression] false [Expression] ; [Expression]
+6	  in : [5]		out : [8]		dom : [5]	code : D=0 [Expression] ; [Expression]
+8	  in : [6]		out : [9]		dom : [6]	code : 
+10	  in : [9]		out : [11]		dom : [9]	code : E=A[D] [Expression] ; [Expression]
+11	  in : [10]		out : [12]		dom : [10]	code : F=B[D] [Expression] ; [Expression]
+12	  in : [11]		out : [13,14]		dom : [11]	code : E!=F [Condition]
+14	  in : [12]		out : [15]		dom : [12]	code : 
+13	  in : [12]		out : [16,17]		dom : [12]	code : E!=null [Condition]
+17	  in : [13]		out : []		dom : [13]	code : return  [Expression] false [Expression] ; [Expression]
+16	  in : [13]		out : [18]		dom : [13]	code : G=boot.BU.DX(E,F) [Expression] ; [Expression]
+18	  in : [16]		out : [15,19]		dom : [16]	code : G!=0 [Condition]
+19	  in : [18]		out : []		dom : [18]	code : return  [Expression] false [Expression] ; [Expression]
+15	  in : [14,18]		out : [9]		dom : []	code : ++ [Expression] D [Expression] ; [Expression]
+9	  in : [8,15]		out : [10,20]		dom : []	code : D<C [Condition]
+20	  in : [9]		out : []		dom : [9]	code : 
+
+visit label 21
+merge21
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1,2]		dom : [-1]	code : A!=B [Condition]
+2	  in : [0]		out : []		dom : [0]	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]		out : [3,4]		dom : [0]	code : (A!=null&&B!=null) [Condition]
+3	  in : [1]		out : []		dom : [1]	code : return  [Expression] false [Expression] ; [Expression]
+4	  in : [1]		out : [5]		dom : [1]	code : C=A.length [Expression] ; [Expression]
+5	  in : [4]		out : [6,7]		dom : [4]	code : B.length==C [Condition]
+7	  in : [5]		out : []		dom : [5]	code : return  [Expression] false [Expression] ; [Expression]
+6	  in : [5]		out : [8]		dom : [5]	code : D=0 [Expression] ; [Expression]
+8	  in : [6]		out : [9]		dom : [6]	code : 
+10	  in : [9]		out : [11]		dom : [9]	code : E=A[D] [Expression] ; [Expression]
+11	  in : [10]		out : [12]		dom : [10]	code : F=B[D] [Expression] ; [Expression]
+12	  in : [11]		out : [13,14]		dom : [11]	code : E!=F [Condition]
+14	  in : [12]		out : [15]		dom : [12]	code : 
+13	  in : [12]		out : [16,17]		dom : [12]	code : E!=null [Condition]
+17	  in : [13]		out : []		dom : [13]	code : return  [Expression] false [Expression] ; [Expression]
+16	  in : [13]		out : [18]		dom : [13]	code : G=boot.BU.DX(E,F) [Expression] ; [Expression]
+18	  in : [16]		out : [15,19]		dom : [16]	code : G!=0 [Condition]
+19	  in : [18]		out : []		dom : [18]	code : return  [Expression] false [Expression] ; [Expression]
+15	  in : [14,18]		out : [9]		dom : []	code : ++ [Expression] D [Expression] ; [Expression]
+9	  in : [8,15]		out : [10,20]		dom : []	code : D<C [Condition]
+20	  in : [9]		out : []		dom : [9]	code : return  [Expression] true [Expression] ; [Expression]
+21	  in : []		out : []		dom : []	code : 
+
+js.util.Arrays deepEquals
+-1	  in : []		out : [0]		dom : []	back : []	code : 
+0	  in : [-1]		out : [1,2]		dom : [-1]	back : []	code : A!=B [Condition]
+2	  in : [0]		out : []		dom : [0]	back : []	code : return  [Expression] true [Expression] ; [Expression]
+1	  in : [0]		out : [3,4]		dom : [0]	back : []	code : (A!=null&&B!=null) [Condition]
+3	  in : [1]		out : []		dom : [1]	back : []	code : return  [Expression] false [Expression] ; [Expression]
+4	  in : [1]		out : [5]		dom : [1]	back : []	code : C=A.length [Expression] ; [Expression]
+5	  in : [4]		out : [6,7]		dom : [4]	back : []	code : B.length==C [Condition]
+7	  in : [5]		out : []		dom : [5]	back : []	code : return  [Expression] false [Expression] ; [Expression]
+6	  in : [5]		out : [8]		dom : [5]	back : []	code : D=0 [Expression] ; [Expression]
+8	  in : [6]		out : [9]		dom : [6]	back : []	code : 
+10	  in : [9]		out : [11]		dom : [9]	back : []	code : E=A[D] [Expression] ; [Expression]
+11	  in : [10]		out : [12]		dom : [10]	back : []	code : F=B[D] [Expression] ; [Expression]
+12	  in : [11]		out : [13,14]		dom : [11]	back : []	code : E!=F [Condition]
+14	  in : [12]		out : [15]		dom : [12]	back : []	code : 
+13	  in : [12]		out : [16,17]		dom : [12]	back : []	code : E!=null [Condition]
+17	  in : [13]		out : []		dom : [13]	back : []	code : return  [Expression] false [Expression] ; [Expression]
+16	  in : [13]		out : [18]		dom : [13]	back : []	code : G=boot.BU.DX(E,F) [Expression] ; [Expression]
+18	  in : [16]		out : [15,19]		dom : [16]	back : []	code : G!=0 [Condition]
+19	  in : [18]		out : []		dom : [18]	back : []	code : return  [Expression] false [Expression] ; [Expression]
+15	  in : [14,18]		out : [9]		dom : [12]	back : []	code : ++ [Expression] D [Expression] ; [Expression]
+9	  in : [8,15]		out : [10,20]		dom : [8]	back : [15]	code : D<C [Condition]
+20	  in : [9]		out : []		dom : [9]	back : []	code : return  [Expression] true [Expression] ; [Expression]
+21	  in : []		out : []		dom : []	back : []	code : 
+
+{
+mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "deepEquals", "([Ljava/lang/Object;[Ljava/lang/Object;)Z", null, null);
+mv.visitCode();
+Label l0 = new Label();
+mv.visitLabel(l0);
+mv.visitLineNumber(1204, l0);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitVarInsn(ALOAD, 1);
+Label l1 = new Label();
+mv.visitJumpInsn(IF_ACMPNE, l1);
+Label l2 = new Label();
+mv.visitLabel(l2);
+mv.visitLineNumber(1205, l2);
+mv.visitInsn(ICONST_1);
+mv.visitInsn(IRETURN);
+mv.visitLabel(l1);
+mv.visitLineNumber(1208, l1);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ALOAD, 0);
+Label l3 = new Label();
+mv.visitJumpInsn(IFNULL, l3);
+mv.visitVarInsn(ALOAD, 1);
+Label l4 = new Label();
+mv.visitJumpInsn(IFNONNULL, l4);
+mv.visitLabel(l3);
+mv.visitLineNumber(1209, l3);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitInsn(ICONST_0);
+mv.visitInsn(IRETURN);
+mv.visitLabel(l4);
+mv.visitLineNumber(1212, l4);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitInsn(ARRAYLENGTH);
+mv.visitVarInsn(ISTORE, 2);
+Label l5 = new Label();
+mv.visitLabel(l5);
+mv.visitLineNumber(1214, l5);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitInsn(ARRAYLENGTH);
+mv.visitVarInsn(ILOAD, 2);
+Label l6 = new Label();
+mv.visitJumpInsn(IF_ICMPEQ, l6);
+Label l7 = new Label();
+mv.visitLabel(l7);
+mv.visitLineNumber(1215, l7);
+mv.visitInsn(ICONST_0);
+mv.visitInsn(IRETURN);
+mv.visitLabel(l6);
+mv.visitLineNumber(1218, l6);
+mv.visitFrame(Opcodes.F_APPEND,1, new Object[] {Opcodes.INTEGER}, 0, null);
+mv.visitInsn(ICONST_0);
+mv.visitVarInsn(ISTORE, 3);
+Label l8 = new Label();
+mv.visitLabel(l8);
+Label l9 = new Label();
+mv.visitJumpInsn(GOTO, l9);
+Label l10 = new Label();
+mv.visitLabel(l10);
+mv.visitLineNumber(1219, l10);
+mv.visitFrame(Opcodes.F_APPEND,1, new Object[] {Opcodes.INTEGER}, 0, null);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitVarInsn(ILOAD, 3);
+mv.visitInsn(AALOAD);
+mv.visitVarInsn(ASTORE, 4);
+Label l11 = new Label();
+mv.visitLabel(l11);
+mv.visitLineNumber(1220, l11);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitVarInsn(ILOAD, 3);
+mv.visitInsn(AALOAD);
+mv.visitVarInsn(ASTORE, 5);
+Label l12 = new Label();
+mv.visitLabel(l12);
+mv.visitLineNumber(1222, l12);
+mv.visitVarInsn(ALOAD, 4);
+mv.visitVarInsn(ALOAD, 5);
+Label l13 = new Label();
+mv.visitJumpInsn(IF_ACMPNE, l13);
+Label l14 = new Label();
+mv.visitLabel(l14);
+mv.visitLineNumber(1223, l14);
+Label l15 = new Label();
+mv.visitJumpInsn(GOTO, l15);
+mv.visitLabel(l13);
+mv.visitLineNumber(1226, l13);
+mv.visitFrame(Opcodes.F_APPEND,2, new Object[] {"java/lang/Object", "java/lang/Object"}, 0, null);
+mv.visitVarInsn(ALOAD, 4);
+Label l16 = new Label();
+mv.visitJumpInsn(IFNONNULL, l16);
+Label l17 = new Label();
+mv.visitLabel(l17);
+mv.visitLineNumber(1227, l17);
+mv.visitInsn(ICONST_0);
+mv.visitInsn(IRETURN);
+mv.visitLabel(l16);
+mv.visitLineNumber(1231, l16);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ALOAD, 4);
+mv.visitVarInsn(ALOAD, 5);
+mv.visitMethodInsn(INVOKESTATIC, "js/util/Arrays", "deepEquals0", "(Ljava/lang/Object;Ljava/lang/Object;)Z");
+mv.visitVarInsn(ISTORE, 6);
+Label l18 = new Label();
+mv.visitLabel(l18);
+mv.visitLineNumber(1233, l18);
+mv.visitVarInsn(ILOAD, 6);
+mv.visitJumpInsn(IFNE, l15);
+Label l19 = new Label();
+mv.visitLabel(l19);
+mv.visitLineNumber(1234, l19);
+mv.visitInsn(ICONST_0);
+mv.visitInsn(IRETURN);
+mv.visitLabel(l15);
+mv.visitLineNumber(1218, l15);
+mv.visitFrame(Opcodes.F_CHOP,2, null, 0, null);
+mv.visitIincInsn(3, 1);
+mv.visitLabel(l9);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ILOAD, 3);
+mv.visitVarInsn(ILOAD, 2);
+mv.visitJumpInsn(IF_ICMPLT, l10);
+Label l20 = new Label();
+mv.visitLabel(l20);
+mv.visitLineNumber(1237, l20);
+mv.visitInsn(ICONST_1);
+mv.visitInsn(IRETURN);
+Label l21 = new Label();
+mv.visitLabel(l21);
+mv.visitLocalVariable("a1", "[Ljava/lang/Object;", null, l0, l21, 0);
+mv.visitLocalVariable("a2", "[Ljava/lang/Object;", null, l0, l21, 1);
+mv.visitLocalVariable("length", "I", null, l5, l21, 2);
+mv.visitLocalVariable("i", "I", null, l8, l20, 3);
+mv.visitLocalVariable("e1", "Ljava/lang/Object;", null, l11, l15, 4);
+mv.visitLocalVariable("e2", "Ljava/lang/Object;", null, l12, l15, 5);
+mv.visitLocalVariable("eq", "Z", null, l18, l15, 6);
+mv.visitMaxs(2, 7);
+mv.visitEnd();
+}
+set 15  20  9
+[, E!=null, ++D]
+_GC:function(A,B,C,D,E,F,G){
+		// 1204
+		if (A!=B) {
+			// 1208
+			if (A==null||B==null) {
+				// 1209
+				return false;
+			} else {
+				// 1212
+				C=A.length;
+				// 1214
+				if (B.length==C) {
+					// 1218
+					D=0;
+					l9: for (; D<C; ++D) {
+						// 1219
+						E=A[D];
+						// 1220
+						F=B[D];
+						// 1222
+						if (E!=F) {
+							// 1226
+							if (E!=null) {
+								// 1231
+								G=boot.BU.DX(E,F);
+								// 1233
+								if (G==0) {
+									// 1234
+									return false;
+								}
+								continue l9;
+							} else {
+								// 1227
+								return false;
+							}
+						} else {
+							// 1223
+							continue l9;
+						}
+					}
+					// 1237
+					return true;
+				} else {
+					// 1215
+					return false;
+				}
+			}
+		} else {
+			// 1205
+			return true;
+		}
+	},
+	
+[C=boot.BU.GC(A,B);, boot.B.$.GD().GE(A)==0||boot.B.$.GD().GE(B)==0, return C;]
+[A="[".CD(this.c);, this.JK()==0, B=[];]
+visit label -1
+visit label 0
+visit label 2
+merge2
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1,2]		dom : [-1]	code : this.h!=null [Condition]
+2	  in : [0]	out : []		dom : [0]	code : 
+
+visit label 3
+visit label 5
+merge5
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1,2]		dom : [-1]	code : this.h!=null [Condition]
+2	  in : [0]	out : [3]		dom : [0]	code : this.h=new boot.BI(0) [Expression] ; [Expression]
+3	  in : [2]	out : [4]		dom : [2]	code : C=(D=Object.keys(this.g)).length [Expression] ; [Expression] B=0 [Expression] ; [Expression]
+5	  in : []	out : []		dom : []	code : 
+
+visit label 6
+visit label 7
+visit label 8
+visit label 4
+visit label 1
+merge1
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1,2]		dom : [-1]	code : this.h!=null [Condition]
+2	  in : [0]		out : [3]		dom : [0]	code : this.h=new boot.BI(0) [Expression] ; [Expression]
+3	  in : [2]		out : [4]		dom : [2]	code : C=(D=Object.keys(this.g)).length [Expression] ; [Expression] B=0 [Expression] ; [Expression]
+5	  in : [4]		out : [6]		dom : [4]	code : A=D[B] [Expression] ; [Expression]
+6	  in : [5]		out : [7]		dom : [5]	code : E=boot.A.B(A) [Expression] ; [Expression]
+7	  in : [6]		out : [8]		dom : [6]	code : this.h.BV(E,boot.DX.KB(null,boot.array("A",[E]),new boot.DW(E,this.g[A],0))) [Expression] ; [Expression]
+8	  in : [7]		out : [4]		dom : [7]	code : ++ [Expression] B [Expression] ; [Expression]
+4	  in : [3,8]		out : [5,1]		dom : []	code : B<C [Condition]
+1	  in : [0,4]		out : []		dom : []	code : 
+
+visit label 9
+merge9
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1,2]		dom : [-1]	code : this.h!=null [Condition]
+2	  in : [0]		out : [3]		dom : [0]	code : this.h=new boot.BI(0) [Expression] ; [Expression]
+3	  in : [2]		out : [4]		dom : [2]	code : C=(D=Object.keys(this.g)).length [Expression] ; [Expression] B=0 [Expression] ; [Expression]
+5	  in : [4]		out : [6]		dom : [4]	code : A=D[B] [Expression] ; [Expression]
+6	  in : [5]		out : [7]		dom : [5]	code : E=boot.A.B(A) [Expression] ; [Expression]
+7	  in : [6]		out : [8]		dom : [6]	code : this.h.BV(E,boot.DX.KB(null,boot.array("A",[E]),new boot.DW(E,this.g[A],0))) [Expression] ; [Expression]
+8	  in : [7]		out : [4]		dom : [7]	code : ++ [Expression] B [Expression] ; [Expression]
+4	  in : [3,8]		out : [5,1]		dom : []	code : B<C [Condition]
+1	  in : [0,4]		out : []		dom : []	code : return  [Expression] this.h.IV().BH(boot.array("Bu",this.h.BF(),null)) [Expression] ; [Expression]
+9	  in : []		out : []		dom : []	code : 
+
+js.lang.reflect.JSAnnotatedElement getDeclaredAnnotations
+-1	  in : []		out : [0]		dom : []	back : []	code : 
+0	  in : [-1]		out : [1,2]		dom : [-1]	back : []	code : this.h!=null [Condition]
+2	  in : [0]		out : [3]		dom : [0]	back : []	code : this.h=new boot.BI(0) [Expression] ; [Expression]
+3	  in : [2]		out : [4]		dom : [2]	back : []	code : C=(D=Object.keys(this.g)).length [Expression] ; [Expression] B=0 [Expression] ; [Expression]
+5	  in : [4]		out : [6]		dom : [4]	back : []	code : A=D[B] [Expression] ; [Expression]
+6	  in : [5]		out : [7]		dom : [5]	back : []	code : E=boot.A.B(A) [Expression] ; [Expression]
+7	  in : [6]		out : [8]		dom : [6]	back : []	code : this.h.BV(E,boot.DX.KB(null,boot.array("A",[E]),new boot.DW(E,this.g[A],0))) [Expression] ; [Expression]
+8	  in : [7]		out : [4]		dom : [7]	back : []	code : ++ [Expression] B [Expression] ; [Expression]
+4	  in : [3,8]		out : [5,1]		dom : [3]	back : [8]	code : B<C [Condition]
+1	  in : [0,4]		out : []		dom : [0]	back : []	code : return  [Expression] this.h.IV().BH(boot.array("Bu",this.h.BF(),null)) [Expression] ; [Expression]
+9	  in : []		out : []		dom : []	back : []	code : 
+
+{
+mv = cw.visitMethod(ACC_PUBLIC + ACC_FINAL, "getDeclaredAnnotations", "()[Ljava/lang/annotation/Annotation;", null, null);
+mv.visitCode();
+Label l0 = new Label();
+mv.visitLabel(l0);
+mv.visitLineNumber(166, l0);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitFieldInsn(GETFIELD, "js/lang/reflect/JSAnnotatedElement", "privateAnnotations", "Ljava/util/Map;");
+Label l1 = new Label();
+mv.visitJumpInsn(IFNONNULL, l1);
+Label l2 = new Label();
+mv.visitLabel(l2);
+mv.visitLineNumber(167, l2);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitTypeInsn(NEW, "java/util/HashMap");
+mv.visitInsn(DUP);
+mv.visitMethodInsn(INVOKESPECIAL, "java/util/HashMap", "<init>", "()V");
+mv.visitFieldInsn(PUTFIELD, "js/lang/reflect/JSAnnotatedElement", "privateAnnotations", "Ljava/util/Map;");
+Label l3 = new Label();
+mv.visitLabel(l3);
+mv.visitLineNumber(169, l3);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitFieldInsn(GETFIELD, "js/lang/reflect/JSAnnotatedElement", "annotations", "Ljs/lang/NativeObject;");
+mv.visitMethodInsn(INVOKEVIRTUAL, "js/lang/NativeObject", "keys", "()[Ljava/lang/String;");
+mv.visitInsn(DUP);
+mv.visitVarInsn(ASTORE, 4);
+mv.visitInsn(ARRAYLENGTH);
+mv.visitVarInsn(ISTORE, 3);
+mv.visitInsn(ICONST_0);
+mv.visitVarInsn(ISTORE, 2);
+Label l4 = new Label();
+mv.visitJumpInsn(GOTO, l4);
+Label l5 = new Label();
+mv.visitLabel(l5);
+mv.visitFrame(Opcodes.F_FULL, 5, new Object[] {"js/lang/reflect/JSAnnotatedElement", Opcodes.TOP, Opcodes.INTEGER, Opcodes.INTEGER, "[Ljava/lang/String;"}, 0, new Object[] {});
+mv.visitVarInsn(ALOAD, 4);
+mv.visitVarInsn(ILOAD, 2);
+mv.visitInsn(AALOAD);
+mv.visitVarInsn(ASTORE, 1);
+Label l6 = new Label();
+mv.visitLabel(l6);
+mv.visitLineNumber(170, l6);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitMethodInsn(INVOKESTATIC, "js/lang/reflect/JSClass", "forName", "(Ljava/lang/String;)Ljava/lang/Class;");
+mv.visitVarInsn(ASTORE, 5);
+Label l7 = new Label();
+mv.visitLabel(l7);
+mv.visitLineNumber(172, l7);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitFieldInsn(GETFIELD, "js/lang/reflect/JSAnnotatedElement", "privateAnnotations", "Ljava/util/Map;");
+mv.visitVarInsn(ALOAD, 5);
+mv.visitInsn(ACONST_NULL);
+mv.visitInsn(ICONST_1);
+mv.visitTypeInsn(ANEWARRAY, "java/lang/Class");
+mv.visitInsn(DUP);
+mv.visitInsn(ICONST_0);
+mv.visitVarInsn(ALOAD, 5);
+mv.visitInsn(AASTORE);
+mv.visitTypeInsn(NEW, "js/lang/reflect/JSAnnotatedElement$AnnotationProxy");
+mv.visitInsn(DUP);
+mv.visitVarInsn(ALOAD, 5);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitFieldInsn(GETFIELD, "js/lang/reflect/JSAnnotatedElement", "annotations", "Ljs/lang/NativeObject;");
+mv.visitVarInsn(ALOAD, 1);
+mv.visitMethodInsn(INVOKEVIRTUAL, "js/lang/NativeObject", "getProperty", "(Ljava/lang/Object;)Ljava/lang/Object;");
+mv.visitMethodInsn(INVOKESPECIAL, "js/lang/reflect/JSAnnotatedElement$AnnotationProxy", "<init>", "(Ljava/lang/Class;Ljava/lang/Object;)V");
+mv.visitMethodInsn(INVOKESTATIC, "java/lang/reflect/Proxy", "newProxyInstance", "(Ljava/lang/ClassLoader;[Ljava/lang/Class;Ljava/lang/reflect/InvocationHandler;)Ljava/lang/Object;");
+mv.visitTypeInsn(CHECKCAST, "java/lang/annotation/Annotation");
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Map", "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
+mv.visitInsn(POP);
+Label l8 = new Label();
+mv.visitLabel(l8);
+mv.visitLineNumber(169, l8);
+mv.visitIincInsn(2, 1);
+mv.visitLabel(l4);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ILOAD, 2);
+mv.visitVarInsn(ILOAD, 3);
+mv.visitJumpInsn(IF_ICMPLT, l5);
+mv.visitLabel(l1);
+mv.visitLineNumber(175, l1);
+mv.visitFrame(Opcodes.F_FULL, 1, new Object[] {"js/lang/reflect/JSAnnotatedElement"}, 0, new Object[] {});
+mv.visitVarInsn(ALOAD, 0);
+mv.visitFieldInsn(GETFIELD, "js/lang/reflect/JSAnnotatedElement", "privateAnnotations", "Ljava/util/Map;");
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Map", "values", "()Ljava/util/Collection;");
+mv.visitVarInsn(ALOAD, 0);
+mv.visitFieldInsn(GETFIELD, "js/lang/reflect/JSAnnotatedElement", "privateAnnotations", "Ljava/util/Map;");
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Map", "size", "()I");
+mv.visitTypeInsn(ANEWARRAY, "java/lang/annotation/Annotation");
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Collection", "toArray", "([Ljava/lang/Object;)[Ljava/lang/Object;");
+mv.visitTypeInsn(CHECKCAST, "[Ljava/lang/annotation/Annotation;");
+mv.visitInsn(ARETURN);
+Label l9 = new Label();
+mv.visitLabel(l9);
+mv.visitLocalVariable("this", "Ljs/lang/reflect/JSAnnotatedElement;", null, l0, l9, 0);
+mv.visitLocalVariable("name", "Ljava/lang/String;", null, l6, l8, 1);
+mv.visitLocalVariable("type", "Ljava/lang/Class;", null, l7, l8, 5);
+mv.visitMaxs(9, 6);
+mv.visitEnd();
+}
+set 8  1  4
+IU:function(A,B,C,D,E){
+		// 166
+		if (this.h==null) {
+			// 167
+			this.h=new boot.BI(0);
+			// 169
+			C=(D=Object.keys(this.g)).length;B=0;
+			l4: for (; B<C; ++B) {
+				A=D[B];
+				// 170
+				E=boot.A.B(A);
+				// 172
+				this.h.BV(E,boot.DX.KB(null,boot.array("A",[E]),new boot.DW(E,this.g[A],0)));
+			}
+			// 175
+			return this.h.IV().BH(boot.array("Bu",this.h.BF(),null));
+		}
+	},
+	
+[++D;, G!=">", ++F]
+[B=this.d[C];, this.c=this.c+1;, this.d[C]=A;]
+visit label -1
+visit label 0
+visit label 1
+visit label 3
+merge3
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1]		dom : [-1]	code : B=0 [Expression] ; [Expression]
+1	  in : [0]	out : [2,3]		dom : [0]	code : this.BF()<=A.BF() [Condition]
+3	  in : [1]	out : []		dom : [1]	code : 
+
+visit label 4
+visit label 6
+visit label 5
+visit label 7
+merge7
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : B=0 [Expression] ; [Expression]
+1	  in : [0]		out : [2,3]		dom : [0]	code : this.BF()<=A.BF() [Condition]
+3	  in : [1]		out : [4]		dom : [1]	code : C=A.HH() [Expression] ; [Expression]
+4	  in : [3]		out : [5]		dom : [3]	code : 
+6	  in : [5]		out : [5]		dom : [5]	code : B=(B|this.HI(C.HT())) [Expression] ; [Expression]
+5	  in : [4,6]		out : [6,7]		dom : []	code : C.HV()!=0 [Condition]
+7	  in : [5]		out : []		dom : [5]	code : 
+
+visit label 2
+visit label 9
+visit label 11
+visit label 12
+merge12
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : B=0 [Expression] ; [Expression]
+1	  in : [0]		out : [2,3]		dom : [0]	code : this.BF()<=A.BF() [Condition]
+3	  in : [1]		out : [4]		dom : [1]	code : C=A.HH() [Expression] ; [Expression]
+4	  in : [3]		out : [5]		dom : [3]	code : 
+6	  in : [5]		out : [5]		dom : [5]	code : B=(B|this.HI(C.HT())) [Expression] ; [Expression]
+5	  in : [4,6]		out : [6,7]		dom : []	code : C.HV()!=0 [Condition]
+7	  in : [5]		out : [8]		dom : [5]	code : 
+2	  in : [1]		out : [9]		dom : [1]	code : C=this.HH() [Expression] ; [Expression]
+9	  in : [2]		out : [10]		dom : [2]	code : 
+11	  in : []		out : [10,12]		dom : []	code : A.HG(C.HT())==0 [Condition]
+12	  in : [11]		out : []		dom : [11]	code : 
+
+visit label 13
+visit label 10
+visit label 8
+merge8
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : B=0 [Expression] ; [Expression]
+1	  in : [0]		out : [2,3]		dom : [0]	code : this.BF()<=A.BF() [Condition]
+3	  in : [1]		out : [4]		dom : [1]	code : C=A.HH() [Expression] ; [Expression]
+4	  in : [3]		out : [5]		dom : [3]	code : 
+6	  in : [5]		out : [5]		dom : [5]	code : B=(B|this.HI(C.HT())) [Expression] ; [Expression]
+5	  in : [4,6]		out : [6,7]		dom : []	code : C.HV()!=0 [Condition]
+7	  in : [5]		out : [8]		dom : [5]	code : 
+2	  in : [1]		out : [9]		dom : [1]	code : C=this.HH() [Expression] ; [Expression]
+9	  in : [2]		out : [10]		dom : [2]	code : 
+11	  in : [10]		out : [10,12]		dom : [10]	code : A.HG(C.HT())==0 [Condition]
+12	  in : [11]		out : [13]		dom : [11]	code : C.LD() [Expression] ; [Expression]
+13	  in : [12]		out : [10]		dom : [12]	code : B=1 [Expression] ; [Expression]
+10	  in : [9,11,13]	out : [11,8]		dom : []	code : C.HV()!=0 [Condition]
+8	  in : [7,10]		out : []		dom : []	code : 
+
+visit label 14
+merge14
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : B=0 [Expression] ; [Expression]
+1	  in : [0]		out : [2,3]		dom : [0]	code : this.BF()<=A.BF() [Condition]
+3	  in : [1]		out : [4]		dom : [1]	code : C=A.HH() [Expression] ; [Expression]
+4	  in : [3]		out : [5]		dom : [3]	code : 
+6	  in : [5]		out : [5]		dom : [5]	code : B=(B|this.HI(C.HT())) [Expression] ; [Expression]
+5	  in : [4,6]		out : [6,7]		dom : []	code : C.HV()!=0 [Condition]
+7	  in : [5]		out : [8]		dom : [5]	code : 
+2	  in : [1]		out : [9]		dom : [1]	code : C=this.HH() [Expression] ; [Expression]
+9	  in : [2]		out : [10]		dom : [2]	code : 
+11	  in : [10]		out : [10,12]		dom : [10]	code : A.HG(C.HT())==0 [Condition]
+12	  in : [11]		out : [13]		dom : [11]	code : C.LD() [Expression] ; [Expression]
+13	  in : [12]		out : [10]		dom : [12]	code : B=1 [Expression] ; [Expression]
+10	  in : [9,11,13]	out : [11,8]		dom : []	code : C.HV()!=0 [Condition]
+8	  in : [7,10]		out : []		dom : []	code : return  [Expression] B [Expression] ; [Expression]
+14	  in : []		out : []		dom : []	code : 
+
+js.util.AbstractSet removeAll
+-1	  in : []		out : [0]		dom : []	back : []		code : 
+0	  in : [-1]		out : [1]		dom : [-1]	back : []		code : B=0 [Expression] ; [Expression]
+1	  in : [0]		out : [2,3]		dom : [0]	back : []		code : this.BF()<=A.BF() [Condition]
+3	  in : [1]		out : [4]		dom : [1]	back : []		code : C=A.HH() [Expression] ; [Expression]
+4	  in : [3]		out : [5]		dom : [3]	back : []		code : 
+6	  in : [5]		out : [5]		dom : [5]	back : []		code : B=(B|this.HI(C.HT())) [Expression] ; [Expression]
+5	  in : [4,6]		out : [6,7]		dom : [4]	back : [6]		code : C.HV()!=0 [Condition]
+7	  in : [5]		out : [8]		dom : [5]	back : []		code : 
+2	  in : [1]		out : [9]		dom : [1]	back : []		code : C=this.HH() [Expression] ; [Expression]
+9	  in : [2]		out : [10]		dom : [2]	back : []		code : 
+11	  in : [10]		out : [10,12]		dom : [10]	back : []		code : A.HG(C.HT())==0 [Condition]
+12	  in : [11]		out : [13]		dom : [11]	back : []		code : C.LD() [Expression] ; [Expression]
+13	  in : [12]		out : [10]		dom : [12]	back : []		code : B=1 [Expression] ; [Expression]
+10	  in : [9,11,13]	out : [11,8]		dom : [9]	back : [11,13]		code : C.HV()!=0 [Condition]
+8	  in : [7,10]		out : []		dom : [1]	back : []		code : return  [Expression] B [Expression] ; [Expression]
+14	  in : []		out : []		dom : []	back : []		code : 
+
+{
+mv = cw.visitMethod(ACC_PUBLIC, "removeAll", "(Ljava/util/Collection;)Z", "(Ljava/util/Collection<*>;)Z", null);
+mv.visitCode();
+Label l0 = new Label();
+mv.visitLabel(l0);
+mv.visitLineNumber(75, l0);
+mv.visitInsn(ICONST_0);
+mv.visitVarInsn(ISTORE, 2);
+Label l1 = new Label();
+mv.visitLabel(l1);
+mv.visitLineNumber(77, l1);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitMethodInsn(INVOKEVIRTUAL, "js/util/AbstractSet", "size", "()I");
+mv.visitVarInsn(ALOAD, 1);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Collection", "size", "()I");
+Label l2 = new Label();
+mv.visitJumpInsn(IF_ICMPLE, l2);
+Label l3 = new Label();
+mv.visitLabel(l3);
+mv.visitLineNumber(78, l3);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Collection", "iterator", "()Ljava/util/Iterator;");
+mv.visitVarInsn(ASTORE, 3);
+Label l4 = new Label();
+mv.visitLabel(l4);
+Label l5 = new Label();
+mv.visitJumpInsn(GOTO, l5);
+Label l6 = new Label();
+mv.visitLabel(l6);
+mv.visitLineNumber(79, l6);
+mv.visitFrame(Opcodes.F_APPEND,2, new Object[] {Opcodes.INTEGER, "java/util/Iterator"}, 0, null);
+mv.visitVarInsn(ILOAD, 2);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitVarInsn(ALOAD, 3);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "next", "()Ljava/lang/Object;");
+mv.visitMethodInsn(INVOKEVIRTUAL, "js/util/AbstractSet", "remove", "(Ljava/lang/Object;)Z");
+mv.visitInsn(IOR);
+mv.visitVarInsn(ISTORE, 2);
+mv.visitLabel(l5);
+mv.visitLineNumber(78, l5);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ALOAD, 3);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "hasNext", "()Z");
+mv.visitJumpInsn(IFNE, l6);
+Label l7 = new Label();
+mv.visitLabel(l7);
+mv.visitLineNumber(81, l7);
+Label l8 = new Label();
+mv.visitJumpInsn(GOTO, l8);
+mv.visitLabel(l2);
+mv.visitLineNumber(82, l2);
+mv.visitFrame(Opcodes.F_CHOP,1, null, 0, null);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitMethodInsn(INVOKEVIRTUAL, "js/util/AbstractSet", "iterator", "()Ljava/util/Iterator;");
+mv.visitVarInsn(ASTORE, 3);
+Label l9 = new Label();
+mv.visitLabel(l9);
+Label l10 = new Label();
+mv.visitJumpInsn(GOTO, l10);
+Label l11 = new Label();
+mv.visitLabel(l11);
+mv.visitLineNumber(83, l11);
+mv.visitFrame(Opcodes.F_APPEND,1, new Object[] {"java/util/Iterator"}, 0, null);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitVarInsn(ALOAD, 3);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "next", "()Ljava/lang/Object;");
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Collection", "contains", "(Ljava/lang/Object;)Z");
+mv.visitJumpInsn(IFEQ, l10);
+Label l12 = new Label();
+mv.visitLabel(l12);
+mv.visitLineNumber(84, l12);
+mv.visitVarInsn(ALOAD, 3);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "remove", "()V");
+Label l13 = new Label();
+mv.visitLabel(l13);
+mv.visitLineNumber(85, l13);
+mv.visitInsn(ICONST_1);
+mv.visitVarInsn(ISTORE, 2);
+mv.visitLabel(l10);
+mv.visitLineNumber(82, l10);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ALOAD, 3);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "hasNext", "()Z");
+mv.visitJumpInsn(IFNE, l11);
+mv.visitLabel(l8);
+mv.visitLineNumber(89, l8);
+mv.visitFrame(Opcodes.F_CHOP,1, null, 0, null);
+mv.visitVarInsn(ILOAD, 2);
+mv.visitInsn(IRETURN);
+Label l14 = new Label();
+mv.visitLabel(l14);
+mv.visitLocalVariable("this", "Ljs/util/AbstractSet;", "Ljs/util/AbstractSet<TE;>;", l0, l14, 0);
+mv.visitLocalVariable("collection", "Ljava/util/Collection;", "Ljava/util/Collection<*>;", l0, l14, 1);
+mv.visitLocalVariable("modified", "Z", null, l1, l14, 2);
+mv.visitLocalVariable("i", "Ljava/util/Iterator;", "Ljava/util/Iterator<*>;", l4, l7, 3);
+mv.visitLocalVariable("i", "Ljava/util/Iterator;", "Ljava/util/Iterator<*>;", l9, l8, 3);
+mv.visitMaxs(3, 4);
+mv.visitEnd();
+}
+[C=A.HH();, C=this.HH();, return B;]
+set 6  7  5
+Hu:function(A,B,C){
+		// 75
+		B=0;
+		// 77
+		if (this.BF()<=A.BF()) {
+			// 82
+			C=this.HH();
+			// 82
+			l10: while (C.HV()!=0) {
+				// 83
+				if (A.HG(C.HT())!=0) {
+					// 84
+					C.LD();
+					// 85
+					B=1;
+					continue l10;
+				}
+				continue l10;
+			}
+		} else {
+			// 78
+			C=A.HH();
+			// 78
+			l5: for (; C.HV()!=0; B=(B|this.HI(C.HT()))) {
+			}
+			// 81
+		}
+		// 89
+		return B
+	},
+	
+[E=E+-32;, C=A>>>32;, D=C<<16;]
+[this.n=1;, this.n=2;, return;]
+[D=-1;, D=1;, J=boot.EQ.d[C];]
+[H=boot.CY.RV(C[I.d],I.c.e);, H=boot.CY.SH(I.c,boot.CY.RJ(I.c.e),C[I.d]);, A.SK(B,I,H);]
+[G=boot.BU.EX(D,E+C.length);, G=boot.array("G",E+C.length,null);, boot.X.BK(C,0,G,A,C.length);]
+[A[B]=boot.CY.RM(boot.EY.SF(this.c.VF()[B],boot.Ew.$)[0]);, this.d[B]!=boot.A.$, ++B]
+visit label -1
+visit label 0
+visit label 1
+visit label 3
+merge3
+-1	  in : []	out : [0]	dom : []	code : 
+0	  in : [-1]	out : [1]	dom : [-1]	code : B=new boot.ET(0) [Expression] ; [Expression]
+1	  in : [0]	out : [2]	dom : [0]	code : D=boot.EY.SD(A).HH() [Expression] ; [Expression]
+3	  in : []	out : []	dom : []	code : 
+
+visit label 4
+visit label 6
+merge6
+-1	  in : []	out : [0]	dom : []	code : 
+0	  in : [-1]	out : [1]	dom : [-1]	code : B=new boot.ET(0) [Expression] ; [Expression]
+1	  in : [0]	out : [2]	dom : [0]	code : D=boot.EY.SD(A).HH() [Expression] ; [Expression]
+3	  in : []	out : [4]	dom : []	code : C=D.HT() [Expression] ; [Expression]
+4	  in : [3]	out : [5]	dom : [3]	code : G=(H=C.JC()).length [Expression] ; [Expression] F=0 [Expression] ; [Expression]
+6	  in : []	out : []	dom : []	code : 
+
+visit label 7
+visit label 9
+merge9
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1]		dom : [-1]	code : B=new boot.ET(0) [Expression] ; [Expression]
+1	  in : [0]	out : [2]		dom : [0]	code : D=boot.EY.SD(A).HH() [Expression] ; [Expression]
+3	  in : []	out : [4]		dom : []	code : C=D.HT() [Expression] ; [Expression]
+4	  in : [3]	out : [5]		dom : [3]	code : G=(H=C.JC()).length [Expression] ; [Expression] F=0 [Expression] ; [Expression]
+6	  in : []	out : [7]		dom : []	code : E=H[F] [Expression] ; [Expression]
+7	  in : [6]	out : [8,9]		dom : [6]	code : E.VG()!=0 [Condition] E.JW()!=0 [Condition] (E.Iv()&2)==0 [Condition] E.IJ()!=A [Condition]
+9	  in : [7]	out : []		dom : [7]	code : 
+
+visit label 10
+visit label 11
+merge11
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1]		dom : [-1]	code : B=new boot.ET(0) [Expression] ; [Expression]
+1	  in : [0]	out : [2]		dom : [0]	code : D=boot.EY.SD(A).HH() [Expression] ; [Expression]
+3	  in : []	out : [4]		dom : []	code : C=D.HT() [Expression] ; [Expression]
+4	  in : [3]	out : [5]		dom : [3]	code : G=(H=C.JC()).length [Expression] ; [Expression] F=0 [Expression] ; [Expression]
+6	  in : []	out : [7]		dom : []	code : E=H[F] [Expression] ; [Expression]
+7	  in : [6]	out : [8,9]		dom : [6]	code : (E.VG()!=0||(E.JW()!=0||((E.Iv()&2)!=0&&E.IJ()!=A))) [Condition]
+9	  in : [7]	out : [10]		dom : [7]	code : I=E.IS() [Expression] ; [Expression]
+10	  in : [9]	out : [8,11]		dom : [9]	code : I.length==0 [Condition]
+11	  in : [10]	out : []		dom : [10]	code : 
+
+visit label 13
+merge13
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1]		dom : [-1]	code : B=new boot.ET(0) [Expression] ; [Expression]
+1	  in : [0]	out : [2]		dom : [0]	code : D=boot.EY.SD(A).HH() [Expression] ; [Expression]
+3	  in : []	out : [4]		dom : []	code : C=D.HT() [Expression] ; [Expression]
+4	  in : [3]	out : [5]		dom : [3]	code : G=(H=C.JC()).length [Expression] ; [Expression] F=0 [Expression] ; [Expression]
+6	  in : []	out : [7]		dom : []	code : E=H[F] [Expression] ; [Expression]
+7	  in : [6]	out : [8,9]		dom : [6]	code : (E.VG()!=0||(E.JW()!=0||((E.Iv()&2)!=0&&E.IJ()!=A))) [Condition]
+9	  in : [7]	out : [10]		dom : [7]	code : I=E.IS() [Expression] ; [Expression]
+10	  in : [9]	out : [8,11]		dom : [9]	code : I.length==0 [Condition]
+11	  in : [10]	out : [12]		dom : [10]	code : K=B.SP().HH() [Expression] ; [Expression]
+13	  in : []	out : []		dom : []	code : 
+
+visit label 14
+visit label 15
+merge15
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1]		dom : [-1]	code : B=new boot.ET(0) [Expression] ; [Expression]
+1	  in : [0]	out : [2]		dom : [0]	code : D=boot.EY.SD(A).HH() [Expression] ; [Expression]
+3	  in : []	out : [4]		dom : []	code : C=D.HT() [Expression] ; [Expression]
+4	  in : [3]	out : [5]		dom : [3]	code : G=(H=C.JC()).length [Expression] ; [Expression] F=0 [Expression] ; [Expression]
+6	  in : []	out : [7]		dom : []	code : E=H[F] [Expression] ; [Expression]
+7	  in : [6]	out : [8,9]		dom : [6]	code : (E.VG()!=0||(E.JW()!=0||((E.Iv()&2)!=0&&E.IJ()!=A))) [Condition]
+9	  in : [7]	out : [10]		dom : [7]	code : I=E.IS() [Expression] ; [Expression]
+10	  in : [9]	out : [8,11]		dom : [9]	code : I.length==0 [Condition]
+11	  in : [10]	out : [12]		dom : [10]	code : K=B.SP().HH() [Expression] ; [Expression]
+13	  in : []	out : [14]		dom : []	code : J=K.HT() [Expression] ; [Expression]
+14	  in : [13]	out : [12,15]		dom : [13]	code : J.IQ().F(E.IQ())==0 [Condition] boot.BU.GC(J.Ix(),E.Ix())==0 [Condition]
+15	  in : [14]	out : []		dom : [14]	code : 
+
+visit label 16
+visit label 12
+visit label 17
+merge17
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : B=new boot.ET(0) [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	code : D=boot.EY.SD(A).HH() [Expression] ; [Expression]
+3	  in : []		out : [4]		dom : []	code : C=D.HT() [Expression] ; [Expression]
+4	  in : [3]		out : [5]		dom : [3]	code : G=(H=C.JC()).length [Expression] ; [Expression] F=0 [Expression] ; [Expression]
+6	  in : []		out : [7]		dom : []	code : E=H[F] [Expression] ; [Expression]
+7	  in : [6]		out : [8,9]		dom : [6]	code : (E.VG()!=0||(E.JW()!=0||((E.Iv()&2)!=0&&E.IJ()!=A))) [Condition]
+9	  in : [7]		out : [10]		dom : [7]	code : I=E.IS() [Expression] ; [Expression]
+10	  in : [9]		out : [8,11]		dom : [9]	code : I.length==0 [Condition]
+11	  in : [10]		out : [12]		dom : [10]	code : K=B.SP().HH() [Expression] ; [Expression]
+13	  in : [12]		out : [14]		dom : [12]	code : J=K.HT() [Expression] ; [Expression]
+14	  in : [13]		out : [12,15]		dom : [13]	code : (J.IQ().F(E.IQ())==0||boot.BU.GC(J.Ix(),E.Ix())==0) [Condition]
+15	  in : [14]		out : [16]		dom : [14]	code : E=J [Expression] ; [Expression]
+16	  in : [15]		out : [17]		dom : [15]	code : 
+12	  in : [11,14]		out : [13,17]		dom : []	code : K.HV()!=0 [Condition]
+17	  in : [16,12]		out : []		dom : []	code : 
+
+visit label 19
+merge19
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : B=new boot.ET(0) [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	code : D=boot.EY.SD(A).HH() [Expression] ; [Expression]
+3	  in : []		out : [4]		dom : []	code : C=D.HT() [Expression] ; [Expression]
+4	  in : [3]		out : [5]		dom : [3]	code : G=(H=C.JC()).length [Expression] ; [Expression] F=0 [Expression] ; [Expression]
+6	  in : []		out : [7]		dom : []	code : E=H[F] [Expression] ; [Expression]
+7	  in : [6]		out : [8,9]		dom : [6]	code : (E.VG()!=0||(E.JW()!=0||((E.Iv()&2)!=0&&E.IJ()!=A))) [Condition]
+9	  in : [7]		out : [10]		dom : [7]	code : I=E.IS() [Expression] ; [Expression]
+10	  in : [9]		out : [8,11]		dom : [9]	code : I.length==0 [Condition]
+11	  in : [10]		out : [12]		dom : [10]	code : K=B.SP().HH() [Expression] ; [Expression]
+13	  in : [12]		out : [14]		dom : [12]	code : J=K.HT() [Expression] ; [Expression]
+14	  in : [13]		out : [12,15]		dom : [13]	code : (J.IQ().F(E.IQ())==0||boot.BU.GC(J.Ix(),E.Ix())==0) [Condition]
+15	  in : [14]		out : [16]		dom : [14]	code : E=J [Expression] ; [Expression]
+16	  in : [15]		out : [17]		dom : [15]	code : 
+12	  in : [11,14]		out : [13,17]		dom : []	code : K.HV()!=0 [Condition]
+17	  in : [16,12]		out : [18]		dom : []	code : L=(M=I).length [Expression] ; [Expression] K=0 [Expression] ; [Expression]
+19	  in : []		out : []		dom : []	code : 
+
+visit label 20
+visit label 22
+merge22
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : B=new boot.ET(0) [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	code : D=boot.EY.SD(A).HH() [Expression] ; [Expression]
+3	  in : []		out : [4]		dom : []	code : C=D.HT() [Expression] ; [Expression]
+4	  in : [3]		out : [5]		dom : [3]	code : G=(H=C.JC()).length [Expression] ; [Expression] F=0 [Expression] ; [Expression]
+6	  in : []		out : [7]		dom : []	code : E=H[F] [Expression] ; [Expression]
+7	  in : [6]		out : [8,9]		dom : [6]	code : (E.VG()!=0||(E.JW()!=0||((E.Iv()&2)!=0&&E.IJ()!=A))) [Condition]
+9	  in : [7]		out : [10]		dom : [7]	code : I=E.IS() [Expression] ; [Expression]
+10	  in : [9]		out : [8,11]		dom : [9]	code : I.length==0 [Condition]
+11	  in : [10]		out : [12]		dom : [10]	code : K=B.SP().HH() [Expression] ; [Expression]
+13	  in : [12]		out : [14]		dom : [12]	code : J=K.HT() [Expression] ; [Expression]
+14	  in : [13]		out : [12,15]		dom : [13]	code : (J.IQ().F(E.IQ())==0||boot.BU.GC(J.Ix(),E.Ix())==0) [Condition]
+15	  in : [14]		out : [16]		dom : [14]	code : E=J [Expression] ; [Expression]
+16	  in : [15]		out : [17]		dom : [15]	code : 
+12	  in : [11,14]		out : [13,17]		dom : []	code : K.HV()!=0 [Condition]
+17	  in : [16,12]		out : [18]		dom : []	code : L=(M=I).length [Expression] ; [Expression] K=0 [Expression] ; [Expression]
+19	  in : []		out : [20]		dom : []	code : J=M[K] [Expression] ; [Expression]
+20	  in : [19]		out : [21]		dom : [19]	code : O=B.RH(E).HH() [Expression] ; [Expression]
+22	  in : []		out : []		dom : []	code : 
+
+visit label 23
+visit label 24
+merge24
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : B=new boot.ET(0) [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	code : D=boot.EY.SD(A).HH() [Expression] ; [Expression]
+3	  in : []		out : [4]		dom : []	code : C=D.HT() [Expression] ; [Expression]
+4	  in : [3]		out : [5]		dom : [3]	code : G=(H=C.JC()).length [Expression] ; [Expression] F=0 [Expression] ; [Expression]
+6	  in : []		out : [7]		dom : []	code : E=H[F] [Expression] ; [Expression]
+7	  in : [6]		out : [8,9]		dom : [6]	code : (E.VG()!=0||(E.JW()!=0||((E.Iv()&2)!=0&&E.IJ()!=A))) [Condition]
+9	  in : [7]		out : [10]		dom : [7]	code : I=E.IS() [Expression] ; [Expression]
+10	  in : [9]		out : [8,11]		dom : [9]	code : I.length==0 [Condition]
+11	  in : [10]		out : [12]		dom : [10]	code : K=B.SP().HH() [Expression] ; [Expression]
+13	  in : [12]		out : [14]		dom : [12]	code : J=K.HT() [Expression] ; [Expression]
+14	  in : [13]		out : [12,15]		dom : [13]	code : (J.IQ().F(E.IQ())==0||boot.BU.GC(J.Ix(),E.Ix())==0) [Condition]
+15	  in : [14]		out : [16]		dom : [14]	code : E=J [Expression] ; [Expression]
+16	  in : [15]		out : [17]		dom : [15]	code : 
+12	  in : [11,14]		out : [13,17]		dom : []	code : K.HV()!=0 [Condition]
+17	  in : [16,12]		out : [18]		dom : []	code : L=(M=I).length [Expression] ; [Expression] K=0 [Expression] ; [Expression]
+19	  in : []		out : [20]		dom : []	code : J=M[K] [Expression] ; [Expression]
+20	  in : [19]		out : [21]		dom : [19]	code : O=B.RH(E).HH() [Expression] ; [Expression]
+22	  in : []		out : [23]		dom : []	code : N=O.HT() [Expression] ; [Expression]
+23	  in : [22]		out : [21,24]		dom : [22]	code : N.DQ()!=J.DQ() [Condition]
+24	  in : [23]		out : []		dom : [23]	code : 
+
+visit label 21
+visit label 26
+merge26
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : B=new boot.ET(0) [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	code : D=boot.EY.SD(A).HH() [Expression] ; [Expression]
+3	  in : []		out : [4]		dom : []	code : C=D.HT() [Expression] ; [Expression]
+4	  in : [3]		out : [5]		dom : [3]	code : G=(H=C.JC()).length [Expression] ; [Expression] F=0 [Expression] ; [Expression]
+6	  in : []		out : [7]		dom : []	code : E=H[F] [Expression] ; [Expression]
+7	  in : [6]		out : [8,9]		dom : [6]	code : (E.VG()!=0||(E.JW()!=0||((E.Iv()&2)!=0&&E.IJ()!=A))) [Condition]
+9	  in : [7]		out : [10]		dom : [7]	code : I=E.IS() [Expression] ; [Expression]
+10	  in : [9]		out : [8,11]		dom : [9]	code : I.length==0 [Condition]
+11	  in : [10]		out : [12]		dom : [10]	code : K=B.SP().HH() [Expression] ; [Expression]
+13	  in : [12]		out : [14]		dom : [12]	code : J=K.HT() [Expression] ; [Expression]
+14	  in : [13]		out : [12,15]		dom : [13]	code : (J.IQ().F(E.IQ())==0||boot.BU.GC(J.Ix(),E.Ix())==0) [Condition]
+15	  in : [14]		out : [16]		dom : [14]	code : E=J [Expression] ; [Expression]
+16	  in : [15]		out : [17]		dom : [15]	code : 
+12	  in : [11,14]		out : [13,17]		dom : []	code : K.HV()!=0 [Condition]
+17	  in : [16,12]		out : [18]		dom : []	code : L=(M=I).length [Expression] ; [Expression] K=0 [Expression] ; [Expression]
+19	  in : []		out : [20]		dom : []	code : J=M[K] [Expression] ; [Expression]
+20	  in : [19]		out : [21]		dom : [19]	code : O=B.RH(E).HH() [Expression] ; [Expression]
+22	  in : [21]		out : [23]		dom : [21]	code : N=O.HT() [Expression] ; [Expression]
+23	  in : [22]		out : [21,24]		dom : [22]	code : N.DQ()!=J.DQ() [Condition]
+24	  in : [23]		out : [25]		dom : [23]	code : 
+21	  in : [20,23]		out : [22,26]		dom : []	code : O.HV()!=0 [Condition]
+26	  in : [21]		out : []		dom : [21]	code : 
+
+visit label 25
+visit label 18
+visit label 8
+merge8
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : B=new boot.ET(0) [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	code : D=boot.EY.SD(A).HH() [Expression] ; [Expression]
+3	  in : []		out : [4]		dom : []	code : C=D.HT() [Expression] ; [Expression]
+4	  in : [3]		out : [5]		dom : [3]	code : G=(H=C.JC()).length [Expression] ; [Expression] F=0 [Expression] ; [Expression]
+6	  in : []		out : [7]		dom : []	code : E=H[F] [Expression] ; [Expression]
+7	  in : [6]		out : [8,9]		dom : [6]	code : (E.VG()!=0||(E.JW()!=0||((E.Iv()&2)!=0&&E.IJ()!=A))) [Condition]
+9	  in : [7]		out : [10]		dom : [7]	code : I=E.IS() [Expression] ; [Expression]
+10	  in : [9]		out : [8,11]		dom : [9]	code : I.length==0 [Condition]
+11	  in : [10]		out : [12]		dom : [10]	code : K=B.SP().HH() [Expression] ; [Expression]
+13	  in : [12]		out : [14]		dom : [12]	code : J=K.HT() [Expression] ; [Expression]
+14	  in : [13]		out : [12,15]		dom : [13]	code : (J.IQ().F(E.IQ())==0||boot.BU.GC(J.Ix(),E.Ix())==0) [Condition]
+15	  in : [14]		out : [16]		dom : [14]	code : E=J [Expression] ; [Expression]
+16	  in : [15]		out : [17]		dom : [15]	code : 
+12	  in : [11,14]		out : [13,17]		dom : []	code : K.HV()!=0 [Condition]
+17	  in : [16,12]		out : [18]		dom : []	code : L=(M=I).length [Expression] ; [Expression] K=0 [Expression] ; [Expression]
+19	  in : [18]		out : [20]		dom : [18]	code : J=M[K] [Expression] ; [Expression]
+20	  in : [19]		out : [21]		dom : [19]	code : O=B.RH(E).HH() [Expression] ; [Expression]
+22	  in : [21]		out : [23]		dom : [21]	code : N=O.HT() [Expression] ; [Expression]
+23	  in : [22]		out : [21,24]		dom : [22]	code : N.DQ()!=J.DQ() [Condition]
+24	  in : [23]		out : [25]		dom : [23]	code : 
+21	  in : [20,23]		out : [22,26]		dom : []	code : O.HV()!=0 [Condition]
+26	  in : [21]		out : [25]		dom : [21]	code : B.SE(E,J) [Expression] ; [Expression]
+25	  in : [24,26]		out : [18]		dom : []	code : ++ [Expression] K [Expression] ; [Expression]
+18	  in : [17,25]		out : [19,8]		dom : []	code : K<L [Condition]
+8	  in : [7,10,18]	out : []		dom : []	code : 
+
+visit label 5
+visit label 2
+merge2
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : B=new boot.ET(0) [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	code : D=boot.EY.SD(A).HH() [Expression] ; [Expression]
+3	  in : []		out : [4]		dom : []	code : C=D.HT() [Expression] ; [Expression]
+4	  in : [3]		out : [5]		dom : [3]	code : G=(H=C.JC()).length [Expression] ; [Expression] F=0 [Expression] ; [Expression]
+6	  in : [5]		out : [7]		dom : [5]	code : E=H[F] [Expression] ; [Expression]
+7	  in : [6]		out : [8,9]		dom : [6]	code : (E.VG()!=0||(E.JW()!=0||((E.Iv()&2)!=0&&E.IJ()!=A))) [Condition]
+9	  in : [7]		out : [10]		dom : [7]	code : I=E.IS() [Expression] ; [Expression]
+10	  in : [9]		out : [8,11]		dom : [9]	code : I.length==0 [Condition]
+11	  in : [10]		out : [12]		dom : [10]	code : K=B.SP().HH() [Expression] ; [Expression]
+13	  in : [12]		out : [14]		dom : [12]	code : J=K.HT() [Expression] ; [Expression]
+14	  in : [13]		out : [12,15]		dom : [13]	code : (J.IQ().F(E.IQ())==0||boot.BU.GC(J.Ix(),E.Ix())==0) [Condition]
+15	  in : [14]		out : [16]		dom : [14]	code : E=J [Expression] ; [Expression]
+16	  in : [15]		out : [17]		dom : [15]	code : 
+12	  in : [11,14]		out : [13,17]		dom : []	code : K.HV()!=0 [Condition]
+17	  in : [16,12]		out : [18]		dom : []	code : L=(M=I).length [Expression] ; [Expression] K=0 [Expression] ; [Expression]
+19	  in : [18]		out : [20]		dom : [18]	code : J=M[K] [Expression] ; [Expression]
+20	  in : [19]		out : [21]		dom : [19]	code : O=B.RH(E).HH() [Expression] ; [Expression]
+22	  in : [21]		out : [23]		dom : [21]	code : N=O.HT() [Expression] ; [Expression]
+23	  in : [22]		out : [21,24]		dom : [22]	code : N.DQ()!=J.DQ() [Condition]
+24	  in : [23]		out : [25]		dom : [23]	code : 
+21	  in : [20,23]		out : [22,26]		dom : []	code : O.HV()!=0 [Condition]
+26	  in : [21]		out : [25]		dom : [21]	code : B.SE(E,J) [Expression] ; [Expression]
+25	  in : [24,26]		out : [18]		dom : []	code : ++ [Expression] K [Expression] ; [Expression]
+18	  in : [17,25]		out : [19,8]		dom : []	code : K<L [Condition]
+8	  in : [7,10,18]	out : [5]		dom : []	code : ++ [Expression] F [Expression] ; [Expression]
+5	  in : [4,8]		out : [6,2]		dom : []	code : F<G [Condition]
+2	  in : [1,5]		out : []		dom : []	code : 
+
+visit label 27
+merge27
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : B=new boot.ET(0) [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	code : D=boot.EY.SD(A).HH() [Expression] ; [Expression]
+3	  in : [2]		out : [4]		dom : [2]	code : C=D.HT() [Expression] ; [Expression]
+4	  in : [3]		out : [5]		dom : [3]	code : G=(H=C.JC()).length [Expression] ; [Expression] F=0 [Expression] ; [Expression]
+6	  in : [5]		out : [7]		dom : [5]	code : E=H[F] [Expression] ; [Expression]
+7	  in : [6]		out : [8,9]		dom : [6]	code : (E.VG()!=0||(E.JW()!=0||((E.Iv()&2)!=0&&E.IJ()!=A))) [Condition]
+9	  in : [7]		out : [10]		dom : [7]	code : I=E.IS() [Expression] ; [Expression]
+10	  in : [9]		out : [8,11]		dom : [9]	code : I.length==0 [Condition]
+11	  in : [10]		out : [12]		dom : [10]	code : K=B.SP().HH() [Expression] ; [Expression]
+13	  in : [12]		out : [14]		dom : [12]	code : J=K.HT() [Expression] ; [Expression]
+14	  in : [13]		out : [12,15]		dom : [13]	code : (J.IQ().F(E.IQ())==0||boot.BU.GC(J.Ix(),E.Ix())==0) [Condition]
+15	  in : [14]		out : [16]		dom : [14]	code : E=J [Expression] ; [Expression]
+16	  in : [15]		out : [17]		dom : [15]	code : 
+12	  in : [11,14]		out : [13,17]		dom : []	code : K.HV()!=0 [Condition]
+17	  in : [16,12]		out : [18]		dom : []	code : L=(M=I).length [Expression] ; [Expression] K=0 [Expression] ; [Expression]
+19	  in : [18]		out : [20]		dom : [18]	code : J=M[K] [Expression] ; [Expression]
+20	  in : [19]		out : [21]		dom : [19]	code : O=B.RH(E).HH() [Expression] ; [Expression]
+22	  in : [21]		out : [23]		dom : [21]	code : N=O.HT() [Expression] ; [Expression]
+23	  in : [22]		out : [21,24]		dom : [22]	code : N.DQ()!=J.DQ() [Condition]
+24	  in : [23]		out : [25]		dom : [23]	code : 
+21	  in : [20,23]		out : [22,26]		dom : []	code : O.HV()!=0 [Condition]
+26	  in : [21]		out : [25]		dom : [21]	code : B.SE(E,J) [Expression] ; [Expression]
+25	  in : [24,26]		out : [18]		dom : []	code : ++ [Expression] K [Expression] ; [Expression]
+18	  in : [17,25]		out : [19,8]		dom : []	code : K<L [Condition]
+8	  in : [7,10,18]	out : [5]		dom : []	code : ++ [Expression] F [Expression] ; [Expression]
+5	  in : [4,8]		out : [6,2]		dom : []	code : F<G [Condition]
+2	  in : [1,5]		out : [3,27]		dom : []	code : D.HV()!=0 [Condition]
+27	  in : [2]		out : []		dom : [2]	code : 
+
+visit label 28
+merge28
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : B=new boot.ET(0) [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	code : D=boot.EY.SD(A).HH() [Expression] ; [Expression]
+3	  in : [2]		out : [4]		dom : [2]	code : C=D.HT() [Expression] ; [Expression]
+4	  in : [3]		out : [5]		dom : [3]	code : G=(H=C.JC()).length [Expression] ; [Expression] F=0 [Expression] ; [Expression]
+6	  in : [5]		out : [7]		dom : [5]	code : E=H[F] [Expression] ; [Expression]
+7	  in : [6]		out : [8,9]		dom : [6]	code : (E.VG()!=0||(E.JW()!=0||((E.Iv()&2)!=0&&E.IJ()!=A))) [Condition]
+9	  in : [7]		out : [10]		dom : [7]	code : I=E.IS() [Expression] ; [Expression]
+10	  in : [9]		out : [8,11]		dom : [9]	code : I.length==0 [Condition]
+11	  in : [10]		out : [12]		dom : [10]	code : K=B.SP().HH() [Expression] ; [Expression]
+13	  in : [12]		out : [14]		dom : [12]	code : J=K.HT() [Expression] ; [Expression]
+14	  in : [13]		out : [12,15]		dom : [13]	code : (J.IQ().F(E.IQ())==0||boot.BU.GC(J.Ix(),E.Ix())==0) [Condition]
+15	  in : [14]		out : [16]		dom : [14]	code : E=J [Expression] ; [Expression]
+16	  in : [15]		out : [17]		dom : [15]	code : 
+12	  in : [11,14]		out : [13,17]		dom : []	code : K.HV()!=0 [Condition]
+17	  in : [16,12]		out : [18]		dom : []	code : L=(M=I).length [Expression] ; [Expression] K=0 [Expression] ; [Expression]
+19	  in : [18]		out : [20]		dom : [18]	code : J=M[K] [Expression] ; [Expression]
+20	  in : [19]		out : [21]		dom : [19]	code : O=B.RH(E).HH() [Expression] ; [Expression]
+22	  in : [21]		out : [23]		dom : [21]	code : N=O.HT() [Expression] ; [Expression]
+23	  in : [22]		out : [21,24]		dom : [22]	code : N.DQ()!=J.DQ() [Condition]
+24	  in : [23]		out : [25]		dom : [23]	code : 
+21	  in : [20,23]		out : [22,26]		dom : []	code : O.HV()!=0 [Condition]
+26	  in : [21]		out : [25]		dom : [21]	code : B.SE(E,J) [Expression] ; [Expression]
+25	  in : [24,26]		out : [18]		dom : []	code : ++ [Expression] K [Expression] ; [Expression]
+18	  in : [17,25]		out : [19,8]		dom : []	code : K<L [Condition]
+8	  in : [7,10,18]	out : [5]		dom : []	code : ++ [Expression] F [Expression] ; [Expression]
+5	  in : [4,8]		out : [6,2]		dom : []	code : F<G [Condition]
+2	  in : [1,5]		out : [3,27]		dom : []	code : D.HV()!=0 [Condition]
+27	  in : [2]		out : []		dom : [2]	code : return  [Expression] B [Expression] ; [Expression]
+28	  in : []		out : []		dom : []	code : 
+
+kiss.model.ClassUtil getAnnotations
+-1	  in : []		out : [0]		dom : []	back : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	back : []	code : B=new boot.ET(0) [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	back : []	code : D=boot.EY.SD(A).HH() [Expression] ; [Expression]
+3	  in : [2]		out : [4]		dom : [2]	back : []	code : C=D.HT() [Expression] ; [Expression]
+4	  in : [3]		out : [5]		dom : [3]	back : []	code : G=(H=C.JC()).length [Expression] ; [Expression] F=0 [Expression] ; [Expression]
+6	  in : [5]		out : [7]		dom : [5]	back : []	code : E=H[F] [Expression] ; [Expression]
+7	  in : [6]		out : [8,9]		dom : [6]	back : []	code : (E.VG()!=0||(E.JW()!=0||((E.Iv()&2)!=0&&E.IJ()!=A))) [Condition]
+9	  in : [7]		out : [10]		dom : [7]	back : []	code : I=E.IS() [Expression] ; [Expression]
+10	  in : [9]		out : [8,11]		dom : [9]	back : []	code : I.length==0 [Condition]
+11	  in : [10]		out : [12]		dom : [10]	back : []	code : K=B.SP().HH() [Expression] ; [Expression]
+13	  in : [12]		out : [14]		dom : [12]	back : []	code : J=K.HT() [Expression] ; [Expression]
+14	  in : [13]		out : [12,15]		dom : [13]	back : []	code : (J.IQ().F(E.IQ())==0||boot.BU.GC(J.Ix(),E.Ix())==0) [Condition]
+15	  in : [14]		out : [16]		dom : [14]	back : []	code : E=J [Expression] ; [Expression]
+16	  in : [15]		out : [17]		dom : [15]	back : []	code : 
+12	  in : [11,14]		out : [13,17]		dom : [11]	back : [14]	code : K.HV()!=0 [Condition]
+17	  in : [16,12]		out : [18]		dom : [12]	back : []	code : L=(M=I).length [Expression] ; [Expression] K=0 [Expression] ; [Expression]
+19	  in : [18]		out : [20]		dom : [18]	back : []	code : J=M[K] [Expression] ; [Expression]
+20	  in : [19]		out : [21]		dom : [19]	back : []	code : O=B.RH(E).HH() [Expression] ; [Expression]
+22	  in : [21]		out : [23]		dom : [21]	back : []	code : N=O.HT() [Expression] ; [Expression]
+23	  in : [22]		out : [21,24]		dom : [22]	back : []	code : N.DQ()!=J.DQ() [Condition]
+24	  in : [23]		out : [25]		dom : [23]	back : []	code : 
+21	  in : [20,23]		out : [22,26]		dom : [20]	back : [23]	code : O.HV()!=0 [Condition]
+26	  in : [21]		out : [25]		dom : [21]	back : []	code : B.SE(E,J) [Expression] ; [Expression]
+25	  in : [24,26]		out : [18]		dom : [21]	back : []	code : ++ [Expression] K [Expression] ; [Expression]
+18	  in : [17,25]		out : [19,8]		dom : [17]	back : [25]	code : K<L [Condition]
+8	  in : [7,10,18]	out : [5]		dom : [7]	back : []	code : ++ [Expression] F [Expression] ; [Expression]
+5	  in : [4,8]		out : [6,2]		dom : [4]	back : [8]	code : F<G [Condition]
+2	  in : [1,5]		out : [3,27]		dom : [1]	back : [5]	code : D.HV()!=0 [Condition]
+27	  in : [2]		out : []		dom : [2]	back : []	code : return  [Expression] B [Expression] ; [Expression]
+28	  in : []		out : []		dom : []	back : []	code : 
+
+{
+mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "getAnnotations", "(Ljava/lang/Class;)Lkiss/Table;", "(Ljava/lang/Class;)Lkiss/Table<Ljava/lang/reflect/Method;Ljava/lang/annotation/Annotation;>;", null);
+mv.visitCode();
+Label l0 = new Label();
+mv.visitLabel(l0);
+mv.visitLineNumber(111, l0);
+mv.visitTypeInsn(NEW, "kiss/Table");
+mv.visitInsn(DUP);
+mv.visitMethodInsn(INVOKESPECIAL, "kiss/Table", "<init>", "()V");
+mv.visitVarInsn(ASTORE, 1);
+Label l1 = new Label();
+mv.visitLabel(l1);
+mv.visitLineNumber(113, l1);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitMethodInsn(INVOKESTATIC, "kiss/model/ClassUtil", "getTypes", "(Ljava/lang/Class;)Ljava/util/Set;");
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Set", "iterator", "()Ljava/util/Iterator;");
+mv.visitVarInsn(ASTORE, 3);
+Label l2 = new Label();
+mv.visitJumpInsn(GOTO, l2);
+Label l3 = new Label();
+mv.visitLabel(l3);
+mv.visitFrame(Opcodes.F_FULL, 4, new Object[] {"java/lang/Class", "kiss/Table", Opcodes.TOP, "java/util/Iterator"}, 0, new Object[] {});
+mv.visitVarInsn(ALOAD, 3);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "next", "()Ljava/lang/Object;");
+mv.visitTypeInsn(CHECKCAST, "java/lang/Class");
+mv.visitVarInsn(ASTORE, 2);
+Label l4 = new Label();
+mv.visitLabel(l4);
+mv.visitLineNumber(114, l4);
+mv.visitVarInsn(ALOAD, 2);
+mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Class", "getDeclaredMethods", "()[Ljava/lang/reflect/Method;");
+mv.visitInsn(DUP);
+mv.visitVarInsn(ASTORE, 7);
+mv.visitInsn(ARRAYLENGTH);
+mv.visitVarInsn(ISTORE, 6);
+mv.visitInsn(ICONST_0);
+mv.visitVarInsn(ISTORE, 5);
+Label l5 = new Label();
+mv.visitJumpInsn(GOTO, l5);
+Label l6 = new Label();
+mv.visitLabel(l6);
+mv.visitFrame(Opcodes.F_FULL, 8, new Object[] {"java/lang/Class", "kiss/Table", "java/lang/Class", "java/util/Iterator", Opcodes.TOP, Opcodes.INTEGER, Opcodes.INTEGER, "[Ljava/lang/reflect/Method;"}, 0, new Object[] {});
+mv.visitVarInsn(ALOAD, 7);
+mv.visitVarInsn(ILOAD, 5);
+mv.visitInsn(AALOAD);
+mv.visitVarInsn(ASTORE, 4);
+Label l7 = new Label();
+mv.visitLabel(l7);
+mv.visitLineNumber(117, l7);
+mv.visitVarInsn(ALOAD, 4);
+mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "isBridge", "()Z");
+Label l8 = new Label();
+mv.visitJumpInsn(IFNE, l8);
+mv.visitVarInsn(ALOAD, 4);
+mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "isSynthetic", "()Z");
+mv.visitJumpInsn(IFNE, l8);
+mv.visitVarInsn(ALOAD, 4);
+mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "getModifiers", "()I");
+mv.visitInsn(ICONST_2);
+mv.visitInsn(IAND);
+Label l9 = new Label();
+mv.visitJumpInsn(IFEQ, l9);
+mv.visitVarInsn(ALOAD, 4);
+mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "getDeclaringClass", "()Ljava/lang/Class;");
+mv.visitVarInsn(ALOAD, 0);
+mv.visitJumpInsn(IF_ACMPNE, l8);
+mv.visitLabel(l9);
+mv.visitLineNumber(118, l9);
+mv.visitFrame(Opcodes.F_FULL, 8, new Object[] {"java/lang/Class", "kiss/Table", "java/lang/Class", "java/util/Iterator", "java/lang/reflect/Method", Opcodes.INTEGER, Opcodes.INTEGER, "[Ljava/lang/reflect/Method;"}, 0, new Object[] {});
+mv.visitVarInsn(ALOAD, 4);
+mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "getAnnotations", "()[Ljava/lang/annotation/Annotation;");
+mv.visitVarInsn(ASTORE, 8);
+Label l10 = new Label();
+mv.visitLabel(l10);
+mv.visitLineNumber(120, l10);
+mv.visitVarInsn(ALOAD, 8);
+mv.visitInsn(ARRAYLENGTH);
+mv.visitJumpInsn(IFEQ, l8);
+Label l11 = new Label();
+mv.visitLabel(l11);
+mv.visitLineNumber(122, l11);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitMethodInsn(INVOKEVIRTUAL, "kiss/Table", "keySet", "()Ljava/util/concurrent/ConcurrentHashMap$KeySetView;");
+mv.visitMethodInsn(INVOKEVIRTUAL, "java/util/concurrent/ConcurrentHashMap$KeySetView", "iterator", "()Ljava/util/Iterator;");
+mv.visitVarInsn(ASTORE, 10);
+Label l12 = new Label();
+mv.visitJumpInsn(GOTO, l12);
+Label l13 = new Label();
+mv.visitLabel(l13);
+mv.visitFrame(Opcodes.F_FULL, 11, new Object[] {"java/lang/Class", "kiss/Table", "java/lang/Class", "java/util/Iterator", "java/lang/reflect/Method", Opcodes.INTEGER, Opcodes.INTEGER, "[Ljava/lang/reflect/Method;", "[Ljava/lang/annotation/Annotation;", Opcodes.TOP, "java/util/Iterator"}, 0, new Object[] {});
+mv.visitVarInsn(ALOAD, 10);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "next", "()Ljava/lang/Object;");
+mv.visitTypeInsn(CHECKCAST, "java/lang/reflect/Method");
+mv.visitVarInsn(ASTORE, 9);
+Label l14 = new Label();
+mv.visitLabel(l14);
+mv.visitLineNumber(123, l14);
+mv.visitVarInsn(ALOAD, 9);
+mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "getName", "()Ljava/lang/String;");
+mv.visitVarInsn(ALOAD, 4);
+mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "getName", "()Ljava/lang/String;");
+mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/String", "equals", "(Ljava/lang/Object;)Z");
+mv.visitJumpInsn(IFEQ, l12);
+mv.visitVarInsn(ALOAD, 9);
+mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "getParameterTypes", "()[Ljava/lang/Class;");
+mv.visitVarInsn(ALOAD, 4);
+mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "getParameterTypes", "()[Ljava/lang/Class;");
+mv.visitMethodInsn(INVOKESTATIC, "java/util/Arrays", "deepEquals", "([Ljava/lang/Object;[Ljava/lang/Object;)Z");
+mv.visitJumpInsn(IFEQ, l12);
+Label l15 = new Label();
+mv.visitLabel(l15);
+mv.visitLineNumber(124, l15);
+mv.visitVarInsn(ALOAD, 9);
+mv.visitVarInsn(ASTORE, 4);
+Label l16 = new Label();
+mv.visitLabel(l16);
+mv.visitLineNumber(125, l16);
+Label l17 = new Label();
+mv.visitJumpInsn(GOTO, l17);
+mv.visitLabel(l12);
+mv.visitLineNumber(122, l12);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ALOAD, 10);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "hasNext", "()Z");
+mv.visitJumpInsn(IFNE, l13);
+mv.visitLabel(l17);
+mv.visitLineNumber(129, l17);
+mv.visitFrame(Opcodes.F_FULL, 9, new Object[] {"java/lang/Class", "kiss/Table", "java/lang/Class", "java/util/Iterator", "java/lang/reflect/Method", Opcodes.INTEGER, Opcodes.INTEGER, "[Ljava/lang/reflect/Method;", "[Ljava/lang/annotation/Annotation;"}, 0, new Object[] {});
+mv.visitVarInsn(ALOAD, 8);
+mv.visitInsn(DUP);
+mv.visitVarInsn(ASTORE, 12);
+mv.visitInsn(ARRAYLENGTH);
+mv.visitVarInsn(ISTORE, 11);
+mv.visitInsn(ICONST_0);
+mv.visitVarInsn(ISTORE, 10);
+Label l18 = new Label();
+mv.visitJumpInsn(GOTO, l18);
+Label l19 = new Label();
+mv.visitLabel(l19);
+mv.visitFrame(Opcodes.F_FULL, 13, new Object[] {"java/lang/Class", "kiss/Table", "java/lang/Class", "java/util/Iterator", "java/lang/reflect/Method", Opcodes.INTEGER, Opcodes.INTEGER, "[Ljava/lang/reflect/Method;", "[Ljava/lang/annotation/Annotation;", Opcodes.TOP, Opcodes.INTEGER, Opcodes.INTEGER, "[Ljava/lang/annotation/Annotation;"}, 0, new Object[] {});
+mv.visitVarInsn(ALOAD, 12);
+mv.visitVarInsn(ILOAD, 10);
+mv.visitInsn(AALOAD);
+mv.visitVarInsn(ASTORE, 9);
+Label l20 = new Label();
+mv.visitLabel(l20);
+mv.visitLineNumber(130, l20);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitVarInsn(ALOAD, 4);
+mv.visitMethodInsn(INVOKEVIRTUAL, "kiss/Table", "get", "(Ljava/lang/Object;)Ljava/util/List;");
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/List", "iterator", "()Ljava/util/Iterator;");
+mv.visitVarInsn(ASTORE, 14);
+Label l21 = new Label();
+mv.visitJumpInsn(GOTO, l21);
+Label l22 = new Label();
+mv.visitLabel(l22);
+mv.visitFrame(Opcodes.F_FULL, 15, new Object[] {"java/lang/Class", "kiss/Table", "java/lang/Class", "java/util/Iterator", "java/lang/reflect/Method", Opcodes.INTEGER, Opcodes.INTEGER, "[Ljava/lang/reflect/Method;", "[Ljava/lang/annotation/Annotation;", "java/lang/annotation/Annotation", Opcodes.INTEGER, Opcodes.INTEGER, "[Ljava/lang/annotation/Annotation;", Opcodes.TOP, "java/util/Iterator"}, 0, new Object[] {});
+mv.visitVarInsn(ALOAD, 14);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "next", "()Ljava/lang/Object;");
+mv.visitTypeInsn(CHECKCAST, "java/lang/annotation/Annotation");
+mv.visitVarInsn(ASTORE, 13);
+Label l23 = new Label();
+mv.visitLabel(l23);
+mv.visitLineNumber(131, l23);
+mv.visitVarInsn(ALOAD, 13);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/lang/annotation/Annotation", "annotationType", "()Ljava/lang/Class;");
+mv.visitVarInsn(ALOAD, 9);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/lang/annotation/Annotation", "annotationType", "()Ljava/lang/Class;");
+mv.visitJumpInsn(IF_ACMPNE, l21);
+Label l24 = new Label();
+mv.visitLabel(l24);
+mv.visitLineNumber(132, l24);
+Label l25 = new Label();
+mv.visitJumpInsn(GOTO, l25);
+mv.visitLabel(l21);
+mv.visitLineNumber(130, l21);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ALOAD, 14);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "hasNext", "()Z");
+mv.visitJumpInsn(IFNE, l22);
+Label l26 = new Label();
+mv.visitLabel(l26);
+mv.visitLineNumber(135, l26);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitVarInsn(ALOAD, 4);
+mv.visitVarInsn(ALOAD, 9);
+mv.visitMethodInsn(INVOKEVIRTUAL, "kiss/Table", "push", "(Ljava/lang/Object;Ljava/lang/Object;)V");
+mv.visitLabel(l25);
+mv.visitLineNumber(129, l25);
+mv.visitFrame(Opcodes.F_FULL, 13, new Object[] {"java/lang/Class", "kiss/Table", "java/lang/Class", "java/util/Iterator", "java/lang/reflect/Method", Opcodes.INTEGER, Opcodes.INTEGER, "[Ljava/lang/reflect/Method;", "[Ljava/lang/annotation/Annotation;", Opcodes.TOP, Opcodes.INTEGER, Opcodes.INTEGER, "[Ljava/lang/annotation/Annotation;"}, 0, new Object[] {});
+mv.visitIincInsn(10, 1);
+mv.visitLabel(l18);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ILOAD, 10);
+mv.visitVarInsn(ILOAD, 11);
+mv.visitJumpInsn(IF_ICMPLT, l19);
+mv.visitLabel(l8);
+mv.visitLineNumber(114, l8);
+mv.visitFrame(Opcodes.F_FULL, 8, new Object[] {"java/lang/Class", "kiss/Table", "java/lang/Class", "java/util/Iterator", Opcodes.TOP, Opcodes.INTEGER, Opcodes.INTEGER, "[Ljava/lang/reflect/Method;"}, 0, new Object[] {});
+mv.visitIincInsn(5, 1);
+mv.visitLabel(l5);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ILOAD, 5);
+mv.visitVarInsn(ILOAD, 6);
+mv.visitJumpInsn(IF_ICMPLT, l6);
+mv.visitLabel(l2);
+mv.visitLineNumber(113, l2);
+mv.visitFrame(Opcodes.F_FULL, 4, new Object[] {"java/lang/Class", "kiss/Table", Opcodes.TOP, "java/util/Iterator"}, 0, new Object[] {});
+mv.visitVarInsn(ALOAD, 3);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "hasNext", "()Z");
+mv.visitJumpInsn(IFNE, l3);
+Label l27 = new Label();
+mv.visitLabel(l27);
+mv.visitLineNumber(141, l27);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitInsn(ARETURN);
+Label l28 = new Label();
+mv.visitLabel(l28);
+mv.visitLocalVariable("clazz", "Ljava/lang/Class;", null, l0, l28, 0);
+mv.visitLocalVariable("table", "Lkiss/Table;", "Lkiss/Table<Ljava/lang/reflect/Method;Ljava/lang/annotation/Annotation;>;", l1, l28, 1);
+mv.visitLocalVariable("type", "Ljava/lang/Class;", null, l4, l2, 2);
+mv.visitLocalVariable("method", "Ljava/lang/reflect/Method;", null, l7, l8, 4);
+mv.visitLocalVariable("annotations", "[Ljava/lang/annotation/Annotation;", null, l10, l8, 8);
+mv.visitLocalVariable("candidate", "Ljava/lang/reflect/Method;", null, l14, l12, 9);
+mv.visitLocalVariable("annotation", "Ljava/lang/annotation/Annotation;", null, l20, l25, 9);
+mv.visitLocalVariable("item", "Ljava/lang/annotation/Annotation;", null, l23, l21, 13);
+mv.visitMaxs(3, 15);
+mv.visitEnd();
+}
+set 8  2  5
+braker 16  17
+set 25  8  18
+_RO:function(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O){
+		// 111
+		B=new boot.ET(0);
+		// 113
+		D=boot.EY.SD(A).HH();
+		// 113
+		l2: while (D.HV()!=0) {
+			C=D.HT();
+			// 114
+			G=(H=C.JC()).length;F=0;
+			l5: for (; F<G; ++F) {
+				E=H[F];
+				// 117
+				if (E.VG()==0&&(E.JW()==0&&((E.Iv()&2)==0||E.IJ()==A))) {
+					// 118
+					I=E.IS();
+					// 120
+					if (I.length!=0) {
+						// 122
+						K=B.SP().HH();
+						// 122
+						l12: while (K.HV()!=0) {
+							J=K.HT();
+							// 123
+							if (J.IQ().F(E.IQ())!=0&&boot.BU.GC(J.Ix(),E.Ix())!=0) {
+								// 124
+								E=J;
+								// 125
+								break l12;
+							}
+							continue l12;
+						}
+						// 129
+						L=(M=I).length;K=0;
+						l18: for (; K<L; ++K) {
+							J=M[K];
+							// 130
+							O=B.RH(E).HH();
+							// 130
+							l21: while (O.HV()!=0) {
+								N=O.HT();
+								// 131
+								if (N.DQ()==J.DQ()) {
+									// 132
+									continue l18;
+								}
+								continue l21;
+							}
+							// 135
+							B.SE(E,J);
+							continue l18;
+						}
+					}
+					continue l5;
+				}
+			}
+		}
+		// 141
+		return B
+	},
+	
+[A[B]=boot.array("Bu",0,null);, A[B]=C.BH(boot.array("Bu",0,null));, ++B]
+[A=A.IK();, boot.GU.$.JR(A)==0, B=boot.FA.c.BS(A);]
+[this.e=0;, this.d=A.IX(boot.array("A",[boot.L.$]));, , return;]
+[boot.FA.prototype.SK.call(this,A,B,C);, A.BV(boot.CY.RV(B.d,this.i.e),C);, return;]
+[boot.FA.prototype.RY.call(this,A,B);, D=A.KV().HH();, return;]
+[this.e=0;, this.d.NA(",");, this.c.BF()==0||A.e==boot.BG.$]
+[this.wF(A);, boot.BR.CE(A);, return;]
+[this.wF(A);, this.wF(boot.DX.WK(boot.HM.$,A,"LG",[]));, return;]
+[this.yU(A);, boot.BR.CE(A);, return;]
+[this.yU(A);, this.yU(boot.DX.WK(boot.Hv.$,A,"LG",[]));, return;]
+[this.BBH(A);, boot.BR.CE(A);, return;]
+[this.BBH(A);, this.BBH(boot.DX.WK(boot.IF.$,A,"LG",[]));, return;]
+visit label -1
+visit label 0
+visit label 1
+visit label 2
+merge2
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1,1]		out : [1]		dom : []	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]		out : [0,2]		dom : [0]	code : 3>A [Condition]
+2	  in : [1]		out : []		dom : [1]	code : 
+
+visit label 3
+merge3
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1,1]		out : [1]		dom : []	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]		out : [0,2]		dom : [0]	code : 3>A [Condition]
+2	  in : [1]		out : []		dom : [1]	code : return  [Expression] A [Expression] ; [Expression]
+3	  in : []		out : []		dom : []	code : 
+
+booton.translator.flow.DoWhiteTest booton.translator.flow.DoWhiteTest
+-1	  in : []		out : [0]		dom : []	back : []	code : 
+0	  in : [-1,1]		out : [1]		dom : [-1]	back : [1]	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]		out : [0,2]		dom : [0]	back : []	code : 3>A [Condition]
+2	  in : [1]		out : []		dom : [1]	back : []	code : return  [Expression] A [Expression] ; [Expression]
+3	  in : []		out : []		dom : []	back : []	code : 
+
+{
+mv = cw.visitMethod(ACC_PUBLIC, "act", "(I)I", null, null);
+mv.visitCode();
+Label l0 = new Label();
+mv.visitLabel(l0);
+mv.visitLineNumber(46, l0);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitIincInsn(1, 1);
+Label l1 = new Label();
+mv.visitLabel(l1);
+mv.visitLineNumber(48, l1);
+mv.visitInsn(ICONST_3);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitJumpInsn(IF_ICMPGT, l0);
+Label l2 = new Label();
+mv.visitLabel(l2);
+mv.visitLineNumber(53, l2);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitInsn(IRETURN);
+Label l3 = new Label();
+mv.visitLabel(l3);
+mv.visitLocalVariable("this", "Lbooton/translator/flow/DoWhiteTest$2;", null, l0, l3, 0);
+mv.visitLocalVariable("value", "I", null, l0, l3, 1);
+mv.visitMaxs(2, 2);
+mv.visitEnd();
+}
+BDJ:function(A){
+		// 46
+		l0 : do {
+			++A;
+		} while (3>A)// 53
+		return A
+	},
+	
+visit label -1
+visit label 0
+visit label 1
+visit label 2
+merge2
+-1	  in : []	out : [0]	dom : []	code : 
+0	  in : [-1]	out : [1]	dom : [-1]	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]	out : [2]	dom : [0]	code : A [Expression] 3 [Number]
+2	  in : [1]	out : []	dom : [1]	code : 
+
+visit label 3
+merge3
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1,2]		out : [1]		dom : []	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	code : 
+2	  in : [1]		out : [0,3]		dom : [1]	code : A<3 [Condition]
+3	  in : [2]		out : []		dom : [2]	code : 
+
+visit label 4
+merge4
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1,2]		out : [1]		dom : []	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	code : 
+2	  in : [1]		out : [0,3]		dom : [1]	code : A<3 [Condition]
+3	  in : [2]		out : []		dom : [2]	code : return  [Expression] A [Expression] ; [Expression]
+4	  in : []		out : []		dom : []	code : 
+
+booton.translator.flow.DoWhiteTest booton.translator.flow.DoWhiteTest
+-1	  in : []		out : [0]		dom : []	back : []	code : 
+0	  in : [-1,2]		out : [1]		dom : [-1]	back : [2]	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	back : []	code : 
+2	  in : [1]		out : [0,3]		dom : [1]	back : []	code : A<3 [Condition]
+3	  in : [2]		out : []		dom : [2]	back : []	code : return  [Expression] A [Expression] ; [Expression]
+4	  in : []		out : []		dom : []	back : []	code : 
+
+{
+mv = cw.visitMethod(ACC_PUBLIC, "act", "(I)I", null, null);
+mv.visitCode();
+Label l0 = new Label();
+mv.visitLabel(l0);
+mv.visitLineNumber(31, l0);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitIincInsn(1, 1);
+Label l1 = new Label();
+mv.visitLabel(l1);
+mv.visitLineNumber(32, l1);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitInsn(ICONST_3);
+Label l2 = new Label();
+mv.visitLabel(l2);
+mv.visitLineNumber(30, l2);
+mv.visitJumpInsn(IF_ICMPLT, l0);
+Label l3 = new Label();
+mv.visitLabel(l3);
+mv.visitLineNumber(34, l3);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitInsn(IRETURN);
+Label l4 = new Label();
+mv.visitLabel(l4);
+mv.visitLocalVariable("this", "Lbooton/translator/flow/DoWhiteTest$1;", null, l0, l4, 0);
+mv.visitLocalVariable("value", "I", null, l0, l4, 1);
+mv.visitMaxs(2, 2);
+mv.visitEnd();
+}
+BDJ:function(A){
+		// 31
+		l0 : do {
+			++A;
+			// 32
+		} while (A<3)// 34
+		return A
+	},
+	
+visit label -1
+visit label 0
+visit label 1
+visit label 3
+merge3
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1]		dom : [-1]	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]	out : [2,3]		dom : [0]	code : A!=2 [Condition]
+3	  in : [1]	out : []		dom : [1]	code : 
+
+visit label 2
+visit label 5
+visit label 6
+merge6
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1]		dom : [-1]	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]	out : [2,3]		dom : [0]	code : A!=2 [Condition]
+3	  in : [1]	out : [4]		dom : [1]	code : 
+2	  in : [1]	out : [5]		dom : [1]	code : ++ [Expression] A [Expression] ; [Expression]
+5	  in : [2]	out : [6]		dom : [2]	code : A [Expression] 4 [Number]
+6	  in : [5]	out : []		dom : [5]	code : 
+
+visit label 4
+merge4
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1,6]		out : [1]		dom : []	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]		out : [2,3]		dom : [0]	code : A!=2 [Condition]
+3	  in : [1]		out : [4]		dom : [1]	code : 
+2	  in : [1]		out : [5]		dom : [1]	code : ++ [Expression] A [Expression] ; [Expression]
+5	  in : [2]		out : [6]		dom : [2]	code : 
+6	  in : [5]		out : [0,4]		dom : [5]	code : A<4 [Condition]
+4	  in : [3,6]		out : []		dom : []	code : 
+
+visit label 7
+merge7
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1,6]		out : [1]		dom : []	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]		out : [2,3]		dom : [0]	code : A!=2 [Condition]
+3	  in : [1]		out : [4]		dom : [1]	code : 
+2	  in : [1]		out : [5]		dom : [1]	code : ++ [Expression] A [Expression] ; [Expression]
+5	  in : [2]		out : [6]		dom : [2]	code : 
+6	  in : [5]		out : [0,4]		dom : [5]	code : A<4 [Condition]
+4	  in : [3,6]		out : []		dom : []	code : return  [Expression] A [Expression] ; [Expression]
+7	  in : []		out : []		dom : []	code : 
+
+booton.translator.flow.DoWhiteTest booton.translator.flow.DoWhiteTest
+-1	  in : []		out : [0]		dom : []	back : []	code : 
+0	  in : [-1,6]		out : [1]		dom : [-1]	back : [6]	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]		out : [2,3]		dom : [0]	back : []	code : A!=2 [Condition]
+3	  in : [1]		out : [4]		dom : [1]	back : []	code : 
+2	  in : [1]		out : [5]		dom : [1]	back : []	code : ++ [Expression] A [Expression] ; [Expression]
+5	  in : [2]		out : [6]		dom : [2]	back : []	code : 
+6	  in : [5]		out : [0,4]		dom : [5]	back : []	code : A<4 [Condition]
+4	  in : [3,6]		out : []		dom : [1]	back : []	code : return  [Expression] A [Expression] ; [Expression]
+7	  in : []		out : []		dom : []	back : []	code : 
+
+{
+mv = cw.visitMethod(ACC_PUBLIC, "act", "(I)I", null, null);
+mv.visitCode();
+Label l0 = new Label();
+mv.visitLabel(l0);
+mv.visitLineNumber(65, l0);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitIincInsn(1, 1);
+Label l1 = new Label();
+mv.visitLabel(l1);
+mv.visitLineNumber(67, l1);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitInsn(ICONST_2);
+Label l2 = new Label();
+mv.visitJumpInsn(IF_ICMPNE, l2);
+Label l3 = new Label();
+mv.visitLabel(l3);
+mv.visitLineNumber(68, l3);
+Label l4 = new Label();
+mv.visitJumpInsn(GOTO, l4);
+mv.visitLabel(l2);
+mv.visitLineNumber(70, l2);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitIincInsn(1, 1);
+Label l5 = new Label();
+mv.visitLabel(l5);
+mv.visitLineNumber(71, l5);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitInsn(ICONST_4);
+Label l6 = new Label();
+mv.visitLabel(l6);
+mv.visitLineNumber(64, l6);
+mv.visitJumpInsn(IF_ICMPLT, l0);
+mv.visitLabel(l4);
+mv.visitLineNumber(73, l4);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitInsn(IRETURN);
+Label l7 = new Label();
+mv.visitLabel(l7);
+mv.visitLocalVariable("this", "Lbooton/translator/flow/DoWhiteTest$3;", null, l0, l7, 0);
+mv.visitLocalVariable("value", "I", null, l0, l7, 1);
+mv.visitMaxs(2, 2);
+mv.visitEnd();
+}
+[, ++A;, return A;]
+BDJ:function(A){
+		// 65
+		l0 : do {
+			++A;
+			// 67
+			if (A!=2) {
+				// 70
+				++A;
+				// 71
+			} else {
+				// 68
+			}
+			// 73
+			return A;
+		} while (A<4)
+	},
+	
+visit label -1
+visit label 0
+visit label 1
+visit label 3
+merge3
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1]		dom : [-1]	code : A [Expression] = [Expression] A [Expression] + [Expression] 2 [Number] ; [Expression]
+1	  in : [0]	out : [2,3]		dom : [0]	code : A!=2 [Condition]
+3	  in : [1]	out : []		dom : [1]	code : 
+
+visit label 2
+visit label 4
+visit label 5
+merge5
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : A [Expression] = [Expression] A [Expression] + [Expression] 2 [Number] ; [Expression]
+1	  in : [0]		out : [2,3]		dom : [0]	code : A!=2 [Condition]
+3	  in : [1]		out : [4]		dom : [1]	code : 
+2	  in : [1]		out : [4]		dom : [1]	code : A [Expression] = [Expression] A [Expression] + [Expression] 3 [Number] ; [Expression]
+4	  in : [3,2]		out : [5]		dom : []	code : A [Expression] 4 [Number]
+5	  in : [4]		out : []		dom : [4]	code : 
+
+visit label 6
+merge6
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1,5]		out : [1]		dom : []	code : A [Expression] = [Expression] A [Expression] + [Expression] 2 [Number] ; [Expression]
+1	  in : [0]		out : [2,3]		dom : [0]	code : A!=2 [Condition]
+3	  in : [1]		out : [4]		dom : [1]	code : 
+2	  in : [1]		out : [4]		dom : [1]	code : A [Expression] = [Expression] A [Expression] + [Expression] 3 [Number] ; [Expression]
+4	  in : [3,2]		out : [5]		dom : []	code : 
+5	  in : [4]		out : [0,6]		dom : [4]	code : A<4 [Condition]
+6	  in : [5]		out : []		dom : [5]	code : 
+
+visit label 7
+merge7
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1,5]		out : [1]		dom : []	code : A [Expression] = [Expression] A [Expression] + [Expression] 2 [Number] ; [Expression]
+1	  in : [0]		out : [2,3]		dom : [0]	code : A!=2 [Condition]
+3	  in : [1]		out : [4]		dom : [1]	code : 
+2	  in : [1]		out : [4]		dom : [1]	code : A [Expression] = [Expression] A [Expression] + [Expression] 3 [Number] ; [Expression]
+4	  in : [3,2]		out : [5]		dom : []	code : 
+5	  in : [4]		out : [0,6]		dom : [4]	code : A<4 [Condition]
+6	  in : [5]		out : []		dom : [5]	code : return  [Expression] A [Expression] ; [Expression]
+7	  in : []		out : []		dom : []	code : 
+
+booton.translator.flow.DoWhiteTest booton.translator.flow.DoWhiteTest
+-1	  in : []		out : [0]		dom : []	back : []	code : 
+0	  in : [-1,5]		out : [1]		dom : [-1]	back : [5]	code : A [Expression] = [Expression] A [Expression] + [Expression] 2 [Number] ; [Expression]
+1	  in : [0]		out : [2,3]		dom : [0]	back : []	code : A!=2 [Condition]
+3	  in : [1]		out : [4]		dom : [1]	back : []	code : 
+2	  in : [1]		out : [4]		dom : [1]	back : []	code : A [Expression] = [Expression] A [Expression] + [Expression] 3 [Number] ; [Expression]
+4	  in : [3,2]		out : [5]		dom : [1]	back : []	code : 
+5	  in : [4]		out : [0,6]		dom : [4]	back : []	code : A<4 [Condition]
+6	  in : [5]		out : []		dom : [5]	back : []	code : return  [Expression] A [Expression] ; [Expression]
+7	  in : []		out : []		dom : []	back : []	code : 
+
+{
+mv = cw.visitMethod(ACC_PUBLIC, "act", "(I)I", null, null);
+mv.visitCode();
+Label l0 = new Label();
+mv.visitLabel(l0);
+mv.visitLineNumber(104, l0);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitIincInsn(1, 2);
+Label l1 = new Label();
+mv.visitLabel(l1);
+mv.visitLineNumber(106, l1);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitInsn(ICONST_2);
+Label l2 = new Label();
+mv.visitJumpInsn(IF_ICMPNE, l2);
+Label l3 = new Label();
+mv.visitLabel(l3);
+mv.visitLineNumber(107, l3);
+Label l4 = new Label();
+mv.visitJumpInsn(GOTO, l4);
+mv.visitLabel(l2);
+mv.visitLineNumber(110, l2);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitIincInsn(1, 3);
+mv.visitLabel(l4);
+mv.visitLineNumber(111, l4);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitInsn(ICONST_4);
+Label l5 = new Label();
+mv.visitLabel(l5);
+mv.visitLineNumber(103, l5);
+mv.visitJumpInsn(IF_ICMPLT, l0);
+Label l6 = new Label();
+mv.visitLabel(l6);
+mv.visitLineNumber(113, l6);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitInsn(IRETURN);
+Label l7 = new Label();
+mv.visitLabel(l7);
+mv.visitLocalVariable("this", "Lbooton/translator/flow/DoWhiteTest$5;", null, l0, l7, 0);
+mv.visitLocalVariable("value", "I", null, l0, l7, 1);
+mv.visitMaxs(2, 2);
+mv.visitEnd();
+}
+[, A=A+3;, ]
+BDJ:function(A){
+		// 104
+		l0 : do {
+			A=A+2;
+			// 106
+			if (A!=2) {
+				// 110
+				A=A+3;
+			} else {
+				// 107
+			}
+			// 111
+		} while (A<4)// 113
+		return A
+	},
+	
 visit label -1
 visit label 0
 visit label 1
@@ -77,12 +1896,12 @@ mv = cw.visitMethod(ACC_PUBLIC, "act", "(I)I", null, null);
 mv.visitCode();
 Label l0 = new Label();
 mv.visitLabel(l0);
-mv.visitLineNumber(124, l0);
+mv.visitLineNumber(125, l0);
 mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
 mv.visitIincInsn(1, 1);
 Label l1 = new Label();
 mv.visitLabel(l1);
-mv.visitLineNumber(126, l1);
+mv.visitLineNumber(127, l1);
 mv.visitVarInsn(ILOAD, 1);
 mv.visitInsn(ICONST_2);
 mv.visitInsn(IREM);
@@ -90,35 +1909,35 @@ Label l2 = new Label();
 mv.visitJumpInsn(IFNE, l2);
 Label l3 = new Label();
 mv.visitLabel(l3);
-mv.visitLineNumber(127, l3);
+mv.visitLineNumber(128, l3);
 Label l4 = new Label();
 mv.visitJumpInsn(GOTO, l4);
 mv.visitLabel(l2);
-mv.visitLineNumber(130, l2);
+mv.visitLineNumber(131, l2);
 mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
 mv.visitVarInsn(ILOAD, 1);
 Label l5 = new Label();
 mv.visitJumpInsn(IFGE, l5);
 Label l6 = new Label();
 mv.visitLabel(l6);
-mv.visitLineNumber(131, l6);
+mv.visitLineNumber(132, l6);
 Label l7 = new Label();
 mv.visitJumpInsn(GOTO, l7);
 mv.visitLabel(l5);
-mv.visitLineNumber(133, l5);
+mv.visitLineNumber(134, l5);
 mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
 mv.visitIincInsn(1, 1);
 mv.visitLabel(l4);
-mv.visitLineNumber(134, l4);
+mv.visitLineNumber(135, l4);
 mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
 mv.visitVarInsn(ILOAD, 1);
 mv.visitInsn(ICONST_4);
 Label l8 = new Label();
 mv.visitLabel(l8);
-mv.visitLineNumber(123, l8);
+mv.visitLineNumber(124, l8);
 mv.visitJumpInsn(IF_ICMPLT, l0);
 mv.visitLabel(l7);
-mv.visitLineNumber(136, l7);
+mv.visitLineNumber(137, l7);
 mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
 mv.visitVarInsn(ILOAD, 1);
 mv.visitInsn(IRETURN);
@@ -129,23 +1948,84 @@ mv.visitLocalVariable("value", "I", null, l0, l9, 1);
 mv.visitMaxs(2, 2);
 mv.visitEnd();
 }
+[, A>=0, , return A;]
 BDJ:function(A){
-		// 124
-		l8 : do {
+		// 125
+		l0 : do {
 			++A;
-			// 126
+			// 127
 			if (A%2!=0) {
-				// 130
+				// 131
 				if (A>=0) {
-					// 133
+					// 134
 					++A;
 				} else {
-					// 131
+					// 132
 				}
 			} else {
-				// 127
+				// 128
 			}
-			// 134
-		} while (A<4)
+			// 135
+		} while (A<4)// 137
+		return A
+	},
+	
+visit label -1
+visit label 0
+visit label 1
+visit label 2
+merge2
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1,1]		out : [1]		dom : []	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]		out : [0,2]		dom : [0]	code : A!=10 [Condition]
+2	  in : [1]		out : []		dom : [1]	code : 
+
+visit label 3
+merge3
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1,1]		out : [1]		dom : []	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]		out : [0,2]		dom : [0]	code : A!=10 [Condition]
+2	  in : [1]		out : []		dom : [1]	code : return  [Expression] A [Expression] ; [Expression]
+3	  in : []		out : []		dom : []	code : 
+
+booton.translator.flow.DoWhiteTest booton.translator.flow.DoWhiteTest
+-1	  in : []		out : [0]		dom : []	back : []	code : 
+0	  in : [-1,1]		out : [1]		dom : [-1]	back : [1]	code : ++ [Expression] A [Expression] ; [Expression]
+1	  in : [0]		out : [0,2]		dom : [0]	back : []	code : A!=10 [Condition]
+2	  in : [1]		out : []		dom : [1]	back : []	code : return  [Expression] A [Expression] ; [Expression]
+3	  in : []		out : []		dom : []	back : []	code : 
+
+{
+mv = cw.visitMethod(ACC_PUBLIC, "act", "(I)I", null, null);
+mv.visitCode();
+Label l0 = new Label();
+mv.visitLabel(l0);
+mv.visitLineNumber(85, l0);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitIincInsn(1, 1);
+Label l1 = new Label();
+mv.visitLabel(l1);
+mv.visitLineNumber(87, l1);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitIntInsn(BIPUSH, 10);
+mv.visitJumpInsn(IF_ICMPNE, l0);
+Label l2 = new Label();
+mv.visitLabel(l2);
+mv.visitLineNumber(92, l2);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitInsn(IRETURN);
+Label l3 = new Label();
+mv.visitLabel(l3);
+mv.visitLocalVariable("this", "Lbooton/translator/flow/DoWhiteTest$4;", null, l0, l3, 0);
+mv.visitLocalVariable("value", "I", null, l0, l3, 1);
+mv.visitMaxs(2, 2);
+mv.visitEnd();
+}
+BDJ:function(A){
+		// 85
+		l0 : do {
+			++A;
+		} while (A!=10)// 92
+		return A
 	},
 	

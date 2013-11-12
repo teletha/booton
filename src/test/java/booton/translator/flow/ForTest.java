@@ -265,6 +265,7 @@ public class ForTest extends ScriptTester {
     public void returnInNest() throws Exception {
         test(new Scriptable() {
 
+            @Debuggable
             int act(int value) {
                 if (value == 0) {
                     value++;

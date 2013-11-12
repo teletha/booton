@@ -24,6 +24,7 @@ import java.util.stream.StreamSupport;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
+import booton.translator.Debuggable;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -1198,6 +1199,7 @@ class Arrays {
      * @see Objects#deepEquals(Object, Object)
      * @since 1.5
      */
+    @Debuggable
     public static boolean deepEquals(Object[] a1, Object[] a2) {
         if (a1 == a2) {
             return true;

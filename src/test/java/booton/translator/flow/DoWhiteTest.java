@@ -9,7 +9,6 @@
  */
 package booton.translator.flow;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.translator.Debuggable;
@@ -20,7 +19,6 @@ import booton.translator.Scriptable;
 /**
  * @version 2013/09/26 10:30:30
  */
-@SuppressWarnings("unused")
 public class DoWhiteTest extends ScriptTester {
 
     @Test
@@ -58,7 +56,6 @@ public class DoWhiteTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void breakNoLabel() {
         test(new Scriptable() {
 
@@ -70,6 +67,7 @@ public class DoWhiteTest extends ScriptTester {
                     if (value == 2) {
                         break;
                     }
+                    value++;
                 } while (value < 4);
 
                 return value;
@@ -118,7 +116,6 @@ public class DoWhiteTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void continueAndBreak() {
         test(new Scriptable() {
 

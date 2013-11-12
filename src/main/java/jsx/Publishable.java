@@ -63,7 +63,6 @@ public class Publishable {
      * Register event listener.
      * </p>
      */
-    @Debuggable
     public void register(Object subscribable) {
         if (subscribable != null) {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
