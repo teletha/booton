@@ -249,7 +249,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("ClassUtil") && original.equals("getAnnotations")) {
+        if (script.source.getName().endsWith("MapModel") && original.equals("walk")) {
             debugger.enable = true;
         }
     }

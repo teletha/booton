@@ -596,8 +596,6 @@ class Node {
                             Node then = null;
                             Node elze = null;
                             Node follower = null;
-                            boolean originalWritten = false;
-                            boolean revert = false;
 
                             if (outgoing.get(0).written) {
                                 condition.invert();
@@ -607,19 +605,17 @@ class Node {
                             } else if (outgoing.get(1).written) {
                                 then = outgoing.get(0);
                                 follower = outgoing.get(1);
-                            } else if (dominators.size() == 2) {
-                                then = outgoing.get(0);
-                                elze = outgoing.get(1);
                             } else {
                                 then = outgoing.get(0);
                                 elze = outgoing.get(1);
-                                System.out.println(dominators);
-                                Set<Node> nodes = new HashSet(dominators);
-                                nodes.removeAll(outgoing);
-                                follower = nodes.iterator().next();
-                                originalWritten = follower.written;
-                                follower.written = true;
-                                revert = true;
+                                follower = dominators.stream()
+                                        .filter(node -> !outgoing.contains(node))
+                                        .findFirst()
+                                        .orElse(null);
+                            }
+
+                            if (follower != null) {
+                                follower.loopExit = true;
                             }
 
                             buffer.write("if", "(" + this + ")", "{");
@@ -629,11 +625,6 @@ class Node {
                                 process(elze, buffer);
                             }
                             buffer.write("}").line();
-
-                            if (follower != null && revert) {
-                                follower.written = originalWritten;
-                            }
-
                             process(follower, buffer);
                         } else {
                             buffer.write("if", "(" + this + ")", "{");
@@ -773,10 +764,20 @@ class Node {
      */
     private final void process(Node next, ScriptWriter buffer) {
         if (next != null) {
+            // while (next.stack.isEmpty() && next.outgoing.size() == 1) {
+            // next = next.outgoing.get(0);
+            // }
+
+            debugger.print(id + "  " + next.id);
+
+            // if (++next.writes != next.incoming.size() - next.backedges.size()) {
+            // debugger.print("no write  from " + id + " to " + next.id + "  " + next.writes + "   "
+            // + next.incoming.size());
+            // return;
+            // }
             Node nextDominator = next.getDominator();
 
             if (nextDominator == null || nextDominator == this || (loopCondition && next.loopExit)) {
-
                 // normal process
                 next.write(buffer);
                 return;
@@ -793,25 +794,30 @@ class Node {
                 return;
             }
 
-            if (nextDominator.backedges.isEmpty()) {
-                // stop here
-                // debugger.print("stop  herer " + id + "  " + nextDominator.id + "   " + next.id +
-                // "   " + next.loopEntrance);
-                if (nextDominator.follower == null) nextDominator.follower = next;
-                return;
-            }
+            // if (nextDominator.backedges.isEmpty()) {
+            // // stop here
+            // debugger.print("stop  herer " + id + "  " + nextDominator.id + "   " + next.id +
+            // "   " + next.loopEntrance);
+            // if (nextDominator.follower == null) nextDominator.follower = next;
+            // return;
+            // }
 
             //
-            // if (next.loopExit) {
-            // if (next.loopEntrance == this) {
-            // // normal process
-            // next.write(buffer);
-            // return;
-            // }
-            // debugger.print(id + "   " + next.id);
-            // buffer.append("break l", next.loopEntrance.id, ";");
-            // return;
-            // }
+            if (next.loopExit) {
+                if (next.loopEntrance == this) {
+                    // normal process
+                    next.write(buffer);
+                    return;
+                }
+
+                if (next.loopEntrance == null) {
+                    return;
+                }
+
+                debugger.print("braker2 " + id + "  " + next.id);
+                buffer.append("break l", next.loopEntrance.id, ";");
+                return;
+            }
 
             // Node backedgedDominator = nextDominator;
             //
@@ -824,7 +830,7 @@ class Node {
             // }
 
             // search destination
-            buffer.append("break l", nextDominator.id, ";");
+            // buffer.append("break l", nextDominator.id, ";");
         }
     }
 
