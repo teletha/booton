@@ -105,6 +105,12 @@ public class Debugger extends AnnotationVisitor {
         System.out.println(clazz.getName() + "#" + methodName);
     }
 
+    public void print(Runnable task) {
+        if (enable) {
+            task.run();
+        }
+    }
+
     /**
      * @param message
      */
