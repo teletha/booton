@@ -74,6 +74,10 @@ class Node {
 
     private Node loopEntrance;
 
+    private int processRequire = -1;
+
+    private int processCount = 0;
+
     /**
      * @param label
      */
@@ -559,20 +563,13 @@ class Node {
                     condition.written = true;
 
                     Node follow;
-                    Node process;
 
                     if (condition.outgoing.get(0) == this) {
                         follow = condition.outgoing.get(1);
-                        process = condition.outgoing.get(0);
                     } else {
                         follow = condition.outgoing.get(0);
-                        process = condition.outgoing.get(1);
                     }
-                    set(condition, follow, this);
-
-                    // setup actual do-while block and its following node
-                    // condition.follower = condition.outgoing.get(condition.outgoing.size() - 1);
-                    // set(condition, condition.follower, this);
+                    analyzeStructure(condition, follow, this);
 
                     // write script fragment
                     buffer.write("l" + id, ":", "do", "{");
@@ -612,6 +609,10 @@ class Node {
                                         .filter(node -> !outgoing.contains(node))
                                         .findFirst()
                                         .orElse(null);
+
+                                if (follower != null) {
+                                    follower.processCount--;
+                                }
                             }
 
                             buffer.write("if", "(" + this + ")", "{");
@@ -651,8 +652,8 @@ class Node {
 
                         // detect process and follower node
                         Node process = detectFollower();
-                        set(update, follower, this);
-                        set(this, follower, this);
+                        analyzeStructure(update, follower, this);
+                        analyzeStructure(this, follower, this);
                         debugger.print("set " + update.id + "  " + follower.id + "  " + id);
 
                         while (!(stack.peekLast() instanceof OperandCondition)) {
@@ -669,7 +670,7 @@ class Node {
                         //
                         // detect process and follower node
                         Node process = detectFollower();
-                        set(this, follower, this);
+                        analyzeStructure(this, follower, this);
 
                         // write script fragment
                         buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
@@ -682,7 +683,7 @@ class Node {
                     //
                     // detect process and follower node
                     Node process = detectFollower();
-                    set(this, follower, this);
+                    analyzeStructure(this, follower, this);
 
                     // write script fragment
                     buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
@@ -735,33 +736,6 @@ class Node {
         }
     }
 
-    private void set(Node condition, Node exit, Node entrance) {
-        condition.loopCondition = true;
-        exit.loopExit = true;
-
-        if (exit.loopEntrance == null) {
-            exit.loopEntrance = entrance;
-        }
-
-        if (condition.loopEntrance == null) {
-            condition.loopEntrance = entrance;
-        }
-    }
-
-    private int counter = -1;
-
-    private int countWrite() {
-        if (counter == -1) {
-            Set<Node> nodes = new HashSet(incoming);
-            nodes.add(getDominator());
-            nodes.removeAll(backedges);
-            counter = nodes.size();
-        }
-        return counter;
-    }
-
-    private int actual = 0;
-
     /**
      * <p>
      * Helper method to process script writing.
@@ -772,18 +746,19 @@ class Node {
      */
     private final void process(Node next, ScriptWriter buffer) {
         if (next != null) {
-            next.actual++;
+            next.processCount++;
 
             if (next.loopCondition && hasDominator(next.loopEntrance)) {
                 buffer.append("continue l", next.loopEntrance.id, "; // " + id + " -> " + next.id + " Entrance " + next.loopEntrance.id);
                 return;
             }
 
-            if (next.loopExit && next.loopEntrance != null && !loopCondition && !next.hasDominator(this) && hasDominator(next.loopEntrance)) {
+            if (!loopCondition && next.loopExit && hasDominator(next.loopEntrance)) {
                 buffer.append("break l", next.loopEntrance.id, "; // " + id + " -> " + next.id + " Entrance " + next.loopEntrance.id);
                 return;
             }
-            debugger.print(() -> buffer.comment(id + " -> " + next.id + " next count " + next.countWrite() + "  " + (next.actual + 1)));
+
+            debugger.print(() -> buffer.comment(id + " -> " + next.id + " next count " + next.countWrite() + "  " + (next.processCount)));
             // if (nextDominator.backedges.isEmpty()) {
             // // stop here
             // debugger.print("stop  herer " + id + "  " + nextDominator.id + "   " + next.id +
@@ -792,43 +767,10 @@ class Node {
             // return;
             // }
 
-            //
-            // if (next.loopExit) {
-            // if (next.loopEntrance == this) {
-            // // normal process
-            // next.write(buffer);
-            // return;
-            // }
-            //
-            // if (next.loopEntrance == null) {
-            // return;
-            // }
-            //
-            // debugger.print("braker2 " + id + "  " + next.id);
-            // buffer.append("break l", next.loopEntrance.id, ";");
-            // return;
-            // }
-
-            // Node backedgedDominator = nextDominator;
-            //
-            // while (backedgedDominator != null) {
-            // if (backedgedDominator.backedges.contains(next)) {
-            // buffer.append("continue l", backedgedDominator.id, ";");
-            // return;
-            // }
-            // backedgedDominator = backedgedDominator.getDominator();
-            // }
-
-            // search destination
-            // buffer.append("break l", nextDominator.id, ";");
-
             // normal process
-
             if (next.loopExit) {
-                if (loopCondition) {
-                    if (next.countWrite() == next.actual) {
-                        next.write(buffer);
-                    }
+                if (next.countWrite() <= next.processCount) {
+                    next.write(buffer);
                 }
             } else {
                 Node dominator = next.getDominator();
@@ -861,6 +803,37 @@ class Node {
             follower = first;
         }
         return process;
+    }
+
+    /**
+     * <p>
+     * Analyze structure.
+     * </p>
+     * 
+     * @param condition
+     * @param exit
+     * @param entrance
+     */
+    private void analyzeStructure(Node condition, Node exit, Node entrance) {
+        condition.loopCondition = true;
+        exit.loopExit = true;
+
+        if (exit.loopEntrance == null) {
+            exit.loopEntrance = entrance;
+        }
+
+        if (condition.loopEntrance == null) {
+            condition.loopEntrance = entrance;
+        }
+    }
+
+    private int countWrite() {
+        if (processRequire == -1) {
+            Set<Node> nodes = new HashSet(incoming);
+            nodes.removeAll(backedges);
+            processRequire = nodes.size();
+        }
+        return processRequire;
     }
 
     /**
