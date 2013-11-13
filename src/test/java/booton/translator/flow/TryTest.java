@@ -14,6 +14,7 @@ import java.io.IOException;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -412,6 +413,7 @@ public class TryTest extends ScriptTester {
     public void TryCatchFinallyAfterNestAtFinally() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     if (value == 0) {
