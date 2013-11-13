@@ -515,20 +515,20 @@ class Node {
                     for (int value : switchy.values(node)) {
                         buffer.append("case ", value, ":").line();
                     }
-                    node.write(buffer);
+                    process(node, buffer);
                 }
 
                 // default case
                 if (!switchy.noDefault) {
                     buffer.append("default:").line();
-                    switchy.defaults.write(buffer);
+                    process(switchy.defaults, buffer);
                 }
 
                 // exit switch
                 buffer.append("}").line();
 
                 // write following nodes if needed
-                if (!switchy.noExit) exit.write(buffer);
+                if (!switchy.noExit) process(exit, buffer);
 
                 return; // must
             }
@@ -729,8 +729,8 @@ class Node {
                 Node exit = block.exit;
 
                 if (exit != null) {
-                    exit.written = false;
-                    exit.write(buffer);
+                    // exit.written = false;
+                    process(exit, buffer);
                 }
             }
         }
@@ -758,7 +758,7 @@ class Node {
                 return;
             }
 
-            debugger.print(() -> buffer.comment(id + " -> " + next.id + " next count " + next.countWrite() + "  " + (next.processCount)));
+            debugger.print(() -> buffer.comment(id + " -> " + next.id + " next count " + next.countWrite() + "  " + (next.processCount) + "  " + next.loopExit));
             // if (nextDominator.backedges.isEmpty()) {
             // // stop here
             // debugger.print("stop  herer " + id + "  " + nextDominator.id + "   " + next.id +
@@ -768,18 +768,18 @@ class Node {
             // }
 
             // normal process
-            if (next.loopExit) {
-                if (next.countWrite() <= next.processCount) {
+            if (next.countWrite() <= next.processCount) {
+                if (next.loopExit) {
                     next.write(buffer);
-                }
-            } else {
-                Node dominator = next.getDominator();
+                } else {
+                    Node dominator = next.getDominator();
 
-                if (dominator == null || dominator == this) {
-                    next.write(buffer);
+                    if (dominator == null || dominator == this) {
+                        if (debugger.enable) buffer.comment("write next node " + next.id);
+                        next.write(buffer);
+                    }
                 }
             }
-
         }
     }
 
@@ -1171,7 +1171,7 @@ class Node {
 
                 if (node.getDominator() == start) {
                     exit = node;
-                    exit.written = true; // forbid node writing
+                    // exit.written = true; // forbid node writing
                     return;
                 }
                 nodes.addAll(node.outgoing);

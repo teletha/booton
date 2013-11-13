@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
-import booton.translator.Debuggable;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -70,7 +69,6 @@ abstract class AbstractSet<E> extends AbstractCollection<E> implements Set<E> {
      * {@inheritDoc}
      */
     @Override
-    @Debuggable
     public boolean removeAll(Collection<?> collection) {
         boolean modified = false;
 

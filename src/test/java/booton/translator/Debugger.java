@@ -260,7 +260,7 @@ public class Debugger extends AnnotationVisitor {
                 } else if (block.catcher == node) {
                     tryFlow.append("c");
                 } else if (block.exit == node) {
-                    tryFlow.append("n");
+                    tryFlow.append("x");
                 } else {
                     tryFlow.append("  ");
                 }

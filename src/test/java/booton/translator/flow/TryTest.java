@@ -413,7 +413,6 @@ public class TryTest extends ScriptTester {
     public void TryCatchFinallyAfterNestAtFinally() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     if (value == 0) {
@@ -498,6 +497,7 @@ public class TryTest extends ScriptTester {
 
             private int counter = 0;
 
+            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     if (value != 0) {
