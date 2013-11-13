@@ -614,10 +614,6 @@ class Node {
                                         .orElse(null);
                             }
 
-                            if (follower != null) {
-                                follower.loopExit = true;
-                            }
-
                             buffer.write("if", "(" + this + ")", "{");
                             process(then, buffer);
                             if (elze != null) {
@@ -752,7 +748,19 @@ class Node {
         }
     }
 
-    private int writes = 0;
+    private int counter = -1;
+
+    private int countWrite() {
+        if (counter == -1) {
+            Set<Node> nodes = new HashSet(incoming);
+            nodes.add(getDominator());
+            nodes.removeAll(backedges);
+            counter = nodes.size();
+        }
+        return counter;
+    }
+
+    private int actual = 0;
 
     /**
      * <p>
@@ -764,36 +772,18 @@ class Node {
      */
     private final void process(Node next, ScriptWriter buffer) {
         if (next != null) {
-            // while (next.stack.isEmpty() && next.outgoing.size() == 1) {
-            // next = next.outgoing.get(0);
-            // }
+            next.actual++;
 
-            debugger.print(id + "  " + next.id);
-
-            // if (++next.writes != next.incoming.size() - next.backedges.size()) {
-            // debugger.print("no write  from " + id + " to " + next.id + "  " + next.writes + "   "
-            // + next.incoming.size());
-            // return;
-            // }
-            Node nextDominator = next.getDominator();
-
-            if (nextDominator == null || nextDominator == this || (loopCondition && next.loopExit)) {
-                // normal process
-                next.write(buffer);
+            if (next.loopCondition && hasDominator(next.loopEntrance)) {
+                buffer.append("continue l", next.loopEntrance.id, "; // " + id + " -> " + next.id + " Entrance " + next.loopEntrance.id);
                 return;
             }
 
-            if (next.loopCondition) {
-                buffer.append("continue l", next.loopEntrance.id, ";");
+            if (next.loopExit && next.loopEntrance != null && !loopCondition && !next.hasDominator(this) && hasDominator(next.loopEntrance)) {
+                buffer.append("break l", next.loopEntrance.id, "; // " + id + " -> " + next.id + " Entrance " + next.loopEntrance.id);
                 return;
             }
-
-            if (next.loopExit && next.canReachTo(next.loopEntrance)) {
-                debugger.print("braker " + id + "  " + next.id);
-                buffer.append("break l", next.loopEntrance.id, ";");
-                return;
-            }
-
+            debugger.print(() -> buffer.comment(id + " -> " + next.id + " next count " + next.countWrite() + "  " + (next.actual + 1)));
             // if (nextDominator.backedges.isEmpty()) {
             // // stop here
             // debugger.print("stop  herer " + id + "  " + nextDominator.id + "   " + next.id +
@@ -803,21 +793,21 @@ class Node {
             // }
 
             //
-            if (next.loopExit) {
-                if (next.loopEntrance == this) {
-                    // normal process
-                    next.write(buffer);
-                    return;
-                }
-
-                if (next.loopEntrance == null) {
-                    return;
-                }
-
-                debugger.print("braker2 " + id + "  " + next.id);
-                buffer.append("break l", next.loopEntrance.id, ";");
-                return;
-            }
+            // if (next.loopExit) {
+            // if (next.loopEntrance == this) {
+            // // normal process
+            // next.write(buffer);
+            // return;
+            // }
+            //
+            // if (next.loopEntrance == null) {
+            // return;
+            // }
+            //
+            // debugger.print("braker2 " + id + "  " + next.id);
+            // buffer.append("break l", next.loopEntrance.id, ";");
+            // return;
+            // }
 
             // Node backedgedDominator = nextDominator;
             //
@@ -831,6 +821,23 @@ class Node {
 
             // search destination
             // buffer.append("break l", nextDominator.id, ";");
+
+            // normal process
+
+            if (next.loopExit) {
+                if (loopCondition) {
+                    if (next.countWrite() == next.actual) {
+                        next.write(buffer);
+                    }
+                }
+            } else {
+                Node dominator = next.getDominator();
+
+                if (dominator == null || dominator == this) {
+                    next.write(buffer);
+                }
+            }
+
         }
     }
 

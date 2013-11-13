@@ -310,78 +310,76 @@ mv.visitLocalVariable("eq", "Z", null, l18, l15, 6);
 mv.visitMaxs(2, 7);
 mv.visitEnd();
 }
--1  0
-0  1
-1  3
-1  4
-4  5
-5  6
-6  8
-8  9
 set 15  20  9
-9  10
-10  11
-11  12
-12  13
-13  16
-16  18
-18  19
-18  15
-13  17
-12  14
-14  15
-12  15
-9  20
-5  7
-0  2
 _GC:function(A,B,C,D,E,F,G){
+		// -1 -> 0
 		// 1204
 		if (A!=B) {
+			// 0 -> 1
 			// 1208
 			if (A==null||B==null) {
+				// 1 -> 3
 				// 1209
 				return false;
 			} else {
+				// 1 -> 4
 				// 1212
 				C=A.length;
+				// 4 -> 5
 				// 1214
 				if (B.length==C) {
+					// 5 -> 6
 					// 1218
 					D=0;
+					// 6 -> 8
+					// 8 -> 9
 					l9: for (; D<C; ++D) {
+						// 9 -> 10
 						// 1219
 						E=A[D];
+						// 10 -> 11
 						// 1220
 						F=B[D];
+						// 11 -> 12
 						// 1222
 						if (E!=F) {
+							// 12 -> 13
 							// 1226
 							if (E!=null) {
+								// 13 -> 16
 								// 1231
 								G=boot.BU.DX(E,F);
+								// 16 -> 18
 								// 1233
 								if (G==0) {
+									// 18 -> 19
 									// 1234
 									return false;
 								}
-								continue l9;
+								continue l9; // 18 -> 15 Entrance 9
 							} else {
+								// 13 -> 17
 								// 1227
 								return false;
 							}
 						} else {
+							// 12 -> 14
 							// 1223
-							continue l9;
+							continue l9; // 14 -> 15 Entrance 9
 						}
+						continue l9; // 12 -> 15 Entrance 9
 					}
+					// 9 -> 20
 					// 1237
 					return true;
 				} else {
+					// 5 -> 7
 					// 1215
 					return false;
 				}
 			}
 		} else {
+			// 0 -> 2
 			// 1205
 			return true;
 		}
@@ -548,34 +546,34 @@ mv.visitLocalVariable("type", "Ljava/lang/Class;", null, l7, l8, 5);
 mv.visitMaxs(9, 6);
 mv.visitEnd();
 }
--1  0
-0  2
-2  3
-3  4
 set 8  1  4
-4  5
-5  6
-6  7
-7  8
-4  1
-0  1
 IU:function(A,B,C,D,E){
+		// -1 -> 0
 		// 166
 		if (this.h==null) {
+			// 0 -> 2
 			// 167
 			this.h=new boot.BI(0);
+			// 2 -> 3
 			// 169
 			C=(D=Object.keys(this.g)).length;B=0;
+			// 3 -> 4
 			l4: for (; B<C; ++B) {
+				// 4 -> 5
 				A=D[B];
+				// 5 -> 6
 				// 170
 				E=boot.A.B(A);
+				// 6 -> 7
 				// 172
 				this.h.BV(E,boot.DX.KB(null,boot.array("A",[E]),new boot.DW(E,this.g[A],0)));
+				continue l4; // 7 -> 8 Entrance 4
 			}
+			// 4 -> 1
+			// 175
+			return this.h.IV().BH(boot.array("Bu",this.h.BF(),null));
 		}
-		// 175
-		return this.h.IV().BH(boot.array("Bu",this.h.BF(),null))
+		// 0 -> 1
 	},
 	
 visit label -1
@@ -776,54 +774,52 @@ mv.visitLocalVariable("i", "Ljava/util/Iterator;", "Ljava/util/Iterator<*>;", l9
 mv.visitMaxs(3, 4);
 mv.visitEnd();
 }
--1  0
-0  1
-1  2
-2  9
-9  10
-10  11
-11  12
-12  13
-13  10
-11  10
-10  8
-1  3
-3  4
-4  5
 set 6  7  5
-5  6
-5  7
-7  8
-1  8
 Hu:function(A,B,C){
+		// -1 -> 0
 		// 75
 		B=0;
+		// 0 -> 1
 		// 77
 		if (this.BF()<=A.BF()) {
+			// 1 -> 2
 			// 82
 			C=this.HH();
+			// 2 -> 9
+			// 9 -> 10
 			// 82
 			l10: while (C.HV()!=0) {
+				// 10 -> 11
 				// 83
 				if (A.HG(C.HT())!=0) {
+					// 11 -> 12
 					// 84
 					C.LD();
+					// 12 -> 13
 					// 85
 					B=1;
-					continue l10;
+					continue l10; // 13 -> 10 Entrance 10
 				}
-				continue l10;
+				continue l10; // 11 -> 10 Entrance 10
 			}
+			// 10 -> 8
+			// 89
+			return B;
 		} else {
+			// 1 -> 3
 			// 78
 			C=A.HH();
+			// 3 -> 4
+			// 4 -> 5
 			// 78
 			l5: for (; C.HV()!=0; B=(B|this.HI(C.HT()))) {
+				continue l5; // 5 -> 6 Entrance 5
 			}
+			// 5 -> 7
 			// 81
+			// 7 -> 8
 		}
-		// 89
-		return B
+		// 1 -> 8
 	},
 	
 visit label -1
@@ -961,197 +957,213 @@ mv.visitLocalVariable("entry", "Ljava/util/Map$Entry;", null, l7, l5, 3);
 mv.visitMaxs(7, 5);
 mv.visitEnd();
 }
--1  0
-0  1
-1  5
 set 7  4  5
-5  6
-6  7
-5  4
-0  2
-2  3
-3  4
-0  4
 RY:function(A,B,C,D){
+		// -1 -> 0
 		// 92
 		if (this.i.RX()!=null) {
+			// 0 -> 1
 			// 95
 			D=A.KV().HH();
+			// 1 -> 5
 			// 95
 			l5: for (; D.HV()!=0; B.SM(this,new boot.FG(this.j,boot.CY.RV(C.KX(),boot.L.$),0),C.KR())) {
+				// 5 -> 6
 				C=D.HT();
+				continue l5; // 6 -> 7 Entrance 5
 			}
+			// 5 -> 4
+			// 99
+			return;
 		} else {
+			// 0 -> 2
 			// 93
 			boot.FA.prototype.RY.call(this,A,B);
+			// 2 -> 3
 			// 94
+			// 3 -> 4
 		}
-		// 99
+		// 0 -> 4
 	},
 	
 visit label -1
 visit label 0
-visit label 1
-visit label 3
-merge3
--1	  in : []	out : [0]		dom : []	code : 
-0	  in : [-1]	out : [1]		dom : [-1]	code : ++ [Expression] A [Expression] ; [Expression]
-1	  in : [0]	out : [2,3]		dom : [0]	code : A%2!=0 [Condition]
-3	  in : [1]	out : []		dom : [1]	code : 
-
 visit label 2
-visit label 6
-merge6
+merge2
 -1	  in : []	out : [0]		dom : []	code : 
-0	  in : [-1]	out : [1]		dom : [-1]	code : ++ [Expression] A [Expression] ; [Expression]
-1	  in : [0]	out : [2,3]		dom : [0]	code : A%2!=0 [Condition]
-3	  in : [1]	out : [4]		dom : [1]	code : 
-2	  in : [1]	out : [5,6]		dom : [1]	code : A>=0 [Condition]
-6	  in : [2]	out : []		dom : [2]	code : 
+0	  in : [-1]	out : [1,2]		dom : [-1]	code : A!=0 [Condition]
+2	  in : [0]	out : []		dom : [0]	code : 
 
+visit label 3
+visit label 1
 visit label 5
-visit label 4
-visit label 8
-merge8
--1	  in : []		out : [0]		dom : []	code : 
-0	  in : [-1]		out : [1]		dom : [-1]	code : ++ [Expression] A [Expression] ; [Expression]
-1	  in : [0]		out : [2,3]		dom : [0]	code : A%2!=0 [Condition]
-3	  in : [1]		out : [4]		dom : [1]	code : 
-2	  in : [1]		out : [5,6]		dom : [1]	code : A>=0 [Condition]
-6	  in : [2]		out : [7]		dom : [2]	code : 
-5	  in : [2]		out : [4]		dom : [2]	code : ++ [Expression] A [Expression] ; [Expression]
-4	  in : [3,5]		out : [8]		dom : []	code : A [Expression] 4 [Number]
-8	  in : [4]		out : []		dom : [4]	code : 
-
 visit label 7
-merge7
--1	  in : []		out : [0]		dom : []	code : 
-0	  in : [-1,8]		out : [1]		dom : []	code : ++ [Expression] A [Expression] ; [Expression]
-1	  in : [0]		out : [2,3]		dom : [0]	code : A%2!=0 [Condition]
-3	  in : [1]		out : [4]		dom : [1]	code : 
-2	  in : [1]		out : [5,6]		dom : [1]	code : A>=0 [Condition]
-6	  in : [2]		out : [7]		dom : [2]	code : 
-5	  in : [2]		out : [4]		dom : [2]	code : ++ [Expression] A [Expression] ; [Expression]
-4	  in : [3,5]		out : [8]		dom : []	code : 
-8	  in : [4]		out : [0,7]		dom : [4]	code : A<4 [Condition]
-7	  in : [6,8]		out : []		dom : []	code : 
-
+visit label 8
 visit label 9
 merge9
--1	  in : []		out : [0]		dom : []	code : 
-0	  in : [-1,8]		out : [1]		dom : []	code : ++ [Expression] A [Expression] ; [Expression]
-1	  in : [0]		out : [2,3]		dom : [0]	code : A%2!=0 [Condition]
-3	  in : [1]		out : [4]		dom : [1]	code : 
-2	  in : [1]		out : [5,6]		dom : [1]	code : A>=0 [Condition]
-6	  in : [2]		out : [7]		dom : [2]	code : 
-5	  in : [2]		out : [4]		dom : [2]	code : ++ [Expression] A [Expression] ; [Expression]
-4	  in : [3,5]		out : [8]		dom : []	code : 
-8	  in : [4]		out : [0,7]		dom : [4]	code : A<4 [Condition]
-7	  in : [6,8]		out : []		dom : []	code : return  [Expression] A [Expression] ; [Expression]
-9	  in : []		out : []		dom : []	code : 
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1,2]		dom : [-1]	code : A!=0 [Condition]
+2	  in : [0]	out : [3]		dom : [0]	code : ++ [Expression] A [Expression] ; [Expression]
+3	  in : [2]	out : [4]		dom : [2]	code : 
+1	  in : [0]	out : [5]		dom : [0]	code : B=0 [Expression] ; [Expression]
+5	  in : [1]	out : [6]		dom : [1]	code : 
+7	  in : []	out : [8]		dom : []	code : ++ [Expression] A [Expression] ; [Expression]
+8	  in : [7]	out : [9,10]		dom : [7]	code : B==-1 [Condition] A%5!=0 [Condition]
+9	  in : [8]	out : []		dom : [8]	code : 
 
-booton.translator.flow.DoWhiteTest booton.translator.flow.DoWhiteTest
+visit label 10
+visit label 6
+visit label 4
+merge4
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1,2]		dom : [-1]	code : A!=0 [Condition]
+2	  in : [0]		out : [3]		dom : [0]	code : ++ [Expression] A [Expression] ; [Expression]
+3	  in : [2]		out : [4]		dom : [2]	code : 
+1	  in : [0]		out : [5]		dom : [0]	code : B=0 [Expression] ; [Expression]
+5	  in : [1]		out : [6]		dom : [1]	code : 
+7	  in : [6]		out : [8]		dom : [6]	code : ++ [Expression] A [Expression] ; [Expression]
+8	  in : [7]		out : [9,10]		dom : [7]	code : (B!=-1&&A%5!=0) [Condition]
+9	  in : [8]		out : []		dom : [8]	code : return  [Expression] 1000 [Number] ; [Expression]
+10	  in : [8]		out : [6]		dom : [8]	code : ++ [Expression] B [Expression] ; [Expression]
+6	  in : [5,10]		out : [7,4]		dom : []	code : B<3 [Condition]
+4	  in : [3,6]		out : []		dom : []	code : 
+
+visit label 11
+merge11
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1,2]		dom : [-1]	code : A!=0 [Condition]
+2	  in : [0]		out : [3]		dom : [0]	code : ++ [Expression] A [Expression] ; [Expression]
+3	  in : [2]		out : [4]		dom : [2]	code : 
+1	  in : [0]		out : [5]		dom : [0]	code : B=0 [Expression] ; [Expression]
+5	  in : [1]		out : [6]		dom : [1]	code : 
+7	  in : [6]		out : [8]		dom : [6]	code : ++ [Expression] A [Expression] ; [Expression]
+8	  in : [7]		out : [9,10]		dom : [7]	code : (B!=-1&&A%5!=0) [Condition]
+9	  in : [8]		out : []		dom : [8]	code : return  [Expression] 1000 [Number] ; [Expression]
+10	  in : [8]		out : [6]		dom : [8]	code : ++ [Expression] B [Expression] ; [Expression]
+6	  in : [5,10]		out : [7,4]		dom : []	code : B<3 [Condition]
+4	  in : [3,6]		out : []		dom : []	code : return  [Expression] A [Expression] ; [Expression]
+11	  in : []		out : []		dom : []	code : 
+
+booton.translator.flow.ForTest booton.translator.flow.ForTest
 -1	  in : []		out : [0]		dom : []	back : []	code : 
-0	  in : [-1,8]		out : [1]		dom : [-1]	back : [8]	code : ++ [Expression] A [Expression] ; [Expression]
-1	  in : [0]		out : [2,3]		dom : [0]	back : []	code : A%2!=0 [Condition]
-3	  in : [1]		out : [4]		dom : [1]	back : []	code : 
-2	  in : [1]		out : [5,6]		dom : [1]	back : []	code : A>=0 [Condition]
-6	  in : [2]		out : [7]		dom : [2]	back : []	code : 
-5	  in : [2]		out : [4]		dom : [2]	back : []	code : ++ [Expression] A [Expression] ; [Expression]
-4	  in : [3,5]		out : [8]		dom : [1]	back : []	code : 
-8	  in : [4]		out : [0,7]		dom : [4]	back : []	code : A<4 [Condition]
-7	  in : [6,8]		out : []		dom : [1]	back : []	code : return  [Expression] A [Expression] ; [Expression]
-9	  in : []		out : []		dom : []	back : []	code : 
+0	  in : [-1]		out : [1,2]		dom : [-1]	back : []	code : A!=0 [Condition]
+2	  in : [0]		out : [3]		dom : [0]	back : []	code : ++ [Expression] A [Expression] ; [Expression]
+3	  in : [2]		out : [4]		dom : [2]	back : []	code : 
+1	  in : [0]		out : [5]		dom : [0]	back : []	code : B=0 [Expression] ; [Expression]
+5	  in : [1]		out : [6]		dom : [1]	back : []	code : 
+7	  in : [6]		out : [8]		dom : [6]	back : []	code : ++ [Expression] A [Expression] ; [Expression]
+8	  in : [7]		out : [9,10]		dom : [7]	back : []	code : (B!=-1&&A%5!=0) [Condition]
+9	  in : [8]		out : []		dom : [8]	back : []	code : return  [Expression] 1000 [Number] ; [Expression]
+10	  in : [8]		out : [6]		dom : [8]	back : []	code : ++ [Expression] B [Expression] ; [Expression]
+6	  in : [5,10]		out : [7,4]		dom : [5]	back : [10]	code : B<3 [Condition]
+4	  in : [3,6]		out : []		dom : [0]	back : []	code : return  [Expression] A [Expression] ; [Expression]
+11	  in : []		out : []		dom : []	back : []	code : 
 
 {
-mv = cw.visitMethod(ACC_PUBLIC, "act", "(I)I", null, null);
+mv = cw.visitMethod(0, "act", "(I)I", null, null);
 mv.visitCode();
 Label l0 = new Label();
 mv.visitLabel(l0);
-mv.visitLineNumber(125, l0);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitIincInsn(1, 1);
-Label l1 = new Label();
-mv.visitLabel(l1);
-mv.visitLineNumber(127, l1);
+mv.visitLineNumber(270, l0);
 mv.visitVarInsn(ILOAD, 1);
-mv.visitInsn(ICONST_2);
-mv.visitInsn(IREM);
+Label l1 = new Label();
+mv.visitJumpInsn(IFNE, l1);
 Label l2 = new Label();
-mv.visitJumpInsn(IFNE, l2);
+mv.visitLabel(l2);
+mv.visitLineNumber(271, l2);
+mv.visitIincInsn(1, 1);
 Label l3 = new Label();
 mv.visitLabel(l3);
-mv.visitLineNumber(128, l3);
+mv.visitLineNumber(272, l3);
 Label l4 = new Label();
 mv.visitJumpInsn(GOTO, l4);
-mv.visitLabel(l2);
-mv.visitLineNumber(131, l2);
+mv.visitLabel(l1);
+mv.visitLineNumber(273, l1);
 mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitVarInsn(ILOAD, 1);
+mv.visitInsn(ICONST_0);
+mv.visitVarInsn(ISTORE, 2);
 Label l5 = new Label();
-mv.visitJumpInsn(IFGE, l5);
-Label l6 = new Label();
-mv.visitLabel(l6);
-mv.visitLineNumber(132, l6);
-Label l7 = new Label();
-mv.visitJumpInsn(GOTO, l7);
 mv.visitLabel(l5);
-mv.visitLineNumber(134, l5);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+Label l6 = new Label();
+mv.visitJumpInsn(GOTO, l6);
+Label l7 = new Label();
+mv.visitLabel(l7);
+mv.visitLineNumber(274, l7);
+mv.visitFrame(Opcodes.F_APPEND,1, new Object[] {Opcodes.INTEGER}, 0, null);
 mv.visitIincInsn(1, 1);
-mv.visitLabel(l4);
-mv.visitLineNumber(135, l4);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitVarInsn(ILOAD, 1);
-mv.visitInsn(ICONST_4);
 Label l8 = new Label();
 mv.visitLabel(l8);
-mv.visitLineNumber(124, l8);
-mv.visitJumpInsn(IF_ICMPLT, l0);
-mv.visitLabel(l7);
-mv.visitLineNumber(137, l7);
+mv.visitLineNumber(276, l8);
+mv.visitVarInsn(ILOAD, 2);
+mv.visitInsn(ICONST_M1);
+Label l9 = new Label();
+mv.visitJumpInsn(IF_ICMPEQ, l9);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitInsn(ICONST_5);
+mv.visitInsn(IREM);
+Label l10 = new Label();
+mv.visitJumpInsn(IFNE, l10);
+mv.visitLabel(l9);
+mv.visitLineNumber(277, l9);
 mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitIntInsn(SIPUSH, 1000);
+mv.visitInsn(IRETURN);
+mv.visitLabel(l10);
+mv.visitLineNumber(273, l10);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitIincInsn(2, 1);
+mv.visitLabel(l6);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ILOAD, 2);
+mv.visitInsn(ICONST_3);
+mv.visitJumpInsn(IF_ICMPLT, l7);
+mv.visitLabel(l4);
+mv.visitLineNumber(281, l4);
+mv.visitFrame(Opcodes.F_CHOP,1, null, 0, null);
 mv.visitVarInsn(ILOAD, 1);
 mv.visitInsn(IRETURN);
-Label l9 = new Label();
-mv.visitLabel(l9);
-mv.visitLocalVariable("this", "Lbooton/translator/flow/DoWhiteTest$6;", null, l0, l9, 0);
-mv.visitLocalVariable("value", "I", null, l0, l9, 1);
-mv.visitMaxs(2, 2);
+Label l11 = new Label();
+mv.visitLabel(l11);
+mv.visitLocalVariable("this", "Lbooton/translator/flow/ForTest$14;", null, l0, l11, 0);
+mv.visitLocalVariable("value", "I", null, l0, l11, 1);
+mv.visitLocalVariable("i", "I", null, l5, l4, 2);
+mv.visitMaxs(2, 3);
 mv.visitEnd();
 }
--1  0
-0  1
-1  2
-2  5
-5  4
-2  6
-6  7
-1  3
-3  4
-1  4
-4  8
-8  7
-braker2 8  7
-BDJ:function(A){
-		// 125
-		l0 : do {
-			++A;
-			// 127
-			if (A%2!=0) {
-				// 131
-				if (A>=0) {
-					// 134
-					++A;
-				} else {
-					// 132
+set 10  4  6
+BDJ:function(A,B){
+		// -1 -> 0
+		// 270
+		if (A!=0) {
+			// 0 -> 1
+			// 273
+			B=0;
+			// 1 -> 5
+			// 5 -> 6
+			l6: for (; B<3; ++B) {
+				// 6 -> 7
+				// 274
+				++A;
+				// 7 -> 8
+				// 276
+				if (B==-1||A%5==0) {
+					// 8 -> 9
+					// 277
+					return 1000;
 				}
-			} else {
-				// 128
+				continue l6; // 8 -> 10 Entrance 6
 			}
-			// 135
-		} while (A<4)break l0
+			// 6 -> 4
+			// 281
+			return A;
+		} else {
+			// 0 -> 2
+			// 271
+			++A;
+			// 2 -> 3
+			// 272
+			// 3 -> 4
+		}
+		// 0 -> 4
 	},
 	
-11 13, 2013 8:39:22 åﬂëO com.gargoylesoftware.htmlunit.javascript.StrictErrorReporter error
-èdëÂ: error: message=[undefined label] sourceName=[] line=[16763] lineSource=[		} while (A<4)break l0] lineOffset=[23]
