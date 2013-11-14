@@ -729,7 +729,6 @@ class Node {
                 Node exit = block.exit;
 
                 if (exit != null) {
-                    // exit.written = false;
                     process(exit, buffer);
                 }
             }
@@ -749,12 +748,15 @@ class Node {
             next.processCount++;
 
             if (next.loopCondition && hasDominator(next.loopEntrance)) {
-                buffer.append("continue l", next.loopEntrance.id, "; // " + id + " -> " + next.id + " Entrance " + next.loopEntrance.id);
+                buffer.comment(id + " -> " + next.id + " Entrance " + next.loopEntrance.id);
+                buffer.append("continue l", next.loopEntrance.id, "; // " + id + " -> " + next.id + " Enter " + next.loopEntrance.id)
+                        .line();
                 return;
             }
 
             if (!loopCondition && next.loopExit && hasDominator(next.loopEntrance)) {
-                buffer.append("break l", next.loopEntrance.id, "; // " + id + " -> " + next.id + " Entrance " + next.loopEntrance.id);
+                buffer.append("break l", next.loopEntrance.id, "; // " + id + " -> " + next.id + " Enter " + next.loopEntrance.id)
+                        .line();
                 return;
             }
 
@@ -1153,7 +1155,6 @@ class Node {
 
                 if (node.getDominator() == start) {
                     exit = node;
-                    // exit.written = true; // forbid node writing
                     return;
                 }
                 nodes.addAll(node.outgoing);
