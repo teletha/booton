@@ -655,7 +655,6 @@ class Node {
                         Node process = detectFollower();
                         analyzeStructure(update, follower, this);
                         analyzeStructure(this, follower, this);
-                        debugger.print("set " + update.id + "  " + follower.id + "  " + id);
 
                         while (!(stack.peekLast() instanceof OperandCondition)) {
                             process.stack.addFirst(remove(0));
@@ -709,11 +708,11 @@ class Node {
                     if (current.exception == null) {
                         // finally block
                         buffer.write(variable, "=", "$;").line();
-                        current.node.write(buffer);
+                        process(current.node, buffer);
                     } else {
                         buffer.write("if", "($ instanceof " + Javascript.computeClassName(current.exception) + ")", "{");
                         buffer.write(variable, "=", "$;").line();
-                        current.node.write(buffer);
+                        process(current.node, buffer);
                         buffer.write("}", "else");
 
                         if (i + 1 == block.catches.size()) {
@@ -760,13 +759,6 @@ class Node {
             }
 
             debugger.print(() -> buffer.comment(id + " -> " + next.id + " next count " + next.countWrite() + "  " + (next.processCount) + "  " + next.loopExit));
-            // if (nextDominator.backedges.isEmpty()) {
-            // // stop here
-            // debugger.print("stop  herer " + id + "  " + nextDominator.id + "   " + next.id +
-            // "   " + next.loopEntrance);
-            // if (nextDominator.follower == null) nextDominator.follower = next;
-            // return;
-            // }
 
             // normal process
             if (next.countWrite() <= next.processCount) {
@@ -1142,6 +1134,8 @@ class Node {
                 }
             }
             catches.add(new Catch(exception, catcher));
+            catcher.countWrite();
+            catcher.processRequire++;
         }
 
         /**

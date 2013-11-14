@@ -1,81 +1,3 @@
-false
-java.lang.Error
-	at booton.translator.Node.write(Node.java:500)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:625)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:671)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:641)
-	at booton.translator.Node.process(Node.java:779)
-	at booton.translator.Node.write(Node.java:673)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:631)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:631)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.JavaMethodCompiler.visitEnd(JavaMethodCompiler.java:305)
-	at org.objectweb.asm.ClassReader.b(Unknown Source)
-	at org.objectweb.asm.ClassReader.accept(Unknown Source)
-	at org.objectweb.asm.ClassReader.accept(Unknown Source)
-	at booton.translator.Javascript.compile(Javascript.java:348)
-	at booton.translator.Javascript.write(Javascript.java:268)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.writeTo(Javascript.java:232)
-	at booton.translator.Javascript.write(Javascript.java:184)
-	at booton.translator.ScriptTester.executeAsJavascript(ScriptTester.java:235)
-	at booton.translator.ScriptRunner$JavascriptMethod$1.runReflectiveCall(ScriptRunner.java:134)
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
-	at booton.translator.ScriptRunner$JavascriptMethod.invokeExplosively(ScriptRunner.java:136)
-	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
-	at antibug.powerassert.PowerAssert$1.evaluate(PowerAssert.java:92)
-	at org.junit.rules.RunRules.evaluate(RunRules.java:18)
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:275)
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:68)
-	at booton.translator.ScriptRunner.runChild(ScriptRunner.java:61)
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:47)
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:241)
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:77)
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:238)
-	at org.junit.runners.ParentRunner.access$0(ParentRunner.java:236)
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:231)
-	at org.junit.runners.ParentRunner$5.evaluate(ParentRunner.java:398)
-	at org.junit.rules.RunRules.evaluate(RunRules.java:18)
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:310)
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:467)
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:683)
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:390)
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:197)
 visit label -1
 visit label 6
 visit label 7
@@ -1821,465 +1743,92 @@ mv.visitMaxs(7, 13);
 mv.visitEnd();
 }
 set 23  17  20
-false
-java.lang.Error
-	at booton.translator.Node.write(Node.java:500)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:641)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:696)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:779)
-	at booton.translator.Node.write(Node.java:685)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.JavaMethodCompiler.visitEnd(JavaMethodCompiler.java:305)
-	at org.objectweb.asm.ClassReader.b(Unknown Source)
-	at org.objectweb.asm.ClassReader.accept(Unknown Source)
-	at org.objectweb.asm.ClassReader.accept(Unknown Source)
-	at booton.translator.Javascript.compile(Javascript.java:348)
-	at booton.translator.Javascript.write(Javascript.java:268)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:275)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:275)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:275)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:275)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:275)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:275)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:275)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.writeTo(Javascript.java:232)
-	at booton.translator.Javascript.write(Javascript.java:184)
-	at booton.translator.ScriptTester.executeAsJavascript(ScriptTester.java:235)
-	at booton.translator.ScriptRunner$JavascriptMethod$1.runReflectiveCall(ScriptRunner.java:134)
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
-	at booton.translator.ScriptRunner$JavascriptMethod.invokeExplosively(ScriptRunner.java:136)
-	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
-	at antibug.powerassert.PowerAssert$1.evaluate(PowerAssert.java:92)
-	at org.junit.rules.RunRules.evaluate(RunRules.java:18)
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:275)
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:68)
-	at booton.translator.ScriptRunner.runChild(ScriptRunner.java:61)
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:47)
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:241)
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:77)
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:238)
-	at org.junit.runners.ParentRunner.access$0(ParentRunner.java:236)
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:231)
-	at org.junit.runners.ParentRunner$5.evaluate(ParentRunner.java:398)
-	at org.junit.rules.RunRules.evaluate(RunRules.java:18)
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:310)
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:467)
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:683)
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:390)
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:197)
-true
-java.lang.Error
-	at booton.translator.Node.write(Node.java:500)
-	at booton.translator.Node.write(Node.java:739)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:641)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:696)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:779)
-	at booton.translator.Node.write(Node.java:685)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.JavaMethodCompiler.visitEnd(JavaMethodCompiler.java:305)
-	at org.objectweb.asm.ClassReader.b(Unknown Source)
-	at org.objectweb.asm.ClassReader.accept(Unknown Source)
-	at org.objectweb.asm.ClassReader.accept(Unknown Source)
-	at booton.translator.Javascript.compile(Javascript.java:348)
-	at booton.translator.Javascript.write(Javascript.java:268)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:275)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:275)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:275)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:275)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:275)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:275)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:275)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.writeTo(Javascript.java:232)
-	at booton.translator.Javascript.write(Javascript.java:184)
-	at booton.translator.ScriptTester.executeAsJavascript(ScriptTester.java:235)
-	at booton.translator.ScriptRunner$JavascriptMethod$1.runReflectiveCall(ScriptRunner.java:134)
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
-	at booton.translator.ScriptRunner$JavascriptMethod.invokeExplosively(ScriptRunner.java:136)
-	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
-	at antibug.powerassert.PowerAssert$1.evaluate(PowerAssert.java:92)
-	at org.junit.rules.RunRules.evaluate(RunRules.java:18)
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:275)
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:68)
-	at booton.translator.ScriptRunner.runChild(ScriptRunner.java:61)
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:47)
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:241)
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:77)
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:238)
-	at org.junit.runners.ParentRunner.access$0(ParentRunner.java:236)
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:231)
-	at org.junit.runners.ParentRunner$5.evaluate(ParentRunner.java:398)
-	at org.junit.rules.RunRules.evaluate(RunRules.java:18)
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:310)
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:467)
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:683)
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:390)
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:197)
 set 62  4  59
 $0:function(A,B,C,D,E,F,G,H,I,J,K,L){
 		// -1 -> 6 next count 1  1  false
-		// write next node 6
 		// 116
 		// 6 -> 7 next count 1  1  false
-		// write next node 7
 		// 108
 		this.h=null;
 		// 7 -> 8 next count 1  1  false
-		// write next node 8
 		// 120
 		this.e=A;
 		// 8 -> 9 next count 1  1  false
-		// write next node 9
 		// 121
 		this.f=A.Ju();
 		// 9 -> 10 next count 1  1  false
-		// write next node 10
 		// 125
 		boot.FA.c.BV(A,this);
 		// 10 -> 11 next count 1  1  false
-		// write next node 11
 		// 128
 		// 11 -> 14 next count 1  1  false
-		// write next node 14
 		this.h=boot.FA.d.HG(A)!=0||A.JO()!=0?new boot.GQ(A,0):boot.CY.RK(boot.GQ.$,A);
 		// 14 -> 15 next count 1  1  false
-		// write next node 15
 		// 131
 		B=new boot.BI(0);
 		// 15 -> 16 next count 1  1  false
-		// write next node 16
 		// 133
 		D=boot.EY.SD(A).HH();
 		// 16 -> 17 next count 1  1  false
-		// write next node 17
 		// 133
 		l17: while (D.HV()!=0) {
 			// 17 -> 18 next count 1  1  false
-			// write next node 18
 			C=D.HT();
 			// 18 -> 19 next count 1  1  false
-			// write next node 19
 			// 134
 			G=(H=C.JC()).length;F=0;
 			// 19 -> 20 next count 1  1  false
-			// write next node 20
 			l20: for (; F<G; ++F) {
 				// 20 -> 21 next count 1  1  false
-				// write next node 21
 				E=H[F];
 				// 21 -> 22 next count 1  1  false
-				// write next node 22
 				// 136
 				if ((266&E.Iv())==0&&(E.VG()==0&&E.JW()==0)) {
 					// 22 -> 25 next count 1  1  false
-					// write next node 25
 					// 143
 					I=1;
 					// 25 -> 26 next count 1  1  false
-					// write next node 26
 					// 144
 					J="set";
 					// 26 -> 27 next count 1  1  false
-					// write next node 27
 					// 145
 					K=E.IQ();
 					// 27 -> 28 next count 1  1  false
-					// write next node 28
 					// 147
 					if (E.VQ()!=boot.DM.c) {
 						// 28 -> 30 next count 1  1  false
-						// write next node 30
 						// 148
 						I=0;
 						// 30 -> 31 next count 1  1  false
-						// write next node 31
 						// 149
 						// 31 -> 33 next count 1  1  false
-						// write next node 33
 						J=(K.Bw(0)=="i"?"is":"get");
 						// 33 -> 29 next count 2  1  false
 					}
 					// 28 -> 29 next count 2  2  false
-					// write next node 29
 					// 153
 					if ((J.length<K.length&&(K.Cu(J)!=0&&boot.BS.PX(K.Bw(J.length))==0))&&E.VF().length==I) {
 						// 29 -> 35 next count 1  1  false
-						// write next node 35
 						// 157
 						K=boot.GR.WM(K.BA(J.length));
 						// 35 -> 36 next count 1  1  false
-						// write next node 36
 						// 160
 						L=B.BS(K);
 						// 36 -> 37 next count 1  1  false
-						// write next node 37
 						// 162
 						if (L==null) {
 							// 37 -> 39 next count 1  1  false
-							// write next node 39
 							// 163
 							L=boot.array("DJ",2,null);
 							// 39 -> 40 next count 1  1  false
-							// write next node 40
 							// 164
 							B.BV(K,L);
 							// 40 -> 38 next count 2  1  false
 						}
 						// 37 -> 38 next count 2  2  false
-						// write next node 38
 						// 167
 						if (L[I]==null) {
 							// 38 -> 41 next count 1  1  false
-							// write next node 41
 							// 168
 							L[I]=E;
 							continue l20; // 41 -> 23 Entrance 20
@@ -2296,71 +1845,54 @@ $0:function(A,B,C,D,E,F,G,H,I,J,K,L){
 		// 177
 		C=boot.FE.Rx();
 		// 42 -> 43 next count 1  1  false
-		// write next node 43
 		// 180
 		D=new boot.u(0);
 		// 43 -> 44 next count 1  1  false
-		// write next node 44
 		// 181
 		E=B.KV().HH();
 		// 44 -> 45 next count 1  1  false
-		// write next node 45
 		// 183
 		// 45 -> 46 next count 1  1  false
-		// write next node 46
 		// 183
 		l46: while (E.HV()!=0) {
 			// 46 -> 47 next count 1  1  false
-			// write next node 47
 			// 184
 			F=E.HT();
 			// 47 -> 48 next count 1  1  false
-			// write next node 48
 			// 185
 			G=F.KR();
 			// 48 -> 49 next count 1  1  false
-			// write next node 49
 			// 187
 			if (G[0]!=null&&(G[1]!=null&&(!(G[0].Iv()|G[1].Iv())&16)==0)) {
 				// 49 -> 0 next count 1  1  false
-				// write next node 0
 				// 190
 				try {
 					H=boot.FA.VI(G[0].VQ(),A);
 					// 0 -> 50 next count 1  1  false
-					// write next node 50
 					// 192
 					if (H.e==boot.FA.VI(G[1].VF()[0],A).e) {
 						// 50 -> 51 next count 1  1  false
-						// write next node 51
 						// 193
 						G[0].VE(true);
 						// 51 -> 52 next count 1  1  false
-						// write next node 52
 						// 194
 						G[1].VE(true);
 						// 52 -> 53 next count 1  1  false
-						// write next node 53
 						// 197
 						I=new boot.FG(H,F.KX(),0);
 						// 53 -> 54 next count 1  1  false
-						// write next node 54
 						// 198
 						I.f=boot.array("GS",[C.Ry(G[0]),C.Ry(G[1])]);
 						// 54 -> 55 next count 1  1  false
-						// write next node 55
 						// 199
 						I.WN(G[0]);
 						// 55 -> 56 next count 1  1  false
-						// write next node 56
 						// 200
 						I.WN(G[1]);
 						// 56 -> 57 next count 1  1  false
-						// write next node 57
 						// 203
 						D.W(I);
 						// 57 -> 1 next count 1  1  false
-						// write next node 1
 						// 205
 						continue l46; // 1 -> 46 Entrance 46
 					}
@@ -2369,14 +1901,14 @@ $0:function(A,B,C,D,E,F,G,H,I,J,K,L){
 					$ = boot.P.BI($) ;
 					if ($ instanceof boot.O) {
 						H = $;
+						// 0 -> 2 next count 1  1  false
 						// 2 -> 58 next count 1  1  false
-						// write next node 58
 						// 206
 						throw boot.CY.RT(H);
 					} else {
 						throw $;
 					}
-				}
+				}// 0 -> 50 next count 1  2  false
 			}
 			continue l46; // 49 -> 46 Entrance 46
 		}
@@ -2385,43 +1917,33 @@ $0:function(A,B,C,D,E,F,G,H,I,J,K,L){
 		try {
 			H=(I=A.JG()).length;G=0;
 			// 3 -> 59 next count 1  1  false
-			// write next node 59
 			l59: for (; G<H; ++G) {
 				// 59 -> 60 next count 1  1  false
-				// write next node 60
 				F=I[G];
 				// 60 -> 61 next count 1  1  false
-				// write next node 61
 				// 216
 				if ((282&F.Iv())==0) {
 					// 61 -> 63 next count 1  1  false
-					// write next node 63
 					// 217
 					F.VE(true);
 					// 63 -> 64 next count 1  1  false
-					// write next node 64
 					// 219
 					J=new boot.FG(boot.FA.VI(F.WO(),A),F.IQ(),0);
 					// 64 -> 65 next count 1  1  false
-					// write next node 65
 					// 220
 					J.f=boot.array("GS",[C.WP(F),C.WQ(F)]);
 					// 65 -> 66 next count 1  1  false
-					// write next node 66
 					// 221
 					J.WN(F);
 					// 66 -> 67 next count 1  1  false
-					// write next node 67
 					// 223
 					if ((128&F.Iv())!=0) {
 						// 67 -> 69 next count 1  1  false
-						// write next node 69
 						// 224
 						J.e.BV(boot.GT.$,"");
 						// 69 -> 68 next count 2  1  false
 					}
 					// 67 -> 68 next count 2  2  false
-					// write next node 68
 					// 228
 					D.W(J);
 					continue l59; // 68 -> 62 Entrance 59
@@ -2431,27 +1953,23 @@ $0:function(A,B,C,D,E,F,G,H,I,J,K,L){
 			// 59 -> 4 next count 1  1  true
 			// 231
 			// 4 -> 70 next count 1  1  false
-			// write next node 70
 			// 236
 			D.HR();
 			// 70 -> 72 next count 1  1  false
-			// write next node 72
 			// 237
 			boot.FJ.TQ(D);
 			// 72 -> 73 next count 1  1  false
-			// write next node 73
 			// 240
 			this.g=boot.FJ.TD(D);
 			// 73 -> 74 next count 1  1  false
-			// write next node 74
 			// 241
 			return;
 		} catch ($) {
 			$ = boot.P.BI($) ;
 			if ($ instanceof boot.O) {
 				F = $;
+				// 3 -> 5 next count 1  1  false
 				// 5 -> 71 next count 1  1  false
-				// write next node 71
 				// 232
 				throw boot.CY.RT(F);
 			} else {
@@ -2511,15 +2029,12 @@ mv.visitEnd();
 }
 $0:function(A,B,C){
 		// -1 -> 0 next count 1  1  false
-		// write next node 0
 		// 31
 		boot.FA.prototype.$0.call(this,A);
 		// 0 -> 1 next count 1  1  false
-		// write next node 1
 		// 33
 		this.i=boot.FA.VI(B,C);
 		// 1 -> 2 next count 1  1  false
-		// write next node 2
 		// 34
 	},
 	
@@ -2622,187 +2137,438 @@ mv.visitEnd();
 }
 $0:function(A,B,C){
 		// -1 -> 0 next count 1  1  false
-		// write next node 0
 		// 37
 		boot.FA.prototype.$0.call(this,A);
 		// 0 -> 1 next count 1  1  false
-		// write next node 1
 		// 39
 		if (B.length==0) {
 			// 1 -> 3 next count 1  1  false
-			// write next node 3
 			// 40
 			B=boot.array("DO",[boot.G.$,boot.G.$]);
 			// 3 -> 2 next count 2  1  false
 		}
 		// 1 -> 2 next count 2  2  false
-		// write next node 2
 		// 43
 		this.i=boot.FA.VI(B[0],C);
 		// 2 -> 4 next count 1  1  false
-		// write next node 4
 		// 44
 		this.j=boot.FA.VI(B[1],C);
 		// 4 -> 5 next count 1  1  false
-		// write next node 5
 		// 45
 	},
 	
-10
-30
-false
-java.lang.Error
-	at booton.translator.Node.write(Node.java:500)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.Node.process(Node.java:786)
-	at booton.translator.Node.write(Node.java:563)
-	at booton.translator.JavaMethodCompiler.visitEnd(JavaMethodCompiler.java:305)
-	at org.objectweb.asm.ClassReader.b(Unknown Source)
-	at org.objectweb.asm.ClassReader.accept(Unknown Source)
-	at org.objectweb.asm.ClassReader.accept(Unknown Source)
-	at booton.translator.Javascript.compile(Javascript.java:348)
-	at booton.translator.Javascript.write(Javascript.java:268)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:272)
-	at booton.translator.Javascript.write(Javascript.java:312)
-	at booton.translator.Javascript.write(Javascript.java:290)
-	at booton.translator.Javascript.writeTo(Javascript.java:236)
-	at booton.translator.Javascript.write(Javascript.java:184)
-	at booton.translator.ScriptTester.executeAsJavascript(ScriptTester.java:235)
-	at booton.translator.ScriptRunner$JavascriptMethod$1.runReflectiveCall(ScriptRunner.java:134)
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
-	at booton.translator.ScriptRunner$JavascriptMethod.invokeExplosively(ScriptRunner.java:136)
-	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
-	at antibug.powerassert.PowerAssert$1.evaluate(PowerAssert.java:92)
-	at org.junit.rules.RunRules.evaluate(RunRules.java:18)
-	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:275)
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:68)
-	at booton.translator.ScriptRunner.runChild(ScriptRunner.java:61)
-	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:47)
-	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:241)
-	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:77)
-	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:238)
-	at org.junit.runners.ParentRunner.access$0(ParentRunner.java:236)
-	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:231)
-	at org.junit.runners.ParentRunner$5.evaluate(ParentRunner.java:398)
-	at org.junit.rules.RunRules.evaluate(RunRules.java:18)
-	at org.junit.runners.ParentRunner.run(ParentRunner.java:310)
-	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
-	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:467)
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:683)
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:390)
-	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:197)
+visit label -1
+visit label 0
+visit label 6
+merge6
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [5,6]		dom : [-1]	code : A%2!=0 [Condition]
+6	  in : [0]	out : []		dom : [0]	code : 
+
+visit label 5
+visit label 1
+visit label 8
+merge8
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [5,6]		dom : [-1]	code : A%2!=0 [Condition]
+6	  in : [0]	out : []		dom : [0]	code : throw  [Expression] new boot.BF(0) [Expression] ; [Expression]
+5	  in : [0]	out : [1]		dom : [0]	code : D=++this.c [Expression] ; [Expression]
+1	  in : [5]	out : [7,8]		dom : [5]	code : this.c%3!=0 [Condition]
+8	  in : [1]	out : []		dom : [1]	code : 
+
+visit label 9
+visit label 7
+visit label 10
+visit label 2
+merge2
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [5,6]		dom : [-1]	code : A%2!=0 [Condition]
+6	  in : [0]		out : []		dom : [0]	code : throw  [Expression] new boot.BF(0) [Expression] ; [Expression]
+5	  in : [0]		out : [1]		dom : [0]	code : D=++this.c [Expression] ; [Expression]
+1	  in : [5]		out : [7,8]		dom : [5]	code : this.c%3!=0 [Condition]
+8	  in : [1]		out : [9]		dom : [1]	code : this.c=this.c+3 [Expression] ; [Expression]
+9	  in : [8]		out : [10]		dom : [8]	code : 
+7	  in : [1]		out : [10]		dom : [1]	code : this.c=this.c+4 [Expression] ; [Expression]
+10	  in : [9,7]		out : []		dom : []	code : return  [Expression] D [Expression] ; [Expression]
+2	  in : []		out : []		dom : []	code : 
+
+visit label 11
+visit label 4
+visit label 13
+merge13
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [5,6]		dom : [-1]	code : A%2!=0 [Condition]
+6	  in : [0]		out : []		dom : [0]	code : throw  [Expression] new boot.BF(0) [Expression] ; [Expression]
+5	  in : [0]		out : [1]		dom : [0]	code : D=++this.c [Expression] ; [Expression]
+1	  in : [5]		out : [7,8]		dom : [5]	code : this.c%3!=0 [Condition]
+8	  in : [1]		out : [9]		dom : [1]	code : this.c=this.c+3 [Expression] ; [Expression]
+9	  in : [8]		out : [10]		dom : [8]	code : 
+7	  in : [1]		out : [10]		dom : [1]	code : this.c=this.c+4 [Expression] ; [Expression]
+10	  in : [9,7]		out : []		dom : []	code : return  [Expression] D [Expression] ; [Expression]
+2	  in : []		out : [11]		dom : []	code : 
+11	  in : [2]		out : [4]		dom : [2]	code : D=this.c=this.c+2 [Expression] ; [Expression]
+4	  in : [11]		out : [12,13]		dom : [11]	code : this.c%3!=0 [Condition]
+13	  in : [4]		out : []		dom : [4]	code : 
+
+visit label 14
+visit label 12
+visit label 15
+visit label 3
+merge3
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [5,6]		dom : [-1]	code : A%2!=0 [Condition]
+6	  in : [0]		out : []		dom : [0]	code : throw  [Expression] new boot.BF(0) [Expression] ; [Expression]
+5	  in : [0]		out : [1]		dom : [0]	code : D=++this.c [Expression] ; [Expression]
+1	  in : [5]		out : [7,8]		dom : [5]	code : this.c%3!=0 [Condition]
+8	  in : [1]		out : [9]		dom : [1]	code : this.c=this.c+3 [Expression] ; [Expression]
+9	  in : [8]		out : [10]		dom : [8]	code : 
+7	  in : [1]		out : [10]		dom : [1]	code : this.c=this.c+4 [Expression] ; [Expression]
+10	  in : [9,7]		out : []		dom : []	code : return  [Expression] D [Expression] ; [Expression]
+2	  in : []		out : [11]		dom : []	code : 
+11	  in : [2]		out : [4]		dom : [2]	code : D=this.c=this.c+2 [Expression] ; [Expression]
+4	  in : [11]		out : [12,13]		dom : [11]	code : this.c%3!=0 [Condition]
+13	  in : [4]		out : [14]		dom : [4]	code : this.c=this.c+3 [Expression] ; [Expression]
+14	  in : [13]		out : [15]		dom : [13]	code : 
+12	  in : [4]		out : [15]		dom : [4]	code : this.c=this.c+4 [Expression] ; [Expression]
+15	  in : [14,12]		out : []		dom : []	code : return  [Expression] D [Expression] ; [Expression]
+3	  in : []		out : []		dom : []	code : 
+
+visit label 16
+visit label 18
+merge18
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [5,6]		dom : [-1]	code : A%2!=0 [Condition]
+6	  in : [0]		out : []		dom : [0]	code : throw  [Expression] new boot.BF(0) [Expression] ; [Expression]
+5	  in : [0]		out : [1]		dom : [0]	code : D=++this.c [Expression] ; [Expression]
+1	  in : [5]		out : [7,8]		dom : [5]	code : this.c%3!=0 [Condition]
+8	  in : [1]		out : [9]		dom : [1]	code : this.c=this.c+3 [Expression] ; [Expression]
+9	  in : [8]		out : [10]		dom : [8]	code : 
+7	  in : [1]		out : [10]		dom : [1]	code : this.c=this.c+4 [Expression] ; [Expression]
+10	  in : [9,7]		out : []		dom : []	code : return  [Expression] D [Expression] ; [Expression]
+2	  in : []		out : [11]		dom : []	code : 
+11	  in : [2]		out : [4]		dom : [2]	code : D=this.c=this.c+2 [Expression] ; [Expression]
+4	  in : [11]		out : [12,13]		dom : [11]	code : this.c%3!=0 [Condition]
+13	  in : [4]		out : [14]		dom : [4]	code : this.c=this.c+3 [Expression] ; [Expression]
+14	  in : [13]		out : [15]		dom : [13]	code : 
+12	  in : [4]		out : [15]		dom : [4]	code : this.c=this.c+4 [Expression] ; [Expression]
+15	  in : [14,12]		out : []		dom : []	code : return  [Expression] D [Expression] ; [Expression]
+3	  in : []		out : [16]		dom : []	code : 
+16	  in : [3]		out : [17,18]		dom : [3]	code : this.c%3!=0 [Condition]
+18	  in : [16]		out : []		dom : [16]	code : 
+
+visit label 19
+visit label 17
+visit label 20
+visit label 21
+merge21
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [5,6]		dom : [-1]	code : A%2!=0 [Condition]
+6	  in : [0]		out : []		dom : [0]	code : throw  [Expression] new boot.BF(0) [Expression] ; [Expression]
+5	  in : [0]		out : [1]		dom : [0]	code : D=++this.c [Expression] ; [Expression]
+1	  in : [5]		out : [7,8]		dom : [5]	code : this.c%3!=0 [Condition]
+8	  in : [1]		out : [9]		dom : [1]	code : this.c=this.c+3 [Expression] ; [Expression]
+9	  in : [8]		out : [10]		dom : [8]	code : 
+7	  in : [1]		out : [10]		dom : [1]	code : this.c=this.c+4 [Expression] ; [Expression]
+10	  in : [9,7]		out : []		dom : []	code : return  [Expression] D [Expression] ; [Expression]
+2	  in : []		out : [11]		dom : []	code : 
+11	  in : [2]		out : [4]		dom : [2]	code : D=this.c=this.c+2 [Expression] ; [Expression]
+4	  in : [11]		out : [12,13]		dom : [11]	code : this.c%3!=0 [Condition]
+13	  in : [4]		out : [14]		dom : [4]	code : this.c=this.c+3 [Expression] ; [Expression]
+14	  in : [13]		out : [15]		dom : [13]	code : 
+12	  in : [4]		out : [15]		dom : [4]	code : this.c=this.c+4 [Expression] ; [Expression]
+15	  in : [14,12]		out : []		dom : []	code : return  [Expression] D [Expression] ; [Expression]
+3	  in : []		out : [16]		dom : []	code : 
+16	  in : [3]		out : [17,18]		dom : [3]	code : this.c%3!=0 [Condition]
+18	  in : [16]		out : [19]		dom : [16]	code : this.c=this.c+3 [Expression] ; [Expression]
+19	  in : [18]		out : [20]		dom : [18]	code : 
+17	  in : [16]		out : [20]		dom : [16]	code : this.c=this.c+4 [Expression] ; [Expression]
+20	  in : [19,17]		out : []		dom : []	code : throw  [Expression] C [Expression] ; [Expression]
+21	  in : []		out : []		dom : []	code : 
+
+booton.translator.flow.TryTest booton.translator.flow.TryTest
+-1	  in : []		out : [0]		dom : []	try :     	code : 
+0	  in : [-1]		out : [5,6]		dom : [-1]	try : s  	code : A%2!=0 [Condition]
+6	  in : [0]		out : []		dom : [0]	try :     	code : throw  [Expression] new boot.BF(0) [Expression] ; [Expression]
+5	  in : [0]		out : [1]		dom : [0]	try :     	code : D=++this.c [Expression] ; [Expression]
+1	  in : [5]		out : [7,8]		dom : [5]	try : e  	code : this.c%3!=0 [Condition]
+8	  in : [1]		out : [9]		dom : [1]	try :     	code : this.c=this.c+3 [Expression] ; [Expression]
+9	  in : [8]		out : [10]		dom : [8]	try :     	code : 
+7	  in : [1]		out : [10]		dom : [1]	try :     	code : this.c=this.c+4 [Expression] ; [Expression]
+10	  in : [9,7]		out : []		dom : [1]	try :     	code : return  [Expression] D [Expression] ; [Expression]
+2	  in : []		out : [11]		dom : [0]	try : cs	code : 
+11	  in : [2]		out : [4]		dom : [2]	try :     	code : D=this.c=this.c+2 [Expression] ; [Expression]
+4	  in : [11]		out : [12,13]		dom : [11]	try :   e	code : this.c%3!=0 [Condition]
+13	  in : [4]		out : [14]		dom : [4]	try :     	code : this.c=this.c+3 [Expression] ; [Expression]
+14	  in : [13]		out : [15]		dom : [13]	try :     	code : 
+12	  in : [4]		out : [15]		dom : [4]	try :     	code : this.c=this.c+4 [Expression] ; [Expression]
+15	  in : [14,12]		out : []		dom : [4]	try :     	code : return  [Expression] D [Expression] ; [Expression]
+3	  in : []		out : [16]		dom : [2]	try :   c	code : 
+16	  in : [3]		out : [17,18]		dom : [3]	try :     	code : this.c%3!=0 [Condition]
+18	  in : [16]		out : [19]		dom : [16]	try :     	code : this.c=this.c+3 [Expression] ; [Expression]
+19	  in : [18]		out : [20]		dom : [18]	try :     	code : 
+17	  in : [16]		out : [20]		dom : [16]	try :     	code : this.c=this.c+4 [Expression] ; [Expression]
+20	  in : [19,17]		out : []		dom : [16]	try :     	code : throw  [Expression] C [Expression] ; [Expression]
+21	  in : []		out : []		dom : []	try :     	code : 
+
+{
+mv = cw.visitMethod(ACC_PRIVATE, "count", "(I)I", null, null);
+mv.visitCode();
+Label l0 = new Label();
+Label l1 = new Label();
+Label l2 = new Label();
+mv.visitTryCatchBlock(l0, l1, l2, "java/lang/Error");
+Label l3 = new Label();
+mv.visitTryCatchBlock(l0, l1, l3, null);
+Label l4 = new Label();
+mv.visitTryCatchBlock(l2, l4, l3, null);
+mv.visitLabel(l0);
+mv.visitLineNumber(638, l0);
+mv.visitVarInsn(ILOAD, 1);
+mv.visitInsn(ICONST_2);
+mv.visitInsn(IREM);
+Label l5 = new Label();
+mv.visitJumpInsn(IFNE, l5);
+Label l6 = new Label();
+mv.visitLabel(l6);
+mv.visitLineNumber(639, l6);
+mv.visitTypeInsn(NEW, "java/lang/Error");
+mv.visitInsn(DUP);
+mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Error", "<init>", "()V");
+mv.visitInsn(ATHROW);
+mv.visitLabel(l5);
+mv.visitLineNumber(641, l5);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitInsn(DUP);
+mv.visitFieldInsn(GETFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+mv.visitInsn(ICONST_1);
+mv.visitInsn(IADD);
+mv.visitInsn(DUP_X1);
+mv.visitFieldInsn(PUTFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+mv.visitVarInsn(ISTORE, 4);
+mv.visitLabel(l1);
+mv.visitLineNumber(645, l1);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitFieldInsn(GETFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+mv.visitInsn(ICONST_3);
+mv.visitInsn(IREM);
+Label l7 = new Label();
+mv.visitJumpInsn(IFNE, l7);
+Label l8 = new Label();
+mv.visitLabel(l8);
+mv.visitLineNumber(646, l8);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitInsn(DUP);
+mv.visitFieldInsn(GETFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+mv.visitInsn(ICONST_3);
+mv.visitInsn(IADD);
+mv.visitFieldInsn(PUTFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+Label l9 = new Label();
+mv.visitLabel(l9);
+mv.visitLineNumber(647, l9);
+Label l10 = new Label();
+mv.visitJumpInsn(GOTO, l10);
+mv.visitLabel(l7);
+mv.visitLineNumber(648, l7);
+mv.visitFrame(Opcodes.F_FULL, 5, new Object[] {"booton/translator/flow/TryTest$28", Opcodes.INTEGER, Opcodes.TOP, Opcodes.TOP, Opcodes.INTEGER}, 0, new Object[] {});
+mv.visitVarInsn(ALOAD, 0);
+mv.visitInsn(DUP);
+mv.visitFieldInsn(GETFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+mv.visitInsn(ICONST_4);
+mv.visitInsn(IADD);
+mv.visitFieldInsn(PUTFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+mv.visitLabel(l10);
+mv.visitLineNumber(641, l10);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ILOAD, 4);
+mv.visitInsn(IRETURN);
+mv.visitLabel(l2);
+mv.visitLineNumber(642, l2);
+mv.visitFrame(Opcodes.F_FULL, 2, new Object[] {"booton/translator/flow/TryTest$28", Opcodes.INTEGER}, 1, new Object[] {"java/lang/Error"});
+mv.visitVarInsn(ASTORE, 2);
+Label l11 = new Label();
+mv.visitLabel(l11);
+mv.visitLineNumber(643, l11);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitInsn(DUP);
+mv.visitFieldInsn(GETFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+mv.visitInsn(ICONST_2);
+mv.visitInsn(IADD);
+mv.visitInsn(DUP_X1);
+mv.visitFieldInsn(PUTFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+mv.visitVarInsn(ISTORE, 4);
+mv.visitLabel(l4);
+mv.visitLineNumber(645, l4);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitFieldInsn(GETFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+mv.visitInsn(ICONST_3);
+mv.visitInsn(IREM);
+Label l12 = new Label();
+mv.visitJumpInsn(IFNE, l12);
+Label l13 = new Label();
+mv.visitLabel(l13);
+mv.visitLineNumber(646, l13);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitInsn(DUP);
+mv.visitFieldInsn(GETFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+mv.visitInsn(ICONST_3);
+mv.visitInsn(IADD);
+mv.visitFieldInsn(PUTFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+Label l14 = new Label();
+mv.visitLabel(l14);
+mv.visitLineNumber(647, l14);
+Label l15 = new Label();
+mv.visitJumpInsn(GOTO, l15);
+mv.visitLabel(l12);
+mv.visitLineNumber(648, l12);
+mv.visitFrame(Opcodes.F_FULL, 5, new Object[] {"booton/translator/flow/TryTest$28", Opcodes.INTEGER, "java/lang/Error", Opcodes.TOP, Opcodes.INTEGER}, 0, new Object[] {});
+mv.visitVarInsn(ALOAD, 0);
+mv.visitInsn(DUP);
+mv.visitFieldInsn(GETFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+mv.visitInsn(ICONST_4);
+mv.visitInsn(IADD);
+mv.visitFieldInsn(PUTFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+mv.visitLabel(l15);
+mv.visitLineNumber(643, l15);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ILOAD, 4);
+mv.visitInsn(IRETURN);
+mv.visitLabel(l3);
+mv.visitLineNumber(644, l3);
+mv.visitFrame(Opcodes.F_FULL, 2, new Object[] {"booton/translator/flow/TryTest$28", Opcodes.INTEGER}, 1, new Object[] {"java/lang/Throwable"});
+mv.visitVarInsn(ASTORE, 3);
+Label l16 = new Label();
+mv.visitLabel(l16);
+mv.visitLineNumber(645, l16);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitFieldInsn(GETFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+mv.visitInsn(ICONST_3);
+mv.visitInsn(IREM);
+Label l17 = new Label();
+mv.visitJumpInsn(IFNE, l17);
+Label l18 = new Label();
+mv.visitLabel(l18);
+mv.visitLineNumber(646, l18);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitInsn(DUP);
+mv.visitFieldInsn(GETFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+mv.visitInsn(ICONST_3);
+mv.visitInsn(IADD);
+mv.visitFieldInsn(PUTFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+Label l19 = new Label();
+mv.visitLabel(l19);
+mv.visitLineNumber(647, l19);
+Label l20 = new Label();
+mv.visitJumpInsn(GOTO, l20);
+mv.visitLabel(l17);
+mv.visitLineNumber(648, l17);
+mv.visitFrame(Opcodes.F_FULL, 4, new Object[] {"booton/translator/flow/TryTest$28", Opcodes.INTEGER, Opcodes.TOP, "java/lang/Throwable"}, 0, new Object[] {});
+mv.visitVarInsn(ALOAD, 0);
+mv.visitInsn(DUP);
+mv.visitFieldInsn(GETFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+mv.visitInsn(ICONST_4);
+mv.visitInsn(IADD);
+mv.visitFieldInsn(PUTFIELD, "booton/translator/flow/TryTest$28", "counter", "I");
+mv.visitLabel(l20);
+mv.visitLineNumber(650, l20);
+mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+mv.visitVarInsn(ALOAD, 3);
+mv.visitInsn(ATHROW);
+Label l21 = new Label();
+mv.visitLabel(l21);
+mv.visitLocalVariable("this", "Lbooton/translator/flow/TryTest$28;", null, l0, l21, 0);
+mv.visitLocalVariable("value", "I", null, l0, l21, 1);
+mv.visitLocalVariable("e", "Ljava/lang/Error;", null, l11, l3, 2);
+mv.visitMaxs(3, 5);
+mv.visitEnd();
+}
+BDK:function(A,B,C,D){
+		// -1 -> 0 next count 1  1  false
+		// 638
+		try {
+			if (A%2!=0) {
+				// 0 -> 5 next count 1  1  false
+				// 641
+				D=++this.c;
+				// 5 -> 1 next count 1  1  false
+				// 645
+				if (this.c%3!=0) {
+					// 1 -> 7 next count 1  1  false
+					// 648
+					this.c=this.c+4;
+					// 7 -> 10 next count 2  0  false
+				} else {
+					// 1 -> 8 next count 1  1  false
+					// 646
+					this.c=this.c+3;
+					// 8 -> 9 next count 1  1  false
+					// 647
+					// 9 -> 10 next count 2  1  false
+				}
+				// 1 -> 10 next count 2  2  false
+				// 641
+				return D;
+			} else {
+				// 0 -> 6 next count 1  1  false
+				// 639
+				throw new boot.BF(0);
+			}
+			// 0 -> 2 next count 1  0  false
+		} catch ($) {
+			$ = boot.P.BI($) ;
+			if ($ instanceof boot.BF) {
+				B = $;
+				// 0 -> 2 next count 1  1  false
+				// 642
+				try {
+					// 2 -> 11 next count 1  1  false
+					// 643
+					D=this.c=this.c+2;
+					// 11 -> 4 next count 1  1  false
+					// 645
+					if (this.c%3!=0) {
+						// 4 -> 12 next count 1  1  false
+						// 648
+						this.c=this.c+4;
+						// 12 -> 15 next count 2  0  false
+					} else {
+						// 4 -> 13 next count 1  1  false
+						// 646
+						this.c=this.c+3;
+						// 13 -> 14 next count 1  1  false
+						// 647
+						// 14 -> 15 next count 2  1  false
+					}
+					// 4 -> 15 next count 2  2  false
+					// 643
+					return D;
+				} catch ($) {
+					$ = boot.P.BI($) ;
+					C = $;
+					// 2 -> 3 next count 1  1  false
+					// 644
+					// 3 -> 16 next count 1  1  false
+					// 645
+					if (this.c%3!=0) {
+						// 16 -> 17 next count 1  1  false
+						// 648
+						this.c=this.c+4;
+						// 17 -> 20 next count 2  0  false
+					} else {
+						// 16 -> 18 next count 1  1  false
+						// 646
+						this.c=this.c+3;
+						// 18 -> 19 next count 1  1  false
+						// 647
+						// 19 -> 20 next count 2  1  false
+					}
+					// 16 -> 20 next count 2  2  false
+					// 650
+					throw C;
+				}
+			} else {
+				throw $;
+			}
+		}
+	},
+	
