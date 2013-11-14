@@ -201,6 +201,7 @@ public class SwitchTest extends ScriptTester {
     public void BreakNoDefault() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 int result = 100;
 
@@ -235,7 +236,6 @@ public class SwitchTest extends ScriptTester {
                     case 1:
                         result = -2;
                         break;
-
                     }
                 }
                 return result;

@@ -505,6 +505,7 @@ class Node {
             // =============================================================
             // Switch block is independent from other blocks, so we must return at the end.
             if (switchy != null) {
+                // execute first to detect default node
                 Node exit = switchy.searchExit();
 
                 // enter switch
@@ -527,8 +528,8 @@ class Node {
                 // exit switch
                 buffer.append("}").line();
 
-                // write following nodes if needed
-                if (!switchy.noExit) process(exit, buffer);
+                // write following node
+                process(exit, buffer);
 
                 return; // must
             }
@@ -775,7 +776,6 @@ class Node {
                     Node dominator = next.getDominator();
 
                     if (dominator == null || dominator == this) {
-                        if (debugger.enable) buffer.comment("write next node " + next.id);
                         next.write(buffer);
                     }
                 }
@@ -872,9 +872,6 @@ class Node {
         /** Whether this switch has default node or not. */
         private boolean noDefault = false;
 
-        /** Whether this switch has exit node or not. */
-        private boolean noExit = false;
-
         /**
          * <p>
          * Creat switch block infomation holder.
@@ -942,15 +939,6 @@ class Node {
          * @return Null or exit node.
          */
         private Node searchExit() {
-            // If the exit node has the incoming node which is outside of switch statement,
-            // it is invalid.
-            for (Node node : defaults.incoming) {
-                if (!node.hasDominator(enter)) {
-                    noExit = true;
-                    noDefault = true;
-                }
-            }
-
             // The end node is not default node.
             if (defaults.incoming.size() != 1 && defaults.incoming.contains(enter)) {
                 noDefault = true; // default node does not exist
