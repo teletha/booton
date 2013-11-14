@@ -11,10 +11,8 @@ package booton.translator.flow;
 
 import java.io.IOException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -497,7 +495,6 @@ public class TryTest extends ScriptTester {
 
             private int counter = 0;
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 try {
                     if (value != 0) {
@@ -595,7 +592,6 @@ public class TryTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void TryCatchFinally() {
         test(new Scriptable() {
 
@@ -621,7 +617,6 @@ public class TryTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void TryCatchFinallyNodes() {
         test(new Scriptable() {
 
@@ -651,7 +646,6 @@ public class TryTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void TryFinallyAfterNest2() {
         test(new Scriptable() {
 
@@ -659,7 +653,6 @@ public class TryTest extends ScriptTester {
 
             public int act(@Param(from = 0, to = 10) int value) {
                 count(value);
-
                 return id;
             }
 
@@ -670,9 +663,9 @@ public class TryTest extends ScriptTester {
                             throw new Exception();
                         }
 
-                        id += 1;
+                        id += value;
                     } catch (Exception e) {
-                        return id += 2;
+                        return id += value * 2;
                     } finally {
                         id += 3;
                     }

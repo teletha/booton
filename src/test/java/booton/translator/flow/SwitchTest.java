@@ -11,7 +11,6 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -174,7 +173,6 @@ public class SwitchTest extends ScriptTester {
     public void Break() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 int result;
 
@@ -201,7 +199,6 @@ public class SwitchTest extends ScriptTester {
     public void BreakNoDefault() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 int result = 100;
 
@@ -223,7 +220,6 @@ public class SwitchTest extends ScriptTester {
     public void BreakNoDefaultInOtherFlow() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 int result = 100;
 
