@@ -189,7 +189,6 @@ public class SwitchTest extends ScriptTester {
                     result = value;
                     break;
                 }
-
                 return result;
             }
         });
@@ -298,6 +297,36 @@ public class SwitchTest extends ScriptTester {
                     break;
                 }
 
+                return result;
+            }
+        });
+    }
+
+    @Test
+    public void breakToOutside() throws Exception {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 3) int value) {
+                int result = 0;
+
+                root: while (result < 5) {
+                    switch (value) {
+                    case 0:
+                        return 10;
+
+                    case 1:
+                        result = -1;
+                        break root;
+
+                    case 2:
+                        result += 3;
+                        break;
+
+                    default:
+                        result++;
+                        break;
+                    }
+                }
                 return result;
             }
         });
