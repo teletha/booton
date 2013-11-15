@@ -918,7 +918,7 @@ public interface Map<K, V> {
      *           {@code map}, then returning the current value or {@code null} if absent:
      * 
      * <pre> {@code
-     * V oldValue = map.get(key);
+//     * V oldValue = map.get(key);
      * V newValue = (oldValue == null) ? value :
      *              remappingFunction.apply(oldValue, value);
      * if (newValue == null)

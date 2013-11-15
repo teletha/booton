@@ -2,113 +2,63 @@ visit label -1
 visit label 0
 visit label 1
 visit label 2
+visit label 3
+merge3
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : boot.BR.CE(C) [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	code : D=this.BS(A) [Expression] ; [Expression]
+2	  in : [1,2]		out : [2,3]		dom : []	code : D==null [Condition]
+3	  in : [2]		out : []		dom : [2]	code : 
+
 visit label 4
-merge4
--1	  in : []	out : [0]		dom : []	code : 
-0	  in : [-1]	out : [1]		dom : [-1]	code : boot.BR.CE(C) [Expression] ; [Expression]
-1	  in : [0]	out : [2]		dom : [0]	code : D=this.BS(A) [Expression] ; [Expression]
-2	  in : [1]	out : [3,4]		dom : [1]	code : D==null [Condition]
-4	  in : [2]	out : []		dom : [2]	code : 
+visit label 6
+merge6
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : boot.BR.CE(C) [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	code : D=this.BS(A) [Expression] ; [Expression]
+2	  in : [1,2]		out : [2,3]		dom : []	code : D==null [Condition]
+3	  in : [2]		out : [4]		dom : [2]	code : E=C.Kw(D,B) [Expression] ; [Expression]
+4	  in : [3]		out : [5,6]		dom : [3]	code : E==null [Condition]
+6	  in : [4]		out : []		dom : [4]	code : 
 
 visit label 5
 visit label 7
 merge7
--1	  in : []	out : [0]		dom : []	code : 
-0	  in : [-1]	out : [1]		dom : [-1]	code : boot.BR.CE(C) [Expression] ; [Expression]
-1	  in : [0]	out : [2]		dom : [0]	code : D=this.BS(A) [Expression] ; [Expression]
-2	  in : [1]	out : [3,4]		dom : [1]	code : D==null [Condition]
-4	  in : [2]	out : [5]		dom : [2]	code : E=C.LL(D,B) [Expression] ; [Expression]
-5	  in : [4]	out : [6,7]		dom : [4]	code : E==null [Condition]
-7	  in : [5]	out : []		dom : [5]	code : 
-
-visit label 6
-visit label 9
-merge9
--1	  in : []	out : [0]		dom : []	code : 
-0	  in : [-1]	out : [1]		dom : [-1]	code : boot.BR.CE(C) [Expression] ; [Expression]
-1	  in : [0]	out : [2]		dom : [0]	code : D=this.BS(A) [Expression] ; [Expression]
-2	  in : [1]	out : [3,4]		dom : [1]	code : D==null [Condition]
-4	  in : [2]	out : [5]		dom : [2]	code : E=C.LL(D,B) [Expression] ; [Expression]
-5	  in : [4]	out : [6,7]		dom : [4]	code : E==null [Condition]
-7	  in : [5]	out : [8]		dom : [5]	code : this.LP(A,D,E)==0 [Condition] return  [Expression] E [Expression] ; [Expression]
-6	  in : [5]	out : [8,9]		dom : [5]	code : this.LO(A,D)==0 [Condition]
-9	  in : [6]	out : []		dom : [6]	code : 
+-1	  in : []			out : [0]		dom : []	code : 
+0	  in : [-1]			out : [1]		dom : [-1]	code : boot.BR.CE(C) [Expression] ; [Expression]
+1	  in : [0]			out : [2]		dom : [0]	code : D=this.BS(A) [Expression] ; [Expression]
+2	  in : [1,2,6,5]		out : [2,3]		dom : []	code : D==null [Condition]
+3	  in : [2]			out : [4]		dom : [2]	code : E=C.Kw(D,B) [Expression] ; [Expression]
+4	  in : [3]			out : [5,6]		dom : [3]	code : E==null [Condition]
+6	  in : [4]			out : [2]		dom : [4]	code : this.LA(A,D,E)==0 [Condition] return  [Expression] E [Expression] ; [Expression]
+5	  in : [4]			out : [2,7]		dom : [4]	code : this.Kz(A,D)==0 [Condition]
+7	  in : [5]			out : []		dom : [5]	code : 
 
 visit label 8
-visit label 10
-visit label 3
-visit label 12
-merge12
--1	  in : []		out : [0]		dom : []	code : 
-0	  in : [-1]		out : [1]		dom : [-1]	code : boot.BR.CE(C) [Expression] ; [Expression]
-1	  in : [0]		out : [2]		dom : [0]	code : D=this.BS(A) [Expression] ; [Expression]
-2	  in : [1,10]		out : [3,4]		dom : []	code : D==null [Condition]
-4	  in : [2]		out : [5]		dom : [2]	code : E=C.LL(D,B) [Expression] ; [Expression]
-5	  in : [4]		out : [6,7]		dom : [4]	code : E==null [Condition]
-7	  in : [5]		out : [8]		dom : [5]	code : this.LP(A,D,E)==0 [Condition] return  [Expression] E [Expression] ; [Expression]
-6	  in : [5]		out : [8,9]		dom : [5]	code : this.LO(A,D)==0 [Condition]
-9	  in : [6]		out : []		dom : [6]	code : return  [Expression] null [Expression] ; [Expression]
-8	  in : [7,6]		out : [10]		dom : []	code : D=this.BS(A) [Expression] ; [Expression]
-10	  in : [8]		out : [2]		dom : [8]	code : 
-3	  in : [2]		out : [11,12]		dom : [2]	code : B!=null [Condition]
-12	  in : [3]		out : []		dom : [3]	code : 
-
-visit label 11
-visit label 13
-merge13
--1	  in : []		out : [0]		dom : []	code : 
-0	  in : [-1]		out : [1]		dom : [-1]	code : boot.BR.CE(C) [Expression] ; [Expression]
-1	  in : [0]		out : [2]		dom : [0]	code : D=this.BS(A) [Expression] ; [Expression]
-2	  in : [1,10,11]	out : [3,4]		dom : []	code : D==null [Condition]
-4	  in : [2]		out : [5]		dom : [2]	code : E=C.LL(D,B) [Expression] ; [Expression]
-5	  in : [4]		out : [6,7]		dom : [4]	code : E==null [Condition]
-7	  in : [5]		out : [8]		dom : [5]	code : this.LP(A,D,E)==0 [Condition] return  [Expression] E [Expression] ; [Expression]
-6	  in : [5]		out : [8,9]		dom : [5]	code : this.LO(A,D)==0 [Condition]
-9	  in : [6]		out : []		dom : [6]	code : return  [Expression] null [Expression] ; [Expression]
-8	  in : [7,6]		out : [10]		dom : []	code : D=this.BS(A) [Expression] ; [Expression]
-10	  in : [8]		out : [2]		dom : [8]	code : 
-3	  in : [2]		out : [11,12]		dom : [2]	code : B!=null [Condition]
-12	  in : [3]		out : []		dom : [3]	code : return  [Expression] null [Expression] ; [Expression]
-11	  in : [3]		out : [2,13]		dom : [3]	code : (D=this.LN(A,B))!=null [Condition]
-13	  in : [11]		out : []		dom : [11]	code : 
-
-visit label 14
-merge14
--1	  in : []		out : [0]		dom : []	code : 
-0	  in : [-1]		out : [1]		dom : [-1]	code : boot.BR.CE(C) [Expression] ; [Expression]
-1	  in : [0]		out : [2]		dom : [0]	code : D=this.BS(A) [Expression] ; [Expression]
-2	  in : [1,10,11]	out : [3,4]		dom : []	code : D==null [Condition]
-4	  in : [2]		out : [5]		dom : [2]	code : E=C.LL(D,B) [Expression] ; [Expression]
-5	  in : [4]		out : [6,7]		dom : [4]	code : E==null [Condition]
-7	  in : [5]		out : [8]		dom : [5]	code : this.LP(A,D,E)==0 [Condition] return  [Expression] E [Expression] ; [Expression]
-6	  in : [5]		out : [8,9]		dom : [5]	code : this.LO(A,D)==0 [Condition]
-9	  in : [6]		out : []		dom : [6]	code : return  [Expression] null [Expression] ; [Expression]
-8	  in : [7,6]		out : [10]		dom : []	code : D=this.BS(A) [Expression] ; [Expression]
-10	  in : [8]		out : [2]		dom : [8]	code : 
-3	  in : [2]		out : [11,12]		dom : [2]	code : B!=null [Condition]
-12	  in : [3]		out : []		dom : [3]	code : return  [Expression] null [Expression] ; [Expression]
-11	  in : [3]		out : [2,13]		dom : [3]	code : (D=this.LN(A,B))!=null [Condition]
-13	  in : [11]		out : []		dom : [11]	code : return  [Expression] B [Expression] ; [Expression]
-14	  in : []		out : []		dom : []	code : 
+merge8
+-1	  in : []			out : [0]		dom : []	code : 
+0	  in : [-1]			out : [1]		dom : [-1]	code : boot.BR.CE(C) [Expression] ; [Expression]
+1	  in : [0]			out : [2]		dom : [0]	code : D=this.BS(A) [Expression] ; [Expression]
+2	  in : [1,2,6,5]		out : [2,3]		dom : []	code : D==null [Condition]
+3	  in : [2]			out : [4]		dom : [2]	code : E=C.Kw(D,B) [Expression] ; [Expression]
+4	  in : [3]			out : [5,6]		dom : [3]	code : E==null [Condition]
+6	  in : [4]			out : [2]		dom : [4]	code : this.LA(A,D,E)==0 [Condition] return  [Expression] E [Expression] ; [Expression]
+5	  in : [4]			out : [2,7]		dom : [4]	code : this.Kz(A,D)==0 [Condition]
+7	  in : [5]			out : []		dom : [5]	code : return  [Expression] null [Expression] ; [Expression]
+8	  in : []			out : []		dom : []	code : 
 
 js.util.Map merge
--1	  in : []		out : [0]		dom : []	back : []		code : 
-0	  in : [-1]		out : [1]		dom : [-1]	back : []		code : boot.BR.CE(C) [Expression] ; [Expression]
-1	  in : [0]		out : [2]		dom : [0]	back : []		code : D=this.BS(A) [Expression] ; [Expression]
-2	  in : [1,10,11]	out : [3,4]		dom : [1]	back : [11,10]		code : D==null [Condition]
-4	  in : [2]		out : [5]		dom : [2]	back : []		code : E=C.LL(D,B) [Expression] ; [Expression]
-5	  in : [4]		out : [6,15]		dom : [4]	back : []		code : E==null [Condition]
-15	  in : [5]		out : [7,8]		dom : [5]	back : []		code : this.LP(A,D,E)!=0 [Condition]
-7	  in : [15]		out : []		dom : [15]	back : []		code : return  [Expression] E [Expression] ; [Expression]
-6	  in : [5]		out : [8,9]		dom : [5]	back : []		code : this.LO(A,D)==0 [Condition]
-9	  in : [6]		out : []		dom : [6]	back : []		code : return  [Expression] null [Expression] ; [Expression]
-8	  in : [6,15]		out : [10]		dom : [5]	back : []		code : D=this.BS(A) [Expression] ; [Expression]
-10	  in : [8]		out : [2]		dom : [8]	back : []		code : 
-3	  in : [2]		out : [11,12]		dom : [2]	back : []		code : B!=null [Condition]
-12	  in : [3]		out : []		dom : [3]	back : []		code : return  [Expression] null [Expression] ; [Expression]
-11	  in : [3]		out : [2,13]		dom : [3]	back : []		code : (D=this.LN(A,B))!=null [Condition]
-13	  in : [11]		out : []		dom : [11]	back : []		code : return  [Expression] B [Expression] ; [Expression]
-14	  in : []		out : []		dom : []	back : []		code : 
+-1	  in : []			out : [0]		dom : []	back : []		code : 
+0	  in : [-1]			out : [1]		dom : [-1]	back : []		code : boot.BR.CE(C) [Expression] ; [Expression]
+1	  in : [0]			out : [2]		dom : [0]	back : []		code : D=this.BS(A) [Expression] ; [Expression]
+2	  in : [1,2,5,9]		out : [2,3]		dom : [1]	back : [2,5,9]		code : D==null [Condition]
+3	  in : [2]			out : [4]		dom : [2]	back : []		code : E=C.Kw(D,B) [Expression] ; [Expression]
+4	  in : [3]			out : [5,9]		dom : [3]	back : []		code : E==null [Condition]
+9	  in : [4]			out : [6,2]		dom : [4]	back : []		code : this.LA(A,D,E)!=0 [Condition]
+6	  in : [9]			out : []		dom : [9]	back : []		code : return  [Expression] E [Expression] ; [Expression]
+5	  in : [4]			out : [2,7]		dom : [4]	back : []		code : this.Kz(A,D)==0 [Condition]
+7	  in : [5]			out : []		dom : [5]	back : []		code : return  [Expression] null [Expression] ; [Expression]
+8	  in : []			out : []		dom : []	back : []		code : 
 
 {
 mv = cw.visitMethod(ACC_PUBLIC, "merge", "(Ljava/lang/Object;Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;", "(TK;TV;Ljava/util/function/BiFunction<-TV;-TV;+TV;>;)TV;", null);
@@ -131,96 +81,57 @@ mv.visitLabel(l2);
 mv.visitLineNumber(952, l2);
 mv.visitFrame(Opcodes.F_APPEND,1, new Object[] {"java/lang/Object"}, 0, null);
 mv.visitVarInsn(ALOAD, 4);
+mv.visitJumpInsn(IFNULL, l2);
 Label l3 = new Label();
-mv.visitJumpInsn(IFNULL, l3);
-Label l4 = new Label();
-mv.visitLabel(l4);
-mv.visitLineNumber(953, l4);
+mv.visitLabel(l3);
+mv.visitLineNumber(953, l3);
 mv.visitVarInsn(ALOAD, 3);
 mv.visitVarInsn(ALOAD, 4);
 mv.visitVarInsn(ALOAD, 2);
 mv.visitMethodInsn(INVOKEINTERFACE, "java/util/function/BiFunction", "apply", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
 mv.visitVarInsn(ASTORE, 5);
-Label l5 = new Label();
-mv.visitLabel(l5);
-mv.visitLineNumber(954, l5);
+Label l4 = new Label();
+mv.visitLabel(l4);
+mv.visitLineNumber(954, l4);
 mv.visitVarInsn(ALOAD, 5);
+Label l5 = new Label();
+mv.visitJumpInsn(IFNULL, l5);
 Label l6 = new Label();
-mv.visitJumpInsn(IFNULL, l6);
-Label l7 = new Label();
-mv.visitLabel(l7);
-mv.visitLineNumber(955, l7);
+mv.visitLabel(l6);
+mv.visitLineNumber(955, l6);
 mv.visitVarInsn(ALOAD, 0);
 mv.visitVarInsn(ALOAD, 1);
 mv.visitVarInsn(ALOAD, 4);
 mv.visitVarInsn(ALOAD, 5);
 mv.visitMethodInsn(INVOKEINTERFACE, "js/util/Map", "replace", "(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Z");
-Label l8 = new Label();
-mv.visitJumpInsn(IFEQ, l8);
+mv.visitJumpInsn(IFEQ, l2);
 mv.visitVarInsn(ALOAD, 5);
 mv.visitInsn(ARETURN);
-mv.visitLabel(l6);
-mv.visitLineNumber(956, l6);
+mv.visitLabel(l5);
+mv.visitLineNumber(956, l5);
 mv.visitFrame(Opcodes.F_APPEND,1, new Object[] {"java/lang/Object"}, 0, null);
 mv.visitVarInsn(ALOAD, 0);
 mv.visitVarInsn(ALOAD, 1);
 mv.visitVarInsn(ALOAD, 4);
 mv.visitMethodInsn(INVOKEINTERFACE, "js/util/Map", "remove", "(Ljava/lang/Object;Ljava/lang/Object;)Z");
-mv.visitJumpInsn(IFEQ, l8);
-Label l9 = new Label();
-mv.visitLabel(l9);
-mv.visitLineNumber(957, l9);
+mv.visitJumpInsn(IFEQ, l2);
+Label l7 = new Label();
+mv.visitLabel(l7);
+mv.visitLineNumber(957, l7);
 mv.visitInsn(ACONST_NULL);
 mv.visitInsn(ARETURN);
+Label l8 = new Label();
 mv.visitLabel(l8);
-mv.visitLineNumber(959, l8);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitVarInsn(ALOAD, 0);
-mv.visitVarInsn(ALOAD, 1);
-mv.visitMethodInsn(INVOKEINTERFACE, "js/util/Map", "get", "(Ljava/lang/Object;)Ljava/lang/Object;");
-mv.visitVarInsn(ASTORE, 4);
-Label l10 = new Label();
-mv.visitLabel(l10);
-mv.visitLineNumber(960, l10);
-mv.visitJumpInsn(GOTO, l2);
-mv.visitLabel(l3);
-mv.visitLineNumber(961, l3);
-mv.visitFrame(Opcodes.F_CHOP,1, null, 0, null);
-mv.visitVarInsn(ALOAD, 2);
-Label l11 = new Label();
-mv.visitJumpInsn(IFNONNULL, l11);
-Label l12 = new Label();
-mv.visitLabel(l12);
-mv.visitLineNumber(962, l12);
-mv.visitInsn(ACONST_NULL);
-mv.visitInsn(ARETURN);
-mv.visitLabel(l11);
-mv.visitLineNumber(965, l11);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitVarInsn(ALOAD, 0);
-mv.visitVarInsn(ALOAD, 1);
-mv.visitVarInsn(ALOAD, 2);
-mv.visitMethodInsn(INVOKEINTERFACE, "js/util/Map", "putIfAbsent", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
-mv.visitInsn(DUP);
-mv.visitVarInsn(ASTORE, 4);
-mv.visitJumpInsn(IFNONNULL, l2);
-Label l13 = new Label();
-mv.visitLabel(l13);
-mv.visitLineNumber(966, l13);
-mv.visitVarInsn(ALOAD, 2);
-mv.visitInsn(ARETURN);
-Label l14 = new Label();
-mv.visitLabel(l14);
-mv.visitLocalVariable("this", "Ljs/util/Map;", "Ljs/util/Map<TK;TV;>;", l0, l14, 0);
-mv.visitLocalVariable("key", "Ljava/lang/Object;", "TK;", l0, l14, 1);
-mv.visitLocalVariable("value", "Ljava/lang/Object;", "TV;", l0, l14, 2);
-mv.visitLocalVariable("remappingFunction", "Ljava/util/function/BiFunction;", "Ljava/util/function/BiFunction<-TV;-TV;+TV;>;", l0, l14, 3);
-mv.visitLocalVariable("oldValue", "Ljava/lang/Object;", "TV;", l2, l14, 4);
-mv.visitLocalVariable("newValue", "Ljava/lang/Object;", "TV;", l5, l10, 5);
+mv.visitLocalVariable("this", "Ljs/util/Map;", "Ljs/util/Map<TK;TV;>;", l0, l8, 0);
+mv.visitLocalVariable("key", "Ljava/lang/Object;", "TK;", l0, l8, 1);
+mv.visitLocalVariable("value", "Ljava/lang/Object;", "TV;", l0, l8, 2);
+mv.visitLocalVariable("remappingFunction", "Ljava/util/function/BiFunction;", "Ljava/util/function/BiFunction<-TV;-TV;+TV;>;", l0, l8, 3);
+mv.visitLocalVariable("oldValue", "Ljava/lang/Object;", "TV;", l2, l8, 4);
+mv.visitLocalVariable("newValue", "Ljava/lang/Object;", "TV;", l4, l8, 5);
 mv.visitMaxs(4, 6);
 mv.visitEnd();
 }
-LV:function(A,B,C,D,E){
+LG:function(A,B,C,D,E){
 		// -1 -> 0 next count 1  1  false
 		// 949
 		boot.BR.CE(C);
@@ -230,55 +141,35 @@ LV:function(A,B,C,D,E){
 		// 1 -> 2 next count 1  1  false
 		// 952
 		l2: while (D==null) {
-			// 2 -> 3 next count 1  1  false
-			// 961
-			if (B!=null) {
-				// 3 -> 11 next count 1  1  false
-				// 965
-				if ((D=this.LN(A,B))==null) {
-					// 11 -> 13 next count 1  1  false
-					// 966
-					return B;
-				}
-				// 11 -> 2 Entrance 2
-				continue l2; // 11 -> 2 Enter 2
-			} else {
-				// 3 -> 12 next count 1  1  false
-				// 962
-				return null;
-			}
+			// 2 -> 2 Entrance 2
+			continue l2; // 2 -> 2 Enter 2
 		}
-		// 2 -> 4 next count 1  1  true
+		// 2 -> 3 next count 1  1  true
 		// 953
-		E=C.LL(D,B);
-		// 4 -> 5 next count 1  1  false
+		E=C.Kw(D,B);
+		// 3 -> 4 next count 1  1  false
 		// 954
 		if (E==null) {
-			// 5 -> 6 next count 1  1  false
+			// 4 -> 5 next count 1  1  false
 			// 956
-			if (this.LO(A,D)!=0) {
-				// 6 -> 9 next count 1  1  false
+			if (this.Kz(A,D)!=0) {
+				// 5 -> 7 next count 1  1  false
 				// 957
 				return null;
 			}
-			// 6 -> 8 next count 2  0  false
+			// 5 -> 2 Entrance 2
+			continue l2; // 5 -> 2 Enter 2
 		} else {
-			// 5 -> 15 next count 1  1  false
+			// 4 -> 9 next count 1  1  false
 			// 955
-			if (this.LP(A,D,E)!=0) {
-				// 15 -> 7 next count 1  1  false
+			if (this.LA(A,D,E)!=0) {
+				// 9 -> 6 next count 1  1  false
 				return E;
 			}
-			// 15 -> 8 next count 2  1  false
+			// 9 -> 2 Entrance 2
+			continue l2; // 9 -> 2 Enter 2
 		}
-		// 5 -> 8 next count 2  2  false
-		// 959
-		D=this.BS(A);
-		// 8 -> 10 next count 1  1  false
-		// 960
-		// 10 -> 2 Entrance 2
-		continue l2; // 10 -> 2 Enter 2
 	},
 	
-11 15, 2013 12:16:39 ŒßŒã com.gargoylesoftware.htmlunit.javascript.StrictErrorReporter error
-d‘å: error: message=[undefined label] sourceName=[] line=[3414] lineSource=[		continue l2; // 10 -> 2 Enter 2] lineOffset=[14]
+11 15, 2013 12:38:44 ŒßŒã com.gargoylesoftware.htmlunit.javascript.StrictErrorReporter error
+d‘å: error: message=[undefined label] sourceName=[] line=[3199] lineSource=[			continue l2; // 5 -> 2 Enter 2] lineOffset=[15]
