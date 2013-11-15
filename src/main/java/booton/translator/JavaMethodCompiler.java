@@ -275,10 +275,11 @@ class JavaMethodCompiler extends MethodVisitor {
                 condition.connect(node);
                 condition.connect(out);
 
+                condition.stack.add(node.stack.pollFirst().invert());
+
                 if (node.stack.peekFirst() == Return) {
                     node.disconnect(out);
                 }
-                condition.stack.add(node.stack.pollFirst().invert());
             }
         }
 
