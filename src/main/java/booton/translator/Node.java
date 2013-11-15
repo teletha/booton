@@ -11,6 +11,7 @@ package booton.translator;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -393,7 +394,8 @@ class Node {
      * @param node A target node.
      * @return A result.
      */
-    final boolean canReachTo(Node node) {
+    final boolean canReachTo(Node node, Node... exclusionNodes) {
+        List<Node> exclusions = Arrays.asList(exclusionNodes);
         Set<Node> recorder = new HashSet();
         recorder.add(this);
 
@@ -406,7 +408,7 @@ class Node {
                     return true;
                 }
 
-                if (recorder.add(out)) {
+                if (!exclusions.contains(out) && recorder.add(out)) {
                     queue.addLast(out);
                 }
             }
@@ -563,11 +565,7 @@ class Node {
                     Node condition = backedges.get(0);
 
                     if (condition.outgoing.size() == 1) {
-                        // infinite loop
-                        buffer.append("for", "(;;)", "{");
-                        buffer.append(this);
-                        process(outgoing.get(0), buffer);
-                        buffer.append("}");
+                        writeInfiniteLoop(buffer);
                     } else {
                         // normal loop
                         condition.written = true;
@@ -663,43 +661,30 @@ class Node {
 
                         // detect process and follower node
                         Node process = detectFollower();
-                        analyzeStructure(update, follower, this);
-                        analyzeStructure(this, follower, this);
 
-                        while (!(stack.peekLast() instanceof OperandCondition)) {
-                            process.stack.addFirst(remove(0));
+                        if (process == null) {
+                            writeInfiniteLoop(buffer);
+                        } else {
+                            analyzeStructure(update, follower, this);
+                            analyzeStructure(this, follower, this);
+
+                            while (!(stack.peekLast() instanceof OperandCondition)) {
+                                process.stack.addFirst(remove(0));
+                            }
+
+                            // write script fragment
+                            buffer.write("l" + id + ":", "for", "(;", this + ";", update + ")", "{");
+                            process(process, buffer);
+                            buffer.write("}").line();
+                            process(follower, buffer);
                         }
-
-                        // write script fragment
-                        buffer.write("l" + id + ":", "for", "(;", this + ";", update + ")", "{");
-                        process(process, buffer);
-                        buffer.write("}").line();
-                        process(follower, buffer);
                     } else {
                         // while with break only
-                        //
-                        // detect process and follower node
-                        Node process = detectFollower();
-                        analyzeStructure(this, follower, this);
-
-                        // write script fragment
-                        buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
-                        process(process, buffer);
-                        buffer.write("}").line();
-                        process(follower, buffer);
+                        writeWhile(buffer);
                     }
                 } else {
                     // while with continue and break
-                    //
-                    // detect process and follower node
-                    Node process = detectFollower();
-                    analyzeStructure(this, follower, this);
-
-                    // write script fragment
-                    buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
-                    process(process, buffer);
-                    buffer.write("}").line();
-                    process(follower, buffer);
+                    writeWhile(buffer);
                 }
             }
 
@@ -742,6 +727,51 @@ class Node {
                     process(exit, buffer);
                 }
             }
+        }
+    }
+
+    /**
+     * <p>
+     * Write infinite loop structure.
+     * </p>
+     * 
+     * @param buffer
+     */
+    private void writeInfiniteLoop(ScriptWriter buffer) {
+        // make rewritable this node
+        written = false;
+
+        // disconnect from the backedge node of infinite loop
+        disconnect(backedges.get(backedges.size() - 1));
+        backedges.clear();
+
+        // write script fragment
+        buffer.write("for", "(;;)", "{");
+        write(buffer);
+        buffer.write("}");
+    }
+
+    /**
+     * <p>
+     * Write while structure.
+     * </p>
+     * 
+     * @param buffer
+     */
+    private void writeWhile(ScriptWriter buffer) {
+        // detect process and follower node
+        Node process = detectFollower();
+
+        if (process == null) {
+            writeInfiniteLoop(buffer);
+        } else {
+            analyzeStructure(this, follower, this);
+
+            // write script fragment
+            buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
+            process(process, buffer);
+            buffer.write("}").line();
+            process(follower, buffer);
         }
     }
 
@@ -798,6 +828,11 @@ class Node {
         Node process;
         Node first = outgoing.get(0);
         Node last = outgoing.get(1);
+        Node back = backedges.get(backedges.size() - 1);
+
+        if (first.canReachTo(back, getDominator()) && last.canReachTo(back, getDominator())) {
+            return null;
+        }
 
         if (backedges.get(0).hasDominator(first)) {
             process = first;

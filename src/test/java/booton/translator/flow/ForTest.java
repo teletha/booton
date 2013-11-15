@@ -322,4 +322,126 @@ public class ForTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void infiniteLikeFor() throws Exception {
+        test(new Scriptable() {
+
+            int act(int value) {
+                for (;;) {
+                    if (value < 5) {
+                        value += 3;
+                    }
+
+                    if (value % 7 == 0) {
+                        return value;
+                    }
+                    value++;
+                }
+            }
+        });
+    }
+
+    @Test
+    public void infiniteLikeWhile() throws Exception {
+        test(new Scriptable() {
+
+            int act(int value) {
+                for (;;) {
+                    if (value < 5) {
+                        value += 3;
+                    }
+
+                    value++;
+
+                    if (value % 7 == 0) {
+                        return value;
+                    }
+                }
+            }
+        });
+    }
+
+    @Test
+    public void infiniteWithWhile() throws Exception {
+        test(new Scriptable() {
+
+            int act(int value) {
+                int counter = 1;
+
+                for (;;) {
+                    while (value < 2) {
+                        value++;
+                        counter++;
+                    }
+                    value += counter;
+
+                    if (10 < value) {
+                        return value;
+                    }
+                }
+            }
+        });
+    }
+
+    @Test
+    public void infiniteWithWhileNodes() throws Exception {
+        test(new Scriptable() {
+
+            int act(int value) {
+                for (;;) {
+                    while (value < 5) {
+                        if (value % 2 == 0) {
+                            return 100;
+                        }
+                        value += 3;
+                    }
+                    value++;
+
+                    if (value % 7 == 0) {
+                        return value;
+                    }
+                }
+            }
+        });
+    }
+
+    @Test
+    public void infiniteIfReturn() throws Exception {
+        test(new Scriptable() {
+
+            int act(int value) {
+                for (;;) {
+                    if (value % 7 == 0) {
+                        return value;
+                    }
+                    value++;
+                    if (value % 3 == 0) {
+                        return value;
+                    }
+                    value++;
+                }
+            }
+        });
+    }
+
+    @Test
+    public void infiniteIfElse() throws Exception {
+        test(new Scriptable() {
+
+            int act(int value) {
+                for (;;) {
+                    if (0 < value) {
+                        value++;
+                    } else {
+                        value--;
+                    }
+
+                    if (value % 3 == 0) {
+                        return value;
+                    }
+                }
+            }
+        });
+    }
 }
