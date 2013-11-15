@@ -252,7 +252,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("Map") && original.equals("compute")) {
+        if (script.source.getName().endsWith("Map") && original.equals("merge")) {
             debugger.enable = true;
         }
     }

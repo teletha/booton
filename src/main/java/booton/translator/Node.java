@@ -557,27 +557,37 @@ class Node {
                     buffer.append(this);
                     process(outgoing.get(0), buffer);
                 } else {
-                    // do while
+                    // do while or infinite loop
 
                     // setup condition expression node
                     Node condition = backedges.get(0);
-                    condition.written = true;
 
-                    Node follow;
-
-                    if (condition.outgoing.get(0) == this) {
-                        follow = condition.outgoing.get(1);
+                    if (condition.outgoing.size() == 1) {
+                        // infinite loop
+                        buffer.append("for", "(;;)", "{");
+                        buffer.append(this);
+                        process(outgoing.get(0), buffer);
+                        buffer.append("}");
                     } else {
-                        follow = condition.outgoing.get(0);
-                    }
-                    analyzeStructure(condition, follow, this);
+                        // normal loop
+                        condition.written = true;
 
-                    // write script fragment
-                    buffer.write("l" + id, ":", "do", "{");
-                    buffer.append(this);
-                    process(outgoing.get(0), buffer);
-                    buffer.write("}", "while", "(" + condition + ")");
-                    condition.process(follow, buffer);
+                        Node follow;
+
+                        if (condition.outgoing.get(0) == this) {
+                            follow = condition.outgoing.get(1);
+                        } else {
+                            follow = condition.outgoing.get(0);
+                        }
+                        analyzeStructure(condition, follow, this);
+
+                        // write script fragment
+                        buffer.write("l" + id, ":", "do", "{");
+                        buffer.append(this);
+                        process(outgoing.get(0), buffer);
+                        buffer.write("}", "while", "(" + condition + ")");
+                        condition.process(follow, buffer);
+                    }
                 }
             } else if (outs == 2) {
                 // while, for or if

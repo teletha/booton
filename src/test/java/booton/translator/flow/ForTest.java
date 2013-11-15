@@ -302,7 +302,6 @@ public class ForTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void infinite() throws Exception {
         test(new Scriptable() {
 
