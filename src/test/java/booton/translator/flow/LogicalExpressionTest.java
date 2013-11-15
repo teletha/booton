@@ -11,6 +11,7 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -169,6 +170,28 @@ public class LogicalExpressionTest extends ScriptTester {
 
             public boolean act(@Param(from = 1, to = 24) int value) {
                 return value % 2 == 0 && value % 3 == 0 && value % 4 == 0;
+            }
+        });
+    }
+
+    @Test
+    public void postIncrement() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public boolean act(@Param(from = 1, to = 10) int value) {
+                return value++ % 2 == 0 || value++ % 5 == 0;
+            }
+        });
+    }
+
+    @Test
+    public void preIncrement() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public boolean act(@Param(from = 1, to = 10) int value) {
+                return ++value % 2 == 0 || ++value % 5 == 0;
             }
         });
     }
