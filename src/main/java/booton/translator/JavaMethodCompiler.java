@@ -133,6 +133,11 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private static final int RETURNS = 413;
 
+    /**
+     * Represents a increment instruction.
+     */
+    private static final int INCREMENT = 414;
+
     /** The extra opcode for byte code parsing. */
     private static final int LABEL = 300;
 
@@ -252,7 +257,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("Map") && original.equals("merge")) {
+        if (script.source.getName().endsWith("$IteratorSpliterator") && original.equals("trySplit")) {
             debugger.enable = true;
         }
     }
@@ -628,12 +633,15 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitIincInsn(int position, int increment) {
+        // recode current instruction
+        record(INCREMENT);
+
         // retrieve the local variable name
         String variable = variables.name(position);
 
         if (increment == 1) {
             // increment
-            if (match(ILOAD)) {
+            if (match(ILOAD, INCREMENT)) {
                 // post increment
                 current.addOperand(current.remove(0) + "++");
             } else {
@@ -642,7 +650,7 @@ class JavaMethodCompiler extends MethodVisitor {
             }
         } else if (increment == -1) {
             // increment
-            if (match(ILOAD)) {
+            if (match(ILOAD, INCREMENT)) {
                 // post increment
                 current.addOperand(current.remove(0) + "--");
             } else {

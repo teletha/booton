@@ -11,6 +11,7 @@ package booton.translator.primitive;
 
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
@@ -307,6 +308,17 @@ public class IntTest extends ScriptTester {
 
             int act(int value) {
                 return ++value;
+            }
+        });
+    }
+
+    @Test
+    public void preIncrementInStatement() {
+        test(new Scriptable() {
+
+            @Debuggable
+            int act(int value) {
+                return 2 * ++value;
             }
         });
     }
