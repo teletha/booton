@@ -314,6 +314,22 @@ public class IfTest extends ScriptTester {
     }
 
     @Test
+    public void shorthandInNest() throws Exception {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 10) int o) {
+                while (o < 10) {
+                    o++;
+                    if (o % 2 == 0) {
+                        if (o % 3 == 0) return -100;
+                    } else if (o % 5 == 0) return -10;
+                }
+                return o;
+            }
+        });
+    }
+
+    @Test
     public void noElse() throws Exception {
         test(new Scriptable() {
 

@@ -1,540 +1,147 @@
 visit label -1
 visit label 0
 visit label 1
-visit label 2
-visit label 4
-visit label 5
-visit label 11
-visit label 14
-visit label 12
-visit label 16
-visit label 6
-visit label 17
-visit label 9
-visit label 18
-visit label 8
-visit label 19
-visit label 10
-visit label 20
-visit label 7
-visit label 21
-visit label 13
-visit label 15
-visit label 3
-visit label 22
-merge22
--1	  in : []					out : [0]					dom : []	code : 
-0	  in : [-1]					out : [1]					dom : [-1]	code : this.d.NA("\"") [Expression] ; [Expression]
-1	  in : [0]					out : [2]					dom : [0]	code : B=0 [Expression] ; [Expression]
-2	  in : [1]					out : [3]					dom : [1]	code : 
-4	  in : [3]					out : [5]					dom : [3]	code : C=A.Bw(B) [Expression] ; [Expression]
-5	  in : [4]					out : [6,7,8,9,10,11,12,13]			dom : [4]	code : 
-11	  in : [5]					out : [14]					dom : [5]	code : this.d.MW("\\\"") [Expression] ; [Expression]
-14	  in : [11]					out : [15]					dom : [11]	code : 
-12	  in : [5]					out : [16]					dom : [5]	code : this.d.MW("\\\\") [Expression] ; [Expression]
-16	  in : [12]					out : [15]					dom : [12]	code : 
-6	  in : [5]					out : [17]					dom : [5]	code : this.d.MW("\\b") [Expression] ; [Expression]
-17	  in : [6]					out : [15]					dom : [6]	code : 
-9	  in : [5]					out : [18]					dom : [5]	code : this.d.MW("\\f") [Expression] ; [Expression]
-18	  in : [9]					out : [15]					dom : [9]	code : 
-8	  in : [5]					out : [19]					dom : [5]	code : this.d.MW("\\n") [Expression] ; [Expression]
-19	  in : [8]					out : [15]					dom : [8]	code : 
-10	  in : [5]					out : [20]					dom : [5]	code : this.d.MW("\\r") [Expression] ; [Expression]
-20	  in : [10]					out : [15]					dom : [10]	code : 
-7	  in : [5]					out : [21]					dom : [5]	code : this.d.MW("\\t") [Expression] ; [Expression]
-21	  in : [7]					out : [15]					dom : [7]	code : 
-13	  in : [5]					out : [15]					dom : [5]	code : this.d.NA(C) [Expression] ; [Expression]
-15	  in : [14,16,17,18,19,20,21,13]		out : [3]					dom : []	code : ++ [Expression] B [Expression] ; [Expression]
-3	  in : [2,15]					out : [4,22]					dom : []	code : B<A.length [Condition]
-22	  in : [3]					out : []					dom : [3]	code : 
-
-visit label 23
-visit label 24
-merge24
--1	  in : []					out : [0]					dom : []	code : 
-0	  in : [-1]					out : [1]					dom : [-1]	code : this.d.NA("\"") [Expression] ; [Expression]
-1	  in : [0]					out : [2]					dom : [0]	code : B=0 [Expression] ; [Expression]
-2	  in : [1]					out : [3]					dom : [1]	code : 
-4	  in : [3]					out : [5]					dom : [3]	code : C=A.Bw(B) [Expression] ; [Expression]
-5	  in : [4]					out : [6,7,8,9,10,11,12,13]			dom : [4]	code : 
-11	  in : [5]					out : [14]					dom : [5]	code : this.d.MW("\\\"") [Expression] ; [Expression]
-14	  in : [11]					out : [15]					dom : [11]	code : 
-12	  in : [5]					out : [16]					dom : [5]	code : this.d.MW("\\\\") [Expression] ; [Expression]
-16	  in : [12]					out : [15]					dom : [12]	code : 
-6	  in : [5]					out : [17]					dom : [5]	code : this.d.MW("\\b") [Expression] ; [Expression]
-17	  in : [6]					out : [15]					dom : [6]	code : 
-9	  in : [5]					out : [18]					dom : [5]	code : this.d.MW("\\f") [Expression] ; [Expression]
-18	  in : [9]					out : [15]					dom : [9]	code : 
-8	  in : [5]					out : [19]					dom : [5]	code : this.d.MW("\\n") [Expression] ; [Expression]
-19	  in : [8]					out : [15]					dom : [8]	code : 
-10	  in : [5]					out : [20]					dom : [5]	code : this.d.MW("\\r") [Expression] ; [Expression]
-20	  in : [10]					out : [15]					dom : [10]	code : 
-7	  in : [5]					out : [21]					dom : [5]	code : this.d.MW("\\t") [Expression] ; [Expression]
-21	  in : [7]					out : [15]					dom : [7]	code : 
-13	  in : [5]					out : [15]					dom : [5]	code : this.d.NA(C) [Expression] ; [Expression]
-15	  in : [14,16,17,18,19,20,21,13]		out : [3]					dom : []	code : ++ [Expression] B [Expression] ; [Expression]
-3	  in : [2,15]					out : [4,22]					dom : []	code : B<A.length [Condition]
-22	  in : [3]					out : [23]					dom : [3]	code : this.d.NA("\"") [Expression] ; [Expression]
-23	  in : [22]					out : []					dom : [22]	code : return [Expression] ; [Expression]
-24	  in : []					out : []					dom : []	code : 
-
-kiss.JSON write
--1	  in : []					out : [0]					dom : []	back : []	code : 
-0	  in : [-1]					out : [1]					dom : [-1]	back : []	code : this.d.NA("\"") [Expression] ; [Expression]
-1	  in : [0]					out : [2]					dom : [0]	back : []	code : B=0 [Expression] ; [Expression]
-2	  in : [1]					out : [3]					dom : [1]	back : []	code : 
-4	  in : [3]					out : [5]					dom : [3]	back : []	code : C=A.Bw(B) [Expression] ; [Expression]
-5	  in : [4]					out : [6,7,8,9,10,11,12,13]			dom : [4]	back : []	code : 
-11	  in : [5]					out : [14]					dom : [5]	back : []	code : this.d.MW("\\\"") [Expression] ; [Expression]
-14	  in : [11]					out : [15]					dom : [11]	back : []	code : 
-12	  in : [5]					out : [16]					dom : [5]	back : []	code : this.d.MW("\\\\") [Expression] ; [Expression]
-16	  in : [12]					out : [15]					dom : [12]	back : []	code : 
-6	  in : [5]					out : [17]					dom : [5]	back : []	code : this.d.MW("\\b") [Expression] ; [Expression]
-17	  in : [6]					out : [15]					dom : [6]	back : []	code : 
-9	  in : [5]					out : [18]					dom : [5]	back : []	code : this.d.MW("\\f") [Expression] ; [Expression]
-18	  in : [9]					out : [15]					dom : [9]	back : []	code : 
-8	  in : [5]					out : [19]					dom : [5]	back : []	code : this.d.MW("\\n") [Expression] ; [Expression]
-19	  in : [8]					out : [15]					dom : [8]	back : []	code : 
-10	  in : [5]					out : [20]					dom : [5]	back : []	code : this.d.MW("\\r") [Expression] ; [Expression]
-20	  in : [10]					out : [15]					dom : [10]	back : []	code : 
-7	  in : [5]					out : [21]					dom : [5]	back : []	code : this.d.MW("\\t") [Expression] ; [Expression]
-21	  in : [7]					out : [15]					dom : [7]	back : []	code : 
-13	  in : [5]					out : [15]					dom : [5]	back : []	code : this.d.NA(C) [Expression] ; [Expression]
-15	  in : [14,16,17,18,19,20,21,13]		out : [3]					dom : [5]	back : []	code : ++ [Expression] B [Expression] ; [Expression]
-3	  in : [2,15]					out : [4,22]					dom : [2]	back : [15]	code : B<A.length [Condition]
-22	  in : [3]					out : [23]					dom : [3]	back : []	code : this.d.NA("\"") [Expression] ; [Expression]
-23	  in : [22]					out : []					dom : [22]	back : []	code : return [Expression] ; [Expression]
-24	  in : []					out : []					dom : []	back : []	code : 
-
-{
-mv = cw.visitMethod(ACC_PRIVATE, "write", "(Ljava/lang/String;)V", null, new String[] { "java/io/IOException" });
-mv.visitCode();
-Label l0 = new Label();
-mv.visitLabel(l0);
-mv.visitLineNumber(117, l0);
-mv.visitVarInsn(ALOAD, 0);
-mv.visitFieldInsn(GETFIELD, "kiss/JSON", "out", "Ljava/lang/Appendable;");
-mv.visitIntInsn(BIPUSH, 34);
-mv.visitMethodInsn(INVOKEINTERFACE, "java/lang/Appendable", "append", "(C)Ljava/lang/Appendable;");
-mv.visitInsn(POP);
-Label l1 = new Label();
-mv.visitLabel(l1);
-mv.visitLineNumber(119, l1);
-mv.visitInsn(ICONST_0);
-mv.visitVarInsn(ISTORE, 2);
-Label l2 = new Label();
-mv.visitLabel(l2);
-Label l3 = new Label();
-mv.visitJumpInsn(GOTO, l3);
-Label l4 = new Label();
-mv.visitLabel(l4);
-mv.visitLineNumber(120, l4);
-mv.visitFrame(Opcodes.F_APPEND,1, new Object[] {Opcodes.INTEGER}, 0, null);
-mv.visitVarInsn(ALOAD, 1);
-mv.visitVarInsn(ILOAD, 2);
-mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/String", "charAt", "(I)C");
-mv.visitVarInsn(ISTORE, 3);
-Label l5 = new Label();
-mv.visitLabel(l5);
-mv.visitLineNumber(122, l5);
-mv.visitVarInsn(ILOAD, 3);
-Label l6 = new Label();
-Label l7 = new Label();
-Label l8 = new Label();
-Label l9 = new Label();
-Label l10 = new Label();
-Label l11 = new Label();
-Label l12 = new Label();
-Label l13 = new Label();
-mv.visitLookupSwitchInsn(l13, new int[] { 8, 9, 10, 12, 13, 34, 92 }, new Label[] { l6, l7, l8, l9, l10, l11, l12 });
-mv.visitLabel(l11);
-mv.visitLineNumber(124, l11);
-mv.visitFrame(Opcodes.F_APPEND,1, new Object[] {Opcodes.INTEGER}, 0, null);
-mv.visitVarInsn(ALOAD, 0);
-mv.visitFieldInsn(GETFIELD, "kiss/JSON", "out", "Ljava/lang/Appendable;");
-mv.visitLdcInsn("\\\"");
-mv.visitMethodInsn(INVOKEINTERFACE, "java/lang/Appendable", "append", "(Ljava/lang/CharSequence;)Ljava/lang/Appendable;");
-mv.visitInsn(POP);
-Label l14 = new Label();
-mv.visitLabel(l14);
-mv.visitLineNumber(125, l14);
-Label l15 = new Label();
-mv.visitJumpInsn(GOTO, l15);
-mv.visitLabel(l12);
-mv.visitLineNumber(128, l12);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitVarInsn(ALOAD, 0);
-mv.visitFieldInsn(GETFIELD, "kiss/JSON", "out", "Ljava/lang/Appendable;");
-mv.visitLdcInsn("\\\\");
-mv.visitMethodInsn(INVOKEINTERFACE, "java/lang/Appendable", "append", "(Ljava/lang/CharSequence;)Ljava/lang/Appendable;");
-mv.visitInsn(POP);
-Label l16 = new Label();
-mv.visitLabel(l16);
-mv.visitLineNumber(129, l16);
-mv.visitJumpInsn(GOTO, l15);
-mv.visitLabel(l6);
-mv.visitLineNumber(132, l6);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitVarInsn(ALOAD, 0);
-mv.visitFieldInsn(GETFIELD, "kiss/JSON", "out", "Ljava/lang/Appendable;");
-mv.visitLdcInsn("\\b");
-mv.visitMethodInsn(INVOKEINTERFACE, "java/lang/Appendable", "append", "(Ljava/lang/CharSequence;)Ljava/lang/Appendable;");
-mv.visitInsn(POP);
-Label l17 = new Label();
-mv.visitLabel(l17);
-mv.visitLineNumber(133, l17);
-mv.visitJumpInsn(GOTO, l15);
-mv.visitLabel(l9);
-mv.visitLineNumber(136, l9);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitVarInsn(ALOAD, 0);
-mv.visitFieldInsn(GETFIELD, "kiss/JSON", "out", "Ljava/lang/Appendable;");
-mv.visitLdcInsn("\\f");
-mv.visitMethodInsn(INVOKEINTERFACE, "java/lang/Appendable", "append", "(Ljava/lang/CharSequence;)Ljava/lang/Appendable;");
-mv.visitInsn(POP);
-Label l18 = new Label();
-mv.visitLabel(l18);
-mv.visitLineNumber(137, l18);
-mv.visitJumpInsn(GOTO, l15);
-mv.visitLabel(l8);
-mv.visitLineNumber(140, l8);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitVarInsn(ALOAD, 0);
-mv.visitFieldInsn(GETFIELD, "kiss/JSON", "out", "Ljava/lang/Appendable;");
-mv.visitLdcInsn("\\n");
-mv.visitMethodInsn(INVOKEINTERFACE, "java/lang/Appendable", "append", "(Ljava/lang/CharSequence;)Ljava/lang/Appendable;");
-mv.visitInsn(POP);
-Label l19 = new Label();
-mv.visitLabel(l19);
-mv.visitLineNumber(141, l19);
-mv.visitJumpInsn(GOTO, l15);
-mv.visitLabel(l10);
-mv.visitLineNumber(144, l10);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitVarInsn(ALOAD, 0);
-mv.visitFieldInsn(GETFIELD, "kiss/JSON", "out", "Ljava/lang/Appendable;");
-mv.visitLdcInsn("\\r");
-mv.visitMethodInsn(INVOKEINTERFACE, "java/lang/Appendable", "append", "(Ljava/lang/CharSequence;)Ljava/lang/Appendable;");
-mv.visitInsn(POP);
-Label l20 = new Label();
-mv.visitLabel(l20);
-mv.visitLineNumber(145, l20);
-mv.visitJumpInsn(GOTO, l15);
-mv.visitLabel(l7);
-mv.visitLineNumber(148, l7);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitVarInsn(ALOAD, 0);
-mv.visitFieldInsn(GETFIELD, "kiss/JSON", "out", "Ljava/lang/Appendable;");
-mv.visitLdcInsn("\\t");
-mv.visitMethodInsn(INVOKEINTERFACE, "java/lang/Appendable", "append", "(Ljava/lang/CharSequence;)Ljava/lang/Appendable;");
-mv.visitInsn(POP);
-Label l21 = new Label();
-mv.visitLabel(l21);
-mv.visitLineNumber(149, l21);
-mv.visitJumpInsn(GOTO, l15);
-mv.visitLabel(l13);
-mv.visitLineNumber(152, l13);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitVarInsn(ALOAD, 0);
-mv.visitFieldInsn(GETFIELD, "kiss/JSON", "out", "Ljava/lang/Appendable;");
-mv.visitVarInsn(ILOAD, 3);
-mv.visitMethodInsn(INVOKEINTERFACE, "java/lang/Appendable", "append", "(C)Ljava/lang/Appendable;");
-mv.visitInsn(POP);
-mv.visitLabel(l15);
-mv.visitLineNumber(119, l15);
-mv.visitFrame(Opcodes.F_CHOP,1, null, 0, null);
-mv.visitIincInsn(2, 1);
-mv.visitLabel(l3);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitVarInsn(ILOAD, 2);
-mv.visitVarInsn(ALOAD, 1);
-mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/String", "length", "()I");
-mv.visitJumpInsn(IF_ICMPLT, l4);
-Label l22 = new Label();
-mv.visitLabel(l22);
-mv.visitLineNumber(156, l22);
-mv.visitVarInsn(ALOAD, 0);
-mv.visitFieldInsn(GETFIELD, "kiss/JSON", "out", "Ljava/lang/Appendable;");
-mv.visitIntInsn(BIPUSH, 34);
-mv.visitMethodInsn(INVOKEINTERFACE, "java/lang/Appendable", "append", "(C)Ljava/lang/Appendable;");
-mv.visitInsn(POP);
-Label l23 = new Label();
-mv.visitLabel(l23);
-mv.visitLineNumber(157, l23);
-mv.visitInsn(RETURN);
-Label l24 = new Label();
-mv.visitLabel(l24);
-mv.visitLocalVariable("this", "Lkiss/JSON;", null, l0, l24, 0);
-mv.visitLocalVariable("value", "Ljava/lang/String;", null, l0, l24, 1);
-mv.visitLocalVariable("i", "I", null, l2, l22, 2);
-mv.visitLocalVariable("c", "C", null, l5, l15, 3);
-mv.visitMaxs(2, 4);
-mv.visitEnd();
-}
-Xu:function(A,B,C){
-		// -1 -> 0 next count 1  1  false
-		// 117
-		this.d.NA("\"");
-		// 0 -> 1 next count 1  1  false
-		// 119
-		B=0;
-		// 1 -> 2 next count 1  1  false
-		// 2 -> 3 next count 1  1  false
-		l3: for (; B<A.length; ++B) {
-			// 3 -> 4 next count 1  1  false
-			// 120
-			C=A.Bw(B);
-			// 4 -> 5 next count 1  1  false
-			// 122
-			switch (C) {
-				case 8:
-				// 5 -> 6 next count 1  1  false
-				// 132
-				this.d.MW("\\b");
-				// 6 -> 17 next count 1  1  false
-				// 133
-				break;
-				// 17 -> 15 Entrance 3
-				continue l3; // 17 -> 15 Enter 3
-				case 9:
-				// 5 -> 7 next count 1  1  false
-				// 148
-				this.d.MW("\\t");
-				// 7 -> 21 next count 1  1  false
-				// 149
-				break;
-				// 21 -> 15 Entrance 3
-				continue l3; // 21 -> 15 Enter 3
-				case 10:
-				// 5 -> 8 next count 1  1  false
-				// 140
-				this.d.MW("\\n");
-				// 8 -> 19 next count 1  1  false
-				// 141
-				break;
-				// 19 -> 15 Entrance 3
-				continue l3; // 19 -> 15 Enter 3
-				case 12:
-				// 5 -> 9 next count 1  1  false
-				// 136
-				this.d.MW("\\f");
-				// 9 -> 18 next count 1  1  false
-				// 137
-				break;
-				// 18 -> 15 Entrance 3
-				continue l3; // 18 -> 15 Enter 3
-				case 13:
-				// 5 -> 10 next count 1  1  false
-				// 144
-				this.d.MW("\\r");
-				// 10 -> 20 next count 1  1  false
-				// 145
-				break;
-				// 20 -> 15 Entrance 3
-				continue l3; // 20 -> 15 Enter 3
-				case 34:
-				// 5 -> 11 next count 1  1  false
-				// 124
-				this.d.MW("\\\"");
-				// 11 -> 14 next count 1  1  false
-				// 125
-				break;
-				// 14 -> 15 Entrance 3
-				continue l3; // 14 -> 15 Enter 3
-				case 92:
-				// 5 -> 12 next count 1  1  false
-				// 128
-				this.d.MW("\\\\");
-				// 12 -> 16 next count 1  1  false
-				// 129
-				break;
-				// 16 -> 15 Entrance 3
-				continue l3; // 16 -> 15 Enter 3
-				default:
-				// 5 -> 13 next count 1  1  false
-				// 152
-				this.d.NA(C);break;
-				// 13 -> 15 Entrance 3
-				continue l3; // 13 -> 15 Enter 3
-			}
-			// 5 -> 15 Entrance 3
-			continue l3; // 5 -> 15 Enter 3
-		}
-		// 3 -> 22 next count 1  1  true
-		// 156
-		this.d.NA("\"");
-		// 22 -> 23 next count 1  1  false
-		// 157
-	},
-	
-visit label -1
-visit label 0
-visit label 1
 visit label 3
 visit label 4
-visit label 5
-visit label 8
 visit label 6
-visit label 10
-visit label 7
+merge6
+-1	  in : []	out : [0]		dom : []	code : 
+0	  in : [-1]	out : [1]		dom : [-1]	code : boot.BR.CE(B) [Expression] ; [Expression]
+1	  in : [0]	out : [2]		dom : [0]	code : 
+3	  in : []	out : [4]		dom : []	code : D=B.LL(A,C) [Expression] ; [Expression]
+4	  in : [3]	out : [5,6]		dom : [3]	code : D==null [Condition]
+6	  in : [4]	out : []		dom : [4]	code : 
+
+visit label 5
 visit label 2
+visit label 7
+merge7
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : boot.BR.CE(B) [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	code : 
+3	  in : []		out : [4]		dom : []	code : D=B.LL(A,C) [Expression] ; [Expression]
+4	  in : [3]		out : [5,6]		dom : [3]	code : D==null [Condition]
+6	  in : [4]		out : [2]		dom : [4]	code : this.LP(A,C,D)==0 [Condition] return  [Expression] D [Expression] ; [Expression]
+5	  in : [4]		out : [2]		dom : [4]	code : this.LO(A,C)==0 [Condition] return  [Expression] null [Expression] ; [Expression]
+2	  in : [1,6,5]		out : [7]		dom : []	code : (C=this.BS(A)) [Expression in Enclose]
+7	  in : [2]		out : []		dom : [2]	code : 
+
+visit label 8
+merge8
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : boot.BR.CE(B) [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	code : 
+3	  in : [7]		out : [4]		dom : [7]	code : D=B.LL(A,C) [Expression] ; [Expression]
+4	  in : [3]		out : [5,6]		dom : [3]	code : D==null [Condition]
+6	  in : [4]		out : [2]		dom : [4]	code : this.LP(A,C,D)==0 [Condition] return  [Expression] D [Expression] ; [Expression]
+5	  in : [4]		out : [2]		dom : [4]	code : this.LO(A,C)==0 [Condition] return  [Expression] null [Expression] ; [Expression]
+2	  in : [1,6,5]		out : [7]		dom : []	code : 
+7	  in : [2]		out : [3,8]		dom : [2]	code : (C=this.BS(A))!=null [Condition]
+8	  in : [7]		out : []		dom : [7]	code : 
+
 visit label 9
 merge9
--1	  in : []		out : [0]			dom : []	code : 
-0	  in : [-1]		out : [1]			dom : [-1]	code : B=0 [Expression] ; [Expression]
-1	  in : [0]		out : [2]			dom : [0]	code : 
-3	  in : [2]		out : [4,5,6,7]		dom : [2]	code : 
-4	  in : [3]		out : []			dom : [3]	code : return  [Expression] 10 [Number] ; [Expression]
-5	  in : [3]		out : [8]			dom : [3]	code : B=-1 [Expression] ; [Expression]
-8	  in : [5]		out : [9]			dom : [5]	code : 
-6	  in : [3]		out : [10]			dom : [3]	code : B [Expression] = [Expression] B [Expression] + [Expression] 3 [Number] ; [Expression]
-10	  in : [6]		out : [2]			dom : [6]	code : 
-7	  in : [3]		out : [2]			dom : [3]	code : ++ [Expression] B [Expression] ; [Expression]
-2	  in : [1,10,7]	out : [3,9]			dom : []	code : B<5 [Condition]
-9	  in : [8,2]		out : []			dom : []	code : 
+-1	  in : []		out : [0]		dom : []	code : 
+0	  in : [-1]		out : [1]		dom : [-1]	code : boot.BR.CE(B) [Expression] ; [Expression]
+1	  in : [0]		out : [2]		dom : [0]	code : 
+3	  in : [7]		out : [4]		dom : [7]	code : D=B.LL(A,C) [Expression] ; [Expression]
+4	  in : [3]		out : [5,6]		dom : [3]	code : D==null [Condition]
+6	  in : [4]		out : [2]		dom : [4]	code : this.LP(A,C,D)==0 [Condition] return  [Expression] D [Expression] ; [Expression]
+5	  in : [4]		out : [2]		dom : [4]	code : this.LO(A,C)==0 [Condition] return  [Expression] null [Expression] ; [Expression]
+2	  in : [1,6,5]		out : [7]		dom : []	code : 
+7	  in : [2]		out : [3,8]		dom : [2]	code : (C=this.BS(A))!=null [Condition]
+8	  in : [7]		out : []		dom : [7]	code : return  [Expression] C [Expression] ; [Expression]
+9	  in : []		out : []		dom : []	code : 
 
-visit label 11
-merge11
--1	  in : []		out : [0]			dom : []	code : 
-0	  in : [-1]		out : [1]			dom : [-1]	code : B=0 [Expression] ; [Expression]
-1	  in : [0]		out : [2]			dom : [0]	code : 
-3	  in : [2]		out : [4,5,6,7]		dom : [2]	code : 
-4	  in : [3]		out : []			dom : [3]	code : return  [Expression] 10 [Number] ; [Expression]
-5	  in : [3]		out : [8]			dom : [3]	code : B=-1 [Expression] ; [Expression]
-8	  in : [5]		out : [9]			dom : [5]	code : 
-6	  in : [3]		out : [10]			dom : [3]	code : B [Expression] = [Expression] B [Expression] + [Expression] 3 [Number] ; [Expression]
-10	  in : [6]		out : [2]			dom : [6]	code : 
-7	  in : [3]		out : [2]			dom : [3]	code : ++ [Expression] B [Expression] ; [Expression]
-2	  in : [1,10,7]	out : [3,9]			dom : []	code : B<5 [Condition]
-9	  in : [8,2]		out : []			dom : []	code : return  [Expression] B [Expression] ; [Expression]
-11	  in : []		out : []			dom : []	code : 
-
-booton.translator.flow.SwitchTest booton.translator.flow.SwitchTest
--1	  in : []		out : [0]			dom : []	back : []		code : 
-0	  in : [-1]		out : [1]			dom : [-1]	back : []		code : B=0 [Expression] ; [Expression]
-1	  in : [0]		out : [2]			dom : [0]	back : []		code : 
-3	  in : [2]		out : [4,5,6,7]		dom : [2]	back : []		code : 
-4	  in : [3]		out : []			dom : [3]	back : []		code : return  [Expression] 10 [Number] ; [Expression]
-5	  in : [3]		out : [8]			dom : [3]	back : []		code : B=-1 [Expression] ; [Expression]
-8	  in : [5]		out : [9]			dom : [5]	back : []		code : 
-6	  in : [3]		out : [10]			dom : [3]	back : []		code : B [Expression] = [Expression] B [Expression] + [Expression] 3 [Number] ; [Expression]
-10	  in : [6]		out : [2]			dom : [6]	back : []		code : 
-7	  in : [3]		out : [2]			dom : [3]	back : []		code : ++ [Expression] B [Expression] ; [Expression]
-2	  in : [1,10,7]	out : [3,9]			dom : [1]	back : [10,7]		code : B<5 [Condition]
-9	  in : [8,2]		out : []			dom : [2]	back : []		code : return  [Expression] B [Expression] ; [Expression]
-11	  in : []		out : []			dom : []	back : []		code : 
+js.util.Map computeIfPresent
+-1	  in : []			out : [0]		dom : []	back : []			code : 
+0	  in : [-1]			out : [1]		dom : [-1]	back : []			code : boot.BR.CE(B) [Expression] ; [Expression]
+1	  in : [0]			out : [2]		dom : [0]	back : []			code : 
+3	  in : [7]			out : [4]		dom : [7]	back : []			code : D=B.LL(A,C) [Expression] ; [Expression]
+4	  in : [3]			out : [10,11]		dom : [3]	back : []			code : D==null [Condition]
+11	  in : [4]			out : [6,2]		dom : [4]	back : []			code : this.LP(A,C,D)!=0 [Condition]
+6	  in : [11]			out : [2]		dom : [11]	back : []			code : return  [Expression] D [Expression] ; [Expression]
+10	  in : [4]			out : [5,2]		dom : [4]	back : []			code : this.LO(A,C)!=0 [Condition]
+5	  in : [10]			out : [2]		dom : [10]	back : []			code : return  [Expression] null [Expression] ; [Expression]
+2	  in : [1,6,5,10,11]		out : [7]		dom : [1]	back : [5,10,6,11]		code : 
+7	  in : [2]			out : [3,8]		dom : [2]	back : []			code : (C=this.BS(A))!=null [Condition]
+8	  in : [7]			out : []		dom : [7]	back : []			code : return  [Expression] C [Expression] ; [Expression]
+9	  in : []			out : []		dom : []	back : []			code : 
 
 {
-mv = cw.visitMethod(ACC_PUBLIC, "act", "(I)I", null, null);
+mv = cw.visitMethod(ACC_PUBLIC, "computeIfPresent", "(Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;", "(TK;Ljava/util/function/BiFunction<-TK;-TV;+TV;>;)TV;", null);
 mv.visitCode();
 Label l0 = new Label();
 mv.visitLabel(l0);
-mv.visitLineNumber(313, l0);
-mv.visitInsn(ICONST_0);
-mv.visitVarInsn(ISTORE, 2);
+mv.visitLineNumber(791, l0);
+mv.visitVarInsn(ALOAD, 2);
+mv.visitMethodInsn(INVOKESTATIC, "java/util/Objects", "requireNonNull", "(Ljava/lang/Object;)Ljava/lang/Object;");
+mv.visitInsn(POP);
 Label l1 = new Label();
 mv.visitLabel(l1);
-mv.visitLineNumber(315, l1);
+mv.visitLineNumber(793, l1);
 Label l2 = new Label();
 mv.visitJumpInsn(GOTO, l2);
 Label l3 = new Label();
 mv.visitLabel(l3);
-mv.visitLineNumber(316, l3);
-mv.visitFrame(Opcodes.F_APPEND,1, new Object[] {Opcodes.INTEGER}, 0, null);
-mv.visitVarInsn(ILOAD, 1);
+mv.visitLineNumber(794, l3);
+mv.visitFrame(Opcodes.F_APPEND,1, new Object[] {"java/lang/Object"}, 0, null);
+mv.visitVarInsn(ALOAD, 2);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitVarInsn(ALOAD, 3);
+mv.visitMethodInsn(INVOKEINTERFACE, "java/util/function/BiFunction", "apply", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
+mv.visitVarInsn(ASTORE, 4);
 Label l4 = new Label();
-Label l5 = new Label();
-Label l6 = new Label();
-Label l7 = new Label();
-mv.visitTableSwitchInsn(0, 2, l7, new Label[] { l4, l5, l6 });
 mv.visitLabel(l4);
-mv.visitLineNumber(318, l4);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitIntInsn(BIPUSH, 10);
-mv.visitInsn(IRETURN);
+mv.visitLineNumber(795, l4);
+mv.visitVarInsn(ALOAD, 4);
+Label l5 = new Label();
+mv.visitJumpInsn(IFNULL, l5);
+Label l6 = new Label();
+mv.visitLabel(l6);
+mv.visitLineNumber(796, l6);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitVarInsn(ALOAD, 3);
+mv.visitVarInsn(ALOAD, 4);
+mv.visitMethodInsn(INVOKEINTERFACE, "js/util/Map", "replace", "(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Z");
+mv.visitJumpInsn(IFEQ, l2);
+mv.visitVarInsn(ALOAD, 4);
+mv.visitInsn(ARETURN);
 mv.visitLabel(l5);
-mv.visitLineNumber(321, l5);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitInsn(ICONST_M1);
-mv.visitVarInsn(ISTORE, 2);
+mv.visitLineNumber(797, l5);
+mv.visitFrame(Opcodes.F_APPEND,1, new Object[] {"java/lang/Object"}, 0, null);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitVarInsn(ALOAD, 3);
+mv.visitMethodInsn(INVOKEINTERFACE, "js/util/Map", "remove", "(Ljava/lang/Object;Ljava/lang/Object;)Z");
+mv.visitJumpInsn(IFEQ, l2);
+mv.visitInsn(ACONST_NULL);
+mv.visitInsn(ARETURN);
+mv.visitLabel(l2);
+mv.visitLineNumber(793, l2);
+mv.visitFrame(Opcodes.F_CHOP,2, null, 0, null);
+mv.visitVarInsn(ALOAD, 0);
+mv.visitVarInsn(ALOAD, 1);
+mv.visitMethodInsn(INVOKEINTERFACE, "js/util/Map", "get", "(Ljava/lang/Object;)Ljava/lang/Object;");
+mv.visitInsn(DUP);
+mv.visitVarInsn(ASTORE, 3);
+Label l7 = new Label();
+mv.visitLabel(l7);
+mv.visitJumpInsn(IFNONNULL, l3);
 Label l8 = new Label();
 mv.visitLabel(l8);
-mv.visitLineNumber(322, l8);
+mv.visitLineNumber(799, l8);
+mv.visitVarInsn(ALOAD, 3);
+mv.visitInsn(ARETURN);
 Label l9 = new Label();
-mv.visitJumpInsn(GOTO, l9);
-mv.visitLabel(l6);
-mv.visitLineNumber(325, l6);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitIincInsn(2, 3);
-Label l10 = new Label();
-mv.visitLabel(l10);
-mv.visitLineNumber(326, l10);
-mv.visitJumpInsn(GOTO, l2);
-mv.visitLabel(l7);
-mv.visitLineNumber(329, l7);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitIincInsn(2, 1);
-mv.visitLabel(l2);
-mv.visitLineNumber(315, l2);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitVarInsn(ILOAD, 2);
-mv.visitInsn(ICONST_5);
-mv.visitJumpInsn(IF_ICMPLT, l3);
 mv.visitLabel(l9);
-mv.visitLineNumber(333, l9);
-mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-mv.visitVarInsn(ILOAD, 2);
-mv.visitInsn(IRETURN);
-Label l11 = new Label();
-mv.visitLabel(l11);
-mv.visitLocalVariable("this", "Lbooton/translator/flow/SwitchTest$14;", null, l0, l11, 0);
-mv.visitLocalVariable("value", "I", null, l0, l11, 1);
-mv.visitLocalVariable("result", "I", null, l1, l11, 2);
-mv.visitMaxs(2, 3);
+mv.visitLocalVariable("this", "Ljs/util/Map;", "Ljs/util/Map<TK;TV;>;", l0, l9, 0);
+mv.visitLocalVariable("key", "Ljava/lang/Object;", "TK;", l0, l9, 1);
+mv.visitLocalVariable("remappingFunction", "Ljava/util/function/BiFunction;", "Ljava/util/function/BiFunction<-TK;-TV;+TV;>;", l0, l9, 2);
+mv.visitLocalVariable("oldValue", "Ljava/lang/Object;", "TV;", l3, l2, 3);
+mv.visitLocalVariable("oldValue", "Ljava/lang/Object;", "TV;", l7, l9, 3);
+mv.visitLocalVariable("newValue", "Ljava/lang/Object;", "TV;", l4, l2, 4);
+mv.visitMaxs(4, 5);
 mv.visitEnd();
 }
-BDJ:function(A,B){
-		// -1 -> 0 next count 1  1  false
-		// 313
-		B=0;
-		// 0 -> 1 next count 1  1  false
-		// 315
-		// 1 -> 2 next count 1  1  false
-		// 315
-		l2: while (B<5) {
-			// 2 -> 3 next count 1  1  false
-			// 316
-			switch (A) {
-				case 0:
-				// 3 -> 4 next count 1  1  false
-				// 318
-				return 10;
-				case 1:
-				// 3 -> 5 next count 1  1  false
-				// 321
-				B=-1;
-				// 5 -> 8 next count 1  1  false
-				// 322
-				break l2; // 8 -> 9 Enter 2
-				case 2:
-				// 3 -> 6 next count 1  1  false
-				// 325
-				B=B+3;
-				// 6 -> 10 next count 1  1  false
-				// 326
-				// 10 -> 2 Entrance 2
-				continue l2; // 10 -> 2 Enter 2
-				default:
-				// 3 -> 7 next count 1  1  false
-				// 329
-				++B;
-				// 7 -> 2 Entrance 2
-				continue l2; // 7 -> 2 Enter 2
-			}
-			// 3 -> 4 next count 1  2  false
-		}
-		// 2 -> 9 next count 2  2  true
-		// 333
-		return B
-	},
-	
