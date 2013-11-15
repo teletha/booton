@@ -19,6 +19,8 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import booton.translator.Debuggable;
+
 /**
  * @version 2013/11/08 9:53:59
  */
@@ -783,6 +785,7 @@ public interface Map<K, V> {
      *             stored in this map (<a href="Collection.html#optional-restrictions">optional</a>)
      * @since 1.8
      */
+    @Debuggable
     default V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
         Objects.requireNonNull(remappingFunction);
         V oldValue;

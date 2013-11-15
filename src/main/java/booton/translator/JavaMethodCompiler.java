@@ -142,6 +142,9 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The frequently used operand for cache. */
     private static final OperandNumber ONE = new OperandNumber(1);
 
+    /** The frequently used operand for cache. */
+    private static final OperandExpression Return = new OperandExpression("return ");
+
     /** The debug flag. */
     private final Debugger debugger;
 
@@ -249,7 +252,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("JSON") && original.equals("write")) {
+        if (script.source.getName().endsWith("Map") && original.equals("compute")) {
             debugger.enable = true;
         }
     }
@@ -272,6 +275,9 @@ class JavaMethodCompiler extends MethodVisitor {
                 condition.connect(node);
                 condition.connect(out);
 
+                if (node.stack.peekFirst() == Return) {
+                    node.disconnect(out);
+                }
                 condition.stack.add(node.stack.pollFirst().invert());
             }
         }
@@ -856,7 +862,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 }
             }
 
-            current.addExpression("return ", operand);
+            current.addExpression(Return, operand);
 
             // disconnect the next appearing node from the current node
             current = null;
@@ -866,7 +872,7 @@ class JavaMethodCompiler extends MethodVisitor {
         case LRETURN:
         case FRETURN:
         case DRETURN:
-            current.addExpression("return ", current.remove(match(DUP, JUMP, ARETURN) ? 1 : 0));
+            current.addExpression(Return, current.remove(match(DUP, JUMP, ARETURN) ? 1 : 0));
 
             // disconnect the next appearing node from the current node
             current = null;
