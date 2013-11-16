@@ -366,6 +366,16 @@ public class LongTest extends ScriptTester {
     }
 
     @Test
+    public void preIncrementInStatement() {
+        test(new Scriptable() {
+
+            long act(long value) {
+                return 2 * ++value;
+            }
+        });
+    }
+
+    @Test
     public void equal() {
         test(new Scriptable() {
 

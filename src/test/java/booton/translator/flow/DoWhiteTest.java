@@ -11,7 +11,6 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -58,7 +57,6 @@ public class DoWhiteTest extends ScriptTester {
     public void complexCondition() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 do {
                     value += 2;

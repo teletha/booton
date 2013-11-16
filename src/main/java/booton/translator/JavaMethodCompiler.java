@@ -638,24 +638,25 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // retrieve the local variable name
         String variable = variables.name(position);
+        InferredType type = variables.type(position);
 
         if (increment == 1) {
             // increment
             if (match(ILOAD, INCREMENT)) {
                 // post increment
-                current.addOperand(current.remove(0) + "++");
+                current.addOperand(new OperandExpression(current.remove(0) + "++", type));
             } else {
                 // pre increment
-                current.addExpression("++", variable);
+                current.addExpression(new OperandExpression("++" + variable, type));
             }
         } else if (increment == -1) {
             // increment
             if (match(ILOAD, INCREMENT)) {
                 // post increment
-                current.addOperand(current.remove(0) + "--");
+                current.addOperand(new OperandExpression(current.remove(0) + "--", type));
             } else {
                 // pre increment
-                current.addExpression("--", variable);
+                current.addExpression(new OperandExpression("--" + variable, type));
             }
         } else {
             current.addExpression(variable, "=", variable, "+", increment);
@@ -1671,11 +1672,22 @@ class JavaMethodCompiler extends MethodVisitor {
         String variable = variables.name(position, opcode);
 
         switch (opcode) {
-        case ALOAD:
         case ILOAD:
         case FLOAD:
         case LLOAD:
         case DLOAD:
+            if (match(INCREMENT, ILOAD) && current.peek(0) == Node.END) {
+                String expression = current.peek(1).toString();
+
+                if (expression.startsWith("++") || expression.startsWith("--")) {
+                    if (expression.substring(2).equals(variable)) {
+                        current.remove(0);
+                        break;
+                    }
+                }
+            }
+
+        case ALOAD:
             current.addOperand(new OperandExpression(variable, variables.type(position)));
             break;
 
