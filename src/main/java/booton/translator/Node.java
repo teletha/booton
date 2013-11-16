@@ -783,7 +783,7 @@ class Node {
      * @param next A next node to write.
      * @param buffer A script code buffer.
      */
-    private final void process(Node next, ScriptWriter buffer) {
+    private void process(Node next, ScriptWriter buffer) {
         if (next != null) {
             next.processCount++;
 
@@ -824,7 +824,7 @@ class Node {
      * 
      * @return A non-follower node.
      */
-    private final Node detectFollower() {
+    private Node detectFollower() {
         Node process;
         Node first = outgoing.get(0);
         Node last = outgoing.get(1);

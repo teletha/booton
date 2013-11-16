@@ -32,6 +32,26 @@ public class ConditionalExpressionTest extends ScriptTester {
     }
 
     @Test
+    public void postIncrement() {
+        test(new Scriptable() {
+
+            public int act(int value) {
+                return value++ < 0 ? 10 : value;
+            }
+        });
+    }
+
+    @Test
+    public void preIncrement() {
+        test(new Scriptable() {
+
+            public int act(int value) {
+                return value < 0 ? 10 : ++value;
+            }
+        });
+    }
+
+    @Test
     public void logicalExpressionInLeft() {
         test(new Scriptable() {
 
