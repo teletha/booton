@@ -257,7 +257,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("$IteratorSpliterator") && original.equals("trySplit")) {
+        if (script.source.getName().endsWith("SpinedBuffer") && original.equals("toString")) {
             debugger.enable = true;
         }
     }
@@ -596,10 +596,12 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 // dispose empty nodes
                 if (firstNode.stack.isEmpty()) {
+                    debugger.print("dispose first node " + firstNode.id);
                     disposeNode(firstNode);
                 }
 
                 if (secondNode.stack.isEmpty()) {
+                    debugger.print("dispose second node " + secondNode.id);
                     disposeNode(secondNode);
                 }
 
@@ -1045,6 +1047,7 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitInvokeDynamicInsn(String name, String description, Handle bsm, Object... bsmArgs) {
+        debugger.print(nodes);
         Handle handle = (Handle) bsmArgs[1];
 
         // detect functional interface
@@ -1093,6 +1096,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // create lambda proxy class
         current.addOperand(Javascript.writeMethodCode(Proxy.class, "newLambdaInstance", Class.class, interfaceClass, NativeObject.class, context, String.class, lambdaMethodName, Object[].class, parameters.toString()));
+        debugger.print(nodes);
     }
 
     /**
@@ -1343,6 +1347,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 OperandCondition condition = (OperandCondition) operand;
 
                 if (group.contains(condition.transition)) {
+                    debugger.print("dispose merged node " + target.id);
                     disposeNode(target);
 
                     // Merge recursively
@@ -1790,7 +1795,6 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private final void disposeNode(Node target) {
         debugger.print("dispose" + target.id);
-
         debugger.print(nodes);
 
         int index = nodes.indexOf(target);
@@ -1843,6 +1847,11 @@ class JavaMethodCompiler extends MethodVisitor {
 
         if (target == current) {
             current = target.previous;
+        }
+
+        // dispose empty node recursively
+        if (target.previous.stack.isEmpty()) {
+            disposeNode(target.previous);
         }
     }
 

@@ -9,12 +9,11 @@
  */
 package js.util.stream;
 
-
 /**
  * @version 2013/11/03 12:27:10
  */
 // @JavaAPIProvider(Emulator.class)
-class AbstractSpinedBuffer {
+class AbstractSpinedBuffer<E> {
 
     /**
      * Minimum power-of-two for the first chunk.
