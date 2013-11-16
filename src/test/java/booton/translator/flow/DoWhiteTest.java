@@ -11,6 +11,7 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -142,6 +143,20 @@ public class DoWhiteTest extends ScriptTester {
                     value++;
                 } while (value < 4);
 
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void oneLiner() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(@Param(from = 0, to = 5) int value) {
+                // @formatter:off
+                do {value+= 2;} while (value < 3);
+                // @formatter:on
                 return value;
             }
         });

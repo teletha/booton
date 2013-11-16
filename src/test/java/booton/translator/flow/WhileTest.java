@@ -11,6 +11,7 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -224,6 +225,36 @@ public class WhileTest extends ScriptTester {
 
             private int test(int value) {
                 return value + 2;
+            }
+        });
+    }
+
+    @Test
+    public void oneLiner() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                // @formatter:off
+                while (value < 0) {value+=2;}
+                // @formatter:on
+
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void oneLinerNest() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                // @formatter:off
+                while (value < 0) {if (value % 2==0) {value +=3;} else {value+= 5;};};
+                // @formatter:on
+
+                return value;
             }
         });
     }
