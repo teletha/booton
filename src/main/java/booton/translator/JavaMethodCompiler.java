@@ -1754,28 +1754,33 @@ class JavaMethodCompiler extends MethodVisitor {
      * @return A created node.
      */
     private final Node createNode(Node next) {
-        Node node = new Node(counter++, debugger);
+        Node created = new Node(counter++, debugger);
 
         // switch line number
-        node.number = next.number;
+        created.number = next.number;
         next.number = -1;
 
         // switch previous node
         Node previous = next.previous;
-        node.previous = previous;
-        next.previous = node;
+        created.previous = previous;
+        next.previous = created;
 
+        // switch incoming node
         ArrayList<Node> list = new ArrayList(next.incoming);
 
         for (Node incoming : list) {
             incoming.disconnect(next);
-            incoming.connect(node);
+            incoming.connect(created);
         }
 
-        // insert to node list
-        nodes.add(nodes.indexOf(next), node);
+        // link
+        created.connect(next);
 
-        return node;
+        // insert to node list
+        nodes.add(nodes.indexOf(next), created);
+
+        // API definition
+        return created;
     }
 
     /**
