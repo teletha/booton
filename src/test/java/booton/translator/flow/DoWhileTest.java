@@ -20,7 +20,7 @@ import booton.translator.Scriptable;
  * @version 2013/09/26 10:30:30
  */
 @SuppressWarnings("unused")
-public class DoWhiteTest extends ScriptTester {
+public class DoWhileTest extends ScriptTester {
 
     @Test
     public void normal() {
