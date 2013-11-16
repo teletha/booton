@@ -11,6 +11,7 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -340,6 +341,19 @@ public class IfTest extends ScriptTester {
                     result = -10;
                 }
                 return result;
+            }
+        });
+    }
+
+    @Test
+    public void oneLiner() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int o) {
+                // @formatter:off
+                if (o == 2) {return o + 3;} else {return o;}
+                // @formatter:on
             }
         });
     }

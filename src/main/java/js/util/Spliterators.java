@@ -27,7 +27,7 @@ import booton.translator.JavaAPIProvider;
 /**
  * @version 2013/10/29 16:19:18
  */
-@JavaAPIProvider(java.util.Spliterators.class)
+// @JavaAPIProvider(java.util.Spliterators.class)
 class Spliterators {
 
     /** reuse */
@@ -1088,9 +1088,9 @@ class Spliterators {
                 if (n > MAX_BATCH) n = MAX_BATCH;
                 Object[] a = new Object[n];
                 int j = 0;
-                do {
-                    a[j] = i.next();
-                } while (++j < n && i.hasNext());
+                // @formatter:off
+                do {a[j] = i.next();} while (++j < n && i.hasNext());
+                // @formatter:on
                 batch = j;
                 if (est != Long.MAX_VALUE) est -= j;
                 return new ArraySpliterator<>(a, 0, j, characteristics);
