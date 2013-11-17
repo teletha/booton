@@ -13,6 +13,7 @@ import static booton.translator.OperandCondition.*;
 import static org.objectweb.asm.Opcodes.*;
 import static org.objectweb.asm.Type.*;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -257,9 +258,80 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("SpinedBuffer") && original.equals("toString")) {
+        if (script.source.getName().endsWith("AnnotatedElement") && original.equals("getDeclaredAnnotationsByType")) {
             debugger.enable = true;
         }
+    }
+
+    private int isMixed(Node node) {
+        int position = -1;
+        boolean initialized = false;
+        boolean conditionOnly = false;
+
+        for (Operand operand : node.stack) {
+            position++;
+
+            if (operand == Return) {
+                continue;
+            }
+
+            if (operand == Node.END) {
+                continue;
+            }
+
+            if (operand instanceof OperandCondition) {
+                if (!initialized) {
+                    initialized = true;
+                    conditionOnly = true;
+                } else {
+                    if (!conditionOnly) {
+                        return position;
+                    }
+                }
+
+            } else {
+                if (!initialized) {
+                    initialized = true;
+                    conditionOnly = false;
+                } else {
+                    if (conditionOnly) {
+                        return position;
+                    }
+                }
+
+            }
+        }
+        return -1;
+    }
+
+    private void splite(Node node, int position) {
+        Node next = nodes.get(nodes.indexOf(node) + 1);
+        Node created = new Node(counter++, debugger);
+
+        int count = node.stack.size() - position;
+
+        for (int i = 0; i < count; i++) {
+            created.stack.addFirst(node.stack.pollLast());
+        }
+
+        OperandCondition condition = (OperandCondition) node.peek(0);
+
+        Node process;
+
+        if (node.outgoing.get(0) == condition.transition) {
+            process = node.outgoing.get(1);
+        } else {
+            process = node.outgoing.get(0);
+        }
+        node.disconnect(process);
+        created.connect(process);
+        node.connect(created);
+
+        created.previous = node;
+        next.previous = created;
+
+        // insert to node list
+        nodes.add(nodes.indexOf(next), created);
     }
 
     /**
@@ -284,6 +356,19 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 if (node.stack.peekFirst() == Return) {
                     node.disconnect(out);
+                }
+            }
+        }
+
+        for (int i = nodes.size() - 1; 0 <= i; i--) {
+            Node node = nodes.get(i);
+            int position = isMixed(node);
+
+            if (position != -1) {
+                if (script.source == AnnotatedElement.class) {
+                    splite(node, position);
+                } else {
+                    System.out.println(script.source + "#" + debugger.methodName + "  " + node);
                 }
             }
         }
@@ -833,7 +918,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case RETURN:
-            current.addExpression("return");
+            current.addExpression(Return);
 
             // disconnect the next appearing node from the current node
             current = null;
@@ -1515,7 +1600,6 @@ class JavaMethodCompiler extends MethodVisitor {
                 while (!hasStaticMethod(owner, methodName, parameters)) {
                     owner = owner.getSuperclass();
                 }
-
                 // push class operand
                 contexts.add(0, new OperandExpression(Javascript.computeClassName(owner)));
 
@@ -1530,6 +1614,7 @@ class JavaMethodCompiler extends MethodVisitor {
         if (immediately && current.stack.size() != 0) {
             current.addExpression(current.remove(0));
         }
+
     }
 
     /**
