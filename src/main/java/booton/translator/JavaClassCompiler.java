@@ -116,6 +116,10 @@ class JavaClassCompiler extends ClassVisitor {
             return null;
         }
 
+        if (script.source == AnnotatedElement.class && !name.equals("isAnnotationPresent")) {
+            return null;
+        }
+
         // ignore compiler generated method for enum switch
         if (Switch.isEnumSwitchTable(name, desc)) {
             return null;

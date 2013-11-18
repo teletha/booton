@@ -11,9 +11,21 @@ package booton.translator.lambda;
 
 import static booton.translator.lambda.LambdaTest.Lambda.*;
 
+import java.util.function.BiFunction;
+import java.util.function.DoubleSupplier;
+import java.util.function.Function;
+import java.util.function.IntBinaryOperator;
+import java.util.function.IntConsumer;
+import java.util.function.IntSupplier;
+import java.util.function.IntUnaryOperator;
+import java.util.function.LongSupplier;
+import java.util.function.Supplier;
+import java.util.function.ToIntFunction;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import booton.translator.Debuggable;
 import booton.translator.ScriptRunner;
 
 /**
@@ -22,43 +34,281 @@ import booton.translator.ScriptRunner;
 @RunWith(ScriptRunner.class)
 public class LambdaTest {
 
-    private int value = 21;
-
     @Test
-    public void lambda() throws Exception {
-        Lambda lambda = new Lambda();
-        assert lambda.nothingInt(() -> 1) == 1;
+    public void inlineNoArguments() throws Exception {
+        assert new InlineNoArguments().lambda(() -> 10) == 10;
+    }
+
+    /**
+     * @version 2013/11/18 10:28:11
+     */
+    private static class InlineNoArguments {
+
+        private int lambda(IntSupplier supplier) {
+            return supplier.getAsInt();
+        }
     }
 
     @Test
-    public void localVariableReference() throws Exception {
-        int value1 = 1;
-        int value2 = 10;
+    public void inlineSingleArgument() throws Exception {
+        InlineSingleArgument instance = new InlineSingleArgument();
 
-        Lambda lambda = new Lambda();
-        assert lambda.nothingInt(() -> value1 - value2) == -9;
+        assert instance.lambda((value) -> value + 10) == 15;
+        assert instance.lambda((value) -> value * 10) == 50;
+    }
+
+    /**
+     * @version 2013/11/18 10:28:11
+     */
+    private static class InlineSingleArgument {
+
+        private int lambda(IntUnaryOperator operator) {
+            return operator.applyAsInt(5);
+        }
     }
 
     @Test
-    public void fieldReference() throws Exception {
-        Lambda lambda = new Lambda();
-        assert lambda.nothingInt(() -> value) == 21;
+    public void inlineMultiArguments() throws Exception {
+        assert new InlineMultiArguments().lambda((one, other) -> one / other + 10) == 12;
+    }
+
+    /**
+     * @version 2013/11/18 10:28:11
+     */
+    private static class InlineMultiArguments {
+
+        private int lambda(IntBinaryOperator operator) {
+            return operator.applyAsInt(10, 5);
+        }
+    }
+
+    /**
+     * @version 2013/11/18 10:37:39
+     */
+    private static class ExternalVariableUser {
+
+        private long forLong(LongSupplier supplier) {
+            return supplier.getAsLong();
+        }
+
+        private Object forObject(Supplier supplier) {
+            return supplier.get();
+        }
     }
 
     @Test
-    public void thisReference() throws Exception {
-        Lambda lambda = new Lambda();
-        assert lambda.nothingObject(() -> this) == this;
+    public void inlineUseLocalVariable() throws Exception {
+        long value1 = 1;
+        long value2 = 10;
+
+        assert new ExternalVariableUser().forLong(() -> value1 - value2) == -9L;
+    }
+
+    private long value1 = 10;
+
+    private long value2 = 1;
+
+    @Test
+    public void inlineUseFieldVariable() throws Exception {
+        assert new ExternalVariableUser().forLong(() -> value1 - value2) == 9L;
     }
 
     @Test
-    public void parameter() throws Exception {
-        int variable = 3;
+    public void inlineUseThisVariable() throws Exception {
+        assert new ExternalVariableUser().forObject(() -> this) == this;
+    }
 
-        Lambda lambda = new Lambda();
-        assert lambda.param10((int param) -> param + 10) == 20;
-        assert lambda.param10((int param) -> param * 10) == 100;
-        assert lambda.param10((int param) -> param * variable) == 30;
+    @Test
+    @Debuggable
+    public void inlineUseVariableAndArguments() throws Exception {
+        int local1 = 10;
+        int local2 = 5;
+
+        assert new InlineSingleArgument().lambda((value) -> value * local1 + local2) == 55;
+    }
+
+    @Test
+    public void referInstanceMethodNoArgument() throws Exception {
+        InstanceMethodNoArgument instance = new InstanceMethodNoArgument();
+        assert instance.lambda(instance::ref);
+    }
+
+    /**
+     * @version 2013/11/18 10:54:53
+     */
+    private static class InstanceMethodNoArgument {
+
+        private boolean executed = false;
+
+        private boolean lambda(Runnable function) {
+            function.run();
+
+            return executed;
+        }
+
+        private void ref() {
+            executed = true;
+        }
+    }
+
+    @Test
+    public void referInstanceMethodNoArgumentWithReturn() throws Exception {
+        InstanceMethodNoArgumentWithReturn instance = new InstanceMethodNoArgumentWithReturn();
+        assert instance.lambda(instance::ref) == 100;
+    }
+
+    /**
+     * @version 2013/11/18 10:54:53
+     */
+    private static class InstanceMethodNoArgumentWithReturn {
+
+        private double lambda(DoubleSupplier function) {
+            return function.getAsDouble();
+        }
+
+        private double ref() {
+            return 100;
+        }
+    }
+
+    @Test
+    public void referAsToIntFunction() throws Exception {
+        AsToIntFunction instance = new AsToIntFunction();
+        assert instance.lambda(AsToIntFunction::ref) == 10;
+    }
+
+    /**
+     * @version 2013/11/18 10:54:53
+     */
+    private static class AsToIntFunction {
+
+        private int field = 10;
+
+        private int lambda(ToIntFunction<AsToIntFunction> function) {
+            return function.applyAsInt(this);
+        }
+
+        private int ref() {
+            return field;
+        }
+    }
+
+    @Test
+    public void referAsFunction() throws Exception {
+        AsFunction instance = new AsFunction();
+        assert instance.lambda(AsFunction::ref).equals("test");
+    }
+
+    /**
+     * @version 2013/11/18 10:54:53
+     */
+    private static class AsFunction {
+
+        private String field = "test";
+
+        private String lambda(Function<AsFunction, String> function) {
+            return function.apply(this);
+        }
+
+        private String ref() {
+            return field;
+        }
+    }
+
+    @Test
+    @Debuggable
+    public void referAsFunctionByInterfaceAPI() throws Exception {
+        AsFunctionByInterfaceAPI instance = new AsFunctionByInterfaceAPI();
+        assert instance.bySupplier(instance::ref).equals("API Supplier");
+        assert instance.byFunction(API::ref).equals("API Function");
+    }
+
+    /**
+     * @version 2013/11/18 14:33:33
+     */
+    private static interface API {
+
+        String ref();
+    }
+
+    /**
+     * @version 2013/11/18 10:54:53
+     */
+    private static class AsFunctionByInterfaceAPI implements API {
+
+        private String field = "API";
+
+        private String bySupplier(Supplier<String> function) {
+            return function.get() + " Supplier";
+        }
+
+        private String byFunction(Function<AsFunctionByInterfaceAPI, String> function) {
+            return function.apply(this) + " Function";
+        }
+
+        public String ref() {
+            return field;
+        }
+    }
+
+    @Test
+    @Debuggable
+    public void referAsFunctionWithArgumentByInterfaceAPI() throws Exception {
+        AsFunctionWithArgumentByInterfaceAPI instance = new AsFunctionWithArgumentByInterfaceAPI();
+        assert instance.byFunction(instance::ref).equals("ArgumentAPI Supplier");
+        assert instance.byBiFunction(ArgumentAPI::ref).equals("ArgumentAPI Function");
+    }
+
+    /**
+     * @version 2013/11/18 14:33:33
+     */
+    private static interface ArgumentAPI {
+
+        String ref(String value);
+    }
+
+    /**
+     * @version 2013/11/18 10:54:53
+     */
+    private static class AsFunctionWithArgumentByInterfaceAPI implements ArgumentAPI {
+
+        private String field = "API";
+
+        private String byFunction(Function<String, String> function) {
+            return function.apply("Argument") + " Supplier";
+        }
+
+        private String byBiFunction(BiFunction<AsFunctionWithArgumentByInterfaceAPI, String, String> function) {
+            return function.apply(this, "Argument") + " Function";
+        }
+
+        public String ref(String value) {
+            return value + field;
+        }
+    }
+
+    @Test
+    public void referInstanceMethodSingleArgument() throws Exception {
+        InstanceMethodSingleArgument instance = new InstanceMethodSingleArgument();
+        assert instance.lambda(instance::ref) == 10;
+    }
+
+    /**
+     * @version 2013/11/18 10:54:53
+     */
+    private static class InstanceMethodSingleArgument {
+
+        private int value = 0;
+
+        private int lambda(IntConsumer function) {
+            function.accept(10);
+
+            return value;
+        }
+
+        private void ref(int value) {
+            this.value = value;
+        }
     }
 
     @Test
