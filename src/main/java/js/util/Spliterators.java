@@ -27,7 +27,7 @@ import booton.translator.JavaAPIProvider;
 /**
  * @version 2013/10/29 16:19:18
  */
-@JavaAPIProvider(java.util.Spliterators.class)
+// @JavaAPIProvider(java.util.Spliterators.class)
 class Spliterators {
 
     /** reuse */

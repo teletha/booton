@@ -1134,36 +1134,51 @@ class JavaMethodCompiler extends MethodVisitor {
     public void visitInvokeDynamicInsn(String name, String description, Handle bsm, Object... bsmArgs) {
         debugger.print(nodes);
         Handle handle = (Handle) bsmArgs[1];
+        Type functionalInterfaceType = (Type) bsmArgs[2];
+        Type lambdaType = Type.getMethodType(handle.getDesc());
+        Type callerType = Type.getMethodType(description);
+        int parameterDiff = lambdaType.getArgumentTypes().length - functionalInterfaceType.getArgumentTypes().length;
+        boolean useContext = callerType.getArgumentTypes().length - Math.max(parameterDiff, 0) == 1;
+
+        debugger.print(parameterDiff + "  " + useContext);
 
         // detect functional interface
-        Type interfaceType = Type.getMethodType(description);
-        String interfaceClass = Javascript.computeClass(convert(interfaceType.getReturnType()));
+        String interfaceClass = Javascript.computeClass(convert(callerType.getReturnType()));
 
         // detect lambda method
         Class lambdaClass = convert(handle.getOwner());
         String lambdaMethodName = '"' + Javascript.computeMethodName(lambdaClass, handle.getName(), handle.getDesc()) + '"';
 
+        // build parameter from local environment
+        StringJoiner parameters = new StringJoiner(",", "[", "]");
+
+        for (int i = parameterDiff - 1; 0 <= i; i--) {
+            parameters.add(current.remove(i).toString());
+        }
+        debugger.print(parameters);
+
+        // detect context
+        Object context = useContext ? current.remove(0) : "null";
+
         // decide lambda context
-        Object context = null;
-        int parameterSize = interfaceType.getArgumentTypes().length - 1;
+        Object holder = null;
 
         switch (handle.getTag()) {
         case H_INVOKESTATIC:
-            context = Javascript.computeClassName(lambdaClass);
+            holder = Javascript.computeClassName(lambdaClass);
             break;
 
         case H_INVOKESPECIAL:
         case H_INVOKEVIRTUAL:
-            context = "this";
+            holder = context;
             break;
 
         case H_INVOKEINTERFACE:
-            context = current.remove(0);
-            parameterSize--;
+            holder = context;
             break;
 
         case H_NEWINVOKESPECIAL:
-            context = Javascript.computeClassName(lambdaClass) + ".prototype";
+            holder = Javascript.computeClassName(lambdaClass) + ".prototype";
             break;
 
         default:
@@ -1172,15 +1187,9 @@ class JavaMethodCompiler extends MethodVisitor {
             throw new Error();
         }
 
-        // build parameter from local environment
-        StringJoiner parameters = new StringJoiner(",", "[", "]");
-
-        for (int i = parameterSize; 0 <= i; i--) {
-            parameters.add(current.remove(i).toString());
-        }
-
         // create lambda proxy class
-        current.addOperand(Javascript.writeMethodCode(Proxy.class, "newLambdaInstance", Class.class, interfaceClass, NativeObject.class, context, String.class, lambdaMethodName, Object[].class, parameters.toString()));
+        System.out.println("oooooooooooooooooooooo   " + parameterDiff);
+        current.addOperand(Javascript.writeMethodCode(Proxy.class, "newLambdaInstance", Class.class, interfaceClass, NativeObject.class, holder, String.class, lambdaMethodName, Object.class, context, Object[].class, parameters.toString(), int.class, parameterDiff));
         debugger.print(nodes);
     }
 

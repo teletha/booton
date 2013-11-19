@@ -14,9 +14,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.PrimitiveIterator;
 import java.util.Set;
-import java.util.Spliterator;
 
 import kiss.ClassListener;
 import kiss.I;
@@ -41,15 +39,15 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
 
     static {
         // builtin(Iterable.class);
-        builtin(Map.class);
-        builtin(Spliterator.class);
-        builtin(Spliterator.OfInt.class);
-        builtin(Spliterator.OfLong.class);
-        builtin(Spliterator.OfDouble.class);
-        builtin(PrimitiveIterator.class);
-        builtin(PrimitiveIterator.OfInt.class);
-        builtin(PrimitiveIterator.OfLong.class);
-        builtin(PrimitiveIterator.OfDouble.class);
+        // builtin(Map.class);
+        // builtin(Spliterator.class);
+        // builtin(Spliterator.OfInt.class);
+        // builtin(Spliterator.OfLong.class);
+        // builtin(Spliterator.OfDouble.class);
+        // builtin(PrimitiveIterator.class);
+        // builtin(PrimitiveIterator.OfInt.class);
+        // builtin(PrimitiveIterator.OfLong.class);
+        // builtin(PrimitiveIterator.OfDouble.class);
     }
 
     private static void builtin(Class type) {

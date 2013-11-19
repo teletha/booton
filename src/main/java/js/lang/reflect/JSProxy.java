@@ -107,12 +107,13 @@ class JSProxy {
      * </p>
      * 
      * @param interfaceClass A functional interface.
-     * @param context A lambda context object.
+     * @param lambdaMethodHolder A lambda method holder (prptotype).
      * @param lambdaMethodName A lambda method name in javascript runtime.
+     * @param context A lambda context object.
      * @param parameters A list of parameters from local environment.
      * @return
      */
-    static Object newLambdaInstance(Class interfaceClass, NativeObject context, String lambdaMethodName, Object[] parameters) {
+    static Object newLambdaInstance(Class interfaceClass, NativeObject lambdaMethodHolder, String lambdaMethodName, Object context, Object[] parameters, int parameterDiff) {
         return newProxyInstance(null, new Class[] {interfaceClass}, new InvocationHandler() {
 
             /**
@@ -123,17 +124,24 @@ class JSProxy {
                 if (lambdaMethodName.charAt(0) == '$') {
                     // constructor
                     // create new instance
-                    Object instance = context.create();
+                    Object instance = lambdaMethodHolder.create();
 
                     // invoke constructor
-                    context.getPropertyAs(NativeFunction.class, lambdaMethodName).apply(instance, args);
+                    lambdaMethodHolder.getPropertyAs(NativeFunction.class, lambdaMethodName).apply(instance, args);
 
                     // API definition
                     return instance;
                 } else {
                     // method
-                    return context.getPropertyAs(NativeFunction.class, lambdaMethodName)
-                            .apply(context, ((NativeArray) (Object) parameters).concat(args).toArray());
+                    Object c = context;
+
+                    if (parameterDiff == -1) {
+
+                        c = ((NativeArray) (Object) args).shift();
+                    }
+
+                    return lambdaMethodHolder.getPropertyAs(NativeFunction.class, lambdaMethodName)
+                            .apply(c, ((NativeArray) (Object) parameters).concat(args).toArray());
                 }
             }
         });

@@ -9,13 +9,10 @@
  */
 package booton.translator.lambda;
 
-import static booton.translator.lambda.LambdaTest.Lambda.*;
-
 import java.util.function.BiFunction;
 import java.util.function.DoubleSupplier;
 import java.util.function.Function;
 import java.util.function.IntBinaryOperator;
-import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 import java.util.function.IntUnaryOperator;
 import java.util.function.LongSupplier;
@@ -36,7 +33,8 @@ public class LambdaTest {
 
     @Test
     public void inlineNoArguments() throws Exception {
-        assert new InlineNoArguments().lambda(() -> 10) == 10;
+        InlineNoArguments instance = new InlineNoArguments();
+        assert instance.lambda(() -> 10) == 10;
     }
 
     /**
@@ -104,13 +102,14 @@ public class LambdaTest {
         assert new ExternalVariableUser().forLong(() -> value1 - value2) == -9L;
     }
 
-    private long value1 = 10;
+    private int value1 = 10;
 
     private long value2 = 1;
 
     @Test
     public void inlineUseFieldVariable() throws Exception {
-        assert new ExternalVariableUser().forLong(() -> value1 - value2) == 9L;
+        ExternalVariableUser instance = new ExternalVariableUser();
+        assert instance.forLong(() -> value1 - value2) == 9L;
     }
 
     @Test
@@ -119,12 +118,12 @@ public class LambdaTest {
     }
 
     @Test
-    @Debuggable
     public void inlineUseVariableAndArguments() throws Exception {
         int local1 = 10;
         int local2 = 5;
 
-        assert new InlineSingleArgument().lambda((value) -> value * local1 + local2) == 55;
+        InlineSingleArgument instance = new InlineSingleArgument();
+        assert instance.lambda((value) -> value * local1 + local2 - value1) == 45;
     }
 
     @Test
@@ -287,159 +286,159 @@ public class LambdaTest {
         }
     }
 
-    @Test
-    public void referInstanceMethodSingleArgument() throws Exception {
-        InstanceMethodSingleArgument instance = new InstanceMethodSingleArgument();
-        assert instance.lambda(instance::ref) == 10;
-    }
-
-    /**
-     * @version 2013/11/18 10:54:53
-     */
-    private static class InstanceMethodSingleArgument {
-
-        private int value = 0;
-
-        private int lambda(IntConsumer function) {
-            function.accept(10);
-
-            return value;
-        }
-
-        private void ref(int value) {
-            this.value = value;
-        }
-    }
-
-    @Test
-    public void instanceMethodReference() throws Exception {
-        Lambda lambda = new Lambda();
-        assert lambda.nothingInt(lambda::int7) == 7;
-    }
-
-    @Test
-    public void defaultMethodReference() throws Exception {
-        Lambda lambda = new Lambda();
-        assert lambda.nothingInt(lambda::int3) == 3;
-        assert lambda.param10(lambda::multiply11) == 110;
-    }
-
-    @Test
-    public void staticMethodReference() throws Exception {
-        Lambda lambda = new Lambda();
-        assert lambda.nothingInt(Lambda::int12) == 12;
-    }
-
-    /**
-     * @version 2013/11/03 17:27:16
-     */
-    public static class Lambda implements DefaultMethod {
-
-        /**
-         * @param runnable
-         * @return
-         */
-        private int nothingInt(IntValue value) {
-            return value.value();
-        }
-
-        /**
-         * @param runnable
-         * @return
-         */
-        private Object nothingObject(ObjectValue value) {
-            return value.value();
-        }
-
-        /**
-         * @param value
-         * @return
-         */
-        private int param10(IntParameter value) {
-            return value.value(10);
-        }
-
-        /**
-         * @return
-         */
-        private int int7() {
-            return 7;
-        }
-
-        /**
-         * @return
-         */
-        private static int int12() {
-            return 12;
-        }
-    }
-
-    /**
-     * @version 2013/11/03 20:53:05
-     */
-    @FunctionalInterface
-    private static interface IntValue {
-
-        /**
-         * @return
-         */
-        int value();
-    }
-
-    /**
-     * @version 2013/11/03 20:53:05
-     */
-    @FunctionalInterface
-    private static interface ObjectValue {
-
-        /**
-         * @return
-         */
-        Object value();
-    }
-
-    /**
-     * @version 2013/11/03 20:53:34
-     */
-    @FunctionalInterface
-    private static interface IntParameter {
-
-        /**
-         * @return
-         */
-        int value(int value);
-    }
-
-    /**
-     * @version 2013/11/04 7:30:05
-     */
-    public static interface DefaultMethod {
-
-        /**
-         * @return
-         */
-        default int int3() {
-            return 3;
-        }
-
-        /**
-         * @return
-         */
-        default int multiply11(int value) {
-            return 11 * value;
-        }
-    }
-
     // @Test
-    // @Ignore
-    // public void lambda() throws Exception {
-    // List<String> values = Arrays.asList("One", "Two", "Three");
-    // values.replaceAll((String value) -> {
-    // return value + " Value";
-    // });
-    //
-    // assert values.get(0).equals("One Value");
-    // assert values.get(1).equals("Two Value");
-    // assert values.get(2).equals("Three Value");
+    // public void referInstanceMethodSingleArgument() throws Exception {
+    // InstanceMethodSingleArgument instance = new InstanceMethodSingleArgument();
+    // assert instance.lambda(instance::ref) == 10;
     // }
+    //
+    // /**
+    // * @version 2013/11/18 10:54:53
+    // */
+    // private static class InstanceMethodSingleArgument {
+    //
+    // private int value = 0;
+    //
+    // private int lambda(IntConsumer function) {
+    // function.accept(10);
+    //
+    // return value;
+    // }
+    //
+    // private void ref(int value) {
+    // this.value = value;
+    // }
+    // }
+    //
+    // @Test
+    // public void instanceMethodReference() throws Exception {
+    // Lambda lambda = new Lambda();
+    // assert lambda.nothingInt(lambda::int7) == 7;
+    // }
+    //
+    // @Test
+    // public void defaultMethodReference() throws Exception {
+    // Lambda lambda = new Lambda();
+    // assert lambda.nothingInt(lambda::int3) == 3;
+    // assert lambda.param10(lambda::multiply11) == 110;
+    // }
+    //
+    // @Test
+    // public void staticMethodReference() throws Exception {
+    // Lambda lambda = new Lambda();
+    // assert lambda.nothingInt(Lambda::int12) == 12;
+    // }
+    //
+    // /**
+    // * @version 2013/11/03 17:27:16
+    // */
+    // public static class Lambda implements DefaultMethod {
+    //
+    // /**
+    // * @param runnable
+    // * @return
+    // */
+    // private int nothingInt(IntValue value) {
+    // return value.value();
+    // }
+    //
+    // /**
+    // * @param runnable
+    // * @return
+    // */
+    // private Object nothingObject(ObjectValue value) {
+    // return value.value();
+    // }
+    //
+    // /**
+    // * @param value
+    // * @return
+    // */
+    // private int param10(IntParameter value) {
+    // return value.value(10);
+    // }
+    //
+    // /**
+    // * @return
+    // */
+    // private int int7() {
+    // return 7;
+    // }
+    //
+    // /**
+    // * @return
+    // */
+    // private static int int12() {
+    // return 12;
+    // }
+    // }
+    //
+    // /**
+    // * @version 2013/11/03 20:53:05
+    // */
+    // @FunctionalInterface
+    // private static interface IntValue {
+    //
+    // /**
+    // * @return
+    // */
+    // int value();
+    // }
+    //
+    // /**
+    // * @version 2013/11/03 20:53:05
+    // */
+    // @FunctionalInterface
+    // private static interface ObjectValue {
+    //
+    // /**
+    // * @return
+    // */
+    // Object value();
+    // }
+    //
+    // /**
+    // * @version 2013/11/03 20:53:34
+    // */
+    // @FunctionalInterface
+    // private static interface IntParameter {
+    //
+    // /**
+    // * @return
+    // */
+    // int value(int value);
+    // }
+    //
+    // /**
+    // * @version 2013/11/04 7:30:05
+    // */
+    // public static interface DefaultMethod {
+    //
+    // /**
+    // * @return
+    // */
+    // default int int3() {
+    // return 3;
+    // }
+    //
+    // /**
+    // * @return
+    // */
+    // default int multiply11(int value) {
+    // return 11 * value;
+    // }
+    // }
+    //
+    // // @Test
+    // // @Ignore
+    // // public void lambda() throws Exception {
+    // // List<String> values = Arrays.asList("One", "Two", "Three");
+    // // values.replaceAll((String value) -> {
+    // // return value + " Value";
+    // // });
+    // //
+    // // assert values.get(0).equals("One Value");
+    // // assert values.get(1).equals("Two Value");
+    // // assert values.get(2).equals("Three Value");
+    // // }
 }
