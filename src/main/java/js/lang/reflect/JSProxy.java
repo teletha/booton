@@ -113,7 +113,7 @@ class JSProxy {
      * @param parameters A list of parameters from local environment.
      * @return
      */
-    static Object newLambdaInstance(Class interfaceClass, NativeObject lambdaMethodHolder, String lambdaMethodName, Object context, Object[] parameters, int parameterDiff) {
+    static Object newLambdaInstance(Class interfaceClass, NativeObject lambdaMethodHolder, String lambdaMethodName, Object context, Object[] parameters) {
         return newProxyInstance(null, new Class[] {interfaceClass}, new InvocationHandler() {
 
             /**
@@ -133,15 +133,16 @@ class JSProxy {
                     return instance;
                 } else {
                     // method
-                    Object c = context;
+                    Object currentContext = context;
+                    NativeObject currentHolder = lambdaMethodHolder;
 
-                    if (parameterDiff == -1) {
-
-                        c = ((NativeArray) (Object) args).shift();
+                    if (currentHolder == null) {
+                        currentContext = ((NativeArray) (Object) args).shift();
+                        currentHolder = (NativeObject) currentContext;
                     }
 
-                    return lambdaMethodHolder.getPropertyAs(NativeFunction.class, lambdaMethodName)
-                            .apply(c, ((NativeArray) (Object) parameters).concat(args).toArray());
+                    return currentHolder.getPropertyAs(NativeFunction.class, lambdaMethodName)
+                            .apply(currentContext, ((NativeArray) (Object) parameters).concat(args).toArray());
                 }
             }
         });

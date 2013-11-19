@@ -9,6 +9,8 @@
  */
 package booton.translator.lambda;
 
+import static booton.translator.lambda.LambdaTest.InterfaceUser.*;
+
 import java.util.function.BiFunction;
 import java.util.function.DoubleSupplier;
 import java.util.function.Function;
@@ -26,7 +28,7 @@ import booton.translator.Debuggable;
 import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/11/03 14:41:38
+ * @version 2013/11/19 22:15:25
  */
 @RunWith(ScriptRunner.class)
 public class LambdaTest {
@@ -286,159 +288,61 @@ public class LambdaTest {
         }
     }
 
-    // @Test
-    // public void referInstanceMethodSingleArgument() throws Exception {
-    // InstanceMethodSingleArgument instance = new InstanceMethodSingleArgument();
-    // assert instance.lambda(instance::ref) == 10;
-    // }
-    //
-    // /**
-    // * @version 2013/11/18 10:54:53
-    // */
-    // private static class InstanceMethodSingleArgument {
-    //
-    // private int value = 0;
-    //
-    // private int lambda(IntConsumer function) {
-    // function.accept(10);
-    //
-    // return value;
-    // }
-    //
-    // private void ref(int value) {
-    // this.value = value;
-    // }
-    // }
-    //
-    // @Test
-    // public void instanceMethodReference() throws Exception {
-    // Lambda lambda = new Lambda();
-    // assert lambda.nothingInt(lambda::int7) == 7;
-    // }
-    //
-    // @Test
-    // public void defaultMethodReference() throws Exception {
-    // Lambda lambda = new Lambda();
-    // assert lambda.nothingInt(lambda::int3) == 3;
-    // assert lambda.param10(lambda::multiply11) == 110;
-    // }
-    //
-    // @Test
-    // public void staticMethodReference() throws Exception {
-    // Lambda lambda = new Lambda();
-    // assert lambda.nothingInt(Lambda::int12) == 12;
-    // }
-    //
-    // /**
-    // * @version 2013/11/03 17:27:16
-    // */
-    // public static class Lambda implements DefaultMethod {
-    //
-    // /**
-    // * @param runnable
-    // * @return
-    // */
-    // private int nothingInt(IntValue value) {
-    // return value.value();
-    // }
-    //
-    // /**
-    // * @param runnable
-    // * @return
-    // */
-    // private Object nothingObject(ObjectValue value) {
-    // return value.value();
-    // }
-    //
-    // /**
-    // * @param value
-    // * @return
-    // */
-    // private int param10(IntParameter value) {
-    // return value.value(10);
-    // }
-    //
-    // /**
-    // * @return
-    // */
-    // private int int7() {
-    // return 7;
-    // }
-    //
-    // /**
-    // * @return
-    // */
-    // private static int int12() {
-    // return 12;
-    // }
-    // }
-    //
-    // /**
-    // * @version 2013/11/03 20:53:05
-    // */
-    // @FunctionalInterface
-    // private static interface IntValue {
-    //
-    // /**
-    // * @return
-    // */
-    // int value();
-    // }
-    //
-    // /**
-    // * @version 2013/11/03 20:53:05
-    // */
-    // @FunctionalInterface
-    // private static interface ObjectValue {
-    //
-    // /**
-    // * @return
-    // */
-    // Object value();
-    // }
-    //
-    // /**
-    // * @version 2013/11/03 20:53:34
-    // */
-    // @FunctionalInterface
-    // private static interface IntParameter {
-    //
-    // /**
-    // * @return
-    // */
-    // int value(int value);
-    // }
-    //
-    // /**
-    // * @version 2013/11/04 7:30:05
-    // */
-    // public static interface DefaultMethod {
-    //
-    // /**
-    // * @return
-    // */
-    // default int int3() {
-    // return 3;
-    // }
-    //
-    // /**
-    // * @return
-    // */
-    // default int multiply11(int value) {
-    // return 11 * value;
-    // }
-    // }
-    //
-    // // @Test
-    // // @Ignore
-    // // public void lambda() throws Exception {
-    // // List<String> values = Arrays.asList("One", "Two", "Three");
-    // // values.replaceAll((String value) -> {
-    // // return value + " Value";
-    // // });
-    // //
-    // // assert values.get(0).equals("One Value");
-    // // assert values.get(1).equals("Two Value");
-    // // assert values.get(2).equals("Three Value");
-    // // }
+    @Test
+    public void referDefaultMethod() throws Exception {
+        InterfaceUser instance = new InterfaceUser();
+        assert instance.bySupplier(instance::defaultMethod) == 0;
+        assert instance.byFunction(Interface::defaultMethod) == 20;
+
+        IntSupplier supplier = instance::defaultMethod;
+        assert supplier.getAsInt() == 10;
+
+        ToIntFunction<InterfaceUser> function = Interface::defaultMethod;
+        assert function.applyAsInt(instance) == 10;
+    }
+
+    @Test
+    public void referStaticMethod() throws Exception {
+        InterfaceUser instance = new InterfaceUser();
+        assert instance.byOperator(InterfaceUser::staticMethod) == 100;
+
+        IntUnaryOperator operator = InterfaceUser::staticMethod;
+        assert operator.applyAsInt(2) == 20;
+    }
+
+    /**
+     * @version 2013/11/19 21:17:44
+     */
+    private static interface Interface {
+
+        default int defaultMethod() {
+            return 10;
+        }
+
+        static int interfaceStaticMethod(int value) {
+            return value * 10;
+        }
+    }
+
+    /**
+     * @version 2013/11/19 21:18:16
+     */
+    static class InterfaceUser implements Interface {
+
+        private int bySupplier(IntSupplier function) {
+            return function.getAsInt() - 10;
+        }
+
+        private int byFunction(ToIntFunction<Interface> function) {
+            return function.applyAsInt(this) + 10;
+        }
+
+        private int byOperator(IntUnaryOperator operator) {
+            return operator.applyAsInt(10);
+        }
+
+        private static int staticMethod(int value) {
+            return value * 10;
+        }
+    }
 }

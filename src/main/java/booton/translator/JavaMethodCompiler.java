@@ -1132,15 +1132,12 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitInvokeDynamicInsn(String name, String description, Handle bsm, Object... bsmArgs) {
-        debugger.print(nodes);
         Handle handle = (Handle) bsmArgs[1];
         Type functionalInterfaceType = (Type) bsmArgs[2];
         Type lambdaType = Type.getMethodType(handle.getDesc());
         Type callerType = Type.getMethodType(description);
         int parameterDiff = lambdaType.getArgumentTypes().length - functionalInterfaceType.getArgumentTypes().length;
         boolean useContext = callerType.getArgumentTypes().length - Math.max(parameterDiff, 0) == 1;
-
-        debugger.print(parameterDiff + "  " + useContext);
 
         // detect functional interface
         String interfaceClass = Javascript.computeClass(convert(callerType.getReturnType()));
@@ -1155,7 +1152,6 @@ class JavaMethodCompiler extends MethodVisitor {
         for (int i = parameterDiff - 1; 0 <= i; i--) {
             parameters.add(current.remove(i).toString());
         }
-        debugger.print(parameters);
 
         // detect context
         Object context = useContext ? current.remove(0) : "null";
@@ -1188,9 +1184,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         // create lambda proxy class
-        System.out.println("oooooooooooooooooooooo   " + parameterDiff);
-        current.addOperand(Javascript.writeMethodCode(Proxy.class, "newLambdaInstance", Class.class, interfaceClass, NativeObject.class, holder, String.class, lambdaMethodName, Object.class, context, Object[].class, parameters.toString(), int.class, parameterDiff));
-        debugger.print(nodes);
+        current.addOperand(Javascript.writeMethodCode(Proxy.class, "newLambdaInstance", Class.class, interfaceClass, NativeObject.class, holder, String.class, lambdaMethodName, Object.class, context, Object[].class, parameters.toString()));
     }
 
     /**
