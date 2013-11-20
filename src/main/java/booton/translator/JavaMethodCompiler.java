@@ -368,9 +368,11 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (position != -1) {
                 if (script.source == AnnotatedElement.class || script.source == Collectors.class || script.source == Arrays.class) {
+                    debugger.print(node.id + "  " + debugger.methodName + "   " + script.source);
                     splite(node, position);
                 } else {
-                    System.out.println(script.source + "#" + debugger.methodName + "  " + java.util.Arrays.toString(parameterTypes) + "   " + node);
+                    debugger.print(node.id + "  " + debugger.methodName + "   " + script.source);
+                    splite(node, position);
                 }
             }
         }
@@ -1018,7 +1020,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 ((OperandArray) contextMaybeArray).set(current.remove(0), value);
             } else {
                 // read by index
-                current.addExpression(contextMaybeArray, "[", current.remove(0), "]=", value);
+                current.addExpression(contextMaybeArray, "[", current.remove(0), "]=", value.toString());
             }
             break;
 
