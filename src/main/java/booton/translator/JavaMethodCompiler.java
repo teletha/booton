@@ -258,7 +258,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("AnnotatedElement") && original.equals("getDeclaredAnnotationsByType")) {
+        if (script.source.getName().endsWith("Collectors") && original.equals("getDeclaredAnnotationsByType")) {
             debugger.enable = true;
         }
     }

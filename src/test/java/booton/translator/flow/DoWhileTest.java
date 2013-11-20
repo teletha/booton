@@ -9,6 +9,7 @@
  */
 package booton.translator.flow;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.translator.Debuggable;
@@ -149,10 +150,10 @@ public class DoWhileTest extends ScriptTester {
     }
 
     @Test
+    @Ignore
     public void oneLiner() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 // @formatter:off
                 do {value+= 2;} while (value < 3);
