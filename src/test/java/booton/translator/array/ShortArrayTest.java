@@ -16,37 +16,19 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/11/21 1:57:02
+ * @version 2013/11/21 1:57:15
  */
 @SuppressWarnings("unused")
-public class IntArrayTest extends ScriptTester {
+public class ShortArrayTest extends ScriptTester {
 
     @Test
     public void Array() {
         test(new Scriptable() {
 
-            public int[] act() {
-                int[] array = new int[2];
+            public short[] act() {
+                short[] array = new short[2];
                 array[0] = 1;
                 array[1] = 2;
-
-                return array;
-            }
-        });
-    }
-
-    @Test
-    public void ArrayWithExpression() {
-        test(new Scriptable() {
-
-            private int field = 10;
-
-            public int[] act() {
-                int[] array = new int[4];
-                array[0] = field + field;
-                array[1] = field - field;
-                array[2] = field * field;
-                array[3] = field / field;
 
                 return array;
             }
@@ -57,8 +39,8 @@ public class IntArrayTest extends ScriptTester {
     public void ArrayByShorthand() {
         test(new Scriptable() {
 
-            public int[] act() {
-                return new int[] {1, 2};
+            public short[] act() {
+                return new short[] {1, 2};
             }
         });
     }
@@ -67,8 +49,8 @@ public class IntArrayTest extends ScriptTester {
     public void ArrayByShorthandWithFirstZero() {
         test(new Scriptable() {
 
-            public int[] act() {
-                return new int[] {0, -1};
+            public short[] act() {
+                return new short[] {0, -1};
             }
         });
     }
@@ -77,8 +59,8 @@ public class IntArrayTest extends ScriptTester {
     public void ArrayByShorthandWithFirstZero2() {
         test(new Scriptable() {
 
-            public int[] act() {
-                return new int[] {0, 0, -1};
+            public short[] act() {
+                return new short[] {0, 0, -1};
             }
         });
     }
@@ -87,8 +69,8 @@ public class IntArrayTest extends ScriptTester {
     public void ArrayByShorthandWithlastZero() {
         test(new Scriptable() {
 
-            public int[] act() {
-                return new int[] {-2, 0};
+            public short[] act() {
+                return new short[] {-2, 0};
             }
         });
     }
@@ -97,20 +79,8 @@ public class IntArrayTest extends ScriptTester {
     public void ArrayByShorthandWithAllZero() {
         test(new Scriptable() {
 
-            public int[] act() {
-                return new int[] {0, 0};
-            }
-        });
-    }
-
-    @Test
-    public void ArrayWithExpressionByShorthand() {
-        test(new Scriptable() {
-
-            private int field = 10;
-
-            public int[] act() {
-                return new int[] {field + field, field - field, field * field, field / field};
+            public short[] act() {
+                return new short[] {0, 0};
             }
         });
     }
@@ -119,8 +89,8 @@ public class IntArrayTest extends ScriptTester {
     public void ArraySoMany() {
         test(new Scriptable() {
 
-            public int[] act() {
-                return new int[] {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096};
+            public short[] act() {
+                return new short[] {1, 2, 4, 8, 16, 32, 64, 32, 16, 8, 4, 2, 1};
             }
         });
     }
@@ -129,11 +99,11 @@ public class IntArrayTest extends ScriptTester {
     public void MultiDimensionArray() {
         test(new Scriptable() {
 
-            public int[][] act() {
-                int[][] array = new int[3][2];
-                array[0] = new int[] {1, 2};
-                array[1] = new int[] {3, 4};
-                array[2] = new int[] {5, 6};
+            public short[][] act() {
+                short[][] array = new short[3][2];
+                array[0] = new short[] {1, 2};
+                array[1] = new short[] {3, 4};
+                array[2] = new short[] {5, 6};
 
                 return array;
             }
@@ -144,8 +114,8 @@ public class IntArrayTest extends ScriptTester {
     public void MultiDimensionArrayByShorthand() {
         test(new Scriptable() {
 
-            public int[][] act() {
-                return new int[][] { {0, 1}, {2, 3, 4}, {5, 6, 7, 8}};
+            public short[][] act() {
+                return new short[][] { {0, 1}, {2, 3, 4}, {5, 6, 7, 8}};
             }
         });
     }
@@ -154,10 +124,10 @@ public class IntArrayTest extends ScriptTester {
     public void ThreeDimensionArray() {
         test(new Scriptable() {
 
-            public int[][][] act() {
-                int[][][] array = new int[2][3][1];
-                array[0] = new int[][] { {0}, {2}, {1}};
-                array[1] = new int[][] { {3}, {-1}, {1, 0, 1}};
+            public short[][][] act() {
+                short[][][] array = new short[2][3][1];
+                array[0] = new short[][] { {0}, {2}, {1}};
+                array[1] = new short[][] { {3}, {-1}, {1, 0, 1}};
 
                 return array;
             }
@@ -168,10 +138,10 @@ public class IntArrayTest extends ScriptTester {
     public void ThreeDimensionArrayWithoutNeedlessDeclaration() {
         test(new Scriptable() {
 
-            public int[][][] act() {
-                int[][][] array = new int[2][][];
-                array[0] = new int[][] { {0}, {2}, {1}};
-                array[1] = new int[][] { {3}, {-1}, {1, 0, 1}};
+            public short[][][] act() {
+                short[][][] array = new short[2][][];
+                array[0] = new short[][] { {0}, {2}, {1}};
+                array[1] = new short[][] { {3}, {-1}, {1, 0, 1}};
 
                 return array;
             }
@@ -182,8 +152,8 @@ public class IntArrayTest extends ScriptTester {
     public void ArrayAccess() {
         test(new Scriptable() {
 
-            public int act(int value) {
-                int[] array = {1, value};
+            public short act(short value) {
+                short[] array = {1, value};
 
                 return array[1];
             }
@@ -194,8 +164,8 @@ public class IntArrayTest extends ScriptTester {
     public void ArrayLength() {
         test(new Scriptable() {
 
-            public int act(@Param(ints = {0, 1, 10}) int value) {
-                return new int[value].length;
+            public int act(@Param(ints = {0, 1, 10}) short value) {
+                return new short[value].length;
             }
         });
     }
@@ -204,9 +174,9 @@ public class IntArrayTest extends ScriptTester {
     public void ArrayFor() {
         test(new Scriptable() {
 
-            public int act(int value) {
-                int sum = 0;
-                int[] array = {0, 1, 2};
+            public short act(short value) {
+                short sum = 0;
+                short[] array = {0, 1, 2};
 
                 for (int i = 0; i < array.length; i++) {
                     sum += array[i];
@@ -220,11 +190,11 @@ public class IntArrayTest extends ScriptTester {
     public void ArrayForEach() {
         test(new Scriptable() {
 
-            public int act(int value) {
-                int sum = 0;
-                int[] array = {0, 1, 2};
+            public short act(short value) {
+                short sum = 0;
+                short[] array = {0, 1, 2};
 
-                for (int i : array) {
+                for (short i : array) {
                     sum += i;
                 }
                 return sum;
@@ -237,11 +207,12 @@ public class IntArrayTest extends ScriptTester {
         test(new Scriptable() {
 
             public int act() {
-                int sum = 0;
-                int[] array = {123456789, 123456789, 123456789, 123456789, 123456789, 123456789, 123456789, 123456789,
-                        123456789, 123456789, 123456789, 123456789, 123456789, 123456789, 123456789};
+                short sum = 0;
+                short[] array = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                        1, 1, 1, 1, 1, 1};
 
-                for (int i : array) {
+                for (short i : array) {
                     sum += i;
                 }
                 return sum;

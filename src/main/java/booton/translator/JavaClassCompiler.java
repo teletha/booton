@@ -104,7 +104,7 @@ class JavaClassCompiler extends ClassVisitor {
             return null;
         }
 
-        // ignore compiler generated method (e.g. ygenerics)
+        // ignore compiler generated method (e.g. generics)
         if ((access & (ACC_NATIVE | ACC_ABSTRACT)) != 0) {
             return null;
         }

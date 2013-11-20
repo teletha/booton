@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 import js.lang.NativeObject;
 import jsx.bwt.Input;
@@ -44,6 +45,7 @@ import org.objectweb.asm.Type;
 import booton.Obfuscator;
 import booton.Stylist;
 import booton.css.CSS;
+import booton.sample.beans.Arrays;
 import booton.translator.Node.Switch;
 import booton.translator.Node.TryCatchFinallyBlocks;
 
@@ -245,7 +247,7 @@ class JavaMethodCompiler extends MethodVisitor {
         this.returnType = Type.getReturnType(description);
         this.parameterTypes = Type.getArgumentTypes(description);
         this.variables = new LocalVariables(isStatic);
-        this.debugger = new Debugger(script.source, original);
+        this.debugger = new Debugger(script.source, original, description);
 
         Type[] parameters = Type.getArgumentTypes(description);
 
@@ -258,7 +260,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("Collectors") && original.equals("getDeclaredAnnotationsByType")) {
+        if (script.source.getName().endsWith("Collectors") && original.equals("lambda$groupingByConcurrent$141")) {
             debugger.enable = true;
         }
     }
@@ -365,10 +367,10 @@ class JavaMethodCompiler extends MethodVisitor {
             int position = isMixed(node);
 
             if (position != -1) {
-                if (script.source == AnnotatedElement.class) {
+                if (script.source == AnnotatedElement.class || script.source == Collectors.class || script.source == Arrays.class) {
                     splite(node, position);
                 } else {
-                    System.out.println(script.source + "#" + debugger.methodName + "  " + node);
+                    System.out.println(script.source + "#" + debugger.methodName + "  " + java.util.Arrays.toString(parameterTypes) + "   " + node);
                 }
             }
         }
@@ -990,6 +992,7 @@ class JavaMethodCompiler extends MethodVisitor {
         case FALOAD:
         case DALOAD:
         case CALOAD:
+        case SALOAD:
             current.addOperand(current.remove(1) + "[" + current.remove(0) + "]");
             break;
 
@@ -1001,6 +1004,7 @@ class JavaMethodCompiler extends MethodVisitor {
         case FASTORE:
         case DASTORE:
         case CASTORE:
+        case SASTORE:
             Operand contextMaybeArray = current.remove(2);
             Operand value = current.remove(0);
 
