@@ -61,6 +61,9 @@ public class Debugger extends AnnotationVisitor {
     /** The Java original method name. */
     final String methodName;
 
+    /** The Java original method signature. */
+    final String methodDescriptor;
+
     boolean enable = false;
 
     boolean beforeLabel = false;
@@ -75,11 +78,12 @@ public class Debugger extends AnnotationVisitor {
     /**
      * 
      */
-    public Debugger(Class clazz, String methodName) {
+    public Debugger(Class clazz, String methodName, String methodDescriptor) {
         super(ASM5);
 
         this.clazz = clazz;
         this.methodName = methodName;
+        this.methodDescriptor = methodDescriptor;
     }
 
     /**
@@ -166,7 +170,7 @@ public class Debugger extends AnnotationVisitor {
 
                 try {
                     ClassReader reader = new ClassReader(script.source.getName());
-                    reader.accept(new ClassTracer(methodName, new ASMifier(), new PrintWriter(System.out)), 0);
+                    reader.accept(new ClassTracer(methodName, methodDescriptor, new ASMifier(), new PrintWriter(System.out)), 0);
                 } catch (Exception e) {
                     throw I.quiet(e);
                 }
@@ -522,6 +526,9 @@ public class Debugger extends AnnotationVisitor {
         /** The target method name. */
         private final String method;
 
+        /** The target method signature. */
+        private final String descriptor;
+
         /**
          * The print writer to be used to print the class. May be null.
          */
@@ -541,10 +548,11 @@ public class Debugger extends AnnotationVisitor {
          * @param writer the print writer to be used to print the class. May be null if you simply
          *            want to use the result via {@link Printer#getText()}, instead of printing it.
          */
-        public ClassTracer(String method, Printer printer, PrintWriter writer) {
+        public ClassTracer(String method, String descriptor, Printer printer, PrintWriter writer) {
             super(Opcodes.ASM5, null);
 
             this.method = method;
+            this.descriptor = descriptor;
             this.writer = writer;
             this.printer = printer;
         }
@@ -554,7 +562,7 @@ public class Debugger extends AnnotationVisitor {
          */
         @Override
         public MethodVisitor visitMethod(final int access, final String name, final String desc, final String signature, final String[] exceptions) {
-            if (!method.equals(name)) {
+            if (!method.equals(name) || !descriptor.equals(desc)) {
                 return null;
             }
 
