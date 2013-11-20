@@ -24,7 +24,6 @@ import java.util.stream.StreamSupport;
 
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
-import booton.translator.Debuggable;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -630,7 +629,6 @@ class Arrays {
      * @param a2 the other array to be tested for equality
      * @return <tt>true</tt> if the two arrays are equal
      */
-    @Debuggable
     public static boolean equals(short[] a, short a2[]) {
         if (a == a2) {
             return true;
