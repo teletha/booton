@@ -24,7 +24,6 @@ import java.util.function.ToIntFunction;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.Debuggable;
 import booton.translator.ScriptRunner;
 
 /**
@@ -217,7 +216,6 @@ public class LambdaTest {
     }
 
     @Test
-    @Debuggable
     public void referAsFunctionByInterfaceAPI() throws Exception {
         AsFunctionByInterfaceAPI instance = new AsFunctionByInterfaceAPI();
         assert instance.bySupplier(instance::ref).equals("API Supplier");
@@ -253,7 +251,6 @@ public class LambdaTest {
     }
 
     @Test
-    @Debuggable
     public void referAsFunctionWithArgumentByInterfaceAPI() throws Exception {
         AsFunctionWithArgumentByInterfaceAPI instance = new AsFunctionWithArgumentByInterfaceAPI();
         assert instance.byFunction(instance::ref).equals("ArgumentAPI Supplier");
