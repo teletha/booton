@@ -13,7 +13,6 @@ import static booton.translator.OperandCondition.*;
 import static org.objectweb.asm.Opcodes.*;
 import static org.objectweb.asm.Type.*;
 
-import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -27,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 import js.lang.NativeObject;
 import jsx.bwt.Input;
@@ -45,7 +43,6 @@ import org.objectweb.asm.Type;
 import booton.Obfuscator;
 import booton.Stylist;
 import booton.css.CSS;
-import booton.sample.beans.Arrays;
 import booton.translator.Node.Switch;
 import booton.translator.Node.TryCatchFinallyBlocks;
 
@@ -367,13 +364,7 @@ class JavaMethodCompiler extends MethodVisitor {
             int position = isMixed(node);
 
             if (position != -1) {
-                if (script.source == AnnotatedElement.class || script.source == Collectors.class || script.source == Arrays.class) {
-                    debugger.print(node.id + "  " + debugger.methodName + "   " + script.source);
-                    splite(node, position);
-                } else {
-                    debugger.print(node.id + "  " + debugger.methodName + "   " + script.source);
-                    splite(node, position);
-                }
+                splite(node, position);
             }
         }
 
