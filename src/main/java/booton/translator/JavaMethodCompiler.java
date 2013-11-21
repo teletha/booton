@@ -226,6 +226,9 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private boolean enumSwitchInvoked;
 
+    /** The synchronized block related nodes. */
+    private Set<Node> synchronizer = new HashSet();
+
     /**
      * @param script A target script to compile.
      * @param code A code writer.
@@ -339,6 +342,11 @@ class JavaMethodCompiler extends MethodVisitor {
     @Override
     public void visitEnd() {
         debugger.whileProcess = false;
+
+        // Dispose all synchronized block nodes
+        for (Node node : synchronizer) {
+            disposeNode(node, true);
+        }
 
         // Resolve shorthand syntax sugar of "if" statement.
         for (int i = nodes.size() - 1; 0 <= i; i--) {
@@ -1038,10 +1046,12 @@ class JavaMethodCompiler extends MethodVisitor {
 
         case MONITORENTER:
             current.remove(0);
+            synchronizer.add(current);
             break;
 
         case MONITOREXIT:
-            break; // ignore
+            synchronizer.add(current);
+            break;
 
         case I2C:
             // cast int to char
@@ -1879,6 +1889,15 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private final void disposeNode(Node target) {
+        disposeNode(target, false);
+    }
+
+    /**
+     * <p>
+     * Helper method to dispose the specified node.
+     * </p>
+     */
+    private final void disposeNode(Node target, boolean clearStack) {
         debugger.print("dispose" + target.id);
         debugger.print(nodes);
 
@@ -1923,8 +1942,10 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         // Copy all operands to the previous node
-        if (target.previous != null) {
-            target.previous.stack.addAll(target.stack);
+        if (!clearStack) {
+            if (target.previous != null) {
+                target.previous.stack.addAll(target.stack);
+            }
         }
 
         // Delete all operands from the current processing node
@@ -1935,8 +1956,8 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         // dispose empty node recursively
-        if (target.previous.stack.isEmpty()) {
-            disposeNode(target.previous);
+        if (target.previous != null && target.previous.stack.isEmpty()) {
+            disposeNode(target.previous, clearStack);
         }
     }
 
