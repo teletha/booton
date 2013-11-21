@@ -540,10 +540,6 @@ class Node {
             // Try-Catch-Finally Block
             // =============================================================
             for (TryCatchFinally block : tries) {
-                if (block.isSychronizeBlock()) {
-                    process(outgoing.get(0), buffer);
-                    return;
-                }
                 buffer.write("try", "{");
             }
 
@@ -696,10 +692,6 @@ class Node {
             // Try-Catch-Finally Block
             // =============================================================
             for (TryCatchFinally block : tries) {
-                if (block.isSychronizeBlock()) {
-                    continue;
-                }
-
                 buffer.write("}", "catch", "($)", "{");
                 buffer.write("$", "=", Javascript.writeMethodCode(Throwable.class, "wrap", Object.class, "$"), ";")
                         .line();
@@ -1172,20 +1164,6 @@ class Node {
             this.catcher = catcher;
 
             addCatchBlock(exception, catcher);
-        }
-
-        /**
-         * @return
-         */
-        private boolean isSychronizeBlock() {
-            if (catches.size() == 1) {
-                Catch block = catches.get(0);
-
-                if (block.exception == null && block.variable == null) {
-                    return true;
-                }
-            }
-            return false;
         }
 
         /**
