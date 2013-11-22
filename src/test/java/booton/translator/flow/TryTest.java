@@ -10,9 +10,13 @@
 package booton.translator.flow;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.junit.Test;
 
+import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -675,6 +679,28 @@ public class TryTest extends ScriptTester {
                     id += 5;
                 }
                 return 0;
+            }
+        });
+    }
+
+    @Test
+    public void insideFor() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public String act() {
+                Map<String, String> map = new HashMap();
+                map.put("1", "one");
+                map.put("2", "two");
+                String valeu = "";
+
+                for (Entry<String, String> entry : map.entrySet()) {
+                    try {
+                        valeu += "1";
+                    } catch (IllegalArgumentException e) {
+                    }
+                }
+                return valeu;
             }
         });
     }
