@@ -32,7 +32,7 @@ import kiss.model.ClassUtil;
 import org.objectweb.asm.Type;
 
 /**
- * @version 2013/09/25 12:55:04
+ * @version 2013/11/22 13:19:38
  */
 class TranslatorManager {
 
@@ -252,6 +252,10 @@ class TranslatorManager {
         }
 
         if (name.equals("readObject") && description.equals("(Ljava/io/ObjectInputStream;)V")) {
+            return true;
+        }
+
+        if (name.equals("$deserializeLambda$") && description.equals("(Ljava/lang/invoke/SerializedLambda;)Ljava/lang/Object;")) {
             return true;
         }
 

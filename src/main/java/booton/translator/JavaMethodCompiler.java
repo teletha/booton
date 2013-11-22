@@ -260,7 +260,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("Collectors") && original.equals("lambda$summingDouble$110")) {
+        if (script.source.getName().endsWith("ConcurrentMap") && original.equals("forEach")) {
             debugger.enable = true;
         }
     }
@@ -653,14 +653,10 @@ class JavaMethodCompiler extends MethodVisitor {
             }
 
             Operand second = current.peek(1);
-            OperandCondition condition = (OperandCondition) third;
 
             Node firstNode = findNodeBy(first);
             Node secondNode = findNodeBy(second);
             Node thirdNode = findNodeBy(third);
-
-            debugger.print(current.id + "     " + condition.transition.id + "   " + firstNode.id + "  " + secondNode.id + "   " + thirdNode.id);
-            debugger.print(nodes);
 
             if (firstNode == secondNode) {
                 return;
@@ -1407,9 +1403,6 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void mergeConditions(Node node) {
-        debugger.print("merge" + node.id);
-        debugger.print(nodes);
-
         Set<Node> group = new HashSet();
         group.add(node);
 

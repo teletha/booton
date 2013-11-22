@@ -29,7 +29,6 @@ import java.util.Set;
 
 import kiss.I;
 import net.sourceforge.htmlunit.corejs.javascript.EcmaError;
-import net.sourceforge.htmlunit.corejs.javascript.EvaluatorException;
 import net.sourceforge.htmlunit.corejs.javascript.NativeArray;
 import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
 import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
@@ -281,16 +280,6 @@ public class ScriptTester {
                 }
             } else {
                 // error in test script
-                Throwable cause = e.getCause();
-
-                if (cause instanceof EvaluatorException) {
-                    EvaluatorException evaluator = (EvaluatorException) cause;
-
-                    System.out.println(evaluator.columnNumber() + "  " + evaluator.lineNumber() + "  " + evaluator.lineSource());
-                    System.out.println(evaluator.details());
-                }
-                System.out.println(e.getCause());
-
                 TranslationError error = new TranslationError(e);
                 error.write(code.findBlock(e.getFailingLineNumber()));
                 throw error;

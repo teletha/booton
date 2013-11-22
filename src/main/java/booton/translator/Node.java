@@ -317,7 +317,9 @@ class Node {
             if (current == dominator) {
                 return true;
             }
+            debugger.print("has " + current.id + "  " + dominator.id + "   " + id);
             current = current.getDominator();
+            if (current != null) debugger.print("has after " + current.id);
         }
 
         // Not Found
@@ -362,6 +364,7 @@ class Node {
                     boolean result = true;
 
                     for (int i = 1; i < size; i++) {
+                        debugger.print(candidates.get(i).id + "  " + candidate.id + "   " + id);
                         if (!candidates.get(i).hasDominator(candidate)) {
                             result = false;
                             break;

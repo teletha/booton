@@ -14,6 +14,7 @@ import static org.objectweb.asm.Opcodes.*;
 import java.lang.reflect.AnnotatedElement;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
@@ -30,7 +31,7 @@ class JavaClassCompiler extends ClassVisitor {
 
     static {
         ignores.add(AnnotatedElement.class);
-        // ignores.add(Function.class);
+        ignores.add(Function.class);
     }
 
     /** The java source(byte) code. */
@@ -112,10 +113,6 @@ class JavaClassCompiler extends ClassVisitor {
         if (script.source.isInterface() && !ignores.contains(script.source) && script.source.getName()
                 .startsWith("java.")) {
             // System.out.println(script.source + "#" + name);
-            return null;
-        }
-
-        if (script.source == AnnotatedElement.class && !name.equals("isAnnotationPresent")) {
             return null;
         }
 
