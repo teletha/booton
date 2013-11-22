@@ -161,4 +161,17 @@ public class FloatArrayTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void withShorthandExpression() {
+        test(new Scriptable() {
+
+            public float act() {
+                float[] array = {1.2f};
+                array[0] += 1.1;
+
+                return array[0];
+            }
+        });
+    }
 }

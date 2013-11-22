@@ -61,4 +61,11 @@ abstract class Operand {
      * @return
      */
     abstract InferredType infer();
+
+    /**
+     * @return
+     */
+    boolean isLarge() {
+        return infer().type() == long.class || infer().type() == double.class;
+    }
 }

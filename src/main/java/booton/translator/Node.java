@@ -284,7 +284,7 @@ class Node {
             right = new OperandExpression(Javascript.writeMethodCode(String.class, "codePointAt", right, int.class, 0), int.class);
         }
 
-        stack.add(new OperandExpression(right + separator + left));
+        stack.add(new OperandExpression(right + separator + left, right.infer()));
 
         // API definition
         return this;
