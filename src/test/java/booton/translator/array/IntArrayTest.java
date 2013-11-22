@@ -16,13 +16,13 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/11/21 1:57:02
+ * @version 2013/11/22 11:21:48
  */
 @SuppressWarnings("unused")
 public class IntArrayTest extends ScriptTester {
 
     @Test
-    public void Array() {
+    public void base() {
         test(new Scriptable() {
 
             public int[] act() {
@@ -36,7 +36,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayWithExpression() {
+    public void withExpression() {
         test(new Scriptable() {
 
             private int field = 10;
@@ -54,7 +54,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayByShorthand() {
+    public void shorthand() {
         test(new Scriptable() {
 
             public int[] act() {
@@ -64,7 +64,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayByShorthandWithFirstZero() {
+    public void shorthandWithFirstZero() {
         test(new Scriptable() {
 
             public int[] act() {
@@ -74,7 +74,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayByShorthandWithFirstZero2() {
+    public void shorthandWithFirstZero2() {
         test(new Scriptable() {
 
             public int[] act() {
@@ -84,7 +84,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayByShorthandWithlastZero() {
+    public void shorthandWithlastZero() {
         test(new Scriptable() {
 
             public int[] act() {
@@ -94,7 +94,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayByShorthandWithAllZero() {
+    public void shorthandWithAllZero() {
         test(new Scriptable() {
 
             public int[] act() {
@@ -104,7 +104,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayWithExpressionByShorthand() {
+    public void expressionByShorthand() {
         test(new Scriptable() {
 
             private int field = 10;
@@ -116,7 +116,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArraySoMany() {
+    public void many() {
         test(new Scriptable() {
 
             public int[] act() {
@@ -126,7 +126,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void MultiDimensionArray() {
+    public void multiDimensionArray() {
         test(new Scriptable() {
 
             public int[][] act() {
@@ -141,7 +141,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void MultiDimensionArrayByShorthand() {
+    public void multiDimensionArrayByShorthand() {
         test(new Scriptable() {
 
             public int[][] act() {
@@ -151,7 +151,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ThreeDimensionArray() {
+    public void threeDimensionArray() {
         test(new Scriptable() {
 
             public int[][][] act() {
@@ -165,7 +165,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ThreeDimensionArrayWithoutNeedlessDeclaration() {
+    public void threeDimensionArrayWithoutNeedlessDeclaration() {
         test(new Scriptable() {
 
             public int[][][] act() {
@@ -179,7 +179,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayAccess() {
+    public void access() {
         test(new Scriptable() {
 
             public int act(int value) {
@@ -191,7 +191,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayLength() {
+    public void length() {
         test(new Scriptable() {
 
             public int act(@Param(ints = {0, 1, 10}) int value) {
@@ -201,7 +201,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayFor() {
+    public void forBlock() {
         test(new Scriptable() {
 
             public int act(int value) {
@@ -217,7 +217,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayForEach() {
+    public void forEachBlock() {
         test(new Scriptable() {
 
             public int act(int value) {
@@ -233,7 +233,7 @@ public class IntArrayTest extends ScriptTester {
     }
 
     @Test
-    public void SplitLine() {
+    public void splitLine() {
         test(new Scriptable() {
 
             public int act() {
@@ -245,6 +245,19 @@ public class IntArrayTest extends ScriptTester {
                     sum += i;
                 }
                 return sum;
+            }
+        });
+    }
+
+    @Test
+    public void withShorthandExpression() {
+        test(new Scriptable() {
+
+            public int act() {
+                int[] array = {1};
+                array[0] += 10;
+
+                return array[0];
             }
         });
     }

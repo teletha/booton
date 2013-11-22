@@ -161,4 +161,17 @@ public class LongArrayTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void withShorthandExpression() {
+        test(new Scriptable() {
+
+            public long act() {
+                long[] array = {1};
+                array[0] += 10;
+
+                return array[0];
+            }
+        });
+    }
 }

@@ -260,7 +260,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("Collectors") && original.equals("lambda$groupingByConcurrent$141")) {
+        if (script.source.getName().endsWith("Collectors") && original.equals("lambda$summingDouble$110")) {
             debugger.enable = true;
         }
     }
@@ -763,10 +763,21 @@ class JavaMethodCompiler extends MethodVisitor {
 
         switch (opcode) {
         case DUP:
-        case DUP2:
             if (!match(NEW, DUP) && !match(NEW, DUP2)) {
                 // mark as duplicated operand
                 current.peek(0).duplicated = true;
+            }
+            break;
+
+        case DUP2:
+            if (!match(NEW, DUP) && !match(NEW, DUP2)) {
+                // mark as duplicated operand
+                Operand first = current.peek(0);
+                first.duplicated = true;
+
+                if (!first.isLarge()) {
+                    current.peek(1).duplicated = true;
+                }
             }
             break;
 

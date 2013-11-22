@@ -16,13 +16,13 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2012/12/01 3:09:50
+ * @version 2013/11/22 11:20:09
  */
 @SuppressWarnings("unused")
 public class DoubleArrayTest extends ScriptTester {
 
     @Test
-    public void Array() {
+    public void base() {
         test(new Scriptable() {
 
             public double[] act() {
@@ -36,7 +36,7 @@ public class DoubleArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayWithExpression() {
+    public void withExpression() {
         test(new Scriptable() {
 
             private double field = 3.14d;
@@ -54,7 +54,7 @@ public class DoubleArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayByShorthand() {
+    public void shorthand() {
         test(new Scriptable() {
 
             public double[] act() {
@@ -64,7 +64,7 @@ public class DoubleArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayByShorthandWithFirstZero() {
+    public void shorthandWithFirstZero() {
         test(new Scriptable() {
 
             public double[] act() {
@@ -74,7 +74,7 @@ public class DoubleArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayByShorthandWithlastZero() {
+    public void shorthandWithlastZero() {
         test(new Scriptable() {
 
             public double[] act() {
@@ -84,7 +84,7 @@ public class DoubleArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayByShorthandWithAllZero() {
+    public void shorthandWithAllZero() {
         test(new Scriptable() {
 
             public double[] act() {
@@ -94,7 +94,7 @@ public class DoubleArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayWithExpressionByShorthand() {
+    public void expressionByShorthand() {
         test(new Scriptable() {
 
             private double field = 0.002000023d;
@@ -106,7 +106,7 @@ public class DoubleArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayAccess() {
+    public void access() {
         test(new Scriptable() {
 
             public double act(double value) {
@@ -118,7 +118,7 @@ public class DoubleArrayTest extends ScriptTester {
     }
 
     @Test
-    public void MultiDimensionArray() {
+    public void multiDimensionArray() {
         test(new Scriptable() {
 
             public double[][] act() {
@@ -133,7 +133,7 @@ public class DoubleArrayTest extends ScriptTester {
     }
 
     @Test
-    public void MultiDimensionArrayByShorthand() {
+    public void multiDimensionArrayByShorthand() {
         test(new Scriptable() {
 
             public double[][] act() {
@@ -143,7 +143,7 @@ public class DoubleArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArrayLength() {
+    public void length() {
         test(new Scriptable() {
 
             public int act(@Param(ints = {0, 1, 10}) int value) {
@@ -153,11 +153,24 @@ public class DoubleArrayTest extends ScriptTester {
     }
 
     @Test
-    public void ArraySoMany() {
+    public void many() {
         test(new Scriptable() {
 
             public double[] act() {
                 return new double[] {0.1d, 0.2d, 0.3d, 0.4d, 0.5d, 0.6d, 0.7d, 0.8d, 0.9d};
+            }
+        });
+    }
+
+    @Test
+    public void withShorthandExpression() {
+        test(new Scriptable() {
+
+            public double act() {
+                double[] array = {1};
+                array[0] += 10;
+
+                return array[0];
             }
         });
     }
