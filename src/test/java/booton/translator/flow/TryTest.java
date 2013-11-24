@@ -16,7 +16,6 @@ import java.util.Map.Entry;
 
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -687,7 +686,6 @@ public class TryTest extends ScriptTester {
     public void insideFor() {
         test(new Scriptable() {
 
-            @Debuggable
             public String act() {
                 Map<String, String> map = new HashMap();
                 map.put("1", "one");
@@ -698,6 +696,7 @@ public class TryTest extends ScriptTester {
                     try {
                         valeu += "1";
                     } catch (IllegalArgumentException e) {
+                        valeu += "2";
                     }
                 }
                 return valeu;

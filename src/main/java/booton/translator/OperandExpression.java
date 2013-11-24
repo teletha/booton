@@ -61,10 +61,12 @@ class OperandExpression extends Operand {
             } else {
                 String value = expression.toString();
 
-                if (value.charAt(0) == '(') {
-                    expression = "!".concat(value);
-                } else if (value.charAt(0) == '!') {
-                    expression = value.substring(1);
+                if (!value.contains("=")) {
+                    if (value.charAt(0) == '(') {
+                        expression = "!".concat(value);
+                    } else if (value.charAt(0) == '!') {
+                        expression = value.substring(1);
+                    }
                 }
             }
         }

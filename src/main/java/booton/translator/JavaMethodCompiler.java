@@ -260,9 +260,10 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("ConcurrentMap") && original.equals("forEach")) {
-            debugger.enable = true;
-        }
+        // if (script.source.getName().endsWith("SpinedBuffer$1Splitr") &&
+        // original.equals("tryAdvance")) {
+        // debugger.enable = true;
+        // }
     }
 
     private int isMixed(Node node) {

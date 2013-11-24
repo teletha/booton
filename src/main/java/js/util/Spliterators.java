@@ -27,7 +27,7 @@ import booton.translator.JavaAPIProvider;
 /**
  * @version 2013/10/29 16:19:18
  */
-// @JavaAPIProvider(java.util.Spliterators.class)
+@JavaAPIProvider(java.util.Spliterators.class)
 class Spliterators {
 
     /** reuse */
@@ -638,7 +638,7 @@ class Spliterators {
      * A Spliterator designed for use by sources that traverse and split elements maintained in an
      * unmodifiable {@code Object[]} array.
      */
-    @JavaAPIProvider(JDKEmulator.class)
+    // @JavaAPIProvider(JDKEmulator.class)
     static final class ArraySpliterator<T> implements Spliterator<T> {
 
         /**
@@ -696,7 +696,12 @@ class Spliterators {
             Object[] a;
             int i, hi; // hoist accesses and checks from loop
             if (action == null) throw new NullPointerException();
-            if ((a = array).length >= (hi = fence) && (i = index) >= 0 && i < (index = hi)) {
+            a = array;
+            hi = fence;
+            i = index;
+            index = hi;
+
+            if (a.length >= hi && i >= 0 && i < index) {
                 do {
                     action.accept((T) a[i]);
                 } while (++i < hi);
@@ -736,7 +741,7 @@ class Spliterators {
      * A Spliterator.OfInt designed for use by sources that traverse and split elements maintained
      * in an unmodifiable {@code int[]} array.
      */
-    // @JavaAPIProvider(Emulator.class)
+    @JavaAPIProvider(JDKEmulator.class)
     static final class IntArraySpliterator implements Spliterator.OfInt {
 
         private final int[] array;
@@ -787,7 +792,12 @@ class Spliterators {
             int[] a;
             int i, hi; // hoist accesses and checks from loop
             if (action == null) throw new NullPointerException();
-            if ((a = array).length >= (hi = fence) && (i = index) >= 0 && i < (index = hi)) {
+            a = array;
+            hi = fence;
+            i = index;
+            index = hi;
+
+            if (a.length >= hi && i >= 0 && i < index) {
                 do {
                     action.accept(a[i]);
                 } while (++i < hi);
@@ -875,7 +885,12 @@ class Spliterators {
             long[] a;
             int i, hi; // hoist accesses and checks from loop
             if (action == null) throw new NullPointerException();
-            if ((a = array).length >= (hi = fence) && (i = index) >= 0 && i < (index = hi)) {
+            a = array;
+            hi = fence;
+            i = index;
+            index = hi;
+
+            if (a.length >= hi && i >= 0 && i < index) {
                 do {
                     action.accept(a[i]);
                 } while (++i < hi);
@@ -963,7 +978,12 @@ class Spliterators {
             double[] a;
             int i, hi; // hoist accesses and checks from loop
             if (action == null) throw new NullPointerException();
-            if ((a = array).length >= (hi = fence) && (i = index) >= 0 && i < (index = hi)) {
+            a = array;
+            hi = fence;
+            i = index;
+            index = hi;
+
+            if (a.length >= hi && i >= 0 && i < index) {
                 do {
                     action.accept(a[i]);
                 } while (++i < hi);
