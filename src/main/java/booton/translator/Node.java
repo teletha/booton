@@ -72,15 +72,20 @@ class Node {
     /** The flag whether this node has already written or not. */
     private boolean written = false;
 
+    /** The flag whether this node indicates loop condition or not. */
     private boolean loopCondition;
 
-    private boolean loopExit;
-
+    /** The flag whether this node indicates loop entrance or not. */
     private Node loopEntrance;
 
-    private int processRequire = -1;
+    /** The flag whether this node indicates loop exit or not. */
+    private boolean loopExit;
 
-    private int processCount = 0;
+    /** The necessary request. */
+    private int necessaryRequest = -1;
+
+    /** The current request . */
+    private int currentRequest = 0;
 
     /**
      * @param label
@@ -295,7 +300,7 @@ class Node {
 
     /**
      * <p>
-     * Helper method to enclose current opperand.
+     * Helper method to enclose current operand.
      * </p>
      * 
      * @return Chainable API.
@@ -320,9 +325,7 @@ class Node {
             if (current == dominator) {
                 return true;
             }
-            debugger.print("has " + current.id + "  " + dominator.id + "   " + id);
             current = current.getDominator();
-            if (current != null) debugger.print("has after " + current.id);
         }
 
         // Not Found
@@ -538,7 +541,7 @@ class Node {
             // =============================================================
             // Try-Catch-Finally Block
             // =============================================================
-            for (TryCatchFinally block : tries) {
+            for (int i = 0; i < tries.size(); i++) {
                 buffer.write("try", "{");
             }
 
@@ -619,7 +622,7 @@ class Node {
                                         .orElse(null);
 
                                 if (follower != null) {
-                                    follower.processCount--;
+                                    follower.currentRequest--;
                                 }
                             }
 
@@ -784,25 +787,26 @@ class Node {
      */
     private void process(Node next, ScriptWriter buffer) {
         if (next != null) {
-            next.processCount++;
+            next.currentRequest++;
 
             if (next.loopCondition && hasDominator(next.loopEntrance)) {
-                buffer.comment(id + " -> " + next.id + " Entrance " + next.loopEntrance.id);
-                buffer.append("continue l", next.loopEntrance.id, "; // " + id + " -> " + next.id + " Enter " + next.loopEntrance.id)
-                        .line();
+                if (debugger.enable) buffer.comment(id + " -> " + next.id + " Entrance " + next.loopEntrance.id);
+                buffer.append("continue l", next.loopEntrance.id, ";").line();
                 return;
             }
 
             if (!loopCondition && next.loopExit && hasDominator(next.loopEntrance)) {
-                buffer.append("break l", next.loopEntrance.id, "; // " + id + " -> " + next.id + " Enter " + next.loopEntrance.id)
-                        .line();
+                if (debugger.enable) buffer.comment(id + " -> " + next.id + " Entrance " + next.loopEntrance.id);
+                buffer.append("break l", next.loopEntrance.id, ";").line();
                 return;
             }
 
-            debugger.print(() -> buffer.comment(id + " -> " + next.id + " next count " + next.countWrite() + "  " + (next.processCount) + "  " + next.loopExit));
+            if (debugger.enable) {
+                buffer.comment(id + " -> " + next.id + " next count " + next.countWrite() + "  " + next.currentRequest);
+            }
 
             // normal process
-            if (next.countWrite() <= next.processCount) {
+            if (next.countWrite() <= next.currentRequest) {
                 if (next.loopExit) {
                     next.write(buffer);
                 } else {
@@ -866,12 +870,12 @@ class Node {
     }
 
     private int countWrite() {
-        if (processRequire == -1) {
+        if (necessaryRequest == -1) {
             Set<Node> nodes = new HashSet(incoming);
             nodes.removeAll(backedges);
-            processRequire = nodes.size();
+            necessaryRequest = nodes.size();
         }
-        return processRequire;
+        return necessaryRequest;
     }
 
     /**
@@ -1030,7 +1034,7 @@ class Node {
     }
 
     /**
-     * @version 2013/04/11 13:04:37
+     * @version 2013/11/24 23:28:29
      */
     static class TryCatchFinallyBlocks {
 
@@ -1111,31 +1115,30 @@ class Node {
                 }
             }
 
+            // Purge the catch block which is inside loop structure directly.
             for (TryCatchFinally block : blocks) {
                 for (Catch catchBlock : block.catches) {
-                    purge(catchBlock.node);
-                }
-            }
-        }
+                    Set<Node> recorder = new HashSet();
+                    recorder.add(catchBlock.node);
 
-        private void purge(Node start) {
-            Set<Node> recorder = new HashSet();
-            recorder.add(start);
+                    Deque<Node> queue = new ArrayDeque();
+                    queue.add(catchBlock.node);
 
-            Deque<Node> queue = new ArrayDeque();
-            queue.add(start);
+                    while (!queue.isEmpty()) {
+                        Node node = queue.pollFirst();
 
-            while (!queue.isEmpty()) {
-                Node node = queue.pollFirst();
-
-                for (Node out : node.outgoing) {
-                    if (out.hasDominator(start)) {
-                        if (recorder.add(out)) {
-                            queue.add(out);
-                        }
-                    } else {
-                        if (!out.backedges.isEmpty()) {
-                            node.disconnect(out);
+                        for (Node out : node.outgoing) {
+                            if (out.hasDominator(catchBlock.node)) {
+                                if (recorder.add(out)) {
+                                    // test next node
+                                    queue.add(out);
+                                }
+                            } else {
+                                if (!out.backedges.isEmpty()) {
+                                    // purge the catch block from the loop structure
+                                    node.disconnect(out);
+                                }
+                            }
                         }
                     }
                 }
@@ -1211,7 +1214,7 @@ class Node {
             }
             catches.add(new Catch(exception, catcher));
             catcher.countWrite();
-            catcher.processRequire++;
+            catcher.necessaryRequest++;
         }
 
         /**
