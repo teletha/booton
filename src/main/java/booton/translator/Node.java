@@ -66,6 +66,9 @@ class Node {
     /** The following node. */
     private Node follower;
 
+    /** The state. */
+    private boolean whileFindingDominator;
+
     /** The flag whether this node has already written or not. */
     private boolean written = false;
 
@@ -333,7 +336,9 @@ class Node {
      */
     final Node getDominator() {
         // check cache
-        if (dominator == null) {
+        if (dominator == null && !whileFindingDominator) {
+            whileFindingDominator = true;
+
             // We must search a immediate dominator.
             //
             // At first, we can ignore the older incoming nodes.
@@ -360,29 +365,20 @@ class Node {
             default: // multiple incoming nodes
                 Node candidate = candidates.get(0);
 
-                while (true) {
-                    boolean result = true;
-
+                search: while (candidate != null) {
                     for (int i = 1; i < size; i++) {
-                        debugger.print(candidates.get(i).id + "  " + candidate.id + "   " + id);
                         if (!candidates.get(i).hasDominator(candidate)) {
-                            result = false;
-                            break;
+                            candidate = candidate.getDominator();
+                            continue search;
                         }
                     }
 
-                    if (result) {
-                        dominator = candidate;
-                        break;
-                    } else {
-                        if (candidate == null) {
-                            return null;
-                        }
-                        candidate = candidate.getDominator();
-                    }
+                    dominator = candidate;
+                    break;
                 }
                 break;
             }
+            whileFindingDominator = false;
         }
 
         // API definition
@@ -1112,6 +1108,36 @@ class Node {
 
                 for (Catch catchBlock : block.catches) {
                     block.start.disconnect(catchBlock.node);
+                }
+            }
+
+            for (TryCatchFinally block : blocks) {
+                for (Catch catchBlock : block.catches) {
+                    purge(catchBlock.node);
+                }
+            }
+        }
+
+        private void purge(Node start) {
+            Set<Node> recorder = new HashSet();
+            recorder.add(start);
+
+            Deque<Node> queue = new ArrayDeque();
+            queue.add(start);
+
+            while (!queue.isEmpty()) {
+                Node node = queue.pollFirst();
+
+                for (Node out : node.outgoing) {
+                    if (out.hasDominator(start)) {
+                        if (recorder.add(out)) {
+                            queue.add(out);
+                        }
+                    } else {
+                        if (!out.backedges.isEmpty()) {
+                            node.disconnect(out);
+                        }
+                    }
                 }
             }
         }

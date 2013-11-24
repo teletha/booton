@@ -11,11 +11,6 @@ package booton.translator;
 
 import static org.objectweb.asm.Opcodes.*;
 
-import java.lang.reflect.AnnotatedElement;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Function;
-
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -23,16 +18,9 @@ import org.objectweb.asm.MethodVisitor;
 import booton.translator.Node.Switch;
 
 /**
- * @version 2013/01/21 15:29:47
+ * @version 2013/11/24 22:31:54
  */
 class JavaClassCompiler extends ClassVisitor {
-
-    private final static Set<Class> ignores = new HashSet();
-
-    static {
-        ignores.add(AnnotatedElement.class);
-        ignores.add(Function.class);
-    }
 
     /** The java source(byte) code. */
     private final Javascript script;
@@ -107,12 +95,6 @@ class JavaClassCompiler extends ClassVisitor {
 
         // ignore compiler generated method (e.g. generics)
         if ((access & (ACC_NATIVE | ACC_ABSTRACT)) != 0) {
-            return null;
-        }
-
-        if (script.source.isInterface() && !ignores.contains(script.source) && script.source.getName()
-                .startsWith("java.")) {
-            // System.out.println(script.source + "#" + name);
             return null;
         }
 

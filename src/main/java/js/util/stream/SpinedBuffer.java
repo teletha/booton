@@ -18,10 +18,13 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
 
+import booton.JDKEmulator;
+import booton.translator.JavaAPIProvider;
+
 /**
  * @version 2013/11/16 21:42:44
  */
-// @JavaAPIProvider(JDKEmulator.class)
+@JavaAPIProvider(JDKEmulator.class)
 class SpinedBuffer<E> extends AbstractSpinedBuffer<E> implements Consumer<E>, Iterable<E> {
 
     /*
@@ -258,7 +261,9 @@ class SpinedBuffer<E> extends AbstractSpinedBuffer<E> implements Consumer<E>, It
                     if (splElementIndex == splChunk.length) {
                         splElementIndex = 0;
                         ++splSpineIndex;
-                        if (spine != null && splSpineIndex <= lastSpineIndex) splChunk = spine[splSpineIndex];
+                        if (spine != null && splSpineIndex <= lastSpineIndex) {
+                            splChunk = spine[splSpineIndex];
+                        }
                     }
                     return true;
                 }
