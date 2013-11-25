@@ -10,7 +10,7 @@
 package booton.translator;
 
 /**
- * @version 2013/09/28 8:48:19
+ * @version 2013/11/26 2:06:47
  */
 class OperandExpression extends Operand {
 
@@ -61,12 +61,10 @@ class OperandExpression extends Operand {
             } else {
                 String value = expression.toString();
 
-                if (!value.contains("=")) {
-                    if (value.charAt(0) == '(') {
-                        expression = "!".concat(value);
-                    } else if (value.charAt(0) == '!') {
-                        expression = value.substring(1);
-                    }
+                if (value.charAt(0) == '(') {
+                    expression = "!".concat(value);
+                } else if (value.charAt(0) == '!') {
+                    expression = value.substring(1);
                 }
             }
         }
