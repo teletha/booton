@@ -260,9 +260,9 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        // if (script.source.getName().endsWith("Map") && original.equals("forEach")) {
-        // debugger.enable = true;
-        // }
+        if (script.source.getName().endsWith("PrimitiveIterator$OfDouble") && original.equals("forEachRemaining")) {
+            debugger.enable = true;
+        }
     }
 
     /**
@@ -754,6 +754,22 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case POP:
+            // When the JDK compiler compiles the code including "instance method reference", it
+            // generates the byte code expressed in following ASM codes.
+            //
+            // visitInsn(DUP);
+            // visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object","getClass","()Ljava/lang/Class;");
+            // visitInsn(POP);
+            //
+            // Although i guess that it is the initialization code for the class to
+            // which the lambda method belongs, ECJ doesn't generated such code.
+            // In Javascript runtime, it is a completely unnecessary code,
+            // so we should delete them unconditionally.
+            if (match(DUP, INVOKEVIRTUAL, POP)) {
+                current.remove(0);
+                break;
+            }
+
         case POP2:
             // One sequence of expressions was finished, so we must write out one remaining
             // operand. (e.g. Method invocation which returns some operands but it is not used ever)

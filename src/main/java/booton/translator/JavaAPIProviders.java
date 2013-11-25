@@ -14,9 +14,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.PrimitiveIterator;
 import java.util.Set;
-import java.util.Spliterator;
 
 import kiss.ClassListener;
 import kiss.I;
@@ -28,7 +26,7 @@ import org.objectweb.asm.Type;
 import booton.JDKEmulator;
 
 /**
- * @version 2013/10/03 12:43:41
+ * @version 2013/11/26 2:04:14
  */
 @Manageable(lifestyle = Singleton.class)
 class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
@@ -38,29 +36,6 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
 
     /** The mapping between Java class and JS implementation class. */
     private static final Map<Class, Class> revert = new HashMap();
-
-    static {
-        builtin(Iterable.class);
-        builtin(Map.class);
-        builtin(Spliterator.class);
-        builtin(Spliterator.OfInt.class);
-        builtin(Spliterator.OfLong.class);
-        builtin(Spliterator.OfDouble.class);
-        builtin(PrimitiveIterator.class);
-        builtin(PrimitiveIterator.OfInt.class);
-        builtin(PrimitiveIterator.OfLong.class);
-        builtin(PrimitiveIterator.OfDouble.class);
-    }
-
-    private static void builtin(Class type) {
-        try {
-            type = Class.forName(type.getName().replace("java.", "js."));
-
-            I.make(JavaAPIProviders.class).load(type);
-        } catch (ClassNotFoundException e) {
-            throw I.quiet(e);
-        }
-    }
 
     /**
      * {@inheritDoc}
