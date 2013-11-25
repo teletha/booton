@@ -54,7 +54,7 @@ import booton.translator.Node.TryCatchFinallyBlocks;
  * completely, garbage goto code will remain.
  * </p>
  * 
- * @version 2013/11/03 11:17:49
+ * @version 2013/11/25 14:07:28
  */
 class JavaMethodCompiler extends MethodVisitor {
 
@@ -266,77 +266,6 @@ class JavaMethodCompiler extends MethodVisitor {
         // }
     }
 
-    private int isMixed(Node node) {
-        int position = -1;
-        boolean initialized = false;
-        boolean conditionOnly = false;
-
-        for (Operand operand : node.stack) {
-            position++;
-
-            if (operand == Return) {
-                continue;
-            }
-
-            if (operand == Node.END) {
-                continue;
-            }
-
-            if (operand instanceof OperandCondition) {
-                if (!initialized) {
-                    initialized = true;
-                    conditionOnly = true;
-                } else {
-                    if (!conditionOnly) {
-                        return position;
-                    }
-                }
-
-            } else {
-                if (!initialized) {
-                    initialized = true;
-                    conditionOnly = false;
-                } else {
-                    if (conditionOnly) {
-                        return position;
-                    }
-                }
-
-            }
-        }
-        return -1;
-    }
-
-    private void splite(Node node, int position) {
-        Node next = nodes.get(nodes.indexOf(node) + 1);
-        Node created = new Node(counter++, debugger);
-
-        int count = node.stack.size() - position;
-
-        for (int i = 0; i < count; i++) {
-            created.stack.addFirst(node.stack.pollLast());
-        }
-
-        OperandCondition condition = (OperandCondition) node.peek(0);
-
-        Node process;
-
-        if (node.outgoing.get(0) == condition.transition) {
-            process = node.outgoing.get(1);
-        } else {
-            process = node.outgoing.get(0);
-        }
-        node.disconnect(process);
-        created.connect(process);
-        node.connect(created);
-
-        created.previous = node;
-        next.previous = created;
-
-        // insert to node list
-        nodes.add(nodes.indexOf(next), created);
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -349,31 +278,28 @@ class JavaMethodCompiler extends MethodVisitor {
             disposeNode(node, true);
         }
 
-        // Resolve shorthand syntax sugar of "if" statement.
         for (int i = nodes.size() - 1; 0 <= i; i--) {
             Node node = nodes.get(i);
 
+            // Resolve shorthand syntax sugar of "if" statement.
             if (node.stack.peekFirst() instanceof OperandCondition && node.outgoing.size() == 1) {
                 // create condition node
                 Node condition = createNode(node);
-                Node out = node.outgoing.get(0);
                 condition.connect(node);
-                condition.connect(out);
-
+                condition.connect(node.outgoing.get(0));
                 condition.stack.add(node.stack.pollFirst().invert());
-
-                if (node.stack.peekFirst() == Return) {
-                    node.disconnect(out);
-                }
             }
-        }
 
-        for (int i = nodes.size() - 1; 0 <= i; i--) {
-            Node node = nodes.get(i);
-            int position = isMixed(node);
+            // Separate conditional operands.
+            int position = searchConditionalOperandSeparator(node);
 
             if (position != -1) {
-                splite(node, position);
+                Node created = createNode(nodes.get(i + 1));
+
+                // transfer operands
+                for (int j = 0; j < position; j++) {
+                    created.stack.addFirst(node.stack.pollLast());
+                }
             }
         }
 
@@ -415,6 +341,48 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         debugger.print(code.toFragment());
+    }
+
+    /**
+     * <p>
+     * Detect conditional operands.
+     * </p>
+     * 
+     * @param node
+     * @return
+     */
+    private int searchConditionalOperandSeparator(Node node) {
+        boolean initialized = false;
+        boolean conditionOnly = false;
+
+        for (int i = node.stack.size() - 1; 0 <= i; i--) {
+            Operand operand = node.stack.get(i);
+
+            if (operand == Return || operand == Node.END) {
+                continue;
+            }
+
+            if (operand instanceof OperandCondition) {
+                if (!initialized) {
+                    initialized = true;
+                    conditionOnly = true;
+                } else {
+                    if (!conditionOnly) {
+                        return i;
+                    }
+                }
+            } else {
+                if (!initialized) {
+                    initialized = true;
+                    conditionOnly = false;
+                } else {
+                    if (conditionOnly) {
+                        return i;
+                    }
+                }
+            }
+        }
+        return -1;
     }
 
     /**
