@@ -260,9 +260,10 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("PrimitiveIterator$OfDouble") && original.equals("forEachRemaining")) {
-            debugger.enable = true;
-        }
+        // if (script.source.getName().endsWith("PrimitiveIterator$OfDouble") &&
+        // original.equals("forEachRemaining")) {
+        // debugger.enable = true;
+        // }
     }
 
     /**
