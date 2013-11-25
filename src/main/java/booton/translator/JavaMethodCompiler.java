@@ -344,7 +344,7 @@ class JavaMethodCompiler extends MethodVisitor {
     public void visitEnd() {
         debugger.whileProcess = false;
 
-        // Dispose all synchronized block nodes
+        // Dispose all nodes which contains synchronized block.
         for (Node node : synchronizer) {
             disposeNode(node, true);
         }
@@ -377,7 +377,7 @@ class JavaMethodCompiler extends MethodVisitor {
             }
         }
 
-        // Search all backedge nodes at first.
+        // Search all backedge nodes.
         searchBackEdge(nodes.get(0), new ArrayDeque());
 
         // Resolve all try-catch-finally blocks.
@@ -392,9 +392,7 @@ class JavaMethodCompiler extends MethodVisitor {
             }
         }
 
-        if (debugger.enable) {
-            debugger.print(script, nodes);
-        }
+        debugger.print(script, nodes);
 
         // ===============================================
         // Script Code
@@ -416,9 +414,7 @@ class JavaMethodCompiler extends MethodVisitor {
             throw error;
         }
 
-        if (debugger.enable) {
-            System.out.println(code.toFragment());
-        }
+        debugger.print(code.toFragment());
     }
 
     /**
@@ -427,23 +423,23 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      * 
      * @param node A target node to check.
-     * @param nodes All passed nodes.
+     * @param recorder All passed nodes.
      */
-    private void searchBackEdge(Node node, Deque<Node> nodes) {
+    private void searchBackEdge(Node node, Deque<Node> recorder) {
         // Store the current processing node.
-        nodes.add(node);
+        recorder.add(node);
 
         // Step into outgoing nodes.
         for (Node out : node.outgoing) {
-            if (nodes.contains(out)) {
+            if (recorder.contains(out)) {
                 out.backedges.addIfAbsent(node);
             } else {
-                searchBackEdge(out, nodes);
+                searchBackEdge(out, recorder);
             }
         }
 
         // Remove the current processing node.
-        nodes.pollLast();
+        recorder.pollLast();
     }
 
     /**
@@ -1946,7 +1942,7 @@ class JavaMethodCompiler extends MethodVisitor {
             }
         }
 
-        // Copy all operands to the previous node
+        // Copy all operands to the previous node if needed
         if (!clearStack) {
             if (target.previous != null) {
                 target.previous.stack.addAll(target.stack);

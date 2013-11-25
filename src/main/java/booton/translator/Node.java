@@ -82,7 +82,7 @@ class Node {
     private boolean loopExit;
 
     /** The necessary request. */
-    private int necessaryRequest = -1;
+    private int necessaryRequest = 0;
 
     /** The current request . */
     private int currentRequest = 0;
@@ -801,12 +801,14 @@ class Node {
                 return;
             }
 
+            int necessary = next.incoming.size() - next.backedges.size() + next.necessaryRequest;
+
             if (debugger.enable) {
-                buffer.comment(id + " -> " + next.id + " next count " + next.countWrite() + "  " + next.currentRequest);
+                buffer.comment(id + " -> " + next.id + " next count " + next.necessaryRequest + "  " + next.currentRequest);
             }
 
             // normal process
-            if (next.countWrite() <= next.currentRequest) {
+            if (necessary <= next.currentRequest) {
                 if (next.loopExit) {
                     next.write(buffer);
                 } else {
@@ -867,15 +869,6 @@ class Node {
         if (condition.loopEntrance == null) {
             condition.loopEntrance = entrance;
         }
-    }
-
-    private int countWrite() {
-        if (necessaryRequest == -1) {
-            Set<Node> nodes = new HashSet(incoming);
-            nodes.removeAll(backedges);
-            necessaryRequest = nodes.size();
-        }
-        return necessaryRequest;
     }
 
     /**
@@ -1213,8 +1206,6 @@ class Node {
                 }
             }
             catches.add(new Catch(exception, catcher));
-            catcher.countWrite();
-            catcher.necessaryRequest++;
         }
 
         /**
@@ -1223,12 +1214,12 @@ class Node {
          * </p>
          */
         private void searchExit() {
-            LinkedList<Node> nodes = new LinkedList();
+            Deque<Node> nodes = new ArrayDeque();
             nodes.addAll(end.outgoing);
             nodes.addAll(catcher.outgoing);
 
             while (!nodes.isEmpty()) {
-                Node node = nodes.remove(0);
+                Node node = nodes.pollFirst();
 
                 if (node.getDominator() == start) {
                     exit = node;
@@ -1260,6 +1251,7 @@ class Node {
         private Catch(Class exception, Node node) {
             this.exception = exception;
             this.node = node;
+            this.node.necessaryRequest++;
         }
     }
 }
