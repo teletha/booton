@@ -559,32 +559,15 @@ class Node {
                     process(outgoing.get(0), buffer);
                 } else {
                     // do while or infinite loop
-
-                    // setup condition expression node
-                    Node condition = backedges.get(0);
-
-                    if (condition.outgoing.size() == 1) {
-                        writeInfiniteLoop(buffer);
-                    } else {
-                        writeDoWhile(condition, buffer);
-                    }
+                    writeDoWhile(buffer);
                 }
             } else if (outs == 2) {
                 // while, for or if
                 if (backs == 0) {
-                    // if
                     writeIf(buffer);
-                } else if (backs == 1) {
-                    // while or for
-                    if (backedges.get(0).outgoing.size() == 1) {
-                        // for
-                        writeFor(buffer);
-                    } else {
-                        // while with break only
-                        writeWhile(buffer);
-                    }
+                } else if (backs == 1 && backedges.get(0).outgoing.size() == 1) {
+                    writeFor(buffer);
                 } else {
-                    // while with continue and break
                     writeWhile(buffer);
                 }
             }
@@ -660,13 +643,12 @@ class Node {
      * @param buffer
      */
     private void writeWhile(ScriptWriter buffer) {
-        // detect process and follower node
         Node[] nodes = detectProcessAndFollower();
 
         if (nodes == null) {
             writeInfiniteLoop(buffer);
         } else {
-            analyzeStructure(this, nodes[1], this);
+            setLoopStructureInfo(this, this, nodes[1]);
 
             // write script fragment
             buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
@@ -683,24 +665,31 @@ class Node {
      * 
      * @param buffer
      */
-    private void writeDoWhile(Node condition, ScriptWriter buffer) {
-        condition.written = true;
+    private void writeDoWhile(ScriptWriter buffer) {
+        // setup condition expression node
+        Node condition = backedges.get(0);
 
-        Node follow;
-
-        if (condition.outgoing.get(0) == this) {
-            follow = condition.outgoing.get(1);
+        if (condition.outgoing.size() == 1) {
+            writeInfiniteLoop(buffer);
         } else {
-            follow = condition.outgoing.get(0);
-        }
-        analyzeStructure(condition, follow, this);
+            condition.written = true;
 
-        // write script fragment
-        buffer.write("l" + id, ":", "do", "{");
-        buffer.append(this);
-        process(outgoing.get(0), buffer);
-        buffer.write("}", "while", "(" + condition + ")");
-        condition.process(follow, buffer);
+            Node follow;
+
+            if (condition.outgoing.get(0) == this) {
+                follow = condition.outgoing.get(1);
+            } else {
+                follow = condition.outgoing.get(0);
+            }
+            setLoopStructureInfo(this, condition, follow);
+
+            // write script fragment
+            buffer.write("l" + id, ":", "do", "{");
+            buffer.append(this);
+            process(outgoing.get(0), buffer);
+            buffer.write("}", "while", "(" + condition + ")");
+            condition.process(follow, buffer);
+        }
     }
 
     /**
@@ -711,7 +700,6 @@ class Node {
      * @param buffer
      */
     private void writeFor(ScriptWriter buffer) {
-        // detect process and follower node
         Node[] nodes = detectProcessAndFollower();
 
         if (nodes == null) {
@@ -726,12 +714,8 @@ class Node {
                 update.remove(0);
             }
 
-            analyzeStructure(update, nodes[1], this);
-            analyzeStructure(this, nodes[1], this);
-
-            while (!(stack.peekLast() instanceof OperandCondition)) {
-                nodes[0].stack.addFirst(remove(0));
-            }
+            setLoopStructureInfo(this, update, nodes[1]);
+            setLoopStructureInfo(this, this, nodes[1]);
 
             // write script fragment
             buffer.write("l" + id + ":", "for", "(;", this + ";", update + ")", "{");
@@ -861,11 +845,11 @@ class Node {
      * Analyze structure.
      * </p>
      * 
+     * @param entrance
      * @param condition
      * @param exit
-     * @param entrance
      */
-    private void analyzeStructure(Node condition, Node exit, Node entrance) {
+    private void setLoopStructureInfo(Node entrance, Node condition, Node exit) {
         condition.loopCondition = true;
         exit.loopExit = true;
 

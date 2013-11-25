@@ -106,7 +106,7 @@ public class Debugger extends AnnotationVisitor {
      * </p>
      */
     public void printInfo() {
-        System.out.println(clazz.getName() + "#" + methodName);
+        System.out.println(clazz.getName() + "#" + methodName + " " + methodDescriptor);
     }
 
     public void print(Runnable task) {
