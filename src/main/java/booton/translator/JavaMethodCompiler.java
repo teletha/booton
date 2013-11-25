@@ -260,8 +260,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        // if (script.source.getName().endsWith("SpinedBuffer$1Splitr") &&
-        // original.equals("tryAdvance")) {
+        // if (script.source.getName().endsWith("Map") && original.equals("forEach")) {
         // debugger.enable = true;
         // }
     }
@@ -291,13 +290,13 @@ class JavaMethodCompiler extends MethodVisitor {
             }
 
             // Separate conditional operands.
-            int position = searchConditionalOperandSeparator(node);
+            int number = searchConditionalOperandSeparator(node);
 
-            if (position != -1) {
+            if (number != -1) {
                 Node created = createNode(nodes.get(i + 1));
 
                 // transfer operands
-                for (int j = 0; j < position; j++) {
+                for (int j = 0; j < number; j++) {
                     created.stack.addFirst(node.stack.pollLast());
                 }
             }
@@ -345,11 +344,11 @@ class JavaMethodCompiler extends MethodVisitor {
 
     /**
      * <p>
-     * Detect conditional operands.
+     * Count a number of transferable operands.
      * </p>
      * 
-     * @param node
-     * @return
+     * @param node A target node.
+     * @return A result.
      */
     private int searchConditionalOperandSeparator(Node node) {
         boolean initialized = false;
@@ -368,7 +367,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     conditionOnly = true;
                 } else {
                     if (!conditionOnly) {
-                        return i;
+                        return node.stack.size() - i - 1;
                     }
                 }
             } else {
@@ -377,7 +376,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     conditionOnly = false;
                 } else {
                     if (conditionOnly) {
-                        return i;
+                        return node.stack.size() - i - 1;
                     }
                 }
             }
