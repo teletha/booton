@@ -63,9 +63,6 @@ class Node {
     /** The dominator node. */
     private Node dominator;
 
-    /** The following node. */
-    private Node follower;
-
     /** The state. */
     private boolean whileFindingDominator;
 
@@ -81,11 +78,11 @@ class Node {
     /** The flag whether this node indicates loop exit or not. */
     private boolean loopExit;
 
-    /** The necessary request. */
-    private int necessaryRequest = 0;
+    /** The number of additional write calls. */
+    private int additionalCalls = 0;
 
-    /** The current request . */
-    private int currentRequest = 0;
+    /** The number of current write calls. */
+    private int currentCalls = 0;
 
     /**
      * @param label
@@ -569,117 +566,19 @@ class Node {
                     if (condition.outgoing.size() == 1) {
                         writeInfiniteLoop(buffer);
                     } else {
-                        // normal loop
-                        condition.written = true;
-
-                        Node follow;
-
-                        if (condition.outgoing.get(0) == this) {
-                            follow = condition.outgoing.get(1);
-                        } else {
-                            follow = condition.outgoing.get(0);
-                        }
-                        analyzeStructure(condition, follow, this);
-
-                        // write script fragment
-                        buffer.write("l" + id, ":", "do", "{");
-                        buffer.append(this);
-                        process(outgoing.get(0), buffer);
-                        buffer.write("}", "while", "(" + condition + ")");
-                        condition.process(follow, buffer);
+                        writeDoWhile(condition, buffer);
                     }
                 }
             } else if (outs == 2) {
                 // while, for or if
                 if (backs == 0) {
                     // if
-                    OperandCondition condition = (OperandCondition) stack.peekLast();
-
-                    if (condition != null && condition.next == outgoing.get(0)) {
-                        condition.invert();
-                    }
-
-                    if (outgoing.get(0).incoming.size() == 1) {
-                        if (outgoing.get(1).incoming.size() == 1) {
-                            Node then = null;
-                            Node elze = null;
-                            Node follower = null;
-
-                            if (outgoing.get(0).written) {
-                                condition.invert();
-
-                                then = outgoing.get(1);
-                                follower = outgoing.get(0);
-                            } else if (outgoing.get(1).written) {
-                                then = outgoing.get(0);
-                                follower = outgoing.get(1);
-                            } else {
-                                then = outgoing.get(0);
-                                elze = outgoing.get(1);
-                                follower = dominators.stream()
-                                        .filter(node -> !outgoing.contains(node))
-                                        .findFirst()
-                                        .orElse(null);
-
-                                if (follower != null) {
-                                    follower.currentRequest--;
-                                }
-                            }
-
-                            buffer.write("if", "(" + this + ")", "{");
-                            process(then, buffer);
-                            if (elze != null) {
-                                buffer.write("}", "else", "{");
-                                process(elze, buffer);
-                            }
-                            buffer.write("}").line();
-                            process(follower, buffer);
-                        } else {
-                            buffer.write("if", "(" + this + ")", "{");
-                            process(outgoing.get(0), buffer);
-                            buffer.write("}").line();
-                            process(outgoing.get(1), buffer);
-                        }
-                    } else {
-                        condition.invert();
-                        buffer.write("if", "(" + this + ")", "{");
-                        process(outgoing.get(1), buffer);
-                        buffer.write("}").line();
-                        process(outgoing.get(0), buffer);
-                    }
+                    writeIf(buffer);
                 } else if (backs == 1) {
                     // while or for
                     if (backedges.get(0).outgoing.size() == 1) {
                         // for
-
-                        // setup update expression node
-                        Node update = backedges.get(0);
-                        update.written = true;
-
-                        // literalize
-                        if (update.stack.peekLast() == END) {
-                            update.remove(0);
-                        }
-
-                        // detect process and follower node
-                        Node process = detectFollower();
-
-                        if (process == null) {
-                            writeInfiniteLoop(buffer);
-                        } else {
-                            analyzeStructure(update, follower, this);
-                            analyzeStructure(this, follower, this);
-
-                            while (!(stack.peekLast() instanceof OperandCondition)) {
-                                process.stack.addFirst(remove(0));
-                            }
-
-                            // write script fragment
-                            buffer.write("l" + id + ":", "for", "(;", this + ";", update + ")", "{");
-                            process(process, buffer);
-                            buffer.write("}").line();
-                            process(follower, buffer);
-                        }
+                        writeFor(buffer);
                     } else {
                         // while with break only
                         writeWhile(buffer);
@@ -762,24 +661,139 @@ class Node {
      */
     private void writeWhile(ScriptWriter buffer) {
         // detect process and follower node
-        Node process = detectFollower();
+        Node[] nodes = detectProcessAndFollower();
 
-        if (process == null) {
+        if (nodes == null) {
             writeInfiniteLoop(buffer);
         } else {
-            analyzeStructure(this, follower, this);
+            analyzeStructure(this, nodes[1], this);
 
             // write script fragment
             buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
-            process(process, buffer);
+            process(nodes[0], buffer);
             buffer.write("}").line();
-            process(follower, buffer);
+            process(nodes[1], buffer);
         }
     }
 
     /**
      * <p>
-     * Helper method to process script writing.
+     * Write do-while structure.
+     * </p>
+     * 
+     * @param buffer
+     */
+    private void writeDoWhile(Node condition, ScriptWriter buffer) {
+        condition.written = true;
+
+        Node follow;
+
+        if (condition.outgoing.get(0) == this) {
+            follow = condition.outgoing.get(1);
+        } else {
+            follow = condition.outgoing.get(0);
+        }
+        analyzeStructure(condition, follow, this);
+
+        // write script fragment
+        buffer.write("l" + id, ":", "do", "{");
+        buffer.append(this);
+        process(outgoing.get(0), buffer);
+        buffer.write("}", "while", "(" + condition + ")");
+        condition.process(follow, buffer);
+    }
+
+    /**
+     * <p>
+     * Write for structure.
+     * </p>
+     * 
+     * @param buffer
+     */
+    private void writeFor(ScriptWriter buffer) {
+        // detect process and follower node
+        Node[] nodes = detectProcessAndFollower();
+
+        if (nodes == null) {
+            writeInfiniteLoop(buffer);
+        } else {
+            // setup update expression node
+            Node update = backedges.get(0);
+            update.written = true;
+
+            // remove tail semicolon if present
+            if (update.stack.peekLast() == END) {
+                update.remove(0);
+            }
+
+            analyzeStructure(update, nodes[1], this);
+            analyzeStructure(this, nodes[1], this);
+
+            while (!(stack.peekLast() instanceof OperandCondition)) {
+                nodes[0].stack.addFirst(remove(0));
+            }
+
+            // write script fragment
+            buffer.write("l" + id + ":", "for", "(;", this + ";", update + ")", "{");
+            process(nodes[0], buffer);
+            buffer.write("}").line();
+            process(nodes[1], buffer);
+        }
+    }
+
+    /**
+     * <p>
+     * Write if structure.
+     * </p>
+     * 
+     * @param buffer
+     */
+    private void writeIf(ScriptWriter buffer) {
+        OperandCondition condition = (OperandCondition) stack.peekLast();
+
+        if (condition.next == outgoing.get(0)) {
+            condition.invert();
+        }
+
+        Node then = null;
+        Node elze = null;
+        Node follow = null;
+
+        if (outgoing.get(0).incoming.size() != 1) {
+            // no else
+            condition.invert();
+
+            then = outgoing.get(1);
+            follow = outgoing.get(0);
+        } else if (outgoing.get(1).incoming.size() != 1) {
+            // no else
+            then = outgoing.get(0);
+            follow = outgoing.get(1);
+        } else {
+            // with else
+            then = outgoing.get(0);
+            elze = outgoing.get(1);
+            follow = dominators.stream().filter(node -> !outgoing.contains(node)).findFirst().orElse(null);
+
+            if (follow != null) {
+                follow.currentCalls--;
+            }
+        }
+
+        // write script fragment
+        buffer.write("if", "(" + this + ")", "{");
+        process(then, buffer);
+        if (elze != null) {
+            buffer.write("}", "else", "{");
+            process(elze, buffer);
+        }
+        buffer.write("}").line();
+        process(follow, buffer);
+    }
+
+    /**
+     * <p>
+     * Detect a node relationship between this node and the next node.
      * </p>
      * 
      * @param next A next node to write.
@@ -787,36 +801,33 @@ class Node {
      */
     private void process(Node next, ScriptWriter buffer) {
         if (next != null) {
-            next.currentRequest++;
+            next.currentCalls++;
 
+            // continue
             if (next.loopCondition && hasDominator(next.loopEntrance)) {
-                if (debugger.enable) buffer.comment(id + " -> " + next.id + " Entrance " + next.loopEntrance.id);
+                debugger.print(() -> buffer.comment(id + " -> " + next.id + " Entrance " + next.loopEntrance.id));
                 buffer.append("continue l", next.loopEntrance.id, ";").line();
                 return;
             }
 
+            // break
             if (!loopCondition && next.loopExit && hasDominator(next.loopEntrance)) {
-                if (debugger.enable) buffer.comment(id + " -> " + next.id + " Entrance " + next.loopEntrance.id);
+                debugger.print(() -> buffer.comment(id + " -> " + next.id + " Entrance " + next.loopEntrance.id));
                 buffer.append("break l", next.loopEntrance.id, ";").line();
                 return;
             }
 
-            int necessary = next.incoming.size() - next.backedges.size() + next.necessaryRequest;
+            // count a number of required write call
+            int requiredCalls = next.incoming.size() - next.backedges.size() + next.additionalCalls;
 
-            if (debugger.enable) {
-                buffer.comment(id + " -> " + next.id + " next count " + next.necessaryRequest + "  " + next.currentRequest);
-            }
+            debugger.print(() -> buffer.comment(id + " -> " + next.id + " (" + next.currentCalls + " of " + requiredCalls + ")"));
 
             // normal process
-            if (necessary <= next.currentRequest) {
-                if (next.loopExit) {
-                    next.write(buffer);
-                } else {
-                    Node dominator = next.getDominator();
+            if (requiredCalls <= next.currentCalls) {
+                Node dominator = next.getDominator();
 
-                    if (dominator == null || dominator == this) {
-                        next.write(buffer);
-                    }
+                if (dominator == null || dominator == this || next.loopExit) {
+                    next.write(buffer);
                 }
             }
         }
@@ -829,8 +840,7 @@ class Node {
      * 
      * @return A non-follower node.
      */
-    private Node detectFollower() {
-        Node process;
+    private Node[] detectProcessAndFollower() {
         Node first = outgoing.get(0);
         Node last = outgoing.get(1);
         Node back = backedges.get(backedges.size() - 1);
@@ -840,13 +850,10 @@ class Node {
         }
 
         if (backedges.get(0).hasDominator(first)) {
-            process = first;
-            follower = last;
+            return new Node[] {first, last};
         } else {
-            process = last;
-            follower = first;
+            return new Node[] {last, first};
         }
-        return process;
     }
 
     /**
@@ -1251,7 +1258,7 @@ class Node {
         private Catch(Class exception, Node node) {
             this.exception = exception;
             this.node = node;
-            this.node.necessaryRequest++;
+            this.node.additionalCalls++;
         }
     }
 }
