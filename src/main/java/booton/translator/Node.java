@@ -790,7 +790,12 @@ class Node {
             // continue
             if (next.loopCondition && hasDominator(next.loopEntrance)) {
                 debugger.print(() -> buffer.comment(id + " -> " + next.id + " Entrance " + next.loopEntrance.id));
-                buffer.append("continue l", next.loopEntrance.id, ";").line();
+
+                if (isImmediateLoopEntrance(next.loopEntrance)) {
+                    buffer.append("continue;").line();
+                } else {
+                    buffer.append("continue l", next.loopEntrance.id, ";").line();
+                }
                 return;
             }
 
@@ -815,6 +820,19 @@ class Node {
                 }
             }
         }
+    }
+
+    private boolean isImmediateLoopEntrance(Node entrance) {
+        Node dominator = getDominator();
+
+        while (dominator != null) {
+            if (dominator.loopCondition) {
+                return dominator == entrance;
+            }
+            dominator = dominator.getDominator();
+        }
+
+        return false;
     }
 
     /**
