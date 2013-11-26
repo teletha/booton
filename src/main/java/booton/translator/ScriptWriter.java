@@ -21,7 +21,7 @@ import org.objectweb.asm.Type;
 import booton.BootonConfiguration;
 
 /**
- * @version 2013/09/05 21:00:37
+ * @version 2013/11/26 11:29:00
  */
 class ScriptWriter {
 
@@ -189,7 +189,7 @@ class ScriptWriter {
      */
     public void optimize() {
         remove(",");
-        remove("return;");
+        remove("return ;");
         remove(";");
     }
 
