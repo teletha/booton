@@ -260,10 +260,9 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        // if (script.source.getName().endsWith("PrimitiveIterator$OfDouble") &&
-        // original.equals("forEachRemaining")) {
-        // debugger.enable = true;
-        // }
+        if (script.source.getName().endsWith("ChampionComparing$2") && original.equals("<init>")) {
+            debugger.enable = true;
+        }
     }
 
     /**
@@ -1569,7 +1568,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     immediately = false;
                 } else {
                     if (className.equals("java/lang/Object")) {
-                        current.remove(0);
+                        // ignore
                     } else {
                         current.addOperand(translator.translateSuperMethod(owner, methodName, desc, parameters, contexts), returnType);
                     }

@@ -177,6 +177,13 @@ public class Debugger extends AnnotationVisitor {
             } else {
                 print(script.source.getName() + " " + methodName);
                 print(nodes);
+
+                try {
+                    ClassReader reader = new ClassReader(script.source.getName());
+                    reader.accept(new ClassTracer(methodName, methodDescriptor, new ASMifier(), new PrintWriter(System.out)), 0);
+                } catch (Exception e) {
+                    throw I.quiet(e);
+                }
             }
         }
     }
