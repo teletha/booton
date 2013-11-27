@@ -260,9 +260,9 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("ChampionComparing$2") && original.equals("<init>")) {
-            debugger.enable = true;
-        }
+        // if (script.source.getName().endsWith("String") && original.equals("regionMatches")) {
+        // debugger.enable = true;
+        // }
     }
 
     /**
