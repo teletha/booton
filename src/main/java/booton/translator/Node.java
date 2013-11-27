@@ -714,6 +714,7 @@ class Node {
             }
 
             LoopStructure loop = new LoopStructure(this, nodes[0], nodes[1], update, buffer);
+            debugger.print(nodes[0].id + "  " + nodes[1].id);
 
             // write script fragment
             buffer.write("for", "(;", this + ";", update + ")", "{");
@@ -891,14 +892,14 @@ class Node {
          */
         private LoopStructure(Node entrance, Node first, Node exit, Node checkpoint, ScriptWriter buffer) {
             this.entrance = entrance;
-            this.first = first;
+            this.first = first == checkpoint ? entrance : first;
             this.exit = exit;
             this.checkpoint = checkpoint;
             this.buffer = buffer;
             this.position = buffer.length();
 
             // first node must be the header of breakable structure
-            first.breakableHeader = true;
+            this.first.breakableHeader = true;
 
             // associate this structure with exit and checkpoint nodes
             if (exit.loop == null) exit.loop = this;
