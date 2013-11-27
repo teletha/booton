@@ -12,7 +12,6 @@ package booton.translator.flow;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -128,7 +127,6 @@ public class ForTest extends ScriptTester {
     public void continueNoLabel() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 1, to = 10) int value) {
                 for (int i = 0; i < 3; i++) {
                     value++;
@@ -147,7 +145,6 @@ public class ForTest extends ScriptTester {
     public void continueNest() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(int value) {
                 root: for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 5; j++) {
@@ -230,7 +227,6 @@ public class ForTest extends ScriptTester {
     public void continueWithLogicalExpressionAndAfterProcess() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(int value) {
                 root: for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 4; j++) {
