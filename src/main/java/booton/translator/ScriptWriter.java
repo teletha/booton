@@ -142,6 +142,20 @@ class ScriptWriter {
     }
 
     /**
+     * Helper method to write script source.
+     * 
+     * @param position
+     * @param fragment
+     * @return
+     */
+    public ScriptWriter insertAt(int position, Object fragment) {
+        buffer.insert(position, fragment);
+
+        // API definition
+        return this;
+    }
+
+    /**
      * <p>
      * Helper method to write script code with white space.
      * </p>
@@ -372,12 +386,25 @@ class ScriptWriter {
     /**
      * Clear data.
      */
-    void clear() {
+    ScriptWriter clear() {
         buffer.delete(0, buffer.length());
+
+        // API definition
+        return this;
     }
 
-    void mark() {
+    /**
+     * <p>
+     * Mark the current position.
+     * </p>
+     * 
+     * @return
+     */
+    ScriptWriter mark() {
         mark = buffer.length();
+
+        // API definition
+        return this;
     }
 
     String toFragment() {

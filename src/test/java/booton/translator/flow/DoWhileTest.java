@@ -12,7 +12,6 @@ package booton.translator.flow;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import booton.translator.Debuggable;
 import booton.translator.Param;
 import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
@@ -73,7 +72,6 @@ public class DoWhileTest extends ScriptTester {
     public void breakNoLabel() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 do {
                     value++;
@@ -131,7 +129,6 @@ public class DoWhileTest extends ScriptTester {
     public void continueAndBreak() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int value) {
                 do {
                     value++;
