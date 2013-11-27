@@ -714,7 +714,6 @@ class Node {
             }
 
             LoopStructure loop = new LoopStructure(this, nodes[0], nodes[1], update, buffer);
-            debugger.print(nodes[0].id + "  " + nodes[1].id);
 
             // write script fragment
             buffer.write("for", "(;", this + ";", update + ")", "{");
