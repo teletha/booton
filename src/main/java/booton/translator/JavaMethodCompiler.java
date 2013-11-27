@@ -260,9 +260,9 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("JSON") && original.equals("write")) {
-            debugger.enable = true;
-        }
+        // if (script.source.getName().endsWith("JSON") && original.equals("write")) {
+        // debugger.enable = true;
+        // }
     }
 
     /**
