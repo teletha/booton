@@ -154,9 +154,9 @@ public class ForTest extends ScriptTester {
                         if (i == 1) {
                             continue root;
                         }
-                        value++;
+                        value += 2;
                     }
-                    value++;
+                    value += 3;
                 }
                 return value;
             }
@@ -230,6 +230,7 @@ public class ForTest extends ScriptTester {
     public void continueWithLogicalExpressionAndAfterProcess() throws Exception {
         test(new Scriptable() {
 
+            @Debuggable
             int act(int value) {
                 root: for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 4; j++) {

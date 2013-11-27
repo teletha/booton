@@ -69,20 +69,22 @@ class Node {
     /** The flag whether this node has already written or not. */
     private boolean written = false;
 
-    /** The flag whether this node indicates loop condition or not. */
-    private boolean loopCondition;
-
-    /** The flag whether this node indicates loop entrance or not. */
-    private Node loopEntrance;
-
-    /** The flag whether this node indicates loop exit or not. */
-    private boolean loopExit;
+    // /** The flag whether this node indicates loop condition or not. */
+    // private boolean loopCondition;
+    //
+    // /** The flag whether this node indicates loop entrance or not. */
+    // private Node loopEntrance;
+    //
+    // /** The flag whether this node indicates loop exit or not. */
+    // private boolean loopExit;
 
     /** The number of additional write calls. */
     private int additionalCalls = 0;
 
     /** The number of current write calls. */
     private int currentCalls = 0;
+
+    private LoopStructure loop;
 
     /**
      * @param label
@@ -648,7 +650,7 @@ class Node {
         if (nodes == null) {
             writeInfiniteLoop(buffer);
         } else {
-            setLoopStructureInfo(this, this, nodes[1]);
+            LoopStructure loop = new LoopStructure(this, this, nodes[0], nodes[1]);
 
             // write script fragment
             buffer.write("l" + id + ":", "while", "(" + this + ")", "{");
@@ -681,7 +683,7 @@ class Node {
             } else {
                 follow = condition.outgoing.get(0);
             }
-            setLoopStructureInfo(this, condition, follow);
+            LoopStructure breakable = new LoopStructure(this, condition, this, follow);
 
             // write script fragment
             buffer.write("l" + id, ":", "do", "{");
@@ -714,8 +716,7 @@ class Node {
                 update.remove(0);
             }
 
-            setLoopStructureInfo(this, update, nodes[1]);
-            setLoopStructureInfo(this, this, nodes[1]);
+            LoopStructure loop = new LoopStructure(this, update, nodes[0], nodes[1]);
 
             // write script fragment
             buffer.write("l" + id + ":", "for", "(;", this + ";", update + ")", "{");
@@ -776,6 +777,66 @@ class Node {
     }
 
     /**
+     * @version 2013/11/27 9:31:00
+     */
+    private static class LoopStructure {
+
+        /** The super dominator for all nodes in this loop structure. */
+        private Node entrance;
+
+        /** The condition node of this loop structure. */
+        private Node condition;
+
+        /** The first processing node of this loop structure. */
+        private Node first;
+
+        /** The ext node of this loop structure if present. */
+        private Node follow;
+
+        /**
+         * @param entrance
+         * @param first
+         * @param follow
+         */
+        private LoopStructure(Node entrance, Node condition, Node first, Node follow) {
+            this.entrance = entrance;
+            this.condition = condition;
+            this.first = first;
+            this.follow = follow;
+
+            if (first != null && first.loop == null) {
+                first.loop = this;
+            }
+
+            if (follow != null && follow.loop == null) {
+                follow.loop = this;
+            }
+
+            if (condition != null && condition.loop == null) {
+                condition.loop = this;
+            }
+        }
+
+        /**
+         * @param node
+         * @return
+         */
+        private boolean isImmediateLoopFrom(Node node) {
+            while (node != null) {
+                if (node.loop != null) {
+                    return node.loop == this;
+                }
+                node = node.getDominator();
+            }
+            return false;
+        }
+
+        private boolean isHeader(Node node) {
+            return node == entrance || node == condition;
+        }
+    }
+
+    /**
      * <p>
      * Detect a node relationship between this node and the next node.
      * </p>
@@ -788,21 +849,26 @@ class Node {
             next.currentCalls++;
 
             // continue
-            if (next.loopCondition && hasDominator(next.loopEntrance)) {
-                debugger.print(() -> buffer.comment(id + " -> " + next.id + " Entrance " + next.loopEntrance.id));
+            if (next.loop != null && next.loop.condition == next && hasDominator(next.loop.entrance)) {
+                debugger.print(() -> buffer.comment(id + " -> " + next.id + " Entrance " + next.loop.entrance.id));
 
-                if (isImmediateLoopEntrance(next.loopEntrance)) {
+                if (next.loop.isImmediateLoopFrom(this)) {
                     buffer.append("continue;").line();
                 } else {
-                    buffer.append("continue l", next.loopEntrance.id, ";").line();
+                    buffer.append("continue l", next.loop.entrance.id, ";").line();
                 }
                 return;
             }
 
             // break
-            if (!loopCondition && next.loopExit && hasDominator(next.loopEntrance)) {
-                debugger.print(() -> buffer.comment(id + " -> " + next.id + " Entrance " + next.loopEntrance.id));
-                buffer.append("break l", next.loopEntrance.id, ";").line();
+            if (next.loop != null && !next.loop.isHeader(this) && next.loop.follow == next && hasDominator(next.loop.entrance)) {
+                debugger.print(() -> buffer.comment(id + " -> " + next.id + " Entrance " + next.loop.entrance.id));
+
+                if (next.loop.isImmediateLoopFrom(this)) {
+                    buffer.append("break;").line();
+                } else {
+                    buffer.append("break l", next.loop.entrance.id, ";").line();
+                }
                 return;
             }
 
@@ -815,24 +881,11 @@ class Node {
             if (requiredCalls <= next.currentCalls) {
                 Node dominator = next.getDominator();
 
-                if (dominator == null || dominator == this || next.loopExit) {
+                if (dominator == null || dominator == this || (next.loop != null && next.loop.follow == next)) {
                     next.write(buffer);
                 }
             }
         }
-    }
-
-    private boolean isImmediateLoopEntrance(Node entrance) {
-        Node dominator = getDominator();
-
-        while (dominator != null) {
-            if (dominator.loopCondition) {
-                return dominator == entrance;
-            }
-            dominator = dominator.getDominator();
-        }
-
-        return false;
     }
 
     /**
@@ -858,27 +911,27 @@ class Node {
         }
     }
 
-    /**
-     * <p>
-     * Analyze structure.
-     * </p>
-     * 
-     * @param entrance
-     * @param condition
-     * @param exit
-     */
-    private void setLoopStructureInfo(Node entrance, Node condition, Node exit) {
-        condition.loopCondition = true;
-        exit.loopExit = true;
-
-        if (exit.loopEntrance == null) {
-            exit.loopEntrance = entrance;
-        }
-
-        if (condition.loopEntrance == null) {
-            condition.loopEntrance = entrance;
-        }
-    }
+    // /**
+    // * <p>
+    // * Analyze structure.
+    // * </p>
+    // *
+    // * @param entrance
+    // * @param condition
+    // * @param exit
+    // */
+    // private void setLoopStructureInfo(Node entrance, Node condition, Node exit) {
+    // condition.loopCondition = true;
+    // exit.loopExit = true;
+    //
+    // if (exit.loopEntrance == null) {
+    // exit.loopEntrance = entrance;
+    // }
+    //
+    // if (condition.loopEntrance == null) {
+    // condition.loopEntrance = entrance;
+    // }
+    // }
 
     /**
      * {@inheritDoc}
@@ -935,6 +988,14 @@ class Node {
             for (int key : keys) {
                 this.keys.add(key);
             }
+
+            LoopStructure breakable = new LoopStructure(null, null, null, null);
+            defaults.loop = breakable;
+
+            for (Node node : cases) {
+                node.loop = breakable;
+            }
+
         }
 
         /**
