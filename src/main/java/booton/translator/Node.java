@@ -639,7 +639,7 @@ class Node {
      * @param buffer
      */
     private void writeWhile(ScriptWriter buffer) {
-        Node[] nodes = detectProcessAndFollower();
+        Node[] nodes = detectProcessAndExit();
 
         if (nodes == null) {
             writeInfiniteLoop(buffer);
@@ -678,7 +678,8 @@ class Node {
             } else {
                 exit = condition.outgoing.get(0);
             }
-            LoopStructure loop = new LoopStructure(this, this, exit, condition, buffer);
+
+            LoopStructure loop = new LoopStructure(this, outgoing.get(0), exit, condition, buffer);
 
             // write script fragment
             buffer.write("do", "{");
@@ -698,7 +699,7 @@ class Node {
      * @param buffer
      */
     private void writeFor(ScriptWriter buffer) {
-        Node[] nodes = detectProcessAndFollower();
+        Node[] nodes = detectProcessAndExit();
 
         if (nodes == null) {
             writeInfiniteLoop(buffer);
@@ -785,26 +786,26 @@ class Node {
         if (next != null) {
             next.currentCalls++;
 
+            // count a number of required write call
+            int requiredCalls = next.incoming.size() - next.backedges.size() + next.additionalCalls;
+
             LoopStructure loop = next.loop;
 
             if (loop != null) {
                 // continue
                 if (loop.hasHeader(next) && hasDominator(loop.entrance)) {
-                    debugger.print(() -> buffer.comment(id + " -> " + next.id + " Entrance " + loop.entrance.id));
-                    buffer.append("continue", loop.computeLabel(this), ";").line();
+                    debugger.print(() -> buffer.comment(id + " -> " + next.id + " continue to " + loop.entrance.id + " (" + next.currentCalls + " of " + requiredCalls + ")"));
+                    buffer.append("continue", loop.computeLabelFor(this), ";").line();
                     return;
                 }
 
                 // break
                 if (!loop.hasHeader(this) && loop.hasExit(next) && hasDominator(loop.entrance)) {
-                    debugger.print(() -> buffer.comment(id + " -> " + next.id + " Entrance " + loop.entrance.id));
-                    buffer.append("break", loop.computeLabel(this), ";").line();
+                    debugger.print(() -> buffer.comment(id + " -> " + next.id + " break to " + loop.entrance.id + "(" + next.currentCalls + " of " + requiredCalls + ")"));
+                    buffer.append("break", loop.computeLabelFor(this), ";").line();
                     return;
                 }
             }
-
-            // count a number of required write call
-            int requiredCalls = next.incoming.size() - next.backedges.size() + next.additionalCalls;
 
             debugger.print(() -> buffer.comment(id + " -> " + next.id + " (" + next.currentCalls + " of " + requiredCalls + ")"));
 
@@ -826,7 +827,7 @@ class Node {
      * 
      * @return A non-follower node.
      */
-    private Node[] detectProcessAndFollower() {
+    private Node[] detectProcessAndExit() {
         Node first = outgoing.get(0);
         Node last = outgoing.get(1);
         Node back = backedges.get(backedges.size() - 1);
@@ -912,7 +913,7 @@ class Node {
          * @param node
          * @return
          */
-        private String computeLabel(Node node) {
+        private String computeLabelFor(Node node) {
             if (isImmediateLoopFrom(node)) {
                 return "";
             } else {
@@ -959,7 +960,7 @@ class Node {
          * @return A result.
          */
         private boolean hasHeader(Node node) {
-            return node == entrance || node == checkpoint;
+            return node == entrance || node == checkpoint || node == first;
         }
 
         /**
