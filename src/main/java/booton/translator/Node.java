@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * @version 2013/10/09 15:55:18
+ * @version 2013/11/28 0:15:36
  */
 class Node {
 
@@ -72,12 +72,16 @@ class Node {
     /** The flag whether this node is first node of breakable structure or not. */
     private boolean breakableHeader;
 
+    /** The flag whether this node can omit continue statement safely or not. */
+    private boolean omitContinue;
+
     /** The number of additional write calls. */
     private int additionalCalls = 0;
 
     /** The number of current write calls. */
     private int currentCalls = 0;
 
+    /** The associated loop structure. */
     private LoopStructure loop;
 
     /**
@@ -763,6 +767,11 @@ class Node {
             }
         }
 
+        // check whether all following nodes can omit continue statement or not
+        if (follow != null) {
+            omitContinue = false;
+        }
+
         // write script fragment
         buffer.write("if", "(" + this + ")", "{");
         process(then, buffer);
@@ -795,7 +804,12 @@ class Node {
                 // continue
                 if (loop.hasHeader(next) && hasDominator(loop.entrance)) {
                     debugger.print(() -> buffer.comment(id + " -> " + next.id + " continue to " + loop.entrance.id + " (" + next.currentCalls + " of " + requiredCalls + ")"));
-                    buffer.append("continue", loop.computeLabelFor(this), ";").line();
+
+                    String label = loop.computeLabelFor(this);
+
+                    if (label.length() != 0 || !omitContinue) {
+                        buffer.append("continue", label, ";").line();
+                    }
                     return;
                 }
 
@@ -814,6 +828,11 @@ class Node {
                 Node dominator = next.getDominator();
 
                 if (dominator == null || dominator == this || (loop != null && loop.exit == next)) {
+                    if (omitContinue) {
+                        next.omitContinue = true; // next node is omittable too
+                    }
+
+                    // process next node
                     next.write(buffer);
                 }
             }
@@ -897,8 +916,10 @@ class Node {
             this.buffer = buffer;
             this.position = buffer.length();
 
-            // first node must be the header of breakable structure
+            // The first node must be the header of breakable structure and
+            // be able to omit continue statement.
             this.first.breakableHeader = true;
+            this.first.omitContinue = true;
 
             // associate this structure with exit and checkpoint nodes
             if (exit.loop == null) exit.loop = this;
