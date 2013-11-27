@@ -73,7 +73,7 @@ class Node {
     private boolean breakableHeader;
 
     /** The flag whether this node can omit continue statement safely or not. */
-    private boolean omitContinue;
+    private ContinueMode continueMode;
 
     /** The number of additional write calls. */
     private int additionalCalls = 0;
@@ -768,8 +768,9 @@ class Node {
         }
 
         // check whether all following nodes can omit continue statement or not
-        if (follow != null) {
-            omitContinue = false;
+        if (follow != null && follow.loop == null) {
+            then.continueMode = ContinueMode.Necessary;
+            if (elze != null) elze.continueMode = ContinueMode.Necessary;
         }
 
         // write script fragment
@@ -807,7 +808,7 @@ class Node {
 
                     String label = loop.computeLabelFor(this);
 
-                    if (label.length() != 0 || !omitContinue) {
+                    if (label.length() != 0 || continueMode != ContinueMode.Unnecessary) {
                         buffer.append("continue", label, ";").line();
                     }
                     return;
@@ -828,8 +829,9 @@ class Node {
                 Node dominator = next.getDominator();
 
                 if (dominator == null || dominator == this || (loop != null && loop.exit == next)) {
-                    if (omitContinue) {
-                        next.omitContinue = true; // next node is omittable too
+                    // next node inherits the mode of dominator
+                    if (next.continueMode == null) {
+                        next.continueMode = continueMode;
                     }
 
                     // process next node
@@ -919,7 +921,7 @@ class Node {
             // The first node must be the header of breakable structure and
             // be able to omit continue statement.
             this.first.breakableHeader = true;
-            this.first.omitContinue = true;
+            this.first.continueMode = ContinueMode.Unnecessary;
 
             // associate this structure with exit and checkpoint nodes
             if (exit.loop == null) exit.loop = this;
@@ -1373,5 +1375,12 @@ class Node {
             this.node = node;
             this.node.additionalCalls++;
         }
+    }
+
+    /**
+     * @version 2013/11/28 0:43:39
+     */
+    private static enum ContinueMode {
+        Necessary, Unnecessary;
     }
 }
