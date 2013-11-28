@@ -77,7 +77,7 @@ public class Build extends Publishable implements StatusCalculator {
             skillLevel[i] = champion.skills[i].getMinLevel();
         }
 
-        items[0] = Item.LastWhisper;
+        items[0] = Item.FrozenHeart;
         items[1] = Item.LichBane;
         items[2] = Item.GuinsoosRageblade;
         items[3] = Item.TrinityForce;
@@ -165,6 +165,7 @@ public class Build extends Publishable implements StatusCalculator {
         case AttackDamageRatio:
         case CurrentManaRatio:
         case Stack:
+        case StackPercentage:
         case ConsumedStack:
         case Duration:
         case Energy:

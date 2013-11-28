@@ -329,7 +329,7 @@ public enum Status {
 
     Charge,
 
-    Stack("スタック"), ConsumedStack("消費したスタック");
+    Stack("スタック"), ConsumedStack("消費したスタック"), StackPercentage("");
 
     /** The status name. */
     public final String name;

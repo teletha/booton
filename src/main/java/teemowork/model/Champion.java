@@ -19,7 +19,7 @@ import java.util.List;
 import js.dom.Element;
 
 /**
- * 3.10A準拠
+ * 3.14準拠
  * 
  * @version 2013/06/14 8:39:54
  */
@@ -693,6 +693,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 325);
+        Corki.update(P313).set(AS, 0.625, 2.3);
         Darius.update(P0000)
                 .set(Health, 426, 93)
                 .set(Hreg, 8.25, 0.95)
@@ -997,6 +998,7 @@ public class Champion {
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
                 .set(MS, 340);
+        Kassadin.update(P313).set(MR, 30, 0);
         Katarina.update(P0000)
                 .set(Health, 395, 83)
                 .set(Hreg, 6.95, 0.55)
@@ -1210,6 +1212,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 425)
                 .set(MS, 335);
+        Morgana.update(P313).set(Range, 450).set(AS, 0.625, 1.53);
         Nami.update(P0000)
                 .set(Health, 365, 74)
                 .set(Hreg, 4.5, 0.55)
@@ -1484,6 +1487,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 500)
                 .set(MS, 335);
+        Sivir.update(P313).set(AS, 0.658, 1.6);
         Skarner.update(P0000)
                 .set(Health, 440, 96)
                 .set(Hreg, 7.5, 0.85)
@@ -1586,6 +1590,7 @@ public class Champion {
                 .set(Range, 475)
                 .set(MS, 335);
         Thresh.update(P310).set(Health, 411, 89).set(AR, 12, 0);
+        Thresh.update(P313).set(AS, 0.625, 3);
         Tristana.update(P0000)
                 .set(Health, 415, 82)
                 .set(Hreg, 5.1, 0.65)
