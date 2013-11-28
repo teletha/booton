@@ -27,16 +27,6 @@ public class ScriptBufferTest {
     }
 
     @Test
-    public void optimizeReturn() throws Exception {
-        ScriptWriter buffer = new ScriptWriter();
-        buffer.append("return ;");
-        assert buffer.toString().length() == 10;
-
-        buffer.optimize();
-        assert buffer.toString().length() == 0;
-    }
-
-    @Test
     public void end() throws Exception {
         ScriptWriter writer = new ScriptWriter();
         writer.append("a , ");
