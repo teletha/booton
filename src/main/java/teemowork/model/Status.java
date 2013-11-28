@@ -282,6 +282,9 @@ public enum Status {
     /** Ignore Unit Collision */
     IgnoreUnitCollision("ユニット衝突無効"),
 
+    /** Reduction. */
+    MSReduction(MS),
+
     // ==================================================
     // State
     // ==================================================
@@ -528,6 +531,7 @@ public enum Status {
             return name + "を" + formatValue(computed) + "軽減";
 
         case ADReduction:
+        case MSReduction:
             return name + "が" + formatValue(computed) + "減少";
 
         case LoseHealth:

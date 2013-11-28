@@ -345,7 +345,7 @@ public class Ability extends Describable<AbilityDescriptor> {
     public static final Ability GhostWard2 = new Ability("Ghost Ward");
 
     /** The ability. */
-    public static final Ability SightWardAvtive = new Ability();
+    public static final Ability StealthWardAvtive = new Ability();
 
     /** The ability. */
     public static final Ability EnhancedMovement = new Ability("Enhanced Movement");
@@ -529,9 +529,12 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .aura()
                 .variable(1, Radius)
                 .variable(2, Hreg, 10);
+        AegisValor.update(P314).passive("{1}の味方ミニオンは与えるダメージが15%増加する。");
+
         Promote.update()
                 .active("近くのSiege MinionをAnti-Turret-Minionに変身させる。Anti-Turret-Minionが敵ユニットを倒した場合、そのゴールドが得られる。またAnti-Turret Minionはタワーを最優先で攻撃する。{1}。")
                 .variable(1, ItemCD, 180);
+
         BansheeShield.update()
                 .passive("敵Championからのスキルを無効化するシールドを張る。シールドはスキルを無効化すると消費され、25秒間敵Championからダメージを受けないと再生する。");
 
@@ -581,6 +584,10 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .variable(2, MagicDamage, 0, 0, amplify(TargetMaxHealthRatio, 15))
                 .variable(3, ItemCD, 60);
         DransBladePassive.update().ununique().passive("敵ユニットに対して通常攻撃をする毎に{1}する。").variable(1, RestoreHealth, 5);
+        DransBladePassive.update(P314)
+                .passive("敵ユニットに対して通常攻撃をする毎にMeleeは{1}し、Rangedは{2}する。")
+                .variable(2, RestoreHealth, 3);
+
         DransRingPassive.update().ununique().passive("敵ユニットを倒すと{1}する。").variable(1, RestoreMana, 5);
         DransRingPassive.update(P308).variable(1, RestoreMana, 4);
 
@@ -822,12 +829,17 @@ public class Ability extends Describable<AbilityDescriptor> {
         WardRefresh1.update().passive("購入時及びショップを訪れる度に4つのチャージを得る。");
         WardRefresh2.update().passive("購入時及びショップを訪れる度に5つのチャージを得る。");
         GhostWard1.update()
-                .active("チャージを1つ消費してSight Wardと同様の効果があるオブジェクトを指定地点に設置する。このアイテムによって同時に設置できるWardの数は最大2個までで、3個目を設置するとこのアイテムによって設置された一番古いWardが消滅する。");
+                .active("チャージを1つ消費して" + Item.StealthWard.name + "と同様の効果があるオブジェクトを指定地点に設置する。このアイテムによって同時に設置できるWardの数は最大2個までで、3個目を設置するとこのアイテムによって設置された一番古いWardが消滅する。");
         GhostWard2.update()
-                .active("チャージを1つ消費してSight Wardと同様の効果があるオブジェクトを指定地点に設置する。このアイテムによって同時に設置できるWardの数は最大3個までで、4個目を設置するとこのアイテムによって設置された一番古いWardが消滅する。");
-        SightWardAvtive.update()
+                .active("チャージを1つ消費して" + Item.StealthWard.name + "と同様の効果があるオブジェクトを指定地点に設置する。このアイテムによって同時に設置できるWardの数は最大3個までで、4個目を設置するとこのアイテムによって設置された一番古いWardが消滅する。");
+        GhostWard1.update(P314).active("チャージを1つ消費して" + Item.StealthWard.name + "と同様の効果があるオブジェクトを指定地点に設置する。");
+
+        StealthWardAvtive.update()
                 .ununique()
                 .active("このアイテムを消費して、視界1100を持つオブジェクトを指定地点に設置する。オブジェクトは設置から約3秒後にステルス状態になり、3分間持続する。");
+        StealthWardAvtive.update(P314)
+                .active("このアイテムを消費して、視界1100を持つオブジェクトを指定地点に設置する。オブジェクトは設置から約3秒後にステルス状態になり、3分間持続する。各プレイヤーは3つまでしか設置出来ず、5つしか携帯出来ない。");
+
         Incinerate.update()
                 .passive("通常攻撃またはDoTではないスキルによってダメージを与えた場合、3秒かけて{1}を与える。")
                 .variable(1, TrueDamage, 6, 0, amplify(Lv, 2));
@@ -883,9 +895,13 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .active("6秒間持続する無敵のゴーストを2体召喚する。ゴーストは最も近くにいる最大2人の敵Championの元まで移動していき(移動速度は450)、ゴーストが敵Championに触れた場合ゴーストが消滅し、その敵Championに2.5秒{1}を与え、2.5秒間対象の視界を得る。{2}。")
                 .variable(1, MSSlowRatio, 40)
                 .variable(2, ItemCD, 120);
+
         VisionWardAvtive.update()
                 .ununique()
-                .active("このアイテムを消費して、ステルスを看破できる視界1000を持つオブジェクトを指定地点に設置するオブジェクトは設置から約3秒後にステルス状態になり、3分間持続する。");
+                .active("このアイテムを消費して、ステルスを看破できる視界1000を持つオブジェクトを指定地点に設置する。オブジェクトは設置から約3秒後にステルス状態になり、3分間持続する。");
+        VisionWardAvtive.update(P314)
+                .active("このアイテムを消費して、ステルスを看破できる視界1000を持ち耐久値5のオブジェクトを指定地点に設置する。これは永久に持続する。各プレイヤーは1個しか設置出来ず、2個しか携帯出来ない。");
+
         VoidStaffPassive.update().passive("{1}を得る。").variable(1, MRPenRatio, 35);
         WarmogsArmorPassive.update().passive("{1}を得る。").variable(1, Hreg, 0, 0, amplify(Health, 0.01));
         WillOftheAncientsAura.update()
