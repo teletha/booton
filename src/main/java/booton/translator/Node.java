@@ -25,6 +25,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 class Node {
 
     /** The re-usable operand. */
+    static final Operand RETURN = new OperandExpression("return");
+
+    /** The re-usable operand. */
     static final Operand END = new OperandExpression(";");
 
     /** The identified label for this node. */
@@ -73,7 +76,10 @@ class Node {
     private boolean breakableHeader;
 
     /** The flag whether this node can omit continue statement safely or not. */
-    private ContinueMode continueMode;
+    private OmitContinue omitContinue;
+
+    /** The flag whether this node can omit return statement safely or not. */
+    private boolean returnOmittable = true;
 
     /** The number of additional write calls. */
     private int additionalCalls = 0;
@@ -550,7 +556,9 @@ class Node {
 
             if (outs == 0) {
                 // end node
-                buffer.append(this);
+                if (!returnOmittable || stack.size() != 2 || stack.get(0) != RETURN || stack.get(1) != END) {
+                    buffer.append(this);
+                }
             } else if (outs == 1) {
                 // do while or normal
                 if (backs == 0) {
@@ -769,8 +777,12 @@ class Node {
 
         // check whether all following nodes can omit continue statement or not
         if (follow != null && follow.loop == null) {
-            then.continueMode = ContinueMode.Necessary;
-            if (elze != null) elze.continueMode = ContinueMode.Necessary;
+            then.omitContinue = OmitContinue.Impossible;
+            then.returnOmittable = false;
+            if (elze != null) {
+                elze.omitContinue = OmitContinue.Impossible;
+                elze.returnOmittable = false;
+            }
         }
 
         // write script fragment
@@ -808,7 +820,7 @@ class Node {
 
                     String label = loop.computeLabelFor(this);
 
-                    if (label.length() != 0 || continueMode != ContinueMode.Unnecessary) {
+                    if (label.length() != 0 || omitContinue != OmitContinue.Possible) {
                         buffer.append("continue", label, ";").line();
                     }
                     return;
@@ -830,9 +842,8 @@ class Node {
 
                 if (dominator == null || dominator == this || (loop != null && loop.exit == next)) {
                     // next node inherits the mode of dominator
-                    if (next.continueMode == null) {
-                        next.continueMode = continueMode;
-                    }
+                    if (next.omitContinue == null) next.omitContinue = omitContinue;
+                    if (!returnOmittable) next.returnOmittable = false;
 
                     // process next node
                     next.write(buffer);
@@ -921,7 +932,8 @@ class Node {
             // The first node must be the header of breakable structure and
             // be able to omit continue statement.
             this.first.breakableHeader = true;
-            this.first.continueMode = ContinueMode.Unnecessary;
+            this.first.omitContinue = OmitContinue.Possible;
+            this.first.returnOmittable = false;
 
             // associate this structure with exit and checkpoint nodes
             if (exit.loop == null) exit.loop = this;
@@ -1380,7 +1392,7 @@ class Node {
     /**
      * @version 2013/11/28 0:43:39
      */
-    private static enum ContinueMode {
-        Necessary, Unnecessary;
+    private static enum OmitContinue {
+        Possible, Impossible;
     }
 }

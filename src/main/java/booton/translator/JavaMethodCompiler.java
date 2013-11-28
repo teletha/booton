@@ -260,9 +260,9 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        // if (script.source.getName().endsWith("JSON") && original.equals("write")) {
-        // debugger.enable = true;
-        // }
+        if (script.source.getName().endsWith("JSON") && original.equals("write")) {
+            debugger.enable = true;
+        }
     }
 
     /**
@@ -357,7 +357,11 @@ class JavaMethodCompiler extends MethodVisitor {
         for (int i = node.stack.size() - 1; 0 <= i; i--) {
             Operand operand = node.stack.get(i);
 
-            if (operand == Return || operand == Node.END) {
+            if (operand == Return || operand == Node.RETURN) {
+                return -1;
+            }
+
+            if (operand == Node.END) {
                 continue;
             }
 
@@ -908,7 +912,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case RETURN:
-            current.addExpression(Return);
+            current.addExpression(Node.RETURN);
 
             // disconnect the next appearing node from the current node
             current = null;
