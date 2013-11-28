@@ -56,10 +56,12 @@ public enum Version {
 
     P313("3.13", 2013, 10, 29),
 
+    P314("3.14", 2013, 11, 20),
+
     PBE("Public Beta Environment", 2013, 1, 26);
 
     /** The latest stable version. */
-    public static final Version Latest = P313;
+    public static final Version Latest = P314;
 
     /** The version name. */
     public final String name;

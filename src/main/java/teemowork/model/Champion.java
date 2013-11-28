@@ -296,7 +296,7 @@ public class Champion {
     public static final Champion Sona = new Champion("Sona", PowerChord, HymnOfValor, AriaOfPerseverance, SongOfCelerity, Crescendo);
 
     /** The champion name. */
-    public static final Champion Soraka = new Champion("Soraka", Consecration, Starcall, AstralBlessing, Infuse, Wish);
+    public static final Champion Soraka = new Champion("Soraka", Salvation, Starcall, AstralBlessing, Infuse, Wish);
 
     /** The champion name. */
     public static final Champion Swain = new Champion("Swain", CarrionRenewal, Decrepify, Nevermove, Torment, RavenousFlock);
@@ -1522,6 +1522,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 335);
+        Soraka.update(P314).set(Health, 405, 76).set(AR, 9.4, 3.8);
         Swain.update(P0000)
                 .set(Health, 385, 78)
                 .set(Hreg, 6.75, 0.65)
