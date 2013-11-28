@@ -76,7 +76,7 @@ class Node {
     private boolean breakableHeader;
 
     /** The flag whether this node can omit continue statement safely or not. */
-    private OmitContinue omitContinue;
+    private Boolean continueOmittable;
 
     /** The flag whether this node can omit return statement safely or not. */
     private boolean returnOmittable = true;
@@ -777,10 +777,10 @@ class Node {
 
         // check whether all following nodes can omit continue statement or not
         if (follow != null && follow.loop == null) {
-            then.omitContinue = OmitContinue.Impossible;
+            then.continueOmittable = false;
             then.returnOmittable = false;
             if (elze != null) {
-                elze.omitContinue = OmitContinue.Impossible;
+                elze.continueOmittable = false;
                 elze.returnOmittable = false;
             }
         }
@@ -820,7 +820,7 @@ class Node {
 
                     String label = loop.computeLabelFor(this);
 
-                    if (label.length() != 0 || omitContinue != OmitContinue.Possible) {
+                    if (label.length() != 0 || !continueOmittable) {
                         buffer.append("continue", label, ";").line();
                     }
                     return;
@@ -842,7 +842,7 @@ class Node {
 
                 if (dominator == null || dominator == this || (loop != null && loop.exit == next)) {
                     // next node inherits the mode of dominator
-                    if (next.omitContinue == null) next.omitContinue = omitContinue;
+                    if (next.continueOmittable == null) next.continueOmittable = continueOmittable;
                     if (!returnOmittable) next.returnOmittable = false;
 
                     // process next node
@@ -932,7 +932,7 @@ class Node {
             // The first node must be the header of breakable structure and
             // be able to omit continue statement.
             this.first.breakableHeader = true;
-            this.first.omitContinue = OmitContinue.Possible;
+            this.first.continueOmittable = true;
             this.first.returnOmittable = false;
 
             // associate this structure with exit and checkpoint nodes
@@ -1387,12 +1387,5 @@ class Node {
             this.node = node;
             this.node.additionalCalls++;
         }
-    }
-
-    /**
-     * @version 2013/11/28 0:43:39
-     */
-    private static enum OmitContinue {
-        Possible, Impossible;
     }
 }
