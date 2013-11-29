@@ -71,6 +71,160 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
 
     /**
      * <p>
+     * Set status.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    ItemDescriptor health(double value) {
+        return set(Health, value);
+    }
+
+    /**
+     * <p>
+     * Set status.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    ItemDescriptor healthRegen(double value) {
+        return set(Hreg, value);
+    }
+
+    /**
+     * <p>
+     * Set status.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    ItemDescriptor mana(double value) {
+        return set(Mana, value);
+    }
+
+    /**
+     * <p>
+     * Set status.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    ItemDescriptor manaRegen(double value) {
+        return set(Mreg, value);
+    }
+
+    /**
+     * <p>
+     * Set status.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    ItemDescriptor attackDamage(double value) {
+        return set(AD, value);
+    }
+
+    /**
+     * <p>
+     * Set status.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    ItemDescriptor abilityPower(double value) {
+        return set(AP, value);
+    }
+
+    /**
+     * <p>
+     * Set status.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    ItemDescriptor armor(double value) {
+        return set(AR, value);
+    }
+
+    /**
+     * <p>
+     * Set status.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    ItemDescriptor magicRegist(double value) {
+        return set(MR, value);
+    }
+
+    /**
+     * <p>
+     * Set status.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    ItemDescriptor attackSpeed(double value) {
+        return set(ASRatio, value);
+    }
+
+    /**
+     * <p>
+     * Set status.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    ItemDescriptor movementSpeed(double value) {
+        return set(MSRatio, value);
+    }
+
+    /**
+     * <p>
+     * Set status.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    ItemDescriptor cooldownReduction(double value) {
+        return set(CDR, value);
+    }
+
+    /**
+     * <p>
+     * Set status.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    ItemDescriptor spellVamp(double value) {
+        return set(SV, value);
+    }
+
+    /**
+     * <p>
+     * Set status.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    ItemDescriptor lifeSteal(double value) {
+        return set(LS, value);
+    }
+
+    /**
+     * <p>
+     * Set status.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    ItemDescriptor critical(double value) {
+        return set(Critical, value);
+    }
+
+    /**
+     * <p>
      * Retrieve status value.
      * </p>
      * 
