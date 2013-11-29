@@ -17,7 +17,7 @@ import org.junit.runner.RunWith;
 import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/09/07 2:59:28
+ * @version 2013/11/29 11:02:53
  */
 @RunWith(ScriptRunner.class)
 public class FieldTest {
@@ -145,6 +145,105 @@ public class FieldTest {
         assert field.get(definition).equals("b");
     }
 
+    @Test
+    public void intValueStatic() throws Exception {
+        Field field = StaticDefinition.class.getField("intValue");
+
+        assert StaticDefinition.intValue == 0;
+        assert field.getInt(null) == 0;
+        field.setInt(null, 10);
+        assert StaticDefinition.intValue == 10;
+        assert field.getInt(null) == 10;
+    }
+
+    @Test
+    public void longValueStatic() throws Exception {
+        Field field = StaticDefinition.class.getField("longValue");
+
+        assert StaticDefinition.longValue == 0;
+        assert field.getLong(null) == 0;
+        field.setLong(null, 10);
+        assert StaticDefinition.longValue == 10;
+        assert field.getLong(null) == 10;
+    }
+
+    @Test
+    public void floatValueStatic() throws Exception {
+        Field field = StaticDefinition.class.getField("floatValue");
+
+        assert StaticDefinition.floatValue == 0;
+        assert field.getFloat(null) == 0;
+        field.setFloat(null, 10);
+        assert StaticDefinition.floatValue == 10;
+        assert field.getFloat(null) == 10;
+    }
+
+    @Test
+    public void doubleValueStatic() throws Exception {
+        Field field = StaticDefinition.class.getField("doubleValue");
+
+        assert StaticDefinition.doubleValue == 0;
+        assert field.getDouble(null) == 0;
+        field.setDouble(null, 10);
+        assert StaticDefinition.doubleValue == 10;
+        assert field.getDouble(null) == 10;
+    }
+
+    @Test
+    public void byteValueStatic() throws Exception {
+        Field field = StaticDefinition.class.getField("byteValue");
+
+        assert StaticDefinition.byteValue == 0;
+        assert field.getByte(null) == 0;
+        field.setByte(null, (byte) 2);
+        assert StaticDefinition.byteValue == 2;
+        assert field.getByte(null) == 2;
+    }
+
+    @Test
+    public void shortValueStatic() throws Exception {
+        Field field = StaticDefinition.class.getField("shortValue");
+
+        assert StaticDefinition.shortValue == 0;
+        assert field.getShort(null) == 0;
+        field.setShort(null, (short) 2);
+        assert StaticDefinition.shortValue == 2;
+        assert field.getShort(null) == 2;
+    }
+
+    @Test
+    public void booleanValueStatic() throws Exception {
+        Field field = StaticDefinition.class.getField("booleanValue");
+
+        assert !StaticDefinition.booleanValue;
+        assert !field.getBoolean(null);
+        field.setBoolean(null, true);
+        assert StaticDefinition.booleanValue;
+        assert field.getBoolean(null);
+    }
+
+    @Test
+    public void charValueStatic() throws Exception {
+        Field field = StaticDefinition.class.getField("charValue");
+
+        assert StaticDefinition.charValue == 'a';
+        assert field.getChar(null) == 'a';
+        field.setChar(null, 'b');
+        assert StaticDefinition.charValue == 'b';
+        assert field.getChar(null) == 'b';
+    }
+
+    @Test
+    public void objectValueStatic() throws Exception {
+        Field field = StaticDefinition.class.getField("stringValue");
+
+        assert StaticDefinition.stringValue.equals("a");
+        assert field.get(null).equals("a");
+        field.set(null, "b");
+        assert StaticDefinition.stringValue.equals("b");
+        assert field.get(null).equals("b");
+    }
+
     /**
      * @version 2013/09/07 1:22:35
      */
@@ -167,5 +266,29 @@ public class FieldTest {
         public char charValue = 'a';
 
         public String stringValue = "a";
+    }
+
+    /**
+     * @version 2013/11/29 10:23:41
+     */
+    private static class StaticDefinition {
+
+        public static int intValue;
+
+        public static long longValue;
+
+        public static float floatValue;
+
+        public static double doubleValue;
+
+        public static byte byteValue;
+
+        public static short shortValue;
+
+        public static boolean booleanValue;
+
+        public static char charValue = 'a';
+
+        public static String stringValue = "a";
     }
 }

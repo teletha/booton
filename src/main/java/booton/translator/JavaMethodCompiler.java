@@ -260,7 +260,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        // if (script.source.getName().endsWith("String") && original.equals("regionMatches")) {
+        // if (script.source.getName().endsWith("Definition") && original.equals("<clinit>")) {
         // debugger.enable = true;
         // }
     }
@@ -553,7 +553,8 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 current.addOperand(new OperandExpression("--" + Javascript.computeClassName(owner) + "." + Javascript.computeFieldName(owner, name)));
             } else {
-                current.addExpression(Javascript.computeClassName(owner), ".", Javascript.computeFieldName(owner, name), "=", current.remove(0));
+                current.addExpression(new OperandExpression(Javascript.computeClassName(owner) + "." + Javascript.computeFieldName(owner, name) + "=" + current.remove(0)
+                        .cast(type), type));
             }
             break;
 
