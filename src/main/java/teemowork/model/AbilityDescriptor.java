@@ -9,7 +9,6 @@
  */
 package teemowork.model;
 
-
 /**
  * @version 2013/01/29 1:55:25
  */
@@ -33,8 +32,8 @@ public class AbilityDescriptor extends Descriptor<AbilityDescriptor> {
      * @param unique
      * @param previous
      */
-    AbilityDescriptor(Ability ability, AbilityDescriptor previous) {
-        super(ability, previous);
+    AbilityDescriptor(Ability ability, AbilityDescriptor previous, Version version) {
+        super(ability, previous, version);
 
         if (previous != null) {
             unique = previous.unique;

@@ -34,8 +34,8 @@ public class SkillDescriptor extends Descriptor<SkillDescriptor> {
     /**
      * @param name
      */
-    SkillDescriptor(Skill skill, SkillDescriptor previous) {
-        super(skill, previous);
+    SkillDescriptor(Skill skill, SkillDescriptor previous, Version version) {
+        super(skill, previous, version);
 
         if (previous != null) {
             type = previous.type;

@@ -275,8 +275,8 @@ public class Mastery extends Describable<MasteryDescriptor> {
      * {@inheritDoc}
      */
     @Override
-    protected MasteryDescriptor createDescriptor(MasteryDescriptor previous) {
-        return new MasteryDescriptor(this, previous);
+    protected MasteryDescriptor createDescriptor(Version version, MasteryDescriptor previous) {
+        return new MasteryDescriptor(this, previous, version);
     }
 
     static {
