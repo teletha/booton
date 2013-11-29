@@ -208,7 +208,9 @@ public class BuildTest {
          * 
          */
         private EmptyItem() {
-            super(0, "Test Item");
+            super(0, "Test Item", item -> {
+
+            });
 
             update(Version.P0000);
         }

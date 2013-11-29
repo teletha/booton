@@ -69,6 +69,18 @@ public abstract class Descriptor<T extends Descriptor> {
 
     /**
      * <p>
+     * Helper method to update.
+     * </p>
+     * 
+     * @param version
+     * @return
+     */
+    public T update(Version version) {
+        return (T) describable.update(version);
+    }
+
+    /**
+     * <p>
      * Retrieve passive text.
      * </p>
      * 
