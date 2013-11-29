@@ -142,7 +142,8 @@ public class BuildTest {
      * @return
      */
     private Item createAbilityItem(Status status, double value) {
-        Ability ability = new Ability("Test Ability " + counter);
+        Ability ability = new Ability("Test Ability " + counter, descriptor -> {
+        });
 
         Item item = new EmptyItem();
         item.update(Version.P0000);
@@ -160,7 +161,8 @@ public class BuildTest {
      * @return
      */
     private Item createUniqueAbilityItem(String unique, Status status, double value) {
-        Ability ability = new Ability(unique);
+        Ability ability = new Ability(unique, descriptor -> {
+        });
 
         Item item = new EmptyItem();
         item.update(Version.P0000);
