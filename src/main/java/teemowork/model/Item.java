@@ -9,12 +9,14 @@
  */
 package teemowork.model;
 
-import static teemowork.model.Ability.*;
 import static teemowork.model.Status.*;
 import static teemowork.model.Version.*;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import js.dom.Element;
 
@@ -29,8 +31,21 @@ public class Item extends Describable<ItemDescriptor> {
     /** The item manager. */
     private static final List<Item> items = new ArrayList();
 
+    /** Negatron Cloak */
+    public static final Item NegatronCloak = new Item(1057, "Negatron Cloak");
+
+    /** Blasting Wand */
+    public static final Item BlastingWand = new Item(1026, "Blasting Wand");
+
     /** Abyssal Scepter */
-    public static final Item AbyssalScepter = new Item(3001, "Abyssal Scepter");
+    public static final Item Abyssal_Scepter = new Item(3001, "Abyssal Scepter", item -> {
+        item.update()
+                .build(BlastingWand, NegatronCloak)
+                .cost(980)
+                .set(AP, 70)
+                .set(MR, 45)
+                .abilities(Ability.AbyssalAura);
+    });
 
     /** Aegis of the Legion */
     public static final Item AegisOftheLegion = new Item(3105, "Aegis of the Legion");
@@ -79,9 +94,6 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Blade of the Ruined King */
     public static final Item BladeOftheRuinedKing = new Item(3153, "Blade of the Ruined King");
-
-    /** Blasting Wand */
-    public static final Item BlastingWand = new Item(1026, "Blasting Wand");
 
     /** The Bloodthirster */
     public static final Item TheBloodthirster = new Item(3072, "The Bloodthirster");
@@ -269,9 +281,6 @@ public class Item extends Describable<ItemDescriptor> {
     /** Needlessly Large Rod */
     public static final Item NeedlesslyLargeRod = new Item(1058, "Needlessly Large Rod");
 
-    /** Negatron Cloak */
-    public static final Item NegatronCloak = new Item(1057, "Negatron Cloak");
-
     /** Ninja Tabi */
     public static final Item NinjaTabi = new Item(3047, "Ninja Tabi");
 
@@ -458,6 +467,8 @@ public class Item extends Describable<ItemDescriptor> {
     /** The item name. */
     public final String name;
 
+    private Consumer<Item> descriptor;
+
     /**
      * <p>
      * Create constructor.
@@ -470,6 +481,23 @@ public class Item extends Describable<ItemDescriptor> {
         this.position = counter++;
         this.id = id;
         this.name = name;
+
+        items.add(this);
+    }
+
+    /**
+     * <p>
+     * Create constructor.
+     * </p>
+     * 
+     * @param id
+     * @param name
+     */
+    Item(int id, String name, Consumer<Item> descriptor) {
+        this.position = counter++;
+        this.id = id;
+        this.name = name;
+        this.descriptor = descriptor;
 
         items.add(this);
     }
@@ -554,19 +582,13 @@ public class Item extends Describable<ItemDescriptor> {
     }
 
     static {
-        AbyssalScepter.update()
-                .build(BlastingWand, NegatronCloak)
-                .cost(980)
-                .set(AP, 70)
-                .set(MR, 45)
-                .abilities(AbyssalAura);
         AegisOftheLegion.update()
                 .build(EmblemOfValor, NullMagicMantle, RubyCrystal)
                 .cost(625)
                 .set(Health, 250)
                 .set(AR, 20)
                 .set(MR, 20)
-                .abilities(AegisLegion);
+                .abilities(Ability.AegisLegion);
         AegisOftheLegion.update(P310).cost(375).set(Health, 200).set(MR, 0);
         AegisOftheLegion.update(P314).build(RejuvenationBead, ClothArmor, RubyCrystal, NullMagicMantle).cost(595);
 
@@ -577,7 +599,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(AP, 60)
                 .set(Mreg, 10)
                 .set(Mana, 250)
-                .abilities(ArchangelInsight, ManaCharge);
+                .abilities(Ability.ArchangelInsight, Ability.ManaCharge);
         AthenesUnholyGrail.update()
                 .build(ChaliceOfHarmony, FiendishCodex)
                 .cost(900)
@@ -585,28 +607,36 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(Mreg, 15)
                 .set(MR, 40)
                 .set(CDR, 20)
-                .abilities(AtheneRestore, ManaFont);
+                .abilities(Ability.AtheneRestore, Ability.ManaFont);
         AtmasImpaler.update()
                 .build(AvariceBlade, ChainVest)
                 .cost(780)
                 .set(AR, 45)
                 .set(Critical, 15)
-                .abilities(AtamDamage);
-        AugmentDeath.update().build(TheHexCore).cost(1000).set(AP, 45).abilities(HexCorePower, HexCoreDeath);
+                .abilities(Ability.AtamDamage);
+        AugmentDeath.update()
+                .build(TheHexCore)
+                .cost(1000)
+                .set(AP, 45)
+                .abilities(Ability.HexCorePower, Ability.HexCoreDeath);
         AugmentGravity.update()
                 .build(TheHexCore)
                 .cost(1000)
                 .set(CDR, 10)
                 .set(Mreg, 5)
                 .set(Mana, 200)
-                .abilities(HexCorePower, HexCoreGravity);
+                .abilities(Ability.HexCorePower, Ability.HexCoreGravity);
         AugmentPower.update()
                 .build(TheHexCore)
                 .cost(1000)
                 .set(Health, 220)
                 .set(Hreg, 6)
-                .abilities(HexCorePower, HexCoreTransfer);
-        AvariceBlade.update().build(BrawlersGloves).cost(400).set(Critical, 10).abilities(Avarice, Greed);
+                .abilities(Ability.HexCorePower, Ability.HexCoreTransfer);
+        AvariceBlade.update()
+                .build(BrawlersGloves)
+                .cost(400)
+                .set(Critical, 10)
+                .abilities(Ability.Avarice, Ability.Greed);
         BFSword.update().cost(1550).set(AD, 45);
 
         BannerOfCommand.update()
@@ -615,7 +645,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(AP, 40)
                 .set(CDR, 10)
                 .set(AR, 30)
-                .abilities(AegisValor, Promote);
+                .abilities(Ability.AegisValor, Ability.Promote);
         BannerOfCommand.update(P314).build(FiendishCodex, BlastingWand).cost(720).set(AP, 80).set(CDR, 20).set(AR, 0);
 
         BansheesVeil.update()
@@ -624,16 +654,20 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(Health, 400)
                 .set(Mana, 300)
                 .set(MR, 45)
-                .abilities(BansheeShield);
+                .abilities(Ability.BansheeShield);
         BansheesVeil.update(P310)
                 .build(SpectresCowl, RubyCrystal)
                 .cost(875)
                 .set(Health, 450)
                 .set(MR, 55)
                 .set(Mana, 0)
-                .abilities(BansheeShield, BansheeRegene);
+                .abilities(Ability.BansheeShield, Ability.BansheeRegene);
 
-        BerserkersGreaves.update().build(BootsOfSpeed, Dagger).cost(150).set(ASRatio, 20).abilities(EnhancedMovement2);
+        BerserkersGreaves.update()
+                .build(BootsOfSpeed, Dagger)
+                .cost(150)
+                .set(ASRatio, 20)
+                .abilities(Ability.EnhancedMovement2);
         BerserkersGreaves.update(P308).cost(175);
 
         BilgewaterCutlass.update()
@@ -641,25 +675,31 @@ public class Item extends Describable<ItemDescriptor> {
                 .cost(150)
                 .set(LS, 12)
                 .set(AD, 25)
-                .abilities(Bilgewater);
+                .abilities(Ability.Bilgewater);
         BladeOftheRuinedKing.update()
                 .build(BilgewaterCutlass, Dagger, Dagger)
                 .cost(1000)
                 .set(LS, 15)
                 .set(AD, 25)
                 .set(ASRatio, 40)
-                .abilities(BotRKPassive, BotRKActive);
+                .abilities(Ability.BotRKPassive, Ability.BotRKActive);
         BlastingWand.update().cost(860).set(AP, 40);
 
-        BonetoothNecklace.update().cost(800).set(AD, 5).abilities(BonetoothNecklaceDamage, BonetoothNecklaceSpecial);
+        BonetoothNecklace.update()
+                .cost(800)
+                .set(AD, 5)
+                .abilities(Ability.BonetoothNecklaceDamage, Ability.BonetoothNecklaceSpecial);
 
-        BootsOfMobility.update().build(BootsOfSpeed).cost(650).abilities(EnhancedMovement5);
+        BootsOfMobility.update().build(BootsOfSpeed).cost(650).abilities(Ability.EnhancedMovement5);
         BootsOfMobility.update(P308).cost(675);
 
-        BootsOfSpeed.update().cost(350).abilities(EnhancedMovement1);
+        BootsOfSpeed.update().cost(350).abilities(Ability.EnhancedMovement1);
         BootsOfSpeed.update(P308).cost(325);
 
-        BootsOfSwiftness.update().build(BootsOfSpeed).cost(650).abilities(EnhancedMovement3, SlowResist);
+        BootsOfSwiftness.update()
+                .build(BootsOfSpeed)
+                .cost(650)
+                .abilities(Ability.EnhancedMovement3, Ability.SlowResist);
         BootsOfSwiftness.update(P308).cost(675);
 
         BrawlersGloves.update().cost(400).set(Critical, 8);
@@ -668,31 +708,31 @@ public class Item extends Describable<ItemDescriptor> {
                 .cost(325)
                 .set(Health, 200)
                 .set(Mana, 300)
-                .abilities(ValorsReward);
+                .abilities(Ability.ValorsReward);
         ChainVest.update().cost(720).set(AR, 40);
         ChaliceOfHarmony.update()
                 .build(FaerieCharm, FaerieCharm, NullMagicMantle)
                 .cost(120)
                 .set(Mreg, 7)
                 .set(MR, 25)
-                .abilities(ManaFont);
+                .abilities(Ability.ManaFont);
         CloakOfAgility.update().cost(730).set(Critical, 15);
         ClothArmor.update().cost(300).set(AR, 15);
-        CrystallineFlask.update().cost(345).abilities(CrystallineFlaskActive, CrystallineFlaskCharge);
+        CrystallineFlask.update().cost(345).abilities(Ability.CrystallineFlaskActive, Ability.CrystallineFlaskCharge);
         Dagger.update().cost(400).set(ASRatio, 12);
         DeathfireGrasp.update()
                 .build(FiendishCodex, NeedlesslyLargeRod)
                 .cost(680)
                 .set(AP, 120)
                 .set(CDR, 10)
-                .abilities(DeathfireGraspActive);
-        DoransBlade.update().cost(475).set(AD, 10).set(Health, 80).abilities(DransBladePassive);
+                .abilities(Ability.DeathfireGraspActive);
+        DoransBlade.update().cost(475).set(AD, 10).set(Health, 80).abilities(Ability.DransBladePassive);
         DoransBlade.update(P314).cost(440).set(AD, 8);
 
-        DoransRing.update().cost(475).set(AP, 15).set(Health, 80).set(Mreg, 3).abilities(DransRingPassive);
+        DoransRing.update().cost(475).set(AP, 15).set(Health, 80).set(Mreg, 3).abilities(Ability.DransRingPassive);
         DoransRing.update(P308).cost(400).set(Health, 60);
 
-        DoransShield.update().cost(475).set(Health, 100).set(Hreg, 8).set(AR, 5).abilities(DransShieldPassive);
+        DoransShield.update().cost(475).set(Health, 100).set(Hreg, 8).set(AR, 5).abilities(Ability.DransShieldPassive);
         DoransShield.update(P308).cost(440).set(AR, 0).set(Hreg, 10);
 
         EleisasMiracle.update()
@@ -700,28 +740,28 @@ public class Item extends Describable<ItemDescriptor> {
                 .cost(400)
                 .set(Mreg, 15)
                 .set(Hreg, 10)
-                .abilities(Aid, EleisasBlessing);
+                .abilities(Ability.Aid, Ability.EleisasBlessing);
         EleisasMiracle.update(P314).deprecated();
 
-        ElixirOfBrilliance.update().cost(250).abilities(ElixirOfBrillianceActive);
-        ElixirOfFortitude.update().cost(350).abilities(ElixirOfFortitudeActive);
-        EmblemOfValor.update().build(ClothArmor, RejuvenationBead).cost(170).set(AR, 20).abilities(Valor);
+        ElixirOfBrilliance.update().cost(250).abilities(Ability.ElixirOfBrillianceActive);
+        ElixirOfFortitude.update().cost(350).abilities(Ability.ElixirOfFortitudeActive);
+        EmblemOfValor.update().build(ClothArmor, RejuvenationBead).cost(170).set(AR, 20).abilities(Ability.Valor);
         ExecutionersCalling.update()
                 .build(AvariceBlade, LongSword)
                 .cost(700)
                 .set(AD, 25)
                 .set(Critical, 20)
-                .abilities(ExecutionersCallingPassive);
+                .abilities(Ability.ExecutionersCallingPassive);
         FaerieCharm.update().cost(180).set(Mreg, 3);
-        FiendishCodex.update().build(AmplifyingTome).cost(385).set(AP, 30).abilities(FiendishCodexPassive);
+        FiendishCodex.update().build(AmplifyingTome).cost(385).set(AP, 30).abilities(Ability.FiendishCodexPassive);
         FrozenHeart.update()
                 .build(GlacialShroud, WardensMail)
                 .cost(550)
                 .set(CDR, 20)
                 .set(AR, 95)
                 .set(Mana, 400)
-                .abilities(FrozenHeartPassive);
-        FrozenMallet.update().build(Phage, GiantsBelt).cost(835).set(AD, 30).set(Health, 700).abilities(Icy2);
+                .abilities(Ability.FrozenHeartPassive);
+        FrozenMallet.update().build(Phage, GiantsBelt).cost(835).set(AD, 30).set(Health, 700).abilities(Ability.Icy2);
         FrozenMallet.update(P310A).build(GiantsBelt, Pickaxe, RubyCrystal).cost(950);
 
         GiantsBelt.update().cost(1000).set(Health, 380);
@@ -730,43 +770,48 @@ public class Item extends Describable<ItemDescriptor> {
                 .cost(230)
                 .set(AR, 45)
                 .set(Mana, 300)
-                .abilities(GlacialShroudPassive);
+                .abilities(Ability.GlacialShroudPassive);
         GuardianAngel.update()
                 .build(NullMagicMantle, ChainVest)
                 .cost(1480)
                 .set(AR, 50)
                 .set(MR, 30)
-                .abilities(GuardianAngelPassive);
+                .abilities(Ability.GuardianAngelPassive);
         GuardianAngel.update(P310).build(NegatronCloak, ChainVest).cost(1310).set(MR, 40);
         GuinsoosRageblade.update()
                 .build(BlastingWand, Pickaxe)
                 .cost(865)
                 .set(AD, 30)
                 .set(AP, 40)
-                .abilities(GuinsooPassive, GuinsooUniquePassive);
+                .abilities(Ability.GuinsooPassive, Ability.GuinsooUniquePassive);
         HauntingGuise.update()
                 .build(RubyCrystal, AmplifyingTome)
                 .cost(575)
                 .set(AP, 25)
                 .set(Health, 200)
-                .abilities(EyesOfPain);
-        HealthPotion.update().cost(35).abilities(PortionHealth);
-        Hexdrinker.update().build(LongSword, NullMagicMantle).cost(550).set(AD, 25).set(MR, 25).abilities(Lifeline1);
+                .abilities(Ability.EyesOfPain);
+        HealthPotion.update().cost(35).abilities(Ability.PortionHealth);
+        Hexdrinker.update()
+                .build(LongSword, NullMagicMantle)
+                .cost(550)
+                .set(AD, 25)
+                .set(MR, 25)
+                .abilities(Ability.Lifeline1);
         HextechGunblade.update()
                 .build(BilgewaterCutlass, HextechRevolver)
                 .cost(800)
                 .set(LS, 12)
                 .set(AD, 45)
                 .set(AP, 65)
-                .abilities(GunbladePassive, Reload, GunbladeActive);
+                .abilities(Ability.GunbladePassive, Ability.Reload, Ability.GunbladeActive);
         HextechRevolver.update()
                 .build(AmplifyingTome, AmplifyingTome)
                 .cost(330)
                 .set(AP, 40)
-                .abilities(HextechRevolverPassive);
+                .abilities(Ability.HextechRevolverPassive);
 
-        HuntersMachete.update().cost(300).abilities(Butcher1, Rend);
-        HuntersMachete.update(P308).abilities(Butcher1, Maim1);
+        HuntersMachete.update().cost(300).abilities(Ability.Butcher1, Ability.Rend);
+        HuntersMachete.update(P308).abilities(Ability.Butcher1, Ability.Maim1);
 
         IcebornGauntlet.update()
                 .build(Sheen, GlacialShroud)
@@ -775,34 +820,37 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(CDR, 10)
                 .set(AR, 70)
                 .set(Mana, 500)
-                .abilities(Spellblade);
+                .abilities(Ability.Spellblade);
         InfinityEdge.update()
                 .build(BFSword, CloakOfAgility, Pickaxe)
                 .cost(645)
                 .set(AD, 70)
                 .set(Critical, 25)
-                .abilities(InfinityEdgePassive);
+                .abilities(Ability.InfinityEdgePassive);
 
-        IonianBootsOfLucidity.update().build(BootsOfSpeed).cost(700).abilities(IonianCDR, EnhancedMovement2);
+        IonianBootsOfLucidity.update()
+                .build(BootsOfSpeed)
+                .cost(700)
+                .abilities(Ability.IonianCDR, Ability.EnhancedMovement2);
         IonianBootsOfLucidity.update(P306).cost(650);
         IonianBootsOfLucidity.update(P308).cost(675);
 
-        KagesLuckyPick.update().build(AmplifyingTome).cost(330).set(AP, 25).abilities(LuckyShadow);
-        Kindlegem.update().build(RubyCrystal).cost(375).set(Health, 200).abilities(KindlegemPassive);
-        LastWhisper.update().build(LongSword, Pickaxe).cost(1025).set(AD, 40).abilities(LastWhisperPassive);
+        KagesLuckyPick.update().build(AmplifyingTome).cost(330).set(AP, 25).abilities(Ability.LuckyShadow);
+        Kindlegem.update().build(RubyCrystal).cost(375).set(Health, 200).abilities(Ability.KindlegemPassive);
+        LastWhisper.update().build(LongSword, Pickaxe).cost(1025).set(AD, 40).abilities(Ability.LastWhisperPassive);
         LiandrysTorment.update()
                 .build(HauntingGuise, AmplifyingTome)
                 .cost(980)
                 .set(AP, 50)
                 .set(Health, 300)
-                .abilities(EyesOfPain, LiandrysTormentPassive);
+                .abilities(Ability.EyesOfPain, Ability.LiandrysTormentPassive);
         LichBane.update()
                 .build(Sheen, BlastingWand)
                 .cost(940)
                 .set(AP, 80)
                 .set(Mana, 250)
                 .set(MSRatio, 5)
-                .abilities(LichSpellblade);
+                .abilities(Ability.LichSpellblade);
         LocketOftheIronSolari.update()
                 .build(Kindlegem, ClothArmor, RejuvenationBead)
                 .cost(520)
@@ -810,7 +858,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(CDR, 10)
                 .set(AR, 35)
                 .set(Hreg, 5)
-                .abilities(SolariActive);
+                .abilities(Ability.SolariActive);
         LocketOftheIronSolari.update(P310)
                 .build(AegisOftheLegion)
                 .cost(600)
@@ -818,24 +866,28 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(AR, 20)
                 .set(CDR, 10)
                 .set(Hreg, 0)
-                .abilities(SolariActive, AegisLegion);
+                .abilities(Ability.SolariActive, Ability.AegisLegion);
 
         LongSword.update().cost(400).set(AD, 10);
         LongSword.update(P314).cost(360);
 
-        MadredsRazors.update().build(ClothArmor, HuntersMachete).cost(100).set(AR, 25).abilities(Maim1, Rend);
-        MadredsRazors.update(P308).abilities(Maim2);
+        MadredsRazors.update()
+                .build(ClothArmor, HuntersMachete)
+                .cost(100)
+                .set(AR, 25)
+                .abilities(Ability.Maim1, Ability.Rend);
+        MadredsRazors.update(P308).abilities(Ability.Maim2);
 
         Malady.update()
                 .build(Dagger, Dagger, AmplifyingTome)
                 .cost(800)
                 .set(AP, 25)
                 .set(ASRatio, 45)
-                .abilities(MaladyPassive);
+                .abilities(Ability.MaladyPassive);
         Malady.update(P308).deprecated();
 
-        ManaManipulator.update().build(FaerieCharm, FaerieCharm).cost(40).abilities(ManaWarp);
-        ManaManipulator.update(P307).build(FaerieCharm).cost(120).abilities(ManaWarp);
+        ManaManipulator.update().build(FaerieCharm, FaerieCharm).cost(40).abilities(Ability.ManaWarp);
+        ManaManipulator.update(P307).build(FaerieCharm).cost(120).abilities(Ability.ManaWarp);
         ManaManipulator.update(P314).deprecated();
 
         Manamune.update()
@@ -844,27 +896,31 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(AD, 20)
                 .set(Mreg, 7)
                 .set(Mana, 250)
-                .abilities(Awe, ManamuneManaCharge);
-        ManaPotion.update().cost(35).abilities(PortionMana);
+                .abilities(Ability.Awe, Ability.ManamuneManaCharge);
+        ManaPotion.update().cost(35).abilities(Ability.PortionMana);
         MawOfMalmortius.update()
                 .build(Hexdrinker, Pickaxe)
                 .cost(975)
                 .set(AD, 55)
                 .set(MR, 36)
-                .abilities(MawOfMalmortiusPassive, Lifeline2);
+                .abilities(Ability.MawOfMalmortiusPassive, Ability.Lifeline2);
         MawOfMalmortius.update(P309).set(AD, 60).set(MR, 40);
-        MejaisSoulstealer.update().build(AmplifyingTome).cost(800).set(AP, 20).abilities(MejaisSoulstealerPassive);
+        MejaisSoulstealer.update()
+                .build(AmplifyingTome)
+                .cost(800)
+                .set(AP, 20)
+                .abilities(Ability.MejaisSoulstealerPassive);
         MercurialScimitar.update()
                 .build(QuicksilverSash, BFSword)
                 .cost(600)
                 .set(AD, 60)
                 .set(MR, 45)
-                .abilities(Quicksilver2);
+                .abilities(Ability.Quicksilver2);
         MercurysTreads.update()
                 .build(BootsOfSpeed, NullMagicMantle)
                 .cost(450)
                 .set(MR, 25)
-                .abilities(EnhancedMovement2, TenacityPassive);
+                .abilities(Ability.EnhancedMovement2, Ability.TenacityPassive);
         MercurysTreads.update(P308).cost(475);
 
         MikaelsCrucible.update()
@@ -873,14 +929,14 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(Mreg, 9)
                 .set(Mana, 300)
                 .set(MR, 40)
-                .abilities(ManaFont, MikaelsCrucibleActive);
+                .abilities(Ability.ManaFont, Ability.MikaelsCrucibleActive);
         MikaelsCrucible.update(P307)
                 .build(ChaliceOfHarmony, PhilosophersStone)
                 .cost(920)
                 .set(Mreg, 18)
                 .set(Hreg, 7)
                 .set(MR, 40)
-                .abilities(ManaFont, MikaelsCrucibleActive);
+                .abilities(Ability.ManaFont, Ability.MikaelsCrucibleActive);
         MikaelsCrucible.update(P314).build(ChaliceOfHarmony).cost(720).set(Mreg, 12).set(Hreg, 0);
 
         Morellonomicon.update()
@@ -889,20 +945,20 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(AP, 75)
                 .set(CDR, 20)
                 .set(Mreg, 12)
-                .abilities(MorellonomiconPassive);
+                .abilities(Ability.MorellonomiconPassive);
         Muramana.update()
                 .build(Manamune)
                 .cost(0)
                 .set(AD, 20)
                 .set(Mreg, 7)
                 .set(Mana, 1000)
-                .abilities(Awe, MuramanaToggle);
+                .abilities(Ability.Awe, Ability.MuramanaToggle);
         NashorsTooth.update()
                 .build(Stinger, FiendishCodex)
                 .cost(430)
                 .set(AP, 65)
                 .set(ASRatio, 50)
-                .abilities(NashorsToothPassive);
+                .abilities(Ability.NashorsToothPassive);
         NashorsTooth.update(P308).cost(920).set(AP, 60);
 
         NeedlesslyLargeRod.update().cost(1600).set(AP, 80);
@@ -912,7 +968,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .build(BootsOfSpeed, ClothArmor)
                 .cost(350)
                 .set(AR, 25)
-                .abilities(NinjaTabiPassive, EnhancedMovement2);
+                .abilities(Ability.NinjaTabiPassive, Ability.EnhancedMovement2);
         NinjaTabi.update(P308).cost(375);
 
         NullMagicMantle.update().cost(400).set(MR, 20);
@@ -923,7 +979,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(Health, 350)
                 .set(Mreg, 15)
                 .set(Hreg, 15)
-                .abilities(OhmwreckerActive);
+                .abilities(Ability.OhmwreckerActive);
         Ohmwrecker.update(P314)
                 .build(RubyCrystal, BlastingWand)
                 .cost(665)
@@ -931,13 +987,13 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(Health, 350)
                 .set(Mreg, 0)
                 .set(Hreg, 0)
-                .abilities(OhmwreckerActive);
+                .abilities(Ability.OhmwreckerActive);
 
-        OraclesElixir.update().cost(400).abilities(OraclesElixirActive);
+        OraclesElixir.update().cost(400).abilities(Ability.OraclesElixirActive);
         OraclesElixir.update(P314).deprecated();
 
-        Phage.update().build(RubyCrystal, LongSword).cost(590).set(AD, 20).set(Health, 200).abilities(Icy1);
-        Phage.update(P310A).cost(375).abilities(Rage);
+        Phage.update().build(RubyCrystal, LongSword).cost(590).set(AD, 20).set(Health, 200).abilities(Ability.Icy1);
+        Phage.update(P310A).cost(375).abilities(Ability.Rage);
         Phage.update(P312).cost(475);
 
         PhantomDancer.update()
@@ -946,26 +1002,26 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(ASRatio, 50)
                 .set(MSRatio, 5)
                 .set(Critical, 30)
-                .abilities(PhantomDancerPassive);
+                .abilities(Ability.PhantomDancerPassive);
         PhilosophersStone.update()
                 .build(FaerieCharm, RejuvenationBead)
                 .cost(340)
                 .set(Mreg, 9)
                 .set(Hreg, 7)
-                .abilities(Transmute);
+                .abilities(Ability.Transmute);
         Pickaxe.update().cost(875).set(AD, 25);
-        QuicksilverSash.update().build(NegatronCloak).cost(830).set(MR, 45).abilities(Quicksilver1);
+        QuicksilverSash.update().build(NegatronCloak).cost(830).set(MR, 45).abilities(Ability.Quicksilver1);
         RabadonsDeathcap.update()
                 .build(BlastingWand, NeedlesslyLargeRod)
                 .cost(840)
                 .set(AP, 120)
-                .abilities(RabadonsDeathcapPassive);
+                .abilities(Ability.RabadonsDeathcapPassive);
         RanduinsOmen.update()
                 .build(GiantsBelt, WardensMail)
                 .cost(1000)
                 .set(Health, 500)
                 .set(AR, 70)
-                .abilities(ColdSteel2, RanduinsOmenAvtive);
+                .abilities(Ability.ColdSteel2, Ability.RanduinsOmenAvtive);
 
         RavenousHydra.update()
                 .build(Tiamat, VampiricScepter)
@@ -973,7 +1029,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(LS, 12)
                 .set(AD, 75)
                 .set(Hreg, 15)
-                .abilities(RavenousHydraPassive, Cleave, Crescent);
+                .abilities(Ability.RavenousHydraPassive, Ability.Cleave, Ability.Crescent);
         RavenousHydra.update(P306).cost(600);
 
         RecurveBow.update().cost(950).set(ASRatio, 30);
@@ -986,62 +1042,62 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(AP, 60)
                 .set(Health, 450)
                 .set(Mana, 450)
-                .abilities(RodOfAgesPassive, ValorsReward);
+                .abilities(Ability.RodOfAgesPassive, Ability.ValorsReward);
         RubyCrystal.update().cost(475).set(Health, 180);
 
         RubySightstone.update()
                 .build(RubyCrystal, Sightstone)
                 .cost(125)
                 .set(Health, 360)
-                .abilities(WardRefresh2, GhostWard2);
-        RubySightstone.update(P314).abilities(WardRefresh2, GhostWard1);
+                .abilities(Ability.WardRefresh2, Ability.GhostWard2);
+        RubySightstone.update(P314).abilities(Ability.WardRefresh2, Ability.GhostWard1);
 
         RunaansHurricane.update()
                 .build(Dagger, RecurveBow, Dagger)
                 .cost(700)
                 .set(ASRatio, 70)
-                .abilities(RunaansHurricanePassive);
+                .abilities(Ability.RunaansHurricanePassive);
         RunicBulwark.update()
                 .build(NullMagicMantle, AegisOftheLegion)
                 .cost(400)
                 .set(Health, 300)
                 .set(AR, 20)
                 .set(MR, 30)
-                .abilities(BulwarkLegion);
+                .abilities(Ability.BulwarkLegion);
         RunicBulwark.update(P310).deprecated();
         RylaisCrystalScepter.update()
                 .build(BlastingWand, AmplifyingTome, GiantsBelt)
                 .cost(605)
                 .set(AP, 80)
                 .set(Health, 500)
-                .abilities(RylaisCrystalScepterPassive);
+                .abilities(Ability.RylaisCrystalScepterPassive);
         SapphireCrystal.update().cost(400).set(Mana, 200);
         SeekersArmguard.update()
                 .build(AmplifyingTome, ClothArmor, ClothArmor)
                 .cost(125)
                 .set(AP, 20)
                 .set(AR, 30)
-                .abilities(SeekersArmguardPassive);
+                .abilities(Ability.SeekersArmguardPassive);
         SeraphsEmbrace.update()
                 .build(ArchangelsStaff)
                 .cost(0)
                 .set(AP, 60)
                 .set(Mreg, 10)
                 .set(Mana, 1000)
-                .abilities(Insight, ManaShield);
+                .abilities(Ability.Insight, Ability.ManaShield);
 
         ShardOfTrueIce.update()
                 .build(KagesLuckyPick, ManaManipulator)
                 .cost(535)
                 .set(AP, 45)
-                .abilities(LuckyShadow, ManaWarp, ShardOfTrueIceActive);
+                .abilities(Ability.LuckyShadow, Ability.ManaWarp, Ability.ShardOfTrueIceActive);
 
         Sheen.update()
                 .build(SapphireCrystal, AmplifyingTome)
                 .cost(365)
                 .set(AP, 25)
                 .set(Mana, 200)
-                .abilities(SheenSpellblade);
+                .abilities(Ability.SheenSpellblade);
         ShurelyasReverie.update()
                 .build(Kindlegem, PhilosophersStone)
                 .cost(550)
@@ -1049,11 +1105,15 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(CDR, 10)
                 .set(Mreg, 10)
                 .set(Hreg, 10)
-                .abilities(ShurelyasReverieAvtive);
-        Sightstone.update().build(RubyCrystal).cost(475).set(Health, 180).abilities(WardRefresh1, GhostWard1);
-        StealthWard.update().cost(75).abilities(StealthWardAvtive);
+                .abilities(Ability.ShurelyasReverieAvtive);
+        Sightstone.update()
+                .build(RubyCrystal)
+                .cost(475)
+                .set(Health, 180)
+                .abilities(Ability.WardRefresh1, Ability.GhostWard1);
+        StealthWard.update().cost(75).abilities(Ability.StealthWardAvtive);
 
-        SorcerersShoes.update().build(BootsOfSpeed).cost(750).set(MRPen, 15).abilities(EnhancedMovement2);
+        SorcerersShoes.update().build(BootsOfSpeed).cost(750).set(MRPen, 15).abilities(Ability.EnhancedMovement2);
         SorcerersShoes.update(P308).cost(775);
 
         SpectresCowl.update()
@@ -1061,7 +1121,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .cost(205)
                 .set(Health, 200)
                 .set(MR, 45)
-                .abilities(SpectresCowlPassive);
+                .abilities(Ability.SpectresCowlPassive);
 
         SpiritOftheAncientGolem.update()
                 .build(SpiritStone, Kindlegem)
@@ -1070,7 +1130,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(Mreg, 7)
                 .set(Hreg, 14)
                 .set(CDR, 10)
-                .abilities(Butcher3, TenacityPassive);
+                .abilities(Ability.Butcher3, Ability.TenacityPassive);
 
         SpiritOftheElderLizard.update()
                 .build(SpiritStone, LongSword, LongSword)
@@ -1079,7 +1139,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(CDR, 10)
                 .set(Mreg, 7)
                 .set(Hreg, 14)
-                .abilities(Butcher3, Incinerate);
+                .abilities(Ability.Butcher3, Ability.Incinerate);
         SpiritOftheElderLizard.update(P308).set(AD, 35);
 
         SpiritOftheSpectralWraith.update()
@@ -1088,7 +1148,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(AP, 50)
                 .set(CDR, 10)
                 .set(Mreg, 10)
-                .abilities(SpiritOftheSpectralWraithSV, Butcher3, SpiritOftheSpectralWraithSmite);
+                .abilities(Ability.SpiritOftheSpectralWraithSV, Ability.Butcher3, Ability.SpiritOftheSpectralWraithSmite);
         SpiritOftheSpectralWraith.update(P308).set(AP, 40);
 
         SpiritStone.update()
@@ -1096,8 +1156,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .cost(40)
                 .set(Mreg, 7)
                 .set(Hreg, 14)
-                .abilities(Butcher2, Rend);
-        SpiritStone.update(P308).abilities(Butcher2, Maim1);
+                .abilities(Ability.Butcher2, Ability.Rend);
+        SpiritStone.update(P308).abilities(Ability.Butcher2, Ability.Maim1);
 
         SpiritVisage.update()
                 .build(Kindlegem, NegatronCloak)
@@ -1105,7 +1165,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(Health, 200)
                 .set(CDR, 20)
                 .set(MR, 50)
-                .abilities(SpiritVisagePassive);
+                .abilities(Ability.SpiritVisagePassive);
         SpiritVisage.update(P310).build(SpectresCowl, Kindlegem).cost(375).set(Health, 400).set(MR, 55).set(Hreg, 20);
         SpiritVisage.update(P310A).cost(500);
         StatikkShiv.update()
@@ -1114,49 +1174,53 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(ASRatio, 40)
                 .set(MSRatio, 6)
                 .set(Critical, 20)
-                .abilities(StatikkShivPassive);
-        Stinger.update().build(Dagger, Dagger).cost(450).set(ASRatio, 40).abilities(StingerPassive);
+                .abilities(Ability.StatikkShivPassive);
+        Stinger.update().build(Dagger, Dagger).cost(450).set(ASRatio, 40).abilities(Ability.StingerPassive);
         SunfireCape.update()
                 .build(ChainVest, GiantsBelt)
                 .cost(930)
                 .set(Health, 450)
                 .set(AR, 45)
-                .abilities(SunfireCapePassive);
+                .abilities(Ability.SunfireCapePassive);
         SwordOftheDivine.update()
                 .build(RecurveBow, Dagger)
                 .cost(850)
                 .set(ASRatio, 45)
-                .abilities(SwordOftheDivinePassive, SwordOftheDivineActive);
-        SwordOftheOccult.update().build(LongSword).cost(800).set(AD, 10).abilities(SwordOftheOccultPassive);
+                .abilities(Ability.SwordOftheDivinePassive, Ability.SwordOftheDivineActive);
+        SwordOftheOccult.update().build(LongSword).cost(800).set(AD, 10).abilities(Ability.SwordOftheOccultPassive);
         TearOftheGoddess.update()
                 .build(SapphireCrystal, FaerieCharm)
                 .cost(120)
                 .set(Mreg, 7)
                 .set(Mana, 250)
-                .abilities(TearManaCharge);
+                .abilities(Ability.TearManaCharge);
         TheBlackCleaver.update()
                 .build(TheBrutalizer, RubyCrystal)
                 .cost(1188)
                 .set(AD, 50)
                 .set(Health, 200)
                 .set(CDR, 10)
-                .abilities(TheBlackCleaverPassive, TheBlackCleaverUniquePassive);
+                .abilities(Ability.TheBlackCleaverPassive, Ability.TheBlackCleaverUniquePassive);
         TheBloodthirster.update()
                 .build(BFSword, VampiricScepter)
                 .cost(850)
                 .set(LS, 12)
                 .set(AD, 70)
-                .abilities(TheBloodthirsterPassive);
-        TheBrutalizer.update().build(LongSword, LongSword).cost(537).set(AD, 25).abilities(TheBrutalizerPassive);
-        TheHexCore.update().cost(0).abilities(TheHexCorePassive);
-        Thornmail.update().build(ChainVest, ClothArmor).cost(1180).set(AR, 100).abilities(ThornmailPassive);
+                .abilities(Ability.TheBloodthirsterPassive);
+        TheBrutalizer.update()
+                .build(LongSword, LongSword)
+                .cost(537)
+                .set(AD, 25)
+                .abilities(Ability.TheBrutalizerPassive);
+        TheHexCore.update().cost(0).abilities(Ability.TheHexCorePassive);
+        Thornmail.update().build(ChainVest, ClothArmor).cost(1180).set(AR, 100).abilities(Ability.ThornmailPassive);
 
         Tiamat.update()
                 .build(Pickaxe, LongSword, RejuvenationBead, RejuvenationBead)
                 .cost(665)
                 .set(AD, 50)
                 .set(Hreg, 15)
-                .abilities(Cleave, Crescent);
+                .abilities(Ability.Cleave, Ability.Crescent);
         Tiamat.update(P306).cost(265).set(AD, 40);
 
         TrinityForce.update()
@@ -1169,8 +1233,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(Mana, 200)
                 .set(MSRatio, 8)
                 .set(Critical, 10)
-                .abilities(Icy1, TrinitySpellblade);
-        TrinityForce.update(P310A).abilities(Rage, TrinitySpellblade);
+                .abilities(Ability.Icy1, Ability.TrinitySpellblade);
+        TrinityForce.update(P310A).abilities(Ability.Rage, Ability.TrinitySpellblade);
 
         TwinShadows.update()
                 .build(KagesLuckyPick, NullMagicMantle)
@@ -1178,29 +1242,33 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(AP, 40)
                 .set(MSRatio, 6)
                 .set(MR, 40)
-                .abilities(Hunt);
+                .abilities(Ability.Hunt);
         TwinShadows.update(P314).build(AmplifyingTome, AmplifyingTome, NullMagicMantle).cost(730).set(AP, 50);
 
         VampiricScepter.update().build(LongSword).cost(400).set(LS, 10).set(AD, 10);
-        VisionWard.update().cost(125).abilities(VisionWardAvtive);
+        VisionWard.update().cost(125).abilities(Ability.VisionWardAvtive);
         VisionWard.update(P314).cost(100);
 
-        VoidStaff.update().build(BlastingWand, AmplifyingTome).cost(1000).set(AP, 70).abilities(VoidStaffPassive);
+        VoidStaff.update()
+                .build(BlastingWand, AmplifyingTome)
+                .cost(1000)
+                .set(AP, 70)
+                .abilities(Ability.VoidStaffPassive);
 
-        WardensMail.update().build(ClothArmor, ClothArmor).cost(500).set(AR, 50).abilities(ColdSteel1);
+        WardensMail.update().build(ClothArmor, ClothArmor).cost(500).set(AR, 50).abilities(Ability.ColdSteel1);
         WardensMail.update(P310).cost(400);
 
         WarmogsArmor.update()
                 .build(GiantsBelt, RubyCrystal, RejuvenationBead, RejuvenationBead)
                 .cost(995)
                 .set(Health, 1000)
-                .abilities(WarmogsArmorPassive);
+                .abilities(Ability.WarmogsArmorPassive);
 
         WillOftheAncients.update()
                 .build(KagesLuckyPick, HextechRevolver)
                 .cost(585)
                 .set(AP, 50)
-                .abilities(WillOftheAncientsAura);
+                .abilities(Ability.WillOftheAncientsAura);
         WillOftheAncients.update(P314)
                 .build(HextechRevolver, FaerieCharm, FaerieCharm)
                 .cost(440)
@@ -1215,7 +1283,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .cost(850)
                 .set(ASRatio, 40)
                 .set(MR, 25)
-                .abilities(WitsEndPassive);
+                .abilities(Ability.WitsEndPassive);
         WitsEnd.update(P308).build(RecurveBow, NullMagicMantle, Dagger).cost(700).set(ASRatio, 42);
 
         WrigglesLantern.update()
@@ -1224,12 +1292,12 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(LS, 10)
                 .set(AD, 15)
                 .set(AR, 30)
-                .abilities(Maim2, WrigglesLanternAvtive);
+                .abilities(Ability.Maim2, Ability.WrigglesLanternAvtive);
         WrigglesLantern.update(P308)
                 .set(AD, 25)
                 .set(LS, 15)
                 .set(AR, 25)
-                .abilities(Maim3, WrigglesLanternAvtive)
+                .abilities(Ability.Maim3, Ability.WrigglesLanternAvtive)
                 .cost(500);
 
         YoumuusGhostblade.update()
@@ -1238,14 +1306,14 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(AD, 30)
                 .set(CDR, 10)
                 .set(Critical, 15)
-                .abilities(YoumuusGhostbladePassive, YoumuusGhostbladeActive);
+                .abilities(Ability.YoumuusGhostbladePassive, Ability.YoumuusGhostbladeActive);
         Zeal.update().build(BrawlersGloves, Dagger).cost(375).set(ASRatio, 18).set(MSRatio, 5).set(Critical, 10);
         ZekesHerald.update()
                 .build(VampiricScepter, Kindlegem)
                 .cost(900)
                 .set(Health, 250)
                 .set(CDR, 20)
-                .abilities(ZekesHeraldAura);
+                .abilities(Ability.ZekesHeraldAura);
         Zephyr.update()
                 .build(Stinger, Pickaxe)
                 .cost(725)
@@ -1253,12 +1321,30 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(CDR, 10)
                 .set(ASRatio, 50)
                 .set(MSRatio, 10)
-                .abilities(TenacityPassive);
+                .abilities(Ability.TenacityPassive);
         ZhonyasHourglass.update()
                 .build(NeedlesslyLargeRod, SeekersArmguard)
                 .cost(500)
                 .set(AP, 120)
                 .set(AR, 50)
-                .abilities(Stasis);
+                .abilities(Ability.Stasis);
+
+        try {
+            for (Field field : Item.class.getFields()) {
+                if (Modifier.isStatic(field.getModifiers())) {
+                    System.out.println(field.getName());
+                    Item item = (Item) field.get(null);
+
+                    if (item.descriptor != null) {
+                        item.update();
+                        item.descriptor.accept(item);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error(e);
+        }
     }
 }

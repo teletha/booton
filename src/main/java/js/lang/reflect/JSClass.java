@@ -328,7 +328,6 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         if (privateConstructors == null) {
             privateConstructors = new HashMap();
 
-            // collect non-static methods only
             for (String name : definition.keys()) {
                 char ch = name.charAt(0);
 
@@ -507,7 +506,6 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         if (privateMethods == null) {
             privateMethods = new HashMap();
 
-            // collect non-static methods only
             for (String name : definition.keys()) {
                 char ch = name.charAt(0);
 
@@ -669,7 +667,6 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         if (privateFields == null) {
             privateFields = new HashMap();
 
-            // collect non-static methods only
             for (String name : definition.keys()) {
                 char ch = name.charAt(0);
 

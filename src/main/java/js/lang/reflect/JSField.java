@@ -9,9 +9,12 @@
  */
 package js.lang.reflect;
 
+import static js.lang.Global.*;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericSignatureFormatError;
 import java.lang.reflect.MalformedParameterizedTypeException;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
 import js.lang.NativeArray;
@@ -115,7 +118,7 @@ class JSField extends JSAccessibleObject {
      * If the field is hidden in the type of {@code obj}, the field's value is obtained according to
      * the preceding rules.
      * 
-     * @param object object from which the represented field's value is to be extracted
+     * @param obj object from which the represented field's value is to be extracted
      * @return the value of the represented field in object {@code obj}; primitive values are
      *         wrapped in an appropriate object before being returned
      * @exception IllegalAccessException if this {@code Field} object is enforcing Java language
@@ -127,8 +130,8 @@ class JSField extends JSAccessibleObject {
      *                field.
      * @exception ExceptionInInitializerError if the initialization provoked by this method fails.
      */
-    public Object get(Object object) throws IllegalArgumentException, IllegalAccessException {
-        return ((NativeObject) object).getProperty(nameJS);
+    public Object get(Object obj) throws IllegalArgumentException, IllegalAccessException {
+        return verify(obj).getProperty(nameJS);
     }
 
     /**
@@ -148,7 +151,7 @@ class JSField extends JSAccessibleObject {
      * @see Field#get
      */
     public boolean getBoolean(Object obj) throws IllegalArgumentException, IllegalAccessException {
-        return ((NativeObject) obj).getBoolean(nameJS);
+        return verify(obj).getBoolean(nameJS);
     }
 
     /**
@@ -168,7 +171,7 @@ class JSField extends JSAccessibleObject {
      * @see Field#get
      */
     public byte getByte(Object obj) throws IllegalArgumentException, IllegalAccessException {
-        return ((NativeObject) obj).getByte(nameJS);
+        return verify(obj).getByte(nameJS);
     }
 
     /**
@@ -189,7 +192,7 @@ class JSField extends JSAccessibleObject {
      * @see Field#get
      */
     public char getChar(Object obj) throws IllegalArgumentException, IllegalAccessException {
-        return ((NativeObject) obj).getChar(nameJS);
+        return verify(obj).getChar(nameJS);
     }
 
     /**
@@ -210,7 +213,7 @@ class JSField extends JSAccessibleObject {
      * @see Field#get
      */
     public short getShort(Object obj) throws IllegalArgumentException, IllegalAccessException {
-        return ((NativeObject) obj).getShort(nameJS);
+        return verify(obj).getShort(nameJS);
     }
 
     /**
@@ -231,7 +234,7 @@ class JSField extends JSAccessibleObject {
      * @see Field#get
      */
     public int getInt(Object obj) throws IllegalArgumentException, IllegalAccessException {
-        return ((NativeObject) obj).getInt(nameJS);
+        return verify(obj).getInt(nameJS);
     }
 
     /**
@@ -252,7 +255,7 @@ class JSField extends JSAccessibleObject {
      * @see Field#get
      */
     public long getLong(Object obj) throws IllegalArgumentException, IllegalAccessException {
-        return ((NativeObject) obj).getLong(nameJS);
+        return verify(obj).getLong(nameJS);
     }
 
     /**
@@ -273,7 +276,7 @@ class JSField extends JSAccessibleObject {
      * @see Field#get
      */
     public float getFloat(Object obj) throws IllegalArgumentException, IllegalAccessException {
-        return ((NativeObject) obj).getFloat(nameJS);
+        return verify(obj).getFloat(nameJS);
     }
 
     /**
@@ -294,7 +297,7 @@ class JSField extends JSAccessibleObject {
      * @see Field#get
      */
     public double getDouble(Object obj) throws IllegalArgumentException, IllegalAccessException {
-        return ((NativeObject) obj).getDouble(nameJS);
+        return verify(obj).getDouble(nameJS);
     }
 
     /**
@@ -338,7 +341,7 @@ class JSField extends JSAccessibleObject {
      * If the field is hidden in the type of {@code obj}, the field's value is set according to the
      * preceding rules.
      * 
-     * @param object the object whose field should be modified
+     * @param obj the object whose field should be modified
      * @param value the new value for the field of {@code obj} being modified
      * @exception IllegalAccessException if this {@code Field} object is enforcing Java language
      *                access control and the underlying field is either inaccessible or final.
@@ -349,8 +352,8 @@ class JSField extends JSAccessibleObject {
      *                field.
      * @exception ExceptionInInitializerError if the initialization provoked by this method fails.
      */
-    public void set(Object object, Object value) throws IllegalArgumentException, IllegalAccessException {
-        ((NativeObject) object).setProperty(nameJS, value);
+    public void set(Object obj, Object value) throws IllegalArgumentException, IllegalAccessException {
+        verify(obj).setProperty(nameJS, value);
     }
 
     /**
@@ -371,7 +374,7 @@ class JSField extends JSAccessibleObject {
      * @see Field#set
      */
     public void setBoolean(Object obj, boolean value) throws IllegalArgumentException, IllegalAccessException {
-        ((NativeObject) obj).setBoolean(nameJS, value);
+        verify(obj).setBoolean(nameJS, value);
     }
 
     /**
@@ -392,7 +395,7 @@ class JSField extends JSAccessibleObject {
      * @see Field#set
      */
     public void setByte(Object obj, byte value) throws IllegalArgumentException, IllegalAccessException {
-        ((NativeObject) obj).setByte(nameJS, value);
+        verify(obj).setByte(nameJS, value);
     }
 
     /**
@@ -413,7 +416,7 @@ class JSField extends JSAccessibleObject {
      * @see Field#set
      */
     public void setChar(Object obj, char value) throws IllegalArgumentException, IllegalAccessException {
-        ((NativeObject) obj).setChar(nameJS, value);
+        verify(obj).setChar(nameJS, value);
     }
 
     /**
@@ -434,7 +437,7 @@ class JSField extends JSAccessibleObject {
      * @see Field#set
      */
     public void setShort(Object obj, short value) throws IllegalArgumentException, IllegalAccessException {
-        ((NativeObject) obj).setShort(nameJS, value);
+        verify(obj).setShort(nameJS, value);
     }
 
     /**
@@ -455,7 +458,7 @@ class JSField extends JSAccessibleObject {
      * @see Field#set
      */
     public void setInt(Object obj, int value) throws IllegalArgumentException, IllegalAccessException {
-        ((NativeObject) obj).setInt(nameJS, value);
+        verify(obj).setInt(nameJS, value);
     }
 
     /**
@@ -476,7 +479,7 @@ class JSField extends JSAccessibleObject {
      * @see Field#set
      */
     public void setLong(Object obj, long value) throws IllegalArgumentException, IllegalAccessException {
-        ((NativeObject) obj).setLong(nameJS, value);
+        verify(obj).setLong(nameJS, value);
     }
 
     /**
@@ -497,7 +500,7 @@ class JSField extends JSAccessibleObject {
      * @see Field#set
      */
     public void setFloat(Object obj, float value) throws IllegalArgumentException, IllegalAccessException {
-        ((NativeObject) obj).setFloat(nameJS, value);
+        verify(obj).setFloat(nameJS, value);
     }
 
     /**
@@ -518,6 +521,20 @@ class JSField extends JSAccessibleObject {
      * @see Field#set
      */
     public void setDouble(Object obj, double value) throws IllegalArgumentException, IllegalAccessException {
-        ((NativeObject) obj).setDouble(nameJS, value);
+        verify(obj).setDouble(nameJS, value);
+    }
+
+    /**
+     * <p>
+     * Verify the target object.
+     * </p>
+     * 
+     * @param obj
+     * @return
+     */
+    private NativeObject verify(Object obj) {
+        if (Modifier.isStatic(modifiers)) obj = boot.getProperty(((JSClass) (Object) owner).nameJS);
+
+        return (NativeObject) obj;
     }
 }
