@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 import js.dom.Element;
 
 /**
- * @version 2013/11/29 12:44:27
+ * @version 2013/11/29 14:01:53
  */
 public class Item extends Describable<ItemDescriptor> {
 
@@ -43,7 +43,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(Health, 250)
                 .set(AR, 20)
                 .set(MR, 20)
-                .abilities(Ability.AegisLegion)
+                .abilities(Ability.Legion)
 
                 .update(P310)
                 .cost(375)
@@ -532,7 +532,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .set(AR, 20)
                 .set(CDR, 10)
                 .set(Hreg, 0)
-                .abilities(Ability.SolariActive, Ability.AegisLegion);
+                .abilities(Ability.SolariActive, Ability.Legion);
     });
 
     /** Long Sword */
@@ -1298,8 +1298,8 @@ public class Item extends Describable<ItemDescriptor> {
      * {@inheritDoc}
      */
     @Override
-    protected ItemDescriptor createDescriptor(ItemDescriptor previous) {
-        return new ItemDescriptor(this, previous);
+    protected ItemDescriptor createDescriptor(Version version, ItemDescriptor previous) {
+        return new ItemDescriptor(this, previous, version);
     }
 
     /**

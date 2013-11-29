@@ -17,7 +17,7 @@ import java.lang.reflect.Modifier;
 import java.util.function.Consumer;
 
 /**
- * @version 2013/06/06 20:22:46
+ * @version 2013/11/29 14:01:48
  */
 public class Ability extends Describable<AbilityDescriptor> {
 
@@ -30,7 +30,7 @@ public class Ability extends Describable<AbilityDescriptor> {
     });
 
     /** The ability. */
-    public static final Ability AegisLegion = new Ability("Legion", item -> {
+    public static final Ability Legion = new Ability("Legion", item -> {
         item.aura()
                 .passive("{1}の味方ユニットは{2}、{3}、{4}を得る。味方ミニオンに対しては効果が1.5倍になる。")
                 .variable(1, Radius, 1100)
@@ -687,8 +687,8 @@ public class Ability extends Describable<AbilityDescriptor> {
      * {@inheritDoc}
      */
     @Override
-    protected AbilityDescriptor createDescriptor(AbilityDescriptor previous) {
-        return new AbilityDescriptor(this, previous);
+    protected AbilityDescriptor createDescriptor(Version version, AbilityDescriptor previous) {
+        return new AbilityDescriptor(this, previous, version);
     }
 
     static {

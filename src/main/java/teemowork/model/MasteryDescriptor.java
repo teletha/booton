@@ -17,7 +17,7 @@ public class MasteryDescriptor extends Descriptor<MasteryDescriptor> {
     /**
      * 
      */
-    MasteryDescriptor(Mastery mastery, MasteryDescriptor previous) {
-        super(mastery, previous);
+    MasteryDescriptor(Mastery mastery, MasteryDescriptor previous, Version version) {
+        super(mastery, previous, version);
     }
 }

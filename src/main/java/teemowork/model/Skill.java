@@ -1854,8 +1854,8 @@ public class Skill extends Describable<SkillDescriptor> {
      * {@inheritDoc}
      */
     @Override
-    protected SkillDescriptor createDescriptor(SkillDescriptor previous) {
-        return new SkillDescriptor(this, previous);
+    protected SkillDescriptor createDescriptor(Version version, SkillDescriptor previous) {
+        return new SkillDescriptor(this, previous, version);
     }
 
     /**

@@ -28,6 +28,9 @@ public abstract class Descriptor<T extends Descriptor> {
     /** The target object to describe. */
     protected final Describable describable;
 
+    /** The version of this descriptor. */
+    protected final Version version;
+
     /** The previous version. */
     private final Descriptor<T> previous;
 
@@ -50,9 +53,10 @@ public abstract class Descriptor<T extends Descriptor> {
      * 
      * @param previous
      */
-    protected Descriptor(Describable describable, Descriptor<T> previous) {
+    protected Descriptor(Describable describable, Descriptor<T> previous, Version version) {
         this.describable = describable;
         this.previous = previous;
+        this.version = version;
 
         if (previous == null) {
             passive = new ArrayList();

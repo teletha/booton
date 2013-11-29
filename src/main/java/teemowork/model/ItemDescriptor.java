@@ -33,8 +33,8 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
     /**
      * @param name
      */
-    ItemDescriptor(Item item, ItemDescriptor previous) {
-        super(item, previous);
+    ItemDescriptor(Item item, ItemDescriptor previous, Version version) {
+        super(item, previous, version);
 
         if (previous != null) {
             values = Arrays.copyOf(previous.values, previous.values.length);
@@ -128,7 +128,6 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
      */
     ItemDescriptor abilities(Ability... abilities) {
         this.abilities = abilities;
-
         return this;
     }
 

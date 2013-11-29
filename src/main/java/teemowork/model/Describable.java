@@ -42,7 +42,7 @@ public abstract class Describable<T extends Descriptor> {
      * @param previous
      * @return
      */
-    protected abstract T createDescriptor(T previous);
+    protected abstract T createDescriptor(Version current, T previous);
 
     /**
      * <p>
@@ -57,7 +57,7 @@ public abstract class Describable<T extends Descriptor> {
                 return (T) descriptor;
             }
         }
-        return createDescriptor(null);
+        return createDescriptor(version, null);
     }
 
     /**
@@ -79,7 +79,7 @@ public abstract class Describable<T extends Descriptor> {
      * @return A descriptor of the specified version.
      */
     protected final T update(Version version) {
-        T descriptor = createDescriptor(getDescriptor(version));
+        T descriptor = createDescriptor(version, getDescriptor(version));
 
         // versioning management
         versions[version.ordinal()] = descriptor;
