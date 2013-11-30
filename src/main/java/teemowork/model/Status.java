@@ -307,7 +307,7 @@ public enum Status {
 
     Sell,
 
-    Gold, GoldPer10Sec,
+    Gold, GoldPer10Sec("Gold Generation"),
 
     // ==================================================
     // Time Related

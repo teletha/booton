@@ -45,7 +45,7 @@ import teemowork.model.Version;
 public class ItemView extends UI {
 
     private static final Status[] VISIBLE = {Health, Hreg, Mana, Mreg, AD, ASRatio, ARPen, LS, Critical, AP, CDR, SV,
-            MRPen, AR, MR, MSRatio};
+            MRPen, AR, MR, MSRatio, GoldPer10Sec};
 
     /** The status calculator. */
     private final StatusCalculator calculator;
