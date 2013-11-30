@@ -11,7 +11,10 @@ package teemowork.model;
 
 import static teemowork.model.Status.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @version 2013/01/29 1:55:25
@@ -25,7 +28,7 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
     private Item[] build = new Item[0];
 
     /** The ability list. */
-    private Ability[] abilities = new Ability[0];
+    private List<Ability> abilities = new ArrayList();
 
     /** The item status. */
     private boolean deprecated = false;
@@ -39,7 +42,7 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
         if (previous != null) {
             values = Arrays.copyOf(previous.values, previous.values.length);
             build = previous.build;
-            abilities = previous.abilities;
+            abilities = new ArrayList(previous.abilities);
         }
     }
 
@@ -225,6 +228,17 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
 
     /**
      * <p>
+     * Set status.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    ItemDescriptor goldGeneration(double value) {
+        return set(GoldPer10Sec, value);
+    }
+
+    /**
+     * <p>
      * Retrieve status value.
      * </p>
      * 
@@ -233,6 +247,20 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
      */
     ItemDescriptor cost(double base) {
         set(Cost, base);
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * Retrieve status value.
+     * </p>
+     * 
+     * @param status A target status.
+     * @return Chainable API.
+     */
+    ItemDescriptor price(double buy, double sell) {
+        set(Cost, buy);
 
         return this;
     }
@@ -269,7 +297,7 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
      * 
      * @return Abilities.
      */
-    public Ability[] getAbilities() {
+    public List<Ability> getAbilities() {
         return abilities;
     }
 
@@ -280,8 +308,10 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
      * 
      * @param Ability list.
      */
-    ItemDescriptor abilities(Ability... abilities) {
-        this.abilities = abilities;
+    ItemDescriptor add(Ability... abilities) {
+        for (Ability ability : abilities) {
+            this.abilities.add(ability);
+        }
         return this;
     }
 
@@ -307,5 +337,61 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
      */
     public boolean isDeprecated() {
         return deprecated;
+    }
+
+    ItemDescriptor add(String name, Consumer<AbilityDescriptor> descriptor) {
+        Ability ability = new Ability(name, descriptor);
+        this.abilities.add(ability);
+
+        descriptor.accept(ability.update(version));
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * Make this item deprecated.
+     * </p>
+     * 
+     * @return
+     */
+    ItemDescriptor add(Consumer<AbilityDescriptor> descriptor) {
+        Ability ability = new Ability(descriptor);
+        this.abilities.add(ability);
+
+        descriptor.accept(ability.update(version));
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * Make this item deprecated.
+     * </p>
+     * 
+     * @return
+     */
+    ItemDescriptor add(Consumer<AbilityDescriptor> descriptor1, Consumer<AbilityDescriptor> descriptor2) {
+        Ability ability1 = new Ability(descriptor1);
+        Ability ability2 = new Ability(descriptor2);
+        this.abilities.add(ability1);
+        this.abilities.add(ability2);
+
+        descriptor1.accept(ability1.update(version));
+        descriptor2.accept(ability2.update(version));
+
+        return this;
+    }
+
+    ItemDescriptor clear() {
+        abilities.clear();
+
+        return this;
+    }
+
+    ItemDescriptor remove(Ability ability) {
+        abilities.remove(ability);
+
+        return this;
     }
 }

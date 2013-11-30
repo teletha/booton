@@ -54,11 +54,11 @@ public class AbilityDescriptor extends Descriptor<AbilityDescriptor> {
      * @param range
      * @return
      */
-    AbilityDescriptor aura() {
+    AbilityDescriptor aura(String text) {
         this.aura = true;
         this.unique = true;
 
-        return this;
+        return passive(text);
     }
 
     /**
