@@ -85,7 +85,7 @@ public abstract class DescriptionView {
                 if (token instanceof Variable) {
                     writeVariable(description, (Variable) token, getLevel());
                 } else {
-                    description.append(token.toString());
+                    description.append(token);
                 }
             }
         }

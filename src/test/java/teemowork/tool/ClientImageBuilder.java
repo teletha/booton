@@ -16,7 +16,7 @@ import java.util.List;
 
 import kiss.I;
 import teemowork.model.Item;
-import teemowork.model.MasterySeason3;
+import teemowork.model.MasterySeason4;
 import teemowork.tool.image.EditableImage;
 
 /**
@@ -116,12 +116,12 @@ public class ClientImageBuilder {
      * </p>
      */
     public void buildMasteryIconSet() {
-        List<MasterySeason3> masteries = new ArrayList();
+        List<MasterySeason4> masteries = new ArrayList();
 
-        for (Field field : MasterySeason3.class.getFields()) {
-            if (field.getType() == MasterySeason3.class) {
+        for (Field field : MasterySeason4.class.getFields()) {
+            if (field.getType() == MasterySeason4.class) {
                 try {
-                    masteries.add((MasterySeason3) field.get(null));
+                    masteries.add((MasterySeason4) field.get(null));
                 } catch (Exception e) {
                     throw I.quiet(e);
                 }
@@ -130,13 +130,13 @@ public class ClientImageBuilder {
 
         EditableImage container = new EditableImage();
 
-        for (MasterySeason3 mastery : masteries) {
+        for (MasterySeason4 mastery : masteries) {
             EditableImage image = new EditableImage(I.locate(mastery.getIcon()));
             image.resize(45);
 
             container.concat(image);
         }
-        container.write(ResourceLocator.Resources.resolve("masteryS3.jpg"));
+        container.write(ResourceLocator.Resources.resolve("masteryS4.jpg"));
     }
 
     /**

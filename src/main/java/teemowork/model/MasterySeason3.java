@@ -19,15 +19,6 @@ public class MasterySeason3 extends Mastery {
 
     static final Mastery[] Masteries = new Mastery[56];
 
-    /** The tree type. */
-    public static final int Offense = 0;
-
-    /** The tree type. */
-    public static final int Defense = 1;
-
-    /** The tree type. */
-    public static final int Utility = 2;
-
     /** Season3 Mastery */
     public static final MasterySeason3 SummonersWrath = new MasterySeason3("Summoner's Wrath", 1, Offense, 0);
 
@@ -53,10 +44,10 @@ public class MasterySeason3 extends Mastery {
     public static final MasterySeason3 Havoc = new MasterySeason3("Havoc", 3, Offense, 2);
 
     /** Season3 Mastery */
-    public static final MasterySeason3 WeaponExpertise = new MasterySeason3("Weapon Expertise", 1, Offense, 2);
+    public static final MasterySeason3 WeaponExpertise = new MasterySeason3("Weapon Expertise", 1, Offense, 2, Deadliness);
 
     /** Season3 Mastery */
-    public static final MasterySeason3 ArcaneKnowledge = new MasterySeason3("Arcane Knowledge", 1, Offense, 2);
+    public static final MasterySeason3 ArcaneKnowledge = new MasterySeason3("Arcane Knowledge", 1, Offense, 2, Blast);
 
     /** Season3 Mastery */
     public static final MasterySeason3 Lethality = new MasterySeason3("Lethality", 2, Offense, 3);
@@ -71,7 +62,7 @@ public class MasterySeason3 extends Mastery {
     public static final MasterySeason3 Spellsword = new MasterySeason3("Spellsword", 1, Offense, 3);
 
     /** Season3 Mastery */
-    public static final MasterySeason3 Frenzy = new MasterySeason3("Frenzy", 1, Offense, 4);
+    public static final MasterySeason3 Frenzy = new MasterySeason3("Frenzy", 1, Offense, 4, Lethality);
 
     /** Season3 Mastery */
     public static final MasterySeason3 Sunder = new MasterySeason3("Sunder", 3, Offense, 4);
@@ -110,13 +101,13 @@ public class MasterySeason3 extends Mastery {
     public static final MasterySeason3 Relentless = new MasterySeason3("Relentless", 2, Defense, 2);
 
     /** Season3 Mastery */
-    public static final MasterySeason3 VeteransScar = new MasterySeason3("Veteran's Scars", 1, Defense, 2);
+    public static final MasterySeason3 VeteransScar = new MasterySeason3("Veteran's Scars", 1, Defense, 2, Durability);
 
     /** Season3 Mastery */
     public static final MasterySeason3 Safeguard = new MasterySeason3("Safeguard", 1, Defense, 2);
 
     /** Season3 Mastery */
-    public static final MasterySeason3 Block = new MasterySeason3("Block", 1, Defense, 3);
+    public static final MasterySeason3 Block = new MasterySeason3("Block", 1, Defense, 3, Unyielding);
 
     /** Season3 Mastery */
     public static final MasterySeason3 Tenacious = new MasterySeason3("Tenacious", 3, Defense, 3);
@@ -176,7 +167,7 @@ public class MasterySeason3 extends Mastery {
     public static final MasterySeason3 Biscuiteer = new MasterySeason3("Biscuiteer", 1, Utility, 2);
 
     /** Season3 Mastery */
-    public static final MasterySeason3 Wealth = new MasterySeason3("Wealth", 2, Utility, 3);
+    public static final MasterySeason3 Wealth = new MasterySeason3("Wealth", 2, Utility, 3, Greed);
 
     /** Season3 Mastery */
     public static final MasterySeason3 Awareness = new MasterySeason3("Awareness", 4, Utility, 3);
@@ -185,7 +176,7 @@ public class MasterySeason3 extends Mastery {
     public static final MasterySeason3 StrengthOfSpirit = new MasterySeason3("Strength of Spirit", 3, Utility, 3);
 
     /** Season3 Mastery */
-    public static final MasterySeason3 Explorer = new MasterySeason3("Explorer", 1, Utility, 3);
+    public static final MasterySeason3 Explorer = new MasterySeason3("Explorer", 1, Utility, 3, Biscuiteer);
 
     /** Season3 Mastery */
     public static final MasterySeason3 Pickpocket = new MasterySeason3("Pickpocket", 1, Utility, 4);
@@ -227,7 +218,19 @@ public class MasterySeason3 extends Mastery {
      * @param level A max level.
      */
     MasterySeason3(String name, int level, int type, int rank) {
-        super(name, level, type, rank, counter++);
+        this(name, level, type, rank, null);
+    }
+
+    /**
+     * <p>
+     * Define mastery.
+     * </p>
+     * 
+     * @param name A mastery name.
+     * @param level A max level.
+     */
+    MasterySeason3(String name, int level, int type, int rank, Mastery dependency) {
+        super(name, level, type, rank, counter++, dependency);
 
         Masteries[id] = this;
     }

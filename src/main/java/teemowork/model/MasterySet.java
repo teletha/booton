@@ -9,6 +9,7 @@
  */
 package teemowork.model;
 
+import static teemowork.model.Mastery.*;
 import static teemowork.model.MasterySeason3.*;
 import jsx.Publishable;
 
@@ -21,7 +22,7 @@ public class MasterySet extends Publishable {
     private String name = "";
 
     /** The values for each masteries. */
-    private int[] levels = new int[56];
+    private int[] levels;
 
     /** The categorized sum of offense tree. */
     private int[] offenses = new int[7];
@@ -46,8 +47,10 @@ public class MasterySet extends Publishable {
      * Create new empty {@link MasterySet}.
      * </p>
      */
-    public MasterySet() {
-        this(null);
+    public MasterySet(Version version) {
+        this((String) null);
+
+        levels = new int[Mastery.getMastery(version).length];
     }
 
     /**
@@ -59,6 +62,10 @@ public class MasterySet extends Publishable {
      */
     public MasterySet(String serialized) {
         setCode(serialized);
+
+        if (serialized != null) {
+            levels = new int[Mastery.getMastery(Version.Latest).length];
+        }
     }
 
     /**
@@ -183,44 +190,20 @@ public class MasterySet extends Publishable {
             return false;
         }
 
-        if (mastery.type == MasterySeason3.Offense) {
+        if (mastery.dependency != null && !isMax(mastery.dependency)) {
+            return false;
+        }
+
+        if (mastery.type == Mastery.Offense) {
             if (offense < mastery.requirement) {
                 return false;
             }
-
-            if (mastery == WeaponExpertise && !isMax(Deadliness)) {
-                return false;
-            }
-
-            if (mastery == ArcaneKnowledge && !isMax(Blast)) {
-                return false;
-            }
-
-            if (mastery == Frenzy && !isMax(Lethality)) {
-                return false;
-            }
-        } else if (mastery.type == MasterySeason3.Defense) {
+        } else if (mastery.type == Mastery.Defense) {
             if (defense < mastery.requirement) {
                 return false;
             }
-
-            if (mastery == VeteransScar && !isMax(Durability)) {
-                return false;
-            }
-
-            if (mastery == Block && !isMax(Unyielding)) {
-                return false;
-            }
-        } else if (mastery.type == MasterySeason3.Utility) {
+        } else if (mastery.type == Mastery.Utility) {
             if (utility < mastery.requirement) {
-                return false;
-            }
-
-            if (mastery == Wealth && !isMax(Greed)) {
-                return false;
-            }
-
-            if (mastery == Explorer && !isMax(Biscuiteer)) {
                 return false;
             }
         }

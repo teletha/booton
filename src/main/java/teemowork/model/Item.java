@@ -1250,7 +1250,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .armor(100)
                 .add(ability -> {
                     ability.passive("敵の通常攻撃受けるとその攻撃者に{1}を与える。")
-                            .variable(1, MagicDamage, 0, 0, amplify(ReceivedDOriginalamageRatio, 30));
+                            .variable(1, MagicDamage, 0, 0, amplify(ReceivedOriginalDamageRatio, 30));
                 });
     });
 
