@@ -92,12 +92,12 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Augment: Power */
     public static final Item AugmentPower = new Item(3196, "Augment: Power", item -> {
-        item.build(TheHexCore).cost(1000).abilityPower(45).add(Ability.HexCorePower, Ability.HexCoreDeath);
+        item.build(HexCore).cost(1000).abilityPower(45).add(Ability.HexCorePower, Ability.HexCoreDeath);
     });
 
     /** Augment: Gravity */
     public static final Item AugmentGravity = new Item(3197, "Augment: Gravity", item -> {
-        item.build(TheHexCore)
+        item.build(HexCore)
                 .cost(1000)
                 .cooldownReduction(10)
                 .manaRegen(5)
@@ -107,7 +107,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Augment: Death */
     public static final Item AugmentDeath = new Item(3198, "Augment: Death", item -> {
-        item.build(TheHexCore).cost(1000).health(220).healthRegen(6).add(Ability.HexCorePower, Ability.HexCoreTransfer);
+        item.build(HexCore).cost(1000).health(220).healthRegen(6).add(Ability.HexCorePower, Ability.HexCoreTransfer);
     });
 
     /** Avarice Blade */
@@ -190,8 +190,8 @@ public class Item extends Describable<ItemDescriptor> {
     });
 
     /** The Black Cleaver */
-    public static final Item TheBlackCleaver = new Item(3071, "The Black Cleaver", item -> {
-        item.build(TheBrutalizer, RubyCrystal)
+    public static final Item BlackCleaver = new Item(3071, "The Black Cleaver", item -> {
+        item.build(Brutalizer, RubyCrystal)
                 .cost(1188)
                 .attackDamage(50)
                 .health(200)
@@ -239,7 +239,7 @@ public class Item extends Describable<ItemDescriptor> {
     });
 
     /** The Bloodthirster */
-    public static final Item TheBloodthirster = new Item(3072, "The Bloodthirster", item -> {
+    public static final Item Bloodthirster = new Item(3072, "The Bloodthirster", item -> {
         item.build(BFSword, VampiricScepter)
                 .cost(850)
                 .lifeSteal(12)
@@ -293,7 +293,7 @@ public class Item extends Describable<ItemDescriptor> {
     });
 
     /** The Brutalizer */
-    public static final Item TheBrutalizer = new Item(3134, "The Brutalizer", item -> {
+    public static final Item Brutalizer = new Item(3134, "The Brutalizer", item -> {
         item.build(LongSword, LongSword).cost(547).attackDamage(25).add(ability -> {
             ability.passive("{1}と{2}を得る。").variable(1, CDR, 10).variable(2, ARPen, 10);
         })
@@ -525,7 +525,7 @@ public class Item extends Describable<ItemDescriptor> {
     });
 
     /** The Hex Core */
-    public static final Item TheHexCore = new Item(3200, "The Hex Core", item -> {
+    public static final Item HexCore = new Item(3200, "The Hex Core", item -> {
         item.cost(0).add(Ability.TheHexCorePassive);
     });
 
@@ -562,9 +562,11 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Hunter's Machete */
     public static final Item HuntersMachete = new Item(1039, "Hunter's Machete", item -> {
-        item.cost(300).add(Ability.Butcher1, Ability.Rend)
+        item.cost(300).add("Butcher", ability -> {
+            ability.passive("モンスターへのダメージが10%増加する。");
+        }).add(Ability.Rend)
 
-        .update(P308).add(Ability.Butcher1, Ability.Maim1);
+        .update(P308).remove(Ability.Rend).add(Ability.Maim);
     });
 
     /** Iceborn Gauntlet */
@@ -661,9 +663,11 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Madred's Razors */
     public static final Item MadredsRazors = new Item(3106, "Madred's Razors", item -> {
-        item.build(ClothArmor, HuntersMachete).cost(100).armor(25).add(Ability.Maim1, Ability.Rend)
+        item.build(ClothArmor, HuntersMachete).price(100, 490).armor(25).add(Ability.Maim, Ability.Rend)
 
-        .update(P308).add(Ability.Maim2);
+        .update(P308).remove(Ability.Maim).add(Ability.MaimForMadredsRazors)
+
+        .update(P314).remove(Ability.Rend);
     });
 
     /** Malady */
@@ -1047,13 +1051,17 @@ public class Item extends Describable<ItemDescriptor> {
     /** Spirit Stone */
     public static final Item SpiritStone = new Item(1080, "Spirit Stone", item -> {
         item.build(HuntersMachete, FaerieCharm, RejuvenationBead)
-                .cost(40)
+                .price(40, 490)
                 .manaRegen(7)
                 .healthRegen(14)
-                .add(Ability.Butcher2, Ability.Rend)
+                .add(Ability.Rend)
+                .add("Butcher", ability -> {
+                    ability.passive("モンスターへのダメージが20%増加する。");
+                })
 
                 .update(P308)
-                .add(Ability.Butcher2, Ability.Maim1);
+                .remove(Ability.Rend)
+                .add(Ability.Maim);
     });
 
     /** Spirit of the Ancient Golem */
@@ -1064,7 +1072,14 @@ public class Item extends Describable<ItemDescriptor> {
                 .manaRegen(7)
                 .healthRegen(14)
                 .cooldownReduction(10)
-                .add(Ability.Butcher3, Ability.TenacityPassive);
+                .add(Ability.Butcher, Ability.TenacityPassive)
+
+                .update(P314)
+                .health(350)
+                .add(Ability.GoldIncome)
+                .add(ability -> {
+                    ability.passive("1.5秒毎に最大80までスタックが貯まる。巨大モンスターを倒した時、最大40スタックを消費して、消費したスタックに等しい収入を得る。");
+                });
     });
 
     /** Spirit of the Elder Lizard */
@@ -1075,14 +1090,16 @@ public class Item extends Describable<ItemDescriptor> {
                 .cooldownReduction(10)
                 .manaRegen(7)
                 .healthRegen(14)
-                .add(Ability.Butcher3, Ability.Incinerate)
+                .add(Ability.Butcher, Ability.Incinerate)
 
                 .update(P308)
                 .attackDamage(35)
 
                 .update(P314)
                 .price(580, 800)
-                .attackDamage(30);
+                .attackDamage(30)
+                .add(Ability.GoldIncome)
+                .add(Ability.BountyHunter);
     });
 
     /** Spirit of the Spectral Wraith */
@@ -1092,10 +1109,32 @@ public class Item extends Describable<ItemDescriptor> {
                 .abilityPower(50)
                 .cooldownReduction(10)
                 .manaRegen(10)
-                .add(Ability.SpiritOftheSpectralWraithSV, Ability.Butcher3, Ability.SpiritOftheSpectralWraithSmite)
+                .add(Ability.Butcher)
+                .add(ability -> {
+                    ability.passive("サモナースペルのSmiteのCDを20%減少させる。");
+                })
+                .add(ability -> {
+                    ability.passive("{1}を得る。").variable(1, SV, 20);
+                })
 
                 .update(P308)
-                .abilityPower(40);
+                .abilityPower(40)
+
+                .update(P314)
+                .build(SpiritStone, FiendishCodex)
+                .price(480, 800)
+                .abilityPower(50)
+                .healthRegen(14)
+                .manaRegen(7)
+                .clear()
+                .add(Ability.Butcher)
+                .add(Ability.GoldIncome)
+                .add(Ability.BountyHunter)
+                .add(ability -> {
+                    ability.passive("モンスターにダメージを与えると{1}し{2}する。(範囲攻撃の場合、この効果は半減する)")
+                            .variable(1, RestoreHealth, 0, 0, amplify(DealtDamage, 0.08))
+                            .variable(2, RestoreMana, 0, 0, amplify(DealtDamage, 0.08));
+                });
     });
 
     /** Spirit Visage */
@@ -1288,20 +1327,53 @@ public class Item extends Describable<ItemDescriptor> {
                 .lifeSteal(10)
                 .attackDamage(15)
                 .armor(30)
-                .add(Ability.Maim2, Ability.WrigglesLanternAvtive)
+                .add(Ability.MaimForMadredsRazors)
+                .add(ability -> {
+                    ability.active("{2}間持続する" + StealthWard.name + "を指定地点に設置する。{1}。")
+                            .variable(1, ItemCD, 180)
+                            .variable(2, Time, 180)
+
+                            .update(P308)
+                            .variable(1, ItemCD, 90)
+                            .variable(2, Time, 90)
+
+                            .update(P314)
+                            .variable(1, ItemCD, 180)
+                            .variable(2, Time, 180);
+                })
 
                 .update(P308)
+                .cost(500)
                 .attackDamage(25)
                 .lifeSteal(15)
                 .armor(25)
-                .remove(Ability.Maim2)
-                .add(Ability.Maim3)
-                .cost(500);
+                .remove(Ability.MaimForMadredsRazors)
+                .add("Maim", ability -> {
+                    ability.passive("モンスターへ通常攻撃をする度に{1}を与える。")
+                            .variable(1, MagicDamage, 100)
+
+                            .update(P314)
+                            .passive("モンスターへ通常攻撃をする度に{1}を与え、{2}する。")
+                            .variable(1, MagicDamage, 100)
+                            .variable(2, RestoreHealth, 10);
+                })
+
+                .update(P314)
+                .build(MadredsRazors, Dagger, Dagger)
+                .price(150, 720)
+                .armor(20)
+                .attackSpeed(25)
+                .attackDamage(0)
+                .lifeSteal(0)
+                .add(Ability.GoldIncome)
+                .add(ability -> {
+                    ability.passive("モンスターからの収入が40%増加する。");
+                });
     });
 
     /** Youmuu's Ghostblade */
     public static final Item YoumuusGhostblade = new Item(3142, "Youmuu's Ghostblade", item -> {
-        item.build(AvariceBlade, TheBrutalizer)
+        item.build(AvariceBlade, Brutalizer)
                 .cost(563)
                 .attackDamage(30)
                 .cooldownReduction(10)
@@ -1373,9 +1445,9 @@ public class Item extends Describable<ItemDescriptor> {
                 .goldGeneration(4)
                 .add(Ability.GoldIncome)
                 .add("Tribute", ability -> {
-                    ability.passive("Championに通常攻撃を行うと{1}獲得する（CD{2}）。ミニオンを倒すとこの効果は10秒間無効になる。")
+                    ability.passive("Championに通常攻撃を行うと{1}獲得する（{2}）。ミニオンを倒すとこの効果は10秒間無効になる。")
                             .variable(1, Gold, 8)
-                            .variable(2, Time, 10);
+                            .variable(2, ItemCD, 10);
                 });
     });
 
@@ -1412,10 +1484,10 @@ public class Item extends Describable<ItemDescriptor> {
                     ability.passive("周囲であなたが殺すことなくミニオンが死んだ場合に{1}獲得する。").variable(1, Gold, 4);
                 })
                 .add(ability -> {
-                    ability.active("{1}の味方は3秒間{2}する。CD{3}")
+                    ability.active("{1}の味方は3秒間{2}する。{3}")
                             .variable(1, Radius, 600)
                             .variable(2, MSRatio, 40)
-                            .variable(3, Time, 60);
+                            .variable(3, ItemCD, 60);
                 });
     });
 
@@ -1459,11 +1531,11 @@ public class Item extends Describable<ItemDescriptor> {
                             .variable(2, Value, 200, 0, ad(1));
                 })
                 .add("Deadly Phalanx", ability -> {
-                    ability.active("あなたは{1}を失う。対象の味方は4秒間{2}を得る。また、4秒後にその味方の周囲の敵に{3}を与える。CD{4}")
+                    ability.active("あなたは{1}を失う。対象の味方は4秒間{2}を得る。また、4秒後にその味方の周囲の敵に{3}を与える。{4}")
                             .variable(1, CurrentHealthRatio, 20)
                             .variable(2, Shield, 0, 0, amplify(Health, 0.1))
                             .variable(3, MagicDamage, 0, 0, amplify(Health, 0.1))
-                            .variable(4, Time, 60);
+                            .variable(4, ItemCD, 60);
                 });
     });
 

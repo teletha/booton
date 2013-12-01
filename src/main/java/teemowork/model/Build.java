@@ -82,6 +82,7 @@ public class Build extends Publishable implements StatusCalculator {
         items[2] = Item.GuinsoosRageblade;
         items[3] = Item.TrinityForce;
         items[4] = Item.RabadonsDeathcap;
+        items[5] = Item.FaceOfTheMountain;
     }
 
     /**
