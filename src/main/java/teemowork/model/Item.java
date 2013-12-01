@@ -443,7 +443,9 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Emblem of Valor */
     public static final Item EmblemOfValor = new Item(3097, "Emblem of Valor", item -> {
-        item.build(ClothArmor, RejuvenationBead).cost(170).armor(20).add(Ability.Valor);
+        item.build(ClothArmor, RejuvenationBead).cost(170).armor(20).add(Ability.Valor)
+
+        .update(P314).deprecated();
     });
 
     /** Executioner's Calling */
@@ -623,7 +625,9 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Kage's Lucky Pick */
     public static final Item KagesLuckyPick = new Item(3098, "Kage's Lucky Pick", item -> {
-        item.build(AmplifyingTome).cost(330).abilityPower(25).add(Ability.LuckyShadow);
+        item.build(AmplifyingTome).cost(330).abilityPower(25).add(Ability.LuckyShadow)
+
+        .update(P314).deprecated();
     });
 
     /** Kindlegem */
