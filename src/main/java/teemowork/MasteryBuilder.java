@@ -10,7 +10,6 @@
 package teemowork;
 
 import static js.lang.Global.*;
-import static teemowork.model.Mastery.*;
 import js.dom.DocumentFragment;
 import js.dom.Element;
 import js.dom.EventListener;
@@ -44,6 +43,7 @@ import teemowork.MasteryBuilderStyle.Utility;
 import teemowork.model.Describable;
 import teemowork.model.DescriptionView;
 import teemowork.model.Mastery;
+import teemowork.model.MasterySeason3;
 import teemowork.model.MasterySet;
 import teemowork.model.Version;
 
@@ -51,21 +51,6 @@ import teemowork.model.Version;
  * @version 2013/10/10 9:47:05
  */
 public class MasteryBuilder extends Page {
-
-    private static final Mastery[][] OFFENSE = { {SummonersWrath, Fury, Sorcery, Butcher},
-            {null, Deadliness, Blast, Destruction}, {Havoc, WeaponExpertise, ArcaneKnowledge, null},
-            {Lethality, BruteForce, MentalForce, Spellsword}, {Frenzy, Sunder, Archmage, null},
-            {null, Executioner, null, null}};
-
-    private static final Mastery[][] DEFEMSE = { {SummonersResolve, Perseverance, Durability, ToughSkin},
-            {Hardiness, Resistance, null, BladedArmor}, {Unyielding, Relentless, VeteransScar, Safeguard},
-            {Block, Tenacious, Juggernaut, null}, {Defender, LegendaryArmor, GoodHands, ReinforcedArmor},
-            {null, HonorGuard, null, null}};
-
-    private static final Mastery[][] UTILITY = { {SummonersInsight, Wanderer, Meditation, ImprovedRecall},
-            {Scout, Mastermind, ExpandedMind, Artificer}, {Greed, RunicAffinity, Vampirism, Biscuiteer},
-            {Wealth, Awareness, StrengthOfSpirit, Explorer}, {Pickpocket, Intelligence, null, null},
-            {null, Nimble, null, null}};
 
     private MasteryManager set;
 
@@ -137,9 +122,11 @@ public class MasteryBuilder extends Page {
             }
         }));
 
-        offense = build(root.child(Offense.class), OFFENSE);
-        defense = build(root.child(Defense.class), DEFEMSE);
-        utility = build(root.child(Utility.class), UTILITY);
+        Mastery[][][] masteries = Mastery.getMasteryTree(Version.Latest);
+
+        offense = build(root.child(Offense.class), masteries[0]);
+        defense = build(root.child(Defense.class), masteries[1]);
+        utility = build(root.child(Utility.class), masteries[2]);
 
         masterySet.publish(masterySet);
     }
@@ -176,9 +163,9 @@ public class MasteryBuilder extends Page {
     public void receive() {
         reset.label(String.valueOf(30 - masterySet.getSum()));
 
-        offense.text("OFFENSE　" + masterySet.getSum(Mastery.Offense));
-        defense.text("DEFENSE　" + masterySet.getSum(Mastery.Defense));
-        utility.text("UTILITY　" + masterySet.getSum(Mastery.Utility));
+        offense.text("OFFENSE　" + masterySet.getSum(MasterySeason3.Offense));
+        defense.text("DEFENSE　" + masterySet.getSum(MasterySeason3.Defense));
+        utility.text("UTILITY　" + masterySet.getSum(MasterySeason3.Utility));
 
         history.replaceState("", "", "#" + getPageId());
     }
