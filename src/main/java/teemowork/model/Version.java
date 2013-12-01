@@ -101,6 +101,6 @@ public enum Version {
      * @return
      */
     public boolean isLessThan(Version other) {
-        return compareTo(other) != 1;
+        return compareTo(other) == -1;
     }
 }

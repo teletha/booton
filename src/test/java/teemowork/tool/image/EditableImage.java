@@ -68,8 +68,8 @@ public class EditableImage {
         try {
             this.file = file;
             this.image = ImageIO.read(file.toFile());
-        } catch (IOException e) {
-            throw I.quiet(e);
+        } catch (Exception e) {
+            throw new RuntimeException(file.toAbsolutePath() + " is not found.");
         }
     }
 
