@@ -91,4 +91,16 @@ public enum Version {
         this.month = month;
         this.day = day;
     }
+
+    /**
+     * <p>
+     * Compare version.
+     * </p>
+     * 
+     * @param other
+     * @return
+     */
+    public boolean isLessThan(Version other) {
+        return compareTo(other) != 1;
+    }
 }

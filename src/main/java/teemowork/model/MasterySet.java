@@ -9,7 +9,7 @@
  */
 package teemowork.model;
 
-import static teemowork.model.Mastery.*;
+import static teemowork.model.MasterySeason3.*;
 import jsx.Publishable;
 
 /**
@@ -115,7 +115,7 @@ public class MasterySet extends Publishable {
     public void reset() {
         boolean changed = false;
 
-        for (Mastery mastery : Mastery.VALUES) {
+        for (Mastery mastery : Mastery.getMastery(Version.Latest)) {
             if (changeLevel(mastery, -4)) {
                 changed = true;
             }
@@ -159,10 +159,10 @@ public class MasterySet extends Publishable {
      */
     public int getSum(int type) {
         switch (type) {
-        case Mastery.Offense:
+        case MasterySeason3.Offense:
             return offense;
 
-        case Mastery.Defense:
+        case MasterySeason3.Defense:
             return defense;
 
         default:
@@ -183,7 +183,7 @@ public class MasterySet extends Publishable {
             return false;
         }
 
-        if (mastery.type == Mastery.Offense) {
+        if (mastery.type == MasterySeason3.Offense) {
             if (offense < mastery.requirement) {
                 return false;
             }
@@ -199,7 +199,7 @@ public class MasterySet extends Publishable {
             if (mastery == Frenzy && !isMax(Lethality)) {
                 return false;
             }
-        } else if (mastery.type == Mastery.Defense) {
+        } else if (mastery.type == MasterySeason3.Defense) {
             if (defense < mastery.requirement) {
                 return false;
             }
@@ -211,7 +211,7 @@ public class MasterySet extends Publishable {
             if (mastery == Block && !isMax(Unyielding)) {
                 return false;
             }
-        } else if (mastery.type == Mastery.Utility) {
+        } else if (mastery.type == MasterySeason3.Utility) {
             if (utility < mastery.requirement) {
                 return false;
             }
@@ -248,7 +248,7 @@ public class MasterySet extends Publishable {
      * @return A result.
      */
     private boolean isUnavailable(Mastery mastery) {
-        if (mastery.type == Mastery.Offense) {
+        if (mastery.type == MasterySeason3.Offense) {
             if (unsafe(offenses, mastery)) {
                 return false;
             }
@@ -264,7 +264,7 @@ public class MasterySet extends Publishable {
             if (mastery == Lethality && levels[Frenzy.id] != 0) {
                 return false;
             }
-        } else if (mastery.type == Mastery.Defense) {
+        } else if (mastery.type == MasterySeason3.Defense) {
             if (unsafe(defenses, mastery)) {
                 return false;
             }
@@ -276,7 +276,7 @@ public class MasterySet extends Publishable {
             if (mastery == Unyielding && levels[Block.id] != 0) {
                 return false;
             }
-        } else if (mastery.type == Mastery.Utility) {
+        } else if (mastery.type == MasterySeason3.Utility) {
             if (unsafe(utilities, mastery)) {
                 return false;
             }
@@ -332,7 +332,7 @@ public class MasterySet extends Publishable {
         int step = 0;
         int value = 0;
 
-        for (Mastery mastery : Mastery.VALUES) {
+        for (Mastery mastery : Mastery.getMastery(Version.Latest)) {
             if (mastery.getMaxLevel() == level) {
                 value |= levels[mastery.id] << step;
 
@@ -363,7 +363,7 @@ public class MasterySet extends Publishable {
         int step = 0;
         int value = Integer.parseInt(serialized, 36);
 
-        for (Mastery mastery : Mastery.VALUES) {
+        for (Mastery mastery : Mastery.getMastery(Version.Latest)) {
             if (mastery.getMaxLevel() == level) {
                 int mask = (int) Math.pow(2, binarySize) - 1 << step;
 
