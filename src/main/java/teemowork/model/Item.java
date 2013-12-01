@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 import js.dom.Element;
 
 /**
- * @version 2013/11/29 19:55:03
+ * @version 2013/12/01 12:39:38
  */
 public class Item extends Describable<ItemDescriptor> {
 
@@ -69,7 +69,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .abilityPower(60)
                 .manaRegen(10)
                 .mana(250)
-                .add(Ability.ArchangelInsight, Ability.ManaCharge);
+                .add(Ability.ArchangelInsight)
+                .add(Ability.ManaCharge);
     });
 
     /** Athene's Unholy Grail */
@@ -80,7 +81,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .manaRegen(15)
                 .magicRegist(40)
                 .cooldownReduction(20)
-                .add(Ability.AtheneRestore, Ability.ManaFont);
+                .add(Ability.AtheneRestore)
+                .add(Ability.ManaFont);
     });
 
     /** Atma's Impaler */
@@ -92,7 +94,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Augment: Power */
     public static final Item AugmentPower = new Item(3196, "Augment: Power", item -> {
-        item.build(HexCore).cost(1000).abilityPower(45).add(Ability.HexCorePower, Ability.HexCoreDeath);
+        item.build(HexCore).cost(1000).abilityPower(45).add(Ability.HexCorePower).add(Ability.HexCoreDeath);
     });
 
     /** Augment: Gravity */
@@ -102,17 +104,23 @@ public class Item extends Describable<ItemDescriptor> {
                 .cooldownReduction(10)
                 .manaRegen(5)
                 .mana(200)
-                .add(Ability.HexCorePower, Ability.HexCoreGravity);
+                .add(Ability.HexCorePower)
+                .add(Ability.HexCoreGravity);
     });
 
     /** Augment: Death */
     public static final Item AugmentDeath = new Item(3198, "Augment: Death", item -> {
-        item.build(HexCore).cost(1000).health(220).healthRegen(6).add(Ability.HexCorePower, Ability.HexCoreTransfer);
+        item.build(HexCore)
+                .cost(1000)
+                .health(220)
+                .healthRegen(6)
+                .add(Ability.HexCorePower)
+                .add(Ability.HexCoreTransfer);
     });
 
     /** Avarice Blade */
     public static final Item AvariceBlade = new Item(3093, "Avarice Blade", item -> {
-        item.build(BrawlersGloves).cost(400).critical(10).add(Ability.Avarice, Ability.Greed);
+        item.build(BrawlersGloves).cost(400).critical(10).add(Ability.Avarice).add(Ability.Greed);
     });
 
     /** B. F. Sword */
@@ -127,7 +135,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .abilityPower(40)
                 .cooldownReduction(10)
                 .armor(30)
-                .add(Ability.AegisValor, Ability.Promote)
+                .add(Ability.AegisValor)
+                .add(Ability.Promote)
 
                 .update(P314)
                 .build(FiendishCodex, BlastingWand)
@@ -156,7 +165,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .mana(0)
                 .add(ability -> {
                     ability.passive("Championからダメージを受けると10秒間{1}を得る。").variable(-1, Hreg, 45);
-                }, ability -> {
+                })
+                .add(ability -> {
                     ability.passive("敵Championからのスキルを無効化するシールドを張る。シールドはスキルを無効化すると消費され、25秒間敵Championからダメージを受けないと再生する。");
                 });
     });
@@ -200,7 +210,8 @@ public class Item extends Describable<ItemDescriptor> {
                     ability.ununique()
                             .passive("敵Championに物理DMを与えた際、{1}を与える。5回（計25％）までスタックし、4秒間持続する。")
                             .variable(1, ARReductionRatio, 5);
-                }, ability -> {
+                })
+                .add(ability -> {
                     ability.passive("{1}を得る。").variable(1, ARPen, 10);
                 });
     });
@@ -215,7 +226,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .add(ability -> {
                     ability.passive("通常攻撃に{1}(Minionに対しては60が上限)を付与する。")
                             .variable(1, PhysicalDamage, 0, 0, amplify(TargetCurrentHealthRatio, 5));
-                }, ability -> {
+                })
+                .add(ability -> {
                     ability.active("対象の敵Champion({1})に{2}(下限100)を与え、{3}する。また{5}間{4}を与え、自身の移動速度がその分だけ増加する。{6}。")
                             .variable(1, Radius, 550)
                             .variable(2, PhysicalDamage, 0, 0, amplify(TargetMaxHealthRatio, 15))
@@ -258,7 +270,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .attackDamage(5)
                 .add(ability -> {
                     ability.passive("{1}を得る。").variable(1, AD, 0, 0, amplify(Lv, 2));
-                }, ability -> {
+                })
+                .add(ability -> {
                     ability.passive("キルまたはアシスト時に1 trophyを得て、死亡時に1 trophyを失う（最大値は14）。その数に応じて追加効果を得る。<br>3 : {1}と{2}を得る。<br>6 : {3}を得る。<br>9 : Unseen Predatorの射程が150増加する。<br>14 : Ultの効果時間が3秒増加する。またUltを使用した次にスキルを使用する際に1 Ferocityを追加で得る。")
                             .variable(1, ARPen, 10)
                             .variable(2, CDR, 5)
@@ -282,7 +295,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Boots of Swiftness */
     public static final Item BootsOfSwiftness = new Item(3009, "Boots of Swiftness", item -> {
-        item.build(BootsOfSpeed).cost(650).add(Ability.EnhancedMovement3, Ability.SlowResist)
+        item.build(BootsOfSpeed).cost(650).add(Ability.EnhancedMovement3).add(Ability.SlowResist)
 
         .update(P308).cost(675);
     });
@@ -332,13 +345,15 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Crystalline Flask */
     public static final Item CrystallineFlask = new Item(2041, "Crystalline Flask", item -> {
-        item.cost(345).add(ability -> {
-            ability.active("チャージを一つ消費して12秒かけて{1}し、{2}する。")
-                    .variable(1, Status.RestoreHealth, 120)
-                    .variable(2, RestoreMana, 60);
-        }, ability -> {
-            ability.passive("購入時及びショップを訪れる度に3つのチャージを得る。");
-        });
+        item.cost(345)
+                .add(ability -> {
+                    ability.active("チャージを一つ消費して12秒かけて{1}し、{2}する。")
+                            .variable(1, Status.RestoreHealth, 120)
+                            .variable(2, RestoreMana, 60);
+                })
+                .add(ability -> {
+                    ability.passive("購入時及びショップを訪れる度に3つのチャージを得る。");
+                });
     });
 
     /** Dagger */
@@ -395,9 +410,15 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Eleisa's Miracle */
     public static final Item EleisasMiracle = new Item(3173, "Eleisa's Miracle", item -> {
-        item.build(PhilosophersStone).cost(400).manaRegen(15).healthRegen(10).add(Ability.Aid, Ability.EleisasBlessing)
+        item.build(PhilosophersStone)
+                .cost(400)
+                .manaRegen(15)
+                .healthRegen(10)
+                .add(Ability.Aid)
+                .add(Ability.EleisasBlessing)
 
-        .update(P314).deprecated();
+                .update(P314)
+                .deprecated();
     });
 
     /** Elixir of Brilliance */
@@ -505,7 +526,8 @@ public class Item extends Describable<ItemDescriptor> {
                             .passive("通常攻撃またはスキル使用時にスタックが1増加する。1スタックにつき{1}し{2}を得る。スタックは8秒持続し、最大8スタックまで増加する。")
                             .variable(-1, ASRatio, 4)
                             .variable(-2, AP, 4);
-                }, ability -> {
+                })
+                .add(ability -> {
                     ability.passive("自身のHealthが50%以下になった際に、戦闘状態が終わるまでの間{1}し{2}と{3}を得る。8秒間戦闘を行わないと解除される。{4}。")
                             .variable(-1, ASRatio, 20)
                             .variable(-2, LS, 10)
@@ -546,7 +568,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .add(ability -> {
                     ability.passive("{1}を得る。敵Championに通常攻撃でダメージを与えるか、単体対象かつDoTではないダメージスキルを使用するたびに、このアイテムのUNIQUE ActiveのCDが3秒解消する。")
                             .variable(1, SV, 20);
-                }, ability -> {
+                })
+                .add(ability -> {
                     ability.active("対象の敵Champion({1})に{2}と2秒間{3}を与える。{4}。")
                             .variable(1, Radius, 700)
                             .variable(2, MagicDamage, 150, 0, ap(0.4))
@@ -591,7 +614,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Ionian Boots of Lucidity */
     public static final Item IonianBootsOfLucidity = new Item(3158, "Ionian Boots of Lucidity", item -> {
-        item.build(BootsOfSpeed).cost(700).add(Ability.IonianCDR, Ability.EnhancedMovement2)
+        item.build(BootsOfSpeed).cost(700).add(Ability.IonianCDR).add(Ability.EnhancedMovement2)
 
         .update(P306).cost(650)
 
@@ -621,7 +644,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .cost(980)
                 .abilityPower(50)
                 .health(300)
-                .add(Ability.EyesOfPain, Ability.LiandrysTormentPassive);
+                .add(Ability.EyesOfPain)
+                .add(Ability.LiandrysTormentPassive);
     });
 
     /** Lich Bane */
@@ -651,7 +675,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .armor(20)
                 .cooldownReduction(10)
                 .healthRegen(0)
-                .add(Ability.SolariActive, Ability.Legion);
+                .add(Ability.SolariActive)
+                .add(Ability.Legion);
     });
 
     /** Long Sword */
@@ -663,7 +688,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Madred's Razors */
     public static final Item MadredsRazors = new Item(3106, "Madred's Razors", item -> {
-        item.build(ClothArmor, HuntersMachete).price(100, 490).armor(25).add(Ability.Maim, Ability.Rend)
+        item.build(ClothArmor, HuntersMachete).price(100, 490).armor(25).add(Ability.Maim).add(Ability.Rend)
 
         .update(P308).remove(Ability.Maim).add(Ability.MaimForMadredsRazors)
 
@@ -703,7 +728,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .attackDamage(20)
                 .manaRegen(7)
                 .mana(250)
-                .add(Ability.Awe, Ability.ManamuneManaCharge)
+                .add(Ability.Awe)
+                .add(Ability.ManamuneManaCharge)
 
                 .update(P314)
                 .price(1040, 1470);
@@ -715,7 +741,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .cost(975)
                 .attackDamage(55)
                 .magicRegist(36)
-                .add(Ability.MawOfMalmortiusPassive, Ability.Lifeline2)
+                .add(Ability.MawOfMalmortiusPassive)
+                .add(Ability.Lifeline2)
 
                 .update(P309)
                 .attackDamage(60)
@@ -737,7 +764,8 @@ public class Item extends Describable<ItemDescriptor> {
         item.build(BootsOfSpeed, NullMagicMantle)
                 .cost(450)
                 .magicRegist(25)
-                .add(Ability.EnhancedMovement2, Ability.TenacityPassive)
+                .add(Ability.EnhancedMovement2)
+                .add(Ability.TenacityPassive)
 
                 .update(P308)
                 .cost(475);
@@ -750,7 +778,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .manaRegen(9)
                 .mana(300)
                 .magicRegist(40)
-                .add(Ability.ManaFont, Ability.MikaelsCrucibleActive)
+                .add(Ability.ManaFont)
+                .add(Ability.MikaelsCrucibleActive)
 
                 .update(P307)
                 .build(ChaliceOfHarmony, PhilosophersStone)
@@ -758,7 +787,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .manaRegen(18)
                 .healthRegen(7)
                 .magicRegist(40)
-                .add(Ability.ManaFont, Ability.MikaelsCrucibleActive)
+                .add(Ability.ManaFont)
+                .add(Ability.MikaelsCrucibleActive)
 
                 .update(P314)
                 .build(ChaliceOfHarmony)
@@ -779,7 +809,13 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Muramana */
     public static final Item Muramana = new Item(3042, "Muramana", item -> {
-        item.build(Manamune).cost(0).attackDamage(20).manaRegen(7).mana(1000).add(Ability.Awe, Ability.MuramanaToggle);
+        item.build(Manamune)
+                .cost(0)
+                .attackDamage(20)
+                .manaRegen(7)
+                .mana(1000)
+                .add(Ability.Awe)
+                .add(Ability.MuramanaToggle);
     });
 
     /** Nashor's Tooth */
@@ -804,7 +840,8 @@ public class Item extends Describable<ItemDescriptor> {
         item.build(BootsOfSpeed, ClothArmor)
                 .cost(350)
                 .armor(25)
-                .add(Ability.NinjaTabiPassive, Ability.EnhancedMovement2)
+                .add(Ability.NinjaTabiPassive)
+                .add(Ability.EnhancedMovement2)
 
                 .update(P308)
                 .cost(375);
@@ -891,7 +928,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .cost(1000)
                 .health(500)
                 .armor(70)
-                .add(Ability.ColdSteel2, Ability.RanduinsOmenAvtive);
+                .add(Ability.ColdSteel2)
+                .add(Ability.RanduinsOmenAvtive);
     });
 
     /** Ravenous Hydra */
@@ -901,7 +939,9 @@ public class Item extends Describable<ItemDescriptor> {
                 .lifeSteal(12)
                 .attackDamage(75)
                 .healthRegen(15)
-                .add(Ability.RavenousHydraPassive, Ability.Cleave, Ability.Crescent)
+                .add(Ability.RavenousHydraPassive)
+                .add(Ability.Cleave)
+                .add(Ability.Crescent)
 
                 .update(P306)
                 .cost(600);
@@ -943,9 +983,9 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Ruby Sightstone */
     public static final Item RubySightstone = new Item(2045, "Ruby Sightstone", item -> {
-        item.build(RubyCrystal, Sightstone).cost(125).health(360).add(Ability.WardRefresh2, Ability.GhostWard2)
+        item.build(RubyCrystal, Sightstone).cost(125).health(360).add(Ability.WardRefresh2).add(Ability.GhostWard2)
 
-        .update(P314).add(Ability.WardRefresh2, Ability.GhostWard1);
+        .update(P314).add(Ability.WardRefresh2).add(Ability.GhostWard1);
     });
 
     /** Runaan's Hurricane */
@@ -987,7 +1027,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .abilityPower(60)
                 .manaRegen(10)
                 .mana(1000)
-                .add(Ability.Insight, Ability.ManaShield);
+                .add(Ability.Insight)
+                .add(Ability.ManaShield);
     });
 
     /** Seeker's Armguard */
@@ -1004,7 +1045,9 @@ public class Item extends Describable<ItemDescriptor> {
         item.build(KagesLuckyPick, ManaManipulator)
                 .cost(535)
                 .abilityPower(45)
-                .add(Ability.LuckyShadow, Ability.ManaWarp, Ability.ShardOfTrueIceActive);
+                .add(Ability.LuckyShadow)
+                .add(Ability.ManaWarp)
+                .add(Ability.ShardOfTrueIceActive);
     });
 
     /** Sheen */
@@ -1033,7 +1076,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Sightstone */
     public static final Item Sightstone = new Item(2049, "Sightstone", item -> {
-        item.build(RubyCrystal).cost(475).health(180).add(Ability.WardRefresh1, Ability.GhostWard1);
+        item.build(RubyCrystal).cost(475).health(180).add(Ability.WardRefresh1).add(Ability.GhostWard1);
     });
 
     /** Sorcerer's Shoes */
@@ -1072,7 +1115,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .manaRegen(7)
                 .healthRegen(14)
                 .cooldownReduction(10)
-                .add(Ability.Butcher, Ability.TenacityPassive)
+                .add(Ability.Butcher)
+                .add(Ability.TenacityPassive)
 
                 .update(P314)
                 .health(350)
@@ -1090,7 +1134,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .cooldownReduction(10)
                 .manaRegen(7)
                 .healthRegen(14)
-                .add(Ability.Butcher, Ability.Incinerate)
+                .add(Ability.Butcher)
+                .add(Ability.Incinerate)
 
                 .update(P308)
                 .attackDamage(35)
@@ -1182,7 +1227,8 @@ public class Item extends Describable<ItemDescriptor> {
         item.build(RecurveBow, Dagger)
                 .cost(850)
                 .attackSpeed(45)
-                .add(Ability.SwordOftheDivinePassive, Ability.SwordOftheDivineActive);
+                .add(Ability.SwordOftheDivinePassive)
+                .add(Ability.SwordOftheDivineActive);
     });
 
     /** Sword of the Occult */
@@ -1214,7 +1260,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .cost(665)
                 .attackDamage(50)
                 .healthRegen(15)
-                .add(Ability.Cleave, Ability.Crescent)
+                .add(Ability.Cleave)
+                .add(Ability.Crescent)
 
                 .update(P306)
                 .cost(265)
@@ -1235,10 +1282,12 @@ public class Item extends Describable<ItemDescriptor> {
                 .mana(200)
                 .movementSpeed(8)
                 .critical(10)
-                .add(Ability.Icy1, Ability.TrinitySpellblade)
+                .add(Ability.Icy1)
+                .add(Ability.TrinitySpellblade)
 
                 .update(P310A)
-                .add(Ability.Rage, Ability.TrinitySpellblade);
+                .add(Ability.Rage)
+                .add(Ability.TrinitySpellblade);
     });
 
     /** Twin Shadows */
@@ -1378,7 +1427,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .attackDamage(30)
                 .cooldownReduction(10)
                 .critical(15)
-                .add(Ability.YoumuusGhostbladePassive, Ability.YoumuusGhostbladeActive);
+                .add(Ability.YoumuusGhostbladePassive)
+                .add(Ability.YoumuusGhostbladeActive);
     });
 
     /** Zeal */

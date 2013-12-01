@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * @version 2013/01/29 1:55:25
+ * @version 2013/12/01 12:39:26
  */
 public class ItemDescriptor extends Descriptor<ItemDescriptor> {
 
@@ -303,20 +303,6 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
 
     /**
      * <p>
-     * Set special abilities.
-     * </p>
-     * 
-     * @param Ability list.
-     */
-    ItemDescriptor add(Ability... abilities) {
-        for (Ability ability : abilities) {
-            this.abilities.add(ability);
-        }
-        return this;
-    }
-
-    /**
-     * <p>
      * Make this item deprecated.
      * </p>
      * 
@@ -339,6 +325,40 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
         return deprecated;
     }
 
+    /**
+     * <p>
+     * Add ability.
+     * </p>
+     * 
+     * @param descriptor
+     * @return
+     */
+    ItemDescriptor add(Ability ability) {
+        this.abilities.add(ability);
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * Add ability.
+     * </p>
+     * 
+     * @param descriptor
+     * @return
+     */
+    ItemDescriptor add(Consumer<AbilityDescriptor> descriptor) {
+        return add(String.valueOf(descriptor.hashCode()), descriptor);
+    }
+
+    /**
+     * <p>
+     * Add ability.
+     * </p>
+     * 
+     * @param descriptor
+     * @return
+     */
     ItemDescriptor add(String name, Consumer<AbilityDescriptor> descriptor) {
         Ability ability = new Ability(name, descriptor);
         this.abilities.add(ability);
@@ -350,45 +370,25 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
 
     /**
      * <p>
-     * Make this item deprecated.
+     * Clear all abilities.
      * </p>
      * 
      * @return
      */
-    ItemDescriptor add(Consumer<AbilityDescriptor> descriptor) {
-        Ability ability = new Ability(descriptor);
-        this.abilities.add(ability);
-
-        descriptor.accept(ability.update(version));
-
-        return this;
-    }
-
-    /**
-     * <p>
-     * Make this item deprecated.
-     * </p>
-     * 
-     * @return
-     */
-    ItemDescriptor add(Consumer<AbilityDescriptor> descriptor1, Consumer<AbilityDescriptor> descriptor2) {
-        Ability ability1 = new Ability(descriptor1);
-        Ability ability2 = new Ability(descriptor2);
-        this.abilities.add(ability1);
-        this.abilities.add(ability2);
-
-        descriptor1.accept(ability1.update(version));
-        descriptor2.accept(ability2.update(version));
-
-        return this;
-    }
-
     ItemDescriptor clear() {
         abilities.clear();
 
         return this;
     }
 
+    /**
+     * <p>
+     * Remoeve the specified ability.
+     * </p>
+     * 
+     * @param ability
+     * @return
+     */
     ItemDescriptor remove(Ability ability) {
         abilities.remove(ability);
 

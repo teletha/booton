@@ -17,7 +17,7 @@ import java.lang.reflect.Modifier;
 import java.util.function.Consumer;
 
 /**
- * @version 2013/11/29 14:01:48
+ * @version 2013/12/01 12:39:34
  */
 public class Ability extends Describable<AbilityDescriptor> {
 
