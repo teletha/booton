@@ -57,6 +57,11 @@ public class Ability extends Describable<AbilityDescriptor> {
     });
 
     /** The ability. */
+    public static final Ability BountyHunter = new Ability("Bounty Hunter", item -> {
+        item.passive("キル、アシストもしくは伝説のモンスターを倒すと{1}を、巨大モンスターを倒すと{2}を得る。").variable(1, Gold, 40).variable(2, Gold, 10);
+    });
+
+    /** The ability. */
     public static final Ability BulwarkLegion = new Ability("Legion", item -> {
         item.aura("{1}の味方ユニットは{2}、{3}、{4}を得る。味方ミニオンに対しては効果が1.5倍になる。")
                 .variable(1, Radius, 1100)
@@ -66,17 +71,7 @@ public class Ability extends Describable<AbilityDescriptor> {
     });
 
     /** The ability. */
-    public static final Ability Butcher1 = new Ability("Butcher", item -> {
-        item.passive("中立モンスターに対するダメージが10%上昇する。");
-    });
-
-    /** The ability. */
-    public static final Ability Butcher2 = new Ability("Butcher", item -> {
-        item.passive("中立モンスターに対するダメージが20%上昇する。");
-    });
-
-    /** The ability. */
-    public static final Ability Butcher3 = new Ability("Butcher", item -> {
+    public static final Ability Butcher = new Ability("Butcher", item -> {
         item.passive("中立モンスターに対するダメージが{1}上昇する。").variable(1, Percentage, 25)
 
         .update(P308).variable(1, Percentage, 30);
@@ -219,7 +214,9 @@ public class Ability extends Describable<AbilityDescriptor> {
 
     /** The ability. */
     public static final Ability Incinerate = new Ability("Incinerate", item -> {
-        item.passive("通常攻撃またはDoTではないスキルによってダメージを与えた場合、3秒かけて{1}を与える。").variable(1, TrueDamage, 6, 0, amplify(Lv, 2));
+        item.passive("通常攻撃またはDoTではないスキルによってダメージを与えた場合、3秒かけて{1}を与える。").variable(1, TrueDamage, 6, 0, amplify(Lv, 2))
+
+        .update(P314).passive("物理ダメージを与えた場合、3秒かけて{1}を与える。").variable(1, PhysicalDamage, 14, 0, amplify(Lv, 2));
     });
 
     /** The ability. */
@@ -291,22 +288,21 @@ public class Ability extends Describable<AbilityDescriptor> {
     });
 
     /** The ability. */
-    public static final Ability Maim1 = new Ability("Maim", item -> {
-        item.passive("Minionまたは中立モンスターに対して通常攻撃をした際、25%の確率で{1}を与える。").variable(1, MagicDamage, 300)
+    public static final Ability Maim = new Ability("Maim", item -> {
+        item.passive("ミニオンやモンスターに対して通常攻撃をした際、25%の確率で{1}を与える。").variable(1, MagicDamage, 300)
 
-        .update(P308).passive("Minionまたは中立モンスターへの通常攻撃は{1}を与える。").variable(1, MagicDamage, 10);
+        .update(P308).passive("モンスターへ通常攻撃をする度に{1}を与える。").variable(1, MagicDamage, 10)
+
+        .update(P314).passive("モンスターへ通常攻撃をする度に{1}を与え、{2}する。").variable(2, RestoreHealth, 5);
     });
 
     /** The ability. */
-    public static final Ability Maim2 = new Ability("Maim", item -> {
-        item.passive("Minionまたは中立モンスターに対して通常攻撃をした際、25%の確率で{1}を与える。").variable(1, MagicDamage, 500)
+    public static final Ability MaimForMadredsRazors = new Ability("Maim", item -> {
+        item.passive("ミニオンやモンスターに対して通常攻撃をした際、25%の確率で{1}を与える。").variable(1, MagicDamage, 500)
 
-        .update(P308).passive("Minionまたは中立モンスターへの通常攻撃は{1}を与える。").variable(1, MagicDamage, 60);
-    });
+        .update(P308).passive("モンスターへ通常攻撃をする度に{1}を与える。").variable(1, MagicDamage, 60)
 
-    /** The ability. */
-    public static final Ability Maim3 = new Ability("Maim", item -> {
-        item.passive("Minionまたは中立モンスターへの通常攻撃は{1}を与える。").variable(1, MagicDamage, 100);
+        .update(P314).passive("モンスターへ通常攻撃をする度に{1}を与え、{2}する。").variable(2, RestoreHealth, 5);
     });
 
     /** The ability. */
@@ -555,16 +551,6 @@ public class Ability extends Describable<AbilityDescriptor> {
     });
 
     /** The ability. */
-    public static final Ability SpiritOftheSpectralWraithSmite = new Ability(item -> {
-        item.passive("サモナースペルのSmiteのCDを20%減少させる。");
-    });
-
-    /** The ability. */
-    public static final Ability SpiritOftheSpectralWraithSV = new Ability(item -> {
-        item.passive("{1}を得る。").variable(1, SV, 20);
-    });
-
-    /** The ability. */
     public static final Ability SpiritVisagePassive = new Ability(item -> {
         item.passive("{1}する。").variable(1, RestoreHealthRatio, 20);
     });
@@ -692,13 +678,6 @@ public class Ability extends Describable<AbilityDescriptor> {
                 .update(P308)
                 .passive("通常攻撃は追加{1}を与え、{2}を得る。また対象の敵に{3}を与える。MRの増減は5回までスタックし、5秒間持続する。")
                 .variable(3, MRReduction, 0, 0, amplify(Stack, 5));
-    });
-
-    /** The ability. */
-    public static final Ability WrigglesLanternAvtive = new Ability(item -> {
-        item.active("Sight Wardと同等の効果がある{2}間持続するオブジェクトを指定地点に設置する。{1}。").variable(1, ItemCD, 180).variable(2, Time, 180)
-
-        .update(P308).variable(1, ItemCD, 90).variable(2, Time, 90);
     });
 
     /** The ability. */
