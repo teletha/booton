@@ -348,7 +348,7 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
      * @return
      */
     ItemDescriptor add(Consumer<AbilityDescriptor> descriptor) {
-        return add(String.valueOf(descriptor.hashCode()), descriptor);
+        return add("", descriptor);
     }
 
     /**

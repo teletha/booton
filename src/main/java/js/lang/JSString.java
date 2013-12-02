@@ -208,7 +208,7 @@ class JSString implements Comparable<String>, CharSequence {
 
         if (h == 0 && 0 < length()) {
             for (int i = 0; i < length(); i++) {
-                h = 31 * h + codePointAt(i);
+                h = (31 * h + codePointAt(i)) >> 0; // cast to signed int forcibly
             }
             hash = h;
         }

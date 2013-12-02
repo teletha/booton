@@ -165,9 +165,6 @@ public class Item extends Describable<ItemDescriptor> {
                 .mana(0)
                 .add(ability -> {
                     ability.passive("Championからダメージを受けると10秒間{1}を得る。").variable(-1, Hreg, 45);
-                })
-                .add(ability -> {
-                    ability.passive("敵Championからのスキルを無効化するシールドを張る。シールドはスキルを無効化すると消費され、25秒間敵Championからダメージを受けないと再生する。");
                 });
     });
 
@@ -679,7 +676,6 @@ public class Item extends Describable<ItemDescriptor> {
                 .armor(20)
                 .cooldownReduction(10)
                 .healthRegen(0)
-                .add(Ability.SolariActive)
                 .add(Ability.Legion);
     });
 
@@ -791,8 +787,6 @@ public class Item extends Describable<ItemDescriptor> {
                 .manaRegen(18)
                 .healthRegen(7)
                 .magicRegist(40)
-                .add(Ability.ManaFont)
-                .add(Ability.MikaelsCrucibleActive)
 
                 .update(P314)
                 .build(ChaliceOfHarmony)
@@ -872,8 +866,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .abilityPower(50)
                 .health(350)
                 .manaRegen(0)
-                .healthRegen(0)
-                .add(Ability.OhmwreckerActive);
+                .healthRegen(0);
     });
 
     /** Oracle's Elixir */
@@ -887,7 +880,7 @@ public class Item extends Describable<ItemDescriptor> {
     public static final Item Phage = new Item(3044, "Phage", item -> {
         item.build(RubyCrystal, LongSword).cost(590).attackDamage(20).health(200).add(Ability.Icy1)
 
-        .update(P310A).cost(375).add(Ability.Rage)
+        .update(P310A).cost(375).clear().add(Ability.Rage)
 
         .update(P312).cost(475)
 
@@ -989,7 +982,7 @@ public class Item extends Describable<ItemDescriptor> {
     public static final Item RubySightstone = new Item(2045, "Ruby Sightstone", item -> {
         item.build(RubyCrystal, Sightstone).cost(125).health(360).add(Ability.WardRefresh2).add(Ability.GhostWard2)
 
-        .update(P314).add(Ability.WardRefresh2).add(Ability.GhostWard1);
+        .update(P314).remove(Ability.GhostWard2).add(Ability.GhostWard1);
     });
 
     /** Runaan's Hurricane */
@@ -1091,7 +1084,7 @@ public class Item extends Describable<ItemDescriptor> {
     });
 
     /** Spectre's Cowl */
-    public static final Item SpectresCowl = new Item(9999, "Spectre's Cowl", item -> {
+    public static final Item SpectresCowl = new Item(9997, "Spectre's Cowl", item -> {
         item.build(NegatronCloak, RubyCrystal).cost(205).health(200).magicRegist(45).add(Ability.SpectresCowlPassive);
     });
 
@@ -1290,8 +1283,8 @@ public class Item extends Describable<ItemDescriptor> {
                 .add(Ability.TrinitySpellblade)
 
                 .update(P310A)
-                .add(Ability.Rage)
-                .add(Ability.TrinitySpellblade);
+                .remove(Ability.Icy1)
+                .add(Ability.Rage);
     });
 
     /** Twin Shadows */

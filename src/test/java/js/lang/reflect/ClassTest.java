@@ -269,6 +269,9 @@ public class ClassTest {
         Method method = Methods.class.getDeclaredMethod("protectedMethod");
         assert method != null;
 
+        method = Methods.class.getDeclaredMethod("packageMethod");
+        assert method != null;
+
         method = Methods.class.getDeclaredMethod("packageMethod", (Class[]) null);
         assert method != null;
 

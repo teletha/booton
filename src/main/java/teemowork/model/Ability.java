@@ -21,9 +21,6 @@ import java.util.function.Consumer;
  */
 public class Ability extends Describable<AbilityDescriptor> {
 
-    /** The ability id counter. */
-    private static int counter = 0;
-
     /** The ability. */
     public static final Ability AegisValor = new Ability("Valor", item -> {
         item.aura("{1}の味方ユニットは{2}を得る。味方ミニオンは与えるダメージが15%増加する。").variable(1, Radius).variable(2, Hreg, 10)
@@ -717,9 +714,6 @@ public class Ability extends Describable<AbilityDescriptor> {
     /** The ability name. */
     public final String name;
 
-    /** The visible name. */
-    public final boolean visible;
-
     /** The ability descriptor. */
     private final Consumer<AbilityDescriptor> descriptor;
 
@@ -727,22 +721,14 @@ public class Ability extends Describable<AbilityDescriptor> {
      * Create new ability with invisible name.
      */
     Ability(Consumer<AbilityDescriptor> descriptor) {
-        this("ability" + counter++, false, descriptor);
+        this("", descriptor);
     }
 
     /**
      * Create new ability with visible name.
      */
     Ability(String name, Consumer<AbilityDescriptor> descriptor) {
-        this(name, true, descriptor);
-    }
-
-    /**
-     * Create new ability with visible name.
-     */
-    private Ability(String name, boolean visible, Consumer<AbilityDescriptor> descriptor) {
         this.name = name;
-        this.visible = visible;
         this.descriptor = descriptor;
     }
 

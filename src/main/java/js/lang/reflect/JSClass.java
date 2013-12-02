@@ -695,6 +695,9 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @return
      */
     private Integer hash(String name, Class[] types) {
+        if (types == null) {
+            types = new Class[0];
+        }
         return name.hashCode() + Arrays.hashCode(types);
     }
 
@@ -983,6 +986,33 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      */
     public boolean isSynthetic() {
         return (modifiers & JSModifier.SYNTHETIC) != 0;
+    }
+
+    /**
+     * Return an informative string for the name of this type.
+     * 
+     * @return an informative string for the name of this type
+     * @since 1.8
+     */
+    public String getTypeName() {
+        if (isArray()) {
+            Class<?> cl = (Class) (Object) this;
+            int dimensions = 0;
+
+            while (cl.isArray()) {
+                dimensions++;
+                cl = cl.getComponentType();
+            }
+
+            StringBuilder builder = new StringBuilder();
+            builder.append(cl.getName());
+
+            for (int i = 0; i < dimensions; i++) {
+                builder.append("[]");
+            }
+            return builder.toString();
+        }
+        return getName();
     }
 
     /**
