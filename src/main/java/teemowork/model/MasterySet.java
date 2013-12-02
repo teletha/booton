@@ -21,7 +21,7 @@ public class MasterySet extends Publishable {
     private String name = "";
 
     /** The values for each masteries. */
-    private int[] levels;
+    private int[] levels = new int[60];
 
     /** The categorized sum of offense tree. */
     private int[] offenses = new int[7];
@@ -48,8 +48,6 @@ public class MasterySet extends Publishable {
      */
     public MasterySet(Version version) {
         this((String) null);
-
-        levels = new int[Mastery.getMastery(version).length];
     }
 
     /**
@@ -61,10 +59,6 @@ public class MasterySet extends Publishable {
      */
     public MasterySet(String serialized) {
         setCode(serialized);
-
-        if (serialized != null) {
-            levels = new int[Mastery.getMastery(Version.Latest).length];
-        }
     }
 
     /**
@@ -286,27 +280,24 @@ public class MasterySet extends Publishable {
      * @param maxSize A maximum requirement size for calculated value.
      * @return A serialized text.
      */
-    private String encode(int level, int binarySize, int maxSize) {
-        int step = 0;
-        int value = 0;
+    private String encode() {
+        StringBuilder encoded = new StringBuilder();
 
-        for (Mastery mastery : Mastery.getMastery(Version.Latest)) {
-            if (mastery.getMaxLevel() == level) {
-                value |= levels[mastery.id] << step;
+        for (int i = 0; i < levels.length; i = i + 5) {
+            StringBuilder builder = new StringBuilder();
 
-                // step into next mastery
-                step += binarySize;
+            for (int j = 0; j < 5; j++) {
+                builder.append(levels[i + j]);
             }
-        }
 
-        // serialization and zero padding
-        String serialized = Integer.toString(value, 36);
-        System.out.println("Encoded " + serialized);
+            String value = Integer.toString(Integer.valueOf(builder.toString()), 36);
 
-        for (int i = serialized.length(); i < maxSize; i++) {
-            serialized = "0" + serialized;
+            for (int j = value.length(); j < 3; j++) {
+                value = "0" + value;
+            }
+            encoded.append(value);
         }
-        return serialized;
+        return encoded.toString();
     }
 
     /**
@@ -318,18 +309,22 @@ public class MasterySet extends Publishable {
      * @param binarySize A minimum requirement size for each value.
      * @param serialized A text expression.
      */
-    private void decode(int level, int binarySize, String serialized) {
-        int step = 0;
-        int value = Integer.parseInt(serialized, 36);
+    private void decode(String serialized) {
+        Mastery[] masteries = Mastery.getMastery(Version.Latest);
 
-        for (Mastery mastery : Mastery.getMastery(Version.Latest)) {
-            if (mastery.getMaxLevel() == level) {
-                int mask = (int) Math.pow(2, binarySize) - 1 << step;
+        for (int i = 0; i < serialized.length(); i = i + 3) {
+            String value = String.valueOf(Integer.parseInt(serialized.substring(i, i + 3), 36));
 
-                changeLevel(mastery, (value & mask) >> step);
+            for (int j = value.length(); j < 5; j++) {
+                value = "0" + value;
+            }
 
-                // step into next mastery
-                step += binarySize;
+            for (int j = 0; j < value.length(); j++) {
+                Mastery mastery = masteries[i / 3 * 5 + j];
+
+                if (mastery != null) {
+                    changeLevel(mastery, Integer.valueOf(value.charAt(j)));
+                }
             }
         }
     }
@@ -406,14 +401,14 @@ public class MasterySet extends Publishable {
      */
     @Override
     public String toString() {
-        return encode(1, 1, 5) + encode(2, 2, 3) + encode(3, 2, 6) + encode(4, 3, 5);
+        return encode();
     }
 
     /**
      * @return
      */
     public String getCode() {
-        return encode(1, 1, 5) + encode(2, 2, 3) + encode(3, 2, 6) + encode(4, 3, 5);
+        return encode();
     }
 
     /**
@@ -424,14 +419,9 @@ public class MasterySet extends Publishable {
      * @param serialized
      */
     public void setCode(String serialized) {
-        if (serialized != null && serialized.length() == 19) {
+        if (serialized != null) {
             reset();
-
-            decode(1, 1, serialized.substring(0, 5));
-            decode(2, 2, serialized.substring(5, 8));
-            decode(3, 2, serialized.substring(8, 14));
-            decode(4, 3, serialized.substring(14, 19));
-
+            decode(serialized);
             publish(this);
         }
     }

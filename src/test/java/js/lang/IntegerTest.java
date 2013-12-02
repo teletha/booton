@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/08/25 13:38:20
+ * @version 2013/12/02 18:00:38
  */
 @RunWith(ScriptRunner.class)
 public class IntegerTest {
@@ -39,5 +39,10 @@ public class IntegerTest {
     @Test(expected = NumberFormatException.class)
     public void parseNull() throws Exception {
         Integer.parseInt(null);
+    }
+
+    @Test
+    public void toStringRadix() throws Exception {
+        assert Integer.toString(16, 36).equals("g");
     }
 }

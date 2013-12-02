@@ -167,7 +167,7 @@ public class NativeNumber extends NativeObject {
          * @param value
          */
         public String NativeNumber(int value) {
-            return "+" + param(0);
+            return "(+" + param(0) + ")";
         }
 
         /**
@@ -178,7 +178,7 @@ public class NativeNumber extends NativeObject {
          * @param value
          */
         public String NativeNumber(long value) {
-            return "+" + param(0);
+            return "(+" + param(0) + ")";
         }
 
         /**
@@ -189,7 +189,7 @@ public class NativeNumber extends NativeObject {
          * @param value
          */
         public String NativeNumber(float value) {
-            return "+" + param(0);
+            return "(+" + param(0) + ")";
         }
 
         /**
@@ -200,7 +200,7 @@ public class NativeNumber extends NativeObject {
          * @param value
          */
         public String NativeNumber(double value) {
-            return "+" + param(0);
+            return "(+" + param(0) + ")";
         }
 
         /**

@@ -17,7 +17,6 @@ import js.dom.Image;
 import jsx.Subscribable;
 import jsx.application.Page;
 import jsx.application.PageInfo;
-import jsx.application.PageUnload;
 import jsx.bwt.Button;
 import jsx.bwt.Select;
 import jsx.bwt.UIAction;
@@ -87,8 +86,6 @@ public class MasteryBuilder extends Page {
     public MasteryBuilder(String levels) {
         masterySet = new MasterySet(levels);
         masterySet.register(this);
-
-        // EventHub.Global.register(this);
     }
 
     /**
@@ -114,12 +111,10 @@ public class MasteryBuilder extends Page {
             }
         }));
 
-        add = infomation.child(new Button("ADD", new EventListener() {
-
-            @Override
-            public void handleEvent(UIEvent event) {
-                menu.model.add(new MasterySet(masterySet.getCode()));
-            }
+        add = infomation.child(new Button("ADD", event -> {
+            System.out.println("Event handled");
+            menu.model.add(new MasterySet(masterySet.getCode()));
+            // save();
         }));
 
         Mastery[][][] masteries = Mastery.getMasteryTree(Version.Latest);
@@ -170,12 +165,10 @@ public class MasteryBuilder extends Page {
         history.replaceState("", "", "#" + getPageId());
     }
 
-    @Subscribable(PageUnload.class)
     private void save() {
         System.out.println("save mastery");
         StringBuilder builder = new StringBuilder();
         I.write(set, builder, true);
-        System.out.println(builder.toString());
         localStorage.set(set);
     }
 

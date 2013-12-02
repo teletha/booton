@@ -26,7 +26,8 @@ public class Button extends FormUI<Button> {
      */
     public Button(String label, EventListener action) {
         super("span");
-
+        System.out.println(action instanceof EventListener);
+        System.out.println(action.getClass());
         form.add(ButtonForm.class).text(label).on(UIAction.Click, action);
 
         this.label = label;
