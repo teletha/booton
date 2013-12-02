@@ -114,7 +114,7 @@ public class ItemView extends UI {
 
             element.child(UniqueAbility.class).text(abilityDescriptor.isActive() ? "Active" : "Passive");
 
-            if (!ability.name.isEmpty()) {
+            if (!ability.name.startsWith("#")) {
                 element.child(UniqueAbility.class).text("[" + ability.name + "]");
             }
             new AbilityDescriptionView(element, ability, calculator, abilityDescriptor.isActive()).receive();
