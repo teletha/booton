@@ -203,16 +203,6 @@ public class ClassTest extends ScriptTester {
     }
 
     @Test
-    public void GetMethods() throws Exception {
-        test(new Scriptable() {
-
-            int act() throws Exception {
-                return Parent.class.getDeclaredMethods().length;
-            }
-        });
-    }
-
-    @Test
     public void GetMethodsOverride() throws Exception {
         test(new Scriptable() {
 

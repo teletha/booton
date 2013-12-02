@@ -77,7 +77,7 @@ class JavaMetadataCompiler {
 
         // methods
         for (Method method : clazz.getDeclaredMethods()) {
-            if (!TranslatorManager.isIgnorableMethod(method) && !method.isBridge()) {
+            if (!TranslatorManager.isIgnorableMethod(method) && !method.isBridge() && !method.isSynthetic()) {
                 elements.add(new MethodMetadata(method));
             }
         }

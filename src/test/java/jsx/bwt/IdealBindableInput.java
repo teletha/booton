@@ -31,6 +31,12 @@ public class IdealBindableInput {
 
         Input<Integer> input = new Input(person::getAge, person::setAge);
         System.out.println(person.getAge());
+
+        new Input(() -> {
+            return 1;
+        }, value -> {
+
+        });
     }
 
     private void modify(Person model) {
