@@ -96,12 +96,12 @@ public class MasterySeason4 extends Mastery {
         Executioner.update()
                 .passive("対象のHealthが{1}以下の時、{2}する。")
                 .variable(1, Percentage, 20, 15)
-                .variable(1, DamageRatio, 5);
+                .variable(2, DamageRatio, 5);
         BladeWeaving.update().passive("スキルでChampionにダメージを与えると、5秒間自身の通常攻撃の与ダメージが1%増加する。この効果は3回までスタックする。");
         Warlord.update().passive("{1}を得る。").variable(1, AD, 0, 0, amplify(BounusAD, 0.02, 0.015));
         Archmage.update().passive("{1}する。").variable(1, APRatio, 2, 1.5);
         DangerousGame.update()
-                .passive("Championを倒すと{1}し{2}する。")
+                .passive("Championを倒すと{1}し、{2}する。")
                 .variable(1, RestoreHealth, 0, 0, amplify(MissingHealthRatio, 5))
                 .variable(2, RestoreMana, 0, 0, amplify(Status.MissingManaRatio, 5));
         Frenzy.update().passive("クリティカルが発生すると3秒間{1}する。この効果は3回までスタックする。").variable(-1, ASRatio, 5);
@@ -171,19 +171,19 @@ public class MasterySeason4 extends Mastery {
         Block.update().passive("敵Championから受ける{1}する。").variable(1, AttackDamageReduction, 1, 1);
         Recovery.update().passive("{1}を得る。").variable(1, Hreg, 1, 1);
         EnchantedArmor.update()
-                .passive("{1}と{2]を得る。")
+                .passive("{1}と{2}を得る。")
                 .variable(1, AR, 0, 0, amplify(BounusAR, 0.025, 0.025))
                 .variable(2, MR, 0, 0, amplify(BounusMR, 0.025, 0.025));
         ToughSkin.update().passive("モンスターから受ける{1}する。").variable(1, DamageReduction, 1, 1);
         Unyielding.update()
-                .passive("Melee : Championから受ける{1}する。<br>Ranged : Championから受ける{1}する。")
+                .passive("Melee : Championから受ける{1}する。<br>Ranged : Championから受ける{2}する。")
                 .variable(1, DamageReduction, 2)
                 .variable(2, DamageReduction, 1);
         VeteranScars.update().passive("{1}を得る。").variable(1, Health, 12, 12);
         BladedArmor.update()
                 .passive("攻撃してきたモンスターを出血状態にし、毎秒{1}を与える。")
                 .variable(1, TrueDamage, 0, 0, amplify(TargetCurrentHealthRatio, 1));
-        Oppression.update().passive("スタン,スロー, タウント, フィアー, スネア, 打ち上げ, ノックバック, サプレッションを受けている敵ユニットから受ける被ダメージが3%減少する。");
+        Oppression.update().passive("スタン,スロー, タウント, フィアー, スネア, 打ち上げ, ノックバック,もしくはサプレッションを受けている敵ユニットから受ける被ダメージが3%減少する。");
         Juggernaut.update().passive("{1}する。").variable(1, HealthRatio, 3);
         Hardiness.update().passive("{1}を得る。").variable(1, AR, 2, 1.5);
         Resistance.update().passive("{1}を得る。").variable(1, MR, 2, 1.5);
@@ -191,12 +191,12 @@ public class MasterySeason4 extends Mastery {
         Swiftness.update().passive("{1}する。").variable(1, MSSlowReductionRatio, 10);
         ReinforcedArmor.update().passive("クリティカルヒットから受ける{1}する。").variable(1, DamageReductionRatio, 10);
         Evasive.update().passive("AoEスキルから受ける{1}する。").variable(1, DamageReductionRatio, 10);
-        SecondWind.update().passive("Healthが25%以下の時、{1}を得る。").variable(1, RestoreHealthRatio, 10);
+        SecondWind.update().passive("Healthが25%以下の時、{1}する。").variable(1, RestoreHealthRatio, 10);
         Tenacious.update()
-                .passive("{1}に敵Championがいる場合、{1}と{2}を得る。")
-                .variable(1, Range, 850)
+                .passive("{1}に敵Championがいる場合、{2}と{3}を得る。")
+                .variable(1, Radius, 850)
                 .variable(2, AR, 0, 0, amplify(EnemyChampion, 1, 1))
-                .variable(2, MR, 0, 0, amplify(EnemyChampion, 0.5, 0.5));
+                .variable(3, MR, 0, 0, amplify(EnemyChampion, 0.5, 0.5));
         RunicShield.update().passive("ゲーム開始時とRespawnする時、{1}を得る。").variable(1, Shield, 50);
         LegendaryGuardian.update().passive("{1}を得る。").variable(1, Tenacity, 15);
     }
