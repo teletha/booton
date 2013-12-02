@@ -19,6 +19,6 @@ import kiss.Singleton;
 public class BootonConfiguration {
 
     /** The oprimization flag. */
-    public boolean optimization = false;
+    public boolean optimization = true;
 
 }
