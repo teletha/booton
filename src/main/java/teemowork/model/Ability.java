@@ -721,14 +721,14 @@ public class Ability extends Describable<AbilityDescriptor> {
      * Create new ability with invisible name.
      */
     Ability(Consumer<AbilityDescriptor> descriptor) {
-        this("", descriptor);
+        this(null, descriptor);
     }
 
     /**
      * Create new ability with visible name.
      */
     Ability(String name, Consumer<AbilityDescriptor> descriptor) {
-        this.name = name;
+        this.name = name == null ? "#" + descriptor.hashCode() : name;
         this.descriptor = descriptor;
     }
 

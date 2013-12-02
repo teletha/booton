@@ -79,6 +79,7 @@ public class Build extends Publishable implements StatusCalculator {
 
         items[0] = Item.FiendishCodex;
         items[1] = Item.FiendishCodex;
+        items[2] = Item.LastWhisper;
         items[4] = Item.RabadonsDeathcap;
     }
 
@@ -325,6 +326,10 @@ public class Build extends Publishable implements StatusCalculator {
      * @return A sum value.
      */
     private double sum(Status status) {
+        if (status == null) {
+            return 0;
+        }
+
         double sum = 0;
 
         // ===================================

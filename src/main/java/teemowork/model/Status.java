@@ -12,7 +12,7 @@ package teemowork.model;
 import js.math.Mathematics;
 
 /**
- * @version 2013/06/06 20:22:40
+ * @version 2013/12/02 13:28:33
  */
 public enum Status {
 
@@ -398,6 +398,9 @@ public enum Status {
      * @return
      */
     public Status per() {
+        if (name().endsWith("PerLv")) {
+            return null;
+        }
         return Status.valueOf(name() + "PerLv");
     }
 
@@ -409,6 +412,9 @@ public enum Status {
      * @return
      */
     public Status ratio() {
+        if (name().endsWith("Ratio")) {
+            return null;
+        }
         return Status.valueOf(name() + "Ratio");
     }
 
