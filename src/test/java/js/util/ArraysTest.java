@@ -139,4 +139,10 @@ public class ArraysTest {
         assert Arrays.deepEquals(one, new Object[] {1, 2});
         assert !Arrays.deepEquals(one, new Object[] {2, 3});
     }
+
+    @Test
+    public void hashCodeNull() throws Exception {
+        Object[] array = null;
+        assert Arrays.hashCode(array) == 0;
+    }
 }

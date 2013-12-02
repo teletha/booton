@@ -25,13 +25,13 @@ import teemowork.tool.image.EditableImage;
 public class ClientImageBuilder {
 
     /** The client root. */
-    public final Path root;
+    public Path root;
 
     /** The latest version directory. */
-    public final Path version;
+    public Path version;
 
     /** The image directory. */
-    public final Path images;
+    public Path images;
 
     /**
      * 
@@ -40,7 +40,8 @@ public class ClientImageBuilder {
         String path = System.getenv("LOL_HOME");
 
         if (path == null) {
-            throw new Error("Environment variable 'LOL_HOME' is not found.");
+            System.out.println("Environment variable 'LOL_HOME' is not found.");
+            return;
         }
         root = I.locate(path);
 
@@ -61,14 +62,16 @@ public class ClientImageBuilder {
      * @param root
      */
     public void copyChampionIcon() {
-        for (Path file : I.walk(images.resolve("champions"), "*_Square_0.png")) {
-            String name = file.getFileName().toString();
-            name = name.substring(0, name.indexOf('_'));
+        if (images != null) {
+            for (Path file : I.walk(images.resolve("champions"), "*_Square_0.png")) {
+                String name = file.getFileName().toString();
+                name = name.substring(0, name.indexOf('_'));
 
-            if (name.equals("MonkeyKing")) {
-                name = "Wukong";
+                if (name.equals("MonkeyKing")) {
+                    name = "Wukong";
+                }
+                I.copy(file, ResourceLocator.ChampionIcon.resolve(name + ".png"));
             }
-            I.copy(file, ResourceLocator.ChampionIcon.resolve(name + ".png"));
         }
     }
 
@@ -99,14 +102,16 @@ public class ClientImageBuilder {
      * @param root
      */
     public void copyChampionSplashArt() {
-        for (Path file : I.walk(images.resolve("champions"), "*_Splash_0.jpg")) {
-            String name = file.getFileName().toString();
-            name = name.substring(0, name.indexOf('_'));
+        if (images != null) {
+            for (Path file : I.walk(images.resolve("champions"), "*_Splash_0.jpg")) {
+                String name = file.getFileName().toString();
+                name = name.substring(0, name.indexOf('_'));
 
-            if (name.equals("MonkeyKing")) {
-                name = "Wukong";
+                if (name.equals("MonkeyKing")) {
+                    name = "Wukong";
+                }
+                I.copy(file, ResourceLocator.ChampionSplash.resolve(name + ".jpg"));
             }
-            I.copy(file, ResourceLocator.ChampionSplash.resolve(name + ".jpg"));
         }
     }
 

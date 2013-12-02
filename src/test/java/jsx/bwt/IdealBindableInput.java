@@ -9,8 +9,11 @@
  */
 package jsx.bwt;
 
+import java.util.Arrays;
 import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
+
+import kiss.model.ClassUtil;
 
 import org.junit.Test;
 
@@ -37,6 +40,10 @@ public class IdealBindableInput {
     private static class Input<T> {
 
         private Input(IntSupplier supplier, IntConsumer consumer) {
+            System.out.println(consumer.getClass());
+            System.out.println(ClassUtil.getTypes(consumer.getClass()));
+            System.out.println(Arrays.toString(consumer.getClass().getDeclaredMethods()));
+            System.out.println(Arrays.toString(consumer.getClass().getDeclaredFields()));
             System.out.println(supplier.getAsInt());
             consumer.accept(30);
         }
