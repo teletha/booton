@@ -43,6 +43,9 @@ public abstract class Mastery extends Describable<MasteryDescriptor> {
     /** The requirement mastery. */
     public final Mastery dependency;
 
+    /** The requirement mastery. */
+    public Mastery dependedBy;
+
     /** The mastery id. */
     public final int id;
 
@@ -66,6 +69,10 @@ public abstract class Mastery extends Describable<MasteryDescriptor> {
         this.id = id;
         this.requirement = rank * 4;
         this.dependency = dependency;
+
+        if (dependency != null) {
+            dependency.dependedBy = this;
+        }
     }
 
     /**

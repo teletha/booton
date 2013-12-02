@@ -10,7 +10,6 @@
 package teemowork.model;
 
 import static teemowork.model.Mastery.*;
-import static teemowork.model.MasterySeason3.*;
 import jsx.Publishable;
 
 /**
@@ -231,44 +230,20 @@ public class MasterySet extends Publishable {
      * @return A result.
      */
     private boolean isUnavailable(Mastery mastery) {
-        if (mastery.type == MasterySeason3.Offense) {
+        if (mastery.dependedBy != null && levels[mastery.dependedBy.id] != 0) {
+            return false;
+        }
+
+        if (mastery.type == Mastery.Offense) {
             if (unsafe(offenses, mastery)) {
                 return false;
             }
-
-            if (mastery == Deadliness && levels[WeaponExpertise.id] != 0) {
-                return false;
-            }
-
-            if (mastery == Blast && levels[ArcaneKnowledge.id] != 0) {
-                return false;
-            }
-
-            if (mastery == Lethality && levels[Frenzy.id] != 0) {
-                return false;
-            }
-        } else if (mastery.type == MasterySeason3.Defense) {
+        } else if (mastery.type == Mastery.Defense) {
             if (unsafe(defenses, mastery)) {
                 return false;
             }
-
-            if (mastery == Durability && levels[VeteransScar.id] != 0) {
-                return false;
-            }
-
-            if (mastery == Unyielding && levels[Block.id] != 0) {
-                return false;
-            }
-        } else if (mastery.type == MasterySeason3.Utility) {
+        } else if (mastery.type == Mastery.Utility) {
             if (unsafe(utilities, mastery)) {
-                return false;
-            }
-
-            if (mastery == Greed && levels[Wealth.id] != 0) {
-                return false;
-            }
-
-            if (mastery == Biscuiteer && levels[Explorer.id] != 0) {
                 return false;
             }
         }
@@ -326,6 +301,7 @@ public class MasterySet extends Publishable {
 
         // serialization and zero padding
         String serialized = Integer.toString(value, 36);
+        System.out.println("Encoded " + serialized);
 
         for (int i = serialized.length(); i < maxSize; i++) {
             serialized = "0" + serialized;
