@@ -121,7 +121,6 @@ class JSProxy {
              */
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                System.out.println(method.getName() + " @@@");
                 if (lambdaMethodName.charAt(0) == '$') {
                     // constructor
                     // create new instance
@@ -188,7 +187,6 @@ class JSProxy {
          */
         @SuppressWarnings("unused")
         public Class $alias$getClass() {
-            System.out.println("call get class " + type);
             return type;
         }
     }

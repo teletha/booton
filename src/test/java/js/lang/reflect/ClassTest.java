@@ -16,6 +16,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
 
+import js.dom.EventListener;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -320,6 +322,12 @@ public class ClassTest {
         // extended interface
         methods = ExtendedInterface.class.getDeclaredMethods();
         assert methods != null;
+        assert methods.length == 1;
+    }
+
+    @Test
+    public void nativeMethod() throws Exception {
+        Method[] methods = EventListener.class.getMethods();
         assert methods.length == 1;
     }
 
