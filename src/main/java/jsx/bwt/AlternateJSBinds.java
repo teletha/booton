@@ -30,7 +30,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/10/11 10:37:56
  */
 @JavaAPIProvider(Binds.class)
-public class JSBinds extends Interceptor<Bind> {
+public class AlternateJSBinds extends Interceptor<Bind> {
 
     /**
      * <p>
@@ -46,7 +46,7 @@ public class JSBinds extends Interceptor<Bind> {
      * </p>
      * TODO Memory Leak
      */
-    private static final Map<Object, Table<String, JSBinds>> contexts = new ConcurrentHashMap();
+    private static final Map<Object, Table<String, AlternateJSBinds>> contexts = new ConcurrentHashMap();
 
     /**
      * <p>
@@ -79,7 +79,7 @@ public class JSBinds extends Interceptor<Bind> {
                     // exclude GUI Widget
                     if (model.properties.size() != 0) {
                         // register as model state listener
-                        Table<String, JSBinds> binds = contexts.get(param);
+                        Table<String, AlternateJSBinds> binds = contexts.get(param);
 
                         if (binds == null) {
                             binds = new Table();
@@ -127,10 +127,10 @@ public class JSBinds extends Interceptor<Bind> {
      * @param property A event type.
      */
     public static final void recall(Object model, String property) {
-        Table<String, JSBinds> binds = contexts.get(model);
+        Table<String, AlternateJSBinds> binds = contexts.get(model);
 
         if (binds != null) {
-            for (JSBinds bind : binds.get(property)) {
+            for (AlternateJSBinds bind : binds.get(property)) {
                 bind.recall();
             }
         }
