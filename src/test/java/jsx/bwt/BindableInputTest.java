@@ -24,7 +24,7 @@ import booton.translator.ScriptRunner;
 public class BindableInputTest {
 
     static {
-        I.load(BindableInputTest.class, true);
+        I.load(Binds.class, true);
     }
 
     @Test

@@ -23,8 +23,8 @@ import booton.translator.ScriptRunner;
 @RunWith(ScriptRunner.class)
 public class BindTest {
 
-    {
-        I.load(BindTest.class, true);
+    static {
+        I.load(Binds.class, true);
     }
 
     @Test

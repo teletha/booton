@@ -24,12 +24,10 @@ import kiss.model.Model;
 import kiss.model.Property;
 import antibug.bytecode.Agent;
 import antibug.bytecode.Agent.Translator;
-import booton.Necessary;
 
 /**
  * @version 2013/10/11 9:53:52
  */
-@Necessary
 public class Binds extends Interceptor<Bind> {
 
     /**
