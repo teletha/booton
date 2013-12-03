@@ -182,7 +182,7 @@ abstract class JSAnnotatedElement implements AnnotatedElement {
      * @param types
      * @return
      */
-    protected List<Class> convert(Type[] types) {
+    protected List convert(Type[] types) {
         List<Class> classes = new ArrayList();
 
         for (Type type : types) {

@@ -507,15 +507,11 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
             privateMethods = new HashMap();
 
             for (String name : definition.keys()) {
-                char ch = name.charAt(0);
+                NativeArray metadata = definition.getPropertyAs(NativeArray.class, name);
 
-                if (ch != '$' && ch < 'a' || 'p' < ch) {
-                    NativeArray metadata = definition.getPropertyAs(NativeArray.class, name);
-
-                    if (4 < metadata.length()) {
-                        Method method = (Method) (Object) new JSMethod(name, (Class) (Object) this, metadata);
-                        privateMethods.put(hash(method.getName(), method.getParameterTypes()), method);
-                    }
+                if (name.charAt(0) != '$' && 4 < metadata.length()) {
+                    Method method = (Method) (Object) new JSMethod(name, (Class) (Object) this, metadata);
+                    privateMethods.put(hash(method.getName(), method.getParameterTypes()), method);
                 }
             }
         }
@@ -668,15 +664,11 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
             privateFields = new HashMap();
 
             for (String name : definition.keys()) {
-                char ch = name.charAt(0);
+                NativeArray metadata = definition.getPropertyAs(NativeArray.class, name);
 
-                if ('a' <= ch && ch <= 'p') {
-                    NativeArray metadata = definition.getPropertyAs(NativeArray.class, name);
-
-                    if (metadata.length() <= 4) {
-                        Field field = (Field) (Object) new JSField(name, (Class) (Object) this, metadata);
-                        privateFields.put(field.getName(), field);
-                    }
+                if (name.charAt(0) != '$' && metadata.length() <= 4) {
+                    Field field = (Field) (Object) new JSField(name, (Class) (Object) this, metadata);
+                    privateFields.put(field.getName(), field);
                 }
             }
         }

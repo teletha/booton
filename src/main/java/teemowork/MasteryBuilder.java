@@ -103,18 +103,13 @@ public class MasteryBuilder extends Page {
         menu = infomation.child(new Select(set));
         menu.model.register(this);
 
-        reset = infomation.child(new Button("30", new EventListener() {
-
-            @Override
-            public void handleEvent(UIEvent event) {
-                masterySet.reset();
-            }
+        reset = infomation.child(new Button("30", event -> {
+            masterySet.reset();
         }));
 
         add = infomation.child(new Button("ADD", event -> {
-            System.out.println("Event handled");
             menu.model.add(new MasterySet(masterySet.getCode()));
-            // save();
+            save();
         }));
 
         Mastery[][][] masteries = Mastery.getMasteryTree(Version.Latest);
