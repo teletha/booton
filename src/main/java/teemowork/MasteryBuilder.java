@@ -103,9 +103,7 @@ public class MasteryBuilder extends Page {
         menu = infomation.child(new Select(set));
         menu.model.register(this);
 
-        reset = infomation.child(new Button("30", event -> {
-            masterySet.reset();
-        }));
+        reset = infomation.child(new Button("30", masterySet::reset));
 
         add = infomation.child(new Button("ADD", event -> {
             menu.model.add(new MasterySet(masterySet.getCode()));

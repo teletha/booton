@@ -22,6 +22,20 @@ public class Button extends FormUI<Button> {
     private String label;
 
     /**
+     * <p>
+     * Create labeled button with the specified action.
+     * </p>
+     * 
+     * @param label
+     * @param action
+     */
+    public Button(String label, Runnable action) {
+        this(label, event -> {
+            action.run();
+        });
+    }
+
+    /**
      * @param label
      */
     public Button(String label, EventListener action) {
