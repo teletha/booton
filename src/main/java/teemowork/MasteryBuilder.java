@@ -51,7 +51,7 @@ import teemowork.model.Version;
  */
 public class MasteryBuilder extends Page {
 
-    private MasteryManager set;
+    private MasteryManager masteryManager;
 
     private final MasterySet masterySet;
 
@@ -93,14 +93,14 @@ public class MasteryBuilder extends Page {
      */
     @Override
     public void load(DocumentFragment root) {
-        set = localStorage.get(MasteryManager.class);
+        masteryManager = localStorage.get(MasteryManager.class);
 
-        if (set == null) {
-            set = new MasteryManager();
+        if (masteryManager == null) {
+            masteryManager = new MasteryManager();
         }
 
         Element infomation = root.child(Information.class);
-        menu = infomation.child(new Select(set));
+        menu = infomation.child(new Select(masteryManager));
         menu.model.register(this);
 
         reset = infomation.child(new Button("30", masterySet::reset));
@@ -161,8 +161,8 @@ public class MasteryBuilder extends Page {
     private void save() {
         System.out.println("save mastery");
         StringBuilder builder = new StringBuilder();
-        I.write(set, builder, true);
-        localStorage.set(set);
+        I.write(masteryManager, builder, true);
+        localStorage.set(masteryManager);
     }
 
     /**
