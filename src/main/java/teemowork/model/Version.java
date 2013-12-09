@@ -9,6 +9,8 @@
  */
 package teemowork.model;
 
+import jsx.Publishable;
+
 /**
  * @version 2013/03/19 19:59:46
  */
@@ -63,6 +65,9 @@ public enum Version {
     /** The latest stable version. */
     public static final Version Latest = P314;
 
+    /** The selected version. */
+    private static Version selection = Latest;
+
     /** The version name. */
     public final String name;
 
@@ -102,5 +107,29 @@ public enum Version {
      */
     public boolean isLessThan(Version other) {
         return compareTo(other) == -1;
+    }
+
+    /**
+     * <p>
+     * Set the current selected version.
+     * </p>
+     * 
+     * @param version
+     */
+    public static void setSelection(Version version) {
+        if (version != null) {
+            selection = version;
+
+            Publishable.Global.publish(selection);
+        }
+    }
+
+    /**
+     * <p>
+     * Set the current selected version.
+     * </p>
+     */
+    public static Version getSelection() {
+        return selection;
     }
 }

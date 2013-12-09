@@ -16,6 +16,7 @@ import jsx.application.HeaderStyle.SubMenu;
 import jsx.application.HeaderStyle.SubMenuGroup;
 import jsx.application.HeaderStyle.TopMenu;
 import jsx.application.HeaderStyle.TopMenuGroup;
+import jsx.bwt.Select;
 
 /**
  * @version 2013/07/30 21:32:12
@@ -45,6 +46,10 @@ public class Header {
         item.child("a").add(MenuLink.class).attr("href", uri).text(label);
 
         return new Menu(item);
+    }
+
+    public void add(Select select) {
+
     }
 
     /**

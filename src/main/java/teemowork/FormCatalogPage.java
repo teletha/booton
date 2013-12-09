@@ -18,6 +18,7 @@ import jsx.bwt.Input;
 import jsx.bwt.Select;
 import jsx.bwt.UIEvent;
 import jsx.model.SelectableModel;
+import teemowork.model.Version;
 
 /**
  * @version 2013/04/02 15:53:46
@@ -77,6 +78,8 @@ public class FormCatalogPage extends Page {
         // SomeModel restored = Global.sessionStorage.get(SomeModel.class);
         // restored.test();
         // restored.modeler.aaa();
+
+        root.child(new Select(Version.class));
     }
 
     /**
