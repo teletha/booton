@@ -42,5 +42,8 @@ public class Teemowork extends Application {
         nav.add("Builder", "#GridTest");
         nav.add("About", "#");
         nav.add("Contact", "#");
+        // nav.add(new Select(Version.class, selected -> {
+        // Version.setSelection(selected);
+        // }));
     }
 }

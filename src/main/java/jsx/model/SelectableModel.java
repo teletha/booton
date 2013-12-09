@@ -36,6 +36,17 @@ public class SelectableModel<T> extends Publishable implements Iterable<T> {
 
     /**
      * <p>
+     * Create {@link SelectableModel} model for enum.
+     * </p>
+     */
+    public SelectableModel(Class<T> enumType) {
+        if (enumType.isEnum()) {
+            add(enumType.getEnumConstants());
+        }
+    }
+
+    /**
+     * <p>
      * Create {@link SelectableModel} model with the given items.
      * </p>
      * 

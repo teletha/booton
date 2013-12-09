@@ -46,6 +46,10 @@ public class Select<M> extends FormUI<Select> {
     /** The select button. */
     private final Button arrow;
 
+    public <E extends Enum> Select(Class<E> type) {
+        this(new SelectableModel(type));
+    }
+
     /**
      * <p>
      * Create select form.
