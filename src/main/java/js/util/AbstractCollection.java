@@ -12,8 +12,9 @@ package js.util;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import kiss.I;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -122,9 +123,7 @@ abstract class AbstractCollection<E> implements Collection<E> {
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("[");
-        builder.append(I.join(",", this)).append("]");
-
-        return builder.toString();
+        Stream<String> map = stream().map(item -> String.valueOf(item));
+        return map.collect(Collectors.joining(", ", "[", "]"));
     }
 }

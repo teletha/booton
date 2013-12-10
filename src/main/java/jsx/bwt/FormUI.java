@@ -25,12 +25,8 @@ public class FormUI<T extends FormUI> extends UI {
     private static final UIAction[] Actions = {Click, ClickLeft, MouseDoubleClick, PointerOver, PointerOut, PointerMove};
 
     /** The event disabler. */
-    private static final EventListener Disabler = new EventListener() {
-
-        @Override
-        public void handleEvent(UIEvent event) {
-            event.stopImmediatePropagation();
-        }
+    private static final EventListener Disabler = event -> {
+        event.stopImmediatePropagation();
     };
 
     /** The actual form element. */

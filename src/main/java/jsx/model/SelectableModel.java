@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import jsx.PublishableInterface;
+import jsx.Publishable;
 
 /**
  * @version 2013/04/05 9:31:56
  */
-public class SelectableModel<T> implements Iterable<T>, PublishableInterface {
+public class SelectableModel<T> extends Publishable implements Iterable<T> {
 
     /** The index of current selected item. */
     private int index = -1;

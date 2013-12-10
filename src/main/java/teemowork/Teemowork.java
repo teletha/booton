@@ -21,11 +21,11 @@ import teemowork.TeemoworkTheme.HTML;
  */
 public class Teemowork extends Application {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void jsmain() {
+    public static void main(String[] args) {
+        new Teemowork().main();
+    }
+
+    public void main() {
         document.documentElement().add(HTML.class);
         document.getElementById("Content").add(Content.class);
 

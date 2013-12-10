@@ -237,7 +237,7 @@ public class Javascript {
 
         // write bootstrap method if needed.
         try {
-            String main = writeMethodCode(source, "jsmain");
+            String main = writeMethodCode(source, "main", String[].class, null);
             String error = writeMethodCode(Thread.class, "handleUncaughtException", Object.class, "e");
 
             ScriptWriter code = new ScriptWriter();

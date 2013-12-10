@@ -14,7 +14,6 @@ import java.net.ServerSocket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import jsx.application.Application;
 import jsx.application.ApplicationTheme;
 import jsx.application.Page;
 import kiss.I;
@@ -40,7 +39,7 @@ public class Booton {
     public static final String BuildPhase = ".building";
 
     /** The application class. */
-    private final Class<? extends Application> application;
+    private final Class application;
 
     /** The application design. */
     private final Class<? extends ApplicationTheme> design;
@@ -62,7 +61,7 @@ public class Booton {
      * Booton web application builder.
      * </p>
      */
-    public Booton(Path root, Class<? extends Application> application) {
+    public Booton(Path root, Class application) {
         this(root, application, null);
     }
 
@@ -71,7 +70,7 @@ public class Booton {
      * Booton web application builder.
      * </p>
      */
-    public Booton(Path root, Class<? extends Application> application, Class<? extends ApplicationTheme> design) {
+    public Booton(Path root, Class application, Class<? extends ApplicationTheme> design) {
         // normalize root directory
         if (root == null) {
             root = I.locate("");

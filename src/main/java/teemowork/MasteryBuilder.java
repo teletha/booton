@@ -15,7 +15,6 @@ import js.dom.Element;
 import js.dom.EventListener;
 import js.dom.Image;
 import jsx.Subscribable;
-import jsx.SubscribableInterface;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Button;
@@ -50,7 +49,7 @@ import teemowork.model.Version;
 /**
  * @version 2013/10/10 9:47:05
  */
-public class MasteryBuilder extends Page implements SubscribableInterface {
+public class MasteryBuilder extends Page {
 
     private MasteryManager masteryManager;
 
@@ -102,7 +101,7 @@ public class MasteryBuilder extends Page implements SubscribableInterface {
 
         Element infomation = root.child(Information.class);
         menu = infomation.child(new Select(masteryManager));
-        subscribe(menu.model);
+        menu.model.register(this);
 
         reset = infomation.child(new Button("30", masterySet::reset));
 

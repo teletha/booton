@@ -64,13 +64,6 @@ public abstract class Application {
 
     /**
      * <p>
-     * Entry point for this application.
-     * </p>
-     */
-    public abstract void jsmain();
-
-    /**
-     * <p>
      * Configure header part.
      * </p>
      * 
