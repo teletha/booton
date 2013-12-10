@@ -9,18 +9,19 @@
  */
 package booton;
 
-import jsx.application.Application;
-
 /**
  * @version 2013/09/11 14:10:12
  */
-public class HelloWorld extends Application {
+public class HelloWorld {
 
     /**
-     * {@inheritDoc}
+     * <p>
+     * Entry point.
+     * </p>
+     * 
+     * @param args
      */
-    @Override
-    public void jsmain() {
+    public static void main(String[] args) {
         System.out.println("Hello World!");
     }
 }

@@ -10,9 +10,7 @@
 package jsx.bwt;
 
 import js.dom.Element;
-import js.dom.EventListener;
 import jsx.Subscribable;
-import jsx.SubscribableInterface;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.SelectStyle.SelectArrow;
 import jsx.bwt.SelectStyle.SelectForm;
@@ -67,24 +65,20 @@ public class Select<M> extends FormUI<Select> {
      */
     public Select(SelectableModel<M> selectable) {
         model = selectable;
-        binder.subscribe(model);
+        model.register(binder);
 
         form.add(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
 
         view = new ScrollableListView(10, 28).provide(binder);
         view.root.add(SelectItemList.class).bind(binder);
 
-        arrow = root.child(new Button(Icon.BottomArrow, new EventListener() {
-
-            @Override
-            public void handleEvent(UIEvent event) {
-                options.toggle();
-            }
+        arrow = root.child(new Button(Icon.BottomArrow, event -> {
+            options.toggle();
         }));
         arrow.root.add(SelectArrow.class);
 
         options = root.child(new SlidableView(view));
-        // options.bind(binder);
+        // options.bind(binder);q
 
         if (model.size() == 0) {
             disable();
@@ -114,7 +108,7 @@ public class Select<M> extends FormUI<Select> {
     /**
      * @version 2013/07/31 1:26:46
      */
-    private class Binder implements ItemRenderer, SubscribableInterface {
+    private class Binder implements ItemRenderer {
 
         @Listen(type = UIAction.Click)
         private void selectItem(UIEvent event) {

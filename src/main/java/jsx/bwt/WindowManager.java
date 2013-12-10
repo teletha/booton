@@ -44,7 +44,6 @@ public class WindowManager {
         this.target = target;
         this.content = content;
 
-        System.out.println("register");
         Publishable.Global.register(this);
     }
 
