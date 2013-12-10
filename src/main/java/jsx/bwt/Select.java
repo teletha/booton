@@ -12,6 +12,7 @@ package jsx.bwt;
 import js.dom.Element;
 import js.dom.EventListener;
 import jsx.Subscribable;
+import jsx.SubscribableInterface;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.SelectStyle.SelectArrow;
 import jsx.bwt.SelectStyle.SelectForm;
@@ -66,7 +67,7 @@ public class Select<M> extends FormUI<Select> {
      */
     public Select(SelectableModel<M> selectable) {
         model = selectable;
-        model.register(binder);
+        binder.subscribe(model);
 
         form.add(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
 
@@ -113,7 +114,7 @@ public class Select<M> extends FormUI<Select> {
     /**
      * @version 2013/07/31 1:26:46
      */
-    private class Binder implements ItemRenderer {
+    private class Binder implements ItemRenderer, SubscribableInterface {
 
         @Listen(type = UIAction.Click)
         private void selectItem(UIEvent event) {
