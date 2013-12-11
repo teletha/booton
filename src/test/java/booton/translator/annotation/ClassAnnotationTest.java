@@ -15,7 +15,7 @@ import booton.translator.ScriptTester;
 import booton.translator.Scriptable;
 
 /**
- * @version 2013/01/17 20:10:20
+ * @version 2013/12/11 20:21:06
  */
 @SuppressWarnings("unused")
 public class ClassAnnotationTest extends ScriptTester {
@@ -93,6 +93,26 @@ public class ClassAnnotationTest extends ScriptTester {
     }
 
     @Test
+    public void AnnotationValue() throws Exception {
+        test(new Scriptable() {
+
+            int act() {
+                return AnnotationValue.class.getAnnotation(AnnotationMarker.class).value().intValue();
+            }
+        });
+    }
+
+    @Test
+    public void AnnotationArrayValue() throws Exception {
+        test(new Scriptable() {
+
+            int act() {
+                return AnnotationArrayValue.class.getAnnotation(AnnotationArrayMarker.class).value()[1].intValue();
+            }
+        });
+    }
+
+    @Test
     public void RepeatableSingleValue() throws Exception {
         test(new Scriptable() {
 
@@ -148,6 +168,20 @@ public class ClassAnnotationTest extends ScriptTester {
      */
     @PrimitiveArrayMarker({1, 2, 3})
     private static class PrimitiveArrayValue {
+    }
+
+    /**
+     * @version 2013/12/11 19:45:09
+     */
+    @AnnotationMarker(@PrimitiveMarker(intValue = 20))
+    private static class AnnotationValue {
+    }
+
+    /**
+     * @version 2013/12/11 19:45:09
+     */
+    @AnnotationArrayMarker({@PrimitiveMarker(intValue = 20), @PrimitiveMarker(intValue = 30)})
+    private static class AnnotationArrayValue {
     }
 
     /**

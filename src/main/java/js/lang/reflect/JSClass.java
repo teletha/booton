@@ -1327,7 +1327,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      */
     @Override
     public String toString() {
-        return (isInterface() ? "interface " : isPrimitive() ? "" : "class ") + name;
+        return (isInterface() ? "interface " : isPrimitive() ? "" : "class ").concat(name);
     }
 
     /**

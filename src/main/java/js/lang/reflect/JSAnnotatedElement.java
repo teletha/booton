@@ -10,7 +10,9 @@
 package js.lang.reflect;
 
 import java.lang.annotation.Annotation;
+import java.lang.annotation.Repeatable;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Array;
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -205,9 +207,29 @@ abstract class JSAnnotatedElement implements AnnotatedElement {
      * @since 1.8
      */
     public <T extends Annotation> T[] getDeclaredAnnotationsByType(Class<T> annotationClass) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        T[] annotations;
+        T annotation = getDeclaredAnnotation(annotationClass);
+
+        if (annotation != null) {
+            annotations = (T[]) Array.newInstance(annotationClass, 1);
+            annotations[0] = annotation;
+        } else {
+            Repeatable repeatable = annotationClass.getAnnotation(Repeatable.class);
+            Annotation container = getDeclaredAnnotation(repeatable.value());
+
+            if (container == null) {
+                annotations = (T[]) Array.newInstance(annotationClass, 0);
+            } else {
+                try {
+                    annotations = (T[]) container.annotationType().getMethod("value").invoke(container);
+                } catch (Exception e) {
+                    // If this exception will be thrown, it is bug of this program. So we must
+                    // rethrow the wrapped error in here.
+                    throw new Error(e);
+                }
+            }
+        }
+        return annotations;
     }
 
     /**
@@ -256,7 +278,14 @@ abstract class JSAnnotatedElement implements AnnotatedElement {
             NativeFunction function = object.getPropertyAs(NativeFunction.class, ((JSMethod) (Object) method).nameJS);
 
             if (function != null) {
-                return function.apply(null);
+                Object value = function.apply(null);
+                Class type = method.getReturnType();
+
+                if (type.isAnnotation()) {
+                    return Proxy.newProxyInstance(null, new Class[] {type}, new AnnotationProxy(type, value));
+                } else {
+                    return value;
+                }
             }
 
             String name = method.getName();

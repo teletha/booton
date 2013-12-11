@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import kiss.I;
 
@@ -120,20 +121,12 @@ class JavaMetadataCompiler {
 
             return Javascript.computeClassName(type) + "." + Javascript.computeFieldName(type, ((Enum) value).name());
         } else if (type.isArray()) {
-            StringBuilder builder = new StringBuilder("[");
+            StringJoiner joiner = new StringJoiner(",", "[", "]");
 
-            int size = Array.getLength(value);
-
-            for (int i = 0; i < size; i++) {
-                builder.append(compileValue(Array.get(value, i)));
-
-                if (i < size - 1) {
-                    builder.append(',');
-                }
+            for (int i = 0; i < Array.getLength(value); i++) {
+                joiner.add(compileValue(Array.get(value, i)));
             }
-            builder.append(']');
-
-            return builder.toString();
+            return joiner.toString();
         } else {
             return value.toString();
         }
@@ -265,7 +258,18 @@ class JavaMetadataCompiler {
          */
         protected void writeAnnotation(Annotation annotation) {
             Class type = annotation.annotationType();
-            code.append(Javascript.computeSimpleClassName(type), ":", "{");
+            code.write(Javascript.computeSimpleClassName(type), ":");
+
+            writeAnnotationValue(type, annotation);
+        }
+
+        /**
+         * <p>
+         * Compile annotation to javascript.
+         * </p>
+         */
+        protected void writeAnnotationValue(Class type, Annotation annotation) {
+            code.write("{");
 
             // collect annotation methods and compile to javascript expression
             for (Method method : type.getDeclaredMethods()) {
@@ -276,14 +280,35 @@ class JavaMetadataCompiler {
                     Object defaultValue = method.getDefaultValue();
 
                     if (!Objects.equals(value, defaultValue)) {
-                        code.append(Javascript.computeMethodName(method), ":", "function() {return " + compileValue(value) + ";}")
-                                .separator();
+                        code.write(Javascript.computeMethodName(method), ":", "function()", "{", "return ");
+
+                        Class returnType = method.getReturnType();
+
+                        if (returnType.isAnnotation()) {
+                            writeAnnotationValue(returnType, (Annotation) value);
+                        } else if (returnType.isArray() && returnType.getComponentType().isAnnotation()) {
+                            code.write("[");
+
+                            int size = Array.getLength(value);
+
+                            for (int i = 0; i < size; i++) {
+                                writeAnnotationValue(returnType.getComponentType(), (Annotation) Array.get(value, i));
+
+                                if (i + 1 != size) {
+                                    code.separator();
+                                }
+                            }
+                            code.write("]");
+                        } else {
+                            code.write(compileValue(value));
+                        }
+                        code.write(";", "}").separator();
                     }
                 } catch (Exception e) {
                     throw I.quiet(e);
                 }
             }
-            code.append("}");
+            code.write("}");
         }
     }
 
