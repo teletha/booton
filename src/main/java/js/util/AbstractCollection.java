@@ -12,8 +12,7 @@ package js.util;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.StringJoiner;
 
 import booton.translator.JavaAPIProvider;
 
@@ -123,7 +122,10 @@ abstract class AbstractCollection<E> implements Collection<E> {
      */
     @Override
     public String toString() {
-        Stream<String> map = stream().map(item -> String.valueOf(item));
-        return map.collect(Collectors.joining(", ", "[", "]"));
+        StringJoiner joiner = new StringJoiner(", ", "[", "]");
+        forEach(item -> {
+            joiner.add(String.valueOf(item));
+        });
+        return joiner.toString();
     }
 }

@@ -9,6 +9,7 @@
  */
 package js.lang.reflect;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -89,10 +90,12 @@ class JSProxy {
         final ProxyBase proxy = new ProxyBase(clazz, handler);
 
         for (Class<?> interfaceType : interfaces) {
-            for (final Method method : interfaceType.getMethods()) {
-                ProxyFunction function = new ProxyFunction(proxy, method);
-                NativeObject.by(proxy)
-                        .setProperty(((JSMethod) (Object) method).nameJS, new NativeFunction(function).bind(function));
+            for (Method method : interfaceType.getMethods()) {
+                if (method.getDeclaringClass() != Annotation.class || method.getName().equals("annotationType")) {
+                    ProxyFunction function = new ProxyFunction(proxy, method);
+                    NativeObject.by(proxy)
+                            .setProperty(((JSMethod) (Object) method).nameJS, new NativeFunction(function).bind(function));
+                }
             }
         }
 
@@ -204,6 +207,14 @@ class JSProxy {
             super("Proxy" + id, new NativeObject(), new NativeArray(), ProxyBase.class, new NativeObject());
 
             interfacesType = Arrays.asList(interfaces);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return "class " + nameJS;
         }
     }
 

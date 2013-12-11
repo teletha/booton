@@ -726,6 +726,11 @@ class Node {
             }
 
             LoopStructure loop = new LoopStructure(this, nodes[0], nodes[1], update, buffer);
+            OperandCondition condition = (OperandCondition) peek(0);
+
+            if (condition.transition != nodes[0]) {
+                condition.invert();
+            }
 
             // write script fragment
             buffer.write("for", "(;", this + ";", update + ")", "{");

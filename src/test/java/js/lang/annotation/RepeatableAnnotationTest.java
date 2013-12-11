@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import booton.translator.ScriptRunner;
 import booton.translator.annotation.MultipleMarker;
 import booton.translator.annotation.MultipleMarkerContainer;
+import booton.translator.annotation.StringMarker;
 
 /**
  * @version 2013/12/11 12:29:21
@@ -81,6 +82,11 @@ public class RepeatableAnnotationTest {
         assert markers != null;
         assert markers.length == 1;
         assert markers[0].value() == 40;
+
+        StringMarker[] no = NoRepeatable.class.getDeclaredAnnotationsByType(StringMarker.class);
+        assert no != null;
+        assert no.length == 1;
+        assert no[0].value().equals("Tobiichi Origami");
     }
 
     /**
@@ -96,5 +102,12 @@ public class RepeatableAnnotationTest {
      */
     @MultipleMarker(40)
     private static class Child extends Repeatable {
+    }
+
+    /**
+     * @version 2013/12/11 12:30:51
+     */
+    @StringMarker("Tobiichi Origami")
+    private static class NoRepeatable {
     }
 }
