@@ -160,7 +160,6 @@ abstract class JSAnnotatedElement implements AnnotatedElement {
      * 
      * @return All annotations directly present on this element.
      */
-
     public final Annotation[] getDeclaredAnnotations() {
         if (privateAnnotations == null) {
             privateAnnotations = new HashMap();
@@ -172,6 +171,43 @@ abstract class JSAnnotatedElement implements AnnotatedElement {
             }
         }
         return privateAnnotations.values().toArray(new Annotation[privateAnnotations.size()]);
+    }
+
+    /**
+     * Returns this element's annotation(s) for the specified type if such annotations are either
+     * <em>directly present</em> or <em>indirectly present</em>. This method ignores inherited
+     * annotations. If there are no specified annotations directly or indirectly present on this
+     * element, the return value is an array of length 0. The difference between this method and
+     * {@link #getDeclaredAnnotation(Class)} is that this method detects if its argument is a
+     * <em>repeatable annotation type</em> (JLS 9.6), and if so, attempts to find one or more
+     * annotations of that type by "looking through" a container annotation if one is present. The
+     * caller of this method is free to modify the returned array; it will have no effect on the
+     * arrays returned to other callers.
+     * 
+     * @implSpec The default implementation may call {@link #getDeclaredAnnotation(Class)} one or
+     *           more times to find a directly present annotation and, if the annotation type is
+     *           repeatable, to find a container annotation. If annotations of the annotation type
+     *           {@code annotationClass} are found to be both directly and indirectly present, then
+     *           {@link #getDeclaredAnnotations()} will get called to determine the order of the
+     *           elements in the returned array.
+     *           <p>
+     *           Alternatively, the default implementation may call
+     *           {@link #getDeclaredAnnotations()} a single time and the returned array examined for
+     *           both directly and indirectly present annotations. The results of calling
+     *           {@link #getDeclaredAnnotations()} are assumed to be consistent with the results of
+     *           calling {@link #getDeclaredAnnotation(Class)}.
+     * @param <T> the type of the annotation to query for and return if directly or indirectly
+     *            present
+     * @param annotationClass the Class object corresponding to the annotation type
+     * @return all this element's annotations for the specified annotation type if directly or
+     *         indirectly present on this element, else an array of length zero
+     * @throws NullPointerException if the given annotation class is null
+     * @since 1.8
+     */
+    public <T extends Annotation> T[] getDeclaredAnnotationsByType(Class<T> annotationClass) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**

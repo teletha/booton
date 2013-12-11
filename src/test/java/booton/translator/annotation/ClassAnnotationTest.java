@@ -92,6 +92,16 @@ public class ClassAnnotationTest extends ScriptTester {
         });
     }
 
+    @Test
+    public void RepeatableSingleValue() throws Exception {
+        test(new Scriptable() {
+
+            int act() {
+                return RepeatableSingleValue.class.getAnnotation(MultipleMarker.class).value();
+            }
+        });
+    }
+
     /**
      * @version 2013/01/17 9:50:06
      */
@@ -138,5 +148,12 @@ public class ClassAnnotationTest extends ScriptTester {
      */
     @PrimitiveArrayMarker({1, 2, 3})
     private static class PrimitiveArrayValue {
+    }
+
+    /**
+     * @version 2013/12/11 12:15:34
+     */
+    @MultipleMarker(10)
+    private static class RepeatableSingleValue {
     }
 }
