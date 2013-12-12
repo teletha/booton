@@ -73,40 +73,51 @@ class Publisher {
         if (subscribable != null) {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
-                    if (annotation.annotationType() == Subscribe.class) {
-                        Class eventType;
-                        Method method = entry.getKey();
+                    Class annotationType = annotation.annotationType();
+                    Subscribe[] subscribes = null;
 
-                        if (method.getParameterTypes().length == 1) {
-                            eventType = method.getParameterTypes()[0];
-                        } else {
-                            eventType = ((Subscribe) annotation).value();
-                        }
+                    if (annotationType == Subscribe.class) {
+                        subscribes = new Subscribe[] {(Subscribe) annotation};
+                    } else if (annotationType == Subscribes.class) {
+                        subscribes = ((Subscribes) annotation).value();
+                    }
 
-                        Listener listener = new Listener(subscribable, method);
+                    if (subscribes != null) {
+                        for (Subscribe subscribe : subscribes) {
+                            Class eventType;
+                            Method method = entry.getKey();
 
-                        eventType = ClassUtil.wrap(eventType);
+                            if (method.getParameterTypes().length == 1) {
+                                eventType = method.getParameterTypes()[0];
+                            } else {
+                                eventType = subscribe.value();
+                            }
 
-                        if (holder == null) {
-                            holder = new HashMap();
-                            publish(new Start(Object.class));
-                        }
+                            Listener listener = new Listener(subscribable, method);
 
-                        List<Listener> listeners = holder.get(eventType);
+                            eventType = ClassUtil.wrap(eventType);
 
-                        if (listeners == null) {
-                            listeners = new CopyOnWriteArrayList();
-                            holder.put(eventType, listeners);
+                            if (holder == null) {
+                                holder = new HashMap();
+                                publish(new Start(Object.class));
+                            }
 
-                            publish(new Start(eventType));
-                        } else {
-                            for (Listener registered : listeners) {
-                                if (registered.instance == subscribable && registered.method == method) {
-                                    return;
+                            List<Listener> listeners = holder.get(eventType);
+
+                            if (listeners == null) {
+                                listeners = new CopyOnWriteArrayList();
+                                holder.put(eventType, listeners);
+
+                                publish(new Start(eventType));
+                            } else {
+                                for (Listener registered : listeners) {
+                                    if (registered.instance == subscribable && registered.method == method) {
+                                        return;
+                                    }
                                 }
                             }
+                            listeners.add(listener);
                         }
-                        listeners.add(listener);
                     }
                 }
             }
@@ -122,37 +133,48 @@ class Publisher {
         if (holder != null && subscribable != null) {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
-                    if (annotation.annotationType() == Subscribe.class) {
-                        Class eventType;
-                        Method method = entry.getKey();
+                    Class annotationType = annotation.annotationType();
+                    Subscribe[] subscribes = null;
 
-                        if (method.getParameterTypes().length == 1) {
-                            eventType = method.getParameterTypes()[0];
-                        } else {
-                            eventType = ((Subscribe) annotation).value();
-                        }
+                    if (annotationType == Subscribe.class) {
+                        subscribes = new Subscribe[] {(Subscribe) annotation};
+                    } else if (annotationType == Subscribes.class) {
+                        subscribes = ((Subscribes) annotation).value();
+                    }
 
-                        eventType = ClassUtil.wrap(eventType);
+                    if (subscribes != null) {
+                        for (Subscribe subscribe : subscribes) {
+                            Class eventType;
+                            Method method = entry.getKey();
 
-                        List<Listener> listeners = holder.get(eventType);
+                            if (method.getParameterTypes().length == 1) {
+                                eventType = method.getParameterTypes()[0];
+                            } else {
+                                eventType = subscribe.value();
+                            }
 
-                        if (listeners != null) {
-                            for (int i = listeners.size() - 1; 0 <= i; i--) {
-                                Listener listener = listeners.get(i);
+                            eventType = ClassUtil.wrap(eventType);
 
-                                if (listener.instance == subscribable) {
-                                    listeners.remove(i);
+                            List<Listener> listeners = holder.get(eventType);
 
-                                    if (listeners.isEmpty()) {
-                                        holder.remove(eventType);
-                                        publish(new Stop(eventType));
+                            if (listeners != null) {
+                                for (int i = listeners.size() - 1; 0 <= i; i--) {
+                                    Listener listener = listeners.get(i);
 
-                                        if (holder.isEmpty()) {
-                                            holder = null;
-                                            publish(new Stop(Object.class));
+                                    if (listener.instance == subscribable) {
+                                        listeners.remove(i);
+
+                                        if (listeners.isEmpty()) {
+                                            holder.remove(eventType);
+                                            publish(new Stop(eventType));
+
+                                            if (holder.isEmpty()) {
+                                                holder = null;
+                                                publish(new Stop(Object.class));
+                                            }
                                         }
+                                        break;
                                     }
-                                    break;
                                 }
                             }
                         }
