@@ -30,7 +30,7 @@ import js.lang.NativeFunction;
 import js.lang.NativeObject;
 
 /**
- * @version 2013/09/10 23:43:34
+ * @version 2013/12/12 15:53:53
  */
 abstract class JSAnnotatedElement implements AnnotatedElement {
 
@@ -283,6 +283,15 @@ abstract class JSAnnotatedElement implements AnnotatedElement {
 
                 if (type.isAnnotation()) {
                     return Proxy.newProxyInstance(null, new Class[] {type}, new AnnotationProxy(type, value));
+                } else if (type.isArray() && type.getComponentType().isAnnotation()) {
+                    Object[] objects = (Object[]) value;
+                    type = type.getComponentType();
+                    Object array = Array.newInstance(type, objects.length);
+
+                    for (int i = 0; i < objects.length; i++) {
+                        Array.set(array, i, Proxy.newProxyInstance(null, new Class[] {type}, new AnnotationProxy(type, objects[i])));
+                    }
+                    return array;
                 } else {
                     return value;
                 }

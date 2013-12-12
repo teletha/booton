@@ -31,7 +31,7 @@ class Publisher {
     private static final Map<Class, Set<Class<?>>> cache = new HashMap();
 
     /** The actual listeners holder. */
-    private Map<Class, List<Listener>> holder;
+    private Map<Class, List<Subscriber>> holder;
 
     /**
      * <p>
@@ -45,18 +45,16 @@ class Publisher {
             Set<Class<?>> types = cache.computeIfAbsent(event.getClass(), type -> ClassUtil.getTypes(type));
 
             for (Class type : types) {
-                List<Listener> listeners = holder.get(type);
+                if (holder != null) {
+                    List<Subscriber> subscribers = holder.get(type);
 
-                if (listeners != null) {
-                    for (Listener listener : listeners) {
-                        try {
-                            if (listener.hasParam) {
-                                listener.method.invoke(listener.instance, event);
-                            } else {
-                                listener.method.invoke(listener.instance);
+                    if (subscribers != null) {
+                        for (Subscriber subscriber : subscribers) {
+                            try {
+                                subscriber.accept(event);
+                            } catch (Exception e) {
+                                throw new Error(e);
                             }
-                        } catch (Exception e) {
-                            throw new Error(e);
                         }
                     }
                 }
@@ -93,7 +91,7 @@ class Publisher {
                                 eventType = subscribe.value();
                             }
 
-                            Listener listener = new Listener(subscribable, method);
+                            Subscriber listener = new Listener(subscribable, method);
 
                             eventType = ClassUtil.wrap(eventType);
 
@@ -102,21 +100,31 @@ class Publisher {
                                 publish(new Start(Object.class));
                             }
 
-                            List<Listener> listeners = holder.get(eventType);
+                            List<Subscriber> subscribers = holder.get(eventType);
 
-                            if (listeners == null) {
-                                listeners = new CopyOnWriteArrayList();
-                                holder.put(eventType, listeners);
+                            if (subscribers == null) {
+                                subscribers = new CopyOnWriteArrayList();
+                                holder.put(eventType, subscribers);
 
                                 publish(new Start(eventType));
                             } else {
-                                for (Listener registered : listeners) {
-                                    if (registered.instance == subscribable && registered.method == method) {
+                                for (Subscriber registered : subscribers) {
+                                    if (registered.equals(subscribable, method)) {
                                         return;
                                     }
                                 }
                             }
-                            listeners.add(listener);
+
+                            // ===========================
+                            // Execution Count Wrapper
+                            // ===========================
+                            int count = subscribe.count();
+
+                            if (0 < count) {
+                                listener = new Count(count, this, subscribable, listener);
+                            }
+
+                            subscribers.add(listener);
                         }
                     }
                 }
@@ -155,16 +163,16 @@ class Publisher {
 
                             eventType = ClassUtil.wrap(eventType);
 
-                            List<Listener> listeners = holder.get(eventType);
+                            List<Subscriber> subscribers = holder.get(eventType);
 
-                            if (listeners != null) {
-                                for (int i = listeners.size() - 1; 0 <= i; i--) {
-                                    Listener listener = listeners.get(i);
+                            if (subscribers != null) {
+                                for (int i = subscribers.size() - 1; 0 <= i; i--) {
+                                    Subscriber subscliber = subscribers.get(i);
 
-                                    if (listener.instance == subscribable) {
-                                        listeners.remove(i);
+                                    if (subscliber.equals(subscribable, null)) {
+                                        subscribers.remove(i);
 
-                                        if (listeners.isEmpty()) {
+                                        if (subscribers.isEmpty()) {
                                             holder.remove(eventType);
                                             publish(new Stop(eventType));
 
@@ -185,9 +193,26 @@ class Publisher {
     }
 
     /**
+     * @version 2013/12/12 14:58:28
+     */
+    private static interface Subscriber<E> {
+
+        /**
+         * <p>
+         * Receieve event.
+         * </p>
+         * 
+         * @param event
+         */
+        void accept(E event) throws Exception;
+
+        boolean equals(Object instance, Method method);
+    }
+
+    /**
      * @version 2013/10/09 15:53:55
      */
-    private static class Listener {
+    private static class Listener implements Subscriber {
 
         /** The listener instance. */
         private final Object instance;
@@ -208,6 +233,79 @@ class Publisher {
             this.instance = instance;
             this.method = method;
             this.hasParam = method.getParameterTypes().length == 1;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void accept(Object event) throws Exception {
+            if (hasParam) {
+                method.invoke(instance, event);
+            } else {
+                method.invoke(instance);
+            }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(Object instance, Method method) {
+            return this.instance == instance && (method == null || this.method == method);
+        }
+    }
+
+    /**
+     * @version 2013/12/12 14:55:38
+     */
+    private static class Count implements Subscriber {
+
+        /** The delegator. */
+        private final Publisher publisher;
+
+        /** The delegator. */
+        private final Subscribable subscribable;
+
+        /** The delegator. */
+        private final Subscriber subscriber;
+
+        /** The execution limit. */
+        private final int limit;
+
+        /** The current number of execution. */
+        private int current = 0;
+
+        /**
+         * @param limit
+         * @param publisher
+         * @param subscriber
+         */
+        private Count(int limit, Publisher publisher, Subscribable subscribable, Subscriber subscriber) {
+            this.limit = limit;
+            this.publisher = publisher;
+            this.subscribable = subscribable;
+            this.subscriber = subscriber;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void accept(Object event) throws Exception {
+            subscriber.accept(event);
+
+            if (++current == limit) {
+                publisher.unregister(subscribable);
+            }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(Object instance, Method method) {
+            return subscriber.equals(instance, method);
         }
     }
 }

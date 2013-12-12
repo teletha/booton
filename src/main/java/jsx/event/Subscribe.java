@@ -16,6 +16,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import jsx.bwt.UIEvent;
+
 /**
  * @version 2013/12/11 9:43:06
  */
@@ -33,4 +35,51 @@ public @interface Subscribe {
      * @return
      */
     Class value() default Object.class;
+
+    /**
+     * <p>
+     * Set the execution debounce time (ms).
+     * </p>
+     * 
+     * @return A time (ms);
+     */
+    long debounce() default 0;
+
+    /**
+     * <p>
+     * Set the execution throttle time (ms).
+     * </p>
+     * 
+     * @return A time (ms);
+     */
+    long throttle() default 0;
+
+    /**
+     * <p>
+     * Set the execution delay time (ms).
+     * </p>
+     * 
+     * @return A time (ms);
+     */
+    long delay() default 0;
+
+    /**
+     * <p>
+     * Set a number of execution.
+     * </p>
+     * 
+     * @return
+     */
+    int count() default 0;
+
+    /**
+     * <p>
+     * Stop event propagation and default behavior. {@link UIEvent#stopPropagation()} and
+     * {@link UIEvent#preventDefault()} methods will be called.
+     * </p>
+     * 
+     * @return The <code>true</code> will stop the current processing event.
+     */
+    boolean abort() default false;
+
 }
