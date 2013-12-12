@@ -15,13 +15,19 @@ import org.junit.runner.RunWith;
 import booton.translator.ScriptRunner;
 
 /**
- * @version 2013/12/11 9:46:40
+ * @version 2013/12/12 15:59:17
  */
 @RunWith(ScriptRunner.class)
 public class PublishableTest {
 
+    /**
+     * @version 2013/12/11 10:07:25
+     */
+    private static class EventHub implements Publishable {
+    }
+
     @Test
-    public void base() throws Exception {
+    public void subscribe() throws Exception {
         EventHub eventhub = new EventHub();
 
         Single reciever = new Single();
@@ -36,110 +42,19 @@ public class PublishableTest {
     }
 
     @Test
-    public void primitive() throws Exception {
+    public void unsubscribe() throws Exception {
         EventHub eventhub = new EventHub();
 
-        Primitive reciever = new Primitive();
+        Single reciever = new Single();
         reciever.subscribe(eventhub);
-        assert reciever.value == 0;
+        assert reciever.name == null;
 
-        eventhub.publish(2);
-        assert reciever.value == 2;
+        eventhub.publish("Nadeko");
+        assert reciever.name.equals("Nadeko");
 
-        eventhub.publish(Integer.valueOf(10));
-        assert reciever.value == 10;
-    }
-
-    @Test
-    public void wrapper() throws Exception {
-        EventHub eventhub = new EventHub();
-
-        Wrapper reciever = new Wrapper();
-        reciever.subscribe(eventhub);
-        assert reciever.value == 0;
-
-        eventhub.publish(Integer.valueOf(10));
-        assert reciever.value == 10;
-
-        eventhub.publish(2);
-        assert reciever.value == 2;
-    }
-
-    @Test
-    public void multipleSameTypes() throws Exception {
-        EventHub eventhub = new EventHub();
-
-        MultipleSameType reciever = new MultipleSameType();
-        reciever.subscribe(eventhub);
-        assert reciever.count == 0;
-
-        eventhub.publish("Sinobu");
-        assert reciever.count == 2;
-    }
-
-    @Test
-    public void methods() throws Exception {
-        EventHub eventhub = new EventHub();
-
-        Methods reciever = new Methods();
-        reciever.subscribe(eventhub);
-
-        eventhub.publish("Hitagi");
-        assert reciever.name.equals("Hitagi");
-
-        eventhub.publish(2);
-        assert reciever.value == 2;
-    }
-
-    @Test
-    public void noParam() throws Exception {
-        EventHub eventhub = new EventHub();
-
-        NoParam reciever = new NoParam();
-        reciever.subscribe(eventhub);
-        assert reciever.count == 0;
-
-        eventhub.publish("Hitagi");
-        assert reciever.count == 1;
-    }
-
-    @Test
-    public void subscribes() throws Exception {
-        EventHub eventhub = new EventHub();
-
-        MultipleSubscribers reciever = new MultipleSubscribers();
-        reciever.subscribe(eventhub);
-        assert reciever.count == 0;
-
-        eventhub.publish("Hitagi");
-        assert reciever.count == 1;
-
-        eventhub.publish(17);
-        assert reciever.count == 2;
-
-        eventhub.publish(new IllegalStateException());
-        assert reciever.count == 2;
-    }
-
-    @Test
-    public void hierarchy() throws Exception {
-        EventHub eventhub = new EventHub();
-
-        Hierarchy reciever = new Hierarchy();
-        reciever.subscribe(eventhub);
-        assert reciever.count == 0;
-
-        eventhub.publish("string and char sequence");
-        assert reciever.count == 2;
-
-        eventhub.publish(new StringBuilder("not string"));
-        assert reciever.count == 3;
-    }
-
-    /**
-     * @version 2013/12/11 10:07:25
-     */
-    private static class EventHub implements Publishable {
+        reciever.unsubscribe(eventhub);
+        eventhub.publish("Tubasa");
+        assert reciever.name.equals("Nadeko");
     }
 
     /**
@@ -153,6 +68,18 @@ public class PublishableTest {
         private void recieve(String name) {
             this.name = name;
         }
+    }
+
+    @Test
+    public void multipleSameTypes() throws Exception {
+        EventHub eventhub = new EventHub();
+
+        MultipleSameType reciever = new MultipleSameType();
+        reciever.subscribe(eventhub);
+        assert reciever.count == 0;
+
+        eventhub.publish("Sinobu");
+        assert reciever.count == 2;
     }
 
     /**
@@ -173,6 +100,21 @@ public class PublishableTest {
         }
     }
 
+    @Test
+    public void primitive() throws Exception {
+        EventHub eventhub = new EventHub();
+
+        Primitive reciever = new Primitive();
+        reciever.subscribe(eventhub);
+        assert reciever.value == 0;
+
+        eventhub.publish(2);
+        assert reciever.value == 2;
+
+        eventhub.publish(Integer.valueOf(10));
+        assert reciever.value == 10;
+    }
+
     /**
      * @version 2013/12/11 10:07:32
      */
@@ -186,6 +128,21 @@ public class PublishableTest {
         }
     }
 
+    @Test
+    public void wrapper() throws Exception {
+        EventHub eventhub = new EventHub();
+
+        Wrapper reciever = new Wrapper();
+        reciever.subscribe(eventhub);
+        assert reciever.value == 0;
+
+        eventhub.publish(Integer.valueOf(10));
+        assert reciever.value == 10;
+
+        eventhub.publish(2);
+        assert reciever.value == 2;
+    }
+
     /**
      * @version 2013/12/11 10:07:32
      */
@@ -197,6 +154,20 @@ public class PublishableTest {
         private void recieve(Integer value) {
             this.value = value;
         }
+    }
+
+    @Test
+    public void methods() throws Exception {
+        EventHub eventhub = new EventHub();
+
+        Methods reciever = new Methods();
+        reciever.subscribe(eventhub);
+
+        eventhub.publish("Hitagi");
+        assert reciever.name.equals("Hitagi");
+
+        eventhub.publish(2);
+        assert reciever.value == 2;
     }
 
     /**
@@ -219,6 +190,18 @@ public class PublishableTest {
         }
     }
 
+    @Test
+    public void noParam() throws Exception {
+        EventHub eventhub = new EventHub();
+
+        NoParam reciever = new NoParam();
+        reciever.subscribe(eventhub);
+        assert reciever.count == 0;
+
+        eventhub.publish("Hitagi");
+        assert reciever.count == 1;
+    }
+
     /**
      * @version 2013/12/11 9:48:31
      */
@@ -230,6 +213,24 @@ public class PublishableTest {
         private void recieve() {
             this.count++;
         }
+    }
+
+    @Test
+    public void subscribes() throws Exception {
+        EventHub eventhub = new EventHub();
+
+        MultipleSubscribers reciever = new MultipleSubscribers();
+        reciever.subscribe(eventhub);
+        assert reciever.count == 0;
+
+        eventhub.publish("Hitagi");
+        assert reciever.count == 1;
+
+        eventhub.publish(17);
+        assert reciever.count == 2;
+
+        eventhub.publish(new IllegalStateException());
+        assert reciever.count == 2;
     }
 
     /**
@@ -246,6 +247,21 @@ public class PublishableTest {
         }
     }
 
+    @Test
+    public void hierarchy() throws Exception {
+        EventHub eventhub = new EventHub();
+
+        Hierarchy reciever = new Hierarchy();
+        reciever.subscribe(eventhub);
+        assert reciever.count == 0;
+
+        eventhub.publish("string and char sequence");
+        assert reciever.count == 2;
+
+        eventhub.publish(new StringBuilder("not string"));
+        assert reciever.count == 3;
+    }
+
     /**
      * @version 2013/12/11 10:09:23
      */
@@ -260,6 +276,37 @@ public class PublishableTest {
 
         @Subscribe
         private void charSequence(CharSequence value) {
+            this.count++;
+        }
+    }
+
+    @Test
+    public void count() throws Exception {
+        EventHub eventhub = new EventHub();
+
+        Count reciever = new Count();
+        reciever.subscribe(eventhub);
+        assert reciever.count == 0;
+
+        eventhub.publish("Hitagi");
+        assert reciever.count == 1;
+
+        eventhub.publish("Nadeko");
+        assert reciever.count == 2;
+
+        eventhub.publish("Suruga");
+        assert reciever.count == 2;
+    }
+
+    /**
+     * @version 2013/12/12 15:59:21
+     */
+    private static class Count implements Subscribable {
+
+        private int count;
+
+        @Subscribe(count = 2)
+        private void string(String name) {
             this.count++;
         }
     }
