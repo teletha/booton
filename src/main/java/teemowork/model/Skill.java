@@ -6773,7 +6773,7 @@ public class Skill extends Describable<SkillDescriptor> {
                         280, 325, 375, 430, 490, 565, 650}));
 
         SteelTempest.update(P315)
-                .active("このスキルはクリティカルが発生する。指定した方向の直線上にいる全ての敵({1})に{2}を与える。" + WhirlingDeath.name + "の使用中に起動した場合、{3}の敵にダメージを与える。このスキルは10秒の間3回まで連続して使用できる。3度目の使用では、直線上({4})の敵に{2}と{5}を与える。" + WhirlingDeath.name + "の使用中に起動した場合、{3}の敵にダメージと{5}を与える。このスキルは固定のCDを持つが、増加AS1.72%毎に再使用時間が1%減少する（最大で66%）。")
+                .active("指定した方向の直線上にいる全ての敵({1})に{2}を与える。" + WhirlingDeath.name + "の使用中に起動した場合、{3}の敵にダメージを与える。このスキルは3回まで連続して使用でき、3度目の使用では{4}になり{5}を追加で与える。このスキルは通常攻撃として扱われ(クリティカル適用)、固定のCDを持つが、増加AS1.72%毎に再使用時間が1%減少する（最大で66%）。")
                 .variable(1, Distance, 475)
                 .variable(2, PhysicalDamage, 20, 20, ad(1))
                 .variable(3, Radius, 375)
@@ -6804,7 +6804,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(1, Radius, 400)
                 .variable(2, PhysicalDamage, 200, 100, bounusAD(1.5))
                 .variable(3, BounusARPenRatio, 50)
-                .cd(80, -15)
+                .cd(80, -25)
                 .range(1300);
     }
 

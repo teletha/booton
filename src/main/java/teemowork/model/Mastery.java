@@ -102,6 +102,14 @@ public abstract class Mastery extends Describable<MasteryDescriptor> {
     public abstract String getSpriteImage();
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    /**
      * <p>
      * Find masteries for the specified {@link Version}.
      * </p>

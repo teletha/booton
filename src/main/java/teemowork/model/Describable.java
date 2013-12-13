@@ -87,6 +87,9 @@ public abstract class Describable<T extends Descriptor> {
         // for helper methods
         current = this;
 
+        // record patch info
+        version.record(this);
+
         // API definition
         return descriptor;
     }
