@@ -12,7 +12,7 @@ package teemowork.model;
 import jsx.Publishable;
 
 /**
- * @version 2013/03/19 19:59:46
+ * @version 2013/12/13 9:11:59
  */
 public enum Version {
 
@@ -60,10 +60,12 @@ public enum Version {
 
     P314("3.14", 2013, 11, 20),
 
+    P315("3.14", 2013, 12, 13),
+
     PBE("Public Beta Environment", 2013, 1, 26);
 
     /** The latest stable version. */
-    public static final Version Latest = P314;
+    public static final Version Latest = P315;
 
     /** The selected version. */
     private static Version selection = Latest;

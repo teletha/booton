@@ -149,7 +149,7 @@ public enum Status {
     ARPen, ARPenPerLv,
 
     /** Percentage Penetration */
-    ARPenRatio("ARPen"), ARPenRatioPerLv,
+    ARPenRatio("ARPen"), ARPenRatioPerLv, BounusARPenRatio("増加ARPen"),
 
     /** Flat Reduction */
     ARReduction("AR減少"),

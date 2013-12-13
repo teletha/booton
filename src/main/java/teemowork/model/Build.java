@@ -81,6 +81,7 @@ public class Build extends Publishable implements StatusCalculator {
         items[1] = Item.FiendishCodex;
         items[2] = Item.LastWhisper;
         items[4] = Item.RabadonsDeathcap;
+        items[5] = Item.InfinityEdge;
     }
 
     /**

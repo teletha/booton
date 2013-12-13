@@ -24,9 +24,9 @@ import teemowork.model.variable.VariableResolver.Per4LevelForTrundle;
 import teemowork.model.variable.VariableResolver.Per5Level;
 import teemowork.model.variable.VariableResolver.Per5LevelForAshe;
 import teemowork.model.variable.VariableResolver.Per5LevelForHeimer;
-import teemowork.model.variable.VariableResolver.Per5LevelForNautilus;
 import teemowork.model.variable.VariableResolver.Per5LevelForSejuani;
 import teemowork.model.variable.VariableResolver.Per5LevelForYoric;
+import teemowork.model.variable.VariableResolver.Per5LevelWith18;
 import teemowork.model.variable.VariableResolver.Per6Level;
 import teemowork.model.variable.VariableResolver.Per6LevelForVi;
 import teemowork.model.variable.VariableResolver.Per6LevelForZed;
@@ -1829,6 +1829,21 @@ public class Skill extends Describable<SkillDescriptor> {
     public static final Skill SuperMegaDeathRocket = new Skill("Super Mega Death Rocket!", R);
 
     /** The skill name. */
+    public static final Skill WayOfTheWanderer = new Skill("Way of the Wanderer", Passive);
+
+    /** The skill name. */
+    public static final Skill SteelTempest = new Skill("Steel Tempest", Q);
+
+    /** The skill name. */
+    public static final Skill WindWall = new Skill("Wind Wall", W);
+
+    /** The skill name. */
+    public static final Skill SweepingBlade = new Skill("Sweeping Blade", E);
+
+    /** The skill name. */
+    public static final Skill LastBreath = new Skill("Last Breath", R);
+
+    /** The skill name. */
     public final String name;
 
     /** The skill system name. */
@@ -2637,36 +2652,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(80)
                 .range(-1);
 
-        /** Fiddlesticks */
-        Dread.update().passive("{1}の敵ユニットに{2}を与える。").variable(1, Radius, 1000).variable(2, Status.MRReduction, 10);
-        Terrify.update().active("対象の敵ユニットに{1}を与える。").variable(1, Fear, 1, 0.5).mana(65, 10).cd(15, -1).range(575);
-        Drain.update()
-                .active("対象の敵ユニットに最大5秒間毎秒{1}を与え、{2}する。敵が離れる({3})と詠唱が中断される。")
-                .variable(1, MagicDamage, 60, 30, ap(0.45))
-                .variable(2, RestoreHealth, 0, 0, amplify(DealtDamageRatio, 60, 5))
-                .variable(3, Radius, 750)
-                .mana(80, 10)
-                .cd(10, -1)
-                .range(475)
-                .type(SkillType.Channel);
-        DarkWind.update()
-                .active("対象の敵ユニットにカラスを飛ばし{1}と{2}を与える。カラスは{4}の敵ユニットに4回まで跳ね返りその度に効果を与える(最大5hit)。この跳ね返りは同一ユニットに何度も跳ね返る。ミニオンとモンスターに対しては{3}を与える。")
-                .variable(1, MagicDamage, 65, 20, ap(0.45))
-                .variable(2, Silence, 1.2)
-                .variable(3, MagicDamage, 97.5, 30, ap(0.675))
-                .variable(4, Radius, 450)
-                .mana(50, 20)
-                .cd(15, -1)
-                .range(750);
-        Crowstorm.update()
-                .active("1.5秒詠唱後に指定地点にテレポートし、{1}の敵ユニットに5秒間毎秒{2}を与える。最大DMは{3}となる。")
-                .variable(1, Radius, 600)
-                .variable(2, MagicDamage, 125, 100, ap(0.45))
-                .variable(3, MagicDamage, 625, 500, ap(2.25))
-                .mana(150, 50)
-                .cd(150, -10)
-                .range(800)
-                .type(SkillType.Channel);
+        Fiddlesticks();
 
         /** Fiora */
         Duelist.update()
@@ -3364,48 +3350,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, MagicDamage, 100, 100, ap(0.65))
                 .mana(0);
 
-        /** Lee Sin */
-        Flurry.update()
-                .passive("スキルを使用すると{1}し通常攻撃の度に{2}する。この効果は3秒経つか2回通常攻撃を行うと解消される。")
-                .variable(-1, ASRatio, 40)
-                .variable(2, RestoreEnergy, 15);
-        SonicWave.update()
-                .active("指定方向に気を飛ばし当たった敵ユニットに{1}を与える。このスキルが敵ユニットに当たった場合、3秒間Resonating Strikeが使用可能になる。また3秒間対象の視界を得る。")
-                .variable(1, PhysicalDamage, 50, 30, bounusAD(0.9))
-                .cd(11, -1)
-                .range(975)
-                .cost(Energy, 50, 0);
-        ResonatingStrike.update()
-                .active("Sonic Waveが当たった敵ユニットにダッシュし、{1}を与える。(追加ダメージはMinionに対して400DMが上限)")
-                .variable(1, PhysicalDamage, 50, 0, bounusAD(0.5), amplify(Status.TargetMissingHealthRatio, 8))
-                .cost(Energy, 30, 0)
-                .range(1100);
-        Safeguard.update()
-                .active("対象の味方ユニットまで移動し、対象と自身に{1}を付与する。自身を対象とした場合はシールドのみが付与される。")
-                .variable(1, Shield, 40, 40, ap(0.8))
-                .cd(9)
-                .cost(Energy, 50, 0)
-                .range(700);
-        IronWill.update().active("5秒間{1}と{2}を得る。").variable(1, LS, 5, 5).variable(2, SV, 5, 5).cost(Energy, 30, 0);
-        Tempest.update()
-                .active("{1}の敵ユニットに{2}を与え、4秒間そのユニットの{3}。このスキルが敵ユニットに当たった場合、3秒間Crippleが使用可能になる。")
-                .variable(1, Radius, 450)
-                .variable(2, MagicDamage, 60, 35, bounusAD(1))
-                .variable(3, Visionable)
-                .cd(10)
-                .cost(Energy, 50, 0);
-        Cripple.update()
-                .active("Tempestが当たった敵ユニット４秒間{1}と{2}を与える。これらの速度低下は時間と共に戻っていく。")
-                .variable(1, MSSlowRatio, 20, 10)
-                .variable(2, ASSlowRatio, 20, 10);
-        DragonsRage.update()
-                .active("対象の敵Championに{1}を与え、{2}させる。ノックバックした対象に触れた敵ユニットにも{1}を与え、{3}を与える。")
-                .variable(1, PhysicalDamage, 200, 200, bounusAD(2))
-                .variable(2, Knockback, 1200)
-                .variable(3, Knockup, 0)
-                .cd(90, -15)
-                .range(375);
-
+        LeeSin();
         Leona();
 
         /** Lissandra */
@@ -3444,40 +3389,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, MSSlowRatio, 20, 10)
                 .variable(4, Time, 2.5);
 
-        /** Lucian */
-        Lightslinger.update()
-                .passive("スキル使用した後の通常攻撃が2回攻撃になる。この効果は通常攻撃を行うか、6秒経過すると解消される。2回目の攻撃は50%のダメージとなるが、対象がMinionの場合は100%のダメージを与える。またon-hitエフェクトは通常通り適用され、クリティカルも発生する。");
-        PiercingLight.update()
-                .active("対象の敵ユニットに向けて0.35秒後に光のボルトを放ち、対象とその直線状({1})にいるすべての敵ユニットに{2}を与える(ミニオンに対しては75%)。")
-                .variable(1, Length, 1100)
-                .variable(2, PhysicalDamage, 80, 40, amplify(BounusAD, 0.6, 0.15))
-                .variable(3, PhysicalDamage)
-                .mana(60, 5)
-                .cd(9, -1)
-                .range(570);
-        ArdentBlaze.update()
-                .active("指定方向に爆発する弾を放つ。敵ユニットに当たるか最大距離まで飛ぶと十字型に爆風が広がり、範囲内の敵ユニットに{1}と6秒間マークを与える。マークを受けている敵ユニットにダメージを与えると、2秒間{2}する。また爆風が発生した地点の{3}。")
-                .variable(1, MagicDamage, 60, 40, ap(0.9), bounusAD(0.8))
-                .variable(2, MS, 40)
-                .variable(3, Visionable)
-                .mana(60)
-                .cd(18, -2)
-                .range(425);
-        RelentlessPursuit.update()
-                .active("指定方向にダッシュし、自身にかかっているスローを解除する。" + TheCulling.name + "発動中に敵Championをキルかアシストした場合このスキルの{1}する。")
-                .variable(1, CDDecrease)
-                .mana(60, -15)
-                .cd(18, -2)
-                .range(425);
-        TheCulling.update()
-                .active("3秒間、指定方向に{1}発の弾を連射し一発毎に{2}を与える（最大で{3}）。銃を連射している間は移動と" + RelentlessPursuit.name + "のみが可能であり、ミニオンに対しては400%のダメージを与える。また連射中にこのスキルを再使用することで連射を解除できる。")
-                .variable(1, Value, 7.5, 0, amplify(AS, 7.5, 1.5))
-                .variable(2, PhysicalDamage, 40, 10, ap(0.1), bounusAD(0.25))
-                .variable(3, PhysicalDamage, 1040, 460, amplify(AP, 2.6, 0.4), amplify(BounusAD, 6.5, 1.0))
-                .mana(100)
-                .cd(100, -25)
-                .range(1400);
-
+        Lucian();
         Lulu();
 
         /** Lux */
@@ -3787,39 +3699,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(100, 25)
                 .cd(120, -15);
 
-        /** Pantheon */
-        AegisProtection.update()
-                .passive("通常攻撃を行うかスキルを使用するたびにスタックが1増加(最大4スタック)し、4スタック時に40DM以上の通常攻撃を受けるとスタックを消費して通常攻撃のダメージを無効化する。");
-        SpearShot.update()
-                .active("対象の敵ユニットに槍を投げ{1}を与える。")
-                .variable(1, PhysicalDamage, 65, 40, bounusAD(1.4))
-                .mana(45)
-                .cd(4)
-                .range(600);
-        AegisOfZeonia.update()
-                .active("対象の敵Championに飛びかかり{1}と{2}を与え、Aegis Protectionを発動する。")
-                .variable(1, MagicDamage, 50, 25, ap(1))
-                .variable(2, Stun, 1)
-                .mana(55)
-                .cd(13, -1)
-                .range(600);
-        HeartseekerStrike.update()
-                .passive("敵ユニットのHPが15%以下の時は通常攻撃が必ずクリティカルになり、またSpear Shotのダメージが1.5倍になる。")
-                .active("指定方向に0.75秒間槍を突き出し、範囲内の敵ユニットに{1}を最大3回与える(0.25秒毎に1ヒット)。対象がChampionの場合、与えるダメージが{2}になる。")
-                .variable(1, PhysicalDamage, 13, 10, bounusAD(0.6))
-                .variable(2, PhysicalDamage, 26, 20, bounusAD(1.2))
-                .mana(45, 5)
-                .cd(10, -1)
-                .range(400)
-                .type(SkillType.Channel);
-        GrandSkyfall.update()
-                .active("地点を指定して2秒後にジャンプし、その1.5秒後に指定地点の{1}に{2}と1秒間{3}を与えつつ落下する。DMは指定地点から離れるほど低減され、範囲最端では50%となる。ジャンプ前にキャンセルすると、消費した分のマナが回復し、このスキルのCDは10秒になる。")
-                .variable(1, Radius, 1000)
-                .variable(2, MagicDamage, 400, 300, ap(1))
-                .variable(3, MSSlowRatio, 35)
-                .mana(125)
-                .cd(150, -15)
-                .range(5500);
+        Pantheon();
 
         /** Poppy */
         ValiantFighter.update().passive("現在HPの10%を超えるダメージを受けた際、その超過分のダメージを50%低減する。塔の攻撃には無効。");
@@ -3898,36 +3778,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(100);
         TagTeam.update(P306).variable(-2, MSRatio, 80, 10).variable(3, MSRatio, 20, 10).cd(140, -30);
 
-        /** Rammus */
-        SpikedShell.update().passive("{1}を得る。").variable(1, AD, 0, 0, amplify(AR, 0.45));
-        Powerball.update()
-                .active("使用してから7秒間Rammusが回転し、その間徐々に移動速度が増加する(最大時85%増加)。回転中に最初に当たった敵ユニットとRammusの周囲({1})にいる敵ユニットに{2}、{3}、3秒間の{4}を与える。回転中にスキル再使用または、Defensive Ball Curlを使用すると回転がキャンセルされる。")
-                .variable(1, Radius, 200)
-                .variable(2, MagicDamage, 100, 50, ap(1))
-                .variable(3, Knockup, 0.75)
-                .variable(4, MSSlowRatio, 20, 5)
-                .mana(70, 10)
-                .cd(10);
-        DefensiveBallCurl.update()
-                .active("6秒間{1}と{2}を得て、Rammusを通常攻撃した敵ユニットに{3}を与える。効果中にPowerballを使用すると効果がキャンセルされる。また、このスキルを再使用することで効果をキャンセルできる。")
-                .variable(1, AR, 40, 20)
-                .variable(2, MR, 40, 20)
-                .variable(3, MagicDamage, 15, 10, amplify(AR, 0.1))
-                .mana(40)
-                .cd(14);
-        PuncturingTaunt.update()
-                .active("対象の敵ユニットに{1}と{2}を与える。")
-                .variable(1, Taunt, 1, 0.5)
-                .variable(2, ARReduction, 10, 5)
-                .mana(50, 10)
-                .cd(12)
-                .range(325);
-        Tremors.update()
-                .active("8秒間地震を発生させ{1}の敵ユニット及び建物に毎秒{2}を与える。")
-                .variable(1, Radius, 300)
-                .variable(2, MagicDamage, 65, 65, ap(0.3))
-                .mana(120)
-                .cd(60);
+        Rammus();
 
         /** Renekton */
         ReignOfAnger.update()
@@ -3992,43 +3843,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(4, MSRatio, 20, 5)
                 .cd(140, -35);
 
-        /** Riven */
-        RunicBlade.update()
-                .passive("スキルを使用するごとに1チャージを得る。チャージがある状態で通常攻撃を行うと、チャージを消費して通常攻撃に{1}が付与される。チャージは最大3スタックされ、通常攻撃ごとに1チャージずつ消費される。チャージは5秒間増加または消費がないと0になる。建物には無効。")
-                .variable(1, PhysicalDamage, 0, 0, amplify(AD, new Per3LevelAdditional(0.2, 0.05)));
-        BrokenWings.update()
-                .active("前方にステップし、{1}の敵ユニットを剣で切りつけて{2}を与える。このスキルは短期間の間、3回まで連続して使用できる。3度目の使用でジャンプを行い、着地時に{3}の敵ユニットに{2}と{4}を与える。また、スキルを使用する度にオートアタックタイマーがリセットされる。最大DMは{5}。")
-                .variable(1, Radius, 112.5)
-                .variable(2, PhysicalDamage, 30, 25, bounusAD(0.7))
-                .variable(3, Radius, 150)
-                .variable(4, Knockback, 225)
-                .variable(5, PhysicalDamage, 90, 75, bounusAD(2.1))
-                .cd(1)
-                .range(260);
-        BrokenWings.update(P310A)
-                .active("前方にステップし、{1}の敵ユニットを剣で切りつけて{2}を与える。このスキルは短期間の間、3回まで連続して使用できる。3度目の使用でジャンプを行い、着地時に{3}の敵ユニットに{2}と{4}を与える。また、スキルを使用する度にオートアタックタイマーがリセットされる。最大DMは{5}。3度目のジャンプのみ壁を飛び越えられる。")
-                .variable(4, Knockup);
-        KiBurst.update()
-                .active("{1}の敵ユニットに{2}と{3}を与える。")
-                .variable(1, Radius, 125)
-                .variable(2, PhysicalDamage, 50, 30, bounusAD(1))
-                .variable(3, Stun, 0.75)
-                .cd(11, -1);
-        Valor.update()
-                .active("指定方向にダッシュ({1})し、2.5秒間{2}が付与される。")
-                .variable(1, Distance, 325)
-                .variable(2, Shield, 70, 30, bounusAD(1))
-                .cd(10, -1)
-                .range(325);
-        BladeOftheExile.update()
-                .active("15秒間折れた剣の刃を再生させ、{1}増加し、射程が増加する(通常攻撃: {2} Broken Wings: {3} Ki Burst: {4})。また、このスキルを再度使用することで一度だけ0.5秒後に指定方向に巨大な衝撃波を発生させ、範囲内の敵ユニットに{5}与える。対象が受けているダメージに比例して与えるダメージが増加して、最大DMは{6}。")
-                .variable(1, AD, 0, 0, ad(0.2))
-                .variable(2, Range, 200)
-                .variable(3, Range, 325)
-                .variable(4, Range, 270)
-                .variable(5, PhysicalDamage, 80, 40, bounusAD(0.6))
-                .variable(6, PhysicalDamage, 240, 120, bounusAD(1.8))
-                .cd(110, -30);
+        Riven();
 
         /** Rumble */
         JunkyardTitan.update()
@@ -4971,6 +4786,8 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(1, PhysicalDamage, 75, 100, bounusAD(1), amplify(TargetCurrentHealthRatio, 0.15))
                 .cd(120, -10);
 
+        Yasuo();
+
         /** Yorick */
         UnholyCovenant.update()
                 .passive("召喚中のGhoulの数に比例して{1}し{2}する。召喚したGhoulは5秒間持続し、毎秒最大HPの20%が減少していく。同じ種類のGhoulを召喚した場合、先に召喚したGhoulが消滅する。任意の操作不可、スロー無効化、AoEスキルのダメージを50%低減し敵ユニットの通行を妨げない。<br>Health : {3}<br>AD : {4}<br>AR : {5}<br>MR : {6}<br>AS : 0.670<br>MS : {7}<br>Kill : {8}")
@@ -5273,6 +5090,48 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(5, MagicDamage, 180, 105, ap(0.45), amplify(AD, 0.3, 0.15));
     }
 
+    private static void Fiddlesticks() {
+        Dread.update().passive("{1}の敵ユニットに{2}を与える。").variable(1, Radius, 1000).variable(2, Status.MRReduction, 10);
+        Terrify.update()
+                .active("対象の敵ユニットに{1}を与える。")
+                .variable(1, Fear, 1, 0.5)
+                .mana(65, 10)
+                .cd(15, -1)
+                .range(575)
+                .update(P315)
+                .variable(1, Fear, 1.25, 0.25)
+                .mana(65);
+        Drain.update()
+                .active("対象の敵ユニットに最大5秒間毎秒{1}を与え、{2}する。敵が離れる({3})と詠唱が中断される。")
+                .variable(1, MagicDamage, 60, 30, ap(0.45))
+                .variable(2, RestoreHealth, 0, 0, amplify(DealtDamageRatio, 60, 5))
+                .variable(3, Radius, 750)
+                .mana(80, 10)
+                .cd(10, -1)
+                .range(475)
+                .type(SkillType.Channel);
+        DarkWind.update()
+                .active("対象の敵ユニットにカラスを飛ばし{1}と{2}を与える。カラスは{4}の敵ユニットに4回まで跳ね返りその度に効果を与える(最大5hit)。この跳ね返りは同一ユニットに何度も跳ね返る。ミニオンとモンスターに対しては{3}を与える。")
+                .variable(1, MagicDamage, 65, 20, ap(0.45))
+                .variable(2, Silence, 1.2)
+                .variable(3, MagicDamage, 97.5, 30, ap(0.675))
+                .variable(4, Radius, 450)
+                .mana(50, 20)
+                .cd(15, -1)
+                .range(750);
+        Crowstorm.update()
+                .active("1.5秒詠唱後に指定地点にテレポートし、{1}の敵ユニットに5秒間毎秒{2}を与える。最大DMは{3}となる。")
+                .variable(1, Radius, 600)
+                .variable(2, MagicDamage, 125, 100, ap(0.45))
+                .variable(3, MagicDamage, 625, 500, ap(2.25))
+                .mana(150, 50)
+                .cd(150, -10)
+                .range(800)
+                .type(SkillType.Channel)
+                .update(P315)
+                .mana(100);
+    }
+
     private static void Fizz() {
         NimbleFighter.update()
                 .passive("{2}を得て、{1}する。この軽減は防御力計算より先に行われる。")
@@ -5490,8 +5349,11 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(2, Knockback, 875)
                 .variable(3, RestoreHealth, 70, 40, ap(0.35))
                 .mana(150, 75)
-                .cd(150, -15);
-        Monsoon.update(P303).mana(100, 50);
+                .cd(150, -15)
+                .update(P303)
+                .mana(100, 50)
+                .update(P315)
+                .mana(100);
     }
 
     private static void Jarvan() {
@@ -5676,6 +5538,51 @@ public class Skill extends Describable<SkillDescriptor> {
         VoidAssault.update(P308).variable(3, DamageReductionRatio, 50);
     }
 
+    private static void LeeSin() {
+        Flurry.update()
+                .passive("スキルを使用すると{1}し通常攻撃の度に{2}する。この効果は3秒経つか2回通常攻撃を行うと解消される。")
+                .variable(-1, ASRatio, 40)
+                .variable(2, RestoreEnergy, 15);
+        SonicWave.update()
+                .active("指定方向に気を飛ばし当たった敵ユニットに{1}を与える。このスキルが敵ユニットに当たった場合、3秒間Resonating Strikeが使用可能になる。また3秒間対象の視界を得る。")
+                .variable(1, PhysicalDamage, 50, 30, bounusAD(0.9))
+                .cd(11, -1)
+                .range(975)
+                .cost(Energy, 50, 0);
+        ResonatingStrike.update()
+                .active("Sonic Waveが当たった敵ユニットにダッシュし、{1}を与える。(追加ダメージはMinionに対して400DMが上限)")
+                .variable(1, PhysicalDamage, 50, 0, bounusAD(0.5), amplify(Status.TargetMissingHealthRatio, 8))
+                .cost(Energy, 30, 0)
+                .range(1100);
+        Safeguard.update()
+                .active("対象の味方ユニットまで移動する。自身及び対象は５秒間{1}を得る。")
+                .variable(1, Shield, 40, 40, ap(0.8))
+                .cd(9)
+                .cost(Energy, 50, 0)
+                .range(700)
+                .update(P315)
+                .active("対象の味方ユニットまで移動する。自身及び対象（味方Championに限る）は５秒間{1}を得る。");
+        IronWill.update().active("5秒間{1}と{2}を得る。").variable(1, LS, 5, 5).variable(2, SV, 5, 5).cost(Energy, 30, 0);
+        Tempest.update()
+                .active("{1}の敵ユニットに{2}を与え、4秒間そのユニットの{3}。このスキルが敵ユニットに当たった場合、3秒間Crippleが使用可能になる。")
+                .variable(1, Radius, 450)
+                .variable(2, MagicDamage, 60, 35, bounusAD(1))
+                .variable(3, Visionable)
+                .cd(10)
+                .cost(Energy, 50, 0);
+        Cripple.update()
+                .active("Tempestが当たった敵ユニット４秒間{1}と{2}を与える。これらの速度低下は時間と共に戻っていく。")
+                .variable(1, MSSlowRatio, 20, 10)
+                .variable(2, ASSlowRatio, 20, 10);
+        DragonsRage.update()
+                .active("対象の敵Championに{1}を与え、{2}させる。ノックバックした対象に触れた敵ユニットにも{1}を与え、{3}を与える。")
+                .variable(1, PhysicalDamage, 200, 200, bounusAD(2))
+                .variable(2, Knockback, 1200)
+                .variable(3, Knockup, 0)
+                .cd(90, -15)
+                .range(375);
+    }
+
     private static void Leona() {
         /** Leona */
         Sunlight.update()
@@ -5718,11 +5625,52 @@ public class Skill extends Describable<SkillDescriptor> {
         SolarFlare.update(P313).mana(100);
     }
 
+    private static void Lucian() {
+        Lightslinger.update()
+                .passive("スキル使用した後の通常攻撃が2回攻撃になる。この効果は通常攻撃を行うか、6秒経過すると解消される。2回目の攻撃は50%のダメージとなるが、対象がMinionの場合は100%のダメージを与える。またon-hitエフェクトは通常通り適用され、クリティカルも発生する。");
+        PiercingLight.update()
+                .active("対象の敵ユニットに向けて0.35秒後に光のボルトを放ち、対象とその直線状({1})にいるすべての敵ユニットに{2}を与える(ミニオンに対しては75%)。")
+                .variable(1, Length, 1100)
+                .variable(2, PhysicalDamage, 80, 40, amplify(BounusAD, 0.6, 0.15))
+                .variable(3, PhysicalDamage)
+                .mana(60, 5)
+                .cd(9, -1)
+                .range(570)
+                .update(P315)
+                .variable(2, PhysicalDamage, 80, 30, amplify(BounusAD, 0.6, 0.15))
+                .range(550);
+        ArdentBlaze.update()
+                .active("指定方向に爆発する弾を放つ。敵ユニットに当たるか最大距離まで飛ぶと十字型に爆風が広がり、範囲内の敵ユニットに{1}と6秒間マークを与える。マークを受けている敵ユニットにダメージを与えると、2秒間{2}する。また爆風が発生した地点の{3}。")
+                .variable(1, MagicDamage, 60, 40, ap(0.9), bounusAD(0.8))
+                .variable(2, MS, 40)
+                .variable(3, Visionable)
+                .mana(60)
+                .cd(18, -2)
+                .range(425);
+        RelentlessPursuit.update()
+                .active("指定方向にダッシュし、自身にかかっているスローを解除する。" + TheCulling.name + "発動中に敵Championをキルかアシストした場合このスキルの{1}する。")
+                .variable(1, CDDecrease)
+                .mana(60, -15)
+                .cd(18, -2)
+                .range(425);
+        TheCulling.update()
+                .active("3秒間、指定方向に{1}発の弾を連射し一発毎に{2}を与える（最大で{3}）。銃を連射している間は移動と" + RelentlessPursuit.name + "のみが可能であり、ミニオンに対しては400%のダメージを与える。また連射中にこのスキルを再使用することで連射を解除できる。")
+                .variable(1, Value, 7.5, 0, amplify(AS, 7.5, 1.5))
+                .variable(2, PhysicalDamage, 40, 10, ap(0.1), bounusAD(0.25))
+                .variable(3, PhysicalDamage, 1040, 460, amplify(AP, 2.6, 0.4), amplify(BounusAD, 6.5, 1.0))
+                .mana(100)
+                .cd(100, -25)
+                .range(1400);
+    }
+
     private static void Lulu() {
         PixFaerieCompanion.update()
                 .passive("Pixという妖精がお供になる。Pixが付いている味方Championが通常攻撃を行った場合、Pixは同一の敵ユニットの方向に3発の弾を放ち1発毎に{1}を与える。この弾は敵ユニットを追尾するが、弾の進行方向上にいる敵ユニットにも当たる。建物を攻撃した場合はPixは弾を撃たない。")
-                .variable(1, MagicDamage, 1, 0, amplify(Lv, 2));
-        PixFaerieCompanion.update(P314).variable(1, MagicDamage, new Per2Level(3, 3), ap(0.05), null);
+                .variable(1, MagicDamage, 1, 0, amplify(Lv, 2))
+                .update(P314)
+                .variable(1, MagicDamage, new Per2Level(3, 3), ap(0.05), null)
+                .update(P315)
+                .variable(1, MagicDamage, new Per2Level(3, 4), ap(0.05), null);
         Glitterlance.update()
                 .active("指定方向に貫通するエネルギーを発射し当たった敵ユニットに{1}と{2}間{3}を与える。この効果は時間と共に元に戻る。またPixがいる位置からもこのスキルが発射される(Pixが放つ方向はPixから見て指定した地点)。同一の対象に2回ヒットはしない。")
                 .variable(1, MagicDamage, 80, 45, ap(0.5))
@@ -5754,8 +5702,11 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(3, Visionable)
                 .mana(60, 10)
                 .cd(10)
-                .range(650);
-        HelpPix.update(P314).variable(2, MagicDamage, 80, 50, ap(0.4));
+                .range(650)
+                .update(P314)
+                .variable(2, MagicDamage, 80, 50, ap(0.4))
+                .update(P315)
+                .variable(1, Shield, 80, 40, ap(0.6));
         WildGrowth.update()
                 .active("対象の味方Championを7秒間巨大化させ、同時に対象の{3}の敵ユニットに{1}を与える。巨大化した味方Championは{2}を得て、{3}の敵ユニットに継続的に{4}を与える。スローの効果は範囲内から出ても1秒間持続する。")
                 .variable(1, Knockup, 1.5)
@@ -5764,7 +5715,9 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(4, MSSlowRatio, 30, 15)
                 .mana(150)
                 .cd(110, -15)
-                .range(900);
+                .range(900)
+                .update(P315)
+                .mana(100);
     }
 
     private static void MasterYi() {
@@ -5965,7 +5918,7 @@ public class Skill extends Describable<SkillDescriptor> {
                 .passive("通常攻撃に{1}と{2}が付与される。同一の対象には12秒に一度しか発動しない。")
                 .variable(1, PhysicalDamage, 2, 0, amplify(Lv, 6))
                 .variable(2, Snare, new Per6Level(0.5, 0.25));
-        StaggeringBlow.update(P314).variable(2, Snare, new Per5LevelForNautilus(0.5, 0.25));
+        StaggeringBlow.update(P314).variable(2, Snare, new Per5LevelWith18(0.5, 0.25));
         DredgeLine.update()
                 .active("指定方向に錨を投げ、最初に命中した敵ユニットに{1}を与えNautilusの方向に引き寄せる。またNautilus自身も敵ユニットの方向に移動する。錨が壁に命中した場合、壁の方向にNautilusが移動しこのスキルのCDが半分になる。")
                 .variable(1, MagicDamage, 60, 45, ap(0.75))
@@ -6171,10 +6124,130 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(0);
     }
 
+    private static void Pantheon() {
+        AegisProtection.update()
+                .passive("通常攻撃を行うかスキルを使用するたびにスタックが1増加(最大4スタック)し、4スタック時に40DM以上の通常攻撃を受けるとスタックを消費して通常攻撃のダメージを無効化する。");
+        SpearShot.update()
+                .active("対象の敵ユニットに槍を投げ{1}を与える。")
+                .variable(1, PhysicalDamage, 65, 40, bounusAD(1.4))
+                .mana(45)
+                .cd(4)
+                .range(600);
+        AegisOfZeonia.update()
+                .active("対象の敵Championに飛びかかり{1}と{2}を与え、Aegis Protectionを発動する。")
+                .variable(1, MagicDamage, 50, 25, ap(1))
+                .variable(2, Stun, 1)
+                .mana(55)
+                .cd(13, -1)
+                .range(600)
+                .update(P315)
+                .active("対象の敵ユニットに飛びかかり{1}と{2}を与え、Aegis Protectionを発動する。");
+        HeartseekerStrike.update()
+                .passive("敵ユニットのHPが15%以下の時は通常攻撃が必ずクリティカルになり、またSpear Shotのダメージが1.5倍になる。")
+                .active("指定方向に0.75秒間槍を突き出し、範囲内の敵ユニットに{1}を最大3回与える(0.25秒毎に1ヒット)。対象がChampionの場合、与えるダメージが{2}になる。")
+                .variable(1, PhysicalDamage, 13, 10, bounusAD(0.6))
+                .variable(2, PhysicalDamage, 26, 20, bounusAD(1.2))
+                .mana(45, 5)
+                .cd(10, -1)
+                .range(400)
+                .type(SkillType.Channel);
+        GrandSkyfall.update()
+                .active("地点を指定して2秒後にジャンプし、その1.5秒後に指定地点の{1}に{2}と1秒間{3}を与えつつ落下する。DMは指定地点から離れるほど低減され、範囲最端では50%となる。ジャンプ前にキャンセルすると、消費した分のマナが回復し、このスキルのCDは10秒になる。")
+                .variable(1, Radius, 1000)
+                .variable(2, MagicDamage, 400, 300, ap(1))
+                .variable(3, MSSlowRatio, 35)
+                .mana(125)
+                .cd(150, -15)
+                .range(5500);
+    }
+
+    private static void Rammus() {
+        SpikedShell.update().passive("{1}を得る。").variable(1, AD, 0, 0, amplify(AR, 0.45));
+        Powerball.update()
+                .active("7秒間徐々に移動速度が増加し、最大で{5}する。最初に当たった敵ユニットと自身の周囲({1})にいる敵ユニットに{2}、{3}、3秒間の{4}を与える。スキルを再使用するか" + DefensiveBallCurl.name + "を使用するとキャンセルされる。")
+                .variable(1, Radius, 200)
+                .variable(2, MagicDamage, 100, 50, ap(1))
+                .variable(3, Knockup, 0.75)
+                .variable(4, MSSlowRatio, 20, 5)
+                .variable(5, MSRatio, 85)
+                .mana(70, 10)
+                .cd(10)
+                .update(P315)
+                .active("7秒間徐々に移動速度が増加し、最大で{5}する。最初に当たった敵ユニットと自身の周囲({1})にいる敵ユニットに{2}、{3}、3秒間の{4}を与える。" + DefensiveBallCurl.name + "を使用するとキャンセルされる。");
+        DefensiveBallCurl.update()
+                .active("6秒間{1}と{2}を得て、Rammusを通常攻撃した敵ユニットに{3}を与える。効果中にPowerballを使用すると効果がキャンセルされる。また、このスキルを再使用することで効果をキャンセルできる。")
+                .variable(1, AR, 40, 20)
+                .variable(2, MR, 40, 20)
+                .variable(3, MagicDamage, 15, 10, amplify(AR, 0.1))
+                .mana(40)
+                .cd(14);
+        PuncturingTaunt.update()
+                .active("対象の敵ユニットに{1}と{2}を与える。")
+                .variable(1, Taunt, 1, 0.5)
+                .variable(2, ARReduction, 10, 5)
+                .mana(50, 10)
+                .cd(12)
+                .range(325)
+                .update(P315)
+                .variable(1, Taunt, 1.25, 0.25)
+                .mana(50);
+        Tremors.update()
+                .active("8秒間地震を発生させ{1}の敵ユニット及び建物に毎秒{2}を与える。")
+                .variable(1, Radius, 300)
+                .variable(2, MagicDamage, 65, 65, ap(0.3))
+                .mana(120)
+                .cd(60)
+                .update(P315)
+                .mana(100);
+    }
+
+    private static void Riven() {
+        RunicBlade.update()
+                .passive("スキルを使用するごとに1チャージを得る。チャージがある状態で通常攻撃を行うと、チャージを消費して通常攻撃に{1}が付与される。チャージは最大3スタックされ、通常攻撃ごとに1チャージずつ消費される。チャージは5秒間増加または消費がないと0になる。建物には無効。")
+                .variable(1, PhysicalDamage, 0, 0, amplify(AD, new Per3LevelAdditional(0.2, 0.05)));
+        BrokenWings.update()
+                .active("前方にステップし、{1}の敵ユニットを剣で切りつけて{2}を与える。このスキルは短期間の間、3回まで連続して使用できる。3度目の使用でジャンプを行い、着地時に{3}の敵ユニットに{2}と{4}を与える。また、スキルを使用する度にオートアタックタイマーがリセットされる。最大DMは{5}。")
+                .variable(1, Radius, 112.5)
+                .variable(2, PhysicalDamage, 30, 25, bounusAD(0.7))
+                .variable(3, Radius, 150)
+                .variable(4, Knockback, 225)
+                .variable(5, PhysicalDamage, 90, 75, bounusAD(2.1))
+                .cd(1)
+                .range(260);
+        BrokenWings.update(P310A)
+                .active("前方にステップし、{1}の敵ユニットを剣で切りつけて{2}を与える。このスキルは短期間の間、3回まで連続して使用できる。3度目の使用でジャンプを行い、着地時に{3}の敵ユニットに{2}と{4}を与える。また、スキルを使用する度にオートアタックタイマーがリセットされる。最大DMは{5}。3度目のジャンプのみ壁を飛び越えられる。")
+                .variable(4, Knockup);
+        KiBurst.update()
+                .active("{1}の敵ユニットに{2}と{3}を与える。")
+                .variable(1, Radius, 125)
+                .variable(2, PhysicalDamage, 50, 30, bounusAD(1))
+                .variable(3, Stun, 0.75)
+                .cd(11, -1);
+        Valor.update()
+                .active("指定方向にダッシュ({1})し、2.5秒間{2}が付与される。")
+                .variable(1, Distance, 325)
+                .variable(2, Shield, 70, 30, bounusAD(1))
+                .cd(10, -1)
+                .range(325);
+        BladeOftheExile.update()
+                .active("15秒間折れた剣の刃を再生させ、{1}増加し、射程が増加する(通常攻撃: {2} Broken Wings: {3} Ki Burst: {4})。また、このスキルを再度使用することで一度だけ0.5秒後に指定方向に巨大な衝撃波を発生させ、範囲内の敵ユニットに{5}与える。対象が受けているダメージに比例して与えるダメージが増加して、最大DMは{6}。")
+                .variable(1, AD, 0, 0, ad(0.2))
+                .variable(2, Range, 200)
+                .variable(3, Range, 325)
+                .variable(4, Range, 270)
+                .variable(5, PhysicalDamage, 80, 40, bounusAD(0.6))
+                .variable(6, PhysicalDamage, 240, 120, bounusAD(1.8))
+                .cd(110, -30);
+    }
+
     private static void Sivir() {
-        FleetOfFoot.update().passive("敵Championに通常攻撃でダメージを与えると、2秒間{1}する。").variable(-1, MSRatio, 50);
-        FleetOfFoot.update(P306)
-                .passive(("敵Championに通常攻撃か" + BoomerangBlade.name + "もしくは" + Ricochet.name + "でダメージを与えると、2秒間{1}する。"));
+        FleetOfFoot.update()
+                .passive("敵Championに通常攻撃でダメージを与えると、2秒間{1}する。")
+                .variable(-1, MSRatio, 50)
+                .update(P306)
+                .passive(("敵Championに通常攻撃か" + BoomerangBlade.name + "もしくは" + Ricochet.name + "でダメージを与えると、2秒間{1}する。"))
+                .update(P315)
+                .variable(-1, MSRatio, new Per5LevelWith18(30, 5));
         BoomerangBlade.update()
                 .active("指定方向にブーメランを投げ、当たった敵ユニットに{1}を与える。ダメージは敵に当たるごとに{2}ずつ減り、最大で40%まで低下する。行きと帰りそれぞれに攻撃判定がある。")
                 .variable(1, PhysicalDamage, 60, 45, ap(0.5), bounusAD(1.1))
@@ -6197,29 +6270,40 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(2, PhysicalDamage, 0, 0, amplify(AD, 0.5, 0.1))
                 .cd(9, -1);
         SpellShield.update()
-                .active("Sivirに3秒間{1}を付与し、その間一度だけ敵のスキルを無効化する。無効化した場合{2}する。")
+                .active("{3}間、一度だけ敵のスキルを無効化する{1}を得る。無効化した場合{2}する。")
                 .variable(1, Status.SpellShield)
                 .variable(2, RestoreMana, 150)
+                .variable(3, Time, 3)
                 .mana(75)
-                .cd(22, -3);
-        SpellShield.update(P313).mana(0).variable(2, RestoreMana, 60, 15);
+                .cd(22, -3)
+                .update(P313)
+                .mana(0)
+                .variable(2, RestoreMana, 60, 15)
+                .update(P315)
+                .variable(3, Time, 1.5);
         OnTheHunt.update()
-                .active("10秒間以下の能力をもつ{1}のオーラを発生させる。{2}し、自身は{3}、近くの味方ユニットは{4}する。一度範囲内に入れば、Sivirから離れても効果が持続する。")
+                .active("{5}間以下の能力をもつ{1}のオーラを発生させる。{2}し、自身は{3}、近くの味方ユニットは{4}する。一度範囲内に入れば、Sivirから離れても効果が持続する。")
                 .variable(1, Radius, 1200)
                 .variable(2, MSRatio, 20)
                 .variable(3, ASRatio, 30, 15)
                 .variable(4, ASRatio, 15, 7.5)
+                .variable(5, Time, 10)
                 .mana(100)
                 .cd(100, -10)
-                .range(1200);
-        OnTheHunt.update(P313)
+                .range(1200)
+                .update(P313)
                 .passive("Ricochetの起動中は{1}する。")
                 .variable(-1, ASRatio, 40, 20)
-                .active("10秒間{2}の味方は{3}する。一度範囲内に入れば、Sivirから離れても効果が持続する。増加移動速度は4秒かけて20%まで減少する。")
+                .active("{5}間{2}の味方は{3}する。一度範囲内に入れば、Sivirから離れても効果が持続する。増加移動速度は{6}かけて20%まで減少する。")
                 .variable(2, Radius, 1000)
                 .variable(3, MSRatio, 60)
+                .variable(6, Time, 4)
                 .range(0)
-                .cd(120, -30);
+                .cd(120, -30)
+                .update(P315)
+                .variable(5, Time, 8)
+                .variable(6, Time, 2, 1)
+                .cd(120, -20);
     }
 
     private static void Sona() {
@@ -6423,7 +6507,9 @@ public class Skill extends Describable<SkillDescriptor> {
         Gemcraft.update(P314)
                 .passive("スキルを使用した次の通常攻撃は追加{1}を与え、全スキルの{2}する。この効果は通常攻撃を行うか、一定時間経過すると解消される。")
                 .variable(1, MagicDamage, 0, 0, amplify(AR, 0.3))
-                .variable(2, CDDecrease, 2);
+                .variable(2, CDDecrease, 2)
+                .update(P315)
+                .variable(1, MagicDamage, 0, 0, amplify(AR, 0.2));
         Imbue.update()
                 .active("対象の味方ユニットとTaricの{1}する。自身に使用した場合は{2}する。このスキルは自身が通常攻撃を行う毎にCDが1秒解消される。対象が敵Championの場合は3秒解消される。")
                 .variable(1, RestoreHealth, 60, 40, ap(0.6))
@@ -6453,7 +6539,11 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(5, MagicDamage, 60, 45, ap(0.6), amplify(AR, 0.3))
                 .mana(50);
         Shatter.update(P304).variable(5, MagicDamage, 50, 40, ap(0.6), amplify(AR, 0.2));
-        Shatter.update(P314).variable(5, MagicDamage, 40, 40, amplify(AR, 0.5));
+        Shatter.update(P314).variable(5, MagicDamage, 40, 40, amplify(AR, 0.3));
+        Shatter.update(P315)
+                .variable(1, AR, 5, 5)
+                .variable(3, AR, 0, 0, amplify(AR, 0.05))
+                .variable(5, MagicDamage, 40, 40, amplify(AR, 0.2));
         Dazzle.update()
                 .active("対象の敵ユニットに{1}と{2}を与える。魔法DMは対象との距離が近いほど増加し、距離が遠いほど低下する。最小DMは{3}。")
                 .variable(1, MagicDamage, 80, 60, ap(0.8))
@@ -6671,6 +6761,51 @@ public class Skill extends Describable<SkillDescriptor> {
                 .cd(120)
                 .range(700);
         ChaosStorm.update(P313).mana(100);
+    }
+
+    private static void Yasuo() {
+        WayOfTheWanderer.update(P315)
+                .passive("一定距離(70)を移動すると最大値の1%のFlowを得る(最大値は{1})。{2}するがクリティカルダメージは10%減少する。この減少効果はダメージ増減算の前に適用される。(例：本来200%のクリティカルダメージは(100 - 10) x 2 = 180%になり、" + Item.InfinityEdge.name + "を持った場合本来250%のダメージが(100 - 10) * 2.5 = 225%になる)。Flowが最大値の時、敵Championかモンスターからダメージを受けると全てのFlowを消費して2秒間持続する{3}を得る。")
+                .variable(1, Value, new Per1Level(new double[] {60, 70, 80, 92, 105, 120, 140, 160, 185, 215, 245, 280,
+                        325, 375, 430, 490, 565, 650}))
+                .variable(2, Critical, 0, 0, amplify(Critical, 1))
+                .variable(3, Shield, new Per1Level(new double[] {60, 70, 80, 92, 105, 120, 140, 160, 185, 215, 245,
+                        280, 325, 375, 430, 490, 565, 650}));
+
+        SteelTempest.update(P315)
+                .active("このスキルはクリティカルが発生する。指定した方向の直線上にいる全ての敵({1})に{2}を与える。" + WhirlingDeath.name + "の使用中に起動した場合、{3}の敵にダメージを与える。このスキルは10秒の間3回まで連続して使用できる。3度目の使用では、直線上({4})の敵に{2}と{5}を与える。" + WhirlingDeath.name + "の使用中に起動した場合、{3}の敵にダメージと{5}を与える。このスキルは固定のCDを持つが、増加AS1.72%毎に再使用時間が1%減少する（最大で66%）。")
+                .variable(1, Distance, 475)
+                .variable(2, PhysicalDamage, 20, 20, ad(1))
+                .variable(3, Radius, 375)
+                .variable(4, Distance, 900)
+                .variable(5, Knockup)
+                .cd(-6, 0.5)
+                .type(SkillType.OnHitEffectable);
+
+        WindWall.update(P315)
+                .passive(SweepingBlade.name + "か" + LastBreath.name + "を使用すると最大値の{1}のFlowを得る。")
+                .variable(1, Percentage, 4, 4)
+                .active("3.75秒間持続する{2}の壁を作り出す。この壁はタワー攻撃を除く全ての投射物をブロックする。")
+                .variable(2, Length, 300, 50)
+                .cd(26, -2)
+                .range(400);
+
+        SweepingBlade.update(P315)
+                .active("マークの付いていない対象の敵の方向に飛び込み一定距離({2})移動する。対象に{1}を与え{3}間マークを付与する。スキル使用時にスタックが増加し、1スタックごとに基礎ダメージが25%増加していく。(最大4スタックで{4})")
+                .variable(1, MagicDamage, 70, 20, ap(0.6))
+                .variable(2, Value, 475)
+                .variable(3, Time, 10, -1)
+                .variable(4, MagicDamage, 140, 40, ap(0.6))
+                .cd(0.5, -0.1)
+                .range(475);
+
+        LastBreath.update(P315)
+                .active("近くの空中にいる敵Championまで瞬時に移動して、対象と{1}にいる敵Championを1秒間空中に留めて{2}を与える。地面に着地すると、15秒間{3}を得る。")
+                .variable(1, Radius, 400)
+                .variable(2, PhysicalDamage, 200, 100, bounusAD(1.5))
+                .variable(3, BounusARPenRatio, 50)
+                .cd(80, -15)
+                .range(1300);
     }
 
     private static void Zed() {
