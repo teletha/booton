@@ -198,12 +198,12 @@ public abstract class VariableResolver {
     /**
      * @version 2013/11/28 22:41:12
      */
-    public static class Per5LevelForNautilus extends PerLevel {
+    public static class Per5LevelWith18 extends PerLevel {
 
         /**
          * @param values
          */
-        public Per5LevelForNautilus(double base, double diff) {
+        public Per5LevelWith18(double base, double diff) {
             super(new int[] {1, 6, 11, 16, 18}, base, diff);
         }
     }

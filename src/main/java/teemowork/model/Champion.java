@@ -19,7 +19,7 @@ import java.util.List;
 import js.dom.Element;
 
 /**
- * 3.14準拠
+ * 3.15準拠
  * 
  * @version 2013/06/14 8:39:54
  */
@@ -371,6 +371,9 @@ public class Champion {
     public static final Champion XinZhao = new Champion("Xin Zhao", Challenge, ThreeTalonStrike, BattleCry, AudaciousCharge, CrescentSweep);
 
     /** The champion name. */
+    public static final Champion Yasuo = new Champion("Yasuo", WayOfTheWanderer, SteelTempest, WindWall, SweepingBlade, LastBreath);
+
+    /** The champion name. */
     public static final Champion Yorick = new Champion("Yorick", UnholyCovenant, OmenOfWar, OmenOfPestilence, OmenOfFamine, OmenOfDeath);
 
     /** The champion name. */
@@ -559,6 +562,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 330);
+        Ahri.update(P315).set(Mana, 250, 50).set(Mreg, 7, 0.6);
         Akali.update(P0000)
                 .set(Health, 445, 85)
                 .set(Hreg, 7.25, 0.65)
@@ -1523,6 +1527,7 @@ public class Champion {
                 .set(Range, 550)
                 .set(MS, 335);
         Soraka.update(P314).set(Health, 405, 76).set(AR, 9.4, 3.8);
+        Soraka.update(P315).set(AR, 13, 3.8).set(MS, 340);
         Swain.update(P0000)
                 .set(Health, 385, 78)
                 .set(Hreg, 6.75, 0.65)
@@ -1790,6 +1795,15 @@ public class Champion {
                 .set(MR, 30, 1.25)
                 .set(Range, 175)
                 .set(MS, 345);
+        Yasuo.update(P315)
+                .set(Health, 430, 82)
+                .set(Hreg, 5, 0.9)
+                .set(AD, 50, 3.2)
+                .set(AS, 0.658, 4)
+                .set(AR, 16, 3.4)
+                .set(MR, 30, 0)
+                .set(Range, 175)
+                .set(MS, 350);
         Yorick.update(P0000)
                 .set(Health, 421, 85)
                 .set(Hreg, 8.5, 0.7)

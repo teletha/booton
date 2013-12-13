@@ -1118,9 +1118,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .update(P314)
                 .health(350)
                 .add(Ability.GoldIncome)
-                .add(ability -> {
-                    ability.passive("1.5秒毎に最大80までスタックが貯まる。巨大モンスターを倒した時、最大40スタックを消費して、消費したスタックに等しい収入を得る。");
-                });
+                .add(Ability.Conservation);
     });
 
     /** Spirit of the Elder Lizard */
@@ -1141,7 +1139,11 @@ public class Item extends Describable<ItemDescriptor> {
                 .price(580, 800)
                 .attackDamage(30)
                 .add(Ability.GoldIncome)
-                .add(Ability.BountyHunter);
+                .add(Ability.BountyHunter)
+
+                .update(P315)
+                .remove(Ability.BountyHunter)
+                .add(Ability.Conservation);
     });
 
     /** Spirit of the Spectral Wraith */
@@ -1176,7 +1178,11 @@ public class Item extends Describable<ItemDescriptor> {
                     ability.passive("モンスターにダメージを与えると{1}し{2}する。(範囲攻撃の場合、この効果は半減する)")
                             .variable(1, RestoreHealth, 0, 0, amplify(DealtDamage, 0.08))
                             .variable(2, RestoreMana, 0, 0, amplify(DealtDamage, 0.08));
-                });
+                })
+
+                .update(P315)
+                .remove(Ability.BountyHunter)
+                .add(Ability.Conservation);
     });
 
     /** Spirit Visage */

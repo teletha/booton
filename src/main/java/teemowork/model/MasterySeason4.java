@@ -10,6 +10,7 @@
 package teemowork.model;
 
 import static teemowork.model.Status.*;
+import static teemowork.model.Version.*;
 
 /**
  * @version 2013/03/13 14:34:14
@@ -91,8 +92,8 @@ public class MasterySeason4 extends Mastery {
         MentalForce.update().passive("{1}を得る。").variable(1, AP, 0, 0, amplify(Lv, 0.33, 0.28));
         Feast.update().passive("敵を倒す毎に{1}し{2}する。").variable(1, RestoreHealth, 2).variable(2, RestoreMana, 1);
         SpellWeaving.update().passive("通常攻撃でChampionにダメージを与えると、5秒間自身のスキルの与ダメージが1%増加する。この効果は3回までスタックする。");
-        MartialMastery.update().passive("{1}を得る。").variable(1, AD, 5);
-        ArcaneMastery.update().passive("{1}を得る。").variable(1, AP, 8);
+        MartialMastery.update().passive("{1}を得る。").variable(1, AD, 5).update(P315).variable(1, AD, 4);
+        ArcaneMastery.update().passive("{1}を得る。").variable(1, AP, 8).update(P315).variable(1, AP, 6);
         Executioner.update()
                 .passive("対象のHealthが{1}以下の時、{2}する。")
                 .variable(1, Percentage, 20, 15)
@@ -159,13 +160,13 @@ public class MasterySeason4 extends Mastery {
     public static final MasterySeason4 SecondWind = new MasterySeason4("Second Wind", 1, Defense, 4, Perseverance);
 
     /** Mastery */
-    public static final MasterySeason4 Tenacious = new MasterySeason4("Tenacious", 4, Defense, 4);
+    public static final MasterySeason4 LegendaryGuardian = new MasterySeason4("Legendary Guardian", 4, Defense, 4);
 
     /** Mastery */
     public static final MasterySeason4 RunicShield = new MasterySeason4("Runic Shield   ", 1, Defense, 4);
 
     /** Mastery */
-    public static final MasterySeason4 LegendaryGuardian = new MasterySeason4("Legendary Guardian", 1, Defense, 5);
+    public static final MasterySeason4 Tenacious = new MasterySeason4("Tenacious", 1, Defense, 5);
 
     static {
         Block.update().passive("敵Championから受ける{1}する。").variable(1, AttackDamageReduction, 1, 1);
@@ -187,18 +188,24 @@ public class MasterySeason4 extends Mastery {
         Juggernaut.update().passive("{1}する。").variable(1, HealthRatio, 3);
         Hardiness.update().passive("{1}を得る。").variable(1, AR, 2, 1.5);
         Resistance.update().passive("{1}を得る。").variable(1, MR, 2, 1.5);
-        Perseverance.update().passive("{1}を得る。").variable(1, Hreg, 0, 0, amplify(MissingHealthPercentage, 1, 1));
+        Perseverance.update()
+                .passive("{1}を得る。")
+                .variable(1, Hreg, 0, 0, amplify(MissingHealthPercentage, 1, 1))
+                .update(P315)
+                .variable(1, Hreg, 0, 0, amplify(MissingHealthPercentage, 0.7, 0.65));
         Swiftness.update().passive("{1}する。").variable(1, MSSlowReductionRatio, 10);
         ReinforcedArmor.update().passive("クリティカルヒットから受ける{1}する。").variable(1, DamageReductionRatio, 10);
         Evasive.update().passive("AoEスキルから受ける{1}する。").variable(1, DamageReductionRatio, 10);
         SecondWind.update().passive("Healthが25%以下の時、{1}する。").variable(1, RestoreHealthRatio, 10);
-        Tenacious.update()
+        LegendaryGuardian.update()
                 .passive("{1}に敵Championがいる場合、{2}と{3}を得る。")
-                .variable(1, Radius, 850)
+                .variable(1, Radius, 900)
                 .variable(2, AR, 0, 0, amplify(EnemyChampion, 1, 1))
-                .variable(3, MR, 0, 0, amplify(EnemyChampion, 0.5, 0.5));
+                .variable(3, MR, 0, 0, amplify(EnemyChampion, 0.5, 0.5))
+                .update(P315)
+                .variable(1, Radius, 700);
         RunicShield.update().passive("ゲーム開始時とRespawnする時、{1}を得る。").variable(1, Shield, 50);
-        LegendaryGuardian.update().passive("{1}を得る。").variable(1, Tenacity, 15);
+        Tenacious.update().passive("{1}を得る。").variable(1, Tenacity, 15);
     }
 
     /** Mastery */
@@ -295,8 +302,8 @@ public class MasterySeason4 extends Mastery {
             // ============ Defense ============ //
             { {Block, Recovery, EnchantedArmor, ToughSkin}, {Unyielding, VeteranScars, null, BladedArmor},
                     {Oppression, Juggernaut, Hardiness, Resistance},
-                    {Perseverance, Swiftness, ReinforcedArmor, Evasive}, {SecondWind, Tenacious, RunicShield, null},
-                    {null, LegendaryGuardian, null, null}},
+                    {Perseverance, Swiftness, ReinforcedArmor, Evasive},
+                    {SecondWind, LegendaryGuardian, RunicShield, null}, {null, Tenacious, null, null}},
 
             // ============ Utility ============ //
             { {Phasewalker, FleetOfFoot, Meditation, Scout}, {null, SummonersInsight, StrengthOfSpirit, Alchemist},

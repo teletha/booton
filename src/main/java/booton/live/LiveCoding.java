@@ -35,9 +35,20 @@ public class LiveCoding implements UncaughtExceptionHandler, Listener {
     private NativeWebSocket socket;
 
     /**
+     * <p>
+     * Entry point.
+     * </p>
+     * 
+     * @param args
+     */
+    public static void main(String[] args) {
+        new LiveCoding();
+    }
+
+    /**
      * 
      */
-    public void jsmain() {
+    private LiveCoding() {
         Thread.setDefaultUncaughtExceptionHandler(this);
 
         socket = new NativeWebSocket("ws://localhost:10021/live" + window.location.pathname, this);

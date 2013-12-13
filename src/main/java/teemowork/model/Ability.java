@@ -101,6 +101,11 @@ public class Ability extends Describable<AbilityDescriptor> {
     });
 
     /** The ability. */
+    public static final Ability Conservation = new Ability("Conservation", item -> {
+        item.passive("1.5秒毎に最大80までスタックが貯まる。巨大モンスターを倒した時、最大40スタックを消費して、消費したスタックに等しい収入を得る。");
+    });
+
+    /** The ability. */
     public static final Ability Crescent = new Ability("Crescent", item -> {
         item.active("{1}のユニットに{2}を与える。ダメージは自身から離れるにつれて減少し、最小で{3}になる。{4}。")
                 .variable(1, Radius, 400)
