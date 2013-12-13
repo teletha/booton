@@ -31,7 +31,7 @@ public class Teemowork extends Application {
 
         Header nav = new Header();
         nav.add("< ^ v ^ > Teemowork", "");
-        nav.add("Patch", "#");
+        nav.add("Patch", "#history");
 
         Menu sub = nav.add("Champion", "#");
         sub.add("Compare", "#ChampionComparing");

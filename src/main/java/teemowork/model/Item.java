@@ -1689,6 +1689,14 @@ public class Item extends Describable<ItemDescriptor> {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    /**
      * <p>
      * List up all Items.
      * </p>

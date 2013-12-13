@@ -9,6 +9,9 @@
  */
 package teemowork.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jsx.Publishable;
 
 /**
@@ -82,6 +85,9 @@ public enum Version {
     /** The released day. */
     public final int day;
 
+    /** The patch info. */
+    public final List<Describable> info = new ArrayList();
+
     /**
      * <p>
      * Create new version.
@@ -109,6 +115,17 @@ public enum Version {
      */
     public boolean isLessThan(Version other) {
         return compareTo(other) == -1;
+    }
+
+    /**
+     * <p>
+     * Record patch info.
+     * </p>
+     * 
+     * @param describable
+     */
+    protected void record(Describable describable) {
+        info.add(describable);
     }
 
     /**
