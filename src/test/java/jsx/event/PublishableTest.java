@@ -310,4 +310,101 @@ public class PublishableTest {
             this.count++;
         }
     }
+
+    /**
+     * @version 2013/12/14 11:34:13
+     */
+    private static class TimeEvent implements TimeAware {
+
+        private final long created = System.currentTimeMillis();
+
+        private final int value;
+
+        /**
+         * @param value
+         */
+        private TimeEvent() {
+            this(0);
+        }
+
+        /**
+         * @param value
+         */
+        private TimeEvent(int value) {
+            this.value = value;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public long time() {
+            return created;
+        }
+    }
+
+    @Test
+    public void throttle() throws Exception {
+        EventHub eventhub = new EventHub();
+
+        Throttle reciever = new Throttle();
+        reciever.subscribe(eventhub);
+        assert reciever.count == 0;
+
+        eventhub.publish(new TimeEvent());
+        assert reciever.count == 1;
+
+        eventhub.publish(new TimeEvent());
+        eventhub.publish(new TimeEvent());
+        eventhub.publish(new TimeEvent());
+        assert reciever.count == 1;
+
+        Thread.sleep(80);
+
+        eventhub.publish(new TimeEvent());
+        assert reciever.count == 2;
+    }
+
+    /**
+     * @version 2013/12/12 15:59:21
+     */
+    private static class Throttle implements Subscribable {
+
+        private int count;
+
+        @Subscribe(throttle = 50)
+        private void string(TimeEvent event) {
+            this.count++;
+        }
+    }
+
+    @Test
+    public void debounce() throws Exception {
+        EventHub eventhub = new EventHub();
+
+        Debounce reciever = new Debounce();
+        reciever.subscribe(eventhub);
+        assert reciever.value == 0;
+
+        eventhub.publish(new TimeEvent(10));
+        eventhub.publish(new TimeEvent(20));
+        eventhub.publish(new TimeEvent(30));
+        assert reciever.value == 0;
+
+        Thread.sleep(80);
+        assert reciever.value == 30;
+    }
+
+    /**
+     * @version 2013/12/12 15:59:21
+     */
+    private static class Debounce implements Subscribable {
+
+        private int value;
+
+        @Subscribe(debounce = 50)
+        private void string(TimeEvent event) {
+            this.value = event.value;
+        }
+    }
 }
