@@ -9,6 +9,8 @@
  */
 package jsx.event;
 
+import static js.lang.Global.*;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -50,11 +52,7 @@ class Publisher {
 
                     if (subscribers != null) {
                         for (Subscriber subscriber : subscribers) {
-                            try {
-                                subscriber.accept(event);
-                            } catch (Exception e) {
-                                throw new Error(e);
-                            }
+                            subscriber.accept(event);
                         }
                     }
                 }
@@ -122,6 +120,27 @@ class Publisher {
 
                             if (0 < count) {
                                 listener = new Count(count, this, subscribable, listener);
+                            }
+
+                            // ===========================
+                            // Timing Related Wrappers
+                            // ===========================
+                            long time = subscribe.delay();
+
+                            if (0 < time) {
+                                // listener = new Delay(time, listener);
+                            }
+
+                            time = subscribe.throttle();
+
+                            if (0 < time) {
+                                listener = new Throttle(time, listener);
+                            }
+
+                            time = subscribe.debounce();
+
+                            if (0 < time) {
+                                listener = new Debounce(time, listener);
                             }
 
                             subscribers.add(listener);
@@ -204,7 +223,7 @@ class Publisher {
          * 
          * @param event
          */
-        void accept(E event) throws Exception;
+        void accept(E event);
 
         boolean equals(Object instance, Method method);
     }
@@ -239,11 +258,17 @@ class Publisher {
          * {@inheritDoc}
          */
         @Override
-        public void accept(Object event) throws Exception {
-            if (hasParam) {
-                method.invoke(instance, event);
-            } else {
-                method.invoke(instance);
+        public void accept(Object event) {
+            try {
+                if (hasParam) {
+                    method.invoke(instance, event);
+                } else {
+                    method.invoke(instance);
+                }
+            } catch (Exception e) {
+                // If this exception will be thrown, it is bug of this program. So we must rethrow
+                // the wrapped error in here.
+                throw new Error(e);
             }
         }
 
@@ -292,7 +317,7 @@ class Publisher {
          * {@inheritDoc}
          */
         @Override
-        public void accept(Object event) throws Exception {
+        public void accept(Object event) {
             subscriber.accept(event);
 
             if (++current == limit) {
@@ -306,6 +331,119 @@ class Publisher {
         @Override
         public boolean equals(Object instance, Method method) {
             return subscriber.equals(instance, method);
+        }
+    }
+
+    /**
+     * <p>
+     * Built-in listener wrapper.
+     * </p>
+     * 
+     * @version 2013/04/08 14:37:30
+     */
+    private static class Throttle implements Subscriber {
+
+        /** The delay time. */
+        private final long delay;
+
+        /** The delegator. */
+        private final Subscriber subscriber;
+
+        /** The latest execution time. */
+        private long latest;
+
+        /**
+         * @param subscriber
+         */
+        private Throttle(long delay, Subscriber subscriber) {
+            this.delay = delay;
+            this.subscriber = subscriber;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void accept(Object event) {
+            if (event instanceof TimeAware) {
+                long now = ((TimeAware) event).time();
+
+                if (latest + delay < now) {
+                    latest = now;
+
+                    subscriber.accept(event);
+                }
+            } else {
+                throw new IllegalArgumentException(event + " is not " + TimeAware.class.getName() + ".");
+            }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(Object instance, Method method) {
+            return subscriber.equals(instance, method);
+        }
+    }
+
+    /**
+     * <p>
+     * Built-in listener wrapper.
+     * </p>
+     * 
+     * @version 2013/04/08 14:58:44
+     */
+    private static class Debounce implements Subscriber, Runnable {
+
+        /** The delay time. */
+        private final long delay;
+
+        /** The delegator. */
+        private final Subscriber subscriber;
+
+        /** The lastest event. */
+        private Object event;
+
+        /** The time out id. */
+        private long id = -1;
+
+        /**
+         * @param subscriber
+         */
+        private Debounce(long delay, Subscriber subscriber) {
+            this.delay = delay;
+            this.subscriber = subscriber;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(Object instance, Method method) {
+            return subscriber.equals(instance, method);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void accept(Object event) {
+            if (id != -1) {
+                clearTimeout(id);
+            }
+            this.event = event;
+            this.id = setTimeout(this, delay);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void run() {
+            id = -1;
+            subscriber.accept(event);
+            event = null;
         }
     }
 }
