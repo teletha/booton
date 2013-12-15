@@ -9,6 +9,8 @@
  */
 package jsx.event;
 
+import js.lang.Global;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -391,8 +393,10 @@ public class PublishableTest {
         eventhub.publish(new TimeEvent(30));
         assert reciever.value == 0;
 
-        Thread.sleep(80);
-        assert reciever.value == 30;
+        Global.setTimeout(() -> {
+            System.out.println(reciever.value);
+            assert reciever.value == 30;
+        }, 80);
     }
 
     /**
@@ -403,7 +407,7 @@ public class PublishableTest {
         private int value;
 
         @Subscribe(debounce = 50)
-        private void string(TimeEvent event) {
+        private void time(TimeEvent event) {
             this.value = event.value;
         }
     }
