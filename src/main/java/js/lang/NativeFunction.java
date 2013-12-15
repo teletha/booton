@@ -28,6 +28,16 @@ public class NativeFunction<T> extends NativeObject {
     /** The empty flag. */
     private static final Object EMPTY = new Object();
 
+    private static final Method run;
+
+    static {
+        try {
+            run = Runnable.class.getMethod("run");
+        } catch (Exception e) {
+            throw I.quiet(e);
+        }
+    }
+
     /** The single abstract method type. */
     final T type;
 
@@ -49,6 +59,17 @@ public class NativeFunction<T> extends NativeObject {
      */
     public NativeFunction(Delegator<T> functional) {
         this((T) functional);
+    }
+
+    /**
+     * <p>
+     * Create function statement form the specified object which has only one method.
+     * </p>
+     * 
+     * @param functional
+     */
+    public NativeFunction(Runnable functional) {
+        this((T) functional, run);
     }
 
     /**
@@ -484,6 +505,17 @@ public class NativeFunction<T> extends NativeObject {
          */
         public String NativeFunction(Delegator functional) {
             return "boot.delegate(" + param(0) + "." + Javascript.computeMethodName(findSAM(type(0))) + "," + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Create function statement form the specified object which has only one method.
+         * </p>
+         * 
+         * @param functional
+         */
+        public String NativeFunction(Runnable functional) {
+            return param(0) + "." + Javascript.computeMethodName(findSAM(Runnable.class));
         }
 
         /**
