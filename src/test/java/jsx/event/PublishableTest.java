@@ -9,12 +9,11 @@
  */
 package jsx.event;
 
-import js.lang.Global;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.translator.ScriptRunner;
+import booton.util.Unsupported;
 
 /**
  * @version 2013/12/12 15:59:17
@@ -393,10 +392,10 @@ public class PublishableTest {
         eventhub.publish(new TimeEvent(30));
         assert reciever.value == 0;
 
-        Global.setTimeout(() -> {
+        Unsupported.async(80, () -> {
             System.out.println(reciever.value);
             assert reciever.value == 30;
-        }, 80);
+        });
     }
 
     /**

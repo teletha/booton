@@ -250,7 +250,7 @@ class Arrays {
      * @since 1.6
      */
     public static <T, U> T[] copyOf(U[] original, int newLength, Class<? extends T[]> newType) {
-        return copyOfRange(original, 0, newLength, newType);
+        return copyOfRange(original, 0, newLength, (Class<T[]>) newType);
     }
 
     /**
