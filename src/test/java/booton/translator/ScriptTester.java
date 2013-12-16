@@ -89,7 +89,6 @@ public class ScriptTester {
 
             // compile and load boot script
             engine.execute(html, engine.compile(html, boot, "boot.js", 1));
-
         } catch (Exception e) {
             throw I.quiet(e);
         }

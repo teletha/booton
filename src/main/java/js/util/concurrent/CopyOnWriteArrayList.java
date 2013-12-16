@@ -104,7 +104,7 @@ class CopyOnWriteArrayList<E> implements List<E> {
         int length = items.length;
 
         if (destination.length < length) {
-            return (T[]) Arrays.copyOf(items, length, destination.getClass());
+            return (T[]) Arrays.copyOf(items, length, (Class) destination.getClass());
         } else {
             System.arraycopy(items, 0, destination, 0, length);
 

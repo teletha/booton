@@ -327,7 +327,7 @@ class JSKiss {
                 Manageable manageable = (Manageable) actualClass.getAnnotation(Manageable.class);
 
                 // Create new lifestyle for the actual model class
-                lifestyle = make(manageable == null ? Prototype.class : manageable.lifestyle());
+                lifestyle = make(manageable == null ? Prototype.class : (Class) manageable.lifestyle());
             }
 
             // Trace dependency graph to detect circular dependencies.
