@@ -16,7 +16,7 @@ import java.lang.reflect.Method;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.ScriptRunner;
+import booton.soeur.ScriptRunner;
 import booton.translator.annotation.PrimitiveMarker;
 import booton.translator.annotation.StringMarker;
 

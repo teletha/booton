@@ -14,7 +14,7 @@ import java.lang.annotation.Annotation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.ScriptRunner;
+import booton.soeur.ScriptRunner;
 import booton.translator.annotation.InheritableMarker;
 import booton.translator.annotation.NotReferenced;
 import booton.translator.annotation.PrimitiveMarker;

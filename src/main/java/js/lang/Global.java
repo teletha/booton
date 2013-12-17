@@ -11,10 +11,6 @@ package js.lang;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import js.dom.Document;
 import js.dom.Element;
@@ -26,6 +22,9 @@ import js.lang.builtin.EmulateStorage;
 import js.lang.builtin.JSON;
 import js.lang.builtin.Storage;
 import jsx.jQuery;
+import kiss.I;
+import kiss.Manageable;
+import kiss.Singleton;
 
 import org.w3c.dom.DocumentFragment;
 
@@ -37,7 +36,7 @@ import booton.translator.Translator;
  * Define global objects and static methods in Booton environment.
  * </p>
  * 
- * @version 2013/10/04 11:24:24
+ * @version 2013/12/18 1:42:55
  */
 public class Global {
 
@@ -93,9 +92,6 @@ public class Global {
      * </p>
      */
     public static final JSON JSON = new JSON();
-
-    /** The async task manager. */
-    private static final TaskManager manager = new TaskManager();
 
     /**
      * <p>
@@ -167,7 +163,7 @@ public class Global {
      * @return A timeout id.
      */
     public static long setTimeout(Runnable runnable, long delay) {
-        return manager.add(new NativeFunction(runnable).bind(runnable), delay);
+        return I.make(TaskScheduler.class).add(new NativeFunction(runnable).bind(runnable), delay);
     }
 
     /**
@@ -178,7 +174,7 @@ public class Global {
      * @param timeoutId The ID of the timeout you wish to clear, as returned by setTimeout().
      */
     public static void clearTimeout(long timeoutId) {
-        manager.remove(timeoutId);
+        I.make(TaskScheduler.class).remove(timeoutId);
     }
 
     /**
@@ -863,43 +859,54 @@ public class Global {
     }
 
     /**
-     * @version 2013/08/18 14:41:37
+     * @version 2013/12/17 22:28:15
      */
-    private static class TaskManager implements Runnable {
+    @Manageable(lifestyle = Singleton.class)
+    private static class TaskScheduler implements Runnable {
 
         /** The task id counter. */
         private static long id = 0;
 
-        /** The thread pool. */
-        private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(4);
-
         /** The scheduled tasks. */
-        private final Map<Long, ScheduledFuture> scheduledTasks = new ConcurrentHashMap();
-
-        private long add(NativeFunction runnable, long delay) {
-            Task task = new Task(runnable, id++);
-            ScheduledFuture future = executor.schedule(task, delay, TimeUnit.MILLISECONDS);
-
-            scheduledTasks.put(task.id, future);
-
-            return task.id;
-        }
-
-        private void remove(long id) {
-            ScheduledFuture future = scheduledTasks.get(id);
-
-            if (future != null) {
-                future.cancel(true);
-                scheduledTasks.remove(id);
-            }
-        }
+        private final Map<Long, Task> scheduledTasks = new ConcurrentHashMap();
 
         /**
          * {@inheritDoc}
          */
         @Override
         public void run() {
+            for (Task task : scheduledTasks.values()) {
+                task.run();
+            }
+            scheduledTasks.clear();
+        }
 
+        /**
+         * <p>
+         * Add background task.
+         * </p>
+         * 
+         * @param runnable
+         * @param delay
+         * @return
+         */
+        private long add(NativeFunction runnable, long delay) {
+            Task task = new Task(runnable, id++);
+
+            scheduledTasks.put(task.id, task);
+
+            return task.id;
+        }
+
+        /**
+         * <p>
+         * Remove background task.
+         * </p>
+         * 
+         * @param id
+         */
+        private void remove(long id) {
+            scheduledTasks.remove(id);
         }
 
         /**

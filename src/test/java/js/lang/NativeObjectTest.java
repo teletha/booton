@@ -14,8 +14,8 @@ import js.lang.NativeObject;
 
 import org.junit.Test;
 
-import booton.translator.ScriptTester;
-import booton.translator.Scriptable;
+import booton.soeur.ScriptTester;
+import booton.soeur.Scriptable;
 
 /**
  * @version 2012/12/09 13:14:54

@@ -12,10 +12,10 @@ package booton.translator.flow;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import booton.soeur.Param;
+import booton.soeur.ScriptTester;
+import booton.soeur.Scriptable;
 import booton.translator.Debuggable;
-import booton.translator.Param;
-import booton.translator.ScriptTester;
-import booton.translator.Scriptable;
 
 /**
  * @version 2013/10/09 15:55:09

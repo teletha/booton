@@ -14,7 +14,7 @@ import java.util.OptionalDouble;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.ScriptRunner;
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2013/10/30 20:25:39

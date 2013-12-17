@@ -14,7 +14,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.ScriptRunner;
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2013/10/11 11:48:40

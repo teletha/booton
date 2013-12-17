@@ -22,7 +22,7 @@ import booton.sample.beans.Collections;
 import booton.sample.beans.Primitives;
 import booton.sample.beans.StringList;
 import booton.sample.beans.StringMap;
-import booton.translator.ScriptRunner;
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2013/10/02 11:28:35

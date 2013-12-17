@@ -14,7 +14,7 @@ import java.lang.annotation.Annotation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.ScriptRunner;
+import booton.soeur.ScriptRunner;
 import booton.translator.annotation.MultipleMarker;
 import booton.translator.annotation.MultipleMarkerContainer;
 import booton.translator.annotation.StringMarker;

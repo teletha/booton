@@ -14,7 +14,7 @@ import java.lang.reflect.Constructor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.ScriptRunner;
+import booton.soeur.ScriptRunner;
 import booton.translator.annotation.PrimitiveMarker;
 
 /**

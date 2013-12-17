@@ -11,9 +11,9 @@ package booton.translator.flow;
 
 import org.junit.Test;
 
-import booton.translator.Param;
-import booton.translator.ScriptTester;
-import booton.translator.Scriptable;
+import booton.soeur.Param;
+import booton.soeur.ScriptTester;
+import booton.soeur.Scriptable;
 
 /**
  * @version 2013/08/09 15:50:42

@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.translator;
+package booton.soeur;
 
 import static java.nio.charset.StandardCharsets.*;
 
@@ -37,6 +37,8 @@ import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
 import booton.Unnecessary;
 import booton.live.ClientStackTrace;
 import booton.live.Source;
+import booton.translator.Javascript;
+import booton.translator.TranslationError;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.ScriptException;
@@ -61,10 +63,10 @@ public class ScriptTester {
     static final WebClient client;
 
     /** The dummy page for test. */
-    private static final HtmlPage html;
+    static final HtmlPage html;
 
     /** The javascript runtime. */
-    private static final JavaScriptEngine engine;
+    static final JavaScriptEngine engine;
 
     /** The defined classes. */
     private static final Set<Class> defined = new HashSet();
@@ -74,6 +76,9 @@ public class ScriptTester {
 
     static {
         try {
+            // load test runner for booton
+            I.load(ScriptTester.class, true);
+
             // read boot.js
             boot = new String(Files.readAllBytes(I.locate("boot.js")), UTF_8);
 
@@ -91,7 +96,7 @@ public class ScriptTester {
             engine.execute(html, engine.compile(html, boot, "boot.js", 1));
 
             // add test utility
-            ScriptableObject.defineClass((ScriptableObject) html.getEnclosingWindow().getScriptObject(), AsynchronousSupport.class);
+            ScriptableObject.defineClass((ScriptableObject) html.getEnclosingWindow().getScriptObject(), AsyncJS.class);
         } catch (Exception e) {
             throw I.quiet(e);
         }
