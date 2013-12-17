@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.translator.ScriptRunner;
-import booton.util.Unsupported;
+import booton.util.Asynchronous;
 
 /**
  * @version 2013/12/12 15:59:17
@@ -392,10 +392,8 @@ public class PublishableTest {
         eventhub.publish(new TimeEvent(30));
         assert reciever.value == 0;
 
-        Unsupported.async(80, () -> {
-            System.out.println(reciever.value);
-            assert reciever.value == 30;
-        });
+        Asynchronous.await(80);
+        assert reciever.value == 30;
     }
 
     /**
