@@ -58,7 +58,7 @@ public class ScriptTester {
     private static final Object NONE = new Object();
 
     /** The testable client. */
-    private static final WebClient client;
+    static final WebClient client;
 
     /** The dummy page for test. */
     private static final HtmlPage html;
@@ -89,6 +89,9 @@ public class ScriptTester {
 
             // compile and load boot script
             engine.execute(html, engine.compile(html, boot, "boot.js", 1));
+
+            // add test utility
+            ScriptableObject.defineClass((ScriptableObject) html.getEnclosingWindow().getScriptObject(), AsynchronousSupport.class);
         } catch (Exception e) {
             throw I.quiet(e);
         }
