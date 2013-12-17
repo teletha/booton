@@ -16,7 +16,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.ScriptRunner;
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2013/10/02 9:42:22

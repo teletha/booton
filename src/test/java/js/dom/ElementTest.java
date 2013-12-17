@@ -14,7 +14,7 @@ import static js.lang.Global.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.ScriptRunner;
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2013/06/30 12:23:59

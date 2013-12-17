@@ -11,8 +11,8 @@ package booton.translator.operator;
 
 import org.junit.Test;
 
-import booton.translator.ScriptTester;
-import booton.translator.Scriptable;
+import booton.soeur.ScriptTester;
+import booton.soeur.Scriptable;
 
 /**
  * @version 2013/03/13 17:53:37

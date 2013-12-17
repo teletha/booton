@@ -19,7 +19,7 @@ import java.util.RandomAccess;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.ScriptRunner;
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2013/09/10 16:33:12

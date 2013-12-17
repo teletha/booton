@@ -16,7 +16,7 @@ import java.lang.reflect.Modifier;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.ScriptRunner;
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2013/09/01 22:44:29

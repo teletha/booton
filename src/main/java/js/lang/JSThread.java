@@ -117,13 +117,9 @@ class JSThread {
      *             thrown.
      */
     public static void sleep(long millis) throws InterruptedException {
-        // FIXME busy loop
-        long start = System.currentTimeMillis();
-        long now = start;
-
-        while (now < start + millis) {
-            now = System.currentTimeMillis();
-        }
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**

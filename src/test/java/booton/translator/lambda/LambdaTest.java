@@ -24,7 +24,7 @@ import java.util.function.ToIntFunction;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.ScriptRunner;
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2013/11/19 22:15:25

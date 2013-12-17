@@ -12,8 +12,8 @@ package jsx.event;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.ScriptRunner;
-import booton.util.Asynchronous;
+import booton.soeur.Async;
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2013/12/12 15:59:17
@@ -360,8 +360,7 @@ public class PublishableTest {
         eventhub.publish(new TimeEvent());
         assert reciever.count == 1;
 
-        Thread.sleep(80);
-
+        Async.wait(55);
         eventhub.publish(new TimeEvent());
         assert reciever.count == 2;
     }
@@ -392,7 +391,7 @@ public class PublishableTest {
         eventhub.publish(new TimeEvent(30));
         assert reciever.value == 0;
 
-        Asynchronous.await(80);
+        Async.awaitTasks();
         assert reciever.value == 30;
     }
 

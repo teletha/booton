@@ -11,8 +11,8 @@ package booton.translator.enumeration;
 
 import org.junit.Test;
 
-import booton.translator.ScriptTester;
-import booton.translator.Scriptable;
+import booton.soeur.ScriptTester;
+import booton.soeur.Scriptable;
 
 /**
  * @version 2013/01/22 15:36:20

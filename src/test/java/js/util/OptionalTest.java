@@ -15,7 +15,7 @@ import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.ScriptRunner;
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2013/10/30 19:56:07

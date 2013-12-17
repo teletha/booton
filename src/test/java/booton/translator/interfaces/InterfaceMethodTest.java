@@ -12,7 +12,7 @@ package booton.translator.interfaces;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.translator.ScriptRunner;
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2013/11/03 16:22:21

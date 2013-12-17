@@ -178,7 +178,7 @@ public class Javascript {
      * @param necessaries A list of required script classes.
      * @return A script output.
      */
-    String write(Set<Class> defined, Class... necessaries) {
+    public String write(Set defined, Class... necessaries) {
         StringBuilder builder = new StringBuilder();
 
         writeTo(builder, defined, necessaries);
@@ -226,7 +226,7 @@ public class Javascript {
      * @param defined A list of compiled script classes.
      * @param necessaries A list of required script classes.
      */
-    void writeTo(Appendable output, Set<Class> defined, Class... necessaries) {
+    public void writeTo(Appendable output, Set defined, Class... necessaries) {
         // find all necessaries and write it
         for (Class necessary : I.make(NecessaryManager.class).collect(necessaries)) {
             getScript(necessary).write(output, defined);

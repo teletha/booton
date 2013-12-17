@@ -11,9 +11,9 @@ package booton.translator.array;
 
 import org.junit.Test;
 
-import booton.translator.Param;
-import booton.translator.ScriptTester;
-import booton.translator.Scriptable;
+import booton.soeur.Param;
+import booton.soeur.ScriptTester;
+import booton.soeur.Scriptable;
 
 /**
  * @version 2013/02/15 20:47:17

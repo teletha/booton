@@ -12,6 +12,8 @@ package booton.translator;
 import org.junit.Test;
 
 import booton.sample.Person;
+import booton.soeur.ScriptTester;
+import booton.soeur.Scriptable;
 
 /**
  * @version 2012/11/30 15:33:32

@@ -11,8 +11,8 @@ package js.lang;
 
 import org.junit.Test;
 
-import booton.translator.ScriptTester;
-import booton.translator.Scriptable;
+import booton.soeur.ScriptTester;
+import booton.soeur.Scriptable;
 
 /**
  * @version 2013/08/17 17:55:39

@@ -16,9 +16,9 @@ import java.util.Map.Entry;
 
 import org.junit.Test;
 
-import booton.translator.Param;
-import booton.translator.ScriptTester;
-import booton.translator.Scriptable;
+import booton.soeur.Param;
+import booton.soeur.ScriptTester;
+import booton.soeur.Scriptable;
 
 /**
  * @version 2013/04/11 19:55:53
