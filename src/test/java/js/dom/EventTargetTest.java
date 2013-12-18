@@ -13,7 +13,7 @@ import static js.lang.Global.*;
 import js.dom.event.Click;
 import js.dom.event.MouseOver;
 import jsx.bwt.UIEvent;
-import jsx.event.Subscribable;
+import jsx.event.Subscribe;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -73,7 +73,7 @@ public class EventTargetTest {
 
         private int invoked = 0;
 
-        @Subscribable
+        @Subscribe
         private void click(Click event) {
             invoked++;
         }

@@ -70,7 +70,7 @@ public class PublishableTest {
 
         private String name;
 
-        @Subscribable
+        @Subscribe
         private void recieve(String name) {
             this.name = name;
         }
@@ -95,12 +95,12 @@ public class PublishableTest {
 
         private int count;
 
-        @Subscribable
+        @Subscribe
         private void recieve1(String name) {
             count++;
         }
 
-        @Subscribable
+        @Subscribe
         private void recieve2(String name) {
             count++;
         }
@@ -128,7 +128,7 @@ public class PublishableTest {
 
         private int value;
 
-        @Subscribable
+        @Subscribe
         private void recieve(int value) {
             this.value = value;
         }
@@ -156,7 +156,7 @@ public class PublishableTest {
 
         private int value;
 
-        @Subscribable
+        @Subscribe
         private void recieve(Integer value) {
             this.value = value;
         }
@@ -183,14 +183,14 @@ public class PublishableTest {
 
         private String name;
 
-        @Subscribable
+        @Subscribe
         private void name(String name) {
             this.name = name;
         }
 
         private int value;
 
-        @Subscribable
+        @Subscribe
         private void recieve2(int value) {
             this.value = value;
         }
@@ -215,7 +215,7 @@ public class PublishableTest {
 
         private int count;
 
-        @Subscribable(String.class)
+        @Subscribe(String.class)
         private void recieve() {
             this.count++;
         }
@@ -246,8 +246,8 @@ public class PublishableTest {
 
         private int count;
 
-        @Subscribable(int.class)
-        @Subscribable(String.class)
+        @Subscribe(int.class)
+        @Subscribe(String.class)
         private void recieve() {
             this.count++;
         }
@@ -275,12 +275,12 @@ public class PublishableTest {
 
         private int count;
 
-        @Subscribable
+        @Subscribe
         private void string(String name) {
             this.count++;
         }
 
-        @Subscribable
+        @Subscribe
         private void charSequence(CharSequence value) {
             this.count++;
         }
@@ -311,7 +311,7 @@ public class PublishableTest {
 
         private int count;
 
-        @Subscribable(count = 2)
+        @Subscribe(count = 2)
         private void string(String name) {
             this.count++;
         }
@@ -367,7 +367,7 @@ public class PublishableTest {
 
         private int count;
 
-        @Subscribable(throttle = 50)
+        @Subscribe(throttle = 50)
         private void string(TimeEvent event) {
             this.count++;
         }
@@ -397,7 +397,7 @@ public class PublishableTest {
 
         private int value;
 
-        @Subscribable(debounce = 50)
+        @Subscribe(debounce = 50)
         private void time(TimeEvent event) {
             this.value = event.value;
         }
@@ -427,7 +427,7 @@ public class PublishableTest {
 
         private int value;
 
-        @Subscribable(delay = 50)
+        @Subscribe(delay = 50)
         private void time(TimeEvent event) {
             this.value += event.value;
         }
@@ -479,7 +479,7 @@ public class PublishableTest {
 
         private int count;
 
-        @Subscribable(key = Key.Space)
+        @Subscribe(key = Key.Space)
         private void string(KeyEvent event) {
             this.count++;
         }
@@ -508,7 +508,7 @@ public class PublishableTest {
 
         private boolean disposed;
 
-        @Subscribable(abort = true)
+        @Subscribe(abort = true)
         private void string(Abort event) {
             count++;
         }
@@ -541,7 +541,7 @@ public class PublishableTest {
 
         private int count;
 
-        @Subscribable
+        @Subscribe
         private void recieve(String name) {
             count++;
         }

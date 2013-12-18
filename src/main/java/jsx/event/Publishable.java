@@ -74,16 +74,16 @@ public class Publishable {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
                     Class annotationType = annotation.annotationType();
-                    Subscribable[] subscribes = null;
+                    Subscribe[] subscribes = null;
 
-                    if (annotationType == Subscribable.class) {
-                        subscribes = new Subscribable[] {(Subscribable) annotation};
-                    } else if (annotationType == Subscribables.class) {
-                        subscribes = ((Subscribables) annotation).value();
+                    if (annotationType == Subscribe.class) {
+                        subscribes = new Subscribe[] {(Subscribe) annotation};
+                    } else if (annotationType == Subscribes.class) {
+                        subscribes = ((Subscribes) annotation).value();
                     }
 
                     if (subscribes != null) {
-                        for (Subscribable subscribe : subscribes) {
+                        for (Subscribe subscribe : subscribes) {
                             Class eventType;
                             Method method = entry.getKey();
 
@@ -176,16 +176,16 @@ public class Publishable {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
                     Class annotationType = annotation.annotationType();
-                    Subscribable[] subscribes = null;
+                    Subscribe[] subscribes = null;
 
-                    if (annotationType == Subscribable.class) {
-                        subscribes = new Subscribable[] {(Subscribable) annotation};
-                    } else if (annotationType == Subscribables.class) {
-                        subscribes = ((Subscribables) annotation).value();
+                    if (annotationType == Subscribe.class) {
+                        subscribes = new Subscribe[] {(Subscribe) annotation};
+                    } else if (annotationType == Subscribes.class) {
+                        subscribes = ((Subscribes) annotation).value();
                     }
 
                     if (subscribes != null) {
-                        for (Subscribable subscribe : subscribes) {
+                        for (Subscribe subscribe : subscribes) {
                             Class eventType;
                             Method method = entry.getKey();
 
@@ -291,7 +291,7 @@ public class Publishable {
         private final boolean abort;
 
         /**
-         * @param instance A {@link Subscribable} listener.
+         * @param instance A {@link Subscribe} listener.
          * @param method A subscribe method.
          * @param abort The event is stoppable.
          */

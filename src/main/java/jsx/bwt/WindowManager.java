@@ -16,7 +16,7 @@ import js.dom.Element;
 import jsx.application.PageUnload;
 import jsx.bwt.view.PopupViewStyle;
 import jsx.event.Publishable;
-import jsx.event.Subscribable;
+import jsx.event.Subscribe;
 
 /**
  * @version 2013/06/12 9:11:13
@@ -74,7 +74,7 @@ public class WindowManager {
     /**
      * 
      */
-    @Subscribable(PageUnload.class)
+    @Subscribe(PageUnload.class)
     private void unload() {
         Publishable.Global.unregister(this);
         target.off();
