@@ -81,13 +81,4 @@ public @interface Subscribe {
      * @return The <code>true</code> will stop the current processing event.
      */
     boolean abort() default false;
-
-    /**
-     * <p>
-     * Set a key binding.
-     * </p>
-     * 
-     * @return A binding key.
-     */
-    Key key() default Key.None;
 }

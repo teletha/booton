@@ -22,7 +22,7 @@ import jsx.bwt.FormUIStyle.FormRoot;
 public class FormUI<T extends FormUI> extends UI {
 
     /** The event types. */
-    private static final UIAction[] Actions = {Click, ClickLeft, MouseDoubleClick, PointerOver, PointerOut, PointerMove};
+    private static final UIAction[] Actions = {Click, ClickRight, MouseDoubleClick, PointerOver, PointerOut, PointerMove};
 
     /** The event disabler. */
     private static final EventListener Disabler = event -> {
