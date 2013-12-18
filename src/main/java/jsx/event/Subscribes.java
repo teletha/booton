@@ -21,14 +21,14 @@ import java.lang.annotation.Target;
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@interface Subscribables {
+@interface Subscribes {
 
     /**
      * <p>
-     * Container for {@link Subscribable}.
+     * Container for {@link Subscribe}.
      * </p>
      * 
      * @return
      */
-    Subscribable[] value();
+    Subscribe[] value();
 }

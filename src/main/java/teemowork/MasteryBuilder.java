@@ -20,7 +20,7 @@ import jsx.bwt.Button;
 import jsx.bwt.Select;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
-import jsx.event.Subscribable;
+import jsx.event.Subscribe;
 import jsx.model.SelectableModel;
 import kiss.I;
 import teemowork.MasteryBuilderStyle.Completed;
@@ -147,7 +147,7 @@ public class MasteryBuilder extends Page {
     /**
      * 
      */
-    @Subscribable(MasterySet.class)
+    @Subscribe(MasterySet.class)
     public void receive() {
         reset.label(String.valueOf(30 - masterySet.getSum()));
 
@@ -173,7 +173,7 @@ public class MasteryBuilder extends Page {
         return "Mastery/" + masterySet.toString();
     }
 
-    @Subscribable(jsx.model.SelectableModel.Select.class)
+    @Subscribe(jsx.model.SelectableModel.Select.class)
     private void select(jsx.model.SelectableModel.Select<MasterySet> event) {
         masterySet.setCode(event.item.getCode());
     }
@@ -247,7 +247,7 @@ public class MasteryBuilder extends Page {
         /**
          * 
          */
-        @Subscribable(MasterySet.class)
+        @Subscribe(MasterySet.class)
         public void receive() {
             int current = masterySet.getLevel(mastery);
 
@@ -304,7 +304,7 @@ public class MasteryBuilder extends Page {
              * {@inheritDoc}
              */
             @Override
-            @Subscribable(MasterySet.class)
+            @Subscribe(MasterySet.class)
             public void receive() {
                 super.receive();
             }

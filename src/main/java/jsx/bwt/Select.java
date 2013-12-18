@@ -23,7 +23,7 @@ import jsx.bwt.view.ScrollableListView;
 import jsx.bwt.view.ScrollableListView.ItemRenderer;
 import jsx.bwt.view.SlidableView;
 import jsx.event.Key;
-import jsx.event.Subscribable;
+import jsx.event.Subscribe;
 import jsx.model.SelectableModel;
 import jsx.model.SelectableModel.Add;
 import jsx.model.SelectableModel.Deselect;
@@ -89,22 +89,22 @@ public class Select<M> extends FormUI<Select> {
         }
     }
 
-    @Subscribable(value = KeyPress.class, key = Key.Down)
+    @Subscribe(value = KeyPress.class, key = Key.Down)
     private void selectPrevious() {
         model.selectPrevious();
     }
 
-    @Subscribable(value = KeyPress.class, key = Key.Up)
+    @Subscribe(value = KeyPress.class, key = Key.Up)
     private void selectNext() {
         model.selectNext();
     }
 
-    @Subscribable(js.dom.event.Focus.class)
+    @Subscribe(js.dom.event.Focus.class)
     private void startInput() {
         root.add(Focus.class);
     }
 
-    @Subscribable(Blur.class)
+    @Subscribe(Blur.class)
     private void endInput() {
         root.remove(Focus.class);
     }
@@ -114,7 +114,7 @@ public class Select<M> extends FormUI<Select> {
      */
     private class Binder implements ItemRenderer {
 
-        @Subscribable
+        @Subscribe
         private void selectItem(Click event) {
             model.setSelectionIndex(Integer.parseInt(event.target.attr("index")));
         }
@@ -141,19 +141,19 @@ public class Select<M> extends FormUI<Select> {
             }
         }
 
-        @Subscribable(jsx.model.SelectableModel.Select.class)
+        @Subscribe(jsx.model.SelectableModel.Select.class)
         public void select(jsx.model.SelectableModel.Select select) {
             form.val(select.item.toString());
 
             view.render(select.index);
         }
 
-        @Subscribable(Deselect.class)
+        @Subscribe(Deselect.class)
         public void deselect(Deselect event) {
             view.render(event.index);
         }
 
-        @Subscribable(Add.class)
+        @Subscribe(Add.class)
         public void add(Add event) {
             view.provide(this);
             view.render(event.index);
@@ -161,7 +161,7 @@ public class Select<M> extends FormUI<Select> {
             enable();
         }
 
-        @Subscribable(Remove.class)
+        @Subscribe(Remove.class)
         public void remove(Remove event) {
             view.provide(this);
 

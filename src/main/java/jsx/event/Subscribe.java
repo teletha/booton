@@ -24,8 +24,8 @@ import jsx.bwt.UIEvent;
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@Repeatable(Subscribables.class)
-public @interface Subscribable {
+@Repeatable(Subscribes.class)
+public @interface Subscribe {
 
     /**
      * <p>

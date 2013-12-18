@@ -19,7 +19,7 @@ import jsx.bwt.view.ScrollableListViewStyle.ItemColumnView;
 import jsx.bwt.view.ScrollableListViewStyle.RenderableItemView;
 import jsx.bwt.view.ScrollableListViewStyle.Spacer;
 import jsx.bwt.view.ScrollableListViewStyle.ViewabletemView;
-import jsx.event.Subscribable;
+import jsx.event.Subscribe;
 
 /**
  * @version 2013/07/29 2:00:26
@@ -124,7 +124,7 @@ public class ScrollableListView extends UI {
      * Render all list items.
      * </p>
      */
-    @Subscribable(value = Scroll.class, debounce = 100)
+    @Subscribe(value = Scroll.class, debounce = 100)
     private void render() {
         int viewableTopIndex = Math.round(-renderableItemView.position().top() / itemHeight);
         int renderableTopIndex = Math.max(0, viewableTopIndex - extraTopRenderableItemSize);

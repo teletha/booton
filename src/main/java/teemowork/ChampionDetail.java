@@ -26,7 +26,7 @@ import jsx.application.PageInfo;
 import jsx.bwt.UI;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
-import jsx.event.Subscribable;
+import jsx.event.Subscribe;
 import teemowork.ChampionDetailStyle.Active;
 import teemowork.ChampionDetailStyle.Amplifier;
 import teemowork.ChampionDetailStyle.Assigned;
@@ -122,12 +122,12 @@ public class ChampionDetail extends Page {
         build.register(this);
     }
 
-    @Subscribable(value = Click.class, abort = true)
+    @Subscribe(value = Click.class, abort = true)
     private void levelUp() {
         build.setLevel(build.getLevel() + 1);
     }
 
-    @Subscribable(value = ContextMenu.class, abort = true)
+    @Subscribe(value = ContextMenu.class, abort = true)
     private void levelDown() {
         build.setLevel(build.getLevel() - 1);
     }
@@ -198,7 +198,7 @@ public class ChampionDetail extends Page {
      * Calcurate current status.
      * </p>
      */
-    @Subscribable(Build.class)
+    @Subscribe(Build.class)
     private void calcurate() {
         // update each status
         level.text(String.valueOf(build.getLevel()));
@@ -647,17 +647,17 @@ public class ChampionDetail extends Page {
             level = me.child(Level.class);
         }
 
-        @Subscribable(value = Click.class, abort = true)
+        @Subscribe(value = Click.class, abort = true)
         private void levelUp() {
             build.setLevel(build.getLevel() + 1);
         }
 
-        @Subscribable(value = ContextMenu.class, abort = true)
+        @Subscribe(value = ContextMenu.class, abort = true)
         private void levelDown() {
             build.setLevel(build.getLevel() - 1);
         }
 
-        @Subscribable
+        @Subscribe
         private void modify(Build build) {
             // change level text
             level.text(build.getLevel());
