@@ -22,6 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import jsx.event.Publishable.Start;
 import jsx.event.Publishable.Stop;
+import kiss.Disposable;
 import kiss.model.ClassUtil;
 
 /**
@@ -89,7 +90,7 @@ class Publisher {
                                 eventType = subscribe.value();
                             }
 
-                            Listener listener = new Invoker(subscribable, method);
+                            Listener listener = new Invoker(subscribable, method, subscribe.abort());
 
                             eventType = ClassUtil.wrap(eventType);
 
@@ -265,16 +266,21 @@ class Publisher {
         /** The parameter flag. */
         private final boolean hasParam;
 
+        /** The event termination flag. */
+        private final boolean abort;
+
         /**
          * @param instance A {@link Subscribable} listener.
          * @param method A subscribe method.
+         * @param abort The event is stoppable.
          */
-        private Invoker(Subscribable instance, Method method) {
+        private Invoker(Subscribable instance, Method method, boolean abort) {
             method.setAccessible(true);
 
             this.instance = instance;
             this.method = method;
             this.hasParam = method.getParameterTypes().length == 1;
+            this.abort = abort;
         }
 
         /**
@@ -282,6 +288,12 @@ class Publisher {
          */
         @Override
         public void accept(Object event) {
+            if (abort) {
+                if (event instanceof Disposable) {
+                    ((Disposable) event).dispose();
+                }
+            }
+
             try {
                 if (hasParam) {
                     method.invoke(instance, event);
