@@ -7,30 +7,28 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx;
+package jsx.event;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @version 2013/10/05 11:27:24
+ * @version 2013/12/04 16:13:31
  */
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@Repeatable(Subscribables.class)
-public @interface Subscribable {
+@interface Subscribables {
 
     /**
      * <p>
-     * Specify event type.
+     * Container for {@link Subscribable}.
      * </p>
      * 
      * @return
      */
-    Class value() default Object.class;
+    Subscribable[] value();
 }

@@ -19,13 +19,13 @@ import java.lang.annotation.Target;
 import jsx.bwt.UIEvent;
 
 /**
- * @version 2013/12/11 9:43:06
+ * @version 2013/10/05 11:27:24
  */
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@Repeatable(Subscribes.class)
-public @interface Subscribe {
+@Repeatable(Subscribables.class)
+public @interface Subscribable {
 
     /**
      * <p>

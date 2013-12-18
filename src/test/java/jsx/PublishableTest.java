@@ -10,7 +10,7 @@
 package jsx;
 
 import jsx.Publishable;
-import jsx.Subscribable;
+import jsx.event.Subscribable;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

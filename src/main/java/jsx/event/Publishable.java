@@ -20,7 +20,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import jsx.Subscribable;
 import kiss.Disposable;
 import kiss.model.ClassUtil;
 
@@ -28,6 +27,9 @@ import kiss.model.ClassUtil;
  * @version 2013/10/09 15:53:49
  */
 public class Publishable {
+
+    /** The global event bus. */
+    public static final Publishable Global = new Publishable();
 
     /** The cache for event types. */
     private static final Map<Class, Set<Class<?>>> cache = new HashMap();
@@ -72,16 +74,16 @@ public class Publishable {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
                     Class annotationType = annotation.annotationType();
-                    Subscribe[] subscribes = null;
+                    Subscribable[] subscribes = null;
 
-                    if (annotationType == Subscribe.class) {
-                        subscribes = new Subscribe[] {(Subscribe) annotation};
-                    } else if (annotationType == Subscribes.class) {
-                        subscribes = ((Subscribes) annotation).value();
+                    if (annotationType == Subscribable.class) {
+                        subscribes = new Subscribable[] {(Subscribable) annotation};
+                    } else if (annotationType == Subscribables.class) {
+                        subscribes = ((Subscribables) annotation).value();
                     }
 
                     if (subscribes != null) {
-                        for (Subscribe subscribe : subscribes) {
+                        for (Subscribable subscribe : subscribes) {
                             Class eventType;
                             Method method = entry.getKey();
 
@@ -174,16 +176,16 @@ public class Publishable {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
                     Class annotationType = annotation.annotationType();
-                    Subscribe[] subscribes = null;
+                    Subscribable[] subscribes = null;
 
-                    if (annotationType == Subscribe.class) {
-                        subscribes = new Subscribe[] {(Subscribe) annotation};
-                    } else if (annotationType == Subscribes.class) {
-                        subscribes = ((Subscribes) annotation).value();
+                    if (annotationType == Subscribable.class) {
+                        subscribes = new Subscribable[] {(Subscribable) annotation};
+                    } else if (annotationType == Subscribables.class) {
+                        subscribes = ((Subscribables) annotation).value();
                     }
 
                     if (subscribes != null) {
-                        for (Subscribe subscribe : subscribes) {
+                        for (Subscribable subscribe : subscribes) {
                             Class eventType;
                             Method method = entry.getKey();
 

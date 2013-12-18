@@ -10,7 +10,6 @@
 package jsx.bwt;
 
 import js.dom.Element;
-import jsx.Subscribable;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.SelectStyle.SelectArrow;
 import jsx.bwt.SelectStyle.SelectForm;
@@ -20,6 +19,7 @@ import jsx.bwt.SelectStyle.SelectedItem;
 import jsx.bwt.view.ScrollableListView;
 import jsx.bwt.view.ScrollableListView.ItemRenderer;
 import jsx.bwt.view.SlidableView;
+import jsx.event.Subscribable;
 import jsx.model.SelectableModel;
 import jsx.model.SelectableModel.Add;
 import jsx.model.SelectableModel.Deselect;

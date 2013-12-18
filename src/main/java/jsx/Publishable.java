@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import jsx.event.Subscribable;
 import kiss.model.ClassUtil;
 import booton.translator.Debuggable;
 
