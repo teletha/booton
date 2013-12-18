@@ -64,6 +64,9 @@ public class UIEvent implements JavascriptNative, Disposable {
     @JavascriptNativeProperty
     public int which;
 
+    /** The user action type. */
+    public UIAction action;
+
     /**
      * <p>
      * Initialize event.

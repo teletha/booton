@@ -13,6 +13,8 @@ import static js.lang.Global.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +22,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import jsx.bwt.UIAction;
+import jsx.bwt.UIEvent;
 import kiss.Disposable;
 import kiss.model.ClassUtil;
 
@@ -35,7 +39,7 @@ public class Publishable {
     private static final Map<Class, Set<Class<?>>> cache = new HashMap();
 
     /** The actual listeners holder. */
-    private Map<Class, List<Listener>> holder;
+    private Map<Object, List<Listener>> holder;
 
     /**
      * <p>
@@ -46,9 +50,15 @@ public class Publishable {
      */
     public final void publish(Object event) {
         if (holder != null && event != null) {
-            Set<Class<?>> types = cache.computeIfAbsent(event.getClass(), type -> ClassUtil.getTypes(type));
+            Set types;
 
-            for (Class type : types) {
+            if (event instanceof UIEvent) {
+                types = Collections.singleton(((UIEvent) event).action);
+            } else {
+                types = cache.computeIfAbsent(event.getClass(), type -> ClassUtil.getTypes(type));
+            }
+
+            for (Object type : types) {
                 if (holder != null) {
                     List<Listener> subscribers = holder.get(type);
 
@@ -73,91 +83,80 @@ public class Publishable {
         if (subscribable != null) {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
-                    Class annotationType = annotation.annotationType();
-                    Subscribe[] subscribes = null;
+                    for (Info info : collect(annotation)) {
+                        Object eventType;
+                        Method method = entry.getKey();
 
-                    if (annotationType == Subscribe.class) {
-                        subscribes = new Subscribe[] {(Subscribe) annotation};
-                    } else if (annotationType == Subscribes.class) {
-                        subscribes = ((Subscribes) annotation).value();
-                    }
+                        if (method.getParameterTypes().length == 1) {
+                            eventType = ClassUtil.wrap(method.getParameterTypes()[0]);
+                        } else {
+                            eventType = info.type;
+                        }
 
-                    if (subscribes != null) {
-                        for (Subscribe subscribe : subscribes) {
-                            Class eventType;
-                            Method method = entry.getKey();
+                        Listener listener = new Invoker(subscribable, method, info.abort);
 
-                            if (method.getParameterTypes().length == 1) {
-                                eventType = method.getParameterTypes()[0];
-                            } else {
-                                eventType = subscribe.value();
-                            }
+                        if (holder == null) {
+                            holder = new HashMap();
+                            startListening(Object.class);
+                        }
 
-                            Listener listener = new Invoker(subscribable, method, subscribe.abort());
+                        List<Listener> subscribers = holder.get(eventType);
 
-                            eventType = ClassUtil.wrap(eventType);
+                        if (subscribers == null) {
+                            subscribers = new CopyOnWriteArrayList();
+                            holder.put(eventType, subscribers);
 
-                            if (holder == null) {
-                                holder = new HashMap();
-                                startListening(Object.class);
-                            }
-
-                            List<Listener> subscribers = holder.get(eventType);
-
-                            if (subscribers == null) {
-                                subscribers = new CopyOnWriteArrayList();
-                                holder.put(eventType, subscribers);
-
-                                startListening(eventType);
-                            } else {
-                                for (Listener registered : subscribers) {
-                                    if (registered.equals(subscribable, method)) {
-                                        return;
-                                    }
+                            startListening(eventType);
+                        } else {
+                            for (Listener registered : subscribers) {
+                                if (registered.equals(subscribable, method)) {
+                                    return;
                                 }
                             }
-
-                            // ===========================
-                            // Execution Count Wrapper
-                            // ===========================
-                            int count = subscribe.count();
-
-                            if (0 < count) {
-                                listener = new Count(count, this, subscribable, listener);
-                            }
-
-                            // ===========================
-                            // Timing Related Wrappers
-                            // ===========================
-                            long time = subscribe.delay();
-
-                            if (0 < time) {
-                                listener = new Delay(time, listener);
-                            }
-
-                            time = subscribe.throttle();
-
-                            if (0 < time) {
-                                listener = new Throttle(time, listener);
-                            }
-
-                            time = subscribe.debounce();
-
-                            if (0 < time) {
-                                listener = new Debounce(time, listener);
-                            }
-
-                            // ===========================
-                            // KeyCode Wrapper
-                            // ===========================
-                            Key key = subscribe.key();
-
-                            if (key != Key.None) {
-                                listener = new KeyBind(key, listener);
-                            }
-
-                            subscribers.add(listener);
                         }
+
+                        // ===========================
+                        // Execution Count Wrapper
+                        // ===========================
+                        int count = info.count;
+
+                        if (0 < count) {
+                            listener = new Count(count, this, subscribable, listener);
+                        }
+
+                        // ===========================
+                        // Timing Related Wrappers
+                        // ===========================
+                        long time = info.delay;
+
+                        if (0 < time) {
+                            listener = new Delay(time, listener);
+                        }
+
+                        time = info.throttle;
+
+                        if (0 < time) {
+                            listener = new Throttle(time, listener);
+                        }
+
+                        time = info.debounce;
+
+                        if (0 < time) {
+                            listener = new Debounce(time, listener);
+                        }
+
+                        // ===========================
+                        // UIAction Wrapper
+                        // ===========================
+                        if (info.type instanceof UIAction) {
+                            UIAction action = (UIAction) info.type;
+
+                            if (0 < action.code) {
+                                listener = new UIBind(action, listener);
+                            }
+                        }
+
+                        subscribers.add(listener);
                     }
                 }
             }
@@ -175,48 +174,35 @@ public class Publishable {
         if (holder != null && subscribable != null) {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
-                    Class annotationType = annotation.annotationType();
-                    Subscribe[] subscribes = null;
+                    for (Info info : collect(annotation)) {
+                        Object eventType;
+                        Method method = entry.getKey();
 
-                    if (annotationType == Subscribe.class) {
-                        subscribes = new Subscribe[] {(Subscribe) annotation};
-                    } else if (annotationType == Subscribes.class) {
-                        subscribes = ((Subscribes) annotation).value();
-                    }
+                        if (method.getParameterTypes().length == 1) {
+                            eventType = ClassUtil.wrap(method.getParameterTypes()[0]);
+                        } else {
+                            eventType = info.type;
+                        }
 
-                    if (subscribes != null) {
-                        for (Subscribe subscribe : subscribes) {
-                            Class eventType;
-                            Method method = entry.getKey();
+                        List<Listener> subscribers = holder.get(eventType);
 
-                            if (method.getParameterTypes().length == 1) {
-                                eventType = method.getParameterTypes()[0];
-                            } else {
-                                eventType = subscribe.value();
-                            }
+                        if (subscribers != null) {
+                            for (int i = subscribers.size() - 1; 0 <= i; i--) {
+                                Listener subscliber = subscribers.get(i);
 
-                            eventType = ClassUtil.wrap(eventType);
+                                if (subscliber.equals(subscribable, null)) {
+                                    subscribers.remove(i);
 
-                            List<Listener> subscribers = holder.get(eventType);
+                                    if (subscribers.isEmpty()) {
+                                        holder.remove(eventType);
+                                        stopListening(eventType);
 
-                            if (subscribers != null) {
-                                for (int i = subscribers.size() - 1; 0 <= i; i--) {
-                                    Listener subscliber = subscribers.get(i);
-
-                                    if (subscliber.equals(subscribable, null)) {
-                                        subscribers.remove(i);
-
-                                        if (subscribers.isEmpty()) {
-                                            holder.remove(eventType);
-                                            stopListening(eventType);
-
-                                            if (holder.isEmpty()) {
-                                                holder = null;
-                                                stopListening(Object.class);
-                                            }
+                                        if (holder.isEmpty()) {
+                                            holder = null;
+                                            stopListening(Object.class);
                                         }
-                                        break;
                                     }
+                                    break;
                                 }
                             }
                         }
@@ -231,7 +217,7 @@ public class Publishable {
      * This method is called whenever this event target starts listening event.
      * </p>
      */
-    protected void startListening(Class type) {
+    protected void startListening(Object type) {
     }
 
     /**
@@ -239,7 +225,114 @@ public class Publishable {
      * This method is called whenever this event target stops listening event.
      * </p>
      */
-    protected void stopListening(Class type) {
+    protected void stopListening(Object type) {
+    }
+
+    /**
+     * <p>
+     * Helper method to collect all lisnteners.
+     * </p>
+     * 
+     * @param annotation
+     * @return
+     */
+    private List<Info> collect(Annotation annotation) {
+        Class type = annotation.annotationType();
+        List<Info> infos = new ArrayList();
+
+        if (type == Subscribe.class) {
+            infos.add(new Info((Subscribe) annotation));
+        } else if (type == Subscribes.class) {
+            for (Subscribe subscribe : ((Subscribes) annotation).value()) {
+                infos.add(new Info(subscribe));
+            }
+        } else if (type == SubscribeUI.class) {
+            infos.add(new Info((SubscribeUI) annotation));
+        } else if (type == SubscribeUIs.class) {
+            for (SubscribeUI subscribe : ((SubscribeUIs) annotation).value()) {
+                infos.add(new Info(subscribe));
+            }
+        }
+        return infos;
+    }
+
+    /**
+     * @version 2013/12/18 15:26:58
+     */
+    private static class Info {
+
+        /** The event type. */
+        private Object type;
+
+        /**
+         * <p>
+         * Set the execution debounce time (ms).
+         * </p>
+         * 
+         * @return A time (ms);
+         */
+        private long debounce;
+
+        /**
+         * <p>
+         * Set the execution throttle time (ms).
+         * </p>
+         * 
+         * @return A time (ms);
+         */
+        private long throttle;
+
+        /**
+         * <p>
+         * Set the execution delay time (ms).
+         * </p>
+         * 
+         * @return A time (ms);
+         */
+        private long delay;
+
+        /**
+         * <p>
+         * Set a number of execution.
+         * </p>
+         * 
+         * @return
+         */
+        private int count;
+
+        /**
+         * <p>
+         * Stop event propagation and default behavior. {@link UIEvent#stopPropagation()} and
+         * {@link UIEvent#preventDefault()} methods will be called.
+         * </p>
+         * 
+         * @return The <code>true</code> will stop the current processing event.
+         */
+        private boolean abort;
+
+        /**
+         * @param subscribe
+         */
+        private Info(Subscribe subscribe) {
+            this.type = ClassUtil.wrap(subscribe.value());
+            this.debounce = subscribe.debounce();
+            this.throttle = subscribe.throttle();
+            this.delay = subscribe.delay();
+            this.count = subscribe.count();
+            this.abort = subscribe.abort();
+        }
+
+        /**
+         * @param subscribe
+         */
+        private Info(SubscribeUI subscribe) {
+            this.type = subscribe.type();
+            this.debounce = subscribe.debounce();
+            this.throttle = subscribe.throttle();
+            this.delay = subscribe.delay();
+            this.count = subscribe.count();
+            this.abort = subscribe.abort();
+        }
     }
 
     /**
@@ -488,6 +581,42 @@ public class Publishable {
             setTimeout(() -> {
                 delegator.accept(event);
             }, delay);
+        }
+    }
+
+    /**
+     * <p>
+     * Built-in listener wrapper.
+     * </p>
+     * 
+     * @version 2013/04/08 10:11:19
+     */
+    private static class UIBind extends Listener {
+
+        /** The ui action type. */
+        private final UIAction type;
+
+        /**
+         * @param type
+         * @param listener
+         */
+        private UIBind(UIAction type, Listener listener) {
+            this.type = type;
+            this.delegator = listener;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void accept(Object event) {
+            if (event instanceof UIEvent) {
+                UIEvent ui = (UIEvent) event;
+
+                if (ui.type.equals(type.name)) {
+                    delegator.accept(event);
+                }
+            }
         }
     }
 

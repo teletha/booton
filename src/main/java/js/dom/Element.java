@@ -520,7 +520,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * {@inheritDoc}
      */
     @Override
-    protected void startListening(Class type) {
+    protected void startListening(Object type) {
         super.startListening(type);
 
         if (type == Object.class) {
@@ -532,7 +532,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * {@inheritDoc}
      */
     @Override
-    protected void stopListening(Class type) {
+    protected void stopListening(Object type) {
         super.stopListening(type);
 
         if (type == Object.class) {

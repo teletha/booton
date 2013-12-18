@@ -10,10 +10,11 @@
 package js.dom;
 
 import static js.lang.Global.*;
+import js.dom.event.AbstractUIEvent;
 import js.dom.event.Click;
 import js.dom.event.MouseOver;
-import jsx.bwt.UIEvent;
-import jsx.event.Subscribe;
+import jsx.bwt.UIAction;
+import jsx.event.SubscribeUI;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +35,7 @@ public class EventTargetTest {
         Element element = document.createElement("div");
         element.register(listener);
 
-        element.publish(new Click());
+        element.publish(new AbstractUIEvent(UIAction.Click));
         assert listener.invoked == 1;
 
         element.publish(new MouseOver());
@@ -73,8 +74,8 @@ public class EventTargetTest {
 
         private int invoked = 0;
 
-        @Subscribe
-        private void click(Click event) {
+        @SubscribeUI(type = UIAction.Click)
+        private void click() {
             invoked++;
         }
     }

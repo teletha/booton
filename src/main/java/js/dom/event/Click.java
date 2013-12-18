@@ -9,9 +9,14 @@
  */
 package js.dom.event;
 
+import jsx.bwt.UIAction;
 
 /**
  * @version 2013/10/19 9:30:39
  */
 public class Click extends AbstractUIEvent {
+
+    {
+        action = UIAction.Click;
+    }
 }
