@@ -18,8 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import js.dom.event.AbstractUIEvent;
 import js.lang.NativeFunction;
-import jsx.bwt.Listen;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
 import jsx.event.Publishable;
@@ -51,59 +51,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      */
     public T bind(Object subscriber) {
         if (subscriber != null) {
-            Class clazz = subscriber.getClass();
-
-            while (clazz != null) {
-                for (Method method : clazz.getDeclaredMethods()) {
-                    Listen listen = method.getAnnotation(Listen.class);
-
-                    if (listen != null) {
-                        EventListener listener = new Subscriber(subscriber, method, listen.abort());
-
-                        // ===========================
-                        // Execution Count Wrapper
-                        // ===========================
-                        int count = listen.count();
-
-                        if (0 < count) {
-                            listener = new Count(count, listener);
-                        }
-
-                        // ===========================
-                        // Timing Related Wrappers
-                        // ===========================
-                        long time = listen.delay();
-
-                        if (0 < time) {
-                            listener = new Delay(time, listener);
-                        }
-
-                        time = listen.throttle();
-
-                        if (0 < time) {
-                            listener = new Throttle(time, listener);
-                        }
-
-                        time = listen.debounce();
-
-                        if (0 < time) {
-                            listener = new Debounce(time, listener);
-                        }
-
-                        // ===========================
-                        // KeyCode Wrapper
-                        // ===========================
-                        UIAction type = listen.type();
-                        int keyCode = type.code;
-
-                        if (keyCode != -1) {
-                            listener = new KeyBind(keyCode, listener);
-                        }
-                        on(type, listener);
-                    }
-                }
-                clazz = clazz.getSuperclass();
-            }
+            register(subscriber);
         }
 
         // API defintion
@@ -121,16 +69,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      */
     public T unbind(Object subscriber) {
         if (subscriber != null) {
-            Class clazz = subscriber.getClass();
-            String namespace = "." + clazz.getSimpleName() + subscriber.hashCode();
-
-            for (Method method : clazz.getMethods()) {
-                Listen annotation = method.getAnnotation(Listen.class);
-
-                if (annotation != null) {
-                    off(annotation.type());
-                }
-            }
+            unregister(subscriber);
         }
 
         // API defintion
@@ -298,6 +237,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
                 listener = new NativeListener(type);
                 natives.put(type, listener);
             }
+            System.out.println("add native listener " + type.getSimpleName().toLowerCase());
             addEventListener(type.getSimpleName().toLowerCase(), listener.dom);
         }
     }
@@ -350,7 +290,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
     private class NativeListener implements EventListener {
 
         /** The event type. */
-        private final Class type;
+        private final Class<? extends AbstractUIEvent> type;
 
         /** The cache for native event listener. */
         private final NativeFunction dom = new NativeFunction(this).bind(this);
@@ -367,7 +307,10 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
          */
         @Override
         public void handleEvent(UIEvent event) {
-            publish(I.make(type));
+            AbstractUIEvent ui = I.make(type);
+            ui.set(event);
+
+            publish(ui);
         }
     }
 

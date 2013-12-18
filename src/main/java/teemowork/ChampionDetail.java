@@ -18,10 +18,11 @@ import java.util.List;
 import js.dom.DocumentFragment;
 import js.dom.Element;
 import js.dom.EventListener;
+import js.dom.event.Click;
+import js.dom.event.ContextMenu;
 import js.math.Mathematics;
 import jsx.application.Page;
 import jsx.application.PageInfo;
-import jsx.bwt.Listen;
 import jsx.bwt.UI;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
@@ -121,12 +122,12 @@ public class ChampionDetail extends Page {
         build.register(this);
     }
 
-    @Listen(type = UIAction.Click, abort = true)
+    @Subscribable(value = Click.class, abort = true)
     private void levelUp() {
         build.setLevel(build.getLevel() + 1);
     }
 
-    @Listen(type = UIAction.ClickLeft, abort = true)
+    @Subscribable(value = ContextMenu.class, abort = true)
     private void levelDown() {
         build.setLevel(build.getLevel() - 1);
     }
@@ -646,12 +647,12 @@ public class ChampionDetail extends Page {
             level = me.child(Level.class);
         }
 
-        @Listen(type = UIAction.Click, abort = true)
+        @Subscribable(value = Click.class, abort = true)
         private void levelUp() {
             build.setLevel(build.getLevel() + 1);
         }
 
-        @Listen(type = UIAction.ClickLeft, abort = true)
+        @Subscribable(value = ContextMenu.class, abort = true)
         private void levelDown() {
             build.setLevel(build.getLevel() - 1);
         }

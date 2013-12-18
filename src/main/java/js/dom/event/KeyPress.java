@@ -9,9 +9,19 @@
  */
 package js.dom.event;
 
+import jsx.event.Key;
+import jsx.event.KeyDetectable;
 
 /**
- * @version 2013/10/19 9:30:39
+ * @version 2013/12/18 15:00:50
  */
-public class Click extends AbstractUIEvent {
+public class KeyPress extends AbstractUIEvent implements KeyDetectable {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Key getKey() {
+        return Key.find(delegator.which);
+    }
 }
