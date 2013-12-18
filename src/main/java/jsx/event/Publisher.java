@@ -25,7 +25,7 @@ import jsx.event.Publishable.Stop;
 import kiss.model.ClassUtil;
 
 /**
- * @version 2013/12/11 9:59:17
+ * @version 2013/12/18 9:24:52
  */
 class Publisher {
 
@@ -33,7 +33,7 @@ class Publisher {
     private static final Map<Class, Set<Class<?>>> cache = new HashMap();
 
     /** The actual listeners holder. */
-    private Map<Class, List<Subscriber>> holder;
+    private Map<Class, List<Listener>> holder;
 
     /**
      * <p>
@@ -48,10 +48,10 @@ class Publisher {
 
             for (Class type : types) {
                 if (holder != null) {
-                    List<Subscriber> subscribers = holder.get(type);
+                    List<Listener> subscribers = holder.get(type);
 
                     if (subscribers != null) {
-                        for (Subscriber subscriber : subscribers) {
+                        for (Listener subscriber : subscribers) {
                             subscriber.accept(event);
                         }
                     }
@@ -89,7 +89,7 @@ class Publisher {
                                 eventType = subscribe.value();
                             }
 
-                            Subscriber listener = new Listener(subscribable, method);
+                            Listener listener = new Invoker(subscribable, method);
 
                             eventType = ClassUtil.wrap(eventType);
 
@@ -98,7 +98,7 @@ class Publisher {
                                 publish(new Start(Object.class));
                             }
 
-                            List<Subscriber> subscribers = holder.get(eventType);
+                            List<Listener> subscribers = holder.get(eventType);
 
                             if (subscribers == null) {
                                 subscribers = new CopyOnWriteArrayList();
@@ -106,7 +106,7 @@ class Publisher {
 
                                 publish(new Start(eventType));
                             } else {
-                                for (Subscriber registered : subscribers) {
+                                for (Listener registered : subscribers) {
                                     if (registered.equals(subscribable, method)) {
                                         return;
                                     }
@@ -128,7 +128,7 @@ class Publisher {
                             long time = subscribe.delay();
 
                             if (0 < time) {
-                                // listener = new Delay(time, listener);
+                                listener = new Delay(time, listener);
                             }
 
                             time = subscribe.throttle();
@@ -182,11 +182,11 @@ class Publisher {
 
                             eventType = ClassUtil.wrap(eventType);
 
-                            List<Subscriber> subscribers = holder.get(eventType);
+                            List<Listener> subscribers = holder.get(eventType);
 
                             if (subscribers != null) {
                                 for (int i = subscribers.size() - 1; 0 <= i; i--) {
-                                    Subscriber subscliber = subscribers.get(i);
+                                    Listener subscliber = subscribers.get(i);
 
                                     if (subscliber.equals(subscribable, null)) {
                                         subscribers.remove(i);
@@ -212,26 +212,40 @@ class Publisher {
     }
 
     /**
-     * @version 2013/12/12 14:58:28
+     * @version 2013/12/18 9:29:13
      */
-    private static interface Subscriber<E> {
+    private static abstract class Listener {
+
+        /** The delegator. */
+        protected Listener delegator;
 
         /**
          * <p>
-         * Receieve event.
+         * Receieve message.
          * </p>
          * 
-         * @param event
+         * @param message A message object.
          */
-        void accept(E event);
+        protected abstract void accept(Object message);
 
-        boolean equals(Object instance, Method method);
+        /**
+         * <p>
+         * Test whether the specified event listener is my consumer or not.
+         * </p>
+         * 
+         * @param instance A target listener.
+         * @param method A target listener method.
+         * @return A result.
+         */
+        protected boolean equals(Object instance, Method method) {
+            return delegator.equals(instance, method);
+        }
     }
 
     /**
-     * @version 2013/10/09 15:53:55
+     * @version 2013/12/18 9:30:25
      */
-    private static class Listener implements Subscriber {
+    private static class Invoker extends Listener {
 
         /** The listener instance. */
         private final Object instance;
@@ -243,10 +257,10 @@ class Publisher {
         private final boolean hasParam;
 
         /**
-         * @param instance
-         * @param method
+         * @param instance A {@link Subscribable} listener.
+         * @param method A subscribe method.
          */
-        private Listener(Subscribable instance, Method method) {
+        private Invoker(Subscribable instance, Method method) {
             method.setAccessible(true);
 
             this.instance = instance;
@@ -282,18 +296,15 @@ class Publisher {
     }
 
     /**
-     * @version 2013/12/12 14:55:38
+     * @version 2013/12/18 9:31:12
      */
-    private static class Count implements Subscriber {
+    private static class Count extends Listener {
 
         /** The delegator. */
         private final Publisher publisher;
 
         /** The delegator. */
         private final Subscribable subscribable;
-
-        /** The delegator. */
-        private final Subscriber subscriber;
 
         /** The execution limit. */
         private final int limit;
@@ -304,13 +315,14 @@ class Publisher {
         /**
          * @param limit
          * @param publisher
-         * @param subscriber
+         * @param subscribable
+         * @param listener
          */
-        private Count(int limit, Publisher publisher, Subscribable subscribable, Subscriber subscriber) {
+        private Count(int limit, Publisher publisher, Subscribable subscribable, Listener listener) {
             this.limit = limit;
             this.publisher = publisher;
             this.subscribable = subscribable;
-            this.subscriber = subscriber;
+            this.delegator = listener;
         }
 
         /**
@@ -318,20 +330,12 @@ class Publisher {
          */
         @Override
         public void accept(Object event) {
-            subscriber.accept(event);
+            delegator.accept(event);
 
             if (++current == limit) {
                 publisher.unregister(subscribable);
             }
         }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean equals(Object instance, Method method) {
-            return subscriber.equals(instance, method);
-        }
     }
 
     /**
@@ -339,25 +343,23 @@ class Publisher {
      * Built-in listener wrapper.
      * </p>
      * 
-     * @version 2013/04/08 14:37:30
+     * @version 2013/12/18 9:22:56
      */
-    private static class Throttle implements Subscriber {
+    private static class Throttle extends Listener {
 
         /** The delay time. */
         private final long delay;
-
-        /** The delegator. */
-        private final Subscriber subscriber;
 
         /** The latest execution time. */
         private long latest;
 
         /**
-         * @param subscriber
+         * @param delay
+         * @param listener
          */
-        private Throttle(long delay, Subscriber subscriber) {
+        private Throttle(long delay, Listener listener) {
             this.delay = delay;
-            this.subscriber = subscriber;
+            this.delegator = listener;
         }
 
         /**
@@ -365,25 +367,13 @@ class Publisher {
          */
         @Override
         public void accept(Object event) {
-            if (event instanceof TimeAware) {
-                long now = ((TimeAware) event).time();
+            long now = System.currentTimeMillis();
 
-                if (latest + delay < now) {
-                    latest = now;
+            if (latest + delay < now) {
+                latest = now;
 
-                    subscriber.accept(event);
-                }
-            } else {
-                throw new IllegalArgumentException(event + " is not " + TimeAware.class.getName() + ".");
+                delegator.accept(event);
             }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean equals(Object instance, Method method) {
-            return subscriber.equals(instance, method);
         }
     }
 
@@ -392,36 +382,23 @@ class Publisher {
      * Built-in listener wrapper.
      * </p>
      * 
-     * @version 2013/04/08 14:58:44
+     * @version 2013/12/18 9:19:21
      */
-    private static class Debounce implements Subscriber, Runnable {
+    private static class Debounce extends Listener {
 
         /** The delay time. */
         private final long delay;
-
-        /** The delegator. */
-        private final Subscriber subscriber;
-
-        /** The lastest event. */
-        private Object event;
 
         /** The time out id. */
         private long id = -1;
 
         /**
-         * @param subscriber
+         * @param delay
+         * @param listener
          */
-        private Debounce(long delay, Subscriber subscriber) {
+        private Debounce(long delay, Listener listener) {
             this.delay = delay;
-            this.subscriber = subscriber;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean equals(Object instance, Method method) {
-            return subscriber.equals(instance, method);
+            this.delegator = listener;
         }
 
         /**
@@ -432,18 +409,43 @@ class Publisher {
             if (id != -1) {
                 clearTimeout(id);
             }
-            this.event = event;
-            this.id = setTimeout(this, delay);
+
+            this.id = setTimeout(() -> {
+                id = -1;
+                delegator.accept(event);
+            }, delay);
+        }
+    }
+
+    /**
+     * <p>
+     * Built-in listener wrapper.
+     * </p>
+     * 
+     * @version 2013/12/18 9:18:45
+     */
+    private static class Delay extends Listener {
+
+        /** The delay time. */
+        private final long delay;
+
+        /**
+         * @param delay
+         * @param listener
+         */
+        public Delay(long delay, Listener listener) {
+            this.delay = delay;
+            this.delegator = listener;
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public void run() {
-            id = -1;
-            subscriber.accept(event);
-            event = null;
+        public void accept(Object event) {
+            setTimeout(() -> {
+                delegator.accept(event);
+            }, delay);
         }
     }
 }

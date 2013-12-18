@@ -313,11 +313,9 @@ public class PublishableTest {
     }
 
     /**
-     * @version 2013/12/14 11:34:13
+     * @version 2013/12/18 9:37:44
      */
-    private static class TimeEvent implements TimeAware {
-
-        private final long created = System.currentTimeMillis();
+    private static class TimeEvent {
 
         private final int value;
 
@@ -333,14 +331,6 @@ public class PublishableTest {
          */
         private TimeEvent(int value) {
             this.value = value;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public long time() {
-            return created;
         }
     }
 
@@ -360,7 +350,7 @@ public class PublishableTest {
         eventhub.publish(new TimeEvent());
         assert reciever.count == 1;
 
-        Async.wait(55);
+        Async.wait(80);
         eventhub.publish(new TimeEvent());
         assert reciever.count == 2;
     }
@@ -405,6 +395,36 @@ public class PublishableTest {
         @Subscribe(debounce = 50)
         private void time(TimeEvent event) {
             this.value = event.value;
+        }
+    }
+
+    @Test
+    public void delay() throws Exception {
+        EventHub eventhub = new EventHub();
+
+        Delay reciever = new Delay();
+        reciever.subscribe(eventhub);
+        assert reciever.value == 0;
+
+        eventhub.publish(new TimeEvent(10));
+        eventhub.publish(new TimeEvent(20));
+        eventhub.publish(new TimeEvent(30));
+        assert reciever.value == 0;
+
+        Async.awaitTasks();
+        assert reciever.value == 60;
+    }
+
+    /**
+     * @version 2013/12/12 15:59:21
+     */
+    private static class Delay implements Subscribable {
+
+        private int value;
+
+        @Subscribe(delay = 50)
+        private void time(TimeEvent event) {
+            this.value += event.value;
         }
     }
 }
