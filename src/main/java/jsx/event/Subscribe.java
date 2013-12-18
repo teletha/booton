@@ -82,4 +82,12 @@ public @interface Subscribe {
      */
     boolean abort() default false;
 
+    /**
+     * <p>
+     * Set a key binding.
+     * </p>
+     * 
+     * @return A binding key.
+     */
+    Key key() default Key.None;
 }
