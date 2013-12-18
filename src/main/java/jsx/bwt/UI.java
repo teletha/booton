@@ -11,7 +11,7 @@ package jsx.bwt;
 
 import static js.lang.Global.*;
 import js.dom.Element;
-import jsx.Publishable;
+import jsx.event.Publishable;
 
 /**
  * @version 2013/07/29 2:28:28

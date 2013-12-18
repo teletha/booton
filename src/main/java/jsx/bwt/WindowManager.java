@@ -13,9 +13,9 @@ import static js.lang.Global.*;
 import static jsx.bwt.UIAction.*;
 import js.dom.ClientRect;
 import js.dom.Element;
-import jsx.Publishable;
 import jsx.application.PageUnload;
 import jsx.bwt.view.PopupViewStyle;
+import jsx.event.Publishable;
 import jsx.event.Subscribable;
 
 /**

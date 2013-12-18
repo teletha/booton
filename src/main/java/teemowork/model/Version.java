@@ -12,7 +12,7 @@ package teemowork.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import jsx.Publishable;
+import jsx.event.Publishable;
 
 /**
  * @version 2013/12/13 9:11:59

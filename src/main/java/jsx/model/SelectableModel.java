@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import jsx.Publishable;
+import jsx.event.Publishable;
 
 /**
  * @version 2013/04/05 9:31:56
