@@ -31,6 +31,32 @@ public interface Publishable {
 
     /**
      * <p>
+     * Start subscribing events from which the specified {@link Publishable} emits.
+     * </p>
+     * 
+     * @param publishable A target event publisher.
+     */
+    public default void register(Object subscriber) {
+        Publishers.get(this, true).register(subscriber);
+    }
+
+    /**
+     * <p>
+     * Stop subscribing events from which the specified {@link Publishable} emits.
+     * </p>
+     * 
+     * @param publishable A target event publisher.
+     */
+    public default void unregister(Object subscriber) {
+        Publisher publisher = Publishers.get(this, false);
+
+        if (publisher != null) {
+            publisher.unregister(subscriber);
+        }
+    }
+
+    /**
+     * <p>
      * This event is called whenever this event target starts listening event.
      * </p>
      * 

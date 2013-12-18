@@ -66,7 +66,7 @@ class Publisher {
      * Register event listener.
      * </p>
      */
-    void register(Subscribable subscribable) {
+    void register(Object subscribable) {
         if (subscribable != null) {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
@@ -166,7 +166,7 @@ class Publisher {
      * Unregister event listener.
      * </p>
      */
-    void unregister(Subscribable subscribable) {
+    void unregister(Object subscribable) {
         if (holder != null && subscribable != null) {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
@@ -274,7 +274,7 @@ class Publisher {
          * @param method A subscribe method.
          * @param abort The event is stoppable.
          */
-        private Invoker(Subscribable instance, Method method, boolean abort) {
+        private Invoker(Object instance, Method method, boolean abort) {
             method.setAccessible(true);
 
             this.instance = instance;
@@ -325,7 +325,7 @@ class Publisher {
         private final Publisher publisher;
 
         /** The delegator. */
-        private final Subscribable subscribable;
+        private final Object subscribable;
 
         /** The execution limit. */
         private final int limit;
@@ -339,7 +339,7 @@ class Publisher {
          * @param subscribable
          * @param listener
          */
-        private Count(int limit, Publisher publisher, Subscribable subscribable, Listener listener) {
+        private Count(int limit, Publisher publisher, Object subscribable, Listener listener) {
             this.limit = limit;
             this.publisher = publisher;
             this.subscribable = subscribable;

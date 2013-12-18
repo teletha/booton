@@ -34,7 +34,7 @@ public class PublishableTest {
         EventHub eventhub = new EventHub();
 
         Single reciever = new Single();
-        reciever.subscribe(eventhub);
+        eventhub.register(reciever);
         assert reciever.name == null;
 
         eventhub.publish("Nadeko");
@@ -49,13 +49,13 @@ public class PublishableTest {
         EventHub eventhub = new EventHub();
 
         Single reciever = new Single();
-        reciever.subscribe(eventhub);
+        eventhub.register(reciever);
         assert reciever.name == null;
 
         eventhub.publish("Nadeko");
         assert reciever.name.equals("Nadeko");
 
-        reciever.unsubscribe(eventhub);
+        eventhub.unregister(reciever);
         eventhub.publish("Tubasa");
         assert reciever.name.equals("Nadeko");
     }
@@ -63,7 +63,7 @@ public class PublishableTest {
     /**
      * @version 2013/12/11 9:48:31
      */
-    private static class Single implements Subscribable {
+    private static class Single {
 
         private String name;
 
@@ -78,7 +78,7 @@ public class PublishableTest {
         EventHub eventhub = new EventHub();
 
         MultipleSameType reciever = new MultipleSameType();
-        reciever.subscribe(eventhub);
+        eventhub.register(reciever);
         assert reciever.count == 0;
 
         eventhub.publish("Sinobu");
@@ -88,7 +88,7 @@ public class PublishableTest {
     /**
      * @version 2013/12/11 9:48:31
      */
-    private static class MultipleSameType implements Subscribable {
+    private static class MultipleSameType {
 
         private int count;
 
@@ -108,7 +108,7 @@ public class PublishableTest {
         EventHub eventhub = new EventHub();
 
         Primitive reciever = new Primitive();
-        reciever.subscribe(eventhub);
+        eventhub.register(reciever);
         assert reciever.value == 0;
 
         eventhub.publish(2);
@@ -121,7 +121,7 @@ public class PublishableTest {
     /**
      * @version 2013/12/11 10:07:32
      */
-    private static class Primitive implements Subscribable {
+    private static class Primitive {
 
         private int value;
 
@@ -136,7 +136,7 @@ public class PublishableTest {
         EventHub eventhub = new EventHub();
 
         Wrapper reciever = new Wrapper();
-        reciever.subscribe(eventhub);
+        eventhub.register(reciever);
         assert reciever.value == 0;
 
         eventhub.publish(Integer.valueOf(10));
@@ -149,7 +149,7 @@ public class PublishableTest {
     /**
      * @version 2013/12/11 10:07:32
      */
-    private static class Wrapper implements Subscribable {
+    private static class Wrapper {
 
         private int value;
 
@@ -164,7 +164,7 @@ public class PublishableTest {
         EventHub eventhub = new EventHub();
 
         Methods reciever = new Methods();
-        reciever.subscribe(eventhub);
+        eventhub.register(reciever);
 
         eventhub.publish("Hitagi");
         assert reciever.name.equals("Hitagi");
@@ -176,7 +176,7 @@ public class PublishableTest {
     /**
      * @version 2013/12/11 10:07:30
      */
-    private static class Methods implements Subscribable {
+    private static class Methods {
 
         private String name;
 
@@ -198,7 +198,7 @@ public class PublishableTest {
         EventHub eventhub = new EventHub();
 
         NoParam reciever = new NoParam();
-        reciever.subscribe(eventhub);
+        eventhub.register(reciever);
         assert reciever.count == 0;
 
         eventhub.publish("Hitagi");
@@ -208,7 +208,7 @@ public class PublishableTest {
     /**
      * @version 2013/12/11 9:48:31
      */
-    private static class NoParam implements Subscribable {
+    private static class NoParam {
 
         private int count;
 
@@ -223,7 +223,7 @@ public class PublishableTest {
         EventHub eventhub = new EventHub();
 
         MultipleSubscribers reciever = new MultipleSubscribers();
-        reciever.subscribe(eventhub);
+        eventhub.register(reciever);
         assert reciever.count == 0;
 
         eventhub.publish("Hitagi");
@@ -239,7 +239,7 @@ public class PublishableTest {
     /**
      * @version 2013/12/11 10:07:30
      */
-    private static class MultipleSubscribers implements Subscribable {
+    private static class MultipleSubscribers {
 
         private int count;
 
@@ -255,7 +255,7 @@ public class PublishableTest {
         EventHub eventhub = new EventHub();
 
         Hierarchy reciever = new Hierarchy();
-        reciever.subscribe(eventhub);
+        eventhub.register(reciever);
         assert reciever.count == 0;
 
         eventhub.publish("string and char sequence");
@@ -268,7 +268,7 @@ public class PublishableTest {
     /**
      * @version 2013/12/11 10:09:23
      */
-    private static class Hierarchy implements Subscribable {
+    private static class Hierarchy {
 
         private int count;
 
@@ -288,7 +288,7 @@ public class PublishableTest {
         EventHub eventhub = new EventHub();
 
         Count reciever = new Count();
-        reciever.subscribe(eventhub);
+        eventhub.register(reciever);
         assert reciever.count == 0;
 
         eventhub.publish("Hitagi");
@@ -304,7 +304,7 @@ public class PublishableTest {
     /**
      * @version 2013/12/12 15:59:21
      */
-    private static class Count implements Subscribable {
+    private static class Count {
 
         private int count;
 
@@ -341,7 +341,7 @@ public class PublishableTest {
         EventHub eventhub = new EventHub();
 
         Throttle reciever = new Throttle();
-        reciever.subscribe(eventhub);
+        eventhub.register(reciever);
         assert reciever.count == 0;
 
         eventhub.publish(new TimeEvent());
@@ -360,7 +360,7 @@ public class PublishableTest {
     /**
      * @version 2013/12/12 15:59:21
      */
-    private static class Throttle implements Subscribable {
+    private static class Throttle {
 
         private int count;
 
@@ -375,7 +375,7 @@ public class PublishableTest {
         EventHub eventhub = new EventHub();
 
         Debounce reciever = new Debounce();
-        reciever.subscribe(eventhub);
+        eventhub.register(reciever);
         assert reciever.value == 0;
 
         eventhub.publish(new TimeEvent(10));
@@ -390,7 +390,7 @@ public class PublishableTest {
     /**
      * @version 2013/12/12 15:59:21
      */
-    private static class Debounce implements Subscribable {
+    private static class Debounce {
 
         private int value;
 
@@ -405,7 +405,7 @@ public class PublishableTest {
         EventHub eventhub = new EventHub();
 
         Delay reciever = new Delay();
-        reciever.subscribe(eventhub);
+        eventhub.register(reciever);
         assert reciever.value == 0;
 
         eventhub.publish(new TimeEvent(10));
@@ -420,7 +420,7 @@ public class PublishableTest {
     /**
      * @version 2013/12/12 15:59:21
      */
-    private static class Delay implements Subscribable {
+    private static class Delay {
 
         private int value;
 
@@ -458,7 +458,7 @@ public class PublishableTest {
         EventHub eventhub = new EventHub();
 
         Space reciever = new Space();
-        reciever.subscribe(eventhub);
+        eventhub.register(reciever);
         assert reciever.count == 0;
 
         eventhub.publish(new KeyEvent(Key.Space));
@@ -472,7 +472,7 @@ public class PublishableTest {
     /**
      * @version 2013/12/18 10:04:53
      */
-    private static class Space implements Subscribable {
+    private static class Space {
 
         private int count;
 
@@ -486,20 +486,20 @@ public class PublishableTest {
     public void abort() throws Exception {
         EventHub eventhub = new EventHub();
 
-        Abort recievier = new Abort();
-        recievier.subscribe(eventhub);
-        assert recievier.count == 0;
-        assert recievier.disposed == false;
+        Abort reciever = new Abort();
+        eventhub.register(reciever);
+        assert reciever.count == 0;
+        assert reciever.disposed == false;
 
-        eventhub.publish(recievier);
-        assert recievier.count == 1;
-        assert recievier.disposed == true;
+        eventhub.publish(reciever);
+        assert reciever.count == 1;
+        assert reciever.disposed == true;
     }
 
     /**
      * @version 2013/12/18 10:10:09
      */
-    private static class Abort implements Subscribable, Disposable {
+    private static class Abort implements Disposable {
 
         private int count;
 
