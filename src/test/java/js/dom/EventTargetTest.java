@@ -12,8 +12,8 @@ package js.dom;
 import static js.lang.Global.*;
 import js.dom.event.Click;
 import js.dom.event.MouseOver;
-import jsx.Subscribable;
 import jsx.bwt.UIEvent;
+import jsx.event.Subscribable;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
