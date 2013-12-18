@@ -13,7 +13,6 @@ import static js.lang.Global.*;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -39,7 +38,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
     private Map<UIAction, Listeners> events;
 
     /** The event listener holder. */
-    private Map<Class, NativeListener> natives;
+    private Map<UIAction, NativeListener> natives;
 
     /**
      * <p>
@@ -225,20 +224,21 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      * {@inheritDoc}
      */
     @Override
-    protected void startListening(Class type) {
-        if (UIEvent.class.isAssignableFrom(type) && !Modifier.isAbstract(type.getModifiers())) {
+    protected void startListening(Object type) {
+        if (type instanceof UIAction) {
+            UIAction action = (UIAction) type;
+
             if (natives == null) {
                 natives = new HashMap();
             }
 
-            NativeListener listener = natives.get(type);
+            NativeListener listener = natives.get(action);
 
             if (listener == null) {
-                listener = new NativeListener(type);
-                natives.put(type, listener);
+                listener = new NativeListener(action);
+                natives.put(action, listener);
             }
-            System.out.println("add native listener " + type.getSimpleName().toLowerCase());
-            addEventListener(type.getSimpleName().toLowerCase(), listener.dom);
+            addEventListener(action.name, listener.dom);
         }
     }
 
@@ -246,10 +246,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      * {@inheritDoc}
      */
     @Override
-    protected void stopListening(Class type) {
-        if (UIEvent.class.isAssignableFrom(type) && !Modifier.isAbstract(type.getModifiers())) {
-
-        }
+    protected void stopListening(Object type) {
     }
 
     /**
@@ -290,7 +287,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
     private class NativeListener implements EventListener {
 
         /** The event type. */
-        private final Class<? extends AbstractUIEvent> type;
+        private final UIAction type;
 
         /** The cache for native event listener. */
         private final NativeFunction dom = new NativeFunction(this).bind(this);
@@ -298,7 +295,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
         /**
          * @param type
          */
-        private NativeListener(Class type) {
+        private NativeListener(UIAction type) {
             this.type = type;
         }
 
@@ -307,8 +304,8 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
          */
         @Override
         public void handleEvent(UIEvent event) {
-            AbstractUIEvent ui = I.make(type);
-            ui.set(event);
+            AbstractUIEvent ui = I.make(AbstractUIEvent.class);
+            ui.set(event, type);
 
             publish(ui);
         }

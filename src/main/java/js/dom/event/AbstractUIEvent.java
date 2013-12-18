@@ -9,16 +9,25 @@
  */
 package js.dom.event;
 
+import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
 
 /**
  * @version 2013/12/18 14:26:59
  */
-public abstract class AbstractUIEvent extends UIEvent {
+public class AbstractUIEvent extends UIEvent {
 
     protected UIEvent delegator;
 
-    public void set(UIEvent nativeEvent) {
+    public AbstractUIEvent() {
+
+    }
+
+    public AbstractUIEvent(UIAction action) {
+        this.action = action;
+    }
+
+    public AbstractUIEvent(UIEvent nativeEvent, UIAction action) {
         this.currentTarget = nativeEvent.currentTarget;
         this.delegateTarget = nativeEvent.delegateTarget;
         this.namespace = nativeEvent.namespace;
@@ -30,6 +39,22 @@ public abstract class AbstractUIEvent extends UIEvent {
         this.type = nativeEvent.type;
         this.which = nativeEvent.which;
         this.delegator = nativeEvent;
+        this.action = action;
+    }
+
+    public void set(UIEvent nativeEvent, UIAction action) {
+        this.currentTarget = nativeEvent.currentTarget;
+        this.delegateTarget = nativeEvent.delegateTarget;
+        this.namespace = nativeEvent.namespace;
+        this.pageX = nativeEvent.pageX;
+        this.pageY = nativeEvent.pageY;
+        this.relatedTarget = nativeEvent.relatedTarget;
+        this.target = nativeEvent.target;
+        this.timeStamp = nativeEvent.timeStamp;
+        this.type = nativeEvent.type;
+        this.which = nativeEvent.which;
+        this.delegator = nativeEvent;
+        this.action = action;
     }
 
     /**

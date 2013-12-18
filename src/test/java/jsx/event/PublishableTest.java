@@ -12,6 +12,8 @@ package jsx.event;
 import java.util.HashSet;
 import java.util.Set;
 
+import jsx.bwt.UIAction;
+import jsx.bwt.UIEvent;
 import kiss.Disposable;
 
 import org.junit.Test;
@@ -464,12 +466,20 @@ public class PublishableTest {
         eventhub.register(reciever);
         assert reciever.count == 0;
 
-        eventhub.publish(new KeyEvent(Key.Space));
+        eventhub.publish(press(UIAction.Key_Space));
         assert reciever.count == 1;
 
-        eventhub.publish(new KeyEvent(Key.A));
-        eventhub.publish(new KeyEvent(Key.Enter));
+        eventhub.publish(press(UIAction.Key_A));
+        eventhub.publish(press(UIAction.Key_Enter));
         assert reciever.count == 1;
+    }
+
+    private static UIEvent press(UIAction action) {
+        UIEvent event = new UIEvent();
+        event.type = action.name;
+        event.action = action;
+
+        return event;
     }
 
     /**
@@ -479,8 +489,8 @@ public class PublishableTest {
 
         private int count;
 
-        @Subscribe(key = Key.Space)
-        private void string(KeyEvent event) {
+        @SubscribeUI(type = UIAction.Key_Space)
+        private void detect() {
             this.count++;
         }
     }
@@ -569,15 +579,15 @@ public class PublishableTest {
      */
     private static class EventLog extends Publishable {
 
-        private Set<Class> starts = new HashSet();
+        private Set starts = new HashSet();
 
-        private Set<Class> stops = new HashSet();
+        private Set stops = new HashSet();
 
         /**
          * {@inheritDoc}
          */
         @Override
-        protected void startListening(Class type) {
+        protected void startListening(Object type) {
             starts.add(type);
         }
 
@@ -585,8 +595,52 @@ public class PublishableTest {
          * {@inheritDoc}
          */
         @Override
-        protected void stopListening(Class type) {
+        protected void stopListening(Object type) {
             stops.add(type);
         }
+    }
+
+    @Test
+    public void subscribeUIEvent() throws Exception {
+        EventHub eventhub = new EventHub();
+
+        ClickLisnter reciever = new ClickLisnter();
+        eventhub.register(reciever);
+        assert reciever.count == 0;
+
+        eventhub.publish(click());
+        assert reciever.count == 1;
+
+        eventhub.publish(focus());
+        assert reciever.count == 1;
+    }
+
+    /**
+     * @version 2013/12/18 15:21:06
+     */
+    private static class ClickLisnter {
+
+        private int count;
+
+        @SubscribeUI(type = UIAction.Click)
+        private void action() {
+            count++;
+        }
+    }
+
+    private static UIEvent click() {
+        UIEvent event = new UIEvent();
+        event.type = "click";
+        event.action = UIAction.Click;
+
+        return event;
+    }
+
+    private static UIEvent focus() {
+        UIEvent event = new UIEvent();
+        event.type = "focus";
+        event.action = UIAction.Focus;
+
+        return event;
     }
 }
