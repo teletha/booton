@@ -10,6 +10,9 @@
 package jsx.bwt;
 
 import js.dom.Element;
+import js.dom.event.Blur;
+import js.dom.event.Click;
+import js.dom.event.KeyPress;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.SelectStyle.SelectArrow;
 import jsx.bwt.SelectStyle.SelectForm;
@@ -19,6 +22,7 @@ import jsx.bwt.SelectStyle.SelectedItem;
 import jsx.bwt.view.ScrollableListView;
 import jsx.bwt.view.ScrollableListView.ItemRenderer;
 import jsx.bwt.view.SlidableView;
+import jsx.event.Key;
 import jsx.event.Subscribable;
 import jsx.model.SelectableModel;
 import jsx.model.SelectableModel.Add;
@@ -85,22 +89,22 @@ public class Select<M> extends FormUI<Select> {
         }
     }
 
-    @Listen(type = UIAction.Key_Up)
+    @Subscribable(value = KeyPress.class, key = Key.Down)
     private void selectPrevious() {
         model.selectPrevious();
     }
 
-    @Listen(type = UIAction.Key_Down)
+    @Subscribable(value = KeyPress.class, key = Key.Up)
     private void selectNext() {
         model.selectNext();
     }
 
-    @Listen(type = UIAction.Focus)
+    @Subscribable(js.dom.event.Focus.class)
     private void startInput() {
         root.add(Focus.class);
     }
 
-    @Listen(type = UIAction.Blur)
+    @Subscribable(Blur.class)
     private void endInput() {
         root.remove(Focus.class);
     }
@@ -110,8 +114,8 @@ public class Select<M> extends FormUI<Select> {
      */
     private class Binder implements ItemRenderer {
 
-        @Listen(type = UIAction.Click)
-        private void selectItem(UIEvent event) {
+        @Subscribable
+        private void selectItem(Click event) {
             model.setSelectionIndex(Integer.parseInt(event.target.attr("index")));
         }
 

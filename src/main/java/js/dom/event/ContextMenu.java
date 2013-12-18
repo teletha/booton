@@ -13,5 +13,5 @@ package js.dom.event;
 /**
  * @version 2013/10/19 9:30:39
  */
-public class Click extends AbstractUIEvent {
+public class ContextMenu extends AbstractUIEvent {
 }

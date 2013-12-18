@@ -228,4 +228,19 @@ public enum Key {
     private Key(int code) {
         this.code = code;
     }
+
+    /**
+     * @param which
+     * @return
+     */
+    public static Key find(int code) {
+        for (Key key : values()) {
+            if (key.code == code) {
+                return key;
+            }
+        }
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
 }

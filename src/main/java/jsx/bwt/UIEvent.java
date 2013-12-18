@@ -10,13 +10,14 @@
 package jsx.bwt;
 
 import js.dom.Element;
+import kiss.Disposable;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 
 /**
  * @version 2012/12/02 23:06:56
  */
-public class UIEvent implements JavascriptNative {
+public class UIEvent implements JavascriptNative, Disposable {
 
     /** The DOM element that initiated the event. */
     @JavascriptNativeProperty
@@ -124,4 +125,11 @@ public class UIEvent implements JavascriptNative {
      * </p>
      */
     public native void stopImmediatePropagation();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void dispose() {
+    }
 }

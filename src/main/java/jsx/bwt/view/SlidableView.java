@@ -10,12 +10,12 @@
 package jsx.bwt.view;
 
 import static js.lang.Global.*;
-import jsx.bwt.Listen;
+import js.dom.event.Click;
 import jsx.bwt.UI;
-import jsx.bwt.UIAction;
 import jsx.bwt.view.SlidableViewStyle.Shown;
 import jsx.bwt.view.SlidableViewStyle.Slider;
 import jsx.bwt.view.SlidableViewStyle.ViewableArea;
+import jsx.event.Subscribable;
 
 /**
  * @version 2013/10/10 13:42:11
@@ -88,7 +88,7 @@ public class SlidableView extends UI {
      * Toggle slide view.
      * </p>
      */
-    @Listen(type = UIAction.Click)
+    @Subscribable(Click.class)
     public void toggle() {
         if (2 <= shown) {
             close();

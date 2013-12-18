@@ -11,7 +11,8 @@ package js.dom.event;
 
 
 /**
- * @version 2013/10/19 9:30:39
+ * @version 2013/12/18 15:07:33
  */
-public class Click extends AbstractUIEvent {
+public class PointerUp extends AbstractUIEvent {
+
 }
