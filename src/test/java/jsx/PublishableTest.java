@@ -9,7 +9,7 @@
  */
 package jsx;
 
-import jsx.Publishable;
+import jsx.event.Publishable;
 import jsx.event.Subscribable;
 
 import org.junit.Test;

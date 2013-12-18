@@ -19,10 +19,10 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import js.lang.NativeFunction;
-import jsx.Publishable;
 import jsx.bwt.Listen;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
+import jsx.event.Publishable;
 import kiss.I;
 import booton.translator.JavascriptNative;
 

@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import jsx.Publishable;
+import jsx.event.Publishable;
 import teemowork.model.variable.Variable;
 import teemowork.model.variable.VariableResolver;
 
