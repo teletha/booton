@@ -9,6 +9,9 @@
  */
 package jsx.event;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import kiss.Disposable;
 
 import org.junit.Test;
@@ -541,6 +544,49 @@ public class PublishableTest {
         @Subscribe
         private void recieve(String name) {
             count++;
+        }
+    }
+
+    @Test
+    public void event() throws Exception {
+        EventLog eventLog = new EventLog();
+        assert eventLog.starts.isEmpty();
+        assert eventLog.stops.isEmpty();
+
+        Single reciever = new Single();
+        eventLog.register(reciever);
+        assert eventLog.starts.contains(Object.class);
+        assert eventLog.starts.contains(String.class);
+        assert eventLog.stops.isEmpty();
+
+        eventLog.unregister(reciever);
+        assert eventLog.stops.contains(Object.class);
+        assert eventLog.stops.contains(String.class);
+    }
+
+    /**
+     * @version 2013/12/18 12:51:34
+     */
+    private static class EventLog extends Publishable {
+
+        private Set<Class> starts = new HashSet();
+
+        private Set<Class> stops = new HashSet();
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void startListening(Class type) {
+            starts.add(type);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void stopListening(Class type) {
+            stops.add(type);
         }
     }
 }
