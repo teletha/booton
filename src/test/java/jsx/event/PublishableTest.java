@@ -435,29 +435,6 @@ public class PublishableTest {
         }
     }
 
-    /**
-     * @version 2013/12/18 9:37:44
-     */
-    private static class KeyEvent implements KeyDetectable {
-
-        private final Key key;
-
-        /**
-         * @param value
-         */
-        private KeyEvent(Key key) {
-            this.key = key;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Key getKey() {
-            return key;
-        }
-    }
-
     @Test
     public void key() throws Exception {
         EventHub eventhub = new EventHub();
@@ -478,6 +455,7 @@ public class PublishableTest {
         UIEvent event = new UIEvent();
         event.type = action.name;
         event.action = action;
+        event.which = action.code;
 
         return event;
     }
@@ -491,6 +469,11 @@ public class PublishableTest {
 
         @SubscribeUI(type = UIAction.Key_Space)
         private void detect() {
+            this.count++;
+        }
+
+        @SubscribeUI(type = UIAction.Key_F1)
+        private void detect2() {
             this.count++;
         }
     }
@@ -601,7 +584,7 @@ public class PublishableTest {
     }
 
     @Test
-    public void subscribeUIEvent() throws Exception {
+    public void subscribeUI() throws Exception {
         EventHub eventhub = new EventHub();
 
         ClickLisnter reciever = new ClickLisnter();
@@ -642,5 +625,33 @@ public class PublishableTest {
         event.action = UIAction.Focus;
 
         return event;
+    }
+
+    @Test
+    public void subscribeUIWithEvent() throws Exception {
+        EventHub eventhub = new EventHub();
+
+        ClickLisnterWithEvent reciever = new ClickLisnterWithEvent();
+        eventhub.register(reciever);
+        assert reciever.count == 0;
+
+        eventhub.publish(click());
+        assert reciever.count == 1;
+
+        eventhub.publish(focus());
+        assert reciever.count == 1;
+    }
+
+    /**
+     * @version 2013/12/18 15:21:06
+     */
+    private static class ClickLisnterWithEvent {
+
+        private int count;
+
+        @SubscribeUI(type = UIAction.Click)
+        private void action(UIEvent event) {
+            count++;
+        }
     }
 }

@@ -11,8 +11,6 @@ package js.dom;
 
 import static js.lang.Global.*;
 import js.dom.event.AbstractUIEvent;
-import js.dom.event.Click;
-import js.dom.event.MouseOver;
 import jsx.bwt.UIAction;
 import jsx.event.SubscribeUI;
 
@@ -38,12 +36,12 @@ public class EventTargetTest {
         element.publish(new AbstractUIEvent(UIAction.Click));
         assert listener.invoked == 1;
 
-        element.publish(new MouseOver());
+        element.publish(new AbstractUIEvent(UIAction.MouseMove));
         assert listener.invoked == 1;
 
         element.unregister(listener);
 
-        element.publish(new Click());
+        element.publish(new AbstractUIEvent(UIAction.Click));
         assert listener.invoked == 1;
     }
 

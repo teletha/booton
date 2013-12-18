@@ -234,7 +234,7 @@ public class MasteryBuilder extends Page {
                     event.preventDefault();
                     masterySet.up(mastery);
                 }
-            }).on(UIAction.ClickLeft, new EventListener() {
+            }).on(UIAction.ClickRight, new EventListener() {
 
                 @Override
                 public void handleEvent(UIEvent event) {

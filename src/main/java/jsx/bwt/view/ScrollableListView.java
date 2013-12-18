@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import js.dom.Element;
-import js.dom.event.Scroll;
 import jsx.bwt.UI;
+import jsx.bwt.UIAction;
 import jsx.bwt.view.ScrollableListViewStyle.ItemColumnView;
 import jsx.bwt.view.ScrollableListViewStyle.RenderableItemView;
 import jsx.bwt.view.ScrollableListViewStyle.Spacer;
 import jsx.bwt.view.ScrollableListViewStyle.ViewabletemView;
-import jsx.event.Subscribe;
+import jsx.event.SubscribeUI;
 
 /**
  * @version 2013/07/29 2:00:26
@@ -124,7 +124,7 @@ public class ScrollableListView extends UI {
      * Render all list items.
      * </p>
      */
-    @Subscribe(value = Scroll.class, debounce = 100)
+    @SubscribeUI(type = UIAction.Scroll, debounce = 100)
     private void render() {
         int viewableTopIndex = Math.round(-renderableItemView.position().top() / itemHeight);
         int renderableTopIndex = Math.max(0, viewableTopIndex - extraTopRenderableItemSize);

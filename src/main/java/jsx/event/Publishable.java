@@ -83,33 +83,24 @@ public class Publishable {
         if (subscribable != null) {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
-                    for (Info info : collect(annotation)) {
-                        Object eventType;
-                        Method method = entry.getKey();
-
-                        if (method.getParameterTypes().length == 1) {
-                            eventType = ClassUtil.wrap(method.getParameterTypes()[0]);
-                        } else {
-                            eventType = info.type;
-                        }
-
-                        Listener listener = new Invoker(subscribable, method, info.abort);
+                    for (Info info : collect(annotation, entry.getKey())) {
+                        Listener listener = new Invoker(subscribable, info.method, info.abort);
 
                         if (holder == null) {
                             holder = new HashMap();
                             startListening(Object.class);
                         }
 
-                        List<Listener> subscribers = holder.get(eventType);
+                        List<Listener> subscribers = holder.get(info.type);
 
                         if (subscribers == null) {
                             subscribers = new CopyOnWriteArrayList();
-                            holder.put(eventType, subscribers);
+                            holder.put(info.type, subscribers);
 
-                            startListening(eventType);
+                            startListening(info.type);
                         } else {
                             for (Listener registered : subscribers) {
-                                if (registered.equals(subscribable, method)) {
+                                if (registered.equals(subscribable, info.method)) {
                                     return;
                                 }
                             }
@@ -155,7 +146,6 @@ public class Publishable {
                                 listener = new UIBind(action, listener);
                             }
                         }
-
                         subscribers.add(listener);
                     }
                 }
@@ -174,17 +164,9 @@ public class Publishable {
         if (holder != null && subscribable != null) {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
-                    for (Info info : collect(annotation)) {
-                        Object eventType;
-                        Method method = entry.getKey();
+                    for (Info info : collect(annotation, entry.getKey())) {
 
-                        if (method.getParameterTypes().length == 1) {
-                            eventType = ClassUtil.wrap(method.getParameterTypes()[0]);
-                        } else {
-                            eventType = info.type;
-                        }
-
-                        List<Listener> subscribers = holder.get(eventType);
+                        List<Listener> subscribers = holder.get(info.type);
 
                         if (subscribers != null) {
                             for (int i = subscribers.size() - 1; 0 <= i; i--) {
@@ -194,8 +176,8 @@ public class Publishable {
                                     subscribers.remove(i);
 
                                     if (subscribers.isEmpty()) {
-                                        holder.remove(eventType);
-                                        stopListening(eventType);
+                                        holder.remove(info.type);
+                                        stopListening(info.type);
 
                                         if (holder.isEmpty()) {
                                             holder = null;
@@ -236,21 +218,21 @@ public class Publishable {
      * @param annotation
      * @return
      */
-    private List<Info> collect(Annotation annotation) {
+    private List<Info> collect(Annotation annotation, Method method) {
         Class type = annotation.annotationType();
         List<Info> infos = new ArrayList();
 
         if (type == Subscribe.class) {
-            infos.add(new Info((Subscribe) annotation));
+            infos.add(new Info((Subscribe) annotation, method));
         } else if (type == Subscribes.class) {
             for (Subscribe subscribe : ((Subscribes) annotation).value()) {
-                infos.add(new Info(subscribe));
+                infos.add(new Info(subscribe, method));
             }
         } else if (type == SubscribeUI.class) {
-            infos.add(new Info((SubscribeUI) annotation));
+            infos.add(new Info((SubscribeUI) annotation, method));
         } else if (type == SubscribeUIs.class) {
             for (SubscribeUI subscribe : ((SubscribeUIs) annotation).value()) {
-                infos.add(new Info(subscribe));
+                infos.add(new Info(subscribe, method));
             }
         }
         return infos;
@@ -260,6 +242,9 @@ public class Publishable {
      * @version 2013/12/18 15:26:58
      */
     private static class Info {
+
+        /** The listener method. */
+        private Method method;
 
         /** The event type. */
         private Object type;
@@ -313,8 +298,18 @@ public class Publishable {
         /**
          * @param subscribe
          */
-        private Info(Subscribe subscribe) {
-            this.type = ClassUtil.wrap(subscribe.value());
+        private Info(Subscribe subscribe, Method method) {
+            this.method = method;
+
+            Class type;
+
+            if (method.getParameterTypes().length == 1) {
+                type = ClassUtil.wrap(method.getParameterTypes()[0]);
+            } else {
+                type = subscribe.value();
+            }
+
+            this.type = ClassUtil.wrap(type);
             this.debounce = subscribe.debounce();
             this.throttle = subscribe.throttle();
             this.delay = subscribe.delay();
@@ -325,7 +320,8 @@ public class Publishable {
         /**
          * @param subscribe
          */
-        private Info(SubscribeUI subscribe) {
+        private Info(SubscribeUI subscribe, Method method) {
+            this.method = method;
             this.type = subscribe.type();
             this.debounce = subscribe.debounce();
             this.throttle = subscribe.throttle();
@@ -594,14 +590,14 @@ public class Publishable {
     private static class UIBind extends Listener {
 
         /** The ui action type. */
-        private final UIAction type;
+        private final UIAction action;
 
         /**
          * @param type
          * @param listener
          */
         private UIBind(UIAction type, Listener listener) {
-            this.type = type;
+            this.action = type;
             this.delegator = listener;
         }
 
@@ -613,45 +609,9 @@ public class Publishable {
             if (event instanceof UIEvent) {
                 UIEvent ui = (UIEvent) event;
 
-                if (ui.type.equals(type.name)) {
+                if (ui.which == action.code) {
                     delegator.accept(event);
                 }
-            }
-        }
-    }
-
-    /**
-     * <p>
-     * Built-in listener wrapper.
-     * </p>
-     * 
-     * @version 2013/04/08 10:11:19
-     */
-    private static class KeyBind extends Listener {
-
-        /** The target key. */
-        private final Key key;
-
-        /**
-         * @param key
-         * @param listener
-         */
-        private KeyBind(Key key, Listener listener) {
-            this.key = key;
-            this.delegator = listener;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void accept(Object event) {
-            if (event instanceof KeyDetectable) {
-                if (((KeyDetectable) event).getKey() == key) {
-                    delegator.accept(event);
-                }
-            } else {
-                throw new IllegalArgumentException(event + " is not " + KeyDetectable.class.getSimpleName() + ".");
             }
         }
     }

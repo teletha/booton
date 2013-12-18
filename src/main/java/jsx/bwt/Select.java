@@ -10,9 +10,6 @@
 package jsx.bwt;
 
 import js.dom.Element;
-import js.dom.event.Blur;
-import js.dom.event.Click;
-import js.dom.event.KeyPress;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.SelectStyle.SelectArrow;
 import jsx.bwt.SelectStyle.SelectForm;
@@ -22,8 +19,8 @@ import jsx.bwt.SelectStyle.SelectedItem;
 import jsx.bwt.view.ScrollableListView;
 import jsx.bwt.view.ScrollableListView.ItemRenderer;
 import jsx.bwt.view.SlidableView;
-import jsx.event.Key;
 import jsx.event.Subscribe;
+import jsx.event.SubscribeUI;
 import jsx.model.SelectableModel;
 import jsx.model.SelectableModel.Add;
 import jsx.model.SelectableModel.Deselect;
@@ -89,22 +86,22 @@ public class Select<M> extends FormUI<Select> {
         }
     }
 
-    @Subscribe(value = KeyPress.class, key = Key.Down)
+    @SubscribeUI(type = UIAction.Key_Down)
     private void selectPrevious() {
         model.selectPrevious();
     }
 
-    @Subscribe(value = KeyPress.class, key = Key.Up)
+    @SubscribeUI(type = UIAction.Key_Up)
     private void selectNext() {
         model.selectNext();
     }
 
-    @Subscribe(js.dom.event.Focus.class)
+    @SubscribeUI(type = UIAction.Focus)
     private void startInput() {
         root.add(Focus.class);
     }
 
-    @Subscribe(Blur.class)
+    @SubscribeUI(type = UIAction.Blur)
     private void endInput() {
         root.remove(Focus.class);
     }
@@ -114,8 +111,8 @@ public class Select<M> extends FormUI<Select> {
      */
     private class Binder implements ItemRenderer {
 
-        @Subscribe
-        private void selectItem(Click event) {
+        @SubscribeUI(type = UIAction.Click)
+        private void selectItem(UIEvent event) {
             model.setSelectionIndex(Integer.parseInt(event.target.attr("index")));
         }
 
@@ -141,7 +138,7 @@ public class Select<M> extends FormUI<Select> {
             }
         }
 
-        @Subscribe(jsx.model.SelectableModel.Select.class)
+        @Subscribe
         public void select(jsx.model.SelectableModel.Select select) {
             form.val(select.item.toString());
 

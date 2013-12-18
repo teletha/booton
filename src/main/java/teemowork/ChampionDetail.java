@@ -18,8 +18,6 @@ import java.util.List;
 import js.dom.DocumentFragment;
 import js.dom.Element;
 import js.dom.EventListener;
-import js.dom.event.Click;
-import js.dom.event.ContextMenu;
 import js.math.Mathematics;
 import jsx.application.Page;
 import jsx.application.PageInfo;
@@ -27,6 +25,7 @@ import jsx.bwt.UI;
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
 import jsx.event.Subscribe;
+import jsx.event.SubscribeUI;
 import teemowork.ChampionDetailStyle.Active;
 import teemowork.ChampionDetailStyle.Amplifier;
 import teemowork.ChampionDetailStyle.Assigned;
@@ -122,12 +121,12 @@ public class ChampionDetail extends Page {
         build.register(this);
     }
 
-    @Subscribe(value = Click.class, abort = true)
+    @SubscribeUI(type = UIAction.Click, abort = true)
     private void levelUp() {
         build.setLevel(build.getLevel() + 1);
     }
 
-    @Subscribe(value = ContextMenu.class, abort = true)
+    @SubscribeUI(type = UIAction.ClickRight, abort = true)
     private void levelDown() {
         build.setLevel(build.getLevel() - 1);
     }
@@ -273,7 +272,7 @@ public class ChampionDetail extends Page {
                     event.preventDefault();
                     build.up(skill);
                 }
-            }).on(UIAction.ClickLeft, new EventListener() {
+            }).on(UIAction.ClickRight, new EventListener() {
 
                 @Override
                 public void handleEvent(UIEvent event) {
@@ -647,12 +646,12 @@ public class ChampionDetail extends Page {
             level = me.child(Level.class);
         }
 
-        @Subscribe(value = Click.class, abort = true)
+        @SubscribeUI(type = UIAction.Click, abort = true)
         private void levelUp() {
             build.setLevel(build.getLevel() + 1);
         }
 
-        @Subscribe(value = ContextMenu.class, abort = true)
+        @SubscribeUI(type = UIAction.ClickRight, abort = true)
         private void levelDown() {
             build.setLevel(build.getLevel() - 1);
         }
