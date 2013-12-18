@@ -9,6 +9,8 @@
  */
 package jsx.event;
 
+import kiss.Disposable;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -477,6 +479,43 @@ public class PublishableTest {
         @Subscribe(key = Key.Space)
         private void string(KeyEvent event) {
             this.count++;
+        }
+    }
+
+    @Test
+    public void abort() throws Exception {
+        EventHub eventhub = new EventHub();
+
+        Abort recievier = new Abort();
+        recievier.subscribe(eventhub);
+        assert recievier.count == 0;
+        assert recievier.disposed == false;
+
+        eventhub.publish(recievier);
+        assert recievier.count == 1;
+        assert recievier.disposed == true;
+    }
+
+    /**
+     * @version 2013/12/18 10:10:09
+     */
+    private static class Abort implements Subscribable, Disposable {
+
+        private int count;
+
+        private boolean disposed;
+
+        @Subscribe(abort = true)
+        private void string(Abort event) {
+            count++;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void dispose() {
+            disposed = true;
         }
     }
 }
