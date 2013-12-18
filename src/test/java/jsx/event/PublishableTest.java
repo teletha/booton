@@ -26,7 +26,7 @@ public class PublishableTest {
     /**
      * @version 2013/12/11 10:07:25
      */
-    private static class EventHub implements Publishable {
+    private static class EventHub extends Publishable {
     }
 
     @Test
@@ -516,6 +516,31 @@ public class PublishableTest {
         @Override
         public void dispose() {
             disposed = true;
+        }
+    }
+
+    @Test
+    public void duplicate() throws Exception {
+        EventHub eventhub = new EventHub();
+
+        Duplicate reciever = new Duplicate();
+        eventhub.register(reciever);
+        eventhub.register(reciever);
+
+        eventhub.publish("Sinobu");
+        assert reciever.count == 1;
+    }
+
+    /**
+     * @version 2013/12/11 9:48:31
+     */
+    private static class Duplicate {
+
+        private int count;
+
+        @Subscribe
+        private void recieve(String name) {
+            count++;
         }
     }
 }

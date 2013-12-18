@@ -230,6 +230,26 @@ class JSMethod extends Parameterizable {
         return ((NativeObject) context).getPropertyAs(NativeFunction.class, nameJS).apply(context, parameters);
     }
 
+    // /**
+    // * Compares this {@code Method} against the specified object. Returns true if the objects are
+    // * the same. Two {@code Methods} are the same if they were declared by the same class and have
+    // * the same name and formal parameter types and return type.
+    // */
+    // @Override
+    // public boolean equals(Object obj) {
+    // if (obj != null && obj instanceof Method) {
+    // Method other = (Method) obj;
+    //
+    // if (getDeclaringClass() == other.getDeclaringClass() && getName() == other.getName()) {
+    // if (!returnType.equals(other.getReturnType())) {
+    // return false;
+    // }
+    // return equalParamTypes(, other.parameterTypes);
+    // }
+    // }
+    // return false;
+    // }
+
     /**
      * {@inheritDoc}
      */

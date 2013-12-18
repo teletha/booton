@@ -12,7 +12,7 @@ package jsx.event;
 /**
  * @version 2013/10/09 15:53:49
  */
-public interface Publishable {
+public class Publishable {
 
     /**
      * <p>
@@ -21,7 +21,7 @@ public interface Publishable {
      * 
      * @param event
      */
-    public default void publish(Object event) {
+    public final void publish(Object event) {
         Publisher publisher = Publishers.get(this, false);
 
         if (publisher != null) {
@@ -36,7 +36,7 @@ public interface Publishable {
      * 
      * @param publishable A target event publisher.
      */
-    public default void register(Object subscriber) {
+    public final void register(Object subscriber) {
         Publishers.get(this, true).register(subscriber);
     }
 
@@ -47,7 +47,7 @@ public interface Publishable {
      * 
      * @param publishable A target event publisher.
      */
-    public default void unregister(Object subscriber) {
+    public final void unregister(Object subscriber) {
         Publisher publisher = Publishers.get(this, false);
 
         if (publisher != null) {
@@ -62,7 +62,7 @@ public interface Publishable {
      * 
      * @version 2013/12/11 9:06:14
      */
-    class Start {
+    public static class Start {
 
         /** The event type. */
         public final Class type;
@@ -84,7 +84,7 @@ public interface Publishable {
      * 
      * @version 2013/12/11 9:06:14
      */
-    class Stop {
+    public static class Stop {
 
         /** The event type. */
         public final Class type;

@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import jsx.Subscribable;
 import jsx.event.Publishable.Start;
 import jsx.event.Publishable.Stop;
 import kiss.Disposable;
@@ -312,7 +313,7 @@ class Publisher {
          */
         @Override
         public boolean equals(Object instance, Method method) {
-            return this.instance == instance && (method == null || this.method == method);
+            return this.instance == instance && (method == null || this.method.equals(method));
         }
     }
 
