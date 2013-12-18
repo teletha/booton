@@ -173,7 +173,7 @@ public class MasteryBuilder extends Page {
         return "Mastery/" + masterySet.toString();
     }
 
-    @Subscribe(jsx.model.SelectableModel.Select.class)
+    @Subscribe
     private void select(jsx.model.SelectableModel.Select<MasterySet> event) {
         masterySet.setCode(event.item.getCode());
     }
