@@ -145,12 +145,12 @@ public class Select<M> extends FormUI<Select> {
             view.render(select.index);
         }
 
-        @Subscribe(Deselect.class)
+        @Subscribe
         public void deselect(Deselect event) {
             view.render(event.index);
         }
 
-        @Subscribe(Add.class)
+        @Subscribe
         public void add(Add event) {
             view.provide(this);
             view.render(event.index);
@@ -158,7 +158,7 @@ public class Select<M> extends FormUI<Select> {
             enable();
         }
 
-        @Subscribe(Remove.class)
+        @Subscribe
         public void remove(Remove event) {
             view.provide(this);
 
