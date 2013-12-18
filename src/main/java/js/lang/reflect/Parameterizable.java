@@ -10,6 +10,7 @@
 package js.lang.reflect;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Executable;
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.GenericSignatureFormatError;
 import java.lang.reflect.MalformedParameterizedTypeException;
@@ -20,10 +21,12 @@ import java.util.List;
 
 import js.lang.NativeArray;
 import js.lang.NativeObject;
+import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/09/21 23:37:10
  */
+@JavaAPIProvider(Executable.class)
 class Parameterizable extends JSAccessibleObject implements GenericDeclaration {
 
     /** The annotation definition for parameters. */
@@ -183,5 +186,17 @@ class Parameterizable extends JSAccessibleObject implements GenericDeclaration {
             }
         }
         return annotations;
+    }
+
+    boolean equalParamTypes(Class<?>[] params1, Class<?>[] params2) {
+        if (params1.length == params2.length) {
+            for (int i = 0; i < params1.length; i++) {
+                if (params1[i] != params2[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }
