@@ -20,6 +20,7 @@ import js.util.Converter;
 import jsx.bwt.FormUIStyle.AbstractBorderForm;
 import jsx.bwt.FormUIStyle.InputForm;
 import jsx.bwt.FormUIStyle.InvalidInputForm;
+import jsx.event.SubscribeUI;
 import jsx.model.validator.IntegerValidator;
 import jsx.model.validator.Invalid;
 import jsx.model.validator.Validator;
@@ -90,7 +91,7 @@ public class Input<T> extends FormUI {
      * Validate the input value by user or API.
      * </p>
      */
-    @Listen(type = UIAction.KeyUp)
+    @SubscribeUI(type = UIAction.KeyUp)
     private void validateInput() {
         String input = form.val();
 

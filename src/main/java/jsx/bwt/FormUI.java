@@ -15,6 +15,7 @@ import js.dom.EventListener;
 import jsx.bwt.FormUIStyle.Disable;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.FormUIStyle.FormRoot;
+import jsx.event.SubscribeUI;
 
 /**
  * @version 2013/07/29 2:08:45
@@ -22,7 +23,8 @@ import jsx.bwt.FormUIStyle.FormRoot;
 public class FormUI<T extends FormUI> extends UI {
 
     /** The event types. */
-    private static final UIAction[] Actions = {Click, ClickRight, MouseDoubleClick, PointerOver, PointerOut, PointerMove};
+    private static final UIAction[] Actions = {Click, ClickRight, MouseDoubleClick, PointerOver, PointerOut,
+            PointerMove};
 
     /** The event disabler. */
     private static final EventListener Disabler = event -> {
@@ -84,12 +86,12 @@ public class FormUI<T extends FormUI> extends UI {
         return (T) this;
     }
 
-    @Listen(type = UIAction.Focus)
+    @SubscribeUI(type = UIAction.Focus)
     private void startInput() {
         root.add(Focus.class);
     }
 
-    @Listen(type = UIAction.Blur)
+    @SubscribeUI(type = UIAction.Blur)
     private void endInput() {
         root.remove(Focus.class);
     }

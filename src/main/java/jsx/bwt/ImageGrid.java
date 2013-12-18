@@ -23,6 +23,7 @@ import jsx.bwt.ImageGridStyle.InputStyle;
 import jsx.bwt.ImageGridStyle.Root;
 import jsx.bwt.ImageGridStyle.Title;
 import jsx.bwt.ImageGridStyle.Unselected;
+import jsx.event.SubscribeUI;
 
 /**
  * @version 2013/07/31 3:21:20
@@ -42,8 +43,8 @@ public abstract class ImageGrid<T> extends UI {
     /**
      * Filter image by user input.
      */
-    @Listen(type = UIAction.KeyUp)
-    private void search() {
+    @SubscribeUI(type = UIAction.KeyUp)
+    protected void search() {
         String name = search.val().toLowerCase().replace("\\s", "");
 
         for (Entry<T, Element> entry : images.entrySet()) {
