@@ -143,6 +143,15 @@ class Publisher {
                                 listener = new Debounce(time, listener);
                             }
 
+                            // ===========================
+                            // KeyCode Wrapper
+                            // ===========================
+                            Key key = subscribe.key();
+
+                            if (key != Key.None) {
+                                listener = new KeyBind(key, listener);
+                            }
+
                             subscribers.add(listener);
                         }
                     }
@@ -224,9 +233,9 @@ class Publisher {
          * Receieve message.
          * </p>
          * 
-         * @param message A message object.
+         * @param event A message object.
          */
-        protected abstract void accept(Object message);
+        protected abstract void accept(Object event);
 
         /**
          * <p>
@@ -446,6 +455,42 @@ class Publisher {
             setTimeout(() -> {
                 delegator.accept(event);
             }, delay);
+        }
+    }
+
+    /**
+     * <p>
+     * Built-in listener wrapper.
+     * </p>
+     * 
+     * @version 2013/04/08 10:11:19
+     */
+    private static class KeyBind extends Listener {
+
+        /** The target key. */
+        private final Key key;
+
+        /**
+         * @param key
+         * @param listener
+         */
+        private KeyBind(Key key, Listener listener) {
+            this.key = key;
+            this.delegator = listener;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void accept(Object event) {
+            if (event instanceof KeyDetectable) {
+                if (((KeyDetectable) event).getKey() == key) {
+                    delegator.accept(event);
+                }
+            } else {
+                throw new IllegalArgumentException(event + " is not " + KeyDetectable.class.getSimpleName() + ".");
+            }
         }
     }
 }

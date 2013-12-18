@@ -427,4 +427,56 @@ public class PublishableTest {
             this.value += event.value;
         }
     }
+
+    /**
+     * @version 2013/12/18 9:37:44
+     */
+    private static class KeyEvent implements KeyDetectable {
+
+        private final Key key;
+
+        /**
+         * @param value
+         */
+        private KeyEvent(Key key) {
+            this.key = key;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Key getKey() {
+            return key;
+        }
+    }
+
+    @Test
+    public void key() throws Exception {
+        EventHub eventhub = new EventHub();
+
+        Space reciever = new Space();
+        reciever.subscribe(eventhub);
+        assert reciever.count == 0;
+
+        eventhub.publish(new KeyEvent(Key.Space));
+        assert reciever.count == 1;
+
+        eventhub.publish(new KeyEvent(Key.A));
+        eventhub.publish(new KeyEvent(Key.Enter));
+        assert reciever.count == 1;
+    }
+
+    /**
+     * @version 2013/12/18 10:04:53
+     */
+    private static class Space implements Subscribable {
+
+        private int count;
+
+        @Subscribe(key = Key.Space)
+        private void string(KeyEvent event) {
+            this.count++;
+        }
+    }
 }
