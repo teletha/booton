@@ -690,7 +690,7 @@ public class Javascript {
             // method
             description = JavaAPIProviders.validateMethod(owner, name, description);
 
-            return mung32(order(methods, name.hashCode() ^ description.hashCode()));
+            return mung32(order(methods, name.concat(description).hashCode()));
         }
     }
 

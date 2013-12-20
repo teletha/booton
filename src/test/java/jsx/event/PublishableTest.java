@@ -23,487 +23,306 @@ import booton.soeur.Async;
 import booton.soeur.ScriptRunner;
 
 /**
- * @version 2013/12/12 15:59:17
+ * @version 2013/12/20 11:24:49
  */
 @RunWith(ScriptRunner.class)
 public class PublishableTest {
 
     /**
-     * @version 2013/12/11 10:07:25
+     * @version 2013/12/20 10:06:34
      */
-    private static class EventHub extends Publishable {
-    }
+    private static abstract class PubSub extends Publishable {
 
-    @Test
-    public void subscribe() throws Exception {
-        EventHub eventhub = new EventHub();
+        /** The counter or value holder. */
+        protected int value;
 
-        Single reciever = new Single();
-        eventhub.register(reciever);
-        assert reciever.name == null;
+        /** The String value holder. */
+        protected String string;
 
-        eventhub.publish("Nadeko");
-        assert reciever.name.equals("Nadeko");
-
-        eventhub.publish("Tubasa");
-        assert reciever.name.equals("Tubasa");
-    }
-
-    @Test
-    public void unsubscribe() throws Exception {
-        EventHub eventhub = new EventHub();
-
-        Single reciever = new Single();
-        eventhub.register(reciever);
-        assert reciever.name == null;
-
-        eventhub.publish("Nadeko");
-        assert reciever.name.equals("Nadeko");
-
-        eventhub.unregister(reciever);
-        eventhub.publish("Tubasa");
-        assert reciever.name.equals("Nadeko");
-    }
-
-    /**
-     * @version 2013/12/11 9:48:31
-     */
-    private static class Single {
-
-        private String name;
-
-        @Subscribe
-        private void recieve(String name) {
-            this.name = name;
+        /**
+         * 
+         */
+        protected PubSub() {
+            register(this);
         }
     }
 
     @Test
-    public void multipleSameTypes() throws Exception {
-        EventHub eventhub = new EventHub();
+    public void registerAndUnregister() throws Exception {
+        PubSub reciever = new PubSub() {
 
-        MultipleSameType reciever = new MultipleSameType();
-        eventhub.register(reciever);
-        assert reciever.count == 0;
+            @Subscribe
+            private void recieve(String name) {
+                this.string = name;
+            }
+        };
+        assert reciever.string == null;
 
-        eventhub.publish("Sinobu");
-        assert reciever.count == 2;
+        reciever.publish("Nadeko");
+        assert reciever.string.equals("Nadeko");
+
+        reciever.publish("Tubasa");
+        assert reciever.string.equals("Tubasa");
+
+        reciever.unregister(reciever);
+        reciever.publish("Nadeko");
+        assert reciever.string.equals("Tubasa");
     }
 
-    /**
-     * @version 2013/12/11 9:48:31
-     */
-    private static class MultipleSameType {
+    @Test
+    public void registerSameObjectMultiple() throws Exception {
+        PubSub reciever = new PubSub() {
 
-        private int count;
+            @Subscribe
+            private void recieve(String name) {
+                value++;
+            }
+        };
+        reciever.register(reciever);
+        reciever.register(reciever);
 
-        @Subscribe
-        private void recieve1(String name) {
-            count++;
-        }
-
-        @Subscribe
-        private void recieve2(String name) {
-            count++;
-        }
+        reciever.publish("Sinobu");
+        assert reciever.value == 1;
     }
 
     @Test
     public void primitive() throws Exception {
-        EventHub eventhub = new EventHub();
+        PubSub reciever = new PubSub() {
 
-        Primitive reciever = new Primitive();
-        eventhub.register(reciever);
-        assert reciever.value == 0;
+            @Subscribe
+            private void recieve(int value) {
+                this.value = value;
+            }
+        };
 
-        eventhub.publish(2);
+        reciever.publish(2);
         assert reciever.value == 2;
 
-        eventhub.publish(Integer.valueOf(10));
+        reciever.publish(Integer.valueOf(10));
         assert reciever.value == 10;
-    }
-
-    /**
-     * @version 2013/12/11 10:07:32
-     */
-    private static class Primitive {
-
-        private int value;
-
-        @Subscribe
-        private void recieve(int value) {
-            this.value = value;
-        }
     }
 
     @Test
     public void wrapper() throws Exception {
-        EventHub eventhub = new EventHub();
+        PubSub reciever = new PubSub() {
 
-        Wrapper reciever = new Wrapper();
-        eventhub.register(reciever);
-        assert reciever.value == 0;
+            @Subscribe
+            private void recieve(Integer value) {
+                this.value = value;
+            }
+        };
 
-        eventhub.publish(Integer.valueOf(10));
+        reciever.publish(Integer.valueOf(10));
         assert reciever.value == 10;
 
-        eventhub.publish(2);
+        reciever.publish(2);
         assert reciever.value == 2;
-    }
-
-    /**
-     * @version 2013/12/11 10:07:32
-     */
-    private static class Wrapper {
-
-        private int value;
-
-        @Subscribe
-        private void recieve(Integer value) {
-            this.value = value;
-        }
-    }
-
-    @Test
-    public void methods() throws Exception {
-        EventHub eventhub = new EventHub();
-
-        Methods reciever = new Methods();
-        eventhub.register(reciever);
-
-        eventhub.publish("Hitagi");
-        assert reciever.name.equals("Hitagi");
-
-        eventhub.publish(2);
-        assert reciever.value == 2;
-    }
-
-    /**
-     * @version 2013/12/11 10:07:30
-     */
-    private static class Methods {
-
-        private String name;
-
-        @Subscribe
-        private void name(String name) {
-            this.name = name;
-        }
-
-        private int value;
-
-        @Subscribe
-        private void recieve2(int value) {
-            this.value = value;
-        }
     }
 
     @Test
     public void noParam() throws Exception {
-        EventHub eventhub = new EventHub();
+        PubSub reciever = new PubSub() {
 
-        NoParam reciever = new NoParam();
-        eventhub.register(reciever);
-        assert reciever.count == 0;
+            @Subscribe(String.class)
+            private void recieve() {
+                value++;
+            }
+        };
 
-        eventhub.publish("Hitagi");
-        assert reciever.count == 1;
-    }
-
-    /**
-     * @version 2013/12/11 9:48:31
-     */
-    private static class NoParam {
-
-        private int count;
-
-        @Subscribe(String.class)
-        private void recieve() {
-            this.count++;
-        }
+        reciever.publish("Hitagi");
+        assert reciever.value == 1;
     }
 
     @Test
-    public void subscribes() throws Exception {
-        EventHub eventhub = new EventHub();
+    public void multipleSameTypes() throws Exception {
+        PubSub reciever = new PubSub() {
 
-        MultipleSubscribers reciever = new MultipleSubscribers();
-        eventhub.register(reciever);
-        assert reciever.count == 0;
+            @Subscribe
+            private void recieve1(String name) {
+                value++;
+            }
 
-        eventhub.publish("Hitagi");
-        assert reciever.count == 1;
+            @Subscribe
+            private void recieve2(String name) {
+                value++;
+            }
+        };
 
-        eventhub.publish(17);
-        assert reciever.count == 2;
-
-        eventhub.publish(new IllegalStateException());
-        assert reciever.count == 2;
+        reciever.publish("Sinobu");
+        assert reciever.value == 2;
     }
 
-    /**
-     * @version 2013/12/11 10:07:30
-     */
-    private static class MultipleSubscribers {
+    @Test
+    public void multipleDifferenceType() throws Exception {
+        PubSub reciever = new PubSub() {
 
-        private int count;
+            @Subscribe
+            private void name(String name) {
+                this.string = name;
+            }
 
-        @Subscribe(int.class)
-        @Subscribe(String.class)
-        private void recieve() {
-            this.count++;
-        }
+            @Subscribe
+            private void recieve2(int value) {
+                this.value = value;
+            }
+        };
+
+        reciever.publish("Hitagi");
+        assert reciever.string.equals("Hitagi");
+
+        reciever.publish(2);
+        assert reciever.value == 2;
+    }
+
+    @Test
+    public void multipleAnnotationsOnSameMethod() throws Exception {
+        PubSub reciever = new PubSub() {
+
+            @Subscribe(int.class)
+            @Subscribe(String.class)
+            private void recieve() {
+                value++;
+            }
+        };
+
+        reciever.publish("Hitagi");
+        assert reciever.value == 1;
+
+        reciever.publish(17);
+        assert reciever.value == 2;
+
+        reciever.publish(new IllegalStateException());
+        assert reciever.value == 2;
     }
 
     @Test
     public void hierarchy() throws Exception {
-        EventHub eventhub = new EventHub();
+        PubSub reciever = new PubSub() {
 
-        Hierarchy reciever = new Hierarchy();
-        eventhub.register(reciever);
-        assert reciever.count == 0;
+            @Subscribe
+            private void string(String name) {
+                this.value++;
+            }
 
-        eventhub.publish("string and char sequence");
-        assert reciever.count == 2;
+            @Subscribe
+            private void charSequence(CharSequence value) {
+                this.value++;
+            }
+        };
+        assert reciever.value == 0;
 
-        eventhub.publish(new StringBuilder("not string"));
-        assert reciever.count == 3;
-    }
+        reciever.publish("string and char sequence");
+        assert reciever.value == 2;
 
-    /**
-     * @version 2013/12/11 10:09:23
-     */
-    private static class Hierarchy {
-
-        private int count;
-
-        @Subscribe
-        private void string(String name) {
-            this.count++;
-        }
-
-        @Subscribe
-        private void charSequence(CharSequence value) {
-            this.count++;
-        }
+        reciever.publish(new StringBuilder("not string"));
+        assert reciever.value == 3;
     }
 
     @Test
     public void count() throws Exception {
-        EventHub eventhub = new EventHub();
+        PubSub reciever = new PubSub() {
 
-        Count reciever = new Count();
-        eventhub.register(reciever);
-        assert reciever.count == 0;
+            @Subscribe(count = 2)
+            private void countValue(String name) {
+                value++;
+            }
+        };
 
-        eventhub.publish("Hitagi");
-        assert reciever.count == 1;
+        reciever.publish("Hitagi");
+        assert reciever.value == 1;
 
-        eventhub.publish("Nadeko");
-        assert reciever.count == 2;
+        reciever.publish("Nadeko");
+        assert reciever.value == 2;
 
-        eventhub.publish("Suruga");
-        assert reciever.count == 2;
-    }
-
-    /**
-     * @version 2013/12/12 15:59:21
-     */
-    private static class Count {
-
-        private int count;
-
-        @Subscribe(count = 2)
-        private void string(String name) {
-            this.count++;
-        }
-    }
-
-    /**
-     * @version 2013/12/18 9:37:44
-     */
-    private static class TimeEvent {
-
-        private final int value;
-
-        /**
-         * @param value
-         */
-        private TimeEvent() {
-            this(0);
-        }
-
-        /**
-         * @param value
-         */
-        private TimeEvent(int value) {
-            this.value = value;
-        }
+        reciever.publish("Suruga");
+        assert reciever.value == 2;
     }
 
     @Test
     public void throttle() throws Exception {
-        EventHub eventhub = new EventHub();
+        PubSub reciever = new PubSub() {
 
-        Throttle reciever = new Throttle();
-        eventhub.register(reciever);
-        assert reciever.count == 0;
+            @Subscribe(throttle = 50)
+            private void string(int event) {
+                value++;
+            }
+        };
 
-        eventhub.publish(new TimeEvent());
-        assert reciever.count == 1;
+        assert reciever.value == 0;
 
-        eventhub.publish(new TimeEvent());
-        eventhub.publish(new TimeEvent());
-        eventhub.publish(new TimeEvent());
-        assert reciever.count == 1;
+        reciever.publish(100);
+        assert reciever.value == 1;
+
+        reciever.publish(100);
+        reciever.publish(100);
+        reciever.publish(100);
+        assert reciever.value == 1;
 
         Async.wait(80);
-        eventhub.publish(new TimeEvent());
-        assert reciever.count == 2;
-    }
-
-    /**
-     * @version 2013/12/12 15:59:21
-     */
-    private static class Throttle {
-
-        private int count;
-
-        @Subscribe(throttle = 50)
-        private void string(TimeEvent event) {
-            this.count++;
-        }
+        reciever.publish(100);
+        assert reciever.value == 2;
     }
 
     @Test
     public void debounce() throws Exception {
-        EventHub eventhub = new EventHub();
+        PubSub reciever = new PubSub() {
 
-        Debounce reciever = new Debounce();
-        eventhub.register(reciever);
-        assert reciever.value == 0;
+            @Subscribe(debounce = 50)
+            private void time(int value) {
+                this.value = value;
+            }
+        };
 
-        eventhub.publish(new TimeEvent(10));
-        eventhub.publish(new TimeEvent(20));
-        eventhub.publish(new TimeEvent(30));
+        reciever.publish(10);
+        reciever.publish(20);
+        reciever.publish(30);
         assert reciever.value == 0;
 
         Async.awaitTasks();
         assert reciever.value == 30;
     }
 
-    /**
-     * @version 2013/12/12 15:59:21
-     */
-    private static class Debounce {
-
-        private int value;
-
-        @Subscribe(debounce = 50)
-        private void time(TimeEvent event) {
-            this.value = event.value;
-        }
-    }
-
     @Test
     public void delay() throws Exception {
-        EventHub eventhub = new EventHub();
+        PubSub reciever = new PubSub() {
 
-        Delay reciever = new Delay();
-        eventhub.register(reciever);
-        assert reciever.value == 0;
+            @Subscribe(delay = 50)
+            private void time(int value) {
+                this.value += value;
+            }
+        };
 
-        eventhub.publish(new TimeEvent(10));
-        eventhub.publish(new TimeEvent(20));
-        eventhub.publish(new TimeEvent(30));
+        reciever.publish(10);
+        reciever.publish(20);
+        reciever.publish(30);
         assert reciever.value == 0;
 
         Async.awaitTasks();
         assert reciever.value == 60;
     }
 
-    /**
-     * @version 2013/12/12 15:59:21
-     */
-    private static class Delay {
-
-        private int value;
-
-        @Subscribe(delay = 50)
-        private void time(TimeEvent event) {
-            this.value += event.value;
-        }
-    }
-
-    @Test
-    public void key() throws Exception {
-        EventHub eventhub = new EventHub();
-
-        Space reciever = new Space();
-        eventhub.register(reciever);
-        assert reciever.count == 0;
-
-        eventhub.publish(press(UIAction.Key_Space));
-        assert reciever.count == 1;
-
-        eventhub.publish(press(UIAction.Key_A));
-        eventhub.publish(press(UIAction.Key_Enter));
-        assert reciever.count == 1;
-    }
-
-    private static UIEvent press(UIAction action) {
-        UIEvent event = new UIEvent();
-        event.type = action.name;
-        event.action = action;
-        event.which = action.code;
-
-        return event;
-    }
-
-    /**
-     * @version 2013/12/18 10:04:53
-     */
-    private static class Space {
-
-        private int count;
-
-        @SubscribeUI(type = UIAction.Key_Space)
-        private void detect() {
-            this.count++;
-        }
-
-        @SubscribeUI(type = UIAction.Key_F1)
-        private void detect2() {
-            this.count++;
-        }
-    }
-
     @Test
     public void abort() throws Exception {
-        EventHub eventhub = new EventHub();
-
         Abort reciever = new Abort();
-        eventhub.register(reciever);
-        assert reciever.count == 0;
+
+        assert reciever.value == 0;
         assert reciever.disposed == false;
 
-        eventhub.publish(reciever);
-        assert reciever.count == 1;
+        reciever.publish(reciever);
+        assert reciever.value == 1;
         assert reciever.disposed == true;
     }
 
     /**
      * @version 2013/12/18 10:10:09
      */
-    private static class Abort implements Disposable {
-
-        private int count;
+    private static class Abort extends PubSub implements Disposable {
 
         private boolean disposed;
 
         @Subscribe(abort = true)
         private void string(Abort event) {
-            count++;
+            value++;
         }
 
         /**
@@ -516,51 +335,99 @@ public class PublishableTest {
     }
 
     @Test
-    public void duplicate() throws Exception {
-        EventHub eventhub = new EventHub();
+    public void subscribeUI() throws Exception {
+        PubSub reciever = new PubSub() {
 
-        Duplicate reciever = new Duplicate();
-        eventhub.register(reciever);
-        eventhub.register(reciever);
+            @SubscribeUI(type = UIAction.Click)
+            private void action() {
+                value++;
+            }
+        };
 
-        eventhub.publish("Sinobu");
-        assert reciever.count == 1;
-    }
+        reciever.publish(event(UIAction.Click));
+        assert reciever.value == 1;
 
-    /**
-     * @version 2013/12/11 9:48:31
-     */
-    private static class Duplicate {
-
-        private int count;
-
-        @Subscribe
-        private void recieve(String name) {
-            count++;
-        }
+        reciever.publish(event(UIAction.Focus));
+        assert reciever.value == 1;
     }
 
     @Test
-    public void event() throws Exception {
-        EventLog eventLog = new EventLog();
-        assert eventLog.starts.isEmpty();
-        assert eventLog.stops.isEmpty();
+    public void subscribeUIWithEventObject() throws Exception {
+        PubSub reciever = new PubSub() {
 
-        Single reciever = new Single();
-        eventLog.register(reciever);
-        assert eventLog.starts.contains(Object.class);
-        assert eventLog.starts.contains(String.class);
-        assert eventLog.stops.isEmpty();
+            @SubscribeUI(type = UIAction.Click)
+            private void action(UIEvent event) {
+                string = event.type;
+            }
+        };
 
-        eventLog.unregister(reciever);
-        assert eventLog.stops.contains(Object.class);
-        assert eventLog.stops.contains(String.class);
+        reciever.publish(event(UIAction.Click));
+        assert reciever.string.equals("click");
+
+        reciever.publish(event(UIAction.Focus));
+        assert !reciever.string.equals("focus");
+    }
+
+    @Test
+    public void key() throws Exception {
+        PubSub reciever = new PubSub() {
+
+            @SubscribeUI(type = UIAction.Key_Space)
+            private void detect1() {
+                this.value++;
+            }
+
+            @SubscribeUI(type = UIAction.Key_F1)
+            private void detect2() {
+                this.value++;
+            }
+        };
+
+        reciever.publish(event(UIAction.Key_Space));
+        assert reciever.value == 1;
+
+        reciever.publish(event(UIAction.Key_A));
+        reciever.publish(event(UIAction.Key_Enter));
+        assert reciever.value == 1;
+    }
+
+    /**
+     * <p>
+     * Helper method to create ui event.
+     * </p>
+     * 
+     * @param action
+     * @return
+     */
+    private static UIEvent event(UIAction action) {
+        UIEvent event = new UIEvent();
+        event.type = action.name;
+        event.action = action;
+        event.which = action.code;
+
+        return event;
+    }
+
+    @Test
+    public void internalEvent() throws Exception {
+        InternalEvent internal = new InternalEvent();
+        assert internal.starts.isEmpty();
+        assert internal.stops.isEmpty();
+
+        internal.register(internal);
+        assert internal.starts.contains(Object.class);
+        assert internal.starts.contains(String.class);
+        assert internal.stops.isEmpty();
+
+        internal.unregister(internal);
+        assert internal.stops.contains(Object.class);
+        assert internal.stops.contains(String.class);
     }
 
     /**
      * @version 2013/12/18 12:51:34
      */
-    private static class EventLog extends Publishable {
+    private static class InternalEvent extends Publishable {
 
         private Set starts = new HashSet();
 
@@ -581,77 +448,80 @@ public class PublishableTest {
         protected void stopListening(Object type) {
             stops.add(type);
         }
-    }
 
-    @Test
-    public void subscribeUI() throws Exception {
-        EventHub eventhub = new EventHub();
-
-        ClickLisnter reciever = new ClickLisnter();
-        eventhub.register(reciever);
-        assert reciever.count == 0;
-
-        eventhub.publish(click());
-        assert reciever.count == 1;
-
-        eventhub.publish(focus());
-        assert reciever.count == 1;
-    }
-
-    /**
-     * @version 2013/12/18 15:21:06
-     */
-    private static class ClickLisnter {
-
-        private int count;
-
-        @SubscribeUI(type = UIAction.Click)
-        private void action() {
-            count++;
+        @Subscribe
+        private void recieve(String name) {
+            // do nothing
         }
     }
 
-    private static UIEvent click() {
-        UIEvent event = new UIEvent();
-        event.type = "click";
-        event.action = UIAction.Click;
+    /**
+     * @version 2013/12/20 11:29:24
+     */
+    private static class FunctionalPubSub extends Publishable {
 
-        return event;
-    }
+        private int runnable;
 
-    private static UIEvent focus() {
-        UIEvent event = new UIEvent();
-        event.type = "focus";
-        event.action = UIAction.Focus;
+        private void runnable() {
+            runnable++;
+        }
 
-        return event;
+        private String consumeString = "";
+
+        private void consumeString(String value) {
+            consumeString = consumeString.concat(value);
+        }
+
+        private int consumeInt;
+
+        private void consumeInt(int value) {
+            consumeInt += value;
+        }
     }
 
     @Test
-    public void subscribeUIWithEvent() throws Exception {
-        EventHub eventhub = new EventHub();
+    public void registerRunnable() throws Exception {
+        FunctionalPubSub pubsub = new FunctionalPubSub();
+        pubsub.register(String.class, pubsub::runnable);
 
-        ClickLisnterWithEvent reciever = new ClickLisnterWithEvent();
-        eventhub.register(reciever);
-        assert reciever.count == 0;
+        pubsub.publish("string");
+        assert pubsub.runnable == 1;
 
-        eventhub.publish(click());
-        assert reciever.count == 1;
+        pubsub.publish(1);
+        assert pubsub.runnable == 1;
 
-        eventhub.publish(focus());
-        assert reciever.count == 1;
+        pubsub.unregister(String.class, pubsub::runnable);
+        pubsub.publish("unsubscribe");
+        assert pubsub.runnable == 1;
     }
 
-    /**
-     * @version 2013/12/18 15:21:06
-     */
-    private static class ClickLisnterWithEvent {
+    @Test
+    public void registerConsumerInt() throws Exception {
+        FunctionalPubSub pubsub = new FunctionalPubSub();
+        pubsub.register(int.class, pubsub::consumeInt);
 
-        private int count;
+        pubsub.publish(10);
+        assert pubsub.consumeInt == 10;
 
-        @SubscribeUI(type = UIAction.Click)
-        private void action(UIEvent event) {
-            count++;
-        }
+        pubsub.publish(20);
+        assert pubsub.consumeInt == 30;
+
+        pubsub.publish("string");
+        assert pubsub.consumeString.isEmpty();
+    }
+
+    @Test
+    public void registerConsumerString() throws Exception {
+        FunctionalPubSub pubsub = new FunctionalPubSub();
+        pubsub.register(String.class, pubsub::consumeString);
+
+        pubsub.publish("Hanekawa");
+        assert pubsub.consumeString.equals("Hanekawa");
+
+        pubsub.publish("Tubasa");
+        assert pubsub.consumeString.equals("HanekawaTubasa");
+
+        pubsub.publish(10);
+        assert pubsub.consumeInt == 0;
     }
 }
