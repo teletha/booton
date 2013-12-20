@@ -242,6 +242,18 @@ public class Publishable {
         unregister(new Info(type), listener);
     }
 
+    /**
+     * <p>
+     * Unregister the specified event listener.
+     * </p>
+     * 
+     * @param type An event type.
+     * @param listener An event listener to remove.
+     */
+    public <T> void unregister(Class<T> type, Consumer<T> listener) {
+        unregister(new Info(type), listener);
+    }
+
     private void unregister(Info info, Object listener) {
         List<Listener> subscribers = holder.get(info.type);
 
@@ -464,9 +476,6 @@ public class Publishable {
          */
         @Override
         protected boolean equals(Object instance, Method method) {
-            System.out.println(runnable.equals(instance) + "  " + (instance == runnable));
-            System.out.println(runnable.getClass() + "  " + instance.getClass());
-            System.out.println(runnable.hashCode() + "  " + instance.hashCode());
             return runnable == instance;
         }
     }
@@ -491,6 +500,14 @@ public class Publishable {
         @Override
         protected void accept(Object event) {
             consumer.accept(event);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected boolean equals(Object instance, Method method) {
+            return consumer == instance;
         }
     }
 
