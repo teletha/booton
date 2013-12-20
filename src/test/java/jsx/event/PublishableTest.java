@@ -11,6 +11,7 @@ package jsx.event;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
@@ -482,7 +483,8 @@ public class PublishableTest {
     @Test
     public void registerRunnable() throws Exception {
         FunctionalPubSub pubsub = new FunctionalPubSub();
-        pubsub.register(String.class, pubsub::runnable);
+        Runnable runnable = pubsub::runnable;
+        pubsub.register(String.class, runnable);
 
         pubsub.publish("string");
         assert pubsub.runnable == 1;
@@ -490,7 +492,7 @@ public class PublishableTest {
         pubsub.publish(1);
         assert pubsub.runnable == 1;
 
-        pubsub.unregister(String.class, pubsub::runnable);
+        pubsub.unregister(String.class, runnable);
         pubsub.publish("unsubscribe");
         assert pubsub.runnable == 1;
     }
@@ -498,7 +500,8 @@ public class PublishableTest {
     @Test
     public void registerConsumerInt() throws Exception {
         FunctionalPubSub pubsub = new FunctionalPubSub();
-        pubsub.register(int.class, pubsub::consumeInt);
+        Consumer<Integer> consumer = pubsub::consumeInt;
+        pubsub.register(int.class, consumer);
 
         pubsub.publish(10);
         assert pubsub.consumeInt == 10;
@@ -508,12 +511,17 @@ public class PublishableTest {
 
         pubsub.publish("string");
         assert pubsub.consumeString.isEmpty();
+
+        pubsub.unregister(int.class, consumer);
+        pubsub.publish(10);
+        assert pubsub.consumeInt == 30;
     }
 
     @Test
     public void registerConsumerString() throws Exception {
         FunctionalPubSub pubsub = new FunctionalPubSub();
-        pubsub.register(String.class, pubsub::consumeString);
+        Consumer<String> consumer = pubsub::consumeString;
+        pubsub.register(String.class, consumer);
 
         pubsub.publish("Hanekawa");
         assert pubsub.consumeString.equals("Hanekawa");
@@ -523,5 +531,9 @@ public class PublishableTest {
 
         pubsub.publish(10);
         assert pubsub.consumeInt == 0;
+
+        pubsub.unregister(String.class, consumer);
+        pubsub.publish("None");
+        assert pubsub.consumeString.equals("HanekawaTubasa");
     }
 }
