@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 
 import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
@@ -84,73 +85,109 @@ public class Publishable {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
                     for (Info info : collect(annotation, entry.getKey())) {
-                        Listener listener = new Invoker(subscribable, info.method, info.abort);
-
-                        if (holder == null) {
-                            holder = new HashMap();
-                            startListening(Object.class);
-                        }
-
-                        List<Listener> subscribers = holder.get(info.type);
-
-                        if (subscribers == null) {
-                            subscribers = new CopyOnWriteArrayList();
-                            holder.put(info.type, subscribers);
-
-                            startListening(info.type);
-                        } else {
-                            for (Listener registered : subscribers) {
-                                if (registered.equals(subscribable, info.method)) {
-                                    return;
-                                }
-                            }
-                        }
-
-                        // ===========================
-                        // Execution Count Wrapper
-                        // ===========================
-                        int count = info.count;
-
-                        if (0 < count) {
-                            listener = new Count(count, this, subscribable, listener);
-                        }
-
-                        // ===========================
-                        // Timing Related Wrappers
-                        // ===========================
-                        long time = info.delay;
-
-                        if (0 < time) {
-                            listener = new Delay(time, listener);
-                        }
-
-                        time = info.throttle;
-
-                        if (0 < time) {
-                            listener = new Throttle(time, listener);
-                        }
-
-                        time = info.debounce;
-
-                        if (0 < time) {
-                            listener = new Debounce(time, listener);
-                        }
-
-                        // ===========================
-                        // UIAction Wrapper
-                        // ===========================
-                        if (info.type instanceof UIAction) {
-                            UIAction action = (UIAction) info.type;
-
-                            if (0 < action.code) {
-                                listener = new UIBind(action, listener);
-                            }
-                        }
-                        subscribers.add(listener);
+                        Listener listener = new MethodInvoker(subscribable, info.method, info.abort);
+                        register(subscribable, info, listener);
                     }
                 }
             }
         }
+    }
+
+    /**
+     * <p>
+     * Register the specified event listener.
+     * </p>
+     * 
+     * @param type An event type.
+     * @param listener An event listener to add.
+     */
+    public <T> void register(Class<T> type, Runnable listener) {
+        register(listener, new Info(type), new RunnableInvoker(listener));
+    }
+
+    /**
+     * <p>
+     * Register the specified event listener.
+     * </p>
+     * 
+     * @param type An event type.
+     * @param listener An event listener to add.
+     */
+    public <T> void register(Class<T> type, Consumer<T> listener) {
+        register(listener, new Info(type), new ConsumerInvoker(listener));
+    }
+
+    /**
+     * <p>
+     * Register an event listener.
+     * </p>
+     * 
+     * @param subscribable
+     * @param info
+     * @param listener
+     */
+    private void register(Object subscribable, Info info, Listener listener) {
+        if (holder == null) {
+            holder = new HashMap();
+            startListening(Object.class);
+        }
+
+        List<Listener> subscribers = holder.get(info.type);
+
+        if (subscribers == null) {
+            subscribers = new CopyOnWriteArrayList();
+            holder.put(info.type, subscribers);
+
+            startListening(info.type);
+        } else {
+            for (Listener registered : subscribers) {
+                if (registered.equals(subscribable, info.method)) {
+                    return;
+                }
+            }
+        }
+
+        // ===========================
+        // Execution Count Wrapper
+        // ===========================
+        int count = info.count;
+
+        if (0 < count) {
+            listener = new Count(count, this, subscribable, listener);
+        }
+
+        // ===========================
+        // Timing Related Wrappers
+        // ===========================
+        long time = info.delay;
+
+        if (0 < time) {
+            listener = new Delay(time, listener);
+        }
+
+        time = info.throttle;
+
+        if (0 < time) {
+            listener = new Throttle(time, listener);
+        }
+
+        time = info.debounce;
+
+        if (0 < time) {
+            listener = new Debounce(time, listener);
+        }
+
+        // ===========================
+        // UIAction Wrapper
+        // ===========================
+        if (info.type instanceof UIAction) {
+            UIAction action = (UIAction) info.type;
+
+            if (0 < action.code) {
+                listener = new UIBind(action, listener);
+            }
+        }
+        subscribers.add(listener);
     }
 
     /**
@@ -165,14 +202,13 @@ public class Publishable {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
                     for (Info info : collect(annotation, entry.getKey())) {
-
                         List<Listener> subscribers = holder.get(info.type);
 
                         if (subscribers != null) {
                             for (int i = subscribers.size() - 1; 0 <= i; i--) {
-                                Listener subscliber = subscribers.get(i);
+                                Listener listener = subscribers.get(i);
 
-                                if (subscliber.equals(subscribable, null)) {
+                                if (listener.equals(subscribable, null)) {
                                     subscribers.remove(i);
 
                                     if (subscribers.isEmpty()) {
@@ -189,6 +225,41 @@ public class Publishable {
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Unregister the specified event listener.
+     * </p>
+     * 
+     * @param type An event type.
+     * @param listener An event listener to remove.
+     */
+    public void unregister(Class type, Runnable listener) {
+        unregister(new Info(type), listener);
+    }
+
+    private void unregister(Info info, Object listener) {
+        List<Listener> subscribers = holder.get(info.type);
+
+        if (subscribers != null) {
+            for (int i = subscribers.size() - 1; 0 <= i; i--) {
+                if (subscribers.get(i).equals(listener, null)) {
+                    subscribers.remove(i);
+
+                    if (subscribers.isEmpty()) {
+                        holder.remove(info.type);
+                        stopListening(info.type);
+
+                        if (holder.isEmpty()) {
+                            holder = null;
+                            stopListening(Object.class);
+                        }
+                    }
+                    break;
                 }
             }
         }
@@ -329,6 +400,10 @@ public class Publishable {
             this.count = subscribe.count();
             this.abort = subscribe.abort();
         }
+
+        private Info(Class type) {
+            this.type = ClassUtil.wrap(type);
+        }
     }
 
     /**
@@ -363,9 +438,66 @@ public class Publishable {
     }
 
     /**
+     * @version 2013/12/20 9:48:58
+     */
+    private static class RunnableInvoker extends Listener {
+
+        private final Runnable runnable;
+
+        /**
+         * @param runnable
+         */
+        private RunnableInvoker(Runnable runnable) {
+            this.runnable = runnable;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void accept(Object event) {
+            runnable.run();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected boolean equals(Object instance, Method method) {
+            System.out.println(runnable.equals(instance) + "  " + (instance == runnable));
+            System.out.println(runnable.getClass() + "  " + instance.getClass());
+            System.out.println(runnable.hashCode() + "  " + instance.hashCode());
+            return runnable == instance;
+        }
+    }
+
+    /**
+     * @version 2013/12/20 9:48:58
+     */
+    private static class ConsumerInvoker extends Listener {
+
+        private final Consumer consumer;
+
+        /**
+         * @param consumer
+         */
+        private ConsumerInvoker(Consumer consumer) {
+            this.consumer = consumer;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void accept(Object event) {
+            consumer.accept(event);
+        }
+    }
+
+    /**
      * @version 2013/12/18 9:30:25
      */
-    private static class Invoker extends Listener {
+    private static class MethodInvoker extends Listener {
 
         /** The listener instance. */
         private final Object instance;
@@ -384,7 +516,7 @@ public class Publishable {
          * @param method A subscribe method.
          * @param abort The event is stoppable.
          */
-        private Invoker(Object instance, Method method, boolean abort) {
+        private MethodInvoker(Object instance, Method method, boolean abort) {
             method.setAccessible(true);
 
             this.instance = instance;
