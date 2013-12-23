@@ -478,6 +478,12 @@ public class PublishableTest {
         private void consumeInt(int value) {
             consumeInt += value;
         }
+
+        private String consumeUI;
+
+        private void consumeUIEvent(UIEvent value) {
+            consumeUI = value.action.name;
+        }
     }
 
     @Test
@@ -535,5 +541,16 @@ public class PublishableTest {
         pubsub.unregister(String.class, consumer);
         pubsub.publish("None");
         assert pubsub.consumeString.equals("HanekawaTubasa");
+    }
+
+    @Test
+    public void registerConsumerEnum() throws Exception {
+        FunctionalPubSub pubsub = new FunctionalPubSub();
+        Consumer<UIEvent> consumer = pubsub::consumeUIEvent;
+        pubsub.register(UIAction.Click, consumer);
+
+        pubsub.publish(event(UIAction.Click));
+        assert pubsub.consumeUI.equals("click");
+
     }
 }
