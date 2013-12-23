@@ -23,8 +23,6 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
-import jsx.bwt.UIAction;
-import jsx.bwt.UIEvent;
 import kiss.Disposable;
 import kiss.model.ClassUtil;
 
@@ -53,8 +51,13 @@ public class Publishable {
         if (holder != null && event != null) {
             Set types;
 
-            if (event instanceof UIEvent) {
-                types = Collections.singleton(((UIEvent) event).action);
+            if (event instanceof Event) {
+                EventType type = ((Event) event).getEventType();
+
+                if (!type.test(event)) {
+                    return;
+                }
+                types = Collections.singleton(type);
             } else {
                 types = cache.computeIfAbsent(event.getClass(), type -> ClassUtil.getTypes(type));
             }
@@ -117,6 +120,10 @@ public class Publishable {
         register(listener, new Info(type), new ConsumerInvoker(listener));
     }
 
+    public <E extends Enum & EventType<Type>, Type> void register(E type, Consumer<Type> listener) {
+        register(listener, new Info(type), new ConsumerInvoker(listener));
+    }
+
     /**
      * <p>
      * Register an event listener.
@@ -175,17 +182,6 @@ public class Publishable {
 
         if (0 < time) {
             listener = new Debounce(time, listener);
-        }
-
-        // ===========================
-        // UIAction Wrapper
-        // ===========================
-        if (info.type instanceof UIAction) {
-            UIAction action = (UIAction) info.type;
-
-            if (0 < action.code) {
-                listener = new UIBind(action, listener);
-            }
         }
         subscribers.add(listener);
     }
@@ -370,8 +366,7 @@ public class Publishable {
 
         /**
          * <p>
-         * Stop event propagation and default behavior. {@link UIEvent#stopPropagation()} and
-         * {@link UIEvent#preventDefault()} methods will be called.
+         * Stop event propagation and default behavior.
          * </p>
          * 
          * @return The <code>true</code> will stop the current processing event.
@@ -415,6 +410,10 @@ public class Publishable {
 
         private Info(Class type) {
             this.type = ClassUtil.wrap(type);
+        }
+
+        private Info(Enum type) {
+            this.type = type;
         }
     }
 
@@ -730,38 +729,71 @@ public class Publishable {
     }
 
     /**
-     * <p>
-     * Built-in listener wrapper.
-     * </p>
-     * 
-     * @version 2013/04/08 10:11:19
+     * @version 2013/12/22 1:15:50
      */
-    private static class UIBind extends Listener {
+    private static class MethodConsumer implements Consumer {
 
-        /** The ui action type. */
-        private final UIAction action;
+        /** The event listener. */
+        private final Object instance;
+
+        /** The event listener. */
+        private final Method method;
+
+        /** The parameter flag. */
+        private final boolean hasParam;
 
         /**
-         * @param type
-         * @param listener
+         * @param instance
+         * @param method
          */
-        private UIBind(UIAction type, Listener listener) {
-            this.action = type;
-            this.delegator = listener;
+        private MethodConsumer(Object instance, Method method) {
+            this.instance = instance;
+            this.method = method;
+            this.hasParam = method.getParameterTypes().length == 1;
+
+            method.setAccessible(true);
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        protected void accept(Object event) {
-            if (event instanceof UIEvent) {
-                UIEvent ui = (UIEvent) event;
-
-                if (ui.which == action.code) {
-                    delegator.accept(event);
+        public void accept(Object event) {
+            try {
+                if (hasParam) {
+                    method.invoke(instance, event);
+                } else {
+                    method.invoke(instance);
                 }
+            } catch (Exception e) {
+                // If this exception will be thrown, it is bug of this program. So we must rethrow
+                // the wrapped error in here.
+                throw new Error(e);
             }
+        }
+    }
+
+    /**
+     * @version 2013/12/22 1:20:30
+     */
+    private static class RunnableConsumer implements Consumer {
+
+        /** The event listener. */
+        private final Runnable listener;
+
+        /**
+         * @param listener
+         */
+        private RunnableConsumer(Runnable listener) {
+            this.listener = listener;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void accept(Object event) {
+            listener.run();
         }
     }
 }

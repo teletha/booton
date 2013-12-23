@@ -10,10 +10,12 @@
 
 package jsx.bwt;
 
+import jsx.event.EventType;
+
 /**
  * @version 2013/10/10 13:45:14
  */
-public enum UIAction {
+public enum UIAction implements EventType<UIEvent> {
 
     /** The ui event type. */
     PointerDown,
@@ -356,4 +358,11 @@ public enum UIAction {
         this.name = 0 < code ? "keydown" : name().toLowerCase();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean test(UIEvent event) {
+        return code == -1 || event.which == code;
+    }
 }
