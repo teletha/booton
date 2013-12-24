@@ -9,10 +9,31 @@
  */
 package jsx.event;
 
+import kiss.Disposable;
+
 /**
+ * <p>
+ * The event object for the specified {@link EventType} enum.
+ * </p>
+ * 
  * @version 2013/12/23 21:28:15
  */
-public interface Event {
+public interface Event<E extends Enum & EventType> extends Disposable {
 
-    <E extends Enum & EventType> E getEventType();
+    /**
+     * <p>
+     * Retrieve the associated {@link EventType} enum.
+     * </p>
+     * 
+     * @return The associated {@link EventType}.
+     */
+    E getEventType();
+
+    /**
+     * <p>
+     * Default implementation for {@link Disposable}.
+     * </p>
+     */
+    default void dispose() {
+    }
 }

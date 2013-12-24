@@ -23,7 +23,6 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
-import kiss.Disposable;
 import kiss.model.ClassUtil;
 
 /**
@@ -52,7 +51,7 @@ public class Publishable {
             Set types;
 
             if (event instanceof Event) {
-                EventType type = ((Event) event).getEventType();
+                EventType type = ((Event<?>) event).getEventType();
 
                 if (!type.test(event)) {
                     return;
@@ -120,7 +119,7 @@ public class Publishable {
         register(listener, new Info(type), new ConsumerInvoker(listener));
     }
 
-    public <E extends Enum & EventType<Type>, Type> void register(E type, Consumer<Type> listener) {
+    public <E extends Enum & EventType<T>, T extends Event> void register(E type, Consumer<T> listener) {
         register(listener, new Info(type), new ConsumerInvoker(listener));
     }
 
@@ -547,8 +546,8 @@ public class Publishable {
         @Override
         public void accept(Object event) {
             if (abort) {
-                if (event instanceof Disposable) {
-                    ((Disposable) event).dispose();
+                if (event instanceof Event) {
+                    ((Event) event).dispose();
                 }
             }
 

@@ -12,7 +12,11 @@ package jsx.event;
 import java.util.function.Predicate;
 
 /**
+ * <p>
+ * Mark the implemented enum as {@link EventType}.
+ * </p>
+ * 
  * @version 2013/12/23 19:26:47
  */
-public interface EventType<T> extends Predicate<T> {
+public interface EventType<T extends Event> extends Predicate<T> {
 }
