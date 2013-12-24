@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import js.dom.Element;
+import js.dom.UIAction;
 import jsx.bwt.UI;
-import jsx.bwt.UIAction;
 import jsx.bwt.view.ScrollableListViewStyle.ItemColumnView;
 import jsx.bwt.view.ScrollableListViewStyle.RenderableItemView;
 import jsx.bwt.view.ScrollableListViewStyle.Spacer;

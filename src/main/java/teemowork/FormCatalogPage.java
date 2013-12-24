@@ -11,12 +11,12 @@ package teemowork;
 
 import js.dom.DocumentFragment;
 import js.dom.EventListener;
+import js.dom.Event;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Button;
 import jsx.bwt.Input;
 import jsx.bwt.Select;
-import jsx.bwt.UIEvent;
 import jsx.model.SelectableModel;
 import teemowork.model.Version;
 
@@ -61,7 +61,7 @@ public class FormCatalogPage extends Page {
         root.child(new Button("Add", new EventListener() {
 
             @Override
-            public void handleEvent(UIEvent event) {
+            public void handleEvent(Event event) {
                 model.type++;
                 System.out.println(model.type);
                 model.name = String.valueOf(model.type);

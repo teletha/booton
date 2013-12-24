@@ -9,125 +9,118 @@
  */
 package jsx.bwt;
 
-import js.dom.Element;
-import jsx.event.Event;
-import booton.translator.JavascriptNative;
-import booton.translator.JavascriptNativeProperty;
+import js.dom.Event;
+import js.dom.UIAction;
 
 /**
- * @version 2012/12/02 23:06:56
+ * @version 2013/12/18 14:26:59
  */
-public class UIEvent implements Event<UIAction>, JavascriptNative {
+public class UIEvent extends Event {
 
-    /** The DOM element that initiated the event. */
-    @JavascriptNativeProperty
-    public Element target;
+    protected Event delegator;
 
-    /** The current DOM element within the event bubbling phase. */
-    @JavascriptNativeProperty
-    public Element currentTarget;
+    public UIEvent() {
 
-    /** The other DOM element involved in the event, if any. */
-    @JavascriptNativeProperty
-    public Element relatedTarget;
+    }
 
-    /** The element where the currently-called jQuery event handler was attached. */
-    @JavascriptNativeProperty
-    public Element delegateTarget;
+    public UIEvent(UIAction action) {
+        this.action = action;
+    }
 
-    /** The namespace specified when the event was triggered. */
-    @JavascriptNativeProperty
-    public String namespace;
+    public UIEvent(Event nativeEvent, UIAction action) {
+        this.currentTarget = nativeEvent.currentTarget;
+        this.delegateTarget = nativeEvent.delegateTarget;
+        this.namespace = nativeEvent.namespace;
+        this.pageX = nativeEvent.pageX;
+        this.pageY = nativeEvent.pageY;
+        this.relatedTarget = nativeEvent.relatedTarget;
+        this.target = nativeEvent.target;
+        this.timeStamp = nativeEvent.timeStamp;
+        this.type = nativeEvent.type;
+        this.which = nativeEvent.which;
+        this.delegator = nativeEvent;
+        this.action = action;
+    }
 
-    /** The mouse position relative to the left edge of the document. */
-    @JavascriptNativeProperty
-    public int pageX;
-
-    /** The mouse position relative to the top edge of the document. */
-    @JavascriptNativeProperty
-    public int pageY;
-
-    /**
-     * The difference in milliseconds between the time the browser created the event and January 1,
-     * 1970.
-     */
-    @JavascriptNativeProperty
-    public long timeStamp;
-
-    /** Describes the nature of the event. */
-    @JavascriptNativeProperty
-    public String type;
-
-    /**
-     * For key or mouse events, this property indicates the specific key or button that was pressed.
-     */
-    @JavascriptNativeProperty
-    public int which;
-
-    /** The user action type. */
-    public UIAction action;
+    public void set(Event nativeEvent, UIAction action) {
+        this.currentTarget = nativeEvent.currentTarget;
+        this.delegateTarget = nativeEvent.delegateTarget;
+        this.namespace = nativeEvent.namespace;
+        this.pageX = nativeEvent.pageX;
+        this.pageY = nativeEvent.pageY;
+        this.relatedTarget = nativeEvent.relatedTarget;
+        this.target = nativeEvent.target;
+        this.timeStamp = nativeEvent.timeStamp;
+        this.type = nativeEvent.type;
+        this.which = nativeEvent.which;
+        this.delegator = nativeEvent;
+        this.action = action;
+    }
 
     /**
-     * <p>
-     * Initialize event.
-     * </p>
-     * 
-     * @param type The type of event.
-     * @param bubbles A boolean indicating whether the event should bubble up through the event
-     *            chain or not.
-     * @param cancelable A boolean indicating whether the event can be canceled.
+     * {@inheritDoc}
      */
-    public native void initEvent(String type, boolean bubbles, boolean cancelable);
+    public int hashCode() {
+        return delegator.hashCode();
+    }
 
     /**
-     * <p>
-     * Returns whether event.preventDefault() was ever called on this event object.
-     * </p>
-     * 
-     * @return
+     * {@inheritDoc}
      */
-    public native boolean isDefaultPrevented();
+    public void initEvent(String type, boolean bubbles, boolean cancelable) {
+        delegator.initEvent(type, bubbles, cancelable);
+    }
 
     /**
-     * <p>
-     * Returns whether event.stopImmediatePropagation() was ever called on this event object.
-     * </p>
-     * 
-     * @return
+     * {@inheritDoc}
      */
-    public native boolean isImmediatePropagationStopped();
+    public boolean isDefaultPrevented() {
+        return delegator.isDefaultPrevented();
+    }
 
     /**
-     * <p>
-     * Returns whether event.stopPropagation() was ever called on this event object.
-     * </p>
-     * 
-     * @return
+     * {@inheritDoc}
      */
-    public native boolean isPropagationStopped();
+    public boolean isImmediatePropagationStopped() {
+        return delegator.isImmediatePropagationStopped();
+    }
 
     /**
-     * <p>
-     * If this method is called, the default action of the event will not be triggered.
-     * </p>
+     * {@inheritDoc}
      */
-    public native void preventDefault();
+    public boolean isPropagationStopped() {
+        return delegator.isPropagationStopped();
+    }
 
     /**
-     * <p>
-     * Prevents the event from bubbling up the DOM tree, preventing any parent handlers from being
-     * notified of the event.
-     * </p>
+     * {@inheritDoc}
      */
-    public native void stopPropagation();
+    public void preventDefault() {
+        delegator.preventDefault();
+    }
 
     /**
-     * <p>
-     * Keeps the rest of the handlers from being executed and prevents the event from bubbling up
-     * the DOM tree.
-     * </p>
+     * {@inheritDoc}
      */
-    public native void stopImmediatePropagation();
+    public void stopPropagation() {
+        delegator.stopPropagation();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void stopImmediatePropagation() {
+        delegator.stopImmediatePropagation();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void dispose() {
+        stopPropagation();
+        preventDefault();
+    }
 
     /**
      * {@inheritDoc}

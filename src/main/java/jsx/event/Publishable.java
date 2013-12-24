@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
+import kiss.Disposable;
 import kiss.model.ClassUtil;
 
 /**
@@ -546,8 +547,8 @@ public class Publishable {
         @Override
         public void accept(Object event) {
             if (abort) {
-                if (event instanceof Event) {
-                    ((Event) event).dispose();
+                if (event instanceof Disposable) {
+                    ((Disposable) event).dispose();
                 }
             }
 

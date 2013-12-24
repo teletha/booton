@@ -10,6 +10,8 @@
 package jsx.bwt;
 
 import js.dom.Element;
+import js.dom.Event;
+import js.dom.UIAction;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.SelectStyle.SelectArrow;
 import jsx.bwt.SelectStyle.SelectForm;
@@ -112,7 +114,7 @@ public class Select<M> extends FormUI<Select> {
     private class Binder implements ItemRenderer {
 
         @SubscribeUI(type = UIAction.Click)
-        private void selectItem(UIEvent event) {
+        private void selectItem(Event event) {
             model.setSelectionIndex(Integer.parseInt(event.target.attr("index")));
         }
 

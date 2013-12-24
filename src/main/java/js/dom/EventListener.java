@@ -9,7 +9,6 @@
  */
 package js.dom;
 
-import jsx.bwt.UIEvent;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 
@@ -27,5 +26,5 @@ public interface EventListener extends JavascriptNative {
      * @return
      */
     @JavascriptNativeProperty
-    void handleEvent(UIEvent event);
+    void handleEvent(Event event);
 }

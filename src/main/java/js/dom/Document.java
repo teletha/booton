@@ -9,7 +9,6 @@
  */
 package js.dom;
 
-import jsx.bwt.UIEvent;
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
@@ -74,7 +73,7 @@ public abstract class Document implements JavascriptNative {
      *            include "UIEvents", "MouseEvents", "MutationEvents", and "HTMLEvents".
      * @return The created Event object.
      */
-    public native UIEvent createEvent(String type);
+    public native Event createEvent(String type);
 
     /**
      * <p>

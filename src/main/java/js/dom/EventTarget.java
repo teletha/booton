@@ -17,9 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import js.dom.event.AbstractUIEvent;
 import js.lang.NativeFunction;
-import jsx.bwt.UIAction;
 import jsx.bwt.UIEvent;
 import jsx.event.Publishable;
 import kiss.I;
@@ -279,7 +277,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      * 
      * @param event A Event object to be dispatched.
      */
-    protected native void dispatchEvent(UIEvent event);
+    protected native void dispatchEvent(Event event);
 
     /**
      * @version 2013/10/20 22:43:45
@@ -303,8 +301,8 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
          * {@inheritDoc}
          */
         @Override
-        public void handleEvent(UIEvent event) {
-            AbstractUIEvent ui = I.make(AbstractUIEvent.class);
+        public void handleEvent(Event event) {
+            UIEvent ui = I.make(UIEvent.class);
             ui.set(event, type);
 
             publish(ui);
@@ -351,7 +349,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
          * {@inheritDoc}
          */
         @Override
-        public void handleEvent(UIEvent event) {
+        public void handleEvent(Event event) {
             try {
                 for (EventListener listener : listeners) {
                     listener.handleEvent(event);

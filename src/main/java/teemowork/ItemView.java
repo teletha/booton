@@ -12,10 +12,10 @@ package teemowork;
 import static teemowork.model.Status.*;
 import js.dom.Element;
 import js.dom.EventListener;
+import js.dom.Event;
+import js.dom.UIAction;
 import jsx.application.Application;
 import jsx.bwt.UI;
-import jsx.bwt.UIAction;
-import jsx.bwt.UIEvent;
 import teemowork.ItemViewStyle.AbilityArea;
 import teemowork.ItemViewStyle.Cost;
 import teemowork.ItemViewStyle.DescriptionArea;
@@ -70,7 +70,7 @@ public class ItemView extends UI {
                     .on(UIAction.Click, new EventListener() {
 
                         @Override
-                        public void handleEvent(UIEvent event) {
+                        public void handleEvent(Event event) {
                             Application.show(new ItemDetail(material.name));
                         }
                     }));

@@ -10,8 +10,7 @@
 package js.dom;
 
 import static js.lang.Global.*;
-import js.dom.event.AbstractUIEvent;
-import jsx.bwt.UIAction;
+import jsx.bwt.UIEvent;
 import jsx.event.SubscribeUI;
 
 import org.junit.Test;
@@ -33,15 +32,15 @@ public class EventTargetTest {
         Element element = document.createElement("div");
         element.register(listener);
 
-        element.publish(new AbstractUIEvent(UIAction.Click));
+        element.publish(new UIEvent(UIAction.Click));
         assert listener.invoked == 1;
 
-        element.publish(new AbstractUIEvent(UIAction.MouseMove));
+        element.publish(new UIEvent(UIAction.MouseMove));
         assert listener.invoked == 1;
 
         element.unregister(listener);
 
-        element.publish(new AbstractUIEvent(UIAction.Click));
+        element.publish(new UIEvent(UIAction.Click));
         assert listener.invoked == 1;
     }
 

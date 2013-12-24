@@ -16,6 +16,8 @@ import java.util.Map.Entry;
 
 import js.dom.Element;
 import js.dom.EventListener;
+import js.dom.Event;
+import js.dom.UIAction;
 import jsx.bwt.ImageGridStyle.Container;
 import jsx.bwt.ImageGridStyle.IconImage;
 import jsx.bwt.ImageGridStyle.ImageSet;
@@ -78,7 +80,7 @@ public abstract class ImageGrid<T> extends UI {
             image.on(UIAction.Click, new EventListener() {
 
                 @Override
-                public void handleEvent(UIEvent event) {
+                public void handleEvent(Event event) {
                     select(source);
                 }
             });

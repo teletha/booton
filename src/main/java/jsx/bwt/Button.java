@@ -10,6 +10,7 @@
 package jsx.bwt;
 
 import js.dom.EventListener;
+import js.dom.UIAction;
 import jsx.bwt.FormUIStyle.ButtonForm;
 import jsx.bwt.FormUIStyle.Icons;
 

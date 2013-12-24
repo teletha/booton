@@ -9,9 +9,10 @@
  */
 package jsx.bwt;
 
-import static jsx.bwt.UIAction.*;
+import static js.dom.UIAction.*;
 import js.dom.Element;
 import js.dom.EventListener;
+import js.dom.UIAction;
 import jsx.bwt.FormUIStyle.Disable;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.FormUIStyle.FormRoot;

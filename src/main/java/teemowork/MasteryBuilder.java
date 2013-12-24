@@ -14,12 +14,12 @@ import js.dom.DocumentFragment;
 import js.dom.Element;
 import js.dom.EventListener;
 import js.dom.Image;
+import js.dom.Event;
+import js.dom.UIAction;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Button;
 import jsx.bwt.Select;
-import jsx.bwt.UIAction;
-import jsx.bwt.UIEvent;
 import jsx.event.Subscribe;
 import jsx.model.SelectableModel;
 import kiss.I;
@@ -230,14 +230,14 @@ public class MasteryBuilder extends Page {
             root.on(UIAction.Click, new EventListener() {
 
                 @Override
-                public void handleEvent(UIEvent event) {
+                public void handleEvent(Event event) {
                     event.preventDefault();
                     masterySet.up(mastery);
                 }
             }).on(UIAction.ClickRight, new EventListener() {
 
                 @Override
-                public void handleEvent(UIEvent event) {
+                public void handleEvent(Event event) {
                     event.preventDefault();
                     masterySet.down(mastery);
                 }

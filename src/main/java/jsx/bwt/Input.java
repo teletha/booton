@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import js.dom.UIAction;
 import js.lang.NativeObject;
 import js.lang.NativeObject.PropertyDescriptor;
 import js.util.Converter;

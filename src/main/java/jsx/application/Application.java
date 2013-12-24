@@ -21,8 +21,8 @@ import java.util.regex.Pattern;
 
 import js.dom.DocumentFragment;
 import js.dom.EventListener;
-import jsx.bwt.UIAction;
-import jsx.bwt.UIEvent;
+import js.dom.Event;
+import js.dom.UIAction;
 import jsx.event.Publishable;
 import kiss.I;
 
@@ -106,7 +106,7 @@ public abstract class Application {
          * </p>
          */
         @Override
-        public void handleEvent(UIEvent event) {
+        public void handleEvent(Event event) {
             dispatch(location.hash);
         }
 
