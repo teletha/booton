@@ -16,7 +16,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import jsx.bwt.UIEvent;
+import js.dom.Event;
 
 /**
  * @version 2013/10/05 11:27:24
@@ -74,8 +74,8 @@ public @interface Subscribe {
 
     /**
      * <p>
-     * Stop event propagation and default behavior. {@link UIEvent#stopPropagation()} and
-     * {@link UIEvent#preventDefault()} methods will be called.
+     * Stop event propagation and default behavior. {@link Event#stopPropagation()} and
+     * {@link Event#preventDefault()} methods will be called.
      * </p>
      * 
      * @return The <code>true</code> will stop the current processing event.

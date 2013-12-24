@@ -18,5 +18,16 @@ import java.util.function.Predicate;
  * 
  * @version 2013/12/23 19:26:47
  */
-public interface EventType<T extends Event> extends Predicate<T> {
+public interface EventType<E extends Event> extends Predicate<E> {
+
+    /**
+     * <p>
+     * Test the specified event object is suitable for this {@link EventType}. Default implementaion
+     * always return true.
+     * </p>
+     */
+    @Override
+    public default boolean test(E event) {
+        return true;
+    }
 }

@@ -20,11 +20,11 @@ import java.util.List;
 import js.dom.DocumentFragment;
 import js.dom.Element;
 import js.dom.EventListener;
+import js.dom.Event;
+import js.dom.UIAction;
 import jsx.application.Application;
 import jsx.application.Page;
 import jsx.application.PageInfo;
-import jsx.bwt.UIAction;
-import jsx.bwt.UIEvent;
 import teemowork.ChampionComparingStyle.Body;
 import teemowork.ChampionComparingStyle.Head;
 import teemowork.ChampionComparingStyle.Icon;
@@ -78,7 +78,7 @@ public class ChampionComparing extends Page {
             head.child(StatusView.class).text(value.name).on(UIAction.Click, new EventListener() {
 
                 @Override
-                public void handleEvent(UIEvent event) {
+                public void handleEvent(Event event) {
                     sort(value);
                 }
             });
@@ -94,7 +94,7 @@ public class ChampionComparing extends Page {
             champion.applyIcon(row.child(Icon.class).on(UIAction.Click, new EventListener() {
 
                 @Override
-                public void handleEvent(UIEvent event) {
+                public void handleEvent(Event event) {
                     Application.show(new ChampionDetail(champion));
                 }
             }));

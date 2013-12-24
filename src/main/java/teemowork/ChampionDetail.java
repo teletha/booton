@@ -18,12 +18,12 @@ import java.util.List;
 import js.dom.DocumentFragment;
 import js.dom.Element;
 import js.dom.EventListener;
+import js.dom.Event;
+import js.dom.UIAction;
 import js.math.Mathematics;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.UI;
-import jsx.bwt.UIAction;
-import jsx.bwt.UIEvent;
 import jsx.event.Subscribe;
 import jsx.event.SubscribeUI;
 import teemowork.ChampionDetailStyle.Active;
@@ -165,7 +165,7 @@ public class ChampionDetail extends Page {
              * {@inheritDoc}
              */
             @Override
-            public void handleEvent(UIEvent event) {
+            public void handleEvent(Event event) {
                 switch (event.which) {
                 case 113:// Q
                     build.active(SkillKey.Q);
@@ -268,14 +268,14 @@ public class ChampionDetail extends Page {
             iconBox.on(UIAction.Click, new EventListener() {
 
                 @Override
-                public void handleEvent(UIEvent event) {
+                public void handleEvent(Event event) {
                     event.preventDefault();
                     build.up(skill);
                 }
             }).on(UIAction.ClickRight, new EventListener() {
 
                 @Override
-                public void handleEvent(UIEvent event) {
+                public void handleEvent(Event event) {
                     event.preventDefault();
                     build.down(skill);
                 }

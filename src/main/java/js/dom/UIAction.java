@@ -8,14 +8,14 @@
  *          http://opensource.org/licenses/mitlicense.php
  */
 
-package jsx.bwt;
+package js.dom;
 
 import jsx.event.EventType;
 
 /**
  * @version 2013/10/10 13:45:14
  */
-public enum UIAction implements EventType<UIEvent> {
+public enum UIAction implements EventType<Event> {
 
     /** The ui event type. */
     PointerDown,
@@ -362,7 +362,7 @@ public enum UIAction implements EventType<UIEvent> {
      * {@inheritDoc}
      */
     @Override
-    public boolean test(UIEvent event) {
+    public boolean test(Event event) {
         return code == -1 || event.which == code;
     }
 }

@@ -9,8 +9,8 @@
  */
 package jsx.bwt;
 
+import static js.dom.UIAction.*;
 import static js.lang.Global.*;
-import static jsx.bwt.UIAction.*;
 import js.dom.ClientRect;
 import js.dom.Element;
 import jsx.application.PageUnload;

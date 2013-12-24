@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 import js.lang.NativeFunction;
-import jsx.bwt.UIEvent;
 import booton.css.CSS;
 
 /**
@@ -94,7 +93,7 @@ public class EmulateElement extends Element implements Nodable {
      * {@inheritDoc}
      */
     @Override
-    protected void dispatchEvent(UIEvent event) {
+    protected void dispatchEvent(Event event) {
         events.dispatchEvent(event);
     }
 

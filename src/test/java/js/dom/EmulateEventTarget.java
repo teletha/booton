@@ -10,7 +10,6 @@
 package js.dom;
 
 import js.lang.NativeFunction;
-import jsx.bwt.UIEvent;
 import kiss.Table;
 
 /**
@@ -45,7 +44,7 @@ public class EmulateEventTarget extends EventTarget {
      * {@inheritDoc}
      */
     @Override
-    protected void dispatchEvent(UIEvent event) {
+    protected void dispatchEvent(Event event) {
         if (event != null) {
             for (NativeFunction listener : listeners.get(event.type)) {
                 listener.apply(null, event);

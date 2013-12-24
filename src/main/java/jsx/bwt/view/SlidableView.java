@@ -10,8 +10,8 @@
 package jsx.bwt.view;
 
 import static js.lang.Global.*;
+import js.dom.UIAction;
 import jsx.bwt.UI;
-import jsx.bwt.UIAction;
 import jsx.bwt.view.SlidableViewStyle.Shown;
 import jsx.bwt.view.SlidableViewStyle.Slider;
 import jsx.bwt.view.SlidableViewStyle.ViewableArea;
