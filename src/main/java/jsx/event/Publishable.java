@@ -92,7 +92,7 @@ public class Publishable {
                     for (Info info : collect(annotation, entry.getKey())) {
                         // Check duplication at first time only.
                         // If the duplicated listener is found, all the other listeners are ignored.
-                        if (!register(listeners, info, new MethodInvoker(listeners, entry.getKey(), info.abort), index++ == 0)) {
+                        if (!register(info, new MethodInvoker(listeners, entry.getKey(), info.abort), index++ == 0)) {
                             return;
                         }
                     }
@@ -110,7 +110,7 @@ public class Publishable {
      * @param listener An event listener to add.
      */
     public final void register(Class type, Runnable listener) {
-        register(listener, new Info(type), new RunnableInvoker(listener), true);
+        register(new Info(type), new RunnableInvoker(listener), true);
     }
 
     /**
@@ -122,7 +122,7 @@ public class Publishable {
      * @param listener An event listener to add.
      */
     public final <T> void register(Class<T> type, Consumer<T> listener) {
-        register(listener, new Info(type), new ConsumerInvoker(listener), true);
+        register(new Info(type), new ConsumerInvoker(listener), true);
     }
 
     /**
@@ -134,7 +134,7 @@ public class Publishable {
      * @param listener An event listener to add.
      */
     public final <E extends Enum & EventType> void register(E type, Runnable listener) {
-        register(listener, new Info(type), new RunnableInvoker(listener), true);
+        register(new Info(type), new RunnableInvoker(listener), true);
     }
 
     /**
@@ -146,7 +146,7 @@ public class Publishable {
      * @param listener An event listener to add.
      */
     public final <E extends Enum & EventType<T>, T extends Event> void register(E type, Consumer<T> listener) {
-        register(listener, new Info(type), new ConsumerInvoker(listener), true);
+        register(new Info(type), new ConsumerInvoker(listener), true);
     }
 
     /**
@@ -154,13 +154,12 @@ public class Publishable {
      * Register an event listener.
      * </p>
      * 
-     * @param subscribable
      * @param info A event type infomation.
      * @param listener An event listener.
      * @param checkDuplication A flag for duplication checking.
      * @return If the registration is success, this method returns true.
      */
-    private boolean register(Object subscribable, Info info, Listener listener, boolean checkDuplication) {
+    private boolean register(Info info, Listener listener, boolean checkDuplication) {
         if (holder == null) {
             holder = new HashMap();
             startListening(Object.class);
@@ -175,7 +174,7 @@ public class Publishable {
             startListening(info.type);
         } else if (checkDuplication) {
             for (Listener registered : listeners) {
-                if (registered.equals(subscribable)) {
+                if (registered.equals(listener.listener)) {
                     return false;
                 }
             }
@@ -187,7 +186,7 @@ public class Publishable {
         int count = info.count;
 
         if (0 < count) {
-            listener = new Count(count, this, subscribable, listener);
+            listener = new Count(count, this, listener.listener, listener);
         }
 
         // ===========================
@@ -223,35 +222,14 @@ public class Publishable {
      * Stop subscribing events from which the specified {@link Publishable} emits.
      * </p>
      * 
-     * @param subscribable A target event subscriber.
+     * @param listeners A target event subscriber.
      */
-    public final void unregister(Object subscribable) {
-        if (holder != null && subscribable != null) {
-            for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
+    public final void unregister(Object listeners) {
+        if (holder != null && listeners != null) {
+            for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(listeners.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
                     for (Info info : collect(annotation, entry.getKey())) {
-                        List<Listener> subscribers = holder.get(info.type);
-
-                        if (subscribers != null) {
-                            for (int i = subscribers.size() - 1; 0 <= i; i--) {
-                                Listener listener = subscribers.get(i);
-
-                                if (listener.equals(subscribable)) {
-                                    subscribers.remove(i);
-
-                                    if (subscribers.isEmpty()) {
-                                        holder.remove(info.type);
-                                        stopListening(info.type);
-
-                                        if (holder.isEmpty()) {
-                                            holder = null;
-                                            stopListening(Object.class);
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                        }
+                        unregister(info, listeners);
                     }
                 }
             }
