@@ -81,15 +81,20 @@ public class Publishable {
      * Start subscribing events from which the specified {@link Publishable} emits.
      * </p>
      * 
-     * @param subscribable A target event subscriber.
+     * @param listeners A target event listeners.
      */
-    public final void register(Object subscribable) {
-        if (subscribable != null) {
-            for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(subscribable.getClass()).entrySet()) {
+    public final void register(Object listeners) {
+        if (listeners != null) {
+            int index = 0;
+
+            for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(listeners.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
                     for (Info info : collect(annotation, entry.getKey())) {
-                        Listener listener = new MethodInvoker(subscribable, info.method, info.abort);
-                        register(subscribable, info, listener);
+                        // Check duplication at first time only.
+                        // If the duplicated listener is found, all the other listeners are ignored.
+                        if (!register(listeners, info, new MethodInvoker(listeners, entry.getKey(), info.abort), index++ == 0)) {
+                            return;
+                        }
                     }
                 }
             }
@@ -104,8 +109,8 @@ public class Publishable {
      * @param type An event type.
      * @param listener An event listener to add.
      */
-    public <T> void register(Class<T> type, Runnable listener) {
-        register(listener, new Info(type), new RunnableInvoker(listener));
+    public final void register(Class type, Runnable listener) {
+        register(listener, new Info(type), new RunnableInvoker(listener), true);
     }
 
     /**
@@ -116,12 +121,32 @@ public class Publishable {
      * @param type An event type.
      * @param listener An event listener to add.
      */
-    public <T> void register(Class<T> type, Consumer<T> listener) {
-        register(listener, new Info(type), new ConsumerInvoker(listener));
+    public final <T> void register(Class<T> type, Consumer<T> listener) {
+        register(listener, new Info(type), new ConsumerInvoker(listener), true);
     }
 
-    public <E extends Enum & EventType<T>, T extends Event> void register(E type, Consumer<T> listener) {
-        register(listener, new Info(type), new ConsumerInvoker(listener));
+    /**
+     * <p>
+     * Register the specified event listener.
+     * </p>
+     * 
+     * @param type An event type.
+     * @param listener An event listener to add.
+     */
+    public final <E extends Enum & EventType> void register(E type, Runnable listener) {
+        register(listener, new Info(type), new RunnableInvoker(listener), true);
+    }
+
+    /**
+     * <p>
+     * Register the specified event listener.
+     * </p>
+     * 
+     * @param type An event type.
+     * @param listener An event listener to add.
+     */
+    public final <E extends Enum & EventType<T>, T extends Event> void register(E type, Consumer<T> listener) {
+        register(listener, new Info(type), new ConsumerInvoker(listener), true);
     }
 
     /**
@@ -130,26 +155,28 @@ public class Publishable {
      * </p>
      * 
      * @param subscribable
-     * @param info
-     * @param listener
+     * @param info A event type infomation.
+     * @param listener An event listener.
+     * @param checkDuplication A flag for duplication checking.
+     * @return If the registration is success, this method returns true.
      */
-    private void register(Object subscribable, Info info, Listener listener) {
+    private boolean register(Object subscribable, Info info, Listener listener, boolean checkDuplication) {
         if (holder == null) {
             holder = new HashMap();
             startListening(Object.class);
         }
 
-        List<Listener> subscribers = holder.get(info.type);
+        List<Listener> listeners = holder.get(info.type);
 
-        if (subscribers == null) {
-            subscribers = new CopyOnWriteArrayList();
-            holder.put(info.type, subscribers);
+        if (listeners == null) {
+            listeners = new CopyOnWriteArrayList();
+            holder.put(info.type, listeners);
 
             startListening(info.type);
-        } else {
-            for (Listener registered : subscribers) {
-                if (registered.equals(subscribable, info.method)) {
-                    return;
+        } else if (checkDuplication) {
+            for (Listener registered : listeners) {
+                if (registered.equals(subscribable)) {
+                    return false;
                 }
             }
         }
@@ -183,7 +210,12 @@ public class Publishable {
         if (0 < time) {
             listener = new Debounce(time, listener);
         }
-        subscribers.add(listener);
+
+        // register a listener
+        listeners.add(listener);
+
+        // API definition
+        return true;
     }
 
     /**
@@ -204,7 +236,7 @@ public class Publishable {
                             for (int i = subscribers.size() - 1; 0 <= i; i--) {
                                 Listener listener = subscribers.get(i);
 
-                                if (listener.equals(subscribable, null)) {
+                                if (listener.equals(subscribable)) {
                                     subscribers.remove(i);
 
                                     if (subscribers.isEmpty()) {
@@ -251,14 +283,14 @@ public class Publishable {
     }
 
     private void unregister(Info info, Object listener) {
-        List<Listener> subscribers = holder.get(info.type);
+        List<Listener> listeners = holder.get(info.type);
 
-        if (subscribers != null) {
-            for (int i = subscribers.size() - 1; 0 <= i; i--) {
-                if (subscribers.get(i).equals(listener, null)) {
-                    subscribers.remove(i);
+        if (listeners != null) {
+            for (int i = listeners.size() - 1; 0 <= i; i--) {
+                if (listeners.get(i).equals(listener)) {
+                    listeners.remove(i);
 
-                    if (subscribers.isEmpty()) {
+                    if (listeners.isEmpty()) {
                         holder.remove(info.type);
                         stopListening(info.type);
 
@@ -308,10 +340,10 @@ public class Publishable {
                 infos.add(new Info(subscribe, method));
             }
         } else if (type == SubscribeUI.class) {
-            infos.add(new Info((SubscribeUI) annotation, method));
+            infos.add(new Info((SubscribeUI) annotation));
         } else if (type == SubscribeUIs.class) {
             for (SubscribeUI subscribe : ((SubscribeUIs) annotation).value()) {
-                infos.add(new Info(subscribe, method));
+                infos.add(new Info(subscribe));
             }
         }
         return infos;
@@ -321,9 +353,6 @@ public class Publishable {
      * @version 2013/12/18 15:26:58
      */
     private static class Info {
-
-        /** The listener method. */
-        private Method method;
 
         /** The event type. */
         private Object type;
@@ -377,8 +406,6 @@ public class Publishable {
          * @param subscribe
          */
         private Info(Subscribe subscribe, Method method) {
-            this.method = method;
-
             Class type;
 
             if (method.getParameterTypes().length == 1) {
@@ -398,8 +425,7 @@ public class Publishable {
         /**
          * @param subscribe
          */
-        private Info(SubscribeUI subscribe, Method method) {
-            this.method = method;
+        private Info(SubscribeUI subscribe) {
             this.type = subscribe.type();
             this.debounce = subscribe.debounce();
             this.throttle = subscribe.throttle();
@@ -420,10 +446,10 @@ public class Publishable {
     /**
      * @version 2013/12/18 9:29:13
      */
-    private static abstract class Listener {
+    private static abstract class Listener<T> {
 
-        /** The delegator. */
-        protected Listener delegator;
+        /** The actual event listener. */
+        protected T listener;
 
         /**
          * <p>
@@ -440,26 +466,24 @@ public class Publishable {
          * </p>
          * 
          * @param instance A target listener.
-         * @param method A target listener method.
          * @return A result.
          */
-        protected boolean equals(Object instance, Method method) {
-            return delegator.equals(instance, method);
+        @Override
+        public boolean equals(Object instance) {
+            return listener.equals(instance);
         }
     }
 
     /**
      * @version 2013/12/20 9:48:58
      */
-    private static class RunnableInvoker extends Listener {
-
-        private final Runnable runnable;
+    private static class RunnableInvoker extends Listener<Runnable> {
 
         /**
          * @param runnable
          */
         private RunnableInvoker(Runnable runnable) {
-            this.runnable = runnable;
+            this.listener = runnable;
         }
 
         /**
@@ -467,30 +491,20 @@ public class Publishable {
          */
         @Override
         protected void accept(Object event) {
-            runnable.run();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected boolean equals(Object instance, Method method) {
-            return runnable == instance;
+            listener.run();
         }
     }
 
     /**
      * @version 2013/12/20 9:48:58
      */
-    private static class ConsumerInvoker extends Listener {
-
-        private final Consumer consumer;
+    private static class ConsumerInvoker extends Listener<Consumer> {
 
         /**
          * @param consumer
          */
         private ConsumerInvoker(Consumer consumer) {
-            this.consumer = consumer;
+            this.listener = consumer;
         }
 
         /**
@@ -498,15 +512,7 @@ public class Publishable {
          */
         @Override
         protected void accept(Object event) {
-            consumer.accept(event);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected boolean equals(Object instance, Method method) {
-            return consumer == instance;
+            listener.accept(event);
         }
     }
 
@@ -514,9 +520,6 @@ public class Publishable {
      * @version 2013/12/18 9:30:25
      */
     private static class MethodInvoker extends Listener {
-
-        /** The listener instance. */
-        private final Object instance;
 
         /** The listener method. */
         private final Method method;
@@ -535,7 +538,7 @@ public class Publishable {
         private MethodInvoker(Object instance, Method method, boolean abort) {
             method.setAccessible(true);
 
-            this.instance = instance;
+            this.listener = instance;
             this.method = method;
             this.hasParam = method.getParameterTypes().length == 1;
             this.abort = abort;
@@ -554,9 +557,9 @@ public class Publishable {
 
             try {
                 if (hasParam) {
-                    method.invoke(instance, event);
+                    method.invoke(listener, event);
                 } else {
-                    method.invoke(instance);
+                    method.invoke(listener);
                 }
             } catch (Exception e) {
                 // If this exception will be thrown, it is bug of this program. So we must rethrow
@@ -564,20 +567,12 @@ public class Publishable {
                 throw new Error(e);
             }
         }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean equals(Object instance, Method method) {
-            return this.instance == instance && (method == null || this.method.equals(method));
-        }
     }
 
     /**
      * @version 2013/12/18 9:31:12
      */
-    private static class Count extends Listener {
+    private static class Count extends Listener<Listener> {
 
         /** The delegator. */
         private final Publishable publishable;
@@ -601,7 +596,7 @@ public class Publishable {
             this.limit = limit;
             this.publishable = publishable;
             this.subscribable = subscribable;
-            this.delegator = listener;
+            this.listener = listener;
         }
 
         /**
@@ -609,7 +604,7 @@ public class Publishable {
          */
         @Override
         public void accept(Object event) {
-            delegator.accept(event);
+            listener.accept(event);
 
             if (++current == limit) {
                 publishable.unregister(subscribable);
@@ -624,7 +619,7 @@ public class Publishable {
      * 
      * @version 2013/12/18 9:22:56
      */
-    private static class Throttle extends Listener {
+    private static class Throttle extends Listener<Listener> {
 
         /** The delay time. */
         private final long delay;
@@ -638,7 +633,7 @@ public class Publishable {
          */
         private Throttle(long delay, Listener listener) {
             this.delay = delay;
-            this.delegator = listener;
+            this.listener = listener;
         }
 
         /**
@@ -651,7 +646,7 @@ public class Publishable {
             if (latest + delay < now) {
                 latest = now;
 
-                delegator.accept(event);
+                listener.accept(event);
             }
         }
     }
@@ -663,7 +658,7 @@ public class Publishable {
      * 
      * @version 2013/12/18 9:19:21
      */
-    private static class Debounce extends Listener {
+    private static class Debounce extends Listener<Listener> {
 
         /** The delay time. */
         private final long delay;
@@ -677,7 +672,7 @@ public class Publishable {
          */
         private Debounce(long delay, Listener listener) {
             this.delay = delay;
-            this.delegator = listener;
+            this.listener = listener;
         }
 
         /**
@@ -691,7 +686,7 @@ public class Publishable {
 
             this.id = setTimeout(() -> {
                 id = -1;
-                delegator.accept(event);
+                listener.accept(event);
             }, delay);
         }
     }
@@ -703,7 +698,7 @@ public class Publishable {
      * 
      * @version 2013/12/18 9:18:45
      */
-    private static class Delay extends Listener {
+    private static class Delay extends Listener<Listener> {
 
         /** The delay time. */
         private final long delay;
@@ -712,79 +707,8 @@ public class Publishable {
          * @param delay
          * @param listener
          */
-        public Delay(long delay, Listener listener) {
+        private Delay(long delay, Listener listener) {
             this.delay = delay;
-            this.delegator = listener;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void accept(Object event) {
-            setTimeout(() -> {
-                delegator.accept(event);
-            }, delay);
-        }
-    }
-
-    /**
-     * @version 2013/12/22 1:15:50
-     */
-    private static class MethodConsumer implements Consumer {
-
-        /** The event listener. */
-        private final Object instance;
-
-        /** The event listener. */
-        private final Method method;
-
-        /** The parameter flag. */
-        private final boolean hasParam;
-
-        /**
-         * @param instance
-         * @param method
-         */
-        private MethodConsumer(Object instance, Method method) {
-            this.instance = instance;
-            this.method = method;
-            this.hasParam = method.getParameterTypes().length == 1;
-
-            method.setAccessible(true);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void accept(Object event) {
-            try {
-                if (hasParam) {
-                    method.invoke(instance, event);
-                } else {
-                    method.invoke(instance);
-                }
-            } catch (Exception e) {
-                // If this exception will be thrown, it is bug of this program. So we must rethrow
-                // the wrapped error in here.
-                throw new Error(e);
-            }
-        }
-    }
-
-    /**
-     * @version 2013/12/22 1:20:30
-     */
-    private static class RunnableConsumer implements Consumer {
-
-        /** The event listener. */
-        private final Runnable listener;
-
-        /**
-         * @param listener
-         */
-        private RunnableConsumer(Runnable listener) {
             this.listener = listener;
         }
 
@@ -793,7 +717,9 @@ public class Publishable {
          */
         @Override
         public void accept(Object event) {
-            listener.run();
+            setTimeout(() -> {
+                listener.accept(event);
+            }, delay);
         }
     }
 }
