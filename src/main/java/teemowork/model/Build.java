@@ -77,11 +77,12 @@ public class Build extends Publishable implements StatusCalculator {
             skillLevel[i] = champion.skills[i].getMinLevel();
         }
 
-        items[0] = Item.FiendishCodex;
-        items[1] = Item.FiendishCodex;
-        items[2] = Item.LastWhisper;
-        items[4] = Item.RabadonsDeathcap;
-        items[5] = Item.InfinityEdge;
+        items[0] = Item.DeathfireGrasp;
+        items[1] = Item.SpiritVisage;
+        items[2] = Item.RabadonsDeathcap;
+        items[3] = Item.SorcerersShoes;
+        items[4] = Item.RylaisCrystalScepter;
+        items[5] = Item.ZhonyasHourglass;
     }
 
     /**
@@ -174,6 +175,7 @@ public class Build extends Publishable implements StatusCalculator {
         case Time:
         case Value:
         case Distance:
+        case DealtDamage:
             return new Computed(0, 0, status);
 
         case BounusAD:
