@@ -266,7 +266,7 @@ public class Publishable {
      * @param type An event type.
      * @param listener An event listener to remove.
      */
-    public void unregister(Class type, Runnable listener) {
+    public final void unregister(Class type, Runnable listener) {
         unregister(new Info(type), listener);
     }
 
@@ -278,10 +278,42 @@ public class Publishable {
      * @param type An event type.
      * @param listener An event listener to remove.
      */
-    public <T> void unregister(Class<T> type, Consumer<T> listener) {
+    public final <T> void unregister(Class<T> type, Consumer<T> listener) {
         unregister(new Info(type), listener);
     }
 
+    /**
+     * <p>
+     * Unregister the specified event listener.
+     * </p>
+     * 
+     * @param type An event type.
+     * @param listener An event listener to remove.
+     */
+    public final <E extends Enum & EventType> void unregister(E type, Runnable listener) {
+        unregister(new Info(type), listener);
+    }
+
+    /**
+     * <p>
+     * Unregister the specified event listener.
+     * </p>
+     * 
+     * @param type An event type.
+     * @param listener An event listener to remove.
+     */
+    public final <E extends Enum & EventType<T>, T extends Event> void unregister(E type, Consumer<T> listener) {
+        unregister(new Info(type), listener);
+    }
+
+    /**
+     * <p>
+     * Unregister the specified event listener.
+     * </p>
+     * 
+     * @param type An event type.
+     * @param listener An event listener to remove.
+     */
     private void unregister(Info info, Object listener) {
         List<Listener> listeners = holder.get(info.type);
 

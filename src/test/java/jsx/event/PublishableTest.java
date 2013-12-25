@@ -479,10 +479,10 @@ public class PublishableTest {
             consumeInt += value;
         }
 
-        private String consumeUI;
+        private int consumeUI;
 
         private void consumeUIEvent(Event value) {
-            consumeUI = value.action.name;
+            consumeUI++;
         }
     }
 
@@ -501,6 +501,23 @@ public class PublishableTest {
         pubsub.unregister(String.class, runnable);
         pubsub.publish("unsubscribe");
         assert pubsub.runnable == 1;
+    }
+
+    @Test
+    public void registerRunnableEnum() throws Exception {
+        FunctionalPubSub pubsub = new FunctionalPubSub();
+        Runnable runnable = pubsub::runnable;
+        pubsub.register(UIAction.Click, runnable);
+
+        pubsub.publish(event(UIAction.Click));
+        assert pubsub.runnable == 1;
+
+        pubsub.publish(event(UIAction.Click));
+        assert pubsub.runnable == 2;
+
+        pubsub.unregister(UIAction.Click, runnable);
+        pubsub.publish(event(UIAction.Click));
+        assert pubsub.runnable == 2;
     }
 
     @Test
@@ -562,7 +579,17 @@ public class PublishableTest {
         pubsub.register(UIAction.Click, consumer);
 
         pubsub.publish(event(UIAction.Click));
-        assert pubsub.consumeUI.equals("click");
+        assert pubsub.consumeUI == 1;
+
+        pubsub.publish(event(UIAction.Click));
+        assert pubsub.consumeUI == 2;
+
+        pubsub.publish(event(UIAction.Focus));
+        assert pubsub.consumeUI == 2;
+
+        pubsub.unregister(UIAction.Click, consumer);
+        pubsub.publish(event(UIAction.Click));
+        assert pubsub.consumeUI == 2;
     }
 
     @Test
