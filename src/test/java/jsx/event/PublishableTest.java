@@ -504,6 +504,18 @@ public class PublishableTest {
     }
 
     @Test
+    public void registerRunnableMultiple() throws Exception {
+        FunctionalPubSub pubsub = new FunctionalPubSub();
+        Runnable runnable = pubsub::runnable;
+        pubsub.register(String.class, runnable);
+        pubsub.register(String.class, runnable);
+        pubsub.register(String.class, runnable);
+
+        pubsub.publish("string");
+        assert pubsub.runnable == 1;
+    }
+
+    @Test
     public void registerConsumerInt() throws Exception {
         FunctionalPubSub pubsub = new FunctionalPubSub();
         Consumer<Integer> consumer = pubsub::consumeInt;
@@ -551,6 +563,17 @@ public class PublishableTest {
 
         pubsub.publish(event(UIAction.Click));
         assert pubsub.consumeUI.equals("click");
+    }
 
+    @Test
+    public void registerConsumerMultiple() throws Exception {
+        FunctionalPubSub pubsub = new FunctionalPubSub();
+        Consumer<Integer> consumer = pubsub::consumeInt;
+        pubsub.register(int.class, consumer);
+        pubsub.register(int.class, consumer);
+        pubsub.register(int.class, consumer);
+
+        pubsub.publish(10);
+        assert pubsub.consumeInt == 10;
     }
 }
