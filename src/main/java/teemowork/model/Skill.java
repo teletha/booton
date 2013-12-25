@@ -4118,7 +4118,8 @@ public class Skill extends Describable<SkillDescriptor> {
                 .variable(1, Shield, 100, 50, ap(0.9))
                 .variable(2, Radius, 550)
                 .variable(3, MagicDamage, 100, 50, ap(0.9))
-                .mana(70, 10);
+                .mana(70, 10)
+                .cd(8);
         Enrage.update()
                 .active("{1}を得る。使用中にLHをとるとSionの最大HPが{2}増加する。対象が敵Champion/SiegeまたはSuperMinion/Buffを持った中立クリープの場合、増加値は2倍になる。")
                 .variable(1, AD, 25, 10)
@@ -4176,30 +4177,8 @@ public class Skill extends Describable<SkillDescriptor> {
         Soraka();
         Swain();
         Syndra();
-
-        /** Talon */
-        Mercy.update().passive("スロー、スタン、スネア、サプレッションを受けている状態の敵ユニットに対しては通常攻撃のダメージが10%上昇する。");
-        NoxianDiplomacy.update()
-                .active("次の通常攻撃に追加物理DMが付与される。対象がChampionの場合、更に6秒間対象を出血させその間毎秒物理DMを与える。また出血中の対象の視界を得る。")
-                .mana(40, 5)
-                .cd(8, -1);
-        Rake.update()
-                .active("前方指定範囲に飛んだ後すぐ戻る刃を投げ当たった敵ユニットに物理DMとスロー(2s)を与える。刃は戻り際にも判定がある。")
-                .mana(60, 5)
-                .cd(10)
-                .range(600);
-        Cutthroat.update()
-                .active("対象の敵ユニットに跳躍しサイレンス(1s)とマーク(3s)を与える。マークがついた敵ユニットに対してはTalonが与えるダメージが増加する。")
-                .mana(35, 5)
-                .cd(18, -2)
-                .range(700);
-        ShadowAssault.update()
-                .active("Talonの周囲に8本の刃を投げ当たった敵ユニットに物理DMを与え、同時に2.5秒間ステルスになりその間移動速度が40%増加する。ステルスが解除される、または敵ユニットを攻撃すると刃がTalonの元に戻ってくる。刃は戻り際にも判定がある。")
-                .mana(80, 10)
-                .cd(75, -10)
-                .range(1000);
-
         Taric();
+        Talon();
 
         /** Teemo */
         Camouflage.update()
@@ -6570,6 +6549,39 @@ public class Skill extends Describable<SkillDescriptor> {
                 .mana(100)
                 .cd(60);
         Radiance.update(P314).variable(2, MagicDamage, 150, 100, ap(0.5)).cd(75);
+    }
+
+    private static void Talon() {
+        Mercy.update().passive("スロー、スタン、スネア、サプレッションを受けている状態の敵ユニットに対しては{1}する。").variable(1, AttackDamageRatio, 10);
+        NoxianDiplomacy.update()
+                .active("次の通常攻撃に{1}が付与される。対象がChampionの場合、更に6秒間対象を出血させその間毎秒{2}を与える。また出血中の対象の{3}。")
+                .variable(1, PhysicalDamage, 30, 30, bounusAD(0.3))
+                .variable(2, PhysicalDamage, 10, 10, bounusAD(1))
+                .variable(3, Visionable)
+                .mana(40, 5)
+                .cd(8, -1);
+        Rake.update()
+                .active("前方指定範囲に飛んだ後すぐ戻る刃を投げ当たった敵ユニットに{1}と2秒間{2}を与える。刃は戻り際にも判定がある。")
+                .variable(1, PhysicalDamage, 30, 25, bounusAD(0.6))
+                .variable(2, MSSlowRatio, 20, 5)
+                .mana(60, 5)
+                .cd(10)
+                .range(600);
+        Cutthroat.update()
+                .active("対象の敵ユニットに跳躍し{1}と3秒間マークを与える。マークがついた敵ユニットに対しては{2}する。")
+                .variable(1, Silence, 1)
+                .variable(2, DamageRatio, 3, 3)
+                .mana(35, 5)
+                .cd(18, -2)
+                .range(700);
+        ShadowAssault.update()
+                .active("周囲に8本の刃を投げ当たった敵ユニットに{1}を与え、同時に{2}になり{3}する。ステルスが解除される、または敵ユニットを攻撃すると刃がTalonの元に戻ってくる。刃は戻り際にも判定がある。")
+                .variable(1, PhysicalDamage, 120, 50, bounusAD(0.75))
+                .variable(2, Stealth, 2.5)
+                .variable(3, MSRatio, 40)
+                .mana(80, 10)
+                .cd(75, -10)
+                .range(1000);
     }
 
     private static void Thresh() {
