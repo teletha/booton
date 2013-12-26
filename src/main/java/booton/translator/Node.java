@@ -616,6 +616,10 @@ class Node {
                 Node exit = block.exit;
 
                 if (exit != null) {
+                    if (debugger.enable) {
+                        buffer.comment("Start " + block.start.id + "  End " + block.end.id + "   Catcher " + block.catcher.id);
+                    }
+                    buffer.comment("ext block " + exit.id);
                     process(exit, buffer);
                 }
             }

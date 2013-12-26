@@ -9,14 +9,18 @@
  */
 package jsx.event;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+
+import kiss.Extensible;
 
 /**
- * @version 2013/12/24 23:08:46
+ * @version 2013/12/26 9:15:03
  */
-public class Info {
+public abstract class ListenerDetail<A extends Annotation> implements Extensible {
 
     /** The event type. */
-    public Object type;
+    protected abstract Object type(A anntation, Method method);
 
     /**
      * <p>
@@ -25,7 +29,9 @@ public class Info {
      * 
      * @return A time (ms);
      */
-    public long debounce;
+    protected long debounce(A annotation) {
+        return 0;
+    }
 
     /**
      * <p>
@@ -34,7 +40,9 @@ public class Info {
      * 
      * @return A time (ms);
      */
-    public long throttle;
+    protected long throttle(A annotation) {
+        return 0;
+    }
 
     /**
      * <p>
@@ -43,7 +51,9 @@ public class Info {
      * 
      * @return A time (ms);
      */
-    public long delay;
+    protected long delay(A annotation) {
+        return 0;
+    }
 
     /**
      * <p>
@@ -52,7 +62,9 @@ public class Info {
      * 
      * @return
      */
-    public int count;
+    protected int count(A annotation) {
+        return 0;
+    }
 
     /**
      * <p>
@@ -61,5 +73,7 @@ public class Info {
      * 
      * @return The <code>true</code> will stop the current processing event.
      */
-    public boolean abort;
+    protected boolean abort(A annotation) {
+        return false;
+    }
 }
