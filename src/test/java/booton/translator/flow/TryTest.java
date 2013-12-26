@@ -10,7 +10,9 @@
 package booton.translator.flow;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -19,6 +21,7 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
+import booton.translator.Debuggable;
 
 /**
  * @version 2013/04/11 19:55:53
@@ -690,16 +693,48 @@ public class TryTest extends ScriptTester {
                 Map<String, String> map = new HashMap();
                 map.put("1", "one");
                 map.put("2", "two");
-                String valeu = "";
+                String value = "";
 
                 for (Entry<String, String> entry : map.entrySet()) {
                     try {
-                        valeu += "1";
+                        value += "1";
                     } catch (IllegalArgumentException e) {
-                        valeu += "2";
+                        value += "2";
                     }
                 }
-                return valeu;
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void insideForWithContinue() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act() {
+                int value = 0;
+
+                for (int i = 0; i < 2; i++) {
+                    List<Integer> list = new ArrayList();
+                    list.add(1);
+                    list.add(2);
+                    list.add(3);
+
+                    for (int j : list) {
+                        try {
+                            j = j + 2;
+
+                            if (j % 2 == 0) {
+                                continue;
+                            }
+                        } catch (IllegalArgumentException e) {
+                            // do nothing
+                        }
+                        value += 100;
+                    }
+                }
+                return value;
             }
         });
     }
