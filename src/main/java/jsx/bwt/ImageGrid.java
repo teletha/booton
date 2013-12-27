@@ -13,9 +13,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
 
 import js.dom.Element;
-import js.dom.EventListener;
 import js.dom.Event;
 import js.dom.UIAction;
 import jsx.bwt.ImageGridStyle.Container;
@@ -77,10 +77,10 @@ public abstract class ImageGrid<T> extends UI {
 
             container.child(Title.class).text(getTitle(source));
 
-            image.on(UIAction.Click, new EventListener() {
+            image.on(UIAction.Click, new Consumer<Event>() {
 
                 @Override
-                public void handleEvent(Event event) {
+                public void accept(Event event) {
                     select(source);
                 }
             });

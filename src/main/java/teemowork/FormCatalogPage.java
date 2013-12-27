@@ -9,8 +9,9 @@
  */
 package teemowork;
 
+import java.util.function.Consumer;
+
 import js.dom.DocumentFragment;
-import js.dom.EventListener;
 import js.dom.Event;
 import jsx.application.Page;
 import jsx.application.PageInfo;
@@ -58,10 +59,10 @@ public class FormCatalogPage extends Page {
 
         root.child(new Input(model.type));
         root.child(new Input(model.name));
-        root.child(new Button("Add", new EventListener() {
+        root.child(new Button("Add", new Consumer<Event>() {
 
             @Override
-            public void handleEvent(Event event) {
+            public void accept(Event event) {
                 model.type++;
                 System.out.println(model.type);
                 model.name = String.valueOf(model.type);

@@ -10,8 +10,10 @@
 package teemowork;
 
 import static teemowork.model.Status.*;
+
+import java.util.function.Consumer;
+
 import js.dom.Element;
-import js.dom.EventListener;
 import js.dom.Event;
 import js.dom.UIAction;
 import jsx.application.Application;
@@ -67,10 +69,10 @@ public class ItemView extends UI {
         for (final Item material : itemDescriptor.getBuild()) {
             material.applyIcon(materials.child(Material.class)
                     .attr("title", material.name)
-                    .on(UIAction.Click, new EventListener() {
+                    .on(UIAction.Click, new Consumer<Event>() {
 
                         @Override
-                        public void handleEvent(Event event) {
+                        public void accept(Event event) {
                             Application.show(new ItemDetail(material.name));
                         }
                     }));

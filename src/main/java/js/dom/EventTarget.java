@@ -9,13 +9,9 @@
  */
 package js.dom;
 
-import static js.lang.Global.*;
-
-import java.lang.Thread.UncaughtExceptionHandler;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 
 import js.lang.NativeFunction;
 import jsx.bwt.UIEvent;
@@ -31,9 +27,6 @@ import booton.translator.JavascriptNative;
  * @version 2013/08/22 15:56:25
  */
 public class EventTarget<T extends EventTarget<T>> extends Publishable implements JavascriptNative {
-
-    /** The event listener holder. */
-    private Map<UIAction, Listeners> events;
 
     /** The event listener holder. */
     private Map<UIAction, NativeListener> natives;
@@ -81,11 +74,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      * @return A chainable API.
      */
     public T off() {
-        if (events != null) {
-            for (UIAction type : events.keySet()) {
-                off(type);
-            }
-        }
+        unregister();
 
         // API defintion
         return (T) this;
@@ -99,16 +88,25 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      * @return A chainable API.
      */
     public T off(UIAction type) {
-        if (events != null) {
-            Listeners listeners = events.get(type);
+        unregister(type);
 
-            if (listeners != null) {
-                events.remove(type);
-                removeEventListener(type.name, listeners.nativeListener);
+        // API defintion
+        return (T) this;
+    }
 
-                if (events.size() == 0) {
-                    events = null;
-                }
+    /**
+     * <p>
+     * Dettach all event handlers which are defined in the given subscriber to the selected
+     * elements.
+     * </p>
+     * 
+     * @param subscriber A subscriber that holds user action event listeners.
+     * @return A chainable API.
+     */
+    public T off(UIAction[] types, Consumer<Event> listener) {
+        if (types != null) {
+            for (UIAction type : types) {
+                off(type, listener);
             }
         }
 
@@ -125,12 +123,8 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      * @param subscriber A subscriber that holds user action event listeners.
      * @return A chainable API.
      */
-    public T off(UIAction[] types, EventListener subscriber) {
-        if (events != null) {
-            for (UIAction type : types) {
-                off(type, subscriber);
-            }
-        }
+    public T off(UIAction type, Consumer<Event> listener) {
+        unregister(type, listener);
 
         // API defintion
         return (T) this;
@@ -138,28 +132,16 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
 
     /**
      * <p>
-     * Dettach all event handlers which are defined in the given subscriber to the selected
-     * elements.
+     * Attach all event handlers which are defined in the given subscriber to the selected elements.
      * </p>
      * 
      * @param subscriber A subscriber that holds user action event listeners.
      * @return A chainable API.
      */
-    public T off(UIAction type, EventListener subscriber) {
-        if (events != null && type != null && subscriber != null) {
-            Listeners listeners = events.get(type);
-
-            if (listeners != null) {
-                int size = listeners.remove(subscriber);
-
-                if (size == 0) {
-                    events.remove(type);
-                    removeEventListener(type.name, listeners.nativeListener);
-
-                    if (events.size() == 0) {
-                        events = null;
-                    }
-                }
+    public T on(UIAction[] types, Consumer<Event> listener) {
+        if (types != null) {
+            for (UIAction type : types) {
+                on(type, listener);
             }
         }
 
@@ -175,40 +157,8 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      * @param subscriber A subscriber that holds user action event listeners.
      * @return A chainable API.
      */
-    public T on(UIAction[] types, EventListener subscriber) {
-        if (types != null && subscriber != null) {
-            for (UIAction type : types) {
-                on(type, subscriber);
-            }
-        }
-
-        // API defintion
-        return (T) this;
-    }
-
-    /**
-     * <p>
-     * Attach all event handlers which are defined in the given subscriber to the selected elements.
-     * </p>
-     * 
-     * @param subscriber A subscriber that holds user action event listeners.
-     * @return A chainable API.
-     */
-    public T on(UIAction type, EventListener subscriber) {
-        if (type != null && subscriber != null) {
-            if (events == null) {
-                events = new HashMap();
-            }
-
-            Listeners listeners = events.get(type);
-
-            if (listeners == null) {
-                listeners = new Listeners();
-                events.put(type, listeners);
-                addEventListener(type.name, listeners.nativeListener);
-            }
-            listeners.add(subscriber);
-        }
+    public T on(UIAction type, Consumer<Event> listener) {
+        register(type, listener);
 
         // API defintion
         return (T) this;
@@ -245,6 +195,17 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      */
     @Override
     protected void stopListening(Object type) {
+        if (type instanceof UIAction) {
+            NativeListener listener = natives.remove(type);
+
+            if (listener != null) {
+                removeEventListener(((UIAction) type).name, listener.dom);
+            }
+
+            if (natives.isEmpty()) {
+                natives = null;
+            }
+        }
     }
 
     /**
@@ -306,61 +267,6 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
             ui.set(event, type);
 
             publish(ui);
-        }
-    }
-
-    /**
-     * @version 2013/07/07 13:50:26
-     */
-    private static class Listeners implements EventListener {
-
-        /** The actual listener holder. */
-        private final CopyOnWriteArrayList<EventListener> listeners = new CopyOnWriteArrayList();
-
-        /** The cache for native event listener. */
-        private final NativeFunction nativeListener = new NativeFunction(this).bind(this);
-
-        /**
-         * <p>
-         * Register event listener.
-         * </p>
-         * 
-         * @param listener
-         */
-        private void add(EventListener listener) {
-            listeners.addIfAbsent(listener);
-        }
-
-        /**
-         * <p>
-         * Unregister event listener.
-         * </p>
-         * 
-         * @param listener
-         * @return
-         */
-        private int remove(EventListener listener) {
-            listeners.remove(listener);
-
-            return listeners.size();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void handleEvent(Event event) {
-            try {
-                for (EventListener listener : listeners) {
-                    listener.handleEvent(event);
-                }
-            } catch (Throwable e) {
-                UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
-
-                if (handler != null) {
-                    handler.uncaughtException(null, e);
-                }
-            }
         }
     }
 }
