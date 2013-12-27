@@ -1358,8 +1358,8 @@ class Node {
          */
         private void searchExit() {
             Deque<Node> nodes = new ArrayDeque();
-            nodes.addAll(end.outgoing);
-            nodes.addAll(catcher.outgoing);
+            nodes.addAll(catcher.outgoing); // catcher node must be first
+            nodes.addAll(end.outgoing); // then end node
 
             while (!nodes.isEmpty()) {
                 Node node = nodes.pollFirst();
