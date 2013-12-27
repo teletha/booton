@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import js.dom.DocumentFragment;
-import js.dom.EventListener;
 import js.dom.Event;
 import js.dom.UIAction;
 import jsx.event.Publishable;
@@ -89,7 +89,7 @@ public abstract class Application {
     /**
      * @version 2013/06/17 13:57:06
      */
-    private static class Router implements EventListener {
+    private static class Router implements Consumer<Event> {
 
         /** The current page. */
         private static Page current;
@@ -106,7 +106,7 @@ public abstract class Application {
          * </p>
          */
         @Override
-        public void handleEvent(Event event) {
+        public void accept(Event event) {
             dispatch(location.hash);
         }
 

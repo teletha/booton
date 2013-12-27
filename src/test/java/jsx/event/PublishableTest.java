@@ -603,4 +603,57 @@ public class PublishableTest {
         pubsub.publish(10);
         assert pubsub.consumeInt == 10;
     }
+
+    @Test
+    public void unregisterImmediately() throws Exception {
+        Publishable instance = new Publishable();
+        instance.unregister();
+        instance.unregister(String.class);
+        instance.unregister(UIAction.Click);
+    }
+
+    @Test
+    public void unregisterByType() throws Exception {
+        PubSub reciever = new PubSub() {
+
+            @Subscribe
+            private void recieve(String name) {
+                value++;
+            }
+        };
+
+        reciever.publish("Sinobu");
+        assert reciever.value == 1;
+
+        reciever.unregister(String.class);
+        reciever.publish("Sinobu");
+        assert reciever.value == 1;
+    }
+
+    @Test
+    public void unregisterAll() throws Exception {
+        PubSub reciever = new PubSub() {
+
+            @Subscribe
+            private void recieve(String name) {
+                value++;
+            }
+
+            @Subscribe
+            private void recieve(int name) {
+                value++;
+            }
+        };
+
+        reciever.publish("Sinobu");
+        reciever.publish(1);
+        assert reciever.value == 2;
+
+        reciever.unregister();
+        reciever.publish("Sinobu");
+        assert reciever.value == 2;
+
+        reciever.publish(1);
+        assert reciever.value == 2;
+    }
 }

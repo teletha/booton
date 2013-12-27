@@ -9,7 +9,9 @@
  */
 package jsx.bwt;
 
-import js.dom.EventListener;
+import java.util.function.Consumer;
+
+import js.dom.Event;
 import js.dom.UIAction;
 import jsx.bwt.FormUIStyle.ButtonForm;
 import jsx.bwt.FormUIStyle.Icons;
@@ -39,7 +41,7 @@ public class Button extends FormUI<Button> {
     /**
      * @param label
      */
-    public Button(String label, EventListener action) {
+    public Button(String label, Consumer<Event> action) {
         super("span");
 
         form.add(ButtonForm.class).text(label).on(UIAction.Click, action);
@@ -50,30 +52,10 @@ public class Button extends FormUI<Button> {
     /**
      * @param label
      */
-    public Button(Icon icon, EventListener action) {
+    public Button(Icon icon, Consumer<Event> action) {
         this("", action);
 
         form.add(Icons.class).attr("icon", icon.code);
-    }
-
-    /**
-     * @param label
-     */
-    public Button(Icon icon, Object subscriber) {
-        this("", subscriber);
-
-        form.add(Icons.class).attr("icon", icon.code);
-    }
-
-    /**
-     * @param label
-     */
-    public Button(String label, Object subscriber) {
-        super("span");
-
-        form.add(ButtonForm.class).text(label).bind(subscriber);
-
-        this.label = label;
     }
 
     public void label(String label) {

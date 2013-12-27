@@ -14,10 +14,10 @@ import static teemowork.model.Status.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import js.dom.DocumentFragment;
 import js.dom.Element;
-import js.dom.EventListener;
 import js.dom.Event;
 import js.dom.UIAction;
 import js.math.Mathematics;
@@ -159,13 +159,13 @@ public class ChampionDetail extends Page {
         }
         skillView = root.child(SkillTable.class);
 
-        window.on(UIAction.KeyPress, new EventListener() {
+        window.on(UIAction.KeyPress, new Consumer<Event>() {
 
             /**
              * {@inheritDoc}
              */
             @Override
-            public void handleEvent(Event event) {
+            public void accept(Event event) {
                 switch (event.which) {
                 case 113:// Q
                     build.active(SkillKey.Q);
@@ -265,17 +265,17 @@ public class ChampionDetail extends Page {
 
             Element iconBox = root.child(IconBox.class);
             icon = iconBox.child(SkillIcon.class).css("background-image", "url(" + skill.getIcon() + ")");
-            iconBox.on(UIAction.Click, new EventListener() {
+            iconBox.on(UIAction.Click, new Consumer<Event>() {
 
                 @Override
-                public void handleEvent(Event event) {
+                public void accept(Event event) {
                     event.preventDefault();
                     build.up(skill);
                 }
-            }).on(UIAction.ClickRight, new EventListener() {
+            }).on(UIAction.ClickRight, new Consumer<Event>() {
 
                 @Override
-                public void handleEvent(Event event) {
+                public void accept(Event event) {
                     event.preventDefault();
                     build.down(skill);
                 }

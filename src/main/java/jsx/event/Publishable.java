@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
@@ -196,7 +197,7 @@ public class Publishable {
      */
     private boolean add(Object type, Listener listener, boolean checkDuplication) {
         if (holder == null) {
-            holder = new HashMap();
+            holder = new ConcurrentHashMap();
             startListening(Object.class);
         }
 
@@ -224,6 +225,19 @@ public class Publishable {
 
     /**
      * <p>
+     * Unregister all event listeners.
+     * </p>
+     */
+    public final void unregister() {
+        if (holder != null) {
+            for (Object type : holder.keySet()) {
+                remove(type);
+            }
+        }
+    }
+
+    /**
+     * <p>
      * Stop subscribing events from which the specified {@link Publishable} emits.
      * </p>
      * 
@@ -235,10 +249,23 @@ public class Publishable {
                 for (Annotation annotation : entry.getValue()) {
                     Subscribable info = I.find(Subscribable.class, annotation.annotationType());
 
-                    remove(info.type(annotation, entry.getKey()), listeners);
+                    if (info != null) {
+                        remove(info.type(annotation, entry.getKey()), listeners);
+                    }
                 }
             }
         }
+    }
+
+    /**
+     * <p>
+     * Unregister all event listeners for the specified event type.
+     * </p>
+     * 
+     * @param type An event type.
+     */
+    public final void unregister(Class type) {
+        remove(type);
     }
 
     /**
@@ -263,6 +290,17 @@ public class Publishable {
      */
     public final <T> void unregister(Class<T> type, Consumer<T> listener) {
         remove(ClassUtil.wrap(type), listener);
+    }
+
+    /**
+     * <p>
+     * Unregister all event listeners for the specified event type.
+     * </p>
+     * 
+     * @param type An event type.
+     */
+    public final <E extends Enum & EventType> void unregister(E type) {
+        remove(type);
     }
 
     /**
@@ -306,16 +344,29 @@ public class Publishable {
                     listeners.remove(i);
 
                     if (listeners.isEmpty()) {
-                        holder.remove(type);
-                        stopListening(type);
-
-                        if (holder.isEmpty()) {
-                            holder = null;
-                            stopListening(Object.class);
-                        }
+                        remove(type);
                     }
                     break;
                 }
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Unregister all event listeners for the specified event type.
+     * </p>
+     * 
+     * @param type An event type.
+     */
+    private void remove(Object type) {
+        if (holder != null && holder.containsKey(type)) {
+            holder.remove(type);
+            stopListening(type);
+
+            if (holder.isEmpty()) {
+                holder = null;
+                stopListening(Object.class);
             }
         }
     }
