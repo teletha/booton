@@ -13,7 +13,6 @@ import static js.lang.Global.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -24,10 +23,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 import kiss.Disposable;
+import kiss.I;
 import kiss.model.ClassUtil;
 
 /**
- * @version 2013/10/09 15:53:49
+ * @version 2013/12/27 10:51:53
  */
 public class Publishable {
 
@@ -89,10 +89,45 @@ public class Publishable {
 
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(listeners.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
-                    for (Info info : collect(annotation, entry.getKey())) {
+                    Subscribable info = I.find(Subscribable.class, annotation.annotationType());
+
+                    if (info != null) {
+                        Method method = entry.getKey();
+                        Listener listener = new MethodInvoker(listeners, method, info.abort(annotation));
+
+                        // ===========================
+                        // Execution Count Wrapper
+                        // ===========================
+                        int count = info.count(annotation);
+
+                        if (0 < count) {
+                            listener = new Count(count, this, listener.listener, listener);
+                        }
+
+                        // ===========================
+                        // Timing Related Wrappers
+                        // ===========================
+                        long time = info.delay(annotation);
+
+                        if (0 < time) {
+                            listener = new Delay(time, listener);
+                        }
+
+                        time = info.throttle(annotation);
+
+                        if (0 < time) {
+                            listener = new Throttle(time, listener);
+                        }
+
+                        time = info.debounce(annotation);
+
+                        if (0 < time) {
+                            listener = new Debounce(time, listener);
+                        }
+
                         // Check duplication at first time only.
                         // If the duplicated listener is found, all the other listeners are ignored.
-                        if (!register(info, new MethodInvoker(listeners, entry.getKey(), info.abort), index++ == 0)) {
+                        if (!add(info.type(annotation, method), listener, index++ == 0)) {
                             return;
                         }
                     }
@@ -110,7 +145,7 @@ public class Publishable {
      * @param listener An event listener to add.
      */
     public final void register(Class type, Runnable listener) {
-        register(new Info(type), new RunnableInvoker(listener), true);
+        add(ClassUtil.wrap(type), new RunnableInvoker(listener), true);
     }
 
     /**
@@ -122,7 +157,7 @@ public class Publishable {
      * @param listener An event listener to add.
      */
     public final <T> void register(Class<T> type, Consumer<T> listener) {
-        register(new Info(type), new ConsumerInvoker(listener), true);
+        add(ClassUtil.wrap(type), new ConsumerInvoker(listener), true);
     }
 
     /**
@@ -134,7 +169,7 @@ public class Publishable {
      * @param listener An event listener to add.
      */
     public final <E extends Enum & EventType> void register(E type, Runnable listener) {
-        register(new Info(type), new RunnableInvoker(listener), true);
+        add(type, new RunnableInvoker(listener), true);
     }
 
     /**
@@ -146,7 +181,7 @@ public class Publishable {
      * @param listener An event listener to add.
      */
     public final <E extends Enum & EventType<T>, T extends Event> void register(E type, Consumer<T> listener) {
-        register(new Info(type), new ConsumerInvoker(listener), true);
+        add(type, new ConsumerInvoker(listener), true);
     }
 
     /**
@@ -154,60 +189,30 @@ public class Publishable {
      * Register an event listener.
      * </p>
      * 
-     * @param info A event type infomation.
+     * @param type A event type.
      * @param listener An event listener.
      * @param checkDuplication A flag for duplication checking.
      * @return If the registration is success, this method returns true.
      */
-    private boolean register(Info info, Listener listener, boolean checkDuplication) {
+    private boolean add(Object type, Listener listener, boolean checkDuplication) {
         if (holder == null) {
             holder = new HashMap();
             startListening(Object.class);
         }
 
-        List<Listener> listeners = holder.get(info.type);
+        List<Listener> listeners = holder.get(type);
 
         if (listeners == null) {
             listeners = new CopyOnWriteArrayList();
-            holder.put(info.type, listeners);
+            holder.put(type, listeners);
 
-            startListening(info.type);
+            startListening(type);
         } else if (checkDuplication) {
             for (Listener registered : listeners) {
                 if (registered.equals(listener.listener)) {
                     return false;
                 }
             }
-        }
-
-        // ===========================
-        // Execution Count Wrapper
-        // ===========================
-        int count = info.count;
-
-        if (0 < count) {
-            listener = new Count(count, this, listener.listener, listener);
-        }
-
-        // ===========================
-        // Timing Related Wrappers
-        // ===========================
-        long time = info.delay;
-
-        if (0 < time) {
-            listener = new Delay(time, listener);
-        }
-
-        time = info.throttle;
-
-        if (0 < time) {
-            listener = new Throttle(time, listener);
-        }
-
-        time = info.debounce;
-
-        if (0 < time) {
-            listener = new Debounce(time, listener);
         }
 
         // register a listener
@@ -228,9 +233,9 @@ public class Publishable {
         if (holder != null && listeners != null) {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(listeners.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
-                    for (Info info : collect(annotation, entry.getKey())) {
-                        unregister(info, listeners);
-                    }
+                    Subscribable info = I.find(Subscribable.class, annotation.annotationType());
+
+                    remove(info.type(annotation, entry.getKey()), listeners);
                 }
             }
         }
@@ -245,7 +250,7 @@ public class Publishable {
      * @param listener An event listener to remove.
      */
     public final void unregister(Class type, Runnable listener) {
-        unregister(new Info(type), listener);
+        remove(ClassUtil.wrap(type), listener);
     }
 
     /**
@@ -257,7 +262,7 @@ public class Publishable {
      * @param listener An event listener to remove.
      */
     public final <T> void unregister(Class<T> type, Consumer<T> listener) {
-        unregister(new Info(type), listener);
+        remove(ClassUtil.wrap(type), listener);
     }
 
     /**
@@ -269,7 +274,7 @@ public class Publishable {
      * @param listener An event listener to remove.
      */
     public final <E extends Enum & EventType> void unregister(E type, Runnable listener) {
-        unregister(new Info(type), listener);
+        remove(type, listener);
     }
 
     /**
@@ -281,7 +286,7 @@ public class Publishable {
      * @param listener An event listener to remove.
      */
     public final <E extends Enum & EventType<T>, T extends Event> void unregister(E type, Consumer<T> listener) {
-        unregister(new Info(type), listener);
+        remove(type, listener);
     }
 
     /**
@@ -292,8 +297,8 @@ public class Publishable {
      * @param type An event type.
      * @param listener An event listener to remove.
      */
-    private void unregister(Info info, Object listener) {
-        List<Listener> listeners = holder.get(info.type);
+    private void remove(Object type, Object listener) {
+        List<Listener> listeners = holder.get(type);
 
         if (listeners != null) {
             for (int i = listeners.size() - 1; 0 <= i; i--) {
@@ -301,8 +306,8 @@ public class Publishable {
                     listeners.remove(i);
 
                     if (listeners.isEmpty()) {
-                        holder.remove(info.type);
-                        stopListening(info.type);
+                        holder.remove(type);
+                        stopListening(type);
 
                         if (holder.isEmpty()) {
                             holder = null;
@@ -329,128 +334,6 @@ public class Publishable {
      * </p>
      */
     protected void stopListening(Object type) {
-    }
-
-    /**
-     * <p>
-     * Helper method to collect all lisnteners.
-     * </p>
-     * 
-     * @param annotation
-     * @return
-     */
-    private List<Info> collect(Annotation annotation, Method method) {
-        Class type = annotation.annotationType();
-        List<Info> infos = new ArrayList();
-
-        if (type == Subscribe.class) {
-            infos.add(new Info((Subscribe) annotation, method));
-        } else if (type == Subscribes.class) {
-            for (Subscribe subscribe : ((Subscribes) annotation).value()) {
-                infos.add(new Info(subscribe, method));
-            }
-        } else if (type == SubscribeUI.class) {
-            infos.add(new Info((SubscribeUI) annotation));
-        } else if (type == SubscribeUIs.class) {
-            for (SubscribeUI subscribe : ((SubscribeUIs) annotation).value()) {
-                infos.add(new Info(subscribe));
-            }
-        }
-        return infos;
-    }
-
-    /**
-     * @version 2013/12/18 15:26:58
-     */
-    private static class Info {
-
-        /** The event type. */
-        private Object type;
-
-        /**
-         * <p>
-         * Set the execution debounce time (ms).
-         * </p>
-         * 
-         * @return A time (ms);
-         */
-        private long debounce;
-
-        /**
-         * <p>
-         * Set the execution throttle time (ms).
-         * </p>
-         * 
-         * @return A time (ms);
-         */
-        private long throttle;
-
-        /**
-         * <p>
-         * Set the execution delay time (ms).
-         * </p>
-         * 
-         * @return A time (ms);
-         */
-        private long delay;
-
-        /**
-         * <p>
-         * Set a number of execution.
-         * </p>
-         * 
-         * @return
-         */
-        private int count;
-
-        /**
-         * <p>
-         * Stop event propagation and default behavior.
-         * </p>
-         * 
-         * @return The <code>true</code> will stop the current processing event.
-         */
-        private boolean abort;
-
-        /**
-         * @param subscribe
-         */
-        private Info(Subscribe subscribe, Method method) {
-            Class type;
-
-            if (method.getParameterTypes().length == 1) {
-                type = ClassUtil.wrap(method.getParameterTypes()[0]);
-            } else {
-                type = subscribe.value();
-            }
-
-            this.type = ClassUtil.wrap(type);
-            this.debounce = subscribe.debounce();
-            this.throttle = subscribe.throttle();
-            this.delay = subscribe.delay();
-            this.count = subscribe.count();
-            this.abort = subscribe.abort();
-        }
-
-        /**
-         * @param subscribe
-         */
-        private Info(SubscribeUI subscribe) {
-            this.type = subscribe.type();
-            this.debounce = subscribe.debounce();
-            this.throttle = subscribe.throttle();
-            this.delay = subscribe.delay();
-            this.count = subscribe.count();
-            this.abort = subscribe.abort();
-        }
-
-        private Info(Class type) {
-            this.type = ClassUtil.wrap(type);
-        }
-
-        private Info(Enum type) {
-            this.type = type;
-        }
     }
 
     /**

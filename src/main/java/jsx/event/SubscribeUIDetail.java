@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 /**
  * @version 2013/12/26 9:20:13
  */
-class SubscribeUIUIDetail extends ListenerDetail<SubscribeUI> {
+class SubscribeUIUIDetail extends Subscribable<SubscribeUI> {
 
     /**
      * {@inheritDoc}

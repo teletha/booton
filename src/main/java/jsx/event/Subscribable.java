@@ -13,11 +13,13 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import kiss.Extensible;
+import booton.Necessary;
 
 /**
- * @version 2013/12/26 9:15:03
+ * @version 2013/12/27 10:48:28
  */
-public abstract class ListenerDetail<A extends Annotation> implements Extensible {
+@Necessary
+public abstract class Subscribable<A extends Annotation> implements Extensible {
 
     /** The event type. */
     protected abstract Object type(A anntation, Method method);

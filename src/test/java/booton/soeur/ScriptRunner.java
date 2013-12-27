@@ -14,6 +14,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import jsx.event.Subscribable;
+import kiss.I;
+
 import org.junit.internal.runners.model.ReflectiveCallable;
 import org.junit.runner.Description;
 import org.junit.runner.manipulation.Filter;
@@ -29,6 +32,10 @@ import org.junit.runners.model.InitializationError;
  * @version 2013/08/04 9:26:13
  */
 public class ScriptRunner extends BlockJUnit4ClassRunner {
+
+    static {
+        I.load(Subscribable.class, true);
+    }
 
     /** The test listener. */
     private Listener listener = new Listener();
