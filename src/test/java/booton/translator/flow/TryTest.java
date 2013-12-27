@@ -10,9 +10,7 @@
 package booton.translator.flow;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -21,7 +19,6 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
-import booton.translator.Debuggable;
 
 /**
  * @version 2013/04/11 19:55:53
@@ -711,28 +708,40 @@ public class TryTest extends ScriptTester {
     public void insideForWithContinue() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act() {
                 int value = 0;
 
-                for (int i = 0; i < 2; i++) {
-                    List<Integer> list = new ArrayList();
-                    list.add(1);
-                    list.add(2);
-                    list.add(3);
-
-                    for (int j : list) {
-                        try {
-                            j = j + 2;
-
-                            if (j % 2 == 0) {
-                                continue;
-                            }
-                        } catch (IllegalArgumentException e) {
-                            // do nothing
+                for (int i = 0; i < 4; i++) {
+                    try {
+                        if (i % 2 == 0) {
+                            continue;
                         }
-                        value += 100;
+                    } catch (IllegalArgumentException e) {
+                        // do nothing
                     }
+                    value += i;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void insideForWithBreak() {
+        test(new Scriptable() {
+
+            public int act() {
+                int value = 0;
+
+                for (int i = 0; i < 4; i++) {
+                    try {
+                        if (i % 2 == 0) {
+                            break;
+                        }
+                    } catch (IllegalArgumentException e) {
+                        // do nothing
+                    }
+                    value += i;
                 }
                 return value;
             }
