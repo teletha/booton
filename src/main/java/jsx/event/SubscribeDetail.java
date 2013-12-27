@@ -16,7 +16,7 @@ import kiss.model.ClassUtil;
 /**
  * @version 2013/12/26 9:16:15
  */
-class SubscribeDetail extends ListenerDetail<Subscribe> {
+class SubscribeDetail extends Subscribable<Subscribe> {
 
     /**
      * {@inheritDoc}
