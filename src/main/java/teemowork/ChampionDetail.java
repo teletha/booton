@@ -14,11 +14,9 @@ import static teemowork.model.Status.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import js.dom.DocumentFragment;
 import js.dom.Element;
-import js.dom.UIEvent;
 import js.dom.UIAction;
 import js.math.Mathematics;
 import jsx.application.Page;
@@ -159,33 +157,26 @@ public class ChampionDetail extends Page {
         }
         skillView = root.child(SkillTable.class);
 
-        window.register(UIAction.KeyPress, new Consumer<UIEvent>() {
+        window.register(UIAction.KeyPress, event -> {
+            switch (event.which) {
+            case 113:// Q
+                build.active(SkillKey.Q);
+                break;
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void accept(UIEvent event) {
-                switch (event.which) {
-                case 113:// Q
-                    build.active(SkillKey.Q);
-                    break;
+            case 119:// W
+                build.active(SkillKey.W);
+                break;
 
-                case 119:// W
-                    build.active(SkillKey.W);
-                    break;
+            case 101:// E
+                build.active(SkillKey.E);
+                break;
 
-                case 101:// E
-                    build.active(SkillKey.E);
-                    break;
+            case 114:// R
+                build.active(SkillKey.R);
+                break;
 
-                case 114:// R
-                    build.active(SkillKey.R);
-                    break;
-
-                default:
-                    break;
-                }
+            default:
+                break;
             }
         });
 
@@ -265,20 +256,12 @@ public class ChampionDetail extends Page {
 
             Element iconBox = root.child(IconBox.class);
             icon = iconBox.child(SkillIcon.class).css("background-image", "url(" + skill.getIcon() + ")");
-            iconBox.register(UIAction.Click, new Consumer<UIEvent>() {
-
-                @Override
-                public void accept(UIEvent event) {
-                    event.preventDefault();
-                    build.up(skill);
-                }
-            }).register(UIAction.ClickRight, new Consumer<UIEvent>() {
-
-                @Override
-                public void accept(UIEvent event) {
-                    event.preventDefault();
-                    build.down(skill);
-                }
+            iconBox.register(UIAction.Click, event -> {
+                event.preventDefault();
+                build.up(skill);
+            }).register(UIAction.ClickRight, event -> {
+                event.preventDefault();
+                build.down(skill);
             });
 
             if (skill.key != SkillKey.Passive) {

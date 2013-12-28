@@ -10,12 +10,8 @@
 package teemowork;
 
 import static js.lang.Global.*;
-
-import java.util.function.Consumer;
-
 import js.dom.DocumentFragment;
 import js.dom.Element;
-import js.dom.UIEvent;
 import js.dom.Image;
 import js.dom.UIAction;
 import jsx.application.Page;
@@ -229,20 +225,12 @@ public class MasteryBuilder extends Page {
             masterySet.register(new MasteryDescriptionView(popup, mastery));
 
             // Event Handlers
-            root.register(UIAction.Click, new Consumer<UIEvent>() {
-
-                @Override
-                public void accept(UIEvent event) {
-                    event.preventDefault();
-                    masterySet.up(mastery);
-                }
-            }).register(UIAction.ClickRight, new Consumer<UIEvent>() {
-
-                @Override
-                public void accept(UIEvent event) {
-                    event.preventDefault();
-                    masterySet.down(mastery);
-                }
+            root.register(UIAction.Click, event -> {
+                event.preventDefault();
+                masterySet.up(mastery);
+            }).register(UIAction.ClickRight, event -> {
+                event.preventDefault();
+                masterySet.down(mastery);
             });
         }
 

@@ -14,10 +14,10 @@ import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 
 /**
- * @version 2013/07/30 23:55:28
+ * @version 2013/12/29 0:44:51
  */
 @JavascriptAPIProvider
-public abstract class Window extends EventTarget implements JavascriptNative {
+public abstract class Window extends EventTarget<Window> implements JavascriptNative {
 
     /**
      * <p>
