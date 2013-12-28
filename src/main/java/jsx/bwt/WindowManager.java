@@ -87,11 +87,4 @@ public class WindowManager {
             target.register(new WindowManager(target, content));
         }
     }
-
-    /**
-     * @version 2013/10/10 12:44:47
-     */
-    private static class Popup {
-
-    }
 }

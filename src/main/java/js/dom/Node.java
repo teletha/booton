@@ -67,7 +67,7 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
      * @param ui A child ui.
      * @return Chainable API.
      */
-    public <T extends UI> T child(T ui) {
+    public <U extends UI> U child(U ui) {
         appendChild(ui.root);
 
         return ui;
@@ -166,7 +166,7 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
      * @return The node being appended, that is newElement.
      */
     @JavascriptNativeProperty
-    protected abstract <T extends Node> T appendChild(T newNode);
+    protected abstract <N extends Node> N appendChild(N newNode);
 
     /**
      * <p>
@@ -178,7 +178,7 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
      * @return The node being removed, that is child node.
      */
     @JavascriptNativeProperty
-    protected abstract <T extends Node> T removeChild(T childNode);
+    protected abstract <N extends Node> N removeChild(N childNode);
 
     /**
      * <p>
