@@ -15,10 +15,14 @@ import java.util.function.Predicate;
  * <p>
  * Mark the implemented enum as {@link EventType}.
  * </p>
+ * <p>
+ * FIXME: We should declare as EventType<E extends Event>, but eclipse compiler throws stack
+ * overflow error.
+ * </p>
  * 
- * @version 2013/12/23 19:26:47
+ * @version 2013/12/28 21:47:49
  */
-public interface EventType extends Predicate {
+public interface EventType<E> extends Predicate<E> {
 
     /**
      * <p>
@@ -27,7 +31,7 @@ public interface EventType extends Predicate {
      * </p>
      */
     @Override
-    public default boolean test(Object event) {
+    public default boolean test(E event) {
         return true;
     }
 }

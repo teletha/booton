@@ -13,8 +13,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import js.dom.UIEvent;
 import js.dom.UIAction;
+import js.dom.UIEvent;
 import kiss.Disposable;
 
 import org.junit.Test;

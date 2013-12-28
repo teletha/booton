@@ -10,14 +10,13 @@
 package js.dom;
 
 import jsx.event.Event;
-import jsx.event.EventType;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 
 /**
  * @version 2013/12/28 11:51:03
  */
-public class UIEvent implements Event, JavascriptNative {
+public class UIEvent implements Event<UIAction>, JavascriptNative {
 
     /** The DOM element that initiated the event. */
     @JavascriptNativeProperty
@@ -133,7 +132,7 @@ public class UIEvent implements Event, JavascriptNative {
      * {@inheritDoc}
      */
     @Override
-    public EventType getEventType() {
+    public UIAction getEventType() {
         return action;
     }
 }

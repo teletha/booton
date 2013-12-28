@@ -15,10 +15,14 @@ import kiss.Disposable;
  * <p>
  * The event object for the specified {@link EventType} enum.
  * </p>
+ * <p>
+ * FIXME: We should declare as Event<T extends Enum & EventType>, but eclipse compiler throws stack
+ * overflow error.
+ * </p>
  * 
- * @version 2013/12/23 21:28:15
+ * @version 2013/12/28 21:47:43
  */
-public interface Event extends Disposable {
+public interface Event<T extends EventType> extends Disposable {
 
     /**
      * <p>
@@ -27,7 +31,7 @@ public interface Event extends Disposable {
      * 
      * @return The associated {@link EventType}.
      */
-    EventType getEventType();
+    T getEventType();
 
     /**
      * <p>
