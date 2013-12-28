@@ -290,7 +290,7 @@ public class EventTarget<T extends Publishable> extends Publishable implements J
     private static class Wrapper extends UIEvent {
 
         /** The actual event. */
-        protected UIEvent event;
+        private UIEvent event;
 
         /**
          * {@inheritDoc}

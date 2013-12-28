@@ -28,9 +28,14 @@ import kiss.I;
 import kiss.model.ClassUtil;
 
 /**
- * @version 2013/12/27 10:51:53
+ * <p>
+ * FIXME: We should declare as Publishable<Myself extends Publishable>, but eclipse compiler throws
+ * stack overflow error.
+ * </p>
+ * 
+ * @version 2013/12/28 23:02:23
  */
-public class Publishable {
+public class Publishable<P> {
 
     /** The global event bus. */
     public static final Publishable Global = new Publishable();
@@ -46,9 +51,10 @@ public class Publishable {
      * Publish the specified event.
      * </p>
      * 
-     * @param event
+     * @param event An event to submit.
+     * @return Chainable API.
      */
-    public final void publish(Object event) {
+    public final P publish(Object event) {
         if (holder != null && event != null) {
             Set types;
 
@@ -56,7 +62,7 @@ public class Publishable {
                 EventType type = ((Event) event).getEventType();
 
                 if (!type.test(event)) {
-                    return;
+                    return (P) this;
                 }
                 types = Collections.singleton(type);
             } else {
@@ -75,6 +81,9 @@ public class Publishable {
                 }
             }
         }
+
+        // API definition
+        return (P) this;
     }
 
     /**
@@ -83,8 +92,9 @@ public class Publishable {
      * </p>
      * 
      * @param listeners A target event listeners.
+     * @return Chainable API.
      */
-    public final void register(Object listeners) {
+    public final P register(Object listeners) {
         if (listeners != null) {
             int index = 0;
 
@@ -129,12 +139,15 @@ public class Publishable {
                         // Check duplication at first time only.
                         // If the duplicated listener is found, all the other listeners are ignored.
                         if (!add(info.type(annotation, method), listener, index++ == 0)) {
-                            return;
+                            return (P) this;
                         }
                     }
                 }
             }
         }
+
+        // API definition
+        return (P) this;
     }
 
     /**
@@ -144,9 +157,13 @@ public class Publishable {
      * 
      * @param type An event type.
      * @param listener An event listener to add.
+     * @return Chainable API.
      */
-    public final void register(Class type, Runnable listener) {
+    public final P register(Class type, Runnable listener) {
         add(ClassUtil.wrap(type), new RunnableInvoker(listener), true);
+
+        // API definition
+        return (P) this;
     }
 
     /**
@@ -156,9 +173,13 @@ public class Publishable {
      * 
      * @param type An event type.
      * @param listener An event listener to add.
+     * @return Chainable API.
      */
-    public final <T> void register(Class<T> type, Consumer<T> listener) {
+    public final <T> P register(Class<T> type, Consumer<T> listener) {
         add(ClassUtil.wrap(type), new ConsumerInvoker(listener), true);
+
+        // API definition
+        return (P) this;
     }
 
     /**
@@ -168,9 +189,13 @@ public class Publishable {
      * 
      * @param type An event type.
      * @param listener An event listener to add.
+     * @return Chainable API.
      */
-    public final <E extends Enum & EventType> void register(E type, Runnable listener) {
+    public final <E extends Enum & EventType> P register(E type, Runnable listener) {
         add(type, new RunnableInvoker(listener), true);
+
+        // API definition
+        return (P) this;
     }
 
     /**
@@ -180,9 +205,13 @@ public class Publishable {
      * 
      * @param type An event type.
      * @param listener An event listener to add.
+     * @return Chainable API.
      */
-    public final <E extends Enum & EventType<T>, T extends Event<E>> void register(E type, Consumer<T> listener) {
+    public final <E extends Enum & EventType<T>, T extends Event<E>> P register(E type, Consumer<T> listener) {
         add(type, new ConsumerInvoker(listener), true);
+
+        // API definition
+        return (P) this;
     }
 
     /**
@@ -227,13 +256,18 @@ public class Publishable {
      * <p>
      * Unregister all event listeners.
      * </p>
+     * 
+     * @return Chainable API.
      */
-    public final void unregister() {
+    public final P unregister() {
         if (holder != null) {
             for (Object type : holder.keySet()) {
                 remove(type);
             }
         }
+
+        // API definition
+        return (P) this;
     }
 
     /**
@@ -242,8 +276,9 @@ public class Publishable {
      * </p>
      * 
      * @param listeners A target event subscriber.
+     * @return Chainable API.
      */
-    public final void unregister(Object listeners) {
+    public final P unregister(Object listeners) {
         if (holder != null && listeners != null) {
             for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(listeners.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
@@ -255,6 +290,9 @@ public class Publishable {
                 }
             }
         }
+
+        // API definition
+        return (P) this;
     }
 
     /**
@@ -263,9 +301,13 @@ public class Publishable {
      * </p>
      * 
      * @param type An event type.
+     * @return Chainable API.
      */
-    public final void unregister(Class type) {
+    public final P unregister(Class type) {
         remove(type);
+
+        // API definition
+        return (P) this;
     }
 
     /**
@@ -275,9 +317,13 @@ public class Publishable {
      * 
      * @param type An event type.
      * @param listener An event listener to remove.
+     * @return Chainable API.
      */
-    public final void unregister(Class type, Runnable listener) {
+    public final P unregister(Class type, Runnable listener) {
         remove(ClassUtil.wrap(type), listener);
+
+        // API definition
+        return (P) this;
     }
 
     /**
@@ -287,9 +333,13 @@ public class Publishable {
      * 
      * @param type An event type.
      * @param listener An event listener to remove.
+     * @return Chainable API.
      */
-    public final <T> void unregister(Class<T> type, Consumer<T> listener) {
+    public final <T> P unregister(Class<T> type, Consumer<T> listener) {
         remove(ClassUtil.wrap(type), listener);
+
+        // API definition
+        return (P) this;
     }
 
     /**
@@ -298,9 +348,13 @@ public class Publishable {
      * </p>
      * 
      * @param type An event type.
+     * @return Chainable API.
      */
-    public final <E extends Enum & EventType> void unregister(E type) {
+    public final <E extends Enum & EventType> P unregister(E type) {
         remove(type);
+
+        // API definition
+        return (P) this;
     }
 
     /**
@@ -310,9 +364,13 @@ public class Publishable {
      * 
      * @param type An event type.
      * @param listener An event listener to remove.
+     * @return Chainable API.
      */
-    public final <E extends Enum & EventType> void unregister(E type, Runnable listener) {
+    public final <E extends Enum & EventType> P unregister(E type, Runnable listener) {
         remove(type, listener);
+
+        // API definition
+        return (P) this;
     }
 
     /**
@@ -322,9 +380,13 @@ public class Publishable {
      * 
      * @param type An event type.
      * @param listener An event listener to remove.
+     * @return Chainable API.
      */
-    public final <E extends Enum & EventType<T>, T extends Event<E>> void unregister(E type, Consumer<T> listener) {
+    public final <E extends Enum & EventType<T>, T extends Event<E>> P unregister(E type, Consumer<T> listener) {
         remove(type, listener);
+
+        // API definition
+        return (P) this;
     }
 
     /**
