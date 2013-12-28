@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 
 import js.dom.DocumentFragment;
 import js.dom.Element;
-import js.dom.Event;
+import js.dom.UIEvent;
 import js.dom.Image;
 import js.dom.UIAction;
 import jsx.application.Page;
@@ -229,17 +229,17 @@ public class MasteryBuilder extends Page {
             masterySet.register(new MasteryDescriptionView(popup, mastery));
 
             // Event Handlers
-            root.on(UIAction.Click, new Consumer<Event>() {
+            root.on(UIAction.Click, new Consumer<UIEvent>() {
 
                 @Override
-                public void accept(Event event) {
+                public void accept(UIEvent event) {
                     event.preventDefault();
                     masterySet.up(mastery);
                 }
-            }).on(UIAction.ClickRight, new Consumer<Event>() {
+            }).on(UIAction.ClickRight, new Consumer<UIEvent>() {
 
                 @Override
-                public void accept(Event event) {
+                public void accept(UIEvent event) {
                     event.preventDefault();
                     masterySet.down(mastery);
                 }

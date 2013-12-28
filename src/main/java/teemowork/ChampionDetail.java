@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 
 import js.dom.DocumentFragment;
 import js.dom.Element;
-import js.dom.Event;
+import js.dom.UIEvent;
 import js.dom.UIAction;
 import js.math.Mathematics;
 import jsx.application.Page;
@@ -159,13 +159,13 @@ public class ChampionDetail extends Page {
         }
         skillView = root.child(SkillTable.class);
 
-        window.on(UIAction.KeyPress, new Consumer<Event>() {
+        window.on(UIAction.KeyPress, new Consumer<UIEvent>() {
 
             /**
              * {@inheritDoc}
              */
             @Override
-            public void accept(Event event) {
+            public void accept(UIEvent event) {
                 switch (event.which) {
                 case 113:// Q
                     build.active(SkillKey.Q);
@@ -265,17 +265,17 @@ public class ChampionDetail extends Page {
 
             Element iconBox = root.child(IconBox.class);
             icon = iconBox.child(SkillIcon.class).css("background-image", "url(" + skill.getIcon() + ")");
-            iconBox.on(UIAction.Click, new Consumer<Event>() {
+            iconBox.on(UIAction.Click, new Consumer<UIEvent>() {
 
                 @Override
-                public void accept(Event event) {
+                public void accept(UIEvent event) {
                     event.preventDefault();
                     build.up(skill);
                 }
-            }).on(UIAction.ClickRight, new Consumer<Event>() {
+            }).on(UIAction.ClickRight, new Consumer<UIEvent>() {
 
                 @Override
-                public void accept(Event event) {
+                public void accept(UIEvent event) {
                     event.preventDefault();
                     build.down(skill);
                 }

@@ -14,7 +14,7 @@ import static js.dom.UIAction.*;
 import java.util.function.Consumer;
 
 import js.dom.Element;
-import js.dom.Event;
+import js.dom.UIEvent;
 import js.dom.UIAction;
 import jsx.bwt.FormUIStyle.Disable;
 import jsx.bwt.FormUIStyle.Focus;
@@ -31,7 +31,7 @@ public class FormUI<T extends FormUI> extends UI {
             PointerMove};
 
     /** The event disabler. */
-    private static final Consumer<Event> Disabler = event -> {
+    private static final Consumer<UIEvent> Disabler = event -> {
         event.stopImmediatePropagation();
     };
 

@@ -12,7 +12,7 @@ package teemowork;
 import java.util.function.Consumer;
 
 import js.dom.DocumentFragment;
-import js.dom.Event;
+import js.dom.UIEvent;
 import jsx.application.Page;
 import jsx.application.PageInfo;
 import jsx.bwt.Button;
@@ -59,10 +59,10 @@ public class FormCatalogPage extends Page {
 
         root.child(new Input(model.type));
         root.child(new Input(model.name));
-        root.child(new Button("Add", new Consumer<Event>() {
+        root.child(new Button("Add", new Consumer<UIEvent>() {
 
             @Override
-            public void accept(Event event) {
+            public void accept(UIEvent event) {
                 model.type++;
                 System.out.println(model.type);
                 model.name = String.valueOf(model.type);
