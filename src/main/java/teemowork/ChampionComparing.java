@@ -16,11 +16,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Consumer;
 
 import js.dom.DocumentFragment;
 import js.dom.Element;
-import js.dom.UIEvent;
 import js.dom.UIAction;
 import jsx.application.Application;
 import jsx.application.Page;
@@ -75,12 +73,8 @@ public class ChampionComparing extends Page {
         head.child(Name.class).text("Name");
 
         for (final Status value : STATUS) {
-            head.child(StatusView.class).text(value.name).register(UIAction.Click, new Consumer<UIEvent>() {
-
-                @Override
-                public void accept(UIEvent event) {
-                    sort(value);
-                }
+            head.child(StatusView.class).text(value.name).register(UIAction.Click, event -> {
+                sort(value);
             });
         }
 
@@ -91,16 +85,11 @@ public class ChampionComparing extends Page {
             ChampionStatus status = champion.getStatus(Version.Latest);
 
             Element row = document.createElement("div").add(RowLine.class);
-            champion.applyIcon(row.child(Icon.class).register(UIAction.Click, new Consumer<UIEvent>() {
+            Element icon = row.child(Icon.class).register(UIAction.Click, event -> {
+                Application.show(new ChampionDetail(champion));
+            });
+            champion.applyIcon(icon);
 
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public void accept(UIEvent event) {
-                    Application.show(new ChampionDetail(champion));
-                }
-            }));
             row.child(Name.class).text(champion.name);
 
             for (Status value : STATUS) {

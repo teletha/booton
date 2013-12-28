@@ -14,8 +14,8 @@ import static teemowork.model.Status.*;
 import java.util.function.Consumer;
 
 import js.dom.Element;
-import js.dom.UIEvent;
 import js.dom.UIAction;
+import js.dom.UIEvent;
 import jsx.application.Application;
 import jsx.bwt.UI;
 import teemowork.ItemViewStyle.AbilityArea;

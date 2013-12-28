@@ -516,6 +516,8 @@ public class Publishable<P extends Publishable<P>> {
      * <p>
      * This method is called whenever this event target starts listening event.
      * </p>
+     * 
+     * @param An event type.
      */
     protected void startListening(Object type) {
     }
@@ -524,6 +526,8 @@ public class Publishable<P extends Publishable<P>> {
      * <p>
      * This method is called whenever this event target stops listening event.
      * </p>
+     * 
+     * @param An event type.
      */
     protected void stopListening(Object type) {
     }
