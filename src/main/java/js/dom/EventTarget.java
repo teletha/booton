@@ -23,9 +23,9 @@ import booton.translator.JavascriptNative;
  * EventTarget is not common class in variaous platforms. (IE and Webkit doesn't have it.)
  * </p>
  * 
- * @version 2013/08/22 15:56:25
+ * @version 2013/12/28 11:51:35
  */
-public class EventTarget<T extends EventTarget<T>> extends Publishable implements JavascriptNative {
+public class EventTarget<T extends Publishable> extends Publishable implements JavascriptNative {
 
     /** The event listener holder. */
     private Map<UIAction, Listener> natives;
@@ -266,89 +266,79 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
          */
         @Override
         public void accept(UIEvent event) {
-            WrappedEvent ui = I.make(WrappedEvent.class);
-            ui.set(event, type);
+            Wrapper wrapper = I.make(Wrapper.class);
+            wrapper.action = type;
+            wrapper.event = event;
+            wrapper.currentTarget = event.currentTarget;
+            wrapper.delegateTarget = event.delegateTarget;
+            wrapper.namespace = event.namespace;
+            wrapper.pageX = event.pageX;
+            wrapper.pageY = event.pageY;
+            wrapper.relatedTarget = event.relatedTarget;
+            wrapper.target = event.target;
+            wrapper.timeStamp = event.timeStamp;
+            wrapper.type = event.type;
+            wrapper.which = event.which;
 
-            publish(ui);
+            publish(wrapper);
         }
     }
 
     /**
      * @version 2013/12/28 11:20:12
      */
-    private static class WrappedEvent extends UIEvent {
+    private static class Wrapper extends UIEvent {
 
-        protected UIEvent delegator;
-
-        public void set(UIEvent nativeEvent, UIAction action) {
-            this.currentTarget = nativeEvent.currentTarget;
-            this.delegateTarget = nativeEvent.delegateTarget;
-            this.namespace = nativeEvent.namespace;
-            this.pageX = nativeEvent.pageX;
-            this.pageY = nativeEvent.pageY;
-            this.relatedTarget = nativeEvent.relatedTarget;
-            this.target = nativeEvent.target;
-            this.timeStamp = nativeEvent.timeStamp;
-            this.type = nativeEvent.type;
-            this.which = nativeEvent.which;
-            this.delegator = nativeEvent;
-            this.action = action;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public int hashCode() {
-            return delegator.hashCode();
-        }
+        /** The actual event. */
+        protected UIEvent event;
 
         /**
          * {@inheritDoc}
          */
         public void initEvent(String type, boolean bubbles, boolean cancelable) {
-            delegator.initEvent(type, bubbles, cancelable);
+            event.initEvent(type, bubbles, cancelable);
         }
 
         /**
          * {@inheritDoc}
          */
         public boolean isDefaultPrevented() {
-            return delegator.isDefaultPrevented();
+            return event.isDefaultPrevented();
         }
 
         /**
          * {@inheritDoc}
          */
         public boolean isImmediatePropagationStopped() {
-            return delegator.isImmediatePropagationStopped();
+            return event.isImmediatePropagationStopped();
         }
 
         /**
          * {@inheritDoc}
          */
         public boolean isPropagationStopped() {
-            return delegator.isPropagationStopped();
+            return event.isPropagationStopped();
         }
 
         /**
          * {@inheritDoc}
          */
         public void preventDefault() {
-            delegator.preventDefault();
+            event.preventDefault();
         }
 
         /**
          * {@inheritDoc}
          */
         public void stopPropagation() {
-            delegator.stopPropagation();
+            event.stopPropagation();
         }
 
         /**
          * {@inheritDoc}
          */
         public void stopImmediatePropagation() {
-            delegator.stopImmediatePropagation();
+            event.stopImmediatePropagation();
         }
 
         /**
@@ -358,14 +348,6 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
         public void dispose() {
             stopPropagation();
             preventDefault();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public UIAction getEventType() {
-            return action;
         }
     }
 }

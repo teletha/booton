@@ -9,13 +9,14 @@
  */
 package js.dom;
 
+import jsx.event.Event;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 
 /**
- * @version 2012/12/02 23:06:56
+ * @version 2013/12/28 11:51:03
  */
-public class UIEvent implements jsx.event.Event<UIAction>, JavascriptNative {
+public class UIEvent implements Event<UIAction>, JavascriptNative {
 
     /** The DOM element that initiated the event. */
     @JavascriptNativeProperty
