@@ -15,7 +15,6 @@ import java.util.function.Consumer;
 
 import js.lang.NativeFunction;
 import jsx.event.Publishable;
-import kiss.I;
 import booton.translator.JavascriptNative;
 
 /**
@@ -129,7 +128,7 @@ public abstract class EventTarget<T extends EventTarget<T>> extends Publishable<
          */
         @Override
         public void accept(UIEvent event) {
-            Wrapper wrapper = I.make(Wrapper.class);
+            Event wrapper = new Event();
             wrapper.action = type;
             wrapper.event = event;
             wrapper.currentTarget = event.currentTarget;
@@ -150,7 +149,7 @@ public abstract class EventTarget<T extends EventTarget<T>> extends Publishable<
     /**
      * @version 2013/12/28 11:20:12
      */
-    private static class Wrapper extends UIEvent {
+    private static class Event extends UIEvent {
 
         /** The actual event. */
         private UIEvent event;

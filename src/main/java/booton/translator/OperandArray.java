@@ -22,9 +22,6 @@ class OperandArray extends Operand {
     /** The array type. */
     private final Class type;
 
-    /** The array dimmension depth. */
-    private final int dimmension;
-
     /** The list of item operands. */
     private final ArrayList<Operand> items = new ArrayList();
 
@@ -39,14 +36,6 @@ class OperandArray extends Operand {
     OperandArray(Operand size, Class type) {
         this.size = size.disclose();
         this.type = type;
-
-        int dimmension = 1;
-
-        while (type.isArray()) {
-            dimmension++;
-            type = type.getComponentType();
-        }
-        this.dimmension = dimmension;
     }
 
     /**
