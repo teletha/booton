@@ -181,7 +181,7 @@ public class Publishable {
      * @param type An event type.
      * @param listener An event listener to add.
      */
-    public final <E extends Enum & EventType, T extends Event> void register(E type, Consumer<T> listener) {
+    public final <E extends Enum & EventType<T>, T extends Event<E>> void register(E type, Consumer<T> listener) {
         add(type, new ConsumerInvoker(listener), true);
     }
 
@@ -323,7 +323,7 @@ public class Publishable {
      * @param type An event type.
      * @param listener An event listener to remove.
      */
-    public final <E extends Enum & EventType, T extends Event> void unregister(E type, Consumer<T> listener) {
+    public final <E extends Enum & EventType<T>, T extends Event<E>> void unregister(E type, Consumer<T> listener) {
         remove(type, listener);
     }
 
