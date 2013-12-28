@@ -29,13 +29,12 @@ import kiss.model.ClassUtil;
 
 /**
  * <p>
- * FIXME: We should declare as Publishable<Myself extends Publishable>, but eclipse compiler throws
- * stack overflow error.
+ * This is base class for Publish-Subscribe architecture.
  * </p>
  * 
- * @version 2013/12/28 23:02:23
+ * @version 2013/12/29 0:27:42
  */
-public class Publishable<P> {
+public class Publishable<P extends Publishable<P>> {
 
     /** The global event bus. */
     public static final Publishable Global = new Publishable();
@@ -191,8 +190,28 @@ public class Publishable<P> {
      * @param listener An event listener to add.
      * @return Chainable API.
      */
-    public final <E extends Enum & EventType> P register(E type, Runnable listener) {
+    public final <T extends Enum & EventType> P register(T type, Runnable listener) {
         add(type, new RunnableInvoker(listener), true);
+
+        // API definition
+        return (P) this;
+    }
+
+    /**
+     * <p>
+     * Register the specified event listener.
+     * </p>
+     * 
+     * @param types A list of event types.
+     * @param listener An event listener to add.
+     * @return Chainable API.
+     */
+    public final <T extends Enum & EventType> P register(T[] types, Runnable listener) {
+        if (types != null) {
+            for (T type : types) {
+                register(type, listener);
+            }
+        }
 
         // API definition
         return (P) this;
@@ -207,8 +226,28 @@ public class Publishable<P> {
      * @param listener An event listener to add.
      * @return Chainable API.
      */
-    public final <E extends Enum & EventType<T>, T extends Event<E>> P register(E type, Consumer<T> listener) {
+    public final <T extends Enum & EventType<E>, E extends Event<T>> P register(T type, Consumer<E> listener) {
         add(type, new ConsumerInvoker(listener), true);
+
+        // API definition
+        return (P) this;
+    }
+
+    /**
+     * <p>
+     * Register the specified event listener.
+     * </p>
+     * 
+     * @param types A list of event types.
+     * @param listener An event listener to add.
+     * @return Chainable API.
+     */
+    public final <T extends Enum & EventType<E>, E extends Event<T>> P register(T[] types, Consumer<E> listener) {
+        if (types != null) {
+            for (T type : types) {
+                register(type, listener);
+            }
+        }
 
         // API definition
         return (P) this;
@@ -350,7 +389,7 @@ public class Publishable<P> {
      * @param type An event type.
      * @return Chainable API.
      */
-    public final <E extends Enum & EventType> P unregister(E type) {
+    public final <T extends Enum & EventType> P unregister(T type) {
         remove(type);
 
         // API definition
@@ -366,8 +405,28 @@ public class Publishable<P> {
      * @param listener An event listener to remove.
      * @return Chainable API.
      */
-    public final <E extends Enum & EventType> P unregister(E type, Runnable listener) {
+    public final <T extends Enum & EventType> P unregister(T type, Runnable listener) {
         remove(type, listener);
+
+        // API definition
+        return (P) this;
+    }
+
+    /**
+     * <p>
+     * Unregister the specified event listener.
+     * </p>
+     * 
+     * @param types A list of event types.
+     * @param listener An event listener to remove.
+     * @return Chainable API.
+     */
+    public final <T extends Enum & EventType> P unregister(T[] types, Runnable listener) {
+        if (types != null) {
+            for (T type : types) {
+                unregister(type, listener);
+            }
+        }
 
         // API definition
         return (P) this;
@@ -382,8 +441,28 @@ public class Publishable<P> {
      * @param listener An event listener to remove.
      * @return Chainable API.
      */
-    public final <E extends Enum & EventType<T>, T extends Event<E>> P unregister(E type, Consumer<T> listener) {
+    public final <T extends Enum & EventType<E>, E extends Event<T>> P unregister(T type, Consumer<E> listener) {
         remove(type, listener);
+
+        // API definition
+        return (P) this;
+    }
+
+    /**
+     * <p>
+     * Unregister the specified event listener.
+     * </p>
+     * 
+     * @param types A list of event types.
+     * @param listener An event listener to remove.
+     * @return Chainable API.
+     */
+    public final <T extends Enum & EventType<E>, E extends Event<T>> P unregister(T[] types, Consumer<E> listener) {
+        if (types != null) {
+            for (T type : types) {
+                unregister(type, listener);
+            }
+        }
 
         // API definition
         return (P) this;

@@ -44,7 +44,7 @@ public class Button extends FormUI<Button> {
     public Button(String label, Consumer<UIEvent> action) {
         super("span");
 
-        form.add(ButtonForm.class).text(label).on(UIAction.Click, action);
+        form.add(ButtonForm.class).text(label).register(UIAction.Click, action);
 
         this.label = label;
     }
