@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import js.dom.Event;
+import js.dom.UIEvent;
 import js.dom.UIAction;
 import kiss.Disposable;
 
@@ -357,7 +357,7 @@ public class PublishableTest {
         PubSub reciever = new PubSub() {
 
             @SubscribeUI(type = UIAction.Click)
-            private void action(Event event) {
+            private void action(UIEvent event) {
                 string = event.type;
             }
         };
@@ -400,8 +400,8 @@ public class PublishableTest {
      * @param action
      * @return
      */
-    private static Event event(UIAction action) {
-        Event event = new Event();
+    private static UIEvent event(UIAction action) {
+        UIEvent event = new UIEvent();
         event.type = action.name;
         event.action = action;
         event.which = action.code;
@@ -481,7 +481,7 @@ public class PublishableTest {
 
         private int consumeUI;
 
-        private void consumeUIEvent(Event value) {
+        private void consumeUIEvent(UIEvent value) {
             consumeUI++;
         }
     }
@@ -575,7 +575,7 @@ public class PublishableTest {
     @Test
     public void registerConsumerEnum() throws Exception {
         FunctionalPubSub pubsub = new FunctionalPubSub();
-        Consumer<Event> consumer = pubsub::consumeUIEvent;
+        Consumer<UIEvent> consumer = pubsub::consumeUIEvent;
         pubsub.register(UIAction.Click, consumer);
 
         pubsub.publish(event(UIAction.Click));

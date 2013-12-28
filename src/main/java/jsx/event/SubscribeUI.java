@@ -16,7 +16,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import js.dom.Event;
+import js.dom.UIEvent;
 import js.dom.UIAction;
 
 /**
@@ -75,8 +75,8 @@ public @interface SubscribeUI {
 
     /**
      * <p>
-     * Stop event propagation and default behavior. {@link Event#stopPropagation()} and
-     * {@link Event#preventDefault()} methods will be called.
+     * Stop event propagation and default behavior. {@link UIEvent#stopPropagation()} and
+     * {@link UIEvent#preventDefault()} methods will be called.
      * </p>
      * 
      * @return The <code>true</code> will stop the current processing event.

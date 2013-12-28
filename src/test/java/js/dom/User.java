@@ -25,7 +25,7 @@ public class User {
      */
     public static void click(Element element) {
         if (element != null) {
-            Event event = document.createEvent("UIEvent");
+            UIEvent event = document.createEvent("UIEvent");
             event.initEvent("click", true, true);
 
             element.dispatchEvent(event);
@@ -41,7 +41,7 @@ public class User {
      */
     public static void mouseDown(Element element) {
         if (element != null) {
-            Event event = document.createEvent("UIEvent");
+            UIEvent event = document.createEvent("UIEvent");
             event.initEvent("mousedown", true, true);
 
             element.dispatchEvent(event);

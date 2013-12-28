@@ -21,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import js.dom.DocumentFragment;
-import js.dom.Event;
+import js.dom.UIEvent;
 import js.dom.UIAction;
 import jsx.event.Publishable;
 import kiss.I;
@@ -89,7 +89,7 @@ public abstract class Application {
     /**
      * @version 2013/06/17 13:57:06
      */
-    private static class Router implements Consumer<Event> {
+    private static class Router implements Consumer<UIEvent> {
 
         /** The current page. */
         private static Page current;
@@ -106,7 +106,7 @@ public abstract class Application {
          * </p>
          */
         @Override
-        public void accept(Event event) {
+        public void accept(UIEvent event) {
             dispatch(location.hash);
         }
 

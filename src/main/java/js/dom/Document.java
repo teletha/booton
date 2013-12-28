@@ -73,7 +73,7 @@ public abstract class Document implements JavascriptNative {
      *            include "UIEvents", "MouseEvents", "MutationEvents", and "HTMLEvents".
      * @return The created Event object.
      */
-    public native Event createEvent(String type);
+    public native UIEvent createEvent(String type);
 
     /**
      * <p>

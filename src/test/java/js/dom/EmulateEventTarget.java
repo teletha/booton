@@ -44,7 +44,7 @@ public class EmulateEventTarget extends EventTarget {
      * {@inheritDoc}
      */
     @Override
-    protected void dispatchEvent(Event event) {
+    protected void dispatchEvent(UIEvent event) {
         if (event != null) {
             for (NativeFunction listener : listeners.get(event.type)) {
                 listener.apply(null, event);

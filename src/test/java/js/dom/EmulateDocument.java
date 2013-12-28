@@ -34,7 +34,7 @@ public class EmulateDocument extends Document {
      * {@inheritDoc}
      */
     @Override
-    public Event createEvent(String type) {
+    public UIEvent createEvent(String type) {
         if (type.equals("UIEvent")) {
             return new EmulateEvent();
         }
@@ -44,7 +44,7 @@ public class EmulateDocument extends Document {
     /**
      * @version 2013/10/20 10:10:21
      */
-    private static class EmulateEvent extends Event {
+    private static class EmulateEvent extends UIEvent {
 
         private boolean bubbles;
 

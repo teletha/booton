@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 
 import js.dom.DocumentFragment;
 import js.dom.Element;
-import js.dom.Event;
+import js.dom.UIEvent;
 import js.dom.UIAction;
 import jsx.application.Application;
 import jsx.application.Page;
@@ -75,10 +75,10 @@ public class ChampionComparing extends Page {
         head.child(Name.class).text("Name");
 
         for (final Status value : STATUS) {
-            head.child(StatusView.class).text(value.name).on(UIAction.Click, new Consumer<Event>() {
+            head.child(StatusView.class).text(value.name).on(UIAction.Click, new Consumer<UIEvent>() {
 
                 @Override
-                public void accept(Event event) {
+                public void accept(UIEvent event) {
                     sort(value);
                 }
             });
@@ -91,13 +91,13 @@ public class ChampionComparing extends Page {
             ChampionStatus status = champion.getStatus(Version.Latest);
 
             Element row = document.createElement("div").add(RowLine.class);
-            champion.applyIcon(row.child(Icon.class).on(UIAction.Click, new Consumer<Event>() {
+            champion.applyIcon(row.child(Icon.class).on(UIAction.Click, new Consumer<UIEvent>() {
 
                 /**
                  * {@inheritDoc}
                  */
                 @Override
-                public void accept(Event event) {
+                public void accept(UIEvent event) {
                     Application.show(new ChampionDetail(champion));
                 }
             }));

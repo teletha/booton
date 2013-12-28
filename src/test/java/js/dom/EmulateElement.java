@@ -93,7 +93,7 @@ public class EmulateElement extends Element implements Nodable {
      * {@inheritDoc}
      */
     @Override
-    protected void dispatchEvent(Event event) {
+    protected void dispatchEvent(UIEvent event) {
         events.dispatchEvent(event);
     }
 

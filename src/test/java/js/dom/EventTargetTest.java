@@ -10,7 +10,6 @@
 package js.dom;
 
 import static js.lang.Global.*;
-import jsx.bwt.UIEvent;
 import jsx.event.SubscribeUI;
 
 import org.junit.Test;
@@ -24,6 +23,13 @@ import booton.soeur.ScriptRunner;
 @RunWith(ScriptRunner.class)
 public class EventTargetTest {
 
+    private UIEvent event(UIAction action) {
+        UIEvent event = new UIEvent();
+        event.action = action;
+
+        return event;
+    }
+
     @Test
     public void fromAPI() throws Exception {
         Listener listener = new Listener();
@@ -32,15 +38,15 @@ public class EventTargetTest {
         Element element = document.createElement("div");
         element.register(listener);
 
-        element.publish(new UIEvent(UIAction.Click));
+        element.publish(event(UIAction.Click));
         assert listener.invoked == 1;
 
-        element.publish(new UIEvent(UIAction.MouseMove));
+        element.publish(event(UIAction.MouseMove));
         assert listener.invoked == 1;
 
         element.unregister(listener);
 
-        element.publish(new UIEvent(UIAction.Click));
+        element.publish(event(UIAction.Click));
         assert listener.invoked == 1;
     }
 

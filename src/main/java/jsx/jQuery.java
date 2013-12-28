@@ -14,7 +14,7 @@ import static js.lang.Global.*;
 import java.util.Iterator;
 
 import js.dom.Element;
-import js.dom.Event;
+import js.dom.UIEvent;
 import js.dom.UIAction;
 import jsx.bwt.UI;
 import booton.css.CSS;
@@ -957,7 +957,7 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
      *            previously attached for the event(s).
      * @return
      */
-    public native jQuery off(Event event);
+    public native jQuery off(UIEvent event);
 
     /**
      * <p>
@@ -1541,6 +1541,6 @@ public abstract class jQuery implements Iterable<jQuery>, JavascriptNative {
          * @return
          */
         @JavascriptNativeProperty
-        void handler(Event event);
+        void handler(UIEvent event);
     }
 }

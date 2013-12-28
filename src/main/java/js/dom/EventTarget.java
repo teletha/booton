@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import js.lang.NativeFunction;
-import jsx.bwt.UIEvent;
 import jsx.event.Publishable;
 import kiss.I;
 import booton.translator.JavascriptNative;
@@ -103,7 +102,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      * @param subscriber A subscriber that holds user action event listeners.
      * @return A chainable API.
      */
-    public T off(UIAction[] types, Consumer<Event> listener) {
+    public T off(UIAction[] types, Consumer<UIEvent> listener) {
         if (types != null) {
             for (UIAction type : types) {
                 off(type, listener);
@@ -123,7 +122,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      * @param subscriber A subscriber that holds user action event listeners.
      * @return A chainable API.
      */
-    public T off(UIAction type, Consumer<Event> listener) {
+    public T off(UIAction type, Consumer<UIEvent> listener) {
         unregister(type, listener);
 
         // API defintion
@@ -138,7 +137,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      * @param subscriber A subscriber that holds user action event listeners.
      * @return A chainable API.
      */
-    public T on(UIAction[] types, Consumer<Event> listener) {
+    public T on(UIAction[] types, Consumer<UIEvent> listener) {
         if (types != null) {
             for (UIAction type : types) {
                 on(type, listener);
@@ -157,7 +156,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      * @param subscriber A subscriber that holds user action event listeners.
      * @return A chainable API.
      */
-    public T on(UIAction type, Consumer<Event> listener) {
+    public T on(UIAction type, Consumer<UIEvent> listener) {
         register(type, listener);
 
         // API defintion
@@ -238,7 +237,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      * 
      * @param event A Event object to be dispatched.
      */
-    protected native void dispatchEvent(Event event);
+    protected native void dispatchEvent(UIEvent event);
 
     /**
      * <p>
@@ -247,7 +246,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
      * 
      * @version 2013/12/28 10:38:36
      */
-    private class Listener implements Consumer<Event> {
+    private class Listener implements Consumer<UIEvent> {
 
         /** The event type. */
         private final UIAction type;
@@ -266,11 +265,107 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
          * {@inheritDoc}
          */
         @Override
-        public void accept(Event event) {
-            UIEvent ui = I.make(UIEvent.class);
+        public void accept(UIEvent event) {
+            WrappedEvent ui = I.make(WrappedEvent.class);
             ui.set(event, type);
 
             publish(ui);
+        }
+    }
+
+    /**
+     * @version 2013/12/28 11:20:12
+     */
+    private static class WrappedEvent extends UIEvent {
+
+        protected UIEvent delegator;
+
+        public void set(UIEvent nativeEvent, UIAction action) {
+            this.currentTarget = nativeEvent.currentTarget;
+            this.delegateTarget = nativeEvent.delegateTarget;
+            this.namespace = nativeEvent.namespace;
+            this.pageX = nativeEvent.pageX;
+            this.pageY = nativeEvent.pageY;
+            this.relatedTarget = nativeEvent.relatedTarget;
+            this.target = nativeEvent.target;
+            this.timeStamp = nativeEvent.timeStamp;
+            this.type = nativeEvent.type;
+            this.which = nativeEvent.which;
+            this.delegator = nativeEvent;
+            this.action = action;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public int hashCode() {
+            return delegator.hashCode();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void initEvent(String type, boolean bubbles, boolean cancelable) {
+            delegator.initEvent(type, bubbles, cancelable);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean isDefaultPrevented() {
+            return delegator.isDefaultPrevented();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean isImmediatePropagationStopped() {
+            return delegator.isImmediatePropagationStopped();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean isPropagationStopped() {
+            return delegator.isPropagationStopped();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void preventDefault() {
+            delegator.preventDefault();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void stopPropagation() {
+            delegator.stopPropagation();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void stopImmediatePropagation() {
+            delegator.stopImmediatePropagation();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void dispose() {
+            stopPropagation();
+            preventDefault();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public UIAction getEventType() {
+            return action;
         }
     }
 }
