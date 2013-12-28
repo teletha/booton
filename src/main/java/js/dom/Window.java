@@ -38,25 +38,4 @@ public abstract class Window extends EventTarget implements JavascriptNative {
      * @return A computed style rule.
      */
     public native CSSStyleDeclaration getComputedStyle(Element element);
-
-    /**
-     * <p>
-     * Registers the specified listener on the EventTarget it's called on.
-     * </p>
-     * 
-     * @param type A string representing the event type to listen for.
-     * @param listener The object that receives a notification when an event of the specified type
-     *            occurs.
-     */
-    public native void addEventListener(String type, EventListener listener);
-
-    /**
-     * <p>
-     * Removes the event listener previously registered.
-     * </p>
-     * 
-     * @param type A string representing the event type being removed.
-     * @param listener The listener to be removed.
-     */
-    public native void removeEventListener(String type, EventListener listener);
 }

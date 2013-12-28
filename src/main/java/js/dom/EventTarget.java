@@ -29,7 +29,7 @@ import booton.translator.JavascriptNative;
 public class EventTarget<T extends EventTarget<T>> extends Publishable implements JavascriptNative {
 
     /** The event listener holder. */
-    private Map<UIAction, NativeListener> natives;
+    private Map<UIAction, Listener> natives;
 
     /**
      * <p>
@@ -180,10 +180,10 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
                 natives = new HashMap();
             }
 
-            NativeListener listener = natives.get(action);
+            Listener listener = natives.get(action);
 
             if (listener == null) {
-                listener = new NativeListener(action);
+                listener = new Listener(action);
                 natives.put(action, listener);
             }
             addEventListener(action.name, listener.dom);
@@ -196,7 +196,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
     @Override
     protected void stopListening(Object type) {
         if (type instanceof UIAction) {
-            NativeListener listener = natives.remove(type);
+            Listener listener = natives.remove(type);
 
             if (listener != null) {
                 removeEventListener(((UIAction) type).name, listener.dom);
@@ -241,9 +241,13 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
     protected native void dispatchEvent(Event event);
 
     /**
-     * @version 2013/10/20 22:43:45
+     * <p>
+     * Native event listener.
+     * </p>
+     * 
+     * @version 2013/12/28 10:38:36
      */
-    private class NativeListener implements EventListener {
+    private class Listener implements Consumer<Event> {
 
         /** The event type. */
         private final UIAction type;
@@ -254,7 +258,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
         /**
          * @param type
          */
-        private NativeListener(UIAction type) {
+        private Listener(UIAction type) {
             this.type = type;
         }
 
@@ -262,7 +266,7 @@ public class EventTarget<T extends EventTarget<T>> extends Publishable implement
          * {@inheritDoc}
          */
         @Override
-        public void handleEvent(Event event) {
+        public void accept(Event event) {
             UIEvent ui = I.make(UIEvent.class);
             ui.set(event, type);
 

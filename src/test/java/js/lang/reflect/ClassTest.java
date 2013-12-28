@@ -16,12 +16,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
 
-import js.dom.EventListener;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
+import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativeProperty;
 
 /**
  * @version 2013/09/03 21:43:55
@@ -327,8 +327,17 @@ public class ClassTest {
 
     @Test
     public void nativeMethod() throws Exception {
-        Method[] methods = EventListener.class.getMethods();
+        Method[] methods = NativeInterface.class.getMethods();
         assert methods.length == 1;
+    }
+
+    /**
+     * @version 2013/12/28 10:07:33
+     */
+    private interface NativeInterface extends JavascriptNative {
+
+        @JavascriptNativeProperty
+        void some();
     }
 
     /**

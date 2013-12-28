@@ -14,14 +14,14 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
-import js.dom.EventListener;
 import kiss.I;
 import booton.translator.Javascript;
 import booton.translator.Translator;
 
 /**
- * @version 2013/08/19 16:39:08
+ * @version 2013/12/28 10:40:52
  */
 public class NativeFunction<T> extends NativeObject {
 
@@ -79,8 +79,8 @@ public class NativeFunction<T> extends NativeObject {
      * 
      * @param functional
      */
-    public NativeFunction(EventListener functional) {
-        this((T) functional, findSAM(EventListener.class), null, null);
+    public NativeFunction(Consumer<T> functional) {
+        this((T) functional, findSAM(Consumer.class), null, null);
     }
 
     /**
@@ -491,7 +491,7 @@ public class NativeFunction<T> extends NativeObject {
     }
 
     /**
-     * @version 2013/08/19 12:57:55
+     * @version 2013/12/28 10:41:00
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<NativeFunction> {
@@ -525,8 +525,8 @@ public class NativeFunction<T> extends NativeObject {
          * 
          * @param functional
          */
-        public String NativeFunction(EventListener functional) {
-            return param(0) + "." + Javascript.computeMethodName(findSAM(EventListener.class));
+        public String NativeFunction(Consumer functional) {
+            return param(0) + "." + Javascript.computeMethodName(findSAM(Consumer.class));
         }
 
         /**
