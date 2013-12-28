@@ -18,7 +18,7 @@ import kiss.Disposable;
  * 
  * @version 2013/12/23 21:28:15
  */
-public interface Event<E extends Enum & EventType> extends Disposable {
+public interface Event extends Disposable {
 
     /**
      * <p>
@@ -27,7 +27,7 @@ public interface Event<E extends Enum & EventType> extends Disposable {
      * 
      * @return The associated {@link EventType}.
      */
-    E getEventType();
+    EventType getEventType();
 
     /**
      * <p>

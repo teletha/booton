@@ -18,7 +18,7 @@ import java.util.function.Predicate;
  * 
  * @version 2013/12/23 19:26:47
  */
-public interface EventType<E extends Event> extends Predicate<E> {
+public interface EventType extends Predicate {
 
     /**
      * <p>
@@ -27,7 +27,7 @@ public interface EventType<E extends Event> extends Predicate<E> {
      * </p>
      */
     @Override
-    public default boolean test(E event) {
+    public default boolean test(Object event) {
         return true;
     }
 }

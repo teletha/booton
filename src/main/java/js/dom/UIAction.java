@@ -15,7 +15,7 @@ import jsx.event.EventType;
 /**
  * @version 2013/10/10 13:45:14
  */
-public enum UIAction implements EventType<UIEvent> {
+public enum UIAction implements EventType {
 
     /** The ui event type. */
     PointerDown,
@@ -362,7 +362,7 @@ public enum UIAction implements EventType<UIEvent> {
      * {@inheritDoc}
      */
     @Override
-    public boolean test(UIEvent event) {
-        return code == -1 || event.which == code;
+    public boolean test(Object event) {
+        return code == -1 || (event instanceof UIEvent && ((UIEvent) event).which == code);
     }
 }
