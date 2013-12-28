@@ -55,7 +55,7 @@ public class FormUI<T extends FormUI> extends UI {
         root.add(FormRoot.class);
 
         form = root.child(elementName);
-        form.bind(this);
+        form.register(this);
     }
 
     /**
@@ -68,7 +68,7 @@ public class FormUI<T extends FormUI> extends UI {
     public T disable() {
         enable = false;
         root.add(Disable.class);
-        root.on(Actions, Disabler);
+        root.register(Actions, Disabler);
         form.attr("disabled", "true");
 
         return (T) this;
@@ -84,7 +84,7 @@ public class FormUI<T extends FormUI> extends UI {
     public T enable() {
         enable = true;
         root.remove(Disable.class);
-        root.off(Actions, Disabler);
+        root.unregister(Actions, Disabler);
         form.remove("disabled");
 
         return (T) this;

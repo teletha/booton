@@ -78,13 +78,13 @@ public class WindowManager {
     @Subscribe(PageUnload.class)
     private void unload() {
         Publishable.Global.unregister(this);
-        target.off();
+        target.unregister();
         hide();
     }
 
     public static void applyTooltip(Element target, Element content) {
         if (target != null && content != null) {
-            target.bind(new WindowManager(target, content));
+            target.register(new WindowManager(target, content));
         }
     }
 

@@ -75,7 +75,7 @@ public class ChampionComparing extends Page {
         head.child(Name.class).text("Name");
 
         for (final Status value : STATUS) {
-            head.child(StatusView.class).text(value.name).on(UIAction.Click, new Consumer<UIEvent>() {
+            head.child(StatusView.class).text(value.name).register(UIAction.Click, new Consumer<UIEvent>() {
 
                 @Override
                 public void accept(UIEvent event) {
@@ -91,7 +91,7 @@ public class ChampionComparing extends Page {
             ChampionStatus status = champion.getStatus(Version.Latest);
 
             Element row = document.createElement("div").add(RowLine.class);
-            champion.applyIcon(row.child(Icon.class).on(UIAction.Click, new Consumer<UIEvent>() {
+            champion.applyIcon(row.child(Icon.class).register(UIAction.Click, new Consumer<UIEvent>() {
 
                 /**
                  * {@inheritDoc}

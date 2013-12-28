@@ -139,7 +139,7 @@ public class ChampionDetail extends Page {
         Element upper = root.child(UpperInfo.class);
 
         // Icon
-        Element icon = upper.child(ChampionIcon.class).bind(this);
+        Element icon = upper.child(ChampionIcon.class).register(this);
         build.champion.applyIcon(icon);
 
         // Level
@@ -159,7 +159,7 @@ public class ChampionDetail extends Page {
         }
         skillView = root.child(SkillTable.class);
 
-        window.on(UIAction.KeyPress, new Consumer<UIEvent>() {
+        window.register(UIAction.KeyPress, new Consumer<UIEvent>() {
 
             /**
              * {@inheritDoc}
@@ -265,14 +265,14 @@ public class ChampionDetail extends Page {
 
             Element iconBox = root.child(IconBox.class);
             icon = iconBox.child(SkillIcon.class).css("background-image", "url(" + skill.getIcon() + ")");
-            iconBox.on(UIAction.Click, new Consumer<UIEvent>() {
+            iconBox.register(UIAction.Click, new Consumer<UIEvent>() {
 
                 @Override
                 public void accept(UIEvent event) {
                     event.preventDefault();
                     build.up(skill);
                 }
-            }).on(UIAction.ClickRight, new Consumer<UIEvent>() {
+            }).register(UIAction.ClickRight, new Consumer<UIEvent>() {
 
                 @Override
                 public void accept(UIEvent event) {

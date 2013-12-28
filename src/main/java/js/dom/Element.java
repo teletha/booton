@@ -238,7 +238,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      */
     public Element empty() {
         for (Element child : getElementsByClassName(EventListenable.class)) {
-            child.off();
+            child.unregister();
         }
 
         textContent("");
@@ -357,9 +357,9 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      */
     public Element remove() {
         for (Element child : getElementsByClassName(EventListenable.class)) {
-            child.off();
+            child.unregister();
         }
-        off();
+        unregister();
 
         // parent node exist surely
         Node parent = parent();

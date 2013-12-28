@@ -229,14 +229,14 @@ public class MasteryBuilder extends Page {
             masterySet.register(new MasteryDescriptionView(popup, mastery));
 
             // Event Handlers
-            root.on(UIAction.Click, new Consumer<UIEvent>() {
+            root.register(UIAction.Click, new Consumer<UIEvent>() {
 
                 @Override
                 public void accept(UIEvent event) {
                     event.preventDefault();
                     masterySet.up(mastery);
                 }
-            }).on(UIAction.ClickRight, new Consumer<UIEvent>() {
+            }).register(UIAction.ClickRight, new Consumer<UIEvent>() {
 
                 @Override
                 public void accept(UIEvent event) {

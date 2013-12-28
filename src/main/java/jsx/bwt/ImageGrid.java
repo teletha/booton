@@ -40,7 +40,7 @@ public abstract class ImageGrid<T> extends UI {
 
     private Input input;
 
-    private Element search = root.child("input", InputStyle.class).attr("type", "text").bind(this);
+    private Element search = root.child("input", InputStyle.class).attr("type", "text").register(this);
 
     /**
      * Filter image by user input.
@@ -77,7 +77,7 @@ public abstract class ImageGrid<T> extends UI {
 
             container.child(Title.class).text(getTitle(source));
 
-            image.on(UIAction.Click, new Consumer<UIEvent>() {
+            image.register(UIAction.Click, new Consumer<UIEvent>() {
 
                 @Override
                 public void accept(UIEvent event) {
