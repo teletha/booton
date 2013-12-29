@@ -39,14 +39,18 @@ public class RequireWithPseudoTest {
         {
             display.block();
 
-            while (before()) {
+            before(() -> {
                 display.inline();
-            }
+            });
+
+            // while (before()) {
+            // display.inline();
+            // }
 
             while (hover()) {
-                while (after()) {
+                after(() -> {
                     display.none();
-                }
+                });
             }
         }
     }

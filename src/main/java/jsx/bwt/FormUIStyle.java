@@ -234,13 +234,13 @@ class FormUIStyle {
     class Disable extends CSS {
 
         {
-            while (after()) {
+            after(() -> {
                 display.block();
                 box.size(100, percent);
                 background.color(Color.Transparent);
                 content.text(" ");
                 position.absolute().top(0, px).left(0, px);
-            }
+            });
         }
     }
 
@@ -251,16 +251,16 @@ class FormUIStyle {
             line.height(IconSize);
             box.size(IconSize);
 
-            while (after()) {
+            after(() -> {
                 font.color(BorderColor.lighten(-20)).family(IconFont);
                 text.verticalAlign.middle();
                 content.attr("icon");
-            }
+            });
 
             while (hover()) {
-                while (after()) {
+                after(() -> {
                     font.color(BorderColor.lighten(-40));
-                }
+                });
             }
         }
     }

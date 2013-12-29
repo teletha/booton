@@ -773,8 +773,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean before() {
-        return rule("$::before");
+    public final void before(Runnable sub) {
+        rule("$::before", sub);
     }
 
     /**
@@ -786,8 +786,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean after() {
-        return rule("$::after");
+    public final void after(Runnable sub) {
+        rule("$::after", sub);
     }
 
     /**
@@ -956,6 +956,24 @@ public abstract class CSS implements Extensible {
      */
     public final boolean siblingHover() {
         return rule("*:hover~$");
+    }
+
+    /**
+     * <p>
+     * Create sub rule set.
+     * </p>
+     * 
+     * @param selector
+     * @return
+     */
+    private final void rule(String selector, Runnable sub) {
+        // create sub rule set
+        load(new RuleSet(rules, selector));
+
+        sub.run();
+
+        // restore parent rule set
+        load(rules.parent);
     }
 
     /**

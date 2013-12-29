@@ -198,7 +198,7 @@ public final class Font extends ColorableProperty<Font> {
      */
     @Override
     public Color color() {
-        return color;
+        return color == null ? Color.Black : color;
     }
 
     /**

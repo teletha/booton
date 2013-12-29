@@ -43,7 +43,7 @@ public class Snippet {
         Numeric width = borderWidth.add(bubbleHeight);
 
         // write bubble border color
-        while (css.before()) {
+        css.before(() -> {
             css.display.block();
             css.box.size(0, px);
             css.content.text("");
@@ -51,21 +51,21 @@ public class Snippet {
             css.margin.left(width.opposite());
             css.border.solid().color(Transparent).width(width);
             css.border.bottom.color(borderColor);
-        }
+        });
 
         // write bubble background color
         if (borderWidth.size != 0) {
-            width = width.subtract(borderWidth.multiply(1.5));
+            Numeric borderWitdh = width.subtract(borderWidth.multiply(1.5));
 
-            while (css.after()) {
+            css.after(() -> {
                 css.display.block();
                 css.box.size(0, px);
                 css.content.text("");
                 css.position.absolute().left(50, percent).bottom(100, percent);
-                css.margin.left(width.opposite());
-                css.border.solid().color(Transparent).width(width);
+                css.margin.left(borderWitdh.opposite());
+                css.border.solid().color(Transparent).width(borderWitdh);
                 css.border.bottom.color(boxBackColor.opacify(1));
-            }
+            });
         }
     }
 
@@ -90,7 +90,7 @@ public class Snippet {
         Numeric width = borderWidth.add(bubbleHeight);
 
         // write bubble border color
-        while (css.before()) {
+        css.before(() -> {
             css.display.block();
             css.box.size(0, px);
             css.content.text("");
@@ -98,21 +98,21 @@ public class Snippet {
             css.margin.left(width.opposite());
             css.border.solid().color(Transparent).width(width);
             css.border.top.color(borderColor);
-        }
+        });
 
         // write bubble background color
         if (borderWidth.size != 0) {
-            width = width.subtract(borderWidth.multiply(1.5));
+            Numeric width2 = width.subtract(borderWidth.multiply(1.5));
 
-            while (css.after()) {
+            css.after(() -> {
                 css.display.block();
                 css.box.size(0, px);
                 css.content.text("");
                 css.position.absolute().left(50, percent).top(100, percent);
-                css.margin.left(width.opposite());
-                css.border.solid().color(Transparent).width(width);
+                css.margin.left(width2.opposite());
+                css.border.solid().color(Transparent).width(width2);
                 css.border.top.color(boxBackColor.opacify(1));
-            }
+            });
         }
     }
 
@@ -128,15 +128,11 @@ public class Snippet {
 
         Color color = css.border.color();
 
-        if (color == null) {
-            color = Color.Black;
-        }
-
-        while (css.before()) {
+        css.before(() -> {
             css.font.color(color.lighten(-20)).family(Icons);
             css.content.text(icon.code);
             css.text.verticalAlign.middle();
-        }
+        });
     }
 
     /**
