@@ -34,6 +34,15 @@ function boot(global) {
                    : Element.prototype.msMatchesSelector
   });
   
+  
+  //====================================================================
+  // SVGElement Extensions
+  //====================================================================
+  // For IE
+  define(SVGElement.prototype, {
+  	getElementsByClassName: HTMLElement.prototype.getElementsByClassName
+  });
+  
 
   //====================================================================
   // WebSocket Extensions
