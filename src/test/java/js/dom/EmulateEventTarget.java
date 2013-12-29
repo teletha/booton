@@ -15,7 +15,7 @@ import kiss.Table;
 /**
  * @version 2013/10/05 10:07:28
  */
-public class EmulateEventTarget extends EventTarget {
+public class EmulateEventTarget<T extends EmulateEventTarget<T>> extends EventTarget<T> {
 
     /** The listener table. */
     private Table<String, NativeFunction> listeners = new Table();

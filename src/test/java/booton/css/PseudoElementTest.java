@@ -31,13 +31,14 @@ public class PseudoElementTest {
     private static class Content extends MyCSS {
 
         {
-            while (before()) {
-                display.inline();
-            }
 
-            while (after()) {
+            before(() -> {
                 display.inline();
-            }
+            });
+
+            after(() -> {
+                display.inline();
+            });
         }
     }
 

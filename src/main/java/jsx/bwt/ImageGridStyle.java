@@ -65,19 +65,18 @@ class ImageGridStyle {
             cursor.pointer();
             transition.property.all().duration(0.2, s).timing.easeInOut();
 
-            while (after()) {
+            after(() -> {
                 content.text("");
                 display.block();
                 position.absolute();
                 box.width(100, percent).height(100, percent);
                 background.color(hsla(0, 100, 100, 0.2));
-
-            }
+            });
 
             while (hover()) {
-                while (after()) {
+                after(() -> {
                     visibility.hidden();
-                }
+                });
             }
         }
     }
