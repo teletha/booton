@@ -44,6 +44,17 @@ abstract class Operand {
 
     /**
      * <p>
+     * Enclose this operand.
+     * </p>
+     * 
+     * @return A disclosed operand.
+     */
+    Operand encolose() {
+        return new OperandEnclose(this);
+    }
+
+    /**
+     * <p>
      * Disclose the outmost parenthesis if we can.
      * </p>
      * 
