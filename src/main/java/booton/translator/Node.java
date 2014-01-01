@@ -1361,6 +1361,8 @@ class Node {
             nodes.addAll(catcher.outgoing); // catcher node must be first
             nodes.addAll(end.outgoing); // then end node
 
+            Set<Node> recorder = new HashSet(nodes);
+
             while (!nodes.isEmpty()) {
                 Node node = nodes.pollFirst();
 
@@ -1368,7 +1370,12 @@ class Node {
                     exit = node;
                     return;
                 }
-                nodes.addAll(node.outgoing);
+
+                for (Node n : node.outgoing) {
+                    if (recorder.add(n)) {
+                        nodes.add(n);
+                    }
+                }
             }
         }
     }

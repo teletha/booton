@@ -712,6 +712,33 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
     }
 
     /**
+     * Casts this {@code Class} object to represent a subclass of the class represented by the
+     * specified class object. Checks that the cast is valid, and throws a
+     * {@code ClassCastException} if it is not. If this method succeeds, it always returns a
+     * reference to this class object.
+     * <p>
+     * This method is useful when a client needs to "narrow" the type of a {@code Class} object to
+     * pass it to an API that restricts the {@code Class} objects that it is willing to accept. A
+     * cast would generate a compile-time warning, as the correctness of the cast could not be
+     * checked at runtime (because generic types are implemented by erasure).
+     * 
+     * @param <U> the type to cast this class object to
+     * @param clazz the class of the type to cast this class object to
+     * @return this {@code Class} object, cast to represent a subclass of the specified class
+     *         object.
+     * @throws ClassCastException if this {@code Class} object does not represent a subclass of the
+     *             specified class (here "subclass" includes the class itself).
+     * @since 1.5
+     */
+    public <U> Class<? extends U> asSubclass(Class<U> clazz) {
+        if (clazz.isAssignableFrom((Class) (Object) this)) {
+            return (Class<? extends U>) (Object) this;
+        } else {
+            throw new ClassCastException(toString());
+        }
+    }
+
+    /**
      * If the class or interface represented by this {@code Class} object is a member of another
      * class, returns the {@code Class} object representing the class in which it was declared. This
      * method returns null if this class or interface is not a member of any other class. If this
@@ -1141,6 +1168,25 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
             metadata.deleteProperty(3);
         }
         return interfacesType.toArray(new Type[interfacesType.size()]);
+    }
+
+    /**
+     * Gets the package for this class. The class loader of this class is used to find the package.
+     * If the class was loaded by the bootstrap class loader the set of packages loaded from
+     * CLASSPATH is searched to find the package of the class. Null is returned if no package object
+     * was created by the class loader of this class.
+     * <p>
+     * Packages have attributes for versions and specifications only if the information was defined
+     * in the manifests that accompany the classes, and if the class loader created the package
+     * instance with the attributes from the manifest.
+     * 
+     * @return the package of the class, or null if no package information is available from the
+     *         archive or codebase.
+     */
+    public Package getPackage() {
+        int index = name.lastIndexOf(".");
+
+        return index == -1 ? null : Package.getPackage(name.substring(0, index));
     }
 
     /**

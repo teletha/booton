@@ -74,6 +74,20 @@ class JSLong extends JSNumber {
     }
 
     /**
+     * Compares two {@code Long} objects numerically.
+     * 
+     * @param anotherLong the {@code Long} to be compared.
+     * @return the value {@code 0} if this {@code Long} is equal to the argument {@code Long}; a
+     *         value less than {@code 0} if this {@code Long} is numerically less than the argument
+     *         {@code Long}; and a value greater than {@code 0} if this {@code Long} is numerically
+     *         greater than the argument {@code Long} (signed comparison).
+     * @since 1.2
+     */
+    public int compareTo(Long anotherLong) {
+        return compare(this.value.longValue(), ((JSLong) (Object) anotherLong).value.longValue());
+    }
+
+    /**
      * Returns the number of one-bits in the two's complement binary representation of the specified
      * {@code long} value. This function is sometimes referred to as the <i>population count</i>.
      * 

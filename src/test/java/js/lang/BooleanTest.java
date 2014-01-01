@@ -28,4 +28,12 @@ public class BooleanTest {
         assert !Boolean.parseBoolean("");
         assert !Boolean.parseBoolean(null);
     }
+
+    @Test
+    public void ToString() throws Exception {
+        assert Boolean.TRUE.toString().equals("true");
+        assert Boolean.FALSE.toString().equals("false");
+        assert Boolean.toString(true).equals("true");
+        assert Boolean.toString(false).equals("false");
+    }
 }

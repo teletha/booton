@@ -260,10 +260,9 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        // if (script.source.getName().endsWith("AnnotatedElement") &&
-        // original.equals("getDeclaredAnnotation")) {
-        // debugger.enable = true;
-        // }
+        if (script.source.getName().endsWith("LeftObserver") && original.equals("onNext")) {
+            debugger.enable = true;
+        }
     }
 
     /**
@@ -636,11 +635,11 @@ class JavaMethodCompiler extends MethodVisitor {
                 if (first == ONE && second == ZERO) {
                     current.remove(0);
                     current.remove(0);
-                    thirdNode.addOperand(current.remove(0));
+                    thirdNode.addOperand(new OperandAmbiguousZeroOneTernary(current.remove(0)));
                 } else if (first == ZERO && second == ONE) {
                     current.remove(0);
                     current.remove(0);
-                    thirdNode.addOperand(current.remove(0).invert());
+                    thirdNode.addOperand(new OperandAmbiguousZeroOneTernary(current.remove(0).invert()));
                 } else {
                     current.remove(0);
                     current.remove(0);
@@ -952,6 +951,8 @@ class JavaMethodCompiler extends MethodVisitor {
                     operand = new OperandExpression("false");
                 } else if (operand.toString().equals("1")) {
                     operand = new OperandExpression("true");
+                } else if (operand instanceof OperandAmbiguousZeroOneTernary) {
+                    operand = operand.cast(boolean.class);
                 }
             }
 

@@ -98,6 +98,17 @@ class JSBoolean implements JavascriptNative {
     }
 
     /**
+     * Returns a {@code String} object representing this Boolean's value. If this object represents
+     * the value {@code true}, a string equal to {@code "true"} is returned. Otherwise, a string
+     * equal to {@code "false"} is returned.
+     * 
+     * @return a string representation of this object.
+     */
+    public String toString() {
+        return value ? "true" : "false";
+    }
+
+    /**
      * Returns {@code true} if and only if the system property named by the argument exists and is
      * equal to the string {@code "true"}. (Beginning with version 1.0.2 of the
      * Java<small><sup>TM</sup></small> platform, the test of this string is case insensitive.) A
@@ -166,6 +177,19 @@ class JSBoolean implements JavascriptNative {
      */
     public static Boolean valueOf(boolean value) {
         return value ? TRUE : FALSE;
+    }
+
+    /**
+     * Returns a {@code String} object representing the specified boolean. If the specified boolean
+     * is {@code true}, then the string {@code "true"} will be returned, otherwise the string
+     * {@code "false"} will be returned.
+     * 
+     * @param value the boolean to be converted
+     * @return the string representation of the specified {@code boolean}
+     * @since 1.4
+     */
+    public static String toString(boolean value) {
+        return value ? "true" : "false";
     }
 
     /**

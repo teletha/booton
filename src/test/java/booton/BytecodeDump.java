@@ -10,7 +10,6 @@
 package booton;
 
 import java.io.PrintWriter;
-import java.util.Comparator;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
@@ -27,7 +26,7 @@ import org.objectweb.asm.util.TraceMethodVisitor;
 public class BytecodeDump {
 
     public static void main(String[] args) throws Exception {
-        dump(Comparator.class, "$deserializeLambda$");
+        dump(Class.forName("rx.operators.OperationZip$ManyObservables$ItemObserver"), "onCompleted");
     }
 
     /**
