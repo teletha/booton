@@ -81,8 +81,8 @@ public class Build extends Publishable implements StatusCalculator {
         items[1] = Item.SpiritVisage;
         items[2] = Item.RabadonsDeathcap;
         items[3] = Item.SorcerersShoes;
-        items[4] = Item.RylaisCrystalScepter;
-        items[5] = Item.ZhonyasHourglass;
+        items[4] = Item.WarmogsArmor;
+        items[5] = Item.TrinityForce;
     }
 
     /**

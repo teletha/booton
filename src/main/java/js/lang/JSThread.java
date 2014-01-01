@@ -106,6 +106,126 @@ class JSThread {
     }
 
     /**
+     * Interrupts this thread.
+     * <p>
+     * Unless the current thread is interrupting itself, which is always permitted, the
+     * {@link #checkAccess() checkAccess} method of this thread is invoked, which may cause a
+     * {@link SecurityException} to be thrown.
+     * <p>
+     * If this thread is blocked in an invocation of the {@link Object#wait() wait()},
+     * {@link Object#wait(long) wait(long)}, or {@link Object#wait(long, int) wait(long, int)}
+     * methods of the {@link Object} class, or of the {@link #join()}, {@link #join(long)},
+     * {@link #join(long, int)}, {@link #sleep(long)}, or {@link #sleep(long, int)}, methods of this
+     * class, then its interrupt status will be cleared and it will receive an
+     * {@link InterruptedException}.
+     * <p>
+     * If this thread is blocked in an I/O operation upon an
+     * {@link java.nio.channels.InterruptibleChannel InterruptibleChannel} then the channel will be
+     * closed, the thread's interrupt status will be set, and the thread will receive a
+     * {@link java.nio.channels.ClosedByInterruptException}.
+     * <p>
+     * If this thread is blocked in a {@link java.nio.channels.Selector} then the thread's interrupt
+     * status will be set and it will return immediately from the selection operation, possibly with
+     * a non-zero value, just as if the selector's {@link java.nio.channels.Selector#wakeup wakeup}
+     * method were invoked.
+     * <p>
+     * If none of the previous conditions hold then this thread's interrupt status will be set.
+     * </p>
+     * <p>
+     * Interrupting a thread that is not alive need not have any effect.
+     * 
+     * @throws SecurityException if the current thread cannot modify this thread
+     * @revised 6.0
+     * @spec JSR-51
+     */
+    public void interrupt() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Tests whether this thread has been interrupted. The <i>interrupted status</i> of the thread
+     * is unaffected by this method.
+     * <p>
+     * A thread interruption ignored because a thread was not alive at the time of the interrupt
+     * will be reflected by this method returning false.
+     * 
+     * @return <code>true</code> if this thread has been interrupted; <code>false</code> otherwise.
+     * @see #interrupted()
+     * @revised 6.0
+     */
+    public boolean isInterrupted() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns this thread's name.
+     * 
+     * @return this thread's name.
+     * @see #setName(String)
+     */
+    public final String getName() {
+        return "name";
+    }
+
+    /**
+     * Marks this thread as either a {@linkplain #isDaemon daemon} thread or a user thread. The Java
+     * Virtual Machine exits when the only threads running are all daemon threads.
+     * <p>
+     * This method must be invoked before the thread is started.
+     * 
+     * @param on if {@code true}, marks this thread as a daemon thread
+     * @throws IllegalThreadStateException if this thread is {@linkplain #isAlive alive}
+     * @throws SecurityException if {@link #checkAccess} determines that the current thread cannot
+     *             modify this thread
+     */
+    public final void setDaemon(boolean on) {
+    }
+
+    /**
+     * Tests if this thread is a daemon thread.
+     * 
+     * @return <code>true</code> if this thread is a daemon thread; <code>false</code> otherwise.
+     * @see #setDaemon(boolean)
+     */
+    public final boolean isDaemon() {
+        return false;
+    }
+
+    /**
+     * Returns a reference to the currently executing thread object.
+     * 
+     * @return the currently executing thread.
+     */
+    public static Thread currentThread() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Tests whether the current thread has been interrupted. The <i>interrupted status</i> of the
+     * thread is cleared by this method. In other words, if this method were to be called twice in
+     * succession, the second call would return false (unless the current thread were interrupted
+     * again, after the first call had cleared its interrupted status and before the second call had
+     * examined it).
+     * <p>
+     * A thread interruption ignored because a thread was not alive at the time of the interrupt
+     * will be reflected by this method returning false.
+     * 
+     * @return <code>true</code> if the current thread has been interrupted; <code>false</code>
+     *         otherwise.
+     * @see #isInterrupted()
+     * @revised 6.0
+     */
+    public static boolean interrupted() {
+        return currentThread().isInterrupted();
+    }
+
+    /**
      * Causes the currently executing thread to sleep (temporarily cease execution) for the
      * specified number of milliseconds, subject to the precision and accuracy of system timers and
      * schedulers. The thread does not lose ownership of any monitors.
@@ -190,6 +310,25 @@ class JSThread {
      */
     public static UncaughtExceptionHandler getDefaultUncaughtExceptionHandler() {
         return defaultUncaughtExceptionHandler;
+    }
+
+    /**
+     * A hint to the scheduler that the current thread is willing to yield its current use of a
+     * processor. The scheduler is free to ignore this hint.
+     * <p>
+     * Yield is a heuristic attempt to improve relative progression between threads that would
+     * otherwise over-utilise a CPU. Its use should be combined with detailed profiling and
+     * benchmarking to ensure that it actually has the desired effect.
+     * <p>
+     * It is rarely appropriate to use this method. It may be useful for debugging or testing
+     * purposes, where it may help to reproduce bugs due to race conditions. It may also be useful
+     * when designing concurrency control constructs such as the ones in the
+     * {@link java.util.concurrent.locks} package.
+     */
+    public static void yield() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**

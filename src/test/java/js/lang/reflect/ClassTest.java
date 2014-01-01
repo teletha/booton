@@ -663,6 +663,16 @@ public class ClassTest {
     }
 
     @Test
+    public void asSubclass() throws Exception {
+        assert Integer.class.asSubclass(Number.class) == Integer.class;
+    }
+
+    @Test(expected = ClassCastException.class)
+    public void asSubclassError() throws Exception {
+        Integer.class.asSubclass(String.class);
+    }
+
+    @Test
     public void isAnnonymousClass() throws Exception {
         assert !Public.class.isAnonymousClass();
         assert !ClassTest.class.isAnonymousClass();
@@ -846,5 +856,12 @@ public class ClassTest {
         assert policies[0] == RetentionPolicy.SOURCE;
         assert policies[1] == RetentionPolicy.CLASS;
         assert policies[2] == RetentionPolicy.RUNTIME;
+    }
+
+    @Test
+    public void getPackage() throws Exception {
+        java.lang.Package p = String.class.getPackage();
+        assert p != null;
+        assert p.getName().equals("java.lang");
     }
 }

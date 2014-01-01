@@ -60,6 +60,20 @@ class JSInteger extends JSNumber {
     }
 
     /**
+     * Compares two {@code Integer} objects numerically.
+     * 
+     * @param anotherInteger the {@code Integer} to be compared.
+     * @return the value {@code 0} if this {@code Integer} is equal to the argument {@code Integer};
+     *         a value less than {@code 0} if this {@code Integer} is numerically less than the
+     *         argument {@code Integer}; and a value greater than {@code 0} if this {@code Integer}
+     *         is numerically greater than the argument {@code Integer} (signed comparison).
+     * @since 1.2
+     */
+    public int compareTo(Integer anotherInteger) {
+        return compare(this.value.intValue(), ((JSInteger) (Object) anotherInteger).value.intValue());
+    }
+
+    /**
      * Compares two {@code int} values numerically. The value returned is identical to what would be
      * returned by:
      * 

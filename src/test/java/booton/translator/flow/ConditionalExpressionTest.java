@@ -14,6 +14,7 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
+import booton.translator.Debuggable;
 
 /**
  * @version 2013/08/09 15:50:42
@@ -185,9 +186,25 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void afterLogicalExpression() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(int value) {
                 boolean result = value % 2 == 0;
                 return result ? value : value + 1;
+            }
+        });
+    }
+
+    @Test
+    public void inIf() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                if (value % 2 == 0) {
+                    return value == 2 ? 0 : 1;
+                } else {
+                    return value % 3 == 0 ? 0 : 1;
+                }
             }
         });
     }
