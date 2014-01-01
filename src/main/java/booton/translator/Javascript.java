@@ -268,11 +268,22 @@ public class Javascript {
             compile();
 
             // write super class and interfaces
-            if (source != rootClass) {
+            if (source != rootClass && !isEnumSubType(source)) {
                 write(output, defined, source.getSuperclass());
 
                 for (Class interfaceType : source.getInterfaces()) {
                     write(output, defined, interfaceType);
+                }
+            }
+
+            // write sub type enum class
+            if (source.getSuperclass() == Enum.class) {
+                for (Object constant : source.getEnumConstants()) {
+                    Class sub = constant.getClass();
+
+                    if (sub != source) {
+                        write(output, defined, sub);
+                    }
                 }
             }
 
@@ -293,6 +304,13 @@ public class Javascript {
             // record compile route
             CompilerRecorder.finishCompiling(this);
         }
+    }
+
+    private boolean isEnumSubType(Class type) {
+        if (Enum.class.isAssignableFrom(type)) {
+            return type.getSuperclass() != Enum.class;
+        }
+        return false;
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
 
 /**
- * @version 2013/03/13 17:53:37
+ * @version 2014/01/01 21:25:29
  */
 @SuppressWarnings("unused")
 public class IntIncrementTest extends ScriptTester {
@@ -146,5 +146,93 @@ public class IntIncrementTest extends ScriptTester {
                 return count + index * 10;
             }
         });
+    }
+
+    @Test
+    public void postIncrementParentFieldInLocalVariableAccess() throws Exception {
+        test(new Scriptable() {
+
+            public int act() {
+                Parent parent = new Parent();
+                int old = parent.child.postIncrement();
+                return parent.value + old;
+            }
+        });
+    }
+
+    @Test
+    public void preIncrementParentFieldInLocalVariableAccess() throws Exception {
+        test(new Scriptable() {
+
+            public int act() {
+                Parent parent = new Parent();
+                int old = parent.child.preIncrement();
+                return parent.value + old;
+            }
+        });
+    }
+
+    @Test
+    public void postDecrementParentFieldInLocalVariableAccess() throws Exception {
+        test(new Scriptable() {
+
+            public int act() {
+                Parent parent = new Parent();
+                int old = parent.child.postDecrement();
+                return parent.value + old;
+            }
+        });
+    }
+
+    @Test
+    public void preDecrementParentFieldInLocalVariableAccess() throws Exception {
+        test(new Scriptable() {
+
+            public int act() {
+                Parent parent = new Parent();
+                int old = parent.child.preDecrement();
+                return parent.value + old;
+            }
+        });
+    }
+
+    /**
+     * @version 2014/01/01 20:56:31
+     */
+    private static class Parent {
+
+        int value = 10;
+
+        private Child child = new Child();
+
+        /**
+         * @version 2014/01/01 20:56:39
+         */
+        private class Child {
+
+            int postIncrement() {
+                int old = value++;
+
+                return old;
+            }
+
+            int preIncrement() {
+                int old = ++value;
+
+                return old;
+            }
+
+            int postDecrement() {
+                int old = value--;
+
+                return old;
+            }
+
+            int preDecrement() {
+                int old = --value;
+
+                return old;
+            }
+        }
     }
 }

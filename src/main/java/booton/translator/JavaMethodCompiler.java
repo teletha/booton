@@ -260,9 +260,9 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("LeftObserver") && original.equals("onNext")) {
-            debugger.enable = true;
-        }
+        // if (script.source.getName().endsWith("LeftObserver") && original.equals("onNext")) {
+        // debugger.enable = true;
+        // }
     }
 
     /**
@@ -490,12 +490,12 @@ class JavaMethodCompiler extends MethodVisitor {
         case PUTFIELD:
             // Increment (decrement) of field doesn't use increment instruction, so we must
             // distinguish increment (decrement) from addition by pattern matching.
-            if (match(ALOAD, DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, ADD, PUTFIELD)) {
+            if (match(ALOAD, DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, ADD, PUTFIELD) || match(ALOAD, GETFIELD, DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, ADD, PUTFIELD)) {
                 // The pattenr of post-increment field is like above.
                 current.remove(0);
 
                 current.addOperand(new OperandExpression(current.remove(0) + "." + Javascript.computeFieldName(owner, name) + "++"));
-            } else if (match(ALOAD, DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, SUB, PUTFIELD)) {
+            } else if (match(ALOAD, DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, SUB, PUTFIELD) || match(ALOAD, GETFIELD, DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, SUB, PUTFIELD)) {
                 // The pattenr of post-decrement field is like above.
                 current.remove(0);
 
@@ -516,7 +516,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 if (match(DUPLICATE_X1, PUTFIELD)) {
                     // multiple assignment (i.e. this.a = this.b = 0;)
-                    current.addOperand(assignment);
+                    current.addOperand(assignment.encolose());
                 } else {
                     // normal assignment
                     current.addExpression(assignment);

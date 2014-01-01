@@ -11,6 +11,7 @@ package jsx.bwt;
 
 import kiss.I;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -28,6 +29,7 @@ public class BindableInputTest {
     }
 
     @Test
+    @Ignore
     public void input() throws Exception {
         Person person = I.make(Person.class);
 
