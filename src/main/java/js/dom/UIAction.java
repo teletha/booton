@@ -111,7 +111,7 @@ public enum UIAction implements EventType<UIEvent> {
     MouseMove,
 
     /** The ui event type. */
-    MouseDoubleClick,
+    MouseDoubleClick("dblclick"),
 
     /** The ui event type. */
     MouseEnter,
