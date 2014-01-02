@@ -73,6 +73,7 @@ public class Publishable<P extends Publishable<P>> {
 
                     @Override
                     public void unsubscribe() {
+                        System.out.println("unsubscribe " + type);
                         unregister(type, consumer);
                     }
                 };

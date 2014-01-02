@@ -71,7 +71,7 @@ public class FormCatalogPage extends Page {
         }));
         model.type = 111000;
 
-        a.root.observe(UIAction.Click).take(3).subscribe(value -> {
+        a.root.observe(UIAction.Click).subscribe(value -> {
             System.out.println(value.getClass());
         });
 
