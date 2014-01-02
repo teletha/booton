@@ -88,7 +88,6 @@ public class Publishable<P extends Publishable<P>> {
              */
             @Override
             public Subscription onSubscribe(Observer<? super E> observer) {
-                System.out.println("on subscribe " + observer + "  " + type);
                 Consumer<E> consumer = new Consumer<E>() {
 
                     /**
@@ -96,7 +95,6 @@ public class Publishable<P extends Publishable<P>> {
                      */
                     @Override
                     public void accept(E t) {
-                        System.out.println("accept " + t);
                         observer.onNext(t);
                     }
                 };
