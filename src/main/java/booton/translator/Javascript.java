@@ -387,7 +387,7 @@ public class Javascript {
             }
 
             if (Extensible.class.isAssignableFrom(source)) {
-                code.append(",").string("E");
+                code.append(",").string("e");
             }
 
             // End class definition
