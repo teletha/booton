@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ import booton.translator.Node.TryCatchFinallyBlocks;
  * completely, garbage goto code will remain.
  * </p>
  * 
- * @version 2013/11/25 14:07:28
+ * @version 2014/01/02 12:27:58
  */
 class JavaMethodCompiler extends MethodVisitor {
 
@@ -490,22 +490,22 @@ class JavaMethodCompiler extends MethodVisitor {
         case PUTFIELD:
             // Increment (decrement) of field doesn't use increment instruction, so we must
             // distinguish increment (decrement) from addition by pattern matching.
-            if (match(ALOAD, DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, ADD, PUTFIELD) || match(ALOAD, GETFIELD, DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, ADD, PUTFIELD)) {
+            if (match(DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, ADD, PUTFIELD)) {
                 // The pattenr of post-increment field is like above.
                 current.remove(0);
 
                 current.addOperand(new OperandExpression(current.remove(0) + "." + Javascript.computeFieldName(owner, name) + "++"));
-            } else if (match(ALOAD, DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, SUB, PUTFIELD) || match(ALOAD, GETFIELD, DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, SUB, PUTFIELD)) {
+            } else if (match(DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, SUB, PUTFIELD)) {
                 // The pattenr of post-decrement field is like above.
                 current.remove(0);
 
                 current.addOperand(new OperandExpression(current.remove(0) + "." + Javascript.computeFieldName(owner, name) + "--"));
-            } else if (match(ALOAD, DUP, GETFIELD, CONSTANT_1, ADD, DUPLICATE_X1, PUTFIELD)) {
+            } else if (match(DUP, GETFIELD, CONSTANT_1, ADD, DUPLICATE_X1, PUTFIELD)) {
                 // The pattenr of pre-increment field is like above.
                 current.remove(0);
 
                 current.addOperand(new OperandExpression("++" + current.remove(0) + "." + Javascript.computeFieldName(owner, name)));
-            } else if (match(ALOAD, DUP, GETFIELD, CONSTANT_1, SUB, DUPLICATE_X1, PUTFIELD)) {
+            } else if (match(DUP, GETFIELD, CONSTANT_1, SUB, DUPLICATE_X1, PUTFIELD)) {
                 // The pattenr of pre-decrement field is like above.
                 current.remove(0);
 

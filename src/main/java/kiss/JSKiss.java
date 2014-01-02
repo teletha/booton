@@ -36,6 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.script.ScriptException;
 
 import js.lang.Global;
+import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeFunction.Delegator;
 import js.lang.NativeObject;
@@ -598,9 +599,10 @@ class JSKiss {
      */
     private static <T> List<Class<? extends T>> search(Class<T> type) {
         List<Class<? extends T>> matched = new ArrayList();
+        NativeArray extensions = boot.getPropertyAs(NativeArray.class, "extensions");
 
-        for (String name : boot.keys()) {
-            NativeObject object = boot.getPropertyAs(NativeObject.class, name);
+        for (int i = 0; i < extensions.length(); i++) {
+            NativeObject object = (NativeObject) extensions.get(i);
 
             if (object != null) {
                 Class clazz = object.getPropertyAs(Class.class, "$");

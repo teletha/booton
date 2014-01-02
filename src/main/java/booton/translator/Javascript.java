@@ -386,6 +386,10 @@ public class Javascript {
                 code.append(",").string(provider.value().length() != 0 ? provider.value() : source.getSimpleName());
             }
 
+            if (Extensible.class.isAssignableFrom(source)) {
+                code.append(",").string("E");
+            }
+
             // End class definition
             code.append(");");
             code.line();

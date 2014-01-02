@@ -9,6 +9,8 @@
  */
 package jsx.rx;
 
+import jsx.event.Publishable;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -27,6 +29,14 @@ public class ObserverTest {
             return v % 2 == 0;
         }).subscribe(v -> {
             System.out.println(v);
+        });
+    }
+
+    @Test
+    public void pub() throws Exception {
+        Publishable publishable = new Publishable();
+        publishable.observe(String.class).subscribe(value -> {
+            System.out.println(value);
         });
     }
 }

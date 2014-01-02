@@ -199,6 +199,11 @@ function boot(global) {
             
             superClass = superClass.super;
           }
+          
+          if (init) init();
+        } else {
+          // extension class
+          boot.extensions.push(Class);
         }
       }
       
@@ -211,6 +216,13 @@ function boot(global) {
      * </p>
      */
     names: {},
+        
+    /**
+     * <p>
+     * Helper property to hold extension classes.
+     * </p>
+     */
+    extensions: [],
 
     /**
      * <p>

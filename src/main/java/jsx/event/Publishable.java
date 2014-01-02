@@ -26,6 +26,10 @@ import java.util.function.Consumer;
 import kiss.Disposable;
 import kiss.I;
 import kiss.model.ClassUtil;
+import rx.Observable;
+import rx.Observable.OnSubscribeFunc;
+import rx.Observer;
+import rx.Subscription;
 
 /**
  * <p>
@@ -44,6 +48,70 @@ public class Publishable<P extends Publishable<P>> {
 
     /** The actual listeners holder. */
     private Map<Object, List<Listener>> holder;
+
+    public final <T> Observable<T> observe(Class<T> type) {
+        return Observable.create(new OnSubscribeFunc<T>() {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public Subscription onSubscribe(Observer<? super T> observer) {
+                Consumer<T> consumer = new Consumer<T>() {
+
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @Override
+                    public void accept(T t) {
+                        observer.onNext(t);
+                    }
+                };
+                register(type, consumer);
+
+                return new Subscription() {
+
+                    @Override
+                    public void unsubscribe() {
+                        unregister(type, consumer);
+                    }
+                };
+            }
+        });
+    }
+
+    public final <T extends Enum & EventType<E>, E extends Event<T>> Observable<E> observe(T type) {
+        return Observable.create(new OnSubscribeFunc<E>() {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public Subscription onSubscribe(Observer<? super E> observer) {
+                System.out.println("on subscribe " + observer + "  " + type);
+                Consumer<E> consumer = new Consumer<E>() {
+
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @Override
+                    public void accept(E t) {
+                        System.out.println("accept " + t);
+                        observer.onNext(t);
+                    }
+                };
+                register(type, consumer);
+
+                return new Subscription() {
+
+                    @Override
+                    public void unsubscribe() {
+                        unregister(type, consumer);
+                    }
+                };
+            }
+        });
+    }
 
     /**
      * <p>
