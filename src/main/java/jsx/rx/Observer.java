@@ -20,9 +20,9 @@ package jsx.rx;
  * For more information see the <a href="https://github.com/Netflix/RxJava/wiki/Observable">RxJava
  * Wiki</a>
  * 
- * @param <T>
+ * @param <V>
  */
-public interface Observer<T> {
+public interface Observer<V> {
 
     /**
      * Notifies the Observer that the {@link Observable} has finished sending push-based
@@ -30,7 +30,9 @@ public interface Observer<T> {
      * <p>
      * The {@link Observable} will not call this closure if it calls <code>onError</code>.
      */
-    public void onCompleted();
+    public default void onCompleted() {
+        // do nothing
+    }
 
     /**
      * Notifies the Observer that the {@link Observable} has experienced an error condition.
@@ -40,7 +42,9 @@ public interface Observer<T> {
      * 
      * @param e
      */
-    public void onError(Throwable e);
+    public default void onError(Throwable e) {
+        // do nothing
+    }
 
     /**
      * Provides the Observer with new data.
@@ -51,7 +55,9 @@ public interface Observer<T> {
      * The {@link Observable} will not call this closure again after it calls either
      * <code>onCompleted</code> or <code>onError</code>.
      * 
-     * @param args
+     * @param value
      */
-    public void onNext(T args);
+    public default void onNext(V value) {
+        // do nothing
+    }
 }
