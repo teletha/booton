@@ -9,9 +9,12 @@
  */
 package jsx.rx;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import static java.util.concurrent.TimeUnit.*;
+import kiss.Disposable;
 
 import org.junit.Test;
+
+import booton.soeur.Async;
 
 /**
  * @version 2013/12/30 11:19:45
@@ -19,27 +22,87 @@ import org.junit.Test;
 public class ObservableTest {
 
     @Test
-    public void base() throws Exception {
-        AtomicInteger sum = new AtomicInteger();
+    public void subscribe() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        Disposable unsubscribe = emitter.observe().subscribe(emitter);
 
-        Subject<Integer> subject = new Subject();
-        subject.subscribe(value -> {
-            sum.addAndGet(value);
-        });
+        assert emitter.emitAndRetrieve(10) == 10;
+        assert emitter.emitAndRetrieve(20) == 20;
 
-        assert sum.get() == 0;
-
-        subject.onNext(10);
-        assert sum.get() == 10;
+        unsubscribe.dispose();
+        assert emitter.emitAndRetrieve(30) == null;
     }
 
     @Test
     public void skip() throws Exception {
-        IntSubject subject = new IntSubject();
-        subject.skip(1).subscribe(value -> {
-            subject.set(value);
-        });
+        EventEmitter<Integer> emitter = new EventEmitter();
+        Disposable unsubscribe = emitter.observe().skip(1).subscribe(emitter);
 
-        assert subject.next(2) == 0;
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(20) == 20;
+
+        unsubscribe.dispose();
+        assert emitter.emitAndRetrieve(30) == null;
+    }
+
+    @Test
+    public void take() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        emitter.observe().take(1).subscribe(emitter);
+
+        assert !emitter.isUnsbscribed();
+        assert emitter.emitAndRetrieve(10) == 10;
+        assert emitter.isUnsbscribed();
+        assert emitter.emitAndRetrieve(20) == null;
+    }
+
+    @Test
+    public void skipAndTake() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        emitter.observe().skip(1).take(1).subscribe(emitter);
+
+        assert !emitter.isUnsbscribed();
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(20) == 20;
+        assert emitter.isUnsbscribed();
+        assert emitter.emitAndRetrieve(30) == null;
+    }
+
+    @Test
+    public void filter() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        emitter.observe().filter(value -> {
+            return value % 2 == 0;
+        }).subscribe(emitter);
+
+        assert emitter.emitAndRetrieve(10) == 10;
+        assert emitter.emitAndRetrieve(20) == 20;
+        assert emitter.emitAndRetrieve(25) == null;
+    }
+
+    @Test
+    public void throttle() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        emitter.observe().throttleFirst(10, MILLISECONDS).subscribe(emitter);
+
+        assert emitter.emitAndRetrieve(10) == 10;
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(10) == null;
+
+        Async.wait(10);
+        assert emitter.emitAndRetrieve(10) == 10;
+    }
+
+    @Test
+    public void debounce() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        emitter.observe().debounce(10, MILLISECONDS).subscribe(emitter);
+
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(20) == null;
+        assert emitter.emitAndRetrieve(30) == null;
+
+        Async.wait(20);
+        assert emitter.retrieve() == 30;
     }
 }

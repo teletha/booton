@@ -14,7 +14,7 @@ import kiss.I;
 import booton.translator.Translator;
 
 /**
- * @version 2013/12/16 10:56:00
+ * @version 2014/01/05 15:54:01
  */
 public class Async {
 
@@ -30,7 +30,13 @@ public class Async {
      */
     public static void wait(int millseconds) {
         try {
+            long start = System.currentTimeMillis();
             Thread.sleep(millseconds);
+            long end = System.currentTimeMillis();
+
+            if (end - start < millseconds) {
+                Async.wait((int) (millseconds - end + start));
+            }
         } catch (InterruptedException e) {
             throw I.quiet(e);
         }
