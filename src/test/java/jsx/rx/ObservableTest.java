@@ -13,12 +13,15 @@ import static java.util.concurrent.TimeUnit.*;
 import kiss.Disposable;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import booton.soeur.Async;
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2013/12/30 11:19:45
  */
+@RunWith(ScriptRunner.class)
 public class ObservableTest {
 
     @Test
@@ -83,7 +86,7 @@ public class ObservableTest {
     @Test
     public void throttle() throws Exception {
         EventEmitter<Integer> emitter = new EventEmitter();
-        emitter.observe().throttleFirst(10, MILLISECONDS).subscribe(emitter);
+        emitter.observe().throttle(10, MILLISECONDS).subscribe(emitter);
 
         assert emitter.emitAndRetrieve(10) == 10;
         assert emitter.emitAndRetrieve(10) == null;

@@ -300,7 +300,7 @@ public class Observable<V> {
      * @param unit A unit of time for the specified timeout.
      * @return Chainable API.
      */
-    public final Observable<V> throttleFirst(long time, TimeUnit unit) {
+    public final Observable<V> throttle(long time, TimeUnit unit) {
         AtomicLong latest = new AtomicLong();
         long delay = unit.toMillis(time);
 
