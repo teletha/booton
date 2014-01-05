@@ -209,9 +209,7 @@ class Executors {
      * @throws IllegalArgumentException if {@code corePoolSize < 0}
      */
     public static ScheduledExecutorService newScheduledThreadPool(int corePoolSize) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return new ScheduledThreadPoolExecutor();
     }
 
     /**
