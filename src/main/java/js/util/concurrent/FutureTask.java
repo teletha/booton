@@ -9,6 +9,7 @@
  */
 package js.util.concurrent;
 
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -16,16 +17,29 @@ import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import kiss.I;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2014/01/06 0:04:38
+ * @version 2014/01/06 14:52:28
  */
 @JavaAPIProvider(java.util.concurrent.FutureTask.class)
 public class FutureTask<V> implements RunnableFuture<V> {
 
     /** The actual task. */
     private final Callable<V> callable;
+
+    /** State */
+    private boolean cancel;
+
+    /** State */
+    private boolean done;
+
+    /** The actual task id. */
+    private int id = -1;
+
+    /** The task result. */
+    private V result;
 
     /**
      * Creates a {@code FutureTask} that will, upon running, execute the given {@code Callable}.
@@ -34,7 +48,8 @@ public class FutureTask<V> implements RunnableFuture<V> {
      * @throws NullPointerException if the callable is null
      */
     public FutureTask(Callable<V> callable) {
-        if (callable == null) throw new NullPointerException();
+        Objects.nonNull(callable);
+
         this.callable = callable;
     }
 
@@ -57,6 +72,10 @@ public class FutureTask<V> implements RunnableFuture<V> {
      */
     @Override
     public boolean cancel(boolean mayInterruptIfRunning) {
+        if (done) {
+            return false;
+        }
+
         return false;
     }
 
@@ -65,7 +84,7 @@ public class FutureTask<V> implements RunnableFuture<V> {
      */
     @Override
     public boolean isCancelled() {
-        return false;
+        return cancel;
     }
 
     /**
@@ -73,7 +92,7 @@ public class FutureTask<V> implements RunnableFuture<V> {
      */
     @Override
     public boolean isDone() {
-        return false;
+        return done;
     }
 
     /**
@@ -81,7 +100,11 @@ public class FutureTask<V> implements RunnableFuture<V> {
      */
     @Override
     public V get() throws InterruptedException, ExecutionException {
-        return null;
+        try {
+            return callable.call();
+        } catch (Exception e) {
+            throw new ExecutionException(e);
+        }
     }
 
     /**
@@ -97,6 +120,55 @@ public class FutureTask<V> implements RunnableFuture<V> {
      */
     @Override
     public void run() {
+        try {
+            result = callable.call();
+        } catch (Exception e) {
+            throw I.quiet(e);
+        }
     }
 
+    /**
+     * Protected method invoked when this task transitions to state {@code isDone} (whether normally
+     * or via cancellation). The default implementation does nothing. Subclasses may override this
+     * method to invoke completion callbacks or perform bookkeeping. Note that you can query status
+     * inside the implementation of this method to determine whether this task has been cancelled.
+     */
+    protected void done() {
+    }
+
+    /**
+     * Sets the result of this future to the given value unless this future has already been set or
+     * has been cancelled.
+     * <p>
+     * This method is invoked internally by the {@link #run} method upon successful completion of
+     * the computation.
+     * 
+     * @param v the value
+     */
+    protected void set(V v) {
+
+    }
+
+    /**
+     * Causes this future to report an {@link ExecutionException} with the given throwable as its
+     * cause, unless this future has already been set or has been cancelled.
+     * <p>
+     * This method is invoked internally by the {@link #run} method upon failure of the computation.
+     * 
+     * @param t the cause of failure
+     */
+    protected void setException(Throwable t) {
+
+    }
+
+    /**
+     * Executes the computation without setting its result, and then resets this future to initial
+     * state, failing to do so if the computation encounters an exception or is cancelled. This is
+     * designed for use with tasks that intrinsically execute more than once.
+     * 
+     * @return {@code true} if successfully run and reset
+     */
+    protected boolean runAndReset() {
+        return false;
+    }
 }

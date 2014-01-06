@@ -13,6 +13,7 @@ import java.security.AccessControlException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.PrivilegedExceptionAction;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
@@ -321,9 +322,13 @@ class Executors {
      * @throws NullPointerException if task null
      */
     public static <T> Callable<T> callable(Runnable task, T result) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        Objects.nonNull(task);
+
+        return () -> {
+            task.run();
+
+            return result;
+        };
     }
 
     /**
@@ -335,9 +340,7 @@ class Executors {
      * @throws NullPointerException if task null
      */
     public static Callable<Object> callable(Runnable task) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return callable(task, null);
     }
 
     /**
@@ -349,9 +352,11 @@ class Executors {
      * @throws NullPointerException if action null
      */
     public static Callable<Object> callable(final PrivilegedAction<?> action) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        Objects.nonNull(action);
+
+        return () -> {
+            return action.run();
+        };
     }
 
     /**
@@ -363,9 +368,11 @@ class Executors {
      * @throws NullPointerException if action null
      */
     public static Callable<Object> callable(final PrivilegedExceptionAction<?> action) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        Objects.nonNull(action);
+
+        return () -> {
+            return action.run();
+        };
     }
 
     /**
@@ -381,9 +388,9 @@ class Executors {
      * @throws NullPointerException if callable null
      */
     public static <T> Callable<T> privilegedCallable(Callable<T> callable) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        Objects.nonNull(callable);
+
+        return callable;
     }
 
     /**
@@ -402,8 +409,6 @@ class Executors {
      *             to both set and get context class loader
      */
     public static <T> Callable<T> privilegedCallableUsingCurrentClassLoader(Callable<T> callable) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return privilegedCallable(callable);
     }
 }
