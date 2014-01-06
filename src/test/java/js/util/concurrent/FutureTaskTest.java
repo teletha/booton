@@ -9,7 +9,7 @@
  */
 package js.util.concurrent;
 
-import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.FutureTask;
 
 import org.junit.Test;
@@ -24,36 +24,59 @@ import booton.soeur.ScriptRunner;
 public class FutureTaskTest {
 
     @Test
-    public void get() throws Exception {
-        FutureTask<String> task = new CompletedTask(() -> {
-            return "Renchon";
-        });
+    public void task() throws Exception {
+        Task<String> task = new Task("Renchon");
+
+        assert task.isDone() == false;
+        assert task.isCancelled() == false;
+
+        task.complete();
+        assert task.isDone() == true;
+        assert task.isCancelled() == false;
         assert task.get().equals("Renchon");
+    }
+
+    @Test(expected = CancellationException.class)
+    public void cancel() throws Exception {
+        Task<String> task = new Task("Renchon");
+
+        assert task.isDone() == false;
+        assert task.isCancelled() == false;
+
+        assert task.cancel(true);
+        assert task.isDone() == true;
+        assert task.isCancelled() == true;
+
+        assert !task.cancel(false);
+
+        // cancelled task will throw exception immediately
+        task.get();
     }
 
     /**
      * @version 2014/01/06 15:30:23
      */
-    private static class CompletedTask extends FutureTask<String> {
+    private static class Task<V> extends FutureTask<V> {
+
+        private V value;
 
         /**
          * @param callable
          * @throws Exception
          */
-        protected CompletedTask(Callable<String> callable) throws Exception {
-            super(callable);
+        protected Task(V value) throws Exception {
+            super(() -> {
+                return value;
+            });
 
-            set(callable.call());
+            this.value = value;
         }
 
         /**
-         * @param runnable
-         * @param result
+         * Helper to complete task.
          */
-        protected CompletedTask(Runnable runnable, String result) {
-            super(runnable, result);
-
-            set(result);
+        protected final void complete() {
+            set(value);
         }
     }
 }
