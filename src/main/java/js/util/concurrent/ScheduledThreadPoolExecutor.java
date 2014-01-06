@@ -9,13 +9,14 @@
  */
 package js.util.concurrent;
 
+import static js.lang.Global.*;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableScheduledFuture;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -175,19 +176,27 @@ public class ScheduledThreadPoolExecutor implements ScheduledExecutorService {
      */
     private static class ScheduledFutureTask<V> extends FutureTask<V> implements RunnableScheduledFuture<V> {
 
+        private long id;
+
         /**
          * @param callable
          */
         private ScheduledFutureTask(Callable<V> callable, long delay) {
             super(callable);
+
+            id = setTimeout(() -> {
+                run();
+            }, delay);
         }
 
         /**
-         * @param runnable
-         * @param result
+         * {@inheritDoc}
          */
-        private ScheduledFutureTask(Runnable runnable, V result) {
-            super(runnable, result);
+        @Override
+        public boolean cancel(boolean mayInterruptIfRunning) {
+            clearTimeout(id);
+
+            return super.cancel(mayInterruptIfRunning);
         }
 
         /**

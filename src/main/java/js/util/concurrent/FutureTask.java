@@ -11,6 +11,7 @@ package js.util.concurrent;
 
 import java.util.Objects;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RunnableFuture;
@@ -76,7 +77,9 @@ public class FutureTask<V> implements RunnableFuture<V> {
             return false;
         }
 
-        return false;
+        done();
+
+        return cancel = true;
     }
 
     /**
@@ -100,9 +103,21 @@ public class FutureTask<V> implements RunnableFuture<V> {
      */
     @Override
     public V get() throws InterruptedException, ExecutionException {
+        run();
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         try {
-            return callable.call();
-        } catch (Exception e) {
+            run();
+
+            return result;
+        } catch (Throwable e) {
             throw new ExecutionException(e);
         }
     }
@@ -111,20 +126,21 @@ public class FutureTask<V> implements RunnableFuture<V> {
      * {@inheritDoc}
      */
     @Override
-    public V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void run() {
-        try {
-            result = callable.call();
-        } catch (Exception e) {
-            throw I.quiet(e);
+        if (cancel) {
+            throw new CancellationException();
         }
+
+        if (!done) {
+            try {
+                result = callable.call();
+
+                done = true;
+            } catch (Exception e) {
+                throw I.quiet(e);
+            }
+        }
+
     }
 
     /**
@@ -134,6 +150,7 @@ public class FutureTask<V> implements RunnableFuture<V> {
      * inside the implementation of this method to determine whether this task has been cancelled.
      */
     protected void done() {
+        done = true;
     }
 
     /**
@@ -143,10 +160,12 @@ public class FutureTask<V> implements RunnableFuture<V> {
      * This method is invoked internally by the {@link #run} method upon successful completion of
      * the computation.
      * 
-     * @param v the value
+     * @param value the value
      */
-    protected void set(V v) {
+    protected void set(V value) {
+        result = value;
 
+        done();
     }
 
     /**
@@ -158,7 +177,7 @@ public class FutureTask<V> implements RunnableFuture<V> {
      * @param t the cause of failure
      */
     protected void setException(Throwable t) {
-
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -169,6 +188,6 @@ public class FutureTask<V> implements RunnableFuture<V> {
      * @return {@code true} if successfully run and reset
      */
     protected boolean runAndReset() {
-        return false;
+        throw new UnsupportedOperationException();
     }
 }
