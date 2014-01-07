@@ -113,13 +113,9 @@ public class FutureTask<V> implements RunnableFuture<V> {
      */
     @Override
     public V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-        try {
-            run();
+        run();
 
-            return result;
-        } catch (Throwable e) {
-            throw new ExecutionException(e);
-        }
+        return result;
     }
 
     /**

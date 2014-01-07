@@ -184,9 +184,7 @@ public class ScheduledThreadPoolExecutor implements ScheduledExecutorService {
         private ScheduledFutureTask(Callable<V> callable, long delay) {
             super(callable);
 
-            id = setTimeout(() -> {
-                run();
-            }, delay);
+            id = setTimeout(this, delay);
         }
 
         /**

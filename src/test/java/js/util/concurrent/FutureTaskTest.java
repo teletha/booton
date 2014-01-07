@@ -9,6 +9,8 @@
  */
 package js.util.concurrent;
 
+import static java.util.concurrent.TimeUnit.*;
+
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.FutureTask;
 
@@ -51,6 +53,20 @@ public class FutureTaskTest {
 
         // cancelled task will throw exception immediately
         task.get();
+    }
+
+    @Test
+    public void run() throws Exception {
+        Task<String> task = new Task("Renchon");
+
+        assert task.isDone() == false;
+        assert task.isCancelled() == false;
+
+        task.run();
+
+        assert task.isDone() == true;
+        assert task.isCancelled() == false;
+        assert task.get(0, MILLISECONDS).equals("Renchon");
     }
 
     /**
