@@ -11,6 +11,10 @@ package js.lang;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import js.dom.Document;
 import js.dom.Element;
@@ -862,24 +866,16 @@ public class Global {
      * @version 2013/12/17 22:28:15
      */
     @Manageable(lifestyle = Singleton.class)
-    private static class TaskScheduler implements Runnable {
+    private static class TaskScheduler {
+
+        /** The service. */
+        private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
 
         /** The task id counter. */
         private static long id = 0;
 
         /** The scheduled tasks. */
-        private final Map<Long, Task> scheduledTasks = new ConcurrentHashMap();
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void run() {
-            for (Task task : scheduledTasks.values()) {
-                task.run();
-            }
-            scheduledTasks.clear();
-        }
+        private final Map<Long, Future> tasks = new ConcurrentHashMap();
 
         /**
          * <p>
@@ -893,7 +889,7 @@ public class Global {
         private long add(NativeFunction runnable, long delay) {
             Task task = new Task(runnable, id++);
 
-            scheduledTasks.put(task.id, task);
+            tasks.put(task.id, scheduler.schedule(task, delay, TimeUnit.MILLISECONDS));
 
             return task.id;
         }
@@ -906,7 +902,11 @@ public class Global {
          * @param id
          */
         private void remove(long id) {
-            scheduledTasks.remove(id);
+            Future task = tasks.remove(id);
+
+            if (task != null && !task.isCancelled() && !task.isDone()) {
+                task.cancel(false);
+            }
         }
 
         /**

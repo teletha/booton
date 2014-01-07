@@ -105,7 +105,7 @@ public class ObservableTest {
         assert emitter.emitAndRetrieve(20) == null;
         assert emitter.emitAndRetrieve(30) == null;
 
-        Async.wait(20);
+        Async.awaitTasks();
         assert emitter.retrieve() == 30;
     }
 }

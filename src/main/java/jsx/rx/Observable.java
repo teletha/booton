@@ -324,7 +324,6 @@ public class Observable<V> {
                 latest.set(null);
                 observer.onNext(value);
             }, time, unit));
-
         });
     }
 }

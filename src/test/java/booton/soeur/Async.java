@@ -9,7 +9,6 @@
  */
 package booton.soeur;
 
-import js.lang.Global;
 import kiss.I;
 import booton.translator.Translator;
 
@@ -50,11 +49,14 @@ public class Async {
      * @param timeout
      */
     public static void awaitTasks() {
+        Thread[] threads = new Thread[Thread.activeCount()];
+        Thread.enumerate(threads);
+
         try {
-            Class clazz = Class.forName(Global.class.getName() + "$TaskScheduler");
-            Runnable tasks = I.make(clazz);
-            tasks.run();
-        } catch (Exception e) {
+            for (Thread thread : threads) {
+                thread.join(1);
+            }
+        } catch (InterruptedException e) {
             throw I.quiet(e);
         }
     }
