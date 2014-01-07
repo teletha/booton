@@ -10,6 +10,9 @@
 package jsx.rx;
 
 import static java.util.concurrent.TimeUnit.*;
+
+import java.util.function.Function;
+
 import kiss.Disposable;
 
 import org.junit.Test;
@@ -51,7 +54,7 @@ public class ObservableTest {
     @Test
     public void take() throws Exception {
         EventEmitter<Integer> emitter = new EventEmitter();
-        emitter.observe().take(1).subscribe(emitter);
+        emitter.observe().limit(1).subscribe(emitter);
 
         assert !emitter.isUnsbscribed();
         assert emitter.emitAndRetrieve(10) == 10;
@@ -62,7 +65,7 @@ public class ObservableTest {
     @Test
     public void skipAndTake() throws Exception {
         EventEmitter<Integer> emitter = new EventEmitter();
-        emitter.observe().skip(1).take(1).subscribe(emitter);
+        emitter.observe().skip(1).limit(1).subscribe(emitter);
 
         assert !emitter.isUnsbscribed();
         assert emitter.emitAndRetrieve(10) == null;
@@ -86,13 +89,13 @@ public class ObservableTest {
     @Test
     public void throttle() throws Exception {
         EventEmitter<Integer> emitter = new EventEmitter();
-        emitter.observe().throttle(10, MILLISECONDS).subscribe(emitter);
+        emitter.observe().throttle(20, MILLISECONDS).subscribe(emitter);
 
         assert emitter.emitAndRetrieve(10) == 10;
         assert emitter.emitAndRetrieve(10) == null;
         assert emitter.emitAndRetrieve(10) == null;
 
-        Async.wait(10);
+        Async.wait(20);
         assert emitter.emitAndRetrieve(10) == 10;
     }
 
@@ -107,5 +110,31 @@ public class ObservableTest {
 
         Async.awaitTasks();
         assert emitter.retrieve() == 30;
+    }
+
+    @Test
+    public void map() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        Disposable unsubscribe = emitter.observe().map((Function<Integer, Integer>) value -> {
+            return value * 2;
+        }).subscribe(emitter);
+
+        assert emitter.emitAndRetrieve(10) == 20;
+        assert emitter.emitAndRetrieve(20) == 40;
+
+        unsubscribe.dispose();
+        assert emitter.emitAndRetrieve(30) == null;
+    }
+
+    @Test
+    public void distinct() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        emitter.observe().distinct().subscribe(emitter);
+
+        assert emitter.emitAndRetrieve(10) == 10;
+        assert emitter.emitAndRetrieve(20) == 20;
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(20) == null;
+        assert emitter.emitAndRetrieve(30) == 30;
     }
 }
