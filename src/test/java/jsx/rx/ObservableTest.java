@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,13 @@ import java.util.function.Function;
 import kiss.Disposable;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import booton.soeur.Async;
-import booton.soeur.ScriptRunner;
 
 /**
- * @version 2013/12/30 11:19:45
+ * @version 2014/01/09 1:01:34
  */
-@RunWith(ScriptRunner.class)
+// @RunWith(ScriptRunner.class)
 public class ObservableTest {
 
     @Test
@@ -52,9 +50,30 @@ public class ObservableTest {
     }
 
     @Test
+    public void skipUntil() throws Exception {
+        EventEmitter<String> condition = new EventEmitter();
+        EventEmitter<Integer> emitter = new EventEmitter();
+        Disposable disposable = emitter.observe().skipUntil(condition.observe()).subscribe(emitter);
+
+        assert condition.isUnsbscribed() == false;
+        assert emitter.isUnsbscribed() == false;
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(20) == null;
+
+        condition.emit("start");
+        assert emitter.emitAndRetrieve(10) == 10;
+        assert emitter.emitAndRetrieve(20) == 20;
+
+        disposable.dispose();
+        assert condition.isUnsbscribed() == true;
+        assert emitter.isUnsbscribed() == true;
+        assert emitter.emitAndRetrieve(10) == null;
+    }
+
+    @Test
     public void take() throws Exception {
         EventEmitter<Integer> emitter = new EventEmitter();
-        emitter.observe().limit(1).subscribe(emitter);
+        emitter.observe().take(1).subscribe(emitter);
 
         assert !emitter.isUnsbscribed();
         assert emitter.emitAndRetrieve(10) == 10;
@@ -63,15 +82,46 @@ public class ObservableTest {
     }
 
     @Test
+    public void takeUntil() throws Exception {
+        EventEmitter<String> condition = new EventEmitter();
+        EventEmitter<Integer> emitter = new EventEmitter();
+        emitter.observe().takeUntil(condition.observe()).subscribe(emitter);
+
+        assert condition.isUnsbscribed() == false;
+        assert emitter.isUnsbscribed() == false;
+        assert emitter.emitAndRetrieve(10) == 10;
+        assert emitter.emitAndRetrieve(20) == 20;
+
+        condition.emit("start");
+        assert condition.isUnsbscribed() == true;
+        assert emitter.isUnsbscribed() == true;
+        assert emitter.emitAndRetrieve(10) == null;
+    }
+
+    @Test
     public void skipAndTake() throws Exception {
         EventEmitter<Integer> emitter = new EventEmitter();
-        emitter.observe().skip(1).limit(1).subscribe(emitter);
+        emitter.observe().skip(1).take(1).subscribe(emitter);
 
         assert !emitter.isUnsbscribed();
         assert emitter.emitAndRetrieve(10) == null;
         assert emitter.emitAndRetrieve(20) == 20;
         assert emitter.isUnsbscribed();
         assert emitter.emitAndRetrieve(30) == null;
+    }
+
+    @Test
+    public void repeat() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        emitter.observe().skip(1).take(1).repeat().subscribe(emitter);
+
+        assert emitter.isUnsbscribed() == false;
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(20) == 20;
+        assert emitter.isUnsbscribed() == false;
+        assert emitter.emitAndRetrieve(30) == null;
+        assert emitter.emitAndRetrieve(40) == 40;
+        assert emitter.isUnsbscribed() == false;
     }
 
     @Test
@@ -136,5 +186,129 @@ public class ObservableTest {
         assert emitter.emitAndRetrieve(10) == null;
         assert emitter.emitAndRetrieve(20) == null;
         assert emitter.emitAndRetrieve(30) == 30;
+    }
+
+    @Test
+    public void merge() throws Exception {
+        EventEmitter<Integer> emitter1 = new EventEmitter();
+        EventEmitter<Integer> emitter2 = new EventEmitter();
+        Disposable disposable = emitter1.observe().merge(emitter2.observe()).subscribe(emitter1);
+
+        assert emitter1.isUnsbscribed() == false;
+        assert emitter2.isUnsbscribed() == false;
+        assert emitter1.emitAndRetrieve(10) == 10;
+        assert emitter1.emitAndRetrieve(20) == 20;
+
+        emitter2.emit(100);
+        emitter2.emit(200);
+        assert emitter1.retrieve() == 100;
+        assert emitter1.retrieve() == 200;
+
+        disposable.dispose();
+        assert emitter1.isUnsbscribed() == true;
+        assert emitter2.isUnsbscribed() == true;
+    }
+
+    @Test
+    public void all() throws Exception {
+        EventEmitter<Integer> emitter1 = new EventEmitter();
+        EventEmitter<Integer> emitter2 = new EventEmitter();
+        EventEmitter<Boolean> reciever = new EventEmitter();
+
+        Disposable disposable = Observable.all(value -> {
+            return 20 <= value;
+        }, emitter1.observe(), emitter2.observe()).subscribe(reciever);
+
+        assert emitter1.isUnsbscribed() == false;
+        assert emitter2.isUnsbscribed() == false;
+        assert reciever.retrieve() == null;
+
+        emitter1.emit(30);
+        emitter2.emit(20);
+        assert reciever.retrieveLast() == true;
+
+        emitter1.emit(10);
+        assert reciever.retrieveLast() == false;
+
+        emitter1.emit(20);
+        assert reciever.retrieveLast() == true;
+
+        emitter2.emit(10);
+        assert reciever.retrieveLast() == false;
+
+        emitter2.emit(40);
+        assert reciever.retrieveLast() == true;
+
+        emitter1.emit(10);
+        emitter2.emit(10);
+        assert reciever.retrieveLast() == false;
+
+        disposable.dispose();
+        assert emitter1.isUnsbscribed() == true;
+        assert emitter2.isUnsbscribed() == true;
+    }
+
+    @Test
+    public void any() throws Exception {
+        EventEmitter<Integer> emitter1 = new EventEmitter();
+        EventEmitter<Integer> emitter2 = new EventEmitter();
+        EventEmitter<Boolean> reciever = new EventEmitter();
+
+        Disposable disposable = Observable.any(value -> {
+            return 20 <= value;
+        }, emitter1.observe(), emitter2.observe()).subscribe(reciever);
+
+        assert emitter1.isUnsbscribed() == false;
+        assert emitter2.isUnsbscribed() == false;
+        assert reciever.retrieve() == null;
+
+        emitter1.emit(30);
+        emitter2.emit(20);
+        assert reciever.retrieveLast() == true;
+
+        emitter1.emit(10);
+        assert reciever.retrieveLast() == true;
+
+        emitter2.emit(10);
+        assert reciever.retrieveLast() == false;
+
+        emitter2.emit(20);
+        assert reciever.retrieveLast() == true;
+
+        disposable.dispose();
+        assert emitter1.isUnsbscribed() == true;
+        assert emitter2.isUnsbscribed() == true;
+    }
+
+    @Test
+    public void none() throws Exception {
+        EventEmitter<Integer> emitter1 = new EventEmitter();
+        EventEmitter<Integer> emitter2 = new EventEmitter();
+        EventEmitter<Boolean> reciever = new EventEmitter();
+
+        Disposable disposable = Observable.none(value -> {
+            return 20 <= value;
+        }, emitter1.observe(), emitter2.observe()).subscribe(reciever);
+
+        assert emitter1.isUnsbscribed() == false;
+        assert emitter2.isUnsbscribed() == false;
+        assert reciever.retrieve() == null;
+
+        emitter1.emit(30);
+        emitter2.emit(20);
+        assert reciever.retrieveLast() == false;
+
+        emitter1.emit(10);
+        assert reciever.retrieveLast() == false;
+
+        emitter2.emit(10);
+        assert reciever.retrieveLast() == true;
+
+        emitter2.emit(20);
+        assert reciever.retrieveLast() == false;
+
+        disposable.dispose();
+        assert emitter1.isUnsbscribed() == true;
+        assert emitter2.isUnsbscribed() == true;
     }
 }

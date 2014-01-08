@@ -23,13 +23,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
+import jsx.rx.Observable;
 import kiss.Disposable;
 import kiss.I;
 import kiss.model.ClassUtil;
-import rx.Observable;
-import rx.Observable.OnSubscribeFunc;
-import rx.Observer;
-import rx.Subscription;
 
 /**
  * <p>
@@ -49,67 +46,47 @@ public class Publishable<P extends Publishable<P>> {
     /** The actual listeners holder. */
     private Map<Object, List<Listener>> holder;
 
-    public final <T> Observable<T> observe(Class<T> type) {
-        return Observable.create(new OnSubscribeFunc<T>() {
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public Subscription onSubscribe(Observer<? super T> observer) {
-                Consumer<T> consumer = new Consumer<T>() {
-
-                    /**
-                     * {@inheritDoc}
-                     */
-                    @Override
-                    public void accept(T t) {
-                        observer.onNext(t);
-                    }
-                };
-                register(type, consumer);
-
-                return new Subscription() {
-
-                    @Override
-                    public void unsubscribe() {
-                        System.out.println("unsubscribe " + type);
-                        unregister(type, consumer);
-                    }
-                };
-            }
-        });
-    }
-
     public final <T extends Enum & EventType<E>, E extends Event<T>> Observable<E> observe(T type) {
-        return Observable.create(new OnSubscribeFunc<E>() {
+        return new Observable<E>(observer -> {
+            Consumer<E> consumer = event -> {
+                observer.onNext(event);
+            };
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public Subscription onSubscribe(Observer<? super E> observer) {
-                Consumer<E> consumer = new Consumer<E>() {
+            register(type, consumer);
 
-                    /**
-                     * {@inheritDoc}
-                     */
-                    @Override
-                    public void accept(E t) {
-                        observer.onNext(t);
-                    }
-                };
-                register(type, consumer);
-
-                return new Subscription() {
-
-                    @Override
-                    public void unsubscribe() {
-                        unregister(type, consumer);
-                    }
-                };
-            }
+            return () -> {
+                unregister(type, consumer);
+            };
         });
+
+        // return Observable.create(new OnSubscribeFunc<E>() {
+        //
+        // /**
+        // * {@inheritDoc}
+        // */
+        // @Override
+        // public Subscription onSubscribe(Observer<? super E> observer) {
+        // Consumer<E> consumer = new Consumer<E>() {
+        //
+        // /**
+        // * {@inheritDoc}
+        // */
+        // @Override
+        // public void accept(E t) {
+        // observer.onNext(t);
+        // }
+        // };
+        // register(type, consumer);
+        //
+        // return new Subscription() {
+        //
+        // @Override
+        // public void unsubscribe() {
+        // unregister(type, consumer);
+        // }
+        // };
+        // }
+        // });
     }
 
     /**
@@ -544,17 +521,19 @@ public class Publishable<P extends Publishable<P>> {
      * @param listener An event listener to remove.
      */
     private void remove(Object type, Object listener) {
-        List<Listener> listeners = holder.get(type);
+        if (holder != null) {
+            List<Listener> listeners = holder.get(type);
 
-        if (listeners != null) {
-            for (int i = listeners.size() - 1; 0 <= i; i--) {
-                if (listeners.get(i).equals(listener)) {
-                    listeners.remove(i);
+            if (listeners != null) {
+                for (int i = listeners.size() - 1; 0 <= i; i--) {
+                    if (listeners.get(i).equals(listener)) {
+                        listeners.remove(i);
 
-                    if (listeners.isEmpty()) {
-                        remove(type);
+                        if (listeners.isEmpty()) {
+                            remove(type);
+                        }
+                        break;
                     }
-                    break;
                 }
             }
         }

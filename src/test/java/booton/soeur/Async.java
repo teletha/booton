@@ -54,7 +54,11 @@ public class Async {
 
         try {
             for (Thread thread : threads) {
-                thread.join(1);
+                String name = thread.getName();
+
+                if (name.startsWith("pool-")) {
+                    thread.join(100);
+                }
             }
         } catch (InterruptedException e) {
             throw I.quiet(e);
