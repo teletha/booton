@@ -9,6 +9,7 @@
  */
 package js.lang;
 
+import sun.misc.FloatConsts;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -80,6 +81,112 @@ class JSFloat extends JSNumber {
     public static boolean isNaN(float value) {
         return Global.isNaN(value);
     }
+
+    /**
+     * Returns a representation of the specified floating-point value according to the IEEE 754
+     * floating-point "single format" bit layout.
+     * <p>
+     * Bit 31 (the bit that is selected by the mask {@code 0x80000000}) represents the sign of the
+     * floating-point number. Bits 30-23 (the bits that are selected by the mask {@code 0x7f800000})
+     * represent the exponent. Bits 22-0 (the bits that are selected by the mask {@code 0x007fffff})
+     * represent the significand (sometimes called the mantissa) of the floating-point number.
+     * <p>
+     * If the argument is positive infinity, the result is {@code 0x7f800000}.
+     * <p>
+     * If the argument is negative infinity, the result is {@code 0xff800000}.
+     * <p>
+     * If the argument is NaN, the result is {@code 0x7fc00000}.
+     * <p>
+     * In all cases, the result is an integer that, when given to the {@link #intBitsToFloat(int)}
+     * method, will produce a floating-point value the same as the argument to
+     * {@code floatToIntBits} (except all NaN values are collapsed to a single "canonical" NaN
+     * value).
+     * 
+     * @param value a floating-point number.
+     * @return the bits that represent the floating-point number.
+     */
+    public static int floatToIntBits(float value) {
+        int result = floatToRawIntBits(value);
+        // Check for NaN based on values of bit fields, maximum
+        // exponent and nonzero significand.
+        if (((result & FloatConsts.EXP_BIT_MASK) == FloatConsts.EXP_BIT_MASK) && (result & FloatConsts.SIGNIF_BIT_MASK) != 0) {
+            result = 0x7fc00000;
+        }
+        return result;
+    }
+
+    /**
+     * Returns a representation of the specified floating-point value according to the IEEE 754
+     * floating-point "single format" bit layout, preserving Not-a-Number (NaN) values.
+     * <p>
+     * Bit 31 (the bit that is selected by the mask {@code 0x80000000}) represents the sign of the
+     * floating-point number. Bits 30-23 (the bits that are selected by the mask {@code 0x7f800000})
+     * represent the exponent. Bits 22-0 (the bits that are selected by the mask {@code 0x007fffff})
+     * represent the significand (sometimes called the mantissa) of the floating-point number.
+     * <p>
+     * If the argument is positive infinity, the result is {@code 0x7f800000}.
+     * <p>
+     * If the argument is negative infinity, the result is {@code 0xff800000}.
+     * <p>
+     * If the argument is NaN, the result is the integer representing the actual NaN value. Unlike
+     * the {@code floatToIntBits} method, {@code floatToRawIntBits} does not collapse all the bit
+     * patterns encoding a NaN to a single "canonical" NaN value.
+     * <p>
+     * In all cases, the result is an integer that, when given to the {@link #intBitsToFloat(int)}
+     * method, will produce a floating-point value the same as the argument to
+     * {@code floatToRawIntBits}.
+     * 
+     * @param value a floating-point number.
+     * @return the bits that represent the floating-point number.
+     * @since 1.3
+     */
+    public static native int floatToRawIntBits(float value);
+
+    /**
+     * Returns the {@code float} value corresponding to a given bit representation. The argument is
+     * considered to be a representation of a floating-point value according to the IEEE 754
+     * floating-point "single format" bit layout.
+     * <p>
+     * If the argument is {@code 0x7f800000}, the result is positive infinity.
+     * <p>
+     * If the argument is {@code 0xff800000}, the result is negative infinity.
+     * <p>
+     * If the argument is any value in the range {@code 0x7f800001} through {@code 0x7fffffff} or in
+     * the range {@code 0xff800001} through {@code 0xffffffff}, the result is a NaN. No IEEE 754
+     * floating-point operation provided by Java can distinguish between two NaN values of the same
+     * type with different bit patterns. Distinct values of NaN are only distinguishable by use of
+     * the {@code Float.floatToRawIntBits} method.
+     * <p>
+     * In all other cases, let <i>s</i>, <i>e</i>, and <i>m</i> be three values that can be computed
+     * from the argument: <blockquote>
+     * 
+     * <pre>{@code
+     * int s = ((bits >> 31) == 0) ? 1 : -1;
+     * int e = ((bits >> 23) & 0xff);
+     * int m = (e == 0) ?
+     *                 (bits & 0x7fffff) << 1 :
+     *                 (bits & 0x7fffff) | 0x800000;
+     * }</pre>
+     * </blockquote> Then the floating-point result equals the value of the mathematical expression
+     * <i>s</i>&middot;<i>m</i>&middot;2<sup><i>e</i>-150</sup>.
+     * <p>
+     * Note that this method may not be able to return a {@code float} NaN with exactly same bit
+     * pattern as the {@code int} argument. IEEE 754 distinguishes between two kinds of NaNs, quiet
+     * NaNs and <i>signaling NaNs</i>. The differences between the two kinds of NaN are generally
+     * not visible in Java. Arithmetic operations on signaling NaNs turn them into quiet NaNs with a
+     * different, but often similar, bit pattern. However, on some processors merely copying a
+     * signaling NaN also performs that conversion. In particular, copying a signaling NaN to return
+     * it to the calling method may perform this conversion. So {@code intBitsToFloat} may not be
+     * able to return a {@code float} with a signaling NaN bit pattern. Consequently, for some
+     * {@code int} values, {@code floatToRawIntBits(intBitsToFloat(start))} may <i>not</i> equal
+     * {@code start}. Moreover, which particular bit patterns represent signaling NaNs is platform
+     * dependent; although all NaN bit patterns, quiet or signaling, must be in the NaN range
+     * identified above.
+     * 
+     * @param bits an integer.
+     * @return the {@code float} floating-point value with the same bit pattern.
+     */
+    public static native float intBitsToFloat(int bits);
 
     /**
      * Returns a new {@code float} initialized to the value represented by the specified

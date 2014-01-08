@@ -13,10 +13,9 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @version 2014/01/05 10:10:58
+ * @version 2014/01/09 2:57:23
  */
 public class EventEmitter<E> implements Observer<E> {
 
@@ -25,9 +24,6 @@ public class EventEmitter<E> implements Observer<E> {
 
     /** The event holder. */
     private final Deque<E> events = new ArrayDeque();
-
-    /** The flag for unsubscription. */
-    private AtomicInteger unsubscribe = new AtomicInteger();
 
     /**
      * <p>
@@ -47,8 +43,6 @@ public class EventEmitter<E> implements Observer<E> {
 
             return () -> {
                 remove(listener);
-
-                unsubscribe.incrementAndGet();
             };
         });
     }
@@ -113,6 +107,19 @@ public class EventEmitter<E> implements Observer<E> {
 
     /**
      * <p>
+     * Retrieve the oldest event.
+     * </p>
+     * 
+     * @return
+     */
+    public E retrieveLast() {
+        E event = events.pollLast();
+        events.clear();
+        return event;
+    }
+
+    /**
+     * <p>
      * Helper method to emit the specified event and retrieve the oldest event.
      * </p>
      * 
@@ -148,6 +155,6 @@ public class EventEmitter<E> implements Observer<E> {
      * @return
      */
     public boolean isUnsbscribed() {
-        return 0 < unsubscribe.get();
+        return listeners.isEmpty();
     }
 }

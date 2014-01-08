@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -9,12 +9,15 @@
  */
 package jsx.rx;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
@@ -27,13 +30,23 @@ import java.util.function.Supplier;
 import kiss.Disposable;
 
 /**
- * @version 2014/01/04 9:27:39
+ * @version 2014/01/09 1:16:11
  */
 public class Observable<V> {
 
     /** For reuse. */
-    public static final Disposable NEVER = () -> {
+    private static final Disposable EmptyDisposable = () -> {
     };
+
+    /** For reuse. */
+    private static final Predicate<Boolean> IdenticalPredicate = value -> {
+        return value;
+    };
+
+    /** For reuse. */
+    public static final Observable NEVER = new Observable(observer -> {
+        return EmptyDisposable;
+    });
 
     private static final ScheduledExecutorService tasks = Executors.newScheduledThreadPool(4);
 
@@ -150,7 +163,7 @@ public class Observable<V> {
     public final Disposable subscribe(Observer<? super V> observer) {
         unsubscriber = subscriber.apply(observer);
 
-        return unsubscriber == null ? NEVER : unsubscriber;
+        return unsubscriber == null ? EmptyDisposable : unsubscriber;
     }
 
     /**
@@ -234,44 +247,62 @@ public class Observable<V> {
 
     /**
      * <p>
-     * Create an {@link Observable} that skips the first sequence items emitted by the
-     * {@link Observable} and emits the remainder.
+     * Drops items emitted by an {@link Observable} that are followed by newer items before a
+     * timeout value expires. The timer resets on each emission.
      * </p>
      * 
-     * @param count A number of items to skip.
+     * @param time A time each value has to be "the most recent" of the {@link Observable} to ensure
+     *            that it's not dropped.
+     * @param unit A time unit.
      * @return Chainable API.
      */
-    public final Observable<V> skip(long count) {
-        AtomicInteger counter = new AtomicInteger();
+    public final Observable<V> debounce(long time, TimeUnit unit) {
+        AtomicReference<ScheduledFuture> latest = new AtomicReference();
 
         return new Observable<V>(this, (observer, value) -> {
-            if (count < counter.incrementAndGet()) {
-                observer.onNext(value);
+            ScheduledFuture future = latest.get();
+
+            if (future != null) {
+                future.cancel(true);
             }
+
+            Runnable task = () -> {
+                latest.set(null);
+                observer.onNext(value);
+            };
+            latest.set(tasks.schedule(task, time, unit));
         });
     }
 
     /**
      * <p>
-     * Create an {@link Observable} that emits only the first sequence items emitted by the source
-     * {@link Observable}.
+     * Returns a {@link Observable} consisting of the distinct elements (according to
+     * {@link Object#equals(Object)}) of this stream.
+     * </p>
+     * <p>
+     * For ordered streams, the selection of distinct elements is stable (for duplicated elements,
+     * the element appearing first in the encounter order is preserved.) For unordered streams, no
+     * stability guarantees are made.
      * </p>
      * 
-     * @param count A number of items to emit.
+     * @apiNote Preserving stability for {@code distinct()} in parallel pipelines is relatively
+     *          expensive (requires that the operation act as a full barrier, with substantial
+     *          buffering overhead), and stability is often not needed. Using an unordered stream
+     *          source (such as {@link #generate(Supplier)}) or removing the ordering constraint
+     *          with {@link #unordered()} may result in significantly more efficient execution for
+     *          {@code distinct()} in parallel pipelines, if the semantics of your situation permit.
+     *          If consistency with encounter order is required, and you are experiencing poor
+     *          performance or memory utilization with {@code distinct()} in parallel pipelines,
+     *          switching to sequential execution with {@link #sequential()} may improve
+     *          performance.
      * @return Chainable API.
      */
-    public final Observable<V> limit(long count) {
-        AtomicLong counter = new AtomicLong(count);
+    public final Observable<V> distinct() {
+        Set<V> set = new HashSet();
 
         return new Observable<V>(this, (observer, value) -> {
-            long current = counter.decrementAndGet();
-
-            if (0 <= current) {
+            if (set.add(value)) {
                 observer.onNext(value);
-
-                if (0 == current) {
-                    unsubscriber.dispose();
-                }
             }
         });
     }
@@ -330,34 +361,115 @@ public class Observable<V> {
 
     /**
      * <p>
-     * Returns a {@link Observable} consisting of the distinct elements (according to
-     * {@link Object#equals(Object)}) of this stream.
-     * </p>
-     * <p>
-     * For ordered streams, the selection of distinct elements is stable (for duplicated elements,
-     * the element appearing first in the encounter order is preserved.) For unordered streams, no
-     * stability guarantees are made.
+     * Flattens a sequence of {@link Observable} emitted by an Observable into one
+     * {@link Observable}, without any transformation.
      * </p>
      * 
-     * @apiNote Preserving stability for {@code distinct()} in parallel pipelines is relatively
-     *          expensive (requires that the operation act as a full barrier, with substantial
-     *          buffering overhead), and stability is often not needed. Using an unordered stream
-     *          source (such as {@link #generate(Supplier)}) or removing the ordering constraint
-     *          with {@link #unordered()} may result in significantly more efficient execution for
-     *          {@code distinct()} in parallel pipelines, if the semantics of your situation permit.
-     *          If consistency with encounter order is required, and you are experiencing poor
-     *          performance or memory utilization with {@code distinct()} in parallel pipelines,
-     *          switching to sequential execution with {@link #sequential()} may improve
-     *          performance.
+     * @param other A target {@link Observable} to merge.
      * @return Chainable API.
      */
-    public final Observable<V> distinct() {
-        Set<V> set = new HashSet();
+    public final Observable<V> merge(Observable<V> other) {
+        return new Observable<V>(observer -> {
+            return new Disposables().add(subscribe(observer)).add(other.subscribe(observer));
+        });
+    }
+
+    public final Observable<V> repeat() {
+        return new Observable<V>(observer -> {
+            Disposables disposables = new Disposables();
+            disposables.add(subscribe(observer, null, null, () -> {
+                subscribe(observer);
+            }));
+
+            return disposables;
+        });
+    }
+
+    /**
+     * <p>
+     * Create an {@link Observable} that skips the first sequence items emitted by the
+     * {@link Observable} and emits the remainder.
+     * </p>
+     * 
+     * @param count A number of items to skip.
+     * @return Chainable API.
+     */
+    public final Observable<V> skip(long count) {
+        AtomicInteger counter = new AtomicInteger();
 
         return new Observable<V>(this, (observer, value) -> {
-            if (set.add(value)) {
+            if (count < counter.incrementAndGet()) {
                 observer.onNext(value);
             }
+        });
+    }
+
+    /**
+     * <p>
+     * Create an {@link Observable} that skips the first sequence items emitted by the
+     * {@link Observable} and emits the remainder.
+     * </p>
+     * 
+     * @param count A number of items to skip.
+     * @return Chainable API.
+     */
+    public final <T> Observable<V> skipUntil(Observable<T> predicate) {
+        return new Observable<V>(observer -> {
+            AtomicBoolean flag = new AtomicBoolean();
+
+            return new Disposables().add(subscribe(value -> {
+                if (flag.get()) {
+                    observer.onNext(value);
+                }
+            })).add(predicate.subscribe(value -> {
+                flag.set(true);
+            }));
+        });
+    }
+
+    /**
+     * <p>
+     * Create an {@link Observable} that emits only the first sequence items emitted by the source
+     * {@link Observable}.
+     * </p>
+     * 
+     * @param count A number of items to emit.
+     * @return Chainable API.
+     */
+    public final Observable<V> take(long count) {
+        AtomicLong counter = new AtomicLong(count);
+
+        return new Observable<V>(this, (observer, value) -> {
+            long current = counter.decrementAndGet();
+
+            if (0 <= current) {
+                observer.onNext(value);
+
+                if (0 == current) {
+                    observer.onCompleted();
+                    unsubscriber.dispose();
+                }
+            }
+        });
+    }
+
+    /**
+     * <p>
+     * Create an {@link Observable} that emits only the first sequence items emitted by the source
+     * {@link Observable}.
+     * </p>
+     * 
+     * @param count A number of items to skip.
+     * @return Chainable API.
+     */
+    public final <T> Observable<V> takeUntil(Observable<T> predicate) {
+        return new Observable<V>(observer -> {
+            Disposables disposables = new Disposables();
+
+            return disposables.add(subscribe(observer)).add(predicate.subscribe(value -> {
+                observer.onCompleted();
+                disposables.dispose();
+            }));
         });
     }
 
@@ -383,34 +495,6 @@ public class Observable<V> {
 
     /**
      * <p>
-     * Drops items emitted by an {@link Observable} that are followed by newer items before a
-     * timeout value expires. The timer resets on each emission.
-     * </p>
-     * 
-     * @param time A time each value has to be "the most recent" of the {@link Observable} to ensure
-     *            that it's not dropped.
-     * @param unit A time unit.
-     * @return Chainable API.
-     */
-    public final Observable<V> debounce(long time, TimeUnit unit) {
-        AtomicReference<ScheduledFuture> latest = new AtomicReference();
-
-        return new Observable<V>(this, (observer, value) -> {
-            ScheduledFuture task = latest.get();
-
-            if (task != null) {
-                task.cancel(true);
-            }
-
-            latest.set(tasks.schedule(() -> {
-                latest.set(null);
-                observer.onNext(value);
-            }, time, unit));
-        });
-    }
-
-    /**
-     * <p>
      * Alias of {@link #map(Object)}.
      * </p>
      * 
@@ -423,20 +507,168 @@ public class Observable<V> {
     }
 
     /**
+     * @version 2014/01/09 2:14:14
+     */
+    private static class Disposables implements Disposable {
+
+        /** The container. */
+        private final List<Disposable> list = new ArrayList();
+
+        /**
+         * <p>
+         * Add {@link Disposable}.
+         * </p>
+         * 
+         * @param disposable A target to add.
+         * @return Chainable API.
+         */
+        private Disposables add(Disposable disposable) {
+            list.add(disposable);
+
+            return this;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void dispose() {
+            for (Disposable disposable : list) {
+                disposable.dispose();
+            }
+        }
+    }
+
+    /**
      * <p>
-     * Creates a pattern that matches when both Observable sequences have an available item.
+     * Create an {@link Observable} that emits true if all specified observables emit true as latest
+     * event.
      * </p>
      * 
-     * @param right Observable sequence to match with the left sequence
-     * @return Pattern object that matches when both Observable sequences have an available item
-     * @throws NullPointerException if <code>right</code> is null
-     * @see <a
-     *      href="https://github.com/Netflix/RxJava/wiki/Combining-Observables#and-then-and-when">RxJava
-     *      Wiki: and()</a>
-     * @see <a href="http://msdn.microsoft.com/en-us/library/hh229153.aspx">MSDN: Observable.And</a>
-     * @return
+     * @param observables A list of target {@link Observable} to test.
+     * @return Chainable API.
      */
-    public final Observable<V> and() {
-        return null;
+    public static Observable<Boolean> all(Observable<Boolean>... observables) {
+        return all(IdenticalPredicate, observables);
+    }
+
+    /**
+     * <p>
+     * Create an {@link Observable} that emits true if all specified observables emit true as latest
+     * event.
+     * </p>
+     * 
+     * @param predicate A test function.
+     * @param observables A list of target {@link Observable} to test.
+     * @return Chainable API.
+     */
+    public static <V> Observable<Boolean> all(Predicate<V> predicate, Observable<V>... observables) {
+        return condition(values -> {
+            for (boolean value : values) {
+                if (value) {
+                    return false;
+                }
+            }
+            return true;
+        }, predicate, observables);
+    }
+
+    /**
+     * <p>
+     * Create an {@link Observable} that emits true if any specified observable emits true as latest
+     * event.
+     * </p>
+     * 
+     * @param observables A list of target {@link Observable} to test.
+     * @return Chainable API.
+     */
+    public static Observable<Boolean> any(Observable<Boolean>... observables) {
+        return any(IdenticalPredicate, observables);
+    }
+
+    /**
+     * <p>
+     * Create an {@link Observable} that emits true if any specified observable emits true as latest
+     * event.
+     * </p>
+     * 
+     * @param predicate A test function.
+     * @param observables A list of target {@link Observable} to test.
+     * @return Chainable API.
+     */
+    public static <V> Observable<Boolean> any(Predicate<V> predicate, Observable<V>... observables) {
+        return condition(values -> {
+            for (boolean value : values) {
+                if (!value) {
+                    return true;
+                }
+            }
+            return false;
+        }, predicate, observables);
+    }
+
+    /**
+     * <p>
+     * Create an {@link Observable} that emits true if all specified observables emit false as
+     * latest event.
+     * </p>
+     * 
+     * @param observables A list of target {@link Observable} to test.
+     * @return Chainable API.
+     */
+    public static Observable<Boolean> none(Observable<Boolean>... observables) {
+        return none(IdenticalPredicate, observables);
+    }
+
+    /**
+     * <p>
+     * Create an {@link Observable} that emits true if all specified observables emit false as
+     * latest event.
+     * </p>
+     * 
+     * @param predicate A test function.
+     * @param observables A list of target {@link Observable} to test.
+     * @return Chainable API.
+     */
+    public static <V> Observable<Boolean> none(Predicate<V> predicate, Observable<V>... observables) {
+        return condition(values -> {
+            for (boolean value : values) {
+                if (!value) {
+                    return false;
+                }
+            }
+            return true;
+        }, predicate, observables);
+    }
+
+    /**
+     * <p>
+     * Helper method to merge the test result of each {@link Observable}.
+     * </p>
+     * 
+     * @param condition A test function for result.
+     * @param predicate A test function for each {@link Observable}.
+     * @param observables A list of target {@link Observable} to test.
+     * @return Chainable API.
+     */
+    private static <V> Observable<Boolean> condition(Predicate<boolean[]> condition, Predicate<V> predicate, Observable<V>... observables) {
+        if (observables == null || observables.length == 0 || predicate == null) {
+            return NEVER;
+        }
+
+        return new Observable<Boolean>(observer -> {
+            Disposables disposables = new Disposables();
+            boolean[] conditions = new boolean[observables.length];
+
+            for (int i = 0; i < observables.length; i++) {
+                int index = i;
+                disposables.add(observables[index].subscribe(value -> {
+                    conditions[index] = !predicate.test(value);
+
+                    observer.onNext(condition.test(conditions));
+                }));
+            }
+            return disposables;
+        });
     }
 }

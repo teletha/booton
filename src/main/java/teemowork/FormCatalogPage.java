@@ -9,7 +9,10 @@
  */
 package teemowork;
 
+import static js.lang.Global.*;
+
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import js.dom.DocumentFragment;
 import js.dom.UIAction;
@@ -20,6 +23,7 @@ import jsx.bwt.Button;
 import jsx.bwt.Input;
 import jsx.bwt.Select;
 import jsx.model.SelectableModel;
+import jsx.rx.Observable;
 import teemowork.model.Version;
 
 /**
@@ -58,8 +62,8 @@ public class FormCatalogPage extends Page {
         Select<String> child = root.child(new Select(selectable));
         child.model.setSelectionIndex(180);
 
-        root.child(new Input(model.type));
-        root.child(new Input(model.name));
+        Input num = root.child(new Input(model.type));
+        Input name = root.child(new Input(model.name));
         Button a = root.child(new Button("Add", new Consumer<UIEvent>() {
 
             @Override
@@ -71,8 +75,33 @@ public class FormCatalogPage extends Page {
         }));
         model.type = 111000;
 
-        a.root.observe(UIAction.Click).subscribe(value -> {
-            System.out.println(value.getClass());
+        Function<UIEvent, Boolean> nonEmpty = v -> {
+            return 0 < v.target.val().length();
+        };
+
+        Observable<Boolean> numberEntered = num.root.observe(UIAction.KeyUp).map(nonEmpty);
+        Observable<Boolean> nameEntered = name.root.observe(UIAction.KeyUp).map(nonEmpty);
+        Observable.all(nameEntered, numberEntered).subscribe(v -> {
+            System.out.println("button enable " + v);
+            if (v) {
+                a.enable();
+            } else {
+                a.disable();
+            }
+        });
+
+        Observable<UIEvent> mouseMove = window.observe(UIAction.MouseMove);
+        Observable<UIEvent> mouseDown = window.observe(UIAction.MouseDown);
+        Observable<UIEvent> mouseUp = window.observe(UIAction.MouseUp);
+
+        Observable<UIEvent> mouseDrag = mouseMove.skipUntil(mouseDown).takeUntil(mouseUp).repeat();
+
+        mouseDrag.subscribe(e -> {
+            System.out.println("drag " + e.pageX + "  " + e.pageY);
+        }, error -> {
+            System.out.println("error " + error);
+        }, () -> {
+            System.out.println("completed");
         });
 
         // model.modeler.test[0] = "acted";
