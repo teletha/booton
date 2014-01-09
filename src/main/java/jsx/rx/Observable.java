@@ -80,23 +80,6 @@ public class Observable<V> {
         };
     }
 
-    private String name = "";
-
-    private Observable<V> name(String name) {
-        this.name = name + "  " + hashCode();
-
-        System.out.println("create " + toString());
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return name.isEmpty() ? getClass().getName() + "#" + hashCode() : name;
-    }
-
     /**
      * <p>
      * An {@link Observer} must call an Observable's {@code subscribe} method in order to receive
@@ -179,36 +162,7 @@ public class Observable<V> {
     public final Disposable subscribe(Observer<? super V> observer) {
         unsubscriber = subscriber.apply(observer);
 
-        if (unsubscriber != null) {
-            unsubscriber = new Wrap(this, unsubscriber);
-        }
-
         return unsubscriber == null ? EmptyDisposable : unsubscriber;
-    }
-
-    private static class Wrap implements Disposable {
-
-        private Observable o;
-
-        private Disposable d;
-
-        /**
-         * @param o
-         * @param d
-         */
-        protected Wrap(Observable o, Disposable d) {
-            this.o = o;
-            this.d = d;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void dispose() {
-            System.out.println("dipose " + o.toString());
-            d.dispose();
-        }
     }
 
     /**
@@ -420,13 +374,10 @@ public class Observable<V> {
 
             return subscribe(value -> {
                 if (count < skip.incrementAndGet()) {
-                    System.out.println("pass skip " + value + "  at " + toString());
                     observer.onNext(value);
-                } else {
-                    System.out.println("drop skip " + value + "  at " + toString());
                 }
             });
-        }).name("skip " + count);
+        });
     }
 
     private AtomicBoolean skipUntil;
@@ -471,23 +422,19 @@ public class Observable<V> {
         return new Observable<V>(observer -> {
             take = new AtomicLong(count);
 
-            Disposables disposables = new Disposables();
-
-            return disposables.add(subscribe(value -> {
+            return subscribe(value -> {
                 long current = take.decrementAndGet();
 
                 if (0 <= current) {
-                    System.out.println("pass take " + value + "  at " + toString());
                     observer.onNext(value);
 
                     if (0 == current) {
-                        System.out.println("complete take " + value + "  at " + toString());
                         observer.onCompleted();
                         unsubscriber.dispose();
                     }
                 }
-            }));
-        }).name("take " + count);
+            });
+        });
     }
 
     /**
