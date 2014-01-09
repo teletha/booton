@@ -18,7 +18,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
@@ -205,44 +204,76 @@ public class Observable<V> {
      * @return A functionality provider for the dispose of this subscription.
      */
     private final Disposable subscribe(Observer<? super V> delegator, Consumer<? super V> next, Consumer<Throwable> error, Runnable complete) {
-        return subscribe(new Observer<V>() {
+        DelegatableObserver<V> observer = new DelegatableObserver<V>(delegator);
+        observer.next = next;
+        observer.error = error;
+        observer.complete = complete;
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void onCompleted() {
-                if (complete == null) {
-                    delegator.onCompleted();
-                } else {
-                    complete.run();
-                }
-            }
+        return subscribe(observer);
+    }
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void onError(Throwable e) {
-                if (error == null) {
-                    delegator.onError(e);
-                } else {
-                    error.accept(e);
-                }
-            }
+    /**
+     * @version 2014/01/09 13:35:39
+     */
+    private static class DelegatableObserver<V> implements Observer<V> {
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void onNext(V value) {
-                if (next == null) {
-                    delegator.onNext(value);
-                } else {
-                    next.accept(value);
-                }
+        /** The delegation. */
+        private final Observer<? super V> delegator;
+
+        /** The delegation. */
+        private Consumer<? super V> next;
+
+        /** The delegation. */
+        private Consumer<Throwable> error;
+
+        /** The delegation. */
+        private Runnable complete;
+
+        /**
+         * @param delegator
+         * @param next
+         * @param error
+         * @param complete
+         */
+        private DelegatableObserver(Observer<? super V> delegator) {
+            this.delegator = delegator;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onCompleted() {
+            if (complete == null) {
+                delegator.onCompleted();
+            } else {
+                complete.run();
             }
-        });
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onError(Throwable e) {
+            if (error == null) {
+                delegator.onError(e);
+            } else {
+                error.accept(e);
+            }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onNext(V value) {
+            if (next == null) {
+                delegator.onNext(value);
+            } else {
+                next.accept(value);
+            }
+        }
     }
 
     /**
@@ -274,6 +305,8 @@ public class Observable<V> {
         });
     }
 
+    private Set<V> distinct;
+
     /**
      * <p>
      * Returns a {@link Observable} consisting of the distinct elements (according to
@@ -298,12 +331,14 @@ public class Observable<V> {
      * @return Chainable API.
      */
     public final Observable<V> distinct() {
-        Set<V> set = new HashSet();
+        return new Observable<V>(observer -> {
+            distinct = new HashSet();
 
-        return new Observable<V>(this, (observer, value) -> {
-            if (set.add(value)) {
-                observer.onNext(value);
-            }
+            return subscribe(value -> {
+                if (distinct.add(value)) {
+                    observer.onNext(value);
+                }
+            });
         });
     }
 
@@ -376,14 +411,17 @@ public class Observable<V> {
 
     public final Observable<V> repeat() {
         return new Observable<V>(observer -> {
-            Disposables disposables = new Disposables();
-            disposables.add(subscribe(observer, null, null, () -> {
-                subscribe(observer);
-            }));
-
-            return disposables;
+            DelegatableObserver<V> delegator = new DelegatableObserver<V>(observer);
+            delegator.complete = () -> {
+                observer.onCompleted();
+                subscribe(delegator);
+            };
+            return subscribe(delegator);
         });
     }
+
+    /** The skip counter. */
+    private AtomicLong skip;
 
     /**
      * <p>
@@ -395,14 +433,18 @@ public class Observable<V> {
      * @return Chainable API.
      */
     public final Observable<V> skip(long count) {
-        AtomicInteger counter = new AtomicInteger();
+        return new Observable<V>(observer -> {
+            skip = new AtomicLong();
 
-        return new Observable<V>(this, (observer, value) -> {
-            if (count < counter.incrementAndGet()) {
-                observer.onNext(value);
-            }
+            return subscribe(value -> {
+                if (count < skip.incrementAndGet()) {
+                    observer.onNext(value);
+                }
+            });
         });
     }
+
+    private AtomicBoolean skipUntil;
 
     /**
      * <p>
@@ -415,17 +457,20 @@ public class Observable<V> {
      */
     public final <T> Observable<V> skipUntil(Observable<T> predicate) {
         return new Observable<V>(observer -> {
-            AtomicBoolean flag = new AtomicBoolean();
+            skipUntil = new AtomicBoolean();
 
             return new Disposables().add(subscribe(value -> {
-                if (flag.get()) {
+                if (skipUntil.get()) {
                     observer.onNext(value);
                 }
             })).add(predicate.subscribe(value -> {
-                flag.set(true);
+                skipUntil.set(true);
             }));
         });
     }
+
+    /** The take counter. */
+    private AtomicLong take;
 
     /**
      * <p>
@@ -437,19 +482,21 @@ public class Observable<V> {
      * @return Chainable API.
      */
     public final Observable<V> take(long count) {
-        AtomicLong counter = new AtomicLong(count);
+        return new Observable<V>(observer -> {
+            take = new AtomicLong(count);
 
-        return new Observable<V>(this, (observer, value) -> {
-            long current = counter.decrementAndGet();
+            return subscribe(value -> {
+                long current = take.decrementAndGet();
 
-            if (0 <= current) {
-                observer.onNext(value);
+                if (0 <= current) {
+                    observer.onNext(value);
 
-                if (0 == current) {
-                    observer.onCompleted();
-                    unsubscriber.dispose();
+                    if (0 == current) {
+                        observer.onCompleted();
+                        unsubscriber.dispose();
+                    }
                 }
-            }
+            });
         });
     }
 

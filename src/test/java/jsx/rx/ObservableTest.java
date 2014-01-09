@@ -71,6 +71,31 @@ public class ObservableTest {
     }
 
     @Test
+    public void skipUntilRepeat() throws Exception {
+        EventEmitter<String> condition = new EventEmitter();
+        EventEmitter<Integer> emitter = new EventEmitter();
+        Disposable disposable = emitter.observe().skipUntil(condition.observe()).take(1).repeat().subscribe(emitter);
+
+        assert condition.isUnsbscribed() == false;
+        assert emitter.isUnsbscribed() == false;
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(20) == null;
+
+        condition.emit("start");
+        assert emitter.emitAndRetrieve(10) == 10;
+        assert emitter.emitAndRetrieve(20) == null;
+
+        condition.emit("start");
+        assert emitter.emitAndRetrieve(10) == 10;
+        assert emitter.emitAndRetrieve(20) == null;
+
+        disposable.dispose();
+        assert condition.isUnsbscribed() == true;
+        assert emitter.isUnsbscribed() == true;
+        assert emitter.emitAndRetrieve(10) == null;
+    }
+
+    @Test
     public void take() throws Exception {
         EventEmitter<Integer> emitter = new EventEmitter();
         emitter.observe().take(1).subscribe(emitter);
@@ -113,7 +138,7 @@ public class ObservableTest {
     @Test
     public void repeat() throws Exception {
         EventEmitter<Integer> emitter = new EventEmitter();
-        emitter.observe().skip(1).take(1).repeat().subscribe(emitter);
+        Disposable disposable = emitter.observe().skip(1).take(1).repeat().subscribe(emitter);
 
         assert emitter.isUnsbscribed() == false;
         assert emitter.emitAndRetrieve(10) == null;
@@ -122,6 +147,10 @@ public class ObservableTest {
         assert emitter.emitAndRetrieve(30) == null;
         assert emitter.emitAndRetrieve(40) == 40;
         assert emitter.isUnsbscribed() == false;
+
+        disposable.dispose();
+        assert emitter.isUnsbscribed() == true;
+        assert emitter.emitAndRetrieve(50) == null;
     }
 
     @Test
@@ -186,6 +215,24 @@ public class ObservableTest {
         assert emitter.emitAndRetrieve(10) == null;
         assert emitter.emitAndRetrieve(20) == null;
         assert emitter.emitAndRetrieve(30) == 30;
+    }
+
+    @Test
+    public void distinctRepeat() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        Disposable disposable = emitter.observe().distinct().take(2).repeat().subscribe(emitter);
+
+        assert emitter.emitAndRetrieve(10) == 10;
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(20) == 20;
+
+        assert emitter.emitAndRetrieve(10) == 10;
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(20) == 20;
+
+        disposable.dispose();
+        assert emitter.isUnsbscribed() == true;
+        assert emitter.emitAndRetrieve(10) == null;
     }
 
     @Test
