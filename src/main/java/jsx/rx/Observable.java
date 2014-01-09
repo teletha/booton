@@ -80,6 +80,23 @@ public class Observable<V> {
         };
     }
 
+    private String name = "";
+
+    private Observable<V> name(String name) {
+        this.name = name + "  " + hashCode();
+
+        System.out.println("create " + toString());
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return name.isEmpty() ? getClass().getName() + "#" + hashCode() : name;
+    }
+
     /**
      * <p>
      * An {@link Observer} must call an Observable's {@code subscribe} method in order to receive
@@ -162,7 +179,36 @@ public class Observable<V> {
     public final Disposable subscribe(Observer<? super V> observer) {
         unsubscriber = subscriber.apply(observer);
 
+        if (unsubscriber != null) {
+            unsubscriber = new Wrap(this, unsubscriber);
+        }
+
         return unsubscriber == null ? EmptyDisposable : unsubscriber;
+    }
+
+    private static class Wrap implements Disposable {
+
+        private Observable o;
+
+        private Disposable d;
+
+        /**
+         * @param o
+         * @param d
+         */
+        protected Wrap(Observable o, Disposable d) {
+            this.o = o;
+            this.d = d;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void dispose() {
+            System.out.println("dipose " + o.toString());
+            d.dispose();
+        }
     }
 
     /**
@@ -210,70 +256,6 @@ public class Observable<V> {
         observer.complete = complete;
 
         return subscribe(observer);
-    }
-
-    /**
-     * @version 2014/01/09 13:35:39
-     */
-    private static class DelegatableObserver<V> implements Observer<V> {
-
-        /** The delegation. */
-        private final Observer<? super V> delegator;
-
-        /** The delegation. */
-        private Consumer<? super V> next;
-
-        /** The delegation. */
-        private Consumer<Throwable> error;
-
-        /** The delegation. */
-        private Runnable complete;
-
-        /**
-         * @param delegator
-         * @param next
-         * @param error
-         * @param complete
-         */
-        private DelegatableObserver(Observer<? super V> delegator) {
-            this.delegator = delegator;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void onCompleted() {
-            if (complete == null) {
-                delegator.onCompleted();
-            } else {
-                complete.run();
-            }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void onError(Throwable e) {
-            if (error == null) {
-                delegator.onError(e);
-            } else {
-                error.accept(e);
-            }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void onNext(V value) {
-            if (next == null) {
-                delegator.onNext(value);
-            } else {
-                next.accept(value);
-            }
-        }
     }
 
     /**
@@ -438,10 +420,13 @@ public class Observable<V> {
 
             return subscribe(value -> {
                 if (count < skip.incrementAndGet()) {
+                    System.out.println("pass skip " + value + "  at " + toString());
                     observer.onNext(value);
+                } else {
+                    System.out.println("drop skip " + value + "  at " + toString());
                 }
             });
-        });
+        }).name("skip " + count);
     }
 
     private AtomicBoolean skipUntil;
@@ -482,22 +467,27 @@ public class Observable<V> {
      * @return Chainable API.
      */
     public final Observable<V> take(long count) {
+
         return new Observable<V>(observer -> {
             take = new AtomicLong(count);
 
-            return subscribe(value -> {
+            Disposables disposables = new Disposables();
+
+            return disposables.add(subscribe(value -> {
                 long current = take.decrementAndGet();
 
                 if (0 <= current) {
+                    System.out.println("pass take " + value + "  at " + toString());
                     observer.onNext(value);
 
                     if (0 == current) {
+                        System.out.println("complete take " + value + "  at " + toString());
                         observer.onCompleted();
                         unsubscriber.dispose();
                     }
                 }
-            });
-        });
+            }));
+        }).name("take " + count);
     }
 
     /**
@@ -551,6 +541,70 @@ public class Observable<V> {
      */
     public final <R> Observable<R> when(Function<? super V, ? extends R> condition) {
         return map(condition);
+    }
+
+    /**
+     * @version 2014/01/09 13:35:39
+     */
+    private static class DelegatableObserver<V> implements Observer<V> {
+
+        /** The delegation. */
+        private final Observer<? super V> delegator;
+
+        /** The delegation. */
+        private Consumer<? super V> next;
+
+        /** The delegation. */
+        private Consumer<Throwable> error;
+
+        /** The delegation. */
+        private Runnable complete;
+
+        /**
+         * @param delegator
+         * @param next
+         * @param error
+         * @param complete
+         */
+        private DelegatableObserver(Observer<? super V> delegator) {
+            this.delegator = delegator;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onCompleted() {
+            if (complete == null) {
+                delegator.onCompleted();
+            } else {
+                complete.run();
+            }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onError(Throwable e) {
+            if (error == null) {
+                delegator.onError(e);
+            } else {
+                error.accept(e);
+            }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onNext(V value) {
+            if (next == null) {
+                delegator.onNext(value);
+            } else {
+                next.accept(value);
+            }
+        }
     }
 
     /**
