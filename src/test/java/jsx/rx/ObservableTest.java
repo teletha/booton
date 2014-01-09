@@ -11,7 +11,6 @@ package jsx.rx;
 
 import static java.util.concurrent.TimeUnit.*;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
 import kiss.Disposable;
@@ -360,24 +359,24 @@ public class ObservableTest {
         assert emitter2.isUnsbscribed() == true;
     }
 
-    @Test
-    public void testname() throws Exception {
-        for (int i = 0; i < 4; i++) {
-            AtomicBoolean atomicBoolean = new AtomicBoolean();
-
-            aaa(() -> {
-                AtomicBoolean inB = new AtomicBoolean();
-                System.out.println(atomicBoolean.hashCode());
-
-                aaa(() -> {
-                    System.out.println(atomicBoolean.hashCode() + "  " + inB.hashCode());
-                });
-
-            });
-        }
-    }
-
-    private void aaa(Runnable runnable) {
-        runnable.run();
-    }
+    // @Test
+    // public void testname() throws Exception {
+    // for (int i = 0; i < 4; i++) {
+    // AtomicBoolean atomicBoolean = new AtomicBoolean();
+    //
+    // aaa(() -> {
+    // AtomicBoolean inB = new AtomicBoolean();
+    // System.out.println(atomicBoolean.hashCode());
+    //
+    // aaa(() -> {
+    // System.out.println(atomicBoolean.hashCode() + "  " + inB.hashCode());
+    // });
+    //
+    // });
+    // }
+    // }
+    //
+    // private void aaa(Runnable runnable) {
+    // runnable.run();
+    // }
 }
