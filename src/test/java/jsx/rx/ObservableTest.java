@@ -11,6 +11,7 @@ package jsx.rx;
 
 import static java.util.concurrent.TimeUnit.*;
 
+import java.util.Arrays;
 import java.util.function.Function;
 
 import kiss.Disposable;
@@ -22,7 +23,7 @@ import antibug.Async;
 import booton.soeur.ScriptRunner;
 
 /**
- * @version 2014/01/09 1:01:34
+ * @version 2014/01/11 2:51:33
  */
 @RunWith(ScriptRunner.class)
 public class ObservableTest {
@@ -102,6 +103,127 @@ public class ObservableTest {
     }
 
     @Test
+    public void buffer() throws Exception {
+        EventEmitter<Integer[]> reciever = new EventEmitter();
+        EventEmitter<Integer> emitter = new EventEmitter();
+        Disposable disposable = emitter.observe().buffer(2).subscribe(reciever);
+
+        emitter.emit(10);
+        assert reciever.retrieve() == null;
+        emitter.emit(20);
+        assert Arrays.equals(reciever.retrieve(), new Integer[] {10, 20});
+
+        emitter.emit(30);
+        assert reciever.retrieve() == null;
+        emitter.emit(40);
+        assert Arrays.equals(reciever.retrieve(), new Integer[] {30, 40});
+
+        disposable.dispose();
+        assert emitter.isUnsubscribed();
+
+        emitter.emit(50);
+        emitter.emit(60);
+        assert reciever.retrieve() == null;
+    }
+
+    @Test
+    public void bufferRepeat() throws Exception {
+        EventEmitter<Integer[]> reciever = new EventEmitter();
+        EventEmitter<Integer> emitter = new EventEmitter();
+        Disposable disposable = emitter.observe().buffer(2).skip(1).take(1).repeat().subscribe(reciever);
+
+        emitter.emit(10);
+        emitter.emit(20);
+        assert reciever.retrieve() == null;
+        emitter.emit(30);
+        emitter.emit(40);
+        assert Arrays.equals(reciever.retrieve(), new Integer[] {30, 40});
+
+        emitter.emit(50);
+        emitter.emit(60);
+        assert reciever.retrieve() == null;
+        emitter.emit(70);
+        emitter.emit(80);
+        assert Arrays.equals(reciever.retrieve(), new Integer[] {70, 80});
+
+        disposable.dispose();
+        assert emitter.isUnsubscribed();
+
+        emitter.emit(90);
+        emitter.emit(100);
+        emitter.emit(110);
+        emitter.emit(120);
+        assert reciever.retrieve() == null;
+    }
+
+    @Test
+    public void bufferInterval1() throws Exception {
+        EventEmitter<Integer[]> reciever = new EventEmitter();
+        EventEmitter<Integer> emitter = new EventEmitter();
+        Disposable disposable = emitter.observe().buffer(2, 1).subscribe(reciever);
+
+        emitter.emit(10);
+        assert reciever.retrieve() == null;
+        emitter.emit(20);
+        assert Arrays.equals(reciever.retrieve(), new Integer[] {10, 20});
+
+        emitter.emit(30);
+        assert Arrays.equals(reciever.retrieve(), new Integer[] {20, 30});
+        emitter.emit(40);
+        assert Arrays.equals(reciever.retrieve(), new Integer[] {30, 40});
+
+        disposable.dispose();
+        assert emitter.isUnsubscribed();
+
+        emitter.emit(50);
+        assert reciever.retrieve() == null;
+    }
+
+    @Test
+    public void bufferInterval2() throws Exception {
+        EventEmitter<Integer[]> reciever = new EventEmitter();
+        EventEmitter<Integer> emitter = new EventEmitter();
+        Disposable disposable = emitter.observe().buffer(2, 3).subscribe(reciever);
+
+        emitter.emit(10);
+        assert reciever.retrieve() == null;
+        emitter.emit(20);
+        assert reciever.retrieve() == null;
+        emitter.emit(30);
+        assert Arrays.equals(reciever.retrieve(), new Integer[] {20, 30});
+        emitter.emit(40);
+        assert reciever.retrieve() == null;
+        emitter.emit(50);
+        assert reciever.retrieve() == null;
+        emitter.emit(60);
+        assert Arrays.equals(reciever.retrieve(), new Integer[] {50, 60});
+
+        disposable.dispose();
+        assert emitter.isUnsubscribed();
+
+        emitter.emit(70);
+        assert reciever.retrieve() == null;
+    }
+
+    @Test
+    public void diff() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        Disposable disposable = emitter.observe().diff().subscribe(emitter);
+
+        assert emitter.isSubscribed();
+        assert emitter.emitAndRetrieve(10) == 10;
+        assert emitter.emitAndRetrieve(20) == 20;
+        assert emitter.emitAndRetrieve(20) == null;
+        assert emitter.emitAndRetrieve(10) == 10;
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(20) == 20;
+
+        disposable.dispose();
+        assert emitter.isUnsubscribed();
+        assert emitter.emitAndRetrieve(10) == null;
+    }
+
+    @Test
     public void take() throws Exception {
         EventEmitter<Integer> emitter = new EventEmitter();
         emitter.observe().take(1).subscribe(emitter);
@@ -157,6 +279,21 @@ public class ObservableTest {
         disposable.dispose();
         assert emitter.isUnsubscribed() == true;
         assert emitter.emitAndRetrieve(50) == null;
+    }
+
+    @Test
+    public void repeatFinitely() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        emitter.observe().skip(1).take(1).repeat(2).subscribe(emitter);
+
+        assert emitter.isSubscribed();
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(20) == 20;
+        assert emitter.isSubscribed();
+        assert emitter.emitAndRetrieve(30) == null;
+        assert emitter.emitAndRetrieve(40) == 40;
+        assert emitter.isUnsubscribed();
+        assert emitter.emitAndRetrieve(30) == null;
     }
 
     @Test
