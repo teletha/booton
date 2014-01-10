@@ -16,14 +16,20 @@ import java.util.function.Function;
 import kiss.Disposable;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import booton.soeur.Async;
+import antibug.Async;
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2014/01/09 1:01:34
  */
-// @RunWith(ScriptRunner.class)
+@RunWith(ScriptRunner.class)
 public class ObservableTest {
+
+    static {
+        Observable.tasks = Async.use();
+    }
 
     @Test
     public void subscribe() throws Exception {
@@ -55,8 +61,8 @@ public class ObservableTest {
         EventEmitter<Integer> emitter = new EventEmitter();
         Disposable disposable = emitter.observe().skipUntil(condition.observe()).subscribe(emitter);
 
-        assert condition.isUnsbscribed() == false;
-        assert emitter.isUnsbscribed() == false;
+        assert condition.isSubscribed();
+        assert emitter.isSubscribed();
         assert emitter.emitAndRetrieve(10) == null;
         assert emitter.emitAndRetrieve(20) == null;
 
@@ -65,8 +71,8 @@ public class ObservableTest {
         assert emitter.emitAndRetrieve(20) == 20;
 
         disposable.dispose();
-        assert condition.isUnsbscribed() == true;
-        assert emitter.isUnsbscribed() == true;
+        assert condition.isUnsubscribed() == true;
+        assert emitter.isUnsubscribed() == true;
         assert emitter.emitAndRetrieve(10) == null;
     }
 
@@ -76,8 +82,8 @@ public class ObservableTest {
         EventEmitter<Integer> emitter = new EventEmitter();
         Disposable disposable = emitter.observe().skipUntil(condition.observe()).take(1).repeat().subscribe(emitter);
 
-        assert condition.isUnsbscribed() == false;
-        assert emitter.isUnsbscribed() == false;
+        assert condition.isSubscribed();
+        assert emitter.isSubscribed();
         assert emitter.emitAndRetrieve(10) == null;
         assert emitter.emitAndRetrieve(20) == null;
 
@@ -90,8 +96,8 @@ public class ObservableTest {
         assert emitter.emitAndRetrieve(20) == null;
 
         disposable.dispose();
-        assert condition.isUnsbscribed() == true;
-        assert emitter.isUnsbscribed() == true;
+        assert condition.isUnsubscribed() == true;
+        assert emitter.isUnsubscribed() == true;
         assert emitter.emitAndRetrieve(10) == null;
     }
 
@@ -100,9 +106,9 @@ public class ObservableTest {
         EventEmitter<Integer> emitter = new EventEmitter();
         emitter.observe().take(1).subscribe(emitter);
 
-        assert !emitter.isUnsbscribed();
+        assert !emitter.isUnsubscribed();
         assert emitter.emitAndRetrieve(10) == 10;
-        assert emitter.isUnsbscribed();
+        assert emitter.isUnsubscribed();
         assert emitter.emitAndRetrieve(20) == null;
     }
 
@@ -112,14 +118,14 @@ public class ObservableTest {
         EventEmitter<Integer> emitter = new EventEmitter();
         emitter.observe().takeUntil(condition.observe()).subscribe(emitter);
 
-        assert condition.isUnsbscribed() == false;
-        assert emitter.isUnsbscribed() == false;
+        assert condition.isSubscribed();
+        assert emitter.isSubscribed();
         assert emitter.emitAndRetrieve(10) == 10;
         assert emitter.emitAndRetrieve(20) == 20;
 
         condition.emit("start");
-        assert condition.isUnsbscribed() == true;
-        assert emitter.isUnsbscribed() == true;
+        assert condition.isUnsubscribed() == true;
+        assert emitter.isUnsubscribed() == true;
         assert emitter.emitAndRetrieve(10) == null;
     }
 
@@ -128,10 +134,10 @@ public class ObservableTest {
         EventEmitter<Integer> emitter = new EventEmitter();
         emitter.observe().skip(1).take(1).subscribe(emitter);
 
-        assert !emitter.isUnsbscribed();
+        assert !emitter.isUnsubscribed();
         assert emitter.emitAndRetrieve(10) == null;
         assert emitter.emitAndRetrieve(20) == 20;
-        assert emitter.isUnsbscribed();
+        assert emitter.isUnsubscribed();
         assert emitter.emitAndRetrieve(30) == null;
     }
 
@@ -140,17 +146,50 @@ public class ObservableTest {
         EventEmitter<Integer> emitter = new EventEmitter();
         Disposable disposable = emitter.observe().skip(1).take(1).repeat().subscribe(emitter);
 
-        assert emitter.isUnsbscribed() == false;
+        assert emitter.isSubscribed();
         assert emitter.emitAndRetrieve(10) == null;
         assert emitter.emitAndRetrieve(20) == 20;
-        assert emitter.isUnsbscribed() == false;
+        assert emitter.isSubscribed();
         assert emitter.emitAndRetrieve(30) == null;
         assert emitter.emitAndRetrieve(40) == 40;
-        assert emitter.isUnsbscribed() == false;
+        assert emitter.isSubscribed();
 
         disposable.dispose();
-        assert emitter.isUnsbscribed() == true;
+        assert emitter.isUnsubscribed() == true;
         assert emitter.emitAndRetrieve(50) == null;
+    }
+
+    @Test
+    public void repeatThen() throws Exception {
+        EventEmitter<Integer> sub = new EventEmitter();
+        EventEmitter<Integer> emitter = new EventEmitter();
+        Disposable disposable = emitter.observe().skip(1).take(2).repeat().merge(sub.observe()).subscribe(emitter);
+
+        assert emitter.isSubscribed();
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(20) == 20;
+        assert emitter.emitAndRetrieve(30) == 30;
+        assert emitter.isSubscribed();
+        assert emitter.emitAndRetrieve(30) == null;
+        assert emitter.emitAndRetrieve(40) == 40;
+        assert emitter.emitAndRetrieve(50) == 50;
+        assert emitter.isSubscribed();
+
+        // from sub
+        assert sub.isSubscribed();
+        sub.emit(100);
+        assert emitter.retrieve() == 100;
+        sub.emit(200);
+        assert emitter.retrieve() == 200;
+
+        disposable.dispose();
+        assert emitter.isUnsubscribed() == true;
+        assert emitter.emitAndRetrieve(50) == null;
+
+        // from sub
+        sub.emit(300);
+        assert emitter.retrieve() == null;
+        assert sub.isUnsubscribed() == true;
     }
 
     @Test
@@ -189,6 +228,30 @@ public class ObservableTest {
 
         Async.awaitTasks();
         assert emitter.retrieve() == 30;
+    }
+
+    @Test
+    public void debounceRepeat() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        emitter.observe().debounce(10, MILLISECONDS).skip(1).take(1).repeat().subscribe(emitter);
+
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(20) == null;
+        assert emitter.emitAndRetrieve(30) == null;
+
+        Async.awaitTasks();
+        assert emitter.retrieve() == null;
+
+        emitter.emit(10);
+        Async.awaitTasks();
+        assert emitter.retrieve() == 10;
+
+        emitter.emit(10);
+        Async.awaitTasks();
+        assert emitter.retrieve() == null;
+        emitter.emit(10);
+        Async.awaitTasks();
+        assert emitter.retrieve() == 10;
     }
 
     @Test
@@ -231,7 +294,7 @@ public class ObservableTest {
         assert emitter.emitAndRetrieve(20) == 20;
 
         disposable.dispose();
-        assert emitter.isUnsbscribed() == true;
+        assert emitter.isUnsubscribed() == true;
         assert emitter.emitAndRetrieve(10) == null;
     }
 
@@ -241,8 +304,8 @@ public class ObservableTest {
         EventEmitter<Integer> emitter2 = new EventEmitter();
         Disposable disposable = emitter1.observe().merge(emitter2.observe()).subscribe(emitter1);
 
-        assert emitter1.isUnsbscribed() == false;
-        assert emitter2.isUnsbscribed() == false;
+        assert emitter1.isSubscribed();
+        assert emitter2.isSubscribed();
         assert emitter1.emitAndRetrieve(10) == 10;
         assert emitter1.emitAndRetrieve(20) == 20;
 
@@ -252,8 +315,8 @@ public class ObservableTest {
         assert emitter1.retrieve() == 200;
 
         disposable.dispose();
-        assert emitter1.isUnsbscribed() == true;
-        assert emitter2.isUnsbscribed() == true;
+        assert emitter1.isUnsubscribed() == true;
+        assert emitter2.isUnsubscribed() == true;
     }
 
     @Test
@@ -266,8 +329,8 @@ public class ObservableTest {
             return 20 <= value;
         }, emitter1.observe(), emitter2.observe()).subscribe(reciever);
 
-        assert emitter1.isUnsbscribed() == false;
-        assert emitter2.isUnsbscribed() == false;
+        assert emitter1.isSubscribed();
+        assert emitter2.isSubscribed();
         assert reciever.retrieve() == null;
 
         emitter1.emit(30);
@@ -291,8 +354,8 @@ public class ObservableTest {
         assert reciever.retrieveLast() == false;
 
         disposable.dispose();
-        assert emitter1.isUnsbscribed() == true;
-        assert emitter2.isUnsbscribed() == true;
+        assert emitter1.isUnsubscribed() == true;
+        assert emitter2.isUnsubscribed() == true;
     }
 
     @Test
@@ -305,8 +368,8 @@ public class ObservableTest {
             return 20 <= value;
         }, emitter1.observe(), emitter2.observe()).subscribe(reciever);
 
-        assert emitter1.isUnsbscribed() == false;
-        assert emitter2.isUnsbscribed() == false;
+        assert emitter1.isSubscribed();
+        assert emitter2.isSubscribed();
         assert reciever.retrieve() == null;
 
         emitter1.emit(30);
@@ -323,8 +386,8 @@ public class ObservableTest {
         assert reciever.retrieveLast() == true;
 
         disposable.dispose();
-        assert emitter1.isUnsbscribed() == true;
-        assert emitter2.isUnsbscribed() == true;
+        assert emitter1.isUnsubscribed() == true;
+        assert emitter2.isUnsubscribed() == true;
     }
 
     @Test
@@ -337,8 +400,8 @@ public class ObservableTest {
             return 20 <= value;
         }, emitter1.observe(), emitter2.observe()).subscribe(reciever);
 
-        assert emitter1.isUnsbscribed() == false;
-        assert emitter2.isUnsbscribed() == false;
+        assert emitter1.isSubscribed();
+        assert emitter2.isSubscribed();
         assert reciever.retrieve() == null;
 
         emitter1.emit(30);
@@ -355,8 +418,8 @@ public class ObservableTest {
         assert reciever.retrieveLast() == false;
 
         disposable.dispose();
-        assert emitter1.isUnsbscribed() == true;
-        assert emitter2.isUnsbscribed() == true;
+        assert emitter1.isUnsubscribed() == true;
+        assert emitter2.isUnsubscribed() == true;
     }
 
     // @Test

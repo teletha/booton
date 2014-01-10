@@ -74,6 +74,9 @@ public class ScriptTester {
     /** The boot.js file. */
     private static final String boot;
 
+    /** The boot.js file for unit test. */
+    private static final String unitTest;
+
     static {
         try {
             // load test runner for booton
@@ -81,6 +84,7 @@ public class ScriptTester {
 
             // read boot.js
             boot = new String(Files.readAllBytes(I.locate("boot.js")), UTF_8);
+            unitTest = new String(Files.readAllBytes(I.locate("src/test/resources/boot.js")), UTF_8);
 
             // build client
             client = new WebClient(BrowserVersion.FIREFOX_17);
@@ -92,11 +96,13 @@ public class ScriptTester {
             // build script engine
             engine = client.getJavaScriptEngine();
 
+            // add test utility
+            ScriptableObject window = (ScriptableObject) html.getEnclosingWindow().getScriptObject();
+            ScriptableObject.defineClass(window, AsyncJSDefinition.class);
+
             // compile and load boot script
             engine.execute(html, engine.compile(html, boot, "boot.js", 1));
-
-            // add test utility
-            ScriptableObject.defineClass((ScriptableObject) html.getEnclosingWindow().getScriptObject(), AsyncJS.class);
+            engine.execute(html, engine.compile(html, unitTest, "unitTest.js", 1));
         } catch (Exception e) {
             throw I.quiet(e);
         }

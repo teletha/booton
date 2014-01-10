@@ -47,10 +47,13 @@ public class Observable<V> {
         return EmptyDisposable;
     });
 
-    private static final ScheduledExecutorService tasks = Executors.newScheduledThreadPool(4);
+    /** The job scheduler. */
+    static ScheduledExecutorService tasks = Executors.newScheduledThreadPool(4);
 
+    /** The subscriber. */
     private Function<Observer<? super V>, Disposable> subscriber;
 
+    /** The unsubscriber. */
     private Disposable unsubscriber;
 
     /**
@@ -488,70 +491,6 @@ public class Observable<V> {
      */
     public final <R> Observable<R> when(Function<? super V, ? extends R> condition) {
         return map(condition);
-    }
-
-    /**
-     * @version 2014/01/09 13:35:39
-     */
-    private static class DelegatableObserver<V> implements Observer<V> {
-
-        /** The delegation. */
-        private final Observer<? super V> delegator;
-
-        /** The delegation. */
-        private Consumer<? super V> next;
-
-        /** The delegation. */
-        private Consumer<Throwable> error;
-
-        /** The delegation. */
-        private Runnable complete;
-
-        /**
-         * @param delegator
-         * @param next
-         * @param error
-         * @param complete
-         */
-        private DelegatableObserver(Observer<? super V> delegator) {
-            this.delegator = delegator;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void onCompleted() {
-            if (complete == null) {
-                delegator.onCompleted();
-            } else {
-                complete.run();
-            }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void onError(Throwable e) {
-            if (error == null) {
-                delegator.onError(e);
-            } else {
-                error.accept(e);
-            }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void onNext(V value) {
-            if (next == null) {
-                delegator.onNext(value);
-            } else {
-                next.accept(value);
-            }
-        }
     }
 
     /**
