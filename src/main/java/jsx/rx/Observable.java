@@ -9,27 +9,28 @@
  */
 package jsx.rx;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 import kiss.Disposable;
 
 /**
- * @version 2014/01/09 1:16:11
+ * @version 2014/01/10 22:31:16
  */
 public class Observable<V> {
 
@@ -58,11 +59,15 @@ public class Observable<V> {
 
     /**
      * <p>
-     * Observable with Function to execute when subscribed to.
+     * Create {@link Observable} with the specified subscriber {@link Function} which will be
+     * invoked whenever you calls {@link #subscribe(Observer)} related methods.
      * </p>
      * 
-     * @param onSubscribe A subscriber {@link Function} to be executed when
-     *            {@link #subscribe(Observer)} is called.
+     * @param subscriber A subscriber {@link Function}.
+     * @see #subscribe(Observer)
+     * @see #subscribe(Consumer)
+     * @see #subscribe(Consumer, Consumer)
+     * @see #subscribe(Consumer, Consumer, Runnable)
      */
     public Observable(Function<Observer<? super V>, Disposable> subscriber) {
         this.subscriber = subscriber;
@@ -70,26 +75,30 @@ public class Observable<V> {
 
     /**
      * <p>
-     * Observable with Function to execute when subscribed to.
+     * Create {@link Observable} with the specified subscriber {@link Function} which will be
+     * invoked whenever you calls {@link #subscribe(Observer)} related methods.
      * </p>
      * 
-     * @param next
+     * @param previous A previous {@link Observable} of chain.
+     * @param next A {@link Observer#onNext(Object)} method to delegate.
      */
-    private Observable(Observable<V> chain, BiConsumer<Observer<? super V>, V> next) {
+    private Observable(Observable<V> previous, BiConsumer<Observer<? super V>, V> next) {
         this.subscriber = observer -> {
-            return chain.subscribe(observer, value -> {
+            Subscriber<V> delegator = new Subscriber(observer);
+            delegator.next = value -> {
                 next.accept(observer, value);
-            });
+            };
+            return previous.subscribe(delegator);
         };
     }
 
     /**
      * <p>
-     * An {@link Observer} must call an Observable's {@code subscribe} method in order to receive
-     * items and notifications from the Observable.
+     * Receive values from this {@link Observable}.
+     * </p>
      * 
-     * @param next A next process.
-     * @return A functionality provider for the dispose of this subscription.
+     * @param next A delegator method of {@link Observer#onNext(Object)}.
+     * @return Calling {@link Disposable#dispose()} will dispose this subscription.
      */
     public final Disposable subscribe(Consumer<? super V> next) {
         return subscribe(next, null);
@@ -100,9 +109,9 @@ public class Observable<V> {
      * An {@link Observer} must call an Observable's {@code subscribe} method in order to receive
      * items and notifications from the Observable.
      * 
-     * @param next A next process.
-     * @param error An error handling.
-     * @return A functionality provider for the dispose of this subscription.
+     * @param next A delegator method of {@link Observer#onNext(Object)}.
+     * @param error A delegator method of {@link Observer#onError(Throwable)}.
+     * @return Calling {@link Disposable#dispose()} will dispose this subscription.
      */
     public final Disposable subscribe(Consumer<? super V> next, Consumer<Throwable> error) {
         return subscribe(next, error, null);
@@ -110,104 +119,16 @@ public class Observable<V> {
 
     /**
      * <p>
-     * An {@link Observer} must call an Observable's {@code subscribe} method in order to receive
-     * items and notifications from the Observable.
-     * 
-     * @param next A next process.
-     * @param error An error handling.
-     * @param complete A complete process.
-     * @return A functionality provider for the dispose of this subscription.
-     */
-    public final Disposable subscribe(Consumer<? super V> next, Consumer<Throwable> error, Runnable complete) {
-        return subscribe(new Observer<V>() {
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void onCompleted() {
-                if (complete != null) {
-                    complete.run();
-                }
-            }
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void onError(Throwable e) {
-                if (error != null) {
-                    error.accept(e);
-                }
-            }
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void onNext(V value) {
-                if (next != null) {
-                    next.accept(value);
-                }
-            }
-        });
-    }
-
-    /**
-     * <p>
-     * An {@link Observer} must call an Observable's {@code subscribe} method in order to receive
-     * items and notifications from the Observable.
+     * Receive values from this {@link Observable}.
      * </p>
      * 
-     * @param observer A value observer.
-     * @return A functionality provider for the dispose of this subscription.
+     * @param next A delegator method of {@link Observer#onNext(Object)}.
+     * @param error A delegator method of {@link Observer#onError(Throwable)}.
+     * @param complete A delegator method of {@link Observer#onCompleted()}.
+     * @return Calling {@link Disposable#dispose()} will dispose this subscription.
      */
-    public final Disposable subscribe(Observer<? super V> observer) {
-        unsubscriber = subscriber.apply(observer);
-
-        return unsubscriber == null ? EmptyDisposable : unsubscriber;
-    }
-
-    /**
-     * <p>
-     * An {@link Observer} must call an Observable's {@code subscribe} method in order to receive
-     * items and notifications from the Observable.
-     * 
-     * @param delegator An observer delegator.
-     * @param next A next process.
-     * @return A functionality provider for the dispose of this subscription.
-     */
-    private final Disposable subscribe(Observer<? super V> delegator, Consumer<? super V> next) {
-        return subscribe(delegator, next, null);
-    }
-
-    /**
-     * <p>
-     * An {@link Observer} must call an Observable's {@code subscribe} method in order to receive
-     * items and notifications from the Observable.
-     * 
-     * @param delegator An observer delegator.
-     * @param next A next process.
-     * @param error An error handling.
-     * @return A functionality provider for the dispose of this subscription.
-     */
-    private final Disposable subscribe(Observer<? super V> delegator, Consumer<? super V> next, Consumer<Throwable> error) {
-        return subscribe(delegator, next, error, null);
-    }
-
-    /**
-     * <p>
-     * An {@link Observer} must call an Observable's {@code subscribe} method in order to receive
-     * items and notifications from the Observable.
-     * 
-     * @param delegator An observer delegator.
-     * @param next A next process.
-     * @param error An error handling.
-     * @param complete A complete process.
-     * @return A functionality provider for the dispose of this subscription.
-     */
-    private final Disposable subscribe(Observer<? super V> delegator, Consumer<? super V> next, Consumer<Throwable> error, Runnable complete) {
-        DelegatableObserver<V> observer = new DelegatableObserver<V>(delegator);
+    public final Disposable subscribe(Consumer<? super V> next, Consumer<Throwable> error, Runnable complete) {
+        Subscriber<V> observer = new Subscriber(null);
         observer.next = next;
         observer.error = error;
         observer.complete = complete;
@@ -217,12 +138,72 @@ public class Observable<V> {
 
     /**
      * <p>
-     * Drops items emitted by an {@link Observable} that are followed by newer items before a
-     * timeout value expires. The timer resets on each emission.
+     * Receive values from this {@link Observable}.
      * </p>
      * 
-     * @param time A time each value has to be "the most recent" of the {@link Observable} to ensure
-     *            that it's not dropped.
+     * @param observer A value observer of this {@link Observable}.
+     * @return Calling {@link Disposable#dispose()} will dispose this subscription.
+     */
+    public final Disposable subscribe(Observer<? super V> observer) {
+        return unsubscriber = subscriber.apply(observer);
+    }
+
+    /**
+     * <p>
+     * Indicates each value of an {@link Observable} sequence into consecutive non-overlapping
+     * buffers which are produced based on value count information.
+     * </p>
+     * 
+     * @param size A length of each buffer.
+     * @return Chainable API.
+     */
+    public final Observable<V[]> buffer(int size) {
+        return buffer(size, size);
+    }
+
+    /**
+     * <p>
+     * Indicates each values of an {@link Observable} sequence into zero or more buffers which are
+     * produced based on value count information.
+     * </p>
+     * 
+     * @param size A length of each buffer.
+     * @param interval A number of values to skip between creation of consecutive buffers.
+     * @return Chainable API.
+     */
+    public final Observable<V[]> buffer(int size, int interval) {
+        return new Observable<V[]>(observer -> {
+            Deque<V> buffer = new ArrayDeque();
+            AtomicInteger timing = new AtomicInteger();
+
+            return subscribe(value -> {
+                buffer.offer(value);
+
+                boolean validTiming = timing.incrementAndGet() == interval;
+                boolean validSize = buffer.size() == size;
+
+                if (validTiming && validSize) {
+                    observer.onNext((V[]) buffer.toArray());
+                }
+
+                if (validTiming) {
+                    timing.set(0);
+                }
+
+                if (validSize) {
+                    buffer.pollFirst();
+                }
+            });
+        });
+    }
+
+    /**
+     * <p>
+     * Drops values that are followed by newer values before a timeout. The timer resets on each
+     * value emission.
+     * </p>
+     * 
+     * @param time A time value.
      * @param unit A time unit.
      * @return Chainable API.
      */
@@ -244,29 +225,40 @@ public class Observable<V> {
         });
     }
 
+    /** The previous value for diff. */
+    private AtomicReference<V> diff;
+
+    /**
+     * <p>
+     * Returns an {@link Observable} consisting of the distinct values (according to
+     * {@link Object#equals(Object)}) of this stream.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public final Observable<V> diff() {
+        return new Observable<V>(observer -> {
+            diff = new AtomicReference();
+
+            return subscribe(value -> {
+                V prev = diff.getAndSet(value);
+
+                if (!Objects.equals(prev, value)) {
+                    observer.onNext(value);
+                }
+            });
+        });
+    }
+
+    /** The distinct set. */
     private Set<V> distinct;
 
     /**
      * <p>
-     * Returns a {@link Observable} consisting of the distinct elements (according to
+     * Returns an {@link Observable} consisting of the distinct values (according to
      * {@link Object#equals(Object)}) of this stream.
      * </p>
-     * <p>
-     * For ordered streams, the selection of distinct elements is stable (for duplicated elements,
-     * the element appearing first in the encounter order is preserved.) For unordered streams, no
-     * stability guarantees are made.
-     * </p>
      * 
-     * @apiNote Preserving stability for {@code distinct()} in parallel pipelines is relatively
-     *          expensive (requires that the operation act as a full barrier, with substantial
-     *          buffering overhead), and stability is often not needed. Using an unordered stream
-     *          source (such as {@link #generate(Supplier)}) or removing the ordering constraint
-     *          with {@link #unordered()} may result in significantly more efficient execution for
-     *          {@code distinct()} in parallel pipelines, if the semantics of your situation permit.
-     *          If consistency with encounter order is required, and you are experiencing poor
-     *          performance or memory utilization with {@code distinct()} in parallel pipelines,
-     *          switching to sequential execution with {@link #sequential()} may improve
-     *          performance.
      * @return Chainable API.
      */
     public final Observable<V> distinct() {
@@ -283,7 +275,8 @@ public class Observable<V> {
 
     /**
      * <p>
-     * Filter values emitted by this {@link Observable}.
+     * Returns an {@link Observable} consisting of the values of this {@link Observable} that match
+     * the given predicate.
      * </p>
      * 
      * @param predicate A function that evaluates the values emitted by the source
@@ -304,7 +297,7 @@ public class Observable<V> {
      * {@link Observable} and emits the result.
      * </p>
      * 
-     * @param constant A constant to apply to each item emitted by this {@link Observable}.
+     * @param constant A constant to apply to each value emitted by this {@link Observable}.
      * @return Chainable API.
      */
     public final <R> Observable<R> map(R constant) {
@@ -317,11 +310,11 @@ public class Observable<V> {
 
     /**
      * <p>
-     * Returns an {@link Observable} that applies the given function to each item emitted by an
+     * Returns an {@link Observable} that applies the given function to each value emitted by an
      * {@link Observable} and emits the result.
      * </p>
      * 
-     * @param converter A converter function to apply to each item emitted by this
+     * @param converter A converter function to apply to each value emitted by this
      *            {@link Observable}.
      * @return Chainable API.
      */
@@ -335,7 +328,7 @@ public class Observable<V> {
 
     /**
      * <p>
-     * Flattens a sequence of {@link Observable} emitted by an Observable into one
+     * Flattens a sequence of {@link Observable} emitted by an {@link Observable} into one
      * {@link Observable}, without any transformation.
      * </p>
      * 
@@ -344,13 +337,20 @@ public class Observable<V> {
      */
     public final Observable<V> merge(Observable<V> other) {
         return new Observable<V>(observer -> {
-            return new Disposables().add(subscribe(observer)).add(other.subscribe(observer));
+            return new Unsubscriber().and(subscribe(observer)).and(other.subscribe(observer));
         });
     }
 
+    /**
+     * <p>
+     * Generates an {@link Observable} sequence that repeats the given value infinitely.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
     public final Observable<V> repeat() {
         return new Observable<V>(observer -> {
-            DelegatableObserver<V> delegator = new DelegatableObserver<V>(observer);
+            Subscriber<V> delegator = new Subscriber<V>(observer);
             delegator.complete = () -> {
                 observer.onCompleted();
                 subscribe(delegator);
@@ -359,21 +359,45 @@ public class Observable<V> {
         });
     }
 
+    /**
+     * <p>
+     * Generates an {@link Observable} sequence that repeats the given value finitely.
+     * </p>
+     * 
+     * @param count A number of repeat.
+     * @return Chainable API.
+     */
+    public final Observable<V> repeat(int count) {
+        AtomicInteger repeat = new AtomicInteger(count);
+
+        return new Observable<V>(observer -> {
+            Subscriber<V> subscriber = new Subscriber<V>(observer);
+            subscriber.complete = () -> {
+                if (repeat.decrementAndGet() == 0) {
+                    unsubscriber.dispose();
+                } else {
+                    unsubscriber = new Unsubscriber().and(unsubscriber).and(subscribe(subscriber));
+                }
+            };
+            return subscribe(subscriber);
+        });
+    }
+
     /** The skip counter. */
-    private AtomicLong skip;
+    private AtomicInteger skip;
 
     /**
      * <p>
-     * Create an {@link Observable} that skips the first sequence items emitted by the
-     * {@link Observable} and emits the remainder.
+     * Bypasses a specified number of values in an {@link Observable} sequence and then returns the
+     * remaining values.
      * </p>
      * 
-     * @param count A number of items to skip.
+     * @param count A number of values to skip.
      * @return Chainable API.
      */
-    public final Observable<V> skip(long count) {
+    public final Observable<V> skip(int count) {
         return new Observable<V>(observer -> {
-            skip = new AtomicLong();
+            skip = new AtomicInteger();
 
             return subscribe(value -> {
                 if (count < skip.incrementAndGet()) {
@@ -387,43 +411,43 @@ public class Observable<V> {
 
     /**
      * <p>
-     * Create an {@link Observable} that skips the first sequence items emitted by the
-     * {@link Observable} and emits the remainder.
+     * Returns the values from the source {@link Observable} sequence only after the other
+     * {@link Observable} sequence produces a value.
      * </p>
      * 
-     * @param count A number of items to skip.
+     * @param predicate An {@link Observable} sequence that triggers propagation of values of the
+     *            source sequence.
      * @return Chainable API.
      */
     public final <T> Observable<V> skipUntil(Observable<T> predicate) {
         return new Observable<V>(observer -> {
             skipUntil = new AtomicBoolean();
 
-            return new Disposables().add(subscribe(value -> {
+            return new Unsubscriber().and(subscribe(value -> {
                 if (skipUntil.get()) {
                     observer.onNext(value);
                 }
-            })).add(predicate.subscribe(value -> {
+            })).and(predicate.subscribe(value -> {
                 skipUntil.set(true);
             }));
         });
     }
 
     /** The take counter. */
-    private AtomicLong take;
+    private AtomicInteger take;
 
     /**
      * <p>
-     * Create an {@link Observable} that emits only the first sequence items emitted by the source
-     * {@link Observable}.
+     * Returns a specified number of contiguous values from the start of an {@link Observable}
+     * sequence.
      * </p>
      * 
-     * @param count A number of items to emit.
+     * @param count A number of values to emit.
      * @return Chainable API.
      */
-    public final Observable<V> take(long count) {
-
+    public final Observable<V> take(int count) {
         return new Observable<V>(observer -> {
-            take = new AtomicLong(count);
+            take = new AtomicInteger(count);
 
             return subscribe(value -> {
                 long current = take.decrementAndGet();
@@ -442,28 +466,31 @@ public class Observable<V> {
 
     /**
      * <p>
-     * Create an {@link Observable} that emits only the first sequence items emitted by the source
-     * {@link Observable}.
+     * Returns the values from the source {@link Observable} sequence until the other
+     * {@link Observable} sequence produces a value.
      * </p>
      * 
-     * @param count A number of items to skip.
+     * @param predicate An {@link Observable} sequence that terminates propagation of values of the
+     *            source sequence.
      * @return Chainable API.
      */
     public final <T> Observable<V> takeUntil(Observable<T> predicate) {
         return new Observable<V>(observer -> {
-            Disposables disposables = new Disposables();
-
-            return disposables.add(subscribe(observer)).add(predicate.subscribe(value -> {
+            return unsubscriber = new Unsubscriber().and(subscribe(observer)).and(predicate.subscribe(value -> {
                 observer.onCompleted();
-                disposables.dispose();
+                unsubscriber.dispose();
             }));
         });
     }
 
     /**
      * <p>
-     * Throttles by skipping items until "skipDuration" passes and then emits the next received
-     * item.
+     * Throttles by skipping values until "skipDuration" passes and then emits the next received
+     * value.
+     * </p>
+     * <p>
+     * Ignores the values from an {@link Observable} sequence which are followed by another value
+     * before due time with the specified source and time.
      * </p>
      * 
      * @param time Time to wait before sending another item after emitting the last item.
@@ -491,39 +518,6 @@ public class Observable<V> {
      */
     public final <R> Observable<R> when(Function<? super V, ? extends R> condition) {
         return map(condition);
-    }
-
-    /**
-     * @version 2014/01/09 2:14:14
-     */
-    private static class Disposables implements Disposable {
-
-        /** The container. */
-        private final List<Disposable> list = new ArrayList();
-
-        /**
-         * <p>
-         * Add {@link Disposable}.
-         * </p>
-         * 
-         * @param disposable A target to add.
-         * @return Chainable API.
-         */
-        private Disposables add(Disposable disposable) {
-            list.add(disposable);
-
-            return this;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void dispose() {
-            for (Disposable disposable : list) {
-                disposable.dispose();
-            }
-        }
     }
 
     /**
@@ -644,18 +638,18 @@ public class Observable<V> {
         }
 
         return new Observable<Boolean>(observer -> {
-            Disposables disposables = new Disposables();
+            Unsubscriber unsubscriber = new Unsubscriber();
             boolean[] conditions = new boolean[observables.length];
 
             for (int i = 0; i < observables.length; i++) {
                 int index = i;
-                disposables.add(observables[index].subscribe(value -> {
+                unsubscriber.add(observables[index].subscribe(value -> {
                     conditions[index] = !predicate.test(value);
 
                     observer.onNext(condition.test(conditions));
                 }));
             }
-            return disposables;
+            return unsubscriber;
         });
     }
 }

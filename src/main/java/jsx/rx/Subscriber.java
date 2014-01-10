@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 /**
  * @version 2014/01/09 13:35:39
  */
-class DelegatableObserver<V> implements Observer<V> {
+class Subscriber<V> implements Observer<V> {
 
     /** The delegation. */
     private final Observer<? super V> delegator;
@@ -34,7 +34,7 @@ class DelegatableObserver<V> implements Observer<V> {
      * @param error
      * @param complete
      */
-    DelegatableObserver(Observer<? super V> delegator) {
+    Subscriber(Observer<? super V> delegator) {
         this.delegator = delegator;
     }
 

@@ -17,7 +17,7 @@ import kiss.Disposable;
  * @version 2014/01/10 13:44:31
  */
 @SuppressWarnings("serial")
-class DelegatableDisposer extends ArrayList<Disposable> implements Disposable {
+class Unsubscriber extends ArrayList<Disposable> implements Disposable {
 
     /**
      * {@inheritDoc}
@@ -27,5 +27,17 @@ class DelegatableDisposer extends ArrayList<Disposable> implements Disposable {
         for (Disposable disposable : this) {
             disposable.dispose();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Unsubscriber and(Disposable disposable) {
+        if (disposable != null) {
+            add(disposable);
+        }
+
+        // API definition
+        return this;
     }
 }
