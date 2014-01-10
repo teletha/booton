@@ -20,7 +20,7 @@ import kiss.Disposable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.soeur.Async;
+import antibug.Async;
 import booton.soeur.ScriptRunner;
 
 /**
@@ -268,7 +268,7 @@ public class PublishableTest {
     public void debounce() throws Exception {
         PubSub reciever = new PubSub() {
 
-            @Subscribe(debounce = 50)
+            @Subscribe(debounce = 10)
             private void time(int value) {
                 this.value = value;
             }
@@ -287,7 +287,7 @@ public class PublishableTest {
     public void delay() throws Exception {
         PubSub reciever = new PubSub() {
 
-            @Subscribe(delay = 50)
+            @Subscribe(delay = 20)
             private void time(int value) {
                 this.value += value;
             }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -9,31 +9,26 @@
  */
 package booton.soeur;
 
-import kiss.I;
-import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
-import net.sourceforge.htmlunit.corejs.javascript.annotations.JSStaticFunction;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptJob;
-import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptJobManager;
+import antibug.Async;
+import booton.translator.Javascript;
+import booton.translator.Translator;
 
 /**
- * @version 2013/12/17 16:25:15
+ * @version 2014/01/10 16:30:58
  */
-@SuppressWarnings("serial")
-public class AsyncJS extends ScriptableObject {
+class AsyncJS extends Translator<Async> {
 
     /**
+     * <p>
+     * Use thread pool.
+     * </p>
      * 
+     * @return
      */
-    public AsyncJS() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getClassName() {
-        return Async.name;
+    public String use() {
+        return "new " + Javascript.computeClassName(ScheduledThreadPoolExecutor.class) + "(0)";
     }
 
     /**
@@ -43,13 +38,8 @@ public class AsyncJS extends ScriptableObject {
      * 
      * @param millseconds
      */
-    @JSStaticFunction
-    public static void wait(int millseconds) {
-        try {
-            Thread.sleep(millseconds);
-        } catch (InterruptedException e) {
-            throw I.quiet(e);
-        }
+    public String wait(int millseconds) {
+        return "Async" + ".wait(" + param(0) + ")";
     }
 
     /**
@@ -59,20 +49,7 @@ public class AsyncJS extends ScriptableObject {
      * 
      * @param timeout
      */
-    @JSStaticFunction
-    public static void awaitTasks() {
-        JavaScriptJobManager manager = ScriptTester.html.getEnclosingWindow().getJobManager();
-        JavaScriptJob job = manager.getEarliestJob();
-
-        while (job != null) {
-            // execute background job
-            job.run();
-
-            // remove it
-            manager.removeJob(job.getId());
-
-            // search next job
-            job = manager.getEarliestJob();
-        }
+    public String awaitTasks() {
+        return "Async" + ".awaitTasks()";
     }
 }
