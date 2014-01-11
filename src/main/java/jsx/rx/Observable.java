@@ -225,6 +225,23 @@ public class Observable<V> {
         });
     }
 
+    /**
+     * <p>
+     * Indicates the {@link Observable} sequence by due time with the specified source and time.
+     * </p>
+     * 
+     * @param time The absolute time used to shift the {@link Observable} sequence.
+     * @param unit A unit of time for the specified time.
+     * @return Chainable API.
+     */
+    public final Observable<V> delay(long time, TimeUnit unit) {
+        return new Observable<V>(this, (observer, value) -> {
+            tasks.schedule(() -> {
+                observer.onNext(value);
+            }, time, unit);
+        });
+    }
+
     /** The previous value for diff. */
     private AtomicReference<V> diff;
 
@@ -433,6 +450,31 @@ public class Observable<V> {
         });
     }
 
+    /**
+     * <p>
+     * Returns the values from the source {@link Observable} sequence only after the other
+     * {@link Observable} sequence produces a value.
+     * </p>
+     * 
+     * @param predicate An {@link Observable} sequence that triggers propagation of values of the
+     *            source sequence.
+     * @return Chainable API.
+     */
+    public final <T> Observable<V> skipUntil(Predicate<V> predicate) {
+        return new Observable<V>(observer -> {
+            skipUntil = new AtomicBoolean();
+
+            return subscribe(value -> {
+                if (skipUntil.get()) {
+                    observer.onNext(value);
+                } else if (predicate.test(value)) {
+                    skipUntil.set(true);
+                    observer.onNext(value);
+                }
+            });
+        });
+    }
+
     /** The take counter. */
     private AtomicInteger take;
 
@@ -485,6 +527,28 @@ public class Observable<V> {
 
     /**
      * <p>
+     * Returns the values from the source {@link Observable} sequence until the other
+     * {@link Observable} sequence produces a value.
+     * </p>
+     * 
+     * @param predicate An {@link Observable} sequence that terminates propagation of values of the
+     *            source sequence.
+     * @return Chainable API.
+     */
+    public final <T> Observable<V> takeUntil(Predicate<V> predicate) {
+        return new Observable<V>(this, (observer, value) -> {
+            if (predicate.test(value)) {
+                observer.onNext(value);
+                observer.onCompleted();
+                unsubscriber.dispose();
+            } else {
+                observer.onNext(value);
+            }
+        });
+    }
+
+    /**
+     * <p>
      * Throttles by skipping values until "skipDuration" passes and then emits the next received
      * value.
      * </p>
@@ -505,19 +569,6 @@ public class Observable<V> {
             long now = System.currentTimeMillis();
             return latest.getAndSet(now) + delay <= now;
         });
-    }
-
-    /**
-     * <p>
-     * Alias of {@link #map(Object)}.
-     * </p>
-     * 
-     * @param condition A converter function to apply to each item emitted by this
-     *            {@link Observable}.
-     * @return Chainable API.
-     */
-    public final <R> Observable<R> when(Function<? super V, ? extends R> condition) {
-        return map(condition);
     }
 
     /**

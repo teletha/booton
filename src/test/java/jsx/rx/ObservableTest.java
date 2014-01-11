@@ -78,6 +78,47 @@ public class ObservableTest {
     }
 
     @Test
+    public void skipUntilCondition() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        Disposable disposable = emitter.observe().skipUntil(v -> {
+            return v % 3 == 0;
+        }).subscribe(emitter);
+
+        assert emitter.isSubscribed();
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(20) == null;
+        assert emitter.emitAndRetrieve(30) == 30;
+        assert emitter.emitAndRetrieve(10) == 10;
+        assert emitter.emitAndRetrieve(20) == 20;
+
+        disposable.dispose();
+        assert emitter.isUnsubscribed() == true;
+        assert emitter.emitAndRetrieve(10) == null;
+    }
+
+    @Test
+    public void skipUntilConditionRepeat() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        Disposable disposable = emitter.observe().skipUntil(v -> {
+            return v % 3 == 0;
+        }).take(2).repeat().subscribe(emitter);
+
+        assert emitter.isSubscribed();
+        assert emitter.emitAndRetrieve(20) == null;
+        assert emitter.emitAndRetrieve(30) == 30;
+        assert emitter.emitAndRetrieve(40) == 40;
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(20) == null;
+        assert emitter.emitAndRetrieve(60) == 60;
+        assert emitter.emitAndRetrieve(90) == 90;
+        assert emitter.emitAndRetrieve(100) == null;
+
+        disposable.dispose();
+        assert emitter.isUnsubscribed() == true;
+        assert emitter.emitAndRetrieve(30) == null;
+    }
+
+    @Test
     public void skipUntilRepeat() throws Exception {
         EventEmitter<String> condition = new EventEmitter();
         EventEmitter<Integer> emitter = new EventEmitter();
@@ -252,6 +293,43 @@ public class ObservableTest {
     }
 
     @Test
+    public void takeUntilCondition() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        emitter.observe().takeUntil(v -> {
+            return v % 3 == 0;
+        }).subscribe(emitter);
+
+        assert emitter.emitAndRetrieve(10) == 10;
+        assert emitter.emitAndRetrieve(20) == 20;
+        assert emitter.emitAndRetrieve(30) == 30;
+
+        assert emitter.isUnsubscribed();
+        assert emitter.emitAndRetrieve(40) == null;
+    }
+
+    @Test
+    public void takeUntilConditionRepeat() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        Disposable disposable = emitter.observe().skip(1).takeUntil(v -> {
+            return v % 3 == 0;
+        }).repeat().subscribe(emitter);
+
+        assert emitter.emitAndRetrieve(10) == null;
+        assert emitter.emitAndRetrieve(20) == 20;
+        assert emitter.emitAndRetrieve(30) == 30;
+
+        assert emitter.emitAndRetrieve(40) == null;
+        assert emitter.emitAndRetrieve(60) == 60;
+        assert emitter.emitAndRetrieve(70) == null;
+        assert emitter.emitAndRetrieve(80) == 80;
+        assert emitter.emitAndRetrieve(100) == 100;
+
+        disposable.dispose();
+        assert emitter.isUnsubscribed();
+        assert emitter.emitAndRetrieve(110) == null;
+    }
+
+    @Test
     public void skipAndTake() throws Exception {
         EventEmitter<Integer> emitter = new EventEmitter();
         emitter.observe().skip(1).take(1).subscribe(emitter);
@@ -389,6 +467,22 @@ public class ObservableTest {
         emitter.emit(10);
         Async.awaitTasks();
         assert emitter.retrieve() == 10;
+    }
+
+    @Test
+    public void delay() throws Exception {
+        EventEmitter<Integer> emitter = new EventEmitter();
+        emitter.observe().delay(10, MILLISECONDS).subscribe(emitter);
+
+        assert emitter.emitAndRetrieve(10) == null;
+        Async.awaitTasks();
+        assert emitter.retrieve() == 10;
+
+        assert emitter.emitAndRetrieve(20) == null;
+        assert emitter.emitAndRetrieve(30) == null;
+        Async.awaitTasks();
+        assert emitter.retrieve() == 20;
+        assert emitter.retrieve() == 30;
     }
 
     @Test
