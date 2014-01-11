@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 
 import js.dom.UIAction;
 import js.dom.UIEvent;
+import jsx.rx.EventEmitter;
 import jsx.rx.Observable;
 import kiss.Disposable;
 
@@ -292,7 +293,7 @@ public class PublishableTest {
     public void delay() throws Exception {
         PubSub reciever = new PubSub() {
 
-            @Subscribe(delay = 20)
+            @Subscribe(delay = 30)
             private void time(int value) {
                 this.value += value;
             }
@@ -660,5 +661,30 @@ public class PublishableTest {
 
         reciever.publish(1);
         assert reciever.value == 2;
+    }
+
+    @Test
+    public void observe() throws Exception {
+        EventEmitter<String> reciever = new EventEmitter();
+        Publishable publishable = new Publishable();
+        Disposable disposable = publishable.observe(String.class).subscribe(reciever);
+
+        publishable.publish("1");
+        assert reciever.retrieve() == "1";
+
+        disposable.dispose();
+        publishable.publish("3");
+        assert reciever.retrieve() == null;
+    }
+
+    @Test
+    public void observeMultiple() throws Exception {
+        EventEmitter<String> reciever = new EventEmitter();
+        Publishable publishable = new Publishable();
+        publishable.observe(String.class).subscribe(reciever);
+        publishable.observe(String.class).subscribe(reciever);
+
+        publishable.publish("1");
+        assert reciever.retrieve() == "1";
     }
 }
