@@ -9,6 +9,7 @@
  */
 package jsx.event;
 
+import static java.util.concurrent.TimeUnit.*;
 import static js.lang.Global.*;
 
 import java.lang.annotation.Annotation;
@@ -46,6 +47,36 @@ public class Publishable<P extends Publishable<P>> {
     /** The actual listeners holder. */
     private Map<Object, List<Listener>> holder;
 
+    /**
+     * <p>
+     * Observe this event sequence of this {@link Publishable}.
+     * </p>
+     * 
+     * @param type An event type.
+     * @return Chainable API.
+     */
+    public final <T> Observable<T> observe(Class<T> type) {
+        return new Observable<T>(observer -> {
+            Consumer<T> consumer = event -> {
+                observer.onNext(event);
+            };
+
+            register(type, consumer);
+
+            return () -> {
+                unregister(type, consumer);
+            };
+        });
+    }
+
+    /**
+     * <p>
+     * Observe this event sequence of this {@link Publishable}.
+     * </p>
+     * 
+     * @param type An event type.
+     * @return Chainable API.
+     */
     public final <T extends Enum & EventType<E>, E extends Event<T>> Observable<E> observe(T type) {
         return new Observable<E>(observer -> {
             Consumer<E> consumer = event -> {
@@ -58,35 +89,6 @@ public class Publishable<P extends Publishable<P>> {
                 unregister(type, consumer);
             };
         });
-
-        // return Observable.create(new OnSubscribeFunc<E>() {
-        //
-        // /**
-        // * {@inheritDoc}
-        // */
-        // @Override
-        // public Subscription onSubscribe(Observer<? super E> observer) {
-        // Consumer<E> consumer = new Consumer<E>() {
-        //
-        // /**
-        // * {@inheritDoc}
-        // */
-        // @Override
-        // public void accept(E t) {
-        // observer.onNext(t);
-        // }
-        // };
-        // register(type, consumer);
-        //
-        // return new Subscription() {
-        //
-        // @Override
-        // public void unsubscribe() {
-        // unregister(type, consumer);
-        // }
-        // };
-        // }
-        // });
     }
 
     /**
@@ -137,7 +139,7 @@ public class Publishable<P extends Publishable<P>> {
      * @param listeners A target event listeners.
      * @return Chainable API.
      */
-    public final P register(Object listeners) {
+    public final <T extends Enum & EventType> P register(Object listeners) {
         if (listeners != null) {
             int index = 0;
 
@@ -149,40 +151,56 @@ public class Publishable<P extends Publishable<P>> {
                         Method method = entry.getKey();
                         Listener listener = new MethodInvoker(listeners, method, info.abort(annotation));
 
-                        // ===========================
-                        // Execution Count Wrapper
-                        // ===========================
-                        int count = info.count(annotation);
+                        Object type = info.type(annotation, method);
+                        Observable observable = null;
 
-                        if (0 < count) {
-                            listener = new Count(count, this, listener.listener, listener);
+                        if (type instanceof Class) {
+                            observable = observe((Class) type);
+                        } else if (type instanceof Enum && type instanceof EventType) {
+                            observable = observe((T) type);
                         }
 
-                        // ===========================
-                        // Timing Related Wrappers
-                        // ===========================
-                        long time = info.delay(annotation);
+                        if (observable != null) {
+                            // ===========================
+                            // Execution Count Wrapper
+                            // ===========================
+                            int count = info.count(annotation);
 
-                        if (0 < time) {
-                            listener = new Delay(time, listener);
-                        }
+                            if (0 < count) {
+                                observable = observable.take(count);
+                            }
 
-                        time = info.throttle(annotation);
+                            // ===========================
+                            // Timing Related Wrappers
+                            // ===========================
+                            long time = info.delay(annotation);
 
-                        if (0 < time) {
-                            listener = new Throttle(time, listener);
-                        }
+                            if (0 < time) {
+                                observable = observable.delay(time, MILLISECONDS);
+                            }
 
-                        time = info.debounce(annotation);
+                            time = info.throttle(annotation);
 
-                        if (0 < time) {
-                            listener = new Debounce(time, listener);
-                        }
+                            if (0 < time) {
+                                observable = observable.throttle(time, MILLISECONDS);
+                            }
 
-                        // Check duplication at first time only.
-                        // If the duplicated listener is found, all the other listeners are ignored.
-                        if (!add(info.type(annotation, method), listener, index++ == 0)) {
-                            return (P) this;
+                            time = info.debounce(annotation);
+
+                            if (0 < time) {
+                                observable = observable.debounce(time, MILLISECONDS);
+                            }
+
+                            observable.subscribe(value -> {
+                                listener.accept(value);
+                            });
+
+                            // // Check duplication at first time only.
+                            // // If the duplicated listener is found, all the other listeners are
+                            // // ignored.
+                            // if (!add(info.type(annotation, method), listener, index++ == 0)) {
+                            // return (P) this;
+                            // }
                         }
                     }
                 }
@@ -652,6 +670,19 @@ public class Publishable<P extends Publishable<P>> {
     }
 
     /**
+     * @version 2014/01/11 16:29:45
+     */
+    private static class ObservableInvoker extends Listener {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void accept(Object event) {
+        }
+    }
+
+    /**
      * @version 2013/12/18 9:30:25
      */
     private static class MethodInvoker extends Listener {
@@ -683,7 +714,7 @@ public class Publishable<P extends Publishable<P>> {
          * {@inheritDoc}
          */
         @Override
-        public void accept(Object event) {
+        protected void accept(Object event) {
             if (abort) {
                 if (event instanceof Disposable) {
                     ((Disposable) event).dispose();

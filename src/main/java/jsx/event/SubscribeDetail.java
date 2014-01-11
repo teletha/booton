@@ -22,9 +22,9 @@ class SubscribeDetail extends Subscribable<Subscribe> {
      * {@inheritDoc}
      */
     @Override
-    protected Object type(Subscribe anntation, Method method) {
+    protected Object type(Subscribe annotation, Method method) {
         return ClassUtil.wrap(method.getParameterTypes().length == 1 ? method.getParameterTypes()[0]
-                : anntation.value());
+                : annotation.value());
     }
 
     /**

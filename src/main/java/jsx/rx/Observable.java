@@ -49,7 +49,7 @@ public class Observable<V> {
     });
 
     /** The job scheduler. */
-    static ScheduledExecutorService tasks = Executors.newScheduledThreadPool(4);
+    public static ScheduledExecutorService tasks = Executors.newScheduledThreadPool(4);
 
     /** The subscriber. */
     private Function<Observer<? super V>, Disposable> subscriber;
