@@ -22,7 +22,7 @@ import booton.Necessary;
 public abstract class Subscribable<A extends Annotation> implements Extensible {
 
     /** The event type. */
-    protected abstract Object type(A anntation, Method method);
+    protected abstract Object type(A annotation, Method method);
 
     /**
      * <p>

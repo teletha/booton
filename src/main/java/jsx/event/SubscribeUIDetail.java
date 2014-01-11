@@ -20,8 +20,8 @@ class SubscribeUIUIDetail extends Subscribable<SubscribeUI> {
      * {@inheritDoc}
      */
     @Override
-    protected Object type(SubscribeUI anntation, Method method) {
-        return anntation.type();
+    protected Object type(SubscribeUI annotation, Method method) {
+        return annotation.type();
     }
 
     /**

@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 
 import js.dom.UIAction;
 import js.dom.UIEvent;
+import jsx.rx.Observable;
 import kiss.Disposable;
 
 import org.junit.Test;
@@ -28,6 +29,10 @@ import booton.soeur.ScriptRunner;
  */
 @RunWith(ScriptRunner.class)
 public class PublishableTest {
+
+    static {
+        Observable.tasks = Async.use();
+    }
 
     /**
      * @version 2013/12/20 10:06:34
