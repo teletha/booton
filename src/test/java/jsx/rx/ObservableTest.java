@@ -247,6 +247,23 @@ public class ObservableTest {
     }
 
     @Test
+    public void as() throws Exception {
+        EventEmitter<Integer> reciever = new EventEmitter();
+        EventEmitter<Number> emitter = new EventEmitter();
+        emitter.observe().as(Integer.class).subscribe(reciever);
+
+        emitter.emit(10);
+        assert reciever.retrieve() == 10;
+
+        emitter.emit(2.1F);
+        assert reciever.retrieve() == null;
+        emitter.emit(-1.1D);
+        assert reciever.retrieve() == null;
+        emitter.emit(20L);
+        assert reciever.retrieve() == null;
+    }
+
+    @Test
     public void diff() throws Exception {
         EventEmitter<Integer> emitter = new EventEmitter();
         Disposable disposable = emitter.observe().diff().subscribe(emitter);
