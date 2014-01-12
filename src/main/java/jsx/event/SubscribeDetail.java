@@ -9,20 +9,26 @@
  */
 package jsx.event;
 
+import static java.util.concurrent.TimeUnit.*;
+
 import java.lang.reflect.Method;
 
+import jsx.rx.Observable;
+import kiss.Disposable;
 import kiss.model.ClassUtil;
+import booton.Necessary;
 
 /**
  * @version 2013/12/26 9:16:15
  */
-class SubscribeDetail extends Subscribable<Subscribe> {
+@Necessary
+class SubscribeDetail implements Subscribable<Subscribe> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected Object type(Subscribe annotation, Method method) {
+    public Object type(Subscribe annotation, Method method) {
         return ClassUtil.wrap(method.getParameterTypes().length == 1 ? method.getParameterTypes()[0]
                 : annotation.value());
     }
@@ -31,39 +37,20 @@ class SubscribeDetail extends Subscribable<Subscribe> {
      * {@inheritDoc}
      */
     @Override
-    protected long debounce(Subscribe annotation) {
-        return annotation.debounce();
-    }
+    public Observable observe(Observable base, Subscribe annotation) {
+        base = base.take(annotation.count())
+                .delay(annotation.delay(), MILLISECONDS)
+                .throttle(annotation.throttle(), MILLISECONDS)
+                .debounce(annotation.debounce(), MILLISECONDS);
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected long throttle(Subscribe annotation) {
-        return annotation.throttle();
-    }
+        if (annotation.abort()) {
+            base = base.on(value -> {
+                if (value instanceof Disposable) {
+                    ((Disposable) value).dispose();
+                }
+            });
+        }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected long delay(Subscribe annotation) {
-        return annotation.delay();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected int count(Subscribe annotation) {
-        return annotation.count();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected boolean abort(Subscribe annotation) {
-        return annotation.abort();
+        return base;
     }
 }

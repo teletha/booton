@@ -9,8 +9,6 @@
  */
 package jsx.event;
 
-import static java.util.concurrent.TimeUnit.*;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Collections;
@@ -154,13 +152,9 @@ public class Publishable<P extends Publishable<P>> {
 
                         // Check duplication at first time only.
                         // If the duplicated listener is found, all the other listeners are ignored.
-                        ObservableInvoker listener = new ObservableInvoker(type, listeners, method, info.abort(annotation), index++ == 0);
+                        ObservableInvoker listener = new ObservableInvoker(type, listeners, method, index++ == 0);
 
-                        new Observable(listener).take(info.count(annotation))
-                                .delay(info.delay(annotation), MILLISECONDS)
-                                .throttle(info.throttle(annotation), MILLISECONDS)
-                                .debounce(info.debounce(annotation), MILLISECONDS)
-                                .subscribe((Observer) listener);
+                        info.observe(new Observable(listener), annotation).subscribe((Observer) listener);
 
                         if (!listener.success) {
                             return (P) this;
@@ -632,9 +626,6 @@ public class Publishable<P extends Publishable<P>> {
         /** The parameter flag. */
         private final boolean hasParam;
 
-        /** The event termination flag. */
-        private final boolean abort;
-
         /** The flag. */
         private final boolean checkDuplication;
 
@@ -650,14 +641,13 @@ public class Publishable<P extends Publishable<P>> {
          * @param hasParam
          * @param abort
          */
-        protected ObservableInvoker(Object type, Object instance, Method method, boolean abort, boolean checkDuplication) {
+        protected ObservableInvoker(Object type, Object instance, Method method, boolean checkDuplication) {
             method.setAccessible(true);
 
             this.type = type;
             this.listener = instance;
             this.method = method;
             this.hasParam = method.getParameterTypes().length == 1;
-            this.abort = abort;
             this.checkDuplication = checkDuplication;
         }
 
@@ -674,12 +664,6 @@ public class Publishable<P extends Publishable<P>> {
          */
         @Override
         public void onNext(Object value) {
-            if (abort) {
-                if (value instanceof Disposable) {
-                    ((Disposable) value).dispose();
-                }
-            }
-
             try {
                 if (hasParam) {
                     method.invoke(listener, value);

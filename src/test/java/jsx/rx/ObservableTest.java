@@ -11,7 +11,9 @@ package jsx.rx;
 
 import static java.util.concurrent.TimeUnit.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
 import kiss.Disposable;
@@ -670,24 +672,17 @@ public class ObservableTest {
         assert emitter2.isUnsubscribed() == true;
     }
 
-    // @Test
-    // public void testname() throws Exception {
-    // for (int i = 0; i < 4; i++) {
-    // AtomicBoolean atomicBoolean = new AtomicBoolean();
-    //
-    // aaa(() -> {
-    // AtomicBoolean inB = new AtomicBoolean();
-    // System.out.println(atomicBoolean.hashCode());
-    //
-    // aaa(() -> {
-    // System.out.println(atomicBoolean.hashCode() + "  " + inB.hashCode());
-    // });
-    //
-    // });
-    // }
-    // }
-    //
-    // private void aaa(Runnable runnable) {
-    // runnable.run();
-    // }
+    @Test
+    public void onNext() throws Exception {
+        List<Integer> list = new ArrayList<Integer>();
+        EventEmitter<Integer> emitter = new EventEmitter();
+        emitter.observe().on(value -> {
+            list.add(value);
+        }).subscribe(emitter);
+
+        assert emitter.emitAndRetrieve(10) == 10;
+        assert emitter.emitAndRetrieve(20) == 20;
+        assert list.get(0) == 10;
+        assert list.get(1) == 20;
+    }
 }
