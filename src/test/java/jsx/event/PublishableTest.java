@@ -249,7 +249,7 @@ public class PublishableTest {
     public void throttle() throws Exception {
         PubSub reciever = new PubSub() {
 
-            @Subscribe(throttle = 50)
+            @Subscribe(throttle = 10)
             private void string(int event) {
                 value++;
             }

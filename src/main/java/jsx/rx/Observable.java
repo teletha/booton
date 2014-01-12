@@ -150,6 +150,23 @@ public class Observable<V> {
 
     /**
      * <p>
+     * Filters the values of an {@link Observable} sequence based on the specified type.
+     * </p>
+     * 
+     * @param type The type of result. <code>null</code> throws {@link NullPointerException}.
+     * @return Chainable API.
+     * @throws NullPointerException If the type is <code>null</code>.
+     */
+    public final <R> Observable<R> as(Class<R> type) {
+        Objects.nonNull(type);
+
+        return (Observable<R>) filter(value -> {
+            return type.isInstance(value);
+        });
+    }
+
+    /**
+     * <p>
      * Indicates each value of an {@link Observable} sequence into consecutive non-overlapping
      * buffers which are produced based on value count information.
      * </p>
