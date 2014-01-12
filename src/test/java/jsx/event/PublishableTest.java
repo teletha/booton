@@ -293,7 +293,7 @@ public class PublishableTest {
     public void delay() throws Exception {
         PubSub reciever = new PubSub() {
 
-            @Subscribe(delay = 30)
+            @Subscribe(delay = 10)
             private void time(int value) {
                 this.value += value;
             }
@@ -686,5 +686,7 @@ public class PublishableTest {
 
         publishable.publish("1");
         assert reciever.retrieve() == "1";
+        assert reciever.retrieve() == "1";
+        assert reciever.retrieve() == null;
     }
 }

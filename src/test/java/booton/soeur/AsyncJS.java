@@ -33,6 +33,17 @@ class AsyncJS extends Translator<Async> {
 
     /**
      * <p>
+     * Use thread pool.
+     * </p>
+     * 
+     * @return
+     */
+    public String sync() {
+        return "new " + Javascript.computeClassName(ScheduledThreadPoolExecutor.class) + "(0)";
+    }
+
+    /**
+     * <p>
      * Wait script execution.
      * </p>
      * 

@@ -11,8 +11,8 @@ package booton.soeur;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import net.sourceforge.htmlunit.corejs.javascript.Context;
@@ -34,7 +34,7 @@ import antibug.Async;
 public class AsyncJSDefinition extends ScriptableObject {
 
     /** The task scheduler. */
-    private static final ScheduledThreadPoolExecutor scheduler = Async.use();
+    private static final ScheduledExecutorService scheduler = Async.use();
 
     /** The task manager. */
     private static final Map<Integer, ScheduledFuture> tasks = new ConcurrentHashMap();
@@ -129,6 +129,7 @@ public class AsyncJSDefinition extends ScriptableObject {
                 // ignore
             } finally {
                 Context.exit();
+                tasks.remove(id);
             }
         }
     }
