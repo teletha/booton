@@ -167,11 +167,16 @@ public class Observable<V> {
      * produced based on value count information.
      * </p>
      * 
-     * @param size A length of each buffer.
-     * @param interval A number of values to skip between creation of consecutive buffers.
+     * @param size A length of each buffer. Zero or negative number are treated exactly the same way
+     *            as 1.
+     * @param interval A number of values to skip between creation of consecutive buffers. Zero or
+     *            negative number are treated exactly the same way as 1.
      * @return Chainable API.
      */
     public final Observable<V[]> buffer(int size, int interval) {
+        int creationSize = 0 < size ? size : 1;
+        int creationInterval = 0 < interval ? interval : 1;
+
         return new Observable<V[]>(observer -> {
             Deque<V> buffer = new ArrayDeque();
             AtomicInteger timing = new AtomicInteger();
@@ -179,8 +184,8 @@ public class Observable<V> {
             return subscribe(value -> {
                 buffer.offer(value);
 
-                boolean validTiming = timing.incrementAndGet() == interval;
-                boolean validSize = buffer.size() == size;
+                boolean validTiming = timing.incrementAndGet() == creationInterval;
+                boolean validSize = buffer.size() == creationSize;
 
                 if (validTiming && validSize) {
                     observer.onNext((V[]) buffer.toArray());
@@ -203,11 +208,16 @@ public class Observable<V> {
      * value emission.
      * </p>
      * 
-     * @param time A time value.
-     * @param unit A time unit.
+     * @param time A time value. Zero or negative number will ignore this instruction.
+     * @param unit A time unit. <code>null</code> will ignore this instruction.
      * @return Chainable API.
      */
     public final Observable<V> debounce(long time, TimeUnit unit) {
+        // ignore invalid parameters
+        if (time <= 0 || unit == null) {
+            return this;
+        }
+
         AtomicReference<ScheduledFuture> latest = new AtomicReference();
 
         return new Observable<V>(this, (observer, value) -> {
@@ -230,11 +240,18 @@ public class Observable<V> {
      * Indicates the {@link Observable} sequence by due time with the specified source and time.
      * </p>
      * 
-     * @param time The absolute time used to shift the {@link Observable} sequence.
-     * @param unit A unit of time for the specified time.
+     * @param time The absolute time used to shift the {@link Observable} sequence. Zero or negative
+     *            number will ignore this instruction.
+     * @param unit A unit of time for the specified time. <code>null</code> will ignore this
+     *            instruction.
      * @return Chainable API.
      */
     public final Observable<V> delay(long time, TimeUnit unit) {
+        // ignore invalid parameters
+        if (time <= 0 || unit == null) {
+            return this;
+        }
+
         return new Observable<V>(this, (observer, value) -> {
             tasks.schedule(() -> {
                 observer.onNext(value);
@@ -298,9 +315,15 @@ public class Observable<V> {
      * 
      * @param predicate A function that evaluates the values emitted by the source
      *            {@link Observable}, returning {@code true} if they pass the filter.
+     *            <code>null</code> will ignore this instruction.
      * @return Chainable API.
      */
     public final Observable<V> filter(Predicate<? super V> predicate) {
+        // ignore invalid parameters
+        if (predicate == null) {
+            return this;
+        }
+
         return new Observable<V>(this, (observer, value) -> {
             if (predicate.test(value)) {
                 observer.onNext(value);
@@ -332,10 +355,15 @@ public class Observable<V> {
      * </p>
      * 
      * @param converter A converter function to apply to each value emitted by this
-     *            {@link Observable}.
+     *            {@link Observable}. <code>null</code> will ignore this instruction.
      * @return Chainable API.
      */
     public final <R> Observable<R> map(Function<? super V, ? extends R> converter) {
+        // ignore invalid parameters
+        if (converter == null) {
+            return (Observable<R>) this;
+        }
+
         return new Observable<R>(observer -> {
             return subscribe(value -> {
                 observer.onNext(converter.apply(value));
@@ -349,10 +377,15 @@ public class Observable<V> {
      * {@link Observable}, without any transformation.
      * </p>
      * 
-     * @param other A target {@link Observable} to merge.
+     * @param other A target {@link Observable} to merge. <code>null</code> will be ignroed.
      * @return Chainable API.
      */
     public final Observable<V> merge(Observable<V> other) {
+        // ignore invalid parameters
+        if (other == null) {
+            return this;
+        }
+
         return new Observable<V>(observer -> {
             return new Unsubscriber().and(subscribe(observer)).and(other.subscribe(observer));
         });
@@ -381,10 +414,15 @@ public class Observable<V> {
      * Generates an {@link Observable} sequence that repeats the given value finitely.
      * </p>
      * 
-     * @param count A number of repeat.
+     * @param count A number of repeat. Zero or negative number will ignore this instruction.
      * @return Chainable API.
      */
     public final Observable<V> repeat(int count) {
+        // ignore invalid parameter
+        if (count < 1) {
+            return this;
+        }
+
         AtomicInteger repeat = new AtomicInteger(count);
 
         return new Observable<V>(observer -> {
@@ -409,10 +447,16 @@ public class Observable<V> {
      * remaining values.
      * </p>
      * 
-     * @param count A number of values to skip.
+     * @param count A number of values to skip. Zero or negative number will ignore this
+     *            instruction.
      * @return Chainable API.
      */
     public final Observable<V> skip(int count) {
+        // ignore invalid parameter
+        if (count <= 0) {
+            return this;
+        }
+
         return new Observable<V>(observer -> {
             skip = new AtomicInteger();
 
@@ -424,6 +468,7 @@ public class Observable<V> {
         });
     }
 
+    /** The skip state. */
     private AtomicBoolean skipUntil;
 
     /**
@@ -433,10 +478,15 @@ public class Observable<V> {
      * </p>
      * 
      * @param predicate An {@link Observable} sequence that triggers propagation of values of the
-     *            source sequence.
+     *            source sequence. <code>null</code> will ignore this instruction.
      * @return Chainable API.
      */
     public final <T> Observable<V> skipUntil(Observable<T> predicate) {
+        // ignore invalid parameter
+        if (predicate == null) {
+            return this;
+        }
+
         return new Observable<V>(observer -> {
             skipUntil = new AtomicBoolean();
 
@@ -457,10 +507,15 @@ public class Observable<V> {
      * </p>
      * 
      * @param predicate An {@link Observable} sequence that triggers propagation of values of the
-     *            source sequence.
+     *            source sequence. <code>null</code> will ignore this instruction.
      * @return Chainable API.
      */
     public final <T> Observable<V> skipUntil(Predicate<V> predicate) {
+        // ignore invalid parameter
+        if (predicate == null) {
+            return this;
+        }
+
         return new Observable<V>(observer -> {
             skipUntil = new AtomicBoolean();
 
@@ -484,10 +539,16 @@ public class Observable<V> {
      * sequence.
      * </p>
      * 
-     * @param count A number of values to emit.
+     * @param count A number of values to emit. Zero or negative number will ignore this
+     *            instruction.
      * @return Chainable API.
      */
     public final Observable<V> take(int count) {
+        // ignore invalid parameter
+        if (count <= 0) {
+            return this;
+        }
+
         return new Observable<V>(observer -> {
             take = new AtomicInteger(count);
 
@@ -513,10 +574,15 @@ public class Observable<V> {
      * </p>
      * 
      * @param predicate An {@link Observable} sequence that terminates propagation of values of the
-     *            source sequence.
+     *            source sequence. <code>null</code> will ignore this instruction.
      * @return Chainable API.
      */
     public final <T> Observable<V> takeUntil(Observable<T> predicate) {
+        // ignore invalid parameter
+        if (predicate == null) {
+            return this;
+        }
+
         return new Observable<V>(observer -> {
             return unsubscriber = new Unsubscriber().and(subscribe(observer)).and(predicate.subscribe(value -> {
                 observer.onCompleted();
@@ -532,10 +598,15 @@ public class Observable<V> {
      * </p>
      * 
      * @param predicate An {@link Observable} sequence that terminates propagation of values of the
-     *            source sequence.
+     *            source sequence. <code>null</code> will ignore this instruction.
      * @return Chainable API.
      */
     public final <T> Observable<V> takeUntil(Predicate<V> predicate) {
+        // ignore invalid parameter
+        if (predicate == null) {
+            return this;
+        }
+
         return new Observable<V>(this, (observer, value) -> {
             if (predicate.test(value)) {
                 observer.onNext(value);
@@ -557,11 +628,18 @@ public class Observable<V> {
      * before due time with the specified source and time.
      * </p>
      * 
-     * @param time Time to wait before sending another item after emitting the last item.
-     * @param unit A unit of time for the specified timeout.
+     * @param time Time to wait before sending another item after emitting the last item. Zero or
+     *            negative number will ignore this instruction.
+     * @param unit A unit of time for the specified timeout. <code>null</code> will ignore this
+     *            instruction.
      * @return Chainable API.
      */
     public final Observable<V> throttle(long time, TimeUnit unit) {
+        // ignore invalid parameters
+        if (time <= 0 || unit == null) {
+            return this;
+        }
+
         AtomicLong latest = new AtomicLong();
         long delay = unit.toMillis(time);
 
