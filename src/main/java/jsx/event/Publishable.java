@@ -160,7 +160,7 @@ public class Publishable<P extends Publishable<P>> {
                                 .delay(info.delay(annotation), MILLISECONDS)
                                 .throttle(info.throttle(annotation), MILLISECONDS)
                                 .debounce(info.debounce(annotation), MILLISECONDS)
-                                .subscribe(listener::next);
+                                .subscribe((Observer) listener);
 
                         if (!listener.success) {
                             return (P) this;
@@ -560,38 +560,24 @@ public class Publishable<P extends Publishable<P>> {
     }
 
     /**
-     * @version 2013/12/18 9:29:13
+     * @version 2014/01/12 16:15:49
      */
-    private static abstract class Listener<T> {
+    private static abstract class Listener<T> implements Consumer {
 
-        /** The actual event listener. */
+        /** The actual listener. */
         protected T listener;
 
         /**
-         * <p>
-         * Receieve message.
-         * </p>
-         * 
-         * @param event A message object.
-         */
-        protected abstract void accept(Object event);
-
-        /**
-         * <p>
-         * Test whether the specified event listener is my consumer or not.
-         * </p>
-         * 
-         * @param instance A target listener.
-         * @return A result.
+         * {@inheritDoc}
          */
         @Override
-        public boolean equals(Object instance) {
-            return listener.equals(instance);
+        public boolean equals(Object obj) {
+            return listener.equals(obj);
         }
     }
 
     /**
-     * @version 2013/12/20 9:48:58
+     * @version 2014/01/12 16:16:45
      */
     private static class RunnableInvoker extends Listener<Runnable> {
 
@@ -606,13 +592,13 @@ public class Publishable<P extends Publishable<P>> {
          * {@inheritDoc}
          */
         @Override
-        protected void accept(Object event) {
+        public void accept(Object event) {
             listener.run();
         }
     }
 
     /**
-     * @version 2013/12/20 9:48:58
+     * @version 2014/01/12 16:16:50
      */
     private static class ConsumerInvoker extends Listener<Consumer> {
 
@@ -627,15 +613,15 @@ public class Publishable<P extends Publishable<P>> {
          * {@inheritDoc}
          */
         @Override
-        protected void accept(Object event) {
+        public void accept(Object event) {
             listener.accept(event);
         }
     }
 
     /**
-     * @version 2014/01/11 16:29:45
+     * @version 2014/01/12 16:16:54
      */
-    private class ObservableInvoker extends Listener implements Function<Observer, Disposable>, Disposable {
+    private class ObservableInvoker<T> extends Listener implements Observer, Function<Observer, Disposable>, Disposable {
 
         /** The event type. */
         private final Object type;
@@ -652,8 +638,10 @@ public class Publishable<P extends Publishable<P>> {
         /** The flag. */
         private final boolean checkDuplication;
 
+        /** The listener. */
         private Observer observer;
 
+        /** The registration result. */
         private boolean success;
 
         /**
@@ -677,20 +665,24 @@ public class Publishable<P extends Publishable<P>> {
          * {@inheritDoc}
          */
         @Override
-        protected void accept(Object event) {
+        public void accept(Object event) {
             observer.onNext(event);
         }
 
-        private void next(Object event) {
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onNext(Object value) {
             if (abort) {
-                if (event instanceof Disposable) {
-                    ((Disposable) event).dispose();
+                if (value instanceof Disposable) {
+                    ((Disposable) value).dispose();
                 }
             }
 
             try {
                 if (hasParam) {
-                    method.invoke(listener, event);
+                    method.invoke(listener, value);
                 } else {
                     method.invoke(listener);
                 }
@@ -713,218 +705,11 @@ public class Publishable<P extends Publishable<P>> {
          * {@inheritDoc}
          */
         @Override
-        public Disposable apply(Observer t) {
-            success = add(type, this, checkDuplication);
-            observer = t;
+        public Disposable apply(Observer observer) {
+            this.success = add(type, this, checkDuplication);
+            this.observer = observer;
 
             return this;
         }
     }
-    //
-    // /**
-    // * @version 2013/12/18 9:30:25
-    // */
-    // private static class MethodInvoker extends Listener {
-    //
-    // /** The listener method. */
-    // private final Method method;
-    //
-    // /** The parameter flag. */
-    // private final boolean hasParam;
-    //
-    // /** The event termination flag. */
-    // private final boolean abort;
-    //
-    // /**
-    // * @param instance A {@link Subscribe} listener.
-    // * @param method A subscribe method.
-    // * @param abort The event is stoppable.
-    // */
-    // private MethodInvoker(Object instance, Method method, boolean abort) {
-    // method.setAccessible(true);
-    //
-    // this.listener = instance;
-    // this.method = method;
-    // this.hasParam = method.getParameterTypes().length == 1;
-    // this.abort = abort;
-    // }
-    //
-    // /**
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // protected void accept(Object event) {
-    // if (abort) {
-    // if (event instanceof Disposable) {
-    // ((Disposable) event).dispose();
-    // }
-    // }
-    //
-    // try {
-    // if (hasParam) {
-    // method.invoke(listener, event);
-    // } else {
-    // method.invoke(listener);
-    // }
-    // } catch (Exception e) {
-    // // If this exception will be thrown, it is bug of this program. So we must rethrow
-    // // the wrapped error in here.
-    // throw new Error(e);
-    // }
-    // }
-    // }
-    //
-    // /**
-    // * @version 2013/12/18 9:31:12
-    // */
-    // private static class Count extends Listener<Listener> {
-    //
-    // /** The delegator. */
-    // private final Publishable publishable;
-    //
-    // /** The delegator. */
-    // private final Object subscribable;
-    //
-    // /** The execution limit. */
-    // private final int limit;
-    //
-    // /** The current number of execution. */
-    // private int current = 0;
-    //
-    // /**
-    // * @param limit
-    // * @param publishable
-    // * @param subscribable
-    // * @param listener
-    // */
-    // private Count(int limit, Publishable publishable, Object subscribable, Listener listener) {
-    // this.limit = limit;
-    // this.publishable = publishable;
-    // this.subscribable = subscribable;
-    // this.listener = listener;
-    // }
-    //
-    // /**
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // public void accept(Object event) {
-    // listener.accept(event);
-    //
-    // if (++current == limit) {
-    // publishable.unregister(subscribable);
-    // }
-    // }
-    // }
-    //
-    // /**
-    // * <p>
-    // * Built-in listener wrapper.
-    // * </p>
-    // *
-    // * @version 2013/12/18 9:22:56
-    // */
-    // private static class Throttle extends Listener<Listener> {
-    //
-    // /** The delay time. */
-    // private final long delay;
-    //
-    // /** The latest execution time. */
-    // private long latest;
-    //
-    // /**
-    // * @param delay
-    // * @param listener
-    // */
-    // private Throttle(long delay, Listener listener) {
-    // this.delay = delay;
-    // this.listener = listener;
-    // }
-    //
-    // /**
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // public void accept(Object event) {
-    // long now = System.currentTimeMillis();
-    //
-    // if (latest + delay < now) {
-    // latest = now;
-    //
-    // listener.accept(event);
-    // }
-    // }
-    // }
-    //
-    // /**
-    // * <p>
-    // * Built-in listener wrapper.
-    // * </p>
-    // *
-    // * @version 2013/12/18 9:19:21
-    // */
-    // private static class Debounce extends Listener<Listener> {
-    //
-    // /** The delay time. */
-    // private final long delay;
-    //
-    // /** The time out id. */
-    // private long id = -1;
-    //
-    // /**
-    // * @param delay
-    // * @param listener
-    // */
-    // private Debounce(long delay, Listener listener) {
-    // this.delay = delay;
-    // this.listener = listener;
-    // }
-    //
-    // /**
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // public void accept(Object event) {
-    // if (id != -1) {
-    // clearTimeout(id);
-    // }
-    //
-    // this.id = setTimeout(() -> {
-    // id = -1;
-    // listener.accept(event);
-    // }, delay);
-    // }
-    // }
-    //
-    // /**
-    // * <p>
-    // * Built-in listener wrapper.
-    // * </p>
-    // *
-    // * @version 2013/12/18 9:18:45
-    // */
-    // private static class Delay extends Listener<Listener> {
-    //
-    // /** The delay time. */
-    // private final long delay;
-    //
-    // /**
-    // * @param delay
-    // * @param listener
-    // */
-    // private Delay(long delay, Listener listener) {
-    // this.delay = delay;
-    // this.listener = listener;
-    // }
-    //
-    // /**
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // public void accept(Object event) {
-    // setTimeout(() -> {
-    // listener.accept(event);
-    // }, delay);
-    // }
-    // }
 }
