@@ -1,3 +1,3 @@
 // replace timer related functions
-setTimeout = Async.setTimeout;
-setInterval = Async.setInterval;
+window.setTimeout = Async.setTimeout;
+window.clearTimeout = Async.clearTimeout;

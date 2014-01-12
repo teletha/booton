@@ -56,7 +56,7 @@ public class ScriptRunner extends BlockJUnit4ClassRunner {
         if (method instanceof JavascriptMethod) {
             notifier.removeListener(listener);
 
-            // chech Java result
+            // check Java result
             if (listener.ignore) {
                 listener.ignore = false;
                 notifier.fireTestIgnored(describeChild(method));
