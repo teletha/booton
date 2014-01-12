@@ -410,6 +410,26 @@ public class Observable<V> {
 
     /**
      * <p>
+     * Invokes an action for each value in the {@link Observable} sequence.
+     * </p>
+     * 
+     * @param next An action to invoke for each value in the {@link Observable} sequence.
+     * @return Chainable API.
+     */
+    public final Observable<V> on(Consumer<V> next) {
+        // ignore invalid parameters
+        if (next == null) {
+            return this;
+        }
+
+        return new Observable<V>(this, (observer, value) -> {
+            next.accept(value);
+            observer.onNext(value);
+        });
+    }
+
+    /**
+     * <p>
      * Generates an {@link Observable} sequence that repeats the given value infinitely.
      * </p>
      * 

@@ -12,6 +12,7 @@ package jsx.event;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import jsx.rx.Observable;
 import kiss.Extensible;
 import booton.Necessary;
 
@@ -19,63 +20,10 @@ import booton.Necessary;
  * @version 2013/12/27 10:48:28
  */
 @Necessary
-public abstract class Subscribable<A extends Annotation> implements Extensible {
+public interface Subscribable<A extends Annotation> extends Extensible {
 
     /** The event type. */
-    protected abstract Object type(A annotation, Method method);
+    Object type(A annotation, Method method);
 
-    /**
-     * <p>
-     * Set the execution debounce time (ms).
-     * </p>
-     * 
-     * @return A time (ms);
-     */
-    protected long debounce(A annotation) {
-        return 0;
-    }
-
-    /**
-     * <p>
-     * Set the execution throttle time (ms).
-     * </p>
-     * 
-     * @return A time (ms);
-     */
-    protected long throttle(A annotation) {
-        return 0;
-    }
-
-    /**
-     * <p>
-     * Set the execution delay time (ms).
-     * </p>
-     * 
-     * @return A time (ms);
-     */
-    protected long delay(A annotation) {
-        return 0;
-    }
-
-    /**
-     * <p>
-     * Set a number of execution.
-     * </p>
-     * 
-     * @return
-     */
-    protected int count(A annotation) {
-        return 0;
-    }
-
-    /**
-     * <p>
-     * Stop event propagation and default behavior.
-     * </p>
-     * 
-     * @return The <code>true</code> will stop the current processing event.
-     */
-    protected boolean abort(A annotation) {
-        return false;
-    }
+    Observable observe(Observable base, A annotation);
 }

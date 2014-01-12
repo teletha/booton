@@ -9,18 +9,25 @@
  */
 package jsx.event;
 
+import static java.util.concurrent.TimeUnit.*;
+
 import java.lang.reflect.Method;
+
+import jsx.rx.Observable;
+import kiss.Disposable;
+import booton.Necessary;
 
 /**
  * @version 2013/12/26 9:20:13
  */
-class SubscribeUIUIDetail extends Subscribable<SubscribeUI> {
+@Necessary
+class SubscribeUIUIDetail implements Subscribable<SubscribeUI> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected Object type(SubscribeUI annotation, Method method) {
+    public Object type(SubscribeUI annotation, Method method) {
         return annotation.type();
     }
 
@@ -28,39 +35,20 @@ class SubscribeUIUIDetail extends Subscribable<SubscribeUI> {
      * {@inheritDoc}
      */
     @Override
-    protected long debounce(SubscribeUI annotation) {
-        return annotation.debounce();
-    }
+    public Observable observe(Observable base, SubscribeUI annotation) {
+        base = base.take(annotation.count())
+                .delay(annotation.delay(), MILLISECONDS)
+                .throttle(annotation.throttle(), MILLISECONDS)
+                .debounce(annotation.debounce(), MILLISECONDS);
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected long throttle(SubscribeUI annotation) {
-        return annotation.throttle();
-    }
+        if (annotation.abort()) {
+            base = base.on(value -> {
+                if (value instanceof Disposable) {
+                    ((Disposable) value).dispose();
+                }
+            });
+        }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected long delay(SubscribeUI annotation) {
-        return annotation.delay();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected int count(SubscribeUI annotation) {
-        return annotation.count();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected boolean abort(SubscribeUI annotation) {
-        return annotation.abort();
+        return base;
     }
 }
