@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,30 @@ import kiss.Extensible;
 import booton.Necessary;
 
 /**
- * @version 2013/12/27 10:48:28
+ * @version 2014/01/13 11:04:40
  */
 @Necessary
 public interface Subscribable<A extends Annotation> extends Extensible {
 
-    /** The event type. */
-    Object type(A annotation, Method method);
+    /**
+     * <p>
+     * Detect event type.
+     * </p>
+     * 
+     * @param method A subscriber method.
+     * @param annotation A subscribe marker.
+     * @return An event type.
+     */
+    Object detect(Method method, A annotation);
 
-    Observable observe(Observable base, A annotation);
+    /**
+     * <p>
+     * Build {@link Observable} using the specified information.
+     * </p>
+     * 
+     * @param base A base {@link Observable}.
+     * @param annotation A subscriber info.
+     * @return
+     */
+    Observable create(Observable base, A annotation);
 }
