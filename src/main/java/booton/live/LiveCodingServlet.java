@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchEvent.Kind;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import kiss.Disposable;
 import kiss.I;
-import kiss.PathListener;
+import kiss.Observer;
 import kiss.XML;
 
 import org.eclipse.jetty.websocket.WebSocket;
@@ -116,7 +119,7 @@ public class LiveCodingServlet extends WebSocketServlet {
             }
 
             // observe publishing file
-            observers.add(I.observe(html.resolveSibling(Booton.BuildPhase), new BuildObserver()));
+            observers.add(I.observe(html.resolveSibling(Booton.BuildPhase)).subscribe(new BuildObserver()));
         }
 
         /**
@@ -193,7 +196,7 @@ public class LiveCodingServlet extends WebSocketServlet {
         /**
          * @version 2013/01/08 9:36:32
          */
-        private class FileObserver implements PathListener {
+        private class FileObserver implements Observer<WatchEvent<Path>> {
 
             /** The original path. */
             protected final String path;
@@ -214,30 +217,18 @@ public class LiveCodingServlet extends WebSocketServlet {
                 this.path = path;
                 this.file = html.resolveSibling(path);
 
-                observers.add(I.observe(file, this));
+                observers.add(I.observe(file).subscribe(this));
             }
 
             /**
              * {@inheritDoc}
              */
             @Override
-            public final void create(Path path) {
-            }
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public final void delete(Path path) {
-            }
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public final void modify(Path path) {
-                if (!whileBuilding) {
-                    send(this.path);
+            public void onNext(WatchEvent<Path> value) {
+                if (value.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
+                    if (!whileBuilding) {
+                        send(path);
+                    }
                 }
             }
         }
@@ -245,31 +236,22 @@ public class LiveCodingServlet extends WebSocketServlet {
         /**
          * @version 2013/01/08 16:25:47
          */
-        private class BuildObserver implements PathListener {
+        private class BuildObserver implements Observer<WatchEvent<Path>> {
 
             /**
              * {@inheritDoc}
              */
             @Override
-            public void create(Path path) {
-                whileBuilding = true;
-            }
+            public void onNext(WatchEvent<Path> value) {
+                Kind kind = value.kind();
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void delete(Path path) {
-                whileBuilding = false;
+                if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
+                    whileBuilding = true;
+                } else if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
+                    whileBuilding = false;
 
-                reload();
-            }
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void modify(Path path) {
+                    reload();
+                }
             }
         }
     }

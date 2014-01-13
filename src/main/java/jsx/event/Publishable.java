@@ -22,10 +22,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import jsx.rx.Observable;
-import jsx.rx.Observer;
 import kiss.Disposable;
 import kiss.I;
+import kiss.Observable;
+import kiss.Observer;
 import kiss.model.ClassUtil;
 
 /**

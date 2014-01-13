@@ -23,7 +23,7 @@ import jsx.bwt.Button;
 import jsx.bwt.Input;
 import jsx.bwt.Select;
 import jsx.model.SelectableModel;
-import jsx.rx.Observable;
+import kiss.Observable;
 import teemowork.model.Version;
 
 /**

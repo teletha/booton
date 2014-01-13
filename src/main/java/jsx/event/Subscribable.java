@@ -12,8 +12,8 @@ package jsx.event;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import jsx.rx.Observable;
 import kiss.Extensible;
+import kiss.Observable;
 import booton.Necessary;
 
 /**

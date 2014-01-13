@@ -19,7 +19,6 @@ import jdk.internal.org.objectweb.asm.util.ASMifier;
 import jdk.internal.org.objectweb.asm.util.Printer;
 import jdk.internal.org.objectweb.asm.util.TraceClassVisitor;
 import jdk.internal.org.objectweb.asm.util.TraceMethodVisitor;
-import jsx.rx.Observable;
 
 /**
  * @version 2013/10/24 14:44:43
@@ -27,7 +26,6 @@ import jsx.rx.Observable;
 public class BytecodeDump {
 
     public static void main(String[] args) throws Exception {
-        dump(Observable.class);
     }
 
     /**
