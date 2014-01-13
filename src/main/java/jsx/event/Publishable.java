@@ -177,60 +177,8 @@ public class Publishable<P extends Publishable<P>> {
      * @param listener An event listener to add.
      * @return Chainable API.
      */
-    public final P register(Class type, Runnable listener) {
-        add(ClassUtil.wrap(type), new RunnableInvoker(listener), true);
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
-     * Register the specified event listener.
-     * </p>
-     * 
-     * @param type An event type.
-     * @param listener An event listener to add.
-     * @return Chainable API.
-     */
     public final <T> P register(Class<T> type, Consumer<T> listener) {
         add(ClassUtil.wrap(type), new ConsumerInvoker(listener), true);
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
-     * Register the specified event listener.
-     * </p>
-     * 
-     * @param type An event type.
-     * @param listener An event listener to add.
-     * @return Chainable API.
-     */
-    public final <T extends Enum & EventType> P register(T type, Runnable listener) {
-        add(type, new RunnableInvoker(listener), true);
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
-     * Register the specified event listener.
-     * </p>
-     * 
-     * @param types A list of event types.
-     * @param listener An event listener to add.
-     * @return Chainable API.
-     */
-    public final <T extends Enum & EventType> P register(T[] types, Runnable listener) {
-        if (types != null) {
-            for (T type : types) {
-                register(type, listener);
-            }
-        }
 
         // API definition
         return (P) this;
@@ -401,22 +349,6 @@ public class Publishable<P extends Publishable<P>> {
      * @param listener An event listener to remove.
      * @return Chainable API.
      */
-    public final P unregister(Class type, Runnable listener) {
-        remove(ClassUtil.wrap(type), listener);
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
-     * Unregister the specified event listener.
-     * </p>
-     * 
-     * @param type An event type.
-     * @param listener An event listener to remove.
-     * @return Chainable API.
-     */
     public final <T> P unregister(Class<T> type, Consumer<T> listener) {
         remove(ClassUtil.wrap(type), listener);
 
@@ -434,42 +366,6 @@ public class Publishable<P extends Publishable<P>> {
      */
     public final <T extends Enum & EventType> P unregister(T type) {
         remove(type);
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
-     * Unregister the specified event listener.
-     * </p>
-     * 
-     * @param type An event type.
-     * @param listener An event listener to remove.
-     * @return Chainable API.
-     */
-    public final <T extends Enum & EventType> P unregister(T type, Runnable listener) {
-        remove(type, listener);
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
-     * Unregister the specified event listener.
-     * </p>
-     * 
-     * @param types A list of event types.
-     * @param listener An event listener to remove.
-     * @return Chainable API.
-     */
-    public final <T extends Enum & EventType> P unregister(T[] types, Runnable listener) {
-        if (types != null) {
-            for (T type : types) {
-                unregister(type, listener);
-            }
-        }
 
         // API definition
         return (P) this;
@@ -591,27 +487,6 @@ public class Publishable<P extends Publishable<P>> {
         @Override
         public boolean equals(Object obj) {
             return listener.equals(obj);
-        }
-    }
-
-    /**
-     * @version 2014/01/12 16:16:45
-     */
-    private static class RunnableInvoker extends Listener<Runnable> {
-
-        /**
-         * @param runnable
-         */
-        private RunnableInvoker(Runnable runnable) {
-            this.listener = runnable;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void accept(Object event) {
-            listener.run();
         }
     }
 

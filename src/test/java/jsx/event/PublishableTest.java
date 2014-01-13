@@ -493,52 +493,6 @@ public class PublishableTest {
     }
 
     @Test
-    public void registerRunnable() throws Exception {
-        FunctionalPubSub pubsub = new FunctionalPubSub();
-        Runnable runnable = pubsub::runnable;
-        pubsub.register(String.class, runnable);
-
-        pubsub.publish("string");
-        assert pubsub.runnable == 1;
-
-        pubsub.publish(1);
-        assert pubsub.runnable == 1;
-
-        pubsub.unregister(String.class, runnable);
-        pubsub.publish("unsubscribe");
-        assert pubsub.runnable == 1;
-    }
-
-    @Test
-    public void registerRunnableEnum() throws Exception {
-        FunctionalPubSub pubsub = new FunctionalPubSub();
-        Runnable runnable = pubsub::runnable;
-        pubsub.register(UIAction.Click, runnable);
-
-        pubsub.publish(event(UIAction.Click));
-        assert pubsub.runnable == 1;
-
-        pubsub.publish(event(UIAction.Click));
-        assert pubsub.runnable == 2;
-
-        pubsub.unregister(UIAction.Click, runnable);
-        pubsub.publish(event(UIAction.Click));
-        assert pubsub.runnable == 2;
-    }
-
-    @Test
-    public void registerRunnableMultiple() throws Exception {
-        FunctionalPubSub pubsub = new FunctionalPubSub();
-        Runnable runnable = pubsub::runnable;
-        pubsub.register(String.class, runnable);
-        pubsub.register(String.class, runnable);
-        pubsub.register(String.class, runnable);
-
-        pubsub.publish("string");
-        assert pubsub.runnable == 1;
-    }
-
-    @Test
     public void registerConsumerInt() throws Exception {
         FunctionalPubSub pubsub = new FunctionalPubSub();
         Consumer<Integer> consumer = pubsub::consumeInt;
