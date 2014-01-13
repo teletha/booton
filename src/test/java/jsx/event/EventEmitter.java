@@ -7,12 +7,15 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.rx;
+package jsx.event;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import kiss.Observable;
+import kiss.Observer;
 
 /**
  * @version 2014/01/09 2:57:23
