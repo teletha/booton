@@ -9,12 +9,10 @@
  */
 package booton.translator;
 
-import static org.objectweb.asm.Opcodes.*;
-
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.FieldVisitor;
-import org.objectweb.asm.MethodVisitor;
-
+import static jdk.internal.org.objectweb.asm.Opcodes.*;
+import jdk.internal.org.objectweb.asm.ClassVisitor;
+import jdk.internal.org.objectweb.asm.FieldVisitor;
+import jdk.internal.org.objectweb.asm.MethodVisitor;
 import booton.translator.Node.Switch;
 
 /**

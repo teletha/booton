@@ -28,6 +28,8 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 
+import jdk.internal.org.objectweb.asm.ClassReader;
+import jdk.internal.org.objectweb.asm.Type;
 import js.lang.Global;
 import js.lang.NativeString;
 import js.util.concurrent.CopyOnWriteArraySet;
@@ -36,10 +38,6 @@ import kiss.Extensible;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
-
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.Type;
-
 import booton.Necessary;
 import booton.Unnecessary;
 

@@ -9,7 +9,7 @@
  */
 package booton.translator;
 
-import static org.objectweb.asm.Opcodes.*;
+import static jdk.internal.org.objectweb.asm.Opcodes.*;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -20,19 +20,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import jdk.internal.org.objectweb.asm.AnnotationVisitor;
+import jdk.internal.org.objectweb.asm.Attribute;
+import jdk.internal.org.objectweb.asm.ClassReader;
+import jdk.internal.org.objectweb.asm.ClassVisitor;
+import jdk.internal.org.objectweb.asm.Handle;
+import jdk.internal.org.objectweb.asm.Label;
+import jdk.internal.org.objectweb.asm.MethodVisitor;
+import jdk.internal.org.objectweb.asm.Opcodes;
+import jdk.internal.org.objectweb.asm.util.ASMifier;
+import jdk.internal.org.objectweb.asm.util.Printer;
 import kiss.I;
-
-import org.objectweb.asm.AnnotationVisitor;
-import org.objectweb.asm.Attribute;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.Handle;
-import org.objectweb.asm.Label;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.util.ASMifier;
-import org.objectweb.asm.util.Printer;
-
 import booton.translator.Node.TryCatchFinally;
 
 /**
