@@ -27,7 +27,7 @@ class SubscribeUIUIDetail implements Subscribable<SubscribeUI> {
      * {@inheritDoc}
      */
     @Override
-    public Object type(SubscribeUI annotation, Method method) {
+    public Object detect(Method method, SubscribeUI annotation) {
         return annotation.type();
     }
 
@@ -35,7 +35,7 @@ class SubscribeUIUIDetail implements Subscribable<SubscribeUI> {
      * {@inheritDoc}
      */
     @Override
-    public Observable observe(Observable base, SubscribeUI annotation) {
+    public Observable create(Observable base, SubscribeUI annotation) {
         base = base.take(annotation.count())
                 .delay(annotation.delay(), MILLISECONDS)
                 .throttle(annotation.throttle(), MILLISECONDS)

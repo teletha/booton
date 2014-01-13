@@ -142,23 +142,23 @@ public class Publishable<P extends Publishable<P>> {
         if (listeners != null) {
             int index = 0;
 
-            for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(listeners.getClass()).entrySet()) {
+            T: for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(listeners.getClass()).entrySet()) {
                 for (Annotation annotation : entry.getValue()) {
                     Subscribable info = I.find(Subscribable.class, annotation.annotationType());
 
                     if (info != null) {
                         Method method = entry.getKey();
-                        Object type = info.type(annotation, method);
+                        Object type = info.detect(method, annotation);
 
                         // Check duplication at first time only.
                         // If the duplicated listener is found, all the other listeners are ignored.
-                        ObservableInvoker listener = new ObservableInvoker(type, listeners, method, index++ == 0);
-
-                        info.observe(new Observable(listener), annotation).subscribe((Observer) listener);
-
-                        if (!listener.success) {
-                            return (P) this;
+                        if (index++ == 0 && has(type, listeners)) {
+                            break T;
                         }
+
+                        ObservableInvoker listener = new ObservableInvoker(type, listeners, method);
+
+                        info.create(new Observable(listener), annotation).subscribe((Observer) listener);
                     }
                 }
             }
@@ -274,6 +274,30 @@ public class Publishable<P extends Publishable<P>> {
 
     /**
      * <p>
+     * Helper method to chech registration of event listener.
+     * </p>
+     * 
+     * @param type An event type.
+     * @param listener An event listener to check.
+     * @return A result.
+     */
+    private boolean has(Object type, Object listener) {
+        if (holder != null) {
+            List<Listener> listeners = holder.get(type);
+
+            if (listeners != null) {
+                for (Listener registered : listeners) {
+                    if (registered.equals(listener)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * <p>
      * Register an event listener.
      * </p>
      * 
@@ -343,7 +367,7 @@ public class Publishable<P extends Publishable<P>> {
                     Subscribable info = I.find(Subscribable.class, annotation.annotationType());
 
                     if (info != null) {
-                        remove(info.type(annotation, entry.getKey()), listeners);
+                        remove(info.detect(entry.getKey(), annotation), listeners);
                     }
                 }
             }
@@ -626,14 +650,8 @@ public class Publishable<P extends Publishable<P>> {
         /** The parameter flag. */
         private final boolean hasParam;
 
-        /** The flag. */
-        private final boolean checkDuplication;
-
         /** The listener. */
         private Observer observer;
-
-        /** The registration result. */
-        private boolean success;
 
         /**
          * @param type
@@ -641,14 +659,13 @@ public class Publishable<P extends Publishable<P>> {
          * @param hasParam
          * @param abort
          */
-        protected ObservableInvoker(Object type, Object instance, Method method, boolean checkDuplication) {
+        protected ObservableInvoker(Object type, Object instance, Method method) {
             method.setAccessible(true);
 
             this.type = type;
             this.listener = instance;
             this.method = method;
             this.hasParam = method.getParameterTypes().length == 1;
-            this.checkDuplication = checkDuplication;
         }
 
         /**
@@ -690,7 +707,7 @@ public class Publishable<P extends Publishable<P>> {
          */
         @Override
         public Disposable apply(Observer observer) {
-            this.success = add(type, this, checkDuplication);
+            add(type, this, false);
             this.observer = observer;
 
             return this;

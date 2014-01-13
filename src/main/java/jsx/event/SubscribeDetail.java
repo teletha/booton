@@ -28,7 +28,7 @@ class SubscribeDetail implements Subscribable<Subscribe> {
      * {@inheritDoc}
      */
     @Override
-    public Object type(Subscribe annotation, Method method) {
+    public Object detect(Method method, Subscribe annotation) {
         return ClassUtil.wrap(method.getParameterTypes().length == 1 ? method.getParameterTypes()[0]
                 : annotation.value());
     }
@@ -37,7 +37,7 @@ class SubscribeDetail implements Subscribable<Subscribe> {
      * {@inheritDoc}
      */
     @Override
-    public Observable observe(Observable base, Subscribe annotation) {
+    public Observable create(Observable base, Subscribe annotation) {
         base = base.take(annotation.count())
                 .delay(annotation.delay(), MILLISECONDS)
                 .throttle(annotation.throttle(), MILLISECONDS)
