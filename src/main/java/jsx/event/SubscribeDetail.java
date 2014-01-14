@@ -37,17 +37,18 @@ class SubscribeDetail implements Subscribable<Subscribe> {
      * {@inheritDoc}
      */
     @Override
-    public Observable create(Observable base, Subscribe annotation) {
+    public Observable create(Observable<?> base, Subscribe annotation) {
         base = base.take(annotation.count())
                 .delay(annotation.delay(), MILLISECONDS)
                 .throttle(annotation.throttle(), MILLISECONDS)
                 .debounce(annotation.debounce(), MILLISECONDS);
 
         if (annotation.abort()) {
-            base = base.on(value -> {
+            base = base.on((observer, value) -> {
                 if (value instanceof Disposable) {
                     ((Disposable) value).dispose();
                 }
+                observer.onNext(value);
             });
         }
 

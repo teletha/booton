@@ -42,5 +42,5 @@ public interface Subscribable<A extends Annotation> extends Extensible {
      * @param annotation A subscriber info.
      * @return
      */
-    Observable create(Observable base, A annotation);
+    Observable create(Observable<?> base, A annotation);
 }
