@@ -41,7 +41,7 @@ public abstract class Application {
      */
     protected Application() {
         // Collect all pages and register it.
-        for (Class page : I.collect(Page.class)) {
+        for (Class page : I.findAs(Page.class)) {
             for (Constructor<?> constructor : page.getConstructors()) {
                 PageInfo info = constructor.getAnnotation(PageInfo.class);
 

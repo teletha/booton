@@ -821,7 +821,7 @@ public class Javascript {
                 set.add(necessary);
 
                 if (Extensible.class.isAssignableFrom(necessary)) {
-                    for (Class<Extensible> extension : I.collect((Class<Extensible>) necessary)) {
+                    for (Class<Extensible> extension : I.findAs((Class<Extensible>) necessary)) {
                         set.add(extension);
                     }
                 }

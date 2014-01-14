@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 import js.dom.UIAction;
 import js.dom.UIEvent;
 import kiss.Disposable;
+import kiss.I;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +31,7 @@ import booton.soeur.ScriptRunner;
 public class PublishableTest {
 
     static {
-        // Observable.tasks = Async.use();
+        I.$scheduler = Async.use();
     }
 
     /**
@@ -464,12 +465,6 @@ public class PublishableTest {
      * @version 2013/12/20 11:29:24
      */
     private static class FunctionalPubSub extends Publishable {
-
-        private int runnable;
-
-        private void runnable() {
-            runnable++;
-        }
 
         private String consumeString = "";
 

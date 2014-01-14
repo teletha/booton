@@ -32,6 +32,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import javax.script.ScriptException;
 
@@ -53,6 +55,8 @@ import booton.translator.JavaAPIProvider;
  */
 @JavaAPIProvider(I.class)
 class JSKiss {
+
+    public static ScheduledExecutorService $scheduler = Executors.newScheduledThreadPool(1);
 
     /** The mapping from extension point to extensions. */
     private static Table<Class, Class> extensions;

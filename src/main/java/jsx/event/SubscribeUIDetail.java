@@ -35,17 +35,18 @@ class SubscribeUIUIDetail implements Subscribable<SubscribeUI> {
      * {@inheritDoc}
      */
     @Override
-    public Observable create(Observable base, SubscribeUI annotation) {
+    public Observable create(Observable<?> base, SubscribeUI annotation) {
         base = base.take(annotation.count())
                 .delay(annotation.delay(), MILLISECONDS)
                 .throttle(annotation.throttle(), MILLISECONDS)
                 .debounce(annotation.debounce(), MILLISECONDS);
 
         if (annotation.abort()) {
-            base = base.on(value -> {
+            base = base.on((observer, value) -> {
                 if (value instanceof Disposable) {
                     ((Disposable) value).dispose();
                 }
+                observer.onNext(value);
             });
         }
 
