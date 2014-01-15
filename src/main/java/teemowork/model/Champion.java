@@ -606,7 +606,9 @@ public class Champion {
                 .set(AR, 10.5, 4)
                 .set(MR, 30, 0)
                 .set(Range, 600)
+                .set(ProjectileSpeed, 1100)
                 .set(MS, 325);
+        Anivia.update(P410).set(ProjectileSpeed, 1400);
         Annie.update(P0000)
                 .set(Health, 384, 76)
                 .set(Hreg, 4.5, 0.55)
@@ -969,6 +971,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 525)
                 .set(MS, 325);
+        Jinx.update(P410).set(Health, 388, 82);
         Karma.update(P0000)
                 .set(Health, 410, 86)
                 .set(Hreg, 4.7, 0.55)
@@ -1388,12 +1391,13 @@ public class Champion {
         Riven.update(P0000)
                 .set(Health, 414, 86)
                 .set(Hreg, 5.5, 0.5)
-                .set(AD, 54, 2.75)
+                .set(AD, 54, 2.7)
                 .set(AS, 0.625, 3.5)
                 .set(AR, 15, 3.1)
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
                 .set(MS, 345);
+        Riven.update(P410).set(AD, 51, 3);
         Rumble.update(P0000)
                 .set(Health, 450, 80)
                 .set(Hreg, 7, 0.7)

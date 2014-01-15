@@ -108,39 +108,6 @@ class JSKiss {
      * @param extensionPoint An extension point class. The <a
      *            href="Extensible#ExtensionPoint">Extension Point</a> class is only accepted,
      *            otherwise this method will return empty list.
-     * @return All Extension classes of the given Extension Point or empty list.
-     * @throws NullPointerException If the Extension Point is <code>null</code>.
-     */
-    public static <E extends Extensible> List<Class<E>> collect(Class<E> extensionPoint) {
-        initialize();
-
-        // Skip null check because this method can throw NullPointerException.
-        List<Class> classes = extensions.get(extensionPoint);
-
-        // instantiate all found extesions
-        List list = new ArrayList(classes.size());
-
-        for (Class extension : classes) {
-            list.add(extension);
-        }
-        return list;
-    }
-
-    /**
-     * <p>
-     * Find all <a href="Extensible.html#Extension">Extensions</a> which are specified by the given
-     * <a href="Extensible#ExtensionPoint">Extension Point</a>.
-     * </p>
-     * <p>
-     * The returned list will be "safe" in that no references to it are maintained by Sinobu. (In
-     * other words, this method must allocate a new list). The caller is thus free to modify the
-     * returned list.
-     * </p>
-     * 
-     * @param <E> An Extension Point.
-     * @param extensionPoint An extension point class. The <a
-     *            href="Extensible#ExtensionPoint">Extension Point</a> class is only accepted,
-     *            otherwise this method will return empty list.
      * @return All Extensions of the given Extension Point or empty list.
      * @throws NullPointerException If the Extension Point is <code>null</code>.
      */
@@ -179,6 +146,39 @@ class JSKiss {
         Class<E> clazz = keys.find(Objects.hash(extensionPoint, key));
 
         return clazz == null ? null : make(clazz);
+    }
+
+    /**
+     * <p>
+     * Find all <a href="Extensible.html#Extension">Extensions</a> which are specified by the given
+     * <a href="Extensible#ExtensionPoint">Extension Point</a>.
+     * </p>
+     * <p>
+     * The returned list will be "safe" in that no references to it are maintained by Sinobu. (In
+     * other words, this method must allocate a new list). The caller is thus free to modify the
+     * returned list.
+     * </p>
+     * 
+     * @param <E> An Extension Point.
+     * @param extensionPoint An extension point class. The <a
+     *            href="Extensible#ExtensionPoint">Extension Point</a> class is only accepted,
+     *            otherwise this method will return empty list.
+     * @return All Extension classes of the given Extension Point or empty list.
+     * @throws NullPointerException If the Extension Point is <code>null</code>.
+     */
+    public static <E extends Extensible> List<Class<E>> findAs(Class<E> extensionPoint) {
+        initialize();
+    
+        // Skip null check because this method can throw NullPointerException.
+        List<Class> classes = extensions.get(extensionPoint);
+    
+        // instantiate all found extesions
+        List list = new ArrayList(classes.size());
+    
+        for (Class extension : classes) {
+            list.add(extension);
+        }
+        return list;
     }
 
     /**

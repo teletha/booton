@@ -196,6 +196,19 @@ public abstract class VariableResolver {
     }
 
     /**
+     * @version 2014/01/15 11:04:07
+     */
+    public static class Per5Level3Times extends PerLevel {
+
+        /**
+         * @param values
+         */
+        public Per5Level3Times(double base, double diff) {
+            super(new int[] {1, 6, 11}, base, diff);
+        }
+    }
+
+    /**
      * @version 2013/11/28 22:41:12
      */
     public static class Per5LevelWith18 extends PerLevel {
