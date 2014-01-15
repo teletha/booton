@@ -586,7 +586,9 @@ public class Ability extends Describable<AbilityDescriptor> {
 
     /** The ability. */
     public static final Ability SunfireCapePassive = new Ability(item -> {
-        item.aura("{1}の敵ユニットに毎秒{2}を与える。").variable(1, Radius, 400).variable(2, MagicDamage, 40);
+        item.aura("{1}の敵ユニットに毎秒{2}を与える。").variable(1, Radius, 400).variable(2, MagicDamage, 40)
+
+        .update(P410).variable(2, MagicDamage, 25, 0, amplify(Lv, 1));
     });
 
     /** The ability. */
@@ -698,6 +700,13 @@ public class Ability extends Describable<AbilityDescriptor> {
     /** The ability. */
     public static final Ability ZekesHeraldAura = new Ability(item -> {
         item.aura("{1}の味方Championは{2}と{3}を得る。").variable(1, Radius, 1200).variable(2, AD, 20).variable(3, LS, 10);
+    });
+
+    /** The ability. */
+    public static final Ability Spirit = new Ability(item -> {
+        item.passive("モンスターにダメージを与えると{1}し{2}する。(範囲攻撃の場合は効果が半減する)")
+                .variable(1, RestoreHealth, 0, 0, amplify(DealtDamage, 0.08))
+                .variable(2, RestoreMana, 0, 0, amplify(DealtDamage, 0.04));
     });
 
     // lazy initialization

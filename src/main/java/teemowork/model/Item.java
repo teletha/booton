@@ -1101,7 +1101,13 @@ public class Item extends Describable<ItemDescriptor> {
 
                 .update(P308)
                 .remove(Ability.Rend)
-                .add(Ability.Maim);
+                .add(Ability.Maim)
+
+                .update(P410)
+                .healthRegen(0)
+                .manaRegen(0)
+                .add(Ability.Spirit)
+                .remove(Ability.Maim);
     });
 
     /** Spirit of the Ancient Golem */
@@ -1118,7 +1124,12 @@ public class Item extends Describable<ItemDescriptor> {
                 .update(P314)
                 .health(350)
                 .add(Ability.GoldIncome)
-                .add(Ability.Conservation);
+                .add(Ability.Conservation)
+
+                .update(P410)
+                .healthRegen(0)
+                .manaRegen(0)
+                .add(Ability.Spirit);
     });
 
     /** Spirit of the Elder Lizard */
@@ -1143,7 +1154,12 @@ public class Item extends Describable<ItemDescriptor> {
 
                 .update(P315)
                 .remove(Ability.BountyHunter)
-                .add(Ability.Conservation);
+                .add(Ability.Conservation)
+
+                .update(P410)
+                .healthRegen(0)
+                .manaRegen(0)
+                .add(Ability.Spirit);
     });
 
     /** Spirit of the Spectral Wraith */
@@ -1174,15 +1190,19 @@ public class Item extends Describable<ItemDescriptor> {
                 .add(Ability.Butcher)
                 .add(Ability.GoldIncome)
                 .add(Ability.BountyHunter)
-                .add(ability -> {
-                    ability.passive("モンスターにダメージを与えると{1}し{2}する。(範囲攻撃の場合、この効果は半減する)")
-                            .variable(1, RestoreHealth, 0, 0, amplify(DealtDamage, 0.08))
-                            .variable(2, RestoreMana, 0, 0, amplify(DealtDamage, 0.08));
-                })
+                .add(Ability.Spirit)
 
                 .update(P315)
                 .remove(Ability.BountyHunter)
-                .add(Ability.Conservation);
+                .add(Ability.Conservation)
+
+                .update(P410)
+                .healthRegen(0)
+                .manaRegen(0)
+
+                .add(ability -> {
+                    ability.passive("巨大モンスターを倒すたびに{1}を得る。(最大で30)").variable(1, AP, 2);
+                });
     });
 
     /** Spirit Visage */
@@ -1202,7 +1222,10 @@ public class Item extends Describable<ItemDescriptor> {
                 .healthRegen(20)
 
                 .update(P310A)
-                .cost(500);
+                .cost(500)
+
+                .update(P410)
+                .cooldownReduction(10);
     });
 
     /** Statikk Shiv */
