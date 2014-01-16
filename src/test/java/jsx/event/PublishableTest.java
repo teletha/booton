@@ -526,7 +526,7 @@ public class PublishableTest {
     }
 
     @Test
-    public void registerConsumerEnum() throws Exception {
+    public void registerConsumerEvent() throws Exception {
         FunctionalPubSub pubsub = new FunctionalPubSub();
         Disposable disposable = pubsub.observe(UIAction.Click).subscribe(value -> {
             pubsub.consumeUI++;
