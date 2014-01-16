@@ -66,7 +66,7 @@ public class Publishable<P extends Publishable<P>> {
      * @param type An event type.
      * @return Chainable API.
      */
-    public final <T extends Enum & EventType<E>, E extends Event<T>> Observable<E> observe(T... types) {
+    public final <T extends EventType<E>, E extends Event<T>> Observable<E> observe(T... types) {
         if (types == null || types.length == 0) {
             return Observable.NEVER;
         }
@@ -110,7 +110,7 @@ public class Publishable<P extends Publishable<P>> {
      * @param listener An event listener to add.
      * @return Chainable API.
      */
-    public final <T extends Enum & EventType<E>, E extends Event<T>> P on(T type, Consumer<E> listener) {
+    public final <T extends EventType<E>, E extends Event<T>> P on(T type, Consumer<E> listener) {
         if (disposer == null) {
             disposer = new HashMap();
         }
@@ -128,7 +128,7 @@ public class Publishable<P extends Publishable<P>> {
      * @param listeners A target event listeners.
      * @return Chainable API.
      */
-    public final <T extends Enum & EventType> P on(Object listeners) {
+    public final <T extends EventType> P on(Object listeners) {
         if (listeners != null) {
             if (disposer == null) {
                 disposer = new HashMap();
