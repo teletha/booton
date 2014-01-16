@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
 
 /**
- * @version 2013/09/26 10:30:30
+ * @version 2014/01/16 22:36:52
  */
 @SuppressWarnings("unused")
 public class DoWhileTest extends ScriptTester {
@@ -163,10 +163,9 @@ public class DoWhileTest extends ScriptTester {
 
     @Test
     @Ignore
-    public void testname() throws Exception {
+    public void oneLinerComplexCondition() throws Exception {
         test(new Scriptable() {
 
-            // do { a[j] = i.nextDouble(); } while (++j < n && i.hasNext());
             public int act(@Param(from = 0, to = 5) int value) {
                 // @formatter:off
                 do {value += 2;} while (++value < 10 && value % 2 == 0);
