@@ -561,9 +561,9 @@ public class PublishableTest {
     @Test
     public void unregisterImmediately() throws Exception {
         Publishable instance = new Publishable();
-        instance.unregister();
-        instance.unregister(String.class);
-        instance.unregister(UIAction.Click);
+        instance.off();
+        instance.off(String.class);
+        instance.off(UIAction.Click);
     }
 
     @Test
@@ -579,7 +579,7 @@ public class PublishableTest {
         reciever.publish("Sinobu");
         assert reciever.value == 1;
 
-        reciever.unregister(String.class);
+        reciever.off(String.class);
         reciever.publish("Sinobu");
         assert reciever.value == 1;
     }
@@ -603,7 +603,7 @@ public class PublishableTest {
         reciever.publish(1);
         assert reciever.value == 2;
 
-        reciever.unregister();
+        reciever.off();
         reciever.publish("Sinobu");
         assert reciever.value == 2;
 

@@ -155,7 +155,7 @@ public abstract class UI extends Publishable {
         @Subscribe(PageUnload.class)
         private void unload() {
             Publishable.Global.off(this);
-            root.unregister();
+            root.off();
             hide();
         }
     }
