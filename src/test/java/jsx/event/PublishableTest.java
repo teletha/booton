@@ -49,7 +49,7 @@ public class PublishableTest {
          * 
          */
         protected PubSub() {
-            register(this);
+            on(this);
         }
     }
 
@@ -70,7 +70,7 @@ public class PublishableTest {
         reciever.publish("Tubasa");
         assert reciever.string.equals("Tubasa");
 
-        reciever.unregister(reciever);
+        reciever.off(reciever);
         reciever.publish("Nadeko");
         assert reciever.string.equals("Tubasa");
     }
@@ -84,8 +84,8 @@ public class PublishableTest {
                 value++;
             }
         };
-        reciever.register(reciever);
-        reciever.register(reciever);
+        reciever.on(reciever);
+        reciever.on(reciever);
 
         reciever.publish("Sinobu");
         assert reciever.value == 1;
@@ -420,12 +420,12 @@ public class PublishableTest {
         assert internal.starts.isEmpty();
         assert internal.stops.isEmpty();
 
-        internal.register(internal);
+        internal.on(internal);
         assert internal.starts.contains(Object.class);
         assert internal.starts.contains(String.class);
         assert internal.stops.isEmpty();
 
-        internal.unregister(internal);
+        internal.off(internal);
         assert internal.stops.contains(Object.class);
         assert internal.stops.contains(String.class);
     }
@@ -489,7 +489,7 @@ public class PublishableTest {
     public void registerConsumerInt() throws Exception {
         FunctionalPubSub pubsub = new FunctionalPubSub();
         Consumer<Integer> consumer = pubsub::consumeInt;
-        pubsub.register(int.class, consumer);
+        pubsub.on(int.class, consumer);
 
         pubsub.publish(10);
         assert pubsub.consumeInt == 10;
@@ -500,16 +500,16 @@ public class PublishableTest {
         pubsub.publish("string");
         assert pubsub.consumeString.isEmpty();
 
-        pubsub.unregister(int.class, consumer);
-        pubsub.publish(10);
-        assert pubsub.consumeInt == 30;
+        // pubsub.unregister(int.class, consumer);
+        // pubsub.publish(10);
+        // assert pubsub.consumeInt == 30;
     }
 
     @Test
     public void registerConsumerString() throws Exception {
         FunctionalPubSub pubsub = new FunctionalPubSub();
         Consumer<String> consumer = pubsub::consumeString;
-        pubsub.register(String.class, consumer);
+        pubsub.on(String.class, consumer);
 
         pubsub.publish("Hanekawa");
         assert pubsub.consumeString.equals("Hanekawa");
@@ -520,16 +520,17 @@ public class PublishableTest {
         pubsub.publish(10);
         assert pubsub.consumeInt == 0;
 
-        pubsub.unregister(String.class, consumer);
-        pubsub.publish("None");
-        assert pubsub.consumeString.equals("HanekawaTubasa");
+        // pubsub.unregister(String.class, consumer);
+        // pubsub.publish("None");
+        // assert pubsub.consumeString.equals("HanekawaTubasa");
     }
 
     @Test
     public void registerConsumerEnum() throws Exception {
         FunctionalPubSub pubsub = new FunctionalPubSub();
-        Consumer<UIEvent> consumer = pubsub::consumeUIEvent;
-        pubsub.register(UIAction.Click, consumer);
+        Disposable disposable = pubsub.observe(UIAction.Click).subscribe(value -> {
+            pubsub.consumeUI++;
+        });
 
         pubsub.publish(event(UIAction.Click));
         assert pubsub.consumeUI == 1;
@@ -540,7 +541,7 @@ public class PublishableTest {
         pubsub.publish(event(UIAction.Focus));
         assert pubsub.consumeUI == 2;
 
-        pubsub.unregister(UIAction.Click, consumer);
+        disposable.dispose();
         pubsub.publish(event(UIAction.Click));
         assert pubsub.consumeUI == 2;
     }
@@ -549,12 +550,12 @@ public class PublishableTest {
     public void registerConsumerMultiple() throws Exception {
         FunctionalPubSub pubsub = new FunctionalPubSub();
         Consumer<Integer> consumer = pubsub::consumeInt;
-        pubsub.register(int.class, consumer);
-        pubsub.register(int.class, consumer);
-        pubsub.register(int.class, consumer);
+        pubsub.on(int.class, consumer);
+        pubsub.on(int.class, consumer);
+        pubsub.on(int.class, consumer);
 
         pubsub.publish(10);
-        assert pubsub.consumeInt == 10;
+        assert pubsub.consumeInt == 30;
     }
 
     @Test

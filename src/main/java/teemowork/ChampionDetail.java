@@ -116,7 +116,7 @@ public class ChampionDetail extends Page {
         }
         this.build = new Build(champion);
 
-        build.register(this);
+        build.on(this);
     }
 
     @SubscribeUI(type = UIAction.Click, abort = true)
@@ -137,7 +137,7 @@ public class ChampionDetail extends Page {
         Element upper = root.child(UpperInfo.class);
 
         // Icon
-        Element icon = upper.child(ChampionIcon.class).register(this);
+        Element icon = upper.child(ChampionIcon.class).on(this);
         build.champion.applyIcon(icon);
 
         // Level
@@ -157,7 +157,7 @@ public class ChampionDetail extends Page {
         }
         skillView = root.child(SkillTable.class);
 
-        window.register(UIAction.KeyPress, event -> {
+        window.on(UIAction.KeyPress, event -> {
             switch (event.which) {
             case 113:// Q
                 build.active(SkillKey.Q);
@@ -256,10 +256,10 @@ public class ChampionDetail extends Page {
 
             Element iconBox = root.child(IconBox.class);
             icon = iconBox.child(SkillIcon.class).css("background-image", "url(" + skill.getIcon() + ")");
-            iconBox.register(UIAction.Click, event -> {
+            iconBox.on(UIAction.Click, event -> {
                 event.preventDefault();
                 build.up(skill);
-            }).register(UIAction.ClickRight, event -> {
+            }).on(UIAction.ClickRight, event -> {
                 event.preventDefault();
                 build.down(skill);
             });

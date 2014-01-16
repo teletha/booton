@@ -20,12 +20,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import kiss.Disposable;
 import kiss.I;
 import kiss.Observable;
-import kiss.Observer;
 import kiss.model.ClassUtil;
 
 /**
@@ -44,7 +42,9 @@ public class Publishable<P extends Publishable<P>> {
     private static final Map<Class, Set<Class<?>>> cache = new HashMap();
 
     /** The actual listeners holder. */
-    private Map<Object, List<Listener>> holder;
+    private Map<Object, List<Consumer>> holder;
+
+    private Map<Object, Disposable> disposer;
 
     /**
      * <p>
@@ -55,17 +55,7 @@ public class Publishable<P extends Publishable<P>> {
      * @return Chainable API.
      */
     public final <T> Observable<T> observe(Class<T> type) {
-        return new Observable<T>(observer -> {
-            Consumer<T> consumer = event -> {
-                observer.onNext(event);
-            };
-
-            register(type, consumer);
-
-            return () -> {
-                unregister(type, consumer);
-            };
-        });
+        return create(type);
     }
 
     /**
@@ -76,16 +66,172 @@ public class Publishable<P extends Publishable<P>> {
      * @param type An event type.
      * @return Chainable API.
      */
-    public final <T extends Enum & EventType<E>, E extends Event<T>> Observable<E> observe(T type) {
-        return new Observable<E>(observer -> {
-            Consumer<E> consumer = event -> {
-                observer.onNext(event);
+    public final <T extends Enum & EventType<E>, E extends Event<T>> Observable<E> observe(T... types) {
+        if (types == null || types.length == 0) {
+            return Observable.NEVER;
+        }
+
+        Observable<E> observable = null;
+
+        for (T type : types) {
+            Observable<E> current = create(type);
+
+            if (observable == null) {
+                observable = current;
+            } else {
+                observable = observable.merge(current);
+            }
+        }
+        return observable;
+    }
+
+    /**
+     * <p>
+     * Register the specified event listener.
+     * </p>
+     * 
+     * @param type An event type.
+     * @param listener An event listener to add.
+     * @return Chainable API.
+     */
+    public final <T> P on(Class<T> type, Consumer<T> listener) {
+        observe(type).subscribe(listener);
+
+        // API definition
+        return (P) this;
+    }
+
+    /**
+     * <p>
+     * Register the specified event listener.
+     * </p>
+     * 
+     * @param type An event type.
+     * @param listener An event listener to add.
+     * @return Chainable API.
+     */
+    public final <T extends Enum & EventType<E>, E extends Event<T>> P on(T type, Consumer<E> listener) {
+        if (disposer == null) {
+            disposer = new HashMap();
+        }
+        disposer.put(listener, observe(type).subscribe(listener));
+
+        // API definition
+        return (P) this;
+    }
+
+    /**
+     * <p>
+     * Start subscribing events from which the specified {@link Publishable} emits.
+     * </p>
+     * 
+     * @param listeners A target event listeners.
+     * @return Chainable API.
+     */
+    public final <T extends Enum & EventType> P on(Object listeners) {
+        if (listeners != null) {
+            if (disposer == null) {
+                disposer = new HashMap();
+            }
+
+            if (!disposer.containsKey(listeners)) {
+                Agent agent = new Agent();
+                disposer.put(listeners, agent);
+
+                for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(listeners.getClass()).entrySet()) {
+                    for (Annotation annotation : entry.getValue()) {
+                        Subscribable info = I.find(Subscribable.class, annotation.annotationType());
+
+                        if (info != null) {
+                            Method method = entry.getKey();
+                            method.setAccessible(true);
+
+                            Object type = info.detect(method, annotation);
+                            boolean hasParam = method.getParameterTypes().length == 1;
+
+                            agent.add(info.create(create(type), annotation).subscribe(value -> {
+                                try {
+                                    if (hasParam) {
+                                        method.invoke(listeners, value);
+                                    } else {
+                                        method.invoke(listeners);
+                                    }
+                                } catch (Exception e) {
+                                    // If this exception will be thrown, it is bug of this program.
+                                    // So we must rethrow
+                                    // the wrapped error in here.
+                                    throw new Error(e);
+                                }
+                            }));
+                        }
+                    }
+                }
+            }
+
+        }
+
+        // API definition
+        return (P) this;
+    }
+
+    /**
+     * <p>
+     * Create an event listener as {@link Observable}.
+     * </p>
+     * 
+     * @param type A event type.
+     * @return
+     */
+    private <V> Observable<V> create(Object type) {
+        // wrap primitive type
+        Object eventType = type instanceof Class ? ClassUtil.wrap((Class) type) : type;
+
+        return new Observable<V>(observer -> {
+            // create an actual event listener
+            Consumer<V> consumer = value -> {
+                observer.onNext(value);
             };
 
-            register(type, consumer);
+            // create event listener holder if it is not initialized
+            if (holder == null) {
+                holder = new ConcurrentHashMap();
+                startListening(Object.class);
+            }
+
+            // create event listener list
+            List<Consumer> listeners = holder.get(eventType);
+
+            if (listeners == null) {
+                listeners = new CopyOnWriteArrayList();
+                holder.put(eventType, listeners);
+
+                startListening(eventType);
+            } else {
+                // for (Consumer registered : listeners) {
+                // if (registered.equals(observer)) {
+                // return;
+                // }
+                // }
+            }
+
+            // register this event listener
+            listeners.add(consumer);
 
             return () -> {
-                unregister(type, consumer);
+                List<Consumer> list = holder.get(eventType);
+
+                if (list != null) {
+                    for (int i = list.size() - 1; 0 <= i; i--) {
+                        if (list.get(i).equals(consumer)) {
+                            list.remove(i);
+
+                            if (list.isEmpty()) {
+                                remove(eventType);
+                            }
+                            break;
+                        }
+                    }
+                }
             };
         });
     }
@@ -115,10 +261,10 @@ public class Publishable<P extends Publishable<P>> {
 
             for (Object type : types) {
                 if (holder != null) {
-                    List<Listener> subscribers = holder.get(type);
+                    List<Consumer> subscribers = holder.get(type);
 
                     if (subscribers != null) {
-                        for (Listener subscriber : subscribers) {
+                        for (Consumer subscriber : subscribers) {
                             subscriber.accept(event);
                         }
                     }
@@ -130,157 +276,50 @@ public class Publishable<P extends Publishable<P>> {
         return (P) this;
     }
 
-    /**
-     * <p>
-     * Start subscribing events from which the specified {@link Publishable} emits.
-     * </p>
-     * 
-     * @param listeners A target event listeners.
-     * @return Chainable API.
-     */
-    public final <T extends Enum & EventType> P register(Object listeners) {
-        if (listeners != null) {
-            int index = 0;
+    // /**
+    // * <p>
+    // * Register the specified event listener.
+    // * </p>
+    // *
+    // * @param types A list of event types.
+    // * @param listener An event listener to add.
+    // * @return Chainable API.
+    // */
+    // public final <T extends Enum & EventType<E>, E extends Event<T>> P register(T[] types,
+    // Consumer<E> listener) {
+    // if (types != null) {
+    // for (T type : types) {
+    // register(type, listener);
+    // }
+    // }
+    //
+    // // API definition
+    // return (P) this;
+    // }
 
-            T: for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(listeners.getClass()).entrySet()) {
-                for (Annotation annotation : entry.getValue()) {
-                    Subscribable info = I.find(Subscribable.class, annotation.annotationType());
-
-                    if (info != null) {
-                        Method method = entry.getKey();
-                        Object type = info.detect(method, annotation);
-
-                        // Check duplication at first time only.
-                        // If the duplicated listener is found, all the other listeners are ignored.
-                        if (index++ == 0 && has(type, listeners)) {
-                            break T;
-                        }
-
-                        ObservableInvoker listener = new ObservableInvoker(type, listeners, method);
-
-                        info.create(new Observable(listener), annotation).subscribe((Observer) listener);
-                    }
-                }
-            }
-        }
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
-     * Register the specified event listener.
-     * </p>
-     * 
-     * @param type An event type.
-     * @param listener An event listener to add.
-     * @return Chainable API.
-     */
-    public final <T> P register(Class<T> type, Consumer<T> listener) {
-        add(ClassUtil.wrap(type), new ConsumerInvoker(listener), true);
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
-     * Register the specified event listener.
-     * </p>
-     * 
-     * @param type An event type.
-     * @param listener An event listener to add.
-     * @return Chainable API.
-     */
-    public final <T extends Enum & EventType<E>, E extends Event<T>> P register(T type, Consumer<E> listener) {
-        add(type, new ConsumerInvoker(listener), true);
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
-     * Register the specified event listener.
-     * </p>
-     * 
-     * @param types A list of event types.
-     * @param listener An event listener to add.
-     * @return Chainable API.
-     */
-    public final <T extends Enum & EventType<E>, E extends Event<T>> P register(T[] types, Consumer<E> listener) {
-        if (types != null) {
-            for (T type : types) {
-                register(type, listener);
-            }
-        }
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
-     * Helper method to chech registration of event listener.
-     * </p>
-     * 
-     * @param type An event type.
-     * @param listener An event listener to check.
-     * @return A result.
-     */
-    private boolean has(Object type, Object listener) {
-        if (holder != null) {
-            List<Listener> listeners = holder.get(type);
-
-            if (listeners != null) {
-                for (Listener registered : listeners) {
-                    if (registered.equals(listener)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * <p>
-     * Register an event listener.
-     * </p>
-     * 
-     * @param type A event type.
-     * @param listener An event listener.
-     * @param checkDuplication A flag for duplication checking.
-     * @return If the registration is success, this method returns true.
-     */
-    private boolean add(Object type, Listener listener, boolean checkDuplication) {
-        if (holder == null) {
-            holder = new ConcurrentHashMap();
-            startListening(Object.class);
-        }
-
-        List<Listener> listeners = holder.get(type);
-
-        if (listeners == null) {
-            listeners = new CopyOnWriteArrayList();
-            holder.put(type, listeners);
-
-            startListening(type);
-        } else if (checkDuplication) {
-            for (Listener registered : listeners) {
-                if (registered.equals(listener.listener)) {
-                    return false;
-                }
-            }
-        }
-
-        // register a listener
-        listeners.add(listener);
-
-        // API definition
-        return true;
-    }
+    // /**
+    // * <p>
+    // * Helper method to chech registration of event listener.
+    // * </p>
+    // *
+    // * @param type An event type.
+    // * @param listener An event listener to check.
+    // * @return A result.
+    // */
+    // private boolean has(Object type, Object listener) {
+    // if (holder != null) {
+    // List<Listener> listeners = holder.get(type);
+    //
+    // if (listeners != null) {
+    // for (Listener registered : listeners) {
+    // if (registered.equals(listener)) {
+    // return true;
+    // }
+    // }
+    // }
+    // }
+    // return false;
+    // }
 
     /**
      * <p>
@@ -308,16 +347,12 @@ public class Publishable<P extends Publishable<P>> {
      * @param listeners A target event subscriber.
      * @return Chainable API.
      */
-    public final P unregister(Object listeners) {
-        if (holder != null && listeners != null) {
-            for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(listeners.getClass()).entrySet()) {
-                for (Annotation annotation : entry.getValue()) {
-                    Subscribable info = I.find(Subscribable.class, annotation.annotationType());
+    public final P off(Object listeners) {
+        if (holder != null && listeners != null && disposer != null) {
+            Disposable disposable = disposer.remove(listeners);
 
-                    if (info != null) {
-                        remove(info.detect(entry.getKey(), annotation), listeners);
-                    }
-                }
+            if (disposable != null) {
+                disposable.dispose();
             }
         }
 
@@ -342,22 +377,6 @@ public class Publishable<P extends Publishable<P>> {
 
     /**
      * <p>
-     * Unregister the specified event listener.
-     * </p>
-     * 
-     * @param type An event type.
-     * @param listener An event listener to remove.
-     * @return Chainable API.
-     */
-    public final <T> P unregister(Class<T> type, Consumer<T> listener) {
-        remove(ClassUtil.wrap(type), listener);
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
      * Unregister all event listeners for the specified event type.
      * </p>
      * 
@@ -369,69 +388,6 @@ public class Publishable<P extends Publishable<P>> {
 
         // API definition
         return (P) this;
-    }
-
-    /**
-     * <p>
-     * Unregister the specified event listener.
-     * </p>
-     * 
-     * @param type An event type.
-     * @param listener An event listener to remove.
-     * @return Chainable API.
-     */
-    public final <T extends Enum & EventType<E>, E extends Event<T>> P unregister(T type, Consumer<E> listener) {
-        remove(type, listener);
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
-     * Unregister the specified event listener.
-     * </p>
-     * 
-     * @param types A list of event types.
-     * @param listener An event listener to remove.
-     * @return Chainable API.
-     */
-    public final <T extends Enum & EventType<E>, E extends Event<T>> P unregister(T[] types, Consumer<E> listener) {
-        if (types != null) {
-            for (T type : types) {
-                unregister(type, listener);
-            }
-        }
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
-     * Unregister the specified event listener.
-     * </p>
-     * 
-     * @param type An event type.
-     * @param listener An event listener to remove.
-     */
-    private void remove(Object type, Object listener) {
-        if (holder != null) {
-            List<Listener> listeners = holder.get(type);
-
-            if (listeners != null) {
-                for (int i = listeners.size() - 1; 0 <= i; i--) {
-                    if (listeners.get(i).equals(listener)) {
-                        listeners.remove(i);
-
-                        if (listeners.isEmpty()) {
-                            remove(type);
-                        }
-                        break;
-                    }
-                }
-            }
-        }
     }
 
     /**
@@ -473,119 +429,82 @@ public class Publishable<P extends Publishable<P>> {
     protected void stopListening(Object type) {
     }
 
-    /**
-     * @version 2014/01/12 16:15:49
-     */
-    private static abstract class Listener<T> implements Consumer {
-
-        /** The actual listener. */
-        protected T listener;
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean equals(Object obj) {
-            return listener.equals(obj);
-        }
-    }
-
-    /**
-     * @version 2014/01/12 16:16:50
-     */
-    private static class ConsumerInvoker extends Listener<Consumer> {
-
-        /**
-         * @param consumer
-         */
-        private ConsumerInvoker(Consumer consumer) {
-            this.listener = consumer;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void accept(Object event) {
-            listener.accept(event);
-        }
-    }
-
-    /**
-     * @version 2014/01/12 16:16:54
-     */
-    private class ObservableInvoker<T> extends Listener implements Observer, Function<Observer, Disposable>, Disposable {
-
-        /** The event type. */
-        private final Object type;
-
-        /** The listener method. */
-        private final Method method;
-
-        /** The parameter flag. */
-        private final boolean hasParam;
-
-        /** The listener. */
-        private Observer observer;
-
-        /**
-         * @param type
-         * @param method
-         * @param hasParam
-         * @param abort
-         */
-        protected ObservableInvoker(Object type, Object instance, Method method) {
-            method.setAccessible(true);
-
-            this.type = type;
-            this.listener = instance;
-            this.method = method;
-            this.hasParam = method.getParameterTypes().length == 1;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void accept(Object event) {
-            observer.onNext(event);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void onNext(Object value) {
-            try {
-                if (hasParam) {
-                    method.invoke(listener, value);
-                } else {
-                    method.invoke(listener);
-                }
-            } catch (Exception e) {
-                // If this exception will be thrown, it is bug of this program. So we must rethrow
-                // the wrapped error in here.
-                throw new Error(e);
-            }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void dispose() {
-            remove(type, this);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Disposable apply(Observer observer) {
-            add(type, this, false);
-            this.observer = observer;
-
-            return this;
-        }
-    }
+    // /**
+    // * @version 2014/01/12 16:16:54
+    // */
+    // private class ObservableInvoker<T> extends Listener implements Observer, Function<Observer,
+    // Disposable>, Disposable {
+    //
+    // /** The event type. */
+    // private final Object type;
+    //
+    // /** The listener method. */
+    // private final Method method;
+    //
+    // /** The parameter flag. */
+    // private final boolean hasParam;
+    //
+    // /** The listener. */
+    // private Observer observer;
+    //
+    // /**
+    // * @param type
+    // * @param method
+    // * @param hasParam
+    // * @param abort
+    // */
+    // protected ObservableInvoker(Object type, Object instance, Method method) {
+    // method.setAccessible(true);
+    //
+    // this.type = type;
+    // this.listener = instance;
+    // this.method = method;
+    // this.hasParam = method.getParameterTypes().length == 1;
+    // }
+    //
+    // /**
+    // * {@inheritDoc}
+    // */
+    // @Override
+    // public void accept(Object event) {
+    // observer.onNext(event);
+    // }
+    //
+    // /**
+    // * {@inheritDoc}
+    // */
+    // @Override
+    // public void onNext(Object value) {
+    // try {
+    // if (hasParam) {
+    // method.invoke(listener, value);
+    // } else {
+    // method.invoke(listener);
+    // }
+    // } catch (Exception e) {
+    // // If this exception will be thrown, it is bug of this program. So we must rethrow
+    // // the wrapped error in here.
+    // throw new Error(e);
+    // }
+    // }
+    //
+    // /**
+    // * {@inheritDoc}
+    // */
+    // @Override
+    // public void dispose() {
+    // remove(type, this);
+    // }
+    //
+    // /**
+    // * {@inheritDoc}
+    // */
+    // @Override
+    // public Disposable apply(Observer observer) {
+    // add(type, this, false);
+    // this.observer = observer;
+    //
+    // return this;
+    // }
+    // }
 }

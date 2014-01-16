@@ -36,7 +36,7 @@ public class EventTargetTest {
         assert listener.invoked == 0;
 
         Element element = document.createElement("div");
-        element.register(listener);
+        element.on(listener);
 
         element.publish(event(UIAction.Click));
         assert listener.invoked == 1;
@@ -44,7 +44,7 @@ public class EventTargetTest {
         element.publish(event(UIAction.MouseMove));
         assert listener.invoked == 1;
 
-        element.unregister(listener);
+        element.off(listener);
 
         element.publish(event(UIAction.Click));
         assert listener.invoked == 1;
@@ -56,7 +56,7 @@ public class EventTargetTest {
         assert listener.invoked == 0;
 
         Element element = document.createElement("div");
-        element.register(listener);
+        element.on(listener);
 
         User.click(element);
         assert listener.invoked == 1;
@@ -64,7 +64,7 @@ public class EventTargetTest {
         User.mouseDown(element);
         assert listener.invoked == 1;
 
-        element.unregister(listener);
+        element.off(listener);
 
         User.click(element);
         assert listener.invoked == 1;

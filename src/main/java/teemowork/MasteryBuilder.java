@@ -83,7 +83,7 @@ public class MasteryBuilder extends Page {
     @PageInfo(path = "Mastery/*")
     public MasteryBuilder(String levels) {
         masterySet = new MasterySet(levels);
-        masterySet.register(this);
+        masterySet.on(this);
     }
 
     /**
@@ -99,7 +99,7 @@ public class MasteryBuilder extends Page {
 
         Element infomation = root.child(Information.class);
         menu = infomation.child(new Select(masteryManager));
-        menu.model.register(this);
+        menu.model.on(this);
 
         reset = infomation.child(new Button("30", masterySet::reset));
 
@@ -135,7 +135,7 @@ public class MasteryBuilder extends Page {
                 if (mastery == null) {
                     pane.add(EmptyPane.class);
                 } else {
-                    masterySet.register(new MasteryView(pane, mastery));
+                    masterySet.on(new MasteryView(pane, mastery));
                 }
             }
         }
@@ -222,13 +222,13 @@ public class MasteryBuilder extends Page {
             // Mastery Description Pane
             popup = root.child(PopupPane.class);
             popup.child(MasteryName.class).text(mastery.name);
-            masterySet.register(new MasteryDescriptionView(popup, mastery));
+            masterySet.on(new MasteryDescriptionView(popup, mastery));
 
             // Event Handlers
-            root.register(UIAction.Click, event -> {
+            root.on(UIAction.Click, event -> {
                 event.preventDefault();
                 masterySet.up(mastery);
-            }).register(UIAction.ClickRight, event -> {
+            }).on(UIAction.ClickRight, event -> {
                 event.preventDefault();
                 masterySet.down(mastery);
             });

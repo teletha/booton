@@ -69,7 +69,7 @@ public class ItemView extends UI {
         for (final Item material : itemDescriptor.getBuild()) {
             material.applyIcon(materials.child(Material.class)
                     .attr("title", material.name)
-                    .register(UIAction.Click, new Consumer<UIEvent>() {
+                    .on(UIAction.Click, new Consumer<UIEvent>() {
 
                         @Override
                         public void accept(UIEvent event) {

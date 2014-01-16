@@ -168,13 +168,13 @@ class JSKiss {
      */
     public static <E extends Extensible> List<Class<E>> findAs(Class<E> extensionPoint) {
         initialize();
-    
+
         // Skip null check because this method can throw NullPointerException.
         List<Class> classes = extensions.get(extensionPoint);
-    
+
         // instantiate all found extesions
         List list = new ArrayList(classes.size());
-    
+
         for (Class extension : classes) {
             list.add(extension);
         }
@@ -332,7 +332,7 @@ class JSKiss {
                 Manageable manageable = (Manageable) actualClass.getAnnotation(Manageable.class);
 
                 // Create new lifestyle for the actual model class
-                lifestyle = make(manageable == null ? Prototype.class : (Class) manageable.lifestyle());
+                lifestyle = (Lifestyle<M>) make(manageable == null ? Prototype.class : (Class) manageable.lifestyle());
             }
 
             // Trace dependency graph to detect circular dependencies.

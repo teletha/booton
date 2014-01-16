@@ -16,7 +16,6 @@ import java.util.Map.Entry;
 
 import js.dom.Element;
 import js.dom.UIAction;
-import js.dom.UIEvent;
 import jsx.bwt.ImageGridStyle.Container;
 import jsx.bwt.ImageGridStyle.IconImage;
 import jsx.bwt.ImageGridStyle.ImageSet;
@@ -39,7 +38,7 @@ public abstract class ImageGrid<T> extends UI {
 
     private Input input;
 
-    private Element search = root.child("input", InputStyle.class).attr("type", "text").register(this);
+    private Element search = root.child("input", InputStyle.class).attr("type", "text").on(this);
 
     /**
      * Filter image by user input.
@@ -76,7 +75,7 @@ public abstract class ImageGrid<T> extends UI {
 
             container.child(Title.class).text(getTitle(source));
 
-            image.register(UIAction.Click, (UIEvent event) -> {
+            image.observe(UIAction.Click).subscribe(value -> {
                 select(source);
             });
 
