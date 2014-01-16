@@ -12,7 +12,6 @@ package js.util;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -65,7 +64,6 @@ public class ArrayListTest {
     }
 
     @Test
-    @Ignore
     public void ToString() throws Exception {
         ArrayList<String> list = list();
         assert list.toString().equals("[one, two, three]");

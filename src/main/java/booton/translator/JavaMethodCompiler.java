@@ -52,7 +52,7 @@ import booton.translator.Node.TryCatchFinallyBlocks;
  * completely, garbage goto code will remain.
  * </p>
  * 
- * @version 2014/01/02 12:27:58
+ * @version 2014/01/16 22:37:18
  */
 class JavaMethodCompiler extends MethodVisitor {
 
@@ -291,11 +291,23 @@ class JavaMethodCompiler extends MethodVisitor {
             int number = searchConditionalOperandSeparator(node);
 
             if (number != -1) {
+                if (debugger.enable) {
+                    System.out.println(nodes);
+                    System.out.println(number + "  " + i);
+                }
                 Node created = createNode(nodes.get(i + 1));
 
                 // transfer operands
                 for (int j = 0; j < number; j++) {
-                    created.stack.addFirst(node.stack.pollLast());
+                    Operand operand = node.stack.pollLast();
+
+                    if (operand instanceof OperandCondition) {
+                        Node transfer = ((OperandCondition) operand).transition;
+                        node.disconnect(transfer);
+                        created.connect(transfer);
+                    }
+
+                    created.stack.addFirst(operand);
                 }
             }
         }
@@ -378,7 +390,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     conditionOnly = false;
                 } else {
                     if (conditionOnly) {
-                        return node.stack.size() - i - 1;
+                        return node.stack.size() - i - 2;
                     }
                 }
             }
