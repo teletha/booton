@@ -81,9 +81,9 @@ public abstract class UI extends Publishable {
                     tooltip = new Tooltip();
 
                     // popup event listener
-                    root.register(tooltip);
+                    root.on(tooltip);
 
-                    Publishable.Global.register(tooltip);
+                    Publishable.Global.on(tooltip);
                 } else {
                     // dispose old tooptip
                 }
@@ -154,7 +154,7 @@ public abstract class UI extends Publishable {
          */
         @Subscribe(PageUnload.class)
         private void unload() {
-            Publishable.Global.unregister(this);
+            Publishable.Global.off(this);
             root.unregister();
             hide();
         }

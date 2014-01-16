@@ -10,36 +10,27 @@
 package jsx.bwt;
 
 import static js.dom.UIAction.*;
-
-import java.util.function.Consumer;
-
 import js.dom.Element;
-import js.dom.UIEvent;
 import js.dom.UIAction;
 import jsx.bwt.FormUIStyle.Disable;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.FormUIStyle.FormRoot;
 import jsx.event.SubscribeUI;
+import kiss.Disposable;
 
 /**
  * @version 2013/07/29 2:08:45
  */
 public class FormUI<T extends FormUI> extends UI {
 
-    /** The event types. */
-    private static final UIAction[] Actions = {Click, ClickRight, MouseDoubleClick, PointerOver, PointerOut,
-            PointerMove};
-
-    /** The event disabler. */
-    private static final Consumer<UIEvent> Disabler = event -> {
-        event.stopImmediatePropagation();
-    };
-
     /** The actual form element. */
     public final Element form;
 
     /** The enable flag. */
     private boolean enable = true;
+
+    /** The enable supporter. */
+    private Disposable disabler;
 
     /**
      * 
@@ -55,7 +46,7 @@ public class FormUI<T extends FormUI> extends UI {
         root.add(FormRoot.class);
 
         form = root.child(elementName);
-        form.register(this);
+        form.on(this);
     }
 
     /**
@@ -66,10 +57,15 @@ public class FormUI<T extends FormUI> extends UI {
      * @return
      */
     public T disable() {
-        enable = false;
-        root.add(Disable.class);
-        root.register(Actions, Disabler);
-        form.attr("disabled", "true");
+        if (enable) {
+            enable = false;
+            root.add(Disable.class);
+            form.attr("disabled", "true");
+            disabler = root.observe(Click, ClickRight, MouseDoubleClick, PointerOver, PointerOut, PointerMove)
+                    .subscribe(event -> {
+                        event.stopImmediatePropagation();
+                    });
+        }
 
         return (T) this;
     }
@@ -82,10 +78,13 @@ public class FormUI<T extends FormUI> extends UI {
      * @return
      */
     public T enable() {
-        enable = true;
-        root.remove(Disable.class);
-        root.unregister(Actions, Disabler);
-        form.remove("disabled");
+        if (!enable) {
+            enable = true;
+            root.remove(Disable.class);
+            form.remove("disabled");
+            disabler.dispose();
+            disabler = null;
+        }
 
         return (T) this;
     }

@@ -56,7 +56,7 @@ public abstract class Application {
         }
 
         // Activate router system.
-        window.register(UIAction.HashChange, router);
+        window.observe(UIAction.HashChange).subscribe(router);
 
         // View initial page by URL.
         router.dispatch(location.hash);

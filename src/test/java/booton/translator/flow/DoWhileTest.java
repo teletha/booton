@@ -149,13 +149,27 @@ public class DoWhileTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void oneLiner() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
                 // @formatter:off
                 do {value+= 2;} while (value < 3);
+                // @formatter:on
+                return value;
+            }
+        });
+    }
+
+    @Test
+    @Ignore
+    public void testname() throws Exception {
+        test(new Scriptable() {
+
+            // do { a[j] = i.nextDouble(); } while (++j < n && i.hasNext());
+            public int act(@Param(from = 0, to = 5) int value) {
+                // @formatter:off
+                do {value += 2;} while (++value < 10 && value % 2 == 0);
                 // @formatter:on
                 return value;
             }

@@ -60,7 +60,7 @@ public class SlidableView extends UI {
             publish(new Open());
 
             // prepare closer
-            window.register(this);
+            window.on(this);
         }
     }
 
@@ -79,7 +79,7 @@ public class SlidableView extends UI {
             publish(new Close());
 
             // discard closer
-            window.unregister(this);
+            window.off(this);
         }
     }
 

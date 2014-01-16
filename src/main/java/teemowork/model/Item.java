@@ -33,14 +33,14 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Abyssal Scepter */
     public static final Item AbyssalScepter = new Item(3001, "Abyssal Scepter", item -> {
-        item.build(BlastingWand, NegatronCloak).cost(980).abilityPower(70).magicRegist(45).add(ability -> {
+        item.build(Item.BlastingWand, Item.NegatronCloak).cost(980).abilityPower(70).magicRegist(45).add(ability -> {
             ability.aura("{1}の敵ユニットに{2}を与える。").variable(1, Radius, 700).variable(2, MRReduction, 20);
         });
     });
 
     /** Aegis of the Legion */
     public static final Item AegisOftheLegion = new Item(3105, "Aegis of the Legion", item -> {
-        item.build(EmblemOfValor, NullMagicMantle, RubyCrystal)
+        item.build(Item.EmblemOfValor, Item.NullMagicMantle, Item.RubyCrystal)
                 .cost(625)
                 .health(250)
                 .armor(20)
@@ -53,7 +53,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .magicRegist(0)
 
                 .update(P314)
-                .build(RejuvenationBead, ClothArmor, RubyCrystal, NullMagicMantle)
+                .build(Item.RejuvenationBead, Item.ClothArmor, Item.RubyCrystal, Item.NullMagicMantle)
                 .cost(595);
     });
 
@@ -64,7 +64,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Archangel's Staff */
     public static final Item ArchangelsStaff = new Item(3003, "Archangel's Staff", item -> {
-        item.build(TearOftheGoddess, BlastingWand)
+        item.build(Item.TearOftheGoddess, Item.BlastingWand)
                 .cost(1140)
                 .abilityPower(60)
                 .manaRegen(10)
@@ -75,7 +75,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Athene's Unholy Grail */
     public static final Item AthenesUnholyGrail = new Item(3174, "Athene's Unholy Grail", item -> {
-        item.build(ChaliceOfHarmony, FiendishCodex)
+        item.build(Item.ChaliceOfHarmony, Item.FiendishCodex)
                 .cost(900)
                 .abilityPower(60)
                 .manaRegen(15)
@@ -87,19 +87,19 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Atma's Impaler */
     public static final Item AtmasImpaler = new Item(3005, "Atma's Impaler", item -> {
-        item.build(AvariceBlade, ChainVest).cost(780).armor(45).critical(15).add(ability -> {
+        item.build(Item.AvariceBlade, Item.ChainVest).cost(780).armor(45).critical(15).add(ability -> {
             ability.passive("{1}を得る。").variable(1, AD, 0, 0, amplify(Health, 0.015));
         });
     });
 
     /** Augment: Power */
     public static final Item AugmentPower = new Item(3196, "Augment: Power", item -> {
-        item.build(HexCore).cost(1000).abilityPower(45).add(Ability.HexCorePower).add(Ability.HexCoreDeath);
+        item.build(Item.HexCore).cost(1000).abilityPower(45).add(Ability.HexCorePower).add(Ability.HexCoreDeath);
     });
 
     /** Augment: Gravity */
     public static final Item AugmentGravity = new Item(3197, "Augment: Gravity", item -> {
-        item.build(HexCore)
+        item.build(Item.HexCore)
                 .cost(1000)
                 .cooldownReduction(10)
                 .manaRegen(5)
@@ -110,7 +110,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Augment: Death */
     public static final Item AugmentDeath = new Item(3198, "Augment: Death", item -> {
-        item.build(HexCore)
+        item.build(Item.HexCore)
                 .cost(1000)
                 .health(220)
                 .healthRegen(6)
@@ -130,7 +130,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Banner of Command */
     public static final Item BannerOfCommand = new Item(3060, "Banner of Command", item -> {
-        item.build(FiendishCodex, EmblemOfValor)
+        item.build(Item.FiendishCodex, Item.EmblemOfValor)
                 .cost(890)
                 .abilityPower(40)
                 .cooldownReduction(10)
@@ -139,7 +139,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .add(Ability.Promote)
 
                 .update(P314)
-                .build(FiendishCodex, BlastingWand)
+                .build(Item.FiendishCodex, Item.BlastingWand)
                 .cost(720)
                 .abilityPower(80)
                 .cooldownReduction(20)
@@ -148,7 +148,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Banshee's Veil */
     public static final Item BansheesVeil = new Item(3102, "Banshee's Veil", item -> {
-        item.build(NegatronCloak, CatalystTheProtector)
+        item.build(Item.NegatronCloak, Item.CatalystTheProtector)
                 .cost(600)
                 .health(400)
                 .mana(300)
@@ -158,7 +158,7 @@ public class Item extends Describable<ItemDescriptor> {
                 })
 
                 .update(P310)
-                .build(SpectresCowl, RubyCrystal)
+                .build(Item.SpectresCowl, Item.RubyCrystal)
                 .cost(875)
                 .health(450)
                 .magicRegist(55)
@@ -170,14 +170,14 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Berserker's Greaves */
     public static final Item BerserkersGreaves = new Item(3006, "Berserker's Greaves", item -> {
-        item.build(BootsOfSpeed, Dagger).cost(150).attackSpeed(20).add(Ability.EnhancedMovement2)
+        item.build(Item.BootsOfSpeed, Item.Dagger).cost(150).attackSpeed(20).add(Ability.EnhancedMovement2)
 
         .update(P308).cost(175);
     });
 
     /** Bilgewater Cutlass */
     public static final Item BilgewaterCutlass = new Item(3144, "Bilgewater Cutlass", item -> {
-        item.build(LongSword, VampiricScepter)
+        item.build(Item.LongSword, Item.VampiricScepter)
                 .cost(200)
                 .lifeSteal(12)
                 .attackDamage(25)
@@ -198,7 +198,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** The Black Cleaver */
     public static final Item BlackCleaver = new Item(3071, "The Black Cleaver", item -> {
-        item.build(Brutalizer, RubyCrystal)
+        item.build(Item.Brutalizer, Item.RubyCrystal)
                 .cost(1188)
                 .attackDamage(50)
                 .health(200)
@@ -215,7 +215,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Blade of the Ruined King */
     public static final Item BladeOftheRuinedKing = new Item(3153, "Blade of the Ruined King", item -> {
-        item.build(BilgewaterCutlass, Dagger, Dagger)
+        item.build(BilgewaterCutlass, Item.Dagger, Item.Dagger)
                 .cost(1000)
                 .lifeSteal(15)
                 .attackDamage(25)
@@ -249,7 +249,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** The Bloodthirster */
     public static final Item Bloodthirster = new Item(3072, "The Bloodthirster", item -> {
-        item.build(BFSword, VampiricScepter)
+        item.build(BFSword, Item.VampiricScepter)
                 .cost(850)
                 .lifeSteal(12)
                 .attackDamage(70)
@@ -278,7 +278,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Boots of Mobility */
     public static final Item BootsOfMobility = new Item(3117, "Boots of Mobility", item -> {
-        item.build(BootsOfSpeed).cost(650).add(Ability.EnhancedMovement5)
+        item.build(Item.BootsOfSpeed).cost(650).add(Ability.EnhancedMovement5)
 
         .update(P308).cost(675);
     });
@@ -360,7 +360,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Deathfire Grasp */
     public static final Item DeathfireGrasp = new Item(3128, "Deathfire Grasp", item -> {
-        item.build(FiendishCodex, NeedlesslyLargeRod)
+        item.build(Item.FiendishCodex, Item.NeedlesslyLargeRod)
                 .cost(680)
                 .abilityPower(120)
                 .cooldownReduction(10)
@@ -407,7 +407,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Eleisa's Miracle */
     public static final Item EleisasMiracle = new Item(3173, "Eleisa's Miracle", item -> {
-        item.build(PhilosophersStone)
+        item.build(Item.PhilosophersStone)
                 .cost(400)
                 .manaRegen(15)
                 .healthRegen(10)
@@ -447,7 +447,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Executioner's Calling */
     public static final Item ExecutionersCalling = new Item(3123, "Executioner's Calling", item -> {
-        item.build(AvariceBlade, LongSword).cost(700).attackDamage(25).critical(20).add(ability -> {
+        item.build(AvariceBlade, Item.LongSword).cost(700).attackDamage(25).critical(20).add(ability -> {
             ability.passive("敵Championに対する通常攻撃に{1}を付与する。").variable(1, Wounds, 1.5);
         })
 
@@ -468,7 +468,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Frozen Heart */
     public static final Item FrozenHeart = new Item(3110, "Frozen Heart", item -> {
-        item.build(GlacialShroud, WardensMail)
+        item.build(Item.GlacialShroud, Item.WardensMail)
                 .cost(550)
                 .cooldownReduction(20)
                 .armor(95)
@@ -478,9 +478,9 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Frozen Mallet */
     public static final Item FrozenMallet = new Item(3022, "Frozen Mallet", item -> {
-        item.build(Phage, GiantsBelt).cost(835).attackDamage(30).health(700).add(Ability.Icy2)
+        item.build(Item.Phage, Item.GiantsBelt).cost(835).attackDamage(30).health(700).add(Ability.Icy2)
 
-        .update(P310A).build(GiantsBelt, Pickaxe, RubyCrystal).cost(950);
+        .update(P310A).build(Item.GiantsBelt, Item.Pickaxe, Item.RubyCrystal).cost(950);
     });
 
     /** Giant's Belt */
@@ -497,7 +497,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Guardian Angel */
     public static final Item GuardianAngel = new Item(3026, "Guardian Angel", item -> {
-        item.build(NullMagicMantle, ChainVest)
+        item.build(Item.NullMagicMantle, ChainVest)
                 .cost(1480)
                 .armor(50)
                 .magicRegist(30)
@@ -509,14 +509,14 @@ public class Item extends Describable<ItemDescriptor> {
                 })
 
                 .update(P310)
-                .build(NegatronCloak, ChainVest)
+                .build(Item.NegatronCloak, ChainVest)
                 .cost(1310)
                 .magicRegist(40);
     });
 
     /** Guinsoo's Rageblade */
     public static final Item GuinsoosRageblade = new Item(3124, "Guinsoo's Rageblade", item -> {
-        item.build(BlastingWand, Pickaxe)
+        item.build(BlastingWand, Item.Pickaxe)
                 .cost(865)
                 .attackDamage(30)
                 .abilityPower(40)
@@ -537,7 +537,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Haunting Guise */
     public static final Item HauntingGuise = new Item(3136, "Haunting Guise", item -> {
-        item.build(RubyCrystal, AmplifyingTome).cost(575).abilityPower(25).health(200).add(Ability.EyesOfPain);
+        item.build(Item.RubyCrystal, AmplifyingTome).cost(575).abilityPower(25).health(200).add(Ability.EyesOfPain);
     });
 
     /** Health Potion */
@@ -552,14 +552,19 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Hexdrinker */
     public static final Item Hexdrinker = new Item(3155, "Hexdrinker", item -> {
-        item.build(LongSword, NullMagicMantle).cost(550).attackDamage(25).magicRegist(25).add(Ability.Lifeline1)
+        item.build(Item.LongSword, Item.NullMagicMantle)
+                .cost(550)
+                .attackDamage(25)
+                .magicRegist(25)
+                .add(Ability.Lifeline1)
 
-        .update(P314).price(590, 945);
+                .update(P314)
+                .price(590, 945);
     });
 
     /** Hextech Gunblade */
     public static final Item HextechGunblade = new Item(3146, "Hextech Gunblade", item -> {
-        item.build(BilgewaterCutlass, HextechRevolver)
+        item.build(BilgewaterCutlass, Item.HextechRevolver)
                 .cost(800)
                 .lifeSteal(12)
                 .attackDamage(45)
@@ -593,7 +598,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Iceborn Gauntlet */
     public static final Item IcebornGauntlet = new Item(3025, "Iceborn Gauntlet", item -> {
-        item.build(Sheen, GlacialShroud)
+        item.build(Item.Sheen, GlacialShroud)
                 .cost(700)
                 .abilityPower(30)
                 .cooldownReduction(10)
@@ -604,7 +609,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Infinity Edge */
     public static final Item InfinityEdge = new Item(3031, "Infinity Edge", item -> {
-        item.build(BFSword, CloakOfAgility, Pickaxe)
+        item.build(BFSword, CloakOfAgility, Item.Pickaxe)
                 .cost(645)
                 .attackDamage(70)
                 .critical(25)
@@ -629,12 +634,12 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Kindlegem */
     public static final Item Kindlegem = new Item(3067, "Kindlegem", item -> {
-        item.build(RubyCrystal).cost(375).health(200).add(Ability.KindlegemPassive);
+        item.build(Item.RubyCrystal).cost(375).health(200).add(Ability.KindlegemPassive);
     });
 
     /** Last Whisper */
     public static final Item LastWhisper = new Item(3035, "Last Whisper", item -> {
-        item.build(LongSword, Pickaxe).cost(1025).attackDamage(40).add(Ability.LastWhisperPassive)
+        item.build(Item.LongSword, Item.Pickaxe).cost(1025).attackDamage(40).add(Ability.LastWhisperPassive)
 
         .update(P314).price(1065, 1610);
     });
@@ -651,7 +656,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Lich Bane */
     public static final Item LichBane = new Item(3100, "Lich Bane", item -> {
-        item.build(Sheen, BlastingWand)
+        item.build(Item.Sheen, BlastingWand)
                 .cost(940)
                 .abilityPower(80)
                 .mana(250)
@@ -661,7 +666,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Locket of the Iron Solari */
     public static final Item LocketOftheIronSolari = new Item(3190, "Locket of the Iron Solari", item -> {
-        item.build(Kindlegem, ClothArmor, RejuvenationBead)
+        item.build(Kindlegem, ClothArmor, Item.RejuvenationBead)
                 .cost(520)
                 .health(300)
                 .cooldownReduction(10)
@@ -723,7 +728,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Manamune */
     public static final Item Manamune = new Item(3004, "Manamune", item -> {
-        item.build(TearOftheGoddess, LongSword)
+        item.build(Item.TearOftheGoddess, LongSword)
                 .cost(1000)
                 .attackDamage(20)
                 .manaRegen(7)
@@ -737,7 +742,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Maw of Malmortius */
     public static final Item MawOfMalmortius = new Item(3156, "Maw of Malmortius", item -> {
-        item.build(Hexdrinker, Pickaxe)
+        item.build(Hexdrinker, Item.Pickaxe)
                 .cost(975)
                 .attackDamage(55)
                 .magicRegist(36)
@@ -756,12 +761,12 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Mercurial Scimitar */
     public static final Item MercurialScimitar = new Item(3139, "Mercurial Scimitar", item -> {
-        item.build(QuicksilverSash, BFSword).cost(600).attackDamage(60).magicRegist(45).add(Ability.Quicksilver2);
+        item.build(Item.QuicksilverSash, BFSword).cost(600).attackDamage(60).magicRegist(45).add(Ability.Quicksilver2);
     });
 
     /** Mercury's Treads */
     public static final Item MercurysTreads = new Item(3111, "Mercury's Treads", item -> {
-        item.build(BootsOfSpeed, NullMagicMantle)
+        item.build(BootsOfSpeed, Item.NullMagicMantle)
                 .cost(450)
                 .magicRegist(25)
                 .add(Ability.EnhancedMovement2)
@@ -773,7 +778,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Mikael's Crucible */
     public static final Item MikaelsCrucible = new Item(3222, "Mikael's Crucible", item -> {
-        item.build(ChaliceOfHarmony, SapphireCrystal)
+        item.build(ChaliceOfHarmony, Item.SapphireCrystal)
                 .cost(920)
                 .manaRegen(9)
                 .mana(300)
@@ -782,7 +787,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .add(Ability.MikaelsCrucibleActive)
 
                 .update(P307)
-                .build(ChaliceOfHarmony, PhilosophersStone)
+                .build(ChaliceOfHarmony, Item.PhilosophersStone)
                 .cost(920)
                 .manaRegen(18)
                 .healthRegen(7)
@@ -818,9 +823,15 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Nashor's Tooth */
     public static final Item NashorsTooth = new Item(3115, "Nashor's Tooth", item -> {
-        item.build(Stinger, FiendishCodex).cost(430).abilityPower(65).attackSpeed(50).add(Ability.NashorsToothPassive)
+        item.build(Item.Stinger, FiendishCodex)
+                .cost(430)
+                .abilityPower(65)
+                .attackSpeed(50)
+                .add(Ability.NashorsToothPassive)
 
-        .update(P308).cost(920).abilityPower(60);
+                .update(P308)
+                .cost(920)
+                .abilityPower(60);
     });
 
     /** Needlessly Large Rod */
@@ -852,7 +863,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Ohmwrecker */
     public static final Item Ohmwrecker = new Item(3056, "Ohmwrecker", item -> {
-        item.build(RubyCrystal, BlastingWand, PhilosophersStone)
+        item.build(Item.RubyCrystal, BlastingWand, Item.PhilosophersStone)
                 .cost(800)
                 .abilityPower(50)
                 .health(350)
@@ -861,7 +872,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .add(Ability.OhmwreckerActive)
 
                 .update(P314)
-                .build(RubyCrystal, BlastingWand)
+                .build(Item.RubyCrystal, BlastingWand)
                 .cost(665)
                 .abilityPower(50)
                 .health(350)
@@ -889,7 +900,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Phantom Dancer */
     public static final Item PhantomDancer = new Item(3046, "Phantom Dancer", item -> {
-        item.build(CloakOfAgility, Zeal, Dagger)
+        item.build(CloakOfAgility, Item.Zeal, Dagger)
                 .cost(495)
                 .attackSpeed(50)
                 .movementSpeed(5)
@@ -921,7 +932,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Randuin's Omen */
     public static final Item RanduinsOmen = new Item(3143, "Randuin's Omen", item -> {
-        item.build(GiantsBelt, WardensMail)
+        item.build(GiantsBelt, Item.WardensMail)
                 .cost(1000)
                 .health(500)
                 .armor(70)
@@ -931,7 +942,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Ravenous Hydra */
     public static final Item RavenousHydra = new Item(3074, "Ravenous Hydra", item -> {
-        item.build(Tiamat, VampiricScepter)
+        item.build(Item.Tiamat, Item.VampiricScepter)
                 .cost(200)
                 .lifeSteal(12)
                 .attackDamage(75)
@@ -980,9 +991,15 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Ruby Sightstone */
     public static final Item RubySightstone = new Item(2045, "Ruby Sightstone", item -> {
-        item.build(RubyCrystal, Sightstone).cost(125).health(360).add(Ability.WardRefresh2).add(Ability.GhostWard2)
+        item.build(RubyCrystal, Item.Sightstone)
+                .cost(125)
+                .health(360)
+                .add(Ability.WardRefresh2)
+                .add(Ability.GhostWard2)
 
-        .update(P314).remove(Ability.GhostWard2).add(Ability.GhostWard1);
+                .update(P314)
+                .remove(Ability.GhostWard2)
+                .add(Ability.GhostWard1);
     });
 
     /** Runaan's Hurricane */
@@ -1230,7 +1247,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Statikk Shiv */
     public static final Item StatikkShiv = new Item(3087, "Statikk Shiv", item -> {
-        item.build(Zeal, AvariceBlade)
+        item.build(Item.Zeal, AvariceBlade)
                 .cost(525)
                 .attackSpeed(40)
                 .movementSpeed(6)
@@ -1299,7 +1316,7 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Trinity Force */
     public static final Item TrinityForce = new Item(3078, "Trinity Force", item -> {
-        item.build(Zeal, Sheen, Phage)
+        item.build(Item.Zeal, Sheen, Phage)
                 .cost(3)
                 .attackDamage(30)
                 .abilityPower(30)

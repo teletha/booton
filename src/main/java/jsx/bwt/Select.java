@@ -68,12 +68,12 @@ public class Select<M> extends FormUI<Select> {
      */
     public Select(SelectableModel<M> selectable) {
         model = selectable;
-        model.register(binder);
+        model.on(binder);
 
         form.add(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
 
         view = new ScrollableListView(10, 28).provide(binder);
-        view.root.add(SelectItemList.class).register(binder);
+        view.root.add(SelectItemList.class).on(binder);
 
         arrow = root.child(new Button(Icon.BottomArrow, event -> {
             options.toggle();
