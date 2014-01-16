@@ -158,8 +158,7 @@ public class Publishable<P extends Publishable<P>> {
                                     }
                                 } catch (Exception e) {
                                     // If this exception will be thrown, it is bug of this program.
-                                    // So we must rethrow
-                                    // the wrapped error in here.
+                                    // So we must rethrow the wrapped error in here.
                                     throw new Error(e);
                                 }
                             }));
@@ -276,51 +275,6 @@ public class Publishable<P extends Publishable<P>> {
         return (P) this;
     }
 
-    // /**
-    // * <p>
-    // * Register the specified event listener.
-    // * </p>
-    // *
-    // * @param types A list of event types.
-    // * @param listener An event listener to add.
-    // * @return Chainable API.
-    // */
-    // public final <T extends Enum & EventType<E>, E extends Event<T>> P register(T[] types,
-    // Consumer<E> listener) {
-    // if (types != null) {
-    // for (T type : types) {
-    // register(type, listener);
-    // }
-    // }
-    //
-    // // API definition
-    // return (P) this;
-    // }
-
-    // /**
-    // * <p>
-    // * Helper method to chech registration of event listener.
-    // * </p>
-    // *
-    // * @param type An event type.
-    // * @param listener An event listener to check.
-    // * @return A result.
-    // */
-    // private boolean has(Object type, Object listener) {
-    // if (holder != null) {
-    // List<Listener> listeners = holder.get(type);
-    //
-    // if (listeners != null) {
-    // for (Listener registered : listeners) {
-    // if (registered.equals(listener)) {
-    // return true;
-    // }
-    // }
-    // }
-    // }
-    // return false;
-    // }
-
     /**
      * <p>
      * Unregister all event listeners.
@@ -328,11 +282,19 @@ public class Publishable<P extends Publishable<P>> {
      * 
      * @return Chainable API.
      */
-    public final P unregister() {
+    public final P off() {
+        if (disposer != null) {
+            for (Object listener : disposer.keySet()) {
+                disposer.remove(listener);
+            }
+            disposer = null;
+        }
+
         if (holder != null) {
             for (Object type : holder.keySet()) {
                 remove(type);
             }
+            holder = null;
         }
 
         // API definition
@@ -347,44 +309,20 @@ public class Publishable<P extends Publishable<P>> {
      * @param listeners A target event subscriber.
      * @return Chainable API.
      */
-    public final P off(Object listeners) {
-        if (holder != null && listeners != null && disposer != null) {
-            Disposable disposable = disposer.remove(listeners);
+    public final P off(Object listener) {
+        if (listener instanceof Class || listener instanceof EventType) {
+            remove(listener);
+        } else if (disposer != null) {
+            Disposable disposable = disposer.remove(listener);
 
             if (disposable != null) {
                 disposable.dispose();
             }
+
+            if (disposer.isEmpty()) {
+                disposer = null;
+            }
         }
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
-     * Unregister all event listeners for the specified event type.
-     * </p>
-     * 
-     * @param type An event type.
-     * @return Chainable API.
-     */
-    public final P unregister(Class type) {
-        remove(type);
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
-     * Unregister all event listeners for the specified event type.
-     * </p>
-     * 
-     * @param type An event type.
-     * @return Chainable API.
-     */
-    public final <T extends Enum & EventType> P unregister(T type) {
-        remove(type);
 
         // API definition
         return (P) this;
@@ -428,83 +366,4 @@ public class Publishable<P extends Publishable<P>> {
      */
     protected void stopListening(Object type) {
     }
-
-    // /**
-    // * @version 2014/01/12 16:16:54
-    // */
-    // private class ObservableInvoker<T> extends Listener implements Observer, Function<Observer,
-    // Disposable>, Disposable {
-    //
-    // /** The event type. */
-    // private final Object type;
-    //
-    // /** The listener method. */
-    // private final Method method;
-    //
-    // /** The parameter flag. */
-    // private final boolean hasParam;
-    //
-    // /** The listener. */
-    // private Observer observer;
-    //
-    // /**
-    // * @param type
-    // * @param method
-    // * @param hasParam
-    // * @param abort
-    // */
-    // protected ObservableInvoker(Object type, Object instance, Method method) {
-    // method.setAccessible(true);
-    //
-    // this.type = type;
-    // this.listener = instance;
-    // this.method = method;
-    // this.hasParam = method.getParameterTypes().length == 1;
-    // }
-    //
-    // /**
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // public void accept(Object event) {
-    // observer.onNext(event);
-    // }
-    //
-    // /**
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // public void onNext(Object value) {
-    // try {
-    // if (hasParam) {
-    // method.invoke(listener, value);
-    // } else {
-    // method.invoke(listener);
-    // }
-    // } catch (Exception e) {
-    // // If this exception will be thrown, it is bug of this program. So we must rethrow
-    // // the wrapped error in here.
-    // throw new Error(e);
-    // }
-    // }
-    //
-    // /**
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // public void dispose() {
-    // remove(type, this);
-    // }
-    //
-    // /**
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // public Disposable apply(Observer observer) {
-    // add(type, this, false);
-    // this.observer = observer;
-    //
-    // return this;
-    // }
-    // }
 }
