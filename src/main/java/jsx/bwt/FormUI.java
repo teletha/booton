@@ -46,7 +46,7 @@ public class FormUI<T extends FormUI> extends UI {
         root.add(FormRoot.class);
 
         form = root.child(elementName);
-        form.on(this);
+        form.subscribe(this);
     }
 
     /**

@@ -38,7 +38,7 @@ public abstract class ImageGrid<T> extends UI {
 
     private Input input;
 
-    private Element search = root.child("input", InputStyle.class).attr("type", "text").on(this);
+    private Element search = root.child("input", InputStyle.class).attr("type", "text").subscribe(this);
 
     /**
      * Filter image by user input.

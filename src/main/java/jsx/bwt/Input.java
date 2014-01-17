@@ -81,7 +81,7 @@ public class Input<T> extends FormUI {
 
         // create UI
         form.attr("type", "input").add(InputForm.class, AbstractBorderForm.class);
-        form.on(this);
+        form.subscribe(this);
 
         // initial binding
         this.model.change(model, name, null, this.model.get());
