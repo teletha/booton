@@ -55,7 +55,7 @@ public class Publishable<P extends Publishable<P>> {
      * @return Chainable API.
      */
     public final <T> Observable<T> observe(Class<T> type) {
-        return create(type);
+        return add(type);
     }
 
     /**
@@ -74,7 +74,7 @@ public class Publishable<P extends Publishable<P>> {
         Observable<E> observable = null;
 
         for (T type : types) {
-            Observable<E> current = create(type);
+            Observable<E> current = add(type);
 
             if (observable == null) {
                 observable = current;
@@ -87,15 +87,15 @@ public class Publishable<P extends Publishable<P>> {
 
     /**
      * <p>
-     * Register the specified event listener.
+     * Register the specified event subscriber to this {@link Publishable}.
      * </p>
      * 
-     * @param type An event type.
-     * @param listener An event listener to add.
+     * @param type An event type to register.
+     * @param subscriber An event subscriber to register.
      * @return Chainable API.
      */
-    public final <T> P on(Class<T> type, Consumer<T> listener) {
-        observe(type).subscribe(listener);
+    public final <T> P subscribe(Class<T> type, Consumer<T> subscriber) {
+        observe(type).subscribe(subscriber);
 
         // API definition
         return (P) this;
@@ -110,7 +110,7 @@ public class Publishable<P extends Publishable<P>> {
      * @param listener An event listener to add.
      * @return Chainable API.
      */
-    public final <T extends EventType<E>, E extends Event<T>> P on(T type, Consumer<E> listener) {
+    public final <T extends EventType<E>, E extends Event<T>> P subscribe(T type, Consumer<E> listener) {
         if (disposer == null) {
             disposer = new HashMap();
         }
@@ -128,7 +128,7 @@ public class Publishable<P extends Publishable<P>> {
      * @param listeners A target event listeners.
      * @return Chainable API.
      */
-    public final <T extends EventType> P on(Object listeners) {
+    public final <T extends EventType> P subscribe(Object listeners) {
         if (listeners != null) {
             if (disposer == null) {
                 disposer = new HashMap();
@@ -149,7 +149,7 @@ public class Publishable<P extends Publishable<P>> {
                             Object type = info.detect(method, annotation);
                             boolean hasParam = method.getParameterTypes().length == 1;
 
-                            agent.add(info.create(create(type), annotation).subscribe(value -> {
+                            agent.add(info.create(add(type), annotation).subscribe(value -> {
                                 try {
                                     if (hasParam) {
                                         method.invoke(listeners, value);
@@ -181,7 +181,7 @@ public class Publishable<P extends Publishable<P>> {
      * @param type A event type.
      * @return
      */
-    private <V> Observable<V> create(Object type) {
+    private <V> Observable<V> add(Object type) {
         // wrap primitive type
         Object eventType = type instanceof Class ? ClassUtil.wrap((Class) type) : type;
 
@@ -237,6 +237,84 @@ public class Publishable<P extends Publishable<P>> {
 
     /**
      * <p>
+     * Stop subscribing all events from which this {@link Publishable} emits.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public final P unsubscribe() {
+        if (disposer != null) {
+            for (Object listener : disposer.keySet()) {
+                disposer.remove(listener);
+            }
+            disposer = null;
+        }
+
+        if (holder != null) {
+            for (Object type : holder.keySet()) {
+                remove(type);
+            }
+            holder = null;
+        }
+
+        // API definition
+        return (P) this;
+    }
+
+    /**
+     * <p>
+     * Stop subscribing the specified event from which this {@link Publishable} emits.
+     * </p>
+     * <p>
+     * The specified subscriber unsubscribes from this {@link Publishable}.
+     * </p>
+     * 
+     * @param subscriberOrType A target subscriber to unsubscribe or a target event type to stop
+     *            emitting.
+     * @return Chainable API.
+     */
+    public final P unsubscribe(Object subscriberOrType) {
+        if (subscriberOrType instanceof Class || subscriberOrType instanceof EventType) {
+            // as event type
+            remove(subscriberOrType);
+        } else if (disposer != null) {
+            // as subscriber
+            Disposable unsubscriber = disposer.remove(subscriberOrType);
+
+            if (unsubscriber != null) {
+                unsubscriber.dispose();
+            }
+
+            if (disposer.isEmpty()) {
+                disposer = null;
+            }
+        }
+
+        // API definition
+        return (P) this;
+    }
+
+    /**
+     * <p>
+     * Unregister all event listeners for the specified event type.
+     * </p>
+     * 
+     * @param type An event type.
+     */
+    private void remove(Object type) {
+        if (holder != null && holder.containsKey(type)) {
+            holder.remove(type);
+            stopListening(type);
+
+            if (holder.isEmpty()) {
+                holder = null;
+                stopListening(Object.class);
+            }
+        }
+    }
+
+    /**
+     * <p>
      * Publish the specified event.
      * </p>
      * 
@@ -273,78 +351,6 @@ public class Publishable<P extends Publishable<P>> {
 
         // API definition
         return (P) this;
-    }
-
-    /**
-     * <p>
-     * Unregister all event listeners.
-     * </p>
-     * 
-     * @return Chainable API.
-     */
-    public final P off() {
-        if (disposer != null) {
-            for (Object listener : disposer.keySet()) {
-                disposer.remove(listener);
-            }
-            disposer = null;
-        }
-
-        if (holder != null) {
-            for (Object type : holder.keySet()) {
-                remove(type);
-            }
-            holder = null;
-        }
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
-     * Stop subscribing events from which the specified {@link Publishable} emits.
-     * </p>
-     * 
-     * @param listeners A target event subscriber.
-     * @return Chainable API.
-     */
-    public final P off(Object listener) {
-        if (listener instanceof Class || listener instanceof EventType) {
-            remove(listener);
-        } else if (disposer != null) {
-            Disposable disposable = disposer.remove(listener);
-
-            if (disposable != null) {
-                disposable.dispose();
-            }
-
-            if (disposer.isEmpty()) {
-                disposer = null;
-            }
-        }
-
-        // API definition
-        return (P) this;
-    }
-
-    /**
-     * <p>
-     * Unregister all event listeners for the specified event type.
-     * </p>
-     * 
-     * @param type An event type.
-     */
-    private void remove(Object type) {
-        if (holder != null && holder.containsKey(type)) {
-            holder.remove(type);
-            stopListening(type);
-
-            if (holder.isEmpty()) {
-                holder = null;
-                stopListening(Object.class);
-            }
-        }
     }
 
     /**

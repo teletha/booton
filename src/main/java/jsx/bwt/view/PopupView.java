@@ -55,7 +55,7 @@ public class PopupView extends UI {
             publish(new Open());
 
             // prepare closer
-            window.on(this);
+            window.subscribe(this);
         }
     }
 
@@ -74,7 +74,7 @@ public class PopupView extends UI {
             publish(new Close());
 
             // discard closer
-            window.off(this);
+            window.unsubscribe(this);
         }
     }
 
