@@ -24,6 +24,7 @@ import java.util.function.Consumer;
 import kiss.Disposable;
 import kiss.I;
 import kiss.Observable;
+import kiss.Observer;
 import kiss.model.ClassUtil;
 
 /**
@@ -42,7 +43,7 @@ public class Publishable<P extends Publishable<P>> {
     private static final Map<Class, Set<Class<?>>> cache = new HashMap();
 
     /** The actual listeners holder. */
-    private Map<Object, List<Consumer>> holder;
+    private Map<Object, List<Observer>> holder;
 
     private Map<Object, Disposable> disposer;
 
@@ -55,7 +56,7 @@ public class Publishable<P extends Publishable<P>> {
      * @return Chainable API.
      */
     public final <T> Observable<T> observe(Class<T> type) {
-        return add(type);
+        return add(ClassUtil.wrap(type));
     }
 
     /**
@@ -112,7 +113,7 @@ public class Publishable<P extends Publishable<P>> {
      */
     public final <T extends EventType<E>, E extends Event<T>> P subscribe(T type, Consumer<E> listener) {
         if (disposer == null) {
-            disposer = new HashMap();
+            disposer = new ConcurrentHashMap();
         }
         disposer.put(listener, observe(type).subscribe(listener));
 
@@ -128,10 +129,10 @@ public class Publishable<P extends Publishable<P>> {
      * @param listeners A target event listeners.
      * @return Chainable API.
      */
-    public final <T extends EventType> P subscribe(Object listeners) {
+    public final P subscribe(Object listeners) {
         if (listeners != null) {
             if (disposer == null) {
-                disposer = new HashMap();
+                disposer = new ConcurrentHashMap();
             }
 
             if (!disposer.containsKey(listeners)) {
@@ -182,15 +183,7 @@ public class Publishable<P extends Publishable<P>> {
      * @return
      */
     private <V> Observable<V> add(Object type) {
-        // wrap primitive type
-        Object eventType = type instanceof Class ? ClassUtil.wrap((Class) type) : type;
-
         return new Observable<V>(observer -> {
-            // create an actual event listener
-            Consumer<V> consumer = value -> {
-                observer.onNext(value);
-            };
-
             // create event listener holder if it is not initialized
             if (holder == null) {
                 holder = new ConcurrentHashMap();
@@ -198,34 +191,28 @@ public class Publishable<P extends Publishable<P>> {
             }
 
             // create event listener list
-            List<Consumer> listeners = holder.get(eventType);
+            List<Observer> listeners = holder.get(type);
 
             if (listeners == null) {
                 listeners = new CopyOnWriteArrayList();
-                holder.put(eventType, listeners);
+                holder.put(type, listeners);
 
-                startListening(eventType);
-            } else {
-                // for (Consumer registered : listeners) {
-                // if (registered.equals(observer)) {
-                // return;
-                // }
-                // }
+                startListening(type);
             }
 
             // register this event listener
-            listeners.add(consumer);
+            listeners.add(observer);
 
             return () -> {
-                List<Consumer> list = holder.get(eventType);
+                List<Observer> list = holder.get(type);
 
                 if (list != null) {
                     for (int i = list.size() - 1; 0 <= i; i--) {
-                        if (list.get(i).equals(consumer)) {
+                        if (list.get(i).equals(observer)) {
                             list.remove(i);
 
                             if (list.isEmpty()) {
-                                remove(eventType);
+                                remove(type);
                             }
                             break;
                         }
@@ -274,7 +261,10 @@ public class Publishable<P extends Publishable<P>> {
      * @return Chainable API.
      */
     public final P unsubscribe(Object subscriberOrType) {
-        if (subscriberOrType instanceof Class || subscriberOrType instanceof EventType) {
+        if (subscriberOrType instanceof Class) {
+            // as event type
+            remove(ClassUtil.wrap((Class) subscriberOrType));
+        } else if (subscriberOrType instanceof EventType) {
             // as event type
             remove(subscriberOrType);
         } else if (disposer != null) {
@@ -338,11 +328,11 @@ public class Publishable<P extends Publishable<P>> {
 
             for (Object type : types) {
                 if (holder != null) {
-                    List<Consumer> subscribers = holder.get(type);
+                    List<Observer> subscribers = holder.get(type);
 
                     if (subscribers != null) {
-                        for (Consumer subscriber : subscribers) {
-                            subscriber.accept(event);
+                        for (Observer subscriber : subscribers) {
+                            subscriber.onNext(event);
                         }
                     }
                 }
