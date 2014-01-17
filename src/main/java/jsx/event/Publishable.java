@@ -56,6 +56,9 @@ public class Publishable<P extends Publishable<P>> {
      * @return Chainable API.
      */
     public final <T> Observable<T> observe(Class<T> type) {
+        if (type == null) {
+            return Observable.NEVER;
+        }
         return add(ClassUtil.wrap(type));
     }
 
@@ -112,10 +115,7 @@ public class Publishable<P extends Publishable<P>> {
      * @return Chainable API.
      */
     public final <T extends EventType<E>, E extends Event<T>> P subscribe(T type, Consumer<E> listener) {
-        if (disposer == null) {
-            disposer = new ConcurrentHashMap();
-        }
-        disposer.put(listener, observe(type).subscribe(listener));
+        observe(type).subscribe(listener);
 
         // API definition
         return (P) this;
@@ -167,7 +167,6 @@ public class Publishable<P extends Publishable<P>> {
                     }
                 }
             }
-
         }
 
         // API definition
