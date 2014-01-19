@@ -18,13 +18,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 import kiss.Disposable;
 import kiss.I;
 import kiss.Observable;
 import kiss.Observer;
+import kiss.Table;
 import kiss.model.ClassUtil;
 
 /**
@@ -43,7 +43,7 @@ public class Publishable<P extends Publishable<P>> {
     private static final Map<Class, Set<Class<?>>> cache = new HashMap();
 
     /** The actual listeners holder. */
-    private Map<Object, List<Observer>> holder;
+    private Table<Object, Observer> holder;
 
     private Map<Object, Disposable> disposer;
 
@@ -185,37 +185,18 @@ public class Publishable<P extends Publishable<P>> {
         return new Observable<V>(observer -> {
             // create event listener holder if it is not initialized
             if (holder == null) {
-                holder = new ConcurrentHashMap();
+                holder = new Table();
                 startListening(Object.class);
             }
 
-            // create event listener list
-            List<Observer> listeners = holder.get(type);
-
-            if (listeners == null) {
-                listeners = new CopyOnWriteArrayList();
-                holder.put(type, listeners);
-
+            // register this event listener
+            if (holder.push(type, observer)) {
                 startListening(type);
             }
 
-            // register this event listener
-            listeners.add(observer);
-
             return () -> {
-                List<Observer> list = holder.get(type);
-
-                if (list != null) {
-                    for (int i = list.size() - 1; 0 <= i; i--) {
-                        if (list.get(i).equals(observer)) {
-                            list.remove(i);
-
-                            if (list.isEmpty()) {
-                                remove(type);
-                            }
-                            break;
-                        }
-                    }
+                if (holder.pull(type, observer)) {
+                    remove(type);
                 }
             };
         });
@@ -272,10 +253,10 @@ public class Publishable<P extends Publishable<P>> {
 
             if (unsubscriber != null) {
                 unsubscriber.dispose();
-            }
 
-            if (disposer.isEmpty()) {
-                disposer = null;
+                if (disposer.isEmpty()) {
+                    disposer = null;
+                }
             }
         }
 
@@ -291,7 +272,7 @@ public class Publishable<P extends Publishable<P>> {
      * @param type An event type.
      */
     private void remove(Object type) {
-        if (holder != null && holder.containsKey(type)) {
+        if (holder != null) {
             holder.remove(type);
             stopListening(type);
 

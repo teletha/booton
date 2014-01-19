@@ -634,7 +634,6 @@ public class PublishableTest {
 
         publishable.publish("1");
         assert reciever.retrieve() == "1";
-        assert reciever.retrieve() == "1";
         assert reciever.retrieve() == null;
     }
 }
