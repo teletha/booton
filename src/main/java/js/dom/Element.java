@@ -804,7 +804,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return
      */
     @JavascriptNativeProperty
-    public final native NodeList<Element> querySelectorAll(String selector);
+    public native NodeList<Element> querySelectorAll(String selector);
 
     /**
      * <p>
@@ -816,7 +816,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return A result.
      */
     @JavascriptNativeProperty
-    public final native boolean matchesSelector(String selector);
+    public native boolean matchesSelector(String selector);
 
     /**
      * <p>

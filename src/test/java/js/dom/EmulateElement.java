@@ -429,6 +429,14 @@ public class EmulateElement extends Element implements Nodable {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean matchesSelector(String selector) {
+        return true;
+    }
+
+    /**
      * <p>
      * Notify element mutation.
      * </p>
