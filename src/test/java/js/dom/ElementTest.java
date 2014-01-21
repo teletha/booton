@@ -36,4 +36,10 @@ public class ElementTest {
         assert child.parentElement() == element; // use native Element method
         assert child.parent() == element;
     }
+
+    @Test
+    public void matches() throws Exception {
+        Element e = document.createElement("e");
+        assert e.matchesSelector("e");
+    }
 }
