@@ -29,15 +29,15 @@ import org.w3c.dom.UserDataHandler;
 /**
  * @version 2014/01/22 12:23:06
  */
-class JavaAPIDocument implements org.w3c.dom.Document {
+class JavaDocument implements org.w3c.dom.Document {
 
     /** The delegator. */
-    private final Document document;
+    private final EmulateDocument document;
 
     /**
      * @param document
      */
-    JavaAPIDocument(Document document) {
+    JavaDocument(EmulateDocument document) {
         this.document = document;
     }
 
@@ -79,9 +79,7 @@ class JavaAPIDocument implements org.w3c.dom.Document {
      */
     @Override
     public short getNodeType() {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return Node.DOCUMENT_NODE;
     }
 
     /**
@@ -89,9 +87,7 @@ class JavaAPIDocument implements org.w3c.dom.Document {
      */
     @Override
     public Node getParentNode() {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return null;
     }
 
     /**
@@ -99,9 +95,7 @@ class JavaAPIDocument implements org.w3c.dom.Document {
      */
     @Override
     public NodeList getChildNodes() {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return new JavaNodeList(document.root);
     }
 
     /**
@@ -167,7 +161,9 @@ class JavaAPIDocument implements org.w3c.dom.Document {
      */
     @Override
     public Node insertBefore(Node newChild, Node refChild) throws DOMException {
-        return null;
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
@@ -175,7 +171,9 @@ class JavaAPIDocument implements org.w3c.dom.Document {
      */
     @Override
     public Node replaceChild(Node newChild, Node oldChild) throws DOMException {
-        return null;
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
@@ -183,7 +181,9 @@ class JavaAPIDocument implements org.w3c.dom.Document {
      */
     @Override
     public Node removeChild(Node oldChild) throws DOMException {
-        return null;
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
@@ -241,9 +241,7 @@ class JavaAPIDocument implements org.w3c.dom.Document {
      */
     @Override
     public String getNamespaceURI() {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return null;
     }
 
     /**
@@ -271,9 +269,7 @@ class JavaAPIDocument implements org.w3c.dom.Document {
      */
     @Override
     public String getLocalName() {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return null;
     }
 
     /**
@@ -610,11 +606,12 @@ class JavaAPIDocument implements org.w3c.dom.Document {
      * {@inheritDoc}
      */
     @Override
-    public void setXmlStandalone(boolean xmlStandalone) throws DOMException { // If this exception
-                                                                              // will be thrown, it
-                                                                              // is bug of this
-                                                                              // program. So we must
-                                                                              // rethrow the
+    public void setXmlStandalone(boolean xmlStandalone) throws DOMException {
+        // If this exception
+        // will be thrown, it
+        // is bug of this
+        // program. So we must
+        // rethrow the
         // wrapped error in here.
         throw new Error();
     }
@@ -633,10 +630,11 @@ class JavaAPIDocument implements org.w3c.dom.Document {
      * {@inheritDoc}
      */
     @Override
-    public void setXmlVersion(String xmlVersion) throws DOMException { // If this exception will be
-                                                                       // thrown, it is bug of this
-                                                                       // program. So we must
-                                                                       // rethrow the
+    public void setXmlVersion(String xmlVersion) throws DOMException {
+        // If this exception will be
+        // thrown, it is bug of this
+        // program. So we must
+        // rethrow the
         // wrapped error in here.
         throw new Error();
     }
@@ -655,10 +653,11 @@ class JavaAPIDocument implements org.w3c.dom.Document {
      * {@inheritDoc}
      */
     @Override
-    public void setStrictErrorChecking(boolean strictErrorChecking) { // If this exception will be
-                                                                      // thrown, it is bug of this
-                                                                      // program. So we must rethrow
-                                                                      // the
+    public void setStrictErrorChecking(boolean strictErrorChecking) {
+        // If this exception will be
+        // thrown, it is bug of this
+        // program. So we must rethrow
+        // the
         // wrapped error in here.
         throw new Error();
     }
@@ -677,8 +676,9 @@ class JavaAPIDocument implements org.w3c.dom.Document {
      * {@inheritDoc}
      */
     @Override
-    public void setDocumentURI(String documentURI) { // If this exception will be thrown, it is bug
-                                                     // of this program. So we must rethrow the
+    public void setDocumentURI(String documentURI) {
+        // If this exception will be thrown, it is bug
+        // of this program. So we must rethrow the
         // wrapped error in here.
         throw new Error();
     }
@@ -707,8 +707,9 @@ class JavaAPIDocument implements org.w3c.dom.Document {
      * {@inheritDoc}
      */
     @Override
-    public void normalizeDocument() { // If this exception will be thrown, it is bug of this
-                                      // program. So we must rethrow the
+    public void normalizeDocument() {
+        // If this exception will be thrown, it is bug of this
+        // program. So we must rethrow the
         // wrapped error in here.
         throw new Error();
     }

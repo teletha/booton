@@ -9,6 +9,7 @@
  */
 package js.dom;
 
+import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
 
@@ -17,6 +18,9 @@ import kiss.Singleton;
  */
 @Manageable(lifestyle = Singleton.class)
 public class EmulateDocument extends Document {
+
+    /** The root element. */
+    Node root;
 
     /**
      * {@inheritDoc}
@@ -31,7 +35,7 @@ public class EmulateDocument extends Document {
      */
     @Override
     protected Document ownerDocument() {
-        return null;
+        return this;
     }
 
     /**
@@ -47,7 +51,7 @@ public class EmulateDocument extends Document {
      */
     @Override
     protected Node firstChild() {
-        return null;
+        return root;
     }
 
     /**
@@ -55,7 +59,7 @@ public class EmulateDocument extends Document {
      */
     @Override
     protected Node lastChild() {
-        return null;
+        return root;
     }
 
     /**
@@ -79,7 +83,9 @@ public class EmulateDocument extends Document {
      */
     @Override
     protected String textContent() {
-        return null;
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
@@ -87,6 +93,7 @@ public class EmulateDocument extends Document {
      */
     @Override
     protected void textContent(String textContent) {
+        root = new EmulateText(textContent);
     }
 
     /**
@@ -94,7 +101,7 @@ public class EmulateDocument extends Document {
      */
     @Override
     protected Node appendChild(Node newNode) {
-        return null;
+        return root = newNode;
     }
 
     /**
@@ -111,6 +118,38 @@ public class EmulateDocument extends Document {
     @Override
     protected Node insertBefore(Node newNode, Node referenceNode) {
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Element documentElement() {
+        return root instanceof Element ? (Element) root : null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Element querySelector(String selector) {
+        return super.querySelector(selector);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public NodeList<Element> querySelectorAll(String selector) {
+        return new NonLiveNodeList(I.xml(new JavaDocument(this)).find(selector));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean matchesSelector(String selector) {
+        return super.matchesSelector(selector);
     }
 
     /**
