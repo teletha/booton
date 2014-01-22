@@ -19,10 +19,10 @@ import org.w3c.dom.Node;
 /**
  * @version 2014/01/22 13:30:33
  */
-class JavaAPINamedNodeMap implements NamedNodeMap {
+class JavaNamedNodeMap implements NamedNodeMap {
 
     /** The delegator. */
-    private final JavaAPIElement element;
+    private final JavaElement element;
 
     /** The delegator. */
     private final Attributes attributes;
@@ -30,7 +30,7 @@ class JavaAPINamedNodeMap implements NamedNodeMap {
     /**
      * @param attributes
      */
-    JavaAPINamedNodeMap(JavaAPIElement element, Attributes attributes) {
+    JavaNamedNodeMap(JavaElement element, Attributes attributes) {
         this.element = element;
         this.attributes = attributes;
     }
@@ -72,7 +72,7 @@ class JavaAPINamedNodeMap implements NamedNodeMap {
     public Node item(int index) {
         Key key = attributes.entries.get(index).getKey();
 
-        return new JavaAPIAttr(element, key.namespace, key.name);
+        return new JavaAttr(element, key.namespace, key.name);
     }
 
     /**

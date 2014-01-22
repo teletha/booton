@@ -9,6 +9,8 @@
  */
 package js.dom;
 
+import kiss.I;
+
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -21,7 +23,7 @@ import org.w3c.dom.UserDataHandler;
 /**
  * @version 2014/01/22 0:55:59
  */
-class JavaAPIElement implements org.w3c.dom.Element {
+class JavaElement implements org.w3c.dom.Element {
 
     /** The delegator. */
     final EmulateElement element;
@@ -29,7 +31,7 @@ class JavaAPIElement implements org.w3c.dom.Element {
     /**
      * @param element
      */
-    JavaAPIElement(EmulateElement element) {
+    JavaElement(EmulateElement element) {
         this.element = element;
     }
 
@@ -46,7 +48,7 @@ class JavaAPIElement implements org.w3c.dom.Element {
      */
     @Override
     public NamedNodeMap getAttributes() {
-        return new JavaAPINamedNodeMap(this, element.attributes);
+        return new JavaNamedNodeMap(this, element.attributes);
     }
 
     /**
@@ -134,7 +136,7 @@ class JavaAPIElement implements org.w3c.dom.Element {
      *         <code>null</code> if there is no such attribute.
      */
     public Attr getAttributeNode(String name) {
-        return new JavaAPIAttr(this, "", name);
+        return new JavaAttr(this, "", name);
     }
 
     /**
@@ -526,7 +528,7 @@ class JavaAPIElement implements org.w3c.dom.Element {
      */
     @Override
     public Document getOwnerDocument() {
-        return new JavaAPIDocument(element.ownerDocument());
+        return new JavaDocument(I.make(EmulateDocument.class));
     }
 
     /**
@@ -678,7 +680,9 @@ class JavaAPIElement implements org.w3c.dom.Element {
      */
     @Override
     public boolean isDefaultNamespace(String namespaceURI) {
-        return false;
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
@@ -686,7 +690,9 @@ class JavaAPIElement implements org.w3c.dom.Element {
      */
     @Override
     public String lookupNamespaceURI(String prefix) {
-        return null;
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
@@ -694,7 +700,9 @@ class JavaAPIElement implements org.w3c.dom.Element {
      */
     @Override
     public boolean isEqualNode(Node arg) {
-        return false;
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
@@ -702,7 +710,9 @@ class JavaAPIElement implements org.w3c.dom.Element {
      */
     @Override
     public Object getFeature(String feature, String version) {
-        return null;
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
@@ -729,15 +739,15 @@ class JavaAPIElement implements org.w3c.dom.Element {
      * @param node
      * @return
      */
-    private Node convert(js.dom.Node node) {
+    static Node convert(js.dom.Node node) {
         if (node == null) {
             return null;
         } else if (node instanceof EmulateElement) {
-            return new JavaAPIElement((EmulateElement) node);
+            return new JavaElement((EmulateElement) node);
         } else if (node instanceof EmulateText) {
             throw new Error();
         } else if (node instanceof EmulateDocument) {
-            return new JavaAPIDocument((EmulateDocument) node);
+            return new JavaDocument((EmulateDocument) node);
         } else {
             throw new Error();
         }

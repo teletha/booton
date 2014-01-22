@@ -85,7 +85,7 @@ public abstract class Document extends Node implements JavascriptNative {
      * @return
      */
     @JavascriptNativeProperty
-    public final native Element querySelector(String selector);
+    public native Element querySelector(String selector);
 
     /**
      * <p>
@@ -97,7 +97,7 @@ public abstract class Document extends Node implements JavascriptNative {
      * @return
      */
     @JavascriptNativeProperty
-    public final native NodeList<Element> querySelectorAll(String selector);
+    public native NodeList<Element> querySelectorAll(String selector);
 
     /**
      * <p>
@@ -109,7 +109,7 @@ public abstract class Document extends Node implements JavascriptNative {
      * @return A result.
      */
     @JavascriptNativeProperty
-    public final native boolean matchesSelector(String selector);
+    public native boolean matchesSelector(String selector);
 
     /**
      * <p>

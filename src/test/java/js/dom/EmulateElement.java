@@ -447,13 +447,12 @@ public class EmulateElement extends Element implements Nodable {
      */
     @Override
     public Element querySelector(String selector) {
-        XML found = I.xml(new JavaAPIElement(this)).find(selector);
+        NodeList<Element> query = querySelectorAll(selector);
 
-        if (found.size() == 0) {
+        if (query.length() == 0) {
             return null;
         }
-
-        return ((JavaAPIElement) found.first().to()).element;
+        return query.item(0);
     }
 
     /**
@@ -461,7 +460,7 @@ public class EmulateElement extends Element implements Nodable {
      */
     @Override
     public NodeList<Element> querySelectorAll(String selector) {
-        return super.querySelectorAll(selector);
+        return new NonLiveNodeList(I.xml(new JavaElement(this)).find(selector));
     }
 
     /**
@@ -469,7 +468,14 @@ public class EmulateElement extends Element implements Nodable {
      */
     @Override
     public boolean matchesSelector(String selector) {
-        return true;
+        NodeList<Element> elements = ownerDocument().querySelectorAll(selector);
+
+        for (Element element : elements) {
+            if (element == this) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -504,7 +510,19 @@ public class EmulateElement extends Element implements Nodable {
      */
     @Override
     public String toString() {
-        return EmulateElement.class.getSimpleName() + " <" + name + ">";
+        return I.xml(new JavaElement(this)).toString();
+    }
+
+    /**
+     * <p>
+     * Convert to {@link XML} to {@link EmulateElement}.
+     * </p>
+     * 
+     * @param xml
+     * @return
+     */
+    static EmulateElement convert(XML xml) {
+        return ((JavaElement) xml.to()).element;
     }
 
     /**
@@ -769,7 +787,7 @@ public class EmulateElement extends Element implements Nodable {
     /**
      * @version 2013/07/11 14:10:27
      */
-    class Attributes {
+    static class Attributes {
 
         /** The manager. */
         final List<Entry<Key, String>> entries = new ArrayList();
@@ -796,33 +814,16 @@ public class EmulateElement extends Element implements Nodable {
                 for (String className : value.trim().split(" ")) {
                     classes.add(className);
                 }
+            }
+
+            Entry<Key, String> entry = find(key);
+
+            if (entry == null) {
+                entry = new SimpleEntry(key, value);
+                entries.add(entry);
             } else {
-                Entry<Key, String> entry = find(key);
-
-                if (entry == null) {
-                    entry = new SimpleEntry(key, value);
-                    entries.add(entry);
-                } else {
-                    entry.setValue(value);
-                }
+                entry.setValue(value);
             }
-        }
-
-        /**
-         * <p>
-         * Helper method to find entry.
-         * </p>
-         * 
-         * @param key
-         * @return
-         */
-        private Entry<Key, String> find(Key key) {
-            for (Entry<Key, String> entry : entries) {
-                if (entry.getKey().equals(key)) {
-                    return entry;
-                }
-            }
-            return null;
         }
 
         /**
@@ -838,12 +839,12 @@ public class EmulateElement extends Element implements Nodable {
 
             if (Key.CLASS.equals(key)) {
                 classes.clear();
-            } else {
-                Entry<Key, String> entry = find(key);
+            }
 
-                if (entry != null) {
-                    entries.remove(entry);
-                }
+            Entry<Key, String> entry = find(key);
+
+            if (entry != null) {
+                entries.remove(entry);
             }
         }
 
@@ -878,17 +879,30 @@ public class EmulateElement extends Element implements Nodable {
         String get(String namespace, String name) {
             Key key = new Key(namespace, name);
 
-            if (Key.CLASS.equals(key)) {
-                return classes.toString();
-            } else {
-                Entry<Key, String> entry = find(key);
+            Entry<Key, String> entry = find(key);
 
-                if (entry == null) {
-                    return null;
-                } else {
-                    return entry.getValue();
+            if (entry == null) {
+                return null;
+            } else {
+                return entry.getValue();
+            }
+        }
+
+        /**
+         * <p>
+         * Helper method to find entry.
+         * </p>
+         * 
+         * @param key
+         * @return
+         */
+        private Entry<Key, String> find(Key key) {
+            for (Entry<Key, String> entry : entries) {
+                if (entry.getKey().equals(key)) {
+                    return entry;
                 }
             }
+            return null;
         }
     }
 

@@ -19,21 +19,24 @@ import org.w3c.dom.TypeInfo;
 import org.w3c.dom.UserDataHandler;
 
 /**
- * @version 2014/01/22 1:12:34
+ * @version 2014/01/22 22:23:03
  */
-class JavaAPIAttr implements Attr {
+class JavaAttr implements Attr {
 
-    private JavaAPIElement element;
+    /** The owner element. */
+    private final JavaElement element;
 
-    private String namespace;
+    /** The namespace uri. */
+    private final String namespace;
 
-    private String name;
+    /** The attribute name. */
+    private final String name;
 
     /**
      * @param element
      * @param name
      */
-    JavaAPIAttr(JavaAPIElement element, String namespace, String name) {
+    JavaAttr(JavaElement element, String namespace, String name) {
         this.element = element;
         this.namespace = namespace;
         this.name = name;
@@ -52,7 +55,9 @@ class JavaAPIAttr implements Attr {
      */
     @Override
     public boolean getSpecified() {
-        return false;
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
@@ -84,7 +89,9 @@ class JavaAPIAttr implements Attr {
      */
     @Override
     public TypeInfo getSchemaTypeInfo() {
-        return null;
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
@@ -92,7 +99,9 @@ class JavaAPIAttr implements Attr {
      */
     @Override
     public boolean isId() {
-        return false;
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
@@ -108,21 +117,15 @@ class JavaAPIAttr implements Attr {
      */
     @Override
     public String getNodeValue() throws DOMException {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return element.getAttribute(name);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void setNodeValue(String nodeValue) throws DOMException { // If this exception will be
-                                                                     // thrown, it is bug of this
-                                                                     // program. So we must rethrow
-                                                                     // the
-        // wrapped error in here.
-        throw new Error();
+    public void setNodeValue(String nodeValue) throws DOMException {
+        element.setAttribute(name, nodeValue);
     }
 
     /**
@@ -375,10 +378,11 @@ class JavaAPIAttr implements Attr {
      * {@inheritDoc}
      */
     @Override
-    public void setTextContent(String textContent) throws DOMException { // If this exception will
-                                                                         // be thrown, it is bug of
-                                                                         // this program. So we must
-                                                                         // rethrow the
+    public void setTextContent(String textContent) throws DOMException {
+        // If this exception will
+        // be thrown, it is bug of
+        // this program. So we must
+        // rethrow the
         // wrapped error in here.
         throw new Error();
     }
@@ -438,7 +442,9 @@ class JavaAPIAttr implements Attr {
      */
     @Override
     public Object getFeature(String feature, String version) {
-        return null;
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
