@@ -86,6 +86,16 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
 
     /**
      * <p>
+     * The ownerDocument property returns the top-level document object for this node.
+     * </p>
+     * 
+     * @return A top-level document.
+     */
+    @JavascriptNativePropertyAccessor
+    protected abstract Document ownerDocument();
+
+    /**
+     * <p>
      * Returns the parent of the specified node in the DOM tree.
      * </p>
      * 
