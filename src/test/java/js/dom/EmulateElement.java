@@ -9,13 +9,15 @@
  */
 package js.dom;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 
 import js.lang.NativeFunction;
+import kiss.I;
+import kiss.XML;
 import booton.css.CSS;
 
 /**
@@ -25,6 +27,9 @@ public class EmulateElement extends Element implements Nodable {
 
     /** The child nodes holder. */
     final Nodes nodes = new Nodes();
+
+    /** The original element name. */
+    final String nameOriginal;
 
     /** The element name. */
     private final String name;
@@ -39,7 +44,7 @@ public class EmulateElement extends Element implements Nodable {
     private final EmulateHTMLCollection elements = new EmulateHTMLCollection();
 
     /** The attribute holder. */
-    private final Attributes attributes = new Attributes();
+    final Attributes attributes = new Attributes();
 
     /** The parent element. */
     private EmulateElement parent;
@@ -62,6 +67,7 @@ public class EmulateElement extends Element implements Nodable {
      * @param name
      */
     public EmulateElement(String name) {
+        this.nameOriginal = name;
         this.name = name.toUpperCase();
     }
 
@@ -159,6 +165,14 @@ public class EmulateElement extends Element implements Nodable {
     @Override
     protected boolean hasAttributeNS(String namespace, String name) {
         return attributes.has(namespace, name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Document ownerDocument() {
+        return I.make(EmulateDocument.class);
     }
 
     /**
@@ -432,6 +446,28 @@ public class EmulateElement extends Element implements Nodable {
      * {@inheritDoc}
      */
     @Override
+    public Element querySelector(String selector) {
+        XML found = I.xml(new JavaAPIElement(this)).find(selector);
+
+        if (found.size() == 0) {
+            return null;
+        }
+
+        return ((JavaAPIElement) found.first().to()).element;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public NodeList<Element> querySelectorAll(String selector) {
+        return super.querySelectorAll(selector);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean matchesSelector(String selector) {
         return true;
     }
@@ -461,6 +497,14 @@ public class EmulateElement extends Element implements Nodable {
     @Override
     protected ClientRect getBoundingClientRect() {
         return new EmulateClientRect();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return EmulateElement.class.getSimpleName() + " <" + name + ">";
     }
 
     /**
@@ -725,13 +769,13 @@ public class EmulateElement extends Element implements Nodable {
     /**
      * @version 2013/07/11 14:10:27
      */
-    private class Attributes {
+    class Attributes {
 
         /** The manager. */
-        private final Map<Key, String> map = new HashMap();
+        final List<Entry<Key, String>> entries = new ArrayList();
 
         /** The class attribute. */
-        private final EmulateDOMTokenList classes = new EmulateDOMTokenList();
+        final EmulateDOMTokenList classes = new EmulateDOMTokenList();
 
         /**
          * <p>
@@ -742,7 +786,7 @@ public class EmulateElement extends Element implements Nodable {
          * @param name
          * @param value
          */
-        private void add(String namespace, String name, String value) {
+        void add(String namespace, String name, String value) {
             Key key = new Key(namespace, name);
             value = String.valueOf(value);
 
@@ -753,8 +797,32 @@ public class EmulateElement extends Element implements Nodable {
                     classes.add(className);
                 }
             } else {
-                map.put(key, value);
+                Entry<Key, String> entry = find(key);
+
+                if (entry == null) {
+                    entry = new SimpleEntry(key, value);
+                    entries.add(entry);
+                } else {
+                    entry.setValue(value);
+                }
             }
+        }
+
+        /**
+         * <p>
+         * Helper method to find entry.
+         * </p>
+         * 
+         * @param key
+         * @return
+         */
+        private Entry<Key, String> find(Key key) {
+            for (Entry<Key, String> entry : entries) {
+                if (entry.getKey().equals(key)) {
+                    return entry;
+                }
+            }
+            return null;
         }
 
         /**
@@ -765,13 +833,17 @@ public class EmulateElement extends Element implements Nodable {
          * @param namespace
          * @param name
          */
-        private void remove(String namespace, String name) {
+        void remove(String namespace, String name) {
             Key key = new Key(namespace, name);
 
             if (Key.CLASS.equals(key)) {
                 classes.clear();
             } else {
-                map.remove(key);
+                Entry<Key, String> entry = find(key);
+
+                if (entry != null) {
+                    entries.remove(entry);
+                }
             }
         }
 
@@ -784,13 +856,13 @@ public class EmulateElement extends Element implements Nodable {
          * @param name
          * @return
          */
-        private boolean has(String namespace, String name) {
+        boolean has(String namespace, String name) {
             Key key = new Key(namespace, name);
 
             if (Key.CLASS.equals(key)) {
                 return classes.length() != 0;
             } else {
-                return map.containsKey(key);
+                return find(key) != null;
             }
         }
 
@@ -803,13 +875,19 @@ public class EmulateElement extends Element implements Nodable {
          * @param name
          * @return
          */
-        private String get(String namespace, String name) {
+        String get(String namespace, String name) {
             Key key = new Key(namespace, name);
 
             if (Key.CLASS.equals(key)) {
                 return classes.toString();
             } else {
-                return map.get(key);
+                Entry<Key, String> entry = find(key);
+
+                if (entry == null) {
+                    return null;
+                } else {
+                    return entry.getValue();
+                }
             }
         }
     }
@@ -817,16 +895,16 @@ public class EmulateElement extends Element implements Nodable {
     /**
      * @version 2013/07/11 14:16:13
      */
-    private static class Key {
+    static class Key {
 
         /** The html class attribute name. */
         private static final Key CLASS = new Key("", "class");
 
         /** The uri. */
-        private final String namespace;
+        final String namespace;
 
         /** The name. */
-        private final String name;
+        final String name;
 
         /**
          * @param namespace
@@ -864,6 +942,14 @@ public class EmulateElement extends Element implements Nodable {
         @Override
         public int hashCode() {
             return name.hashCode() + namespace.hashCode();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return (namespace == null ? "" : namespace + ":") + name;
         }
     }
 

@@ -9,6 +9,8 @@
  */
 package js.dom;
 
+import kiss.I;
+
 /**
  * @version 2013/07/01 21:30:14
  */
@@ -41,6 +43,14 @@ public class EmulateText extends Text implements Nodable {
     @Override
     public boolean contains(Node node) {
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Document ownerDocument() {
+        return I.make(EmulateDocument.class);
     }
 
     /**

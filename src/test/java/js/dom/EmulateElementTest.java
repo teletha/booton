@@ -253,4 +253,25 @@ public class EmulateElementTest {
         element.removeAttribute("class");
         assert element.classList().length() == 0;
     }
+
+    @Test
+    public void querySelector() throws Exception {
+        Element root = createTree();
+        Element query = root.querySelector("child1");
+
+        assert query == root.firstChild();
+    }
+
+    /**
+     * 
+     */
+    private Element createTree() {
+        Element root = new EmulateElement("root");
+        Element child1 = new EmulateElement("child1");
+        Element child2 = new EmulateElement("child2");
+
+        root.append(child1).append(child2);
+
+        return root;
+    }
 }

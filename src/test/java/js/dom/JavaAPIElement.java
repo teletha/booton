@@ -11,13 +11,51 @@ package js.dom;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.TypeInfo;
+import org.w3c.dom.UserDataHandler;
 
 /**
  * @version 2014/01/22 0:55:59
  */
-public interface JavaAPIElement extends org.w3c.dom.Element {
+class JavaAPIElement implements org.w3c.dom.Element {
+
+    /** The delegator. */
+    final EmulateElement element;
+
+    /**
+     * @param element
+     */
+    JavaAPIElement(EmulateElement element) {
+        this.element = element;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getLocalName() {
+        return getTagName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public NamedNodeMap getAttributes() {
+        return new JavaAPINamedNodeMap(this, element.attributes);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getNodeName() {
+        return getTagName();
+    }
 
     /**
      * The name of the element. If <code>Node.localName</code> is different from <code>null</code>,
@@ -31,8 +69,8 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      * <code>tagName</code> of an HTML element in the canonical uppercase form, regardless of the
      * case in the source HTML document.
      */
-    public default String getTagName() {
-        return spi().tagName();
+    public String getTagName() {
+        return element.nameOriginal;
     }
 
     /**
@@ -42,8 +80,8 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      * @return The <code>Attr</code> value as a string, or the empty string if that attribute does
      *         not have a specified or default value.
      */
-    public default String getAttribute(String name) {
-        return spi().attr(name);
+    public String getAttribute(String name) {
+        return element.attr(name);
     }
 
     /**
@@ -65,8 +103,8 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      *                <code>Document.xmlVersion</code> attribute. <br>
      *                NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
      */
-    public default void setAttribute(String name, String value) throws DOMException {
-        spi().attr(name, String.valueOf(value));
+    public void setAttribute(String name, String value) throws DOMException {
+        element.attr(name, String.valueOf(value));
     }
 
     /**
@@ -82,8 +120,8 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      * @param name The name of the attribute to remove.
      * @exception DOMException NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
      */
-    public default void removeAttribute(String name) throws DOMException {
-        spi().removeAttribute(name);
+    public void removeAttribute(String name) throws DOMException {
+        element.removeAttribute(name);
     }
 
     /**
@@ -95,8 +133,8 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      * @return The <code>Attr</code> node with the specified name ( <code>nodeName</code>) or
      *         <code>null</code> if there is no such attribute.
      */
-    public default Attr getAttributeNode(String name) {
-        return new JavaAPIAttr(this, name);
+    public Attr getAttributeNode(String name) {
+        return new JavaAPIAttr(this, "", name);
     }
 
     /**
@@ -116,7 +154,11 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      *                another <code>Element</code> object. The DOM user must explicitly clone
      *                <code>Attr</code> nodes to re-use them in other elements.
      */
-    public Attr setAttributeNode(Attr newAttr) throws DOMException;
+    public Attr setAttributeNode(Attr newAttr) throws DOMException {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
 
     /**
      * Removes the specified attribute node. If a default value for the removed <code>Attr</code>
@@ -131,7 +173,9 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      *                NOT_FOUND_ERR: Raised if <code>oldAttr</code> is not an attribute of the
      *                element.
      */
-    public Attr removeAttributeNode(Attr oldAttr) throws DOMException;
+    public Attr removeAttributeNode(Attr oldAttr) throws DOMException {
+        throw new Error();
+    }
 
     /**
      * Returns a <code>NodeList</code> of all descendant <code>Elements</code> with a given tag
@@ -140,7 +184,9 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      * @param name The name of the tag to match on. The special value "*" matches all tags.
      * @return A list of matching <code>Element</code> nodes.
      */
-    public NodeList getElementsByTagName(String name);
+    public NodeList getElementsByTagName(String name) {
+        throw new Error();
+    }
 
     /**
      * Retrieves an attribute value by local name and namespace URI. <br>
@@ -158,19 +204,21 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      *                href='http://www.w3.org/TR/1999/REC-html401-19991224/'>HTML 4.01</a>]).
      * @since DOM Level 2
      */
-    public String getAttributeNS(String namespaceURI, String localName) throws DOMException;
+    public String getAttributeNS(String namespaceURI, String localName) throws DOMException {
+        throw new Error();
+    }
 
     /**
      * Adds a new attribute. If an attribute with the same local name and namespace URI is already
      * present on the element, its prefix is changed to be the prefix part of the
      * <code>qualifiedName</code>, and its value is changed to be the <code>value</code> parameter.
-     * This value is a simple string; it is not parsed as it is being set. So any markup (such as
-     * syntax to be recognized as an entity reference) is treated as literal text, and needs to be
-     * appropriately escaped by the implementation when it is written out. In order to assign an
-     * attribute value that contains entity references, the user must create an <code>Attr</code>
-     * node plus any <code>Text</code> and <code>EntityReference</code> nodes, build the appropriate
-     * subtree, and use <code>setAttributeNodeNS</code> or <code>setAttributeNode</code> to assign
-     * it as the value of an attribute. <br>
+     * This value is a simple string{ throw new Error();} it is not parsed as it is being set. So
+     * any markup (such as syntax to be recognized as an entity reference) is treated as literal
+     * text, and needs to be appropriately escaped by the implementation when it is written out. In
+     * order to assign an attribute value that contains entity references, the user must create an
+     * <code>Attr</code> node plus any <code>Text</code> and <code>EntityReference</code> nodes,
+     * build the appropriate subtree, and use <code>setAttributeNodeNS</code> or
+     * <code>setAttributeNode</code> to assign it as the value of an attribute. <br>
      * Per [<a href='http://www.w3.org/TR/1999/REC-xml-names-19990114/'>XML Namespaces</a>] ,
      * applications must use the value <code>null</code> as the <code>namespaceURI</code> parameter
      * for methods if they wish to have no namespace.
@@ -200,7 +248,9 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      *                href='http://www.w3.org/TR/1999/REC-html401-19991224/'>HTML 4.01</a>]).
      * @since DOM Level 2
      */
-    public void setAttributeNS(String namespaceURI, String qualifiedName, String value) throws DOMException;
+    public void setAttributeNS(String namespaceURI, String qualifiedName, String value) throws DOMException {
+        throw new Error();
+    }
 
     /**
      * Removes an attribute by local name and namespace URI. If a default value for the removed
@@ -222,7 +272,9 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      *                href='http://www.w3.org/TR/1999/REC-html401-19991224/'>HTML 4.01</a>]).
      * @since DOM Level 2
      */
-    public void removeAttributeNS(String namespaceURI, String localName) throws DOMException;
+    public void removeAttributeNS(String namespaceURI, String localName) throws DOMException {
+        throw new Error();
+    }
 
     /**
      * Retrieves an <code>Attr</code> node by local name and namespace URI. <br>
@@ -240,7 +292,9 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      *                href='http://www.w3.org/TR/1999/REC-html401-19991224/'>HTML 4.01</a>]).
      * @since DOM Level 2
      */
-    public Attr getAttributeNodeNS(String namespaceURI, String localName) throws DOMException;
+    public Attr getAttributeNodeNS(String namespaceURI, String localName) throws DOMException {
+        throw new Error();
+    }
 
     /**
      * Adds a new attribute. If an attribute with that local name and that namespace URI is already
@@ -266,7 +320,9 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      *                href='http://www.w3.org/TR/1999/REC-html401-19991224/'>HTML 4.01</a>]).
      * @since DOM Level 2
      */
-    public Attr setAttributeNodeNS(Attr newAttr) throws DOMException;
+    public Attr setAttributeNodeNS(Attr newAttr) throws DOMException {
+        throw new Error();
+    }
 
     /**
      * Returns a <code>NodeList</code> of all the descendant <code>Elements</code> with a given
@@ -283,7 +339,9 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      *                href='http://www.w3.org/TR/1999/REC-html401-19991224/'>HTML 4.01</a>]).
      * @since DOM Level 2
      */
-    public NodeList getElementsByTagNameNS(String namespaceURI, String localName) throws DOMException;
+    public NodeList getElementsByTagNameNS(String namespaceURI, String localName) throws DOMException {
+        throw new Error();
+    }
 
     /**
      * Returns <code>true</code> when an attribute with a given name is specified on this element or
@@ -294,7 +352,9 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      *         has a default value, <code>false</code> otherwise.
      * @since DOM Level 2
      */
-    public boolean hasAttribute(String name);
+    public boolean hasAttribute(String name) {
+        throw new Error();
+    }
 
     /**
      * Returns <code>true</code> when an attribute with a given local name and namespace URI is
@@ -313,14 +373,18 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      *                href='http://www.w3.org/TR/1999/REC-html401-19991224/'>HTML 4.01</a>]).
      * @since DOM Level 2
      */
-    public boolean hasAttributeNS(String namespaceURI, String localName) throws DOMException;
+    public boolean hasAttributeNS(String namespaceURI, String localName) throws DOMException {
+        throw new Error();
+    }
 
     /**
      * The type information associated with this element.
      * 
      * @since DOM Level 3
      */
-    public TypeInfo getSchemaTypeInfo();
+    public TypeInfo getSchemaTypeInfo() {
+        throw new Error();
+    }
 
     /**
      * If the parameter <code>isId</code> is <code>true</code>, this method declares the specified
@@ -340,7 +404,9 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      *                element.
      * @since DOM Level 3
      */
-    public void setIdAttribute(String name, boolean isId) throws DOMException;
+    public void setIdAttribute(String name, boolean isId) throws DOMException {
+        throw new Error();
+    }
 
     /**
      * If the parameter <code>isId</code> is <code>true</code>, this method declares the specified
@@ -359,7 +425,9 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      *                element.
      * @since DOM Level 3
      */
-    public void setIdAttributeNS(String namespaceURI, String localName, boolean isId) throws DOMException;
+    public void setIdAttributeNS(String namespaceURI, String localName, boolean isId) throws DOMException {
+        throw new Error();
+    }
 
     /**
      * If the parameter <code>isId</code> is <code>true</code>, this method declares the specified
@@ -377,7 +445,301 @@ public interface JavaAPIElement extends org.w3c.dom.Element {
      *                element.
      * @since DOM Level 3
      */
-    public void setIdAttributeNode(Attr idAttr, boolean isId) throws DOMException;
+    public void setIdAttributeNode(Attr idAttr, boolean isId) throws DOMException {
+        throw new Error();
+    }
 
-    js.dom.Element spi();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getNodeValue() throws DOMException {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setNodeValue(String nodeValue) throws DOMException {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public short getNodeType() {
+        return Node.ELEMENT_NODE;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Node getParentNode() {
+        return convert(element.parentNode());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public NodeList getChildNodes() {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Node getFirstChild() {
+        return convert(element.firstChild());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Node getLastChild() {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Node getPreviousSibling() {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Node getNextSibling() {
+        return convert(element.nextSibling());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Document getOwnerDocument() {
+        return new JavaAPIDocument(element.ownerDocument());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Node insertBefore(Node newChild, Node refChild) throws DOMException {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Node replaceChild(Node newChild, Node oldChild) throws DOMException {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Node removeChild(Node oldChild) throws DOMException {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Node appendChild(Node newChild) throws DOMException {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasChildNodes() {
+        return element.firstChild() != null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Node cloneNode(boolean deep) {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void normalize() {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isSupported(String feature, String version) {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getNamespaceURI() {
+        return "";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getPrefix() {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setPrefix(String prefix) throws DOMException {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasAttributes() {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getBaseURI() {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public short compareDocumentPosition(Node other) throws DOMException {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTextContent() throws DOMException {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setTextContent(String textContent) throws DOMException {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isSameNode(Node other) {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String lookupPrefix(String namespaceURI) {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDefaultNamespace(String namespaceURI) {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String lookupNamespaceURI(String prefix) {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEqualNode(Node arg) {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object getFeature(String feature, String version) {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object setUserData(String key, Object data, UserDataHandler handler) {
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object getUserData(String key) {
+        throw new Error();
+    }
+
+    /**
+     * <p>
+     * Helper method to convert {@link js.dom.Node} to {@link Node}.
+     * </p>
+     * 
+     * @param node
+     * @return
+     */
+    private Node convert(js.dom.Node node) {
+        if (node == null) {
+            return null;
+        } else if (node instanceof EmulateElement) {
+            return new JavaAPIElement((EmulateElement) node);
+        } else if (node instanceof EmulateText) {
+            throw new Error();
+        } else if (node instanceof EmulateDocument) {
+            return new JavaAPIDocument((EmulateDocument) node);
+        } else {
+            throw new Error();
+        }
+    }
 }

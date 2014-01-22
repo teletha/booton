@@ -792,7 +792,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return
      */
     @JavascriptNativeProperty
-    protected final native Element querySelector(String selector);
+    public native Element querySelector(String selector);
 
     /**
      * <p>
