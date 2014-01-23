@@ -40,11 +40,11 @@ public class ElementTest {
     @Test
     public void matches() throws Exception {
         Element root = document.createElement("div");
-        Element e = document.createElement("em");
+        Element em = document.createElement("em");
 
         document.documentElement().append(root);
-        root.append(e);
+        root.append(em);
 
-        assert e.matches("em");
+        assert em.matches("em");
     }
 }

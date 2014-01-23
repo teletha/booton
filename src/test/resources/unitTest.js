@@ -8,7 +8,7 @@ window.clearTimeout = Async.clearTimeout;
 Element.prototype.matches = function(selector) {
   var elements = document.querySelectorAll(selector);
 
-  for ( var i=0, length=elements.length; i<length; i++) {
+  for (var i=0, length=elements.length; i<length; i++) {
     if (elements[i] === this) {
       return true;
     }
