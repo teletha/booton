@@ -84,7 +84,7 @@ public class ScriptTester {
 
             // read boot.js
             boot = new String(Files.readAllBytes(I.locate("boot.js")), UTF_8);
-            unitTest = new String(Files.readAllBytes(I.locate("src/test/resources/boot.js")), UTF_8);
+            unitTest = new String(Files.readAllBytes(I.locate("src/test/resources/unitTest.js")), UTF_8);
 
             // build client
             client = new WebClient(BrowserVersion.FIREFOX_17);
@@ -101,8 +101,8 @@ public class ScriptTester {
             ScriptableObject.defineClass(window, AsyncJSDefinition.class);
 
             // compile and load boot script
-            engine.execute(html, engine.compile(html, boot, "boot.js", 1));
             engine.execute(html, engine.compile(html, unitTest, "unitTest.js", 1));
+            engine.execute(html, engine.compile(html, boot, "boot.js", 1));
         } catch (Exception e) {
             throw I.quiet(e);
         }

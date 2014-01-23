@@ -13,6 +13,8 @@ import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
 
+import org.w3c.dom.DOMException;
+
 /**
  * @version 2013/07/12 20:39:00
  */
@@ -20,14 +22,14 @@ import kiss.Singleton;
 public class EmulateDocument extends Document {
 
     /** The root element. */
-    Node root;
+    private final EmulateElement root = new EmulateElement("html");
 
     /**
      * {@inheritDoc}
      */
     @Override
     public boolean contains(Node node) {
-        return false;
+        return root.contains(node);
     }
 
     /**
@@ -83,9 +85,7 @@ public class EmulateDocument extends Document {
      */
     @Override
     protected String textContent() {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return root.textContent();
     }
 
     /**
@@ -93,7 +93,7 @@ public class EmulateDocument extends Document {
      */
     @Override
     protected void textContent(String textContent) {
-        root = new EmulateText(textContent);
+        throw new DOMException(DOMException.INVALID_MODIFICATION_ERR, "Document cannot be inserted at the specified point in the hierarchy.");
     }
 
     /**
@@ -101,7 +101,7 @@ public class EmulateDocument extends Document {
      */
     @Override
     protected Node appendChild(Node newNode) {
-        return root = newNode;
+        throw new DOMException(DOMException.INVALID_MODIFICATION_ERR, "Document cannot be inserted at the specified point in the hierarchy.");
     }
 
     /**
@@ -109,7 +109,7 @@ public class EmulateDocument extends Document {
      */
     @Override
     protected Node removeChild(Node childNode) {
-        return null;
+        throw new DOMException(DOMException.INVALID_MODIFICATION_ERR, "Document cannot be inserted at the specified point in the hierarchy.");
     }
 
     /**
@@ -117,7 +117,7 @@ public class EmulateDocument extends Document {
      */
     @Override
     protected Node insertBefore(Node newNode, Node referenceNode) {
-        return null;
+        throw new DOMException(DOMException.INVALID_MODIFICATION_ERR, "Document cannot be inserted at the specified point in the hierarchy.");
     }
 
     /**
@@ -125,7 +125,7 @@ public class EmulateDocument extends Document {
      */
     @Override
     public Element documentElement() {
-        return root instanceof Element ? (Element) root : null;
+        return root;
     }
 
     /**
@@ -148,8 +148,8 @@ public class EmulateDocument extends Document {
      * {@inheritDoc}
      */
     @Override
-    public boolean matchesSelector(String selector) {
-        return super.matchesSelector(selector);
+    public boolean matches(String selector) {
+        return super.matches(selector);
     }
 
     /**

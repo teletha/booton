@@ -95,7 +95,7 @@ class JavaDocument implements org.w3c.dom.Document {
      */
     @Override
     public NodeList getChildNodes() {
-        return new JavaNodeList(document.root);
+        return new JavaNodeList(document.documentElement());
     }
 
     /**

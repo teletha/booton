@@ -109,7 +109,7 @@ public abstract class Document extends Node implements JavascriptNative {
      * @return A result.
      */
     @JavascriptNativeProperty
-    public native boolean matchesSelector(String selector);
+    public native boolean matches(String selector);
 
     /**
      * <p>

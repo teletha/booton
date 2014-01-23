@@ -51,7 +51,7 @@ public class Global {
     public static Window window;
 
     /** The root document in web environment. */
-    public static final Document document = new EmulateDocument();
+    public static final Document document = I.make(EmulateDocument.class);
 
     /**
      * <p>

@@ -39,7 +39,12 @@ public class ElementTest {
 
     @Test
     public void matches() throws Exception {
-        Element e = document.createElement("e");
-        assert e.matchesSelector("e");
+        Element root = document.createElement("div");
+        Element e = document.createElement("em");
+
+        document.documentElement().append(root);
+        root.append(e);
+
+        assert e.matches("em");
     }
 }

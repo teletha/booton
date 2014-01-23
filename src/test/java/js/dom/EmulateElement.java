@@ -467,26 +467,20 @@ public class EmulateElement extends Element implements Nodable {
      * {@inheritDoc}
      */
     @Override
-    public boolean matchesSelector(String selector) {
-        NodeList<Element> elements = ownerDocument().querySelectorAll(selector);
+    public boolean matches(String selector) {
+        Element root = this;
 
-        for (Element element : elements) {
+        while (root.parent() != null) {
+            root = root.parent();
+        }
+        NodeList<Element> query = root.querySelectorAll(selector);
+
+        for (Element element : query) {
             if (element == this) {
                 return true;
             }
         }
         return false;
-    }
-
-    /**
-     * <p>
-     * Notify element mutation.
-     * </p>
-     * 
-     * @param event
-     */
-    private void notify(MutationEvent event) {
-
     }
 
     /**
@@ -965,12 +959,5 @@ public class EmulateElement extends Element implements Nodable {
         public String toString() {
             return (namespace == null ? "" : namespace + ":") + name;
         }
-    }
-
-    /**
-     * @version 2013/07/28 22:26:35
-     */
-    private static class MutationEvent {
-
     }
 }
