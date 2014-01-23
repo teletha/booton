@@ -30,11 +30,11 @@ function boot(global) {
   // Element Extensions
   //====================================================================
   define(Element.prototype, {
-  	matchesSelector: Element.prototype.webkitMatchesSelector ? Element.prototype.webkitMatchesSelector
-                   : Element.prototype.mozMatchesSelector ? Element.prototype.mozMatchesSelector
-                   : Element.prototype.msMatchesSelector
-  });
-  
+  	matches: Element.prototype.webkitMatchesSelector
+          || Element.prototype.mozMatchesSelector
+          || Element.prototype.msMatchesSelector
+  }, true);
+
   
   //====================================================================
   // SVGElement Extensions

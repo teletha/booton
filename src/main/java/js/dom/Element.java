@@ -816,7 +816,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return A result.
      */
     @JavascriptNativeProperty
-    public native boolean matchesSelector(String selector);
+    public native boolean matches(String selector);
 
     /**
      * <p>

@@ -10,7 +10,6 @@
 package js.dom;
 
 import static js.lang.Global.*;
-import kiss.I;
 
 import org.junit.Test;
 
@@ -275,25 +274,26 @@ public class EmulateElementTest {
 
     @Test
     public void matches() throws Exception {
-        Element child = createTree().firstElementChild();
-        System.out.println(child.parent());
-        assert child.matchesSelector(".child");
-        assert child.matchesSelector("child1");
-        assert !child.matchesSelector("child2");
-        assert child.matchesSelector("root > *");
+        Element root = createTree();
+        Element child = root.firstElementChild();
+
+        assert child.matches(".child");
+        assert child.matches("child1");
+        assert !child.matches("child2");
+        assert root.querySelector("sub11").matches("child1 sub11");
     }
 
     /**
      * 
      */
     private Element createTree() {
-        Document document = I.make(EmulateDocument.class);
         Element root = new EmulateElement("root");
         Element child1 = new EmulateElement("child1").attr("class", "child");
         Element child2 = new EmulateElement("child2").attr("class", "child");
+        Element sub11 = new EmulateElement("sub11").attr("class", "sub");
 
-        document.appendChild(root);
         root.append(child1).append(child2);
+        child1.append(sub11);
 
         return root;
     }
