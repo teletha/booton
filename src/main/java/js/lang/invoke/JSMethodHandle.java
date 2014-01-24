@@ -13,6 +13,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.WrongMethodTypeException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 
 import js.lang.NativeFunction;
@@ -25,6 +26,9 @@ import booton.translator.JavaAPIProvider;
 @JavaAPIProvider(MethodHandle.class)
 class JSMethodHandle {
 
+    /** The actual reflection target. */
+    Member member;
+
     /** The actual function. */
     private NativeFunction function;
 
@@ -32,6 +36,8 @@ class JSMethodHandle {
      * @param method
      */
     JSMethodHandle(Method method) {
+        this.member = method;
+
         function = Reflections.getPrototype(method.getDeclaringClass())
                 .getPropertyAs(NativeFunction.class, Reflections.getPropertyName(method));
     }
@@ -41,6 +47,7 @@ class JSMethodHandle {
      * @param b
      */
     JSMethodHandle(Field field, boolean setter) {
+        this.member = field;
     }
 
     /**
