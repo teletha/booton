@@ -9,6 +9,8 @@
  */
 package booton;
 
+import js.lang.Global;
+
 /**
  * @version 2013/09/11 14:10:12
  */
@@ -22,6 +24,6 @@ public class HelloWorld {
      * @param args
      */
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        Global.document.documentElement().append("日本語うほおおおおお");
     }
 }

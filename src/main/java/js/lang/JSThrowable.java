@@ -404,6 +404,8 @@ class JSThrowable {
             end--;
         } else if (error.hasProperty("sourceURL")) {
             // webkit
+            pattern = Pattern.compile("(.+)@(.+):(.+):(.+)");
+            start++;
         } else if (error.hasProperty("number")) {
             // ie
             pattern = Pattern.compile("\\s*at\\s*(.+)\\s\\((.+):(.+):(.+)\\)");

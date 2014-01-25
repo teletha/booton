@@ -76,6 +76,29 @@ class JSDouble extends JSNumber {
     }
 
     /**
+     * Returns {@code true} if the specified number is infinitely large in magnitude, {@code false}
+     * otherwise.
+     * 
+     * @param value the value to be tested.
+     * @return {@code true} if the value of the argument is positive infinity or negative infinity;
+     *         {@code false} otherwise.
+     */
+    public static boolean isInfinite(double value) {
+        return isInfinite(value);
+    }
+
+    /**
+     * Returns {@code true} if the specified number is a Not-a-Number (NaN) value, {@code false}
+     * otherwise.
+     * 
+     * @param value the value to be tested.
+     * @return {@code true} if the value of the argument is NaN; {@code false} otherwise.
+     */
+    public static boolean isNaN(double value) {
+        return isNaN(value);
+    }
+
+    /**
      * Compares the two specified {@code double} values. The sign of the integer value returned is
      * the same as that of the integer that would be returned by the call:
      * 
