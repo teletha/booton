@@ -9,14 +9,16 @@
  */
 package js.dom;
 
-import jsx.event.Event;
+import java.util.function.Supplier;
+
+import kiss.Disposable;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 
 /**
  * @version 2013/12/28 11:51:03
  */
-public class UIEvent implements Event<UIAction>, JavascriptNative {
+public class UIEvent implements Supplier<UIAction>, Disposable, JavascriptNative {
 
     /** The DOM element that initiated the event. */
     @JavascriptNativeProperty
@@ -132,7 +134,14 @@ public class UIEvent implements Event<UIAction>, JavascriptNative {
      * {@inheritDoc}
      */
     @Override
-    public UIAction getEventType() {
+    public UIAction get() {
         return action;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void dispose() {
     }
 }

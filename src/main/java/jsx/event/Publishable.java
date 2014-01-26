@@ -19,6 +19,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import kiss.Disposable;
 import kiss.I;
@@ -70,7 +72,7 @@ public class Publishable<P extends Publishable<P>> {
      * @param type An event type.
      * @return Chainable API.
      */
-    public final <T extends EventType<E>, E extends Event<T>> Observable<E> observe(T... types) {
+    public final <T extends Enum & Predicate<E>, E extends Supplier<T>> Observable<E> observe(T... types) {
         if (types == null || types.length == 0) {
             return Observable.NEVER;
         }
@@ -114,7 +116,7 @@ public class Publishable<P extends Publishable<P>> {
      * @param listener An event listener to add.
      * @return Chainable API.
      */
-    public final <T extends EventType<E>, E extends Event<T>> P subscribe(T type, Consumer<E> listener) {
+    public final <T extends Enum & Predicate<E>, E extends Supplier<T>> P subscribe(T type, Consumer<E> listener) {
         observe(type).subscribe(listener);
 
         // API definition
@@ -241,13 +243,7 @@ public class Publishable<P extends Publishable<P>> {
      * @return Chainable API.
      */
     public final P unsubscribe(Object subscriberOrType) {
-        if (subscriberOrType instanceof Class) {
-            // as event type
-            remove(ClassUtil.wrap((Class) subscriberOrType));
-        } else if (subscriberOrType instanceof EventType) {
-            // as event type
-            remove(subscriberOrType);
-        } else if (disposer != null) {
+        if (disposer != null && disposer.containsKey(subscriberOrType)) {
             // as subscriber
             Disposable unsubscriber = disposer.remove(subscriberOrType);
 
@@ -258,6 +254,12 @@ public class Publishable<P extends Publishable<P>> {
                     disposer = null;
                 }
             }
+        } else if (subscriberOrType instanceof Class) {
+            // as event type
+            remove(ClassUtil.wrap((Class) subscriberOrType));
+        } else {
+            // as event type
+            remove(subscriberOrType);
         }
 
         // API definition
@@ -295,10 +297,10 @@ public class Publishable<P extends Publishable<P>> {
         if (holder != null && event != null) {
             Set types;
 
-            if (event instanceof Event) {
-                EventType type = ((Event) event).getEventType();
+            if (event instanceof Supplier) {
+                Object type = ((Supplier) event).get();
 
-                if (!type.test(event)) {
+                if (!(type instanceof Enum) || !(type instanceof Predicate) || !((Predicate) type).test(event)) {
                     return (P) this;
                 }
                 types = Collections.singleton(type);
