@@ -10,12 +10,12 @@
 
 package js.dom;
 
-import jsx.event.EventType;
+import java.util.function.Predicate;
 
 /**
  * @version 2013/10/10 13:45:14
  */
-public enum UIAction implements EventType<UIEvent> {
+public enum UIAction implements Predicate<UIEvent> {
 
     /** The ui event type. */
     PointerDown,
