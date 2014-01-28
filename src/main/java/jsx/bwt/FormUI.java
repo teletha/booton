@@ -21,7 +21,7 @@ import kiss.Disposable;
 /**
  * @version 2013/07/29 2:08:45
  */
-public class FormUI<T extends FormUI> extends UI {
+public class FormUI<T extends FormUI> extends UI<T> {
 
     /** The actual form element. */
     public final Element form;

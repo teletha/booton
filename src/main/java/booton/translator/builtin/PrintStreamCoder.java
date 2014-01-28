@@ -111,6 +111,18 @@ public class PrintStreamCoder extends Translator<PrintStream> {
     }
 
     /**
+     * Prints a string. If the argument is <code>null</code> then the string <code>"null"</code> is
+     * printed. Otherwise, the string's characters are converted into bytes according to the
+     * platform's default character encoding, and these bytes are written in exactly the manner of
+     * the <code>{@link #write(int)}</code> method.
+     * 
+     * @param s The <code>String</code> to be printed
+     */
+    public String print(String s) {
+        return that + ".log(" + param(0) + ")";
+    }
+
+    /**
      * Prints an Object and then terminate the line. This method calls at first String.valueOf(x) to
      * get the printed object's string value, then behaves as though it invokes
      * <code>{@link #print(String)}</code> and then <code>{@link #println()}</code>.

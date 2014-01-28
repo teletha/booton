@@ -13,16 +13,19 @@ import static js.dom.UIAction.*;
 import static js.lang.Global.*;
 import js.dom.ClientRect;
 import js.dom.Element;
+import js.dom.UIAction;
 import jsx.application.PageUnload;
 import jsx.bwt.view.PopupViewStyle;
 import jsx.event.Publishable;
 import jsx.event.Subscribe;
 import jsx.event.SubscribeUI;
+import kiss.Disposable;
+import kiss.Observable;
 
 /**
  * @version 2013/07/29 2:28:28
  */
-public abstract class UI extends Publishable {
+public abstract class UI<T extends UI> extends Publishable {
 
     /** The popup area. */
     private static Element popup;
@@ -32,6 +35,9 @@ public abstract class UI extends Publishable {
 
     /** The tooltip content. */
     private Tooltip tooltip;
+
+    /** The tooltip unsubscriber. */
+    private Disposable unsubscriber;
 
     /**
      * <p>
@@ -75,6 +81,8 @@ public abstract class UI extends Publishable {
         if (tooltip == null || tooltip.content != content) {
             if (content == null) {
                 // remove tooltip
+                root.unsubscribe(tooltip);
+                tooltip = null;
             } else {
                 if (tooltip == null) {
                     // first access
@@ -92,6 +100,10 @@ public abstract class UI extends Publishable {
                 tooltip.content = content;
             }
         }
+    }
+
+    public Observable<T> onKeyUp() {
+        return (Observable<T>) root.observe(UIAction.KeyUp).map(this);
     }
 
     /**

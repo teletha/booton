@@ -19,6 +19,9 @@ import booton.translator.JavaAPIProvider;
 @JavaAPIProvider(Thread.class)
 class JSThread {
 
+    /** The javascript main thread. */
+    private static final Thread main = new Thread();
+
     /** This filed is null unless explicitly set. */
     private static volatile UncaughtExceptionHandler defaultUncaughtExceptionHandler;
 
@@ -168,7 +171,17 @@ class JSThread {
      * @see #setName(String)
      */
     public final String getName() {
-        return "name";
+        return "main";
+    }
+
+    /**
+     * Returns the thread group to which this thread belongs. This method returns null if this
+     * thread has died (been stopped).
+     * 
+     * @return this thread's thread group.
+     */
+    public final ThreadGroup getThreadGroup() {
+        return new ThreadGroup("main");
     }
 
     /**
@@ -201,9 +214,7 @@ class JSThread {
      * @return the currently executing thread.
      */
     public static Thread currentThread() {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return main;
     }
 
     /**
