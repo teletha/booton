@@ -314,7 +314,11 @@ public class Publishable<P extends Publishable<P>> {
 
                     if (subscribers != null) {
                         for (Observer subscriber : subscribers) {
-                            subscriber.onNext(event);
+                            try {
+                                subscriber.onNext(event);
+                            } catch (Throwable e) {
+                                subscriber.onError(e);
+                            }
                         }
                     }
                 }

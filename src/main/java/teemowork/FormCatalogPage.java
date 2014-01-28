@@ -22,6 +22,7 @@ import jsx.application.PageInfo;
 import jsx.bwt.Button;
 import jsx.bwt.Input;
 import jsx.bwt.Select;
+import jsx.bwt.UI;
 import jsx.model.SelectableModel;
 import kiss.Observable;
 import teemowork.model.Version;
@@ -75,12 +76,18 @@ public class FormCatalogPage extends Page {
         }));
         model.type = 111000;
 
-        Function<UIEvent, Boolean> nonEmpty = v -> {
-            return 0 < v.target.val().length();
+        Function<Input, Boolean> nonEmpty = ui -> {
+            if (0 < ui.form.val().length()) {
+                ui.setTooltip((UI) null);
+                return true;
+            } else {
+                ui.setTooltip("Error");
+                return false;
+            }
         };
 
-        Observable<Boolean> numberEntered = num.root.observe(UIAction.KeyUp).map(nonEmpty);
-        Observable<Boolean> nameEntered = name.root.observe(UIAction.KeyUp).map(nonEmpty);
+        Observable<Boolean> numberEntered = num.onKeyUp().map(nonEmpty);
+        Observable<Boolean> nameEntered = name.onKeyUp().map(nonEmpty);
         Observable.all(nameEntered, numberEntered).subscribe(v -> {
             System.out.println("button enable " + v);
             if (v) {
