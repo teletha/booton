@@ -73,7 +73,7 @@ public class Javascript {
     private static final List<Integer> primitiveIds = Arrays.asList(8, 9, 5, 3, 25, 1, 18, 2, 21);
 
     /** The all cached scripts. */
-    private static final Map<Class, Javascript> scripts = I.aware(new ConcurrentHashMap());
+    private static final Map<Class, Javascript> scripts = new ConcurrentHashMap();
 
     /** The root class of javascript model. */
     private static final Class rootClass;

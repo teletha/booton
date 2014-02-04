@@ -15,6 +15,9 @@
  */
 package booton.sample;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @version 2009/04/12 16:26:19
  */
@@ -23,6 +26,8 @@ public class Person {
     private int age;
 
     private String name;
+
+    private List<Person> friends = new ArrayList();
 
     /**
      * Get the age property of this {@link Person}.
@@ -58,6 +63,24 @@ public class Person {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Get the friends property of this {@link Person}.
+     * 
+     * @return The friends property.
+     */
+    public List<Person> getFriends() {
+        return friends;
+    }
+
+    /**
+     * Set the friends property of this {@link Person}.
+     * 
+     * @param friends The friends value to set.
+     */
+    public void setFriends(List<Person> friends) {
+        this.friends = friends;
     }
 
     /**
