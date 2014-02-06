@@ -19,6 +19,27 @@ import booton.translator.JavaAPIProvider;
 @JavaAPIProvider(ThreadGroup.class)
 class JSThreadGroup implements UncaughtExceptionHandler {
 
+    /** The parent group. */
+    private ThreadGroup parent;
+
+    /**
+     * Returns the parent of this thread group.
+     * <p>
+     * First, if the parent is not <code>null</code>, the <code>checkAccess</code> method of the
+     * parent thread group is called with no arguments; this may result in a security exception.
+     *
+     * @return the parent of this thread group. The top-level thread group is the only thread group
+     *         whose parent is <code>null</code>.
+     * @exception SecurityException if the current thread cannot modify this thread group.
+     * @see java.lang.ThreadGroup#checkAccess()
+     * @see java.lang.SecurityException
+     * @see java.lang.RuntimePermission
+     * @since JDK1.0
+     */
+    public final ThreadGroup getParent() {
+        return parent;
+    }
+
     /**
      * {@inheritDoc}
      */

@@ -10,6 +10,7 @@
 package js.lang;
 
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -320,6 +321,20 @@ class JSThrowable {
      * @param stream {@code PrintStream} to use for output
      */
     public void printStackTrace(PrintStream stream) {
+        // TODO
+        for (StackTraceElement element : stacktrace) {
+            System.out.println(element);
+        }
+    }
+
+    /**
+     * Prints this throwable and its backtrace to the specified print writer.
+     *
+     * @param stream {@code PrintWriter} to use for output
+     * @since JDK1.1
+     */
+    public void printStackTrace(PrintWriter stream) {
+        // TODO
         for (StackTraceElement element : stacktrace) {
             System.out.println(element);
         }
