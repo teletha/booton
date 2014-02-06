@@ -9,7 +9,6 @@
  */
 package js.util;
 
-import sun.util.logging.PlatformLogger;
 import booton.JDKEmulator;
 import booton.translator.JavaAPIProvider;
 

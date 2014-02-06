@@ -52,6 +52,16 @@ class DateCoder extends Translator<Date> {
     }
 
     /**
+     * Sets this <code>Date</code> object to represent a point in time that is <code>time</code>
+     * milliseconds after January 1, 1970 00:00:00 GMT.
+     *
+     * @param time the number of milliseconds.
+     */
+    public String setTime(long time) {
+        return that + ".setTime(" + param(0) + ")";
+    }
+
+    /**
      * Return a copy of this object.
      */
     public String clone() {

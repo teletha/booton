@@ -59,6 +59,33 @@ class Arrays {
     }
 
     /**
+     * Searches a range of the specified array of ints for the specified value using the binary
+     * search algorithm. The range must be sorted (as by the {@link #sort(int[], int, int)} method)
+     * prior to making this call. If it is not sorted, the results are undefined. If the range
+     * contains multiple elements with the specified value, there is no guarantee which one will be
+     * found.
+     *
+     * @param a the array to be searched
+     * @param fromIndex the index of the first element (inclusive) to be searched
+     * @param toIndex the index of the last element (exclusive) to be searched
+     * @param key the value to be searched for
+     * @return index of the search key, if it is contained in the array within the specified range;
+     *         otherwise, <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is
+     *         defined as the point at which the key would be inserted into the array: the index of
+     *         the first element in the range greater than the key, or <tt>toIndex</tt> if all
+     *         elements in the range are less than the specified key. Note that this guarantees that
+     *         the return value will be &gt;= 0 if and only if the key is found.
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex}
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0 or toIndex > a.length}
+     * @since 1.6
+     */
+    public static int binarySearch(int[] a, int fromIndex, int toIndex, int key) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
      * Copies the specified array, truncating or padding with zeros (if necessary) so the copy has
      * the specified length. For all indices that are valid in both the original array and the copy,
      * the two arrays will contain identical values. For any indices that are valid in the copy but
