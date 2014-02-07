@@ -291,14 +291,14 @@ class JavaMethodCompiler extends MethodVisitor {
             int number = searchConditionalOperandSeparator(node);
 
             if (number != -1) {
-                if (debugger.enable) {
-                    System.out.println(nodes);
-                    System.out.println(number + "  " + i);
-                }
+                debugger.print(nodes);
+                debugger.print(nodes.get(i + 1));
                 Node created = createNode(nodes.get(i + 1));
+                debugger.print("create node " + created.id);
 
                 // transfer operands
                 for (int j = 0; j < number; j++) {
+                    debugger.print(node);
                     Operand operand = node.stack.pollLast();
 
                     if (operand instanceof OperandCondition) {
@@ -309,6 +309,8 @@ class JavaMethodCompiler extends MethodVisitor {
 
                     created.stack.addFirst(operand);
                 }
+
+                debugger.print(nodes);
             }
         }
 
@@ -1027,9 +1029,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (opcode == CASTORE) {
                 // convert assign value (int -> char)
-                debugger.print(value.duplicated + "   @@ " + value.getClass());
                 value = value.cast(char.class);
-                debugger.print(value.duplicated);
             }
 
             if (contextMaybeArray instanceof OperandArray) {
