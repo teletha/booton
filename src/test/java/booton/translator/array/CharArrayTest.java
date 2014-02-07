@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,10 @@ import org.junit.Test;
 
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
+import booton.translator.Debuggable;
 
 /**
- * @version 2012/11/30 13:30:30
+ * @version 2014/02/07 12:58:53
  */
 @SuppressWarnings("unused")
 public class CharArrayTest extends ScriptTester {
@@ -33,13 +34,27 @@ public class CharArrayTest extends ScriptTester {
     }
 
     @Test
-    public void Array() {
+    public void base() {
         test(new Scriptable() {
 
             public char[] act() {
                 char[] array = new char[2];
                 array[0] = 'a';
                 array[1] = 'b';
+
+                return array;
+            }
+        });
+    }
+
+    @Test
+    public void multipleAssign() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            public char[] act() {
+                char[] array = new char[3];
+                array[0] = array[1] = array[2] = '@';
 
                 return array;
             }

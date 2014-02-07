@@ -33,6 +33,20 @@ class MathCoder extends Translator<Math> {
     }
 
     /**
+     * Returns the absolute value of a {@code long} value. If the argument is not negative, the
+     * argument is returned. If the argument is negative, the negation of the argument is returned.
+     * <p>
+     * Note that if the argument is equal to the value of {@link Long#MIN_VALUE}, the most negative
+     * representable {@code long} value, the result is that same value, which is negative.
+     *
+     * @param a the argument whose absolute value is to be determined
+     * @return the absolute value of the argument.
+     */
+    public String abs(long a) {
+        return "Math.abs(" + param(0) + ")";
+    }
+
+    /**
      * <p>
      * Returns the absolute value of a {@code double} value. If the argument is not negative, the
      * argument is returned. If the argument is negative, the negation of the argument is returned.
@@ -152,6 +166,21 @@ class MathCoder extends Translator<Math> {
     }
 
     /**
+     * Returns the greater of two {@code float} values. That is, the result is the argument closer
+     * to positive infinity. If the arguments have the same value, the result is that same value. If
+     * either value is NaN, then the result is NaN. Unlike the numerical comparison operators, this
+     * method considers negative zero to be strictly smaller than positive zero. If one argument is
+     * positive zero and the other negative zero, the result is positive zero.
+     *
+     * @param a an argument.
+     * @param b another argument.
+     * @return the larger of {@code a} and {@code b}.
+     */
+    public String max(float a, float b) {
+        return "Math.max(" + param(0) + "," + param(1) + ")";
+    }
+
+    /**
      * <p>
      * Returns the greater of two {@code int} values. That is, the result is the argument closer to
      * the value of {@link Integer#MAX_VALUE}. If the arguments have the same value, the result is
@@ -191,6 +220,21 @@ class MathCoder extends Translator<Math> {
      * @return the smaller of {@code a} and {@code b}.
      */
     public String min(long a, long b) {
+        return "Math.min(" + param(0) + "," + param(1) + ")";
+    }
+
+    /**
+     * Returns the smaller of two {@code float} values. That is, the result is the value closer to
+     * negative infinity. If the arguments have the same value, the result is that same value. If
+     * either value is NaN, then the result is NaN. Unlike the numerical comparison operators, this
+     * method considers negative zero to be strictly smaller than positive zero. If one argument is
+     * positive zero and the other is negative zero, the result is negative zero.
+     *
+     * @param a an argument.
+     * @param b another argument.
+     * @return the smaller of {@code a} and {@code b}.
+     */
+    public String min(float a, float b) {
         return "Math.min(" + param(0) + "," + param(1) + ")";
     }
 

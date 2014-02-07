@@ -90,11 +90,11 @@ class OperandExpression extends Operand {
      * {@inheritDoc}
      */
     @Override
-    Operand cast(Class type) {
+    Operand castActual(Class type) {
         if (type == char.class && this.type.type() == Number.class) {
             return new OperandExpression("String.fromCharCode(" + this + ")", type);
         }
-        return super.cast(type);
+        return this;
     }
 
     /**

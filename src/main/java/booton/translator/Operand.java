@@ -27,7 +27,22 @@ abstract class Operand {
      * @param type
      * @return
      */
-    Operand cast(Class type) {
+    final Operand cast(Class type) {
+        Operand operand = castActual(type);
+        operand.duplicated = duplicated;
+
+        return operand;
+    }
+
+    /**
+     * <p>
+     * Internal API.
+     * </p>
+     * 
+     * @param type
+     * @return
+     */
+    Operand castActual(Class type) {
         return this;
     }
 

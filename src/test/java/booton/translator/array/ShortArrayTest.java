@@ -16,19 +16,32 @@ import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
 
 /**
- * @version 2013/11/21 1:57:15
+ * @version 2014/02/07 12:58:30
  */
 @SuppressWarnings("unused")
 public class ShortArrayTest extends ScriptTester {
 
     @Test
-    public void Array() {
+    public void base() {
         test(new Scriptable() {
 
             public short[] act() {
                 short[] array = new short[2];
                 array[0] = 1;
                 array[1] = 2;
+
+                return array;
+            }
+        });
+    }
+
+    @Test
+    public void multipleAssign() throws Exception {
+        test(new Scriptable() {
+
+            public short[] act() {
+                short[] array = new short[3];
+                array[0] = array[1] = array[2] = 3;
 
                 return array;
             }

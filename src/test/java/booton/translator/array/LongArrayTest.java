@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,32 @@ import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
 
 /**
- * @version 2012/12/01 3:00:31
+ * @version 2014/02/07 12:59:28
  */
 @SuppressWarnings("unused")
 public class LongArrayTest extends ScriptTester {
 
     @Test
-    public void Array() {
+    public void base() {
         test(new Scriptable() {
 
             public long[] act() {
                 long[] array = new long[2];
                 array[0] = 1;
                 array[1] = 2;
+
+                return array;
+            }
+        });
+    }
+
+    @Test
+    public void multipleAssign() throws Exception {
+        test(new Scriptable() {
+
+            public long[] act() {
+                long[] array = new long[3];
+                array[0] = array[1] = array[2] = 30230225454L;
 
                 return array;
             }

@@ -65,7 +65,7 @@ class Arrays {
      * contains multiple elements with the specified value, there is no guarantee which one will be
      * found.
      *
-     * @param a the array to be searched
+     * @param array the array to be searched
      * @param fromIndex the index of the first element (inclusive) to be searched
      * @param toIndex the index of the last element (exclusive) to be searched
      * @param key the value to be searched for
@@ -79,10 +79,138 @@ class Arrays {
      * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0 or toIndex > a.length}
      * @since 1.6
      */
-    public static int binarySearch(int[] a, int fromIndex, int toIndex, int key) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+    public static int binarySearch(int[] array, int fromIndex, int toIndex, int key) {
+        return search((Integer[]) (Object) array, fromIndex, toIndex, (Integer) key);
+    }
+
+    /**
+     * Searches a range of the specified array for the specified object using the binary search
+     * algorithm. The range must be sorted into ascending order according to the
+     * {@linkplain Comparable natural ordering} of its elements (as by the
+     * {@link #sort(Object[], int, int)} method) prior to making this call. If it is not sorted, the
+     * results are undefined. (If the range contains elements that are not mutually comparable (for
+     * example, strings and integers), it <i>cannot</i> be sorted according to the natural ordering
+     * of its elements, hence results are undefined.) If the range contains multiple elements equal
+     * to the specified object, there is no guarantee which one will be found.
+     *
+     * @param array the array to be searched
+     * @param fromIndex the index of the first element (inclusive) to be searched
+     * @param toIndex the index of the last element (exclusive) to be searched
+     * @param key the value to be searched for
+     * @return index of the search key, if it is contained in the array within the specified range;
+     *         otherwise, <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is
+     *         defined as the point at which the key would be inserted into the array: the index of
+     *         the first element in the range greater than the key, or <tt>toIndex</tt> if all
+     *         elements in the range are less than the specified key. Note that this guarantees that
+     *         the return value will be &gt;= 0 if and only if the key is found.
+     * @throws ClassCastException if the search key is not comparable to the elements of the array
+     *             within the specified range.
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex}
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0 or toIndex > a.length}
+     * @since 1.6
+     */
+    public static int binarySearch(Object[] array, int fromIndex, int toIndex, Object key) {
+        return search(array, fromIndex, toIndex, key);
+    }
+
+    /**
+     * Searches a range of the specified array for the specified object using the binary search
+     * algorithm. The range must be sorted into ascending order according to the specified
+     * comparator (as by the {@link #sort(Object[], int, int, Comparator) sort(T[], int, int,
+     * Comparator)} method) prior to making this call. If it is not sorted, the results are
+     * undefined. If the range contains multiple elements equal to the specified object, there is no
+     * guarantee which one will be found.
+     *
+     * @param <T> the class of the objects in the array
+     * @param array the array to be searched
+     * @param fromIndex the index of the first element (inclusive) to be searched
+     * @param toIndex the index of the last element (exclusive) to be searched
+     * @param key the value to be searched for
+     * @param comparator the comparator by which the array is ordered. A <tt>null</tt> value
+     *            indicates that the elements' {@linkplain Comparable natural ordering} should be
+     *            used.
+     * @return index of the search key, if it is contained in the array within the specified range;
+     *         otherwise, <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is
+     *         defined as the point at which the key would be inserted into the array: the index of
+     *         the first element in the range greater than the key, or <tt>toIndex</tt> if all
+     *         elements in the range are less than the specified key. Note that this guarantees that
+     *         the return value will be &gt;= 0 if and only if the key is found.
+     * @throws ClassCastException if the range contains elements that are not <i>mutually
+     *             comparable</i> using the specified comparator, or the search key is not
+     *             comparable to the elements in the range using this comparator.
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex}
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0 or toIndex > a.length}
+     * @since 1.6
+     */
+    public static <T> int binarySearch(T[] array, int fromIndex, int toIndex, T key, Comparator<? super T> comparator) {
+        return search(array, fromIndex, toIndex, key, comparator);
+    }
+
+    /**
+     * <p>
+     * Generic binary search method.
+     * </p>
+     * 
+     * @param array
+     * @param fromIndex
+     * @param toIndex
+     * @param key
+     * @return
+     */
+    private static <T> int search(T[] array, int fromIndex, int toIndex, T key) {
+        int low = fromIndex;
+        int high = toIndex - 1;
+
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            Comparable midVal = (Comparable) array[mid];
+            int cmp = midVal.compareTo(key);
+
+            if (cmp < 0) {
+                low = mid + 1;
+            } else if (cmp > 0) {
+                high = mid - 1;
+            } else {
+                return mid; // key found
+            }
+        }
+        return -(low + 1); // key not found.
+    }
+
+    /**
+     * <p>
+     * Generic binary search method.
+     * </p>
+     * 
+     * @param array
+     * @param fromIndex
+     * @param toIndex
+     * @param key
+     * @param comparator
+     * @return
+     */
+    private static <T> int search(T[] array, int fromIndex, int toIndex, T key, Comparator<? super T> comparator) {
+        if (comparator == null) {
+            return search(array, fromIndex, toIndex, key);
+        }
+
+        int low = fromIndex;
+        int high = toIndex - 1;
+
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            T midVal = array[mid];
+            int cmp = comparator.compare(midVal, key);
+
+            if (cmp < 0) {
+                low = mid + 1;
+            } else if (cmp > 0) {
+                high = mid - 1;
+            } else {
+                return mid; // key found
+            }
+        }
+        return -(low + 1); // key not found.
     }
 
     /**
@@ -1579,6 +1707,52 @@ class Arrays {
      */
     public static <T> void sort(T[] array, Comparator<? super T> comparator) {
         new NativeArray(array).sort(new NativeFunction(comparator).bind(comparator));
+    }
+
+    /**
+     * Sorts the specified range of the specified array of objects according to the order induced by
+     * the specified comparator. The range to be sorted extends from index {@code fromIndex},
+     * inclusive, to index {@code toIndex}, exclusive. (If {@code fromIndex==toIndex}, the range to
+     * be sorted is empty.) All elements in the range must be <i>mutually comparable</i> by the
+     * specified comparator (that is, {@code c.compare(e1, e2)} must not throw a
+     * {@code ClassCastException} for any elements {@code e1} and {@code e2} in the range).
+     * <p>
+     * This sort is guaranteed to be <i>stable</i>: equal elements will not be reordered as a result
+     * of the sort.
+     * <p>
+     * Implementation note: This implementation is a stable, adaptive, iterative mergesort that
+     * requires far fewer than n lg(n) comparisons when the input array is partially sorted, while
+     * offering the performance of a traditional mergesort when the input array is randomly ordered.
+     * If the input array is nearly sorted, the implementation requires approximately n comparisons.
+     * Temporary storage requirements vary from a small constant for nearly sorted input arrays to
+     * n/2 object references for randomly ordered input arrays.
+     * <p>
+     * The implementation takes equal advantage of ascending and descending order in its input
+     * array, and can take advantage of ascending and descending order in different parts of the the
+     * same input array. It is well-suited to merging two or more sorted arrays: simply concatenate
+     * the arrays and sort the resulting array.
+     * <p>
+     * The implementation was adapted from Tim Peters's list sort for Python (<a
+     * href="http://svn.python.org/projects/python/trunk/Objects/listsort.txt"> TimSort</a>). It
+     * uses techniques from Peter McIlroy's "Optimistic Sorting and Information Theoretic
+     * Complexity", in Proceedings of the Fourth Annual ACM-SIAM Symposium on Discrete Algorithms,
+     * pp 467-474, January 1993.
+     *
+     * @param <T> the class of the objects to be sorted
+     * @param array the array to be sorted
+     * @param fromIndex the index of the first element (inclusive) to be sorted
+     * @param toIndex the index of the last element (exclusive) to be sorted
+     * @param comparator the comparator to determine the order of the array. A {@code null} value
+     *            indicates that the elements' {@linkplain Comparable natural ordering} should be
+     *            used.
+     * @throws ClassCastException if the array contains elements that are not <i>mutually
+     *             comparable</i> using the specified comparator.
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex} or (optional) if the
+     *             comparator is found to violate the {@link Comparator} contract
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0} or {@code toIndex > a.length}
+     */
+    public static <T> void sort(T[] array, int fromIndex, int toIndex, Comparator<? super T> comparator) {
+        new NativeArray(array).sort(new NativeFunction(comparator).bind(comparator)); // FIXME
     }
 
     /**

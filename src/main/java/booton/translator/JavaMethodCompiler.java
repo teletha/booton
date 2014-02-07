@@ -633,6 +633,10 @@ class JavaMethodCompiler extends MethodVisitor {
 
             Operand second = current.peek(1);
 
+            if (second == Node.END) {
+                return;
+            }
+
             Node firstNode = findNodeBy(first);
             Node secondNode = findNodeBy(second);
             Node thirdNode = findNodeBy(third);
@@ -757,15 +761,23 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case DUP_X1:
-        case DUP_X2:
             // These instructions are used for field increment mainly, see visitFieldInsn(PUTFIELD).
             // Skip this instruction to simplify compiler.
             break;
 
+        case DUP_X2:
+            // mark as duplicated operand
+            current.peek(0).duplicated = true;
+            break;
+
         case DUP2_X1:
-        case DUP2_X2:
             // These instructions are used for field increment mainly, see visitFieldInsn(PUTFIELD).
             // Skip this instruction to simplify compiler.
+            break;
+
+        case DUP2_X2:
+            // mark as duplicated operand
+            current.peek(0).duplicated = true;
             break;
 
         case POP:
@@ -1011,19 +1023,30 @@ class JavaMethodCompiler extends MethodVisitor {
         case CASTORE:
         case SASTORE:
             Operand contextMaybeArray = current.remove(2);
-            Operand value = current.remove(0);
+            Operand value = current.remove(0, false);
 
             if (opcode == CASTORE) {
                 // convert assign value (int -> char)
+                debugger.print(value.duplicated + "   @@ " + value.getClass());
                 value = value.cast(char.class);
+                debugger.print(value.duplicated);
             }
 
             if (contextMaybeArray instanceof OperandArray) {
                 // initialization of syntax sugar
                 ((OperandArray) contextMaybeArray).set(current.remove(0), value);
             } else {
-                // read by index
-                current.addExpression(contextMaybeArray, "[", current.remove(0), "]=", value.toString());
+                // write by index
+                OperandExpression assignment = new OperandExpression(contextMaybeArray + "[" + current.remove(0) + "]=" + value.toString());
+
+                if (!value.duplicated) {
+                    current.addExpression(assignment);
+                } else {
+                    value.duplicated = false;
+
+                    // duplicate pointer
+                    current.addOperand(new OperandEnclose(assignment));
+                }
             }
             break;
 

@@ -74,6 +74,19 @@ public class ForTest extends ScriptTester {
     }
 
     @Test
+    public void multipleUpdate() throws Exception {
+        test(new Scriptable() {
+
+            public int act(int value) {
+                for (int i = 0; i < 3; i++, value++) {
+                    value += 2;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
     public void afterProcess() {
         test(new Scriptable() {
 
