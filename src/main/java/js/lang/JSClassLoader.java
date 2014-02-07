@@ -21,6 +21,66 @@ class JSClassLoader {
     private static JSClassLoader system = new JSClassLoader();
 
     /**
+     * Loads the class with the specified <a href="#name">binary name</a>. This method searches for
+     * classes in the same manner as the {@link #loadClass(String, boolean)} method. It is invoked
+     * by the Java virtual machine to resolve class references. Invoking this method is equivalent
+     * to invoking {@link #loadClass(String, boolean) <tt>loadClass(name,
+     * false)</tt>}.
+     *
+     * @param name The <a href="#name">binary name</a> of the class
+     * @return The resulting <tt>Class</tt> object
+     * @throws ClassNotFoundException If the class was not found
+     */
+    public Class<?> loadClass(String name) throws ClassNotFoundException {
+        return loadClass(name, false);
+    }
+
+    /**
+     * Loads the class with the specified <a href="#name">binary name</a>. The default
+     * implementation of this method searches for classes in the following order:
+     * <ol>
+     * <li>
+     * <p>
+     * Invoke {@link #findLoadedClass(String)} to check if the class has already been loaded.
+     * </p>
+     * </li>
+     * <li>
+     * <p>
+     * Invoke the {@link #loadClass(String) <tt>loadClass</tt>} method on the parent class loader.
+     * If the parent is <tt>null</tt> the class loader built-in to the virtual machine is used,
+     * instead.
+     * </p>
+     * </li>
+     * <li>
+     * <p>
+     * Invoke the {@link #findClass(String)} method to find the class.
+     * </p>
+     * </li>
+     * </ol>
+     * <p>
+     * If the class was found using the above steps, and the <tt>resolve</tt> flag is true, this
+     * method will then invoke the {@link #resolveClass(Class)} method on the resulting
+     * <tt>Class</tt> object.
+     * <p>
+     * Subclasses of <tt>ClassLoader</tt> are encouraged to override {@link #findClass(String)},
+     * rather than this method.
+     * </p>
+     * <p>
+     * Unless overridden, this method synchronizes on the result of {@link #getClassLoadingLock
+     * <tt>getClassLoadingLock</tt>} method during the entire class loading process.
+     *
+     * @param name The <a href="#name">binary name</a> of the class
+     * @param resolve If <tt>true</tt> then resolve the class
+     * @return The resulting <tt>Class</tt> object
+     * @throws ClassNotFoundException If the class could not be found
+     */
+    protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
      * Returns the system class loader for delegation. This is the default delegation parent for new
      * <tt>ClassLoader</tt> instances, and is typically the class loader used to start the
      * application.

@@ -724,10 +724,15 @@ class Node {
             Node update = backedges.get(0);
             update.written = true;
 
-            // remove tail semicolon if present
+            // At first, remove tail semicolon.
             if (update.stack.peekLast() == END) {
                 update.remove(0);
             }
+
+            // Then, replace all semicolons with comma from update expression node.
+            update.stack.replaceAll(operand -> {
+                return operand != END ? operand : new OperandExpression(",");
+            });
 
             LoopStructure loop = new LoopStructure(this, nodes[0], nodes[1], update, buffer);
             OperandCondition condition = (OperandCondition) peek(0);

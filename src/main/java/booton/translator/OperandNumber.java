@@ -36,11 +36,11 @@ class OperandNumber extends Operand {
      * {@inheritDoc}
      */
     @Override
-    protected Operand cast(Class type) {
+    protected Operand castActual(Class type) {
         if (type == char.class) {
             return new OperandString(String.valueOf((char) value.intValue()));
         }
-        return super.cast(type);
+        return this;
     }
 
     /**

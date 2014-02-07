@@ -34,6 +34,10 @@ public class PlatformLoggerCoder extends Translator<PlatformLogger> {
         return that + ".warn(" + param(0) + "," + param(1) + ")";
     }
 
+    public String finest(String param0, Object[] param1) {
+        return that + ".finest(" + param(0) + "," + param(1) + ")";
+    }
+
     public String isLoggable(Level param0) {
         return "true";
     }

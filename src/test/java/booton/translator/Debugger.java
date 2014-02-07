@@ -510,6 +510,8 @@ public class Debugger extends AnnotationVisitor {
                 return "Number";
             } else if (operand instanceof OperandEnclose) {
                 return type(((OperandEnclose) operand).value) + " in Enclose";
+            } else if (operand instanceof OperandAmbiguousZeroOneTernary) {
+                return "TernaryCondition";
             }
             return "";
         }

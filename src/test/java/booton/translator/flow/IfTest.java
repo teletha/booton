@@ -355,4 +355,18 @@ public class IfTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void denyInElse() throws Exception {
+        test(new Scriptable() {
+
+            public boolean act(String attrs) {
+                if (attrs == null) {
+                    return attrs != null;
+                } else {
+                    return !attrs.equals("");
+                }
+            }
+        });
+    }
 }

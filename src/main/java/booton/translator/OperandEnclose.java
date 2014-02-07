@@ -28,7 +28,7 @@ class OperandEnclose extends Operand {
      * {@inheritDoc}
      */
     @Override
-    Operand cast(Class type) {
+    Operand castActual(Class type) {
         return value.cast(type);
     }
 

@@ -28,7 +28,7 @@ class OperandAmbiguousZeroOneTernary extends Operand {
      * {@inheritDoc}
      */
     @Override
-    Operand cast(Class type) {
+    Operand castActual(Class type) {
         if (type == boolean.class) {
             return condition;
         }

@@ -12,6 +12,7 @@ package js.util;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -101,6 +102,50 @@ class Collections {
             result |= c.add(element);
         }
         return result;
+    }
+
+    /**
+     * Returns a dynamically typesafe view of the specified list. Any attempt to insert an element
+     * of the wrong type will result in an immediate {@link ClassCastException}. Assuming a list
+     * contains no incorrectly typed elements prior to the time a dynamically typesafe view is
+     * generated, and that all subsequent access to the list takes place through the view, it is
+     * <i>guaranteed</i> that the list cannot contain an incorrectly typed element.
+     * <p>
+     * A discussion of the use of dynamically typesafe views may be found in the documentation for
+     * the {@link #checkedCollection checkedCollection} method.
+     * <p>
+     * The returned list will be serializable if the specified list is serializable.
+     * <p>
+     * Since {@code null} is considered to be a value of any reference type, the returned list
+     * permits insertion of null elements whenever the backing list does.
+     *
+     * @param <E> the class of the objects in the list
+     * @param list the list for which a dynamically typesafe view is to be returned
+     * @param type the type of element that {@code list} is permitted to hold
+     * @return a dynamically typesafe view of the specified list
+     * @since 1.5
+     */
+    public static <E> List<E> checkedList(List<E> list, Class<E> type) {
+        return list;
+    }
+
+    /**
+     * Returns an enumeration that has no elements. More precisely,
+     * <ul>
+     * <li>{@link Enumeration#hasMoreElements hasMoreElements} always returns {@code false}.</li>
+     * <li> {@link Enumeration#nextElement nextElement} always throws {@link NoSuchElementException}.
+     * </li>
+     * </ul>
+     * <p>
+     * Implementations of this method are permitted, but not required, to return the same object
+     * from multiple invocations.
+     *
+     * @param <T> the class of the objects in the enumeration
+     * @return an empty enumeration
+     * @since 1.7
+     */
+    public static <T> Enumeration<T> emptyEnumeration() {
+        return (Enumeration<T>) EmptyEnumeration.EMPTY_ENUMERATION;
     }
 
     /**
@@ -201,6 +246,28 @@ class Collections {
      */
     public static <K, V> Map<K, V> emptyMap() {
         return (Map<K, V>) EMPTY_MAP;
+    }
+
+    /**
+     * Returns an unmodifiable view of the specified collection. This method allows modules to
+     * provide users with "read-only" access to internal collections. Query operations on the
+     * returned collection "read through" to the specified collection, and attempts to modify the
+     * returned collection, whether direct or via its iterator, result in an
+     * <tt>UnsupportedOperationException</tt>.
+     * <p>
+     * The returned collection does <i>not</i> pass the hashCode and equals operations through to
+     * the backing collection, but relies on <tt>Object</tt>'s <tt>equals</tt> and <tt>hashCode</tt>
+     * methods. This is necessary to preserve the contracts of these operations in the case that the
+     * backing collection is a set or a list.
+     * <p>
+     * The returned collection will be serializable if the specified collection is serializable.
+     *
+     * @param <T> the class of the objects in the collection
+     * @param collection the collection for which an unmodifiable view is to be returned.
+     * @return an unmodifiable view of the specified collection.
+     */
+    public static <T> Collection<T> unmodifiableCollection(Collection<? extends T> collection) {
+        return new UnmodifiableCollection(collection);
     }
 
     /**
@@ -345,6 +412,19 @@ class Collections {
     }
 
     /**
+     * <p>
+     * Internal helper.
+     * </p>
+     * 
+     * @param collection
+     * @param mutex
+     * @return
+     */
+    static <T> Collection<T> synchronizedCollection(Collection<T> collection, Object mutex) {
+        return collection;
+    }
+
+    /**
      * Returns a synchronized (thread-safe) list backed by the specified list. In order to guarantee
      * serial access, it is critical that <strong>all</strong> access to the backing list is
      * accomplished through the returned list.
@@ -373,6 +453,19 @@ class Collections {
     }
 
     /**
+     * <p>
+     * Internal helper.
+     * </p>
+     * 
+     * @param list
+     * @param mutex
+     * @return
+     */
+    static <T> List<T> synchronizedList(List<T> list, Object mutex) {
+        return list;
+    }
+
+    /**
      * Returns a synchronized (thread-safe) set backed by the specified set. In order to guarantee
      * serial access, it is critical that <strong>all</strong> access to the backing set is
      * accomplished through the returned set.
@@ -397,6 +490,19 @@ class Collections {
      * @return a synchronized view of the specified set.
      */
     public static <T> Set<T> synchronizedSet(Set<T> set) {
+        return set;
+    }
+
+    /**
+     * <p>
+     * Internal helper.
+     * </p>
+     * 
+     * @param set
+     * @param mutex
+     * @return
+     */
+    static <T> Set<T> synchronizedSet(Set<T> set, Object mutex) {
         return set;
     }
 
@@ -717,6 +823,31 @@ class Collections {
         @Override
         public int hashCode() {
             return comparator.hashCode() ^ Integer.MIN_VALUE;
+        }
+    }
+
+    /**
+     * @version 2014/02/07 9:31:41
+     */
+    private static class EmptyEnumeration<E> implements Enumeration<E> {
+
+        /** The singleton. */
+        private static final EmptyEnumeration<Object> EMPTY_ENUMERATION = new EmptyEnumeration();
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean hasMoreElements() {
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E nextElement() {
+            throw new NoSuchElementException();
         }
     }
 

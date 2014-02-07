@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,32 @@ import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
 
 /**
- * @version 2013/02/15 20:47:17
+ * @version 2014/02/07 12:59:06
  */
 @SuppressWarnings("unused")
 public class BooleanArrayTest extends ScriptTester {
 
     @Test
-    public void Array() {
+    public void base() {
         test(new Scriptable() {
 
             public boolean[] act() {
                 boolean[] array = new boolean[2];
                 array[0] = true;
                 array[1] = false;
+
+                return array;
+            }
+        });
+    }
+
+    @Test
+    public void multipleAssign() throws Exception {
+        test(new Scriptable() {
+
+            public boolean[] act() {
+                boolean[] array = new boolean[3];
+                array[0] = array[1] = array[2] = true;
 
                 return array;
             }

@@ -16,7 +16,7 @@ import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
 
 /**
- * @version 2013/11/22 11:21:48
+ * @version 2014/02/07 12:58:35
  */
 @SuppressWarnings("unused")
 public class IntArrayTest extends ScriptTester {
@@ -29,6 +29,19 @@ public class IntArrayTest extends ScriptTester {
                 int[] array = new int[2];
                 array[0] = 1;
                 array[1] = 2;
+
+                return array;
+            }
+        });
+    }
+
+    @Test
+    public void multipleAssign() throws Exception {
+        test(new Scriptable() {
+
+            public int[] act() {
+                int[] array = new int[3];
+                array[0] = array[1] = array[2] = 3;
 
                 return array;
             }
