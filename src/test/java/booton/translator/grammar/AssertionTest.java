@@ -13,7 +13,6 @@ import org.junit.Test;
 
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
-import booton.translator.Debuggable;
 
 /**
  * @version 2014/02/07 13:10:32
@@ -35,23 +34,9 @@ public class AssertionTest extends ScriptTester {
     public void multiple() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             void act(int value) {
                 assert value != 10 || value != 20;
             }
         });
     }
-
-    // @Test
-    // public void testname() throws Exception {
-    // test(new Scriptable() {
-    //
-    // @Debuggable
-    // void act(int value) {
-    // if (value != 10 || value != 20) {
-    // throw new Error();
-    // }
-    // }
-    // });
-    // }
 }

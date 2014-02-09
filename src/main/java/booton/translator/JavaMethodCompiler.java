@@ -195,6 +195,9 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The flag whether the next jump instruction is used for assert statement or not. */
     private boolean assertJump = false;
 
+    /** The flag whether the next new instruction is used for assert statement or not. */
+    private boolean assertNew = false;
+
     /**
      * {@link Enum#values} produces special bytecode, so we must handle it by special way.
      */
@@ -479,8 +482,8 @@ class JavaMethodCompiler extends MethodVisitor {
     public void visitFieldInsn(int opcode, String ownerClassName, String name, String desc) {
         // If this field access instruction is used for assertion, we should skip it to erase
         // compiler generated extra code.
-        if (name.equals("$assertionsDisabled")) {
-            assertJump = true;
+        if (opcode == GETSTATIC && name.equals("$assertionsDisabled")) {
+            assertJump = assertNew = true;
             return;
         }
 
@@ -1400,7 +1403,7 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
-     * Connect the current node and the specified labed node.
+     * Connect the current node and the specified label node.
      * 
      * @param label
      * @return
@@ -1431,6 +1434,9 @@ class JavaMethodCompiler extends MethodVisitor {
         // Decide target node
         Node target = node.previous;
 
+        if (debugger.enable) {
+            debugger.print(target);
+        }
         // Merge the sequencial conditional operands in this node from right to left.
         for (int i = 0; i < target.stack.size(); i++) {
             Operand operand = target.peek(i);
@@ -1744,6 +1750,10 @@ class JavaMethodCompiler extends MethodVisitor {
 
         switch (opcode) {
         case NEW:
+            if (assertNew) {
+                assertNew = false;
+                current = createNode();
+            }
             countInitialization++;
 
             current.addOperand("new " + Javascript.computeClassName(convert(type)));
@@ -1867,6 +1877,30 @@ class JavaMethodCompiler extends MethodVisitor {
             }
             break;
         }
+    }
+
+    /**
+     * <p>
+     * Create new node after the current node.
+     * </p>
+     * 
+     * @return A created node.
+     */
+    private final Node createNode() {
+        Node created = new Node(counter++, debugger);
+        created.previous = current;
+
+        // make connection
+        current.connect(created);
+
+        // insert to node list
+        nodes.add(created);
+
+        // merge all conditions in the previous node
+        mergeConditions(created);
+
+        // API definition
+        return created;
     }
 
     /**
