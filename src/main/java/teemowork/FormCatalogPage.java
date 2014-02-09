@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
@@ -131,7 +133,7 @@ public class FormCatalogPage extends Page {
 
         ObservableMap<String, String> map = FXCollections.observableMap(aaa);
         map.addListener((MapChangeListener) (e) -> {
-            System.out.println(e);
+            System.out.println("event " + e);
         });
 
         map.put("1", "one");
@@ -139,6 +141,19 @@ public class FormCatalogPage extends Page {
 
         map.put("1", "one");
         map.put("2", "two");
+
+        StringProperty property1 = new SimpleStringProperty("aaa");
+        StringProperty property2 = new SimpleStringProperty("bbb");
+        System.out.println(property1);
+        System.out.println(property2);
+        
+        property1.bindBidirectional(property2);
+        System.out.println(property1);
+        System.out.println(property2);
+        
+        property1.set("change");
+        System.out.println(property1);
+        System.out.println(property2);
     }
 
     /**
