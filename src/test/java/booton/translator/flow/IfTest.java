@@ -361,7 +361,7 @@ public class IfTest extends ScriptTester {
     public void denyInElse() throws Exception {
         test(new Scriptable() {
 
-            public boolean act(String attrs) {
+            boolean act(String attrs) {
                 if (attrs == null) {
                     return attrs != null;
                 } else {
@@ -378,11 +378,11 @@ public class IfTest extends ScriptTester {
             private String value;
 
             @Debuggable
-            String act(String newValue) {
-                if ((value == null) ? newValue != null : !value.equals(newValue)) {
-                    return "change";
+            boolean act(int value) {
+                if ((value % 2 == 0) ? value < 0 : 0 < value) {
+                    return true;
                 }
-                return "same";
+                return false;
             }
         });
     }

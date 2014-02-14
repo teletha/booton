@@ -1237,7 +1237,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         // recode current instruction
-        record(JUMP);
+        record(opcode);
 
         // search node
         Node node = getNode(label);
@@ -2140,6 +2140,31 @@ class JavaMethodCompiler extends MethodVisitor {
                 case LRETURN:
                 case FRETURN:
                 case DRETURN:
+                    continue root;
+
+                default:
+                    return false;
+                }
+
+            case JUMP:
+                switch (record) {
+                case IFEQ:
+                case IFGE:
+                case IFGT:
+                case IFLE:
+                case IFLT:
+                case IFNE:
+                case IFNONNULL:
+                case IFNULL:
+                case IF_ACMPEQ:
+                case IF_ACMPNE:
+                case IF_ICMPEQ:
+                case IF_ICMPGE:
+                case IF_ICMPGT:
+                case IF_ICMPLE:
+                case IF_ICMPLT:
+                case IF_ICMPNE:
+                case GOTO:
                     continue root;
 
                 default:

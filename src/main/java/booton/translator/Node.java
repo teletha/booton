@@ -758,10 +758,14 @@ class Node {
      * @param buffer
      */
     private void writeIf(ScriptWriter buffer) {
-        OperandCondition condition = (OperandCondition) stack.peekLast();
+        Operand operand = stack.peekLast();
 
-        if (condition.next == outgoing.get(0)) {
-            condition.invert();
+        if (operand instanceof OperandCondition) {
+            OperandCondition condition = (OperandCondition) operand;
+
+            if (condition.next == outgoing.get(0)) {
+                condition.invert();
+            }
         }
 
         Node then = null;
@@ -770,7 +774,7 @@ class Node {
 
         if (outgoing.get(0).incoming.size() != 1) {
             // no else
-            condition.invert();
+            operand.invert();
 
             then = outgoing.get(1);
             follow = outgoing.get(0);
