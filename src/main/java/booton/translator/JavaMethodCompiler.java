@@ -294,14 +294,10 @@ class JavaMethodCompiler extends MethodVisitor {
             int number = searchConditionalOperandSeparator(node);
 
             if (number != -1) {
-                debugger.print(nodes);
-                debugger.print(nodes.get(i + 1));
                 Node created = createNode(nodes.get(i + 1));
-                debugger.print("create node " + created.id);
 
                 // transfer operands
                 for (int j = 0; j < number; j++) {
-                    debugger.print(node);
                     Operand operand = node.stack.pollLast();
 
                     if (operand instanceof OperandCondition) {
@@ -312,8 +308,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
                     created.stack.addFirst(operand);
                 }
-
-                debugger.print(nodes);
             }
         }
 
@@ -1434,9 +1428,6 @@ class JavaMethodCompiler extends MethodVisitor {
         // Decide target node
         Node target = node.previous;
 
-        if (debugger.enable) {
-            debugger.print(target);
-        }
         // Merge the sequencial conditional operands in this node from right to left.
         for (int i = 0; i < target.stack.size(); i++) {
             Operand operand = target.peek(i);
