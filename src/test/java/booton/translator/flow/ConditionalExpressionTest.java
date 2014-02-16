@@ -14,6 +14,7 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
+import booton.translator.Debuggable;
 
 /**
  * @version 2013/08/09 15:50:42
@@ -202,6 +203,34 @@ public class ConditionalExpressionTest extends ScriptTester {
                 } else {
                     return value % 3 == 0 ? 0 : 1;
                 }
+            }
+        });
+    }
+
+    @Test
+    public void inIfCondition() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            boolean act(int value) {
+                if (value < 0 ? value == -1 : value == 2) {
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    @Test
+    public void inIfCondition2() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            boolean act(int value) {
+                if (value < 0 ? true : value == 2) {
+                    return true;
+                }
+                return false;
             }
         });
     }

@@ -14,7 +14,6 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
-import booton.translator.Debuggable;
 
 /**
  * @version 2013/08/11 9:53:05
@@ -367,22 +366,6 @@ public class IfTest extends ScriptTester {
                 } else {
                     return !attrs.equals("");
                 }
-            }
-        });
-    }
-
-    @Test
-    public void ternaryOperator() throws Exception {
-        test(new Scriptable() {
-
-            private String value;
-
-            @Debuggable
-            boolean act(int value) {
-                if ((value % 2 == 0) ? value < 0 : 0 < value) {
-                    return true;
-                }
-                return false;
             }
         });
     }
