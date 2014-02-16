@@ -1440,11 +1440,17 @@ class JavaMethodCompiler extends MethodVisitor {
 
                     // This is first operand condition.
                     group.add(condition.transition);
+                    debugger.print("add first transition " + condition.transition.id);
 
                     // Set next appearing node for grouping.
                     condition.next = node;
                 } else if (group.contains(condition.transition) && target.peek(i - 1) instanceof OperandCondition) {
+                    OperandCondition p = (OperandCondition) target.peek(i - 1);
+
                     // Merge two adjucent conditional operands.
+                    debugger.print(target);
+                    debugger.print(condition.toString2());
+                    debugger.print(p.toString2());
                     i--;
 
                     target.set(i, new OperandCondition(condition, (OperandCondition) target.remove(i)));
