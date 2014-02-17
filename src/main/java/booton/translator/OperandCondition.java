@@ -46,10 +46,10 @@ class OperandCondition extends Operand {
     static final int GE = ~LT;
 
     /** The left operand of this conditional expression. */
-    private Operand left;
+    Operand left;
 
     /** The right operand of this conditional expression. */
-    private Operand right;
+    Operand right;
 
     /** The transition node. */
     final Node transition;

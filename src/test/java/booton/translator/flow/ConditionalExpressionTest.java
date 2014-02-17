@@ -208,7 +208,7 @@ public class ConditionalExpressionTest extends ScriptTester {
     }
 
     @Test
-    public void inIfCondition() throws Exception {
+    public void ifCondition() throws Exception {
         test(new Scriptable() {
 
             @Debuggable
@@ -222,7 +222,7 @@ public class ConditionalExpressionTest extends ScriptTester {
     }
 
     @Test
-    public void inIfCondition2() throws Exception {
+    public void ifCondition2() throws Exception {
         test(new Scriptable() {
 
             @Debuggable
@@ -231,6 +231,20 @@ public class ConditionalExpressionTest extends ScriptTester {
                     return true;
                 }
                 return false;
+            }
+        });
+    }
+
+    @Test
+    public void whileCondition() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            int act(int value) {
+                while (value < 0 ? value != -2 : value != 2) {
+                    value++;
+                }
+                return value;
             }
         });
     }
