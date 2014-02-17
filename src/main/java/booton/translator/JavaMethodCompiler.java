@@ -578,6 +578,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
+        current.frame = true;
+
         switch (type) {
         case F_NEW:
             record(FRAME_NEW);
@@ -621,6 +623,8 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void processTernaryOperator() {
+        isTernary();
+
         Operand third = current.peek(2);
 
         if (third instanceof OperandCondition) {
@@ -673,6 +677,38 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 // process recursively
                 processTernaryOperator();
+            }
+        }
+    }
+
+    private void isTernary() {
+        if (3 <= nodes.size() && match(GOTO, LABEL)) {
+            Node previous1 = current.previous;
+            Node previous2 = previous1.previous;
+
+            if (previous1.frame && previous2.frame) {
+                Operand operand = previous2.peek(0);
+
+                if (operand instanceof OperandCondition) {
+                    OperandCondition first, second, third;
+                    OperandCondition condition = (OperandCondition) operand;
+                    System.out.println(condition);
+                    if (condition.left instanceof OperandCondition && condition.right instanceof OperandCondition) {
+                        second = (OperandCondition) condition.left;
+                        third = (OperandCondition) condition.right;
+
+                        if (second.left instanceof OperandCondition && second.right instanceof OperandCondition) {
+                            first = (OperandCondition) second.left;
+                            second = (OperandCondition) second.right;
+
+                            System.out.println(first.transition.id + "  " + second.transition.id + "   " + third.transition.id);
+                            System.out.println(debugger.methodName + "   " + script.source);
+
+                            previous2.remove(0);
+                            previous2.stack.add(new OperandExpression(first.disclose() + "?" + second.disclose() + ":" + third.disclose(), new InferredType(third, second)));
+                        }
+                    }
+                }
             }
         }
     }
@@ -1953,7 +1989,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private final void disposeNode(Node target, boolean clearStack) {
-        debugger.print("dispose" + target.id);
+        debugger.print("dispose node " + target.id);
         debugger.print(nodes);
 
         int index = nodes.indexOf(target);
@@ -2002,6 +2038,9 @@ class JavaMethodCompiler extends MethodVisitor {
                 target.previous.stack.addAll(target.stack);
             }
         }
+
+        // copy frame info
+        target.previous.frame = target.frame;
 
         // Delete all operands from the current processing node
         target.stack.clear();

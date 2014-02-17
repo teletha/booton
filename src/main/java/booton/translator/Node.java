@@ -60,6 +60,9 @@ class Node {
     /** The previous node. */
     Node previous;
 
+    /** The flag whether this node has additional frame or not. */
+    boolean frame;
+
     /** This node is switch starting node. */
     private Switch switchy;
 
