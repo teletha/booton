@@ -682,7 +682,7 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     private void isTernary() {
-        if (3 <= nodes.size() && match(GOTO, LABEL)) {
+        if (3 <= nodes.size()) {
             Node previous1 = current.previous;
             Node previous2 = previous1.previous;
 
@@ -690,24 +690,26 @@ class JavaMethodCompiler extends MethodVisitor {
                 Operand operand = previous2.peek(0);
 
                 if (operand instanceof OperandCondition) {
-                    OperandCondition first, second, third;
+                    OperandCondition first;
+                    Operand second, third;
                     OperandCondition condition = (OperandCondition) operand;
                     System.out.println(condition);
-                    if (condition.left instanceof OperandCondition && condition.right instanceof OperandCondition) {
-                        second = (OperandCondition) condition.left;
-                        third = (OperandCondition) condition.right;
+                    // mergeConditions(current);
 
-                        if (second.left instanceof OperandCondition && second.right instanceof OperandCondition) {
-                            first = (OperandCondition) second.left;
-                            second = (OperandCondition) second.right;
-
-                            System.out.println(first.transition.id + "  " + second.transition.id + "   " + third.transition.id);
-                            System.out.println(debugger.methodName + "   " + script.source);
-
-                            previous2.remove(0);
-                            previous2.stack.add(new OperandExpression(first.disclose() + "?" + second.disclose() + ":" + third.disclose(), new InferredType(third, second)));
-                        }
-                    }
+                    // if (condition.left instanceof OperandCondition) {
+                    // first = (OperandCondition) condition.left;
+                    // third = condition.right;
+                    //
+                    // if (first.left instanceof OperandCondition) {
+                    // second = first.right;
+                    // first = (OperandCondition) first.left;
+                    //
+                    // previous2.remove(0);
+                    // previous2.stack.add(new OperandExpression(first.disclose() + "?" +
+                    // second.disclose() + ":" + third.disclose(), new InferredType(third,
+                    // second)));
+                    // }
+                    // }
                 }
             }
         }
@@ -1456,6 +1458,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void mergeConditions(Node node) {
+        debugger.print("start merge condition");
         Set<Node> group = new HashSet();
         group.add(node);
 
@@ -1463,6 +1466,8 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // Decide target node
         Node target = node.previous;
+        debugger.print("search condition from the following node");
+        debugger.print(target);
 
         // Merge the sequencial conditional operands in this node from right to left.
         for (int i = 0; i < target.stack.size(); i++) {
@@ -1472,21 +1477,18 @@ class JavaMethodCompiler extends MethodVisitor {
                 OperandCondition condition = (OperandCondition) operand;
 
                 if (!found) {
+                    debugger.print("     found first condition [index : " + i + ", value : " + condition + ", transitionNode : " + condition.transition.id + "]");
                     found = true;
 
                     // This is first operand condition.
                     group.add(condition.transition);
-                    debugger.print("add first transition " + condition.transition.id);
 
                     // Set next appearing node for grouping.
                     condition.next = node;
                 } else if (group.contains(condition.transition) && target.peek(i - 1) instanceof OperandCondition) {
-                    OperandCondition p = (OperandCondition) target.peek(i - 1);
+                    debugger.print("     merge conditions " + i + " and " + (i - 1));
 
                     // Merge two adjucent conditional operands.
-                    debugger.print(target);
-                    debugger.print(condition.toString2());
-                    debugger.print(p.toString2());
                     i--;
 
                     target.set(i, new OperandCondition(condition, (OperandCondition) target.remove(i)));
@@ -1495,6 +1497,8 @@ class JavaMethodCompiler extends MethodVisitor {
                 }
             }
         }
+
+        debugger.print("end merge condition");
 
         // Merge this node and the specified node.
         // Rearch the start of node
@@ -2040,7 +2044,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         // copy frame info
-        target.previous.frame = target.frame;
+        // target.previous.frame = target.frame;
 
         // Delete all operands from the current processing node
         target.stack.clear();
