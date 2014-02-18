@@ -9,6 +9,7 @@
  */
 package booton.translator.flow;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.soeur.Param;
@@ -236,6 +237,37 @@ public class ConditionalExpressionTest extends ScriptTester {
     }
 
     @Test
+    public void ifCondition3() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            boolean act(int value) {
+                if (value < 0 || value == 2) {
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    @Test
+    public void ifCondition4() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            boolean act(int value) {
+                if (value >= 0) {
+                    if (value != 2) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        });
+    }
+
+    @Test
+    @Ignore
     public void whileCondition() throws Exception {
         test(new Scriptable() {
 
