@@ -213,16 +213,21 @@ public class ConditionalExpressionTest extends ScriptTester {
         test(new Scriptable() {
 
             @Debuggable
-            boolean act(int value) {
+            String act(int value) {
                 if (value < 0 ? value == -1 : value == 2) {
-                    return true;
+                    if (value < 0) {
+                        return "one";
+                    } else {
+                        return "two";
+                    }
                 }
-                return false;
+                return "threes";
             }
         });
     }
 
     @Test
+    @Ignore
     public void ifCondition2() throws Exception {
         test(new Scriptable() {
 
@@ -232,36 +237,6 @@ public class ConditionalExpressionTest extends ScriptTester {
                     return true;
                 }
                 return false;
-            }
-        });
-    }
-
-    @Test
-    public void ifCondition3() throws Exception {
-        test(new Scriptable() {
-
-            @Debuggable
-            boolean act(int value) {
-                if (value < 0 || value == 2) {
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
-
-    @Test
-    public void ifCondition4() throws Exception {
-        test(new Scriptable() {
-
-            @Debuggable
-            boolean act(int value) {
-                if (value >= 0) {
-                    if (value != 2) {
-                        return false;
-                    }
-                }
-                return true;
             }
         });
     }

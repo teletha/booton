@@ -63,6 +63,8 @@ class Node {
     /** The flag whether this node has additional frame or not. */
     boolean frame;
 
+    boolean to;
+
     /** This node is switch starting node. */
     private Switch switchy;
 
@@ -803,6 +805,30 @@ class Node {
             if (elze != null) {
                 elze.continueOmittable = false;
                 elze.returnOmittable = false;
+            }
+        }
+
+        int multiplicity = operand.computeMultiplicity();
+
+        if (5 <= multiplicity) {
+            if (then.to) {
+                OperandCondition condition = (OperandCondition) operand;
+                OperandCondition base = (OperandCondition) condition.left;
+                Operand root = base.left.invert();
+                Operand left = base.right;
+                Operand right = condition.right;
+
+                remove(0);
+                addOperand(new OperandExpression(root + "?" + left + ":" + right));
+            } else if (elze != null && elze.frame && elze.to) {
+                OperandCondition condition = (OperandCondition) operand;
+                OperandCondition base = (OperandCondition) condition.left;
+                Operand root = base.left;
+                Operand left = base.right;
+                Operand right = condition.right;
+
+                remove(0);
+                addOperand(new OperandExpression(root + "?" + left + ":" + right));
             }
         }
 

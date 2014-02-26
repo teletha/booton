@@ -57,6 +57,10 @@ abstract class Operand {
         return this;
     }
 
+    int computeMultiplicity() {
+        return 1;
+    }
+
     /**
      * <p>
      * Enclose this operand.
