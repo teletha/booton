@@ -106,6 +106,14 @@ class OperandCondition extends Operand {
      * {@inheritDoc}
      */
     @Override
+    int computeMultiplicity() {
+        return left.computeMultiplicity() + right.computeMultiplicity();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     InferredType infer() {
         return new InferredType(boolean.class);
     }

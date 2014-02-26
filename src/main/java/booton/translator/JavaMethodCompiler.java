@@ -261,7 +261,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        // if (script.source.getName().endsWith("LeftObserver") && original.equals("onNext")) {
+        // if (script.source.getName().endsWith("StringPropertyBase") && original.equals("set")) {
         // debugger.enable = true;
         // }
     }
@@ -623,8 +623,6 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void processTernaryOperator() {
-        isTernary();
-
         Operand third = current.peek(2);
 
         if (third instanceof OperandCondition) {
@@ -677,40 +675,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 // process recursively
                 processTernaryOperator();
-            }
-        }
-    }
-
-    private void isTernary() {
-        if (3 <= nodes.size()) {
-            Node previous1 = current.previous;
-            Node previous2 = previous1.previous;
-
-            if (previous1.frame && previous2.frame) {
-                Operand operand = previous2.peek(0);
-
-                if (operand instanceof OperandCondition) {
-                    OperandCondition first;
-                    Operand second, third;
-                    OperandCondition condition = (OperandCondition) operand;
-                    System.out.println(condition);
-                    // mergeConditions(current);
-
-                    // if (condition.left instanceof OperandCondition) {
-                    // first = (OperandCondition) condition.left;
-                    // third = condition.right;
-                    //
-                    // if (first.left instanceof OperandCondition) {
-                    // second = first.right;
-                    // first = (OperandCondition) first.left;
-                    //
-                    // previous2.remove(0);
-                    // previous2.stack.add(new OperandExpression(first.disclose() + "?" +
-                    // second.disclose() + ":" + third.disclose(), new InferredType(third,
-                    // second)));
-                    // }
-                    // }
-                }
             }
         }
     }
@@ -1279,6 +1243,7 @@ class JavaMethodCompiler extends MethodVisitor {
             connect(label);
             // disconnect the next appearing node from the current node
             current = null;
+            node.to = true;
             return;
 
         case IFEQ: // == 0
@@ -1458,7 +1423,6 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void mergeConditions(Node node) {
-        debugger.print("start merge condition");
         Set<Node> group = new HashSet();
         group.add(node);
 
@@ -1466,8 +1430,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // Decide target node
         Node target = node.previous;
-        debugger.print("search condition from the following node");
-        debugger.print(target);
 
         // Merge the sequencial conditional operands in this node from right to left.
         for (int i = 0; i < target.stack.size(); i++) {
@@ -1477,7 +1439,6 @@ class JavaMethodCompiler extends MethodVisitor {
                 OperandCondition condition = (OperandCondition) operand;
 
                 if (!found) {
-                    debugger.print("     found first condition [index : " + i + ", value : " + condition + ", transitionNode : " + condition.transition.id + "]");
                     found = true;
 
                     // This is first operand condition.
@@ -1486,8 +1447,6 @@ class JavaMethodCompiler extends MethodVisitor {
                     // Set next appearing node for grouping.
                     condition.next = node;
                 } else if (group.contains(condition.transition) && target.peek(i - 1) instanceof OperandCondition) {
-                    debugger.print("     merge conditions " + i + " and " + (i - 1));
-
                     // Merge two adjucent conditional operands.
                     i--;
 
@@ -1497,8 +1456,6 @@ class JavaMethodCompiler extends MethodVisitor {
                 }
             }
         }
-
-        debugger.print("end merge condition");
 
         // Merge this node and the specified node.
         // Rearch the start of node

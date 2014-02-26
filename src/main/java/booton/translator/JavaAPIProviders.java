@@ -39,7 +39,7 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
      * {@inheritDoc}
      */
     @Override
-    public void load(Class<JavaAPIProvider> clazz) {
+    public void load(Class clazz) {
         Class api = find(clazz);
 
         if (api != null && !definitions.containsKey(api)) {

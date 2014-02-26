@@ -9,15 +9,40 @@
  */
 package js.lang.ref;
 
+import java.lang.ref.ReferenceQueue;
+
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2014/02/06 9:34:27
+ * @version 2014/02/26 14:23:09
  */
 @JavaAPIProvider(java.lang.ref.Reference.class)
 class Reference<T> {
 
-    private T reference;
+    private T referent;
+
+    /**
+     * <p>
+     * Hide constructor.
+     * </p>
+     * 
+     * @param referent
+     */
+    Reference(T referent) {
+        this(referent, null);
+    }
+
+    /**
+     * <p>
+     * Hide constructor.
+     * </p>
+     * 
+     * @param referent
+     * @param queue
+     */
+    Reference(T referent, ReferenceQueue<? super T> queue) {
+        this.referent = referent;
+    }
 
     /**
      * Returns this reference object's referent. If this reference object has been cleared, either
@@ -27,6 +52,6 @@ class Reference<T> {
      *         object has been cleared
      */
     public T get() {
-        return reference;
+        return referent;
     }
 }
