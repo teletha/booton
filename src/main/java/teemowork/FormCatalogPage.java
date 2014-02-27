@@ -11,15 +11,9 @@ package teemowork;
 
 import static js.lang.Global.*;
 
-import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableMap;
 import js.dom.DocumentFragment;
 import js.dom.UIAction;
 import js.dom.UIEvent;
@@ -128,32 +122,6 @@ public class FormCatalogPage extends Page {
         // restored.modeler.aaa();
 
         root.child(new Select(Version.class));
-
-        HashMap<String, String> aaa = new HashMap();
-
-        ObservableMap<String, String> map = FXCollections.observableMap(aaa);
-        map.addListener((MapChangeListener) (e) -> {
-            System.out.println("event " + e);
-        });
-
-        map.put("1", "one");
-        map.remove("1");
-
-        map.put("1", "one");
-        map.put("2", "two");
-
-        StringProperty property1 = new SimpleStringProperty("aaa");
-        StringProperty property2 = new SimpleStringProperty("bbb");
-        System.out.println(property1);
-        System.out.println(property2);
-        
-        property1.bindBidirectional(property2);
-        System.out.println(property1);
-        System.out.println(property2);
-        
-        property1.set("change");
-        System.out.println(property1);
-        System.out.println(property2);
     }
 
     /**

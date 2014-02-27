@@ -365,7 +365,7 @@ public class Champion {
     public static final Champion Wukong = new Champion("Wukong", StoneSkin, CrushingBlow, Decoy, NimbusStrike, Cyclone);
 
     /** The champion name. */
-    public static final Champion Xerath = new Champion("Xerath", AscendedForm, Arcanopulse, LocusOfPower, MageChains, ArcaneBarrage);
+    public static final Champion Xerath = new Champion("Xerath", AscendedForm, Arcanopulse, LocusOfPower, ShockingOrb, RiteOfTheArcane);
 
     /** The champion name. */
     public static final Champion XinZhao = new Champion("Xin Zhao", Challenge, ThreeTalonStrike, BattleCry, AudaciousCharge, CrescentSweep);
@@ -606,9 +606,9 @@ public class Champion {
                 .set(AR, 10.5, 4)
                 .set(MR, 30, 0)
                 .set(Range, 600)
-                .set(ProjectileSpeed, 1100)
+                .set(MissileSpeed, 1100)
                 .set(MS, 325);
-        Anivia.update(P410).set(ProjectileSpeed, 1400);
+        Anivia.update(P411).set(MissileSpeed, 1400);
         Annie.update(P0000)
                 .set(Health, 384, 76)
                 .set(Hreg, 4.5, 0.55)
@@ -971,7 +971,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 525)
                 .set(MS, 325);
-        Jinx.update(P410).set(Health, 388, 82);
+        Jinx.update(P411).set(Health, 388, 82);
         Karma.update(P0000)
                 .set(Health, 410, 86)
                 .set(Hreg, 4.7, 0.55)
@@ -1231,8 +1231,8 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 340)
-                .set(ProjectileSpeed, 1350);
-        Nami.update(P307).set(ProjectileSpeed, 1500);
+                .set(MissileSpeed, 1350);
+        Nami.update(P307).set(MissileSpeed, 1500);
         Nasus.update(P0000)
                 .set(Health, 410, 90)
                 .set(Hreg, 7.5, 0.9)
@@ -1397,7 +1397,8 @@ public class Champion {
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
                 .set(MS, 345);
-        Riven.update(P410).set(AD, 51, 3);
+        Riven.update(P411).set(AD, 51, 3);
+        Riven.update(P412).set(Hreg, 2.5, 0.5);
         Rumble.update(P0000)
                 .set(Health, 450, 80)
                 .set(Hreg, 7, 0.7)
@@ -1507,6 +1508,7 @@ public class Champion {
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
                 .set(MS, 345);
+        Skarner.update(P412).set(AS, 0.619, 2.1);
         Sona.update(P0000)
                 .set(Health, 340, 70)
                 .set(Hreg, 4.5, 0.55)
@@ -1601,6 +1603,7 @@ public class Champion {
                 .set(MS, 335);
         Thresh.update(P310).set(Health, 411, 89).set(AR, 12, 0);
         Thresh.update(P313).set(AS, 0.625, 3);
+        Thresh.update(P412).set(Range, 450);
         Tristana.update(P0000)
                 .set(Health, 415, 82)
                 .set(Hreg, 5.1, 0.65)
@@ -1781,13 +1784,14 @@ public class Champion {
                 .set(Health, 380, 80)
                 .set(Hreg, 5, 0.55)
                 .set(Mana, 250, 45)
-                .set(Mreg, 8, 0.6)
+                .set(Mreg, 7, 0.6)
                 .set(AD, 52, 3)
                 .set(AS, 0.625, 1.36)
                 .set(AR, 12.6, 3.4)
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 340);
+        Xerath.update(P412).set(Mana, 238, 47).set(Mreg, 6, 0.65).set(Range, 525);
         XinZhao.update(P0000)
                 .set(Health, 445, 87)
                 .set(Hreg, 7, 0.7)
