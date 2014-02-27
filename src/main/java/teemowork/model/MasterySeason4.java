@@ -193,7 +193,7 @@ public class MasterySeason4 extends Mastery {
                 .variable(1, Hreg, 0, 0, amplify(MissingHealthPercentage, 1, 1))
                 .update(P315)
                 .variable(1, Hreg, 0, 0, amplify(MissingHealthPercentage, 0.7, 0.65))
-                .update(P412)
+                .update(P402)
                 .variable(1, Hreg, 0, 0, amplify(MissingHealthPercentage, 0.35, 0.325));
         Swiftness.update().passive("{1}する。").variable(1, MSSlowReductionRatio, 10);
         ReinforcedArmor.update().passive("クリティカルヒットから受ける{1}する。").variable(1, DamageReductionRatio, 10);

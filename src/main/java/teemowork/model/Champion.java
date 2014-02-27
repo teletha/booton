@@ -608,7 +608,7 @@ public class Champion {
                 .set(Range, 600)
                 .set(MissileSpeed, 1100)
                 .set(MS, 325);
-        Anivia.update(P411).set(MissileSpeed, 1400);
+        Anivia.update(P401).set(MissileSpeed, 1400);
         Annie.update(P0000)
                 .set(Health, 384, 76)
                 .set(Hreg, 4.5, 0.55)
@@ -971,7 +971,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 525)
                 .set(MS, 325);
-        Jinx.update(P411).set(Health, 388, 82);
+        Jinx.update(P401).set(Health, 388, 82);
         Karma.update(P0000)
                 .set(Health, 410, 86)
                 .set(Hreg, 4.7, 0.55)
@@ -1397,8 +1397,8 @@ public class Champion {
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
                 .set(MS, 345);
-        Riven.update(P411).set(AD, 51, 3);
-        Riven.update(P412).set(Hreg, 2.5, 0.5);
+        Riven.update(P401).set(AD, 51, 3);
+        Riven.update(P402).set(Hreg, 2.5, 0.5);
         Rumble.update(P0000)
                 .set(Health, 450, 80)
                 .set(Hreg, 7, 0.7)
@@ -1420,6 +1420,7 @@ public class Champion {
                 .set(Range, 550)
                 .set(MS, 335);
         Ryze.update(P312).set(MS, 340);
+        Ryze.update(P403).set(Health, 414, 86);
         Sejuani.update(P0000)
                 .set(Health, 450, 85)
                 .set(Hreg, 7.35, 0.85)
@@ -1508,7 +1509,7 @@ public class Champion {
                 .set(MR, 30, 1.25)
                 .set(Range, 125)
                 .set(MS, 345);
-        Skarner.update(P412).set(AS, 0.619, 2.1);
+        Skarner.update(P402).set(AS, 0.619, 2.1);
         Sona.update(P0000)
                 .set(Health, 340, 70)
                 .set(Hreg, 4.5, 0.55)
@@ -1603,7 +1604,7 @@ public class Champion {
                 .set(MS, 335);
         Thresh.update(P310).set(Health, 411, 89).set(AR, 12, 0);
         Thresh.update(P313).set(AS, 0.625, 3);
-        Thresh.update(P412).set(Range, 450);
+        Thresh.update(P402).set(Range, 450);
         Tristana.update(P0000)
                 .set(Health, 415, 82)
                 .set(Hreg, 5.1, 0.65)
@@ -1791,7 +1792,7 @@ public class Champion {
                 .set(MR, 30, 0)
                 .set(Range, 550)
                 .set(MS, 340);
-        Xerath.update(P412).set(Mana, 238, 47).set(Mreg, 6, 0.65).set(Range, 525);
+        Xerath.update(P402).set(Mana, 238, 47).set(Mreg, 6, 0.65).set(Range, 525);
         XinZhao.update(P0000)
                 .set(Health, 445, 87)
                 .set(Hreg, 7, 0.7)
