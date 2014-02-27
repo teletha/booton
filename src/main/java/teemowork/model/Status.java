@@ -208,9 +208,6 @@ public enum Status {
     /** Range */
     Range("射程"), RangePerLv, RangeRatio("射程"),
 
-    /** Projectile Speed. */
-    ProjectileSpeed("投射速度"),
-
     /** Grow Body Size */
     Grow("サイズ"),
 
@@ -323,6 +320,8 @@ public enum Status {
     Distance("距離"),
 
     MissileSpeed("弾速"),
+
+    MissileWidth("射幅"),
 
     EnemyChampion("敵Championの数"),
 

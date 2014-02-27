@@ -1120,7 +1120,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .remove(Ability.Rend)
                 .add(Ability.Maim)
 
-                .update(P410)
+                .update(P411)
                 .healthRegen(0)
                 .manaRegen(0)
                 .add(Ability.Spirit)
@@ -1143,7 +1143,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .add(Ability.GoldIncome)
                 .add(Ability.Conservation)
 
-                .update(P410)
+                .update(P411)
                 .healthRegen(0)
                 .manaRegen(0)
                 .add(Ability.Spirit);
@@ -1173,7 +1173,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .remove(Ability.BountyHunter)
                 .add(Ability.Conservation)
 
-                .update(P410)
+                .update(P411)
                 .healthRegen(0)
                 .manaRegen(0)
                 .add(Ability.Spirit);
@@ -1213,7 +1213,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .remove(Ability.BountyHunter)
                 .add(Ability.Conservation)
 
-                .update(P410)
+                .update(P411)
                 .healthRegen(0)
                 .manaRegen(0)
 
@@ -1241,7 +1241,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .update(P310A)
                 .cost(500)
 
-                .update(P410)
+                .update(P411)
                 .cooldownReduction(10);
     });
 

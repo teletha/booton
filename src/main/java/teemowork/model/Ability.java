@@ -347,8 +347,9 @@ public class Ability extends Describable<AbilityDescriptor> {
 
     /** The ability. */
     public static final Ability ManaWarp = new Ability("Mana Warp", item -> {
-        item.aura("{1}の味方Championは{2}を得る。").variable(1, Radius, 1100).variable(2, Hreg, 6);
-        ManaWarp.update(P307).variable(2, Hreg, 5);
+        item.aura("{1}の味方Championは{2}を得る。").variable(1, Radius, 1100).variable(2, Hreg, 6)
+
+        .update(P307).variable(2, Hreg, 5);
     });
 
     /** The ability. */
@@ -588,7 +589,7 @@ public class Ability extends Describable<AbilityDescriptor> {
     public static final Ability SunfireCapePassive = new Ability(item -> {
         item.aura("{1}の敵ユニットに毎秒{2}を与える。").variable(1, Radius, 400).variable(2, MagicDamage, 40)
 
-        .update(P410).variable(2, MagicDamage, 25, 0, amplify(Lv, 1));
+        .update(P411).variable(2, MagicDamage, 25, 0, amplify(Lv, 1));
     });
 
     /** The ability. */
