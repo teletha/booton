@@ -136,7 +136,9 @@ public class Ability extends Describable<AbilityDescriptor> {
 
     /** The ability. */
     public static final Ability EnhancedMovement5 = new Ability("Enhanced Movement", item -> {
-        item.passive("{1}する。5秒間戦闘をしなければ、{2}する。").variable(1, MS, 45).variable(2, MS, 105);
+        item.passive("{1}する。5秒間戦闘をしなければ、{2}する。").variable(1, MS, 45).variable(2, MS, 105)
+
+        .update(P403).variable(1, MS, 25);
     });
 
     /** The ability. */
@@ -589,7 +591,7 @@ public class Ability extends Describable<AbilityDescriptor> {
     public static final Ability SunfireCapePassive = new Ability(item -> {
         item.aura("{1}の敵ユニットに毎秒{2}を与える。").variable(1, Radius, 400).variable(2, MagicDamage, 40)
 
-        .update(P411).variable(2, MagicDamage, 25, 0, amplify(Lv, 1));
+        .update(P401).variable(2, MagicDamage, 25, 0, amplify(Lv, 1));
     });
 
     /** The ability. */
@@ -614,9 +616,11 @@ public class Ability extends Describable<AbilityDescriptor> {
 
     /** The ability. */
     public static final Ability TearManaCharge = new Ability("Mana Charge", item -> {
-        item.passive("スキル使用時またはmana消費時に最大Manaが4増加する(最大増加量は750)。{1}。").variable(1, ItemCD, 3)
+        item.passive("スキル使用時またはマナ消費時に最大マナが4増加する(最大増加量は750)。{1}。").variable(1, ItemCD, 3)
 
-        .update(P309).variable(1, ItemCD, 4);
+        .update(P309).variable(1, ItemCD, 4)
+
+        .update(P403).passive("スキル使用時またはマナ消費時に最大マナが4増加し（{1}）、8秒毎に最大マナが1増加する。最大増加量は750。");
     });
 
     /** The ability. */
@@ -707,7 +711,12 @@ public class Ability extends Describable<AbilityDescriptor> {
     public static final Ability Spirit = new Ability(item -> {
         item.passive("モンスターにダメージを与えると{1}し{2}する。(範囲攻撃の場合は効果が半減する)")
                 .variable(1, RestoreHealth, 0, 0, amplify(DealtDamage, 0.08))
-                .variable(2, RestoreMana, 0, 0, amplify(DealtDamage, 0.04));
+                .variable(2, RestoreMana, 0, 0, amplify(DealtDamage, 0.04))
+
+                .update(P403)
+                .passive("モンスターにダメージを与えると{1}し{2}する。")
+                .variable(1, RestoreHealth, 0, 0, amplify(DealtDamage, 0.06))
+                .variable(2, RestoreMana, 0, 0, amplify(DealtDamage, 0.03));
     });
 
     // lazy initialization

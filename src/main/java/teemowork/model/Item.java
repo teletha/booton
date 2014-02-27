@@ -280,7 +280,9 @@ public class Item extends Describable<ItemDescriptor> {
     public static final Item BootsOfMobility = new Item(3117, "Boots of Mobility", item -> {
         item.build(Item.BootsOfSpeed).cost(650).add(Ability.EnhancedMovement5)
 
-        .update(P308).cost(675);
+        .update(P308).cost(675)
+
+        .update(P403).cost(475);
     });
 
     /** Boots of Speed */
@@ -402,7 +404,9 @@ public class Item extends Describable<ItemDescriptor> {
             .update(P308).variable(1, AttackDamageReduction, 8);
         })
 
-        .update(P308).cost(440).armor(0).healthRegen(10);
+        .update(P308).cost(440).armor(0).healthRegen(10)
+
+        .update(P403).health(80).healthRegen(6);
     });
 
     /** Eleisa's Miracle */
@@ -986,7 +990,9 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Ruby Crystal */
     public static final Item RubyCrystal = new Item(1028, "Ruby Crystal", item -> {
-        item.cost(475).health(180);
+        item.cost(475).health(180)
+
+        .update(P403).cost(400).health(150);
     });
 
     /** Ruby Sightstone */
@@ -999,7 +1005,11 @@ public class Item extends Describable<ItemDescriptor> {
 
                 .update(P314)
                 .remove(Ability.GhostWard2)
-                .add(Ability.GhostWard1);
+                .add(Ability.GhostWard1)
+
+                .update(P403)
+                .cost(325)
+                .health(400);
     });
 
     /** Runaan's Hurricane */
@@ -1090,7 +1100,9 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Sightstone */
     public static final Item Sightstone = new Item(2049, "Sightstone", item -> {
-        item.build(RubyCrystal).cost(475).health(180).add(Ability.WardRefresh1).add(Ability.GhostWard1);
+        item.build(RubyCrystal).cost(475).health(180).add(Ability.WardRefresh1).add(Ability.GhostWard1)
+
+        .update(P403).health(150).cost(400);
     });
 
     /** Sorcerer's Shoes */
@@ -1120,7 +1132,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .remove(Ability.Rend)
                 .add(Ability.Maim)
 
-                .update(P411)
+                .update(P401)
                 .healthRegen(0)
                 .manaRegen(0)
                 .add(Ability.Spirit)
@@ -1143,7 +1155,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .add(Ability.GoldIncome)
                 .add(Ability.Conservation)
 
-                .update(P411)
+                .update(P401)
                 .healthRegen(0)
                 .manaRegen(0)
                 .add(Ability.Spirit);
@@ -1173,7 +1185,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .remove(Ability.BountyHunter)
                 .add(Ability.Conservation)
 
-                .update(P411)
+                .update(P401)
                 .healthRegen(0)
                 .manaRegen(0)
                 .add(Ability.Spirit);
@@ -1213,7 +1225,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .remove(Ability.BountyHunter)
                 .add(Ability.Conservation)
 
-                .update(P411)
+                .update(P401)
                 .healthRegen(0)
                 .manaRegen(0)
 
@@ -1241,7 +1253,7 @@ public class Item extends Describable<ItemDescriptor> {
                 .update(P310A)
                 .cost(500)
 
-                .update(P411)
+                .update(P401)
                 .cooldownReduction(10);
     });
 
@@ -1283,7 +1295,9 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Tear of the Goddess */
     public static final Item TearOftheGoddess = new Item(3070, "Tear of the Goddess", item -> {
-        item.build(SapphireCrystal, FaerieCharm).cost(120).manaRegen(7).mana(250).add(Ability.TearManaCharge);
+        item.build(SapphireCrystal, FaerieCharm).cost(120).manaRegen(7).mana(250).add(Ability.TearManaCharge)
+
+        .update(P403).manaRegen(6);
     });
 
     /** Thornmail */
@@ -1510,8 +1524,17 @@ public class Item extends Describable<ItemDescriptor> {
                 .add("Tribute", ability -> {
                     ability.passive("Championに通常攻撃を行うと{1}獲得する（CD{2}）。ミニオンを倒すとこの効果は10秒間無効になる。")
                             .variable(1, Gold, 4)
-                            .variable(2, Time, 10);
-                });
+                            .variable(2, Time, 10)
+
+                            .update(P403)
+                            .passive("敵Championか建物に通常攻撃かスキルを使用すると{2}を与え{1}獲得する。この効果は30秒に3度まで発生し、ミニオンを倒すと12秒間無効になる。")
+                            .variable(1, Gold, 5)
+                            .variable(2, TrueDamage, 10);
+                })
+
+                .update(P403)
+                .abilityPower(5)
+                .manaRegen(2);
     });
 
     /** Frostfang */
@@ -1525,8 +1548,18 @@ public class Item extends Describable<ItemDescriptor> {
                 .add("Tribute", ability -> {
                     ability.passive("Championに通常攻撃を行うと{1}獲得する（CD{2}）。ミニオンを倒すとこの効果は10秒間無効になる。")
                             .variable(1, Gold, 8)
-                            .variable(2, Time, 10);
-                });
+                            .variable(2, Time, 10)
+
+                            .update(P403)
+                            .passive("敵Championか建物に通常攻撃かスキルを使用すると{2}を与え{1}獲得する。この効果は30秒に3度まで発生し、ミニオンを倒すと12秒間無効になる。")
+                            .variable(1, Gold, 10)
+                            .variable(2, TrueDamage, 15);
+                })
+
+                .update(P403)
+                .price(500, 425)
+                .abilityPower(10)
+                .manaRegen(5);
     });
 
     /** Frost Queen's Claim */
@@ -1540,15 +1573,46 @@ public class Item extends Describable<ItemDescriptor> {
                 .add("Tribute", ability -> {
                     ability.passive("Championに通常攻撃を行うと{1}獲得する（{2}）。ミニオンを倒すとこの効果は10秒間無効になる。")
                             .variable(1, Gold, 8)
-                            .variable(2, ItemCD, 10);
-                });
+                            .variable(2, ItemCD, 10)
+
+                            .update(P403)
+                            .passive("敵Championか建物に通常攻撃かスキルを使用すると{2}を与え{1}獲得する。この効果は30秒に3度まで発生する。")
+                            .variable(1, Gold, 10)
+                            .variable(2, TrueDamage, 15);
+                })
+
+                .update(P403)
+                .price(315, 800)
+                .build(Frostfang, FiendishCodex)
+                .abilityPower(40)
+                .cooldownReduction(10)
+                .add(ability -> {
+                    ability.active("対象とその{1}の敵に{2}と2秒かけて減衰する{3}を与える。{4}")
+                            .variable(1, Radius)
+                            .variable(2, MagicDamage, 50, 0, amplify(Lv, 5, 5))
+                            .variable(3, MSSlowRatio, 80)
+                            .variable(4, ItemCD, 60);
+                });;
     });
 
     /** Ancient Coin */
     public static final Item AncientCoin = new Item(3301, "Ancient Coin", item -> {
-        item.price(365, 145).healthRegen(5).manaRegen(3).add(Ability.GoldIncome).add("Favor", ability -> {
-            ability.passive("周囲であなたが殺すことなくミニオンが死んだ場合に{1}獲得する。").variable(1, Gold, 2);
-        });
+        item.price(365, 145)
+                .healthRegen(5)
+                .manaRegen(3)
+                .add(Ability.GoldIncome)
+                .add("Favor", ability -> {
+                    ability.passive("周囲であなたが殺すことなくミニオンが死んだ場合に{1}獲得する。")
+                            .variable(1, Gold, 2)
+
+                            .update(P403)
+                            .passive("周囲であなたが殺すことなくミニオンが死んだ場合に{1}獲得し、{2}する。")
+                            .variable(1, Gold, 2)
+                            .variable(2, RestoreHealth, 5);
+                })
+
+                .update(P403)
+                .healthRegen(0);
     });
 
     /** Nomad's Medallion */
@@ -1560,8 +1624,19 @@ public class Item extends Describable<ItemDescriptor> {
                 .goldGeneration(2)
                 .add(Ability.GoldIncome)
                 .add("Favor", ability -> {
-                    ability.passive("周囲であなたが殺すことなくミニオンが死んだ場合に{1}獲得する。").variable(1, Gold, 4);
-                });
+                    ability.passive("周囲であなたが殺すことなくミニオンが死んだ場合に{1}獲得する。")
+                            .variable(1, Gold, 4)
+
+                            .update(P403)
+                            .passive("周囲であなたが殺すことなくミニオンが死んだ場合に{1}獲得し、{2}する。")
+                            .variable(1, Gold, 3)
+                            .variable(2, RestoreHealth, 5);
+                })
+
+                .update(P403)
+                .price(500, 340)
+                .healthRegen(5)
+                .manaRegen(7);
     });
 
     /** Talisman of Ascension */
@@ -1574,14 +1649,23 @@ public class Item extends Describable<ItemDescriptor> {
                 .goldGeneration(2)
                 .add(Ability.GoldIncome)
                 .add("Favor", ability -> {
-                    ability.passive("周囲であなたが殺すことなくミニオンが死んだ場合に{1}獲得する。").variable(1, Gold, 4);
+                    ability.passive("周囲であなたが殺すことなくミニオンが死んだ場合に{1}獲得する。")
+                            .variable(1, Gold, 4)
+
+                            .update(P403)
+                            .passive("周囲であなたが殺すことなくミニオンが死んだ場合に{1}獲得し、{2}する。")
+                            .variable(1, Gold, 3)
+                            .variable(2, RestoreHealth, 10);
                 })
                 .add(ability -> {
                     ability.active("{1}の味方は3秒間{2}する。{3}")
                             .variable(1, Radius, 600)
                             .variable(2, MSRatio, 40)
                             .variable(3, ItemCD, 60);
-                });
+                })
+
+                .update(P403)
+                .manaRegen(15);
     });
 
     /** Relic Shield */
@@ -1593,8 +1677,16 @@ public class Item extends Describable<ItemDescriptor> {
                 .add("Spoils of War", ability -> {
                     ability.passive("60秒毎に最大2つまでスタックが貯まる。スタックがある状態でミニオンを倒すと最寄りの味方Championはあなたが獲得した金額+5Goｌdを獲得し、{1}する。また、Healthが{2}以下のミニオンにMeleeが通常攻撃を行うと、そのミニオンを倒すことが出来る。近くに味方がいない場合、これらの効果は発動しない。")
                             .variable(1, RestoreHealth, 0, 0, amplify(Health, 0.02))
-                            .variable(2, Value, 200, 0, ad(1));
-                });
+                            .variable(2, Value, 200, 0, ad(1))
+
+                            .update(P403)
+                            .passive("60秒毎に最大2つまでスタックが貯まる。スタックがある状態でミニオンを倒すとあなたと最寄りの味方Championは共にゴールドを獲得し、{1}する。また、Healthが200以下のミニオンにMeleeが通常攻撃を行うと、そのミニオンを倒すことが出来る。近くに味方がいない場合、これらの効果は発動しない。")
+                            .variable(1, RestoreHealth, 40);
+                })
+
+                .update(P403)
+                .health(75)
+                .healthRegen(0);
     });
 
     /** Targon's Brace */
@@ -1607,27 +1699,48 @@ public class Item extends Describable<ItemDescriptor> {
                 .add("Spoils of War", ability -> {
                     ability.passive("30秒毎に最大3つまでスタックが貯まる。スタックがある状態でミニオンを倒すと最寄りの味方Championはあなたが獲得した金額+10Goｌdを獲得し、{1}する。また、Healthが{2}以下のミニオンにMeleeが通常攻撃を行うと、そのミニオンを倒すことが出来る。近くに味方がいない場合、これらの効果は発動しない。")
                             .variable(1, RestoreHealth, 0, 0, amplify(Health, 0.02))
-                            .variable(2, Value, 200, 0, ad(1));
-                });
+                            .variable(2, Value, 200, 0, ad(1))
+
+                            .update(P403)
+                            .passive("30秒毎に最大3つまでスタックが貯まる。スタックがある状態でミニオンを倒すとあなたと最寄りの味方Championは共にゴールドを獲得し、{1}する。また、Healthが200以下のミニオンにMeleeが通常攻撃を行うと、そのミニオンを倒すことが出来る。近くに味方がいない場合、これらの効果は発動しない。")
+                            .variable(1, RestoreHealth, 50);
+                })
+
+                .update(P403)
+                .price(500, 340)
+                .health(175)
+                .healthRegen(8);
     });
 
     /** Face of the Mountain */
-    public static final Item FaceOfTheMountain = new Item(9998, "Face of the Mountain", item -> {
+    public static final Item FaceOfTheMountain = new Item(3401, "Face of the Mountain", item -> {
         item.build(TargonsBrace, RubyCrystal)
                 .price(675, 800)
                 .health(375)
                 .healthRegen(25)
+                .cooldownReduction(10)
                 .add(Ability.GoldIncome)
                 .add("Spoils of War", ability -> {
                     ability.passive("30秒毎に最大4つまでスタックが貯まる。スタックがある状態でミニオンを倒すと最寄りの味方Championはあなたが獲得した金額+10Goｌdを獲得し、{1}する。また、Healthが{2}以下のミニオンにMeleeが通常攻撃を行うと、そのミニオンを倒すことが出来る。近くに味方がいない場合、これらの効果は発動しない。")
                             .variable(1, RestoreHealth, 0, 0, amplify(Health, 0.02))
-                            .variable(2, Value, 200, 0, ad(1));
+                            .variable(2, Value, 200, 0, ad(1))
+
+                            .update(P403)
+                            .passive("30秒毎に最大4つまでスタックが貯まる。スタックがある状態でミニオンを倒すとあなたと最寄りの味方Championは共にゴールドを獲得し、{1}する。また、Healthが200以下のミニオンにMeleeが通常攻撃を行うと、そのミニオンを倒すことが出来る。近くに味方がいない場合、これらの効果は発動しない。")
+                            .variable(1, RestoreHealth, 50, 0, amplify(HealthRatio, 0.01));
                 })
                 .add("Deadly Phalanx", ability -> {
                     ability.active("あなたは{1}を失う。対象の味方は4秒間{2}を得る。また、4秒後にその味方の周囲の敵に{3}を与える。{4}")
                             .variable(1, CurrentHealthRatio, 20)
                             .variable(2, Shield, 0, 0, amplify(Health, 0.1))
                             .variable(3, MagicDamage, 0, 0, amplify(Health, 0.1))
+                            .variable(4, ItemCD, 60)
+
+                            .update(P403)
+                            .active("対象の味方は4秒間{2}を得る。また、4秒後にその味方の周囲の敵に{3}を与える。{4}")
+                            .variable(1, HealthRatio, 10)
+                            .variable(2, Shield, 0, 0, amplify(Health, 0.1))
+                            .variable(3, MagicDamage, 0, 0, ad(1), ap(0.3))
                             .variable(4, ItemCD, 60);
                 });
     });
