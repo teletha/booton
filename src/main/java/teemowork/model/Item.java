@@ -54,7 +54,10 @@ public class Item extends Describable<ItemDescriptor> {
 
                 .update(P314)
                 .build(Item.RejuvenationBead, Item.ClothArmor, Item.RubyCrystal, Item.NullMagicMantle)
-                .cost(595);
+                .cost(595)
+
+                .update(P403)
+                .price(670, 1365);
     });
 
     /** Amplifying Tome */
@@ -165,7 +168,10 @@ public class Item extends Describable<ItemDescriptor> {
                 .mana(0)
                 .add(ability -> {
                     ability.passive("Championからダメージを受けると10秒間{1}を得る。").variable(-1, Hreg, 45);
-                });
+                })
+
+                .update(P403)
+                .price(950, 1925);
     });
 
     /** Berserker's Greaves */
@@ -210,7 +216,10 @@ public class Item extends Describable<ItemDescriptor> {
                 })
                 .add(ability -> {
                     ability.passive("{1}を得る。").variable(1, ARPen, 10);
-                });
+                })
+
+                .update(P403)
+                .price(1263, 2100);
     });
 
     /** Blade of the Ruined King */
@@ -315,7 +324,9 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Catalyst the Protector */
     public static final Item CatalystTheProtector = new Item(3010, "Catalyst the Protector", item -> {
-        item.build(RubyCrystal, SapphireCrystal).cost(325).health(200).mana(300).add(Ability.ValorsReward);
+        item.build(RubyCrystal, SapphireCrystal).cost(325).health(200).mana(300).add(Ability.ValorsReward)
+
+        .update(P403).price(400, 840);
     });
 
     /** Chain Vest */
@@ -484,7 +495,9 @@ public class Item extends Describable<ItemDescriptor> {
     public static final Item FrozenMallet = new Item(3022, "Frozen Mallet", item -> {
         item.build(Item.Phage, Item.GiantsBelt).cost(835).attackDamage(30).health(700).add(Ability.Icy2)
 
-        .update(P310A).build(Item.GiantsBelt, Item.Pickaxe, Item.RubyCrystal).cost(950);
+        .update(P310A).build(Item.GiantsBelt, Item.Pickaxe, Item.RubyCrystal).cost(950)
+
+        .update(P403).price(1025, 2310);
     });
 
     /** Giant's Belt */
@@ -541,7 +554,9 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Haunting Guise */
     public static final Item HauntingGuise = new Item(3136, "Haunting Guise", item -> {
-        item.build(Item.RubyCrystal, AmplifyingTome).cost(575).abilityPower(25).health(200).add(Ability.EyesOfPain);
+        item.build(Item.RubyCrystal, AmplifyingTome).cost(575).abilityPower(25).health(200).add(Ability.EyesOfPain)
+
+        .update(P403).price(650, 1040);
     });
 
     /** Health Potion */
@@ -638,7 +653,9 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Kindlegem */
     public static final Item Kindlegem = new Item(3067, "Kindlegem", item -> {
-        item.build(Item.RubyCrystal).cost(375).health(200).add(Ability.KindlegemPassive);
+        item.build(Item.RubyCrystal).cost(375).health(200).add(Ability.KindlegemPassive)
+
+        .update(P403).price(450, 595);
     });
 
     /** Last Whisper */
@@ -881,7 +898,10 @@ public class Item extends Describable<ItemDescriptor> {
                 .abilityPower(50)
                 .health(350)
                 .manaRegen(0)
-                .healthRegen(0);
+                .healthRegen(0)
+
+                .update(P403)
+                .price(740, 1400);
     });
 
     /** Oracle's Elixir */
@@ -899,7 +919,9 @@ public class Item extends Describable<ItemDescriptor> {
 
         .update(P312).cost(475)
 
-        .update(P314).price(490, 928);
+        .update(P314).price(490, 928)
+
+        .update(P403).price(565);
     });
 
     /** Phantom Dancer */
@@ -992,7 +1014,7 @@ public class Item extends Describable<ItemDescriptor> {
     public static final Item RubyCrystal = new Item(1028, "Ruby Crystal", item -> {
         item.cost(475).health(180)
 
-        .update(P403).cost(400).health(150);
+        .update(P403).price(400, 280).health(150);
     });
 
     /** Ruby Sightstone */
@@ -1114,7 +1136,9 @@ public class Item extends Describable<ItemDescriptor> {
 
     /** Spectre's Cowl */
     public static final Item SpectresCowl = new Item(9997, "Spectre's Cowl", item -> {
-        item.build(NegatronCloak, RubyCrystal).cost(205).health(200).magicRegist(45).add(Ability.SpectresCowlPassive);
+        item.build(NegatronCloak, RubyCrystal).cost(205).health(200).magicRegist(45).add(Ability.SpectresCowlPassive)
+
+        .update(P403).price(280, 945);
     });
 
     /** Spirit Stone */
@@ -1394,7 +1418,9 @@ public class Item extends Describable<ItemDescriptor> {
     public static final Item WarmogsArmor = new Item(3083, "Warmog's Armor", item -> {
         item.build(GiantsBelt, RubyCrystal, RejuvenationBead, RejuvenationBead).cost(995).health(1000).add(ability -> {
             ability.passive("{1}を得る。").variable(1, Hreg, 0, 0, amplify(Health, 0.01));
-        });
+        })
+
+        .update(P403).price(1070, 1981);
     });
 
     /** Will of the Ancients */
@@ -1540,7 +1566,7 @@ public class Item extends Describable<ItemDescriptor> {
     /** Frostfang */
     public static final Item Frostfang = new Item(3098, "Frostfang", item -> {
         item.build(SpellthiefsEdge)
-                .price(485, 425)
+                .price(485, 340)
                 .abilityPower(20)
                 .manaRegen(7)
                 .goldGeneration(4)
@@ -1557,7 +1583,7 @@ public class Item extends Describable<ItemDescriptor> {
                 })
 
                 .update(P403)
-                .price(500, 425)
+                .price(500, 346)
                 .abilityPower(10)
                 .manaRegen(5);
     });
@@ -1665,6 +1691,7 @@ public class Item extends Describable<ItemDescriptor> {
                 })
 
                 .update(P403)
+                .price(955, 800)
                 .manaRegen(15);
     });
 
@@ -1707,7 +1734,7 @@ public class Item extends Describable<ItemDescriptor> {
                 })
 
                 .update(P403)
-                .price(500, 340)
+                .price(500, 346)
                 .health(175)
                 .healthRegen(8);
     });
@@ -1740,9 +1767,13 @@ public class Item extends Describable<ItemDescriptor> {
                             .active("対象の味方は4秒間{2}を得る。また、4秒後にその味方の周囲の敵に{3}を与える。{4}")
                             .variable(1, HealthRatio, 10)
                             .variable(2, Shield, 0, 0, amplify(Health, 0.1))
-                            .variable(3, MagicDamage, 0, 0, ad(1), ap(0.3))
+                            .variable(3, MagicDamage, 0, 0, amplify(TargetAD, 1), amplify(TargetAP, 0.3))
                             .variable(4, ItemCD, 60);
-                });
+                })
+
+                .update(P403)
+                .build(TargonsBrace, Kindlegem)
+                .price(285, 800);
     });
 
     // lazy initialization

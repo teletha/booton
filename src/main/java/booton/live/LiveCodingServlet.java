@@ -18,6 +18,7 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -119,7 +120,9 @@ public class LiveCodingServlet extends WebSocketServlet {
             }
 
             // observe publishing file
-            observers.add(I.observe(html.resolveSibling(Booton.BuildPhase)).subscribe(new BuildObserver()));
+            observers.add(I.observe(html.resolveSibling(Booton.BuildPhase))
+                    .debounce(1, TimeUnit.SECONDS)
+                    .subscribe(new BuildObserver()));
         }
 
         /**

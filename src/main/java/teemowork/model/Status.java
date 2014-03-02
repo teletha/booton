@@ -105,8 +105,6 @@ public enum Status {
     // ==================================================
     // Target Mana Related Reference
     // ==================================================
-    TargetAP("対象のAP"),
-
     TargetManaRatio("対象の最大Mana"),
 
     TargetCurrentManaRatio("対象の現在のMana"),
@@ -119,7 +117,7 @@ public enum Status {
     // Attack Related
     // ==================================================
     /** Attack Damage */
-    AD, ADPerLv, ADRatio("AD"), BounusAD("増加AD"), BaseAD("基礎AD"),
+    AD, ADPerLv, ADRatio("AD"), BounusAD("増加AD"), BaseAD("基礎AD"), TargetAD("対象のAD"),
 
     /** Attack Speed */
     AS(3), ASPerLv(3), ASRatio("攻撃速度"),
@@ -134,7 +132,7 @@ public enum Status {
     // Ability Power Related
     // ==================================================
     /** Ability Power */
-    AP, APPerLv, APRatio("AP", 2),
+    AP, APPerLv, APRatio("AP", 2), TargetAP("対象のAP"),
 
     /** Cooldown Reduction */
     CDR("CD減少"), CDRPerLv, CDRRatio, CDRUnaware("CD減少の影響を受けない"),
