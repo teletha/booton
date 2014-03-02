@@ -259,6 +259,20 @@ public class ItemDescriptor extends Descriptor<ItemDescriptor> {
      * @param status A target status.
      * @return Chainable API.
      */
+    ItemDescriptor price(double buy) {
+        set(Cost, buy);
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * Retrieve status value.
+     * </p>
+     * 
+     * @param status A target status.
+     * @return Chainable API.
+     */
     ItemDescriptor price(double buy, double sell) {
         set(Cost, buy);
 
