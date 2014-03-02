@@ -347,6 +347,9 @@ public class Champion {
     public static final Champion Veigar = new Champion("Veigar", Equilibrium, BalefulStrike, DarkMatter, EventHorizon, PrimordialBurst);
 
     /** The champion name. */
+    public static final Champion VelKoz = new Champion("Vel'Koz", OrganicDeconstruction, PlasmaFission, VoidRift, TectonicDisruption, LifeFormDisintegrationRay);
+
+    /** The champion name. */
     public static final Champion Vi = new Champion("Vi", BlastShield, VaultBreaker, DentingBlows, ExcessiveForce, AssaultandBattery);
 
     /** The champion name. */
@@ -1713,6 +1716,17 @@ public class Champion {
                 .set(AD, 48.3, 2.625)
                 .set(AS, 0.625, 2.24)
                 .set(AR, 12.25, 3.75)
+                .set(MR, 30, 0)
+                .set(Range, 525)
+                .set(MS, 340);
+        VelKoz.update(P403)
+                .set(Health, 380, 76)
+                .set(Hreg, 4.5, 0.55)
+                .set(Mana, 250, 45)
+                .set(Mreg, 7, 0.6)
+                .set(AD, 51.7, 3.14)
+                .set(AS, 0.625, 1.36)
+                .set(AR, 12, 3.5)
                 .set(MR, 30, 0)
                 .set(Range, 525)
                 .set(MS, 340);

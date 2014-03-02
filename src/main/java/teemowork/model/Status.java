@@ -239,6 +239,8 @@ public enum Status {
 
     Stun("スタン", 3),
 
+    Suspension("サスペンション", 3),
+
     Snare("スネア", 3),
 
     Fear("Fear", 3),
