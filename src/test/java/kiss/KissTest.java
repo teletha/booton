@@ -56,7 +56,7 @@ public class KissTest {
     public void lifestyleInjection() throws Exception {
         LifestyleInjector injector = I.make(LifestyleInjector.class);
 
-        assert injector.singleton.resolve() == I.make(SingletonClass.class);
+        assert injector.singleton.get() == I.make(SingletonClass.class);
     }
 
     /**

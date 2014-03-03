@@ -243,7 +243,7 @@ class JSKiss {
      * @throws InstantiationException If Sinobu can't instantiate(resolve) the model class.
      */
     public static <M> M make(Class<M> modelClass) {
-        return makeLifestyle(modelClass).resolve();
+        return makeLifestyle(modelClass).get();
     }
 
     /**
@@ -308,7 +308,7 @@ class JSKiss {
         }
 
         // Construct dependency graph for the current thred.
-        Deque<Class> dependency = dependencies.resolve();
+        Deque<Class> dependency = dependencies.get();
         dependency.add(actualClass);
 
         // Don't use 'contains' method check here to resolve singleton based
