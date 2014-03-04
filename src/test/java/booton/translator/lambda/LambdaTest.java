@@ -342,4 +342,46 @@ public class LambdaTest {
             return value * 10;
         }
     }
+
+    @Test
+    public void interfaceWithDefault() throws Exception {
+        InterfaceWithDefault api = () -> {
+            return 10;
+        };
+
+        assert api.value() == 10;
+        assert api.multiple() == 20;
+    }
+
+    /**
+     * @version 2014/03/04 15:23:27
+     */
+    private static interface InterfaceWithDefault {
+
+        int value();
+
+        default int multiple() {
+            return value() * 2;
+        }
+    }
+
+    @Test
+    public void interfaceWithOverride() throws Exception {
+        InterfaceWithOverride api = () -> {
+            return 10;
+        };
+    
+        assert api.value() == 10;
+        assert api.multiple() == 100;
+    }
+
+    /**
+     * @version 2014/03/04 15:27:32
+     */
+    private static interface InterfaceWithOverride extends InterfaceWithDefault {
+
+        default int multiple() {
+            return value() * value();
+        }
+    }
 }

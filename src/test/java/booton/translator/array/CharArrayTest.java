@@ -13,7 +13,6 @@ import org.junit.Test;
 
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
-import booton.translator.Debuggable;
 
 /**
  * @version 2014/02/07 12:58:53
@@ -51,7 +50,6 @@ public class CharArrayTest extends ScriptTester {
     public void multipleAssign() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             public char[] act() {
                 char[] array = new char[3];
                 array[0] = array[1] = array[2] = '@';
