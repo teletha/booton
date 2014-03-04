@@ -90,8 +90,17 @@ class JSProxy {
         final ProxyBase proxy = new ProxyBase(clazz, handler);
 
         for (Class<?> interfaceType : interfaces) {
+            // implement default methods and lambda methods
+            JSClass definition = (JSClass) (Object) interfaceType;
+
+            for (String name : definition.prototype.keys()) {
+                ((NativeObject) (Object) proxy).setProperty(name, definition.prototype.getProperty(name));
+            }
+
+            // implement interface methods for proxy api
             for (Method method : interfaceType.getMethods()) {
-                if (method.getDeclaringClass() != Annotation.class || method.getName().equals("annotationType")) {
+                if (!method.isDefault() && (method.getDeclaringClass() != Annotation.class || method.getName()
+                        .equals("annotationType"))) {
                     ProxyFunction function = new ProxyFunction(proxy, method);
                     NativeObject.by(proxy)
                             .setProperty(((JSMethod) (Object) method).nameJS, new NativeFunction(function).bind(function));
@@ -134,6 +143,9 @@ class JSProxy {
 
                     // API definition
                     return instance;
+                } else if (method.isDefault()) {
+                    // default method
+                    return method.invoke(proxy, args);
                 } else {
                     // method
                     Object currentContext = context;

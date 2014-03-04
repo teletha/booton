@@ -15,7 +15,6 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
-import booton.translator.Debuggable;
 
 /**
  * @version 2013/08/09 15:50:42
@@ -212,7 +211,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void ifCondition() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             String act(int value) {
                 if (value < 0 ? value == -1 : value == 2) {
                     if (value < 0) {
@@ -231,7 +229,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void ifCondition2() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             boolean act(int value) {
                 if (value < 0 ? true : value == 2) {
                     return true;
@@ -246,7 +243,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void whileCondition() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(int value) {
                 while (value < 0 ? value != -2 : value != 2) {
                     value++;

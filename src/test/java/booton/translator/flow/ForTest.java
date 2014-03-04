@@ -15,7 +15,6 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
-import booton.translator.Debuggable;
 
 /**
  * @version 2013/10/09 15:55:09
@@ -259,7 +258,6 @@ public class ForTest extends ScriptTester {
     public void continueWithLogicalExpression() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(int value) {
                 for (int i = 0; i < 3; i++) {
                     value++;
