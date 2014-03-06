@@ -98,7 +98,7 @@ public class ScriptTester {
 
             // add test utility
             ScriptableObject window = (ScriptableObject) html.getEnclosingWindow().getScriptObject();
-            ScriptableObject.defineClass(window, AsyncJSDefinition.class);
+            ScriptableObject.defineClass(window, Chronus.class);
 
             // compile and load boot script
             engine.execute(html, engine.compile(html, unitTest, "unitTest.js", 1));

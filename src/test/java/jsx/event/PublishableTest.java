@@ -18,10 +18,11 @@ import js.dom.UIEvent;
 import kiss.Disposable;
 import kiss.I;
 
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import antibug.Async;
+import antibug.Chronus;
 import booton.soeur.ScriptRunner;
 
 /**
@@ -30,9 +31,8 @@ import booton.soeur.ScriptRunner;
 @RunWith(ScriptRunner.class)
 public class PublishableTest {
 
-    static {
-        I.$scheduler = Async.use();
-    }
+    @ClassRule
+    public static final Chronus Chronus = new Chronus(I.class);
 
     /**
      * @version 2013/12/20 10:06:34
@@ -264,7 +264,7 @@ public class PublishableTest {
         reciever.publish(100);
         assert reciever.value == 1;
 
-        Async.wait(80);
+        Chronus.freeze(80);
         reciever.publish(100);
         assert reciever.value == 2;
     }
@@ -284,7 +284,7 @@ public class PublishableTest {
         reciever.publish(30);
         assert reciever.value == 0;
 
-        Async.awaitTasks();
+        Chronus.await();
         assert reciever.value == 30;
     }
 
@@ -303,7 +303,7 @@ public class PublishableTest {
         reciever.publish(30);
         assert reciever.value == 0;
 
-        Async.awaitTasks();
+        Chronus.await();
         assert reciever.value == 60;
     }
 
