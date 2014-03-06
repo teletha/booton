@@ -230,6 +230,7 @@ public class LiveCodingServlet extends WebSocketServlet {
             public void onNext(WatchEvent<Path> value) {
                 if (value.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
                     if (!whileBuilding) {
+                        System.out.println("modify " + path);
                         send(path);
                     }
                 }
@@ -250,9 +251,10 @@ public class LiveCodingServlet extends WebSocketServlet {
 
                 if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
                     whileBuilding = true;
+                    System.out.println("start build");
                 } else if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
                     whileBuilding = false;
-
+                    System.out.println("end build");
                     reload();
                 }
             }
