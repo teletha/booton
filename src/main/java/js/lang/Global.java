@@ -11,6 +11,7 @@ package js.lang;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -31,7 +32,6 @@ import kiss.Singleton;
 
 import org.w3c.dom.DocumentFragment;
 
-import antibug.Async;
 import booton.translator.Javascript;
 import booton.translator.Translator;
 
@@ -869,7 +869,7 @@ public class Global {
     private static class TaskScheduler {
 
         /** The service. */
-        private static final ScheduledExecutorService scheduler = Async.use();
+        private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(8);
 
         /** The task id counter. */
         private static long id = 0;

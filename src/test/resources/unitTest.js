@@ -1,6 +1,6 @@
 // replace timer related functions
-window.setTimeout = Async.setTimeout;
-window.clearTimeout = Async.clearTimeout;
+window.setTimeout = Chronus.setTimeout;
+window.clearTimeout = Chronus.clearTimeout;
 
 /**
  * Polyfill for matches(selector).

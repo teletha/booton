@@ -32,8 +32,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.script.ScriptException;
 
@@ -69,6 +73,9 @@ class JSKiss {
 
     /** The cache between Model and Lifestyle. */
     private static final ConcurrentHashMap<Class, Lifestyle> lifestyles = new ConcurrentHashMap();
+
+    /** The task manager. */
+    private static final ScheduledExecutorService parallel = Executors.newScheduledThreadPool(4);
 
     static {
         // built-in lifestyles
@@ -329,7 +336,7 @@ class JSKiss {
             if (lifestyle == null) {
                 // If the actual model class doesn't provide its lifestyle explicitly, we use
                 // Prototype lifestyle which is default lifestyle in Sinobu.
-                Manageable manageable = (Manageable) actualClass.getAnnotation(Manageable.class);
+                Manageable manageable = actualClass.getAnnotation(Manageable.class);
 
                 // Create new lifestyle for the actual model class
                 lifestyle = (Lifestyle<M>) make((Class) (manageable == null ? Prototype.class : manageable.lifestyle()));
@@ -451,7 +458,7 @@ class JSKiss {
             return null;
         }
 
-        Model inputModel = Model.load((Class) input.getClass());
+        Model inputModel = Model.load(input.getClass());
         Model outputModel = Model.load(output);
 
         // no conversion
@@ -671,6 +678,32 @@ class JSKiss {
 
     /**
      * <p>
+     * Execute the specified task in background {@link Thread}.
+     * </p>
+     * 
+     * @param task A task to execute.
+     */
+    public static Future<?> schedule(Runnable task) {
+        return schedule(0, null, true, task);
+    }
+
+    /**
+     * <p>
+     * Execute the specified task in background {@link Thread} with the specified delay.
+     * </p>
+     * 
+     * @param time A delay time.
+     * @param unit A delay time unit.
+     * @param parallelExecution The <code>true</code> will execute task in parallel,
+     *            <code>false</code> will execute task in serial.
+     * @param task A task to execute.
+     */
+    public static Future<?> schedule(long time, TimeUnit unit, boolean parallelExecution, Runnable task) {
+        return parallel.schedule(task, time, unit);
+    }
+
+    /**
+     * <p>
      * Writes Java object tree to the given output as XML or JSON.
      * </p>
      * <p>
@@ -755,6 +788,7 @@ class JSKiss {
         /**
          * {@inheritDoc}
          */
+        @Override
         public void walk(Model model, Property property, Object node) {
             Property dest = this.model.getProperty(property.name);
 

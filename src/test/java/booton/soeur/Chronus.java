@@ -11,30 +11,35 @@ package booton.soeur;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import kiss.I;
 import net.sourceforge.htmlunit.corejs.javascript.Context;
 import net.sourceforge.htmlunit.corejs.javascript.Function;
 import net.sourceforge.htmlunit.corejs.javascript.JavaScriptException;
 import net.sourceforge.htmlunit.corejs.javascript.Scriptable;
 import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
+import net.sourceforge.htmlunit.corejs.javascript.annotations.JSFunction;
 import net.sourceforge.htmlunit.corejs.javascript.annotations.JSStaticFunction;
-import antibug.Async;
+import antibug.internal.Awaitable;
+import booton.translator.Translator;
 
 /**
  * <p>
- * {@link Async} implemetation for Javascript runtime which uses {@link Async} class.
+ * {@link antibug.Chronus} implemetation in Javascript runtime which uses {@link Awaitable}
+ * functionality.
  * </p>
  * 
- * @version 2014/01/10 20:37:55
+ * @version 2014/03/06 14:58:44
  */
 @SuppressWarnings("serial")
-public class AsyncJSDefinition extends ScriptableObject {
+public class Chronus extends ScriptableObject {
 
     /** The task scheduler. */
-    private static final ScheduledExecutorService scheduler = Async.use();
+    private static final ScheduledExecutorService scheduler = Awaitable.wrap(Executors.newScheduledThreadPool(8));
 
     /** The task manager. */
     private static final Map<Integer, ScheduledFuture> tasks = new ConcurrentHashMap();
@@ -42,7 +47,7 @@ public class AsyncJSDefinition extends ScriptableObject {
     /**
      * 
      */
-    public AsyncJSDefinition() {
+    public Chronus() {
     }
 
     /**
@@ -50,7 +55,7 @@ public class AsyncJSDefinition extends ScriptableObject {
      */
     @Override
     public String getClassName() {
-        return "Async";
+        return "Chronus";
     }
 
     @JSStaticFunction
@@ -78,9 +83,13 @@ public class AsyncJSDefinition extends ScriptableObject {
      * 
      * @param millseconds
      */
-    @JSStaticFunction
-    public static void wait(int millseconds) {
-        Async.wait(millseconds);
+    @JSFunction
+    public void freeze(int millseconds) {
+        try {
+            Thread.sleep(millseconds);
+        } catch (InterruptedException e) {
+            throw I.quiet(e);
+        }
     }
 
     /**
@@ -90,9 +99,9 @@ public class AsyncJSDefinition extends ScriptableObject {
      * 
      * @param timeout
      */
-    @JSStaticFunction
-    public static void awaitTasks() {
-        Async.awaitTasks();
+    @JSFunction
+    public void await() {
+        Awaitable.await();
     }
 
     /**
@@ -131,6 +140,25 @@ public class AsyncJSDefinition extends ScriptableObject {
                 Context.exit();
                 tasks.remove(id);
             }
+        }
+    }
+
+    /**
+     * @version 2014/03/06 15:02:09
+     */
+    @SuppressWarnings("unused")
+    private static class Coder extends Translator<antibug.Chronus> {
+
+        public String Chronus(Class[] classes) {
+            return "new Chronus()";
+        }
+
+        public String freeze(int time) {
+            return that + ".freeze(" + param(0) + ")";
+        }
+
+        public String await() {
+            return that + ".await()";
         }
     }
 }
