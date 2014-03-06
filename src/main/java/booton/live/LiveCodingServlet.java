@@ -9,6 +9,8 @@
  */
 package booton.live;
 
+import static java.util.concurrent.TimeUnit.*;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -18,12 +20,12 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
 import kiss.Disposable;
 import kiss.I;
+import kiss.Observable;
 import kiss.Observer;
 import kiss.XML;
 
@@ -96,7 +98,7 @@ public class LiveCodingServlet extends WebSocketServlet {
             System.out.println("open " + html);
 
             // observe html
-            new FileObserver(html.getFileName().toString());
+            Observable<WatchEvent<Path>> observable = observe(html.getFileName().toString());
 
             XML xml = I.xml(html);
 
@@ -105,23 +107,32 @@ public class LiveCodingServlet extends WebSocketServlet {
                 String src = js.attr("src");
 
                 if (src.length() != 0 && !src.startsWith("http://") && !src.startsWith("https://")) {
-                    new FileObserver(src);
+                    observable = observable.merge(observe(src));
                 }
             }
-            new FileObserver("live.js");
+            observable = observable.merge(observe("live.js"));
 
             // observe css
             for (XML css : xml.find("link[rel=stylesheet]")) {
                 String href = css.attr("href");
 
                 if (href.length() != 0 && !href.startsWith("http://") && !href.startsWith("https://")) {
-                    new FileObserver(href);
+                    observable = observable.merge(observe(href));
                 }
             }
 
+            observable.debounce(1, SECONDS).subscribe(value -> {
+                if (value.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
+                    if (!whileBuilding) {
+                        System.out.println("modify " + value.context().getFileName().toString());
+                        send(value.context().getFileName().toString());
+                    }
+                }
+            });
+
             // observe publishing file
             observers.add(I.observe(html.resolveSibling(Booton.BuildPhase))
-                    .debounce(1, TimeUnit.SECONDS)
+                    .debounce(1, SECONDS)
                     .subscribe(new BuildObserver()));
         }
 
@@ -196,45 +207,13 @@ public class LiveCodingServlet extends WebSocketServlet {
             }
         }
 
-        /**
-         * @version 2013/01/08 9:36:32
-         */
-        private class FileObserver implements Observer<WatchEvent<Path>> {
+        private Observable<WatchEvent<Path>> observe(String path) {
+            int index = path.indexOf('?');
 
-            /** The original path. */
-            protected final String path;
-
-            /** The target. */
-            protected final Path file;
-
-            /**
-             * @param file
-             */
-            private FileObserver(String path) {
-                int index = path.indexOf('?');
-
-                if (index != -1) {
-                    path = path.substring(0, index);
-                }
-
-                this.path = path;
-                this.file = html.resolveSibling(path);
-
-                observers.add(I.observe(file).subscribe(this));
+            if (index != -1) {
+                path = path.substring(0, index);
             }
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void onNext(WatchEvent<Path> value) {
-                if (value.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
-                    if (!whileBuilding) {
-                        System.out.println("modify " + path);
-                        send(path);
-                    }
-                }
-            }
+            return I.observe(html.resolveSibling(path));
         }
 
         /**
