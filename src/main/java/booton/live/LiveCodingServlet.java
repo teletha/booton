@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,20 +17,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
-import java.nio.file.WatchEvent.Kind;
 
 import javax.servlet.http.HttpServletRequest;
 
 import kiss.Disposable;
 import kiss.I;
 import kiss.Observable;
-import kiss.Observer;
 import kiss.XML;
 
 import org.eclipse.jetty.websocket.WebSocket;
+import org.eclipse.jetty.websocket.WebSocket.OnTextMessage;
 import org.eclipse.jetty.websocket.WebSocketServlet;
-
-import booton.Booton;
 
 /**
  * @version 2013/08/08 11:48:43
@@ -45,7 +42,7 @@ public class LiveCodingServlet extends WebSocketServlet {
      * @param project
      */
     public LiveCodingServlet(Path root) {
-        this.root = root;
+        this.root = root.toAbsolutePath();
     }
 
     /**
@@ -53,39 +50,33 @@ public class LiveCodingServlet extends WebSocketServlet {
      */
     @Override
     public WebSocket doWebSocketConnect(HttpServletRequest request, String protocol) {
-        String path = request.getPathInfo();
-
-        return new LiveCodingSocket(root.toAbsolutePath().resolve(path.substring(1)));
+        return new LiveCoder(request, root.resolve(request.getPathInfo().substring(1)));
     }
 
     /**
-     * @version 2013/08/08 11:48:39
+     * @version 2014/03/07 15:48:20
      */
-    private static class LiveCodingSocket implements WebSocket.OnTextMessage {
+    private class LiveCoder implements OnTextMessage {
 
-        /** The coding html. */
+        /** The html file. */
         private final Path html;
+
+        /** The user agnet. */
+        private final String agent;
 
         /** The actual connection. */
         private Connection connection;
 
-        /** The publish flag. */
-        private boolean whileBuilding = false;
-
-        /** The last send time. */
-        private long last = System.currentTimeMillis();
-
         /** For source observers. */
-        private Disposable souces;
-
-        /** For mutex observer. */
-        private Disposable mutex;
+        private Disposable sources;
 
         /**
-         * @param target
+         * @param request
+         * @param html
          */
-        private LiveCodingSocket(Path target) {
-            this.html = target;
+        private LiveCoder(HttpServletRequest request, Path html) {
+            this.html = html;
+            this.agent = analyzeAgent(request.getHeader("User-Agent"));
         }
 
         /**
@@ -93,13 +84,13 @@ public class LiveCodingServlet extends WebSocketServlet {
          */
         @Override
         public void onOpen(Connection connection) {
+            System.out.println("CONNECT [" + agent + "]");
+
             this.connection = connection;
             this.connection.setMaxIdleTime(Integer.MAX_VALUE);
 
-            System.out.println("open " + html);
-
             // observe html
-            Observable<WatchEvent<Path>> observable = observe(html.getFileName().toString());
+            Observable<WatchEvent<Path>> observable = I.observe(html);
 
             XML xml = I.xml(html);
 
@@ -108,33 +99,26 @@ public class LiveCodingServlet extends WebSocketServlet {
                 String src = js.attr("src");
 
                 if (src.length() != 0 && !src.startsWith("http://") && !src.startsWith("https://")) {
-                    observable = observable.merge(observe(src));
+                    observable = observable.merge(observeFile(src));
                 }
             }
-            observable = observable.merge(observe("live.js"));
+            observable = observable.merge(observeFile("live.js"));
 
             // observe css
             for (XML css : xml.find("link[rel=stylesheet]")) {
                 String href = css.attr("href");
 
                 if (href.length() != 0 && !href.startsWith("http://") && !href.startsWith("https://")) {
-                    observable = observable.merge(observe(href));
+                    observable = observable.merge(observeFile(href));
                 }
             }
 
-            souces = observable.debounce(1, SECONDS).subscribe(value -> {
-                if (value.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
-                    if (!whileBuilding) {
-                        System.out.println("modify " + value.context().getFileName().toString());
-                        send(value.context().getFileName().toString());
-                    }
+            sources = observable.debounce(1, SECONDS).subscribe(event -> {
+                if (event.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
+                    System.out.println("modify " + event.context());
+                    send(event.context().getFileName().toString());
                 }
             });
-
-            // observe publishing file
-            mutex = I.observe(html.resolveSibling(Booton.BuildPhase))
-                    .debounce(1, SECONDS)
-                    .subscribe(new BuildObserver());
         }
 
         /**
@@ -142,11 +126,21 @@ public class LiveCodingServlet extends WebSocketServlet {
          */
         @Override
         public void onClose(int closeCode, String message) {
-            System.out.println("close " + html);
+            System.out.println("DISCONNECT [" + agent + "]");
 
-            souces.dispose();
-            mutex.dispose();
             connection = null;
+            sources.dispose();
+            sources = null;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onMessage(String data) {
+            Source application = create(html.resolveSibling("application.js"));
+            Source live = create(html.resolveSibling("live.js"));
+            ClientStackTrace.decode(data, application, live).printStackTrace(System.err);
         }
 
         /**
@@ -166,25 +160,6 @@ public class LiveCodingServlet extends WebSocketServlet {
         }
 
         /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void onMessage(String data) {
-            Source application = create(html.resolveSibling("application.js"));
-            Source live = create(html.resolveSibling("live.js"));
-            ClientStackTrace.decode(data, application, live).printStackTrace(System.err);
-        }
-
-        /**
-         * <p>
-         * Reload all resources.
-         * </p>
-         */
-        private void reload() {
-            send("reload");
-        }
-
-        /**
          * <p>
          * Helper method to send message.
          * </p>
@@ -192,48 +167,44 @@ public class LiveCodingServlet extends WebSocketServlet {
          * @param message
          */
         private void send(String message) {
-            long current = System.currentTimeMillis();
-
-            if (last + 1000 < current) {
-                last = current;
-
-                try {
-                    connection.sendMessage(message);
-                } catch (IOException e) {
-                    throw I.quiet(e);
-                }
+            try {
+                connection.sendMessage(message);
+            } catch (IOException e) {
+                throw I.quiet(e);
             }
-        }
-
-        private Observable<WatchEvent<Path>> observe(String path) {
-            int index = path.indexOf('?');
-
-            if (index != -1) {
-                path = path.substring(0, index);
-            }
-            return I.observe(html.resolveSibling(path));
         }
 
         /**
-         * @version 2013/01/08 16:25:47
+         * <p>
+         * Observe source file modification.
+         * </p>
+         * 
+         * @param relativePath A relative path from root.
+         * @param file A target file.
+         * @return A {@link Observable}.
          */
-        private class BuildObserver implements Observer<WatchEvent<Path>> {
+        private Observable<WatchEvent<Path>> observeFile(String relativePath) {
+            int index = relativePath.indexOf('?');
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void onNext(WatchEvent<Path> value) {
-                Kind kind = value.kind();
+            if (index != -1) {
+                relativePath = relativePath.substring(0, index);
+            }
+            return I.observe(root.resolve(relativePath));
+        }
 
-                if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
-                    whileBuilding = true;
-                    System.out.println("start build");
-                } else if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
-                    whileBuilding = false;
-                    System.out.println("end build");
-                    reload();
-                }
+        /**
+         * <p>
+         * Analyze user-agent name.
+         * </p>
+         * 
+         * @param agent
+         * @return
+         */
+        private String analyzeAgent(String agent) {
+            if (agent.contains("Firefox")) {
+                return agent.substring(agent.indexOf("Firefox"));
+            } else {
+                return agent;
             }
         }
     }
