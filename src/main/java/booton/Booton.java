@@ -158,7 +158,9 @@ public class Booton {
 
         try {
             // starting build phase
-            Files.createFile(mutex);
+            if (Files.notExists(mutex)) {
+                Files.createFile(mutex);
+            }
 
             // build html file
             buildHTML();

@@ -18,8 +18,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -68,9 +66,6 @@ public class LiveCodingServlet extends WebSocketServlet {
         /** The coding html. */
         private final Path html;
 
-        /** The file observers. */
-        private List<Disposable> observers = new ArrayList();
-
         /** The actual connection. */
         private Connection connection;
 
@@ -79,6 +74,12 @@ public class LiveCodingServlet extends WebSocketServlet {
 
         /** The last send time. */
         private long last = System.currentTimeMillis();
+
+        /** For source observers. */
+        private Disposable souces;
+
+        /** For mutex observer. */
+        private Disposable mutex;
 
         /**
          * @param target
@@ -121,7 +122,7 @@ public class LiveCodingServlet extends WebSocketServlet {
                 }
             }
 
-            observable.debounce(1, SECONDS).subscribe(value -> {
+            souces = observable.debounce(1, SECONDS).subscribe(value -> {
                 if (value.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
                     if (!whileBuilding) {
                         System.out.println("modify " + value.context().getFileName().toString());
@@ -131,9 +132,9 @@ public class LiveCodingServlet extends WebSocketServlet {
             });
 
             // observe publishing file
-            observers.add(I.observe(html.resolveSibling(Booton.BuildPhase))
+            mutex = I.observe(html.resolveSibling(Booton.BuildPhase))
                     .debounce(1, SECONDS)
-                    .subscribe(new BuildObserver()));
+                    .subscribe(new BuildObserver());
         }
 
         /**
@@ -143,10 +144,8 @@ public class LiveCodingServlet extends WebSocketServlet {
         public void onClose(int closeCode, String message) {
             System.out.println("close " + html);
 
-            for (Disposable observer : observers) {
-                observer.dispose();
-            }
-            observers.clear();
+            souces.dispose();
+            mutex.dispose();
             connection = null;
         }
 
@@ -199,7 +198,6 @@ public class LiveCodingServlet extends WebSocketServlet {
                 last = current;
 
                 try {
-                    System.out.println(message);
                     connection.sendMessage(message);
                 } catch (IOException e) {
                     throw I.quiet(e);
