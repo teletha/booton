@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import kiss.I;
 import kiss.XML;
+import booton.Booton;
 import booton.util.HTMLWriter;
 
 /**
- * @version 2013/07/25 22:39:40
+ * @version 2014/03/07 10:22:55
  */
 @SuppressWarnings("serial")
 public class ResourceServlet extends HttpServlet {
@@ -52,6 +53,8 @@ public class ResourceServlet extends HttpServlet {
             path = "/index.html";
         }
 
+        waitBuilding();
+
         Path file = root.resolve(path.substring(1));
 
         if (path.endsWith(".html")) {
@@ -64,8 +67,26 @@ public class ResourceServlet extends HttpServlet {
             if (path.endsWith(".js")) {
                 response.addHeader("Content-Type", "text/javascript");
             }
-
             I.copy(Files.newInputStream(file), response.getOutputStream(), true);
+        }
+    }
+
+    /**
+     * <p>
+     * Check building phase.
+     * </p>
+     */
+    private synchronized void waitBuilding() {
+        int timer = 0;
+        Path build = root.resolve(Booton.BuildPhase);
+
+        while (timer < 10000 && Files.exists(build)) {
+            try {
+                timer += 100;
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                return;
+            }
         }
     }
 
