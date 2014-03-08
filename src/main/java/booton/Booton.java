@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import booton.translator.Javascript;
 import booton.util.HTMLWriter;
 
 /**
- * @version 2013/10/29 10:53:33
+ * @version 2014/03/08 11:26:41
  */
 public class Booton {
 
@@ -166,7 +166,7 @@ public class Booton {
             // build html file
             buildHTML();
 
-            Set<Class> set = new HashSet();
+            Set set = new HashSet();
 
             // build js file
             Javascript.getScript(application).writeTo(js, set);

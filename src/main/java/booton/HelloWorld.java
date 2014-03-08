@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -9,10 +9,10 @@
  */
 package booton;
 
-import js.lang.Global;
+import static js.lang.Global.*;
 
 /**
- * @version 2013/09/11 14:10:12
+ * @version 2014/03/08 11:13:39
  */
 public class HelloWorld {
 
@@ -24,6 +24,6 @@ public class HelloWorld {
      * @param args
      */
     public static void main(String[] args) {
-        Global.document.documentElement().append("日本語うほおおおおお");
+        document.documentElement().append("Hello World!");
     }
 }

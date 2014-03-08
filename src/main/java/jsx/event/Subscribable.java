@@ -14,12 +14,10 @@ import java.lang.reflect.Method;
 
 import kiss.Extensible;
 import kiss.Observable;
-import booton.Necessary;
 
 /**
- * @version 2014/01/13 11:04:40
+ * @version 2014/03/08 11:24:50
  */
-@Necessary
 public interface Subscribable<A extends Annotation> extends Extensible {
 
     /**
