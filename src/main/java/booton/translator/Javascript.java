@@ -152,6 +152,16 @@ public class Javascript {
         for (Field field : source.getDeclaredFields()) {
             order(fields, field.getName().hashCode() + source.hashCode());
         }
+
+        if (Extensible.class.isAssignableFrom(source)) {
+            // check wether it is extension point or not
+            if (Arrays.asList(source.getInterfaces()).contains(Extensible.class)) {
+
+                for (Class extension : I.findAs((Class<Extensible>) source)) {
+                    require(extension);
+                }
+            }
+        }
     }
 
     /**
@@ -163,8 +173,8 @@ public class Javascript {
      * @param necessaries A list of required script classes.
      * @return A script output.
      */
-    public String write(Class... necessaries) {
-        return write(new HashSet(), necessaries);
+    public String write() {
+        return write(null);
     }
 
     /**
@@ -176,10 +186,10 @@ public class Javascript {
      * @param necessaries A list of required script classes.
      * @return A script output.
      */
-    public String write(Set defined, Class... necessaries) {
+    public String write(Set<Class> defined) {
         StringBuilder builder = new StringBuilder();
 
-        writeTo(builder, defined, necessaries);
+        writeTo(builder, defined);
 
         return builder.toString();
     }
@@ -191,11 +201,23 @@ public class Javascript {
      * </p>
      * 
      * @param outout A script output.
+     */
+    public void writeTo(Path output) {
+        writeTo(output, null);
+    }
+
+    /**
+     * <p>
+     * Write this script into the specified output. This method write out dependency scripts of this
+     * script too.
+     * </p>
+     * 
+     * @param outout A script output.
      * @param requirements A list of required script classes.
      */
-    public void writeTo(Path output, Class... requirements) {
+    public void writeTo(Path output, Set<Class> defined) {
         try {
-            writeTo(Files.newBufferedWriter(output, I.$encoding), requirements);
+            writeTo(Files.newBufferedWriter(output, I.$encoding), defined);
         } catch (IOException e) {
             throw I.quiet(e);
         }
@@ -210,8 +232,8 @@ public class Javascript {
      * @param outout A script output.
      * @param requirements A list of required script classes.
      */
-    public void writeTo(Appendable output, Class... requirements) {
-        writeTo(output, new HashSet(), requirements);
+    public void writeTo(Appendable output) {
+        writeTo(output, null);
     }
 
     /**
@@ -224,9 +246,13 @@ public class Javascript {
      * @param defined A list of compiled script classes.
      * @param necessaries A list of required script classes.
      */
-    public void writeTo(Appendable output, Set defined, Class... necessaries) {
+    public void writeTo(Appendable output, Set<Class> defined) {
+        if (defined == null) {
+            defined = new HashSet();
+        }
+
         // find all necessaries and write it
-        for (Class necessary : I.make(NecessaryManager.class).collect(necessaries)) {
+        for (Class necessary : I.make(NecessaryManager.class).collect()) {
             getScript(necessary).write(output, defined);
         }
 
@@ -242,7 +268,7 @@ public class Javascript {
             code.write("try", "{", main, ";", "}", "catch(e)", "{", error, ";", "}");
             output.append(code.toString());
         } catch (Exception e) {
-            // ignore missing "jsmain" method
+            // ignore missing "main" method
         }
 
         // close stream
@@ -812,16 +838,15 @@ public class Javascript {
          * @param necessaries
          * @return
          */
-        private Set<Class> collect(Class[] necessaries) {
+        private Set<Class> collect() {
             Set<Class> set = new CopyOnWriteArraySet();
             set.addAll(classes);
-            set.addAll(Arrays.asList(necessaries));
 
-            for (Class necessary : necessaries) {
-                set.add(necessary);
+            for (Class clazz : classes) {
+                set.add(clazz);
 
-                if (Extensible.class.isAssignableFrom(necessary)) {
-                    for (Class<Extensible> extension : I.findAs((Class<Extensible>) necessary)) {
+                if (Extensible.class.isAssignableFrom(clazz)) {
+                    for (Class<Extensible> extension : I.findAs((Class<Extensible>) clazz)) {
                         set.add(extension);
                     }
                 }

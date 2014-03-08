@@ -14,7 +14,6 @@ import static js.lang.Global.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import jsx.bwt.UI;
 import booton.css.CSS;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
@@ -551,8 +550,8 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
     private Node nodify(Object content) {
         if (content instanceof Node) {
             return (Node) content;
-        } else if (content instanceof UI) {
-            return ((UI) content).root;
+        } else if (content instanceof Elemental) {
+            return ((Elemental) content).getElement();
         } else {
             return document.createTextNode(content.toString());
         }

@@ -13,6 +13,7 @@ import static js.dom.UIAction.*;
 import static js.lang.Global.*;
 import js.dom.ClientRect;
 import js.dom.Element;
+import js.dom.Elemental;
 import js.dom.UIAction;
 import jsx.application.PageUnload;
 import jsx.bwt.view.PopupViewStyle;
@@ -25,7 +26,7 @@ import kiss.Observable;
 /**
  * @version 2013/07/29 2:28:28
  */
-public abstract class UI<T extends UI> extends Publishable {
+public abstract class UI<T extends UI> extends Publishable implements Elemental {
 
     /** The popup area. */
     private static Element popup;
@@ -57,6 +58,14 @@ public abstract class UI<T extends UI> extends Publishable {
      */
     protected UI(String name) {
         this.root = document.createElement(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Element getElement() {
+        return root;
     }
 
     /**

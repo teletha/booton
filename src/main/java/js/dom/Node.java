@@ -10,7 +10,6 @@
 package js.dom;
 
 import static js.lang.Global.*;
-import jsx.bwt.UI;
 import booton.css.CSS;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
@@ -67,8 +66,8 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
      * @param ui A child ui.
      * @return Chainable API.
      */
-    public <U extends UI> U child(U ui) {
-        appendChild(ui.root);
+    public <U extends Elemental> U child(U ui) {
+        appendChild(ui.getElement());
 
         return ui;
     }

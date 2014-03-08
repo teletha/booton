@@ -13,9 +13,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Set;
 
 import jsx.application.ApplicationTheme;
-import jsx.application.Page;
 import kiss.I;
 import kiss.XML;
 
@@ -165,12 +166,14 @@ public class Booton {
             // build html file
             buildHTML();
 
+            Set<Class> set = new HashSet();
+
             // build js file
-            Javascript.getScript(application).writeTo(js, Page.class);
+            Javascript.getScript(application).writeTo(js, set);
 
             // Don't build live coding script out of build process, because all scripts must share
             // compiled and obfuscated class information.
-            Javascript.getScript(LiveCoding.class).writeTo(root.resolve("live.js"));
+            Javascript.getScript(LiveCoding.class).writeTo(root.resolve("live.js"), set);
 
             // build css file
             I.make(Stylist.class).write(css);
