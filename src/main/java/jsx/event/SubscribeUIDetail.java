@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,11 @@ import java.lang.reflect.Method;
 
 import kiss.Disposable;
 import kiss.Observable;
-import booton.Necessary;
 
 /**
- * @version 2013/12/26 9:20:13
+ * @version 2014/03/08 11:24:41
  */
-@Necessary
-class SubscribeUIUIDetail implements Subscribable<SubscribeUI> {
+class SubscribeUIDetail implements Subscribable<SubscribeUI> {
 
     /**
      * {@inheritDoc}

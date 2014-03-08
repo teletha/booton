@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ import booton.Unnecessary;
  * volatile
  * </p>
  * 
- * @version 2013/11/05 10:13:44
+ * @version 2014/03/08 11:26:32
  */
 public class Javascript {
 
