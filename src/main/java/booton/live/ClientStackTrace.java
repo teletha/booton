@@ -12,9 +12,12 @@ package booton.live;
 import java.util.ArrayList;
 import java.util.List;
 
+import booton.Necessary;
+
 /**
  * @version 2013/08/08 11:48:26
  */
+@Necessary
 public class ClientStackTrace {
 
     /**

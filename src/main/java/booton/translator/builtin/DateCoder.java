@@ -67,4 +67,18 @@ class DateCoder extends Translator<Date> {
     public String clone() {
         return that;
     }
+
+    /**
+     * Tests if this date is before the specified date.
+     *
+     * @param when a date.
+     * @return <code>true</code> if and only if the instant of time represented by this
+     *         <tt>Date</tt> object is strictly earlier than the instant represented by
+     *         <tt>when</tt>; <code>false</code> otherwise.
+     * @exception NullPointerException if <code>when</code> is null.
+     */
+    public String before(Date when) {
+        return that + "<when";
+    }
+
 }

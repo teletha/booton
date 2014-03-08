@@ -245,7 +245,7 @@ public class ScriptTester {
 
         try {
             // compile as Javascript and script engine read it
-            engine.execute(html, script.write(defined, ClientStackTrace.class), sourceName, 1);
+            engine.execute(html, script.write(defined), sourceName, 1);
 
             // write test script
             String wraped = Javascript.writeMethodCode(Throwable.class, "wrap", Object.class, "e");
@@ -261,7 +261,7 @@ public class ScriptTester {
                 // fail (AssertionError) or error
 
                 // decode as Java's error and rethrow it
-                Source code = new Source(sourceName, script.write(ClientStackTrace.class));
+                Source code = new Source(sourceName, script.write());
                 Throwable throwable = ClientStackTrace.decode((String) result, code);
 
                 if (throwable instanceof AssertionError || throwable instanceof InternalError) {
@@ -272,7 +272,7 @@ public class ScriptTester {
         } catch (ScriptException e) {
             dumpCode(source);
             // script parse error (translation fails) or runtime error
-            Source code = new Source(sourceName, script.write(ClientStackTrace.class));
+            Source code = new Source(sourceName, script.write());
 
             if (e.getScriptSourceCode() == null) {
                 Throwable cause = e.getCause();
