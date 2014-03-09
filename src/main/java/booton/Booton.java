@@ -80,14 +80,14 @@ public class Booton {
      * 
      * @param port
      */
-    public void launch(int port) {
-        if (requireServer(port)) {
+    public void launch() {
+        if (requireServer()) {
             try {
                 ServletContextHandler servletHandler = new ServletContextHandler();
                 servletHandler.addServlet(new ServletHolder(new LiveCodingServlet(config.root)), "/live/*");
                 servletHandler.addServlet(new ServletHolder(new ResourceServlet(config.root)), "/*");
 
-                Server server = new Server(port);
+                Server server = new Server(config.port);
                 server.setHandler(servletHandler);
                 server.start();
             } catch (Exception e) {
@@ -104,11 +104,11 @@ public class Booton {
      * @param port
      * @return
      */
-    private boolean requireServer(int port) {
+    private boolean requireServer() {
         ServerSocket socket = null;
 
         try {
-            socket = new ServerSocket(port);
+            socket = new ServerSocket(config.port);
 
             return true;
         } catch (IOException e) {
@@ -182,7 +182,6 @@ public class Booton {
      * @param file
      */
     private void buildHTML() throws Exception {
-        System.out.println(config.root);
         XML html = I.xml("html");
         XML head = html.child("head");
         head.child("meta").attr("charset", "utf-8");
@@ -210,7 +209,7 @@ public class Booton {
      */
     public static void main(String[] args) {
         Booton booton = new Booton(Teemowork.class);
-        booton.launch(10021);
+        booton.launch();
         booton.build();
     }
 }

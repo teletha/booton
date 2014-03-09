@@ -26,11 +26,14 @@ public class BootonConfiguration {
     /** The outpu root directory. */
     public Path root;
 
-    /** The application design. */
-    public Class<? extends ApplicationTheme> design;
+    /** The application theme. */
+    public Class<? extends ApplicationTheme> theme;
 
     /** The code compression flag. */
     public boolean compression = false;
+
+    /** The port of live coding server. */
+    public int port = 10021;
 
     /**
      * <p>
@@ -38,15 +41,32 @@ public class BootonConfiguration {
      * </p>
      */
     void validate(BootonConfiguration config) {
-        if (config != null) {
+        if (config != null && this != config) {
             // copy configuration
             root = config.root;
-            design = config.design;
+            port = config.port;
+            theme = config.theme;
             compression = config.compression;
         }
 
+        validatePort();;
         validateRoot();
         validateTheme();
+    }
+
+    /**
+     * <p>
+     * Validate configuration.
+     * </p>
+     */
+    private void validatePort() {
+        if (port <= 1024) {
+            port = 1025;
+        }
+
+        if (65535 < port) {
+            port = 65535;
+        }
     }
 
     /**
@@ -74,8 +94,8 @@ public class BootonConfiguration {
      * </p>
      */
     private void validateTheme() {
-        if (design == null) {
-            design = ApplicationTheme.class;
+        if (theme == null) {
+            theme = ApplicationTheme.class;
         }
     }
 }
