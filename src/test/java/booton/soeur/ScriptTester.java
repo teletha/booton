@@ -88,7 +88,7 @@ public class ScriptTester {
             unitTest = new String(Files.readAllBytes(I.locate("src/test/resources/unitTest.js")), UTF_8);
 
             // build client
-            client = new WebClient(BrowserVersion.FIREFOX_17);
+            client = new WebClient(BrowserVersion.FIREFOX_24);
             client.getWebConsole().setLogger(new Debugger());
 
             // build dummy page
