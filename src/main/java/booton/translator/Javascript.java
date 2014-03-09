@@ -251,13 +251,13 @@ public class Javascript {
             defined = new HashSet();
         }
 
+        // write this script
+        write(output, defined);
+
         // find all necessaries and write it
         for (Class necessary : I.make(NecessaryManager.class).collect()) {
             getScript(necessary).write(output, defined);
         }
-
-        // write this script
-        write(output, defined);
 
         // write bootstrap method if needed.
         try {

@@ -198,4 +198,17 @@ public class Source {
         }
         return lines.length - 1;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        for (String line : lines) {
+            builder.append(line).append("\r\n");
+        }
+        return builder.toString();
+    }
 }

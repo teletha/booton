@@ -11,6 +11,7 @@ package jsx.template;
 
 import kiss.I;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.sample.Person;
@@ -25,6 +26,7 @@ public class TemplateTest {
     }
 
     @Test
+    @Ignore
     public void testname() throws Exception {
         Person person = I.make(Person.class);
         person.setAge(12);
