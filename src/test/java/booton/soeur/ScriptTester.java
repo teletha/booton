@@ -34,6 +34,7 @@ import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
 import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
 import net.sourceforge.htmlunit.corejs.javascript.Undefined;
 import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
+import antibug.powerassert.PowerAssertOffError;
 import booton.Unnecessary;
 import booton.live.ClientStackTrace;
 import booton.live.Source;
@@ -69,7 +70,7 @@ public class ScriptTester {
     static final JavaScriptEngine engine;
 
     /** The defined classes. */
-    private static final Set<Class> defined = new HashSet();
+    private static final Set defined = new HashSet();
 
     /** The boot.js file. */
     private static final String boot;
@@ -157,7 +158,7 @@ public class ScriptTester {
                         result = method.invoke(instance, input);
                     }
                 } catch (InvocationTargetException e) {
-                    throw I.quiet(((InvocationTargetException) e).getTargetException());
+                    throw I.quiet(e.getTargetException());
                 }
                 results.add(result);
             }
@@ -244,8 +245,11 @@ public class ScriptTester {
         Javascript script = Javascript.getScript(source);
 
         try {
-            // compile as Javascript and script engine read it
-            engine.execute(html, script.write(defined), sourceName, 1);
+            // compile as Javascript
+            String compiled = script.write(defined);
+
+            // script engine read it
+            engine.execute(html, compiled, sourceName, 1);
 
             // write test script
             String wraped = Javascript.writeMethodCode(Throwable.class, "wrap", Object.class, "e");
@@ -261,11 +265,13 @@ public class ScriptTester {
                 // fail (AssertionError) or error
 
                 // decode as Java's error and rethrow it
-                Source code = new Source(sourceName, script.write());
+                Source code = new Source(sourceName, compiled.length() != 0 ? compiled : script.write());
                 Throwable throwable = ClientStackTrace.decode((String) result, code);
 
                 if (throwable instanceof AssertionError || throwable instanceof InternalError) {
-                    dumpCode(source);
+                    dumpCode(code);
+
+                    throwable = new PowerAssertOffError(throwable);
                 }
                 throw I.quiet(throwable);
             }
@@ -648,7 +654,22 @@ public class ScriptTester {
      */
     private void dumpCode(Class source) {
         try {
-            Files.write(I.locate("e:\\test.js"), Javascript.getScript(source).toString().getBytes());
+            Files.write(I.locate("e:\\dump.js"), Javascript.getScript(source).toString().getBytes());
+        } catch (IOException e) {
+            throw I.quiet(e);
+        }
+    }
+
+    /**
+     * <p>
+     * Helper method to dump code.
+     * </p>
+     * 
+     * @param source
+     */
+    private void dumpCode(Source source) {
+        try {
+            Files.write(I.locate("e:\\dump.js"), source.toString().getBytes());
         } catch (IOException e) {
             throw I.quiet(e);
         }

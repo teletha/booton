@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,7 +10,9 @@
 package js.dom;
 
 import static js.lang.Global.*;
+import jsx.event.Publishable;
 import jsx.event.SubscribeUI;
+import kiss.I;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,10 +20,14 @@ import org.junit.runner.RunWith;
 import booton.soeur.ScriptRunner;
 
 /**
- * @version 2013/10/18 12:37:54
+ * @version 2014/03/09 11:53:04
  */
 @RunWith(ScriptRunner.class)
 public class EventTargetTest {
+
+    static {
+        I.load(Publishable.class, true);
+    }
 
     private UIEvent event(UIAction action) {
         UIEvent event = new UIEvent();
@@ -45,7 +51,6 @@ public class EventTargetTest {
         assert listener.invoked == 1;
 
         element.unsubscribe(listener);
-
         element.publish(event(UIAction.Click));
         assert listener.invoked == 1;
     }
