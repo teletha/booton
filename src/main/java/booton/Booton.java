@@ -16,7 +16,6 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 
-import jsx.application.ApplicationTheme;
 import kiss.I;
 import kiss.XML;
 
@@ -32,21 +31,18 @@ import booton.translator.Javascript;
 import booton.util.HTMLWriter;
 
 /**
- * @version 2014/03/08 11:26:41
+ * @version 2014/03/09 13:08:45
  */
 public class Booton {
 
     /** The file name for build phase. */
     public static final String BuildPhase = ".building";
 
+    /** The configuration. */
+    private final BootonConfiguration config = I.make(BootonConfiguration.class);
+
     /** The application class. */
     private final Class application;
-
-    /** The application design. */
-    private final Class<? extends ApplicationTheme> design;
-
-    /** The outpu root directory. */
-    private final Path root;
 
     /** The html file. */
     private Path html;
@@ -62,8 +58,8 @@ public class Booton {
      * Booton web application builder.
      * </p>
      */
-    public Booton(Path root, Class application) {
-        this(root, application, null);
+    public Booton(Class application) {
+        this(application, null);
     }
 
     /**
@@ -71,19 +67,10 @@ public class Booton {
      * Booton web application builder.
      * </p>
      */
-    public Booton(Path root, Class application, Class<? extends ApplicationTheme> design) {
-        // normalize root directory
-        if (root == null) {
-            root = I.locate("");
-        }
+    public Booton(Class application, BootonConfiguration config) {
+        this.config.validate(config);
 
-        if (Files.isRegularFile(root)) {
-            root = root.getParent();
-        }
-
-        this.root = root.toAbsolutePath();
         this.application = application;
-        this.design = design == null ? ApplicationTheme.class : design;
     }
 
     /**
@@ -97,8 +84,8 @@ public class Booton {
         if (requireServer(port)) {
             try {
                 ServletContextHandler servletHandler = new ServletContextHandler();
-                servletHandler.addServlet(new ServletHolder(new LiveCodingServlet(root)), "/live/*");
-                servletHandler.addServlet(new ServletHolder(new ResourceServlet(root)), "/*");
+                servletHandler.addServlet(new ServletHolder(new LiveCodingServlet(config.root)), "/live/*");
+                servletHandler.addServlet(new ServletHolder(new ResourceServlet(config.root)), "/*");
 
                 Server server = new Server(port);
                 server.setHandler(servletHandler);
@@ -145,6 +132,8 @@ public class Booton {
      * @param output An output location
      */
     public void build() {
+        Path root = config.root;
+
         this.html = root.resolve("index.html");
         this.js = root.resolve("application.js");
         this.css = root.resolve("application.css");
@@ -193,11 +182,12 @@ public class Booton {
      * @param file
      */
     private void buildHTML() throws Exception {
+        System.out.println(config.root);
         XML html = I.xml("html");
         XML head = html.child("head");
         head.child("meta").attr("charset", "utf-8");
         head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", "normalize.css");
-        head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", root.relativize(css));
+        head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", config.root.relativize(css));
 
         XML body = html.child("body");
         body.child("header").attr("id", "Header");
@@ -206,7 +196,7 @@ public class Booton {
 
         body.child("script").attr("type", "text/javascript").attr("src", "pointer-events.js");
         body.child("script").attr("type", "text/javascript").attr("src", "boot.js");
-        body.child("script").attr("type", "text/javascript").attr("src", root.relativize(js));
+        body.child("script").attr("type", "text/javascript").attr("src", config.root.relativize(js));
 
         html.to(new HTMLWriter(Files.newBufferedWriter(this.html, I.$encoding)));
     }
@@ -219,7 +209,7 @@ public class Booton {
      * @param args
      */
     public static void main(String[] args) {
-        Booton booton = new Booton(null, Teemowork.class);
+        Booton booton = new Booton(Teemowork.class);
         booton.launch(10021);
         booton.build();
     }
