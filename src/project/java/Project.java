@@ -19,7 +19,6 @@ public class Project extends bee.api.Project {
         require("org.eclipse.jetty", "jetty-servlet", "8.1.7.v20120910");
         require("npc", "antibug", "0.3").atTest();
         require("net.sourceforge.htmlunit", "htmlunit", "2.14").atTest();
-        require("com.github.detro.ghostdriver", "phantomjsdriver", "1.1.0").atTest();
 
         require("com.google.inject", "guice", "4.0-beta");
     }
