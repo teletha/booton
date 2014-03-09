@@ -40,7 +40,7 @@ public class CSSWriter {
      * @return Chainable API.
      */
     public CSSWriter comment(Object comment) {
-        if (!config.optimization) {
+        if (!config.compression) {
             builder.append("/* ").append(comment).append(" */");
             line();
         }
@@ -55,7 +55,7 @@ public class CSSWriter {
      * @return Chainable API.
      */
     public CSSWriter line() {
-        if (!config.optimization) {
+        if (!config.compression) {
             builder.append("\r\n");
         }
         return this;
@@ -69,7 +69,7 @@ public class CSSWriter {
      * @return Chainable API.
      */
     public CSSWriter indent() {
-        if (!config.optimization) {
+        if (!config.compression) {
             builder.append("  ");
         }
         return this;
@@ -204,7 +204,7 @@ public class CSSWriter {
     public CSSWriter write(String... params) {
         for (String param : params) {
             if (param != null) {
-                if (!config.optimization) {
+                if (!config.compression) {
                     switch (param) {
                     case "{":
                         builder.append(" ");
@@ -214,7 +214,7 @@ public class CSSWriter {
 
                 builder.append(param);
 
-                if (!config.optimization) {
+                if (!config.compression) {
                     switch (param) {
                     case ":":
                         builder.append(" ");

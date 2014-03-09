@@ -46,7 +46,7 @@ class ScriptWriter {
      * @param description
      */
     public void debug(Class owner, String methodName, String description) {
-        if (!config.optimization) {
+        if (!config.compression) {
             buffer.append("// ");
             buffer.append(owner.getName()).append("#").append(methodName).append("(");
 
@@ -73,7 +73,7 @@ class ScriptWriter {
      * @param comment
      */
     public ScriptWriter comment(Object comment) {
-        if (!config.optimization) {
+        if (!config.compression) {
             buffer.append("// ");
             write(comment);
             line();
@@ -90,7 +90,7 @@ class ScriptWriter {
      * @return A chainable API.
      */
     public ScriptWriter line() {
-        if (!config.optimization) {
+        if (!config.compression) {
             // write line separator
             buffer.append("\r\n");
 
@@ -164,7 +164,7 @@ class ScriptWriter {
         for (int i = 0; i < fragments.length; i++) {
             write(fragments[i], false);
 
-            if (!config.optimization && i + 1 != fragments.length) {
+            if (!config.compression && i + 1 != fragments.length) {
                 write(" ");
             }
         }

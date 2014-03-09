@@ -474,14 +474,6 @@ public class Javascript {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return write();
-    }
-
-    /**
      * <p>
      * Write method calling code.
      * </p>
