@@ -24,7 +24,7 @@ import jsx.bwt.Input;
 import jsx.bwt.Select;
 import jsx.bwt.UI;
 import jsx.model.SelectableModel;
-import kiss.Observable;
+import kiss.Events;
 import teemowork.model.Version;
 
 /**
@@ -86,9 +86,9 @@ public class FormCatalogPage extends Page {
             }
         };
 
-        Observable<Boolean> numberEntered = num.onKeyUp().map(nonEmpty);
-        Observable<Boolean> nameEntered = name.onKeyUp().map(nonEmpty);
-        Observable.all(nameEntered, numberEntered).subscribe(v -> {
+        Events<Boolean> numberEntered = num.onKeyUp().map(nonEmpty);
+        Events<Boolean> nameEntered = name.onKeyUp().map(nonEmpty);
+        Events.all(nameEntered, numberEntered).to(v -> {
             System.out.println("button enable " + v);
             if (v) {
                 a.enable();
@@ -97,13 +97,13 @@ public class FormCatalogPage extends Page {
             }
         });
 
-        Observable<UIEvent> mouseMove = window.observe(UIAction.MouseMove);
-        Observable<UIEvent> mouseDown = window.observe(UIAction.MouseDown);
-        Observable<UIEvent> mouseUp = window.observe(UIAction.MouseUp);
+        Events<UIEvent> mouseMove = window.observe(UIAction.MouseMove);
+        Events<UIEvent> mouseDown = window.observe(UIAction.MouseDown);
+        Events<UIEvent> mouseUp = window.observe(UIAction.MouseUp);
 
-        Observable<UIEvent> mouseDrag = mouseMove.skipUntil(mouseDown).takeUntil(mouseUp).repeat();
+        Events<UIEvent> mouseDrag = mouseMove.skipUntil(mouseDown).takeUntil(mouseUp).repeat();
 
-        mouseDrag.subscribe(e -> {
+        mouseDrag.to(e -> {
             System.out.println("drag " + e.pageX + "  " + e.pageY);
         }, error -> {
             System.out.println("error " + error);

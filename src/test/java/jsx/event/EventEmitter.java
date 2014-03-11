@@ -14,7 +14,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kiss.Observable;
+import kiss.Events;
 import kiss.Observer;
 
 /**
@@ -36,8 +36,8 @@ public class EventEmitter<E> implements Observer<E> {
      * @param emitter
      * @return
      */
-    public Observable<E> observe() {
-        return new Observable<E>(observer -> {
+    public Events<E> observe() {
+        return new Events<E>(observer -> {
             Listener<E> listener = event -> {
                 observer.onNext(event);
             };

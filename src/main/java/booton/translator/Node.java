@@ -1165,6 +1165,9 @@ class Node {
             }
 
             if (!noDefault) {
+                Set<Node> record = new HashSet();
+                record.addAll(defaults.outgoing);
+
                 List<Node> nodes = new LinkedList();
                 nodes.addAll(defaults.outgoing);
 
@@ -1178,7 +1181,12 @@ class Node {
                         }
                         return node;
                     }
-                    nodes.addAll(node.outgoing);
+
+                    for (Node out : node.outgoing) {
+                        if (record.add(out)) {
+                            nodes.add(out);
+                        }
+                    }
                 }
             }
             return defaults;

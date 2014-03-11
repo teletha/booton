@@ -261,9 +261,9 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        // if (script.source.getName().endsWith("StringPropertyBase") && original.equals("set")) {
-        // debugger.enable = true;
-        // }
+        if (script.source.getName().endsWith("Model") && original.equals("<init>")) {
+            debugger.enable = true;
+        }
     }
 
     /**
@@ -1738,6 +1738,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void visitTypeInsn(int opcode, String type) {
         // recode current instruction
         record(opcode);

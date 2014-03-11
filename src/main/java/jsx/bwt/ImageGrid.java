@@ -75,7 +75,7 @@ public abstract class ImageGrid<T> extends UI {
 
             container.child(Title.class).text(getTitle(source));
 
-            image.observe(UIAction.Click).subscribe(value -> {
+            image.observe(UIAction.Click).to(value -> {
                 select(source);
             });
 

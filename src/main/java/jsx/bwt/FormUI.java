@@ -62,7 +62,7 @@ public class FormUI<T extends FormUI> extends UI<T> {
             root.add(Disable.class);
             form.attr("disabled", "true");
             disabler = root.observe(Click, ClickRight, MouseDoubleClick, PointerOver, PointerOut, PointerMove)
-                    .subscribe(event -> {
+                    .to(event -> {
                         event.stopImmediatePropagation();
                     });
         }

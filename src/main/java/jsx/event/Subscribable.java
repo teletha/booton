@@ -12,8 +12,8 @@ package jsx.event;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import kiss.Events;
 import kiss.Extensible;
-import kiss.Observable;
 
 /**
  * @version 2014/03/08 11:24:50
@@ -33,12 +33,12 @@ public interface Subscribable<A extends Annotation> extends Extensible {
 
     /**
      * <p>
-     * Build {@link Observable} using the specified information.
+     * Build {@link Events} using the specified information.
      * </p>
      * 
-     * @param base A base {@link Observable}.
+     * @param base A base {@link Events}.
      * @param annotation A subscriber info.
      * @return
      */
-    Observable create(Observable<?> base, A annotation);
+    Events create(Events<?> base, A annotation);
 }

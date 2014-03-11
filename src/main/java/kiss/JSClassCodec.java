@@ -22,15 +22,15 @@ class JSClassCodec extends Codec<Class> {
      * {@inheritDoc}
      */
     @Override
-    public String encode(Class value) {
-        return super.encode(value);
+    public String toString(Class value) {
+        return super.toString(value);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Class decode(String value) {
-        return super.decode(value);
+    public Class fromString(String value) {
+        return super.fromString(value);
     }
 }
