@@ -953,6 +953,63 @@ class JSString implements Comparable<String>, CharSequence {
     }
 
     /**
+     * Converts all of the characters in this {@code String} to lower case using the rules of the
+     * given {@code Locale}. Case mapping is based on the Unicode Standard version specified by the
+     * {@link java.lang.Character Character} class. Since case mappings are not always 1:1 char
+     * mappings, the resulting {@code String} may be a different length than the original
+     * {@code String}.
+     * <p>
+     * Examples of lowercase mappings are in the following table:
+     * <table border="1" summary="Lowercase mapping examples showing language code of locale, upper case, lower case, and description">
+     * <tr>
+     * <th>Language Code of Locale</th>
+     * <th>Upper Case</th>
+     * <th>Lower Case</th>
+     * <th>Description</th>
+     * </tr>
+     * <tr>
+     * <td>tr (Turkish)</td>
+     * <td>&#92;u0130</td>
+     * <td>&#92;u0069</td>
+     * <td>capital letter I with dot above -&gt; small letter i</td>
+     * </tr>
+     * <tr>
+     * <td>tr (Turkish)</td>
+     * <td>&#92;u0049</td>
+     * <td>&#92;u0131</td>
+     * <td>capital letter I -&gt; small letter dotless i</td>
+     * </tr>
+     * <tr>
+     * <td>(all)</td>
+     * <td>French Fries</td>
+     * <td>french fries</td>
+     * <td>lowercased all chars in String</td>
+     * </tr>
+     * <tr>
+     * <td>(all)</td>
+     * <td><img src="doc-files/capiota.gif" alt="capiota"><img src="doc-files/capchi.gif"
+     * alt="capchi"> <img src="doc-files/captheta.gif" alt="captheta"><img
+     * src="doc-files/capupsil.gif" alt="capupsil"> <img src="doc-files/capsigma.gif"
+     * alt="capsigma"></td>
+     * <td><img src="doc-files/iota.gif" alt="iota"><img src="doc-files/chi.gif" alt="chi"> <img
+     * src="doc-files/theta.gif" alt="theta"><img src="doc-files/upsilon.gif" alt="upsilon"> <img
+     * src="doc-files/sigma1.gif" alt="sigma"></td>
+     * <td>lowercased all chars in String</td>
+     * </tr>
+     * </table>
+     *
+     * @param locale use the case transformation rules for this locale
+     * @return the {@code String}, converted to lowercase.
+     * @see java.lang.String#toLowerCase()
+     * @see java.lang.String#toUpperCase()
+     * @see java.lang.String#toUpperCase(Locale)
+     * @since 1.1
+     */
+    public String toLowerCase(Locale locale) {
+        return toLowerCase();
+    }
+
+    /**
      * Converts all of the characters in this <code>String</code> to upper case using the rules of
      * the default locale. This method is equivalent to
      * <code>toUpperCase(Locale.getDefault())</code>.
@@ -970,6 +1027,58 @@ class JSString implements Comparable<String>, CharSequence {
      */
     public String toUpperCase() {
         return (String) (Object) that.toUpperCase();
+    }
+
+    /**
+     * Converts all of the characters in this {@code String} to upper case using the rules of the
+     * given {@code Locale}. Case mapping is based on the Unicode Standard version specified by the
+     * {@link java.lang.Character Character} class. Since case mappings are not always 1:1 char
+     * mappings, the resulting {@code String} may be a different length than the original
+     * {@code String}.
+     * <p>
+     * Examples of locale-sensitive and 1:M case mappings are in the following table.
+     * <table border="1" summary="Examples of locale-sensitive and 1:M case mappings. Shows Language code of locale, lower case, upper case, and description.">
+     * <tr>
+     * <th>Language Code of Locale</th>
+     * <th>Lower Case</th>
+     * <th>Upper Case</th>
+     * <th>Description</th>
+     * </tr>
+     * <tr>
+     * <td>tr (Turkish)</td>
+     * <td>&#92;u0069</td>
+     * <td>&#92;u0130</td>
+     * <td>small letter i -&gt; capital letter I with dot above</td>
+     * </tr>
+     * <tr>
+     * <td>tr (Turkish)</td>
+     * <td>&#92;u0131</td>
+     * <td>&#92;u0049</td>
+     * <td>small letter dotless i -&gt; capital letter I</td>
+     * </tr>
+     * <tr>
+     * <td>(all)</td>
+     * <td>&#92;u00df</td>
+     * <td>&#92;u0053 &#92;u0053</td>
+     * <td>small letter sharp s -&gt; two letters: SS</td>
+     * </tr>
+     * <tr>
+     * <td>(all)</td>
+     * <td>Fahrvergn&uuml;gen</td>
+     * <td>FAHRVERGN&Uuml;GEN</td>
+     * <td></td>
+     * </tr>
+     * </table>
+     * 
+     * @param locale use the case transformation rules for this locale
+     * @return the {@code String}, converted to uppercase.
+     * @see java.lang.String#toUpperCase()
+     * @see java.lang.String#toLowerCase()
+     * @see java.lang.String#toLowerCase(Locale)
+     * @since 1.1
+     */
+    public String toUpperCase(Locale locale) {
+        return toUpperCase();
     }
 
     /**
