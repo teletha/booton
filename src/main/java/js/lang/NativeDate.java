@@ -31,6 +31,16 @@ public class NativeDate {
 
     /**
      * <p>
+     * Creates JavaScript Date instances which let you work with dates and times.
+     * </p>
+     */
+    public NativeDate(long time) {
+        calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+    }
+
+    /**
+     * <p>
      * Returns the numeric value corresponding to the time for the specified date according to
      * universal time.
      * </p>
@@ -65,6 +75,15 @@ public class NativeDate {
          */
         public String NativeDate() {
             return "new Date()";
+        }
+
+        /**
+         * <p>
+         * Creates JavaScript Date instances which let you work with dates and times.
+         * </p>
+         */
+        public String NativeDate(long time) {
+            return "new Date(" + param(0) + ")";
         }
 
         /**

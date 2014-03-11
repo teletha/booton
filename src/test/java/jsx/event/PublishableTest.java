@@ -532,7 +532,7 @@ public class PublishableTest {
     @Test
     public void registerConsumerEvent() throws Exception {
         FunctionalPubSub pubsub = new FunctionalPubSub();
-        Disposable disposable = pubsub.observe(UIAction.Click).subscribe(value -> {
+        Disposable disposable = pubsub.observe(UIAction.Click).to(value -> {
             pubsub.consumeUI++;
         });
 
@@ -619,7 +619,7 @@ public class PublishableTest {
     public void observe() throws Exception {
         EventEmitter<String> reciever = new EventEmitter();
         Publishable publishable = new Publishable();
-        Disposable disposable = publishable.observe(String.class).subscribe(reciever);
+        Disposable disposable = publishable.observe(String.class).to(reciever);
 
         publishable.publish("1");
         assert reciever.retrieve() == "1";
@@ -633,8 +633,8 @@ public class PublishableTest {
     public void observeMultiple() throws Exception {
         EventEmitter<String> reciever = new EventEmitter();
         Publishable publishable = new Publishable();
-        publishable.observe(String.class).subscribe(reciever);
-        publishable.observe(String.class).subscribe(reciever);
+        publishable.observe(String.class).to(reciever);
+        publishable.observe(String.class).to(reciever);
 
         publishable.publish("1");
         assert reciever.retrieve() == "1";

@@ -23,8 +23,8 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import kiss.Disposable;
+import kiss.Events;
 import kiss.I;
-import kiss.Observable;
 import kiss.Observer;
 import kiss.Table;
 import kiss.model.ClassUtil;
@@ -57,9 +57,9 @@ public class Publishable<P extends Publishable<P>> {
      * @param type An event type.
      * @return Chainable API.
      */
-    public final <T> Observable<T> observe(Class<T> type) {
+    public final <T> Events<T> observe(Class<T> type) {
         if (type == null) {
-            return Observable.NEVER;
+            return Events.NEVER;
         }
         return add(ClassUtil.wrap(type));
     }
@@ -72,15 +72,15 @@ public class Publishable<P extends Publishable<P>> {
      * @param type An event type.
      * @return Chainable API.
      */
-    public final <T extends Enum & Predicate<E>, E extends Supplier<T>> Observable<E> observe(T... types) {
+    public final <T extends Enum & Predicate<E>, E extends Supplier<T>> Events<E> observe(T... types) {
         if (types == null || types.length == 0) {
-            return Observable.NEVER;
+            return Events.NEVER;
         }
 
-        Observable<E> observable = null;
+        Events<E> observable = null;
 
         for (T type : types) {
-            Observable<E> current = add(type);
+            Events<E> current = add(type);
 
             if (observable == null) {
                 observable = current;
@@ -101,7 +101,7 @@ public class Publishable<P extends Publishable<P>> {
      * @return Chainable API.
      */
     public final <T> P subscribe(Class<T> type, Consumer<T> subscriber) {
-        observe(type).subscribe(subscriber);
+        observe(type).to(subscriber);
 
         // API definition
         return (P) this;
@@ -117,7 +117,7 @@ public class Publishable<P extends Publishable<P>> {
      * @return Chainable API.
      */
     public final <T extends Enum & Predicate<E>, E extends Supplier<T>> P subscribe(T type, Consumer<E> listener) {
-        observe(type).subscribe(listener);
+        observe(type).to(listener);
 
         // API definition
         return (P) this;
@@ -152,7 +152,7 @@ public class Publishable<P extends Publishable<P>> {
                             Object type = info.detect(method, annotation);
                             boolean hasParam = method.getParameterTypes().length == 1;
 
-                            agent.add(info.create(add(type), annotation).subscribe(value -> {
+                            agent.add(info.create(add(type), annotation).to(value -> {
                                 try {
                                     if (hasParam) {
                                         method.invoke(listeners, value);
@@ -177,14 +177,14 @@ public class Publishable<P extends Publishable<P>> {
 
     /**
      * <p>
-     * Create an event listener as {@link Observable}.
+     * Create an event listener as {@link Events}.
      * </p>
      * 
      * @param type A event type.
      * @return
      */
-    private <V> Observable<V> add(Object type) {
-        return new Observable<V>(observer -> {
+    private <V> Events<V> add(Object type) {
+        return new Events<V>(observer -> {
             // create event listener holder if it is not initialized
             if (holder == null) {
                 holder = new Table();

@@ -9,8 +9,8 @@
  */
 package jsx.template;
 
+import kiss.Events;
 import kiss.I;
-import kiss.Observable;
 import booton.sample.Person;
 
 /**
@@ -42,7 +42,7 @@ public class TemplateSample {
     }
 
     void text(String observable) {
-        Observable<String> observe = I.observe(observable);
+        Events<String> observe = I.observe(observable);
     }
 
     void item(Object... contents) {
