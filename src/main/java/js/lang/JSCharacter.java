@@ -565,6 +565,15 @@ class JSCharacter implements JavascriptNative {
     }
 
     /**
+     * Returns the value of this {@code Character} object.
+     * 
+     * @return the primitive {@code char} value represented by this object.
+     */
+    public char charValue() {
+        return (char) (Object) character;
+    }
+
+    /**
      * <p>
      * Returns the primitive value of this object.
      * </p>

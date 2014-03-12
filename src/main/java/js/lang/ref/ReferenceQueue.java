@@ -9,12 +9,24 @@
  */
 package js.lang.ref;
 
+import java.lang.ref.Reference;
+
 import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2014/02/06 9:34:49
  */
 @JavaAPIProvider(java.lang.ref.ReferenceQueue.class)
-class ReferenceQueue {
+class ReferenceQueue<T> {
 
+    /**
+     * Polls this queue to see if a reference object is available. If one is available without
+     * further delay then it is removed from the queue and returned. Otherwise this method
+     * immediately returns <tt>null</tt>.
+     *
+     * @return A reference object, if one was immediately available, otherwise <code>null</code>
+     */
+    public Reference<? extends T> poll() {
+        return null;
+    }
 }

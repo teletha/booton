@@ -7,14 +7,15 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package sun.util.locale.provider;
+package moon.util.locale.provider;
 
+import booton.JDKEmulator;
 import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2014/03/12 2:53:27
  */
-@JavaAPIProvider(sun.util.locale.provider.LocaleProviderAdapter.class)
-class LocaleProviderAdapter {
+@JavaAPIProvider(JDKEmulator.class)
+public class LocaleProviderAdapter {
 
 }

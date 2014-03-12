@@ -130,6 +130,32 @@ class Collections {
     }
 
     /**
+     * Returns an enumeration over the specified collection. This provides interoperability with
+     * legacy APIs that require an enumeration as input.
+     *
+     * @param <T> the class of the objects in the collection
+     * @param c the collection for which an enumeration is to be returned.
+     * @return an enumeration over the specified collection.
+     * @see Enumeration
+     */
+    public static <T> Enumeration<T> enumeration(Collection<T> c) {
+        return new Enumeration<T>() {
+
+            private final Iterator<T> i = c.iterator();
+
+            @Override
+            public boolean hasMoreElements() {
+                return i.hasNext();
+            }
+
+            @Override
+            public T nextElement() {
+                return i.next();
+            }
+        };
+    }
+
+    /**
      * Returns an enumeration that has no elements. More precisely,
      * <ul>
      * <li>{@link Enumeration#hasMoreElements hasMoreElements} always returns {@code false}.</li>
@@ -163,7 +189,7 @@ class Collections {
      * @since 1.7
      */
     public static <T> Iterator<T> emptyIterator() {
-        return (Iterator<T>) EmptyIterator.EMPTY_ITERATOR;
+        return EmptyIterator.EMPTY_ITERATOR;
     }
 
     /**
@@ -187,7 +213,7 @@ class Collections {
      * @since 1.7
      */
     public static <T> ListIterator<T> emptyListIterator() {
-        return (ListIterator<T>) EmptyListIterator.EMPTY_ITERATOR;
+        return EmptyListIterator.EMPTY_ITERATOR;
     }
 
     /**
@@ -206,7 +232,7 @@ class Collections {
      * @since 1.5
      */
     public static <T> List<T> emptyList() {
-        return (List<T>) EMPTY_LIST;
+        return EMPTY_LIST;
     }
 
     /**
@@ -226,7 +252,7 @@ class Collections {
      * @since 1.5
      */
     public static <T> Set<T> emptySet() {
-        return (Set<T>) EMPTY_SET;
+        return EMPTY_SET;
     }
 
     /**
@@ -245,7 +271,7 @@ class Collections {
      * @since 1.5
      */
     public static <K, V> Map<K, V> emptyMap() {
-        return (Map<K, V>) EMPTY_MAP;
+        return EMPTY_MAP;
     }
 
     /**
@@ -1658,6 +1684,7 @@ class Collections {
         /**
          * {@inheritDoc}
          */
+        @Override
         public Iterator<Entry<K, V>> iterator() {
             return new UnmodifiableIterator<Entry<K, V>, Iterator<Entry<K, V>>>(collection.iterator()) {
 
