@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import kiss.Singleton;
 import booton.JDKEmulator;
 
 /**
- * @version 2013/11/26 2:04:14
+ * @version 2014/03/12 20:02:06
  */
 @Manageable(lifestyle = Singleton.class)
 class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
@@ -45,7 +45,6 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
         if (api != null && !definitions.containsKey(api)) {
             definitions.put(api, new Definition(clazz));
             revert.put(clazz, api);
-            System.out.println(clazz);
         }
 
         Class parent = clazz.getSuperclass();
@@ -85,7 +84,7 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
 
         if (type == JDKEmulator.class) {
             try {
-                type = Class.forName(declared.getName().replace("js.", "java.").replace("moon.", "sun."));
+                type = Class.forName(declared.getName().replace("js.emulate.", "").replace("js.", "java."));
 
             } catch (ClassNotFoundException e) {
                 throw I.quiet(e);

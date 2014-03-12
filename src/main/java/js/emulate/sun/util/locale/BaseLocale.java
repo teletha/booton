@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package moon.util.locale;
+package js.emulate.sun.util.locale;
 
 import sun.util.locale.BaseLocale;
 
