@@ -45,6 +45,7 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
         if (api != null && !definitions.containsKey(api)) {
             definitions.put(api, new Definition(clazz));
             revert.put(clazz, api);
+            System.out.println(clazz);
         }
 
         Class parent = clazz.getSuperclass();
@@ -84,7 +85,7 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
 
         if (type == JDKEmulator.class) {
             try {
-                type = Class.forName(declared.getName().replace("js.", "java."));
+                type = Class.forName(declared.getName().replace("js.", "java.").replace("moon.", "sun."));
 
             } catch (ClassNotFoundException e) {
                 throw I.quiet(e);

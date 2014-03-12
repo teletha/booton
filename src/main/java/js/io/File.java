@@ -16,4 +16,21 @@ import booton.translator.JavaAPIProvider;
  */
 @JavaAPIProvider(java.io.File.class)
 class File {
+
+    /**
+     * The system-dependent default name-separator character. This field is initialized to contain
+     * the first character of the value of the system property <code>file.separator</code>. On UNIX
+     * systems the value of this field is <code>'/'</code>; on Microsoft Windows systems it is
+     * <code>'\\'</code>.
+     *
+     * @see java.lang.System#getProperty(java.lang.String)
+     */
+    public static final char separatorChar = '/';
+
+    /**
+     * The system-dependent default name-separator character, represented as a string for
+     * convenience. This string contains a single character, namely
+     * <code>{@link #separatorChar}</code>.
+     */
+    public static final String separator = "/";
 }

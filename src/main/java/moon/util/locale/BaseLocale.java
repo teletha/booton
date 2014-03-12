@@ -7,7 +7,9 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package sun.util.locale;
+package moon.util.locale;
+
+import sun.util.locale.BaseLocale;
 
 
 /**

@@ -11,12 +11,10 @@ package js.util;
 
 import java.util.Locale.Category;
 
-import booton.translator.JavaAPIProvider;
-
 /**
  * @version 2013/09/24 16:01:43
  */
-@JavaAPIProvider(java.util.Locale.class)
+// @JavaAPIProvider(java.util.Locale.class)
 class Locale {
 
     /**
