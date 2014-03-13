@@ -364,6 +364,26 @@ class JSSystem {
     }
 
     /**
+     * Runs the garbage collector.
+     * <p>
+     * Calling the <code>gc</code> method suggests that the Java Virtual Machine expend effort
+     * toward recycling unused objects in order to make the memory they currently occupy available
+     * for quick reuse. When control returns from the method call, the Java Virtual Machine has made
+     * a best effort to reclaim space from all discarded objects.
+     * <p>
+     * The call <code>System.gc()</code> is effectively equivalent to the call: <blockquote>
+     * 
+     * <pre>
+     * Runtime.getRuntime().gc()
+     * </pre>
+     * </blockquote>
+     *
+     * @see java.lang.Runtime#gc()
+     */
+    public static void gc() {
+    }
+
+    /**
      * @version 2013/05/16 19:27:00
      */
     private static class DummyOutputStream extends OutputStream {

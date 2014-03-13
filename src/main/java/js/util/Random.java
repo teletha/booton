@@ -18,6 +18,26 @@ import booton.translator.JavaAPIProvider;
 class Random {
 
     /**
+     * Returns the next pseudorandom, uniformly distributed {@code int} value from this random
+     * number generator's sequence. The general contract of {@code nextInt} is that one {@code int}
+     * value is pseudorandomly generated and returned. All 2<sup>32</sup> possible {@code int}
+     * values are produced with (approximately) equal probability.
+     * <p>
+     * The method {@code nextInt} is implemented by class {@code Random} as if by:
+     * 
+     * <pre> {@code
+     * public int nextInt() {
+     *   return next(32);
+     * }}</pre>
+     *
+     * @return the next pseudorandom, uniformly distributed {@code int} value from this random
+     *         number generator's sequence
+     */
+    public int nextInt() {
+        return nextInt(Integer.MAX_VALUE);
+    }
+
+    /**
      * Returns a pseudorandom, uniformly distributed {@code int} value between 0 (inclusive) and the
      * specified value (exclusive), drawn from this random number generator's sequence. The general
      * contract of {@code nextInt} is that one {@code int} value in the specified range is
@@ -68,5 +88,31 @@ class Random {
      */
     public int nextInt(int bound) {
         return (int) Math.floor(Math.random() * bound);
+    }
+
+    /**
+     * Generates random bytes and places them into a user-supplied byte array. The number of random
+     * bytes produced is equal to the length of the byte array.
+     * <p>
+     * The method {@code nextBytes} is implemented by class {@code Random} as if by:
+     * 
+     * <pre> {@code
+     * public void nextBytes(byte[] bytes) {
+     *   for (int i = 0; i < bytes.length; )
+     *     for (int rnd = nextInt(), n = Math.min(bytes.length - i, 4);
+     *          n-- > 0; rnd >>= 8)
+     *       bytes[i++] = (byte)rnd;
+     * }}</pre>
+     *
+     * @param bytes the byte array to fill with random bytes
+     * @throws NullPointerException if the byte array is null
+     * @since 1.1
+     */
+    public void nextBytes(byte[] bytes) {
+        for (int i = 0, len = bytes.length; i < len;) {
+            for (int rnd = nextInt(), n = Math.min(len - i, Integer.SIZE / Byte.SIZE); n-- > 0; rnd >>= Byte.SIZE) {
+                bytes[i++] = (byte) rnd;
+            }
+        }
     }
 }

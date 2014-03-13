@@ -426,4 +426,14 @@ public class StringTest {
         assert String.valueOf(true).equals("true");
         assert String.valueOf('Q').equals("Q");
     }
+
+    @Test
+    public void copyValueOf() throws Exception {
+        assert String.copyValueOf(new char[] {'t', 'e', 's', 't'}).equals("test");
+    }
+
+    @Test
+    public void copyValueOfWithRange() throws Exception {
+        assert String.copyValueOf(new char[] {'t', 'e', 's', 't'}, 1, 2).equals("es");
+    }
 }

@@ -1139,6 +1139,31 @@ class JSString implements Comparable<String>, CharSequence {
     }
 
     /**
+     * Equivalent to {@link #valueOf(char[])}.
+     *
+     * @param data the character array.
+     * @return a {@code String} that contains the characters of the character array.
+     */
+    public static String copyValueOf(char[] data) {
+        return new String(data);
+    }
+
+    /**
+     * Equivalent to {@link #valueOf(char[], int, int)}.
+     *
+     * @param data the character array.
+     * @param offset initial offset of the subarray.
+     * @param count length of the subarray.
+     * @return a {@code String} that contains the characters of the specified subarray of the
+     *         character array.
+     * @exception IndexOutOfBoundsException if {@code offset} is negative, or {@code count} is
+     *                negative, or {@code offset+count} is larger than {@code data.length}.
+     */
+    public static String copyValueOf(char[] data, int offset, int count) {
+        return new String(data, offset, count);
+    }
+
+    /**
      * Returns a formatted string using the specified format string and arguments.
      * <p>
      * The locale always used is the one returned by {@link java.util.Locale#getDefault()

@@ -867,7 +867,7 @@ class Node {
 
                     String label = loop.computeLabelFor(this);
 
-                    if (label.length() != 0 || !continueOmittable) {
+                    if (label.length() != 0 || continueOmittable == null || !continueOmittable) {
                         buffer.append("continue", label, ";").line();
                     }
                     return;

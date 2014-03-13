@@ -11,16 +11,118 @@ package js.util;
 
 import java.util.Locale.Category;
 
+import booton.translator.JavaAPIProvider;
+
 /**
  * @version 2013/09/24 16:01:43
  */
-// @JavaAPIProvider(java.util.Locale.class)
+@JavaAPIProvider(java.util.Locale.class)
 class Locale {
+
+    /**
+     * Useful constant for language.
+     */
+    public static final Locale ENGLISH = new Locale("en", "");
+
+    /**
+     * Useful constant for language.
+     */
+    public static final Locale FRENCH = new Locale("fr", "");
+
+    /**
+     * Useful constant for language.
+     */
+    public static final Locale GERMAN = new Locale("de", "");
+
+    /**
+     * Useful constant for language.
+     */
+    public static final Locale ITALIAN = new Locale("it", "");
+
+    /**
+     * Useful constant for language.
+     */
+    public static final Locale JAPANESE = new Locale("ja", "");
+
+    /**
+     * Useful constant for language.
+     */
+    public static final Locale KOREAN = new Locale("ko", "");
+
+    /**
+     * Useful constant for language.
+     */
+    public static final Locale CHINESE = new Locale("zh", "");
+
+    /**
+     * Useful constant for language.
+     */
+    public static final Locale SIMPLIFIED_CHINESE = new Locale("zh", "CN");
+
+    /**
+     * Useful constant for language.
+     */
+    public static final Locale TRADITIONAL_CHINESE = new Locale("zh", "TW");
+
+    /**
+     * Useful constant for country.
+     */
+    public static final Locale FRANCE = new Locale("fr", "FR");
+
+    /**
+     * Useful constant for country.
+     */
+    public static final Locale GERMANY = new Locale("de", "DE");
+
+    /**
+     * Useful constant for country.
+     */
+    public static final Locale ITALY = new Locale("it", "IT");
+
+    /**
+     * Useful constant for country.
+     */
+    public static final Locale JAPAN = new Locale("ja", "JP");
+
+    /**
+     * Useful constant for country.
+     */
+    public static final Locale KOREA = new Locale("ko", "KR");
+
+    /**
+     * Useful constant for country.
+     */
+    public static final Locale CHINA = SIMPLIFIED_CHINESE;
+
+    /**
+     * Useful constant for country.
+     */
+    public static final Locale PRC = SIMPLIFIED_CHINESE;
+
+    /**
+     * Useful constant for country.
+     */
+    public static final Locale TAIWAN = TRADITIONAL_CHINESE;
+
+    /**
+     * Useful constant for country.
+     */
+    public static final Locale UK = new Locale("en", "GB");
 
     /**
      * Useful constant for country.
      */
     public static final Locale US = new Locale("en", "US");
+
+    /**
+     * Useful constant for country.
+     */
+    public static final Locale CANADA = new Locale("en", "CA");
+
+    /**
+     * Useful constant for country.
+     */
+    public static final Locale CANADA_FRENCH = new Locale("fr", "CA");
 
     /**
      * Useful constant for the root locale. The root locale is the locale whose language, country,
@@ -32,18 +134,92 @@ class Locale {
     public static final Locale ROOT = new Locale("", "");
 
     /** The base language. */
-    private String language = "en";
+    private final String language;
 
     /** The base country. */
-    private String country = "US";
+    private final String country;
+
+    /** The base country. */
+    private final String variant;
 
     /**
-     * @param language
-     * @param country
+     * Construct a locale from a language code. This constructor normalizes the language value to
+     * lowercase.
+     * <p>
+     * <b>Note:</b>
+     * <ul>
+     * <li>ISO 639 is not a stable standard; some of the language codes it defines (specifically
+     * "iw", "ji", and "in") have changed. This constructor accepts both the old codes ("iw", "ji",
+     * and "in") and the new codes ("he", "yi", and "id"), but all other API on Locale will return
+     * only the OLD codes.
+     * <li>For backward compatibility reasons, this constructor does not make any syntactic checks
+     * on the input.
+     * </ul>
+     *
+     * @param language An ISO 639 alpha-2 or alpha-3 language code, or a language subtag up to 8
+     *            characters in length. See the <code>Locale</code> class description about valid
+     *            language values.
+     * @exception NullPointerException thrown if argument is null.
+     * @since 1.4
      */
-    private Locale(String language, String country) {
+    public Locale(String language) {
+        this(language, "", "");
+    }
+
+    /**
+     * Construct a locale from language and country. This constructor normalizes the language value
+     * to lowercase and the country value to uppercase.
+     * <p>
+     * <b>Note:</b>
+     * <ul>
+     * <li>ISO 639 is not a stable standard; some of the language codes it defines (specifically
+     * "iw", "ji", and "in") have changed. This constructor accepts both the old codes ("iw", "ji",
+     * and "in") and the new codes ("he", "yi", and "id"), but all other API on Locale will return
+     * only the OLD codes.
+     * <li>For backward compatibility reasons, this constructor does not make any syntactic checks
+     * on the input.
+     * </ul>
+     *
+     * @param language An ISO 639 alpha-2 or alpha-3 language code, or a language subtag up to 8
+     *            characters in length. See the <code>Locale</code> class description about valid
+     *            language values.
+     * @param country An ISO 3166 alpha-2 country code or a UN M.49 numeric-3 area code. See the
+     *            <code>Locale</code> class description about valid country values.
+     * @exception NullPointerException thrown if either argument is null.
+     */
+    public Locale(String language, String country) {
+        this(language, country, "");
+    }
+
+    /**
+     * Construct a locale from language, country and variant. This constructor normalizes the
+     * language value to lowercase and the country value to uppercase.
+     * <p>
+     * <b>Note:</b>
+     * <ul>
+     * <li>ISO 639 is not a stable standard; some of the language codes it defines (specifically
+     * "iw", "ji", and "in") have changed. This constructor accepts both the old codes ("iw", "ji",
+     * and "in") and the new codes ("he", "yi", and "id"), but all other API on Locale will return
+     * only the OLD codes.
+     * <li>For backward compatibility reasons, this constructor does not make any syntactic checks
+     * on the input.
+     * <li>The two cases ("ja", "JP", "JP") and ("th", "TH", "TH") are handled specially, see <a
+     * href="#special_cases_constructor">Special Cases</a> for more information.
+     * </ul>
+     *
+     * @param language An ISO 639 alpha-2 or alpha-3 language code, or a language subtag up to 8
+     *            characters in length. See the <code>Locale</code> class description about valid
+     *            language values.
+     * @param country An ISO 3166 alpha-2 country code or a UN M.49 numeric-3 area code. See the
+     *            <code>Locale</code> class description about valid country values.
+     * @param variant Any arbitrary value used to indicate a variation of a <code>Locale</code>. See
+     *            the <code>Locale</code> class description for the details.
+     * @exception NullPointerException thrown if any argument is null.
+     */
+    public Locale(String language, String country, String variant) {
         this.language = language;
         this.country = country;
+        this.variant = variant;
     }
 
     /**
@@ -81,6 +257,29 @@ class Locale {
      */
     public String getLanguage() {
         return language;
+    }
+
+    /**
+     * Returns the variant code for this locale.
+     *
+     * @return The variant code, or the empty string if none is defined.
+     * @see #getDisplayVariant
+     */
+    public String getVariant() {
+        return variant;
+    }
+
+    /**
+     * Returns the script for this locale, which should either be the empty string or an ISO 15924
+     * 4-letter script code. The first letter is uppercase and the rest are lowercase, for example,
+     * 'Latn', 'Cyrl'.
+     *
+     * @return The script code, or the empty string if none is defined.
+     * @see #getDisplayScript
+     * @since 1.7
+     */
+    public String getScript() {
+        return "";
     }
 
     /**
@@ -136,6 +335,23 @@ class Locale {
      */
     public String toLanguageTag() {
         return language + "-" + country;
+    }
+
+    /**
+     * Returns the Unicode locale type associated with the specified Unicode locale key for this
+     * locale. Returns the empty string for keys that are defined with no type. Returns null if the
+     * key is not defined. Keys are case-insensitive. The key must be two alphanumeric characters
+     * ([0-9a-zA-Z]), or an IllegalArgumentException is thrown.
+     *
+     * @param key the Unicode locale key
+     * @return The Unicode locale type associated with the key, or null if the locale does not
+     *         define the key.
+     * @throws IllegalArgumentException if the key is not well-formed
+     * @throws NullPointerException if <code>key</code> is null
+     * @since 1.7
+     */
+    public String getUnicodeLocaleType(String key) {
+        return null;
     }
 
     /**

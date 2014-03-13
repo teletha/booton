@@ -967,7 +967,7 @@ public class JSMath {
      * @return the larger of {@code a} and {@code b}.
      */
     public static int max(int a, int b) {
-        return (a >= b) ? a : b;
+        return NativeMath.max(a, b);
     }
 
     /**
@@ -980,13 +980,8 @@ public class JSMath {
      * @return the larger of {@code a} and {@code b}.
      */
     public static long max(long a, long b) {
-        return (a >= b) ? a : b;
+        return NativeMath.max(a, b);
     }
-
-    // Use raw bit-wise conversions on guaranteed non-NaN arguments.
-    private static long negativeZeroFloatBits = Float.floatToRawIntBits(-0.0f);
-
-    private static long negativeZeroDoubleBits = Double.doubleToRawLongBits(-0.0d);
 
     /**
      * Returns the greater of two {@code float} values. That is, the result is the argument closer
@@ -1000,12 +995,7 @@ public class JSMath {
      * @return the larger of {@code a} and {@code b}.
      */
     public static float max(float a, float b) {
-        if (a != a) return a; // a is NaN
-        if ((a == 0.0f) && (b == 0.0f) && (Float.floatToRawIntBits(a) == negativeZeroFloatBits)) {
-            // Raw conversion ok since NaN can't map to -0.0.
-            return b;
-        }
-        return (a >= b) ? a : b;
+        return NativeMath.max(a, b);
     }
 
     /**
@@ -1020,12 +1010,7 @@ public class JSMath {
      * @return the larger of {@code a} and {@code b}.
      */
     public static double max(double a, double b) {
-        if (a != a) return a; // a is NaN
-        if ((a == 0.0d) && (b == 0.0d) && (Double.doubleToRawLongBits(a) == negativeZeroDoubleBits)) {
-            // Raw conversion ok since NaN can't map to -0.0.
-            return b;
-        }
-        return (a >= b) ? a : b;
+        return NativeMath.max(a, b);
     }
 
     /**
@@ -1038,7 +1023,7 @@ public class JSMath {
      * @return the smaller of {@code a} and {@code b}.
      */
     public static int min(int a, int b) {
-        return (a <= b) ? a : b;
+        return NativeMath.min(a, b);
     }
 
     /**
@@ -1051,7 +1036,7 @@ public class JSMath {
      * @return the smaller of {@code a} and {@code b}.
      */
     public static long min(long a, long b) {
-        return (a <= b) ? a : b;
+        return NativeMath.min(a, b);
     }
 
     /**
@@ -1066,12 +1051,7 @@ public class JSMath {
      * @return the smaller of {@code a} and {@code b}.
      */
     public static float min(float a, float b) {
-        if (a != a) return a; // a is NaN
-        if ((a == 0.0f) && (b == 0.0f) && (Float.floatToRawIntBits(b) == negativeZeroFloatBits)) {
-            // Raw conversion ok since NaN can't map to -0.0.
-            return b;
-        }
-        return (a <= b) ? a : b;
+        return NativeMath.min(a, b);
     }
 
     /**
@@ -1086,12 +1066,7 @@ public class JSMath {
      * @return the smaller of {@code a} and {@code b}.
      */
     public static double min(double a, double b) {
-        if (a != a) return a; // a is NaN
-        if ((a == 0.0d) && (b == 0.0d) && (Double.doubleToRawLongBits(b) == negativeZeroDoubleBits)) {
-            // Raw conversion ok since NaN can't map to -0.0.
-            return b;
-        }
-        return (a <= b) ? a : b;
+        return NativeMath.max(a, b);
     }
 
     /**

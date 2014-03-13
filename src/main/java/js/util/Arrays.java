@@ -59,6 +59,25 @@ class Arrays {
     }
 
     /**
+     * Searches the specified array of ints for the specified value using the binary search
+     * algorithm. The array must be sorted (as by the {@link #sort(int[])} method) prior to making
+     * this call. If it is not sorted, the results are undefined. If the array contains multiple
+     * elements with the specified value, there is no guarantee which one will be found.
+     *
+     * @param array the array to be searched
+     * @param key the value to be searched for
+     * @return index of the search key, if it is contained in the array; otherwise,
+     *         <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is defined as
+     *         the point at which the key would be inserted into the array: the index of the first
+     *         element greater than the key, or <tt>a.length</tt> if all elements in the array are
+     *         less than the specified key. Note that this guarantees that the return value will be
+     *         &gt;= 0 if and only if the key is found.
+     */
+    public static int binarySearch(int[] array, int key) {
+        return binarySearch(array, 0, array.length, key);
+    }
+
+    /**
      * Searches a range of the specified array of ints for the specified value using the binary
      * search algorithm. The range must be sorted (as by the {@link #sort(int[], int, int)} method)
      * prior to making this call. If it is not sorted, the results are undefined. If the range
@@ -81,6 +100,296 @@ class Arrays {
      */
     public static int binarySearch(int[] array, int fromIndex, int toIndex, int key) {
         return search((Integer[]) (Object) array, fromIndex, toIndex, (Integer) key);
+    }
+
+    /**
+     * Searches the specified array of longs for the specified value using the binary search
+     * algorithm. The array must be sorted (as by the {@link #sort(long[])} method) prior to making
+     * this call. If it is not sorted, the results are undefined. If the array contains multiple
+     * elements with the specified value, there is no guarantee which one will be found.
+     *
+     * @param array the array to be searched
+     * @param key the value to be searched for
+     * @return index of the search key, if it is contained in the array; otherwise,
+     *         <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is defined as
+     *         the point at which the key would be inserted into the array: the index of the first
+     *         element greater than the key, or <tt>a.length</tt> if all elements in the array are
+     *         less than the specified key. Note that this guarantees that the return value will be
+     *         &gt;= 0 if and only if the key is found.
+     */
+    public static int binarySearch(long[] array, long key) {
+        return binarySearch(array, 0, array.length, key);
+    }
+
+    /**
+     * Searches a range of the specified array of longs for the specified value using the binary
+     * search algorithm. The range must be sorted (as by the {@link #sort(long[], int, int)} method)
+     * prior to making this call. If it is not sorted, the results are undefined. If the range
+     * contains multiple elements with the specified value, there is no guarantee which one will be
+     * found.
+     *
+     * @param a the array to be searched
+     * @param fromIndex the index of the first element (inclusive) to be searched
+     * @param toIndex the index of the last element (exclusive) to be searched
+     * @param key the value to be searched for
+     * @return index of the search key, if it is contained in the array within the specified range;
+     *         otherwise, <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is
+     *         defined as the point at which the key would be inserted into the array: the index of
+     *         the first element in the range greater than the key, or <tt>toIndex</tt> if all
+     *         elements in the range are less than the specified key. Note that this guarantees that
+     *         the return value will be &gt;= 0 if and only if the key is found.
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex}
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0 or toIndex > a.length}
+     * @since 1.6
+     */
+    public static int binarySearch(long[] array, int fromIndex, int toIndex, long key) {
+        return search((Long[]) (Object) array, fromIndex, toIndex, (Long) key);
+    }
+
+    /**
+     * Searches the specified array of shorts for the specified value using the binary search
+     * algorithm. The array must be sorted (as by the {@link #sort(short[])} method) prior to making
+     * this call. If it is not sorted, the results are undefined. If the array contains multiple
+     * elements with the specified value, there is no guarantee which one will be found.
+     *
+     * @param array the array to be searched
+     * @param key the value to be searched for
+     * @return index of the search key, if it is contained in the array; otherwise,
+     *         <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is defined as
+     *         the point at which the key would be inserted into the array: the index of the first
+     *         element greater than the key, or <tt>a.length</tt> if all elements in the array are
+     *         less than the specified key. Note that this guarantees that the return value will be
+     *         &gt;= 0 if and only if the key is found.
+     */
+    public static int binarySearch(short[] array, short key) {
+        return binarySearch(array, 0, array.length, key);
+    }
+
+    /**
+     * Searches a range of the specified array of shorts for the specified value using the binary
+     * search algorithm. The range must be sorted (as by the {@link #sort(short[], int, int)}
+     * method) prior to making this call. If it is not sorted, the results are undefined. If the
+     * range contains multiple elements with the specified value, there is no guarantee which one
+     * will be found.
+     *
+     * @param a the array to be searched
+     * @param fromIndex the index of the first element (inclusive) to be searched
+     * @param toIndex the index of the last element (exclusive) to be searched
+     * @param key the value to be searched for
+     * @return index of the search key, if it is contained in the array within the specified range;
+     *         otherwise, <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is
+     *         defined as the point at which the key would be inserted into the array: the index of
+     *         the first element in the range greater than the key, or <tt>toIndex</tt> if all
+     *         elements in the range are less than the specified key. Note that this guarantees that
+     *         the return value will be &gt;= 0 if and only if the key is found.
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex}
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0 or toIndex > a.length}
+     * @since 1.6
+     */
+    public static int binarySearch(short[] array, int fromIndex, int toIndex, short key) {
+        return search((Short[]) (Object) array, fromIndex, toIndex, (Short) key);
+    }
+
+    /**
+     * Searches the specified array of chars for the specified value using the binary search
+     * algorithm. The array must be sorted (as by the {@link #sort(char[])} method) prior to making
+     * this call. If it is not sorted, the results are undefined. If the array contains multiple
+     * elements with the specified value, there is no guarantee which one will be found.
+     *
+     * @param array the array to be searched
+     * @param key the value to be searched for
+     * @return index of the search key, if it is contained in the array; otherwise,
+     *         <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is defined as
+     *         the point at which the key would be inserted into the array: the index of the first
+     *         element greater than the key, or <tt>a.length</tt> if all elements in the array are
+     *         less than the specified key. Note that this guarantees that the return value will be
+     *         &gt;= 0 if and only if the key is found.
+     */
+    public static int binarySearch(char[] array, char key) {
+        return binarySearch(array, 0, array.length, key);
+    }
+
+    /**
+     * Searches a range of the specified array of chars for the specified value using the binary
+     * search algorithm. The range must be sorted (as by the {@link #sort(char[], int, int)} method)
+     * prior to making this call. If it is not sorted, the results are undefined. If the range
+     * contains multiple elements with the specified value, there is no guarantee which one will be
+     * found.
+     *
+     * @param a the array to be searched
+     * @param fromIndex the index of the first element (inclusive) to be searched
+     * @param toIndex the index of the last element (exclusive) to be searched
+     * @param key the value to be searched for
+     * @return index of the search key, if it is contained in the array within the specified range;
+     *         otherwise, <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is
+     *         defined as the point at which the key would be inserted into the array: the index of
+     *         the first element in the range greater than the key, or <tt>toIndex</tt> if all
+     *         elements in the range are less than the specified key. Note that this guarantees that
+     *         the return value will be &gt;= 0 if and only if the key is found.
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex}
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0 or toIndex > a.length}
+     * @since 1.6
+     */
+    public static int binarySearch(char[] array, int fromIndex, int toIndex, char key) {
+        return search((Character[]) (Object) array, fromIndex, toIndex, (Character) key);
+    }
+
+    /**
+     * Searches the specified array of bytes for the specified value using the binary search
+     * algorithm. The array must be sorted (as by the {@link #sort(byte[])} method) prior to making
+     * this call. If it is not sorted, the results are undefined. If the array contains multiple
+     * elements with the specified value, there is no guarantee which one will be found.
+     *
+     * @param array the array to be searched
+     * @param key the value to be searched for
+     * @return index of the search key, if it is contained in the array; otherwise,
+     *         <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is defined as
+     *         the point at which the key would be inserted into the array: the index of the first
+     *         element greater than the key, or <tt>a.length</tt> if all elements in the array are
+     *         less than the specified key. Note that this guarantees that the return value will be
+     *         &gt;= 0 if and only if the key is found.
+     */
+    public static int binarySearch(byte[] array, byte key) {
+        return binarySearch(array, 0, array.length, key);
+    }
+
+    /**
+     * Searches a range of the specified array of bytes for the specified value using the binary
+     * search algorithm. The range must be sorted (as by the {@link #sort(byte[], int, int)} method)
+     * prior to making this call. If it is not sorted, the results are undefined. If the range
+     * contains multiple elements with the specified value, there is no guarantee which one will be
+     * found.
+     *
+     * @param array the array to be searched
+     * @param fromIndex the index of the first element (inclusive) to be searched
+     * @param toIndex the index of the last element (exclusive) to be searched
+     * @param key the value to be searched for
+     * @return index of the search key, if it is contained in the array within the specified range;
+     *         otherwise, <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is
+     *         defined as the point at which the key would be inserted into the array: the index of
+     *         the first element in the range greater than the key, or <tt>toIndex</tt> if all
+     *         elements in the range are less than the specified key. Note that this guarantees that
+     *         the return value will be &gt;= 0 if and only if the key is found.
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex}
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0 or toIndex > a.length}
+     * @since 1.6
+     */
+    public static int binarySearch(byte[] array, int fromIndex, int toIndex, byte key) {
+        return search((Byte[]) (Object) array, fromIndex, toIndex, (Byte) key);
+    }
+
+    /**
+     * Searches the specified array of doubles for the specified value using the binary search
+     * algorithm. The array must be sorted (as by the {@link #sort(double[])} method) prior to
+     * making this call. If it is not sorted, the results are undefined. If the array contains
+     * multiple elements with the specified value, there is no guarantee which one will be found.
+     * This method considers all NaN values to be equivalent and equal.
+     *
+     * @param array the array to be searched
+     * @param key the value to be searched for
+     * @return index of the search key, if it is contained in the array; otherwise,
+     *         <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is defined as
+     *         the point at which the key would be inserted into the array: the index of the first
+     *         element greater than the key, or <tt>a.length</tt> if all elements in the array are
+     *         less than the specified key. Note that this guarantees that the return value will be
+     *         &gt;= 0 if and only if the key is found.
+     */
+    public static int binarySearch(double[] array, double key) {
+        return binarySearch(array, 0, array.length, key);
+    }
+
+    /**
+     * Searches a range of the specified array of doubles for the specified value using the binary
+     * search algorithm. The range must be sorted (as by the {@link #sort(double[], int, int)}
+     * method) prior to making this call. If it is not sorted, the results are undefined. If the
+     * range contains multiple elements with the specified value, there is no guarantee which one
+     * will be found. This method considers all NaN values to be equivalent and equal.
+     *
+     * @param array the array to be searched
+     * @param fromIndex the index of the first element (inclusive) to be searched
+     * @param toIndex the index of the last element (exclusive) to be searched
+     * @param key the value to be searched for
+     * @return index of the search key, if it is contained in the array within the specified range;
+     *         otherwise, <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is
+     *         defined as the point at which the key would be inserted into the array: the index of
+     *         the first element in the range greater than the key, or <tt>toIndex</tt> if all
+     *         elements in the range are less than the specified key. Note that this guarantees that
+     *         the return value will be &gt;= 0 if and only if the key is found.
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex}
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0 or toIndex > a.length}
+     * @since 1.6
+     */
+    public static int binarySearch(double[] array, int fromIndex, int toIndex, double key) {
+        return search((Double[]) (Object) array, fromIndex, toIndex, (Double) key);
+    }
+
+    /**
+     * Searches the specified array of floats for the specified value using the binary search
+     * algorithm. The array must be sorted (as by the {@link #sort(float[])} method) prior to making
+     * this call. If it is not sorted, the results are undefined. If the array contains multiple
+     * elements with the specified value, there is no guarantee which one will be found. This method
+     * considers all NaN values to be equivalent and equal.
+     *
+     * @param array the array to be searched
+     * @param key the value to be searched for
+     * @return index of the search key, if it is contained in the array; otherwise,
+     *         <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is defined as
+     *         the point at which the key would be inserted into the array: the index of the first
+     *         element greater than the key, or <tt>a.length</tt> if all elements in the array are
+     *         less than the specified key. Note that this guarantees that the return value will be
+     *         &gt;= 0 if and only if the key is found.
+     */
+    public static int binarySearch(float[] array, float key) {
+        return binarySearch(array, 0, array.length, key);
+    }
+
+    /**
+     * Searches a range of the specified array of floats for the specified value using the binary
+     * search algorithm. The range must be sorted (as by the {@link #sort(float[], int, int)}
+     * method) prior to making this call. If it is not sorted, the results are undefined. If the
+     * range contains multiple elements with the specified value, there is no guarantee which one
+     * will be found. This method considers all NaN values to be equivalent and equal.
+     *
+     * @param array the array to be searched
+     * @param fromIndex the index of the first element (inclusive) to be searched
+     * @param toIndex the index of the last element (exclusive) to be searched
+     * @param key the value to be searched for
+     * @return index of the search key, if it is contained in the array within the specified range;
+     *         otherwise, <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is
+     *         defined as the point at which the key would be inserted into the array: the index of
+     *         the first element in the range greater than the key, or <tt>toIndex</tt> if all
+     *         elements in the range are less than the specified key. Note that this guarantees that
+     *         the return value will be &gt;= 0 if and only if the key is found.
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex}
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0 or toIndex > a.length}
+     * @since 1.6
+     */
+    public static int binarySearch(float[] array, int fromIndex, int toIndex, float key) {
+        return search((Float[]) (Object) array, fromIndex, toIndex, (Float) key);
+    }
+
+    /**
+     * Searches the specified array for the specified object using the binary search algorithm. The
+     * array must be sorted into ascending order according to the {@linkplain Comparable natural
+     * ordering} of its elements (as by the {@link #sort(Object[])} method) prior to making this
+     * call. If it is not sorted, the results are undefined. (If the array contains elements that
+     * are not mutually comparable (for example, strings and integers), it <i>cannot</i> be sorted
+     * according to the natural ordering of its elements, hence results are undefined.) If the array
+     * contains multiple elements equal to the specified object, there is no guarantee which one
+     * will be found.
+     *
+     * @param a the array to be searched
+     * @param key the value to be searched for
+     * @return index of the search key, if it is contained in the array; otherwise,
+     *         <tt>(-(<i>insertion point</i>) - 1)</tt>. The <i>insertion point</i> is defined as
+     *         the point at which the key would be inserted into the array: the index of the first
+     *         element greater than the key, or <tt>a.length</tt> if all elements in the array are
+     *         less than the specified key. Note that this guarantees that the return value will be
+     *         &gt;= 0 if and only if the key is found.
+     * @throws ClassCastException if the search key is not comparable to the elements of the array.
+     */
+    public static int binarySearch(Object[] array, Object key) {
+        return search(array, 0, array.length, key);
     }
 
     /**
@@ -405,7 +714,7 @@ class Arrays {
      * @since 1.6
      */
     public static <T, U> T[] copyOf(U[] original, int newLength, Class<? extends T[]> newType) {
-        return copyOfRange(original, 0, newLength, (Class<T[]>) newType);
+        return copyOfRange(original, 0, newLength, newType);
     }
 
     /**
