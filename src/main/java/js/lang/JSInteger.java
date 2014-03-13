@@ -26,6 +26,12 @@ class JSInteger extends JSNumber {
     public static final Class TYPE = Primitive.class;
 
     /**
+     * All possible chars for representing a number as a String
+     */
+    static final char[] digits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+            'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+
+    /**
      * Constructs a newly allocated {@code Integer} object that represents the specified {@code int}
      * value.
      * 
@@ -71,6 +77,25 @@ class JSInteger extends JSNumber {
      */
     public int compareTo(Integer anotherInteger) {
         return compare(this.value.intValue(), ((JSInteger) (Object) anotherInteger).value.intValue());
+    }
+
+    /**
+     * Returns the number of one-bits in the two's complement binary representation of the specified
+     * {@code int} value. This function is sometimes referred to as the <i>population count</i>.
+     *
+     * @param i the value whose bits are to be counted
+     * @return the number of one-bits in the two's complement binary representation of the specified
+     *         {@code int} value.
+     * @since 1.5
+     */
+    public static int bitCount(int i) {
+        // HD, Figure 5-2
+        i = i - ((i >>> 1) & 0x55555555);
+        i = (i & 0x33333333) + ((i >>> 2) & 0x33333333);
+        i = (i + (i >>> 4)) & 0x0f0f0f0f;
+        i = i + (i >>> 8);
+        i = i + (i >>> 16);
+        return i & 0x3f;
     }
 
     /**
@@ -149,6 +174,56 @@ class JSInteger extends JSNumber {
         }
         n -= value >>> 31;
         return n;
+    }
+
+    /**
+     * Returns the number of zero bits following the lowest-order ("rightmost") one-bit in the two's
+     * complement binary representation of the specified {@code int} value. Returns 32 if the
+     * specified value has no one-bits in its two's complement representation, in other words if it
+     * is equal to zero.
+     *
+     * @param i the value whose number of trailing zeros is to be computed
+     * @return the number of zero bits following the lowest-order ("rightmost") one-bit in the two's
+     *         complement binary representation of the specified {@code int} value, or 32 if the
+     *         value is equal to zero.
+     * @since 1.5
+     */
+    public static int numberOfTrailingZeros(int i) {
+        int y;
+        if (i == 0) {
+            return 32;
+        }
+
+        int n = 31;
+
+        y = i << 16;
+
+        if (y != 0) {
+            n = n - 16;
+            i = y;
+        }
+
+        y = i << 8;
+
+        if (y != 0) {
+            n = n - 8;
+            i = y;
+        }
+
+        y = i << 4;
+
+        if (y != 0) {
+            n = n - 4;
+            i = y;
+        }
+
+        y = i << 2;
+
+        if (y != 0) {
+            n = n - 2;
+            i = y;
+        }
+        return n - ((i << 1) >>> 31);
     }
 
     /**
@@ -400,7 +475,7 @@ class JSInteger extends JSNumber {
      * @since 1.8
      */
     public static long toUnsignedLong(int x) {
-        return ((long) x) & 0xffffffffL;
+        return (x) & 0xffffffffL;
     }
 
     /**

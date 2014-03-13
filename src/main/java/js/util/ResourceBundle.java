@@ -80,6 +80,10 @@ abstract class ResourceBundle {
         return bundle.get(key);
     }
 
+    private static Control getDefaultControl(String baseName) {
+        return new Control();
+    }
+
     /**
      * Gets a resource bundle using the specified base name, the default locale, and the caller's
      * class loader. Calling this method is equivalent to calling <blockquote>

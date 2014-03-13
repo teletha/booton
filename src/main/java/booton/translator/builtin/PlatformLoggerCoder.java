@@ -22,6 +22,10 @@ public class PlatformLoggerCoder extends Translator<PlatformLogger> {
         return "console";
     }
 
+    public String config(String param0) {
+        return that + ".log(" + param(0) + ")";
+    }
+
     public String info(String param0, Throwable param1) {
         return that + ".info(" + param(0) + "," + param(1) + ")";
     }
@@ -31,6 +35,10 @@ public class PlatformLoggerCoder extends Translator<PlatformLogger> {
     }
 
     public String warning(String param0, Throwable param1) {
+        return that + ".warn(" + param(0) + "," + param(1) + ")";
+    }
+
+    public String severe(String param0, Throwable param1) {
         return that + ".warn(" + param(0) + "," + param(1) + ")";
     }
 
