@@ -9,12 +9,19 @@
  */
 package js.math;
 
-import static js.math.BigDecimal.*;
-import static js.math.BigInteger.*;
+import static js.math.APIConveter.*;
+import static js.math.JSBigDecimal.*;
+import static js.math.JSBigInteger.*;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
-ficient use of allocated space by
+
+import booton.JDKEmulator;
+import booton.translator.JavaAPIProvider;
+
+/**
+ * A class used to represent multiprecision integers that makes efficient use of allocated space by
  * allowing a number to occupy only part of an array so that the arrays do not have to be
  * reallocated as often. When performing an operation with many iterations the array used to hold a
  * number is only reallocated when necessary and does not have to be the same size as the number it
@@ -26,7 +33,8 @@ ficient use of allocated space by
  * @author Timothy Buktu
  * @since 1.3
  */
-// @JavaAPIProvider(JDKEmulator.class)
+
+@JavaAPIProvider(JDKEmulator.class)
 class MutableBigInteger {
 
     /**
@@ -101,8 +109,8 @@ class MutableBigInteger {
      * Construct a new MutableBigInteger with a magnitude equal to the specified BigInteger.
      */
     MutableBigInteger(BigInteger b) {
-        intLen = b.mag.length;
-        value = Arrays.copyOf(b.mag, intLen);
+        intLen = $(b).mag.length;
+        value = Arrays.copyOf($(b).mag, intLen);
     }
 
     /**
@@ -121,7 +129,10 @@ class MutableBigInteger {
      * @return a number equal to {@code ((1<<(32*n)))-1}
      */
     private void ones(int n) {
-        if (n > value.length) value = new int[n];
+        if (n > value.length) {
+            value = new int[n];
+        }
+
         Arrays.fill(value, -1);
         offset = 0;
         intLen = n;
@@ -132,7 +143,9 @@ class MutableBigInteger {
      * the returned array.
      */
     private int[] getMagnitudeArray() {
-        if (offset > 0 || value.length != intLen) return Arrays.copyOfRange(value, offset, offset + intLen);
+        if (offset > 0 || value.length != intLen) {
+            return Arrays.copyOfRange(value, offset, offset + intLen);
+        }
         return value;
     }
 
@@ -141,8 +154,9 @@ class MutableBigInteger {
      * MutableBigInteger can be fit into long.
      */
     private long toLong() {
-        assert (intLen <= 2) : "this MutableBigInteger exceeds the range of long";
-        if (intLen == 0) return 0;
+        if (intLen == 0) {
+            return 0;
+        }
         long d = value[offset] & LONG_MASK;
         return (intLen == 2) ? d << 32 | (value[offset + 1] & LONG_MASK) : d;
     }
@@ -151,8 +165,10 @@ class MutableBigInteger {
      * Convert this MutableBigInteger to a BigInteger object.
      */
     BigInteger toBigInteger(int sign) {
-        if (intLen == 0 || sign == 0) return BigInteger.ZERO;
-        return new BigInteger(getMagnitudeArray(), sign);
+        if (intLen == 0 || sign == 0) {
+            return BigInteger.ZERO;
+        }
+        return $(new JSBigInteger(getMagnitudeArray(), sign));
     }
 
     /**
@@ -167,13 +183,18 @@ class MutableBigInteger {
      * Convert this MutableBigInteger to BigDecimal object with the specified sign and scale.
      */
     BigDecimal toBigDecimal(int sign, int scale) {
-        if (intLen == 0 || sign == 0) return BigDecimal.zeroValueOf(scale);
+        if (intLen == 0 || sign == 0) {
+            return JSBigDecimal.zeroValueOf(scale);
+        }
         int[] mag = getMagnitudeArray();
         int len = mag.length;
         int d = mag[0];
         // If this MutableBigInteger can't be fit into long, we need to
         // make a BigInteger object for the resultant BigDecimal object.
-        if (len > 2 || (d < 0 && len == 2)) return new BigDecimal(new BigInteger(mag, sign), INFLATED, scale, 0);
+        if (len > 2 || (d < 0 && len == 2)) {
+            return $(new JSBigDecimal($(new JSBigInteger(mag, sign)), INFLATED, scale, 0));
+        }
+
         long v = (len == 2) ? ((mag[1] & LONG_MASK) | (d & LONG_MASK) << 32) : d & LONG_MASK;
         return BigDecimal.valueOf(sign == -1 ? -v : v, scale);
     }
@@ -183,7 +204,9 @@ class MutableBigInteger {
      * given a specified sign. returns INFLATED if value is not fit into long
      */
     long toCompactValue(int sign) {
-        if (intLen == 0 || sign == 0) return 0L;
+        if (intLen == 0 || sign == 0) {
+            return 0L;
+        }
         int[] mag = getMagnitudeArray();
         int len = mag.length;
         int d = mag[0];
@@ -387,7 +410,9 @@ class MutableBigInteger {
      */
     void copyValue(MutableBigInteger src) {
         int len = src.intLen;
-        if (value.length < len) value = new int[len];
+        if (value.length < len) {
+            value = new int[len];
+        }
         System.arraycopy(src.value, src.offset, value, 0, len);
         intLen = len;
         offset = 0;
@@ -399,7 +424,9 @@ class MutableBigInteger {
      */
     void copyValue(int[] val) {
         int len = val.length;
-        if (value.length < len) value = new int[len];
+        if (value.length < len) {
+            value = new int[len];
+        }
         System.arraycopy(val, 0, value, 0, len);
         intLen = len;
         offset = 0;
@@ -472,7 +499,7 @@ class MutableBigInteger {
         int nBits = n & 0x1F;
         this.intLen -= nInts;
         if (nBits == 0) return;
-        int bitsInHighWord = BigInteger.bitLengthForInt(value[offset]);
+        int bitsInHighWord = JSBigInteger.bitLengthForInt(value[offset]);
         if (nBits >= bitsInHighWord) {
             this.primitiveLeftShift(32 - nBits);
             this.intLen--;
@@ -502,7 +529,7 @@ class MutableBigInteger {
         if (intLen == 0) return;
         int nInts = n >>> 5;
         int nBits = n & 0x1F;
-        int bitsInHighWord = BigInteger.bitLengthForInt(value[offset]);
+        int bitsInHighWord = JSBigInteger.bitLengthForInt(value[offset]);
 
         // If shift can be done without moving words, do so
         if (n <= (32 - bitsInHighWord)) {
@@ -630,10 +657,11 @@ class MutableBigInteger {
         } else {
             // strip zeros
             int len = n;
-            while (len > 0 && value[offset + intLen - len] == 0)
+            while (len > 0 && value[offset + intLen - len] == 0) {
                 len--;
+            }
             int sign = len > 0 ? 1 : 0;
-            return new BigInteger(Arrays.copyOfRange(value, offset + intLen - len, offset + intLen), sign);
+            return $(new JSBigInteger(Arrays.copyOfRange(value, offset + intLen - len, offset + intLen), sign));
         }
     }
 
@@ -852,7 +880,6 @@ class MutableBigInteger {
         while (y > 0) {
             x--;
             y--;
-
             diff = (a.value[x + a.offset] & LONG_MASK) - (b.value[y + b.offset] & LONG_MASK) - ((int) -(diff >> 32));
             result[rstart--] = (int) diff;
         }
@@ -1048,7 +1075,7 @@ class MutableBigInteger {
     }
 
     MutableBigInteger divide(MutableBigInteger b, MutableBigInteger quotient, boolean needRemainder) {
-        if (b.intLen < BigInteger.BURNIKEL_ZIEGLER_THRESHOLD || intLen - b.intLen < BigInteger.BURNIKEL_ZIEGLER_OFFSET) {
+        if (b.intLen < JSBigInteger.BURNIKEL_ZIEGLER_THRESHOLD || intLen - b.intLen < JSBigInteger.BURNIKEL_ZIEGLER_OFFSET) {
             return divideKnuth(b, quotient, needRemainder);
         } else {
             return divideAndRemainderBurnikelZiegler(b, quotient);
@@ -1146,7 +1173,7 @@ class MutableBigInteger {
             // additional benefit.
 
             // step 1: let m = min{2^k | (2^k)*BURNIKEL_ZIEGLER_THRESHOLD > s}
-            int m = 1 << (32 - Integer.numberOfLeadingZeros(s / BigInteger.BURNIKEL_ZIEGLER_THRESHOLD));
+            int m = 1 << (32 - Integer.numberOfLeadingZeros(s / JSBigInteger.BURNIKEL_ZIEGLER_THRESHOLD));
 
             int j = (s + m - 1) / m; // step 2a: j = ceil(s/m)
             int n = j * m; // step 2b: block length in 32-bit units
@@ -1206,7 +1233,7 @@ class MutableBigInteger {
         int n = b.intLen;
 
         // step 1: base case
-        if (n % 2 != 0 || n < BigInteger.BURNIKEL_ZIEGLER_THRESHOLD) {
+        if (n % 2 != 0 || n < JSBigInteger.BURNIKEL_ZIEGLER_THRESHOLD) {
             return divideKnuth(b, quotient);
         }
 
@@ -1982,8 +2009,9 @@ class MutableBigInteger {
             k += trailingZeros;
         }
 
-        while (c.sign < 0)
+        while (c.sign < 0) {
             c.signedAdd(p);
+        }
 
         return fixup(c, p, k);
     }
@@ -2020,8 +2048,9 @@ class MutableBigInteger {
         }
 
         // In theory, c may be greater than p at this point (Very rare!)
-        while (c.compare(p) >= 0)
+        while (c.compare(p) >= 0) {
             c.subtract(p);
+        }
 
         return c;
     }
@@ -2051,15 +2080,18 @@ class MutableBigInteger {
         while (!b.isOne()) {
             r = a.divide(b, q);
 
-            if (r.intLen == 0) throw new ArithmeticException("BigInteger not invertible.");
+            if (r.intLen == 0) {
+                throw new ArithmeticException("BigInteger not invertible.");
+            }
 
             swapper = r;
             a = swapper;
 
-            if (q.intLen == 1)
+            if (q.intLen == 1) {
                 t1.mul(q.value[q.offset], temp);
-            else
+            } else {
                 q.multiply(t1, temp);
+            }
             swapper = q;
             q = temp;
             temp = swapper;
@@ -2069,15 +2101,18 @@ class MutableBigInteger {
 
             r = b.divide(a, q);
 
-            if (r.intLen == 0) throw new ArithmeticException("BigInteger not invertible.");
+            if (r.intLen == 0) {
+                throw new ArithmeticException("BigInteger not invertible.");
+            }
 
             swapper = b;
             b = r;
 
-            if (q.intLen == 1)
+            if (q.intLen == 1) {
                 t0.mul(q.value[q.offset], temp);
-            else
+            } else {
                 q.multiply(t0, temp);
+            }
             swapper = q;
             q = temp;
             temp = swapper;

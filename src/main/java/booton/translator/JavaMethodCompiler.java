@@ -261,9 +261,9 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("BigInteger") && original.equals("<clinit>")) {
-            debugger.enable = true;
-        }
+        // if (script.source.getName().endsWith("BigInteger") && original.equals("<clinit>")) {
+        // debugger.enable = true;
+        // }
     }
 
     /**
@@ -932,7 +932,7 @@ class JavaMethodCompiler extends MethodVisitor {
         case LNEG:
         case FNEG:
         case DNEG:
-            current.addOperand(new OperandExpression("-" + current.remove(0)));
+            current.addOperand(new OperandExpression("-" + current.remove(0).encolose()).encolose());
             break;
 
         case RETURN:
