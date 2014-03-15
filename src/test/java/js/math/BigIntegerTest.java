@@ -25,6 +25,7 @@ public class BigIntegerTest {
     @Test
     public void bigString() throws Exception {
         BigInteger value = new BigInteger("12345678901234567890");
+        System.out.println(value);
         assert value.toString().equals("12345678901234567890");
     }
 }

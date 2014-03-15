@@ -9,7 +9,11 @@
  */
 package js.math;
 
+import static js.math.APIConveter.*;
 import java.math.BigInteger;
+
+import booton.JDKEmulator;
+import booton.translator.JavaAPIProvider;
 
 /**
  * A simple bit sieve used for finding prime number candidates. Allows setting and clearing of bits
@@ -25,7 +29,7 @@ import java.math.BigInteger;
  * @author Michael McCloskey
  * @since 1.3
  */
-// @JavaAPIProvider(JDKEmulator.class)
+@JavaAPIProvider(JDKEmulator.class)
 class BitSieve {
 
     /**
@@ -173,7 +177,7 @@ class BitSieve {
             for (int j = 0; j < 64; j++) {
                 if ((nextLong & 1) == 1) {
                     BigInteger candidate = initValue.add(BigInteger.valueOf(offset));
-                    if (candidate.primeToCertainty(certainty, random)) return candidate;
+                    if ($(candidate).primeToCertainty(certainty, random)) return candidate;
                 }
                 nextLong >>>= 1;
                 offset += 2;
