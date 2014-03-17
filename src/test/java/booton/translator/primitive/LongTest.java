@@ -303,10 +303,12 @@ public class LongTest extends ScriptTester {
     /**
      * @TODO Implement arbitrary-precision integer for Javascript.
      */
+    @Test
     public void unsignedShiftRight() {
         test(new Scriptable() {
 
             long act(long value) {
+                System.out.println(value >>> 1);
                 return value >>> 1;
             }
         });

@@ -368,15 +368,20 @@ class JSBigInteger extends Number implements Comparable<BigInteger> {
         if (numBits + 31 >= (1L << 32)) {
             reportOverflow();
         }
+
         int numWords = (int) (numBits + 31) >>> 5;
         int[] magnitude = new int[numWords];
 
         // Process first (potentially short) digit group
         int firstGroupLen = numDigits % digitsPerInt[radix];
-        if (firstGroupLen == 0) firstGroupLen = digitsPerInt[radix];
+        if (firstGroupLen == 0) {
+            firstGroupLen = digitsPerInt[radix];
+        }
         String group = val.substring(cursor, cursor += firstGroupLen);
         magnitude[numWords - 1] = Integer.parseInt(group, radix);
-        if (magnitude[numWords - 1] < 0) throw new NumberFormatException("Illegal digit");
+        if (magnitude[numWords - 1] < 0) {
+            throw new NumberFormatException("Illegal digit");
+        }
 
         // Process remaining digit groups
         int superRadix = intRadix[radix];
@@ -384,8 +389,11 @@ class JSBigInteger extends Number implements Comparable<BigInteger> {
         while (cursor < len) {
             group = val.substring(cursor, cursor += digitsPerInt[radix]);
             groupVal = Integer.parseInt(group, radix);
-            if (groupVal < 0) throw new NumberFormatException("Illegal digit");
+            if (groupVal < 0) {
+                throw new NumberFormatException("Illegal digit");
+            }
             destructiveMulAdd(magnitude, superRadix, groupVal);
+
         }
         // Required for cases where the array was overallocated.
         mag = trustedStripLeadingZeroInts(magnitude);
@@ -716,9 +724,9 @@ class JSBigInteger extends Number implements Comparable<BigInteger> {
 
         // If it's small enough, use smallToString.
         if (mag.length <= SCHOENHAGE_BASE_CONVERSION_THRESHOLD) {
+            System.out.println(signum + "   " + mag);
             return smallToString(radix);
         }
-
         // Otherwise use recursive toString, which requires positive arguments.
         // The results will be concatenated into this StringBuilder
         StringBuilder sb = new StringBuilder();
@@ -726,8 +734,9 @@ class JSBigInteger extends Number implements Comparable<BigInteger> {
         if (signum < 0) {
             toString(this.negate(), sb, radix, 0);
             sb.insert(0, '-');
-        } else
+        } else {
             toString($(this), sb, radix, 0);
+        }
 
         return sb.toString();
     }
@@ -2541,31 +2550,33 @@ class JSBigInteger extends Number implements Comparable<BigInteger> {
     /**
      * Multiply x array times word y in place, and add word z.
      * 
-     * @param x
+     * @param array
      * @param y
      * @param z
      */
-    private static void destructiveMulAdd(int[] x, int y, int z) {
+    private static void destructiveMulAdd(int[] array, int y, int z) {
         // Perform the multiplication word by word
         long ylong = y & LONG_MASK;
         long zlong = z & LONG_MASK;
-        int len = x.length;
+        int len = array.length;
 
         long product = 0;
         long carry = 0;
         for (int i = len - 1; i >= 0; i--) {
-            product = ylong * (x[i] & LONG_MASK) + carry;
-            x[i] = (int) product;
+            System.out.println((ylong * (array[i] & LONG_MASK) + carry) + "        " + ((int) (ylong * (array[i] & LONG_MASK) + carry)) + "        " + ylong + "    @@  " + array[i] + "    " + LONG_MASK + "    " + carry);
+            product = ylong * (array[i] & LONG_MASK) + carry;
+            array[i] = (int) product;
+            System.out.println("       product   " + product + "   " + (product >>> 32));
             carry = product >>> 32;
         }
 
         // Perform the addition
-        long sum = (x[len - 1] & LONG_MASK) + zlong;
-        x[len - 1] = (int) sum;
+        long sum = (array[len - 1] & LONG_MASK) + zlong;
+        array[len - 1] = (int) sum;
         carry = sum >>> 32;
         for (int i = len - 2; i >= 0; i--) {
-            sum = (x[i] & LONG_MASK) + carry;
-            x[i] = (int) sum;
+            sum = (array[i] & LONG_MASK) + carry;
+            array[i] = (int) sum;
             carry = sum >>> 32;
         }
     }

@@ -742,6 +742,10 @@ class JavaMethodCompiler extends MethodVisitor {
         record(opcode);
 
         switch (opcode) {
+        case L2I:
+            current.addOperand(new OperandExpression(current.remove(0) + ">>32", int.class).encolose());
+            break;
+
         case DUP:
             if (!match(NEW, DUP) && !match(NEW, DUP2)) {
                 // mark as duplicated operand
@@ -912,19 +916,19 @@ class JavaMethodCompiler extends MethodVisitor {
         // << operand
         case ISHL:
         case LSHL:
-            current.join("<<");
+            current.join("<<").enclose();
             break;
 
         // >> operand
         case ISHR:
         case LSHR:
-            current.join(">>");
+            current.join(">>").enclose();
             break;
 
         // >>> operand
         case IUSHR:
         case LUSHR:
-            current.join(">>>");
+            current.join(">>>").enclose();
             break;
 
         // negative operand
@@ -1748,6 +1752,7 @@ class JavaMethodCompiler extends MethodVisitor {
             if (assertNew) {
                 assertNew = false;
                 current = createNode();
+                current.number = current.previous.number;
             }
             countInitialization++;
 

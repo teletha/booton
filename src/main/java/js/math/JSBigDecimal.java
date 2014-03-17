@@ -45,6 +45,27 @@ class JSBigDecimal {
             new JSBigDecimal(BigInteger.ZERO, 0, 13, 1), new JSBigDecimal(BigInteger.ZERO, 0, 14, 1),
             new JSBigDecimal(BigInteger.ZERO, 0, 15, 1),};
 
+    private static final long[] LONG_TEN_POWERS_TABLE = {1, // 0 / 10^0
+            10, // 1 / 10^1
+            100, // 2 / 10^2
+            1000, // 3 / 10^3
+            10000, // 4 / 10^4
+            100000, // 5 / 10^5
+            1000000, // 6 / 10^6
+            10000000, // 7 / 10^7
+            100000000, // 8 / 10^8
+            1000000000, // 9 / 10^9
+            10000000000L, // 10 / 10^10
+            100000000000L, // 11 / 10^11
+            1000000000000L, // 12 / 10^12
+            10000000000000L, // 13 / 10^13
+            100000000000000L, // 14 / 10^14
+            1000000000000000L, // 15 / 10^15
+            10000000000000000L, // 16 / 10^16
+            100000000000000000L, // 17 / 10^17
+            1000000000000000000L // 18 / 10^18
+    };
+
     /**
      * Sentinel value for {@link #intCompact} indicating the significand information is only
      * available from {@code intVal}.
@@ -432,12 +453,143 @@ class JSBigDecimal {
     }
 
     /**
+     * Returns the <i>precision</i> of this {@code BigDecimal}. (The precision is the number of
+     * digits in the unscaled value.)
+     * <p>
+     * The precision of a zero value is 1.
+     *
+     * @return the precision of this {@code BigDecimal}.
+     * @since 1.5
+     */
+    public int precision() {
+        int result = precision;
+        if (result == 0) {
+            long s = intCompact;
+            if (s != INFLATED)
+                result = longDigitLength(s);
+            else
+                result = bigDigitLength(intVal);
+            precision = result;
+        }
+        return result;
+    }
+
+    /**
      * Returns the signum function of this {@code BigDecimal}.
      *
      * @return -1, 0, or 1 as the value of this {@code BigDecimal} is negative, zero, or positive.
      */
     public int signum() {
         return (intCompact != INFLATED) ? Long.signum(intCompact) : intVal.signum();
+    }
+
+    /**
+     * Converts this {@code BigDecimal} to an {@code int}. This conversion is analogous to the
+     * <i>narrowing primitive conversion</i> from {@code double} to {@code short} as defined in
+     * section 5.1.3 of <cite>The Java&trade; Language Specification</cite>: any fractional part of
+     * this {@code BigDecimal} will be discarded, and if the resulting "{@code BigInteger}" is too
+     * big to fit in an {@code int}, only the low-order 32 bits are returned. Note that this
+     * conversion can lose information about the overall magnitude and precision of this
+     * {@code BigDecimal} value as well as return a result with the opposite sign.
+     *
+     * @return this {@code BigDecimal} converted to an {@code int}.
+     */
+    public int intValue() {
+        return (intCompact != INFLATED && scale == 0) ? (int) intCompact : toBigInteger().intValue();
+    }
+
+    /**
+     * Converts this {@code BigDecimal} to an {@code int}, checking for lost information. If this
+     * {@code BigDecimal} has a nonzero fractional part or is out of the possible range for an
+     * {@code int} result then an {@code ArithmeticException} is thrown.
+     *
+     * @return this {@code BigDecimal} converted to an {@code int}.
+     * @throws ArithmeticException if {@code this} has a nonzero fractional part, or will not fit in
+     *             an {@code int}.
+     * @since 1.5
+     */
+    public int intValueExact() {
+        long num;
+        num = this.longValueExact(); // will check decimal part
+        if ((int) num != num) throw new java.lang.ArithmeticException("Overflow");
+        return (int) num;
+    }
+
+    /**
+     * Converts this {@code BigDecimal} to a {@code long}. This conversion is analogous to the
+     * <i>narrowing primitive conversion</i> from {@code double} to {@code short} as defined in
+     * section 5.1.3 of <cite>The Java&trade; Language Specification</cite>: any fractional part of
+     * this {@code BigDecimal} will be discarded, and if the resulting "{@code BigInteger}" is too
+     * big to fit in a {@code long}, only the low-order 64 bits are returned. Note that this
+     * conversion can lose information about the overall magnitude and precision of this
+     * {@code BigDecimal} value as well as return a result with the opposite sign.
+     *
+     * @return this {@code BigDecimal} converted to a {@code long}.
+     */
+    public long longValue() {
+        return (intCompact != INFLATED && scale == 0) ? intCompact : toBigInteger().longValue();
+    }
+
+    /**
+     * Converts this {@code BigDecimal} to a {@code long}, checking for lost information. If this
+     * {@code BigDecimal} has a nonzero fractional part or is out of the possible range for a
+     * {@code long} result then an {@code ArithmeticException} is thrown.
+     *
+     * @return this {@code BigDecimal} converted to a {@code long}.
+     * @throws ArithmeticException if {@code this} has a nonzero fractional part, or will not fit in
+     *             a {@code long}.
+     * @since 1.5
+     */
+    public long longValueExact() {
+        if (intCompact != INFLATED && scale == 0) return intCompact;
+        // If more than 19 digits in integer part it cannot possibly fit
+        if ((precision() - scale) > 19) // [OK for negative scale too]
+            throw new java.lang.ArithmeticException("Overflow");
+        // Fastpath zero and < 1.0 numbers (the latter can be very slow
+        // to round if very small)
+        if (this.signum() == 0) return 0;
+        if ((this.precision() - this.scale) <= 0) throw new ArithmeticException("Rounding necessary");
+        // round to an integer, with Exception if decimal part non-0
+        BigDecimal num = this.setScale(0, ROUND_UNNECESSARY);
+        if (num.precision() >= 19) // need to check carefully
+            LongOverflow.check(num);
+        return num.inflated().longValue();
+    }
+
+    /**
+     * Returns the length of the absolute value of a BigInteger, in decimal digits.
+     *
+     * @param b the BigInteger
+     * @return the length of the unscaled value, in decimal digits
+     */
+    private static int bigDigitLength(BigInteger b) {
+        /*
+         * Same idea as the long version, but we need a better approximation of log10(2). Using
+         * 646456993/2^31 is accurate up to max possible reported bitLength.
+         */
+        if (b.signum == 0) return 1;
+        int r = (int) ((((long) b.bitLength() + 1) * 646456993) >>> 31);
+        return b.compareMagnitude(bigTenToThe(r)) < 0 ? r : r + 1;
+    }
+
+    /**
+     * Returns the length of the absolute value of a {@code long}, in decimal digits.
+     *
+     * @param x the {@code long}
+     * @return the length of the unscaled value, in deciaml digits.
+     */
+    static int longDigitLength(long x) {
+        if (x < 0) {
+            x = -x;
+        }
+        if (x < 10) {
+            // must screen for 0, might as well 10
+            return 1;
+        }
+        int r = ((64 - Long.numberOfLeadingZeros(x) + 1) * 1233) >>> 12;
+        long[] tab = LONG_TEN_POWERS_TABLE;
+        // if r >= length, must have max possible digits for long
+        return (r >= tab.length || x < tab[r]) ? r : r + 1;
     }
 
     /**
