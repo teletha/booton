@@ -7,9 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.math;
-
-import java.math.BigInteger;
+package booton.translator.operator;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,16 +15,17 @@ import org.junit.runner.RunWith;
 import booton.soeur.ScriptRunner;
 
 /**
- * @version 2014/03/13 13:39:23
+ * @version 2014/03/17 10:28:45
  */
 @RunWith(ScriptRunner.class)
-public class BigIntegerTest {
+public class ArithmeticOperatorPriorityTest {
 
     @Test
-    public void bigString() throws Exception {
-
-        BigInteger value = new BigInteger("12345678901234567890");
-        System.out.println(value);
-        assert value.toString().equals("12345678901234567890");
+    public void shiftWithAdd() throws Exception {
+        int value = 128;
+        int base = 2;
+        assert value >> base + 1 == 16;
+        assert (value >> base) + 1 == 33;
     }
+
 }
