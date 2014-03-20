@@ -576,10 +576,118 @@ class JSLong extends JSNumber {
         return (Long) (Object) new JSLong(value);
     }
 
+    // public static void main(String[] args) {
+    // long value = -1234567890123456L;
+    // System.out.println(value + "     " + ((int) (value >> 32)) + "      " + ((int) value));
+    // Primitive primitive = new Primitive((int) (value >> 32), (int) value);
+    // System.out.println(primitive.high_ + "   " + primitive.low_ + "       " + ((long)
+    // primitive.high_ << 32));
+    // System.out.println(((long) primitive.high_ << 32) | (primitive.low_ & 0xffffffffL));
+    //
+    // }
+
     /**
      * @version 2013/04/16 23:01:24
      */
     @JavaAPIProvider(long.class)
     private static class Primitive {
+
+        private int high_;
+
+        private int low_;
+
+        /**
+         * @param high
+         * @param low
+         */
+        private Primitive(int high, int low) {
+            this.high_ = high;
+            this.low_ = low;
+        }
+
+        /**
+         * Returns long with bits shifted to the left by the given amount.
+         * 
+         * @param numBits The number of bits by which to shift.
+         * @return This shifted to the left by the given amount.
+         */
+        public Primitive shiftLeft(int numBits) {
+            numBits &= 63;
+
+            if (numBits == 0) {
+                return this;
+            } else {
+                int low = this.low_;
+
+                if (numBits < 32) {
+                    int high = this.high_;
+                    return new Primitive(low << numBits, (high << numBits) | (low >>> (32 - numBits)));
+                } else {
+                    return new Primitive(0, low << (numBits - 32));
+                }
+            }
+        }
+
+        /**
+         * Returns long with bits shifted to the right by the given amount.
+         * 
+         * @param numBits The number of bits by which to shift.
+         * @return This shifted to the right by the given amount.
+         */
+        public Primitive shiftRight(int numBits) {
+            numBits &= 63;
+
+            if (numBits == 0) {
+                return this;
+            } else {
+                int high = this.high_;
+
+                if (numBits < 32) {
+                    int low = this.low_;
+                    return new Primitive((low >>> numBits) | (high << (32 - numBits)), high >> numBits);
+                } else {
+                    return new Primitive(high >> (numBits - 32), high >= 0 ? 0 : -1);
+                }
+            }
+        }
+
+        /**
+         * Returns this long with bits shifted to the right by the given amount, with the new top
+         * bits matching the current sign bit.
+         * 
+         * @param numBits The number of bits by which to shift.
+         * @return This shifted to the right by the given amount, with zeros placed into the new
+         *         leading bits.
+         */
+        public Primitive shiftRightUnsigned(int numBits) {
+            numBits &= 63;
+
+            if (numBits == 0) {
+                return this;
+            } else {
+                int high = this.high_;
+
+                if (numBits < 32) {
+                    int low = this.low_;
+                    return new Primitive((low >>> numBits) | (high << (32 - numBits)), high >>> numBits);
+                } else if (numBits == 32) {
+                    return new Primitive(high, 0);
+                } else {
+                    return new Primitive(high >>> (numBits - 32), 0);
+                }
+            }
+        }
+
+        /**
+         * Returns a Long representing the 64-bit integer that comes by concatenating the given high
+         * and low bits. Each is assumed to use 32 bits.
+         * 
+         * @param {number} lowBits The low 32-bits.
+         * @param {number} highBits The high 32-bits.
+         * @return {!goog.math.Long} The corresponding Long value.
+         */
+        private static Primitive fromBits(int lowBits, int highBits) {
+            return new Primitive(lowBits, highBits);
+        }
     }
 }

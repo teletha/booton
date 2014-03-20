@@ -66,6 +66,15 @@ import booton.Unnecessary;
  */
 public class Javascript {
 
+    /** The primitive long class for javascript runtime. */
+    static final Class PrimitiveLong;
+
+    /** The root class of javascript model. */
+    private static final Class RootClass;
+
+    /** The primitive long constructor for reuse. */
+    private static final Constructor primitiveLongConstructor;
+
     /** The primitive types. */
     private static final List<Class<?>> primitives = Arrays.asList(int.class, long.class, float.class, double.class, boolean.class, byte.class, short.class, char.class, void.class);
 
@@ -74,9 +83,6 @@ public class Javascript {
 
     /** The all cached scripts. */
     private static final Map<Class, Javascript> scripts = new ConcurrentHashMap();
-
-    /** The root class of javascript model. */
-    private static final Class rootClass;
 
     /** The method list. Method signature must have identity in compiling environment */
     private static final List<Integer> methods = new ArrayList();
@@ -87,8 +93,11 @@ public class Javascript {
     // initialization
     static {
         try {
-            rootClass = Class.forName("js.lang.JSObject");
-        } catch (ClassNotFoundException e) {
+            RootClass = Class.forName("js.lang.JSObject");
+            PrimitiveLong = Class.forName("js.lang.JSLong$Primitive");
+            primitiveLongConstructor = PrimitiveLong.getDeclaredConstructor(int.class, int.class);
+            primitiveLongConstructor.setAccessible(true);
+        } catch (Exception e) {
             throw I.quiet(e);
         }
 
@@ -140,7 +149,7 @@ public class Javascript {
         }
 
         // copy all member fields for override mechanism
-        if (source != rootClass) {
+        if (source != RootClass) {
             Javascript script = getScript(source.getSuperclass());
 
             if (script != null) {
@@ -292,7 +301,7 @@ public class Javascript {
             compile();
 
             // write super class and interfaces
-            if (source != rootClass && !isEnumSubType(source)) {
+            if (source != RootClass && !isEnumSubType(source)) {
                 write(output, defined, source.getSuperclass());
 
                 for (Class interfaceType : source.getInterfaces()) {
@@ -471,6 +480,18 @@ public class Javascript {
             }
         }
         return false;
+    }
+
+    /**
+     * <p>
+     * Create primitve long as javascript runtime expression in Java runtime.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public static final String writePrimitiveCode(long value) {
+        return writeMethodCode(PrimitiveLong, "fromBits", int.class, (int) (value >> 32), int.class, (int) (value));
     }
 
     /**

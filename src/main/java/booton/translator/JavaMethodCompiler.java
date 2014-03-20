@@ -9,6 +9,7 @@
  */
 package booton.translator;
 
+import static booton.translator.Javascript.*;
 import static booton.translator.OperandCondition.*;
 import static jdk.internal.org.objectweb.asm.Opcodes.*;
 import static jdk.internal.org.objectweb.asm.Type.*;
@@ -915,20 +916,26 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // << operand
         case ISHL:
-        case LSHL:
             current.join("<<").enclose();
+            break;
+        case LSHL:
+            longOperation("shiftLeft");
             break;
 
         // >> operand
         case ISHR:
-        case LSHR:
             current.join(">>").enclose();
+            break;
+        case LSHR:
+            longOperation("shiftRight");
             break;
 
         // >>> operand
         case IUSHR:
-        case LUSHR:
             current.join(">>>").enclose();
+            break;
+        case LUSHR:
+            longOperation("shiftRightUnsigned");
             break;
 
         // negative operand
@@ -1088,6 +1095,17 @@ class JavaMethodCompiler extends MethodVisitor {
             current.addOperand("String.fromCharCode(" + current.remove(0) + ")", char.class);
             break;
         }
+    }
+
+    /**
+     * <p>
+     * Execute the operation for primitive long.
+     * </p>
+     * 
+     * @param operation
+     */
+    private void longOperation(String operation) {
+        current.addOperand(Javascript.writeMethodCode(PrimitiveLong, operation, current.remove(1), int.class, current.remove(0)), long.class);
     }
 
     /**
