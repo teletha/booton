@@ -193,6 +193,8 @@ public class ScriptTester {
                         invoker.append('"').append(input).append('"');
                     } else if (input instanceof Class) {
                         invoker.append(Javascript.computeClass((Class) input));
+                    } else if (input instanceof Long) {
+                        invoker.append(Javascript.writePrimitiveCode((Long) input));
                     } else {
                         invoker.append(input);
                     }
@@ -202,6 +204,7 @@ public class ScriptTester {
 
                 try {
                     // execute and compare it to the java resul
+                    System.out.println("input " + inputs.get(i));
                     assertObject(results.get(i), engine.execute(html, invoker.toString(), "", 1));
                 } catch (AssertionError e) {
                     StringBuilder builder = new StringBuilder();
@@ -516,7 +519,9 @@ public class ScriptTester {
                 if (js instanceof UniqueTag) {
                     assert value == 0L;
                 } else {
-                    assert value == ((Double) js).longValue();
+                    long jsValue = createLong((NativeObject) js);
+                    System.out.println("    " + value + "   " + jsValue);
+                    assert value == jsValue;
                 }
             } else if (type == Float.class) {
                 // ========================
@@ -587,6 +592,17 @@ public class ScriptTester {
                 throw new Error(js.getClass() + " " + java.getClass() + "  " + java + "  " + js);
             }
         }
+    }
+
+    /**
+     * @param js
+     * @return
+     */
+    private long createLong(NativeObject js) {
+        long high = Double.valueOf(js.get("d").toString()).longValue();
+        long low = Double.valueOf(js.get("c").toString()).longValue();
+        System.out.println(high + " @@  " + low);
+        return high << 32 | (low & 0xffffffffL);
     }
 
     /**
