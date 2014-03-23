@@ -811,18 +811,22 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // 0
         case ICONST_0:
-        case LCONST_0:
         case FCONST_0:
         case DCONST_0:
             current.addOperand(ZERO);
             break;
+        case LCONST_0:
+            current.addOperand(Javascript.writePrimitiveCode(0));
+            break;
 
         // 1
         case ICONST_1:
-        case LCONST_1:
         case FCONST_1:
         case DCONST_1:
             current.addOperand(ONE);
+            break;
+        case LCONST_1:
+            current.addOperand(Javascript.writePrimitiveCode(1));
             break;
 
         // 2
@@ -858,34 +862,42 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // + operand
         case IADD:
-        case LADD:
         case FADD:
         case DADD:
             current.join("+").enclose();
             break;
+        case LADD:
+            longOperation("add");
+            break;
 
         // - operand
         case ISUB:
-        case LSUB:
         case FSUB:
         case DSUB:
             current.join("-").enclose();
             break;
+        case LSUB:
+            longOperation("subtract");
+            break;
 
         // * operand
         case IMUL:
-        case LMUL:
         case FMUL:
         case DMUL:
             current.join("*");
             break;
+        case LMUL:
+            longOperation("multiply");
+            break;
 
         // / operand
         case IDIV:
-        case LDIV:
         case FDIV:
         case DDIV:
             current.join("/");
+            break;
+        case LDIV:
+            longOperation("divide");
             break;
 
         // % operand
@@ -940,10 +952,12 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // negative operand
         case INEG:
-        case LNEG:
         case FNEG:
         case DNEG:
             current.addOperand(new OperandExpression("-" + current.remove(0).encolose()).encolose());
+            break;
+        case LNEG:
+            longOperation("negate");
             break;
 
         case RETURN:
@@ -1105,7 +1119,21 @@ class JavaMethodCompiler extends MethodVisitor {
      * @param operation
      */
     private void longOperation(String operation) {
-        current.addOperand(Javascript.writeMethodCode(PrimitiveLong, operation, current.remove(1), int.class, current.remove(0)), long.class);
+        for (Method method : PrimitiveLong.getDeclaredMethods()) {
+            if (method.getName().equals(operation)) {
+                Class[] types = method.getParameterTypes();
+                Object[] params = new Object[types.length * 2 + 1];
+                params[0] = current.remove(types.length);
+
+                for (int i = 0; i < types.length; i++) {
+                    params[i * 2 + 1] = types[i];
+                    params[i * 2 + 2] = current.remove(0);
+                }
+                current.addOperand(Javascript.writeMethodCode(PrimitiveLong, operation, params), long.class);
+                return;
+            }
+        }
+        throw new TranslationError();
     }
 
     /**
@@ -1510,6 +1538,8 @@ class JavaMethodCompiler extends MethodVisitor {
     public void visitLdcInsn(Object constant) {
         if (constant instanceof String) {
             current.stack.add(new OperandString((String) constant));
+        } else if (constant instanceof Long) {
+            current.addOperand(Javascript.writePrimitiveCode((Long) constant));
         } else if (constant instanceof Type) {
             String className = ((Type) constant).getInternalName();
 

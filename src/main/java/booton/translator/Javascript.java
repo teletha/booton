@@ -491,7 +491,7 @@ public class Javascript {
      * @return
      */
     public static final String writePrimitiveCode(long value) {
-        return writeMethodCode(PrimitiveLong, "fromBits", int.class, (int) (value >> 32), int.class, (int) (value));
+        return writeMethodCode(PrimitiveLong, "fromBits", int.class, (int) (value), int.class, (int) (value >> 32));
     }
 
     /**

@@ -12,6 +12,8 @@ package js.lang;
 import java.math.BigInteger;
 
 import booton.translator.JavaAPIProvider;
+import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativeProperty;
 
 /**
  * <p>
@@ -589,20 +591,277 @@ class JSLong extends JSNumber {
     /**
      * @version 2013/04/16 23:01:24
      */
+    @SuppressWarnings("unused")
     @JavaAPIProvider(long.class)
-    private static class Primitive {
+    private static class Primitive implements JavascriptNative {
 
+        /** The reusable magic number. */
+        private static final int TWO_PWR_16_DBL_ = 65536;
+
+        /** The reusable magic number. */
+        private static final int TWO_PWR_24_DBL_ = 16777216;
+
+        /** The reusable magic number. Don't use long. */
+        private static final double TWO_PWR_31_DBL_ = 2147483648D;
+
+        /** The reusable magic number. Don't use long. */
+        private static final double TWO_PWR_32_DBL_ = 4294967296D;
+
+        /** The reusable magic number. Don't use long. */
+        private static final double TWO_PWR_48_DBL_ = 281474976710656D;
+
+        /** The reusable magic number. Don't use long. */
+        private static final double TWO_PWR_63_DBL_ = 9223372036854776000D;
+
+        /** The reusable magic number. Don't use long. */
+        private static final double TWO_PWR_64_DBL_ = 18446744073709552000D;
+
+        /** The reusable cache. */
+        private static final Primitive[] IntCache_ = new Primitive[256];
+
+        /** The reusable cache. */
+        private static final Primitive ZERO = fromInt(0);
+
+        /** The reusable cache. */
+        private static final Primitive ONE = fromInt(1);
+
+        /** The reusable cache. */
+        private static final Primitive NEG_ONE = fromInt(-1);
+
+        /** The reusable cache. */
+        private static final Primitive TWO_PWR_24_ = fromInt(1 << 24);
+
+        /** The maximum value. */
+        private static final Primitive MAX_VALUE = fromBits(0xFFFFFFFF, 0x7FFFFFFF);
+
+        /** The minimum value. */
+        private static final Primitive MIN_VALUE = fromBits(0, 0x80000000);
+
+        @JavascriptNativeProperty
         private int high_;
 
+        @JavascriptNativeProperty
         private int low_;
 
         /**
          * @param high
          * @param low
          */
-        private Primitive(int high, int low) {
-            this.high_ = high;
-            this.low_ = low;
+        private Primitive(int low, int high) {
+            this.low_ = Global.toSignedInteger(low);
+            this.high_ = Global.toSignedInteger(high);
+        }
+
+        /**
+         * Returns the sum of this and the given Long.
+         * 
+         * @param other Long to add to this one.
+         * @return The sum of this and the given Long.
+         */
+        public Primitive add(Primitive other) {
+            // Divide each number into 4 chunks of 16 bits, and then sum the chunks.
+            int a48 = this.high_ >>> 16;
+            int a32 = this.high_ & 0xFFFF;
+            int a16 = this.low_ >>> 16;
+            int a00 = this.low_ & 0xFFFF;
+
+            int b48 = other.high_ >>> 16;
+            int b32 = other.high_ & 0xFFFF;
+            int b16 = other.low_ >>> 16;
+            int b00 = other.low_ & 0xFFFF;
+
+            int c48 = 0, c32 = 0, c16 = 0, c00 = 0;
+            c00 += a00 + b00;
+            c16 += c00 >>> 16;
+            c00 &= 0xFFFF;
+            c16 += a16 + b16;
+            c32 += c16 >>> 16;
+            c16 &= 0xFFFF;
+            c32 += a32 + b32;
+            c48 += c32 >>> 16;
+            c32 &= 0xFFFF;
+            c48 += a48 + b48;
+            c48 &= 0xFFFF;
+
+            return new Primitive((c16 << 16) | c00, (c48 << 16) | c32);
+        }
+
+        /**
+         * Returns the difference of this and the given long.
+         * 
+         * @param other Long to subtract from this.
+         * @return The difference of this and the given long.
+         */
+        public Primitive subtract(Primitive other) {
+            return add(other.negate());
+        }
+
+        /**
+         * Returns the product of this and the given long.
+         * 
+         * @param other Long to multiply with this.
+         * @return The product of this and the other.
+         */
+        public Primitive multiply(Primitive other) {
+            if (isZero()) {
+                return ZERO;
+            } else if (other.isZero()) {
+                return ZERO;
+            }
+
+            if (equals(MIN_VALUE)) {
+                return other.isOdd() ? MIN_VALUE : ZERO;
+            } else if (other.equals(MIN_VALUE)) {
+                return this.isOdd() ? MIN_VALUE : ZERO;
+            }
+
+            if (isNegative()) {
+                if (other.isNegative()) {
+                    return negate().multiply(other.negate());
+                } else {
+                    return negate().multiply(other).negate();
+                }
+            } else if (other.isNegative()) {
+                return multiply(other.negate()).negate();
+            }
+
+            // If both longs are small, use float multiplication
+            if (lessThan(TWO_PWR_24_) && other.lessThan(TWO_PWR_24_)) {
+                return fromNumber(toNumber() * other.toNumber());
+            }
+
+            // Divide each long into 4 chunks of 16 bits, and then add up 4x4 products.
+            // We can skip products that would overflow.
+
+            int a48 = this.high_ >>> 16;
+            int a32 = this.high_ & 0xFFFF;
+            int a16 = this.low_ >>> 16;
+            int a00 = this.low_ & 0xFFFF;
+
+            int b48 = other.high_ >>> 16;
+            int b32 = other.high_ & 0xFFFF;
+            int b16 = other.low_ >>> 16;
+            int b00 = other.low_ & 0xFFFF;
+
+            int c48 = 0, c32 = 0, c16 = 0, c00 = 0;
+            c00 += a00 * b00;
+            c16 += c00 >>> 16;
+            c00 &= 0xFFFF;
+            c16 += a16 * b00;
+            c32 += c16 >>> 16;
+            c16 &= 0xFFFF;
+            c16 += a00 * b16;
+            c32 += c16 >>> 16;
+            c16 &= 0xFFFF;
+            c32 += a32 * b00;
+            c48 += c32 >>> 16;
+            c32 &= 0xFFFF;
+            c32 += a16 * b16;
+            c48 += c32 >>> 16;
+            c32 &= 0xFFFF;
+            c32 += a00 * b32;
+            c48 += c32 >>> 16;
+            c32 &= 0xFFFF;
+            c48 += a48 * b00 + a32 * b16 + a16 * b32 + a00 * b48;
+            c48 &= 0xFFFF;
+            return fromBits((c16 << 16) | c00, (c48 << 16) | c32);
+        }
+
+        /**
+         * Returns this long divided by the given one.
+         * 
+         * @param other long by which to divide.
+         * @return This long divided by the given one.
+         */
+        public Primitive divide(Primitive other) {
+            if (other.isZero()) {
+                throw new ArithmeticException("divide by zero");
+            } else if (isZero()) {
+                return ZERO;
+            }
+
+            if (equals(MIN_VALUE)) {
+                if (other.equals(ONE) || other.equals(NEG_ONE)) {
+                    return MIN_VALUE; // recall that -MIN_VALUE == MIN_VALUE
+                } else if (other.equals(MIN_VALUE)) {
+                    return ONE;
+                } else {
+                    // At this point, we have |other| >= 2, so |this/other| < |MIN_VALUE|.
+                    Primitive halfThis = shiftRight(1);
+                    Primitive approx = halfThis.divide(other).shiftLeft(1);
+
+                    if (approx.equals(ZERO)) {
+                        return other.isNegative() ? ONE : NEG_ONE;
+                    } else {
+                        Primitive rem = subtract(other.multiply(approx));
+                        return approx.add(rem.divide(other));
+                    }
+                }
+            } else if (other.equals(MIN_VALUE)) {
+                return ZERO;
+            }
+
+            if (isNegative()) {
+                if (other.isNegative()) {
+                    return negate().divide(other.negate());
+                } else {
+                    return negate().divide(other).negate();
+                }
+            } else if (other.isNegative()) {
+                return divide(other.negate()).negate();
+            }
+
+            // Repeat the following until the remainder is less than other: find a
+            // floating-point that approximates remainder / other *from below*, add this
+            // into the result, and subtract it from the remainder. It is critical that
+            // the approximate value is less than or equal to the real value so that the
+            // remainder never becomes negative.
+            Primitive res = ZERO;
+            Primitive rem = this;
+
+            while (rem.greaterThanOrEqual(other)) {
+                // Approximate the result of division. This may be a little greater or
+                // smaller than the actual value.
+                double approx = Math.max(1, Math.floor(rem.toNumber() / other.toNumber()));
+
+                // We will tweak the approximate result by changing it in the 48-th digit or
+                // the smallest non-fractional digit, whichever is larger.
+                double log2 = Math.ceil(Math.log(approx) / NativeMath.LN2);
+                double delta = (log2 <= 48) ? 1 : Math.pow(2, log2 - 48);
+
+                // Decrease the approximation until it is smaller than the remainder. Note
+                // that if it is too large, the product overflows and is negative.
+                Primitive approxRes = fromNumber(approx);
+                Primitive approxRem = approxRes.multiply(other);
+
+                while (approxRem.isNegative() || approxRem.greaterThan(rem)) {
+                    approx -= delta;
+                    approxRes = fromNumber(approx);
+                    approxRem = approxRes.multiply(other);
+                }
+
+                // We know the answer can't be zero... and actually, zero would cause
+                // infinite recursion since we would make no progress.
+                if (approxRes.isZero()) {
+                    approxRes = ONE;
+                }
+
+                res = res.add(approxRes);
+                rem = rem.subtract(approxRem);
+            }
+            return res;
+        }
+
+        /**
+         * Return the negation of this value.
+         * 
+         * @return The negation of this value.
+         */
+        public Primitive negate() {
+            if (this == MIN_VALUE) {
+                return MIN_VALUE;
+            }
+            return fromBits(~low_, ~high_).add(ONE);
         }
 
         /**
@@ -679,6 +938,130 @@ class JSLong extends JSNumber {
         }
 
         /**
+         * Test equality.
+         * 
+         * @param other
+         * @return
+         */
+        public boolean equals(Primitive other) {
+            return (this.high_ == other.high_) && (this.low_ == other.low_);
+        }
+
+        public boolean notEquals(Primitive other) {
+            return (this.high_ != other.high_) || (this.low_ != other.low_);
+        }
+
+        public boolean lessThan(Primitive other) {
+            return this.compare(other) < 0;
+        }
+
+        public boolean lessThanOrEqual(Primitive other) {
+            return this.compare(other) <= 0;
+        }
+
+        public boolean greaterThan(Primitive other) {
+            return this.compare(other) > 0;
+        }
+
+        public boolean greaterThanOrEqual(Primitive other) {
+            return this.compare(other) >= 0;
+        }
+
+        /**
+         * Compares this Long with the given one.
+         * 
+         * @param other Long to compare against.
+         * @return 0 if they are the same, 1 if the this is greater, and -1 if the given one is
+         *         greater.
+         */
+        private int compare(Primitive other) {
+            if (this.equals(other)) {
+                return 0;
+            }
+
+            boolean thisNeg = this.isNegative();
+            boolean otherNeg = other.isNegative();
+
+            if (thisNeg && !otherNeg) {
+                return -1;
+            }
+
+            if (!thisNeg && otherNeg) {
+                return 1;
+            }
+
+            // at this point, the signs are the same, so subtraction will not overflow
+            if (this.subtract(other).isNegative()) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+
+        /**
+         * Test value.
+         * 
+         * @return
+         */
+        private boolean isNegative() {
+            return this.high_ < 0;
+        }
+
+        /**
+         * Test value.
+         * 
+         * @return
+         */
+        private boolean isOdd() {
+            return (this.low_ & 1) == 1;
+        }
+
+        /**
+         * Zero or not.
+         * 
+         * @return
+         */
+        private boolean isZero() {
+            return high_ == 0 && low_ == 0;
+        }
+
+        private int toNumber() {
+            return (int) (high_ * TWO_PWR_32_DBL_ + getLowBitsUnsigned());
+        }
+
+        /**
+         * @return
+         */
+        private int getLowBitsUnsigned() {
+            return (low_ >= 0) ? low_ : (int) (TWO_PWR_32_DBL_ + low_);
+        }
+
+        /**
+         * <p>
+         * Returns a Long representing the given (32-bit) integer value.
+         * </p>
+         * 
+         * @param value
+         * @return
+         */
+        private static Primitive fromInt(int value) {
+            if (-128 <= value && value < 128) {
+                Primitive cachedObj = IntCache_[value + 128];
+
+                if (cachedObj != null) {
+                    return cachedObj;
+                }
+            }
+
+            Primitive obj = new Primitive(Global.toSignedInteger(value), value < 0 ? -1 : 0);
+
+            if (-128 <= value && value < 128) {
+                IntCache_[value + 128] = obj;
+            }
+            return obj;
+        }
+
+        /**
          * Returns a Long representing the 64-bit integer that comes by concatenating the given high
          * and low bits. Each is assumed to use 32 bits.
          * 
@@ -688,6 +1071,28 @@ class JSLong extends JSNumber {
          */
         private static Primitive fromBits(int lowBits, int highBits) {
             return new Primitive(lowBits, highBits);
+        }
+
+        /**
+         * Returns a long representing the given value, provided that it is a finite number.
+         * Otherwise, zero is returned.
+         * 
+         * @param value The number in question.
+         * @return The corresponding Long value.
+         * @return
+         */
+        private static Primitive fromNumber(double value) {
+            if (Global.isNaN(value) || !Global.isFinite(value)) {
+                return ZERO;
+            } else if (value <= -TWO_PWR_63_DBL_) {
+                return MIN_VALUE;
+            } else if (value + 1 >= TWO_PWR_63_DBL_) {
+                return MAX_VALUE;
+            } else if (value < 0) {
+                return fromNumber(-value).negate();
+            } else {
+                return new Primitive(Global.toSignedInteger((value % TWO_PWR_32_DBL_)), Global.toSignedInteger(value / TWO_PWR_32_DBL_));
+            }
         }
     }
 }
