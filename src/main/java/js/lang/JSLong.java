@@ -580,11 +580,10 @@ class JSLong extends JSNumber {
 
     // public static void main(String[] args) {
     // long value = -1234567890123456L;
-    // System.out.println(value + "     " + ((int) (value >> 32)) + "      " + ((int) value));
-    // Primitive primitive = new Primitive((int) (value >> 32), (int) value);
-    // System.out.println(primitive.high_ + "   " + primitive.low_ + "       " + ((long)
-    // primitive.high_ << 32));
-    // System.out.println(((long) primitive.high_ << 32) | (primitive.low_ & 0xffffffffL));
+    // System.out.println((int) value);
+    //
+    // Primitive primitive = Primitive.fromNumber(value);
+    // System.out.println(primitive.low_);
     //
     // }
 
@@ -853,6 +852,16 @@ class JSLong extends JSNumber {
         }
 
         /**
+         * Returns this long modulo the given one.
+         * 
+         * @param other long by which to mod.
+         * @return This long modulo the given one.
+         */
+        public Primitive modulo(Primitive other) {
+            return subtract(divide(other).multiply(other));
+        }
+
+        /**
          * Return the negation of this value.
          * 
          * @return The negation of this value.
@@ -862,6 +871,36 @@ class JSLong extends JSNumber {
                 return MIN_VALUE;
             }
             return fromBits(~low_, ~high_).add(ONE);
+        }
+
+        /**
+         * Returns the bitwise-AND of this long and the given one.
+         * 
+         * @param other The long with which to AND.
+         * @return The bitwise-AND of this and the other.
+         */
+        public Primitive and(Primitive other) {
+            return fromBits(low_ & other.low_, high_ & other.high_);
+        }
+
+        /**
+         * Returns the bitwise-OR of this long and the given one.
+         * 
+         * @param other The long with which to OR.
+         * @return The bitwise-OR of this and the other.
+         */
+        public Primitive or(Primitive other) {
+            return fromBits(low_ | other.low_, high_ | other.high_);
+        }
+
+        /**
+         * Returns the bitwise-XOR of this long and the given one.
+         * 
+         * @param other The long with which to XOR.
+         * @return The bitwise-XOR of this and the other.
+         */
+        public Primitive xor(Primitive other) {
+            return fromBits(low_ ^ other.low_, high_ ^ other.high_);
         }
 
         /**
@@ -965,6 +1004,70 @@ class JSLong extends JSNumber {
 
         public boolean greaterThanOrEqual(Primitive other) {
             return this.compare(other) >= 0;
+        }
+
+        public int toInt() {
+            return low_;
+        }
+
+        @JavascriptNativeProperty
+        public int valueOf() {
+            return toNumber();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @JavascriptNativeProperty
+        public String toString() {
+            return toString(10);
+        }
+
+        public String toString(int radix) {
+            if (radix < 2 || 36 < radix) {
+                throw new Error("radix out of range: " + radix);
+            }
+
+            if (isZero()) {
+                return "0";
+            }
+
+            if (isNegative()) {
+                if (equals(MIN_VALUE)) {
+                    // We need to change the Long value before it can be negated, so we remove
+                    // the bottom-most digit in this base and then recurse to do the rest.
+                    Primitive radixLong = fromNumber(radix);
+                    Primitive div = divide(radixLong);
+                    Primitive rem = div.multiply(radixLong).subtract(this);
+                    return div.toString(radix) + Integer.toString(rem.toInt(), radix);
+                } else {
+                    return '-' + negate().toString(radix);
+                }
+            }
+
+            // Do several (6) digits each time through the loop, so as to
+            // minimize the calls to the very expensive emulated div.
+            Primitive radixToPower = fromNumber(Math.pow(radix, 6));
+
+            Primitive rem = this;
+            String result = "";
+
+            while (true) {
+                Primitive remDiv = rem.divide(radixToPower);
+                int intval = rem.subtract(remDiv.multiply(radixToPower)).toInt();
+                String digits = Integer.toString(intval, radix);
+
+                rem = remDiv;
+                if (rem.isZero()) {
+                    return digits + result;
+                } else {
+                    while (digits.length() < 6) {
+                        digits = '0' + digits;
+                    }
+                    result = "" + digits + result;
+                }
+            }
         }
 
         /**
