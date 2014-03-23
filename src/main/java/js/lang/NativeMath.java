@@ -18,6 +18,9 @@ import booton.translator.Translator;
  */
 public class NativeMath {
 
+    /** Thhe natural logarithm of 2, approximately 0.693. */
+    public static final double LN2 = Math.log(2);
+
     /**
      * Returns the absolute value of an {@code int} value. If the argument is not negative, the
      * argument is returned. If the argument is negative, the negation of the argument is returned.
@@ -677,6 +680,9 @@ public class NativeMath {
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<NativeMath> {
+
+        /** Thhe natural logarithm of 2, approximately 0.693. */
+        public String LN2 = "Math.LN2";
 
         /**
          * Returns the absolute value of an {@code int} value. If the argument is not negative, the

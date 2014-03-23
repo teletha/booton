@@ -24,7 +24,7 @@ public class LongTest extends ScriptTester {
     public void zero() {
         test(new Scriptable() {
 
-            long act(long value) {
+            long act() {
                 return 0;
             }
         });
@@ -34,7 +34,7 @@ public class LongTest extends ScriptTester {
     public void one() {
         test(new Scriptable() {
 
-            long act(long value) {
+            long act() {
                 return 1;
             }
         });
@@ -44,7 +44,7 @@ public class LongTest extends ScriptTester {
     public void two() {
         test(new Scriptable() {
 
-            long act(long value) {
+            long act() {
                 return 2;
             }
         });
@@ -54,7 +54,7 @@ public class LongTest extends ScriptTester {
     public void three() {
         test(new Scriptable() {
 
-            long act(long value) {
+            long act() {
                 return 3;
             }
         });
@@ -106,6 +106,16 @@ public class LongTest extends ScriptTester {
 
             long act(long value) {
                 return value += 2;
+            }
+        });
+    }
+
+    @Test
+    public void negate() {
+        test(new Scriptable() {
+
+            long act(long value) {
+                return -value;
             }
         });
     }

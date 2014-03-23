@@ -204,7 +204,6 @@ public class ScriptTester {
 
                 try {
                     // execute and compare it to the java resul
-                    System.out.println("input " + inputs.get(i));
                     assertObject(results.get(i), engine.execute(html, invoker.toString(), "", 1));
                 } catch (AssertionError e) {
                     StringBuilder builder = new StringBuilder();
@@ -222,7 +221,7 @@ public class ScriptTester {
         } catch (ScriptException e) {
             dumpCode(source);
 
-            Source code = new Source(source.getSimpleName(), Javascript.getScript(source).toString());
+            Source code = new Source(source.getSimpleName(), Javascript.getScript(source).write());
             TranslationError error = new TranslationError(e);
             error.write(code.findBlock(e.getFailingLineNumber()));
 
@@ -520,7 +519,6 @@ public class ScriptTester {
                     assert value == 0L;
                 } else {
                     long jsValue = createLong((NativeObject) js);
-                    System.out.println("    " + value + "   " + jsValue);
                     assert value == jsValue;
                 }
             } else if (type == Float.class) {
@@ -599,9 +597,8 @@ public class ScriptTester {
      * @return
      */
     private long createLong(NativeObject js) {
-        long high = Double.valueOf(js.get("d").toString()).longValue();
-        long low = Double.valueOf(js.get("c").toString()).longValue();
-        System.out.println(high + " @@  " + low);
+        long high = Double.valueOf(js.get("high_").toString()).longValue();
+        long low = Double.valueOf(js.get("low_").toString()).longValue();
         return high << 32 | (low & 0xffffffffL);
     }
 

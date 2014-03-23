@@ -347,7 +347,7 @@ public class Global {
      * @param value The number to evaluate.
      * @return A result.
      */
-    public static native boolean isFinit(int value);
+    public static native boolean isFinite(int value);
 
     /**
      * <p>
@@ -362,7 +362,7 @@ public class Global {
      * @param value The number to evaluate.
      * @return A result.
      */
-    public static native boolean isFinit(long value);
+    public static native boolean isFinite(long value);
 
     /**
      * <p>
@@ -377,7 +377,7 @@ public class Global {
      * @param value The number to evaluate.
      * @return A result.
      */
-    public static native boolean isFinit(float value);
+    public static native boolean isFinite(float value);
 
     /**
      * <p>
@@ -392,7 +392,7 @@ public class Global {
      * @param value The number to evaluate.
      * @return A result.
      */
-    public static native boolean isFinit(double value);
+    public static native boolean isFinite(double value);
 
     /**
      * <p>
@@ -407,7 +407,7 @@ public class Global {
      * @param value The number to evaluate.
      * @return A result.
      */
-    public static native boolean isFinit(Object value);
+    public static native boolean isFinite(Object value);
 
     /**
      * <p>
@@ -428,6 +428,30 @@ public class Global {
      * @return A result.
      */
     public static native boolean isString(Object value);
+
+    /**
+     * <p>
+     * Convert the specified value to signed integer (32bit).
+     * </p>
+     * 
+     * @param value A target value to convert.
+     * @return A signed integer.
+     */
+    public static int toSignedInteger(int value) {
+        return value;
+    }
+
+    /**
+     * <p>
+     * Convert the specified value to signed integer (32bit).
+     * </p>
+     * 
+     * @param value A target value to convert.
+     * @return A signed integer.
+     */
+    public static int toSignedInteger(double value) {
+        return (int) value;
+    }
 
     /**
      * <p>
@@ -754,7 +778,7 @@ public class Global {
          * @param value The number to evaluate.
          * @return A result.
          */
-        public String isFinit(int value) {
+        public String isFinite(int value) {
             return "isFinite(" + param(0) + ")";
         }
 
@@ -771,7 +795,7 @@ public class Global {
          * @param value The number to evaluate.
          * @return A result.
          */
-        public String isFinit(long value) {
+        public String isFinite(long value) {
             return "isFinite(" + param(0) + ")";
         }
 
@@ -788,7 +812,7 @@ public class Global {
          * @param value The number to evaluate.
          * @return A result.
          */
-        public String isFinit(float value) {
+        public String isFinite(float value) {
             return "isFinite(" + param(0) + ")";
         }
 
@@ -805,7 +829,7 @@ public class Global {
          * @param value The number to evaluate.
          * @return A result.
          */
-        public String isFinit(double value) {
+        public String isFinite(double value) {
             return "isFinite(" + param(0) + ")";
         }
 
@@ -822,7 +846,7 @@ public class Global {
          * @param value The number to evaluate.
          * @return A result.
          */
-        public String isFinit(Object value) {
+        public String isFinite(Object value) {
             return "isFinite(" + param(0) + ")";
         }
 
@@ -848,6 +872,30 @@ public class Global {
          */
         public String isString(Object value) {
             return "boot.isString(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Convert the specified value to signed integer (32bit).
+         * </p>
+         * 
+         * @param value A target value to convert.
+         * @return A signed integer.
+         */
+        public String toSignedInteger(int value) {
+            return param(0) + "|0";
+        }
+
+        /**
+         * <p>
+         * Convert the specified value to signed integer (32bit).
+         * </p>
+         * 
+         * @param value A target value to convert.
+         * @return A signed integer.
+         */
+        public String toSignedInteger(double value) {
+            return toSignedInteger((int) value);
         }
 
         /**
