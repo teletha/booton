@@ -282,7 +282,7 @@ public class Global {
      * @return A result.
      */
     public static boolean isNaN(int value) {
-        return false;
+        return Float.isNaN(value);
     }
 
     /**
@@ -295,7 +295,7 @@ public class Global {
      * @return A result.
      */
     public static boolean isNaN(long value) {
-        return false;
+        return Double.isNaN(value);
     }
 
     /**
@@ -347,7 +347,9 @@ public class Global {
      * @param value The number to evaluate.
      * @return A result.
      */
-    public static native boolean isFinite(int value);
+    public static boolean isFinite(int value) {
+        return Float.isFinite(value);
+    }
 
     /**
      * <p>
@@ -362,7 +364,9 @@ public class Global {
      * @param value The number to evaluate.
      * @return A result.
      */
-    public static native boolean isFinite(long value);
+    public static boolean isFinite(long value) {
+        return Double.isFinite(value);
+    }
 
     /**
      * <p>
@@ -377,7 +381,9 @@ public class Global {
      * @param value The number to evaluate.
      * @return A result.
      */
-    public static native boolean isFinite(float value);
+    public static boolean isFinite(float value) {
+        return Float.isFinite(value);
+    }
 
     /**
      * <p>
@@ -392,7 +398,9 @@ public class Global {
      * @param value The number to evaluate.
      * @return A result.
      */
-    public static native boolean isFinite(double value);
+    public static boolean isFinite(double value) {
+        return Double.isFinite(value);
+    }
 
     /**
      * <p>

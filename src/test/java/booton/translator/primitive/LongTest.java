@@ -205,6 +205,8 @@ public class LongTest extends ScriptTester {
         test(new Scriptable() {
 
             boolean act(long value) {
+                System.out.println(value);
+                System.out.println(value + "    " + (value & 1));
                 return (value & 1) == 0;
             }
         });

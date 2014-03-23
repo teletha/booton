@@ -743,10 +743,6 @@ class JavaMethodCompiler extends MethodVisitor {
         record(opcode);
 
         switch (opcode) {
-        case L2I:
-            current.addOperand(new OperandExpression(current.remove(0) + ">>32", int.class).encolose());
-            break;
-
         case DUP:
             if (!match(NEW, DUP) && !match(NEW, DUP2)) {
                 // mark as duplicated operand
@@ -902,28 +898,36 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // % operand
         case IREM:
-        case LREM:
         case FREM:
         case DREM:
             current.join("%");
             break;
+        case LREM:
+            longOperation("modulo");
+            break;
 
         // & operand
         case IAND:
-        case LAND:
             current.join("&").enclose();
+            break;
+        case LAND:
+            longOperation("and");
             break;
 
         // | operand
         case IOR:
-        case LOR:
             current.join("|").enclose();
+            break;
+        case LOR:
+            longOperation("or");
             break;
 
         // ^ operand
         case IXOR:
-        case LXOR:
             current.join("^");
+            break;
+        case LXOR:
+            longOperation("xor");
             break;
 
         // << operand
@@ -1108,6 +1112,16 @@ class JavaMethodCompiler extends MethodVisitor {
             // cast int to char
             current.addOperand("String.fromCharCode(" + current.remove(0) + ")", char.class);
             break;
+
+        case L2I:
+            // cast long to int
+            longOperation("toInt");
+            break;
+
+        case I2L:
+            // cast int to long
+            longOperation("fromInt");
+            break;
         }
     }
 
@@ -1121,13 +1135,17 @@ class JavaMethodCompiler extends MethodVisitor {
     private void longOperation(String operation) {
         for (Method method : PrimitiveLong.getDeclaredMethods()) {
             if (method.getName().equals(operation)) {
+                int context = Modifier.isStatic(method.getModifiers()) ? 0 : 1;
                 Class[] types = method.getParameterTypes();
-                Object[] params = new Object[types.length * 2 + 1];
-                params[0] = current.remove(types.length);
+                Object[] params = new Object[types.length * 2 + context];
+
+                if (context == 1) {
+                    params[0] = current.remove(types.length);
+                }
 
                 for (int i = 0; i < types.length; i++) {
-                    params[i * 2 + 1] = types[i];
-                    params[i * 2 + 2] = current.remove(0);
+                    params[i * 2 + context] = types[i];
+                    params[i * 2 + context + 1] = current.remove(0);
                 }
                 current.addOperand(Javascript.writeMethodCode(PrimitiveLong, operation, params), long.class);
                 return;
