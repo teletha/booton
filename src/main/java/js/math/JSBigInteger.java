@@ -17,6 +17,7 @@ import java.util.Random;
 
 import sun.misc.DoubleConsts;
 import sun.misc.FloatConsts;
+
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -416,6 +417,56 @@ class JSBigInteger extends Number implements Comparable<BigInteger> {
         }
     }
 
+    /*
+     * Constructs a new BigInteger using a char array with radix=10. Sign is precalculated outside
+     * and not allowed in the val.
+     */
+    JSBigInteger(char[] val, int sign, int len) {
+        int cursor = 0, numDigits;
+
+        // Skip leading zeros and compute number of digits in magnitude
+        while (cursor < len && Character.digit(val[cursor], 10) == 0) {
+            cursor++;
+        }
+        if (cursor == len) {
+            signum = 0;
+            mag = $(ZERO).mag;
+            return;
+        }
+
+        numDigits = len - cursor;
+        signum = sign;
+        // Pre-allocate array of expected size
+        int numWords;
+        if (len < 10) {
+            numWords = 1;
+        } else {
+            long numBits = ((numDigits * bitsPerDigit[10]) >>> 10) + 1;
+            if (numBits + 31 >= (1L << 32)) {
+                reportOverflow();
+            }
+            numWords = (int) (numBits + 31) >>> 5;
+        }
+        int[] magnitude = new int[numWords];
+
+        // Process first (potentially short) digit group
+        int firstGroupLen = numDigits % digitsPerInt[10];
+        if (firstGroupLen == 0) {
+            firstGroupLen = digitsPerInt[10];
+        }
+        magnitude[numWords - 1] = parseInt(val, cursor, cursor += firstGroupLen);
+
+        // Process remaining digit groups
+        while (cursor < len) {
+            int groupVal = parseInt(val, cursor, cursor += digitsPerInt[10]);
+            destructiveMulAdd(magnitude, intRadix[10], groupVal);
+        }
+        mag = trustedStripLeadingZeroInts(magnitude);
+        if (mag.length >= MAX_MAG_LENGTH) {
+            checkRange();
+        }
+    }
+
     /**
      * Constructs a BigInteger with the specified value, which may not be zero.
      */
@@ -724,7 +775,6 @@ class JSBigInteger extends Number implements Comparable<BigInteger> {
 
         // If it's small enough, use smallToString.
         if (mag.length <= SCHOENHAGE_BASE_CONVERSION_THRESHOLD) {
-            System.out.println(signum + "   " + mag);
             return smallToString(radix);
         }
         // Otherwise use recursive toString, which requires positive arguments.
@@ -958,6 +1008,51 @@ class JSBigInteger extends Number implements Comparable<BigInteger> {
                 return multiplyToomCook3(this, $(val));
             }
         }
+    }
+
+    /**
+     * Package private methods used by BigDecimal code to multiply a BigInteger with a long. Assumes
+     * v is not equal to INFLATED.
+     */
+    BigInteger multiply(long v) {
+        if (v == 0 || signum == 0) {
+            return ZERO;
+        }
+        if (v == JSBigDecimal.INFLATED) {
+            return multiply(BigInteger.valueOf(v));
+        }
+        int rsign = (v > 0 ? signum : -signum);
+        if (v < 0) {
+            v = -v;
+        }
+        long dh = v >>> 32; // higher order bits
+        long dl = v & LONG_MASK; // lower order bits
+
+        int xlen = mag.length;
+        int[] value = mag;
+        int[] rmag = (dh == 0L) ? (new int[xlen + 1]) : (new int[xlen + 2]);
+        long carry = 0;
+        int rstart = rmag.length - 1;
+        for (int i = xlen - 1; i >= 0; i--) {
+            long product = (value[i] & LONG_MASK) * dl + carry;
+            rmag[rstart--] = (int) product;
+            carry = product >>> 32;
+        }
+        rmag[rstart] = (int) carry;
+        if (dh != 0L) {
+            carry = 0;
+            rstart = rmag.length - 2;
+            for (int i = xlen - 1; i >= 0; i--) {
+                long product = (value[i] & LONG_MASK) * dh + (rmag[rstart] & LONG_MASK) + carry;
+                rmag[rstart--] = (int) product;
+                carry = product >>> 32;
+            }
+            rmag[0] = (int) carry;
+        }
+        if (carry == 0L) {
+            rmag = java.util.Arrays.copyOfRange(rmag, 1, rmag.length);
+        }
+        return $(new JSBigInteger(rmag, rsign));
     }
 
     /**
@@ -2409,6 +2504,26 @@ class JSBigInteger extends Number implements Comparable<BigInteger> {
         return $(new JSBigInteger(trustedStripLeadingZeroInts(upperInts), 1));
     }
 
+    // Create an integer with the digits between the two indexes
+    // Assumes start < end. The result may be negative, but it
+    // is to be treated as an unsigned value.
+    private int parseInt(char[] source, int start, int end) {
+        int result = Character.digit(source[start++], 10);
+        if (result == -1) {
+            throw new NumberFormatException(new String(source));
+        }
+
+        for (int index = start; index < end; index++) {
+            int nextVal = Character.digit(source[index], 10);
+            if (nextVal == -1) {
+                throw new NumberFormatException(new String(source));
+            }
+            result = 10 * result + nextVal;
+        }
+
+        return result;
+    }
+
     /**
      * Returns {@code true} if and only if the designated bit is set. (Computes
      * {@code ((this & (1<<n)) != 0)}.)
@@ -2563,10 +2678,8 @@ class JSBigInteger extends Number implements Comparable<BigInteger> {
         long product = 0;
         long carry = 0;
         for (int i = len - 1; i >= 0; i--) {
-            System.out.println((ylong * (array[i] & LONG_MASK) + carry) + "        " + ((int) (ylong * (array[i] & LONG_MASK) + carry)) + "        " + ylong + "    @@  " + array[i] + "    " + LONG_MASK + "    " + carry);
             product = ylong * (array[i] & LONG_MASK) + carry;
             array[i] = (int) product;
-            System.out.println("       product   " + product + "   " + (product >>> 32));
             carry = product >>> 32;
         }
 

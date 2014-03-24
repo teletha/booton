@@ -11,11 +11,12 @@ package js.math;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 
 import booton.translator.Translator;
 
 /**
- * @version 2014/03/15 10:22:21
+ * @version 2014/03/24 23:49:09
  */
 class APIConveter {
 
@@ -53,6 +54,30 @@ class APIConveter {
      */
     static JSBigDecimal $(BigDecimal value) {
         return new JSBigDecimal(value.toString());
+    }
+
+    /**
+     * <p>
+     * API conversion.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    static MathContext $(JSMathContext value) {
+        return new MathContext(value.getPrecision(), value.getRoundingMode());
+    }
+
+    /**
+     * <p>
+     * API conversion.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    static JSMathContext $(MathContext value) {
+        return new JSMathContext(value.getPrecision(), value.getRoundingMode());
     }
 
     /**
@@ -118,6 +143,30 @@ class APIConveter {
          * @return
          */
         public String $(JSBigDecimal value) {
+            return param(0);
+        }
+
+        /**
+         * <p>
+         * API conversion.
+         * </p>
+         * 
+         * @param value
+         * @return
+         */
+        public String $(MathContext value) {
+            return param(0);
+        }
+
+        /**
+         * <p>
+         * API conversion.
+         * </p>
+         * 
+         * @param value
+         * @return
+         */
+        public String $(JSMathContext value) {
             return param(0);
         }
     }
