@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.Arrays;
 
 import booton.translator.JavaAPIProvider;
 
@@ -24,9 +25,85 @@ import booton.translator.JavaAPIProvider;
 @JavaAPIProvider(BigDecimal.class)
 class JSBigDecimal {
 
+    /**
+     * Rounding mode to round away from zero. Always increments the digit prior to a nonzero
+     * discarded fraction. Note that this rounding mode never decreases the magnitude of the
+     * calculated value.
+     */
+    public final static int ROUND_UP = 0;
+
+    /**
+     * Rounding mode to round towards zero. Never increments the digit prior to a discarded fraction
+     * (i.e., truncates). Note that this rounding mode never increases the magnitude of the
+     * calculated value.
+     */
+    public final static int ROUND_DOWN = 1;
+
+    /**
+     * Rounding mode to round towards positive infinity. If the {@code BigDecimal} is positive,
+     * behaves as for {@code ROUND_UP}; if negative, behaves as for {@code ROUND_DOWN}. Note that
+     * this rounding mode never decreases the calculated value.
+     */
+    public final static int ROUND_CEILING = 2;
+
+    /**
+     * Rounding mode to round towards negative infinity. If the {@code BigDecimal} is positive,
+     * behave as for {@code ROUND_DOWN}; if negative, behave as for {@code ROUND_UP}. Note that this
+     * rounding mode never increases the calculated value.
+     */
+    public final static int ROUND_FLOOR = 3;
+
+    /**
+     * Rounding mode to round towards {@literal "nearest neighbor"} unless both neighbors are
+     * equidistant, in which case round up. Behaves as for {@code ROUND_UP} if the discarded
+     * fraction is &ge; 0.5; otherwise, behaves as for {@code ROUND_DOWN}. Note that this is the
+     * rounding mode that most of us were taught in grade school.
+     */
+    public final static int ROUND_HALF_UP = 4;
+
+    /**
+     * Rounding mode to round towards {@literal "nearest neighbor"} unless both neighbors are
+     * equidistant, in which case round down. Behaves as for {@code ROUND_UP} if the discarded
+     * fraction is {@literal >} 0.5; otherwise, behaves as for {@code ROUND_DOWN}.
+     */
+    public final static int ROUND_HALF_DOWN = 5;
+
+    /**
+     * Rounding mode to round towards the {@literal "nearest neighbor"} unless both neighbors are
+     * equidistant, in which case, round towards the even neighbor. Behaves as for
+     * {@code ROUND_HALF_UP} if the digit to the left of the discarded fraction is odd; behaves as
+     * for {@code ROUND_HALF_DOWN} if it's even. Note that this is the rounding mode that minimizes
+     * cumulative error when applied repeatedly over a sequence of calculations.
+     */
+    public final static int ROUND_HALF_EVEN = 6;
+
+    /**
+     * Rounding mode to assert that the requested operation has an exact result, hence no rounding
+     * is necessary. If this rounding mode is specified on an operation that yields an inexact
+     * result, an {@code ArithmeticException} is thrown.
+     */
+    public final static int ROUND_UNNECESSARY = 7;
+
+    private static final long HALF_LONG_MAX_VALUE = Long.MAX_VALUE / 2;
+
+    private static final long HALF_LONG_MIN_VALUE = Long.MIN_VALUE / 2;
+
     // All 18-digit base ten strings fit into a long; not all 19-digit
     // strings will
     private static final int MAX_COMPACT_DIGITS = 18;
+
+    private static volatile BigInteger BIG_TEN_POWERS_TABLE[] = {BigInteger.ONE, BigInteger.valueOf(10),
+            BigInteger.valueOf(100), BigInteger.valueOf(1000), BigInteger.valueOf(10000), BigInteger.valueOf(100000),
+            BigInteger.valueOf(1000000), BigInteger.valueOf(10000000), BigInteger.valueOf(100000000),
+            BigInteger.valueOf(1000000000), BigInteger.valueOf(10000000000L), BigInteger.valueOf(100000000000L),
+            BigInteger.valueOf(1000000000000L), BigInteger.valueOf(10000000000000L),
+            BigInteger.valueOf(100000000000000L), BigInteger.valueOf(1000000000000000L),
+            BigInteger.valueOf(10000000000000000L), BigInteger.valueOf(100000000000000000L),
+            BigInteger.valueOf(1000000000000000000L)};
+
+    private static final int BIG_TEN_POWERS_TABLE_INITLEN = BIG_TEN_POWERS_TABLE.length;
+
+    private static final int BIG_TEN_POWERS_TABLE_MAX = 16 * BIG_TEN_POWERS_TABLE_INITLEN;
 
     private static final StringBuilderHelper threadLocalStringBuilderHelper = new StringBuilderHelper();
 
@@ -70,6 +147,27 @@ class JSBigDecimal {
             1000000000000000000L // 18 / 10^18
     };
 
+    private static final long THRESHOLDS_TABLE[] = {Long.MAX_VALUE, // 0
+            Long.MAX_VALUE / 10L, // 1
+            Long.MAX_VALUE / 100L, // 2
+            Long.MAX_VALUE / 1000L, // 3
+            Long.MAX_VALUE / 10000L, // 4
+            Long.MAX_VALUE / 100000L, // 5
+            Long.MAX_VALUE / 1000000L, // 6
+            Long.MAX_VALUE / 10000000L, // 7
+            Long.MAX_VALUE / 100000000L, // 8
+            Long.MAX_VALUE / 1000000000L, // 9
+            Long.MAX_VALUE / 10000000000L, // 10
+            Long.MAX_VALUE / 100000000000L, // 11
+            Long.MAX_VALUE / 1000000000000L, // 12
+            Long.MAX_VALUE / 10000000000000L, // 13
+            Long.MAX_VALUE / 100000000000000L, // 14
+            Long.MAX_VALUE / 1000000000000000L, // 15
+            Long.MAX_VALUE / 10000000000000000L, // 16
+            Long.MAX_VALUE / 100000000000000000L, // 17
+            Long.MAX_VALUE / 1000000000000000000L // 18
+    };
+
     /**
      * Sentinel value for {@link #intCompact} indicating the significand information is only
      * available from {@code intVal}.
@@ -77,6 +175,8 @@ class JSBigDecimal {
     static final long INFLATED = Long.MIN_VALUE;
 
     private static final BigInteger INFLATED_BIGINT = JSBigInteger.valueOf(INFLATED);
+
+    private static final RoundingMode DOWN = null;
 
     /**
      * The unscaled value of this BigDecimal, as returned by {@link #unscaledValue}.
@@ -357,13 +457,13 @@ class JSBigDecimal {
                     scl = adjustScale(scl, exp);
                 }
                 rs = isneg ? -rs : rs;
-                int mcp = mc.precision;
+                int mcp = mc.getPrecision();
                 int drop = prec - mcp; // prec has range [1, MAX_INT], mcp has range [0, MAX_INT];
                                        // therefore, this subtract cannot overflow
                 if (mcp > 0 && drop > 0) { // do rounding
                     while (drop > 0) {
                         scl = checkScaleNonZero((long) scl - drop);
-                        rs = divideAndRound(rs, LONG_TEN_POWERS_TABLE[drop], mc.roundingMode.oldMode);
+                        rs = divideAndRound(rs, LONG_TEN_POWERS_TABLE[drop], mc.getRoundingMode());
                         prec = longDigitLength(rs);
                         drop = prec - mcp;
                     }
@@ -388,42 +488,49 @@ class JSBigDecimal {
                             if (prec != 1 || idx != 0) ++prec; // prec unchanged if preceded by 0s
                             coeff[idx++] = c;
                         }
-                        if (dot) ++scl;
+                        if (dot) {
+                            ++scl;
+                        }
                         continue;
                     }
                     // have dot
                     if (c == '.') {
                         // have dot
-                        if (dot) // two dots
+                        if (dot) {
                             throw new NumberFormatException();
+                        }
                         dot = true;
                         continue;
                     }
                     // exponent expected
-                    if ((c != 'e') && (c != 'E')) throw new NumberFormatException();
+                    if ((c != 'e') && (c != 'E')) {
+                        throw new NumberFormatException();
+                    }
                     exp = parseExp(in, offset, len);
                     // Next test is required for backwards compatibility
-                    if ((int) exp != exp) // overflow
+                    if ((int) exp != exp) {
                         throw new NumberFormatException();
+                    }
                     break; // [saves a test]
                 }
                 // here when no characters left
-                if (prec == 0) // no digits found
+                if (prec == 0) {
                     throw new NumberFormatException();
+                }
                 // Adjust scale if exp is not zero.
                 if (exp != 0) { // had significant exponent
                     scl = adjustScale(scl, exp);
                 }
                 // Remove leading zeros from precision (digits count)
-                rb = new BigInteger(coeff, isneg ? -1 : 1, prec);
+                rb = $(new JSBigInteger(coeff, isneg ? -1 : 1, prec));
                 rs = compactValFor(rb);
-                int mcp = mc.precision;
+                int mcp = mc.getPrecision();
                 if (mcp > 0 && (prec > mcp)) {
                     if (rs == INFLATED) {
                         int drop = prec - mcp;
                         while (drop > 0) {
                             scl = checkScaleNonZero((long) scl - drop);
-                            rb = divideAndRoundByTenPow(rb, drop, mc.roundingMode.oldMode);
+                            rb = divideAndRoundByTenPow(rb, drop, mc.getRoundingMode());
                             rs = compactValFor(rb);
                             if (rs != INFLATED) {
                                 prec = longDigitLength(rs);
@@ -437,7 +544,7 @@ class JSBigDecimal {
                         int drop = prec - mcp;
                         while (drop > 0) {
                             scl = checkScaleNonZero((long) scl - drop);
-                            rs = divideAndRound(rs, LONG_TEN_POWERS_TABLE[drop], mc.roundingMode.oldMode);
+                            rs = divideAndRound(rs, LONG_TEN_POWERS_TABLE[drop], mc.getRoundingMode());
                             prec = longDigitLength(rs);
                             drop = prec - mcp;
                         }
@@ -704,6 +811,125 @@ class JSBigDecimal {
     }
 
     /**
+     * Converts this {@code BigDecimal} to a {@code BigInteger}. This conversion is analogous to the
+     * <i>narrowing primitive conversion</i> from {@code double} to {@code long} as defined in
+     * section 5.1.3 of <cite>The Java&trade; Language Specification</cite>: any fractional part of
+     * this {@code BigDecimal} will be discarded. Note that this conversion can lose information
+     * about the precision of the {@code BigDecimal} value.
+     * <p>
+     * To have an exception thrown if the conversion is inexact (in other words if a nonzero
+     * fractional part is discarded), use the {@link #toBigIntegerExact()} method.
+     *
+     * @return this {@code BigDecimal} converted to a {@code BigInteger}.
+     */
+    public BigInteger toBigInteger() {
+        // force to an integer, quietly
+        return $(setScale(0, RoundingMode.DOWN)).inflated();
+    }
+
+    /**
+     * Returns a {@code BigDecimal} whose scale is the specified value, and whose unscaled value is
+     * determined by multiplying or dividing this {@code BigDecimal}'s unscaled value by the
+     * appropriate power of ten to maintain its overall value. If the scale is reduced by the
+     * operation, the unscaled value must be divided (rather than multiplied), and the value may be
+     * changed; in this case, the specified rounding mode is applied to the division.
+     * <p>
+     * Note that since BigDecimal objects are immutable, calls of this method do <i>not</i> result
+     * in the original object being modified, contrary to the usual convention of having methods
+     * named <tt>set<i>X</i></tt> mutate field <i>{@code X}</i>. Instead, {@code setScale} returns
+     * an object with the proper scale; the returned object may or may not be newly allocated.
+     *
+     * @param newScale scale of the {@code BigDecimal} value to be returned.
+     * @param roundingMode The rounding mode to apply.
+     * @return a {@code BigDecimal} whose scale is the specified value, and whose unscaled value is
+     *         determined by multiplying or dividing this {@code BigDecimal}'s unscaled value by the
+     *         appropriate power of ten to maintain its overall value.
+     * @throws ArithmeticException if {@code roundingMode==UNNECESSARY} and the specified scaling
+     *             operation would require rounding.
+     * @see RoundingMode
+     * @since 1.5
+     */
+    public BigDecimal setScale(int newScale, RoundingMode roundingMode) {
+        if (roundingMode.ordinal() < RoundingMode.UP.ordinal() || roundingMode.ordinal() > RoundingMode.UNNECESSARY.ordinal()) {
+            throw new IllegalArgumentException("Invalid rounding mode");
+        }
+
+        int oldScale = this.scale;
+        if (newScale == oldScale) {
+            return $(this);
+        }
+        if (this.signum() == 0) {
+            return zeroValueOf(newScale);
+        }
+        if (this.intCompact != INFLATED) {
+            long rs = this.intCompact;
+            if (newScale > oldScale) {
+                int raise = checkScale((long) newScale - oldScale);
+                if ((rs = longMultiplyPowerTen(rs, raise)) != INFLATED) {
+                    return valueOf(rs, newScale);
+                }
+                BigInteger rb = bigMultiplyPowerTen(raise);
+                return $(new JSBigDecimal(rb, INFLATED, newScale, (precision > 0) ? precision + raise : 0));
+            } else {
+                // newScale < oldScale -- drop some digits
+                // Can't predict the precision due to the effect of rounding.
+                int drop = checkScale((long) oldScale - newScale);
+                if (drop < LONG_TEN_POWERS_TABLE.length) {
+                    return divideAndRound(rs, LONG_TEN_POWERS_TABLE[drop], newScale, roundingMode, newScale);
+                } else {
+                    return divideAndRound(inflated(), bigTenToThe(drop), newScale, roundingMode, newScale);
+                }
+            }
+        } else {
+            if (newScale > oldScale) {
+                int raise = checkScale((long) newScale - oldScale);
+                BigInteger rb = bigMultiplyPowerTen(this.intVal, raise);
+                return $(new JSBigDecimal(rb, INFLATED, newScale, (precision > 0) ? precision + raise : 0));
+            } else {
+                // newScale < oldScale -- drop some digits
+                // Can't predict the precision due to the effect of rounding.
+                int drop = checkScale((long) oldScale - newScale);
+                if (drop < LONG_TEN_POWERS_TABLE.length)
+                    return divideAndRound(intVal, LONG_TEN_POWERS_TABLE[drop], newScale, roundingMode, newScale);
+                else
+                    return divideAndRound(intVal, bigTenToThe(drop), newScale, roundingMode, newScale);
+            }
+        }
+    }
+
+    /**
+     * Returns a {@code BigDecimal} whose scale is the specified value, and whose value is
+     * numerically equal to this {@code BigDecimal}'s. Throws an {@code ArithmeticException} if this
+     * is not possible.
+     * <p>
+     * This call is typically used to increase the scale, in which case it is guaranteed that there
+     * exists a {@code BigDecimal} of the specified scale and the correct value. The call can also
+     * be used to reduce the scale if the caller knows that the {@code BigDecimal} has sufficiently
+     * many zeros at the end of its fractional part (i.e., factors of ten in its integer value) to
+     * allow for the rescaling without changing its value.
+     * <p>
+     * This method returns the same result as the two-argument versions of {@code setScale}, but
+     * saves the caller the trouble of specifying a rounding mode in cases where it is irrelevant.
+     * <p>
+     * Note that since {@code BigDecimal} objects are immutable, calls of this method do <i>not</i>
+     * result in the original object being modified, contrary to the usual convention of having
+     * methods named <tt>set<i>X</i></tt> mutate field <i>{@code X}</i>. Instead, {@code setScale}
+     * returns an object with the proper scale; the returned object may or may not be newly
+     * allocated.
+     *
+     * @param newScale scale of the {@code BigDecimal} value to be returned.
+     * @return a {@code BigDecimal} whose scale is the specified value, and whose unscaled value is
+     *         determined by multiplying or dividing this {@code BigDecimal}'s unscaled value by the
+     *         appropriate power of ten to maintain its overall value.
+     * @throws ArithmeticException if the specified scaling operation would require rounding.
+     * @see #setScale(int, int)
+     * @see #setScale(int, RoundingMode)
+     */
+    public BigDecimal setScale(int newScale) {
+        return setScale(newScale, RoundingMode.UNNECESSARY);
+    }
+
+    /**
      * Converts this {@code BigDecimal} to an {@code int}, checking for lost information. If this
      * {@code BigDecimal} has a nonzero fractional part or is out of the possible range for an
      * {@code int} result then an {@code ArithmeticException} is thrown.
@@ -716,7 +942,9 @@ class JSBigDecimal {
     public int intValueExact() {
         long num;
         num = this.longValueExact(); // will check decimal part
-        if ((int) num != num) throw new java.lang.ArithmeticException("Overflow");
+        if ((int) num != num) {
+            throw new java.lang.ArithmeticException("Overflow");
+        }
         return (int) num;
     }
 
@@ -746,19 +974,28 @@ class JSBigDecimal {
      * @since 1.5
      */
     public long longValueExact() {
-        if (intCompact != INFLATED && scale == 0) return intCompact;
+        if (intCompact != INFLATED && scale == 0) {
+            return intCompact;
+        }
         // If more than 19 digits in integer part it cannot possibly fit
-        if ((precision() - scale) > 19) // [OK for negative scale too]
+        if ((precision() - scale) > 19) {
+            // [OK for negative scale too]
             throw new java.lang.ArithmeticException("Overflow");
+        }
         // Fastpath zero and < 1.0 numbers (the latter can be very slow
         // to round if very small)
-        if (this.signum() == 0) return 0;
-        if ((this.precision() - this.scale) <= 0) throw new ArithmeticException("Rounding necessary");
+        if (this.signum() == 0) {
+            return 0;
+        }
+        if ((this.precision() - this.scale) <= 0) {
+            throw new ArithmeticException("Rounding necessary");
+        }
         // round to an integer, with Exception if decimal part non-0
-        BigDecimal num = this.setScale(0, ROUND_UNNECESSARY);
-        if (num.precision() >= 19) // need to check carefully
+        BigDecimal num = setScale(0, RoundingMode.UNNECESSARY);
+        if (num.precision() >= 19) {
             LongOverflow.check(num);
-        return num.inflated().longValue();
+        }
+        return $(num).inflated().longValue();
     }
 
     private int adjustScale(int scl, long exp) {
@@ -768,6 +1005,88 @@ class JSBigDecimal {
         }
         scl = (int) adjustedScale;
         return scl;
+    }
+
+    /**
+     * Check a scale for Underflow or Overflow. If this BigDecimal is nonzero, throw an exception if
+     * the scale is outof range. If this is zero, saturate the scale to the extreme value of the
+     * right sign if the scale is out of range.
+     *
+     * @param val The new scale.
+     * @throws ArithmeticException (overflow or underflow) if the new scale is out of range.
+     * @return validated scale as an int.
+     */
+    private int checkScale(long val) {
+        int asInt = (int) val;
+        if (asInt != val) {
+            asInt = val > Integer.MAX_VALUE ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            BigInteger b;
+            if (intCompact != 0 && ((b = intVal) == null || b.signum() != 0)) {
+                throw new ArithmeticException(asInt > 0 ? "Underflow" : "Overflow");
+            }
+        }
+        return asInt;
+    }
+
+    /**
+     * Compute this * 10 ^ n. Needed mainly to allow special casing to trap zero value
+     */
+    private BigInteger bigMultiplyPowerTen(int n) {
+        if (n <= 0) {
+            return inflated();
+        }
+
+        if (intCompact != INFLATED) {
+            return $(bigTenToThe(n)).multiply(intCompact);
+        } else {
+            return intVal.multiply(bigTenToThe(n));
+        }
+    }
+
+    /**
+     * Returns appropriate BigInteger from intVal field if intVal is null, i.e. the compact
+     * representation is in use.
+     */
+    private BigInteger inflated() {
+        if (intVal == null) {
+            return BigInteger.valueOf(intCompact);
+        }
+        return intVal;
+    }
+
+    private static BigInteger bigMultiplyPowerTen(BigInteger value, int n) {
+        if (n <= 0) return value;
+        if (n < LONG_TEN_POWERS_TABLE.length) {
+            return $(value).multiply(LONG_TEN_POWERS_TABLE[n]);
+        }
+        return value.multiply(bigTenToThe(n));
+    }
+
+    private static BigInteger bigMultiplyPowerTen(long value, int n) {
+        if (n <= 0) {
+            return BigInteger.valueOf(value);
+        }
+        return $(bigTenToThe(n)).multiply(value);
+    }
+
+    /**
+     * Compute val * 10 ^ n; return this product if it is representable as a long, INFLATED
+     * otherwise.
+     */
+    private static long longMultiplyPowerTen(long val, int n) {
+        if (val == 0 || n <= 0) return val;
+        long[] tab = LONG_TEN_POWERS_TABLE;
+        long[] bounds = THRESHOLDS_TABLE;
+        if (n < tab.length && n < bounds.length) {
+            long tenpower = tab[n];
+            if (val == 1) {
+                return tenpower;
+            }
+            if (Math.abs(val) <= bounds[n]) {
+                return val * tenpower;
+            }
+        }
+        return INFLATED;
     }
 
     /**
@@ -781,9 +1100,11 @@ class JSBigDecimal {
          * Same idea as the long version, but we need a better approximation of log10(2). Using
          * 646456993/2^31 is accurate up to max possible reported bitLength.
          */
-        if (b.signum == 0) return 1;
+        if ($(b).signum == 0) {
+            return 1;
+        }
         int r = (int) ((((long) b.bitLength() + 1) * 646456993) >>> 31);
-        return b.compareMagnitude(bigTenToThe(r)) < 0 ? r : r + 1;
+        return $(b).compareMagnitude(bigTenToThe(r)) < 0 ? r : r + 1;
     }
 
     /*
@@ -842,6 +1163,424 @@ class JSBigDecimal {
         return exp;
     }
 
+    private static int checkScaleNonZero(long val) {
+        int asInt = (int) val;
+        if (asInt != val) {
+            throw new ArithmeticException(asInt > 0 ? "Underflow" : "Overflow");
+        }
+        return asInt;
+    }
+
+    /**
+     * Divides {@code long} by {@code long} and do rounding based on the passed in roundingMode.
+     */
+    private static long divideAndRound(long ldividend, long ldivisor, RoundingMode roundingMode) {
+        int qsign; // quotient sign
+        long q = ldividend / ldivisor; // store quotient in long
+        if (roundingMode == RoundingMode.DOWN) {
+            return q;
+        }
+        long r = ldividend % ldivisor; // store remainder in long
+        qsign = ((ldividend < 0) == (ldivisor < 0)) ? 1 : -1;
+        if (r != 0) {
+            boolean increment = needIncrement(ldivisor, roundingMode, qsign, q, r);
+            return increment ? q + qsign : q;
+        } else {
+            return q;
+        }
+    }
+
+    /**
+     * Tests if quotient has to be incremented according the roundingMode
+     */
+    private static boolean needIncrement(long ldivisor, RoundingMode roundingMode, int qsign, long q, long r) {
+        int cmpFracHalf;
+        if (r <= HALF_LONG_MIN_VALUE || r > HALF_LONG_MAX_VALUE) {
+            cmpFracHalf = 1; // 2 * r can't fit into long
+        } else {
+            cmpFracHalf = longCompareMagnitude(2 * r, ldivisor);
+        }
+
+        return commonNeedIncrement(roundingMode, qsign, cmpFracHalf, (q & 1L) != 0L);
+    }
+
+    private static int longCompareMagnitude(long x, long y) {
+        if (x < 0) {
+            x = -x;
+        }
+        if (y < 0) {
+            y = -y;
+        }
+        return (x < y) ? -1 : ((x == y) ? 0 : 1);
+    }
+
+    /**
+     * Shared logic of need increment computation.
+     */
+    private static boolean commonNeedIncrement(RoundingMode roundingMode, int qsign, int cmpFracHalf, boolean oddQuot) {
+        switch (roundingMode) {
+        case UNNECESSARY:
+            throw new ArithmeticException("Rounding necessary");
+
+        case UP: // Away from zero
+            return true;
+
+        case DOWN: // Towards zero
+            return false;
+
+        case CEILING: // Towards +infinity
+            return qsign > 0;
+
+        case FLOOR: // Towards -infinity
+            return qsign < 0;
+
+        default: // Some kind of half-way rounding
+
+            if (cmpFracHalf < 0) {
+                // We're closer to higher digit
+                return false;
+            } else if (cmpFracHalf > 0) {
+                return true;
+            } else { // half-way
+                assert cmpFracHalf == 0;
+
+                switch (roundingMode) {
+                case HALF_DOWN:
+                    return false;
+
+                case HALF_UP:
+                    return true;
+
+                case HALF_EVEN:
+                    return oddQuot;
+
+                default:
+                    throw new AssertionError("Unexpected rounding mode" + roundingMode);
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns the compact value for given {@code BigInteger}, or INFLATED if too big. Relies on
+     * internal representation of {@code BigInteger}.
+     */
+    private static long compactValFor(BigInteger b) {
+        int[] m = $(b).mag;
+        int len = m.length;
+        if (len == 0) {
+            return 0;
+        }
+        int d = m[0];
+        if (len > 2 || (len == 2 && d < 0)) {
+            return INFLATED;
+        }
+
+        long u = (len == 2) ? ((m[1] & JSBigInteger.LONG_MASK) + (((long) d) << 32)) : ((d) & JSBigInteger.LONG_MASK);
+        return ($(b).signum < 0) ? -u : u;
+    }
+
+    /*
+     * Divides {@code BigInteger} value by ten power.
+     */
+    private static BigInteger divideAndRoundByTenPow(BigInteger intVal, int tenPow, RoundingMode roundingMode) {
+        if (tenPow < LONG_TEN_POWERS_TABLE.length) {
+            intVal = divideAndRound(intVal, LONG_TEN_POWERS_TABLE[tenPow], roundingMode);
+        } else {
+            intVal = divideAndRound(intVal, bigTenToThe(tenPow), roundingMode);
+        }
+        return intVal;
+    }
+
+    /**
+     * Divides {@code BigInteger} value by {@code BigInteger} value and do rounding based on the
+     * passed in roundingMode.
+     */
+    private static BigInteger divideAndRound(BigInteger bdividend, BigInteger bdivisor, RoundingMode roundingMode) {
+        boolean isRemainderZero; // record remainder is zero or not
+        int qsign; // quotient sign
+        // Descend into mutables for faster remainder checks
+        MutableBigInteger mdividend = new MutableBigInteger($(bdividend).mag);
+        MutableBigInteger mq = new MutableBigInteger();
+        MutableBigInteger mdivisor = new MutableBigInteger($(bdivisor).mag);
+        MutableBigInteger mr = mdividend.divide(mdivisor, mq);
+        isRemainderZero = mr.isZero();
+        qsign = ($(bdividend).signum != $(bdivisor).signum) ? -1 : 1;
+        if (!isRemainderZero) {
+            if (needIncrement(mdivisor, roundingMode, qsign, mq, mr)) {
+                mq.add(MutableBigInteger.ONE);
+            }
+        }
+        return mq.toBigInteger(qsign);
+    }
+
+    /**
+     * Tests if quotient has to be incremented according the roundingMode
+     */
+    private static boolean needIncrement(MutableBigInteger mdivisor, RoundingMode roundingMode, int qsign, MutableBigInteger mq, MutableBigInteger mr) {
+        int cmpFracHalf = mr.compareHalf(mdivisor);
+        return commonNeedIncrement(roundingMode, qsign, cmpFracHalf, mq.isOdd());
+    }
+
+    /**
+     * Return 10 to the power n, as a {@code BigInteger}.
+     *
+     * @param n the power of ten to be returned (>=0)
+     * @return a {@code BigInteger} with the value (10<sup>n</sup>)
+     */
+    private static BigInteger bigTenToThe(int n) {
+        if (n < 0) return BigInteger.ZERO;
+
+        if (n < BIG_TEN_POWERS_TABLE_MAX) {
+            BigInteger[] pows = BIG_TEN_POWERS_TABLE;
+            if (n < pows.length) {
+                return pows[n];
+            } else {
+                return expandBigIntegerTenPowers(n);
+            }
+        }
+
+        return BigInteger.TEN.pow(n);
+    }
+
+    /**
+     * Expand the BIG_TEN_POWERS_TABLE array to contain at least 10**n.
+     *
+     * @param n the power of ten to be returned (>=0)
+     * @return a {@code BigDecimal} with the value (10<sup>n</sup>) and in the meantime, the
+     *         BIG_TEN_POWERS_TABLE array gets expanded to the size greater than n.
+     */
+    private static BigInteger expandBigIntegerTenPowers(int n) {
+        BigInteger[] pows = BIG_TEN_POWERS_TABLE;
+        int curLen = pows.length;
+        // The following comparison and the above synchronized statement is
+        // to prevent multiple threads from expanding the same array.
+        if (curLen <= n) {
+            int newLen = curLen << 1;
+            while (newLen <= n) {
+                newLen <<= 1;
+            }
+            pows = Arrays.copyOf(pows, newLen);
+            for (int i = curLen; i < newLen; i++) {
+                pows[i] = pows[i - 1].multiply(BigInteger.TEN);
+            }
+            // Based on the following facts:
+            // 1. pows is a private local varible;
+            // 2. the following store is a volatile store.
+            // the newly created array elements can be safely published.
+            BIG_TEN_POWERS_TABLE = pows;
+        }
+        return pows[n];
+    }
+
+    /**
+     * Internally used for division operation for division {@code BigInteger} by {@code long}. The
+     * returned {@code BigDecimal} object is the quotient whose scale is set to the passed in scale.
+     * If the remainder is not zero, it will be rounded based on the passed in roundingMode. Also,
+     * if the remainder is zero and the last parameter, i.e. preferredScale is NOT equal to scale,
+     * the trailing zeros of the result is stripped to match the preferredScale.
+     */
+    private static BigDecimal divideAndRound(BigInteger bdividend, long ldivisor, int scale, RoundingMode roundingMode, int preferredScale) {
+        boolean isRemainderZero; // record remainder is zero or not
+        int qsign; // quotient sign
+        long r = 0; // store quotient & remainder in long
+        MutableBigInteger mq = null; // store quotient
+        // Descend into mutables for faster remainder checks
+        MutableBigInteger mdividend = new MutableBigInteger($(bdividend).mag);
+        mq = new MutableBigInteger();
+        r = mdividend.divide(ldivisor, mq);
+        isRemainderZero = (r == 0);
+        qsign = (ldivisor < 0) ? -$(bdividend).signum : $(bdividend).signum;
+        if (!isRemainderZero) {
+            if (needIncrement(ldivisor, roundingMode, qsign, mq, r)) {
+                mq.add(MutableBigInteger.ONE);
+            }
+            return mq.toBigDecimal(qsign, scale);
+        } else {
+            if (preferredScale != scale) {
+                long compactVal = mq.toCompactValue(qsign);
+                if (compactVal != INFLATED) {
+                    return createAndStripZerosToMatchScale(compactVal, scale, preferredScale);
+                }
+                BigInteger intVal = mq.toBigInteger(qsign);
+                return createAndStripZerosToMatchScale(intVal, scale, preferredScale);
+            } else {
+                return mq.toBigDecimal(qsign, scale);
+            }
+        }
+    }
+
+    /**
+     * Internally used for division operation for division {@code BigInteger} by {@code BigInteger}.
+     * The returned {@code BigDecimal} object is the quotient whose scale is set to the passed in
+     * scale. If the remainder is not zero, it will be rounded based on the passed in roundingMode.
+     * Also, if the remainder is zero and the last parameter, i.e. preferredScale is NOT equal to
+     * scale, the trailing zeros of the result is stripped to match the preferredScale.
+     */
+    private static BigDecimal divideAndRound(BigInteger bdividend, BigInteger bdivisor, int scale, RoundingMode roundingMode, int preferredScale) {
+        boolean isRemainderZero; // record remainder is zero or not
+        int qsign; // quotient sign
+        // Descend into mutables for faster remainder checks
+        MutableBigInteger mdividend = new MutableBigInteger($(bdividend).mag);
+        MutableBigInteger mq = new MutableBigInteger();
+        MutableBigInteger mdivisor = new MutableBigInteger($(bdivisor).mag);
+        MutableBigInteger mr = mdividend.divide(mdivisor, mq);
+        isRemainderZero = mr.isZero();
+        qsign = ($(bdividend).signum != $(bdivisor).signum) ? -1 : 1;
+        if (!isRemainderZero) {
+            if (needIncrement(mdivisor, roundingMode, qsign, mq, mr)) {
+                mq.add(MutableBigInteger.ONE);
+            }
+            return mq.toBigDecimal(qsign, scale);
+        } else {
+            if (preferredScale != scale) {
+                long compactVal = mq.toCompactValue(qsign);
+                if (compactVal != INFLATED) {
+                    return createAndStripZerosToMatchScale(compactVal, scale, preferredScale);
+                }
+                BigInteger intVal = mq.toBigInteger(qsign);
+                return createAndStripZerosToMatchScale(intVal, scale, preferredScale);
+            } else {
+                return mq.toBigDecimal(qsign, scale);
+            }
+        }
+    }
+
+    /**
+     * Divides {@code BigInteger} value by {@code long} value and do rounding based on the passed in
+     * roundingMode.
+     */
+    private static BigInteger divideAndRound(BigInteger bdividend, long ldivisor, RoundingMode roundingMode) {
+        boolean isRemainderZero; // record remainder is zero or not
+        int qsign; // quotient sign
+        long r = 0; // store quotient & remainder in long
+        MutableBigInteger mq = null; // store quotient
+        // Descend into mutables for faster remainder checks
+        MutableBigInteger mdividend = new MutableBigInteger($(bdividend).mag);
+        mq = new MutableBigInteger();
+        r = mdividend.divide(ldivisor, mq);
+        isRemainderZero = (r == 0);
+        qsign = (ldivisor < 0) ? -$(bdividend).signum : $(bdividend).signum;
+        if (!isRemainderZero) {
+            if (needIncrement(ldivisor, roundingMode, qsign, mq, r)) {
+                mq.add(MutableBigInteger.ONE);
+            }
+        }
+        return mq.toBigInteger(qsign);
+    }
+
+    /**
+     * Tests if quotient has to be incremented according the roundingMode
+     */
+    private static boolean needIncrement(long ldivisor, RoundingMode roundingMode, int qsign, MutableBigInteger mq, long r) {
+        assert r != 0L;
+
+        int cmpFracHalf;
+        if (r <= HALF_LONG_MIN_VALUE || r > HALF_LONG_MAX_VALUE) {
+            cmpFracHalf = 1; // 2 * r can't fit into long
+        } else {
+            cmpFracHalf = longCompareMagnitude(2 * r, ldivisor);
+        }
+
+        return commonNeedIncrement(roundingMode, qsign, cmpFracHalf, mq.isOdd());
+    }
+
+    /**
+     * Internally used for division operation for division {@code long} by {@code long}. The
+     * returned {@code BigDecimal} object is the quotient whose scale is set to the passed in scale.
+     * If the remainder is not zero, it will be rounded based on the passed in roundingMode. Also,
+     * if the remainder is zero and the last parameter, i.e. preferredScale is NOT equal to scale,
+     * the trailing zeros of the result is stripped to match the preferredScale.
+     */
+    private static BigDecimal divideAndRound(long ldividend, long ldivisor, int scale, RoundingMode roundingMode, int preferredScale) {
+        int qsign; // quotient sign
+        long q = ldividend / ldivisor; // store quotient in long
+        if (roundingMode == DOWN && scale == preferredScale) {
+            return valueOf(q, scale);
+        }
+        long r = ldividend % ldivisor; // store remainder in long
+        qsign = ((ldividend < 0) == (ldivisor < 0)) ? 1 : -1;
+        if (r != 0) {
+            boolean increment = needIncrement(ldivisor, roundingMode, qsign, q, r);
+            return valueOf((increment ? q + qsign : q), scale);
+        } else {
+            if (preferredScale != scale) {
+                return createAndStripZerosToMatchScale(q, scale, preferredScale);
+            } else {
+                return valueOf(q, scale);
+            }
+        }
+    }
+
+    /**
+     * Remove insignificant trailing zeros from this {@code BigInteger} value until the preferred
+     * scale is reached or no more zeros can be removed. If the preferred scale is less than
+     * Integer.MIN_VALUE, all the trailing zeros will be removed.
+     *
+     * @return new {@code BigDecimal} with a scale possibly reduced to be closed to the preferred
+     *         scale.
+     */
+    private static BigDecimal createAndStripZerosToMatchScale(BigInteger intVal, int scale, long preferredScale) {
+        BigInteger qr[]; // quotient-remainder pair
+        while ($(intVal).compareMagnitude(BigInteger.TEN) >= 0 && scale > preferredScale) {
+            if (intVal.testBit(0)) {
+                break; // odd number cannot end in 0
+            }
+            qr = intVal.divideAndRemainder(BigInteger.TEN);
+            if (qr[1].signum() != 0) {
+                break; // non-0 remainder
+            }
+            intVal = qr[0];
+            scale = checkScale(intVal, (long) scale - 1); // could Overflow
+        }
+        return valueOf(intVal, scale, 0);
+    }
+
+    /**
+     * Remove insignificant trailing zeros from this {@code long} value until the preferred scale is
+     * reached or no more zeros can be removed. If the preferred scale is less than
+     * Integer.MIN_VALUE, all the trailing zeros will be removed.
+     *
+     * @return new {@code BigDecimal} with a scale possibly reduced to be closed to the preferred
+     *         scale.
+     */
+    private static BigDecimal createAndStripZerosToMatchScale(long compactVal, int scale, long preferredScale) {
+        while (Math.abs(compactVal) >= 10L && scale > preferredScale) {
+            if ((compactVal & 1L) != 0L) {
+                break; // odd number cannot end in 0
+            }
+            long r = compactVal % 10L;
+            if (r != 0L) {
+                break; // non-0 remainder
+            }
+            compactVal /= 10;
+            scale = checkScale(compactVal, (long) scale - 1); // could Overflow
+        }
+        return valueOf(compactVal, scale);
+    }
+
+    private static int checkScale(long intCompact, long val) {
+        int asInt = (int) val;
+        if (asInt != val) {
+            asInt = val > Integer.MAX_VALUE ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            if (intCompact != 0) {
+                throw new ArithmeticException(asInt > 0 ? "Underflow" : "Overflow");
+            }
+        }
+        return asInt;
+    }
+
+    private static int checkScale(BigInteger intVal, long val) {
+        int asInt = (int) val;
+        if (asInt != val) {
+            asInt = val > Integer.MAX_VALUE ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            if (intVal.signum() != 0) {
+                throw new ArithmeticException(asInt > 0 ? "Underflow" : "Overflow");
+            }
+        }
+        return asInt;
+    }
+
     /**
      * Returns the length of the absolute value of a {@code long}, in decimal digits.
      *
@@ -860,6 +1599,39 @@ class JSBigDecimal {
         long[] tab = LONG_TEN_POWERS_TABLE;
         // if r >= length, must have max possible digits for long
         return (r >= tab.length || x < tab[r]) ? r : r + 1;
+    }
+
+    static BigDecimal valueOf(BigInteger intVal, int scale, int prec) {
+        long val = compactValFor(intVal);
+        if (val == 0) {
+            return zeroValueOf(scale);
+        } else if (scale == 0 && val >= 0 && val < zeroThroughTen.length) {
+            return $(zeroThroughTen[(int) val]);
+        }
+        return $(new JSBigDecimal(intVal, val, scale, prec));
+    }
+
+    /**
+     * Translates a {@code double} into a {@code BigDecimal}, using the {@code double}'s canonical
+     * string representation provided by the {@link Double#toString(double)} method.
+     * <p>
+     * <b>Note:</b> This is generally the preferred way to convert a {@code double} (or
+     * {@code float}) into a {@code BigDecimal}, as the value returned is equal to that resulting
+     * from constructing a {@code BigDecimal} from the result of using
+     * {@link Double#toString(double)}.
+     *
+     * @param val {@code double} to convert to a {@code BigDecimal}.
+     * @return a {@code BigDecimal} whose value is equal to or approximately equal to the value of
+     *         {@code val}.
+     * @throws NumberFormatException if {@code val} is infinite or NaN.
+     * @since 1.5
+     */
+    public static BigDecimal valueOf(double val) {
+        // Reminder: a zero double returns '0.0', so we cannot fastpath
+        // to use the constant ZERO. This might be important enough to
+        // justify a factory approach, a cache, or a few private
+        // constants, later.
+        return new BigDecimal(Double.toString(val));
     }
 
     /**
@@ -1012,5 +1784,21 @@ class JSBigDecimal {
                 '5', '6', '7', '8', '9', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '1', '2', '3', '4',
                 '5', '6', '7', '8', '9', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '1', '2', '3', '4',
                 '5', '6', '7', '8', '9',};
+    }
+
+    private static class LongOverflow {
+
+        /** BigInteger equal to Long.MIN_VALUE. */
+        private static final BigInteger LONGMIN = BigInteger.valueOf(Long.MIN_VALUE);
+
+        /** BigInteger equal to Long.MAX_VALUE. */
+        private static final BigInteger LONGMAX = BigInteger.valueOf(Long.MAX_VALUE);
+
+        public static void check(BigDecimal num) {
+            BigInteger intVal = $(num).inflated();
+            if (intVal.compareTo(LONGMIN) < 0 || intVal.compareTo(LONGMAX) > 0) {
+                throw new java.lang.ArithmeticException("Overflow");
+            }
+        }
     }
 }
