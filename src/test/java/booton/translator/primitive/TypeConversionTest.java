@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import booton.soeur.ScriptRunner;
 
 /**
- * @version 2014/03/17 10:58:56
+ * @version 2014/03/24 13:07:04
  */
 @RunWith(ScriptRunner.class)
 public class TypeConversionTest {
@@ -42,5 +42,23 @@ public class TypeConversionTest {
 
         value = -9876543210987654L;
         assert ((int) value) == 374136698;
+    }
+
+    @Test
+    public void intToLong() throws Exception {
+        int value = 123;
+        assert (value) == 123L;
+
+        value = Integer.MAX_VALUE;
+        assert (value) == 2147483647L;
+
+        value = Integer.MAX_VALUE + 1;
+        assert (value) == -2147483648L;
+
+        value = Integer.MIN_VALUE;
+        assert (value) == -2147483648L;
+
+        value = Integer.MIN_VALUE - 1;
+        assert (value) == 2147483647L;
     }
 }

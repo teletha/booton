@@ -9,9 +9,6 @@
  */
 package js.emulate.sun.util.locale;
 
-import sun.util.locale.BaseLocale;
-
-
 /**
  * @version 2014/03/12 1:51:07
  */

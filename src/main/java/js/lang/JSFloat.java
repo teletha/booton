@@ -68,7 +68,7 @@ class JSFloat extends JSNumber {
      *         otherwise.
      */
     public static boolean isInfinite(float value) {
-        return !Global.isFinit(value);
+        return !Global.isFinite(value);
     }
 
     /**

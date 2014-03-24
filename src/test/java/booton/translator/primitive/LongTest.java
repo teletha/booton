@@ -205,8 +205,6 @@ public class LongTest extends ScriptTester {
         test(new Scriptable() {
 
             boolean act(long value) {
-                System.out.println(value);
-                System.out.println(value + "    " + (value & 1));
                 return (value & 1) == 0;
             }
         });
@@ -444,7 +442,7 @@ public class LongTest extends ScriptTester {
     }
 
     @Test
-    public void incrementStatiFieldInFieldAccess() throws Exception {
+    public void incrementStaticFieldInFieldAccess() throws Exception {
         test(new IncrementStaticField());
     }
 
@@ -465,7 +463,7 @@ public class LongTest extends ScriptTester {
     }
 
     @Test
-    public void decrementStatiFieldInFieldAccess() throws Exception {
+    public void decrementStaticFieldInFieldAccess() throws Exception {
         test(new DecrementStaticField());
     }
 
@@ -486,7 +484,7 @@ public class LongTest extends ScriptTester {
     }
 
     @Test
-    public void preincrementStatiFieldInFieldAccess() throws Exception {
+    public void preincrementStaticFieldInFieldAccess() throws Exception {
         test(new PreincrementStaticField());
     }
 
@@ -507,7 +505,7 @@ public class LongTest extends ScriptTester {
     }
 
     @Test
-    public void predecrementStatiFieldInFieldAccess() throws Exception {
+    public void predecrementStaticFieldInFieldAccess() throws Exception {
         test(new PredecrementStaticField());
     }
 

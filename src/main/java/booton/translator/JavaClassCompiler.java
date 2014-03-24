@@ -9,6 +9,7 @@
  */
 package booton.translator;
 
+import static booton.translator.Javascript.*;
 import static jdk.internal.org.objectweb.asm.Opcodes.*;
 import jdk.internal.org.objectweb.asm.ClassVisitor;
 import jdk.internal.org.objectweb.asm.FieldVisitor;
@@ -60,12 +61,16 @@ class JavaClassCompiler extends ClassVisitor {
 
                 switch (desc) {
                 case "I": // int
-                case "J": // long
                 case "F": // float
                 case "D": // double
                 case "B": // byte
                 case "S": // short
                     code.append(name, ":0").separator();
+                    break;
+
+                case "J": // long
+                    code.append(name, ":", computeClassName(PrimitiveLong), ".", computeFieldName(PrimitiveLong, "ZERO"))
+                            .separator();
                     break;
 
                 case "C": // char

@@ -667,7 +667,7 @@ public class ScriptTester {
      */
     private void dumpCode(Class source) {
         try {
-            Files.write(I.locate("e:\\dump.js"), Javascript.getScript(source).toString().getBytes());
+            Files.write(I.locate("e:\\dump.js"), Javascript.getScript(source).write().getBytes());
         } catch (IOException e) {
             throw I.quiet(e);
         }

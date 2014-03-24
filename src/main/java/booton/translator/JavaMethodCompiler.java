@@ -504,22 +504,22 @@ class JavaMethodCompiler extends MethodVisitor {
                 // The pattenr of post-increment field is like above.
                 current.remove(0);
 
-                current.addOperand(new OperandExpression(current.remove(0) + "." + Javascript.computeFieldName(owner, name) + "++"));
+                current.addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, true, true));
             } else if (match(DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, SUB, PUTFIELD)) {
                 // The pattenr of post-decrement field is like above.
                 current.remove(0);
 
-                current.addOperand(new OperandExpression(current.remove(0) + "." + Javascript.computeFieldName(owner, name) + "--"));
+                current.addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, false, true));
             } else if (match(DUP, GETFIELD, CONSTANT_1, ADD, DUPLICATE_X1, PUTFIELD)) {
                 // The pattenr of pre-increment field is like above.
                 current.remove(0);
 
-                current.addOperand(new OperandExpression("++" + current.remove(0) + "." + Javascript.computeFieldName(owner, name)));
+                current.addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, true, false));
             } else if (match(DUP, GETFIELD, CONSTANT_1, SUB, DUPLICATE_X1, PUTFIELD)) {
                 // The pattenr of pre-decrement field is like above.
                 current.remove(0);
 
-                current.addOperand(new OperandExpression("--" + current.remove(0) + "." + Javascript.computeFieldName(owner, name)));
+                current.addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, false, false));
             } else {
                 OperandExpression assignment = new OperandExpression(translator.translateField(owner, name, current.remove(1)) + "=" + current.remove(0)
                         .cast(type), type);
@@ -543,25 +543,23 @@ class JavaMethodCompiler extends MethodVisitor {
                 // The pattenr of post-increment field is like above.
                 current.remove(0);
 
-                current.addOperand(new OperandExpression(current.remove(0) + "++"));
+                current.addOperand(increment(current.remove(0), type, true, true));
             } else if (match(GETSTATIC, DUPLICATE, CONSTANT_1, SUB, PUTSTATIC)) {
                 // The pattenr of post-decrement field is like above.
                 current.remove(0);
 
-                current.addOperand(new OperandExpression(current.remove(0) + "--"));
+                current.addOperand(increment(current.remove(0), type, false, true));
             } else if (match(GETSTATIC, CONSTANT_1, ADD, DUPLICATE, PUTSTATIC)) {
-                // The pattenr of pre-increment field is like above.
                 current.remove(0);
                 current.remove(0);
 
-                current.addOperand(new OperandExpression("++" + Javascript.computeClassName(owner) + "." + Javascript.computeFieldName(owner, name)));
-
+                current.addOperand(increment(Javascript.computeClassName(owner) + "." + Javascript.computeFieldName(owner, name), type, true, false));
             } else if (match(GETSTATIC, CONSTANT_1, SUB, DUPLICATE, PUTSTATIC)) {
                 // The pattenr of pre-decrement field is like above.
                 current.remove(0);
                 current.remove(0);
 
-                current.addOperand(new OperandExpression("--" + Javascript.computeClassName(owner) + "." + Javascript.computeFieldName(owner, name)));
+                current.addOperand(increment(Javascript.computeClassName(owner) + "." + Javascript.computeFieldName(owner, name), type, false, false));
             } else {
                 current.addExpression(new OperandExpression(Javascript.computeClassName(owner) + "." + Javascript.computeFieldName(owner, name) + "=" + current.remove(0)
                         .cast(type), type));
@@ -1155,6 +1153,35 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
+     * <p>
+     * Execute the operation for primitive long.
+     * </p>
+     * 
+     * @param operation
+     */
+    private void longCondition(String operation, int operator, Operand right, Node transition) {
+        for (Method method : PrimitiveLong.getDeclaredMethods()) {
+            if (method.getName().equals(operation)) {
+                int context = Modifier.isStatic(method.getModifiers()) ? 0 : 1;
+                Class[] types = method.getParameterTypes();
+                Object[] params = new Object[types.length * 2 + context];
+
+                if (context == 1) {
+                    params[0] = current.remove(types.length);
+                }
+
+                for (int i = 0; i < types.length; i++) {
+                    params[i * 2 + context] = types[i];
+                    params[i * 2 + context + 1] = current.remove(0);
+                }
+                current.addOperand(new OperandCondition(new OperandExpression(Javascript.writeMethodCode(PrimitiveLong, operation, params), long.class), operator, right, transition));
+                return;
+            }
+        }
+        throw new TranslationError();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -1315,19 +1342,24 @@ class JavaMethodCompiler extends MethodVisitor {
             return;
 
         case IFEQ: // == 0
-            if (match(DCMPL, JUMP) || match(FCMPL, JUMP) || match(LCMP, JUMP)) {
-                // for long, float and double
+            if (match(DCMPL, JUMP) || match(FCMPL, JUMP)) {
+                // for float and double
                 current.condition(current.remove(1), EQ, current.remove(0), node);
+            } else if (match(LCMP, JUMP)) {
+                // for long
+                longCondition("equals", NE, ZERO, node);
             } else {
                 // others
                 current.condition(current.remove(0), EQ, ZERO, node);
             }
             break;
-
         case IFNE: // != 0
-            if (match(DCMPL, JUMP) || match(FCMPL, JUMP) || match(LCMP, JUMP)) {
-                // for long, float and double
+            if (match(DCMPL, JUMP) || match(FCMPL, JUMP)) {
+                // for float and double
                 current.condition(current.remove(1), NE, current.remove(0), node);
+            } else if (match(LCMP, JUMP)) {
+                // for long
+                longCondition("notEquals", NE, ZERO, node);
             } else {
                 // others
                 current.condition(current.remove(0), NE, ZERO, node);
@@ -1335,9 +1367,12 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case IFGE: // => 0
-            if (match(DCMPG, JUMP) || match(FCMPG, JUMP) || match(LCMP, JUMP)) {
-                // for long, float and double
+            if (match(DCMPG, JUMP) || match(FCMPG, JUMP)) {
+                // for float and double
                 current.condition(current.remove(1), GE, current.remove(0), node);
+            } else if (match(LCMP, JUMP)) {
+                // for long
+                longCondition("greaterThanOrEqual", NE, ZERO, node);
             } else {
                 // others
                 current.condition(current.remove(0), GE, ZERO, node);
@@ -1345,9 +1380,12 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case IFGT: // > 0
-            if (match(DCMPG, JUMP) || match(FCMPG, JUMP) || match(LCMP, JUMP)) {
-                // for long, float and double
+            if (match(DCMPG, JUMP) || match(FCMPG, JUMP)) {
+                // for float and double
                 current.condition(current.remove(1), GT, current.remove(0), node);
+            } else if (match(LCMP, JUMP)) {
+                // for long
+                longCondition("greaterThan", NE, ZERO, node);
             } else {
                 // others
                 current.condition(current.remove(0), GT, ZERO, node);
@@ -1355,9 +1393,12 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case IFLE: // <= 0
-            if (match(DCMPL, JUMP) || match(FCMPL, JUMP) || match(LCMP, JUMP)) {
-                // for long, float and double
+            if (match(DCMPL, JUMP) || match(FCMPL, JUMP)) {
+                // for float and double
                 current.condition(current.remove(1), LE, current.remove(0), node);
+            } else if (match(LCMP, JUMP)) {
+                // for long
+                longCondition("lessThanOrEqual", NE, ZERO, node);
             } else {
                 // others
                 current.condition(current.remove(0), LE, ZERO, node);
@@ -1365,9 +1406,12 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case IFLT: // < 0
-            if (match(DCMPL, JUMP) || match(FCMPL, JUMP) || match(LCMP, JUMP)) {
-                // for long, float and double
+            if (match(DCMPL, JUMP) || match(FCMPL, JUMP)) {
+                // for float and double
                 current.condition(current.remove(1), LT, current.remove(0), node);
+            } else if (match(LCMP, JUMP)) {
+                // for long
+                longCondition("lessThan", NE, ZERO, node);
             } else {
                 // others
                 current.condition(current.remove(0), LT, ZERO, node);
@@ -1903,12 +1947,20 @@ class JavaMethodCompiler extends MethodVisitor {
             // Increment not-int type doesn't use Iinc instruction, so we must distinguish
             // increment from addition by pattern matching. Post increment code of non-int type
             // leaves characteristic pattern like the following.
-            if (match(FLOAD, DUP, FCONST_1, FADD, FSTORE) || match(DLOAD, DUP2, DCONST_1, DADD, DSTORE) || match(LLOAD, DUP2, LCONST_1, LADD, LSTORE)) {
+            if (match(FLOAD, DUP, FCONST_1, FADD, FSTORE) || match(DLOAD, DUP2, DCONST_1, DADD, DSTORE)) {
+                // for float and double
                 current.remove(0);
                 current.remove(0);
 
                 current.addOperand(variable + "++");
+            } else if (match(LLOAD, DUP2, LCONST_1, LADD, LSTORE)) {
+                // for long
+                current.remove(0);
+                current.remove(0);
+
+                current.addOperand(increment(variable, long.class, true, true));
             } else {
+                // for other
                 if (current.peek(0) != null) {
                     // retrieve and remove it
                     Operand operand = current.remove(0, false);
@@ -1943,6 +1995,81 @@ class JavaMethodCompiler extends MethodVisitor {
             }
             break;
         }
+    }
+
+    /**
+     * <p>
+     * Write increment/decrement code.
+     * </p>
+     * 
+     * @param context A current context value.
+     * @param type A current context type.
+     * @param increase Increment or decrement.
+     * @param post Post or pre.
+     * @return A suitable code.
+     */
+    private final String increment(Object context, Class type, boolean increase, boolean post) {
+        if (type == long.class) {
+            return incrementLong(context, increase, post);
+        } else if (post) {
+            return context + (increase ? "++" : "--");
+        } else {
+            return (increase ? "++" : "--") + context;
+        }
+    }
+
+    /**
+     * <p>
+     * Write increment/decrement code for primitive long.
+     * </p>
+     * 
+     * @param context A current context value.
+     * @param increase Increment or decrement.
+     * @param post Post or pre.
+     * @return A suitable code.
+     */
+    private final String incrementLong(Object context, boolean increase, boolean post) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("(")
+                .append(context)
+                .append("=")
+                .append(context)
+                .append(".")
+                .append(longMethod(increase ? "add" : "subtract"))
+                .append("(")
+                .append(longMethod("fromInt"))
+                .append("(1)))");
+
+        if (post) {
+            builder.append(".")
+                    .append(longMethod(increase ? "subtract" : "add"))
+                    .append("(")
+                    .append(longMethod("fromInt"))
+                    .append("(1))");
+        }
+        return builder.toString();
+    }
+
+    /**
+     * <p>
+     * Write primitive long operation code.
+     * </p>
+     * 
+     * @param operation A operation type.
+     * @param value A computable value.
+     * @return A source code.
+     */
+    private final String longMethod(String operation) {
+        for (Method method : PrimitiveLong.getDeclaredMethods()) {
+            if (method.getName().equals(operation)) {
+                if (Modifier.isStatic(method.getModifiers())) {
+                    return Javascript.computeClassName(PrimitiveLong) + "." + Javascript.computeMethodName(method);
+                } else {
+                    return Javascript.computeMethodName(method);
+                }
+            }
+        }
+        throw new TranslationError();
     }
 
     /**
