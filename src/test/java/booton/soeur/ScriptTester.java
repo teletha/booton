@@ -593,12 +593,16 @@ public class ScriptTester {
     }
 
     /**
-     * @param js
-     * @return
+     * <p>
+     * Create primitive long from the specified javascript long object.
+     * </p>
+     * 
+     * @param js A primitive long object in javascript runtime.
+     * @return A primitive long in java runtime.
      */
     private long createLong(NativeObject js) {
-        long high = Double.valueOf(js.get("high_").toString()).longValue();
-        long low = Double.valueOf(js.get("low_").toString()).longValue();
+        long high = Double.valueOf(js.get("h").toString()).longValue();
+        long low = Double.valueOf(js.get("l").toString()).longValue();
         return high << 32 | (low & 0xffffffffL);
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -9,10 +9,12 @@
  */
 package booton.translator;
 
+import static booton.translator.Javascript.*;
+
 import java.util.ArrayList;
 
 /**
- * @version 2013/09/01 20:23:18
+ * @version 2014/03/24 15:09:10
  */
 class OperandArray extends Operand {
 
@@ -72,7 +74,19 @@ class OperandArray extends Operand {
     @Override
     public String toString() {
         Class component = type.getComponentType();
-        String undefined = component.isPrimitive() ? component == boolean.class ? "false" : "0" : "null";
+        String undefined;
+
+        if (component.isPrimitive()) {
+            if (component == boolean.class) {
+                undefined = "false";
+            } else if (component == long.class) {
+                undefined = computeFieldFullName(PrimitiveLong, "ZERO");
+            } else {
+                undefined = "0";
+            }
+        } else {
+            undefined = "null";
+        }
 
         ScriptWriter writer = new ScriptWriter();
         writer.append("boot.array(").string(Javascript.computeSimpleClassName(component)).append(",");
