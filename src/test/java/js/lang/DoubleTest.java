@@ -9,8 +9,7 @@
  */
 package js.lang;
 
-import js.math.BigInteger;
-
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -34,32 +33,11 @@ public class DoubleTest {
     }
 
     @Test
+    @Ignore
     public void doubleToRawLongBits() throws Exception {
-        // assert Double.doubleToRawLongBits(1) == 4607182418800017408L;
-        // assert Double.doubleToRawLongBits(2) == 4611686018427387904L;
-        // assert Double.doubleToRawLongBits(-1) == -4616189618054758400L;
-        // assert Double.doubleToRawLongBits(-118.625) == -4585324127639830528L;
-    }
-
-    public static long aaa(double value) {
-        boolean negative = value < 0;
-
-        if (negative) {
-            value *= -1;
-        }
-
-        double exp = Math.floor(Math.log(value) / Math.log(2));
-        double frac = Math.floor(value * Math.pow(2, 52 - exp));
-        exp += 1023;
-
-        StringBuilder builder = new StringBuilder();
-        builder.append(negative ? "1" : "0");
-
-        String mix = "0000000000".concat(Long.toBinaryString((long) exp));
-        mix = mix.substring(mix.length() - 11);
-
-        builder.append(mix).append(Long.toBinaryString((long) frac).substring(1));
-        BigInteger bigInteger = new BigInteger(builder.toString(), 2);
-        return bigInteger.longValue();
+        assert Double.doubleToRawLongBits(1) == 4607182418800017408L;
+        assert Double.doubleToRawLongBits(2) == 4611686018427387904L;
+        assert Double.doubleToRawLongBits(-1) == -4616189618054758400L;
+        assert Double.doubleToRawLongBits(-118.625) == -4585324127639830528L;
     }
 }
