@@ -861,7 +861,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.join("+").enclose();
             break;
         case LADD:
-            longOperation("add");
+            current.addOperand(operateLong("add"));
             break;
 
         // - operand
@@ -871,7 +871,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.join("-").enclose();
             break;
         case LSUB:
-            longOperation("subtract");
+            current.addOperand(operateLong("subtract"));
             break;
 
         // * operand
@@ -881,7 +881,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.join("*");
             break;
         case LMUL:
-            longOperation("multiply");
+            current.addOperand(operateLong("multiply"));
             break;
 
         // / operand
@@ -891,7 +891,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.join("/");
             break;
         case LDIV:
-            longOperation("divide");
+            current.addOperand(operateLong("divide"));
             break;
 
         // % operand
@@ -901,7 +901,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.join("%");
             break;
         case LREM:
-            longOperation("modulo");
+            current.addOperand(operateLong("modulo"));
             break;
 
         // & operand
@@ -909,7 +909,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.join("&").enclose();
             break;
         case LAND:
-            longOperation("and");
+            current.addOperand(operateLong("and"));
             break;
 
         // | operand
@@ -917,7 +917,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.join("|").enclose();
             break;
         case LOR:
-            longOperation("or");
+            current.addOperand(operateLong("or"));
             break;
 
         // ^ operand
@@ -925,7 +925,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.join("^");
             break;
         case LXOR:
-            longOperation("xor");
+            current.addOperand(operateLong("xor"));
             break;
 
         // << operand
@@ -933,7 +933,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.join("<<").enclose();
             break;
         case LSHL:
-            longOperation("shiftLeft");
+            current.addOperand(operateLong("shiftLeft"));
             break;
 
         // >> operand
@@ -941,7 +941,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.join(">>").enclose();
             break;
         case LSHR:
-            longOperation("shiftRight");
+            current.addOperand(operateLong("shiftRight"));
             break;
 
         // >>> operand
@@ -949,7 +949,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.join(">>>").enclose();
             break;
         case LUSHR:
-            longOperation("shiftRightUnsigned");
+            current.addOperand(operateLong("shiftRightUnsigned"));
             break;
 
         // negative operand
@@ -959,7 +959,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.addOperand(new OperandExpression("-" + current.remove(0).encolose()).encolose());
             break;
         case LNEG:
-            longOperation("negate");
+            current.addOperand(operateLong("negate"));
             break;
 
         case RETURN:
@@ -1113,72 +1113,27 @@ class JavaMethodCompiler extends MethodVisitor {
 
         case L2I:
             // cast long to int
-            longOperation("toInt");
+            current.addOperand(operateLong("toInt"));
             break;
 
         case I2L:
             // cast int to long
-            longOperation("fromInt");
+            current.addOperand(writeLongMethod("fromInt", current.remove(0)));
             break;
         }
     }
 
     /**
      * <p>
-     * Execute the operation for primitive long.
+     * Write primitive long instruction code.
      * </p>
      * 
-     * @param operation
+     * @param operator A operator.
+     * @return A operation code.
      */
-    private void longOperation(String operation) {
-        for (Method method : PrimitiveLong.getDeclaredMethods()) {
-            if (method.getName().equals(operation)) {
-                int context = Modifier.isStatic(method.getModifiers()) ? 0 : 1;
-                Class[] types = method.getParameterTypes();
-                Object[] params = new Object[types.length * 2 + context];
-
-                if (context == 1) {
-                    params[0] = current.remove(types.length);
-                }
-
-                for (int i = 0; i < types.length; i++) {
-                    params[i * 2 + context] = types[i];
-                    params[i * 2 + context + 1] = current.remove(0);
-                }
-                current.addOperand(Javascript.writeMethodCode(PrimitiveLong, operation, params), long.class);
-                return;
-            }
-        }
-        throw new TranslationError();
-    }
-
-    /**
-     * <p>
-     * Execute the operation for primitive long.
-     * </p>
-     * 
-     * @param operation
-     */
-    private void longCondition(String operation, int operator, Operand right, Node transition) {
-        for (Method method : PrimitiveLong.getDeclaredMethods()) {
-            if (method.getName().equals(operation)) {
-                int context = Modifier.isStatic(method.getModifiers()) ? 0 : 1;
-                Class[] types = method.getParameterTypes();
-                Object[] params = new Object[types.length * 2 + context];
-
-                if (context == 1) {
-                    params[0] = current.remove(types.length);
-                }
-
-                for (int i = 0; i < types.length; i++) {
-                    params[i * 2 + context] = types[i];
-                    params[i * 2 + context + 1] = current.remove(0);
-                }
-                current.addOperand(new OperandCondition(new OperandExpression(Javascript.writeMethodCode(PrimitiveLong, operation, params), long.class), operator, right, transition));
-                return;
-            }
-        }
-        throw new TranslationError();
+    private final Operand operateLong(String operator) {
+        String operation = writeLongMethod(operator, null);
+        return new OperandExpression(current.remove(0) + operation, long.class);
     }
 
     /**
@@ -1347,7 +1302,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.condition(current.remove(1), EQ, current.remove(0), node);
             } else if (match(LCMP, JUMP)) {
                 // for long
-                longCondition("equals", NE, ZERO, node);
+                current.addOperand(new OperandCondition(operateLong("equals"), NE, ZERO, node));
             } else {
                 // others
                 current.condition(current.remove(0), EQ, ZERO, node);
@@ -1359,7 +1314,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.condition(current.remove(1), NE, current.remove(0), node);
             } else if (match(LCMP, JUMP)) {
                 // for long
-                longCondition("notEquals", NE, ZERO, node);
+                current.addOperand(new OperandCondition(operateLong("notEquals"), NE, ZERO, node));
             } else {
                 // others
                 current.condition(current.remove(0), NE, ZERO, node);
@@ -1372,7 +1327,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.condition(current.remove(1), GE, current.remove(0), node);
             } else if (match(LCMP, JUMP)) {
                 // for long
-                longCondition("greaterThanOrEqual", NE, ZERO, node);
+                current.addOperand(new OperandCondition(operateLong("greaterThanOrEqual"), NE, ZERO, node));
             } else {
                 // others
                 current.condition(current.remove(0), GE, ZERO, node);
@@ -1385,7 +1340,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.condition(current.remove(1), GT, current.remove(0), node);
             } else if (match(LCMP, JUMP)) {
                 // for long
-                longCondition("greaterThan", NE, ZERO, node);
+                current.addOperand(new OperandCondition(operateLong("greaterThan"), NE, ZERO, node));
             } else {
                 // others
                 current.condition(current.remove(0), GT, ZERO, node);
@@ -1398,7 +1353,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.condition(current.remove(1), LE, current.remove(0), node);
             } else if (match(LCMP, JUMP)) {
                 // for long
-                longCondition("lessThanOrEqual", NE, ZERO, node);
+                current.addOperand(new OperandCondition(operateLong("lessThanOrEqual"), NE, ZERO, node));
             } else {
                 // others
                 current.condition(current.remove(0), LE, ZERO, node);
@@ -1411,7 +1366,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.condition(current.remove(1), LT, current.remove(0), node);
             } else if (match(LCMP, JUMP)) {
                 // for long
-                longCondition("lessThan", NE, ZERO, node);
+                current.addOperand(new OperandCondition(operateLong("lessThan"), NE, ZERO, node));
             } else {
                 // others
                 current.condition(current.remove(0), LT, ZERO, node);
@@ -2034,18 +1989,11 @@ class JavaMethodCompiler extends MethodVisitor {
                 .append(context)
                 .append("=")
                 .append(context)
-                .append(".")
-                .append(longMethod(increase ? "add" : "subtract"))
-                .append("(")
-                .append(longMethod("fromInt"))
-                .append("(1)))");
+                .append(writeLongMethod(increase ? "add" : "subtract", computeFieldFullName(PrimitiveLong, "ONE")))
+                .append(")");
 
         if (post) {
-            builder.append(".")
-                    .append(longMethod(increase ? "subtract" : "add"))
-                    .append("(")
-                    .append(longMethod("fromInt"))
-                    .append("(1))");
+            builder.append(writeLongMethod(increase ? "subtract" : "add", computeFieldFullName(PrimitiveLong, "ONE")));
         }
         return builder.toString();
     }
@@ -2059,14 +2007,27 @@ class JavaMethodCompiler extends MethodVisitor {
      * @param value A computable value.
      * @return A source code.
      */
-    private final String longMethod(String operation) {
+    private final String writeLongMethod(String operation, Object parameter) {
         for (Method method : PrimitiveLong.getDeclaredMethods()) {
             if (method.getName().equals(operation)) {
+                StringBuilder builder = new StringBuilder();
+
                 if (Modifier.isStatic(method.getModifiers())) {
-                    return Javascript.computeClassName(PrimitiveLong) + "." + Javascript.computeMethodName(method);
-                } else {
-                    return Javascript.computeMethodName(method);
+                    builder.append(computeClassName(PrimitiveLong));
                 }
+
+                builder.append(".").append(computeMethodName(method)).append("(");
+                Class[] types = method.getParameterTypes();
+
+                if (types.length != 0) {
+                    if (parameter == null) {
+                        parameter = current.remove(0);
+                    }
+                    builder.append(parameter);
+                }
+                builder.append(")");
+
+                return builder.toString();
             }
         }
         throw new TranslationError();

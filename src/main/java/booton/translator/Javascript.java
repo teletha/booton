@@ -796,6 +796,19 @@ public class Javascript {
 
     /**
      * <p>
+     * Compute the accessible qualified field name for ECMAScript.
+     * </p>
+     * 
+     * @param owner A owner class of the specified field.
+     * @param fieldName A field name in Java source code.
+     * @return An accessible field name for ECMAScript.
+     */
+    public static final String computeFieldFullName(Class owner, String fieldName) {
+        return computeClassName(owner) + "." + computeFieldName(owner, fieldName);
+    }
+
+    /**
+     * <p>
      * Helper method to do numbering for the specified member's id.
      * </p>
      * 
