@@ -578,42 +578,18 @@ class JSLong extends JSNumber {
         return (Long) (Object) new JSLong(value);
     }
 
-    // public static void main(String[] args) {
-    // long value = -1234567890123456L;
-    // System.out.println((int) value);
-    //
-    // Primitive primitive = Primitive.fromNumber(value);
-    // System.out.println(primitive.low_);
-    //
-    // }
-
     /**
-     * @version 2013/04/16 23:01:24
+     * @version 2014/03/24 17:11:09
      */
     @SuppressWarnings("unused")
     @JavaAPIProvider(long.class)
     private static class Primitive implements JavascriptNative {
 
-        /** The reusable magic number. */
-        private static final int TWO_PWR_16_DBL_ = 65536;
-
-        /** The reusable magic number. */
-        private static final int TWO_PWR_24_DBL_ = 16777216;
-
-        /** The reusable magic number. Don't use long. */
-        private static final double TWO_PWR_31_DBL_ = 2147483648D;
-
         /** The reusable magic number. Don't use long. */
         private static final double TWO_PWR_32_DBL_ = 4294967296D;
 
         /** The reusable magic number. Don't use long. */
-        private static final double TWO_PWR_48_DBL_ = 281474976710656D;
-
-        /** The reusable magic number. Don't use long. */
         private static final double TWO_PWR_63_DBL_ = 9223372036854776000D;
-
-        /** The reusable magic number. Don't use long. */
-        private static final double TWO_PWR_64_DBL_ = 18446744073709552000D;
 
         /** The reusable cache. */
         private static final Primitive[] IntCache_ = new Primitive[256];
@@ -637,18 +613,18 @@ class JSLong extends JSNumber {
         private static final Primitive MIN_VALUE = fromBits(0, 0x80000000);
 
         @JavascriptNativeProperty
-        private int high_;
+        private int h;
 
         @JavascriptNativeProperty
-        private int low_;
+        private int l;
 
         /**
          * @param high
          * @param low
          */
         private Primitive(int low, int high) {
-            this.low_ = Global.toSignedInteger(low);
-            this.high_ = Global.toSignedInteger(high);
+            this.l = Global.toSignedInteger(low);
+            this.h = Global.toSignedInteger(high);
         }
 
         /**
@@ -659,15 +635,15 @@ class JSLong extends JSNumber {
          */
         public Primitive add(Primitive other) {
             // Divide each number into 4 chunks of 16 bits, and then sum the chunks.
-            int a48 = this.high_ >>> 16;
-            int a32 = this.high_ & 0xFFFF;
-            int a16 = this.low_ >>> 16;
-            int a00 = this.low_ & 0xFFFF;
+            int a48 = this.h >>> 16;
+            int a32 = this.h & 0xFFFF;
+            int a16 = this.l >>> 16;
+            int a00 = this.l & 0xFFFF;
 
-            int b48 = other.high_ >>> 16;
-            int b32 = other.high_ & 0xFFFF;
-            int b16 = other.low_ >>> 16;
-            int b00 = other.low_ & 0xFFFF;
+            int b48 = other.h >>> 16;
+            int b32 = other.h & 0xFFFF;
+            int b16 = other.l >>> 16;
+            int b00 = other.l & 0xFFFF;
 
             int c48 = 0, c32 = 0, c16 = 0, c00 = 0;
             c00 += a00 + b00;
@@ -732,15 +708,15 @@ class JSLong extends JSNumber {
             // Divide each long into 4 chunks of 16 bits, and then add up 4x4 products.
             // We can skip products that would overflow.
 
-            int a48 = this.high_ >>> 16;
-            int a32 = this.high_ & 0xFFFF;
-            int a16 = this.low_ >>> 16;
-            int a00 = this.low_ & 0xFFFF;
+            int a48 = this.h >>> 16;
+            int a32 = this.h & 0xFFFF;
+            int a16 = this.l >>> 16;
+            int a00 = this.l & 0xFFFF;
 
-            int b48 = other.high_ >>> 16;
-            int b32 = other.high_ & 0xFFFF;
-            int b16 = other.low_ >>> 16;
-            int b00 = other.low_ & 0xFFFF;
+            int b48 = other.h >>> 16;
+            int b32 = other.h & 0xFFFF;
+            int b16 = other.l >>> 16;
+            int b00 = other.l & 0xFFFF;
 
             int c48 = 0, c32 = 0, c16 = 0, c00 = 0;
             c00 += a00 * b00;
@@ -870,7 +846,7 @@ class JSLong extends JSNumber {
             if (this == MIN_VALUE) {
                 return MIN_VALUE;
             }
-            return fromBits(~low_, ~high_).add(ONE);
+            return fromBits(~l, ~h).add(ONE);
         }
 
         /**
@@ -880,7 +856,7 @@ class JSLong extends JSNumber {
          * @return The bitwise-AND of this and the other.
          */
         public Primitive and(Primitive other) {
-            return fromBits(low_ & other.low_, high_ & other.high_);
+            return fromBits(l & other.l, h & other.h);
         }
 
         /**
@@ -890,7 +866,7 @@ class JSLong extends JSNumber {
          * @return The bitwise-OR of this and the other.
          */
         public Primitive or(Primitive other) {
-            return fromBits(low_ | other.low_, high_ | other.high_);
+            return fromBits(l | other.l, h | other.h);
         }
 
         /**
@@ -900,7 +876,7 @@ class JSLong extends JSNumber {
          * @return The bitwise-XOR of this and the other.
          */
         public Primitive xor(Primitive other) {
-            return fromBits(low_ ^ other.low_, high_ ^ other.high_);
+            return fromBits(l ^ other.l, h ^ other.h);
         }
 
         /**
@@ -915,10 +891,10 @@ class JSLong extends JSNumber {
             if (numBits == 0) {
                 return this;
             } else {
-                int low = this.low_;
+                int low = this.l;
 
                 if (numBits < 32) {
-                    int high = this.high_;
+                    int high = this.h;
                     return new Primitive(low << numBits, (high << numBits) | (low >>> (32 - numBits)));
                 } else {
                     return new Primitive(0, low << (numBits - 32));
@@ -938,10 +914,10 @@ class JSLong extends JSNumber {
             if (numBits == 0) {
                 return this;
             } else {
-                int high = this.high_;
+                int high = this.h;
 
                 if (numBits < 32) {
-                    int low = this.low_;
+                    int low = this.l;
                     return new Primitive((low >>> numBits) | (high << (32 - numBits)), high >> numBits);
                 } else {
                     return new Primitive(high >> (numBits - 32), high >= 0 ? 0 : -1);
@@ -963,10 +939,10 @@ class JSLong extends JSNumber {
             if (numBits == 0) {
                 return this;
             } else {
-                int high = this.high_;
+                int high = this.h;
 
                 if (numBits < 32) {
-                    int low = this.low_;
+                    int low = this.l;
                     return new Primitive((low >>> numBits) | (high << (32 - numBits)), high >>> numBits);
                 } else if (numBits == 32) {
                     return new Primitive(high, 0);
@@ -977,97 +953,74 @@ class JSLong extends JSNumber {
         }
 
         /**
-         * Test equality.
+         * <p>
+         * Convert to 32ibt integer.
+         * </p>
          * 
-         * @param other
          * @return
          */
+        public int toInt() {
+            return l;
+        }
+
+        /**
+         * Compare to other pritmitive long value.
+         * 
+         * @param other An other primitive long.
+         * @return A result.
+         */
         public boolean equals(Primitive other) {
-            return (this.high_ == other.high_) && (this.low_ == other.low_);
+            return (this.h == other.h) && (this.l == other.l);
         }
 
+        /**
+         * Compare to other pritmitive long value.
+         * 
+         * @param other An other primitive long.
+         * @return A result.
+         */
         public boolean notEquals(Primitive other) {
-            return (this.high_ != other.high_) || (this.low_ != other.low_);
+            return (this.h != other.h) || (this.l != other.l);
         }
 
+        /**
+         * Compare to other pritmitive long value.
+         * 
+         * @param other An other primitive long.
+         * @return A result.
+         */
         public boolean lessThan(Primitive other) {
             return this.compare(other) < 0;
         }
 
+        /**
+         * Compare to other pritmitive long value.
+         * 
+         * @param other An other primitive long.
+         * @return A result.
+         */
         public boolean lessThanOrEqual(Primitive other) {
             return this.compare(other) <= 0;
         }
 
+        /**
+         * Compare to other pritmitive long value.
+         * 
+         * @param other An other primitive long.
+         * @return A result.
+         */
         public boolean greaterThan(Primitive other) {
             return this.compare(other) > 0;
         }
 
+        /**
+         * Compare to other pritmitive long value.
+         * 
+         * @param other An other primitive long.
+         * @return A result.
+         */
         public boolean greaterThanOrEqual(Primitive other) {
             return this.compare(other) >= 0;
-        }
-
-        public int toInt() {
-            return low_;
-        }
-
-        @JavascriptNativeProperty
-        public int valueOf() {
-            return toNumber();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        @JavascriptNativeProperty
-        public String toString() {
-            return toString(10);
-        }
-
-        public String toString(int radix) {
-            if (radix < 2 || 36 < radix) {
-                throw new Error("radix out of range: " + radix);
-            }
-
-            if (isZero()) {
-                return "0";
-            }
-
-            if (isNegative()) {
-                if (equals(MIN_VALUE)) {
-                    // We need to change the Long value before it can be negated, so we remove
-                    // the bottom-most digit in this base and then recurse to do the rest.
-                    Primitive radixLong = fromNumber(radix);
-                    Primitive div = divide(radixLong);
-                    Primitive rem = div.multiply(radixLong).subtract(this);
-                    return div.toString(radix) + Integer.toString(rem.toInt(), radix);
-                } else {
-                    return '-' + negate().toString(radix);
-                }
-            }
-
-            // Do several (6) digits each time through the loop, so as to
-            // minimize the calls to the very expensive emulated div.
-            Primitive radixToPower = fromNumber(Math.pow(radix, 6));
-
-            Primitive rem = this;
-            String result = "";
-
-            while (true) {
-                Primitive remDiv = rem.divide(radixToPower);
-                int intval = rem.subtract(remDiv.multiply(radixToPower)).toInt();
-                String digits = Integer.toString(intval, radix);
-
-                rem = remDiv;
-                if (rem.isZero()) {
-                    return digits + result;
-                } else {
-                    while (digits.length() < 6) {
-                        digits = '0' + digits;
-                    }
-                    result = "" + digits + result;
-                }
-            }
         }
 
         /**
@@ -1107,7 +1060,7 @@ class JSLong extends JSNumber {
          * @return
          */
         private boolean isNegative() {
-            return this.high_ < 0;
+            return this.h < 0;
         }
 
         /**
@@ -1116,7 +1069,7 @@ class JSLong extends JSNumber {
          * @return
          */
         private boolean isOdd() {
-            return (this.low_ & 1) == 1;
+            return (this.l & 1) == 1;
         }
 
         /**
@@ -1125,18 +1078,21 @@ class JSLong extends JSNumber {
          * @return
          */
         private boolean isZero() {
-            return high_ == 0 && low_ == 0;
+            return h == 0 && l == 0;
         }
 
+        /**
+         * @return
+         */
         private int toNumber() {
-            return (int) (high_ * TWO_PWR_32_DBL_ + getLowBitsUnsigned());
+            return (int) (h * TWO_PWR_32_DBL_ + getLowBitsUnsigned());
         }
 
         /**
          * @return
          */
         private int getLowBitsUnsigned() {
-            return (low_ >= 0) ? low_ : (int) (TWO_PWR_32_DBL_ + low_);
+            return (l >= 0) ? l : (int) (TWO_PWR_32_DBL_ + l);
         }
 
         /**

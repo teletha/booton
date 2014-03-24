@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ import booton.translator.JavaAPIProvider;
  * functionalities.
  * </p>
  * 
- * @version 2013/04/12 12:58:25
+ * @version 2014/03/24 16:16:31
  */
 @JavaAPIProvider(Double.class)
 class JSDouble extends JSNumber {
@@ -84,7 +84,7 @@ class JSDouble extends JSNumber {
      *         {@code false} otherwise.
      */
     public static boolean isInfinite(double value) {
-        return isInfinite(value);
+        return value == Double.POSITIVE_INFINITY || value == Double.NEGATIVE_INFINITY;
     }
 
     /**
@@ -95,7 +95,7 @@ class JSDouble extends JSNumber {
      * @return {@code true} if the value of the argument is NaN; {@code false} otherwise.
      */
     public static boolean isNaN(double value) {
-        return isNaN(value);
+        return value != value;
     }
 
     /**
