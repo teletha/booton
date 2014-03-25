@@ -557,10 +557,12 @@ class JSBigDecimal {
         } catch (NegativeArraySizeException e) {
             throw new NumberFormatException();
         }
+
         this.scale = scl;
         this.precision = prec;
         this.intCompact = rs;
         this.intVal = rb;
+        System.out.println(scale + "   " + precision + "    " + intCompact + "    " + intVal);
     }
 
     /**
