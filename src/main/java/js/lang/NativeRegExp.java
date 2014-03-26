@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 import booton.translator.Translator;
 
 /**
- * @version 2013/08/27 14:51:37
+ * @version 2014/03/26 21:40:09
  */
 public class NativeRegExp extends NativeObject {
 
@@ -29,8 +29,8 @@ public class NativeRegExp extends NativeObject {
      * 
      * @param pattern The text of the regular expression.
      */
-    public NativeRegExp(String pattern) {
-        this.pattern = Pattern.compile(pattern);
+    public NativeRegExp(CharSequence pattern) {
+        this.pattern = Pattern.compile(pattern.toString());
     }
 
     /**
@@ -41,8 +41,8 @@ public class NativeRegExp extends NativeObject {
      * @param pattern The text of the regular expression.
      * @param flags If specified, flags can have any combination of the "g", "i" or "m".
      */
-    public NativeRegExp(String pattern, String flags) {
-        this.pattern = Pattern.compile(pattern);
+    public NativeRegExp(CharSequence pattern, String flags) {
+        this.pattern = Pattern.compile(pattern.toString());
     }
 
     /**
@@ -85,7 +85,7 @@ public class NativeRegExp extends NativeObject {
     public native void lastIndex(int index);
 
     /**
-     * @version 2013/08/27 14:58:58
+     * @version 2014/03/26 21:40:02
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<NativeRegExp> {
@@ -97,7 +97,7 @@ public class NativeRegExp extends NativeObject {
          * 
          * @param pattern The text of the regular expression.
          */
-        public String NativeRegExp(String pattern) {
+        public String NativeRegExp(CharSequence pattern) {
             return "new RegExp(" + param(0) + ")";
         }
 
@@ -109,7 +109,7 @@ public class NativeRegExp extends NativeObject {
          * @param pattern The text of the regular expression.
          * @param flags If specified, flags can have any combination of the "g", "i" or "m".
          */
-        public String NativeRegExp(String pattern, String flags) {
+        public String NativeRegExp(CharSequence pattern, String flags) {
             return "new RegExp(" + param(0) + "," + param(1) + ")";
         }
 

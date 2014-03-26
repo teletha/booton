@@ -776,21 +776,23 @@ class Node {
         Node then = null;
         Node elze = null;
         Node follow = null;
+        Node one = outgoing.get(0);
+        Node other = outgoing.get(1);
 
-        if (outgoing.get(0).incoming.size() != 1) {
+        if (one.backedges.isEmpty() && one.incoming.size() != 1) {
             // no else
             operand.invert();
 
-            then = outgoing.get(1);
-            follow = outgoing.get(0);
-        } else if (outgoing.get(1).incoming.size() != 1) {
+            then = other;
+            follow = one;
+        } else if (other.backedges.isEmpty() && other.incoming.size() != 1) {
             // no else
-            then = outgoing.get(0);
-            follow = outgoing.get(1);
+            then = one;
+            follow = other;
         } else {
             // with else
-            then = outgoing.get(0);
-            elze = outgoing.get(1);
+            then = one;
+            elze = other;
             follow = dominators.stream().filter(node -> !outgoing.contains(node)).findFirst().orElse(null);
 
             if (follow != null) {

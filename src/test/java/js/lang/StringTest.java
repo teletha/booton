@@ -257,6 +257,16 @@ public class StringTest {
         assert "aaa".replace("aa", "b").equals("ba");
     }
 
+    @Test
+    public void replaceNonRegex() throws Exception {
+        String[] specials = {".", "+", "{", "}", "[", "]", "?", "*", "#", "\\", "^", "$", ","};
+
+        for (String special : specials) {
+            assert !special.equals("@@");
+            assert special.concat(special).replace(special, "@").equals("@@");
+        }
+    }
+
     @Test(expected = NullPointerException.class)
     public void replaceNull1() throws Exception {
         "abcabc".replace(null, null);

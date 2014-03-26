@@ -14,6 +14,7 @@ import static js.lang.JSStringHelper.*;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import booton.translator.JavaAPIProvider;
@@ -495,7 +496,7 @@ class JSString implements Comparable<String>, CharSequence {
         Objects.requireNonNull(target);
         Objects.requireNonNull(replacement);
 
-        return (String) (Object) that.replace(target, replacement);
+        return (String) (Object) that.replace(Pattern.quote(target.toString()), replacement);
     }
 
     /**

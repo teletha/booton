@@ -28,6 +28,6 @@ public class BigDecimalTest {
         assert value.intValue() == 1;
 
         value = new BigDecimal("123456789012345678901234567890.12345678901");
-        assert value.toString().endsWith("123456789012345678901234567890.12345678901");
+        assert value.toString().equals("123456789012345678901234567890.12345678901");
     }
 }

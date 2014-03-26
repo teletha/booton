@@ -136,6 +136,7 @@ public class NativeNumber extends NativeObject {
      * 
      * @return A string expression.
      */
+    @Override
     public String toString() {
         return value.toString();
     }
@@ -178,7 +179,7 @@ public class NativeNumber extends NativeObject {
          * @param value
          */
         public String NativeNumber(long value) {
-            return "(+" + param(0) + ")";
+            return param(0);
         }
 
         /**
@@ -276,6 +277,7 @@ public class NativeNumber extends NativeObject {
          * 
          * @return A string expression.
          */
+        @Override
         public String toString() {
             return that + ".toString()";
         }
