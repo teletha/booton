@@ -32,6 +32,20 @@ abstract class JSNumber implements JavascriptNative {
     /**
      * @param value
      */
+    protected JSNumber(int value) {
+        this.value = new NativeNumber(value);
+    }
+
+    /**
+     * @param value
+     */
+    protected JSNumber(long value) {
+        this.value = new NativeNumber(value);
+    }
+
+    /**
+     * @param value
+     */
     protected JSNumber(double value) {
         this.value = new NativeNumber(value);
     }

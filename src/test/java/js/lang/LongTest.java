@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,75 +10,40 @@
 package js.lang;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import booton.soeur.ScriptTester;
-import booton.soeur.Scriptable;
+import booton.soeur.ScriptRunner;
 
 /**
- * @version 2013/04/17 3:16:19
+ * @version 2014/03/27 1:11:32
  */
-@SuppressWarnings("unused")
-public class LongTest extends ScriptTester {
+@RunWith(ScriptRunner.class)
+public class LongTest {
 
     @Test
-    public void parse() throws Exception {
-        test(new Scriptable() {
+    public void parseLong() {
+        assert Long.parseLong("1") == 1L;
+        assert Long.parseLong("-1") == -1L;
+    }
 
-            long act() {
-                return Long.parseLong("1");
-            }
-        });
+    @Test(expected = NumberFormatException.class)
+    public void parseLongNaN() {
+        Long.parseLong("Number");
+    }
+
+    @Test(expected = NumberFormatException.class)
+    public void parseLongEmpty() {
+        Long.parseLong("");
+    }
+
+    @Test(expected = NumberFormatException.class)
+    public void parseLongNull() {
+        Long.parseLong(null);
     }
 
     @Test
-    public void parseNegative() throws Exception {
-        test(new Scriptable() {
-
-            long act() {
-                return Long.parseLong("-1");
-            }
-        });
-    }
-
-    @Test
-    public void parseNaN() throws Exception {
-        test(new Scriptable() {
-
-            long act() {
-                try {
-                    return Long.parseLong("Number");
-                } catch (NumberFormatException e) {
-                    return 10;
-                }
-            }
-        });
-    }
-
-    @Test
-    public void empty() throws Exception {
-        test(new Scriptable() {
-
-            long act() {
-                try {
-                    return Long.parseLong("");
-                } catch (NumberFormatException e) {
-                    return 10;
-                }
-            }
-        });
-    }
-
-    @Test
-    public void Null() throws Exception {
-        test(new Scriptable() {
-
-            long act() {
-                try {
-                    return Long.parseLong(null);
-                } catch (NumberFormatException e) {
-                    return 10;
-                }
-            }
-        });
+    public void valueOf() {
+        assert Long.valueOf(1L).toString().endsWith("1");
+        assert Long.valueOf(12345678901L).toString().equals("12345678901");
     }
 }

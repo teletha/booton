@@ -65,8 +65,8 @@ public class StringBuilderTest {
     @Test
     public void appendCharSequenceRange() throws Exception {
         StringBuilder builder = new StringBuilder("");
-        assert builder.append((CharSequence) "value", 2, 3).toString().equals("l");
-        assert builder.append((CharSequence) "value", 2, 2).toString().equals("l");
+        assert builder.append("value", 2, 3).toString().equals("l");
+        assert builder.append("value", 2, 2).toString().equals("l");
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -154,8 +154,8 @@ public class StringBuilderTest {
     @Test
     public void insertCharSequenceRange() throws Exception {
         StringBuilder builder = new StringBuilder("0123");
-        assert builder.insert(2, (CharSequence) "value", 2, 3).toString().equals("01l23");
-        assert builder.insert(2, (CharSequence) "value", 2, 2).toString().equals("01l23");
+        assert builder.insert(2, "value", 2, 3).toString().equals("01l23");
+        assert builder.insert(2, "value", 2, 2).toString().equals("01l23");
     }
 
     @Test(expected = IndexOutOfBoundsException.class)

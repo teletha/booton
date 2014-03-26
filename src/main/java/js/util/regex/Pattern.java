@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.PatternSyntaxException;
 
 import js.lang.NativeRegExp;
+import js.lang.NativeString;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -129,4 +130,19 @@ class Pattern {
         return ((Pattern) (Object) Pattern.compile(regex)).matcher(input).matches();
     }
 
+    /**
+     * Returns a literal pattern <code>String</code> for the specified <code>String</code>.
+     * <p>
+     * This method produces a <code>String</code> that can be used to create a <code>Pattern</code>
+     * that would match the string <code>s</code> as if it were a literal pattern.
+     * </p>
+     * Metacharacters or escape sequences in the input sequence will be given no special meaning.
+     *
+     * @param value The string to be literalized
+     * @return A literal string replacement
+     * @since 1.5
+     */
+    public static String quote(String value) {
+        return (String) (Object) new NativeString(value).replace("[-[\\]{}()*+?.,\\\\^$|#\\s]", "\\$&");
+    }
 }

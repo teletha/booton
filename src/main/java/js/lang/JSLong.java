@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -8,6 +8,8 @@
  *          http://opensource.org/licenses/mit-license.php
  */
 package js.lang;
+
+import static js.lang.JSLongHelper.*;
 
 import java.math.BigInteger;
 
@@ -21,7 +23,7 @@ import booton.translator.JavascriptNativeProperty;
  * functionalities.
  * </p>
  * 
- * @version 2013/04/12 12:58:25
+ * @version 2014/03/26 23:41:44
  */
 @JavaAPIProvider(Long.class)
 class JSLong extends JSNumber {
@@ -364,12 +366,7 @@ class JSLong extends JSNumber {
      * @throws NumberFormatException if the string does not contain a parsable {@code long}.
      */
     public static long parseLong(String value, int radix) throws NumberFormatException {
-        long parsed = Global.parseInt(value, radix);
-
-        if (Global.isNaN(parsed)) {
-            throw new NumberFormatException(value + " is not a number.");
-        }
-        return parsed;
+        return $(Primitive.from(value, radix));
     }
 
     /**
@@ -579,17 +576,16 @@ class JSLong extends JSNumber {
     }
 
     /**
-     * @version 2014/03/24 17:11:09
+     * @version 2014/03/26 23:41:29
      */
-    @SuppressWarnings("unused")
     @JavaAPIProvider(long.class)
-    private static class Primitive implements JavascriptNative {
+    static class Primitive implements JavascriptNative {
 
         /** The reusable magic number. Don't use long. */
-        private static final double TWO_PWR_32_DBL_ = 4294967296D;
+        private static final double TWO_PWR_32 = 4294967296D;
 
         /** The reusable magic number. Don't use long. */
-        private static final double TWO_PWR_63_DBL_ = 9223372036854776000D;
+        private static final double TWO_PWR_63 = 9223372036854776000D;
 
         /** The reusable cache. */
         private static final Primitive[] IntCache_ = new Primitive[256];
@@ -605,6 +601,9 @@ class JSLong extends JSNumber {
 
         /** The reusable cache. */
         private static final Primitive TWO_PWR_24_ = fromInt(1 << 24);
+
+        // /** The reusable cache. */
+        // private static final Primitive TEN_PWR_6 = from(Math.pow(10, 6));
 
         /** The maximum value. */
         private static final Primitive MAX_VALUE = fromBits(0xFFFFFFFF, 0x7FFFFFFF);
@@ -702,7 +701,7 @@ class JSLong extends JSNumber {
 
             // If both longs are small, use float multiplication
             if (lessThan(TWO_PWR_24_) && other.lessThan(TWO_PWR_24_)) {
-                return fromNumber(toNumber() * other.toNumber());
+                return fromInt(toNumber() * other.toNumber());
             }
 
             // Divide each long into 4 chunks of 16 bits, and then add up 4x4 products.
@@ -954,13 +953,50 @@ class JSLong extends JSNumber {
 
         /**
          * <p>
-         * Convert to 32ibt integer.
+         * Convert to 32bit integer.
          * </p>
          * 
          * @return
          */
         public int toInt() {
             return l;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @JavascriptNativeProperty
+        public String toString() {
+            if (isZero()) {
+                return "0";
+            }
+
+            if (isNegative()) {
+                return "-".concat(negate().toString());
+            }
+
+            Primitive TEN_PWR_6 = fromNumber(Math.pow(10, 6));
+            System.out.println(Math.pow(10, 6));
+            Primitive rem = this;
+            String result = "";
+
+            while (true) {
+                Primitive remDiv = rem.divide(TEN_PWR_6);
+                int intval = rem.subtract(remDiv.multiply(TEN_PWR_6)).toInt();
+                String digits = Integer.toString(intval);
+                System.out.println(digits);
+                rem = remDiv;
+
+                if (rem.isZero()) {
+                    return digits + result;
+                } else {
+                    while (digits.length() < 6) {
+                        digits = "0" + digits;
+                    }
+                    result = "" + digits + result;
+                }
+            }
         }
 
         /**
@@ -1085,14 +1121,14 @@ class JSLong extends JSNumber {
          * @return
          */
         private int toNumber() {
-            return (int) (h * TWO_PWR_32_DBL_ + getLowBitsUnsigned());
+            return (int) (h * TWO_PWR_32 + getLowBitsUnsigned());
         }
 
         /**
          * @return
          */
         private int getLowBitsUnsigned() {
-            return (l >= 0) ? l : (int) (TWO_PWR_32_DBL_ + l);
+            return (l >= 0) ? l : (int) (TWO_PWR_32 + l);
         }
 
         /**
@@ -1112,7 +1148,7 @@ class JSLong extends JSNumber {
                 }
             }
 
-            Primitive obj = new Primitive(Global.toSignedInteger(value), value < 0 ? -1 : 0);
+            Primitive obj = new Primitive(value, value < 0 ? -1 : 0);
 
             if (-128 <= value && value < 128) {
                 IntCache_[value + 128] = obj;
@@ -1143,15 +1179,59 @@ class JSLong extends JSNumber {
         private static Primitive fromNumber(double value) {
             if (Global.isNaN(value) || !Global.isFinite(value)) {
                 return ZERO;
-            } else if (value <= -TWO_PWR_63_DBL_) {
+            } else if (value <= -TWO_PWR_63) {
                 return MIN_VALUE;
-            } else if (value + 1 >= TWO_PWR_63_DBL_) {
+            } else if (value + 1 >= TWO_PWR_63) {
                 return MAX_VALUE;
             } else if (value < 0) {
                 return fromNumber(-value).negate();
             } else {
-                return new Primitive(Global.toSignedInteger((value % TWO_PWR_32_DBL_)), Global.toSignedInteger(value / TWO_PWR_32_DBL_));
+                return new Primitive(Global.toSignedInteger(value % TWO_PWR_32), Global.toSignedInteger(value / TWO_PWR_32));
             }
+        }
+
+        /**
+         * Returns a long representation of the given string, written using the given radix.
+         * 
+         * @param value The textual representation of the Long.
+         * @param radix The radix in which the text is written.
+         * @return The corresponding long value.
+         */
+        private static Primitive from(String value, int radix) throws NumberFormatException {
+            if (value == null || value.length() == 0) {
+                throw new NumberFormatException(value + " is not a number.");
+            }
+
+            if (radix < 2 || 36 < radix) {
+                throw new NumberFormatException(radix + " is  out of range.");
+            }
+
+            if (value.charAt(0) == '-') {
+                return from(value.substring(1), radix).negate();
+            } else if (value.indexOf('-') != -1) {
+                throw new NumberFormatException(value + " is not a number.");
+            }
+
+            Primitive radixToPower = fromNumber(Math.pow(radix, 8));
+            Primitive result = ZERO;
+
+            for (int i = 0; i < value.length(); i += 8) {
+                int size = Math.min(8, value.length() - i);
+                int integer = Global.parseInt(value.substring(i, i + size), radix);
+
+                if (Global.isNaN(integer)) {
+                    throw new NumberFormatException(value + " is not a number.");
+                }
+
+                if (size < 8) {
+                    Primitive power = fromNumber(Math.pow(radix, size));
+                    result = result.multiply(power).add(fromInt(integer));
+                } else {
+                    result = result.multiply(radixToPower);
+                    result = result.add(fromInt(integer));
+                }
+            }
+            return result;
         }
     }
 }

@@ -11,6 +11,7 @@ package js.lang;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import booton.translator.Translator;
 
@@ -192,9 +193,11 @@ public class NativeString {
     }
 
     /**
-     * <pReturns a new string with some or all matches of a pattern replaced by a replacement. The
+     * <p>
+     * Returns a new string with some or all matches of a pattern replaced by a replacement. The
      * pattern can be a string or a RegExp, and the replacement can be a string or a function to be
      * called for each match.
+     * </p>
      * 
      * @param target A RegExp object. The match is replaced by the return value of parameter #2.
      * @param replacement The String that replaces the substring received from parameter #1. A
@@ -207,9 +210,11 @@ public class NativeString {
     }
 
     /**
-     * <pReturns a new string with some or all matches of a pattern replaced by a replacement. The
+     * <p>
+     * Returns a new string with some or all matches of a pattern replaced by a replacement. The
      * pattern can be a string or a RegExp, and the replacement can be a string or a function to be
      * called for each match.
+     * </p>
      * 
      * @param regex A RegExp object. The match is replaced by the return value of parameter #2.
      * @param replacement The String that replaces the substring received from parameter #1. A
@@ -222,9 +227,45 @@ public class NativeString {
     }
 
     /**
-     * <pReturns a new string with some or all matches of a pattern replaced by a replacement. The
+     * <p>
+     * Returns a new string with some or all matches of a pattern replaced by a replacement. The
      * pattern can be a string or a RegExp, and the replacement can be a string or a function to be
      * called for each match.
+     * </p>
+     * 
+     * @param regex A RegExp object. The match is replaced by the return value of parameter #2.
+     * @param replacement The String that replaces the substring received from parameter #1. A
+     *            number of special replacement patterns are supported; see the
+     *            "Specifying a string as a parameter" section below.
+     * @return
+     */
+    public NativeString replace(NativeRegExp regex, CharSequence replacement) {
+        return new NativeString(builder.toString().replace(regex.source(), replacement));
+    }
+
+    /**
+     * <p>
+     * Returns a new string with some or all matches of a pattern replaced by a replacement. The
+     * pattern can be a string or a RegExp, and the replacement can be a string or a function to be
+     * called for each match.
+     * </p>
+     * 
+     * @param matcher A string object. The match is replaced by the return value of parameter #2.
+     * @param replacer The String that replaces the substring received from parameter #1. A number
+     *            of special replacement patterns are supported; see the
+     *            "Specifying a string as a parameter" section below.
+     * @return
+     */
+    public NativeString replaceWithoutRegex(CharSequence matcher, CharSequence replacer) {
+        return new NativeString(builder.toString().replace(Pattern.quote(matcher.toString()), replacer));
+    }
+
+    /**
+     * <p>
+     * Returns a new string with some or all matches of a pattern replaced by a replacement. The
+     * pattern can be a string or a RegExp, and the replacement can be a string or a function to be
+     * called for each match.
+     * </p>
      * 
      * @param regex A RegExp object. The match is replaced by the return value of parameter #2.
      * @param replacement The String that replaces the substring received from parameter #1. A
@@ -557,9 +598,11 @@ public class NativeString {
         }
 
         /**
-         * <pReturns a new string with some or all matches of a pattern replaced by a replacement.
-         * The pattern can be a string or a RegExp, and the replacement can be a string or a
-         * function to be called for each match.
+         * <p>
+         * Returns a new string with some or all matches of a pattern replaced by a replacement. The
+         * pattern can be a string or a RegExp, and the replacement can be a string or a function to
+         * be called for each match.
+         * </p>
          * 
          * @param target A RegExp object. The match is replaced by the return value of parameter #2.
          * @param replacement The String that replaces the substring received from parameter #1. A
@@ -572,9 +615,11 @@ public class NativeString {
         }
 
         /**
-         * <pReturns a new string with some or all matches of a pattern replaced by a replacement.
-         * The pattern can be a string or a RegExp, and the replacement can be a string or a
-         * function to be called for each match.
+         * <p>
+         * Returns a new string with some or all matches of a pattern replaced by a replacement. The
+         * pattern can be a string or a RegExp, and the replacement can be a string or a function to
+         * be called for each match.
+         * </p>
          * 
          * @param regex A RegExp object. The match is replaced by the return value of parameter #2.
          * @param replacement The String that replaces the substring received from parameter #1. A
@@ -587,9 +632,28 @@ public class NativeString {
         }
 
         /**
-         * <pReturns a new string with some or all matches of a pattern replaced by a replacement.
-         * The pattern can be a string or a RegExp, and the replacement can be a string or a
-         * function to be called for each match.
+         * <p>
+         * Returns a new string with some or all matches of a pattern replaced by a replacement. The
+         * pattern can be a string or a RegExp, and the replacement can be a string or a function to
+         * be called for each match.
+         * </p>
+         * 
+         * @param regex A RegExp object. The match is replaced by the return value of parameter #2.
+         * @param replacement The String that replaces the substring received from parameter #1. A
+         *            number of special replacement patterns are supported; see the
+         *            "Specifying a string as a parameter" section below.
+         * @return
+         */
+        public String replace(NativeRegExp regex, CharSequence replacement) {
+            return that + ".replace(" + param(0) + "," + param(1) + ")";
+        }
+
+        /**
+         * <p>
+         * Returns a new string with some or all matches of a pattern replaced by a replacement. The
+         * pattern can be a string or a RegExp, and the replacement can be a string or a function to
+         * be called for each match.
+         * </p>
          * 
          * @param regex A RegExp object. The match is replaced by the return value of parameter #2.
          * @param replacement The String that replaces the substring received from parameter #1. A
@@ -599,6 +663,24 @@ public class NativeString {
          */
         public String replaceFirst(String regex, String replacement) {
             return that + ".replace(" + regex(0) + "," + param(1) + ")";
+        }
+
+        /**
+         * <p>
+         * Returns a new string with some or all matches of a pattern replaced by a replacement. The
+         * pattern can be a string or a RegExp, and the replacement can be a string or a function to
+         * be called for each match.
+         * </p>
+         * 
+         * @param matcher A string object. The match is replaced by the return value of parameter
+         *            #2.
+         * @param replacer The String that replaces the substring received from parameter #1. A
+         *            number of special replacement patterns are supported; see the
+         *            "Specifying a string as a parameter" section below.
+         * @return
+         */
+        public String replaceWithoutRegex(CharSequence matcher, CharSequence replacer) {
+            return that + ".replace(" + param(0) + "," + param(1) + ")";
         }
 
         /**
