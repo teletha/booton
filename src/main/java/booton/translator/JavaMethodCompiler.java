@@ -1324,6 +1324,7 @@ class JavaMethodCompiler extends MethodVisitor {
         case IFGE: // => 0
             if (match(DCMPG, JUMP) || match(FCMPG, JUMP)) {
                 // for float and double
+                System.out.println(nodes);
                 current.condition(current.remove(1), GE, current.remove(0), node);
             } else if (match(LCMP, JUMP)) {
                 // for long
