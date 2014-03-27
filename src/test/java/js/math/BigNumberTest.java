@@ -20,13 +20,26 @@ import booton.soeur.ScriptRunner;
 @RunWith(ScriptRunner.class)
 public class BigNumberTest {
 
+    private static final BigNumber ZERO = new BigNumber("0");
+
+    private static final BigNumber ONE = new BigNumber("1");
+
+    private static final BigNumber BIG = new BigNumber("24682468246824682468246824682468");
+
     @Test
     public void construct() throws Exception {
-        assert new BigNumber("0").toString().equals("0");
+        assert ZERO.toString().equals("0");
         assert new BigNumber("-2").toString().equals("-2");
         assert new BigNumber("123456789012345678901234567890").toString().equals("123456789012345678901234567890");
         assert new BigNumber("-1234567890123456789012345.67890123456789").toString()
                 .equals("-1234567890123456789012345.67890123456789");
         assert new BigNumber("-0000").toString().equals("0");
+        assert BIG.toString().equals("24682468246824682468246824682468");
+    }
+
+    @Test
+    public void add() throws Exception {
+        assert ZERO.add(ONE).toString().equals("1");
+        assert BIG.add(ONE).toString().equals("24682468246824682468246824682469");
     }
 }

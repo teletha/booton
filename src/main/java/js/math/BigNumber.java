@@ -53,16 +53,19 @@ class BigNumber {
     private static final String DIGITS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$_";
 
     /** The reusable cache. */
+    private static final BigNumber ZERO = new BigNumber(0);
+
+    /** The reusable cache. */
     private static final BigNumber ONE = new BigNumber(1);
 
     /** Whether BigNumber Errors are ever thrown. */
     private boolean ERRORS = true;
 
-    private int sign;
+    private final int sign;
 
-    private int[] component;
+    private final int[] component;
 
-    private int exponential;
+    private final int exponential;
 
     /**
      * 
@@ -112,6 +115,8 @@ class BigNumber {
         // Overflow?
         if (MAX_EXP < (e -= i + 1)) {
             // Initinity
+            component = null;
+            exponential = 0;
         } else if (i == b || e < MIN_EXP) {
             // zero or underflow
             component = new int[] {0};
@@ -133,12 +138,112 @@ class BigNumber {
     }
 
     /**
+     * <p>
+     * Internal copy constructor.
+     * </p>
+     * 
+     * @param sign
+     * @param component
+     * @param exponential
+     */
+    private BigNumber(int sign, int[] component, int exponential) {
+        this.sign = sign;
+        this.component = component;
+        this.exponential = exponential;
+    }
+
+    /**
+     * <p>
+     * Return a new {@link BigNumber} whose value is the value of this {@link BigNumber} neegated.
+     * </p>
+     * 
+     * @return
+     */
+    public BigNumber negate() {
+        return new BigNumber(-sign, component, exponential);
+    }
+
+    public BigNumber add(BigNumber other) {
+        // signs differ
+        if (sign != other.sign) {
+            return subtract(other.negate());
+        }
+
+        int xe = exponential;
+        int ye = other.exponential;
+        int[] xc = component;
+        int[] yc = other.component;
+
+        if (xe == 0 || ye == 0) {
+            // Either Infinity
+            if (xc == null || yc == null) {
+                // +-Infinity
+                return new BigNumber(sign / 0);
+            }
+
+            // Either zero
+            if (xc[0] == 0 || yc[0] == 0) {
+                return yc[0] != 0 ? other : xc[0] != 0 ? this : ZERO;
+            }
+        }
+
+        // Determine which is the bigger number.
+        // Prepend zeros to equalise exponents.
+        int ze = 0;
+        int[] zc = null;
+        int diff = xe - ye;
+
+        if (0 < diff) {
+            // x is larger than y
+            ze = xe;
+            zc = new int[yc.length + diff];
+            System.arraycopy(yc, 0, zc, diff, yc.length);
+        } else if (diff <= 0) {
+            // y is larger than x
+            ze = ye;
+            zc = new int[xc.length - diff];
+            System.arraycopy(xc, 0, zc, -diff, xc.length);
+        }
+
+        // Point xc to the longer array.
+        if (xc.length < yc.length) {
+            int[] temp = xc;
+            xc = yc;
+            yc = temp;
+        }
+
+        int i = yc.length;
+        int j = 0;
+
+        while (i != 0) {
+            zc[--i] = xc[i] + yc[i] + j;
+            j = zc[i] / 10 ^ 0;
+            zc[i] %= 10;
+        }
+
+        // No need to check for zero, as +x + +y != 0 && -x + -y != 0
+        if (j != 0) {
+            System.out.println("unshift");
+
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
+        }
+
+        // Remove trailing zeros.
+
+        return new BigNumber(ze, zc, ze);
+    }
+
+    public BigNumber subtract(BigNumber other) {
+        return other;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public String toString() {
-        System.out.println("BigNumber [sign=" + sign + ", component=" + Arrays.toString(component) + ", exponential=" + exponential + "]");
-
         int exponential = this.exponential;
         StringBuilder builder = new StringBuilder();
 
@@ -176,5 +281,9 @@ class BigNumber {
             builder.insert(0, "-");
         }
         return builder.toString();
+    }
+
+    private void debug() {
+        System.out.println("BigNumber [sign=" + sign + ", component=" + Arrays.toString(component) + ", exponential=" + exponential + "]");
     }
 }
