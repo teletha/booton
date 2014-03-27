@@ -137,6 +137,16 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private static final int INCREMENT = 414;
 
+    /**
+     * Represents a compare instruction. FCMPL and FCMPG
+     */
+    private static final int FCMP = 415;
+
+    /**
+     * Represents a compare instruction. DCMPL and DCMPG
+     */
+    private static final int DCMP = 416;
+
     /** The extra opcode for byte code parsing. */
     private static final int LABEL = 300;
 
@@ -1297,7 +1307,7 @@ class JavaMethodCompiler extends MethodVisitor {
             return;
 
         case IFEQ: // == 0
-            if (match(DCMPL, JUMP) || match(FCMPL, JUMP)) {
+            if (match(DCMP, JUMP) || match(FCMP, JUMP)) {
                 // for float and double
                 current.condition(current.remove(1), EQ, current.remove(0), node);
             } else if (match(LCMP, JUMP)) {
@@ -1309,7 +1319,7 @@ class JavaMethodCompiler extends MethodVisitor {
             }
             break;
         case IFNE: // != 0
-            if (match(DCMPL, JUMP) || match(FCMPL, JUMP)) {
+            if (match(DCMP, JUMP) || match(FCMP, JUMP)) {
                 // for float and double
                 current.condition(current.remove(1), NE, current.remove(0), node);
             } else if (match(LCMP, JUMP)) {
@@ -1322,9 +1332,8 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case IFGE: // => 0
-            if (match(DCMPG, JUMP) || match(FCMPG, JUMP)) {
+            if (match(DCMP, JUMP) || match(FCMP, JUMP)) {
                 // for float and double
-                System.out.println(nodes);
                 current.condition(current.remove(1), GE, current.remove(0), node);
             } else if (match(LCMP, JUMP)) {
                 // for long
@@ -1336,7 +1345,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case IFGT: // > 0
-            if (match(DCMPG, JUMP) || match(FCMPG, JUMP)) {
+            if (match(DCMP, JUMP) || match(FCMP, JUMP)) {
                 // for float and double
                 current.condition(current.remove(1), GT, current.remove(0), node);
             } else if (match(LCMP, JUMP)) {
@@ -1349,7 +1358,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case IFLE: // <= 0
-            if (match(DCMPL, JUMP) || match(FCMPL, JUMP)) {
+            if (match(DCMP, JUMP) || match(FCMP, JUMP)) {
                 // for float and double
                 current.condition(current.remove(1), LE, current.remove(0), node);
             } else if (match(LCMP, JUMP)) {
@@ -1362,7 +1371,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case IFLT: // < 0
-            if (match(DCMPL, JUMP) || match(FCMPL, JUMP)) {
+            if (match(DCMP, JUMP) || match(FCMP, JUMP)) {
                 // for float and double
                 current.condition(current.remove(1), LT, current.remove(0), node);
             } else if (match(LCMP, JUMP)) {
@@ -2323,6 +2332,26 @@ class JavaMethodCompiler extends MethodVisitor {
                 case IF_ICMPLT:
                 case IF_ICMPNE:
                 case GOTO:
+                    continue root;
+
+                default:
+                    return false;
+                }
+
+            case FCMP:
+                switch (record) {
+                case FCMPG:
+                case FCMPL:
+                    continue root;
+
+                default:
+                    return false;
+                }
+
+            case DCMP:
+                switch (record) {
+                case DCMPG:
+                case DCMPL:
                     continue root;
 
                 default:
