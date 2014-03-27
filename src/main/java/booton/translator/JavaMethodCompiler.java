@@ -1130,6 +1130,11 @@ class JavaMethodCompiler extends MethodVisitor {
             // cast int to long
             current.addOperand(writeLongMethod("fromInt", current.remove(0)));
             break;
+
+        case L2D:
+            // cast long to double
+            current.addOperand(operateLong("toDouble"));
+            break;
         }
     }
 

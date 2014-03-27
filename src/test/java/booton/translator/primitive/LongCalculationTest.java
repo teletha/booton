@@ -42,13 +42,5 @@ public class LongCalculationTest {
         assert 20L / value == 10L;
         assert 2222222222222222222L / value == 1111111111111111111L;
         assert -2222222222222222222L / value == -1111111111111111111L;
-        assertD(3L / value, 1.5, 0.5);
-    }
-
-    private void assertD(double ac, double ex, double delta) {
-        if (Double.compare(ac, ex) != 0) {
-            double diff = Math.abs(ex - ac);
-            assert diff <= delta;
-        }
     }
 }

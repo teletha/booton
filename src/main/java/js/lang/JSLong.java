@@ -602,8 +602,8 @@ class JSLong extends JSNumber {
         /** The reusable cache. */
         private static final Primitive TWO_PWR_24_ = fromInt(1 << 24);
 
-        // /** The reusable cache. */
-        // private static final Primitive TEN_PWR_6 = from(Math.pow(10, 6));
+        /** The reusable cache. */
+        private static final Primitive TEN_PWR_6 = fromNumber(Math.pow(10, 6));
 
         /** The maximum value. */
         private static final Primitive MAX_VALUE = fromBits(0xFFFFFFFF, 0x7FFFFFFF);
@@ -701,7 +701,7 @@ class JSLong extends JSNumber {
 
             // If both longs are small, use float multiplication
             if (lessThan(TWO_PWR_24_) && other.lessThan(TWO_PWR_24_)) {
-                return fromInt(toNumber() * other.toNumber());
+                return fromNumber(toDouble() * other.toDouble());
             }
 
             // Divide each long into 4 chunks of 16 bits, and then add up 4x4 products.
@@ -796,7 +796,7 @@ class JSLong extends JSNumber {
             while (rem.greaterThanOrEqual(other)) {
                 // Approximate the result of division. This may be a little greater or
                 // smaller than the actual value.
-                double approx = Math.max(1, Math.floor(rem.toNumber() / other.toNumber()));
+                double approx = Math.max(1, Math.floor(rem.toDouble() / other.toDouble()));
 
                 // We will tweak the approximate result by changing it in the 48-th digit or
                 // the smallest non-fractional digit, whichever is larger.
@@ -963,6 +963,17 @@ class JSLong extends JSNumber {
         }
 
         /**
+         * <p>
+         * Convert to the closest floating-point representation.
+         * </p>
+         * 
+         * @return The closest floating-point representation to this value.
+         */
+        public double toDouble() {
+            return h * TWO_PWR_32 + (0 <= l ? l : TWO_PWR_32 + l);
+        }
+
+        /**
          * {@inheritDoc}
          */
         @Override
@@ -976,25 +987,21 @@ class JSLong extends JSNumber {
                 return "-".concat(negate().toString());
             }
 
-            Primitive TEN_PWR_6 = fromNumber(Math.pow(10, 6));
-            System.out.println(Math.pow(10, 6));
             Primitive rem = this;
-            String result = "";
+            StringBuilder builder = new StringBuilder();
 
             while (true) {
                 Primitive remDiv = rem.divide(TEN_PWR_6);
-                int intval = rem.subtract(remDiv.multiply(TEN_PWR_6)).toInt();
-                String digits = Integer.toString(intval);
-                System.out.println(digits);
+                String digits = Integer.toString(rem.subtract(remDiv.multiply(TEN_PWR_6)).toInt());
                 rem = remDiv;
 
                 if (rem.isZero()) {
-                    return digits + result;
+                    return builder.insert(0, digits).toString();
                 } else {
                     while (digits.length() < 6) {
-                        digits = "0" + digits;
+                        builder.insert(0, "0");
                     }
-                    result = "" + digits + result;
+                    builder.insert(0, digits);
                 }
             }
         }
@@ -1118,20 +1125,6 @@ class JSLong extends JSNumber {
         }
 
         /**
-         * @return
-         */
-        private int toNumber() {
-            return (int) (h * TWO_PWR_32 + getLowBitsUnsigned());
-        }
-
-        /**
-         * @return
-         */
-        private int getLowBitsUnsigned() {
-            return (l >= 0) ? l : (int) (TWO_PWR_32 + l);
-        }
-
-        /**
          * <p>
          * Returns a Long representing the given (32-bit) integer value.
          * </p>
@@ -1186,7 +1179,7 @@ class JSLong extends JSNumber {
             } else if (value < 0) {
                 return fromNumber(-value).negate();
             } else {
-                return new Primitive(Global.toSignedInteger(value % TWO_PWR_32), Global.toSignedInteger(value / TWO_PWR_32));
+                return new Primitive((int) (value % TWO_PWR_32), (int) (value / TWO_PWR_32));
             }
         }
 
