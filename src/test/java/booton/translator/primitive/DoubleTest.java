@@ -246,7 +246,7 @@ public class DoubleTest extends ScriptTester {
         test(new Scriptable() {
 
             boolean act(double value) {
-                return value != 0;
+                return value != 0; // CMPL IFEQ
             }
         });
     }
@@ -256,7 +256,7 @@ public class DoubleTest extends ScriptTester {
         test(new Scriptable() {
 
             boolean act(double value) {
-                return value < 1;
+                return value < 1; // CMPG IFGE
             }
         });
     }
@@ -266,7 +266,17 @@ public class DoubleTest extends ScriptTester {
         test(new Scriptable() {
 
             boolean act(double value) {
-                return value <= 1;
+                return value <= 1; // CMPG IFGT
+            }
+        });
+    }
+
+    @Test
+    public void lessEqual2() {
+        test(new Scriptable() {
+
+            boolean act(double value) {
+                return 1 >= value; // CMPL IFLT
             }
         });
     }
@@ -276,7 +286,17 @@ public class DoubleTest extends ScriptTester {
         test(new Scriptable() {
 
             boolean act(double value) {
-                return value > 1;
+                return value > 1; // CMPL IFLE
+            }
+        });
+    }
+
+    @Test
+    public void greater2() {
+        test(new Scriptable() {
+
+            boolean act(double value) {
+                return 1 < value; // CMPG IFGE
             }
         });
     }
@@ -286,7 +306,17 @@ public class DoubleTest extends ScriptTester {
         test(new Scriptable() {
 
             boolean act(double value) {
-                return value >= 1;
+                return value >= 1; // CMPL IFLT
+            }
+        });
+    }
+
+    @Test
+    public void greaterEqual2() {
+        test(new Scriptable() {
+
+            boolean act(double value) {
+                return 1 <= value; // CMPG IFGT
             }
         });
     }

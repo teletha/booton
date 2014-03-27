@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
-import booton.translator.Debuggable;
 
 /**
  * @version 2014/03/27 2:42:39
@@ -46,7 +45,6 @@ public class LongCalculationTest {
         assertD(3L / value, 1.5, 0.5);
     }
 
-    @Debuggable
     private void assertD(double ac, double ex, double delta) {
         if (Double.compare(ac, ex) != 0) {
             double diff = Math.abs(ex - ac);
