@@ -12,15 +12,14 @@ package js.math;
 import java.math.BigDecimal;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import booton.soeur.ScriptRunner;
 
 /**
  * @version 2014/03/17 9:41:10
  */
-@RunWith(ScriptRunner.class)
 public class BigDecimalTest {
+
+    /** reusable. */
+    private static final BigDecimal ZERO = new BigDecimal(0);
 
     @Test
     public void constructorString() throws Exception {
@@ -29,5 +28,10 @@ public class BigDecimalTest {
 
         value = new BigDecimal("123456789012345678901234567890.12345678901");
         assert value.toString().equals("123456789012345678901234567890.12345678901");
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void addNull() throws Exception {
+        ZERO.add(null);
     }
 }
