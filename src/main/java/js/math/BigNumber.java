@@ -10,6 +10,10 @@
 package js.math;
 
 import java.util.Arrays;
+import java.util.Objects;
+
+import js.lang.Global;
+import js.lang.NativeIntArray;
 
 /**
  * @version 2014/03/26 13:21:00
@@ -63,7 +67,7 @@ class BigNumber {
 
     private final int sign;
 
-    private final int[] component;
+    private final NativeIntArray component;
 
     private final int exponential;
 
@@ -78,6 +82,7 @@ class BigNumber {
      * 
      */
     public BigNumber(String value) {
+        String ori = value;
         // Determine sign.
         if (value.charAt(0) == '-') {
             sign = -1;
@@ -119,22 +124,24 @@ class BigNumber {
             exponential = 0;
         } else if (i == b || e < MIN_EXP) {
             // zero or underflow
-            component = new int[] {0};
+            component = new NativeIntArray(new int[] {0});
             exponential = 0;
         } else {
             // Determine trailing zeros.
             while (0 <= --b && value.charAt(b) == '0') {
             }
             exponential = e;
-            component = new int[b - i + 1];
+            component = new NativeIntArray(b - i + 1);
 
             // Convert string to array of digits (without leading and trailing zeros).
             int p = 0;
 
             while (i <= b) {
-                component[p++] = Integer.parseInt(value.substring(i, ++i));
+                component.set(p++, Integer.parseInt(value.substring(i, ++i)));
             }
         }
+
+        System.out.println(ori + "   sign : " + sign + "  exponent : " + exponential + "   component : " + Arrays.toString(component.toArray()));
     }
 
     /**
@@ -146,9 +153,9 @@ class BigNumber {
      * @param component
      * @param exponential
      */
-    private BigNumber(int sign, int[] component, int exponential) {
+    private BigNumber(int sign, NativeIntArray component, int exponential, boolean copy) {
         this.sign = sign;
-        this.component = component;
+        this.component = copy ? component.copy() : component;
         this.exponential = exponential;
     }
 
@@ -160,83 +167,190 @@ class BigNumber {
      * @return
      */
     public BigNumber negate() {
-        return new BigNumber(-sign, component, exponential);
+        return new BigNumber(-sign, component, exponential, true);
     }
 
-    public BigNumber add(BigNumber other) {
+    /**
+     * <p>
+     * Returns a {@link BigNumber} whose value is (this + augend), and whose scale is
+     * max(this.scale(), augend.scale()).
+     * </p>
+     * 
+     * @param augend A value to be added to this {@link BigNumber}.
+     * @return this + augend
+     */
+    public BigNumber add(BigNumber augend) {
+        Objects.nonNull(augend);
+
+        // arrange sign
+        if (sign != augend.sign) {
+            return subtract(augend.negate());
+        }
+
+        // zero pattern
+        if (isZero()) {
+            return augend;
+        }
+
+        if (augend.isZero()) {
+            return this;
+        }
+
+        int xe = exponential;
+        int ye = augend.exponential;
+        NativeIntArray xc = component.copy();
+        NativeIntArray yc = augend.component.copy();
+
+        // Prepend zeros to equalise exponents.
+        // Note: Faster to use reverse then do unshifts.
+        int a = xe - ye;
+        NativeIntArray d;
+
+        if (a != 0) {
+            if (0 < a) {
+                ye = xe;
+                d = yc;
+            } else {
+                a = -a;
+                d = xc;
+            }
+
+            for (d.reverse(); a-- != 0; d.push(0)) {
+            }
+            d.reverse();
+        }
+
+        // Point xc to the longer array.
+        if (xc.length() - yc.length() < 0) {
+            d = yc;
+            yc = xc;
+            xc = d;
+        }
+
+        /*
+         * Only start adding at yc.length - 1 as the further digits of xc can be left as they are.
+         */
+        a = yc.length();
+        int b = 0;
+
+        for (; a != 0;) {
+            int value = xc.get(--a) + yc.get(a) + b;
+            b = Global.toSignedInteger(value / 10);
+            xc.set(a, value % 10);
+        }
+
+        // No need to check for zero, as +x + +y != 0 && -x + -y != 0
+        if (b != 0) {
+            xc.unshift(b);
+            ye++;
+        }
+
+        removeTailingZeros(xc);
+
+        return new BigNumber(augend.sign, xc, ye, false);
+    }
+
+    /**
+     * <p>
+     * Helper method to remove tailing zeros.
+     * </p>
+     * 
+     * @param ints
+     */
+    private void removeHeadingZeros(NativeIntArray ints) {
+        int index = 0;
+
+        while (index < ints.length() && ints.get(index++) == 0) {
+            ints.pop();
+        }
+    }
+
+    /**
+     * <p>
+     * Helper method to remove tailing zeros.
+     * </p>
+     * 
+     * @param ints
+     */
+    private void removeTailingZeros(NativeIntArray ints) {
+        int index = ints.length();
+
+        while (ints.get(--index) == 0) {
+            ints.pop();
+        }
+    }
+
+    public BigNumber subtract(BigNumber other) {
         // signs differ
         if (sign != other.sign) {
-            return subtract(other.negate());
+            return add(other.negate());
         }
 
         int xe = exponential;
         int ye = other.exponential;
-        int[] xc = component;
-        int[] yc = other.component;
+        NativeIntArray xc = component;
+        NativeIntArray yc = other.component;
+
+        if (xe == 0) {
+
+        }
 
         if (xe == 0 || ye == 0) {
-            // Either Infinity
-            if (xc == null || yc == null) {
-                // +-Infinity
-                return new BigNumber(sign / 0);
+            if (xc.get(0) == 0) {
+                return other.negate();
+            } else if (yc.get(0) == 0) {
+
             }
 
-            // Either zero
-            if (xc[0] == 0 || yc[0] == 0) {
-                return yc[0] != 0 ? other : xc[0] != 0 ? this : ZERO;
+            if (xc.get(0) == 0 || yc.get(0) == 0) {
+                return yc.get(0) != 0 ? other.negate() : xc.get(0) != 0 ? this : ZERO;
             }
         }
 
         // Determine which is the bigger number.
         // Prepend zeros to equalise exponents.
+        int zs = other.sign;
         int ze = 0;
-        int[] zc = null;
         int diff = xe - ye;
 
         if (0 < diff) {
             // x is larger than y
             ze = xe;
-            zc = new int[yc.length + diff];
-            System.arraycopy(yc, 0, zc, diff, yc.length);
         } else if (diff <= 0) {
             // y is larger than x
             ze = ye;
-            zc = new int[xc.length - diff];
-            System.arraycopy(xc, 0, zc, -diff, xc.length);
         }
 
         // Point xc to the longer array.
-        if (xc.length < yc.length) {
-            int[] temp = xc;
+        if (xc.length() < yc.length()) {
+            NativeIntArray temp = xc;
             xc = yc;
             yc = temp;
         }
 
-        int i = yc.length;
-        int j = 0;
+        xc = xc.copy();
+        NativeIntArray zc = new NativeIntArray(xc.length());
+        System.arraycopy(yc.toArray(), 0, zc.toArray(), Math.abs(diff), yc.length());
+        System.out.println(Arrays.toString(xc.toArray()));
+        System.out.println(Arrays.toString(zc.toArray()));
 
-        while (i != 0) {
-            zc[--i] = xc[i] + yc[i] + j;
-            j = zc[i] / 10 ^ 0;
-            zc[i] %= 10;
-        }
+        int index = zc.length();
 
-        // No need to check for zero, as +x + +y != 0 && -x + -y != 0
-        if (j != 0) {
-            System.out.println("unshift");
+        while (0 < index--) {
+            if (xc.get(index) < zc.get(index)) {
+                int pos = index;
 
-            // If this exception will be thrown, it is bug of this program. So we must rethrow the
-            // wrapped error in here.
-            throw new Error();
+                while (xc.get(--pos) == 0) {
+                    xc.set(pos, 9);
+                }
+                xc.set(pos, xc.get(pos) - 1);
+                xc.set(index, xc.get(index) + 10);
+            }
+            zc.set(index, xc.get(index) - zc.get(index));
         }
 
         // Remove trailing zeros.
-
-        return new BigNumber(ze, zc, ze);
-    }
-
-    public BigNumber subtract(BigNumber other) {
-        return other;
+        return new BigNumber(zs, zc, ze);
     }
 
     /**
@@ -247,8 +361,8 @@ class BigNumber {
         int exponential = this.exponential;
         StringBuilder builder = new StringBuilder();
 
-        for (int i = 0; i < component.length; i++) {
-            builder.append(component[i]);
+        for (int i = 0; i < component.length(); i++) {
+            builder.append(component.get(i));
         }
 
         if (exponential < 0) {
@@ -283,7 +397,18 @@ class BigNumber {
         return builder.toString();
     }
 
+    /**
+     * <p>
+     * Helper method to chech whether this value is zero or not.
+     * </p>
+     * 
+     * @return A result.
+     */
+    private boolean isZero() {
+        return exponential == 0 && component.get(0) == 0;
+    }
+
     private void debug() {
-        System.out.println("BigNumber [sign=" + sign + ", component=" + Arrays.toString(component) + ", exponential=" + exponential + "]");
+        System.out.println("BigNumber [sign=" + sign + ", component=" + Arrays.toString(component.toArray()) + ", exponential=" + exponential + "]");
     }
 }

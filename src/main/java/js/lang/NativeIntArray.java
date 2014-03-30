@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,58 +10,64 @@
 package js.lang;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
+import java.util.StringJoiner;
 
-import kiss.I;
+import booton.translator.Javascript;
 import booton.translator.Translator;
 
 /**
- * @version 2013/08/31 23:26:44
+ * @version 2014/03/29 19:56:30
  */
-public class NativeArray<T> extends NativeObject {
+public class NativeIntArray {
 
     /** The java emulation. */
-    private final ArrayList<T> list = new ArrayList();
+    private int[] list;
 
     /**
      * 
      */
-    public NativeArray() {
+    public NativeIntArray() {
+        list = new int[0];
     }
 
     /**
      * 
      */
-    public NativeArray(int initialSize) {
-        for (int i = 0; i < initialSize; i++) {
-            list.add(null);
+    public NativeIntArray(int initialSize) {
+        list = new int[initialSize];
+    }
+
+    /**
+     * 
+     */
+    public NativeIntArray(int[] initial) {
+        list = initial;
+    }
+
+    /**
+     * 
+     */
+    private NativeIntArray(List<Integer> initial) {
+        this(initial.size());
+
+        for (int i = 0; i < initial.size(); i++) {
+            list[i] = initial.get(i);
         }
     }
 
     /**
+     * <p>
+     * Retrieve the item at the specified index.
+     * </p>
      * 
+     * @param index A array index;
+     * @return A item at index.
      */
-    public NativeArray(T[] initial) {
-        for (T item : initial) {
-            list.add(item);
-        }
-    }
-
-    /**
-     * 
-     */
-    public NativeArray(Set<T> initial) {
-        list.addAll(initial);
-    }
-
-    /**
-     * 
-     */
-    public NativeArray(List<T> initial) {
-        list.addAll(initial);
+    public int get(int index) {
+        return list[index];
     }
 
     /**
@@ -72,153 +78,11 @@ public class NativeArray<T> extends NativeObject {
      * @param index A array index;
      * @return A item at index.
      */
-    public T get(int index) {
-        return (T) get(index, Object.class);
-    }
-
-    /**
-     * <p>
-     * Retrieve the item at the specified index.
-     * </p>
-     * 
-     * @param index A array index;
-     * @param defaultValue A default value.
-     * @return A item at index.
-     */
-    public <S> S get(int index, S defaultValue) {
-        T item = list.get(index);
-
-        return item == null ? defaultValue : (S) item;
-    }
-
-    /**
-     * <p>
-     * Retrieve the item at the specified index.
-     * </p>
-     * 
-     * @param index A array index;
-     * @return A item at index.
-     */
-    public int getAsInt(int index) {
-        return get(index, Integer.class).intValue();
-    }
-
-    /**
-     * <p>
-     * Retrieve the item at the specified index.
-     * </p>
-     * 
-     * @param index A array index.
-     * @param defaultValue A default value.
-     * @return A item at index.
-     */
-    public int getAsInt(int index, int defaultValue) {
-        T item = list.get(index);
-
-        if (item instanceof Integer) {
-            return ((Integer) item).intValue();
-        } else {
+    public int get(int index, int defaultValue) {
+        if (index < 0 || list.length <= index) {
             return defaultValue;
         }
-    }
-
-    /**
-     * <p>
-     * Retrieve the item at the specified index.
-     * </p>
-     * 
-     * @param index A array index;
-     * @return A item at index.
-     */
-    public long getAsLong(int index) {
-        return get(index, Long.class).longValue();
-    }
-
-    /**
-     * <p>
-     * Retrieve the item at the specified index.
-     * </p>
-     * 
-     * @param index A array index;
-     * @return A item at index.
-     */
-    public float getAsFloat(int index) {
-        return get(index, Float.class).floatValue();
-    }
-
-    /**
-     * <p>
-     * Retrieve the item at the specified index.
-     * </p>
-     * 
-     * @param index A array index;
-     * @return A item at index.
-     */
-    public double getAsDouble(int index) {
-        return get(index, Double.class).doubleValue();
-    }
-
-    /**
-     * <p>
-     * Retrieve the item at the specified index.
-     * </p>
-     * 
-     * @param index A array index;
-     * @return A item at index.
-     */
-    public boolean getAsBoolean(int index) {
-        return get(index, Boolean.class).booleanValue();
-    }
-
-    /**
-     * <p>
-     * Retrieve the item at the specified index.
-     * </p>
-     * 
-     * @param index A array index;
-     * @return A item at index.
-     */
-    public short getAsShort(int index) {
-        return get(index, Short.class).shortValue();
-    }
-
-    /**
-     * <p>
-     * Retrieve the item at the specified index.
-     * </p>
-     * 
-     * @param index A array index;
-     * @return A item at index.
-     */
-    public byte getAsByte(int index) {
-        return get(index, Byte.class).byteValue();
-    }
-
-    /**
-     * <p>
-     * Retrieve the item at the specified index.
-     * </p>
-     * 
-     * @param index A array index;
-     * @return A item at index.
-     */
-    public char getAsChar(int index) {
-        return get(index, Character.class).charValue();
-    }
-
-    /**
-     * <p>
-     * Helper method to get value.
-     * </p>
-     * 
-     * @param index
-     * @param type
-     * @return
-     */
-    private <X> X get(int index, Class<X> type) {
-        ensureSize(index + 1);
-
-        return (X) list.get(index);
+        return list[index];
     }
 
     /**
@@ -230,10 +94,10 @@ public class NativeArray<T> extends NativeObject {
      * @param value A value to set.
      * @return A value to set.
      */
-    public T set(int index, T value) {
+    public int set(int index, int value) {
         ensureSize(index + 1);
 
-        return list.set(index, value);
+        return list[index] = value;
     }
 
     /**
@@ -244,8 +108,13 @@ public class NativeArray<T> extends NativeObject {
      * @param min A minmum size.
      */
     private void ensureSize(int min) {
-        for (int i = list.size(); i < min; i++) {
-            list.add(null);
+        if (list.length < min) {
+            int[] copy = new int[min];
+
+            for (int i = 0; i < list.length; i++) {
+                copy[i] = list[i];
+            }
+            list = copy;
         }
     }
 
@@ -257,7 +126,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A array size.
      */
     public int length() {
-        return list.size();
+        return list.length;
     }
 
     /**
@@ -268,14 +137,17 @@ public class NativeArray<T> extends NativeObject {
      * @param values Arrays and/or values to concatenate to the resulting array.
      * @return
      */
-    public NativeArray<T> concat(T[] values) {
-        List<T> items = new ArrayList();
-        items.addAll(list);
+    public NativeIntArray concat(int[] values) {
+        int[] copy = new int[list.length + values.length];
 
-        for (T item : items) {
-            items.add(item);
+        for (int i = 0; i < list.length; i++) {
+            copy[i] = list[i];
         }
-        return new NativeArray(items);
+
+        for (int i = 0; i < values.length; i++) {
+            copy[i + list.length] = values[i];
+        }
+        return new NativeIntArray(copy);
     }
 
     /**
@@ -287,7 +159,12 @@ public class NativeArray<T> extends NativeObject {
      * @return A built expression.
      */
     public String join(String separator) {
-        return I.join(separator, list);
+        StringJoiner joiner = new StringJoiner(separator);
+
+        for (int i = 0; i < list.length; i++) {
+            joiner.add(String.valueOf(list[i]));
+        }
+        return joiner.toString();
     }
 
     /**
@@ -298,10 +175,10 @@ public class NativeArray<T> extends NativeObject {
      * @param item The elements to add to the end of the array.
      * @return The new length property of the object upon which the method was called.
      */
-    public int push(T item) {
-        list.add(item);
+    public int push(int item) {
+        set(list.length, item);
 
-        return list.size();
+        return list.length;
     }
 
     /**
@@ -311,8 +188,8 @@ public class NativeArray<T> extends NativeObject {
      * 
      * @return A removed item.
      */
-    public T pop() {
-        return list.isEmpty() ? null : list.remove(list.size() - 1);
+    public int pop() {
+        return remove(list.length - 1);
     }
 
     /**
@@ -323,8 +200,8 @@ public class NativeArray<T> extends NativeObject {
      * 
      * @return A removed item.
      */
-    public T shift() {
-        return list.isEmpty() ? null : list.remove(0);
+    public int shift() {
+        return remove(0);
     }
 
     /**
@@ -334,10 +211,10 @@ public class NativeArray<T> extends NativeObject {
      * 
      * @return The new length property of the object upon which the method was called.
      */
-    public int unshift(T item) {
-        list.add(0, item);
+    public int unshift(int item) {
+        add(0, item);
 
-        return list.size();
+        return list.length;
     }
 
     /**
@@ -349,8 +226,13 @@ public class NativeArray<T> extends NativeObject {
      * @param item A search item.
      * @return A first index or -1 if none is found.
      */
-    public int indexOf(Object item) {
-        return list.indexOf(item);
+    public int indexOf(int item) {
+        for (int i = 0; i < list.length; i++) {
+            if (list[i] == item) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -362,28 +244,13 @@ public class NativeArray<T> extends NativeObject {
      * @param item A search item.
      * @return A last index or -1 if none is found.
      */
-    public int lastIndexOf(Object item) {
-        return list.lastIndexOf(item);
-    }
-
-    /**
-     * <p>
-     * Changes the content of an array, adding new elements while removing old elements.
-     * </p>
-     */
-    public void add(int index, T item) {
-        list.add(index, item);
-    }
-
-    /**
-     * <p>
-     * Changes the content of an array, adding new elements while removing old elements.
-     * </p>
-     */
-    public void add(int index, T[] items) {
-        for (int i = 0; i < items.length; i++) {
-            list.add(i + index, items[i]);
+    public int lastIndexOf(int item) {
+        for (int i = list.length - 1; 0 <= i; i++) {
+            if (list[i] == item) {
+                return i;
+            }
         }
+        return -1;
     }
 
     /**
@@ -391,8 +258,54 @@ public class NativeArray<T> extends NativeObject {
      * Changes the content of an array, adding new elements while removing old elements.
      * </p>
      */
-    public T remove(int index) {
-        return list.remove(index);
+    public void add(int index, int item) {
+        add(index, new int[] {item});
+    }
+
+    /**
+     * <p>
+     * Changes the content of an array, adding new elements while removing old elements.
+     * </p>
+     */
+    public void add(int index, int[] items) {
+        int[] copy = new int[list.length + items.length];
+
+        for (int i = 0; i < index; i++) {
+            copy[i] = list[i];
+        }
+
+        for (int i = 0; i < items.length; i++) {
+            copy[i + index] = items[i];
+        }
+
+        for (int i = index; i < list.length; i++) {
+            copy[i + items.length] = list[i];
+        }
+        list = copy;
+    }
+
+    /**
+     * <p>
+     * Changes the content of an array, adding new elements while removing old elements.
+     * </p>
+     */
+    public int remove(int index) {
+        int[] copy = new int[list.length - 1];
+
+        for (int i = 0; i < index; i++) {
+            copy[i] = list[i];
+        }
+
+        for (int i = index + 1; i < list.length; i++) {
+            copy[i] = list[i];
+        }
+
+        int removed = list[index];
+
+        // replace
+        list = copy;
+
+        return removed;
     }
 
     /**
@@ -402,7 +315,7 @@ public class NativeArray<T> extends NativeObject {
      */
     public void remove(int index, int length) {
         for (int i = 0; i < length; i++) {
-            list.remove(index);
+            remove(index);
         }
     }
 
@@ -416,8 +329,8 @@ public class NativeArray<T> extends NativeObject {
      *            second-to-last element and the last element in the sequence.
      * @return
      */
-    public NativeArray<T> slice(int begin) {
-        return slice(begin, list.size());
+    public NativeIntArray slice(int begin) {
+        return slice(begin, list.length);
     }
 
     /**
@@ -436,8 +349,8 @@ public class NativeArray<T> extends NativeObject {
      *            end of the sequence.
      * @return
      */
-    public NativeArray<T> slice(int begin, int end) {
-        return new NativeArray(list.subList(begin, end));
+    public NativeIntArray slice(int begin, int end) {
+        return new NativeIntArray(Arrays.copyOfRange(list, begin, end));
     }
 
     /**
@@ -447,8 +360,14 @@ public class NativeArray<T> extends NativeObject {
      * 
      * @return
      */
-    public NativeArray<T> copy() {
-        return new NativeArray(list.toArray());
+    public NativeIntArray copy() {
+        List copy = new ArrayList();
+
+        for (int item : list) {
+            copy.add(item);
+        }
+
+        return new NativeIntArray(copy);
     }
 
     /**
@@ -459,8 +378,13 @@ public class NativeArray<T> extends NativeObject {
      * 
      * @return Chainable API.
      */
-    public NativeArray<T> reverse() {
-        Collections.reverse(list);
+    public NativeIntArray reverse() {
+        int[] copy = new int[list.length];
+
+        for (int i = 0; i < copy.length; i++) {
+            copy[i] = list[list.length - 1 - i];
+        }
+        list = copy;
 
         return this;
     }
@@ -472,19 +396,8 @@ public class NativeArray<T> extends NativeObject {
      * 
      * @return
      */
-    public Object[] toArray() {
-        return list.toArray();
-    }
-
-    /**
-     * <p>
-     * Convert type to Java array.
-     * </p>
-     * 
-     * @return
-     */
-    public T[] toArray(T[] container) {
-        return list.toArray(container);
+    public int[] toArray() {
+        return list;
     }
 
     /**
@@ -497,17 +410,17 @@ public class NativeArray<T> extends NativeObject {
      *            of each element.
      * @return
      */
-    public NativeArray<T> sort(NativeFunction<? extends Comparator<? super T>> comparator) {
-        Collections.sort(list, comparator.type);
-
-        return this;
+    public NativeIntArray sort(NativeFunction<? extends Comparator<Integer>> comparator) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
      * @version 2013/08/31 23:26:39
      */
     @SuppressWarnings("unused")
-    private static class Coder<T> extends Translator<NativeArray> {
+    private static class Coder<T> extends Translator<NativeIntArray> {
 
         /**
          * <p>
@@ -516,8 +429,8 @@ public class NativeArray<T> extends NativeObject {
          * 
          * @return
          */
-        public String NativeArray() {
-            return "[]";
+        public String NativeIntArray() {
+            return "boot.array(\"" + Javascript.computeSimpleClassName(int.class) + "\",0,0)";
         }
 
         /**
@@ -525,8 +438,8 @@ public class NativeArray<T> extends NativeObject {
          * Create array.
          * </p>
          */
-        public String NativeArray(int initialSize) {
-            return "new Array(" + param(0) + ")";
+        public String NativeIntArray(int initialSize) {
+            return "boot.array(\"" + Javascript.computeSimpleClassName(int.class) + "\"," + param(0) + ",0)";
         }
 
         /**
@@ -536,7 +449,7 @@ public class NativeArray<T> extends NativeObject {
          * 
          * @return
          */
-        public String NativeArray(T[] initial) {
+        public String NativeIntArray(int[] initial) {
             return param(0);
         }
 
@@ -561,117 +474,8 @@ public class NativeArray<T> extends NativeObject {
          * @param defaultValue A default value.
          * @return A item at index.
          */
-        public String get(int index, Object defaultValue) {
+        public String get(int index, int defaultValue) {
             return "(" + that + "[" + param(0) + "]||" + param(1) + ")";
-        }
-
-        /**
-         * <p>
-         * Retrieve the item at the specified index.
-         * </p>
-         * 
-         * @param index A array index;
-         * @return A item at index.
-         */
-        public String getAsInt(int index) {
-            return that + "[" + param(0) + "]";
-        }
-
-        /**
-         * <p>
-         * Retrieve the item at the specified index.
-         * </p>
-         * 
-         * @param index A array index.
-         * @param defaultValue A default value.
-         * @return A item at index.
-         */
-        public String getAsInt(int index, int defaultValue) {
-            return that + "[" + param(0) + "]||" + param(1);
-        }
-
-        /**
-         * <p>
-         * Retrieve the item at the specified index.
-         * </p>
-         * 
-         * @param index A array index;
-         * @return A item at index.
-         */
-        public String getAsLong(int index) {
-            return that + "[" + param(0) + "]";
-        }
-
-        /**
-         * <p>
-         * Retrieve the item at the specified index.
-         * </p>
-         * 
-         * @param index A array index;
-         * @return A item at index.
-         */
-        public String getAsFloat(int index) {
-            return that + "[" + param(0) + "]";
-        }
-
-        /**
-         * <p>
-         * Retrieve the item at the specified index.
-         * </p>
-         * 
-         * @param index A array index;
-         * @return A item at index.
-         */
-        public String getAsDouble(int index) {
-            return that + "[" + param(0) + "]";
-        }
-
-        /**
-         * <p>
-         * Retrieve the item at the specified index.
-         * </p>
-         * 
-         * @param index A array index;
-         * @return A item at index.
-         */
-        public String getAsBoolean(int index) {
-            return that + "[" + param(0) + "]";
-        }
-
-        /**
-         * <p>
-         * Retrieve the item at the specified index.
-         * </p>
-         * 
-         * @param index A array index;
-         * @return A item at index.
-         */
-        public String getAsShort(int index) {
-            return that + "[" + param(0) + "]";
-        }
-
-        /**
-         * <p>
-         * Retrieve the item at the specified index.
-         * </p>
-         * 
-         * @param index A array index;
-         * @return A item at index.
-         */
-        public String getAsByte(int index) {
-            return that + "[" + param(0) + "]";
-        }
-
-        /**
-         * <p>
-         * Retrieve the item at the specified index.
-         * </p>
-         * 
-         * @param index A array index;
-         * @return A item at index.
-         */
-        public String getAsChar(int index) {
-            return that + "[" + param(0) + "]";
         }
 
         /**
@@ -683,7 +487,7 @@ public class NativeArray<T> extends NativeObject {
          * @param value A value to set.
          * @return A value to set.
          */
-        public String set(int index, Object value) {
+        public String set(int index, int value) {
             return that + "[" + param(0) + "]=" + param(1);
         }
 
@@ -706,7 +510,7 @@ public class NativeArray<T> extends NativeObject {
          * @param values Arrays and/or values to concatenate to the resulting array.
          * @return
          */
-        public String concat(T[] values) {
+        public String concat(int[] values) {
             return that + ".concat(" + param(0) + ")";
         }
 
@@ -742,7 +546,7 @@ public class NativeArray<T> extends NativeObject {
          * @param item The elements to add to the end of the array.
          * @return The new length property of the object upon which the method was called.
          */
-        public String push(Object param0) {
+        public String push(int param0) {
             return that + ".push(" + param(0) + ")";
         }
 
@@ -755,7 +559,7 @@ public class NativeArray<T> extends NativeObject {
          * @param item A search item.
          * @return A first index or -1 if none is found.
          */
-        public String indexOf(Object item) {
+        public String indexOf(int item) {
             return that + ".indexOf(" + param(0) + ")";
         }
 
@@ -768,7 +572,7 @@ public class NativeArray<T> extends NativeObject {
          * @param item A search item.
          * @return A last index or -1 if none is found.
          */
-        public String lastIndexOf(Object item) {
+        public String lastIndexOf(int item) {
             return that + ".lastIndexOf(" + param(0) + ")";
         }
 
@@ -777,7 +581,7 @@ public class NativeArray<T> extends NativeObject {
          * Changes the content of an array, adding new elements while removing old elements.
          * </p>
          */
-        public String add(int index, T item) {
+        public String add(int index, int item) {
             return that + ".splice(" + param(0) + ",0," + param(1) + ")";
         }
 
@@ -786,7 +590,7 @@ public class NativeArray<T> extends NativeObject {
          * Changes the content of an array, adding new elements while removing old elements.
          * </p>
          */
-        public String add(int index, T[] items) {
+        public String add(int index, int[] items) {
             return that + ".splice(" + param(0) + ",0," + param(1) + ")";
         }
 
@@ -813,7 +617,7 @@ public class NativeArray<T> extends NativeObject {
          * Changes the content of an array, adding new elements while removing old elements.
          * </p>
          */
-        public String splice(int param0, int param1, NativeArray param2) {
+        public String splice(int param0, int param1, NativeIntArray param2) {
             return that + ".splice(" + param(0) + "," + param(1) + "," + param(2) + ")";
         }
 
@@ -866,7 +670,7 @@ public class NativeArray<T> extends NativeObject {
          * @return
          */
         public String copy() {
-            return that + ".slice(0)";
+            return "boot.array(" + that + ".$," + that + ".slice(0))";
         }
 
         /**
@@ -894,17 +698,6 @@ public class NativeArray<T> extends NativeObject {
 
         /**
          * <p>
-         * Convert type to Java array.
-         * </p>
-         * 
-         * @return
-         */
-        public String toArray(Object[] container) {
-            return that;
-        }
-
-        /**
-         * <p>
          * Sorts the elements of an array in place and returns the array.
          * </p>
          * 
@@ -913,7 +706,7 @@ public class NativeArray<T> extends NativeObject {
          *            conversion of each element.
          * @return
          */
-        public String sort(NativeFunction<? extends Comparator<? super T>> comparator) {
+        public String sort(NativeFunction<? extends Comparator<Integer>> comparator) {
             return that + ".sort(" + param(0) + ")";
         }
 
@@ -937,7 +730,7 @@ public class NativeArray<T> extends NativeObject {
          * 
          * @return The new length property of the object upon which the method was called.
          */
-        public String unshift(T item) {
+        public String unshift(int item) {
             return that + ".unshift(" + param(0) + ")";
         }
     }
