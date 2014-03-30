@@ -203,19 +203,19 @@ class BigNumber {
 
         // Prepend zeros to equalise exponents.
         // Note: Faster to use reverse then do unshifts.
-        int a = xe - ye;
+        int ze = Math.max(xe, ye);
+        int diff = xe - ye;
         NativeIntArray d;
 
-        if (a != 0) {
-            if (0 < a) {
-                ye = xe;
+        if (diff != 0) {
+            if (0 < diff) {
                 d = yc;
             } else {
-                a = -a;
+                diff = -diff;
                 d = xc;
             }
 
-            for (d.reverse(); a-- != 0; d.push(0)) {
+            for (d.reverse(); diff-- != 0; d.push(0)) {
             }
             d.reverse();
         }
@@ -230,24 +230,23 @@ class BigNumber {
         /*
          * Only start adding at yc.length - 1 as the further digits of xc can be left as they are.
          */
-        a = yc.length();
-        int b = 0;
+        int index = yc.length();
+        int carry = 0;
 
-        for (; a != 0;) {
-            int value = xc.get(--a) + yc.get(a) + b;
-            b = Global.toSignedInteger(value / 10);
-            xc.set(a, value % 10);
+        for (; index != 0;) {
+            int value = xc.get(--index) + yc.get(index) + carry;
+            carry = Global.toSignedInteger(value / 10);
+            xc.set(index, value % 10);
         }
 
-        // No need to check for zero, as +x + +y != 0 && -x + -y != 0
-        if (b != 0) {
-            xc.unshift(b);
-            ye++;
+        if (carry != 0) {
+            xc.unshift(carry);
+            ze++;
         }
 
         removeTailingZeros(xc);
 
-        return new BigNumber(augend.sign, xc, ye, false);
+        return new BigNumber(sign, xc, ze, false);
     }
 
     /**
