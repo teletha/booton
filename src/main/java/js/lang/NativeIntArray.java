@@ -417,6 +417,28 @@ public class NativeIntArray {
     }
 
     /**
+     * <p>
+     * Increment value by index.
+     * </p>
+     * 
+     * @param index
+     */
+    public void increment(int index) {
+        set(index, get(index) + 1);
+    }
+
+    /**
+     * <p>
+     * Decrement value by index.
+     * </p>
+     * 
+     * @param index
+     */
+    public void decrement(int index) {
+        set(index, get(index) - 1);
+    }
+
+    /**
      * @version 2013/08/31 23:26:39
      */
     @SuppressWarnings("unused")
@@ -732,6 +754,28 @@ public class NativeIntArray {
          */
         public String unshift(int item) {
             return that + ".unshift(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Increment value by index.
+         * </p>
+         * 
+         * @param index
+         */
+        public String increment(int index) {
+            return "++" + that + "[" + param(0) + "]";
+        }
+
+        /**
+         * <p>
+         * Decrement value by index.
+         * </p>
+         * 
+         * @param index
+         */
+        public String decrement(int index) {
+            return "--" + that + "[" + param(0) + "]";
         }
     }
 }
