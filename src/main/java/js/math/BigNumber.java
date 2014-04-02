@@ -14,6 +14,7 @@ import java.util.Objects;
 
 import js.lang.Global;
 import js.lang.NativeIntArray;
+import booton.translator.Debuggable;
 
 /**
  * @version 2014/03/26 13:21:00
@@ -244,6 +245,7 @@ class BigNumber {
      * @param subtrahend A value to be subtracted from this {@link BigNumber}.
      * @return
      */
+    @Debuggable
     public BigNumber subtract(BigNumber subtrahend) {
         Objects.nonNull(subtrahend);
 
@@ -269,16 +271,48 @@ class BigNumber {
         // equalize each exponent
         int largeExponent = exponential;
         int smallExponent = subtrahend.exponential;
+        int maxExponent = largeExponent;
         int diff = largeExponent - smallExponent;
 
-        if (0 < diff) {
+        boolean shouldSwap = false;
 
+        if (diff != 0) {
+            NativeIntArray min = null;
+
+            if (0 < diff) {
+                // "large" is larger than "small", so we should expand "small".
+                min = small;
+            } else {
+                // "large" is smaller than "small", so we should expand "large".
+                small = large;
+                maxExponent = smallExponent;
+                shouldSwap = true;
+
+                // absolutize exponent diff size
+                diff = -diff;
+            }
+
+            // prepend zero to equalize exponent
+            for (int i = diff; 0 < i; --i) {
+                min.unshift(0);
+            }
+        } else {
+            // each exponents are equal, so we check its digit values
+            int size = Math.min(large.length(), small.length());
+
+            for (int i = 0; i < size; i++) {
+                int largeValue = large.get(i);
+                int smallValue = small.get(i);
+
+                if (largeValue != smallValue) {
+                    shouldSwap = largeValue < smallValue;
+                    break;
+                }
+            }
         }
 
-        int exponent = equalize(large, exponential, small, subtrahend.exponential);
-
         // "large" compoent must be larger than "small" component
-        if (exponent < subtrahend.exponential) {
+        if (shouldSwap) {
             NativeIntArray swap = large;
 
             large = small;
@@ -322,12 +356,12 @@ class BigNumber {
         // Remove leading zeros and adjust exponent accordingly.
         while (0 < large.length() && large.get(0) == 0) {
             large.shift();
-            exponent--;
+            maxExponent--;
         }
-        System.out.println(Arrays.toString(large.toArray()) + "  e : " + exponent + "   sign : " + sign);
+        System.out.println(Arrays.toString(large.toArray()) + "  e : " + maxExponent + "   sign : " + sign);
 
         // API definition
-        return new BigNumber(sign, large, exponent, false);
+        return new BigNumber(sign, large, maxExponent, false);
     }
 
     /**

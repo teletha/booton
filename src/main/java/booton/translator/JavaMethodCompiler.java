@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 import jdk.internal.org.objectweb.asm.AnnotationVisitor;
 import jdk.internal.org.objectweb.asm.Attribute;
@@ -1305,6 +1306,9 @@ class JavaMethodCompiler extends MethodVisitor {
 
         switch (opcode) {
         case GOTO:
+            if (match(LABEL, GOTO) &&  ) {
+                
+            }
             connect(label);
             // disconnect the next appearing node from the current node
             current = null;
@@ -1432,6 +1436,11 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitLabel(Label label) {
+        if (current != null && match(LABEL, GOTO)) {
+            debugger.print("dispose " + current.previous);
+            disposeNode(current.previous);
+        }
+
         // recode current instruction
         record(LABEL);
 
@@ -1519,7 +1528,9 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
-
+                debugger.print("try merge condition group " + group.stream()
+                        .map(n -> n.id)
+                        .collect(Collectors.toList()) + "     " + condition.transition.id);
                 if (!found) {
                     found = true;
 
