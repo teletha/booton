@@ -1306,10 +1306,16 @@ class JavaMethodCompiler extends MethodVisitor {
 
         switch (opcode) {
         case GOTO:
-            if (match(LABEL, GOTO) &&  ) {
-                
+            if (match(LABEL, GOTO) && current.peek(0) instanceof OperandCondition && current.peek(1) instanceof OperandCondition) {
+                Node merger = getNode(label);
+                debugger.print("merge current " + current.id + "  merger " + merger.id);
+                mergeConditions(current, merger);
+
+                connect(label);
+            } else {
+                connect(label);
             }
-            connect(label);
+
             // disconnect the next appearing node from the current node
             current = null;
             node.to = true;
@@ -1514,17 +1520,23 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void mergeConditions(Node node) {
+        mergeConditions(node.previous, node);
+    }
+
+    /**
+     * <p>
+     * Helper method to merge all conditional operands.
+     * </p>
+     */
+    private void mergeConditions(Node start, Node initialTransition) {
         Set<Node> group = new HashSet();
-        group.add(node);
+        group.add(initialTransition);
 
         boolean found = false;
 
-        // Decide target node
-        Node target = node.previous;
-
         // Merge the sequencial conditional operands in this node from right to left.
-        for (int i = 0; i < target.stack.size(); i++) {
-            Operand operand = target.peek(i);
+        for (int i = 0; i < start.stack.size(); i++) {
+            Operand operand = start.peek(i);
 
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
@@ -1538,12 +1550,12 @@ class JavaMethodCompiler extends MethodVisitor {
                     group.add(condition.transition);
 
                     // Set next appearing node for grouping.
-                    condition.next = node;
-                } else if (group.contains(condition.transition) && target.peek(i - 1) instanceof OperandCondition) {
+                    condition.next = initialTransition;
+                } else if (group.contains(condition.transition) && start.peek(i - 1) instanceof OperandCondition) {
                     // Merge two adjucent conditional operands.
                     i--;
 
-                    target.set(i, new OperandCondition(condition, (OperandCondition) target.remove(i)));
+                    start.set(i, new OperandCondition(condition, (OperandCondition) start.remove(i)));
                 } else {
                     return; // Stop here.
                 }
@@ -1552,18 +1564,18 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // Merge this node and the specified node.
         // Rearch the start of node
-        if (target.previous != null) {
-            Operand operand = target.previous.peek(0);
+        if (start.previous != null) {
+            Operand operand = start.previous.peek(0);
 
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
 
                 if (group.contains(condition.transition)) {
-                    debugger.print("dispose merged node " + target.id);
-                    disposeNode(target);
+                    debugger.print("dispose merged node " + start.id);
+                    disposeNode(start);
 
                     // Merge recursively
-                    mergeConditions(node);
+                    mergeConditions(initialTransition);
                 }
             }
         }
