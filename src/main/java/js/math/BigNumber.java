@@ -204,7 +204,6 @@ class BigNumber {
         // equalize each exponent
         // candidate value for max exponent
         int exponent = exponential;
-        int exponent = equalize(large, exponential, small, augend.exponential);
 
         // "large" compoent must be larger than "small" component
         if (large.length() < small.length()) {
@@ -352,47 +351,15 @@ class BigNumber {
         while (0 < large.length() && large.get(--index) == 0) {
             large.pop();
         }
-
+        System.out.println(Arrays.toString(large.toArray()) + "  e : " + maxExponent + "   sign : " + sign);
         // Remove leading zeros and adjust exponent accordingly.
         while (0 < large.length() && large.get(0) == 0) {
             large.shift();
             maxExponent--;
         }
-        System.out.println(Arrays.toString(large.toArray()) + "  e : " + maxExponent + "   sign : " + sign);
 
         // API definition
         return new BigNumber(sign, large, maxExponent, false);
-    }
-
-    /**
-     * <p>
-     * Helper method to equalize each component size.
-     * </p>
-     * 
-     * @param one
-     * @param oneExponent
-     * @param other
-     * @param otherExponent
-     * @return
-     */
-    private int equalize(NativeIntArray one, NativeIntArray other, int diff) {
-        NativeIntArray small;
-
-        if (0 < diff) {
-            small = other;
-        } else {
-            small = one;
-            max = otherExponent;
-
-            // absolutize exponent diff size
-            diff = -diff;
-        }
-
-        // prepend zero to equalize exponent
-        for (int i = diff; 0 < i; --i) {
-            small.unshift(0);
-        }
-        return max;
     }
 
     /**
