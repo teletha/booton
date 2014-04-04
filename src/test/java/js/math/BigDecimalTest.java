@@ -11,11 +11,13 @@ package js.math;
 
 import java.math.BigDecimal;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @version 2014/03/17 9:41:10
  */
+@Ignore
 public class BigDecimalTest {
 
     /** reusable. */

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle.Control;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -22,6 +23,7 @@ import booton.soeur.ScriptRunner;
  * @version 2014/03/12 8:59:12
  */
 @RunWith(ScriptRunner.class)
+@Ignore
 public class ResourceBundleControlTest {
 
     @Test

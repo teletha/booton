@@ -17,12 +17,9 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Arrays;
 
-import booton.translator.JavaAPIProvider;
-
 /**
  * @version 2014/03/15 12:53:40
  */
-@JavaAPIProvider(BigDecimal.class)
 class JSBigDecimal {
 
     /**

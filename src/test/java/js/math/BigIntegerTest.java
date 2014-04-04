@@ -11,6 +11,7 @@ package js.math;
 
 import java.math.BigInteger;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -19,6 +20,7 @@ import booton.soeur.ScriptRunner;
 /**
  * @version 2014/03/13 13:39:23
  */
+@Ignore
 @RunWith(ScriptRunner.class)
 public class BigIntegerTest {
 

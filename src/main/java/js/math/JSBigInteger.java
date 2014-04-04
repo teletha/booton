@@ -18,12 +18,9 @@ import java.util.Random;
 import sun.misc.DoubleConsts;
 import sun.misc.FloatConsts;
 
-import booton.translator.JavaAPIProvider;
-
 /**
  * @version 2014/03/13 14:46:48
  */
-@JavaAPIProvider(BigInteger.class)
 class JSBigInteger extends Number implements Comparable<BigInteger> {
 
     /**

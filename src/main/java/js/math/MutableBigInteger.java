@@ -17,9 +17,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import booton.JDKEmulator;
-import booton.translator.JavaAPIProvider;
-
 /**
  * A class used to represent multiprecision integers that makes efficient use of allocated space by
  * allowing a number to occupy only part of an array so that the arrays do not have to be
@@ -34,7 +31,7 @@ import booton.translator.JavaAPIProvider;
  * @since 1.3
  */
 
-@JavaAPIProvider(JDKEmulator.class)
+// @JavaAPIProvider(JDKEmulator.class)
 class MutableBigInteger {
 
     /**
