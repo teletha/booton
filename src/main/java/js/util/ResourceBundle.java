@@ -24,7 +24,9 @@ import java.util.spi.ResourceBundleControlProvider;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
+
 import sun.reflect.CallerSensitive;
+
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -32,6 +34,8 @@ import booton.translator.JavaAPIProvider;
  */
 @JavaAPIProvider(java.util.ResourceBundle.class)
 abstract class ResourceBundle {
+
+    private static final Control CONTROL = new Control();
 
     /**
      * The parent bundle of this bundle. The parent bundle is searched by {@link #getObject
@@ -80,8 +84,12 @@ abstract class ResourceBundle {
         return bundle.get(key);
     }
 
-    private static Control getDefaultControl(String baseName) {
-        return new Control();
+    private static java.util.ResourceBundle.Control getDefaultControl(String baseName) {
+        return (java.util.ResourceBundle.Control) (Object) I.make(Control.class);
+    }
+
+    public js.util.ResourceBundle.Control access$300() {
+        return I.make(Control.class);
     }
 
     /**
@@ -511,10 +519,9 @@ abstract class ResourceBundle {
          *                <code>null</code>
          */
         public List<Locale> getCandidateLocales(String baseName, Locale locale) {
-            if (baseName == null) {
-                throw new NullPointerException();
-            }
-            return new ArrayList<>(CANDIDATES_CACHE.get(locale.getBaseLocale()));
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
         }
 
         /**
