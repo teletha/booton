@@ -362,7 +362,9 @@ class Locale {
      * @since 1.8
      */
     public boolean hasExtensions() {
-        return localeExtensions != null;
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
@@ -374,7 +376,9 @@ class Locale {
      * @since 1.8
      */
     public Locale stripExtensions() {
-        return hasExtensions() ? Locale.getInstance(baseLocale, null) : this;
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
