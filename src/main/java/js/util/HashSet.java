@@ -159,7 +159,7 @@ class HashSet<E> extends AbstractSet<E> {
      * @param key
      * @return
      */
-    private int hash(Object key) {
+    int hash(Object key) {
         return key == null ? -1 : key.hashCode();
     }
 
