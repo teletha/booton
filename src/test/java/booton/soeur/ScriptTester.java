@@ -101,6 +101,12 @@ public class ScriptTester {
             ScriptableObject window = (ScriptableObject) html.getEnclosingWindow().getScriptObject();
             ScriptableObject.defineClass(window, Chronus.class);
 
+            for (Class definition : JavascriptClassDefinition.class.getDeclaredClasses()) {
+                if (!definition.isInterface()) {
+                    ScriptableObject.defineClass(window, definition);
+                }
+            }
+
             // compile and load boot script
             engine.execute(html, engine.compile(html, unitTest, "unitTest.js", 1));
             engine.execute(html, engine.compile(html, boot, "boot.js", 1));
