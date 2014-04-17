@@ -12,7 +12,8 @@ package js.lang;
 import java.util.HashMap;
 import java.util.Map;
 
-
+import net.sourceforge.htmlunit.corejs.javascript.annotations.JSConstructor;
+import net.sourceforge.htmlunit.corejs.javascript.annotations.JSFunction;
 import booton.translator.Translator;
 
 /**
@@ -22,10 +23,17 @@ import booton.translator.Translator;
  * 
  * @version 2012/12/08 9:52:59
  */
-public class NativeMap<K, V> extends NativeObject {
+public class NativeMap<K, V> {
 
     /** The java emulation. */
     private final Map<K, V> container = new HashMap();
+
+    /**
+     * 
+     */
+    @JSConstructor
+    public NativeMap() {
+    }
 
     /**
      * <p>
@@ -35,6 +43,7 @@ public class NativeMap<K, V> extends NativeObject {
      * @param key
      * @return
      */
+    @JSFunction
     public V get(Object key) {
         return container.get(key);
     }
@@ -48,6 +57,7 @@ public class NativeMap<K, V> extends NativeObject {
      * @param value
      * @return
      */
+    @JSFunction
     public V set(K key, V value) {
         return container.put(key, value);
     }
@@ -60,6 +70,7 @@ public class NativeMap<K, V> extends NativeObject {
      * @param key
      * @return
      */
+    @JSFunction
     public boolean has(Object key) {
         return container.containsKey(key);
     }
@@ -72,6 +83,7 @@ public class NativeMap<K, V> extends NativeObject {
      * @param key
      * @return
      */
+    @JSFunction
     public V delete(Object key) {
         return container.remove(key);
     }
@@ -83,6 +95,7 @@ public class NativeMap<K, V> extends NativeObject {
      * 
      * @return
      */
+    @JSFunction
     public int size() {
         return container.size();
     }

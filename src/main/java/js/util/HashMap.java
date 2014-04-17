@@ -22,6 +22,19 @@ import booton.translator.JavaAPIProvider;
 @JavaAPIProvider(java.util.HashMap.class)
 public class HashMap<K, V> extends AbstractMap<K, V> {
 
+    /**
+     * The number of times this HashMap has been structurally modified Structural modifications are
+     * those that change the number of mappings in the HashMap or otherwise modify its internal
+     * structure (e.g., rehash). This field is used to make iterators on Collection-views of the
+     * HashMap fail-fast. (See ConcurrentModificationException).
+     */
+    transient int modCount;
+
+    /**
+     * Holds cached entrySet(). Note that AbstractMap fields are used for keySet() and values().
+     */
+    transient Set<Map.Entry<K, V>> entrySet;
+
     /** The item pool. */
     private final HashSet<Entry<K, V>> items = new HashSet();
 

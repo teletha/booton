@@ -12,7 +12,6 @@ package js.lang;
 import java.util.HashSet;
 import java.util.Set;
 
-
 import booton.translator.Translator;
 
 /**
@@ -120,7 +119,7 @@ public class NativeSet<T> extends NativeObject {
          * @return
          */
         public String size() {
-            return that + ".size()";
+            return that + ".size";
         }
     }
 }
