@@ -12,8 +12,6 @@ package js.lang;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sourceforge.htmlunit.corejs.javascript.annotations.JSConstructor;
-import net.sourceforge.htmlunit.corejs.javascript.annotations.JSFunction;
 import booton.translator.Translator;
 
 /**
@@ -29,13 +27,6 @@ public class NativeMap<K, V> {
     private final Map<K, V> container = new HashMap();
 
     /**
-     * 
-     */
-    @JSConstructor
-    public NativeMap() {
-    }
-
-    /**
      * <p>
      * Returns the value associated to the key, or undefined if there is none.
      * </p>
@@ -43,7 +34,6 @@ public class NativeMap<K, V> {
      * @param key
      * @return
      */
-    @JSFunction
     public V get(Object key) {
         return container.get(key);
     }
@@ -57,7 +47,6 @@ public class NativeMap<K, V> {
      * @param value
      * @return
      */
-    @JSFunction
     public V set(K key, V value) {
         return container.put(key, value);
     }
@@ -70,7 +59,6 @@ public class NativeMap<K, V> {
      * @param key
      * @return
      */
-    @JSFunction
     public boolean has(Object key) {
         return container.containsKey(key);
     }
@@ -83,7 +71,6 @@ public class NativeMap<K, V> {
      * @param key
      * @return
      */
-    @JSFunction
     public V delete(Object key) {
         return container.remove(key);
     }
@@ -95,9 +82,17 @@ public class NativeMap<K, V> {
      * 
      * @return
      */
-    @JSFunction
     public int size() {
         return container.size();
+    }
+
+    /**
+     * <p>
+     * Removes all key/value pairs from the Map object.
+     * </p>
+     */
+    public void clear() {
+        container.clear();
     }
 
     /**
@@ -176,7 +171,16 @@ public class NativeMap<K, V> {
          * @return
          */
         public String size() {
-            return that + ".size()";
+            return that + ".size";
+        }
+
+        /**
+         * <p>
+         * Removes all key/value pairs from the Map object.
+         * </p>
+         */
+        public String clear() {
+            return that + ".clear()";
         }
     }
 }
