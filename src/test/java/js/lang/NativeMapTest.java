@@ -64,4 +64,15 @@ public class NativeMapTest {
         assert map.get("a") == null;
         assert map.has("a") == false;
     }
+
+    @Test
+    public void clear() throws Exception {
+        NativeMap<String, String> map = new NativeMap();
+        map.set("a", null);
+        map.set("b", null);
+        assert map.size() == 2;
+
+        map.clear();
+        assert map.size() == 0;
+    }
 }
