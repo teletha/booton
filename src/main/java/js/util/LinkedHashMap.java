@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@ import booton.translator.JavaAPIProvider;
 /**
  * @version 2013/10/23 14:59:32
  */
-@JavaAPIProvider(java.util.LinkedHashSet.class)
-public class LinkedHashSet extends HashSet {
-
+@JavaAPIProvider(java.util.LinkedHashMap.class)
+public class LinkedHashMap<K, V> extends HashMap<K, V> {
 }

@@ -9,7 +9,7 @@
  */
 package js.lang;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import js.lang.NativeIntl.DateTimeFormat;
 
@@ -28,7 +28,7 @@ public class NativeDateTimeFormatTest {
     public void format() throws Exception {
 
         DateTimeFormat format = new DateTimeFormat("en");
-        String text = format.format(LocalDate.of(2014, 3, 7));
+        String text = format.format(LocalDateTime.of(2014, 3, 7, 1, 1));
         System.out.println(text);
     }
 }

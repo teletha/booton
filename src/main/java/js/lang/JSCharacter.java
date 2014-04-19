@@ -27,6 +27,14 @@ class JSCharacter implements JavascriptNative {
     /** The primitive char class. */
     public static final Class TYPE = Primitive.class;
 
+    /**
+     * The minimum value of a <a href="http://www.unicode.org/glossary/#supplementary_code_point">
+     * Unicode supplementary code point</a>, constant {@code U+10000}.
+     *
+     * @since 1.5
+     */
+    public static final int MIN_SUPPLEMENTARY_CODE_POINT = 0x010000;
+
     /** The actual character. */
     private NativeString character;
 
@@ -49,6 +57,24 @@ class JSCharacter implements JavascriptNative {
      */
     private JSCharacter(NativeString character) {
         this.character = character;
+    }
+
+    /**
+     * Determines the number of {@code char} values needed to represent the specified character
+     * (Unicode code point). If the specified character is equal to or greater than 0x10000, then
+     * the method returns 2. Otherwise, the method returns 1.
+     * <p>
+     * This method doesn't validate the specified character to be a valid Unicode code point. The
+     * caller must validate the character value using {@link #isValidCodePoint(int)
+     * isValidCodePoint} if necessary.
+     *
+     * @param codePoint the character (Unicode code point) to be tested.
+     * @return 2 if the character is a valid supplementary character; 1 otherwise.
+     * @see Character#isSupplementaryCodePoint(int)
+     * @since 1.5
+     */
+    public static int charCount(int codePoint) {
+        return codePoint >= MIN_SUPPLEMENTARY_CODE_POINT ? 2 : 1;
     }
 
     /**

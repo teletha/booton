@@ -9,7 +9,7 @@
  */
 package booton;
 
-import static js.lang.Global.*;
+import java.util.LinkedHashSet;
 
 /**
  * @version 2014/03/08 11:13:39
@@ -24,6 +24,26 @@ public class HelloWorld {
      * @param args
      */
     public static void main(String[] args) {
-        document.documentElement().append("Hello World!");
+        for (String string : create()) {
+            System.out.println(string);
+        }
+    }
+
+    /**
+     * <p>
+     * Create new set.
+     * </p>
+     * 
+     * @return
+     */
+    private static LinkedHashSet<String> create() {
+        LinkedHashSet<String> set = new LinkedHashSet();
+        set.add("one");
+        set.add("two");
+        set.add("three");
+        set.add("four");
+        set.add("five");
+
+        return set;
     }
 }

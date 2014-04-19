@@ -12,6 +12,7 @@ package js.lang;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.time.temporal.TemporalAccessor;
+import java.util.Date;
 
 import booton.translator.Translator;
 
@@ -52,10 +53,46 @@ public class NativeIntl {
         }
 
         /**
+         * <p>
+         * Returns a getter function that formats a date according to the locale and formatting
+         * options of this DateTimeFormat object.
+         * </p>
+         * 
+         * @param date The date to format.
+         * @return
+         */
+        public String format(Date date) {
+            return format.format(date.toInstant());
+        }
+
+        /**
          * @version 2014/03/09 22:56:14
          */
+        @SuppressWarnings("unused")
         private static class Coder extends Translator<DateTimeFormat> {
 
+            /**
+             * <p>
+             * The Intl.DateTimeFormat object is a constructor for objects that enable language
+             * sensitive date and time formatting.
+             * </p>
+             */
+            public String DateTimeFormat(String locales) {
+                return "new Intl.DateTimeFormat(" + param(0) + ")";
+            }
+
+            /**
+             * <p>
+             * Returns a getter function that formats a date according to the locale and formatting
+             * options of this DateTimeFormat object.
+             * </p>
+             * 
+             * @param date The date to format.
+             * @return
+             */
+            public String format(TemporalAccessor date) {
+                return that + ".format(" + param(0) + ")";
+            }
         }
     }
 
