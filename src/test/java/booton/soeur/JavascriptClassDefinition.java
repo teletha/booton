@@ -9,6 +9,7 @@
  */
 package booton.soeur;
 
+import js.lang.NativeIntl;
 import js.lang.NativeMap;
 import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
 
@@ -62,6 +63,22 @@ public class JavascriptClassDefinition {
 
         public int jsGet_size() {
             return map.size();
+        }
+    }
+
+    /**
+     * @version 2014/04/21 13:07:30
+     */
+    public static class DateTimeFormat extends Helper {
+
+        private NativeIntl.DateTimeFormat format = new NativeIntl.DateTimeFormat("en");
+
+        public void jsConstructor_DateTimeFormat() {
+            System.out.println("a");
+        }
+
+        public String jsFunction_format(int date) {
+            return format.format(date);
         }
     }
 }
