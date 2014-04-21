@@ -2,6 +2,10 @@
 window.setTimeout = Chronus.setTimeout;
 window.clearTimeout = Chronus.clearTimeout;
 
+Intl = {
+  DateTimeFormat: DateTimeFormat
+};
+
 /**
  * Polyfill for matches(selector).
  */

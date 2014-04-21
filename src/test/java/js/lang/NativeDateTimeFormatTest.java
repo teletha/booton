@@ -9,9 +9,8 @@
  */
 package js.lang;
 
-import java.time.LocalDateTime;
-
 import js.lang.NativeIntl.DateTimeFormat;
+import js.lang.NativeIntl.DateTimeFormat.Option;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,9 +25,19 @@ public class NativeDateTimeFormatTest {
 
     @Test
     public void format() throws Exception {
-
         DateTimeFormat format = new DateTimeFormat("en");
-        String text = format.format(LocalDateTime.of(2014, 3, 7, 1, 1));
+        String text = format.format(0);
         System.out.println(text);
     }
+
+    @Test
+    public void option() throws Exception {
+        Option option = new Option();
+        option.year = "numeric";
+
+        DateTimeFormat format = new DateTimeFormat("en", option);
+        String text = format.format(0);
+        System.out.println(text);
+    }
+
 }

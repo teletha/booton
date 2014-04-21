@@ -9,10 +9,12 @@
  */
 package js.lang;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
 import java.time.temporal.TemporalAccessor;
-import java.util.Date;
 
 import booton.translator.Translator;
 
@@ -41,6 +43,18 @@ public class NativeIntl {
 
         /**
          * <p>
+         * The Intl.DateTimeFormat object is a constructor for objects that enable language
+         * sensitive date and time formatting.
+         * </p>
+         */
+        public DateTimeFormat(String locales, Option option) {
+            DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
+            format = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT);
+
+        }
+
+        /**
+         * <p>
          * Returns a getter function that formats a date according to the locale and formatting
          * options of this DateTimeFormat object.
          * </p>
@@ -61,8 +75,30 @@ public class NativeIntl {
          * @param date The date to format.
          * @return
          */
-        public String format(Date date) {
-            return format.format(date.toInstant());
+        public String format(long date) {
+            return format.format(LocalDateTime.ofEpochSecond(date, 0, ZoneOffset.UTC));
+        }
+
+        /**
+         * @version 2014/04/21 13:28:26
+         */
+        public static class Option {
+
+            public String localeMatcher;
+
+            public String formatMatcher;
+
+            public boolean hour12;
+
+            public String timeZone;
+
+            public String weekday;
+
+            public String era;
+
+            public String year;
+
+            public String month;
         }
 
         /**
@@ -83,6 +119,16 @@ public class NativeIntl {
 
             /**
              * <p>
+             * The Intl.DateTimeFormat object is a constructor for objects that enable language
+             * sensitive date and time formatting.
+             * </p>
+             */
+            public String DateTimeFormat(String locales, Option option) {
+                return "new Intl.DateTimeFormat(" + param(0) + "," + param(1) + ")";
+            }
+
+            /**
+             * <p>
              * Returns a getter function that formats a date according to the locale and formatting
              * options of this DateTimeFormat object.
              * </p>
@@ -90,7 +136,7 @@ public class NativeIntl {
              * @param date The date to format.
              * @return
              */
-            public String format(TemporalAccessor date) {
+            public String format(long date) {
                 return that + ".format(" + param(0) + ")";
             }
         }
