@@ -10,8 +10,14 @@
 package booton.soeur;
 
 import js.lang.NativeIntl;
+import js.lang.NativeIntl.DateTimeFormat.Option;
 import js.lang.NativeMap;
+import kiss.I;
+import kiss.model.Model;
+import kiss.model.Property;
+import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
 import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
+import net.sourceforge.htmlunit.corejs.javascript.Undefined;
 
 /**
  * @version 2014/04/17 14:47:38
@@ -30,6 +36,25 @@ public class JavascriptClassDefinition {
         @Override
         public String getClassName() {
             return getClass().getSimpleName();
+        }
+
+        protected <T> T cast(Object object, Class<T> type) {
+            NativeObject base = (NativeObject) object;
+            T instance = I.make(type);
+            Model model = Model.load(type);
+
+            for (Property property : model.properties) {
+                Object value = base.get(property.name);
+
+                if (value == null || value instanceof Undefined) {
+                    // do nothing
+                } else if (property.isAttribute()) {
+                    model.set(instance, property, value);
+                } else {
+                    model.set(instance, property, cast(value, property.model.type));
+                }
+            }
+            return instance;
         }
     }
 
@@ -71,10 +96,14 @@ public class JavascriptClassDefinition {
      */
     public static class DateTimeFormat extends Helper {
 
-        private NativeIntl.DateTimeFormat format = new NativeIntl.DateTimeFormat("en");
+        private NativeIntl.DateTimeFormat format;
 
-        public void jsConstructor_DateTimeFormat() {
-            System.out.println("a");
+        public void jsConstructor(String locale, Object option) {
+            if (option instanceof Undefined) {
+                format = new NativeIntl.DateTimeFormat(locale);
+            } else {
+                format = new NativeIntl.DateTimeFormat(locale, cast(option, Option.class));
+            }
         }
 
         public String jsFunction_format(int date) {

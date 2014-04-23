@@ -16,6 +16,8 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
 import java.time.temporal.TemporalAccessor;
 
+import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativeProperty;
 import booton.translator.Translator;
 
 /**
@@ -48,6 +50,7 @@ public class NativeIntl {
          * </p>
          */
         public DateTimeFormat(String locales, Option option) {
+            System.out.println("aaAAA " + option);
             DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
             format = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT);
 
@@ -82,22 +85,30 @@ public class NativeIntl {
         /**
          * @version 2014/04/21 13:28:26
          */
-        public static class Option {
+        public static class Option implements JavascriptNative {
 
+            @JavascriptNativeProperty
             public String localeMatcher;
 
+            @JavascriptNativeProperty
             public String formatMatcher;
 
+            @JavascriptNativeProperty
             public boolean hour12;
 
+            @JavascriptNativeProperty
             public String timeZone;
 
+            @JavascriptNativeProperty
             public String weekday;
 
+            @JavascriptNativeProperty
             public String era;
 
+            @JavascriptNativeProperty
             public String year;
 
+            @JavascriptNativeProperty
             public String month;
         }
 
