@@ -1632,6 +1632,64 @@ class Arrays {
     }
 
     /**
+     * Returns a hash code based on the "deep contents" of the specified array. If the array
+     * contains other arrays as elements, the hash code is based on their contents and so on, ad
+     * infinitum. It is therefore unacceptable to invoke this method on an array that contains
+     * itself as an element, either directly or indirectly through one or more levels of arrays. The
+     * behavior of such an invocation is undefined.
+     * <p>
+     * For any two arrays <tt>a</tt> and <tt>b</tt> such that <tt>Arrays.deepEquals(a, b)</tt>, it
+     * is also the case that <tt>Arrays.deepHashCode(a) == Arrays.deepHashCode(b)</tt>.
+     * <p>
+     * The computation of the value returned by this method is similar to that of the value returned
+     * by {@link List#hashCode()} on a list containing the same elements as <tt>a</tt> in the same
+     * order, with one difference: If an element <tt>e</tt> of <tt>a</tt> is itself an array, its
+     * hash code is computed not by calling <tt>e.hashCode()</tt>, but as by calling the appropriate
+     * overloading of <tt>Arrays.hashCode(e)</tt> if <tt>e</tt> is an array of a primitive type, or
+     * as by calling <tt>Arrays.deepHashCode(e)</tt> recursively if <tt>e</tt> is an array of a
+     * reference type. If <tt>a</tt> is <tt>null</tt>, this method returns 0.
+     *
+     * @param a the array whose deep-content-based hash code to compute
+     * @return a deep-content-based hash code for <tt>a</tt>
+     * @see #hashCode(Object[])
+     * @since 1.5
+     */
+    public static int deepHashCode(Object a[]) {
+        if (a == null) {
+            return 0;
+        }
+
+        int result = 1;
+
+        for (Object element : a) {
+            int elementHash = 0;
+            if (element instanceof Object[]) {
+                elementHash = deepHashCode((Object[]) element);
+            } else if (element instanceof byte[]) {
+                elementHash = hashCode((byte[]) element);
+            } else if (element instanceof short[]) {
+                elementHash = hashCode((short[]) element);
+            } else if (element instanceof int[]) {
+                elementHash = hashCode((int[]) element);
+            } else if (element instanceof long[]) {
+                elementHash = hashCode((long[]) element);
+            } else if (element instanceof char[]) {
+                elementHash = hashCode((char[]) element);
+            } else if (element instanceof float[]) {
+                elementHash = hashCode((float[]) element);
+            } else if (element instanceof double[]) {
+                elementHash = hashCode((double[]) element);
+            } else if (element instanceof boolean[]) {
+                elementHash = hashCode((boolean[]) element);
+            } else if (element != null) {
+                elementHash = element.hashCode();
+            }
+            result = 31 * result + elementHash;
+        }
+        return result;
+    }
+
+    /**
      * Returns <tt>true</tt> if the two specified arrays are <i>deeply equal</i> to one another.
      * Unlike the {@link #equals(Object[],Object[])} method, this method is appropriate for use with
      * nested arrays of arbitrary depth.

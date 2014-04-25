@@ -20,12 +20,38 @@ import booton.translator.JavaAPIProvider;
 class BigIntegerEmulation extends Number implements Comparable<BigInteger> {
 
     /**
+     * The BigInteger constant zero.
+     *
+     * @since 1.2
+     */
+    public static final BigInteger ZERO = valueOf(0);
+
+    /**
+     * The BigInteger constant ten.
+     *
+     * @since 1.5
+     */
+    public static final BigInteger TEN = valueOf(10);
+
+    /**
      * Returns a BigInteger whose value is {@code (this + val)}.
      *
      * @param val value to be added to this BigInteger.
      * @return {@code this + val}
      */
     public BigInteger add(BigInteger val) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns a BigInteger whose value is {@code (this * val)}.
+     *
+     * @param val value to be multiplied by this BigInteger.
+     * @return {@code this * val}
+     */
+    public BigInteger multiply(BigInteger val) {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
         throw new Error();
@@ -69,6 +95,17 @@ class BigIntegerEmulation extends Number implements Comparable<BigInteger> {
      * @see #shiftRight
      */
     public BigInteger shiftLeft(int n) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns a BigInteger whose value is {@code (-this)}.
+     *
+     * @return {@code -this}
+     */
+    public BigInteger negate() {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
         throw new Error();
@@ -148,8 +185,6 @@ class BigIntegerEmulation extends Number implements Comparable<BigInteger> {
      * @return a BigInteger with the specified value.
      */
     public static BigInteger valueOf(long val) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return null;
     }
 }

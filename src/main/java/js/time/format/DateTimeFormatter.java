@@ -14,12 +14,10 @@ import java.time.format.ResolverStyle;
 import java.time.temporal.TemporalQuery;
 import java.util.Objects;
 
-import booton.translator.JavaAPIProvider;
-
 /**
  * @version 2014/04/24 15:23:34
  */
-@JavaAPIProvider(java.time.format.DateTimeFormatter.class)
+// @JavaAPIProvider(java.time.format.DateTimeFormatter.class)
 class DateTimeFormatter {
 
     /**
