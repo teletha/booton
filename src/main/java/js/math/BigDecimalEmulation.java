@@ -23,6 +23,27 @@ import booton.translator.JavaAPIProvider;
 class BigDecimalEmulation {
 
     /**
+     * The value 0, with a scale of 0.
+     *
+     * @since 1.5
+     */
+    public static final BigDecimal ZERO = valueOf(0);
+
+    /**
+     * The value 1, with a scale of 0.
+     *
+     * @since 1.5
+     */
+    public static final BigDecimal ONE = valueOf(1);
+
+    /**
+     * The value 10, with a scale of 0.
+     *
+     * @since 1.5
+     */
+    public static final BigDecimal TEN = valueOf(10);
+
+    /**
      * Rounding mode to round away from zero. Always increments the digit prior to a nonzero
      * discarded fraction. Note that this rounding mode never decreases the magnitude of the
      * calculated value.
@@ -210,6 +231,26 @@ class BigDecimalEmulation {
 
     /**
      * Returns a {@code BigDecimal} whose value is {@code (this /
+     * divisor)}, and whose scale is as specified. If rounding must be performed to generate a
+     * result with the specified scale, the specified rounding mode is applied.
+     *
+     * @param divisor value by which this {@code BigDecimal} is to be divided.
+     * @param scale scale of the {@code BigDecimal} quotient to be returned.
+     * @param roundingMode rounding mode to apply.
+     * @return {@code this / divisor}
+     * @throws ArithmeticException if {@code divisor} is zero,
+     *             {@code roundingMode==RoundingMode.UNNECESSARY} and the specified scale is
+     *             insufficient to represent the result of the division exactly.
+     * @since 1.5
+     */
+    public BigDecimal divide(BigDecimal divisor, int scale, RoundingMode roundingMode) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns a {@code BigDecimal} whose value is {@code (this /
      * divisor)}, with rounding according to the context settings.
      *
      * @param divisor value by which this {@code BigDecimal} is to be divided.
@@ -312,7 +353,7 @@ class BigDecimalEmulation {
      */
     public BigDecimal[] divideAndRemainder(BigDecimal divisor, MathContext mc) {
         BigDecimal[] result = new BigDecimal[2];
-    
+
         result[0] = divideToIntegralValue(divisor, mc);
         result[1] = subtract(result[0].multiply(divisor, mc));
         return result;
@@ -358,6 +399,25 @@ class BigDecimalEmulation {
      */
     public BigDecimal remainder(BigDecimal divisor, MathContext mc) {
         return divideAndRemainder(divisor, mc)[1];
+    }
+
+    /**
+     * Compares this {@code BigDecimal} with the specified {@code BigDecimal}. Two
+     * {@code BigDecimal} objects that are equal in value but have a different scale (like 2.0 and
+     * 2.00) are considered equal by this method. This method is provided in preference to
+     * individual methods for each of the six boolean comparison operators ({@literal <}, ==,
+     * {@literal >}, {@literal >=}, !=, {@literal <=}). The suggested idiom for performing these
+     * comparisons is: {@code (x.compareTo(y)} &lt;<i>op</i>&gt; {@code 0)}, where &lt;<i>op</i>&gt;
+     * is one of the six comparison operators.
+     *
+     * @param val {@code BigDecimal} to which this {@code BigDecimal} is to be compared.
+     * @return -1, 0, or 1 as this {@code BigDecimal} is numerically less than, equal to, or greater
+     *         than {@code val}.
+     */
+    public int compareTo(BigDecimal val) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
@@ -431,6 +491,125 @@ class BigDecimalEmulation {
     }
 
     /**
+     * Returns a string representation of this {@code BigDecimal} without an exponent field. For
+     * values with a positive scale, the number of digits to the right of the decimal point is used
+     * to indicate scale. For values with a zero or negative scale, the resulting string is
+     * generated as if the value were converted to a numerically equal value with zero scale and as
+     * if all the trailing zeros of the zero scale value were present in the result. The entire
+     * string is prefixed by a minus sign character '-' (<tt>'&#92;u002D'</tt>) if the unscaled
+     * value is less than zero. No sign character is prefixed if the unscaled value is zero or
+     * positive. Note that if the result of this method is passed to the
+     * {@linkplain #BigDecimal(String) string constructor}, only the numerical value of this
+     * {@code BigDecimal} will necessarily be recovered; the representation of the new
+     * {@code BigDecimal} may have a different scale. In particular, if this {@code BigDecimal} has
+     * a negative scale, the string resulting from this method will have a scale of zero when
+     * processed by the string constructor. (This method behaves analogously to the {@code toString}
+     * method in 1.4 and earlier releases.)
+     *
+     * @return a string representation of this {@code BigDecimal} without an exponent field.
+     * @since 1.5
+     * @see #toString()
+     * @see #toEngineeringString()
+     */
+    public String toPlainString() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns a {@code BigDecimal} which is numerically equal to this one but with any trailing
+     * zeros removed from the representation. For example, stripping the trailing zeros from the
+     * {@code BigDecimal} value {@code 600.0}, which has [{@code BigInteger}, {@code scale}]
+     * components equals to [6000, 1], yields {@code 6E2} with [{@code BigInteger}, {@code scale}]
+     * components equals to [6, -2]. If this BigDecimal is numerically equal to zero, then
+     * {@code BigDecimal.ZERO} is returned.
+     *
+     * @return a numerically equal {@code BigDecimal} with any trailing zeros removed.
+     * @since 1.5
+     */
+    public BigDecimal stripTrailingZeros() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns the <i>scale</i> of this {@code BigDecimal}. If zero or positive, the scale is the
+     * number of digits to the right of the decimal point. If negative, the unscaled value of the
+     * number is multiplied by ten to the power of the negation of the scale. For example, a scale
+     * of {@code -3} means the unscaled value is multiplied by 1000.
+     *
+     * @return the scale of this {@code BigDecimal}.
+     */
+    public int scale() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns a {@code BigDecimal} whose scale is the specified value, and whose unscaled value is
+     * determined by multiplying or dividing this {@code BigDecimal}'s unscaled value by the
+     * appropriate power of ten to maintain its overall value. If the scale is reduced by the
+     * operation, the unscaled value must be divided (rather than multiplied), and the value may be
+     * changed; in this case, the specified rounding mode is applied to the division.
+     * <p>
+     * Note that since BigDecimal objects are immutable, calls of this method do <i>not</i> result
+     * in the original object being modified, contrary to the usual convention of having methods
+     * named <tt>set<i>X</i></tt> mutate field <i>{@code X}</i>. Instead, {@code setScale} returns
+     * an object with the proper scale; the returned object may or may not be newly allocated.
+     *
+     * @param newScale scale of the {@code BigDecimal} value to be returned.
+     * @param roundingMode The rounding mode to apply.
+     * @return a {@code BigDecimal} whose scale is the specified value, and whose unscaled value is
+     *         determined by multiplying or dividing this {@code BigDecimal}'s unscaled value by the
+     *         appropriate power of ten to maintain its overall value.
+     * @throws ArithmeticException if {@code roundingMode==UNNECESSARY} and the specified scaling
+     *             operation would require rounding.
+     * @see RoundingMode
+     * @since 1.5
+     */
+    public BigDecimal setScale(int newScale, RoundingMode roundingMode) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Converts this {@code BigDecimal} to a {@code long}. This conversion is analogous to the
+     * <i>narrowing primitive conversion</i> from {@code double} to {@code short} as defined in
+     * section 5.1.3 of <cite>The Java&trade; Language Specification</cite>: any fractional part of
+     * this {@code BigDecimal} will be discarded, and if the resulting "{@code BigInteger}" is too
+     * big to fit in a {@code long}, only the low-order 64 bits are returned. Note that this
+     * conversion can lose information about the overall magnitude and precision of this
+     * {@code BigDecimal} value as well as return a result with the opposite sign.
+     *
+     * @return this {@code BigDecimal} converted to a {@code long}.
+     */
+    public long longValue() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Converts this {@code BigDecimal} to a {@code long}, checking for lost information. If this
+     * {@code BigDecimal} has a nonzero fractional part or is out of the possible range for a
+     * {@code long} result then an {@code ArithmeticException} is thrown.
+     *
+     * @return this {@code BigDecimal} converted to a {@code long}.
+     * @throws ArithmeticException if {@code this} has a nonzero fractional part, or will not fit in
+     *             a {@code long}.
+     * @since 1.5
+     */
+    public long longValueExact() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
      * Translates a {@code long} unscaled value and an {@code int} scale into a {@code BigDecimal}.
      * This {@literal "static factory method"} is provided in preference to a ({@code long},
      * {@code int}) constructor because it allows for reuse of frequently used {@code BigDecimal}
@@ -456,10 +635,7 @@ class BigDecimalEmulation {
      * @return a {@code BigDecimal} whose value is {@code val}.
      */
     public static BigDecimal valueOf(long val) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
-
+        return null;
     }
 
     /**

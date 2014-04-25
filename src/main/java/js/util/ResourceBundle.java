@@ -608,6 +608,35 @@ class ResourceBundle {
         }
 
         /**
+         * Returns a <code>ResourceBundle.Control</code> in which the {@link #getFormats(String)
+         * getFormats} method returns the specified <code>formats</code> and the
+         * {@link Control#getFallbackLocale(String, Locale) getFallbackLocale} method returns
+         * <code>null</code>. The <code>formats</code> must be equal to one of
+         * {@link Control#FORMAT_PROPERTIES}, {@link Control#FORMAT_CLASS} or
+         * {@link Control#FORMAT_DEFAULT}. <code>ResourceBundle.Control</code> instances returned by
+         * this method are singletons and thread-safe.
+         *
+         * @param formats the formats to be returned by the
+         *            <code>ResourceBundle.Control.getFormats</code> method
+         * @return a <code>ResourceBundle.Control</code> supporting the specified
+         *         <code>formats</code> with no fallback <code>Locale</code> support
+         * @exception NullPointerException if <code>formats</code> is <code>null</code>
+         * @exception IllegalArgumentException if <code>formats</code> is unknown
+         */
+        public static final Control getNoFallbackControl(List<String> formats) {
+            if (formats.equals(Control.FORMAT_DEFAULT)) {
+                return NoFallbackControl.NO_FALLBACK;
+            }
+            if (formats.equals(Control.FORMAT_PROPERTIES)) {
+                return NoFallbackControl.PROPERTIES_ONLY_NO_FALLBACK;
+            }
+            if (formats.equals(Control.FORMAT_CLASS)) {
+                return NoFallbackControl.CLASS_ONLY_NO_FALLBACK;
+            }
+            throw new IllegalArgumentException();
+        }
+
+        /**
          * Returns a <code>List</code> of <code>Locale</code>s as candidate locales for
          * <code>baseName</code> and <code>locale</code>. This method is called by the
          * <code>ResourceBundle.getBundle</code> factory method each time the factory method tries
@@ -888,6 +917,54 @@ class ResourceBundle {
          */
         public boolean needsReload(String baseName, Locale locale, String format, ClassLoader loader, ResourceBundle bundle, long loadTime) {
             return false;
+        }
+    }
+
+    /**
+     * @version 2014/04/25 9:42:42
+     */
+    private static class SingleFormatControl extends Control {
+
+        private static final Control PROPERTIES_ONLY = new SingleFormatControl(FORMAT_PROPERTIES);
+
+        private static final Control CLASS_ONLY = new SingleFormatControl(FORMAT_CLASS);
+
+        private final List<String> formats;
+
+        protected SingleFormatControl(List<String> formats) {
+            this.formats = formats;
+        }
+
+        @Override
+        public List<String> getFormats(String baseName) {
+            if (baseName == null) {
+                throw new NullPointerException();
+            }
+            return formats;
+        }
+    }
+
+    /**
+     * @version 2014/04/25 9:42:46
+     */
+    private static final class NoFallbackControl extends SingleFormatControl {
+
+        private static final Control NO_FALLBACK = new NoFallbackControl(FORMAT_DEFAULT);
+
+        private static final Control PROPERTIES_ONLY_NO_FALLBACK = new NoFallbackControl(FORMAT_PROPERTIES);
+
+        private static final Control CLASS_ONLY_NO_FALLBACK = new NoFallbackControl(FORMAT_CLASS);
+
+        protected NoFallbackControl(List<String> formats) {
+            super(formats);
+        }
+
+        @Override
+        public Locale getFallbackLocale(String baseName, Locale locale) {
+            if (baseName == null || locale == null) {
+                throw new NullPointerException();
+            }
+            return null;
         }
     }
 }

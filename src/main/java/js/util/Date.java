@@ -31,6 +31,40 @@ class Date {
     }
 
     /**
+     * Tests if this date is after the specified date.
+     *
+     * @param when a date.
+     * @return <code>true</code> if and only if the instant represented by this <tt>Date</tt> object
+     *         is strictly later than the instant represented by <tt>when</tt>; <code>false</code>
+     *         otherwise.
+     * @exception NullPointerException if <code>when</code> is null.
+     */
+    public boolean after(java.util.Date when) {
+        return when.getTime() < getTime();
+    }
+
+    /**
+     * Tests if this date is before the specified date.
+     *
+     * @param when a date.
+     * @return <code>true</code> if and only if the instant of time represented by this
+     *         <tt>Date</tt> object is strictly earlier than the instant represented by
+     *         <tt>when</tt>; <code>false</code> otherwise.
+     * @exception NullPointerException if <code>when</code> is null.
+     */
+    public boolean before(java.util.Date when) {
+        return getTime() < when.getTime();
+    }
+
+    /**
+     * Return a copy of this object.
+     */
+    @Override
+    public Object clone() {
+        return this;
+    }
+
+    /**
      * Returns the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this
      * <tt>Date</tt> object.
      *

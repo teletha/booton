@@ -12,6 +12,7 @@ package js.emulate.sun.util.locale.provider;
 import java.util.Locale;
 import java.util.spi.LocaleServiceProvider;
 
+import sun.util.locale.provider.LocaleServiceProviderPool.LocalizedObjectGetter;
 import booton.JDKEmulator;
 import booton.translator.JavaAPIProvider;
 
@@ -57,5 +58,17 @@ class LocaleServiceProviderPool {
      */
     public static Locale[] getAllAvailableLocales() {
         return new Locale[] {Locale.US};
+    }
+
+    public <P extends LocaleServiceProvider, S> S getLocalizedObject(LocalizedObjectGetter<P, S> provider, Locale locale, Object... params) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    public <P extends LocaleServiceProvider, S> S getLocalizedObject(LocalizedObjectGetter<P, S> provider, Locale locale, String key, Object... params) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 }

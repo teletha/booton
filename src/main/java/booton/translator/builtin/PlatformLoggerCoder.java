@@ -14,7 +14,7 @@ import sun.util.logging.PlatformLogger.Level;
 import booton.translator.Translator;
 
 /**
- * @version 2014/02/06 22:47:36
+ * @version 2014/04/25 9:40:36
  */
 public class PlatformLoggerCoder extends Translator<PlatformLogger> {
 
@@ -24,6 +24,10 @@ public class PlatformLoggerCoder extends Translator<PlatformLogger> {
 
     public String config(String param0) {
         return that + ".log(" + param(0) + ")";
+    }
+
+    public String info(String param0) {
+        return that + ".info(" + param(0) + ")";
     }
 
     public String info(String param0, Throwable param1) {

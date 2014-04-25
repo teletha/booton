@@ -152,6 +152,19 @@ class HashSet<E> extends AbstractSet<E> {
     }
 
     /**
+     * Returns a shallow copy of this <tt>HashSet</tt> instance: the elements themselves are not
+     * cloned.
+     *
+     * @return a shallow copy of this set
+     */
+    @Override
+    public Object clone() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
      * <p>
      * Compute hash.
      * </p>
