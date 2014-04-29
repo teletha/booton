@@ -1176,10 +1176,22 @@ class Node {
                 while (!nodes.isEmpty()) {
                     Node node = nodes.remove(0);
 
+                    // PATTERN 1
+                    // The exit node accepts only from case nodes.
                     if (node.getDominator() == enter) {
-                        // add break statement to each incoming node
                         for (Node incoming : node.incoming) {
                             incoming.addExpression("break");
+                        }
+                        return node;
+                    }
+
+                    // PATTERN 2
+                    // The exit node accepts both case nodes and other flow nodes.
+                    if (!node.hasDominator(enter)) {
+                        for (Node incoming : node.incoming) {
+                            if (incoming.hasDominator(enter)) {
+                                incoming.addExpression("break");
+                            }
                         }
                         return node;
                     }
