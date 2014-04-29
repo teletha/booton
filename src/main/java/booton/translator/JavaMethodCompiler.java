@@ -273,9 +273,9 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        if (script.source.getName().endsWith("model.Model") && original.equals("<init>")) {
-            debugger.enable = true;
-        }
+        // if (script.source.getName().endsWith("model.Model") && original.equals("<init>")) {
+        // debugger.enable = true;
+        // }
     }
 
     /**
