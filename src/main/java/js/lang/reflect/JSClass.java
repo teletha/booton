@@ -135,6 +135,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @return This element's annotation for the specified annotation type if present on this
      *         element, else null.
      */
+    @Override
     public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
         Objects.requireNonNull(annotationClass);
 
@@ -153,6 +154,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * 
      * @return All annotations present on this element.
      */
+    @Override
     public Annotation[] getAnnotations() {
         if (publicAnnotations == null) {
             publicAnnotations = new HashMap();
