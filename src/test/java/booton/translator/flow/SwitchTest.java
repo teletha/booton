@@ -216,7 +216,7 @@ public class SwitchTest extends ScriptTester {
     }
 
     @Test
-    public void BreakNoDefaultInOtherFlow() {
+    public void breakInOtherFlow1() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -234,6 +234,29 @@ public class SwitchTest extends ScriptTester {
                     }
                 }
                 return result;
+            }
+        });
+    }
+
+    @Test
+    public void breakInOtherFlow2() throws Exception {
+        test(new Scriptable() {
+
+            public int act(int value) {
+                if (value == 0) {
+                    value = 100;
+                } else {
+                    switch (value) {
+                    case 1:
+                        value--;
+                        break;
+
+                    default:
+                        value++;
+                        break;
+                    }
+                }
+                return value;
             }
         });
     }
