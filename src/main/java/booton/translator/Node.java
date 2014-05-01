@@ -819,7 +819,7 @@ class Node {
                 Operand root = base.left.invert();
                 Operand left = base.right;
                 Operand right = condition.right;
-
+                debugger.print("create ternary operator");
                 remove(0);
                 addOperand(new OperandExpression(root + "?" + left + ":" + right));
             } else if (elze != null && elze.frame && elze.to) {
