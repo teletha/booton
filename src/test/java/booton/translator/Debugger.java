@@ -22,15 +22,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import jdk.internal.org.objectweb.asm.AnnotationVisitor;
 import jdk.internal.org.objectweb.asm.Attribute;
-import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.ClassVisitor;
 import jdk.internal.org.objectweb.asm.Handle;
 import jdk.internal.org.objectweb.asm.Label;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Opcodes;
-import jdk.internal.org.objectweb.asm.util.ASMifier;
 import jdk.internal.org.objectweb.asm.util.Printer;
-import kiss.I;
 import booton.translator.Node.TryCatchFinally;
 
 /**
@@ -163,25 +160,11 @@ public class Debugger extends AnnotationVisitor {
                 String testClassName = computeTestClassName(script.source);
                 String testMethodName = computeTestMethodName(testClassName);
 
-                print(testClassName + " " + (testMethodName == null ? methodName : testClassName));
+                print("===== " + testClassName + "#" + (testMethodName == null ? methodName : testMethodName) + " =====");
                 print(nodes);
-
-                try {
-                    ClassReader reader = new ClassReader(script.source.getName());
-                    reader.accept(new ClassTracer(methodName, methodDescriptor, new ASMifier(), new PrintWriter(System.out)), 0);
-                } catch (Exception e) {
-                    throw I.quiet(e);
-                }
             } else {
-                print(script.source.getName() + " " + methodName);
+                print("===== " + script.source.getName() + "#" + methodName + " =====");
                 print(nodes);
-
-                try {
-                    ClassReader reader = new ClassReader(script.source.getName());
-                    reader.accept(new ClassTracer(methodName, methodDescriptor, new ASMifier(), new PrintWriter(System.out)), 0);
-                } catch (Exception e) {
-                    throw I.quiet(e);
-                }
             }
         }
     }
