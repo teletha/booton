@@ -865,7 +865,9 @@ class Node {
             if (loop != null) {
                 // continue
                 if (loop.hasHeader(next) && hasDominator(loop.entrance)) {
-                    debugger.print(() -> buffer.comment(id + " -> " + next.id + " continue to " + loop.entrance.id + " (" + next.currentCalls + " of " + requiredCalls + ")"));
+                    if (debugger.enable) {
+                        buffer.comment(id + " -> " + next.id + " continue to " + loop.entrance.id + " (" + next.currentCalls + " of " + requiredCalls + ")");
+                    }
 
                     String label = loop.computeLabelFor(this);
 
@@ -877,13 +879,17 @@ class Node {
 
                 // break
                 if (!loop.hasHeader(this) && loop.hasExit(next) && hasDominator(loop.entrance)) {
-                    debugger.print(() -> buffer.comment(id + " -> " + next.id + " break to " + loop.entrance.id + "(" + next.currentCalls + " of " + requiredCalls + ")"));
+                    if (debugger.enable) {
+                        buffer.comment(id + " -> " + next.id + " break to " + loop.entrance.id + "(" + next.currentCalls + " of " + requiredCalls + ")");
+                    }
                     buffer.append("break", loop.computeLabelFor(this), ";").line();
                     return;
                 }
             }
 
-            debugger.print(() -> buffer.comment(id + " -> " + next.id + " (" + next.currentCalls + " of " + requiredCalls + ")"));
+            if (debugger.enable) {
+                buffer.comment(id + " -> " + next.id + " (" + next.currentCalls + " of " + requiredCalls + ")");
+            }
 
             // normal process
             if (requiredCalls <= next.currentCalls) {

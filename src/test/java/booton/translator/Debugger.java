@@ -28,6 +28,9 @@ import jdk.internal.org.objectweb.asm.Label;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Opcodes;
 import jdk.internal.org.objectweb.asm.util.Printer;
+
+import org.objectweb.asm.util.TraceClassVisitor;
+
 import booton.translator.Node.TryCatchFinally;
 
 /**
@@ -102,12 +105,6 @@ public class Debugger extends AnnotationVisitor {
      */
     public void printInfo() {
         System.out.println(clazz.getName() + "#" + methodName + " " + methodDescriptor);
-    }
-
-    public void print(Runnable task) {
-        if (enable) {
-            task.run();
-        }
     }
 
     /**
