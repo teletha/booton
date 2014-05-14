@@ -148,6 +148,11 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private static final int DCMP = 416;
 
+    /**
+     * Represents a compare instruction. DCMPL and DCMPG
+     */
+    private static final int CMP = 417;
+
     /** The extra opcode for byte code parsing. */
     private static final int LABEL = 300;
 
@@ -1231,6 +1236,9 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitInvokeDynamicInsn(String name, String description, Handle bsm, Object... bsmArgs) {
+        // recode current instruction
+        record(INVOKEDYNAMIC);
+
         Handle handle = (Handle) bsmArgs[1];
         Type functionalInterfaceType = (Type) bsmArgs[2];
         Type lambdaType = Type.getMethodType(handle.getDesc());
@@ -1310,6 +1318,15 @@ class JavaMethodCompiler extends MethodVisitor {
                 Node merger = getNode(label);
                 debugger.print("merge current " + current.id + "  merger " + merger.id);
                 mergeConditions(current, merger);
+
+                connect(label);
+            } else if (match(CMP, GOTO)) {
+                debugger.print("Compare Goto");
+                debugger.print(nodes);
+
+                if (true) {
+                    throw new Error();
+                }
 
                 connect(label);
             } else {
@@ -1591,6 +1608,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitLdcInsn(Object constant) {
+        record(LDC);
+
         if (constant instanceof String) {
             current.stack.add(new OperandString((String) constant));
         } else if (constant instanceof Long) {
@@ -2360,6 +2379,30 @@ class JavaMethodCompiler extends MethodVisitor {
                 case IF_ICMPLT:
                 case IF_ICMPNE:
                 case GOTO:
+                    continue root;
+
+                default:
+                    return false;
+                }
+
+            case CMP:
+                switch (record) {
+                case IFEQ:
+                case IFGE:
+                case IFGT:
+                case IFLE:
+                case IFLT:
+                case IFNE:
+                case IFNONNULL:
+                case IFNULL:
+                case IF_ACMPEQ:
+                case IF_ACMPNE:
+                case IF_ICMPEQ:
+                case IF_ICMPGE:
+                case IF_ICMPGT:
+                case IF_ICMPLE:
+                case IF_ICMPLT:
+                case IF_ICMPNE:
                     continue root;
 
                 default:
