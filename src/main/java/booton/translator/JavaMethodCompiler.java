@@ -639,16 +639,17 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private void processTernaryOperator() {
         Operand third = current.peek(2);
-
+        debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
+        debugger.print(nodes);
         if (third instanceof OperandCondition) {
             Operand first = current.peek(0);
-
+            debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
             if (first == Node.END) {
                 return;
             }
 
             Operand second = current.peek(1);
-
+            debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
             if (second == Node.END) {
                 return;
             }
@@ -656,7 +657,7 @@ class JavaMethodCompiler extends MethodVisitor {
             Node firstNode = findNodeBy(first);
             Node secondNode = findNodeBy(second);
             Node thirdNode = findNodeBy(third);
-
+            debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
             if (firstNode == secondNode) {
                 return;
             }
@@ -1318,15 +1319,6 @@ class JavaMethodCompiler extends MethodVisitor {
                 Node merger = getNode(label);
                 debugger.print("merge current " + current.id + "  merger " + merger.id);
                 mergeConditions(current, merger);
-
-                connect(label);
-            } else if (match(CMP, GOTO)) {
-                debugger.print("Compare Goto");
-                debugger.print(nodes);
-
-                if (true) {
-                    throw new Error();
-                }
 
                 connect(label);
             } else {
