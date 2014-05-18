@@ -278,7 +278,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        // if (script.source.getName().endsWith("model.Model") && original.equals("<init>")) {
+        // if (script.source.getName().endsWith("Array") && original.equals("newInstance")) {
         // debugger.enable = true;
         // }
     }
@@ -1605,7 +1605,7 @@ class JavaMethodCompiler extends MethodVisitor {
         if (constant instanceof String) {
             current.stack.add(new OperandString((String) constant));
         } else if (constant instanceof Long) {
-            current.addOperand(Javascript.writePrimitiveCode((Long) constant));
+            current.addOperand(writePrimitiveCode((Long) constant));
         } else if (constant instanceof Type) {
             String className = ((Type) constant).getInternalName();
 

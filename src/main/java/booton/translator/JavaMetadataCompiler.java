@@ -9,6 +9,8 @@
  */
 package booton.translator;
 
+import static booton.translator.Javascript.*;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
@@ -127,6 +129,8 @@ class JavaMetadataCompiler {
                 joiner.add(compileValue(Array.get(value, i)));
             }
             return joiner.toString();
+        } else if (type == Long.class) {
+            return writePrimitiveCode((long) value);
         } else {
             return value.toString();
         }
