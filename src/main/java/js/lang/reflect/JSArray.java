@@ -45,7 +45,15 @@ class JSArray {
         array.setProperty("$", ((JSClass) (Object) componentType).getArrayClass().getName());
 
         for (int i = 0; i < length; i++) {
-            array.set(i, componentType.isPrimitive() ? 0 : null);
+            if (componentType.isPrimitive()) {
+                if (componentType == long.class) {
+                    array.set(i, 0L);
+                } else {
+                    array.set(i, 0);
+                }
+            } else {
+                array.set(i, null);
+            }
         }
         return array;
     }
