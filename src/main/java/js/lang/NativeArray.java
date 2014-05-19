@@ -238,6 +238,110 @@ public class NativeArray<T> extends NativeObject {
 
     /**
      * <p>
+     * Set the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
+     * @param value A value to set.
+     * @return A value to set.
+     */
+    public void set(int index, int value) {
+        set(index, Integer.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Set the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
+     * @param value A value to set.
+     * @return A value to set.
+     */
+    public void set(int index, long value) {
+        set(index, Long.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Set the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
+     * @param value A value to set.
+     * @return A value to set.
+     */
+    public void set(int index, float value) {
+        set(index, Float.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Set the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
+     * @param value A value to set.
+     * @return A value to set.
+     */
+    public void set(int index, double value) {
+        set(index, Double.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Set the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
+     * @param value A value to set.
+     * @return A value to set.
+     */
+    public void set(int index, byte value) {
+        set(index, Byte.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Set the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
+     * @param value A value to set.
+     * @return A value to set.
+     */
+    public void set(int index, short value) {
+        set(index, Short.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Set the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
+     * @param value A value to set.
+     * @return A value to set.
+     */
+    public void set(int index, boolean value) {
+        set(index, Boolean.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Set the item at the specified index.
+     * </p>
+     * 
+     * @param index A array index;
+     * @param value A value to set.
+     * @return A value to set.
+     */
+    public void set(int index, char value) {
+        set(index, Character.valueOf(value));
+    }
+
+    /**
+     * <p>
      * Ensure list size.
      * </p>
      * 
@@ -684,6 +788,110 @@ public class NativeArray<T> extends NativeObject {
          * @return A value to set.
          */
         public String set(int index, Object value) {
+            return that + "[" + param(0) + "]=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Set the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @param value A value to set.
+         * @return A value to set.
+         */
+        public String set(int index, int value) {
+            return that + "[" + param(0) + "]=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Set the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @param value A value to set.
+         * @return A value to set.
+         */
+        public String set(int index, long value) {
+            return that + "[" + param(0) + "]=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Set the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @param value A value to set.
+         * @return A value to set.
+         */
+        public String set(int index, float value) {
+            return that + "[" + param(0) + "]=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Set the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @param value A value to set.
+         * @return A value to set.
+         */
+        public String set(int index, double value) {
+            return that + "[" + param(0) + "]=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Set the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @param value A value to set.
+         * @return A value to set.
+         */
+        public String set(int index, boolean value) {
+            return that + "[" + param(0) + "]=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Set the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @param value A value to set.
+         * @return A value to set.
+         */
+        public String set(int index, char value) {
+            return that + "[" + param(0) + "]=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Set the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @param value A value to set.
+         * @return A value to set.
+         */
+        public String set(int index, byte value) {
+            return that + "[" + param(0) + "]=" + param(1);
+        }
+
+        /**
+         * <p>
+         * Set the item at the specified index.
+         * </p>
+         * 
+         * @param index A array index;
+         * @param value A value to set.
+         * @return A value to set.
+         */
+        public String set(int index, short value) {
             return that + "[" + param(0) + "]=" + param(1);
         }
 
