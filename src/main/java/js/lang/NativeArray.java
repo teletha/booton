@@ -246,7 +246,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A value to set.
      */
     public void set(int index, int value) {
-        set(index, Integer.valueOf(value));
+        set(index, (T) Integer.valueOf(value));
     }
 
     /**
@@ -259,7 +259,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A value to set.
      */
     public void set(int index, long value) {
-        set(index, Long.valueOf(value));
+        set(index, (T) Long.valueOf(value));
     }
 
     /**
@@ -272,7 +272,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A value to set.
      */
     public void set(int index, float value) {
-        set(index, Float.valueOf(value));
+        set(index, (T) Float.valueOf(value));
     }
 
     /**
@@ -285,7 +285,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A value to set.
      */
     public void set(int index, double value) {
-        set(index, Double.valueOf(value));
+        set(index, (T) Double.valueOf(value));
     }
 
     /**
@@ -298,7 +298,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A value to set.
      */
     public void set(int index, byte value) {
-        set(index, Byte.valueOf(value));
+        set(index, (T) Byte.valueOf(value));
     }
 
     /**
@@ -311,7 +311,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A value to set.
      */
     public void set(int index, short value) {
-        set(index, Short.valueOf(value));
+        set(index, (T) Short.valueOf(value));
     }
 
     /**
@@ -324,7 +324,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A value to set.
      */
     public void set(int index, boolean value) {
-        set(index, Boolean.valueOf(value));
+        set(index, (T) Boolean.valueOf(value));
     }
 
     /**
@@ -337,7 +337,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A value to set.
      */
     public void set(int index, char value) {
-        set(index, Character.valueOf(value));
+        set(index, (T) Character.valueOf(value));
     }
 
     /**
