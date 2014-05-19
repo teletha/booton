@@ -212,7 +212,7 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void ifCondition() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
+            @Debuggable(afterLabel = true, beforeLabel = true)
             String act(int value) {
                 if (value < 0 ? value == -1 : value == 2) {
                     if (value < 0) {

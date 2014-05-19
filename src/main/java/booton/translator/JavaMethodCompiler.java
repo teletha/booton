@@ -148,6 +148,11 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private static final int DCMP = 416;
 
+    /**
+     * Represents a compare instruction. DCMPL and DCMPG
+     */
+    private static final int CMP = 417;
+
     /** The extra opcode for byte code parsing. */
     private static final int LABEL = 300;
 
@@ -273,7 +278,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        // if (script.source.getName().endsWith("model.Model") && original.equals("<init>")) {
+        // if (script.source.getName().endsWith("Array") && original.equals("newInstance")) {
         // debugger.enable = true;
         // }
     }
@@ -634,16 +639,17 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private void processTernaryOperator() {
         Operand third = current.peek(2);
-
+        debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
+        debugger.print(nodes);
         if (third instanceof OperandCondition) {
             Operand first = current.peek(0);
-
+            debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
             if (first == Node.END) {
                 return;
             }
 
             Operand second = current.peek(1);
-
+            debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
             if (second == Node.END) {
                 return;
             }
@@ -651,7 +657,7 @@ class JavaMethodCompiler extends MethodVisitor {
             Node firstNode = findNodeBy(first);
             Node secondNode = findNodeBy(second);
             Node thirdNode = findNodeBy(third);
-
+            debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
             if (firstNode == secondNode) {
                 return;
             }
@@ -1231,6 +1237,9 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitInvokeDynamicInsn(String name, String description, Handle bsm, Object... bsmArgs) {
+        // recode current instruction
+        record(INVOKEDYNAMIC);
+
         Handle handle = (Handle) bsmArgs[1];
         Type functionalInterfaceType = (Type) bsmArgs[2];
         Type lambdaType = Type.getMethodType(handle.getDesc());
@@ -1591,10 +1600,12 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitLdcInsn(Object constant) {
+        record(LDC);
+
         if (constant instanceof String) {
             current.stack.add(new OperandString((String) constant));
         } else if (constant instanceof Long) {
-            current.addOperand(Javascript.writePrimitiveCode((Long) constant));
+            current.addOperand(writePrimitiveCode((Long) constant));
         } else if (constant instanceof Type) {
             String className = ((Type) constant).getInternalName();
 
@@ -2360,6 +2371,30 @@ class JavaMethodCompiler extends MethodVisitor {
                 case IF_ICMPLT:
                 case IF_ICMPNE:
                 case GOTO:
+                    continue root;
+
+                default:
+                    return false;
+                }
+
+            case CMP:
+                switch (record) {
+                case IFEQ:
+                case IFGE:
+                case IFGT:
+                case IFLE:
+                case IFLT:
+                case IFNE:
+                case IFNONNULL:
+                case IFNULL:
+                case IF_ACMPEQ:
+                case IF_ACMPNE:
+                case IF_ICMPEQ:
+                case IF_ICMPGE:
+                case IF_ICMPGT:
+                case IF_ICMPLE:
+                case IF_ICMPLT:
+                case IF_ICMPNE:
                     continue root;
 
                 default:

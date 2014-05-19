@@ -9,6 +9,7 @@
  */
 package js.math;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -17,6 +18,7 @@ import booton.soeur.ScriptRunner;
 /**
  * @version 2014/03/26 13:21:20
  */
+@Ignore
 @RunWith(ScriptRunner.class)
 public class BigNumberTest {
 
