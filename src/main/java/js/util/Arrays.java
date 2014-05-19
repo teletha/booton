@@ -9,6 +9,8 @@
  */
 package js.util;
 
+import static booton.translator.builtin.JavascriptSnippet.*;
+
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Comparator;
@@ -1370,7 +1372,7 @@ class Arrays {
      *             <tt>toIndex &gt; a.length</tt>
      */
     public static void fill(int[] array, int fromIndex, int toIndex, int value) {
-        fill((Object[]) (Object) array, fromIndex, toIndex, value);
+        fill((Object[]) (Object) array, fromIndex, toIndex, nocast(value));
     }
 
     /**
@@ -1400,7 +1402,7 @@ class Arrays {
      *             <tt>toIndex &gt; a.length</tt>
      */
     public static void fill(long[] array, int fromIndex, int toIndex, long value) {
-        fill((Object[]) (Object) array, fromIndex, toIndex, value);
+        fill((Object[]) (Object) array, fromIndex, toIndex, nocast(value));
     }
 
     /**
@@ -1430,7 +1432,7 @@ class Arrays {
      *             <tt>toIndex &gt; a.length</tt>
      */
     public static void fill(float[] array, int fromIndex, int toIndex, float value) {
-        fill((Object[]) (Object) array, fromIndex, toIndex, value);
+        fill((Object[]) (Object) array, fromIndex, toIndex, nocast(value));
     }
 
     /**
@@ -1460,7 +1462,7 @@ class Arrays {
      *             <tt>toIndex &gt; a.length</tt>
      */
     public static void fill(double[] array, int fromIndex, int toIndex, double value) {
-        fill((Object[]) (Object) array, fromIndex, toIndex, value);
+        fill((Object[]) (Object) array, fromIndex, toIndex, nocast(value));
     }
 
     /**
@@ -1490,7 +1492,7 @@ class Arrays {
      *             <tt>toIndex &gt; a.length</tt>
      */
     public static void fill(short[] array, int fromIndex, int toIndex, short value) {
-        fill((Object[]) (Object) array, fromIndex, toIndex, value);
+        fill((Object[]) (Object) array, fromIndex, toIndex, nocast(value));
     }
 
     /**
@@ -1520,7 +1522,7 @@ class Arrays {
      *             <tt>toIndex &gt; a.length</tt>
      */
     public static void fill(byte[] array, int fromIndex, int toIndex, byte value) {
-        fill((Object[]) (Object) array, fromIndex, toIndex, value);
+        fill((Object[]) (Object) array, fromIndex, toIndex, nocast(value));
     }
 
     /**
@@ -1550,7 +1552,7 @@ class Arrays {
      *             <tt>toIndex &gt; a.length</tt>
      */
     public static void fill(char[] array, int fromIndex, int toIndex, char value) {
-        fill((Object[]) (Object) array, fromIndex, toIndex, value);
+        fill((Object[]) (Object) array, fromIndex, toIndex, nocast(value));
     }
 
     /**
@@ -1580,7 +1582,7 @@ class Arrays {
      *             <tt>toIndex &gt; a.length</tt>
      */
     public static void fill(boolean[] array, int fromIndex, int toIndex, boolean value) {
-        fill((Object[]) (Object) array, fromIndex, toIndex, value);
+        fill((Object[]) (Object) array, fromIndex, toIndex, nocast(value));
     }
 
     /**
