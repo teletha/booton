@@ -88,7 +88,7 @@ class AbstractStringBuilder<T extends Appendable> implements Appendable, CharSeq
     public T append(String value) {
         text = text.concat(value);
 
-        return (T) (Object) this;
+        return (T) this;
     }
 
     /**
@@ -110,6 +110,7 @@ class AbstractStringBuilder<T extends Appendable> implements Appendable, CharSeq
      * @return a reference to this object.
      * @since 1.5
      */
+    @Override
     public T append(CharSequence value) {
         return append(String.valueOf(value));
     }
@@ -137,6 +138,7 @@ class AbstractStringBuilder<T extends Appendable> implements Appendable, CharSeq
      * @throws IndexOutOfBoundsException if {@code start} is negative, or {@code start} is greater
      *             than {@code end} or {@code end} is greater than {@code s.length()}
      */
+    @Override
     public T append(CharSequence sequence, int start, int end) {
         if (sequence == null) {
             sequence = "null";
@@ -215,7 +217,7 @@ class AbstractStringBuilder<T extends Appendable> implements Appendable, CharSeq
      * @return Chainable API.
      */
     public T append(int value) {
-        return (T) (Object) append(String.valueOf(value));
+        return append(String.valueOf(value));
     }
 
     /**
@@ -333,6 +335,7 @@ class AbstractStringBuilder<T extends Appendable> implements Appendable, CharSeq
      * @param value A value to append.
      * @return Chainable API.
      */
+    @Override
     public T append(char value) {
         return append(String.valueOf(value));
     }
@@ -353,6 +356,7 @@ class AbstractStringBuilder<T extends Appendable> implements Appendable, CharSeq
      * @param index The index of the desired char value.
      * @return The char value at the specified index.
      */
+    @Override
     public char charAt(int index) {
         if (index < 0 || length() <= index) {
             throw new StringIndexOutOfBoundsException(index);
@@ -396,7 +400,7 @@ class AbstractStringBuilder<T extends Appendable> implements Appendable, CharSeq
         }
         text = text.substring(0, start - 1).concat(text.substring(end));
 
-        return (T) (Object) this;
+        return (T) this;
     }
 
     /**
@@ -464,6 +468,7 @@ class AbstractStringBuilder<T extends Appendable> implements Appendable, CharSeq
      * 
      * @return the length of the sequence of characters currently represented by this object
      */
+    @Override
     public int length() {
         return text.length();
     }
@@ -857,7 +862,7 @@ class AbstractStringBuilder<T extends Appendable> implements Appendable, CharSeq
         text = text.substring(0, start).concat(value).concat(text.substring(end));
 
         // API definiton
-        return (T) (Object) this;
+        return (T) this;
     }
 
     /**
@@ -925,6 +930,7 @@ class AbstractStringBuilder<T extends Appendable> implements Appendable, CharSeq
      *             than <tt>end</tt>
      * @spec JSR-51
      */
+    @Override
     public CharSequence subSequence(int start, int end) {
         return substring(start, end);
     }

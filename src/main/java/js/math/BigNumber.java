@@ -14,7 +14,6 @@ import java.util.Objects;
 
 import js.lang.Global;
 import js.lang.NativeIntArray;
-import booton.translator.Debuggable;
 
 /**
  * @version 2014/03/26 13:21:00
@@ -244,7 +243,6 @@ class BigNumber {
      * @param subtrahend A value to be subtracted from this {@link BigNumber}.
      * @return
      */
-    @Debuggable
     public BigNumber subtract(BigNumber subtrahend) {
         Objects.nonNull(subtrahend);
 

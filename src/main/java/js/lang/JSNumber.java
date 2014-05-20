@@ -137,6 +137,7 @@ abstract class JSNumber implements JavascriptNative {
      * {@inheritDoc}
      */
     @Override
+    @JavascriptNativeProperty
     public String toString() {
         return value.toString();
     }

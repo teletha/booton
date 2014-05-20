@@ -238,7 +238,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         Constructor constructor = publicConstructors.get(hash("", parameterTypes));
 
         if (constructor == null) {
-            throw new NoSuchMethodException();
+            throw new NoSuchMethodException(getName() + "<" + Arrays.toString(parameterTypes) + ">");
         } else {
             return constructor;
         }

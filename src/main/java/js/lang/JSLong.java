@@ -41,6 +41,9 @@ class JSLong extends JSNumber {
     /** The primitive long class. */
     public static final Class TYPE = Primitive.class;
 
+    /** The actual value. */
+    private final Primitive primitive;
+
     /**
      * Constructs a newly allocated {@code Long} object that represents the specified {@code long}
      * argument.
@@ -49,6 +52,8 @@ class JSLong extends JSNumber {
      */
     public JSLong(long value) {
         super(value);
+
+        this.primitive = $(value);
     }
 
     /**
@@ -62,6 +67,8 @@ class JSLong extends JSNumber {
      */
     public JSLong(String value) throws NumberFormatException {
         super(parseLong(value));
+
+        this.primitive = $(this.value.longValue());
     }
 
     /**
@@ -75,6 +82,30 @@ class JSLong extends JSNumber {
     @Override
     public int hashCode() {
         return hashCode(value.longValue());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof JSLong) {
+            return primitive.equals(((JSLong) obj).primitive);
+        }
+
+        if (obj instanceof Primitive) {
+            return primitive.equals((Primitive) obj);
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public NativeNumber valueOf() {
+        return super.valueOf();
     }
 
     /**
@@ -444,7 +475,7 @@ class JSLong extends JSNumber {
      * @return a string representation of the argument in base&nbsp;10.
      */
     public static String toString(long value) {
-        return valueOf(value).toString();
+        return $(value).toString();
     }
 
     /**

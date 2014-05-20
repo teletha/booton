@@ -31,6 +31,17 @@ class JSString implements Comparable<String>, CharSequence {
     private int hash = 0;
 
     /**
+     * Initializes a newly created {@code String} object so that it represents the same sequence of
+     * characters as the argument; in other words, the newly created string is a copy of the
+     * argument string. Unless an explicit copy of {@code original} is needed, use of this
+     * constructor is unnecessary since Strings are immutable.
+     *
+     * @param original A {@code String}
+     */
+    public JSString(String original) {
+    }
+
+    /**
      * Returns the <code>char</code> value at the specified index. An index ranges from
      * <code>0</code> to <code>length() - 1</code>. The first <code>char</code> value of the
      * sequence is at index <code>0</code>, the next at index <code>1</code>, and so on, as for

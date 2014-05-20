@@ -32,6 +32,20 @@ class JSLongHelper {
     }
 
     /**
+     * <p>
+     * Convert from primitive long.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    static Primitive $(long value) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
      * @version 2014/03/26 23:28:55
      */
     @SuppressWarnings("unused")
@@ -46,6 +60,18 @@ class JSLongHelper {
          * @return
          */
         public String $(Primitive value) {
+            return param(0);
+        }
+
+        /**
+         * <p>
+         * Convert to primitive long.
+         * </p>
+         * 
+         * @param value
+         * @return
+         */
+        public String $(long value) {
             return param(0);
         }
     }

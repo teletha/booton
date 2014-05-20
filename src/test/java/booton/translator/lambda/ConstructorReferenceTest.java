@@ -17,7 +17,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
-import booton.translator.Debuggable;
 
 /**
  * @version 2013/11/07 2:12:10
@@ -32,10 +31,8 @@ public class ConstructorReferenceTest {
     }
 
     @Test
-    @Debuggable
     public void longParameter() throws Exception {
         Function<Long, Constructors> function = Constructors::new;
-        System.out.println(function.apply(10L).getClass());
         assert function.apply(10L).value.equals("Long10");
     }
 
