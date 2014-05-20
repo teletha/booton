@@ -1029,7 +1029,9 @@ class JSLong extends JSNumber {
                 if (rem.isZero()) {
                     return builder.insert(0, digits).toString();
                 } else {
-                    while (digits.length() < 6) {
+                    int length = digits.length();
+
+                    while (length++ < 6) {
                         builder.insert(0, "0");
                     }
                     builder.insert(0, digits);
