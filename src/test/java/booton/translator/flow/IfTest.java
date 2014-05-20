@@ -14,7 +14,6 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
-import booton.translator.Debuggable;
 
 /**
  * @version 2013/08/11 9:53:05
@@ -394,7 +393,6 @@ public class IfTest extends ScriptTester {
     public void multipleInWhile() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(int value) {
                 while (value++ < 5) {
                     if (value != 0 && value != 1 && value != 2) {
