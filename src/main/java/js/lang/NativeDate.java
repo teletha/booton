@@ -63,7 +63,7 @@ public class NativeDate {
     }
 
     /**
-     * @version 2013/09/24 22:56:20
+     * @version 2014/05/26 16:48:27
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<NativeDate> {
@@ -95,7 +95,7 @@ public class NativeDate {
          * @return
          */
         public String getTime() {
-            return that + ".getTime()";
+            return long64(that + ".getTime()");
         }
 
         /**
@@ -106,7 +106,7 @@ public class NativeDate {
          * @return
          */
         public String now() {
-            return "Date.now()";
+            return long64("Date.now()");
         }
     }
 }

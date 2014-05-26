@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -8,6 +8,8 @@
  *          http://opensource.org/licenses/mit-license.php
  */
 package booton.translator;
+
+import static booton.translator.Javascript.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -27,7 +29,7 @@ import org.objectweb.asm.Type;
  * Public {@link Translator} API.
  * </p>
  * 
- * @version 2013/08/27 23:26:01
+ * @version 2014/05/26 16:51:05
  */
 @Manageable(lifestyle = Singleton.class)
 public class Translator<T> implements Extensible {
@@ -291,7 +293,7 @@ public class Translator<T> implements Extensible {
      * @return
      */
     protected final String function(int index) {
-        return "boot.bind(\"" + Javascript.computeMethodName(NativeFunction.findSAM(type(index))) + "\"," + param(index) + ")";
+        return "boot.bind(\"" + computeMethodName(NativeFunction.findSAM(type(index))) + "\"," + param(index) + ")";
     }
 
     /**
@@ -306,6 +308,16 @@ public class Translator<T> implements Extensible {
             options = "";
         }
         return "new RegExp(" + getOperand(index) + ",\"" + options + "\")";
+    }
+
+    /**
+     * Helper method to convert to 64bit primitive long.
+     * 
+     * @param value
+     * @return
+     */
+    protected final String long64(String value) {
+        return writeMethodCode(PrimitiveLong, "fromNumber", double.class, value);
     }
 
     /**
