@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import java.util.Map;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/09/25 12:49:02
+ * @version 2014/05/26 16:48:18
  */
 @JavaAPIProvider(System.class)
 class JSSystem {

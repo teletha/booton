@@ -13,7 +13,7 @@ import js.lang.JSLong.Primitive;
 import booton.translator.Translator;
 
 /**
- * @version 2014/03/26 23:30:56
+ * @version 2014/05/26 16:48:04
  */
 class JSLongHelper {
 
