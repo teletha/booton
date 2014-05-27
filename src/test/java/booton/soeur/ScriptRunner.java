@@ -132,6 +132,7 @@ public class ScriptRunner extends BlockJUnit4ClassRunner {
          * {@code params}. {@link InvocationTargetException}s thrown are unwrapped, and their causes
          * rethrown.
          */
+        @Override
         public Object invokeExplosively(final Object target, final Object... params) throws Throwable {
             return new ReflectiveCallable() {
 
