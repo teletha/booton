@@ -13,7 +13,7 @@ import static jdk.internal.org.objectweb.asm.Opcodes.*;
 import static jdk.internal.org.objectweb.asm.Type.*;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Method;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +28,7 @@ import booton.Obfuscator;
 /**
  * @version 2014/05/27 15:45:59
  */
-class JavaStackMethodCompiler extends MethodVisitor {
+class JavaMethodStackableCompiler extends MethodVisitor {
 
     /** The variable name for stack. */
     private static final String stack = "$";
@@ -37,19 +37,10 @@ class JavaStackMethodCompiler extends MethodVisitor {
     private static final String jump = "_";
 
     /** The variable name for label. */
-    private static final String root = "$";
-
-    /** The array method name for stack. */
-    private static final String push = "push";
+    private static final String root = "_";
 
     /** The array method name for stack. */
     private static final String popMethodName = "pop";
-
-    /** The array method name for stack. */
-    private static final String pop = stack + "." + popMethodName + "()";
-
-    /** The actual method. */
-    private final Method method;
 
     /** The java source(byte) code. */
     private final Javascript script;
@@ -72,6 +63,9 @@ class JavaStackMethodCompiler extends MethodVisitor {
     /** The label counter. */
     private int counter = 0;
 
+    /** The operand stack. */
+    private final ArrayDeque<Operand> operands = new ArrayDeque();
+
     /**
      * @param script
      * @param code
@@ -79,16 +73,15 @@ class JavaStackMethodCompiler extends MethodVisitor {
      * @param computed
      * @param desc
      */
-    JavaStackMethodCompiler(Javascript script, ScriptWriter code, String name, String computed, String description, boolean isStatic, Method method) {
+    JavaMethodStackableCompiler(Javascript script, ScriptWriter code, String name, String computed, String description, boolean isStatic) {
         super(ASM5);
 
-        this.method = method;
         this.script = script;
         this.code = code;
         this.methodName = name;
         this.returnType = Type.getReturnType(description);
         this.parameterTypes = Type.getArgumentTypes(description);
-        this.variables = new LocalVariables(method.getParameterTypes(), isStatic);
+        this.variables = new LocalVariables(Type.getArgumentTypes(description).length, isStatic);
 
         Type[] parameters = Type.getArgumentTypes(description);
 
@@ -133,8 +126,40 @@ class JavaStackMethodCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     @Override
+    public void visitIincInsn(int position, int increment) {
+        String variable = variables.name(position);
+
+        code.write(variable, "=", variable, "+", increment, ";").line();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visitLdcInsn(Object value) {
+        if (value instanceof String) {
+            push("\"" + value + "\"");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void visitVarInsn(int opcode, int index) {
-        code.append(stack, ".", push, "(", variables.name(index), ");");
+        push(variables.name(index));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visitIntInsn(int opecode, int value) {
+        switch (opecode) {
+        case BIPUSH:
+            push(value);
+            break;
+        }
     }
 
     /**
@@ -142,14 +167,65 @@ class JavaStackMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitInsn(int opecode) {
-        String value = "";
-
         switch (opecode) {
+        case ICONST_0:
+            push("0");
+            break;
+
+        case ICONST_1:
+            push("1");
+            break;
+
+        case ICONST_2:
+            push("2");
+            break;
+
+        case ICONST_3:
+            push("3");
+            break;
+
+        case ICONST_4:
+            push("4");
+            break;
+
+        case ICONST_5:
+            push("5");
+            break;
+
         case ICONST_M1:
-            value = "-1";
+            push("-1");
+            break;
+
+        case ARETURN:
+        case IRETURN:
+        case LRETURN:
+        case FRETURN:
+        case DRETURN:
+            code.append("return ", pop(), ";");
             break;
         }
-        code.append(stack, ".", push, "(", value, ");");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visitFieldInsn(int opcode, String ownerClassName, String name, String desc) {
+        // compute owner class
+        Class owner = convert(ownerClassName);
+
+        // current processing script depends on the owner class
+        Javascript.require(owner);
+
+        // Field type
+        Class type = convert(Type.getType(desc));
+        Translator translator = TranslatorManager.getTranslator(owner);
+
+        switch (opcode) {
+        case GETFIELD:
+            push(translator.translateField(owner, name, pop()));
+            break;
+        }
     }
 
     /**
@@ -162,20 +238,72 @@ class JavaStackMethodCompiler extends MethodVisitor {
 
             switch (opcode) {
             case IFGE:
-                code.append("0", "<=", stack, ".", popMethodName, "()");
+                code.append("0", "<=", pop());
                 break;
 
             case IF_ICMPNE:
-                code.append(pop, "!=", pop);
+                code.append(pop(), "!=", pop());
+                break;
+
+            case IF_ICMPGE:
+                code.append(pop(), "<=", pop());
                 break;
             }
             code.write(")", "{");
         }
 
         code.append(jump, "=", node(label).id, ";");
-        code.append("continue ", root, ";");
+        code.append("continue", ";");
         if (opcode != GOTO) code.write("}");
         code.line();
+    }
+
+    /**
+     * <p>
+     * Helper method to write push code.
+     * </p>
+     * 
+     * @param value
+     */
+    private void push(int value) {
+        push(String.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Helper method to write push code.
+     * </p>
+     * 
+     * @param value
+     */
+    private void push(Object value) {
+        push(String.valueOf(value));
+    }
+
+    /**
+     * <p>
+     * Helper method to write push code.
+     * </p>
+     * 
+     * @param value
+     */
+    private void push(String value) {
+        push(new OperandExpression(value));
+    }
+
+    /**
+     * <p>
+     * Helper method to write push code.
+     * </p>
+     * 
+     * @param value
+     */
+    private void push(Operand operand) {
+        operands.push(operand);
+    }
+
+    private Operand pop() {
+        return operands.removeLast();
     }
 
     /**
@@ -307,8 +435,8 @@ class JavaStackMethodCompiler extends MethodVisitor {
         /**
          * @param isStatic
          */
-        private LocalVariables(Class[] params, boolean isStatic) {
-            this.max = params.length + 1;
+        private LocalVariables(int size, boolean isStatic) {
+            this.max = size + 1;
             this.isStatic = isStatic;
         }
 
