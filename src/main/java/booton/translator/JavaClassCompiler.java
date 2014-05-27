@@ -137,7 +137,7 @@ class JavaClassCompiler extends ClassVisitor {
                 JVMStack[] annotationsByType = method.getAnnotationsByType(JVMStack.class);
 
                 if (annotationsByType.length != 0) {
-                    return new JavaStackMethodCompiler(script, code, name, computed, desc, isStatic, method);
+                    return new JavaMethodStackableCompiler(script, code, name, computed, desc, isStatic);
                 }
             } catch (NoSuchMethodException | SecurityException e) {
                 throw I.quiet(e);
