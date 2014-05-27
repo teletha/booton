@@ -33,13 +33,13 @@ import booton.translator.Translator;
  * functionality.
  * </p>
  * 
- * @version 2014/03/06 14:58:44
+ * @version 2014/05/27 11:18:49
  */
 @SuppressWarnings("serial")
 public class Chronus extends ScriptableObject {
 
     /** The task scheduler. */
-    private static final ScheduledExecutorService scheduler = Awaitable.wrap(Executors.newScheduledThreadPool(8));
+    private static final ScheduledExecutorService scheduler = Awaitable.wrap(Executors.newSingleThreadScheduledExecutor());
 
     /** The task manager. */
     private static final Map<Integer, ScheduledFuture> tasks = new ConcurrentHashMap();
@@ -61,7 +61,6 @@ public class Chronus extends ScriptableObject {
     @JSStaticFunction
     public static int setTimeout(Function function, int delay) {
         FunctionTask task = new FunctionTask(function);
-
         tasks.put(task.id, scheduler.schedule(task, delay, TimeUnit.MILLISECONDS));
 
         return task.id;

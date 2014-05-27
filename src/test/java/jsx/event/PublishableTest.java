@@ -252,7 +252,7 @@ public class PublishableTest {
     public void throttle() throws Exception {
         PubSub reciever = new PubSub() {
 
-            @Subscribe(throttle = 10)
+            @Subscribe(throttle = 100)
             private void string(int event) {
                 value++;
             }
@@ -268,7 +268,7 @@ public class PublishableTest {
         reciever.publish(100);
         assert reciever.value == 1;
 
-        Chronus.freeze(80);
+        Chronus.freeze(150);
         reciever.publish(100);
         assert reciever.value == 2;
     }
