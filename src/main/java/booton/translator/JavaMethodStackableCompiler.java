@@ -13,7 +13,6 @@ import static jdk.internal.org.objectweb.asm.Opcodes.*;
 import static jdk.internal.org.objectweb.asm.Type.*;
 
 import java.lang.reflect.Array;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,16 +30,13 @@ import booton.Obfuscator;
 class JavaMethodStackableCompiler extends MethodVisitor {
 
     /** The variable name for stack. */
-    private static final String stack = "$";
+    private static final String stack = "_";
 
     /** The variable name for label. */
-    private static final String jump = "_";
+    private static final String jump = "$";
 
-    /** The variable name for label. */
-    private static final String root = "_";
-
-    /** The array method name for stack. */
-    private static final String popMethodName = "pop";
+    /** The variable name for stack. */
+    private static final String local = "L";
 
     /** The java source(byte) code. */
     private final Javascript script;
@@ -63,8 +59,8 @@ class JavaMethodStackableCompiler extends MethodVisitor {
     /** The label counter. */
     private int counter = 0;
 
-    /** The operand stack. */
-    private final ArrayDeque<Operand> operands = new ArrayDeque();
+    /** The stack index. */
+    private int index = 0;
 
     /**
      * @param script
@@ -96,8 +92,8 @@ class JavaMethodStackableCompiler extends MethodVisitor {
         // write method declaration
         code.mark();
         code.append(computed, ":", "function(", I.join(",", variables.names()), "){");
-        code.write("var ", stack, "=", "[],", jump, "=", "0;").line();
-        code.write(root, ":", "while", "(true)", "{");
+        code.append("var ", stack, "=", "[],", local, "=", "[", isStatic ? "" : "this", "],", jump, "=", "0;");
+        code.write("while", "(true)", "{");
         code.write("switch(", jump, ")", "{");
     }
 
@@ -127,9 +123,7 @@ class JavaMethodStackableCompiler extends MethodVisitor {
      */
     @Override
     public void visitIincInsn(int position, int increment) {
-        String variable = variables.name(position);
-
-        code.write(variable, "=", variable, "+", increment, ";").line();
+        code.append(local, "[", position, "]", "=", local, "[", position, "]", "+", increment, ";");
     }
 
     /**
@@ -139,6 +133,8 @@ class JavaMethodStackableCompiler extends MethodVisitor {
     public void visitLdcInsn(Object value) {
         if (value instanceof String) {
             push("\"" + value + "\"");
+        } else if (value instanceof Integer) {
+            push(value);
         }
     }
 
@@ -146,18 +142,60 @@ class JavaMethodStackableCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     @Override
-    public void visitVarInsn(int opcode, int index) {
-        push(variables.name(index));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void visitIntInsn(int opecode, int value) {
+    public void visitIntInsn(int opecode, int operand) {
         switch (opecode) {
         case BIPUSH:
-            push(value);
+        case SIPUSH:
+            push(operand);
+            break;
+
+        // When opcode is NEWARRAY, operand value should be one of Opcodes.T_BOOLEAN,
+        // Opcodes.T_CHAR, Opcodes.T_FLOAT, Opcodes.T_DOUBLE, Opcodes.T_BYTE, Opcodes.T_SHORT,
+        // Opcodes.T_INT or Opcodes.T_LONG.
+        case NEWARRAY:
+            Class type = null;
+
+            switch (operand) {
+            case T_INT:
+                type = int[].class;
+                break;
+
+            case T_LONG:
+                type = long[].class;
+                break;
+
+            case T_FLOAT:
+                type = float[].class;
+                break;
+
+            case T_DOUBLE:
+                type = double[].class;
+                break;
+
+            case T_BOOLEAN:
+                type = boolean[].class;
+                break;
+
+            case T_BYTE:
+                type = byte[].class;
+                break;
+
+            case T_CHAR:
+                type = char[].class;
+                break;
+
+            case T_SHORT:
+                type = short[].class;
+                break;
+
+            default:
+                // If this exception will be thrown, it is bug of this program. So we must rethrow
+                // the wrapped error in here.
+                throw new Error();
+            }
+
+            Javascript.require(type);
+            push(new OperandArray(new OperandExpression(pop()), type));
             break;
         }
     }
@@ -168,6 +206,21 @@ class JavaMethodStackableCompiler extends MethodVisitor {
     @Override
     public void visitInsn(int opecode) {
         switch (opecode) {
+        case DUP:
+            code.append(stack, ".dup(", index - 1, ",", index - 1, ");");
+            index++;
+            break;
+
+        case DUP2:
+            code.append(stack, ".dup2(", index - 1, ",", index - 2, ");");
+            index += 2;
+            break;
+
+        case DUP_X2:
+            code.append(stack, ".dup(", index - 1, ",", index - 3, ");");
+            index++;
+            break;
+
         case ICONST_0:
             push("0");
             break;
@@ -194,6 +247,56 @@ class JavaMethodStackableCompiler extends MethodVisitor {
 
         case ICONST_M1:
             push("-1");
+            break;
+
+        case IADD:
+            push(pop() + "+" + pop());
+            break;
+
+        case ISUB:
+            push(pop() + "-" + pop());
+            break;
+
+        case IMUL:
+            push(pop() + "*" + pop());
+            break;
+
+        case IDIV:
+            push(pop() + "/" + pop());
+            break;
+
+        // read array length
+        case ARRAYLENGTH:
+            push(pop() + ".length");
+            break;
+
+        // write array value by index
+        case IALOAD:
+        case AALOAD:
+        case BALOAD:
+        case LALOAD:
+        case FALOAD:
+        case DALOAD:
+        case CALOAD:
+        case SALOAD:
+            String index = pop();
+            String array = pop();
+            push(array + "[" + index + "]");
+            break;
+
+        // read array value by index
+        case AASTORE:
+        case BASTORE:
+        case IASTORE:
+        case LASTORE:
+        case FASTORE:
+        case DASTORE:
+        case CASTORE:
+        case SASTORE:
+            String value = pop();
+            index = pop();
+            array = pop();
+            code.append(array, "[", index, "]=", value, ";");
             break;
 
         case ARETURN:
@@ -223,9 +326,84 @@ class JavaMethodStackableCompiler extends MethodVisitor {
 
         switch (opcode) {
         case GETFIELD:
-            push(translator.translateField(owner, name, pop()));
+            push(translator.translateField(owner, name, new OperandExpression(pop())));
             break;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visitMethodInsn(int opcode, String className, String methodName, String desc, boolean access) {
+        // compute owner class
+        Class owner = convert(className);
+
+        // current processing script depends on the owner class
+        Javascript.require(owner);
+
+        // compute parameter types
+        Type[] types = Type.getArgumentTypes(desc);
+        Class[] parameters = new Class[types.length];
+
+        for (int i = 0; i < types.length; i++) {
+            parameters[i] = convert(types[i]);
+        }
+
+        // write mode
+        Class returnType = convert(Type.getReturnType(desc));
+        boolean immediately = returnType == void.class;
+
+        // copy latest operands for this method invocation
+        ArrayList<Operand> contexts = new ArrayList(parameters.length + 1);
+
+        for (int i = 0; i < parameters.length; i++) {
+            contexts.add(0, new OperandExpression(pop()));
+        }
+
+        // retrieve translator for this method owner
+        Translator translator = TranslatorManager.getTranslator(owner);
+
+        switch (opcode) {
+        // Invoke instance method; special handling for superclass constructor, private method,
+        // and instance initialization method invocations
+        case INVOKESPECIAL:
+            contexts.add(0, new OperandExpression(pop()));
+
+            // Analyze method argument
+            if (!methodName.equals("<init>")) {
+                if (owner == script.source) {
+                    // private method invocation
+                    push(translator.translateMethod(owner, methodName, desc, parameters, contexts));
+                } else {
+                    // super method invocation
+                    push(translator.translateSuperMethod(owner, methodName, desc, parameters, contexts));
+                }
+            } else {
+                // constructor
+
+            }
+            break;
+
+        case INVOKEVIRTUAL: // method call
+        case INVOKEINTERFACE: // interface method call
+            break;
+
+        case INVOKESTATIC: // static method call
+            break;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visitMultiANewArrayInsn(String desc, int dimension) {
+        // remove needless operands
+        for (int i = 0; i < dimension - 1; i++) {
+            pop();
+        }
+        push(new OperandArray(new OperandExpression(pop()), convert(desc)));
     }
 
     /**
@@ -241,12 +419,40 @@ class JavaMethodStackableCompiler extends MethodVisitor {
                 code.append("0", "<=", pop());
                 break;
 
+            case IFGT:
+                code.append("0", "<", pop());
+                break;
+
+            case IFLE:
+                code.append(pop(), "<=", "0");
+                break;
+
+            case IFLT:
+                code.append(pop(), "<", "0");
+                break;
+
+            case IF_ICMPEQ:
+                code.append(pop(), "==", pop());
+                break;
+
             case IF_ICMPNE:
                 code.append(pop(), "!=", pop());
                 break;
 
             case IF_ICMPGE:
                 code.append(pop(), "<=", pop());
+                break;
+
+            case IF_ICMPGT:
+                code.append(pop(), "<", pop());
+                break;
+
+            case IF_ICMPLE:
+                code.append(pop(), "=>", pop());
+                break;
+
+            case IF_ICMPLT:
+                code.append(pop(), ">", pop());
                 break;
             }
             code.write(")", "{");
@@ -256,6 +462,83 @@ class JavaMethodStackableCompiler extends MethodVisitor {
         code.append("continue", ";");
         if (opcode != GOTO) code.write("}");
         code.line();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visitTypeInsn(int opcode, String type) {
+        switch (opcode) {
+        case NEW:
+            // if (assertNew) {
+            // assertNew = false;
+            // current = createNode();
+            // current.number = current.previous.number;
+            // }
+            // countInitialization++;
+            //
+            // current.addOperand("new " + Javascript.computeClassName(convert(type)));
+            break;
+
+        case ANEWARRAY:
+            if (type.charAt(0) == '[') {
+                type = "[" + type;
+            } else {
+                type = "[L" + type + ";";
+            }
+            push(new OperandArray(new OperandExpression(pop()), convert(type)));
+            break;
+
+        case CHECKCAST:
+            break;
+
+        case INSTANCEOF:
+            // Class clazz = convert(type);
+            //
+            // // load source
+            // Javascript.require(clazz);
+            //
+            // String code;
+            //
+            // if (clazz == Object.class || clazz == NativeObject.class) {
+            // code = current.remove(0) + " instanceof Object";
+            // } else if (clazz == String.class) {
+            // code = "boot.isString(" + current.remove(0) + ")";
+            // } else if (clazz.isInterface() || clazz.isArray()) {
+            // code = Javascript.writeMethodCode(Class.class, "isInstance",
+            // Javascript.computeClass(clazz), Object.class, current.remove(0));
+            // } else {
+            // code = current.remove(0) + " instanceof " + Javascript.computeClassName(clazz);
+            // }
+            // current.addOperand(code, boolean.class);
+            break;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visitVarInsn(int opcode, int index) {
+        switch (opcode) {
+        case ASTORE:
+        case ISTORE:
+        case LSTORE:
+        case FSTORE:
+        case DSTORE:
+            code.append(local, "[" + index + "]=", pop(), ";");
+            break;
+
+        case ALOAD:
+        case ILOAD:
+        case FLOAD:
+        case LLOAD:
+        case DLOAD:
+            push(local + "[" + index + "]");
+            break;
+        }
+
     }
 
     /**
@@ -288,22 +571,11 @@ class JavaMethodStackableCompiler extends MethodVisitor {
      * @param value
      */
     private void push(String value) {
-        push(new OperandExpression(value));
+        code.append(stack, "[", index++, "]=", value + ";");
     }
 
-    /**
-     * <p>
-     * Helper method to write push code.
-     * </p>
-     * 
-     * @param value
-     */
-    private void push(Operand operand) {
-        operands.push(operand);
-    }
-
-    private Operand pop() {
-        return operands.removeLast();
+    private String pop() {
+        return stack + "[" + --index + "]";
     }
 
     /**

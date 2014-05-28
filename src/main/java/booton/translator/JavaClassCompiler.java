@@ -134,7 +134,7 @@ class JavaClassCompiler extends ClassVisitor {
 
             try {
                 Method method = script.source.getDeclaredMethod(name, classes);
-                JVMStack[] annotationsByType = method.getAnnotationsByType(JVMStack.class);
+                LowLevel[] annotationsByType = method.getAnnotationsByType(LowLevel.class);
 
                 if (annotationsByType.length != 0) {
                     return new JavaMethodStackableCompiler(script, code, name, computed, desc, isStatic);

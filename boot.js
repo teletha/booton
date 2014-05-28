@@ -34,6 +34,16 @@ function boot(global) {
           || Element.prototype.mozMatchesSelector
           || Element.prototype.msMatchesSelector
   }, true);
+  
+  define(Array.prototype, {
+    dup: function(from, to) {
+      this.splice(to, 0, this[from]);
+    },
+    
+    dup2: function(from, to) {
+      this.splice(to, 0, this[from - 1], this[from]);
+    } 
+  });
 
   
   //====================================================================

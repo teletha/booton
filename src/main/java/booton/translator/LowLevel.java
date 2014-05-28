@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 /**
  * @version 2014/05/27 15:12:25
  */
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface JVMStack {
+public @interface LowLevel {
 }
