@@ -11,14 +11,9 @@ package booton.translator;
 
 import static booton.translator.Javascript.*;
 import static jdk.internal.org.objectweb.asm.Opcodes.*;
-
-import java.lang.reflect.Method;
-
 import jdk.internal.org.objectweb.asm.ClassVisitor;
 import jdk.internal.org.objectweb.asm.FieldVisitor;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
-import jdk.internal.org.objectweb.asm.Type;
-import kiss.I;
 import booton.translator.Node.Switch;
 
 /**
@@ -124,24 +119,8 @@ class JavaClassCompiler extends ClassVisitor {
             computed = "_" + computed;
         }
 
-        if (!name.startsWith("<")) {
-            Type[] arguments = Type.getArgumentTypes(desc);
-            Class[] classes = new Class[arguments.length];
-
-            for (int i = 0; i < classes.length; i++) {
-                classes[i] = JavaMethodCompiler.convert(arguments[i]);
-            }
-
-            try {
-                Method method = script.source.getDeclaredMethod(name, classes);
-                LowLevel[] annotationsByType = method.getAnnotationsByType(LowLevel.class);
-
-                if (annotationsByType.length != 0) {
-                    return new JavaMethodStackableCompiler(script, code, name, computed, desc, isStatic);
-                }
-            } catch (NoSuchMethodException | SecurityException e) {
-                throw I.quiet(e);
-            }
+        if (LowLevel.class.isAssignableFrom(script.source)) {
+            return new JavaMethodLowLevelCompiler(script, code, name, computed, desc, isStatic);
         }
 
         // start compiling method
