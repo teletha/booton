@@ -23,20 +23,19 @@ import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
 import kiss.I;
 import booton.Obfuscator;
+import booton.Stylist;
+import booton.css.CSS;
 
 /**
  * @version 2014/05/27 15:45:59
  */
-class JavaMethodStackableCompiler extends MethodVisitor {
+class JavaMethodLowLevelCompiler extends MethodVisitor {
 
     /** The variable name for stack. */
     private static final String stack = "_";
 
     /** The variable name for label. */
     private static final String jump = "$";
-
-    /** The variable name for stack. */
-    private static final String local = "L";
 
     /** The java source(byte) code. */
     private final Javascript script;
@@ -62,6 +61,9 @@ class JavaMethodStackableCompiler extends MethodVisitor {
     /** The stack index. */
     private int index = 0;
 
+    /** The flag. */
+    private boolean ignoreNextDupOperation;
+
     /**
      * @param script
      * @param code
@@ -69,7 +71,7 @@ class JavaMethodStackableCompiler extends MethodVisitor {
      * @param computed
      * @param desc
      */
-    JavaMethodStackableCompiler(Javascript script, ScriptWriter code, String name, String computed, String description, boolean isStatic) {
+    JavaMethodLowLevelCompiler(Javascript script, ScriptWriter code, String name, String computed, String description, boolean isStatic) {
         super(ASM5);
 
         this.script = script;
@@ -92,7 +94,7 @@ class JavaMethodStackableCompiler extends MethodVisitor {
         // write method declaration
         code.mark();
         code.append(computed, ":", "function(", I.join(",", variables.names()), "){");
-        code.append("var ", stack, "=", "[],", local, "=", "[", isStatic ? "" : "this", "],", jump, "=", "0;");
+        code.append("var ", stack, "=", "[],", jump, "=", "0;");
         code.write("while", "(true)", "{");
         code.write("switch(", jump, ")", "{");
     }
@@ -102,6 +104,7 @@ class JavaMethodStackableCompiler extends MethodVisitor {
      */
     @Override
     public void visitEnd() {
+        code.append("return;");
         code.append("}");
         code.append("}");
         code.append('}'); // method end
@@ -114,8 +117,41 @@ class JavaMethodStackableCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     @Override
-    public void visitLabel(Label label) {
-        code.append("case ", node(label).id, ":").line();
+    public void visitFieldInsn(int opcode, String ownerClassName, String name, String desc) {
+        // compute owner class
+        Class owner = convert(ownerClassName);
+
+        // current processing script depends on the owner class
+        Javascript.require(owner);
+
+        // Field type
+        Class type = convert(Type.getType(desc));
+        Translator translator = TranslatorManager.getTranslator(owner);
+
+        switch (opcode) {
+        case GETFIELD:
+            push(translator.translateField(owner, name, new OperandExpression(pop())));
+            break;
+
+        case PUTFIELD:
+            String value = pop();
+            String field = pop();
+
+            code.append(translator.translateField(owner, name, new OperandExpression(field)), "=", value, ";");
+            break;
+
+        case GETSTATIC:
+            push(translator.translateStaticField(owner, name));
+            break;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
+        index = nStack;
     }
 
     /**
@@ -123,19 +159,7 @@ class JavaMethodStackableCompiler extends MethodVisitor {
      */
     @Override
     public void visitIincInsn(int position, int increment) {
-        code.append(local, "[", position, "]", "=", local, "[", position, "]", "+", increment, ";");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void visitLdcInsn(Object value) {
-        if (value instanceof String) {
-            push("\"" + value + "\"");
-        } else if (value instanceof Integer) {
-            push(value);
-        }
+        code.append(variables.name(position), "=", variables.name(position), "+", increment, ";");
     }
 
     /**
@@ -207,6 +231,10 @@ class JavaMethodStackableCompiler extends MethodVisitor {
     public void visitInsn(int opecode) {
         switch (opecode) {
         case DUP:
+            if (ignoreNextDupOperation) {
+                ignoreNextDupOperation = false;
+                return;
+            }
             code.append(stack, ".dup(", index - 1, ",", index - 1, ");");
             index++;
             break;
@@ -219,6 +247,11 @@ class JavaMethodStackableCompiler extends MethodVisitor {
         case DUP_X2:
             code.append(stack, ".dup(", index - 1, ",", index - 3, ");");
             index++;
+            break;
+
+        case I2C:
+            // cast int to char
+            push("String.fromCharCode(" + pop() + ")");
             break;
 
         case ICONST_0:
@@ -313,21 +346,104 @@ class JavaMethodStackableCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     @Override
-    public void visitFieldInsn(int opcode, String ownerClassName, String name, String desc) {
-        // compute owner class
-        Class owner = convert(ownerClassName);
+    public void visitJumpInsn(int opcode, Label label) {
+        if (opcode != GOTO) {
+            code.write("if", "(");
 
-        // current processing script depends on the owner class
-        Javascript.require(owner);
+            switch (opcode) {
+            case IFEQ:
+                code.append("!", pop());
+                break;
 
-        // Field type
-        Class type = convert(Type.getType(desc));
-        Translator translator = TranslatorManager.getTranslator(owner);
+            case IFNE:
+                code.append(pop());
+                break;
 
-        switch (opcode) {
-        case GETFIELD:
-            push(translator.translateField(owner, name, new OperandExpression(pop())));
-            break;
+            case IFGE:
+                code.append("0", "<=", pop());
+                break;
+
+            case IFGT:
+                code.append("0", "<", pop());
+                break;
+
+            case IFLE:
+                code.append(pop(), "<=", "0");
+                break;
+
+            case IFLT:
+                code.append(pop(), "<", "0");
+                break;
+
+            case IF_ACMPEQ:
+            case IF_ICMPEQ:
+                code.append(pop(), "==", pop());
+                break;
+
+            case IF_ACMPNE:
+            case IF_ICMPNE:
+                code.append(pop(), "!=", pop());
+                break;
+
+            case IF_ICMPGE:
+                code.append(pop(), "<=", pop());
+                break;
+
+            case IF_ICMPGT:
+                code.append(pop(), "<", pop());
+                break;
+
+            case IF_ICMPLE:
+                code.append(pop(), "=>", pop());
+                break;
+
+            case IF_ICMPLT:
+                code.append(pop(), ">", pop());
+                break;
+            }
+            code.write(")", "{");
+        }
+
+        code.append(jump, "=", node(label).id, ";");
+        code.append("break;");
+        if (opcode != GOTO) code.write("}");
+        code.line();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visitLabel(Label label) {
+        code.append("case ", node(label).id, ":").line();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visitLdcInsn(Object value) {
+        if (value instanceof String) {
+            push("\"" + value + "\"");
+        } else if (value instanceof Integer) {
+            push(value);
+        } else if (value instanceof Type) {
+            String className = ((Type) value).getInternalName();
+
+            // add class operand
+            Class clazz = convert(className);
+
+            if (CSS.class.isAssignableFrom(clazz)) {
+                // support stylesheet class
+                I.make(Stylist.class).register(clazz);
+
+                push('"' + Obfuscator.computeCSSName(clazz) + '"');
+            } else {
+                // support class literal in javascript runtime.
+                push(Javascript.computeClass(clazz));
+
+                Javascript.require(clazz);
+            }
         }
     }
 
@@ -382,11 +498,18 @@ class JavaMethodStackableCompiler extends MethodVisitor {
             } else {
                 // constructor
 
+                // instance initialization method invocation
+                push(translator.translateConstructor(owner, desc, parameters, contexts));
             }
             break;
 
         case INVOKEVIRTUAL: // method call
         case INVOKEINTERFACE: // interface method call
+            // push "this" operand
+            contexts.add(0, new OperandExpression(pop()));
+
+            // translate
+            push(translator.translateMethod(owner, methodName, desc, parameters, contexts));
             break;
 
         case INVOKESTATIC: // static method call
@@ -410,75 +533,11 @@ class JavaMethodStackableCompiler extends MethodVisitor {
      * {@inheritDoc}
      */
     @Override
-    public void visitJumpInsn(int opcode, Label label) {
-        if (opcode != GOTO) {
-            code.write("if", "(");
-
-            switch (opcode) {
-            case IFGE:
-                code.append("0", "<=", pop());
-                break;
-
-            case IFGT:
-                code.append("0", "<", pop());
-                break;
-
-            case IFLE:
-                code.append(pop(), "<=", "0");
-                break;
-
-            case IFLT:
-                code.append(pop(), "<", "0");
-                break;
-
-            case IF_ICMPEQ:
-                code.append(pop(), "==", pop());
-                break;
-
-            case IF_ICMPNE:
-                code.append(pop(), "!=", pop());
-                break;
-
-            case IF_ICMPGE:
-                code.append(pop(), "<=", pop());
-                break;
-
-            case IF_ICMPGT:
-                code.append(pop(), "<", pop());
-                break;
-
-            case IF_ICMPLE:
-                code.append(pop(), "=>", pop());
-                break;
-
-            case IF_ICMPLT:
-                code.append(pop(), ">", pop());
-                break;
-            }
-            code.write(")", "{");
-        }
-
-        code.append(jump, "=", node(label).id, ";");
-        code.append("continue", ";");
-        if (opcode != GOTO) code.write("}");
-        code.line();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void visitTypeInsn(int opcode, String type) {
         switch (opcode) {
         case NEW:
-            // if (assertNew) {
-            // assertNew = false;
-            // current = createNode();
-            // current.number = current.previous.number;
-            // }
-            // countInitialization++;
-            //
-            // current.addOperand("new " + Javascript.computeClassName(convert(type)));
+            index++;
+            ignoreNextDupOperation = true;
             break;
 
         case ANEWARRAY:
@@ -527,7 +586,7 @@ class JavaMethodStackableCompiler extends MethodVisitor {
         case LSTORE:
         case FSTORE:
         case DSTORE:
-            code.append(local, "[" + index + "]=", pop(), ";");
+            code.append(variables.name(index), "=", pop(), ";");
             break;
 
         case ALOAD:
@@ -535,7 +594,7 @@ class JavaMethodStackableCompiler extends MethodVisitor {
         case FLOAD:
         case LLOAD:
         case DLOAD:
-            push(local + "[" + index + "]");
+            push(variables.name(index));
             break;
         }
 

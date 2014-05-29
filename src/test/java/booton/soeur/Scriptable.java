@@ -9,11 +9,9 @@
  */
 package booton.soeur;
 
-import booton.translator.LowLevel;
 
 /**
  * @version 2012/11/30 1:43:48
  */
-@LowLevel
 public interface Scriptable {
 }
