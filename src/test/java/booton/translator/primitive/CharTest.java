@@ -13,7 +13,6 @@ import org.junit.Test;
 
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
-import booton.translator.Debuggable;
 
 /**
  * @version 2013/08/31 22:21:41
@@ -95,7 +94,6 @@ public class CharTest extends ScriptTester {
     public void cast() {
         test(new Scriptable() {
 
-            @Debuggable
             char act(char value) {
                 return (char) (value + 1);
             }

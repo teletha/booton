@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import jdk.internal.org.objectweb.asm.AnnotationVisitor;
@@ -27,6 +28,7 @@ import jdk.internal.org.objectweb.asm.Handle;
 import jdk.internal.org.objectweb.asm.Label;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Opcodes;
+import jdk.internal.org.objectweb.asm.Type;
 import jdk.internal.org.objectweb.asm.util.Printer;
 
 import org.objectweb.asm.util.TraceClassVisitor;
@@ -104,7 +106,13 @@ public class Debugger extends AnnotationVisitor {
      * </p>
      */
     public void printInfo() {
-        System.out.println(clazz.getName() + "#" + methodName + " " + methodDescriptor);
+        Type[] prameters = Type.getArgumentTypes(methodDescriptor);
+
+        StringJoiner joiner = new StringJoiner(", ", "(", ")");
+        for (Type type : prameters) {
+            joiner.add(JavaMethodCompiler.convert(type).getTypeName());
+        }
+        System.out.println(methodName + joiner + "   (" + clazz.getName() + ".java:1)");
     }
 
     /**

@@ -1459,6 +1459,10 @@ class JavaMethodCompiler extends MethodVisitor {
         // recode current instruction
         record(LABEL);
 
+        if (match(JUMP, GOTO, LABEL)) {
+            debugger.printInfo();
+        }
+
         // Basically, visitLabel method is called each expression. But the following patterns are
         // exception so we must deal with them.
         //
