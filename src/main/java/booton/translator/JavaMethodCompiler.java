@@ -278,9 +278,9 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         debugger.whileProcess = true;
 
-        // if (script.source.getName().endsWith("Array") && original.equals("newInstance")) {
-        // debugger.enable = true;
-        // }
+        if (script.source.getName().endsWith("Set") && original.equals("recalculateWordsInUse")) {
+            debugger.enable = true;
+        }
     }
 
     /**
@@ -615,6 +615,10 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case F_SAME:
+            if (match(JUMP, GOTO, LABEL)) {
+                debugger.printInfo();
+            }
+
             record(FRAME_SAME);
 
             if (nLocal == 0 && nStack == 0) {
@@ -1458,10 +1462,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // recode current instruction
         record(LABEL);
-
-        if (match(JUMP, GOTO, LABEL)) {
-            debugger.printInfo();
-        }
 
         // Basically, visitLabel method is called each expression. But the following patterns are
         // exception so we must deal with them.
