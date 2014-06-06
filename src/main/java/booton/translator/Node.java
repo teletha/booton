@@ -780,17 +780,85 @@ class Node {
         Node other = outgoing.get(1);
 
         if (one.backedges.isEmpty() && one.incoming.size() != 1) {
-            // no else
-            operand.invert();
+            if (one.getDominator() != this) {
+                /**
+                 * loop breaker
+                 * 
+                 * <pre>
+                 * if (condition) {
+                 *    break one;
+                 * } else {
+                 *    other
+                 * }
+                 * </pre>
+                 */
+                operand.invert();
 
-            then = other;
-            follow = one;
+                then = other;
+                elze = createConnectorNode(this, one);
+                follow = one;
+                follow.currentCalls--;
+            } else {
+                /**
+                 * no else
+                 * 
+                 * <pre>
+                 * if (condition) {
+                 *      other
+                 * }
+                 * one
+                 * </pre>
+                 */
+                operand.invert();
+
+                then = other;
+                follow = one;
+            }
         } else if (other.backedges.isEmpty() && other.incoming.size() != 1) {
-            // no else
-            then = one;
-            follow = other;
+            if (other.getDominator() != this) {
+                /**
+                 * loop breaker
+                 * 
+                 * <pre>
+                 * if (condition) {
+                 *    break other;
+                 * } else {
+                 *    one
+                 * }
+                 * </pre>
+                 */
+                operand.invert();
+
+                then = one;
+                elze = createConnectorNode(this, other);
+                follow = other;
+                follow.currentCalls--;
+            } else {
+                /**
+                 * no else
+                 * 
+                 * <pre>
+                 * if (condition) {
+                 *      one
+                 * }
+                 * other
+                 * </pre>
+                 */
+                then = one;
+                follow = other;
+            }
         } else {
-            // with else
+            /**
+             * with else
+             * 
+             * <pre>
+             * if (condition) {
+             *      one
+             * } else {
+             *      other
+             * }
+             * </pre>
+             */
             then = one;
             elze = other;
             follow = dominators.stream().filter(node -> !outgoing.contains(node)).findFirst().orElse(null);
@@ -878,7 +946,9 @@ class Node {
                 }
 
                 // break
+                debugger.print("breakable?  " + loop.entrance.id + "  " + loop.checkpoint.id + "   " + loop.first.id + "  " + this.id);
                 if (!loop.hasHeader(this) && loop.hasExit(next) && hasDominator(loop.entrance)) {
+                    debugger.print("break!");
                     if (debugger.enable) {
                         buffer.comment(id + " -> " + next.id + " break to " + loop.entrance.id + "(" + next.currentCalls + " of " + requiredCalls + ")");
                     }
@@ -928,6 +998,28 @@ class Node {
         } else {
             return new Node[] {last, first};
         }
+    }
+
+    /**
+     * <p>
+     * Create new connector node.
+     * </p>
+     * 
+     * @param previous A previous node.
+     * @param next A next node.
+     * @return A new created node.
+     */
+    private Node createConnectorNode(Node previous, Node next) {
+        // dislinkage
+        previous.disconnect(next);
+
+        // create and linkage
+        Node node = new Node(-previous.id, debugger);
+        previous.connect(node);
+        node.connect(next);
+
+        // API definition
+        return node;
     }
 
     /**
