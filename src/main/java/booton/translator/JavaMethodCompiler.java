@@ -198,7 +198,7 @@ class JavaMethodCompiler extends MethodVisitor {
     private List<Node> nodes = new ArrayList();
 
     /** The counter for the current processing node identifier. */
-    private int counter = -1;
+    private int counter = 0;
 
     /** The counter for construction of the object initialization. */
     private int countInitialization = 0;
@@ -281,6 +281,43 @@ class JavaMethodCompiler extends MethodVisitor {
         if (script.source.getName().endsWith("Set") && original.equals("recalculateWordsInUse")) {
             debugger.enable = true;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+        if (desc.equals(Type.getType(Debuggable.class).getDescriptor())) {
+            debugger.enable = true;
+    
+            return debugger;
+        }
+        return null; // do nothing
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AnnotationVisitor visitAnnotationDefault() {
+        return null; // do nothing
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visitAttribute(Attribute attr) {
+        // do nothing
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visitCode() {
+        // do nothing
     }
 
     /**
@@ -437,53 +474,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // Remove the current processing node.
         recorder.pollLast();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-        if (desc.equals(Type.getType(Debuggable.class).getDescriptor())) {
-            debugger.enable = true;
-
-            return debugger;
-        }
-        return null; // do nothing
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public AnnotationVisitor visitAnnotationDefault() {
-        return null; // do nothing
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void visitAttribute(Attribute attr) {
-        // do nothing
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void visitCode() {
-        visitLabel(new Label());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void visitLineNumber(int line, Label start) {
-        getNode(start).number = line;
-
-        CompilerRecorder.recordMethodLineNumber(line);
     }
 
     /**
@@ -1630,6 +1620,16 @@ class JavaMethodCompiler extends MethodVisitor {
         } else {
             current.addOperand(constant);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visitLineNumber(int line, Label start) {
+        getNode(start).number = line;
+    
+        CompilerRecorder.recordMethodLineNumber(line);
     }
 
     /**
