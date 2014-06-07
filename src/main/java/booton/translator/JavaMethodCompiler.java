@@ -2163,17 +2163,8 @@ class JavaMethodCompiler extends MethodVisitor {
 
         for (Node out : target.outgoing) {
             for (Node in : target.incoming) {
-                if (!in.outgoing.contains(out)) {
-                    in.outgoing.add(out);
-                }
-            }
-        }
-
-        for (Node in : target.incoming) {
-            for (Node out : target.outgoing) {
-                if (!out.incoming.contains(in)) {
-                    out.incoming.add(in);
-                }
+                in.outgoing.addIfAbsent(out);
+                out.incoming.addIfAbsent(in);
             }
         }
 

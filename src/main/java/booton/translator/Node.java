@@ -454,8 +454,12 @@ class Node {
      * @param node A target node.
      */
     final void connect(Node node) {
-        outgoing.addIfAbsent(node);
-        node.incoming.addIfAbsent(this);
+        boolean out = outgoing.addIfAbsent(node);
+        boolean in = node.incoming.addIfAbsent(this);
+
+        if (!out && !in) {
+            Debugger.print("add duplication node " + id + "  -> " + node.id);
+        }
     }
 
     /**
@@ -942,9 +946,7 @@ class Node {
                 }
 
                 // break
-                Debugger.print("breakable?  " + loop.entrance.id + "  " + loop.checkpoint.id + "   " + loop.first.id + "  " + this.id);
                 if (!loop.hasHeader(this) && loop.hasExit(next) && hasDominator(loop.entrance)) {
-                    Debugger.print("break!");
                     if (Debugger.isEnable()) {
                         buffer.comment(id + " -> " + next.id + " break to " + loop.entrance.id + "(" + next.currentCalls + " of " + requiredCalls + ")");
                     }
