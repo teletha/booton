@@ -15,8 +15,9 @@ import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
 
 /**
- * @version 2014/03/15 14:25:52
+ * @version 2014/06/07 10:53:18
  */
+@SuppressWarnings("unused")
 public class NegateOperatorTest extends ScriptTester {
 
     @Test

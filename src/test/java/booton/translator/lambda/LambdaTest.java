@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -8,8 +8,6 @@
  *          http://opensource.org/licenses/mit-license.php
  */
 package booton.translator.lambda;
-
-import static booton.translator.lambda.LambdaTest.InterfaceUser.*;
 
 import java.util.function.BiFunction;
 import java.util.function.DoubleSupplier;
@@ -27,7 +25,7 @@ import org.junit.runner.RunWith;
 import booton.soeur.ScriptRunner;
 
 /**
- * @version 2013/11/19 22:15:25
+ * @version 2014/06/07 10:52:50
  */
 @RunWith(ScriptRunner.class)
 public class LambdaTest {
@@ -245,6 +243,7 @@ public class LambdaTest {
             return function.apply(this) + " Function";
         }
 
+        @Override
         public String ref() {
             return field;
         }
@@ -280,6 +279,7 @@ public class LambdaTest {
             return function.apply(this, "Argument") + " Function";
         }
 
+        @Override
         public String ref(String value) {
             return value + field;
         }
@@ -370,7 +370,7 @@ public class LambdaTest {
         InterfaceWithOverride api = () -> {
             return 10;
         };
-    
+
         assert api.value() == 10;
         assert api.multiple() == 100;
     }
@@ -380,6 +380,7 @@ public class LambdaTest {
      */
     private static interface InterfaceWithOverride extends InterfaceWithDefault {
 
+        @Override
         default int multiple() {
             return value() * value();
         }
