@@ -15,6 +15,7 @@ import static jdk.internal.org.objectweb.asm.Opcodes.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,16 +29,16 @@ import booton.translator.Node.TryCatchFinally;
  */
 public class Debugger extends AnnotationVisitor {
 
-    /** The list for debug patterns. */
-    private static final List<Pattern[]> patterns = new ArrayList();
-
-    static {
-        debug(".+Set", "recalculateWordsInUse");
-    }
-
     /** The processing environment. */
     private static final boolean whileTest;
 
+    /** The list for debug patterns. */
+    private static final List<Pattern[]> patterns = new ArrayList();
+
+    /** The current debugger. */
+    private static Debugger debugger;
+
+    // initialization
     static {
         boolean flag = false;
 
@@ -49,9 +50,6 @@ public class Debugger extends AnnotationVisitor {
         }
         whileTest = flag;
     }
-
-    /** The current debugger. */
-    private static Debugger debugger;
 
     /** The use flag. */
     private boolean enable = false;
@@ -71,12 +69,19 @@ public class Debugger extends AnnotationVisitor {
      */
     @Override
     public void visit(String methodName, Object type) {
-        Class clazz = (Class) type;
+        if (!patterns.isEmpty()) {
+            Class clazz = (Class) type;
 
-        for (Pattern[] patterns : patterns) {
-            if (patterns[0].matcher(clazz.getName()).matches() && patterns[1].matcher(methodName).matches()) {
-                enable = true;
-                return;
+            Iterator<Pattern[]> iterator = patterns.iterator();
+
+            while (iterator.hasNext()) {
+                Pattern[] patterns = iterator.next();
+
+                if (patterns[0].matcher(clazz.getName()).matches() && patterns[1].matcher(methodName).matches()) {
+                    iterator.remove();
+                    enable = true;
+                    return;
+                }
             }
         }
     }
@@ -87,6 +92,18 @@ public class Debugger extends AnnotationVisitor {
     @Override
     public void visitEnd() {
         enable = true;
+    }
+
+    /**
+     * <p>
+     * Register debug pattern.
+     * </p>
+     * 
+     * @param className
+     * @param methodName
+     */
+    public static void debug(String className, String methodName) {
+        patterns.add(new Pattern[] {Pattern.compile(className), Pattern.compile(methodName)});
     }
 
     /**
@@ -288,18 +305,6 @@ public class Debugger extends AnnotationVisitor {
             return Collections.EMPTY_LIST;
         }
         return Arrays.asList(node);
-    }
-
-    /**
-     * <p>
-     * Register debug pattern.
-     * </p>
-     * 
-     * @param className
-     * @param methodName
-     */
-    private static void debug(String className, String methodName) {
-        patterns.add(new Pattern[] {Pattern.compile(className), Pattern.compile(methodName)});
     }
 
     /**
