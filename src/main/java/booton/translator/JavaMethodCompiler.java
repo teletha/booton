@@ -58,6 +58,9 @@ import booton.translator.Node.TryCatchFinallyBlocks;
  */
 class JavaMethodCompiler extends MethodVisitor {
 
+    /** The description of {@link Debugger}. */
+    private static final String DEBUGGER = Type.getType(Debuggable.class).getDescriptor();
+
     /**
      * Represents an expanded frame. See {@link ClassReader#EXPAND_FRAMES}.
      */
@@ -165,9 +168,6 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The frequently used operand for cache. */
     private static final OperandExpression Return = new OperandExpression("return ");
 
-    /** The debug flag. */
-    private final Debugger debugger;
-
     /** The java source(byte) code. */
     private final Javascript script;
 
@@ -254,10 +254,8 @@ class JavaMethodCompiler extends MethodVisitor {
      * @param description A method description.
      * @param isStatic A static flag.
      */
-    JavaMethodCompiler(Javascript script, ScriptWriter code, String original, String name, String description, boolean isStatic) {
+    JavaMethodCompiler(Javascript script, ScriptWriter code, String name, String description, boolean isStatic) {
         super(ASM5);
-
-        CompilerRecorder.recordMethodName(original);
 
         this.script = script;
         this.code = code;
@@ -265,7 +263,6 @@ class JavaMethodCompiler extends MethodVisitor {
         this.returnType = Type.getReturnType(description);
         this.parameterTypes = Type.getArgumentTypes(description);
         this.variables = new LocalVariables(isStatic);
-        this.debugger = new Debugger(script.source, original, description);
 
         Type[] parameters = Type.getArgumentTypes(description);
 
@@ -276,11 +273,6 @@ class JavaMethodCompiler extends MethodVisitor {
         for (int i = 0; i < parameters.length; i++) {
             variables.type(isStatic ? i : i + 1).type(convert(parameters[i]));
         }
-        debugger.whileProcess = true;
-
-        if (script.source.getName().endsWith("Set") && original.equals("recalculateWordsInUse")) {
-            debugger.enable = true;
-        }
     }
 
     /**
@@ -288,10 +280,8 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-        if (desc.equals(Type.getType(Debuggable.class).getDescriptor())) {
-            debugger.enable = true;
-    
-            return debugger;
+        if (desc.equals(DEBUGGER)) {
+            return I.make(Debugger.class);
         }
         return null; // do nothing
     }
@@ -325,8 +315,6 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitEnd() {
-        debugger.whileProcess = false;
-
         // Dispose all nodes which contains synchronized block.
         for (Node node : synchronizer) {
             disposeNode(node, true);
@@ -380,7 +368,7 @@ class JavaMethodCompiler extends MethodVisitor {
             }
         }
 
-        debugger.print(script, nodes);
+        Debugger.print(script, nodes);
 
         // ===============================================
         // Script Code
@@ -397,12 +385,12 @@ class JavaMethodCompiler extends MethodVisitor {
             TranslationError error = new TranslationError(e);
             error.write("Can't compile method because");
             error.write(e.getMessage());
-            error.writeMethod(debugger.methodName, returnType, parameterTypes);
+            error.writeMethod(CompilerRecorder.getMethodName(), returnType, parameterTypes);
 
             throw error;
         }
 
-        debugger.print(code.toFragment());
+        Debugger.print(code.toFragment());
     }
 
     /**
@@ -606,7 +594,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
         case F_SAME:
             if (match(JUMP, GOTO, LABEL)) {
-                debugger.printInfo();
+                Debugger.printInfo();
             }
 
             record(FRAME_SAME);
@@ -633,17 +621,17 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private void processTernaryOperator() {
         Operand third = current.peek(2);
-        debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
-        debugger.print(nodes);
+        Debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
+        Debugger.print(nodes);
         if (third instanceof OperandCondition) {
             Operand first = current.peek(0);
-            debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
+            Debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
             if (first == Node.END) {
                 return;
             }
 
             Operand second = current.peek(1);
-            debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
+            Debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
             if (second == Node.END) {
                 return;
             }
@@ -651,7 +639,7 @@ class JavaMethodCompiler extends MethodVisitor {
             Node firstNode = findNodeBy(first);
             Node secondNode = findNodeBy(second);
             Node thirdNode = findNodeBy(third);
-            debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
+            Debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
             if (firstNode == secondNode) {
                 return;
             }
@@ -674,12 +662,12 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 // dispose empty nodes
                 if (firstNode.stack.isEmpty()) {
-                    debugger.print("dispose first node " + firstNode.id);
+                    Debugger.print("dispose first node " + firstNode.id);
                     disposeNode(firstNode);
                 }
 
                 if (secondNode.stack.isEmpty()) {
-                    debugger.print("dispose second node " + secondNode.id);
+                    Debugger.print("dispose second node " + secondNode.id);
                     disposeNode(secondNode);
                 }
 
@@ -1311,7 +1299,7 @@ class JavaMethodCompiler extends MethodVisitor {
         case GOTO:
             if (match(LABEL, GOTO) && current.peek(0) instanceof OperandCondition && current.peek(1) instanceof OperandCondition) {
                 Node merger = getNode(label);
-                debugger.print("merge current " + current.id + "  merger " + merger.id);
+                Debugger.print("merge current " + current.id + "  merger " + merger.id);
                 mergeConditions(current, merger);
 
                 connect(label);
@@ -1446,7 +1434,7 @@ class JavaMethodCompiler extends MethodVisitor {
     @Override
     public void visitLabel(Label label) {
         if (current != null && match(LABEL, GOTO)) {
-            debugger.print("dispose " + current.previous);
+            Debugger.print("dispose " + current.previous);
             disposeNode(current.previous);
         }
 
@@ -1471,14 +1459,7 @@ class JavaMethodCompiler extends MethodVisitor {
         // build new node
         current = connect(label);
 
-        if (debugger.enable) {
-            System.out.println("visit label " + current.id);
-        }
-
-        if (debugger.beforeLabel) {
-            debugger.print("Before node" + current.id);
-            debugger.print(nodes);
-        }
+        Debugger.print("visit label " + current.id);
 
         // store the node in appearing order
         nodes.add(current);
@@ -1491,11 +1472,6 @@ class JavaMethodCompiler extends MethodVisitor {
                     mergeConditions(current);
                 }
             }
-        }
-
-        if (debugger.afterLabel) {
-            debugger.print("After node" + current.id);
-            debugger.print(nodes);
         }
     }
 
@@ -1543,7 +1519,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
-                debugger.print("try merge condition group " + group.stream()
+                Debugger.print("try merge condition group " + group.stream()
                         .map(n -> n.id)
                         .collect(Collectors.toList()) + "     " + condition.transition.id);
                 if (!found) {
@@ -1574,7 +1550,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 OperandCondition condition = (OperandCondition) operand;
 
                 if (group.contains(condition.transition)) {
-                    debugger.print("dispose merged node " + start.id);
+                    Debugger.print("dispose merged node " + start.id);
                     disposeNode(start);
 
                     // Merge recursively
@@ -1628,7 +1604,7 @@ class JavaMethodCompiler extends MethodVisitor {
     @Override
     public void visitLineNumber(int line, Label start) {
         getNode(start).number = line;
-    
+
         CompilerRecorder.recordMethodLineNumber(line);
     }
 
@@ -2094,7 +2070,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * @return A created node.
      */
     private final Node createNode() {
-        Node created = new Node(counter++, debugger);
+        Node created = new Node(counter++);
         created.previous = current;
 
         // make connection
@@ -2119,7 +2095,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * @return A created node.
      */
     private final Node createNode(Node next) {
-        Node created = new Node(counter++, debugger);
+        Node created = new Node(counter++);
 
         // switch line number
         created.number = next.number;
@@ -2163,8 +2139,8 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private final void disposeNode(Node target, boolean clearStack) {
-        debugger.print("dispose node " + target.id);
-        debugger.print(nodes);
+        Debugger.print("dispose node " + target.id);
+        Debugger.print(nodes);
 
         int index = nodes.indexOf(target);
 
@@ -2242,7 +2218,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // search cached node
         if (node == null) {
-            label.info = node = new Node(counter++, debugger);
+            label.info = node = new Node(counter++);
             labels.put(node, label);
         }
 

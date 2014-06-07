@@ -9,25 +9,31 @@
  */
 package booton.translator;
 
+import static booton.translator.CompilerRecorder.*;
 import static jdk.internal.org.objectweb.asm.Opcodes.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.StringJoiner;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.regex.Pattern;
 
 import jdk.internal.org.objectweb.asm.AnnotationVisitor;
-import jdk.internal.org.objectweb.asm.Type;
 import booton.translator.Node.TryCatchFinally;
 
 /**
- * @version 2014/06/07 10:10:46
+ * @version 2014/06/07 15:00:34
  */
 public class Debugger extends AnnotationVisitor {
+
+    /** The list for debug patterns. */
+    private static final List<Pattern[]> patterns = new ArrayList();
+
+    static {
+        debug(".+Set", "recalculateWordsInUse");
+    }
 
     /** The processing environment. */
     private static final boolean whileTest;
@@ -44,45 +50,50 @@ public class Debugger extends AnnotationVisitor {
         whileTest = flag;
     }
 
-    /** The Java original class. */
-    final Class clazz;
+    /** The current debugger. */
+    private static Debugger debugger;
 
-    /** The Java original method name. */
-    final String methodName;
-
-    /** The Java original method signature. */
-    final String methodDescriptor;
-
-    boolean enable = false;
-
-    boolean beforeLabel = false;
-
-    boolean afterLabel = false;
-
-    /** The processing flag. */
-    boolean whileProcess = false;
+    /** The use flag. */
+    private boolean enable = false;
 
     /**
      * 
      */
-    public Debugger(Class clazz, String methodName, String methodDescriptor) {
+    private Debugger() {
         super(ASM5);
 
-        this.clazz = clazz;
-        this.methodName = methodName;
-        this.methodDescriptor = methodDescriptor;
+        // update
+        debugger = this;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void visit(String name, Object value) {
-        if (name.equals("beforeLabel")) {
-            beforeLabel = Boolean.parseBoolean(value.toString());
-        } else if (name.equals("afterLabel")) {
-            afterLabel = Boolean.parseBoolean(value.toString());
+    public void visit(String methodName, Object type) {
+        Class clazz = (Class) type;
+
+        for (Pattern[] patterns : patterns) {
+            if (patterns[0].matcher(clazz.getName()).matches() && patterns[1].matcher(methodName).matches()) {
+                enable = true;
+                return;
+            }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void visitEnd() {
+        enable = true;
+    }
+
+    /**
+     * @return
+     */
+    public static boolean isEnable() {
+        return debugger.enable;
     }
 
     /**
@@ -90,21 +101,15 @@ public class Debugger extends AnnotationVisitor {
      * Print method info.
      * </p>
      */
-    public void printInfo() {
-        Type[] prameters = Type.getArgumentTypes(methodDescriptor);
-
-        StringJoiner joiner = new StringJoiner(", ", "(", ")");
-        for (Type type : prameters) {
-            joiner.add(JavaMethodCompiler.convert(type).getTypeName());
-        }
-        System.out.println(methodName + joiner + "   (" + clazz.getName() + ".java:" + CompilerRecorder.getCurrentLine() + ")");
+    public static void printInfo() {
+        System.out.println(getMethodName() + " " + link());
     }
 
     /**
      * @param message
      */
-    public void print(Object message) {
-        if (enable) {
+    public static void print(Object message) {
+        if (isEnable()) {
             System.out.println(message);
         }
     }
@@ -116,7 +121,7 @@ public class Debugger extends AnnotationVisitor {
      * 
      * @param node
      */
-    public void print(Node node) {
+    public static void print(Node node) {
         if (node != null) {
             print(Collections.singletonList(node));
         }
@@ -129,8 +134,8 @@ public class Debugger extends AnnotationVisitor {
      * 
      * @param nodes
      */
-    public void print(List<Node> nodes) {
-        if (enable) {
+    public static void print(List<Node> nodes) {
+        if (isEnable()) {
             System.out.println(format(nodes));
         }
     }
@@ -144,16 +149,16 @@ public class Debugger extends AnnotationVisitor {
      * @param methodName A original method name.
      * @param nodes A node info.
      */
-    public void print(Javascript script, List<Node> nodes) {
-        if (enable) {
+    public static void print(Javascript script, List<Node> nodes) {
+        if (isEnable()) {
             if (whileTest) {
                 String testClassName = computeTestClassName(script.source);
                 String testMethodName = computeTestMethodName(testClassName);
 
-                print("===== " + testClassName + "#" + (testMethodName == null ? methodName : testMethodName) + " =====");
+                print("==== " + (testMethodName == null ? getMethodName() : testMethodName) + " " + link() + " ====");
                 print(nodes);
             } else {
-                print("===== " + script.source.getName() + "#" + methodName + " =====");
+                print("==== " + getMethodName() + " " + link() + " ====");
                 print(nodes);
             }
         }
@@ -167,7 +172,7 @@ public class Debugger extends AnnotationVisitor {
      * @param clazz
      * @return
      */
-    private String computeTestClassName(Class clazz) {
+    private static String computeTestClassName(Class clazz) {
         String name = clazz.getName();
 
         int index = name.indexOf('$');
@@ -186,7 +191,7 @@ public class Debugger extends AnnotationVisitor {
      * @param testClassName
      * @return
      */
-    private String computeTestMethodName(String testClassName) {
+    private static String computeTestMethodName(String testClassName) {
         for (StackTraceElement element : new Error().getStackTrace()) {
             if (element.getClassName().equals(testClassName)) {
                 return element.getMethodName();
@@ -203,7 +208,7 @@ public class Debugger extends AnnotationVisitor {
      * @param nodes
      * @return
      */
-    private String format(List<Node> nodes) {
+    private static String format(List<Node> nodes) {
         Set<TryCatchFinally> tries = new LinkedHashSet();
 
         for (Node node : nodes) {
@@ -254,7 +259,7 @@ public class Debugger extends AnnotationVisitor {
             format.write("out : ");
             format.formatNode(node.outgoing, outgoing);
             format.write("dom : ");
-            format.formatNode(list(getDominator(node)), 1);
+            format.formatNode(list(node.getDominator()), 1);
             if (backedge != 0) {
                 format.write("back : ");
                 format.formatNode(node.backedges, backedge);
@@ -278,7 +283,7 @@ public class Debugger extends AnnotationVisitor {
      * @param node
      * @return
      */
-    private List<Node> list(Node node) {
+    private static List<Node> list(Node node) {
         if (node == null) {
             return Collections.EMPTY_LIST;
         }
@@ -287,95 +292,25 @@ public class Debugger extends AnnotationVisitor {
 
     /**
      * <p>
-     * Helper method to compute dominator node.
+     * Register debug pattern.
      * </p>
      * 
-     * @param target
+     * @param className
+     * @param methodName
+     */
+    private static void debug(String className, String methodName) {
+        patterns.add(new Pattern[] {Pattern.compile(className), Pattern.compile(methodName)});
+    }
+
+    /**
+     * <p>
+     * Create link expression.
+     * </p>
+     * 
      * @return
      */
-    private Node getDominator(Node target) {
-        if (whileProcess) {
-            return getDominator(target, new HashSet());
-        } else {
-            return target.getDominator();
-        }
-    }
-
-    /**
-     * Compute the immediate dominator of this node.
-     * 
-     * @return A dominator node. If this node is root, <code>null</code>.
-     */
-    private Node getDominator(Node target, Set<Node> nodes) {
-        if (!nodes.add(target)) {
-            return null;
-        }
-
-        // check cache
-        // We must search a immediate dominator.
-        //
-        // At first, we can ignore the older incoming nodes.
-        List<Node> candidates = new CopyOnWriteArrayList(target.incoming);
-
-        // compute backedges
-        for (Node node : candidates) {
-            if (target.backedges.contains(node)) {
-                candidates.remove(node);
-            }
-        }
-
-        int size = candidates.size();
-
-        switch (size) {
-        case 0: // this is root node
-            return null;
-
-        case 1: // only one incoming node
-            return candidates.get(0);
-
-        default: // multiple incoming nodes
-            Node candidate = candidates.get(0);
-
-            while (true) {
-                boolean result = true;
-
-                for (int i = 1; i < size; i++) {
-                    if (!hasDominator(candidates.get(i), candidate, nodes)) {
-                        result = false;
-                        break;
-                    }
-                }
-
-                if (result) {
-                    return candidate;
-                } else {
-                    if (candidate == null) {
-                        return null;
-                    }
-                    candidate = getDominator(candidate, nodes);
-                }
-            }
-        }
-    }
-
-    /**
-     * Helper method to check whether the specified node dominate this node or not.
-     * 
-     * @param dominator A dominator node.
-     * @return A result.
-     */
-    private boolean hasDominator(Node target, Node dominator, Set<Node> nodes) {
-        Node current = target;
-
-        while (current != null) {
-            if (current == dominator) {
-                return true;
-            }
-            current = getDominator(current, nodes);
-        }
-
-        // Not Found
-        return false;
+    private static String link() {
+        return "(" + getScript().source.getName() + ".java:" + getLine() + ")";
     }
 
     /**

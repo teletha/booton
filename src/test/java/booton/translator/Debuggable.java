@@ -20,22 +20,4 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.CONSTRUCTOR})
 @Retention(RetentionPolicy.CLASS)
 public @interface Debuggable {
-
-    /**
-     * <p>
-     * Show debug info in detail.
-     * </p>
-     * 
-     * @return
-     */
-    boolean beforeLabel() default false;
-
-    /**
-     * <p>
-     * Show debug info in detail.
-     * </p>
-     * 
-     * @return
-     */
-    boolean afterLabel() default false;
 }
