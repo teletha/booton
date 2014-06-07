@@ -101,6 +101,17 @@ class CompilerRecorder {
     }
 
     /**
+     * <p>
+     * Retrieve the current compiling script.
+     * </p>
+     * 
+     * @return The current compiling script.
+     */
+    static int getCurrentLine() {
+        return route.peekFirst().line;
+    }
+
+    /**
      * @version 2013/10/28 14:16:01
      */
     private static class CompilerContext {
