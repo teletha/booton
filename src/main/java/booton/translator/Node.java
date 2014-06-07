@@ -33,9 +33,6 @@ class Node {
     /** The identified label for this node. */
     final int id;
 
-    /** The debug flag. */
-    final Debugger debugger;
-
     /** The actual operand stack. */
     final LinkedList<Operand> stack = new LinkedList();
 
@@ -98,9 +95,8 @@ class Node {
     /**
      * @param label
      */
-    Node(int id, Debugger debugger) {
+    Node(int id) {
         this.id = id;
-        this.debugger = debugger;
     }
 
     /**
@@ -621,7 +617,7 @@ class Node {
                 Node exit = block.exit;
 
                 if (exit != null) {
-                    if (debugger.enable) {
+                    if (Debugger.isEnable()) {
                         buffer.comment("Start " + block.start.id + "  End " + block.end.id + "   Catcher " + block.catcher.id);
                     }
                     buffer.comment("ext block " + exit.id);
@@ -933,7 +929,7 @@ class Node {
             if (loop != null) {
                 // continue
                 if (loop.hasHeader(next) && hasDominator(loop.entrance)) {
-                    if (debugger.enable) {
+                    if (Debugger.isEnable()) {
                         buffer.comment(id + " -> " + next.id + " continue to " + loop.entrance.id + " (" + next.currentCalls + " of " + requiredCalls + ")");
                     }
 
@@ -946,10 +942,10 @@ class Node {
                 }
 
                 // break
-                debugger.print("breakable?  " + loop.entrance.id + "  " + loop.checkpoint.id + "   " + loop.first.id + "  " + this.id);
+                Debugger.print("breakable?  " + loop.entrance.id + "  " + loop.checkpoint.id + "   " + loop.first.id + "  " + this.id);
                 if (!loop.hasHeader(this) && loop.hasExit(next) && hasDominator(loop.entrance)) {
-                    debugger.print("break!");
-                    if (debugger.enable) {
+                    Debugger.print("break!");
+                    if (Debugger.isEnable()) {
                         buffer.comment(id + " -> " + next.id + " break to " + loop.entrance.id + "(" + next.currentCalls + " of " + requiredCalls + ")");
                     }
                     buffer.append("break", loop.computeLabelFor(this), ";").line();
@@ -957,7 +953,7 @@ class Node {
                 }
             }
 
-            if (debugger.enable) {
+            if (Debugger.isEnable()) {
                 buffer.comment(id + " -> " + next.id + " (" + next.currentCalls + " of " + requiredCalls + ")");
             }
 
@@ -1014,7 +1010,7 @@ class Node {
         previous.disconnect(next);
 
         // create and linkage
-        Node node = new Node(-previous.id, debugger);
+        Node node = new Node(-previous.id);
         previous.connect(node);
         node.connect(next);
 

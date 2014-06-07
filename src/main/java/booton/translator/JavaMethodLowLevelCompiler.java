@@ -43,9 +43,6 @@ class JavaMethodLowLevelCompiler extends MethodVisitor {
     /** The javascript object code. */
     private final ScriptWriter code;
 
-    /** The current processing method name. */
-    private final String methodName;
-
     /** The method return type. */
     private final Type returnType;
 
@@ -67,16 +64,14 @@ class JavaMethodLowLevelCompiler extends MethodVisitor {
     /**
      * @param script
      * @param code
-     * @param name
      * @param computed
      * @param desc
      */
-    JavaMethodLowLevelCompiler(Javascript script, ScriptWriter code, String name, String computed, String description, boolean isStatic) {
+    JavaMethodLowLevelCompiler(Javascript script, ScriptWriter code, String computed, String description, boolean isStatic) {
         super(ASM5);
 
         this.script = script;
         this.code = code;
-        this.methodName = name;
         this.returnType = Type.getReturnType(description);
         this.parameterTypes = Type.getArgumentTypes(description);
         this.variables = new LocalVariables(Type.getArgumentTypes(description).length, isStatic);

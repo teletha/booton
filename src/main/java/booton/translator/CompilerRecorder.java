@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,8 +12,10 @@ package booton.translator;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import kiss.I;
+
 /**
- * @version 2013/10/29 10:54:48
+ * @version 2014/06/07 11:36:50
  */
 class CompilerRecorder {
 
@@ -57,6 +59,8 @@ class CompilerRecorder {
         CompilerContext context = route.peekFirst();
         context.method = method;
         context.line = 1;
+
+        I.make(Debugger.class).visit(method, context.script.source);
     }
 
     /**
@@ -91,23 +95,34 @@ class CompilerRecorder {
 
     /**
      * <p>
-     * Retrieve the current compiling script.
+     * Retrieve the current compiling script info.
      * </p>
      * 
      * @return The current compiling script.
      */
-    static Javascript getCurrent() {
+    static Javascript getScript() {
         return route.peekFirst().script;
     }
 
     /**
      * <p>
-     * Retrieve the current compiling script.
+     * Retrieve the current compiling script info.
      * </p>
      * 
      * @return The current compiling script.
      */
-    static int getCurrentLine() {
+    static String getMethodName() {
+        return route.peekFirst().method;
+    }
+
+    /**
+     * <p>
+     * Retrieve the current compiling script info.
+     * </p>
+     * 
+     * @return The current compiling script.
+     */
+    static int getLine() {
         return route.peekFirst().line;
     }
 

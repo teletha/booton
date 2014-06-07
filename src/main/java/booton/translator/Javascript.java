@@ -566,7 +566,7 @@ public class Javascript {
         }
 
         if (!dependency.isAnnotationPresent(Unnecessary.class)) {
-            Javascript context = CompilerRecorder.getCurrent();
+            Javascript context = CompilerRecorder.getScript();
 
             if (context.source != dependency) {
                 context.dependencies.add(dependency);

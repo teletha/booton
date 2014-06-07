@@ -119,12 +119,15 @@ class JavaClassCompiler extends ClassVisitor {
             computed = "_" + computed;
         }
 
+        // record
+        CompilerRecorder.recordMethodName(name);
+
         if (LowLevel.class.isAssignableFrom(script.source)) {
-            return new JavaMethodLowLevelCompiler(script, code, name, computed, desc, isStatic);
+            return new JavaMethodLowLevelCompiler(script, code, computed, desc, isStatic);
         }
 
         // start compiling method
-        return new JavaMethodCompiler(script, code, name, computed, desc, isStatic);
+        return new JavaMethodCompiler(script, code, computed, desc, isStatic);
     }
 
     /**
