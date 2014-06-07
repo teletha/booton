@@ -211,6 +211,7 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void ifConditionLogical() throws Exception {
         test(new Scriptable() {
 
+            @Debuggable
             String act(int value) {
                 if ((value < 0 && value == -1) || value == 2) {
                     if (value < 0) {
