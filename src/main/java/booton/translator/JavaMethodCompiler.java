@@ -621,17 +621,16 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private void processTernaryOperator() {
         Operand third = current.peek(2);
-        Debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
-        Debugger.print(nodes);
+
         if (third instanceof OperandCondition) {
             Operand first = current.peek(0);
-            Debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
+
             if (first == Node.END) {
                 return;
             }
 
             Operand second = current.peek(1);
-            Debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
+
             if (second == Node.END) {
                 return;
             }
@@ -639,7 +638,7 @@ class JavaMethodCompiler extends MethodVisitor {
             Node firstNode = findNodeBy(first);
             Node secondNode = findNodeBy(second);
             Node thirdNode = findNodeBy(third);
-            Debugger.print("TERNARY ~~~~~~~~~~~~~~~~~~");
+
             if (firstNode == secondNode) {
                 return;
             }
@@ -1433,11 +1432,6 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitLabel(Label label) {
-        if (current != null && match(LABEL, GOTO)) {
-            Debugger.print("dispose " + current.previous);
-            disposeNode(current.previous);
-        }
-
         // recode current instruction
         record(LABEL);
 
