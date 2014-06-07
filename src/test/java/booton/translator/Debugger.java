@@ -11,7 +11,6 @@ package booton.translator;
 
 import static jdk.internal.org.objectweb.asm.Opcodes.*;
 
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,17 +21,7 @@ import java.util.StringJoiner;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import jdk.internal.org.objectweb.asm.AnnotationVisitor;
-import jdk.internal.org.objectweb.asm.Attribute;
-import jdk.internal.org.objectweb.asm.ClassVisitor;
-import jdk.internal.org.objectweb.asm.Handle;
-import jdk.internal.org.objectweb.asm.Label;
-import jdk.internal.org.objectweb.asm.MethodVisitor;
-import jdk.internal.org.objectweb.asm.Opcodes;
 import jdk.internal.org.objectweb.asm.Type;
-import jdk.internal.org.objectweb.asm.util.Printer;
-
-import org.objectweb.asm.util.TraceClassVisitor;
-
 import booton.translator.Node.TryCatchFinally;
 
 /**
