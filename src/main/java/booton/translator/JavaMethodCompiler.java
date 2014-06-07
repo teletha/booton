@@ -368,7 +368,8 @@ class JavaMethodCompiler extends MethodVisitor {
             }
         }
 
-        Debugger.print(script, nodes);
+        Debugger.printHeader();
+        Debugger.print(nodes);
 
         // ===============================================
         // Script Code
