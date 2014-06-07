@@ -54,6 +54,9 @@ public class Debugger extends AnnotationVisitor {
     /** The use flag. */
     private boolean enable = false;
 
+    /** The use flag. */
+    private boolean firstTime = true;
+
     /**
      * 
      */
@@ -110,6 +113,11 @@ public class Debugger extends AnnotationVisitor {
      * @return
      */
     public static boolean isEnable() {
+        if (debugger.enable && debugger.firstTime) {
+            debugger.firstTime = false;
+
+            printHeader();
+        }
         return debugger.enable;
     }
 
@@ -119,7 +127,39 @@ public class Debugger extends AnnotationVisitor {
      * </p>
      */
     public static void printInfo() {
-        System.out.println(getMethodName() + " " + link());
+        System.out.println(link());
+    }
+
+    /**
+     * <p>
+     * Print method info as header like.
+     * </p>
+     */
+    public static void printHeader() {
+        if (isEnable()) {
+            System.out.println("==== " + link() + " ====");
+        }
+    }
+
+    /**
+     * <p>
+     * Create link expression.
+     * </p>
+     * 
+     * @return
+     */
+    private static String link() {
+        String methodName;
+
+        if (whileTest) {
+            String testClassName = computeTestClassName(getScript().source);
+            String testMethodName = computeTestMethodName(testClassName);
+
+            methodName = testMethodName == null ? getMethodName() : testMethodName;
+        } else {
+            methodName = getMethodName();
+        }
+        return methodName + " " + "(" + getScript().source.getName() + ".java:" + getLine() + ")";
     }
 
     /**
@@ -154,30 +194,6 @@ public class Debugger extends AnnotationVisitor {
     public static void print(List<Node> nodes) {
         if (isEnable()) {
             System.out.println(format(nodes));
-        }
-    }
-
-    /**
-     * <p>
-     * Dump node tree with method info.
-     * </p>
-     * 
-     * @param script A current processing script.
-     * @param methodName A original method name.
-     * @param nodes A node info.
-     */
-    public static void print(Javascript script, List<Node> nodes) {
-        if (isEnable()) {
-            if (whileTest) {
-                String testClassName = computeTestClassName(script.source);
-                String testMethodName = computeTestMethodName(testClassName);
-
-                print("==== " + (testMethodName == null ? getMethodName() : testMethodName) + " " + link() + " ====");
-                print(nodes);
-            } else {
-                print("==== " + getMethodName() + " " + link() + " ====");
-                print(nodes);
-            }
         }
     }
 
@@ -305,17 +321,6 @@ public class Debugger extends AnnotationVisitor {
             return Collections.EMPTY_LIST;
         }
         return Arrays.asList(node);
-    }
-
-    /**
-     * <p>
-     * Create link expression.
-     * </p>
-     * 
-     * @return
-     */
-    private static String link() {
-        return "(" + getScript().source.getName() + ".java:" + getLine() + ")";
     }
 
     /**
