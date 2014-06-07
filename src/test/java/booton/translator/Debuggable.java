@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @version 2013/11/01 10:53:45
+ * @version 2014/06/07 10:10:31
  */
 @Target({ElementType.METHOD, ElementType.CONSTRUCTOR})
 @Retention(RetentionPolicy.CLASS)
@@ -38,13 +38,4 @@ public @interface Debuggable {
      * @return
      */
     boolean afterLabel() default false;
-
-    /**
-     * <p>
-     * Show debug info in detail.
-     * </p>
-     * 
-     * @return
-     */
-    boolean asm() default false;
 }
