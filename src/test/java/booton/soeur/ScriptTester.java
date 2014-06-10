@@ -208,9 +208,12 @@ public class ScriptTester {
                 invoker.append(");");
                 invoker.append("} catch(e) {e}");
 
+                // execute
+                Object js = engine.execute(html, invoker.toString(), "", 1);
+
                 try {
-                    // execute and compare it to the java resul
-                    assertObject(results.get(i), engine.execute(html, invoker.toString(), "", 1));
+                    // compare it to the java resul
+                    assertObject(results.get(i), js);
                 } catch (AssertionError e) {
                     StringBuilder builder = new StringBuilder();
                     builder.append("Compiling script is success but execution results of Java and JS are different.")
@@ -218,6 +221,8 @@ public class ScriptTester {
 
                     if (input != NONE) {
                         builder.append("Input value : ").append(input).append(END);
+                        builder.append("Java    : ").append(results.get(i)).append(END);
+                        builder.append("Script   : ").append(js).append(END);
                     }
                     throw new AssertionError(builder.toString(), e);
                 }

@@ -60,6 +60,9 @@ class Node {
     /** The flag whether this node has additional frame or not. */
     boolean frame;
 
+    /** The flag whether this node is logical condition or not. */
+    boolean logical;
+
     boolean to;
 
     /** This node is switch starting node. */
@@ -458,7 +461,11 @@ class Node {
         boolean in = node.incoming.addIfAbsent(this);
 
         if (!out && !in) {
-            Debugger.print("add duplication node " + id + "  -> " + node.id);
+            logical = true;
+
+            for (Node o : outgoing) {
+                o.logical = true;
+            }
         }
     }
 
@@ -740,10 +747,14 @@ class Node {
             });
 
             LoopStructure loop = new LoopStructure(this, nodes[0], nodes[1], update, buffer);
-            OperandCondition condition = (OperandCondition) peek(0);
+            Operand operand = peek(0);
 
-            if (condition.transition != nodes[0]) {
-                condition.invert();
+            if (operand instanceof OperandCondition) {
+                OperandCondition condition = (OperandCondition) operand;
+
+                if (condition.transition != nodes[0]) {
+                    condition.invert();
+                }
             }
 
             // write script fragment
