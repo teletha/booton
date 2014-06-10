@@ -1297,19 +1297,10 @@ class JavaMethodCompiler extends MethodVisitor {
 
         switch (opcode) {
         case GOTO:
-            if (match(LABEL, GOTO) && current.peek(0) instanceof OperandCondition && current.peek(1) instanceof OperandCondition) {
-                Node merger = getNode(label);
-                Debugger.print("merge current " + current.id + "  merger " + merger.id);
-                mergeConditions(current, merger);
-
-                connect(label);
-            } else {
-                connect(label);
-            }
+            connect(label);
 
             // disconnect the next appearing node from the current node
             current = null;
-            node.to = true;
             return;
 
         case IFEQ: // == 0
