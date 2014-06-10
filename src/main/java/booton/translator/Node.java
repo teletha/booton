@@ -63,8 +63,6 @@ class Node {
     /** The flag whether this node is logical condition or not. */
     boolean logical;
 
-    boolean to;
-
     /** This node is switch starting node. */
     private Switch switchy;
 
