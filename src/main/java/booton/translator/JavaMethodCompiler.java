@@ -1530,8 +1530,6 @@ class JavaMethodCompiler extends MethodVisitor {
                     i--;
 
                     start.set(i, new OperandCondition(condition, (OperandCondition) start.remove(i)));
-                } else {
-                    return; // Stop here.
                 }
             }
         }

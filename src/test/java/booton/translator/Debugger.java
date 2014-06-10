@@ -40,6 +40,8 @@ public class Debugger extends AnnotationVisitor {
 
     // initialization
     static {
+        debug(".+Map", "absHighFence");
+
         boolean flag = false;
 
         for (StackTraceElement element : new Error().getStackTrace()) {
@@ -303,6 +305,11 @@ public class Debugger extends AnnotationVisitor {
             }
             format.write("code : ");
             format.formatCodeFragment(node.stack);
+
+            if (node.logical) {
+                format.write("\t\t");
+                format.write("L");
+            }
             format.write("\r\n");
         }
         return format.toString();
