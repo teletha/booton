@@ -189,8 +189,6 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The pool of try-catch-finally blocks. */
     private final TryCatchFinallyBlocks tries = new TryCatchFinallyBlocks();
 
-    private final Map<Node, Label> labels = new HashMap<>();
-
     /** The current processing node. */
     private Node current = null;
 
@@ -2132,29 +2130,23 @@ class JavaMethodCompiler extends MethodVisitor {
             nodes.get(index + 1).previous = index < 1 ? null : nodes.get(index - 1);
         }
 
-        Label label = labels.get(target);
-
-        if (label != null) {
-            labels.put(target.previous, label);
-            label.info = target.previous;
-        }
-
         // Merge the current processing node
         nodes.remove(target);
 
-        // Remove it from outgoings of all previous-sibling nodes.
-        for (Node node : labels.keySet()) {
-            if (node != null) {
-                node.incoming.remove(target);
-                node.outgoing.remove(target);
-            }
-        }
-
+        // Connect from incomings to outgouings
         for (Node out : target.outgoing) {
             for (Node in : target.incoming) {
                 in.outgoing.addIfAbsent(out);
                 out.incoming.addIfAbsent(in);
             }
+        }
+
+        // Remove the target node from its incomings and outgoings.
+        for (Node node : target.incoming) {
+            node.disconnect(target);
+        }
+        for (Node node : target.outgoing) {
+            target.disconnect(node);
         }
 
         // Copy all operands to the previous node if needed
@@ -2194,7 +2186,6 @@ class JavaMethodCompiler extends MethodVisitor {
         // search cached node
         if (node == null) {
             label.info = node = new Node(counter++);
-            labels.put(node, label);
         }
 
         // API definition

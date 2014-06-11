@@ -14,6 +14,7 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
+import booton.translator.Debuggable;
 
 /**
  * @version 2013/11/04 17:19:06
@@ -65,6 +66,7 @@ public class LogicalExpressionTest extends ScriptTester {
     public void Or() {
         test(new Scriptable() {
 
+            @Debuggable
             public boolean act(int value) {
                 return value == 1 || value == -1;
             }
@@ -765,6 +767,7 @@ public class LogicalExpressionTest extends ScriptTester {
             public String act() {
                 return new Object() {
 
+                    @Override
                     public String toString() {
                         return "Anonymous";
                     };
