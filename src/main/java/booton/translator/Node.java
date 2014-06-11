@@ -25,7 +25,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 class Node {
 
     /** The re-usable operand. */
-    static final Operand RETURN = new OperandExpression("return");
+    static final OperandExpression Return = new OperandExpression("return");
 
     /** The re-usable operand. */
     static final Operand END = new OperandExpression(";");
@@ -566,7 +566,7 @@ class Node {
 
             if (outs == 0) {
                 // end node
-                if (!returnOmittable || stack.size() != 2 || stack.get(0) != RETURN || stack.get(1) != END) {
+                if (!returnOmittable || stack.size() != 2 || stack.get(0) != Return || stack.get(1) != END) {
                     buffer.append(this);
                 }
             } else if (outs == 1) {

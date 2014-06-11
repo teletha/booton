@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 import jdk.internal.org.objectweb.asm.AnnotationVisitor;
 import jdk.internal.org.objectweb.asm.Attribute;
@@ -407,7 +406,7 @@ class JavaMethodCompiler extends MethodVisitor {
         for (int i = node.stack.size() - 1; 0 <= i; i--) {
             Operand operand = node.stack.get(i);
 
-            if (operand == Return || operand == Node.RETURN) {
+            if (operand == Return || operand == Node.Return) {
                 return -1;
             }
 
@@ -960,7 +959,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case RETURN:
-            current.addExpression(Node.RETURN);
+            current.addExpression(Node.Return);
 
             // disconnect the next appearing node from the current node
             current = null;
@@ -986,9 +985,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 disposeNode(current);
 
                 // invert the latest condition
-                if (!current.stack.isEmpty()) {
-                    current.peek(0).invert();
-                }
+                current.peek(0).invert();
             }
 
             Operand operand = current.remove(0);
@@ -1486,40 +1483,72 @@ class JavaMethodCompiler extends MethodVisitor {
         mergeConditions(node.previous, node);
     }
 
+    private int detectContentsType(Node node) {
+        int mode = 0;
+
+        for (Operand operand : node.stack) {
+            if (operand instanceof OperandCondition) {
+                if (mode == 0) {
+                    mode = 1;
+                } else if (mode < 0) {
+                    return -1;
+                }
+            } else {
+                if (mode == 0) {
+                    mode = -1;
+                } else if (0 < mode) {
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+
     /**
      * <p>
      * Helper method to merge all conditional operands.
      * </p>
      */
     private void mergeConditions(Node start, Node initialTransition) {
-        Set<Node> group = new HashSet();
-        group.add(initialTransition);
+        OperandCondition left = null;
+        OperandCondition right = null;
 
-        boolean found = false;
+        Set<Node> transitions = new HashSet();
+        transitions.add(initialTransition);
 
-        // Merge the sequencial conditional operands in this node from right to left.
-        for (int i = 0; i < start.stack.size(); i++) {
-            Operand operand = start.peek(i);
+        int separator = searchConditionalOperandSeparator(start);
+
+        if (separator != -1) {
+            Debugger.printInfo();
+
+        }
+
+        Debugger.print("Call mergeConditions [start: " + start.id + "  initialTransition: " + initialTransition.id + " separator: " + separator + "]");
+        Debugger.print(nodes);
+
+        // Search and merge the sequencial conditional operands in this node from right to left.
+        for (int index = 0; index < start.stack.size(); index++) {
+            Operand operand = start.peek(index);
 
             if (operand instanceof OperandCondition) {
-                OperandCondition condition = (OperandCondition) operand;
-                Debugger.print("try merge condition group " + group.stream()
-                        .map(n -> n.id)
-                        .collect(Collectors.toList()) + "     " + condition.transition.id);
-                if (!found) {
-                    found = true;
+                if (right == null) {
+                    right = (OperandCondition) operand;
 
                     // This is first operand condition.
-                    group.add(condition.transition);
+                    transitions.add(right.transition);
 
                     // Set next appearing node for grouping.
-                    condition.next = initialTransition;
-                } else if (group.contains(condition.transition) && start.peek(i - 1) instanceof OperandCondition) {
-                    // Merge two adjucent conditional operands.
-                    i--;
+                    right.next = initialTransition;
+                } else {
+                    left = (OperandCondition) operand;
 
-                    start.set(i, new OperandCondition(condition, (OperandCondition) start.remove(i)));
+                    if (transitions.contains(left.transition)) {
+                        // Merge two adjucent conditional operands.
+                        start.set(--index, new OperandCondition(left, (OperandCondition) start.remove(index)));
+                    }
                 }
+            } else {
+                left = right = null;
             }
         }
 
@@ -1531,12 +1560,12 @@ class JavaMethodCompiler extends MethodVisitor {
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
 
-                if (group.contains(condition.transition)) {
+                if (transitions.contains(condition.transition)) {
                     Debugger.print("dispose merged node " + start.id);
                     disposeNode(start);
 
                     // Merge recursively
-                    mergeConditions(initialTransition);
+                    mergeConditions(start.previous, initialTransition);
                 }
             }
         }

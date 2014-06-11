@@ -147,13 +147,6 @@ class OperandCondition extends Operand {
     /**
      * {@inheritDoc}
      */
-    public String toString2() {
-        return "OperandCondition [left=" + left + ", right=" + right + ", transition=" + transition.id + ", operator=" + operator + ", group=" + group + ", next=" + next + "]";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         // convert int to char if needed
