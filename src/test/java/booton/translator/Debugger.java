@@ -40,7 +40,7 @@ public class Debugger extends AnnotationVisitor {
 
     // initialization
     static {
-        debug(".+Map", "absHighFence");
+        // debug(".+Map", "absHighFence");
 
         boolean flag = false;
 
@@ -130,6 +130,15 @@ public class Debugger extends AnnotationVisitor {
      */
     public static void printInfo() {
         System.out.println(link());
+    }
+
+    /**
+     * <p>
+     * Print method info.
+     * </p>
+     */
+    public static void printInfo(String text) {
+        System.out.println(text + "   " + link());
     }
 
     /**

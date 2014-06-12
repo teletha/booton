@@ -76,7 +76,6 @@ public class LogicalExpressionTest extends ScriptTester {
     public void NotOr() {
         test(new Scriptable() {
 
-            @Debuggable
             public boolean act(int value) {
                 return value != 1 || value == -1;
             }
@@ -677,6 +676,7 @@ public class LogicalExpressionTest extends ScriptTester {
     public void ConditionalOperatorNest3() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 return value % 2 == 0 ? value == 2 || value == 4 ? 20 : 10 : value;
             }
