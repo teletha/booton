@@ -591,10 +591,6 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case F_SAME:
-            if (match(JUMP, GOTO, LABEL)) {
-                Debugger.printInfo();
-            }
-
             record(FRAME_SAME);
 
             if (nLocal == 0 && nStack == 0) {
@@ -1518,11 +1514,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
         int separator = searchConditionalOperandSeparator(start);
 
-        if (separator != -1) {
-            Debugger.printInfo();
-
-        }
-
         Debugger.print("Call mergeConditions [start: " + start.id + "  initialTransition: " + initialTransition.id + " separator: " + separator + "]");
         Debugger.print(nodes);
 
@@ -1561,7 +1552,17 @@ class JavaMethodCompiler extends MethodVisitor {
                 OperandCondition condition = (OperandCondition) operand;
 
                 if (transitions.contains(condition.transition)) {
-                    Debugger.print("dispose merged node " + start.id);
+                    // if (start.stack.peekFirst() instanceof OperandCondition == false &&
+                    // !start.previous.frame) {
+                    // return;
+                    // }
+
+                    // multiline sequencial method call
+                    // visitFrame F_SAME 0 0
+                    // visitFrame F_APPEND 1 0 (ternary operator left value -> goto return)
+                    // logical condition - all conditions
+                    //
+                    Debugger.printInfo("dispose merged node " + start.id);
                     disposeNode(start);
 
                     // Merge recursively
