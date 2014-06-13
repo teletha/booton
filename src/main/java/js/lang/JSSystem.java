@@ -16,6 +16,7 @@ import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
 
+import booton.translator.Debuggable;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -299,6 +300,7 @@ class JSSystem {
      * @see java.lang.SecurityManager#checkPropertyAccess(java.lang.String)
      * @see java.lang.System#getProperties()
      */
+    @Debuggable
     public static String getProperty(String key, String def) {
         String value = properties.get(key);
 

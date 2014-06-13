@@ -629,39 +629,46 @@ class JavaMethodCompiler extends MethodVisitor {
                 return;
             }
 
-            Node firstNode = findNodeBy(first);
-            Node secondNode = findNodeBy(second);
-            Node thirdNode = findNodeBy(third);
+            Node right = findNodeBy(first);
+            Node left = findNodeBy(second);
+            Node condition = findNodeBy(third);
 
-            if (firstNode == secondNode) {
+            if (right == left) {
                 return;
             }
 
-            if ((firstNode == thirdNode && secondNode != thirdNode) || (firstNode != thirdNode && secondNode == thirdNode) || (thirdNode.outgoing.contains(firstNode) && thirdNode.outgoing.contains(secondNode))) {
+            // The condition node must be dominator of the left and right nodes.
+            boolean dominator = left.hasDominator(condition) && right.hasDominator(condition);
+
+            // The left node must not be dominator of the right node except when condtion and left
+            // value are in same node.
+            boolean values = condition != left && right.hasDominator(left);
+
+            if (dominator && !values) {
                 if (first == ONE && second == ZERO) {
                     current.remove(0);
                     current.remove(0);
-                    thirdNode.addOperand(new OperandAmbiguousZeroOneTernary(current.remove(0)));
+                    condition.addOperand(new OperandAmbiguousZeroOneTernary(current.remove(0)));
                 } else if (first == ZERO && second == ONE) {
                     current.remove(0);
                     current.remove(0);
-                    thirdNode.addOperand(new OperandAmbiguousZeroOneTernary(current.remove(0).invert()));
+                    condition.addOperand(new OperandAmbiguousZeroOneTernary(current.remove(0).invert()));
                 } else {
                     current.remove(0);
                     current.remove(0);
                     current.remove(0);
-                    thirdNode.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
+                    condition.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
                 }
 
                 // dispose empty nodes
-                if (firstNode.stack.isEmpty()) {
-                    Debugger.print("dispose first node " + firstNode.id);
-                    disposeNode(firstNode);
+                if (right.stack.isEmpty()) {
+                    Debugger.print("dispose first node " + right.id);
+                    disposeNode(right);
                 }
 
-                if (secondNode.stack.isEmpty()) {
-                    Debugger.print("dispose second node " + secondNode.id);
-                    disposeNode(secondNode);
+                if (left.stack.isEmpty()) {
+                    Debugger.print("dispose second node " + left.id);
+                    disposeNode(left);
                 }
 
                 // process recursively
@@ -1552,21 +1559,24 @@ class JavaMethodCompiler extends MethodVisitor {
                 OperandCondition condition = (OperandCondition) operand;
 
                 if (transitions.contains(condition.transition)) {
-                    // if (start.stack.peekFirst() instanceof OperandCondition == false &&
-                    // !start.previous.frame) {
-                    // return;
-                    // }
+                    // Logical conditions
+                    // a == 0 || a == 1
+                    if (start.logical && start.previous.logical) {
+                        disposeNode(start);
+                        mergeConditions(start.previous, initialTransition);
+                    } else {
 
-                    // multiline sequencial method call
-                    // visitFrame F_SAME 0 0
-                    // visitFrame F_APPEND 1 0 (ternary operator left value -> goto return)
-                    // logical condition - all conditions
-                    //
-                    Debugger.printInfo("dispose merged node " + start.id);
-                    disposeNode(start);
+                        // multiline sequencial method call
+                        // visitFrame F_SAME 0 0
+                        // visitFrame F_APPEND 1 0 (ternary operator left value -> goto return)
+                        // logical condition - all conditions
+                        //
+                        Debugger.printInfo("dispose merged node " + start.id);
+                        disposeNode(start);
 
-                    // Merge recursively
-                    mergeConditions(start.previous, initialTransition);
+                        // Merge recursively
+                        mergeConditions(start.previous, initialTransition);
+                    }
                 }
             }
         }
@@ -1758,7 +1768,6 @@ class JavaMethodCompiler extends MethodVisitor {
         if (immediately && current.stack.size() != 0) {
             current.addExpression(current.remove(0));
         }
-
     }
 
     /**
@@ -2131,6 +2140,43 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // insert to node list
         nodes.add(nodes.indexOf(next), created);
+
+        // API definition
+        return created;
+    }
+
+    /**
+     * <p>
+     * Create new node after the specified node.
+     * </p>
+     * 
+     * @param index A index node.
+     * @return A created node.
+     */
+    private final Node createNodeAfter(Node index) {
+        Node created = new Node(counter++);
+
+        // switch line number
+        created.number = index.number;
+        index.number = -1;
+
+        int nodeIndex = nodes.indexOf(index) + 1;
+
+        // switch previous node
+        Node next = nodes.get(nodeIndex);
+        next.previous = created;
+        created.previous = index;
+
+        // link
+        index.disconnect(next);
+        index.connect(created);
+        created.connect(next);
+
+        // insert to node list
+        nodes.add(nodeIndex, created);
+
+        Debugger.printInfo("Create node" + created.id + " after node" + index.id + ".");
+        Debugger.print(nodes);
 
         // API definition
         return created;

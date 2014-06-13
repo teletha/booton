@@ -774,6 +774,10 @@ class Node {
     private void writeIf(ScriptWriter buffer) {
         Operand operand = stack.peekLast();
 
+        if (operand == null) {
+            return;
+        }
+
         if (operand instanceof OperandCondition) {
             OperandCondition condition = (OperandCondition) operand;
 
