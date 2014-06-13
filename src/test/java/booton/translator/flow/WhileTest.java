@@ -15,6 +15,7 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
+import booton.translator.Debuggable;
 
 /**
  * @version 2013/08/14 10:22:03
@@ -74,6 +75,7 @@ public class WhileTest extends ScriptTester {
     public void multipuleBreaks() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(int value) {
                 while (value < 5) {
                     value++;
@@ -82,7 +84,7 @@ public class WhileTest extends ScriptTester {
                         break;
                     }
 
-                    if (value == 7) {
+                    if (value == 0) {
                         break;
                     }
                 }

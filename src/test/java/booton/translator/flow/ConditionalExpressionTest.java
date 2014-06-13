@@ -27,7 +27,7 @@ public class ConditionalExpressionTest extends ScriptTester {
         test(new Scriptable() {
 
             public int act(int value) {
-                return value < 3 ? 10 : 20;
+                return value < 1 ? 10 : 20;
             }
         });
     }

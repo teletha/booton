@@ -238,6 +238,7 @@ public class LogicalExpressionTest extends ScriptTester {
     public void Complex3() {
         test(new Scriptable() {
 
+            @Debuggable
             public boolean act(@Param(from = 1, to = 24) int value) {
                 return (value % 5 == 0 || value % 3 == 0) && value % 2 == 0;
             }
