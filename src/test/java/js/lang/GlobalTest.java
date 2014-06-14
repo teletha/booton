@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
-import booton.translator.Debuggable;
 
 /**
  * @version 2013/08/18 14:18:38
@@ -66,7 +65,6 @@ public class GlobalTest {
     }
 
     @Test
-    @Debuggable
     public void IsNaN() throws Exception {
         assert !isNaN(10);
         assert !isNaN(10L);

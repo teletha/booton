@@ -14,7 +14,6 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
-import booton.translator.Debuggable;
 
 /**
  * @version 2013/11/04 17:19:06
@@ -238,7 +237,6 @@ public class LogicalExpressionTest extends ScriptTester {
     public void Complex3() {
         test(new Scriptable() {
 
-            @Debuggable
             public boolean act(@Param(from = 1, to = 24) int value) {
                 return (value % 5 == 0 || value % 3 == 0) && value % 2 == 0;
             }
@@ -677,7 +675,6 @@ public class LogicalExpressionTest extends ScriptTester {
     public void ConditionalOperatorNest3() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 return value % 2 == 0 ? value == 2 || value == 4 ? 20 : 10 : value;
             }
@@ -751,7 +748,6 @@ public class LogicalExpressionTest extends ScriptTester {
     public void ConditionalOperatorComplexInMethod() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 48) int value) {
                 return method((value % 2 == 0 || value % 3 == 0) && value % 4 == 0 ? value + 1 : value + 2);
             }
