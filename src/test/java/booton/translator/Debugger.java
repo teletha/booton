@@ -42,7 +42,7 @@ public class Debugger extends AnnotationVisitor {
 
     // initialization
     static {
-        debug(".+ListChangeBuilder", "commit");
+        // enable(".+ListChangeBuilder", "commit");
 
         boolean flag = false;
 
@@ -103,13 +103,13 @@ public class Debugger extends AnnotationVisitor {
 
     /**
      * <p>
-     * Register debug pattern.
+     * Register debug target.
      * </p>
      * 
-     * @param className
-     * @param methodName
+     * @param className A class name regex.
+     * @param methodName A method name regex.
      */
-    public static void debug(String className, String methodName) {
+    public static void enable(String className, String methodName) {
         patterns.add(new Pattern[] {Pattern.compile(className), Pattern.compile(methodName)});
     }
 
@@ -123,6 +123,38 @@ public class Debugger extends AnnotationVisitor {
             printHeader();
         }
         return debugger.enable;
+    }
+
+    /**
+     * <p>
+     * Print debug message.
+     * </p>
+     * 
+     * @param values
+     */
+    public static void info(Object... values) {
+        StringBuilder text = new StringBuilder();
+        CopyOnWriteArrayList<Node> nodes = new CopyOnWriteArrayList();
+
+        for (Object value : values) {
+            if (value instanceof Node) {
+                Node node = (Node) value;
+                nodes.addIfAbsent(node);
+                text.append("n").append(node.id);
+            } else if (value instanceof List) {
+                List<Node> list = (List<Node>) value;
+
+                for (Node node : list) {
+                    nodes.addIfAbsent(node);
+                }
+            } else {
+                text.append(value);
+            }
+        }
+        text.append("   ").append(link());
+
+        System.out.println(text);
+        System.out.println(format(nodes));
     }
 
     /**
@@ -172,7 +204,11 @@ public class Debugger extends AnnotationVisitor {
         } else {
             methodName = getMethodName();
         }
-        return methodName + " " + "(" + getScript().source.getName() + ".java:" + getLine() + ")";
+
+        if (!methodName.startsWith("<")) {
+            methodName = "#".concat(methodName);
+        }
+        return "(" + getScript().source.getName() + ".java:" + getLine() + ") " + methodName;
     }
 
     /**
@@ -528,7 +564,7 @@ public class Debugger extends AnnotationVisitor {
             } else if (operand instanceof OperandExpression) {
                 return "Expression";
             } else if (operand instanceof OperandCondition) {
-                return "Condition";
+                return "Condition to " + ((OperandCondition) operand).transition.id;
             } else if (operand instanceof OperandArray) {
                 return "Array";
             } else if (operand instanceof OperandNumber) {
