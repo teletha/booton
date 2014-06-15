@@ -457,7 +457,7 @@ class Node {
     final void connect(Node node) {
         boolean out = outgoing.addIfAbsent(node);
         boolean in = node.incoming.addIfAbsent(this);
-
+        Debugger.print(id + " -> " + node.id + "  " + out + "  " + in);
         if (!out && !in) {
             logical = true;
 
