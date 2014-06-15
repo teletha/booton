@@ -1537,8 +1537,6 @@ class JavaMethodCompiler extends MethodVisitor {
         Set<Node> transitions = new HashSet();
         transitions.add(initialTransition);
 
-        Debugger.info("Call mergeConditions [start: ", start, " initialTransition: ", initialTransition, "]");
-
         // Search and merge the sequencial conditional operands in this node from right to left.
         for (int index = 0; index < start.stack.size(); index++) {
             Operand operand = start.peek(index);
@@ -1557,15 +1555,31 @@ class JavaMethodCompiler extends MethodVisitor {
 
                     if (transitions.contains(left.transition)) {
                         if (start.logical) {
-                            System.out.println("==============L   Merge [" + left + "]  [" + start.peek(index - 1) + "]");
+                            // Debugger.info("Call mergeConditions [start: ", start,
+                            // " initialTransition: ", initialTransition, "]");
+                            // System.out.println("==============L   Merge [" + left + "]  [" +
+                            // start.peek(index - 1) + "]");
+
+                        } else if (right.transition == left.transition) {
+                            //
+                        } else if (match(GOTO, LABEL)) {
+                            // Debugger.info("Call mergeConditions [start: ", start,
+                            // " initialTransition: ", initialTransition, "]");
+                            // return;
                         } else {
                             /**
                              * <pre>
                              * Call mergeConditions [start: n1 initialTransition: n4]   (java.util.concurrent.ConcurrentMap.java:320) #computeIfAbsent
                              * 1     in : [0]  out : [2,4] dom : [0]   code : (C=this.Bz(A))!=null [Condition to 2] (D=B.NA(A))==null [Condition to 2] this [Expression] A [Expression] D [Expression]
+                             * 
+                             * Call mergeConditions [start: n1 initialTransition: n2]   (java.util.Map.java:784) #remove
+                             * 1     in : [0]  out : [2,3] dom : [0]   code : boot.BS.EZ(C,B)==0 [Condition to 2] C!=null [Condition to 3] this.KG(A)!=0 [Condition to 3]  
                              * </pre>
                              */
-                            System.out.println("===============   Merge [" + left + "]  [" + start.peek(index - 1) + "]");
+                            // Debugger.info("Call mergeConditions [start: ", start,
+                            // " initialTransition: ", initialTransition, "]");
+                            // System.out.println("===============   Merge [" + left + "]  [" +
+                            // start.peek(index - 1) + "]");
                         }
 
                         // Merge two adjucent conditional operands.
@@ -1592,6 +1606,7 @@ class JavaMethodCompiler extends MethodVisitor {
                          * 
                          * </pre>
                          */
+                        Debugger.print("===============   Merge [" + left + "]  [" + start.peek(index - 1) + "]");
                         start.set(--index, new OperandCondition(left, (OperandCondition) start.remove(index)));
                     }
                 }
@@ -1612,6 +1627,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     // Logical conditions
                     // a == 0 || a == 1
                     if (start.logical && start.previous.logical) {
+                        Debugger.printInfo("dispose merged logical node " + start.id);
                         disposeNode(start);
                         mergeConditions(start.previous, initialTransition);
                     } else {
@@ -1621,7 +1637,7 @@ class JavaMethodCompiler extends MethodVisitor {
                         // visitFrame F_APPEND 1 0 (ternary operator left value -> goto return)
                         // logical condition - all conditions
                         //
-                        // Debugger.printInfo("dispose merged node " + start.id);
+                        Debugger.printInfo("dispose merged node " + start.id);
                         disposeNode(start);
 
                         // Merge recursively

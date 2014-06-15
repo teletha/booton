@@ -76,6 +76,7 @@ class CompilerRecorder {
         if (context.line == 1) {
             context.line = line - 1;
         }
+        context.lineNow = line;
     }
 
     /**
@@ -122,8 +123,19 @@ class CompilerRecorder {
      * 
      * @return The current compiling script.
      */
-    static int getLine() {
+    static int getMethodLine() {
         return route.peekFirst().line;
+    }
+
+    /**
+     * <p>
+     * Retrieve the current compiling script info.
+     * </p>
+     * 
+     * @return The current compiling script.
+     */
+    static int getLine() {
+        return route.peekFirst().lineNow;
     }
 
     /**
@@ -139,6 +151,9 @@ class CompilerRecorder {
 
         /** The current compiling method position. */
         private int line = 1;
+
+        /** The current compiling line position. */
+        private int lineNow = 1;
 
         /**
          * @param script An associated script.

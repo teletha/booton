@@ -42,7 +42,7 @@ public class Debugger extends AnnotationVisitor {
 
     // initialization
     static {
-        // enable(".+ListChangeBuilder", "commit");
+        enable("java.util.Map", "remove");
 
         boolean flag = false;
 
@@ -151,7 +151,7 @@ public class Debugger extends AnnotationVisitor {
                 text.append(value);
             }
         }
-        text.append("   ").append(link());
+        text.append("   ").append(link(false));
 
         System.out.println(text);
         System.out.println(format(nodes));
@@ -163,7 +163,7 @@ public class Debugger extends AnnotationVisitor {
      * </p>
      */
     public static void printInfo() {
-        System.out.println(link());
+        System.out.println(link(false));
     }
 
     /**
@@ -172,7 +172,7 @@ public class Debugger extends AnnotationVisitor {
      * </p>
      */
     public static void printInfo(String text) {
-        System.out.println(text + "   " + link());
+        System.out.println(text + "   " + link(false));
     }
 
     /**
@@ -182,7 +182,7 @@ public class Debugger extends AnnotationVisitor {
      */
     public static void printHeader() {
         if (isEnable()) {
-            System.out.println("==== " + link() + " ====");
+            System.out.println("==== " + link(true) + " ====");
         }
     }
 
@@ -193,7 +193,7 @@ public class Debugger extends AnnotationVisitor {
      * 
      * @return
      */
-    private static String link() {
+    private static String link(boolean head) {
         String methodName;
 
         if (whileTest) {
@@ -208,7 +208,7 @@ public class Debugger extends AnnotationVisitor {
         if (!methodName.startsWith("<")) {
             methodName = "#".concat(methodName);
         }
-        return "(" + getScript().source.getName() + ".java:" + getLine() + ") " + methodName;
+        return "(" + getScript().source.getName() + ".java:" + (head ? getMethodLine() : getLine()) + ") " + methodName;
     }
 
     /**
@@ -353,9 +353,13 @@ public class Debugger extends AnnotationVisitor {
             format.write("code : ");
             format.formatCodeFragment(node.stack);
 
+            format.write("\t");
+
             if (node.logical) {
-                format.write("\t\t");
                 format.write("L");
+            }
+            if (node.frame) {
+                format.write("F");
             }
             format.write("\r\n");
         }
