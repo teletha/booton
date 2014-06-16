@@ -14,6 +14,7 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
+import booton.translator.Debuggable;
 
 /**
  * @version 2013/11/04 17:19:06
@@ -645,6 +646,7 @@ public class LogicalExpressionTest extends ScriptTester {
     public void ConditionalOperatorComplex() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 return (value % 2 == 0 || value % 3 == 0) && value % 5 == 0 ? value + 1 : value + 2;
             }

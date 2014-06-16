@@ -1526,11 +1526,62 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
+     * @version 2014/06/16 16:44:55
+     */
+    private static class SequencialConditionInfo {
+
+        /** The sequential conditions. */
+        private Deque<OperandCondition> conditions = new ArrayDeque();
+
+        /** The transition group for conditions. */
+        private Set<Node> transitions = new HashSet();
+
+        /**
+         * <p>
+         * Search the sequencial conditional operands in the specified node from right to left.
+         * </p>
+         * 
+         * @param node A target node.
+         */
+        private void search(Node node) {
+            List<OperandCondition> conditions = new ArrayList();
+
+            // Search the sequencial conditional operands in the specified node from right to left.
+            for (int index = 0; index < node.stack.size(); index++) {
+                Operand operand = node.peek(index);
+
+                if (operand instanceof OperandCondition == false) {
+                    // non-conditional operand is found
+                    if (conditions.isEmpty()) {
+                        // conditional operand is not found as yet, so we should continue to search
+                        continue;
+                    } else {
+                        // stop searching
+                        break;
+                    }
+                }
+
+                // conditional operand is found
+                OperandCondition condition = (OperandCondition) operand;
+
+                if (conditions.isEmpty()) {
+                    // this is first condition
+                } else {
+                    // this is last condition
+                }
+                conditions.add(condition);
+                transitions.add(condition.transition);
+            }
+        }
+    }
+
+    /**
      * <p>
      * Helper method to merge all conditional operands.
      * </p>
      */
     private void mergeConditions(Node start, Node initialTransition) {
+
         OperandCondition left = null;
         OperandCondition right = null;
 
@@ -1554,7 +1605,24 @@ class JavaMethodCompiler extends MethodVisitor {
                     left = (OperandCondition) operand;
 
                     if (transitions.contains(left.transition)) {
-                        if (start.logical) {
+                        if (start.outgoing.size() == 3) {
+                            /**
+                             * <pre>
+                             *    return value % 5 == 0 && ((value % 3 == 0 && value % 4 == 0) || (value % 7 == 0 || value % 6 == 0));
+                             * ===============   Merge [A%3!=0]  [A%4==0]  n0   (booton.translator.flow.LogicalExpressionTest$35.java:372) #Complex24
+                             * 0     in : []   out : [1,2,3]       dom : []    code : A%5!=0 [Condition to 1] A%3!=0 [Condition to 2] A%4==0 [Condition to 3]  L
+                             * 
+                             *      return value % 7 == 0 || (value % 3 == 0 || value % 2 == 0) && value % 5 == 0;
+                             *      ===============   Merge [A%3==0]  [A%2!=0]  n0   (booton.translator.flow.LogicalExpressionTest$40.java:422) #Complex29
+                             *      0     in : []   out : [1,2,3]       dom : []    code : A%7==0 [Condition to 1] A%3==0 [Condition to 2] A%2!=0 [Condition to 3]  L
+                             *      
+                             *         return value % 7 == 0 && (value % 3 == 0 && value % 2 == 0 || value % 5 == 0);
+                             *         ===============   Merge [A%3!=0]  [A%2==0]  n0   (booton.translator.flow.LogicalExpressionTest$41.java:432) #Complex30
+                             *         0      in : []   out : [1,2,3]       dom : []    code : A%7!=0 [Condition to 1] A%3!=0 [Condition to 2] A%2==0 [Condition to 3]  L
+                             * </pre>
+                             */
+                            Debugger.info("===============   Merge [" + left + "]  [" + start.peek(index - 1) + "]  ", transitions.size(), " ", start);
+                        } else if (start.logical) {
                             // Debugger.info("Call mergeConditions [start: ", start,
                             // " initialTransition: ", initialTransition, "]");
                             // System.out.println("==============L   Merge [" + left + "]  [" +
@@ -1606,7 +1674,7 @@ class JavaMethodCompiler extends MethodVisitor {
                          * 
                          * </pre>
                          */
-                        Debugger.print("===============   Merge [" + left + "]  [" + start.peek(index - 1) + "]");
+
                         start.set(--index, new OperandCondition(left, (OperandCondition) start.remove(index)));
                     }
                 }

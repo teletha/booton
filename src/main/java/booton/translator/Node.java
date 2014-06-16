@@ -461,9 +461,9 @@ class Node {
         if (!out && !in) {
             logical = true;
 
-            for (Node o : outgoing) {
-                o.logical = true;
-            }
+            // for (Node o : outgoing) {
+            // o.logical = true;
+            // }
         }
     }
 
