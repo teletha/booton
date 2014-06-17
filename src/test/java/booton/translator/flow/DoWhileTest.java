@@ -14,6 +14,7 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
+import booton.translator.Debuggable;
 
 /**
  * @version 2014/01/16 22:36:52
@@ -192,6 +193,7 @@ public class DoWhileTest extends ScriptTester {
     public void inIfOneLiner() throws Exception {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(int value) {
                 if (value != 0) {
                     // @formatter:off

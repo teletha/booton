@@ -42,7 +42,7 @@ public class Debugger extends AnnotationVisitor {
 
     // initialization
     static {
-        enable("java.util.Map", "remove");
+        enable(".+SubMap", "absHighFence");
 
         boolean flag = false;
 

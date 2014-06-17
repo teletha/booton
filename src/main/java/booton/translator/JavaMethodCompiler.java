@@ -314,6 +314,9 @@ class JavaMethodCompiler extends MethodVisitor {
     public void visitEnd() {
         // Dispose all nodes which contains synchronized block.
         for (Node node : synchronizer) {
+            Debugger.print("dispose synchronizer node " + node.id);
+            Debugger.print(nodes);
+
             disposeNode(node, true);
         }
 
@@ -333,7 +336,7 @@ class JavaMethodCompiler extends MethodVisitor {
             int number = searchConditionalOperandSeparator(node);
 
             if (number != -1) {
-                Node created = createNode(nodes.get(i + 1));
+                Node created = createNodeAfter(nodes.get(i));
 
                 // transfer operands
                 for (int j = 0; j < number; j++) {
@@ -637,6 +640,12 @@ class JavaMethodCompiler extends MethodVisitor {
                 return;
             }
 
+            Node transition = ((OperandCondition) third).transition;
+
+            if (!left.hasDominator(transition) && !right.hasDominator(transition)) {
+                return;
+            }
+
             // The condition node must be dominator of the left and right nodes.
             boolean dominator = left.hasDominator(condition) && right.hasDominator(condition);
 
@@ -645,6 +654,8 @@ class JavaMethodCompiler extends MethodVisitor {
             boolean values = condition != left && right.hasDominator(left);
 
             if (dominator && !values) {
+                Debugger.print("Create ternary operator condition[" + condition + "]  left[" + left + "]  right[" + right + "]");
+
                 if (first == ONE && second == ZERO) {
                     current.remove(0);
                     current.remove(0);
@@ -1622,141 +1633,81 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void mergeConditions(Node start, Node initialTransition) {
-        SequentialConditionInfo info = new SequentialConditionInfo(start);
-
-        // if (info.isValid(initialTransition)) {
-        // info.merge();
-        // }
-
-        OperandCondition left = null;
-        OperandCondition right = null;
-
         Set<Node> transitions = new HashSet();
         transitions.add(initialTransition);
 
-        // Search and merge the sequencial conditional operands in this node from right to left.
-        for (int index = 0; index < start.stack.size(); index++) {
-            Operand operand = start.peek(index);
+        if (!start.logical) {
+            Debugger.print("Skip non-logical node " + start.id);
+            Debugger.print(nodes);
+        } else {
+            OperandCondition left = null;
+            OperandCondition right = null;
 
-            if (operand instanceof OperandCondition) {
-                if (right == null) {
-                    right = (OperandCondition) operand;
+            // Search and merge the sequencial conditional operands in this node from right to left.
+            for (int index = 0; index < start.stack.size(); index++) {
+                Operand operand = start.peek(index);
 
-                    // This is first operand condition.
-                    transitions.add(right.transition);
+                if (operand instanceof OperandCondition) {
+                    if (right == null) {
+                        right = (OperandCondition) operand;
 
-                    // Set next appearing node for grouping.
-                    right.next = initialTransition;
-                } else {
-                    left = (OperandCondition) operand;
+                        // This is first operand condition.
+                        transitions.add(right.transition);
 
-                    if (transitions.contains(left.transition)) {
-                        if (start.outgoing.size() == 3) {
-                            /**
-                             * <pre>
-                             *    return value % 5 == 0 && ((value % 3 == 0 && value % 4 == 0) || (value % 7 == 0 || value % 6 == 0));
-                             * ===============   Merge [A%3!=0]  [A%4==0]  n0   (booton.translator.flow.LogicalExpressionTest$35.java:372) #Complex24
-                             * 0     in : []   out : [1,2,3]       dom : []    code : A%5!=0 [Condition to 1] A%3!=0 [Condition to 2] A%4==0 [Condition to 3]  L
-                             * 
-                             *      return value % 7 == 0 || (value % 3 == 0 || value % 2 == 0) && value % 5 == 0;
-                             *      ===============   Merge [A%3==0]  [A%2!=0]  n0   (booton.translator.flow.LogicalExpressionTest$40.java:422) #Complex29
-                             *      0     in : []   out : [1,2,3]       dom : []    code : A%7==0 [Condition to 1] A%3==0 [Condition to 2] A%2!=0 [Condition to 3]  L
-                             *      
-                             *         return value % 7 == 0 && (value % 3 == 0 && value % 2 == 0 || value % 5 == 0);
-                             *         ===============   Merge [A%3!=0]  [A%2==0]  n0   (booton.translator.flow.LogicalExpressionTest$41.java:432) #Complex30
-                             *         0      in : []   out : [1,2,3]       dom : []    code : A%7!=0 [Condition to 1] A%3!=0 [Condition to 2] A%2==0 [Condition to 3]  L
-                             * </pre>
-                             */
-                            Debugger.info("===============   Merge [" + left + "]  [" + start.peek(index - 1) + "]  ", transitions.size(), " ", start);
-                        } else if (start.logical) {
-                            // Debugger.info("Call mergeConditions [start: ", start,
-                            // " initialTransition: ", initialTransition, "]");
-                            // System.out.println("==============L   Merge [" + left + "]  [" +
-                            // start.peek(index - 1) + "]");
+                        // Set next appearing node for grouping.
+                        right.next = initialTransition;
+                    } else {
+                        left = (OperandCondition) operand;
 
-                        } else if (right.transition == left.transition) {
-                            //
-                        } else if (match(GOTO, LABEL)) {
-                            // Debugger.info("Call mergeConditions [start: ", start,
-                            // " initialTransition: ", initialTransition, "]");
-                            // return;
-                        } else {
-                            /**
-                             * <pre>
-                             * Call mergeConditions [start: n1 initialTransition: n4]   (java.util.concurrent.ConcurrentMap.java:320) #computeIfAbsent
-                             * 1     in : [0]  out : [2,4] dom : [0]   code : (C=this.Bz(A))!=null [Condition to 2] (D=B.NA(A))==null [Condition to 2] this [Expression] A [Expression] D [Expression]
-                             * 
-                             * Call mergeConditions [start: n1 initialTransition: n2]   (java.util.Map.java:784) #remove
-                             * 1     in : [0]  out : [2,3] dom : [0]   code : boot.BS.EZ(C,B)==0 [Condition to 2] C!=null [Condition to 3] this.KG(A)!=0 [Condition to 3]  
-                             * </pre>
-                             */
-                            // Debugger.info("Call mergeConditions [start: ", start,
-                            // " initialTransition: ", initialTransition, "]");
-                            // System.out.println("===============   Merge [" + left + "]  [" +
-                            // start.peek(index - 1) + "]");
+                        if (transitions.contains(left.transition)) {
+                            Debugger.print("Merge conditions [" + left + "] [" + start.peek(index - 1) + "]");
+                            Debugger.print(nodes);
+
+                            // Merge two adjucent conditional operands.
+                            start.set(--index, new OperandCondition(left, (OperandCondition) start.remove(index)));
                         }
-
-                        // Merge two adjucent conditional operands.
-
-                        /**
-                         * <pre> 
-                         * 1      in : [0]  out : [3,4] dom : [0]   code : C<0 [Condition to 3] C<=999999 [Condition to 4]      L
-                         * 4      in : [1]  out : [5,6] dom : [1]   code : C>=500000 [Condition to 5] C==0 [Condition to 6] A.T(boot.J.R(0,0))!=0 [Condition to 6]      L
-                         * 49     in : []   out : [50,53]       dom : []    code : H.BN(J).BO().D("Class")==0 [Condition to 50] H.BN(J).BP().BF("boot.js")==0 [Condition to 50]
-                         * 0      in : []   out : [1,2] dom : []    code : A<0 [Condition to 1] this.CN()>A [Condition to 2]        L
-                         * 1      in : [0]  out : [2,3] dom : [0]   code : A!=0 [Condition to 2] this.CN()<=0 [Condition to 2]  
-                         * 2      in : [1]  out : [3,4] dom : [1]   code : D<0 [Condition to 3] B<0 [Condition to 3] B>(this.CN()-E) [Condition to 3] D<=(C.length-E) [Condition to 4]      L
-                         * 0      in : []   out : [1,2] dom : []    code : A==B [Condition to 1] A==null [Condition to 2] A.D(B)==0 [Condition to 2]        L
-                         * 1      in : [0]  out : [3,4] dom : [0]   code : A==null [Condition to 3] B!=null [Condition to 4]        L
-                         * 17     in : [13] out : [19,20]       dom : [13]  code : this.FQ(boot.J.i)==0 [Condition to 19] A.FQ(boot.J.i)==0 [Condition to 19]       L
-                         * 6      in : [3]  out : [7,8] dom : [3]   code : A.FN(boot.J.g)!=0 [Condition to 7] A.FN(boot.J.h)==0 [Condition to 8]        L
-                         * 4      in : [3]  out : [5,6] dom : [3]   code : B==0 [Condition to 5] C!=0 [Condition to 5]      L
-                         * 0      in : []   out : [1,2] dom : []    code : -128>A [Condition to 1] A>=128 [Condition to 1]      L
-                         * 0      in : []   out : [1,2] dom : []    code : isNaN(A)!=0 [Condition to 1] isFinite(A)!=0 [Condition to 2]     L
-                         * 0      in : []   out : [1,2] dom : []    code : A==null [Condition to 1] A.length!=0 [Condition to 2]        L
-                         * 2      in : [0]  out : [3,4] dom : [0]   code : B<2 [Condition to 3] 36>=B [Condition to 4]      L
-                         * 5      in : [3]  out : [6,7] dom : [3]   code : C.FN(boot.J.R(0,0))!=0 [Condition to 6] E.FS(C).T(A)!=0 [Condition to 7]     L
-                         * 3      in : [2]  out : [4,7] dom : [2]   code : G.Fw(I).Fy(31).FN(boot.J.R(0,0))!=0 [Condition to 4] ((C.FN(boot.J.R(0,0))!=0||E.FS(C).T(A)==0)&&(A.T(boot.J.R(0,-2147483648))!=0||C.T(boot.J.R(-1,-1))!=0)) [Condition to 4]
-                         * 
-                         * </pre>
-                         */
-
-                        start.set(--index, new OperandCondition(left, (OperandCondition) start.remove(index)));
                     }
+                } else {
+                    left = right = null;
                 }
-            } else {
-                left = right = null;
             }
         }
 
         // Merge this node and the specified node.
         // Rearch the start of node
-        if (start.previous != null) {
+        if (start.previous != null && start.previous.logical) {
+            for (Node out : start.previous.outgoing) {
+                if (out != start && !start.outgoing.contains(out)) {
+                    return;
+                }
+            }
+
             Operand operand = start.previous.peek(0);
 
             if (operand instanceof OperandCondition) {
-                OperandCondition condition = (OperandCondition) operand;
+                OperandCondition left = (OperandCondition) operand;
+                Operand right = start.peek(start.stack.size() - 1);
 
-                if (transitions.contains(condition.transition)) {
-                    // Logical conditions
-                    // a == 0 || a == 1
-                    if (start.logical && start.previous.logical) {
-                        Debugger.printInfo("dispose merged logical node " + start.id);
-                        disposeNode(start);
-                        mergeConditions(start.previous, initialTransition);
-                    } else {
+                // Logical conditions
+                // a == 0 || a == 1
+                if (start.logical && start.previous.logical) {
+                    Debugger.print("dispose merged logical node " + start.id);
+                    Debugger.print(nodes);
+                    disposeNode(start);
+                    mergeConditions(start.previous, initialTransition);
+                } else {
 
-                        // multiline sequencial method call
-                        // visitFrame F_SAME 0 0
-                        // visitFrame F_APPEND 1 0 (ternary operator left value -> goto return)
-                        // logical condition - all conditions
-                        //
-                        Debugger.printInfo("dispose merged node " + start.id);
-                        disposeNode(start);
+                    // multiline sequencial method call
+                    // visitFrame F_SAME 0 0
+                    // visitFrame F_APPEND 1 0 (ternary operator left value -> goto return)
+                    // logical condition - all conditions
+                    //
+                    Debugger.print("dispose merged non-logical node " + start.id);
+                    Debugger.print(nodes);
+                    disposeNode(start);
 
-                        // Merge recursively
-                        mergeConditions(start.previous, initialTransition);
-                    }
+                    // Merge recursively
+                    mergeConditions(start.previous, initialTransition);
                 }
             }
         }
@@ -1816,7 +1767,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     // a == 0 || a == 1
                     if (start.logical && start.previous.logical) {
                         disposeNode(start);
-                        mergeConditions(start.previous, initialTransition);
+                        mergeConditions2(start.previous, initialTransition);
                     } else {
 
                         // multiline sequencial method call
@@ -2369,6 +2320,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * @return A created node.
      */
     private final Node createNode(Node next) {
+        Debugger.print(nodes);
         Node created = new Node(counter++);
 
         // switch line number
@@ -2384,8 +2336,8 @@ class JavaMethodCompiler extends MethodVisitor {
         ArrayList<Node> list = new ArrayList(next.incoming);
 
         for (Node incoming : list) {
-            incoming.disconnect(next);
             incoming.connect(created);
+            incoming.disconnect(next);
         }
 
         // link
@@ -2393,6 +2345,9 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // insert to node list
         nodes.add(nodes.indexOf(next), created);
+
+        Debugger.print("Create node" + created.id + " before node" + next.id + ".");
+        Debugger.print(nodes);
 
         // API definition
         return created;
@@ -2428,7 +2383,7 @@ class JavaMethodCompiler extends MethodVisitor {
         // insert to node list
         nodes.add(nodeIndex, created);
 
-        Debugger.printInfo("Create node" + created.id + " after node" + index.id + ".");
+        Debugger.print("Create node" + created.id + " after node" + index.id + ".");
         Debugger.print(nodes);
 
         // API definition
@@ -2450,9 +2405,6 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private final void disposeNode(Node target, boolean clearStack) {
-        Debugger.print("dispose node " + target.id);
-        Debugger.print(nodes);
-
         int index = nodes.indexOf(target);
 
         if (0 < index && index + 1 < nodes.size()) {
@@ -2465,8 +2417,7 @@ class JavaMethodCompiler extends MethodVisitor {
         // Connect from incomings to outgouings
         for (Node out : target.outgoing) {
             for (Node in : target.incoming) {
-                in.outgoing.addIfAbsent(out);
-                out.incoming.addIfAbsent(in);
+                in.connect(out);
             }
         }
 
@@ -2487,6 +2438,9 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // copy frame info
         // target.previous.frame = target.frame;
+        if (target.logical) {
+            target.previous.logical = true;
+        }
 
         // Delete all operands from the current processing node
         target.stack.clear();
