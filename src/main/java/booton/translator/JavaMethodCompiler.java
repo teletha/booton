@@ -1528,7 +1528,13 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * @version 2014/06/16 16:44:55
      */
-    private static class SequencialConditionInfo {
+    private class SequentialConditionInfo {
+
+        /** The start location of this sequence. */
+        private int start;
+
+        /** The base node. */
+        private Node base;
 
         /** The sequential conditions. */
         private Deque<OperandCondition> conditions = new ArrayDeque();
@@ -1543,8 +1549,8 @@ class JavaMethodCompiler extends MethodVisitor {
          * 
          * @param node A target node.
          */
-        private void search(Node node) {
-            List<OperandCondition> conditions = new ArrayList();
+        private SequentialConditionInfo(Node node) {
+            this.base = node;
 
             // Search the sequencial conditional operands in the specified node from right to left.
             for (int index = 0; index < node.stack.size(); index++) {
@@ -1566,12 +1572,47 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 if (conditions.isEmpty()) {
                     // this is first condition
+                    start = index;
                 } else {
                     // this is last condition
                 }
                 conditions.add(condition);
                 transitions.add(condition.transition);
             }
+        }
+
+        private boolean isValid(Node transition) {
+            // check sequence size
+            if (conditions.size() < 2) {
+                return false;
+            }
+
+            // check transition group
+            Set<Node> group = new HashSet();
+            group.add(transition);
+            group.add(conditions.getFirst().transition);
+
+            for (OperandCondition condition : conditions) {
+                if (!group.contains(condition.transition)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void merge() {
+
+            OperandCondition right = (OperandCondition) base.peek(start);
+
+            for (int i = 0; i < conditions.size() - 1; i++) {
+                OperandCondition left = (OperandCondition) base.remove(start + 1);
+                right = new OperandCondition(left, right);
+
+                base.set(start, right);
+            }
+
+            Debugger.info("merge ", nodes);
         }
     }
 
@@ -1581,6 +1622,11 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void mergeConditions(Node start, Node initialTransition) {
+        SequentialConditionInfo info = new SequentialConditionInfo(start);
+
+        // if (info.isValid(initialTransition)) {
+        // info.merge();
+        // }
 
         OperandCondition left = null;
         OperandCondition right = null;
