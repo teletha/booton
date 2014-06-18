@@ -63,6 +63,9 @@ class Node {
     /** The flag whether this node is logical condition or not. */
     boolean logical;
 
+    /** The flag whether this node has goto instruction or not. */
+    boolean go;
+
     /** This node is switch starting node. */
     private Switch switchy;
 
@@ -457,13 +460,9 @@ class Node {
     final void connect(Node node) {
         boolean out = outgoing.addIfAbsent(node);
         boolean in = node.incoming.addIfAbsent(this);
-        Debugger.print(id + " -> " + node.id + "  " + out + "  " + in);
+
         if (!out && !in) {
             logical = true;
-
-            // for (Node o : outgoing) {
-            // o.logical = true;
-            // }
         }
     }
 
