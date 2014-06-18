@@ -325,7 +325,7 @@ class JavaMethodCompiler extends MethodVisitor {
             // Resolve shorthand syntax sugar of "if" statement.
             if (node.stack.peekFirst() instanceof OperandCondition && node.outgoing.size() == 1) {
                 // create condition node
-                Node condition = createNode(node);
+                Node condition = createNodeBefore(node);
                 condition.connect(node);
                 condition.connect(node.outgoing.get(0));
                 condition.stack.add(node.stack.pollFirst().invert());
@@ -1456,7 +1456,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (current.previous.stack.size() != 0) {
                 if (current.peek(0) != Node.END) {
-                    mergeConditions(current);
+                    mergeConditions(current.previous, current);
                 }
             }
         }
@@ -1478,15 +1478,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // API definition
         return node;
-    }
-
-    /**
-     * <p>
-     * Helper method to merge all conditional operands.
-     * </p>
-     */
-    private void mergeConditions(Node node) {
-        mergeConditions(node.previous, node);
     }
 
     /**
@@ -1630,7 +1621,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void mergeConditions(Node start, Node initialTransition) {
-        SequentialConditionInfo info = new SequentialConditionInfo(start);
+        // SequentialConditionInfo info = new SequentialConditionInfo(start);
 
         // if (info.isValid(initialTransition)) {
         // info.merge();
@@ -1712,7 +1703,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * Helper method to merge all conditional operands.
      * </p>
      */
-    private void mergeConditions2(Node start, Node initialTransition) {
+    private void mergeConditionsOld(Node start, Node initialTransition) {
         OperandCondition left = null;
         OperandCondition right = null;
 
@@ -1761,7 +1752,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     // a == 0 || a == 1
                     if (start.logical && start.previous.logical) {
                         disposeNode(start);
-                        mergeConditions(start.previous, initialTransition);
+                        mergeConditionsOld(start.previous, initialTransition);
                     } else {
 
                         // multiline sequencial method call
@@ -1773,7 +1764,7 @@ class JavaMethodCompiler extends MethodVisitor {
                         disposeNode(start);
 
                         // Merge recursively
-                        mergeConditions2(start.previous, initialTransition);
+                        mergeConditionsOld(start.previous, initialTransition);
                     }
                 }
             }
@@ -2299,7 +2290,7 @@ class JavaMethodCompiler extends MethodVisitor {
         nodes.add(created);
 
         // merge all conditions in the previous node
-        mergeConditions2(current, created);
+        mergeConditionsOld(current, created);
 
         // API definition
         return created;
@@ -2313,7 +2304,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * @param next A index node.
      * @return A created node.
      */
-    private final Node createNode(Node next) {
+    private final Node createNodeBefore(Node next) {
         Node created = new Node(counter++);
 
         // switch line number
