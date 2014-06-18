@@ -57,6 +57,9 @@ class Node {
     /** The previous node. */
     Node previous;
 
+    /** The next node. */
+    Node next;
+
     /** The flag whether this node has additional frame or not. */
     boolean frame;
 
