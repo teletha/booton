@@ -1487,7 +1487,6 @@ class JavaMethodCompiler extends MethodVisitor {
         SequentialConditionInfo info = new SequentialConditionInfo(start);
 
         if (!info.isValid(initialTransition)) {
-            Debugger.info("stop merge condition ", nodes, " start: ", start, "transition: ", initialTransition);
             return;
         }
 
