@@ -639,6 +639,15 @@ class JavaMethodCompiler extends MethodVisitor {
                 return;
             }
 
+            // The condition's transition node must be right node. (not left node)
+            // The bytecode order is:
+            // [jump to RIGHT value]
+            // [label]?
+            // [LEFT value]
+            // [label]
+            // [RIGHT value]
+            boolean transition = ((OperandCondition) third).transition == right;
+
             // The condition node must be dominator of the left and right nodes.
             boolean dominator = left.hasDominator(condition) && right.hasDominator(condition);
 
@@ -646,8 +655,8 @@ class JavaMethodCompiler extends MethodVisitor {
             // value are in same node.
             boolean values = condition != left && right.hasDominator(left);
 
-            if (dominator && !values) {
-                Debugger.print("Create ternary operator. condition[" + condition + "]  left[" + left + "]  right[" + right + "]");
+            if (transition && dominator && !values) {
+                Debugger.print("Create ternary operator. condition[" + third + "]  left[" + second + "]  right[" + first + "]");
                 Debugger.print(nodes);
 
                 if (first == ONE && second == ZERO) {
@@ -1475,6 +1484,13 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void mergeConditions(Node start, Node initialTransition) {
+        SequentialConditionInfo info = new SequentialConditionInfo(start);
+
+        if (!info.isValid(initialTransition)) {
+            Debugger.info("stop merge condition ", nodes, " start: ", start, "transition: ", initialTransition);
+            return;
+        }
+
         OperandCondition left = null;
         OperandCondition right = null;
 
@@ -1524,8 +1540,104 @@ class JavaMethodCompiler extends MethodVisitor {
 
                     // Merge recursively
                     mergeConditions(start.previous, initialTransition);
+                } else {
+                    // Debugger.info("Don't dispose ", start.previous, start, "  transitions",
+                    // Arrays.toString(transitions.stream()
+                    // .map(n -> n.id)
+                    // .toArray()));
                 }
             }
+        }
+    }
+
+    /**
+     * @version 2014/06/16 16:44:55
+     */
+    private class SequentialConditionInfo {
+
+        /** The start location of this sequence. */
+        private int start;
+
+        /** The base node. */
+        private Node base;
+
+        /** The sequential conditions. */
+        private Deque<OperandCondition> conditions = new ArrayDeque();
+
+        /** The transition group for conditions. */
+        private Set<Node> transitions = new HashSet();
+
+        /**
+         * <p>
+         * Search the sequencial conditional operands in the specified node from right to left.
+         * </p>
+         * 
+         * @param node A target node.
+         */
+        private SequentialConditionInfo(Node node) {
+            this.base = node;
+
+            // Search the sequential conditional operands in the specified node from right to left.
+            for (int index = 0; index < node.stack.size(); index++) {
+                Operand operand = node.peek(index);
+
+                if (operand instanceof OperandCondition == false) {
+                    // non-conditional operand is found
+                    if (conditions.isEmpty()) {
+                        // conditional operand is not found as yet, so we should continue to search
+                        continue;
+                    } else {
+                        // stop searching
+                        break;
+                    }
+                }
+
+                // conditional operand is found
+                OperandCondition condition = (OperandCondition) operand;
+
+                if (conditions.isEmpty()) {
+                    // this is first condition
+                    start = index;
+                } else {
+                    // this is last condition
+                }
+                conditions.add(condition);
+                transitions.add(condition.transition);
+            }
+        }
+
+        private boolean isValid(Node transition) {
+            // check sequence size
+            if (conditions.isEmpty()) {
+                return false;
+            }
+
+            // // check transition group
+            // Set<Node> group = new HashSet();
+            // group.add(transition);
+            // group.add(conditions.getFirst().transition);
+            //
+            // for (OperandCondition condition : conditions) {
+            // if (!group.contains(condition.transition)) {
+            // return false;
+            // }
+            // }
+
+            return true;
+        }
+
+        private void merge() {
+
+            OperandCondition right = (OperandCondition) base.peek(start);
+
+            for (int i = 0; i < conditions.size() - 1; i++) {
+                OperandCondition left = (OperandCondition) base.remove(start + 1);
+                right = new OperandCondition(left, right);
+
+                base.set(start, right);
+            }
+
+            Debugger.info("merge ", nodes);
         }
     }
 
@@ -1587,97 +1699,6 @@ class JavaMethodCompiler extends MethodVisitor {
         if (node.stack.isEmpty()) {
             Debugger.print("Dispose empty node" + node.id + " on merge.", nodes);
             disposeNode(node);
-        }
-    }
-
-    /**
-     * @version 2014/06/16 16:44:55
-     */
-    private class SequentialConditionInfo {
-
-        /** The start location of this sequence. */
-        private int start;
-
-        /** The base node. */
-        private Node base;
-
-        /** The sequential conditions. */
-        private Deque<OperandCondition> conditions = new ArrayDeque();
-
-        /** The transition group for conditions. */
-        private Set<Node> transitions = new HashSet();
-
-        /**
-         * <p>
-         * Search the sequencial conditional operands in the specified node from right to left.
-         * </p>
-         * 
-         * @param node A target node.
-         */
-        private SequentialConditionInfo(Node node) {
-            this.base = node;
-
-            // Search the sequencial conditional operands in the specified node from right to left.
-            for (int index = 0; index < node.stack.size(); index++) {
-                Operand operand = node.peek(index);
-
-                if (operand instanceof OperandCondition == false) {
-                    // non-conditional operand is found
-                    if (conditions.isEmpty()) {
-                        // conditional operand is not found as yet, so we should continue to search
-                        continue;
-                    } else {
-                        // stop searching
-                        break;
-                    }
-                }
-
-                // conditional operand is found
-                OperandCondition condition = (OperandCondition) operand;
-
-                if (conditions.isEmpty()) {
-                    // this is first condition
-                    start = index;
-                } else {
-                    // this is last condition
-                }
-                conditions.add(condition);
-                transitions.add(condition.transition);
-            }
-        }
-
-        private boolean isValid(Node transition) {
-            // check sequence size
-            if (conditions.size() < 2) {
-                return false;
-            }
-
-            // check transition group
-            Set<Node> group = new HashSet();
-            group.add(transition);
-            group.add(conditions.getFirst().transition);
-
-            for (OperandCondition condition : conditions) {
-                if (!group.contains(condition.transition)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private void merge() {
-
-            OperandCondition right = (OperandCondition) base.peek(start);
-
-            for (int i = 0; i < conditions.size() - 1; i++) {
-                OperandCondition left = (OperandCondition) base.remove(start + 1);
-                right = new OperandCondition(left, right);
-
-                base.set(start, right);
-            }
-
-            Debugger.info("merge ", nodes);
         }
     }
 
