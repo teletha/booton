@@ -377,6 +377,9 @@ public class Debugger extends AnnotationVisitor {
             if (node.frame) {
                 format.write("F");
             }
+            if (node.go) {
+                format.write("G");
+            }
             format.write("\r\n");
         }
         return format.toString();
