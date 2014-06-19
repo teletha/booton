@@ -165,6 +165,7 @@ public class DoWhileTest extends ScriptTester {
     public void oneLinerComplexCondition() throws Exception {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 // @formatter:off
                 do {value += 2;} while (++value < 10 && value % 2 == 0);
@@ -193,7 +194,6 @@ public class DoWhileTest extends ScriptTester {
     public void inIfOneLiner() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int value) {
                 if (value != 0) {
                     // @formatter:off
