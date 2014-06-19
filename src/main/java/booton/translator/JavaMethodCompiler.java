@@ -1525,9 +1525,9 @@ class JavaMethodCompiler extends MethodVisitor {
             }
         }
 
-        // Merge this node and the specified node.
-        // Rearch the start of node
-        if (start.previous != null) {
+        // If the previous node is terminated by conditional operand and the target node is started
+        // by conditional operand, we should try to merge them.
+        if (info.conditionalHead && start.previous != null) {
             Operand operand = start.previous.peek(0);
 
             if (operand instanceof OperandCondition) {
@@ -1566,6 +1566,9 @@ class JavaMethodCompiler extends MethodVisitor {
         /** The transition group for conditions. */
         private Set<Node> transitions = new HashSet();
 
+        /** The flag whether this node is started by conditional operand or not. */
+        private final boolean conditionalHead;
+
         /**
          * <p>
          * Search the sequencial conditional operands in the specified node from right to left.
@@ -1603,6 +1606,8 @@ class JavaMethodCompiler extends MethodVisitor {
                 conditions.add(condition);
                 transitions.add(condition.transition);
             }
+
+            this.conditionalHead = node.stack.size() == start + conditions.size();
         }
 
         private boolean isValid(Node transition) {
