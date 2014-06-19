@@ -1475,12 +1475,6 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void mergeConditions(Node start, Node initialTransition) {
-        // SequentialConditionInfo info = new SequentialConditionInfo(start);
-
-        // if (info.isValid(initialTransition)) {
-        // info.merge();
-        // }
-
         OperandCondition left = null;
         OperandCondition right = null;
 
@@ -1525,28 +1519,11 @@ class JavaMethodCompiler extends MethodVisitor {
                 OperandCondition condition = (OperandCondition) operand;
 
                 if (transitions.contains(condition.transition)) {
-                    // Logical conditions
-                    // a == 0 || a == 1
-                    if (start.logical && start.previous.logical) {
-                        Debugger.print("Dispose merged logical node " + start.id);
-                        Debugger.print(nodes);
+                    Debugger.print("Dispose node " + start.id + " after mergeConditions.", nodes);
+                    disposeNode(start);
 
-                        disposeNode(start);
-                        mergeConditions(start.previous, initialTransition);
-                    } else {
-
-                        // multiline sequencial method call
-                        // visitFrame F_SAME 0 0
-                        // visitFrame F_APPEND 1 0 (ternary operator left value -> goto return)
-                        // logical condition - all conditions
-                        //
-                        Debugger.print("dispose merged node " + start.id);
-                        Debugger.print(nodes);
-                        disposeNode(start);
-
-                        // Merge recursively
-                        mergeConditions(start.previous, initialTransition);
-                    }
+                    // Merge recursively
+                    mergeConditions(start.previous, initialTransition);
                 }
             }
         }
@@ -1608,8 +1585,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // remove empty node
         if (node.stack.isEmpty()) {
-            Debugger.print("Dispose empty node" + node.id + " on merge.");
-            Debugger.print(nodes);
+            Debugger.print("Dispose empty node" + node.id + " on merge.", nodes);
             disposeNode(node);
         }
     }

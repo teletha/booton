@@ -248,6 +248,18 @@ public class Debugger extends AnnotationVisitor {
 
     /**
      * <p>
+     * Dump node tree.
+     * </p>
+     * 
+     * @param nodes
+     */
+    public static void print(String text, List<Node> nodes) {
+        print(text);
+        print(nodes);
+    }
+
+    /**
+     * <p>
      * Compute actual test class name.
      * </p>
      * 
