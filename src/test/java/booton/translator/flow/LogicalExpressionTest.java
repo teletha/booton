@@ -368,6 +368,7 @@ public class LogicalExpressionTest extends ScriptTester {
     public void Complex24() {
         test(new Scriptable() {
 
+            @Debuggable
             public boolean act(@Param(from = 1, to = 128) int value) {
                 return value % 5 == 0 && ((value % 3 == 0 && value % 4 == 0) || (value % 7 == 0 || value % 6 == 0));
             }
@@ -697,6 +698,7 @@ public class LogicalExpressionTest extends ScriptTester {
     public void ConditionalOperatorNest5() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 100) int value) {
                 return value % 2 == 0 ? value % 3 == 0 || value % 4 == 0 && (value % 5 == 0 || value % 7 == 0) ? 20
                         : 10 : value;

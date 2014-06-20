@@ -54,6 +54,8 @@ class OperandCondition extends Operand {
     /** The transition node. */
     final Node transition;
 
+    Node transitionThen;
+
     /** The operator of this conditional expression. */
     private int operator;
 

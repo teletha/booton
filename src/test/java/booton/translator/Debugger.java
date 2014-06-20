@@ -587,7 +587,14 @@ public class Debugger extends AnnotationVisitor {
             } else if (operand instanceof OperandExpression) {
                 return "Expression";
             } else if (operand instanceof OperandCondition) {
-                return "Condition to " + ((OperandCondition) operand).transition.id;
+                OperandCondition condition = (OperandCondition) operand;
+
+                StringBuilder builder = new StringBuilder("Condition to ").append(condition.transition.id);
+
+                if (condition.transitionThen != null) {
+                    builder.append(" then ").append(condition.transitionThen.id);
+                }
+                return builder.toString();
             } else if (operand instanceof OperandArray) {
                 return "Array";
             } else if (operand instanceof OperandNumber) {
