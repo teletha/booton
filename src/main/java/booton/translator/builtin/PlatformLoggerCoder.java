@@ -11,6 +11,7 @@ package booton.translator.builtin;
 
 import sun.util.logging.PlatformLogger;
 import sun.util.logging.PlatformLogger.Level;
+
 import booton.translator.Translator;
 
 /**
@@ -46,8 +47,12 @@ public class PlatformLoggerCoder extends Translator<PlatformLogger> {
         return that + ".warn(" + param(0) + "," + param(1) + ")";
     }
 
+    public String fine(String param0, Throwable param1) {
+        return that + ".log(" + param(0) + "," + param(1) + ")";
+    }
+
     public String finest(String param0, Object[] param1) {
-        return that + ".finest(" + param(0) + "," + param(1) + ")";
+        return that + ".log(" + param(0) + "," + param(1) + ")";
     }
 
     public String isLoggable(Level param0) {
