@@ -265,6 +265,37 @@ class JSThread {
     }
 
     /**
+     * Returns the handler invoked when this thread abruptly terminates due to an uncaught
+     * exception. If this thread has not had an uncaught exception handler explicitly set then this
+     * thread's <tt>ThreadGroup</tt> object is returned, unless this thread has terminated, in which
+     * case <tt>null</tt> is returned.
+     * 
+     * @since 1.5
+     * @return the uncaught exception handler for this thread
+     */
+    public UncaughtExceptionHandler getUncaughtExceptionHandler() {
+        return defaultUncaughtExceptionHandler;
+    }
+
+    /**
+     * Set the handler invoked when this thread abruptly terminates due to an uncaught exception.
+     * <p>
+     * A thread can take full control of how it responds to uncaught exceptions by having its
+     * uncaught exception handler explicitly set. If no such handler is set then the thread's
+     * <tt>ThreadGroup</tt> object acts as its handler.
+     * 
+     * @param handler the object to use as this thread's uncaught exception handler. If
+     *            <tt>null</tt> then this thread has no explicit handler.
+     * @throws SecurityException if the current thread is not allowed to modify this thread.
+     * @see #setDefaultUncaughtExceptionHandler
+     * @see ThreadGroup#uncaughtException
+     * @since 1.5
+     */
+    public void setUncaughtExceptionHandler(UncaughtExceptionHandler handler) {
+        defaultUncaughtExceptionHandler = handler;
+    }
+
+    /**
      * Returns a reference to the currently executing thread object.
      * 
      * @return the currently executing thread.

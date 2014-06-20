@@ -154,7 +154,7 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
 
         if (originalDescriptor == null) {
             TranslationError error = new TranslationError();
-            System.out.println(owner + "   " + name + "  " + description);
+            System.out.println("(" + owner.getName() + ".java:1) #" + name + "  " + description);
             error.write("You must define the method in " + definition.clazz + ".");
             error.writeMethod(name, Type.getReturnType(description), Type.getArgumentTypes(description));
 
