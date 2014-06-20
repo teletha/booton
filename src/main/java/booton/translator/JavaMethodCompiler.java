@@ -53,7 +53,7 @@ import booton.translator.Node.TryCatchFinallyBlocks;
  * completely, garbage goto code will remain.
  * </p>
  * 
- * @version 2014/01/16 22:37:18
+ * @version 2014/06/20 10:41:27
  */
 class JavaMethodCompiler extends MethodVisitor {
 
@@ -95,65 +95,70 @@ class JavaMethodCompiler extends MethodVisitor {
     private static final int FRAME_SAME1 = 405;
 
     /**
+     * Represents an expanded frame. See {@link ClassReader#EXPAND_FRAMES}.
+     */
+    private static final int FRAME = 406;
+
+    /**
      * Represents a jump instruction. A jump instruction is an instruction that may jump to another
      * instruction.
      */
-    private static final int JUMP = 406;
+    private static final int JUMP = 410;
 
     /**
      * Represents a primitive addtion instruction. IADD, LADD, FADD and DADD.
      */
-    private static final int ADD = 407;
+    private static final int ADD = 420;
 
     /**
      * Represents a primitive substruction instruction. ISUB, LSUB, FSUB and DSUB.
      */
-    private static final int SUB = 408;
+    private static final int SUB = 421;
 
     /**
      * Represents a constant 0 instruction. ICONST_0, LCONST_0, FCONST_0 and DCONST_0.
      */
-    private static final int CONSTANT_0 = 409;
+    private static final int CONSTANT_0 = 430;
 
     /**
      * Represents a constant 1 instruction. ICONST_1, LCONST_1, FCONST_1 and DCONST_1.
      */
-    private static final int CONSTANT_1 = 410;
+    private static final int CONSTANT_1 = 431;
 
     /**
      * Represents a duplicate instruction. DUP and DUP2.
      */
-    private static final int DUPLICATE = 411;
+    private static final int DUPLICATE = 440;
 
     /**
      * Represents a duplicate instruction. DUP_X1 and DUP2_X2.
      */
-    private static final int DUPLICATE_X1 = 412;
+    private static final int DUPLICATE_X1 = 441;
 
     /**
      * Represents a return instruction.
      */
-    private static final int RETURNS = 413;
+    private static final int RETURNS = 450;
 
     /**
      * Represents a increment instruction.
      */
-    private static final int INCREMENT = 414;
+    private static final int INCREMENT = 460;
 
     /**
      * Represents a compare instruction. FCMPL and FCMPG
      */
-    private static final int FCMP = 415;
+    private static final int FCMP = 470;
 
     /**
      * Represents a compare instruction. DCMPL and DCMPG
      */
-    private static final int DCMP = 416;
+    private static final int DCMP = 471;
 
     /**
      * Represents a compare instruction. DCMPL and DCMPG
      */
-    private static final int CMP = 417;
+    private static final int CMP = 472;
 
     /** The extra opcode for byte code parsing. */
     private static final int LABEL = 300;
@@ -201,7 +206,7 @@ class JavaMethodCompiler extends MethodVisitor {
     private int countInitialization = 0;
 
     /** The record of recent instructions. */
-    private int[] records = new int[8];
+    private int[] records = new int[10];
 
     /** The current start position of instruction records. */
     private int recordIndex = 0;
@@ -983,14 +988,14 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case IRETURN:
-            if (match(JUMP, ICONST_0, IRETURN, LABEL, FRAME_SAME, ICONST_1, IRETURN) || match(JUMP, ICONST_0, IRETURN, LABEL, FRAME_APPEND, ICONST_1, IRETURN)) {
+            if (match(JUMP, ICONST_0, IRETURN, LABEL, FRAME, ICONST_1, IRETURN) || match(JUMP, LABEL, FRAME, ICONST_0, IRETURN, LABEL, FRAME, ICONST_1, IRETURN)) {
                 // merge the node sequence of logical expression
                 current.remove(0);
                 current.remove(0);
                 current.remove(0);
                 current.remove(0);
                 merge(current.previous);
-            } else if (match(JUMP, ICONST_1, IRETURN, LABEL, FRAME_SAME, ICONST_0, IRETURN) || match(JUMP, ICONST_1, IRETURN, LABEL, FRAME_APPEND, ICONST_0, IRETURN)) {
+            } else if (match(JUMP, ICONST_1, IRETURN, LABEL, FRAME, ICONST_0, IRETURN) || match(JUMP, LABEL, FRAME, ICONST_1, IRETURN, LABEL, FRAME, ICONST_0, IRETURN)) {
                 // merge the node sequence of logical expression
                 current.remove(0);
                 current.remove(0);
@@ -1462,6 +1467,10 @@ class JavaMethodCompiler extends MethodVisitor {
         if (latest != null) latest.next = current;
         latest = current;
 
+        if (match(JUMP, LABEL) && !match(GOTO, LABEL)) {
+            ((OperandCondition) current.peek(0)).transitionThen = current;
+        }
+
         Debugger.print("visit label " + current.id);
 
         // store the node in appearing order
@@ -1477,6 +1486,8 @@ class JavaMethodCompiler extends MethodVisitor {
             }
         }
     }
+
+    private static int count = 0;
 
     /**
      * <p>
@@ -1513,6 +1524,9 @@ class JavaMethodCompiler extends MethodVisitor {
                     left = (OperandCondition) operand;
 
                     if (transitions.contains(left.transition)) {
+                        if (start.outgoing.size() == 3) {
+                            Debugger.info("not logical? ", ++count, "  ", nodes);
+                        }
                         Debugger.print("Merge conditions. left[" + left + "]  right[" + start.peek(index - 1) + "]");
                         Debugger.print(nodes);
 
@@ -2489,7 +2503,7 @@ class JavaMethodCompiler extends MethodVisitor {
     private final void record(int opcode) {
         records[recordIndex++] = opcode;
 
-        if (recordIndex == 8) {
+        if (recordIndex == records.length) {
             recordIndex = 0; // loop index
         }
     }
@@ -2504,7 +2518,7 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private final boolean match(int... opcodes) {
         root: for (int i = 0; i < opcodes.length; i++) {
-            int record = records[(recordIndex + i + 8 - opcodes.length) % 8];
+            int record = records[(recordIndex + i + records.length - opcodes.length) % records.length];
 
             switch (opcodes[i]) {
             case ADD:
@@ -2652,6 +2666,20 @@ class JavaMethodCompiler extends MethodVisitor {
                 switch (record) {
                 case DCMPG:
                 case DCMPL:
+                    continue root;
+
+                default:
+                    return false;
+                }
+
+            case FRAME:
+                switch (record) {
+                case FRAME_APPEND:
+                case FRAME_CHOP:
+                case FRAME_FULL:
+                case FRAME_NEW:
+                case FRAME_SAME:
+                case FRAME_SAME1:
                     continue root;
 
                 default:
