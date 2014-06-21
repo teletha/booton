@@ -1314,6 +1314,10 @@ class JavaMethodCompiler extends MethodVisitor {
             connect(label);
             current.go = true;
 
+            if (match(JUMP, GOTO)) {
+                ((OperandCondition) current.peek(0)).transitionThen = getNode(label);
+            }
+
             // disconnect the next appearing node from the current node
             current = null;
             return;
@@ -1487,8 +1491,6 @@ class JavaMethodCompiler extends MethodVisitor {
         }
     }
 
-    private static int count = 0;
-
     /**
      * <p>
      * Helper method to merge all conditional operands.
@@ -1524,14 +1526,29 @@ class JavaMethodCompiler extends MethodVisitor {
                     left = (OperandCondition) operand;
 
                     if (transitions.contains(left.transition)) {
-                        if (start.outgoing.size() == 3) {
-                            Debugger.info("not logical? ", ++count, "  ", nodes);
-                        }
+                        // if (info.transitions.contains(left.transition)) {
+                        // Debugger.info("Warning! ", transitions.stream()
+                        // .map(n -> String.valueOf(n.id))
+                        // .collect(Collectors.joining(",", "[", "]")), " ",
+                        // info.transitions.stream()
+                        // .map(n -> String.valueOf(n.id))
+                        // .collect(Collectors.joining(",", "[", "]")), nodes);
+                        // }
+
                         Debugger.print("Merge conditions. left[" + left + "]  right[" + start.peek(index - 1) + "]");
                         Debugger.print(nodes);
 
                         // Merge two adjucent conditional operands.
                         start.set(--index, new OperandCondition(left, (OperandCondition) start.remove(index)));
+                    } else {
+                        // if (info.transitions.contains(left.transition)) {
+                        // Debugger.info("Warning! ", transitions.stream()
+                        // .map(n -> String.valueOf(n.id))
+                        // .collect(Collectors.joining(",", "[", "]")), " ",
+                        // info.transitions.stream()
+                        // .map(n -> String.valueOf(n.id))
+                        // .collect(Collectors.joining(",", "[", "]")), nodes);
+                        // }
                     }
                 }
             } else {
@@ -1547,7 +1564,10 @@ class JavaMethodCompiler extends MethodVisitor {
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
 
-                if (transitions.contains(condition.transition)) {
+                if (info.transitions.contains(condition.transition)) {
+                    if (!info.canMerge(condition, (OperandCondition) start.stack.peekFirst())) {
+                        Debugger.info("Warning", nodes);
+                    }
                     Debugger.print("Dispose node " + start.id + " after mergeConditions.", nodes);
                     disposeNode(start);
 
@@ -1614,11 +1634,13 @@ class JavaMethodCompiler extends MethodVisitor {
                 if (conditions.isEmpty()) {
                     // this is first condition
                     start = index;
+
+                    transitions.add(condition.transition);
+                    if (condition.transitionThen != null) transitions.add(condition.transitionThen);
                 } else {
                     // this is last condition
                 }
                 conditions.add(condition);
-                transitions.add(condition.transition);
             }
 
             this.conditionalHead = node.stack.size() == start + conditions.size();
@@ -1656,6 +1678,17 @@ class JavaMethodCompiler extends MethodVisitor {
             }
 
             Debugger.info("merge ", nodes);
+        }
+
+        private boolean canMerge(OperandCondition left, OperandCondition right) {
+            if (left.transition == right.transition && left.transitionThen == right.transitionThen) {
+                return false;
+            }
+
+            if (left.transition == right.transition || left.transition == right.transitionThen) {
+                return true;
+            }
+            return false;
         }
     }
 

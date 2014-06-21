@@ -43,6 +43,9 @@ public class Debugger extends AnnotationVisitor {
     // initialization
     static {
         enable(".+SubMap", "absHighFence");
+        enable(".+util\\.Map", "replace");
+        enable(".+AttributeEntry", "equals");
+        enable(".+ConcurrentMap", "computeIfAbsent");
 
         boolean flag = false;
 

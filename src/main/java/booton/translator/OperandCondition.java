@@ -92,6 +92,7 @@ class OperandCondition extends Operand {
             this.operator = left.operator;
         }
         this.transition = right.transition;
+        this.transitionThen = right.transitionThen;
         this.next = right.next;
 
         if (left.transition != right.transition) {
