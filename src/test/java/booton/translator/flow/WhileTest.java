@@ -9,7 +9,6 @@
  */
 package booton.translator.flow;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.soeur.Param;
@@ -245,13 +244,12 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void oneLinerNest() {
         test(new Scriptable() {
 
             public int act(int value) {
                 // @formatter:off
-                while (value < 0) {if (value % 2==0) {value +=3;} else {value+= 5;};};
+                while (value < 0) {if (value % 2==0) {value +=3;} else {value+= 5;}};
                 // @formatter:on
 
                 return value;

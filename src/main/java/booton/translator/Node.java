@@ -67,7 +67,7 @@ class Node {
     boolean logical;
 
     /** The flag whether this node has goto instruction or not. */
-    boolean go;
+    Node go;
 
     /** This node is switch starting node. */
     private Switch switchy;
@@ -98,6 +98,8 @@ class Node {
 
     /** The associated loop structure. */
     private LoopStructure loop;
+
+    public boolean isDisposed;
 
     /**
      * @param label
@@ -779,20 +781,13 @@ class Node {
      * @param buffer
      */
     private void writeIf(ScriptWriter buffer) {
-        Operand operand = stack.peekLast();
+        OperandCondition condition = (OperandCondition) stack.peekLast();
 
-        if (operand == null) {
-            return;
-        }
-
-        if (operand instanceof OperandCondition) {
-            OperandCondition condition = (OperandCondition) operand;
-
-            if (condition.transitionThen == outgoing.get(0)) {
-                condition.invert();
-            } else {
-                Debugger.info("NoInvert curent: ", this, "  normal: ", condition.transition, " then: ", condition.transitionThen, "  out: ", outgoing.get(0));
-            }
+        if (condition.transitionThen == outgoing.get(0)) {
+            condition.invert();
+        } else {
+            // Debugger.info("NoInvert curent: ", this, "  normal: ", condition.transition,
+            // " then: ", condition.transitionThen, "  out: ", outgoing.get(0));
         }
 
         Node then = null;
@@ -807,14 +802,17 @@ class Node {
                  * loop breaker
                  * 
                  * <pre>
-                 * if (condition) {
-                 *    break one;
-                 * } else {
-                 *    other
+                 * loop-structure ( ~ ) {
+                 *   if (condition) {
+                 *     break; // to one
+                 *   } else {
+                 *     other
+                 *   }
                  * }
+                 * one // dominator is not if-condition but loop-condition
                  * </pre>
                  */
-                operand.invert();
+                condition.invert();
 
                 then = other;
                 elze = createConnectorNode(this, one);
@@ -831,7 +829,7 @@ class Node {
                  * one
                  * </pre>
                  */
-                operand.invert();
+                condition.invert();
 
                 then = other;
                 follow = one;
@@ -849,7 +847,7 @@ class Node {
                  * }
                  * </pre>
                  */
-                operand.invert();
+                condition.invert();
 
                 then = one;
                 elze = createConnectorNode(this, other);

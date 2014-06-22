@@ -42,7 +42,6 @@ public class Debugger extends AnnotationVisitor {
 
     // initialization
     static {
-        enable(".+SubMap", "absHighFence");
         enable(".+AttributeEntry", "equals");
 
         boolean flag = false;
@@ -390,8 +389,8 @@ public class Debugger extends AnnotationVisitor {
             if (node.frame) {
                 format.write("F");
             }
-            if (node.go) {
-                format.write("G");
+            if (node.go != null) {
+                format.write("G" + node.go.id);
             }
             format.write("\r\n");
         }
