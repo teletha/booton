@@ -1499,6 +1499,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (current.previous.stack.size() != 0) {
                 if (current.peek(0) != Node.END) {
+
                     mergeConditions(current.previous, current);
                 }
             }
