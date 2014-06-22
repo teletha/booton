@@ -20,6 +20,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -651,7 +652,9 @@ class JavaMethodCompiler extends MethodVisitor {
             // [LEFT value]
             // [label]
             // [RIGHT value]
-            boolean transition = ((OperandCondition) third).transition == right;
+            Debugger.print("try to ternary ");
+            Debugger.print(nodes);
+            boolean transition = collect(((OperandCondition) third).transition).contains(right);
 
             // The condition node must be dominator of the left and right nodes.
             boolean dominator = left.hasDominator(condition) && right.hasDominator(condition);
@@ -694,6 +697,18 @@ class JavaMethodCompiler extends MethodVisitor {
                 processTernaryOperator();
             }
         }
+    }
+
+    private Set<Node> collect(Node node) {
+        Set<Node> nodes = new HashSet();
+        nodes.add(node);
+
+        while (node.stack.isEmpty() && node.outgoing.size() == 1 && node.incoming.size() == 1) {
+            node = node.outgoing.get(0);
+
+            nodes.add(node);
+        }
+        return nodes;
     }
 
     /**
@@ -1471,10 +1486,6 @@ class JavaMethodCompiler extends MethodVisitor {
         if (latest != null) latest.next = current;
         latest = current;
 
-        if (match(JUMP, LABEL) && !match(GOTO, LABEL)) {
-            ((OperandCondition) current.peek(0)).transitionThen = current;
-        }
-
         Debugger.print("visit label " + current.id);
 
         // store the node in appearing order
@@ -1526,16 +1537,19 @@ class JavaMethodCompiler extends MethodVisitor {
                     left = (OperandCondition) operand;
 
                     if (transitions.contains(left.transition)) {
-                        if (!info.canMerge(left, right)) {
-                            Debugger.info("Can't merge", nodes);
+                        if (info.canMerge(left, right)) {
+                            Debugger.print("Merge conditions. left[" + left + "]  right[" + right + "] start: " + start.id);
+                            Debugger.print(nodes);
+
+                            // Merge two adjucent conditional operands.
+                            right = new OperandCondition(left, (OperandCondition) start.remove(--index));
+
+                            start.set(index, right);
+                        } else {
+                            Debugger.print("Stop merging at " + start.id);
+                            Debugger.print(nodes);
+                            break;
                         }
-                        Debugger.print("Merge conditions. left[" + left + "]  right[" + start.peek(index - 1) + "]");
-                        Debugger.print(nodes);
-
-                        // Merge two adjucent conditional operands.
-                        right = new OperandCondition(left, (OperandCondition) start.remove(--index));
-
-                        start.set(index, right);
                     }
                 }
             } else {
@@ -1552,11 +1566,24 @@ class JavaMethodCompiler extends MethodVisitor {
                 OperandCondition condition = (OperandCondition) operand;
 
                 if (info.transitions.contains(condition.transition)) {
+
+                    if (!info.canMergeBetweenNodes(condition, start.previous, (OperandCondition) start.stack.peekFirst(), start)) {
+                        Debugger.print("Stop dispose node " + start.id);
+                        return;
+                    }
                     Debugger.print("Dispose node " + start.id + " after mergeConditions.", nodes);
                     disposeNode(start);
 
+                    if (condition.transitionThen == start) {
+                        condition.transitionThen = null;
+                    }
+
                     // Merge recursively
                     mergeConditions(start.previous, initialTransition);
+                } else {
+                    Debugger.print("Stop dispose node " + start.id + " " + Arrays.toString(info.transitions.stream()
+                            .map(m -> m.id)
+                            .toArray()) + "  " + info.conditions);
                 }
             }
         }
@@ -1617,8 +1644,12 @@ class JavaMethodCompiler extends MethodVisitor {
                     // this is first condition
                     start = index;
 
+                    if (condition.transitionThen == null) {
+                        condition.transitionThen = node.next;
+                    }
+
                     transitions.add(condition.transition);
-                    if (condition.transitionThen != null) transitions.add(condition.transitionThen);
+                    transitions.add(condition.transitionThen);
                 } else {
                     // this is last condition
                 }
@@ -1664,13 +1695,21 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         private boolean canMerge(OperandCondition left, OperandCondition right) {
-            if (left.transition == right.transition && left.transitionThen == right.transitionThen) {
+            if (left.transitionThen != null) {
                 return false;
             }
 
             if (left.transition == right.transition || left.transition == right.transitionThen) {
                 return true;
             }
+            return false;
+        }
+
+        private boolean canMergeBetweenNodes(OperandCondition left, Node leftNode, OperandCondition right, Node rightNode) {
+            if (left.transitionThen == rightNode) {
+                return true;
+            }
+
             return false;
         }
     }
