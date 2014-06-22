@@ -270,4 +270,15 @@ public class ConditionalExpressionTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void withLogical() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            boolean act(@Param(from = 0, to = 5) int value) {
+                return 2 < value && (value % 2 == 0 ? value == 4 : value == 5);
+            }
+        });
+    }
 }
