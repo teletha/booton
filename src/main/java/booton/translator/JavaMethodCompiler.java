@@ -1526,29 +1526,16 @@ class JavaMethodCompiler extends MethodVisitor {
                     left = (OperandCondition) operand;
 
                     if (transitions.contains(left.transition)) {
-                        // if (info.transitions.contains(left.transition)) {
-                        // Debugger.info("Warning! ", transitions.stream()
-                        // .map(n -> String.valueOf(n.id))
-                        // .collect(Collectors.joining(",", "[", "]")), " ",
-                        // info.transitions.stream()
-                        // .map(n -> String.valueOf(n.id))
-                        // .collect(Collectors.joining(",", "[", "]")), nodes);
-                        // }
-
+                        if (!info.canMerge(left, right)) {
+                            Debugger.info("Can't merge", nodes);
+                        }
                         Debugger.print("Merge conditions. left[" + left + "]  right[" + start.peek(index - 1) + "]");
                         Debugger.print(nodes);
 
                         // Merge two adjucent conditional operands.
-                        start.set(--index, new OperandCondition(left, (OperandCondition) start.remove(index)));
-                    } else {
-                        // if (info.transitions.contains(left.transition)) {
-                        // Debugger.info("Warning! ", transitions.stream()
-                        // .map(n -> String.valueOf(n.id))
-                        // .collect(Collectors.joining(",", "[", "]")), " ",
-                        // info.transitions.stream()
-                        // .map(n -> String.valueOf(n.id))
-                        // .collect(Collectors.joining(",", "[", "]")), nodes);
-                        // }
+                        right = new OperandCondition(left, (OperandCondition) start.remove(--index));
+
+                        start.set(index, right);
                     }
                 }
             } else {
@@ -1565,19 +1552,11 @@ class JavaMethodCompiler extends MethodVisitor {
                 OperandCondition condition = (OperandCondition) operand;
 
                 if (info.transitions.contains(condition.transition)) {
-                    if (!info.canMerge(condition, (OperandCondition) start.stack.peekFirst())) {
-                        Debugger.info("Warning", nodes);
-                    }
                     Debugger.print("Dispose node " + start.id + " after mergeConditions.", nodes);
                     disposeNode(start);
 
                     // Merge recursively
                     mergeConditions(start.previous, initialTransition);
-                } else {
-                    // Debugger.info("Don't dispose ", start.previous, start, "  transitions",
-                    // Arrays.toString(transitions.stream()
-                    // .map(n -> n.id)
-                    // .toArray()));
                 }
             }
         }
@@ -1602,6 +1581,9 @@ class JavaMethodCompiler extends MethodVisitor {
 
         /** The flag whether this node is started by conditional operand or not. */
         private final boolean conditionalHead;
+
+        /** The flag whether this node is started by conditional operand or not. */
+        private final boolean conditionalTail;
 
         /**
          * <p>
@@ -1644,6 +1626,7 @@ class JavaMethodCompiler extends MethodVisitor {
             }
 
             this.conditionalHead = node.stack.size() == start + conditions.size();
+            this.conditionalTail = start == 0 && !conditions.isEmpty();
         }
 
         private boolean isValid(Node transition) {
