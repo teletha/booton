@@ -20,7 +20,6 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1489,12 +1488,39 @@ class JavaMethodCompiler extends MethodVisitor {
         if (latest != null) latest.next = current;
         latest = current;
 
+        /**
+         * The following bytecode must be normalized.
+         * 
+         * <pre>
+         * // Before
+         * mv.visitJumpInsn(IFEQ, l1);
+         * mv.visitJumpInsn(GOTO, l2);
+         * mv.visitLabel(l1);
+         * </pre>
+         * 
+         * <pre>
+         * // After
+         * mv.visitJumpInsn(IFNE, l2);
+         * mv.visitLabel(l1);
+         * </pre>
+         */
+        if (match(JUMP, GOTO, LABEL)) {
+            OperandCondition condition = (OperandCondition) current.peek(0);
+
+            if (condition.transition == current) {
+                condition.invert();
+            }
+        }
+
         Debugger.print("visit label " + current.id);
 
         // store the node in appearing order
         nodes.add(current);
 
         if (1 < nodes.size()) {
+            if (current.previous != nodes.get(nodes.size() - 2)) {
+                // Debugger.info("DIFF ", current.previous, nodes.get(nodes.size() - 2));
+            }
             current.previous = nodes.get(nodes.size() - 2);
 
             if (current.previous.stack.size() != 0) {
@@ -1521,9 +1547,6 @@ class JavaMethodCompiler extends MethodVisitor {
         OperandCondition left = null;
         OperandCondition right = null;
 
-        Set<Node> transitions = new HashSet();
-        transitions.add(initialTransition);
-
         // Search and merge the sequencial conditional operands in this node from right to left.
         for (int index = 0; index < start.stack.size(); index++) {
             Operand operand = start.peek(index);
@@ -1531,29 +1554,21 @@ class JavaMethodCompiler extends MethodVisitor {
             if (operand instanceof OperandCondition) {
                 if (right == null) {
                     right = (OperandCondition) operand;
-
-                    // This is first operand condition.
-                    transitions.add(right.transition);
-
-                    // Set next appearing node for grouping.
-                    right.next = initialTransition;
                 } else {
                     left = (OperandCondition) operand;
 
-                    if (transitions.contains(left.transition)) {
-                        if (info.canMerge(left, right)) {
-                            Debugger.print("Merge conditions. left[" + left + "]  right[" + right + "] start: " + start.id);
-                            Debugger.print(nodes);
+                    if (info.canMerge(left, right)) {
+                        Debugger.print("Merge conditions. left[" + left + "]  right[" + right + "] start: " + start.id);
+                        Debugger.print(nodes);
 
-                            // Merge two adjucent conditional operands.
-                            right = new OperandCondition(left, (OperandCondition) start.remove(--index));
+                        // Merge two adjucent conditional operands.
+                        right = new OperandCondition(left, (OperandCondition) start.remove(--index));
 
-                            start.set(index, right);
-                        } else {
-                            Debugger.print("Stop merging at " + start.id);
-                            Debugger.print(nodes);
-                            break;
-                        }
+                        start.set(index, right);
+                    } else {
+                        Debugger.print("Stop merging at " + start.id);
+                        Debugger.print(nodes);
+                        break;
                     }
                 }
             } else {
@@ -1584,10 +1599,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
                     // Merge recursively
                     mergeConditions(start.previous, initialTransition);
-                } else {
-                    Debugger.print("Stop dispose node " + start.id + " " + Arrays.toString(info.transitions.stream()
-                            .map(m -> m.id)
-                            .toArray()) + "  " + info.conditions);
                 }
             }
         }
@@ -1776,79 +1787,6 @@ class JavaMethodCompiler extends MethodVisitor {
         if (node.stack.isEmpty()) {
             Debugger.print("Dispose empty node" + node.id + " on merge.", nodes);
             disposeNode(node);
-        }
-    }
-
-    /**
-     * <p>
-     * Helper method to merge all conditional operands.
-     * </p>
-     */
-    private void mergeConditionsOld(Node start, Node initialTransition) {
-        OperandCondition left = null;
-        OperandCondition right = null;
-
-        Set<Node> transitions = new HashSet();
-        transitions.add(initialTransition);
-
-        // Debugger.info("Call mergeConditions [start: ", start, " initialTransition: ",
-        // initialTransition, " separator: ", separator, "]");
-
-        // Search and merge the sequencial conditional operands in this node from right to left.
-        for (int index = 0; index < start.stack.size(); index++) {
-            Operand operand = start.peek(index);
-
-            if (operand instanceof OperandCondition) {
-                if (right == null) {
-                    right = (OperandCondition) operand;
-
-                    // This is first operand condition.
-                    transitions.add(right.transition);
-
-                    // Set next appearing node for grouping.
-                    right.next = initialTransition;
-                } else {
-                    left = (OperandCondition) operand;
-
-                    if (transitions.contains(left.transition)) {
-                        // Merge two adjucent conditional operands.
-                        start.set(--index, new OperandCondition(left, (OperandCondition) start.remove(index)));
-                    }
-                }
-            } else {
-                left = right = null;
-            }
-        }
-
-        // Merge this node and the specified node.
-        // Rearch the start of node
-        if (start.previous != null) {
-            Operand operand = start.previous.peek(0);
-
-            if (operand instanceof OperandCondition) {
-                OperandCondition condition = (OperandCondition) operand;
-
-                if (transitions.contains(condition.transition)) {
-                    // Logical conditions
-                    // a == 0 || a == 1
-                    if (start.logical && start.previous.logical) {
-                        disposeNode(start);
-                        mergeConditionsOld(start.previous, initialTransition);
-                    } else {
-
-                        // multiline sequencial method call
-                        // visitFrame F_SAME 0 0
-                        // visitFrame F_APPEND 1 0 (ternary operator left value -> goto return)
-                        // logical condition - all conditions
-                        //
-                        // Debugger.printInfo("dispose merged node " + start.id);
-                        disposeNode(start);
-
-                        // Merge recursively
-                        mergeConditionsOld(start.previous, initialTransition);
-                    }
-                }
-            }
         }
     }
 
@@ -2136,8 +2074,10 @@ class JavaMethodCompiler extends MethodVisitor {
         case NEW:
             if (assertNew) {
                 assertNew = false;
-                current = createNode();
+                current = createNodeAfter(current);
                 current.number = current.previous.number;
+
+                mergeConditions(current.previous, current);
             }
             countInitialization++;
 
@@ -2355,30 +2295,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
     /**
      * <p>
-     * Create new node after the current node.
-     * </p>
-     * 
-     * @return A created node.
-     */
-    private final Node createNode() {
-        Node created = new Node(counter++);
-        created.previous = current;
-
-        // make connection
-        current.connect(created);
-
-        // insert to node list
-        nodes.add(created);
-
-        // merge all conditions in the previous node
-        mergeConditionsOld(current, created);
-
-        // API definition
-        return created;
-    }
-
-    /**
-     * <p>
      * Create new node before the specified node.
      * </p>
      * 
@@ -2441,7 +2357,7 @@ class JavaMethodCompiler extends MethodVisitor {
         // switch previous and next nodes
         // index -> created -> next
         Node next = index.next;
-        next.previous = created;
+        if (next != null) next.previous = created;
         created.previous = index;
         index.next = created;
         created.next = next;

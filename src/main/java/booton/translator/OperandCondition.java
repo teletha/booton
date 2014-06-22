@@ -52,7 +52,7 @@ class OperandCondition extends Operand {
     Operand right;
 
     /** The transition node. */
-    final Node transition;
+    Node transition;
 
     Node transitionThen;
 
@@ -61,9 +61,6 @@ class OperandCondition extends Operand {
 
     /** The flag of grouping. */
     private boolean group = false;
-
-    /** The next transition node of the node that this condition belongs to. */
-    Node next;
 
     /**
      * @param left
@@ -93,7 +90,6 @@ class OperandCondition extends Operand {
         }
         this.transition = right.transition;
         this.transitionThen = right.transitionThen;
-        this.next = right.next;
 
         if (left.transition != right.transition) {
             this.left.invert();
@@ -102,7 +98,7 @@ class OperandCondition extends Operand {
 
         // Make group if left transition node equals to transition node or next node of the
         // right condition node.
-        group = (left.transition == right.next || left.transition == right.transition);
+        group = (left.transition == right.transitionThen || left.transition == right.transition);
     }
 
     /**
