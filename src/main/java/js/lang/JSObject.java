@@ -9,7 +9,6 @@
  */
 package js.lang;
 
-import booton.translator.Debuggable;
 import booton.translator.JavaAPIProvider;
 import booton.translator.JavascriptAPIProvider;
 
@@ -274,7 +273,6 @@ class JSObject {
      *                the current thread was waiting for a notification. The <i>interrupted
      *                status</i> of the current thread is cleared when this exception is thrown.
      */
-    @Debuggable
     public final void $alias$wait(long timeout, int nanos) throws InterruptedException {
         if (timeout < 0) {
             throw new IllegalArgumentException("timeout value is negative");

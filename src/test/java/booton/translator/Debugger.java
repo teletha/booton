@@ -43,9 +43,7 @@ public class Debugger extends AnnotationVisitor {
     // initialization
     static {
         enable(".+SubMap", "absHighFence");
-        enable(".+util\\.Map", "replace");
         enable(".+AttributeEntry", "equals");
-        enable(".+ConcurrentMap", "computeIfAbsent");
 
         boolean flag = false;
 
@@ -102,6 +100,18 @@ public class Debugger extends AnnotationVisitor {
     @Override
     public void visitEnd() {
         enable = true;
+    }
+
+    /**
+     * <p>
+     * Register current processing target.
+     * </p>
+     * 
+     * @param className A class name regex.
+     * @param methodName A method name regex.
+     */
+    public static void enable() {
+        debugger.enable = true;
     }
 
     /**
