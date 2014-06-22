@@ -652,8 +652,6 @@ class JavaMethodCompiler extends MethodVisitor {
             // [LEFT value]
             // [label]
             // [RIGHT value]
-            Debugger.print("try to ternary ");
-            Debugger.print(nodes);
             boolean transition = collect(((OperandCondition) third).transition).contains(right);
 
             // The condition node must be dominator of the left and right nodes.
@@ -679,7 +677,12 @@ class JavaMethodCompiler extends MethodVisitor {
                     current.remove(0);
                     current.remove(0);
                     current.remove(0);
-                    condition.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
+
+                    if (first instanceof OperandCondition && second instanceof OperandCondition) {
+                        condition.addOperand(new OperandTernaryCondition((OperandCondition) third, (OperandCondition) second, (OperandCondition) first));
+                    } else {
+                        condition.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
+                    }
                 }
 
                 // dispose empty nodes
