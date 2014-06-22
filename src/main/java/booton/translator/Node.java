@@ -461,12 +461,15 @@ class Node {
      * @param node A target node.
      */
     final void connect(Node node) {
-        boolean out = outgoing.addIfAbsent(node);
-        boolean in = node.incoming.addIfAbsent(this);
+        if (node != null) {
+            boolean out = outgoing.addIfAbsent(node);
+            boolean in = node.incoming.addIfAbsent(this);
 
-        if (!out && !in) {
-            logical = true;
+            if (!out && !in) {
+                logical = true;
+            }
         }
+
     }
 
     /**
@@ -477,8 +480,10 @@ class Node {
      * @param node A target node.
      */
     final void disconnect(Node node) {
-        outgoing.remove(node);
-        node.incoming.remove(this);
+        if (node != null) {
+            outgoing.remove(node);
+            node.incoming.remove(this);
+        }
     }
 
     /**
@@ -783,8 +788,10 @@ class Node {
         if (operand instanceof OperandCondition) {
             OperandCondition condition = (OperandCondition) operand;
 
-            if (condition.next == outgoing.get(0)) {
+            if (condition.transitionThen == outgoing.get(0)) {
                 condition.invert();
+            } else {
+                Debugger.info("NoInvert curent: ", this, "  normal: ", condition.transition, " then: ", condition.transitionThen, "  out: ", outgoing.get(0));
             }
         }
 
@@ -892,30 +899,6 @@ class Node {
                 elze.returnOmittable = false;
             }
         }
-
-        // int multiplicity = operand.computeMultiplicity();
-        //
-        // if (5 <= multiplicity) {
-        // if (then.to) {
-        // OperandCondition condition = (OperandCondition) operand;
-        // OperandCondition base = (OperandCondition) condition.left;
-        // Operand root = base.left.invert();
-        // Operand left = base.right;
-        // Operand right = condition.right;
-        // debugger.print("create ternary operator");
-        // remove(0);
-        // addOperand(new OperandExpression(root + "?" + left + ":" + right));
-        // } else if (elze != null && elze.frame && elze.to) {
-        // OperandCondition condition = (OperandCondition) operand;
-        // OperandCondition base = (OperandCondition) condition.left;
-        // Operand root = base.left;
-        // Operand left = base.right;
-        // Operand right = condition.right;
-        //
-        // remove(0);
-        // addOperand(new OperandExpression(root + "?" + left + ":" + right));
-        // }
-        // }
 
         // write script fragment
         buffer.write("if", "(" + this + ")", "{");
