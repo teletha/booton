@@ -211,7 +211,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void ifConditionLogical() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             String act(int value) {
                 if ((value < 0 && value == -1) || value == 2) {
                     if (value < 0) {
@@ -229,7 +228,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void ifConditionTernary() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             String act(int value) {
                 if (value < 0 ? value == -1 : value == 2) {
                     if (value < 0) {
@@ -261,7 +259,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void whileConditionTernary() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(int value) {
                 while (value < 0 ? value != -2 : value != 5) {
                     value++;
@@ -275,7 +272,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void withLogical() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             boolean act(@Param(from = 0, to = 5) int value) {
                 return 2 < value && (value % 2 == 0 ? value == 4 : value == 5);
             }

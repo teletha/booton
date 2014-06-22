@@ -337,24 +337,8 @@ class JavaMethodCompiler extends MethodVisitor {
             }
 
             // Separate conditional operands.
-            int number = searchConditionalOperandSeparator(node);
-
-            if (number != -1) {
-                Node created = createNodeAfter(nodes.get(i));
-
-                // transfer operands
-                for (int j = 0; j < number; j++) {
-                    Operand operand = node.stack.pollLast();
-
-                    if (operand instanceof OperandCondition) {
-                        Node transfer = ((OperandCondition) operand).transition;
-                        node.disconnect(transfer);
-                        created.connect(transfer);
-                    }
-
-                    created.stack.addFirst(operand);
-                }
-            }
+            SequentialConditionInfo info = new SequentialConditionInfo(node);
+            info.split();
         }
 
         // Search all backedge nodes.
@@ -396,52 +380,6 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         Debugger.print(code.toFragment());
-    }
-
-    /**
-     * <p>
-     * Count a number of transferable operands.
-     * </p>
-     * 
-     * @param node A target node.
-     * @return A result.
-     */
-    private int searchConditionalOperandSeparator(Node node) {
-        boolean initialized = false;
-        boolean conditionOnly = false;
-
-        for (int i = node.stack.size() - 1; 0 <= i; i--) {
-            Operand operand = node.stack.get(i);
-
-            if (operand == Return || operand == Node.Return) {
-                return -1;
-            }
-
-            if (operand == Node.END) {
-                continue;
-            }
-
-            if (operand instanceof OperandCondition) {
-                if (!initialized) {
-                    initialized = true;
-                    conditionOnly = true;
-                } else {
-                    if (!conditionOnly) {
-                        return node.stack.size() - i - 1;
-                    }
-                }
-            } else {
-                if (!initialized) {
-                    initialized = true;
-                    conditionOnly = false;
-                } else {
-                    if (conditionOnly) {
-                        return node.stack.size() - i - 2;
-                    }
-                }
-            }
-        }
-        return -1;
     }
 
     /**
@@ -1329,7 +1267,7 @@ class JavaMethodCompiler extends MethodVisitor {
         switch (opcode) {
         case GOTO:
             connect(label);
-            current.go = true;
+            current.go = getNode(label);
 
             if (match(JUMP, GOTO)) {
                 ((OperandCondition) current.peek(0)).transitionThen = getNode(label);
@@ -1628,6 +1566,11 @@ class JavaMethodCompiler extends MethodVisitor {
         private final boolean conditionalTail;
 
         /**
+         * The flag whether this node has mixed contents (conditional and non-conditional operands).
+         */
+        private final boolean mixed;
+
+        /**
          * <p>
          * Search the sequencial conditional operands in the specified node from right to left.
          * </p>
@@ -1659,7 +1602,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     // this is first condition
                     start = index;
 
-                    if (condition.transitionThen == null) {
+                    if (condition.transitionThen == null && condition.transition != node.next) {
                         condition.transitionThen = node.next;
                     }
 
@@ -1673,6 +1616,32 @@ class JavaMethodCompiler extends MethodVisitor {
 
             this.conditionalHead = node.stack.size() == start + conditions.size();
             this.conditionalTail = start == 0 && !conditions.isEmpty();
+            this.mixed = conditions.size() != 0 && conditions.size() != node.stack.size();
+        }
+
+        /**
+         * <p>
+         * Split mixed contents into condition part and non-condition part.
+         * </p>
+         */
+        private void split() {
+            int size = conditions.size();
+
+            if (size != 0 && size != base.stack.size()) {
+                Node created = createNodeAfter(base, base.go == null ? base.next : base.go);
+                size = conditionalTail ? conditions.size() : start;
+
+                for (int i = 0; i < size; i++) {
+                    Operand operand = base.stack.pollLast();
+
+                    if (operand instanceof OperandCondition) {
+                        OperandCondition condition = (OperandCondition) operand;
+                        base.disconnect(condition.transition);
+                        created.connect(condition.transition);
+                    }
+                    created.stack.addFirst(operand);
+                }
+            }
         }
 
         private boolean isValid(Node transition) {
@@ -1693,20 +1662,6 @@ class JavaMethodCompiler extends MethodVisitor {
             // }
 
             return true;
-        }
-
-        private void merge() {
-
-            OperandCondition right = (OperandCondition) base.peek(start);
-
-            for (int i = 0; i < conditions.size() - 1; i++) {
-                OperandCondition left = (OperandCondition) base.remove(start + 1);
-                right = new OperandCondition(left, right);
-
-                base.set(start, right);
-            }
-
-            Debugger.info("merge ", nodes);
         }
 
         private boolean canMerge(OperandCondition left, OperandCondition right) {
@@ -2074,7 +2029,7 @@ class JavaMethodCompiler extends MethodVisitor {
         case NEW:
             if (assertNew) {
                 assertNew = false;
-                current = createNodeAfter(current);
+                current = createNodeAfter(current, null);
                 current.number = current.previous.number;
 
                 mergeConditions(current.previous, current);
@@ -2345,7 +2300,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * @param index A index node.
      * @return A created node.
      */
-    private final Node createNodeAfter(Node index) {
+    private final Node createNodeAfter(Node index, Node link) {
         Node created = new Node(counter++);
 
         // switch line number
@@ -2363,9 +2318,9 @@ class JavaMethodCompiler extends MethodVisitor {
         created.next = next;
 
         // link
-        index.disconnect(next);
+        index.disconnect(link);
         index.connect(created);
-        created.connect(next);
+        created.connect(link);
 
         // insert to node list
         nodes.add(nodeIndex, created);
@@ -2392,63 +2347,64 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private final void disposeNode(Node target, boolean clearStack) {
-        Node next = target.next;
-        Node previous = target.previous;
+        if (nodes.remove(target)) {
+            target.isDisposed = true;
 
-        if (next != null) {
-            next.previous = null;
-        }
+            Node next = target.next;
+            Node previous = target.previous;
 
-        if (previous != null) {
-            previous.next = null;
-        }
-
-        if (previous != null && next != null) {
-            next.previous = previous;
-            previous.next = next;
-        }
-
-        // Merge the current processing node
-        nodes.remove(target);
-
-        // Connect from incomings to outgouings
-        for (Node out : target.outgoing) {
-            for (Node in : target.incoming) {
-                in.connect(out);
+            if (next != null) {
+                next.previous = null;
             }
-        }
 
-        // Remove the target node from its incomings and outgoings.
-        for (Node node : target.incoming) {
-            node.disconnect(target);
-        }
-        for (Node node : target.outgoing) {
-            target.disconnect(node);
-        }
-
-        // Copy all operands to the previous node if needed
-        if (!clearStack) {
-            if (target.previous != null) {
-                target.previous.stack.addAll(target.stack);
+            if (previous != null) {
+                previous.next = null;
             }
-        }
 
-        // copy frame info
-        // target.previous.frame = target.frame;
-        if (target.logical) {
-            target.previous.logical = true;
-        }
+            if (previous != null && next != null) {
+                next.previous = previous;
+                previous.next = next;
+            }
 
-        // Delete all operands from the current processing node
-        target.stack.clear();
+            // Connect from incomings to outgouings
+            for (Node out : target.outgoing) {
+                for (Node in : target.incoming) {
+                    in.connect(out);
+                }
+            }
 
-        if (target == current) {
-            current = target.previous;
-        }
+            // Remove the target node from its incomings and outgoings.
+            for (Node node : target.incoming) {
+                node.disconnect(target);
+            }
+            for (Node node : target.outgoing) {
+                target.disconnect(node);
+            }
 
-        // dispose empty node recursively
-        if (target.previous != null && target.previous.stack.isEmpty()) {
-            disposeNode(target.previous, clearStack);
+            // Copy all operands to the previous node if needed
+            if (!clearStack) {
+                if (target.previous != null) {
+                    target.previous.stack.addAll(target.stack);
+                }
+            }
+
+            // copy frame info
+            // target.previous.frame = target.frame;
+            if (target.logical) {
+                target.previous.logical = true;
+            }
+
+            // Delete all operands from the current processing node
+            target.stack.clear();
+
+            if (target == current) {
+                current = target.previous;
+            }
+
+            // dispose empty node recursively
+            if (target.previous != null && target.previous.stack.isEmpty()) {
+                disposeNode(target.previous, clearStack);
+            }
         }
     }
 
