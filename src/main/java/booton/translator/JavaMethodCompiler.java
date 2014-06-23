@@ -329,6 +329,8 @@ class JavaMethodCompiler extends MethodVisitor {
 
             // Resolve shorthand syntax sugar of "if" statement.
             if (node.stack.peekFirst() instanceof OperandCondition && node.outgoing.size() == 1) {
+                Debugger.print(nodes);
+
                 // create condition node
                 Node condition = createNodeBefore(node);
                 condition.connect(node);
@@ -1628,18 +1630,53 @@ class JavaMethodCompiler extends MethodVisitor {
             int size = conditions.size();
 
             if (size != 0 && size != base.stack.size()) {
-                Node created = createNodeAfter(base, base.go == null ? base.next : base.go);
-                size = conditionalTail ? conditions.size() : start;
+                if (conditionalTail) {
+                    // [non-condition] [condition]
+                    Node created = createNodeAfter(base);
 
-                for (int i = 0; i < size; i++) {
-                    Operand operand = base.stack.pollLast();
+                    for (int i = 0; i < size; i++) {
+                        OperandCondition condition = (OperandCondition) base.stack.pollLast();
 
-                    if (operand instanceof OperandCondition) {
-                        OperandCondition condition = (OperandCondition) operand;
+                        // disconnect from base node
                         base.disconnect(condition.transition);
+                        base.disconnect(condition.transitionThen);
+
+                        // connect from created node
                         created.connect(condition.transition);
+                        created.connect(condition.transitionThen);
+
+                        // transfer operand
+                        created.stack.addFirst(condition);
                     }
-                    created.stack.addFirst(operand);
+
+                    // connect from base to created
+                    base.connect(created);
+                } else if (conditionalHead) {
+                    // [condition] [non-condition]
+                    Node created = createNodeAfter(base);
+
+                    // transfer operand
+                    for (int i = 0; i < start; i++) {
+                        created.stack.addFirst(base.stack.pollLast());
+                    }
+
+                    // search non-conditional operand's transition
+                    Set<Node> transitions = new HashSet(base.outgoing);
+
+                    for (OperandCondition condition : conditions) {
+                        transitions.remove(condition.transition);
+                    }
+
+                    for (Node transition : transitions) {
+                        // disconnect from base
+                        base.disconnect(transition);
+
+                        // connect from created
+                        created.connect(transition);
+                    }
+
+                    // connect from base to created
+                    base.connect(created);
                 }
             }
         }
@@ -2334,6 +2371,41 @@ class JavaMethodCompiler extends MethodVisitor {
 
     /**
      * <p>
+     * Create new node after the specified node.
+     * </p>
+     * 
+     * @param index A index node.
+     * @return A created node.
+     */
+    private final Node createNodeAfter(Node index) {
+        Node created = new Node(counter++);
+
+        // switch line number
+        created.number = index.number;
+        index.number = -1;
+
+        int nodeIndex = nodes.indexOf(index) + 1;
+
+        // switch previous and next nodes
+        // index -> created -> next
+        Node next = index.next;
+        if (next != null) next.previous = created;
+        created.previous = index;
+        index.next = created;
+        created.next = next;
+
+        // insert to node list
+        nodes.add(nodeIndex, created);
+
+        Debugger.print("Create node" + created.id + " after node" + index.id + ".");
+        Debugger.print(nodes);
+
+        // API definition
+        return created;
+    }
+
+    /**
+     * <p>
      * Helper method to dispose the specified node.
      * </p>
      */
@@ -2348,8 +2420,6 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private final void disposeNode(Node target, boolean clearStack) {
         if (nodes.remove(target)) {
-            target.isDisposed = true;
-
             Node next = target.next;
             Node previous = target.previous;
 

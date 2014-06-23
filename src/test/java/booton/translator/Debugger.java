@@ -43,6 +43,8 @@ public class Debugger extends AnnotationVisitor {
     // initialization
     static {
         enable(".+AttributeEntry", "equals");
+        enable(".+Iterable", "forEach");
+        enable(".+AnnotatedElement", "getDeclaredAnnotation");
 
         boolean flag = false;
 
@@ -167,24 +169,6 @@ public class Debugger extends AnnotationVisitor {
 
         System.out.println(text);
         System.out.println(format(nodes));
-    }
-
-    /**
-     * <p>
-     * Print method info.
-     * </p>
-     */
-    public static void printInfo() {
-        System.out.println(link(false));
-    }
-
-    /**
-     * <p>
-     * Print method info.
-     * </p>
-     */
-    public static void printInfo(String text) {
-        System.out.println(text + "   " + link(false));
     }
 
     /**
