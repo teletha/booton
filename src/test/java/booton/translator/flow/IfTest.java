@@ -14,7 +14,6 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
-import booton.translator.Debuggable;
 
 /**
  * @version 2013/08/11 9:53:05
@@ -226,7 +225,6 @@ public class IfTest extends ScriptTester {
     public void shorthand() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int o) {
                 if (o == 2) return o + 3;
                 return o;
