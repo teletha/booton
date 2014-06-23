@@ -99,8 +99,6 @@ class Node {
     /** The associated loop structure. */
     private LoopStructure loop;
 
-    public boolean isDisposed;
-
     /**
      * @param label
      */
