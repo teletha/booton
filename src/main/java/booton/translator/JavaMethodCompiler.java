@@ -329,13 +329,14 @@ class JavaMethodCompiler extends MethodVisitor {
 
             // Resolve shorthand syntax sugar of "if" statement.
             if (node.stack.peekFirst() instanceof OperandCondition && node.outgoing.size() == 1) {
+                Debugger.print("SHORT " + node.id);
                 Debugger.print(nodes);
 
                 // create condition node
-                Node condition = createNodeBefore(node);
-                condition.connect(node);
-                condition.connect(node.outgoing.get(0));
-                condition.stack.add(node.stack.pollFirst().invert());
+                Node created = createNodeBefore(node);
+                created.connect(node);
+                created.connect(node.outgoing.get(0));
+                created.stack.add(node.stack.pollFirst().invert());
             }
 
             // Separate conditional operands.
@@ -1506,9 +1507,10 @@ class JavaMethodCompiler extends MethodVisitor {
 
                         start.set(index, right);
                     } else {
-                        Debugger.print("Stop merging at " + start.id);
+                        Debugger.print("Stop merging at " + start.id + "  left[" + left + "]  right[" + right + "]");
                         Debugger.print(nodes);
-                        break;
+                        right = left;
+                        left = null;
                     }
                 }
             } else {
