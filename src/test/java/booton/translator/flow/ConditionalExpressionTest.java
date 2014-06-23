@@ -100,7 +100,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void logicalAll() {
         test(new Scriptable() {
 
-            @Debuggable
             public boolean act(int value) {
                 return -2 < value && value < 2 ? value != 0 : value == 2;
             }
@@ -111,7 +110,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void logicalAllUnformat() {
         test(new Scriptable() {
 
-            @Debuggable
             public boolean act(int value) {
                 // @formatter:off
                 return -2 < value && value < 2 

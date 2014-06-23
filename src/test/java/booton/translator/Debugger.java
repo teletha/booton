@@ -44,6 +44,7 @@ public class Debugger extends AnnotationVisitor {
     static {
         enable(".+AttributeEntry", "equals");
         enable(".+Iterable", "forEach");
+        enable(".+IntIteratorSpliterator", "forEachRemaining");
 
         boolean flag = false;
 

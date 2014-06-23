@@ -325,23 +325,8 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         for (int i = nodes.size() - 1; 0 <= i; i--) {
-            Node node = nodes.get(i);
-
-            // Resolve shorthand syntax sugar of "if" statement.
-            if (node.stack.peekFirst() instanceof OperandCondition && node.outgoing.size() == 1) {
-                Debugger.print("SHORT " + node.id);
-                Debugger.print(nodes);
-
-                // create condition node
-                Node created = createNodeBefore(node);
-                created.connect(node);
-                created.connect(node.outgoing.get(0));
-                created.stack.add(node.stack.pollFirst().invert());
-            }
-
             // Separate conditional operands.
-            SequentialConditionInfo info = new SequentialConditionInfo(node);
-            info.split();
+            new SequentialConditionInfo(nodes.get(i)).split();
         }
 
         // Search all backedge nodes.
@@ -1570,11 +1555,6 @@ class JavaMethodCompiler extends MethodVisitor {
         private final boolean conditionalTail;
 
         /**
-         * The flag whether this node has mixed contents (conditional and non-conditional operands).
-         */
-        private final boolean mixed;
-
-        /**
          * <p>
          * Search the sequencial conditional operands in the specified node from right to left.
          * </p>
@@ -1620,7 +1600,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
             this.conditionalHead = node.stack.size() == start + conditions.size();
             this.conditionalTail = start == 0 && !conditions.isEmpty();
-            this.mixed = conditions.size() != 0 && conditions.size() != node.stack.size();
         }
 
         /**
@@ -1633,6 +1612,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (size != 0 && size != base.stack.size()) {
                 if (conditionalTail) {
+                    // transfer condition operands to the created node
                     // [non-condition] [condition]
                     Node created = createNodeAfter(base);
 
@@ -1654,12 +1634,19 @@ class JavaMethodCompiler extends MethodVisitor {
                     // connect from base to created
                     base.connect(created);
                 } else if (conditionalHead) {
+                    // transfer non-condition operands to the created node
                     // [condition] [non-condition]
                     Node created = createNodeAfter(base);
+                    boolean returned = false;
 
                     // transfer operand
                     for (int i = 0; i < start; i++) {
-                        created.stack.addFirst(base.stack.pollLast());
+                        Operand operand = base.stack.pollLast();
+
+                        if (operand == Return || operand == Node.Return) {
+                            returned = true;
+                        }
+                        created.stack.addFirst(operand);
                     }
 
                     // search non-conditional operand's transition
@@ -1679,6 +1666,13 @@ class JavaMethodCompiler extends MethodVisitor {
 
                     // connect from base to created
                     base.connect(created);
+
+                    // connect from created to next
+                    if (base.go == null) {
+                        if (!returned) created.connect(created.next);
+                    } else {
+                        created.connect(base.go);
+                    }
                 }
             }
         }
@@ -2068,7 +2062,8 @@ class JavaMethodCompiler extends MethodVisitor {
         case NEW:
             if (assertNew) {
                 assertNew = false;
-                current = createNodeAfter(current, null);
+                current = createNodeAfter(current);
+                current.previous.connect(current);
                 current.number = current.previous.number;
 
                 mergeConditions(current.previous, current);
@@ -2285,90 +2280,6 @@ class JavaMethodCompiler extends MethodVisitor {
             }
         }
         throw new TranslationError();
-    }
-
-    /**
-     * <p>
-     * Create new node before the specified node.
-     * </p>
-     * 
-     * @param index A index node.
-     * @return A created node.
-     */
-    private final Node createNodeBefore(Node index) {
-        Node created = new Node(counter++);
-
-        // switch line number
-        created.number = index.number;
-        index.number = -1;
-
-        // switch previous and next nodes
-        // previous -> created -> index
-        Node previous = index.previous;
-        index.previous = created;
-        created.previous = previous;
-        if (previous != null) previous.next = created;
-        created.next = index;
-
-        // switch incoming node
-        ArrayList<Node> list = new ArrayList(index.incoming);
-
-        for (Node incoming : list) {
-            incoming.disconnect(index);
-            incoming.connect(created);
-        }
-
-        // link
-        created.connect(index);
-
-        // insert to node list
-        nodes.add(nodes.indexOf(index), created);
-
-        Debugger.print("Create node" + created.id + " before node" + index.id + ".");
-        Debugger.print(nodes);
-
-        // API definition
-        return created;
-    }
-
-    /**
-     * <p>
-     * Create new node after the specified node.
-     * </p>
-     * 
-     * @param index A index node.
-     * @return A created node.
-     */
-    private final Node createNodeAfter(Node index, Node link) {
-        Node created = new Node(counter++);
-
-        // switch line number
-        created.number = index.number;
-        index.number = -1;
-
-        int nodeIndex = nodes.indexOf(index) + 1;
-
-        // switch previous and next nodes
-        // index -> created -> next
-        Node next = index.next;
-        if (next != null) next.previous = created;
-        created.previous = index;
-        index.next = created;
-        created.next = next;
-
-        // link
-        index.disconnect(link);
-        index.connect(created);
-        created.connect(link);
-
-        // insert to node list
-        nodes.add(nodeIndex, created);
-
-        Debugger.print("Create node" + created.id + " after node" + index.id + ".");
-        Debugger.print(nodes);
-
-        // API definition
-        return created;
     }
 
     /**
