@@ -1452,7 +1452,7 @@ class JavaMethodCompiler extends MethodVisitor {
             if (current.previous.stack.size() != 0) {
                 if (current.peek(0) != Node.END) {
 
-                    mergeConditions(current.previous, current);
+                    mergeConditions(current.previous);
                 }
             }
         }
@@ -1463,32 +1463,31 @@ class JavaMethodCompiler extends MethodVisitor {
      * Helper method to merge all conditional operands.
      * </p>
      */
-    private void mergeConditions(Node start, Node initialTransition) {
-        SequentialConditionInfo info = new SequentialConditionInfo(start);
+    private void mergeConditions(Node node) {
+        SequentialConditionInfo info = new SequentialConditionInfo(node);
 
-        if (!info.isValid(initialTransition)) {
+        if (info.conditions.isEmpty()) {
             return;
         }
 
         // Search and merge the sequencial conditional operands in this node from right to left.
-        int offset = info.start;
-        int size = info.conditions.size();
+        int start = info.start;
         OperandCondition left = null;
-        OperandCondition right = (OperandCondition) start.peek(offset);
+        OperandCondition right = (OperandCondition) node.peek(start);
 
-        for (int index = 1; index < size; index++) {
-            left = (OperandCondition) start.peek(offset + index);
+        for (int index = 1; index < info.conditions.size(); index++) {
+            left = (OperandCondition) node.peek(start + index);
 
             if (info.canMerge(left, right)) {
-                Debugger.print("Merge conditions. left[" + left + "]  right[" + right + "] start: " + start.id);
+                Debugger.print("Merge conditions. left[" + left + "]  right[" + right + "] start: " + node.id);
                 Debugger.print(nodes);
 
                 // Merge two adjucent conditional operands.
-                right = new OperandCondition(left, (OperandCondition) start.remove(--offset + index));
+                right = new OperandCondition(left, (OperandCondition) node.remove(--start + index));
 
-                start.set(offset + index, right);
+                node.set(start + index, right);
             } else {
-                Debugger.print("Stop merging at " + start.id + "  left[" + left + "]  right[" + right + "]");
+                Debugger.print("Stop merging at " + node.id + "  left[" + left + "]  right[" + right + "]");
                 Debugger.print(nodes);
                 right = left;
                 left = null;
@@ -1497,26 +1496,18 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // If the previous node is terminated by conditional operand and the target node is started
         // by conditional operand, we should try to merge them.
-        if (info.conditionalHead && start.previous != null) {
-            Operand operand = start.previous.peek(0);
+        if (info.conditionalHead && node.previous != null) {
+            Operand operand = node.previous.peek(0);
 
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
 
-                if (info.transitions.contains(condition.transition)) {
-                    if (!info.canMergeBetweenNodes(condition, start.previous, (OperandCondition) start.stack.peekFirst(), start)) {
-                        Debugger.print("Stop dispose node " + start.id);
-                        return;
-                    }
-                    Debugger.print("Dispose node " + start.id + " after mergeConditions.", nodes);
-                    disposeNode(start);
-
-                    if (condition.transitionThen == start) {
-                        condition.transitionThen = null;
-                    }
+                if (info.canMerge(condition, right) && condition.transitionThen == node) {
+                    Debugger.print("Dispose node " + node.id + " after mergeConditions.", nodes);
+                    disposeNode(node);
 
                     // Merge recursively
-                    mergeConditions(start.previous, initialTransition);
+                    mergeConditions(node.previous);
                 }
             }
         }
@@ -1535,9 +1526,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
         /** The sequential conditions. */
         private ArrayList<OperandCondition> conditions = new ArrayList();
-
-        /** The transition group for conditions. */
-        private Set<Node> transitions = new HashSet();
 
         /** The flag whether this node is started by conditional operand or not. */
         private final boolean conditionalHead;
@@ -1580,9 +1568,6 @@ class JavaMethodCompiler extends MethodVisitor {
                     if (condition.transitionThen == null && condition.transition != node.next) {
                         condition.transitionThen = node.next;
                     }
-
-                    transitions.add(condition.transition);
-                    transitions.add(condition.transitionThen);
                 } else {
                     // this is last condition
                 }
@@ -1668,31 +1653,10 @@ class JavaMethodCompiler extends MethodVisitor {
             }
         }
 
-        private boolean isValid(Node transition) {
-            // check sequence size
-            if (conditions.isEmpty()) {
-                return false;
-            }
-
-            return true;
-        }
-
         private boolean canMerge(OperandCondition left, OperandCondition right) {
-            if (left.transitionThen != null) {
-                return false;
-            }
-
             if (left.transition == right.transition || left.transition == right.transitionThen) {
                 return true;
             }
-            return false;
-        }
-
-        private boolean canMergeBetweenNodes(OperandCondition left, Node leftNode, OperandCondition right, Node rightNode) {
-            if (left.transitionThen == rightNode) {
-                return true;
-            }
-
             return false;
         }
     }
@@ -2046,7 +2010,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.previous.connect(current);
                 current.number = current.previous.number;
 
-                mergeConditions(current.previous, current);
+                mergeConditions(current.previous);
             }
             countInitialization++;
 
