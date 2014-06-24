@@ -9,6 +9,8 @@
  */
 package booton.translator;
 
+import static booton.translator.JavaMethodCompiler.*;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,9 +25,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @version 2013/11/28 0:15:36
  */
 class Node {
-
-    /** The re-usable operand. */
-    static final OperandExpression Return = new OperandExpression("return");
 
     /** The re-usable operand. */
     static final Operand END = new OperandExpression(";");
