@@ -170,7 +170,7 @@ class JavaMethodCompiler extends MethodVisitor {
     private static final OperandNumber ONE = new OperandNumber(1);
 
     /** The frequently used operand for cache. */
-    private static final OperandExpression Return = new OperandExpression("return ");
+    static final OperandExpression Return = new OperandExpression("return ");
 
     /** The java source(byte) code. */
     private final Javascript script;
@@ -924,7 +924,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case RETURN:
-            current.addExpression(Node.Return);
+            current.addExpression(Return);
 
             // disconnect the next appearing node from the current node
             current = null;
@@ -1450,10 +1450,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.previous = nodes.get(nodes.size() - 2);
 
             if (current.previous.stack.size() != 0) {
-                if (current.peek(0) != Node.END) {
-
-                    mergeConditions(current.previous);
-                }
+                mergeConditions(current.previous);
             }
         }
     }
@@ -1543,6 +1540,8 @@ class JavaMethodCompiler extends MethodVisitor {
         private SequentialConditionInfo(Node node) {
             this.base = node;
 
+            boolean returned = false;
+
             // Search the sequential conditional operands in the specified node from right to left.
             for (int index = 0; index < node.stack.size(); index++) {
                 Operand operand = node.peek(index);
@@ -1550,6 +1549,9 @@ class JavaMethodCompiler extends MethodVisitor {
                 if (operand instanceof OperandCondition == false) {
                     // non-conditional operand is found
                     if (conditions.isEmpty()) {
+                        if (operand == Return) {
+                            returned = true;
+                        }
                         // conditional operand is not found as yet, so we should continue to search
                         continue;
                     } else {
@@ -1565,7 +1567,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     // this is first condition
                     start = index;
 
-                    if (condition.transitionThen == null && condition.transition != node.next) {
+                    if (!returned && condition.transitionThen == null && condition.transition != node.next) {
                         condition.transitionThen = node.next;
                     }
                 } else {
@@ -1619,7 +1621,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     for (int i = 0; i < start; i++) {
                         Operand operand = base.stack.pollLast();
 
-                        if (operand == Return || operand == Node.Return) {
+                        if (operand == Return) {
                             returned = true;
                         }
                         created.stack.addFirst(operand);
