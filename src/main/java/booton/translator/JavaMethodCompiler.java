@@ -1657,6 +1657,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     break;
                 } else {
                     // merge two adjucent conditional operands
+                    Debugger.info("merge", nodes);
                     node.set(--index, new OperandCondition(left, (OperandCondition) node.remove(index)));
                 }
             }
