@@ -1394,6 +1394,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (current.destination == null) {
                 current.connect(next);
+                current.destination = next;
             }
         }
         current = next;
@@ -1544,8 +1545,8 @@ class JavaMethodCompiler extends MethodVisitor {
                     // this is first condition
                     start = index;
 
-                    if (!returned && condition.transitionThen == null && condition.transition != node.next) {
-                        condition.transitionThen = node.next;
+                    if (!returned && condition.transitionThen == null && condition.transition != node.destination) {
+                        condition.transitionThen = node.destination;
                     }
                 } else {
                     // this is last condition
@@ -1617,7 +1618,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     base.connect(created);
 
                     // connect from created to next
-                    created.connect(base.destination == null ? created.next : base.destination);
+                    created.connect(base.destination == null ? created.destination : base.destination);
                 }
             }
         }
