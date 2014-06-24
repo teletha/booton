@@ -2182,14 +2182,16 @@ class JavaMethodCompiler extends MethodVisitor {
      * @return A last node.
      */
     private final Node link(Node... nodes) {
-        for (int i = 1; i < nodes.length; i++) {
-            Node prev = nodes[i - 1];
-            Node next = nodes[i];
+        int size = nodes.length - 1;
+
+        for (int i = 0; i < size; i++) {
+            Node prev = nodes[i];
+            Node next = nodes[i + 1];
 
             if (prev != null) prev.next = next;
             if (next != null) next.previous = prev;
         }
-        return nodes[nodes.length - 1];
+        return nodes[size];
     }
 
     /**
