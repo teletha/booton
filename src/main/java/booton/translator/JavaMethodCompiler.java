@@ -324,8 +324,8 @@ class JavaMethodCompiler extends MethodVisitor {
             disposeNode(node, true);
         }
 
+        // Separate conditional operands.
         for (int i = nodes.size() - 1; 0 <= i; i--) {
-            // Separate conditional operands.
             new SequentialConditionInfo(nodes.get(i)).split();
         }
 
@@ -1470,36 +1470,28 @@ class JavaMethodCompiler extends MethodVisitor {
             return;
         }
 
-        OperandCondition left = null;
-        OperandCondition right = null;
-
         // Search and merge the sequencial conditional operands in this node from right to left.
-        for (int index = 0; index < start.stack.size(); index++) {
-            Operand operand = start.peek(index);
+        int offset = info.start;
+        int size = info.conditions.size();
+        OperandCondition left = null;
+        OperandCondition right = (OperandCondition) start.peek(offset);
 
-            if (operand instanceof OperandCondition) {
-                if (right == null) {
-                    right = (OperandCondition) operand;
-                } else {
-                    left = (OperandCondition) operand;
+        for (int index = 1; index < size; index++) {
+            left = (OperandCondition) start.peek(offset + index);
 
-                    if (info.canMerge(left, right)) {
-                        Debugger.print("Merge conditions. left[" + left + "]  right[" + right + "] start: " + start.id);
-                        Debugger.print(nodes);
+            if (info.canMerge(left, right)) {
+                Debugger.print("Merge conditions. left[" + left + "]  right[" + right + "] start: " + start.id);
+                Debugger.print(nodes);
 
-                        // Merge two adjucent conditional operands.
-                        right = new OperandCondition(left, (OperandCondition) start.remove(--index));
+                // Merge two adjucent conditional operands.
+                right = new OperandCondition(left, (OperandCondition) start.remove(--offset + index));
 
-                        start.set(index, right);
-                    } else {
-                        Debugger.print("Stop merging at " + start.id + "  left[" + left + "]  right[" + right + "]");
-                        Debugger.print(nodes);
-                        right = left;
-                        left = null;
-                    }
-                }
+                start.set(offset + index, right);
             } else {
-                left = right = null;
+                Debugger.print("Stop merging at " + start.id + "  left[" + left + "]  right[" + right + "]");
+                Debugger.print(nodes);
+                right = left;
+                left = null;
             }
         }
 
@@ -1512,7 +1504,6 @@ class JavaMethodCompiler extends MethodVisitor {
                 OperandCondition condition = (OperandCondition) operand;
 
                 if (info.transitions.contains(condition.transition)) {
-
                     if (!info.canMergeBetweenNodes(condition, start.previous, (OperandCondition) start.stack.peekFirst(), start)) {
                         Debugger.print("Stop dispose node " + start.id);
                         return;
@@ -1543,7 +1534,7 @@ class JavaMethodCompiler extends MethodVisitor {
         private Node base;
 
         /** The sequential conditions. */
-        private Deque<OperandCondition> conditions = new ArrayDeque();
+        private ArrayList<OperandCondition> conditions = new ArrayList();
 
         /** The transition group for conditions. */
         private Set<Node> transitions = new HashSet();
@@ -1682,17 +1673,6 @@ class JavaMethodCompiler extends MethodVisitor {
             if (conditions.isEmpty()) {
                 return false;
             }
-
-            // // check transition group
-            // Set<Node> group = new HashSet();
-            // group.add(transition);
-            // group.add(conditions.getFirst().transition);
-            //
-            // for (OperandCondition condition : conditions) {
-            // if (!group.contains(condition.transition)) {
-            // return false;
-            // }
-            // }
 
             return true;
         }
