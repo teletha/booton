@@ -161,6 +161,12 @@ public class Debugger extends AnnotationVisitor {
                 for (Node node : list) {
                     nodes.addIfAbsent(node);
                 }
+            } else if (value instanceof Set) {
+                Set<Node> list = (Set<Node>) value;
+
+                for (Node node : list) {
+                    nodes.addIfAbsent(node);
+                }
             } else {
                 text.append(value);
             }
