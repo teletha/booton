@@ -10,6 +10,7 @@
 package booton.translator;
 
 import static booton.translator.Javascript.*;
+import static booton.translator.Node.*;
 import static booton.translator.OperandCondition.*;
 import static jdk.internal.org.objectweb.asm.Opcodes.*;
 import static jdk.internal.org.objectweb.asm.Type.*;
@@ -168,9 +169,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
     /** The frequently used operand for cache. */
     private static final OperandNumber ONE = new OperandNumber(1);
-
-    /** The frequently used operand for cache. */
-    static final OperandExpression Return = new OperandExpression("return ");
 
     /** The java source(byte) code. */
     private final Javascript script;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -8,8 +8,6 @@
  *          http://opensource.org/licenses/mit-license.php
  */
 package booton.translator;
-
-import static booton.translator.JavaMethodCompiler.*;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -22,12 +20,15 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * @version 2013/11/28 0:15:36
+ * @version 2014/06/24 17:06:45
  */
 class Node {
 
-    /** The re-usable operand. */
-    static final Operand END = new OperandExpression(";");
+    /** The frequently used operand for cache. */
+    static final OperandExpression END = new OperandExpression(";");
+
+    /** The frequently used operand for cache. */
+    static final OperandExpression Return = new OperandExpression("return ");
 
     /** The identified label for this node. */
     final int id;
