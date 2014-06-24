@@ -1387,17 +1387,12 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // build next node
         Node next = getNode(label);
-        next.previous = current; // link in the order they occur in the bytecode
 
-        if (current != null) {
-            current.next = next; // link in the order they occur in the bytecode
-
-            if (current.destination == null) {
-                current.connect(next);
-                current.destination = next;
-            }
+        if (current != null && current.destination == null) {
+            current.connect(next);
+            current.destination = next;
         }
-        current = next;
+        current = link(current, next);
 
         /**
          * The following bytecode must be normalized.
@@ -2180,6 +2175,25 @@ class JavaMethodCompiler extends MethodVisitor {
 
     /**
      * <p>
+     * Link all nodes as order of appearance.
+     * </p>
+     * 
+     * @param nodes A sequence of nodes.
+     * @return A last node.
+     */
+    private final Node link(Node... nodes) {
+        for (int i = 1; i < nodes.length; i++) {
+            Node prev = nodes[i - 1];
+            Node next = nodes[i];
+
+            if (prev != null) prev.next = next;
+            if (next != null) next.previous = prev;
+        }
+        return nodes[nodes.length - 1];
+    }
+
+    /**
+     * <p>
      * Create new node after the specified node.
      * </p>
      * 
@@ -2193,18 +2207,12 @@ class JavaMethodCompiler extends MethodVisitor {
         created.number = index.number;
         index.number = -1;
 
-        int nodeIndex = nodes.indexOf(index) + 1;
-
         // switch previous and next nodes
         // index -> created -> next
-        Node next = index.next;
-        if (next != null) next.previous = created;
-        created.previous = index;
-        index.next = created;
-        created.next = next;
+        link(index, created, index.next);
 
         // insert to node list
-        nodes.add(nodeIndex, created);
+        nodes.add(nodes.indexOf(index) + 1, created);
 
         Debugger.print("Create node" + created.id + " after node" + index.id + ".");
         Debugger.print(nodes);
@@ -2229,21 +2237,7 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private final void disposeNode(Node target, boolean clearStack) {
         if (nodes.remove(target)) {
-            Node next = target.next;
-            Node previous = target.previous;
-
-            if (next != null) {
-                next.previous = null;
-            }
-
-            if (previous != null) {
-                previous.next = null;
-            }
-
-            if (previous != null && next != null) {
-                next.previous = previous;
-                previous.next = next;
-            }
+            link(target.previous, target.next);
 
             // Connect from incomings to outgouings
             for (Node out : target.outgoing) {
