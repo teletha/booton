@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
+import booton.translator.Debuggable;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 
@@ -859,6 +860,7 @@ public class ClassTest {
     }
 
     @Test
+    @Debuggable
     public void getPackage() throws Exception {
         java.lang.Package p = String.class.getPackage();
         assert p != null;

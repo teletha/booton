@@ -1442,14 +1442,7 @@ class JavaMethodCompiler extends MethodVisitor {
         nodes.add(current);
 
         if (1 < nodes.size()) {
-            if (current.previous != nodes.get(nodes.size() - 2)) {
-                // Debugger.info("DIFF ", current.previous, nodes.get(nodes.size() - 2));
-            }
-            current.previous = nodes.get(nodes.size() - 2);
-
-            if (current.previous.stack.size() != 0) {
-                mergeConditions(current.previous);
-            }
+            mergeConditions(current.previous);
         }
     }
 
@@ -2250,6 +2243,8 @@ class JavaMethodCompiler extends MethodVisitor {
         created.previous = index;
         index.next = created;
         created.next = next;
+
+        latest = created;
 
         // insert to node list
         nodes.add(nodeIndex, created);
