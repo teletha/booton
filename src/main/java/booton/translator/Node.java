@@ -24,6 +24,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 class Node {
 
+    /** The representation of node termination. */
+    static final Node Termination = new Node(0);
+
     /** The frequently used operand for cache. */
     static final OperandExpression END = new OperandExpression(";");
 
@@ -54,20 +57,17 @@ class Node {
     /** The line number. */
     int number = -1;
 
-    /** The previous node. */
+    /** The previous node by order of appearance. */
     Node previous;
 
-    /** The next node. */
+    /** The next node by order of appearance. */
     Node next;
 
-    /** The flag whether this node has additional frame or not. */
-    boolean frame;
-
-    /** The flag whether this node is logical condition or not. */
-    boolean logical;
-
-    /** The flag whether this node has goto instruction or not. */
-    Node go;
+    /**
+     * The next node by jump destination. If this node has return or throw operand, this property
+     * will be {@link #Termination}.
+     */
+    Node destination;
 
     /** This node is switch starting node. */
     private Switch switchy;
@@ -461,15 +461,10 @@ class Node {
      * @param node A target node.
      */
     final void connect(Node node) {
-        if (node != null) {
-            boolean out = outgoing.addIfAbsent(node);
-            boolean in = node.incoming.addIfAbsent(this);
-
-            if (!out && !in) {
-                logical = true;
-            }
+        if (node != null && node != Termination) {
+            outgoing.addIfAbsent(node);
+            node.incoming.addIfAbsent(this);
         }
-
     }
 
     /**
@@ -480,7 +475,7 @@ class Node {
      * @param node A target node.
      */
     final void disconnect(Node node) {
-        if (node != null) {
+        if (node != null && node != Termination) {
             outgoing.remove(node);
             node.incoming.remove(this);
         }

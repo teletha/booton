@@ -370,18 +370,6 @@ public class Debugger extends AnnotationVisitor {
             }
             format.write("code : ");
             format.formatCodeFragment(node.stack);
-
-            format.write("\t");
-
-            if (node.logical) {
-                format.write("L");
-            }
-            if (node.frame) {
-                format.write("F");
-            }
-            if (node.go != null) {
-                format.write("G" + node.go.id);
-            }
             format.write("\r\n");
         }
         return format.toString();

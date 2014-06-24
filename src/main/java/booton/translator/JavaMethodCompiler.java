@@ -500,8 +500,6 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
-        current.frame = true;
-
         switch (type) {
         case F_NEW:
             record(FRAME_NEW);
@@ -925,7 +923,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.addExpression(Return);
 
             // disconnect the next appearing node from the current node
-            current = null;
+            current.destination = Termination;
             break;
 
         case IRETURN:
@@ -963,7 +961,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.addExpression(Return, operand);
 
             // disconnect the next appearing node from the current node
-            current = null;
+            current.destination = Termination;
             break;
 
         case ARETURN:
@@ -973,7 +971,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.addExpression(Return, current.remove(match(DUP, JUMP, ARETURN) ? 1 : 0));
 
             // disconnect the next appearing node from the current node
-            current = null;
+            current.destination = Termination;
             break;
 
         // write array value by index
@@ -1040,7 +1038,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.addExpression("throw ", current.remove(0));
 
             // disconnect the next appearing node from the current node
-            current = null;
+            current.destination = Termination;
             break;
 
         // numerical comparison operator for long, float and double primitives
@@ -1252,15 +1250,15 @@ class JavaMethodCompiler extends MethodVisitor {
 
         switch (opcode) {
         case GOTO:
-            connect(label);
-            current.go = getNode(label);
+            Node destination = getNode(label);
+            current.connect(destination);
+            current.destination = destination;
 
             if (match(JUMP, GOTO)) {
                 ((OperandCondition) current.peek(0)).transitionThen = getNode(label);
             }
 
             // disconnect the next appearing node from the current node
-            current = null;
             return;
 
         case IFEQ: // == 0
@@ -1376,10 +1374,8 @@ class JavaMethodCompiler extends MethodVisitor {
             current.condition(current.remove(1), LT, current.remove(0), node);
             break;
         }
-        connect(label);
+        current.connect(getNode(label));
     }
-
-    private Node latest;
 
     /**
      * {@inheritDoc}
@@ -1389,28 +1385,18 @@ class JavaMethodCompiler extends MethodVisitor {
         // recode current instruction
         record(LABEL);
 
-        // Basically, visitLabel method is called each expression. But the following patterns are
-        // exception so we must deal with them.
-        //
-        // Logical Expression Result with Return
-        // A logical expression result (e.g. return i == 1;) is represented as [ICONST_0, IRETURN,
-        // LABEL, ICONST_1, IRETURN] in bytecode.
-        //
-        // Logical Expression Result
-        // A logical expression result (e.g. boolean b = (i == 1);) is represented as [ICONST_0,
-        // GOTO, LABEL, ICONST_1, LABEL] in bytecode.
-        //
-        // Ternary Operator
-        // Ternary operator (e.g. int i = (j == 0) ? 0 : 1;) is represented as [LABEL,
-        // THEN_EXPRESSION, GOTO, LABEL, ELSE_EXPRESSION, LABEL] in bytecode.
+        // build next node
+        Node next = getNode(label);
+        next.previous = current; // link in the order they occur in the bytecode
 
-        // build new node
-        current = connect(label);
+        if (current != null) {
+            current.next = next; // link in the order they occur in the bytecode
 
-        // link in the order they occur in the bytecode
-        current.previous = latest;
-        if (latest != null) latest.next = current;
-        latest = current;
+            if (current.destination == null) {
+                current.connect(next);
+            }
+        }
+        current = next;
 
         /**
          * The following bytecode must be normalized.
@@ -1606,16 +1592,10 @@ class JavaMethodCompiler extends MethodVisitor {
                     // transfer non-condition operands to the created node
                     // [condition] [non-condition]
                     Node created = createNodeAfter(base);
-                    boolean returned = false;
 
                     // transfer operand
                     for (int i = 0; i < start; i++) {
-                        Operand operand = base.stack.pollLast();
-
-                        if (operand == Return) {
-                            returned = true;
-                        }
-                        created.stack.addFirst(operand);
+                        created.stack.addFirst(base.stack.pollLast());
                     }
 
                     // search non-conditional operand's transition
@@ -1637,11 +1617,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     base.connect(created);
 
                     // connect from created to next
-                    if (base.go == null) {
-                        if (!returned) created.connect(created.next);
-                    } else {
-                        created.connect(base.go);
-                    }
+                    created.connect(base.destination == null ? created.next : base.destination);
                 }
             }
         }
@@ -1652,24 +1628,6 @@ class JavaMethodCompiler extends MethodVisitor {
             }
             return false;
         }
-    }
-
-    /**
-     * Connect the current node and the specified label node.
-     * 
-     * @param label
-     * @return
-     */
-    private Node connect(Label label) {
-        // search cached node
-        Node node = getNode(label);
-
-        if (current != null) {
-            current.connect(node);
-        }
-
-        // API definition
-        return node;
     }
 
     /**
@@ -2244,8 +2202,6 @@ class JavaMethodCompiler extends MethodVisitor {
         index.next = created;
         created.next = next;
 
-        latest = created;
-
         // insert to node list
         nodes.add(nodeIndex, created);
 
@@ -2308,12 +2264,6 @@ class JavaMethodCompiler extends MethodVisitor {
                 if (target.previous != null) {
                     target.previous.stack.addAll(target.stack);
                 }
-            }
-
-            // copy frame info
-            // target.previous.frame = target.frame;
-            if (target.logical) {
-                target.previous.logical = true;
             }
 
             // Delete all operands from the current processing node
