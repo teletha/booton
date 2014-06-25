@@ -317,9 +317,7 @@ class JavaMethodCompiler extends MethodVisitor {
     public void visitEnd() {
         // Dispose all nodes which contains synchronized block.
         for (Node node : synchronizer) {
-            Debugger.print("Dispose synchronizer node" + node.id);
-            Debugger.print(nodes);
-            disposeNode(node, true);
+            dispose(node, true);
         }
 
         // Separate conditional operands.
@@ -524,7 +522,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (nLocal == 0 && nStack == 0) {
                 processTernaryOperator();
-                mergeConditions(current.previous);
+                merge(current.previous);
             }
             break;
 
@@ -574,7 +572,7 @@ class JavaMethodCompiler extends MethodVisitor {
             // [LEFT value]
             // [label]
             // [RIGHT value]
-            boolean transition = collect(((OperandCondition) third).transition).contains(right);
+            boolean transition = collect(((OperandCondition) third).then).contains(right);
 
             // The condition node must be dominator of the left and right nodes.
             boolean dominator = left.hasDominator(condition) && right.hasDominator(condition);
@@ -609,13 +607,11 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 // dispose empty nodes
                 if (right.stack.isEmpty()) {
-                    Debugger.print("Dispose first node " + right.id);
-                    disposeNode(right);
+                    dispose(right);
                 }
 
                 if (left.stack.isEmpty()) {
-                    Debugger.print("Dispose second node " + left.id);
-                    disposeNode(left);
+                    dispose(left);
                 }
 
                 // process recursively
@@ -938,7 +934,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.remove(0); // remove "return"
 
                 // remove empty node if needed
-                if (current.previous.stack.isEmpty()) disposeNode(current.previous);
+                if (current.previous.stack.isEmpty()) dispose(current.previous);
             } else if (match(JUMP, ICONST_1, IRETURN, LABEL, FRAME, ICONST_0, IRETURN) || match(JUMP, LABEL, FRAME, ICONST_1, IRETURN, LABEL, FRAME, ICONST_0, IRETURN)) {
                 // Current operands is like the following, so we must remove four operands to
                 // represent boolean value.
@@ -950,7 +946,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.remove(0); // remove "return"
 
                 // remove empty node if needed
-                if (current.previous.stack.isEmpty()) disposeNode(current.previous);
+                if (current.previous.stack.isEmpty()) dispose(current.previous);
 
                 // invert the latest condition
                 current.peek(0).invert();
@@ -1256,6 +1252,10 @@ class JavaMethodCompiler extends MethodVisitor {
         case GOTO:
             current.connect(node);
             current.destination = node;
+
+            if (match(JUMP, LABEL, GOTO) && current.previous.outgoing.size() == 3) {
+                dispose(current);
+            }
             return;
 
         case IFEQ: // == 0
@@ -1391,6 +1391,9 @@ class JavaMethodCompiler extends MethodVisitor {
         }
         current = link(current, next);
 
+        // debug code
+        Debugger.print("Visit label " + current.id);
+
         /**
          * The following bytecode must be normalized.
          * 
@@ -1410,18 +1413,16 @@ class JavaMethodCompiler extends MethodVisitor {
         if (match(JUMP, GOTO, LABEL)) {
             OperandCondition condition = (OperandCondition) current.peek(0);
 
-            if (condition.transition == current) {
+            if (condition.then == current) {
                 condition.invert();
             }
         }
-
-        Debugger.print("visit label " + current.id);
 
         // store the node in appearing order
         nodes.add(current);
 
         if (1 < nodes.size()) {
-            mergeConditions(current.previous);
+            merge(current.previous);
         }
     }
 
@@ -1430,7 +1431,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * Helper method to merge all conditional operands.
      * </p>
      */
-    private void mergeConditions(Node node) {
+    private void merge(Node node) {
         if (node == null) {
             return;
         }
@@ -1473,12 +1474,11 @@ class JavaMethodCompiler extends MethodVisitor {
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
 
-                if (info.canMerge(condition, right) && condition.transitionThen == node) {
-                    Debugger.print("Dispose node " + node.id + " after mergeConditions.", nodes);
-                    disposeNode(node);
+                if (info.canMerge(condition, right) && condition.elze == node) {
+                    dispose(node);
 
                     // Merge recursively
-                    mergeConditions(node.previous);
+                    merge(node.previous);
                 }
             }
         }
@@ -1541,8 +1541,8 @@ class JavaMethodCompiler extends MethodVisitor {
                     // this is first condition
                     start = index;
 
-                    if (!returned && condition.transitionThen == null && condition.transition != node.destination) {
-                        condition.transitionThen = node.destination;
+                    if (!returned && condition.elze == null && condition.then != node.destination) {
+                        condition.elze = node.destination;
                     }
                 } else {
                     // this is last condition
@@ -1572,12 +1572,12 @@ class JavaMethodCompiler extends MethodVisitor {
                         OperandCondition condition = (OperandCondition) base.stack.pollLast();
 
                         // disconnect from base node
-                        base.disconnect(condition.transition);
-                        base.disconnect(condition.transitionThen);
+                        base.disconnect(condition.then);
+                        base.disconnect(condition.elze);
 
                         // connect from created node
-                        created.connect(condition.transition);
-                        created.connect(condition.transitionThen);
+                        created.connect(condition.then);
+                        created.connect(condition.elze);
 
                         // transfer operand
                         created.stack.addFirst(condition);
@@ -1599,7 +1599,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     Set<Node> transitions = new HashSet(base.outgoing);
 
                     for (OperandCondition condition : conditions) {
-                        transitions.remove(condition.transition);
+                        transitions.remove(condition.then);
                     }
 
                     for (Node transition : transitions) {
@@ -1620,7 +1620,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         private boolean canMerge(OperandCondition left, OperandCondition right) {
-            if (left.transition == right.transition || left.transition == right.transitionThen) {
+            if (left.then == right.then || left.then == right.elze) {
                 return true;
             }
             return false;
@@ -1915,7 +1915,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.previous.connect(current);
                 current.number = current.previous.number;
 
-                mergeConditions(current.previous);
+                merge(current.previous);
             }
             countInitialization++;
 
@@ -2186,8 +2186,8 @@ class JavaMethodCompiler extends MethodVisitor {
      * Helper method to dispose the specified node.
      * </p>
      */
-    private final void disposeNode(Node target) {
-        disposeNode(target, false);
+    private final void dispose(Node target) {
+        dispose(target, false);
     }
 
     /**
@@ -2195,8 +2195,11 @@ class JavaMethodCompiler extends MethodVisitor {
      * Helper method to dispose the specified node.
      * </p>
      */
-    private final void disposeNode(Node target, boolean clearStack) {
+    private final void dispose(Node target, boolean clearStack) {
         if (nodes.remove(target)) {
+            Debugger.print("Dispose node" + target.id);
+            Debugger.print(nodes);
+
             link(target.previous, target.next);
 
             // Connect from incomings to outgouings
@@ -2209,6 +2212,20 @@ class JavaMethodCompiler extends MethodVisitor {
             // Remove the target node from its incomings and outgoings.
             for (Node node : target.incoming) {
                 node.disconnect(target);
+
+                for (Operand operand : node.stack) {
+                    if (operand instanceof OperandCondition) {
+                        OperandCondition condition = (OperandCondition) operand;
+
+                        if (condition.then == target) {
+                            condition.then = target.destination;
+                        }
+
+                        if (condition.elze == target) {
+                            condition.elze = target.destination;
+                        }
+                    }
+                }
             }
             for (Node node : target.outgoing) {
                 target.disconnect(node);
@@ -2230,7 +2247,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
             // dispose empty node recursively
             if (target.previous != null && target.previous.stack.isEmpty()) {
-                disposeNode(target.previous, clearStack);
+                dispose(target.previous, clearStack);
             }
         }
     }
