@@ -9,7 +9,6 @@
  */
 package booton.translator.flow;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import booton.soeur.Param;
@@ -282,7 +281,6 @@ public class ForTest extends ScriptTester {
     }
 
     @Test
-    @Ignore
     public void continueWithLogicalExpression() throws Exception {
         test(new Scriptable() {
 

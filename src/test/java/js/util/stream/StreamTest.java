@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ import org.junit.runner.RunWith;
 import booton.soeur.ScriptRunner;
 
 /**
- * @version 2013/11/04 7:17:43
+ * @version 2014/06/25 19:03:02
  */
 @RunWith(ScriptRunner.class)
 public class StreamTest {
