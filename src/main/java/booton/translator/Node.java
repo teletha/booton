@@ -776,17 +776,17 @@ class Node {
     private void writeIf(ScriptWriter buffer) {
         OperandCondition condition = (OperandCondition) stack.peekLast();
 
-        Debugger.info("IF: ", this, "  then: ", condition.then, " else: ", condition.elze, "  out0: ", outgoing.get(0), "  out1: ", outgoing.get(1));
-
-        if (condition.elze == outgoing.get(0)) {
-            condition.invert();
-        }
-
         Node then = null;
         Node elze = null;
         Node follow = null;
         Node one = outgoing.get(0);
         Node other = outgoing.get(1);
+
+        Debugger.info("IF: ", this, "  then: ", condition.then, " else: ", condition.elze, "  out0: ", one, "  out1: ", other);
+
+        if (condition.elze == one) {
+            condition.invert();
+        }
 
         if (one.backedges.isEmpty() && one.incoming.size() != 1) {
             if (one.getDominator() != this) {
