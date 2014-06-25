@@ -524,7 +524,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (nLocal == 0 && nStack == 0) {
                 processTernaryOperator();
-                Debugger.print(current.id);
                 mergeConditions(current.previous);
             }
             break;
@@ -923,8 +922,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
         case RETURN:
             current.addExpression(Return);
-
-            // disconnect the next appearing node from the current node
             current.destination = Termination;
             break;
 
@@ -972,8 +969,6 @@ class JavaMethodCompiler extends MethodVisitor {
             }
 
             current.addExpression(Return, operand);
-
-            // disconnect the next appearing node from the current node
             current.destination = Termination;
             break;
 
@@ -982,8 +977,6 @@ class JavaMethodCompiler extends MethodVisitor {
         case FRETURN:
         case DRETURN:
             current.addExpression(Return, current.remove(match(DUP, JUMP, ARETURN) ? 1 : 0));
-
-            // disconnect the next appearing node from the current node
             current.destination = Termination;
             break;
 
@@ -1049,8 +1042,6 @@ class JavaMethodCompiler extends MethodVisitor {
         // throw
         case ATHROW:
             current.addExpression("throw ", current.remove(0));
-
-            // disconnect the next appearing node from the current node
             current.destination = Termination;
             break;
 
@@ -1266,12 +1257,6 @@ class JavaMethodCompiler extends MethodVisitor {
             Node destination = getNode(label);
             current.connect(destination);
             current.destination = destination;
-
-            if (match(JUMP, GOTO)) {
-                ((OperandCondition) current.peek(0)).transitionThen = getNode(label);
-            }
-
-            // disconnect the next appearing node from the current node
             return;
 
         case IFEQ: // == 0
