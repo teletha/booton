@@ -1394,31 +1394,6 @@ class JavaMethodCompiler extends MethodVisitor {
         // debug code
         Debugger.print("Visit label " + current.id);
 
-        /**
-         * The following bytecode must be normalized.
-         * 
-         * <pre>
-         * // Before
-         * mv.visitJumpInsn(IFEQ, l1);
-         * mv.visitJumpInsn(GOTO, l2);
-         * mv.visitLabel(l1);
-         * </pre>
-         * 
-         * <pre>
-         * // After
-         * mv.visitJumpInsn(IFNE, l2);
-         * mv.visitLabel(l1);
-         * </pre>
-         */
-        if (match(JUMP, GOTO, LABEL)) {
-            OperandCondition condition = (OperandCondition) current.peek(0);
-
-            if (condition.then == current) {
-                Debugger.print("NEED?", nodes);
-                condition.invert();
-            }
-        }
-
         // store the node in appearing order
         nodes.add(current);
 
