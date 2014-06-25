@@ -296,7 +296,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void withLogical() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             boolean act(@Param(from = 0, to = 12) int value) {
                 return value % 2 == 0 && (value % 3 == 0 ? value == 6 : value == 7);
             }
