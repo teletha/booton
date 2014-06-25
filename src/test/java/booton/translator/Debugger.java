@@ -42,7 +42,6 @@ public class Debugger extends AnnotationVisitor {
 
     // initialization
     static {
-        enable(".+SortedList", "findPosition");
         // enable(".+IntIteratorSpliterator", "forEachRemaining");
 
         boolean flag = false;

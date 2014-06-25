@@ -782,9 +782,7 @@ class Node {
         Node one = outgoing.get(0);
         Node other = outgoing.get(1);
 
-        Debugger.print("IF: ", this, "  then: ", condition.then, " else: ", condition.elze, "  out0: ", one, "  out1: ", other);
-
-        if (condition.elze == one) {
+        if (condition.then == other) {
             condition.invert();
         }
 
@@ -839,8 +837,6 @@ class Node {
                  * }
                  * </pre>
                  */
-                condition.invert();
-
                 then = one;
                 elze = createConnectorNode(this, other);
                 follow = other;

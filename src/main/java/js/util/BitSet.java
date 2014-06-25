@@ -12,7 +12,6 @@ package js.util;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
-import booton.translator.Debuggable;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -72,7 +71,6 @@ class BitSet {
      * assumes that the number of words actually in use is less than or equal to the current value
      * of wordsInUse!
      */
-    @Debuggable
     private void recalculateWordsInUse() {
         // Traverse the bitset until a used word is found
         int i;

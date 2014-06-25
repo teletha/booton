@@ -14,7 +14,6 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
-import booton.translator.Debuggable;
 
 /**
  * @version 2014/06/25 15:46:51
@@ -269,7 +268,6 @@ public class ConditionalExpressionTest extends ScriptTester {
     public void ifConditionTernaryBoolean() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             String act(int value) {
                 if (value < 0 ? true : value == 2) {
                     return "yes";
