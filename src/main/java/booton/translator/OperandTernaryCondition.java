@@ -26,7 +26,7 @@ class OperandTernaryCondition extends OperandCondition {
 
         this.condition = condition;
 
-        if (left.transition == right.transition && left.transitionThen == right.transitionThen) {
+        if (left.then == right.then && left.elze == right.elze) {
             condition.invert();
         }
     }

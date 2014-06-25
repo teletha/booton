@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ import booton.soeur.Scriptable;
 import booton.translator.Debuggable;
 
 /**
- * @version 2013/08/09 15:50:42
+ * @version 2014/06/25 15:46:51
  */
 @SuppressWarnings("unused")
 public class ConditionalExpressionTest extends ScriptTester {

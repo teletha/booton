@@ -752,7 +752,7 @@ class Node {
             if (operand instanceof OperandCondition) {
                 OperandCondition condition = (OperandCondition) operand;
 
-                if (condition.transition != nodes[0]) {
+                if (condition.then != nodes[0]) {
                     condition.invert();
                 }
             }
@@ -776,7 +776,7 @@ class Node {
     private void writeIf(ScriptWriter buffer) {
         OperandCondition condition = (OperandCondition) stack.peekLast();
 
-        if (condition.transitionThen == outgoing.get(0)) {
+        if (condition.elze == outgoing.get(0)) {
             condition.invert();
         } else {
             // Debugger.info("NoInvert curent: ", this, "  normal: ", condition.transition,

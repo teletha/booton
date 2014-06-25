@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package booton.translator;
  * change depending on the content of the description of the logical expression.
  * </p>
  * 
- * @version 2013/08/31 21:33:37
+ * @version 2014/06/25 15:46:41
  */
 class OperandCondition extends Operand {
 
@@ -52,9 +52,9 @@ class OperandCondition extends Operand {
     Operand right;
 
     /** The transition node. */
-    Node transition;
+    Node then;
 
-    Node transitionThen;
+    Node elze;
 
     /** The operator of this conditional expression. */
     private int operator;
@@ -72,7 +72,7 @@ class OperandCondition extends Operand {
         this.left = left;
         this.right = right;
         this.operator = operator;
-        this.transition = transition;
+        this.then = transition;
     }
 
     /**
@@ -88,17 +88,17 @@ class OperandCondition extends Operand {
             this.right = new OperandCondition((OperandCondition) left.right, right);
             this.operator = left.operator;
         }
-        this.transition = right.transition;
-        this.transitionThen = right.transitionThen;
+        this.then = right.then;
+        this.elze = right.elze;
 
-        if (left.transition != right.transition) {
+        if (left.then != right.then) {
             this.left.invert();
             this.operator = ~this.operator;
         }
 
         // Make group if left transition node equals to transition node or next node of the
         // right condition node.
-        group = (left.transition == right.transitionThen || left.transition == right.transition);
+        group = left.then == right.then || left.then == right.elze;
     }
 
     /**
