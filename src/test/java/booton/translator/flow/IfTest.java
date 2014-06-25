@@ -14,7 +14,6 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
-import booton.translator.Debuggable;
 
 /**
  * @version 2013/08/11 9:53:05
@@ -318,7 +317,6 @@ public class IfTest extends ScriptTester {
     public void shorthandInNest() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int o) {
                 while (o < 10) {
                     o++;
