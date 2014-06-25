@@ -374,7 +374,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * @param node A target node to check.
      * @param recorder All passed nodes.
      */
-    private void searchBackEdge(Node node, Deque<Node> recorder) {
+    private final void searchBackEdge(Node node, Deque<Node> recorder) {
         // Store the current processing node.
         recorder.add(node);
 
@@ -1404,207 +1404,6 @@ class JavaMethodCompiler extends MethodVisitor {
 
     /**
      * <p>
-     * Helper method to merge all conditional operands.
-     * </p>
-     */
-    private void merge(Node node) {
-        if (node == null) {
-            return;
-        }
-
-        SequentialConditionInfo info = new SequentialConditionInfo(node);
-
-        if (info.conditions.isEmpty()) {
-            return;
-        }
-
-        // Search and merge the sequencial conditional operands in this node from right to left.
-        int start = info.start;
-        OperandCondition left = null;
-        OperandCondition right = (OperandCondition) node.peek(start);
-
-        for (int index = 1; index < info.conditions.size(); index++) {
-            left = (OperandCondition) node.peek(start + index);
-
-            if (info.canMerge(left, right)) {
-                Debugger.print("Merge conditions. left[" + left + "]  right[" + right + "] start: " + node.id);
-                Debugger.print(nodes);
-
-                // Merge two adjucent conditional operands.
-                right = new OperandCondition(left, (OperandCondition) node.remove(--start + index));
-
-                node.set(start + index, right);
-            } else {
-                Debugger.print("Stop merging at " + node.id + "  left[" + left + "]  right[" + right + "]");
-                Debugger.print(nodes);
-                right = left;
-                left = null;
-            }
-        }
-
-        // If the previous node is terminated by conditional operand and the target node is started
-        // by conditional operand, we should try to merge them.
-        if (info.conditionalHead && node.previous != null) {
-            Operand operand = node.previous.peek(0);
-
-            if (operand instanceof OperandCondition) {
-                OperandCondition condition = (OperandCondition) operand;
-
-                if (info.canMerge(condition, right) && condition.elze == node) {
-                    dispose(node);
-
-                    // Merge recursively
-                    merge(node.previous);
-                }
-            }
-        }
-    }
-
-    /**
-     * @version 2014/06/16 16:44:55
-     */
-    private class SequentialConditionInfo {
-
-        /** The start location of this sequence. */
-        private int start;
-
-        /** The base node. */
-        private Node base;
-
-        /** The sequential conditions. */
-        private ArrayList<OperandCondition> conditions = new ArrayList();
-
-        /** The flag whether this node is started by conditional operand or not. */
-        private final boolean conditionalHead;
-
-        /** The flag whether this node is started by conditional operand or not. */
-        private final boolean conditionalTail;
-
-        /**
-         * <p>
-         * Search the sequencial conditional operands in the specified node from right to left.
-         * </p>
-         * 
-         * @param node A target node.
-         */
-        private SequentialConditionInfo(Node node) {
-            this.base = node;
-
-            boolean returned = false;
-
-            // Search the sequential conditional operands in the specified node from right to left.
-            for (int index = 0; index < node.stack.size(); index++) {
-                Operand operand = node.peek(index);
-
-                if (operand instanceof OperandCondition == false) {
-                    // non-conditional operand is found
-                    if (conditions.isEmpty()) {
-                        if (operand == Return) {
-                            returned = true;
-                        }
-                        // conditional operand is not found as yet, so we should continue to search
-                        continue;
-                    } else {
-                        // stop searching
-                        break;
-                    }
-                }
-
-                // conditional operand is found
-                OperandCondition condition = (OperandCondition) operand;
-
-                if (conditions.isEmpty()) {
-                    // this is first condition
-                    start = index;
-
-                    if (!returned && condition.elze == null && condition.then != node.destination) {
-                        condition.elze = node.destination;
-                    }
-                } else {
-                    // this is last condition
-                }
-                conditions.add(condition);
-            }
-
-            this.conditionalHead = node.stack.size() == start + conditions.size();
-            this.conditionalTail = start == 0 && !conditions.isEmpty();
-        }
-
-        /**
-         * <p>
-         * Split mixed contents into condition part and non-condition part.
-         * </p>
-         */
-        private void split() {
-            int size = conditions.size();
-
-            if (size != 0 && size != base.stack.size()) {
-                if (conditionalTail) {
-                    // transfer condition operands to the created node
-                    // [non-condition] [condition]
-                    Node created = createNodeAfter(base);
-
-                    for (int i = 0; i < size; i++) {
-                        OperandCondition condition = (OperandCondition) base.stack.pollLast();
-
-                        // disconnect from base node
-                        base.disconnect(condition.then);
-                        base.disconnect(condition.elze);
-
-                        // connect from created node
-                        created.connect(condition.then);
-                        created.connect(condition.elze);
-
-                        // transfer operand
-                        created.stack.addFirst(condition);
-                    }
-
-                    // connect from base to created
-                    base.connect(created);
-                } else if (conditionalHead) {
-                    // transfer non-condition operands to the created node
-                    // [condition] [non-condition]
-                    Node created = createNodeAfter(base);
-
-                    // transfer operand
-                    for (int i = 0; i < start; i++) {
-                        created.stack.addFirst(base.stack.pollLast());
-                    }
-
-                    // search non-conditional operand's transition
-                    Set<Node> transitions = new HashSet(base.outgoing);
-
-                    for (OperandCondition condition : conditions) {
-                        transitions.remove(condition.then);
-                    }
-
-                    for (Node transition : transitions) {
-                        // disconnect from base
-                        base.disconnect(transition);
-
-                        // connect from created
-                        created.connect(transition);
-                    }
-
-                    // connect from base to created
-                    base.connect(created);
-
-                    // connect from created to next
-                    created.connect(base.destination == null ? created.destination : base.destination);
-                }
-            }
-        }
-
-        private boolean canMerge(OperandCondition left, OperandCondition right) {
-            if (left.then == right.then || left.then == right.elze) {
-                return true;
-            }
-            return false;
-        }
-    }
-
-    /**
-     * <p>
      * This parameter must be a non null Integer, a Float, a Long, a Double a String (or a Type for
      * .class constants, for classes whose version is 49.0 or more).
      * </p>
@@ -2249,6 +2048,64 @@ class JavaMethodCompiler extends MethodVisitor {
     }
 
     /**
+     * <p>
+     * Helper method to merge all conditional operands.
+     * </p>
+     */
+    private final void merge(Node node) {
+        if (node == null) {
+            return;
+        }
+
+        SequentialConditionInfo info = new SequentialConditionInfo(node);
+
+        if (info.conditions.isEmpty()) {
+            return;
+        }
+
+        // Search and merge the sequencial conditional operands in this node from right to left.
+        int start = info.start;
+        OperandCondition left = null;
+        OperandCondition right = (OperandCondition) node.peek(start);
+
+        for (int index = 1; index < info.conditions.size(); index++) {
+            left = (OperandCondition) node.peek(start + index);
+
+            if (info.canMerge(left, right)) {
+                Debugger.print("Merge conditions. left[" + left + "]  right[" + right + "] start: " + node.id);
+                Debugger.print(nodes);
+
+                // Merge two adjucent conditional operands.
+                right = new OperandCondition(left, (OperandCondition) node.remove(--start + index));
+
+                node.set(start + index, right);
+            } else {
+                Debugger.print("Stop merging at " + node.id + "  left[" + left + "]  right[" + right + "]");
+                Debugger.print(nodes);
+                right = left;
+                left = null;
+            }
+        }
+
+        // If the previous node is terminated by conditional operand and the target node is started
+        // by conditional operand, we should try to merge them.
+        if (info.conditionalHead && node.previous != null) {
+            Operand operand = node.previous.peek(0);
+
+            if (operand instanceof OperandCondition) {
+                OperandCondition condition = (OperandCondition) operand;
+
+                if (info.canMerge(condition, right) && condition.elze == node) {
+                    dispose(node);
+
+                    // Merge recursively
+                    merge(node.previous);
+                }
+            }
+        }
+    }
+
+    /**
      * Record the current instruction.
      */
     private final void record(int opcode) {
@@ -2623,6 +2480,155 @@ class JavaMethodCompiler extends MethodVisitor {
                 types.put(position, type);
             }
             return type;
+        }
+    }
+
+    /**
+     * @version 2014/06/25 18:50:07
+     */
+    private class SequentialConditionInfo {
+
+        /** The start location of this sequence. */
+        private int start;
+
+        /** The base node. */
+        private final Node base;
+
+        /** The sequential conditions. */
+        private final ArrayList<OperandCondition> conditions = new ArrayList();
+
+        /** The flag whether this node is started by conditional operand or not. */
+        private final boolean conditionalHead;
+
+        /** The flag whether this node is started by conditional operand or not. */
+        private final boolean conditionalTail;
+
+        /**
+         * <p>
+         * Search the sequencial conditional operands in the specified node from right to left.
+         * </p>
+         * 
+         * @param node A target node.
+         */
+        private SequentialConditionInfo(Node node) {
+            this.base = node;
+
+            boolean returned = false;
+
+            // Search the sequential conditional operands in the specified node from right to left.
+            for (int index = 0; index < node.stack.size(); index++) {
+                Operand operand = node.peek(index);
+
+                if (operand instanceof OperandCondition == false) {
+                    // non-conditional operand is found
+                    if (conditions.isEmpty()) {
+                        if (operand == Return) {
+                            returned = true;
+                        }
+                        // conditional operand is not found as yet, so we should continue to search
+                        continue;
+                    } else {
+                        // stop searching
+                        break;
+                    }
+                }
+
+                // conditional operand is found
+                OperandCondition condition = (OperandCondition) operand;
+
+                if (conditions.isEmpty()) {
+                    // this is first condition
+                    start = index;
+
+                    if (!returned && condition.elze == null && condition.then != node.destination) {
+                        condition.elze = node.destination;
+                    }
+                } else {
+                    // this is last condition
+                }
+                conditions.add(condition);
+            }
+
+            this.conditionalHead = node.stack.size() == start + conditions.size();
+            this.conditionalTail = start == 0 && !conditions.isEmpty();
+        }
+
+        /**
+         * <p>
+         * Split mixed contents into condition part and non-condition part.
+         * </p>
+         */
+        private void split() {
+            int size = conditions.size();
+
+            if (size != 0 && size != base.stack.size()) {
+                if (conditionalTail) {
+                    // transfer condition operands to the created node
+                    // [non-condition] [condition]
+                    Node created = createNodeAfter(base);
+
+                    for (int i = 0; i < size; i++) {
+                        OperandCondition condition = (OperandCondition) base.stack.pollLast();
+
+                        // disconnect from base node
+                        base.disconnect(condition.then);
+                        base.disconnect(condition.elze);
+
+                        // connect from created node
+                        created.connect(condition.then);
+                        created.connect(condition.elze);
+
+                        // transfer operand
+                        created.stack.addFirst(condition);
+                    }
+
+                    // connect from base to created
+                    base.connect(created);
+                } else if (conditionalHead) {
+                    // transfer non-condition operands to the created node
+                    // [condition] [non-condition]
+                    Node created = createNodeAfter(base);
+
+                    // transfer operand
+                    for (int i = 0; i < start; i++) {
+                        created.stack.addFirst(base.stack.pollLast());
+                    }
+
+                    // search non-conditional operand's transition
+                    Set<Node> transitions = new HashSet(base.outgoing);
+
+                    for (OperandCondition condition : conditions) {
+                        transitions.remove(condition.then);
+                    }
+
+                    for (Node transition : transitions) {
+                        // disconnect from base
+                        base.disconnect(transition);
+
+                        // connect from created
+                        created.connect(transition);
+                    }
+
+                    // connect from base to created
+                    base.connect(created);
+
+                    // connect from created to next
+                    created.connect(base.destination == null ? created.destination : base.destination);
+                }
+            }
+        }
+
+        /**
+         * <p>
+         * Test whether target conditions is able to merge.
+         * </p>
+         * 
+         * @param left A left condition.
+         * @param right A right condition.
+         * @return A result.
+         */
+        private boolean canMerge(OperandCondition left, OperandCondition right) {
+            return left.then == right.then || left.then == right.elze;
         }
     }
 }
