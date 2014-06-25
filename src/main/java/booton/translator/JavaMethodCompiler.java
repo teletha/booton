@@ -1254,9 +1254,8 @@ class JavaMethodCompiler extends MethodVisitor {
 
         switch (opcode) {
         case GOTO:
-            Node destination = getNode(label);
-            current.connect(destination);
-            current.destination = destination;
+            current.connect(node);
+            current.destination = node;
             return;
 
         case IFEQ: // == 0
@@ -1372,7 +1371,7 @@ class JavaMethodCompiler extends MethodVisitor {
             current.condition(current.remove(1), LT, current.remove(0), node);
             break;
         }
-        current.connect(getNode(label));
+        current.connect(node);
     }
 
     /**
