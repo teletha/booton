@@ -830,11 +830,14 @@ class Node {
                  * loop breaker
                  * 
                  * <pre>
-                 * if (condition) {
-                 *    break other;
-                 * } else {
-                 *    one
+                 * loop-structure ( ~ ) {
+                 *   if (condition) {
+                 *     break; // to other
+                 *   } else {
+                 *     one
+                 *   }
                  * }
+                 * other // dominator is not if-condition but loop-condition
                  * </pre>
                  */
                 then = one;
