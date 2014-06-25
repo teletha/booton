@@ -1414,6 +1414,7 @@ class JavaMethodCompiler extends MethodVisitor {
             OperandCondition condition = (OperandCondition) current.peek(0);
 
             if (condition.then == current) {
+                Debugger.print("NEED?", nodes);
                 condition.invert();
             }
         }

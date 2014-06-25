@@ -42,7 +42,7 @@ public class Debugger extends AnnotationVisitor {
 
     // initialization
     static {
-        // enable(".+Iterable", "forEach");
+        enable(".+SortedList", "findPosition");
         // enable(".+IntIteratorSpliterator", "forEachRemaining");
 
         boolean flag = false;
@@ -86,7 +86,6 @@ public class Debugger extends AnnotationVisitor {
                 Pattern[] patterns = iterator.next();
 
                 if (patterns[0].matcher(clazz.getName()).matches() && patterns[1].matcher(methodName).matches()) {
-                    iterator.remove();
                     enable = true;
                     return;
                 }
@@ -174,6 +173,19 @@ public class Debugger extends AnnotationVisitor {
 
         System.out.println(text);
         System.out.println(format(nodes));
+    }
+
+    /**
+     * <p>
+     * Print debug message.
+     * </p>
+     * 
+     * @param values
+     */
+    public static void print(Object... values) {
+        if (isEnable()) {
+            info(values);
+        }
     }
 
     /**
