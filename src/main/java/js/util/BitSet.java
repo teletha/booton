@@ -12,6 +12,7 @@ package js.util;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
+import booton.translator.Debuggable;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -71,6 +72,7 @@ class BitSet {
      * assumes that the number of words actually in use is less than or equal to the current value
      * of wordsInUse!
      */
+    @Debuggable
     private void recalculateWordsInUse() {
         // Traverse the bitset until a used word is found
         int i;
@@ -806,6 +808,7 @@ class BitSet {
      * 
      * @return the hash code value for this bit set
      */
+    @Override
     public int hashCode() {
         long h = 1234;
         for (int i = wordsInUse; --i >= 0;)
@@ -838,6 +841,7 @@ class BitSet {
      * @return {@code true} if the objects are the same; {@code false} otherwise
      * @see #size()
      */
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof BitSet)) return false;
         if (this == obj) return true;
@@ -864,6 +868,7 @@ class BitSet {
      * @return a clone of this bit set
      * @see #size()
      */
+    @Override
     public Object clone() {
         if (!sizeIsSticky) trimToSize();
 
@@ -912,6 +917,7 @@ class BitSet {
      * 
      * @return a string representation of this bit set
      */
+    @Override
     public String toString() {
         checkInvariants();
 

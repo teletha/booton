@@ -782,7 +782,7 @@ class Node {
         Node one = outgoing.get(0);
         Node other = outgoing.get(1);
 
-        Debugger.info("IF: ", this, "  then: ", condition.then, " else: ", condition.elze, "  out0: ", one, "  out1: ", other);
+        Debugger.print("IF: ", this, "  then: ", condition.then, " else: ", condition.elze, "  out0: ", one, "  out1: ", other);
 
         if (condition.elze == one) {
             condition.invert();
