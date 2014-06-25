@@ -7,25 +7,27 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.util.stream;
+package js.util;
 
-import java.util.stream.IntStream;
+import java.util.BitSet;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
 
 /**
- * @version 2014/06/25 19:14:26
+ * @version 2014/06/25 19:23:28
  */
 @RunWith(ScriptRunner.class)
-public class IntStreamTest {
+public class BitSetTest {
 
     @Test
-    @Ignore
-    public void count() throws Exception {
-        assert IntStream.range(1, 5).count() == 4;
+    public void get() throws Exception {
+        BitSet set = new BitSet();
+        assert set.get(0) == false;
+
+        set.set(0);
+        assert set.get(0) == true;
     }
 }
