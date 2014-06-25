@@ -80,11 +80,11 @@ class OperandCondition extends Operand {
      */
     OperandCondition(OperandCondition left, OperandCondition right) {
         if (left.group || !(left.right instanceof OperandCondition)) {
-            this.left = left;
-            this.right = right;
+            this.left = encloseIfTernay(left);
+            this.right = encloseIfTernay(right);
             this.operator = OR;
         } else {
-            this.left = left.left;
+            this.left = encloseIfTernay(left);
             this.right = new OperandCondition((OperandCondition) left.right, right);
             this.operator = left.operator;
         }
@@ -99,6 +99,22 @@ class OperandCondition extends Operand {
         // Make group if left transition node equals to transition node or next node of the
         // right condition node.
         group = (left.transition == right.transitionThen || left.transition == right.transition);
+    }
+
+    /**
+     * <p>
+     * Enclose conditional operand if it it {@link OperandTernaryCondition}.
+     * </p>
+     * 
+     * @param condition A target condition.
+     * @return A result.
+     */
+    private Operand encloseIfTernay(OperandCondition condition) {
+        if (condition instanceof OperandTernaryCondition) {
+            return condition.encolose();
+        } else {
+            return condition;
+        }
     }
 
     /**

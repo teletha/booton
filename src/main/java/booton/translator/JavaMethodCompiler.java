@@ -524,6 +524,8 @@ class JavaMethodCompiler extends MethodVisitor {
 
             if (nLocal == 0 && nStack == 0) {
                 processTernaryOperator();
+                Debugger.print(current.id);
+                mergeConditions(current.previous);
             }
             break;
 
@@ -927,20 +929,31 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case IRETURN:
+            // Java bytecode represents boolean value as integer value (0 or 1).
             if (match(JUMP, ICONST_0, IRETURN, LABEL, FRAME, ICONST_1, IRETURN) || match(JUMP, LABEL, FRAME, ICONST_0, IRETURN, LABEL, FRAME, ICONST_1, IRETURN)) {
-                // merge the node sequence of logical expression
-                current.remove(0);
-                current.remove(0);
-                current.remove(0);
-                current.remove(0);
-                merge(current.previous);
+                // Current operands is like the following, so we must remove four operands to
+                // represent boolean value.
+                //
+                // JUMP [Condition] return [Expression] false [Expression] ; [Expression] 1 [Number]
+                current.remove(0); // remove "1"
+                current.remove(0); // remove ";"
+                current.remove(0); // remove "false"
+                current.remove(0); // remove "return"
+
+                // remove empty node if needed
+                if (current.previous.stack.isEmpty()) disposeNode(current.previous);
             } else if (match(JUMP, ICONST_1, IRETURN, LABEL, FRAME, ICONST_0, IRETURN) || match(JUMP, LABEL, FRAME, ICONST_1, IRETURN, LABEL, FRAME, ICONST_0, IRETURN)) {
-                // merge the node sequence of logical expression
-                current.remove(0);
-                current.remove(0);
-                current.remove(0);
-                current.remove(0);
-                merge(current.previous);
+                // Current operands is like the following, so we must remove four operands to
+                // represent boolean value.
+                //
+                // JUMP [Condition] return [Expression] true [Expression] ; [Expression] 0 [Number]
+                current.remove(0); // remove "0"
+                current.remove(0); // remove ";"
+                current.remove(0); // remove "true"
+                current.remove(0); // remove "return"
+
+                // remove empty node if needed
+                if (current.previous.stack.isEmpty()) disposeNode(current.previous);
 
                 // invert the latest condition
                 current.peek(0).invert();
@@ -1434,6 +1447,10 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private void mergeConditions(Node node) {
+        if (node == null) {
+            return;
+        }
+
         SequentialConditionInfo info = new SequentialConditionInfo(node);
 
         if (info.conditions.isEmpty()) {
@@ -1623,50 +1640,6 @@ class JavaMethodCompiler extends MethodVisitor {
                 return true;
             }
             return false;
-        }
-    }
-
-    /**
-     * <p>
-     * Merge all conditional operands in the specified node.
-     * </p>
-     * 
-     * @param node
-     */
-    private void merge(Node node) {
-        OperandCondition left = null;
-        OperandCondition right = null;
-
-        for (int index = 0; index < Integer.MAX_VALUE; index++) {
-            Operand operand = node.peek(index);
-
-            if (operand instanceof OperandCondition == false) {
-                // stop merging
-                break;
-            }
-
-            if (right == null) {
-                // first detection
-                right = (OperandCondition) operand;
-            } else {
-                // sequencial detection
-                left = (OperandCondition) operand;
-
-                if (left.transition != right.transition) {
-                    // stop merging
-                    break;
-                } else {
-                    // merge two adjucent conditional operands
-                    Debugger.info("merge", nodes);
-                    node.set(--index, new OperandCondition(left, (OperandCondition) node.remove(index)));
-                }
-            }
-        }
-
-        // remove empty node
-        if (node.stack.isEmpty()) {
-            Debugger.print("Dispose empty node" + node.id + " on merge.", nodes);
-            disposeNode(node);
         }
     }
 
