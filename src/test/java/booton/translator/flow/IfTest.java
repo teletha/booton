@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,10 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
+import booton.translator.Debuggable;
 
 /**
- * @version 2013/08/11 9:53:05
+ * @version 2014/06/25 16:27:29
  */
 @SuppressWarnings("unused")
 public class IfTest extends ScriptTester {
@@ -25,6 +26,7 @@ public class IfTest extends ScriptTester {
     public void normal() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 if (value < 3) {
                     return 2;

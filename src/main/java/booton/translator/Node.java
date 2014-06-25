@@ -776,11 +776,10 @@ class Node {
     private void writeIf(ScriptWriter buffer) {
         OperandCondition condition = (OperandCondition) stack.peekLast();
 
+        Debugger.info("IF: ", this, "  then: ", condition.then, " else: ", condition.elze, "  out0: ", outgoing.get(0), "  out1: ", outgoing.get(1));
+
         if (condition.elze == outgoing.get(0)) {
             condition.invert();
-        } else {
-            // Debugger.info("NoInvert curent: ", this, "  normal: ", condition.transition,
-            // " then: ", condition.transitionThen, "  out: ", outgoing.get(0));
         }
 
         Node then = null;
