@@ -10,10 +10,11 @@
 package booton.translator.builtin;
 
 import sun.reflect.misc.ReflectUtil;
+
 import booton.translator.Translator;
 
 /**
- * @version 2014/02/06 22:54:19
+ * @version 2014/06/26 11:33:31
  */
 public class ReflectUtilCoder extends Translator<ReflectUtil> {
 
@@ -26,6 +27,10 @@ public class ReflectUtilCoder extends Translator<ReflectUtil> {
     }
 
     public String isPackageAccessible(Class param0) {
+        return "true";
+    }
+
+    public String needsPackageAccessCheck(ClassLoader one, ClassLoader other) {
         return "true";
     }
 }

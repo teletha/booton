@@ -9,13 +9,11 @@
  */
 package js.math;
 
-import booton.JDKEmulator;
-import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2014/03/15 13:14:32
  */
-@JavaAPIProvider(JDKEmulator.class)
+// @JavaAPIProvider(JDKEmulator.class)
 class SignedMutableBigInteger extends MutableBigInteger {
 
     /**

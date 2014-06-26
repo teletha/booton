@@ -11,12 +11,10 @@ package js.math;
 
 import java.math.BigInteger;
 
-import booton.translator.JavaAPIProvider;
-
 /**
  * @version 2014/03/13 14:46:48
  */
-@JavaAPIProvider(BigInteger.class)
+// @JavaAPIProvider(BigInteger.class)
 class BigIntegerEmulation extends Number implements Comparable<BigInteger> {
 
     /**

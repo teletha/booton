@@ -14,7 +14,45 @@ import static booton.translator.Javascript.*;
 import java.util.ArrayList;
 
 /**
- * @version 2014/03/24 15:09:10
+ * <p>
+ * The code like the following will generate difference bytecode by compiler.
+ * </p>
+ * 
+ * <pre>
+ * String[] array = {null, null, "third"};
+ * </pre>
+ * <p>
+ * Eclipse Java Compiler generates the following bytecode.
+ * </p>
+ *
+ * <pre>
+ * mv.visitTypeInsn(ANEWARRAY, "java/lang/String");
+ * mv.visitInsn(DUP);
+ * mv.visitInsn(ICONST_2);
+ * mv.visitLdcInsn("third");
+ * mv.visitInsn(AASTORE); // Assign third value suddenly
+ *</pre>
+ * <p>
+ * JDK Compiler generates the following bytecode.
+ * </p>
+ * 
+ * <pre>
+ * mv.visitTypeInsn(ANEWARRAY,  "java/lang/String");
+ * mv.visitInsn(DUP);
+ * mv.visitInsn(ICONST_0);
+ * mv.visitInsn(ACONST_NULL);
+ * mv.visitInsn(AASTORE); // Assign first null value
+ * mv.visitInsn(DUP);
+ * mv.visitInsn(ICONST_1);
+ * mv.visitInsn(ACONST_NULL);
+ * mv.visitInsn(AASTORE); // Assign second null value
+ * mv.visitInsn(DUP);
+ * mv.visitInsn(ICONST_2);
+ * mv.visitLdcInsn("third");
+ * mv.visitInsn(AASTORE); // Assign third value
+ *</pre>
+ *
+ * @version 2014/06/26 9:30:10
  */
 class OperandArray extends Operand {
 

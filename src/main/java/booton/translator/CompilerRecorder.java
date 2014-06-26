@@ -173,7 +173,7 @@ class CompilerRecorder {
                     .append('(')
                     .append(script.source.getSimpleName())
                     .append(".java:")
-                    .append(line)
+                    .append(lineNow)
                     .append(')');
 
             return builder.toString();

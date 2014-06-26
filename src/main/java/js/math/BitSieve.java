@@ -10,10 +10,8 @@
 package js.math;
 
 import static js.math.APIConveter.*;
-import java.math.BigInteger;
 
-import booton.JDKEmulator;
-import booton.translator.JavaAPIProvider;
+import java.math.BigInteger;
 
 /**
  * A simple bit sieve used for finding prime number candidates. Allows setting and clearing of bits
@@ -29,7 +27,7 @@ import booton.translator.JavaAPIProvider;
  * @author Michael McCloskey
  * @since 1.3
  */
-@JavaAPIProvider(JDKEmulator.class)
+// @JavaAPIProvider(JDKEmulator.class)
 class BitSieve {
 
     /**
