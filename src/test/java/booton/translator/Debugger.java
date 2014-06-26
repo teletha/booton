@@ -42,7 +42,7 @@ public class Debugger extends AnnotationVisitor {
 
     // initialization
     static {
-        // enable(".+IntIteratorSpliterator", "forEachRemaining");
+        enable(".+BigInteger", "<clinit>");
 
         boolean flag = false;
 
