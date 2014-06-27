@@ -1688,7 +1688,6 @@ class JavaMethodCompiler extends MethodVisitor {
                 assertNew = false;
                 current = createNodeAfter(current);
                 current.previous.connect(current);
-                current.number = current.previous.number;
 
                 merge(current.previous);
             }
