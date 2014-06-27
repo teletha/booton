@@ -59,7 +59,6 @@ class CompilerRecorder {
         CompilerContext context = route.peekFirst();
         context.method = method;
         context.line = 1;
-
         I.make(Debugger.class).visit(method, context.script.source);
     }
 
