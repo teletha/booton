@@ -42,7 +42,7 @@ public class Debugger extends AnnotationVisitor {
 
     // initialization
     static {
-        enable(".+BigInteger", "<clinit>");
+        // enable(".+BigInteger", "<clinit>");
 
         boolean flag = false;
 

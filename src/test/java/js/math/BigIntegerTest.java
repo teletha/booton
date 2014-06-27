@@ -23,8 +23,10 @@ import booton.soeur.ScriptRunner;
 public class BigIntegerTest {
 
     @Test
-    public void bigString() throws Exception {
-        BigInteger value = new BigInteger("12345678901234567890");
-        assert value.toString().equals("12345678901234567890");
+    public void ToString() throws Exception {
+        assert new BigInteger("0").toString().equals("0");
+        assert new BigInteger("-1").toString().equals("-1");
+        assert new BigInteger("12345").toString().equals("12345");
+        assert new BigInteger("12345678901234567890").toString().equals("12345678901234567890");
     }
 }
