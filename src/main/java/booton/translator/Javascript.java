@@ -790,10 +790,6 @@ public class Javascript {
 
             return mung16(order(js.fields, fieldName.hashCode() + js.source.hashCode()));
         } catch (NoSuchFieldException e) {
-            if (fieldName.equals("fieldFilterMap")) {
-                e.printStackTrace();
-            }
-            System.out.println(owner + "  " + fieldName);
             return computeFieldName(owner.getSuperclass(), fieldName);
         }
     }
