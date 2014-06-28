@@ -225,6 +225,52 @@ public class ForTest extends ScriptTester {
     }
 
     @Test
+    public void continueInIf() throws Exception {
+        test(new Scriptable() {
+
+            int act(int value) {
+                for (; value < 2; value++) {
+                    if (value % 2 == 0) {
+                        continue;
+                    }
+                    value += 3;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void continueInShorthandIf() throws Exception {
+        test(new Scriptable() {
+
+            int act(int value) {
+                for (; value < 2; value++) {
+                    if (value % 2 == 0) continue;
+                    value += 3;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void continueInLogicalIf() throws Exception {
+        test(new Scriptable() {
+
+            int act(int value) {
+                for (; value < 2; value++) {
+                    if (value == 0 || value == -1) {
+                        continue;
+                    }
+                    value += 3;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
     public void returnNest() throws Exception {
         test(new Scriptable() {
 
