@@ -14,6 +14,7 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
+import booton.translator.Debuggable;
 
 /**
  * @version 2014/06/28 18:12:01
@@ -70,6 +71,29 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
+    public void infiniteMultipleBreaks() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                while (true) {
+                    value++;
+
+                    if (value == 0) {
+                        break;
+                    }
+
+                    if (value % 2 == 0) {
+                        value++;
+                        break;
+                    }
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
     public void inifinitContinue() throws Exception {
         test(new Scriptable() {
 
@@ -90,7 +114,7 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
-    public void inifinitContinueInShorthandIf() throws Exception {
+    public void inifinitContinueWithShorthandIf() throws Exception {
         test(new Scriptable() {
 
             int act(@Param(from = 0, to = 10) int value) {
@@ -100,6 +124,29 @@ public class WhileTest extends ScriptTester {
                     if (value % 6 == 0) continue;
 
                     if (value % 3 == 0) {
+                        return value;
+                    }
+                }
+            }
+        });
+    }
+
+    @Test
+    public void inifinitContinueWithShorthandIfInAnotherIf() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            int act(@Param(from = 0, to = 20) int value) {
+                while (true) {
+                    value++;
+
+                    if (value % 2 == 0) {
+                        value++;
+
+                        if (value % 3 == 0) continue;
+                    }
+
+                    if (value % 7 == 0) {
                         return value;
                     }
                 }

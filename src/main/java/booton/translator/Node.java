@@ -386,7 +386,6 @@ class Node {
                             continue search;
                         }
                     }
-
                     dominator = candidate;
                     break;
                 }
@@ -921,6 +920,7 @@ class Node {
 
             if (loop != null) {
                 // continue
+                Debugger.print("Loop? " + id);
                 if (loop.hasHeader(next) && hasDominator(loop.entrance)) {
                     if (Debugger.isEnable()) {
                         buffer.comment(id + " -> " + next.id + " continue to " + loop.entrance.id + " (" + next.currentCalls + " of " + requiredCalls + ")");

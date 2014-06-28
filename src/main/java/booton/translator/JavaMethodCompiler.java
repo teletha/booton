@@ -340,7 +340,7 @@ class JavaMethodCompiler extends MethodVisitor {
             }
         }
 
-        Debugger.printHeader();
+        Debugger.printHeader(true);
         Debugger.print(nodes);
 
         // ===============================================
