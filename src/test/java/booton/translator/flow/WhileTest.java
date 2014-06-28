@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
 
 /**
- * @version 2013/08/14 10:22:03
+ * @version 2014/06/28 18:12:01
  */
 @SuppressWarnings("unused")
 public class WhileTest extends ScriptTester {
@@ -56,7 +56,7 @@ public class WhileTest extends ScriptTester {
     public void infiniteBreak() {
         test(new Scriptable() {
 
-            public int act(@Param(from = 0, to = 5) int value) {
+            public int act(int value) {
                 while (true) {
                     value++;
 
@@ -65,6 +65,44 @@ public class WhileTest extends ScriptTester {
                     }
                 }
                 return value;
+            }
+        });
+    }
+
+    @Test
+    public void inifinitContinue() throws Exception {
+        test(new Scriptable() {
+
+            int act(@Param(from = 0, to = 10) int value) {
+                while (true) {
+                    value++;
+
+                    if (value % 6 == 0) {
+                        continue;
+                    }
+
+                    if (value % 3 == 0) {
+                        return value;
+                    }
+                }
+            }
+        });
+    }
+
+    @Test
+    public void inifinitContinueInShorthandIf() throws Exception {
+        test(new Scriptable() {
+
+            int act(@Param(from = 0, to = 10) int value) {
+                while (true) {
+                    value++;
+
+                    if (value % 6 == 0) continue;
+
+                    if (value % 3 == 0) {
+                        return value;
+                    }
+                }
             }
         });
     }

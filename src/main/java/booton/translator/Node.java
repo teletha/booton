@@ -577,9 +577,12 @@ class Node {
                     // normal node with follower
                     buffer.append(this);
                     process(outgoing.get(0), buffer);
-                } else {
+                } else if (backs == 1) {
                     // do while or infinite loop
                     writeDoWhile(buffer);
+                } else {
+                    // infinite loop
+                    writeInfiniteLoop(buffer);
                 }
             } else if (outs == 2) {
                 // while, for or if
@@ -649,11 +652,10 @@ class Node {
         // make rewritable this node
         written = false;
 
-        // disconnect from the backedge node of infinite loop
-        disconnect(backedges.get(backedges.size() - 1));
+        // clear all backedge nodes of infinite loop
         backedges.clear();
 
-        // write script fragment
+        // re-write script fragment
         buffer.write("for", "(;;)", "{");
         write(buffer);
         buffer.write("}");
