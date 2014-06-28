@@ -61,6 +61,9 @@ public class Debugger extends AnnotationVisitor {
     /** The use flag. */
     private boolean firstTime = true;
 
+    /** Can i use getDominator safely? */
+    private boolean dominatorSafe = false;
+
     /**
      * 
      */
@@ -131,7 +134,7 @@ public class Debugger extends AnnotationVisitor {
         if (debugger.enable && debugger.firstTime) {
             debugger.firstTime = false;
 
-            printHeader();
+            printHeader(false);
         }
         return debugger.enable;
     }
@@ -192,7 +195,9 @@ public class Debugger extends AnnotationVisitor {
      * Print method info as header like.
      * </p>
      */
-    public static void printHeader() {
+    public static void printHeader(boolean safe) {
+        debugger.dominatorSafe = safe;
+
         if (isEnable()) {
             System.out.println("==== " + link(true) + " ====");
         }
@@ -409,7 +414,11 @@ public class Debugger extends AnnotationVisitor {
      * @return
      */
     private static Node getDominator(Node target) {
-        return getDominator(target, new HashSet());
+        if (debugger.dominatorSafe) {
+            return target.getDominator();
+        } else {
+            return getDominator(target, new HashSet());
+        }
     }
 
     /**
@@ -447,25 +456,16 @@ public class Debugger extends AnnotationVisitor {
         default: // multiple incoming nodes
             Node candidate = candidates.get(0);
 
-            while (true) {
-                boolean result = true;
-
+            search: while (candidate != null) {
                 for (int i = 1; i < size; i++) {
                     if (!hasDominator(candidates.get(i), candidate, nodes)) {
-                        result = false;
-                        break;
+                        candidate = getDominator(candidate, nodes);
+                        continue search;
                     }
                 }
-
-                if (result) {
-                    return candidate;
-                } else {
-                    if (candidate == null) {
-                        return null;
-                    }
-                    candidate = getDominator(candidate, nodes);
-                }
+                return candidate;
             }
+            return null;
         }
     }
 
