@@ -54,138 +54,6 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
-    public void infiniteBreak() {
-        test(new Scriptable() {
-
-            public int act(int value) {
-                while (true) {
-                    value++;
-
-                    if (value == 10) {
-                        break;
-                    }
-                }
-                return value;
-            }
-        });
-    }
-
-    @Test
-    public void infiniteMultipleBreaks() {
-        test(new Scriptable() {
-
-            @Debuggable
-            public int act(int value) {
-                while (true) {
-                    value++;
-
-                    if (value == 0) {
-                        break;
-                    }
-
-                    if (value % 2 == 0) {
-                        value++;
-                        break;
-                    }
-                }
-                return value;
-            }
-        });
-    }
-
-    @Test
-    public void infiniteMultipleBreaks2() {
-        test(new Scriptable() {
-
-            @Debuggable
-            public int act(int value) {
-                int c = 0;
-
-                while (true) {
-                    value++;
-
-                    if (value == 0) {
-                        break;
-                    }
-
-                    if (value % 2 == 0) {
-                        value++;
-
-                        if (value % 3 == 0) {
-                            break;
-                        }
-                    }
-                }
-
-                value += 2;
-
-                return value * c;
-            }
-        });
-    }
-
-    @Test
-    public void inifinitContinue() throws Exception {
-        test(new Scriptable() {
-
-            int act(@Param(from = 0, to = 10) int value) {
-                while (true) {
-                    value++;
-
-                    if (value % 6 == 0) {
-                        continue;
-                    }
-
-                    if (value % 3 == 0) {
-                        return value;
-                    }
-                }
-            }
-        });
-    }
-
-    @Test
-    public void inifinitContinueWithShorthandIf() throws Exception {
-        test(new Scriptable() {
-
-            int act(@Param(from = 0, to = 10) int value) {
-                while (true) {
-                    value++;
-
-                    if (value % 6 == 0) continue;
-
-                    if (value % 3 == 0) {
-                        return value;
-                    }
-                }
-            }
-        });
-    }
-
-    @Test
-    public void inifinitContinueWithShorthandIfInAnotherIf() throws Exception {
-        test(new Scriptable() {
-
-            @Debuggable
-            int act(@Param(from = 0, to = 20) int value) {
-                while (true) {
-                    value++;
-
-                    if (value % 2 == 0) {
-                        value++;
-
-                        if (value % 3 == 0) continue;
-                    }
-
-                    if (value % 7 == 0) {
-                        return value;
-                    }
-                }
-            }
-        });
-    }
-
-    @Test
     public void multipuleBreaks() {
         test(new Scriptable() {
 
@@ -385,6 +253,237 @@ public class WhileTest extends ScriptTester {
                     value++;
                 }
                 return value;
+            }
+        });
+    }
+
+    @Test
+    public void infiniteBreak() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                while (true) {
+                    value++;
+
+                    if (value == 10) {
+                        break;
+                    }
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void infiniteStatementBreakWithFollow() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                while (true) {
+                    value++;
+
+                    if (value == 10) {
+                        value += 2;
+                        break;
+                    }
+                }
+                value += 3;
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void infiniteMultipleStatementBreak() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                while (true) {
+                    value++;
+
+                    if (value == 0) {
+                        break;
+                    }
+
+                    if (value % 2 == 0) {
+                        value++;
+                        break;
+                    }
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void infiniteMultipleStatementBreaks() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                while (true) {
+                    value++;
+
+                    if (value == 0) {
+                        value += 2;
+                        break;
+                    }
+
+                    if (value % 2 == 0) {
+                        value += 3;
+                        break;
+                    }
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void infiniteBreakInNestedIf() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                while (true) {
+                    value++;
+
+                    if (value == 0) {
+                        break;
+                    }
+
+                    if (value % 2 == 0) {
+                        value++;
+
+                        if (value % 3 == 0) {
+                            break;
+                        }
+                    }
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void infiniteBreakAndContinue() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                while (true) {
+                    value++;
+
+                    if (value % 5 == 0) {
+                        value += 5;
+                        break;
+                    }
+
+                    if (value % 3 == 0) {
+                        continue;
+                    }
+
+                    if (value % 2 == 0) {
+                        value += 2;
+                        break;
+                    }
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void infiniteMultipleBreaks2() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                int c = 0;
+
+                while (true) {
+                    value++;
+
+                    if (value == 0) {
+                        break;
+                    }
+
+                    if (value % 2 == 0) {
+                        value++;
+
+                        if (value % 3 == 0) {
+                            break;
+                        }
+                    }
+                }
+
+                value += 2;
+
+                return value * c;
+            }
+        });
+    }
+
+    @Test
+    public void inifinitContinue() throws Exception {
+        test(new Scriptable() {
+
+            int act(@Param(from = 0, to = 10) int value) {
+                while (true) {
+                    value++;
+
+                    if (value % 6 == 0) {
+                        continue;
+                    }
+
+                    if (value % 3 == 0) {
+                        return value;
+                    }
+                }
+            }
+        });
+    }
+
+    @Test
+    public void inifinitContinueWithShorthandIf() throws Exception {
+        test(new Scriptable() {
+
+            int act(@Param(from = 0, to = 10) int value) {
+                while (true) {
+                    value++;
+
+                    if (value % 6 == 0) continue;
+
+                    if (value % 3 == 0) {
+                        return value;
+                    }
+                }
+            }
+        });
+    }
+
+    @Test
+    public void inifinitContinueWithShorthandIfInAnotherIf() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            int act(@Param(from = 0, to = 20) int value) {
+                while (true) {
+                    value++;
+
+                    if (value % 2 == 0) {
+                        value++;
+
+                        if (value % 3 == 0) continue;
+                    }
+
+                    if (value % 7 == 0) {
+                        return value;
+                    }
+                }
             }
         });
     }
