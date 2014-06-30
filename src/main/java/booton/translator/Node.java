@@ -662,6 +662,44 @@ class Node {
 
     /**
      * <p>
+     * Write infinite loop structure.
+     * </p>
+     * 
+     * @param buffer
+     */
+    private void writeInfiniteLoop2(ScriptWriter buffer) {
+        // search exit node if it is present
+        Node back = backedges.get(0);
+
+        Node nonBackProcess = back.outgoing.get(back.outgoing.get(0) == this ? 1 : 0);
+
+        Node exit = nonBackProcess;
+
+        while (!exit.hasDominator(back)) {
+            exit = exit.outgoing.get(0);
+        }
+
+        LoopStructure loop = new LoopStructure(this, this, exit, null, buffer);
+
+        // make rewritable this node
+        written = false;
+
+        // clear all backedge nodes of infinite loop
+        backedges.clear();
+
+        // re-write script fragment
+        buffer.write("for", "(;;)", "{");
+        write(buffer);
+        buffer.write("}");
+        process(exit, buffer);
+    }
+
+    private Node serachInfinitExit(Node target) {
+        return null;
+    }
+
+    /**
+     * <p>
      * Write while structure.
      * </p>
      * 

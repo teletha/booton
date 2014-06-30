@@ -94,6 +94,37 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
+    public void infiniteMultipleBreaks2() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                int c = 0;
+
+                while (true) {
+                    value++;
+
+                    if (value == 0) {
+                        break;
+                    }
+
+                    if (value % 2 == 0) {
+                        value++;
+
+                        if (value % 3 == 0) {
+                            break;
+                        }
+                    }
+                }
+
+                value += 2;
+
+                return value * c;
+            }
+        });
+    }
+
+    @Test
     public void inifinitContinue() throws Exception {
         test(new Scriptable() {
 
