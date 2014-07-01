@@ -588,8 +588,16 @@ class Node {
                         writeInfiniteLoop(exit, buffer);
                     }
                 } else {
-                    // infinit loop
-                    writeInfiniteLoop(searchInfinitLoopExit(this), buffer);
+                    // do while or infinite loop
+                    Node exit = searchInfinitLoopExit(this);
+
+                    if (exit == null) {
+                        // do while
+                        writeDoWhile(buffer);
+                    } else {
+                        // infinit loop
+                        writeInfiniteLoop(exit, buffer);
+                    }
                 }
             } else if (outs == 2) {
                 // while, for or if
@@ -683,7 +691,16 @@ class Node {
         written = false;
 
         // clear all backedge nodes of infinite loop
-        backedges.clear();
+        if (exit == null) {
+            backedges.clear();
+        } else {
+            for (Node node : backedges) {
+                if (node.canReachTo(exit)) {
+                    backedges.remove(node);
+                    Debugger.print("remove " + node.id);
+                }
+            }
+        }
 
         // re-write script fragment
         buffer.write("for", "(;;)", "{");
@@ -701,21 +718,20 @@ class Node {
      * @return
      */
     private Node searchInfinitLoopExit(Node loop) {
-        for (Node backedge : loop.backedges) {
-            Deque<Node> candidates = new ArrayDeque(backedge.outgoing);
-            Set<Node> recorder = new HashSet();
-            recorder.add(loop);
-            recorder.addAll(loop.backedges);
+        Node backedge = loop.backedges.get(loop.backedges.size() - 1);
+        Deque<Node> candidates = new ArrayDeque(backedge.outgoing);
+        Set<Node> recorder = new HashSet();
+        recorder.add(loop);
+        recorder.addAll(loop.backedges);
 
-            while (!candidates.isEmpty()) {
-                Node node = candidates.pollLast();
+        while (!candidates.isEmpty()) {
+            Node node = candidates.pollFirst();
 
-                if (recorder.add(node)) {
-                    if (!node.hasDominator(backedge)) {
-                        return node;
-                    } else {
-                        candidates.addAll(node.outgoing);
-                    }
+            if (recorder.add(node)) {
+                if (!node.hasDominator(backedge)) {
+                    return node;
+                } else {
+                    candidates.addAll(node.outgoing);
                 }
             }
         }
@@ -755,7 +771,7 @@ class Node {
      */
     private void writeDoWhile(ScriptWriter buffer) {
         // setup condition expression node
-        Node condition = backedges.get(0);
+        Node condition = backedges.remove(backedges.size() - 1);
 
         if (condition.outgoing.size() == 1) {
             writeInfiniteLoop(buffer);
