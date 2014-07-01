@@ -705,7 +705,7 @@ class Node {
             Deque<Node> candidates = new ArrayDeque(backedge.outgoing);
             Set<Node> recorder = new HashSet();
             recorder.add(loop);
-            recorder.add(backedge);
+            recorder.addAll(loop.backedges);
 
             while (!candidates.isEmpty()) {
                 Node node = candidates.pollLast();
