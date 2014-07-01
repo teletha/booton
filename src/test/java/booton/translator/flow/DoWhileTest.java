@@ -179,6 +179,7 @@ public class DoWhileTest extends ScriptTester {
     public void inIf() throws Exception {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 if (value != 3) {
                     do {
