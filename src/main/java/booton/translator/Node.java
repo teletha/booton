@@ -578,18 +578,18 @@ class Node {
                     process(outgoing.get(0), buffer);
                 } else if (backs == 1) {
                     // do while or infinite loop
-                    // Node exit = serachInfinitLoopExit(this);
-                    //
-                    // if (exit == null) {
-                    // // do while
-                    writeDoWhile(buffer);
-                    // } else {
-                    // // infinit loop
-                    // writeInfiniteLoop(exit, buffer);
-                    // }
+                    Node exit = searchInfinitLoopExit(this);
+
+                    if (exit == null) {
+                        // do while
+                        writeDoWhile(buffer);
+                    } else {
+                        // infinit loop
+                        writeInfiniteLoop(exit, buffer);
+                    }
                 } else {
-                    // infinite loop
-                    writeInfiniteLoop2(buffer);
+                    // infinit loop
+                    writeInfiniteLoop(searchInfinitLoopExit(this), buffer);
                 }
             } else if (outs == 2) {
                 // while, for or if
@@ -676,33 +676,8 @@ class Node {
      * @param buffer
      */
     private void writeInfiniteLoop(Node exit, ScriptWriter buffer) {
-        LoopStructure loop = new LoopStructure(this, this, exit, null, buffer);
-
-        // make rewritable this node
-        written = false;
-
-        // clear all backedge nodes of infinite loop
-        backedges.clear();
-
-        // re-write script fragment
-        buffer.write("for", "(;;)", "{");
-        write(buffer);
-        buffer.write("}");
-        process(exit, buffer);
-    }
-
-    /**
-     * <p>
-     * Write infinite loop structure.
-     * </p>
-     * 
-     * @param buffer
-     */
-    private void writeInfiniteLoop2(ScriptWriter buffer) {
-        // search exit node if it is present
-        Node exit = serachInfinitLoopExit(this);
-
-        LoopStructure loop = new LoopStructure(this, this, exit, null, buffer);
+        loop = new LoopStructure(this, this, exit, null, buffer);
+        if (exit != null) exit.currentCalls--;
 
         // make rewritable this node
         written = false;
@@ -725,7 +700,7 @@ class Node {
      * @param loop
      * @return
      */
-    private Node serachInfinitLoopExit(Node loop) {
+    private Node searchInfinitLoopExit(Node loop) {
         for (Node backedge : loop.backedges) {
             Deque<Node> candidates = new ArrayDeque(backedge.outgoing);
             Set<Node> recorder = new HashSet();
