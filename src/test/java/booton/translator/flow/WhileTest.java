@@ -261,7 +261,6 @@ public class WhileTest extends ScriptTester {
     public void infiniteBreak() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int value) {
                 while (true) {
                     value++;
@@ -279,7 +278,6 @@ public class WhileTest extends ScriptTester {
     public void infiniteStatementBreakWithFollow() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int value) {
                 while (true) {
                     value++;
@@ -299,7 +297,6 @@ public class WhileTest extends ScriptTester {
     public void infiniteMultipleStatementBreak() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int value) {
                 while (true) {
                     value++;
@@ -322,7 +319,6 @@ public class WhileTest extends ScriptTester {
     public void infiniteMultipleStatementBreaks() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int value) {
                 while (true) {
                     value++;
@@ -346,7 +342,6 @@ public class WhileTest extends ScriptTester {
     public void infiniteBreakInNestedIf() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int value) {
                 while (true) {
                     value++;
@@ -397,41 +392,9 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
-    public void infiniteMultipleBreaks2() {
-        test(new Scriptable() {
-
-            @Debuggable
-            public int act(int value) {
-                int c = 0;
-
-                while (true) {
-                    value++;
-
-                    if (value == 0) {
-                        break;
-                    }
-
-                    if (value % 2 == 0) {
-                        value++;
-
-                        if (value % 3 == 0) {
-                            break;
-                        }
-                    }
-                }
-
-                value += 2;
-
-                return value * c;
-            }
-        });
-    }
-
-    @Test
     public void inifinitContinue() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(@Param(from = 0, to = 10) int value) {
                 while (true) {
                     value++;
@@ -452,6 +415,7 @@ public class WhileTest extends ScriptTester {
     public void inifinitContinueWithShorthandIf() throws Exception {
         test(new Scriptable() {
 
+            @Debuggable
             int act(@Param(from = 0, to = 10) int value) {
                 while (true) {
                     value++;
@@ -470,7 +434,6 @@ public class WhileTest extends ScriptTester {
     public void inifinitContinueWithShorthandIfInAnotherIf() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(@Param(from = 0, to = 20) int value) {
                 while (true) {
                     value++;
@@ -488,4 +451,34 @@ public class WhileTest extends ScriptTester {
             }
         });
     }
+
+    @Test
+    public void infiniteNest() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            int act(int value) {
+                while (true) {
+                    while (true) {
+                        value++;
+
+                        if (value % 3 == 0) {
+                            break;
+                        }
+
+                        if (value % 5 == 0) {
+                            break;
+                        }
+                    }
+
+                    value++;
+
+                    if (value % 2 == 0) {
+                        return value;
+                    }
+                }
+            }
+        });
+    }
+
 }
