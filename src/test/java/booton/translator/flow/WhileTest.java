@@ -431,6 +431,7 @@ public class WhileTest extends ScriptTester {
     public void inifinitContinue() throws Exception {
         test(new Scriptable() {
 
+            @Debuggable
             int act(@Param(from = 0, to = 10) int value) {
                 while (true) {
                     value++;

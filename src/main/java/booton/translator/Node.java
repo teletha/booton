@@ -578,10 +578,18 @@ class Node {
                     process(outgoing.get(0), buffer);
                 } else if (backs == 1) {
                     // do while or infinite loop
+                    // Node exit = serachInfinitLoopExit(this);
+                    //
+                    // if (exit == null) {
+                    // // do while
                     writeDoWhile(buffer);
+                    // } else {
+                    // // infinit loop
+                    // writeInfiniteLoop(exit, buffer);
+                    // }
                 } else {
                     // infinite loop
-                    writeInfiniteLoop(buffer);
+                    writeInfiniteLoop2(buffer);
                 }
             } else if (outs == 2) {
                 // while, for or if
@@ -667,17 +675,32 @@ class Node {
      * 
      * @param buffer
      */
+    private void writeInfiniteLoop(Node exit, ScriptWriter buffer) {
+        LoopStructure loop = new LoopStructure(this, this, exit, null, buffer);
+
+        // make rewritable this node
+        written = false;
+
+        // clear all backedge nodes of infinite loop
+        backedges.clear();
+
+        // re-write script fragment
+        buffer.write("for", "(;;)", "{");
+        write(buffer);
+        buffer.write("}");
+        process(exit, buffer);
+    }
+
+    /**
+     * <p>
+     * Write infinite loop structure.
+     * </p>
+     * 
+     * @param buffer
+     */
     private void writeInfiniteLoop2(ScriptWriter buffer) {
         // search exit node if it is present
-        Node back = backedges.get(0);
-
-        Node nonBackProcess = back.outgoing.get(back.outgoing.get(0) == this ? 1 : 0);
-
-        Node exit = nonBackProcess;
-
-        while (!exit.hasDominator(back)) {
-            exit = exit.outgoing.get(0);
-        }
+        Node exit = serachInfinitLoopExit(this);
 
         LoopStructure loop = new LoopStructure(this, this, exit, null, buffer);
 
@@ -694,7 +717,33 @@ class Node {
         process(exit, buffer);
     }
 
-    private Node serachInfinitExit(Node target) {
+    /**
+     * <p>
+     * Search exit node of the specified infinit loop.
+     * </p>
+     * 
+     * @param loop
+     * @return
+     */
+    private Node serachInfinitLoopExit(Node loop) {
+        for (Node backedge : loop.backedges) {
+            Deque<Node> candidates = new ArrayDeque(backedge.outgoing);
+            Set<Node> recorder = new HashSet();
+            recorder.add(loop);
+            recorder.add(backedge);
+
+            while (!candidates.isEmpty()) {
+                Node node = candidates.pollLast();
+
+                if (recorder.add(node)) {
+                    if (!node.hasDominator(backedge)) {
+                        return node;
+                    } else {
+                        candidates.addAll(node.outgoing);
+                    }
+                }
+            }
+        }
         return null;
     }
 
@@ -958,7 +1007,6 @@ class Node {
 
             if (loop != null) {
                 // continue
-                Debugger.print("Loop? " + id);
                 if (loop.hasHeader(next) && hasDominator(loop.entrance)) {
                     if (Debugger.isEnable()) {
                         buffer.comment(id + " -> " + next.id + " continue to " + loop.entrance.id + " (" + next.currentCalls + " of " + requiredCalls + ")");
@@ -974,16 +1022,20 @@ class Node {
 
                 // break
                 if (!loop.hasHeader(this) && loop.hasExit(next) && hasDominator(loop.entrance)) {
-                    if (Debugger.isEnable()) {
-                        buffer.comment(id + " -> " + next.id + " break to " + loop.entrance.id + "(" + next.currentCalls + " of " + requiredCalls + ")");
+                    // chech whether the current node connects to the exit node directly or not
+                    if (loop.exit.incoming.contains(this)) {
+                        if (Debugger.isEnable()) {
+                            buffer.comment(id + " -> " + next.id + " break to " + loop.entrance.id + "(" + next.currentCalls + " of " + requiredCalls + ")  " + loop);
+                        }
+                        buffer.append("break", loop.computeLabelFor(this), ";").line();
                     }
-                    buffer.append("break", loop.computeLabelFor(this), ";").line();
                     return;
                 }
             }
 
             if (Debugger.isEnable()) {
-                buffer.comment(id + " -> " + next.id + " (" + next.currentCalls + " of " + requiredCalls + ")");
+                buffer.comment(id + " -> " + next.id + " (" + next.currentCalls + " of " + requiredCalls + ")   " + (loop != null ? loop
+                        : ""));
             }
 
             // normal process
@@ -1108,8 +1160,8 @@ class Node {
             this.first.returnOmittable = false;
 
             // associate this structure with exit and checkpoint nodes
-            if (exit.loop == null) exit.loop = this;
-            if (checkpoint.loop == null) checkpoint.loop = this;
+            if (exit != null && exit.loop == null) exit.loop = this;
+            if (checkpoint != null && checkpoint.loop == null) checkpoint.loop = this;
         }
 
         /**
@@ -1180,6 +1232,18 @@ class Node {
          */
         private boolean hasExit(Node node) {
             return node == exit;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return "Loop[entrance=" + id(entrance) + ", first=" + id(first) + ", exit=" + id(exit) + ", check=" + id(checkpoint) + "]";
+        }
+
+        private String id(Node node) {
+            return node == null ? "null" : String.valueOf(node.id);
         }
     }
 
