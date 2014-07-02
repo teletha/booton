@@ -670,7 +670,6 @@ class Node {
         written = false;
 
         LoopStructure loop = new LoopStructure(this, this, null, null, buffer);
-        loops.add(loop);
 
         // clear all backedge nodes of infinite loop
         backedges.clear();
@@ -694,7 +693,6 @@ class Node {
         Debugger.print("loop1 exit: ", exit);
 
         LoopStructure loop = new LoopStructure(this, this, exit, null, buffer);
-        loops.add(loop);
 
         if (exit != null) exit.currentCalls--;
 
@@ -729,7 +727,6 @@ class Node {
         Debugger.print("loop2 exit: null");
 
         LoopStructure loop = new LoopStructure(this, this, null, null, buffer);
-        loops.add(loop);
 
         // make rewritable this node
         written = false;
@@ -760,7 +757,6 @@ class Node {
         Node exit = backedge.searchExit();
 
         LoopStructure loop = new LoopStructure(this, this, exit, null, buffer);
-        loops.add(loop);
 
         if (exit != null) exit.currentCalls--;
 
@@ -793,7 +789,6 @@ class Node {
             writeInfiniteLoop(buffer);
         } else {
             LoopStructure loop = new LoopStructure(this, nodes[0], nodes[1], this, buffer);
-            loops.add(loop);
 
             // write script fragment
             buffer.write("while", "(" + this + ")", "{");
@@ -828,7 +823,6 @@ class Node {
         }
 
         LoopStructure loop = new LoopStructure(this, outgoing.get(0), exit, condition, buffer);
-        loops.add(loop);
 
         // write script fragment
         buffer.write("do", "{");
@@ -869,7 +863,6 @@ class Node {
             });
 
             LoopStructure loop = new LoopStructure(this, nodes[0], nodes[1], update, buffer);
-            loops.add(loop);
 
             Operand operand = peek(0);
 
@@ -1296,7 +1289,7 @@ class Node {
     /**
      * @version 2013/11/27 14:57:53
      */
-    private static class LoopStructure extends Breakable {
+    private class LoopStructure extends Breakable {
 
         /** The super dominator for all nodes in this loop structure. */
         private final Node entrance;
@@ -1338,6 +1331,7 @@ class Node {
             this.first.returnOmittable = false;
 
             // associate this structure with exit and checkpoint nodes
+            loops.add(this);
             if (exit != null) exit.loops.add(this);
             if (checkpoint != null) checkpoint.loops.add(this);
         }
