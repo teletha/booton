@@ -1240,6 +1240,118 @@ class Node {
     }
 
     /**
+     * @version 2014/07/02 17:10:19
+     */
+    private static class InfiniteLoopInfo {
+
+        /** The loop entrance node. */
+        private final Node entrance;
+
+        /** The list of backedges. */
+        private final ArrayDeque<InfiniteLoop> loops = new ArrayDeque();
+
+        /**
+         * @param loops
+         */
+        private InfiniteLoopInfo(Node entrance) {
+            this.entrance = entrance;
+
+            for (Node node : entrance.incoming) {
+                if (entrance.backedges.contains(node)) {
+                    InfiniteLoop loop = new InfiniteLoop(node);
+
+                    if (!loop.merge(loops.peekLast())) {
+                        loops.add(loop);
+                    }
+                }
+            }
+        }
+
+        /**
+         * 
+         */
+        private InfiniteLoop next() {
+            return loops.pollLast();
+        }
+
+        /**
+         * @version 2014/07/02 17:12:28
+         */
+        private class InfiniteLoop {
+
+            /** The actual backedge node. */
+            private final Deque<Node> edges = new ArrayDeque();
+
+            /** The route node of backedge. */
+            private final Node route;
+
+            /**
+             * @param node
+             */
+            private InfiniteLoop(Node node) {
+                this.edges.add(node);
+
+                while (node.outgoing.size() == 1 && node.incoming.size() == 1) {
+                    node = node.incoming.get(0);
+                }
+                this.route = node;
+            }
+
+            /**
+             * <p>
+             * Try to merge two backedge node.
+             * </p>
+             * 
+             * @param other
+             * @return
+             */
+            private boolean merge(InfiniteLoop other) {
+                if (other == null) {
+                    return false;
+                }
+
+                if (route.hasDominator(other.route)) {
+                    // merge
+                    other.edges.add(route);
+
+                    return true;
+                } else {
+                    // can't merge
+                    return false;
+                }
+            }
+
+            /**
+             * <p>
+             * Search exit node of this backedge.
+             * </p>
+             * 
+             * @return
+             */
+            private Node searchExit() {
+                Node backedge = edges.peekLast();
+                Deque<Node> candidates = new ArrayDeque(backedge.outgoing);
+                Set<Node> recorder = new HashSet();
+                recorder.add(entrance);
+                recorder.addAll(entrance.backedges);
+
+                while (!candidates.isEmpty()) {
+                    Node node = candidates.pollFirst();
+
+                    if (recorder.add(node)) {
+                        if (!node.hasDominator(backedge)) {
+                            return node;
+                        } else {
+                            candidates.addAll(node.outgoing);
+                        }
+                    }
+                }
+                return null;
+            }
+        }
+    }
+
+    /**
      * @version 2013/11/27 14:57:53
      */
     private static class LoopStructure {
