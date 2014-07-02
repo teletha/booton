@@ -275,6 +275,26 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
+    public void infiniteFisrtBreak() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                while (true) {
+                    value++;
+
+                    if (value == 5 || value == 6) {
+                        break;
+                    }
+
+                    value++;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
     public void infiniteStatementBreakWithFollow() {
         test(new Scriptable() {
 
@@ -481,4 +501,40 @@ public class WhileTest extends ScriptTester {
         });
     }
 
+    @Test
+    public void infiniteNestBreakAndContinue() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            int act(@Param(from = 0, to = 10) int value) {
+                int a = 0;
+
+                while (true) {
+                    while (true) {
+                        value++;
+
+                        if (value % 3 == 0) {
+                            break;
+                        }
+
+                        if (value % 4 == 0) {
+                            a++;
+                            continue;
+                        }
+
+                        if (value % 5 == 0) {
+                            break;
+                        }
+                    }
+
+                    a++;
+
+                    if (value % 2 == 0) {
+                        break;
+                    }
+                }
+                return a;
+            }
+        });
+    }
 }
