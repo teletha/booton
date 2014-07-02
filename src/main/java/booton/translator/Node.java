@@ -347,6 +347,7 @@ class Node {
             if (current == dominator) {
                 return true;
             }
+            Debugger.print("up " + current.id);
             current = current.getDominator();
         }
 
@@ -361,7 +362,7 @@ class Node {
      */
     final Node getDominator() {
         // check cache
-        if (dominator == null && !whileFindingDominator) {
+        if (previous != null && dominator == null && !whileFindingDominator) {
             whileFindingDominator = true;
 
             // We must search a immediate dominator.
@@ -593,7 +594,9 @@ class Node {
                 } else if (backs == 1) {
                     // do while or infinite loop
                     if (backedges.get(0).stack.peekLast() instanceof OperandCondition) {
-                        Node exit = searchInfinitLoopExit(this);
+                        InfiniteLoopInfo group = getInfiniteLoopInfo();
+                        InfiniteLoopInfo.InfiniteLoop backedge = group.next();
+                        Node exit = backedge.searchExit();
 
                         if (exit == null) {
                             // do while
@@ -608,7 +611,7 @@ class Node {
                     }
                 } else {
                     // infinit loop
-                    writeInfiniteLoop3(searchInfinitLoopExit(this), buffer);
+                    writeInfiniteLoop3(buffer);
                 }
             } else if (outs == 2) {
                 // while, for or if
@@ -678,12 +681,16 @@ class Node {
         // make rewritable this node
         written = false;
 
+        loop = new LoopStructure(this, this, null, null, buffer);
+
         // clear all backedge nodes of infinite loop
         backedges.clear();
 
         // re-write script fragment
         buffer.write("for", "(;;)", "{");
+        breakables.add(loop);
         write(buffer);
+        breakables.removeLast();
         buffer.write("}");
     }
 
@@ -698,6 +705,7 @@ class Node {
         Debugger.print("loop1 exit: ", exit);
 
         loop = new LoopStructure(this, this, exit, null, buffer);
+
         if (exit != null) exit.currentCalls--;
 
         // make rewritable this node
@@ -753,8 +761,12 @@ class Node {
      * 
      * @param buffer
      */
-    private void writeInfiniteLoop3(Node exit, ScriptWriter buffer) {
-        Debugger.print("loop3 exit: ", exit);
+    private void writeInfiniteLoop3(ScriptWriter buffer) {
+        Debugger.print("loop3");
+
+        InfiniteLoopInfo group = getInfiniteLoopInfo();
+        InfiniteLoopInfo.InfiniteLoop backedge = group.next();
+        Node exit = backedge.searchExit();
 
         loop = new LoopStructure(this, this, exit, null, buffer);
         if (exit != null) exit.currentCalls--;
@@ -763,11 +775,7 @@ class Node {
         written = false;
 
         // clear all backedge nodes of infinite loop
-        if (exit == null) {
-            backedges.clear();
-        } else {
-            backedges.clear();
-        }
+        backedges.removeAll(backedge.edges);
 
         // re-write script fragment
         buffer.write("for", "(;;)", "{");
@@ -788,84 +796,6 @@ class Node {
      */
     private Node searchInfinitLoopExit(Node loop) {
         for (Node backedge : backedges) {
-            Deque<Node> candidates = new ArrayDeque(backedge.outgoing);
-            Set<Node> recorder = new HashSet();
-            recorder.add(loop);
-            recorder.addAll(loop.backedges);
-
-            while (!candidates.isEmpty()) {
-                Node node = candidates.pollFirst();
-
-                if (recorder.add(node)) {
-                    if (!node.hasDominator(backedge)) {
-                        return node;
-                    } else {
-                        candidates.addAll(node.outgoing);
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @version 2014/07/02 17:10:19
-     */
-    private static class InfinitLoop {
-
-        /** The list of backedges. */
-        private final List<Backedge> backedges = new ArrayList();
-
-        /**
-         * @param backedges
-         */
-        private InfinitLoop(Node loop) {
-            for (Node node : loop.incoming) {
-                if (loop.backedges.contains(node)) {
-                    backedges.add(new Backedge(node));
-                }
-            }
-        }
-    }
-
-    /**
-     * @version 2014/07/02 17:12:28
-     */
-    private static class Backedge {
-
-        /** The actual backedge node. */
-        private final Node edge;
-
-        /** The route node of backedge. */
-        private final Node route;
-
-        /**
-         * @param node
-         */
-        private Backedge(Node node) {
-            this.edge = node;
-
-            while (node.outgoing.size() == 1 && node.incoming.size() == 1) {
-                node = node.incoming.get(0);
-            }
-            this.route = node;
-        }
-    }
-
-    /**
-     * <p>
-     * Search exit node of the specified infinit loop.
-     * </p>
-     * 
-     * @param loop
-     * @return
-     */
-    private Node searchInfinitLoopExitFromEnd(Node loop) {
-        InfinitLoop info = new InfinitLoop(loop);
-
-        for (int i = backedges.size() - 1; 0 <= i; i--) {
-            Node backedge = backedges.get(i);
             Deque<Node> candidates = new ArrayDeque(backedge.outgoing);
             Set<Node> recorder = new HashSet();
             recorder.add(loop);
@@ -1163,6 +1093,8 @@ class Node {
                 }
 
                 // break
+                Debugger.print(!loop.hasHeader(this) + "  " + loop.hasExit(next) + "  " + hasDominator(loop.entrance) + "  " + id + "  ");
+                Debugger.print(this);
                 if (!loop.hasHeader(this) && loop.hasExit(next) && hasDominator(loop.entrance)) {
                     // check whether the current node connects to the exit node directly or not
                     if (loop.exit.incoming.contains(this)) {
@@ -1237,6 +1169,12 @@ class Node {
         previous.connect(node);
         node.connect(next);
 
+        previous.next = node;
+        node.next = next;
+
+        next.previous = node;
+        node.previous = previous;
+
         // API definition
         return node;
     }
@@ -1252,6 +1190,15 @@ class Node {
             builder.append(operand.disclose());
         }
         return builder.toString();
+    }
+
+    private InfiniteLoopInfo info;
+
+    private InfiniteLoopInfo getInfiniteLoopInfo() {
+        if (info == null) {
+            info = new InfiniteLoopInfo(this);
+        }
+        return info;
     }
 
     /**
