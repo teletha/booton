@@ -324,6 +324,17 @@ class Node {
     }
 
     /**
+     * <p>
+     * Check this node is empty or not.
+     * </p>
+     * 
+     * @return
+     */
+    final boolean isEmpty() {
+        return stack.isEmpty() && outgoing.size() == 1 && incoming.size() == 1;
+    }
+
+    /**
      * Helper method to check whether the specified node dominate this node or not.
      * 
      * @param dominator A dominator node.
@@ -578,18 +589,23 @@ class Node {
                     process(outgoing.get(0), buffer);
                 } else if (backs == 1) {
                     // do while or infinite loop
-                    Node exit = searchInfinitLoopExit(this);
+                    if (backedges.get(0).stack.peekLast() instanceof OperandCondition) {
+                        Node exit = searchInfinitLoopExit(this);
 
-                    if (exit == null) {
-                        // do while
-                        writeDoWhile(buffer);
+                        if (exit == null) {
+                            // do while
+                            writeDoWhile(buffer);
+                        } else {
+                            // infinit loop
+                            writeInfiniteLoop1(exit, buffer);
+                        }
                     } else {
                         // infinit loop
-                        writeInfiniteLoop(exit, buffer);
+                        writeInfiniteLoop2(buffer);
                     }
                 } else {
                     // infinit loop
-                    writeInfiniteLoop(searchInfinitLoopExit(this), buffer);
+                    writeInfiniteLoop3(searchInfinitLoopExit(this), buffer);
                 }
             } else if (outs == 2) {
                 // while, for or if
@@ -675,7 +691,64 @@ class Node {
      * 
      * @param buffer
      */
-    private void writeInfiniteLoop(Node exit, ScriptWriter buffer) {
+    private void writeInfiniteLoop1(Node exit, ScriptWriter buffer) {
+        Debugger.print("loop1 exit: ", exit);
+
+        loop = new LoopStructure(this, this, exit, null, buffer);
+        if (exit != null) exit.currentCalls--;
+
+        // make rewritable this node
+        written = false;
+
+        // clear all backedge nodes of infinite loop
+        if (exit == null) {
+            backedges.clear();
+        } else {
+            backedges.clear();
+        }
+
+        // re-write script fragment
+        buffer.write("for", "(;;)", "{");
+        write(buffer);
+        buffer.write("}");
+        process(exit, buffer);
+    }
+
+    /**
+     * <p>
+     * Write infinite loop structure.
+     * </p>
+     * 
+     * @param buffer
+     */
+    private void writeInfiniteLoop2(ScriptWriter buffer) {
+        // non-conditional single backedge
+        Debugger.print("loop2 exit: null");
+
+        loop = new LoopStructure(this, this, null, null, buffer);
+
+        // make rewritable this node
+        written = false;
+
+        // clear all backedge nodes of infinite loop
+        backedges.clear();
+
+        // re-write script fragment
+        buffer.write("for", "(;;)", "{");
+        write(buffer);
+        buffer.write("}");
+    }
+
+    /**
+     * <p>
+     * Write infinite loop structure.
+     * </p>
+     * 
+     * @param buffer
+     */
+    private void writeInfiniteLoop3(Node exit, ScriptWriter buffer) {
+        Debugger.print("loop3 exit: ", exit);
+
         loop = new LoopStructure(this, this, exit, null, buffer);
         if (exit != null) exit.currentCalls--;
 
@@ -728,6 +801,84 @@ class Node {
     }
 
     /**
+     * @version 2014/07/02 17:10:19
+     */
+    private static class InfinitLoop {
+
+        /** The list of backedges. */
+        private final List<Backedge> backedges = new ArrayList();
+
+        /**
+         * @param backedges
+         */
+        private InfinitLoop(Node loop) {
+            for (Node node : loop.incoming) {
+                if (loop.backedges.contains(node)) {
+                    backedges.add(new Backedge(node));
+                }
+            }
+        }
+    }
+
+    /**
+     * @version 2014/07/02 17:12:28
+     */
+    private static class Backedge {
+
+        /** The actual backedge node. */
+        private final Node edge;
+
+        /** The route node of backedge. */
+        private final Node route;
+
+        /**
+         * @param node
+         */
+        private Backedge(Node node) {
+            this.edge = node;
+
+            while (node.outgoing.size() == 1 && node.incoming.size() == 1) {
+                node = node.incoming.get(0);
+            }
+            this.route = node;
+        }
+    }
+
+    /**
+     * <p>
+     * Search exit node of the specified infinit loop.
+     * </p>
+     * 
+     * @param loop
+     * @return
+     */
+    private Node searchInfinitLoopExitFromEnd(Node loop) {
+        InfinitLoop info = new InfinitLoop(loop);
+
+        for (int i = backedges.size() - 1; 0 <= i; i--) {
+            Node backedge = backedges.get(i);
+            Deque<Node> candidates = new ArrayDeque(backedge.outgoing);
+            Set<Node> recorder = new HashSet();
+            recorder.add(loop);
+            recorder.addAll(loop.backedges);
+
+            while (!candidates.isEmpty()) {
+                Node node = candidates.pollFirst();
+
+                if (recorder.add(node)) {
+                    if (!node.hasDominator(backedge)) {
+                        return node;
+                    } else {
+                        candidates.addAll(node.outgoing);
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * <p>
      * Write while structure.
      * </p>
@@ -740,7 +891,7 @@ class Node {
         if (nodes == null) {
             writeInfiniteLoop(buffer);
         } else {
-            LoopStructure loop = new LoopStructure(this, nodes[0], nodes[1], this, buffer);
+            loop = new LoopStructure(this, nodes[0], nodes[1], this, buffer);
 
             // write script fragment
             buffer.write("while", "(" + this + ")", "{");
@@ -762,29 +913,25 @@ class Node {
         // setup condition expression node
         Node condition = backedges.remove(0);
 
-        if (condition.outgoing.size() == 1) {
-            writeInfiniteLoop(buffer);
+        condition.written = true;
+
+        Node exit;
+
+        if (condition.outgoing.get(0) == this) {
+            exit = condition.outgoing.get(1);
         } else {
-            condition.written = true;
-
-            Node exit;
-
-            if (condition.outgoing.get(0) == this) {
-                exit = condition.outgoing.get(1);
-            } else {
-                exit = condition.outgoing.get(0);
-            }
-
-            LoopStructure loop = new LoopStructure(this, outgoing.get(0), exit, condition, buffer);
-
-            // write script fragment
-            buffer.write("do", "{");
-            buffer.append(this);
-            process(outgoing.get(0), buffer);
-            buffer.write("}", "while", "(" + condition + ")");
-            loop.writeRequiredLabel();
-            condition.process(exit, buffer);
+            exit = condition.outgoing.get(0);
         }
+
+        loop = new LoopStructure(this, outgoing.get(0), exit, condition, buffer);
+
+        // write script fragment
+        buffer.write("do", "{");
+        buffer.append(this);
+        process(outgoing.get(0), buffer);
+        buffer.write("}", "while", "(" + condition + ")");
+        loop.writeRequiredLabel();
+        condition.process(exit, buffer);
     }
 
     /**
@@ -814,7 +961,7 @@ class Node {
                 return operand != END ? operand : new OperandExpression(",");
             });
 
-            LoopStructure loop = new LoopStructure(this, nodes[0], nodes[1], update, buffer);
+            loop = new LoopStructure(this, nodes[0], nodes[1], update, buffer);
             Operand operand = peek(0);
 
             if (operand instanceof OperandCondition) {
@@ -989,7 +1136,7 @@ class Node {
                 // continue
                 if (loop.hasHeader(next) && hasDominator(loop.entrance)) {
                     if (Debugger.isEnable()) {
-                        buffer.comment(id + " -> " + next.id + " continue to " + loop.entrance.id + " (" + next.currentCalls + " of " + requiredCalls + ")");
+                        buffer.comment(id + " -> " + next.id + " continue to " + loop.entrance.id + " (" + next.currentCalls + " of " + requiredCalls + ")  " + loop);
                     }
 
                     String label = loop.computeLabelFor(this);
@@ -1181,9 +1328,19 @@ class Node {
          * @return A result.
          */
         private boolean isImmediateLoopFrom(Node node) {
+            Deque<LoopStructure> ignore = new ArrayDeque();
+
             while (node != null) {
                 if (node.breakableHeader) {
-                    return node == first;
+                    if (ignore.remove(node.loop)) {
+                        // skip
+                    } else {
+                        return node == first;
+                    }
+                } else {
+                    if (node.loop != null && node.loop.hasExit(node)) {
+                        ignore.add(node.loop);
+                    }
                 }
                 node = node.getDominator();
             }
