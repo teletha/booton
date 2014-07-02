@@ -324,17 +324,6 @@ class Node {
     }
 
     /**
-     * <p>
-     * Check this node is empty or not.
-     * </p>
-     * 
-     * @return
-     */
-    final boolean isEmpty() {
-        return stack.isEmpty() && outgoing.size() == 1 && incoming.size() == 1;
-    }
-
-    /**
      * Helper method to check whether the specified node dominate this node or not.
      * 
      * @param dominator A dominator node.
@@ -347,7 +336,6 @@ class Node {
             if (current == dominator) {
                 return true;
             }
-            Debugger.print("up " + current.id);
             current = current.getDominator();
         }
 
@@ -793,37 +781,6 @@ class Node {
 
     /**
      * <p>
-     * Search exit node of the specified infinit loop.
-     * </p>
-     * 
-     * @param loop
-     * @return
-     */
-    private Node searchInfinitLoopExit(Node loop) {
-        for (Node backedge : backedges) {
-            Deque<Node> candidates = new ArrayDeque(backedge.outgoing);
-            Set<Node> recorder = new HashSet();
-            recorder.add(loop);
-            recorder.addAll(loop.backedges);
-
-            while (!candidates.isEmpty()) {
-                Node node = candidates.pollFirst();
-
-                if (recorder.add(node)) {
-                    if (!node.hasDominator(backedge)) {
-                        return node;
-                    } else {
-                        candidates.addAll(node.outgoing);
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * <p>
      * Write while structure.
      * </p>
      * 
@@ -1102,8 +1059,6 @@ class Node {
                 }
 
                 // break
-                Debugger.print(!loop.hasHeader(this) + "  " + loop.hasExit(next) + "  " + hasDominator(loop.entrance) + "  " + id + "  ");
-                Debugger.print(this);
                 if (!loop.hasHeader(this) && loop.hasExit(next) && hasDominator(loop.entrance)) {
                     // check whether the current node connects to the exit node directly or not
                     if (loop.exit.incoming.contains(this)) {
@@ -1281,7 +1236,7 @@ class Node {
                     return false;
                 }
 
-                if (route.hasDominator(other.route)) {
+                if (route.incoming.contains(other.route) || route.hasDominator(other.route)) {
                     // merge
                     other.edges.add(route);
 
@@ -1383,8 +1338,8 @@ class Node {
             this.first.returnOmittable = false;
 
             // associate this structure with exit and checkpoint nodes
-            if (exit != null && exit.loops.isEmpty()) exit.loops.add(this);
-            if (checkpoint != null && checkpoint.loops.isEmpty()) checkpoint.loops.add(this);
+            if (exit != null) exit.loops.add(this);
+            if (checkpoint != null) checkpoint.loops.add(this);
         }
 
         /**
@@ -1439,16 +1394,16 @@ class Node {
             return node == exit;
         }
 
+        private String id(Node node) {
+            return node == null ? "null" : String.valueOf(node.id);
+        }
+
         /**
          * {@inheritDoc}
          */
         @Override
         public String toString() {
             return "Loop[entrance=" + id(entrance) + ", first=" + id(first) + ", exit=" + id(exit) + ", check=" + id(checkpoint) + "]";
-        }
-
-        private String id(Node node) {
-            return node == null ? "null" : String.valueOf(node.id);
         }
     }
 
