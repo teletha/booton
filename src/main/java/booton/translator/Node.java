@@ -33,6 +33,9 @@ class Node {
     /** The frequently used operand for cache. */
     static final OperandExpression Return = new OperandExpression("return ");
 
+    /** The stack of labeled blocks. */
+    private static final Deque<Breakable> breakables = new ArrayDeque();
+
     /** The identified label for this node. */
     final int id;
 
@@ -80,9 +83,6 @@ class Node {
 
     /** The flag whether this node has already written or not. */
     private boolean written = false;
-
-    /** The flag whether this node is first node of breakable structure or not. */
-    private boolean breakableHeader;
 
     /** The flag whether this node can omit continue statement safely or not. */
     private Boolean continueOmittable;
@@ -539,6 +539,7 @@ class Node {
 
                 // enter switch
                 buffer.write("switch", "(" + switchy.value + ")", "{");
+                breakables.add(switchy);
 
                 // each cases
                 for (Node node : switchy.cases()) {
@@ -553,6 +554,8 @@ class Node {
                     buffer.append("default:").line();
                     process(switchy.defaults, buffer);
                 }
+
+                breakables.pollLast();
 
                 // exit switch
                 buffer.append("}").line();
@@ -709,7 +712,9 @@ class Node {
 
         // re-write script fragment
         buffer.write("for", "(;;)", "{");
+        breakables.add(loop);
         write(buffer);
+        breakables.removeLast();
         buffer.write("}");
         process(exit, buffer);
     }
@@ -735,7 +740,9 @@ class Node {
 
         // re-write script fragment
         buffer.write("for", "(;;)", "{");
+        breakables.add(loop);
         write(buffer);
+        breakables.removeLast();
         buffer.write("}");
     }
 
@@ -764,7 +771,9 @@ class Node {
 
         // re-write script fragment
         buffer.write("for", "(;;)", "{");
+        breakables.add(loop);
         write(buffer);
+        breakables.removeLast();
         buffer.write("}");
         process(exit, buffer);
     }
@@ -895,7 +904,9 @@ class Node {
 
             // write script fragment
             buffer.write("while", "(" + this + ")", "{");
+            breakables.add(loop);
             process(nodes[0], buffer);
+            breakables.removeLast();
             buffer.write("}").line();
             loop.writeRequiredLabel();
             process(nodes[1], buffer);
@@ -927,8 +938,10 @@ class Node {
 
         // write script fragment
         buffer.write("do", "{");
+        breakables.add(loop);
         buffer.append(this);
         process(outgoing.get(0), buffer);
+        breakables.removeLast();
         buffer.write("}", "while", "(" + condition + ")");
         loop.writeRequiredLabel();
         condition.process(exit, buffer);
@@ -974,7 +987,9 @@ class Node {
 
             // write script fragment
             buffer.write("for", "(;", this + ";", update + ")", "{");
+            breakables.add(loop);
             process(nodes[0], buffer);
+            breakables.removeLast();
             buffer.write("}").line();
             loop.writeRequiredLabel();
             process(nodes[1], buffer);
@@ -1139,7 +1154,7 @@ class Node {
                         buffer.comment(id + " -> " + next.id + " continue to " + loop.entrance.id + " (" + next.currentCalls + " of " + requiredCalls + ")  " + loop);
                     }
 
-                    String label = loop.computeLabelFor(this);
+                    String label = loop.computeLabelFor(next);
 
                     if (label.length() != 0 || continueOmittable == null || !continueOmittable) {
                         buffer.append("continue", label, ";").line();
@@ -1154,7 +1169,7 @@ class Node {
                         if (Debugger.isEnable()) {
                             buffer.comment(id + " -> " + next.id + " break to " + loop.entrance.id + "(" + next.currentCalls + " of " + requiredCalls + ")  " + loop);
                         }
-                        buffer.append("break", loop.computeLabelFor(this), ";").line();
+                        buffer.append("break", loop.computeLabelFor(next), ";").line();
                     }
                     return;
                 }
@@ -1251,7 +1266,7 @@ class Node {
         private final ArrayDeque<InfiniteLoop> loops = new ArrayDeque();
 
         /**
-         * @param loops
+         * @param breakables
          */
         private InfiniteLoopInfo(Node entrance) {
             this.entrance = entrance;
@@ -1352,15 +1367,28 @@ class Node {
     }
 
     /**
+     * @version 2014/07/02 23:19:37
+     */
+    private abstract static class Breakable {
+
+        /** The first processing node of this block structure. */
+        protected final Node first;
+
+        /**
+         * @param first
+         */
+        protected Breakable(Node first) {
+            this.first = first;
+        }
+    }
+
+    /**
      * @version 2013/11/27 14:57:53
      */
-    private static class LoopStructure {
+    private static class LoopStructure extends Breakable {
 
         /** The super dominator for all nodes in this loop structure. */
         private final Node entrance;
-
-        /** The first processing node of this loop structure. */
-        private final Node first;
 
         /** The exit node of this loop structure if present. */
         private final Node exit;
@@ -1385,8 +1413,9 @@ class Node {
          *            if present.
          */
         private LoopStructure(Node entrance, Node first, Node exit, Node checkpoint, ScriptWriter buffer) {
+            super(first == checkpoint ? entrance : first);
+
             this.entrance = entrance;
-            this.first = first == checkpoint ? entrance : first;
             this.exit = exit;
             this.checkpoint = checkpoint;
             this.buffer = buffer;
@@ -1394,7 +1423,6 @@ class Node {
 
             // The first node must be the header of breakable structure and
             // be able to omit continue statement.
-            this.first.breakableHeader = true;
             this.first.continueOmittable = true;
             this.first.returnOmittable = false;
 
@@ -1412,7 +1440,7 @@ class Node {
          * @return
          */
         private String computeLabelFor(Node node) {
-            if (isImmediateLoopFrom(node)) {
+            if (breakables.peekLast() == node.loop) {
                 return "";
             } else {
                 requireLabel = true;
@@ -1429,34 +1457,6 @@ class Node {
             if (requireLabel) {
                 buffer.insertAt(position, "l" + entrance.id + ":");
             }
-        }
-
-        /**
-         * <p>
-         * Detect whether this loop contains the specified node directly or not.
-         * </p>
-         * 
-         * @param node A target node.
-         * @return A result.
-         */
-        private boolean isImmediateLoopFrom(Node node) {
-            Deque<LoopStructure> ignore = new ArrayDeque();
-
-            while (node != null) {
-                if (node.breakableHeader) {
-                    if (ignore.remove(node.loop)) {
-                        // skip
-                    } else {
-                        return node == first;
-                    }
-                } else {
-                    if (node.loop != null && node.loop.hasExit(node)) {
-                        ignore.add(node.loop);
-                    }
-                }
-                node = node.getDominator();
-            }
-            return false;
         }
 
         /**
@@ -1499,7 +1499,7 @@ class Node {
     /**
      * @version 2013/01/23 9:25:08
      */
-    static class Switch {
+    static class Switch extends Breakable {
 
         /** The entering node. */
         private final Node enter;
@@ -1530,6 +1530,8 @@ class Node {
          * @param cases
          */
         private Switch(Node enter, Node defaults, int[] keys, List<Node> cases) {
+            super(enter);
+
             this.enter = enter;
             this.value = enter.remove(0);
             this.defaults = defaults;
@@ -1538,13 +1540,6 @@ class Node {
             for (int key : keys) {
                 this.keys.add(key);
             }
-
-            defaults.breakableHeader = true;
-
-            for (Node node : cases) {
-                node.breakableHeader = true;
-            }
-
         }
 
         /**
@@ -1662,6 +1657,14 @@ class Node {
                 return true;
             }
             return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return "Switch [enter=" + enter.id + "]";
         }
     }
 
