@@ -97,7 +97,7 @@ class Node {
     private int currentCalls = 0;
 
     /** The associated loop structure. */
-    private LoopStructure loop;
+    private Deque<LoopStructure> loops = new ArrayDeque();
 
     /**
      * @param label
@@ -681,7 +681,8 @@ class Node {
         // make rewritable this node
         written = false;
 
-        loop = new LoopStructure(this, this, null, null, buffer);
+        LoopStructure loop = new LoopStructure(this, this, null, null, buffer);
+        loops.add(loop);
 
         // clear all backedge nodes of infinite loop
         backedges.clear();
@@ -704,7 +705,8 @@ class Node {
     private void writeInfiniteLoop1(Node exit, ScriptWriter buffer) {
         Debugger.print("loop1 exit: ", exit);
 
-        loop = new LoopStructure(this, this, exit, null, buffer);
+        LoopStructure loop = new LoopStructure(this, this, exit, null, buffer);
+        loops.add(loop);
 
         if (exit != null) exit.currentCalls--;
 
@@ -738,7 +740,8 @@ class Node {
         // non-conditional single backedge
         Debugger.print("loop2 exit: null");
 
-        loop = new LoopStructure(this, this, null, null, buffer);
+        LoopStructure loop = new LoopStructure(this, this, null, null, buffer);
+        loops.add(loop);
 
         // make rewritable this node
         written = false;
@@ -768,7 +771,9 @@ class Node {
         InfiniteLoopInfo.InfiniteLoop backedge = group.next();
         Node exit = backedge.searchExit();
 
-        loop = new LoopStructure(this, this, exit, null, buffer);
+        LoopStructure loop = new LoopStructure(this, this, exit, null, buffer);
+        loops.add(loop);
+
         if (exit != null) exit.currentCalls--;
 
         // make rewritable this node
@@ -830,7 +835,8 @@ class Node {
         if (nodes == null) {
             writeInfiniteLoop(buffer);
         } else {
-            loop = new LoopStructure(this, nodes[0], nodes[1], this, buffer);
+            LoopStructure loop = new LoopStructure(this, nodes[0], nodes[1], this, buffer);
+            loops.add(loop);
 
             // write script fragment
             buffer.write("while", "(" + this + ")", "{");
@@ -864,7 +870,8 @@ class Node {
             exit = condition.outgoing.get(0);
         }
 
-        loop = new LoopStructure(this, outgoing.get(0), exit, condition, buffer);
+        LoopStructure loop = new LoopStructure(this, outgoing.get(0), exit, condition, buffer);
+        loops.add(loop);
 
         // write script fragment
         buffer.write("do", "{");
@@ -904,7 +911,9 @@ class Node {
                 return operand != END ? operand : new OperandExpression(",");
             });
 
-            loop = new LoopStructure(this, nodes[0], nodes[1], update, buffer);
+            LoopStructure loop = new LoopStructure(this, nodes[0], nodes[1], update, buffer);
+            loops.add(loop);
+
             Operand operand = peek(0);
 
             if (operand instanceof OperandCondition) {
@@ -1040,7 +1049,7 @@ class Node {
         }
 
         // check whether all following nodes can omit continue statement or not
-        if (follow != null && follow.loop == null) {
+        if (follow != null && follow.loops.isEmpty()) {
             then.continueOmittable = false;
             then.returnOmittable = false;
             if (elze != null) {
@@ -1075,7 +1084,7 @@ class Node {
             // count a number of required write call
             int requiredCalls = next.incoming.size() - next.backedges.size() + next.additionalCalls;
 
-            LoopStructure loop = next.loop;
+            LoopStructure loop = next.loops.peekLast();
 
             if (loop != null) {
                 // continue
@@ -1374,8 +1383,8 @@ class Node {
             this.first.returnOmittable = false;
 
             // associate this structure with exit and checkpoint nodes
-            if (exit != null && exit.loop == null) exit.loop = this;
-            if (checkpoint != null && checkpoint.loop == null) checkpoint.loop = this;
+            if (exit != null && exit.loops.isEmpty()) exit.loops.add(this);
+            if (checkpoint != null && checkpoint.loops.isEmpty()) checkpoint.loops.add(this);
         }
 
         /**
@@ -1387,7 +1396,7 @@ class Node {
          * @return
          */
         private String computeLabelFor(Node node) {
-            if (breakables.peekLast() == node.loop) {
+            if (node.loops.contains(breakables.peekLast())) {
                 return "";
             } else {
                 requireLabel = true;
