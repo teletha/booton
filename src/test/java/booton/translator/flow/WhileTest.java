@@ -244,6 +244,7 @@ public class WhileTest extends ScriptTester {
     public void sequentialWithComplexCondition() throws Exception {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(int value) {
                 while (0 < value && value < 5) {
                     value++;
@@ -359,9 +360,36 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
+    public void infiniteNonConditionaSingleBackedge() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                while (true) {
+                    value++;
+
+                    if (value == 0) {
+                        value += 2;
+                        break;
+                    }
+
+                    if (value % 2 == 0) {
+                        value += 3;
+                        break;
+                    }
+
+                    value += 2;
+                }
+                return value;
+            }
+        });
+    }
+
+    @Test
     public void infiniteBreakInNestedIf() {
         test(new Scriptable() {
 
+            @Debuggable
             public int act(int value) {
                 while (true) {
                     value++;
@@ -415,6 +443,7 @@ public class WhileTest extends ScriptTester {
     public void inifinitContinue() throws Exception {
         test(new Scriptable() {
 
+            @Debuggable
             int act(@Param(from = 0, to = 10) int value) {
                 while (true) {
                     value++;
@@ -454,6 +483,7 @@ public class WhileTest extends ScriptTester {
     public void inifinitContinueWithShorthandIfInAnotherIf() throws Exception {
         test(new Scriptable() {
 
+            @Debuggable
             int act(@Param(from = 0, to = 20) int value) {
                 while (true) {
                     value++;
