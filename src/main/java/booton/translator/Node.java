@@ -331,11 +331,13 @@ class Node {
      */
     final boolean hasDominator(Node dominator) {
         Node current = this;
+        Set<Node> recorder = new HashSet();
 
-        while (current != null) {
+        while (current != null && recorder.add(current)) {
             if (current == dominator) {
                 return true;
             }
+            Debugger.print("search dominator from " + current.id);
             current = current.getDominator();
         }
 
@@ -350,7 +352,7 @@ class Node {
      */
     final Node getDominator() {
         // check cache
-        if (previous != null && dominator == null && !whileFindingDominator) {
+        if (dominator == null && !whileFindingDominator) {
             whileFindingDominator = true;
 
             // We must search a immediate dominator.
@@ -582,9 +584,8 @@ class Node {
                 } else if (backs == 1) {
                     // do while or infinite loop
                     if (backedges.get(0).stack.peekLast() instanceof OperandCondition) {
-                        InfiniteLoopInfo group = getInfiniteLoopInfo();
-                        InfiniteLoopInfo.InfiniteLoop backedge = group.next();
-                        Node exit = backedge.searchExit();
+                        InfiniteLoopGroup group = new InfiniteLoopGroup(this);
+                        Node exit = group.exit;
 
                         if (exit == null) {
                             // do while
@@ -752,9 +753,8 @@ class Node {
     private void writeInfiniteLoop3(ScriptWriter buffer) {
         Debugger.print("loop3");
 
-        InfiniteLoopInfo group = getInfiniteLoopInfo();
-        InfiniteLoopInfo.InfiniteLoop backedge = group.next();
-        Node exit = backedge.searchExit();
+        InfiniteLoopGroup group = new InfiniteLoopGroup(this);
+        Node exit = group.exit;
 
         LoopStructure loop = new LoopStructure(this, this, exit, null, buffer);
 
@@ -764,7 +764,7 @@ class Node {
         written = false;
 
         // clear all backedge nodes of infinite loop
-        backedges.removeAll(backedge.edges);
+        backedges.removeAll(group);
 
         // re-write script fragment
         buffer.write("for", "(;;)", "{");
@@ -1149,124 +1149,75 @@ class Node {
         return builder.toString();
     }
 
-    private InfiniteLoopInfo info;
-
-    private InfiniteLoopInfo getInfiniteLoopInfo() {
-        if (info == null) {
-            info = new InfiniteLoopInfo(this);
-        }
-        return info;
-    }
-
     /**
-     * @version 2014/07/02 17:10:19
+     * @version 2014/07/03 11:36:56
      */
-    private static class InfiniteLoopInfo {
+    private static class InfiniteLoopGroup extends ArrayDeque {
 
-        /** The loop entrance node. */
-        private final Node entrance;
-
-        /** The list of backedges. */
-        private final ArrayDeque<InfiniteLoop> loops = new ArrayDeque();
+        /** The loop exit node. */
+        private Node exit;
 
         /**
          * @param breakables
          */
-        private InfiniteLoopInfo(Node entrance) {
-            this.entrance = entrance;
+        private InfiniteLoopGroup(Node entrance) {
+            // collect all backedges which share same infinite loop structure
+            Node base = null;
 
-            for (Node node : entrance.incoming) {
+            // the descendant order in incoming nodes is important
+            for (int i = entrance.incoming.size() - 1; 0 <= i; i--) {
+                Node node = entrance.incoming.get(i);
+
+                // we needs backedge nodes only
                 if (entrance.backedges.contains(node)) {
-                    InfiniteLoop loop = new InfiniteLoop(node);
+                    // track back to branch node
+                    Node branch = findBranch(node);
 
-                    if (!loop.merge(loops.peekLast())) {
-                        loops.add(loop);
+                    if (base == null) {
+                        // first backedge
+
+                        // store as base node to collect all other backedges which share same
+                        // infinite loop structure
+                        base = branch;
+                        add(node);
+                    } else if (base.incoming.contains(branch) || base.hasDominator(branch)) {
+                        // following backedges which is dominated by base node
+                        add(node);
+                    } else {
+                        // stop collecting
+                        break;
+                    }
+                }
+            }
+
+            // search exit node of this infinite loop structure (depth-first search)
+            //
+            // startfrom base node
+            Deque<Node> candidates = new ArrayDeque(base.outgoing);
+
+            // record accessed nodes to avoid second access
+            Set<Node> recorder = new HashSet(entrance.incoming);
+            recorder.add(entrance);
+
+            while (!candidates.isEmpty()) {
+                Node node = candidates.pollFirst();
+
+                if (recorder.add(node)) {
+                    if (!node.hasDominator(base)) {
+                        exit = node;
+                        break;
+                    } else {
+                        candidates.addAll(node.outgoing);
                     }
                 }
             }
         }
 
-        /**
-         * 
-         */
-        private InfiniteLoop next() {
-            return loops.pollLast();
-        }
-
-        /**
-         * @version 2014/07/02 17:12:28
-         */
-        private class InfiniteLoop {
-
-            /** The actual backedge node. */
-            private final Deque<Node> edges = new ArrayDeque();
-
-            /** The route node of backedge. */
-            private final Node route;
-
-            /**
-             * @param node
-             */
-            private InfiniteLoop(Node node) {
-                this.edges.add(node);
-
-                while (node.outgoing.size() == 1 && node.incoming.size() == 1) {
-                    node = node.incoming.get(0);
-                }
-                this.route = node;
+        private Node findBranch(Node node) {
+            while (node.outgoing.size() == 1 && node.incoming.size() == 1) {
+                node = node.incoming.get(0);
             }
-
-            /**
-             * <p>
-             * Try to merge two backedge node.
-             * </p>
-             * 
-             * @param other
-             * @return
-             */
-            private boolean merge(InfiniteLoop other) {
-                if (other == null) {
-                    return false;
-                }
-
-                if (route.incoming.contains(other.route) || route.hasDominator(other.route)) {
-                    // merge
-                    other.edges.add(route);
-
-                    return true;
-                } else {
-                    // can't merge
-                    return false;
-                }
-            }
-
-            /**
-             * <p>
-             * Search exit node of this backedge.
-             * </p>
-             * 
-             * @return
-             */
-            private Node searchExit() {
-                Node backedge = edges.peekLast();
-                Deque<Node> candidates = new ArrayDeque(backedge.outgoing);
-                Set<Node> recorder = new HashSet();
-                recorder.add(entrance);
-                recorder.addAll(entrance.backedges);
-
-                while (!candidates.isEmpty()) {
-                    Node node = candidates.pollFirst();
-
-                    if (recorder.add(node)) {
-                        if (!node.hasDominator(backedge)) {
-                            return node;
-                        } else {
-                            candidates.addAll(node.outgoing);
-                        }
-                    }
-                }
-                return null;
-            }
+            return node;
         }
     }
 
