@@ -584,15 +584,14 @@ class Node {
                 } else if (backs == 1) {
                     // do while or infinite loop
                     if (backedges.get(0).stack.peekLast() instanceof OperandCondition) {
-                        InfiniteLoopGroup group = new InfiniteLoopGroup(this);
-                        Node exit = group.exit;
+                        BackedgeGroup group = new BackedgeGroup(this);
 
-                        if (exit == null) {
+                        if (group.exit == null) {
                             // do while
                             writeDoWhile(buffer);
                         } else {
                             // infinit loop
-                            writeInfiniteLoop1(exit, buffer);
+                            writeInfiniteLoop1(group.exit, buffer);
                         }
                     } else {
                         // infinit loop
@@ -753,12 +752,11 @@ class Node {
     private void writeInfiniteLoop3(ScriptWriter buffer) {
         Debugger.print("loop3");
 
-        InfiniteLoopGroup group = new InfiniteLoopGroup(this);
-        Node exit = group.exit;
+        BackedgeGroup group = new BackedgeGroup(this);
 
-        LoopStructure loop = new LoopStructure(this, this, exit, null, buffer);
+        LoopStructure loop = new LoopStructure(this, this, group.exit, null, buffer);
 
-        if (exit != null) exit.currentCalls--;
+        if (group.exit != null) group.exit.currentCalls--;
 
         // make rewritable this node
         written = false;
@@ -772,7 +770,7 @@ class Node {
         write(buffer);
         breakables.removeLast();
         buffer.write("}");
-        process(exit, buffer);
+        process(group.exit, buffer);
     }
 
     /**
@@ -1152,15 +1150,15 @@ class Node {
     /**
      * @version 2014/07/03 11:36:56
      */
-    private static class InfiniteLoopGroup extends ArrayDeque {
+    private static class BackedgeGroup extends ArrayDeque {
 
         /** The loop exit node. */
         private Node exit;
 
         /**
-         * @param breakables
+         * @param entrance
          */
-        private InfiniteLoopGroup(Node entrance) {
+        private BackedgeGroup(Node entrance) {
             // collect all backedges which share same infinite loop structure
             Node base = null;
 
@@ -1171,7 +1169,11 @@ class Node {
                 // we needs backedge nodes only
                 if (entrance.backedges.contains(node)) {
                     // track back to branch node
-                    Node branch = findBranch(node);
+                    Node branch = node;
+
+                    while (branch.outgoing.size() == 1 && branch.incoming.size() == 1) {
+                        branch = branch.incoming.get(0);
+                    }
 
                     if (base == null) {
                         // first backedge
@@ -1211,13 +1213,6 @@ class Node {
                     }
                 }
             }
-        }
-
-        private Node findBranch(Node node) {
-            while (node.outgoing.size() == 1 && node.incoming.size() == 1) {
-                node = node.incoming.get(0);
-            }
-            return node;
         }
     }
 
