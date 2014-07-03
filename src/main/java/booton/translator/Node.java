@@ -513,6 +513,7 @@ class Node {
      */
     final void write(ScriptWriter buffer) {
         if (!written) {
+            Debugger.print("Write " + id);
             written = true;
 
             if (number != -1) {
@@ -583,6 +584,7 @@ class Node {
                 } else if (backs == 1) {
                     // do while or infinite loop
                     BackedgeGroup group = new BackedgeGroup(this);
+                    Debugger.print(id + " group: " + group.exit);
 
                     if (backedges.get(0).outgoing.size() == 2) {
                         if (group.exit == null) {
@@ -1005,7 +1007,6 @@ class Node {
             // normal process
             if (requiredCalls <= next.currentCalls) {
                 Node dominator = next.getDominator();
-
                 if (dominator == null || dominator == this || (loop != null && loop.exit == next)) {
                     // next node inherits the mode of dominator
                     if (next.continueOmittable == null) next.continueOmittable = continueOmittable;
