@@ -72,7 +72,6 @@ public class DoWhileTest extends ScriptTester {
     public void breakNoLabel() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 5) int value) {
                 do {
                     value++;
@@ -120,6 +119,36 @@ public class DoWhileTest extends ScriptTester {
 
                     value += 3;
                 } while (value < 4);
+
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void nestContinueJump() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(@Param(from = 0, to = 10) int value) {
+                root: do {
+                    value += 2;
+
+                    if (value % 2 == 0) {
+                        if (value % 3 == 0) {
+                            continue;
+                        }
+                        value++;
+                    }
+
+                    do {
+                        value++;
+
+                        if (value % 3 == 0) {
+                            continue root;
+                        }
+                    } while (value < 7);
+                } while (value < 10);
 
                 return value;
             }
