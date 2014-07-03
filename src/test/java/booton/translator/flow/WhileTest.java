@@ -360,7 +360,7 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
-    public void infiniteNonConditionaSingleBackedge() {
+    public void infiniteNonConditionalSingleBackedge() {
         test(new Scriptable() {
 
             @Debuggable

@@ -337,7 +337,6 @@ class Node {
             if (current == dominator) {
                 return true;
             }
-            Debugger.print("search dominator from " + current.id);
             current = current.getDominator();
         }
 
@@ -583,23 +582,23 @@ class Node {
                     process(outgoing.get(0), buffer);
                 } else if (backs == 1) {
                     // do while or infinite loop
-                    if (backedges.get(0).stack.peekLast() instanceof OperandCondition) {
-                        BackedgeGroup group = new BackedgeGroup(this);
+                    BackedgeGroup group = new BackedgeGroup(this);
 
+                    if (backedges.get(0).outgoing.size() == 2) {
                         if (group.exit == null) {
                             // do while
                             writeDoWhile(buffer);
                         } else {
                             // infinit loop
-                            writeInfiniteLoop1(group.exit, buffer);
+                            writeInfiniteLoop1(group, buffer);
                         }
                     } else {
                         // infinit loop
-                        writeInfiniteLoop2(buffer);
+                        writeInfiniteLoop1(group, buffer);
                     }
                 } else {
                     // infinit loop
-                    writeInfiniteLoop3(buffer);
+                    writeInfiniteLoop1(new BackedgeGroup(this), buffer);
                 }
             } else if (outs == 2) {
                 // while, for or if
@@ -689,71 +688,7 @@ class Node {
      * 
      * @param buffer
      */
-    private void writeInfiniteLoop1(Node exit, ScriptWriter buffer) {
-        Debugger.print("loop1 exit: ", exit);
-
-        LoopStructure loop = new LoopStructure(this, this, exit, null, buffer);
-
-        if (exit != null) exit.currentCalls--;
-
-        // make rewritable this node
-        written = false;
-
-        // clear all backedge nodes of infinite loop
-        if (exit == null) {
-            backedges.clear();
-        } else {
-            backedges.clear();
-        }
-
-        // re-write script fragment
-        buffer.write("for", "(;;)", "{");
-        breakables.add(loop);
-        write(buffer);
-        breakables.removeLast();
-        buffer.write("}");
-        process(exit, buffer);
-    }
-
-    /**
-     * <p>
-     * Write infinite loop structure.
-     * </p>
-     * 
-     * @param buffer
-     */
-    private void writeInfiniteLoop2(ScriptWriter buffer) {
-        // non-conditional single backedge
-        Debugger.print("loop2 exit: null");
-
-        LoopStructure loop = new LoopStructure(this, this, null, null, buffer);
-
-        // make rewritable this node
-        written = false;
-
-        // clear all backedge nodes of infinite loop
-        backedges.clear();
-
-        // re-write script fragment
-        buffer.write("for", "(;;)", "{");
-        breakables.add(loop);
-        write(buffer);
-        breakables.removeLast();
-        buffer.write("}");
-    }
-
-    /**
-     * <p>
-     * Write infinite loop structure.
-     * </p>
-     * 
-     * @param buffer
-     */
-    private void writeInfiniteLoop3(ScriptWriter buffer) {
-        Debugger.print("loop3");
-
-        BackedgeGroup group = new BackedgeGroup(this);
-
+    private void writeInfiniteLoop1(BackedgeGroup group, ScriptWriter buffer) {
         LoopStructure loop = new LoopStructure(this, this, group.exit, null, buffer);
 
         if (group.exit != null) group.exit.currentCalls--;
