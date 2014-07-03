@@ -126,36 +126,6 @@ public class DoWhileTest extends ScriptTester {
     }
 
     @Test
-    public void nestContinueJump() {
-        test(new Scriptable() {
-
-            @Debuggable
-            public int act(@Param(from = 0, to = 10) int value) {
-                root: do {
-                    value += 2;
-
-                    if (value % 2 == 0) {
-                        if (value % 3 == 0) {
-                            continue;
-                        }
-                        value++;
-                    }
-
-                    do {
-                        value++;
-
-                        if (value % 3 == 0) {
-                            continue root;
-                        }
-                    } while (value < 7);
-                } while (value < 10);
-
-                return value;
-            }
-        });
-    }
-
-    @Test
     public void continueAndBreak() {
         test(new Scriptable() {
 
@@ -229,6 +199,59 @@ public class DoWhileTest extends ScriptTester {
                     do {value += 2;} while (value < 3);           
                     // @formatter:on
                 }
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void continueThenFollow() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(@Param(from = 0, to = 10) int value) {
+                do {
+                    value += 5;
+
+                    if (value % 2 == 0) {
+                        if (value % 3 == 0) {
+                            continue;
+                        }
+                        value++;
+                    }
+                    value += 3;
+                } while (value < 10);
+
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void nestContinueJump() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(@Param(from = 0, to = 10) int value) {
+                root: do {
+                    value += 2;
+
+                    if (value % 2 == 0) {
+                        if (value % 3 == 0) {
+                            continue;
+                        }
+                        value++;
+                    }
+
+                    do {
+                        value++;
+
+                        if (value % 3 == 0) {
+                            continue root;
+                        }
+                    } while (value < 7);
+                } while (value < 10);
+
                 return value;
             }
         });
