@@ -208,7 +208,6 @@ public class DoWhileTest extends ScriptTester {
     public void continueThenFollow() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 do {
                     value += 5;

@@ -20,12 +20,12 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * @version 2014/06/24 17:06:45
+ * @version 2014/07/05 19:06:00
  */
 class Node {
 
     /** The representation of node termination. */
-    static final Node Termination = new Node(0);
+    static final Node Termination = new Node("T");
 
     /** The frequently used operand for cache. */
     static final OperandExpression END = new OperandExpression(";");
@@ -37,7 +37,7 @@ class Node {
     private static final Deque<Breakable> breakables = new ArrayDeque();
 
     /** The identified label for this node. */
-    final int id;
+    final String id;
 
     /** The actual operand stack. */
     final LinkedList<Operand> stack = new LinkedList();
@@ -58,7 +58,10 @@ class Node {
     final List<TryCatchFinally> tries = new CopyOnWriteArrayList();
 
     /** The line number. */
-    int number = -1;
+    int lineNumber = -1;
+
+    /** The flag whether we can dispose this node or not. */
+    boolean disposable = true;
 
     /** The previous node by order of appearance. */
     Node previous;
@@ -73,7 +76,7 @@ class Node {
     Node destination;
 
     /** This node is switch starting node. */
-    private Switch switchy;
+    Switch switchy;
 
     /** The dominator node. */
     Node dominator;
@@ -103,6 +106,13 @@ class Node {
      * @param label
      */
     Node(int id) {
+        this(String.valueOf(id));
+    }
+
+    /**
+     * @param label
+     */
+    Node(String id) {
         this.id = id;
     }
 
@@ -401,6 +411,17 @@ class Node {
 
     /**
      * <p>
+     * Retrieve the valid destination node.
+     * </p>
+     * 
+     * @return An actual destination node of this node.
+     */
+    Node getDestination() {
+        return destination == Termination ? next : destination;
+    }
+
+    /**
+     * <p>
      * Detect whether the specified node is traversable from this node.
      * </p>
      * 
@@ -516,8 +537,8 @@ class Node {
             Debugger.print("Write " + id);
             written = true;
 
-            if (number != -1) {
-                buffer.comment(number);
+            if (lineNumber != -1) {
+                buffer.comment(lineNumber);
             }
 
             // =============================================================
@@ -1056,7 +1077,7 @@ class Node {
         previous.disconnect(next);
 
         // create and linkage
-        Node node = new Node(-previous.id);
+        Node node = new Node(previous + "*" + next);
         previous.connect(node);
         node.connect(next);
 
@@ -1320,6 +1341,7 @@ class Node {
             super(enter);
 
             this.enter = enter;
+            this.enter.disposable = false;
             this.value = enter.remove(0);
             this.defaults = defaults;
             this.cases = cases;
@@ -1616,6 +1638,7 @@ class Node {
             this.start = start;
             this.end = end;
             this.catcher = catcher;
+            start.disposable = end.disposable = catcher.disposable = false;
 
             addCatchBlock(exception, catcher);
         }
@@ -1634,6 +1657,7 @@ class Node {
                     return;
                 }
             }
+            catcher.disposable = false;
             catches.add(new Catch(exception, catcher));
         }
 
