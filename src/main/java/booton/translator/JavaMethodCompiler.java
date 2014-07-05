@@ -1985,9 +1985,11 @@ class JavaMethodCompiler extends MethodVisitor {
      * @param recursive true will dispose the previous node if it is empty.
      */
     private final void dispose(Node target, boolean clearStack, boolean recursive) {
-        if (nodes.remove(target)) {
-            Debugger.print("Dispose node" + target.id);
-            Debugger.print(nodes);
+        if (nodes.contains(target)) {
+            Debugger.print("Dispose node" + target.id, nodes);
+
+            // remove actually
+            nodes.remove(target);
 
             link(target.previous, target.next);
 
