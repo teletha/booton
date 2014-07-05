@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import jdk.internal.org.objectweb.asm.AnnotationVisitor;
 import jdk.internal.org.objectweb.asm.Attribute;
@@ -54,7 +55,7 @@ import booton.translator.Node.TryCatchFinallyBlocks;
  * completely, garbage goto code will remain.
  * </p>
  * 
- * @version 2014/06/20 10:41:27
+ * @version 2014/07/05 19:05:52
  */
 class JavaMethodCompiler extends MethodVisitor {
 
@@ -195,7 +196,7 @@ class JavaMethodCompiler extends MethodVisitor {
     private Node current = null;
 
     /** The all node list for this method. */
-    private List<Node> nodes = new ArrayList();
+    private List<Node> nodes = new CopyOnWriteArrayList();
 
     /** The counter for the current processing node identifier. */
     private int counter = 0;
@@ -317,12 +318,16 @@ class JavaMethodCompiler extends MethodVisitor {
     public void visitEnd() {
         // Dispose all nodes which contains synchronized block.
         for (Node node : synchronizer) {
-            dispose(node, true);
+            dispose(node, true, false);
         }
 
-        // Separate conditional operands.
-        for (int i = nodes.size() - 1; 0 <= i; i--) {
-            new SequentialConditionInfo(nodes.get(i)).split();
+        // Separate conditional operands and dispose empty node.
+        for (Node node : nodes) {
+            if (node.disposable && node.stack.isEmpty()) {
+                dispose(node, false, false);
+            } else {
+                new SequentialConditionInfo(node).split();
+            }
         }
 
         // Search all backedge nodes.
@@ -1250,6 +1255,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
         switch (opcode) {
         case GOTO:
+            current.disposable = false;
             current.connect(node);
             current.destination = node;
 
@@ -1445,7 +1451,7 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitLineNumber(int line, Label start) {
-        getNode(start).number = line;
+        getNode(start).lineNumber = line;
 
         CompilerRecorder.recordMethodLineNumber(line);
     }
@@ -1935,15 +1941,19 @@ class JavaMethodCompiler extends MethodVisitor {
      * @return A created node.
      */
     private final Node createNodeAfter(Node index) {
-        Node created = new Node(counter++);
+        Node created = new Node(index.id + "+");
 
         // switch line number
-        created.number = index.number;
-        index.number = -1;
+        created.lineNumber = index.lineNumber;
+        index.lineNumber = -1;
 
         // switch previous and next nodes
         // index -> created -> next
         link(index, created, index.next);
+
+        if (index.destination == null) {
+            index.destination = created;
+        }
 
         // insert to node list
         nodes.add(nodes.indexOf(index) + 1, created);
@@ -1961,15 +1971,20 @@ class JavaMethodCompiler extends MethodVisitor {
      * </p>
      */
     private final void dispose(Node target) {
-        dispose(target, false);
+        dispose(target, false, true);
     }
 
     /**
      * <p>
      * Helper method to dispose the specified node.
      * </p>
+     * 
+     * @param target A target node to dipose.
+     * @param clearStack true will clear all operands in target node, false will transfer them into
+     *            the previous node.
+     * @param recursive true will dispose the previous node if it is empty.
      */
-    private final void dispose(Node target, boolean clearStack) {
+    private final void dispose(Node target, boolean clearStack, boolean recursive) {
         if (nodes.remove(target)) {
             Debugger.print("Dispose node" + target.id);
             Debugger.print(nodes);
@@ -1987,16 +2002,20 @@ class JavaMethodCompiler extends MethodVisitor {
             for (Node node : target.incoming) {
                 node.disconnect(target);
 
+                if (node.destination == target) {
+                    node.destination = target.getDestination();
+                }
+
                 for (Operand operand : node.stack) {
                     if (operand instanceof OperandCondition) {
                         OperandCondition condition = (OperandCondition) operand;
 
                         if (condition.then == target) {
-                            condition.then = target.destination;
+                            condition.then = target.getDestination();
                         }
 
                         if (condition.elze == target) {
-                            condition.elze = target.destination;
+                            condition.elze = target.getDestination();
                         }
                     }
                 }
@@ -2015,13 +2034,14 @@ class JavaMethodCompiler extends MethodVisitor {
             // Delete all operands from the current processing node
             target.stack.clear();
 
+            // switch current node if needed
             if (target == current) {
                 current = target.previous;
             }
 
             // dispose empty node recursively
-            if (target.previous != null && target.previous.stack.isEmpty()) {
-                dispose(target.previous, clearStack);
+            if (recursive && target.previous != null && target.previous.stack.isEmpty()) {
+                dispose(target.previous, clearStack, recursive);
             }
         }
     }

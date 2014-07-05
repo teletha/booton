@@ -375,6 +375,8 @@ public class Debugger extends AnnotationVisitor {
             format.formatNode(list(node.previous), 1);
             format.write("next : ");
             format.formatNode(list(node.next), 1);
+            format.write("dest : ");
+            format.formatNode(list(node.destination), 1);
             if (backedge != 0) {
                 format.write("back : ");
                 format.formatNode(node.backedges, backedge);

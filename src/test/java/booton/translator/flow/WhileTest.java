@@ -14,7 +14,6 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
-import booton.translator.Debuggable;
 
 /**
  * @version 2014/06/28 18:12:01
@@ -244,7 +243,6 @@ public class WhileTest extends ScriptTester {
     public void sequentialWithComplexCondition() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int value) {
                 while (0 < value && value < 5) {
                     value++;
@@ -279,7 +277,6 @@ public class WhileTest extends ScriptTester {
     public void infiniteFisrtBreak() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int value) {
                 while (true) {
                     value++;
@@ -363,7 +360,6 @@ public class WhileTest extends ScriptTester {
     public void infiniteNonConditionalSingleBackedge() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int value) {
                 while (true) {
                     value++;
@@ -389,7 +385,6 @@ public class WhileTest extends ScriptTester {
     public void infiniteBreakInNestedIf() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int value) {
                 while (true) {
                     value++;
@@ -415,7 +410,6 @@ public class WhileTest extends ScriptTester {
     public void infiniteBreakAndContinue() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(int value) {
                 while (true) {
                     value++;
@@ -443,7 +437,6 @@ public class WhileTest extends ScriptTester {
     public void inifinitContinue() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(@Param(from = 0, to = 10) int value) {
                 while (true) {
                     value++;
@@ -464,7 +457,6 @@ public class WhileTest extends ScriptTester {
     public void inifinitContinueWithShorthandIf() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(@Param(from = 0, to = 10) int value) {
                 while (true) {
                     value++;
@@ -483,7 +475,6 @@ public class WhileTest extends ScriptTester {
     public void inifinitContinueWithShorthandIfInAnotherIf() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(@Param(from = 0, to = 20) int value) {
                 while (true) {
                     value++;
@@ -506,7 +497,6 @@ public class WhileTest extends ScriptTester {
     public void infiniteNest() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(int value) {
                 while (true) {
                     while (true) {
@@ -535,7 +525,6 @@ public class WhileTest extends ScriptTester {
     public void infiniteNestBreakAndContinue() throws Exception {
         test(new Scriptable() {
 
-            @Debuggable
             int act(@Param(from = 0, to = 10) int value) {
                 int a = 0;
 
