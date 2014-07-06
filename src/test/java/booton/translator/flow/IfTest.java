@@ -371,7 +371,7 @@ public class IfTest extends ScriptTester {
     }
 
     @Test
-    public void whileElse() throws Exception {
+    public void whileInElse() throws Exception {
         test(new Scriptable() {
 
             private boolean flag;
