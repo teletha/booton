@@ -182,6 +182,24 @@ public class WhileTest extends ScriptTester {
     }
 
     @Test
+    public void afterIf() {
+        test(new Scriptable() {
+
+            public int act(int value) {
+                if (value % 2 == 0) {
+                    value += 100;
+                }
+
+                while (value < 3) {
+                    value++;
+                }
+
+                return value;
+            }
+        });
+    }
+
+    @Test
     public void logical() {
         test(new Scriptable() {
 

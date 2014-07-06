@@ -371,12 +371,15 @@ public class Debugger extends AnnotationVisitor {
             format.formatNode(node.outgoing, outgoing);
             format.write("dom : ");
             format.formatNode(list(getDominator(node)), 1);
+            format.write("doms : ");
+            format.formatNode(node.dominators, node.dominators.size());
             format.write("prev : ");
             format.formatNode(list(node.previous), 1);
             format.write("next : ");
             format.formatNode(list(node.next), 1);
             format.write("dest : ");
             format.formatNode(list(node.destination), 1);
+
             if (backedge != 0) {
                 format.write("back : ");
                 format.formatNode(node.backedges, backedge);

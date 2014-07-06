@@ -333,9 +333,6 @@ class JavaMethodCompiler extends MethodVisitor {
         // Search all backedge nodes.
         searchBackEdge(nodes.get(0), new ArrayDeque());
 
-        // Resolve all try-catch-finally blocks.
-        tries.process();
-
         // Build dominator tree
         for (Node node : nodes) {
             Node dominator = node.getDominator();
@@ -344,6 +341,9 @@ class JavaMethodCompiler extends MethodVisitor {
                 dominator.dominators.addIfAbsent(node);
             }
         }
+
+        // Resolve all try-catch-finally blocks.
+        tries.process();
 
         Debugger.printHeader(true);
         Debugger.print(nodes);

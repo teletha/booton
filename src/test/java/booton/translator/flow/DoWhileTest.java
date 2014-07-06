@@ -14,7 +14,6 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
-import booton.translator.Debuggable;
 
 /**
  * @version 2014/01/16 22:36:52
@@ -208,7 +207,6 @@ public class DoWhileTest extends ScriptTester {
     public void continueThenFollow() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 do {
                     value += 5;
@@ -228,10 +226,31 @@ public class DoWhileTest extends ScriptTester {
     }
 
     @Test
-    public void nestContinueJump() {
+    public void withWhile() {
         test(new Scriptable() {
 
-            @Debuggable
+            public int act(int value) {
+                do {
+                    value++;
+
+                    if (value % 2 == 0) {
+                        value += 5;
+                    }
+
+                    while (value < 7) {
+                        value += 3;
+                    }
+                } while (value < 10);
+
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void nestContinueJump2() {
+        test(new Scriptable() {
+
             public int act(@Param(from = 0, to = 10) int value) {
                 root: do {
                     value += 2;

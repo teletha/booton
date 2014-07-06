@@ -422,6 +422,20 @@ class Node {
 
     /**
      * <p>
+     * Collect pure incoming nodes which is not backedge.
+     * </p>
+     * 
+     * @return
+     */
+    Set<Node> getPureIncoming() {
+        Set<Node> nodes = new HashSet(incoming);
+        nodes.removeAll(backedges);
+
+        return nodes;
+    }
+
+    /**
+     * <p>
      * Detect whether the specified node is traversable from this node.
      * </p>
      * 
@@ -861,7 +875,7 @@ class Node {
             condition.invert();
         }
 
-        if (one.backedges.isEmpty() && one.incoming.size() != 1) {
+        if (one.getPureIncoming().size() != 1) {
             if (one.getDominator() != this) {
                 /**
                  * loop breaker
@@ -899,7 +913,7 @@ class Node {
                 then = other;
                 follow = one;
             }
-        } else if (other.backedges.isEmpty() && other.incoming.size() != 1) {
+        } else if (other.getPureIncoming().size() != 1) {
             if (other.getDominator() != this) {
                 /**
                  * loop breaker
@@ -1077,7 +1091,7 @@ class Node {
         previous.disconnect(next);
 
         // create and linkage
-        Node node = new Node(previous + "*" + next);
+        Node node = new Node(previous.id + "*" + next.id);
         previous.connect(node);
         node.connect(next);
 
@@ -1107,6 +1121,7 @@ class Node {
     /**
      * @version 2014/07/03 11:36:56
      */
+    @SuppressWarnings("serial")
     private static class BackedgeGroup extends ArrayDeque {
 
         /** The loop exit node. */
