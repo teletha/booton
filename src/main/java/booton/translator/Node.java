@@ -716,6 +716,7 @@ class Node {
         write(buffer);
         breakables.removeLast();
         buffer.write("}");
+        loop.writeRequiredLabel();
     }
 
     /**
@@ -742,6 +743,7 @@ class Node {
         write(buffer);
         breakables.removeLast();
         buffer.write("}");
+        loop.writeRequiredLabel();
         process(group.exit, buffer);
     }
 
