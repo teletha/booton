@@ -252,7 +252,6 @@ public class DoWhileTest extends ScriptTester {
     public void nestContinueJump() {
         test(new Scriptable() {
 
-            @Debuggable
             public int act(@Param(from = 0, to = 10) int value) {
                 root: do {
                     value += 2;
@@ -272,6 +271,29 @@ public class DoWhileTest extends ScriptTester {
                         }
                     } while (value < 7);
                 } while (value < 10);
+
+                return value;
+            }
+        });
+    }
+
+    @Test
+    public void nestBreakJump() {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(int value) {
+                root: do {
+                    value++;
+
+                    do {
+                        value += 2;
+
+                        if (value % 3 == 0) {
+                            break root;
+                        }
+                    } while (value < 5);
+                } while (value < 7);
 
                 return value;
             }
