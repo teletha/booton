@@ -204,6 +204,19 @@ public class DoWhileTest extends ScriptTester {
     }
 
     @Test
+    public void inOneLinerIf() throws Exception {
+        test(new Scriptable() {
+
+            public int act(int value) {
+                // @formatter:off
+                if (value != 0) do {value += 2;} while (value < 3);
+                // @formatter:on
+                return value;
+            }
+        });
+    }
+
+    @Test
     public void continueThenFollow() {
         test(new Scriptable() {
 

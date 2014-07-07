@@ -78,6 +78,15 @@ public class ClientStackTrace {
             for (String line : elements) {
                 String[] info = line.split(" ");
 
+                // Firefox 30~ returns [methodName, fileName:lineNumber, columnNumber]
+                // Others returns [methodName, fileName, columnNumber]
+                int separator = info[1].indexOf(":", info[1].lastIndexOf('/'));
+
+                if (separator != -1) {
+                    info[2] = info[1].substring(separator + 1);
+                    info[1] = info[1].substring(0, separator);
+                }
+
                 for (Source source : maps) {
                     if (info[1].contains(source.name)) {
                         stacks.add(source.search(Integer.parseInt(info[2])));
