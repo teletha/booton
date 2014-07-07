@@ -674,7 +674,7 @@ public class NativeArray<T> extends NativeObject {
          * @return A item at index.
          */
         public String getAsInt(int index) {
-            return that + "[" + param(0) + "]";
+            return that + "[" + param(0) + "]||0";
         }
 
         /**
@@ -699,7 +699,7 @@ public class NativeArray<T> extends NativeObject {
          * @return A item at index.
          */
         public String getAsLong(int index) {
-            return that + "[" + param(0) + "]";
+            return that + "[" + param(0) + "]||0";
         }
 
         /**
@@ -711,7 +711,7 @@ public class NativeArray<T> extends NativeObject {
          * @return A item at index.
          */
         public String getAsFloat(int index) {
-            return that + "[" + param(0) + "]";
+            return that + "[" + param(0) + "]||0";
         }
 
         /**
@@ -723,7 +723,7 @@ public class NativeArray<T> extends NativeObject {
          * @return A item at index.
          */
         public String getAsDouble(int index) {
-            return that + "[" + param(0) + "]";
+            return that + "[" + param(0) + "]||0";
         }
 
         /**
@@ -735,7 +735,7 @@ public class NativeArray<T> extends NativeObject {
          * @return A item at index.
          */
         public String getAsBoolean(int index) {
-            return that + "[" + param(0) + "]";
+            return that + "[" + param(0) + "]||false";
         }
 
         /**
@@ -747,7 +747,7 @@ public class NativeArray<T> extends NativeObject {
          * @return A item at index.
          */
         public String getAsShort(int index) {
-            return that + "[" + param(0) + "]";
+            return that + "[" + param(0) + "]||0";
         }
 
         /**
@@ -759,7 +759,7 @@ public class NativeArray<T> extends NativeObject {
          * @return A item at index.
          */
         public String getAsByte(int index) {
-            return that + "[" + param(0) + "]";
+            return that + "[" + param(0) + "]||0";
         }
 
         /**
@@ -771,7 +771,7 @@ public class NativeArray<T> extends NativeObject {
          * @return A item at index.
          */
         public String getAsChar(int index) {
-            return that + "[" + param(0) + "]";
+            return that + "[" + param(0) + "]||''";
         }
 
         /**
