@@ -122,10 +122,6 @@ class JavaClassCompiler extends ClassVisitor {
         // record
         CompilerRecorder.recordMethodName(name);
 
-        if (LowLevel.class.isAssignableFrom(script.source)) {
-            return new JavaMethodLowLevelCompiler(script, code, computed, desc, isStatic);
-        }
-
         // start compiling method
         return new JavaMethodCompiler(script, code, computed, desc, isStatic);
     }
