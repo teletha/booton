@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,10 +10,9 @@
 package teemowork.model;
 
 import js.lang.NativeArray;
-import booton.translator.Debuggable;
 
 /**
- * @version 2013/01/28 14:37:16
+ * @version 2014/07/07 13:50:10
  */
 public class ChampionStatus {
 
