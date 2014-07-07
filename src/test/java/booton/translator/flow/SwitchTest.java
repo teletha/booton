@@ -22,7 +22,7 @@ import booton.soeur.Scriptable;
 public class SwitchTest extends ScriptTester {
 
     @Test
-    public void Return() {
+    public void returns() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -41,7 +41,7 @@ public class SwitchTest extends ScriptTester {
     }
 
     @Test
-    public void Sparse() {
+    public void sparse() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -63,7 +63,7 @@ public class SwitchTest extends ScriptTester {
     }
 
     @Test
-    public void NoDefault() {
+    public void noDefault() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -83,7 +83,7 @@ public class SwitchTest extends ScriptTester {
     }
 
     @Test
-    public void EmptyDefault() {
+    public void emptyDefault() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -105,7 +105,23 @@ public class SwitchTest extends ScriptTester {
     }
 
     @Test
-    public void Multiple() {
+    public void followWillBeEmpty() throws Exception {
+        test(new Scriptable() {
+
+            private String prefix = "Number ";
+
+            String act(int value) {
+                switch (value) {
+                case 1:
+                    return "one";
+                }
+                return prefix + value;
+            }
+        });
+    }
+
+    @Test
+    public void multiple() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -125,7 +141,7 @@ public class SwitchTest extends ScriptTester {
     }
 
     @Test
-    public void Nest() {
+    public void nest() {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 5) int value) {
@@ -421,5 +437,17 @@ public class SwitchTest extends ScriptTester {
      */
     private static enum Number {
         One, Two, Three, Four, Five;
+
+        /**
+         * <p>
+         * Helper method to convert.
+         * </p>
+         * 
+         * @param value
+         * @return
+         */
+        private static Number by(int value) {
+            return Number.values()[value];
+        }
     }
 }

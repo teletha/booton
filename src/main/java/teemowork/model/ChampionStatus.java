@@ -10,6 +10,7 @@
 package teemowork.model;
 
 import js.lang.NativeArray;
+import booton.translator.Debuggable;
 
 /**
  * @version 2013/01/28 14:37:16
@@ -39,9 +40,7 @@ public class ChampionStatus {
      * @return A result.
      */
     public double get(Status status) {
-        Double value = values.get(status.ordinal());
-
-        return value == null ? 0 : value;
+        return values.getAsDouble(status.ordinal());
     }
 
     /**

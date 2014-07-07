@@ -548,7 +548,6 @@ class Node {
      */
     final void write(ScriptWriter buffer) {
         if (!written) {
-            Debugger.print("Write " + id);
             written = true;
 
             if (lineNumber != -1) {
@@ -619,7 +618,6 @@ class Node {
                 } else if (backs == 1) {
                     // do while or infinite loop
                     BackedgeGroup group = new BackedgeGroup(this);
-                    Debugger.print(id + " group: " + group.exit);
 
                     if (backedges.get(0).outgoing.size() == 2) {
                         if (group.exit == null) {
@@ -1362,6 +1360,11 @@ class Node {
             this.value = enter.remove(0);
             this.defaults = defaults;
             this.cases = cases;
+
+            enter.disposable = defaults.disposable = false;
+            for (Node node : cases) {
+                node.disposable = false;
+            }
 
             for (int key : keys) {
                 this.keys.add(key);

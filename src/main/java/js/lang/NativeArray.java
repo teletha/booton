@@ -73,7 +73,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A item at index.
      */
     public T get(int index) {
-        return (T) get(index, Object.class);
+        return retrieve(index, (T) null);
     }
 
     /**
@@ -100,7 +100,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A item at index.
      */
     public int getAsInt(int index) {
-        return get(index, Integer.class).intValue();
+        return retrieve(index, 0);
     }
 
     /**
@@ -113,13 +113,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A item at index.
      */
     public int getAsInt(int index, int defaultValue) {
-        T item = list.get(index);
-
-        if (item instanceof Integer) {
-            return ((Integer) item).intValue();
-        } else {
-            return defaultValue;
-        }
+        return retrieve(index, defaultValue);
     }
 
     /**
@@ -131,7 +125,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A item at index.
      */
     public long getAsLong(int index) {
-        return get(index, Long.class).longValue();
+        return retrieve(index, 0L);
     }
 
     /**
@@ -143,7 +137,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A item at index.
      */
     public float getAsFloat(int index) {
-        return get(index, Float.class).floatValue();
+        return retrieve(index, 0F);
     }
 
     /**
@@ -155,7 +149,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A item at index.
      */
     public double getAsDouble(int index) {
-        return get(index, Double.class).doubleValue();
+        return retrieve(index, 0D);
     }
 
     /**
@@ -167,7 +161,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A item at index.
      */
     public boolean getAsBoolean(int index) {
-        return get(index, Boolean.class).booleanValue();
+        return retrieve(index, false);
     }
 
     /**
@@ -179,7 +173,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A item at index.
      */
     public short getAsShort(int index) {
-        return get(index, Short.class).shortValue();
+        return retrieve(index, 0).shortValue();
     }
 
     /**
@@ -191,7 +185,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A item at index.
      */
     public byte getAsByte(int index) {
-        return get(index, Byte.class).byteValue();
+        return retrieve(index, 0).byteValue();
     }
 
     /**
@@ -203,7 +197,7 @@ public class NativeArray<T> extends NativeObject {
      * @return A item at index.
      */
     public char getAsChar(int index) {
-        return get(index, Character.class).charValue();
+        return get(index, ' ');
     }
 
     /**
@@ -215,10 +209,12 @@ public class NativeArray<T> extends NativeObject {
      * @param type
      * @return
      */
-    private <X> X get(int index, Class<X> type) {
+    private <X> X retrieve(int index, X defaultValue) {
         ensureSize(index + 1);
 
-        return (X) list.get(index);
+        X value = (X) list.get(index);
+
+        return value == null ? defaultValue : value;
     }
 
     /**

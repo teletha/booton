@@ -713,7 +713,7 @@ public class NativeMath {
          * @return the absolute value of the argument.
          */
         public String abs(long a) {
-            return "Math.abs(" + param(0) + ")";
+            return long64("Math.abs(" + param(0) + ")");
         }
 
         /**
@@ -833,7 +833,7 @@ public class NativeMath {
          * @return the larger of {@code a} and {@code b}.
          */
         public String max(long a, long b) {
-            return "Math.max(" + param(0) + "," + param(1) + ")";
+            return long64("Math.max(" + param(0) + "," + param(1) + ")");
         }
 
         /**
@@ -892,7 +892,7 @@ public class NativeMath {
          * @return the smaller of {@code a} and {@code b}.
          */
         public String min(long a, long b) {
-            return "Math.min(" + param(0) + "," + param(1) + ")";
+            return long64("Math.min(" + param(0) + "," + param(1) + ")");
         }
 
         /**
@@ -969,7 +969,7 @@ public class NativeMath {
          * @see java.lang.Integer#MIN_VALUE
          */
         public String round(double param0) {
-            return "Math.round(" + param(0) + ")";
+            return long64("Math.round(" + param(0) + ")");
         }
 
         /**

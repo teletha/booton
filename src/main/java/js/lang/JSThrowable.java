@@ -156,6 +156,7 @@ class JSThrowable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String toString() {
         return message;
     }
