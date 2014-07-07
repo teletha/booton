@@ -46,6 +46,15 @@ public class MasterySet extends Publishable {
      * Create new empty {@link MasterySet}.
      * </p>
      */
+    public MasterySet() {
+        this((String) null);
+    }
+
+    /**
+     * <p>
+     * Create new empty {@link MasterySet}.
+     * </p>
+     */
     public MasterySet(Version version) {
         this((String) null);
     }
