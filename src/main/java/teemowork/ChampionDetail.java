@@ -200,11 +200,11 @@ public class ChampionDetail extends Page {
         }
 
         for (StatusView box : statuses) {
-            box.calcurate();
+            box.calculate();
         }
 
         for (ItemBox box : items) {
-            box.calcurate();
+            box.calculate();
         }
     }
 
@@ -554,10 +554,10 @@ public class ChampionDetail extends Page {
 
         /**
          * <p>
-         * Calcurate status and show it
+         * Calculate status and show it
          * </p>
          */
-        private void calcurate() {
+        private void calculate() {
             Computed value = build.get(status);
 
             this.current.text(value.value() + status.getUnit());
@@ -593,10 +593,10 @@ public class ChampionDetail extends Page {
 
         /**
          * <p>
-         * Calcurate status and show it
+         * Calculate status and show it
          * </p>
          */
-        private void calcurate() {
+        private void calculate() {
             if (item != null) {
                 item.applyIcon(icon);
 
