@@ -9,7 +9,7 @@
  */
 package jsx.bwt;
 
-import static org.objectweb.asm.Opcodes.*;
+import static jdk.internal.org.objectweb.asm.Opcodes.*;
 
 import java.util.Arrays;
 import java.util.Map;

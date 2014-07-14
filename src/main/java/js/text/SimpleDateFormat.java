@@ -9,6 +9,8 @@
  */
 package js.text;
 
+import java.text.DateFormat;
+import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
@@ -19,17 +21,26 @@ import booton.translator.JavaAPIProvider;
  * @version 2014/05/18 13:08:42
  */
 @JavaAPIProvider(java.text.SimpleDateFormat.class)
-class SimpleDateFormat {
+class SimpleDateFormat extends DateFormat {
 
     /**
-     * Formats a Date into a date/time string.
-     * 
-     * @param date the time value to be formatted into a time string.
-     * @return the formatted time string.
+     * {@inheritDoc}
      */
-    public final String format(Date date) {
-       // If this exception will be thrown, it is bug of this program. So we must rethrow the wrapped error in here.
-    throw new Error();
+    @Override
+    public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Date parse(String source, ParsePosition pos) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
@@ -42,6 +53,7 @@ class SimpleDateFormat {
      * @return A <code>Date</code> parsed from the string.
      * @exception ParseException if the beginning of the specified string cannot be parsed.
      */
+    @Override
     public Date parse(String source) throws ParseException {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.

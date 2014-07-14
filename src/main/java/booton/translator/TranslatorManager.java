@@ -23,13 +23,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import jdk.internal.org.objectweb.asm.Type;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
 import kiss.Table;
 import kiss.model.ClassUtil;
-
-import org.objectweb.asm.Type;
 
 /**
  * @version 2013/11/22 13:19:38
