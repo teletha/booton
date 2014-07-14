@@ -18,6 +18,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -226,6 +227,59 @@ class JSKiss {
             }
         }
         return builder.toString();
+    }
+
+    /**
+     * <p>
+     * Locate the specified file URL and return the plain {@link Path} object.
+     * </p>
+     *
+     * @param filePath A location path.
+     * @return A located {@link Path}.
+     * @throws NullPointerException If the given file path is null.
+     * @throws SecurityException If a security manager exists and its
+     *             {@link SecurityManager#checkWrite(String)} method does not allow a file to be
+     *             created.
+     */
+    public static Path locate(URL filePath) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * <p>
+     * Locate the specified file path and return the plain {@link Path} object.
+     * </p>
+     *
+     * @param filePath A location path.
+     * @return A located {@link Path}.
+     * @throws NullPointerException If the given file path is null.
+     * @throws SecurityException If a security manager exists and its
+     *             {@link SecurityManager#checkWrite(String)} method does not allow a file to be
+     *             created.
+     */
+    public static Path locate(String filePath) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * <p>
+     * Creates a new abstract file somewhere beneath the system's temporary directory (as defined by
+     * the <code>java.io.tmpdir</code> system property).
+     * </p>
+     *
+     * @return A newly created temporary file which is not exist yet.
+     * @throws SecurityException If a security manager exists and its
+     *             {@link SecurityManager#checkWrite(String)} method does not allow a file to be
+     *             created.
+     */
+    public static Path locateTemporary() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**

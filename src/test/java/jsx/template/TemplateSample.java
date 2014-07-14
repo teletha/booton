@@ -9,7 +9,6 @@
  */
 package jsx.template;
 
-import kiss.Events;
 import kiss.I;
 import booton.sample.Person;
 
@@ -26,8 +25,6 @@ public class TemplateSample {
     public void ui(Person person) {
         String name = person.getName();
 
-        text(name.toUpperCase());
-
         if (20 <= person.getAge()) {
             list(() -> {
                 for (Person friend : person.getFriends()) {
@@ -39,10 +36,6 @@ public class TemplateSample {
 
     void list(Runnable a) {
 
-    }
-
-    void text(String observable) {
-        Events<String> observe = I.observe(observable);
     }
 
     void item(Object... contents) {

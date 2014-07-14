@@ -24,6 +24,26 @@ class TimeZone {
     private static TimeZone def;
 
     /**
+     * Gets the <code>TimeZone</code> for the given ID.
+     *
+     * @param ID the ID for a <code>TimeZone</code>, either an abbreviation such as "PST", a full
+     *            name such as "America/Los_Angeles", or a custom ID such as "GMT-8:00". Note that
+     *            the support of abbreviations is for JDK 1.1.x compatibility only and full names
+     *            should be used.
+     * @return the specified <code>TimeZone</code>, or the GMT zone if the given ID cannot be
+     *         understood.
+     */
+    public static synchronized TimeZone getTimeZone(String ID) {
+        return getTimeZone(ID, true);
+    }
+
+    private static TimeZone getTimeZone(String ID, boolean fallback) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
      * Converts this {@code TimeZone} object to a {@code ZoneId}.
      *
      * @return a {@code ZoneId} representing the same time zone as this {@code TimeZone}

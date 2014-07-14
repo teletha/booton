@@ -9,7 +9,6 @@
  */
 package jsx.template;
 
-import kiss.I;
 import kiss.Interceptor;
 
 /**
@@ -23,12 +22,6 @@ public class TemplateInterceptor extends Interceptor<Template> {
     @Override
     protected Object invoke(Object... params) {
         Object[] mocks = new Object[params.length];
-
-        for (int i = 0; i < mocks.length; i++) {
-            System.out.println("crete mock " + params[i]);
-            mocks[i] = I.mock(params[i]);
-        }
-
         return super.invoke(mocks);
     }
 }

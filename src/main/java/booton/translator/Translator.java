@@ -16,13 +16,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+import jdk.internal.org.objectweb.asm.Type;
 import js.lang.NativeFunction;
 import kiss.Extensible;
 import kiss.Manageable;
 import kiss.Singleton;
 import kiss.model.ClassUtil;
-
-import org.objectweb.asm.Type;
 
 /**
  * <p>
