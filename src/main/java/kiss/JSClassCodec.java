@@ -9,28 +9,19 @@
  */
 package kiss;
 
-import kiss.model.Codec;
 import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2014/03/07 20:21:02
  */
 @JavaAPIProvider(ClassCodec.class)
-class JSClassCodec extends Codec<Class> {
+class JSClassCodec implements Codec<Class> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String toString(Class value) {
-        return super.toString(value);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Class fromString(String value) {
-        return super.fromString(value);
+    public Class decode(String value) {
+        return null;
     }
 }

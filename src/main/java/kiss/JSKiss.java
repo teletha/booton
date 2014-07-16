@@ -47,7 +47,6 @@ import js.lang.NativeFunction.Delegator;
 import js.lang.NativeObject;
 import js.lang.reflect.Reflections;
 import kiss.model.ClassUtil;
-import kiss.model.Codec;
 import kiss.model.Model;
 import kiss.model.Property;
 import kiss.model.PropertyWalker;
@@ -536,11 +535,11 @@ class JSKiss {
         } else {
             // type conversion
             if (output == String.class) {
-                return (M) ((inputCodec != null) ? inputCodec.toString(input) : input.toString());
+                return (M) ((inputCodec != null) ? inputCodec.encode(input) : input.toString());
             }
 
             if (inputModel.type == String.class && outputCodec != null) {
-                return outputCodec.fromString((String) input);
+                return outputCodec.decode((String) input);
             }
             return (M) input;
         }
