@@ -14,8 +14,8 @@ import booton.translator.JavaAPIProvider;
 /**
  * @version 2014/03/07 20:21:02
  */
-@JavaAPIProvider(ClassCodec.class)
-class JSClassCodec implements Codec<Class> {
+@JavaAPIProvider(Modules.class)
+class JSModules implements Codec<Class> {
 
     /**
      * {@inheritDoc}
