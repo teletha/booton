@@ -28,7 +28,6 @@ import java.util.Set;
 
 import kiss.I;
 import kiss.Table;
-import booton.translator.JavaAPIProvider;
 
 /**
  * <p>
@@ -37,7 +36,7 @@ import booton.translator.JavaAPIProvider;
  * 
  * @version 2011/12/11 20:16:03
  */
-@JavaAPIProvider(ClassUtil.class)
+// @JavaAPIProvider(ClassUtil.class)
 public final class ClassUtilJS {
 
     /** The list of primitive classes. (except for void type) */

@@ -60,6 +60,9 @@ class JSKiss {
 
     public static ScheduledExecutorService $scheduler = Executors.newScheduledThreadPool(1);
 
+    /** The cache for Module, Model and Lifestyle. */
+    static final Modules modules = new Modules();
+
     /** The mapping from extension point to extensions. */
     private static Table<Class, Class> extensions;
 
