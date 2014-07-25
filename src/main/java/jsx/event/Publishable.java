@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import kiss.Disposable;
-import kiss.Events;
+import kiss.Event;
 import kiss.I;
 import kiss.Observer;
 import kiss.Table;
@@ -57,9 +57,9 @@ public class Publishable<P extends Publishable<P>> {
      * @param type An event type.
      * @return Chainable API.
      */
-    public final <T> Events<T> observe(Class<T> type) {
+    public final <T> Event<T> observe(Class<T> type) {
         if (type == null) {
-            return Events.NEVER;
+            return Event.NEVER;
         }
         return add(ClassUtil.wrap(type));
     }
@@ -72,15 +72,15 @@ public class Publishable<P extends Publishable<P>> {
      * @param type An event type.
      * @return Chainable API.
      */
-    public final <T extends Enum & Predicate<E>, E extends Supplier<T>> Events<E> observe(T... types) {
+    public final <T extends Enum & Predicate<E>, E extends Supplier<T>> Event<E> observe(T... types) {
         if (types == null || types.length == 0) {
-            return Events.NEVER;
+            return Event.NEVER;
         }
 
-        Events<E> observable = null;
+        Event<E> observable = null;
 
         for (T type : types) {
-            Events<E> current = add(type);
+            Event<E> current = add(type);
 
             if (observable == null) {
                 observable = current;
@@ -177,14 +177,14 @@ public class Publishable<P extends Publishable<P>> {
 
     /**
      * <p>
-     * Create an event listener as {@link Events}.
+     * Create an event listener as {@link Event}.
      * </p>
      * 
      * @param type A event type.
      * @return
      */
-    private <V> Events<V> add(Object type) {
-        return new Events<V>(observer -> {
+    private <V> Event<V> add(Object type) {
+        return new Event<V>(observer -> {
             // create event listener holder if it is not initialized
             if (holder == null) {
                 holder = new Table();

@@ -38,7 +38,11 @@ class OperandNumber extends Operand {
     @Override
     protected Operand castActual(Class type) {
         if (type == char.class) {
-            return new OperandString(String.valueOf((char) value.intValue()));
+            char ch = (char) value.intValue();
+
+            if (Character.isSurrogate(ch) == false) {
+                return new OperandString(String.valueOf(ch));
+            }
         }
         return this;
     }

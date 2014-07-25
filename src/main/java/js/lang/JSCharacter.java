@@ -28,6 +28,42 @@ class JSCharacter implements JavascriptNative {
     public static final Class TYPE = Primitive.class;
 
     /**
+     * The minimum value of a <a href="http://www.unicode.org/glossary/#high_surrogate_code_unit">
+     * Unicode high-surrogate code unit</a> in the UTF-16 encoding, constant {@code '\u005CuD800'}.
+     * A high-surrogate is also known as a <i>leading-surrogate</i>.
+     *
+     * @since 1.5
+     */
+    public static final char MIN_HIGH_SURROGATE = '\uD800';
+
+    /**
+     * The maximum value of a <a href="http://www.unicode.org/glossary/#high_surrogate_code_unit">
+     * Unicode high-surrogate code unit</a> in the UTF-16 encoding, constant {@code '\u005CuDBFF'}.
+     * A high-surrogate is also known as a <i>leading-surrogate</i>.
+     *
+     * @since 1.5
+     */
+    public static final char MAX_HIGH_SURROGATE = '\uDBFF';
+
+    /**
+     * The minimum value of a <a href="http://www.unicode.org/glossary/#low_surrogate_code_unit">
+     * Unicode low-surrogate code unit</a> in the UTF-16 encoding, constant {@code '\u005CuDC00'}. A
+     * low-surrogate is also known as a <i>trailing-surrogate</i>.
+     *
+     * @since 1.5
+     */
+    public static final char MIN_LOW_SURROGATE = '\uDC00';
+
+    /**
+     * The maximum value of a <a href="http://www.unicode.org/glossary/#low_surrogate_code_unit">
+     * Unicode low-surrogate code unit</a> in the UTF-16 encoding, constant {@code '\u005CuDFFF'}. A
+     * low-surrogate is also known as a <i>trailing-surrogate</i>.
+     *
+     * @since 1.5
+     */
+    public static final char MAX_LOW_SURROGATE = '\uDFFF';
+
+    /**
      * The minimum value of a <a href="http://www.unicode.org/glossary/#supplementary_code_point">
      * Unicode supplementary code point</a>, constant {@code U+10000}.
      *
