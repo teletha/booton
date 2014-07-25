@@ -21,7 +21,7 @@ import java.nio.file.WatchEvent;
 import javax.servlet.http.HttpServletRequest;
 
 import kiss.Disposable;
-import kiss.Events;
+import kiss.Event;
 import kiss.I;
 import kiss.XML;
 
@@ -90,7 +90,7 @@ public class LiveCodingServlet extends WebSocketServlet {
             this.connection.setMaxIdleTime(Integer.MAX_VALUE);
 
             // observe html
-            Events<WatchEvent<Path>> observable = I.observe(html);
+            Event<WatchEvent<Path>> observable = I.observe(html);
 
             XML xml = I.xml(html);
 
@@ -181,9 +181,9 @@ public class LiveCodingServlet extends WebSocketServlet {
          * 
          * @param relativePath A relative path from root.
          * @param file A target file.
-         * @return A {@link Events}.
+         * @return A {@link Event}.
          */
-        private Events<WatchEvent<Path>> observeFile(String relativePath) {
+        private Event<WatchEvent<Path>> observeFile(String relativePath) {
             int index = relativePath.indexOf('?');
 
             if (index != -1) {

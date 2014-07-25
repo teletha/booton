@@ -14,7 +14,7 @@ import static java.util.concurrent.TimeUnit.*;
 import java.lang.reflect.Method;
 
 import kiss.Disposable;
-import kiss.Events;
+import kiss.Event;
 
 /**
  * @version 2014/03/08 11:24:41
@@ -33,7 +33,7 @@ class SubscribeUIDetail implements Subscribable<SubscribeUI> {
      * {@inheritDoc}
      */
     @Override
-    public Events create(Events<?> base, SubscribeUI annotation) {
+    public Event create(Event<?> base, SubscribeUI annotation) {
         base = base.take(annotation.count())
                 .delay(annotation.delay(), MILLISECONDS)
                 .throttle(annotation.throttle(), MILLISECONDS)
