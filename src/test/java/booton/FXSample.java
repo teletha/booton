@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 /**
  * @version 2014/01/25 9:31:23
  */
-public class FXTest extends Application {
+public class FXSample extends Application {
 
     public static void main(String[] args) {
         launch();
