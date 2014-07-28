@@ -11,6 +11,7 @@ package js.math;
 
 import java.math.BigInteger;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,6 +24,7 @@ import booton.soeur.ScriptRunner;
 public class BigIntegerTest {
 
     @Test
+    @Ignore
     public void ToString() throws Exception {
         assert new BigInteger("0").toString().equals("0");
         assert new BigInteger("-1").toString().equals("-1");
