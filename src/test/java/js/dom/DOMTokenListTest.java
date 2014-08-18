@@ -72,13 +72,13 @@ public class DOMTokenListTest {
         assert list.contains("null");
     }
 
-    @Test(expected = DOMError.class)
+    @Test(expected = EmulateDOMError.class)
     public void addEmpty() {
         DOMTokenList list = new EmulateDOMTokenList();
         list.add("");
     }
 
-    @Test(expected = DOMError.class)
+    @Test(expected = EmulateDOMError.class)
     public void addWhitespace() {
         DOMTokenList list = new EmulateDOMTokenList();
         list.add("space ");
@@ -105,13 +105,13 @@ public class DOMTokenListTest {
         // no error
     }
 
-    @Test(expected = DOMError.class)
+    @Test(expected = EmulateDOMError.class)
     public void removeEmpty() {
         DOMTokenList list = new EmulateDOMTokenList();
         list.remove("");
     }
 
-    @Test(expected = DOMError.class)
+    @Test(expected = EmulateDOMError.class)
     public void removeWhitespace() {
         DOMTokenList list = new EmulateDOMTokenList();
         list.remove("space ");
@@ -129,25 +129,25 @@ public class DOMTokenListTest {
         assert list.length() == 0;
     }
 
-    @Test(expected = DOMError.class)
+    @Test(expected = EmulateDOMError.class)
     public void toggleEmpty() {
         DOMTokenList list = new EmulateDOMTokenList();
         list.toggle("");
     }
 
-    @Test(expected = DOMError.class)
+    @Test(expected = EmulateDOMError.class)
     public void toggleWhitespace() {
         DOMTokenList list = new EmulateDOMTokenList();
         list.toggle("space ");
     }
 
-    @Test(expected = DOMError.class)
+    @Test(expected = EmulateDOMError.class)
     public void containsEmpty() {
         DOMTokenList list = new EmulateDOMTokenList();
         list.contains("");
     }
 
-    @Test(expected = DOMError.class)
+    @Test(expected = EmulateDOMError.class)
     public void containsWhitespace() {
         DOMTokenList list = new EmulateDOMTokenList();
         list.contains("space ");

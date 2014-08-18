@@ -49,7 +49,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine;
 
 /**
- * @version 2013/10/29 10:41:32
+ * @version 2014/08/18 13:01:22
  */
 @Unnecessary
 public class ScriptTester {
@@ -84,7 +84,7 @@ public class ScriptTester {
             I.load(ScriptTester.class, true);
 
             // read boot.js
-            boot = new String(Files.readAllBytes(I.locate("boot.js")), UTF_8);
+            boot = new String(Files.readAllBytes(I.locate("src/main/resources/init/boot.js")), UTF_8);
             unitTest = new String(Files.readAllBytes(I.locate("src/test/resources/unitTest.js")), UTF_8);
 
             // build client
