@@ -1,5 +1,3 @@
-import bee.util.PathPattern;
-
 /*
  * Copyright (C) 2012 Teemowork Development Team
  * 
@@ -20,13 +18,5 @@ public class Project extends bee.api.Project {
         require("org.eclipse.jetty", "jetty-servlet", "8.1.15.v20140411");
         require("npc", "antibug", "0.3").atTest();
         require("net.sourceforge.htmlunit", "htmlunit", "2.15").atTest();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public PathPattern getClasses() {
-        return new PathPattern(super.getClasses().base, "!teemowork/**");
     }
 }
