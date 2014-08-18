@@ -23,7 +23,6 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-import teemowork.Teemowork;
 import booton.live.LiveCoding;
 import booton.live.LiveCodingServlet;
 import booton.live.ResourceServlet;
@@ -208,7 +207,16 @@ public class Booton {
      * @param args
      */
     public static void main(String[] args) {
-        Booton booton = new Booton(Teemowork.class);
+        launch(HelloWorld.class);
+    }
+
+    /**
+     * Launch application with debuggable server.
+     * 
+     * @param applicationClass A target application.
+     */
+    public static void launch(Class applicationClass) {
+        Booton booton = new Booton(applicationClass);
         booton.launch();
         booton.build();
     }

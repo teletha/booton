@@ -10,6 +10,10 @@
 package js.dom;
 
 import static js.lang.Global.*;
+import js.dom.Element;
+import js.dom.HTMLCollection;
+import js.dom.Node;
+import js.dom.NodeList;
 
 import org.junit.Test;
 
@@ -37,7 +41,7 @@ public class EmulateElementTest {
         assert node == child1;
     }
 
-    @Test(expected = DOMError.class)
+    @Test(expected = EmulateDOMError.class)
     public void apendChildNull() throws Exception {
         Element element = new EmulateElement();
         element.appendChild(null);
@@ -57,13 +61,13 @@ public class EmulateElementTest {
         assert removed == child;
     }
 
-    @Test(expected = DOMError.class)
+    @Test(expected = EmulateDOMError.class)
     public void removeChildNull() throws Exception {
         Element element = new EmulateElement();
         element.appendChild(null);
     }
 
-    @Test(expected = DOMError.class)
+    @Test(expected = EmulateDOMError.class)
     public void removeNonChild() throws Exception {
         Element element = new EmulateElement();
         Element child = new EmulateElement();
@@ -98,7 +102,7 @@ public class EmulateElementTest {
         assert element.children().get(1) == child2;
     }
 
-    @Test(expected = DOMError.class)
+    @Test(expected = EmulateDOMError.class)
     public void insertBeforeNotChildReference() throws Exception {
         Element element = new EmulateElement();
         Element child1 = new EmulateElement();

@@ -11,7 +11,6 @@ package jsx.bwt;
 
 import static booton.css.Unit.*;
 import static booton.css.value.Color.*;
-import teemowork.TeemoworkTheme;
 import booton.css.CSS;
 import booton.css.Priority;
 import booton.css.Snippet;
@@ -88,7 +87,7 @@ class ImageGridStyle {
         Color color = new Color(0, 98, 97, 1);
 
         {
-            font.weight.bold().size(18, px).family(TeemoworkTheme.Title);
+            font.weight.bold().size(18, px);
             text.align.center().shadow(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
             line.height(20, px);
             padding.size(5, px);

@@ -18,11 +18,9 @@ import java.util.concurrent.TimeUnit;
 
 import js.dom.Document;
 import js.dom.Element;
-import js.dom.EmulateDocument;
 import js.dom.History;
 import js.dom.Location;
 import js.dom.Window;
-import js.lang.builtin.EmulateStorage;
 import js.lang.builtin.JSON;
 import js.lang.builtin.Storage;
 import jsx.jQuery;
@@ -51,7 +49,7 @@ public class Global {
     public static Window window;
 
     /** The root document in web environment. */
-    public static final Document document = I.make(EmulateDocument.class);
+    public static Document document = emulate(Document.class);
 
     /**
      * <p>
@@ -77,7 +75,7 @@ public class Global {
      * persistent. localStorage was introduced in Firefox 3.5.
      * </p>
      */
-    public static Storage localStorage = new EmulateStorage();
+    public static Storage localStorage = emulate(Storage.class);
 
     /**
      * <p>
@@ -87,7 +85,7 @@ public class Global {
      * new session to be initiated.
      * </p>
      */
-    public static Storage sessionStorage = new EmulateStorage();
+    public static Storage sessionStorage = emulate(Storage.class);
 
     /**
      * <p>
@@ -96,6 +94,24 @@ public class Global {
      * </p>
      */
     public static final JSON JSON = new JSON();
+
+    /**
+     * <p>
+     * Create emulater object of the specified type.
+     * </p>
+     * 
+     * @param string A object type name.
+     * @return A created Object.
+     */
+    private static <T> T emulate(Class type) {
+        try {
+            Class emulater = Class.forName(type.getPackage().getName() + ".Emulate" + type.getSimpleName());
+
+            return (T) I.make(emulater);
+        } catch (ClassNotFoundException e) {
+            throw I.quiet(e);
+        }
+    }
 
     /**
      * <p>

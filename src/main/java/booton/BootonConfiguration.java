@@ -49,7 +49,7 @@ public class BootonConfiguration {
             compression = config.compression;
         }
 
-        validatePort();;
+        validatePort();
         validateRoot();
         validateTheme();
     }

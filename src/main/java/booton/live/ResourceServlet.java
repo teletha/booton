@@ -52,10 +52,11 @@ public class ResourceServlet extends HttpServlet {
         if (path == null) {
             path = "/index.html";
         }
+        path = path.substring(1);
 
         waitBuilding();
 
-        Path file = root.resolve(path.substring(1));
+        Path file = root.resolve(path);
 
         if (path.endsWith(".html")) {
             rebuild(file).to(new HTMLWriter(new OutputStreamWriter(response.getOutputStream(), I.$encoding)));
@@ -67,7 +68,14 @@ public class ResourceServlet extends HttpServlet {
             if (path.endsWith(".js")) {
                 response.addHeader("Content-Type", "text/javascript");
             }
-            I.copy(Files.newInputStream(file), response.getOutputStream(), true);
+
+            if (Files.exists(file)) {
+                // from configured root directory
+                I.copy(Files.newInputStream(file), response.getOutputStream(), true);
+            } else {
+                // from resource directory in jar
+                I.copy(ClassLoader.getSystemResourceAsStream("init/" + path), response.getOutputStream(), true);
+            }
         }
     }
 
