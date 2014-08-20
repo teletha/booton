@@ -40,6 +40,11 @@ import java.util.concurrent.TimeUnit;
 
 import javax.script.ScriptException;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+
 import js.lang.Global;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
@@ -415,6 +420,70 @@ class JSKiss {
         } finally {
             dependency.pollLast();
         }
+    }
+
+    /**
+     * <p>
+     * Observe the specified {@link ObservableValue}.
+     * </p>
+     * <p>
+     * An implementation of {@link ObservableValue} may support lazy evaluation, which means that
+     * the value is not immediately recomputed after changes, but lazily the next time the value is
+     * requested.
+     * </p>
+     * 
+     * @param observable A target to observe.
+     * @return A observable event stream.
+     */
+    public static <E extends Observable> Event<E> observe(E observable) {
+        if (observable == null) {
+            return Event.NEVER;
+        }
+
+        return new Event<>(observer -> {
+            // create actual listener
+            InvalidationListener listener = value -> {
+                observer.onNext((E) value);
+            };
+
+            observable.addListener(listener); // register listener
+
+            return () -> {
+                observable.removeListener(listener); // unregister listener
+            };
+        });
+    }
+
+    /**
+     * <p>
+     * Observe the specified {@link ObservableValue}.
+     * </p>
+     * <p>
+     * An implementation of {@link ObservableValue} may support lazy evaluation, which means that
+     * the value is not immediately recomputed after changes, but lazily the next time the value is
+     * requested.
+     * </p>
+     * 
+     * @param observable A target to observe.
+     * @return A observable event stream.
+     */
+    public static <E> Event<E> observe(ObservableValue<E> observable) {
+        if (observable == null) {
+            return Event.NEVER;
+        }
+
+        return new Event<>(observer -> {
+            // create actual listener
+            ChangeListener<E> listener = (o, oldValue, newValue) -> {
+                observer.onNext(newValue);
+            };
+
+            observable.addListener(listener); // register listener
+
+            return () -> {
+                observable.removeListener(listener); // unregister listener
+            };
+        });
     }
 
     /**
