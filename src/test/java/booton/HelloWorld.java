@@ -9,7 +9,6 @@
  */
 package booton;
 
-import java.util.LinkedHashSet;
 
 /**
  * @version 2014/03/08 11:13:39
@@ -24,26 +23,6 @@ public class HelloWorld {
      * @param args
      */
     public static void main(String[] args) {
-        for (String string : create()) {
-            System.out.println(string);
-        }
-    }
-
-    /**
-     * <p>
-     * Create new set.
-     * </p>
-     * 
-     * @return
-     */
-    private static LinkedHashSet<String> create() {
-        LinkedHashSet<String> set = new LinkedHashSet();
-        set.add("one");
-        set.add("two");
-        set.add("three");
-        set.add("four");
-        set.add("five");
-
-        return set;
+        System.out.println("Hello World!");
     }
 }

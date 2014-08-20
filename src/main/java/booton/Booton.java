@@ -158,10 +158,12 @@ public class Booton {
 
             // build js file
             Javascript.getScript(application).writeTo(js, set);
+            System.out.println("Complete compilation of " + application.getSimpleName() + ".");
 
             // Don't build live coding script out of build process, because all scripts must share
             // compiled and obfuscated class information.
             Javascript.getScript(LiveCoding.class).writeTo(root.resolve("live.js"), set);
+            System.out.println("Complete compilation of Live Coding Server.");
 
             // build css file
             I.make(Stylist.class).write(css);
