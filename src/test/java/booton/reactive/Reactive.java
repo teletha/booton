@@ -9,8 +9,11 @@
  */
 package booton.reactive;
 
+import java.util.function.Consumer;
+
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 
 import booton.reactive.css.Font;
 
@@ -19,8 +22,16 @@ import booton.reactive.css.Font;
  */
 public abstract class Reactive {
 
-    protected void hbox(Piece... pieces) {
+    protected void vbox(Piece... pieces) {
 
+    }
+
+    protected Piece hbox(Piece... pieces) {
+        return null;
+    }
+
+    protected <T> Piece hbox(ObservableList<T> list, Consumer<T> builder) {
+        return null;
     }
 
     protected void text(Object... texts) {
@@ -33,6 +44,13 @@ public abstract class Reactive {
 
             }
         }
+    }
+
+    /**
+     * @return
+     */
+    Object getVirtualElement() {
+        return null;
     }
 
     protected abstract void template();
