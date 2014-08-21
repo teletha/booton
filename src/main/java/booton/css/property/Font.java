@@ -154,7 +154,7 @@ public final class Font extends ColorableProperty<Font> {
      * font when needed.
      * </p>
      * 
-     * @param names
+     * @param persons
      * @return
      */
     public Family family(String... fonts) {
