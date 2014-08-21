@@ -90,6 +90,10 @@ public class UseCase extends Reactive {
         });
     }
 
+    private static class Component {
+
+    }
+
     private <T> Var<T> $(ObservableValue<T> value) {
         return null;
     }
