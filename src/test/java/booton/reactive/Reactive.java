@@ -10,6 +10,7 @@
 package booton.reactive;
 
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 
 import booton.reactive.css.Font;
 
@@ -28,7 +29,9 @@ public abstract class Reactive {
         }
 
         for (Object text : texts) {
+            if (text instanceof ObservableValue) {
 
+            }
         }
     }
 
