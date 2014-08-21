@@ -13,12 +13,12 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 import java.util.function.Consumer;
 
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 
 import booton.reactive.css.Color;
-import booton.reactive.sample.Group;
-import booton.reactive.sample.Person;
 
 /**
  * @version 2014/08/21 13:31:48
@@ -72,22 +72,30 @@ public class UseCase extends Reactive {
 
     public final Variable<Integer> size = new Variable();
 
-    public final Group group = new Group();
+    public final ListProperty<String> todos = new SimpleListProperty();
+
+    /** The input field. */
+    private Input input = new Input();
+
+    /** The add button. */
+    private Button add = new Button() {
+
+        {
+            input.value.map(v -> !v.isEmpty()).to(this::enable);
+        }
+    };
 
     /**
      * {@inheritDoc}
      */
     @Override
     protected void template() {
-        hbox(() -> {
-            for (Person person : group.members) {
-                text("Hello ", person, "!");
-            }
+
+        hbox(todos, todo -> {
+            text(todo, "!");
         });
 
-        hbox(group.members, person -> {
-            text("Hello ", $(person.name), "!");
-        });
+        hbox(input, add);
     }
 
     private static class Component {

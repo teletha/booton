@@ -19,7 +19,7 @@ import booton.reactive.css.Font;
  */
 public abstract class Reactive {
 
-    protected void hbox(Runnable child) {
+    protected void hbox(Piece... pieces) {
 
     }
 
