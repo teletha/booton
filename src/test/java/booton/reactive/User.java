@@ -9,25 +9,17 @@
  */
 package booton.reactive;
 
-import kiss.Event;
-
 /**
- * @version 2014/08/21 17:09:35
+ * @version 2014/08/22 7:44:00
  */
-public class Input extends Piece {
-
-    public Event<String> value;
+public class User {
 
     /**
-     * @return
-     */
-    public String value() {
-        return null;
-    }
-
-    /**
+     * Helper method to type the text value into the specified {@link Input} ui.
      * 
+     * @param value
+     * @param target
      */
-    public void clear() {
+    public static final void input(String value, Input target) {
     }
 }

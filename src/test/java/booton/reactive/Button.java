@@ -19,9 +19,7 @@ public class Button extends Piece {
 
     protected Event<Boolean> press;
 
-    public Event<UIEvent> click() {
-        return null;
-    }
+    protected Event<UIEvent> click;
 
     public void enable(boolean enable) {
 
