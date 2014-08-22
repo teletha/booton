@@ -9,19 +9,10 @@
  */
 package booton.reactive;
 
-import org.junit.Test;
-
 /**
- * @version 2014/08/22 7:42:04
+ * @version 2014/08/22 9:22:44
  */
-public class UseCaseTest {
+public class UIEvent<V> {
 
-    @Test
-    public void testname() throws Exception {
-        TodoSample use = new TodoSample();
-        assert use.todos.size() == 0;
-        assert use.getVirtualElement() != null;
-
-        User.input("test", use.input);
-    }
+    public V context;
 }

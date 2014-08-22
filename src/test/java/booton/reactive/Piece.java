@@ -9,12 +9,15 @@
  */
 package booton.reactive;
 
+import java.util.function.Consumer;
+
+import kiss.Event;
 import booton.reactive.css.Font;
 
 /**
  * @version 2014/08/21 17:16:06
  */
-public abstract class Piece {
+public abstract class Piece<T extends Piece<T>> {
 
     protected final Font font = new Font();
 
@@ -24,4 +27,7 @@ public abstract class Piece {
     protected void style() {
     }
 
+    public T click(Consumer<Event<UIEvent>> events) {
+        return (T) this;
+    }
 }

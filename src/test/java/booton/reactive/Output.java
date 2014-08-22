@@ -9,19 +9,12 @@
  */
 package booton.reactive;
 
-import org.junit.Test;
+import kiss.Event;
 
 /**
- * @version 2014/08/22 7:42:04
+ * @version 2014/08/22 11:27:22
  */
-public class UseCaseTest {
+public class Output<V> extends Piece {
 
-    @Test
-    public void testname() throws Exception {
-        TodoSample use = new TodoSample();
-        assert use.todos.size() == 0;
-        assert use.getVirtualElement() != null;
-
-        User.input("test", use.input);
-    }
+    protected Event<V> value;
 }

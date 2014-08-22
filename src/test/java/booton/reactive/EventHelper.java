@@ -9,7 +9,7 @@
  */
 package booton.reactive;
 
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * @version 2014/08/21 21:43:04
@@ -17,12 +17,12 @@ import java.util.function.Function;
 public class EventHelper {
 
     /** The reusable function. */
-    public static final Function<String, Boolean> IsEmpty = value -> {
+    public static final Predicate<String> Empty = value -> {
         return value.isEmpty();
     };
 
     /** The reusable function. */
-    public static final Function<String, Boolean> IsNotEmpty = value -> {
+    public static final Predicate<String> NotEmpty = value -> {
         return !value.isEmpty();
     };
 }
