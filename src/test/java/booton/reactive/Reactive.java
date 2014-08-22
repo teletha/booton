@@ -12,6 +12,7 @@ package booton.reactive;
 import java.util.function.Consumer;
 
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 
@@ -34,6 +35,10 @@ public abstract class Reactive {
         return null;
     }
 
+    protected <T> Piece vbox(ObservableList<T> list, Consumer<T> builder) {
+        return null;
+    }
+
     protected void text(Object... texts) {
         if (texts == null) {
             return;
@@ -44,6 +49,18 @@ public abstract class Reactive {
 
             }
         }
+    }
+
+    protected void check(ObservableBooleanValue value) {
+
+    }
+
+    protected void output(ObservableValue value) {
+
+    }
+
+    protected void button(String label) {
+
     }
 
     /**

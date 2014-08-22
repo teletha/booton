@@ -28,6 +28,30 @@ public class Input extends Piece {
     /**
      * 
      */
-    public void clear() {
+    public String clear() {
+        String current = value();
+
+        // clear value
+
+        // API definition
+        return current;
+    }
+
+    /**
+     * Configure placeholder string.
+     * 
+     * @param string
+     */
+    protected Input placeholder(String string) {
+        return this;
+    }
+
+    /**
+     * Configure requirement.
+     * 
+     * @return
+     */
+    protected Input require() {
+        return this;
     }
 }

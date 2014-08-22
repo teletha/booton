@@ -9,19 +9,30 @@
  */
 package booton.reactive;
 
-import js.dom.UIEvent;
 import kiss.Event;
 
 /**
  * @version 2014/08/21 17:09:43
  */
-public class Button extends Piece {
+public class Button<T> extends Piece<Button<T>> {
 
     protected Event<Boolean> press;
 
-    protected Event<UIEvent> click;
+    protected Event<UIEvent<T>> click;
 
-    public void enable(boolean enable) {
+    public Button<T> enable(boolean enable) {
+        return this;
+    }
 
+    public Button<T> enable(Event<Boolean> enable) {
+        return this;
+    }
+
+    /**
+     * @param string
+     * @return
+     */
+    public Button<T> label(String label) {
+        return this;
     }
 }
