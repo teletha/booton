@@ -11,6 +11,8 @@ package booton.reactive;
 
 import java.util.function.Consumer;
 
+import javafx.beans.value.ObservableValue;
+
 import kiss.Event;
 import booton.reactive.css.Font;
 
@@ -29,5 +31,27 @@ public abstract class Piece<T extends Piece<T>> {
 
     public T click(Consumer<Event<UIEvent>> events) {
         return (T) this;
+    }
+
+    /**
+     * @param event
+     * @param string
+     * @return
+     */
+    public T validate(Event<Boolean> event, String string) {
+        return null;
+    }
+
+    /**
+     * @param greaterThan
+     * @param string
+     * @return
+     */
+    public T validate(ObservableValue<Boolean> event, String string) {
+        return null;
+    }
+
+    public T dependOn(Piece piece) {
+        return null;
     }
 }

@@ -18,7 +18,7 @@ public class Button<T> extends Piece<Button<T>> {
 
     protected Event<Boolean> press;
 
-    protected Event<UIEvent<T>> click;
+    protected Event<T> click;
 
     public Button<T> enable(boolean enable) {
         return this;
@@ -34,5 +34,12 @@ public class Button<T> extends Piece<Button<T>> {
      */
     public Button<T> label(String label) {
         return this;
+    }
+
+    /**
+     * @return
+     */
+    public Button<T> click(Runnable action) {
+        return null;
     }
 }
