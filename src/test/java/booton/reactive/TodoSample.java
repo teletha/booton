@@ -11,80 +11,51 @@ package booton.reactive;
 
 import static booton.reactive.EventHelper.*;
 
-import java.util.Comparator;
-import java.util.function.Predicate;
-
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
-import kiss.Event;
-import kiss.I;
 
 /**
  * @version 2014/08/21 13:31:48
  */
 public class TodoSample extends Reactive {
 
+    /** The data model. */
     public final ListProperty<Todo> todos = new SimpleListProperty();
 
     /** The input field. */
-    Input input = new Input().placeholder("新しい要件を入力").require();
+    Input input = new Input() {
+
+        {
+            placeholder("新しい要件を入力").validate(input.value.is(Empty), "要件を入力してください");
+        }
+    };
 
     /** The add button. */
-    Button<Todo> add = new Button().label("追加")
-            .enable(Event.all(input.value.is(NotEmpty), I.observe(todos.sizeProperty()).map(n -> n.intValue() < 10)));
+    Button<Todo> add = new Button<Todo>().label("追加")
+            .dependOn(input)
+            .validate(todos.sizeProperty().greaterThan(9), "要件は10件まで")
+            .click(() -> todos.add(new Todo(input.value.value())));
 
-    /** The todo output. */
-    Output<Todo> todoInList = new Output<Todo>() {
+    Button addon = new Button() {
 
         {
-            // todos.size().isLessThan(10);
-            input.value.value();
+            add.click.to(e -> todos.add(new Todo(input.value.value())));
+            // add.run(this::add).onclick();
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void style() {
-            super.style();
+        // @On(UIAction.Click)
+        private void add() {
+            todos.add(new Todo(input.value.value()));
         }
     };
 
-    /**
-     * @version 2014/08/22 11:32:30
-     */
-    private class TodoLine extends Output<Todo> {
-
-        private final Todo todo;
-
-        /**
-         * @param todo
-         */
-        private TodoLine(Todo todo) {
-            this.todo = todo;
-
-            // style(todo.completed, css -> css.font);
-        }
-    }
-
-    /** The delete button. */
-    Button<String> delete = new Button<String>() {
-
-        {
-            click.to(e -> todos.remove(e.context));
-        }
-    };
-
-    private final Property<Predicate<Todo>> isCompleted = new SimpleObjectProperty();
-
-    private final Property<Comparator<Todo>> order = new SimpleObjectProperty();
+    // private final Property<Predicate<Todo>> isCompleted = new SimpleObjectProperty();
+    //
+    // private final Property<Comparator<Todo>> order = new SimpleObjectProperty();
 
     /**
      * {@inheritDoc}

@@ -25,4 +25,5 @@ public class EventHelper {
     public static final Predicate<String> NotEmpty = value -> {
         return !value.isEmpty();
     };
+
 }
