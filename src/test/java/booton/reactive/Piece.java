@@ -11,6 +11,8 @@ package booton.reactive;
 
 import java.util.function.Consumer;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 
 import kiss.Event;
@@ -22,6 +24,8 @@ import booton.reactive.css.Font;
 public abstract class Piece<T extends Piece<T>> {
 
     protected final Font font = new Font();
+
+    protected final BooleanProperty enable = new SimpleBooleanProperty();
 
     /**
      * Define style.
@@ -51,7 +55,8 @@ public abstract class Piece<T extends Piece<T>> {
         return null;
     }
 
-    public T dependOn(Piece piece) {
+    public T enableIf(ObservableValue<Boolean> enable) {
         return null;
     }
+
 }
