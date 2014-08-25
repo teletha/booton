@@ -70,7 +70,7 @@ public class TodoSample extends Reactive {
     javafx.scene.control.Button button = new javafx.scene.control.Button() {
 
         {
-
+            disableProperty().bind(input.enable);
         }
     };
 
